@@ -1,0 +1,12 @@
+language: ruby
+cache: bundler
+git:
+  depth: false
+services:
+  - postgresql
+addons:
+  postgresql: "9.6"
+before_install:
+  - gem update --system
+script:
+  - bundle exec govuk-lint-ruby app config db lib spec --format clang
