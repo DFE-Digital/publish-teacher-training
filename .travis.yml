@@ -9,4 +9,5 @@ addons:
 before_install:
   - gem update --system
 script:
+  - bundle exec rake spec
   - bundle exec govuk-lint-ruby app config db lib spec --format clang
