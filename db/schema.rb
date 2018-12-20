@@ -92,14 +92,14 @@ ActiveRecord::Schema.define(version: 0) do
     t.index ["organisation_id"], name: "IX_nctl_organisation_organisation_id"
   end
 
-  create_table "organisation", id: :integer, default: -> { "nextval('mc_organisation_id_seq'::regclass)" }, force: :cascade do |t|
+  create_table "organisation", id: :integer, force: :cascade do |t|
     t.text "name"
     t.text "org_id"
     t.index ["org_id"], name: "IX_mc_organisation_org_id", unique: true
     t.index ["org_id"], name: "IX_organisation_org_id", unique: true
   end
 
-  create_table "organisation_provider", id: :integer, default: -> { "nextval('mc_organisation_institution_id_seq'::regclass)" }, force: :cascade do |t|
+  create_table "organisation_provider", id: :integer, force: :cascade do |t|
     t.integer "provider_id"
     t.integer "organisation_id"
     t.index ["organisation_id"], name: "IX_mc_organisation_provider_mc_organisation_id"
@@ -108,7 +108,7 @@ ActiveRecord::Schema.define(version: 0) do
     t.index ["provider_id"], name: "IX_organisation_provider_provider_id"
   end
 
-  create_table "organisation_user", id: :integer, default: -> { "nextval('mc_organisation_user_id_seq'::regclass)" }, force: :cascade do |t|
+  create_table "organisation_user", id: :integer, force: :cascade do |t|
     t.integer "organisation_id"
     t.integer "user_id"
     t.index ["organisation_id"], name: "IX_mc_organisation_user_mc_organisation_id"
@@ -122,7 +122,7 @@ ActiveRecord::Schema.define(version: 0) do
     t.text "provider_code", null: false
   end
 
-  create_table "provider", id: :integer, default: -> { "nextval('\"UcasInstitutions_Id_seq\"'::regclass)" }, force: :cascade do |t|
+  create_table "provider", id: :integer, force: :cascade do |t|
     t.text "address4"
     t.text "provider_name"
     t.text "scheme_member"
@@ -142,7 +142,7 @@ ActiveRecord::Schema.define(version: 0) do
     t.index ["provider_code"], name: "IX_ucas_provider_provider_code", unique: true
   end
 
-  create_table "provider_enrichment", id: :integer, default: -> { "nextval('institution_enrichment_id_seq'::regclass)" }, force: :cascade do |t|
+  create_table "provider_enrichment", id: :integer, force: :cascade do |t|
     t.text "provider_code", null: false
     t.jsonb "json_data"
     t.integer "updated_by_user_id"
@@ -156,7 +156,7 @@ ActiveRecord::Schema.define(version: 0) do
     t.index ["updated_by_user_id"], name: "IX_provider_enrichment_updated_by_user_id"
   end
 
-  create_table "session", id: :integer, default: -> { "nextval('mc_session_id_seq'::regclass)" }, force: :cascade do |t|
+  create_table "session", id: :integer, force: :cascade do |t|
     t.text "access_token"
     t.datetime "created_utc", null: false
     t.integer "user_id", null: false
@@ -166,7 +166,7 @@ ActiveRecord::Schema.define(version: 0) do
     t.index ["user_id"], name: "IX_session_user_id"
   end
 
-  create_table "site", id: :integer, default: -> { "nextval('\"UcasCampuses_Id_seq\"'::regclass)" }, force: :cascade do |t|
+  create_table "site", id: :integer, force: :cascade do |t|
     t.text "address2"
     t.text "address3"
     t.text "address4"
@@ -178,7 +178,7 @@ ActiveRecord::Schema.define(version: 0) do
     t.index ["provider_id", "code"], name: "IX_site_provider_id_code", unique: true
   end
 
-  create_table "subject", id: :integer, default: -> { "nextval('\"UcasSubjects_Id_seq\"'::regclass)" }, force: :cascade do |t|
+  create_table "subject", id: :integer, force: :cascade do |t|
     t.text "subject_name"
     t.text "subject_code", null: false
     t.index ["subject_code"], name: "AK_ucas_subject_subject_code", unique: true
@@ -189,7 +189,7 @@ ActiveRecord::Schema.define(version: 0) do
     t.text "code"
   end
 
-  create_table "user", id: :integer, default: -> { "nextval('mc_user_id_seq'::regclass)" }, force: :cascade do |t|
+  create_table "user", id: :integer, force: :cascade do |t|
     t.text "email"
     t.text "first_name"
     t.text "last_name"
