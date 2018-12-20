@@ -6,6 +6,8 @@ services:
   - postgresql
 addons:
   postgresql: "9.6"
+before_script:
+  - bundle exec rake db:setup
 before_install:
   - gem update --system
 script:
