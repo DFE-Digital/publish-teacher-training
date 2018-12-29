@@ -7,6 +7,10 @@ RSpec.describe "Courses API", type: :request do
         course_code: "2HPF",
         name: "Religious Education",
         qualification: 1,
+        subjects: [
+          FactoryBot.create(:subject, subject_code: "1", subject_name: "Secondary"),
+          FactoryBot.create(:subject, subject_code: "2", subject_name: "Mathematics")
+        ],
         provider: FactoryBot.create(:provider,
           provider_name: "ACME SCITT",
           provider_code: "2LD",
@@ -36,6 +40,16 @@ RSpec.describe "Courses API", type: :request do
           "maths" => nil,
           "science" => nil,
           "qualification" => 1,
+          "subjects" => [
+            {
+              "subject_code" => "1",
+              "subject_name" => "Secondary"
+            },
+            {
+              "subject_code" => "2",
+              "subject_name" => "Mathematics"
+            }
+          ],
           "provider" => {
             "institution_code" => "2LD",
             "institution_name" => "ACME SCITT",
