@@ -5,9 +5,11 @@ FactoryBot.define do
 
     transient do
       site_count { 1 }
+      course_count { 2 }
     end
 
     after(:create) do |provider, evaluator|
+      create_list(:course, evaluator.course_count, provider: provider)
       create_list(:site, evaluator.site_count, provider: provider)
     end
   end
