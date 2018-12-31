@@ -3,19 +3,18 @@ require "rails_helper"
 RSpec.describe "Courses API", type: :request do
   describe 'GET index' do
     before do
+      provider = FactoryBot.create(:provider, provider_name: "ACME SCITT", provider_code: "2LD", site_count: 0, course_count: 0)
+      site = FactoryBot.create(:site, code: "-", location_name: "Main Site", provider: provider)
+      subject1 = FactoryBot.create(:subject, subject_code: "1", subject_name: "Secondary")
+      subject2 = FactoryBot.create(:subject, subject_code: "2", subject_name: "Mathematics")
+
       FactoryBot.create(:course,
         course_code: "2HPF",
         name: "Religious Education",
         qualification: 1,
-        subjects: [
-          FactoryBot.create(:subject, subject_code: "1", subject_name: "Secondary"),
-          FactoryBot.create(:subject, subject_code: "2", subject_name: "Mathematics")
-        ],
-        provider: FactoryBot.create(:provider,
-          provider_name: "ACME SCITT",
-          provider_code: "2LD",
-          site_count: 0,
-          course_count: 0))
+        sites: [site],
+        subjects: [subject1, subject2],
+        provider: provider)
 
       get "/api/v1/courses", headers: { 'HTTP_AUTHORIZATION' => ActionController::HttpAuthentication::Basic.encode_credentials("bat", "beta") }
     end
@@ -40,6 +39,16 @@ RSpec.describe "Courses API", type: :request do
           "maths" => nil,
           "science" => nil,
           "qualification" => 1,
+          "campus_statuses" => [
+            {
+              "campus_code" => "-",
+              "name" => "Main Site",
+              "vac_status" => nil,
+              "publish" => nil,
+              "status" => nil,
+              "course_open_date" => nil
+            }
+          ],
           "subjects" => [
             {
               "subject_code" => "1",
