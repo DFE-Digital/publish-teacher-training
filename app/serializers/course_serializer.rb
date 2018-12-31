@@ -1,4 +1,5 @@
 class CourseSerializer < ActiveModel::Serializer
+  has_many :site_statuses, key: :campus_statuses
   has_many :subjects
   has_one :provider
   has_one :accrediting_provider
