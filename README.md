@@ -12,6 +12,14 @@
 2. Run `rails db:setup` to create a development and testing database
 3. Run `bundle exec rails server` to launch the app on http://localhost:3000.
 
+## Accessing API
+
+Example using the command line using the development basic authentication credentials
+
+```bash
+curl --basic -u bat:beta http://localhost:3000/api/v1/subjects.json
+```
+
 ## Linting
 
 It's best to lint just your app directories and not those belonging to the framework, e.g.
