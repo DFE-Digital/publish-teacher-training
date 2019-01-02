@@ -9,15 +9,21 @@ RSpec.describe "Subjecs API", type: :request do
       FactoryBot.create(:subject,
         subject_name: "Biology",
         subject_code: "M4")
-
-      get "/api/v1/subjects", headers: { 'HTTP_AUTHORIZATION' => ActionController::HttpAuthentication::Basic.encode_credentials("bat", "beta") }
     end
 
     it "returns http success" do
+      get "/api/v1/subjects", headers: { 'HTTP_AUTHORIZATION' => ActionController::HttpAuthentication::Basic.encode_credentials("bat", "beta") }
       expect(response).to have_http_status(:success)
     end
 
+    it "returns http unauthorized" do
+      get "/api/v1/subjects", headers: { 'HTTP_AUTHORIZATION' => ActionController::HttpAuthentication::Basic.encode_credentials("foo", "bar") }
+      expect(response).to have_http_status(:unauthorized)
+    end
+
     it "JSON body response contains expected provider attributes" do
+      get "/api/v1/subjects", headers: { 'HTTP_AUTHORIZATION' => ActionController::HttpAuthentication::Basic.encode_credentials("bat", "beta") }
+
       json = JSON.parse(response.body)
       expect(json).to eq([
         {
