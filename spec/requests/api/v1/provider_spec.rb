@@ -12,15 +12,22 @@ RSpec.describe "Providers API", type: :request do
         location_name: "Main site",
         code: "-",
         provider: provider)
-
-      get "/api/v1/providers", headers: { 'HTTP_AUTHORIZATION' => ActionController::HttpAuthentication::Basic.encode_credentials("bat", "beta") }
     end
 
     it "returns http success" do
+      get "/api/v1/providers", headers: { 'HTTP_AUTHORIZATION' => ActionController::HttpAuthentication::Basic.encode_credentials("bat", "beta") }
       expect(response).to have_http_status(:success)
     end
 
+
+    it "returns http unauthorised" do
+      get "/api/v1/providers", headers: { 'HTTP_AUTHORIZATION' => ActionController::HttpAuthentication::Basic.encode_credentials("foo", "bar") }
+      expect(response).to have_http_status(:unauthorized)
+    end
+
     it "JSON body response contains expected provider attributes" do
+      get "/api/v1/providers", headers: { 'HTTP_AUTHORIZATION' => ActionController::HttpAuthentication::Basic.encode_credentials("bat", "beta") }
+
       json = JSON.parse(response.body)
       expect(json). to eq(
         [

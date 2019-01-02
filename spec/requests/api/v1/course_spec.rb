@@ -15,15 +15,21 @@ RSpec.describe "Courses API", type: :request do
         sites: [site],
         subjects: [subject1, subject2],
         provider: provider)
-
-      get "/api/v1/courses", headers: { 'HTTP_AUTHORIZATION' => ActionController::HttpAuthentication::Basic.encode_credentials("bat", "beta") }
     end
 
     it "returns http success" do
+      get "/api/v1/courses", headers: { 'HTTP_AUTHORIZATION' => ActionController::HttpAuthentication::Basic.encode_credentials("bat", "beta") }
       expect(response).to have_http_status(:success)
     end
 
+    it "returns http unauthorised" do
+      get "/api/v1/courses", headers: { 'HTTP_AUTHORIZATION' => ActionController::HttpAuthentication::Basic.encode_credentials("foo", "bar") }
+      expect(response).to have_http_status(:unauthorized)
+    end
+
     it "JSON body response contains expected course attributes" do
+      get "/api/v1/courses", headers: { 'HTTP_AUTHORIZATION' => ActionController::HttpAuthentication::Basic.encode_credentials("bat", "beta") }
+
       json = JSON.parse(response.body)
       expect(json). to eq([
         {
