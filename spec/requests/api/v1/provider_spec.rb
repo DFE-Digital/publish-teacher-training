@@ -30,9 +30,7 @@ RSpec.describe "Providers API", type: :request do
               {
                 "campus_code" => "-",
                 "name" => "Main site",
-                "recruitment_cycle" => {
-                  "name" => "2019/20"
-                }
+                "recruitment_cycle" => "2019"
               }
             ],
             "institution_code" => "A123",
