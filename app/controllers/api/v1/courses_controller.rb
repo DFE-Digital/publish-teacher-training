@@ -1,6 +1,6 @@
 module Api
   module V1
-    class CoursesController < ActionController::API
+    class CoursesController < ApplicationController
       def index
         @courses = Course.all
         paginate json: @courses
