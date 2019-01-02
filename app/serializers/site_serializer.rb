@@ -11,8 +11,6 @@ class SiteSerializer < ActiveModel::Serializer
 
   # TODO: make recruitment cycle dynamic
   def recruitment_cycle
-    {
-      "name" => "2019/20"
-    }
+    "2019"
   end
 end

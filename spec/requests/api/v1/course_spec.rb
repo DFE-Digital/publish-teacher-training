@@ -39,9 +39,7 @@ RSpec.describe "Courses API", type: :request do
           "maths" => nil,
           "science" => nil,
           "qualification" => 1,
-          "recruitment_cycle" => {
-            "name" => "2019/20"
-          },
+          "recruitment_cycle" => "2019",
           "campus_statuses" => [
             {
               "campus_code" => "-",
@@ -50,9 +48,7 @@ RSpec.describe "Courses API", type: :request do
               "publish" => nil,
               "status" => nil,
               "course_open_date" => nil,
-              "recruitment_cycle" => {
-                "name" => "2019/20"
-              }
+              "recruitment_cycle" => "2019"
             }
           ],
           "subjects" => [
