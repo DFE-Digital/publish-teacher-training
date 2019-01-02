@@ -1,5 +1,5 @@
 class SiteStatusSerializer < ActiveModel::Serializer
-  attributes :campus_code, :name, :vac_status, :publish, :status, :course_open_date
+  attributes :campus_code, :name, :vac_status, :publish, :status, :course_open_date, :recruitment_cycle
 
   def campus_code
     object.site.code
@@ -14,5 +14,12 @@ class SiteStatusSerializer < ActiveModel::Serializer
 
   def name
     object.site.location_name
+  end
+
+  # TODO: make recruitment cycle dynamic
+  def recruitment_cycle
+    {
+      "name" => "2019/20"
+    }
   end
 end
