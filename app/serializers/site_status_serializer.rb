@@ -8,7 +8,7 @@ class SiteStatusSerializer < ActiveModel::Serializer
   # rubocop:disable Style/DateTime
   def course_open_date
     # TODO applications_accepted_from should be a timestamp, not a string
-    DateTime.parse(object.applications_accepted_from).iso8601 if object.applications_accepted_from
+    DateTime.parse(object.applications_accepted_from).iso8601 if object.applications_accepted_from.present?
   end
   # rubocop:enable Style/DateTime
 
