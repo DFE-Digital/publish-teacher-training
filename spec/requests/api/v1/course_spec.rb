@@ -19,7 +19,7 @@ RSpec.describe "Courses API", type: :request do
         english: 3,
         maths: 9,
         profpost_flag: "Postgraduate",
-        program_type: "SD",
+        program_type: "School Direct training programme",
         modular: "",
         provider: provider)
 
