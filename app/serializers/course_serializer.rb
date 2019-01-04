@@ -8,6 +8,10 @@ class CourseSerializer < ActiveModel::Serializer
              :program_type, :modular, :english, :maths, :science, :qualification, :recruitment_cycle,
              :start_month_string
 
+  def profpost_flag
+    object.profpost_flag_before_type_cast
+  end
+
   def start_month
     object.start_date.iso8601 if object.start_date
   end
