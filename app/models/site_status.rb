@@ -8,6 +8,13 @@ class SiteStatus < ApplicationRecord
     "No vacancies" => "",
   }
 
+  enum status: {
+    "Discontinued" => "D",
+    "Running" => "R",
+    "New" => "N",
+    "Suspended" => "S",
+  }
+
   belongs_to :site
   belongs_to :course
 end

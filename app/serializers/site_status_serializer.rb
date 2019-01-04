@@ -9,6 +9,10 @@ class SiteStatusSerializer < ActiveModel::Serializer
     object.vac_status_before_type_cast
   end
 
+  def status
+    object.status_before_type_cast
+  end
+
   # rubocop:disable Style/DateTime
   def course_open_date
     # TODO applications_accepted_from should be a timestamp, not a string
