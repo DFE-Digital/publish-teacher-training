@@ -24,7 +24,7 @@ RSpec.describe "Courses API", type: :request do
         provider: provider)
 
       course.site_statuses.first.update(
-        vac_status: 'F',
+        vac_status: 'Full time vacancies',
         publish: 'Y',
         status: 'R',
         applications_accepted_from: "2018-10-09 00:00:00"
