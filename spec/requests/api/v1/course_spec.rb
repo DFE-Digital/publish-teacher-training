@@ -49,6 +49,7 @@ RSpec.describe "Courses API", type: :request do
         {
           "course_code" => "2HPF",
           "start_month" => "2019-09-01T00:00:00Z",
+          "start_month_string" => "September",
           "name" => "Religious Education",
           "study_mode" => "F",
           "copy_form_required" => "Y",
