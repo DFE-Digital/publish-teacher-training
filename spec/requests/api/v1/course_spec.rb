@@ -15,7 +15,7 @@ RSpec.describe "Courses API", type: :request do
         qualification: 1,
         sites: [site],
         subjects: [subject1, subject2],
-        study_mode: "F",
+        study_mode: "full time",
         english: 3,
         maths: 9,
         profpost_flag: "Postgraduate",

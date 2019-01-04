@@ -16,6 +16,12 @@ class Course < ApplicationRecord
     "PG Teaching Apprenticeship" => "TA",
   }
 
+  enum study_mode: {
+    "full time" => "F",
+    "part time" => "P",
+    "full time or part time" => "B",
+  }
+
   belongs_to :provider
   belongs_to :accrediting_provider, class_name: 'Provider', optional: true
   has_and_belongs_to_many :subjects
