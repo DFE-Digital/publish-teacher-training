@@ -18,7 +18,7 @@ RSpec.describe "Courses API", type: :request do
         study_mode: "F",
         english: 3,
         maths: 9,
-        profpost_flag: "PG",
+        profpost_flag: "Postgraduate",
         program_type: "SD",
         modular: "",
         provider: provider)
