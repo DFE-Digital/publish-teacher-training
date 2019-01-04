@@ -8,13 +8,27 @@ RSpec.describe "Courses API", type: :request do
       subject1 = FactoryBot.create(:subject, subject_code: "1", subject_name: "Secondary")
       subject2 = FactoryBot.create(:subject, subject_code: "2", subject_name: "Mathematics")
 
-      FactoryBot.create(:course,
+      course = FactoryBot.create(:course,
         course_code: "2HPF",
+        start_date: Date.new(2019, 9, 1),
         name: "Religious Education",
         qualification: 1,
         sites: [site],
         subjects: [subject1, subject2],
+        study_mode: "F",
+        english: 3,
+        maths: 9,
+        profpost_flag: "PG",
+        program_type: "SD",
+        modular: "",
         provider: provider)
+
+      course.site_statuses.first.update(
+        vac_status: 'F',
+        publish: 'Y',
+        status: 'R',
+        applications_accepted_from: "2018-10-09 00:00:00"
+      )
     end
 
     it "returns http success" do
@@ -34,15 +48,15 @@ RSpec.describe "Courses API", type: :request do
       expect(json). to eq([
         {
           "course_code" => "2HPF",
-          "start_month" => nil,
+          "start_month" => "2019-09-01T00:00:00Z",
           "name" => "Religious Education",
-          "study_mode" => nil,
+          "study_mode" => "F",
           "copy_form_required" => "Y",
-          "profpost_flag" => nil,
-          "program_type" => nil,
-          "modular" => nil,
-          "english" => nil,
-          "maths" => nil,
+          "profpost_flag" => "PG",
+          "program_type" => "SD",
+          "modular" => "",
+          "english" => 3,
+          "maths" => 9,
           "science" => nil,
           "qualification" => 1,
           "recruitment_cycle" => "2019",
@@ -50,10 +64,10 @@ RSpec.describe "Courses API", type: :request do
             {
               "campus_code" => "-",
               "name" => "Main Site",
-              "vac_status" => nil,
-              "publish" => nil,
-              "status" => nil,
-              "course_open_date" => nil,
+              "vac_status" => "F",
+              "publish" => "Y",
+              "status" => "R",
+              "course_open_date" => "2018-10-09T00:00:00+00:00",
               "recruitment_cycle" => "2019"
             }
           ],
