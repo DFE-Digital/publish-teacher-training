@@ -12,6 +12,14 @@ class CourseSerializer < ActiveModel::Serializer
     object.profpost_flag_before_type_cast
   end
 
+  def program_type
+    object.program_type_before_type_cast
+  end
+
+  def study_mode
+    object.study_mode_before_type_cast
+  end
+
   def start_month
     object.start_date.iso8601 if object.start_date
   end

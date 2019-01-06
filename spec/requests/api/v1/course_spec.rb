@@ -15,18 +15,18 @@ RSpec.describe "Courses API", type: :request do
         qualification: 1,
         sites: [site],
         subjects: [subject1, subject2],
-        study_mode: "F",
+        study_mode: "full time",
         english: 3,
         maths: 9,
         profpost_flag: "Postgraduate",
-        program_type: "SD",
+        program_type: "School Direct training programme",
         modular: "",
         provider: provider)
 
       course.site_statuses.first.update(
-        vac_status: 'F',
+        vac_status: 'Full time vacancies',
         publish: 'Y',
-        status: 'R',
+        status: 'Running',
         applications_accepted_from: "2018-10-09 00:00:00"
       )
     end
