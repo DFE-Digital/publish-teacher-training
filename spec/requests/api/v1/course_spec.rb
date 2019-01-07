@@ -4,6 +4,16 @@ RSpec.describe "Courses API", type: :request do
   describe 'GET index' do
     before do
       provider = FactoryBot.create(:provider, provider_name: "ACME SCITT", provider_code: "2LD", site_count: 0, course_count: 0)
+      FactoryBot.create(:provider_enrichment,
+                        provider_code: "2LD",
+                        provider: provider,
+                        json_data: {
+                          "Address1" => "Sydney Russell School",
+                          "Address2" => "Parsloes Avenue",
+                          "Address3" => "Dagenham",
+                          "Address4" => "Essex",
+                          "Postcode" => "RM9 5QT"
+                        })
       site = FactoryBot.create(:site, code: "-", location_name: "Main Site", provider: provider)
       subject1 = FactoryBot.create(:subject, subject_code: "1", subject_name: "Secondary")
       subject2 = FactoryBot.create(:subject, subject_code: "2", subject_name: "Mathematics")
@@ -86,7 +96,12 @@ RSpec.describe "Courses API", type: :request do
             "institution_code" => "2LD",
             "institution_name" => "ACME SCITT",
             "institution_type" => "Y",
-            "accrediting_provider" => nil
+            "accrediting_provider" => nil,
+            "address1" => "Sydney Russell School",
+            "address2" => "Parsloes Avenue",
+            "address3" => "Dagenham",
+            "address4" => "Essex",
+            "postcode" => "RM9 5QT"
           },
           "accrediting_provider" => nil
         }
