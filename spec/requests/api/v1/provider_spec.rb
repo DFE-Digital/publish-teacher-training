@@ -12,6 +12,13 @@ RSpec.describe "Providers API", type: :request do
         location_name: "Main site",
         code: "-",
         provider: provider)
+      FactoryBot.create(:provider_enrichment,
+                        provider_code: provider.provider_code,
+                        json_data: { "Address1" => "Sydney Russell School",
+                                    "Address2" => "Parsloes Avenue",
+                                    "Address3" => "Dagenham",
+                                    "Address4" => "Essex",
+                                    "Postcode" => "RM9 5QT" })
     end
 
     it "returns http success" do
@@ -43,6 +50,11 @@ RSpec.describe "Providers API", type: :request do
             "institution_code" => "A123",
             "institution_name" => "ACME SCITT",
             "institution_type" => "Y",
+            "address1" => "Sydney Russell School",
+            "address2" => "Parsloes Avenue",
+            "address3" => "Dagenham",
+            "address4" => "Essex",
+            "postcode" => "RM9 5QT"
           },
         ]
       )
