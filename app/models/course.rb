@@ -22,6 +22,15 @@ class Course < ApplicationRecord
     "full time or part time" => "B",
   }
 
+  enum age_range: {
+    "primary" => "P",
+    "secondary" => "S",
+    "middle years" => "M",
+    # 'other' doesn't exist in the data yet but is reserved for courses that don't fit
+    # the above categories
+    "other" => "O",
+  }
+
   belongs_to :provider
   belongs_to :accrediting_provider, class_name: 'Provider', optional: true
   has_and_belongs_to_many :subjects

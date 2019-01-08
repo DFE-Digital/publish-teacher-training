@@ -6,7 +6,7 @@ class CourseSerializer < ActiveModel::Serializer
 
   attributes :course_code, :start_month, :name, :study_mode, :copy_form_required, :profpost_flag,
              :program_type, :modular, :english, :maths, :science, :qualification, :recruitment_cycle,
-             :start_month_string
+             :start_month_string, :age_range
 
   def profpost_flag
     object.profpost_flag_before_type_cast
@@ -18,6 +18,10 @@ class CourseSerializer < ActiveModel::Serializer
 
   def study_mode
     object.study_mode_before_type_cast
+  end
+
+  def age_range
+    object.age_range_before_type_cast
   end
 
   def start_month
