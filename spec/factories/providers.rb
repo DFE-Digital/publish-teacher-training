@@ -11,13 +11,13 @@ FactoryBot.define do
     transient do
       site_count { 1 }
       course_count { 2 }
-      enrichment_count { 1 }
+      enrichments { build_list(:provider_enrichment, 1) }
     end
 
     after(:create) do |provider, evaluator|
       create_list(:course, evaluator.course_count, provider: provider)
       create_list(:site, evaluator.site_count, provider: provider)
-      create_list(:provider_enrichment, evaluator.enrichment_count, provider: provider)
+      provider.enrichments << evaluator.enrichments
     end
   end
 end
