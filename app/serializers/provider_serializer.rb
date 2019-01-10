@@ -19,4 +19,24 @@ class ProviderSerializer < ActiveModel::Serializer
   def accrediting_provider
     # TODO: pull this thru from UCAS import
   end
+
+  def address1
+    object.address_info['address1']
+  end
+
+  def address2
+    object.address_info['address2']
+  end
+
+  def address3
+    object.address_info['address3']
+  end
+
+  def address4
+    object.address_info['address4']
+  end
+
+  def postcode
+    object.address_info['postcode']
+  end
 end

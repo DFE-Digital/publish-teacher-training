@@ -17,7 +17,12 @@ FactoryBot.define do
     after(:create) do |provider, evaluator|
       create_list(:course, evaluator.course_count, provider: provider)
       create_list(:site, evaluator.site_count, provider: provider)
-      provider.enrichments << evaluator.enrichments
+      # Add the enrichments to the provider. Normally setting provider_code
+      # would be the model's concern, but as we're still a read-only app we'll
+      # have to do that here.
+      provider.enrichments << evaluator.enrichments.each do |enrichment|
+        enrichment.provider_code ||= provider.provider_code
+      end
     end
   end
 end
