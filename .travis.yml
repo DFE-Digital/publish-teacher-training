@@ -4,6 +4,8 @@ git:
 services:
   - docker
 before_script:
+  - source ./config.sh
+  - ./docker-login.sh
   - docker-compose pull
   - docker-compose build
   - docker-compose up --no-build -d
