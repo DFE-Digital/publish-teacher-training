@@ -38,3 +38,11 @@ It's best to lint just your app directories and not those belonging to the frame
 ```bash
 $ docker-compose exec web /bin/sh -c "bundle exec govuk-lint-ruby app config db lib spec --format clang"
 ```
+
+## CI variables
+
+You'll need to define the `AZURE_CR_PASSWORD` in Travis in order to successfully build and publish. This can be done using this command:
+
+```bash
+travis encrypt AZURE_CR_PASSWORD="xxx" --add
+```
