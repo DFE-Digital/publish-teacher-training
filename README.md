@@ -33,7 +33,7 @@ curl --basic -u bat:beta http://localhost:3000/api/v1/subjects.json
 
 ## Linting
 
-It's best to lint just your app directories and not those belonging to the framework, e.g.
+It's best to lint just your app directories and not those belonging to the framework:
 
 ```bash
 $ docker-compose exec web /bin/sh -c "bundle exec govuk-lint-ruby app config db lib spec --format clang"
