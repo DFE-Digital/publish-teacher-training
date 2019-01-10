@@ -1,0 +1,24 @@
+version: '3.2'
+volumes:
+  dbdata:
+services:
+  db:
+    image: postgres:9.6-alpine
+    # To preserve data between runs of docker-compose, we mount a folder from the host machine.
+    volumes:
+     - dbdata:/var/lib/postgresql/data
+  web:
+    build:
+      context: .
+      cache_from:
+        - batdevcontainerregistry.azurecr.io/manage-courses-backend:latest
+    image: batdevcontainerregistry.azurecr.io/manage-courses-backend:latest
+    command: bash -c "rm -f tmp/pids/server.pid && bundle exec rails server -p 3000 -b '0.0.0.0'"
+    volumes:
+      - .:/app
+    ports:
+      - "3000:3000"
+    depends_on:
+      - db
+    environment:
+      - DB_HOSTNAME=db
