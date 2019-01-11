@@ -6,7 +6,7 @@ RSpec.describe "Providers API", type: :request do
       provider = FactoryBot.create(:provider,
         provider_name: "ACME SCITT",
         provider_code: "A123",
-        provider_type: 'Y',
+        provider_type: 'SCITT',
         site_count: 0)
       FactoryBot.create(:site,
         location_name: "Main site",
@@ -20,21 +20,20 @@ RSpec.describe "Providers API", type: :request do
                                     "Address4" => "Essex",
                                     "Postcode" => "RM9 5QT" })
       provider = FactoryBot.create(:provider,
-        provider_name: "BCME SCITT",
+        provider_name: "ACME University",
         provider_code: "B123",
-        provider_type: 'B',
+        provider_type: 'University',
+        address1: "Bee School",
+        address2: "Bee Avenue",
+        address3: "Bee City",
+        address4: "Bee Hive",
+        postcode: "B3 3BB",
+        enrichments: [],
         site_count: 0)
       FactoryBot.create(:site,
         location_name: "Main site",
         code: "-",
         provider: provider)
-      FactoryBot.create(:provider_enrichment,
-                        provider_code: provider.provider_code,
-                        json_data: { "Address1" => "Bee School",
-                                    "Address2" => "Bee Avenue",
-                                    "Address3" => "Bee City",
-                                    "Address4" => "Bee Hive",
-                                    "Postcode" => "B3 3BB" })
     end
 
     it "returns http success" do
@@ -65,7 +64,7 @@ RSpec.describe "Providers API", type: :request do
             ],
             "institution_code" => "A123",
             "institution_name" => "ACME SCITT",
-            "institution_type" => "Y",
+            "institution_type" => "B",
             "address1" => "Sydney Russell School",
             "address2" => "Parsloes Avenue",
             "address3" => "Dagenham",
@@ -82,8 +81,8 @@ RSpec.describe "Providers API", type: :request do
               }
             ],
             "institution_code" => "B123",
-            "institution_name" => "BCME SCITT",
-            "institution_type" => "B",
+            "institution_name" => "ACME University",
+            "institution_type" => "O",
             "address1" => "Bee School",
             "address2" => "Bee Avenue",
             "address3" => "Bee City",
