@@ -1,6 +1,14 @@
 class Provider < ApplicationRecord
   self.table_name = "provider"
 
+  enum provider_type: {
+    "SCITT" => "B",
+    "Lead school" => "Y",
+    "University" => "O",
+    "??" => "",
+    "Invalid value" => "0", # there is only one of these in the data
+  }
+
   has_and_belongs_to_many :organisations, join_table: :organisation_provider
 
   has_many :sites
