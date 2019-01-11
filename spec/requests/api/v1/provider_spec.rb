@@ -23,18 +23,17 @@ RSpec.describe "Providers API", type: :request do
         provider_name: "ACME University",
         provider_code: "B123",
         provider_type: 'University',
+        address1: "Bee School",
+        address2: "Bee Avenue",
+        address3: "Bee City",
+        address4: "Bee Hive",
+        postcode: "B3 3BB",
+        enrichments: [],
         site_count: 0)
       FactoryBot.create(:site,
         location_name: "Main site",
         code: "-",
         provider: provider)
-      FactoryBot.create(:provider_enrichment,
-                        provider_code: provider.provider_code,
-                        json_data: { "Address1" => "Bee School",
-                                    "Address2" => "Bee Avenue",
-                                    "Address3" => "Bee City",
-                                    "Address4" => "Bee Hive",
-                                    "Postcode" => "B3 3BB" })
     end
 
     it "returns http success" do
