@@ -13,7 +13,7 @@ class ProviderSerializer < ActiveModel::Serializer
   end
 
   def institution_type
-    'Y' # TODO: wire up data
+    object.provider_type
   end
 
   def accrediting_provider

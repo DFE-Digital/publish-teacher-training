@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.describe "Courses API", type: :request do
   describe 'GET index' do
     before do
-      provider = FactoryBot.create(:provider, provider_name: "ACME SCITT", provider_code: "2LD", site_count: 0, course_count: 0)
+      provider = FactoryBot.create(:provider, provider_name: "ACME SCITT", provider_code: "2LD", provider_type: "Y", site_count: 0, course_count: 0)
       FactoryBot.create(:provider_enrichment,
                         provider_code: "2LD",
                         provider: provider,

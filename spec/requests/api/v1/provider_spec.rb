@@ -19,6 +19,22 @@ RSpec.describe "Providers API", type: :request do
                                     "Address3" => "Dagenham",
                                     "Address4" => "Essex",
                                     "Postcode" => "RM9 5QT" })
+      provider = FactoryBot.create(:provider,
+        provider_name: "BCME SCITT",
+        provider_code: "B123",
+        provider_type: 'B',
+        site_count: 0)
+      FactoryBot.create(:site,
+        location_name: "Main site",
+        code: "-",
+        provider: provider)
+      FactoryBot.create(:provider_enrichment,
+                        provider_code: provider.provider_code,
+                        json_data: { "Address1" => "Bee School",
+                                    "Address2" => "Bee Avenue",
+                                    "Address3" => "Bee City",
+                                    "Address4" => "Bee Hive",
+                                    "Postcode" => "B3 3BB" })
     end
 
     it "returns http success" do
@@ -55,6 +71,24 @@ RSpec.describe "Providers API", type: :request do
             "address3" => "Dagenham",
             "address4" => "Essex",
             "postcode" => "RM9 5QT"
+          },
+          {
+            "accrediting_provider" => nil,
+            "campuses" => [
+              {
+                "campus_code" => "-",
+                "name" => "Main site",
+                "recruitment_cycle" => "2019"
+              }
+            ],
+            "institution_code" => "B123",
+            "institution_name" => "BCME SCITT",
+            "institution_type" => "B",
+            "address1" => "Bee School",
+            "address2" => "Bee Avenue",
+            "address3" => "Bee City",
+            "address4" => "Bee Hive",
+            "postcode" => "B3 3BB"
           },
         ]
       )
