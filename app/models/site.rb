@@ -1,6 +1,8 @@
 class Site < ApplicationRecord
   self.table_name = "site"
 
+  # These correspond to the first-level NUTS regions for the UK (minus Northern Ireland)
+  # https://en.wikipedia.org/wiki/First-level_NUTS_of_the_European_Union#United_Kingdom
   enum region_code: {
     'London' => 1,
     'South East' => 2,
