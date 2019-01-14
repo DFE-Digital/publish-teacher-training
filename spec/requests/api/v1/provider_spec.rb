@@ -13,6 +13,7 @@ describe 'Providers API', type: :request do
              address3: nil,
              address4: 'London',
              postcode: 'N1 5JN',
+             region_code: 1,
              enrichments: [enrichment])
     end
     let!(:site) do
@@ -28,7 +29,8 @@ describe 'Providers API', type: :request do
             address2: '',
             address3: 'Dagenham',
             address4: 'Essex',
-            postcode: 'RM9 5QT')
+            postcode: 'RM9 5QT',
+            region_code: 2)
     end
     let(:provider2) do
       create(:provider,
@@ -95,7 +97,8 @@ describe 'Providers API', type: :request do
               'address2' => '',
               'address3' => 'Dagenham',
               'address4' => 'Essex',
-              'postcode' => 'RM9 5QT'
+              'postcode' => 'RM9 5QT',
+              "region_code" => 2,
             },
             {
               'accrediting_provider' => nil,
@@ -114,7 +117,8 @@ describe 'Providers API', type: :request do
               'address2' => 'Bee Avenue',
               'address3' => 'Bee City',
               'address4' => 'Bee Hive',
-              'postcode' => 'B3 3BB'
+              'postcode' => 'B3 3BB',
+              "region_code" => nil,
             }
           ]
         )
@@ -128,7 +132,7 @@ describe 'Providers API', type: :request do
         # from json_data
         ProviderEnrichment.connection.update(<<~EOSQL)
           UPDATE provider_enrichment
-                 SET json_data=json_data-'Address1'-'Address2'-'Address3'-'Address4'-'Postcode'
+                 SET json_data=json_data-'Address1'-'Address2'-'Address3'-'Address4'-'Postcode' - 'RegionCode'
                  WHERE provider_code='#{enrichment.id}'
         EOSQL
 
@@ -154,7 +158,8 @@ describe 'Providers API', type: :request do
                                 'address2' => '313 Bridport Pl',
                                 'address3' => nil,
                                 'address4' => 'London',
-                                'postcode' => 'N1 5JN'
+                                'postcode' => 'N1 5JN',
+                                "region_code" => 1,
                               },
                               {
                                 'accrediting_provider' => nil,
@@ -173,7 +178,8 @@ describe 'Providers API', type: :request do
                                 'address2' => 'Bee Avenue',
                                 'address3' => 'Bee City',
                                 'address4' => 'Bee Hive',
-                                'postcode' => 'B3 3BB'
+                                'postcode' => 'B3 3BB',
+                                "region_code" => nil
                               }
                             ])
       end

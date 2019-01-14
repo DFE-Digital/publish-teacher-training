@@ -131,6 +131,7 @@ ActiveRecord::Schema.define(version: 0) do
     t.text "provider_code"
     t.text "provider_type"
     t.text "postcode"
+    t.integer "region_code"
     t.text "scitt"
     t.text "url"
     t.text "address1"

@@ -24,7 +24,7 @@ class ProviderSerializer < ActiveModel::Serializer
   has_many :sites, key: :campuses
 
   attributes :institution_code, :institution_name, :institution_type, :accrediting_provider,
-             :address1, :address2, :address3, :address4, :postcode
+             :address1, :address2, :address3, :address4, :postcode, :region_code
 
   def institution_code
     object.provider_code
@@ -60,5 +60,9 @@ class ProviderSerializer < ActiveModel::Serializer
 
   def postcode
     object.address_info['postcode']
+  end
+
+  def region_code
+    object.address_info['region_code']
   end
 end

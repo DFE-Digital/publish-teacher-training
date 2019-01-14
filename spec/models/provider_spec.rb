@@ -37,7 +37,8 @@ RSpec.describe Provider, type: :model do
         'address2' => provider.address2,
         'address3' => provider.address3,
         'address4' => provider.address4,
-        'postcode' => provider.postcode
+        'postcode' => provider.postcode,
+        'region_code' => provider.region_code
       )
     end
 
@@ -51,7 +52,8 @@ RSpec.describe Provider, type: :model do
           'address2' => enrichment.address2,
           'address3' => enrichment.address3,
           'address4' => enrichment.address4,
-          'postcode' => enrichment.postcode
+          'postcode' => enrichment.postcode,
+          'region_code' => enrichment.region_code
         )
       end
     end
