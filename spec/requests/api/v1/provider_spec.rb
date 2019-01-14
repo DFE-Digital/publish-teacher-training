@@ -19,7 +19,7 @@ describe 'Providers API', type: :request do
       create(:site,
              location_name: 'Main site',
              code: '-',
-             region_code: 1,
+             region_code: 'London',
              provider: provider)
     end
     let(:enrichment) do
