@@ -5,10 +5,6 @@ module Api
         @providers = Provider.all
         paginate json: @providers
       end
-
-      def show
-        render json: Provider.find(params[:id])
-      end
     end
   end
 end
