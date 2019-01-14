@@ -1,5 +1,5 @@
 class SiteSerializer < ActiveModel::Serializer
-  attributes :campus_code, :name, :recruitment_cycle
+  attributes :campus_code, :name, :region_code, :recruitment_cycle
 
   def campus_code
     object.code

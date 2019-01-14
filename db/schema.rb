@@ -175,6 +175,7 @@ ActiveRecord::Schema.define(version: 0) do
     t.text "postcode"
     t.text "address1"
     t.integer "provider_id", default: 0, null: false
+    t.integer "region_code"
     t.index ["provider_id", "code"], name: "IX_site_provider_id_code", unique: true
   end
 

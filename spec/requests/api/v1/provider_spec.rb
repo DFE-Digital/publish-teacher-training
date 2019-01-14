@@ -19,6 +19,7 @@ describe 'Providers API', type: :request do
       create(:site,
              location_name: 'Main site',
              code: '-',
+             region_code: 1,
              provider: provider)
     end
     let(:enrichment) do
@@ -46,6 +47,7 @@ describe 'Providers API', type: :request do
       create(:site,
              location_name: 'Main site',
              code: '-',
+             region_code: nil,
              provider: provider2)
     end
     let(:credentials) do
@@ -82,6 +84,7 @@ describe 'Providers API', type: :request do
                 {
                   'campus_code' => '-',
                   'name' => 'Main site',
+                  'region_code' => 1,
                   'recruitment_cycle' => '2019'
                 }
               ],
@@ -100,6 +103,7 @@ describe 'Providers API', type: :request do
                 {
                   'campus_code' => '-',
                   'name' => 'Main site',
+                  'region_code' => nil,
                   'recruitment_cycle' => '2019'
                 }
               ],
@@ -139,6 +143,7 @@ describe 'Providers API', type: :request do
                                   {
                                     'campus_code' => '-',
                                     'name' => 'Main site',
+                                    'region_code' => 1,
                                     'recruitment_cycle' => '2019'
                                   }
                                 ],
@@ -157,6 +162,7 @@ describe 'Providers API', type: :request do
                                   {
                                     'campus_code' => '-',
                                     'name' => 'Main site',
+                                    'region_code' => nil,
                                     'recruitment_cycle' => '2019'
                                   }
                                 ],
