@@ -1,5 +1,5 @@
 class SiteSerializer < ActiveModel::Serializer
-  attributes :campus_code, :name, :recruitment_cycle
+  attributes :campus_code, :name, :region_code, :recruitment_cycle
 
   def campus_code
     object.code
@@ -7,6 +7,10 @@ class SiteSerializer < ActiveModel::Serializer
 
   def name
     object.location_name
+  end
+
+  def region_code
+    object.region_code
   end
 
   # TODO: make recruitment cycle dynamic
