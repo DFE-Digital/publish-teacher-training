@@ -5,7 +5,7 @@ RSpec.describe ProviderSerializer do
   subject { serialize(provider) }
 
   it { should include(institution_code: provider.provider_code) }
-  it { should include(institution_name: provider.provider_name) }
+  it { should have_key(:institution_name) }
   it { should include(address1: provider.enrichments.last.address1) }
   it { should include(address2: provider.enrichments.last.address2) }
   it { should include(address3: provider.enrichments.last.address3) }

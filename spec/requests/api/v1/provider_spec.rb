@@ -32,7 +32,7 @@ describe 'Providers API', type: :request do
     end
     let(:provider2) do
       create(:provider,
-             provider_name: 'ACME University',
+             provider_name: 'ACME University of the North East',
              provider_code: 'B123',
              provider_type: 'University',
              address1: 'Bee School',
@@ -89,7 +89,11 @@ describe 'Providers API', type: :request do
                 }
               ],
               'institution_code' => 'A123',
-              'institution_name' => 'ACME SCITT',
+              'institution_name' => {
+                'full' => 'ACME SCITT',
+                'long' => 'ACME SCITT',
+                'short' => 'ACME S',
+              },
               'institution_type' => 'B',
               'address1' => 'Sydney Russell School',
               'address2' => '',
@@ -108,7 +112,11 @@ describe 'Providers API', type: :request do
                 }
               ],
               'institution_code' => 'B123',
-              'institution_name' => 'ACME University',
+              'institution_name' => {
+                'full' => 'ACME University of the North East',
+                'long' => 'ACME University of t',
+                'short' => 'ACME U',
+              },
               'institution_type' => 'O',
               'address1' => 'Bee School',
               'address2' => 'Bee Avenue',
@@ -148,7 +156,11 @@ describe 'Providers API', type: :request do
                                   }
                                 ],
                                 'institution_code' => 'A123',
-                                'institution_name' => 'ACME SCITT',
+                                'institution_name' => {
+                                  'full' => 'ACME SCITT',
+                                  'long' => 'ACME SCITT',
+                                  'short' => 'ACME S',
+                                },
                                 'institution_type' => 'B',
                                 'address1' => 'Shoreditch Park Primary School',
                                 'address2' => '313 Bridport Pl',
@@ -167,7 +179,11 @@ describe 'Providers API', type: :request do
                                   }
                                 ],
                                 'institution_code' => 'B123',
-                                'institution_name' => 'ACME University',
+                                'institution_name' => {
+                                  'full' => 'ACME University of the North East',
+                                  'long' => 'ACME University of t',
+                                  'short' => 'ACME U',
+                                },
                                 'institution_type' => 'O',
                                 'address1' => 'Bee School',
                                 'address2' => 'Bee Avenue',

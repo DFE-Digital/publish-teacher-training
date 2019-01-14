@@ -9,7 +9,11 @@ class ProviderSerializer < ActiveModel::Serializer
   end
 
   def institution_name
-    object.provider_name
+    {
+      "full" => object.provider_name,
+      "long" => object.provider_name[0..19],
+      "short" => object.provider_name[0..5],
+    }
   end
 
   def institution_type

@@ -98,7 +98,11 @@ RSpec.describe "Courses API", type: :request do
           ],
           "provider" => {
             "institution_code" => "2LD",
-            "institution_name" => "ACME SCITT",
+            "institution_name" => {
+              "full" => "ACME SCITT",
+              "long" => "ACME SCITT",
+              "short" => "ACME S",
+            },
             "institution_type" => "B",
             "accrediting_provider" => nil,
             "address1" => "Sydney Russell School",
