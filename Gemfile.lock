@@ -47,6 +47,9 @@ GEM
       i18n (>= 0.7, < 2)
       minitest (~> 5.1)
       tzinfo (~> 1.1)
+    annotate (2.7.4)
+      activerecord (>= 3.2, < 6.0)
+      rake (>= 10.4, < 13.0)
     api-pagination (4.8.2)
     arel (9.0.0)
     ast (2.4.0)
@@ -163,6 +166,7 @@ GEM
     rb-fsevent (0.10.3)
     rb-inotify (0.10.0)
       ffi (~> 1.0)
+    rb-readline (0.5.5)
     rspec-core (3.8.0)
       rspec-support (~> 3.8.0)
     rspec-expectations (3.8.2)
@@ -235,6 +239,7 @@ PLATFORMS
 
 DEPENDENCIES
   active_model_serializers
+  annotate
   api-pagination
   awesome_print
   bootsnap (>= 1.1.0)
@@ -251,6 +256,7 @@ DEPENDENCIES
   pry-byebug
   puma (~> 3.11)
   rails (~> 5.2.2)
+  rb-readline
   rspec-rails
   schema_to_scaffold
   shoulda-matchers (~> 3.1)

@@ -1,3 +1,25 @@
+# == Schema Information
+#
+# Table name: provider
+#
+#  id            :integer          not null, primary key
+#  address4      :text
+#  provider_name :text
+#  scheme_member :text
+#  contact_name  :text
+#  year_code     :text
+#  provider_code :text
+#  provider_type :text
+#  postcode      :text
+#  scitt         :text
+#  url           :text
+#  address1      :text
+#  address2      :text
+#  address3      :text
+#  email         :text
+#  telephone     :text
+#
+
 class Provider < ApplicationRecord
   self.table_name = "provider"
 
