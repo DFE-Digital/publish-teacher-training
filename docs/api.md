@@ -409,6 +409,13 @@ address3 | Text || Town/City
 address4 | Text || County
 postcode | Text || Postcode
 region_code | Text | 01 to 11 | 2-character string
+data_download_format | Text | `ASCII DATA`, `ASCII DATA and UNICODE DATA` or `Unicode data` |
+oustanding_decisions | Text | `Alphabetic`, `Application code`, `Course / Alphabetic`, `Course / Application code`, `Course / Learner Number`, `Faculty / Alphabetic`, `Faculty / Application code`, `Faculty / Course / Alphabetic`, `Faculty / Course / Application code`, `Faculty / Course / Learner code`, `Not required` or `Learner Number` |
+require_copy_forms | Text | `No, not required` or `Yes, required` |
+star_j | Text | `UCAS link` or `Flat file` |
+star_x | Text | `No, not required` or `Yes, required` |
+utt_application_alerts | Text | `No, not required`, `Yes, required`, `Yes - only my programmes` or `Yes - for accredited programmes only` | New UTT Application alerts
+type_of_gt12 | Text | `Coming / Enrol`, `Coming or Not`, `No response` or `Not coming` |
 
 ### Get all providers
 
