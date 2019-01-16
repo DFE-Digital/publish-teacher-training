@@ -34,7 +34,6 @@ RSpec.describe SiteSerializer do
 
   region_codes.each do |region_code|
     describe "region code #{region_code} " do
-
       let(:site) { create :site, region_code: region_code }
       it { is_expected.to eql(format("%02d", region_code)) }
       it { expect(subject.length).to eql(2) }
