@@ -18,6 +18,5 @@ module RegionCode
       'North East' => 10,
       'Scotland' => 11,
     }
-
   end
 end
