@@ -84,7 +84,7 @@ describe 'Providers API', type: :request do
                 {
                   'campus_code' => '-',
                   'name' => 'Main site',
-                  'region_code' => 1,
+                  'region_code' => '01',
                   'recruitment_cycle' => '2019'
                 }
               ],
@@ -143,7 +143,7 @@ describe 'Providers API', type: :request do
                                   {
                                     'campus_code' => '-',
                                     'name' => 'Main site',
-                                    'region_code' => 1,
+                                    'region_code' => '01',
                                     'recruitment_cycle' => '2019'
                                   }
                                 ],
