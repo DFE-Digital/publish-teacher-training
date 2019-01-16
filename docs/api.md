@@ -2,16 +2,18 @@
 
 # Authorisation
 
-The server expects an API key to be included in a header  for all API requests:
+The server expects an API key to be included in a header for all API requests:
 
-`Authorization: Bearer your_api_key`
+```
+Authorization: Bearer your_api_key
+```
 
 <aside class="notice">
 You must replace <code>your_api_key</code> with your issued API key.
 </aside>
 
 
-> To authorise, use this code:
+**To authorise, use this code:**
 
 ```shell
 # With shell, you can just pass the correct header with each request
@@ -26,7 +28,7 @@ the page size, multiple requests will be necessary to retrieve all the results.
 Clients should use the links provided in the headers for the next pages when
 retrieving the entire result-set.
 
-> Example headers:
+**Example headers:**
 
 ```
 Link: <https://manage-courses-backend.herokuapp.com/api/v1/2018/courses?page=169>; rel="last", <https://manage-courses-backend.herokuapp.com/api/v1/2018/courses?page=2>; rel="next"
@@ -47,7 +49,7 @@ time are returned.
 
 ## All-Records Pagination
 
-> Example page URLs:
+**Example page URLs:**
 
 ```
 https://manage-courses-backend.herokuapp.com/api/v1/2018/courses
@@ -61,7 +63,7 @@ parameter.
 
 ## Changed-Records Pagination
 
-> Example page URLs:
+**Example page URLs:**
 
 ```
 https://manage-courses-backend.herokuapp.com/api/v1/2018/courses?changed_since=
@@ -76,7 +78,7 @@ so clients should be prepared to receive duplicate records.
 
 # Retrieving Changed Records
 
-> Example request sequence:
+**Example request sequence:**
 
 ```
 # initial get with first page or results
@@ -201,7 +203,9 @@ This endpoint retrieves all courses.
 
 #### HTTP Request
 
-`GET https://manage-courses-backend.herokuapp.com/api/v1/<recruitment_cycle>/courses`
+```
+GET https://manage-courses-backend.herokuapp.com/api/v1/<recruitment_cycle>/courses
+```
 
 #### URL Parameters
 
@@ -216,7 +220,7 @@ curl "https://manage-courses-backend.herokuapp.com/api/v1/2019/courses"
   -H "Authorization: Bearer your_api_key"
 ```
 
-> The above command returns JSON structured like this:
+**The above command returns JSON structured like this:**
 
 ```json
 [
@@ -302,7 +306,9 @@ A course is marked as changed (and hence included in this endpoint) if:
 
 #### HTTP Request
 
-`GET https://manage-courses-backend.herokuapp.com/api/v1/<recruitment_cycle>/courses?changed_since=<iso-8601-timestamp>`
+```
+GET https://manage-courses-backend.herokuapp.com/api/v1/<recruitment_cycle>/courses?changed_since=<iso-8601-timestamp>
+```
 
 #### URL Parameters
 
@@ -355,7 +361,9 @@ This endpoint retrieves all subjects.
 
 #### HTTP Request
 
-`GET https://manage-courses-backend.herokuapp.com/api/v1/<recruitment_cycle>/subjects`
+```
+GET https://manage-courses-backend.herokuapp.com/api/v1/<recruitment_cycle>/subjects
+```
 
 #### URL Parameters
 
@@ -370,7 +378,7 @@ curl "https://manage-courses-backend.herokuapp.com/api/v1/2019/subjects"
   -H "Authorization: Bearer your_api_key"
 ```
 
-> The above command returns JSON structured like this:
+**The above command returns JSON structured like this:**
 
 ```json
 [
@@ -408,7 +416,9 @@ This endpoint retrieves all institutions.
 
 #### HTTP Request
 
-`GET https://manage-courses-backend.herokuapp.com/api/v1/<recruitment_cycle>/providers`
+```
+GET https://manage-courses-backend.herokuapp.com/api/v1/<recruitment_cycle>/providers
+```
 
 #### URL Parameters
 
@@ -423,7 +433,7 @@ curl "https://manage-courses-backend.herokuapp.com/api/v1/2019/providers"
   -H "Authorization: Bearer your_api_key"
 ```
 
-> The above command returns JSON structured like this:
+**The above command returns JSON structured like this:**
 
 ```json
 [
@@ -473,7 +483,9 @@ A provider is marked as changed (and hence included in this endpoint) if:
 
 #### HTTP Request
 
-`GET https://manage-courses-backend.herokuapp.com/api/v1/<recruitment_cycle>/providers?changed_since=<iso-8601-timestamp>`
+```
+GET https://manage-courses-backend.herokuapp.com/api/v1/<recruitment_cycle>/providers?changed_since=<iso-8601-timestamp>
+```
 
 #### URL Parameters
 
