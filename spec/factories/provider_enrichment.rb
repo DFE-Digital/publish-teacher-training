@@ -24,7 +24,7 @@ FactoryBot.define do
         'address3' => Faker::Address.city,
         'address4' => Faker::Address.state,
         'postcode' => Faker::Address.postcode,
-        'region_code' => Faker::Number.between(0, 12),
+        'region_code' => Faker::Number.between(0, 11),
         'train_with_us' => Faker::Lorem.sentence.to_s,
         'train_with_disability' => Faker::Lorem.sentence.to_s }
     }

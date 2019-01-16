@@ -36,3 +36,24 @@ RSpec.describe ProviderSerializer do
   it { should include(institution_type: provider.provider_type) }
   it { should include(accrediting_provider: nil) }
 end
+
+RSpec.describe ProviderSerializer do
+  subject do
+    serialize(provider)["region_code"]
+  end
+
+  region_codes = 1..11
+
+  region_codes.each do |region_code|
+    describe "region code #{region_code} " do
+      let(:enrichment) do
+        build(:provider_enrichment,
+              region_code: region_code)
+      end
+
+      let(:provider) { create :provider, enrichments: [enrichment] }
+      it { is_expected.to eql(format("%02d", region_code)) }
+      it { expect(subject.length).to eql(2) }
+    end
+  end
+end

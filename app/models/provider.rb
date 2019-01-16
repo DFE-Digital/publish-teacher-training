@@ -23,6 +23,8 @@
 class Provider < ApplicationRecord
   self.table_name = "provider"
 
+  include RegionCode
+
   enum provider_type: {
     "SCITT" => "B",
     "Lead school" => "Y",

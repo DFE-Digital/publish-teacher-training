@@ -63,6 +63,6 @@ class ProviderSerializer < ActiveModel::Serializer
   end
 
   def region_code
-    object.address_info['region_code']
+    '%02d' % object.address_info['region_code'] if object.address_info['region_code']
   end
 end

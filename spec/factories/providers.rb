@@ -29,6 +29,7 @@ FactoryBot.define do
     address3 { Faker::Address.city }
     address4 { Faker::Address.state }
     postcode { Faker::Address.postcode }
+    region_code { Faker::Number.between(0, 11) }
 
     transient do
       site_count { 1 }
