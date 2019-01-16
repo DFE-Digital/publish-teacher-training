@@ -1,3 +1,16 @@
+# == Schema Information
+#
+# Table name: course_site
+#
+#  id                         :integer          not null, primary key
+#  applications_accepted_from :text
+#  course_id                  :integer
+#  publish                    :text
+#  site_id                    :integer
+#  status                     :text
+#  vac_status                 :text
+#
+
 class SiteStatusSerializer < ActiveModel::Serializer
   attributes :campus_code, :name, :vac_status, :publish, :status, :course_open_date, :recruitment_cycle
 

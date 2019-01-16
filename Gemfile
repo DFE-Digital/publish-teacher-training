@@ -29,6 +29,9 @@ gem 'kaminari'
 gem 'jsonb_accessor'
 
 group :development, :test do
+  # add info about db structure to models and other files
+  gem 'annotate'
+
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
 
@@ -44,6 +47,7 @@ group :development, :test do
   # A little extra console goodness
   gem 'pry'
   gem 'pry-byebug'
+  gem 'rb-readline'
 end
 
 group :development do

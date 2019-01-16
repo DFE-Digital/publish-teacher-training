@@ -1,3 +1,24 @@
+# == Schema Information
+#
+# Table name: course
+#
+#  id                      :integer          not null, primary key
+#  age_range               :text
+#  course_code             :text
+#  name                    :text
+#  profpost_flag           :text
+#  program_type            :text
+#  qualification           :integer          not null
+#  start_date              :datetime
+#  study_mode              :text
+#  accrediting_provider_id :integer
+#  provider_id             :integer          default(0), not null
+#  modular                 :text
+#  english                 :integer
+#  maths                   :integer
+#  science                 :integer
+#
+
 class CourseSerializer < ActiveModel::Serializer
   has_many :site_statuses, key: :campus_statuses
   has_many :subjects

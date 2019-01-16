@@ -1,3 +1,16 @@
+# == Schema Information
+#
+# Table name: course_site
+#
+#  id                         :integer          not null, primary key
+#  applications_accepted_from :text
+#  course_id                  :integer
+#  publish                    :text
+#  site_id                    :integer
+#  status                     :text
+#  vac_status                 :text
+#
+
 class SiteStatus < ApplicationRecord
   self.table_name = "course_site"
 
