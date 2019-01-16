@@ -197,6 +197,20 @@ Course codes:
 
 ### Get all courses
 
+This endpoint retrieves all courses.
+
+#### HTTP Request
+
+`GET https://manage-courses-backend.herokuapp.com/api/v1/<recruitment_cycle>/courses`
+
+#### URL Parameters
+
+Parameter | Description
+--------- | -----------
+recruitment_cycle | 4-character year (e.g. 2019 for 2019/20 courses)
+
+#### Example
+
 ```shell
 curl "https://manage-courses-backend.herokuapp.com/api/v1/2019/courses"
   -H "Authorization: Bearer your_api_key"
@@ -266,18 +280,6 @@ curl "https://manage-courses-backend.herokuapp.com/api/v1/2019/courses"
   }
 ]
 ```
-
-This endpoint retrieves all courses.
-
-#### HTTP Request
-
-`GET https://manage-courses-backend.herokuapp.com/api/v1/<recruitment_cycle>/courses`
-
-#### URL Parameters
-
-Parameter | Description
---------- | -----------
-recruitment_cycle | 4-character year (e.g. 2019 for 2019/20 courses)
 
 ### Get changed courses
 
@@ -349,6 +351,20 @@ subject_name | Text | |
 
 ### Get all subjects
 
+This endpoint retrieves all subjects.
+
+#### HTTP Request
+
+`GET https://manage-courses-backend.herokuapp.com/api/v1/<recruitment_cycle>/subjects`
+
+#### URL Parameters
+
+Parameter | Description
+--------- | -----------
+recruitment_cycle | 4-character year (e.g. 2019 for 2019/20 courses)
+
+#### Example
+
 ```shell
 curl "https://manage-courses-backend.herokuapp.com/api/v1/2019/subjects"
   -H "Authorization: Bearer your_api_key"
@@ -367,18 +383,6 @@ curl "https://manage-courses-backend.herokuapp.com/api/v1/2019/subjects"
   }
 ]
 ```
-
-This endpoint retrieves all subjects.
-
-#### HTTP Request
-
-`GET https://manage-courses-backend.herokuapp.com/api/v1/<recruitment_cycle>/subjects`
-
-#### URL Parameters
-
-Parameter | Description
---------- | -----------
-recruitment_cycle | 4-character year (e.g. 2019 for 2019/20 courses)
 
 ## Providers
 
@@ -399,6 +403,20 @@ postcode | Text || Postcode
 region_code | Text | 01 to 11 | 2-character string
 
 ### Get all providers
+
+This endpoint retrieves all institutions.
+
+#### HTTP Request
+
+`GET https://manage-courses-backend.herokuapp.com/api/v1/<recruitment_cycle>/providers`
+
+#### URL Parameters
+
+Parameter | Description
+--------- | -----------
+recruitment_cycle | 4-character year (e.g. 2019 for 2019/20 courses)
+
+#### Example
 
 ```shell
 curl "https://manage-courses-backend.herokuapp.com/api/v1/2019/providers"
@@ -434,18 +452,6 @@ curl "https://manage-courses-backend.herokuapp.com/api/v1/2019/providers"
   }
 ]
 ```
-
-This endpoint retrieves all institutions.
-
-#### HTTP Request
-
-`GET https://manage-courses-backend.herokuapp.com/api/v1/<recruitment_cycle>/providers`
-
-#### URL Parameters
-
-Parameter | Description
---------- | -----------
-recruitment_cycle | 4-character year (e.g. 2019 for 2019/20 courses)
 
 ### Get changed providers
 
