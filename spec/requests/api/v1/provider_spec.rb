@@ -30,7 +30,7 @@ describe 'Providers API', type: :request do
             address3: 'Dagenham',
             address4: 'Essex',
             postcode: 'RM9 5QT',
-            region_code: 'South East')
+            region_code: 11) # this must be a number as its jsonb data not sql data or enum
     end
     let(:provider2) do
       create(:provider,
@@ -99,7 +99,7 @@ describe 'Providers API', type: :request do
               'address3' => 'Dagenham',
               'address4' => 'Essex',
               'postcode' => 'RM9 5QT',
-              'region_code' => '01',
+              'region_code' => '11',
             },
             {
               'accrediting_provider' => nil,

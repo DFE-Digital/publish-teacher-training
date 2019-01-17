@@ -42,6 +42,18 @@ RSpec.describe ProviderSerializer do
     serialize(provider)["region_code"]
   end
 
+  describe "provider region code 'London' cannot be overriden by 'Scotland'  " do
+    let(:enrichment) do
+      build(:provider_enrichment,
+            region_code: "Scotland") # this must be a number
+    end
+
+    let(:provider) { create :provider, region_code: "London", enrichments: [enrichment] }
+    it { is_expected.not_to eql(format("%02d", 1)) }
+    it { is_expected.to eql(format("%02d", 0)) }
+    it { expect(subject.length).to eql(2) }
+  end
+
   region_codes = 1..11
 
   region_codes.each do |region_code|
