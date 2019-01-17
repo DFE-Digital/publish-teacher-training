@@ -35,38 +35,38 @@ RSpec.describe ProviderSerializer do
   it { should include(postcode: provider.enrichments.last.postcode) }
   it { should include(institution_type: provider.provider_type) }
   it { should include(accrediting_provider: nil) }
-end
 
-RSpec.describe ProviderSerializer do
-  subject do
-    serialize(provider)["region_code"]
-  end
-
-  describe "provider region code 'London' cannot be overriden by 'Scotland'  " do
-    let(:enrichment) do
-      build(:provider_enrichment,
-            region_code: "Scotland") # this must be a number
+  describe 'ProviderSerializer#region_code' do
+    subject do
+      serialize(provider)["region_code"]
     end
 
-    let(:provider) { create :provider, region_code: "London", enrichments: [enrichment] }
-    it { is_expected.not_to eql(format("%02d", 1)) }
-    it { is_expected.to eql(format("%02d", 0)) }
-    it { expect(subject.length).to eql(2) }
-  end
-
-  region_codes = 1..11
-
-  region_codes.each do |region_code|
-    describe "provider region code 00 is overriden with #{region_code} " do
+    describe "provider region code 'London' cannot be overriden by 'Scotland'  " do
       let(:enrichment) do
         build(:provider_enrichment,
-              region_code: region_code)
+              region_code: "Scotland") # this must be a number
       end
 
-      let(:provider) { create :provider, region_code: 0, enrichments: [enrichment] }
-      it { is_expected.to eql(format("%02d", region_code)) }
-      it { is_expected.not_to eql(format("%02d", 0)) }
+      let(:provider) { create :provider, region_code: "London", enrichments: [enrichment] }
+      it { is_expected.not_to eql(format("%02d", 1)) }
+      it { is_expected.to eql(format("%02d", 0)) }
       it { expect(subject.length).to eql(2) }
+    end
+
+    region_codes = 1..11
+
+    region_codes.each do |region_code|
+      describe "provider region code 00 is overriden with #{region_code} " do
+        let(:enrichment) do
+          build(:provider_enrichment,
+                region_code: region_code)
+        end
+
+        let(:provider) { create :provider, region_code: 0, enrichments: [enrichment] }
+        it { is_expected.to eql(format("%02d", region_code)) }
+        it { is_expected.not_to eql(format("%02d", 0)) }
+        it { expect(subject.length).to eql(2) }
+      end
     end
   end
 end
