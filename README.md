@@ -15,6 +15,12 @@ Run this in a shell and leave it running:
 $ docker-compose up --build --detach
 ```
 
+You can then follow the log output with
+
+```
+docker-compose logs --follow
+```
+
 The first time you run the app, you need to set up the databases. With the above command running separately, do:
 
 ```
