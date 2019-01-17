@@ -12,7 +12,7 @@
 Run this in a shell and leave it running:
 
 ```
-$ docker-compose up
+$ docker-compose up --build --detach
 ```
 
 The first time you run the app, you need to set up the databases. With the above command running separately, do:
