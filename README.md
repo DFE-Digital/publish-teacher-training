@@ -25,11 +25,7 @@ Then open http://localhost:3000 to see the app.
 
 ## Accessing API
 
-Example using the command line using the development basic authentication credentials:
-
-```bash
-curl --basic -u bat:beta http://localhost:3000/api/v1/subjects.json
-```
+[See API Docs](https://github.com/DFE-Digital/manage-courses-backend/blob/master/docs/api.md)
 
 ## Linting
 
