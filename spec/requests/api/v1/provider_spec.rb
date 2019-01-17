@@ -51,12 +51,12 @@ describe 'Providers API', type: :request do
              provider: provider2)
     end
     let(:credentials) do
-      ActionController::HttpAuthentication::Basic
-        .encode_credentials('bat', 'beta')
+      ActionController::HttpAuthentication::Token
+        .encode_credentials('bats')
     end
     let(:unauthorized_credentials) do
-      ActionController::HttpAuthentication::Basic
-        .encode_credentials('foo', 'bar')
+      ActionController::HttpAuthentication::Token
+        .encode_credentials('foo')
     end
 
     it 'returns http success' do
