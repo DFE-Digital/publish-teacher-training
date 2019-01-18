@@ -14,6 +14,7 @@ describe 'Providers API', type: :request do
              address4: 'London',
              postcode: 'N1 5JN',
              region_code: 'London',
+             scitt: 'Y',
              enrichments: [enrichment])
     end
     let!(:site) do
@@ -43,6 +44,7 @@ describe 'Providers API', type: :request do
              address4: 'Bee Hive',
              postcode: 'B3 3BB',
              region_code: 'South West',
+             scitt: 'N',
              enrichments: [],
              site_count: 0)
     end
@@ -82,7 +84,7 @@ describe 'Providers API', type: :request do
         expect(json). to eq(
           [
             {
-              'accrediting_provider' => nil,
+              'accrediting_provider' => 'Y',
               'campuses' => [
                 {
                   'campus_code' => '-',
@@ -102,7 +104,7 @@ describe 'Providers API', type: :request do
               'region_code' => '11',
             },
             {
-              'accrediting_provider' => nil,
+              'accrediting_provider' => 'N',
               'campuses' => [
                 {
                   'campus_code' => '-',
@@ -143,7 +145,7 @@ describe 'Providers API', type: :request do
         json = JSON.parse(response.body)
         expect(json). to eq([
                               {
-                                'accrediting_provider' => nil,
+                                'accrediting_provider' => 'Y',
                                 'campuses' => [
                                   {
                                     'campus_code' => '-',
@@ -163,7 +165,7 @@ describe 'Providers API', type: :request do
                                 'region_code' => '01',
                               },
                               {
-                                'accrediting_provider' => nil,
+                                'accrediting_provider' => 'N',
                                 'campuses' => [
                                   {
                                     'campus_code' => '-',

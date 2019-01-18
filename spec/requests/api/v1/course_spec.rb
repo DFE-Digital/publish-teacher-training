@@ -101,7 +101,7 @@ RSpec.describe "Courses API", type: :request do
             "institution_code" => "2LD",
             "institution_name" => "ACME SCITT",
             "institution_type" => "B",
-            "accrediting_provider" => nil,
+            "accrediting_provider" => 'N',
             "address1" => "Sydney Russell School",
             "address2" => "Parsloes Avenue",
             "address3" => "Dagenham",
