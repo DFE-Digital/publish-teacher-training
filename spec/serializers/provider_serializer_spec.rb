@@ -41,10 +41,9 @@ RSpec.describe ProviderSerializer do
       serialize(provider)["region_code"]
     end
 
-    describe "provider region code 'London' can be overriden by 'Scotland'  " do
+    describe "provider region code 'London' can be overriden by enrichment region code 'Scotland'" do
       let(:enrichment) do
-        build(:provider_enrichment,
-              region_code: "Scotland") # this must be a number
+        build(:provider_enrichment, region_code: "Scotland")
       end
 
       let(:provider) { create :provider, region_code: "London", enrichments: [enrichment] }
@@ -56,8 +55,7 @@ RSpec.describe ProviderSerializer do
     region_code = 1
     describe "provider region code 00 is overriden with #{region_code} " do
       let(:enrichment) do
-        build(:provider_enrichment,
-              region_code: region_code)
+        build(:provider_enrichment, region_code: region_code)
       end
 
       let(:provider) { create :provider, region_code: 0, enrichments: [enrichment] }
