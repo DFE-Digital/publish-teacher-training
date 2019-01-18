@@ -47,9 +47,8 @@ RSpec.describe ProviderSerializer do
       end
 
       let(:provider) { create :provider, region_code: "London", enrichments: [enrichment] }
-      it { is_expected.not_to eql(format("%02d", 1)) }
-      it { is_expected.to eql(format("%02d", 11)) }
-      it { expect(subject.length).to eql(2) }
+      it { is_expected.not_to eql("%02d" % 1) }
+      it { is_expected.to eql("%02d" % 11) }
     end
 
     describe "provider region code 00 is overriden with enrichment region code" do
@@ -58,8 +57,8 @@ RSpec.describe ProviderSerializer do
       end
       let(:region_code) { 1 }
       let(:provider) { create :provider, region_code: 0, enrichments: [enrichment] }
-      it { is_expected.to eql(format("%02d", region_code)) }
-      it { is_expected.not_to eql(format("%02d", 0)) }
+      it { is_expected.to eql("%02d" % region_code) }
+      it { is_expected.not_to eql("%02d" % 0) }
     end
   end
 end
