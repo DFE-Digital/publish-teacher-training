@@ -23,6 +23,8 @@
 class Provider < ApplicationRecord
   self.table_name = "provider"
 
+  include RegionCode
+
   enum provider_type: {
     "SCITT" => "B",
     "Lead school" => "Y",
@@ -37,6 +39,7 @@ class Provider < ApplicationRecord
   has_many :enrichments, foreign_key: :provider_code, primary_key: :provider_code, class_name: "ProviderEnrichment"
   def address_info
     (enrichments.with_address_info.last || self)
-      .slice('address1', 'address2', 'address3', 'address4', 'postcode')
+      .attributes_before_type_cast
+      .slice('address1', 'address2', 'address3', 'address4', 'postcode', 'region_code')
   end
 end

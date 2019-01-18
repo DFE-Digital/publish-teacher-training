@@ -35,4 +35,30 @@ RSpec.describe ProviderSerializer do
   it { should include(postcode: provider.enrichments.last.postcode) }
   it { should include(institution_type: provider.provider_type) }
   it { should include(accrediting_provider: nil) }
+
+  describe 'ProviderSerializer#region_code' do
+    subject do
+      serialize(provider)["region_code"]
+    end
+
+    describe "provider region code 'London' can be overriden by enrichment region code 'Scotland'" do
+      let(:enrichment) do
+        build(:provider_enrichment, region_code: "Scotland")
+      end
+
+      let(:provider) { create :provider, region_code: "London", enrichments: [enrichment] }
+      it { is_expected.not_to eql("%02d" % 1) }
+      it { is_expected.to eql("%02d" % 11) }
+    end
+
+    describe "provider region code 00 is overriden with enrichment region code" do
+      let(:enrichment) do
+        build(:provider_enrichment, region_code: region_code)
+      end
+      let(:region_code) { 1 }
+      let(:provider) { create :provider, region_code: 0, enrichments: [enrichment] }
+      it { is_expected.to eql("%02d" % region_code) }
+      it { is_expected.not_to eql("%02d" % 0) }
+    end
+  end
 end
