@@ -28,14 +28,11 @@ RSpec.describe SiteSerializer do
       serialize(site)["region_code"]
     end
 
-    region_codes = 1..11
-
-    region_codes.each do |region_code|
-      describe "region code #{region_code} " do
-        let(:site) { create :site, region_code: region_code }
-        it { is_expected.to eql(format("%02d", region_code)) }
-        it { expect(subject.length).to eql(2) }
-      end
+    region_code = 1
+    describe "region code #{region_code} is set" do
+      let(:site) { create :site, region_code: region_code }
+      it { is_expected.to eql(format("%02d", region_code)) }
+      it { expect(subject.length).to eql(2) }
     end
   end
 end
