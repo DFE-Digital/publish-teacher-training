@@ -39,7 +39,7 @@ class ProviderSerializer < ActiveModel::Serializer
   end
 
   def accrediting_provider
-    # TODO: pull this thru from UCAS import
+    object.scitt || 'N'
   end
 
   def address1
