@@ -52,16 +52,14 @@ RSpec.describe ProviderSerializer do
       it { expect(subject.length).to eql(2) }
     end
 
-    region_code = 1
-    describe "provider region code 00 is overriden with #{region_code} " do
+    describe "provider region code 00 is overriden with enrichment region code" do
       let(:enrichment) do
         build(:provider_enrichment, region_code: region_code)
       end
-
+      let(:region_code) { 1 }
       let(:provider) { create :provider, region_code: 0, enrichments: [enrichment] }
       it { is_expected.to eql(format("%02d", region_code)) }
       it { is_expected.not_to eql(format("%02d", 0)) }
-      it { expect(subject.length).to eql(2) }
     end
   end
 end
