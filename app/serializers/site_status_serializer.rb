@@ -29,7 +29,7 @@ class SiteStatusSerializer < ActiveModel::Serializer
   def course_open_date
     object.applications_accepted_from.iso8601 if object.applications_accepted_from.present?
   end
-  
+
   def name
     object.site.location_name
   end
