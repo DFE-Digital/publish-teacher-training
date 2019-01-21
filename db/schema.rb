@@ -68,7 +68,7 @@ ActiveRecord::Schema.define(version: 0) do
   end
 
   create_table "course_site", id: :serial, force: :cascade do |t|
-    t.text "applications_accepted_from"
+    t.date "applications_accepted_from"
     t.integer "course_id"
     t.text "publish"
     t.integer "site_id"
