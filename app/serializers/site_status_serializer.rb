@@ -3,7 +3,7 @@
 # Table name: course_site
 #
 #  id                         :integer          not null, primary key
-#  applications_accepted_from :text
+#  applications_accepted_from :date
 #  course_id                  :integer
 #  publish                    :text
 #  site_id                    :integer
@@ -26,12 +26,9 @@ class SiteStatusSerializer < ActiveModel::Serializer
     object.status_before_type_cast
   end
 
-  # rubocop:disable Style/DateTime
   def course_open_date
-    # TODO applications_accepted_from should be a timestamp, not a string
-    DateTime.parse(object.applications_accepted_from).iso8601 if object.applications_accepted_from.present?
+    object.applications_accepted_from
   end
-  # rubocop:enable Style/DateTime
 
   def name
     object.site.location_name
