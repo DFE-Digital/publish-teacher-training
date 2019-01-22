@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 describe 'Providers API', type: :request do
-  describe 'GET index' do
+  describe 'GET' do
     let!(:provider) do
       create(:provider,
              provider_name: 'ACME SCITT',
@@ -64,127 +64,259 @@ describe 'Providers API', type: :request do
         .encode_credentials('foo')
     end
 
-    it 'returns http success' do
-      get '/api/v1/providers', headers: { 'HTTP_AUTHORIZATION' => credentials }
-      expect(response).to have_http_status(:success)
-    end
+    describe 'index' do
+      it 'returns http success' do
+        get '/api/v1/providers', headers: { 'HTTP_AUTHORIZATION' => credentials }
+        expect(response).to have_http_status(:success)
+      end
 
-    it 'returns http unauthorised' do
-      get '/api/v1/providers',
-          headers: { 'HTTP_AUTHORIZATION' => unauthorized_credentials }
-      expect(response).to have_http_status(:unauthorized)
-    end
-
-    context 'with enrichment address data' do
-      it 'JSON body response contains expected provider attributes' do
+      it 'returns http unauthorised' do
         get '/api/v1/providers',
-            headers: { 'HTTP_AUTHORIZATION' => credentials }
+            headers: { 'HTTP_AUTHORIZATION' => unauthorized_credentials }
+        expect(response).to have_http_status(:unauthorized)
+      end
 
-        json = JSON.parse(response.body)
-        expect(json). to eq(
-          [
-            {
-              'accrediting_provider' => 'Y',
-              'campuses' => [
-                {
-                  'campus_code' => '-',
-                  'name' => 'Main site',
-                  'region_code' => '01',
-                  'recruitment_cycle' => '2019'
-                }
-              ],
-              'institution_code' => 'A123',
-              'institution_name' => 'ACME SCITT',
-              'institution_type' => 'B',
-              'address1' => 'Sydney Russell School',
-              'address2' => '',
-              'address3' => 'Dagenham',
-              'address4' => 'Essex',
-              'postcode' => 'RM9 5QT',
-              'region_code' => '11',
-            },
-            {
-              'accrediting_provider' => 'N',
-              'campuses' => [
-                {
-                  'campus_code' => '-',
-                  'name' => 'Main site',
-                  'region_code' => '11',
-                  'recruitment_cycle' => '2019'
-                }
-              ],
-              'institution_code' => 'B123',
-              'institution_name' => 'ACME University',
-              'institution_type' => 'O',
-              'address1' => 'Bee School',
-              'address2' => 'Bee Avenue',
-              'address3' => 'Bee City',
-              'address4' => 'Bee Hive',
-              'postcode' => 'B3 3BB',
-              'region_code' => '03',
-            }
-          ]
-        )
+      context 'with enrichment address data' do
+        it 'JSON body response contains expected provider attributes' do
+          get '/api/v1/providers',
+              headers: { 'HTTP_AUTHORIZATION' => credentials }
+
+          json = JSON.parse(response.body)
+          expect(json). to eq(
+            [
+              {
+                'accrediting_provider' => 'Y',
+                'campuses' => [
+                  {
+                    'campus_code' => '-',
+                    'name' => 'Main site',
+                    'region_code' => '01'
+                  }
+                ],
+                'institution_code' => 'A123',
+                'institution_name' => 'ACME SCITT',
+                'institution_type' => 'B',
+                'address1' => 'Sydney Russell School',
+                'address2' => '',
+                'address3' => 'Dagenham',
+                'address4' => 'Essex',
+                'postcode' => 'RM9 5QT',
+                'region_code' => '11',
+              },
+              {
+                'accrediting_provider' => 'N',
+                'campuses' => [
+                  {
+                    'campus_code' => '-',
+                    'name' => 'Main site',
+                    'region_code' => '11'
+                  }
+                ],
+                'institution_code' => 'B123',
+                'institution_name' => 'ACME University',
+                'institution_type' => 'O',
+                'address1' => 'Bee School',
+                'address2' => 'Bee Avenue',
+                'address3' => 'Bee City',
+                'address4' => 'Bee Hive',
+                'postcode' => 'B3 3BB',
+                'region_code' => '03',
+              }
+            ]
+          )
+        end
+      end
+
+      context 'without enrichment address data' do
+        it 'JSON body response contains expected provider attributes' do
+          # Simulate a provider enrichment that has no address data. It's not just
+          # a matter of the attributes being nil, the data is actually missing
+          # from json_data
+          ProviderEnrichment.connection.update(<<~EOSQL)
+            UPDATE provider_enrichment
+                  SET json_data=json_data-'Address1'-'Address2'-'Address3'-'Address4'-'Postcode'-'RegionCode'
+                  WHERE provider_code='#{enrichment.id}'
+          EOSQL
+
+          get '/api/v1/providers',
+              headers: { 'HTTP_AUTHORIZATION' => credentials }
+
+          json = JSON.parse(response.body)
+          expect(json). to eq([
+                                {
+                                  'accrediting_provider' => 'Y',
+                                  'campuses' => [
+                                    {
+                                      'campus_code' => '-',
+                                      'name' => 'Main site',
+                                      'region_code' => '01'
+                                    }
+                                  ],
+                                  'institution_code' => 'A123',
+                                  'institution_name' => 'ACME SCITT',
+                                  'institution_type' => 'B',
+                                  'address1' => 'Shoreditch Park Primary School',
+                                  'address2' => '313 Bridport Pl',
+                                  'address3' => nil,
+                                  'address4' => 'London',
+                                  'postcode' => 'N1 5JN',
+                                  'region_code' => '01',
+                                },
+                                {
+                                  'accrediting_provider' => 'N',
+                                  'campuses' => [
+                                    {
+                                      'campus_code' => '-',
+                                      'name' => 'Main site',
+                                      'region_code' => '11'
+                                    }
+                                  ],
+                                  'institution_code' => 'B123',
+                                  'institution_name' => 'ACME University',
+                                  'institution_type' => 'O',
+                                  'address1' => 'Bee School',
+                                  'address2' => 'Bee Avenue',
+                                  'address3' => 'Bee City',
+                                  'address4' => 'Bee Hive',
+                                  'postcode' => 'B3 3BB',
+                                  "region_code" => '03'
+                                }
+                              ])
+        end
       end
     end
 
-    context 'without enrichment address data' do
-      it 'JSON body response contains expected provider attributes' do
-        # Simulate a provider enrichment that has no address data. It's not just
-        # a matter of the attributes being nil, the data is actually missing
-        # from json_data
-        ProviderEnrichment.connection.update(<<~EOSQL)
-          UPDATE provider_enrichment
-                 SET json_data=json_data-'Address1'-'Address2'-'Address3'-'Address4'-'Postcode'-'RegionCode'
-                 WHERE provider_code='#{enrichment.id}'
-        EOSQL
+    describe 'show' do
+      it 'returns http success' do
+        get '/api/v1/2019/providers', headers: { 'HTTP_AUTHORIZATION' => credentials }
+        expect(response).to have_http_status(:success)
+      end
 
-        get '/api/v1/providers',
-            headers: { 'HTTP_AUTHORIZATION' => credentials }
+      it 'returns http unauthorised' do
+        get '/api/v1/2019/providers',
+            headers: { 'HTTP_AUTHORIZATION' => unauthorized_credentials }
+        expect(response).to have_http_status(:unauthorized)
+      end
 
-        json = JSON.parse(response.body)
-        expect(json). to eq([
-                              {
-                                'accrediting_provider' => 'Y',
-                                'campuses' => [
-                                  {
-                                    'campus_code' => '-',
-                                    'name' => 'Main site',
-                                    'region_code' => '01',
-                                    'recruitment_cycle' => '2019'
-                                  }
-                                ],
-                                'institution_code' => 'A123',
-                                'institution_name' => 'ACME SCITT',
-                                'institution_type' => 'B',
-                                'address1' => 'Shoreditch Park Primary School',
-                                'address2' => '313 Bridport Pl',
-                                'address3' => nil,
-                                'address4' => 'London',
-                                'postcode' => 'N1 5JN',
-                                'region_code' => '01',
-                              },
-                              {
-                                'accrediting_provider' => 'N',
-                                'campuses' => [
-                                  {
-                                    'campus_code' => '-',
-                                    'name' => 'Main site',
-                                    'region_code' => '11',
-                                    'recruitment_cycle' => '2019'
-                                  }
-                                ],
-                                'institution_code' => 'B123',
-                                'institution_name' => 'ACME University',
-                                'institution_type' => 'O',
-                                'address1' => 'Bee School',
-                                'address2' => 'Bee Avenue',
-                                'address3' => 'Bee City',
-                                'address4' => 'Bee Hive',
-                                'postcode' => 'B3 3BB',
-                                "region_code" => '03'
-                              }
-                            ])
+      context 'with enrichment address data' do
+        it 'JSON body response contains expected provider attributes' do
+          get '/api/v1/2019/providers',
+              headers: { 'HTTP_AUTHORIZATION' => credentials }
+
+          json = JSON.parse(response.body)
+          expect(json). to eq(
+            [
+              {
+                'accrediting_provider' => 'Y',
+                'campuses' => [
+                  {
+                    'campus_code' => '-',
+                    'name' => 'Main site',
+                    'region_code' => '01'
+                  }
+                ],
+                'institution_code' => 'A123',
+                'institution_name' => 'ACME SCITT',
+                'institution_type' => 'B',
+                'address1' => 'Sydney Russell School',
+                'address2' => '',
+                'address3' => 'Dagenham',
+                'address4' => 'Essex',
+                'postcode' => 'RM9 5QT',
+                'region_code' => '11',
+              },
+              {
+                'accrediting_provider' => 'N',
+                'campuses' => [
+                  {
+                    'campus_code' => '-',
+                    'name' => 'Main site',
+                    'region_code' => '11'
+                  }
+                ],
+                'institution_code' => 'B123',
+                'institution_name' => 'ACME University',
+                'institution_type' => 'O',
+                'address1' => 'Bee School',
+                'address2' => 'Bee Avenue',
+                'address3' => 'Bee City',
+                'address4' => 'Bee Hive',
+                'postcode' => 'B3 3BB',
+                'region_code' => '03',
+              }
+            ]
+          )
+        end
+      end
+
+      context 'without enrichment address data' do
+        it 'JSON body response contains expected provider attributes' do
+          # Simulate a provider enrichment that has no address data. It's not just
+          # a matter of the attributes being nil, the data is actually missing
+          # from json_data
+          ProviderEnrichment.connection.update(<<~EOSQL)
+            UPDATE provider_enrichment
+                  SET json_data=json_data-'Address1'-'Address2'-'Address3'-'Address4'-'Postcode'-'RegionCode'
+                  WHERE provider_code='#{enrichment.id}'
+          EOSQL
+
+          get '/api/v1/2019/providers',
+              headers: { 'HTTP_AUTHORIZATION' => credentials }
+
+          json = JSON.parse(response.body)
+          expect(json). to eq([
+                                {
+                                  'accrediting_provider' => 'Y',
+                                  'campuses' => [
+                                    {
+                                      'campus_code' => '-',
+                                      'name' => 'Main site',
+                                      'region_code' => '01'
+                                    }
+                                  ],
+                                  'institution_code' => 'A123',
+                                  'institution_name' => 'ACME SCITT',
+                                  'institution_type' => 'B',
+                                  'address1' => 'Shoreditch Park Primary School',
+                                  'address2' => '313 Bridport Pl',
+                                  'address3' => nil,
+                                  'address4' => 'London',
+                                  'postcode' => 'N1 5JN',
+                                  'region_code' => '01',
+                                },
+                                {
+                                  'accrediting_provider' => 'N',
+                                  'campuses' => [
+                                    {
+                                      'campus_code' => '-',
+                                      'name' => 'Main site',
+                                      'region_code' => '11'
+                                    }
+                                  ],
+                                  'institution_code' => 'B123',
+                                  'institution_name' => 'ACME University',
+                                  'institution_type' => 'O',
+                                  'address1' => 'Bee School',
+                                  'address2' => 'Bee Avenue',
+                                  'address3' => 'Bee City',
+                                  'address4' => 'Bee Hive',
+                                  'postcode' => 'B3 3BB',
+                                  "region_code" => '03'
+                                }
+                              ])
+        end
+      end
+    end
+
+    describe 'not found' do
+      it "returns http not found" do
+        get "/api/v1/2018/providers", headers: { 'HTTP_AUTHORIZATION' => ActionController::HttpAuthentication::Token.encode_credentials("bats") }
+        expect(response).to have_http_status(:not_found)
+      end
+
+      it "returns http not found" do
+        get "/api/v1/2020/providers", headers: { 'HTTP_AUTHORIZATION' => ActionController::HttpAuthentication::Token.encode_credentials("bats") }
+        expect(response).to have_http_status(:not_found)
       end
     end
   end

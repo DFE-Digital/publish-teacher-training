@@ -45,73 +45,102 @@ RSpec.describe "Courses API", type: :request do
       )
     end
 
-    it "returns http success" do
-      get "/api/v1/courses", headers: { 'HTTP_AUTHORIZATION' => ActionController::HttpAuthentication::Token.encode_credentials("bats") }
-      expect(response).to have_http_status(:success)
-    end
-
-    it "returns http unauthorised" do
-      get "/api/v1/courses", headers: { 'HTTP_AUTHORIZATION' => ActionController::HttpAuthentication::Token.encode_credentials("foo") }
-      expect(response).to have_http_status(:unauthorized)
-    end
-
-    it "JSON body response contains expected course attributes" do
-      get "/api/v1/courses", headers: { 'HTTP_AUTHORIZATION' => ActionController::HttpAuthentication::Token.encode_credentials("bats") }
-
-      json = JSON.parse(response.body)
-      expect(json). to eq([
-        {
-          "course_code" => "2HPF",
-          "start_month" => "2019-09-01T00:00:00Z",
-          "start_month_string" => "September",
-          "name" => "Religious Education",
-          "study_mode" => "F",
-          "copy_form_required" => "Y",
-          "profpost_flag" => "PG",
-          "program_type" => "SD",
-          "age_range" => "P",
-          "modular" => "",
-          "english" => 3,
-          "maths" => 9,
-          "science" => nil,
-          "qualification" => 1,
-          "recruitment_cycle" => "2019",
-          "campus_statuses" => [
-            {
-              "campus_code" => "-",
-              "name" => "Main Site",
-              "vac_status" => "F",
-              "publish" => "Y",
-              "status" => "R",
-              "course_open_date" => "2018-10-09",
-              "recruitment_cycle" => "2019"
-            }
-          ],
-          "subjects" => [
-            {
-              "subject_code" => "1",
-              "subject_name" => "Secondary"
-            },
-            {
-              "subject_code" => "2",
-              "subject_name" => "Mathematics"
-            }
-          ],
-          "provider" => {
-            "institution_code" => "2LD",
-            "institution_name" => "ACME SCITT",
-            "institution_type" => "B",
-            "accrediting_provider" => 'N',
-            "address1" => "Sydney Russell School",
-            "address2" => "Parsloes Avenue",
-            "address3" => "Dagenham",
-            "address4" => "Essex",
-            "postcode" => "RM9 5QT",
-            "region_code" => "07",
+    expected_json = [
+      {
+        "course_code" => "2HPF",
+        "start_month" => "2019-09-01T00:00:00Z",
+        "start_month_string" => "September",
+        "name" => "Religious Education",
+        "study_mode" => "F",
+        "copy_form_required" => "Y",
+        "profpost_flag" => "PG",
+        "program_type" => "SD",
+        "age_range" => "P",
+        "modular" => "",
+        "english" => 3,
+        "maths" => 9,
+        "science" => nil,
+        "qualification" => 1,
+        "campus_statuses" => [
+          {
+            "campus_code" => "-",
+            "name" => "Main Site",
+            "vac_status" => "F",
+            "publish" => "Y",
+            "status" => "R",
+            "course_open_date" => "2018-10-09"
+          }
+        ],
+        "subjects" => [
+          {
+            "subject_code" => "1",
+            "subject_name" => "Secondary"
           },
-          "accrediting_provider" => nil
-        }
-      ])
+          {
+            "subject_code" => "2",
+            "subject_name" => "Mathematics"
+          }
+        ],
+        "provider" => {
+          "institution_code" => "2LD",
+          "institution_name" => "ACME SCITT",
+          "institution_type" => "B",
+          "accrediting_provider" => 'N',
+          "address1" => "Sydney Russell School",
+          "address2" => "Parsloes Avenue",
+          "address3" => "Dagenham",
+          "address4" => "Essex",
+          "postcode" => "RM9 5QT",
+          "region_code" => "07",
+        },
+        "accrediting_provider" => nil
+      }
+    ]
+
+    describe 'index' do
+      it "returns http success" do
+        get "/api/v1/courses", headers: { 'HTTP_AUTHORIZATION' => ActionController::HttpAuthentication::Token.encode_credentials("bats") }
+        expect(response).to have_http_status(:success)
+      end
+
+      it "returns http unauthorised" do
+        get "/api/v1/courses", headers: { 'HTTP_AUTHORIZATION' => ActionController::HttpAuthentication::Token.encode_credentials("foo") }
+        expect(response).to have_http_status(:unauthorized)
+      end
+
+      it "JSON body response contains expected course attributes" do
+        get "/api/v1/courses", headers: { 'HTTP_AUTHORIZATION' => ActionController::HttpAuthentication::Token.encode_credentials("bats") }
+        json = JSON.parse(response.body)
+        expect(json). to eq expected_json
+      end
+
+      it "returns http success" do
+        get "/api/v1/2019/courses", headers: { 'HTTP_AUTHORIZATION' => ActionController::HttpAuthentication::Token.encode_credentials("bats") }
+        expect(response).to have_http_status(:success)
+      end
+
+      it "returns http unauthorised" do
+        get "/api/v1/2019/courses", headers: { 'HTTP_AUTHORIZATION' => ActionController::HttpAuthentication::Token.encode_credentials("foo") }
+        expect(response).to have_http_status(:unauthorized)
+      end
+
+      it "JSON body response contains expected course attributes" do
+        get "/api/v1/2019/courses", headers: { 'HTTP_AUTHORIZATION' => ActionController::HttpAuthentication::Token.encode_credentials("bats") }
+        json = JSON.parse(response.body)
+        expect(json). to eq expected_json
+      end
+    end
+
+    describe 'not found' do
+      it "returns http not found" do
+        get "/api/v1/2018/courses", headers: { 'HTTP_AUTHORIZATION' => ActionController::HttpAuthentication::Token.encode_credentials("bats") }
+        expect(response).to have_http_status(:not_found)
+      end
+
+      it "returns http not found" do
+        get "/api/v1/2020/courses", headers: { 'HTTP_AUTHORIZATION' => ActionController::HttpAuthentication::Token.encode_credentials("bats") }
+        expect(response).to have_http_status(:not_found)
+      end
     end
   end
 end
