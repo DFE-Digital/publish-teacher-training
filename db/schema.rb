@@ -139,6 +139,7 @@ ActiveRecord::Schema.define(version: 0) do
     t.text "address3"
     t.text "email"
     t.text "telephone"
+    t.string "accrediting_provider"
     t.index ["provider_code"], name: "IX_provider_provider_code", unique: true
     t.index ["provider_code"], name: "IX_ucas_provider_provider_code", unique: true
   end
