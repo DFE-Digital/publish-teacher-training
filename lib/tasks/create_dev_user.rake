@@ -7,13 +7,13 @@ namespace :db do
     when /linux/
       system('sudo', '-u', 'postgres', 'psql', '-c', sql)
     else
-      puts <<~EOT
+      puts <<~EOTEXT
         Don't know how to support this platform, sorry. Please run this SQL in psql by hand:
 
           #{sql}
 
         Patches for automating this are welcome.
-      EOT
+      EOTEXT
     end
   end
 
