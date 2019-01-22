@@ -9,11 +9,11 @@ default: &default
 
 development:
   <<: *default
-  database: manage_courses_backend_development
+  database: <%= ENV['DB_DATABASE'] || 'manage_courses_backend_development' %>
 
 test:
   <<: *default
-  database: manage_courses_backend_test
+  database: <%= ENV['DB_DATABASE'] || 'manage_courses_backend_test' %>
 
 production:
   <<: *default
