@@ -29,6 +29,24 @@ docker-compose exec web /bin/sh -c "bundle exec rails db:setup"
 
 Then open http://localhost:3000 to see the app.
 
+## Setting up the app for local (non-Docker) development
+
+### Creating the DB user
+
+We use a project-specific Postgres user which needs to be created before you create and use the databases.
+
+On OSX:
+
+```bash
+psql -U postgres < db/create_dev_user.sql
+```
+
+On Linux where there is a system `postgres` user:
+
+```bash
+sudo -u postgres psql < db/create_dev_user.sql
+```
+
 ## Accessing API
 
 [See API Docs](https://github.com/DFE-Digital/manage-courses-backend/blob/master/docs/api.md)
