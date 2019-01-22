@@ -39,14 +39,6 @@ On Linux:
 sudo apt install postgresql-9.6 postgresql-contrib-9.6
 ```
 
-### Creating the DB user
-
-Before creating the db create the dev user:
-
-```bash
-rails db:create_dev_user
-```
-
 ## Accessing API
 
 [See API Docs](https://github.com/DFE-Digital/manage-courses-backend/blob/master/docs/api.md)

@@ -17,6 +17,11 @@ namespace :db do
     end
   end
 
+  task create: [:create_dev_user]
+  task :drop do
+    Rake::Task['db:drop_dev_user'].execute
+  end
+
   task :create_dev_user do
     run_sql <<~EOSQL.strip
       CREATE USER manage_courses_backend WITH SUPERUSER CREATEDB PASSWORD 'manage_courses_backend';
