@@ -31,6 +31,14 @@ Then open http://localhost:3000 to see the app.
 
 ## Setting up the app for local (non-Docker) development
 
+### Installing prerequisites
+
+On Linux:
+
+```bash
+sudo apt install postgresql-9.6 postgresql-contrib-9.6
+```
+
 ### Creating the DB user
 
 We use a project-specific Postgres user which needs to be created before you create and use the databases.
