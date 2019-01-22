@@ -41,18 +41,10 @@ sudo apt install postgresql-9.6 postgresql-contrib-9.6
 
 ### Creating the DB user
 
-We use a project-specific Postgres user which needs to be created before you create and use the databases.
-
-On OSX:
+Before creating the db create the dev user:
 
 ```bash
-psql -U postgres < db/create_dev_user.sql
-```
-
-On Linux where there is a system `postgres` user:
-
-```bash
-sudo -u postgres psql < db/create_dev_user.sql
+rails db:create_dev_user
 ```
 
 ## Accessing API
