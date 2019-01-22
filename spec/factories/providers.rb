@@ -29,7 +29,7 @@ FactoryBot.define do
     address3 { Faker::Address.city }
     address4 { Faker::Address.state }
     postcode { Faker::Address.postcode }
-    scitt { 'N' }
+    accrediting_provider { 'N' }
 
     transient do
       site_count { 1 }

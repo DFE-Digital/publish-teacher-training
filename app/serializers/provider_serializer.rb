@@ -2,22 +2,23 @@
 #
 # Table name: provider
 #
-#  id            :integer          not null, primary key
-#  address4      :text
-#  provider_name :text
-#  scheme_member :text
-#  contact_name  :text
-#  year_code     :text
-#  provider_code :text
-#  provider_type :text
-#  postcode      :text
-#  scitt         :text
-#  url           :text
-#  address1      :text
-#  address2      :text
-#  address3      :text
-#  email         :text
-#  telephone     :text
+#  id                   :integer          not null, primary key
+#  provider_name        :text
+#  provider_code        :text
+#  provider_type        :text
+#  scheme_member        :text
+#  year_code            :text
+#  scitt                :text
+#  accrediting_provider :text
+#  contact_name         :text
+#  address1             :text
+#  address2             :text
+#  address3             :text
+#  address4             :text
+#  postcode             :text
+#  email                :text
+#  telephone            :text
+#  url                  :text
 #
 
 class ProviderSerializer < ActiveModel::Serializer
@@ -36,10 +37,6 @@ class ProviderSerializer < ActiveModel::Serializer
 
   def institution_type
     object.provider_type_before_type_cast
-  end
-
-  def accrediting_provider
-    object.scitt || 'N'
   end
 
   def address1

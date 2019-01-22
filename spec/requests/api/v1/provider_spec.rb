@@ -14,7 +14,7 @@ describe 'Providers API', type: :request do
              address4: 'London',
              postcode: 'N1 5JN',
              region_code: 'London',
-             scitt: 'Y',
+             accrediting_provider: 'Y',
              enrichments: [enrichment])
     end
     let!(:site) do
@@ -44,7 +44,7 @@ describe 'Providers API', type: :request do
              address4: 'Bee Hive',
              postcode: 'B3 3BB',
              region_code: 'South West',
-             scitt: 'N',
+             accrediting_provider: 'N',
              enrichments: [],
              site_count: 0)
     end
