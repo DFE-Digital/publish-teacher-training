@@ -33,6 +33,14 @@ Then open http://localhost:3000 to see the app.
 
 [See API Docs](https://github.com/DFE-Digital/manage-courses-backend/blob/master/docs/api.md)
 
+Quick check that it's working in local development with the token "bats"
+configured in `config/environments/development.rb`:
+
+```bash
+curl http://localhost:3000/api/v1/subjects.json -H "Authorization: Bearer bats"
+```
+
+
 ## Linting
 
 It's best to lint just your app directories and not those belonging to the framework:
