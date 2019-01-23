@@ -416,6 +416,7 @@ star_j | Text | `UCAS link` or `Flat file` |
 star_x | Text | `No, not required` or `Yes, required` |
 utt_application_alerts | Text | `No, not required`, `Yes, required`, `Yes - only my programmes` or `Yes - for accredited programmes only` | New UTT Application alerts
 type_of_gt12 | Text | `Coming / Enrol`, `Coming or Not`, `No response` or `Not coming` |
+scheme_member | Text | `Y` or `N` |
 
 ### Get all providers
 
@@ -455,6 +456,7 @@ curl "https://manage-courses-backend.herokuapp.com/api/v1/2019/providers"
     "address4": "Essex",
     "postcode": "RM9 5QT",
     "region_code": "01",
+    "scheme_member": "Y",
     "campuses": [
       {
         "campus_code": "",
