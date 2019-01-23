@@ -66,3 +66,11 @@ You'll need to define the `AZURE_CR_PASSWORD` in Travis in order to successfully
 ```bash
 travis encrypt AZURE_CR_PASSWORD="xxx" --add
 ```
+
+## Sentry
+
+To track exceptions through Sentry, configure the `SENTRY_DSN` environment variable:
+
+```
+SENTRY_DSN=https://aaa:bbb@sentry.io/123 rails s
+```
