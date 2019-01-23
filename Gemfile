@@ -28,6 +28,10 @@ gem 'kaminari'
 # Access jsonb attributes like normal ActiveRecord model attributes
 gem 'jsonb_accessor'
 
+# App Insights for Azure
+gem 'pkg-config', '~> 1.1.7'
+gem 'application_insights'
+
 group :development, :test do
   # add info about db structure to models and other files
   gem 'annotate'
