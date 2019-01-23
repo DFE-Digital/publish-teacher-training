@@ -32,6 +32,8 @@ gem 'jsonb_accessor'
 gem 'pkg-config', '~> 1.1.7'
 gem 'application_insights'
 
+gem "sentry-raven"
+
 group :development, :test do
   # add info about db structure to models and other files
   gem 'annotate'
