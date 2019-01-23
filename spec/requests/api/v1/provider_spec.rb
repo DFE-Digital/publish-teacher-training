@@ -15,6 +15,7 @@ describe 'Providers API', type: :request do
              postcode: 'N1 5JN',
              region_code: 'London',
              accrediting_provider: 'Y',
+             scheme_member: 'Y',
              enrichments: [enrichment])
     end
     let!(:site) do
@@ -45,6 +46,7 @@ describe 'Providers API', type: :request do
              postcode: 'B3 3BB',
              region_code: 'South West',
              accrediting_provider: 'N',
+             scheme_member: 'N',
              enrichments: [],
              site_count: 0)
     end
@@ -102,6 +104,7 @@ describe 'Providers API', type: :request do
               'address4' => 'Essex',
               'postcode' => 'RM9 5QT',
               'region_code' => '11',
+              'scheme_member' => 'Y'
             },
             {
               'accrediting_provider' => 'N',
@@ -122,6 +125,7 @@ describe 'Providers API', type: :request do
               'address4' => 'Bee Hive',
               'postcode' => 'B3 3BB',
               'region_code' => '03',
+              'scheme_member' => 'N'
             }
           ]
         )
@@ -163,6 +167,7 @@ describe 'Providers API', type: :request do
                                 'address4' => 'London',
                                 'postcode' => 'N1 5JN',
                                 'region_code' => '01',
+                                'scheme_member' => 'Y'
                               },
                               {
                                 'accrediting_provider' => 'N',
@@ -182,7 +187,8 @@ describe 'Providers API', type: :request do
                                 'address3' => 'Bee City',
                                 'address4' => 'Bee Hive',
                                 'postcode' => 'B3 3BB',
-                                "region_code" => '03'
+                                'region_code' => '03',
+                                'scheme_member' => 'N'
                               }
                             ])
       end
