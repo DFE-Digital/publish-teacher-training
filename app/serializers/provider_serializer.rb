@@ -3,22 +3,25 @@
 # Table name: provider
 #
 #  id                   :integer          not null, primary key
+#  address4             :text
 #  provider_name        :text
+#  scheme_member        :text
+#  contact_name         :text
+#  year_code            :text
 #  provider_code        :text
 #  provider_type        :text
-#  scheme_member        :text
-#  year_code            :text
+#  postcode             :text
 #  scitt                :text
-#  accrediting_provider :text
-#  contact_name         :text
+#  url                  :text
 #  address1             :text
 #  address2             :text
 #  address3             :text
-#  address4             :text
-#  postcode             :text
 #  email                :text
 #  telephone            :text
-#  url                  :text
+#  region_code          :integer
+#  created_at           :datetime         not null
+#  updated_at           :datetime         not null
+#  accrediting_provider :text
 #
 
 class ProviderSerializer < ActiveModel::Serializer

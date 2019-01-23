@@ -11,6 +11,9 @@
 #  postcode      :text
 #  address1      :text
 #  provider_id   :integer          default(0), not null
+#  region_code   :integer
+#  created_at    :datetime         not null
+#  updated_at    :datetime         not null
 #
 
 require "rails_helper"

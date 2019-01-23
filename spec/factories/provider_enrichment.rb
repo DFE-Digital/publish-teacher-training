@@ -2,15 +2,15 @@
 #
 # Table name: provider_enrichment
 #
-#  id                           :integer          not null
-#  provider_code                :text             not null, primary key
-#  json_data                    :jsonb
-#  updated_by_user_id           :integer
-#  created_timestamp_utc        :datetime         default(Mon, 01 Jan 0001 00:00:00 UTC +00:00), not null
-#  updated_timestamp_utc        :datetime         default(Mon, 01 Jan 0001 00:00:00 UTC +00:00), not null
-#  created_by_user_id           :integer
-#  last_published_timestamp_utc :datetime
-#  status                       :integer          default("draft"), not null
+#  id                 :integer          not null
+#  provider_code      :text             not null, primary key
+#  json_data          :jsonb
+#  updated_by_user_id :integer
+#  created_at         :datetime         default(Mon, 01 Jan 0001 00:00:00 UTC +00:00), not null
+#  updated_at         :datetime         default(Mon, 01 Jan 0001 00:00:00 UTC +00:00), not null
+#  created_by_user_id :integer
+#  last_published_at  :datetime
+#  status             :integer          default("draft"), not null
 #
 
 FactoryBot.define do
