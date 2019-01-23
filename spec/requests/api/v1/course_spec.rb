@@ -15,6 +15,7 @@ RSpec.describe "Courses API", type: :request do
                                    address4: "Essex",
                                    postcode: "RM9 5QT",
                                    region_code: 'Eastern',
+                                   scheme_member: 'Y',
                                    enrichments: [])
 
       site = FactoryBot.create(:site, code: "-", location_name: "Main Site", provider: provider)
@@ -108,6 +109,7 @@ RSpec.describe "Courses API", type: :request do
             "address4" => "Essex",
             "postcode" => "RM9 5QT",
             "region_code" => "07",
+            "scheme_member" => "Y"
           },
           "accrediting_provider" => nil
         }
