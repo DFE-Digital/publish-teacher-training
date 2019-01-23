@@ -3,7 +3,7 @@
 # Table name: course_site
 #
 #  id                         :integer          not null, primary key
-#  applications_accepted_from :text
+#  applications_accepted_from :date
 #  course_id                  :integer
 #  publish                    :text
 #  site_id                    :integer
