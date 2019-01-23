@@ -29,6 +29,16 @@ docker-compose exec web /bin/sh -c "bundle exec rails db:setup"
 
 Then open http://localhost:3000 to see the app.
 
+## Setting up the app for local (non-Docker) development
+
+### Installing prerequisites
+
+On Linux:
+
+```bash
+sudo apt install postgresql-9.6 postgresql-contrib-9.6
+```
+
 ## Accessing API
 
 [See API Docs](https://github.com/DFE-Digital/manage-courses-backend/blob/master/docs/api.md)

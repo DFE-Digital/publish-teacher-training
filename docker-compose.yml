@@ -22,3 +22,4 @@ services:
       - db
     environment:
       - DB_HOSTNAME=db
+      - DB_USERNAME=postgres

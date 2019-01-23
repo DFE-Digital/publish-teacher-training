@@ -2,19 +2,21 @@ default: &default
   adapter: postgresql
   encoding: unicode
   pool: 5
-  username: <%= ENV['DB_USERNAME'] || 'postgres' %>
-  password: <%= ENV['DB_PASSWORD'] || '' %>
+  username: <%= ENV['DB_USERNAME'] || 'manage_courses_backend' %>
+  password: <%= ENV['DB_PASSWORD'] || 'manage_courses_backend' %>
   host: <%= ENV['DB_HOSTNAME'] || 'localhost' %>
   port: <%= ENV['DB_PORT'] || '5432' %>
 
 development:
   <<: *default
-  database: manage_courses_backend_development
+  database: <%= ENV['DB_DATABASE'] || 'manage_courses_backend_development' %>
 
 test:
   <<: *default
-  database: manage_courses_backend_test
+  database: <%= ENV['DB_DATABASE'] || 'manage_courses_backend_test' %>
 
 production:
   <<: *default
+  username: <%= ENV['DB_USERNAME'] || 'postgres' %>
+  password: <%= ENV['DB_PASSWORD'] %>
   database: <%= ENV['DB_DATABASE'] %>
