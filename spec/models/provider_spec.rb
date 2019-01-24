@@ -95,16 +95,13 @@ RSpec.describe Provider, type: :model do
     end
 
     context 'with a provider enrichment that has been updated' do
-      let!(:provider) do
-        create(:provider,
-               updated_at: 1.hour.ago,
-               created_at: 1.hour.ago)
-      end
+      let!(:old_provider) { create(:provider, age: 1.hour.ago) }
+      let!(:provider) { create(:provider, age: 1.hour.ago) }
 
-      it 'includes the provider' do
-        provider.enrichments.first.touch
-        expect(Provider.changed_since(10.minutes.ago)).to include provider
-      end
+      before  { provider.enrichments.first.touch }
+      subject { Provider.changed_since(10.minutes.ago) }
+      it      { should_not include old_provider }
+      xit      { should     include provider }
     end
 
     context 'with a provider whose site has been updated' do

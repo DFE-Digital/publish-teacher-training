@@ -21,5 +21,16 @@ FactoryBot.define do
     sequence(:code, &:to_s)
     location_name { 'Main Site' + rand(1000000).to_s }
     association(:provider)
+
+    transient do
+      age { nil }
+    end
+
+    after(:build) do |site, evaluator|
+      if evaluator.age.present?
+        site.created_at = evaluator.age
+        site.updated_at = evaluator.age
+      end
+    end
   end
 end

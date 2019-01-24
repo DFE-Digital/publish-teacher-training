@@ -36,10 +36,18 @@ FactoryBot.define do
     accrediting_provider { 'N' }
 
     transient do
+      age          { nil }
       site_count   { 1 }
-      sites        { build_list :site, site_count, provider: nil }
+      sites        { build_list :site, site_count, provider: nil, age: age }
       course_count { 2 }
       enrichments  { [build(:provider_enrichment)] }
+    end
+
+    after(:build) do |provider, evaluator|
+      if evaluator.age.present?
+        provider.created_at = evaluator.age
+        provider.updated_at = evaluator.age
+      end
     end
 
     after(:create) do |provider, evaluator|
