@@ -150,8 +150,8 @@ ActiveRecord::Schema.define(version: 0) do
     t.text "provider_code", null: false
     t.jsonb "json_data"
     t.integer "updated_by_user_id"
-    t.datetime "created_at", default: "0001-01-01 00:00:00", null: false
-    t.datetime "updated_at", default: "0001-01-01 00:00:00", null: false
+    t.datetime "created_at", default: -> { "timezone('utc'::text, now())" }, null: false
+    t.datetime "updated_at", default: -> { "timezone('utc'::text, now())" }, null: false
     t.integer "created_by_user_id"
     t.datetime "last_published_at"
     t.integer "status", default: 0, null: false
