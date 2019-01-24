@@ -36,14 +36,17 @@ FactoryBot.define do
     accrediting_provider { 'N' }
 
     transient do
-      site_count { 1 }
+      site_count   { 1 }
+      sites        { build_list :site, site_count, provider: nil }
       course_count { 2 }
-      enrichments { build_list(:provider_enrichment, 1) }
+      enrichments  { [build(:provider_enrichment)] }
     end
 
     after(:create) do |provider, evaluator|
       create_list(:course, evaluator.course_count, provider: provider)
-      create_list(:site, evaluator.site_count, provider: provider)
+
+      provider.sites << evaluator.sites
+
       # Add the enrichments to the provider. Normally setting provider_code
       # would be the model's concern, but as we're still a read-only app we'll
       # have to do that here.

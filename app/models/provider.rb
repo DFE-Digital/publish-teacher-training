@@ -41,6 +41,14 @@ class Provider < ApplicationRecord
 
   has_many :sites
   has_many :enrichments, foreign_key: :provider_code, primary_key: :provider_code, class_name: "ProviderEnrichment"
+
+  scope :changed_since, ->(datetime) do
+    joins(:sites).where(
+      'provider.updated_at >= :since OR site.updated_at >= :since',
+      since: datetime
+    )
+  end
+
   # TODO: filter to published enrichments, maybe rename to published_address_info
   def address_info
     (enrichments.with_address_info.last || self)

@@ -62,4 +62,68 @@ RSpec.describe Provider, type: :model do
       end
     end
   end
+
+  describe '#changed_since' do
+    context 'with a provider whose updated_at has changed since' do
+      let(:site) do
+        build(:site,
+              updated_at: 1.hour.ago,
+              provider: nil)
+      end
+      let!(:old_provider) do
+        create(:provider,
+               updated_at: 1.hour.ago,
+               created_at: 1.hour.ago,
+               sites: [site])
+      end
+      let(:update_time) { 5.minutes.ago }
+      let!(:updated_provider) { create(:provider, updated_at: update_time) }
+
+      it 'does not includes providers updated before the given time' do
+        expect(Provider.changed_since(10.minutes.ago))
+          .not_to include old_provider
+      end
+
+      it 'includes providers whose records have been updated since the given time' do
+        expect(Provider.changed_since(10.minutes.ago))
+          .to include updated_provider
+      end
+
+      it 'includes providers updated precisely at the given time' do
+        expect(Provider.changed_since(update_time)).to include updated_provider
+      end
+    end
+
+    context 'with a provider enrichment that has been updated' do
+      let!(:provider) do
+        create(:provider,
+               updated_at: 1.hour.ago,
+               created_at: 1.hour.ago)
+      end
+
+      it 'includes the provider' do
+        provider.enrichments.first.touch
+        expect(Provider.changed_since(10.minutes.ago)).to include provider
+      end
+    end
+
+    context 'with a provider whose site has been updated' do
+      let(:site) do
+        build(:site,
+              updated_at: 5.minutes.ago,
+              provider: nil)
+      end
+      let!(:provider) do
+        create(:provider,
+               updated_at: 1.hour.ago,
+               created_at: 1.hour.ago,
+               sites: [site])
+      end
+
+      it 'includes providers whose sites have been updated' do
+        provider.sites.first.touch
+        expect(Provider.changed_since(10.minutes.ago)).to include provider
+      end
+    end
+  end
 end
