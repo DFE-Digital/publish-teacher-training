@@ -53,6 +53,8 @@ group :development, :test do
   # A little extra console goodness
   gem 'pry'
   gem 'pry-byebug'
+  gem 'pry-rails'
+
   gem 'rb-readline'
 end
 
