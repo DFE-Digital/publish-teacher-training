@@ -25,9 +25,7 @@ RSpec.describe CourseSerializer do
   let(:course) { create :course }
   subject { serialize(course) }
 
-  it {
-    is_expected.to include(course_code: course.course_code,
-                              name: course.name,
-                              qualification: course.qualification)
-  }
+  it { should include(course_code: course.course_code) }
+  it { should include(name: course.name) }
+  it { should include(qualification: course.qualification) }
 end
