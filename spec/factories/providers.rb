@@ -40,7 +40,7 @@ FactoryBot.define do
       site_count   { 1 }
       sites        { build_list :site, site_count, provider: nil, age: age }
       course_count { 2 }
-      enrichments  { [build(:provider_enrichment)] }
+      enrichments  { [build(:provider_enrichment, age: age)] }
     end
 
     after(:build) do |provider, evaluator|

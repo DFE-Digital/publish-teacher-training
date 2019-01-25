@@ -64,62 +64,48 @@ RSpec.describe Provider, type: :model do
   end
 
   describe '#changed_since' do
-    context 'with a provider whose updated_at has changed since' do
-      let(:site) do
-        build(:site,
-              updated_at: 1.hour.ago,
-              provider: nil)
-      end
-      let!(:old_provider) do
-        create(:provider,
-               updated_at: 1.hour.ago,
-               created_at: 1.hour.ago,
-               sites: [site])
-      end
-      let(:update_time) { 5.minutes.ago }
-      let!(:updated_provider) { create(:provider, updated_at: update_time) }
+    let!(:old_provider) { create(:provider, age: 1.hour.ago) }
+    let!(:provider)     { create(:provider, age: 1.hour.ago) }
 
-      it 'does not includes providers updated before the given time' do
-        expect(Provider.changed_since(10.minutes.ago))
-          .not_to include old_provider
-      end
+    context 'with a provider whose updated_at has been changed in the past' do
+      before  { provider.touch }
+      subject { Provider.changed_since(10.minutes.ago) }
 
-      it 'includes providers whose records have been updated since the given time' do
-        expect(Provider.changed_since(10.minutes.ago))
-          .to include updated_provider
-      end
+      it { should_not include old_provider }
+      it { should     include provider }
 
-      it 'includes providers updated precisely at the given time' do
-        expect(Provider.changed_since(update_time)).to include updated_provider
+      describe 'when the checked timestamp matches the provider updated_at' do
+        subject { Provider.changed_since(provider.updated_at) }
+
+        it { should include provider }
       end
     end
 
     context 'with a provider enrichment that has been updated' do
-      let!(:old_provider) { create(:provider, age: 1.hour.ago) }
-      let!(:provider) { create(:provider, age: 1.hour.ago) }
-
       before  { provider.enrichments.first.touch }
       subject { Provider.changed_since(10.minutes.ago) }
-      it      { should_not include old_provider }
-      xit      { should     include provider }
+
+      it { should_not include old_provider }
+      it { should     include provider }
+
+      describe 'when the checked timestamp matches the enrichment updated_at' do
+        subject { Provider.changed_since(provider.enrichments.first.updated_at) }
+
+        it { should include provider }
+      end
     end
 
     context 'with a provider whose site has been updated' do
-      let(:site) do
-        build(:site,
-              updated_at: 5.minutes.ago,
-              provider: nil)
-      end
-      let!(:provider) do
-        create(:provider,
-               updated_at: 1.hour.ago,
-               created_at: 1.hour.ago,
-               sites: [site])
-      end
+      before  { provider.sites.first.touch }
+      subject { Provider.changed_since(10.minutes.ago) }
 
-      it 'includes providers whose sites have been updated' do
-        provider.sites.first.touch
-        expect(Provider.changed_since(10.minutes.ago)).to include provider
+      it { should_not include old_provider }
+      it { should     include provider }
+
+      describe "when the checked timestamp matches the site updated_at" do
+        subject { Provider.changed_since(provider.sites.first.updated_at) }
+
+        it { should include provider }
       end
     end
   end
