@@ -40,13 +40,17 @@ class Provider < ApplicationRecord
   has_and_belongs_to_many :organisations, join_table: :organisation_provider
 
   has_many :sites
-  has_many :enrichments, foreign_key: :provider_code, primary_key: :provider_code, class_name: "ProviderEnrichment"
+  has_many :enrichments,
+           foreign_key: :provider_code,
+           primary_key: :provider_code,
+           class_name: "ProviderEnrichment"
 
   scope :changed_since, ->(datetime) do
-    joins(:sites, :enrichments).where(
-      'provider.updated_at >= :since OR site.updated_at >= :since OR provider_enrichment.updated_at >= :since',
-      since: datetime
-    )
+    joins(:sites, :enrichments).where(<<~EOSQL, since: datetime)
+      provider.updated_at >= :since
+        OR site.updated_at >= :since
+        OR provider_enrichment.updated_at >= :since
+    EOSQL
   end
 
   # TODO: filter to published enrichments, maybe rename to published_address_info
