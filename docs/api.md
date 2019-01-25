@@ -247,7 +247,7 @@ curl "https://manage-courses-backend.herokuapp.com/api/v1/2019/courses"
         "vac_status": "F",
         "publish": "Y",
         "status": "R",
-        "course_open_date": "2018-10-09 00:00:00",
+        "course_open_date": "2018-10-09",
         "recruitment_cycle": "2019"
       }
     ],
@@ -343,7 +343,7 @@ name | Text | |
 vac_status | Text | |
 publish | Text | |
 status | Text | |
-course_open_date | ISO 8601 date/time string | |
+course_open_date | ISO 8601 date string | |
 recruitment_cycle | Text || 4-character year
 
 ## Subjects
