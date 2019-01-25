@@ -46,11 +46,16 @@ class Provider < ApplicationRecord
            class_name: "ProviderEnrichment"
 
   scope :changed_since, ->(datetime) do
-    joins(:sites, :enrichments).where(<<~EOSQL, since: datetime)
-      provider.updated_at >= :since
-        OR site.updated_at >= :since
-        OR provider_enrichment.updated_at >= :since
-    EOSQL
+    joins(:sites, :enrichments).where(
+      <<~EOSQL,
+        provider.updated_at >= :since
+          OR site.updated_at >= :since
+          OR (provider_enrichment.status = :status
+              AND provider_enrichment.updated_at >= :since)
+      EOSQL
+      since: datetime,
+      status: ProviderEnrichment.statuses['published']
+    )
   end
 
   # TODO: filter to published enrichments, maybe rename to published_address_info

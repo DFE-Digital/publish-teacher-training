@@ -81,8 +81,14 @@ RSpec.describe Provider, type: :model do
       end
     end
 
-    context 'with a provider enrichment that has been updated' do
-      before  { provider.enrichments.first.touch }
+    context 'with a provider enrichment that has published changes' do
+      before do
+        provider.enrichments.first.update(
+          status: :published,
+          updated_at: DateTime.now
+        )
+      end
+
       subject { Provider.changed_since(10.minutes.ago) }
 
       it { should_not include old_provider }
@@ -93,6 +99,19 @@ RSpec.describe Provider, type: :model do
 
         it { should include provider }
       end
+    end
+
+    context 'with an old provider that has a new draft enrichment' do
+      before do
+        provider.enrichments.first.update(
+          status: :draft,
+          updated_at: DateTime.now
+        )
+      end
+
+      subject { Provider.changed_since(10.minutes.ago) }
+
+      it { should_not include provider }
     end
 
     context 'with a provider whose site has been updated' do
