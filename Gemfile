@@ -29,7 +29,7 @@ gem 'kaminari'
 gem 'jsonb_accessor'
 
 # App Insights for Azure
-gem 'pkg-config', '~> 1.1.7'
+gem 'pkg-config', '~> 1.3.2'
 gem 'application_insights'
 
 gem "sentry-raven"
