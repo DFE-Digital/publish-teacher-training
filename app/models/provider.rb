@@ -46,7 +46,7 @@ class Provider < ApplicationRecord
            class_name: "ProviderEnrichment"
 
   scope :changed_since, ->(datetime) do
-    joins(:sites, :enrichments).where(
+    left_joins(:sites, :enrichments).where(
       <<~EOSQL,
         provider.updated_at >= :since
           OR site.updated_at >= :since

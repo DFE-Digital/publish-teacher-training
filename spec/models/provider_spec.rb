@@ -67,6 +67,14 @@ RSpec.describe Provider, type: :model do
     let!(:old_provider) { create(:provider, age: 1.hour.ago) }
     let!(:provider)     { create(:provider, age: 1.hour.ago) }
 
+    context 'with a provider with no enrichments or sites' do
+      let(:provider) { create(:provider, enrichments:[], sites:[]) }
+
+      subject { Provider.changed_since(10.minutes.ago) }
+
+      it { should include provider }
+    end
+
     context 'with a provider whose updated_at has been changed in the past' do
       before  { provider.touch }
       subject { Provider.changed_since(10.minutes.ago) }
