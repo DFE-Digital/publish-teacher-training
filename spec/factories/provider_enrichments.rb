@@ -31,6 +31,7 @@ FactoryBot.define do
         'train_with_us' => Faker::Lorem.sentence.to_s,
         'train_with_disability' => Faker::Lorem.sentence.to_s }
     }
+    created_at { Faker::Date.between 2.days.ago, 1.days.ago }
 
     after(:build) do |enrichment, evaluator|
       if evaluator.age.present?

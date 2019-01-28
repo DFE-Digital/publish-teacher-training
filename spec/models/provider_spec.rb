@@ -34,20 +34,38 @@ RSpec.describe Provider, type: :model do
   end
 
   describe '#address_info' do
-    it 'returns address of the provider' do
-      provider = create(:provider, enrichments: [])
-      expect(provider.address_info).to eq(
-        'address1' => provider.address1,
-        'address2' => provider.address2,
-        'address3' => provider.address3,
-        'address4' => provider.address4,
-        'postcode' => provider.postcode,
-        'region_code' => provider.region_code
-      )
+    describe 'returns address of the provider' do
+      it 'even empty enrichments' do
+        provider = create(:provider, enrichments: [])
+        expect(provider.address_info).to eq(
+          'address1' => provider.address1,
+          'address2' => provider.address2,
+          'address3' => provider.address3,
+          'address4' => provider.address4,
+          'postcode' => provider.postcode,
+          'region_code' => provider.region_code
+        )
+      end
+
+      it 'even when enrichment has nothing set for address_info' do
+        enrichment = build(:provider_enrichment, json_data: { 'email' => Faker::Internet.email,
+        'website' => Faker::Internet.url,
+        'train_with_us' => Faker::Lorem.sentence.to_s,
+        'train_with_disability' => Faker::Lorem.sentence.to_s })
+        provider = create(:provider, enrichments: [enrichment])
+        expect(provider.address_info).to eq(
+          'address1' => provider.address1,
+          'address2' => provider.address2,
+          'address3' => provider.address3,
+          'address4' => provider.address4,
+          'postcode' => provider.postcode,
+          'region_code' => provider.region_code
+        )
+      end
     end
 
     context 'provider has enrichments' do
-      it 'returns json_data from the last enrichment' do
+      it 'returns json_data from the first enrichment' do
         enrichment = build(:provider_enrichment)
         provider = create(:provider, enrichments: [enrichment])
 
@@ -58,6 +76,21 @@ RSpec.describe Provider, type: :model do
           'address4' => enrichment.address4,
           'postcode' => enrichment.postcode,
           'region_code' => enrichment.region_code
+        )
+      end
+
+      it 'returns json_data from the newest enrichment' do
+        enrichment = build(:provider_enrichment)
+        newest_enrichment = build(:provider_enrichment, created_at: Date.today)
+        provider = create(:provider, enrichments: [enrichment, newest_enrichment])
+
+        expect(provider.address_info).to eq(
+          'address1' => newest_enrichment.address1,
+          'address2' => newest_enrichment.address2,
+          'address3' => newest_enrichment.address3,
+          'address4' => newest_enrichment.address4,
+          'postcode' => newest_enrichment.postcode,
+          'region_code' => newest_enrichment.region_code
         )
       end
     end

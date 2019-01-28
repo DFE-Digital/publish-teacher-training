@@ -16,6 +16,7 @@
 class ProviderEnrichment < ApplicationRecord
   self.table_name = "provider_enrichment"
   self.primary_key = "provider_code"
+  default_scope { order(created_at: :desc) }
 
   include RegionCode
 
