@@ -64,27 +64,28 @@ class Provider < ApplicationRecord
   def address_info
     result = valid_enriched_address_info
 
-    if !result.present?
-      fields = %w[address1 address2 address3 address4 postcode]
-
+    unless result.present?
+      fields = %w[address1 address2 address3 address4 postcode region_code]
       result = self
-        .attributes_before_type_cast
-        .slice(*fields)
+      .attributes_before_type_cast
+      .slice(*fields)
     end
-
-    # region_code should be present in enrichment regardless
-    result['region_code'] = (enrichments.with_address_info.first || self).region_code_before_type_cast
 
     result
   end
 
   def valid_enriched_address_info
+    return nil unless enrichments.with_address_info.present?
+
     fields = %w[address1 address2 address3 address4 postcode]
 
-    result = enrichments.with_address_info.first.present? && enrichments.with_address_info.first
-    .attributes_before_type_cast
-    .slice(*fields)
+    result = enrichments.with_address_info.first
+     .attributes_before_type_cast
+     .slice(*fields)
 
-    result = !result.present? || fields.any? { |field| result[field].present? } ? result : nil
+    return nil unless (result.select { |_k, v| v.present? }).present?
+
+    result['region_code'] = enrichments.with_address_info.first.region_code_before_type_cast
+    result
   end
 end
