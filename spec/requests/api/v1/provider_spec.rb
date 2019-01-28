@@ -194,7 +194,7 @@ describe 'Providers API', type: :request do
       end
     end
     context 'with changed_since' do
-      it 'JSON body response contains expected provider attributes' do
+      it 'JSON body response contains expected providers' do
         old_provider = create(:provider, provider_code: "SINCE1", age: 1.hour.ago)
 
         updated_provider = create(:provider, provider_code: "SINCE2", age: 5.minutes.ago)
