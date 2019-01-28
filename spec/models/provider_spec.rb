@@ -68,7 +68,7 @@ RSpec.describe Provider, type: :model do
     let!(:provider)     { create(:provider, age: 1.hour.ago) }
 
     context 'with a provider with no enrichments or sites' do
-      let(:provider) { create(:provider, enrichments:[], sites:[]) }
+      let(:provider) { create(:provider, enrichments: [], sites: []) }
 
       subject { Provider.changed_since(10.minutes.ago) }
 
