@@ -62,11 +62,11 @@ class Provider < ApplicationRecord
 
   # TODO: filter to published enrichments, maybe rename to published_address_info
   def address_info
-    fields = %w[address1 address2 address3 address4 postcode]
-
     result = valid_enriched_address_info
 
     if !result.present?
+      fields = %w[address1 address2 address3 address4 postcode]
+
       result = self
         .attributes_before_type_cast
         .slice(*fields)
