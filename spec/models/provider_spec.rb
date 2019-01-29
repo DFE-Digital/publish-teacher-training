@@ -119,7 +119,7 @@ RSpec.describe Provider, type: :model do
           end
         end
         context 'enrichment has partial set for address_info' do
-          it 'returns address of the provider' do
+          it 'returns address of the enrichment' do
             enrichment = build(:provider_enrichment, json_data: { 'email' => Faker::Internet.email,
             'website' => Faker::Internet.url,
             'address1' => Faker::Address.street_address,
@@ -136,6 +136,28 @@ RSpec.describe Provider, type: :model do
               'postcode' => enrichment.postcode,
               'region_code' => enrichment.region_code
             )
+          end
+
+          context 'enrichment has only region code set for address_info' do
+            it 'returns address of the provider' do
+              london = ProviderEnrichment.region_codes['London']
+
+              enrichment = build(:provider_enrichment, json_data: { 'email' => Faker::Internet.email,
+              'website' => Faker::Internet.url,
+              'region_code' => 'No region',
+              'train_with_us' => Faker::Lorem.sentence.to_s,
+              'train_with_disability' => Faker::Lorem.sentence.to_s })
+              provider = create(:provider, region_code: london, enrichments: [enrichment])
+
+              expect(provider.address_info).to eq(
+                'address1' => provider.address1,
+                'address2' => provider.address2,
+                'address3' => provider.address3,
+                'address4' => provider.address4,
+                'postcode' => provider.postcode,
+                'region_code' => london
+              )
+            end
           end
         end
       end
