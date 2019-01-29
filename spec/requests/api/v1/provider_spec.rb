@@ -68,19 +68,19 @@ describe 'Providers API', type: :request do
               provider: provider2)
       end
       it 'returns http success' do
-        get '/api/v1/providers', headers: { 'HTTP_AUTHORIZATION' => credentials }
+        get '/api/v1/2019/providers', headers: { 'HTTP_AUTHORIZATION' => credentials }
         expect(response).to have_http_status(:success)
       end
 
       it 'returns http unauthorised' do
-        get '/api/v1/providers',
+        get '/api/v1/2019/providers',
             headers: { 'HTTP_AUTHORIZATION' => unauthorized_credentials }
         expect(response).to have_http_status(:unauthorized)
       end
 
       context 'with enrichment address data' do
         it 'JSON body response contains expected provider attributes' do
-          get '/api/v1/providers',
+          get '/api/v1/2019/providers',
               headers: { 'HTTP_AUTHORIZATION' => credentials }
 
           json = JSON.parse(response.body)

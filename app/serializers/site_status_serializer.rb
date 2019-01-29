@@ -34,8 +34,7 @@ class SiteStatusSerializer < ActiveModel::Serializer
     object.site.location_name
   end
 
-  # TODO: make recruitment cycle dynamic
   def recruitment_cycle
-    "2019"
+    object.recruitment_cycle
   end
 end
