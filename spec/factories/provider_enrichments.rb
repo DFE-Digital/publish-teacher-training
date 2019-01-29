@@ -28,6 +28,7 @@ FactoryBot.define do
         'address3' => Faker::Address.city,
         'address4' => Faker::Address.state,
         'postcode' => Faker::Address.postcode,
+        'region_code' => ProviderEnrichment.region_codes['Eastern'],
         'train_with_us' => Faker::Lorem.sentence.to_s,
         'train_with_disability' => Faker::Lorem.sentence.to_s }
     }

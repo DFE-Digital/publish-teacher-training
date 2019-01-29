@@ -44,7 +44,7 @@ RSpec.describe Provider, type: :model do
           'address3' => provider.address3,
           'address4' => provider.address4,
           'postcode' => provider.postcode,
-          'region_code' => provider.region_code
+          'region_code' => ProviderEnrichment.region_codes[provider.region_code]
         )
       end
 
@@ -56,13 +56,21 @@ RSpec.describe Provider, type: :model do
             'train_with_us' => Faker::Lorem.sentence.to_s,
             'train_with_disability' => Faker::Lorem.sentence.to_s })
             provider = create(:provider, enrichments: [enrichment])
+
+            # forcing it to be absent in json_data altogether
+            ProviderEnrichment.connection.update(<<~EOSQL)
+              UPDATE provider_enrichment
+                    SET json_data=json_data-'Address1'-'Address2'-'Address3'-'Address4'-'Postcode'-'RegionCode'
+                    WHERE provider_code='#{enrichment.id}'
+            EOSQL
+
             expect(provider.address_info).to eq(
               'address1' => provider.address1,
               'address2' => provider.address2,
               'address3' => provider.address3,
               'address4' => provider.address4,
               'postcode' => provider.postcode,
-              'region_code' => provider.region_code
+              'region_code' => ProviderEnrichment.region_codes[provider.region_code]
             )
           end
           it 'returns address of the provider' do
@@ -83,7 +91,7 @@ RSpec.describe Provider, type: :model do
               'address3' => provider.address3,
               'address4' => provider.address4,
               'postcode' => provider.postcode,
-              'region_code' => provider.region_code
+              'region_code' => ProviderEnrichment.region_codes[provider.region_code]
             )
           end
         end
@@ -99,7 +107,7 @@ RSpec.describe Provider, type: :model do
               'address3' => enrichment.address3,
               'address4' => enrichment.address4,
               'postcode' => enrichment.postcode,
-              'region_code' => enrichment.region_code
+              'region_code' => ProviderEnrichment.region_codes[enrichment.region_code]
             )
           end
 
@@ -114,7 +122,7 @@ RSpec.describe Provider, type: :model do
               'address3' => newest_enrichment.address3,
               'address4' => newest_enrichment.address4,
               'postcode' => newest_enrichment.postcode,
-              'region_code' => newest_enrichment.region_code
+              'region_code' => ProviderEnrichment.region_codes[newest_enrichment.region_code]
             )
           end
         end
@@ -134,14 +142,13 @@ RSpec.describe Provider, type: :model do
               'address3' => enrichment.address3,
               'address4' => enrichment.address4,
               'postcode' => enrichment.postcode,
-              'region_code' => enrichment.region_code
+              'region_code' => ProviderEnrichment.region_codes[enrichment.region_code]
             )
           end
 
           context 'enrichment has only region code set for address_info' do
             it 'returns address of the provider' do
               london = ProviderEnrichment.region_codes['London']
-
               enrichment = build(:provider_enrichment, json_data: { 'email' => Faker::Internet.email,
               'website' => Faker::Internet.url,
               'region_code' => 'No region',
@@ -155,7 +162,7 @@ RSpec.describe Provider, type: :model do
                 'address3' => provider.address3,
                 'address4' => provider.address4,
                 'postcode' => provider.postcode,
-                'region_code' => london
+                'region_code' => ProviderEnrichment.region_codes[provider.region_code]
               )
             end
           end
@@ -163,6 +170,7 @@ RSpec.describe Provider, type: :model do
       end
     end
   end
+
   describe '#changed_since' do
     let!(:old_provider) { create(:provider, age: 1.hour.ago) }
     let!(:provider) { create(:provider, age: 1.hour.ago) }

@@ -27,7 +27,7 @@ class ProviderEnrichment < ApplicationRecord
   scope :with_address_info,
         -> do
           where("json_data ?| array['Address1', 'Address2', 'Address3', 'Address4', 'Postcode', 'RegionCode']")
-            .json_data_where_not(address1: nil, address2: nil, address3: nil, address4: nil, postcode: nil, region_code: nil)
+            .json_data_where_not(address1: nil, address2: nil, address3: nil, address4: nil, postcode: nil)
         end
 
   jsonb_accessor :json_data,
