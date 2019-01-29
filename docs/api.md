@@ -21,125 +21,64 @@ curl "api_endpoint_here"
   -H "Authorization: Bearer your_api_key"
 ```
 
-# Pagination
+# Retrieving Records
 
-All endpoints return paginated results, meaning if there are more results than
-the page size, multiple requests will be necessary to retrieve all the results.
-Clients should use the links provided in the headers for the next pages when
-retrieving the entire result-set.
+The "provider" and "course" endpoints support retrieving records changed
+since the last request. This is intended to reduce the data transfer volumes
+and processing needed to synchronise the UCAS apply system with DfE's course
+data on a schedule.
 
-**Example headers:**
+The expected usage is as follows:
 
-```
-Link: <https://manage-courses-backend.herokuapp.com/api/v1/2018/courses?page=169>; rel="last", <https://manage-courses-backend.herokuapp.com/api/v1/2018/courses?page=2>; rel="next"
-Per-Page: 100
-Total: 16888
-Last-Changed: 20190113222741
-```
+## Populating an empty system
 
-| Header       | Description                                                                                    |
-|--------------|------------------------------------------------------------------------------------------------|
-| Link         | Links to the next and last pages                                                               |
-| Per-Page     | The number of results in the page                                                              |
-| Total        | The total number of results                                                                    |
 
-Behind the scenes, there are two types of pagination depending on whether all
-records are being returned, or whether a list of records changed since a given
-time are returned.
+1. Call the endpoint with no query parameters,
+   e.g. `GET https://.../api/v1/<recruitment_cycle>/providers`
+2. The API will return the first page of records, and will include a response
+   header indicating the url needed to request the next page of records.
+3. Make another GET using the provided next page url.
+4. Repeat until no data is returned. Keep a copy of the next-page url
+   provided along with the empty response in order to be able to fetch
+   records that chanch after this initial load.
 
-## All-Records Pagination
+*The above can also be used to refetch all the data periodically to eliminate any drift
+that has crept in over time*
 
-**Example page URLs:**
+## Retrieving changed records
 
-```
-https://manage-courses-backend.herokuapp.com/api/v1/2018/courses
-https://manage-courses-backend.herokuapp.com/api/v1/2018/courses?page=1
-https://manage-courses-backend.herokuapp.com/api/v1/2018/courses?page=2
-https://manage-courses-backend.herokuapp.com/api/v1/2018/courses?page=3
-```
+1. Make a GET request using the next-page url provided with the empty
+   response at the end of the last full or incrmental fetch.
+2. The API will return the first page of records, and will include a response
+   header indicating the url needed to request the next page of records.
+3. Make another GET using the provided next page url.
+4. Repeat until no data is returned. Keep a copy of the next-page url
+   provided along with the empty response in order to be able to fetch
+   records that chanch after this initial load.
 
-When all records are being retrieved, pagination is done using the `page`
-parameter.
+Records will be repeated as new changes are recorded so the client **must**
+be able to handle duplicate entries in the result sets.
 
-## Changed-Records Pagination
-
-**Example page URLs:**
+The header will be of the form with the contents of `<...>` replaced with the
+correct url:
 
 ```
-https://manage-courses-backend.herokuapp.com/api/v1/2018/courses?changed_since=
-https://manage-courses-backend.herokuapp.com/api/v1/2018/courses?changed_since=20190113T222741Z
-https://manage-courses-backend.herokuapp.com/api/v1/2018/courses?changed_since=20190114T223403Z
+Link: <https://.../api/v1/recruitment_cycle/providers?...>; rel="next"
 ```
 
-When changed records are being retrieved, pagination is done by re-using the
-`changed_since` parameter. This pagination is state-less and any records that
-change while the results are being retrieved will appear again in the results,
-so clients should be prepared to receive duplicate records.
+**The query parameters are considered an interal concern of the API** and
+***must not** be constructed manually in order to avoid losing changes. The
+incremental update should only be performed using the next-page urls provided
+in the response headers. With that in mind, these are the parameters you
+should expect to see:
 
-# Retrieving Changed Records
+* `changed_since` - is an ISO 8601 timestamp stating the oldest change to include
+* `from_entity_id` where "entity" is "provider" or "course" - is an internal id
+  used in paging to ensure no ambiguity where record updates within the same
+  second have been split across pages
 
-**Example request sequence:**
-
-```
-# initial get with first page or results
-> GET https://manage-courses-backend.herokuapp.com/api/v1/2018/courses?changed_since=
-
-< Link: <https://manage-courses-backend.herokuapp.com/api/v1/2018/courses?changed_since=20190110T112846Z&changed_id=173>;rel="next"
-< Per-Page: 100
-< Total: 250
-
-
-# second page of results
-> GET https://manage-courses-backend.herokuapp.com/api/v1/2018/courses?changed_since=20190110T112846Z&changed_id=173
-
-< Link: <https://manage-courses-backend.herokuapp.com/api/v1/2018/courses?changed_since=20190111T222741Z&changed_id=291>;rel="next"
-< Per-Page: 100
-< Total: 150
-
-
-# last page of results with "next" link to be used later
-> GET https://manage-courses-backend.herokuapp.com/api/v1/2018/courses?changed_since=20190111T222741Z&changed_id=291
-
-< Link: <https://manage-courses-backend.herokuapp.com/api/v1/2018/courses?changed_since=20190113T120126Z&changed_id=400>;rel="next"
-< Per-Page: 100
-< Total: 50
-```
-
-Certain endpoints support retrieving records that have changed since a given
-point in time. This is to facilitate keeping a client's database in sync with
-the primary source at the DfE using incremental updates, where using the API as
-a live data source is not an option.
-
-The general pattern for how to retrieve changed records is described here, see
-endpoint documentation below to see which endpoints support this and for further
-details.
-
-To initiate a changed-records request supply the parameter `changed_since` with
-a timestamp of the last API requests.
-
-| Parameter     | Data type                                                           | Description                                                                                                                           |
-|---------------|---------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------|
-| changed_since | [ISO 8601 date/time string](https://en.wikipedia.org/wiki/ISO_8601) | Request all records that have changed since this date/time. Leave blank to retrieve all records                                       |
-| changed_id    | Integer                                                             | Optional. In the case where multiple records are changed within the same second, this is used to specify which record id to start at. |
-|               |                                                                     |                                                                                                                                       |
-
-
-The response headers will include information related to continuing to retrieve
-changed records either immediately, or when ready to ingest more records.
-
-| Header       | Description                                                                                    |
-|--------------|------------------------------------------------------------------------------------------------|
-| Link         | Links to the next and last pages.                                                              |
-| Per-Page     | The maximum number of results on a page.                                                       |
-| Total        | The total number of results.                                                                   |
-
-
-As all responses from the API are paginated, a set maximum of results will be
-returned and a link to the next page will be included in the response headers.
-If the value for `Total` is less than `Per-Page` that indicates that there are
-no more results to retrieve with the `next` link, and if used 0 records will be
-returned. The `next` link may be saved for a future request to continue the
-incremental loading of changed data.
+This is based on the [link header
+pagination](https://apievangelist.com/2016/05/02/http-header-awareness-using-the-link-header-for-pagination/)
 
 # Errors
 
