@@ -11,7 +11,7 @@ describe 'Providers API', type: :request do
         .encode_credentials('foo')
     end
 
-    describe "without changed_since parameter" do
+    context "without changed_since parameter" do
       let!(:provider) do
         create(:provider,
               provider_name: 'ACME SCITT',
@@ -196,7 +196,7 @@ describe 'Providers API', type: :request do
       end
     end
 
-    describe "with changed_since parameter" do
+    context "with changed_since parameter" do
       describe "JSON body response" do
         it 'contains expected providers' do
           old_provider = create(:provider, provider_code: "SINCE1", age: 1.hour.ago)
