@@ -3,7 +3,7 @@ module Api
     class ProvidersController < ApplicationController
       def index
         @providers = Provider.changed_since(params[:changed_since])
-        paginate json: @providers
+        render json: @providers
       end
     end
   end
