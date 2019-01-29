@@ -75,17 +75,17 @@ class Provider < ApplicationRecord
   end
 
   def valid_enriched_address_info
-    return nil unless enrichments.with_address_info.present?
+    return nil unless enrichments.latest_created_at.with_address_info.first.present?
 
     fields = %w[address1 address2 address3 address4 postcode]
 
-    result = enrichments.with_address_info.first
+    result = enrichments.latest_created_at.with_address_info.first
      .attributes_before_type_cast
      .slice(*fields)
 
     return nil unless (result.select { |_k, v| v.present? }).present?
 
-    result['region_code'] = enrichments.with_address_info.first.region_code_before_type_cast
+    result['region_code'] = enrichments.latest_created_at.with_address_info.first.region_code_before_type_cast
     result
   end
 end
