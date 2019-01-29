@@ -57,8 +57,7 @@ class CourseSerializer < ActiveModel::Serializer
     "Y" # we want to always create PDFs for applications coming in
   end
 
-  # TODO: make recruitment cycle dynamic
   def recruitment_cycle
-    "2019"
+    object.recruitment_cycle
   end
 end

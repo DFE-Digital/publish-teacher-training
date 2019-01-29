@@ -57,4 +57,8 @@ class Course < ApplicationRecord
   has_and_belongs_to_many :subjects
   has_many :site_statuses
   has_many :sites, through: :site_statuses
+
+  def recruitment_cycle
+    "2019"
+  end
 end

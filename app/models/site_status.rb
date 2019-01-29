@@ -30,4 +30,8 @@ class SiteStatus < ApplicationRecord
 
   belongs_to :site
   belongs_to :course
+
+  def recruitment_cycle
+    "2019"
+  end
 end

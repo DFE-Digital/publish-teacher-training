@@ -31,8 +31,7 @@ class SiteSerializer < ActiveModel::Serializer
     '%02d' % object.region_code_before_type_cast if object.region_code.present?
   end
 
-  # TODO: make recruitment cycle dynamic
   def recruitment_cycle
-    "2019"
+    object.recruitment_cycle
   end
 end
