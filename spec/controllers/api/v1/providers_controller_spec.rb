@@ -13,5 +13,12 @@ RSpec.describe Api::V1::ProvidersController, type: :controller do
         'code' => 503, 'status' => 'Service Unavailable'
       )
     end
+
+    it "calls limit on the model with default value of 100" do
+      allow(controller).to receive(:authenticate)
+      expect(Provider).to receive_message_chain(:changed_since, :limit).with(100).and_return([])
+
+      get :index
+    end
   end
 end

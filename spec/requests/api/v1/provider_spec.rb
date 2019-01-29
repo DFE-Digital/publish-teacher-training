@@ -1,5 +1,10 @@
 require 'rails_helper'
 
+def get_provider_codes_from_body(body)
+  json = JSON.parse(body)
+  json.map { |provider| provider["institution_code"] }
+end
+
 describe 'Providers API', type: :request do
   describe 'GET index' do
     let(:credentials) do
@@ -213,13 +218,76 @@ describe 'Providers API', type: :request do
               headers: { 'HTTP_AUTHORIZATION' => credentials },
               params: { changed_since: 10.minutes.ago.utc.iso8601 }
 
-          json = JSON.parse(response.body)
-          returned_provider_codes = json.map { |provider| provider["institution_code"] }
+          returned_provider_codes = get_provider_codes_from_body(response.body)
 
           expect(returned_provider_codes).not_to include old_provider.provider_code
           expect(returned_provider_codes).to include updated_provider.provider_code
           expect(returned_provider_codes).to include provider_with_updated_enrichment.provider_code
           expect(returned_provider_codes).to include provider_with_updated_site.provider_code
+        end
+      end
+
+      it 'includes correct next link in response headers' do
+        create(:provider, provider_code: "LAST1", age: 10.minutes.ago)
+
+        timestamp_of_last_provider = 2.minutes.ago
+        last_provider_in_results = create(:provider, provider_code: "LAST2", age: timestamp_of_last_provider)
+
+        get '/api/v1/providers',
+          headers: { 'HTTP_AUTHORIZATION' => credentials },
+          params: { changed_since: 30.minutes.ago.utc.iso8601 }
+
+        expect(response.headers).to have_key "Link"
+        expected = /#{request.base_url + request.path}\?changed_since=#{(timestamp_of_last_provider + 1.second).utc.iso8601}&from_provider_id=#{last_provider_in_results.id}&per_page=100; rel="next"$/
+        expect(response.headers["Link"]).to match expected
+      end
+
+      it 'includes correct next link when there is an empty set' do
+        provided_timestamp = 5.minutes.ago.utc.iso8601
+
+        get '/api/v1/providers',
+          headers: { 'HTTP_AUTHORIZATION' => credentials },
+          params: { changed_since: provided_timestamp }
+
+        expected = /#{request.base_url + request.path}\?changed_since=#{provided_timestamp}&from_provider_id=&per_page=100; rel="next"$/
+        expect(response.headers["Link"]).to match expected
+      end
+
+      context "with many providers" do
+        before do
+          11.times do |i|
+            create(:provider, provider_code: "PROV#{i + 1}", age: (20 - i).minutes.ago, sites: [], enrichments: [])
+          end
+        end
+
+        it 'pages properly' do
+          get '/api/v1/providers',
+            headers: { 'HTTP_AUTHORIZATION' => credentials },
+            params: { changed_since: 21.minutes.ago.utc.iso8601, per_page: 10 }
+
+          returned_provider_codes = get_provider_codes_from_body(response.body)
+
+          expected_provider_codes = (1..10).map { |n| "PROV#{n}" }
+          expect(returned_provider_codes).to match_array expected_provider_codes
+
+          next_url = response.headers["Link"]
+
+          get next_url,
+            headers: { 'HTTP_AUTHORIZATION' => credentials }
+
+          returned_provider_codes = get_provider_codes_from_body(response.body)
+
+          expect(returned_provider_codes.size).to eq 1
+          expect(returned_provider_codes).to include "PROV11"
+
+          next_url = response.headers["Link"]
+
+          get next_url,
+            headers: { 'HTTP_AUTHORIZATION' => credentials }
+
+          returned_provider_codes = get_provider_codes_from_body(response.body)
+
+          expect(returned_provider_codes.size).to eq 0
         end
       end
     end
