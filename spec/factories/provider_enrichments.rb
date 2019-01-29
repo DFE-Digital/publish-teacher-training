@@ -15,6 +15,10 @@
 
 FactoryBot.define do
   factory :provider_enrichment do
+    transient do
+      age { nil }
+    end
+
     sequence(:provider_code) { |n| "A#{n}" }
     json_data {
       { 'email' => Faker::Internet.email,
@@ -27,5 +31,12 @@ FactoryBot.define do
         'train_with_us' => Faker::Lorem.sentence.to_s,
         'train_with_disability' => Faker::Lorem.sentence.to_s }
     }
+
+    after(:build) do |enrichment, evaluator|
+      if evaluator.age.present?
+        enrichment.created_at = evaluator.age
+        enrichment.updated_at = evaluator.age
+      end
+    end
   end
 end
