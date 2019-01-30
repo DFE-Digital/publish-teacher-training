@@ -2,24 +2,22 @@
 
 # Authorisation
 
-The server expects an API key to be included in a header for all API requests:
+The server expects an API key to be included in a header for all API requests,
+where `your_api_key` is the api key supplied by the becoming a teacher team:
 
 ```
 Authorization: Bearer your_api_key
 ```
 
-<aside class="notice">
-You must replace <code>your_api_key</code> with your issued API key.
-</aside>
 
 
-**To authorise, use this code:**
+## Example
 
 ```shell
-# With shell, you can just pass the correct header with each request
-curl "api_endpoint_here"
-  -H "Authorization: Bearer your_api_key"
+curl "https://manage-courses-backend.herokuapp.com/api/v1/2019/subjects" -H "Authorization: Bearer your_api_key"
 ```
+
+Replace `your_api_key` with your issued API key.
 
 # Retrieving Records
 
@@ -28,19 +26,23 @@ since the last request. This is intended to reduce the data transfer volumes
 and processing needed to synchronise the UCAS apply system with DfE's course
 data on a schedule.
 
+:rocket: *This feature is a work in progress and the API may not yet provide the stated
+capabilities and interface* - [trello
+card](https://trello.com/c/HMAlga4l/852-implement-incremental-fetch-for-providers)
+
 The expected usage is as follows:
 
 ## Populating an empty system
 
 
 1. Call the endpoint with no query parameters,
-   e.g. `GET https://.../api/v1/<recruitment_cycle>/providers`
+   e.g. `GET https://manage-courses-backend.herokuapp.com/api/v1/<recruitment_cycle>/providers`
 2. The API will return the first page of records, and will include a response
    header indicating the url needed to request the next page of records.
 3. Make another GET using the provided next page url.
 4. Repeat until no data is returned. Keep a copy of the next-page url
-   provided along with the empty response in order to be able to fetch
-   records that change after this initial load.
+   provided in the response headers in order to be able to fetch records that
+   change after this initial load.
 
 *The above can also be used to refetch all the data periodically to eliminate any drift
 that has crept in over time*
@@ -53,8 +55,8 @@ that has crept in over time*
    header indicating the url needed to request the next page of records.
 3. Make another GET using the provided next page url.
 4. Repeat until no data is returned. Keep a copy of the next-page url
-   provided along with the empty response in order to be able to fetch
-   records that change after this initial load.
+   provided in the response headers in order to be able to fetch records that
+   change after this initial load.
 
 Records will be repeated as new changes are recorded so the client **must**
 be able to handle duplicate entries in the result sets.
@@ -63,7 +65,7 @@ The header will be of the form with the contents of `<...>` replaced with the
 correct url:
 
 ```
-Link: <https://.../api/v1/recruitment_cycle/providers?...>; rel="next"
+Link: <https://manage-courses-backend.herokuapp.com/api/v1/2019/providers?...>; rel="next"
 ```
 
 **The query parameters are considered an interal concern of the API** and
@@ -77,8 +79,17 @@ should expect to see:
   used in paging to ensure no ambiguity where record updates within the same
   second have been split across pages
 
-This is based on the [link header
-pagination](https://apievangelist.com/2016/05/02/http-header-awareness-using-the-link-header-for-pagination/)
+The header format is from [link header
+pagination](https://apievangelist.com/2016/05/02/http-header-awareness-using-the-link-header-for-pagination/).
+
+The details of the mechanism are intended to avoid the risk of missing changes under edge-case conditions such as:
+
+* Bulk updates are happening to the data at the same time as a client is paging
+  through results.
+* More than a single page of records are updated within the same second.
+* Timestamps being generated for changes but being delayed in written to the
+  database due to transaction contention.
+* Clock skew between server generating timestamps and other servers involved.
 
 # Errors
 
@@ -94,17 +105,72 @@ Error Code | Meaning
 
 # Preparation for the next recruitment cycle (rollover)
 
-During a given recruitment cycle, there will be a period when providers have two sets of courses to manage – one set of courses that are currently published for the current recruitment cycle, and unpublished courses being preparated for the next recruitment cycle. Additionally, the providers who deliver next year's courses may change, and they may have different campuses for the same courses. The point in time when the overlap starts is referred to as rollover, and typically happens in or around May.
+During a given recruitment cycle, there will be a period when providers have
+two sets of courses to manage – one set of courses that are currently
+published for the current recruitment cycle, and unpublished courses being
+preparated for the next recruitment cycle. Additionally, the providers who
+deliver next year's courses may change, and they may have different campuses
+for the same courses. The point in time when the overlap starts is referred
+to as rollover, and typically happens in or around May.
 
-To differentiate between entities from different recruitment cycles, each endpoint has a `<recruitment_cycle>` part in the URL. Additionally, the following entities have a `recruitment_cycle` attribute:
+To differentiate between entities from different recruitment cycles, each
+endpoint has a `<recruitment_cycle>` part in the URL. Additionally, the
+following entities have a `recruitment_cycle` attribute:
 
 - course
 - campus
 - campus status
 
+## Recruitment cycle URL parameter
+
+`recruitment_cycle` - 4-character year (e.g. 2019 for 2019/20 course)
+
+All the examples in this documentation include `2019` for convenience and
+assume you wish to obtain information for the 2019-20 cycle. For future
+cycles update the value in the URL, e.g. `2020`.
+
+:rocket: *This feature is pending
+[PR #71](https://github.com/DFE-Digital/manage-courses-backend/pull/71)
+being merged & deployed*
+
 # Endpoints
 
 ## Courses
+
+This endpoint retrieves a paginated list of courses.
+
+* It is segmented by recruitment cycle, see
+  [preparation-for-the-next-recruitment-cycle](#Preparation-for-the-next-recruitment-cycle-rollover)
+* Results are paginated with a page size of 100 - see [retrieving
+  records](#retrieving-records)
+* It provides the capability outlined above for [retrieving changed
+  records](#retrieving-changed-records).
+* Results are sorted by `changed_at` with the oldest update first, then by
+  `course_id` ascending.
+
+### Example HTTP Requests
+
+First page of the complete data set:
+
+```shell
+curl -v "https://manage-courses-backend.herokuapp.com/api/v1/2019/courses" -H "Authorization: Bearer your_api_key"
+```
+
+Subsequent pages / incremental fetch, using the "next" url in the "Link" header from the previous request:
+
+```shell
+curl -v "https://manage-courses-backend.herokuapp.com/api/v1/2019/courses?changed_since=xxx&from_course_id=nnn" -H "Authorization: Bearer your_api_key"
+```
+
+### What constitutes a course change
+
+A course is considered to have been changed (and hence included in this
+endpoint) if any of these are true:
+
+* the course itself has been changed
+* the campus status has changed
+* campus associations have changed
+* subject associations have changed
 
 ### Entity documentation
 
@@ -128,38 +194,15 @@ provider             | Provider                    | A provider entity          
 accrediting_provider | Provider                    | null or a provider entity    | See the provider entity documentation below
 age_range            | Text                        | "P", "S", "M", "O"           | Age of students targeted by this course.
 
-#### Course codes
+### Course codes
 
-Course codes:
+* are unique within a provider
+* are not unique across providers
+* are stable across rollover (i.e. by default, a course in a particular subject
+  delivered by the same provider will have the same course code across
+  different recruitment cycles)
 
-- are unique within a provider
-- are not unique across providers
-- are stable across rollover (i.e. by default, a course in a particular subject delivered by the same provider will have the same course code across different recruitment cycles)
-
-### Get all courses
-
-This endpoint retrieves all courses.
-
-#### HTTP Request
-
-```
-GET https://manage-courses-backend.herokuapp.com/api/v1/<recruitment_cycle>/courses
-```
-
-#### URL Parameters
-
-Parameter         | Description
----------         | -----------
-recruitment_cycle | 4-character year (e.g. 2019 for 2019/20 courses)
-
-#### Example
-
-```shell
-curl "https://manage-courses-backend.herokuapp.com/api/v1/2019/courses"
-  -H "Authorization: Bearer your_api_key"
-```
-
-**The above command returns JSON structured like this:**
+### Example response body
 
 ```json
 [
@@ -224,38 +267,6 @@ curl "https://manage-courses-backend.herokuapp.com/api/v1/2019/courses"
 ]
 ```
 
-### Get changed courses
-
-This endpoint supports retrieving courses that have changed since the
-specified point in time, see the [Retrieving Changed
-Records](#retrieving-changed-records) section.
-
-The returned results:
-
-- match the structure of the [Get all courses](#get-all-courses) endpoint
-- are sorted chronologically with the oldest update first
-- are paginated with a page size of 100 (see the [pagination section](#pagination) for info about navigating pages)
-
-A course is marked as changed (and hence included in this endpoint) if:
-
-- the course itself has been changed
-- the campus status has changed
-- campus associations have changed
-- subject associations have changed
-
-#### HTTP Request
-
-```
-GET https://manage-courses-backend.herokuapp.com/api/v1/<recruitment_cycle>/courses?changed_since=<iso-8601-timestamp>
-```
-
-#### URL Parameters
-
-| Parameter           | Description                                                           |
-| ------------------- | --------------------------------------------------------------------- |
-| recruitment_cycle   | 4-character year (e.g. 2019 for 2019/20 courses)                      |
-| changed_since       | [ISO 8601 date/time string](https://en.wikipedia.org/wiki/ISO_8601)   |
-
 ## Campuses
 
 ### Entity documentation
@@ -267,9 +278,7 @@ name              | Text      |                     |
 region_code       | Text      | 01 to 11            | 2-character string
 recruitment_cycle | Text      |                     | 4-character year
 
-<aside class="warning">
-A single provider can have at most 37 campuses.
-</aside>
+:warning: - *A single provider can have at most 37 campuses.*
 
 ## Campus statuses
 
@@ -287,6 +296,18 @@ recruitment_cycle | Text                 |                   | 4-character year
 
 ## Subjects
 
+This endpoint retrieves all subjects.
+
+* It is not paginated.
+* It is segmented by recruitment cycle, see
+  [preparation-for-the-next-recruitment-cycle](#Preparation-for-the-next-recruitment-cycle-rollover)
+
+### Example HTTP Request
+
+```shell
+curl "https://manage-courses-backend.herokuapp.com/api/v1/2019/subjects" -H "Authorization: Bearer your_api_key"
+```
+
 ### Entity documentation
 
 Parameter    | Data type | Possible values     | Description
@@ -294,30 +315,7 @@ Parameter    | Data type | Possible values     | Description
 subject_code | Text      | 2-character strings | 2-character subject codes
 subject_name | Text      |                     |
 
-### Get all subjects
-
-This endpoint retrieves all subjects.
-
-#### HTTP Request
-
-```
-GET https://manage-courses-backend.herokuapp.com/api/v1/<recruitment_cycle>/subjects
-```
-
-#### URL Parameters
-
-Parameter         | Description
----------         | -----------
-recruitment_cycle | 4-character year (e.g. 2019 for 2019/20 courses)
-
-#### Example
-
-```shell
-curl "https://manage-courses-backend.herokuapp.com/api/v1/2019/subjects"
-  -H "Authorization: Bearer your_api_key"
-```
-
-**The above command returns JSON structured like this:**
+### Example response body
 
 ```json
 [
@@ -332,6 +330,32 @@ curl "https://manage-courses-backend.herokuapp.com/api/v1/2019/subjects"
 ```
 
 ## Providers
+
+This endpoint retrieves all institutions.
+
+* It is segmented by recruitment cycle, see
+  [preparation-for-the-next-recruitment-cycle](#Preparation-for-the-next-recruitment-cycle-rollover)
+* Results are paginated with a page size of 100 - see [retrieving
+  records](#retrieving-records)
+* It provides the capability outlined above for [retrieving changed
+  records](#retrieving-changed-records).
+* Results are sorted by `changed_at` with the oldest update first, then by
+  `provider_id` ascending.
+
+### Example HTTP Request
+
+```shell
+curl "https://manage-courses-backend.herokuapp.com/api/v1/2019/providers" -H "Authorization: Bearer your_api_key"
+```
+
+### What constitutes a provider change
+
+A provider is considered to have been changed (and hence included in this
+endpoint) if any of these are true:
+
+* the provider itself has been changed (including contact data changes)
+* any of the associated campuses has changed
+* campus associations have changed
 
 ### Entity documentation
 
@@ -357,30 +381,7 @@ utt_application_alerts | Text               | `No, not required`, `Yes, required
 type_of_gt12           | Text               | `Coming / Enrol`, `Coming or Not`, `No response` or `Not coming`                                                                                                                                                                                                                                                     |
 scheme_member          | Text               | `Y` or `N`                                                                                                                                                                                                                                                                                                           |
 
-### Get all providers
-
-This endpoint retrieves all institutions.
-
-#### HTTP Request
-
-```
-GET https://manage-courses-backend.herokuapp.com/api/v1/<recruitment_cycle>/providers
-```
-
-#### URL Parameters
-
-Parameter         | Description
----------         | -----------
-recruitment_cycle | 4-character year (e.g. 2019 for 2019/20 courses)
-
-#### Example
-
-```shell
-curl "https://manage-courses-backend.herokuapp.com/api/v1/2019/providers"
-  -H "Authorization: Bearer your_api_key"
-```
-
-**The above command returns JSON structured like this:**
+### Example response body
 
 ```json
 [
@@ -410,34 +411,3 @@ curl "https://manage-courses-backend.herokuapp.com/api/v1/2019/providers"
   }
 ]
 ```
-
-### Get changed providers
-
-This endpoint supports retrieving providers that have changed since the
-specified point in time, see the [Retrieving Changed
-Records](#retrieving-changed-records) section.
-
-The returned results:
-
-- matches the structure of the [Get all providers](#get-all-providers) endpoint
-- are sorted chronologically with the oldest update first
-- are paginated with a page size of 100 (see the [pagination section](#pagination) for info about navigating pages)
-
-A provider is marked as changed (and hence included in this endpoint) if:
-
-- the provider itself has been changed (including contact data changes)
-- any of the associated campuses has changed
-- campus associations have changed
-
-#### HTTP Request
-
-```
-GET https://manage-courses-backend.herokuapp.com/api/v1/<recruitment_cycle>/providers?changed_since=<iso-8601-timestamp>
-```
-
-#### URL Parameters
-
-Parameter         | Description
----------         | -----------
-recruitment_cycle | 4-character year (e.g. 2019 for 2019/20 courses)
-changed_since     | [ISO 8601 date/time string](https://en.wikipedia.org/wiki/ISO_8601)
