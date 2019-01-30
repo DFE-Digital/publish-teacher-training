@@ -30,4 +30,6 @@ Rails.application.routes.draw do
       end
     end
   end
+
+  get 'error_500', to: 'error#error_500'
 end
