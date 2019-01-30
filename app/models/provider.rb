@@ -62,10 +62,8 @@ class Provider < ApplicationRecord
 
   # TODO: filter to published enrichments, maybe rename to published_address_info
   def address_info
-    fields = %w[address1 address2 address3 address4 postcode region_code]
-
     (enrichments.latest_created_at.with_address_info.first || self)
       .attributes_before_type_cast
-      .slice(*fields)
+      .slice('address1', 'address2', 'address3', 'address4', 'postcode', 'region_code')
   end
 end

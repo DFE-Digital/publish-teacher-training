@@ -141,7 +141,7 @@ describe 'Providers API', type: :request do
           ProviderEnrichment.connection.update(<<~EOSQL)
             UPDATE provider_enrichment
                   SET json_data=json_data-'Address1'-'Address2'-'Address3'-'Address4'-'Postcode'-'RegionCode'
-                  WHERE provider_code='#{enrichment.id}'
+                  WHERE provider_code='#{enrichment.provider_code}'
           EOSQL
 
           get '/api/v1/providers',
