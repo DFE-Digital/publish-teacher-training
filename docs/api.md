@@ -40,7 +40,7 @@ The expected usage is as follows:
 3. Make another GET using the provided next page url.
 4. Repeat until no data is returned. Keep a copy of the next-page url
    provided along with the empty response in order to be able to fetch
-   records that chanch after this initial load.
+   records that change after this initial load.
 
 *The above can also be used to refetch all the data periodically to eliminate any drift
 that has crept in over time*
@@ -48,13 +48,13 @@ that has crept in over time*
 ## Retrieving changed records
 
 1. Make a GET request using the next-page url provided with the empty
-   response at the end of the last full or incrmental fetch.
+   response at the end of the last full or incremental fetch.
 2. The API will return the first page of records, and will include a response
    header indicating the url needed to request the next page of records.
 3. Make another GET using the provided next page url.
 4. Repeat until no data is returned. Keep a copy of the next-page url
    provided along with the empty response in order to be able to fetch
-   records that chanch after this initial load.
+   records that change after this initial load.
 
 Records will be repeated as new changes are recorded so the client **must**
 be able to handle duplicate entries in the result sets.
@@ -67,7 +67,7 @@ Link: <https://.../api/v1/recruitment_cycle/providers?...>; rel="next"
 ```
 
 **The query parameters are considered an interal concern of the API** and
-***must not** be constructed manually in order to avoid losing changes. The
+**must not** be constructed manually in order to avoid losing changes. The
 incremental update should only be performed using the next-page urls provided
 in the response headers. With that in mind, these are the parameters you
 should expect to see:
