@@ -86,11 +86,11 @@ The API uses the following error codes:
 
 Error Code | Meaning
 ---------- | -------
-400 | Bad Request -- Your request is invalid.
-401 | Unauthorized -- Your API key is wrong.
-404 | Not Found -- The specified resource could not be found.
-500 | Internal Server Error -- We had a problem with our server. Try again later.
-503 | Service Unavailable -- We're temporarily offline for maintenance. Please try again later.
+400        | Bad Request -- Your request is invalid.
+401        | Unauthorized -- Your API key is wrong.
+404        | Not Found -- The specified resource could not be found.
+500        | Internal Server Error -- We had a problem with our server. Try again later.
+503        | Service Unavailable -- We're temporarily offline for maintenance. Please try again later.
 
 # Preparation for the next recruitment cycle (rollover)
 
@@ -108,25 +108,25 @@ To differentiate between entities from different recruitment cycles, each endpoi
 
 ### Entity documentation
 
-Parameter | Data type | Possible values | Description
---------- | --------- | --------------- | -----------
-course_code | Text | 4-character strings | 4-character course code
-start_month | ISO 8601 date/time string | | The month and year when the course starts
-start_month_string | Text | January, February, etc | The month when the course starts as a string
-name | Text | | Course title
-copy_form_required | Text | 'Y' or 'N' |
-profpost_flag | Text | "", "PF", "PG", "BO" | Maximum of 2-characters
-program_type | Text | "SC", "SS", "TA", "SD", "HE" | Maximum of 2-characters
-modular | Text | "", "M" | Maximum of 1-character
-english | Integer | 1, 2, 3, 9 |
-maths | Integer | 1, 2, 3, 9 |
-science | Integer | 1, 2, 3, 9, null |
-recruitment_cycle | Text || 4-character year
-campus_statuses | An array of campus statuses | | See the campus status entity documentation below
-subjects | An array of subjects | | See the subject entity documentation below
-provider | Provider | A provider entity | See the provider entity documentation below
-accrediting_provider | Provider | null or a provider entity | See the provider entity documentation below
-age_range | Text | "P", "S", "M", "O" | Age of students targeted by this course.
+Parameter            | Data type                   | Possible values              | Description
+---------            | ---------                   | ---------------              | -----------
+course_code          | Text                        | 4-character strings          | 4-character course code
+start_month          | ISO 8601 date/time string   |                              | The month and year when the course starts
+start_month_string   | Text                        | January, February, etc       | The month when the course starts as a string
+name                 | Text                        |                              | Course title
+copy_form_required   | Text                        | 'Y' or 'N'                   |
+profpost_flag        | Text                        | "", "PF", "PG", "BO"         | Maximum of 2-characters
+program_type         | Text                        | "SC", "SS", "TA", "SD", "HE" | Maximum of 2-characters
+modular              | Text                        | "", "M"                      | Maximum of 1-character
+english              | Integer                     | 1, 2, 3, 9                   |
+maths                | Integer                     | 1, 2, 3, 9                   |
+science              | Integer                     | 1, 2, 3, 9, null             |
+recruitment_cycle    | Text                        |                              | 4-character year
+campus_statuses      | An array of campus statuses |                              | See the campus status entity documentation below
+subjects             | An array of subjects        |                              | See the subject entity documentation below
+provider             | Provider                    | A provider entity            | See the provider entity documentation below
+accrediting_provider | Provider                    | null or a provider entity    | See the provider entity documentation below
+age_range            | Text                        | "P", "S", "M", "O"           | Age of students targeted by this course.
 
 #### Course codes
 
@@ -148,8 +148,8 @@ GET https://manage-courses-backend.herokuapp.com/api/v1/<recruitment_cycle>/cour
 
 #### URL Parameters
 
-Parameter | Description
---------- | -----------
+Parameter         | Description
+---------         | -----------
 recruitment_cycle | 4-character year (e.g. 2019 for 2019/20 courses)
 
 #### Example
@@ -251,21 +251,21 @@ GET https://manage-courses-backend.herokuapp.com/api/v1/<recruitment_cycle>/cour
 
 #### URL Parameters
 
-| Parameter         | Description                                                         |
-|-------------------|---------------------------------------------------------------------|
-| recruitment_cycle | 4-character year (e.g. 2019 for 2019/20 courses)                    |
-| changed_since     | [ISO 8601 date/time string](https://en.wikipedia.org/wiki/ISO_8601) |
+| Parameter           | Description                                                           |
+| ------------------- | --------------------------------------------------------------------- |
+| recruitment_cycle   | 4-character year (e.g. 2019 for 2019/20 courses)                      |
+| changed_since       | [ISO 8601 date/time string](https://en.wikipedia.org/wiki/ISO_8601)   |
 
 ## Campuses
 
 ### Entity documentation
 
-Parameter | Data type | Possible values | Description
---------- | --------- | --------------- | -----------
-campus_code | Text | A-Z, 0-9, "-" or "" | 1-character campus codes
-name | Text | |
-region_code | Text | 01 to 11 | 2-character string
-recruitment_cycle | Text || 4-character year
+Parameter         | Data type | Possible values     | Description
+---------         | --------- | ---------------     | -----------
+campus_code       | Text      | A-Z, 0-9, "-" or "" | 1-character campus codes
+name              | Text      |                     |
+region_code       | Text      | 01 to 11            | 2-character string
+recruitment_cycle | Text      |                     | 4-character year
 
 <aside class="warning">
 A single provider can have at most 37 campuses.
@@ -275,24 +275,24 @@ A single provider can have at most 37 campuses.
 
 ### Entity documentation
 
-Parameter | Data type | Possible values | Description
---------- | --------- | --------------- | -----------
-campus_code | Text | A-Z, 0-9, "-", "" | 1-character campus codes
-name | Text | |
-vac_status | Text | |
-publish | Text | |
-status | Text | |
-course_open_date | ISO 8601 date string | |
-recruitment_cycle | Text || 4-character year
+Parameter         | Data type            | Possible values   | Description
+---------         | ---------            | ---------------   | -----------
+campus_code       | Text                 | A-Z, 0-9, "-", "" | 1-character campus codes
+name              | Text                 |                   |
+vac_status        | Text                 |                   |
+publish           | Text                 |                   |
+status            | Text                 |                   |
+course_open_date  | ISO 8601 date string |                   |
+recruitment_cycle | Text                 |                   | 4-character year
 
 ## Subjects
 
 ### Entity documentation
 
-Parameter | Data type | Possible values | Description
---------- | --------- | --------------- | -----------
-subject_code | Text | 2-character strings | 2-character subject codes
-subject_name | Text | |
+Parameter    | Data type | Possible values     | Description
+---------    | --------- | ---------------     | -----------
+subject_code | Text      | 2-character strings | 2-character subject codes
+subject_name | Text      |                     |
 
 ### Get all subjects
 
@@ -306,8 +306,8 @@ GET https://manage-courses-backend.herokuapp.com/api/v1/<recruitment_cycle>/subj
 
 #### URL Parameters
 
-Parameter | Description
---------- | -----------
+Parameter         | Description
+---------         | -----------
 recruitment_cycle | 4-character year (e.g. 2019 for 2019/20 courses)
 
 #### Example
@@ -335,27 +335,27 @@ curl "https://manage-courses-backend.herokuapp.com/api/v1/2019/subjects"
 
 ### Entity documentation
 
-Parameter | Data type | Possible values | Description
---------- | --------- | --------------- | -----------
-institution_code | Text | 3-character strings | 3-character UCAS institution code
-institution_name | Text | | The institution's full-length marketing name
-institution_type | Text | "Y", "B", "0", "O", null | The type of institution (whether it's a university, lead school/teaching school alliance or a SCITT)
-accrediting_provider | Text | "Y" or "N" | Whether the provider can accredit courses or not
-campuses | An array of campus || See the campus entity documentation above
-address1 | Text || Address line 1
-address2 | Text || Address line 2
-address3 | Text || Town/City
-address4 | Text || County
-postcode | Text || Postcode
-region_code | Text | 01 to 11 | 2-character string
-data_download_format | Text | `ASCII DATA`, `ASCII DATA and UNICODE DATA` or `Unicode data` |
-oustanding_decisions | Text | `Alphabetic`, `Application code`, `Course / Alphabetic`, `Course / Application code`, `Course / Learner Number`, `Faculty / Alphabetic`, `Faculty / Application code`, `Faculty / Course / Alphabetic`, `Faculty / Course / Application code`, `Faculty / Course / Learner code`, `Not required` or `Learner Number` |
-require_copy_forms | Text | `No, not required` or `Yes, required` |
-star_j | Text | `UCAS link` or `Flat file` |
-star_x | Text | `No, not required` or `Yes, required` |
-utt_application_alerts | Text | `No, not required`, `Yes, required`, `Yes - only my programmes` or `Yes - for accredited programmes only` | New UTT Application alerts
-type_of_gt12 | Text | `Coming / Enrol`, `Coming or Not`, `No response` or `Not coming` |
-scheme_member | Text | `Y` or `N` |
+Parameter              | Data type          | Possible values                                                                                                                                                                                                                                                                                                      | Description
+---------              | ---------          | ---------------                                                                                                                                                                                                                                                                                                      | -----------
+institution_code       | Text               | 3-character strings                                                                                                                                                                                                                                                                                                  | 3-character UCAS institution code
+institution_name       | Text               |                                                                                                                                                                                                                                                                                                                      | The institution's full-length marketing name
+institution_type       | Text               | "Y", "B", "0", "O", null                                                                                                                                                                                                                                                                                             | The type of institution (whether it's a university, lead school/teaching school alliance or a SCITT)
+accrediting_provider   | Text               | "Y" or "N"                                                                                                                                                                                                                                                                                                           | Whether the provider can accredit courses or not
+campuses               | An array of campus |                                                                                                                                                                                                                                                                                                                      | See the campus entity documentation above
+address1               | Text               |                                                                                                                                                                                                                                                                                                                      | Address line 1
+address2               | Text               |                                                                                                                                                                                                                                                                                                                      | Address line 2
+address3               | Text               |                                                                                                                                                                                                                                                                                                                      | Town/City
+address4               | Text               |                                                                                                                                                                                                                                                                                                                      | County
+postcode               | Text               |                                                                                                                                                                                                                                                                                                                      | Postcode
+region_code            | Text               | 01 to 11                                                                                                                                                                                                                                                                                                             | 2-character string
+data_download_format   | Text               | `ASCII DATA`, `ASCII DATA and UNICODE DATA` or `Unicode data`                                                                                                                                                                                                                                                        |
+oustanding_decisions   | Text               | `Alphabetic`, `Application code`, `Course / Alphabetic`, `Course / Application code`, `Course / Learner Number`, `Faculty / Alphabetic`, `Faculty / Application code`, `Faculty / Course / Alphabetic`, `Faculty / Course / Application code`, `Faculty / Course / Learner code`, `Not required` or `Learner Number` |
+require_copy_forms     | Text               | `No, not required` or `Yes, required`                                                                                                                                                                                                                                                                                |
+star_j                 | Text               | `UCAS link` or `Flat file`                                                                                                                                                                                                                                                                                           |
+star_x                 | Text               | `No, not required` or `Yes, required`                                                                                                                                                                                                                                                                                |
+utt_application_alerts | Text               | `No, not required`, `Yes, required`, `Yes - only my programmes` or `Yes - for accredited programmes only`                                                                                                                                                                                                            | New UTT Application alerts
+type_of_gt12           | Text               | `Coming / Enrol`, `Coming or Not`, `No response` or `Not coming`                                                                                                                                                                                                                                                     |
+scheme_member          | Text               | `Y` or `N`                                                                                                                                                                                                                                                                                                           |
 
 ### Get all providers
 
@@ -369,8 +369,8 @@ GET https://manage-courses-backend.herokuapp.com/api/v1/<recruitment_cycle>/prov
 
 #### URL Parameters
 
-Parameter | Description
---------- | -----------
+Parameter         | Description
+---------         | -----------
 recruitment_cycle | 4-character year (e.g. 2019 for 2019/20 courses)
 
 #### Example
@@ -437,7 +437,7 @@ GET https://manage-courses-backend.herokuapp.com/api/v1/<recruitment_cycle>/prov
 
 #### URL Parameters
 
-Parameter | Description
---------- | -----------
+Parameter         | Description
+---------         | -----------
 recruitment_cycle | 4-character year (e.g. 2019 for 2019/20 courses)
-changed_since | [ISO 8601 date/time string](https://en.wikipedia.org/wiki/ISO_8601)
+changed_since     | [ISO 8601 date/time string](https://en.wikipedia.org/wiki/ISO_8601)
