@@ -84,7 +84,7 @@ describe 'Providers API', type: :request do
               headers: { 'HTTP_AUTHORIZATION' => credentials }
 
           json = JSON.parse(response.body)
-          expect(json). to eq(
+          expect(json). to match_array(
             [
               {
                 'accrediting_provider' => 'Y',
@@ -148,7 +148,7 @@ describe 'Providers API', type: :request do
               headers: { 'HTTP_AUTHORIZATION' => credentials }
 
           json = JSON.parse(response.body)
-          expect(json). to eq([
+          expect(json). to match_array([
                                 {
                                   'accrediting_provider' => 'Y',
                                   'campuses' => [
