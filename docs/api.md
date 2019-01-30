@@ -68,7 +68,7 @@ correct url:
 Link: <https://manage-courses-backend.herokuapp.com/api/v1/2019/providers?...>; rel="next"
 ```
 
-**The query parameters are considered an interal concern of the API** and
+**The query parameters are considered an internal concern of the API** and
 **must not** be constructed manually in order to avoid losing changes. The
 incremental update should only be performed using the next-page urls provided
 in the response headers. With that in mind, these are the parameters you
@@ -87,7 +87,7 @@ The details of the mechanism are intended to avoid the risk of missing changes u
 * Bulk updates are happening to the data at the same time as a client is paging
   through results.
 * More than a single page of records are updated within the same second.
-* Timestamps being generated for changes but being delayed in written to the
+* Timestamps being generated for changes but delayed in being written to the
   database due to transaction contention.
 * Clock skew between server generating timestamps and other servers involved.
 
@@ -115,7 +115,7 @@ to as rollover, and typically happens in or around May.
 
 To differentiate between entities from different recruitment cycles, each
 endpoint has a `<recruitment_cycle>` part in the URL. Additionally, the
-following entities have a `recruitment_cycle` attribute:
+following entities have a `recruitment_cycle` attribute in the response data:
 
 - course
 - campus
