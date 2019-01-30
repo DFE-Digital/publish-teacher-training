@@ -16,7 +16,6 @@
 class ProviderEnrichment < ApplicationRecord
   self.table_name = "provider_enrichment"
   self.primary_key = "provider_code"
-  scope :latest_created_at, -> { order(created_at: :desc) }
 
   include RegionCode
 
@@ -29,6 +28,8 @@ class ProviderEnrichment < ApplicationRecord
           where("json_data ?| array['Address1', 'Address2', 'Address3', 'Address4', 'Postcode']")
             .json_data_where_not(address1: nil, address2: nil, address3: nil, address4: nil, postcode: nil)
         end
+
+  scope :latest_created_at, -> { order(created_at: :desc) }
 
   jsonb_accessor :json_data,
                  email: [:string, store_key: 'Email'],

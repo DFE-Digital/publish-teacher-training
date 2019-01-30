@@ -50,45 +50,48 @@ RSpec.describe Provider, type: :model do
 
       context 'provider has enrichments' do
         context 'enrichment has nothing set for address_info' do
-          it 'returns address of the provider' do
-            enrichment = build(:provider_enrichment)
-            provider = create(:provider, enrichments: [enrichment])
+          context 'via absent json_data fields' do
+            it 'returns address of the provider' do
+              enrichment = build(:provider_enrichment)
+              provider = create(:provider, enrichments: [enrichment])
 
-            # forcing all fields to be absent in json_data altogether
-            ProviderEnrichment.connection.update(<<~EOSQL)
-              UPDATE provider_enrichment
-                    SET json_data=json_data-'Address1'-'Address2'-'Address3'-'Address4'-'Postcode'-'RegionCode'
-                    WHERE provider_code='#{enrichment.provider_code}'
-            EOSQL
+              # forcing all fields to be absent in json_data altogether
+              ProviderEnrichment.connection.update(<<~EOSQL)
+                UPDATE provider_enrichment
+                      SET json_data=json_data-'Address1'-'Address2'-'Address3'-'Address4'-'Postcode'-'RegionCode'
+                      WHERE provider_code='#{enrichment.provider_code}'
+              EOSQL
 
-            expect(provider.address_info).to eq(
-              'address1' => provider.address1,
-              'address2' => provider.address2,
-              'address3' => provider.address3,
-              'address4' => provider.address4,
-              'postcode' => provider.postcode,
-              'region_code' => provider.region_code_before_type_cast
-            )
+              expect(provider.address_info).to eq(
+                'address1' => provider.address1,
+                'address2' => provider.address2,
+                'address3' => provider.address3,
+                'address4' => provider.address4,
+                'postcode' => provider.postcode,
+                'region_code' => provider.region_code_before_type_cast
+              )
+            end
           end
+          context 'via nil fields' do
+            it 'returns address of the provider' do
+              enrichment = build(:provider_enrichment,
+                  address1: nil,
+                  address2: nil,
+                  address3: nil,
+                  address4: nil,
+                  postcode: nil,
+                  region_code: nil)
+              provider = create(:provider, enrichments: [enrichment])
 
-          it 'returns address of the provider' do
-            enrichment = build(:provider_enrichment,
-                address1: nil,
-                address2: nil,
-                address3: nil,
-                address4: nil,
-                postcode: nil,
-                region_code: nil)
-            provider = create(:provider, enrichments: [enrichment])
-
-            expect(provider.address_info).to eq(
-              'address1' => provider.address1,
-              'address2' => provider.address2,
-              'address3' => provider.address3,
-              'address4' => provider.address4,
-              'postcode' => provider.postcode,
-              'region_code' => provider.region_code_before_type_cast
-            )
+              expect(provider.address_info).to eq(
+                'address1' => provider.address1,
+                'address2' => provider.address2,
+                'address3' => provider.address3,
+                'address4' => provider.address4,
+                'postcode' => provider.postcode,
+                'region_code' => provider.region_code_before_type_cast
+              )
+            end
           end
         end
 
@@ -144,48 +147,47 @@ RSpec.describe Provider, type: :model do
           context 'enrichment has only region code set for address_info' do
             london = ProviderEnrichment.region_codes['London']
             no_region = ProviderEnrichment.region_codes['No region']
+            context 'via absent json_data fields' do
+              it 'returns address of the provider' do
+                enrichment = build(:provider_enrichment, region_code: no_region,)
+                provider = create(:provider, region_code: london, enrichments: [enrichment])
 
-            it 'returns address of the provider' do
-              enrichment = build(:provider_enrichment, region_code: no_region,
-              address1: nil,
-              address2: nil,
-              address3: nil,
-              address4: nil,
-              postcode: nil)
-              provider = create(:provider, region_code: london, enrichments: [enrichment])
+                # forcing all fields apart region_code to be absent in json_data altogether
+                ProviderEnrichment.connection.update(<<~EOSQL)
+                  UPDATE provider_enrichment
+                        SET json_data=json_data-'Address1'-'Address2'-'Address3'-'Address4'-'Postcode'
+                        WHERE provider_code='#{enrichment.provider_code}'
+                EOSQL
 
-              expect(provider.address_info).to eq(
-                'address1' => provider.address1,
-                'address2' => provider.address2,
-                'address3' => provider.address3,
-                'address4' => provider.address4,
-                'postcode' => provider.postcode,
-                'region_code' => provider.region_code_before_type_cast
-              )
+                expect(provider.address_info).to eq(
+                  'address1' => provider.address1,
+                  'address2' => provider.address2,
+                  'address3' => provider.address3,
+                  'address4' => provider.address4,
+                  'postcode' => provider.postcode,
+                  'region_code' => provider.region_code_before_type_cast
+                )
+              end
             end
+            context 'via nil fields' do
+              it 'returns address of the provider' do
+                enrichment = build(:provider_enrichment, region_code: no_region,
+                address1: nil,
+                address2: nil,
+                address3: nil,
+                address4: nil,
+                postcode: nil)
+                provider = create(:provider, region_code: london, enrichments: [enrichment])
 
-            it 'returns address of the provider' do
-              enrichment = build(:provider_enrichment, region_code: no_region, address2: nil,
-              address3: nil,
-              address4: nil,
-              postcode: nil)
-              provider = create(:provider, region_code: london, enrichments: [enrichment])
-
-              # forcing all fields apart region_code to be absent in json_data altogether
-              ProviderEnrichment.connection.update(<<~EOSQL)
-                UPDATE provider_enrichment
-                      SET json_data=json_data-'Address1'-'Address2'-'Address3'-'Address4'-'Postcode'
-                      WHERE provider_code='#{enrichment.provider_code}'
-              EOSQL
-
-              expect(provider.address_info).to eq(
-                'address1' => provider.address1,
-                'address2' => provider.address2,
-                'address3' => provider.address3,
-                'address4' => provider.address4,
-                'postcode' => provider.postcode,
-                'region_code' => provider.region_code_before_type_cast
-              )
+                expect(provider.address_info).to eq(
+                  'address1' => provider.address1,
+                  'address2' => provider.address2,
+                  'address3' => provider.address3,
+                  'address4' => provider.address4,
+                  'postcode' => provider.postcode,
+                  'region_code' => provider.region_code_before_type_cast
+                )
+              end
             end
           end
         end
