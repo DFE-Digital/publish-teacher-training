@@ -17,8 +17,6 @@
 #
 
 class Site < ApplicationRecord
-  self.table_name = "site"
-
   include RegionCode
 
   belongs_to :provider

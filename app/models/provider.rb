@@ -25,8 +25,6 @@
 #
 
 class Provider < ApplicationRecord
-  self.table_name = "provider"
-
   include RegionCode
 
   enum provider_type: {

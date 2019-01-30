@@ -14,7 +14,6 @@
 #
 
 class ProviderEnrichment < ApplicationRecord
-  self.table_name = "provider_enrichment"
   self.primary_key = "provider_code"
 
   include RegionCode
