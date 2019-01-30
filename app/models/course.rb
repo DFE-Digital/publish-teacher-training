@@ -20,8 +20,6 @@
 #
 
 class Course < ApplicationRecord
-  self.table_name = "course"
-
   enum profpost_flag: {
     "Recommendation for QTS" => "",
     "Professional" => "PF",
