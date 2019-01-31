@@ -129,10 +129,6 @@ All the examples in this documentation include `2019` for convenience and
 assume you wish to obtain information for the 2019-20 cycle. For future
 cycles update the value in the URL, e.g. `2020`.
 
-:rocket: *This feature is pending
-[PR #71](https://github.com/DFE-Digital/manage-courses-backend/pull/71)
-being merged & deployed*
-
 # Endpoints
 
 ## Courses
