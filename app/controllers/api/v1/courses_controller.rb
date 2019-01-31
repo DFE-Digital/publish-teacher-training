@@ -2,7 +2,7 @@ module Api
   module V1
     class CoursesController < ApplicationController
       def index
-        @courses = Course.all.includes(:sites, :provider, :site_statuses)
+        @courses = Course.all.includes(:sites, :provider, :site_statuses, :subjects)
         paginate json: @courses
       end
     end
