@@ -2,144 +2,94 @@
 
 # Authorisation
 
-The server expects an API key to be included in a header for all API requests:
+The server expects an API key to be included in a header for all API requests,
+where `your_api_key` is the api key supplied by the becoming a teacher team:
 
 ```
 Authorization: Bearer your_api_key
 ```
 
-<aside class="notice">
-You must replace <code>your_api_key</code> with your issued API key.
-</aside>
 
 
-**To authorise, use this code:**
+## Example
 
 ```shell
-# With shell, you can just pass the correct header with each request
-curl "api_endpoint_here"
-  -H "Authorization: Bearer your_api_key"
+curl "https://manage-courses-backend.herokuapp.com/api/v1/2019/subjects" -H "Authorization: Bearer your_api_key"
 ```
 
-# Pagination
+Replace `your_api_key` with your issued API key.
 
-All endpoints return paginated results, meaning if there are more results than
-the page size, multiple requests will be necessary to retrieve all the results.
-Clients should use the links provided in the headers for the next pages when
-retrieving the entire result-set.
+# Retrieving Records
 
-**Example headers:**
+The "provider" and "course" endpoints support retrieving records changed
+since the last request. This is intended to reduce the data transfer volumes
+and processing needed to synchronise the UCAS apply system with DfE's course
+data on a schedule.
 
-```
-Link: <https://manage-courses-backend.herokuapp.com/api/v1/2018/courses?page=169>; rel="last", <https://manage-courses-backend.herokuapp.com/api/v1/2018/courses?page=2>; rel="next"
-Per-Page: 100
-Total: 16888
-Last-Changed: 20190113222741
-```
+:rocket: *This feature is a work in progress and the API may not yet provide the stated
+capabilities and interface* - [trello
+card](https://trello.com/c/HMAlga4l/852-implement-incremental-fetch-for-providers)
 
-| Header       | Description                                                                                    |
-|--------------|------------------------------------------------------------------------------------------------|
-| Link         | Links to the next and last pages                                                               |
-| Per-Page     | The number of results in the page                                                              |
-| Total        | The total number of results                                                                    |
+The expected usage is as follows:
 
-Behind the scenes, there are two types of pagination depending on whether all
-records are being returned, or whether a list of records changed since a given
-time are returned.
+## Populating an empty system
 
-## All-Records Pagination
 
-**Example page URLs:**
+1. Call the endpoint with no query parameters,
+   e.g. `GET https://manage-courses-backend.herokuapp.com/api/v1/<recruitment_cycle>/providers`
+2. The API will return the first page of records, and will include a response
+   header indicating the url needed to request the next page of records.
+3. Make another GET using the provided next page url.
+4. Repeat until no data is returned. Keep a copy of the next-page url
+   provided in the response headers in order to be able to fetch records that
+   change after this initial load.
 
-```
-https://manage-courses-backend.herokuapp.com/api/v1/2018/courses
-https://manage-courses-backend.herokuapp.com/api/v1/2018/courses?page=1
-https://manage-courses-backend.herokuapp.com/api/v1/2018/courses?page=2
-https://manage-courses-backend.herokuapp.com/api/v1/2018/courses?page=3
-```
+*The above can also be used to refetch all the data periodically to eliminate any drift
+that has crept in over time*
 
-When all records are being retrieved, pagination is done using the `page`
-parameter.
+## Retrieving changed records
 
-## Changed-Records Pagination
+1. Make a GET request using the next-page url provided with the empty
+   response at the end of the last full or incremental fetch.
+2. The API will return the first page of records, and will include a response
+   header indicating the url needed to request the next page of records.
+3. Make another GET using the provided next page url.
+4. Repeat until no data is returned. Keep a copy of the next-page url
+   provided in the response headers in order to be able to fetch records that
+   change after this initial load.
 
-**Example page URLs:**
+Records will be repeated as new changes are recorded so the client **must**
+be able to handle duplicate entries in the result sets.
 
-```
-https://manage-courses-backend.herokuapp.com/api/v1/2018/courses?changed_since=
-https://manage-courses-backend.herokuapp.com/api/v1/2018/courses?changed_since=20190113T222741Z
-https://manage-courses-backend.herokuapp.com/api/v1/2018/courses?changed_since=20190114T223403Z
-```
-
-When changed records are being retrieved, pagination is done by re-using the
-`changed_since` parameter. This pagination is state-less and any records that
-change while the results are being retrieved will appear again in the results,
-so clients should be prepared to receive duplicate records.
-
-# Retrieving Changed Records
-
-**Example request sequence:**
+The header will be of the form with the contents of `<...>` replaced with the
+correct url:
 
 ```
-# initial get with first page or results
-> GET https://manage-courses-backend.herokuapp.com/api/v1/2018/courses?changed_since=
-
-< Link: <https://manage-courses-backend.herokuapp.com/api/v1/2018/courses?changed_since=20190110T112846Z&changed_id=173>;rel="next"
-< Per-Page: 100
-< Total: 250
-
-
-# second page of results
-> GET https://manage-courses-backend.herokuapp.com/api/v1/2018/courses?changed_since=20190110T112846Z&changed_id=173
-
-< Link: <https://manage-courses-backend.herokuapp.com/api/v1/2018/courses?changed_since=20190111T222741Z&changed_id=291>;rel="next"
-< Per-Page: 100
-< Total: 150
-
-
-# last page of results with "next" link to be used later
-> GET https://manage-courses-backend.herokuapp.com/api/v1/2018/courses?changed_since=20190111T222741Z&changed_id=291
-
-< Link: <https://manage-courses-backend.herokuapp.com/api/v1/2018/courses?changed_since=20190113T120126Z&changed_id=400>;rel="next"
-< Per-Page: 100
-< Total: 50
+Link: <https://manage-courses-backend.herokuapp.com/api/v1/2019/providers?...>; rel="next"
 ```
 
-Certain endpoints support retrieving records that have changed since a given
-point in time. This is to facilitate keeping a client's database in sync with
-the primary source at the DfE using incremental updates, where using the API as
-a live data source is not an option.
+**The query parameters are considered an internal concern of the API** and
+**must not** be constructed manually in order to avoid losing changes. The
+incremental update should only be performed using the next-page urls provided
+in the response headers. With that in mind, these are the parameters you
+should expect to see:
 
-The general pattern for how to retrieve changed records is described here, see
-endpoint documentation below to see which endpoints support this and for further
-details.
+* `changed_since` - is an ISO 8601 timestamp stating the oldest change to include
+* `from_entity_id` where "entity" is "provider" or "course" - is an internal id
+  used in paging to ensure no ambiguity where record updates within the same
+  second have been split across pages
 
-To initiate a changed-records request supply the parameter `changed_since` with
-a timestamp of the last API requests.
+The header format is from [link header
+pagination](https://apievangelist.com/2016/05/02/http-header-awareness-using-the-link-header-for-pagination/).
 
-| Parameter     | Data type                                                           | Description                                                                                                                           |
-|---------------|---------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------|
-| changed_since | [ISO 8601 date/time string](https://en.wikipedia.org/wiki/ISO_8601) | Request all records that have changed since this date/time. Leave blank to retrieve all records                                       |
-| changed_id    | Integer                                                             | Optional. In the case where multiple records are changed within the same second, this is used to specify which record id to start at. |
-|               |                                                                     |                                                                                                                                       |
+The details of the mechanism are intended to avoid the risk of missing changes under edge-case conditions such as:
 
-
-The response headers will include information related to continuing to retrieve
-changed records either immediately, or when ready to ingest more records.
-
-| Header       | Description                                                                                    |
-|--------------|------------------------------------------------------------------------------------------------|
-| Link         | Links to the next and last pages.                                                              |
-| Per-Page     | The maximum number of results on a page.                                                       |
-| Total        | The total number of results.                                                                   |
-
-
-As all responses from the API are paginated, a set maximum of results will be
-returned and a link to the next page will be included in the response headers.
-If the value for `Total` is less than `Per-Page` that indicates that there are
-no more results to retrieve with the `next` link, and if used 0 records will be
-returned. The `next` link may be saved for a future request to continue the
-incremental loading of changed data.
+* Bulk updates are happening to the data at the same time as a client is paging
+  through results.
+* More than a single page of records are updated within the same second.
+* Timestamps being generated for changes but delayed in being written to the
+  database due to transaction contention.
+* Clock skew between server generating timestamps and other servers involved.
 
 # Errors
 
@@ -147,80 +97,112 @@ The API uses the following error codes:
 
 Error Code | Meaning
 ---------- | -------
-400 | Bad Request -- Your request is invalid.
-401 | Unauthorized -- Your API key is wrong.
-404 | Not Found -- The specified resource could not be found.
-500 | Internal Server Error -- We had a problem with our server. Try again later.
-503 | Service Unavailable -- We're temporarily offline for maintenance. Please try again later.
+400        | Bad Request -- Your request is invalid.
+401        | Unauthorized -- Your API key is wrong.
+404        | Not Found -- The specified resource could not be found.
+500        | Internal Server Error -- We had a problem with our server. Try again later.
+503        | Service Unavailable -- We're temporarily offline for maintenance. Please try again later.
 
 # Preparation for the next recruitment cycle (rollover)
 
-During a given recruitment cycle, there will be a period when providers have two sets of courses to manage – one set of courses that are currently published for the current recruitment cycle, and unpublished courses being preparated for the next recruitment cycle. Additionally, the providers who deliver next year's courses may change, and they may have different campuses for the same courses. The point in time when the overlap starts is referred to as rollover, and typically happens in or around May.
+During a given recruitment cycle, there will be a period when providers have
+two sets of courses to manage – one set of courses that are currently
+published for the current recruitment cycle, and unpublished courses being
+preparated for the next recruitment cycle. Additionally, the providers who
+deliver next year's courses may change, and they may have different campuses
+for the same courses. The point in time when the overlap starts is referred
+to as rollover, and typically happens in or around May.
 
-To differentiate between entities from different recruitment cycles, each endpoint has a `<recruitment_cycle>` part in the URL. Additionally, the following entities have a `recruitment_cycle` attribute:
+To differentiate between entities from different recruitment cycles, each
+endpoint has a `<recruitment_cycle>` part in the URL. Additionally, the
+following entities have a `recruitment_cycle` attribute in the response data:
 
 - course
 - campus
 - campus status
 
+## Recruitment cycle URL parameter
+
+`recruitment_cycle` - 4-character year (e.g. 2019 for 2019/20 course)
+
+All the examples in this documentation include `2019` for convenience and
+assume you wish to obtain information for the 2019-20 cycle. For future
+cycles update the value in the URL, e.g. `2020`.
+
+:rocket: *This feature is pending
+[PR #71](https://github.com/DFE-Digital/manage-courses-backend/pull/71)
+being merged & deployed*
+
 # Endpoints
 
 ## Courses
 
-### Entity documentation
+This endpoint retrieves a paginated list of courses.
 
-Parameter | Data type | Possible values | Description
---------- | --------- | --------------- | -----------
-course_code | Text | 4-character strings | 4-character course code
-start_month | ISO 8601 date/time string | | The month and year when the course starts
-start_month_string | Text | January, February, etc | The month when the course starts as a string
-name | Text | | Course title
-copy_form_required | Text | 'Y' or 'N' |
-profpost_flag | Text | "", "PF", "PG", "BO" | Maximum of 2-characters
-program_type | Text | "SC", "SS", "TA", "SD", "HE" | Maximum of 2-characters
-modular | Text | "", "M" | Maximum of 1-character
-english | Integer | 1, 2, 3, 9 |
-maths | Integer | 1, 2, 3, 9 |
-science | Integer | 1, 2, 3, 9, null |
-recruitment_cycle | Text || 4-character year
-campus_statuses | An array of campus statuses | | See the campus status entity documentation below
-subjects | An array of subjects | | See the subject entity documentation below
-provider | Provider | A provider entity | See the provider entity documentation below
-accrediting_provider | Provider | null or a provider entity | See the provider entity documentation below
-age_range | Text | "P", "S", "M", "O" | Age of students targeted by this course.
+* It is segmented by recruitment cycle, see
+  [preparation-for-the-next-recruitment-cycle](#Preparation-for-the-next-recruitment-cycle-rollover)
+* Results are paginated with a page size of 100 - see [retrieving
+  records](#retrieving-records)
+* It provides the capability outlined above for [retrieving changed
+  records](#retrieving-changed-records).
+* Results are sorted by `updated_at` with the oldest update first, then by
+  `course_id` ascending.
 
-#### Course codes
+### Example HTTP Requests
 
-Course codes:
-
-- are unique within a provider
-- are not unique across providers
-- are stable across rollover (i.e. by default, a course in a particular subject delivered by the same provider will have the same course code across different recruitment cycles)
-
-### Get all courses
-
-This endpoint retrieves all courses.
-
-#### HTTP Request
-
-```
-GET https://manage-courses-backend.herokuapp.com/api/v1/<recruitment_cycle>/courses
-```
-
-#### URL Parameters
-
-Parameter | Description
---------- | -----------
-recruitment_cycle | 4-character year (e.g. 2019 for 2019/20 courses)
-
-#### Example
+First page of the complete data set:
 
 ```shell
-curl "https://manage-courses-backend.herokuapp.com/api/v1/2019/courses"
-  -H "Authorization: Bearer your_api_key"
+curl -v "https://manage-courses-backend.herokuapp.com/api/v1/2019/courses" -H "Authorization: Bearer your_api_key"
 ```
 
-**The above command returns JSON structured like this:**
+Subsequent pages / incremental fetch, using the "next" url in the "Link" header from the previous request:
+
+```shell
+curl -v "https://manage-courses-backend.herokuapp.com/api/v1/2019/courses?changed_since=xxx&from_course_id=nnn" -H "Authorization: Bearer your_api_key"
+```
+
+### What constitutes a course change
+
+A course is considered to have been changed (and hence included in this
+endpoint) if any of these are true:
+
+* the course itself has been changed
+* the campus status has changed
+* campus associations have changed
+* subject associations have changed
+
+### Entity documentation
+
+Parameter            | Data type                   | Possible values              | Description
+---------            | ---------                   | ---------------              | -----------
+course_code          | Text                        | 4-character strings          | 4-character course code
+start_month          | ISO 8601 date/time string   |                              | The month and year when the course starts
+start_month_string   | Text                        | January, February, etc       | The month when the course starts as a string
+name                 | Text                        |                              | Course title
+copy_form_required   | Text                        | 'Y' or 'N'                   |
+profpost_flag        | Text                        | "", "PF", "PG", "BO"         | Maximum of 2-characters
+program_type         | Text                        | "SC", "SS", "TA", "SD", "HE" | Maximum of 2-characters
+modular              | Text                        | "", "M"                      | Maximum of 1-character
+english              | Integer                     | 1, 2, 3, 9                   |
+maths                | Integer                     | 1, 2, 3, 9                   |
+science              | Integer                     | 1, 2, 3, 9, null             |
+recruitment_cycle    | Text                        |                              | 4-character year
+campus_statuses      | An array of campus statuses |                              | See the campus status entity documentation below
+subjects             | An array of subjects        |                              | See the subject entity documentation below
+provider             | Provider                    | A provider entity            | See the provider entity documentation below
+accrediting_provider | Provider                    | null or a provider entity    | See the provider entity documentation below
+age_range            | Text                        | "P", "S", "M", "O"           | Age of students targeted by this course.
+
+### Course codes
+
+* are unique within a provider
+* are not unique across providers
+* are stable across rollover (i.e. by default, a course in a particular subject
+  delivered by the same provider will have the same course code across
+  different recruitment cycles)
+
+### Example response body
 
 ```json
 [
@@ -285,100 +267,55 @@ curl "https://manage-courses-backend.herokuapp.com/api/v1/2019/courses"
 ]
 ```
 
-### Get changed courses
-
-This endpoint supports retrieving courses that have changed since the
-specified point in time, see the [Retrieving Changed
-Records](#retrieving-changed-records) section.
-
-The returned results:
-
-- match the structure of the [Get all courses](#get-all-courses) endpoint
-- are sorted chronologically with the oldest update first
-- are paginated with a page size of 100 (see the [pagination section](#pagination) for info about navigating pages)
-
-A course is marked as changed (and hence included in this endpoint) if:
-
-- the course itself has been changed
-- the campus status has changed
-- campus associations have changed
-- subject associations have changed
-
-#### HTTP Request
-
-```
-GET https://manage-courses-backend.herokuapp.com/api/v1/<recruitment_cycle>/courses?changed_since=<iso-8601-timestamp>
-```
-
-#### URL Parameters
-
-| Parameter         | Description                                                         |
-|-------------------|---------------------------------------------------------------------|
-| recruitment_cycle | 4-character year (e.g. 2019 for 2019/20 courses)                    |
-| changed_since     | [ISO 8601 date/time string](https://en.wikipedia.org/wiki/ISO_8601) |
-
 ## Campuses
 
 ### Entity documentation
 
-Parameter | Data type | Possible values | Description
---------- | --------- | --------------- | -----------
-campus_code | Text | A-Z, 0-9, "-" or "" | 1-character campus codes
-name | Text | |
-region_code | Text | 01 to 11 | 2-character string
-recruitment_cycle | Text || 4-character year
+Parameter         | Data type | Possible values     | Description
+---------         | --------- | ---------------     | -----------
+campus_code       | Text      | A-Z, 0-9, "-" or "" | 1-character campus codes
+name              | Text      |                     |
+region_code       | Text      | 01 to 11            | 2-character string
+recruitment_cycle | Text      |                     | 4-character year
 
-<aside class="warning">
-A single provider can have at most 37 campuses.
-</aside>
+:warning: - *A single provider can have at most 37 campuses.*
 
 ## Campus statuses
 
 ### Entity documentation
 
-Parameter | Data type | Possible values | Description
---------- | --------- | --------------- | -----------
-campus_code | Text | A-Z, 0-9, "-", "" | 1-character campus codes
-name | Text | |
-vac_status | Text | |
-publish | Text | |
-status | Text | |
-course_open_date | ISO 8601 date string | |
-recruitment_cycle | Text || 4-character year
+Parameter         | Data type            | Possible values   | Description
+---------         | ---------            | ---------------   | -----------
+campus_code       | Text                 | A-Z, 0-9, "-", "" | 1-character campus codes
+name              | Text                 |                   |
+vac_status        | Text                 |                   |
+publish           | Text                 |                   |
+status            | Text                 |                   |
+course_open_date  | ISO 8601 date string |                   |
+recruitment_cycle | Text                 |                   | 4-character year
 
 ## Subjects
 
-### Entity documentation
-
-Parameter | Data type | Possible values | Description
---------- | --------- | --------------- | -----------
-subject_code | Text | 2-character strings | 2-character subject codes
-subject_name | Text | |
-
-### Get all subjects
-
 This endpoint retrieves all subjects.
 
-#### HTTP Request
+* It is not paginated.
+* It is segmented by recruitment cycle, see
+  [preparation-for-the-next-recruitment-cycle](#Preparation-for-the-next-recruitment-cycle-rollover)
 
-```
-GET https://manage-courses-backend.herokuapp.com/api/v1/<recruitment_cycle>/subjects
-```
-
-#### URL Parameters
-
-Parameter | Description
---------- | -----------
-recruitment_cycle | 4-character year (e.g. 2019 for 2019/20 courses)
-
-#### Example
+### Example HTTP Request
 
 ```shell
-curl "https://manage-courses-backend.herokuapp.com/api/v1/2019/subjects"
-  -H "Authorization: Bearer your_api_key"
+curl "https://manage-courses-backend.herokuapp.com/api/v1/2019/subjects" -H "Authorization: Bearer your_api_key"
 ```
 
-**The above command returns JSON structured like this:**
+### Entity documentation
+
+Parameter    | Data type | Possible values     | Description
+---------    | --------- | ---------------     | -----------
+subject_code | Text      | 2-character strings | 2-character subject codes
+subject_name | Text      |                     |
+
+### Example response body
 
 ```json
 [
@@ -394,54 +331,57 @@ curl "https://manage-courses-backend.herokuapp.com/api/v1/2019/subjects"
 
 ## Providers
 
-### Entity documentation
-
-Parameter | Data type | Possible values | Description
---------- | --------- | --------------- | -----------
-institution_code | Text | 3-character strings | 3-character UCAS institution code
-institution_name | Text | | The institution's full-length marketing name
-institution_type | Text | "Y", "B", "0", "O", null | The type of institution (whether it's a university, lead school/teaching school alliance or a SCITT)
-accrediting_provider | Text | "Y" or "N" | Whether the provider can accredit courses or not
-campuses | An array of campus || See the campus entity documentation above
-address1 | Text || Address line 1
-address2 | Text || Address line 2
-address3 | Text || Town/City
-address4 | Text || County
-postcode | Text || Postcode
-region_code | Text | 01 to 11 | 2-character string
-data_download_format | Text | `ASCII DATA`, `ASCII DATA and UNICODE DATA` or `Unicode data` |
-oustanding_decisions | Text | `Alphabetic`, `Application code`, `Course / Alphabetic`, `Course / Application code`, `Course / Learner Number`, `Faculty / Alphabetic`, `Faculty / Application code`, `Faculty / Course / Alphabetic`, `Faculty / Course / Application code`, `Faculty / Course / Learner code`, `Not required` or `Learner Number` |
-require_copy_forms | Text | `No, not required` or `Yes, required` |
-star_j | Text | `UCAS link` or `Flat file` |
-star_x | Text | `No, not required` or `Yes, required` |
-utt_application_alerts | Text | `No, not required`, `Yes, required`, `Yes - only my programmes` or `Yes - for accredited programmes only` | New UTT Application alerts
-type_of_gt12 | Text | `Coming / Enrol`, `Coming or Not`, `No response` or `Not coming` |
-scheme_member | Text | `Y` or `N` |
-
-### Get all providers
-
 This endpoint retrieves all institutions.
 
-#### HTTP Request
+* It is segmented by recruitment cycle, see
+  [preparation-for-the-next-recruitment-cycle](#Preparation-for-the-next-recruitment-cycle-rollover)
+* Results are paginated with a page size of 100 - see [retrieving
+  records](#retrieving-records)
+* It provides the capability outlined above for [retrieving changed
+  records](#retrieving-changed-records).
+* Results are sorted by `updated_at` with the oldest update first, then by
+  `provider_id` ascending.
 
-```
-GET https://manage-courses-backend.herokuapp.com/api/v1/<recruitment_cycle>/providers
-```
-
-#### URL Parameters
-
-Parameter | Description
---------- | -----------
-recruitment_cycle | 4-character year (e.g. 2019 for 2019/20 courses)
-
-#### Example
+### Example HTTP Request
 
 ```shell
-curl "https://manage-courses-backend.herokuapp.com/api/v1/2019/providers"
-  -H "Authorization: Bearer your_api_key"
+curl "https://manage-courses-backend.herokuapp.com/api/v1/2019/providers" -H "Authorization: Bearer your_api_key"
 ```
 
-**The above command returns JSON structured like this:**
+### What constitutes a provider change
+
+A provider is considered to have been changed (and hence included in this
+endpoint) if any of these are true:
+
+* the provider itself has been changed (including contact data changes)
+* any of the associated campuses has changed
+* campus associations have changed
+
+### Entity documentation
+
+Parameter              | Data type          | Possible values                                                                                                                                                                                                                                                                                                      | Description
+---------              | ---------          | ---------------                                                                                                                                                                                                                                                                                                      | -----------
+institution_code       | Text               | 3-character strings                                                                                                                                                                                                                                                                                                  | 3-character UCAS institution code
+institution_name       | Text               |                                                                                                                                                                                                                                                                                                                      | The institution's full-length marketing name
+institution_type       | Text               | "Y", "B", "0", "O", null                                                                                                                                                                                                                                                                                             | The type of institution (whether it's a university, lead school/teaching school alliance or a SCITT)
+accrediting_provider   | Text               | "Y" or "N"                                                                                                                                                                                                                                                                                                           | Whether the provider can accredit courses or not
+campuses               | An array of campus |                                                                                                                                                                                                                                                                                                                      | See the campus entity documentation above
+address1               | Text               |                                                                                                                                                                                                                                                                                                                      | Address line 1
+address2               | Text               |                                                                                                                                                                                                                                                                                                                      | Address line 2
+address3               | Text               |                                                                                                                                                                                                                                                                                                                      | Town/City
+address4               | Text               |                                                                                                                                                                                                                                                                                                                      | County
+postcode               | Text               |                                                                                                                                                                                                                                                                                                                      | Postcode
+region_code            | Text               | 01 to 11                                                                                                                                                                                                                                                                                                             | 2-character string
+data_download_format   | Text               | `ASCII DATA`, `ASCII DATA and UNICODE DATA` or `Unicode data`                                                                                                                                                                                                                                                        |
+oustanding_decisions   | Text               | `Alphabetic`, `Application code`, `Course / Alphabetic`, `Course / Application code`, `Course / Learner Number`, `Faculty / Alphabetic`, `Faculty / Application code`, `Faculty / Course / Alphabetic`, `Faculty / Course / Application code`, `Faculty / Course / Learner code`, `Not required` or `Learner Number` |
+require_copy_forms     | Text               | `No, not required` or `Yes, required`                                                                                                                                                                                                                                                                                |
+star_j                 | Text               | `UCAS link` or `Flat file`                                                                                                                                                                                                                                                                                           |
+star_x                 | Text               | `No, not required` or `Yes, required`                                                                                                                                                                                                                                                                                |
+utt_application_alerts | Text               | `No, not required`, `Yes, required`, `Yes - only my programmes` or `Yes - for accredited programmes only`                                                                                                                                                                                                            | New UTT Application alerts
+type_of_gt12           | Text               | `Coming / Enrol`, `Coming or Not`, `No response` or `Not coming`                                                                                                                                                                                                                                                     |
+scheme_member          | Text               | `Y` or `N`                                                                                                                                                                                                                                                                                                           |
+
+### Example response body
 
 ```json
 [
@@ -471,34 +411,3 @@ curl "https://manage-courses-backend.herokuapp.com/api/v1/2019/providers"
   }
 ]
 ```
-
-### Get changed providers
-
-This endpoint supports retrieving providers that have changed since the
-specified point in time, see the [Retrieving Changed
-Records](#retrieving-changed-records) section.
-
-The returned results:
-
-- matches the structure of the [Get all providers](#get-all-providers) endpoint
-- are sorted chronologically with the oldest update first
-- are paginated with a page size of 100 (see the [pagination section](#pagination) for info about navigating pages)
-
-A provider is marked as changed (and hence included in this endpoint) if:
-
-- the provider itself has been changed (including contact data changes)
-- any of the associated campuses has changed
-- campus associations have changed
-
-#### HTTP Request
-
-```
-GET https://manage-courses-backend.herokuapp.com/api/v1/<recruitment_cycle>/providers?changed_since=<iso-8601-timestamp>
-```
-
-#### URL Parameters
-
-Parameter | Description
---------- | -----------
-recruitment_cycle | 4-character year (e.g. 2019 for 2019/20 courses)
-changed_since | [ISO 8601 date/time string](https://en.wikipedia.org/wiki/ISO_8601)
