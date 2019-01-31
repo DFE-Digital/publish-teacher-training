@@ -9,12 +9,6 @@ RSpec.describe "Courses API", type: :request do
                                    provider_type: "SCITT",
                                    site_count: 0,
                                    course_count: 0,
-                                   address1: "Sydney Russell School",
-                                   address2: "Parsloes Avenue",
-                                   address3: "Dagenham",
-                                   address4: "Essex",
-                                   postcode: "RM9 5QT",
-                                   region_code: 'Eastern',
                                    scheme_member: 'Y',
                                    enrichments: [])
 
@@ -103,12 +97,6 @@ RSpec.describe "Courses API", type: :request do
             "institution_name" => "ACME SCITT",
             "institution_type" => "B",
             "accrediting_provider" => 'N',
-            "address1" => "Sydney Russell School",
-            "address2" => "Parsloes Avenue",
-            "address3" => "Dagenham",
-            "address4" => "Essex",
-            "postcode" => "RM9 5QT",
-            "region_code" => "07",
             "scheme_member" => "Y"
           },
           "accrediting_provider" => nil
