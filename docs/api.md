@@ -145,7 +145,7 @@ This endpoint retrieves a paginated list of courses.
   records](#retrieving-records)
 * It provides the capability outlined above for [retrieving changed
   records](#retrieving-changed-records).
-* Results are sorted by `changed_at` with the oldest update first, then by
+* Results are sorted by `updated_at` with the oldest update first, then by
   `course_id` ascending.
 
 ### Example HTTP Requests
@@ -339,7 +339,7 @@ This endpoint retrieves all institutions.
   records](#retrieving-records)
 * It provides the capability outlined above for [retrieving changed
   records](#retrieving-changed-records).
-* Results are sorted by `changed_at` with the oldest update first, then by
+* Results are sorted by `updated_at` with the oldest update first, then by
   `provider_id` ascending.
 
 ### Example HTTP Request
