@@ -84,7 +84,7 @@ describe 'Providers API', type: :request do
               headers: { 'HTTP_AUTHORIZATION' => credentials }
 
           json = JSON.parse(response.body)
-          expect(json). to eq(
+          expect(json). to match_array(
             [
               {
                 'accrediting_provider' => 'Y',
@@ -141,14 +141,14 @@ describe 'Providers API', type: :request do
           ProviderEnrichment.connection.update(<<~EOSQL)
             UPDATE provider_enrichment
                   SET json_data=json_data-'Address1'-'Address2'-'Address3'-'Address4'-'Postcode'-'RegionCode'
-                  WHERE provider_code='#{enrichment.id}'
+                  WHERE provider_code='#{enrichment.provider_code}'
           EOSQL
 
           get '/api/v1/providers',
               headers: { 'HTTP_AUTHORIZATION' => credentials }
 
           json = JSON.parse(response.body)
-          expect(json). to eq([
+          expect(json). to match_array([
                                 {
                                   'accrediting_provider' => 'Y',
                                   'campuses' => [

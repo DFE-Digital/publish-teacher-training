@@ -34,6 +34,7 @@ FactoryBot.define do
     address4 { Faker::Address.state }
     postcode { Faker::Address.postcode }
     accrediting_provider { 'N' }
+    region_code { ProviderEnrichment.region_codes['London'] }
 
     transient do
       age          { nil }
