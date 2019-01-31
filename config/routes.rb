@@ -19,6 +19,7 @@
 #                  PATCH  /api/v1(/:recruitment_year)/courses/:id(.:format)   api/v1/courses#update
 #                  PUT    /api/v1(/:recruitment_year)/courses/:id(.:format)   api/v1/courses#update
 #                  DELETE /api/v1(/:recruitment_year)/courses/:id(.:format)   api/v1/courses#destroy
+#        error_500 GET    /error_500(.:format)                                error#error_500
 
 Rails.application.routes.draw do
   namespace :api do
