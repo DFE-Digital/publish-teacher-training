@@ -9,7 +9,7 @@ before_script:
   - docker-compose pull
   - docker-compose build
   - docker-compose up --no-build -d
-  - docker-compose exec web /bin/sh -c "./wait-for-it.sh db:5432" # Wait for the database to wake up, so we can set up the schema and run the tests.
+  - docker-compose exec web /bin/sh -c "./wait-for-command.sh -c 'nc -z db 5432' -s 0 -t 20" # Wait for the database to wake up, so we can set up the schema and run the tests.
   - docker-compose exec web /bin/sh -c "bundle exec rails db:setup"
 script:
   - docker-compose exec web /bin/sh -c "bundle exec rake spec"
