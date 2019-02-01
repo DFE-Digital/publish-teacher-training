@@ -1,15 +1,11 @@
 require 'rails_helper'
 
 RSpec.describe Api::V1::ProvidersController, type: :controller do
-  before do
-    controller.request.env['HTTP_AUTHORIZATION'] = ActionController::HttpAuthentication::Token.encode_credentials('bats')
-    def controller.index
-      raise PG::ConnectionBad
-    end
-  end
-
   describe "index" do
     it "render service unavailable" do
+      allow(controller).to receive(:index).and_raise(PG::ConnectionBad)
+      allow(controller).to receive(:authenticate)
+
       get :index
       expect(response).to have_http_status(:service_unavailable)
       json = JSON.parse(response.body)
