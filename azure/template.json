@@ -1,0 +1,202 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "appServiceName": {
+            "type": "string",
+            "metadata": {
+                "description": "The name of the app service."
+            }
+        },
+        "authenticationToken": {
+            "type": "string",
+            "metadata": {
+                "description": "Authentication token for api access."
+            }
+        },
+        "appServicePlanName": {
+            "type": "string",
+            "metadata": {
+                "description": "The name of the app service plan."
+            }
+        },
+        "dockerHubUsername": {
+            "type": "string",
+            "metadata": {
+                "description": "the username associated with the dockerhub account"
+            }
+        },
+        "containerImageReference": {
+            "type": "string",
+            "metadata": {
+                "description": "The container image to pull from the server. Should be in image:tag format."
+            }
+        },
+        "railsEnv": {
+            "type": "string",
+            "defaultValue": "production",
+            "metadata": {
+                "description": "Environment for the rails app."
+            }
+        },
+        "databaseName": {
+            "type": "string",
+            "metadata": {
+                "description": "The name of the database that the app will connect to."
+            }
+        },
+        "databaseServerHostName": {
+            "type": "string",
+            "metadata": {
+                "description": "The fqdn of the psql server hosting the database."
+            }
+        },
+        "databasePort": {
+            "type": "string",
+            "metadata": {
+                "description": "The default port for the psql server."
+            }
+        },
+        "databaseUsername": {
+            "type": "string",
+            "metadata": {
+                "description": "The username used to connect to the database."
+            }
+        },
+        "databasePassword": {
+            "type": "string",
+            "metadata": {
+                "description": "The password used to connect to the database."
+            }
+        },
+        "secretKeyBase": {
+            "type": "string",
+            "metadata": {
+                "description": "Secret Key Base."
+            }
+        },
+        "sentryDSN": {
+            "type": "string",
+            "metadata": {
+                "description": "Connection string for Sentry monitoring."
+            }
+        }
+    },
+    "variables": {
+        "templateBaseUrl": "https://raw.githubusercontent.com/DFE-Digital/bat-platform-building-blocks/master/templates/",
+        "appServiceRuntimeStack": "[concat('DOCKER|', parameters('dockerHubUsername'), '/', parameters('containerImageReference'))]"
+    },
+    "resources": [
+        {
+            "name": "app-service-plan",
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2017-05-10",
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[concat(variables('templateBaseUrl'), 'app-service-plan.json')]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "appServicePlanName": {
+                        "value": "[parameters('appServicePlanName')]"
+                    }
+                }
+            }
+        },
+        {
+            "name": "app-service",
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2017-05-10",
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[concat(variables('templateBaseUrl'), 'app-service-linux.json')]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "appServiceName": {
+                        "value": "[parameters('appServiceName')]"
+                    },
+                    "appServicePlanResourceGroup": {
+                        "value": "[resourceGroup().name]"
+                    },
+                    "appServicePlanName": {
+                        "value": "[parameters('appServicePlanName')]"
+                    },
+                    "runtimeStack": {
+                        "value": "[variables('appServiceRuntimeStack')]"
+                    },
+                    "appServiceAppSettings": {
+                        "value": [
+                            {
+                                "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
+                                "value": "[reference('app-insights').outputs.instrumentationKey.value]"
+                            },
+                            {
+                                "name": "RAILS_ENV",
+                                "value": "[parameters('railsEnv')]"
+                            },
+                            {
+                                "name": "AUTHENTICATION_TOKEN",
+                                "value": "[parameters('authenticationToken')]"
+                            },
+                            {
+                                "name": "DB_DATABASE",
+                                "value": "[parameters('databaseName')]"
+                            },
+                            {
+                                "name": "DB_HOSTNAME",
+                                "value": "[parameters('databaseServerHostName')]"
+                            },
+                            {
+                                "name": "DB_PASSWORD",
+                                "value": "[parameters('databasePassword')]"
+                            },
+                            {
+                                "name": "DB_USERNAME",
+                                "value": "[parameters('databaseUsername')]"
+                            },
+                            {
+                                "name": "DB_PORT",
+                                "value": "[parameters('databasePort')]"
+                            },
+                            {
+                                "name": "SECRET_KEY_BASE",
+                                "value": "[parameters('secretKeyBase')]"
+                            },
+                            {
+                                "name": "SENTRY_DSN",
+                                "value": "[parameters('sentryDSN')]"
+                            }
+                        ]
+                    }
+                }
+            },
+            "dependsOn": [
+                "app-service-plan"
+            ]
+        },
+        {
+            "apiVersion": "2017-05-10",
+            "name": "app-insights",
+            "type": "Microsoft.Resources/deployments",
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[concat(variables('templateBaseUrl'), 'application-insights.json')]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "appInsightsName": {
+                        "value": "[parameters('appServiceName')]"
+                    },
+                    "attachedService": {
+                        "value": "[parameters('appServiceName')]"
+                    }
+                }
+            }
+        }
+    ],
+    "outputs": {}
+}

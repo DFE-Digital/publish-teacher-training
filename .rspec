@@ -1,1 +1,2 @@
+--format RspecJunitFormatter
 --require spec_helper
