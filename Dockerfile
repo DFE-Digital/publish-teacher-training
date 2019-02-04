@@ -1,10 +1,10 @@
 FROM ruby:2.5.3-alpine
 
-RUN apk add --update tzdata && \
+RUN apk add --update --no-cache tzdata && \
     cp /usr/share/zoneinfo/Europe/London /etc/localtime && \
     echo "Europe/London" > /etc/timezone
 
-RUN apk add --update --virtual runtime-dependances \
+RUN apk add --update --no-cache --virtual runtime-dependances \
  postgresql-dev
 
 ENV APP_HOME /app
@@ -15,7 +15,7 @@ ADD Gemfile $APP_HOME/Gemfile
 ADD Gemfile.lock $APP_HOME/Gemfile.lock
 
 
-RUN apk add --update --virtual build-dependances \
+RUN apk add --update --no-cache --virtual build-dependances \
  build-base  && \
  bundle install --jobs=4 && \
  apk del build-dependances
