@@ -24,6 +24,8 @@ since the last request. This is intended to reduce the data transfer volumes
 and processing needed to synchronise the UCAS apply system with DfE's course
 data on a schedule.
 
+You can control page size using the `?per_page=100` query parameter.
+
 :rocket: _This feature is a work in progress and the API may not yet provide the stated
 capabilities and interface_ - [trello
 card](https://trello.com/c/HMAlga4l/852-implement-incremental-fetch-for-providers)

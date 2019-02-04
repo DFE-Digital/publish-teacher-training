@@ -45,16 +45,18 @@ class Provider < ApplicationRecord
 
   scope :changed_since, ->(datetime) do
     if datetime.present?
-      left_joins(:sites, :enrichments).where(
-        <<~EOSQL,
-          provider.updated_at >= :since
-            OR site.updated_at >= :since
-            OR (provider_enrichment.status = :status
-                AND provider_enrichment.updated_at >= :since)
-        EOSQL
-        since: datetime,
-        status: ProviderEnrichment.statuses['published']
-      )
+      left_joins(:sites, :enrichments)
+        .where(
+          <<~EOSQL,
+            provider.updated_at >= :since
+              OR site.updated_at >= :since
+              OR (provider_enrichment.status = :status
+                  AND provider_enrichment.updated_at >= :since)
+          EOSQL
+          since: datetime,
+          status: ProviderEnrichment.statuses['published']
+        )
+        .order(:updated_at, :id)
     end
   end
 
