@@ -57,6 +57,7 @@ class Provider < ApplicationRecord
           status: ProviderEnrichment.statuses['published']
         )
         .order(:updated_at, :id)
+        .distinct
     end
   end
 

@@ -290,6 +290,54 @@ describe 'Providers API', type: :request do
           expect(returned_provider_codes.size).to eq 0
         end
       end
+
+      context 'a single provider with multiple published enrichments' do
+        let!(:provider) do
+          create(:provider,
+                site_count: 0,
+                updated_at: 5.days.ago,
+                enrichments: [new_published_enrichment, old_published_enrichment])
+        end
+        let!(:site1) do
+          create(:site,
+                updated_at: 4.days.ago,
+                provider: provider)
+        end
+        let!(:site2) do
+          create(:site,
+                updated_at: 3.days.ago,
+                provider: provider)
+        end
+        let(:new_published_enrichment) do
+          build(:provider_enrichment,
+                address1: 'enrichment1 address1',
+                address2: 'enrichment1 address2',
+                address3: 'enrichment1 address3',
+                address4: 'enrichment1 address4',
+                postcode: 'enrichment1 postcode',
+                updated_at: 1.days.ago,
+                status: 1)
+        end
+        let(:old_published_enrichment) do
+          build(:provider_enrichment,
+                updated_at: 6.days.ago,
+                status: 1)
+        end
+        it 'there is no dupes' do
+          get '/api/v1/2019/providers',
+              headers: { 'HTTP_AUTHORIZATION' => credentials },
+              params: { changed_since: 2.days.ago }
+          json = JSON.parse(response.body)
+
+          expect(json.count). to eql(1)
+          expect(json.first['address1']). to eql('enrichment1 address1')
+          expect(json.first['address2']). to eql('enrichment1 address2')
+          expect(json.first['address3']). to eql('enrichment1 address3')
+          expect(json.first['address4']). to eql('enrichment1 address4')
+          expect(json.first['postcode']). to eql('enrichment1 postcode')
+          expect(json.first['campuses'].count). to eql(2)
+        end
+      end
     end
   end
 end
