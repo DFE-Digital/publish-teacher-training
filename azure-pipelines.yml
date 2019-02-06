@@ -8,7 +8,7 @@ pool:
   vmImage: 'Ubuntu-16.04'
 
 variables:
-  imageName: 'manage-courses-backend'
+  imageName: 'manage-courses-backend-poc'
 
 steps:
 - script: |
@@ -16,6 +16,7 @@ steps:
     tag=$(dockerHubUsername)/$(imageName):$GIT_SHORT_SHA
     echo "##vso[build.updatebuildnumber]$GIT_SHORT_SHA"
     echo "##vso[task.setvariable variable=tag;]$tag"
+  displayName: 'Set version number'
 
 - script: |
     docker build -f Dockerfile -t $(tag) .
