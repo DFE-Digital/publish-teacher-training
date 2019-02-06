@@ -226,12 +226,6 @@ describe 'Providers API', type: :request do
 
           updated_provider = create(:provider, provider_code: "SINCE2", age: 5.minutes.ago)
 
-          provider_with_updated_enrichment = create(:provider, provider_code: "SINCE3", age: 1.hour.ago)
-          provider_with_updated_enrichment.enrichments.first.published!
-
-          provider_with_updated_site = create(:provider, provider_code: "SINCE4", age: 1.hour.ago)
-          provider_with_updated_site.sites.first.touch
-
           get '/api/v1/providers',
               headers: { 'HTTP_AUTHORIZATION' => credentials },
               params: { changed_since: 10.minutes.ago.utc.iso8601 }
@@ -240,8 +234,6 @@ describe 'Providers API', type: :request do
 
           expect(returned_provider_codes).not_to include old_provider.provider_code
           expect(returned_provider_codes).to include updated_provider.provider_code
-          expect(returned_provider_codes).to include provider_with_updated_enrichment.provider_code
-          expect(returned_provider_codes).to include provider_with_updated_site.provider_code
         end
       end
 
