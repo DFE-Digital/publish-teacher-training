@@ -1,4 +1,3 @@
-name: '$(Build.SourceVersion)'
 trigger:
   batch: true
   branches:
@@ -15,21 +14,24 @@ steps:
 - script: |
     GIT_SHORT_SHA=$(echo $(Build.SourceVersion) | cut -c 1-7)
     tag=$(dockerHubUsername)/$(imageName):$GIT_SHORT_SHA
+    echo "##vso[build.updatebuildnumber]$GIT_SHORT_SHA"
+    echo "##vso[task.setvariable variable=tag;]$tag"
+
 - script: |
-    docker build -f Dockerfile -t $tag .
+    docker build -f Dockerfile -t $(tag) .
   displayName: 'Build image'
 
 - script: |
-    docker run "$tag" /bin/sh -c "bundle exec rake spec" | sed -e 1d >> rspec-results.xml
+    docker run "$(tag)" /bin/sh -c "bundle exec rake spec" | sed -e 1d >> rspec-results.xml
   displayName: 'Execute tests'
 
 - script: | 
-    docker run "$tag" /bin/sh -c "bundle exec govuk-lint-ruby app config db lib spec --format clang"
+    docker run "$(tag)" /bin/sh -c "bundle exec govuk-lint-ruby app config db lib spec --format clang"
   displayName: 'Execute linters'
 
 - script: |
     echo $password | docker login --username $(dockerHubUsername) --password-stdin
-    docker push "$tag"
+    docker push "$(tag)"
   displayName: 'Push image'
   env:
     password: $(dockerHubPassword)
