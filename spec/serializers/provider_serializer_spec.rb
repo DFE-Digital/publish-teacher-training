@@ -39,6 +39,9 @@ RSpec.describe ProviderSerializer do
   it { should include(postcode: provider.enrichments.last.postcode) }
   it { should include(institution_type: provider.provider_type) }
   it { should include(accrediting_provider: provider.accrediting_provider) }
+  it { should include(contact_name: provider.contact_name) }
+  it { should include(email: provider.email) }
+  it { should include(telephone: provider.telephone) }
 
   describe 'ProviderSerializer#region_code' do
     subject do
