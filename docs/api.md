@@ -361,6 +361,9 @@ endpoint) if any of these are true:
 | address3               | Text               |                                                                                                                                                                                                                                                                                                                      | Town/City                                                                                            |
 | address4               | Text               |                                                                                                                                                                                                                                                                                                                      | County                                                                                               |
 | postcode               | Text               |                                                                                                                                                                                                                                                                                                                      | Postcode                                                                                             |
+| email                  | Text | | |
+| telephone              | Text | | |
+| contact_name           | Text | | |
 | region_code            | Text               | 01 to 11                                                                                                                                                                                                                                                                                                             | 2-character string                                                                                   |
 | data_download_format   | Text               | `ASCII DATA`, `ASCII DATA and UNICODE DATA` or `Unicode data`                                                                                                                                                                                                                                                        |
 | oustanding_decisions   | Text               | `Alphabetic`, `Application code`, `Course / Alphabetic`, `Course / Application code`, `Course / Learner Number`, `Faculty / Alphabetic`, `Faculty / Application code`, `Faculty / Course / Alphabetic`, `Faculty / Course / Application code`, `Faculty / Course / Learner code`, `Not required` or `Learner Number` |
@@ -385,6 +388,9 @@ endpoint) if any of these are true:
     "address3": "Dagenham",
     "address4": "Essex",
     "postcode": "RM9 5QT",
+    "telephone": "020 812 345 678",
+    "email": "info@acmescitt.education.uk",
+    "contact_name": "Amy Smith",
     "region_code": "01",
     "scheme_member": "Y",
     "campuses": [
