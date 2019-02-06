@@ -1,4 +1,4 @@
-name: '0.1.0-$(Rev:r)'
+name: '$(Build.SourceVersion)'
 trigger:
   batch: true
   branches:
@@ -9,25 +9,27 @@ pool:
   vmImage: 'Ubuntu-16.04'
 
 variables:
-  imageName: 'manage-courses-backend-poc:$(build.buildNumber)'
-  tag: 'govukdfe/$(imageName)'
+  imageName: 'manage-courses-backend'
 
 steps:
 - script: |
-    docker build -f Dockerfile -t $(tag) .
+    GIT_SHORT_SHA=$(echo $(Build.SourceVersion) | cut -c 1-7)
+    tag=$(dockerHubUsername)/$(imageName):$GIT_SHORT_SHA
+- script: |
+    docker build -f Dockerfile -t $tag .
   displayName: 'Build image'
 
 - script: |
-    docker run "$(tag)" /bin/sh -c "bundle exec rake spec" | sed -e 1d >> rspec-results.xml
+    docker run "$tag" /bin/sh -c "bundle exec rake spec" | sed -e 1d >> rspec-results.xml
   displayName: 'Execute tests'
 
 - script: | 
-    docker run "$(tag)" /bin/sh -c "bundle exec govuk-lint-ruby app config db lib spec --format clang"
+    docker run "$tag" /bin/sh -c "bundle exec govuk-lint-ruby app config db lib spec --format clang"
   displayName: 'Execute linters'
 
 - script: |
     echo $password | docker login --username $(dockerHubUsername) --password-stdin
-    docker push "$(tag)"
+    docker push "$tag"
   displayName: 'Push image'
   env:
     password: $(dockerHubPassword)
