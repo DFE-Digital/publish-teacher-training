@@ -6,7 +6,7 @@
 
 ### Native
 
-- Ruby 2.5.3
+- Ruby 2.6.1
 - postgresql-9.6 postgresql-contrib-9.6
 
 ### Docker
