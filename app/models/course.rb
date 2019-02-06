@@ -58,6 +58,12 @@ class Course < ApplicationRecord
   has_many :site_statuses
   has_many :sites, through: :site_statuses
 
+  scope :changed_since, ->(datetime) do
+    if datetime.present?
+      where("course.updated_at >= ?", datetime)
+    end
+  end
+
   def recruitment_cycle
     "2019"
   end
