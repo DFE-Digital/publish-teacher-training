@@ -28,6 +28,9 @@ describe 'Providers API', type: :request do
               address3: nil,
               address4: 'London',
               postcode: 'N1 5JN',
+              telephone: '020 812 345 678',
+              email: 'info@acmescitt.education.uk',
+              contact_name: 'Amy Smith',
               region_code: 'London',
               accrediting_provider: 'Y',
               scheme_member: 'Y',
@@ -59,6 +62,9 @@ describe 'Providers API', type: :request do
               address3: 'Bee City',
               address4: 'Bee Hive',
               postcode: 'B3 3BB',
+              telephone: '01273 345 678',
+              email: 'info@acmeuniversity.education.uk',
+              contact_name: 'James Brown',
               region_code: 'South West',
               accrediting_provider: 'N',
               scheme_member: 'N',
@@ -110,7 +116,10 @@ describe 'Providers API', type: :request do
                 'address4' => 'Essex',
                 'postcode' => 'RM9 5QT',
                 'region_code' => '11',
-                'scheme_member' => 'Y'
+                'scheme_member' => 'Y',
+                'telephone' => '020 812 345 678',
+                'email' => 'info@acmescitt.education.uk',
+                'contact_name' => 'Amy Smith'
               },
               {
                 'accrediting_provider' => 'N',
@@ -131,7 +140,10 @@ describe 'Providers API', type: :request do
                 'address4' => 'Bee Hive',
                 'postcode' => 'B3 3BB',
                 'region_code' => '03',
-                'scheme_member' => 'N'
+                'scheme_member' => 'N',
+                'telephone' => '01273 345 678',
+                'email' => 'info@acmeuniversity.education.uk',
+                'contact_name' => 'James Brown'
               }
             ]
           )
@@ -173,7 +185,10 @@ describe 'Providers API', type: :request do
                                   'address4' => 'London',
                                   'postcode' => 'N1 5JN',
                                   'region_code' => '01',
-                                  'scheme_member' => 'Y'
+                                  'scheme_member' => 'Y',
+                                  'telephone' => '020 812 345 678',
+                                  'email' => 'info@acmescitt.education.uk',
+                                  'contact_name' => 'Amy Smith'
                                 },
                                 {
                                   'accrediting_provider' => 'N',
@@ -194,7 +209,10 @@ describe 'Providers API', type: :request do
                                   'address4' => 'Bee Hive',
                                   'postcode' => 'B3 3BB',
                                   'region_code' => '03',
-                                  'scheme_member' => 'N'
+                                  'scheme_member' => 'N',
+                                  'telephone' => '01273 345 678',
+                                  'email' => 'info@acmeuniversity.education.uk',
+                                  'contact_name' => 'James Brown'
                                 }
                               ])
         end
