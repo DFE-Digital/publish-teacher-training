@@ -67,4 +67,12 @@ class Course < ApplicationRecord
   def recruitment_cycle
     "2019"
   end
+
+  def findable?
+    site_statuses.any?(&:findable?)
+  end
+
+  def can_be_applied_to?
+    site_statuses.any?(&:can_be_applied_to?)
+  end
 end

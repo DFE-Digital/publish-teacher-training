@@ -33,6 +33,9 @@ Rails.application.routes.draw do
 
     namespace :v2 do
       resources :users
+      resources :providers do
+        resources :courses
+      end
     end
   end
 
