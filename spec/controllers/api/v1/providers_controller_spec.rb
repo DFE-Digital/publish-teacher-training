@@ -20,5 +20,16 @@ RSpec.describe Api::V1::ProvidersController, type: :controller do
 
       get :index
     end
+
+    it 'renders a 400 when the changed_since param is not valid' do
+      allow(controller).to receive(:authenticate)
+
+      get :index, params: { changed_since: '2019' }
+      expect(response).to have_http_status(:bad_request)
+      json = JSON.parse(response.body)
+      expect(json). to eq(
+        'status' => 400, 'message' => 'Invalid changed_since value, the format should be a iso8601 timestamp'
+      )
+    end
   end
 end
