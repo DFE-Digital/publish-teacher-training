@@ -24,5 +24,5 @@ class CourseSummarySerializer < ActiveModel::Serializer
   has_one :accrediting_provider, serializer: CourseProviderSerializer
 
   attributes :course_code, :start_date, :name, :study_mode, :profpost_flag,
-             :findable?, :can_be_applied_to?
+             :findable?, :applications_being_accepted_now?, :has_vacancies?
 end

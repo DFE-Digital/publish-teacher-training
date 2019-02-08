@@ -48,10 +48,6 @@ class SiteStatus < ApplicationRecord
   end
 
   def applications_being_accepted_now?
-    applications_accepted_from < Time.now.utc
-  end
-
-  def can_be_applied_to?
-    findable? && applications_being_accepted_now? && has_vacancies?
+    applications_accepted_from.present? && applications_accepted_from <= Time.now.utc
   end
 end
