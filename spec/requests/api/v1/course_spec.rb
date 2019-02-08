@@ -2,6 +2,15 @@ require "rails_helper"
 
 RSpec.describe "Courses API", type: :request do
   describe 'GET index' do
+    let(:credentials) do
+      ActionController::HttpAuthentication::Token
+        .encode_credentials('bats')
+    end
+    let(:unauthorized_credentials) do
+      ActionController::HttpAuthentication::Token
+        .encode_credentials('foo')
+    end
+
     before do
       provider = FactoryBot.create(:provider,
                                    provider_name: "ACME SCITT",
@@ -40,68 +49,70 @@ RSpec.describe "Courses API", type: :request do
       )
     end
 
-    it "returns http success" do
-      get "/api/v1/2019/courses", headers: { 'HTTP_AUTHORIZATION' => ActionController::HttpAuthentication::Token.encode_credentials("bats") }
-      expect(response).to have_http_status(:success)
-    end
+    context "without changed_since parameter" do
+      it "returns http success" do
+        get "/api/v1/2019/courses", headers: { 'HTTP_AUTHORIZATION' => credentials }
+        expect(response).to have_http_status(:success)
+      end
 
-    it "returns http unauthorised" do
-      get "/api/v1/2019/courses", headers: { 'HTTP_AUTHORIZATION' => ActionController::HttpAuthentication::Token.encode_credentials("foo") }
-      expect(response).to have_http_status(:unauthorized)
-    end
+      it "returns http unauthorised" do
+        get "/api/v1/2019/courses", headers: { 'HTTP_AUTHORIZATION' => unauthorized_credentials }
+        expect(response).to have_http_status(:unauthorized)
+      end
 
-    it "JSON body response contains expected course attributes" do
-      get "/api/v1/2019/courses", headers: { 'HTTP_AUTHORIZATION' => ActionController::HttpAuthentication::Token.encode_credentials("bats") }
+      it "JSON body response contains expected course attributes" do
+        get "/api/v1/2019/courses", headers: { 'HTTP_AUTHORIZATION' => credentials }
 
-      json = JSON.parse(response.body)
-      expect(json). to eq([
-        {
-          "course_code" => "2HPF",
-          "start_month" => "2019-09-01T00:00:00Z",
-          "start_month_string" => "September",
-          "name" => "Religious Education",
-          "study_mode" => "F",
-          "copy_form_required" => "Y",
-          "profpost_flag" => "PG",
-          "program_type" => "SD",
-          "age_range" => "P",
-          "modular" => "",
-          "english" => 3,
-          "maths" => 9,
-          "science" => nil,
-          "qualification" => 1,
-          "recruitment_cycle" => "2019",
-          "campus_statuses" => [
-            {
-              "campus_code" => "-",
-              "name" => "Main Site",
-              "vac_status" => "F",
-              "publish" => "Y",
-              "status" => "R",
-              "course_open_date" => "2018-10-09",
-              "recruitment_cycle" => "2019"
-            }
-          ],
-          "subjects" => [
-            {
-              "subject_code" => "1",
-              "subject_name" => "Secondary"
+        json = JSON.parse(response.body)
+        expect(json). to eq([
+          {
+            "course_code" => "2HPF",
+            "start_month" => "2019-09-01T00:00:00Z",
+            "start_month_string" => "September",
+            "name" => "Religious Education",
+            "study_mode" => "F",
+            "copy_form_required" => "Y",
+            "profpost_flag" => "PG",
+            "program_type" => "SD",
+            "age_range" => "P",
+            "modular" => "",
+            "english" => 3,
+            "maths" => 9,
+            "science" => nil,
+            "qualification" => 1,
+            "recruitment_cycle" => "2019",
+            "campus_statuses" => [
+              {
+                "campus_code" => "-",
+                "name" => "Main Site",
+                "vac_status" => "F",
+                "publish" => "Y",
+                "status" => "R",
+                "course_open_date" => "2018-10-09",
+                "recruitment_cycle" => "2019"
+              }
+            ],
+            "subjects" => [
+              {
+                "subject_code" => "1",
+                "subject_name" => "Secondary"
+              },
+              {
+                "subject_code" => "2",
+                "subject_name" => "Mathematics"
+              }
+            ],
+            "provider" => {
+              "institution_code" => "2LD",
+              "institution_name" => "ACME SCITT",
+              "institution_type" => "B",
+              "accrediting_provider" => 'N',
+              "scheme_member" => "Y"
             },
-            {
-              "subject_code" => "2",
-              "subject_name" => "Mathematics"
-            }
-          ],
-          "provider" => {
-            "institution_code" => "2LD",
-            "institution_name" => "ACME SCITT",
-            "institution_type" => "B",
-            "accrediting_provider" => 'N',
-            "scheme_member" => "Y"
-          },
-          "accrediting_provider" => nil
-        }
-      ])
+            "accrediting_provider" => nil
+          }
+        ])
+      end
     end
   end
 end
