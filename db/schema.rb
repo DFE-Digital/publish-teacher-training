@@ -95,25 +95,20 @@ ActiveRecord::Schema.define(version: 0) do
   create_table "organisation", id: :integer, force: :cascade do |t|
     t.text "name"
     t.text "org_id"
-    t.index ["org_id"], name: "IX_mc_organisation_org_id", unique: true
     t.index ["org_id"], name: "IX_organisation_org_id", unique: true
   end
 
   create_table "organisation_provider", id: :integer, force: :cascade do |t|
     t.integer "provider_id"
     t.integer "organisation_id"
-    t.index ["organisation_id"], name: "IX_mc_organisation_provider_mc_organisation_id"
     t.index ["organisation_id"], name: "IX_organisation_provider_organisation_id"
-    t.index ["provider_id"], name: "IX_mc_organisation_provider_provider_id"
     t.index ["provider_id"], name: "IX_organisation_provider_provider_id"
   end
 
   create_table "organisation_user", id: :integer, force: :cascade do |t|
     t.integer "organisation_id"
     t.integer "user_id"
-    t.index ["organisation_id"], name: "IX_mc_organisation_user_mc_organisation_id"
     t.index ["organisation_id"], name: "IX_organisation_user_organisation_id"
-    t.index ["user_id"], name: "IX_mc_organisation_user_mc_user_id"
     t.index ["user_id"], name: "IX_organisation_user_user_id"
   end
 
@@ -143,7 +138,6 @@ ActiveRecord::Schema.define(version: 0) do
     t.datetime "updated_at", default: -> { "timezone('utc'::text, now())" }, null: false
     t.text "accrediting_provider"
     t.index ["provider_code"], name: "IX_provider_provider_code", unique: true
-    t.index ["provider_code"], name: "IX_ucas_provider_provider_code", unique: true
   end
 
   create_table "provider_enrichment", id: :integer, force: :cascade do |t|
@@ -164,9 +158,7 @@ ActiveRecord::Schema.define(version: 0) do
     t.text "access_token"
     t.datetime "created_utc", null: false
     t.integer "user_id", null: false
-    t.index ["access_token", "created_utc"], name: "IX_mc_session_access_token_created_utc"
     t.index ["access_token", "created_utc"], name: "IX_session_access_token_created_utc"
-    t.index ["user_id"], name: "IX_mc_session_mc_user_id"
     t.index ["user_id"], name: "IX_session_user_id"
   end
 
@@ -188,8 +180,7 @@ ActiveRecord::Schema.define(version: 0) do
   create_table "subject", id: :integer, force: :cascade do |t|
     t.text "subject_name"
     t.text "subject_code", null: false
-    t.index ["subject_code"], name: "AK_ucas_subject_subject_code", unique: true
-    t.index ["subject_code"], name: "IX_subject_subject_code", unique: true
+    t.index ["subject_code"], name: "AK_subject_subject_code", unique: true
   end
 
   create_table "user", id: :integer, force: :cascade do |t|
@@ -202,7 +193,6 @@ ActiveRecord::Schema.define(version: 0) do
     t.datetime "welcome_email_date_utc"
     t.datetime "invite_date_utc"
     t.datetime "accept_terms_date_utc"
-    t.index ["email"], name: "IX_mc_user_email", unique: true
     t.index ["email"], name: "IX_user_email", unique: true
   end
 
@@ -216,17 +206,12 @@ ActiveRecord::Schema.define(version: 0) do
   add_foreign_key "course_subject", "course", name: "FK_course_subject_course_course_id", on_delete: :cascade
   add_foreign_key "course_subject", "subject", name: "FK_course_subject_subject_subject_id", on_delete: :cascade
   add_foreign_key "nctl_organisation", "organisation", name: "FK_nctl_organisation_organisation_organisation_id", on_delete: :cascade
-  add_foreign_key "organisation_provider", "organisation", name: "FK_mc_organisation_provider_mc_organisation_mc_organisation_", on_delete: :restrict
   add_foreign_key "organisation_provider", "organisation", name: "FK_organisation_provider_organisation_organisation_id", on_delete: :restrict
-  add_foreign_key "organisation_provider", "provider", name: "FK_mc_organisation_provider_provider_provider_id", on_delete: :restrict
   add_foreign_key "organisation_provider", "provider", name: "FK_organisation_provider_provider_provider_id", on_delete: :restrict
-  add_foreign_key "organisation_user", "\"user\"", column: "user_id", name: "FK_mc_organisation_user_mc_user_mc_user_id", on_delete: :restrict
   add_foreign_key "organisation_user", "\"user\"", column: "user_id", name: "FK_organisation_user_user_user_id", on_delete: :restrict
-  add_foreign_key "organisation_user", "organisation", name: "FK_mc_organisation_user_mc_organisation_mc_organisation_id", on_delete: :restrict
   add_foreign_key "organisation_user", "organisation", name: "FK_organisation_user_organisation_organisation_id", on_delete: :restrict
   add_foreign_key "provider_enrichment", "\"user\"", column: "created_by_user_id", name: "FK_provider_enrichment_user_created_by_user_id", on_delete: :restrict
   add_foreign_key "provider_enrichment", "\"user\"", column: "updated_by_user_id", name: "FK_provider_enrichment_user_updated_by_user_id", on_delete: :restrict
-  add_foreign_key "session", "\"user\"", column: "user_id", name: "FK_mc_session_mc_user_mc_user_id", on_delete: :cascade
   add_foreign_key "session", "\"user\"", column: "user_id", name: "FK_session_user_user_id", on_delete: :cascade
   add_foreign_key "site", "provider", name: "FK_site_provider_provider_id", on_delete: :cascade
 end
