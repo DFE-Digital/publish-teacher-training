@@ -27,8 +27,8 @@ RSpec.describe Api::V1::ProvidersController, type: :controller do
       get :index, params: { changed_since: '2019' }
       expect(response).to have_http_status(:bad_request)
       json = JSON.parse(response.body)
-      expect(json). to eq(
-        'status' => 400, 'message' => 'Invalid changed_since value, the format should be a iso8601 timestamp'
+      expect(json). to include(
+        'status' => 400
       )
     end
   end
