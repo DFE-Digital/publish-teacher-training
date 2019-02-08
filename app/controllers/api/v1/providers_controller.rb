@@ -22,7 +22,7 @@ module Api
 
         render json: @providers
       rescue ActiveRecord::StatementInvalid
-        render json: { status: 400, message: 'Invalid changed_since value, the format should be a iso8601 timestamp' }.to_json, status: 400
+        render json: { status: 400, message: 'Invalid changed_since value, the format should be an ISO8601 UTC timestamp, for example: `2019-01-01T12:01:00Z`' }.to_json, status: 400
       end
 
     private
