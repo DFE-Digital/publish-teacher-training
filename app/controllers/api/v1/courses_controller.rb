@@ -20,6 +20,8 @@ module Api
         next_link_header("from_course_id", @courses.last, next_course, changed_since, per_page)
 
         render json: @courses
+      rescue ActiveRecord::StatementInvalid
+        render json: { status: 400, message: 'Invalid changed_since value, the format should be an ISO8601 UTC timestamp, for example: `2019-01-01T12:01:00Z`' }.to_json, status: 400
       end
     end
   end
