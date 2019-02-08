@@ -58,9 +58,9 @@ class Course < ApplicationRecord
   has_many :site_statuses
   has_many :sites, through: :site_statuses
 
-  scope :changed_since, ->(datetime) do
+  scope :changed_since, ->(datetime, from_course_id = 0) do
     if datetime.present?
-      where("course.updated_at >= ?", datetime)
+      where("course.updated_at >= ? AND course.id > ?", datetime, from_course_id).order(:updated_at, :id)
     end
   end
 
