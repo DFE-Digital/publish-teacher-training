@@ -136,8 +136,10 @@ ActiveRecord::Schema.define(version: 0) do
     t.integer "region_code"
     t.datetime "created_at", default: -> { "timezone('utc'::text, now())" }, null: false
     t.datetime "updated_at", default: -> { "timezone('utc'::text, now())" }, null: false
+    t.datetime "last_published_at"
     t.text "accrediting_provider"
     t.index ["provider_code"], name: "IX_provider_provider_code", unique: true
+    t.index ["last_published_at"], name: "IX_provider_last_published_at"
   end
 
   create_table "provider_enrichment", id: :integer, force: :cascade do |t|

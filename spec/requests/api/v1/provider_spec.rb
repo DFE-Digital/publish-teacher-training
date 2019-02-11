@@ -34,6 +34,7 @@ describe 'Providers API', type: :request do
               region_code: 'London',
               accrediting_provider: 'Y',
               scheme_member: 'Y',
+              last_published_at: DateTime.now.utc,
               enrichments: [enrichment])
       end
       let!(:site) do
@@ -68,6 +69,7 @@ describe 'Providers API', type: :request do
               region_code: 'South West',
               accrediting_provider: 'N',
               scheme_member: 'N',
+              last_published_at: DateTime.now.utc,
               enrichments: [],
               site_count: 0)
       end
@@ -222,9 +224,13 @@ describe 'Providers API', type: :request do
     context "with changed_since parameter" do
       describe "JSON body response" do
         it 'contains expected providers' do
-          old_provider = create(:provider, provider_code: "SINCE1", age: 1.hour.ago)
+          old_provider = create(:provider,
+                                provider_code: "SINCE1",
+                                last_published_at: 1.hour.ago)
 
-          updated_provider = create(:provider, provider_code: "SINCE2", age: 5.minutes.ago)
+          updated_provider = create(:provider,
+                                    provider_code: "SINCE2",
+                                    last_published_at: 5.minutes.ago)
 
           get '/api/v1/providers',
               headers: { 'HTTP_AUTHORIZATION' => credentials },
@@ -238,10 +244,12 @@ describe 'Providers API', type: :request do
       end
 
       it 'includes correct next link in response headers' do
-        create(:provider, provider_code: "LAST1", age: 10.minutes.ago)
+        create(:provider, provider_code: "LAST1", last_published_at: 10.minutes.ago)
 
         timestamp_of_last_provider = 2.minutes.ago
-        last_provider_in_results = create(:provider, provider_code: "LAST2", age: timestamp_of_last_provider)
+        last_provider_in_results = create(:provider,
+                                          provider_code: "LAST2",
+                                          last_published_at: timestamp_of_last_provider)
 
         get '/api/v1/providers',
           headers: { 'HTTP_AUTHORIZATION' => credentials },
@@ -266,7 +274,10 @@ describe 'Providers API', type: :request do
       context "with many providers" do
         before do
           11.times do |i|
-            create(:provider, provider_code: "PROV#{i + 1}", age: (20 - i).minutes.ago, sites: [], enrichments: [])
+            create(:provider, provider_code: "PROV#{i + 1}",
+                   last_published_at: (20 - i).minutes.ago,
+                   sites: [],
+                   enrichments: [])
           end
         end
 

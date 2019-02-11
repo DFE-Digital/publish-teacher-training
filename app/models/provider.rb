@@ -45,8 +45,10 @@ class Provider < ApplicationRecord
 
   scope :changed_since, ->(datetime) do
     if datetime.present?
-      where("updated_at >= ?", datetime).order(:updated_at, :id)
-    end
+      where("last_published_at >= ?", datetime)
+    else
+      where("last_published_at is not null")
+    end.order(:last_published_at, :id)
   end
 
   # TODO: filter to published enrichments, maybe rename to published_address_info
