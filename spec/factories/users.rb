@@ -14,13 +14,10 @@
 #  accept_terms_date_utc  :datetime
 #
 
-require 'rails_helper'
-
-RSpec.describe User, type: :model do
-  subject { create(:user) }
-
-  describe 'associations' do
-    it { should have_and_belong_to_many(:organisations) }
-    it { should have_many(:providers).through(:organisations) }
+FactoryBot.define do
+  factory :user do
+    email { Faker::Internet.email }
+    first_name { Faker::Name.first_name }
+    last_name { Faker::Name.last_name }
   end
 end

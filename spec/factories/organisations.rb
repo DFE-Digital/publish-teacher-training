@@ -7,7 +7,8 @@
 #  org_id :text
 #
 
-class Organisation < ApplicationRecord
-  has_and_belongs_to_many :users
-  has_and_belongs_to_many :providers
+FactoryBot.define do
+  factory :organisation do
+    name { 'LONDON SCITT' + rand(1000000).to_s }
+  end
 end
