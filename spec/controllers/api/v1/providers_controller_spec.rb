@@ -31,5 +31,22 @@ RSpec.describe Api::V1::ProvidersController, type: :controller do
         'status' => 400
       )
     end
+
+    describe 'generated next link' do
+      let!(:old_provider) { create(:provider, last_published_at: 5.minute.ago.utc) }
+      let!(:last_provider) { create(:provider, last_published_at: 1.minute.ago.utc) }
+      let(:last_provider_id) { last_provider.id }
+
+      before do
+        allow(controller).to receive(:authenticate)
+
+        get :index, params: { changed_since: 10.minutes.ago.utc }
+      end
+
+      subject { response.headers['Link'] }
+
+      it { is_expected.to match %r{changed_since=#{(last_provider.last_published_at + 1.second).iso8601}} }
+      it { is_expected.to match %r{from_provider_id=#{last_provider_id}} }
+    end
   end
 end

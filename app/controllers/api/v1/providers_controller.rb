@@ -15,7 +15,7 @@ module Api
         last_provider = @providers.last
 
         response.headers['Link'] = if last_provider
-                                     next_link((last_provider.updated_at + 1.second).utc.iso8601, last_provider.id, page_size)
+                                     next_link((last_provider.last_published_at + 1.second).utc.iso8601, last_provider.id, page_size)
                                    else
                                      next_link(params[:changed_since], "", page_size)
                                    end

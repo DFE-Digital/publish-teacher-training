@@ -37,19 +37,11 @@ FactoryBot.define do
     region_code { ProviderEnrichment.region_codes['London'] }
 
     transient do
-      age                  { nil }
       skip_associated_data { false }
       site_count           { 1 }
-      sites                { build_list :site, site_count, provider: nil, age: age }
+      sites                { build_list :site, site_count, provider: nil }
       course_count         { 2 }
-      enrichments          { [build(:provider_enrichment, age: age)] }
-    end
-
-    after(:build) do |provider, evaluator|
-      if evaluator.age.present?
-        provider.created_at = evaluator.age
-        provider.updated_at = evaluator.age
-      end
+      enrichments          { [build(:provider_enrichment)] }
     end
 
     after(:create) do |provider, evaluator|

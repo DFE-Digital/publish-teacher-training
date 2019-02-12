@@ -196,28 +196,42 @@ RSpec.describe Provider, type: :model do
   end
 
   describe '#changed_since' do
-    let!(:old_provider) { create(:provider, age: 1.hour.ago) }
-    let!(:provider) { create(:provider, age: 1.hour.ago) }
-
-    context 'with a provider with no enrichments or sites' do
-      let(:provider) { create(:provider, enrichments: [], sites: []) }
+    context 'with a provider that has been published after the given timestamp' do
+      let(:provider) { create(:provider, last_published_at: 5.minutes.ago) }
 
       subject { Provider.changed_since(10.minutes.ago) }
 
       it { should include provider }
     end
 
-    context 'with a provider whose updated_at has been changed in the past' do
-      before  { provider.touch }
+    context 'with a provider that has been published exactly at the given timestamp' do
+      let(:publish_time) { 10.minutes.ago }
+      let(:provider) { create(:provider, last_published_at: publish_time) }
+
+      subject { Provider.changed_since(publish_time) }
+
+      it { should include provider }
+    end
+
+    context 'with a provider that has been published before the given timestamp' do
+      let(:provider) { create(:provider, last_published_at: 1.hour.ago) }
+
       subject { Provider.changed_since(10.minutes.ago) }
 
-      it { should_not include old_provider }
-      it { should     include provider }
+      it { should_not include provider }
+    end
 
-      describe 'when the checked timestamp matches the provider updated_at' do
-        subject { Provider.changed_since(provider.updated_at) }
+    context 'with a provider that has never been published' do
+      let(:provider) { create(:provider, last_published_at: nil) }
 
-        it { should include provider }
+      describe 'with non-nil changed_since' do
+        subject { Provider.changed_since(10.minutes.ago) }
+        it { should_not include provider }
+      end
+
+      describe 'with changed_since set to nil' do
+        subject { Provider.changed_since(nil) }
+        it { should_not include provider }
       end
     end
   end
