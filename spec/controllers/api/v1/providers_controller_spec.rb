@@ -33,7 +33,7 @@ RSpec.describe Api::V1::ProvidersController, type: :controller do
     end
 
     describe 'generated next link' do
-      let!(:oldy_provider) { create(:provider, last_published_at: 5.minute.ago.utc) }
+      let!(:old_provider) { create(:provider, last_published_at: 5.minute.ago.utc) }
       let!(:last_provider) { create(:provider, last_published_at: 1.minute.ago.utc) }
       let(:last_provider_id) { last_provider.id }
 
