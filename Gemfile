@@ -34,6 +34,9 @@ gem 'application_insights'
 
 gem "sentry-raven"
 
+# Formalise config settings with support for env vars
+gem 'config'
+
 group :development, :test do
   # add info about db structure to models and other files
   gem 'annotate'
