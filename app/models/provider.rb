@@ -29,6 +29,7 @@
 
 class Provider < ApplicationRecord
   include RegionCode
+  include ChangedAt
 
   enum provider_type: {
     scitt: "B",
