@@ -17,6 +17,8 @@
 #  english                 :integer
 #  maths                   :integer
 #  science                 :integer
+#  created_at              :datetime         not null
+#  updated_at              :datetime         not null
 #
 
 FactoryBot.define do
@@ -25,5 +27,17 @@ FactoryBot.define do
     name { Faker::ProgrammingLanguage.name }
     qualification { 1 }
     association(:provider)
+
+
+    transient do
+      age { nil }
+    end
+
+    after(:build) do |course, evaluator|
+      if evaluator.age.present?
+        course.created_at = evaluator.age
+        course.updated_at = evaluator.age
+      end
+    end
   end
 end

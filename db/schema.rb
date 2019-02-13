@@ -49,20 +49,22 @@ ActiveRecord::Schema.define(version: 0) do
     t.integer "english"
     t.integer "maths"
     t.integer "science"
+    t.datetime "created_at", default: -> { "timezone('utc'::text, now())" }, null: false
+    t.datetime "updated_at", default: -> { "timezone('utc'::text, now())" }, null: false
     t.index ["accrediting_provider_id"], name: "IX_course_accrediting_provider_id"
     t.index ["provider_id", "course_code"], name: "IX_course_provider_id_course_code", unique: true
   end
 
   create_table "course_enrichment", id: :serial, force: :cascade do |t|
     t.integer "created_by_user_id"
-    t.datetime "created_timestamp_utc", null: false
+    t.datetime "created_at", default: -> { "timezone('utc'::text, now())" }, null: false
     t.text "provider_code", null: false
     t.jsonb "json_data"
     t.datetime "last_published_timestamp_utc"
     t.integer "status", null: false
     t.text "ucas_course_code", null: false
     t.integer "updated_by_user_id"
-    t.datetime "updated_timestamp_utc", null: false
+    t.datetime "updated_at", default: -> { "timezone('utc'::text, now())" }, null: false
     t.index ["created_by_user_id"], name: "IX_course_enrichment_created_by_user_id"
     t.index ["updated_by_user_id"], name: "IX_course_enrichment_updated_by_user_id"
   end

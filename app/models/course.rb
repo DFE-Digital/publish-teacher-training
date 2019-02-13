@@ -17,6 +17,8 @@
 #  english                 :integer
 #  maths                   :integer
 #  science                 :integer
+#  created_at              :datetime         not null
+#  updated_at              :datetime         not null
 #
 
 class Course < ApplicationRecord
@@ -55,6 +57,12 @@ class Course < ApplicationRecord
   has_and_belongs_to_many :subjects
   has_many :site_statuses
   has_many :sites, through: :site_statuses
+
+  scope :changed_since, ->(datetime, from_course_id = 0) do
+    if datetime.present?
+      where("course.updated_at >= ? AND course.id > ?", datetime, from_course_id).order(:updated_at, :id)
+    end
+  end
 
   def recruitment_cycle
     "2019"
