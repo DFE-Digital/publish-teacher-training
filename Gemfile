@@ -62,10 +62,16 @@ group :development, :test do
   gem 'pry-byebug'
   gem 'pry-rails'
 
+  gem 'rails-controller-testing'
+
   gem 'rb-readline'
 
   # Test framework
   gem 'rspec-rails'
+
+  # Enable shorter notation for rspec one-liners
+  gem 'rspec-its'
+
 end
 
 group :development do
