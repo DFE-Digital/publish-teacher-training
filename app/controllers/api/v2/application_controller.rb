@@ -1,6 +1,6 @@
 module Api
   module V2
-    class V2ApplicationController < ApplicationController
+    class ApplicationController < ::ApplicationController
       include ActionController::HttpAuthentication::Token::ControllerMethods
 
       before_action :authenticate

@@ -1,6 +1,6 @@
 module Api
   module V1
-    class SubjectsController < V1ApplicationController
+    class SubjectsController < ApplicationController
       def index
         @subjects = Subject.all
         paginate json: @subjects
