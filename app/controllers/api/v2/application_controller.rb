@@ -10,7 +10,7 @@ module Api
             #    curl -H 'Authorization: Bearer user@education.gov.uk' http://localhost:3000/api/v2/providers
             email = token
           else
-            (json_payload, options) = JWT.decode(token,
+            (json_payload, _options) = JWT.decode(token,
                                                  Settings.authentication.secret,
                                                  Settings.authentication.algorithm)
             payload = JSON.parse(json_payload)

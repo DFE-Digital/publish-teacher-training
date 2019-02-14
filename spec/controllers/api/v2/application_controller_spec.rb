@@ -48,7 +48,7 @@ describe Api::V2::ApplicationController, type: :controller do
     end
 
     context 'algorithm is set to plain-text' do
-      let(:bearer_token) { "Bearer #{user.email}"}
+      let(:bearer_token) { "Bearer #{user.email}" }
 
       before do
         allow(Settings).to receive_message_chain(:authentication, :algorithm)
