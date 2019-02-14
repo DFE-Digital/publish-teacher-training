@@ -1,8 +1,6 @@
 module Api
   module V2
     class ApplicationController < ::ApplicationController
-      include ActionController::HttpAuthentication::Token::ControllerMethods
-
       def authenticate
         authenticate_or_request_with_http_token do |token|
           if Settings.authentication.algorithm == 'plain-text'
