@@ -71,7 +71,6 @@ group :development, :test do
 
   # Enable shorter notation for rspec one-liners
   gem 'rspec-its'
-
 end
 
 group :development do

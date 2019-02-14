@@ -45,6 +45,42 @@ describe Api::V2::ApplicationController, type: :controller do
             .to eq 'Token realm="Application"'
         end
       end
+
+      describe 'errors' do
+        context 'empty payload' do
+          let(:payload) {}
+
+          it 'raise error' do
+            expect { controller.authenticate }.to raise_error NoMethodError
+          end
+        end
+
+        context 'JWT mismatch' do
+          context 'secret' do
+            let(:encoded_token) do
+              JWT.encode payload.to_json,
+                         'mismatch secret',
+                         Settings.authentication.algorithm
+            end
+
+            it 'raise error' do
+              expect { controller.authenticate }.to raise_error JWT::VerificationError
+            end
+          end
+
+          context 'encoding' do
+            let(:encoded_token) do
+              JWT.encode payload.to_json,
+                         Settings.authentication.secret,
+                         'HS384'
+            end
+
+            it 'raise error' do
+              expect { controller.authenticate }.to raise_error JWT::IncorrectAlgorithm
+            end
+          end
+        end
+      end
     end
 
     context 'algorithm is set to plain-text' do
@@ -56,6 +92,12 @@ describe Api::V2::ApplicationController, type: :controller do
       end
 
       it { should be true }
+
+      context 'user does not exist' do
+        let(:bearer_token) { "Bearer nobody@nowhere" }
+
+        it { should eq "HTTP Token: Access denied.\n" }
+      end
     end
   end
 end
