@@ -105,3 +105,21 @@ Course.create!(
   provider: Provider.create!(provider_name: 'Big Uni', provider_code: 'B01'),
   qualification: 1
 )
+
+10.times do |i|
+  provider = Provider.create!(
+    provider_name: "ACME SCITT #{i}",
+    provider_code: "A#{i}"
+  )
+
+  organisation = Organisation.create!(name: "ACME#{i}")
+  organisation.providers << provider
+
+  user = User.create!(
+    email: Faker::Internet.email,
+    first_name: Faker::Name.first_name,
+    last_name: Faker::Name.last_name
+  )
+
+  user.organisations << organisation
+end
