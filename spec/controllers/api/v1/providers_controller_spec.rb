@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe Api::V1::ProvidersController, type: :controller do
+RSpec.describe API::V1::ProvidersController, type: :controller do
   describe "index" do
     it "render service unavailable" do
       allow(controller).to receive(:index).and_raise(PG::ConnectionBad)
