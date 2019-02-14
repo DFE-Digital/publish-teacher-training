@@ -25,6 +25,10 @@ gem 'kaminari'
 # Use Rack CORS for handling Cross-Origin Resource Sharing (CORS), making cross-origin AJAX possible
 # gem 'rack-cors'
 
+# JSON:API Ruby Client
+gem 'jsonapi-rb'
+gem 'jsonapi-rails'
+
 # Access jsonb attributes like normal ActiveRecord model attributes
 gem 'jsonb_accessor'
 

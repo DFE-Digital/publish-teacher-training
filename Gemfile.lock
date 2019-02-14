@@ -121,7 +121,17 @@ GEM
       concurrent-ruby (~> 1.0)
     jaro_winkler (1.5.2)
     json (2.1.0)
+    jsonapi-deserializable (0.2.0)
+    jsonapi-parser (0.1.1)
+    jsonapi-rails (0.3.1)
+      jsonapi-parser (~> 0.1.0)
+      jsonapi-rb (~> 0.5.0)
+    jsonapi-rb (0.5.0)
+      jsonapi-deserializable (~> 0.2.0)
+      jsonapi-serializable (~> 0.3.0)
     jsonapi-renderer (0.2.0)
+    jsonapi-serializable (0.3.0)
+      jsonapi-renderer (~> 0.2.0)
     jsonb_accessor (1.0.0)
       activerecord (>= 5.0)
       activesupport (>= 5.0)
@@ -300,6 +310,8 @@ DEPENDENCIES
   factory_bot_rails (~> 5.0)
   faker
   govuk-lint
+  jsonapi-rails
+  jsonapi-rb
   jsonb_accessor
   jwt
   kaminari
