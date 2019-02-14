@@ -64,7 +64,7 @@ bundle exec govuk-lint-ruby app config db lib spec --format clang
 
 or
 
-docker-compose exec web /bin/sh -c "bundle exec govuk-lint-ruby app config db lib spec --format clang"
+docker-compose exec web /bin/sh -c "bundle exec govuk-lint-ruby app config db lib spec Gemfile --format clang"
 ```
 
 ## CI variables

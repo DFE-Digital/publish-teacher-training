@@ -13,7 +13,7 @@ before_script:
   - docker-compose exec web /bin/sh -c "bundle exec rails db:setup"
 script:
   - docker-compose exec web /bin/sh -c "bundle exec rake spec"
-  - docker-compose exec web /bin/sh -c "bundle exec govuk-lint-ruby app config db lib spec --format clang"
+  - docker-compose exec web /bin/sh -c "bundle exec govuk-lint-ruby app config db lib spec Gemfile --format clang"
 deploy:
   provider: script
   script: bash docker-push.sh
