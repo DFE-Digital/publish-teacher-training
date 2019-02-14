@@ -1,6 +1,6 @@
 module Api
   module V1
-    class ProvidersController < ApplicationController
+    class ProvidersController < V1ApplicationController
       include NextLinkHeader
 
       # Potential edge case:

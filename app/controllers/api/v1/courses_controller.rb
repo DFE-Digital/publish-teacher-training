@@ -1,6 +1,6 @@
 module Api
   module V1
-    class CoursesController < ApplicationController
+    class CoursesController < V1ApplicationController
       include NextLinkHeader
       include FirstItemFromNextPage
 
