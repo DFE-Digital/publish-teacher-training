@@ -46,6 +46,8 @@ Then open http://localhost:3000 to see the app.
 
 ## Accessing API
 
+### V1
+
 [See API Docs](https://github.com/DFE-Digital/manage-courses-backend/blob/master/docs/api.md)
 
 Quick check that it's working in local development with the token "bats"
@@ -53,6 +55,41 @@ configured in `config/environments/development.rb`:
 
 ```bash
 curl http://localhost:3000/api/v1/2019/subjects.json -H "Authorization: Bearer bats"
+```
+
+### V2
+
+#### Development
+
+In development mode, authenticating with V2 of the API relies on an email
+address of an existing use in the database being supplied as the bearer token.
+An example HTTP request would look like:
+
+```
+GET /api/v2/users.json
+Authorization: Bearer user@digital.education.gov.uk
+```
+
+or with curl:
+
+```bash
+curl http://localhost:3000/api/v2/users.json -H "Authorization: Bearer user@digital.education.gov.uk"
+```
+
+#### Production
+
+In production mode the bearer token is an HMAC-encrypted JWT with the JSON payload:
+
+```
+{
+  "email": "user@digital.education.gov.uk"
+}
+```
+
+Encoding the payload can be done with the [Ruby `jwt` gem](https://github.com/jwt/ruby-jwt):
+
+```
+JWT.encode payload, SECRET, 'HS256'
 ```
 
 ## Linting
