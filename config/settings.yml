@@ -1,0 +1,5 @@
+authentication:
+  algorithm: HS256
+  # Set this in the env! The below ensures that we are un-authenticatable if we
+  # forget to do this in production.
+  secret: <%= SecureRandom.base64 %>

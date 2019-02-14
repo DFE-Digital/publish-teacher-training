@@ -38,6 +38,9 @@ gem 'sentry-raven'
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'tzinfo-data', platforms: %i[mingw mswin x64_mingw jruby]
 
+# For encoding/decoding web token used for authentication
+gem 'jwt'
+
 # Formalise config settings with support for env vars
 gem 'config'
 
@@ -59,10 +62,15 @@ group :development, :test do
   gem 'pry-byebug'
   gem 'pry-rails'
 
+  gem 'rails-controller-testing'
+
   gem 'rb-readline'
 
   # Test framework
   gem 'rspec-rails'
+
+  # Enable shorter notation for rspec one-liners
+  gem 'rspec-its'
 end
 
 group :development do

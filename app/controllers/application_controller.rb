@@ -1,14 +1,9 @@
 class ApplicationController < ActionController::API
   include ActionController::HttpAuthentication::Token::ControllerMethods
 
+  # child must define authenticate method
   before_action :authenticate
   rescue_from PG::ConnectionBad, with: :render_service_unavailable
-
-  def authenticate
-    authenticate_or_request_with_http_token do |token|
-      ActiveSupport::SecurityUtils.secure_compare(token, Rails.application.config.authentication_token)
-    end
-  end
 
 private
 
