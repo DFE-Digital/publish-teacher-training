@@ -22,6 +22,7 @@
 #        error_500 GET    /error_500(.:format)                                error#error_500
 
 Rails.application.routes.draw do
+  resources :ping
   namespace :api do
     namespace :v1 do
       scope "/(:recruitment_year)" do
