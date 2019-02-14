@@ -9,7 +9,7 @@ class ApplicationController < ActionController::API
   def authenticate
     authenticate_or_request_with_http_token do |token|
       # ActiveSupport::SecurityUtils.secure_compare(token, Rails.application.config.authentication_token)
-      (json_payload, options) = JWT.decode(token,
+      (json_payload, _options) = JWT.decode(token,
                                            Settings.authentication.secret,
                                            Settings.authentication.encoding)
       payload = JSON.parse(json_payload)
