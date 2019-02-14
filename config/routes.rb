@@ -30,6 +30,10 @@ Rails.application.routes.draw do
         resources :courses
       end
     end
+
+    namespace :v2 do
+      resources :users
+    end
   end
 
   get 'error_500', to: 'error#error_500'
