@@ -3,6 +3,6 @@ namespace :db do
   task 'schema:load' => [:annotate]
   task :annotate do
     puts 'Annotating models...'
-    system 'bundle exec annotate -r'
+    system 'bundle exec annotate'
   end
 end
