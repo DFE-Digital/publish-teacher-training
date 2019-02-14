@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe Api::V2::ApplicationController, type: :controller do
+describe API::V2::ApplicationController, type: :controller do
   describe '#authenticate' do
     let(:user) { create(:user) }
     let(:payload) { { email: user.email } }

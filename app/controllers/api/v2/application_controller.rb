@@ -1,4 +1,4 @@
-module Api
+module API
   module V2
     class ApplicationController < ::ApplicationController
       def authenticate
