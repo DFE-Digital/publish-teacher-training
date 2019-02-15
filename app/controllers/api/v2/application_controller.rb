@@ -20,8 +20,8 @@ module API
             payload = JSON.parse(json_payload)
             email = payload['email']
           end
-          @user = User.find_by(email: email)
-          @user.present?
+          @authenticated_user = User.find_by(email: email)
+          @authenticated_user.present?
         end
       end
     end
