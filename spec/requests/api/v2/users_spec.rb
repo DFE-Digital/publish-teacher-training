@@ -13,14 +13,20 @@ describe '/api/v2/users', type: :request do
       .encode_credentials(token)
   end
 
-  before do
-    get "/api/v2/users/#{user.id}",
-        headers: { 'HTTP_AUTHORIZATION' => credentials }
+  describe 'JSON generated for a user' do
+    before do
+      get "/api/v2/users/#{user.id}",
+          headers: { 'HTTP_AUTHORIZATION' => credentials }
+    end
+
+    subject { response }
+
+    it { should have_http_status(:success) }
+
+    its(:body) { should be_json.with_content(data: { id: user.id.to_s }) }
+    its(:body) { should be_json.with_content(data: { type: 'users' }) }
+    its(:body) { should be_json.with_content(data: { attributes: { email: user.email } }) }
+    its(:body) { should be_json.with_content(data: { attributes: { first_name: user.first_name } }) }
+    its(:body) { should be_json.with_content(data: { attributes: { last_name: user.last_name } }) }
   end
-
-  subject { response }
-
-  its(:status) { should eq 200 }
-  its(:body)   { should be_json }
-  its(:body)   { should be_json.with_content(data: { id: user.id.to_s }) }
 end

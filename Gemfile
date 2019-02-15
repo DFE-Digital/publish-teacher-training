@@ -26,8 +26,8 @@ gem 'kaminari'
 # gem 'rack-cors'
 
 # JSON:API Ruby Client
-gem 'jsonapi-rb'
 gem 'jsonapi-rails'
+gem 'jsonapi-rb'
 
 # Access jsonb attributes like normal ActiveRecord model attributes
 gem 'jsonb_accessor'
