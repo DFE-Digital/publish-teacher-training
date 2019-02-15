@@ -23,6 +23,7 @@
 #  updated_at           :datetime         not null
 #  accrediting_provider :text
 #  last_published_at    :datetime
+#  changed_at           :datetime         not null
 #
 
 require 'rails_helper'
