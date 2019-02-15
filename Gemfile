@@ -70,11 +70,13 @@ group :development, :test do
 
   gem 'rb-readline'
 
+  # Enable shorter notation for rspec one-liners
+  gem 'rspec-its'
+
   # Test framework
   gem 'rspec-rails'
 
-  # Enable shorter notation for rspec one-liners
-  gem 'rspec-its'
+  gem 'rspec-json_matchers'
 end
 
 group :development do
