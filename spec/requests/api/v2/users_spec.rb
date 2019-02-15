@@ -9,8 +9,20 @@ describe '/api/v2/users', type: :request do
                Settings.authentication.algorithm
   end
   let(:credentials) do
-    ActionController::HttpAuthentication::Token
-      .encode_credentials(token)
+    ActionController::HttpAuthentication::Token.encode_credentials(token)
+  end
+
+  context 'when unauthorized' do
+    let(:payload) { { email: 'foo@bar' } }
+
+    before do
+      get "/api/v2/users/#{user.id}",
+          headers: { 'HTTP_AUTHORIZATION' => credentials }
+    end
+
+    subject { response }
+
+    it { should have_http_status(:unauthorized) }
   end
 
   describe 'JSON generated for a user' do
