@@ -78,7 +78,7 @@ curl http://localhost:3000/api/v2/users.json -H "Authorization: Bearer user@digi
 
 #### Production
 
-In production mode the bearer token is an HMAC-encrypted JWT with the JSON payload:
+In production mode the bearer token is an encrypted JWT with the JSON payload:
 
 ```
 {
