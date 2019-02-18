@@ -80,9 +80,35 @@
             "metadata": {
                 "description": "Connection string for Sentry monitoring."
             }
+        },
+                "keyVaultName": {
+            "type": "string",
+            "metadata": {
+                "description": "The name of the key vault."
+            }
+        },
+        "keyVaultResourceGroup": {
+            "type": "string",
+            "metadata": {
+                "description": "The resource group for the key vault."
+            }
+        },      
+        "customHostName": {
+            "type": "string",
+            "metadata": {
+                "description": "The custom hostname to add to the app service."
+            }
+        },
+        "certificateName": {
+            "type": "string",
+            "defaultValue": "",
+            "metadata": {
+                "description": "The name of the certificate in key vault."
+            }
         }
     },
     "variables": {
+        "keyvaultCertificateName": "[if(greater(length(parameters('certificateName')),0), parameters('certificateName'), replace(parameters('customHostName'), '.', '-'))]",
         "templateBaseUrl": "https://raw.githubusercontent.com/DFE-Digital/bat-platform-building-blocks/master/templates/",
         "appServiceRuntimeStack": "[concat('DOCKER|', parameters('dockerHubUsername'), '/', parameters('containerImageReference'))]"
     },
@@ -101,6 +127,29 @@
                     "appServicePlanName": {
                         "value": "[parameters('appServicePlanName')]"
                     }
+                }
+            }
+        },
+        {
+            "name": "app-service-certificate",
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2017-05-10",
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[concat(variables('templateBaseUrl'), 'app-service-certificate.json')]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "keyVaultCertificateName": {
+                        "value": "[variables('keyVaultCertificateName')]"
+                    },
+                    "keyVaultName": {
+                        "value": "[parameters('keyVaultName')]"
+                    },
+                    "keyVaultResourceGroup": {
+                        "value": "[parameters('keyVaultResourceGroup')]"
+                    }   
                 }
             }
         },
