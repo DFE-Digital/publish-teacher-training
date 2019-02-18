@@ -21,7 +21,7 @@ describe API::V2::ApplicationController, type: :controller do
     it 'saves the user for use by the action' do
       controller.authenticate
 
-      expect(assigns(:user)).to eq user
+      expect(assigns(:authenticated_user)).to eq user
     end
 
     context 'algorithm is not plain-text' do
@@ -30,7 +30,7 @@ describe API::V2::ApplicationController, type: :controller do
       it 'saves the user for use by the action' do
         controller.authenticate
 
-        expect(assigns(:user)).to eq user
+        expect(assigns(:authenticated_user)).to eq user
       end
 
       context 'user is not valid' do

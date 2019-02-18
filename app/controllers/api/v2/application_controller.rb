@@ -1,6 +1,10 @@
 module API
   module V2
     class ApplicationController < ::ApplicationController
+      SERIALIZABLE_CLASSES = {
+        User: API::V2::UserSerializable
+      }.freeze
+
       def authenticate
         authenticate_or_request_with_http_token do |token|
           if Settings.authentication.algorithm == 'plain-text'
@@ -16,8 +20,8 @@ module API
             payload = JSON.parse(json_payload)
             email = payload['email']
           end
-          @user = User.find_by(email: email)
-          @user.present?
+          @authenticated_user = User.find_by(email: email)
+          @authenticated_user.present?
         end
       end
     end

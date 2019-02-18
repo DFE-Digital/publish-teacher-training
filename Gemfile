@@ -25,6 +25,10 @@ gem 'kaminari'
 # Use Rack CORS for handling Cross-Origin Resource Sharing (CORS), making cross-origin AJAX possible
 # gem 'rack-cors'
 
+# JSON:API Ruby Client
+gem 'jsonapi-rails'
+gem 'jsonapi-rb'
+
 # Access jsonb attributes like normal ActiveRecord model attributes
 gem 'jsonb_accessor'
 
@@ -66,11 +70,13 @@ group :development, :test do
 
   gem 'rb-readline'
 
+  # Enable shorter notation for rspec one-liners
+  gem 'rspec-its'
+
   # Test framework
   gem 'rspec-rails'
 
-  # Enable shorter notation for rspec one-liners
-  gem 'rspec-its'
+  gem 'rspec-json_matchers'
 end
 
 group :development do
