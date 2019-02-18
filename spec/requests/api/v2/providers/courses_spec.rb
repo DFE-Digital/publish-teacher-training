@@ -4,30 +4,37 @@ describe 'Courses API v2', type: :request do
   describe 'GET index' do
     let(:user) { create(:user) }
     let(:payload) { { email: user.email } }
-    let(:encoded_token) do
+    let(:token) do
       JWT.encode payload.to_json,
                  Settings.authentication.secret,
                  Settings.authentication.algorithm
     end
-    let(:bearer_token) { "Bearer #{encoded_token}" }
+    let(:credentials) do
+      ActionController::HttpAuthentication::Token.encode_credentials(token)
+    end
 
     let(:provider) { create :provider }
+    subject { response }
 
-    it 'returns http success' do
-      get "/api/v2/providers/#{provider.provider_code}/courses", headers: { 'HTTP_AUTHORIZATION' => bearer_token }
-      expect(response).to have_http_status(:success)
-    end
-
-    it 'returns http unauthorised' do
+    before do
       get "/api/v2/providers/#{provider.provider_code}/courses",
-          headers: { 'HTTP_AUTHORIZATION' => 'no bearer_token' }
-      expect(response).to have_http_status(:unauthorized)
+          headers: { 'HTTP_AUTHORIZATION' => credentials }
     end
 
-    it 'raise a a record not found error' do
+    context 'when unauthorized' do
+      let(:payload) { { email: 'foo@bar' } }
+
+      it { should have_http_status(:unauthorized) }
+    end
+
+    describe 'JSON generated for courses' do
+      it { should have_http_status(:success) }
+    end
+
+    it "raises a record not found error when the provider doesn't exist" do
       expect {
-        get("/api/v2/providers/garabage/courses",
-         headers: { 'HTTP_AUTHORIZATION' => bearer_token })
+        get("/api/v2/providers/non-existent-provider/courses",
+         headers: { 'HTTP_AUTHORIZATION' => credentials })
       } .to raise_error ActiveRecord::RecordNotFound
     end
   end
