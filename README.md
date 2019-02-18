@@ -19,7 +19,7 @@
 ### Native
 
 1. Run `bundle install` to install the gem dependencies
-2. Run `rails db:setup` to create a development and testing database
+2. Run `bundle exec rails db:setup` to create a development and testing database
 3. Run `bundle exec rails server` to launch the app on http://localhost:3000.
 
 ### Docker
