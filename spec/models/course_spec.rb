@@ -33,16 +33,16 @@ RSpec.describe Course, type: :model do
     it { should have_many(:sites) }
   end
 
-  describe `no site statuses` do
+  describe 'no site statuses' do
     it { expect(subject.site_statuses).to be_empty }
     it { expect(subject.findable?).to be false }
     it { expect(subject.applications_being_accepted_now?).to be false }
     it { expect(subject.has_vacancies?).to be false }
   end
 
-  context `with site statuses` do
+  context 'with site statuses' do
     describe 'findable?' do
-      context `with at least one site status as findable` do
+      context 'with at least one site status as findable' do
         context 'single site status as findable' do
           let(:subject) { create(:course, site_statuses: site_statuses) }
 
@@ -70,7 +70,7 @@ RSpec.describe Course, type: :model do
     end
 
     describe 'has_vacancies' do
-      context `with at least one site status has vacancies` do
+      context 'with at least one site status has vacancies' do
         context 'single site status has vacancies' do
           let(:subject) { create(:course, site_statuses: site_statuses) }
 
@@ -97,7 +97,7 @@ RSpec.describe Course, type: :model do
       end
     end
     describe 'applications_being_accepted_now?' do
-      context `with at least one site status applications_being_accepted_now` do
+      context 'with at least one site status applications_being_accepted_now' do
         context 'single site status applications_being_accepted_now as it open now' do
           let(:subject) { create(:course, site_statuses: site_statuses) }
 
