@@ -25,7 +25,7 @@ RSpec.describe SiteStatus, type: :model do
 
       its(:findable?) { should be true }
       its(:status_before_type_cast) { should eq('R') }
-      its(:publish) { should eq('Y') }
+      its(:published_on_ucas?) { should be true }
     end
   end
 

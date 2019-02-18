@@ -28,6 +28,11 @@ class SiteStatus < ApplicationRecord
     suspended: "S",
   }, _prefix: :status
 
+  enum publish: {
+    published: "Y",
+    unpublished: "N",
+  }, _suffix: :on_ucas
+
   belongs_to :site
   belongs_to :course
 
@@ -36,7 +41,7 @@ class SiteStatus < ApplicationRecord
   end
 
   def findable?
-    status_running? && publish == 'Y'
+    status_running? && published_on_ucas?
   end
 
   def has_vacancies?
