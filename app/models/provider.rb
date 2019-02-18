@@ -43,6 +43,7 @@ class Provider < ApplicationRecord
            foreign_key: :provider_code,
            primary_key: :provider_code,
            class_name: "ProviderEnrichment"
+  has_many :courses
 
   scope :changed_since, ->(datetime) do
     if datetime.present?
