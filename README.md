@@ -22,6 +22,11 @@
 2. Run `rails db:setup` to create a development and testing database
 3. Run `bundle exec rails server` to launch the app on http://localhost:3000.
 
+#### Updating
+
+1. `git pull`
+2. `rails db:migrate`
+
 ### Docker
 
 Run this in a shell and leave it running:
@@ -43,6 +48,12 @@ docker-compose exec web /bin/sh -c "bundle exec rails db:setup"
 ```
 
 Then open http://localhost:3000 to see the app.
+
+#### Updating
+
+1. `git pull`
+2. `docker-compose up --build --detach` - this will recreate the image if there's any changes
+3. `docker-compose exec web /bin/sh -c "bundle exec rails db:migrate"`
 
 ## Accessing API
 
