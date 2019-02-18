@@ -35,10 +35,22 @@ describe '/api/v2/users', type: :request do
 
     it { should have_http_status(:success) }
 
-    its(:body) { should be_json.with_content(data: { id: user.id.to_s }) }
-    its(:body) { should be_json.with_content(data: { type: 'users' }) }
-    its(:body) { should be_json.with_content(data: { attributes: { email: user.email } }) }
-    its(:body) { should be_json.with_content(data: { attributes: { first_name: user.first_name } }) }
-    its(:body) { should be_json.with_content(data: { attributes: { last_name: user.last_name } }) }
+    it 'has a data section with the correct attributes' do
+      json_response = JSON.parse response.body
+      expect(json_response).to eq(
+        "data" => {
+          "id" => user.id.to_s,
+          "type" => "users",
+          "attributes" => {
+            "first_name" => user.first_name,
+            "last_name" => user.last_name,
+            "email" => user.email
+          }
+        },
+        "jsonapi" => {
+          "version" => "1.0"
+        }
+      )
+    end
   end
 end
