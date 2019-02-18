@@ -15,18 +15,18 @@ class SiteStatus < ApplicationRecord
   self.table_name = "course_site"
 
   enum vac_status: {
-    "Both full time and part time vacancies" => "B",
-    "Part time vacancies" => "P",
-    "Full time vacancies" => "F",
-    "No vacancies" => "",
+    both_full_time_and_part_time_vacancies: "B",
+    part_time_vacancies: "P",
+    full_time_vacancies: "F",
+    no_vacancies: "",
   }
 
   enum status: {
-    "Discontinued" => "D",
-    "Running" => "R",
-    "New" => "N",
-    "Suspended" => "S",
-  }
+    discontinued: "D",
+    running: "R",
+    new_status: "N",
+    suspended: "S",
+  }, _prefix: :status
 
   belongs_to :site
   belongs_to :course
@@ -36,15 +36,15 @@ class SiteStatus < ApplicationRecord
   end
 
   def findable?
-    status == "Running" && publish == 'Y'
+    status_running? && publish == 'Y'
   end
 
   def has_vacancies?
-    [
-      "Both full time and part time vacancies",
-      "Part time vacancies",
-      "Full time vacancies"
-    ].include?(vac_status)
+    %w{
+      both_full_time_and_part_time_vacancies
+      part_time_vacancies
+      full_time_vacancies
+    }.include?(vac_status)
   end
 
   def applications_being_accepted_now?

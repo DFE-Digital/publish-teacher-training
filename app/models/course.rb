@@ -23,33 +23,33 @@
 
 class Course < ApplicationRecord
   enum profpost_flag: {
-    "Recommendation for QTS" => "",
-    "Professional" => "PF",
-    "Postgraduate" => "PG",
-    "Professional/Postgraduate" => "BO",
+    recommendation_for_qts: "",
+    professional: "PF",
+    postgraduate: "PG",
+    professional_postgraduate: "BO",
   }
 
   enum program_type: {
-    "Higher education programme" => "HE",
-    "School Direct training programme" => "SD",
-    "School Direct (salaried) training programme" => "SS",
-    "SCITT programme" => "SC",
-    "PG Teaching Apprenticeship" => "TA",
+    higher_education_programme: "HE",
+    school_direct_training_programme: "SD",
+    school_direct_salaried_training_programme: "SS",
+    scitt_programme: "SC",
+    pg_teaching_apprenticeship: "TA",
   }
 
   enum study_mode: {
-    "full time" => "F",
-    "part time" => "P",
-    "full time or part time" => "B",
+    full_time: "F",
+    part_time: "P",
+    full_time_or_part_time: "B",
   }
 
   enum age_range: {
-    "primary" => "P",
-    "secondary" => "S",
-    "middle years" => "M",
+    primary: "P",
+    secondary: "S",
+    middle_years: "M",
     # 'other' doesn't exist in the data yet but is reserved for courses that don't fit
     # the above categories
-    "other" => "O",
+    other: "O",
   }
 
   belongs_to :provider

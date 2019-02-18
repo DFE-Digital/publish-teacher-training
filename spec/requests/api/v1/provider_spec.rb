@@ -21,7 +21,7 @@ describe 'Providers API', type: :request do
         create(:provider,
               provider_name: 'ACME SCITT',
               provider_code: 'A123',
-              provider_type: 'SCITT',
+              provider_type: :scitt,
               site_count: 0,
               address1: 'Shoreditch Park Primary School',
               address2: '313 Bridport Pl',
@@ -31,7 +31,7 @@ describe 'Providers API', type: :request do
               telephone: '020 812 345 678',
               email: 'info@acmescitt.education.uk',
               contact_name: 'Amy Smith',
-              region_code: 'London',
+              region_code: :london,
               accrediting_provider: 'Y',
               scheme_member: 'Y',
               last_published_at: DateTime.now.utc,
@@ -41,7 +41,7 @@ describe 'Providers API', type: :request do
         create(:site,
               location_name: 'Main site',
               code: '-',
-              region_code: 'London',
+              region_code: :london,
               provider: provider)
       end
       let(:enrichment) do
@@ -51,13 +51,13 @@ describe 'Providers API', type: :request do
               address3: 'Dagenham',
               address4: 'Essex',
               postcode: 'RM9 5QT',
-              region_code: "Scotland")
+              region_code: :scotland)
       end
       let(:provider2) do
         create(:provider,
               provider_name: 'ACME University',
               provider_code: 'B123',
-              provider_type: 'University',
+              provider_type: :university,
               address1: 'Bee School',
               address2: 'Bee Avenue',
               address3: 'Bee City',
@@ -66,7 +66,7 @@ describe 'Providers API', type: :request do
               telephone: '01273 345 678',
               email: 'info@acmeuniversity.education.uk',
               contact_name: 'James Brown',
-              region_code: 'South West',
+              region_code: :south_west,
               accrediting_provider: 'N',
               scheme_member: 'N',
               last_published_at: DateTime.now.utc,
@@ -77,7 +77,7 @@ describe 'Providers API', type: :request do
         create(:site,
               location_name: 'Main site',
               code: '-',
-              region_code: 'Scotland',
+              region_code: :scotland,
               provider: provider2)
       end
       it 'returns http success' do
