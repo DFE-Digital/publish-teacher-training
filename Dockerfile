@@ -22,4 +22,4 @@ RUN apk add --update --no-cache --virtual build-dependances \
 
 ADD . $APP_HOME/
 
-CMD bundle exec rails server -b 0.0.0.0
+CMD bundle exec rails db:migrate && bundle exec rails server -b 0.0.0.0
