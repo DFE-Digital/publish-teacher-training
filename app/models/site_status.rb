@@ -36,23 +36,14 @@ class SiteStatus < ApplicationRecord
   belongs_to :site
   belongs_to :course
 
+  scope :findable, -> { status_running.published_on_ucas }
+  scope :applications_being_accepted_now, -> {
+    where.not(applications_accepted_from: nil).
+    where('applications_accepted_from <= ?', Time.now.utc)
+  }
+  scope :with_vacancies, -> { where.not(vac_status: :no_vacancies) }
+
   def recruitment_cycle
     "2019"
-  end
-
-  def findable?
-    status_running? && published_on_ucas?
-  end
-
-  def has_vacancies?
-    %w{
-      both_full_time_and_part_time_vacancies
-      part_time_vacancies
-      full_time_vacancies
-    }.include?(vac_status)
-  end
-
-  def applications_being_accepted_now?
-    applications_accepted_from.present? && applications_accepted_from <= Time.now.utc
   end
 end

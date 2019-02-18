@@ -69,14 +69,14 @@ class Course < ApplicationRecord
   end
 
   def findable?
-    site_statuses.any?(&:findable?)
+    site_statuses.findable.any?
   end
 
   def applications_being_accepted_now?
-    site_statuses.any?(&:applications_being_accepted_now?)
+    site_statuses.applications_being_accepted_now.any?
   end
 
   def has_vacancies?
-    site_statuses.any?(&:has_vacancies?)
+    site_statuses.with_vacancies.any?
   end
 end
