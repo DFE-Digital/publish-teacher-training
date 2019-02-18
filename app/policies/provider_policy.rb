@@ -20,6 +20,6 @@ class ProviderPolicy
   end
 
   def index?
-    user.providers.include?(provider)
+    user.present?
   end
 end
