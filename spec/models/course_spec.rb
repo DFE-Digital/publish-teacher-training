@@ -28,7 +28,7 @@ RSpec.describe Course, type: :model do
 
   describe 'associations' do
     it { should belong_to(:provider) }
-    it { should belong_to(:accrediting_provider) }
+    it { should belong_to(:accrediting_provider).optional }
     it { should have_and_belong_to_many(:subjects) }
   end
 
