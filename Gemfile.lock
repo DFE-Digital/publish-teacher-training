@@ -131,7 +131,6 @@ GEM
       jsonapi-deserializable (~> 0.2.0)
       jsonapi-serializable (~> 0.3.0)
     jsonapi-renderer (0.2.0)
-    jsonapi-rspec (0.0.2)
     jsonapi-serializable (0.3.0)
       jsonapi-renderer (~> 0.2.0)
     jsonb_accessor (1.0.0)
@@ -322,7 +321,6 @@ DEPENDENCIES
   govuk-lint
   jsonapi-rails
   jsonapi-rb
-  jsonapi-rspec
   jsonb_accessor
   jwt
   kaminari
