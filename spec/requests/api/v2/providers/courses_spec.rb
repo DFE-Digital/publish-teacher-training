@@ -3,6 +3,7 @@ require 'rails_helper'
 describe 'Courses API v2', type: :request do
   describe 'GET index' do
     let(:user) { create(:user) }
+    let(:organisation) { create(:organisation, users: [user]) }
     let(:payload) { { email: user.email } }
     let(:token) do
       JWT.encode payload.to_json,
@@ -18,7 +19,12 @@ describe 'Courses API v2', type: :request do
              start_date: Time.now.utc,
              site_statuses: [create(:site_status, :findable, :with_any_vacancy, :applications_being_accepted_now)])
     }
-    let(:provider) { create(:provider, course_count: 0, courses: [findable_open_course]) }
+    let(:provider) {
+      create(:provider,
+             course_count: 0,
+             courses: [findable_open_course],
+             organisations: [organisation])
+    }
     subject { response }
 
     before do
@@ -26,8 +32,16 @@ describe 'Courses API v2', type: :request do
           headers: { 'HTTP_AUTHORIZATION' => credentials }
     end
 
-    context 'when unauthorized' do
+    context 'when unauthenticated' do
       let(:payload) { { email: 'foo@bar' } }
+
+      it { should have_http_status(:unauthorized) }
+    end
+
+    context 'when unauthorised' do
+      let(:unauthorised_user) { create(:user) }
+
+      let(:payload) { { email: unauthorised_user.email } }
 
       it { should have_http_status(:unauthorized) }
     end
