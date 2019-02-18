@@ -34,4 +34,20 @@ class SiteStatus < ApplicationRecord
   def recruitment_cycle
     "2019"
   end
+
+  def findable?
+    status == "Running" && publish == 'Y'
+  end
+
+  def has_vacancies?
+    [
+      "Both full time and part time vacancies",
+      "Part time vacancies",
+      "Full time vacancies"
+    ].include?(vac_status)
+  end
+
+  def applications_being_accepted_now?
+    applications_accepted_from.present? && applications_accepted_from <= Time.now.utc
+  end
 end

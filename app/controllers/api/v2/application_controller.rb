@@ -2,7 +2,8 @@ module API
   module V2
     class ApplicationController < ::ApplicationController
       SERIALIZABLE_CLASSES = {
-        User: API::V2::UserSerializable
+        User: API::V2::UserSerializable,
+        Course: API::V2::CourseSerializable,
       }.freeze
 
       def authenticate
