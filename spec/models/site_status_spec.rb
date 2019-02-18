@@ -21,117 +21,122 @@ RSpec.describe SiteStatus, type: :model do
 
   describe 'findable?' do
     describe 'running and published returns true' do
-      let(:site_status) { create(:site_status, :findable) }
-      it { expect(site_status.findable?).to eq(true) }
-      it { expect(site_status.status_before_type_cast).to eq('R') }
-      it { expect(site_status.publish).to eq('Y') }
+      let(:subject) { create(:site_status, :findable) }
+
+      its(:findable?) { should be true }
+      its(:status_before_type_cast) { should eq('R') }
+      its(:publish) { should eq('Y') }
     end
   end
 
   context "has_vacancies?" do
     describe 'full time vacancy returns true' do
-      let(:site_status) { create(:site_status, :full_time_vacancies) }
-      it { expect(site_status.has_vacancies?).to eq(true) }
+      let(:subject) { create(:site_status, :full_time_vacancies) }
+
+      its(:has_vacancies?) { should be true }
     end
 
     describe 'part time vacancy returns true' do
-      let(:site_status) { create(:site_status, :full_time_vacancies) }
-      it { expect(site_status.has_vacancies?).to eq(true) }
+      let(:subject) { create(:site_status, :full_time_vacancies) }
+      its(:has_vacancies?) { should be true }
     end
 
     describe 'full time and part time vacancies returns true' do
-      let(:site_status) { create(:site_status, :both_full_time_and_part_time_vacancies) }
+      let(:subject) { create(:site_status, :both_full_time_and_part_time_vacancies) }
 
-      it { expect(site_status.has_vacancies?).to eq(true) }
+      its(:has_vacancies?) { should be true }
     end
 
     describe 'no vacancies returns false' do
-      let(:site_status) { create(:site_status) }
+      let(:subject) { create(:site_status) }
 
-      it { expect(site_status.has_vacancies?).to eq(false) }
+      its(:has_vacancies?) { should be false }
     end
   end
 
   context 'applications_being_accepted_now?' do
     context 'should return true' do
       describe 'has past applications_accepted_from date and has has_vacancies and is findable' do
-        let(:site_status) { create(:site_status, :findable_and_with_any_vacancy, :applications_being_accepted_now) }
-        it { expect(site_status.applications_being_accepted_now?).to eq(true) }
-        it { expect(site_status.has_vacancies?).to eq(true) }
-        it { expect(site_status.findable?).to eq(true) }
-        it { expect(site_status.applications_accepted_from).to be <= 0.days.ago }
+        let(:subject) { create(:site_status, :findable_and_with_any_vacancy, :applications_being_accepted_now) }
+
+        its(:applications_being_accepted_now?) { should be true }
+        its(:has_vacancies?) { should be true }
+        its(:findable?) { should be true }
+        its(:applications_accepted_from) { should be <= 0.days.ago }
       end
 
       describe 'has past applications_accepted_from date and has no has_vacancies and is findable' do
-        let(:site_status) { create(:site_status, :findable, :applications_being_accepted_now) }
-        it { expect(site_status.applications_being_accepted_now?).to eq(true) }
-        it { expect(site_status.has_vacancies?).to eq(false) }
-        it { expect(site_status.findable?).to eq(true) }
-        it { expect(site_status.applications_accepted_from).to be <= 0.days.ago }
+        let(:subject) { create(:site_status, :findable, :applications_being_accepted_now) }
+
+        its(:applications_being_accepted_now?) { should be true }
+        its(:has_vacancies?) { should be false }
+        its(:findable?) { should be true }
+        its(:applications_accepted_from) { should be <= 0.days.ago }
       end
 
       describe 'has past applications_accepted_from date and has no has_vacancies and is not findable' do
-        let(:site_status) { create(:site_status, :applications_being_accepted_now) }
-        it { expect(site_status.applications_being_accepted_now?).to eq(true) }
-        it { expect(site_status.has_vacancies?).to eq(false) }
-        it { expect(site_status.findable?).to eq(false) }
-        it { expect(site_status.applications_accepted_from).to be <= 0.days.ago }
+        let(:subject) { create(:site_status, :applications_being_accepted_now) }
+
+        its(:applications_being_accepted_now?) { should be true }
+        its(:has_vacancies?) { should be false }
+        its(:findable?) { should be false }
+        its(:applications_accepted_from) { should be <= 0.days.ago }
       end
     end
 
     context 'should return false' do
       describe 'has future applications_accepted_from date and has has_vacancies and is findable' do
-        let(:site_status) { create(:site_status, :findable_and_with_any_vacancy, :applications_being_accepted_in_future) }
-        it { expect(site_status.applications_being_accepted_now?).to eq(false) }
+        let(:subject) { create(:site_status, :findable_and_with_any_vacancy, :applications_being_accepted_in_future) }
 
-        it { expect(site_status.has_vacancies?).to eq(true) }
-        it { expect(site_status.findable?).to eq(true) }
-        it { expect(site_status.applications_accepted_from).to be >= 0.days.ago }
+        its(:applications_being_accepted_now?) { should be false }
+        its(:has_vacancies?) { should be true }
+        its(:findable?) { should be true }
+        its(:applications_accepted_from) { should be >= 0.days.ago }
       end
 
       describe 'has future applications_accepted_from date and has no has_vacancies and is findable' do
-        let(:site_status) { create(:site_status, :findable, :applications_being_accepted_in_future) }
-        it { expect(site_status.applications_being_accepted_now?).to eq(false) }
+        let(:subject) { create(:site_status, :findable, :applications_being_accepted_in_future) }
 
-        it { expect(site_status.has_vacancies?).to eq(false) }
-        it { expect(site_status.findable?).to eq(true) }
-        it { expect(site_status.applications_accepted_from).to be >= 0.days.ago }
+        its(:applications_being_accepted_now?) { should be false }
+        its(:has_vacancies?) { should be false }
+        its(:findable?) { should be true }
+        its(:applications_accepted_from) { should be >= 0.days.ago }
       end
 
       describe 'has future applications_accepted_from date and has no has_vacancies and is not findable' do
-        let(:site_status) { create(:site_status, :applications_being_accepted_in_future) }
-        it { expect(site_status.applications_being_accepted_now?).to eq(false) }
+        let(:subject) { create(:site_status, :applications_being_accepted_in_future) }
 
-        it { expect(site_status.has_vacancies?).to eq(false) }
-        it { expect(site_status.findable?).to eq(false) }
-        it { expect(site_status.applications_accepted_from).to be >= 0.days.ago }
+        its(:applications_being_accepted_now?) { should be false }
+        its(:has_vacancies?) { should be false }
+        its(:findable?) { should be false }
+        its(:applications_accepted_from) { should be >= 0.days.ago }
       end
 
       describe 'has no applications_accepted_from date and has has_vacancies and is findable' do
-        let(:site_status) { create(:site_status, :with_any_vacancy, :findable) }
-        it { expect(site_status.applications_being_accepted_now?).to eq(false) }
+        let(:subject) { create(:site_status, :with_any_vacancy, :findable) }
 
-        it { expect(site_status.has_vacancies?).to eq(true) }
-        it { expect(site_status.findable?).to eq(true) }
-        it { expect(site_status.applications_accepted_from).to eq(nil) }
+        its(:applications_being_accepted_now?) { should be false }
+        its(:has_vacancies?) { should be true }
+        its(:findable?) { should be true }
+        its(:applications_accepted_from) { should be nil }
       end
 
       describe 'has no applications_accepted_from date and has has_vacancies and is not findable' do
-        let(:site_status) { create(:site_status, :with_any_vacancy) }
-        it { expect(site_status.applications_being_accepted_now?).to eq(false) }
+        let(:subject) { create(:site_status, :with_any_vacancy) }
 
-        it { expect(site_status.has_vacancies?).to eq(true) }
-        it { expect(site_status.findable?).to eq(false) }
-        it { expect(site_status.applications_accepted_from).to eq(nil) }
+        its(:applications_being_accepted_now?) { should be false }
+        its(:has_vacancies?) { should be true }
+        its(:findable?) { should be false }
+        its(:applications_accepted_from) { should be nil }
       end
 
       describe 'has no applications_accepted_from date and has no has_vacancies and is not findable' do
-        let(:site_status) { create(:site_status) }
-        it { expect(site_status.applications_being_accepted_now?).to eq(false) }
+        let(:subject) { create(:site_status) }
 
-        it { expect(site_status.has_vacancies?).to eq(false) }
-        it { expect(site_status.findable?).to eq(false) }
-        it { expect(site_status.applications_accepted_from).to eq(nil) }
+        its(:applications_being_accepted_now?) { should be false }
+        its(:has_vacancies?) { should be false }
+        its(:findable?) { should be false }
+        its(:applications_accepted_from) { should be nil }
       end
     end
   end
