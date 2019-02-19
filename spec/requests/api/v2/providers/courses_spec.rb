@@ -43,7 +43,7 @@ describe 'Courses API v2', type: :request do
             "type" => "courses",
             "attributes" => {
               "findable?" => true,
-              "applications_being_accepted_now?" => true,
+              "open_for_applications?" => true,
               "has_vacancies?" => true,
               "name" => provider.courses[0].name,
               "course_code" => provider.courses[0].course_code,

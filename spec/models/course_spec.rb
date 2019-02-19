@@ -36,8 +36,7 @@ RSpec.describe Course, type: :model do
   describe 'no site statuses' do
     its(:site_statuses) { should be_empty }
     its(:findable?) { should be false }
-    its(:applications_being_accepted_now?) { should be false }
-    its(:has_vacancies?) { should be false }
+    its(:open_for_applications?) { should be false }
     its(:has_vacancies?) { should be false }
   end
 
@@ -97,17 +96,17 @@ RSpec.describe Course, type: :model do
         end
       end
     end
-    describe 'applications_being_accepted_now?' do
+    describe 'open_for_applications?' do
       context 'with at least one site status applications_being_accepted_now' do
         context 'single site status applications_being_accepted_now as it open now' do
           let(:subject) { create(:course, site_statuses: course_site_statuses) }
 
           let(:course_site_statuses) {
-            [create(:site_status, :applications_being_accepted_now)]
+            [create(:site_status, :findable, :applications_being_accepted_now, :with_any_vacancy)]
           }
 
           its(:site_statuses) { should_not be_empty }
-          its(:applications_being_accepted_now?) { should be true }
+          its(:open_for_applications?) { should be true }
         end
         context 'single site status applications_being_accepted_now as it open future' do
           let(:subject) { create(:course, site_statuses: course_site_statuses) }
@@ -117,18 +116,18 @@ RSpec.describe Course, type: :model do
           }
 
           its(:site_statuses) { should_not be_empty }
-          its(:applications_being_accepted_now?) { should be false }
+          its(:open_for_applications?) { should be false }
         end
         context 'site statuses applications_being_accepted_now as it open now & future' do
           let(:subject) { create(:course, site_statuses: course_site_statuses) }
 
           let(:course_site_statuses) {
-            [create(:site_status, :applications_being_accepted_now),
-             create(:site_status, :applications_being_accepted_in_future)]
+            [create(:site_status, :findable, :applications_being_accepted_now, :with_any_vacancy),
+             create(:site_status, :findable, :applications_being_accepted_in_future, :with_any_vacancy)]
           }
 
           its(:site_statuses) { should_not be_empty }
-          its(:applications_being_accepted_now?) { should be true }
+          its(:open_for_applications?) { should be true }
         end
         context 'site statuses applications_being_accepted_now as it open now & future and mix site status as non findable' do
           let(:subject) { create(:course, site_statuses: course_site_statuses) }
@@ -143,13 +142,14 @@ RSpec.describe Course, type: :model do
 
           its(:site_statuses) { should_not be_empty }
           its(:findable?) { should be true }
+          its(:open_for_applications?) { should be false }
         end
       end
     end
 
     its(:site_statuses) { should be_empty }
     its(:findable?) { should be false }
-    its(:applications_being_accepted_now?) { should be false }
+    its(:open_for_applications?) { should be false }
     its(:has_vacancies?) { should be false }
   end
 

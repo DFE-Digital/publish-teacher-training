@@ -72,8 +72,8 @@ class Course < ApplicationRecord
     site_statuses.findable.any?
   end
 
-  def applications_being_accepted_now?
-    site_statuses.applications_being_accepted_now.any?
+  def open_for_applications?
+    site_statuses.open_for_applications.any?
   end
 
   def has_vacancies?
