@@ -27,26 +27,35 @@ describe 'Courses API v2', type: :request do
     }
     subject { response }
 
-    before do
-      get "/api/v2/providers/#{provider.provider_code}/courses",
-          headers: { 'HTTP_AUTHORIZATION' => credentials }
-    end
-
     context 'when unauthenticated' do
       let(:payload) { { email: 'foo@bar' } }
+
+      before do
+        get "/api/v2/providers/#{provider.provider_code}/courses",
+            headers: { 'HTTP_AUTHORIZATION' => credentials }
+      end
 
       it { should have_http_status(:unauthorized) }
     end
 
     context 'when unauthorised' do
       let(:unauthorised_user) { create(:user) }
-
       let(:payload) { { email: unauthorised_user.email } }
 
-      it { should have_http_status(:unauthorized) }
+      it "raises an error" do
+        expect {
+          get "/api/v2/providers/#{provider.provider_code}/courses",
+            headers: { 'HTTP_AUTHORIZATION' => credentials }
+        }.to raise_error Pundit::NotAuthorizedError
+      end
     end
 
     describe 'JSON generated for courses' do
+      before do
+        get "/api/v2/providers/#{provider.provider_code}/courses",
+            headers: { 'HTTP_AUTHORIZATION' => credentials }
+      end
+
       it { should have_http_status(:success) }
 
       it 'has a data section with the correct attributes' do
@@ -77,7 +86,7 @@ describe 'Courses API v2', type: :request do
       end
     end
 
-    it "raises a record not found error when the provider doesn't exist" do
+    it "raises a 'record not found' error when the provider doesn't exist" do
       expect {
         get("/api/v2/providers/non-existent-provider/courses",
          headers: { 'HTTP_AUTHORIZATION' => credentials })

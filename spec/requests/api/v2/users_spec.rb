@@ -25,18 +25,16 @@ describe '/api/v2/users', type: :request do
     it { should have_http_status(:unauthorized) }
   end
 
-  context 'when unauthenticated' do
+  context 'when unauthorized' do
     let(:unauthorised_user) { create(:user) }
     let(:payload) { { email: unauthorised_user.email } }
 
-    before do
-      get "/api/v2/users/#{user.id}",
-          headers: { 'HTTP_AUTHORIZATION' => credentials }
+    it "raises an error" do
+      expect {
+        get "/api/v2/users/#{user.id}",
+            headers: { 'HTTP_AUTHORIZATION' => credentials }
+      }.to raise_error Pundit::NotAuthorizedError
     end
-
-    subject { response }
-
-    it { should have_http_status(:unauthorized) }
   end
 
   describe 'JSON generated for a user' do
