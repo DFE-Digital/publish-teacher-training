@@ -57,6 +57,10 @@ class Course < ApplicationRecord
   has_and_belongs_to_many :subjects
   has_many :site_statuses
   has_many :sites, through: :site_statuses
+  scope :pgde, -> {
+    joins(:provider).
+    joins("INNER JOIN pgde_course ON pgde_course.course_code = course.course_code AND pgde_course.provider_code = provider.provider_code")
+  }
 
   scope :changed_since, ->(datetime, from_course_id = 0) do
     if datetime.present?
