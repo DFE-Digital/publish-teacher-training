@@ -34,7 +34,7 @@ gem 'jsonb_accessor'
 
 # App Insights for Azure
 gem 'application_insights'
-gem 'pkg-config', '~> 1.3.3'
+gem 'pkg-config', '~> 1.3.4'
 
 # Sending exceptions to sentry
 gem 'sentry-raven'
