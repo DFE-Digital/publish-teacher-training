@@ -38,6 +38,7 @@ class Provider < ApplicationRecord
   }
 
   has_and_belongs_to_many :organisations, join_table: :organisation_provider
+  has_many :users, through: :organisations
 
   has_many :sites
   has_many :enrichments,
