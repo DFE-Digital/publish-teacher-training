@@ -15,26 +15,31 @@ variables:
 steps:
 - script: |
     GIT_SHORT_SHA=$(echo $(Build.SourceVersion) | cut -c 1-7)
-    tag=$(dockerHubUsername)/$(imageName):$GIT_SHORT_SHA
+    docker_path=$(dockerHubUsername)/$(imageName)
     echo "##vso[build.updatebuildnumber]$GIT_SHORT_SHA"
-    echo "##vso[task.setvariable variable=tag;]$tag"
+    echo "##vso[task.setvariable variable=tag;]$docker_path:$GIT_SHORT_SHA"
   displayName: 'Set version number'
 
 - script: |
-    docker build -f Dockerfile -t $(tag) .
-  displayName: 'Build image'
+    docker-compose pull
+    docker-compose build
+    docker-compose up --no-build -d
+    docker-compose exec web /bin/sh -c "./wait-for-command.sh -c 'nc -z db 5432' -s 0 -t 20"
+    docker-compose exec web /bin/sh -c "bundle exec rails db:setup"
+  displayName: 'Build & setup'
 
 - script: |
-    docker run "$(tag)" /bin/sh -c "bundle exec rake spec SPEC_OPTS='--format RspecJunitFormatter'" | sed -e 1d >> rspec-results.xml
+    docker-compose exec web /bin/sh -c 'bundle exec rake spec SPEC_OPTS="--format RspecJunitFormatter"' | sed -e 1d >> rspec-results.xml
   displayName: 'Execute tests'
 
 - script: |
-    docker run "$(tag)" /bin/sh -c "bundle exec govuk-lint-ruby app config db lib spec --format clang"
+    docker-compose exec web /bin/sh -c "bundle exec govuk-lint-ruby app config db lib spec --format clang"
   displayName: 'Execute linters'
 
 - script: |
     echo $password | docker login --username $(dockerHubUsername) --password-stdin
-    docker push "$(tag)"
+    docker tag "$(docker_path):latest" "$(docker_path):$GIT_SHORT_SHA"
+    docker push "$(docker_path):$GIT_SHORT_SHA"
   displayName: 'Push image'
   env:
     password: $(dockerHubPassword)
