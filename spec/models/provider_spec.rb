@@ -29,7 +29,7 @@
 
 require 'rails_helper'
 
-RSpec.describe Provider, type: :model do
+describe Provider, type: :model do
   subject { create(:provider) }
 
   describe 'associations' do
@@ -39,19 +39,16 @@ RSpec.describe Provider, type: :model do
 
   describe 'changed_at' do
     it 'is set on create' do
-      Timecop.freeze do
-       expect(subject.changed_at).to be_present
-       expect(subject.changed_at).to eq subject.updated_at
-     end
+      provider = Provider.create
+      expect(provider.changed_at).to be_present
+      expect(provider.changed_at).to eq provider.updated_at
     end
 
     it 'is set on update' do
-      Timecop.freeze do
-        provider = create(:provider, updated_at: 1.hour.ago)
-        provider.touch
-        expect(subject.changed_at).to eq subject.updated_at
-        expect(subject.changed_at).not_to be_within(1.second).of(1.hour.ago)
-      end
+      provider = create(:provider, updated_at: 1.hour.ago)
+      provider.touch
+      expect(provider.changed_at).to eq provider.updated_at
+      expect(provider.changed_at).not_to be_within(1.second).of(1.hour.ago)
     end
   end
 
