@@ -6,17 +6,16 @@ class Qualifications
   end
 
   def to_a
-    case
-    when @is_pgde && @is_fe
+    if @is_pgde && @is_fe
       [:pgde] # 'PGDE'
-    when @is_pgde && !@is_fe
-      [:qts, :pgde] # 'PGDE with QTS'
-    when @is_fe
+    elsif @is_pgde && !@is_fe
+      %i[qts pgde] # 'PGDE with QTS'
+    elsif @is_fe
       [:pgce] # 'PGCE'
-    when @profpost_flag == "recommendation_for_qts"
+    elsif @profpost_flag == "recommendation_for_qts"
       [:qts] # 'QTS'
     else
-      [:qts, :pgce] # 'PGCE with QTS'
+      %i[qts pgce] # 'PGCE with QTS'
     end
   end
 end

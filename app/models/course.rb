@@ -85,8 +85,6 @@ class Course < ApplicationRecord
   end
 
   def qualifications
-    is_fe = subjects.further_education.any?
-
     Qualifications.new(
       profpost_flag: profpost_flag,
       is_pgde: self.in?(Course.pgde),
