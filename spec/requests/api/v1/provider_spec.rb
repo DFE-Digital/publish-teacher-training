@@ -335,10 +335,10 @@ describe 'Providers API', type: :request do
 
       context "with many providers updated in the same second" do
         before do
-          t = 1.second.ago,
+          updated_at = 1.second.ago
           25.times do |i|
             create(:provider, provider_code: "PROV#{i + 1}",
-                   updated_at: t,
+                   updated_at: updated_at,
                    sites: [],
                    enrichments: [])
           end

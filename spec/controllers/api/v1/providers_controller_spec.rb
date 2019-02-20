@@ -39,14 +39,14 @@ describe API::V1::ProvidersController, type: :controller do
           let(:changed_since) { 10.minutes.ago.utc }
 
           its(%w[changed_since]) do
-            should eq last_provider.changed_at.strftime('%FT%T.%6NZ') 
+            should eq last_provider.changed_at.strftime('%FT%T.%6NZ')
           end
         end
 
         context 'using a changed_since after any providers have changed' do
           let(:changed_since) { Time.now.utc }
 
-          its(%w[changed_since])    { should eq changed_since.iso8601 }
+          its(%w[changed_since]) { should eq changed_since.iso8601 }
         end
       end
 
@@ -57,7 +57,7 @@ describe API::V1::ProvidersController, type: :controller do
           get :index, params: { changed_since: changed_since.iso8601 }
         end
 
-        its(%w[changed_since])    { should eq changed_since.iso8601 }
+        its(%w[changed_since]) { should eq changed_since.iso8601 }
       end
     end
   end

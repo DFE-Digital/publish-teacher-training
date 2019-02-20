@@ -225,7 +225,7 @@ describe Provider, type: :model do
 
     context 'with a provider that has been changed less than a second after the given timestamp' do
       let(:timestamp) { 5.minutes.ago }
-      let(:provider) { create(:provider, changed_at: timestamp + (0.001).seconds) }
+      let(:provider) { create(:provider, changed_at: timestamp + 0.001.seconds) }
 
       subject { Provider.changed_since(timestamp) }
 
