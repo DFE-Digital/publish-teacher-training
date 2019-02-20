@@ -1,6 +1,6 @@
 module API
   module V2
-    class ProviderSerializable < JSONAPI::Serializable::Resource
+    class SerializableProvider < JSONAPI::Serializable::Resource
       type 'providers'
 
       attribute :institution_code do

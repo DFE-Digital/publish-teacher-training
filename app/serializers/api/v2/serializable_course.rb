@@ -1,6 +1,6 @@
 module API
   module V2
-    class CourseSerializable < JSONAPI::Serializable::Resource
+    class SerializableCourse < JSONAPI::Serializable::Resource
       type 'courses'
 
       attributes :findable?, :open_for_applications?, :has_vacancies?,
