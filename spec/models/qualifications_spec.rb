@@ -55,10 +55,10 @@ RSpec.describe Qualifications, type: :model do
   end
 
   describe 'PGCE' do
-    context "is recommendation_for_qts and is not pgde and is further education" do
+    context "(nonsensical scenario) is recommendation_for_qts and is not pgde and is further education" do
       subject { Qualifications.new(profpost_flag: "recommendation_for_qts", is_pgde: false, is_fe: true) }
 
-      its(:to_a) { should match_array([:pgce]) }
+      its(:to_a) { should be_empty }
     end
 
     context "is professional and is not pdge and is further education" do
