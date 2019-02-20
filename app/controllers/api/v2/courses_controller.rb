@@ -6,7 +6,7 @@ module API
         authorize provider
 
         render jsonapi: provider.courses,
-               class: SERIALIZABLE_CLASSES
+               class: { Course: API::V2::CourseSerializable }
       end
     end
   end
