@@ -30,8 +30,6 @@ RSpec.describe Qualifications, type: :model do
   end
 
   describe 'PGDE with QTS' do
-    # when @is_pgde && !@is_fe
-    # [:qts, :pgde]
     context "is recommendation_for_qts and is pgde and is not further education" do
       subject { Qualifications.new(profpost_flag: "recommendation_for_qts", is_pgde: true, is_fe: false) }
 
@@ -57,8 +55,13 @@ RSpec.describe Qualifications, type: :model do
 
   end
 
-
   describe 'PGCE' do
+    context "is recommendation_for_qts and is not pgde and is further education" do
+      subject { Qualifications.new(profpost_flag: "recommendation_for_qts", is_pgde: false, is_fe: true) }
+
+      its(:to_a) { should match_array([:qtls, :pgce])}
+    end
+
     context "is professional and is not pdge and is further education" do
       subject { Qualifications.new(profpost_flag: "professional", is_pgde: false, is_fe: true) }
 
@@ -84,6 +87,7 @@ RSpec.describe Qualifications, type: :model do
 
       its(:to_a) { should match_array([:qtls, :pgde])}
     end
+
     context "is professional and is pgde and is further education" do
       subject { Qualifications.new(profpost_flag: "professional", is_pgde: true, is_fe: true) }
 
@@ -103,5 +107,3 @@ RSpec.describe Qualifications, type: :model do
     end
   end
 end
-
-
