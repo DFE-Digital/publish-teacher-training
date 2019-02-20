@@ -1,0 +1,57 @@
+trigger:
+  batch: true
+  branches:
+    include:
+      - vsts_build_and_deploy
+
+pool:
+  vmImage: 'Ubuntu-16.04'
+
+variables:
+  imageName: 'manage-courses-backend-poc'
+
+steps:
+- script: |
+    GIT_SHORT_SHA=$(echo $(Build.SourceVersion) | cut -c 1-7)
+    tag=$(dockerHubUsername)/$(imageName):$GIT_SHORT_SHA
+    echo "##vso[build.updatebuildnumber]$GIT_SHORT_SHA"
+    echo "##vso[task.setvariable variable=tag;]$tag"
+  displayName: 'Set version number'
+
+- script: |
+    docker build -f Dockerfile -t $(tag) .
+  displayName: 'Build image'
+
+- script: |
+    docker run "$(tag)" /bin/sh -c "bundle exec rake spec" | sed -e 1d >> rspec-results.xml
+  displayName: 'Execute tests'
+
+- script: | 
+    docker run "$(tag)" /bin/sh -c "bundle exec govuk-lint-ruby app config db lib spec --format clang"
+  displayName: 'Execute linters'
+
+- script: |
+    echo $password | docker login --username $(dockerHubUsername) --password-stdin
+    docker push "$(tag)"
+  displayName: 'Push image'
+  env:
+    password: $(dockerHubPassword)
+
+- task: CopyFiles@2
+  displayName: 'Copy Files to: $(build.artifactstagingdirectory)'
+  inputs:
+    Contents: |
+     azure/**
+    TargetFolder: '$(build.artifactstagingdirectory)'
+    OverWrite: true
+
+- task: PublishBuildArtifacts@1
+  displayName: 'Publish Artifact'
+  inputs:
+    PathtoPublish: '$(build.artifactstagingdirectory)'
+
+- task: PublishTestResults@2
+  condition: succeededOrFailed()
+  inputs:
+    testRunner: JUnit
+    testResultsFiles: '*.xml'
