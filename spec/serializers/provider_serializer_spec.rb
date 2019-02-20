@@ -52,10 +52,10 @@ RSpec.describe ProviderSerializer do
 
     describe "provider region code 'London' can be overriden by enrichment region code 'Scotland'" do
       let(:enrichment) do
-        build(:provider_enrichment, region_code: "Scotland")
+        build(:provider_enrichment, region_code: :scotland)
       end
 
-      let(:provider) { create :provider, region_code: "London", enrichments: [enrichment] }
+      let(:provider) { create :provider, region_code: :london, enrichments: [enrichment] }
       it { is_expected.not_to eql("%02d" % 1) }
       it { is_expected.to eql("%02d" % 11) }
     end

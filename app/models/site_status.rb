@@ -15,39 +15,36 @@ class SiteStatus < ApplicationRecord
   self.table_name = "course_site"
 
   enum vac_status: {
-    "Both full time and part time vacancies" => "B",
-    "Part time vacancies" => "P",
-    "Full time vacancies" => "F",
-    "No vacancies" => "",
+    both_full_time_and_part_time_vacancies: "B",
+    part_time_vacancies: "P",
+    full_time_vacancies: "F",
+    no_vacancies: "",
   }
 
   enum status: {
-    "Discontinued" => "D",
-    "Running" => "R",
-    "New" => "N",
-    "Suspended" => "S",
-  }
+    discontinued: "D",
+    running: "R",
+    new_status: "N",
+    suspended: "S",
+  }, _prefix: :status
+
+  enum publish: {
+    published: "Y",
+    unpublished: "N",
+  }, _suffix: :on_ucas
 
   belongs_to :site
   belongs_to :course
 
+  scope :findable, -> { status_running.published_on_ucas }
+  scope :applications_being_accepted_now, -> {
+    where.not(applications_accepted_from: nil).
+    where('applications_accepted_from <= ?', Time.now.utc)
+  }
+  scope :with_vacancies, -> { where.not(vac_status: :no_vacancies) }
+  scope :open_for_applications, -> { findable.applications_being_accepted_now.with_vacancies }
+
   def recruitment_cycle
     "2019"
-  end
-
-  def findable?
-    status == "Running" && publish == 'Y'
-  end
-
-  def has_vacancies?
-    [
-      "Both full time and part time vacancies",
-      "Part time vacancies",
-      "Full time vacancies"
-    ].include?(vac_status)
-  end
-
-  def applications_being_accepted_now?
-    applications_accepted_from.present? && applications_accepted_from <= Time.now.utc
   end
 end

@@ -30,11 +30,11 @@ class Provider < ApplicationRecord
   include RegionCode
 
   enum provider_type: {
-    "SCITT" => "B",
-    "Lead school" => "Y",
-    "University" => "O",
-    "??" => "",
-    "Invalid value" => "0", # there is only one of these in the data
+    scitt: "B",
+    lead_school: "Y",
+    university: "O",
+    unknown: "",
+    invalid_value: "0", # there is only one of these in the data
   }
 
   has_and_belongs_to_many :organisations, join_table: :organisation_provider

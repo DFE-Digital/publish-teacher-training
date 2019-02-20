@@ -16,46 +16,50 @@ FactoryBot.define do
     association(:course)
     association(:site)
     publish { 'N' }
-    vac_status { '' }
+    vac_status { :no_vacancies }
 
     trait :published do
-      publish { 'Y' }
+      publish { :published }
     end
 
     trait :unpublished do
-      publish { 'N' }
+      publish { :unpublished }
     end
 
     trait :part_time_vacancies do
-      vac_status { 'P' }
+      vac_status { :part_time_vacancies }
     end
 
     trait :full_time_vacancies do
-      vac_status { 'F' }
+      vac_status { :full_time_vacancies }
     end
 
     trait :both_full_time_and_part_time_vacancies do
-      vac_status { 'B' }
+      vac_status { :both_full_time_and_part_time_vacancies }
     end
 
     trait :with_any_vacancy do
-      vac_status { %w[P F B].sample }
+      vac_status { %i[full_time_vacancies full_time_vacancies part_time_vacancies].sample }
+    end
+
+    trait :with_no_vacancies do
+      vac_status { :no_vacancies }
     end
 
     trait :discontinued do
-      status { 'D' }
+      status { :discontinued }
     end
 
     trait :running do
-      status { 'R' }
+      status { :running }
     end
 
     trait :new do
-      status { 'N' }
+      status { :new_status }
     end
 
     trait :suspended do
-      status { 'S' }
+      status { :suspended }
     end
 
     trait :applications_being_accepted_now do

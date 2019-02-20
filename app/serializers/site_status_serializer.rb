@@ -26,6 +26,10 @@ class SiteStatusSerializer < ActiveModel::Serializer
     object.status_before_type_cast
   end
 
+  def publish
+    object.publish_before_type_cast
+  end
+
   def course_open_date
     object.applications_accepted_from
   end

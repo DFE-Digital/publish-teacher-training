@@ -5,18 +5,18 @@ module RegionCode
     # https://en.wikipedia.org/wiki/First-level_NUTS_of_the_European_Union#United_Kingdom
 
     enum region_code: {
-      'No region' => 0,
-      'London' => 1,
-      'South East' => 2,
-      'South West' => 3,
-      'Wales' => 4,
-      'West Midlands' => 5,
-      'East Midlands' => 6,
-      'Eastern' => 7,
-      'North West' => 8,
-      'Yorkshire & the Humber' => 9,
-      'North East' => 10,
-      'Scotland' => 11,
+      no_region: 0,
+      london: 1,
+      south_east: 2,
+      south_west: 3,
+      wales: 4,
+      west_midlands: 5,
+      east_midlands: 6,
+      eastern: 7,
+      north_west: 8,
+      yorkshire_and_the_humber: 9,
+      north_east: 10,
+      scotland: 11,
     }
   end
 end

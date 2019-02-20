@@ -20,7 +20,7 @@ RSpec.describe "Courses API", type: :request do
       FactoryBot.create(:provider,
         provider_name: "ACME SCITT",
         provider_code: "2LD",
-        provider_type: "SCITT",
+        provider_type: :scitt,
         site_count: 0,
         course_count: 0,
         scheme_member: 'Y',
@@ -39,20 +39,20 @@ RSpec.describe "Courses API", type: :request do
         qualification: 1,
         sites: [site],
         subjects: [subject1, subject2],
-        study_mode: "full time",
+        study_mode: :full_time,
         age_range: 'primary',
         english: 3,
         maths: 9,
-        profpost_flag: "Postgraduate",
-        program_type: "School Direct training programme",
+        profpost_flag: :postgraduate,
+        program_type: :school_direct_training_programme,
         modular: "",
         provider: provider,
         age: 2.hours.ago)
 
       course.site_statuses.first.update(
-        vac_status: 'Full time vacancies',
+        vac_status: :full_time_vacancies,
         publish: 'Y',
-        status: 'Running',
+        status: :running,
         applications_accepted_from: "2018-10-09 00:00:00"
       )
     end

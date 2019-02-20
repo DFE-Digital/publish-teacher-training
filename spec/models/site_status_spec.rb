@@ -14,130 +14,107 @@ require 'rails_helper'
 
 
 RSpec.describe SiteStatus, type: :model do
+  RSpec::Matchers.define :be_findable do
+    match do |actual|
+      SiteStatus.findable.include?(actual)
+    end
+  end
+
+  RSpec::Matchers.define :be_open_for_applications do
+    match do |actual|
+      SiteStatus.open_for_applications.include?(actual)
+    end
+  end
+
+  RSpec::Matchers.define :have_vacancies do
+    match do |actual|
+      SiteStatus.with_vacancies.include?(actual)
+    end
+  end
+
   describe 'associations' do
     it { should belong_to(:site) }
     it { should belong_to(:course) }
   end
 
-  describe 'findable?' do
-    describe 'running and published returns true' do
-      let(:subject) { create(:site_status, :findable) }
+  describe 'is it on find?' do
+    describe 'if discontinued on UCAS' do
+      subject { create(:site_status, :discontinued) }
+      it { should_not be_findable }
+    end
 
-      its(:findable?) { should be true }
-      its(:status_before_type_cast) { should eq('R') }
-      its(:publish) { should eq('Y') }
+    describe 'if suspended on UCAS' do
+      subject { create(:site_status, :suspended) }
+      it { should_not be_findable }
+    end
+
+    describe 'if new on UCAS' do
+      subject { create(:site_status, :new) }
+      it { should_not be_findable }
+    end
+
+    describe 'if running but not published on UCAS' do
+      subject { create(:site_status, :running, :unpublished) }
+      it { should_not be_findable }
+    end
+
+    describe 'if running and published on UCAS' do
+      subject { create(:site_status, :running, :published) }
+      it { should be_findable }
     end
   end
 
-  context "has_vacancies?" do
-    describe 'full time vacancy returns true' do
-      let(:subject) { create(:site_status, :full_time_vacancies) }
-
-      its(:has_vacancies?) { should be true }
+  describe 'applications open?' do
+    describe 'if on find, application date open and has full-time vacancies' do
+      subject { create(:site_status, :findable, :applications_being_accepted_now, :full_time_vacancies) }
+      it { should be_open_for_applications }
     end
 
-    describe 'part time vacancy returns true' do
-      let(:subject) { create(:site_status, :full_time_vacancies) }
-      its(:has_vacancies?) { should be true }
+    describe 'if on find, application date open and has part-time vacancies' do
+      subject { create(:site_status, :findable, :applications_being_accepted_now, :part_time_vacancies) }
+      it { should be_open_for_applications }
     end
 
-    describe 'full time and part time vacancies returns true' do
-      let(:subject) { create(:site_status, :both_full_time_and_part_time_vacancies) }
-
-      its(:has_vacancies?) { should be true }
+    describe 'if on find, application date open and has both full-time and part-time vacancies' do
+      subject { create(:site_status, :findable, :applications_being_accepted_now, :both_full_time_and_part_time_vacancies) }
+      it { should be_open_for_applications }
     end
 
-    describe 'no vacancies returns false' do
-      let(:subject) { create(:site_status) }
+    describe 'if not on find' do
+      subject { create(:site_status, :suspended) }
+      it { should_not be_open_for_applications }
+    end
 
-      its(:has_vacancies?) { should be false }
+    describe 'if on find but applications accepted in the future' do
+      subject { create(:site_status, :findable, :applications_being_accepted_in_future) }
+      it { should_not be_open_for_applications }
+    end
+
+    describe 'if on find, applications accepted now but no vacancies' do
+      subject { create(:site_status, :findable, :applications_being_accepted_now, :with_no_vacancies) }
+      it { should_not be_open_for_applications }
     end
   end
 
-  context 'applications_being_accepted_now?' do
-    context 'should return true' do
-      describe 'has past applications_accepted_from date and has has_vacancies and is findable' do
-        let(:subject) { create(:site_status, :findable_and_with_any_vacancy, :applications_being_accepted_now) }
-
-        its(:applications_being_accepted_now?) { should be true }
-        its(:has_vacancies?) { should be true }
-        its(:findable?) { should be true }
-        its(:applications_accepted_from) { should be <= 0.days.ago }
-      end
-
-      describe 'has past applications_accepted_from date and has no has_vacancies and is findable' do
-        let(:subject) { create(:site_status, :findable, :applications_being_accepted_now) }
-
-        its(:applications_being_accepted_now?) { should be true }
-        its(:has_vacancies?) { should be false }
-        its(:findable?) { should be true }
-        its(:applications_accepted_from) { should be <= 0.days.ago }
-      end
-
-      describe 'has past applications_accepted_from date and has no has_vacancies and is not findable' do
-        let(:subject) { create(:site_status, :applications_being_accepted_now) }
-
-        its(:applications_being_accepted_now?) { should be true }
-        its(:has_vacancies?) { should be false }
-        its(:findable?) { should be false }
-        its(:applications_accepted_from) { should be <= 0.days.ago }
-      end
+  describe "has vacancies?" do
+    describe 'if has part-time vacancies' do
+      subject { create(:site_status, :part_time_vacancies) }
+      it { should have_vacancies }
     end
 
-    context 'should return false' do
-      describe 'has future applications_accepted_from date and has has_vacancies and is findable' do
-        let(:subject) { create(:site_status, :findable_and_with_any_vacancy, :applications_being_accepted_in_future) }
+    describe 'if has full-time vacancies' do
+      subject { create(:site_status, :full_time_vacancies) }
+      it { should have_vacancies }
+    end
 
-        its(:applications_being_accepted_now?) { should be false }
-        its(:has_vacancies?) { should be true }
-        its(:findable?) { should be true }
-        its(:applications_accepted_from) { should be >= 0.days.ago }
-      end
+    describe 'if has both full-time and part-time vacancies' do
+      subject { create(:site_status, :both_full_time_and_part_time_vacancies) }
+      it { should have_vacancies }
+    end
 
-      describe 'has future applications_accepted_from date and has no has_vacancies and is findable' do
-        let(:subject) { create(:site_status, :findable, :applications_being_accepted_in_future) }
-
-        its(:applications_being_accepted_now?) { should be false }
-        its(:has_vacancies?) { should be false }
-        its(:findable?) { should be true }
-        its(:applications_accepted_from) { should be >= 0.days.ago }
-      end
-
-      describe 'has future applications_accepted_from date and has no has_vacancies and is not findable' do
-        let(:subject) { create(:site_status, :applications_being_accepted_in_future) }
-
-        its(:applications_being_accepted_now?) { should be false }
-        its(:has_vacancies?) { should be false }
-        its(:findable?) { should be false }
-        its(:applications_accepted_from) { should be >= 0.days.ago }
-      end
-
-      describe 'has no applications_accepted_from date and has has_vacancies and is findable' do
-        let(:subject) { create(:site_status, :with_any_vacancy, :findable) }
-
-        its(:applications_being_accepted_now?) { should be false }
-        its(:has_vacancies?) { should be true }
-        its(:findable?) { should be true }
-        its(:applications_accepted_from) { should be nil }
-      end
-
-      describe 'has no applications_accepted_from date and has has_vacancies and is not findable' do
-        let(:subject) { create(:site_status, :with_any_vacancy) }
-
-        its(:applications_being_accepted_now?) { should be false }
-        its(:has_vacancies?) { should be true }
-        its(:findable?) { should be false }
-        its(:applications_accepted_from) { should be nil }
-      end
-
-      describe 'has no applications_accepted_from date and has no has_vacancies and is not findable' do
-        let(:subject) { create(:site_status) }
-
-        its(:applications_being_accepted_now?) { should be false }
-        its(:has_vacancies?) { should be false }
-        its(:findable?) { should be false }
-        its(:applications_accepted_from) { should be nil }
-      end
+    describe 'if has no vacancies' do
+      subject { create(:site_status, :with_no_vacancies) }
+      it { should_not have_vacancies }
     end
   end
 end
