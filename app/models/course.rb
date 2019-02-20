@@ -83,4 +83,12 @@ class Course < ApplicationRecord
   def has_vacancies?
     site_statuses.with_vacancies.any?
   end
+
+  def qualifications
+    Qualifications.new(
+      profpost_flag: profpost_flag,
+      is_pgde: self.in?(Course.pgde),
+      is_fe: false, # TODO: implement this properly!
+    ).to_a
+  end
 end
