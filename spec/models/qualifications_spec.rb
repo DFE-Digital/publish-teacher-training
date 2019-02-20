@@ -59,25 +59,25 @@ RSpec.describe Qualifications, type: :model do
     context "is recommendation_for_qts and is not pgde and is further education" do
       subject { Qualifications.new(profpost_flag: "recommendation_for_qts", is_pgde: false, is_fe: true) }
 
-      its(:to_a) { should match_array([:qtls, :pgce])}
+      its(:to_a) { should match_array([:pgce])}
     end
 
     context "is professional and is not pdge and is further education" do
       subject { Qualifications.new(profpost_flag: "professional", is_pgde: false, is_fe: true) }
 
-      its(:to_a) { should match_array([:qtls, :pgce])}
+      its(:to_a) { should match_array([:pgce])}
     end
 
     context "is postgraduate and is not pdge and is further education" do
       subject { Qualifications.new(profpost_flag: "professional", is_pgde: false, is_fe: true) }
 
-      its(:to_a) { should match_array([:qtls, :pgce])}
+      its(:to_a) { should match_array([:pgce])}
     end
 
     context "is professional_postgraduate and is not pdge and is further education" do
       subject { Qualifications.new(profpost_flag: "professional", is_pgde: false, is_fe: true) }
 
-      its(:to_a) { should match_array([:qtls, :pgce])}
+      its(:to_a) { should match_array([:pgce])}
     end
   end
 
@@ -85,25 +85,25 @@ RSpec.describe Qualifications, type: :model do
     context "is recommendation_for_qts and is pgde and is further education" do
       subject { Qualifications.new(profpost_flag: "recommendation_for_qts", is_pgde: true, is_fe: true) }
 
-      its(:to_a) { should match_array([:qtls, :pgde])}
+      its(:to_a) { should match_array([:pgde])}
     end
 
     context "is professional and is pgde and is further education" do
       subject { Qualifications.new(profpost_flag: "professional", is_pgde: true, is_fe: true) }
 
-      its(:to_a) { should match_array([:qtls, :pgde])}
+      its(:to_a) { should match_array([:pgde])}
     end
 
     context "is postgraduate and is pgde and is further education" do
       subject { Qualifications.new(profpost_flag: "professional", is_pgde: true, is_fe: true) }
 
-      its(:to_a) { should match_array([:qtls, :pgde])}
+      its(:to_a) { should match_array([:pgde])}
     end
 
     context "is professional_postgraduate and is pgde and is further education" do
       subject { Qualifications.new(profpost_flag: "professional", is_pgde: true, is_fe: true) }
 
-      its(:to_a) { should match_array([:qtls, :pgde])}
+      its(:to_a) { should match_array([:pgde])}
     end
   end
 end

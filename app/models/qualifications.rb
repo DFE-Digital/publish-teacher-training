@@ -8,11 +8,11 @@ class Qualifications
   def to_a
     case
     when @is_pgde && @is_fe
-      [:qtls, :pgde] # 'PGDE'
+      [:pgde] # 'PGDE'
     when @is_pgde && !@is_fe
       [:qts, :pgde] # 'PGDE with QTS'
     when @is_fe
-      [:qtls, :pgce] # 'PGCE'
+      [:pgce] # 'PGCE'
     when @profpost_flag == "recommendation_for_qts"
       [:qts] # 'QTS'
     else
