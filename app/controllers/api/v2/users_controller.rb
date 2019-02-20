@@ -6,7 +6,8 @@ module API
         authorize user
 
         render jsonapi: user,
-               class: { User: API::V2::UserSerializable },
+               class: { User: API::V2::UserSerializable,
+                        Provider: API::V2::ProviderSerializable },
                include: params[:includes]
       end
     end
