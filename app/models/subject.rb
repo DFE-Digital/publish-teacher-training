@@ -8,4 +8,5 @@
 #
 
 class Subject < ApplicationRecord
+  scope :further_education, -> { where(subject_name: 'Further Education') }
 end
