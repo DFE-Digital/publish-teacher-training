@@ -7,8 +7,10 @@ class Qualifications
 
   def to_a
     case
-    when @is_pgde
-      @is_fe ? [:qtls, :pgde] : [:qts, :pgde]
+    when @is_pgde && @is_fe
+      [:qtls, :pgde]
+    when @is_pgde && !@is_fe
+      [:qts, :pgde]
     when @is_fe
       [:qtls, :pgce]
     when @profpost_flag == "recommendation_for_qts"
