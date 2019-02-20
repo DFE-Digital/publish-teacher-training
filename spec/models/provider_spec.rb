@@ -39,15 +39,19 @@ RSpec.describe Provider, type: :model do
 
   describe 'changed_at' do
     it 'is set on create' do
-      expect(subject.changed_at).to be_present
-      expect(subject.changed_at).to eq subject.updated_at
+      Timecop.freeze do
+       expect(subject.changed_at).to be_present
+       expect(subject.changed_at).to eq subject.updated_at
+     end
     end
 
     it 'is set on update' do
-      provider = create(:provider, updated_at: 1.hour.ago)
-      provider.touch
-      expect(subject.changed_at).to eq subject.updated_at
-      expect(subject.changed_at).not_to be_within(1.second).of(1.hour.ago)
+      Timecop.freeze do
+        provider = create(:provider, updated_at: 1.hour.ago)
+        provider.touch
+        expect(subject.changed_at).to eq subject.updated_at
+        expect(subject.changed_at).not_to be_within(1.second).of(1.hour.ago)
+      end
     end
   end
 
