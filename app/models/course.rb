@@ -62,16 +62,6 @@ class Course < ApplicationRecord
     joins("INNER JOIN pgde_course ON pgde_course.course_code = course.course_code AND pgde_course.provider_code = provider.provider_code")
   }
 
-  # select * from course
-  # inner join  course_subject
-  #   on course.id = course_subject.course_id
-  # inner join subject
-  #   on  subject.id = course_subject.subject_id
-  #   and  subject.subject_name = 'Further Education'
-  # scope :further_education, -> {
-
-  # }
-
   scope :changed_since, ->(datetime, from_course_id = 0) do
     if datetime.present?
       where("course.updated_at >= ? AND course.id > ?", datetime, from_course_id).order(:updated_at, :id)

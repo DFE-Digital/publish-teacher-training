@@ -31,12 +31,17 @@ FactoryBot.define do
 
     transient do
       age { nil }
+      is_pgde { false }
     end
 
     after(:build) do |course, evaluator|
       if evaluator.age.present?
         course.created_at = evaluator.age
         course.updated_at = evaluator.age
+      end
+
+      if evaluator.is_pgde
+        create(:pgde_course, provider_code: course.provider.provider_code, course_code: course.course_code)
       end
     end
   end
