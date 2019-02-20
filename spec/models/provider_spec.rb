@@ -33,6 +33,7 @@ RSpec.describe Provider, type: :model do
 
   describe 'associations' do
     it { should have_many(:sites) }
+    it { should have_many(:users).through(:organisations) }
   end
 
   describe '#address_info' do

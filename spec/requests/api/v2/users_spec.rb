@@ -12,7 +12,7 @@ describe '/api/v2/users', type: :request do
     ActionController::HttpAuthentication::Token.encode_credentials(token)
   end
 
-  context 'when unauthorized' do
+  context 'when unauthenticated' do
     let(:payload) { { email: 'foo@bar' } }
 
     before do
@@ -23,6 +23,18 @@ describe '/api/v2/users', type: :request do
     subject { response }
 
     it { should have_http_status(:unauthorized) }
+  end
+
+  context 'when unauthorized' do
+    let(:unauthorised_user) { create(:user) }
+    let(:payload) { { email: unauthorised_user.email } }
+
+    it "raises an error" do
+      expect {
+        get "/api/v2/users/#{user.id}",
+            headers: { 'HTTP_AUTHORIZATION' => credentials }
+      }.to raise_error Pundit::NotAuthorizedError
+    end
   end
 
   describe 'JSON generated for a user' do

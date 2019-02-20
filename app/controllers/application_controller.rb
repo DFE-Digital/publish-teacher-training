@@ -1,8 +1,10 @@
 class ApplicationController < ActionController::API
   include ActionController::HttpAuthentication::Token::ControllerMethods
+  include Pundit
 
   # child must define authenticate method
   before_action :authenticate
+  after_action :verify_authorized
   rescue_from PG::ConnectionBad, with: :render_service_unavailable
 
 private

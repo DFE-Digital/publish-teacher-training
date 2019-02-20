@@ -1,6 +1,8 @@
 module API
   module V2
     class ApplicationController < ::ApplicationController
+      attr_reader :current_user
+
       SERIALIZABLE_CLASSES = {
         User: API::V2::UserSerializable,
         Course: API::V2::CourseSerializable,
@@ -21,8 +23,8 @@ module API
             payload = JSON.parse(json_payload)
             email = payload['email']
           end
-          @authenticated_user = User.find_by(email: email)
-          @authenticated_user.present?
+          @current_user = User.find_by(email: email)
+          @current_user.present?
         end
       end
     end
