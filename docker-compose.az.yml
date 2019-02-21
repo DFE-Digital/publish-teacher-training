@@ -1,0 +1,6 @@
+version: '3.2'
+services:
+  web:
+    build:
+      context: .
+    image: ${docker_path}:latest

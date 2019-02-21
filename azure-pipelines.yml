@@ -21,7 +21,7 @@ steps:
   displayName: 'Set version number'
 
 - script: |
-    docker-compose build
+    docker-compose -f docker-compose.yml -f docker-compose.az.yml build
     docker-compose up --no-build -d
     docker-compose exec -T web /bin/sh -c "./wait-for-command.sh -c 'nc -z db 5432' -s 0 -t 20"
     docker-compose exec -T web /bin/sh -c "bundle exec rails db:setup"
