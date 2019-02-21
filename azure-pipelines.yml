@@ -11,6 +11,7 @@ pool:
 
 variables:
   imageName: 'manage-courses-backend-poc'
+  dockerOverride: 'docker-compose -f docker-compose.yml -f docker-compose.az.yml'
 
 steps:
 - script: |
@@ -21,19 +22,25 @@ steps:
   displayName: 'Set version number'
 
 - script: |
-    docker-compose -f docker-compose.yml -f docker-compose.az.yml build
-    docker-compose up --no-build -d
-    docker-compose exec -T web /bin/sh -c "./wait-for-command.sh -c 'nc -z db 5432' -s 0 -t 20"
-    docker-compose exec -T web /bin/sh -c "bundle exec rails db:setup"
+    $DOCKER_OVERRIDE build
+    $DOCKER_OVERRIDE up --no-build -d
+    $DOCKER_OVERRIDE exec -T web /bin/sh -c "./wait-for-command.sh -c 'nc -z db 5432' -s 0 -t 20"
+    $DOCKER_OVERRIDE exec -T web /bin/sh -c "bundle exec rails db:setup"
   displayName: 'Build & setup'
+  env:
+    DOCKER_OVERRIDE: $(dockerOverride)
 
 - script: |
-    docker-compose exec -T web /bin/sh -c 'bundle exec rake spec SPEC_OPTS="--format RspecJunitFormatter --out ./rspec-results.xml"'
+    $DOCKER_OVERRIDE exec -T web /bin/sh -c 'bundle exec rake spec SPEC_OPTS="--format RspecJunitFormatter --out ./rspec-results.xml"'
   displayName: 'Execute tests'
+  env:
+    DOCKER_OVERRIDE: $(dockerOverride)
 
 - script: |
-    docker-compose exec -T web /bin/sh -c "bundle exec govuk-lint-ruby app config db lib spec --format clang"
+    $DOCKER_OVERRIDE exec -T web /bin/sh -c "bundle exec govuk-lint-ruby app config db lib spec --format clang"
   displayName: 'Execute linters'
+  env:
+    DOCKER_OVERRIDE: $(dockerOverride)
 
 - script: |
     echo $password | docker login --username $(dockerHubUsername) --password-stdin
