@@ -30,6 +30,7 @@
 class Provider < ApplicationRecord
   include RegionCode
   include ChangedAt
+  include TouchProvider
 
   enum provider_type: {
     scitt: "B",
