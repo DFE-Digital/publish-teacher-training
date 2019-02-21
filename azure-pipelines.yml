@@ -29,7 +29,7 @@ steps:
   displayName: 'Build & setup'
 
 - script: |
-    docker-compose exec -T web /bin/sh -c 'bundle exec rake spec SPEC_OPTS="--format RspecJunitFormatter"' | sed -e 1d >> rspec-results.xml
+    docker-compose exec -T web /bin/sh -c 'bundle exec rake spec SPEC_OPTS="--format RspecJunitFormatter --out ./rspec-results.xml"'
   displayName: 'Execute tests'
 
 - script: |
