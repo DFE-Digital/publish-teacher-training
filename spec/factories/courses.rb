@@ -58,13 +58,9 @@ FactoryBot.define do
       end
     end
 
-    # #[:qts] # 'QTS'
-    # ["recommendation_for_qts", :not_pgde, :not_fe]        => %i[qts],
-
     factory :course_with_qts_qualication do
       profpost_flag { :recommendation_for_qts }
     end
-
 
     factory :course_with_pgce_qts_qualication do
       profpost_flag { %i[professional postgraduate professional_postgraduate].sample }
