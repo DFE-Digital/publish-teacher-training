@@ -44,6 +44,7 @@
 #                       PUT    /api/v2/providers(/:provider_code)/courses/:id(.:format) api/v2/courses#update
 #                       DELETE /api/v2/providers(/:provider_code)/courses/:id(.:format) api/v2/courses#destroy
 #             error_500 GET    /error_500(.:format)                                     error#error_500
+#            error_nodb GET    /error_nodb(.:format)                                    error#error_nodb
 
 Rails.application.routes.draw do
   namespace :api do
