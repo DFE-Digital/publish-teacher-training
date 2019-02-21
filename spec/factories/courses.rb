@@ -27,6 +27,7 @@ FactoryBot.define do
     name { Faker::ProgrammingLanguage.name }
     qualification { 1 }
     association(:provider)
+    profpost_flag { %i[recommendation_for_qts professional postgraduate professional_postgraduate].sample }
 
     transient do
       age { nil }
@@ -54,7 +55,6 @@ FactoryBot.define do
 
     trait :resulting_in_pgde_with_qts do
       marked_as_pgde
-      profpost_flag { %i[recommendation_for_qts professional postgraduate professional_postgraduate].sample }
     end
 
     trait :resulting_in_pgce do
@@ -65,7 +65,6 @@ FactoryBot.define do
     trait :resulting_in_pgde do
       marked_as_pgde
       in_further_education
-      profpost_flag { %i[recommendation_for_qts professional postgraduate professional_postgraduate].sample }
     end
 
     after(:build) do |course, evaluator|
