@@ -33,7 +33,7 @@ RSpec.describe Qualifications, type: :model do
 
   nonsensical_specs = [
     ["recommendation_for_qts", :not_pgde, :is_fe] => []
-]
+  ]
 
   specs = nonsensical_specs + qtl_specs + qts_pgce_specs + qts_pgde_specs + pgce_specs + pgde_specs
 
