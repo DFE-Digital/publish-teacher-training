@@ -28,7 +28,8 @@ module ManageCoursesBackend
     config.active_record.pluralize_table_names = false
 
     config.action_dispatch.rescue_responses = {
-      'Pundit::NotAuthorizedError' => :forbidden
+      'Pundit::NotAuthorizedError' => :forbidden,
+      'PG::ConnectionBad' => :service_unavailable
     }
   end
 end

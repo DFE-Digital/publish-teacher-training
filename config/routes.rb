@@ -48,4 +48,5 @@ Rails.application.routes.draw do
   end
 
   get 'error_500', to: 'error#error_500'
+  get 'error_nodb', to: 'error#error_nodb'
 end
