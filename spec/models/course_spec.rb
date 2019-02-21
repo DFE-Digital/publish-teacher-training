@@ -179,4 +179,36 @@ RSpec.describe Course, type: :model do
       it { should include course }
     end
   end
+
+  describe 'qualifications' do
+    context "course with qts qualication" do
+      let(:subject) { create(:course_with_qts_qualication) }
+
+      its(:qualifications) { should eq %i[qts] }
+    end
+
+    context "course with pgce qts qualication" do
+      let(:subject) { create(:course_with_pgce_qts_qualication) }
+
+      its(:qualifications) { should eq %i[qts pgce] }
+    end
+
+    context "course with pgde qts qualication" do
+      let(:subject) { create(:course_with_pgde_qts_qualication) }
+
+      its(:qualifications) { should eq %i[qts pgde] }
+    end
+
+    context "course with pgce qualication" do
+      let(:subject) { create(:course_with_pgce_qualication) }
+
+      its(:qualifications) { should eq %i[pgce] }
+    end
+
+    context "course with pgde qualication" do
+      let(:subject) { create(:course_with_pgde_qualication) }
+
+      its(:qualifications) { should eq %i[pgde] }
+    end
+  end
 end
