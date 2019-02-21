@@ -13,8 +13,6 @@
 ActiveRecord::Schema.define(version: 2019_02_22_063449) do
 
   # These are extensions that must be enabled in order to support this database
-  enable_extension "pg_buffercache"
-  enable_extension "pg_stat_statements"
   enable_extension "plpgsql"
 
   create_table "__EFMigrationsHistory", primary_key: "MigrationId", id: :string, limit: 150, force: :cascade do |t|
