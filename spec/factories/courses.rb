@@ -41,20 +41,15 @@ FactoryBot.define do
   end
 
   factory :course_with_qualication, parent: :course do
-    transient do
-      have_pgde { false }
-      have_fe_subject { false }
-    end
-
     trait :with_further_education_subject do
-      transient do
-        have_fe_subject { true }
+      after(:build) do |course|
+        course.subjects << create(:futher_education_subject)
       end
     end
 
     trait :with_pgde_course do
-      transient do
-        have_pgde { true }
+      after(:build) do |course|
+        create(:pgde_course, provider_code: course.provider.provider_code, course_code: course.course_code)
       end
     end
 
@@ -80,16 +75,6 @@ FactoryBot.define do
       with_pgde_course
       with_further_education_subject
       profpost_flag { %i[recommendation_for_qts professional postgraduate professional_postgraduate].sample }
-    end
-
-    after(:build) do |course, evaluator|
-      if evaluator.have_pgde
-        create(:pgde_course, provider_code: course.provider.provider_code, course_code: course.course_code)
-      end
-
-      if evaluator.have_fe_subject
-        course.subjects << create(:futher_education_subject)
-      end
     end
   end
 end
