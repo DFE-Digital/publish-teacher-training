@@ -41,7 +41,6 @@ RSpec.describe Qualifications, type: :model do
 
   specs.each do |spec|
     spec.each do |inputs, expected|
-      pp expected
       profpost_flag = inputs[0]
       is_pgde = (inputs[1] == :is_pgde)
       is_fe = (inputs[2] == :is_fe)
