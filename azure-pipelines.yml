@@ -29,11 +29,11 @@ steps:
   displayName: 'Build & setup'
 
 - script: |
-    docker-compose exec web /bin/sh -c 'bundle exec rake spec SPEC_OPTS="--format RspecJunitFormatter"' | sed -e 1d >> rspec-results.xml
+    docker-compose exec -T web /bin/sh -c 'bundle exec rake spec SPEC_OPTS="--format RspecJunitFormatter"' | sed -e 1d >> rspec-results.xml
   displayName: 'Execute tests'
 
 - script: |
-    docker-compose exec web /bin/sh -c "bundle exec govuk-lint-ruby app config db lib spec --format clang"
+    docker-compose exec -T web /bin/sh -c "bundle exec govuk-lint-ruby app config db lib spec --format clang"
   displayName: 'Execute linters'
 
 - script: |
