@@ -216,7 +216,7 @@ describe Provider, type: :model do
 
   describe '#changed_since' do
     context 'with a provider that has been published after the given timestamp' do
-      let(:provider) { create(:provider, last_published_at: 5.minutes.ago) }
+      let(:provider) { create(:provider, changed_at: 5.minutes.ago) }
 
       subject { Provider.changed_since(10.minutes.ago) }
 
@@ -225,7 +225,7 @@ describe Provider, type: :model do
 
     context 'with a provider that has been published exactly at the given timestamp' do
       let(:publish_time) { 10.minutes.ago }
-      let(:provider) { create(:provider, last_published_at: publish_time) }
+      let(:provider) { create(:provider, changed_at: publish_time) }
 
       subject { Provider.changed_since(publish_time) }
 
@@ -233,25 +233,11 @@ describe Provider, type: :model do
     end
 
     context 'with a provider that has been published before the given timestamp' do
-      let(:provider) { create(:provider, last_published_at: 1.hour.ago) }
+      let(:provider) { create(:provider, changed_at: 1.hour.ago) }
 
       subject { Provider.changed_since(10.minutes.ago) }
 
       it { should_not include provider }
-    end
-
-    context 'with a provider that has never been published' do
-      let(:provider) { create(:provider, last_published_at: nil) }
-
-      describe 'with non-nil changed_since' do
-        subject { Provider.changed_since(10.minutes.ago) }
-        it { should_not include provider }
-      end
-
-      describe 'with changed_since set to nil' do
-        subject { Provider.changed_since(nil) }
-        it { should_not include provider }
-      end
     end
   end
 

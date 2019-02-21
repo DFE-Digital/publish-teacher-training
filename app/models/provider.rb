@@ -51,10 +51,10 @@ class Provider < ApplicationRecord
 
   scope :changed_since, ->(datetime) do
     if datetime.present?
-      where("last_published_at >= ?", datetime)
+      where("changed_at >= ?", datetime)
     else
-      where("last_published_at is not null")
-    end.order(:last_published_at, :id)
+      where("changed_at is not null")
+    end.order(:changed_at, :id)
   end
 
   scope :opted_in, -> { where(opted_in: true) }

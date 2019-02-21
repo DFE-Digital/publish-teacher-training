@@ -41,6 +41,7 @@ FactoryBot.define do
     opted_in { true }
 
     transient do
+      changed_at           { nil }
       skip_associated_data { false }
       site_count           { 1 }
       sites                { build_list :site, site_count, provider: nil }
@@ -58,6 +59,14 @@ FactoryBot.define do
       # have to do that here.
       provider.enrichments << evaluator.enrichments.each do |enrichment|
         enrichment.provider_code ||= provider.provider_code
+      end
+
+      # Strangely, changed_at doesn't get set if we don't do this, even though
+      # updated_at does. Maybe this is because we've added changed_at to
+      # timestamp_attributes_for_update but FactoryBot doesn't actually
+      # recognise it.
+      if evaluator.changed_at.present?
+        provider.update changed_at: evaluator.changed_at
       end
     end
   end
