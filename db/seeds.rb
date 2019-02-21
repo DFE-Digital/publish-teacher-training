@@ -16,6 +16,7 @@ accrediting_provider = Provider.create!(provider_name: 'Acme SCITT', provider_co
   "English" => "Q3",
   "Mathematics" => "G1",
   "Biology" => "C1",
+  "Further Education" => "41",
 }.each do |name, code|
   Subject.create!(
     subject_name: name,
@@ -75,7 +76,8 @@ course2 = Course.create!(
   qualification: 1,
   subjects: [
     Subject.find_by(subject_name: "Secondary"),
-    Subject.find_by(subject_name: "Biology")
+    Subject.find_by(subject_name: "Biology"),
+    Subject.find_by(subject_name: "Further Education"),
   ],
 )
 
