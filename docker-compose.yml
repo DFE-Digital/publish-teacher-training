@@ -10,9 +10,9 @@ services:
   web:
     build:
       context: .
-      cache_from:
-        - govukdfe/manage-courses-backend-poc:ef0bee1
-    image: govukdfe/manage-courses-backend-poc:ef0bee1
+      #cache_from:
+      #  - govukdfe/manage-courses-backend-poc:latest
+    image: govukdfe/manage-courses-backend-poc:latest
     command: ash -c "rm -f tmp/pids/server.pid && bundle exec rails server -p 3000 -b '0.0.0.0'"
     volumes:
       - .:/app
