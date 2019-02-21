@@ -70,7 +70,6 @@ describe 'Courses API v2', type: :request do
               "has_vacancies?" => true,
               "name" => provider.courses[0].name,
               "course_code" => provider.courses[0].course_code,
-              "profpost_flag" => provider.courses[0].profpost_flag,
               "start_date" => provider.courses[0].start_date.iso8601,
               "study_mode" => provider.courses[0].study_mode,
               "qualifications" => %w[qts pgce],
