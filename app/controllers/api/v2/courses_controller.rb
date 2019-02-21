@@ -5,8 +5,7 @@ module API
         provider = Provider.find_by!(provider_code: params[:provider_code])
         authorize provider
 
-        render jsonapi: provider.courses,
-               class: SERIALIZABLE_CLASSES
+        render jsonapi: provider.courses
       end
     end
   end

@@ -1,8 +1,8 @@
 require 'rails_helper'
 
-describe API::V2::UserSerializable do
+describe API::V2::SerializableUser do
   let(:user)     { create :user }
-  let(:resource) { API::V2::UserSerializable.new object: user }
+  let(:resource) { API::V2::SerializableUser.new object: user }
 
   it 'sets type to users' do
     expect(resource.jsonapi_type).to eq :users

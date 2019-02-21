@@ -3,11 +3,6 @@ module API
     class ApplicationController < ::ApplicationController
       attr_reader :current_user
 
-      SERIALIZABLE_CLASSES = {
-        User: API::V2::UserSerializable,
-        Course: API::V2::CourseSerializable,
-      }.freeze
-
       def authenticate
         authenticate_or_request_with_http_token do |token|
           if Settings.authentication.algorithm == 'plain-text'

@@ -1,8 +1,8 @@
 require "rails_helper"
 
-RSpec.describe describe API::V2::CourseSerializable do
+describe API::V2::SerializableCourse do
   let(:course) { create(:course, start_date: Time.now.utc) }
-  let(:resource) { API::V2::CourseSerializable.new object: course }
+  let(:resource) { API::V2::SerializableCourse.new object: course }
 
   it 'sets type to courses' do
     expect(resource.jsonapi_type).to eq :courses
