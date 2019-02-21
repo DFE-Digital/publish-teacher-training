@@ -38,8 +38,8 @@ steps:
 
 - script: |
     echo $password | docker login --username $(dockerHubUsername) --password-stdin
-    docker tag "$(docker_path):latest" "$(docker_path):$GIT_SHORT_SHA"
-    docker push "$(docker_path):$GIT_SHORT_SHA"
+    docker tag "$(docker_path):latest" "$(docker_path):$(Build.BuildNumber)"
+    docker push "$(docker_path):$(Build.BuildNumber)"
   displayName: 'Push image'
   env:
     password: $(dockerHubPassword)
