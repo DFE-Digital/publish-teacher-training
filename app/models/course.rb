@@ -79,4 +79,16 @@ class Course < ApplicationRecord
   def has_vacancies?
     site_statuses.with_vacancies.any?
   end
+
+  def qualifications
+    Qualifications.new(
+      profpost_flag: profpost_flag,
+      is_pgde: pgde?,
+      is_further_education: subjects.further_education.any?,
+    ).to_a
+  end
+
+  def pgde?
+    PGDECourse.where(course_code: self.course_code, provider_code: provider.provider_code).exists?
+  end
 end
