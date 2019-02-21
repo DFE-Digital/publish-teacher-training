@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe Qualifications, type: :model do
-  qtl_specs = [
+  qts_specs = [
     ["recommendation_for_qts", :not_pgde, :not_fe] => %i[qts]
   ]
 
@@ -35,7 +35,7 @@ RSpec.describe Qualifications, type: :model do
     ["recommendation_for_qts", :not_pgde, :is_fe] => []
   ]
 
-  specs = (nonsensical_specs + qtl_specs + qts_pgce_specs + qts_pgde_specs + pgce_specs + pgde_specs).freeze
+  specs = (nonsensical_specs + qts_specs + qts_pgce_specs + qts_pgde_specs + pgce_specs + pgde_specs).freeze
 
   specs.each do |spec|
     spec.each do |inputs, expected|
