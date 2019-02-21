@@ -32,49 +32,47 @@ FactoryBot.define do
       age { nil }
     end
 
-    after(:build) do |course, evaluator|
-      if evaluator.age.present?
-        course.created_at = evaluator.age
-        course.updated_at = evaluator.age
-      end
-    end
-  end
-
-  factory :course_with_qualication, parent: :course do
-    trait :with_further_education_subject do
+    trait :in_further_education do
       after(:build) do |course|
         course.subjects << create(:futher_education_subject)
       end
     end
 
-    trait :with_pgde_course do
+    trait :marked_as_pgde do
       after(:build) do |course|
         create(:pgde_course, provider_code: course.provider.provider_code, course_code: course.course_code)
       end
     end
 
-    factory :course_with_qts_qualication do
+    trait :resulting_in_qts do
       profpost_flag { :recommendation_for_qts }
     end
 
-    factory :course_with_pgce_qts_qualication do
+    trait :resulting_in_pgce_with_qts do
       profpost_flag { %i[professional postgraduate professional_postgraduate].sample }
     end
 
-    factory :course_with_pgde_qts_qualication do
-      with_pgde_course
+    trait :resulting_in_pgde_with_qts do
+      marked_as_pgde
       profpost_flag { %i[recommendation_for_qts professional postgraduate professional_postgraduate].sample }
     end
 
-    factory :course_with_pgce_qualication do
-      with_further_education_subject
+    trait :resulting_in_pgce do
+      in_further_education
       profpost_flag { %i[professional postgraduate professional_postgraduate].sample }
     end
 
-    factory :course_with_pgde_qualication do
-      with_pgde_course
-      with_further_education_subject
+    trait :resulting_in_pgde do
+      marked_as_pgde
+      in_further_education
       profpost_flag { %i[recommendation_for_qts professional postgraduate professional_postgraduate].sample }
+    end
+
+    after(:build) do |course, evaluator|
+      if evaluator.age.present?
+        course.created_at = evaluator.age
+        course.updated_at = evaluator.age
+      end
     end
   end
 end

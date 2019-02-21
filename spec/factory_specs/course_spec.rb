@@ -8,16 +8,16 @@ describe "Course Factory" do
     expect(course).to be_valid
   end
 
-  context "course with_pgde_course" do
-    let(:course) { create(:course_with_qualication, :with_pgde_course) }
+  context "course resulting_in_pgde" do
+    let(:course) { create(:course, :resulting_in_pgde) }
 
     it "created course" do
       expect(course.in?(Course.pgde)).to be true
     end
   end
 
-  context "course with_further_education_subject" do
-    let(:course) { create(:course_with_qualication, :with_further_education_subject) }
+  context "course in_further_education" do
+    let(:course) { create(:course, :in_further_education) }
 
     it "created course" do
       expect(course.subjects.further_education.any?).to be true
