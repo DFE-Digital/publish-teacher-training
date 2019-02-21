@@ -81,6 +81,11 @@ course2 = Course.create!(
   ],
 )
 
+PGDECourse.create!(
+  provider_code: course2.provider.provider_code,
+  course_code: course2.course_code,
+)
+
 SiteStatus.create!(
   site: Site.last,
   vac_status: "B",
