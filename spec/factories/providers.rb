@@ -37,6 +37,7 @@ FactoryBot.define do
     postcode { Faker::Address.postcode }
     accrediting_provider { 'N' }
     region_code { ProviderEnrichment.region_codes['London'] }
+    opted_in { true }
 
     transient do
       skip_associated_data { false }

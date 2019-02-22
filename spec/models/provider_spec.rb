@@ -238,4 +238,13 @@ RSpec.describe Provider, type: :model do
       end
     end
   end
+
+  describe '.opted_in' do
+    let!(:opted_in_provider) { create(:provider, opted_in: true) }
+    let!(:opted_out_provder) { create(:provider, opted_in: false) }
+
+    it 'returns only the opted_in provider' do
+      expect(Provider.opted_in).to match_array([opted_in_provider])
+    end
+  end
 end

@@ -14,7 +14,7 @@ module API
 
         ActiveRecord::Base.transaction do
           ActiveRecord::Base.connection.execute('LOCK provider, provider_enrichment, site IN SHARE UPDATE EXCLUSIVE MODE')
-          @providers = Provider.changed_since(changed_since).limit(per_page)
+          @providers = Provider.opted_in.changed_since(changed_since).limit(per_page)
         end
 
         last_provider = @providers.last
