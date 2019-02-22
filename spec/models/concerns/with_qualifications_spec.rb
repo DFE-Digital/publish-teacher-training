@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe Qualifications, type: :model do
+RSpec.describe WithQualifications, type: :model do
   qts_specs = [
     ["recommendation_for_qts", :not_pgde, :not_fe] => %i[qts]
   ]
@@ -40,13 +40,14 @@ RSpec.describe Qualifications, type: :model do
   specs.each do |spec|
     spec.each do |inputs, expected|
       profpost_flag = inputs[0]
-      is_pgde = (inputs[1] == :is_pgde)
-      is_further_education = (inputs[2] == :is_further_education)
+      factory_settings = []
+      factory_settings << :marked_as_pgde if inputs[1] == :is_pgde
+      factory_settings << :in_further_education if inputs[2] == :is_further_education
 
-      context "is #{profpost_flag} and is pgde #{is_pgde} and further education #{is_further_education}" do
-        subject { Qualifications.new(profpost_flag: profpost_flag, is_pgde: is_pgde, is_further_education: is_further_education) }
+      context "course with profpost_flag=#{profpost_flag}, #{factory_settings.join(', ')}" do
+        subject { create(:course, *factory_settings, profpost_flag: profpost_flag) }
 
-        its(:to_a) { should eq(expected) }
+        its(:qualifications) { should eq(expected) }
       end
     end
   end

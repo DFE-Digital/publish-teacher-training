@@ -12,7 +12,7 @@ describe "Course Factory" do
     let(:course) { create(:course, :resulting_in_pgde) }
 
     it "created course" do
-      expect(course.pgde?).to be true
+      expect(PGDECourse.is_one?(course)).to be true
     end
   end
 
