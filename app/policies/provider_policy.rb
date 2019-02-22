@@ -22,4 +22,10 @@ class ProviderPolicy
   def index?
     user.present?
   end
+
+  def show?
+    user.providers.include?(provider)
+  end
+
+  alias_method :can_list_courses?, :show?
 end
