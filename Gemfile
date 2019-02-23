@@ -51,6 +51,9 @@ gem 'jwt'
 # Formalise config settings with support for env vars
 gem 'config'
 
+# Nicer URL's
+gem 'friendly_id'
+
 group :development, :test do
   # add info about db structure to models and other files
   gem 'annotate'
