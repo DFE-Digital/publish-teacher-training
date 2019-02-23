@@ -22,12 +22,7 @@
 #
 
 class Course < ApplicationRecord
-  enum profpost_flag: {
-    recommendation_for_qts: "",
-    professional: "PF",
-    postgraduate: "PG",
-    professional_postgraduate: "BO",
-  }
+  include WithQualifications
 
   enum program_type: {
     higher_education_programme: "HE",

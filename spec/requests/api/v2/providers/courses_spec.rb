@@ -15,7 +15,7 @@ describe 'Courses API v2', type: :request do
     end
 
     let(:findable_open_course) {
-      create(:course,
+      create(:course, :resulting_in_pgce_with_qts,
              start_date: Time.now.utc,
              site_statuses: [create(:site_status, :findable, :with_any_vacancy, :applications_being_accepted_now)])
     }
@@ -70,9 +70,9 @@ describe 'Courses API v2', type: :request do
               "has_vacancies?" => true,
               "name" => provider.courses[0].name,
               "course_code" => provider.courses[0].course_code,
-              "profpost_flag" => provider.courses[0].profpost_flag,
               "start_date" => provider.courses[0].start_date.iso8601,
               "study_mode" => provider.courses[0].study_mode,
+              "qualifications" => %w[qts pgce],
             },
             "relationships" => {
               "accrediting_provider" => { "meta" => { "included" => false } },

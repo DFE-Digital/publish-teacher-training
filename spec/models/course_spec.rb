@@ -25,6 +25,7 @@ require 'rails_helper'
 
 RSpec.describe Course, type: :model do
   let(:subject) { create(:course) }
+
   describe 'associations' do
     it { should belong_to(:provider) }
     it { should belong_to(:accrediting_provider).optional }
@@ -176,6 +177,38 @@ RSpec.describe Course, type: :model do
       subject { Course.changed_since(course.updated_at) }
 
       it { should include course }
+    end
+  end
+
+  describe 'qualifications' do
+    context "course with qts qualication" do
+      let(:subject) { create(:course, :resulting_in_qts) }
+
+      its(:qualifications) { should eq %i[qts] }
+    end
+
+    context "course with pgce qts qualication" do
+      let(:subject) { create(:course, :resulting_in_pgce_with_qts) }
+
+      its(:qualifications) { should eq %i[qts pgce] }
+    end
+
+    context "course with pgde qts qualication" do
+      let(:subject) { create(:course, :resulting_in_pgde_with_qts) }
+
+      its(:qualifications) { should eq %i[qts pgde] }
+    end
+
+    context "course with pgce qualication" do
+      let(:subject) { create(:course, :resulting_in_pgce) }
+
+      its(:qualifications) { should eq %i[pgce] }
+    end
+
+    context "course with pgde qualication" do
+      let(:subject) { create(:course, :resulting_in_pgde) }
+
+      its(:qualifications) { should eq %i[pgde] }
     end
   end
 end

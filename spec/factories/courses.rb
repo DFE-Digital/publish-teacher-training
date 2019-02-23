@@ -27,7 +27,7 @@ FactoryBot.define do
     name { Faker::ProgrammingLanguage.name }
     qualification { 1 }
     association(:provider)
-
+    resulting_in_pgce_with_qts
 
     transient do
       age { nil }
@@ -38,6 +38,40 @@ FactoryBot.define do
         course.created_at = evaluator.age
         course.updated_at = evaluator.age
       end
+    end
+
+    trait :in_further_education do
+      after(:build) do |course|
+        course.subjects << create(:futher_education_subject)
+      end
+    end
+
+    trait :marked_as_pgde do
+      after(:build) do |course|
+        create(:pgde_course, provider_code: course.provider.provider_code, course_code: course.course_code)
+      end
+    end
+
+    trait :resulting_in_qts do
+      profpost_flag { :recommendation_for_qts }
+    end
+
+    trait :resulting_in_pgce_with_qts do
+      profpost_flag { %i[professional postgraduate professional_postgraduate].sample }
+    end
+
+    trait :resulting_in_pgde_with_qts do
+      marked_as_pgde
+    end
+
+    trait :resulting_in_pgce do
+      in_further_education
+      profpost_flag { %i[professional postgraduate professional_postgraduate].sample }
+    end
+
+    trait :resulting_in_pgde do
+      marked_as_pgde
+      in_further_education
     end
   end
 end
