@@ -33,6 +33,20 @@ module WithQualifications
       professional_postgraduate: "BO",
     }
 
+    # When UCAS basic courses were being imported into Manage Courses DB, this
+    # field wasn't coming from the UCAS data. Instead, the UCAS importer derived
+    # this field from the `profpost_flag`, the `pgde_course` table and from the
+    # subjects this course was tagged to.
+    #
+    # Defined here: https://github.com/DFE-Digital/manage-courses-api/blob/master/src/ManageCourses.Domain/Models/CourseQualification.cs
+    enum qualification: %i[
+      qts
+      pgce_with_qts
+      pgde_with_qts
+      pgce
+      pgde
+    ]
+
     def is_further_education?
       subjects.further_education.any?
     end

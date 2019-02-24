@@ -25,7 +25,7 @@ FactoryBot.define do
   factory :course do
     sequence(:course_code) { |n| "C#{n}D3" }
     name { Faker::ProgrammingLanguage.name }
-    qualification { 1 }
+    qualification { :pgce_with_qts }
     association(:provider)
     resulting_in_pgce_with_qts
 

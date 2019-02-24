@@ -46,7 +46,7 @@ course1 = Course.create!(
   english: 9,
   science: nil,
   modular: "M",
-  qualification: 1,
+  qualification: :pgce_with_qts,
   subjects: [
     Subject.find_by(subject_name: "Secondary"),
     Subject.find_by(subject_name: "Mathematics")
@@ -73,7 +73,7 @@ course2 = Course.create!(
   english: 9,
   science: nil,
   modular: "",
-  qualification: 1,
+  qualification: :pgce_with_qts,
   subjects: [
     Subject.find_by(subject_name: "Secondary"),
     Subject.find_by(subject_name: "Biology"),
@@ -100,7 +100,7 @@ Course.create!(
   course_code: "5W2A",
   provider: Provider.create!(provider_name: "Acme Alliance", provider_code: "A02"),
   accrediting_provider: accrediting_provider,
-  qualification: 1,
+  qualification: :pgce_with_qts,
   subjects: [
     Subject.last
   ]
@@ -110,7 +110,7 @@ Course.create!(
   name: Faker::ProgrammingLanguage.name,
   course_code: "9A5Y",
   provider: Provider.create!(provider_name: 'Big Uni', provider_code: 'B01'),
-  qualification: 1
+  qualification: :pgce_with_qts
 )
 
 10.times do |i|
