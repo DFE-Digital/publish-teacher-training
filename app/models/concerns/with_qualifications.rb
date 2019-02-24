@@ -47,27 +47,22 @@ module WithQualifications
       pgde
     ]
 
-    def is_further_education?
-      subjects.further_education.any?
-    end
-
+    # This field may seem like an unnecessary overhead when there is already a
+    # database-backed `qualification` field. However it's misleading, from the
+    # point of view of the teacher training domain, to think of 'PGCE with QTS'
+    # as a single qualification, since the QTS and PGCE aspects are completely
+    # separate and may even be delivered in different places by different providers.
+    # e.g. the QTS might come from a SCITT but the PGCE would come from a university.
+    #
+    # It's more accurate (and hopefully more future-proof) to represent qualifications
+    # as a list and leave the gluing of them to the presentation layer.
     def qualifications
-      qts_if_any + qualification_awarded_by_uni_if_any
-    end
-
-  private
-
-    def qts_if_any
-      is_further_education? ? [] : [:qts]
-    end
-
-    def qualification_awarded_by_uni_if_any
-      if PGDECourse.is_one?(self)
-        [:pgde]
-      elsif recommendation_for_qts?
-        []
-      else
-        [:pgce]
+      case qualification
+      when "qts" then [:qts]
+      when "pgce_with_qts" then %i[qts pgce]
+      when "pgde_with_qts" then %i[qts pgde]
+      when "pgce" then [:pgce]
+      when "pgde" then [:pgde]
       end
     end
   end

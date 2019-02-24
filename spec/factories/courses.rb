@@ -40,38 +40,24 @@ FactoryBot.define do
       end
     end
 
-    trait :in_further_education do
-      after(:build) do |course|
-        course.subjects << create(:futher_education_subject)
-      end
-    end
-
-    trait :marked_as_pgde do
-      after(:build) do |course|
-        create(:pgde_course, provider_code: course.provider.provider_code, course_code: course.course_code)
-      end
-    end
-
     trait :resulting_in_qts do
-      profpost_flag { :recommendation_for_qts }
+      qualification { :qts }
     end
 
     trait :resulting_in_pgce_with_qts do
-      profpost_flag { %i[professional postgraduate professional_postgraduate].sample }
+      qualification { :pgce_with_qts }
     end
 
     trait :resulting_in_pgde_with_qts do
-      marked_as_pgde
+      qualification { :pgde_with_qts }
     end
 
     trait :resulting_in_pgce do
-      in_further_education
-      profpost_flag { %i[professional postgraduate professional_postgraduate].sample }
+      qualification { :pgce }
     end
 
     trait :resulting_in_pgde do
-      marked_as_pgde
-      in_further_education
+      qualification { :pgde }
     end
   end
 end
