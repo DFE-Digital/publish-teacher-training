@@ -36,7 +36,6 @@ RSpec.describe "Courses API", type: :request do
         course_code: "2HPF",
         start_date: Date.new(2019, 9, 1),
         name: "Religious Education",
-        qualification: 1,
         sites: [site],
         subjects: [subject1, subject2],
         study_mode: :full_time,
@@ -87,7 +86,6 @@ RSpec.describe "Courses API", type: :request do
             "english" => 3,
             "maths" => 9,
             "science" => nil,
-            "qualification" => 1,
             "recruitment_cycle" => "2019",
             "campus_statuses" => [
               {

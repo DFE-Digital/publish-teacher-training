@@ -28,7 +28,7 @@ class CourseSerializer < ActiveModel::Serializer
   has_one :accrediting_provider, serializer: CourseProviderSerializer
 
   attributes :course_code, :start_month, :name, :study_mode, :copy_form_required, :profpost_flag,
-             :program_type, :modular, :english, :maths, :science, :qualification, :recruitment_cycle,
+             :program_type, :modular, :english, :maths, :science, :recruitment_cycle,
              :start_month_string, :age_range
 
   def profpost_flag
