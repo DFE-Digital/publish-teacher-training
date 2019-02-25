@@ -13,20 +13,21 @@ describe ProviderPolicy do
     end
   end
 
-  subject { ProviderPolicy.new(user, provider) }
+  subject { described_class }
 
-  describe 'show?' do
+  permissions :show? do
     let(:user) { create(:user) }
     let(:user_outside_org) { create(:user) }
     let(:provider) { create(:provider) }
     let!(:organisation) { create(:organisation, providers: [provider], users: [user]) }
 
-    it 'permits showing providers that the user can manage' do
-      expect(ProviderPolicy.new(user, provider).show?).to be_truthy
-    end
+    it { should permit(user, provider) }
+    it { should_not permit(user_outside_org, provider) }
+  end
 
-    it "doesn't permit showing providers outside the user's orgs" do
-      expect(ProviderPolicy.new(user_outside_org, provider).show?).to be_falsey
-    end
+  permissions :index? do
+    let(:user) { create(:user) }
+
+    it { should permit user }
   end
 end
