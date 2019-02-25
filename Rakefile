@@ -4,3 +4,7 @@
 require_relative 'config/application'
 
 Rails.application.load_tasks
+
+task lint: ['lint:ruby']
+task annotate: ['db:annotate']
+task default: %i[spec annotate lint]
