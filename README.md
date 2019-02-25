@@ -45,6 +45,28 @@ docker-compose exec web /bin/sh -c "bundle exec rails db:setup"
 
 Then open http://localhost:3000 to see the app.
 
+## Running specs, linter(without auto correct) and annotate models and serializers
+```
+bundle exec rake
+```
+
+## Running specs
+```
+bundle exec rspec
+```
+
+## Linting
+
+It's best to lint just your app directories and not those belonging to the framework:
+
+```bash
+bundle exec govuk-lint-ruby app config db lib spec --format clang
+
+or
+
+docker-compose exec web /bin/sh -c "bundle exec govuk-lint-ruby app config db lib spec Gemfile --format clang"
+```
+
 ## Accessing API
 
 ### V1
@@ -91,18 +113,6 @@ Encoding the payload can be done with the [Ruby `jwt` gem](https://github.com/jw
 
 ```
 JWT.encode payload, SECRET, 'HS256'
-```
-
-## Linting
-
-It's best to lint just your app directories and not those belonging to the framework:
-
-```bash
-bundle exec govuk-lint-ruby app config db lib spec --format clang
-
-or
-
-docker-compose exec web /bin/sh -c "bundle exec govuk-lint-ruby app config db lib spec Gemfile --format clang"
 ```
 
 ## CI variables
