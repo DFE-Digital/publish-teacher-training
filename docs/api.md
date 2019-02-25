@@ -73,10 +73,8 @@ incremental update should only be performed using the next-page urls provided
 in the response headers. With that in mind, these are the parameters you
 should expect to see:
 
-- `changed_since` - is an ISO 8601 timestamp stating the oldest change to include
-- `from_entity_id` where "entity" is "provider" or "course" - is an internal id
-  used in paging to ensure no ambiguity where record updates within the same
-  second have been split across pages
+- `changed_since` - is an ISO 8601 timestamp stating the oldest change to include.
+
 
 The header format is from [link header
 pagination](https://apievangelist.com/2016/05/02/http-header-awareness-using-the-link-header-for-pagination/).
@@ -140,8 +138,7 @@ This endpoint retrieves a paginated list of courses.
   records](#retrieving-records)
 - It provides the capability outlined above for [retrieving changed
   records](#retrieving-changed-records).
-- Results are sorted by `updated_at` with the oldest update first, then by
-  `course_id` ascending.
+- Results are sorted by `updated_at` with the oldest update first.
 
 ### Example HTTP Requests
 
@@ -329,9 +326,7 @@ This endpoint retrieves all institutions.
   records](#retrieving-records)
 - It provides the capability outlined above for [retrieving changed
   records](#retrieving-changed-records).
-- Results are sorted by `updated_at` with the oldest update first, then by
-  `provider_id` ascending.
-
+- Results are sorted by `updated_at` with the oldest update first.
 ### Example HTTP Request
 
 ```shell
