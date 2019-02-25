@@ -80,6 +80,9 @@ group :development, :test do
   gem 'rspec-rails'
 
   gem 'rspec-json_matchers'
+
+  # Allow us to freeze time in tests
+  gem 'timecop'
 end
 
 group :development do
