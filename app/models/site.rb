@@ -20,8 +20,4 @@ class Site < ApplicationRecord
   include RegionCode
 
   belongs_to :provider
-
-  def recruitment_cycle
-    "2019"
-  end
 end

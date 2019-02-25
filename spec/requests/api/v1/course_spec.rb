@@ -95,7 +95,6 @@ RSpec.describe "Courses API", type: :request do
                 "publish" => "Y",
                 "status" => "R",
                 "course_open_date" => "2018-10-09",
-                "recruitment_cycle" => "2019"
               }
             ],
             "subjects" => [

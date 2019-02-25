@@ -12,7 +12,7 @@
 #
 
 class SiteStatusSerializer < ActiveModel::Serializer
-  attributes :campus_code, :name, :vac_status, :publish, :status, :course_open_date, :recruitment_cycle
+  attributes :campus_code, :name, :vac_status, :publish, :status, :course_open_date
 
   def campus_code
     object.site.code
@@ -36,9 +36,5 @@ class SiteStatusSerializer < ActiveModel::Serializer
 
   def name
     object.site.location_name
-  end
-
-  def recruitment_cycle
-    object.recruitment_cycle
   end
 end

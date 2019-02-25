@@ -106,7 +106,6 @@ describe 'Providers API', type: :request do
                     'campus_code' => '-',
                     'name' => 'Main site',
                     'region_code' => '01',
-                    'recruitment_cycle' => '2019'
                   }
                 ],
                 'institution_code' => 'A123',
@@ -130,7 +129,6 @@ describe 'Providers API', type: :request do
                     'campus_code' => '-',
                     'name' => 'Main site',
                     'region_code' => '11',
-                    'recruitment_cycle' => '2019'
                   }
                 ],
                 'institution_code' => 'B123',
@@ -175,7 +173,6 @@ describe 'Providers API', type: :request do
                                       'campus_code' => '-',
                                       'name' => 'Main site',
                                       'region_code' => '01',
-                                      'recruitment_cycle' => '2019'
                                     }
                                   ],
                                   'institution_code' => 'A123',
@@ -199,7 +196,6 @@ describe 'Providers API', type: :request do
                                       'campus_code' => '-',
                                       'name' => 'Main site',
                                       'region_code' => '11',
-                                      'recruitment_cycle' => '2019'
                                     }
                                   ],
                                   'institution_code' => 'B123',

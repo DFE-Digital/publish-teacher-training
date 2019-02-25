@@ -17,7 +17,7 @@
 #
 
 class SiteSerializer < ActiveModel::Serializer
-  attributes :campus_code, :name, :region_code, :recruitment_cycle
+  attributes :campus_code, :name, :region_code
 
   def campus_code
     object.code
@@ -29,9 +29,5 @@ class SiteSerializer < ActiveModel::Serializer
 
   def region_code
     '%02d' % object.region_code_before_type_cast if object.region_code.present?
-  end
-
-  def recruitment_cycle
-    object.recruitment_cycle
   end
 end
