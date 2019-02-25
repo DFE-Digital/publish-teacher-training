@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe API::V1::ProvidersController, type: :controller do
+describe API::V1::ProvidersController, type: :controller do
   describe "index" do
     it "calls limit on the model with default value of 100" do
       allow(controller).to receive(:authenticate)
@@ -21,20 +21,44 @@ RSpec.describe API::V1::ProvidersController, type: :controller do
     end
 
     describe 'generated next link' do
-      let!(:old_provider) { create(:provider, last_published_at: 5.minute.ago.utc) }
-      let!(:last_provider) { create(:provider, last_published_at: 1.minute.ago.utc) }
-      let(:last_provider_id) { last_provider.id }
-
       before do
         allow(controller).to receive(:authenticate)
-
-        get :index, params: { changed_since: 10.minutes.ago.utc }
       end
 
-      subject { response.headers['Link'] }
+      subject { Rack::Utils.parse_query(URI(response.headers['Link']).query) }
 
-      it { is_expected.to match %r{changed_since=#{(last_provider.last_published_at + 1.second).iso8601}} }
-      it { is_expected.to match %r{from_provider_id=#{last_provider_id}} }
+      context 'with two providers changed at different times' do
+        let!(:old_provider)  { create(:provider, changed_at: 5.minute.ago.utc) }
+        let!(:last_provider) { create(:provider, changed_at: 1.minute.ago.utc) }
+
+        before do
+          get :index, params: { changed_since: changed_since.iso8601 }
+        end
+
+        context 'using a changed_since before any providers have changed' do
+          let(:changed_since) { 10.minutes.ago.utc }
+
+          its(%w[changed_since]) do
+            should eq last_provider.changed_at.strftime('%FT%T.%6NZ') 
+          end
+        end
+
+        context 'using a changed_since after any providers have changed' do
+          let(:changed_since) { Time.now.utc }
+
+          its(%w[changed_since])    { should eq changed_since.iso8601 }
+        end
+      end
+
+      context 'with no providers at all' do
+        let(:changed_since) { DateTime.now.utc }
+
+        before do
+          get :index, params: { changed_since: changed_since.iso8601 }
+        end
+
+        its(%w[changed_since])    { should eq changed_since.iso8601 }
+      end
     end
   end
 end

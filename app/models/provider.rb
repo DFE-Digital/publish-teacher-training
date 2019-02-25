@@ -49,9 +49,9 @@ class Provider < ApplicationRecord
            class_name: "ProviderEnrichment"
   has_many :courses
 
-  scope :changed_since, ->(datetime) do
-    if datetime.present?
-      where("changed_at >= ?", datetime)
+  scope :changed_since, ->(timestamp) do
+    if timestamp.present?
+      where("provider.changed_at > ?", timestamp)
     else
       where("changed_at is not null")
     end.order(:changed_at, :id)

@@ -215,7 +215,7 @@ describe Provider, type: :model do
   end
 
   describe '#changed_since' do
-    context 'with a provider that has been published after the given timestamp' do
+    context 'with a provider that has been changed after the given timestamp' do
       let(:provider) { create(:provider, changed_at: 5.minutes.ago) }
 
       subject { Provider.changed_since(10.minutes.ago) }
@@ -223,16 +223,25 @@ describe Provider, type: :model do
       it { should include provider }
     end
 
-    context 'with a provider that has been published exactly at the given timestamp' do
+    context 'with a provider that has been changed less than a second after the given timestamp' do
+      let(:timestamp) { 5.minutes.ago }
+      let(:provider) { create(:provider, changed_at: timestamp + (0.001).seconds) }
+
+      subject { Provider.changed_since(timestamp) }
+
+      it { should include provider }
+    end
+
+    context 'with a provider that has been changed exactly at the given timestamp' do
       let(:publish_time) { 10.minutes.ago }
       let(:provider) { create(:provider, changed_at: publish_time) }
 
       subject { Provider.changed_since(publish_time) }
 
-      it { should include provider }
+      it { should_not include provider }
     end
 
-    context 'with a provider that has been published before the given timestamp' do
+    context 'with a provider that has been changed before the given timestamp' do
       let(:provider) { create(:provider, changed_at: 1.hour.ago) }
 
       subject { Provider.changed_since(10.minutes.ago) }
