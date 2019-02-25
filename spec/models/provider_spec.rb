@@ -37,6 +37,20 @@ RSpec.describe Provider, type: :model do
     it { should have_many(:users).through(:organisations) }
   end
 
+  describe 'changed_at' do
+    it 'is set on create' do
+      expect(subject.changed_at).to be_present
+      expect(subject.changed_at).to eq subject.updated_at
+    end
+
+    it 'is set on update' do
+      provider = create(:provider, updated_at: 1.hour.ago)
+      provider.touch
+      expect(subject.changed_at).to eq subject.updated_at
+      expect(subject.changed_at).not_to be_within(1.second).of(1.hour.ago)
+    end
+  end
+
   describe '#address_info' do
     context 'empty enrichments' do
       it 'returns address of the provider' do
@@ -249,17 +263,28 @@ RSpec.describe Provider, type: :model do
     end
   end
 
-  describe 'changed_at' do
-    it 'is set on create' do
-      expect(subject.changed_at).to be_present
-      expect(subject.changed_at).to eq subject.updated_at
+  describe '#updated_changed_at' do
+    let(:provider) { create(:provider, changed_at: 1.hour.ago) }
+
+    it 'sets changed_at to the current time' do
+      Timecop.freeze do
+        provider.update_changed_at
+        expect(provider.changed_at).to eq Time.now.utc
+      end
     end
 
-    it 'is set on update' do
-      provider = create(:provider, updated_at: 1.hour.ago)
-      provider.touch
-      expect(subject.changed_at).to eq subject.updated_at
-      expect(subject.changed_at).not_to be_within(1.second).of(1.hour.ago)
+    it 'sets changed_at to the given time' do
+      timestamp = Time.now.utc
+      provider.update_changed_at timestamp: timestamp
+      expect(provider.changed_at).to eq timestamp
+    end
+
+    it 'leaves updated_at unchanged' do
+      timestamp = 1.hour.ago
+      provider.update updated_at: timestamp
+
+      provider.update_changed_at
+      expect(provider.updated_at).to eq timestamp
     end
   end
 end

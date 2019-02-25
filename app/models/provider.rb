@@ -65,4 +65,10 @@ class Provider < ApplicationRecord
       .attributes_before_type_cast
       .slice('address1', 'address2', 'address3', 'address4', 'postcode', 'region_code')
   end
+
+  def update_changed_at(timestamp: Time.now.utc)
+    # We don't want `updated_at` to change, only `changed_at`. Otherwise what
+    # would be the point of separating the two?
+    update_columns changed_at: timestamp
+  end
 end
