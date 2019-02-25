@@ -12,15 +12,7 @@ describe "Course Factory" do
     let(:course) { create(:course, :resulting_in_pgde) }
 
     it "created course" do
-      expect(PGDECourse.is_one?(course)).to be true
-    end
-  end
-
-  context "course in_further_education" do
-    let(:course) { create(:course, :in_further_education) }
-
-    it "created course" do
-      expect(course.subjects.further_education.any?).to be true
+      expect(course.qualification).to eq("pgde")
     end
   end
 end

@@ -7,11 +7,9 @@
 #  provider_code :text             not null
 #
 
-class PGDECourse < ApplicationRecord
-  def self.is_one?(course)
-    where(
-      course_code: course.course_code,
-      provider_code: course.provider.provider_code
-    ).exists?
-  end
-end
+# Prior to the UCAS transition, this class is only used in the UCAS importer to
+# calculate the `course#qualification` database column.
+#
+# TODO: delete this class (and entire table) after the UCAS transition is finished
+
+class PGDECourse < ApplicationRecord; end
