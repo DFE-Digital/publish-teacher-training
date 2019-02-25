@@ -225,7 +225,6 @@ endpoint) if any of these are true:
         "publish": "Y",
         "status": "R",
         "course_open_date": "2018-10-09",
-        "recruitment_cycle": "2019"
       }
     ],
     "subjects": [
@@ -266,7 +265,6 @@ endpoint) if any of these are true:
 | campus_code       | Text      | A-Z, 0-9, "-" or "" | 1-character campus codes |
 | name              | Text      |                     |
 | region_code       | Text      | 01 to 11            | 2-character string       |
-| recruitment_cycle | Text      |                     | 4-character year         |
 
 :warning: - _A single provider can have at most 37 campuses._
 
@@ -282,7 +280,6 @@ endpoint) if any of these are true:
 | publish           | Text                 |                   |
 | status            | Text                 |                   |
 | course_open_date  | ISO 8601 date string |                   |
-| recruitment_cycle | Text                 |                   | 4-character year         |
 
 ## Subjects
 
@@ -397,7 +394,6 @@ endpoint) if any of these are true:
       {
         "campus_code": "",
         "name": "Main Site",
-        "recruitment_cycle": "2019",
         "region_code": "01"
       }
     ]
