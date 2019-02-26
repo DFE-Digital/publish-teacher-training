@@ -9,7 +9,7 @@ module API
             # This method can be used in development mode to simplify querying
             # the API with curl. It should allow us to do:
             #
-            #    curl -H 'Authorization: Bearer user@education.gov.uk' http://localhost:3000/api/v2/providers
+            #    curl -H 'Authorization: Bearer user@education.gov.uk' http://localhost:3001/api/v2/providers
             email = token
           else
             (json_payload, _options) = JWT.decode(token,

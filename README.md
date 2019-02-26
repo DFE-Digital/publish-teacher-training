@@ -21,7 +21,7 @@
 
 1. Run `bundle install` to install the gem dependencies
 2. Run `bundle exec rails db:setup` to create a development and testing database
-3. Run `bundle exec rails server` to launch the app on http://localhost:3000.
+3. Run `bundle exec rails server` to launch the app on http://localhost:3001.
 
 ### Docker
 
@@ -43,7 +43,7 @@ The first time you run the app, you need to set up the databases. With the above
 docker-compose exec web /bin/sh -c "bundle exec rails db:setup"
 ```
 
-Then open http://localhost:3000 to see the app.
+Then open http://localhost:3001 to see the app.
 
 ## Running specs, linter(without auto correct) and annotate models and serializers
 ```
@@ -77,7 +77,7 @@ Quick check that it's working in local development with the token "bats"
 configured in `config/environments/development.rb`:
 
 ```bash
-curl http://localhost:3000/api/v1/2019/subjects.json -H "Authorization: Bearer bats"
+curl http://localhost:3001/api/v1/2019/subjects.json -H "Authorization: Bearer bats"
 ```
 
 ### V2
@@ -96,7 +96,7 @@ Authorization: Bearer user@digital.education.gov.uk
 or with curl:
 
 ```bash
-curl http://localhost:3000/api/v2/users.json -H "Authorization: Bearer user@digital.education.gov.uk"
+curl http://localhost:3001/api/v2/users.json -H "Authorization: Bearer user@digital.education.gov.uk"
 ```
 
 #### Production
