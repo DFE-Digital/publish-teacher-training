@@ -261,7 +261,7 @@ describe Provider, type: :model do
     end
   end
 
-  describe '#updated_changed_at' do
+  describe '#update_changed_at' do
     let(:provider) { create(:provider, changed_at: 1.hour.ago) }
 
     it 'sets changed_at to the current time' do
@@ -272,7 +272,7 @@ describe Provider, type: :model do
     end
 
     it 'sets changed_at to the given time' do
-      timestamp = Time.now.utc
+      timestamp = 1.hour.ago
       provider.update_changed_at timestamp: timestamp
       expect(provider.changed_at).to eq timestamp
     end

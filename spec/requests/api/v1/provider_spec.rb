@@ -359,6 +359,13 @@ describe 'Providers API', type: :request do
 
           get_next_providers response.headers['Link'].split(';').first
           expect(response.body).to have_provider_codes([])
+
+          random_provider = Provider.all.sample
+          random_provider.touch
+
+          get_next_providers response.headers['Link'].split(';').first
+          expect(response.body)
+            .to have_provider_codes([random_provider.provider_code])
         end
       end
     end

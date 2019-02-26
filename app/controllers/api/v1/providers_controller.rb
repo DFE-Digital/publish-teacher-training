@@ -27,6 +27,12 @@ module API
 
         last_provider = @providers.last
 
+        # When we extract the changed_at from the last provider, format it with
+        # sub-second timing information (micro-seconds) so that our incremental
+        # fetch can handle many records being updated within the same second.
+        #
+        # The strftime format '%FT%T.%6NZ' is similar to the ISO8601 standard,
+        # (equivalent to %FT%TZ) and adds micro-seconds (%6N).
         response.headers['Link'] = if last_provider
                                      next_link(last_provider.changed_at
                                                  .utc

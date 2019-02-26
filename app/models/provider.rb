@@ -67,8 +67,9 @@ class Provider < ApplicationRecord
   end
 
   def update_changed_at(timestamp: Time.now.utc)
-    # We don't want `updated_at` to change, only `changed_at`. Otherwise what
-    # would be the point of separating the two?
+    # Changed_at represents changes to related records as well as provider
+    # itself, so we don't want to alter the semantics of updated_at which
+    # represents changes to just the provider record.
     update_columns changed_at: timestamp
   end
 end
