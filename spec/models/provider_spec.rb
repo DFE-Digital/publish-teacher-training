@@ -45,10 +45,12 @@ describe Provider, type: :model do
     end
 
     it 'is set on update' do
-      provider = create(:provider, updated_at: 1.hour.ago)
-      provider.touch
-      expect(provider.changed_at).to eq provider.updated_at
-      expect(provider.changed_at).not_to be_within(1.second).of(1.hour.ago)
+      Timecop.freeze do
+        provider = create(:provider, updated_at: 1.hour.ago)
+        provider.touch
+        expect(provider.changed_at).to eq provider.updated_at
+        expect(provider.changed_at).to eq Time.now.utc
+      end
     end
   end
 
