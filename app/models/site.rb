@@ -20,4 +20,12 @@ class Site < ApplicationRecord
   include RegionCode
 
   belongs_to :provider
+
+  after_save :touch_provider
+
+private
+
+  def touch_provider
+    provider.update_changed_at
+  end
 end

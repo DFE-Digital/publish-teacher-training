@@ -29,6 +29,7 @@
 
 class Provider < ApplicationRecord
   include RegionCode
+  include ChangedAt
 
   enum provider_type: {
     scitt: "B",
@@ -48,12 +49,12 @@ class Provider < ApplicationRecord
            class_name: "ProviderEnrichment"
   has_many :courses
 
-  scope :changed_since, ->(datetime) do
-    if datetime.present?
-      where("last_published_at >= ?", datetime)
+  scope :changed_since, ->(timestamp) do
+    if timestamp.present?
+      where("provider.changed_at > ?", timestamp)
     else
-      where("last_published_at is not null")
-    end.order(:last_published_at, :id)
+      where("changed_at is not null")
+    end.order(:changed_at, :id)
   end
 
   scope :opted_in, -> { where(opted_in: true) }
@@ -63,5 +64,12 @@ class Provider < ApplicationRecord
     (enrichments.latest_created_at.with_address_info.first || self)
       .attributes_before_type_cast
       .slice('address1', 'address2', 'address3', 'address4', 'postcode', 'region_code')
+  end
+
+  def update_changed_at(timestamp: Time.now.utc)
+    # Changed_at represents changes to related records as well as provider
+    # itself, so we don't want to alter the semantics of updated_at which
+    # represents changes to just the provider record.
+    update_columns changed_at: timestamp
   end
 end

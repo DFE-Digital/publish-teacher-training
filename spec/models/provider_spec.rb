@@ -29,12 +29,29 @@
 
 require 'rails_helper'
 
-RSpec.describe Provider, type: :model do
+describe Provider, type: :model do
   subject { create(:provider) }
 
   describe 'associations' do
     it { should have_many(:sites) }
     it { should have_many(:users).through(:organisations) }
+  end
+
+  describe 'changed_at' do
+    it 'is set on create' do
+      provider = Provider.create
+      expect(provider.changed_at).to be_present
+      expect(provider.changed_at).to eq provider.updated_at
+    end
+
+    it 'is set on update' do
+      Timecop.freeze do
+        provider = create(:provider, updated_at: 1.hour.ago)
+        provider.touch
+        expect(provider.changed_at).to eq provider.updated_at
+        expect(provider.changed_at).to eq Time.now.utc
+      end
+    end
   end
 
   describe '#address_info' do
@@ -200,43 +217,38 @@ RSpec.describe Provider, type: :model do
   end
 
   describe '#changed_since' do
-    context 'with a provider that has been published after the given timestamp' do
-      let(:provider) { create(:provider, last_published_at: 5.minutes.ago) }
+    context 'with a provider that has been changed after the given timestamp' do
+      let(:provider) { create(:provider, changed_at: 5.minutes.ago) }
 
       subject { Provider.changed_since(10.minutes.ago) }
 
       it { should include provider }
     end
 
-    context 'with a provider that has been published exactly at the given timestamp' do
+    context 'with a provider that has been changed less than a second after the given timestamp' do
+      let(:timestamp) { 5.minutes.ago }
+      let(:provider) { create(:provider, changed_at: timestamp + 0.001.seconds) }
+
+      subject { Provider.changed_since(timestamp) }
+
+      it { should include provider }
+    end
+
+    context 'with a provider that has been changed exactly at the given timestamp' do
       let(:publish_time) { 10.minutes.ago }
-      let(:provider) { create(:provider, last_published_at: publish_time) }
+      let(:provider) { create(:provider, changed_at: publish_time) }
 
       subject { Provider.changed_since(publish_time) }
-
-      it { should include provider }
-    end
-
-    context 'with a provider that has been published before the given timestamp' do
-      let(:provider) { create(:provider, last_published_at: 1.hour.ago) }
-
-      subject { Provider.changed_since(10.minutes.ago) }
 
       it { should_not include provider }
     end
 
-    context 'with a provider that has never been published' do
-      let(:provider) { create(:provider, last_published_at: nil) }
+    context 'with a provider that has been changed before the given timestamp' do
+      let(:provider) { create(:provider, changed_at: 1.hour.ago) }
 
-      describe 'with non-nil changed_since' do
-        subject { Provider.changed_since(10.minutes.ago) }
-        it { should_not include provider }
-      end
+      subject { Provider.changed_since(10.minutes.ago) }
 
-      describe 'with changed_since set to nil' do
-        subject { Provider.changed_since(nil) }
-        it { should_not include provider }
-      end
+      it { should_not include provider }
     end
   end
 
@@ -246,6 +258,31 @@ RSpec.describe Provider, type: :model do
 
     it 'returns only the opted_in provider' do
       expect(Provider.opted_in).to match_array([opted_in_provider])
+    end
+  end
+
+  describe '#update_changed_at' do
+    let(:provider) { create(:provider, changed_at: 1.hour.ago) }
+
+    it 'sets changed_at to the current time' do
+      Timecop.freeze do
+        provider.update_changed_at
+        expect(provider.changed_at).to eq Time.now.utc
+      end
+    end
+
+    it 'sets changed_at to the given time' do
+      timestamp = 1.hour.ago
+      provider.update_changed_at timestamp: timestamp
+      expect(provider.changed_at).to eq timestamp
+    end
+
+    it 'leaves updated_at unchanged' do
+      timestamp = 1.hour.ago
+      provider.update updated_at: timestamp
+
+      provider.update_changed_at
+      expect(provider.updated_at).to eq timestamp
     end
   end
 end
