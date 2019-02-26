@@ -23,8 +23,6 @@ class ProviderEnrichment < ApplicationRecord
 
   belongs_to :provider, foreign_key: :provider_code, primary_key: :provider_code
 
-  after_save :touch_provider
-
   scope :with_address_info,
         -> do
           where("json_data ?| array['Address1', 'Address2', 'Address3', 'Address4', 'Postcode']")

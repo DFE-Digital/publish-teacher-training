@@ -21,6 +21,4 @@ class Site < ApplicationRecord
   include TouchProvider
 
   belongs_to :provider
-
-  after_save :touch_provider
 end
