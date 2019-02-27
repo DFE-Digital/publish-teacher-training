@@ -115,6 +115,33 @@ Encoding the payload can be done with the [Ruby `jwt` gem](https://github.com/jw
 JWT.encode payload, SECRET, 'HS256'
 ```
 
+## Settings vs config vs Environment variables
+
+Refer to the [the config gem](https://github.com/railsconfig/config#accessing-the-settings-object) to understand the `file based settings` loading order.
+
+To override file based via `Machine based env variables settings`
+```bash
+cat config/settings.yml
+file
+  based
+    settings
+      env1: 'some file based value'
+```
+
+```bash
+export SETTINGS__FILE__BASED__SETTINGS__ENV1="machine wins"
+```
+
+```ruby
+puts Settings.file.based.setting.env1
+
+machine wins
+```
+
+Any `Machine based env variables settings` that is not prefixed with `SETTINGS`.* are not considered for general consumption.
+
+
+
 ## CI variables
 
 You'll need to define the `AZURE_CR_PASSWORD` in Travis in order to successfully build and publish. This can be done using this command:
