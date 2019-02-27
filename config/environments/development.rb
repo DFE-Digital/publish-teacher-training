@@ -44,5 +44,5 @@ Rails.application.configure do
   # routes, locales, etc. This feature depends on the listen gem.
   config.file_watcher = ActiveSupport::EventedFileUpdateChecker
 
-  config.authentication_token = "bats"
+  config.authentication_token = ENV.fetch("AUTHENTICATION_TOKEN", "bats")
 end
