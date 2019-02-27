@@ -26,7 +26,7 @@ FactoryBot.define do
     sequence(:course_code) { |n| "C#{n}D3" }
     name { Faker::ProgrammingLanguage.name }
     qualification { :pgce_with_qts }
-    association(:provider)
+    association(:provider, course_count: 0)
     resulting_in_pgce_with_qts
 
     transient do

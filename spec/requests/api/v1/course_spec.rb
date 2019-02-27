@@ -58,7 +58,8 @@ RSpec.describe "Courses API", type: :request do
 
     context "without changed_since parameter" do
       it "returns http success" do
-        get "/api/v1/2019/courses", headers: { 'HTTP_AUTHORIZATION' => credentials }
+        get '/api/v1/2019/courses',
+            headers: { 'HTTP_AUTHORIZATION' => credentials }
         expect(response).to have_http_status(:success)
       end
 
@@ -118,6 +119,32 @@ RSpec.describe "Courses API", type: :request do
           }
         ])
       end
+
+      it 'includes correct next link in response headers' do
+        create(:course,
+               course_code: "LAST1",
+               age: 10.minutes.ago,
+               provider: provider)
+
+        timestamp_of_last_course = 2.minutes.ago
+        _last_course_in_results = create(:course,
+                                         course_code: "LAST2",
+                                         age: timestamp_of_last_course,
+                                         provider: provider)
+
+        get '/api/v1/courses',
+          headers: { 'HTTP_AUTHORIZATION' => credentials }
+
+        expect(response.headers).to have_key "Link"
+        url = url_for(
+          params: {
+            changed_since: timestamp_of_last_course.utc.strftime('%FT%T.%6NZ'),
+            per_page: 100
+          }
+        )
+
+        expect(response.headers["Link"]).to match "#{url}; rel=\"next\""
+      end
     end
 
     context "with changed_since parameter" do
@@ -137,19 +164,31 @@ RSpec.describe "Courses API", type: :request do
         end
       end
 
+
+
       it 'includes correct next link in response headers' do
-        create(:course, course_code: "LAST1", age: 10.minutes.ago, provider: provider)
+        create(:course,
+               course_code: "LAST1",
+               age: 10.minutes.ago,
+               provider: provider)
 
         timestamp_of_last_course = 2.minutes.ago
-        last_course_in_results = create(:course, course_code: "LAST2", age: timestamp_of_last_course, provider: provider)
+        _last_course_in_results = create(:course,
+                                         course_code: "LAST2",
+                                         age: timestamp_of_last_course,
+                                         provider: provider)
 
         get '/api/v1/courses',
           headers: { 'HTTP_AUTHORIZATION' => credentials },
           params: { changed_since: 30.minutes.ago.utc.iso8601 }
 
+
         expect(response.headers).to have_key "Link"
-        expected = /#{request.base_url + request.path}\?changed_since=#{(timestamp_of_last_course + 1.second).utc.iso8601}&from_course_id=#{last_course_in_results.id}&per_page=100; rel="next"$/
-        expect(response.headers["Link"]).to match expected
+        url = url_for(params: {
+                        changed_since: timestamp_of_last_course.utc.strftime('%FT%T.%6NZ'),
+                        per_page: 100
+                      })
+        expect(response.headers["Link"]).to match "#{url}; rel=\"next\""
       end
 
       it 'includes correct next link when there is an empty set' do
@@ -159,8 +198,11 @@ RSpec.describe "Courses API", type: :request do
           headers: { 'HTTP_AUTHORIZATION' => credentials },
           params: { changed_since: provided_timestamp }
 
-        expected = /#{request.base_url + request.path}\?changed_since=#{provided_timestamp}&from_course_id=&per_page=100; rel="next"$/
-        expect(response.headers["Link"]).to match expected
+        url = url_for(params: {
+                        changed_since: provided_timestamp,
+                        per_page: 100
+                      })
+        expect(response.headers["Link"]).to match "#{url}; rel=\"next\""
       end
 
       context "with many courses" do
