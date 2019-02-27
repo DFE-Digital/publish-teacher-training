@@ -129,13 +129,13 @@ file
 ```
 
 ```bash
-export SETTINGS__FILE__BASED__SETTINGS_ENV1="machine wins"
+export SETTINGS__FILE__BASED__SETTINGS__ENV1="machine wins"
 ```
 
 ```ruby
 puts Settings.file.based.setting.env1
 
-# machine wins
+machine wins
 ```
 
 Any `Machine based env variables settings` that is not prefixed with `SETTINGS`.* are not considered for general consumption.
