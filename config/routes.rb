@@ -69,7 +69,7 @@ Rails.application.routes.draw do
         end
       end
 
-      resource :session
+      resource :sessions
     end
   end
 
