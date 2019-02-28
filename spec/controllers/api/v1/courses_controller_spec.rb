@@ -20,6 +20,20 @@ describe API::V1::CoursesController, type: :controller do
       end
     end
 
+    RSpec::Matchers.define :have_empty_response do
+      match do |body|
+        json = JSON.parse(body)
+        json == []
+      end
+
+      failure_message do |body|
+        <<~STRING
+          Expected empty array '[]' response, got:
+          #{body}
+        STRING
+      end
+    end
+
     # Format we use for changed_since param.
     let(:timestamp_format) { '%FT%T.%6NZ' }
 
@@ -105,7 +119,6 @@ describe API::V1::CoursesController, type: :controller do
     end
 
     context 'with no courses at all' do
-      # No courses, so this could be anything really.
       let(:changed_since) { 10.minutes.ago.utc }
 
       before do
@@ -115,8 +128,7 @@ describe API::V1::CoursesController, type: :controller do
       describe 'returned courses in JSON' do
         subject { response.body }
 
-        # TODO: This isn't very clear, it should be "should_not have_courses"
-        it { should have_courses }
+        it { should have_empty_response }
       end
 
       describe 'generated next link' do
