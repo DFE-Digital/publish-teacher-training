@@ -43,8 +43,14 @@ describe 'Providers API v2', type: :request do
             "type" => "providers",
             "attributes" => {
               "institution_code" => provider.provider_code,
-              "institution_name" => provider.provider_name,
-              "course_count" => provider.courses.count
+              "institution_name" => provider.provider_name
+            },
+            "relationships" => {
+              "courses" => {
+                "meta" => {
+                  "count" => provider.courses.count
+                }
+              }
             }
           }],
           "jsonapi" => {
@@ -67,8 +73,14 @@ describe 'Providers API v2', type: :request do
             "type" => "providers",
             "attributes" => {
               "institution_code" => provider.provider_code,
-              "institution_name" => provider.provider_name,
-              "course_count" => provider.courses.count
+              "institution_name" => provider.provider_name
+            },
+            "relationships" => {
+              "courses" => {
+                "meta" => {
+                  "count" => provider.courses.count
+                }
+              }
             }
           }],
           "jsonapi" => {

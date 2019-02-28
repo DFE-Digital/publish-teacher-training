@@ -11,8 +11,10 @@ module API
         @object.provider_name
       end
 
-      attribute :course_count do
-        @object.courses.count
+      has_many :courses do
+        meta do
+          { count: @object.courses.count }
+        end
       end
     end
   end
