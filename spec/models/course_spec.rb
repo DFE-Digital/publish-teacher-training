@@ -227,4 +227,22 @@ RSpec.describe Course, type: :model do
       its(:qualifications) { should eq %i[pgde] }
     end
   end
+
+  describe '.providers_have_opted_in' do
+    let(:course) { create(:course, provider: provider) }
+
+    subject { Course.providers_have_opted_in }
+
+    context 'provider is opted in' do
+      let(:provider) { create(:provider, opted_in: true) }
+
+      it { should include(course) }
+    end
+
+    context 'provider is opted in' do
+      let(:provider) { create(:provider, opted_in: false) }
+
+      it { should_not include(course) }
+    end
+  end
 end

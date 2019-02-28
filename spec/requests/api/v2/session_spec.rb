@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe '/api/v2/session', type: :request do
+describe '/api/v2/sessions', type: :request do
   let(:user)    { create(:user) }
   let(:payload) { { email: user.email } }
   let(:token) do
@@ -16,7 +16,7 @@ describe '/api/v2/session', type: :request do
     let(:payload) { { email: 'foo@bar' } }
 
     before do
-      get "/api/v2/users/#{user.id}",
+      post "/api/v2/sessions",
           headers: { 'HTTP_AUTHORIZATION' => credentials }
     end
 
@@ -29,7 +29,7 @@ describe '/api/v2/session', type: :request do
     let(:user)    { create(:user, last_login_date_utc: 10.days.ago) }
     it 'saves the last login time' do
       Timecop.freeze do
-        post '/api/v2/session',
+        post '/api/v2/sessions',
              headers: { 'HTTP_AUTHORIZATION' => credentials }
 
         # OS vs TimeCop vs db, most likely db (nanoseconds are omitted), hence
@@ -39,7 +39,7 @@ describe '/api/v2/session', type: :request do
     end
 
     it 'returns the user record' do
-      post '/api/v2/session',
+      post '/api/v2/sessions',
            headers: { 'HTTP_AUTHORIZATION' => credentials },
            params: { first_name: user.first_name, last_name: user.last_name }
 
@@ -61,7 +61,7 @@ describe '/api/v2/session', type: :request do
     end
 
     it 'returns the updated user record' do
-      post '/api/v2/session',
+      post '/api/v2/sessions',
            headers: { 'HTTP_AUTHORIZATION' => credentials },
            params: { first_name: "updated first_name", last_name: "updated last_name" }
 
