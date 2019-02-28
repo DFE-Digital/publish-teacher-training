@@ -12,7 +12,7 @@ module API
           ActiveRecord::Base.connection.execute('LOCK provider, provider_enrichment, site IN SHARE UPDATE EXCLUSIVE MODE')
           # TODO: This will need to be scoped to opted-in providers.
           @courses = Course
-          .providers_have_opted_in
+                       .providers_have_opted_in
                        .includes(:sites, :provider, :site_statuses, :subjects)
                        .changed_since(changed_since)
                        .limit(per_page)
