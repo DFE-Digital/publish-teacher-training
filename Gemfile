@@ -100,6 +100,7 @@ group :test do
   gem 'database_cleaner'
   gem 'factory_bot_rails', '~> 5.0'
   gem 'faker'
+  gem "jsonapi-rspec"
   gem "rspec_junit_formatter"
   gem 'shoulda-matchers', '~> 4.0'
   gem 'simplecov', require: false

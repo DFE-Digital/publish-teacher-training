@@ -13,7 +13,7 @@ module API
         render jsonapi: @current_user
       end
 
-      private
+    private
 
       def create_params
         params.require(:session).permit(:first_name, :last_name)
