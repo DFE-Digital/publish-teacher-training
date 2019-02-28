@@ -57,7 +57,7 @@ class Course < ApplicationRecord
     if timestamp.present?
       where("course.updated_at > ?", timestamp)
     else
-      where("updated_at is not null")
+      where.not(updated_at: nil)
     end.order(:updated_at, :id)
   end
 
