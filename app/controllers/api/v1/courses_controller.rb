@@ -10,6 +10,7 @@ module API
         from_course_id = params[:from_course_id].to_i
 
         @courses = Course
+          .providers_have_opted_in
           .includes(:sites, :provider, :site_statuses, :subjects)
           .changed_since(changed_since, from_course_id)
 
