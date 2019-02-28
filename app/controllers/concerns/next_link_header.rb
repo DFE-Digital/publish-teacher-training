@@ -3,17 +3,17 @@ module NextLinkHeader
 
 private
 
-  def next_link_header(from_key_string, last_object, next_object, changed_since, per_page)
-    response.headers['Link'] = if last_object
-                                 next_object_timestamp = (next_object ? next_object.updated_at : last_object.updated_at + 1.second).utc.iso8601
-                                 header_content(from_key_string, next_object_timestamp, last_object.id, per_page)
-                               else
-                                 header_content(from_key_string, changed_since, "", per_page)
-                               end
+  def set_next_link_header_using_changed_since_or_last_object(last_object,
+                                                              params = {})
+    if last_object.present?
+      params[:changed_since] =
+        incremental_load_timestamp_format last_object.updated_at
+    end
+
+    response.headers['Link'] = "#{url_for(params: params)}; rel=\"next\""
   end
 
-  def header_content(from_key_string, changed_since, from_object_id, per_page)
-    current_url = request.base_url + request.path
-    "#{current_url}?changed_since=#{changed_since}&#{from_key_string}=#{from_object_id}&per_page=#{per_page}; rel=\"next\""
+  def incremental_load_timestamp_format(timestamp)
+    timestamp.strftime('%FT%T.%6NZ')
   end
 end

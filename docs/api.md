@@ -151,7 +151,7 @@ curl -v "https://api2.publish-teacher-training-courses.service.gov.uk/api/v1/201
 Subsequent pages / incremental fetch, using the "next" url in the "Link" header from the previous request:
 
 ```shell
-curl -v "https://api2.publish-teacher-training-courses.service.gov.uk/api/v1/2019/courses?changed_since=xxx&from_course_id=nnn" -H "Authorization: Bearer your_api_key"
+curl -v "https://api2.publish-teacher-training-courses.service.gov.uk/api/v1/2019/courses?changed_since=xxx" -H "Authorization: Bearer your_api_key"
 ```
 
 ### What constitutes a course change

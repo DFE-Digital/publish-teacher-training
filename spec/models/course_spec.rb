@@ -155,16 +155,20 @@ RSpec.describe Course, type: :model do
   end
 
   describe '#changed_since' do
-    let!(:old_course) { create(:course, age: 1.hour.ago) }
-    let!(:course) { create(:course, age: 1.hour.ago) }
-
     context 'with no parameters' do
+      let!(:old_course) { create(:course, age: 1.hour.ago) }
+      let!(:course) { create(:course, age: 1.hour.ago) }
+
       subject { Course.changed_since(nil) }
+
       it { should include course }
       it { should include old_course }
     end
 
     context 'with a course that was just updated' do
+      let(:course) { create(:course, age: 1.hour.ago) }
+      let!(:old_course) { create(:course, age: 1.hour.ago) }
+
       before { course.touch }
 
       subject { Course.changed_since(10.minutes.ago) }
@@ -173,10 +177,22 @@ RSpec.describe Course, type: :model do
       it { should_not include old_course }
     end
 
-    context 'when the checked timestamp matches the course updated_at' do
-      subject { Course.changed_since(course.updated_at) }
+    context 'with a course that has been changed less than a second after the given timestamp' do
+      let(:timestamp) { 5.minutes.ago }
+      let(:course) { create(:course, updated_at: timestamp + 0.001.seconds) }
+
+      subject { Course.changed_since(timestamp) }
 
       it { should include course }
+    end
+
+    context 'with a course that has been changed exactly at the given timestamp' do
+      let(:timestamp) { 10.minutes.ago }
+      let(:course) { create(:course, updated_at: timestamp) }
+
+      subject { Course.changed_since(timestamp) }
+
+      it { should_not include course }
     end
   end
 

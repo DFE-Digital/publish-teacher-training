@@ -7,18 +7,22 @@ module API
       def index
         per_page = (params[:per_page] || 100).to_i
         changed_since = params[:changed_since]
-        from_course_id = params[:from_course_id].to_i
 
-        @courses = Course
-          .providers_have_opted_in
-          .includes(:sites, :provider, :site_statuses, :subjects)
-          .changed_since(changed_since, from_course_id)
+        ActiveRecord::Base.transaction do
+          ActiveRecord::Base.connection.execute('LOCK provider, provider_enrichment, site IN SHARE UPDATE EXCLUSIVE MODE')
+          # TODO: This will need to be scoped to opted-in providers.
+          @courses = Course
+                       .providers_have_opted_in
+                       .includes(:sites, :provider, :site_statuses, :subjects)
+                       .changed_since(changed_since)
+                       .limit(per_page)
+        end
 
-        next_course = first_item_from_next_page(@courses, per_page)
-
-        @courses = @courses.limit(per_page)
-
-        next_link_header("from_course_id", @courses.last, next_course, changed_since, per_page)
+        set_next_link_header_using_changed_since_or_last_object(
+          @courses.last,
+          changed_since: changed_since,
+          per_page: per_page
+        )
 
         render json: @courses
       rescue ActiveRecord::StatementInvalid

@@ -53,10 +53,12 @@ class Course < ApplicationRecord
   has_many :site_statuses
   has_many :sites, through: :site_statuses
 
-  scope :changed_since, ->(datetime, from_course_id = 0) do
-    if datetime.present?
-      where("course.updated_at >= ? AND course.id > ?", datetime, from_course_id).order(:updated_at, :id)
-    end
+  scope :changed_since, ->(timestamp) do
+    if timestamp.present?
+      where("course.updated_at > ?", timestamp)
+    else
+      where.not(updated_at: nil)
+    end.order(:updated_at, :id)
   end
 
   scope :providers_have_opted_in, -> { joins(:provider).merge(Provider.opted_in) }
