@@ -10,6 +10,12 @@ module API
       attribute :institution_name do
         @object.provider_name
       end
+
+      has_many :courses do
+        meta do
+          { count: @object.courses.count }
+        end
+      end
     end
   end
 end
