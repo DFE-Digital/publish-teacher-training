@@ -123,7 +123,8 @@ describe 'Providers API', type: :request do
                 'scheme_member' => 'Y',
                 'telephone' => '020 812 345 678',
                 'email' => 'info@acmescitt.education.uk',
-                'contact_name' => 'Amy Smith'
+                'contact_name' => 'Amy Smith',
+                'recruitment_cycle' => '2019'
               },
               {
                 'accrediting_provider' => 'N',
@@ -146,7 +147,8 @@ describe 'Providers API', type: :request do
                 'scheme_member' => 'N',
                 'telephone' => '01273 345 678',
                 'email' => 'info@acmeuniversity.education.uk',
-                'contact_name' => 'James Brown'
+                'contact_name' => 'James Brown',
+                'recruitment_cycle' => '2019'
               }
             ]
           )
@@ -190,7 +192,8 @@ describe 'Providers API', type: :request do
                                   'scheme_member' => 'Y',
                                   'telephone' => '020 812 345 678',
                                   'email' => 'info@acmescitt.education.uk',
-                                  'contact_name' => 'Amy Smith'
+                                  'contact_name' => 'Amy Smith',
+                                  'recruitment_cycle' => '2019'
                                 },
                                 {
                                   'accrediting_provider' => 'N',
@@ -213,7 +216,8 @@ describe 'Providers API', type: :request do
                                   'scheme_member' => 'N',
                                   'telephone' => '01273 345 678',
                                   'email' => 'info@acmeuniversity.education.uk',
-                                  'contact_name' => 'James Brown'
+                                  'contact_name' => 'James Brown',
+                                  'recruitment_cycle' => '2019'
                                 }
                               ])
         end

@@ -32,7 +32,7 @@ class ProviderSerializer < ActiveModel::Serializer
 
   attributes :institution_code, :institution_name, :institution_type, :accrediting_provider,
              :address1, :address2, :address3, :address4, :postcode, :region_code, :scheme_member,
-             :contact_name, :email, :telephone
+             :contact_name, :email, :telephone, :recruitment_cycle
 
   def institution_code
     object.provider_code

@@ -72,4 +72,8 @@ class Provider < ApplicationRecord
     # represents changes to just the provider record.
     update_columns changed_at: timestamp
   end
+
+  def recruitment_cycle
+    "2019"
+  end
 end
