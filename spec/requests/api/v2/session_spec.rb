@@ -165,8 +165,7 @@ describe '/api/v2/sessions', type: :request do
       expect {
         post(
           '/api/v2/sessions',
-          headers: { 'HTTP_AUTHORIZATION' => credentials },
-          params: params
+          headers: { 'HTTP_AUTHORIZATION' => credentials }
         ) rescue nil
       }.not_to(change { user.reload })
     end
