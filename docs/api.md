@@ -79,15 +79,6 @@ should expect to see:
 The header format is from [link header
 pagination](https://apievangelist.com/2016/05/02/http-header-awareness-using-the-link-header-for-pagination/).
 
-The details of the mechanism are intended to avoid the risk of missing changes under edge-case conditions such as:
-
-- Bulk updates are happening to the data at the same time as a client is paging
-  through results.
-- More than a single page of records are updated within the same second.
-- Timestamps being generated for changes but delayed in being written to the
-  database due to transaction contention.
-- Clock skew between server generating timestamps and other servers involved.
-
 # Errors
 
 The API uses the following error codes:
@@ -138,7 +129,7 @@ This endpoint retrieves a paginated list of courses.
   records](#retrieving-records)
 - It provides the capability outlined above for [retrieving changed
   records](#retrieving-changed-records).
-- Results are sorted by `updated_at` with the oldest update first.
+- Results are sorted oldest update first.
 
 ### Example HTTP Requests
 
@@ -323,7 +314,7 @@ This endpoint retrieves all institutions.
   records](#retrieving-records)
 - It provides the capability outlined above for [retrieving changed
   records](#retrieving-changed-records).
-- Results are sorted by `updated_at` with the oldest update first.
+- Results are sorted oldest update first.
 ### Example HTTP Request
 
 ```shell
