@@ -107,6 +107,12 @@
       "metadata": {
         "description": "Connection string for Sentry monitoring."
       }
+    },
+    "settingsAuthenticationSecret": {
+        "type": "string",
+        "metadata": {
+            "description": "Auth secret for manage back-end."
+        }
     }
   },
   "variables": {
@@ -223,6 +229,10 @@
               {
                 "name": "SENTRY_DSN",
                 "value": "[parameters('sentryDSN')]"
+              },
+              {
+                  "name": "SETTINGS__AUTHENTICATION__SECRET",
+                  "value": "[parameters('settingsAuthenticationSecret')]"
               }
             ]
           },
