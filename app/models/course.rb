@@ -57,10 +57,10 @@ class Course < ApplicationRecord
 
   scope :changed_since, ->(timestamp) do
     if timestamp.present?
-      where("course.updated_at > ?", timestamp)
+      where("course.changed_at > ?", timestamp)
     else
-      where.not(updated_at: nil)
-    end.order(:updated_at, :id)
+      where.not(changed_at: nil)
+    end.order(:changed_at, :id)
   end
 
   scope :providers_have_opted_in, -> { joins(:provider).merge(Provider.opted_in) }

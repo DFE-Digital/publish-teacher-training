@@ -65,8 +65,8 @@ describe API::V1::CoursesController, type: :controller do
     end
 
     context 'with two courses changed at different times' do
-      let(:old_course)  { create(:course, updated_at: 5.minute.ago.utc) }
-      let(:last_course) { create(:course, updated_at: 1.minute.ago.utc) }
+      let(:old_course)  { create(:course, changed_at: 5.minute.ago.utc) }
+      let(:last_course) { create(:course, changed_at: 1.minute.ago.utc) }
 
       # We need to define the before block after any let! statements since they
       # are run in order of definition: we need to call the controller action
@@ -98,7 +98,7 @@ describe API::V1::CoursesController, type: :controller do
 
           its(%w[per_page]) { should eq '100' }
           its(%w[changed_since]) do
-            should eq format_timestamp(last_course.updated_at)
+            should eq format_timestamp(last_course.changed_at)
           end
         end
       end

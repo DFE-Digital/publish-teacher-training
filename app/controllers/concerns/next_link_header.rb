@@ -7,7 +7,7 @@ private
                                                               params = {})
     if last_object.present?
       params[:changed_since] =
-        incremental_load_timestamp_format last_object.updated_at
+        incremental_load_timestamp_format last_object.changed_at
     end
 
     response.headers['Link'] = "#{url_for(params: params)}; rel=\"next\""

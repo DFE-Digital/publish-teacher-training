@@ -38,6 +38,7 @@ FactoryBot.define do
       if evaluator.age.present?
         course.created_at = evaluator.age
         course.updated_at = evaluator.age
+        course.changed_at = evaluator.age
       end
     end
 
