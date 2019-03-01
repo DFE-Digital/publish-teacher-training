@@ -125,9 +125,7 @@ describe '/api/v2/sessions', type: :request do
           "last_name" => "updated invalid last_name",
         }
       end
-
       let(:type) { "invalid" }
-
       let(:returned_json_response) { JSON.parse response.body }
 
       # session type
@@ -138,17 +136,24 @@ describe '/api/v2/sessions', type: :request do
       # pp params[:session]
       #<ActionController::Parameters {"type"=>"invalid", "first_name"=>"update invalid first_name", "last_name"=>"updated invalid last_name"} permitted: false>
 
-      # concerns are "first_name" & "last_name" and not "type" == "session"
-      it 'returns the updated user record' do
-        post '/api/v2/sessions',
-        headers: { 'HTTP_AUTHORIZATION' => credentials },
-        params: params
 
-        expect(returned_json_response['data']).to have_attribute(:first_name).with_value("update invalid first_name")
-        expect(returned_json_response['data']).to have_attribute(:last_name).with_value("updated invalid last_name")
-        user.reload
-        expect(user.first_name).to eq "update invalid first_name"
-        expect(user.last_name).to eq "updated invalid last_name"
+      # concerns are "first_name" & "last_name" and not "type" == "session"
+      it 'raises an error' do
+        expect {
+          post '/api/v2/sessions',
+               headers: { 'HTTP_AUTHORIZATION' => credentials },
+               params: params
+        }.to raise_error(ActionController::BadRequest)
+      end
+
+      it 'does not update user record' do
+        expect {
+          post(
+            '/api/v2/sessions',
+            headers: { 'HTTP_AUTHORIZATION' => credentials },
+            params: params
+          ) rescue nil
+        }.not_to(change { user.reload })
       end
     end
   end
@@ -156,11 +161,14 @@ describe '/api/v2/sessions', type: :request do
   context "no params" do
     # deserializable_resource :session
     # from jsonapi-rails seems to enforce expectation
-    it 'raise errors' do
+    it 'does not update user record' do
       expect {
-        post '/api/v2/sessions',
-          headers: { 'HTTP_AUTHORIZATION' => credentials }
-      }.to raise_error NoMethodError
+        post(
+          '/api/v2/sessions',
+          headers: { 'HTTP_AUTHORIZATION' => credentials },
+          params: params
+        ) rescue nil
+      }.not_to(change { user.reload })
     end
   end
 end

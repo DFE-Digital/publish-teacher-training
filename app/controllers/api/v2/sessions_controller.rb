@@ -1,6 +1,8 @@
 module API
   module V2
     class SessionsController < ApplicationController
+      include ValidateJsonapiType
+
       deserializable_resource :session
 
       def create
@@ -16,6 +18,8 @@ module API
     private
 
       def create_params
+        validate_jsonapi_type(params, 'sessions')
+
         params.require(:session).permit(:first_name, :last_name)
       end
     end
