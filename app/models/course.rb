@@ -19,6 +19,7 @@
 #  science                 :integer
 #  created_at              :datetime         not null
 #  updated_at              :datetime         not null
+#  changed_at              :datetime         not null
 #
 
 class Course < ApplicationRecord
