@@ -51,6 +51,9 @@ gem 'jwt'
 # Formalise config settings with support for env vars
 gem 'config'
 
+# For building cmdline apps (mcb)
+gem 'cri'
+
 group :development, :test do
   # add info about db structure to models and other files
   gem 'annotate'
@@ -94,6 +97,9 @@ group :development do
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring'
   gem 'spring-watcher-listen', '~> 2.0.0'
+
+  # Make HTTP requests fun again
+  gem 'httparty'
 end
 
 group :test do
