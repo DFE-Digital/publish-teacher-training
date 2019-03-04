@@ -57,6 +57,12 @@ gem 'friendly_id'
 # For building cmdline apps (mcb)
 gem 'cri'
 
+# Build pretty tables in the terminal
+#   table_print handles ActiveRecord objects and collections really nicely
+gem 'table_print'
+#   terminal-table is a bit more flexible allowing us to use a headers column
+gem 'terminal-table'
+
 group :development, :test do
   # add info about db structure to models and other files
   gem 'annotate'
