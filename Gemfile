@@ -54,6 +54,10 @@ gem 'config'
 # For building cmdline apps (mcb)
 gem 'cri'
 
+# Build pretty tables in the terminal
+gem 'terminal-table'
+gem 'table_print'
+
 group :development, :test do
   # add info about db structure to models and other files
   gem 'annotate'
