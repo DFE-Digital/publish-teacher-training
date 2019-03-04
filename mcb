@@ -1,0 +1,100 @@
+#!/usr/bin/env ruby
+# -!- mode: ruby -!-
+
+# Wrapper for management functions for manage-courses-backend
+#
+# Run with:
+#
+#  bundle exec mcb
+
+require 'cri'
+require 'pry'
+require 'ap'
+
+$mcb = Cri::Command.define do
+  name        'mcb'
+  usage       'mcb [options]'
+  summary     'wrapper for management of manage-curses-backend app'
+
+  option :v, 'verbose', 'display progess info' do |value|
+    $verbosity = :verbose if value
+  end
+
+  flag :h, :help, 'show help for this command' do |_value, cmd|
+    puts cmd.help
+    exit 0
+  end
+end
+
+apiv1 = $mcb.define_command do
+  name 'apiv1'
+  summary 'Commands that target the V1 providers endpoint'
+
+  option :u, 'url', 'set the url to connect to',
+         argument: :required,
+         default: 'http://localhost:3001/api/v1/2019/providers'
+  option :t, 'token', 'set the authorization token',
+         argument: :required,
+         default: 'bats'
+end
+
+def verbose(msg)
+  if $verbosity == :verbose
+    puts msg
+  end
+end
+
+def each_v1_provider(opts)
+  url = opts[:url]
+  page_count = 0
+  max_pages = 30
+
+  Enumerator.new do |y|
+    loop do
+      if page_count > max_pages
+        raise RuntimeError.new(
+          "too many page requests, stopping at #{page_count}" +
+          " as a safeguard. Increase max page_count if necessary."
+        )
+      end
+
+      verbose "Requesting page #{page_count + 1}: #{url}"
+      response = HTTParty.get(
+        url,
+        headers: {
+          authorization: "Bearer #{opts[:token]}"
+        }
+      )
+      providers_list = JSON.parse(response.body)
+      break if providers_list == []
+
+      # Send each provider to the consumer of this enumerator
+      providers_list.each { |provider| y << provider }
+
+      url = response.headers[:link].sub(/;.*/, '')
+      page_count += 1
+    end
+  end
+end
+
+apiv1.define_command do
+  name 'find'
+  summary 'Find a particular provider entry'
+  usage 'find [options] <code>'
+  param :code
+
+  run do |opts, args, _cmd|
+    # We only need httparty for API V1 calls
+    require 'httparty'
+
+    puts "looking for provider #{args[:code]}"
+
+    provider = each_v1_provider(opts).detect do |p|
+      p['institution_code'] == args[:code]
+    end
+
+    ap provider if provider
+  end
+end
+
+$mcb.run(ARGV) if File.basename(__FILE__) == File.basename($0)
