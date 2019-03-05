@@ -25,32 +25,16 @@ module API
                          .limit(per_page)
         end
 
-        last_provider = @providers.last
 
-        # When we extract the changed_at from the last provider, format it with
-        # sub-second timing information (micro-seconds) so that our incremental
-        # fetch can handle many records being updated within the same second.
-        #
-        # The strftime format '%FT%T.%6NZ' is similar to the ISO8601 standard,
-        # (equivalent to %FT%TZ) and adds micro-seconds (%6N).
-        response.headers['Link'] = if last_provider
-                                     next_link(last_provider.changed_at
-                                                 .utc
-                                                 .strftime('%FT%T.%6NZ'),
-                                               per_page)
-                                   else
-                                     next_link(changed_since, per_page)
-                                   end
+        set_next_link_header_using_changed_since_or_last_object(
+          @providers.last,
+          changed_since: changed_since,
+          per_page: per_page
+        )
+
         render json: @providers
       rescue ActiveRecord::StatementInvalid
         render json: { status: 400, message: 'Invalid changed_since value, the format should be an ISO8601 UTC timestamp, for example: `2019-01-01T12:01:00Z`' }.to_json, status: 400
-      end
-
-    private
-
-      def next_link(changed_since, per_page)
-        current_url = request.base_url + request.path
-        "#{current_url}?changed_since=#{changed_since}&per_page=#{per_page}; rel=\"next\""
       end
     end
   end

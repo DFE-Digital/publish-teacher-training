@@ -1,66 +1,151 @@
 require 'rails_helper'
 
 describe API::V1::ProvidersController, type: :controller do
-  describe "index" do
-    it "calls limit on the model with default value of 100" do
-      allow(controller).to receive(:authenticate)
-      expect(Provider).to receive_message_chain(:changed_since, :limit).with(100).and_return([])
-
-      get :index
-    end
-
-    it 'renders a 400 when the changed_since param is not valid' do
-      allow(controller).to receive(:authenticate)
-
-      get :index, params: { changed_since: '2019' }
-      expect(response).to have_http_status(:bad_request)
-      json = JSON.parse(response.body)
-      expect(json). to include(
-        'status' => 400
-      )
-    end
-
-    describe 'generated next link' do
-      before do
-        allow(controller).to receive(:authenticate)
+  describe '#index' do
+    RSpec::Matchers.define :have_providers do |*providers|
+      def provider_codes(body)
+        json = JSON.parse(body)
+        json.map { |provider| provider["institution_code"] }
       end
 
-      subject { Rack::Utils.parse_query(URI(response.headers['Link']).query) }
+      match do |body|
+        if providers.any?
+          provider_codes(body) == providers.map(&:provider_code)
+        else
+          provider_codes(body).any?
+        end
+      end
 
-      context 'with two providers changed at different times' do
-        let!(:old_provider)  { create(:provider, changed_at: 5.minute.ago.utc) }
-        let!(:last_provider) { create(:provider, changed_at: 1.minute.ago.utc) }
+      failure_message do |body|
+        if providers.any?
+          <<~STRING
+            expected provider codes #{providers.map(&:provider_code)}
+              to be found in body #{provider_codes(body)}
+          STRING
+        else
+          'expected providers to be present, but no providers found'
+        end
+      end
 
-        before do
-          get :index, params: { changed_since: changed_since.iso8601 }
+      failure_message_when_negated do |body|
+        if providers.any?
+          <<~STRING
+              expected provider codes #{providers.map(&:provider_code)}
+            not to be found in body #{provider_codes(body)}
+          STRING
+        else
+          "expected no providers to be present, #{provider_codes(body).length} provider(s) found"
+        end
+      end
+    end
+
+    # Format we use for changed_since param.
+    let(:timestamp_format) { '%FT%T.%6NZ' }
+
+    def format_timestamp(timestamp)
+      timestamp.strftime(timestamp_format)
+    end
+
+    # Default sensible params used by tests.
+    let(:params) do
+      {
+        changed_since: format_timestamp(changed_since)
+      }
+    end
+
+    before do
+      allow(controller).to receive(:authenticate)
+
+      # A bit of boilerplate setup since this isn't an integration or
+      # functional test. There may be a more standard way of doing this
+      # which would be better.
+      assigns(:_params).merge! params
+
+      # Stubbing out the data that Rails' url_for relies on is too tricky,
+      # so just stub the whole method out.
+      allow(controller).to receive(:url_for) do |options = {}|
+        'http://test.local/api/v1/provider?' + options[:params].to_query
+      end
+      controller.response = response
+    end
+
+    context 'with two providers changed at different times' do
+      let(:old_provider)  { create(:provider, changed_at: 5.minute.ago.utc) }
+      let(:last_provider) { create(:provider, changed_at: 1.minute.ago.utc) }
+
+      # We need to define the before block after any let! statements since they
+      # are run in order of definition: we need to call the controller action
+      # after any let! fixtures are created.
+      before do
+        old_provider
+        last_provider
+
+        controller.index
+      end
+
+      context 'using a changed_since before any providers have changed' do
+        # Gets placed into params.
+        let(:changed_since) { 10.minutes.ago.utc }
+
+        describe 'returned providers in JSON' do
+          subject { response.body }
+
+          it {
+            should have_providers(old_provider, last_provider)
+          }
         end
 
-        context 'using a changed_since before any providers have changed' do
-          let(:changed_since) { 10.minutes.ago.utc }
+        describe 'generated next link' do
+          subject do
+            # Parse out the query params for testing.
+            Rack::Utils.parse_query(URI(response.headers['Link']).query)
+          end
 
           its(%w[per_page]) { should eq '100' }
           its(%w[changed_since]) do
-            should eq last_provider.changed_at.strftime('%FT%T.%6NZ')
+            should eq format_timestamp(last_provider.changed_at)
           end
-        end
-
-        context 'using a changed_since after any providers have changed' do
-          let(:changed_since) { Time.now.utc }
-
-          its(%w[per_page]) { should eq '100' }
-          its(%w[changed_since]) { should eq changed_since.iso8601 }
         end
       end
 
-      context 'with no providers at all' do
-        let(:changed_since) { DateTime.now.utc }
+      context 'using a changed_since after any providers have changed' do
+        describe 'generated next link' do
+          subject do
+            # Parse out the query params for testing.
+            Rack::Utils.parse_query(URI(response.headers['Link']).query)
+          end
 
-        before do
-          get :index, params: { changed_since: changed_since.iso8601 }
+          let(:changed_since) { Time.now.utc }
+
+          its(%w[per_page]) { should eq '100' }
+          its(%w[changed_since]) { should eq params[:changed_since] }
+        end
+      end
+    end
+
+    context 'with no providers at all' do
+      let(:changed_since) { 10.minutes.ago.utc }
+
+      before do
+        controller.index
+      end
+
+      describe 'returned providers in JSON' do
+        subject { response.body }
+
+        it { should_not have_providers }
+      end
+
+      describe 'generated next link' do
+        subject do
+          # Parse out the query params for testing.
+          Rack::Utils.parse_query(URI(response.headers['Link']).query)
         end
 
+        let(:changed_since) { DateTime.now.utc }
+
         its(%w[per_page]) { should eq '100' }
-        its(%w[changed_since]) { should eq changed_since.iso8601 }
+        its(%w[changed_since]) { should eq format_timestamp(changed_since) }
       end
     end
   end
