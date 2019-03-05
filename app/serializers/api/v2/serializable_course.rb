@@ -4,7 +4,7 @@ module API
       type 'courses'
 
       attributes :findable?, :open_for_applications?, :has_vacancies?,
-                 :course_code, :name, :study_mode, :qualifications
+                 :course_code, :name, :study_mode, :qualifications, :description
 
       attribute :start_date do
         @object.start_date&.iso8601
