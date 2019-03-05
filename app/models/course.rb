@@ -78,4 +78,8 @@ class Course < ApplicationRecord
   def has_vacancies?
     site_statuses.with_vacancies.any?
   end
+
+  def study_mode_description
+    study_mode.to_s.tr("_", " ")
+  end
 end

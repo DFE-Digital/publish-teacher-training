@@ -196,6 +196,21 @@ RSpec.describe Course, type: :model do
     end
   end
 
+  describe "#study_mode_description" do
+    specs = {
+      full_time: 'full time',
+      part_time: 'part time',
+      full_time_or_part_time: 'full time or part time',
+    }.freeze
+
+    specs.each do |study_mode, expected_description|
+      context study_mode.to_s do
+        subject { create(:course, study_mode: study_mode) }
+        its(:study_mode_description) { should eq(expected_description) }
+      end
+    end
+  end
+
   describe 'qualifications' do
     context "course with qts qualication" do
       let(:subject) { create(:course, :resulting_in_qts) }
