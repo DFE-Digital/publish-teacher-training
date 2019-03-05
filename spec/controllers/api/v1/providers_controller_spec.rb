@@ -9,28 +9,33 @@ describe API::V1::ProvidersController, type: :controller do
       end
 
       match do |body|
-        provider_codes(body) == providers.map(&:provider_code)
+        if providers.any?
+          provider_codes(body) == providers.map(&:provider_code)
+        else
+          provider_codes(body).any?
+        end
       end
 
       failure_message do |body|
-        <<~STRING
-          expected provider codes #{providers.map(&:provider_code)}
-            to be found in body #{provider_codes(body)}
-        STRING
-      end
-    end
-
-    RSpec::Matchers.define :have_empty_response do
-      match do |body|
-        json = JSON.parse(body)
-        json == []
+        if providers.any?
+          <<~STRING
+            expected provider codes #{providers.map(&:provider_code)}
+              to be found in body #{provider_codes(body)}
+          STRING
+        else
+          'expected providers to be present, but no providers found'
+        end
       end
 
-      failure_message do |body|
-        <<~STRING
-          Expected empty array '[]' response, got:
-          #{body}
-        STRING
+      failure_message_when_negated do |body|
+        if providers.any?
+          <<~STRING
+              expected provider codes #{providers.map(&:provider_code)}
+            not to be found in body #{provider_codes(body)}
+          STRING
+        else
+          "expected no providers to be present, #{provider_codes(body).length} provider(s) found"
+        end
       end
     end
 
@@ -128,7 +133,7 @@ describe API::V1::ProvidersController, type: :controller do
       describe 'returned providers in JSON' do
         subject { response.body }
 
-        it { should have_empty_response }
+        it { should_not have_providers }
       end
 
       describe 'generated next link' do
