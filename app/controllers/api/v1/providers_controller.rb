@@ -25,12 +25,6 @@ module API
                          .limit(per_page)
         end
 
-        # When we extract the changed_at from the last provider, format it with
-        # sub-second timing information (micro-seconds) so that our incremental
-        # fetch can handle many records being updated within the same second.
-        #
-        # The strftime format '%FT%T.%6NZ' is similar to the ISO8601 standard,
-        # (equivalent to %FT%TZ) and adds micro-seconds (%6N).
 
         set_next_link_header_using_changed_since_or_last_object(
           @providers.last,
