@@ -27,36 +27,37 @@ RSpec.describe "Courses API", type: :request do
         enrichments: [])
     end
 
-    before do
-      site = FactoryBot.create(:site, code: "-", location_name: "Main Site", provider: provider)
-      subject1 = FactoryBot.create(:subject, subject_code: "1", subject_name: "Secondary")
-      subject2 = FactoryBot.create(:subject, subject_code: "2", subject_name: "Mathematics")
-
-      course = FactoryBot.create(:course,
-        course_code: "2HPF",
-        start_date: Date.new(2019, 9, 1),
-        name: "Religious Education",
-        sites: [site],
-        subjects: [subject1, subject2],
-        study_mode: :full_time,
-        age_range: 'primary',
-        english: 3,
-        maths: 9,
-        profpost_flag: :postgraduate,
-        program_type: :school_direct_training_programme,
-        modular: "",
-        provider: provider,
-        age: 2.hours.ago)
-
-      course.site_statuses.first.update(
-        vac_status: :full_time_vacancies,
-        publish: 'Y',
-        status: :running,
-        applications_accepted_from: "2018-10-09 00:00:00"
-      )
-    end
 
     context "without changed_since parameter" do
+      before do
+        site = FactoryBot.create(:site, code: "-", location_name: "Main Site", provider: provider)
+        subject1 = FactoryBot.create(:subject, subject_code: "1", subject_name: "Secondary")
+        subject2 = FactoryBot.create(:subject, subject_code: "2", subject_name: "Mathematics")
+
+        course = FactoryBot.create(:course,
+          course_code: "2HPF",
+          start_date: Date.new(2019, 9, 1),
+          name: "Religious Education",
+          sites: [site],
+          subjects: [subject1, subject2],
+          study_mode: :full_time,
+          age_range: 'primary',
+          english: 3,
+          maths: 9,
+          profpost_flag: :postgraduate,
+          program_type: :school_direct_training_programme,
+          modular: "",
+          provider: provider,
+          age: 2.hours.ago)
+
+        course.site_statuses.first.update(
+          vac_status: :full_time_vacancies,
+          publish: 'Y',
+          status: :running,
+          applications_accepted_from: "2018-10-09 00:00:00"
+        )
+      end
+
       it "returns http success" do
         get '/api/v1/2019/courses',
             headers: { 'HTTP_AUTHORIZATION' => credentials }
@@ -205,67 +206,96 @@ RSpec.describe "Courses API", type: :request do
         expect(response.headers["Link"]).to match "#{url}; rel=\"next\""
       end
 
-      context "with many courses" do
-        before do
-          11.times do |i|
-            create(:course, course_code: "CRSE#{i + 1}", age: (20 - i).minutes.ago, provider: provider)
-          end
+      RSpec::Matchers.define :have_course_codes do |codes|
+        def course_codes(body)
+          json = JSON.parse(body)
+          json.map { |course| course["course_code"] }
         end
 
-        it 'pages properly' do
-          get '/api/v1/courses',
-            headers: { 'HTTP_AUTHORIZATION' => credentials },
-            params: { changed_since: 21.minutes.ago.utc.iso8601, per_page: 10 }
+        match do |body|
+          course_codes(body) == codes
+        end
 
-          returned_course_codes = get_course_codes_from_body(response.body)
-
-          expected_course_codes = (1..10).map { |n| "CRSE#{n}" }
-          expect(returned_course_codes).to match_array expected_course_codes
-
-          next_url = response.headers["Link"]
-
-          get next_url,
-            headers: { 'HTTP_AUTHORIZATION' => credentials }
-
-          returned_course_codes = get_course_codes_from_body(response.body)
-
-          expect(returned_course_codes.size).to eq 1
-          expect(returned_course_codes).to include "CRSE11"
-
-          next_url = response.headers["Link"]
-
-          get next_url,
-            headers: { 'HTTP_AUTHORIZATION' => credentials }
-
-          returned_course_codes = get_course_codes_from_body(response.body)
-
-          expect(returned_course_codes.size).to eq 0
+        failure_message do |body|
+          <<~STRING
+            expected course codes #{codes}
+                   to be found in body #{course_codes(body)}
+          STRING
         end
       end
 
-      context "with courses with the same timestamp" do
+      def get_next_courses(link, params = {})
+        get link,
+            headers: { 'HTTP_AUTHORIZATION' => credentials },
+            params: params
+      end
+
+      context "with many courses" do
         before do
-          3.times do |i|
-            create(:course, course_code: "CRSE#{i + 1}", age: 2.minutes.ago, provider: provider)
+          25.times do |i|
+            create(:course, course_code: "CRSE#{i + 1}",
+                   updated_at: (30 - i).minutes.ago,
+                   provider: provider)
           end
         end
 
         it 'pages properly' do
-          get '/api/v1/courses',
-            headers: { 'HTTP_AUTHORIZATION' => credentials },
-            params: { changed_since: 3.minutes.ago.utc.iso8601, per_page: 1 }
+          get_next_courses '/api/v1/courses', per_page: 10
+          expect(response.body)
+            .to have_course_codes((1..10).map { |n| "CRSE#{n}" })
 
-          returned_course_codes = get_course_codes_from_body(response.body)
+          get_next_courses response.headers['Link'].split(';').first
+          expect(response.body)
+            .to have_course_codes((11..20).map { |n| "CRSE#{n}" })
 
-          3.times do |i|
-            expect(returned_course_codes).to include "CRSE#{i + 1}"
+          get_next_courses response.headers['Link'].split(';').first
+          expect(response.body)
+            .to have_course_codes((21..25).map { |n| "CRSE#{n}" })
 
-            get response.headers["Link"], headers: { 'HTTP_AUTHORIZATION' => credentials }
+          get_next_courses response.headers['Link'].split(';').first
+          expect(response.body).to have_course_codes([])
 
-            returned_course_codes = get_course_codes_from_body(response.body)
+          random_course = Course.all.sample
+          random_course.touch
+
+          get_next_courses response.headers['Link'].split(';').first
+          expect(response.body)
+            .to have_course_codes([random_course.course_code])
+        end
+      end
+
+      context "with many courses updated in the same second" do
+        before do
+          updated_at = 1.second.ago
+          25.times do |i|
+            create(:course, course_code: "CRSE#{i + 1}",
+                   updated_at: updated_at,
+                   provider: provider)
           end
+        end
 
-          expect(returned_course_codes.size).to eq 0
+        it 'pages properly' do
+          get_next_courses '/api/v1/courses', per_page: 10
+          expect(response.body)
+            .to have_course_codes((1..10).map { |n| "CRSE#{n}" })
+
+          get_next_courses response.headers['Link'].split(';').first
+          expect(response.body)
+            .to have_course_codes((11..20).map { |n| "CRSE#{n}" })
+
+          get_next_courses response.headers['Link'].split(';').first
+          expect(response.body)
+            .to have_course_codes((21..25).map { |n| "CRSE#{n}" })
+
+          get_next_courses response.headers['Link'].split(';').first
+          expect(response.body).to have_course_codes([])
+
+          random_course = Course.all.sample
+          random_course.touch
+
+          get_next_courses response.headers['Link'].split(';').first
+          expect(response.body)
+            .to have_course_codes([random_course.course_code])
         end
       end
     end

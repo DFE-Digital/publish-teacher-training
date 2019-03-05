@@ -19,6 +19,7 @@
 #  science                 :integer
 #  created_at              :datetime         not null
 #  updated_at              :datetime         not null
+#  changed_at              :datetime         not null
 #
 
 require 'rails_helper'
@@ -32,6 +33,23 @@ RSpec.describe Course, type: :model do
     it { should have_and_belong_to_many(:subjects) }
     it { should have_many(:site_statuses) }
     it { should have_many(:sites) }
+  end
+
+  describe 'changed_at' do
+    it 'is set on create' do
+      course = create(:course)
+      expect(course.changed_at).to be_present
+      expect(course.changed_at).to eq course.updated_at
+    end
+
+    it 'is set on update' do
+      Timecop.freeze do
+        course = create(:course, changed_at: 1.hour.ago)
+        course.touch
+        expect(course.changed_at).to eq course.updated_at
+        expect(course.changed_at).to eq Time.now.utc
+      end
+    end
   end
 
   describe 'no site statuses' do
@@ -179,7 +197,7 @@ RSpec.describe Course, type: :model do
 
     context 'with a course that has been changed less than a second after the given timestamp' do
       let(:timestamp) { 5.minutes.ago }
-      let(:course) { create(:course, updated_at: timestamp + 0.001.seconds) }
+      let(:course) { create(:course, changed_at: timestamp + 0.001.seconds) }
 
       subject { Course.changed_since(timestamp) }
 
@@ -188,7 +206,7 @@ RSpec.describe Course, type: :model do
 
     context 'with a course that has been changed exactly at the given timestamp' do
       let(:timestamp) { 10.minutes.ago }
-      let(:course) { create(:course, updated_at: timestamp) }
+      let(:course) { create(:course, changed_at: timestamp) }
 
       subject { Course.changed_since(timestamp) }
 

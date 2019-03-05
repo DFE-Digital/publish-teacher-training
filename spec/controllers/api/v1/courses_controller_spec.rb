@@ -9,28 +9,33 @@ describe API::V1::CoursesController, type: :controller do
       end
 
       match do |body|
-        course_codes(body) == courses.map(&:course_code)
+        if courses.any?
+          course_codes(body) == courses.map(&:course_code)
+        else
+          course_codes(body).any?
+        end
       end
 
       failure_message do |body|
-        <<~STRING
-          expected course codes #{courses.map(&:course_code)}
-            to be found in body #{course_codes(body)}
-        STRING
-      end
-    end
-
-    RSpec::Matchers.define :have_empty_response do
-      match do |body|
-        json = JSON.parse(body)
-        json == []
+        if courses.any?
+          <<~STRING
+            expected course codes #{courses.map(&:course_code)}
+              to be found in body #{course_codes(body)}
+          STRING
+        else
+          'expected courses to be present, but no courses found'
+        end
       end
 
-      failure_message do |body|
-        <<~STRING
-          Expected empty array '[]' response, got:
-          #{body}
-        STRING
+      failure_message_when_negated do |body|
+        if courses.any?
+          <<~STRING
+              expected course codes #{courses.map(&:course_code)}
+            not to be found in body #{course_codes(body)}
+          STRING
+        else
+          "expected no courses to be present, #{course_codes(body).length} course(s) found"
+        end
       end
     end
 
@@ -65,8 +70,8 @@ describe API::V1::CoursesController, type: :controller do
     end
 
     context 'with two courses changed at different times' do
-      let(:old_course)  { create(:course, updated_at: 5.minute.ago.utc) }
-      let(:last_course) { create(:course, updated_at: 1.minute.ago.utc) }
+      let(:old_course)  { create(:course, changed_at: 5.minute.ago.utc) }
+      let(:last_course) { create(:course, changed_at: 1.minute.ago.utc) }
 
       # We need to define the before block after any let! statements since they
       # are run in order of definition: we need to call the controller action
@@ -98,7 +103,7 @@ describe API::V1::CoursesController, type: :controller do
 
           its(%w[per_page]) { should eq '100' }
           its(%w[changed_since]) do
-            should eq format_timestamp(last_course.updated_at)
+            should eq format_timestamp(last_course.changed_at)
           end
         end
       end
@@ -128,7 +133,7 @@ describe API::V1::CoursesController, type: :controller do
       describe 'returned courses in JSON' do
         subject { response.body }
 
-        it { should have_empty_response }
+        it { should_not have_courses }
       end
 
       describe 'generated next link' do

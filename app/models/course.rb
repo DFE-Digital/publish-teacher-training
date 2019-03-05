@@ -19,10 +19,12 @@
 #  science                 :integer
 #  created_at              :datetime         not null
 #  updated_at              :datetime         not null
+#  changed_at              :datetime         not null
 #
 
 class Course < ApplicationRecord
   include WithQualifications
+  include ChangedAt
 
   enum program_type: {
     higher_education_programme: "HE",
@@ -55,10 +57,10 @@ class Course < ApplicationRecord
 
   scope :changed_since, ->(timestamp) do
     if timestamp.present?
-      where("course.updated_at > ?", timestamp)
+      where("course.changed_at > ?", timestamp)
     else
-      where.not(updated_at: nil)
-    end.order(:updated_at, :id)
+      where.not(changed_at: nil)
+    end.order(:changed_at, :id)
   end
 
   scope :providers_have_opted_in, -> { joins(:provider).merge(Provider.opted_in) }
@@ -77,6 +79,13 @@ class Course < ApplicationRecord
 
   def has_vacancies?
     site_statuses.with_vacancies.any?
+  end
+
+  def update_changed_at(timestamp: Time.now.utc)
+    # Changed_at represents changes to related records as well as course
+    # itself, so we don't want to alter the semantics of updated_at which
+    # represents changes to just the course record.
+    update_columns changed_at: timestamp
   end
 
   def study_mode_description

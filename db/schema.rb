@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_02_27_124613) do
+ActiveRecord::Schema.define(version: 2019_03_01_114503) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -49,6 +49,7 @@ ActiveRecord::Schema.define(version: 2019_02_27_124613) do
     t.integer "science"
     t.datetime "created_at", default: -> { "timezone('utc'::text, now())" }, null: false
     t.datetime "updated_at", default: -> { "timezone('utc'::text, now())" }, null: false
+    t.datetime "changed_at", default: -> { "timezone('utc'::text, now())" }, null: false
     t.index ["accrediting_provider_id"], name: "IX_course_accrediting_provider_id"
     t.index ["provider_id", "course_code"], name: "IX_course_provider_id_course_code", unique: true
   end
