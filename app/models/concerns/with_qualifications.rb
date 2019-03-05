@@ -65,5 +65,9 @@ module WithQualifications
       when "pgde" then [:pgde]
       end
     end
+
+    def qualifications_description
+      qualifications.map(&:upcase).sort.join(" with ")
+    end
   end
 end

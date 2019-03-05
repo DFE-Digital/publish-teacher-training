@@ -196,6 +196,76 @@ RSpec.describe Course, type: :model do
     end
   end
 
+  describe "#study_mode_description" do
+    specs = {
+      full_time: 'full time',
+      part_time: 'part time',
+      full_time_or_part_time: 'full time or part time',
+    }.freeze
+
+    specs.each do |study_mode, expected_description|
+      context study_mode.to_s do
+        subject { create(:course, study_mode: study_mode) }
+        its(:study_mode_description) { should eq(expected_description) }
+      end
+    end
+  end
+
+  describe "#description" do
+    context "for a both full time and part time course" do
+      subject {
+        create(:course,
+               study_mode: :full_time_or_part_time,
+               program_type: :scitt_programme,
+               qualification: :qts)
+      }
+
+      its(:description) { should eq("QTS, full time or part time") }
+    end
+
+    specs = {
+      "QTS, full time or part time" => {
+        study_mode: :full_time_or_part_time,
+        program_type: :scitt_programme,
+        qualification: :qts,
+      },
+      "PGCE with QTS full time with salary" => {
+        study_mode: :full_time,
+        program_type: :school_direct_salaried_training_programme,
+        qualification: :pgce_with_qts,
+      }
+    }.freeze
+
+    specs.each do |expected_description, course_attributes|
+      context "for #{expected_description} course" do
+        subject { create(:course, course_attributes) }
+        its(:description) { should eq(expected_description) }
+      end
+    end
+
+    context "for a salaried course" do
+      subject {
+        create(:course,
+               study_mode: :full_time,
+               program_type: :school_direct_salaried_training_programme,
+               qualification: :pgce_with_qts)
+      }
+
+      its(:description) { should eq("PGCE with QTS full time with salary") }
+    end
+
+    context "for a teaching apprenticeship" do
+      subject {
+        create(:course,
+               study_mode: :part_time,
+               program_type: :pg_teaching_apprenticeship,
+               qualification: :pgde_with_qts)
+      }
+
+      its(:description) { should eq("PGDE with QTS part time teaching apprenticeship") }
+    end
+  end
+
   describe 'qualifications' do
     context "course with qts qualication" do
       let(:subject) { create(:course, :resulting_in_qts) }

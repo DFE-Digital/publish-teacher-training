@@ -2,11 +2,11 @@ require 'rails_helper'
 
 RSpec.describe WithQualifications, type: :model do
   specs = [
-    qts: [:qts],
-    pgce: [:pgce],
-    pgde: [:pgde],
-    pgce_with_qts: %i[qts pgce],
-    pgde_with_qts: %i[qts pgde],
+    qts: { values: [:qts], description: "QTS" },
+    pgce: { values: [:pgce], description: "PGCE" },
+    pgde: { values: [:pgde], description: "PGDE" },
+    pgce_with_qts: { values: %i[qts pgce], description: "PGCE with QTS" },
+    pgde_with_qts: { values: %i[qts pgde], description: "PGDE with QTS" },
   ].freeze
 
   describe "#qualifications" do
@@ -15,7 +15,8 @@ RSpec.describe WithQualifications, type: :model do
         context "course with qualification=#{qualification}" do
           subject { create(:course, qualification: qualification) }
 
-          its(:qualifications) { should eq(expected) }
+          its(:qualifications) { should eq(expected[:values]) }
+          its(:qualifications_description) { should eq(expected[:description]) }
         end
       end
     end

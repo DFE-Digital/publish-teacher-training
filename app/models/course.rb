@@ -78,4 +78,21 @@ class Course < ApplicationRecord
   def has_vacancies?
     site_statuses.with_vacancies.any?
   end
+
+  def study_mode_description
+    study_mode.to_s.tr("_", " ")
+  end
+
+  def program_type_description
+    if school_direct_salaried_training_programme? then " with salary"
+    elsif pg_teaching_apprenticeship? then " teaching apprenticeship"
+    else ""
+    end
+  end
+
+  def description
+    study_mode_string = (full_time_or_part_time? ? ", " : " ") +
+      study_mode_description
+    qualifications_description + study_mode_string + program_type_description
+  end
 end
