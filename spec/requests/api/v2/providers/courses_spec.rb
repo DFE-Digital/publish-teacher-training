@@ -17,6 +17,7 @@ describe 'Courses API v2', type: :request do
     let(:findable_open_course) {
       create(:course, :resulting_in_pgce_with_qts,
              start_date: Time.now.utc,
+             study_mode: :full_time,
              site_statuses: [create(:site_status, :findable, :with_any_vacancy, :applications_being_accepted_now)])
     }
     let(:provider) {
@@ -71,8 +72,9 @@ describe 'Courses API v2', type: :request do
               "name" => provider.courses[0].name,
               "course_code" => provider.courses[0].course_code,
               "start_date" => provider.courses[0].start_date.iso8601,
-              "study_mode" => provider.courses[0].study_mode,
+              "study_mode" => "full_time",
               "qualifications" => %w[qts pgce],
+              "description" => "PGCE with QTS full time"
             },
             "relationships" => {
               "accrediting_provider" => { "meta" => { "included" => false } },
