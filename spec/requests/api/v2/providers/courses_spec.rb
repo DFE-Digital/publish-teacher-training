@@ -6,7 +6,7 @@ describe 'Courses API v2', type: :request do
     let(:organisation) { create(:organisation, users: [user]) }
     let(:payload) { { email: user.email } }
     let(:token) do
-      JWT.encode payload.to_json,
+      JWT.encode payload,
                  Settings.authentication.secret,
                  Settings.authentication.algorithm
     end
