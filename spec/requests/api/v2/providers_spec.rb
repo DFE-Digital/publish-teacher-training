@@ -106,5 +106,22 @@ describe 'Providers API v2', type: :request do
         )
       end
     end
+
+    context 'with unalphabetical ordering in the database' do
+      let!(:second_alphabetical_provider) { create(:provider, provider_name: 'Zork', organisations: [organisation]) }
+
+      before do
+        provider.update(provider_name: 'Acme') # This moves it last in the order that it gets fetched by default.
+        get "/api/v2/users/#{user.id}/providers", headers: { 'HTTP_AUTHORIZATION' => credentials }
+      end
+
+      let(:provider_names_in_response) {
+        JSON.parse(response.body)["data"].map { |provider| provider["attributes"]["institution_name"] }
+      }
+
+      it 'returns them in alphabetical order' do
+        expect(provider_names_in_response).to eq(%w(Acme Zork))
+      end
+    end
   end
 end
