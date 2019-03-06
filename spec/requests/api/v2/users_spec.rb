@@ -4,7 +4,7 @@ describe '/api/v2/users', type: :request do
   let(:user)    { create(:user) }
   let(:payload) { { email: user.email } }
   let(:token) do
-    JWT.encode payload.to_json,
+    JWT.encode payload,
                Settings.authentication.secret,
                Settings.authentication.algorithm
   end

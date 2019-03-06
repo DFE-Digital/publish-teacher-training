@@ -12,10 +12,9 @@ module API
             #    curl -H 'Authorization: Bearer user@education.gov.uk' http://localhost:3001/api/v2/providers
             email = token
           else
-            (json_payload, _options) = JWT.decode(token,
+            (payload, _options) = JWT.decode(token,
                                                  Settings.authentication.secret,
                                                  Settings.authentication.algorithm)
-            payload = JSON.parse(json_payload)
             email = payload['email']
           end
           @current_user = User.find_by(email: email)

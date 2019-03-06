@@ -5,7 +5,7 @@ describe API::V2::ApplicationController, type: :controller do
     let(:user) { create(:user) }
     let(:payload) { { email: user.email } }
     let(:encoded_token) do
-      JWT.encode payload.to_json,
+      JWT.encode payload,
                  Settings.authentication.secret,
                  Settings.authentication.algorithm
     end
@@ -58,7 +58,7 @@ describe API::V2::ApplicationController, type: :controller do
         context 'JWT mismatch' do
           context 'secret' do
             let(:encoded_token) do
-              JWT.encode payload.to_json,
+              JWT.encode payload,
                          'mismatch secret',
                          Settings.authentication.algorithm
             end
@@ -70,7 +70,7 @@ describe API::V2::ApplicationController, type: :controller do
 
           context 'encoding' do
             let(:encoded_token) do
-              JWT.encode payload.to_json,
+              JWT.encode payload,
                          Settings.authentication.secret,
                          'HS384'
             end
