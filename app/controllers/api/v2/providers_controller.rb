@@ -11,6 +11,13 @@ module API
         render jsonapi: providers.in_order
       end
 
+      def show
+        provider = Provider.friendly.find(params[:code])
+        authorize provider, :show?
+
+        render jsonapi: provider
+      end
+
     private
 
       def get_user
