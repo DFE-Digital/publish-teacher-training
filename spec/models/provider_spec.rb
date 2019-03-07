@@ -254,10 +254,19 @@ describe Provider, type: :model do
 
   describe '.opted_in' do
     let!(:opted_in_provider) { create(:provider, opted_in: true) }
-    let!(:opted_out_provder) { create(:provider, opted_in: false) }
+    let!(:opted_out_provider) { create(:provider, opted_in: false) }
 
     it 'returns only the opted_in provider' do
       expect(Provider.opted_in).to match_array([opted_in_provider])
+    end
+  end
+
+  describe '.in_order' do
+    let!(:second_alphabetical_provider) { create(:provider, provider_name: "Zork") }
+    let!(:first_alphabetical_provider) { create(:provider, provider_name: "Acme") }
+
+    it 'returns sorted providers' do
+      expect(Provider.in_order).to match_array([first_alphabetical_provider, second_alphabetical_provider])
     end
   end
 

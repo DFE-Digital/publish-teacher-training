@@ -59,6 +59,8 @@ class Provider < ApplicationRecord
 
   scope :opted_in, -> { where(opted_in: true) }
 
+  scope :in_order, -> { order(:provider_name) }
+
   # TODO: filter to published enrichments, maybe rename to published_address_info
   def address_info
     (enrichments.latest_created_at.with_address_info.first || self)

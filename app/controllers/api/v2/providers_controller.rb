@@ -8,7 +8,7 @@ module API
         providers = policy_scope(Provider)
         providers = providers.where(id: @user.providers) if @user.present?
 
-        render jsonapi: providers
+        render jsonapi: providers.in_order
       end
 
     private
