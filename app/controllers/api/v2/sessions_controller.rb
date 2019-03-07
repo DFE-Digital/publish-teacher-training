@@ -6,6 +6,8 @@ module API
       deserializable_resource :session
 
       def create
+        skip_authorization
+
         @current_user.update(
           create_params.merge(
             last_login_date_utc: Time.now.utc
