@@ -2,42 +2,6 @@ require 'rails_helper'
 
 describe API::V1::ProvidersController, type: :controller do
   describe '#index' do
-    RSpec::Matchers.define :have_providers do |*providers|
-      def provider_codes(body)
-        json = JSON.parse(body)
-        json.map { |provider| provider["institution_code"] }
-      end
-
-      match do |body|
-        if providers.any?
-          provider_codes(body) == providers.map(&:provider_code)
-        else
-          provider_codes(body).any?
-        end
-      end
-
-      failure_message do |body|
-        if providers.any?
-          <<~STRING
-            expected provider codes #{providers.map(&:provider_code)}
-              to be found in body #{provider_codes(body)}
-          STRING
-        else
-          'expected providers to be present, but no providers found'
-        end
-      end
-
-      failure_message_when_negated do |body|
-        if providers.any?
-          <<~STRING
-              expected provider codes #{providers.map(&:provider_code)}
-            not to be found in body #{provider_codes(body)}
-          STRING
-        else
-          "expected no providers to be present, #{provider_codes(body).length} provider(s) found"
-        end
-      end
-    end
 
     # Format we use for changed_since param.
     let(:timestamp_format) { '%FT%T.%6NZ' }
@@ -133,7 +97,7 @@ describe API::V1::ProvidersController, type: :controller do
       describe 'returned providers in JSON' do
         subject { response.body }
 
-        it { should_not have_providers }
+        it { should have_providers([]) }
       end
 
       describe 'generated next link' do

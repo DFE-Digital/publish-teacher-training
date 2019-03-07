@@ -278,23 +278,7 @@ describe 'Providers API', type: :request do
         expect(query_params[:changed_since]).to eq provided_timestamp
       end
 
-      RSpec::Matchers.define :have_provider_codes do |codes|
-        def institution_codes(body)
-          json = JSON.parse(body)
-          json.map { |provider| provider["institution_code"] }
-        end
 
-        match do |body|
-          institution_codes(body) == codes
-        end
-
-        failure_message do |body|
-          <<~STRING
-            expected institution codes #{codes}
-                   to be found in body #{institution_codes(body)}
-          STRING
-        end
-      end
 
       def get_next_providers(link, params = {})
         get link,
@@ -304,72 +288,72 @@ describe 'Providers API', type: :request do
 
       context "with many providers" do
         before do
-          25.times do |i|
+          @providers = Array.new(25) do |i|
             create(:provider, provider_code: "PROV#{i + 1}",
-                   changed_at: (30 - i).minutes.ago,
-                   sites: [],
-                   enrichments: [])
+              updated_at: (30 - i).minutes.ago,
+              sites: [],
+              enrichments: [])
+            end
           end
-        end
 
         it 'pages properly' do
           get_next_providers '/api/v1/providers', per_page: 10
           expect(response.body)
-            .to have_provider_codes((1..10).map { |n| "PROV#{n}" })
+            .to have_providers(@providers[0..9])
 
           get_next_providers response.headers['Link'].split(';').first
           expect(response.body)
-            .to have_provider_codes((11..20).map { |n| "PROV#{n}" })
+            .to have_providers(@providers[10..19])
 
           get_next_providers response.headers['Link'].split(';').first
           expect(response.body)
-            .to have_provider_codes((21..25).map { |n| "PROV#{n}" })
+            .to have_providers(@providers[20..24])
 
           get_next_providers response.headers['Link'].split(';').first
-          expect(response.body).to have_provider_codes([])
+          expect(response.body).to have_providers([])
 
           random_provider = Provider.all.sample
           random_provider.touch
 
           get_next_providers response.headers['Link'].split(';').first
           expect(response.body)
-            .to have_provider_codes([random_provider.provider_code])
+            .to have_providers([random_provider])
         end
       end
 
       context "with many providers updated in the same second" do
         before do
           updated_at = 1.second.ago
-          25.times do |i|
+          @providers = Array.new(25) do |i|
             create(:provider, provider_code: "PROV#{i + 1}",
-                   updated_at: updated_at,
-                   sites: [],
-                   enrichments: [])
+              updated_at: updated_at,
+              sites: [],
+              enrichments: [])
+            end
           end
-        end
 
         it 'pages properly' do
           get_next_providers '/api/v1/providers', per_page: 10
           expect(response.body)
-            .to have_provider_codes((1..10).map { |n| "PROV#{n}" })
+            .to have_providers(@providers[0..9])
 
           get_next_providers response.headers['Link'].split(';').first
           expect(response.body)
-            .to have_provider_codes((11..20).map { |n| "PROV#{n}" })
+            .to have_providers(@providers[10..19])
 
           get_next_providers response.headers['Link'].split(';').first
           expect(response.body)
-            .to have_provider_codes((21..25).map { |n| "PROV#{n}" })
+            .to have_providers(@providers[20..24])
 
           get_next_providers response.headers['Link'].split(';').first
-          expect(response.body).to have_provider_codes([])
+          expect(response.body).to have_providers([])
 
           random_provider = Provider.all.sample
           random_provider.touch
 
           get_next_providers response.headers['Link'].split(';').first
           expect(response.body)
-            .to have_provider_codes([random_provider.provider_code])
+            .to have_providers([random_provider])
         end
       end
     end
