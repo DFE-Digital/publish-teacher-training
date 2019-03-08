@@ -13,7 +13,11 @@ require 'pry'
 require 'table_print'
 require 'terminal-table'
 
-$mcb = Cri::Command.define do
+tp.set :capitalize_headers, false
+
+lib_dir = 'lib'
+
+mcb = Cri::Command.define do
   name        'mcb'
   usage       'mcb [options]'
   summary     'wrapper for management of manage-curses-backend app'
@@ -28,6 +32,19 @@ $mcb = Cri::Command.define do
   end
 end
 
+# It'd almost be nice to be able to load these automatically, but since we have
+# to express the command structure by loading sub-commands with the correct
+# parent command, I don't think there's a trivial way to do this.
+provider = Cri::Command.load_file("#{lib_dir}/mcb/commands/provider.rb")
+mcb.add_command(provider)
+provider.add_command(Cri::Command.load_file("#{lib_dir}/mcb/commands/provider/list.rb"))
+provider.add_command(Cri::Command.load_file("#{lib_dir}/mcb/commands/provider/show.rb"))
+
+apiv1 = Cri::Command.load_file("#{lib_dir}/mcb/commands/apiv1.rb")
+mcb.add_command(apiv1)
+apiv1.add_command(Cri::Command.load_file("#{lib_dir}/mcb/commands/apiv1/find.rb"))
+
+
 MCB_ROOT_DIR = File.dirname($0)
 def init_rails
   unless defined?(Rails)
@@ -35,75 +52,15 @@ def init_rails
   end
 end
 
-provider = $mcb.define_command do
-  name 'provider'
-  summary 'Operate on providers directly in db'
-  default_subcommand 'list'
-end
-
-provider.define_command do
-  name 'list'
-  summary 'List providers in db'
-
-  run do |_opts, args, _cmd|
-    init_rails
-
-    providers = if args.any?
-                  Provider.where(provider_code: args.to_a)
-                else
-                  Provider.all
-                end
-
-    tp.set :capitalize_headers, false
-
-    puts "\nProviders:"
-    tp providers, 'id', 'provider_code', 'provider_name', 'provider_type',
-       'postcode'
-  end
-end
-
-provider.define_command do
-  name 'show'
-  summary 'Show infomration about provider'
-  param :code
-
-  run do |_opts, args, _cmd|
-    init_rails
-
-    code = args[:code]
-
-    provider = Provider.find_by(provider_code: code)
-
-    puts 'Provider:'
-    puts Terminal::Table.new rows: provider.attributes
-
-    tp.set :capitalize_headers, false
-
-    puts "\nProvider Enrichments:"
-    tp provider.enrichments, 'id', 'status', 'email', 'website', 'address1',
-       'address2', 'address3', 'address4', 'postcode', 'telephone'
-
-    puts "\nProvider Courses:"
-    tp provider.courses
-  end
-end
-
-apiv1 = $mcb.define_command do
-  name 'apiv1'
-  summary 'Commands that target the V1 providers endpoint'
-
-  option :u, 'url', 'set the url to connect to',
-         argument: :required,
-         default: 'http://localhost:3001/api/v1/2019/providers'
-  option :t, 'token', 'set the authorization token',
-         argument: :required,
-         default: 'bats'
-end
 
 def verbose(msg)
   if $verbosity == :verbose
     puts msg
   end
+end
+
+def error(msg)
+  puts msg
 end
 
 def each_v1_provider(opts)
@@ -139,24 +96,4 @@ def each_v1_provider(opts)
   end
 end
 
-apiv1.define_command do
-  name 'find'
-  summary 'Find a particular provider entry'
-  usage 'find [options] <code>'
-  param :code
-
-  run do |opts, args, _cmd|
-    # We only need httparty for API V1 calls
-    require 'httparty'
-
-    puts "looking for provider #{args[:code]}"
-
-    provider = each_v1_provider(opts).detect do |p|
-      p['institution_code'] == args[:code]
-    end
-
-    ap provider if provider
-  end
-end
-
-$mcb.run(ARGV.dup) if File.basename(__FILE__) == File.basename($0)
+mcb.run(ARGV.dup) if File.basename(__FILE__) == File.basename($0)
