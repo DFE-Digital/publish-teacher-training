@@ -80,8 +80,8 @@ group :development, :test do
   gem 'rspec-its'
 
   # Test framework
-  gem 'rspec-rails'
   gem 'rspec-json_matchers'
+  gem 'rspec-rails'
 
   # Make diffs of Ruby objects much more readable
   gem 'super_diff'
