@@ -269,6 +269,29 @@ endpoint) if any of these are true:
 | status            | Text                 |                   |
 | course_open_date  | ISO 8601 date string |                   |
 
+## Contacs
+
+### Entity documentation
+
+| Parameter         | Data type | Possible values     | Description                                                       |
+| ----------------- | --------- | ------------------- | ----------------------------------------------------------------- |
+| contact_type      | Text      | A-Z, 0-9, "-" or "" | Type of contact, one of a pre-defined list. See below for details |
+| email             | Text      |                     | Email address for the contact.                                    |
+
+### Contact Types
+
+UCAS defines a number of contact types (called "contact groups"). Only the
+subset of contact groups required by the DfE course publishing system is used for the contact types here. This list is:
+
+| UCAS "contact group"       | Contact Purpose                                                | Contact Type                        | Fields Required |
+| -------------------------- | -------------------------------------------------------------- | ----------------------------------- | --------------- |
+| UTT Correspondent          | correspondent for UCAS monthly bulletins, etc                  | ucas_correspondent                  | email           |
+| UTT Output                 | new application alerts                                         | ucas_alerts_recipient               | email           |
+| Addressee for GT12 replies | recipient of GT12 letter responses from successful applicants  | gt12_addressee                      | email, url      |
+| Fraud Correspondent        | fraud                                                          | fraud_correspondent                 | email           |
+| web-link Correspondent     | web-link details (downtime, changes, etc)                      | web_link_correspondent              | email           |
+| UTT finance contact        | finance                                                        | finance_correspondent               | email           |
+
 ## Subjects
 
 This endpoint retrieves all subjects.
@@ -339,6 +362,7 @@ endpoint) if any of these are true:
 | institution_type       | Text               | "Y", "B", "0", "O", null                                                                                  | The type of institution (whether it's a university, lead school/teaching school alliance or a SCITT) |
 | accrediting_provider   | Text               | "Y" or "N"                                                                                                | Whether the provider can accredit courses or not                                                     |
 | campuses               | An array of campus |                                                                                                           | See the campus entity documentation above                                                            |
+| contacts               | Array of contacts  |                                                                                                           | List of contact objects that include group
 | address1               | Text               |                                                                                                           | Address line 1                                                                                       |
 | address2               | Text               |                                                                                                           | Address line 2                                                                                       |
 | address3               | Text               |                                                                                                           | Town/City                                                                                            |
