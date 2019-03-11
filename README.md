@@ -89,14 +89,14 @@ address of an existing use in the database being supplied as the bearer token.
 An example HTTP request would look like:
 
 ```
-GET /api/v2/users.json
+GET /api/v2/providers.json
 Authorization: Bearer user@digital.education.gov.uk
 ```
 
 or with curl:
 
 ```bash
-curl http://localhost:3001/api/v2/users.json -H "Authorization: Bearer user@digital.education.gov.uk"
+curl http://localhost:3001/api/v2/providers.json -H "Authorization: Bearer user@digital.education.gov.uk"
 ```
 
 #### Production
