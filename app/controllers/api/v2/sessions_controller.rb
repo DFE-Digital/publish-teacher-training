@@ -1,6 +1,6 @@
 module API
   module V2
-    class SessionsController < ApplicationController
+    class SessionsController < API::V2::ApplicationController
       include ValidateJsonapiType
 
       deserializable_resource :session
