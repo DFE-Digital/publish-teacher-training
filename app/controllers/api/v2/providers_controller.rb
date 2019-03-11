@@ -1,6 +1,6 @@
 module API
   module V2
-    class ProvidersController < ApplicationController
+    class ProvidersController < API::V2::ApplicationController
       before_action :get_user, if: -> { params[:user_id].present? }
 
       def index
