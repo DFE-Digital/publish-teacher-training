@@ -81,8 +81,10 @@ group :development, :test do
 
   # Test framework
   gem 'rspec-rails'
-
   gem 'rspec-json_matchers'
+
+  # Make diffs of Ruby objects much more readable
+  gem 'super_diff'
 
   # Allow us to freeze time in tests
   gem 'timecop'
