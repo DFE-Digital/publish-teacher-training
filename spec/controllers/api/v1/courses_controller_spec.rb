@@ -96,7 +96,7 @@ describe API::V1::CoursesController, type: :controller do
       describe 'returned courses in JSON' do
         subject { response.body }
 
-        it { should_not have_courses([]) }
+        it { should_not have_courses }
       end
 
       describe 'generated next link' do
