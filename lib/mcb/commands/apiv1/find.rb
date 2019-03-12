@@ -4,9 +4,6 @@ usage 'find [options] <code>'
 param :code
 
 run do |opts, args, _cmd|
-  # We only need httparty for API V1 calls
-  require 'httparty'
-
   puts "looking for provider #{args[:code]}"
 
   provider = each_v1_provider(opts).detect do |p|

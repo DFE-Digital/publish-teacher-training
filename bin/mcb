@@ -45,13 +45,13 @@ mcb.add_command(apiv1)
 apiv1.add_command(Cri::Command.load_file("#{lib_dir}/mcb/commands/apiv1/find.rb"))
 
 
-MCB_ROOT_DIR = File.dirname($0)
 def init_rails
   unless defined?(Rails)
-    exec(File.join(MCB_ROOT_DIR, 'bin', 'rails'), 'runner', $0, *ARGV)
+    app_root = File.expand_path(File.join(File.dirname($0), '..'))
+    exec_path = File.join(app_root, 'bin', 'rails')
+    exec(exec_path, 'runner', $0, *ARGV)
   end
 end
-
 
 def verbose(msg)
   if $verbosity == :verbose
@@ -64,6 +64,9 @@ def error(msg)
 end
 
 def each_v1_provider(opts)
+  # We only need httparty for API V1 calls
+  require 'httparty'
+
   url = opts[:url]
   page_count = 0
   max_pages = 30
