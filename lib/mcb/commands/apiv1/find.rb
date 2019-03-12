@@ -1,5 +1,10 @@
 name 'find'
 summary 'Find a particular provider entry'
+description <<~EODESCRIPTION
+  Searches for a provider with the given provider code by iterating through all
+  the pages of results provided from the provider endpoint, outputing the found
+  record.
+EODESCRIPTION
 usage 'find [options] <code>'
 param :code
 

@@ -157,3 +157,23 @@ To track exceptions through Sentry, configure the `SENTRY_DSN` environment varia
 ```
 SENTRY_DSN=https://aaa:bbb@sentry.io/123 rails s
 ```
+
+## mcb Command
+
+This project comes with a script `bin/mcb` which provides certain
+project-specific functionality that is conveniently accessed via the cmdline.
+The goal is to provide access to project data and functionality in a guided
+way that is safer and better sign-posted than using the raw Rails console. This
+can be useful for people who aren't as familiar with the app, or with certain
+complex operations that just aren't already packaged up in the app.
+
+The script's functionality is accessed using sub-commands with built-in
+documentation. This is the best way to discover it's functionality and the
+commands available, and is accessable with the `--help` option:
+
+```
+bin/mcb --help
+```
+
+Commands for mcb are defined in `lib/mcb/commands` and any new commands should
+be organised in an appropriate sub-folder there.
