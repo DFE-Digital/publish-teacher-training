@@ -142,7 +142,30 @@ describe 'Providers API v2', type: :request do
 
     subject { response }
 
-    describe 'JSON generated for a providers' do
+    let(:expected_response) {
+      {
+        "data" => {
+          "id" => provider.id.to_s,
+          "type" => "providers",
+          "attributes" => {
+            "institution_code" => provider.provider_code,
+            "institution_name" => provider.provider_name
+          },
+          "relationships" => {
+            "courses" => {
+              "meta" => {
+                "count" => provider.courses.count
+              }
+            }
+          }
+        },
+        "jsonapi" => {
+          "version" => "1.0"
+        }
+      }
+    }
+
+    describe 'JSON generated for a provider' do
       before do
         get "/api/v2/providers/#{provider.provider_code}", headers: { 'HTTP_AUTHORIZATION' => credentials }
       end
@@ -151,26 +174,20 @@ describe 'Providers API v2', type: :request do
 
       it 'has a data section with the correct attributes' do
         json_response = JSON.parse(response.body)
-        expect(json_response).to eq(
-          "data" => {
-            "id" => provider.id.to_s,
-            "type" => "providers",
-            "attributes" => {
-              "institution_code" => provider.provider_code,
-              "institution_name" => provider.provider_name
-            },
-            "relationships" => {
-              "courses" => {
-                "meta" => {
-                  "count" => provider.courses.count
-                }
-              }
-            }
-          },
-          "jsonapi" => {
-            "version" => "1.0"
-          }
-        )
+        expect(json_response).to eq(expected_response)
+      end
+    end
+
+    describe "with lowercase provider code" do
+      before do
+        get "/api/v2/providers/#{provider.provider_code.downcase}", headers: { 'HTTP_AUTHORIZATION' => credentials }
+      end
+
+      it { should have_http_status(:success) }
+
+      it 'has a data section with the correct attributes' do
+        json_response = JSON.parse(response.body)
+        expect(json_response).to eq(expected_response)
       end
     end
   end
