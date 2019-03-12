@@ -12,7 +12,7 @@ module API
       end
 
       def show
-        provider = Provider.friendly.find(params[:code])
+        provider = Provider.friendly.find(params[:code].upcase)
         authorize provider, :show?
 
         render jsonapi: provider
