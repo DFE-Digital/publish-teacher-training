@@ -14,7 +14,7 @@ run do |opts, args, _cmd|
   end
 
   if provider.nil?
-    error "Provider with code '#{code}' not found"
+    error "Provider with code '#{args[:code]}' not found"
   else
     campuses = provider.delete('campuses')
     puts Terminal::Table.new rows: provider
