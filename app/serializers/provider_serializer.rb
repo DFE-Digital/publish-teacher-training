@@ -32,7 +32,8 @@ class ProviderSerializer < ActiveModel::Serializer
 
   attributes :institution_code, :institution_name, :institution_type, :accrediting_provider,
              :address1, :address2, :address3, :address4, :postcode, :region_code, :scheme_member,
-             :contact_name, :email, :telephone, :recruitment_cycle
+             :contact_name, :email, :telephone, :recruitment_cycle, :utt_application_alerts,
+             :type_of_gt12
 
   def institution_code
     object.provider_code
@@ -68,5 +69,42 @@ class ProviderSerializer < ActiveModel::Serializer
 
   def region_code
     "%02d" % object.address_info['region_code'] if object.address_info['region_code'].present?
+  end
+
+  def utt_application_alerts
+    # Temporarily create a value for this field which will be consistent
+    # for this provider. Remove this when we've data for this value to the
+    # db.
+    values = [
+      'No, not required',
+      'Yes, required',
+      'Yes - only my programmes',
+      'Yes - for accredited programmes only',
+    ]
+
+    select_value_for_provider(@object.provider_code, values)
+  end
+
+  def type_of_gt12
+    # Temporarily create a value for this field which will be consistent
+    # for this provider. Remove this when we've data for this value to the
+    # db.
+    values = [
+      'Coming / Enrol',
+      'Coming or Not',
+      'No response',
+      'Not coming',
+    ]
+
+    select_value_for_provider(@object.provider_code, values)
+  end
+
+private
+
+  def select_value_for_provider(provider_code, values)
+    # Using `to_i(36)` is an easy, cheap way to convert 'A1' into a consistent
+    # hash. ex. 'A1'.to_i(36) == 361
+    index = provider_code.to_i(36) % values.count
+    values[index]
   end
 end

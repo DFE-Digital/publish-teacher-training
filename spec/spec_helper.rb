@@ -2,6 +2,7 @@ require 'support/serializer_spec_helper'
 require 'rspec-json_matchers'
 require 'pundit/rspec'
 require 'jsonapi/rspec'
+require "super_diff/rspec"
 require 'support/matchers/have_courses'
 require 'support/matchers/have_providers'
 

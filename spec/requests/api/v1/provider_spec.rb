@@ -100,7 +100,7 @@ describe 'Providers API', type: :request do
               headers: { 'HTTP_AUTHORIZATION' => credentials }
 
           json = JSON.parse(response.body)
-          expect(json). to match_array(
+          expect(json).to eq(
             [
               {
                 'accrediting_provider' => 'Y',
@@ -124,7 +124,9 @@ describe 'Providers API', type: :request do
                 'telephone' => '020 812 345 678',
                 'email' => 'info@acmescitt.education.uk',
                 'contact_name' => 'Amy Smith',
-                'recruitment_cycle' => '2019'
+                'recruitment_cycle' => '2019',
+                'type_of_gt12' => 'Not coming',
+                'utt_application_alerts' => 'Yes - for accredited programmes only',
               },
               {
                 'accrediting_provider' => 'N',
@@ -148,7 +150,9 @@ describe 'Providers API', type: :request do
                 'telephone' => '01273 345 678',
                 'email' => 'info@acmeuniversity.education.uk',
                 'contact_name' => 'James Brown',
-                'recruitment_cycle' => '2019'
+                'recruitment_cycle' => '2019',
+                'type_of_gt12' => 'Not coming',
+                'utt_application_alerts' => 'Yes - for accredited programmes only',
               }
             ]
           )
@@ -170,8 +174,8 @@ describe 'Providers API', type: :request do
               headers: { 'HTTP_AUTHORIZATION' => credentials }
 
           json = JSON.parse(response.body)
-          expect(json). to match_array([
-                                {
+          expect(json).to eq([
+                               {
                                   'accrediting_provider' => 'Y',
                                   'campuses' => [
                                     {
@@ -193,33 +197,37 @@ describe 'Providers API', type: :request do
                                   'telephone' => '020 812 345 678',
                                   'email' => 'info@acmescitt.education.uk',
                                   'contact_name' => 'Amy Smith',
-                                  'recruitment_cycle' => '2019'
-                                },
-                                {
-                                  'accrediting_provider' => 'N',
-                                  'campuses' => [
-                                    {
-                                      'campus_code' => '-',
-                                      'name' => 'Main site',
-                                      'region_code' => '11',
-                                    }
-                                  ],
-                                  'institution_code' => 'B123',
-                                  'institution_name' => 'ACME University',
-                                  'institution_type' => 'O',
-                                  'address1' => 'Bee School',
-                                  'address2' => 'Bee Avenue',
-                                  'address3' => 'Bee City',
-                                  'address4' => 'Bee Hive',
-                                  'postcode' => 'B3 3BB',
-                                  'region_code' => '03',
-                                  'scheme_member' => 'N',
-                                  'telephone' => '01273 345 678',
-                                  'email' => 'info@acmeuniversity.education.uk',
-                                  'contact_name' => 'James Brown',
-                                  'recruitment_cycle' => '2019'
-                                }
-                              ])
+                                  'recruitment_cycle' => '2019',
+                                  'type_of_gt12' => 'Not coming',
+                                  'utt_application_alerts' => 'Yes - for accredited programmes only',
+                               },
+                               {
+                                 'accrediting_provider' => 'N',
+                                 'campuses' => [
+                                   {
+                                     'campus_code' => '-',
+                                     'name' => 'Main site',
+                                     'region_code' => '11',
+                                   }
+                                 ],
+                                 'institution_code' => 'B123',
+                                 'institution_name' => 'ACME University',
+                                 'institution_type' => 'O',
+                                 'address1' => 'Bee School',
+                                 'address2' => 'Bee Avenue',
+                                 'address3' => 'Bee City',
+                                 'address4' => 'Bee Hive',
+                                 'postcode' => 'B3 3BB',
+                                 'region_code' => '03',
+                                 'scheme_member' => 'N',
+                                 'telephone' => '01273 345 678',
+                                 'email' => 'info@acmeuniversity.education.uk',
+                                 'contact_name' => 'James Brown',
+                                 'recruitment_cycle' => '2019',
+                                 'type_of_gt12' => 'Not coming',
+                                 'utt_application_alerts' => 'Yes - for accredited programmes only',
+                               }
+                             ])
         end
       end
     end
