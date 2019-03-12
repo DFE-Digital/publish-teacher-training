@@ -88,7 +88,7 @@ def each_v1_provider(opts)
         }
       )
       providers_list = JSON.parse(response.body)
-      break if providers_list == []
+      break if providers_list.empty?
 
       # Send each provider to the consumer of this enumerator
       providers_list.each { |provider| y << provider }
