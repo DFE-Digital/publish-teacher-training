@@ -2,43 +2,6 @@ require 'rails_helper'
 
 describe API::V1::CoursesController, type: :controller do
   describe '#index' do
-    RSpec::Matchers.define :have_courses do |*courses|
-      def course_codes(body)
-        json = JSON.parse(body)
-        json.map { |course| course["course_code"] }
-      end
-
-      match do |body|
-        if courses.any?
-          course_codes(body) == courses.map(&:course_code)
-        else
-          course_codes(body).any?
-        end
-      end
-
-      failure_message do |body|
-        if courses.any?
-          <<~STRING
-            expected course codes #{courses.map(&:course_code)}
-              to be found in body #{course_codes(body)}
-          STRING
-        else
-          'expected courses to be present, but no courses found'
-        end
-      end
-
-      failure_message_when_negated do |body|
-        if courses.any?
-          <<~STRING
-              expected course codes #{courses.map(&:course_code)}
-            not to be found in body #{course_codes(body)}
-          STRING
-        else
-          "expected no courses to be present, #{course_codes(body).length} course(s) found"
-        end
-      end
-    end
-
     # Format we use for changed_since param.
     let(:timestamp_format) { '%FT%T.%6NZ' }
 

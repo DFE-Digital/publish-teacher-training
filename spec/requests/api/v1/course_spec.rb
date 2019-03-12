@@ -206,24 +206,6 @@ RSpec.describe "Courses API", type: :request do
         expect(response.headers["Link"]).to match "#{url}; rel=\"next\""
       end
 
-      RSpec::Matchers.define :have_course_codes do |codes|
-        def course_codes(body)
-          json = JSON.parse(body)
-          json.map { |course| course["course_code"] }
-        end
-
-        match do |body|
-          course_codes(body) == codes
-        end
-
-        failure_message do |body|
-          <<~STRING
-            expected course codes #{codes}
-                   to be found in body #{course_codes(body)}
-          STRING
-        end
-      end
-
       def get_next_courses(link, params = {})
         get link,
             headers: { 'HTTP_AUTHORIZATION' => credentials },
@@ -232,70 +214,72 @@ RSpec.describe "Courses API", type: :request do
 
       context "with many courses" do
         before do
-          25.times do |i|
+          @courses = Array.new(25) do |i|
             create(:course, course_code: "CRSE#{i + 1}",
-                   updated_at: (30 - i).minutes.ago,
-                   provider: provider)
+                 changed_at: (30 - i).minutes.ago,
+                 provider: provider)
           end
         end
 
         it 'pages properly' do
           get_next_courses '/api/v1/courses', per_page: 10
+
           expect(response.body)
-            .to have_course_codes((1..10).map { |n| "CRSE#{n}" })
+            .to have_courses(@courses[0..9])
 
           get_next_courses response.headers['Link'].split(';').first
           expect(response.body)
-            .to have_course_codes((11..20).map { |n| "CRSE#{n}" })
+            .to have_courses(@courses[10..19])
 
           get_next_courses response.headers['Link'].split(';').first
           expect(response.body)
-            .to have_course_codes((21..25).map { |n| "CRSE#{n}" })
+            .to have_courses(@courses[20..24])
 
           get_next_courses response.headers['Link'].split(';').first
-          expect(response.body).to have_course_codes([])
+          expect(response.body).to_not have_courses
 
           random_course = Course.all.sample
           random_course.touch
 
           get_next_courses response.headers['Link'].split(';').first
           expect(response.body)
-            .to have_course_codes([random_course.course_code])
+            .to have_courses([random_course])
         end
       end
 
       context "with many courses updated in the same second" do
+        timestamp = 1.second.ago
         before do
-          updated_at = 1.second.ago
-          25.times do |i|
+          @courses = Array.new(25) do |i|
             create(:course, course_code: "CRSE#{i + 1}",
-                   updated_at: updated_at,
-                   provider: provider)
+                 changed_at: timestamp + i / 1000.0,
+                 provider: provider)
           end
         end
+
 
         it 'pages properly' do
           get_next_courses '/api/v1/courses', per_page: 10
           expect(response.body)
-            .to have_course_codes((1..10).map { |n| "CRSE#{n}" })
+            .to have_courses(@courses[0..9])
 
           get_next_courses response.headers['Link'].split(';').first
           expect(response.body)
-            .to have_course_codes((11..20).map { |n| "CRSE#{n}" })
+            .to have_courses(@courses[10..19])
 
           get_next_courses response.headers['Link'].split(';').first
           expect(response.body)
-            .to have_course_codes((21..25).map { |n| "CRSE#{n}" })
+            .to have_courses(@courses[20..24])
 
           get_next_courses response.headers['Link'].split(';').first
-          expect(response.body).to have_course_codes([])
+          expect(response.body).to_not have_courses
 
           random_course = Course.all.sample
           random_course.touch
 
           get_next_courses response.headers['Link'].split(';').first
           expect(response.body)
-            .to have_course_codes([random_course.course_code])
+            .to have_courses([random_course])
         end
       end
     end
