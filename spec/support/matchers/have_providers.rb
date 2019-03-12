@@ -1,37 +1,37 @@
-RSpec::Matchers.define :have_providers do |*providers|
-  providers = providers.flatten
-  def provider_codes(body)
-    json = JSON.parse(body)
+RSpec::Matchers.define :have_providers do |*expected_providers|
+  expected_providers = expected_providers.flatten
+  def provider_codes(server_response_body)
+    json = JSON.parse(server_response_body)
     json.map { |provider| provider["institution_code"] }
   end
 
-  match do |body|
-    if providers.any?
-      provider_codes(body) == providers.map(&:provider_code)
+  match do |server_response_body|
+    if expected_providers.any?
+      provider_codes(server_response_body) == expected_providers.map(&:provider_code)
     else
-      provider_codes(body).any?
+      provider_codes(server_response_body).any? # inverted match logic for "should_not have_providers"
     end
   end
 
-  failure_message do |body|
-    if providers.any?
+  failure_message do |server_response_body|
+    if expected_providers.any?
       <<~STRING
-        expected provider codes #{providers.map(&:provider_code)}
-          to be found in body #{provider_codes(body)}
+        expected provider codes #{expected_providers.map(&:provider_code)}
+        but got #{provider_codes(server_response_body)}
       STRING
     else
-      'expected providers to be present, but no providers found'
+      "expected provider codes #{expected_providers.map(&:provider_code)} but no providers found"
     end
   end
 
-  failure_message_when_negated do |body|
-    if providers.any?
+  failure_message_when_negated do |server_response_body|
+    if expected_providers.any?
       <<~STRING
-          expected provider codes #{providers.map(&:provider_code)}
-        not to be found in body #{provider_codes(body)}
+        didn't expect to find provider codes #{expected_providers.map(&:provider_code)}
+        in response. Got: #{provider_codes(server_response_body)}
       STRING
     else
-      "expected no providers to be present, #{provider_codes(body).length} provider(s) found"
+      "expected no providers in response. Got: #{provider_codes(server_response_body)}"
     end
   end
 end
