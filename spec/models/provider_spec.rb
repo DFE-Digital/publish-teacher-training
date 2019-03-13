@@ -54,23 +54,25 @@ describe Provider, type: :model do
     end
   end
 
-  describe '#address_info' do
+  describe '#contact_info' do
     context 'empty enrichments' do
       it 'returns address of the provider' do
         provider = create(:provider, enrichments: [])
 
-        expect(provider.address_info).to eq(
+        expect(provider.contact_info).to eq(
           'address1' => provider.address1,
           'address2' => provider.address2,
           'address3' => provider.address3,
           'address4' => provider.address4,
           'postcode' => provider.postcode,
-          'region_code' => provider.region_code_before_type_cast
+          'region_code' => provider.region_code_before_type_cast,
+          'email' => provider.email,
+          'telephone' => provider.telephone
         )
       end
 
       context 'provider has enrichments' do
-        context 'enrichment has nothing set for address_info' do
+        context 'enrichment has nothing set for contact_info' do
           context 'via absent json_data fields' do
             it 'returns address of the provider' do
               enrichment = build(:provider_enrichment)
@@ -79,17 +81,19 @@ describe Provider, type: :model do
               # forcing all fields to be absent in json_data altogether
               ProviderEnrichment.connection.update(<<~EOSQL)
                 UPDATE provider_enrichment
-                      SET json_data=json_data-'Address1'-'Address2'-'Address3'-'Address4'-'Postcode'-'RegionCode'
+                      SET json_data=json_data-'Address1'-'Address2'-'Address3'-'Address4'-'Postcode'-'RegionCode'-'Email'-'Telephone'
                       WHERE provider_code='#{enrichment.provider_code}'
               EOSQL
 
-              expect(provider.address_info).to eq(
+              expect(provider.contact_info).to eq(
                 'address1' => provider.address1,
                 'address2' => provider.address2,
                 'address3' => provider.address3,
                 'address4' => provider.address4,
                 'postcode' => provider.postcode,
-                'region_code' => provider.region_code_before_type_cast
+                'region_code' => provider.region_code_before_type_cast,
+                'email' => provider.email,
+                'telephone' => provider.telephone
               )
             end
           end
@@ -101,16 +105,20 @@ describe Provider, type: :model do
                   address3: nil,
                   address4: nil,
                   postcode: nil,
-                  region_code: nil)
+                  region_code: nil,
+                  email: nil,
+                  telephone: nil)
               provider = create(:provider, enrichments: [enrichment])
 
-              expect(provider.address_info).to eq(
+              expect(provider.contact_info).to eq(
                 'address1' => provider.address1,
                 'address2' => provider.address2,
                 'address3' => provider.address3,
                 'address4' => provider.address4,
                 'postcode' => provider.postcode,
-                'region_code' => provider.region_code_before_type_cast
+                'region_code' => provider.region_code_before_type_cast,
+                'email' => provider.email,
+                'telephone' => provider.telephone
               )
             end
           end
@@ -121,13 +129,15 @@ describe Provider, type: :model do
             enrichment = build(:provider_enrichment)
             provider = create(:provider, enrichments: [enrichment])
 
-            expect(provider.address_info).to eq(
+            expect(provider.contact_info).to eq(
               'address1' => enrichment.address1,
               'address2' => enrichment.address2,
               'address3' => enrichment.address3,
               'address4' => enrichment.address4,
               'postcode' => enrichment.postcode,
-              'region_code' => enrichment.region_code_before_type_cast
+              'region_code' => enrichment.region_code_before_type_cast,
+              'email' => enrichment.email,
+              'telephone' => enrichment.telephone
             )
           end
 
@@ -136,36 +146,42 @@ describe Provider, type: :model do
             newest_enrichment = build(:provider_enrichment, created_at: Date.today)
             provider = create(:provider, enrichments: [enrichment, newest_enrichment])
 
-            expect(provider.address_info).to eq(
+            expect(provider.contact_info).to eq(
               'address1' => newest_enrichment.address1,
               'address2' => newest_enrichment.address2,
               'address3' => newest_enrichment.address3,
               'address4' => newest_enrichment.address4,
               'postcode' => newest_enrichment.postcode,
-              'region_code' => newest_enrichment.region_code_before_type_cast
+              'region_code' => newest_enrichment.region_code_before_type_cast,
+              'email' => newest_enrichment.email,
+              'telephone' => newest_enrichment.telephone
             )
           end
         end
-        context 'enrichment has partial set for address_info' do
+        context 'enrichment has partial set for contact_info' do
           it 'returns address of the enrichment' do
             enrichment = build(:provider_enrichment,
               address2: nil,
               address3: nil,
               address4: nil,
-              postcode: nil)
+              postcode: nil,
+              email: nil,
+              telephone: nil)
             provider = create(:provider, enrichments: [enrichment])
 
-            expect(provider.address_info).to eq(
+            expect(provider.contact_info).to eq(
               'address1' => enrichment.address1,
               'address2' => enrichment.address2,
               'address3' => enrichment.address3,
               'address4' => enrichment.address4,
               'postcode' => enrichment.postcode,
-              'region_code' => enrichment.region_code_before_type_cast
+              'region_code' => enrichment.region_code_before_type_cast,
+              'email' => enrichment.email,
+              'telephone' => enrichment.telephone
             )
           end
 
-          context 'enrichment has only region code set for address_info' do
+          context 'enrichment has only region code set for contact_info' do
             london = ProviderEnrichment.region_codes['London']
             no_region = ProviderEnrichment.region_codes['No region']
             context 'via absent json_data fields' do
@@ -176,17 +192,19 @@ describe Provider, type: :model do
                 # forcing all fields apart region_code to be absent in json_data altogether
                 ProviderEnrichment.connection.update(<<~EOSQL)
                   UPDATE provider_enrichment
-                        SET json_data=json_data-'Address1'-'Address2'-'Address3'-'Address4'-'Postcode'
+                        SET json_data=json_data-'Address1'-'Address2'-'Address3'-'Address4'-'Postcode'-'RegionCode'-'Email'-'Telephone'
                         WHERE provider_code='#{enrichment.provider_code}'
                 EOSQL
 
-                expect(provider.address_info).to eq(
+                expect(provider.contact_info).to eq(
                   'address1' => provider.address1,
                   'address2' => provider.address2,
                   'address3' => provider.address3,
                   'address4' => provider.address4,
                   'postcode' => provider.postcode,
-                  'region_code' => provider.region_code_before_type_cast
+                  'region_code' => provider.region_code_before_type_cast,
+                  'email' => provider.email,
+                  'telephone' => provider.telephone
                 )
               end
             end
@@ -197,16 +215,20 @@ describe Provider, type: :model do
                 address2: nil,
                 address3: nil,
                 address4: nil,
-                postcode: nil)
+                postcode: nil,
+                email: nil,
+                telephone: nil)
                 provider = create(:provider, region_code: london, enrichments: [enrichment])
 
-                expect(provider.address_info).to eq(
+                expect(provider.contact_info).to eq(
                   'address1' => provider.address1,
                   'address2' => provider.address2,
                   'address3' => provider.address3,
                   'address4' => provider.address4,
                   'postcode' => provider.postcode,
-                  'region_code' => provider.region_code_before_type_cast
+                  'region_code' => provider.region_code_before_type_cast,
+                  'email' => provider.email,
+                  'telephone' => provider.telephone
                 )
               end
             end

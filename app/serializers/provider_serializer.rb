@@ -48,27 +48,35 @@ class ProviderSerializer < ActiveModel::Serializer
   end
 
   def address1
-    object.address_info['address1']
+    object.contact_info['address1']
   end
 
   def address2
-    object.address_info['address2']
+    object.contact_info['address2']
   end
 
   def address3
-    object.address_info['address3']
+    object.contact_info['address3']
   end
 
   def address4
-    object.address_info['address4']
+    object.contact_info['address4']
   end
 
   def postcode
-    object.address_info['postcode']
+    object.contact_info['postcode']
+  end
+
+  def email
+    object.contact_info['email']
+  end
+
+  def telephone
+    object.contact_info['telephone']
   end
 
   def region_code
-    "%02d" % object.address_info['region_code'] if object.address_info['region_code'].present?
+    "%02d" % object.contact_info['region_code'] if object.contact_info['region_code'].present?
   end
 
   def utt_application_alerts

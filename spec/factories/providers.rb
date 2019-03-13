@@ -36,6 +36,8 @@ FactoryBot.define do
     address3 { Faker::Address.city }
     address4 { Faker::Address.state }
     postcode { Faker::Address.postcode }
+    email { Faker::Internet.email }
+    telephone { Faker::PhoneNumber.phone_number }
     accrediting_provider { 'N' }
     region_code { ProviderEnrichment.region_codes['London'] }
     opted_in { true }

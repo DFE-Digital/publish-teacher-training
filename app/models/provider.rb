@@ -65,10 +65,10 @@ class Provider < ApplicationRecord
   scope :in_order, -> { order(:provider_name) }
 
   # TODO: filter to published enrichments, maybe rename to published_address_info
-  def address_info
-    (enrichments.latest_created_at.with_address_info.first || self)
+  def contact_info
+    (enrichments.latest_created_at.with_contact_info.first || self)
       .attributes_before_type_cast
-      .slice('address1', 'address2', 'address3', 'address4', 'postcode', 'region_code')
+      .slice('address1', 'address2', 'address3', 'address4', 'postcode', 'region_code', 'telephone', 'email')
   end
 
   def update_changed_at(timestamp: Time.now.utc)
