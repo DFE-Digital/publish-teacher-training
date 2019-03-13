@@ -46,6 +46,12 @@ describe API::V2::ApplicationController, type: :controller do
         end
       end
 
+      context 'email case not the same as in the DB' do
+        let(:payload) { { email: user.email.upcase } }
+
+        it { should be true }
+      end
+
       describe 'errors' do
         context 'empty payload' do
           let(:payload) {}

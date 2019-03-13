@@ -17,7 +17,8 @@ module API
                                                  Settings.authentication.algorithm)
             email = payload['email']
           end
-          @current_user = User.find_by(email: email)
+          # match email addresses case-insensitively
+          @current_user = User.find_by("lower(email) = ?", email.downcase)
           @current_user.present?
         end
       end
