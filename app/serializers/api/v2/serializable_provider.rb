@@ -13,7 +13,7 @@ module API
 
       has_many :courses do
         meta do
-          { count: @object.courses.count }
+          { count: @object.courses.size }
         end
       end
     end
