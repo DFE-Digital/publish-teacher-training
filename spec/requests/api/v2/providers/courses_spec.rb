@@ -102,7 +102,7 @@ describe 'Courses API v2', type: :request do
             "relationships" => {
               "site" => {
                 "data" => {
-                  "type" => "site",
+                  "type" => "sites",
                     "id" => site.id.to_s
                   }
                 }
@@ -110,7 +110,7 @@ describe 'Courses API v2', type: :request do
             },
                          {
                            "id" => site.id.to_s,
-                           "type" => "site",
+                           "type" => "sites",
                            "attributes" => {
                              "code" => site.code,
                              "location_name" => site.location_name
