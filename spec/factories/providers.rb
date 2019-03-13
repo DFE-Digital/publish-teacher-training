@@ -47,7 +47,7 @@ FactoryBot.define do
       skip_associated_data { false }
       site_count           { 1 }
       sites                { build_list :site, site_count, provider: nil }
-      course_count         { 2 }
+      course_count         { 0 }
       enrichments          { [build(:provider_enrichment)] }
     end
 
