@@ -9,4 +9,8 @@ class CoursePolicy
   def index?
     user.present?
   end
+
+  def show?
+    user.providers.include? course.provider
+  end
 end

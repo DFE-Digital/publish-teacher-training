@@ -8,6 +8,13 @@ module API
 
         render jsonapi: provider.courses
       end
+
+      def show
+        course = Course.find_by!(course_code: params[:code])
+        authorize course
+
+        render jsonapi: course, include: [site_statuses: [:site]]
+      end
     end
   end
 end

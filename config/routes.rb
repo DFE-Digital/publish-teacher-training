@@ -65,6 +65,8 @@ Rails.application.routes.draw do
         resources :courses, only: %i[index create]
       end
 
+      resources :courses, param: :code, only: :show
+
       resource :sessions
     end
   end
