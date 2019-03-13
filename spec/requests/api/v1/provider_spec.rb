@@ -51,6 +51,8 @@ describe 'Providers API', type: :request do
               address3: 'Dagenham',
               address4: 'Essex',
               postcode: 'RM9 5QT',
+              email: 'sydney-russell-school@education.gov.uk',
+              telephone: '020 8123 1234',
               region_code: :scotland)
       end
       let(:provider2) do
@@ -94,7 +96,7 @@ describe 'Providers API', type: :request do
 
       it 'includes correct next link in response headers'
 
-      context 'with enrichment address data' do
+      context 'with enrichment contact data' do
         it 'JSON body response contains expected provider attributes' do
           get '/api/v1/2019/providers',
               headers: { 'HTTP_AUTHORIZATION' => credentials }
@@ -121,8 +123,8 @@ describe 'Providers API', type: :request do
                 'postcode' => 'RM9 5QT',
                 'region_code' => '11',
                 'scheme_member' => 'Y',
-                'telephone' => '020 812 345 678',
-                'email' => 'info@acmescitt.education.uk',
+                'telephone' => '020 8123 1234',
+                'email' => 'sydney-russell-school@education.gov.uk',
                 'contact_name' => 'Amy Smith',
                 'recruitment_cycle' => '2019',
                 'type_of_gt12' => 'Not coming',
@@ -159,14 +161,14 @@ describe 'Providers API', type: :request do
         end
       end
 
-      context 'without enrichment address data' do
+      context 'without enrichment contact data' do
         it 'JSON body response contains expected provider attributes' do
-          # Simulate a provider enrichment that has no address data. It's not just
+          # Simulate a provider enrichment that has no contact data. It's not just
           # a matter of the attributes being nil, the data is actually missing
           # from json_data
           ProviderEnrichment.connection.update(<<~EOSQL)
             UPDATE provider_enrichment
-                  SET json_data=json_data-'Address1'-'Address2'-'Address3'-'Address4'-'Postcode'-'RegionCode'
+                  SET json_data=json_data-'Address1'-'Address2'-'Address3'-'Address4'-'Postcode'-'RegionCode'-'Email'-'Telephone'
                   WHERE provider_code='#{enrichment.provider_code}'
           EOSQL
 
