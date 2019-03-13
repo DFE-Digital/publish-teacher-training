@@ -115,8 +115,6 @@ GEM
     faraday (0.15.4)
       multipart-post (>= 1.2, < 3)
     ffi (1.10.0)
-    friendly_id (5.2.5)
-      activerecord (>= 4.0.0)
     globalid (0.4.2)
       activesupport (>= 4.2.0)
     govuk-lint (3.11.0)
@@ -346,7 +344,6 @@ DEPENDENCIES
   database_cleaner
   factory_bot_rails (~> 5.0)
   faker
-  friendly_id
   govuk-lint
   httparty
   jsonapi-rails

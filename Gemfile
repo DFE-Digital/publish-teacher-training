@@ -51,9 +51,6 @@ gem 'jwt'
 # Formalise config settings with support for env vars
 gem 'config'
 
-# Nicer URL's
-gem 'friendly_id'
-
 # For building cmdline apps (mcb)
 gem 'cri'
 

@@ -31,9 +31,6 @@ class Provider < ApplicationRecord
   include RegionCode
   include ChangedAt
 
-  extend FriendlyId
-  friendly_id :provider_code, use: :slugged, slug_column: :provider_code
-
   enum provider_type: {
     scitt: "B",
     lead_school: "Y",
