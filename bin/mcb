@@ -1,0 +1,102 @@
+#!/usr/bin/env ruby
+# -!- mode: ruby -!-
+
+# Wrapper for management functions for manage-courses-backend
+#
+# Run with:
+#
+#  bundle exec mcb
+
+require 'ap'
+require 'cri'
+require 'pry'
+require 'table_print'
+require 'terminal-table'
+
+tp.set :capitalize_headers, false
+
+lib_dir = 'lib'
+
+mcb = Cri::Command.define do
+  name        'mcb'
+  usage       'mcb [options]'
+  summary     'wrapper for management of manage-curses-backend app'
+
+  option :v, 'verbose', 'display progess info' do |value|
+    $verbosity = :verbose if value
+  end
+
+  flag :h, :help, 'show help for this command' do |_value, cmd|
+    puts cmd.help
+    exit 0
+  end
+end
+
+# It'd almost be nice to be able to load these automatically, but since we have
+# to express the command structure by loading sub-commands with the correct
+# parent command, I don't think there's a trivial way to do this.
+provider = Cri::Command.load_file("#{lib_dir}/mcb/commands/provider.rb")
+mcb.add_command(provider)
+provider.add_command(Cri::Command.load_file("#{lib_dir}/mcb/commands/provider/list.rb"))
+provider.add_command(Cri::Command.load_file("#{lib_dir}/mcb/commands/provider/show.rb"))
+
+apiv1 = Cri::Command.load_file("#{lib_dir}/mcb/commands/apiv1.rb")
+mcb.add_command(apiv1)
+apiv1.add_command(Cri::Command.load_file("#{lib_dir}/mcb/commands/apiv1/find.rb"))
+
+
+def init_rails
+  unless defined?(Rails)
+    app_root = File.expand_path(File.join(File.dirname($0), '..'))
+    exec_path = File.join(app_root, 'bin', 'rails')
+    exec(exec_path, 'runner', $0, *ARGV)
+  end
+end
+
+def verbose(msg)
+  if $verbosity == :verbose
+    puts msg
+  end
+end
+
+def error(msg)
+  puts msg
+end
+
+def each_v1_provider(opts)
+  # We only need httparty for API V1 calls
+  require 'httparty'
+
+  url = opts[:url]
+  page_count = 0
+  max_pages = 30
+
+  Enumerator.new do |y|
+    loop do
+      if page_count > max_pages
+        raise RuntimeError.new(
+          "too many page requests, stopping at #{page_count}" +
+          " as a safeguard. Increase max page_count if necessary."
+        )
+      end
+
+      verbose "Requesting page #{page_count + 1}: #{url}"
+      response = HTTParty.get(
+        url,
+        headers: {
+          authorization: "Bearer #{opts[:token]}"
+        }
+      )
+      providers_list = JSON.parse(response.body)
+      break if providers_list.empty?
+
+      # Send each provider to the consumer of this enumerator
+      providers_list.each { |provider| y << provider }
+
+      url = response.headers[:link].sub(/;.*/, '')
+      page_count += 1
+    end
+  end
+end
+
+mcb.run(ARGV.dup) if File.basename(__FILE__) == File.basename($0)
