@@ -36,7 +36,7 @@ describe 'Courses API v2', type: :request do
       let(:payload) { { email: 'foo@bar' } }
 
       before do
-        get "/api/v2/courses/#{findable_open_course.course_code}",
+        get "/api/v2/providers/#{provider.provider_code}/courses/#{findable_open_course.course_code}",
             headers: { 'HTTP_AUTHORIZATION' => credentials }
       end
 
@@ -49,7 +49,7 @@ describe 'Courses API v2', type: :request do
 
       it "raises an error" do
         expect {
-          get "/api/v2/courses/#{findable_open_course.course_code}",
+          get "/api/v2/providers/#{provider.provider_code}/courses/#{findable_open_course.course_code}",
             headers: { 'HTTP_AUTHORIZATION' => credentials }
         }.to raise_error Pundit::NotAuthorizedError
       end
@@ -57,7 +57,7 @@ describe 'Courses API v2', type: :request do
 
     describe 'JSON generated for courses' do
       before do
-        get "/api/v2/courses/#{findable_open_course.course_code}",
+        get "/api/v2/providers/#{provider.provider_code}/courses/#{findable_open_course.course_code}",
             headers: { 'HTTP_AUTHORIZATION' => credentials },
             params: { includes: "site_statuses" }
       end

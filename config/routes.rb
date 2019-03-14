@@ -62,10 +62,8 @@ Rails.application.routes.draw do
       end
 
       resources :providers, param: :code do
-        resources :courses, only: %i[index create]
+        resources :courses, param: :code, only: %i[index create show]
       end
-
-      resources :courses, param: :code, only: :show
 
       resource :sessions
     end
