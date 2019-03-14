@@ -1,5 +1,9 @@
 # API Reference
 
+This documents the API that serves out post graduate teacher training course,
+subject and training provider information. The version of the API documented
+here feeds the UCAS Apply system.
+
 # Table of Contents
 
 * [Authorisation](#authorisation)
