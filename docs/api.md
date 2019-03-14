@@ -1,5 +1,22 @@
 # API Reference
 
+# Table of Contents
+
+* [Authorisation](#authorisation)
+* [Retrieving Records](#retrieving-records)
+  * [Populating an empty system](#populating-an-empty-system)
+  * [Retrieving changed records](#retrieving-changed-records)
+* [Errors](#errors)
+* [Preparation for the next recruitment cycle (rollover)](#preparation-for-the-next-recruitment-cycle-rollover)
+  * [Recruitment cycle URL parameter](#recruitment-cycle-url-parameter)
+* [Endpoints](#endpoints)
+  * [Courses](#courses)
+  * [Campuses](#campuses)
+  * [Campus statuses](#campus-statuses)
+  * [Contacts](#contacts)
+  * [Subjects](#subjects)
+  * [Providers](#providers)
+
 # Authorisation
 
 The server expects an API key to be included in a header for all API requests,
