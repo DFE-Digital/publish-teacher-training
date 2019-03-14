@@ -12,6 +12,8 @@ module API
 
       has_one :provider
       has_one :accrediting_provider
+
+      has_many :site_statuses
     end
   end
 end
