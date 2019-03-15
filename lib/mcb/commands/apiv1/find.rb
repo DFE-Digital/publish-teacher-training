@@ -7,9 +7,11 @@ description <<~EODESCRIPTION
 EODESCRIPTION
 usage 'find [options] <code>'
 param :code
+option :j, 'json', 'show the returned JSON response'
+
 
 run do |opts, args, _cmd|
-  puts "looking for provider #{args[:code]}"
+  verbose "looking for provider #{args[:code]}"
 
   provider = each_v1_provider(opts).detect do |p|
     p['institution_code'] == args[:code]
@@ -20,9 +22,17 @@ run do |opts, args, _cmd|
     next
   end
 
-  campuses = provider.delete('campuses')
-  puts Terminal::Table.new rows: provider
-  puts ''
-  puts "Campuses:"
-  tp campuses
+  if opts[:json]
+    puts JSON.pretty_generate(JSON.parse(provider.to_json))
+  else
+    campuses = provider.delete('campuses')
+    contacts = provider.delete('contacts')
+    puts Terminal::Table.new rows: provider
+    puts ''
+    puts "Campuses:"
+    tp campuses
+    puts ''
+    puts "Contacts:"
+    tp contacts
+  end
 end
