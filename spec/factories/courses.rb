@@ -30,7 +30,8 @@ FactoryBot.define do
     association(:provider, course_count: 0)
     study_mode { :full_time }
     resulting_in_pgce_with_qts
-    study_mode { :full_time_or_part_time }
+
+    with_study_mode_as_full_time
 
     trait :skips_validate do
       to_create { |instance| instance.save(validate: false) }
@@ -66,6 +67,40 @@ FactoryBot.define do
 
     trait :resulting_in_pgde do
       qualification { :pgde }
+    end
+
+    trait :with_study_mode_as_full_time do
+      study_mode { :full_time }
+    end
+
+    trait :with_study_mode_as_part_time do
+      study_mode { :part_time }
+    end
+
+    trait :with_study_mode_as_full_time_or_part_time do
+      study_mode { :full_time_or_part_time }
+    end
+
+    factory :course_with_site_statuses do
+      with_study_mode_as_full_time_or_part_time
+
+      transient do
+        site_statuses_traits {
+          [
+            [:findable],
+            [:with_any_vacancy],
+            [],
+            [:applications_being_accepted_now],
+            [:applications_being_accepted_in_future]
+          ]
+        }
+      end
+
+      after(:create) do |course, evaluator|
+        evaluator.site_statuses_traits.each do |traits|
+          create(:site_status, *traits, course: course)
+        end
+      end
     end
   end
 end

@@ -13,10 +13,11 @@
 
 FactoryBot.define do
   factory :site_status do
-    association(:course)
-    association(:site)
+    course
+    site
+
     publish { 'N' }
-    vac_status { :full_time_vacancies }
+    full_time_vacancies
 
     trait :skips_validate do
       to_create { |instance| instance.save(validate: false) }
@@ -89,15 +90,15 @@ FactoryBot.define do
     end
 
     trait :with_course_study_mode_as_full_time do
-      association(:course, study_mode: :full_time)
+      association(:course, :with_study_mode_as_full_time)
     end
 
     trait :with_course_study_mode_as_part_time do
-      association(:course, study_mode: :part_time)
+      association(:course, :with_study_mode_as_part_time)
     end
 
     trait :with_course_study_mode_as_full_time_or_part_time do
-      association(:course, study_mode: :full_time_or_part_time)
+      association(:course, :with_study_mode_as_full_time_or_part_time)
     end
   end
 end

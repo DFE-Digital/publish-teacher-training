@@ -71,12 +71,12 @@ RSpec.describe SiteStatus, type: :model do
     end
 
     describe 'if on find, application date open and has part-time vacancies' do
-      subject { create(:site_status, :findable, :applications_being_accepted_now, :part_time_vacancies) }
+      subject { create(:site_status, :with_course_study_mode_as_part_time, :findable, :applications_being_accepted_now, :part_time_vacancies) }
       it { should be_open_for_applications }
     end
 
     describe 'if on find, application date open and has both full-time and part-time vacancies' do
-      subject { create(:site_status, :findable, :applications_being_accepted_now, :both_full_time_and_part_time_vacancies) }
+      subject { create(:site_status, :with_course_study_mode_as_full_time_or_part_time, :findable, :applications_being_accepted_now, :both_full_time_and_part_time_vacancies) }
       it { should be_open_for_applications }
     end
 
@@ -98,7 +98,7 @@ RSpec.describe SiteStatus, type: :model do
 
   describe "has vacancies?" do
     describe 'if has part-time vacancies' do
-      subject { create(:site_status, :part_time_vacancies) }
+      subject { create(:site_status, :with_course_study_mode_as_part_time, :part_time_vacancies) }
       it { should have_vacancies }
     end
 
@@ -108,7 +108,7 @@ RSpec.describe SiteStatus, type: :model do
     end
 
     describe 'if has both full-time and part-time vacancies' do
-      subject { create(:site_status, :both_full_time_and_part_time_vacancies) }
+      subject { create(:site_status, :with_course_study_mode_as_full_time_or_part_time, :both_full_time_and_part_time_vacancies) }
       it { should have_vacancies }
     end
 
@@ -141,7 +141,7 @@ RSpec.describe SiteStatus, type: :model do
 
     specs.each do |spec|
       context "site status #{spec[:study_mode].to_s.humanize(capitalize: false)}" do
-        subject { create(:site_status, spec[:study_mode]) }
+        subject { create(:site_status, spec[:study_mode], :with_no_vacancies) }
 
         spec[:valid_states].each do |state|
           context "set a valid vac_status to #{state}" do

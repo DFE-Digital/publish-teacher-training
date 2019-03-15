@@ -63,25 +63,18 @@ RSpec.describe Course, type: :model do
     describe 'findable?' do
       context 'with at least one site status as findable' do
         context 'single site status as findable' do
-          let(:subject) { create(:course, site_statuses: course_site_statuses) }
+          let(:subject) { create(:course_with_site_statuses, site_statuses_traits: course_site_statuses) }
 
-          let(:course_site_statuses) { [create(:site_status, :findable)] }
+          let(:course_site_statuses) {
+            [[:findable]]
+          }
 
           its(:site_statuses) { should_not be_empty }
           its(:findable?) { should be true }
         end
 
         context 'single site status as findable and mix site status as non findable' do
-          let(:subject) { create(:course, site_statuses: course_site_statuses) }
-
-          let(:course_site_statuses) {
-            [create(:site_status, :findable),
-             create(:site_status, :with_any_vacancy),
-             create(:site_status),
-             create(:site_status, :applications_being_accepted_now),
-             create(:site_status, :applications_being_accepted_in_future)]
-          }
-
+          let(:subject) { create(:course_with_site_statuses) }
           its(:site_statuses) { should_not be_empty }
           its(:findable?) { should be true }
         end
@@ -91,25 +84,18 @@ RSpec.describe Course, type: :model do
     describe 'has_vacancies' do
       context 'with at least one site status has vacancies' do
         context 'single site status has vacancies' do
-          let(:subject) { create(:course, site_statuses: course_site_statuses) }
+          let(:subject) { create(:course_with_site_statuses, site_statuses_traits: course_site_statuses) }
 
-          let(:course_site_statuses) { [create(:site_status, :with_any_vacancy)] }
+          let(:course_site_statuses) {
+            [[:with_any_vacancy]]
+          }
 
           its(:site_statuses) { should_not be_empty }
           its(:has_vacancies?) { should be true }
         end
 
         context 'single site status has vacancies and mix site status with no vacancies' do
-          let(:subject) { create(:course, site_statuses: course_site_statuses) }
-
-          let(:course_site_statuses) {
-            [create(:site_status, :findable),
-             create(:site_status, :with_any_vacancy),
-             create(:site_status),
-             create(:site_status, :applications_being_accepted_now),
-             create(:site_status, :applications_being_accepted_in_future)]
-          }
-
+          let(:subject) { create(:course_with_site_statuses) }
           its(:site_statuses) { should_not be_empty }
           its(:has_vacancies?) { should be true }
         end
@@ -118,47 +104,38 @@ RSpec.describe Course, type: :model do
     describe 'open_for_applications?' do
       context 'with at least one site status applications_being_accepted_now' do
         context 'single site status applications_being_accepted_now as it open now' do
-          let(:subject) { create(:course, site_statuses: course_site_statuses) }
+          let(:subject) { create(:course_with_site_statuses, site_statuses_traits: course_site_statuses) }
 
           let(:course_site_statuses) {
-            [create(:site_status, :findable, :applications_being_accepted_now, :with_any_vacancy)]
+            [%i[findable applications_being_accepted_now with_any_vacancy]]
           }
 
           its(:site_statuses) { should_not be_empty }
           its(:open_for_applications?) { should be true }
         end
         context 'single site status applications_being_accepted_now as it open future' do
-          let(:subject) { create(:course, site_statuses: course_site_statuses) }
+          let(:subject) { create(:course_with_site_statuses, site_statuses_traits: course_site_statuses) }
 
           let(:course_site_statuses) {
-            [create(:site_status, :applications_being_accepted_in_future)]
+            [[:applications_being_accepted_in_future]]
           }
 
           its(:site_statuses) { should_not be_empty }
           its(:open_for_applications?) { should be false }
         end
         context 'site statuses applications_being_accepted_now as it open now & future' do
-          let(:subject) { create(:course, site_statuses: course_site_statuses) }
+          let(:subject) { create(:course_with_site_statuses, site_statuses_traits: course_site_statuses) }
 
           let(:course_site_statuses) {
-            [create(:site_status, :findable, :applications_being_accepted_now, :with_any_vacancy),
-             create(:site_status, :findable, :applications_being_accepted_in_future, :with_any_vacancy)]
+            [%i[findable applications_being_accepted_now with_any_vacancy],
+             %i[findable applications_being_accepted_in_future with_any_vacancy]]
           }
 
           its(:site_statuses) { should_not be_empty }
           its(:open_for_applications?) { should be true }
         end
         context 'site statuses applications_being_accepted_now as it open now & future and mix site status as non findable' do
-          let(:subject) { create(:course, site_statuses: course_site_statuses) }
-
-          let(:course_site_statuses) {
-            [create(:site_status, :findable),
-             create(:site_status, :with_any_vacancy),
-             create(:site_status),
-             create(:site_status, :applications_being_accepted_now),
-             create(:site_status, :applications_being_accepted_in_future)]
-          }
-
+          let(:subject) { create(:course_with_site_statuses) }
           its(:site_statuses) { should_not be_empty }
           its(:findable?) { should be true }
           its(:open_for_applications?) { should be false }
