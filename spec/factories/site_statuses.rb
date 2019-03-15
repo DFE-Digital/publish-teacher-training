@@ -89,15 +89,15 @@ FactoryBot.define do
     end
 
     trait :with_course_study_mode_as_full_time do
-      association(:course, study_mode: "F")
+      association(:course, study_mode: :full_time)
     end
 
     trait :with_course_study_mode_as_part_time do
-      association(:course, study_mode: "P")
+      association(:course, study_mode: :part_time)
     end
 
     trait :with_course_study_mode_as_full_time_or_part_time do
-      association(:course, study_mode: "B")
+      association(:course, study_mode: :full_time_or_part_time)
     end
   end
 end

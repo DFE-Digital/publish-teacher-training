@@ -14,10 +14,10 @@ describe 'Courses API v2', type: :request do
   end
 
   let(:findable_open_course) {
-    create(:course, :skips_validate, :resulting_in_pgce_with_qts,
+    create(:course, :resulting_in_pgce_with_qts,
            start_date: Time.now.utc,
            study_mode: :full_time,
-           site_statuses: [create(:site_status, :skips_validate, :findable, :with_any_vacancy, :applications_being_accepted_now)])
+           site_statuses: [create(:site_status, :findable, :full_time_vacancies, :applications_being_accepted_now)])
   }
   let!(:provider) {
     create(:provider,

@@ -30,6 +30,7 @@ FactoryBot.define do
     association(:provider, course_count: 0)
     study_mode { :full_time }
     resulting_in_pgce_with_qts
+    study_mode { :full_time_or_part_time }
 
     trait :skips_validate do
       to_create { |instance| instance.save(validate: false) }
