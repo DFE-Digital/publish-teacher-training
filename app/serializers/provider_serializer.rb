@@ -119,7 +119,7 @@ class ProviderSerializer < ActiveModel::Serializer
       {
         "type": type,
        "name": "#{type.humanize.titleize} #{@object.provider_code}",
-       "email": @object.email&.sub(/.*@/, "admin_contact@"),
+       "email": @object.email&.sub(/.*@/, "#{type}@"),
        "telephone": @object.telephone,
       }
     end

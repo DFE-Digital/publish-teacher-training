@@ -139,31 +139,31 @@ describe 'Providers API', type: :request do
                   {
                     "type" => "utt_correspondent",
                     "name" => "Utt Correspondent A123",
-                    "email" => "admin_contact@acmescitt.education.uk",
+                    "email" => "utt_correspondent@acmescitt.education.uk",
                     "telephone" => "020 812 345 678"
                   },
                   {
                     "type" => "web_link_correspondent",
                     "name" => "Web Link Correspondent A123",
-                    "email" => "admin_contact@acmescitt.education.uk",
+                    "email" => "web_link_correspondent@acmescitt.education.uk",
                     "telephone" => "020 812 345 678"
                   },
                   {
                     "type" => "fraud_contact",
                     "name" => "Fraud Contact A123",
-                    "email" => "admin_contact@acmescitt.education.uk",
+                    "email" => "fraud_contact@acmescitt.education.uk",
                     "telephone" => "020 812 345 678"
                   },
                   {
                     "type" => "finance_contact",
                     "name" => "Finance Contact A123",
-                    "email" => "admin_contact@acmescitt.education.uk",
+                    "email" => "finance_contact@acmescitt.education.uk",
                     "telephone" => "020 812 345 678"
                   },
                   {
                     "type" => "application_alert_recipient",
                     "name" => "Application Alert Recipient A123",
-                    "email" => "admin_contact@acmescitt.education.uk",
+                    "email" => "application_alert_recipient@acmescitt.education.uk",
                     "telephone" => "020 812 345 678"
                   }
                 ]
@@ -203,31 +203,31 @@ describe 'Providers API', type: :request do
                   {
                     "type" => "utt_correspondent",
                     "name" => "Utt Correspondent B123",
-                    "email" => "admin_contact@acmeuniversity.education.uk",
+                    "email" => "utt_correspondent@acmeuniversity.education.uk",
                     "telephone" => "01273 345 678"
                   },
                   {
                     "type" => "web_link_correspondent",
                     "name" => "Web Link Correspondent B123",
-                    "email" => "admin_contact@acmeuniversity.education.uk",
+                    "email" => "web_link_correspondent@acmeuniversity.education.uk",
                     "telephone" => "01273 345 678"
                   },
                   {
                     "type" => "fraud_contact",
                     "name" => "Fraud Contact B123",
-                    "email" => "admin_contact@acmeuniversity.education.uk",
+                    "email" => "fraud_contact@acmeuniversity.education.uk",
                     "telephone" => "01273 345 678"
                   },
                   {
                     "type" => "finance_contact",
                     "name" => "Finance Contact B123",
-                    "email" => "admin_contact@acmeuniversity.education.uk",
+                    "email" => "finance_contact@acmeuniversity.education.uk",
                     "telephone" => "01273 345 678"
                   },
                   {
                     "type" => "application_alert_recipient",
                     "name" => "Application Alert Recipient B123",
-                    "email" => "admin_contact@acmeuniversity.education.uk",
+                    "email" => "application_alert_recipient@acmeuniversity.education.uk",
                     "telephone" => "01273 345 678"
                   }
                 ]
@@ -288,31 +288,31 @@ describe 'Providers API', type: :request do
                                     {
                                       "type" => "utt_correspondent",
                                       "name" => "Utt Correspondent A123",
-                                      "email" => "admin_contact@acmescitt.education.uk",
+                                      "email" => "utt_correspondent@acmescitt.education.uk",
                                       "telephone" => "020 812 345 678"
                                     },
                                     {
                                       "type" => "web_link_correspondent",
                                       "name" => "Web Link Correspondent A123",
-                                      "email" => "admin_contact@acmescitt.education.uk",
+                                      "email" => "web_link_correspondent@acmescitt.education.uk",
                                       "telephone" => "020 812 345 678"
                                     },
                                     {
                                       "type" => "fraud_contact",
                                       "name" => "Fraud Contact A123",
-                                      "email" => "admin_contact@acmescitt.education.uk",
+                                      "email" => "fraud_contact@acmescitt.education.uk",
                                       "telephone" => "020 812 345 678"
                                     },
                                     {
                                       "type" => "finance_contact",
                                       "name" => "Finance Contact A123",
-                                      "email" => "admin_contact@acmescitt.education.uk",
+                                      "email" => "finance_contact@acmescitt.education.uk",
                                       "telephone" => "020 812 345 678"
                                     },
                                     {
                                       "type" => "application_alert_recipient",
                                       "name" => "Application Alert Recipient A123",
-                                      "email" => "admin_contact@acmescitt.education.uk",
+                                      "email" => "application_alert_recipient@acmescitt.education.uk",
                                       "telephone" => "020 812 345 678"
                                     }
                                   ]
@@ -352,31 +352,31 @@ describe 'Providers API', type: :request do
                                    {
                                      "type" => "utt_correspondent",
                                      "name" => "Utt Correspondent B123",
-                                     "email" => "admin_contact@acmeuniversity.education.uk",
+                                     "email" => "utt_correspondent@acmeuniversity.education.uk",
                                      "telephone" => "01273 345 678"
                                    },
                                    {
                                      "type" => "web_link_correspondent",
                                      "name" => "Web Link Correspondent B123",
-                                     "email" => "admin_contact@acmeuniversity.education.uk",
+                                     "email" => "web_link_correspondent@acmeuniversity.education.uk",
                                      "telephone" => "01273 345 678"
                                    },
                                    {
                                      "type" => "fraud_contact",
                                      "name" => "Fraud Contact B123",
-                                     "email" => "admin_contact@acmeuniversity.education.uk",
+                                     "email" => "fraud_contact@acmeuniversity.education.uk",
                                      "telephone" => "01273 345 678"
                                    },
                                    {
                                      "type" => "finance_contact",
                                      "name" => "Finance Contact B123",
-                                     "email" => "admin_contact@acmeuniversity.education.uk",
+                                     "email" => "finance_contact@acmeuniversity.education.uk",
                                      "telephone" => "01273 345 678"
                                    },
                                    {
                                      "type" => "application_alert_recipient",
                                      "name" => "Application Alert Recipient B123",
-                                     "email" => "admin_contact@acmeuniversity.education.uk",
+                                     "email" => "application_alert_recipient@acmeuniversity.education.uk",
                                      "telephone" => "01273 345 678"
                                    }
                                  ]
