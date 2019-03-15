@@ -74,10 +74,5 @@ FactoryBot.define do
       running
       published
     end
-
-    trait :findable_and_with_any_vacancy do
-      findable
-      with_any_vacancy
-    end
   end
 end
