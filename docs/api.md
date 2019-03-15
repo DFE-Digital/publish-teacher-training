@@ -435,33 +435,33 @@ endpoint) if any of these are true:
     "contacts": [
       {
         "type": "utt_correspondent",
-        "name": "Kevin Warnock",
-        "email": "kevin.warnock@mpc.org.uk",
-        "telephone": "020 7946 0935",
+        "name": "UTT Corey",
+        "email": "utt.corey@asmescitt.education.uk",
+        "telephone": "020 7946 0935"
       },
       {
         "type": "web_link_correspondent",
-        "name": "Randal Rappaport",
-        "email": "randal.rappaport@mpc.org.uk",
-        "telephone": "020 7946 0733",
+        "name": "Web Link",
+        "email": "web_link@asmescitt.education.uk",
+        "telephone": "020 7946 0733"
       },
       {
         "type": "fraud_contact",
-        "name": "Fidgit Baker",
-        "email": "fidgit.baker@mpc.org.uk",
-        "telephone": "020 7946 0043",
+        "name": "Fraught Fred",
+        "email": "fraud@asmescitt.education.uk",
+        "telephone": "020 7946 0043"
       },
       {
         "type": "finance_contact",
-        "name": "Strutter Dixon",
-        "email": "strutter.dixon@mpc.org.uk",
-        "telephone": "020 7946 0722",
+        "name": "Finance Finn",
+        "email": "finance@asmescitt.education.uk",
+        "telephone": "020 7946 0722"
       },
       {
         "type": "application_alert_recipient",
-        "name": "Og Edmonds",
-        "email": "og.edmonds@mpc.org.uk",
-        "telephone": "020 7946 0145",
+        "name": "Amy Alert",
+        "email": "alert@asmescitt.education.uk",
+        "telephone": "020 7946 0145"
       }
     ]
   },
