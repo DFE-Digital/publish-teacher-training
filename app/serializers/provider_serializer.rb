@@ -107,6 +107,24 @@ class ProviderSerializer < ActiveModel::Serializer
     select_value_for_provider(@object.provider_code, values)
   end
 
+  attribute :contacts do
+    %w[
+      admin_contact
+      utt_correspondent
+      web_link_correspondent
+      fraud_contact
+      finance_contact
+      application_alert_recipient
+    ].map do |type|
+      {
+        "type": type,
+       "name": "#{type.humanize.titleize} #{@object.provider_code}",
+       "email": @object.email&.sub(/.*@/, "admin_contact@"),
+       "telephone": @object.telephone,
+      }
+    end
+  end
+
 private
 
   def select_value_for_provider(provider_code, values)
