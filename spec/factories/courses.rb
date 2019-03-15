@@ -31,6 +31,10 @@ FactoryBot.define do
     study_mode { :full_time }
     resulting_in_pgce_with_qts
 
+    trait :skips_validate do
+      to_create { |instance| instance.save(validate: false) }
+    end
+
     transient do
       age { nil }
     end

@@ -18,6 +18,10 @@ FactoryBot.define do
     publish { 'N' }
     vac_status { :full_time_vacancies }
 
+    trait :skips_validate do
+      to_create { |instance| instance.save(validate: false) }
+    end
+
     trait :published do
       publish { :published }
     end
@@ -39,7 +43,7 @@ FactoryBot.define do
     end
 
     trait :with_any_vacancy do
-      vac_status { %i[full_time_vacancies full_time_vacancies part_time_vacancies].sample }
+      vac_status { %i[both_full_time_and_part_time_vacancies full_time_vacancies part_time_vacancies].sample }
     end
 
     trait :with_no_vacancies do
@@ -73,6 +77,27 @@ FactoryBot.define do
     trait :findable do
       running
       published
+    end
+
+    trait :findable_and_with_any_vacancy do
+      findable
+      with_any_vacancy
+    end
+
+    trait :with_course_study_mode_as_nil do
+      association(:course, study_mode: nil)
+    end
+
+    trait :with_course_study_mode_as_full_time do
+      association(:course, study_mode: "F")
+    end
+
+    trait :with_course_study_mode_as_part_time do
+      association(:course, study_mode: "P")
+    end
+
+    trait :with_course_study_mode_as_full_time_or_part_time do
+      association(:course, study_mode: "B")
     end
   end
 end

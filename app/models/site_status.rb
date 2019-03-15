@@ -14,6 +14,22 @@
 class SiteStatus < ApplicationRecord
   self.table_name = "course_site"
 
+  ALLOWED_VAC_STATUSES = {
+    nil                      => %w[no_vacancies],
+    'full_time'              => %w[no_vacancies full_time_vacancies],
+    'part_time'              => %w[no_vacancies part_time_vacancies],
+    'full_time_or_part_time' => %w[no_vacancies part_time_vacancies full_time_vacancies both_full_time_and_part_time_vacancies],
+  }.freeze
+
+  validate :validate_vac_status, if: :vac_status_changed?
+
+  def validate_vac_status
+    unless ALLOWED_VAC_STATUSES[self.course.study_mode].include? vac_status
+      errors.add(:vac_status,
+        "can only be #{ALLOWED_VAC_STATUSES[self.course.study_mode].map { |s| "'#{s}'" }.join(', ')} as the course study mode is '#{self.course.study_mode}'")
+    end
+  end
+
   enum vac_status: {
     both_full_time_and_part_time_vacancies: "B",
     part_time_vacancies: "P",
