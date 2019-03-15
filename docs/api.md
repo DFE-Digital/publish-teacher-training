@@ -308,6 +308,7 @@ subset of contact groups required by the DfE course publishing system is used fo
 
 | Contact Type                | UCAS "contact group"   | Contact Purpose                                                                                                                  |
 | --------------------------- | ---------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
+| admin_contact               | n/a                    | This is the lead UCAS contact.                                                                                                   |
 | utt_correspondent           | UTT Correspondent      | This person will receive the UCAS monthly bulletin, which will include information about deadlines for making decisions.         |
 | web_link_correspondent      | web-link Correspondent | This person will receive notices about UCAS systems and planned downtime.                                                        |
 | fraud_contact               | Fraud Correspondent    | This person will receive alerts about fradulent activity, for example similarity detection for a plagiarised personal statement. |
@@ -394,9 +395,6 @@ endpoint) if any of these are true:
 | address3               | Text               |                                                                                                            | Town/City                                                                                            |
 | address4               | Text               |                                                                                                            | County                                                                                               |
 | postcode               | Text               |                                                                                                            | Postcode                                                                                             |
-| email                  | Text               |                                                                                                            |                                                                                                      |
-| telephone              | Text               |                                                                                                            |                                                                                                      |
-| contact_name           | Text               |                                                                                                            |                                                                                                      |
 | region_code            | Text               | 01 to 11                                                                                                   | 2-character string                                                                                   |
 | utt_application_alerts | Text               | `No, not required`, `Yes, required`, `Yes - only my programmes` or `Yes - for accredited programmes only`  | New UTT Application alerts                                                                           |
 | type_of_gt12           | Text               | `Coming / Enrol`, `Coming or Not`, `No response` or `Not coming`                                           |                                                                                                      |
@@ -433,6 +431,12 @@ endpoint) if any of these are true:
       }
     ],
     "contacts": [
+      {
+        "type": "admin_contact",
+        "name": "Andy Admin",
+        "email": "admin@asmescitt.education.uk",
+        "telephone": "020 7946 0936"
+      },
       {
         "type": "utt_correspondent",
         "name": "UTT Corey",
