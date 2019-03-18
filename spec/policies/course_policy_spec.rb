@@ -27,6 +27,10 @@ describe CoursePolicy do
       it 'allows the :show action' do
         expect(subject.show?).to be_truthy
       end
+
+      it 'allows the :update action' do
+        expect(subject.update?).to be_truthy
+      end
     end
 
     context 'when accessing a course of a provider that the user does not have' do
@@ -34,6 +38,10 @@ describe CoursePolicy do
 
       it 'allows the :show action' do
         expect(subject.show?).to be_falsey
+      end
+
+      it 'allows the :update action' do
+        expect(subject.update?).to be_falsey
       end
     end
   end
