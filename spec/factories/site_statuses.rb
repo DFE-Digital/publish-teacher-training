@@ -16,7 +16,7 @@ FactoryBot.define do
     association(:course)
     association(:site)
     publish { 'N' }
-    vac_status { :no_vacancies }
+    vac_status { :full_time_vacancies }
 
     trait :published do
       publish { :published }
@@ -73,11 +73,6 @@ FactoryBot.define do
     trait :findable do
       running
       published
-    end
-
-    trait :findable_and_with_any_vacancy do
-      findable
-      with_any_vacancy
     end
   end
 end

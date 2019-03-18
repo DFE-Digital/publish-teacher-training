@@ -28,6 +28,7 @@ FactoryBot.define do
     name { Faker::ProgrammingLanguage.name }
     qualification { :pgce_with_qts }
     association(:provider, course_count: 0)
+    study_mode { :full_time }
     resulting_in_pgce_with_qts
 
     transient do

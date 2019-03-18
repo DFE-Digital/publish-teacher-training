@@ -51,6 +51,7 @@ course1 = Course.create!(
     Subject.find_by(subject_name: "Secondary"),
     Subject.find_by(subject_name: "Mathematics")
   ],
+  study_mode: "F",
 )
 
 SiteStatus.create!(
@@ -79,6 +80,7 @@ course2 = Course.create!(
     Subject.find_by(subject_name: "Biology"),
     Subject.find_by(subject_name: "Further Education"),
   ],
+  study_mode: "B",
 )
 
 PGDECourse.create!(

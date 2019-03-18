@@ -107,15 +107,14 @@ describe 'Courses API v2', type: :request do
                   }
                 }
               }
-            },
-                         {
-                           "id" => site.id.to_s,
-                           "type" => "sites",
-                           "attributes" => {
-                             "code" => site.code,
-                             "location_name" => site.location_name
-                           }
-                         }]
+            }, {
+            "id" => site.id.to_s,
+            "type" => "sites",
+            "attributes" => {
+              "code" => site.code,
+              "location_name" => site.location_name
+            }
+          }]
         )
       end
     end
