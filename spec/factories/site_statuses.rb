@@ -19,8 +19,8 @@ FactoryBot.define do
     publish { 'N' }
     full_time_vacancies
 
-    trait :skips_validate do
-      to_create { |instance| instance.save(validate: false) }
+    trait :allow_invalid do
+      to_create(&:save)
     end
 
     trait :published do

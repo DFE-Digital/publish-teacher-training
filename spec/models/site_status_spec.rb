@@ -118,56 +118,45 @@ RSpec.describe SiteStatus, type: :model do
     end
   end
 
-  describe "#update" do
-    all_vac_statuses = %w[no_vacancies part_time_vacancies full_time_vacancies both_full_time_and_part_time_vacancies]
+  describe "vac_status" do
     specs = [
       {
-        study_mode: :with_course_study_mode_as_nil,
-        valid_states: %w[no_vacancies]
+        course_study_mode: nil,
+        valid_states: %w[no_vacancies],
+        invalid_states: %w[part_time_vacancies full_time_vacancies both_full_time_and_part_time_vacancies]
       },
       {
-        study_mode: :with_course_study_mode_as_full_time,
-        valid_states: %w[no_vacancies full_time_vacancies]
+        course_study_mode: :full_time,
+        valid_states: %w[no_vacancies full_time_vacancies],
+        invalid_states: %w[part_time_vacancies both_full_time_and_part_time_vacancies]
       },
       {
-        study_mode: :with_course_study_mode_as_part_time,
-        valid_states: %w[no_vacancies part_time_vacancies]
+        course_study_mode: :part_time,
+        valid_states: %w[no_vacancies part_time_vacancies],
+        invalid_states: %w[full_time_vacancies both_full_time_and_part_time_vacancies]
       },
       {
-        study_mode: :with_course_study_mode_as_full_time_or_part_time,
-        valid_states: all_vac_statuses
+        course_study_mode: :full_time_or_part_time,
+        valid_states: %w[no_vacancies part_time_vacancies full_time_vacancies both_full_time_and_part_time_vacancies],
+        invalid_states: []
       },
     ].freeze
 
     specs.each do |spec|
-      context "site status #{spec[:study_mode].to_s.humanize(capitalize: false)}" do
-        subject { create(:site_status, spec[:study_mode], :with_no_vacancies) }
+      context "#{spec[:study_mode].to_s.humanize(capitalize: false)} course" do
+        let(:course) { build(:course, study_mode: spec[:course_study_mode]) }
 
         spec[:valid_states].each do |state|
-          context "set a valid vac_status to #{state}" do
-            let!(:has_saved) {
-              subject.update(vac_status: state)
-            }
-
-            it "updated successfully" do
-              expect(subject.vac_status).to eq state.to_s
-              expect(has_saved).to eq true
-            end
+          context "vac_status set to #{state}" do
+            subject { create(:site_status, vac_status: state, course: course) }
+            it { should be_valid }
           end
         end
 
-        invalid_states = (spec[:valid_states] + all_vac_statuses) - (spec[:valid_states] & all_vac_statuses)
-
-        invalid_states.each do |state|
-          context "set an invalid the vac_status to #{state}" do
-            let!(:has_saved) {
-              subject.update(vac_status: state)
-            }
-
-            it "updated unsuccessfully" do
-              expect(subject.vac_status).to eq state.to_s
-              expect(has_saved).to eq false
-            end
+        spec[:invalid_states].each do |state|
+          context "vac_status set to #{state}" do
+            subject { create(:site_status, :allow_invalid, vac_status: state, course: course) }
+            it { should_not be_valid }
           end
         end
       end
