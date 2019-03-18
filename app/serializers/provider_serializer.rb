@@ -109,11 +109,11 @@ class ProviderSerializer < ActiveModel::Serializer
 
   attribute :contacts do
     %w[
-      admin_contact
-      utt_correspondent
-      web_link_correspondent
-      fraud_contact
-      finance_contact
+      admin
+      utt
+      web_link
+      fraud
+      finance
       application_alert_recipient
     ].map do |type|
       {
