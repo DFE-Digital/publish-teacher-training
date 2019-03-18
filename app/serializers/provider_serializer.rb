@@ -117,10 +117,10 @@ class ProviderSerializer < ActiveModel::Serializer
       application_alert_recipient
     ].map do |type|
       {
-        "type": type,
-       "name": "#{type.humanize.titleize} #{@object.provider_code}",
-       "email": @object.email&.sub(/.*@/, "#{type}@"),
-       "telephone": @object.telephone,
+        type: type,
+        name: "#{type.humanize.titleize} Contact #{@object.provider_code}",
+        email: @object.email&.sub(/.*@/, "#{type}@"),
+        telephone: @object.telephone,
       }
     end
   end
