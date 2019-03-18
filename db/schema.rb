@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_03_06_122110) do
+ActiveRecord::Schema.define(version: 2019_03_13_153617) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_buffercache"
@@ -53,6 +53,7 @@ ActiveRecord::Schema.define(version: 2019_03_06_122110) do
     t.datetime "updated_at", default: -> { "timezone('utc'::text, now())" }, null: false
     t.datetime "changed_at", default: -> { "timezone('utc'::text, now())" }, null: false
     t.index ["accrediting_provider_id"], name: "IX_course_accrediting_provider_id"
+    t.index ["changed_at"], name: "index_course_on_changed_at", unique: true
     t.index ["provider_id", "course_code"], name: "IX_course_provider_id_course_code", unique: true
   end
 
@@ -143,6 +144,7 @@ ActiveRecord::Schema.define(version: 2019_03_06_122110) do
     t.datetime "last_published_at"
     t.datetime "changed_at", default: -> { "timezone('utc'::text, now())" }, null: false
     t.boolean "opted_in", default: false
+    t.index ["changed_at"], name: "index_provider_on_changed_at", unique: true
     t.index ["last_published_at"], name: "IX_provider_last_published_at"
     t.index ["provider_code"], name: "IX_provider_provider_code", unique: true
   end

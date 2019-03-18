@@ -5,7 +5,7 @@ def get_course_codes_from_body(body)
   json.map { |course| course["course_code"] }
 end
 
-RSpec.describe "Courses API", type: :request do
+describe "Courses API", type: :request do
   describe 'GET index' do
     let(:credentials) do
       ActionController::HttpAuthentication::Token
@@ -22,7 +22,6 @@ RSpec.describe "Courses API", type: :request do
         provider_code: "2LD",
         provider_type: :scitt,
         site_count: 0,
-        course_count: 0,
         scheme_member: 'Y',
         enrichments: [])
     end
