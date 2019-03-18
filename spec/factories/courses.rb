@@ -33,6 +33,7 @@ FactoryBot.define do
     resulting_in_pgce_with_qts
 
     transient do
+      with_site_statuses { [] }
       age { nil }
     end
 
@@ -41,6 +42,17 @@ FactoryBot.define do
         course.created_at = evaluator.age
         course.updated_at = evaluator.age
         course.changed_at = evaluator.age
+      end
+    end
+
+    after(:create) do |course, evaluator|
+      evaluator.with_site_statuses.each do |traits|
+        attrs = { course: course }
+        if traits == [:default]
+          create(:site_status, attrs)
+        else
+          create(:site_status, *traits, attrs)
+        end
       end
     end
 
