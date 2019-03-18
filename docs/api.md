@@ -1,5 +1,26 @@
 # API Reference
 
+This documents the API that serves out post graduate teacher training course,
+subject and training provider information. The version of the API documented
+here feeds the UCAS Apply system.
+
+# Table of Contents
+
+* [Authorisation](#authorisation)
+* [Retrieving Records](#retrieving-records)
+  * [Populating an empty system](#populating-an-empty-system)
+  * [Retrieving changed records](#retrieving-changed-records)
+* [Errors](#errors)
+* [Preparation for the next recruitment cycle (rollover)](#preparation-for-the-next-recruitment-cycle-rollover)
+  * [Recruitment cycle URL parameter](#recruitment-cycle-url-parameter)
+* [Endpoints](#endpoints)
+  * [Courses](#courses)
+  * [Campuses](#campuses)
+  * [Campus statuses](#campus-statuses)
+  * [Contacts](#contacts)
+  * [Subjects](#subjects)
+  * [Providers](#providers)
+
 # Authorisation
 
 The server expects an API key to be included in a header for all API requests,
@@ -269,6 +290,35 @@ endpoint) if any of these are true:
 | status            | Text                 |                   |
 | course_open_date  | ISO 8601 date string |                   |
 
+## Contacts
+
+### Entity documentation
+
+| Parameter         | Data type | Possible values     | Description                                                       |
+| ----------------- | --------- | ------------------- | ----------------------------------------------------------------- |
+| contact_type      | Text      | A-Z, 0-9, "-" or "" | Type of contact, one of a pre-defined list. See below for details |
+| name              | Text      |                     | Name of contact.                                                  |
+| email             | Text      |                     | Email address for the contact.                                    |
+| telephone         | Text      |                     | Telephone for the contact.                                        |
+
+### Contact Types
+
+UCAS defines a number of contact types (called "contact groups"). Only the
+subset of contact groups required by the DfE course publishing system is used for the contact types here. This list is:
+
+| Contact Type                | UCAS "contact group"   | Contact Purpose                                                                                                                  |
+| --------------------------- | ---------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
+| admin_contact               | n/a                    | This is the lead UCAS contact.                                                                                                   |
+| utt_correspondent           | UTT Correspondent      | This person will receive the UCAS monthly bulletin, which will include information about deadlines for making decisions.         |
+| web_link_correspondent      | web-link Correspondent | This person will receive notices about UCAS systems and planned downtime.                                                        |
+| fraud_contact               | Fraud Correspondent    | This person will receive alerts about fradulent activity, for example similarity detection for a plagiarised personal statement. |
+| finance_contact             | UTT finance contact    | This person will receive invoices from UCAS for payment of fees.                                                                 |
+| application_alert_recipient | UTT Output             | This person will receive alerts about new applications.                                                                          |
+
+### Example
+
+See the example in the [Providers](#providers) section.
+
 ## Subjects
 
 This endpoint retrieves all subjects.
@@ -332,26 +382,25 @@ endpoint) if any of these are true:
 
 ### Entity documentation
 
-| Parameter              | Data type          | Possible values                                                                                           | Description                                                                                          |
-| ---------------------- | ------------------ | ----------------------------------------------------------------------------------------------------------| ---------------------------------------------------------------------------------------------------- |
-| institution_code       | Text               | 3-character strings                                                                                       | 3-character UCAS institution code                                                                    |
-| institution_name       | Text               |                                                                                                           | The institution's full-length marketing name                                                         |
-| institution_type       | Text               | "Y", "B", "0", "O", null                                                                                  | The type of institution (whether it's a university, lead school/teaching school alliance or a SCITT) |
-| accrediting_provider   | Text               | "Y" or "N"                                                                                                | Whether the provider can accredit courses or not                                                     |
-| campuses               | An array of campus |                                                                                                           | See the campus entity documentation above                                                            |
-| address1               | Text               |                                                                                                           | Address line 1                                                                                       |
-| address2               | Text               |                                                                                                           | Address line 2                                                                                       |
-| address3               | Text               |                                                                                                           | Town/City                                                                                            |
-| address4               | Text               |                                                                                                           | County                                                                                               |
-| postcode               | Text               |                                                                                                           | Postcode                                                                                             |
-| email                  | Text               |                                                                                                           |                                                                                                      |
-| telephone              | Text               |                                                                                                           |                                                                                                      |
-| contact_name           | Text               |                                                                                                           |                                                                                                      |
-| region_code            | Text               | 01 to 11                                                                                                  | 2-character string                                                                                   |
-| utt_application_alerts | Text               | `No, not required`, `Yes, required`, `Yes - only my programmes` or `Yes - for accredited programmes only` | New UTT Application alerts                                                                           |
-| type_of_gt12           | Text               | `Coming / Enrol`, `Coming or Not`, `No response` or `Not coming`                                          |                                                                                                      |
-| scheme_member          | Text               | `Y` or `N`                                                                                                |                                                                                                      |
-| recruitment_cycle      | Text               |                                                                                                           | 4-character year                                                                                     |
+| Parameter              | Data type          | Possible values                                                                                            | Description                                                                                          |
+| ---------------------- | ------------------ | ---------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------- |
+| institution_code       | Text               | 3-character strings                                                                                        | 3-character UCAS institution code                                                                    |
+| institution_name       | Text               |                                                                                                            | The institution's full-length marketing name                                                         |
+| institution_type       | Text               | "Y", "B", "0", "O", null                                                                                   | The type of institution (whether it's a university, lead school/teaching school alliance or a SCITT) |
+| accrediting_provider   | Text               | "Y" or "N"                                                                                                 | Whether the provider can accredit courses or not                                                     |
+| campuses               | An array of campus |                                                                                                            | See the campus entity documentation above                                                            |
+| contacts               | Array of contacts  |                                                                                                            | List of contact objects that include group                                                           |
+| address1               | Text               |                                                                                                            | Address line 1                                                                                       |
+| address2               | Text               |                                                                                                            | Address line 2                                                                                       |
+| address3               | Text               |                                                                                                            | Town/City                                                                                            |
+| address4               | Text               |                                                                                                            | County                                                                                               |
+| postcode               | Text               |                                                                                                            | Postcode                                                                                             |
+| region_code            | Text               | 01 to 11                                                                                                   | 2-character string                                                                                   |
+| utt_application_alerts | Text               | `No, not required`, `Yes, required`, `Yes - only my programmes` or `Yes - for accredited programmes only`  | New UTT Application alerts                                                                           |
+| type_of_gt12           | Text               | `Coming / Enrol`, `Coming or Not`, `No response` or `Not coming`                                           |                                                                                                      |
+| scheme_member          | Text               | `Y` or `N`                                                                                                 |                                                                                                      |
+| recruitment_cycle      | Text               |                                                                                                            | 4-character year                                                                                     |
+| g12_contact_address    | Text               |                                                                                                            | Email or URL for the candidate to contact that will be inserted into the GT12 letter sent them.      |
 
 ### Example response body
 
@@ -373,11 +422,50 @@ endpoint) if any of these are true:
     "region_code": "01",
     "scheme_member": "Y",
     "recruitment_cycle": "2019",
+    "g12_contact_address": "info@asmescitt.education.uk",
     "campuses": [
       {
         "campus_code": "",
         "name": "Main Site",
         "region_code": "01"
+      }
+    ],
+    "contacts": [
+      {
+        "type": "admin_contact",
+        "name": "Andy Admin",
+        "email": "admin@asmescitt.education.uk",
+        "telephone": "020 7946 0936"
+      },
+      {
+        "type": "utt_correspondent",
+        "name": "UTT Corey",
+        "email": "utt.corey@asmescitt.education.uk",
+        "telephone": "020 7946 0935"
+      },
+      {
+        "type": "web_link_correspondent",
+        "name": "Web Link",
+        "email": "web_link@asmescitt.education.uk",
+        "telephone": "020 7946 0733"
+      },
+      {
+        "type": "fraud_contact",
+        "name": "Fraught Fred",
+        "email": "fraud@asmescitt.education.uk",
+        "telephone": "020 7946 0043"
+      },
+      {
+        "type": "finance_contact",
+        "name": "Finance Finn",
+        "email": "finance@asmescitt.education.uk",
+        "telephone": "020 7946 0722"
+      },
+      {
+        "type": "application_alert_recipient",
+        "name": "Amy Alert",
+        "email": "alert@asmescitt.education.uk",
+        "telephone": "020 7946 0145"
       }
     ]
   },
