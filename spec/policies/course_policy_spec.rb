@@ -21,15 +21,11 @@ describe CoursePolicy do
               organisations: [organisation])
     }
 
-    it 'permits when the user belongs to the organisation' do
-      should permit(user, course)
-    end
+    it { should permit(user, course) }
 
     context 'with a user outside the organisation' do
       let(:other_user) { create(:user) }
-      it 'does not permit' do
-        should_not permit(other_user, course)
-      end
+      it { should_not permit(other_user, course) }
     end
   end
 end
