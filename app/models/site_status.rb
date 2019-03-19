@@ -12,6 +12,8 @@
 #
 
 class SiteStatus < ApplicationRecord
+  include TouchCourse
+
   self.table_name = "course_site"
 
   validate :vac_status_must_be_consistent_with_course_study_mode,
