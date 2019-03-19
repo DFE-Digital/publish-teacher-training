@@ -13,4 +13,6 @@ class CoursePolicy
   def show?
     user.providers.include? course.provider
   end
+
+  alias_method :update?, :show?
 end

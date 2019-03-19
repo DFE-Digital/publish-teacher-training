@@ -10,8 +10,7 @@ module API
       end
 
       def show
-        course = Course.find_by!(course_code: params[:code])
-        authorize course
+        course = authorize Course.find_by!(course_code: params[:code])
 
         render jsonapi: course, include: [site_statuses: [:site]]
       end
