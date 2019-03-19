@@ -43,6 +43,19 @@ describe 'Courses API v2', type: :request do
       it { should have_http_status(:unauthorized) }
     end
 
+    context 'when user has not accepted terms' do
+      let(:user_without_terms_accepted) { create(:user, accept_terms_date_utc: nil) }
+      let(:organisation) { create(:organisation, users: [user, user_without_terms_accepted]) }
+      let(:payload) { { email: user_without_terms_accepted.email } }
+
+      before do
+        get "/api/v2/providers/#{provider.provider_code}/courses/#{findable_open_course.course_code}",
+            headers: { 'HTTP_AUTHORIZATION' => credentials }
+      end
+
+      it { should have_http_status(:forbidden) }
+    end
+
     context 'when unauthorised' do
       let(:unauthorised_user) { create(:user) }
       let(:payload) { { email: unauthorised_user.email } }
