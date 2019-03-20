@@ -13,10 +13,14 @@
 
 FactoryBot.define do
   factory :site_status do
-    association(:course)
+    association :course, study_mode: :full_time_or_part_time
     association(:site)
     publish { 'N' }
     vac_status { :full_time_vacancies }
+
+    transient do
+      any_vancancy { false }
+    end
 
     trait :published do
       publish { :published }
@@ -39,7 +43,7 @@ FactoryBot.define do
     end
 
     trait :with_any_vacancy do
-      vac_status { %i[full_time_vacancies full_time_vacancies part_time_vacancies].sample }
+      any_vancancy { true }
     end
 
     trait :with_no_vacancies do
@@ -73,6 +77,22 @@ FactoryBot.define do
     trait :findable do
       running
       published
+    end
+
+    after(:build) do |site_status, evaluator|
+      if evaluator.any_vancancy && site_status&.course&.study_mode.present?
+        vac_status = case site_status.course.study_mode
+                     when "full_time"
+                       :full_time_vacancies
+                     when "part_time"
+                       :part_time_vacancies
+                     when "full_time_or_part_time"
+                       :both_full_time_and_part_time_vacancies
+                     else
+                       :no_vacancies
+                     end
+        site_status.vac_status = vac_status
+      end
     end
   end
 end

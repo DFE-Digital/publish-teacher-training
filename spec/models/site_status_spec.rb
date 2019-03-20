@@ -117,4 +117,49 @@ RSpec.describe SiteStatus, type: :model do
       it { should_not have_vacancies }
     end
   end
+
+  describe "vac_status" do
+    specs = [
+      {
+        course_study_mode: :full_time,
+        valid_states: %w[no_vacancies full_time_vacancies],
+        invalid_states: %w[part_time_vacancies both_full_time_and_part_time_vacancies]
+      },
+      {
+        course_study_mode: :part_time,
+        valid_states: %w[no_vacancies part_time_vacancies],
+        invalid_states: %w[full_time_vacancies both_full_time_and_part_time_vacancies]
+      },
+      {
+        course_study_mode: :full_time_or_part_time,
+        valid_states: %w[no_vacancies part_time_vacancies full_time_vacancies both_full_time_and_part_time_vacancies],
+        invalid_states: []
+      },
+    ].freeze
+
+    specs.each do |spec|
+      context "#{spec[:study_mode].to_s.humanize(capitalize: false)} course" do
+        let(:course) { build(:course, study_mode: spec[:course_study_mode]) }
+
+        spec[:valid_states].each do |state|
+          context "vac_status set to #{state}" do
+            subject { build(:site_status, vac_status: state, course: course) }
+            it { should be_valid }
+          end
+        end
+
+        spec[:invalid_states].each do |state|
+          context "vac_status set to #{state}" do
+            subject { build(:site_status, vac_status: state, course: course) }
+            it { should_not be_valid }
+
+            it 'has a validation error about vacancy status not matching study mode' do
+              subject.valid?
+              expect(subject.errors.full_messages).to include("Vac status (#{state}) must be consistent with course study mode #{course.study_mode}")
+            end
+          end
+        end
+      end
+    end
+  end
 end

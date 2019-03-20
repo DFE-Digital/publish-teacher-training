@@ -17,8 +17,9 @@ describe 'Courses API v2', type: :request do
     create(:course, :resulting_in_pgce_with_qts,
            start_date: Time.now.utc,
            study_mode: :full_time,
-           site_statuses: [create(:site_status, :findable, :with_any_vacancy, :applications_being_accepted_now)])
+           with_site_statuses: [%i[findable with_any_vacancy applications_being_accepted_now]])
   }
+
   let!(:provider) {
     create(:provider,
            course_count: 0,

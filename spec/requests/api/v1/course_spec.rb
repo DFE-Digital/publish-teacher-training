@@ -37,7 +37,6 @@ describe "Courses API", type: :request do
           course_code: "2HPF",
           start_date: Date.new(2019, 9, 1),
           name: "Religious Education",
-          sites: [site],
           subjects: [subject1, subject2],
           study_mode: :full_time,
           age_range: 'primary',
@@ -49,12 +48,13 @@ describe "Courses API", type: :request do
           provider: provider,
           age: 2.hours.ago)
 
-        course.site_statuses.first.update(
+        FactoryBot.create(:site_status,
           vac_status: :full_time_vacancies,
           publish: 'Y',
           status: :running,
-          applications_accepted_from: "2018-10-09 00:00:00"
-        )
+          applications_accepted_from: "2018-10-09 00:00:00",
+          course: course,
+          site: site)
       end
 
       it "returns http success" do
