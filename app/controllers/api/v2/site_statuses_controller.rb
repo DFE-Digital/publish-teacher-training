@@ -1,7 +1,18 @@
 module API
   module V2
     class SiteStatusesController < API::V2::ApplicationController
-      def update;end
+      deserializable_resource :site_status, only: :update
+
+      def update
+        site_status = authorize SiteStatus.find(params[:id])
+        site_status.update site_status_params
+      end
+
+    private
+
+      def site_status_params
+        params.require(:site_status).permit :vac_status
+      end
     end
   end
 end
