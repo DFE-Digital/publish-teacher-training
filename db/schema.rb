@@ -167,6 +167,8 @@ ActiveRecord::Schema.define(version: 2019_03_19_163755) do
     t.integer "provider_id", null: false
     t.text "type_of_gt12"
     t.text "send_application_alerts"
+    t.text "application_alert_email"
+    t.text "gt12_response_destination"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["provider_id"], name: "index_provider_ucas_preference_on_provider_id"
