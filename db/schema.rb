@@ -10,7 +10,8 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_03_19_163755) do
+ActiveRecord::Schema.define(version: 2019_03_20_144534) do
+
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_buffercache"
@@ -32,6 +33,17 @@ ActiveRecord::Schema.define(version: 2019_03_19_163755) do
     t.integer "status", null: false
     t.text "requester_email"
     t.index ["requester_id"], name: "IX_access_request_requester_id"
+  end
+
+  create_table "contact", force: :cascade do |t|
+    t.integer "provider_id", null: false
+    t.text "type"
+    t.text "name"
+    t.text "email"
+    t.text "telephone"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["provider_id"], name: "index_contact_on_provider_id"
   end
 
   create_table "course", id: :serial, force: :cascade do |t|
