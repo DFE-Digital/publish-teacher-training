@@ -139,7 +139,7 @@ RSpec.describe SiteStatus, type: :model do
 
     specs.each do |spec|
       context "#{spec[:study_mode].to_s.humanize(capitalize: false)} course" do
-        let(:course) { create(:course, study_mode: spec[:course_study_mode]) }
+        let(:course) { build(:course, study_mode: spec[:course_study_mode]) }
 
         spec[:valid_states].each do |state|
           context "vac_status set to #{state}" do
