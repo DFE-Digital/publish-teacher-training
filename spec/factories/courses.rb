@@ -75,5 +75,9 @@ FactoryBot.define do
     trait :resulting_in_pgde do
       qualification { :pgde }
     end
+
+    trait :without_provider do
+      association :provider, strategy: :null
+    end
   end
 end
