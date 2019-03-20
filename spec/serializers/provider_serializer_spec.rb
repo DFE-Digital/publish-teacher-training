@@ -78,4 +78,10 @@ describe ProviderSerializer do
 
     it { should eq provider.ucas_preferences.type_of_gt12_before_type_cast }
   end
+
+  describe 'utt_application_alerts' do
+    subject { serialize(provider)['utt_application_alerts'] }
+
+    it { should eq provider.ucas_preferences.send_application_alerts_before_type_cast }
+  end
 end

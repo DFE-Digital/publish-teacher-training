@@ -19,7 +19,8 @@ describe 'Providers API', type: :request do
     context "without changed_since parameter" do
       let(:ucas_preferences) do
         build(:ucas_preferences,
-               type_of_gt12: :not_coming)
+              type_of_gt12: :not_coming,
+              send_application_alerts: :all,)
       end
       let!(:provider) do
         create(:provider,
@@ -62,7 +63,8 @@ describe 'Providers API', type: :request do
       end
       let(:ucas_preferences2) do
         build(:ucas_preferences,
-              type_of_gt12: :coming_or_not)
+              type_of_gt12: :coming_or_not,
+              send_application_alerts: :none)
       end
       let(:provider2) do
         create(:provider,
@@ -138,7 +140,7 @@ describe 'Providers API', type: :request do
                 'contact_name' => 'Amy Smith',
                 'recruitment_cycle' => '2019',
                 'type_of_gt12' => 'Not coming',
-                'utt_application_alerts' => 'Yes - for accredited programmes only',
+                'utt_application_alerts' => 'Yes, required',
                 'contacts' => [
                   {
                     'type' => 'admin',
@@ -202,7 +204,7 @@ describe 'Providers API', type: :request do
                 'contact_name' => 'James Brown',
                 'recruitment_cycle' => '2019',
                 'type_of_gt12' => 'Coming or Not',
-                'utt_application_alerts' => 'Yes - for accredited programmes only',
+                'utt_application_alerts' => 'No, not required',
                 'contacts' => [
                   {
                     'type' => 'admin',
@@ -287,7 +289,7 @@ describe 'Providers API', type: :request do
                                   'contact_name' => 'Amy Smith',
                                   'recruitment_cycle' => '2019',
                                   'type_of_gt12' => 'Not coming',
-                                  'utt_application_alerts' => 'Yes - for accredited programmes only',
+                                  'utt_application_alerts' => 'Yes, required',
                                   'contacts' => [
                                     {
                                       'type' => 'admin',
@@ -351,7 +353,7 @@ describe 'Providers API', type: :request do
                                  'contact_name' => 'James Brown',
                                  'recruitment_cycle' => '2019',
                                  'type_of_gt12' => 'Coming or Not',
-                                 'utt_application_alerts' => 'Yes - for accredited programmes only',
+                                 'utt_application_alerts' => 'No, not required',
                                  'contacts' => [
                                    {
                                      'type' => 'admin',
