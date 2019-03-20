@@ -66,6 +66,7 @@ Rails.application.routes.draw do
       end
 
       resource :sessions
+      resources :site_statuses, only: :update
     end
   end
 
