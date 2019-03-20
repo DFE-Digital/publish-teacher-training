@@ -4,6 +4,7 @@ module API
       attr_reader :current_user
 
       before_action :check_terms_accepted
+      before_action :add_provider_count_header
 
       def authenticate
         authenticate_or_request_with_http_token do |token|
@@ -16,6 +17,10 @@ module API
       end
 
     private
+
+      def add_provider_count_header
+        response.set_header('Provider-Count', Provider.count)
+      end
 
       def check_terms_accepted
         return if @current_user&.accept_terms_date_utc.present?
