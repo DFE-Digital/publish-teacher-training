@@ -152,6 +152,11 @@ RSpec.describe SiteStatus, type: :model do
           context "vac_status set to #{state}" do
             subject { build(:site_status, vac_status: state, course: course) }
             it { should_not be_valid }
+
+            it 'has a validation error about vacancy status not matching study mode' do
+              subject.valid?
+              expect(subject.errors.full_messages).to include("Vac status (#{state}) must be consistent with course study mode #{course.study_mode}")
+            end
           end
         end
       end
