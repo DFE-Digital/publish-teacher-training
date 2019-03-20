@@ -18,4 +18,5 @@
 ActiveSupport::Inflector.inflections do |inflect|
   inflect.acronym 'API'
   inflect.acronym 'PGDE'
+  inflect.acronym 'UCAS'
 end

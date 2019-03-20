@@ -35,6 +35,7 @@ describe Provider, type: :model do
   describe 'associations' do
     it { should have_many(:sites) }
     it { should have_many(:users).through(:organisations) }
+    it { should have_one(:ucas_preferences).class_name('ProviderUCASPreference') }
   end
 
   describe 'changed_at' do
