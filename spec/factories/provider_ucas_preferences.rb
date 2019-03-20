@@ -13,7 +13,15 @@
 #
 
 FactoryBot.define do
-  factory :provider_ucas_preference do
+  factory :provider_ucas_preference, aliases: [:ucas_preferences] do
     provider
+    type_of_gt12 do
+      [
+        :coming_or_not,
+        :coming_enrol,
+        :not_coming,
+        :no_response,
+      ].sample
+    end
   end
 end

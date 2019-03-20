@@ -17,6 +17,10 @@ describe 'Providers API', type: :request do
     end
 
     context "without changed_since parameter" do
+      let(:ucas_preferences) do
+        build(:ucas_preferences,
+               type_of_gt12: :not_coming)
+      end
       let!(:provider) do
         create(:provider,
                provider_name: 'ACME SCITT',
@@ -35,7 +39,8 @@ describe 'Providers API', type: :request do
                accrediting_provider: 'Y',
                scheme_member: 'Y',
                last_published_at: DateTime.now.utc,
-               enrichments: [enrichment])
+               enrichments: [enrichment],
+               ucas_preferences: ucas_preferences)
       end
       let!(:site) do
         create(:site,
@@ -55,6 +60,10 @@ describe 'Providers API', type: :request do
               telephone: '020 8123 1234',
               region_code: :scotland)
       end
+      let(:ucas_preferences2) do
+        build(:ucas_preferences,
+              type_of_gt12: :coming_or_not)
+      end
       let(:provider2) do
         create(:provider,
               provider_name: 'ACME University',
@@ -73,7 +82,8 @@ describe 'Providers API', type: :request do
               scheme_member: 'N',
               last_published_at: DateTime.now.utc,
               enrichments: [],
-              site_count: 0)
+              site_count: 0,
+              ucas_preferences: ucas_preferences2)
       end
       let!(:site2) do
         create(:site,
@@ -191,7 +201,7 @@ describe 'Providers API', type: :request do
                 'email' => 'info@acmeuniversity.education.uk',
                 'contact_name' => 'James Brown',
                 'recruitment_cycle' => '2019',
-                'type_of_gt12' => 'Not coming',
+                'type_of_gt12' => 'Coming or Not',
                 'utt_application_alerts' => 'Yes - for accredited programmes only',
                 'contacts' => [
                   {
@@ -340,7 +350,7 @@ describe 'Providers API', type: :request do
                                  'email' => 'info@acmeuniversity.education.uk',
                                  'contact_name' => 'James Brown',
                                  'recruitment_cycle' => '2019',
-                                 'type_of_gt12' => 'Not coming',
+                                 'type_of_gt12' => 'Coming or Not',
                                  'utt_application_alerts' => 'Yes - for accredited programmes only',
                                  'contacts' => [
                                    {
@@ -409,7 +419,9 @@ describe 'Providers API', type: :request do
       end
 
       it 'includes correct next link in response headers' do
-        create(:provider, provider_code: "LAST1", changed_at: 10.minutes.ago)
+        create(:provider,
+               provider_code: "LAST1",
+               changed_at: 10.minutes.ago)
 
         timestamp_of_last_provider = 2.minutes.ago
         create(:provider,

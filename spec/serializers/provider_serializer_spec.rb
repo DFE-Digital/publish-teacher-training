@@ -29,8 +29,9 @@
 
 require "rails_helper"
 
-RSpec.describe ProviderSerializer do
+describe ProviderSerializer do
   let(:provider) { create :provider }
+
   subject { serialize(provider) }
 
   it { should include(institution_code: provider.provider_code) }
@@ -70,5 +71,11 @@ RSpec.describe ProviderSerializer do
       it { is_expected.to eql("%02d" % region_code) }
       it { is_expected.not_to eql("%02d" % 0) }
     end
+  end
+
+  describe 'type_of_gt12' do
+    subject { serialize(provider)['type_of_gt12'] }
+
+    it { should eq provider.ucas_preferences.type_of_gt12_before_type_cast }
   end
 end

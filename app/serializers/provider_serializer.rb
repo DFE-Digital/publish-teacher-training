@@ -94,17 +94,7 @@ class ProviderSerializer < ActiveModel::Serializer
   end
 
   def type_of_gt12
-    # Temporarily create a value for this field which will be consistent
-    # for this provider. Remove this when we've data for this value to the
-    # db.
-    values = [
-      'Coming / Enrol',
-      'Coming or Not',
-      'No response',
-      'Not coming',
-    ]
-
-    select_value_for_provider(@object.provider_code, values)
+    @object.ucas_preferences.type_of_gt12_before_type_cast
   end
 
   attribute :contacts do
