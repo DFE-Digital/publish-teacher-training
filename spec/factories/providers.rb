@@ -70,6 +70,10 @@ FactoryBot.define do
       if evaluator.changed_at.present?
         provider.update changed_at: evaluator.changed_at
       end
+
+      if provider.ucas_preferences.nil?
+        provider.ucas_preferences = create(:ucas_preferences, provider: provider)
+      end
     end
   end
 end

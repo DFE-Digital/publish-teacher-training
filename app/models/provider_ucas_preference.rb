@@ -16,10 +16,10 @@ class ProviderUCASPreference < ApplicationRecord
   belongs_to :provider
 
   enum type_of_gt12: {
-         coming_or_not: 'Coming or Not (GT12B)',
-         coming_enrol: 'Coming / Enrol (GT12E)',
-         not_coming: 'Not coming (GT12N)',
-         no_response: 'No response (GT12)',
+         coming_or_not: 'Coming or Not',
+         coming_enrol: 'Coming / Enrol',
+         not_coming: 'Not coming',
+         no_response: 'No response',
        },
        _prefix: 'type_of_gt12'
 

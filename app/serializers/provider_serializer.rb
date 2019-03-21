@@ -80,31 +80,11 @@ class ProviderSerializer < ActiveModel::Serializer
   end
 
   def utt_application_alerts
-    # Temporarily create a value for this field which will be consistent
-    # for this provider. Remove this when we've data for this value to the
-    # db.
-    values = [
-      'No, not required',
-      'Yes, required',
-      'Yes - only my programmes',
-      'Yes - for accredited programmes only',
-    ]
-
-    select_value_for_provider(@object.provider_code, values)
+    @object.ucas_preferences.send_application_alerts_before_type_cast
   end
 
   def type_of_gt12
-    # Temporarily create a value for this field which will be consistent
-    # for this provider. Remove this when we've data for this value to the
-    # db.
-    values = [
-      'Coming / Enrol',
-      'Coming or Not',
-      'No response',
-      'Not coming',
-    ]
-
-    select_value_for_provider(@object.provider_code, values)
+    @object.ucas_preferences.type_of_gt12_before_type_cast
   end
 
   attribute :contacts do

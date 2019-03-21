@@ -23,10 +23,10 @@ describe ProviderUCASPreference, type: :model do
         .to define_enum_for(:type_of_gt12)
               .backed_by_column_of_type(:text)
               .with_values(
-                coming_or_not: 'Coming or Not (GT12B)',
-                coming_enrol: 'Coming / Enrol (GT12E)',
-                not_coming: 'Not coming (GT12N)',
-                no_response: 'No response (GT12)',
+                coming_or_not: 'Coming or Not',
+                coming_enrol: 'Coming / Enrol',
+                not_coming: 'Not coming',
+                no_response: 'No response',
               )
               .with_prefix('type_of_gt12')
     end
