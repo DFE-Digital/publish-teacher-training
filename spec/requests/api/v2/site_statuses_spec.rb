@@ -12,22 +12,36 @@ describe 'Site Helpers API V2' do
   let(:credentials) do
     ActionController::HttpAuthentication::Token.encode_credentials(token)
   end
-  let!(:provider) { create(:provider, organisations: [organisation]) }
+  let(:provider) { create(:provider, organisations: [organisation]) }
+  let(:course) do
+    create(
+      :course,
+      provider: provider,
+      with_site_statuses: [%i[
+       with_no_vacancies
+       running
+       published
+      ]]
+    )
+  end
+  let(:site_status) { course.site_statuses.first }
 
   describe 'PATCH update' do
-    context 'when authenticated' do
-      let(:course) do
-        create(
-          :course,
-          provider: provider,
-          with_site_statuses: [%i[
-           with_no_vacancies
-           running
-           published
-          ]]
-        )
+    context 'when unauthorised' do
+      let(:unauthorised_user) { create(:user) }
+      let(:payload) { { email: unauthorised_user.email } }
+
+      it "raises an error" do
+        expect {
+          patch(
+            api_v2_site_status_path(site_status),
+            headers: { 'HTTP_AUTHORIZATION' => credentials },
+          )
+        }.to raise_error Pundit::NotAuthorizedError
       end
-      let(:site_status) { course.site_statuses.first }
+    end
+
+    context 'when authenticated' do
       let(:jsonapi_renderer) { JSONAPI::Serializable::Renderer.new }
       let(:params) do
         {
