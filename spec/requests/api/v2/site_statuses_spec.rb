@@ -64,10 +64,12 @@ describe 'Site Helpers API V2' do
       let(:json_data)                  { JSON.parse(response.body)['data'] }
 
       before do
-        site_status_params[:applications_accepted_from] = applications_accepted_from
-        site_status_params[:publish]                    = publish
-        site_status_params[:status]                     = status
-        site_status_params[:vac_status]                 = vac_status
+        site_status_params.merge!(
+          applications_accepted_from: applications_accepted_from,
+          publish:                    publish,
+          status:                     status,
+          vac_status:                 vac_status,
+        )
       end
 
       subject { perform_request }
