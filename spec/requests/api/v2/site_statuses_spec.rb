@@ -39,11 +39,19 @@ describe 'Site Helpers API V2' do
           )
         }
       end
-      let(:site_status_params)         { params[:_jsonapi][:data][:attributes] }
+      let(:site_status_params)         { params.dig :_jsonapi, :data, :attributes }
       let(:applications_accepted_from) { '2019-01-01 00:00:00' }
       let(:publish)                    { 'unpublished' }
       let(:status)                     { 'discontinued' }
       let(:vac_status)                 { 'full_time_vacancies' }
+      let(:json_data)                  { JSON.parse(response.body)['data'] }
+      let(:perform_request) do
+        patch(
+          api_v2_site_status_path(site_status),
+          headers: { 'HTTP_AUTHORIZATION' => credentials },
+          params: params
+        )
+      end
 
       before do
         site_status_params[:applications_accepted_from] = applications_accepted_from
@@ -52,13 +60,7 @@ describe 'Site Helpers API V2' do
         site_status_params[:vac_status]                 = vac_status
       end
 
-      subject do
-        patch(
-          api_v2_site_status_path(site_status),
-          headers: { 'HTTP_AUTHORIZATION' => credentials },
-          params: params
-        )
-      end
+      subject { perform_request }
 
       it 'updates applications_accepted_from on the site status' do
         expect { subject }.to(
@@ -80,6 +82,30 @@ describe 'Site Helpers API V2' do
       it 'updates vac_status on the site status' do
         expect { subject }.to(change { site_status.reload.vac_status }
           .from('no_vacancies').to('full_time_vacancies'))
+      end
+
+      context 'response output' do
+        before do
+          perform_request
+        end
+
+        subject { response }
+
+        it { should have_http_status(:success) }
+
+        it 'returns a JSON repsentation of the updated site site status' do
+          subject
+
+          expect(json_data).to have_id(site_status.id.to_s)
+          expect(json_data).to have_type('site_statuses')
+          expect(json_data).to have_attributes(
+            :applications_accepted_from,
+            :publish,
+            :status,
+            :vac_status
+          )
+          expect(json_data).to have_relationship(:site)
+        end
       end
     end
   end
