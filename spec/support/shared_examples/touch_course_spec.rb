@@ -1,8 +1,8 @@
 require 'rails_helper'
 
-shared_examples 'Touch course' do
+shared_examples 'Touch course' do |model_factory|
   describe '#touch_course' do
-    let!(:model) { create(described_class.model_name.singular.to_sym) }
+    let!(:model) { create(model_factory) }
 
     it 'sets changed_at on the parent course to the current time' do
       Timecop.freeze do

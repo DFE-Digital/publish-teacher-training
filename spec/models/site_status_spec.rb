@@ -14,7 +14,7 @@ require 'rails_helper'
 
 
 RSpec.describe SiteStatus, type: :model do
-  it_behaves_like 'Touch course'
+  it_behaves_like 'Touch course', :site_status
 
   RSpec::Matchers.define :be_findable do
     match do |actual|
