@@ -1,8 +1,8 @@
 require 'rails_helper'
 
 describe 'Site Helpers API V2' do
-  let(:user) { create(:user) }
-  let(:organisation) { create(:organisation, users: [user]) }
+  let(:user) { create(:user).tap { |u| organisation.users << u } }
+  let(:organisation) { site_status.course.provider.organisations.first }
   let(:payload) { { email: user.email } }
   let(:token) do
     JWT.encode payload,
@@ -12,19 +12,7 @@ describe 'Site Helpers API V2' do
   let(:credentials) do
     ActionController::HttpAuthentication::Token.encode_credentials(token)
   end
-  let(:provider) { create(:provider, organisations: [organisation]) }
-  let(:course) do
-    create(
-      :course,
-      provider: provider,
-      with_site_statuses: [%i[
-       with_no_vacancies
-       running
-       published
-      ]]
-    )
-  end
-  let(:site_status) { course.site_statuses.first }
+  let(:site_status) { create :site_status }
   let(:params)      { {} }
   let(:perform_request) do
     patch(
@@ -70,9 +58,9 @@ describe 'Site Helpers API V2' do
       end
       let(:site_status_params)         { params.dig :_jsonapi, :data, :attributes }
       let(:applications_accepted_from) { '2019-01-01 00:00:00' }
-      let(:publish)                    { 'unpublished' }
+      let(:publish)                    { 'published' }
       let(:status)                     { 'discontinued' }
-      let(:vac_status)                 { 'full_time_vacancies' }
+      let(:vac_status)                 { 'no_vacancies' }
       let(:json_data)                  { JSON.parse(response.body)['data'] }
 
       before do
@@ -87,23 +75,23 @@ describe 'Site Helpers API V2' do
       it 'updates applications_accepted_from on the site status' do
         expect { subject }.to(
           change { site_status.reload.applications_accepted_from }
-          .to(Date.parse('2019-01-01 00:00:00'))
+          .to(Date.parse(applications_accepted_from))
         )
       end
 
       it 'updates publish on the site status' do
         expect { subject }.to(change { site_status.reload.publish }
-          .from('published').to('unpublished'))
+          .from('unpublished').to(publish))
       end
 
       it 'updates status on the site status' do
         expect { subject }.to(change { site_status.reload.status }
-          .from('running').to('discontinued'))
+          .from('running').to(status))
       end
 
       it 'updates vac_status on the site status' do
         expect { subject }.to(change { site_status.reload.vac_status }
-          .from('no_vacancies').to('full_time_vacancies'))
+          .from('full_time_vacancies').to(vac_status))
       end
 
       context 'response output' do

@@ -17,6 +17,7 @@ FactoryBot.define do
     association(:site)
     publish { 'N' }
     vac_status { :full_time_vacancies }
+    status { 'running' }
 
     transient do
       any_vancancy { false }
