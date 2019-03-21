@@ -6,12 +6,19 @@ module API
       def update
         site_status = authorize SiteStatus.find(params[:id])
         site_status.update site_status_params
+
+        render jsonapi: site_status
       end
 
     private
 
       def site_status_params
-        params.require(:site_status).permit :vac_status
+        params.require(:site_status).permit(
+          :applications_accepted_from,
+          :publish,
+          :status,
+          :vac_status
+        )
       end
     end
   end
