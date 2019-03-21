@@ -114,4 +114,7 @@ RSpec.configure do |config|
   Kernel.srand config.seed
 =end
   config.include JSONAPI::RSpec
+
+  # Load shared examples
+  Dir['./spec/support/shared_examples/**/*.rb'].each { |f| require f }
 end

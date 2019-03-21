@@ -55,6 +55,8 @@ describe "Courses API", type: :request do
           applications_accepted_from: "2018-10-09 00:00:00",
           course: course,
           site: site)
+
+        course.update changed_at: 2.hours.ago
       end
 
       it "returns http success" do
