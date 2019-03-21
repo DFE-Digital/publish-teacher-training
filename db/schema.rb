@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_03_13_153617) do
+ActiveRecord::Schema.define(version: 2019_03_19_163755) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_buffercache"
@@ -161,6 +161,17 @@ ActiveRecord::Schema.define(version: 2019_03_13_153617) do
     t.index ["created_by_user_id"], name: "IX_provider_enrichment_created_by_user_id"
     t.index ["provider_code"], name: "IX_provider_enrichment_provider_code"
     t.index ["updated_by_user_id"], name: "IX_provider_enrichment_updated_by_user_id"
+  end
+
+  create_table "provider_ucas_preference", force: :cascade do |t|
+    t.integer "provider_id", null: false
+    t.text "type_of_gt12"
+    t.text "send_application_alerts"
+    t.text "application_alert_email"
+    t.text "gt12_response_destination"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["provider_id"], name: "index_provider_ucas_preference_on_provider_id"
   end
 
   create_table "session", id: :serial, force: :cascade do |t|
