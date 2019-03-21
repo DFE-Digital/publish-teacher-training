@@ -1,34 +1,22 @@
 require 'rails_helper'
 
 describe SiteStatusPolicy do
-  let(:organisation) { create(:organisation, users: [user]) }
-  let!(:provider) {
-    create(:provider,
-            course_count: 0,
-            courses: [course],
-            organisations: [organisation])
-  }
-  let!(:course) do
-    create(
-      :course,
-      site_statuses: build_list(:site_status, 1)
-    )
-  end
-  let(:site_status) { course.site_statuses.first }
+  let(:organisation) { site_status.course.provider.organisations.first }
+  let(:site_status) { create :site_status }
 
   subject { described_class }
 
   permissions :update? do
-    let(:user) { create :user }
+    let(:user) { create(:user).tap { |u| organisation.users << u } }
 
     context 'with an user inside the organisation' do
       it { should permit(user, site_status) }
     end
 
     context 'with a user outside the organisation' do
-      let(:user_outside_provider) { build(:user) }
+      let(:user) { build(:user) }
 
-      it { should_not permit(user_outside_provider, site_status) }
+      it { should_not permit(user, site_status) }
     end
   end
 end
