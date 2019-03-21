@@ -49,6 +49,7 @@ class Provider < ApplicationRecord
            class_name: "ProviderEnrichment"
   has_many :courses
   has_one :ucas_preferences, class_name: 'ProviderUCASPreference'
+  has_many :contacts
 
   scope :changed_since, ->(timestamp) do
     if timestamp.present?
