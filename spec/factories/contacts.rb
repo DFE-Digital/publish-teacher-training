@@ -4,7 +4,7 @@
 #
 #  id          :bigint(8)        not null, primary key
 #  provider_id :integer          not null
-#  type        :text
+#  type        :text             not null
 #  name        :text
 #  email       :text
 #  telephone   :text
@@ -15,5 +15,6 @@
 FactoryBot.define do
   factory :contact do
     provider
+    type { 'admin' }
   end
 end

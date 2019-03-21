@@ -4,7 +4,7 @@
 #
 #  id          :bigint(8)        not null, primary key
 #  provider_id :integer          not null
-#  type        :text
+#  type        :text             not null
 #  name        :text
 #  email       :text
 #  telephone   :text
@@ -23,7 +23,7 @@ describe Contact, type: :model do
         .to define_enum_for(:type)
               .backed_by_column_of_type(:text)
               .with_values(
-                admin:  'admin',
+                admin: 'admin',
                 utt: 'utt',
                 web_link: 'web_link',
                 fraud: 'fraud',

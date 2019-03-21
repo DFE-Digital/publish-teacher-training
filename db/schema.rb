@@ -12,7 +12,6 @@
 
 ActiveRecord::Schema.define(version: 2019_03_20_144534) do
 
-
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_buffercache"
   enable_extension "pg_stat_statements"
@@ -37,7 +36,7 @@ ActiveRecord::Schema.define(version: 2019_03_20_144534) do
 
   create_table "contact", force: :cascade do |t|
     t.integer "provider_id", null: false
-    t.text "type"
+    t.text "type", null: false
     t.text "name"
     t.text "email"
     t.text "telephone"

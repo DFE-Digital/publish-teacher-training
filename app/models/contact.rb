@@ -4,7 +4,7 @@
 #
 #  id          :bigint(8)        not null, primary key
 #  provider_id :integer          not null
-#  type        :text
+#  type        :text             not null
 #  name        :text
 #  email       :text
 #  telephone   :text
@@ -13,10 +13,12 @@
 #
 
 class Contact < ApplicationRecord
+  self.inheritance_column = '_unused'
+
   belongs_to :provider
 
   enum type: {
-         admin:  'admin',
+         admin: 'admin',
          utt: 'utt',
          web_link: 'web_link',
          fraud: 'fraud',
