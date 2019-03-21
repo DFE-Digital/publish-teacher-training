@@ -56,7 +56,7 @@ describe "Courses API", type: :request do
           course: course,
           site: site)
 
-        course.update_attributes changed_at: 2.hours.ago
+        course.update changed_at: 2.hours.ago
       end
 
       it "returns http success" do
