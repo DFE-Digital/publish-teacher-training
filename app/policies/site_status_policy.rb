@@ -7,6 +7,6 @@ class SiteStatusPolicy
   end
 
   def update?
-    site_status&.course&.provider&.in? user.providers
+    CoursePolicy.new(user, site_status&.course).update?
   end
 end
