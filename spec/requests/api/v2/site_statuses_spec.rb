@@ -14,15 +14,16 @@ describe 'Site Helpers API V2' do
   end
   let(:site_status) { create :site_status }
   let(:params)      { {} }
-  let(:perform_request) do
+
+  subject { response }
+
+  def perform_request
     patch(
       api_v2_site_status_path(site_status),
       headers: { 'HTTP_AUTHORIZATION' => credentials },
       params: params
     )
   end
-
-  subject { response }
 
   describe 'PATCH update' do
     context 'when unauthenticated' do
