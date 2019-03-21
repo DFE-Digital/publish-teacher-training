@@ -25,23 +25,38 @@ describe 'Site Helpers API V2' do
     )
   end
   let(:site_status) { course.site_statuses.first }
+  let(:params)      { {} }
+  let(:perform_request) do
+    patch(
+      api_v2_site_status_path(site_status),
+      headers: { 'HTTP_AUTHORIZATION' => credentials },
+      params: params
+    )
+  end
+
+  subject { response }
 
   describe 'PATCH update' do
+    context 'when unauthenticated' do
+      let(:payload) { { email: 'foo@bar' } }
+
+      before do
+        perform_request
+      end
+
+      it { should have_http_status(:unauthorized) }
+    end
+
     context 'when unauthorised' do
       let(:unauthorised_user) { create(:user) }
       let(:payload) { { email: unauthorised_user.email } }
 
-      it "raises an error" do
-        expect {
-          patch(
-            api_v2_site_status_path(site_status),
-            headers: { 'HTTP_AUTHORIZATION' => credentials },
-          )
-        }.to raise_error Pundit::NotAuthorizedError
+      it 'raises an error' do
+        expect { perform_request }.to raise_error Pundit::NotAuthorizedError
       end
     end
 
-    context 'when authenticated' do
+    context 'when authorised' do
       let(:jsonapi_renderer) { JSONAPI::Serializable::Renderer.new }
       let(:params) do
         {
@@ -59,13 +74,6 @@ describe 'Site Helpers API V2' do
       let(:status)                     { 'discontinued' }
       let(:vac_status)                 { 'full_time_vacancies' }
       let(:json_data)                  { JSON.parse(response.body)['data'] }
-      let(:perform_request) do
-        patch(
-          api_v2_site_status_path(site_status),
-          headers: { 'HTTP_AUTHORIZATION' => credentials },
-          params: params
-        )
-      end
 
       before do
         site_status_params[:applications_accepted_from] = applications_accepted_from
