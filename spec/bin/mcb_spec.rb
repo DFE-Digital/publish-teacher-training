@@ -1,4 +1,4 @@
-require "rails_helper"
+require 'spec_helper'
 require "#{Rails.root}/lib/mcb"
 
 describe 'mcb command' do
