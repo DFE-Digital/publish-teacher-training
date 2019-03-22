@@ -33,7 +33,14 @@ class ProviderSerializer < ActiveModel::Serializer
   attributes :institution_code, :institution_name, :institution_type, :accrediting_provider,
              :address1, :address2, :address3, :address4, :postcode, :region_code, :scheme_member,
              :contact_name, :email, :telephone, :recruitment_cycle, :utt_application_alerts,
-             :type_of_gt12
+             :type_of_gt12, :application_alert_recipient
+
+  attribute :contacts do
+    object.contacts.map { |c| c.attributes.slice('type', 'name', 'email', 'telephone') } + [{
+      type: 'application_alert_recipient',
+      email: object.ucas_preferences.application_alert_email,
+      }]
+  end
 
   def institution_code
     object.provider_code
@@ -87,22 +94,8 @@ class ProviderSerializer < ActiveModel::Serializer
     @object.ucas_preferences.type_of_gt12_before_type_cast
   end
 
-  attribute :contacts do
-    %w[
-      admin
-      utt
-      web_link
-      fraud
-      finance
-      application_alert_recipient
-    ].map do |type|
-      {
-        type: type,
-        name: "#{type.humanize.titleize} Contact #{@object.provider_code}",
-        email: @object.email&.sub(/.*@/, "#{type}@"),
-        telephone: @object.telephone,
-      }
-    end
+  def application_alert_recipient
+    @object.ucas_preferences.application_alert_email
   end
 
 private
