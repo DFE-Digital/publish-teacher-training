@@ -41,6 +41,7 @@ FactoryBot.define do
     accrediting_provider { 'N' }
     region_code { ProviderEnrichment.region_codes['London'] }
     opted_in { true }
+    organisations { build_list :organisation, 1 }
 
     transient do
       changed_at           { nil }
