@@ -1,5 +1,5 @@
 name 'show'
-summary 'Show infomration about provider'
+summary 'Show information about provider'
 param :code
 
 run do |_opts, args, _cmd|

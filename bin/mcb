@@ -13,9 +13,11 @@ require 'pry'
 require 'table_print'
 require 'terminal-table'
 
-tp.set :capitalize_headers, false
+lib_dir = File.expand_path 'lib'
 
-lib_dir = 'lib'
+require_relative "#{lib_dir}/mcb"
+
+tp.set :capitalize_headers, false
 
 mcb = Cri::Command.define do
   name        'mcb'
@@ -32,18 +34,7 @@ mcb = Cri::Command.define do
   end
 end
 
-# It'd almost be nice to be able to load these automatically, but since we have
-# to express the command structure by loading sub-commands with the correct
-# parent command, I don't think there's a trivial way to do this.
-provider = Cri::Command.load_file("#{lib_dir}/mcb/commands/provider.rb")
-mcb.add_command(provider)
-provider.add_command(Cri::Command.load_file("#{lib_dir}/mcb/commands/provider/list.rb"))
-provider.add_command(Cri::Command.load_file("#{lib_dir}/mcb/commands/provider/show.rb"))
-
-apiv1 = Cri::Command.load_file("#{lib_dir}/mcb/commands/apiv1.rb")
-mcb.add_command(apiv1)
-apiv1.add_command(Cri::Command.load_file("#{lib_dir}/mcb/commands/apiv1/find.rb"))
-
+MCB.load_commands(mcb, "#{lib_dir}/mcb/commands")
 
 def init_rails
   unless defined?(Rails)

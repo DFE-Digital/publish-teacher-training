@@ -113,6 +113,7 @@ end
 group :test do
   gem 'database_cleaner'
   gem 'factory_bot_rails', '~> 5.0'
+  gem 'fakefs', require: 'fakefs/safe'
   gem 'faker'
   gem "jsonapi-rspec"
   gem "rspec_junit_formatter"
