@@ -16,5 +16,8 @@ FactoryBot.define do
   factory :contact do
     provider
     type { 'admin' }
+    name { Faker::Name.name }
+    email { Faker::Internet.email }
+    telephone { Faker::PhoneNumber.phone_number }
   end
 end
