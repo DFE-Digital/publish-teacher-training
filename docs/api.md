@@ -400,7 +400,7 @@ endpoint) if any of these are true:
 | type_of_gt12           | Text               | `Coming / Enrol`, `Coming or Not`, `No response` or `Not coming`                                           |                                                                                                      |
 | scheme_member          | Text               | `Y` or `N`                                                                                                 |                                                                                                      |
 | recruitment_cycle      | Text               |                                                                                                            | 4-character year                                                                                     |
-| g12_contact_address    | Text               |                                                                                                            | Email or URL for the candidate to contact that will be inserted into the GT12 letter sent them.      |
+| gt12_contact_address   | Text               |                                                                                                            | Email or URL for the candidate to contact that will be inserted into the GT12 letter sent them.      |
 
 ### Example response body
 
@@ -422,7 +422,7 @@ endpoint) if any of these are true:
     "region_code": "01",
     "scheme_member": "Y",
     "recruitment_cycle": "2019",
-    "g12_contact_address": "info@asmescitt.education.uk",
+    "gt12_contact_address": "info@asmescitt.education.uk",
     "campuses": [
       {
         "campus_code": "",
