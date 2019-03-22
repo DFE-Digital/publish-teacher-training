@@ -36,14 +36,6 @@ end
 
 MCB.load_commands(mcb, "#{lib_dir}/mcb/commands")
 
-def init_rails
-  unless defined?(Rails)
-    app_root = File.expand_path(File.join(File.dirname($0), '..'))
-    exec_path = File.join(app_root, 'bin', 'rails')
-    exec(exec_path, 'runner', $0, *ARGV)
-  end
-end
-
 def verbose(msg)
   if $verbosity == :verbose
     puts msg
