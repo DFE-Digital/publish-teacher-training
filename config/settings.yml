@@ -3,3 +3,8 @@ authentication:
   # Set this in the env! The below ensures that we are un-authenticatable if we
   # forget to do this in production.
   secret: <%= SecureRandom.base64 %>
+manage_api:
+  # URL of the C# API app (manage-courses-api)
+  base_url: http://localhost:6001
+  # Auth token used between backend and C# API to authorize requests.
+  secret: banana
