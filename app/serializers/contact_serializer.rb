@@ -21,19 +21,5 @@
 class ContactSerializer < ActiveModel::Serializer
   belongs_to :provider
 
-  attribute :type do
-    object.type
-  end
-
-  attribute :name do
-    object.name
-  end
-
-  attribute :email do
-    object.email
-  end
-
-  attribute :telephone do
-    object.telephone
-  end
+  attributes :type, :name, :email, :telephone
 end

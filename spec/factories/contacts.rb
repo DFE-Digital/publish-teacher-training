@@ -20,4 +20,24 @@ FactoryBot.define do
     email { Faker::Internet.email }
     telephone { Faker::PhoneNumber.phone_number }
   end
+
+  trait :admin_contact do
+    type { :admin }
+  end
+
+  trait :utt_contact do
+    type { :utt }
+  end
+
+  trait :web_link_contact do
+    type { :web_link }
+  end
+
+  trait :finance_contact do
+    type { :finance }
+  end
+
+  trait :fraud_contact do
+    type { :fraud }
+  end
 end

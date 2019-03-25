@@ -33,13 +33,16 @@ class ProviderSerializer < ActiveModel::Serializer
   attributes :institution_code, :institution_name, :institution_type, :accrediting_provider,
              :address1, :address2, :address3, :address4, :postcode, :region_code, :scheme_member,
              :contact_name, :email, :telephone, :recruitment_cycle, :utt_application_alerts,
-             :type_of_gt12, :application_alert_recipient
+             :type_of_gt12
+
+             # application alert reciepient has not been added into the enum in the contact model
+             # as it's does not share the name and email attribute. It is simply a contact email
+             # address and is more suited to sit in the ucas  preferences model. However, in the docs
+             # it is exposed in the contacts so has been added directly into the contacts attribute
+             # see lines 109-120 for logic.
 
   attribute :contacts do
-    object.contacts.map { |c| c.attributes.slice('type', 'name', 'email', 'telephone') } + [{
-      type: 'application_alert_recipient',
-      email: object.ucas_preferences.application_alert_email,
-      }]
+    generate_provider_contacts + add_application_alert_recipient
   end
 
   def institution_code
@@ -94,10 +97,6 @@ class ProviderSerializer < ActiveModel::Serializer
     @object.ucas_preferences.type_of_gt12_before_type_cast
   end
 
-  def application_alert_recipient
-    @object.ucas_preferences.application_alert_email
-  end
-
 private
 
   def select_value_for_provider(provider_code, values)
@@ -105,5 +104,18 @@ private
     # hash. ex. 'A1'.to_i(36) == 361
     index = provider_code.to_i(36) % values.count
     values[index]
+  end
+
+  def generate_provider_contacts
+    object.contacts.map { |c| c.attributes.slice('type', 'name', 'email', 'telephone') }
+  end
+
+  def add_application_alert_recipient
+    [{
+      type: 'application_alert_recipient',
+      name: '',
+      email: object.ucas_preferences.application_alert_email,
+      telephone: ''
+      }]
   end
 end

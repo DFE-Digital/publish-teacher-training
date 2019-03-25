@@ -193,7 +193,6 @@ describe 'Providers API', type: :request do
                 'recruitment_cycle' => '2019',
                 'type_of_gt12' => 'Not coming',
                 'utt_application_alerts' => 'Yes, required',
-                'application_alert_recipient' => 'application_alert_recipient@acmescitt.education.uk',
                 'contacts' => [
                   {
                     'type' => 'admin',
@@ -227,7 +226,9 @@ describe 'Providers API', type: :request do
                   },
                   {
                     'type' => 'application_alert_recipient',
-                    'email' => 'application_alert_recipient@acmescitt.education.uk'
+                    'name' => '',
+                    'email' => 'application_alert_recipient@acmescitt.education.uk',
+                    'telephone' => ''
                   }
                 ]
               },
@@ -256,7 +257,6 @@ describe 'Providers API', type: :request do
                 'recruitment_cycle' => '2019',
                 'type_of_gt12' => 'Coming or Not',
                 'utt_application_alerts' => 'No, not required',
-                'application_alert_recipient' => 'application_alert_recipient@acmeuniversity.education.uk',
                 'contacts' => [
                   {
                     'type' => 'admin',
@@ -290,7 +290,9 @@ describe 'Providers API', type: :request do
                   },
                   {
                     'type' => 'application_alert_recipient',
-                    'email' => 'application_alert_recipient@acmeuniversity.education.uk'
+                    'name' => '',
+                    'email' => 'application_alert_recipient@acmeuniversity.education.uk',
+                    'telephone' => ''
                   }
                 ]
               }
@@ -340,7 +342,6 @@ describe 'Providers API', type: :request do
                                   'recruitment_cycle' => '2019',
                                   'type_of_gt12' => 'Not coming',
                                   'utt_application_alerts' => 'Yes, required',
-                                  'application_alert_recipient' => 'application_alert_recipient@acmescitt.education.uk',
                                   'contacts' => [
                                     {
                                       'type' => 'admin',
@@ -374,7 +375,9 @@ describe 'Providers API', type: :request do
                                     },
                                     {
                                       'type' => 'application_alert_recipient',
+                                      'name' => '',
                                       'email' => 'application_alert_recipient@acmescitt.education.uk',
+                                      'telephone' => ''
                                     }
                                   ]
                                },
@@ -403,7 +406,6 @@ describe 'Providers API', type: :request do
                                  'recruitment_cycle' => '2019',
                                  'type_of_gt12' => 'Coming or Not',
                                  'utt_application_alerts' => 'No, not required',
-                                 'application_alert_recipient' => 'application_alert_recipient@acmeuniversity.education.uk',
                                  'contacts' => [
                                    {
                                      'type' => 'admin',
@@ -437,7 +439,9 @@ describe 'Providers API', type: :request do
                                    },
                                    {
                                      'type' => 'application_alert_recipient',
+                                     'name' => '',
                                      'email' => 'application_alert_recipient@acmeuniversity.education.uk',
+                                     'telephone' => ''
                                    }
                                  ]
                                }

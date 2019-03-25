@@ -86,76 +86,16 @@ describe ProviderSerializer do
   end
 
   describe 'contacts' do
-    describe 'admin contact' do
-      let(:provider) do
-        create :provider,
-               contacts: [admin]
-      end
-      let(:admin) { create(:contact, type: 'admin') }
-
-      subject { serialize(provider)['contacts'].find { |c| c[:type] == 'admin' } }
-
-      its([:name]) { should eq admin.name }
-      its([:email]) { should eq admin.email }
-      its([:telephone]) { should eq admin.telephone }
+    let(:provider) do
+      create :provider,
+             contacts: [utt]
     end
+    let(:utt) { create(:contact, type: 'utt') }
 
-    describe 'utt contact' do
-      let(:provider) do
-        create :provider,
-               contacts: [utt]
-      end
-      let(:utt) { create(:contact, type: 'utt') }
+    subject { serialize(provider)['contacts'].find { |c| c[:type] == 'utt' } }
 
-      subject { serialize(provider)['contacts'].find { |c| c[:type] == 'utt' } }
-
-      its([:name]) { should eq utt.name }
-      its([:email]) { should eq utt.email }
-      its([:telephone]) { should eq utt.telephone }
-    end
-
-    describe 'web_link contact' do
-      let(:provider) do
-        create :provider,
-               contacts: [web_link]
-      end
-      let(:web_link) { create(:contact, type: 'web_link') }
-
-      subject { serialize(provider)['contacts'].find { |c| c[:type] == 'web_link' } }
-
-      its([:name]) { should eq web_link.name }
-      its([:email]) { should eq web_link.email }
-      its([:telephone]) { should eq web_link.telephone }
-    end
-
-    describe 'fraud contact' do
-      let(:provider) do
-        create :provider,
-               contacts: [fraud]
-      end
-
-      let(:fraud) { create(:contact, type: 'fraud') }
-
-      subject { serialize(provider)['contacts'].find { |c| c[:type] == 'fraud' } }
-
-      its([:name]) { should eq fraud.name }
-      its([:email]) { should eq fraud.email }
-      its([:telephone]) { should eq fraud.telephone }
-    end
-
-    describe 'finance contact' do
-      let(:provider) do
-        create :provider,
-               contacts: [finance]
-      end
-
-      let(:finance) { create(:contact, type: 'finance') }
-
-      subject { serialize(provider)['contacts'].find { |c| c[:type] == 'finance' } }
-
-      its([:name]) { should eq finance.name }
-      its([:email]) { should eq finance.email }
-      its([:telephone]) { should eq finance.telephone }
-    end
+    its([:name]) { should eq utt.name }
+    its([:email]) { should eq utt.email }
+    its([:telephone]) { should eq utt.telephone }
   end
 end
