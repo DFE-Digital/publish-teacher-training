@@ -90,7 +90,7 @@ describe ProviderSerializer do
       create :provider,
              contacts: [utt]
     end
-    let(:utt) { create(:contact, type: 'utt') }
+    let(:utt) { create(:contact, :utt_type) }
 
     subject { serialize(provider)['contacts'].find { |c| c[:type] == 'utt' } }
 
