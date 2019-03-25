@@ -15,6 +15,12 @@ module API
       #   to postgres
       # - clock drift between servers
       def index
+        # only return 2019 courses until rollover is supported
+        if params[:recruitment_year].present? && params[:recruitment_year] != '2019'
+          render json: [], status: 404
+          return
+        end
+
         per_page = params[:per_page] || 100
         changed_since = params[:changed_since]
         ActiveRecord::Base.transaction do
