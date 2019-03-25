@@ -111,5 +111,22 @@ describe API::V1::ProvidersController, type: :controller do
         its(%w[changed_since]) { should eq format_timestamp(changed_since) }
       end
     end
+
+    context "for next recruitment year" do
+      let!(:course) { create(:provider) }
+      let(:params) {
+        { recruitment_year: '2020' }
+      }
+
+      before do
+        controller.index
+      end
+
+      describe 'returned courses in JSON' do
+        subject { response.body }
+
+        it { should_not have_providers }
+      end
+    end
   end
 end
