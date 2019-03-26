@@ -3,7 +3,7 @@ summary 'Show information about provider'
 param :code
 
 run do |_opts, args, _cmd|
-  init_rails
+  MCB.init_rails
 
   code = args[:code]
 

@@ -16,5 +16,10 @@ FactoryBot.define do
     PRV_ID    { Random.rand 10000 }
 
     initialize_with { attributes }
+
+    trait(:type_of_gt12_not_coming) do
+      PREF_TYPE  { 'Type of GT12 required' }
+      PREF_VALUE { 'Not coming' }
+    end
   end
 end

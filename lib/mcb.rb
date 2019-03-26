@@ -1,4 +1,14 @@
 module MCB
+  LOGGER = Logger.new($stdout)
+
+  LOGGER.formatter = proc do |severity, _datetime, _progname, msg|
+    if severity == Logger::INFO
+      msg + "\n"
+    else
+      "#{severity}: #{msg}\n"
+    end
+  end
+
   # Load the rails environment.
   #
   # Not all mcb commands require the rails env, e.g. the API ones don't. Use
