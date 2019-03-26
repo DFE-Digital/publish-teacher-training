@@ -113,6 +113,18 @@
         "metadata": {
             "description": "Auth secret for manage back-end."
         }
+    },
+    "settingsManageApiBaseUrl": {
+        "type": "string",
+        "metadata": {
+            "description": "The base URL for manage-courses-api."
+        }
+    },
+    "settingsManageApiSecret": {
+        "type": "string",
+        "metadata": {
+            "description": "The secret shared between manage courses backend and manage courses API to authorize requests."
+        }
     }
   },
   "variables": {
@@ -233,6 +245,14 @@
               {
                   "name": "SETTINGS__AUTHENTICATION__SECRET",
                   "value": "[parameters('settingsAuthenticationSecret')]"
+              },
+              {
+                  "name": "SETTINGS__MANAGE_API__BASE_URL",
+                  "value": "[parameters('settingsManageApiBaseUrl')]"
+              },
+              {
+                  "name": "SETTINGS__MANAGE_API__SECRET",
+                  "value": "[parameters('settingsManageApiSecret')]"
               }
             ]
           },
