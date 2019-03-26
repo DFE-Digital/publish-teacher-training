@@ -60,6 +60,9 @@ gem 'table_print'
 #   terminal-table is a bit more flexible allowing us to use a headers column
 gem 'terminal-table'
 
+# For querying third party APIs
+gem 'faraday'
+
 group :development, :test do
   # add info about db structure to models and other files
   gem 'annotate'
@@ -119,4 +122,5 @@ group :test do
   gem "rspec_junit_formatter"
   gem 'shoulda-matchers', '~> 4.0'
   gem 'simplecov', require: false
+  gem 'webmock'
 end
