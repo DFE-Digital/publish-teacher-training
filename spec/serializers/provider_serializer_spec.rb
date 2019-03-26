@@ -84,4 +84,28 @@ describe ProviderSerializer do
 
     it { should eq provider.ucas_preferences.send_application_alerts_before_type_cast }
   end
+
+  describe 'contacts' do
+    describe 'generate provider object returns the providers contacts' do
+      let(:provider) do
+        create :provider,
+               contacts: [contact]
+      end
+      let(:contact) { create(:contact) }
+
+      subject { serialize(provider)['contacts'].find { |c| c[:type] == contact.type } }
+
+      its([:name]) { should eq contact.name }
+      its([:email]) { should eq contact.email }
+      its([:telephone]) { should eq contact.telephone }
+    end
+
+    describe 'the application alert recipient has been serialized upon instantiation of the contact object' do
+      subject { serialize(provider)['contacts'].find { |c| c[:type] == 'application_alert_recipient' } }
+
+      its([:name]) { should eq '' }
+      its([:email]) { should eq provider.ucas_preferences.application_alert_email }
+      its([:telephone]) { should eq '' }
+    end
+  end
 end

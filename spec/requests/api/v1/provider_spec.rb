@@ -20,7 +20,32 @@ describe 'Providers API', type: :request do
       let(:ucas_preferences) do
         build(:ucas_preferences,
               type_of_gt12: :not_coming,
-              send_application_alerts: :all,)
+              send_application_alerts: :all,
+              application_alert_email: 'application_alert_recipient@acmescitt.education.uk')
+      end
+      let(:contacts) do
+        [
+        build(:contact, type: 'admin',
+                        name: 'Admin Contact A123',
+                        email: 'admin@acmescitt.education.uk',
+                        telephone: '020 812 345 678'),
+        build(:contact, type: 'utt',
+                        name: 'Utt Contact A123',
+                        email: 'utt@acmescitt.education.uk',
+                        telephone: '020 812 345 678'),
+        build(:contact, type: 'web_link',
+                        name: 'Web Link Contact A123',
+                        email: 'web_link@acmescitt.education.uk',
+                        telephone: '020 812 345 678'),
+        build(:contact, type: 'fraud',
+                        name: 'Fraud Contact A123',
+                        email: 'fraud@acmescitt.education.uk',
+                        telephone: '020 812 345 678'),
+        build(:contact, type: 'finance',
+                        name: 'Finance Contact A123',
+                        email: 'finance@acmescitt.education.uk',
+                        telephone: '020 812 345 678')
+        ]
       end
       let!(:provider) do
         create(:provider,
@@ -41,7 +66,8 @@ describe 'Providers API', type: :request do
                scheme_member: 'Y',
                last_published_at: DateTime.now.utc,
                enrichments: [enrichment],
-               ucas_preferences: ucas_preferences)
+               ucas_preferences: ucas_preferences,
+               contacts: contacts)
       end
       let!(:site) do
         create(:site,
@@ -64,7 +90,32 @@ describe 'Providers API', type: :request do
       let(:ucas_preferences2) do
         build(:ucas_preferences,
               type_of_gt12: :coming_or_not,
-              send_application_alerts: :none)
+              send_application_alerts: :none,
+              application_alert_email: 'application_alert_recipient@acmeuniversity.education.uk')
+      end
+      let(:contacts2) do
+        [
+        build(:contact, type: 'admin',
+                        name: 'Admin Contact B123',
+                        email: 'admin@acmeuniversity.education.uk',
+                        telephone: '01273 345 678'),
+        build(:contact, type: 'utt',
+                        name: 'Utt Contact B123',
+                        email: 'utt@acmeuniversity.education.uk',
+                        telephone: '01273 345 678'),
+        build(:contact, type: 'web_link',
+                        name: 'Web Link Contact B123',
+                        email: 'web_link@acmeuniversity.education.uk',
+                        telephone: '01273 345 678'),
+        build(:contact, type: 'fraud',
+                        name: 'Fraud Contact B123',
+                        email: 'fraud@acmeuniversity.education.uk',
+                        telephone: '01273 345 678'),
+        build(:contact, type: 'finance',
+                        name: 'Finance Contact B123',
+                        email: 'finance@acmeuniversity.education.uk',
+                        telephone: '01273 345 678')
+        ]
       end
       let(:provider2) do
         create(:provider,
@@ -85,7 +136,8 @@ describe 'Providers API', type: :request do
               last_published_at: DateTime.now.utc,
               enrichments: [],
               site_count: 0,
-              ucas_preferences: ucas_preferences2)
+              ucas_preferences: ucas_preferences2,
+              contacts: contacts2)
       end
       let!(:site2) do
         create(:site,
@@ -174,9 +226,9 @@ describe 'Providers API', type: :request do
                   },
                   {
                     'type' => 'application_alert_recipient',
-                    'name' => 'Application Alert Recipient Contact A123',
+                    'name' => '',
                     'email' => 'application_alert_recipient@acmescitt.education.uk',
-                    'telephone' => '020 812 345 678'
+                    'telephone' => ''
                   }
                 ]
               },
@@ -238,9 +290,9 @@ describe 'Providers API', type: :request do
                   },
                   {
                     'type' => 'application_alert_recipient',
-                    'name' => 'Application Alert Recipient Contact B123',
+                    'name' => '',
                     'email' => 'application_alert_recipient@acmeuniversity.education.uk',
-                    'telephone' => '01273 345 678'
+                    'telephone' => ''
                   }
                 ]
               }
@@ -323,9 +375,9 @@ describe 'Providers API', type: :request do
                                     },
                                     {
                                       'type' => 'application_alert_recipient',
-                                      'name' => 'Application Alert Recipient Contact A123',
+                                      'name' => '',
                                       'email' => 'application_alert_recipient@acmescitt.education.uk',
-                                      'telephone' => '020 812 345 678'
+                                      'telephone' => ''
                                     }
                                   ]
                                },
@@ -387,9 +439,9 @@ describe 'Providers API', type: :request do
                                    },
                                    {
                                      'type' => 'application_alert_recipient',
-                                     'name' => 'Application Alert Recipient Contact B123',
+                                     'name' => '',
                                      'email' => 'application_alert_recipient@acmeuniversity.education.uk',
-                                     'telephone' => '01273 345 678'
+                                     'telephone' => ''
                                    }
                                  ]
                                }
