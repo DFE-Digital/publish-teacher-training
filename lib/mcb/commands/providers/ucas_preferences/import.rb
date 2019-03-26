@@ -1,5 +1,3 @@
-require 'logger'
-
 summary 'Import UCAS preferences for providers'
 param :filename
 option :n, 'dry_run', "don't update anything, display what would be done"

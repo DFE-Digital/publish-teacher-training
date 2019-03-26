@@ -1,3 +1,5 @@
+require 'logger'
+
 module MCB
   LOGGER = Logger.new($stdout)
 

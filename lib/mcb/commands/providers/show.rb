@@ -15,6 +15,13 @@ run do |_opts, args, _cmd|
     puts 'Provider:'
     puts Terminal::Table.new rows: provider.attributes
 
+    puts "\nUCAS Preferences:"
+    if provider.ucas_preferences
+      puts Terminal::Table.new rows: provider.ucas_preferences.attributes
+    else
+      puts 'no preferences found'
+    end
+
     puts "\nProvider Enrichments:"
     tp provider.enrichments, 'id', 'status', 'email', 'website', 'address1',
        'address2', 'address3', 'address4', 'postcode', 'telephone'

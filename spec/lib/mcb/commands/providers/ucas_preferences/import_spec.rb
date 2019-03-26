@@ -4,25 +4,6 @@ require 'stringio'
 require 'csv'
 
 describe 'mcb providers ucas_preferences import' do
-  def with_stubbed_stdout(stdin: "yes\n")
-    output = StringIO.new
-    original_stdout = $stdout
-    $stdout = output
-    MCB::LOGGER.instance_eval { @logdev = output }
-    unless stdin.nil?
-      original_stdin = $stdin
-      $stdin = StringIO.new(stdin)
-    end
-
-    yield
-
-    output
-  ensure
-    $stdout = original_stdout
-    MCB::LOGGER.instance_eval { @logdev = original_stdout }
-    $stdin = original_stdin if stdin
-  end
-
   def write_csv_to_tmpfile(*lines)
     tmpfile = Tempfile.new('providers_preferences')
     csv = CSV.generate(headers: csv_headers, write_headers: true) do |csv_file|
@@ -34,7 +15,7 @@ describe 'mcb providers ucas_preferences import' do
   end
 
   def import_csv_file(tmpfile, opts = [])
-    with_stubbed_stdout do
+    with_stubbed_stdout(stdin: "yes\n") do
       cmd.run(opts + [tmpfile.path])
     end
   end
@@ -124,8 +105,9 @@ describe 'mcb providers ucas_preferences import' do
             PREF_TYPE: 'Type of GT12 required',
             PREF_VALUE: 'Not coming'
     end
+
     it "displays preferences that will be changed" do
-      output = with_stubbed_stdout do
+      output = with_stubbed_stdout(stdin: "yes\n") do
         cmd.run([tmpfile.path])
       end
 
@@ -161,7 +143,7 @@ describe 'mcb providers ucas_preferences import' do
     it "instantiates provider UCAS preferences when they don't exist" do
       provider.ucas_preferences.delete
 
-      with_stubbed_stdout do
+      with_stubbed_stdout(stdin: "yes\n") do
         cmd.run([tmpfile.path])
       end
 
