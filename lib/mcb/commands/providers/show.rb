@@ -3,17 +3,24 @@ summary 'Show information about provider'
 param :code
 
 run do |_opts, args, _cmd|
-  init_rails
+  MCB.init_rails
 
   code = args[:code]
 
-  provider = Provider.find_by(provider_code: code)
+  provider = Provider.find_by!(provider_code: code)
 
   if provider.nil?
     error "Provider with code '#{code}' not found"
   else
     puts 'Provider:'
     puts Terminal::Table.new rows: provider.attributes
+
+    puts "\nUCAS Preferences:"
+    if provider.ucas_preferences
+      puts Terminal::Table.new rows: provider.ucas_preferences.attributes
+    else
+      puts 'no preferences found'
+    end
 
     puts "\nProvider Enrichments:"
     tp provider.enrichments, 'id', 'status', 'email', 'website', 'address1',
