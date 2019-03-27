@@ -85,6 +85,19 @@ describe ProviderSerializer do
     it { should eq provider.ucas_preferences.send_application_alerts_before_type_cast }
   end
 
+  context "when UCAS preferences are missing" do
+    before do
+      provider.ucas_preferences.destroy
+      provider.reload
+    end
+
+    it "handles the missing data gracefully" do
+      expect(subject['utt_application_alerts']).to be_nil
+      expect(subject['type_of_gt12']).to be_nil
+      expect(subject['contacts'].detect { |c| c['type'] == 'application_alert_recipient' }['email']).to be_nil
+    end
+  end
+
   describe 'contacts' do
     describe 'generate provider object returns the providers contacts' do
       let(:provider) do
