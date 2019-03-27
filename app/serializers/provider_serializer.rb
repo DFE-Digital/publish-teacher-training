@@ -90,11 +90,11 @@ class ProviderSerializer < ActiveModel::Serializer
   end
 
   def utt_application_alerts
-    @object.ucas_preferences.send_application_alerts_before_type_cast
+    @object.ucas_preferences&.send_application_alerts_before_type_cast
   end
 
   def type_of_gt12
-    @object.ucas_preferences.type_of_gt12_before_type_cast
+    @object.ucas_preferences&.type_of_gt12_before_type_cast
   end
 
 private
@@ -114,7 +114,7 @@ private
     [{
       type: 'application_alert_recipient',
       name: '',
-      email: object.ucas_preferences.application_alert_email,
+      email: object.ucas_preferences&.application_alert_email,
       telephone: ''
       }]
   end
