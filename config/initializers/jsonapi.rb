@@ -35,4 +35,15 @@ JSONAPI::Rails.configure do |config|
   #
   # # Set a default pagination scheme.
   # config.jsonapi_pagination = ->(_) { nil }
+  #
+  # # Set a logger.
+  # config.logger = Logger.new(STDOUT)
+  #
+  # Uncomment the following to disable logging.
+  # config.logger = Logger.new(STDOUT)
+
+  # This might be the right thing to do. It cleans up logging in the test env,
+  # at the very least, and seems to dump the logs into `log/test.log` as would
+  # be expected.
+  config.logger = Rails.logger
 end
