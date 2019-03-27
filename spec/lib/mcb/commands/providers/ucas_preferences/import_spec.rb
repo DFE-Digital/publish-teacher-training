@@ -131,13 +131,14 @@ describe 'mcb providers ucas_preferences import' do
     end
 
     it 'does not change anything if confirmation is not given' do
-      with_stubbed_stdout(stdin: "no\n") do
-        cmd.run([tmpfile.path])
-      end
-
-      provider.reload
-      expect(provider.ucas_preferences.type_of_gt12).to eq 'coming_or_not'
-      expect(provider.ucas_preferences.send_application_alerts).to eq 'all'
+      expect {
+        with_stubbed_stdout(stdin: "no\n") do
+          cmd.run([tmpfile.path])
+        end
+      }.not_to(change do
+                 provider.ucas_preferences.reload.slice :type_of_gt12,
+                                                        :send_application_alerts
+               end)
     end
 
     it "instantiates provider UCAS preferences when they don't exist" do

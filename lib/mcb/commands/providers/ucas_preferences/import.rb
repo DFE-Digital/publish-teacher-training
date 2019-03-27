@@ -20,10 +20,10 @@ run do |opts, args, _cmd| # rubocop: disable Metrics/BlockLength
   csv = CSV.new(import_file, headers: true)
   csv.each do |row|
     provider = providers[row['INST_CODE']]
-    attribute = translate_ucas_preference_to_attribute(row['PREF_TYPE'])
-    if attribute.present?
-      log_attribute_change(provider, attribute, row['PREF_VALUE'])
-      changed_preferences[provider][attribute] = row['PREF_VALUE']
+    preference_type = translate_ucas_preference_attribute(row['PREF_TYPE'])
+    if preference_type.present?
+      log_attribute_change(provider, preference_type, row['PREF_VALUE'])
+      changed_preferences[provider][preference_type] = row['PREF_VALUE']
     end
   rescue ActiveRecord::RecordNotFound => exx
     if opts[:dry_run]
@@ -42,7 +42,7 @@ run do |opts, args, _cmd| # rubocop: disable Metrics/BlockLength
   commit_changes(changed_preferences, opts)
 end
 
-def translate_ucas_preference_to_attribute(ucas_preference)
+def translate_ucas_preference_attribute(ucas_preference)
   case ucas_preference
   when 'Type of GT12 required' then 'type_of_gt12'
   when 'New UTT application alerts' then 'send_application_alerts'

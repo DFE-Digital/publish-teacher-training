@@ -7,7 +7,7 @@ run do |_opts, args, _cmd|
 
   code = args[:code]
 
-  provider = Provider.find_by(provider_code: code)
+  provider = Provider.find_by!(provider_code: code)
 
   if provider.nil?
     error "Provider with code '#{code}' not found"
