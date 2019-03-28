@@ -69,6 +69,16 @@ describe 'Courses API v2', type: :request do
       end
     end
 
+    context 'when course and provider is not related' do
+      let(:course) { create(:course) }
+      it "raises an error" do
+        expect {
+          get "/api/v2/providers/#{provider.provider_code}/courses/#{course.course_code}",
+            headers: { 'HTTP_AUTHORIZATION' => credentials }
+        }.to raise_error ActiveRecord::RecordNotFound
+      end
+    end
+
     describe 'JSON generated for courses' do
       before do
         get "/api/v2/providers/#{provider.provider_code.downcase}/courses/#{findable_open_course.course_code.downcase}",
