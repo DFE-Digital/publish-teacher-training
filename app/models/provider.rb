@@ -63,11 +63,13 @@ class Provider < ApplicationRecord
 
   scope :in_order, -> { order(:provider_name) }
 
-  # Currently this isn't used but will likely be needed when
+  # Currently Provider#contact_info isn't used but will likely be needed when
   # we need to expose the candidate-facing contact info.
   #
   # When the time comes:
   # - rename this method to reflect that it's the candidate-facing contact
+  # - resurrect the tests which were stripped from models/provider_spec.rb
+  #
   # def contact_info
   #   self
   #     .attributes_before_type_cast
