@@ -71,7 +71,7 @@ describe 'Courses API v2', type: :request do
 
     describe 'JSON generated for courses' do
       before do
-        get "/api/v2/providers/#{provider.provider_code}/courses/#{findable_open_course.course_code}",
+        get "/api/v2/providers/#{provider.provider_code.downcase}/courses/#{findable_open_course.course_code.downcase}",
             headers: { 'HTTP_AUTHORIZATION' => credentials },
             params: { includes: "site_statuses" }
       end
