@@ -63,11 +63,16 @@ class Provider < ApplicationRecord
 
   scope :in_order, -> { order(:provider_name) }
 
-  def contact_info
-    self
-      .attributes_before_type_cast
-      .slice('address1', 'address2', 'address3', 'address4', 'postcode', 'region_code', 'telephone', 'email')
-  end
+  # Currently this isn't used but will likely be needed when
+  # we need to expose the candidate-facing contact info.
+  #
+  # When the time comes:
+  # - rename this method to reflect that it's the candidate-facing contact
+  # def contact_info
+  #   self
+  #     .attributes_before_type_cast
+  #     .slice('address1', 'address2', 'address3', 'address4', 'postcode', 'region_code', 'telephone', 'email')
+  # end
 
   def update_changed_at(timestamp: Time.now.utc)
     # Changed_at represents changes to related records as well as provider

@@ -56,23 +56,6 @@ describe Provider, type: :model do
     end
   end
 
-  describe '#contact_info' do
-    it 'returns address of the provider' do
-      provider = create(:provider, enrichments: [])
-
-      expect(provider.contact_info).to eq(
-        'address1' => provider.address1,
-        'address2' => provider.address2,
-        'address3' => provider.address3,
-        'address4' => provider.address4,
-        'postcode' => provider.postcode,
-        'region_code' => provider.region_code_before_type_cast,
-        'email' => provider.email,
-        'telephone' => provider.telephone
-      )
-    end
-  end
-
   describe '#changed_since' do
     context 'with a provider that has been changed after the given timestamp' do
       let(:provider) { create(:provider, changed_at: 5.minutes.ago) }
