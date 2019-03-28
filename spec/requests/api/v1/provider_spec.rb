@@ -65,7 +65,7 @@ describe 'Providers API', type: :request do
                accrediting_provider: 'Y',
                scheme_member: 'Y',
                last_published_at: DateTime.now.utc,
-               enrichments: [enrichment],
+               enrichments: [],
                ucas_preferences: ucas_preferences,
                contacts: contacts)
       end
@@ -75,17 +75,6 @@ describe 'Providers API', type: :request do
               code: '-',
               region_code: :london,
               provider: provider)
-      end
-      let(:enrichment) do
-        build(:provider_enrichment,
-              address1: 'Sydney Russell School',
-              address2: '',
-              address3: 'Dagenham',
-              address4: 'Essex',
-              postcode: 'RM9 5QT',
-              email: 'sydney-russell-school@education.gov.uk',
-              telephone: '020 8123 1234',
-              region_code: :scotland)
       end
       let(:ucas_preferences2) do
         build(:ucas_preferences,
@@ -160,293 +149,143 @@ describe 'Providers API', type: :request do
 
       it 'includes correct next link in response headers'
 
-      context 'with enrichment contact data' do
-        it 'JSON body response contains expected provider attributes' do
-          get '/api/v1/2019/providers',
-              headers: { 'HTTP_AUTHORIZATION' => credentials }
+      it 'JSON body response contains expected provider attributes' do
+        get '/api/v1/2019/providers',
+            headers: { 'HTTP_AUTHORIZATION' => credentials }
 
-          json = JSON.parse(response.body)
-          expect(json).to eq(
-            [
-              {
-                'accrediting_provider' => 'Y',
-                'campuses' => [
-                  {
-                    'campus_code' => '-',
-                    'name' => 'Main site',
-                    'region_code' => '01',
-                  }
-                ],
-                'institution_code' => 'A123',
-                'institution_name' => 'ACME SCITT',
-                'institution_type' => 'B',
-                'address1' => 'Sydney Russell School',
-                'address2' => '',
-                'address3' => 'Dagenham',
-                'address4' => 'Essex',
-                'postcode' => 'RM9 5QT',
-                'region_code' => '11',
-                'scheme_member' => 'Y',
-                'telephone' => '020 8123 1234',
-                'email' => 'sydney-russell-school@education.gov.uk',
-                'contact_name' => 'Amy Smith',
-                'recruitment_cycle' => '2019',
-                'type_of_gt12' => 'Not coming',
-                'utt_application_alerts' => 'Yes, required',
-                'contacts' => [
-                  {
-                    'type' => 'admin',
-                    'name' => 'Admin Contact A123',
-                    'email' => 'admin@acmescitt.education.uk',
-                    'telephone' => '020 812 345 678'
-                  },
-                  {
-                    'type' => 'utt',
-                    'name' => 'Utt Contact A123',
-                    'email' => 'utt@acmescitt.education.uk',
-                    'telephone' => '020 812 345 678'
-                  },
-                  {
-                    'type' => 'web_link',
-                    'name' => 'Web Link Contact A123',
-                    'email' => 'web_link@acmescitt.education.uk',
-                    'telephone' => '020 812 345 678'
-                  },
-                  {
-                    'type' => 'fraud',
-                    'name' => 'Fraud Contact A123',
-                    'email' => 'fraud@acmescitt.education.uk',
-                    'telephone' => '020 812 345 678'
-                  },
-                  {
-                    'type' => 'finance',
-                    'name' => 'Finance Contact A123',
-                    'email' => 'finance@acmescitt.education.uk',
-                    'telephone' => '020 812 345 678'
-                  },
-                  {
-                    'type' => 'application_alert_recipient',
-                    'name' => '',
-                    'email' => 'application_alert_recipient@acmescitt.education.uk',
-                    'telephone' => ''
-                  }
-                ]
-              },
-              {
-                'accrediting_provider' => 'N',
-                'campuses' => [
-                  {
-                    'campus_code' => '-',
-                    'name' => 'Main site',
-                    'region_code' => '11',
-                  }
-                ],
-                'institution_code' => 'B123',
-                'institution_name' => 'ACME University',
-                'institution_type' => 'O',
-                'address1' => 'Bee School',
-                'address2' => 'Bee Avenue',
-                'address3' => 'Bee City',
-                'address4' => 'Bee Hive',
-                'postcode' => 'B3 3BB',
-                'region_code' => '03',
-                'scheme_member' => 'N',
-                'telephone' => '01273 345 678',
-                'email' => 'info@acmeuniversity.education.uk',
-                'contact_name' => 'James Brown',
-                'recruitment_cycle' => '2019',
-                'type_of_gt12' => 'Coming or Not',
-                'utt_application_alerts' => 'No, not required',
-                'contacts' => [
-                  {
-                    'type' => 'admin',
-                    'name' => 'Admin Contact B123',
-                    'email' => 'admin@acmeuniversity.education.uk',
-                    'telephone' => '01273 345 678'
-                  },
-                  {
-                    'type' => 'utt',
-                    'name' => 'Utt Contact B123',
-                    'email' => 'utt@acmeuniversity.education.uk',
-                    'telephone' => '01273 345 678'
-                  },
-                  {
-                    'type' => 'web_link',
-                    'name' => 'Web Link Contact B123',
-                    'email' => 'web_link@acmeuniversity.education.uk',
-                    'telephone' => '01273 345 678'
-                  },
-                  {
-                    'type' => 'fraud',
-                    'name' => 'Fraud Contact B123',
-                    'email' => 'fraud@acmeuniversity.education.uk',
-                    'telephone' => '01273 345 678'
-                  },
-                  {
-                    'type' => 'finance',
-                    'name' => 'Finance Contact B123',
-                    'email' => 'finance@acmeuniversity.education.uk',
-                    'telephone' => '01273 345 678'
-                  },
-                  {
-                    'type' => 'application_alert_recipient',
-                    'name' => '',
-                    'email' => 'application_alert_recipient@acmeuniversity.education.uk',
-                    'telephone' => ''
-                  }
-                ]
-              }
-            ]
-          )
-        end
-      end
-
-      context 'without enrichment contact data' do
-        it 'JSON body response contains expected provider attributes' do
-          # Simulate a provider enrichment that has no contact data. It's not just
-          # a matter of the attributes being nil, the data is actually missing
-          # from json_data
-          ProviderEnrichment.connection.update(<<~EOSQL)
-            UPDATE provider_enrichment
-                  SET json_data=json_data-'Address1'-'Address2'-'Address3'-'Address4'-'Postcode'-'RegionCode'-'Email'-'Telephone'
-                  WHERE provider_code='#{enrichment.provider_code}'
-          EOSQL
-
-          get '/api/v1/providers',
-              headers: { 'HTTP_AUTHORIZATION' => credentials }
-
-          json = JSON.parse(response.body)
-          expect(json).to eq([
-                               {
-                                  'accrediting_provider' => 'Y',
-                                  'campuses' => [
-                                    {
-                                      'campus_code' => '-',
-                                      'name' => 'Main site',
-                                      'region_code' => '01',
-                                    }
-                                  ],
-                                  'institution_code' => 'A123',
-                                  'institution_name' => 'ACME SCITT',
-                                  'institution_type' => 'B',
-                                  'address1' => 'Shoreditch Park Primary School',
-                                  'address2' => '313 Bridport Pl',
-                                  'address3' => nil,
-                                  'address4' => 'London',
-                                  'postcode' => 'N1 5JN',
-                                  'region_code' => '01',
-                                  'scheme_member' => 'Y',
-                                  'telephone' => '020 812 345 678',
-                                  'email' => 'info@acmescitt.education.uk',
-                                  'contact_name' => 'Amy Smith',
-                                  'recruitment_cycle' => '2019',
-                                  'type_of_gt12' => 'Not coming',
-                                  'utt_application_alerts' => 'Yes, required',
-                                  'contacts' => [
-                                    {
-                                      'type' => 'admin',
-                                      'name' => 'Admin Contact A123',
-                                      'email' => 'admin@acmescitt.education.uk',
-                                      'telephone' => '020 812 345 678'
-                                    },
-                                    {
-                                      'type' => 'utt',
-                                      'name' => 'Utt Contact A123',
-                                      'email' => 'utt@acmescitt.education.uk',
-                                      'telephone' => '020 812 345 678'
-                                    },
-                                    {
-                                      'type' => 'web_link',
-                                      'name' => 'Web Link Contact A123',
-                                      'email' => 'web_link@acmescitt.education.uk',
-                                      'telephone' => '020 812 345 678'
-                                    },
-                                    {
-                                      'type' => 'fraud',
-                                      'name' => 'Fraud Contact A123',
-                                      'email' => 'fraud@acmescitt.education.uk',
-                                      'telephone' => '020 812 345 678'
-                                    },
-                                    {
-                                      'type' => 'finance',
-                                      'name' => 'Finance Contact A123',
-                                      'email' => 'finance@acmescitt.education.uk',
-                                      'telephone' => '020 812 345 678'
-                                    },
-                                    {
-                                      'type' => 'application_alert_recipient',
-                                      'name' => '',
-                                      'email' => 'application_alert_recipient@acmescitt.education.uk',
-                                      'telephone' => ''
-                                    }
-                                  ]
-                               },
-                               {
-                                 'accrediting_provider' => 'N',
-                                 'campuses' => [
-                                   {
-                                     'campus_code' => '-',
-                                     'name' => 'Main site',
-                                     'region_code' => '11',
-                                   }
-                                 ],
-                                 'institution_code' => 'B123',
-                                 'institution_name' => 'ACME University',
-                                 'institution_type' => 'O',
-                                 'address1' => 'Bee School',
-                                 'address2' => 'Bee Avenue',
-                                 'address3' => 'Bee City',
-                                 'address4' => 'Bee Hive',
-                                 'postcode' => 'B3 3BB',
-                                 'region_code' => '03',
-                                 'scheme_member' => 'N',
-                                 'telephone' => '01273 345 678',
-                                 'email' => 'info@acmeuniversity.education.uk',
-                                 'contact_name' => 'James Brown',
-                                 'recruitment_cycle' => '2019',
-                                 'type_of_gt12' => 'Coming or Not',
-                                 'utt_application_alerts' => 'No, not required',
-                                 'contacts' => [
-                                   {
-                                     'type' => 'admin',
-                                     'name' => 'Admin Contact B123',
-                                     'email' => 'admin@acmeuniversity.education.uk',
-                                     'telephone' => '01273 345 678'
-                                   },
-                                   {
-                                     'type' => 'utt',
-                                     'name' => 'Utt Contact B123',
-                                     'email' => 'utt@acmeuniversity.education.uk',
-                                     'telephone' => '01273 345 678'
-                                   },
-                                   {
-                                     'type' => 'web_link',
-                                     'name' => 'Web Link Contact B123',
-                                     'email' => 'web_link@acmeuniversity.education.uk',
-                                     'telephone' => '01273 345 678'
-                                   },
-                                   {
-                                     'type' => 'fraud',
-                                     'name' => 'Fraud Contact B123',
-                                     'email' => 'fraud@acmeuniversity.education.uk',
-                                     'telephone' => '01273 345 678'
-                                   },
-                                   {
-                                     'type' => 'finance',
-                                     'name' => 'Finance Contact B123',
-                                     'email' => 'finance@acmeuniversity.education.uk',
-                                     'telephone' => '01273 345 678'
-                                   },
-                                   {
-                                     'type' => 'application_alert_recipient',
-                                     'name' => '',
-                                     'email' => 'application_alert_recipient@acmeuniversity.education.uk',
-                                     'telephone' => ''
-                                   }
-                                 ]
-                               }
-                             ])
-        end
+        json = JSON.parse(response.body)
+        expect(json).to eq(
+          [
+            {
+              'accrediting_provider' => 'Y',
+              'campuses' => [
+                {
+                  'campus_code' => '-',
+                  'name' => 'Main site',
+                  'region_code' => '01',
+                }
+              ],
+              'institution_code' => 'A123',
+              'institution_name' => 'ACME SCITT',
+              'institution_type' => 'B',
+              'address1' => 'Shoreditch Park Primary School',
+              'address2' => '313 Bridport Pl',
+              'address3' => nil,
+              'address4' => 'London',
+              'postcode' => 'N1 5JN',
+              'region_code' => '01',
+              'scheme_member' => 'Y',
+              'telephone' => '020 812 345 678',
+              'email' => 'info@acmescitt.education.uk',
+              'contact_name' => 'Amy Smith',
+              'recruitment_cycle' => '2019',
+              'type_of_gt12' => 'Not coming',
+              'utt_application_alerts' => 'Yes, required',
+              'contacts' => [
+                {
+                  'type' => 'admin',
+                  'name' => 'Admin Contact A123',
+                  'email' => 'admin@acmescitt.education.uk',
+                  'telephone' => '020 812 345 678'
+                },
+                {
+                  'type' => 'utt',
+                  'name' => 'Utt Contact A123',
+                  'email' => 'utt@acmescitt.education.uk',
+                  'telephone' => '020 812 345 678'
+                },
+                {
+                  'type' => 'web_link',
+                  'name' => 'Web Link Contact A123',
+                  'email' => 'web_link@acmescitt.education.uk',
+                  'telephone' => '020 812 345 678'
+                },
+                {
+                  'type' => 'fraud',
+                  'name' => 'Fraud Contact A123',
+                  'email' => 'fraud@acmescitt.education.uk',
+                  'telephone' => '020 812 345 678'
+                },
+                {
+                  'type' => 'finance',
+                  'name' => 'Finance Contact A123',
+                  'email' => 'finance@acmescitt.education.uk',
+                  'telephone' => '020 812 345 678'
+                },
+                {
+                  'type' => 'application_alert_recipient',
+                  'name' => '',
+                  'email' => 'application_alert_recipient@acmescitt.education.uk',
+                  'telephone' => ''
+                }
+              ]
+            },
+            {
+              'accrediting_provider' => 'N',
+              'campuses' => [
+                {
+                  'campus_code' => '-',
+                  'name' => 'Main site',
+                  'region_code' => '11',
+                }
+              ],
+              'institution_code' => 'B123',
+              'institution_name' => 'ACME University',
+              'institution_type' => 'O',
+              'address1' => 'Bee School',
+              'address2' => 'Bee Avenue',
+              'address3' => 'Bee City',
+              'address4' => 'Bee Hive',
+              'postcode' => 'B3 3BB',
+              'region_code' => '03',
+              'scheme_member' => 'N',
+              'telephone' => '01273 345 678',
+              'email' => 'info@acmeuniversity.education.uk',
+              'contact_name' => 'James Brown',
+              'recruitment_cycle' => '2019',
+              'type_of_gt12' => 'Coming or Not',
+              'utt_application_alerts' => 'No, not required',
+              'contacts' => [
+                {
+                  'type' => 'admin',
+                  'name' => 'Admin Contact B123',
+                  'email' => 'admin@acmeuniversity.education.uk',
+                  'telephone' => '01273 345 678'
+                },
+                {
+                  'type' => 'utt',
+                  'name' => 'Utt Contact B123',
+                  'email' => 'utt@acmeuniversity.education.uk',
+                  'telephone' => '01273 345 678'
+                },
+                {
+                  'type' => 'web_link',
+                  'name' => 'Web Link Contact B123',
+                  'email' => 'web_link@acmeuniversity.education.uk',
+                  'telephone' => '01273 345 678'
+                },
+                {
+                  'type' => 'fraud',
+                  'name' => 'Fraud Contact B123',
+                  'email' => 'fraud@acmeuniversity.education.uk',
+                  'telephone' => '01273 345 678'
+                },
+                {
+                  'type' => 'finance',
+                  'name' => 'Finance Contact B123',
+                  'email' => 'finance@acmeuniversity.education.uk',
+                  'telephone' => '01273 345 678'
+                },
+                {
+                  'type' => 'application_alert_recipient',
+                  'name' => '',
+                  'email' => 'application_alert_recipient@acmeuniversity.education.uk',
+                  'telephone' => ''
+                }
+              ]
+            }
+          ]
+        )
       end
     end
 
