@@ -15,4 +15,5 @@ class CoursePolicy
   end
 
   alias_method :update?, :show?
+  alias_method :publish?, :update?
 end

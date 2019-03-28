@@ -15,6 +15,15 @@ module API
         render jsonapi: @course, include: [site_statuses: [:site]]
       end
 
+      def publish
+        response = ManageCoursesAPI::Request.publish_course(
+          @current_user.email,
+          @provider.provider_code,
+          @course.course_code
+        )
+        render jsonapi: {}
+      end
+
     private
 
       def build_provider
