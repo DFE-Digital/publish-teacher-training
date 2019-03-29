@@ -75,13 +75,10 @@ describe ProviderSerializer do
 
   describe 'contacts' do
     describe 'generate provider object returns the providers contacts' do
-      let(:provider) do
-        create :provider,
-               contacts: [contact]
-      end
-      let(:contact) { create(:contact) }
+      let(:contact)  { create :contact }
+      let(:provider) { create :provider, contacts: [contact] }
 
-      subject { serialize(provider)['contacts'].find { |c| c[:type] == contact.type } }
+      subject { serialize(provider)['contacts'].first }
 
       its([:name]) { should eq contact.name }
       its([:email]) { should eq contact.email }
@@ -94,6 +91,29 @@ describe ProviderSerializer do
       its([:name]) { should eq '' }
       its([:email]) { should eq provider.ucas_preferences.application_alert_email }
       its([:telephone]) { should eq '' }
+    end
+
+    describe 'admin contact' do
+      context 'exists on provider record and not in contacts table' do
+        let(:provider) { create :provider }
+
+        subject { serialize(provider)['contacts'].find { |c| c[:type] == 'admin' } }
+
+        its([:name]) { should eq provider.contact_name }
+        its([:email]) { should eq provider.email }
+        its([:telephone]) { should eq provider.telephone }
+      end
+
+      context 'exists in contacts table' do
+        let(:contact)  { create :contact, type: 'admin' }
+        let(:provider) { create :provider, contacts: [contact] }
+
+        subject { serialize(provider)['contacts'].find { |c| c[:type] == 'admin' } }
+
+        its([:name]) { should eq contact.name }
+        its([:email]) { should eq contact.email }
+        its([:telephone]) { should eq contact.telephone }
+      end
     end
   end
 end

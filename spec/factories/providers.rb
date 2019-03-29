@@ -36,6 +36,7 @@ FactoryBot.define do
     address3 { Faker::Address.city }
     address4 { Faker::Address.state }
     postcode { Faker::Address.postcode }
+    contact_name { Faker::Name.name }
     email { Faker::Internet.email }
     telephone { Faker::PhoneNumber.phone_number }
     accrediting_provider { 'N' }
