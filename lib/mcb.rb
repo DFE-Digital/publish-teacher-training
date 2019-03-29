@@ -19,6 +19,7 @@ module MCB
     unless defined?(Rails)
       app_root = File.expand_path(File.join(File.dirname($0), '..'))
       exec_path = File.join(app_root, 'bin', 'rails')
+      ENV["DISABLE_SPRING"] = "true" # prevent caching of environment variables by spring
       verbose("Running #{exec_path}")
       exec(exec_path, 'runner', $0, *ARGV)
     end
