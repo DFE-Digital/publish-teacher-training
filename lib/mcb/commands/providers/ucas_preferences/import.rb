@@ -1,4 +1,4 @@
-summary 'Import UCAS preferences for providers'
+summary 'Import UCAS preferences for providers. Requires a filename to import as an argument.'
 param :filename
 option :n, 'dry_run', "don't update anything, display what would be done"
 
