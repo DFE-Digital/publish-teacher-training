@@ -4,5 +4,6 @@ class ApplicationController < ActionController::API
 
   # child must define authenticate method
   before_action :authenticate
+  before_action :bat_environment
   after_action :verify_authorized
 end

@@ -6,3 +6,7 @@ Raven.configure do |config|
   config.excluded_exceptions = Raven::Configuration::IGNORE_DEFAULT -
     ['ActiveRecord::RecordNotFound']
 end
+
+def bat_environment
+  Raven.tags_context(bat_environment: ENV['SENTRY_ENVIRONMENT'])
+end
