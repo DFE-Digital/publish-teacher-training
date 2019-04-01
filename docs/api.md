@@ -308,11 +308,11 @@ subset of contact groups required by the DfE course publishing system is used fo
 
 | Contact Type                | UCAS "contact group"   | Contact Purpose                                                                                                                  |
 | --------------------------- | ---------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
-| admin_contact               | n/a                    | This is the lead UCAS contact.                                                                                                   |
-| utt_correspondent           | UTT Correspondent      | This person will receive the UCAS monthly bulletin, which will include information about deadlines for making decisions.         |
-| web_link_correspondent      | web-link Correspondent | This person will receive notices about UCAS systems and planned downtime.                                                        |
-| fraud_contact               | Fraud Correspondent    | This person will receive alerts about fradulent activity, for example similarity detection for a plagiarised personal statement. |
-| finance_contact             | UTT finance contact    | This person will receive invoices from UCAS for payment of fees.                                                                 |
+| admin                       | n/a                    | This is the lead UCAS contact.                                                                                                   |
+| utt                         | UTT Correspondent      | This person will receive the UCAS monthly bulletin, which will include information about deadlines for making decisions.         |
+| web_link                    | web-link Correspondent | This person will receive notices about UCAS systems and planned downtime.                                                        |
+| fraud                       | Fraud Correspondent    | This person will receive alerts about fradulent activity, for example similarity detection for a plagiarised personal statement. |
+| finance                     | UTT finance contact    | This person will receive invoices from UCAS for payment of fees.                                                                 |
 | application_alert_recipient | UTT Output             | This person will receive alerts about new applications.                                                                          |
 
 ### Example
