@@ -54,4 +54,9 @@ module MCB
 
     cmd
   end
+
+  def self.run_command(cmd)
+    verbose("Running: #{cmd}")
+    `#{cmd}`
+  end
 end

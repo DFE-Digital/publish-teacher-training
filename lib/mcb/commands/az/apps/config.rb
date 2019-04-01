@@ -8,5 +8,5 @@ param :rgroup
 run do |_opts, args, _cmd|
   app = args[:app]
   rgroup = args[:rgroup]
-  puts Azure.get_config(app, rgroup)
+  puts MCB::Azure.get_config(app, rgroup)
 end

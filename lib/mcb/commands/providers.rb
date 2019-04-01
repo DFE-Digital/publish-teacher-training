@@ -6,6 +6,6 @@ option nil, 'webapp',
        'Connect to the database of this webapp',
        argument: :required do |webapp|
   if webapp
-    Azure.configure_database(webapp)
+    MCB::Azure.configure_database(webapp)
   end
 end
