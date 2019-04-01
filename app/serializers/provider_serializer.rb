@@ -41,7 +41,11 @@ class ProviderSerializer < ActiveModel::Serializer
              # see generate_provider_contacts and return_application_alert_recipient for logic.
 
   attribute :contacts do
-    generate_provider_contacts + application_alert_recipient
+    if application_alert_recipient
+      generate_provider_contacts + application_alert_recipient
+    else
+      generate_provider_contacts
+    end
   end
 
   def institution_code
@@ -96,11 +100,13 @@ private
   end
 
   def application_alert_recipient
-    [{
-      type: 'application_alert_recipient',
-      name: '',
-      email: object.ucas_preferences&.application_alert_email,
-      telephone: ''
-      }]
+    if object.ucas_preferences&.application_alert_email
+      [{
+        type: 'application_alert_recipient',
+        name: '',
+        email: object.ucas_preferences&.application_alert_email,
+        telephone: ''
+        }]
+    end
   end
 end

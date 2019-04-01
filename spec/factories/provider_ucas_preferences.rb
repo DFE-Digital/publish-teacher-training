@@ -16,6 +16,8 @@ FactoryBot.define do
   factory :provider_ucas_preference, aliases: [:ucas_preferences] do
     provider
 
+    application_alert_email { Faker::Internet.email }
+
     type_of_gt12 do
       %i[
         coming_or_not

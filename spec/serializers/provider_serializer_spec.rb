@@ -57,16 +57,45 @@ describe ProviderSerializer do
     it { should eq provider.ucas_preferences.send_application_alerts_before_type_cast }
   end
 
+  describe 'application alert recipient' do
+    context 'if set' do
+      let(:application_alert_recipient) do
+        serialize(provider)['contacts'].find do |contact|
+          contact[:type] == 'application_alert_recipient'
+        end
+      end
+
+      subject { application_alert_recipient }
+
+      its([:name]) { should eq '' }
+      its([:email]) { should eq provider.ucas_preferences.application_alert_email }
+      its([:telephone]) { should eq '' }
+    end
+
+    context 'if nil' do
+      let(:ucas_preferences) { create :ucas_preferences, application_alert_email: nil }
+      let(:provider) { create :provider, ucas_preferences: ucas_preferences }
+      let(:contacts) do
+        serialize(provider)['contacts'].map { |contact| contact[:type] }
+      end
+
+      subject { contacts }
+
+      it { should_not include 'application_alert_recipient' }
+    end
+  end
+
   context "when UCAS preferences are missing" do
     before do
       provider.ucas_preferences.destroy
       provider.reload
     end
+    # no need to test for the application alret recipient as it will not have
+    # been instantiated into the contacts object due to being nil
 
     it "handles the missing data gracefully" do
       expect(subject['utt_application_alerts']).to be_nil
       expect(subject['type_of_gt12']).to be_nil
-      expect(subject['contacts'].detect { |c| c['type'] == 'application_alert_recipient' }['email']).to be_nil
     end
   end
 
@@ -80,14 +109,6 @@ describe ProviderSerializer do
       its([:name]) { should eq contact.name }
       its([:email]) { should eq contact.email }
       its([:telephone]) { should eq contact.telephone }
-    end
-
-    describe 'the application alert recipient has been serialized upon instantiation of the contact object' do
-      subject { serialize(provider)['contacts'].find { |c| c[:type] == 'application_alert_recipient' } }
-
-      its([:name]) { should eq '' }
-      its([:email]) { should eq provider.ucas_preferences.application_alert_email }
-      its([:telephone]) { should eq '' }
     end
 
     describe 'admin contact' do
