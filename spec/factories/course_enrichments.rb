@@ -14,6 +14,24 @@
 #  updated_at                   :datetime         not null
 #
 
-class CourseEnrichment < ApplicationRecord
-  enum status: %i[draft published]
+FactoryBot.define do
+  factory :course_enrichment do
+    sequence(:provider_code) { |n| "A#{n}" }
+    sequence(:ucas_course_code) { |n| "C#{n}D3" }
+    status { :draft }
+  end
+
+  trait :initial_draft do
+    last_published_timestamp_utc { nil }
+  end
+
+  trait :published do
+    status { :published }
+    last_published_timestamp_utc { 5.days.ago }
+  end
+
+  trait :subsequent_draft do
+    status { :draft }
+    last_published_timestamp_utc { 5.days.ago }
+  end
 end
