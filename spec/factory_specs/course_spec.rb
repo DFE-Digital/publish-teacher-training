@@ -1,18 +1,13 @@
 require 'rails_helper'
 
-describe "Course Factory" do
-  let(:course) { create(:course) }
+describe "Course factory" do
+  subject { create(:course) }
 
-  it "created course" do
-    expect(course).to be_instance_of(Course)
-    expect(course).to be_valid
-  end
+  it { should be_instance_of(Course) }
+  it { should be_valid }
 
   context "course resulting_in_pgde" do
-    let(:course) { create(:course, :resulting_in_pgde) }
-
-    it "created course" do
-      expect(course.qualification).to eq("pgde")
-    end
+    subject { create(:course, :resulting_in_pgde) }
+    its(:qualification) { should eq("pgde") }
   end
 end
