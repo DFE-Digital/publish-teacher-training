@@ -22,12 +22,6 @@ class ProviderEnrichment < ApplicationRecord
 
   belongs_to :provider, foreign_key: :provider_code, primary_key: :provider_code
 
-  scope :with_contact_info,
-        -> do
-          where("json_data ?| array['Address1', 'Address2', 'Address3', 'Address4', 'Postcode', 'Email', 'Telephone']")
-            .json_data_where_not(address1: nil, address2: nil, address3: nil, address4: nil, postcode: nil, email: nil, telephone: nil)
-        end
-
   scope :latest_created_at, -> { order(created_at: :desc) }
 
   jsonb_accessor :json_data,
