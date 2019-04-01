@@ -381,6 +381,7 @@ DEPENDENCIES
   rspec-json_matchers
   rspec-rails
   rspec_junit_formatter
+  rubocop
   schema_to_scaffold
   sentry-raven
   shoulda-matchers (~> 4.0)

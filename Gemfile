@@ -92,6 +92,9 @@ group :development, :test do
   gem 'rspec-json_matchers'
   gem 'rspec-rails'
 
+  # A Ruby static code analyzer and formatter
+  gem 'rubocop', require: false
+
   # Make diffs of Ruby objects much more readable
   gem 'super_diff'
 

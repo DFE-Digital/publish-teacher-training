@@ -60,11 +60,11 @@ bundle exec rspec
 It's best to lint just your app directories and not those belonging to the framework:
 
 ```bash
-bundle exec govuk-lint-ruby app config db lib spec --format clang
+bundle exec rubocop app config db lib spec --format clang
 
 or
 
-docker-compose exec web /bin/sh -c "bundle exec govuk-lint-ruby app config db lib spec Gemfile --format clang"
+docker-compose exec web /bin/sh -c "bundle exec rubocop app config db lib spec Gemfile --format clang"
 ```
 
 ## Accessing API
