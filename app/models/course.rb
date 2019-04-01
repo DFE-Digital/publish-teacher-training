@@ -104,4 +104,15 @@ class Course < ApplicationRecord
       study_mode_description
     qualifications_description + study_mode_string + program_type_description
   end
+
+  def enrichments
+    # This isn't implemented with pure ActiveRecord associations because for historic reasons,
+    # CourseEnrichment uses `course_code` and `provider_code` instead of
+    # `course_id` and `provider_id`. This should be fixed when the UCAS data model
+    # is revisited.
+    CourseEnrichment.where(
+      provider_code: self.provider.provider_code,
+      ucas_course_code: self.course_code
+    )
+  end
 end
