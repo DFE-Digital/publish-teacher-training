@@ -115,4 +115,18 @@ class Course < ApplicationRecord
       ucas_course_code: self.course_code
     )
   end
+
+  def content_status
+    newest_enrichment = enrichments.order('created_at desc').first
+
+    if newest_enrichment.nil?
+      :empty
+    elsif newest_enrichment.published?
+      :published
+    elsif newest_enrichment.has_been_published_before?
+      :published_with_unpublished_changes
+    else
+      :draft
+    end
+  end
 end

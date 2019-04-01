@@ -333,4 +333,31 @@ RSpec.describe Course, type: :model do
       it { should_not include(course) }
     end
   end
+
+  describe "#content_status" do
+    context "for a course without any enrichments" do
+      subject { create(:course, with_enrichments: []) }
+      its(:content_status) { should eq(:empty) }
+    end
+
+    context "for a course an initial draft enrichments" do
+      subject { create(:course, with_enrichments: [[:initial_draft]]) }
+      its(:content_status) { should eq(:draft) }
+    end
+
+    context "for a course with a single published enrichment" do
+      subject { create(:course, with_enrichments: [[:published]]) }
+      its(:content_status) { should eq(:published) }
+    end
+
+    context "for a course with multiple published enrichments" do
+      subject { create(:course, with_enrichments: [[:published], [:published]]) }
+      its(:content_status) { should eq(:published) }
+    end
+
+    context "for a course with published enrichments and a draft one" do
+      subject { create(:course, with_enrichments: [[:published], [:subsequent_draft]]) }
+      its(:content_status) { should eq(:published_with_unpublished_changes) }
+    end
+  end
 end
