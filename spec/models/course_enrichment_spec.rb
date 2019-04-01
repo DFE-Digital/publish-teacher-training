@@ -14,10 +14,21 @@
 #  updated_at                   :datetime         not null
 #
 
-class CourseEnrichment < ApplicationRecord
-  enum status: %i[draft published]
+require 'rails_helper'
 
-  def has_been_published_before?
-    last_published_timestamp_utc.present?
+describe CourseEnrichment, type: :model do
+  context 'when the enrichment is an initial draft' do
+    subject { create(:course_enrichment, :initial_draft) }
+    it { should_not have_been_published_before }
+  end
+
+  context 'when the enrichment is published' do
+    subject { create(:course_enrichment, :published) }
+    it { should have_been_published_before }
+  end
+
+  context 'when the enrichment is a subsequent draft' do
+    subject { create(:course_enrichment, :subsequent_draft) }
+    it { should have_been_published_before }
   end
 end
