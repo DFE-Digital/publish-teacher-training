@@ -62,7 +62,9 @@ Rails.application.routes.draw do
       end
 
       resources :providers, param: :code do
-        resources :courses, param: :code, only: %i[index create show]
+        resources :courses, param: :code, only: %i[index create show] do
+          post :sync_with_search_and_compare, on: :member
+        end
       end
 
       resource :sessions

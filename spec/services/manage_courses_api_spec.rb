@@ -20,7 +20,7 @@ describe ManageCoursesAPI do
   describe "Request" do
     subject { ManageCoursesAPI::Request }
 
-    describe "publish_course" do
+    describe 'sync_course_with_search_and_compare' do
       let(:provider_code) { 'X12' }
       let(:course_code) { 'X123' }
       let(:email) { 'foo@bar' }
@@ -37,7 +37,9 @@ describe ManageCoursesAPI do
         end
 
         it "returns true" do
-          result = subject.publish_course(email, provider_code, course_code)
+          result = subject.sync_course_with_search_and_compare(
+            email, provider_code, course_code
+          )
           expect(result).to eq(true)
         end
       end
