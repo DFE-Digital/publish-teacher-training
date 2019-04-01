@@ -15,13 +15,14 @@ module API
         render jsonapi: @course, include: [site_statuses: [:site]]
       end
 
-      def publish
-        response = ManageCoursesAPI::Request.publish_course(
+      def sync_with_search_and_compare
+        response = ManageCoursesAPI::Request.sync_course_with_search_and_compare(
           @current_user.email,
           @provider.provider_code,
           @course.course_code
         )
-        render jsonapi: {}
+
+        head response ? :ok : :internal_server_error
       end
 
     private
@@ -31,7 +32,7 @@ module API
       end
 
       def build_course
-        @course = Course.where(provider: @provider).find_by!(course_code: params[:code].upcase)
+        @course = @provider.courses.find_by!(course_code: params[:code].upcase)
         authorize @course
       end
     end

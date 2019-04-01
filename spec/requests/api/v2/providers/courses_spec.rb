@@ -134,80 +134,72 @@ describe 'Courses API v2', type: :request do
     end
   end
 
-  describe 'POST publish' do
+  describe 'POST sync_with_search_and_compare' do
+    let(:api_status)   { 200 }
+    let(:api_response) { '{ "result": true }' }
     let!(:stubbed_manage_courses_api_request) do
       stub_request(:post, %r{#{Settings.manage_api.base_url}/api/Publish/internal/course/})
-      .to_return(
-        status: 200,
-        body: '{ "result": true }'
-      )
+        .to_return(
+          status: api_status,
+          body: api_response
+        )
+    end
+    let(:sync_path) do
+      "/api/v2/providers/#{provider.provider_code}" +
+        "/courses/#{course.course_code}/sync_with_search_and_compare"
+    end
+    let(:course) { findable_open_course }
+
+    subject do
+      post sync_path, headers: { 'HTTP_AUTHORIZATION' => credentials }
+      response
     end
 
     context 'when unauthenticated' do
       let(:payload) { { email: 'foo@bar' } }
 
-      before do
-        post "/api/v2/providers/#{provider.provider_code}/courses/#{findable_open_course.course_code}/publish",
-            headers: { 'HTTP_AUTHORIZATION' => credentials }
-      end
-
       it { should have_http_status(:unauthorized) }
     end
 
     context 'when user has not accepted terms' do
-      let(:user_without_terms_accepted) { create(:user, accept_terms_date_utc: nil) }
-      let(:organisation) { create(:organisation, users: [user, user_without_terms_accepted]) }
-      let(:payload) { { email: user_without_terms_accepted.email } }
-
-      before do
-        post "/api/v2/providers/#{provider.provider_code}/courses/#{findable_open_course.course_code}/publish",
-            headers: { 'HTTP_AUTHORIZATION' => credentials }
-      end
+      let(:user)         { create(:user, accept_terms_date_utc: nil) }
+      let(:organisation) { create(:organisation, users: [user]) }
 
       it { should have_http_status(:forbidden) }
     end
 
     context 'when unauthorised' do
       let(:unauthorised_user) { create(:user) }
-      let(:payload) { { email: unauthorised_user.email } }
+      let(:payload)           { { email: unauthorised_user.email } }
 
       it "raises an error" do
-        expect {
-          post "/api/v2/providers/#{provider.provider_code}/courses/#{findable_open_course.course_code}/publish",
-              headers: { 'HTTP_AUTHORIZATION' => credentials }
-        }.to raise_error Pundit::NotAuthorizedError
+        expect { subject }.to raise_error Pundit::NotAuthorizedError
       end
     end
 
     context 'when course and provider is not related' do
       let(:course) { create(:course) }
-      it "raises an error" do
-        expect {
-          post "/api/v2/providers/#{provider.provider_code}/courses/#{course.course_code}/publish",
-              headers: { 'HTTP_AUTHORIZATION' => credentials }
-        }.to raise_error ActiveRecord::RecordNotFound
+
+      it 'raises an error' do
+        expect { subject }.to raise_error ActiveRecord::RecordNotFound
       end
     end
 
-    describe 'publishing a course' do
-      before do
-        post "/api/v2/providers/#{provider.provider_code}/courses/#{findable_open_course.course_code}/publish",
-            headers: { 'HTTP_AUTHORIZATION' => credentials }
-      end
-
+    context 'when the api responds with a success' do
       it { should have_http_status(:success) }
+    end
 
-      it 'has a data section with the correct attributes' do
-        json_response = JSON.parse response.body
-        expect(json_response).to eq(
-          "data" => nil,
-          "jsonapi" => { "version" => "1.0" },
-        )
-      end
+    context 'when the api responds with result: false' do
+      let(:api_response) { '{ "result": false }' }
 
-      it 'calls Manage Courses API' do
-        expect(stubbed_manage_courses_api_request).to have_been_made
-      end
+      it { should have_http_status(:internal_server_error) }
+    end
+
+    context 'when the api sets http status to 500' do
+      let(:api_status)   { 500 }
+      let(:api_response) { '{ "result": true }' }
+
+      it { should have_http_status(:internal_server_error) }
     end
   end
 
