@@ -29,49 +29,43 @@ describe 'Courses API v2', type: :request do
   subject { response }
 
   describe 'GET show' do
+    let(:show_path) do
+      "/api/v2/providers/#{provider.provider_code}" +
+        "/courses/#{course.course_code}"
+    end
+    let(:course) { findable_open_course }
+
+    subject do
+      get show_path, headers: { 'HTTP_AUTHORIZATION' => credentials }
+      response
+    end
+
     context 'when unauthenticated' do
       let(:payload) { { email: 'foo@bar' } }
-
-      before do
-        get "/api/v2/providers/#{provider.provider_code}/courses/#{findable_open_course.course_code}",
-            headers: { 'HTTP_AUTHORIZATION' => credentials }
-      end
 
       it { should have_http_status(:unauthorized) }
     end
 
     context 'when user has not accepted terms' do
-      let(:user_without_terms_accepted) { create(:user, accept_terms_date_utc: nil) }
-      let(:organisation) { create(:organisation, users: [user, user_without_terms_accepted]) }
-      let(:payload) { { email: user_without_terms_accepted.email } }
-
-      before do
-        get "/api/v2/providers/#{provider.provider_code}/courses/#{findable_open_course.course_code}",
-            headers: { 'HTTP_AUTHORIZATION' => credentials }
-      end
+      let(:user)         { create(:user, accept_terms_date_utc: nil) }
+      let(:organisation) { create(:organisation, users: [user]) }
 
       it { should have_http_status(:forbidden) }
     end
 
     context 'when unauthorised' do
       let(:unauthorised_user) { create(:user) }
-      let(:payload) { { email: unauthorised_user.email } }
+      let(:payload)           { { email: unauthorised_user.email } }
 
       it "raises an error" do
-        expect {
-          get "/api/v2/providers/#{provider.provider_code}/courses/#{findable_open_course.course_code}",
-            headers: { 'HTTP_AUTHORIZATION' => credentials }
-        }.to raise_error Pundit::NotAuthorizedError
+        expect { subject }.to raise_error Pundit::NotAuthorizedError
       end
     end
 
     context 'when course and provider is not related' do
       let(:course) { create(:course) }
       it "raises an error" do
-        expect {
-          get "/api/v2/providers/#{provider.provider_code}/courses/#{course.course_code}",
-            headers: { 'HTTP_AUTHORIZATION' => credentials }
-        }.to raise_error ActiveRecord::RecordNotFound
+        expect { subject }.to raise_error ActiveRecord::RecordNotFound
       end
     end
 
