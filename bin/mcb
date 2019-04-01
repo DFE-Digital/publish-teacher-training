@@ -15,7 +15,9 @@ require 'terminal-table'
 
 lib_dir = File.expand_path 'lib'
 
-require_relative "#{lib_dir}/mcb"
+$LOAD_PATH << lib_dir
+require 'mcb'
+require 'mcb/azure'
 
 tp.set :capitalize_headers, false
 
@@ -24,7 +26,8 @@ mcb = Cri::Command.define do
   usage       'mcb [options]'
   summary     'wrapper for management of manage-curses-backend app'
 
-  option :v, 'verbose', 'display progess info' do |value|
+  option :v, 'verbose',
+         'display additional info (for commands that support it)' do |value|
     $verbosity = :verbose if value
   end
 

@@ -2,7 +2,9 @@ name 'provider'
 summary 'Operate on providers directly in db'
 default_subcommand 'list'
 
-option nil, 'webapp', 'Connect to the database of this webapp', argument: :required do |webapp|
+option nil, 'webapp',
+       'Connect to the database of this webapp',
+       argument: :required do |webapp|
   if webapp
     Azure.configure_database(webapp)
   end

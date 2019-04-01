@@ -8,7 +8,7 @@ run do |_opts, args, _cmd|
 
   provider = Provider.find_by(provider_code: code)
 
-  if !provider
+  if provider.nil?
     puts 'provider not found'
   elsif provider.ucas_preferences
     puts Terminal::Table.new rows: provider.ucas_preferences.attributes
