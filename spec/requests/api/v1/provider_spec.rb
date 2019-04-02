@@ -80,7 +80,7 @@ describe 'Providers API', type: :request do
         build(:ucas_preferences,
               type_of_gt12: :coming_or_not,
               send_application_alerts: :none,
-              application_alert_email: 'application_alert_recipient@acmeuniversity.education.uk')
+              application_alert_email: nil)
       end
       let(:contacts2) do
         [
@@ -269,12 +269,6 @@ describe 'Providers API', type: :request do
                   'name' => 'Finance Contact B123',
                   'email' => 'finance@acmeuniversity.education.uk',
                   'telephone' => '01273 345 678'
-                },
-                {
-                  'type' => 'application_alert_recipient',
-                  'name' => '',
-                  'email' => 'application_alert_recipient@acmeuniversity.education.uk',
-                  'telephone' => ''
                 }
               ]
             }
