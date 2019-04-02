@@ -15,7 +15,7 @@ module ManageCoursesAPI
       def sync_course_with_search_and_compare(email, provider_code, course_code)
         response = api.post(
           "/api/Publish/internal/course/#{provider_code}/#{course_code}",
-          email: email
+          { email: email }.to_json
         )
         if response.success?
           JSON.parse(response.body)["result"]
