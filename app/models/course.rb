@@ -55,6 +55,12 @@ class Course < ApplicationRecord
   has_many :site_statuses
   has_many :sites, through: :site_statuses
 
+  has_many :enrichments,
+           ->(course) { where(provider_code: course.provider.provider_code) },
+           foreign_key: :ucas_course_code,
+           primary_key: :course_code,
+           class_name: 'CourseEnrichment'
+
   scope :changed_since, ->(timestamp) do
     if timestamp.present?
       where("course.changed_at > ?", timestamp)
@@ -103,5 +109,19 @@ class Course < ApplicationRecord
     study_mode_string = (full_time_or_part_time? ? ", " : " ") +
       study_mode_description
     qualifications_description + study_mode_string + program_type_description
+  end
+
+  def content_status
+    newest_enrichment = enrichments.order('created_at desc').first
+
+    if newest_enrichment.nil?
+      :empty
+    elsif newest_enrichment.published?
+      :published
+    elsif newest_enrichment.has_been_published_before?
+      :published_with_unpublished_changes
+    else
+      :draft
+    end
   end
 end

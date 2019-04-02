@@ -34,6 +34,7 @@ FactoryBot.define do
 
     transient do
       with_site_statuses { [] }
+      with_enrichments { [] }
       age { nil }
     end
 
@@ -53,6 +54,14 @@ FactoryBot.define do
         else
           create(:site_status, *traits, attrs)
         end
+      end
+
+      evaluator.with_enrichments.each do |trait, attributes = {}|
+        defaults = {
+          ucas_course_code: course.course_code,
+          provider_code: course.provider.provider_code,
+        }
+        create(:course_enrichment, trait, attributes.merge(defaults))
       end
     end
 
