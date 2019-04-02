@@ -11,6 +11,8 @@ module API
         @object.provider_name
       end
 
+      has_many :sites
+
       has_many :courses do
         meta do
           { count: @object.courses.size }

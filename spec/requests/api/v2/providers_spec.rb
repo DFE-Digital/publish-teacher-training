@@ -46,6 +46,11 @@ describe 'Providers API v2', type: :request do
               "institution_name" => provider.provider_name
             },
             "relationships" => {
+              "sites" => {
+                "meta" => {
+                  "included" => false
+                }
+              },
               "courses" => {
                 "meta" => {
                   "count" => provider.courses.count
@@ -76,6 +81,11 @@ describe 'Providers API v2', type: :request do
               "institution_name" => provider.provider_name
             },
             "relationships" => {
+              "sites" => {
+                "meta" => {
+                  "included" => false
+                }
+              },
               "courses" => {
                 "meta" => {
                   "count" => provider.courses.count
@@ -138,7 +148,7 @@ describe 'Providers API v2', type: :request do
       ActionController::HttpAuthentication::Token.encode_credentials(token)
     end
 
-    let!(:provider) { create(:provider, course_count: 0, site_count: 0, organisations: [organisation]) }
+    let!(:provider) { create(:provider, course_count: 0, site_count: 1, organisations: [organisation]) }
 
     subject { response }
 
@@ -152,6 +162,11 @@ describe 'Providers API v2', type: :request do
             "institution_name" => provider.provider_name
           },
           "relationships" => {
+            "sites" => {
+              "meta" => {
+                "included" => false
+              }
+            },
             "courses" => {
               "meta" => {
                 "count" => provider.courses.count
@@ -164,6 +179,58 @@ describe 'Providers API v2', type: :request do
         }
       }
     }
+
+    context 'including sites' do
+      before do
+        get "/api/v2/providers/#{provider.provider_code}",
+            headers: { 'HTTP_AUTHORIZATION' => credentials },
+            params: { include: "sites" }
+
+        it { should have_http_status(:success) }
+
+        it 'has a data section with the correct attributes' do
+          json_response = JSON.parse(response.body)
+          expect(json_response).to eq(
+            "data" => [{
+              "id" => provider.id.to_s,
+              "type" => "providers",
+              "attributes" => {
+                "institution_code" => provider.provider_code,
+                "institution_name" => provider.provider_name
+              },
+              "relationships" => {
+                "sites" => {
+                  "data" => [
+                    {
+                      "type" => "sites",
+                      "id" => "1"
+                    }
+                  ]
+                },
+                "courses" => {
+                  "meta" => {
+                    "count" => provider.courses.count
+                  }
+                }
+              }
+            }],
+            "included": [
+              {
+                "id" => provider.site.id.to_s,
+                "type" => "sites",
+                "attributes" => {
+                  "code" => provider.site.code,
+                  "location_name" => provider.site.location_name
+                }
+              }
+            ],
+            "jsonapi" => {
+              "version" => "1.0"
+            }
+          )
+        end
+      end
+    end
 
     describe 'JSON generated for a provider' do
       before do
