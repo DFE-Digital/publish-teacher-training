@@ -29,7 +29,7 @@ describe ManageCoursesAPI do
       describe "with a normal response" do
         before do
           stub_request(:post, Settings.manage_api.base_url + "/api/Publish/internal/course/#{provider_code}/#{course_code}")
-            .with { |req| req.body == body }
+            .with { |req| req.body == body.to_json }
             .to_return(
               status: 200,
               body: '{ "result": true }'
