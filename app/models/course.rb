@@ -55,6 +55,12 @@ class Course < ApplicationRecord
   has_many :site_statuses
   has_many :sites, through: :site_statuses
 
+  has_many :enrichments,
+           ->(course) { where(provider_code: course.provider.provider_code) },
+           foreign_key: :ucas_course_code,
+           primary_key: :course_code,
+           class_name: 'CourseEnrichment'
+
   scope :changed_since, ->(timestamp) do
     if timestamp.present?
       where("course.changed_at > ?", timestamp)
@@ -103,17 +109,6 @@ class Course < ApplicationRecord
     study_mode_string = (full_time_or_part_time? ? ", " : " ") +
       study_mode_description
     qualifications_description + study_mode_string + program_type_description
-  end
-
-  def enrichments
-    # This isn't implemented with pure ActiveRecord associations because for historic reasons,
-    # CourseEnrichment uses `course_code` and `provider_code` instead of
-    # `course_id` and `provider_id`. This should be fixed when the UCAS data model
-    # is revisited.
-    CourseEnrichment.where(
-      provider_code: self.provider.provider_code,
-      ucas_course_code: self.course_code
-    )
   end
 
   def content_status

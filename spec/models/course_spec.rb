@@ -334,6 +334,28 @@ RSpec.describe Course, type: :model do
     end
   end
 
+  describe "#enrichments" do
+    subject {
+      create(:course, with_enrichments: [
+        [:published, created_at: 5.days.ago],
+        [:published, created_at: 3.days.ago],
+        [:subsequent_draft, created_at: 1.day.ago],
+      ]).enrichments
+    }
+
+    let(:another_course) {
+      create(:course, with_enrichments: [
+        [:published, created_at: 5.days.ago],
+      ])
+    }
+
+    its(:size) { should eq(3) }
+
+    it "doesn't overlap with enrichments from another course" do
+      expect(subject & another_course.enrichments).to be_empty
+    end
+  end
+
   describe "#content_status" do
     context "for a course without any enrichments" do
       subject { create(:course, with_enrichments: []) }
