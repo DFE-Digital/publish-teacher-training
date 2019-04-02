@@ -1,7 +1,7 @@
 require 'logger'
 
 module MCB
-  LOGGER = Logger.new($stdout)
+  LOGGER = Logger.new(STDOUT)
 
   LOGGER.formatter = proc do |severity, _datetime, _progname, msg|
     if severity == Logger::INFO
@@ -19,6 +19,8 @@ module MCB
     unless defined?(Rails)
       app_root = File.expand_path(File.join(File.dirname($0), '..'))
       exec_path = File.join(app_root, 'bin', 'rails')
+      ENV["DISABLE_SPRING"] = "true" # prevent caching of environment variables by spring
+      verbose("Running #{exec_path}")
       exec(exec_path, 'runner', $0, *ARGV)
     end
   end
@@ -51,5 +53,10 @@ module MCB
     end
 
     cmd
+  end
+
+  def self.run_command(cmd)
+    verbose("Running: #{cmd}")
+    `#{cmd}`
   end
 end

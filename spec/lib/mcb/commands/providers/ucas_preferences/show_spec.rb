@@ -22,6 +22,6 @@ describe 'mcb providers ucas_preferences show' do
       cmd.run([provider.provider_code])
     end
 
-    expect(output.string).to match %r{type_of_gt12\s+\|\scoming_or_not}
+    expect(output).to match %r{type_of_gt12\s+\|\scoming_or_not}
   end
 end
