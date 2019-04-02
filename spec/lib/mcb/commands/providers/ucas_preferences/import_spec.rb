@@ -75,7 +75,7 @@ describe 'mcb providers ucas_preferences import' do
     let(:tmpfile) { write_csv_to_tmpfile }
 
     it 'displays no changes' do
-      expect(output.string).to match <<~EOMESSAGE
+      expect(output).to match <<~EOMESSAGE
         0 provider(s) changed. No changes, finishing early.
         Aborting without updating.
       EOMESSAGE
@@ -112,7 +112,7 @@ describe 'mcb providers ucas_preferences import' do
       end
 
       # rubocop: disable Layout/TrailingWhitespace
-      expect(output.string.squeeze(' ')).to match <<~EOEXPECTED.chomp
+      expect(output.squeeze(' ')).to match <<~EOEXPECTED.chomp
         \ #{provider.provider_code} type_of_gt12: Coming or Not -> Not coming\ 
         \ #{provider.provider_code} send_application_alerts: Yes, required -> No, not required\ 
         1 provider(s) changed. Continue?\ 
@@ -181,10 +181,11 @@ describe 'mcb providers ucas_preferences import' do
         tmpfile = write_csv_to_tmpfile(
           preferences_for_unknown_provider
         )
+
         output = import_csv_file(tmpfile, opts)
 
         expected_code = nonexistent_provider.provider_code
-        expect(output.string).to match <<~EOMESSAGE
+        expect(output).to match <<~EOMESSAGE
           WARN: [2] Message "Couldn't find Provider" while processing #{expected_code}
           0 provider(s) changed. Dry-run, finishing early.
           Aborting without updating.
