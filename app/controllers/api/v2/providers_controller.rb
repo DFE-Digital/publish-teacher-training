@@ -15,7 +15,7 @@ module API
         provider = Provider.find_by!(provider_code: params[:code].upcase)
         authorize provider, :show?
 
-        render jsonapi: provider
+        render jsonapi: provider, include: params[:include]
       end
 
     private
