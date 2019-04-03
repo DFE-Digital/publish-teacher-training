@@ -79,6 +79,10 @@ class Course < ApplicationRecord
     site_statuses.findable.any?
   end
 
+  def new?
+    site_statuses.status_new_status.any?
+  end
+
   def open_for_applications?
     site_statuses.open_for_applications.any?
   end
@@ -123,5 +127,12 @@ class Course < ApplicationRecord
     else
       :draft
     end
+  end
+
+  def ucas_status
+    return :running if findable?
+    return :new if new?
+
+    :not_running
   end
 end
