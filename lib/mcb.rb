@@ -19,9 +19,15 @@ module MCB
     unless defined?(Rails)
       app_root = File.expand_path(File.join(File.dirname($0), '..'))
       exec_path = File.join(app_root, 'bin', 'rails')
-      ENV["DISABLE_SPRING"] = "true" # prevent caching of environment variables by spring
+
+      # prevent caching of environment variables by spring
+      ENV["DISABLE_SPRING"] = "true"
+
       verbose("Running #{exec_path}")
-      exec(exec_path, 'runner', $0, *ARGV)
+
+      # --webapp only needs to be processed on the first time through
+      new_argv = remove_option_with_arg(ARGV, '--webapp')
+      exec(exec_path, 'runner', $0, *new_argv)
     end
   end
 
@@ -59,4 +65,20 @@ module MCB
     verbose("Running: #{cmd}")
     `#{cmd}`
   end
+
+  def self.remove_option_with_arg(argv, *options)
+    argv.dup.tap do |new_argv|
+      options.each do |option|
+        if (index = new_argv.find_index { |o| o == option })
+          new_argv.delete_at index
+          # delete the argument as well as the option
+          new_argv.delete_at index
+        else
+          new_argv.delete_if { |o| o.match %r{#{option}=} }
+        end
+      end
+    end
+  end
+
+  private_class_method :remove_option_with_arg
 end
