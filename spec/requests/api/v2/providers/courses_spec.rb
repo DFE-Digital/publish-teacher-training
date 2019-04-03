@@ -95,6 +95,7 @@ describe 'Courses API v2', type: :request do
               "qualifications" => %w[qts pgce],
               "description" => "PGCE with QTS full time",
               "content_status" => "empty",
+              "ucas_status" => "running"
             },
             "relationships" => {
               "accrediting_provider" => { "meta" => { "included" => false } },
@@ -253,6 +254,7 @@ describe 'Courses API v2', type: :request do
               "qualifications" => %w[qts pgce],
               "description" => "PGCE with QTS full time",
               "content_status" => "empty",
+              "ucas_status" => "running"
             },
             "relationships" => {
               "accrediting_provider" => { "meta" => { "included" => false } },

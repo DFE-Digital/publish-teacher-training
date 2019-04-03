@@ -166,6 +166,26 @@ RSpec.describe Course, type: :model do
       end
     end
 
+    describe 'ucas_status' do
+      context 'with a running site_status' do
+        let(:subject) { create(:course, with_site_statuses: [%i[findable]]) }
+
+        its(:ucas_status) { should eq :running }
+      end
+
+      context 'with a new site_status' do
+        let(:subject) { create(:course, with_site_statuses: [%i[new]]) }
+
+        its(:ucas_status) { should eq :new }
+      end
+
+      context 'with a not running site_status' do
+        let(:subject) { create(:course, with_site_statuses: [%i[suspended]]) }
+
+        its(:ucas_status) { should eq :not_running }
+      end
+    end
+
     its(:site_statuses) { should be_empty }
     its(:findable?) { should be false }
     its(:open_for_applications?) { should be false }
