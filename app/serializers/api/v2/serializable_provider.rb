@@ -11,6 +11,10 @@ module API
         @object.provider_name
       end
 
+      attribute :opted_in do
+        @object.opted_in
+      end
+
       has_many :sites
 
       has_many :courses do
