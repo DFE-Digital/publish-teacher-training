@@ -1,17 +1,31 @@
 require "rails_helper"
 
 describe API::V2::SerializableCourse do
-  let(:course) { create(:course, start_date: Time.now.utc) }
-  let(:resource) { API::V2::SerializableCourse.new object: course }
-
-  it 'sets type to courses' do
-    expect(resource.jsonapi_type).to eq :courses
+  let(:jsonapi_renderer) { JSONAPI::Serializable::Renderer.new }
+  let(:course)           { create(:course, start_date: Time.now.utc) }
+  let(:provider)         { course.provider }
+  let(:course_json) do
+    jsonapi_renderer.render(
+      course,
+      class: {
+        Course: API::V2::SerializableCourse,
+        Provider: API::V2::SerializableProvider
+      },
+      include: [
+        :provider
+      ]
+    ).to_json
   end
+  let(:parsed_json) { JSON.parse(course_json) }
 
-  subject { resource.as_jsonapi.to_json }
+  subject { parsed_json['included'] }
 
-  it { should be_json.with_content(type: 'courses') }
-  it { should be_json.with_content(course.start_date.iso8601).at_path("attributes.start_date") }
-  it { should be_json.with_content(course.content_status.to_s).at_path("attributes.content_status") }
-  it { should be_json.with_content(course.ucas_status.to_s).at_path("attributes.ucas_status") }
+  it { should include(have_type('providers').and(have_id(provider.id.to_s))) }
+
+  describe 'data' do
+    subject { parsed_json['data'] }
+
+    it { should have_type('courses') }
+    it { should have_attributes(:start_date, :content_status, :ucas_status) }
+  end
 end
