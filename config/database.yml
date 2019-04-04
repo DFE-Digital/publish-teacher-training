@@ -23,6 +23,10 @@ qa:
   <<: *default
   database: <%= ENV['DB_DATABASE'] || 'manage_courses_backend_qa' %>
 
+ucas:
+  <<: *default
+  database: <%= ENV['DB_DATABASE'] || 'manage_courses_backend_ucas' %>
+
 production:
   <<: *default
   username: <%= ENV['DB_USERNAME'] || 'postgres' %>
