@@ -11,8 +11,8 @@ module API
         @object.start_date&.iso8601
       end
 
-      has_one :provider
-      has_one :accrediting_provider
+      belongs_to :provider
+      belongs_to :accrediting_provider
 
       has_many :site_statuses
     end

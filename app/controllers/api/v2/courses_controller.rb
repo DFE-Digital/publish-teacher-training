@@ -8,7 +8,7 @@ module API
         authorize @provider, :can_list_courses?
         authorize Course
 
-        render jsonapi: @provider.courses
+        render jsonapi: @provider.courses, include: params[:include]
       end
 
       def show
