@@ -43,7 +43,8 @@ describe 'Providers API v2', type: :request do
             "type" => "providers",
             "attributes" => {
               "institution_code" => provider.provider_code,
-              "institution_name" => provider.provider_name
+              "institution_name" => provider.provider_name,
+              "opted_in" => true
             },
             "relationships" => {
               "sites" => {
@@ -78,7 +79,8 @@ describe 'Providers API v2', type: :request do
             "type" => "providers",
             "attributes" => {
               "institution_code" => provider.provider_code,
-              "institution_name" => provider.provider_name
+              "institution_name" => provider.provider_name,
+              "opted_in" => true
             },
             "relationships" => {
               "sites" => {
@@ -159,7 +161,8 @@ describe 'Providers API v2', type: :request do
           "type" => "providers",
           "attributes" => {
             "institution_code" => provider.provider_code,
-            "institution_name" => provider.provider_name
+            "institution_name" => provider.provider_name,
+            "opted_in" => true
           },
           "relationships" => {
             "sites" => {
@@ -196,7 +199,8 @@ describe 'Providers API v2', type: :request do
               "type" => "providers",
               "attributes" => {
                 "institution_code" => provider.provider_code,
-                "institution_name" => provider.provider_name
+                "institution_name" => provider.provider_name,
+                "opted_in" => true
               },
               "relationships" => {
                 "sites" => {
