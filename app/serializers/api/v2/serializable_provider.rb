@@ -3,9 +3,7 @@ module API
     class SerializableProvider < JSONAPI::Serializable::Resource
       type 'providers'
 
-      attribute :institution_code do
-        @object.provider_code
-      end
+      attributes :provider_code
 
       attribute :institution_name do
         @object.provider_name
