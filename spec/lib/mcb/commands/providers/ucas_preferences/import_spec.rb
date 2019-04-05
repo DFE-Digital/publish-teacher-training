@@ -15,9 +15,11 @@ describe 'mcb providers ucas_preferences import' do
   end
 
   def import_csv_file(tmpfile, opts = [])
-    with_stubbed_stdout(stdin: "yes\n") do
+    stderr = ""
+    output = with_stubbed_stdout(stdin: "yes\n", stderr: stderr) do
       cmd.run(opts + [tmpfile.path])
     end
+    [output, stderr]
   end
 
   let(:lib_dir) { "#{Rails.root}/lib" }

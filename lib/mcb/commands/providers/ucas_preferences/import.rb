@@ -26,17 +26,13 @@ run do |opts, args, _cmd| # rubocop: disable Metrics/BlockLength
       changed_preferences[provider][preference_type] = row['PREF_VALUE']
     end
   rescue ActiveRecord::RecordNotFound => e
-    if opts[:dry_run]
-      MCB::LOGGER.warn(
-        '[%<lineno>d] Message "%<message>s" while processing %<code>s' % {
-          lineno: csv.lineno,
-          message: e.message,
-          code: row['INST_CODE']
-        }
-      )
-    else
-      raise
-    end
+    MCB::LOGGER.warn(
+      '[%<lineno>d] Message "%<message>s" while processing %<code>s' % {
+        lineno: csv.lineno,
+        message: e.message,
+        code: row['INST_CODE']
+      }
+    )
   end
 
   commit_changes(changed_preferences, opts)

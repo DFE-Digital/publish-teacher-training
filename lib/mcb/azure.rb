@@ -16,6 +16,9 @@ module MCB
         .select { |s| s["name"] == app }
         .first
         .fetch('resourceGroup')
+    rescue # rubocop: disable Style/RescueStandardError
+      MCB::LOGGER.error("could not retrieve resource group for app #{app}, " \
+                        "is this the right subscription?")
     end
 
     def self.get_config(app, rgroup: nil)
