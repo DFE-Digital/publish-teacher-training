@@ -1,9 +1,18 @@
-summary 'Import UCAS preferences for providers. Requires a filename to import as an argument.'
+summary 'Import UCAS preferences for providers. ' \
+        'Requires a filename to import as an argument.'
 param :filename
+usage 'import [options] <preferences_csv_filename>'
 option :n, 'dry_run', "don't update anything, display what would be done"
 
+description <<-EODESCRIPTION
+  Use this command to import UCAS preferences for providers. It will display the
+  changes that will be performed and a summary of those changes before prompting
+  the user to continue. The -n/--dry-run` option can also be used to ensure no
+  changes are performed.
+EODESCRIPTION
+
 run do |opts, args, _cmd| # rubocop: disable Metrics/BlockLength
-  MCB.init_rails
+  MCB.init_rails(opts)
 
   providers = Hash.new do |hash, code|
     hash[code] = Provider.find_by!(provider_code: code)
@@ -14,6 +23,7 @@ run do |opts, args, _cmd| # rubocop: disable Metrics/BlockLength
       provider: provider
     )
   end
+  changed_preference_count = 0
 
   import_filename = args.first
   import_file = File.open(import_filename)
@@ -22,24 +32,26 @@ run do |opts, args, _cmd| # rubocop: disable Metrics/BlockLength
     provider = providers[row['INST_CODE']]
     preference_type = translate_ucas_preference_attribute(row['PREF_TYPE'])
     if preference_type.present?
-      log_attribute_change(provider, preference_type, row['PREF_VALUE'])
-      changed_preferences[provider][preference_type] = row['PREF_VALUE']
+      if changed_preferences[provider].attributes_before_type_cast[preference_type] != row['PREF_VALUE']
+        log_attribute_change(provider, preference_type, row['PREF_VALUE'])
+        changed_preferences[provider][preference_type] = row['PREF_VALUE']
+        changed_preference_count += 1
+      else
+        verbose "#{preference_type} value '#{row['PREF_VALUE']} " \
+                "not changed for #{row['INST_CODE']}"
+      end
     end
   rescue ActiveRecord::RecordNotFound => e
-    if opts[:dry_run]
-      MCB::LOGGER.warn(
-        '[%<lineno>d] Message "%<message>s" while processing %<code>s' % {
-          lineno: csv.lineno,
-          message: e.message,
-          code: row['INST_CODE']
-        }
-      )
-    else
-      raise
-    end
+    MCB::LOGGER.warn(
+      '[%<lineno>d] Message "%<message>s" while processing %<code>s' % {
+        lineno: csv.lineno,
+        message: e.message,
+        code: row['INST_CODE']
+      }
+    )
   end
 
-  commit_changes(changed_preferences, opts)
+  commit_changes(changed_preferences, providers, changed_preference_count, opts)
 end
 
 def translate_ucas_preference_attribute(ucas_preference)
@@ -63,21 +75,24 @@ def log_attribute_change(provider, attribute, new_value)
   }
 end
 
-def commit_changes(changed_preferences, opts)
-  if confirm_changes(changed_preferences, opts)
-    changed_preferences.values.each(&:save!)
+def commit_changes(changed_preferences, providers, changed_preference_count, opts)
+  if confirm_changes(providers, changed_preference_count, opts)
+    ProviderUCASPreference.connection.transaction do
+      changed_preferences.values.each(&:save!)
+    end
   else
     puts 'Aborting without updating.'
   end
 end
 
-def confirm_changes(changed_preferences, opts)
-  summary = "#{changed_preferences.keys.count} provider(s) changed."
+def confirm_changes(providers, changed_preference_count, opts)
+  summary = "#{changed_preference_count} changed preferences for " \
+            "#{providers.keys.count} providers."
 
   if opts[:dry_run]
     puts "#{summary} Dry-run, finishing early."
     false
-  elsif changed_preferences.any?
+  elsif changed_preference_count.positive?
     print "#{summary} Continue? "
 
     response = $stdin.readline

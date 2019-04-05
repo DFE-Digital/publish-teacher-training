@@ -1,8 +1,8 @@
 name 'list'
 summary 'List providers in db'
 
-run do |_opts, args, _cmd|
-  MCB.init_rails
+run do |opts, args, _cmd|
+  MCB.init_rails(opts)
 
   providers = if args.any?
                 Provider.where(provider_code: args.to_a)

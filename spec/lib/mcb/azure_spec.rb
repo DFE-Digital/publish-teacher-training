@@ -83,7 +83,7 @@ describe MCB::Azure do
       EOCONFIG
     end
 
-    subject { MCB::Azure.get_config('some-app', 'some-rgroup') }
+    subject { MCB::Azure.get_config('some-app', rgroup: 'some-rgroup') }
 
     before :each do
       allow(MCB).to receive(:run_command).and_return(config_json)

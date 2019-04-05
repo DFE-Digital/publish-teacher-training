@@ -15,9 +15,11 @@ describe 'mcb providers ucas_preferences import' do
   end
 
   def import_csv_file(tmpfile, opts = [])
-    with_stubbed_stdout(stdin: "yes\n") do
+    stderr = ""
+    output = with_stubbed_stdout(stdin: "yes\n", stderr: stderr) do
       cmd.run(opts + [tmpfile.path])
     end
+    [output, stderr]
   end
 
   let(:lib_dir) { "#{Rails.root}/lib" }
@@ -62,7 +64,7 @@ describe 'mcb providers ucas_preferences import' do
           PREF_TYPE: 'Copy Form Sequence',
           PREF_VALUE: 'Alphabetic coming'
   end
-  let(:output) { import_csv_file(tmpfile) }
+  let(:output) { import_csv_file(tmpfile).first }
 
   after :each do
     # NB: If ... IF ... something goes wrong in the spec before tmpfile gets
@@ -76,7 +78,7 @@ describe 'mcb providers ucas_preferences import' do
 
     it 'displays no changes' do
       expect(output).to match <<~EOMESSAGE
-        0 provider(s) changed. No changes, finishing early.
+        0 changed preferences for 0 providers. No changes, finishing early.
         Aborting without updating.
       EOMESSAGE
     end
@@ -115,7 +117,7 @@ describe 'mcb providers ucas_preferences import' do
       expect(output.squeeze(' ')).to match <<~EOEXPECTED.chomp
         \ #{provider.provider_code} type_of_gt12: Coming or Not -> Not coming\ 
         \ #{provider.provider_code} send_application_alerts: Yes, required -> No, not required\ 
-        1 provider(s) changed. Continue?\ 
+        2 changed preferences for 1 providers. Continue?\ 
       EOEXPECTED
       # rubocop: enable Layout/TrailingWhitespace
     end
@@ -153,16 +155,17 @@ describe 'mcb providers ucas_preferences import' do
       expect(provider.ucas_preferences.send_application_alerts).to eq 'none'
     end
 
-    it 'raises an error when a provider cannot be found' do
+    it 'displays a warning when a provider cannot be found' do
       tmpfile = write_csv_to_tmpfile(
         preferences_for_unknown_provider
       )
-      expect { import_csv_file(tmpfile) }.to(
-        raise_error(
-          ActiveRecord::RecordNotFound,
-          "Couldn't find Provider"
-        )
-      )
+
+      (_output, stderr) = import_csv_file(tmpfile)
+
+      expected_code = nonexistent_provider.provider_code
+      expect(stderr).to match <<~EOMESSAGE
+        WARN: [2] Message "Couldn't find Provider" while processing #{expected_code}
+      EOMESSAGE
     end
 
     context 'dry-run' do
@@ -182,13 +185,11 @@ describe 'mcb providers ucas_preferences import' do
           preferences_for_unknown_provider
         )
 
-        output = import_csv_file(tmpfile, opts)
+        (_output, stderr) = import_csv_file(tmpfile, opts)
 
         expected_code = nonexistent_provider.provider_code
-        expect(output).to match <<~EOMESSAGE
+        expect(stderr).to match <<~EOMESSAGE
           WARN: [2] Message "Couldn't find Provider" while processing #{expected_code}
-          0 provider(s) changed. Dry-run, finishing early.
-          Aborting without updating.
         EOMESSAGE
       end
     end
