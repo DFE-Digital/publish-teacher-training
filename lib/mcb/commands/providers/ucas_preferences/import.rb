@@ -14,6 +14,7 @@ run do |opts, args, _cmd| # rubocop: disable Metrics/BlockLength
       provider: provider
     )
   end
+  changed_preference_count = 0
 
   import_filename = args.first
   import_file = File.open(import_filename)
@@ -22,8 +23,14 @@ run do |opts, args, _cmd| # rubocop: disable Metrics/BlockLength
     provider = providers[row['INST_CODE']]
     preference_type = translate_ucas_preference_attribute(row['PREF_TYPE'])
     if preference_type.present?
-      log_attribute_change(provider, preference_type, row['PREF_VALUE'])
-      changed_preferences[provider][preference_type] = row['PREF_VALUE']
+      if changed_preferences[provider].attributes_before_type_cast[preference_type] != row['PREF_VALUE']
+        log_attribute_change(provider, preference_type, row['PREF_VALUE'])
+        changed_preferences[provider][preference_type] = row['PREF_VALUE']
+        changed_preference_count += 1
+      else
+        verbose "#{preference_type} value '#{row['PREF_VALUE']} " \
+                "not changed for #{row['INST_CODE']}"
+      end
     end
   rescue ActiveRecord::RecordNotFound => e
     MCB::LOGGER.warn(
@@ -35,7 +42,7 @@ run do |opts, args, _cmd| # rubocop: disable Metrics/BlockLength
     )
   end
 
-  commit_changes(changed_preferences, opts)
+  commit_changes(changed_preferences, providers, changed_preference_count, opts)
 end
 
 def translate_ucas_preference_attribute(ucas_preference)
@@ -59,16 +66,19 @@ def log_attribute_change(provider, attribute, new_value)
   }
 end
 
-def commit_changes(changed_preferences, opts)
-  if confirm_changes(changed_preferences, opts)
-    changed_preferences.values.each(&:save!)
+def commit_changes(changed_preferences, providers, changed_preference_count, opts)
+  if confirm_changes(changed_preferences, providers, changed_preference_count, opts)
+    ProviderUCASPreference.connection.transaction do
+      changed_preferences.values.each(&:save!)
+    end
   else
     puts 'Aborting without updating.'
   end
 end
 
-def confirm_changes(changed_preferences, opts)
-  summary = "#{changed_preferences.keys.count} provider(s) changed."
+def confirm_changes(changed_preferences, providers, changed_preference_count, opts)
+  summary = "#{changed_preference_count} changed preferences for " \
+            "#{providers.keys.count} providers"
 
   if opts[:dry_run]
     puts "#{summary} Dry-run, finishing early."
