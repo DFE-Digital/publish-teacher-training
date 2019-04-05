@@ -32,10 +32,16 @@ module MCB
 
     def self.configure_database(app, app_config: nil)
       app_config ||= MCB::Azure.get_config(app)
-      ENV['DB_HOSTNAME'] = app_config["MANAGE_COURSES_POSTGRESQL_SERVICE_HOST"]
-      ENV['DB_DATABASE'] = app_config["PG_DATABASE"]
-      ENV['DB_USERNAME'] = app_config["PG_USERNAME"]
-      ENV['DB_PASSWORD'] = app_config["PG_PASSWORD"]
+
+      [%w[DB_HOSTNAME MANAGE_COURSES_POSTGRESQL_SERVICE_HOST],
+       %w[DB_DATABASE PG_DATABASE],
+       %w[DB_USERNAME PG_USERNAME],
+       %w[DB_PASSWORD PG_PASSWORD]].each do |rails_env_var, csharp_env_var|
+        ENV[rails_env_var] = app_config.fetch(rails_env_var) do |key|
+          app_config.fetch(key)
+        end
+      end
+    end
 
     # Pull in the app config from Azure and prompt the user for the
     # RAILS_ENV to make sure they are running against the environment they
