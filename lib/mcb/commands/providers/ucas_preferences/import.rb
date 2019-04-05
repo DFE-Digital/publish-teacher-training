@@ -1,6 +1,15 @@
-summary 'Import UCAS preferences for providers. Requires a filename to import as an argument.'
+summary 'Import UCAS preferences for providers. ' \
+        'Requires a filename to import as an argument.'
 param :filename
+usage 'import [options] <preferences_csv_filename>'
 option :n, 'dry_run', "don't update anything, display what would be done"
+
+description <<-EODESCRIPTION
+  Use this command to import UCAS preferences for providers. It will display the
+  changes that will be performed and a summary of those changes before prompting
+  the user to continue. The -n/--dry-run` option can also be used to ensure no
+  changes are performed.
+EODESCRIPTION
 
 run do |opts, args, _cmd| # rubocop: disable Metrics/BlockLength
   MCB.init_rails(opts)
