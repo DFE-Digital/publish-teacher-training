@@ -51,7 +51,6 @@ def with_stubbed_stdout(stdin: nil, stderr: nil)
   output_file.sync
   output_file.seek(0)
   output_file.read
-
 ensure
   # We need to restore STDOUT and remove the output file no matter what.
   STDOUT.reopen(original_stdout)

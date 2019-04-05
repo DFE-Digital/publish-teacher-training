@@ -37,8 +37,8 @@ module MCB
        %w[DB_DATABASE PG_DATABASE],
        %w[DB_USERNAME PG_USERNAME],
        %w[DB_PASSWORD PG_PASSWORD]].each do |rails_env_var, csharp_env_var|
-        ENV[rails_env_var] = app_config.fetch(rails_env_var) do |key|
-          app_config.fetch(key)
+        ENV[rails_env_var] = app_config.fetch(rails_env_var) do
+          app_config.fetch(csharp_env_var)
         end
       end
     end
