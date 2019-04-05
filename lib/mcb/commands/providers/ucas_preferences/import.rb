@@ -3,7 +3,7 @@ param :filename
 option :n, 'dry_run', "don't update anything, display what would be done"
 
 run do |opts, args, _cmd| # rubocop: disable Metrics/BlockLength
-  MCB.init_rails
+  MCB.init_rails(opts)
 
   providers = Hash.new do |hash, code|
     hash[code] = Provider.find_by!(provider_code: code)

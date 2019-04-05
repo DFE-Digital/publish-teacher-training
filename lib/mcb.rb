@@ -15,7 +15,9 @@ module MCB
   #
   # Not all mcb commands require the rails env, e.g. the API ones don't. Use
   # this method in those commands that do.
-  def self.init_rails
+  def self.init_rails(**opts)
+    MCB::Azure.configure_for_webapp(opts) if opts.key? :webapp
+
     unless defined?(Rails)
       app_root = File.expand_path(File.join(File.dirname($0), '..'))
       exec_path = File.join(app_root, 'bin', 'rails')
