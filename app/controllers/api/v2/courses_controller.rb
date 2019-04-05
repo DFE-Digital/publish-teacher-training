@@ -12,7 +12,7 @@ module API
       end
 
       def show
-        render jsonapi: @course, include: [site_statuses: [:site]]
+        render jsonapi: @course, include: params[:include]
       end
 
       def sync_with_search_and_compare

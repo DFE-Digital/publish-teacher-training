@@ -84,5 +84,9 @@ FactoryBot.define do
     trait :resulting_in_pgde do
       qualification { :pgde }
     end
+
+    trait :with_accrediting_provider do
+      association(:accrediting_provider, factory: :provider)
+    end
   end
 end
