@@ -11,4 +11,5 @@ describe API::V2::SerializableProvider do
   subject { resource.as_jsonapi.to_json }
 
   it { should be_json.with_content(type: 'providers') }
+  it { should be_json.with_content(attributes: { provider_code: provider.provider_code }) }
 end
