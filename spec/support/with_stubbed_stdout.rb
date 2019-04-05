@@ -23,13 +23,13 @@ def with_stubbed_stdout(stdin: nil, stderr: nil)
   if stderr
     stderr_file = Tempfile.new('stderr.')
     original_stderr = STDERR.dup
-    STDERR.reopen(output_file)
+    STDERR.reopen(stderr_file)
     STDERR.sync
   end
 
   # Maybe we should do stdin in a similar way, but for now this works so we'll
   # leave it. That may change if we ever decide to use ReadLine.
-  unless stdin.nil?
+  if stdin
     original_stdin = $stdin
     $stdin = StringIO.new(stdin)
   end

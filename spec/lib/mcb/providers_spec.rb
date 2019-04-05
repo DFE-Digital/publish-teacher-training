@@ -13,6 +13,7 @@ describe 'mcb providers' do
     before do
       allow(MCB::Azure).to receive(:get_config).and_return(app_config)
       allow(MCB::Azure).to receive(:configure_database)
+      allow(MCB::Azure).to receive(:rgroup_for_app).and_return('banana-tree')
     end
 
     subject do
@@ -24,7 +25,8 @@ describe 'mcb providers' do
     it 'configures the database' do
       subject
 
-      expect(MCB::Azure).to have_received(:get_config).with('banana')
+      expect(MCB::Azure).to have_received(:get_config)
+                              .with('banana', rgroup: 'banana-tree')
       expect(MCB::Azure).to have_received(:configure_database)
                               .with('banana', app_config: app_config)
     end

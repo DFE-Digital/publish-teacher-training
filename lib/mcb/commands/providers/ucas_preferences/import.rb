@@ -67,7 +67,7 @@ def log_attribute_change(provider, attribute, new_value)
 end
 
 def commit_changes(changed_preferences, providers, changed_preference_count, opts)
-  if confirm_changes(changed_preferences, providers, changed_preference_count, opts)
+  if confirm_changes(providers, changed_preference_count, opts)
     ProviderUCASPreference.connection.transaction do
       changed_preferences.values.each(&:save!)
     end
@@ -76,14 +76,14 @@ def commit_changes(changed_preferences, providers, changed_preference_count, opt
   end
 end
 
-def confirm_changes(changed_preferences, providers, changed_preference_count, opts)
+def confirm_changes(providers, changed_preference_count, opts)
   summary = "#{changed_preference_count} changed preferences for " \
-            "#{providers.keys.count} providers"
+            "#{providers.keys.count} providers."
 
   if opts[:dry_run]
     puts "#{summary} Dry-run, finishing early."
     false
-  elsif changed_preferences.any?
+  elsif changed_preference_count.positive?
     print "#{summary} Continue? "
 
     response = $stdin.readline
