@@ -3,11 +3,7 @@ module API
     class SerializableProvider < JSONAPI::Serializable::Resource
       type 'providers'
 
-      attributes :provider_code
-
-      attribute :institution_name do
-        @object.provider_name
-      end
+      attributes :provider_code, :provider_name
 
       attribute :opted_in do
         @object.opted_in
