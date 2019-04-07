@@ -43,7 +43,7 @@ describe 'Providers API v2', type: :request do
             "type" => "providers",
             "attributes" => {
               "provider_code" => provider.provider_code,
-              "institution_name" => provider.provider_name,
+              "provider_name" => provider.provider_name,
               "opted_in" => true
             },
             "relationships" => {
@@ -79,7 +79,7 @@ describe 'Providers API v2', type: :request do
             "type" => "providers",
             "attributes" => {
               "provider_code" => provider.provider_code,
-              "institution_name" => provider.provider_name,
+              "provider_name" => provider.provider_name,
               "opted_in" => true
             },
             "relationships" => {
@@ -128,7 +128,7 @@ describe 'Providers API v2', type: :request do
       end
 
       let(:provider_names_in_response) {
-        JSON.parse(response.body)["data"].map { |provider| provider["attributes"]["institution_name"] }
+        JSON.parse(response.body)["data"].map { |provider| provider["attributes"]["provider_name"] }
       }
 
       it 'returns them in alphabetical order' do
@@ -161,7 +161,7 @@ describe 'Providers API v2', type: :request do
           "type" => "providers",
           "attributes" => {
             "provider_code" => provider.provider_code,
-            "institution_name" => provider.provider_name,
+            "provider_name" => provider.provider_name,
             "opted_in" => true
           },
           "relationships" => {
@@ -199,7 +199,7 @@ describe 'Providers API v2', type: :request do
               "type" => "providers",
               "attributes" => {
                 "provider_code" => provider.provider_code,
-                "institution_name" => provider.provider_name,
+                "provider_name" => provider.provider_name,
                 "opted_in" => true
               },
               "relationships" => {
