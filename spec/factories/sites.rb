@@ -20,6 +20,12 @@ FactoryBot.define do
   factory :site do
     sequence(:code, &:to_s)
     location_name { 'Main Site' + rand(1000000).to_s }
+    address1 { Faker::Address.street_address }
+    address2 { Faker::Address.community }
+    address3 { Faker::Address.city }
+    address4 { Faker::Address.state }
+    postcode { Faker::Address.postcode }
+    region_code { ProviderEnrichment.region_codes['London'] }
     association(:provider)
 
     transient do

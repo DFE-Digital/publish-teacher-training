@@ -128,7 +128,13 @@ describe 'Courses API v2', type: :request do
             "type" => "sites",
             "attributes" => {
               "code" => site.code,
-              "location_name" => site.location_name
+              "location_name" => site.location_name,
+              "address1" => site.address1,
+              "address2" => site.address2,
+              "address3" => site.address3,
+              "address4" => site.address4,
+              "postcode" => site.postcode,
+              "region_code" => site.region_code
             }
           }]
         )
