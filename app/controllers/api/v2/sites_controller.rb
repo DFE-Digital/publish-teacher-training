@@ -15,6 +15,8 @@ module API
 
       def update
         @site.update(site_params)
+
+        render jsonapi: @site
       end
 
       def show

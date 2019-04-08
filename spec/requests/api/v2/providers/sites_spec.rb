@@ -247,6 +247,33 @@ describe 'Sites API v2', type: :request do
           .from(site1.region_code)
           .to(region_code)
       end
+
+      context 'response output' do
+        let(:json_data) { JSON.parse(response.body)['data'] }
+
+        before do
+          perform_site_update
+        end
+
+        subject { response }
+
+        it { should have_http_status(:success) }
+
+        it 'returns a JSON repsentation of the updated site' do
+          expect(json_data).to have_id(site1.id.to_s)
+          expect(json_data).to have_type('sites')
+          expect(json_data).to have_attributes(
+            :code,
+            :location_name,
+            :address1,
+            :address2,
+            :address3,
+            :address4,
+            :postcode,
+            :region_code
+          )
+        end
+      end
     end
   end
 end
