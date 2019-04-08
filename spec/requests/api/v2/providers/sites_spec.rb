@@ -157,18 +157,73 @@ describe 'Sites API v2', type: :request do
     let(:site_params) { params.dig :_jsonapi, :data, :attributes }
 
     context 'when authenticted and authorised' do
+      let(:code) { 'A3' }
+      let(:location_name) { 'New location name' }
+      let(:address1) { Faker::Address.street_address }
+      let(:address2) { Faker::Address.community }
+      let(:address3) { Faker::Address.city }
+      let(:address4) { Faker::Address.state }
+      let(:postcode) { Faker::Address.postcode }
+      let(:region_code) { 'west_midlands' }
       before do
         site_params.merge!(
-          location_name: 'New location name'
+          code: code,
+          location_name: location_name,
+          address1: address1,
+          address2: address2,
+          address3: address3,
+          address4: address4,
+          postcode: postcode,
+          region_code: region_code
         )
       end
 
       subject { perform_site_update }
 
       it 'updates the location name of the site' do
-        expect { perform_site_update }.to change { site1.reload.location_name }
-          .from('Main site 1')
-          .to('New location name')
+        expect { subject }.to change { site1.reload.location_name }
+          .from(site1.location_name)
+          .to(location_name)
+      end
+
+      it 'updates the code of the site' do
+        expect { subject }.not_to(change { site1.reload.code })
+      end
+
+      it 'updates the address1 of the site' do
+        expect { subject }.to change { site1.reload.address1 }
+          .from(site1.address1)
+          .to(address1)
+      end
+
+      it 'updates the address2 of the site' do
+        expect { subject }.to change { site1.reload.address2 }
+          .from(site1.address2)
+          .to(address2)
+      end
+
+      it 'updates the address3 of the site' do
+        expect { subject }.to change { site1.reload.address3 }
+          .from(site1.address3)
+          .to(address3)
+      end
+
+      it 'updates the address4 of the site' do
+        expect { subject }.to change { site1.reload.address4 }
+          .from(site1.address4)
+          .to(address4)
+      end
+
+      it 'updates the post code of the site' do
+        expect { subject }.to change { site1.reload.postcode }
+          .from(site1.postcode)
+          .to(postcode)
+      end
+
+      it 'updates the region code of the site' do
+        expect { subject }.to change { site1.reload.region_code }
+          .from(site1.region_code)
+          .to(region_code)
       end
     end
   end
