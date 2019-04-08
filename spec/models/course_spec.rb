@@ -88,31 +88,27 @@ RSpec.describe Course, type: :model do
       end
     end
 
-    describe 'has_vacancies' do
-      context 'with at least one site status has vacancies' do
-        context 'single site status has vacancies' do
-          let(:subject) {
-            create(:course, with_site_statuses: [[:with_any_vacancy]])
-          }
+    describe '#has_vacancies?' do
+      context 'for a single site status that has vacancies' do
+        let(:subject) {
+          create(:course, with_site_statuses: [[:with_any_vacancy]])
+        }
 
-          its(:site_statuses) { should_not be_empty }
-          its(:has_vacancies?) { should be true }
-        end
+        its(:site_statuses) { should_not be_empty }
+        its(:has_vacancies?) { should be true }
+      end
 
-        context 'single site status has vacancies and mix site status with no vacancies' do
-          let(:subject) {
-            create(:course, with_site_statuses: [
-              [:findable],
-              [:with_any_vacancy],
-              [:default],
-              [:applications_being_accepted_now],
-              [:applications_being_accepted_in_future]
-            ])
-          }
+      context 'for a site status with vacancies and others without' do
+        let(:subject) {
+          create(:course, with_site_statuses: [
+            %i[findable applications_being_accepted_now with_any_vacancy],
+            %i[findable with_no_vacancies],
+            %i[findable with_no_vacancies],
+          ])
+        }
 
-          its(:site_statuses) { should_not be_empty }
-          its(:has_vacancies?) { should be true }
-        end
+        its(:site_statuses) { should_not be_empty }
+        its(:has_vacancies?) { should be true }
       end
     end
 
