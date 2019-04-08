@@ -156,6 +156,27 @@ describe 'Sites API v2', type: :request do
     end
     let(:site_params) { params.dig :_jsonapi, :data, :attributes }
 
+    context 'when unauthenticated' do
+      let(:payload) { { email: 'foo@bar' } }
+
+      subject { response }
+
+      before do
+        perform_site_update
+      end
+
+      it { should have_http_status(:unauthorized) }
+    end
+
+    context 'when unauthorised' do
+      let(:unauthorised_user) { create(:user) }
+      let(:payload) { { email: unauthorised_user.email } }
+
+      it 'raises an error' do
+        expect { perform_site_update }.to raise_error Pundit::NotAuthorizedError
+      end
+    end
+
     context 'when authenticted and authorised' do
       let(:code) { 'A3' }
       let(:location_name) { 'New location name' }
@@ -165,6 +186,9 @@ describe 'Sites API v2', type: :request do
       let(:address4) { Faker::Address.state }
       let(:postcode) { Faker::Address.postcode }
       let(:region_code) { 'west_midlands' }
+
+      subject { perform_site_update }
+
       before do
         site_params.merge!(
           code: code,
@@ -177,8 +201,6 @@ describe 'Sites API v2', type: :request do
           region_code: region_code
         )
       end
-
-      subject { perform_site_update }
 
       it 'updates the location name of the site' do
         expect { subject }.to change { site1.reload.location_name }
