@@ -108,6 +108,17 @@ RSpec.describe Course, type: :model do
 
         its(:has_vacancies?) { should be true }
       end
+
+      context 'when none of the sites have vacancies' do
+        let(:subject) {
+          create(:course, with_site_statuses: [
+            [:findable, :with_no_vacancies],
+            [:findable, :with_no_vacancies],
+          ])
+        }
+
+        its(:has_vacancies?) { should be false }
+      end
     end
 
     describe 'open_for_applications?' do
