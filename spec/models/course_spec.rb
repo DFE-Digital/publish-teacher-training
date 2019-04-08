@@ -94,7 +94,6 @@ RSpec.describe Course, type: :model do
           create(:course, with_site_statuses: [[:with_any_vacancy]])
         }
 
-        its(:site_statuses) { should_not be_empty }
         its(:has_vacancies?) { should be true }
       end
 
@@ -107,7 +106,6 @@ RSpec.describe Course, type: :model do
           ])
         }
 
-        its(:site_statuses) { should_not be_empty }
         its(:has_vacancies?) { should be true }
       end
     end
