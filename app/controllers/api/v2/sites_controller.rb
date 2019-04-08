@@ -1,6 +1,8 @@
 module API
   module V2
     class SitesController < API::V2::ApplicationController
+      deserializable_resource :site, only: :update
+
       before_action :build_provider
       before_action :build_site, except: :index
 
@@ -11,11 +13,27 @@ module API
         render jsonapi: @provider.sites
       end
 
+      def update
+        @site.update(site_params)
+      end
+
       def show
         render jsonapi: @site
       end
 
     private
+
+      def site_params
+        params.require(:site).permit(
+          :location_name,
+          :address1,
+          :address2,
+          :address3,
+          :address4,
+          :postcode,
+          :region_code
+        )
+      end
 
       def build_provider
         @provider = Provider.find_by!(provider_code: params[:provider_code].upcase)

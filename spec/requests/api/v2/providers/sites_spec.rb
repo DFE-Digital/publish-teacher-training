@@ -133,4 +133,43 @@ describe 'Sites API v2', type: :request do
       } .to raise_error ActiveRecord::RecordNotFound
     end
   end
+
+  describe 'PATCH update' do
+    def perform_site_update
+      patch(
+        api_v2_provider_site_path(provider.provider_code, site1),
+        headers: { 'HTTP_AUTHORIZATION' => credentials },
+        params: params
+      )
+    end
+
+    let(:jsonapi_renderer) { JSONAPI::Serializable::Renderer.new }
+    let(:params) do
+      {
+        _jsonapi: jsonapi_renderer.render(
+          site1,
+          class: {
+            Site: API::V2::SerializableSite
+          }
+        )
+      }
+    end
+    let(:site_params) { params.dig :_jsonapi, :data, :attributes }
+
+    context 'when authenticted and authorised' do
+      before do
+        site_params.merge!(
+          location_name: 'New location name'
+        )
+      end
+
+      subject { perform_site_update }
+
+      it 'updates the location name of the site' do
+        expect { perform_site_update }.to change { site1.reload.location_name }
+          .from('Main site 1')
+          .to('New location name')
+      end
+    end
+  end
 end
