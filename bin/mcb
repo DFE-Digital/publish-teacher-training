@@ -28,6 +28,7 @@ $mcb = Cri::Command.define do
 
   option :v, 'verbose',
          'display additional info (for commands that support it)' do |value|
+    MCB::LOGGER.level = Logger::INFO
     $verbosity = :verbose if value
   end
 
@@ -40,9 +41,7 @@ end
 MCB.load_commands($mcb, "#{lib_dir}/mcb/commands")
 
 def verbose(msg)
-  if $verbosity == :verbose
-    puts msg
-  end
+  MCB::LOGGER.info msg
 end
 
 def error(msg)

@@ -2,6 +2,7 @@ require 'logger'
 
 module MCB
   LOGGER = Logger.new(STDERR)
+  LOGGER.level = Logger::WARN
 
   LOGGER.formatter = proc do |severity, _datetime, _progname, msg|
     if severity == Logger::INFO
