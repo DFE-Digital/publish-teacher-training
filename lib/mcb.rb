@@ -2,6 +2,7 @@ require 'logger'
 
 module MCB
   LOGGER = Logger.new(STDERR)
+  LOGGER.level = Logger::WARN
 
   LOGGER.formatter = proc do |severity, _datetime, _progname, msg|
     if severity == Logger::INFO
@@ -28,7 +29,7 @@ module MCB
       verbose("Running #{exec_path}")
 
       # --webapp only needs to be processed on the first time through
-      new_argv = remove_option_with_arg(ARGV, '--webapp')
+      new_argv = remove_option_with_arg(ARGV, '--webapp', '-A')
       exec(exec_path, 'runner', $0, *new_argv)
     end
   end
@@ -68,19 +69,155 @@ module MCB
     `#{cmd}`
   end
 
-  def self.remove_option_with_arg(argv, *options)
-    argv.dup.tap do |new_argv|
-      options.each do |option|
-        if (index = new_argv.find_index { |o| o == option })
-          new_argv.delete_at index
-          # delete the argument as well as the option
-          new_argv.delete_at index
-        else
-          new_argv.delete_if { |o| o.match %r{#{option}=} }
+  def self.apiv1_token(webapp: nil, rgroup: nil)
+    if webapp
+      verbose "getting config for webapp: #{webapp} rgroup: #{rgroup}"
+      MCB::Azure.get_config(webapp, rgroup: rgroup).fetch('AUTHENTICATION_TOKEN')
+    else
+      Rails.application.config.authentication_token
+    end
+  end
+
+  def self.generate_apiv2_token(email:, encoding:, secret: nil)
+    require 'jwt'
+
+    payload = { email: email }
+    if encoding == 'plain-text'
+      unless secret.nil?
+        raise 'Secret provided, only valid when encoding is NOT plain-text'
+      end
+
+      payload.to_json
+    else
+      if secret.nil?
+        raise 'Secret not provided, only valid when encoding is plain-text'
+      end
+
+      JWT.encode(payload.to_json, secret, encoding)
+    end
+  end
+
+  def self.each_v1_course(opts)
+    # We only need httparty for API V1 calls
+    require 'httparty'
+
+    url = URI.join(opts[:url], opts[:endpoint])
+
+    token = opts.fetch(:token) { apiv1_token(opts.slice(:webapp, :rgroup)) }
+
+    process_opt_changed_since(opts, url)
+    page_count = 0
+    max_pages = 30
+    all_pages = opts.fetch(:all, false)
+
+    Enumerator.new do |y|
+      loop do
+        if page_count > max_pages
+          raise "too many page requests, stopping at #{page_count}" \
+                " as a safeguard. Increase max page_count if necessary."
         end
+
+        verbose "Requesting page #{page_count + 1}: #{url}"
+        response = HTTParty.get(
+          url.to_s,
+          headers: { authorization: "Bearer #{token}" }
+        )
+        courses_list = JSON.parse(response.body)
+        break if courses_list.empty?
+
+        next_url = response.headers[:link].sub(/;.*/, '')
+
+        # Send each provider to the consumer of this enumerator
+        courses_list.each do |course|
+          y << [course, {
+                  page: page_count,
+                  url: url,
+                  next_url: next_url
+                }]
+        end
+
+        break unless all_pages
+
+        url = next_url
+        page_count += 1
       end
     end
   end
 
-  private_class_method :remove_option_with_arg
+  def self.each_v1_provider(opts)
+    # We only need httparty for API V1 calls
+    require 'httparty'
+
+    url = URI.join(opts[:url], opts[:endpoint])
+
+    token = opts.fetch(:token) { apiv1_token(opts.slice(:webapp, :rgroup)) }
+
+    process_opt_changed_since(opts, url)
+    page_count = 0
+    max_pages = 30
+    all_pages = opts.fetch(:all, false)
+
+    Enumerator.new do |y|
+      loop do
+        if page_count > max_pages
+          raise "too many page requests, stopping at #{page_count}" \
+                " as a safeguard. Increase max page_count if necessary."
+        end
+
+        verbose "Requesting page #{page_count + 1}: #{url}"
+        response = HTTParty.get(
+          url.to_s,
+          headers: { authorization: "Bearer #{token}" }
+        )
+        providers_list = JSON.parse(response.body)
+        break if providers_list.empty?
+
+        next_url = response.headers[:link].sub(/;.*/, '')
+
+        # Send each provider to the consumer of this enumerator
+        providers_list.each do |provider|
+          y << [provider, {
+                  page: page_count,
+                  url: url,
+                  next_url: next_url
+                }]
+        end
+
+        break unless all_pages
+
+        url = next_url
+        page_count += 1
+      end
+    end
+  end
+
+  class << self
+  private # rubocop: disable Layout/IndentationWidth
+
+    def remove_option_with_arg(argv, *options)
+      argv.dup.tap do |new_argv|
+        options.each do |option|
+          if (index = new_argv.find_index { |o| o == option })
+            new_argv.delete_at index
+            # delete the argument as well as the option
+            new_argv.delete_at index
+          else
+            new_argv.delete_if { |o| o.match %r{#{option}=} }
+          end
+        end
+      end
+    end
+
+    def process_opt_changed_since(opts, url)
+      if opts.key? :'changed-since'
+        changed_since = DateTime.strptime(
+          CGI.unescape(opts[:'changed-since']),
+          '%FT%T.%NZ'
+        ) rescue nil
+        changed_since ||= DateTime.parse(opts[:'changed-since'])
+        changed_since_param = CGI.escape(changed_since.strftime('%FT%T.%6NZ'))
+        url.query = "changed_since=#{changed_since_param}"
+      end
+    end
+  end
 end

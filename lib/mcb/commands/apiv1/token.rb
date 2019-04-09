@@ -1,6 +1,6 @@
-name 'provider'
-summary 'Operate on providers directly in db'
-default_subcommand 'list'
+name 'token'
+summary 'Operate on the APIV1 token'
+default_subcommand 'show'
 
 option :A, 'webapp',
        'Connect to the database of this webapp',
