@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 describe API::V2::SerializableProvider do
-  let(:provider) { create :provider }
+  let(:provider) { create :provider, accrediting_provider: 'Y' }
   let(:resource) { API::V2::SerializableProvider.new object: provider }
 
   it 'sets type to providers' do
@@ -15,6 +15,6 @@ describe API::V2::SerializableProvider do
     should be_json.with_content(attributes: { provider_code: provider.provider_code,
                                               provider_name: provider.provider_name,
                                               opted_in: provider.opted_in,
-                                              accrediting_provider: provider.accrediting_provider })
+                                              accredited_body?: true })
   }
 end

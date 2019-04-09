@@ -45,7 +45,7 @@ describe 'Providers API v2', type: :request do
               "provider_code" => provider.provider_code,
               "provider_name" => provider.provider_name,
               "opted_in" => true,
-              "accrediting_provider" => "N"
+              "accredited_body?" => false,
             },
             "relationships" => {
               "sites" => {
@@ -82,7 +82,7 @@ describe 'Providers API v2', type: :request do
               "provider_code" => provider.provider_code,
               "provider_name" => provider.provider_name,
               "opted_in" => true,
-              "accrediting_provider" => "N"
+              "accredited_body?" => false,
             },
             "relationships" => {
               "sites" => {
@@ -165,7 +165,7 @@ describe 'Providers API v2', type: :request do
             "provider_code" => provider.provider_code,
             "provider_name" => provider.provider_name,
             "opted_in" => true,
-            "accrediting_provider" => "N"
+            "accredited_body?" => false,
           },
           "relationships" => {
             "sites" => {
@@ -204,7 +204,7 @@ describe 'Providers API v2', type: :request do
                 "provider_code" => provider.provider_code,
                 "provider_name" => provider.provider_name,
                 "opted_in" => true,
-                "accrediting_provider" => "N"
+                "accredited_body?" => false,
               },
               "relationships" => {
                 "sites" => {

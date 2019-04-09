@@ -86,4 +86,8 @@ class Provider < ApplicationRecord
   def recruitment_cycle
     "2019"
   end
+
+  def accredited_body?
+    accrediting_provider == 'Y'
+  end
 end
