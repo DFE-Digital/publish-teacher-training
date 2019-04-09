@@ -23,11 +23,11 @@ class Site < ApplicationRecord
 
   belongs_to :provider
 
-  validates :location_name, uniqueness: { scope: :provider }
-  validates :postcode, postcode: true
+  validates :location_name, uniqueness: { scope: :provider_id }
   validates :location_name,
             :address1,
             :address3,
             :postcode,
             presence: true
+  validates :postcode, postcode: true
 end
