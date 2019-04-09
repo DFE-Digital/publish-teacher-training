@@ -36,7 +36,7 @@ describe ManageCoursesAPI do
       let(:course_code) { 'X123' }
 
       describe "with a normal response" do
-        let(:endpoint) { "api/Publish/internal/course#{provider_code}/#{course_code}" }
+        let(:endpoint) { "api/Publish/internal/course/#{provider_code}/#{course_code}" }
 
         it "returns true" do
           result = subject.sync_course_with_search_and_compare(
