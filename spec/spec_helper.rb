@@ -4,6 +4,7 @@ require 'jsonapi/rspec'
 require "super_diff/rspec"
 require 'fakefs/spec_helpers'
 require 'webmock/rspec'
+require 'audited-rspec'
 
 # Pull in all the files in spec/support automatically.
 Dir['./spec/support/**/*.rb'].each { |file| require file }

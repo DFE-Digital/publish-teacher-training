@@ -27,6 +27,11 @@ require 'rails_helper'
 RSpec.describe Course, type: :model do
   let(:subject) { create(:course) }
 
+  describe 'auditing' do
+    it { should be_audited.except(:changed_at) }
+    it { should have_associated_audits }
+  end
+
   describe 'associations' do
     it { should belong_to(:provider) }
     it { should belong_to(:accrediting_provider).optional }

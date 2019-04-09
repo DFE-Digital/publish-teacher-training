@@ -21,6 +21,10 @@ require 'rails_helper'
 describe Provider, type: :model do
   subject { create(:site) }
 
+  describe 'auditing' do
+    it { should be_audited.associated_with(:provider) }
+  end
+
   it { is_expected.to validate_presence_of(:location_name) }
   it { is_expected.to validate_presence_of(:address1) }
   it { is_expected.to validate_presence_of(:address3) }

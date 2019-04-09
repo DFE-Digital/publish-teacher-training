@@ -26,6 +26,9 @@ class Course < ApplicationRecord
   include WithQualifications
   include ChangedAt
 
+  has_associated_audits
+  audited except: :changed_at
+
   enum program_type: {
     higher_education_programme: "HE",
     school_direct_training_programme: "SD",
