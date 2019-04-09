@@ -63,6 +63,9 @@ gem 'terminal-table'
 # For querying third party APIs
 gem 'faraday'
 
+# UK postcode parsing and validation for Ruby
+gem 'uk_postcode'
+
 group :development, :test do
   # add info about db structure to models and other files
   gem 'annotate'

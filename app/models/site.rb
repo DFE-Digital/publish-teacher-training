@@ -17,6 +17,7 @@
 #
 
 class Site < ApplicationRecord
+  include PostcodeNormalize
   include RegionCode
   include TouchProvider
 
