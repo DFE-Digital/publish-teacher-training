@@ -284,7 +284,7 @@ describe 'Sites API v2', type: :request do
             let(:postcode)      { '' }
             let(:region_code)   { '' }
 
-            it { should have_http_status(:bad_request) }
+            it { should have_http_status(:unprocessable_entity) }
 
             it 'has the right amount of errors' do
               expect(json_data.count).to eq 5

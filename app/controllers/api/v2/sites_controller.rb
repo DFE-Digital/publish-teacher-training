@@ -17,7 +17,7 @@ module API
         if @site.update(site_params)
           render jsonapi: @site
         else
-          render jsonapi_errors: @site.errors, status: 400
+          render jsonapi_errors: @site.errors, status: 422
         end
       end
 
