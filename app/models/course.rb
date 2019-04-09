@@ -88,7 +88,7 @@ class Course < ApplicationRecord
   end
 
   def has_vacancies?
-    site_statuses.with_vacancies.any?
+    site_statuses.findable.with_vacancies.any?
   end
 
   def update_changed_at(timestamp: Time.now.utc)
