@@ -91,7 +91,7 @@ RSpec.describe Course, type: :model do
     describe '#has_vacancies?' do
       context 'for a single site status that has vacancies' do
         let(:subject) {
-          create(:course, with_site_statuses: [[:with_any_vacancy]])
+          create(:course, with_site_statuses: [%i[findable applications_being_accepted_now with_any_vacancy]])
         }
 
         its(:has_vacancies?) { should be true }
@@ -112,8 +112,20 @@ RSpec.describe Course, type: :model do
       context 'when none of the sites have vacancies' do
         let(:subject) {
           create(:course, with_site_statuses: [
-            [:findable, :with_no_vacancies],
-            [:findable, :with_no_vacancies],
+            %i[findable with_no_vacancies],
+            %i[findable with_no_vacancies],
+          ])
+        }
+
+        its(:has_vacancies?) { should be false }
+      end
+
+      context 'when only discontinued and suspended site statuses have vacancies' do
+        let(:subject) {
+          create(:course, with_site_statuses: [
+            %i[published suspended with_any_vacancy],
+            %i[published discontinued with_any_vacancy],
+            %i[findable with_no_vacancies],
           ])
         }
 
