@@ -48,40 +48,4 @@ def error(msg)
   puts msg
 end
 
-def each_v1_provider(opts)
-  # We only need httparty for API V1 calls
-  require 'httparty'
-
-  url = opts[:url]
-  page_count = 0
-  max_pages = 30
-
-  Enumerator.new do |y|
-    loop do
-      if page_count > max_pages
-        raise RuntimeError.new(
-          "too many page requests, stopping at #{page_count}" +
-          " as a safeguard. Increase max page_count if necessary."
-        )
-      end
-
-      verbose "Requesting page #{page_count + 1}: #{url}"
-      response = HTTParty.get(
-        url,
-        headers: {
-          authorization: "Bearer #{opts[:token]}"
-        }
-      )
-      providers_list = JSON.parse(response.body)
-      break if providers_list.empty?
-
-      # Send each provider to the consumer of this enumerator
-      providers_list.each { |provider| y << provider }
-
-      url = response.headers[:link].sub(/;.*/, '')
-      page_count += 1
-    end
-  end
-end
-
 $mcb.run(ARGV.dup) if File.basename(__FILE__) == File.basename($0)

@@ -1,5 +1,6 @@
 require 'spec_helper'
 require "#{Rails.root}/lib/mcb"
+require "#{Rails.root}/lib/mcb/azure"
 
 describe 'mcb command' do
   describe '#load_commands' do
@@ -50,6 +51,25 @@ describe 'mcb command' do
         }.to raise_error(
           "Command lib/mcb/commands/test.rb must be defined to have sub-commands lib/mcb/commands/test"
         )
+      end
+    end
+  end
+
+  describe '#apiv1_token' do
+    it 'returns the token' do
+      expect(MCB.apiv1_token).to eq 'bats'
+    end
+
+    context 'with the webapp option' do
+      before do
+        allow(MCB::Azure).to receive(:get_config)
+                               .and_return('AUTHENTICATION_TOKEN' => 'bar')
+      end
+
+      it 'uses get_config to retrieve the app config' do
+        expect(MCB.apiv1_token(webapp: 'az-app')).to eq 'bar'
+        expect(MCB::Azure).to have_received(:get_config).with('az-app',
+                                                              rgroup: nil)
       end
     end
   end
