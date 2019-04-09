@@ -71,7 +71,7 @@ describe 'Providers API', type: :request do
       end
       let!(:site) do
         create(:site,
-              location_name: 'Main site',
+              location_name: 'Main site 1',
               code: '-',
               region_code: :london,
               provider: provider)
@@ -130,7 +130,7 @@ describe 'Providers API', type: :request do
       end
       let!(:site2) do
         create(:site,
-              location_name: 'Main site',
+              location_name: 'Main site 2',
               code: '-',
               region_code: :scotland,
               provider: provider2)
@@ -161,7 +161,7 @@ describe 'Providers API', type: :request do
               'campuses' => [
                 {
                   'campus_code' => '-',
-                  'name' => 'Main site',
+                  'name' => 'Main site 1',
                   'region_code' => '01',
                 }
               ],
@@ -222,7 +222,7 @@ describe 'Providers API', type: :request do
               'campuses' => [
                 {
                   'campus_code' => '-',
-                  'name' => 'Main site',
+                  'name' => 'Main site 2',
                   'region_code' => '11',
                 }
               ],

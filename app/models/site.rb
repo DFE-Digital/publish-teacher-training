@@ -21,4 +21,11 @@ class Site < ApplicationRecord
   include TouchProvider
 
   belongs_to :provider
+
+  validates :location_name, uniqueness: { scope: :provider }
+  validates :location_name,
+            :address1,
+            :address3,
+            :postcode,
+            presence: true
 end

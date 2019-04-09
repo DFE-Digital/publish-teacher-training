@@ -273,6 +273,71 @@ describe 'Sites API v2', type: :request do
             :region_code
           )
         end
+
+        context 'with validation errors' do
+          let(:json_data) { JSON.parse(response.body)['errors'] }
+
+          context 'with missing attributes' do
+            let(:location_name) { '' }
+            let(:address1)      { '' }
+            let(:address3)      { '' }
+            let(:postcode)      { '' }
+            let(:region_code)   { '' }
+
+            it { should have_http_status(:bad_request) }
+
+            it 'has the right amount of errors' do
+              expect(json_data.count).to eq 4
+            end
+
+            it 'checks the location_name is present' do
+              expect(response.body).to include('Invalid location_name')
+              expect(response.body).to include("Location name can't be blank")
+            end
+
+            it 'checks the address1 is present' do
+              expect(response.body).to include('Invalid address1')
+              expect(response.body).to include("Address1 can't be blank")
+            end
+
+            it 'checks the address3 is present' do
+              expect(response.body).to include('Invalid address3')
+              expect(response.body).to include("Address3 can't be blank")
+            end
+
+            it 'checks the postcode is present' do
+              expect(response.body).to include('Invalid postcode')
+              expect(response.body).to include("Postcode can't be blank")
+            end
+
+            it 'checks the region_code is present' do
+            end
+          end
+
+          context 'with an already existing location_name' do
+            context 'within the same provider' do
+              let(:location_name) { site2.location_name }
+
+              it 'checks the location_name is unique' do
+                expect(json_data.count).to eq 1
+                expect(response.body).to include('Invalid location_name')
+                expect(response.body).to include('Location name has already been taken')
+              end
+            end
+
+            context 'within another provider' do
+              let!(:provider2) { create :provider, sites: [site3] }
+              let!(:site3) { create :site, location_name: site1.location_name }
+              let(:location_name) { site3.location_name }
+
+              it { should have_http_status(:success) }
+
+              it 'does not have a validation error' do
+                expect(response.body).not_to include('errors')
+              end
+            end
+          end
+        end
       end
     end
   end

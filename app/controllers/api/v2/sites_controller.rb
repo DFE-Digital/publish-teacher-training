@@ -14,9 +14,11 @@ module API
       end
 
       def update
-        @site.update(site_params)
-
-        render jsonapi: @site
+        if @site.update(site_params)
+          render jsonapi: @site
+        else
+          render jsonapi_errors: @site.errors, status: 400
+        end
       end
 
       def show
