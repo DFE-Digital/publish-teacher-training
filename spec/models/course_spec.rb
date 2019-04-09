@@ -120,6 +120,16 @@ RSpec.describe Course, type: :model do
         its(:has_vacancies?) { should be false }
       end
 
+      context 'when the site is findable but only opens in the future' do
+        let(:subject) {
+          create(:course, with_site_statuses: [
+            %i[findable with_any_vacancy applications_being_accepted_in_future],
+          ])
+        }
+
+        its(:has_vacancies?) { should be true }
+      end
+
       context 'when only discontinued and suspended site statuses have vacancies' do
         let(:subject) {
           create(:course, with_site_statuses: [
