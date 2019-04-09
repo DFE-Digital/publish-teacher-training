@@ -78,6 +78,25 @@ module MCB
     end
   end
 
+  def self.generate_apiv2_token(email:, encoding:, secret: nil)
+    require 'jwt'
+
+    payload = { email: email }
+    if encoding == 'plain-text'
+      unless secret.nil?
+        raise 'Secret provided, only valid when encoding is NOT plain-text'
+      end
+
+      payload.to_json
+    else
+      if secret.nil?
+        raise 'Secret not provided, only valid when encoding is plain-text'
+      end
+
+      JWT.encode(payload.to_json, secret, encoding)
+    end
+  end
+
   def self.each_v1_provider(opts)
     # We only need httparty for API V1 calls
     require 'httparty'

@@ -73,4 +73,61 @@ describe 'mcb command' do
       end
     end
   end
+
+  describe '#generate_apiv2_token' do
+    let(:email)    { 'foo@local' }
+    let(:secret)   { 'bar' }
+
+    context 'using HS256 encoding' do
+      let(:encoding) { 'HS256' }
+
+      it 'generates a valid JWT token' do
+        token = MCB.generate_apiv2_token(
+          email: email,
+          encoding: encoding,
+          secret: secret
+        )
+        expect(token).to eq JWT.encode({ email: email }.to_json,
+                                       secret,
+                                       encoding)
+      end
+
+      it 'gives a friendly error when secret is nil' do
+        expect {
+          MCB.generate_apiv2_token(
+            email: email,
+            encoding: encoding,
+            secret: nil
+          )
+        }.to raise_error(
+          "Secret not provided, only valid when encoding is plain-text"
+        )
+      end
+    end
+
+    context 'plain-text encoding' do
+      let(:encoding) { 'plain-text' }
+
+      it 'returns the payload as JSON' do
+        token = MCB.generate_apiv2_token(
+          email: email,
+          encoding: encoding,
+          secret: nil
+        )
+        expect(token).to eq "{\"email\":\"#{email}\"}"
+      end
+
+      it 'gives a friendly error when secret is NOT nil' do
+        expect {
+          MCB.generate_apiv2_token(
+            email: email,
+            encoding: encoding,
+            secret: secret
+          )
+        }.to raise_error(
+          'Secret provided, only valid when encoding is NOT plain-text'
+        )
+      end
+    end
+  end
 end
