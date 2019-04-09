@@ -19,28 +19,43 @@ describe ManageCoursesAPI do
 
   describe "Request" do
     subject { ManageCoursesAPI::Request }
+    let(:provider_code) { 'X12' }
+    let(:email) { 'foo@bar' }
+    let(:body) { { "email": email } }
+
+    before do
+      stub_request(:post, "#{Settings.manage_api.base_url}/#{endpoint}")
+        .with { |req| req.body == body.to_json }
+        .to_return(
+          status: 200,
+          body: '{ "result": true }'
+        )
+    end
 
     describe 'sync_course_with_search_and_compare' do
-      let(:provider_code) { 'X12' }
       let(:course_code) { 'X123' }
-      let(:email) { 'foo@bar' }
-      let(:body) { { "email": email } }
 
       describe "with a normal response" do
-        before do
-          stub_request(:post, Settings.manage_api.base_url + "/api/Publish/internal/course/#{provider_code}/#{course_code}")
-            .with { |req| req.body == body.to_json }
-            .to_return(
-              status: 200,
-              body: '{ "result": true }'
-            )
-        end
+        let(:endpoint) { "api/Publish/internal/course#{provider_code}/#{course_code}" }
 
         it "returns true" do
           result = subject.sync_course_with_search_and_compare(
             email, provider_code, course_code
           )
           expect(result).to eq(true)
+        end
+      end
+
+      describe 'sync_courses_with_search_and_compare' do
+        let(:endpoint) { "api/Publish/internal/course/#{provider_code}" }
+
+        describe "with a normal response" do
+          it "returns true" do
+            result = subject.sync_courses_with_search_and_compare(
+              email, provider_code
+            )
+            expect(result).to eq(true)
+          end
         end
       end
     end
