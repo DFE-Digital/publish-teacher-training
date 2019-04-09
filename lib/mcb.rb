@@ -97,6 +97,53 @@ module MCB
     end
   end
 
+  def self.each_v1_course(opts)
+    # We only need httparty for API V1 calls
+    require 'httparty'
+
+    url = URI.join(opts[:url], opts[:endpoint])
+
+    token = opts.fetch(:token) { apiv1_token(opts.slice(:webapp, :rgroup)) }
+
+    process_opt_changed_since(opts, url)
+    page_count = 0
+    max_pages = 30
+    all_pages = opts.fetch(:all, false)
+
+    Enumerator.new do |y|
+      loop do
+        if page_count > max_pages
+          raise "too many page requests, stopping at #{page_count}" \
+                " as a safeguard. Increase max page_count if necessary."
+        end
+
+        verbose "Requesting page #{page_count + 1}: #{url}"
+        response = HTTParty.get(
+          url.to_s,
+          headers: { authorization: "Bearer #{token}" }
+        )
+        courses_list = JSON.parse(response.body)
+        break if courses_list.empty?
+
+        next_url = response.headers[:link].sub(/;.*/, '')
+
+        # Send each provider to the consumer of this enumerator
+        courses_list.each do |course|
+          y << [course, {
+                  page: page_count,
+                  url: url,
+                  next_url: next_url
+                }]
+        end
+
+        break unless all_pages
+
+        url = next_url
+        page_count += 1
+      end
+    end
+  end
+
   def self.each_v1_provider(opts)
     # We only need httparty for API V1 calls
     require 'httparty'
