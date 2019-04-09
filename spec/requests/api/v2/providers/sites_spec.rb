@@ -177,15 +177,15 @@ describe 'Sites API v2', type: :request do
       end
     end
 
-    context 'when authenticted and authorised' do
-      let(:code) { 'A3' }
+    context 'when authenticated and authorised' do
+      let(:code)          { 'A3' }
       let(:location_name) { 'New location name' }
-      let(:address1) { Faker::Address.street_address }
-      let(:address2) { Faker::Address.community }
-      let(:address3) { Faker::Address.city }
-      let(:address4) { Faker::Address.state }
-      let(:postcode) { Faker::Address.postcode }
-      let(:region_code) { 'west_midlands' }
+      let(:address1)      { 'New street 1' }
+      let(:address2)      { 'New street 2' }
+      let(:address3)      { 'New city' }
+      let(:address4)      { 'New state' }
+      let(:postcode)      { 'SW1A 1AA' }
+      let(:region_code)   { 'west_midlands' }
 
       subject { perform_site_update }
 
@@ -287,7 +287,7 @@ describe 'Sites API v2', type: :request do
             it { should have_http_status(:bad_request) }
 
             it 'has the right amount of errors' do
-              expect(json_data.count).to eq 4
+              expect(json_data.count).to eq 5
             end
 
             it 'checks the location_name is present' do
@@ -308,6 +308,11 @@ describe 'Sites API v2', type: :request do
             it 'checks the postcode is present' do
               expect(response.body).to include('Invalid postcode')
               expect(response.body).to include("Postcode can't be blank")
+            end
+
+            it 'checks the postcode is present' do
+              expect(response.body).to include('Invalid postcode')
+              expect(response.body).to include('Postcode not recognised as a UK postcode')
             end
 
             it 'checks the region_code is present' do
