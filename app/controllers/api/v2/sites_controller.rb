@@ -15,6 +15,8 @@ module API
 
       def update
         if @site.update(site_params)
+          sync_courses_with_search_and_compare
+
           render jsonapi: @site
         else
           render jsonapi_errors: @site.errors, status: 422
@@ -46,6 +48,15 @@ module API
       def build_site
         @site = @provider.sites.find(params[:id])
         authorize @site
+      end
+
+      def sync_courses_with_search_and_compare
+        ManageCoursesAPI::Request.sync_courses_with_search_and_compare(
+          @current_user.email,
+          @provider.provider_code
+        )
+      rescue StandardError
+        false
       end
     end
   end
