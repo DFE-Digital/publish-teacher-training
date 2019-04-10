@@ -47,7 +47,7 @@ describe ManageCoursesAPI do
       end
 
       describe 'sync_courses_with_search_and_compare' do
-        let(:endpoint) { "api/Publish/internal/course/#{provider_code}" }
+        let(:endpoint) { "api/Publish/internal/courses/#{provider_code}" }
 
         describe "with a normal response" do
           it "returns true" do
