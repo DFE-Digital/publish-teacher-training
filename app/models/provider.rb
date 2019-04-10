@@ -31,6 +31,9 @@ class Provider < ApplicationRecord
   include RegionCode
   include ChangedAt
 
+  has_associated_audits
+  audited except: :changed_at
+
   enum provider_type: {
     scitt: "B",
     lead_school: "Y",

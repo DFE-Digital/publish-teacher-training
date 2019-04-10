@@ -21,6 +21,8 @@ class Site < ApplicationRecord
   include RegionCode
   include TouchProvider
 
+  audited associated_with: :provider
+
   belongs_to :provider
 
   validates :location_name, uniqueness: { scope: :provider_id }

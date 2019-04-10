@@ -16,6 +16,8 @@ class SiteStatus < ApplicationRecord
 
   self.table_name = "course_site"
 
+  audited associated_with: :course
+
   validate :vac_status_must_be_consistent_with_course_study_mode,
     if: Proc.new { |s| s.course&.study_mode.present? }
 

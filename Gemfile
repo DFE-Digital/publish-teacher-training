@@ -66,6 +66,9 @@ gem 'faraday'
 # UK postcode parsing and validation for Ruby
 gem 'uk_postcode'
 
+# For change history on provider, courses, sites, etc
+gem 'audited', '~> 4.7'
+
 group :development, :test do
   # add info about db structure to models and other files
   gem 'annotate'

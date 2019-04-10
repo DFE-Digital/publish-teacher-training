@@ -34,6 +34,10 @@ RSpec.describe SiteStatus, type: :model do
     end
   end
 
+  describe 'auditing' do
+    it { should be_audited.associated_with(:course) }
+  end
+
   describe 'associations' do
     it { should belong_to(:site) }
     it { should belong_to(:course) }

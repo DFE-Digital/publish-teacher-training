@@ -32,6 +32,11 @@ require 'rails_helper'
 describe Provider, type: :model do
   subject { create(:provider) }
 
+  describe 'auditing' do
+    it { should be_audited.except(:changed_at) }
+    it { should have_associated_audits }
+  end
+
   describe 'associations' do
     it { should have_many(:sites) }
     it { should have_many(:users).through(:organisations) }

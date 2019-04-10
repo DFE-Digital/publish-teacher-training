@@ -17,6 +17,8 @@ class Contact < ApplicationRecord
 
   belongs_to :provider
 
+  audited associated_with: :provider
+
   enum type: {
          admin: 'admin',
          utt: 'utt',

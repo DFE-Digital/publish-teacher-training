@@ -57,6 +57,8 @@ GEM
     application_insights (0.5.6)
     arel (9.0.0)
     ast (2.4.0)
+    audited (4.8.0)
+      activerecord (>= 4.0, < 5.3)
     awesome_print (1.8.0)
     bootsnap (1.4.3)
       msgpack (~> 1.0)
@@ -349,6 +351,7 @@ DEPENDENCIES
   annotate
   api-pagination
   application_insights
+  audited (~> 4.7)
   awesome_print
   bootsnap (>= 1.1.0)
   byebug
