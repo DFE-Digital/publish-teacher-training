@@ -208,7 +208,7 @@ describe 'Sites API v2', type: :request do
           .to(location_name)
       end
 
-      it 'updates the code of the site' do
+      it 'does not update the code of the site' do
         expect { subject }.not_to(change { site1.reload.code })
       end
 
