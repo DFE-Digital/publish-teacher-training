@@ -25,7 +25,8 @@ describe API::V2::SerializableCourse do
         course,
         class: {
           Course:   API::V2::SerializableCourse,
-          Provider: API::V2::SerializableProvider
+          Provider: API::V2::SerializableProvider,
+          CourseEnrichment: API::V2::SerializableCourseEnrichment
         },
         include: [
           :provider
@@ -50,7 +51,8 @@ describe API::V2::SerializableCourse do
         course,
         class: {
           Course:   API::V2::SerializableCourse,
-          Provider: API::V2::SerializableProvider
+          Provider: API::V2::SerializableProvider,
+          CourseEnrichment: API::V2::SerializableCourseEnrichment
         },
         include: [
           :accrediting_provider
