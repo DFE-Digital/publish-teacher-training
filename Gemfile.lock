@@ -331,6 +331,7 @@ GEM
     trollop (1.16.2)
     tzinfo (1.2.5)
       thread_safe (~> 0.1)
+    uk_postcode (2.1.3)
     unicode-display_width (1.5.0)
     webmock (3.5.1)
       addressable (>= 2.3.6)
@@ -393,6 +394,7 @@ DEPENDENCIES
   terminal-table
   timecop
   tzinfo-data
+  uk_postcode
   webmock
 
 RUBY VERSION

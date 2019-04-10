@@ -17,8 +17,17 @@
 #
 
 class Site < ApplicationRecord
+  include PostcodeNormalize
   include RegionCode
   include TouchProvider
 
   belongs_to :provider
+
+  validates :location_name, uniqueness: { scope: :provider_id }
+  validates :location_name,
+            :address1,
+            :address3,
+            :postcode,
+            presence: true
+  validates :postcode, postcode: true
 end
