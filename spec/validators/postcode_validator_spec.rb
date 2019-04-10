@@ -22,4 +22,13 @@ describe PostcodeValidator do
       expect(site.errors[:postcode]).not_to be_blank
     end
   end
+
+  context 'without a postcode' do
+    let(:postcode) { nil }
+
+    it 'adds an error' do
+      expect(site).not_to be_valid
+      expect(site.errors[:postcode]).not_to be_blank
+    end
+  end
 end
