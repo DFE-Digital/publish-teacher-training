@@ -315,7 +315,7 @@ describe 'Sites API v2', type: :request do
               expect(response.body).to include('Postcode not recognised as a UK postcode')
             end
 
-            it 'checks the region_code is present' do
+            xit 'checks the region_code is present' do
             end
           end
 
