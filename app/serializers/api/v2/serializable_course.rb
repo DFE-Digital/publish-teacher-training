@@ -15,6 +15,7 @@ module API
       belongs_to :accrediting_provider
 
       has_many :site_statuses
+      has_many :subjects
     end
   end
 end

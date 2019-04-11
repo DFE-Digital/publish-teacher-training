@@ -8,5 +8,7 @@
 #
 
 class Subject < ApplicationRecord
+  has_and_belongs_to_many :courses, join_table: :course_subject
+
   scope :further_education, -> { where(subject_name: 'Further Education') }
 end
