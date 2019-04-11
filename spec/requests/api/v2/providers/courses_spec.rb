@@ -9,10 +9,14 @@ describe 'Courses API v2', type: :request do
     ActionController::HttpAuthentication::Token.encode_credentials(token)
   end
 
+  let(:course_subject) { create(:subject, subject_name: 'English', subject_code: 'E') }
+
   let(:findable_open_course) {
     create(:course, :resulting_in_pgce_with_qts,
            start_date: Time.now.utc,
            study_mode: :full_time,
+           subject_count: 0,
+           subjects: [course_subject],
            with_site_statuses: [%i[findable with_any_vacancy applications_being_accepted_now]])
   }
 
@@ -73,7 +77,7 @@ describe 'Courses API v2', type: :request do
       before do
         get "/api/v2/providers/#{provider.provider_code.downcase}/courses/#{findable_open_course.course_code.downcase}",
             headers: { 'HTTP_AUTHORIZATION' => credentials },
-            params: { include: 'site_statuses.site' }
+            params: { include: 'subjects,site_statuses.site' }
       end
 
       it { should have_http_status(:success) }
@@ -101,6 +105,7 @@ describe 'Courses API v2', type: :request do
               "accrediting_provider" => { "meta" => { "included" => false } },
               "provider" => { "meta" => { "included" => false } },
               "site_statuses" => { "data" => [{ "type" => "site_statuses", "id" => site_status.id.to_s }] },
+              "subjects" => { "data" => [{ "type" => "subjects", "id" => course_subject.id.to_s }] },
             },
           },
           "jsonapi" => {
@@ -122,6 +127,13 @@ describe 'Courses API v2', type: :request do
                     "id" => site.id.to_s
                   }
                 }
+              }
+            }, {
+              "id" => course_subject.id.to_s,
+              "type" => "subjects",
+              "attributes" => {
+                "subject_name" => course_subject.subject_name,
+                "subject_code" => course_subject.subject_code
               }
             }, {
             "id" => site.id.to_s,
@@ -266,6 +278,7 @@ describe 'Courses API v2', type: :request do
               "accrediting_provider" => { "meta" => { "included" => false } },
               "provider" => { "meta" => { "included" => false } },
               "site_statuses" => { "meta" => { "included" => false } },
+              "subjects" => { "meta" => { "included" => false } },
             },
           }],
           "jsonapi" => {
