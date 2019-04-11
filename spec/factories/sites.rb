@@ -25,7 +25,7 @@ FactoryBot.define do
     address3 { Faker::Address.city }
     address4 { Faker::Address.state }
     postcode { Faker::Address.postcode }
-    region_code { ProviderEnrichment.region_codes['London'] }
+    region_code { 'london' }
     association(:provider)
 
     transient do
