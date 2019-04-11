@@ -30,7 +30,7 @@
 require "rails_helper"
 
 describe ProviderSerializer do
-  let(:provider) { create :provider }
+  let(:provider) { create :provider, site_count: 0 }
 
   subject { serialize(provider) }
 
@@ -41,7 +41,7 @@ describe ProviderSerializer do
   it { should include(address3: provider.address3) }
   it { should include(address4: provider.address4) }
   it { should include(postcode: provider.postcode) }
-  it { should include(region_code: provider.region_code) }
+  it { should include(region_code: "%02d" % provider.region_code_before_type_cast) }
   it { should include(institution_type: provider.provider_type) }
   it { should include(accrediting_provider: provider.accrediting_provider) }
 
@@ -74,7 +74,7 @@ describe ProviderSerializer do
 
     context 'if nil' do
       let(:ucas_preferences) { create :ucas_preferences, application_alert_email: nil }
-      let(:provider) { create :provider, ucas_preferences: ucas_preferences }
+      let(:provider) { create :provider, ucas_preferences: ucas_preferences, site_count: 0 }
       let(:contacts) do
         serialize(provider)['contacts'].map { |contact| contact[:type] }
       end
@@ -102,7 +102,7 @@ describe ProviderSerializer do
   describe 'contacts' do
     describe 'generate provider object returns the providers contacts' do
       let(:contact)  { create :contact }
-      let(:provider) { create :provider, contacts: [contact] }
+      let(:provider) { create :provider, contacts: [contact], site_count: 0 }
 
       subject { serialize(provider)['contacts'].first }
 
@@ -113,8 +113,6 @@ describe ProviderSerializer do
 
     describe 'admin contact' do
       context 'exists on provider record and not in contacts table' do
-        let(:provider) { create :provider }
-
         subject { serialize(provider)['contacts'].find { |c| c[:type] == 'admin' } }
 
         its([:name]) { should eq provider.contact_name }
@@ -124,7 +122,7 @@ describe ProviderSerializer do
 
       context 'exists in contacts table' do
         let(:contact)  { create :contact, type: 'admin' }
-        let(:provider) { create :provider, contacts: [contact] }
+        let(:provider) { create :provider, contacts: [contact], site_count: 0 }
 
         subject { serialize(provider)['contacts'].find { |c| c[:type] == 'admin' } }
 

@@ -40,7 +40,7 @@ FactoryBot.define do
     email { Faker::Internet.email }
     telephone { Faker::PhoneNumber.phone_number }
     accrediting_provider { 'N' }
-    region_code { ProviderEnrichment.region_codes['London'] }
+    region_code { 'london' }
     opted_in { true }
     organisations { build_list :organisation, 1 }
 

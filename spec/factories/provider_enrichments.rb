@@ -13,6 +13,7 @@
 #  status             :integer          default("draft"), not null
 #
 
+
 FactoryBot.define do
   factory :provider_enrichment do
     transient do
@@ -27,7 +28,7 @@ FactoryBot.define do
     address3 { Faker::Address.city }
     address4 { Faker::Address.state }
     postcode { Faker::Address.postcode }
-    region_code { ProviderEnrichment.region_codes['Eastern'] }
+    region_code { 'eastern' }
     train_with_us { Faker::Lorem.sentence.to_s }
     train_with_disability { Faker::Lorem.sentence.to_s }
     created_at { Faker::Date.between 2.days.ago, 1.days.ago }
