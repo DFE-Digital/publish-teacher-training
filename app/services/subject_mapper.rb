@@ -71,7 +71,7 @@ class SubjectMapper
   @ucas_other = ["leisure and tourism",
                  "special educational needs"]
 
-  @ucas_mathemtics = ["mathematics",
+  @ucas_mathematics = ["mathematics",
                       "mathematics (abridged)"]
 
   @ucas_physics = ["physics",
@@ -117,7 +117,7 @@ class SubjectMapper
     secondary_subjects = []
 
       # Does the subject list mention maths?
-    if (ucas_subjects & @ucas_mathemtics).any?
+    if (ucas_subjects & @ucas_mathematics).any?
       secondary_subjects.push("Mathematics")
     end
 
@@ -219,7 +219,7 @@ class SubjectMapper
       primary_subjects.push("Primary with geography and history")
     end
       # Does the subject list mention maths?
-    if((ucas_subjects & @ucas_mathemtics).any?)
+    if((ucas_subjects & @ucas_mathematics).any?)
       primary_subjects.push("Primary with mathematics")
     end
       # Does the subject list mention any mfl subject?
