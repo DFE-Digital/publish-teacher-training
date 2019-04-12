@@ -1,4 +1,4 @@
-require "rails_helper"
+require "spec_helper"
 
 describe SubjectMapper do
   further_education_subjects =
