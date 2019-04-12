@@ -101,6 +101,7 @@ class SubjectMapper
   @ucas_needs_mention_in_title = { "humanities" => /humanities/,
       "science" => /(?<!social |computer )science/,
       "modern studies" => /modern studies/ }
+
   def self.is_further_education(subjects)
     subjects = subjects.map { |subject| (subject.strip! || subject).downcase }
     (subjects & @ucas_further_education).any?

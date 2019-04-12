@@ -62,6 +62,7 @@ describe SubjectMapper do
     end
   end
 
+  # Port of https://github.com/DFE-Digital/manage-courses-api/blob/master/tests/ManageCourses.Tests/UnitTesting/SubjectMapperTests.cs
   describe "#get_subject_list" do
 
   specs = [
