@@ -1,3 +1,3 @@
 manage_api:
-  base_url: https://api.publish-teacher-training-courses.service.gov.uk
+  base_url: https://bat-prod-manage-courses-api-app.azurewebsites.net
   secret: please_change_me
