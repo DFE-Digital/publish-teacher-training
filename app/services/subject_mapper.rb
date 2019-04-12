@@ -148,11 +148,6 @@ class SubjectMapper
     end
 
       #  Does the subject list mention languages but hasn't already been covered?
-    pp ucas_subjects
-    pp @ucas_language_cat
-    pp @ucas_mfl_mandarin
-    pp @ucas_mfl_main
-
     if (ucas_subjects & @ucas_language_cat).any? && (ucas_subjects & @ucas_mfl_mandarin).none? && (ucas_subjects & @ucas_mfl_main).none?
       secondary_subjects.push("Modern languages (other)")
     end
