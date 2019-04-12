@@ -72,7 +72,7 @@ class SubjectMapper
                  "special educational needs"]
 
   @ucas_mathematics = ["mathematics",
-                      "mathematics (abridged)"]
+                       "mathematics (abridged)"]
 
   @ucas_physics = ["physics",
                    "physics (abridged)"]

@@ -1,19 +1,20 @@
 require "spec_helper"
 
 describe SubjectMapper do
-  further_education_subjects =
-    ["further education",
-     "higher education",
-     "post-compulsory"]
+  further_education_subjects = [
+    "further education",
+    "higher education",
+    "post-compulsory",
+  ]
 
   ucas_mfl_main = [
-      "english as a second or other language",
-      "french",
-      "german",
-      "italian",
-      "japanese",
-      "russian",
-      "spanish"
+    "english as a second or other language",
+    "french",
+    "german",
+    "italian",
+    "japanese",
+    "russian",
+    "spanish"
   ]
 
   describe "#is_further_education" do
@@ -37,15 +38,16 @@ describe SubjectMapper do
   end
 
   describe "#map_to_subject_name" do
-    ucas_rename =
-      { "chinese" => "Mandarin",
+    ucas_rename = {
+      "chinese" => "Mandarin",
       "art / art & design" => "Art and design",
       "business education" => "Business studies",
       "computer studies" => "Computing",
       "science" => "Balanced science",
       "dance and performance" => "Dance",
       "drama and theatre studies" => "Drama",
-      "social science" => "Social sciences" }
+      "social science" => "Social sciences",
+    }
 
     ucas_rename.each do |key, expected_value|
       describe "ucasRename '#{key}''" do
@@ -81,17 +83,14 @@ describe SubjectMapper do
         course_title: "Early Years",
         ucas_subjects: ["primary", "early years"],
         expected_subjects: %w[Primary],
-
-  test_case: "an example of early years (which is absorbed into primary)"
-},
+        test_case: "an example of early years (which is absorbed into primary)"
+      },
       {
         course_title: "Physics (Welsh medium)",
         ucas_subjects: ["physics (abridged)", "welsh", "secondary", "science"],
         expected_subjects: %w[Physics],
-  test_case: "an example where science should be excluded because it's used as a category"
-},
-
-
+        test_case: "an example where science should be excluded because it's used as a category"
+      },
       {
         course_title: "Physics",
         ucas_subjects: %w[physics secondary science english],
@@ -120,41 +119,38 @@ describe SubjectMapper do
         course_title: "Further ed",
         ucas_subjects: ["further education", "numeracy"],
         expected_subjects: ["Further education"],
-        test_case: "further education examplpe"
+        test_case: "further education example"
       },
       {
         course_title: "MFL (Chinese)",
         ucas_subjects: ["secondary", "languages", "languages (asian)", "chinese"],
         expected_subjects: %w[Mandarin],
-  test_case: "a rename"
+        test_case: "a rename"
       },
       {
         course_title: "",
         ucas_subjects: %w[secondary welsh],
         expected_subjects: %w[Welsh],
-  test_case: "an example of welsh, which only triggers if nothing else goes"
-},
-
+        test_case: "an example of welsh, which only triggers if nothing else goes"
+      },
       {
         course_title: "Computer science",
         ucas_subjects: ["computer studies", "science"],
         expected_subjects: %w[Computing],
-  test_case: "here science is used as a category"
-},
+        test_case: "here science is used as a category"
+      },
       {
         course_title: "Computer science with Science",
         ucas_subjects: ["computer studies", "science"],
         expected_subjects: ["Computing", "Balanced science"],
         test_case: "here it is explicit"
       },
-
       {
         course_title: "Primary with Mathematics",
         ucas_subjects: %w[primary mathematics],
         expected_subjects: ["Primary", "Primary with mathematics"],
         test_case: "bug fix test:  accidentally included maths in the list of sciences"
       },
-
       {
         course_title: "Mfl",
         ucas_subjects: %w[languages],
@@ -165,8 +161,8 @@ describe SubjectMapper do
         course_title: "Latin",
         ucas_subjects: %w[latin],
         expected_subjects: %w[Classics],
-  test_case: "latin and classics have been merged"
-},
+        test_case: "latin and classics have been merged"
+      },
       {
         course_title: "Primary (geo)",
         ucas_subjects: %w[primary geography],
@@ -184,9 +180,8 @@ describe SubjectMapper do
         course_title: "Computing",
         ucas_subjects: ["secondary", "computer studies", "information communication technology"],
         expected_subjects: %w[Computing],
-  test_case: "no ICT"
-},
-
+        test_case: "no ICT"
+      },
       {
         course_title: "Mandarin and ESOL",
         ucas_subjects: ["mandarin", "english as a second or other language"],
@@ -201,8 +196,6 @@ describe SubjectMapper do
       },
     ]
         # public void MapToSearchAndCompareCourse(string courseTitle","string commaSeparatedUcasSubjects","string commaSeparatedExpectedSubjects)
-
-
 
     specs.each do |spec|
       describe "Test case '#{spec[:test_case]}''" do
