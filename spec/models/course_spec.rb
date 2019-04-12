@@ -379,7 +379,7 @@ RSpec.describe Course, type: :model do
       it { should include(course) }
     end
 
-    context 'provider is opted in' do
+    context 'provider is not opted in' do
       let(:provider) { create(:provider, opted_in: false) }
 
       it { should_not include(course) }
