@@ -113,34 +113,35 @@ class SubjectMapper
     (res.sub "english", "English" || res)
   end
 
+  class GroupedSubject
+    def initialize(included_ucas_subjects, resulting_dfe_subject)
+      @included_ucas_subjects = included_ucas_subjects
+      @resulting_dfe_subject = resulting_dfe_subject
+    end
+
+    def applicable_to?(ucas_subjects_to_map)
+      (ucas_subjects_to_map & @included_ucas_subjects).any?
+    end
+
+    def to_s
+      @resulting_dfe_subject
+    end
+  end
+
   def self.map_to_secondary_subjects(course_title, ucas_subjects)
+    potential_dfe_subjects = [
+      GroupedSubject.new(@ucas_mathematics, "Mathematics"),
+      GroupedSubject.new(@ucas_physics, "Physics"),
+      GroupedSubject.new(@ucas_design_and_tech, "Design and technology"),
+      GroupedSubject.new(@ucas_classics, "Classics"),
+      GroupedSubject.new(@ucas_mfl_mandarin, "Mandarin"),
+    ]
+
     secondary_subjects = []
 
-      # Does the subject list mention maths?
-    if (ucas_subjects & @ucas_mathematics).any?
-      secondary_subjects.push("Mathematics")
-    end
-
-      # Does the subject list mention physics?
-    if (ucas_subjects & @ucas_physics).any?
-      secondary_subjects.push("Physics")
-    end
-
-      # Does the subject list mention D&T?
-    if (ucas_subjects & @ucas_design_and_tech).any?
-      secondary_subjects.push("Design and technology")
-    end
-
-      # Does the subject list mention Classics?
-    if (ucas_subjects & @ucas_classics).any?
-      secondary_subjects.push("Classics")
-    end
-
-
-      # Does the subject list mention Mandarin Chinese
-    if (ucas_subjects & @ucas_mfl_mandarin).any?
-      secondary_subjects.push("Mandarin")
-    end
+    secondary_subjects += potential_dfe_subjects.map do |subject|
+      subject.to_s if subject.applicable_to?(ucas_subjects)
+    end.compact
 
       #  Does the subject list mention a mainstream foreign language
     (ucas_subjects & @ucas_mfl_main).each do |ucas_subject|
