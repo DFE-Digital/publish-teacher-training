@@ -113,7 +113,7 @@ class SubjectMapper
     (res.sub "english", "English" || res)
   end
 
-  class GroupedSubject
+  class GroupedSubjectMapping
     def initialize(included_ucas_subjects, resulting_dfe_subject)
       @included_ucas_subjects = included_ucas_subjects
       @resulting_dfe_subject = resulting_dfe_subject
@@ -129,19 +129,19 @@ class SubjectMapper
   end
 
   def self.map_to_secondary_subjects(course_title, ucas_subjects)
-    potential_dfe_subjects = [
-      GroupedSubject.new(@ucas_mathematics, "Mathematics"),
-      GroupedSubject.new(@ucas_physics, "Physics"),
-      GroupedSubject.new(@ucas_design_and_tech, "Design and technology"),
-      GroupedSubject.new(@ucas_classics, "Classics"),
-      GroupedSubject.new(@ucas_mfl_mandarin, "Mandarin"),
+    secondary_subject_mappings = [
+      GroupedSubjectMapping.new(@ucas_mathematics, "Mathematics"),
+      GroupedSubjectMapping.new(@ucas_physics, "Physics"),
+      GroupedSubjectMapping.new(@ucas_design_and_tech, "Design and technology"),
+      GroupedSubjectMapping.new(@ucas_classics, "Classics"),
+      GroupedSubjectMapping.new(@ucas_mfl_mandarin, "Mandarin"),
     ]
 
     secondary_subjects = []
 
-    secondary_subjects += potential_dfe_subjects.map do |subject|
-      subject.to_s if subject.applicable_to?(ucas_subjects)
-    end.compact
+    secondary_subjects += secondary_subject_mappings.map { |mapping|
+      mapping.to_s if mapping.applicable_to?(ucas_subjects)
+    }.compact
 
       #  Does the subject list mention a mainstream foreign language
     (ucas_subjects & @ucas_mfl_main).each do |ucas_subject|
@@ -200,37 +200,26 @@ class SubjectMapper
 
 
   def self.map_to_primary_subjects(ucas_subjects)
+    primary_subject_mappings = [
+      GroupedSubjectMapping.new(@ucas_english, "Primary with English"),
+      GroupedSubjectMapping.new(%w[geography history], "Primary with geography and history"),
+      GroupedSubjectMapping.new(@ucas_mathematics, "Primary with mathematics"),
+      GroupedSubjectMapping.new(@ucas_language_cat + @ucas_mfl_main + @ucas_mfl_other,
+        "Primary with modern languages"),
+      GroupedSubjectMapping.new(%w[science] + @ucas_physics + @ucas_science_fields,
+        "Primary with science"),
+    ]
+
     primary_subjects = %w[Primary]
-    ucas_primary_language_specialisation = @ucas_language_cat + @ucas_mfl_main + @ucas_mfl_other
 
-    ucas_primary_science_specialisation = %w[science] + @ucas_physics + @ucas_science_fields
+    primary_subjects += primary_subject_mappings.map { |mapping|
+      mapping.to_s if mapping.applicable_to?(ucas_subjects)
+    }.compact
 
-    ucas_primary_geo_hist_specialisation = %w[geography history]
-      # Does the subject list mention English?
-    if((ucas_subjects & @ucas_english).any?)
-      primary_subjects.push("Primary with English")
-    end
-      # Does the subject list mention geography or history?
-    if((ucas_subjects & ucas_primary_geo_hist_specialisation).any?)
-      primary_subjects.push("Primary with geography and history")
-    end
-      # Does the subject list mention maths?
-    if((ucas_subjects & @ucas_mathematics).any?)
-      primary_subjects.push("Primary with mathematics")
-    end
-      # Does the subject list mention any mfl subject?
-    if((ucas_subjects & ucas_primary_language_specialisation).any?)
-      primary_subjects.push("Primary with modern languages")
-    end
-      # Does the subject list mention PE?
-    if(ucas_subjects.index("physical education") != nil)
+    if ucas_subjects.index("physical education") != nil
       primary_subjects.push("Primary with physical education")
     end
-      # Does the subject list mention science?
 
-    if((ucas_subjects & ucas_primary_science_specialisation).any?)
-      primary_subjects.push("Primary with science")
-    end
     primary_subjects
   end
 
