@@ -27,6 +27,7 @@ FactoryBot.define do
     sequence(:course_code) { |n| "C#{n}D3" }
     name { Faker::ProgrammingLanguage.name }
     qualification { :pgce_with_qts }
+    with_higher_education
 
     association(:provider)
     study_mode { :full_time }
@@ -91,6 +92,26 @@ FactoryBot.define do
 
     trait :with_accrediting_provider do
       association(:accrediting_provider, factory: :provider)
+    end
+
+    trait :with_higher_education do
+      program_type { 'HE' }
+    end
+
+    trait :with_school_direct do
+      program_type { 'SD' }
+    end
+
+    trait :with_scitt do
+      program_type { 'SC' }
+    end
+
+    trait :with_apprenticeship do
+      program_type { 'TA' }
+    end
+
+    trait :with_salary do
+      program_type { 'SS' }
     end
   end
 end

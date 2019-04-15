@@ -138,4 +138,14 @@ class Course < ApplicationRecord
 
     :not_running
   end
+
+  def funding
+    if school_direct_salaried_training_programme?
+      'salary'
+    elsif pg_teaching_apprenticeship?
+      'apprenticeship'
+    else
+      'fee'
+    end
+  end
 end
