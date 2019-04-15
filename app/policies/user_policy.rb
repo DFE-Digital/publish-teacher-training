@@ -9,4 +9,6 @@ class UserPolicy
   def show?
     user == accessed_user
   end
+
+  alias_method :update?, :show?
 end

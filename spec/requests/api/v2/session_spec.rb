@@ -67,21 +67,11 @@ describe '/api/v2/sessions', type: :request do
       end
 
       describe "the returned json" do
-        it 'returns the user record' do
-          expect(returned_json_response).to eq(
-            "data" => {
-              "id" => user.id.to_s,
-              "type" => "users",
-              "attributes" => {
-                "first_name" => user.first_name,
-                "last_name" => user.last_name,
-                "email" => user.email,
-              }
-            },
-            "jsonapi" => {
-              "version" => "1.0"
-            }
-          )
+        it 'has a data section with the correct attributes' do
+          data_attributes = returned_json_response['data']['attributes']
+          expect(data_attributes['email']).to eq(user.email)
+          expect(data_attributes['first_name']).to eq(user.first_name)
+          expect(data_attributes['last_name']).to eq(user.last_name)
         end
       end
 
