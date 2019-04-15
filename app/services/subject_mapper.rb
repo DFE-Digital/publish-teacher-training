@@ -49,9 +49,6 @@ class SubjectMapper
   @ucas_physics = ["physics",
                    "physics (abridged)"]
 
-  @ucas_science_fields = %w[ biology
-                             chemistry]
-
   @ucas_unexpected = [
     "construction and the built environment",
     # "history of art",
@@ -126,6 +123,8 @@ class SubjectMapper
        %w[japanese] => "Japanese",
        %w[russian] => "Russian",
        %w[spanish] => "Spanish",
+       %w[biology] => "Biology",
+       %w[chemistry] => "Chemistry",
     },
   }.freeze
 
@@ -186,10 +185,6 @@ class SubjectMapper
       secondary_subjects.push("Modern languages (other)")
     end
 
-      # Does the subject list mention one or more sciences?
-    (ucas_subjects & @ucas_science_fields).each do |ucas_subject|
-      secondary_subjects.push(map_to_subject_name(ucas_subject))
-    end
       # Does the subject list mention a subject we are happy to translate directly?
     (ucas_subjects & @ucas_direct_translation_secondary).each do |ucas_subject|
       secondary_subjects.push(map_to_subject_name(ucas_subject))
