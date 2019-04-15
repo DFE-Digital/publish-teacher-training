@@ -8,8 +8,6 @@ class SubjectMapper
                    "english language",
                    "english literature"]
 
-  @ucas_mfl_welsh = %w[welsh]
-
   @ucas_primary = ["early years",
                    "upper primary",
                    "primary",
@@ -183,7 +181,7 @@ class SubjectMapper
     end
 
       # if nothing else yet, try welsh
-    if secondary_subjects.none? && (ucas_subjects & @ucas_mfl_welsh).any?
+    if secondary_subjects.none? && (ucas_subjects & %w[welsh]).any?
       secondary_subjects.push("Welsh")
     end
 
