@@ -144,6 +144,13 @@ class SubjectMapper
        "engineering"] => "Design and technology",
        %w[classics latin] => "Classics",
        %w[chinese mandarin] => "Mandarin",
+       ["english as a second or other language"] => "English as a second or other language",
+       %w[french] => "French",
+       %w[german] => "German",
+       %w[italian] => "Italian",
+       %w[japanese] => "Japanese",
+       %w[russian] => "Russian",
+       %w[spanish] => "Spanish",
     },
   }.freeze
 
@@ -183,11 +190,6 @@ class SubjectMapper
     secondary_subjects += secondary_subject_mappings.map { |mapping|
       mapping.to_s if mapping.applicable_to?(ucas_subjects)
     }.compact
-
-      #  Does the subject list mention a mainstream foreign language
-    (ucas_subjects & @ucas_mfl_main).each do |ucas_subject|
-      secondary_subjects.push(map_to_subject_name(ucas_subject))
-    end
 
       #  Does the subject list mention languages but hasn't already been covered?
     if (ucas_subjects & @ucas_language_cat).any? && (ucas_subjects & @ucas_mfl_mandarin).none? && (ucas_subjects & @ucas_mfl_main).none?
