@@ -131,6 +131,7 @@ class SubjectMapper
        "mandarin",
        "punjabi"] => "Primary with modern languages",
       ["science", "physics", "physics (abridged)", "biology", "chemistry"] => "Primary with science",
+      ["physical education"] => "Primary with physical education",
     },
     secondary: {
       ["mathematics", "mathematics (abridged)"] => "Mathematics",
@@ -244,17 +245,9 @@ class SubjectMapper
       GroupedSubjectMapping.new(ucas_input_subjects, dfe_subject)
     end
 
-    primary_subjects = %w[Primary]
-
-    primary_subjects += primary_subject_mappings.map { |mapping|
+    %w[Primary] + primary_subject_mappings.map { |mapping|
       mapping.to_s if mapping.applicable_to?(ucas_subjects)
     }.compact
-
-    if ucas_subjects.index("physical education") != nil
-      primary_subjects.push("Primary with physical education")
-    end
-
-    primary_subjects
   end
 
   def self.get_subject_list(course_title, ucas_subjects)
