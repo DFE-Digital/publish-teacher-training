@@ -116,6 +116,12 @@ describe SubjectMapper do
         test_case: "examples of how the title is considered when adding additional subjects"
       },
       {
+        course_title: "Physical Education",
+        ucas_subjects: ["secondary", "physical education"],
+        expected_subjects: ["Physical education"],
+        test_case: "PE",
+      },
+      {
         course_title: "Further ed",
         ucas_subjects: ["further education", "numeracy"],
         expected_subjects: ["Further education"],
@@ -175,7 +181,12 @@ describe SubjectMapper do
         expected_subjects: ["Primary", "Primary with geography and history"],
         test_case: "Primary with hist/geo have beeen merged"
       },
-
+      {
+        course_title: "Primary (Physical Education)",
+        ucas_subjects: ["primary", "physical education"],
+        expected_subjects: ["Primary", "Primary with physical education"],
+        test_case: "Primary PE",
+      },
       {
         course_title: "Computing",
         ucas_subjects: ["secondary", "computer studies", "information communication technology"],
