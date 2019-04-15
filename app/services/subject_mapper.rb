@@ -80,27 +80,34 @@ class SubjectMapper
   @ucas_science_fields = %w[ biology
                              chemistry]
 
-  @ucas_unexpected = ["construction and the built environment",
-      # history of art",
-                      "home economics",
-                      "hospitality and catering",
-                      "personal and social education",
-      # "philosophy",
-                      "sport and leisure",
-                      "environmental science",
-                      "law"]
+  @ucas_unexpected = [
+    "construction and the built environment",
+    # "history of art",
+    "home economics",
+    "hospitality and catering",
+    "personal and social education",
+    # "philosophy",
+    "sport and leisure",
+    "environmental science",
+    "law",
+  ]
 
-  @ucas_rename =     { "chinese" => "mandarin",
+  @ucas_rename = {
+    "chinese" => "mandarin",
     "art / art & design" => "art and design",
     "business education" => "business studies",
     "computer studies" => "computing",
     "science" => "balanced science",
     "dance and performance" => "dance",
     "drama and theatre studies" => "drama",
-    "social science" => "social sciences" }
-  @ucas_needs_mention_in_title = { "humanities" => /humanities/,
-      "science" => /(?<!social |computer )science/,
-      "modern studies" => /modern studies/ }
+    "social science" => "social sciences"
+  }
+
+  @ucas_needs_mention_in_title = {
+    "humanities" => /humanities/,
+    "science" => /(?<!social |computer )science/,
+    "modern studies" => /modern studies/,
+  }
 
   def self.is_further_education(subjects)
     subjects = subjects.map { |subject| (subject.strip! || subject).downcase }
