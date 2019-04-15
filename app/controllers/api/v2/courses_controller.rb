@@ -25,6 +25,12 @@ module API
         head response ? :ok : :internal_server_error
       end
 
+      def publish
+        # todo: set running
+        # todo: set enrichment published
+        sync_with_search_and_compare
+      end
+
     private
 
       def build_provider
