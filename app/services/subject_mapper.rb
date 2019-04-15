@@ -8,26 +8,6 @@ class SubjectMapper
                    "english language",
                    "english literature"]
 
-  @ucas_mfl_mandarin = %w[ chinese
-                           mandarin]
-
-  @ucas_mfl_main = ["english as a second or other language",
-                    "french",
-                    "german",
-                    "italian",
-                    "japanese",
-                    "russian",
-                    "spanish"]
-
-  @ucas_mfl_other = %w[ arabic
-                        bengali
-                        gaelic
-                        greek
-                        hebrew
-                        urdu
-                        mandarin
-                        punjabi]
-
   @ucas_mfl_welsh = %w[welsh]
 
   @ucas_design_and_tech = ["design and technology",
@@ -62,11 +42,6 @@ class SubjectMapper
                    "upper primary",
                    "primary",
                    "lower primary"]
-
-  @ucas_language_cat = ["languages",
-                        "languages (african)",
-                        "languages (asian)",
-                        "languages (european)"]
 
   @ucas_mathematics = ["mathematics",
                        "mathematics (abridged)"]
@@ -191,8 +166,23 @@ class SubjectMapper
       mapping.to_s if mapping.applicable_to?(ucas_subjects)
     }.compact
 
+    ucas_language_cat = ["languages",
+                         "languages (african)",
+                         "languages (asian)",
+                         "languages (european)"]
+
+    ucas_mfl_mandarin = %w[chinese mandarin]
+
+    ucas_mfl_main = ["english as a second or other language",
+                     "french",
+                     "german",
+                     "italian",
+                     "japanese",
+                     "russian",
+                     "spanish"]
+
       #  Does the subject list mention languages but hasn't already been covered?
-    if (ucas_subjects & @ucas_language_cat).any? && (ucas_subjects & @ucas_mfl_mandarin).none? && (ucas_subjects & @ucas_mfl_main).none?
+    if (ucas_subjects & ucas_language_cat).any? && (ucas_subjects & ucas_mfl_mandarin).none? && (ucas_subjects & ucas_mfl_main).none?
       secondary_subjects.push("Modern languages (other)")
     end
 
