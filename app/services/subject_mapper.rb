@@ -10,16 +10,6 @@ class SubjectMapper
 
   @ucas_mfl_welsh = %w[welsh]
 
-  @ucas_design_and_tech = ["design and technology",
-                           "design and technology (food)",
-                           "design and technology (product design)",
-                           "design and technology (systems and control)",
-                           "design and technology (textiles)",
-                           "engineering"]
-
-  @ucas_classics = %w[ classics
-                       latin]
-
   @ucas_direct_translation_secondary = ["art / art & design",
                                         "business education",
                                         "citizenship",
@@ -42,12 +32,6 @@ class SubjectMapper
                    "upper primary",
                    "primary",
                    "lower primary"]
-
-  @ucas_mathematics = ["mathematics",
-                       "mathematics (abridged)"]
-
-  @ucas_physics = ["physics",
-                   "physics (abridged)"]
 
   @ucas_unexpected = [
     "construction and the built environment",
