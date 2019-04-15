@@ -68,9 +68,6 @@ class SubjectMapper
                         "languages (asian)",
                         "languages (european)"]
 
-  @ucas_other = ["leisure and tourism",
-                 "special educational needs"]
-
   @ucas_mathematics = ["mathematics",
                        "mathematics (abridged)"]
 
