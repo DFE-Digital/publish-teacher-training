@@ -10,24 +10,6 @@ class SubjectMapper
 
   @ucas_mfl_welsh = %w[welsh]
 
-  @ucas_direct_translation_secondary = ["art / art & design",
-                                        "business education",
-                                        "citizenship",
-                                        "communication and media studies",
-                                        "computer studies",
-                                        "dance and performance",
-                                        "drama and theatre studies",
-                                        "economics",
-                                        "geography",
-                                        "health and social care",
-                                        "history",
-                                        "music",
-                                        "outdoor activities",
-                                        "physical education",
-                                        "psychology",
-                                        "religious education",
-                                        "social science"]
-
   @ucas_primary = ["early years",
                    "upper primary",
                    "primary",
@@ -109,6 +91,23 @@ class SubjectMapper
        %w[spanish] => "Spanish",
        %w[biology] => "Biology",
        %w[chemistry] => "Chemistry",
+       ["art / art & design"] => "Art and design",
+       ["business education"] => "Business studies",
+       %w[citizenship] => "Citizenship",
+       ["communication and media studies"] => "Communication and media studies",
+       ["computer studies"] => "Computing",
+       ["dance and performance"] => "Dance",
+       ["drama and theatre studies"] => "Drama",
+       %w[economics] => "Economics",
+       %w[geography] => "Geography",
+       ["health and social care"] => "Health and social care",
+       %w[history] => "History",
+       %w[music] => "Music",
+       ["outdoor activities"] => "Outdoor activities",
+       ["physical education"] => "Physical education",
+       %w[psychology] => "Psychology",
+       ["religious education"] => "Religious education",
+       ["social science"] => "Social sciences",
     },
   }.freeze
 
@@ -169,10 +168,6 @@ class SubjectMapper
       secondary_subjects.push("Modern languages (other)")
     end
 
-      # Does the subject list mention a subject we are happy to translate directly?
-    (ucas_subjects & @ucas_direct_translation_secondary).each do |ucas_subject|
-      secondary_subjects.push(map_to_subject_name(ucas_subject))
-    end
       # Does the subject list mention a subject we are happy to translate if the course title contains a mention?
     (ucas_subjects & @ucas_needs_mention_in_title.keys).each do |ucas_subject|
       if course_title.match?(@ucas_needs_mention_in_title[ucas_subject])
