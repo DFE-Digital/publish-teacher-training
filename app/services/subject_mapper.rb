@@ -106,6 +106,46 @@ class SubjectMapper
     "modern studies" => /modern studies/,
   }
 
+  MAPPINGS = {
+    primary: {
+      ["english", "english language", "english literature"] => "Primary with English",
+      %w[geography history] => "Primary with geography and history",
+      ["mathematics", "mathematics (abridged)"] => "Primary with mathematics",
+      ["languages",
+       "languages (african)",
+       "languages (asian)",
+       "languages (european)",
+       "english as a second or other language",
+       "french",
+       "german",
+       "italian",
+       "japanese",
+       "russian",
+       "spanish",
+       "arabic",
+       "bengali",
+       "gaelic",
+       "greek",
+       "hebrew",
+       "urdu",
+       "mandarin",
+       "punjabi"] => "Primary with modern languages",
+      ["science", "physics", "physics (abridged)", "biology", "chemistry"] => "Primary with science",
+    },
+    secondary: {
+      ["mathematics", "mathematics (abridged)"] => "Mathematics",
+      ["physics", "physics (abridged)"] => "Physics",
+      ["design and technology",
+       "design and technology (food)",
+       "design and technology (product design)",
+       "design and technology (systems and control)",
+       "design and technology (textiles)",
+       "engineering"] => "Design and technology",
+       %w[classics latin] => "Classics",
+       %w[chinese mandarin] => "Mandarin",
+    },
+  }.freeze
+
   def self.is_further_education(subjects)
     subjects = subjects.map { |subject| (subject.strip! || subject).downcase }
     (subjects & @ucas_further_education).any?
@@ -133,13 +173,9 @@ class SubjectMapper
   end
 
   def self.map_to_secondary_subjects(course_title, ucas_subjects)
-    secondary_subject_mappings = [
-      GroupedSubjectMapping.new(@ucas_mathematics, "Mathematics"),
-      GroupedSubjectMapping.new(@ucas_physics, "Physics"),
-      GroupedSubjectMapping.new(@ucas_design_and_tech, "Design and technology"),
-      GroupedSubjectMapping.new(@ucas_classics, "Classics"),
-      GroupedSubjectMapping.new(@ucas_mfl_mandarin, "Mandarin"),
-    ]
+    secondary_subject_mappings = MAPPINGS[:secondary].map do |ucas_input_subjects, dfe_subject|
+      GroupedSubjectMapping.new(ucas_input_subjects, dfe_subject)
+    end
 
     secondary_subjects = []
 
@@ -204,15 +240,9 @@ class SubjectMapper
 
 
   def self.map_to_primary_subjects(ucas_subjects)
-    primary_subject_mappings = [
-      GroupedSubjectMapping.new(@ucas_english, "Primary with English"),
-      GroupedSubjectMapping.new(%w[geography history], "Primary with geography and history"),
-      GroupedSubjectMapping.new(@ucas_mathematics, "Primary with mathematics"),
-      GroupedSubjectMapping.new(@ucas_language_cat + @ucas_mfl_main + @ucas_mfl_other,
-        "Primary with modern languages"),
-      GroupedSubjectMapping.new(%w[science] + @ucas_physics + @ucas_science_fields,
-        "Primary with science"),
-    ]
+    primary_subject_mappings = MAPPINGS[:primary].map do |ucas_input_subjects, dfe_subject|
+      GroupedSubjectMapping.new(ucas_input_subjects, dfe_subject)
+    end
 
     primary_subjects = %w[Primary]
 
