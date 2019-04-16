@@ -16,7 +16,7 @@ describe API::V2::SerializableCourse do
   subject { parsed_json['data'] }
 
   it { should have_type('courses') }
-  it { should have_attributes(:start_date, :content_status, :ucas_status) }
+  it { should have_attributes(:start_date, :content_status, :ucas_status, :funding) }
 
   context 'with a provider' do
     let(:provider) { course.provider }
@@ -59,5 +59,25 @@ describe API::V2::SerializableCourse do
     end
 
     it { should have_relationship(:accrediting_provider) }
+  end
+
+  fcontext "funding" do
+    context "fee-paying" do
+      let(:course) { create(:course) }
+
+      it { expect(subject["attributes"]).to include("funding" => "fee") }
+    end
+
+    context "apprenticeship" do
+      let(:course) { create(:course, :with_apprenticeship) }
+
+      it { expect(subject["attributes"]).to include("funding" => "apprenticeship") }
+    end
+
+    context "salaried" do
+      let(:course) { create(:course, :with_salary) }
+
+      it { expect(subject["attributes"]).to include("funding" => "salary") }
+    end
   end
 end

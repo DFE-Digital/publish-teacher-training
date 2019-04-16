@@ -12,7 +12,7 @@ describe 'Courses API v2', type: :request do
   let(:course_subject) { create(:subject, subject_name: 'English', subject_code: 'E') }
 
   let(:findable_open_course) {
-    create(:course, :resulting_in_pgce_with_qts,
+    create(:course, :resulting_in_pgce_with_qts, :with_apprenticeship,
            start_date: Time.now.utc,
            study_mode: :full_time,
            subject_count: 0,
@@ -99,7 +99,8 @@ describe 'Courses API v2', type: :request do
               "qualifications" => %w[qts pgce],
               "description" => "PGCE with QTS full time",
               "content_status" => "empty",
-              "ucas_status" => "running"
+              "ucas_status" => "running",
+              "funding" => "teaching_apprenticeship"
             },
             "relationships" => {
               "accrediting_provider" => { "meta" => { "included" => false } },
@@ -272,7 +273,8 @@ describe 'Courses API v2', type: :request do
               "qualifications" => %w[qts pgce],
               "description" => "PGCE with QTS full time",
               "content_status" => "empty",
-              "ucas_status" => "running"
+              "ucas_status" => "running",
+              "funding" => "teaching_apprenticeship"
             },
             "relationships" => {
               "accrediting_provider" => { "meta" => { "included" => false } },
