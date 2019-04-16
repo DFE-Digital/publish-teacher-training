@@ -207,7 +207,6 @@ describe SubjectMapper do
         test_case: "secondary ESOL"
       },
     ]
-        # public void MapToSearchAndCompareCourse(string courseTitle","string commaSeparatedUcasSubjects","string commaSeparatedExpectedSubjects)
 
     specs.each do |spec|
       describe "Test case '#{spec[:test_case]}''" do
