@@ -61,7 +61,7 @@ describe API::V2::SerializableCourse do
     it { should have_relationship(:accrediting_provider) }
   end
 
-  fcontext "funding" do
+  context "funding" do
     context "fee-paying" do
       let(:course) { create(:course) }
 
