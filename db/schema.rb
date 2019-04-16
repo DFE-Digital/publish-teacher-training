@@ -122,6 +122,9 @@ ActiveRecord::Schema.define(version: 2019_04_16_093524) do
     t.index ["subject_id"], name: "IX_course_subject_subject_id"
   end
 
+  create_table "data_migrations", primary_key: "version", id: :string, force: :cascade do |t|
+  end
+
   create_table "nctl_organisation", id: :serial, force: :cascade do |t|
     t.text "name"
     t.text "nctl_id", null: false
