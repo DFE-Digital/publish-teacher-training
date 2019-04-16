@@ -23,4 +23,8 @@ RSpec.describe User, type: :model do
     it { should have_and_belong_to_many(:organisations) }
     it { should have_many(:providers).through(:organisations) }
   end
+
+  describe 'auditing' do
+    it { should be_audited }
+  end
 end
