@@ -215,5 +215,20 @@ describe SubjectMapper do
         it { should match_array spec[:expected_subjects] }
       end
     end
+
+    describe "using subject-mapper-test-data.csv" do
+      data = CSV.read("#{Dir.pwd}/spec/services/subject-mapper-test-data.csv", encoding: "UTF-8", headers: true, header_converters: :symbol, converters: :all)
+
+      hashed_data = data.map(&:to_hash)
+
+      hashed_data.each_with_index do |spec, index|
+        describe "Test case '#{index}''" do
+          delimiter = "[d]" #This delimiter is used as the actual subject name may contain a comma
+          subject { SubjectMapper.get_subject_list(spec[:course_title], spec[:ucas_subjects].split(delimiter)) }
+
+          it { should match_array spec[:expected_subjects].split(delimiter) }
+        end
+      end
+    end
   end
 end
