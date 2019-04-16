@@ -97,10 +97,10 @@ describe 'Courses API v2', type: :request do
               "start_date" => provider.courses[0].start_date.iso8601,
               "study_mode" => "full_time",
               "qualifications" => %w[qts pgce],
-              "description" => "PGCE with QTS full time",
+              "description" => "PGCE with QTS full time teaching apprenticeship",
               "content_status" => "empty",
               "ucas_status" => "running",
-              "funding" => "teaching_apprenticeship"
+              "funding" => "apprenticeship",
             },
             "relationships" => {
               "accrediting_provider" => { "meta" => { "included" => false } },
@@ -271,10 +271,10 @@ describe 'Courses API v2', type: :request do
               "start_date" => provider.courses[0].start_date.iso8601,
               "study_mode" => "full_time",
               "qualifications" => %w[qts pgce],
-              "description" => "PGCE with QTS full time",
+              "description" => "PGCE with QTS full time teaching apprenticeship",
               "content_status" => "empty",
               "ucas_status" => "running",
-              "funding" => "teaching_apprenticeship"
+              "funding" => "apprenticeship",
             },
             "relationships" => {
               "accrediting_provider" => { "meta" => { "included" => false } },
