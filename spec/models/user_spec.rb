@@ -12,7 +12,7 @@
 #  welcome_email_date_utc :datetime
 #  invite_date_utc        :datetime
 #  accept_terms_date_utc  :datetime
-#  aasm_state             :string
+#  state                  :string
 #
 
 require 'rails_helper'

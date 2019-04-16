@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_04_09_230916) do
+ActiveRecord::Schema.define(version: 2019_04_16_093524) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_buffercache"
@@ -246,6 +246,7 @@ ActiveRecord::Schema.define(version: 2019_04_09_230916) do
     t.datetime "welcome_email_date_utc"
     t.datetime "invite_date_utc"
     t.datetime "accept_terms_date_utc"
+    t.string "state"
     t.index ["email"], name: "IX_user_email", unique: true
   end
 
