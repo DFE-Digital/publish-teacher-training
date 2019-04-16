@@ -231,7 +231,7 @@ describe 'Courses API v2', type: :request do
         expect(course.site_statuses.first.status).to eq 'running'
         expect(course.site_statuses.first.publish).to eq 'published'
 
-        # todo: expect(course.enrichments.first.status).to eq 'published'
+        expect(course.enrichments.first.status).to eq 'published'
         # todo 'has published to search'
         expect(response).to have_http_status(:success)
       end
