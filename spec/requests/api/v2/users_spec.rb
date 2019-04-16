@@ -72,7 +72,7 @@ describe '/api/v2/users', type: :request do
       Timecop.return
     end
 
-    context 'with accept_terms_date_utc' do
+    context 'when authenticated and authorised' do
       let(:jsonapi_renderer) { JSONAPI::Serializable::Renderer.new }
       let(:params) do
         {
@@ -146,6 +146,21 @@ describe '/api/v2/users', type: :request do
             :last_name,
             :accept_terms_date_utc
           )
+        end
+
+        context 'with validation errors' do
+          let(:json_data) { JSON.parse(response.body)['errors'] }
+
+          context 'with missing attributes' do
+            let(:email) { '' }
+
+            it { should have_http_status(:unprocessable_entity) }
+
+            it 'checks the email is present' do
+              expect(response.body).to include('Invalid email')
+              expect(response.body).to include("Email can't be blank")
+            end
+          end
         end
       end
     end

@@ -10,8 +10,11 @@ module API
       end
 
       def update
-        @user.update(user_params)
-        render jsonapi: @user
+        if @user.update(user_params)
+          render jsonapi: @user
+        else
+          render jsonapi_errors: @user.errors, status: 422
+        end
       end
 
     private

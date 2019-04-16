@@ -24,6 +24,8 @@ RSpec.describe User, type: :model do
     it { should have_many(:providers).through(:organisations) }
   end
 
+  it { is_expected.to validate_presence_of(:email) }
+
   describe 'auditing' do
     it { should be_audited }
   end
