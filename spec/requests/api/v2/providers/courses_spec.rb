@@ -181,6 +181,12 @@ describe 'Courses API v2', type: :request do
           body: api_response
         )
     end
+    let(:course) {
+      create(:course,
+             provider: provider,
+             with_site_statuses: [:new],
+             with_enrichments: [:initial_draft]
+      )}
 
     subject do
       post publish_path, headers: { 'HTTP_AUTHORIZATION' => credentials }
@@ -217,8 +223,18 @@ describe 'Courses API v2', type: :request do
       end
     end
 
-    context 'when the api responds with a success' do
-      it { should have_http_status(:success) }
+    context 'unpublished course with draft enrichment' do
+      it 'publishes a course' do
+        # run the POST
+        response = subject
+
+        expect(course.site_statuses.first.status).to eq 'running'
+        expect(course.site_statuses.first.publish).to eq 'published'
+
+        # todo: expect(course.enrichments.first.status).to eq 'published'
+        # todo 'has published to search'
+        expect(response).to have_http_status(:success)
+      end
     end
 
     context 'when the api responds with result: false' do

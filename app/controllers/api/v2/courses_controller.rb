@@ -26,7 +26,10 @@ module API
       end
 
       def publish
-        # todo: set running
+        if @provider.opted_in
+          update_new_to_running
+          update_published_if_running
+        end
         # todo: set enrichment published
 
         response = ManageCoursesAPI::Request.sync_course_with_search_and_compare(
@@ -36,6 +39,14 @@ module API
         )
 
         head response ? :ok : :internal_server_error
+      end
+
+      def update_new_to_running
+        @course.site_statuses.where(status: 'new_status').update_all(status: 'running')
+      end
+
+      def update_published_if_running
+        @course.site_statuses.where(status: 'running', publish: 'unpublished').update_all(publish: 'published')
       end
 
     private
