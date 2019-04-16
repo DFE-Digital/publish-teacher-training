@@ -232,7 +232,7 @@ describe 'Courses API v2', type: :request do
         expect(course.site_statuses.first.publish).to eq 'published'
 
         expect(course.enrichments.first.status).to eq 'published'
-        # todo 'has published to search'
+        assert_requested :post, %r{#{Settings.manage_api.base_url}/api/Publish/internal/course/}
         expect(response).to have_http_status(:success)
       end
     end
