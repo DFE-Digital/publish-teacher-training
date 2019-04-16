@@ -38,33 +38,6 @@ describe SubjectMapper do
     end
   end
 
-  describe "#map_to_subject_name" do
-    ucas_rename = {
-      "chinese" => "Mandarin",
-      "art / art & design" => "Art and design",
-      "business education" => "Business studies",
-      "computer studies" => "Computing",
-      "science" => "Balanced science",
-      "dance and performance" => "Dance",
-      "drama and theatre studies" => "Drama",
-      "social science" => "Social sciences",
-    }
-
-    ucas_rename.each do |key, expected_value|
-      describe "ucasRename '#{key}''" do
-        subject { SubjectMapper.map_to_subject_name(key) }
-
-        it { should eq expected_value }
-      end
-    end
-
-    describe "bad english" do
-      subject { SubjectMapper.map_to_subject_name("bad english") }
-
-      it { should eq "Bad English" }
-    end
-  end
-
   # Port of https://github.com/DFE-Digital/manage-courses-api/blob/master/tests/ManageCourses.Tests/UnitTesting/SubjectMapperTests.cs
   describe "#get_subject_list" do
     specs = [

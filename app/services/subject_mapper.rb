@@ -24,21 +24,11 @@ class SubjectMapper
                    "english language",
                    "english literature"]
 
-  @ucas_rename = {
-    "chinese" => "mandarin",
-    "art / art & design" => "art and design",
-    "business education" => "business studies",
-    "computer studies" => "computing",
-    "science" => "balanced science",
-    "dance and performance" => "dance",
-    "drama and theatre studies" => "drama",
-    "social science" => "social sciences"
-  }
+  @ucas_rename = { "science" => "balanced science" }
 
   @ucas_needs_mention_in_title = {
     "humanities" => /humanities/,
     "science" => /(?<!social |computer )science/,
-    "modern studies" => /modern studies/,
   }
 
   MAPPINGS = {
@@ -114,9 +104,7 @@ class SubjectMapper
   end
 
   def self.map_to_subject_name(ucas_subject)
-    res = (@ucas_rename[ucas_subject] || ucas_subject).capitalize
-
-    (res.sub "english", "English" || res)
+    @ucas_rename.fetch(ucas_subject, ucas_subject).capitalize
   end
 
   class GroupedSubjectMapping
