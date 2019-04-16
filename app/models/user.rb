@@ -12,9 +12,12 @@
 #  welcome_email_date_utc :datetime
 #  invite_date_utc        :datetime
 #  accept_terms_date_utc  :datetime
+#  aasm_state             :string
 #
 
 class User < ApplicationRecord
+  include AASM
+
   has_and_belongs_to_many :organisations
   has_many :providers, through: :organisations
 
