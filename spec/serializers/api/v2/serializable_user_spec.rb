@@ -11,4 +11,5 @@ describe API::V2::SerializableUser do
   subject { resource.as_jsonapi.to_json }
 
   it { should be_json.with_content(type: 'users') }
+  it { should be_json.with_content(attributes: { state: user.state }) }
 end

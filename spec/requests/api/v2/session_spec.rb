@@ -72,6 +72,7 @@ describe '/api/v2/sessions', type: :request do
           expect(data_attributes['email']).to eq(user.email)
           expect(data_attributes['first_name']).to eq(user.first_name)
           expect(data_attributes['last_name']).to eq(user.last_name)
+          expect(data_attributes['state']).to eq(user.state)
         end
       end
 
