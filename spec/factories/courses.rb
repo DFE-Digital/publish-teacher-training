@@ -95,23 +95,23 @@ FactoryBot.define do
     end
 
     trait :with_higher_education do
-      program_type { 'HE' }
+      program_type { :higher_education_programme }
     end
 
     trait :with_school_direct do
-      program_type { 'SD' }
+      program_type { :school_direct_training_programme }
     end
 
     trait :with_scitt do
-      program_type { 'SC' }
+      program_type { :scitt_programme }
     end
 
     trait :with_apprenticeship do
-      program_type { 'TA' }
+      program_type { :pg_teaching_apprenticeship }
     end
 
     trait :with_salary do
-      program_type { 'SS' }
+      program_type { :school_direct_salaried_training_programme }
     end
   end
 end
