@@ -24,13 +24,6 @@ class SubjectMapper
                    "english language",
                    "english literature"]
 
-  @ucas_rename = { "science" => "balanced science" }
-
-  @ucas_needs_mention_in_title = {
-    "humanities" => /humanities/,
-    "science" => /(?<!social |computer )science/,
-  }
-
   MAPPINGS = {
     primary: {
       ["english", "english language", "english literature"] => "Primary with English",
@@ -144,10 +137,17 @@ class SubjectMapper
       secondary_subjects.push("Modern languages (other)")
     end
 
+    # TODO: remove this bonkers logic once course mapping is done by one app!
+    # There is absolutely no user need for it!
+    #
     # Does the subject list mention a subject we are happy to translate if the course title contains a mention?
-    (ucas_subjects & @ucas_needs_mention_in_title.keys).each do |ucas_subject|
-      if course_title.match?(@ucas_needs_mention_in_title[ucas_subject])
-        renamed_subject = @ucas_rename.fetch(ucas_subject, ucas_subject).capitalize
+    ucas_needs_mention_in_title = {
+      "humanities" => /humanities/,
+      "science" => /(?<!social |computer )science/,
+    }
+    (ucas_subjects & %w[humanities science]).each do |ucas_subject|
+      if course_title.match?(ucas_needs_mention_in_title[ucas_subject])
+        renamed_subject = (ucas_subject == "science" ? "balanced science" : ucas_subject).capitalize
         secondary_subjects << renamed_subject
       end
     end
