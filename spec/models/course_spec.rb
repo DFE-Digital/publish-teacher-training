@@ -436,14 +436,36 @@ RSpec.describe Course, type: :model do
   end
 
   describe 'publish_sites' do
-    context 'course with new site'do
-      let(:subject) { create(:course, with_site_statuses: [:new]) }
-      it 'sets sites to running and published' do
-        subject.publish_sites!
+    context 'course with a single site' do
+      context 'site status is new site'do
+        let(:subject) { create(:course, with_site_statuses: [:new]) }
+        it 'sets sites to running and published' do
+          subject.publish_sites
 
-        expect(subject.site_statuses.first.status).to eq 'running'
-        expect(subject.site_statuses.first.publish).to eq 'published'
+          expect(subject.site_statuses.first.status).to eq 'running'
+          expect(subject.site_statuses.first.publish).to eq 'published'
+        end
+      end
+
+      it 'correctly applies all state transitions' do
+        [
+          { before: { publish: 'published', status: 'new_status' }, after: { publish: 'published', status: 'running' } },
+          { before: { publish: 'published', status: 'running' }, after: { publish: 'published', status: 'running' } },
+          { before: { publish: 'published', status: 'suspended' }, after: { publish: 'published', status: 'suspended' } },
+          { before: { publish: 'published', status: 'discontinued' }, after: { publish: 'published', status: 'discontinued' } },
+          { before: { publish: 'unpublished', status: 'new_status' }, after: { publish: 'published', status: 'running' } },
+          { before: { publish: 'unpublished', status: 'running' }, after: { publish: 'published', status: 'running' } },
+          { before: { publish: 'unpublished', status: 'suspended' }, after: { publish: 'unpublished', status: 'suspended' } },
+          { before: { publish: 'unpublished', status: 'discontinued' }, after: { publish: 'unpublished', status: 'discontinued' } },
+        ].each do |test_case|
+          site = create(:site_status, status: test_case[:before][:status], publish: test_case[:before][:publish])
+          subject = create(:course, site_statuses: [site])
+          subject.publish_sites
+          expect(subject.site_statuses.first.status).to eq test_case[:after][:status]
+          expect(subject.site_statuses.first.publish).to eq test_case[:after][:publish]
+        end
       end
     end
+    # xcontext 'course with multiple sites in different states'
   end
 end
