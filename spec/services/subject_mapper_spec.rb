@@ -159,11 +159,14 @@ describe SubjectMapper do
       hashed_data = data.map(&:to_hash)
 
       hashed_data.each_with_index do |spec, index|
-        describe "Test case '#{index}''" do
-          delimiter = "[d]" #This delimiter is used as the actual subject name may contain a comma
-          subject { SubjectMapper.get_subject_list(spec[:course_title], spec[:ucas_subjects].split(delimiter)) }
+        delimiter = "[d]" #This delimiter is used as the actual subject name may contain a comma
+        ucas_subjects_to_map = spec[:ucas_subjects].split(delimiter)
+        expected_dfe_subjects = spec[:expected_subjects].split(delimiter)
+        title = spec[:course_title]
 
-          it { should match_array spec[:expected_subjects].split(delimiter) }
+        describe "Test case row '#{index}': subjects #{ucas_subjects_to_map.join(', ')}, title: #{title}" do
+          subject { SubjectMapper.get_subject_list(title, ucas_subjects_to_map) }
+          it { should match_array expected_dfe_subjects }
         end
       end
     end
