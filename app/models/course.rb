@@ -167,6 +167,10 @@ class Course < ApplicationRecord
     update(changed_at: Time.now.utc)
   end
 
+  def publish_enrichment
+    enrichments.where(status: 'draft').update_all(status: 'published')
+  end
+
 private
 
   def update_new_to_running

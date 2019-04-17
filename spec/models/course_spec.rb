@@ -435,6 +435,38 @@ RSpec.describe Course, type: :model do
     end
   end
 
+  describe "#publish_enrichments" do
+    context 'on a course with only a draft enrichment' do
+      let(:course) do
+        create(:course, with_enrichments: [
+          [:initial_draft, created_at: 1.day.ago],
+      ])
+      end
+
+      it 'should publish the draft' do
+        course.publish_enrichment
+        expect(course.enrichments.first.status).to eq 'published'
+      end
+    end
+
+    context 'on a course draft and published enrichments' do
+      let(:course) do
+        create(:course, with_enrichments: [
+            [:published, created_at: 5.days.ago],
+            [:published, created_at: 3.days.ago],
+            [:subsequent_draft, created_at: 1.day.ago],
+        ])
+      end
+
+      it 'should publish the draft' do
+        course.publish_enrichment
+        course.enrichments.each do |enrichment|
+          expect(enrichment.status).to eq 'published'
+        end
+      end
+    end
+  end
+
   describe 'publish_sites' do
     context 'a pre-existing course' do
       let(:subject) { create(:course, changed_at: 10.minutes.ago) }

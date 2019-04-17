@@ -29,8 +29,7 @@ module API
         if @provider.opted_in
           @course.publish_sites
         end
-        # todo @course.publish_draft_enrichment
-        publish_enrichment
+        @course.publish_enrichment
 
         response = ManageCoursesAPI::Request.sync_course_with_search_and_compare(
           @current_user.email,
@@ -39,10 +38,6 @@ module API
         )
 
         head response ? :ok : :internal_server_error
-      end
-
-      def publish_enrichment
-        @course.enrichments.where(status: 'draft').update_all(status: 'published')
       end
 
     private
