@@ -134,6 +134,31 @@ class SubjectMapper
     end
   end
 
+  # TODO: remove this bonkers logic once course mapping is done by one app!
+  # The user need for this is unclear
+  class SecondaryEnglishMapping
+    def initialize(course_title)
+      @course_title = course_title
+    end
+
+    def applicable_to?(ucas_subjects)
+      (ucas_subjects & ucas_english).any? &&
+        @course_title.index("english") != nil
+    end
+
+    def to_s
+      "English"
+    end
+
+  private
+
+    def ucas_english
+      ["english",
+       "english language",
+       "english literature"]
+    end
+  end
+
   def self.map_to_secondary_subjects(course_title, ucas_subjects)
     secondary_subject_mappings = MAPPINGS[:secondary].map do |ucas_input_subjects, dfe_subject|
       GroupedSubjectMapping.new(ucas_input_subjects, dfe_subject)
@@ -141,6 +166,9 @@ class SubjectMapper
 
     #  Does the subject list mention languages but hasn't already been covered?
     secondary_subject_mappings << MFLOtherMapping.new
+
+    # Does the subject list mention english, and it's mentioned in the title (or it's the only subject we know for this course)?
+    secondary_subject_mappings << SecondaryEnglishMapping.new(course_title)
 
     secondary_subjects = []
 
@@ -160,20 +188,6 @@ class SubjectMapper
       if course_title.match?(ucas_needs_mention_in_title[ucas_subject])
         renamed_subject = (ucas_subject == "science" ? "balanced science" : ucas_subject).capitalize
         secondary_subjects << renamed_subject
-      end
-    end
-
-    # TODO: remove this bonkers logic once course mapping is done by one app!
-    # The user need for this is unclear
-    #
-    # Does the subject list mention english, and it's mentioned in the title (or it's the only subject we know for this course)?
-    ucas_english = ["english",
-                    "english language",
-                    "english literature"]
-
-    if (ucas_subjects & ucas_english).any?
-      if secondary_subjects.none? || course_title.index("english") != nil
-        secondary_subjects.push("English")
       end
     end
 
