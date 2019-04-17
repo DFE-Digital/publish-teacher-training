@@ -1,4 +1,5 @@
 # This is a port of https://github.com/DFE-Digital/manage-courses-api/blob/master/src/ManageCourses.Api/Mapping/SubjectMapper.cs
+
 class SubjectMapper
   @ucas_further_education = ["further education",
                              "higher education",
@@ -161,48 +162,32 @@ class SubjectMapper
                      "russian",
                      "spanish"]
 
-      #  Does the subject list mention languages but hasn't already been covered?
+    #  Does the subject list mention languages but hasn't already been covered?
     if (ucas_subjects & ucas_language_cat).any? && (ucas_subjects & ucas_mfl_mandarin).none? && (ucas_subjects & ucas_mfl_main).none?
       secondary_subjects.push("Modern languages (other)")
     end
 
-      # Does the subject list mention a subject we are happy to translate if the course title contains a mention?
+    # Does the subject list mention a subject we are happy to translate if the course title contains a mention?
     (ucas_subjects & @ucas_needs_mention_in_title.keys).each do |ucas_subject|
       if course_title.match?(@ucas_needs_mention_in_title[ucas_subject])
         secondary_subjects.push(map_to_subject_name(ucas_subject))
       end
     end
 
-      # Does the subject list mention english, and it's mentioned in the title (or it's the only subject we know for this course)?
+    # Does the subject list mention english, and it's mentioned in the title (or it's the only subject we know for this course)?
     if (ucas_subjects & @ucas_english).any?
       if secondary_subjects.none? || course_title.index("english") != nil
         secondary_subjects.push("English")
       end
     end
 
-      # if nothing else yet, try welsh
+    # if nothing else yet, try welsh
     if secondary_subjects.none? && (ucas_subjects & %w[welsh]).any?
       secondary_subjects.push("Welsh")
     end
 
     secondary_subjects
   end
-
-
-        # /// <summary>
-        # /// This maps a list of of UCAS subjects to our interpretation of subjects.
-        # /// UCAS subjects are a pretty loose tagging system where individual tags don't always
-        # /// represent the subjects you will be able to teach but also categories (such as "secundary", "foreign languages" etc)
-        # /// there is also duplication ("chinese" vs "mandarin") and ambiguity
-        # /// (does "science" = Balanced science, a category, or Primary with science?)
-        # ///
-        # /// This takes this list of tags and the course title and applies heuristics to determine
-        # /// which subjects you will be allowed to teach when you graduate, making the subjects more suitable for searching.
-        # /// </summary>
-        # /// <param name="course_title">The name of the course</param>
-        # /// <param name="ucas_subjects">The subject tags from UCAS</param>
-        # /// <returns>An enumerable of all the subjects the course should be findable by.</returns>
-
 
   def self.map_to_primary_subjects(ucas_subjects)
     primary_subject_mappings = MAPPINGS[:primary].map do |ucas_input_subjects, dfe_subject|
@@ -214,23 +199,41 @@ class SubjectMapper
     }.compact
   end
 
+  # <summary>
+  # This maps a list of of UCAS subjects to our interpretation of subjects.
+  # UCAS subjects are a pretty loose tagging system where individual tags don't always
+  # represent the subjects you will be able to teach but also categories (such as "secundary", "foreign languages" etc)
+  # there is also duplication ("chinese" vs "mandarin") and ambiguity
+  # (does "science" = Balanced science, a category, or Primary with science?)
+  #
+  # This takes this list of tags and the course title and applies heuristics to determine
+  # which subjects you will be allowed to teach when you graduate, making the subjects more suitable for searching.
+  # </summary>
+  #
+  # <param name="course_title">The name of the course</param>
+  # <param name="ucas_subjects">The subject tags from UCAS</param>
+  # <returns>An enumerable of all the subjects the course should be findable by.</returns>
   def self.get_subject_list(course_title, ucas_subjects)
     ucas_subjects = ucas_subjects.map { |subject| (subject.strip! || subject).downcase }
     course_title = (course_title.strip! || course_title).downcase
+
     # if unexpected throw.
     if (ucas_subjects & @ucas_unexpected).any?
       raise "found unsupported subject name(s): #{(ucas_subjects & @ucas_unexpected) * ', '}"
+
     # If the subject indicates that it's primary, do not associate it with any
     # Secondary subjects (that happens a lot in UCAS data). Instead, mark it as primary
     # and additionally test for specialisations (e.g. Pimary with mathematics)
     # note a course can cover multiple specialisations, e.g. Primary with geography and Primary with history
     elsif (ucas_subjects & @ucas_primary).any?
       return map_to_primary_subjects(ucas_subjects)
+
     # If the subject indicates that it's in the Further Education space,
     # just assign Further education to it and do not associate it with any
     # secondary subjects
     elsif (ucas_subjects & @ucas_further_education).any?
       return ["Further education"]
+
     # The most common case is when the course is teaching secondary subjects.
     else
       return map_to_secondary_subjects(course_title, ucas_subjects)

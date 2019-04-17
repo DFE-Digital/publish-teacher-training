@@ -1,5 +1,5 @@
 require "spec_helper"
-require 'csv'
+require "csv"
 
 describe SubjectMapper do
   further_education_subjects = [
