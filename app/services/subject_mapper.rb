@@ -20,10 +20,6 @@ class SubjectMapper
                       "law"]
   }.freeze
 
-  @ucas_english = ["english",
-                   "english language",
-                   "english literature"]
-
   MAPPINGS = {
     primary: {
       ["english", "english language", "english literature"] => "Primary with English",
@@ -152,8 +148,15 @@ class SubjectMapper
       end
     end
 
+    # TODO: remove this bonkers logic once course mapping is done by one app!
+    # The user need for this is unclear
+    #
     # Does the subject list mention english, and it's mentioned in the title (or it's the only subject we know for this course)?
-    if (ucas_subjects & @ucas_english).any?
+    ucas_english = ["english",
+                    "english language",
+                    "english literature"]
+
+    if (ucas_subjects & ucas_english).any?
       if secondary_subjects.none? || course_title.index("english") != nil
         secondary_subjects.push("English")
       end
