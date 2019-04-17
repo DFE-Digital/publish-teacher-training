@@ -102,36 +102,51 @@ class SubjectMapper
     end
   end
 
+  class MFLOtherMapping
+    def applicable_to?(ucas_subjects)
+      (ucas_subjects & language_categories).any? &&
+        (ucas_subjects & mandarin).none? &&
+        (ucas_subjects & mfl_main).none?
+    end
+
+    def to_s
+      "Modern languages (other)"
+    end
+
+  private
+
+    def language_categories
+      ["languages", "languages (african)", "languages (asian)", "languages (european)"]
+    end
+
+    def mandarin
+      %w[chinese mandarin]
+    end
+
+    def mfl_main
+      ["english as a second or other language",
+       "french",
+       "german",
+       "italian",
+       "japanese",
+       "russian",
+       "spanish"]
+    end
+  end
+
   def self.map_to_secondary_subjects(course_title, ucas_subjects)
     secondary_subject_mappings = MAPPINGS[:secondary].map do |ucas_input_subjects, dfe_subject|
       GroupedSubjectMapping.new(ucas_input_subjects, dfe_subject)
     end
+
+    #  Does the subject list mention languages but hasn't already been covered?
+    secondary_subject_mappings << MFLOtherMapping.new
 
     secondary_subjects = []
 
     secondary_subjects += secondary_subject_mappings.map { |mapping|
       mapping.to_s if mapping.applicable_to?(ucas_subjects)
     }.compact
-
-    ucas_language_cat = ["languages",
-                         "languages (african)",
-                         "languages (asian)",
-                         "languages (european)"]
-
-    ucas_mfl_mandarin = %w[chinese mandarin]
-
-    ucas_mfl_main = ["english as a second or other language",
-                     "french",
-                     "german",
-                     "italian",
-                     "japanese",
-                     "russian",
-                     "spanish"]
-
-    #  Does the subject list mention languages but hasn't already been covered?
-    if (ucas_subjects & ucas_language_cat).any? && (ucas_subjects & ucas_mfl_mandarin).none? && (ucas_subjects & ucas_mfl_main).none?
-      secondary_subjects.push("Modern languages (other)")
-    end
 
     # TODO: remove this bonkers logic once course mapping is done by one app!
     # There is absolutely no user need for it!
