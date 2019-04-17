@@ -103,10 +103,6 @@ class SubjectMapper
     (subjects & SUBJECT_LEVEL[:ucas_further_education]).any?
   end
 
-  def self.map_to_subject_name(ucas_subject)
-    @ucas_rename.fetch(ucas_subject, ucas_subject).capitalize
-  end
-
   class GroupedSubjectMapping
     def initialize(included_ucas_subjects, resulting_dfe_subject)
       @included_ucas_subjects = included_ucas_subjects
@@ -156,7 +152,8 @@ class SubjectMapper
     # Does the subject list mention a subject we are happy to translate if the course title contains a mention?
     (ucas_subjects & @ucas_needs_mention_in_title.keys).each do |ucas_subject|
       if course_title.match?(@ucas_needs_mention_in_title[ucas_subject])
-        secondary_subjects.push(map_to_subject_name(ucas_subject))
+        renamed_subject = @ucas_rename.fetch(ucas_subject, ucas_subject).capitalize
+        secondary_subjects << renamed_subject
       end
     end
 
