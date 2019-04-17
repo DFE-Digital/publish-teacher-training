@@ -110,8 +110,8 @@ describe '/api/v2/users', type: :request do
 
       it 'updates accept_terms_date_utc on the user' do
         expect { subject }.to(change { user.reload.accept_terms_date_utc }
-          .from(user.accept_terms_date_utc)
-          .to(be_within(1.second).of(accept_terms_date_utc)))
+          .from(user.accept_terms_date_utc.change(usec: 0))
+          .to(accept_terms_date_utc.change(usec: 0)))
       end
 
       it 'updates first_name on the user' do
