@@ -98,11 +98,6 @@ class SubjectMapper
     },
   }.freeze
 
-  def self.is_further_education(subjects)
-    subjects = subjects.map { |subject| (subject.strip! || subject).downcase }
-    (subjects & SUBJECT_LEVEL[:ucas_further_education]).any?
-  end
-
   class GroupedSubjectMapping
     def initialize(included_ucas_subjects, resulting_dfe_subject)
       @included_ucas_subjects = included_ucas_subjects

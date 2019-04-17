@@ -2,42 +2,6 @@ require "spec_helper"
 require "csv"
 
 describe SubjectMapper do
-  further_education_subjects = [
-    "further education",
-    "higher education",
-    "post-compulsory",
-  ]
-
-  ucas_mfl_main = [
-    "english as a second or other language",
-    "french",
-    "german",
-    "italian",
-    "japanese",
-    "russian",
-    "spanish"
-  ]
-
-  describe "#is_further_education" do
-    all_further_education_subjects = further_education_subjects + further_education_subjects.map(&:upcase) + further_education_subjects.map { |subject_name| " #{subject_name} " }
-
-    all_further_education_subjects.each do |subject_name|
-      describe "'#{subject_name}''" do
-        subject { SubjectMapper.is_further_education([subject_name]) }
-
-        it { should be true }
-      end
-    end
-
-    ucas_mfl_main.each do |subject_name|
-      describe "'#{subject_name}''" do
-        subject { SubjectMapper.is_further_education([subject_name]) }
-
-        it { should be false }
-      end
-    end
-  end
-
   # Port of https://github.com/DFE-Digital/manage-courses-api/blob/master/tests/ManageCourses.Tests/UnitTesting/SubjectMapperTests.cs
   describe "#get_subject_list" do
     specs = [
