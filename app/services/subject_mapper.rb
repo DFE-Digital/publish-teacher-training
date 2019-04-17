@@ -102,6 +102,7 @@ class SubjectMapper
     end
   end
 
+  #  Does the subject list mention languages but hasn't already been covered?
   class MFLOtherMapping
     def applicable_to?(ucas_subjects)
       (ucas_subjects & language_categories).any? &&
@@ -136,6 +137,8 @@ class SubjectMapper
 
   # TODO: remove this bonkers logic once course mapping is done by one app!
   # The user need for this is unclear
+  #
+  # Does the subject list mention english, and it's mentioned in the title (or it's the only subject we know for this course)?
   class SecondaryEnglishMapping
     def initialize(course_title)
       @course_title = course_title
@@ -174,18 +177,13 @@ class SubjectMapper
       GroupedSubjectMapping.new(ucas_input_subjects, dfe_subject)
     end
 
-    #  Does the subject list mention languages but hasn't already been covered?
-    secondary_subject_mappings << MFLOtherMapping.new
+    secondary_subject_mappings += [
+      MFLOtherMapping.new,
+      SecondaryEnglishMapping.new(course_title),
+      SecondaryWelshMapping.new,
+    ]
 
-    # Does the subject list mention english, and it's mentioned in the title (or it's the only subject we know for this course)?
-    secondary_subject_mappings << SecondaryEnglishMapping.new(course_title)
-
-    # if nothing else yet, try welsh
-    secondary_subject_mappings << SecondaryWelshMapping.new
-
-    secondary_subjects = []
-
-    secondary_subjects += secondary_subject_mappings.map { |mapping|
+    secondary_subjects = secondary_subject_mappings.map { |mapping|
       mapping.to_s if mapping.applicable_to?(ucas_subjects)
     }.compact
 
