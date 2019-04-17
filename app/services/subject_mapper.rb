@@ -1,30 +1,28 @@
 # This is a port of https://github.com/DFE-Digital/manage-courses-api/blob/master/src/ManageCourses.Api/Mapping/SubjectMapper.cs
 
 class SubjectMapper
-  @ucas_further_education = ["further education",
+  SUBJECT_LEVEL = {
+    ucas_further_education: ["further education",
                              "higher education",
-                             "post-compulsory"]
+                             "post-compulsory"],
+    ucas_primary: ["early years",
+                   "upper primary",
+                   "primary",
+                   "lower primary"],
+    ucas_unexpected: ["construction and the built environment",
+                      # "history of art",
+                      "home economics",
+                      "hospitality and catering",
+                      "personal and social education",
+                      # "philosophy",
+                      "sport and leisure",
+                      "environmental science",
+                      "law"]
+  }.freeze
 
   @ucas_english = ["english",
                    "english language",
                    "english literature"]
-
-  @ucas_primary = ["early years",
-                   "upper primary",
-                   "primary",
-                   "lower primary"]
-
-  @ucas_unexpected = [
-    "construction and the built environment",
-    # "history of art",
-    "home economics",
-    "hospitality and catering",
-    "personal and social education",
-    # "philosophy",
-    "sport and leisure",
-    "environmental science",
-    "law",
-  ]
 
   @ucas_rename = {
     "chinese" => "mandarin",
@@ -112,7 +110,7 @@ class SubjectMapper
 
   def self.is_further_education(subjects)
     subjects = subjects.map { |subject| (subject.strip! || subject).downcase }
-    (subjects & @ucas_further_education).any?
+    (subjects & SUBJECT_LEVEL[:ucas_further_education]).any?
   end
 
   def self.map_to_subject_name(ucas_subject)
@@ -199,6 +197,18 @@ class SubjectMapper
     }.compact
   end
 
+  def self.get_subject_level(ucas_subjects)
+    if (ucas_subjects & SUBJECT_LEVEL[:ucas_unexpected]).any?
+      "found unsupported subject name(s): #{(ucas_subjects & SUBJECT_LEVEL[:ucas_unexpected]) * ', '}"
+    elsif (ucas_subjects & SUBJECT_LEVEL[:ucas_primary]).any?
+      :primary
+    elsif (ucas_subjects & SUBJECT_LEVEL[:ucas_further_education]).any?
+      :further_education
+    else
+      :secondary
+    end
+  end
+
   # <summary>
   # This maps a list of of UCAS subjects to our interpretation of subjects.
   # UCAS subjects are a pretty loose tagging system where individual tags don't always
@@ -215,28 +225,19 @@ class SubjectMapper
   # <returns>An enumerable of all the subjects the course should be findable by.</returns>
   def self.get_subject_list(course_title, ucas_subjects)
     ucas_subjects = ucas_subjects.map { |subject| (subject.strip! || subject).downcase }
-    course_title = (course_title.strip! || course_title).downcase
 
-    # if unexpected throw.
-    if (ucas_subjects & @ucas_unexpected).any?
-      raise "found unsupported subject name(s): #{(ucas_subjects & @ucas_unexpected) * ', '}"
+    subject_level = get_subject_level(ucas_subjects);
 
-    # If the subject indicates that it's primary, do not associate it with any
-    # Secondary subjects (that happens a lot in UCAS data). Instead, mark it as primary
-    # and additionally test for specialisations (e.g. Pimary with mathematics)
-    # note a course can cover multiple specialisations, e.g. Primary with geography and Primary with history
-    elsif (ucas_subjects & @ucas_primary).any?
-      return map_to_primary_subjects(ucas_subjects)
-
-    # If the subject indicates that it's in the Further Education space,
-    # just assign Further education to it and do not associate it with any
-    # secondary subjects
-    elsif (ucas_subjects & @ucas_further_education).any?
-      return ["Further education"]
-
-    # The most common case is when the course is teaching secondary subjects.
+    case subject_level
+    when :primary
+      map_to_primary_subjects(ucas_subjects)
+    when :further_education
+      ["Further education"]
+    when :secondary
+      course_title = (course_title.strip! || course_title).downcase
+      map_to_secondary_subjects(course_title, ucas_subjects)
     else
-      return map_to_secondary_subjects(course_title, ucas_subjects)
+      raise subject_level
     end
   end
 end
