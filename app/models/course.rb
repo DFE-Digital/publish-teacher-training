@@ -163,6 +163,8 @@ class Course < ApplicationRecord
   def publish_sites
     update_new_to_running
     update_published_if_running
+    # as update_all is called and doesn't trigger a save this has to be manually tested
+    update(changed_at: Time.now.utc)
   end
 
 private
