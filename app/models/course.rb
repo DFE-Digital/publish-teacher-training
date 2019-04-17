@@ -159,4 +159,19 @@ class Course < ApplicationRecord
       'fee'
     end
   end
+
+  def publish_sites
+    update_new_to_running
+    update_published_if_running
+  end
+
+private
+
+  def update_new_to_running
+    site_statuses.where(status: 'new_status').update_all(status: 'running')
+  end
+
+  def update_published_if_running
+    site_statuses.where(status: 'running', publish: 'unpublished').update_all(publish: 'published')
+  end
 end

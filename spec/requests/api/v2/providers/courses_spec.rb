@@ -185,8 +185,8 @@ describe 'Courses API v2', type: :request do
       create(:course,
              provider: provider,
              with_site_statuses: [:new],
-             with_enrichments: [:initial_draft]
-      )}
+             with_enrichments: [:initial_draft])
+    }
 
     subject do
       post publish_path, headers: { 'HTTP_AUTHORIZATION' => credentials }

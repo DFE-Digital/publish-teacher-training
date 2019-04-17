@@ -434,4 +434,16 @@ RSpec.describe Course, type: :model do
       its(:content_status) { should eq(:published_with_unpublished_changes) }
     end
   end
+
+  describe 'publish_sites' do
+    context 'course with new site'do
+      let(:subject) { create(:course, with_site_statuses: [:new]) }
+      it 'sets sites to running and published' do
+        subject.publish_sites!
+
+        expect(subject.site_statuses.first.status).to eq 'running'
+        expect(subject.site_statuses.first.publish).to eq 'published'
+      end
+    end
+  end
 end
