@@ -212,9 +212,9 @@ class SubjectMapper
   # <param name="ucas_subjects">The subject tags from UCAS</param>
   # <returns>An enumerable of all the subjects the course should be findable by.</returns>
   def self.get_subject_list(course_title, ucas_subjects)
-    ucas_subjects = ucas_subjects.map { |subject| (subject.strip! || subject).downcase }
+    ucas_subjects = ucas_subjects.map(&:strip).map(&:downcase)
 
-    subject_level = get_subject_level(ucas_subjects);
+    subject_level = get_subject_level(ucas_subjects)
 
     case subject_level
     when :primary
@@ -222,8 +222,7 @@ class SubjectMapper
     when :further_education
       ["Further education"]
     when :secondary
-      course_title = (course_title.strip! || course_title).downcase
-      map_to_secondary_subjects(course_title, ucas_subjects)
+      map_to_secondary_subjects(course_title.strip.downcase, ucas_subjects)
     else
       raise subject_level
     end
