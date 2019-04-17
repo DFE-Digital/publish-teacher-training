@@ -71,6 +71,10 @@ FactoryBot.define do
       applications_accepted_from { Faker::Date.between 2.days.ago, 0.days.ago }
     end
 
+    trait :applications_being_accepted_from_2019 do
+      applications_accepted_from { DateTime.new(2019) }
+    end
+
     trait :applications_being_accepted_in_future do
       applications_accepted_from { Faker::Date.forward 90 }
     end

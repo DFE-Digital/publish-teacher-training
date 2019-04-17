@@ -5,7 +5,7 @@ module API
 
       attributes :findable?, :open_for_applications?, :has_vacancies?,
                  :course_code, :name, :study_mode, :qualifications, :description,
-                 :content_status, :ucas_status, :funding
+                 :content_status, :ucas_status, :funding, :applications_open_from
 
       attribute :start_date do
         @object.start_date&.iso8601

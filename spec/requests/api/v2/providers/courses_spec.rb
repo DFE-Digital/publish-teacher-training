@@ -19,7 +19,7 @@ describe 'Courses API v2', type: :request do
            study_mode: :full_time,
            subject_count: 0,
            subjects: [course_subject_primary, course_subject_mathematics],
-           with_site_statuses: [%i[findable with_any_vacancy applications_being_accepted_now]])
+           with_site_statuses: [%i[findable with_any_vacancy applications_being_accepted_from_2019]])
   }
 
   let!(:provider) {
@@ -104,7 +104,8 @@ describe 'Courses API v2', type: :request do
               "ucas_status" => "running",
               "funding" => "apprenticeship",
               "subjects" => ["Primary",
-                             "Primary with mathematics"]
+                             "Primary with mathematics"],
+              "applications_open_from" => "2019-01-01T00:00:00Z",
             },
             "relationships" => {
               "accrediting_provider" => { "meta" => { "included" => false } },
@@ -272,7 +273,8 @@ describe 'Courses API v2', type: :request do
               "ucas_status" => "running",
               "funding" => "apprenticeship",
               "subjects" => ["Primary",
-                             "Primary with mathematics"]
+                             "Primary with mathematics"],
+              "applications_open_from" => "2019-01-01T00:00:00Z",
             },
             "relationships" => {
               "accrediting_provider" => { "meta" => { "included" => false } },
