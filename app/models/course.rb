@@ -90,6 +90,17 @@ class Course < ApplicationRecord
     site_statuses.open_for_applications.any?
   end
 
+  def applications_open_from
+    site_statuses
+      .open_for_applications
+      .order("applications_accepted_from ASC")
+      .first
+      &.applications_accepted_from
+      &.to_datetime
+      &.utc
+      &.iso8601
+  end
+
   def has_vacancies?
     site_statuses.findable.with_vacancies.any?
   end
