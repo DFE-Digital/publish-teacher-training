@@ -57,7 +57,7 @@ Rails.application.routes.draw do
     end
 
     namespace :v2 do
-      resources :users do
+      resources :users, only: %i[update show] do
         resources :providers
       end
 
