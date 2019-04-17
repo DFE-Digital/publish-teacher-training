@@ -16,7 +16,7 @@ describe API::V2::SerializableCourse do
   subject { parsed_json['data'] }
 
   it { should have_type('courses') }
-  it { should have_attributes(:start_date, :content_status, :ucas_status, :funding) }
+  it { should have_attributes(:start_date, :content_status, :ucas_status, :funding, :subjects) }
 
   context 'with a provider' do
     let(:provider) { course.provider }

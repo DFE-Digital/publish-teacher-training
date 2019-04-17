@@ -9,14 +9,16 @@ describe 'Courses API v2', type: :request do
     ActionController::HttpAuthentication::Token.encode_credentials(token)
   end
 
-  let(:course_subject) { create(:subject, subject_name: 'English', subject_code: 'E') }
+  let(:course_subject_primary) { create(:subject, subject_name: 'Primary', subject_code: 'P') }
+  let(:course_subject_mathematics) { create(:subject, subject_name: 'Mathematics', subject_code: 'M') }
 
   let(:findable_open_course) {
     create(:course, :resulting_in_pgce_with_qts, :with_apprenticeship,
+           name: "Primary (Mathematics Specialist)",
            start_date: Time.now.utc,
            study_mode: :full_time,
            subject_count: 0,
-           subjects: [course_subject],
+           subjects: [course_subject_primary, course_subject_mathematics],
            with_site_statuses: [%i[findable with_any_vacancy applications_being_accepted_now]])
   }
 
@@ -101,12 +103,13 @@ describe 'Courses API v2', type: :request do
               "content_status" => "empty",
               "ucas_status" => "running",
               "funding" => "apprenticeship",
+              "subjects" => ["Primary",
+                             "Primary with mathematics"]
             },
             "relationships" => {
               "accrediting_provider" => { "meta" => { "included" => false } },
               "provider" => { "meta" => { "included" => false } },
               "site_statuses" => { "data" => [{ "type" => "site_statuses", "id" => site_status.id.to_s }] },
-              "subjects" => { "data" => [{ "type" => "subjects", "id" => course_subject.id.to_s }] },
             },
           },
           "jsonapi" => {
@@ -128,13 +131,6 @@ describe 'Courses API v2', type: :request do
                     "id" => site.id.to_s
                   }
                 }
-              }
-            }, {
-              "id" => course_subject.id.to_s,
-              "type" => "subjects",
-              "attributes" => {
-                "subject_name" => course_subject.subject_name,
-                "subject_code" => course_subject.subject_code
               }
             }, {
             "id" => site.id.to_s,
@@ -275,12 +271,13 @@ describe 'Courses API v2', type: :request do
               "content_status" => "empty",
               "ucas_status" => "running",
               "funding" => "apprenticeship",
+              "subjects" => ["Primary",
+                             "Primary with mathematics"]
             },
             "relationships" => {
               "accrediting_provider" => { "meta" => { "included" => false } },
               "provider" => { "meta" => { "included" => false } },
               "site_statuses" => { "meta" => { "included" => false } },
-              "subjects" => { "meta" => { "included" => false } },
             },
           }],
           "jsonapi" => {

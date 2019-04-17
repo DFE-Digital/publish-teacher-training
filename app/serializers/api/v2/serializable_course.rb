@@ -11,11 +11,15 @@ module API
         @object.start_date&.iso8601
       end
 
+      attribute :subjects do
+        ucas_subjects = @object.subjects.map(&:subject_name)
+        SubjectMapper.get_subject_list(@object.name, ucas_subjects)
+      end
+
       belongs_to :provider
       belongs_to :accrediting_provider
 
       has_many :site_statuses
-      has_many :subjects
     end
   end
 end
