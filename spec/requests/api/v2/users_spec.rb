@@ -60,16 +60,13 @@ describe '/api/v2/users', type: :request do
     let(:params) { {} }
 
     def perform_request
-      Timecop.freeze
-      patch(
-        api_v2_user_path(user),
-        headers: { 'HTTP_AUTHORIZATION' => credentials },
-        params: params
-      )
-    end
-
-    after do
-      Timecop.return
+      Timecop.freeze do
+        patch(
+          api_v2_user_path(user),
+          headers: { 'HTTP_AUTHORIZATION' => credentials },
+          params: params
+        )
+      end
     end
 
     context 'when authenticated and authorised' do
