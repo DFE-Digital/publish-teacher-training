@@ -73,7 +73,7 @@ describe SubjectMapper do
       },
       {
         course_title: "",
-        ucas_subjects: %w[secondary welsh],
+        ucas_subjects: %w[welsh],
         expected_subjects: %w[Welsh],
         test_case: "an example of welsh, which only triggers if nothing else goes"
       },

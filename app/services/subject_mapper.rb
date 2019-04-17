@@ -159,6 +159,16 @@ class SubjectMapper
     end
   end
 
+  class SecondaryWelshMapping
+    def applicable_to?(ucas_subjects)
+      ucas_subjects == %w[welsh]
+    end
+
+    def to_s
+      "Welsh"
+    end
+  end
+
   def self.map_to_secondary_subjects(course_title, ucas_subjects)
     secondary_subject_mappings = MAPPINGS[:secondary].map do |ucas_input_subjects, dfe_subject|
       GroupedSubjectMapping.new(ucas_input_subjects, dfe_subject)
@@ -169,6 +179,9 @@ class SubjectMapper
 
     # Does the subject list mention english, and it's mentioned in the title (or it's the only subject we know for this course)?
     secondary_subject_mappings << SecondaryEnglishMapping.new(course_title)
+
+    # if nothing else yet, try welsh
+    secondary_subject_mappings << SecondaryWelshMapping.new
 
     secondary_subjects = []
 
@@ -189,11 +202,6 @@ class SubjectMapper
         renamed_subject = (ucas_subject == "science" ? "balanced science" : ucas_subject).capitalize
         secondary_subjects << renamed_subject
       end
-    end
-
-    # if nothing else yet, try welsh
-    if secondary_subjects.none? && (ucas_subjects & %w[welsh]).any?
-      secondary_subjects.push("Welsh")
     end
 
     secondary_subjects
