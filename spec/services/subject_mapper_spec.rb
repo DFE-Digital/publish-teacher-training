@@ -147,6 +147,13 @@ describe SubjectMapper do
       end
     end
 
+    describe "regression test" do
+      xcontext "english" do
+        subject { SubjectMapper.get_subject_list(title, ["english"]) }
+        it { should match_array ["English"] }
+      end
+    end
+
     describe "using subject-mapper-test-data.csv" do
       data = CSV.read("#{Dir.pwd}/spec/services/subject-mapper-test-data.csv", encoding: "UTF-8", headers: true, header_converters: :symbol, converters: :all)
 
