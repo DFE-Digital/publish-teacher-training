@@ -87,7 +87,7 @@ class SubjectMapper
     },
   }.freeze
 
-  class GroupedSubjectMapping
+  class StaticMapping
     def initialize(included_ucas_subjects, resulting_dfe_subject)
       @included_ucas_subjects = included_ucas_subjects
       @resulting_dfe_subject = resulting_dfe_subject
@@ -174,7 +174,7 @@ class SubjectMapper
 
   def self.map_to_secondary_subjects(course_title, ucas_subjects)
     secondary_subject_mappings = MAPPINGS[:secondary].map do |ucas_input_subjects, dfe_subject|
-      GroupedSubjectMapping.new(ucas_input_subjects, dfe_subject)
+      StaticMapping.new(ucas_input_subjects, dfe_subject)
     end
 
     secondary_subject_mappings += [
@@ -207,7 +207,7 @@ class SubjectMapper
 
   def self.map_to_primary_subjects(ucas_subjects)
     primary_subject_mappings = MAPPINGS[:primary].map do |ucas_input_subjects, dfe_subject|
-      GroupedSubjectMapping.new(ucas_input_subjects, dfe_subject)
+      StaticMapping.new(ucas_input_subjects, dfe_subject)
     end
 
     %w[Primary] + primary_subject_mappings.map { |mapping|
