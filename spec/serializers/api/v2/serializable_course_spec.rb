@@ -108,9 +108,9 @@ describe API::V2::SerializableCourse do
     end
 
     context 'with secondary subjects' do
-      let(:course) { create(:course, subject_count: 0, subjects: [create(:subject, subject_name: "english")]) }
+      let(:course) { create(:course, subject_count: 0, subjects: [create(:subject, subject_name: "physical education")]) }
       it { expect(subject["attributes"]).to include("level" => "secondary") }
-      it { expect(subject["attributes"]).to include("subjects" => %w[English]) }
+      it { expect(subject["attributes"]).to include("subjects" => ["Physical education"]) }
     end
 
     context 'with further education subjects' do
