@@ -2,69 +2,6 @@ require "spec_helper"
 require "csv"
 
 describe SubjectMapper do
-  further_education_subjects = [
-    "further education",
-    "higher education",
-    "post-compulsory",
-  ]
-
-  ucas_mfl_main = [
-    "english as a second or other language",
-    "french",
-    "german",
-    "italian",
-    "japanese",
-    "russian",
-    "spanish"
-  ]
-
-  describe "#is_further_education" do
-    all_further_education_subjects = further_education_subjects + further_education_subjects.map(&:upcase) + further_education_subjects.map { |subject_name| " #{subject_name} " }
-
-    all_further_education_subjects.each do |subject_name|
-      describe "'#{subject_name}''" do
-        subject { SubjectMapper.is_further_education([subject_name]) }
-
-        it { should be true }
-      end
-    end
-
-    ucas_mfl_main.each do |subject_name|
-      describe "'#{subject_name}''" do
-        subject { SubjectMapper.is_further_education([subject_name]) }
-
-        it { should be false }
-      end
-    end
-  end
-
-  describe "#map_to_subject_name" do
-    ucas_rename = {
-      "chinese" => "Mandarin",
-      "art / art & design" => "Art and design",
-      "business education" => "Business studies",
-      "computer studies" => "Computing",
-      "science" => "Balanced science",
-      "dance and performance" => "Dance",
-      "drama and theatre studies" => "Drama",
-      "social science" => "Social sciences",
-    }
-
-    ucas_rename.each do |key, expected_value|
-      describe "ucasRename '#{key}''" do
-        subject { SubjectMapper.map_to_subject_name(key) }
-
-        it { should eq expected_value }
-      end
-    end
-
-    describe "bad english" do
-      subject { SubjectMapper.map_to_subject_name("bad english") }
-
-      it { should eq "Bad English" }
-    end
-  end
-
   # Port of https://github.com/DFE-Digital/manage-courses-api/blob/master/tests/ManageCourses.Tests/UnitTesting/SubjectMapperTests.cs
   describe "#get_subject_list" do
     specs = [
@@ -87,8 +24,8 @@ describe SubjectMapper do
         test_case: "an example of early years (which is absorbed into primary)"
       },
       {
-        course_title: "Physics (Welsh medium)",
-        ucas_subjects: ["physics (abridged)", "welsh", "secondary", "science"],
+        course_title: "Physics",
+        ucas_subjects: ["physics (abridged)", "secondary", "science"],
         expected_subjects: %w[Physics],
         test_case: "an example where science should be excluded because it's used as a category"
       },
@@ -133,12 +70,6 @@ describe SubjectMapper do
         ucas_subjects: ["secondary", "languages", "languages (asian)", "chinese"],
         expected_subjects: %w[Mandarin],
         test_case: "a rename"
-      },
-      {
-        course_title: "",
-        ucas_subjects: %w[secondary welsh],
-        expected_subjects: %w[Welsh],
-        test_case: "an example of welsh, which only triggers if nothing else goes"
       },
       {
         course_title: "Computer science",
@@ -222,11 +153,14 @@ describe SubjectMapper do
       hashed_data = data.map(&:to_hash)
 
       hashed_data.each_with_index do |spec, index|
-        describe "Test case '#{index}''" do
-          delimiter = "[d]" #This delimiter is used as the actual subject name may contain a comma
-          subject { SubjectMapper.get_subject_list(spec[:course_title], spec[:ucas_subjects].split(delimiter)) }
+        delimiter = "[d]" #This delimiter is used as the actual subject name may contain a comma
+        ucas_subjects_to_map = spec[:ucas_subjects].split(delimiter)
+        expected_dfe_subjects = spec[:expected_subjects].split(delimiter)
+        title = spec[:course_title]
 
-          it { should match_array spec[:expected_subjects].split(delimiter) }
+        describe "Test case row '#{index}': subjects #{ucas_subjects_to_map.join(', ')}, title: #{title}" do
+          subject { SubjectMapper.get_subject_list(title, ucas_subjects_to_map) }
+          it { should match_array expected_dfe_subjects }
         end
       end
     end
