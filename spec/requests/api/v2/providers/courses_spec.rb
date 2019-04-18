@@ -107,6 +107,7 @@ describe 'Courses API v2', type: :request do
               "is_send?" => true,
               "subjects" => ["Primary",
                              "Primary with mathematics"],
+              "level" => "primary",
               "applications_open_from" => "2019-01-01T00:00:00Z",
             },
             "relationships" => {
@@ -277,6 +278,7 @@ describe 'Courses API v2', type: :request do
               "is_send?" => true,
               "subjects" => ["Primary",
                              "Primary with mathematics"],
+              "level" => "primary",
               "applications_open_from" => "2019-01-01T00:00:00Z",
             },
             "relationships" => {

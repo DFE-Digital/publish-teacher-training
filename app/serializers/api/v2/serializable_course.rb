@@ -16,6 +16,11 @@ module API
         SubjectMapper.get_subject_list(@object.name, ucas_subjects)
       end
 
+      attribute :level do
+        ucas_subjects = @object.subjects.map(&:subject_name)
+        SubjectMapper.get_subject_level(ucas_subjects)
+      end
+
       attribute :is_send? do
         @object.subjects.any? { |subject| subject.subject_code.casecmp('U3').zero? }
       end
