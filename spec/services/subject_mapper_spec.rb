@@ -149,8 +149,8 @@ describe SubjectMapper do
 
     describe "regression test" do
       xcontext "english" do
-        subject { SubjectMapper.get_subject_list(title, ["english"]) }
-        it { should match_array ["English"] }
+        subject { SubjectMapper.get_subject_list(title, %w[english]) }
+        it { should match_array %w[English] }
       end
     end
 
