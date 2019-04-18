@@ -24,4 +24,13 @@ class User < ApplicationRecord
   validates :email, presence: true
 
   audited
+
+  aasm column: 'state' do
+    state :new, initial: true
+    state :transitioned
+
+    event :accept_transition_screen do
+      transitions from: :new, to: :transitioned
+    end
+  end
 end

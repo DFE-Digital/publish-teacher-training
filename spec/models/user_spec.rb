@@ -17,7 +17,7 @@
 
 require 'rails_helper'
 
-RSpec.describe User, type: :model do
+describe User, type: :model do
   subject { create(:user) }
 
   describe 'associations' do
@@ -29,5 +29,19 @@ RSpec.describe User, type: :model do
 
   describe 'auditing' do
     it { should be_audited }
+  end
+
+  describe 'states' do
+    context 'new user' do
+      it { should be_new }
+    end
+  end
+
+  describe 'state events' do
+    before do
+      subject.accept_transition_screen!
+    end
+
+    it { should be_transitioned }
   end
 end
