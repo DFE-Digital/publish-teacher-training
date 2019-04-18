@@ -21,9 +21,11 @@ describe 'Courses API v2', type: :request do
            study_mode: :full_time,
            subject_count: 0,
            subjects: [course_subject_primary, course_subject_mathematics, course_subject_send],
-           with_site_statuses: [%i[findable with_any_vacancy applications_being_accepted_from_2019]])
+           with_site_statuses: [%i[findable with_any_vacancy applications_being_accepted_from_2019]],
+           enrichments: [enrichment])
   }
 
+  let(:enrichment)     { build :course_enrichment }
   let(:provider)       { create :provider, organisations: [organisation] }
   let(:course_subject) { course.subjects.first }
   let(:site_status)    { findable_open_course.site_statuses.first }
@@ -97,7 +99,7 @@ describe 'Courses API v2', type: :request do
               "study_mode" => "full_time",
               "qualifications" => %w[qts pgce],
               "description" => "PGCE with QTS full time teaching apprenticeship",
-              "content_status" => "empty",
+              "content_status" => "draft",
               "ucas_status" => "running",
               "funding" => "apprenticeship",
               "is_send?" => true,
@@ -105,6 +107,18 @@ describe 'Courses API v2', type: :request do
                              "Primary with mathematics"],
               "level" => "primary",
               "applications_open_from" => "2019-01-01T00:00:00Z",
+              "about_course" => enrichment.about_course,
+              "course_length" => enrichment.course_length,
+              "fee_details" => enrichment.fee_details,
+              "fee_international" => enrichment.fee_international,
+              "fee_uk_eu" => enrichment.fee_uk_eu,
+              "financial_support" => enrichment.financial_support,
+              "how_school_placements_work" => enrichment.how_school_placements_work,
+              "interview_process" => enrichment.interview_process,
+              "other_requirements" => enrichment.other_requirements,
+              "personal_qualities" => enrichment.personal_qualities,
+              "required_qualifications" => enrichment.qualifications,
+              "salary_details" => enrichment.salary_details
             },
             "relationships" => {
               "accrediting_provider" => { "meta" => { "included" => false } },
@@ -269,7 +283,7 @@ describe 'Courses API v2', type: :request do
               "study_mode" => "full_time",
               "qualifications" => %w[qts pgce],
               "description" => "PGCE with QTS full time teaching apprenticeship",
-              "content_status" => "empty",
+              "content_status" => "draft",
               "ucas_status" => "running",
               "funding" => "apprenticeship",
               "is_send?" => true,
@@ -277,6 +291,18 @@ describe 'Courses API v2', type: :request do
                              "Primary with mathematics"],
               "level" => "primary",
               "applications_open_from" => "2019-01-01T00:00:00Z",
+              "about_course" => enrichment.about_course,
+              "course_length" => enrichment.course_length,
+              "fee_details" => enrichment.fee_details,
+              "fee_international" => enrichment.fee_international,
+              "fee_uk_eu" => enrichment.fee_uk_eu,
+              "financial_support" => enrichment.financial_support,
+              "how_school_placements_work" => enrichment.how_school_placements_work,
+              "interview_process" => enrichment.interview_process,
+              "other_requirements" => enrichment.other_requirements,
+              "personal_qualities" => enrichment.personal_qualities,
+              "required_qualifications" => enrichment.qualifications,
+              "salary_details" => enrichment.salary_details
             },
             "relationships" => {
               "accrediting_provider" => { "meta" => { "included" => false } },

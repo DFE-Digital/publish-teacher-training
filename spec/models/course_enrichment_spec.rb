@@ -17,6 +17,20 @@
 require 'rails_helper'
 
 describe CourseEnrichment, type: :model do
+  describe 'associations' do
+    it 'belongs to a provider' do
+      expect(subject).to belong_to(:provider)
+                           .with_foreign_key(:provider_code)
+                           .with_primary_key(:provider_code)
+    end
+
+    it 'belongs to a course' do
+      expect(subject).to belong_to(:course)
+                           .with_foreign_key(:ucas_course_code)
+                           .with_primary_key(:course_code)
+    end
+  end
+
   context 'when the enrichment is an initial draft' do
     subject { create(:course_enrichment, :initial_draft) }
     it { should_not have_been_published_before }
