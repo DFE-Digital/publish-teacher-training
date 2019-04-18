@@ -162,16 +162,6 @@ class SubjectMapper
     end
   end
 
-  class SecondaryWelshMapping
-    def applicable_to?(ucas_subjects)
-      ucas_subjects == %w[welsh]
-    end
-
-    def to_s
-      "Welsh"
-    end
-  end
-
   def self.map_to_secondary_subjects(course_title, ucas_subjects)
     secondary_subject_mappings = MAPPINGS[:secondary].map do |ucas_input_subjects, dfe_subject|
       StaticMapping.new(ucas_input_subjects, dfe_subject)
@@ -180,7 +170,6 @@ class SubjectMapper
     secondary_subject_mappings += [
       MFLOtherMapping.new,
       SecondaryEnglishMapping.new(course_title),
-      SecondaryWelshMapping.new,
     ]
 
     secondary_subjects = secondary_subject_mappings.map { |mapping|

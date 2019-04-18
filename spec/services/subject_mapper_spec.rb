@@ -24,8 +24,8 @@ describe SubjectMapper do
         test_case: "an example of early years (which is absorbed into primary)"
       },
       {
-        course_title: "Physics (Welsh medium)",
-        ucas_subjects: ["physics (abridged)", "welsh", "secondary", "science"],
+        course_title: "Physics",
+        ucas_subjects: ["physics (abridged)", "secondary", "science"],
         expected_subjects: %w[Physics],
         test_case: "an example where science should be excluded because it's used as a category"
       },
@@ -70,12 +70,6 @@ describe SubjectMapper do
         ucas_subjects: ["secondary", "languages", "languages (asian)", "chinese"],
         expected_subjects: %w[Mandarin],
         test_case: "a rename"
-      },
-      {
-        course_title: "",
-        ucas_subjects: %w[welsh],
-        expected_subjects: %w[Welsh],
-        test_case: "an example of welsh, which only triggers if nothing else goes"
       },
       {
         course_title: "Computer science",
