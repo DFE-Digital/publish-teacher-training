@@ -18,7 +18,7 @@ describe API::V2::SerializableCourse do
   it { should have_type('courses') }
   it {
     should have_attributes(:start_date, :content_status, :ucas_status,
-    :funding, :subjects, :applications_open_from, :is_send?)
+    :funding, :subjects, :applications_open_from, :is_send?, :level)
   }
 
   context 'with a provider' do
@@ -91,6 +91,32 @@ describe API::V2::SerializableCourse do
     context "with a SEND subject" do
       let(:course) { create(:course, subject_count: 0, subjects: [create(:send_subject)]) }
       it { expect(subject["attributes"]).to include("is_send?" => true) }
+    end
+  end
+
+  context "subjects & level" do
+    context 'with no subjects' do
+      let(:course) { create(:course, subject_count: 0) }
+      it { expect(subject["attributes"]).to include("level" => "secondary") }
+      it { expect(subject["attributes"]).to include("subjects" => []) }
+    end
+
+    context 'with primary subjects' do
+      let(:course) { create(:course, subject_count: 0, subjects: [create(:subject, subject_name: "primary")]) }
+      it { expect(subject["attributes"]).to include("level" => "primary") }
+      it { expect(subject["attributes"]).to include("subjects" => %w[Primary]) }
+    end
+
+    context 'with secondary subjects' do
+      let(:course) { create(:course, subject_count: 0, subjects: [create(:subject, subject_name: "english")]) }
+      it { expect(subject["attributes"]).to include("level" => "secondary") }
+      it { expect(subject["attributes"]).to include("subjects" => %w[English]) }
+    end
+
+    context 'with further education subjects' do
+      let(:course) { create(:course, subject_count: 0, subjects: [create(:further_education_subject)]) }
+      it { expect(subject["attributes"]).to include("level" => "further_education") }
+      it { expect(subject["attributes"]).to include("subjects" => ["Further education"]) }
     end
   end
 end
