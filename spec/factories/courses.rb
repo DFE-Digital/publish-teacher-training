@@ -113,5 +113,13 @@ FactoryBot.define do
     trait :with_salary do
       program_type { :school_direct_salaried_training_programme }
     end
+
+    trait :primary do
+      age_range { 'P' }
+    end
+
+    trait :secondary do
+      age_range { 'S' }
+    end
   end
 end

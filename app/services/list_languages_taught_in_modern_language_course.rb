@@ -11,18 +11,20 @@ class ListLanguagesTaughtInModernLanguageCourse
     'Urdu'
   ].freeze
 
-  attr_reader :course_name, :ucas_subject_names
+  attr_reader :course, :ucas_subject_names
 
-  def self.call(course_name, ucas_subject_names)
-    new(course_name, ucas_subject_names).call
+  def self.call(course, ucas_subject_names)
+    new(course, ucas_subject_names).call
   end
 
-  def initialize(course_name, ucas_subject_names)
-    @course_name        = course_name
+  def initialize(course, ucas_subject_names)
+    @course             = course
     @ucas_subject_names = ucas_subject_names
   end
 
   def call
+    return [] unless course.secondary?
+
     dfe_subject_names.select do |subject_name|
       subject_name.in? LANGUAGE_SUBJECTS
     end
@@ -32,7 +34,7 @@ private
 
   def dfe_subject_names
     SubjectMapper.get_subject_list(
-      course_name,
+      course.name,
       ucas_subject_names
     )
   end
