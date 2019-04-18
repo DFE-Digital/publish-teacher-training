@@ -1,17 +1,15 @@
 class ListLanguagesTaughtInModernLanguageCourse
-  LANGUAGES = [
-    'english as a foreign language',
-    'french',
-    'german',
-    'italian',
-    'japanese',
-    'mandarin',
-    'russian',
-    'spanish',
-    'urdu'
+  LANGUAGE_SUBJECTS = [
+    'English as a foreign language',
+    'French',
+    'German',
+    'Italian',
+    'Japanese',
+    'Mandarin',
+    'Russian',
+    'Spanish',
+    'Urdu'
   ].freeze
-
-  MODERN_LANGUAGE_COURSE_PATTERN = /mfl|modern language|modern foreign language/.freeze
 
   attr_reader :course_name, :ucas_subject_names
 
@@ -25,20 +23,17 @@ class ListLanguagesTaughtInModernLanguageCourse
   end
 
   def call
-    return [] unless modern_language_course?
-
-    LANGUAGES.select do |language|
-      language.in? normalized_ucas_subject_names
+    dfe_subject_names.select do |subject_name|
+      subject_name.in? LANGUAGE_SUBJECTS
     end
   end
 
 private
 
-  def normalized_ucas_subject_names
-    @normalized_ucas_subject_names ||= ucas_subject_names.strip.downcase
-  end
-
-  def modern_language_course?
-    course_name.downcase.match?(MODERN_LANGUAGE_COURSE_PATTERN)
+  def dfe_subject_names
+    SubjectMapper.get_subject_list(
+      course_name,
+      ucas_subject_names
+    )
   end
 end
