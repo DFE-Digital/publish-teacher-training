@@ -1,21 +1,22 @@
 require 'rails_helper'
 
 describe 'Courses API v2', type: :request do
-  let(:user) { create(:user) }
+  let(:user)         { create(:user) }
   let(:organisation) { create(:organisation, users: [user]) }
-  let(:payload) { { email: user.email } }
-  let(:token) { build_jwt :apiv2, payload: payload }
+  let(:payload)      { { email: user.email } }
+  let(:token)        { build_jwt :apiv2, payload: payload }
   let(:credentials) do
     ActionController::HttpAuthentication::Token.encode_credentials(token)
   end
 
-  let(:course_subject_primary) { create(:subject, subject_name: 'Primary', subject_code: 'P') }
-  let(:course_subject_mathematics) { create(:subject, subject_name: 'Mathematics', subject_code: 'M') }
-  let(:course_subject_send) { create(:send_subject) }
+  let(:course_subject_primary) { find_or_create(:subject, subject_name: 'Primary', subject_code: 'P') }
+  let(:course_subject_mathematics) { find_or_create(:subject, subject_name: 'Mathematics', subject_code: 'M') }
+  let(:course_subject_send) { find_or_create(:send_subject) }
 
   let(:findable_open_course) {
     create(:course, :resulting_in_pgce_with_qts, :with_apprenticeship,
            name: "Primary (Mathematics Specialist)",
+           provider: provider,
            start_date: Time.now.utc,
            study_mode: :full_time,
            subject_count: 0,
@@ -23,15 +24,10 @@ describe 'Courses API v2', type: :request do
            with_site_statuses: [%i[findable with_any_vacancy applications_being_accepted_from_2019]])
   }
 
-  let!(:provider) {
-    create(:provider,
-           course_count: 0,
-           courses: [findable_open_course],
-           organisations: [organisation])
-  }
-
-  let(:site_status) { findable_open_course.site_statuses.first }
-  let(:site) { site_status.site }
+  let(:provider)       { create :provider, organisations: [organisation] }
+  let(:course_subject) { course.subjects.first }
+  let(:site_status)    { findable_open_course.site_statuses.first }
+  let(:site)           { site_status.site }
 
   subject { response }
 
@@ -250,6 +246,7 @@ describe 'Courses API v2', type: :request do
 
     describe 'JSON generated for courses' do
       before do
+        findable_open_course
         get "/api/v2/providers/#{provider.provider_code}/courses",
             headers: { 'HTTP_AUTHORIZATION' => credentials }
       end

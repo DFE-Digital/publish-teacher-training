@@ -16,6 +16,11 @@ FactoryBot.define do
       subject_name { 'Further Education' }
     end
 
+    trait :english do
+      subject_name { 'English' }
+      subject_code { 'E' }
+    end
+
     factory :send_subject do
       subject_name { 'Special Educational Needs' }
       subject_code { 'U3' }

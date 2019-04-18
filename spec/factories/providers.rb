@@ -54,15 +54,13 @@ FactoryBot.define do
     end
 
     after(:create) do |provider, evaluator|
-      create_list(:course, evaluator.course_count, provider: provider)
-
       provider.sites << evaluator.sites
 
       # Add the enrichments to the provider. Normally setting provider_code
       # would be the model's concern, but as we're still a read-only app we'll
       # have to do that here.
       provider.enrichments << evaluator.enrichments.each do |enrichment|
-        enrichment.provider_code ||= provider.provider_code
+        enrichment.provider_code = provider.provider_code
       end
 
       # Strangely, changed_at doesn't get set if we don't do this, even though

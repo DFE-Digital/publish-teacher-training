@@ -50,7 +50,9 @@ FactoryBot.define do
     end
 
     after(:create) do |course, evaluator|
-      course.subjects << evaluator.subjects
+      course.subjects << evaluator.subjects.map { |subject|
+        subject.is_a?(Subject) ? subject : create(*subject)
+      }
 
       evaluator.with_site_statuses.each do |traits|
         attrs = { course: course }
@@ -68,6 +70,10 @@ FactoryBot.define do
         }
         create(:course_enrichment, trait, attributes.merge(defaults))
       end
+
+      # We've just created a course with this provider's code, so ensure it's
+      # up-to-date and has this course loaded.
+      course.provider.reload
     end
 
     trait :resulting_in_qts do
