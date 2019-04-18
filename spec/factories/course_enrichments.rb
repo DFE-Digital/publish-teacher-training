@@ -16,9 +16,73 @@
 
 FactoryBot.define do
   factory :course_enrichment do
-    sequence(:provider_code) { |n| "A#{n}" }
-    sequence(:ucas_course_code) { |n| "C#{n}D3" }
+    provider
+    course
     status { :draft }
+
+    about_course { Faker::Books::Dune.quote }
+    course_length do
+      # samples taken from real data
+      [
+        "36 weeks",
+        "38 weeks",
+        "1 year Full-time or 2 years Part-time",
+        "Sept  - End July",
+        "4 school terms",
+        "9 months",
+        "1 Year for Full Time / Up to 2 Years",
+        "4 academic terms",
+        "9 Months",
+        "1 year plus ",
+        "Other",
+        "10 Months",
+        "OneYear",
+        "This programme is offered as a one year full-time programme or as a two year part-time programme.  The P/T programme is typically 3 days a week.",
+        "September 2019- December 2020",
+        "September to June",
+        "Approximately 15 months",
+        "1 year and 1 day minimum",
+        "Academic Year",
+      ].sample
+    end
+    fee_details do
+      [
+        "This apprenticeship programme is funded via the apprentice levy from eligible schools.",
+        "You will not have to pay these fees upfront. Eligible UK and EU students can apply for a tuition fee loan to cover the cost of tuition fees from the government.",
+        "Student grants are available to eligible applicants.",
+        "Fees are made payable to the University.",
+      ].sample
+    end
+    fee_uk_eu         { fee_international * 2 }
+    fee_international { rand(100) * 10 }
+    financial_support do
+      [
+        "Please get in contact with the school for any further details.",
+        "The course is Non-Salaried only. ",
+        "Find out more about the financial support available within our [financial information section](http://localhost:5000/about/financial_support)",
+        "Bursaries and scholarships are available to trainees",
+        "You may be eligible for a government bursary if you are applying to teach one of our secondary subjects",
+        "DfE bursaries are available for select trainees ",
+        "You can find information about tuition fee loans and other financial help on the Gov.uk website - (https://www.gov.uk/student-finance)"
+      ].sample
+    end
+    how_school_placements_work { Faker::TvShows::GameOfThrones.quote }
+    interview_process { Faker::TvShows::Seinfeld.quote }
+    other_requirements { Faker::TvShows::TheITCrowd.quote }
+    personal_qualities { Faker::Hipster.paragraph }
+    qualifications { Faker::Educator.degree }
+    # Technically, salary_details should align with whether the course is
+    # salaried or not. Maybe worth implementing this somehow at some point.
+    salary_details do
+      [
+        "Trainees should expcet to be paid as an Unqualified Teacher.",
+        "For more information on salary please contact us",
+        "Salary negotiable.",
+        "Applicants will be paid as an unqualified teacher.",
+        "The trainee will be paid and taxed as an unqualified teacher.",
+        "Using the unqualified teachers scale"
+      ].sample
+    end
   end
 
   trait :initial_draft do

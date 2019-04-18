@@ -30,6 +30,7 @@ FactoryBot.define do
     with_higher_education
 
     association(:provider)
+
     study_mode { :full_time }
     resulting_in_pgce_with_qts
 
@@ -37,8 +38,9 @@ FactoryBot.define do
       subject_count      { 1 }
       subjects           { build_list(:subject, subject_count) }
       with_site_statuses { [] }
-      with_enrichments { [] }
-      age { nil }
+      with_enrichments   { [] }
+      age                { nil }
+      enrichments        { [] }
     end
 
     after(:build) do |course, evaluator|
@@ -50,7 +52,9 @@ FactoryBot.define do
     end
 
     after(:create) do |course, evaluator|
-      course.subjects << evaluator.subjects
+      course.subjects << evaluator.subjects.map { |subject|
+        subject.is_a?(Subject) ? subject : create(*subject)
+      }
 
       evaluator.with_site_statuses.each do |traits|
         attrs = { course: course }
@@ -68,6 +72,14 @@ FactoryBot.define do
         }
         create(:course_enrichment, trait, attributes.merge(defaults))
       end
+
+      course.enrichments += evaluator.enrichments.map do |enrichment|
+        enrichment.tap { |e| e.provider_code = course.provider.provider_code }
+      end
+
+      # We've just created a course with this provider's code, so ensure it's
+      # up-to-date and has this course loaded.
+      course.provider.reload
     end
 
     trait :resulting_in_qts do

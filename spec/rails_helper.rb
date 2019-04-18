@@ -12,6 +12,9 @@ abort("The Rails environment is running in production mode!") if Rails.env.produ
 require 'rspec/rails'
 # Add additional requires below this line. Rails is not loaded until this point!
 
+# Pull in all the files in spec/support automatically.
+Dir['./spec/strategies/**/*.rb'].each { |file| require file }
+
 Faker::Config.locale = 'en-GB'
 
 # configure shoulda matchers to use rspec as the test framework and full matcher libraries for rails

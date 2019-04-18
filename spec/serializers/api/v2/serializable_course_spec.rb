@@ -2,7 +2,10 @@ require "rails_helper"
 
 describe API::V2::SerializableCourse do
   let(:jsonapi_renderer) { JSONAPI::Serializable::Renderer.new }
-  let(:course)           { create(:course, start_date: Time.now.utc) }
+  let(:enrichment)       { build :course_enrichment }
+  let(:course)           do
+    create(:course, enrichments: [enrichment], start_date: Time.now.utc)
+  end
   let(:course_json) do
     jsonapi_renderer.render(
       course,
@@ -118,5 +121,22 @@ describe API::V2::SerializableCourse do
       it { expect(subject["attributes"]).to include("level" => "further_education") }
       it { expect(subject["attributes"]).to include("subjects" => ["Further education"]) }
     end
+  end
+
+  describe 'attributes retrieved from enrichments' do
+    subject { parsed_json['data']['attributes'] }
+
+    its(%w[about_course])               { should eq enrichment.about_course }
+    its(%w[course_length])              { should eq enrichment.course_length }
+    its(%w[fee_details])                { should eq enrichment.fee_details }
+    its(%w[fee_international])          { should eq enrichment.fee_international }
+    its(%w[fee_uk_eu])                  { should eq enrichment.fee_uk_eu }
+    its(%w[financial_support])          { should eq enrichment.financial_support }
+    its(%w[how_school_placements_work]) { should eq enrichment.how_school_placements_work }
+    its(%w[interview_process])          { should eq enrichment.interview_process }
+    its(%w[other_requirements])         { should eq enrichment.other_requirements }
+    its(%w[personal_qualities])         { should eq enrichment.personal_qualities }
+    its(%w[required_qualifications])    { should eq enrichment.qualifications }
+    its(%w[salary_details])             { should eq enrichment.salary_details }
   end
 end

@@ -1,37 +1,35 @@
 require 'rails_helper'
 
 describe 'Courses API v2', type: :request do
-  let(:user) { create(:user) }
+  let(:user)         { create(:user) }
   let(:organisation) { create(:organisation, users: [user]) }
-  let(:payload) { { email: user.email } }
-  let(:token) { build_jwt :apiv2, payload: payload }
+  let(:payload)      { { email: user.email } }
+  let(:token)        { build_jwt :apiv2, payload: payload }
   let(:credentials) do
     ActionController::HttpAuthentication::Token.encode_credentials(token)
   end
 
-  let(:course_subject_primary) { create(:subject, subject_name: 'Primary', subject_code: 'P') }
-  let(:course_subject_mathematics) { create(:subject, subject_name: 'Mathematics', subject_code: 'M') }
-  let(:course_subject_send) { create(:send_subject) }
+  let(:course_subject_primary) { find_or_create(:subject, subject_name: 'Primary', subject_code: 'P') }
+  let(:course_subject_mathematics) { find_or_create(:subject, subject_name: 'Mathematics', subject_code: 'M') }
+  let(:course_subject_send) { find_or_create(:send_subject) }
 
   let(:findable_open_course) {
     create(:course, :resulting_in_pgce_with_qts, :with_apprenticeship,
            name: "Primary (Mathematics Specialist)",
+           provider: provider,
            start_date: Time.now.utc,
            study_mode: :full_time,
            subject_count: 0,
            subjects: [course_subject_primary, course_subject_mathematics, course_subject_send],
-           with_site_statuses: [%i[findable with_any_vacancy applications_being_accepted_from_2019]])
+           with_site_statuses: [%i[findable with_any_vacancy applications_being_accepted_from_2019]],
+           enrichments: [enrichment])
   }
 
-  let!(:provider) {
-    create(:provider,
-           course_count: 0,
-           courses: [findable_open_course],
-           organisations: [organisation])
-  }
-
-  let(:site_status) { findable_open_course.site_statuses.first }
-  let(:site) { site_status.site }
+  let(:enrichment)     { build :course_enrichment }
+  let(:provider)       { create :provider, organisations: [organisation] }
+  let(:course_subject) { course.subjects.first }
+  let(:site_status)    { findable_open_course.site_statuses.first }
+  let(:site)           { site_status.site }
 
   subject { response }
 
@@ -101,7 +99,7 @@ describe 'Courses API v2', type: :request do
               "study_mode" => "full_time",
               "qualifications" => %w[qts pgce],
               "description" => "PGCE with QTS full time teaching apprenticeship",
-              "content_status" => "empty",
+              "content_status" => "draft",
               "ucas_status" => "running",
               "funding" => "apprenticeship",
               "is_send?" => true,
@@ -109,6 +107,18 @@ describe 'Courses API v2', type: :request do
                              "Primary with mathematics"],
               "level" => "primary",
               "applications_open_from" => "2019-01-01T00:00:00Z",
+              "about_course" => enrichment.about_course,
+              "course_length" => enrichment.course_length,
+              "fee_details" => enrichment.fee_details,
+              "fee_international" => enrichment.fee_international,
+              "fee_uk_eu" => enrichment.fee_uk_eu,
+              "financial_support" => enrichment.financial_support,
+              "how_school_placements_work" => enrichment.how_school_placements_work,
+              "interview_process" => enrichment.interview_process,
+              "other_requirements" => enrichment.other_requirements,
+              "personal_qualities" => enrichment.personal_qualities,
+              "required_qualifications" => enrichment.qualifications,
+              "salary_details" => enrichment.salary_details
             },
             "relationships" => {
               "accrediting_provider" => { "meta" => { "included" => false } },
@@ -250,6 +260,7 @@ describe 'Courses API v2', type: :request do
 
     describe 'JSON generated for courses' do
       before do
+        findable_open_course
         get "/api/v2/providers/#{provider.provider_code}/courses",
             headers: { 'HTTP_AUTHORIZATION' => credentials }
       end
@@ -272,7 +283,7 @@ describe 'Courses API v2', type: :request do
               "study_mode" => "full_time",
               "qualifications" => %w[qts pgce],
               "description" => "PGCE with QTS full time teaching apprenticeship",
-              "content_status" => "empty",
+              "content_status" => "draft",
               "ucas_status" => "running",
               "funding" => "apprenticeship",
               "is_send?" => true,
@@ -280,6 +291,18 @@ describe 'Courses API v2', type: :request do
                              "Primary with mathematics"],
               "level" => "primary",
               "applications_open_from" => "2019-01-01T00:00:00Z",
+              "about_course" => enrichment.about_course,
+              "course_length" => enrichment.course_length,
+              "fee_details" => enrichment.fee_details,
+              "fee_international" => enrichment.fee_international,
+              "fee_uk_eu" => enrichment.fee_uk_eu,
+              "financial_support" => enrichment.financial_support,
+              "how_school_placements_work" => enrichment.how_school_placements_work,
+              "interview_process" => enrichment.interview_process,
+              "other_requirements" => enrichment.other_requirements,
+              "personal_qualities" => enrichment.personal_qualities,
+              "required_qualifications" => enrichment.qualifications,
+              "salary_details" => enrichment.salary_details
             },
             "relationships" => {
               "accrediting_provider" => { "meta" => { "included" => false } },
