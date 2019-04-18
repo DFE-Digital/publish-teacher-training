@@ -224,6 +224,13 @@ describe 'Courses API v2', type: :request do
     end
 
     context 'unpublished course with draft enrichment' do
+      let!(:course) {
+        create(:course,
+               provider: provider,
+               with_site_statuses: [:new],
+               with_enrichments: [:initial_draft],
+               age: 17.days.ago)
+      }
       it 'publishes a course' do
         # run the POST
         response = subject
@@ -232,6 +239,10 @@ describe 'Courses API v2', type: :request do
         expect(course.site_statuses.first.publish).to eq 'published'
 
         expect(course.enrichments.first.status).to eq 'published'
+        expect(course.enrichments.first.updated_by_user_id).to eq user.id
+        expect(course.enrichments.first.updated_at).to be_within(1.second).of Time.now.utc
+        expect(course.enrichments.first.last_published_timestamp_utc).to be_within(1.second).of Time.now.utc
+        expect(course.changed_at).to be_within(1.second).of Time.now.utc
         assert_requested :post, %r{#{Settings.manage_api.base_url}/api/Publish/internal/course/}
         expect(response).to have_http_status(:success)
       end

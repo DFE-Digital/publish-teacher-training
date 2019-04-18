@@ -70,6 +70,14 @@ FactoryBot.define do
           ucas_course_code: course.course_code,
           provider_code: course.provider.provider_code,
         }
+        if evaluator.age.present?
+          defaults = defaults.merge(
+            {
+              created_at: evaluator.age,
+              updated_at: evaluator.age,
+            }
+          )
+        end
         create(:course_enrichment, trait, attributes.merge(defaults))
       end
 

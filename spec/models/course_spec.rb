@@ -438,14 +438,37 @@ RSpec.describe Course, type: :model do
   describe "#publish_enrichments" do
     context 'on a course with only a draft enrichment' do
       let(:course) do
-        create(:course, with_enrichments: [
-          [:initial_draft, created_at: 1.day.ago],
-      ])
+        create(:course,
+            changed_at: 10.minutes.ago,
+          with_enrichments: [
+          [:initial_draft, created_at: 1.day.ago, updated_at: 20.minutes.ago],
+        ])
       end
+      let(:user) { create(:user) }
 
       it 'should publish the draft' do
-        course.publish_enrichment
+        course.publish_enrichment(user.id)
         expect(course.enrichments.first.status).to eq 'published'
+      end
+
+      it 'should update course changed_at to the current time' do
+        course.publish_enrichment(user.id)
+        expect(course.changed_at).to be_within(1.second).of Time.now.utc
+      end
+
+      it 'should touch enrichment updated_at to the current time' do
+        course.publish_enrichment(user.id)
+        expect(course.enrichments.first.updated_at).to be_within(1.second).of Time.now.utc
+      end
+
+      it 'should updated last_published to the current time' do
+        course.publish_enrichment(user.id)
+        expect(course.enrichments.first.last_published_timestamp_utc).to be_within(1.second).of Time.now.utc
+      end
+
+      it 'should updated updated_by to the current user' do
+        course.publish_enrichment(user.id)
+        expect(course.enrichments.first.updated_by_user_id).to eq user.id
       end
     end
 
@@ -457,9 +480,10 @@ RSpec.describe Course, type: :model do
             [:subsequent_draft, created_at: 1.day.ago],
         ])
       end
+      let(:user) { create(:user) }
 
       it 'should publish the draft' do
-        course.publish_enrichment
+        course.publish_enrichment(user)
         course.enrichments.each do |enrichment|
           expect(enrichment.status).to eq 'published'
         end
