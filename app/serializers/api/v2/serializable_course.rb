@@ -16,6 +16,10 @@ module API
         SubjectMapper.get_subject_list(@object.name, ucas_subjects)
       end
 
+      attribute :is_send? do
+        @object.subjects.any? { |subject| subject.subject_code.casecmp('U3').zero? }
+      end
+
       belongs_to :provider
       belongs_to :accrediting_provider
 

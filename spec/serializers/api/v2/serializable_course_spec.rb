@@ -18,7 +18,7 @@ describe API::V2::SerializableCourse do
   it { should have_type('courses') }
   it {
     should have_attributes(:start_date, :content_status, :ucas_status,
-    :funding, :subjects, :applications_open_from)
+    :funding, :subjects, :applications_open_from, :is_send?)
   }
 
   context 'with a provider' do
@@ -81,6 +81,16 @@ describe API::V2::SerializableCourse do
       let(:course) { create(:course, :with_salary) }
 
       it { expect(subject["attributes"]).to include("funding" => "salary") }
+    end
+  end
+
+  describe "#is_send?" do
+    let(:course) { create(:course, subject_count: 0) }
+    it { expect(subject["attributes"]).to include("is_send?" => false) }
+
+    context "with a SEND subject" do
+      let(:course) { create(:course, subject_count: 0, subjects: [create(:send_subject)]) }
+      it { expect(subject["attributes"]).to include("is_send?" => true) }
     end
   end
 end
