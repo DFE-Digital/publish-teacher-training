@@ -24,4 +24,13 @@ class User < ApplicationRecord
   validates :email, presence: true
 
   audited
+
+  aasm do
+    state :new, initial: true
+    state :active
+
+    event :activated do
+      transitions from: :new, to: :active
+    end
+  end
 end
