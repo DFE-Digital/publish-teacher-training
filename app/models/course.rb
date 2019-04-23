@@ -166,9 +166,8 @@ class Course < ApplicationRecord
   end
 
   def publish_enrichment(current_user)
-    enrichments.draft
-    .update(status: 'published',
-            last_published_timestamp_utc: Time.now.utc,
-            updated_by_user_id: current_user.id)
+    enrichments.draft.each do |enrichment|
+      enrichment.publish(current_user)
+    end
   end
 end

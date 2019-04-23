@@ -31,18 +31,50 @@ describe CourseEnrichment, type: :model do
     end
   end
 
-  context 'when the enrichment is an initial draft' do
-    subject { create(:course_enrichment, :initial_draft) }
-    it { should_not have_been_published_before }
+  describe '#has_been_published_before?' do
+    context 'when the enrichment is an initial draft' do
+      subject { create(:course_enrichment, :initial_draft) }
+      it { should_not have_been_published_before }
+    end
+
+    context 'when the enrichment is published' do
+      subject { create(:course_enrichment, :published) }
+      it { should have_been_published_before }
+    end
+
+    context 'when the enrichment is a subsequent draft' do
+      subject { create(:course_enrichment, :subsequent_draft) }
+      it { should have_been_published_before }
+    end
   end
 
-  context 'when the enrichment is published' do
-    subject { create(:course_enrichment, :published) }
-    it { should have_been_published_before }
-  end
+  describe '#publish' do
+    let(:user) { create(:user) }
 
-  context 'when the enrichment is a subsequent draft' do
-    subject { create(:course_enrichment, :subsequent_draft) }
-    it { should have_been_published_before }
+    context 'when the enrichment is an initial draft' do
+      subject { create(:course_enrichment, :initial_draft, created_at: 1.day.ago, updated_at: 20.minutes.ago) }
+
+      before do
+        subject.publish(user)
+      end
+
+      its(:status) { should eq 'published' }
+      its(:updated_at) { should be_within(1.second).of Time.now.utc }
+      its(:last_published_timestamp_utc) { should be_within(1.second).of Time.now.utc }
+      its(:updated_by_user_id) { should eq user.id }
+    end
+
+    context 'when the enrichment is a subsequent draft' do
+      subject { create(:course_enrichment, :subsequent_draft, created_at: 1.day.ago, updated_at: 20.minutes.ago) }
+
+      before do
+        subject.publish(user)
+      end
+
+      its(:status) { should eq 'published' }
+      its(:updated_at) { should be_within(1.second).of Time.now.utc }
+      its(:last_published_timestamp_utc) { should be_within(1.second).of Time.now.utc }
+      its(:updated_by_user_id) { should eq user.id }
+    end
   end
 end

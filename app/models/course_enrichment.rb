@@ -43,4 +43,10 @@ class CourseEnrichment < ApplicationRecord
   def has_been_published_before?
     last_published_timestamp_utc.present?
   end
+
+  def publish(current_user)
+    update(status: 'published',
+          last_published_timestamp_utc: Time.now.utc,
+          updated_by_user_id: current_user.id)
+  end
 end
