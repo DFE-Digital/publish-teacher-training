@@ -162,7 +162,7 @@ describe SubjectMapperService do
 
         describe "Test case row '#{i}': subjects #{row[:ucas_subjects]}, title: #{row[:course_title]}" do
           subject { described_class.get_subject_list(row[:course_title], row[:ucas_subjects].split(",")) }
-          it { should match_array row[:expected_subjects].split(",") }
+          it { should match_array row[:expected_subjects]&.split(",") || [] }
         end
       end
     end
