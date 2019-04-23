@@ -51,5 +51,39 @@ describe 'mcb provider optin' do
       # These should be correct to the second, but not the nsec
       expect(course1.created_at.nsec).not_to eq course2.created_at.nsec
     end
+
+    context 'when the course has UCAS status "new"' do
+      let(:course1) do
+        create(
+          :course,
+          site_statuses: create_list(:site_status, 1, :new),
+          enrichments: enrichments
+        )
+      end
+
+      before do
+        enrichments.each do |enrichment|
+          enrichment.update(provider_code: provider.provider_code)
+        end
+      end
+
+      context 'when the course has publised course enrichments' do
+        let(:enrichments) { create_list(:course_enrichment, 1, :published) }
+
+        it 'changes the enrichment to draft' do
+          expect { subject }.to change { course1.enrichments.first.reload.status }
+            .from('published')
+            .to('draft')
+        end
+      end
+
+      context 'when the course does not have published enrichments' do
+        let(:enrichments) { create_list(:course_enrichment, 1, :initial_draft) }
+
+        it 'does not change the enrichment status' do
+          expect { subject }.not_to(change { course1.enrichments.first.reload.status })
+        end
+      end
+    end
   end
 end
