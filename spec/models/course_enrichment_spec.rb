@@ -45,4 +45,16 @@ describe CourseEnrichment, type: :model do
     subject { create(:course_enrichment, :subsequent_draft) }
     it { should have_been_published_before }
   end
+
+  describe '.latest_first' do
+    let!(:old_enrichment) do
+      create(:course_enrichment, :published, created_at: Date.yesterday)
+    end
+    let!(:new_enrichment) { create(:course_enrichment, :published) }
+
+    it 'returns the new enrichment first' do
+      expect(CourseEnrichment.latest_first.first).to eq new_enrichment
+      expect(CourseEnrichment.latest_first.last).to eq old_enrichment
+    end
+  end
 end

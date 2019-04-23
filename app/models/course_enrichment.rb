@@ -38,6 +38,8 @@ class CourseEnrichment < ApplicationRecord
              foreign_key: :ucas_course_code,
              primary_key: :course_code
 
+  scope :latest_first, -> { order(created_at: :desc) }
+
   def has_been_published_before?
     last_published_timestamp_utc.present?
   end

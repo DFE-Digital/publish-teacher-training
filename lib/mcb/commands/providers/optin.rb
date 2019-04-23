@@ -11,7 +11,13 @@ run do |opts, args, _cmd|
       provider.update(opted_in: true)
 
       provider.courses.each do |course|
-        course.enrichments.update_all(status: :draft) if course.new?
+        next unless course.new?
+
+        enrichment = course.enrichments.latest_first.first
+        next unless enrichment.published?
+
+        puts "resetting enrichment #{enrichment.id} for course #{course.course_code} to draft"
+        enrichment.update(status: :draft)
       end
 
       provider.courses.each do |c|
