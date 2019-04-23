@@ -164,7 +164,6 @@ class Course < ApplicationRecord
     site_statuses.status_new_status.each(&:status_running!)
     site_statuses.status_running.unpublished_on_ucas.each(&:published_on_ucas!)
 
-    # as update_all is called and doesn't trigger a save this has to be manually tested
     update(changed_at: Time.now.utc)
   end
 
