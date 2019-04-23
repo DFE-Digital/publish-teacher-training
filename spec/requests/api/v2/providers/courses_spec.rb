@@ -234,6 +234,7 @@ describe 'Courses API v2', type: :request do
       it 'publishes a course' do
         # run the POST
         response = subject
+        course.reload
 
         expect(course.site_statuses.first.status).to eq 'running'
         expect(course.site_statuses.first.publish).to eq 'published'

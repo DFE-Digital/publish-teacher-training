@@ -169,11 +169,10 @@ class Course < ApplicationRecord
 
   def publish_enrichment(current_user_id)
     enrichments.where(status: 'draft')
-    .update_all(status: 'published',
-                updated_at: Time.now.utc,
-                last_published_timestamp_utc: Time.now.utc,
-                updated_by_user_id: current_user_id
-                )
+    .update(status: 'published',
+            updated_at: Time.now.utc,
+            last_published_timestamp_utc: Time.now.utc,
+            updated_by_user_id: current_user_id)
     update(changed_at: Time.now.utc)
   end
 

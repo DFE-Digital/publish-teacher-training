@@ -448,26 +448,31 @@ RSpec.describe Course, type: :model do
 
       it 'should publish the draft' do
         course.publish_enrichment(user.id)
+        course.reload
         expect(course.enrichments.first.status).to eq 'published'
       end
 
       it 'should update course changed_at to the current time' do
         course.publish_enrichment(user.id)
+        course.reload
         expect(course.changed_at).to be_within(1.second).of Time.now.utc
       end
 
       it 'should touch enrichment updated_at to the current time' do
         course.publish_enrichment(user.id)
+        course.reload
         expect(course.enrichments.first.updated_at).to be_within(1.second).of Time.now.utc
       end
 
       it 'should updated last_published to the current time' do
         course.publish_enrichment(user.id)
+        course.reload
         expect(course.enrichments.first.last_published_timestamp_utc).to be_within(1.second).of Time.now.utc
       end
 
       it 'should updated updated_by to the current user' do
         course.publish_enrichment(user.id)
+        course.reload
         expect(course.enrichments.first.updated_by_user_id).to eq user.id
       end
     end
@@ -484,6 +489,7 @@ RSpec.describe Course, type: :model do
 
       it 'should publish the draft' do
         course.publish_enrichment(user)
+        course.reload
         course.enrichments.each do |enrichment|
           expect(enrichment.status).to eq 'published'
         end
@@ -526,6 +532,7 @@ RSpec.describe Course, type: :model do
           site = create(:site_status, status: test_case[:before][:status], publish: test_case[:before][:publish])
           subject = create(:course, site_statuses: [site])
           subject.publish_sites
+          subject.reload
           expect(subject.site_statuses.first.status).to eq test_case[:after][:status]
           expect(subject.site_statuses.first.publish).to eq test_case[:after][:publish]
         end
