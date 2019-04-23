@@ -168,17 +168,18 @@ describe 'Courses API v2', type: :request do
   describe 'POST publish' do
     let(:api_status)   { 200 }
     let(:api_response) { '{ "result": true }' }
-    let!(:stubbed_manage_courses_api_request) do
+    let(:course) { findable_open_course }
+    let(:publish_path) do
+      "/api/v2/providers/#{provider.provider_code}" +
+        "/courses/#{course.course_code}/publish"
+    end
+
+    before do
       stub_request(:post, %r{#{Settings.manage_api.base_url}/api/Publish/internal/course/})
         .to_return(
           status: api_status,
           body: api_response
         )
-    end
-    let(:course) { findable_open_course }
-    let(:publish_path) do
-      "/api/v2/providers/#{provider.provider_code}" +
-        "/courses/#{course.course_code}/publish"
     end
 
     subject do
