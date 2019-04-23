@@ -498,14 +498,6 @@ RSpec.describe Course, type: :model do
   end
 
   describe 'publish_sites' do
-    context 'a pre-existing course' do
-      let(:subject) { create(:course, changed_at: 10.minutes.ago) }
-      it 'updates course changed_at attribute to the current time' do
-        subject.publish_sites
-        expect(subject.changed_at).to be_within(1.second).of Time.now.utc
-      end
-    end
-
     context 'course with a single site' do
       let(:subject) { create(:course, with_site_statuses: [:new]) }
 
@@ -515,6 +507,11 @@ RSpec.describe Course, type: :model do
 
           expect(subject.site_statuses.first.status).to eq 'running'
           expect(subject.site_statuses.first.publish).to eq 'published'
+        end
+
+        it 'updates course changed_at attribute to the current time' do
+          subject.publish_sites
+          expect(subject.changed_at).to be_within(1.second).of Time.now.utc
         end
       end
 

@@ -163,8 +163,6 @@ class Course < ApplicationRecord
   def publish_sites
     site_statuses.status_new_status.each(&:status_running!)
     site_statuses.status_running.unpublished_on_ucas.each(&:published_on_ucas!)
-
-    update(changed_at: Time.now.utc)
   end
 
   def publish_enrichment(current_user)
