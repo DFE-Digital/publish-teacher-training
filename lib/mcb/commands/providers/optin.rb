@@ -16,7 +16,7 @@ run do |opts, args, _cmd|
         enrichment = course.enrichments.latest_first.first
         next unless enrichment.published?
 
-        puts "resetting enrichment #{enrichment.id} for course #{course.course_code} to draft"
+        verbose "  resetting enrichment #{enrichment.id} for course #{course.course_code} to draft"
         enrichment.update(status: :draft)
       end
 
