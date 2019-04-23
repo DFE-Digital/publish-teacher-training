@@ -25,6 +25,19 @@ module API
         head response ? :ok : :internal_server_error
       end
 
+      def publish
+        # todo: set running
+        # todo: set enrichment published
+
+        response = ManageCoursesAPI::Request.sync_course_with_search_and_compare(
+          @current_user.email,
+          @provider.provider_code,
+          @course.course_code
+        )
+
+        head response ? :ok : :internal_server_error
+      end
+
     private
 
       def build_provider
