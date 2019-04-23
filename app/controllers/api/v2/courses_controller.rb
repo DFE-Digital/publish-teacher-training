@@ -28,7 +28,14 @@ module API
       def publish
         # todo: set running
         # todo: set enrichment published
-        sync_with_search_and_compare
+
+        response = ManageCoursesAPI::Request.sync_course_with_search_and_compare(
+          @current_user.email,
+          @provider.provider_code,
+          @course.course_code
+        )
+
+        head response ? :ok : :internal_server_error
       end
 
     private
