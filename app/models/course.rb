@@ -170,6 +170,5 @@ class Course < ApplicationRecord
     .update(status: 'published',
             last_published_timestamp_utc: Time.now.utc,
             updated_by_user_id: current_user.id)
-    update(changed_at: Time.now.utc)
   end
 end

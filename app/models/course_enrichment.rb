@@ -15,6 +15,8 @@
 #
 
 class CourseEnrichment < ApplicationRecord
+  include TouchCourse
+
   enum status: %i[draft published]
 
   jsonb_accessor :json_data,
