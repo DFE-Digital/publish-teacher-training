@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_04_09_230916) do
+ActiveRecord::Schema.define(version: 2019_04_18_114021) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_buffercache"
@@ -120,6 +120,9 @@ ActiveRecord::Schema.define(version: 2019_04_09_230916) do
     t.integer "subject_id"
     t.index ["course_id"], name: "IX_course_subject_course_id"
     t.index ["subject_id"], name: "IX_course_subject_subject_id"
+  end
+
+  create_table "data_migrations", primary_key: "version", id: :string, force: :cascade do |t|
   end
 
   create_table "nctl_organisation", id: :serial, force: :cascade do |t|
@@ -246,6 +249,7 @@ ActiveRecord::Schema.define(version: 2019_04_09_230916) do
     t.datetime "welcome_email_date_utc"
     t.datetime "invite_date_utc"
     t.datetime "accept_terms_date_utc"
+    t.string "state", null: false
     t.index ["email"], name: "IX_user_email", unique: true
   end
 

@@ -11,4 +11,5 @@ class UserPolicy
   end
 
   alias_method :update?, :show?
+  alias_method :accept_transition_screen?, :update?
 end

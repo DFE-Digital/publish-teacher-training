@@ -17,6 +17,10 @@ module API
         end
       end
 
+      def accept_transition_screen
+        @user.accept_transition_screen!
+      end
+
     private
 
       def build_user

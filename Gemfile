@@ -69,6 +69,12 @@ gem 'uk_postcode'
 # For change history on provider, courses, sites, etc
 gem 'audited', '~> 4.7'
 
+# State machine to track users through their onboarding journey
+gem 'aasm'
+
+# Handle data migrations
+gem 'data_migrate'
+
 group :development, :test do
   # add info about db structure to models and other files
   gem 'annotate'

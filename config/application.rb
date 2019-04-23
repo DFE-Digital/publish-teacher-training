@@ -30,7 +30,8 @@ module ManageCoursesBackend
 
     config.action_dispatch.rescue_responses = {
       'Pundit::NotAuthorizedError' => :forbidden,
-      'PG::ConnectionBad' => :service_unavailable
+      'PG::ConnectionBad' => :service_unavailable,
+      'AASM::InvalidTransition' => :bad_request
     }
   end
 end

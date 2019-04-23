@@ -46,6 +46,7 @@
 #             error_500 GET    /error_500(.:format)                                     error#error_500
 #            error_nodb GET    /error_nodb(.:format)                                    error#error_nodb
 
+# rubocop:disable Metrics/BlockLength
 Rails.application.routes.draw do
   namespace :api do
     namespace :v1 do
@@ -59,6 +60,8 @@ Rails.application.routes.draw do
     namespace :v2 do
       resources :users, only: %i[update show] do
         resources :providers
+
+        patch :accept_transition_screen, on: :member
       end
 
       resources :providers, param: :code do
@@ -77,3 +80,4 @@ Rails.application.routes.draw do
   get 'error_500', to: 'error#error_500'
   get 'error_nodb', to: 'error#error_nodb'
 end
+# rubocop:enable Metrics/BlockLength

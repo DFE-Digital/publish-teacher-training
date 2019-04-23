@@ -3,7 +3,7 @@ module API
     class SerializableUser < JSONAPI::Serializable::Resource
       type 'users'
 
-      attributes :first_name, :last_name, :email, :accept_terms_date_utc
+      attributes :first_name, :last_name, :email, :accept_terms_date_utc, :state
     end
   end
 end

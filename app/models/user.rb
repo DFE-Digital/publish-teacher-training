@@ -12,14 +12,25 @@
 #  welcome_email_date_utc :datetime
 #  invite_date_utc        :datetime
 #  accept_terms_date_utc  :datetime
-#  aasm_state             :string
+#  state                  :string           not null
 #
 
 class User < ApplicationRecord
+  include AASM
+
   has_and_belongs_to_many :organisations
   has_many :providers, through: :organisations
 
   validates :email, presence: true
 
   audited
+
+  aasm column: 'state' do
+    state :new, initial: true
+    state :transitioned
+
+    event :accept_transition_screen do
+      transitions from: :new, to: :transitioned
+    end
+  end
 end
