@@ -447,31 +447,31 @@ RSpec.describe Course, type: :model do
       let(:user) { create(:user) }
 
       it 'should publish the draft' do
-        course.publish_enrichment(user.id)
+        course.publish_enrichment(user)
         course.reload
         expect(course.enrichments.first.status).to eq 'published'
       end
 
       it 'should update course changed_at to the current time' do
-        course.publish_enrichment(user.id)
+        course.publish_enrichment(user)
         course.reload
         expect(course.changed_at).to be_within(1.second).of Time.now.utc
       end
 
       it 'should touch enrichment updated_at to the current time' do
-        course.publish_enrichment(user.id)
+        course.publish_enrichment(user)
         course.reload
         expect(course.enrichments.first.updated_at).to be_within(1.second).of Time.now.utc
       end
 
       it 'should updated last_published to the current time' do
-        course.publish_enrichment(user.id)
+        course.publish_enrichment(user)
         course.reload
         expect(course.enrichments.first.last_published_timestamp_utc).to be_within(1.second).of Time.now.utc
       end
 
       it 'should updated updated_by to the current user' do
-        course.publish_enrichment(user.id)
+        course.publish_enrichment(user)
         course.reload
         expect(course.enrichments.first.updated_by_user_id).to eq user.id
       end

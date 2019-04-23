@@ -29,7 +29,7 @@ module API
         if @provider.opted_in
           @course.publish_sites
         end
-        @course.publish_enrichment(@current_user.id)
+        @course.publish_enrichment(@current_user)
 
         response = ManageCoursesAPI::Request.sync_course_with_search_and_compare(
           @current_user.email,
