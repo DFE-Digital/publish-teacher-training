@@ -113,13 +113,12 @@ describe 'mcb providers ucas_preferences import' do
         cmd.run([tmpfile.path])
       end
 
-      # rubocop: disable Layout/TrailingWhitespace
-      expect(output.squeeze(' ')).to match <<~EOEXPECTED.chomp
-        \ #{provider.provider_code} type_of_gt12: Coming or Not -> Not coming\ 
-        \ #{provider.provider_code} send_application_alerts: Yes, required -> No, not required\ 
-        2 changed preferences for 1 providers. Continue?\ 
-      EOEXPECTED
-      # rubocop: enable Layout/TrailingWhitespace
+      expected_output_regexp = Regexp.new([
+        "\s*#{provider.provider_code}\s*type_of_gt12:\s*Coming or Not -> Not coming\s*",
+        "\s*#{provider.provider_code}\s*send_application_alerts:\s*Yes, required -> No, not required\s*",
+        "2 changed preferences for 1 providers. Continue?"
+      ].join("\n"))
+      expect(output).to match(expected_output_regexp)
     end
 
     it 'changes the given preferences when confirmation is given' do
