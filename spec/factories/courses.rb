@@ -72,10 +72,8 @@ FactoryBot.define do
         }
         if evaluator.age.present?
           defaults = defaults.merge(
-            {
-              created_at: evaluator.age,
-              updated_at: evaluator.age,
-            }
+            created_at: evaluator.age,
+            updated_at: evaluator.age,
           )
         end
         create(:course_enrichment, trait, attributes.merge(defaults))
