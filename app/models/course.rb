@@ -161,15 +161,15 @@ class Course < ApplicationRecord
   end
 
   def publish_sites
-    site_statuses.where(status: 'new_status').update_all(status: 'running')
-    site_statuses.where(status: 'running', publish: 'unpublished').update_all(publish: 'published')
+    site_statuses.status_new_status.update_all(status: 'running')
+    site_statuses.status_running.unpublished_on_ucas.update_all(publish: 'published')
 
     # as update_all is called and doesn't trigger a save this has to be manually tested
     update(changed_at: Time.now.utc)
   end
 
   def publish_enrichment(current_user)
-    enrichments.where(status: 'draft')
+    enrichments.draft
     .update(status: 'published',
             updated_at: Time.now.utc,
             last_published_timestamp_utc: Time.now.utc,
