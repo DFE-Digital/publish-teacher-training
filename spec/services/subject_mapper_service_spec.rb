@@ -2,6 +2,30 @@ require "spec_helper"
 require "csv"
 
 describe SubjectMapperService do
+  RSpec::Matchers.define :map_to_dfe_subjects do |expected|
+    match do |input|
+      @input = input
+      @actual_dfe_subjects = mapped_subjects(input.fetch(:title, "Any title"), input[:ucas])
+      @actual_level = described_class.get_subject_level(input[:ucas])
+      contain_exactly(*expected).matches?(@actual_dfe_subjects) &&
+        (@actual_level == @expected_level)
+    end
+
+    def mapped_subjects(course_title, ucas_subjects)
+      described_class.get_subject_list(course_title, ucas_subjects)
+    end
+
+    chain :at_level do |level|
+      @expected_level = level
+    end
+
+    failure_message do |_|
+      "expected that UCAS subjects '#{@input[:ucas].join(', ')}' would map to DfE subjects '#{expected.join(', ')}' " +
+        "at #{@expected_level} level but was DfE subjects '#{@actual_dfe_subjects.join(', ')}' " +
+        "at #{@actual_level} level"
+    end
+  end
+
   # Port of https://github.com/DFE-Digital/manage-courses-api/blob/master/tests/ManageCourses.Tests/UnitTesting/SubjectMapperTests.cs
   describe "#get_subject_list" do
     specs = [
@@ -131,13 +155,12 @@ describe SubjectMapperService do
         expected_subjects: ["Mandarin", "English as a second or other language"],
         test_case: "secondary ESOL"
       },
-      {
-        course_title: "PCET ESOL",
-        ucas_subjects: ["further education", "english as a second or other language"],
-        expected_subjects: ["Further education"],
-        test_case: "secondary ESOL"
-      },
     ]
+
+    describe "PCET ESOL" do
+      subject { { ucas: ["further education", "english as a second or other language"] } }
+      it { should map_to_dfe_subjects(["Further education"]).at_level(:further_education) }
+    end
 
     specs.each do |spec|
       describe "Test case '#{spec[:test_case]}''" do
