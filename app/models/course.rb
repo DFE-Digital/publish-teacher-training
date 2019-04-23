@@ -161,8 +161,8 @@ class Course < ApplicationRecord
   end
 
   def publish_sites
-    site_statuses.status_new_status.update_all(status: 'running')
-    site_statuses.status_running.unpublished_on_ucas.update_all(publish: 'published')
+    site_statuses.status_new_status.update(status: 'running')
+    site_statuses.status_running.unpublished_on_ucas.update(publish: 'published')
 
     # as update_all is called and doesn't trigger a save this has to be manually tested
     update(changed_at: Time.now.utc)
