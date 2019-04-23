@@ -155,13 +155,14 @@ describe SubjectMapperService do
     end
 
     describe "using subject-mapper-test-data.csv" do
-      data = CSV.read("#{Dir.pwd}/spec/services/subject-mapper-test-data.csv", encoding: "UTF-8", headers: true, header_converters: :symbol, converters: :all)
-      hashed_data = data.map(&:to_hash)
+      CSV.foreach("#{Dir.pwd}/spec/services/subject-mapper-test-data.csv",
+        encoding: "UTF-8",
+        headers: true,
+        header_converters: :symbol).with_index do |row, i|
 
-      hashed_data.each_with_index do |spec, index|
-        describe "Test case row '#{index}': subjects #{spec[:ucas_subjects]}, title: #{spec[:course_title]}" do
-          subject { described_class.get_subject_list(spec[:course_title], spec[:ucas_subjects].split(",")) }
-          it { should match_array spec[:expected_subjects].split(",") }
+        describe "Test case row '#{i}': subjects #{row[:ucas_subjects]}, title: #{row[:course_title]}" do
+          subject { described_class.get_subject_list(row[:course_title], row[:ucas_subjects].split(",")) }
+          it { should match_array row[:expected_subjects].split(",") }
         end
       end
     end
