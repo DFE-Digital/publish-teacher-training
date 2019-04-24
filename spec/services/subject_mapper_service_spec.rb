@@ -1,7 +1,7 @@
 require "spec_helper"
 require "csv"
 
-describe SubjectMapper do
+describe SubjectMapperService do
   # Port of https://github.com/DFE-Digital/manage-courses-api/blob/master/tests/ManageCourses.Tests/UnitTesting/SubjectMapperTests.cs
   describe "#get_subject_list" do
     specs = [
@@ -141,7 +141,7 @@ describe SubjectMapper do
 
     specs.each do |spec|
       describe "Test case '#{spec[:test_case]}''" do
-        subject { SubjectMapper.get_subject_list(spec[:course_title], spec[:ucas_subjects]) }
+        subject { described_class.get_subject_list(spec[:course_title], spec[:ucas_subjects]) }
 
         it { should match_array spec[:expected_subjects] }
       end
@@ -149,7 +149,7 @@ describe SubjectMapper do
 
     describe "regression test" do
       xcontext "english" do
-        subject { SubjectMapper.get_subject_list(title, %w[english]) }
+        subject { described_class.get_subject_list(title, %w[english]) }
         it { should match_array %w[English] }
       end
     end
@@ -166,7 +166,7 @@ describe SubjectMapper do
         title = spec[:course_title]
 
         describe "Test case row '#{index}': subjects #{ucas_subjects_to_map.join(', ')}, title: #{title}" do
-          subject { SubjectMapper.get_subject_list(title, ucas_subjects_to_map) }
+          subject { described_class.get_subject_list(title, ucas_subjects_to_map) }
           it { should match_array expected_dfe_subjects }
         end
       end

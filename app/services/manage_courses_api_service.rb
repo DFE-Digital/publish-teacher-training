@@ -1,4 +1,4 @@
-module ManageCoursesAPI
+module ManageCoursesAPIService
   class Connection
     def self.api
       Faraday.new(url: Settings.manage_api.base_url) do |faraday|
