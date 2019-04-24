@@ -17,7 +17,7 @@ run do |opts, args, _cmd|
         next unless enrichment&.published?
 
         verbose "  resetting enrichment #{enrichment.id} for course #{course.course_code} to draft"
-        enrichment.update(status: :draft)
+        enrichment.unpublish(initial_draft: true)
       end
 
       provider.courses.each do |c|
