@@ -43,4 +43,10 @@ class CourseEnrichment < ApplicationRecord
   def has_been_published_before?
     last_published_timestamp_utc.present?
   end
+
+  def unpublish(initial_draft: true)
+    data = { status: :draft }
+    data[:last_published_timestamp_utc] = nil if initial_draft
+    update(data)
+  end
 end

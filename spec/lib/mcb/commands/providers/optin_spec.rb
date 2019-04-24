@@ -68,10 +68,11 @@ describe 'mcb provider optin' do
       end
 
       context 'when the course has publised course enrichments' do
+        let(:a_date_in_the_past) { Date.new(2017, 1, 1) }
         let(:enrichments) do
           [
             create(:course_enrichment, :published, created_at: Date.yesterday),
-            create(:course_enrichment, :published)
+            create(:course_enrichment, :published, last_published_timestamp_utc: a_date_in_the_past)
           ]
         end
 
@@ -79,6 +80,12 @@ describe 'mcb provider optin' do
           expect { subject }.to change { enrichments.last.reload.status }
             .from('published')
             .to('draft')
+        end
+
+        it 'blows away the last publication timestamp on the latest enrichment' do
+          expect { subject }.to change { enrichments.last.reload.last_published_timestamp_utc }
+            .from(a_date_in_the_past)
+            .to(nil)
         end
 
         it 'does not change the status of the second enrichment' do
