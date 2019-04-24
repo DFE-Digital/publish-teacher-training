@@ -157,7 +157,7 @@ describe 'Sites API v2', type: :request do
     let(:site_params) { params.dig :_jsonapi, :data, :attributes }
 
     before do
-      allow(ManageCoursesAPI::Request).to(
+      allow(ManageCoursesAPIService::Request).to(
         receive(:sync_courses_with_search_and_compare).and_return(true)
       )
     end
@@ -266,7 +266,7 @@ describe 'Sites API v2', type: :request do
         it { should have_http_status(:success) }
 
         it 'publishes courses on manage-courses-api' do
-          expect(ManageCoursesAPI::Request).to(
+          expect(ManageCoursesAPIService::Request).to(
             have_received(:sync_courses_with_search_and_compare)
             .with(user.email, provider.provider_code)
           )

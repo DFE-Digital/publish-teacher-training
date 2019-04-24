@@ -21,12 +21,12 @@ module API
 
       attribute :subjects do
         ucas_subjects = @object.subjects.map(&:subject_name)
-        SubjectMapper.get_subject_list(@object.name, ucas_subjects)
+        SubjectMapperService.get_subject_list(@object.name, ucas_subjects)
       end
 
       attribute :level do
         ucas_subjects = @object.subjects.map(&:subject_name)
-        SubjectMapper.get_subject_level(ucas_subjects)
+        SubjectMapperService.get_subject_level(ucas_subjects)
       end
 
       attribute :is_send? do

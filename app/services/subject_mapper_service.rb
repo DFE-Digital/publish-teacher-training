@@ -1,6 +1,6 @@
 # This is a port of https://github.com/DFE-Digital/manage-courses-api/blob/master/src/ManageCourses.Api/Mapping/SubjectMapper.cs
 
-class SubjectMapper
+class SubjectMapperService
   SUBJECT_LEVEL = {
     ucas_further_education: ["further education",
                              "higher education",
