@@ -10,8 +10,14 @@ module API
           email = email_from_token(token)
 
           @current_user = User.find_by("lower(email) = ?", email.downcase)
-
-          @current_user.present?
+          if @current_user.present?
+            Raven.user_context(id: @current_user.id)
+            true
+          else
+            # Once DFE Sign-In ID is passed in, add that to the Raven user
+            # context.
+            false
+          end
         end
       end
 
