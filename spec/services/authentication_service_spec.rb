@@ -1,4 +1,4 @@
-describe Authentication do
+describe AuthenticationService do
   describe '.call' do
     let(:user) { create(:user) }
 

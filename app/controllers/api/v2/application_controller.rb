@@ -7,7 +7,7 @@ module API
 
       def authenticate
         authenticate_or_request_with_http_token do |token|
-          @current_user = Authentication.call(token)
+          @current_user = AuthenticationService.call(token)
           assign_sentry_contexts
           @current_user.present?
         end

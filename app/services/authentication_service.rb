@@ -1,4 +1,4 @@
-class Authentication
+class AuthenticationService
   attr_accessor :encoded_token, :user
 
   def self.call(encoded_token)
