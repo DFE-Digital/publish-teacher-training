@@ -436,55 +436,54 @@ RSpec.describe Course, type: :model do
   end
 
   describe "#publish_enrichments" do
+    let(:user) { create(:user) }
+
+    before do
+      subject.publish_enrichment(user)
+      subject.reload
+    end
+
     context 'on a course with only a draft enrichment' do
-      let(:course) do
+      let(:subject) do
         create(:course,
             changed_at: 10.minutes.ago,
             with_enrichments: [[:initial_draft,
                                 created_at: 1.day.ago,
                                 updated_at: 20.minutes.ago]])
       end
-      let(:user) { create(:user) }
+
+      let(:enrichment) { subject.enrichments.first }
+
+      its(:changed_at) { should be_within(1.second).of Time.now.utc }
 
       it 'publishes the draft' do
-        course.publish_enrichment(user)
-        expect(course.reload.enrichments.first).to be_published
-      end
-
-      it 'updates course changed_at to the current time' do
-        course.publish_enrichment(user)
-        expect(course.reload.changed_at).to be_within(1.second).of Time.now.utc
+        expect(enrichment).to be_published
       end
 
       it 'updates enrichment updated_at to the current time' do
-        course.publish_enrichment(user)
-        expect(course.reload.enrichments.first.updated_at).to be_within(1.second).of Time.now.utc
+        expect(enrichment.updated_at).to be_within(1.second).of Time.now.utc
       end
 
       it 'updates last_published to the current time' do
-        course.publish_enrichment(user)
-        expect(course.reload.enrichments.first.last_published_timestamp_utc).to be_within(1.second).of Time.now.utc
+        expect(enrichment.last_published_timestamp_utc).to be_within(1.second).of Time.now.utc
       end
 
       it 'updates updated_by to the current user' do
-        course.publish_enrichment(user)
-        expect(course.reload.enrichments.first.updated_by_user_id).to eq user.id
+        expect(enrichment.updated_by_user_id).to eq user.id
       end
     end
 
     context 'on a course with a draft enrichment and previously-published enrichments' do
-      let(:course) do
+      let(:subject) do
         create(:course, with_enrichments: [
             [:published, created_at: 5.days.ago],
             [:published, created_at: 3.days.ago],
             [:subsequent_draft, created_at: 1.day.ago],
         ])
       end
-      let(:user) { create(:user) }
 
       it 'publishes the draft' do
-        course.publish_enrichment(user)
-        course.reload.enrichments.each do |enrichment|
+        subject.enrichments.each do |enrichment|
           expect(enrichment).to be_published
         end
       end
