@@ -7,7 +7,7 @@ class UserPolicy
   end
 
   def show?
-    user == accessed_user
+    user === accessed_user
   end
 
   alias_method :update?, :show?
