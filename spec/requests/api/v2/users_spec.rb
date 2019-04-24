@@ -85,9 +85,9 @@ describe '/api/v2/users', type: :request do
       end
       let(:user_params)           { params.dig :_jsonapi, :data, :attributes }
       let(:accept_terms_date_utc) { DateTime.now.utc }
-      let(:email)                 { 'dave.smith@gmail.com' }
-      let(:first_name)            { 'Dave' }
-      let(:last_name)             { 'Smith' }
+      let(:first_name)            { Faker::Name.unique.first_name }
+      let(:last_name)             { Faker::Name.unique.last_name }
+      let(:email)                 { Faker::Internet.email("#{first_name}.#{last_name}") }
       let(:json_data)             { JSON.parse(response.body)['data'] }
 
       before do
