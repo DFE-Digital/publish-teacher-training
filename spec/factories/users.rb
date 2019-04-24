@@ -17,9 +17,9 @@
 
 FactoryBot.define do
   factory :user do
-    email { Faker::Internet.email }
-    first_name { Faker::Name.first_name }
-    last_name { Faker::Name.last_name }
+    email { Faker::Internet.unique.email }
+    first_name { Faker::Name.unique.first_name }
+    last_name { Faker::Name.unique.last_name }
     accept_terms_date_utc { Faker::Time.backward(1).utc }
 
     trait :opted_in do
