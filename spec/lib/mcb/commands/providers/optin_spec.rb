@@ -93,6 +93,14 @@ describe 'mcb provider optin' do
           expect { subject }.not_to(change { course1.enrichments.first.reload.status })
         end
       end
+
+      context 'when the course has no enrichments' do
+        let(:enrichments) { [] }
+
+        it 'skips the course' do
+          expect { subject }.not_to raise_error
+        end
+      end
     end
   end
 end

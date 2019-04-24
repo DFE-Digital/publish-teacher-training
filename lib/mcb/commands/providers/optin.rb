@@ -14,7 +14,7 @@ run do |opts, args, _cmd|
         next unless course.new?
 
         enrichment = course.enrichments.latest_first.first
-        next unless enrichment.published?
+        next unless enrichment&.published?
 
         verbose "  resetting enrichment #{enrichment.id} for course #{course.course_code} to draft"
         enrichment.update(status: :draft)
