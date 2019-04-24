@@ -33,4 +33,8 @@ class User < ApplicationRecord
       transitions from: :new, to: :transitioned
     end
   end
+
+  def opted_in?
+    providers.any?(&:opted_in?)
+  end
 end
