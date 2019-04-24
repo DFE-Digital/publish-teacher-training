@@ -118,7 +118,8 @@ describe 'Courses API v2', type: :request do
               "other_requirements" => enrichment.other_requirements,
               "personal_qualities" => enrichment.personal_qualities,
               "required_qualifications" => enrichment.qualifications,
-              "salary_details" => enrichment.salary_details
+              "salary_details" => enrichment.salary_details,
+              "changed_at" => provider.courses[0].changed_at.iso8601,
             },
             "relationships" => {
               "accrediting_provider" => { "meta" => { "included" => false } },
@@ -372,7 +373,8 @@ describe 'Courses API v2', type: :request do
               "other_requirements" => enrichment.other_requirements,
               "personal_qualities" => enrichment.personal_qualities,
               "required_qualifications" => enrichment.qualifications,
-              "salary_details" => enrichment.salary_details
+              "salary_details" => enrichment.salary_details,
+              "changed_at" => provider.courses[0].changed_at.iso8601,
             },
             "relationships" => {
               "accrediting_provider" => { "meta" => { "included" => false } },
