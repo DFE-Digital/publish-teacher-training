@@ -83,6 +83,12 @@ FactoryBot.define do
         enrichment.tap { |e| e.provider_code = course.provider.provider_code }
       end
 
+      if evaluator.age.present?
+        course.created_at = evaluator.age
+        course.updated_at = evaluator.age
+        course.changed_at = evaluator.age
+      end
+
       # We've just created a course with this provider's code, so ensure it's
       # up-to-date and has this course loaded.
       course.provider.reload
