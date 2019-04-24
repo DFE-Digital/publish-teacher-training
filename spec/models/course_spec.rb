@@ -440,44 +440,39 @@ RSpec.describe Course, type: :model do
       let(:course) do
         create(:course,
             changed_at: 10.minutes.ago,
-          with_enrichments: [
-          [:initial_draft, created_at: 1.day.ago, updated_at: 20.minutes.ago],
-        ])
+            with_enrichments: [[:initial_draft,
+                                created_at: 1.day.ago,
+                                updated_at: 20.minutes.ago]])
       end
       let(:user) { create(:user) }
 
-      it 'should publish the draft' do
+      it 'publishes the draft' do
         course.publish_enrichment(user)
-        course.reload
-        expect(course.enrichments.first.status).to eq 'published'
+        expect(course.reload.enrichments.first).to be_published
       end
 
-      it 'should update course changed_at to the current time' do
+      it 'updates course changed_at to the current time' do
         course.publish_enrichment(user)
-        course.reload
-        expect(course.changed_at).to be_within(1.second).of Time.now.utc
+        expect(course.reload.changed_at).to be_within(1.second).of Time.now.utc
       end
 
-      it 'should touch enrichment updated_at to the current time' do
+      it 'updates enrichment updated_at to the current time' do
         course.publish_enrichment(user)
-        course.reload
-        expect(course.enrichments.first.updated_at).to be_within(1.second).of Time.now.utc
+        expect(course.reload.enrichments.first.updated_at).to be_within(1.second).of Time.now.utc
       end
 
-      it 'should updated last_published to the current time' do
+      it 'updates last_published to the current time' do
         course.publish_enrichment(user)
-        course.reload
-        expect(course.enrichments.first.last_published_timestamp_utc).to be_within(1.second).of Time.now.utc
+        expect(course.reload.enrichments.first.last_published_timestamp_utc).to be_within(1.second).of Time.now.utc
       end
 
-      it 'should updated updated_by to the current user' do
+      it 'updates updated_by to the current user' do
         course.publish_enrichment(user)
-        course.reload
-        expect(course.enrichments.first.updated_by_user_id).to eq user.id
+        expect(course.reload.enrichments.first.updated_by_user_id).to eq user.id
       end
     end
 
-    context 'on a course draft and published enrichments' do
+    context 'on a course with a draft enrichment and previously-published enrichments' do
       let(:course) do
         create(:course, with_enrichments: [
             [:published, created_at: 5.days.ago],
@@ -487,54 +482,68 @@ RSpec.describe Course, type: :model do
       end
       let(:user) { create(:user) }
 
-      it 'should publish the draft' do
+      it 'publishes the draft' do
         course.publish_enrichment(user)
-        course.reload
-        course.enrichments.each do |enrichment|
-          expect(enrichment.status).to eq 'published'
+        course.reload.enrichments.each do |enrichment|
+          expect(enrichment).to be_published
         end
       end
     end
   end
 
-  describe 'publish_sites' do
-    context 'course with a single site' do
-      let(:subject) { create(:course, with_site_statuses: [:new]) }
+  describe '#publish_sites' do
+    let(:published_new_site)            { create(:site_status, :published, :new) }
+    let(:published_running_site)        { create(:site_status, :published, :running) }
+    let(:published_discontinued_site)   { create(:site_status, :published, :discontinued) }
+    let(:published_suspended_site)      { create(:site_status, :published, :suspended) }
+    let(:unpublished_new_site)          { create(:site_status, :unpublished, :new) }
+    let(:unpublished_running_site)      { create(:site_status, :unpublished, :running) }
+    let(:unpublished_discontinued_site) { create(:site_status, :unpublished, :discontinued) }
+    let(:unpublished_suspended_site)    { create(:site_status, :unpublished, :suspended) }
 
-      context 'site status is new site'do
-        it 'sets sites to running and published' do
-          subject.publish_sites
+    before do
+      course.publish_sites
+    end
 
-          expect(subject.site_statuses.first.status).to eq 'running'
-          expect(subject.site_statuses.first.publish).to eq 'published'
-        end
-
-        it 'updates course changed_at attribute to the current time' do
-          subject.publish_sites
-          expect(subject.changed_at).to be_within(1.second).of Time.now.utc
-        end
-      end
-
-      it 'correctly applies all state transitions' do
-        [
-          { before: { publish: 'published', status: 'new_status' }, after: { publish: 'published', status: 'running' } },
-          { before: { publish: 'published', status: 'running' }, after: { publish: 'published', status: 'running' } },
-          { before: { publish: 'published', status: 'suspended' }, after: { publish: 'published', status: 'suspended' } },
-          { before: { publish: 'published', status: 'discontinued' }, after: { publish: 'published', status: 'discontinued' } },
-          { before: { publish: 'unpublished', status: 'new_status' }, after: { publish: 'published', status: 'running' } },
-          { before: { publish: 'unpublished', status: 'running' }, after: { publish: 'published', status: 'running' } },
-          { before: { publish: 'unpublished', status: 'suspended' }, after: { publish: 'unpublished', status: 'suspended' } },
-          { before: { publish: 'unpublished', status: 'discontinued' }, after: { publish: 'unpublished', status: 'discontinued' } },
-        ].each do |test_case|
-          site = create(:site_status, status: test_case[:before][:status], publish: test_case[:before][:publish])
-          subject = create(:course, site_statuses: [site])
-          subject.publish_sites
-          subject.reload
-          expect(subject.site_statuses.first.status).to eq test_case[:after][:status]
-          expect(subject.site_statuses.first.publish).to eq test_case[:after][:publish]
-        end
+    context 'on an old course with a site' do
+      let(:course) { create(:course, site_statuses: [published_new_site], age: 5.days.ago) }
+      it 'updates course.changed_at' do
+        expect(course.changed_at).to be_within(1.second).of Time.now.utc
       end
     end
-    # xcontext 'course with multiple sites in different states'
+
+    context 'on a course with many sites' do
+      let(:course) {
+        create(:course, site_statuses: [
+          published_new_site,
+          published_running_site,
+          published_discontinued_site,
+          published_suspended_site,
+          unpublished_new_site,
+          unpublished_running_site,
+          unpublished_discontinued_site,
+          unpublished_suspended_site
+        ])
+      }
+
+      it 'sets all the sites to the right published/status states' do
+        expect(published_new_site.reload).to be_published_on_ucas
+        expect(published_new_site).to be_status_running
+        expect(published_running_site.reload).to be_published_on_ucas
+        expect(published_running_site).to be_status_running
+        expect(published_discontinued_site.reload).to be_published_on_ucas
+        expect(published_discontinued_site).to be_status_discontinued
+        expect(published_suspended_site.reload).to be_published_on_ucas
+        expect(published_suspended_site).to be_status_suspended
+        expect(unpublished_new_site.reload).to be_published_on_ucas
+        expect(unpublished_new_site).to be_status_running
+        expect(unpublished_running_site.reload).to be_published_on_ucas
+        expect(unpublished_running_site).to be_status_running
+        expect(unpublished_discontinued_site.reload).to be_unpublished_on_ucas
+        expect(unpublished_discontinued_site).to be_status_discontinued
+        expect(unpublished_suspended_site.reload).to be_unpublished_on_ucas
+        expect(unpublished_suspended_site).to be_status_suspended
+      end
+    end
   end
 end

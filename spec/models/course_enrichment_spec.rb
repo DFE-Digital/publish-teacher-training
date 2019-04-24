@@ -58,7 +58,7 @@ describe CourseEnrichment, type: :model do
         subject.publish(user)
       end
 
-      its(:status) { should eq 'published' }
+      it { should be_published }
       its(:updated_at) { should be_within(1.second).of Time.now.utc }
       its(:last_published_timestamp_utc) { should be_within(1.second).of Time.now.utc }
       its(:updated_by_user_id) { should eq user.id }
@@ -71,7 +71,7 @@ describe CourseEnrichment, type: :model do
         subject.publish(user)
       end
 
-      its(:status) { should eq 'published' }
+      it { should be_published }
       its(:updated_at) { should be_within(1.second).of Time.now.utc }
       its(:last_published_timestamp_utc) { should be_within(1.second).of Time.now.utc }
       its(:updated_by_user_id) { should eq user.id }
