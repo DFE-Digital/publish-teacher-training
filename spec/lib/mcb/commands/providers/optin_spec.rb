@@ -68,12 +68,21 @@ describe 'mcb provider optin' do
       end
 
       context 'when the course has publised course enrichments' do
-        let(:enrichments) { create_list(:course_enrichment, 1, :published) }
+        let(:enrichments) do
+          [
+            create(:course_enrichment, :published, created_at: Date.yesterday),
+            create(:course_enrichment, :published)
+          ]
+        end
 
-        it 'changes the enrichment to draft' do
-          expect { subject }.to change { course1.enrichments.first.reload.status }
+        it 'changes the latest enrichment to draft' do
+          expect { subject }.to change { enrichments.last.reload.status }
             .from('published')
             .to('draft')
+        end
+
+        it 'does not change the status of the second enrichment' do
+          expect { subject }.not_to(change { enrichments.first.reload.status })
         end
       end
 
