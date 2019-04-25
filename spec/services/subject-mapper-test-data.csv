@@ -1,1291 +1,832 @@
-"course_title","ucas_subjects","expected_subjects"
-"2S4X","Primary","Primary"
-"Art","Art / Art & Design[d]Secondary","Art and design"
-"Art","Secondary[d]Art / Art & Design","Art and design"
-"ART","Art / Art & Design[d]Secondary","Art and design"
-"Art and design","Secondary[d]Art / Art & Design","Art and design"
-"Art and Design","Art / Art & Design[d]Middle Years","Art and design"
-"Art and Design","Art / Art & Design[d]Secondary","Art and design"
-"Art and Design","Secondary[d]Art / Art & Design","Art and design"
-"Art And Design","Secondary[d]Art / Art & Design","Art and design"
-"Art and Design - Dane Court Grammar School","Secondary[d]Art / Art & Design","Art and design"
-"Art and Design - Part Time","Art / Art & Design[d]Secondary","Art and design"
-"Art (CaBan)","Secondary[d]Art / Art & Design","Art and design"
-"Art (CaBan Partnership)","Art / Art & Design[d]Secondary","Art and design"
-"Art & Design","Art / Art & Design[d]Middle Years","Art and design"
-"Art & Design","Art / Art & Design[d]Secondary","Art and design"
-"Art & Design","Secondary[d]Art / Art & Design","Art and design"
-"ART-PART TIME","Art / Art & Design[d]Secondary","Art and design"
-"Berwick Middle / Ponteland Middle","Primary","Primary"
-"Biology","Biology[d]Science[d]Secondary","Biology"
-"Biology","Biology[d]Secondary","Biology"
-"Biology","Biology[d]Secondary[d]Science","Biology"
-"Biology","Primary[d]Biology","Primary[d]Primary with science"
-"Biology","Science[d]Biology[d]Secondary","Biology"
-"Biology","Science[d]Secondary[d]Biology","Biology"
-"Biology","Secondary[d]Biology","Biology"
-"Biology","Secondary[d]Biology[d]Science","Biology"
-"Biology","Secondary[d]Science[d]Biology","Biology"
-"Biology - Dane Court Grammar School","Biology[d]Science[d]Secondary","Biology"
-"Biology (North Charnwood Learning Partnership)","Biology[d]Science[d]Secondary","Biology"
-"Biology Part Time","Biology[d]Science[d]Secondary","Biology"
-"BIOLOGY-PART TIME","Secondary[d]Biology[d]Science","Biology"
-"Biology School Direct Salaried","Secondary[d]Biology","Biology"
-"Biology (with Physical Education)","Secondary[d]Biology[d]Physical Education[d]Science","Biology[d]Physical education"
-"Biology (with Post-16 Enhancement)","Biology[d]Science[d]Secondary","Biology"
-"Biology with Psychology","Biology[d]Psychology[d]Science[d]Secondary","Biology[d]Psychology"
-"Bury St Edmunds Hub","Primary","Primary"
-"Business","Business Education[d]Secondary","Business studies"
-"Business","Secondary[d]Business Education","Business studies"
-"Business and Economics","Business Education[d]Secondary[d]Economics","Business studies[d]Economics"
-"Business Education","Business Education[d]Secondary","Business studies"
-"Business Education (Flexible)","Business Education[d]Secondary","Business studies"
-"Business studies","Secondary[d]Business Education","Business studies"
-"Business Studies","Business Education[d]Primary","Primary"
-"Business Studies","Business Education[d]Secondary","Business studies"
-"Business Studies","Secondary[d]Business Education","Business studies"
-"Business Studies (and Economics)","Business Education[d]Economics[d]Secondary","Business studies[d]Economics"
-"Business Studies (and Economics)","Economics[d]Secondary[d]Business Education","Economics[d]Business studies"
-"Business Studies - King Ethelbert School","Secondary[d]Business Education","Business studies"
-"Business Studies - Part Time","Secondary[d]Business Education","Business studies"
-"Business with Economics","Business Education[d]Secondary[d]Economics","Business studies[d]Economics"
-"Chemistry","Chemistry[d]Primary","Primary[d]Primary with science"
-"Chemistry","Chemistry[d]Science[d]Secondary","Chemistry"
-"Chemistry","Chemistry[d]Secondary","Chemistry"
-"Chemistry","Chemistry[d]Secondary[d]Science","Chemistry"
-"Chemistry","Science[d]Chemistry[d]Secondary","Chemistry"
-"Chemistry","Science[d]Secondary[d]Chemistry","Chemistry"
-"Chemistry","Secondary[d]Chemistry","Chemistry"
-"Chemistry","Secondary[d]Chemistry[d]Science","Chemistry"
-"Chemistry","Secondary[d]Science[d]Chemistry","Chemistry"
-"Chemistry - Canterbury High School","Chemistry[d]Science[d]Secondary","Chemistry"
-"Chemistry - Dane Court Grammar School","Chemistry[d]Science[d]Secondary","Chemistry"
-"Chemistry - Herne Bay High School","Chemistry[d]Science[d]Secondary","Chemistry"
-"Chemistry - Herne Bay High School","Science[d]Secondary[d]Chemistry","Chemistry"
-"Chemistry - King Ethelbert School","Chemistry[d]Science[d]Secondary","Chemistry"
-"Chemistry (North Charnwood Learning Partnership)","Secondary[d]Art / Art & Design[d]Chemistry","Chemistry[d]Art and design"
-"Chemistry (North Charnwood Learning Partnership)","Secondary[d]Science[d]Chemistry","Chemistry"
-"Chemistry Part Time","Art / Art & Design[d]Chemistry[d]Secondary","Chemistry[d]Art and design"
-"Chemistry Part Time","Chemistry[d]Secondary[d]Science","Chemistry"
-"Chemistry Part Time","Science[d]Secondary[d]Chemistry","Chemistry"
-"Chemistry Part Time","Secondary[d]Science[d]Chemistry","Chemistry"
-"CHEMISTRY-PART TIME","Secondary[d]Chemistry[d]Science","Chemistry"
-"Chemistry - Royal Harbour Academy","Chemistry[d]Science[d]Secondary","Chemistry"
-"Chemistry (with Post-16 Enhancement)","Secondary[d]Science[d]Chemistry","Chemistry"
-"Citizenship","Citizenship[d]Secondary","Citizenship"
-"Citizenship","Secondary[d]Citizenship","Citizenship"
-"Citizenship with Social Science","Citizenship[d]Secondary[d]Social Science","Citizenship[d]Social sciences"
-"Classics","Classics[d]Secondary","Classics"
-"Classics","Secondary[d]Classics","Classics"
-"Classics (Latin and Ancient Greek)","Latin[d]Secondary[d]Classics[d]Greek","Classics"
-"Classics (Latin and Ancient Greek)","Secondary[d]Classics","Classics"
-"Combined Science","Secondary[d]Biology[d]Science[d]Chemistry[d]Physics","Physics[d]Biology[d]Chemistry[d]Balanced science"
-"Computer Sci and Information Technology (flexible)","Secondary[d]Information Technology[d]Computer Studies","Computing"
-"Computer Science","Computer Studies[d]Science[d]Secondary","Computing"
-"Computer Science","Computer Studies[d]Secondary","Computing"
-"Computer Science","Computer Studies[d]Secondary[d]Science","Computing"
-"Computer Science","Science[d]Computer Studies[d]Secondary","Computing"
-"Computer Science","Science[d]Secondary[d]Computer Studies","Computing"
-"Computer Science","Secondary[d]Computer Studies","Computing"
-"Computer Science","Secondary[d]Computer Studies[d]Science","Computing"
-"Computer Science","Secondary[d]Science[d]Computer Studies","Computing"
-"COMPUTER SCIENCE-PART TIME","Computer Studies[d]Secondary","Computing"
-"Computer Science (Researchers in Schools)","Computer Studies[d]Science[d]Secondary","Computing"
-"Computer Science with IT","Science[d]Computer Studies[d]Secondary","Computing"
-"computing","Primary","Primary"
-"Computing","Computer Studies[d]Science[d]Secondary","Computing"
-"Computing","Computer Studies[d]Secondary","Computing"
-"Computing","Primary","Primary"
-"Computing","Science[d]Computer Studies[d]Secondary","Computing"
-"Computing","Science[d]Secondary",""
-"Computing","Secondary",""
-"Computing","Secondary[d]Computer Studies","Computing"
-"Computing - Canterbury High School","Secondary[d]Computer Studies","Computing"
-"Computing (Computer Science and IT)","Secondary[d]Computer Studies","Computing"
-"Computing - King Ethelbert","Computer Studies[d]Secondary","Computing"
-"Computing Part Time","Secondary[d]Computer Studies","Computing"
-"Computing School Direct Salaried","Computer Studies[d]Secondary","Computing"
-"Computing (Special Educational Needs)","Secondary[d]Computer Studies[d]Special Educational Needs","Computing"
-"Computing with ICT","Computer Studies[d]Secondary","Computing"
-"Computing with ICT","Secondary[d]Information Technology[d]Information Communication Technology[d]Computer Studies","Computing"
-"Dance","Dance and Performance[d]Secondary","Dance"
-"Dance","Secondary[d]Dance and Performance","Dance"
-"Design and technology","Secondary[d]Design and Technology","Design and technology"
-"Design and Technology","Design and Technology[d]Design and Technology (Food)[d]Secondary[d]Design and Technology (Textiles)[d]Design and Technology [TestCase((Product Design)[d]Engineering","Design and technology"
-"Design and Technology","Design and Technology[d]Design and Technology (Product Design)[d]Secondary","Design and technology"
-"Design and Technology","Design and Technology[d]Design and Technology (Textiles)[d]Secondary[d]Design and Technology (Food)[d]Design and Technology [TestCase((Product Design)[d]Engineering","Design and technology"
-"Design and Technology","Design and Technology[d]Secondary","Design and technology"
-"Design and Technology","Design and Technology[d]Secondary[d]Design and Technology (Food)[d]Design and Technology (Systems and Control)[d]Design and [TestCase(Technology (Textiles)[d]Design and Technology (Product Design)","Design and technology"
-"Design and Technology","Design and Technology[d]Secondary[d]Design and Technology (Food)[d]Design and Technology (Textiles)[d]Design and Technology [TestCase((Product Design)","Design and technology"
-"Design and Technology","Design and Technology[d]Secondary[d]Design and Technology (Product Design)","Design and technology"
-"Design and Technology","Design and Technology[d]Secondary[d]Engineering[d]Design and Technology (Textiles)[d]Design and Technology (Product Design)[TestCase([d]Design and Technology (Food)","Design and technology"
-"Design and Technology","Design and Technology (Food)[d]Design and Technology[d]Secondary","Design and technology"
-"Design and Technology","Design and Technology (Food)[d]Design and Technology[d]Secondary[d]Design and Technology (Textiles)[d]Design and Technology [TestCase((Systems and Control)[d]Design and Technology (Product Design)","Design and technology"
-"Design and Technology","Design and Technology (Food)[d]Design and Technology (Product Design)[d]Design and Technology[d]Secondary","Design and technology"
-"Design and Technology","Design and Technology (Food)[d]Design and Technology (Textiles)[d]Design and Technology (Product Design)[d]Design and Technology[TestCase([d]Secondary","Design and technology"
-"Design and Technology","Design and Technology (Food)[d]Secondary[d]Design and Technology (Product Design)[d]Design and Technology","Design and technology"
-"Design and Technology","Design and Technology (Product Design)[d]Design and Technology[d]Secondary","Design and technology"
-"Design and Technology","Design and Technology (Textiles)[d]Design and Technology (Product Design)[d]Secondary[d]Design and Technology","Design and technology"
-"Design and Technology","Engineering[d]Design and Technology (Textiles)[d]Design and Technology (Product Design)[d]Design and Technology (Food)[d][TestCase(Secondary[d]Design and Technology","Design and technology"
-"Design and Technology","Secondary[d]Design and Technology","Design and technology"
-"Design and Technology","Secondary[d]Design and Technology (Food)[d]Design and Technology (Textiles)[d]Design and Technology (Product Design)[d]Design [TestCase(and Technology","Design and technology"
-"Design and Technology","Secondary[d]Design and Technology (Food)[d]Design and Technology (Textiles)[d]Design and Technology (Product Design)[d][TestCase(Engineering[d]Design and Technology","Design and technology"
-"Design And Technology","Design and Technology[d]Design and Technology (Food)[d]Design and Technology (Product Design)[d]Design and Technology (Systems and [TestCase(Control)[d]Design and Technology (Textiles)[d]Secondary","Design and technology"
-"Design And Technology","Secondary[d]Design and Technology","Design and technology"
-"Design and Technology (CaBan Partnership)","Secondary[d]Design and Technology","Design and technology"
-"Design and Technology - Canterbury High School","Design and Technology[d]Secondary","Design and technology"
-"Design and Technology (Engineering)","Design and Technology[d]Engineering[d]Secondary","Design and technology"
-"Design and Technology (Engineering)","Design and Technology[d]Secondary[d]Engineering","Design and technology"
-"Design and Technology (Engineering)","Engineering[d]Design and Technology[d]Secondary","Design and technology"
-"Design and Technology (Engineering)","Engineering[d]Secondary[d]Design and Technology","Design and technology"
-"Design and Technology (Engineering)","Secondary[d]Design and Technology[d]Engineering","Design and technology"
-"Design and Technology (Engineering)","Secondary[d]Engineering[d]Design and Technology","Design and technology"
-"Design and Technology (Flexible)","Design and Technology[d]Secondary","Design and technology"
-"Design and Technology ( Food)","Design and Technology[d]Design and Technology (Food)[d]Secondary","Design and technology"
-"Design and Technology (Food)","Design and Technology[d]Design and Technology (Food)[d]Secondary","Design and technology"
-"Design and Technology (Food)","Design and Technology[d]Secondary","Design and technology"
-"Design and Technology (Food)","Design and Technology[d]Secondary[d]Design and Technology (Food)","Design and technology"
-"Design and Technology (Food)","Design and Technology (Food)[d]Design and Technology[d]Secondary","Design and technology"
-"Design and Technology (Food)","Design and Technology (Food)[d]Secondary[d]Design and Technology","Design and technology"
-"Design and Technology (Food)","Secondary[d]Design and Technology[d]Design and Technology (Food)","Design and technology"
-"Design and Technology (Food)","Secondary[d]Design and Technology (Food)","Design and technology"
-"Design and Technology (Food)","Secondary[d]Design and Technology (Food)[d]Design and Technology","Design and technology"
-"Design And Technology (Food)","Design and Technology[d]Design and Technology (Food)[d]Secondary","Design and technology"
-"Design and Technology (Food and Product Design)","Design and Technology[d]Secondary[d]Design and Technology (Food)[d]Design and Technology (Product Design)","Design and technology"
-"Design and Technology (Food and Product Design)","Secondary[d]Design and Technology (Product Design)[d]Design and Technology (Food)[d]Design and Technology","Design and technology"
-"Design and Technology (Food and Textiles)","Design and Technology[d]Design and Technology (Textiles)[d]Design and Technology (Food)[d]Secondary","Design and technology"
-"Design and Technology (Food and Textiles)","Design and Technology (Textiles)[d]Design and Technology[d]Design and Technology (Food)[d]Secondary","Design and technology"
-"Design and Technology (Food and Textiles)","Secondary[d]Design and Technology (Textiles)[d]Design and Technology (Food)[d]Design and Technology","Design and technology"
-"Design and Technology (Food or Product Design)","Secondary[d]Design and Technology","Design and technology"
-"Design and Technology (Food or Textiles)","Design and Technology (Textiles)[d]Secondary[d]Design and Technology (Food)[d]Design and Technology","Design and technology"
-"Design and Technology (Food or Textiles)","Secondary[d]Design and Technology (Food)[d]Design and Technology[d]Design and Technology (Textiles)","Design and technology"
-"Design and Technology (Food, PD and Textiles)","Design and Technology[d]Design and Technology (Food)[d]Design and Technology (Product Design)[d]Design and [TestCase(Technology (Textiles)[d]Secondary","Design and technology"
-"Design and Technology (Food, PD and Textiles)","Design and Technology (Product Design)[d]Design and Technology (Textiles)[d]Secondary[d]Design and Technology[TestCase([d]Design and Technology (Food)","Design and technology"
-"Design and Technology (Food, PD, Textiles)","Design and Technology[d]Secondary[d]Design and Technology (Food)[d]Design and Technology (Product Design)[TestCase([d]Design and Technology (Textiles)","Design and technology"
-"Design and Technology (Food,Product Design or Eng)","Design and Technology[d]Secondary[d]Design and Technology (Food)[d]Design and Technology (Product Design)[TestCase(","Design and technology"
-"Design and Technology (Food, Resistant Materials)","Design and Technology (Food)[d]Design and Technology[d]Secondary","Design and technology"
-"Design and Technology (Food, Textiles)","Secondary[d]Design and Technology (Textiles)[d]Design and Technology (Food)[d]Design and Technology","Design and technology"
-"Design and Technology (Food, Textiles and PD)","Design and Technology (Textiles)[d]Design and Technology[d]Design and Technology (Product Design)[d]Design [TestCase(and Technology (Food)[d]Secondary","Design and technology"
-"Design and Technology - Part Time","Secondary[d]Design and Technology","Design and technology"
-"Design and Technology (PD, Systems and Control)","Design and Technology[d]Design and Technology (Systems and Control)[d]Design and Technology (Product Design)[TestCase([d]Secondary","Design and technology"
-"Design and Technology (Product Design)","Design and Technology[d]Design and Technology (Product Design)[d]Secondary","Design and technology"
-"Design and Technology (Product Design)","Design and Technology[d]Secondary","Design and technology"
-"Design and Technology (Product Design)","Design and Technology[d]Secondary[d]Design and Technology (Product Design)","Design and technology"
-"Design and Technology (Product Design)","Design and Technology (Product Design)[d]Design and Technology[d]Secondary","Design and technology"
-"Design and Technology (Product Design)","Design and Technology (Product Design)[d]Secondary[d]Design and Technology","Design and technology"
-"Design and Technology (Product Design)","Secondary[d]Design and Technology","Design and technology"
-"Design and Technology (Product Design)","Secondary[d]Design and Technology[d]Design and Technology (Product Design)","Design and technology"
-"Design and Technology (Product Design)","Secondary[d]Design and Technology (Product Design)[d]Design and Technology","Design and technology"
-"Design and Technology (Product Design)","Secondary[d]Design and Technology (Systems and Control)[d]Design and Technology","Design and technology"
-"Design And Technology (Product Design)","Design and Technology[d]Design and Technology (Product Design)[d]Secondary","Design and technology"
-"Design And Technology (Product Design)","Secondary[d]Design and Technology (Product Design)[d]Design and Technology","Design and technology"
-"Design and Technology (Product Design,Engineering)","Design and Technology[d]Secondary[d]Design and Technology (Product Design)[d]Engineering","Design and technology"
-"Design and Technology (Product Design,Engineering)","Engineering[d]Design and Technology[d]Design and Technology (Product Design)[d]Secondary","Design and technology"
-"Design and Technology (Product Design or Food)","Design and Technology (Food)[d]Design and Technology[d]Secondary[d]Design and Technology (Product Design)","Design and technology"
-"Design and Technology (Product Design or Food)","Secondary[d]Design and Technology (Food)[d]Design and Technology[d]Design and Technology (Product Design)","Design and technology"
-"Design and Technology (Resistant Materials)","Design and Technology[d]Secondary","Design and technology"
-"Design and Technology (Systems and Control)","Design and Technology[d]Design and Technology (Systems and Control)[d]Secondary","Design and technology"
-"Design and Technology (Systems and Control)","Design and Technology (Systems and Control)[d]Design and Technology[d]Secondary","Design and technology"
-"Design and Technology (Systems and Control)","Design and Technology (Systems and Control)[d]Secondary[d]Design and Technology","Design and technology"
-"Design and Technology (Systems and Control)","Secondary[d]Design and Technology (Systems and Control)[d]Design and Technology","Design and technology"
-"Design and Technology (Textiles)","Design and Technology[d]Design and Technology (Textiles)[d]Secondary","Design and technology"
-"Design and Technology (Textiles)","Design and Technology[d]Secondary[d]Design and Technology (Textiles)","Design and technology"
-"Design and Technology (Textiles)","Design and Technology (Textiles)[d]Design and Technology[d]Secondary","Design and technology"
-"Design and Technology (Textiles)","Design and Technology (Textiles)[d]Secondary[d]Design and Technology","Design and technology"
-"Design and Technology (Textiles)","Secondary[d]Design and Technology[d]Design and Technology (Textiles)","Design and technology"
-"Design and Technology (Textiles)","Secondary[d]Design and Technology (Textiles)[d]Design and Technology","Design and technology"
-"Design and Technology (Textiles and Product Design","Design and Technology (Product Design)[d]Design and Technology[d]Design and Technology (Textiles)[d][TestCase(Secondary","Design and technology"
-"Design and Technology (Textiles and Product Design","Design and Technology (Textiles)[d]Secondary[d]Design and Technology (Product Design)[d]Design and [TestCase(Technology","Design and technology"
-"Design and Technology(Textiles and Product Design)","Design and Technology[d]Secondary","Design and technology"
-"Design and Technology(Textiles and Product Design)","Design and Technology (Product Design)[d]Design and Technology (Textiles)[d]Secondary[d]Design and [TestCase(Technology","Design and technology"
-"Design and Technology (Textiles, Product Design)","Design and Technology[d]Design and Technology (Product Design)[d]Design and Technology (Textiles)[d][TestCase(Secondary","Design and technology"
-"Design & Technology","Design and Technology[d]Secondary","Design and technology"
-"Design & Technology","Secondary",""
-"Design Technology","Design and Technology[d]Secondary","Design and technology"
-"Design Technology","Secondary",""
-"Design Technology","Secondary[d]Design and Technology","Design and technology"
-"Design Technology (Food)","Secondary[d]Design and Technology[d]Design and Technology (Food)","Design and technology"
-"Design Technology (Food Technology)","Secondary[d]Design and Technology (Food)[d]Design and Technology","Design and technology"
-"Design Technology (Food, Textiles, Product Design)","Design and Technology (Product Design)[d]Design and Technology (Food)[d]Design and Technology[d]Secondary[TestCase([d]Design and Technology (Textiles)","Design and technology"
-"DESIGN & TECHNOLOGY - PART TIME","Design and Technology[d]Secondary","Design and technology"
-"Design & Technology (Resistant Materials)","Secondary",""
-"Design Technology - Systems","Primary","Primary"
-"Design Technology Textiles / Food","Secondary[d]Design and Technology (Textiles)","Design and technology"
-"Drama","Drama and Theatre Studies[d]Primary","Primary"
-"Drama","Drama and Theatre Studies[d]Secondary","Drama"
-"Drama","English[d]Drama and Theatre Studies[d]Secondary","Drama"
-"Drama","Secondary[d]Drama and Theatre Studies","Drama"
-"DRAMA","Secondary[d]Drama and Theatre Studies","Drama"
-"DRAMA-PART TIME","Secondary[d]Drama and Theatre Studies","Drama"
-"Drama (with English)","Drama and Theatre Studies[d]English[d]Secondary","Drama[d]English"
-"Drama (with English)","Drama and Theatre Studies[d]Secondary[d]English","Drama[d]English"
-"Drama with English","English[d]Drama and Theatre Studies[d]Secondary","Drama[d]English"
-"DT","Secondary",""
-"D&T Engineering","Secondary[d]Engineering[d]Design and Technology","Design and technology"
-"Early Years (3-7)","Early Years[d]Primary","Primary"
-"Economics","Economics[d]Secondary","Economics"
-"Economics","Secondary[d]Economics","Economics"
-"Economics and Business Education","Economics[d]Secondary[d]Business Education","Economics[d]Business studies"
-"Economics (and Business Studies)","Business Education[d]Economics[d]Secondary","Business studies[d]Economics"
-"Economics with Business Education","Economics[d]Secondary","Economics"
-"Education and Training","Post-Compulsory[d]Further Education","Further education"
-"English","English[d]Primary","Primary[d]Primary with English"
-"English","English[d]Secondary","English"
-"English","Middle Years[d]English","English"
-"English","Secondary[d]English","English"
-"English (7-14)","English[d]Middle Years","English"
-"English and Drama","Drama and Theatre Studies[d]English[d]Secondary","Drama[d]English"
-"English and Drama","English[d]Secondary[d]Drama and Theatre Studies","Drama[d]English"
-"English and Drama","Secondary[d]Drama and Theatre Studies[d]English","Drama[d]English"
-"English and Media","English[d]Secondary","English"
-"English and Media","Secondary[d]English","English"
-"English and Media Studies","Communication and Media Studies[d]Secondary[d]English","Communication and media studies[d]English"
-"English and Media Studies","Secondary[d]English[d]Communication and Media Studies","Communication and media studies[d]English"
-"English - Borden Grammar School","English[d]Secondary","English"
-"English (CaBan Partnership)","Secondary[d]English","English"
-"English - Canterbury High","Secondary[d]English","English"
-"English - Canterbury High School","English[d]Secondary","English"
-"English - Dane Court Grammar School","English[d]Secondary","English"
-"English (Flexible)","Secondary[d]English","English"
-"English - Herne Bay High School","Secondary[d]English","English"
-"English - King Ethelbert School","English[d]Secondary","English"
-"English (North Charnwood Learning Partnership)","English[d]Secondary","English"
-"English (North Charnwood Learning Partnership)","English[d]Secondary[d]Art / Art & Design","Art and design[d]English"
-"English  - Part Time","Secondary[d]English","English"
-"ENGLISH-PART TIME","English[d]Secondary","English"
-"English (RIS)","English[d]Secondary","English"
-"English - Royal Harbour Academy","Secondary[d]English","English"
-"English Salaried","English[d]Secondary","English"
-"English School Direct Salaried","English[d]Secondary","English"
-"English School Direct Salaried","Secondary[d]English","English"
-"English (Special Educational Needs)","Secondary[d]English[d]Special Educational Needs","English"
-"English (Special Educational Needs)","Special Educational Needs[d]Secondary[d]English","English"
-"English (with Drama)","Drama and Theatre Studies[d]English[d]Secondary","Drama[d]English"
-"English (with Drama)","English[d]Secondary[d]Drama and Theatre Studies","Drama[d]English"
-"English (with Drama)","Secondary[d]Drama and Theatre Studies[d]English","Drama[d]English"
-"English with Drama","Drama and Theatre Studies[d]English[d]Secondary","Drama[d]English"
-"English with Drama","English[d]Drama and Theatre Studies[d]Secondary","Drama[d]English"
-"English with Drama","Secondary[d]Drama and Theatre Studies[d]English","Drama[d]English"
-"English (with Media)","Communication and Media Studies[d]Secondary[d]English","Communication and media studies[d]English"
-"English with Media","English[d]Secondary","English"
-"Food","Primary","Primary"
-"Food","Secondary",""
-"Food","Secondary[d]Design and Technology (Food)","Design and technology"
-"Food and Nutrition","Primary","Primary"
-"Food and Nutrition","Secondary[d]Design and Technology (Food)","Design and technology"
-"French","French[d]Secondary","French"
-"French","Languages (European)[d]French[d]Secondary[d]Languages","French"
-"French","Languages (European)[d]Secondary[d]French[d]Languages","French"
-"French","Secondary[d]French","French"
-"French","Secondary[d]Languages[d]French[d]Languages (European)","French"
-"Further and Post-Compulsory Education","Further Education[d]Secondary[d]Post-Compulsory","Further education"
-"Further and Post-Compulsory Education (English)","English[d]Post-Compulsory[d]Further Education[d]Secondary","Further education"
-"Further and Post-Compulsory Education Mathematics","Mathematics[d]Post-Compulsory[d]Further Education[d]Secondary","Further education"
-"Further and Post-Compulsory Education (SEN)","Secondary[d]Further Education[d]Post-Compulsory[d]Special Educational Needs","Further education"
-"Further Education","Secondary[d]Further Education","Further education"
-"Further Education and Training (Full-Time)","Further Education[d]Post-Compulsory","Further education"
-"Further Education and Training (Part-Time)","Further Education[d]Post-Compulsory","Further education"
-"General Primary","Primary","Primary"
-"General Primary and PGCE","Primary","Primary"
-"geography","Primary[d]Geography","Primary[d]Primary with geography and history"
-"Geography","Geography[d]Middle Years","Geography"
-"Geography","Geography[d]Primary","Primary[d]Primary with geography and history"
-"Geography","Geography[d]Secondary","Geography"
-"Geography","Secondary[d]Geography","Geography"
-"Geography (CaBan Partnership)","Secondary[d]Geography","Geography"
-"Geography - Herne Bay High School","Geography[d]Secondary","Geography"
-"Geography - King Ethelbert School","Secondary[d]Geography","Geography"
-"Geography (North Charnwood Learning Partnership)","Secondary[d]Geography","Geography"
-"Geography Part Time","Geography[d]Secondary","Geography"
-"GEOGRAPHY-PART TIME","Geography[d]Secondary","Geography"
-"Geography School Direct Salaried","Geography[d]Secondary","Geography"
-"Geography (with Humanities)","Geography[d]Humanities[d]Secondary","Geography[d]Humanities"
-"Geography with Humanities","Geography[d]Humanities[d]Secondary","Geography[d]Humanities"
-"German","German[d]Secondary[d]Languages[d]Languages (European)","German"
-"Health and social care","Secondary[d]Health and Social Care","Health and social care"
-"Health and Social Care","Health and Social Care[d]Secondary","Health and social care"
-"Health and Social Care","Health and Social Care[d]Secondary[d]Social Science","Health and social care[d]Social sciences"
-"Health and Social Care","Health and Social Care[d]Social Science[d]Secondary","Health and social care[d]Social sciences"
-"Health and Social Care","Secondary[d]Health and Social Care","Health and social care"
-"Health and Social Care","Secondary[d]Social Science[d]Health and Social Care","Social sciences[d]Health and social care"
-"Health and Social Care","Social Science[d]Health and Social Care[d]Secondary","Social sciences[d]Health and social care"
-"Health and Social Care","Social Science[d]Secondary[d]Health and Social Care","Social sciences[d]Health and social care"
-"History","History[d]Middle Years","History"
-"History","History[d]Primary","Primary[d]Primary with geography and history"
-"History","History[d]Secondary","History"
-"History","Secondary[d]History","History"
-"HIstory","Secondary[d]History","History"
-"History (CaBan Partnership)","Secondary[d]History of Art[d]History","History"
-"History (North Charnwood Learning Partnership)","Secondary[d]History","History"
-"History - Part Time","History[d]Secondary","History"
-"HISTORY-PART TIME","History[d]Secondary","History"
-"History School Direct Salaried","History[d]Secondary","History"
-"History Secondary Education (11-16) with QTS","Secondary[d]History","History"
-"History (Special Educational Needs)","Special Educational Needs[d]History[d]Secondary","History"
-"History (with Humanities)","History[d]Humanities[d]Secondary","History[d]Humanities"
-"History with Humanities","History[d]Humanities[d]Secondary","History[d]Humanities"
-"Hostory","Secondary",""
-"Humanities","Humanities[d]Secondary","Humanities"
-"Humanities","Secondary[d]Humanities","Humanities"
-"Humanities and Social Sciences (PCET)","Post-Compulsory[d]Further Education[d]Social Science[d]Humanities","Further education"
-"Information Technology (CaBan Partnership)","Secondary[d]Information Technology",""
-"INSPIRE Chemistry","Secondary[d]Chemistry","Chemistry"
-"INSPIRE Mathematics","Secondary[d]Mathematics","Mathematics"
-"INSPIRE Physics","Secondary[d]Physics","Physics"
-"INSPIRE Physics With Maths","Secondary[d]Physics","Physics"
-"Latin (with Classics)","Secondary[d]Latin[d]Classics","Classics"
-"Leisure and Tourism","Leisure and Tourism[d]Secondary",""
-"Leisure and Tourism","Secondary[d]Leisure and Tourism",""
-"Lifelong Learning PGCE (pre-service)","Further Education[d]Post-Compulsory","Further education"
-"Lifelong learning (Pre-Service)","Secondary[d]Further Education[d]Post-Compulsory","Further education"
-"Lifelong Learning (Pre-Service)","Further Education[d]Post-Compulsory","Further education"
-"Lifelong Learning (Pre-Service)","Post-Compulsory[d]Further Education","Further education"
-"Lifelong Learning (Pre-Service)","Secondary[d]Post-Compulsory","Further education"
-"Lifelong Learning Sector","Post-Compulsory[d]Secondary","Further education"
-"Lifelong Learning Sector","Secondary[d]Post-Compulsory","Further education"
-"Lifelong Learning Sector (ESOL)","English as a Second or Other Language[d]Post-Compulsory[d]Secondary","Further education"
-"Lifelong Learning Sector (ESOL)","Post-Compulsory[d]English as a Second or Other Language[d]Secondary","Further education"
-"Lifelong Learning Sector (Literacy)","Literacy[d]Post-Compulsory[d]Secondary","Further education"
-"Lifelong Learning Sector (Literacy)","Secondary[d]Post-Compulsory[d]Literacy","Further education"
-"Lifelong Learning Sector (Literacy & ESOL)","English as a Second or Other Language[d]Literacy[d]Post-Compulsory[d]Secondary","Further education"
-"Lifelong Learning Sector (Literacy & ESOL)","Secondary[d]Literacy[d]English as a Second or Other Language[d]Post-Compulsory","Further education"
-"Lifelong Learning Sector (Numeracy)","Numeracy[d]Post-Compulsory[d]Secondary","Further education"
-"Mandarin Chinese with a European Language or EAL","Languages (Asian)[d]Mandarin[d]Chinese[d]Languages (European)[d]English as a Second or Other [TestCase(Language[d]Secondary[d]Languages","Mandarin"
-"Mathematics","Mathematics[d]Middle Years","Mathematics"
-"Mathematics","Mathematics[d]Secondary","Mathematics"
-"Mathematics","Middle Years[d]Mathematics","Mathematics"
-"Mathematics","Primary[d]Mathematics","Primary[d]Primary with mathematics"
-"Mathematics","Secondary[d]Mathematics","Mathematics"
-"Mathematics (7-14)","Middle Years[d]Mathematics","Mathematics"
-"Mathematics (abridged)","Mathematics (abridged)[d]Mathematics[d]Secondary","Mathematics"
-"Mathematics (Abridged)","Mathematics (abridged)[d]Mathematics[d]Secondary","Mathematics"
-"Mathematics - Borden Grammar School","Secondary[d]Mathematics","Mathematics"
-"Mathematics (CaBan Partnership)","Mathematics[d]Secondary","Mathematics"
-"Mathematics - Canterbury High School","Mathematics[d]Secondary","Mathematics"
-"Mathematics - Dane Court Grammar School","Mathematics[d]Secondary","Mathematics"
-"Mathematics (Flexible)","Mathematics[d]Secondary","Mathematics"
-"Mathematics - Herne Bay High School","Secondary[d]Mathematics","Mathematics"
-"Mathematics - King Ethelbert School","Mathematics[d]Secondary","Mathematics"
-"Mathematics - King Ethelbert School","Secondary[d]Mathematics","Mathematics"
-"Mathematics Part Time","Secondary[d]Mathematics","Mathematics"
-"Mathematics (RIS)","Mathematics[d]Secondary","Mathematics"
-"Mathematics - Royal Harbour Academy","Mathematics[d]Secondary","Mathematics"
-"Mathematics (Special Eduational Needs)","Secondary[d]Mathematics[d]Special Educational Needs","Mathematics"
-"Mathematics (Special Educational Needs)","Mathematics[d]Secondary[d]Special Educational Needs","Mathematics"
-"Mathematics (Special Educational Needs)","Secondary[d]Mathematics[d]Special Educational Needs","Mathematics"
-"Mathematics (Special Educational Needs)","Special Educational Needs[d]Secondary[d]Mathematics","Mathematics"
-"Mathematics Teaching Apprenticeship","Mathematics[d]Secondary","Mathematics"
-"Mathematics with","Mathematics[d]Secondary","Mathematics"
-"Mathematics (with Psychology)","Secondary[d]Psychology[d]Mathematics","Mathematics[d]Psychology"
-"Mathematicsy","Mathematics[d]Secondary","Mathematics"
-"Maths","Primary","Primary"
-"Maths","Secondary",""
-"Maths (North Charnwood Learning Partnership)","Mathematics[d]Secondary","Mathematics"
-"MATHS-PART TIME","Secondary[d]Mathematics","Mathematics"
-"Media","Secondary",""
-"Media studies","Secondary[d]Communication and Media Studies","Communication and media studies"
-"Media Studies","Communication and Media Studies[d]Secondary","Communication and media studies"
-"Media Studies","Secondary[d]Communication and Media Studies","Communication and media studies"
-"Media Studies (with English)","Communication and Media Studies[d]English[d]Secondary","Communication and media studies[d]English"
-"Media with English","Secondary[d]English[d]Communication and Media Studies","Communication and media studies[d]English"
-"MFL","Secondary",""
-"MFL - Canterbury Academy","Secondary",""
-"MFL - French","French[d]Languages (European)[d]Secondary","French"
-"MFL - German","German[d]Secondary[d]Languages (European)","German"
-"MFL (German)","German[d]Primary","Primary[d]Primary with modern languages"
-"MFL (German)","German[d]Secondary","German"
-"MFL (North Charnwood Learning Partnership)","Languages[d]Secondary","Modern languages (other)"
-"MFL - Spanish","Languages (European)[d]Spanish[d]Secondary","Spanish"
-"MFL (Spanish)","Spanish[d]Secondary","Spanish"
-"MFL Urdu","Primary[d]Urdu","Primary[d]Primary with modern languages"
-"Middle Years","Middle Years",""
-"Middle Years (9-13 years)","Middle Years[d]Primary","Primary"
-"Modern Foreign Language (French)","French[d]Secondary","French"
-"Modern Foreign Language (German)","German[d]Secondary","German"
-"Modern Foreign Languages","Languages[d]Secondary","Modern languages (other)"
-"Modern Foreign Languages","Secondary[d]Languages","Modern languages (other)"
-"Modern Foreign Languages (CaBan Partnership)","Secondary[d]Languages","Modern languages (other)"
-"Modern Foreign Languages ( French)","Secondary[d]French[d]Languages","French"
-"Modern Foreign Languages (French and Spanish)","Spanish[d]Languages[d]French[d]Secondary","Spanish[d]French"
-"Modern Foreign Languages (French/Spanish)","Spanish[d]Languages[d]Secondary[d]French","Spanish[d]French"
-"Modern Foreign Language (Spanish)","Spanish[d]Secondary","Spanish"
-"Modern Foreign Language (Spanish & German)","Secondary[d]German[d]Spanish[d]Languages[d]Languages (European)","German[d]Spanish"
-"MODERN FOREIGN LANGUAGES -PART TIME","Languages[d]Secondary","Modern languages (other)"
-"Modern Foreign Languages (Spanish)","Languages[d]Secondary[d]Spanish","Spanish"
-"Modern Foreign Languages Teaching Apprenticeship","Secondary[d]Languages","Modern languages (other)"
-"Modern Langauges","Secondary[d]Languages","Modern languages (other)"
-"Modern Language","Languages[d]Secondary","Modern languages (other)"
-"Modern languages","Languages[d]Secondary","Modern languages (other)"
-"Modern languages","Secondary[d]Languages","Modern languages (other)"
-"Modern Languages","French[d]German[d]Spanish[d]Languages (European)[d]Languages[d]Secondary","French[d]German[d]Spanish"
-"Modern Languages","French[d]Languages[d]Languages (European)[d]Secondary[d]Spanish","French[d]Spanish"
-"Modern Languages","French[d]Spanish[d]Languages (European)[d]Secondary[d]Languages","French[d]Spanish"
-"Modern Languages","French[d]Spanish[d]Secondary[d]Languages","French[d]Spanish"
-"Modern Languages","German[d]French[d]Spanish[d]Secondary[d]Languages","German[d]French[d]Spanish"
-"Modern Languages","German[d]French[d]Spanish[d]Secondary[d]Languages[d]Languages (European)","German[d]French[d]Spanish"
-"Modern Languages","German[d]Languages[d]Languages (European)[d]Russian[d]Secondary[d]Spanish[d]French","German[d]Russian[d]Spanish[d]French"
-"Modern Languages","German[d]Languages (European)[d]Spanish[d]Secondary[d]Languages[d]French","German[d]Spanish[d]French"
-"Modern Languages","German[d]Spanish[d]French[d]Languages (European)[d]Secondary[d]Languages","German[d]Spanish[d]French"
-"Modern Languages","German[d]Spanish[d]French[d]Secondary[d]Languages","German[d]Spanish[d]French"
-"Modern Languages","German[d]Spanish[d]French[d]Secondary[d]Languages[d]Languages (European)","German[d]Spanish[d]French"
-"Modern Languages","German[d]Spanish[d]Languages[d]Secondary[d]French","German[d]Spanish[d]French"
-"Modern Languages","Italian[d]German[d]Spanish[d]French[d]Languages (European)[d]Secondary[d]Languages","Italian[d]German[d]Spanish[d]French"
-"Modern Languages","Languages (Asian)[d]Mandarin[d]Spanish[d]German[d]Languages[d]Secondary[d]Languages (European)[d]French","Mandarin[d]Spanish[d]German[d]French"
-"Modern Languages","Languages (Asian)[d]Secondary[d]Languages[d]French[d]German[d]Spanish[d]Italian[d]Japanese[d]Mandarin[TestCase([d]Languages (European)","French[d]German[d]Spanish[d]Italian[d]Japanese"
-"Modern Languages","Languages[d]French[d]Spanish[d]Secondary[d]Languages (European)","French[d]Spanish"
-"Modern Languages","Languages[d]Languages (European)[d]Secondary","Modern languages (other)"
-"Modern Languages","Languages[d]Secondary","Modern languages (other)"
-"Modern Languages","Languages[d]Secondary[d]French[d]German[d]Languages (European)","French[d]German"
-"Modern Languages","Languages[d]Secondary[d]French[d]German[d]Languages (European)[d]Spanish","French[d]German[d]Spanish"
-"Modern Languages","Languages[d]Secondary[d]Languages (European)","Modern languages (other)"
-"Modern Languages","Languages[d]Secondary[d]Spanish[d]Languages (European)[d]French","Spanish[d]French"
-"Modern Languages","Languages (European)[d]Secondary[d]Languages[d]German[d]French[d]Spanish","German[d]French[d]Spanish"
-"Modern Languages","Languages (European)[d]Spanish[d]French[d]Languages[d]Secondary","Spanish[d]French"
-"Modern Languages","Languages (European)[d]Spanish[d]German[d]French[d]Languages[d]Secondary","Spanish[d]German[d]French"
-"Modern Languages","Languages (European)[d]Spanish[d]German[d]French[d]Secondary[d]Languages","Spanish[d]German[d]French"
-"Modern Languages","Languages (European)[d]Spanish[d]Secondary[d]French[d]German[d]Languages","Spanish[d]French[d]German"
-"Modern Languages","Secondary[d]French[d]Spanish[d]German[d]Languages","French[d]Spanish[d]German"
-"Modern Languages","Secondary[d]Languages","Modern languages (other)"
-"Modern Languages","Secondary[d]Languages[d]French[d]German[d]Spanish[d]Languages (European)","French[d]German[d]Spanish"
-"Modern Languages","Secondary[d]Languages[d]French[d]Spanish[d]German[d]Languages (Asian)[d]Mandarin[d]Languages (European)","Mandarin[d]French[d]Spanish[d]German"
-"Modern Languages","Secondary[d]Languages[d]German[d]Languages (European)","German"
-"Modern Languages","Secondary[d]Languages[d]Languages (European)","Modern languages (other)"
-"Modern Languages","Secondary[d]Languages (European)[d]Languages","Modern languages (other)"
-"Modern Languages","Spanish[d]French[d]Secondary[d]Languages[d]German","Spanish[d]French[d]German"
-"Modern Languages","Spanish[d]Languages (European)[d]French[d]Languages[d]Secondary","Spanish[d]French"
-"Modern Languages (Arabic)","Languages (African)[d]Languages[d]Arabic[d]Languages (Asian)[d]Secondary","Modern languages (other)"
-"Modern Languages - Canterbury High School","Secondary[d]Languages","Modern languages (other)"
-"Modern Languages (Chinese)","Chinese[d]Secondary[d]Languages[d]Languages (Asian)","Mandarin"
-"Modern Languages (European)","Languages (European)[d]Secondary[d]Languages","Modern languages (other)"
-"Modern Languages (European Language with Mandarin)","Languages[d]Languages (Asian)[d]Languages (European)[d]Secondary[d]Mandarin","Mandarin"
-"Modern languages (French)","Languages[d]Secondary[d]Languages (European)[d]French","French"
-"Modern Languages (French)","French[d]Languages[d]Languages (European)[d]Secondary","French"
-"Modern Languages (French)","French[d]Languages[d]Secondary","French"
-"Modern Languages (French)","French[d]Languages[d]Secondary[d]Languages (European)","French"
-"Modern Languages (French)","French[d]Languages (European)[d]Languages[d]Secondary","French"
-"Modern Languages (French)","French[d]Languages (European)[d]Secondary[d]Languages","French"
-"Modern Languages (French)","French[d]Middle Years[d]Languages","French"
-"Modern Languages (French)","French[d]Secondary[d]Languages","French"
-"Modern Languages (French)","French[d]Secondary[d]Languages[d]Languages (European)","French"
-"Modern Languages (French)","Languages[d]French[d]Languages (European)[d]Secondary","French"
-"Modern Languages (French)","Languages[d]French[d]Secondary","French"
-"Modern Languages (French)","Languages[d]French[d]Secondary[d]Languages (European)","French"
-"Modern Languages (French)","Languages[d]Languages (European)[d]French[d]Secondary","French"
-"Modern Languages (French)","Languages[d]Languages (European)[d]Middle Years[d]French","French"
-"Modern Languages (French)","Languages[d]Languages (European)[d]Secondary[d]French","French"
-"Modern Languages (French)","Languages[d]Secondary[d]French","French"
-"Modern Languages (French)","Languages[d]Secondary[d]French[d]Languages (European)","French"
-"Modern Languages (French)","Languages[d]Secondary[d]Languages (European)[d]French","French"
-"Modern Languages (French)","Languages (European)[d]French[d]Languages[d]Secondary","French"
-"Modern Languages (French)","Languages (European)[d]French[d]Secondary","French"
-"Modern Languages (French)","Languages (European)[d]French[d]Secondary[d]Languages","French"
-"Modern Languages (French)","Languages (European)[d]Languages[d]French[d]Secondary","French"
-"Modern Languages (French)","Languages (European)[d]Languages[d]Secondary[d]French","French"
-"Modern Languages (French)","Languages (European)[d]Secondary[d]French[d]Languages","French"
-"Modern Languages (French)","Languages (European)[d]Secondary[d]Languages[d]French","French"
-"Modern Languages (French)","Secondary[d]French[d]Languages","French"
-"Modern Languages (French)","Secondary[d]French[d]Languages (European)","French"
-"Modern Languages (French)","Secondary[d]French[d]Languages (European)[d]Languages","French"
-"Modern Languages (French)","Secondary[d]Languages[d]French","French"
-"Modern Languages (French)","Secondary[d]Languages[d]French[d]Languages (European)","French"
-"Modern Languages (French)","Secondary[d]Languages[d]Languages (European)[d]French","French"
-"Modern Languages (French)","Secondary[d]Languages (European)[d]French[d]Languages","French"
-"Modern Languages (French)","Secondary[d]Languages (European)[d]Languages[d]French","French"
-"Modern Languages (French)","Spanish[d]Languages[d]Languages (European)[d]Secondary[d]French","Spanish[d]French"
-"Modern Languages (French and German)","French[d]German[d]Languages[d]Languages (European)[d]Secondary","French[d]German"
-"Modern Languages (French and German)","French[d]German[d]Languages (European)[d]Secondary[d]Languages","French[d]German"
-"Modern Languages (French and German)","French[d]German[d]Secondary[d]Languages (European)[d]Languages","French[d]German"
-"Modern Languages (French and German)","French[d]Languages (European)[d]German[d]Secondary[d]Languages","French[d]German"
-"Modern Languages (French and German)","German[d]French[d]Languages[d]Languages (European)[d]Secondary","German[d]French"
-"Modern Languages (French and German)","German[d]French[d]Languages[d]Secondary[d]Languages (European)","German[d]French"
-"Modern Languages (French and German)","German[d]French[d]Secondary[d]Languages (European)[d]Languages","German[d]French"
-"Modern Languages (French and German)","Languages[d]French[d]German[d]Secondary[d]Languages (European)","French[d]German"
-"Modern Languages (French and German)","Languages[d]German[d]Secondary[d]Languages (European)[d]French","German[d]French"
-"Modern Languages (French and German)","Languages[d]Languages (European)[d]Secondary[d]French[d]German","French[d]German"
-"Modern Languages (French and German)","Languages[d]Languages (European)[d]Secondary[d]German[d]French","German[d]French"
-"Modern Languages (French and German)","Languages[d]Secondary[d]German[d]French[d]Languages (European)","German[d]French"
-"Modern Languages (French and German)","Secondary[d]French[d]Languages (European)[d]German[d]Languages","French[d]German"
-"Modern Languages (French and German)","Secondary[d]German[d]Languages[d]Languages (European)[d]French","German[d]French"
-"Modern Languages (French and German)","Secondary[d]Languages[d]French[d]German[d]Languages (European)","French[d]German"
-"Modern Languages (French and German)","Secondary[d]Languages[d]German[d]French","German[d]French"
-"Modern Languages (French and Italian)","Secondary[d]Languages[d]French[d]Italian[d]Languages (European)","French[d]Italian"
-"Modern Languages (French and Mandarin)","Secondary[d]Languages[d]French[d]Languages (European)[d]Mandarin[d]Languages (Asian)","Mandarin[d]French"
-"Modern Languages (French and/or Spanish)","French[d]Spanish[d]Secondary[d]Languages (European)[d]Languages","French[d]Spanish"
-"Modern Languages (French and Spanish)","French[d]Languages[d]Languages (European)[d]Secondary[d]Spanish","French[d]Spanish"
-"Modern Languages (French and Spanish)","French[d]Languages[d]Languages (European)[d]Spanish[d]Secondary","French[d]Spanish"
-"Modern Languages (French and Spanish)","French[d]Languages[d]Secondary[d]Spanish[d]Languages (European)","French[d]Spanish"
-"Modern Languages (French and Spanish)","French[d]Languages (European)[d]Secondary[d]Spanish[d]Languages","French[d]Spanish"
-"Modern Languages (French and Spanish)","French[d]Languages (European)[d]Spanish[d]Languages[d]Secondary","French[d]Spanish"
-"Modern Languages (French and Spanish)","French[d]Secondary[d]Spanish[d]Languages (European)[d]Languages","French[d]Spanish"
-"Modern Languages (French and Spanish)","French[d]Spanish[d]Secondary[d]Languages","French[d]Spanish"
-"Modern Languages (French and Spanish)","French[d]Spanish[d]Secondary[d]Languages[d]Languages (European)","French[d]Spanish"
-"Modern Languages (French and Spanish)","Languages[d]French[d]Spanish[d]Languages (European)[d]Secondary","French[d]Spanish"
-"Modern Languages (French and Spanish)","Languages[d]French[d]Spanish[d]Secondary","French[d]Spanish"
-"Modern Languages (French and Spanish)","Languages[d]Languages (European)[d]French[d]Spanish[d]Secondary","French[d]Spanish"
-"Modern Languages (French and Spanish)","Languages[d]Languages (European)[d]Secondary[d]Spanish[d]French","Spanish[d]French"
-"Modern Languages (French and Spanish)","Languages[d]Secondary[d]French[d]Spanish[d]Languages (European)","French[d]Spanish"
-"Modern Languages (French and Spanish)","Languages[d]Secondary[d]Languages (European)[d]French[d]Spanish","French[d]Spanish"
-"Modern Languages (French and Spanish)","Languages[d]Secondary[d]Languages (European)[d]Spanish[d]French","Spanish[d]French"
-"Modern Languages (French and Spanish)","Languages[d]Secondary[d]Spanish[d]French[d]Languages (European)","Spanish[d]French"
-"Modern Languages (French and Spanish)","Languages[d]Spanish[d]Secondary[d]Languages (European)[d]French","Spanish[d]French"
-"Modern Languages (French and Spanish)","Languages (European)[d]Languages[d]Spanish[d]Secondary[d]French","Spanish[d]French"
-"Modern Languages (French and Spanish)","Languages (European)[d]Secondary[d]French[d]Languages[d]Spanish","French[d]Spanish"
-"Modern Languages (French and Spanish)","Languages (European)[d]Secondary[d]Languages[d]French[d]Spanish","French[d]Spanish"
-"Modern Languages (French and Spanish)","Languages (European)[d]Secondary[d]Spanish[d]French[d]Languages","Spanish[d]French"
-"Modern Languages (French and Spanish)","Languages (European)[d]Spanish[d]French[d]Languages[d]Secondary","Spanish[d]French"
-"Modern Languages (French and Spanish)","Languages (European)[d]Spanish[d]French[d]Secondary[d]Languages","Spanish[d]French"
-"Modern Languages (French and Spanish)","Secondary[d]French[d]Languages[d]Spanish[d]Languages (European)","French[d]Spanish"
-"Modern Languages (French and Spanish)","Secondary[d]Languages[d]French[d]Spanish[d]Languages (European)","French[d]Spanish"
-"Modern Languages (French and Spanish)","Secondary[d]Languages[d]Spanish[d]Languages (European)[d]French","Spanish[d]French"
-"Modern Languages (French and Spanish)","Secondary[d]Languages (European)[d]Languages[d]French[d]Spanish","French[d]Spanish"
-"Modern Languages (French and Spanish)","Secondary[d]Spanish[d]Languages[d]Languages (European)[d]French","Spanish[d]French"
-"Modern Languages (French and Spanish)","Secondary[d]Spanish[d]Languages (European)[d]French[d]Languages","Spanish[d]French"
-"Modern Languages (French and Spanish)","Spanish[d]French[d]Languages[d]Secondary[d]Languages (European)","Spanish[d]French"
-"Modern Languages (French and Spanish)","Spanish[d]French[d]Languages (European)[d]Secondary[d]Languages","Spanish[d]French"
-"Modern Languages (French and Spanish)","Spanish[d]Languages[d]French[d]Secondary","Spanish[d]French"
-"Modern Languages (French and Spanish)","Spanish[d]Languages (European)[d]Languages[d]German[d]French[d]Secondary","Spanish[d]German[d]French"
-"Modern Languages (French and Spanish)","Spanish[d]Languages (European)[d]Secondary[d]Languages[d]French","Spanish[d]French"
-"Modern Languages (French and Spanish)","Spanish[d]Secondary[d]French[d]Languages","Spanish[d]French"
-"Modern Languages (French and Spanish)","Spanish[d]Secondary[d]Languages (European)[d]French[d]Languages","Spanish[d]French"
-"Modern Languages (French and Spanish)","Spanish[d]Secondary[d]Languages (European)[d]Languages[d]French","Spanish[d]French"
-"Modern Languages (French, German)","German[d]Secondary[d]French[d]Languages[d]Languages (European)","German[d]French"
-"Modern Languages (French, German and Spanish)","French[d]German[d]Languages[d]Secondary[d]Spanish","French[d]German[d]Spanish"
-"Modern Languages (French, German and Spanish)","French[d]Spanish[d]Secondary[d]Languages (European)[d]Languages[d]German","French[d]Spanish[d]German"
-"Modern Languages (French, German and Spanish)","German[d]French[d]Languages[d]Languages (European)[d]Spanish[d]Secondary","German[d]French[d]Spanish"
-"Modern Languages (French, German and Spanish)","Languages (European)[d]Languages[d]German[d]French[d]Secondary[d]Spanish","German[d]French[d]Spanish"
-"Modern Languages (French, German and Spanish)","Languages (European)[d]Secondary[d]Spanish[d]Languages[d]French[d]German","Spanish[d]French[d]German"
-"Modern Languages (French, German and Spanish)","Languages (European)[d]Spanish[d]Secondary[d]Languages[d]German[d]French","Spanish[d]German[d]French"
-"Modern Languages (French, German and Spanish)","Secondary[d]Languages (European)[d]Languages[d]German[d]French[d]Spanish","German[d]French[d]Spanish"
-"Modern Languages (French, German and Spanish)","Secondary[d]Languages (European)[d]Languages[d]German[d]Spanish[d]French","German[d]Spanish[d]French"
-"Modern Languages (French, German and Spanish)","Spanish[d]French[d]German[d]Languages[d]Languages (European)[d]Secondary","Spanish[d]French[d]German"
-"Modern Languages (French, German and Spanish)","Spanish[d]Languages[d]Languages (European)[d]Secondary[d]French[d]German","Spanish[d]French[d]German"
-"Modern Languages (French, German and Spanish)","Spanish[d]Secondary[d]Languages (European)[d]Languages[d]German[d]French","Spanish[d]German[d]French"
-"Modern Languages (French, German or Spanish)","German[d]Secondary[d]Spanish[d]Languages[d]French","German[d]Spanish[d]French"
-"Modern Languages (French, German, Spanish","Secondary[d]Languages[d]French[d]Spanish[d]German","French[d]Spanish[d]German"
-"Modern Languages (French, German, Spanish)","French[d]German[d]Languages[d]Secondary[d]Spanish[d]Languages (European)","French[d]German[d]Spanish"
-"Modern Languages (French, German, Spanish)","German[d]Languages[d]Secondary[d]Spanish[d]Languages (European)[d]French","German[d]Spanish[d]French"
-"Modern Languages (French, German, Spanish)","Languages[d]German[d]French[d]Spanish[d]Secondary[d]Languages (European)","German[d]French[d]Spanish"
-"Modern Languages (French, German, Spanish)","Languages (European)[d]German[d]French[d]Languages[d]Secondary[d]Spanish","German[d]French[d]Spanish"
-"Modern Languages (French, German, Spanish)","Languages (European)[d]Languages[d]Secondary[d]Spanish[d]German[d]French","Spanish[d]German[d]French"
-"Modern Languages (French, German, Spanish)","Languages (European)[d]Secondary[d]French[d]Spanish[d]Languages[d]German","French[d]Spanish[d]German"
-"Modern Languages (French, German, Spanish)","Languages (European)[d]Spanish[d]German[d]French[d]Languages[d]Secondary","Spanish[d]German[d]French"
-"Modern Languages (French, German, Spanish)","Languages (European)[d]Spanish[d]German[d]French[d]Secondary[d]Languages","Spanish[d]German[d]French"
-"Modern Languages (French, German, Spanish)","Languages (European)[d]Spanish[d]Secondary[d]Languages[d]German[d]French","Spanish[d]German[d]French"
-"Modern Languages (French, German, Spanish)","Secondary[d]French[d]German[d]Spanish[d]Languages (European)[d]Languages","French[d]German[d]Spanish"
-"Modern Languages (French, German, Spanish)","Secondary[d]Languages[d]French[d]German[d]Spanish[d]Languages (European)","French[d]German[d]Spanish"
-"Modern Languages (French, German, Spanish)","Secondary[d]Languages (European)[d]Spanish[d]German[d]French[d]Languages","Spanish[d]German[d]French"
-"Modern Languages (French, German, Spanish)","Spanish[d]Secondary[d]Languages (European)[d]Languages[d]German[d]French","Spanish[d]German[d]French"
-"Modern Languages (French, German, Spanish 7-14)","Middle Years[d]Languages","Modern languages (other)"
-"Modern Languages (French or German)","Languages (European)[d]German[d]French[d]Languages[d]Secondary","German[d]French"
-"Modern Languages (French or Spanish)","French[d]Languages[d]Secondary[d]Spanish[d]Languages (European)","French[d]Spanish"
-"Modern Languages (French or Spanish)","French[d]Spanish[d]Languages[d]Languages (European)[d]Secondary","French[d]Spanish"
-"Modern Languages (French or Spanish)","French[d]Spanish[d]Secondary[d]Languages (European)[d]Languages","French[d]Spanish"
-"Modern Languages (French or Spanish)","Secondary[d]Languages (European)[d]French[d]Languages[d]Spanish","French[d]Spanish"
-"Modern Languages(French or with Spanish or German)","Secondary[d]French[d]German[d]Languages[d]Languages (European)[d]Spanish","French[d]German[d]Spanish"
-"Modern Languages (French, Spanish)","French[d]Languages[d]Languages (European)[d]Secondary[d]Spanish","French[d]Spanish"
-"Modern Languages (French, Spanish)","Languages (European)[d]French[d]Languages[d]Spanish[d]Secondary","French[d]Spanish"
-"Modern Languages (French, Spanish)","Languages (European)[d]Spanish[d]Secondary[d]Languages[d]French","Spanish[d]French"
-"Modern Languages (French, Spanish)","Secondary[d]French[d]Languages[d]Spanish[d]Languages (European)","French[d]Spanish"
-"Modern Languages (French, Spanish)","Secondary[d]Languages[d]French[d]Languages (European)[d]Spanish","French[d]Spanish"
-"Modern Languages (French, Spanish)","Secondary[d]Spanish[d]Languages (European)[d]Languages[d]French","Spanish[d]French"
-"Modern Languages (French, Spanish)","Spanish[d]Secondary[d]Languages[d]Languages (European)[d]French","Spanish[d]French"
-"Modern Languages (French, Spanish)","Spanish[d]Secondary[d]Languages (European)[d]Languages[d]French","Spanish[d]French"
-"Modern Languages (French, Spanish, German)","French[d]German[d]Languages[d]Languages (European)[d]Secondary[d]Spanish","French[d]German[d]Spanish"
-"Modern Languages (French, Spanish, German)","German[d]French[d]Languages (European)[d]Spanish[d]Secondary[d]Languages","German[d]French[d]Spanish"
-"Modern Languages (French, Spanish, German)","German[d]French[d]Spanish[d]Languages (European)[d]Secondary[d]Languages","German[d]French[d]Spanish"
-"Modern Languages (French, Spanish, German)","German[d]Languages[d]Languages (European)[d]Secondary[d]Spanish[d]French","German[d]Spanish[d]French"
-"Modern Languages (French, Spanish, German)","German[d]Spanish[d]Secondary[d]Languages (European)[d]Languages[d]French","German[d]Spanish[d]French"
-"Modern Languages (French, Spanish, German)","Languages[d]Languages (European)[d]Secondary[d]French[d]German[d]Spanish","French[d]German[d]Spanish"
-"Modern Languages (French, Spanish, German)","Languages[d]Languages (European)[d]Spanish[d]German[d]French[d]Secondary","Spanish[d]German[d]French"
-"Modern Languages (French, Spanish, German)","Languages[d]Secondary[d]Spanish[d]Languages (European)[d]French[d]German","Spanish[d]French[d]German"
-"Modern Languages (French, Spanish, German)","Languages (European)[d]German[d]Languages[d]Secondary[d]Spanish[d]French","German[d]Spanish[d]French"
-"Modern Languages (French, Spanish, German)","Languages (European)[d]Spanish[d]German[d]French[d]Languages[d]Secondary","Spanish[d]German[d]French"
-"Modern Languages (French, Spanish, German)","Secondary[d]Languages[d]German[d]Spanish[d]Languages (European)[d]French","German[d]Spanish[d]French"
-"Modern Languages (French, Spanish, German)","Spanish[d]Languages[d]French[d]Secondary[d]Languages (European)[d]German","Spanish[d]French[d]German"
-"Modern Languages (French, Spanish, German)","Spanish[d]Secondary[d]Languages (European)[d]Languages[d]German[d]French","Spanish[d]German[d]French"
-"Modern Languages (French, Spanish,German)","German[d]French[d]Spanish[d]Secondary[d]Languages (European)[d]Languages","German[d]French[d]Spanish"
-"Modern Languages (French, Spanish or German)","Spanish[d]Secondary[d]Languages (European)[d]Languages[d]German[d]French","Spanish[d]German[d]French"
-"Modern Languages (French with additional language)","Languages (European)[d]Languages[d]Secondary[d]French","French"
-"Modern Languages (French with another language)","French[d]Languages (European)[d]Languages[d]Secondary","French"
-"Modern Languages (French with German)","French[d]German[d]Languages[d]Languages (European)[d]Secondary","French[d]German"
-"Modern Languages (French with German)","French[d]German[d]Languages[d]Secondary[d]Languages (European)","French[d]German"
-"Modern Languages (French with German)","French[d]Languages[d]Secondary[d]Languages (European)[d]German","French[d]German"
-"Modern Languages (French with German)","French[d]Languages (European)[d]German[d]Secondary[d]Languages","French[d]German"
-"Modern Languages (French with German)","German[d]French[d]Languages[d]Languages (European)[d]Secondary","German[d]French"
-"Modern Languages (French with German)","German[d]Languages (European)[d]Secondary[d]Languages[d]French","German[d]French"
-"Modern Languages (French with German)","Languages[d]German[d]French[d]Secondary","German[d]French"
-"Modern Languages (French with German)","Languages[d]Secondary[d]German[d]French[d]Languages (European)","German[d]French"
-"Modern Languages (French with German)","Languages (European)[d]German[d]French[d]Languages[d]Secondary","German[d]French"
-"Modern Languages (French with German)","Languages (European)[d]German[d]Languages[d]Secondary[d]French","German[d]French"
-"Modern Languages (French with German)","Languages (European)[d]Secondary[d]Languages[d]German[d]French","German[d]French"
-"Modern Languages (French with German)","Secondary[d]Languages[d]French[d]German[d]Languages (European)","French[d]German"
-"Modern Languages (French with German)","Secondary[d]Languages (European)[d]Languages[d]German[d]French","German[d]French"
-"Modern Languages (French with Italian)","Italian[d]French[d]Languages[d]Secondary[d]Languages (European)","Italian[d]French"
-"Modern Languages (French with Italian)","Languages (European)[d]French[d]Languages[d]Secondary[d]Italian","French[d]Italian"
-"Modern Languages (French with Italian)","Languages (European)[d]Italian[d]French[d]Languages[d]Secondary","Italian[d]French"
-"Modern Languages (French with Italian)","Languages (European)[d]Secondary[d]Languages[d]French[d]Italian","French[d]Italian"
-"Modern Languages (French with Italian)","Secondary[d]French[d]Languages[d]Languages (European)[d]Italian","French[d]Italian"
-"Modern Languages (French with Japanese)","Japanese[d]Secondary[d]Languages[d]French[d]Languages (European)[d]Languages (Asian)","Japanese[d]French"
-"Modern Languages (French with Mandarin)","Secondary[d]Languages[d]French[d]Languages (European)[d]Mandarin[d]Languages (Asian)","Mandarin[d]French"
-"Modern Languages (French with Russian)","Secondary[d]Languages[d]French[d]Russian[d]Languages (European)","French[d]Russian"
-"Modern Languages (French with some Spanish)","Secondary[d]French[d]Languages[d]Spanish","French[d]Spanish"
-"Modern Languages (French with Spanish)","French[d]Languages[d]Languages (European)[d]Secondary[d]Spanish","French[d]Spanish"
-"Modern Languages (French with Spanish)","French[d]Languages[d]Secondary[d]Spanish[d]Languages (European)","French[d]Spanish"
-"Modern Languages (French with Spanish)","French[d]Languages (European)[d]Spanish[d]Secondary[d]Languages","French[d]Spanish"
-"Modern Languages (French with Spanish)","Languages[d]Languages (European)[d]Spanish[d]French[d]Secondary","Spanish[d]French"
-"Modern Languages (French with Spanish)","Languages[d]Secondary[d]French[d]Languages (European)[d]Spanish","French[d]Spanish"
-"Modern Languages (French with Spanish)","Languages[d]Secondary[d]French[d]Spanish[d]Languages (European)","French[d]Spanish"
-"Modern Languages (French with Spanish)","Languages[d]Secondary[d]Languages (European)[d]Spanish[d]French","Spanish[d]French"
-"Modern Languages (French with Spanish)","Languages[d]Secondary[d]Spanish[d]Languages (European)[d]French","Spanish[d]French"
-"Modern Languages (French with Spanish)","Languages (European)[d]French[d]Spanish[d]Secondary[d]Languages","French[d]Spanish"
-"Modern Languages (French with Spanish)","Languages (European)[d]Secondary[d]Languages[d]French[d]Spanish","French[d]Spanish"
-"Modern Languages (French with Spanish)","Languages (European)[d]Secondary[d]Spanish[d]French[d]Languages","Spanish[d]French"
-"Modern Languages (French with Spanish)","Languages (European)[d]Spanish[d]French[d]Languages[d]Secondary","Spanish[d]French"
-"Modern Languages (French with Spanish)","Languages (European)[d]Spanish[d]French[d]Secondary[d]Languages","Spanish[d]French"
-"Modern Languages (French with Spanish)","Secondary[d]Languages[d]French[d]Spanish","French[d]Spanish"
-"Modern Languages (French with Spanish)","Secondary[d]Languages[d]French[d]Spanish[d]Languages (European)","French[d]Spanish"
-"Modern Languages (French with Spanish)","Secondary[d]Languages (European)[d]Languages[d]French[d]Spanish","French[d]Spanish"
-"Modern Languages (French with Spanish)","Secondary[d]Languages (European)[d]Spanish[d]French[d]Languages","Spanish[d]French"
-"Modern Languages (French with Spanish)","Spanish[d]French[d]Languages[d]Secondary[d]Languages (European)","Spanish[d]French"
-"Modern Languages (French with Spanish)","Spanish[d]Languages (European)[d]Secondary[d]French[d]Languages","Spanish[d]French"
-"Modern Languages (French with Spanish)","Spanish[d]Secondary[d]Languages (European)[d]Languages[d]French","Spanish[d]French"
-"Modern Languages (French with Spanish or German)","Languages (European)[d]Spanish[d]German[d]French[d]Languages[d]Secondary","Spanish[d]German[d]French"
-"Modern Languages (French with Spanish or German)","Secondary[d]Languages[d]French[d]German[d]Spanish[d]Languages (European)","French[d]German[d]Spanish"
-"Modern Languages (French with Urdu)","Secondary[d]Languages[d]French[d]Languages (European)[d]Urdu[d]Languages (Asian)","French"
-"Modern Languages (German)","German[d]Languages[d]Languages (European)[d]Secondary","German"
-"Modern Languages (German)","German[d]Languages[d]Secondary","German"
-"Modern Languages (German)","German[d]Languages[d]Secondary[d]Languages (European)","German"
-"Modern Languages (German)","German[d]Languages (European)[d]Languages[d]Secondary","German"
-"Modern Languages (German)","German[d]Languages (European)[d]Secondary[d]Languages","German"
-"Modern Languages (German)","German[d]Secondary[d]Languages","German"
-"Modern Languages (German)","German[d]Secondary[d]Languages[d]Languages (European)","German"
-"Modern Languages (German)","German[d]Secondary[d]Languages (European)[d]Languages","German"
-"Modern Languages (German)","Languages[d]German[d]Languages (European)[d]Secondary","German"
-"Modern Languages (German)","Languages[d]German[d]Secondary","German"
-"Modern Languages (German)","Languages[d]German[d]Secondary[d]Languages (European)","German"
-"Modern Languages (German)","Languages[d]Languages (European)[d]German[d]Secondary","German"
-"Modern Languages (German)","Languages[d]Languages (European)[d]Secondary[d]German","German"
-"Modern Languages (German)","Languages (European)[d]German[d]Languages[d]Secondary","German"
-"Modern Languages (German)","Languages (European)[d]German[d]Secondary[d]Languages","German"
-"Modern Languages (German)","Languages (European)[d]Languages[d]German[d]Secondary","German"
-"Modern Languages (German)","Languages (European)[d]Languages[d]Secondary[d]German","German"
-"Modern Languages (German)","Languages (European)[d]Secondary[d]German[d]Languages","German"
-"Modern Languages (German)","Languages (European)[d]Secondary[d]Languages[d]German","German"
-"Modern Languages (German)","Secondary[d]German[d]Languages[d]Languages (European)","German"
-"Modern Languages (German)","Secondary[d]German[d]Languages (European)[d]Languages","German"
-"Modern Languages (German)","Secondary[d]Languages[d]German","German"
-"Modern Languages (German)","Secondary[d]Languages[d]German[d]Languages (European)","German"
-"Modern Languages (German)","Secondary[d]Languages[d]Languages (European)[d]German","German"
-"Modern Languages (German)","Secondary[d]Languages (European)[d]German[d]Languages","German"
-"Modern Languages (German)","Secondary[d]Languages (European)[d]Languages[d]German","German"
-"Modern Languages (German and French)","Languages (European)[d]German[d]French[d]Languages[d]Secondary","German[d]French"
-"Modern Languages (German and French)","Languages (European)[d]Secondary[d]Languages[d]German[d]French","German[d]French"
-"Modern Languages (German and Spanish)","German[d]Languages[d]Languages (European)[d]Secondary[d]Spanish","German[d]Spanish"
-"Modern Languages (German and Spanish)","German[d]Languages[d]Secondary[d]Spanish[d]Languages (European)","German[d]Spanish"
-"Modern Languages (German and Spanish)","German[d]Secondary[d]Spanish[d]Languages (European)[d]Languages","German[d]Spanish"
-"Modern Languages (German and Spanish)","Languages (European)[d]Spanish[d]Secondary[d]Languages[d]German","Spanish[d]German"
-"Modern Languages (German/French)","Languages[d]German[d]French[d]Secondary","German[d]French"
-"Modern Languages (German, French, Spanish)","Spanish[d]Secondary[d]Languages (European)[d]French[d]Languages[d]German","Spanish[d]French[d]German"
-"Modern Languages (German or French)","Languages[d]Secondary[d]Languages (European)[d]French[d]German","French[d]German"
-"Modern Languages(German or with French or Spanish)","Languages (European)[d]Secondary[d]Spanish[d]French[d]German[d]Languages","Spanish[d]French[d]German"
-"Modern Languages (German with additional language)","Secondary[d]German[d]Languages (European)[d]Languages","German"
-"Modern Languages (German with French)","French[d]German[d]Languages[d]Secondary[d]Languages (European)","French[d]German"
-"Modern Languages (German with French)","French[d]Languages (European)[d]German[d]Languages[d]Secondary","French[d]German"
-"Modern Languages (German with French)","German[d]Languages (European)[d]French[d]Languages[d]Secondary","German[d]French"
-"Modern Languages (German with French)","Languages (European)[d]German[d]French[d]Languages[d]Secondary","German[d]French"
-"Modern Languages (German with French)","Languages (European)[d]Languages[d]French[d]German[d]Secondary","French[d]German"
-"Modern Languages (German with French)","Languages (European)[d]Languages[d]Secondary[d]German[d]French","German[d]French"
-"Modern Languages (German with French)","Secondary[d]Languages[d]French[d]German[d]Languages (European)","French[d]German"
-"Modern Languages (German with French)","Secondary[d]Languages[d]German[d]French[d]Languages (European)","German[d]French"
-"Modern Languages (German with French)","Secondary[d]Languages (European)[d]German[d]French[d]Languages","German[d]French"
-"Modern Languages (German with Italian)","Languages (European)[d]Italian[d]German[d]Languages[d]Secondary","Italian[d]German"
-"Modern Languages (German with Japanese)","Secondary[d]Languages[d]German[d]Languages (European)[d]Japanese[d]Languages (Asian)","German[d]Japanese"
-"Modern Languages (German with Mandarin)","Languages (Asian)[d]Secondary[d]Languages[d]German[d]Languages (European)[d]Mandarin","Mandarin[d]German"
-"Modern Languages (German with Russian)","Secondary[d]Languages[d]German[d]Russian[d]Languages (European)","German[d]Russian"
-"Modern Languages (German with Spanish)","German[d]Languages[d]Languages (European)[d]Secondary[d]Spanish","German[d]Spanish"
-"Modern Languages (German with Spanish)","German[d]Languages[d]Languages (European)[d]Spanish[d]Secondary","German[d]Spanish"
-"Modern Languages (German with Spanish)","German[d]Spanish[d]Languages (European)[d]Secondary[d]Languages","German[d]Spanish"
-"Modern Languages (German with Spanish)","Languages (European)[d]Spanish[d]German[d]Languages[d]Secondary","Spanish[d]German"
-"Modern Languages (German with Spanish)","Languages (European)[d]Spanish[d]Languages[d]Secondary[d]German","Spanish[d]German"
-"Modern Languages (German with Spanish)","Secondary[d]Languages[d]German[d]Languages (European)[d]Spanish","German[d]Spanish"
-"Modern Languages (German with Spanish)","Secondary[d]Languages[d]German[d]Spanish[d]Languages (European)","German[d]Spanish"
-"Modern Languages (German with Spanish)","Secondary[d]Languages[d]Languages (European)[d]Spanish[d]German","Spanish[d]German"
-"Modern Languages (German with Spanish)","Spanish[d]German[d]Languages[d]Secondary[d]Languages (European)","Spanish[d]German"
-"Modern Languages (German with Spanish)","Spanish[d]Middle Years[d]German[d]Languages[d]Languages (European)","Spanish[d]German"
-"Modern Languages (German with Urdu)","Secondary[d]Languages[d]German[d]Languages (European)[d]Urdu[d]Languages (Asian)","German"
-"Modern Languages (Italian)","Languages (European)[d]Secondary[d]Languages[d]Italian","Italian"
-"Modern Languages (Japanese with French)","Languages (European)[d]Secondary[d]Languages (Asian)[d]Languages[d]French[d]Japanese","French[d]Japanese"
-"Modern Languages (Japanese with German)","Languages[d]Japanese[d]German[d]Languages (Asian)[d]Languages (European)[d]Secondary","Japanese[d]German"
-"Modern Languages (Japanese with Spanish)","Languages (European)[d]Japanese[d]Languages (Asian)[d]Secondary[d]Languages[d]Spanish","Japanese[d]Spanish"
-"Modern Languages (Mandarin)","Languages (Asian)[d]Mandarin[d]Secondary[d]Languages","Mandarin"
-"Modern Languages (Mandarin)","Languages[d]Languages (Asian)[d]Secondary[d]Mandarin","Mandarin"
-"Modern Languages (Mandarin)","Languages[d]Mandarin[d]Secondary[d]Languages (Asian)","Mandarin"
-"Modern Languages (Mandarin)","Languages[d]Secondary[d]Languages (Asian)[d]Mandarin","Mandarin"
-"Modern Languages (Mandarin)","Secondary[d]Languages[d]Mandarin[d]Languages (Asian)","Mandarin"
-"Modern Languages (Mandarin)","Secondary[d]Mandarin[d]Languages (Asian)[d]Languages","Mandarin"
-"Modern Languages (Mandarin, French or Spanish)","Languages[d]Languages (African)[d]Languages (European)[d]Mandarin[d]Spanish[d]Secondary[TestCase([d]French","Mandarin[d]Spanish[d]French"
-"Modern Languages (Mandarin with French)","Languages (Asian)[d]Mandarin[d]Languages (European)[d]French[d]Languages[d]Secondary","Mandarin[d]French"
-"Modern Languages (Mandarin with German)","Secondary[d]Languages[d]Mandarin[d]Languages (European)[d]Languages (Asian)[d]German","Mandarin[d]German"
-"Modern Languages (Mandarin with Spanish)","Languages (Asian)[d]Mandarin[d]Languages (European)[d]Spanish[d]Secondary[d]Languages","Mandarin[d]Spanish"
-"Modern Language (Spanish)","Languages (European)[d]Spanish[d]Secondary","Spanish"
-"Modern Languages Part Time","Secondary[d]Languages","Modern languages (other)"
-"Modern languages (Spanish)","Languages[d]Languages (European)[d]Spanish[d]Secondary","Spanish"
-"Modern languages (Spanish)","Languages[d]Secondary[d]Spanish[d]Languages (European)","Spanish"
-"Modern Languages (Spanish)","Languages[d]Languages (European)[d]Secondary[d]Spanish","Spanish"
-"Modern Languages (Spanish)","Languages[d]Languages (European)[d]Spanish[d]Secondary","Spanish"
-"Modern Languages (Spanish)","Languages[d]Secondary[d]Languages (European)[d]Spanish","Spanish"
-"Modern Languages (Spanish)","Languages[d]Secondary[d]Spanish[d]Languages (European)","Spanish"
-"Modern Languages (Spanish)","Languages[d]Spanish[d]Languages (European)[d]Secondary","Spanish"
-"Modern Languages (Spanish)","Languages[d]Spanish[d]Secondary[d]Languages (European)","Spanish"
-"Modern Languages (Spanish)","Languages (European)[d]Languages[d]Secondary[d]Spanish","Spanish"
-"Modern Languages (Spanish)","Languages (European)[d]Languages[d]Spanish[d]Secondary","Spanish"
-"Modern Languages (Spanish)","Languages (European)[d]Secondary[d]Languages[d]Spanish","Spanish"
-"Modern Languages (Spanish)","Languages (European)[d]Secondary[d]Spanish[d]Languages","Spanish"
-"Modern Languages (Spanish)","Languages (European)[d]Spanish[d]Languages[d]Secondary","Spanish"
-"Modern Languages (Spanish)","Languages (European)[d]Spanish[d]Secondary[d]Languages","Spanish"
-"Modern Languages (Spanish)","Secondary[d]Languages[d]Languages (European)[d]Spanish","Spanish"
-"Modern Languages (Spanish)","Secondary[d]Languages[d]Spanish","Spanish"
-"Modern Languages (Spanish)","Secondary[d]Languages[d]Spanish[d]Languages (European)","Spanish"
-"Modern Languages (Spanish)","Secondary[d]Languages (European)[d]Languages[d]Spanish","Spanish"
-"Modern Languages (Spanish)","Secondary[d]Languages (European)[d]Spanish[d]Languages","Spanish"
-"Modern Languages (Spanish)","Secondary[d]Spanish[d]Languages","Spanish"
-"Modern Languages (Spanish)","Secondary[d]Spanish[d]Languages[d]Languages (European)","Spanish"
-"Modern Languages (Spanish)","Secondary[d]Spanish[d]Languages (European)[d]Languages","Spanish"
-"Modern Languages (Spanish)","Spanish[d]Languages[d]Languages (European)[d]Secondary","Spanish"
-"Modern Languages (Spanish)","Spanish[d]Languages[d]Secondary","Spanish"
-"Modern Languages (Spanish)","Spanish[d]Languages[d]Secondary[d]Languages (European)","Spanish"
-"Modern Languages (Spanish)","Spanish[d]Languages (European)[d]Languages[d]Secondary","Spanish"
-"Modern Languages (Spanish)","Spanish[d]Languages (European)[d]Secondary[d]Languages","Spanish"
-"Modern Languages (Spanish)","Spanish[d]Secondary[d]Languages[d]Languages (European)","Spanish"
-"Modern Languages (Spanish)","Spanish[d]Secondary[d]Languages (European)[d]Languages","Spanish"
-"Modern Languages (Spanish and French)","French[d]Languages[d]Languages (European)[d]Secondary[d]Spanish","French[d]Spanish"
-"Modern Languages (Spanish and French)","French[d]Languages[d]Spanish[d]Secondary[d]Languages (European)","French[d]Spanish"
-"Modern Languages (Spanish and French)","French[d]Languages (European)[d]Spanish[d]Secondary[d]Languages","French[d]Spanish"
-"Modern Languages (Spanish and French)","Languages[d]Languages (European)[d]Spanish[d]French[d]Secondary","Spanish[d]French"
-"Modern Languages (Spanish and French)","Languages[d]Secondary[d]French[d]Spanish[d]Languages (European)","French[d]Spanish"
-"Modern Languages (Spanish and French)","Languages (European)[d]Spanish[d]Secondary[d]Languages[d]French","Spanish[d]French"
-"Modern Languages (Spanish and French)","Secondary[d]Languages[d]French[d]Spanish[d]Languages (European)","French[d]Spanish"
-"Modern Languages (Spanish and French)","Spanish[d]Secondary[d]Languages[d]French","Spanish[d]French"
-"Modern Languages (Spanish and French)","Spanish[d]Secondary[d]Languages (European)[d]French[d]Languages","Spanish[d]French"
-"Modern Languages (Spanish and German)","Languages (European)[d]Languages[d]Spanish[d]Secondary[d]German","Spanish[d]German"
-"Modern Languages (Spanish and German)","Spanish[d]Secondary[d]Languages (European)[d]Languages[d]German","Spanish[d]German"
-"Modern Languages (Spanish, French)","French[d]Languages[d]Secondary[d]Languages (European)[d]Spanish","French[d]Spanish"
-"Modern Languages (Spanish, French)","Languages (European)[d]Spanish[d]French[d]Languages[d]Secondary","Spanish[d]French"
-"Modern Languages (Spanish, French)","Spanish[d]Secondary[d]Languages[d]French[d]Languages (European)","Spanish[d]French"
-"Modern Languages (Spanish/French)","Secondary[d]French[d]Languages[d]Languages (European)[d]Spanish","French[d]Spanish"
-"Modern Languages (Spanish/French/German)","Secondary[d]French[d]German[d]Languages[d]Spanish","French[d]German[d]Spanish"
-"Modern Languages (Spanish, French, Mandarin)","Languages (Asian)[d]Languages[d]French[d]Spanish[d]Secondary[d]Mandarin[d]Languages [TestCase((European)","Mandarin[d]French[d]Spanish"
-"Modern Languages (Spanish, French or German)","Languages (European)[d]Secondary[d]Spanish[d]German[d]French[d]Languages","Spanish[d]German[d]French"
-"Modern Languages (Spanish, German, French)","German[d]Languages (European)[d]Secondary[d]French[d]Spanish[d]Languages","German[d]French[d]Spanish"
-"Modern Languages (Spanish, German, French)","Spanish[d]Secondary[d]Languages (European)[d]Languages[d]German[d]French","Spanish[d]German[d]French"
-"Modern Languages (Spanish or French)","Secondary[d]Languages[d]French[d]Spanish[d]Languages (European)","French[d]Spanish"
-"Modern Languages (Spanish or German)","Secondary[d]Languages (European)[d]Languages[d]German[d]Spanish","German[d]Spanish"
-"Modern Languages(Spanish or with French or German)","French[d]German[d]Languages[d]Languages (European)[d]Spanish[d]Secondary","French[d]German[d]Spanish"
-"Modern Languages (Spanish with another language)","Languages[d]Languages (European)[d]Spanish[d]Secondary","Spanish"
-"Modern Languages (Spanish with French)","French[d]Languages[d]Languages (European)[d]Secondary[d]Spanish","French[d]Spanish"
-"Modern Languages (Spanish with French)","French[d]Secondary[d]Spanish[d]Languages[d]Languages (European)","French[d]Spanish"
-"Modern Languages (Spanish with French)","French[d]Secondary[d]Spanish[d]Languages (European)[d]Languages","French[d]Spanish"
-"Modern Languages (Spanish with French)","French[d]Spanish[d]Secondary[d]Languages[d]Languages (European)","French[d]Spanish"
-"Modern Languages (Spanish with French)","Languages[d]French[d]Spanish[d]Languages (European)[d]Secondary","French[d]Spanish"
-"Modern Languages (Spanish with French)","Languages[d]Languages (European)[d]Secondary[d]Spanish[d]French","Spanish[d]French"
-"Modern Languages (Spanish with French)","Languages[d]Secondary[d]French[d]Languages (European)[d]Spanish","French[d]Spanish"
-"Modern Languages (Spanish with French)","Languages (European)[d]French[d]Spanish[d]Secondary[d]Languages","French[d]Spanish"
-"Modern Languages (Spanish with French)","Languages (European)[d]Secondary[d]French[d]Languages[d]Spanish","French[d]Spanish"
-"Modern Languages (Spanish with French)","Languages (European)[d]Secondary[d]Spanish[d]French[d]Languages","Spanish[d]French"
-"Modern Languages (Spanish with French)","Languages (European)[d]Secondary[d]Spanish[d]Languages[d]French","Spanish[d]French"
-"Modern Languages (Spanish with French)","Languages (European)[d]Spanish[d]French[d]Languages[d]Secondary","Spanish[d]French"
-"Modern Languages (Spanish with French)","Languages (European)[d]Spanish[d]Secondary[d]Languages[d]French","Spanish[d]French"
-"Modern Languages (Spanish with French)","Secondary[d]Languages[d]French[d]Spanish[d]Languages (European)","French[d]Spanish"
-"Modern Languages (Spanish with French)","Secondary[d]Spanish[d]French[d]Languages[d]Languages (European)","Spanish[d]French"
-"Modern Languages (Spanish with French)","Spanish[d]French[d]Languages[d]Languages (European)[d]Secondary","Spanish[d]French"
-"Modern Languages (Spanish with French)","Spanish[d]French[d]Languages[d]Secondary[d]Languages (European)","Spanish[d]French"
-"Modern Languages (Spanish with German)","German[d]Languages[d]Languages (European)[d]Middle Years[d]Spanish","German[d]Spanish"
-"Modern Languages (Spanish with German)","German[d]Languages[d]Languages (European)[d]Spanish[d]Secondary","German[d]Spanish"
-"Modern Languages (Spanish with German)","German[d]Languages[d]Secondary[d]Spanish[d]Languages (European)","German[d]Spanish"
-"Modern Languages (Spanish with German)","German[d]Secondary[d]Spanish[d]Languages[d]Languages (European)","German[d]Spanish"
-"Modern Languages (Spanish with German)","Languages (European)[d]Spanish[d]German[d]Languages[d]Secondary","Spanish[d]German"
-"Modern Languages (Spanish with German)","Languages (European)[d]Spanish[d]German[d]Secondary[d]Languages","Spanish[d]German"
-"Modern Languages (Spanish with German)","Languages (European)[d]Spanish[d]Secondary[d]Languages[d]German","Spanish[d]German"
-"Modern Languages (Spanish with German)","Secondary[d]German[d]Languages[d]Spanish","German[d]Spanish"
-"Modern Languages (Spanish with German)","Secondary[d]Languages[d]German[d]Spanish[d]Languages (European)","German[d]Spanish"
-"Modern Languages (Spanish with German)","Spanish[d]Secondary[d]Languages[d]German[d]Languages (European)","Spanish[d]German"
-"Modern Languages (Spanish with Japanese)","Secondary[d]Languages[d]Spanish[d]Japanese[d]Languages (Asian)[d]Languages (European)","Spanish[d]Japanese"
-"Modern Languages (Spanish with Mandarin)","Secondary[d]Languages[d]Spanish[d]Languages (European)[d]Mandarin[d]Languages (Asian)","Mandarin[d]Spanish"
-"Modern Languages (Spanish with Russian)","Languages[d]Spanish[d]Russian[d]Languages (European)[d]Secondary","Spanish[d]Russian"
-"Modern Languages (Spanish with Urdu)","Secondary[d]Languages[d]Spanish[d]Languages (European)[d]Urdu[d]Languages (Asian)","Spanish"
-"Modern Languages (Turkish)","Secondary[d]Languages[d]Languages (European)","Modern languages (other)"
-"Modern Languages (Urdu)","Languages (Asian)[d]Languages[d]Secondary[d]Urdu","Modern languages (other)"
-"Modern Languages (Urdu)","Secondary[d]Languages (Asian)[d]Languages[d]Urdu","Modern languages (other)"
-"Modern Languages (Urdu)","Urdu[d]Languages (Asian)[d]Languages[d]Secondary","Modern languages (other)"
-"Modern Languages (Urdu with French)","Secondary[d]Languages[d]French[d]Languages (European)[d]Urdu[d]Languages (Asian)","French"
-"Modern Languages (Urdu with German)","Secondary[d]Languages[d]German[d]Languages (European)[d]Urdu[d]Languages (Asian)","German"
-"Modern Languages (with French)","French[d]Languages[d]Secondary","French"
-"Modern Languages (with French)","Languages[d]Secondary[d]Languages (European)[d]French","French"
-"Modern Languages (with German)","Languages[d]German[d]Secondary","German"
-"Modern Languages with Post-16 Enhancement","Secondary[d]Languages","Modern languages (other)"
-"Modern Languages (with Spanish)","Languages[d]Secondary[d]Spanish","Spanish"
-"Music","Music[d]Primary","Primary"
-"Music","Music[d]Secondary","Music"
-"Music","Secondary[d]Music","Music"
-"MUSIC","Music[d]Secondary","Music"
-"Music (CaBan Partnership)","Secondary[d]Music","Music"
-"Music - Canterbury High School","Secondary[d]Music","Music"
-"Music - King Ethelbert School","Music[d]Secondary","Music"
-"Music - Part Time","Secondary[d]Music","Music"
-"Music (with Specialist Instrument Training)","Music[d]Secondary","Music"
-"Nicholas Chamberlaine School","Secondary",""
-"OWLS School Direct","Primary","Primary"
-"Part Time","Primary[d]Art / Art & Design","Primary"
-"Part-time PE Specialist","Primary[d]Physical Education","Primary[d]Primary with physical education"
-"Part Time PGCE with QTS","Primary","Primary"
-"Part time school direct","Primary[d]Art / Art & Design","Primary"
-"PCET (with specialism in Arts, Media and Perform)","Art / Art & Design[d]Drama and Theatre Studies[d]Further Education[d]Post-Compulsory","Further education"
-"PCET (with specialism in English, Literacy & ESOL)","Post-Compulsory[d]Literacy[d]Further Education[d]English as a Second or Other Language[d]English","Further education"
-"PCET (with specialism in Maths and Numeracy)","Numeracy[d]Mathematics[d]Further Education[d]Post-Compulsory","Further education"
-"PCET (with specialism in Science and Technology)","Science[d]Post-Compulsory[d]Further Education","Further education"
-"PE","Primary","Primary"
-"PE","Secondary",""
-"PE (North Charnwood Learning Partnership)","Physical Education[d]Secondary","Physical education"
-"PE with EBacc","Secondary[d]Physical Education","Physical education"
-"PE with EBACC (History)","History[d]Secondary","History"
-"PE with EBacc Specialism","Physical Education[d]Secondary","Physical education"
-"PE with EBacc Specialism","Secondary",""
-"PE with Maths","Secondary[d]Mathematics[d]Physical Education","Mathematics[d]Physical education"
-"PGCE in Physics","Physics[d]Primary","Primary[d]Primary with science"
-"PGCE Post-14 (Education and Training)","Post-Compulsory[d]Secondary","Further education"
-"PGCE Primary","Primary","Primary"
-"PGCE Primary with QTS Full Time with Salary","Primary","Primary"
-"PGCE Secondary Social Sciences","Secondary[d]Science[d]Social Science","Social sciences"
-"PGCE with QTS","Primary","Primary"
-"PGDE, FE and Skills","Further Education","Further education"
-"PGDE Post-14 (Education and Training)","Secondary[d]Post-Compulsory","Further education"
-"Philosophy, Religion and Ethics","Secondary[d]Religious Education[d]Philosophy","Religious education"
-"Physical Educaion","Physical Education[d]Secondary","Physical education"
-"Physical education","Secondary[d]Physical Education","Physical education"
-"Physical Education","Physical Education[d]Primary","Primary[d]Primary with physical education"
-"Physical Education","Physical Education[d]Secondary","Physical education"
-"Physical Education","Secondary[d]Physical Education","Physical education"
-"Physical Education Boys","Secondary[d]Physical Education","Physical education"
-"Physical Education - Canterbury High School","Physical Education[d]Secondary","Physical education"
-"Physical Education - Chatham and Clarendon Grammar","Secondary[d]Physical Education","Physical education"
-"Physical Education (Dance)","Dance and Performance[d]Physical Education[d]Secondary","Dance[d]Physical education"
-"Physical Education - Dane Court","Secondary[d]Physical Education","Physical education"
-"Physical Education (European Baccalaureate)","Physical Education[d]Secondary","Physical education"
-"Physical Education (European Baccalaureate)","Secondary[d]Physical Education","Physical education"
-"Physical Education (Girls)","Physical Education[d]Secondary","Physical education"
-"Physical Education - Herne Bay High","Secondary[d]Physical Education","Physical education"
-"Physical Education - Queen Elizabeth's Grammar Sch","Physical Education[d]Secondary","Physical education"
-"Physical Education (Special Educational Needs)","Physical Education[d]Secondary[d]Special Educational Needs","Physical education"
-"Physical Education (Special Educational Needs)","Secondary[d]Physical Education[d]Special Educational Needs","Physical education"
-"Physical Education (Special Educational Needs)","Special Educational Needs[d]Secondary[d]Physical Education","Physical education"
-"Physical Education (with Art and Design 11-16)","Art / Art & Design[d]Physical Education[d]Secondary","Art and design[d]Physical education"
-"Physical Education with Biology","Biology[d]Secondary[d]Physical Education","Biology[d]Physical education"
-"Physical Education with Biology","Physical Education[d]Biology[d]Secondary","Biology[d]Physical education"
-"Physical Education (with Biology EBacc)","Secondary[d]Physical Education[d]Science[d]Biology","Biology[d]Physical education"
-"Physical Education with Chemistry","Physical Education[d]Chemistry[d]Secondary","Chemistry[d]Physical education"
-"Physical Education (with Chemistry EBacc)","Science[d]Chemistry[d]Physical Education[d]Secondary","Chemistry[d]Physical education"
-"Physical Education with Computer Science","Secondary[d]Computer Studies[d]Physical Education[d]Science","Computing[d]Physical education"
-"Physical Education (with Computer Science 11-16)","Computer Studies[d]Physical Education[d]Science[d]Secondary","Computing[d]Physical education"
-"Physical Education with EBacc","Physical Education[d]Secondary","Physical education"
-"Physical Education with EBacc","Secondary[d]Physical Education","Physical education"
-"Physical Education with EBacc subject","Physical Education[d]Secondary","Physical education"
-"Physical Education (with EBacc Subject)","Secondary[d]Physical Education","Physical education"
-"Physical Education with EBacc Subject","Secondary[d]Physical Education","Physical education"
-"Physical Education (with EBAcc Subject)","Physical Education[d]Secondary","Physical education"
-"Physical Education with EBACC Subject","Physical Education[d]Secondary","Physical education"
-"Physical Education with English","Physical Education[d]English[d]Secondary","Physical education[d]English"
-"Physical Education with English","Secondary[d]English[d]Physical Education","Physical education[d]English"
-"Physical Education (with English 11-16)","English[d]Physical Education[d]Secondary","Physical education[d]English"
-"Physical Education (with English EBacc)","Physical Education[d]English[d]Secondary","Physical education[d]English"
-"Physical Education with French","French[d]Secondary[d]Physical Education","French[d]Physical education"
-"Physical Education (with French EBacc)","Languages (European)[d]Languages[d]Secondary[d]Physical Education[d]French","French[d]Physical education"
-"Physical Education with Geography","Physical Education[d]Geography[d]Primary","Primary[d]Primary with geography and history[d]Primary with physical education"
-"Physical Education with Geography","Secondary[d]Geography[d]Physical Education","Geography[d]Physical education"
-"Physical Education (with Geography 11-16)","Secondary[d]Physical Education[d]Geography","Physical education[d]Geography"
-"Physical Education (with Geography EBacc)","Physical Education[d]Geography[d]Secondary","Physical education[d]Geography"
-"Physical Education (with German EBacc)","Physical Education[d]German[d]Secondary[d]Languages[d]Languages (European)","German[d]Physical education"
-"Physical Education with History","Physical Education[d]History[d]Secondary","Physical education[d]History"
-"Physical Education (with History EBacc)","Physical Education[d]History[d]Secondary","Physical education[d]History"
-"Physical Education (with KS3 Mathematics)","Mathematics[d]Secondary[d]Physical Education","Mathematics[d]Physical education"
-"Physical Education (with KS3 Science)","Secondary[d]Science[d]Physical Education","Physical education[d]Balanced science"
-"Physical Education with Mathematics","Mathematics[d]Secondary[d]Physical Education","Mathematics[d]Physical education"
-"Physical Education (with Mathematics 11-16)","Secondary[d]Physical Education[d]Mathematics","Mathematics[d]Physical education"
-"Physical Education (with Mathematics EBacc)","Physical Education[d]Mathematics[d]Secondary","Mathematics[d]Physical education"
-"Physical Education with Maths specialism","Secondary[d]Mathematics[d]Physical Education","Mathematics[d]Physical education"
-"Physical Education with Physics","Physical Education[d]Physics[d]Secondary","Physics[d]Physical education"
-"Physical Education (with Physics 11-16)","Physics[d]Secondary[d]Science[d]Physical Education","Physics[d]Physical education"
-"Physical Education (with Physics EBacc)","Physical Education[d]Physics[d]Secondary[d]Science","Physics[d]Physical education"
-"Physical Education (with Science EBacc)","Secondary[d]Science[d]Physical Education","Physical education[d]Balanced science"
-"Physical Education with Spanish","Physical Education[d]Secondary[d]Spanish","Spanish[d]Physical education"
-"Physical Education (with Spanish EBacc)","Languages (European)[d]Languages[d]Secondary[d]Physical Education[d]Spanish","Spanish[d]Physical education"
-"Physical Educaton","Physical Education[d]Secondary","Physical education"
-"physics","Physics[d]Secondary","Physics"
-"Physics","Physics[d]Primary","Primary[d]Primary with science"
-"Physics","Physics[d]Science[d]Secondary","Physics"
-"Physics","Physics[d]Secondary","Physics"
-"Physics","Physics[d]Secondary[d]Science","Physics"
-"Physics","Science[d]Physics[d]Secondary","Physics"
-"Physics","Science[d]Secondary[d]Physics","Physics"
-"Physics","Secondary",""
-"Physics","Secondary[d]Physics","Physics"
-"Physics","Secondary[d]Physics[d]Science","Physics"
-"Physics","Secondary[d]Science[d]Physics","Physics"
-"Physics (abridged)","Physics[d]Secondary[d]Science","Physics"
-"Physics (Abridged)","Physics (abridged)[d]Physics[d]Science[d]Secondary","Physics"
-"Physics (Abridged)","Physics[d]Secondary[d]Science[d]Physics (abridged)","Physics"
-"Physics - Canterbury High School","Physics[d]Secondary[d]Science","Physics"
-"Physics - Dane Court","Secondary[d]Physics","Physics"
-"Physics - Herne Bay High School","Physics[d]Primary","Primary[d]Primary with science"
-"Physics - Herne Bay High School","Physics[d]Science[d]Secondary","Physics"
-"Physics - Herne Bay High School","Secondary[d]Physics[d]Science","Physics"
-"Physics (North Charnwood Learning Partnership)","Science[d]Physics[d]Secondary","Physics"
-"Physics Part Time","Secondary[d]Physics[d]Science","Physics"
-"PHYSICS-PART TIME","Secondary[d]Physics[d]Science","Physics"
-"Physics - Queen Elizabeth's Grammar School","Physics[d]Science[d]Secondary","Physics"
-"Physics (RIS)","Secondary[d]Science[d]Physics","Physics"
-"Physics - Royal Harbour Academy","Physics[d]Science[d]Secondary","Physics"
-"Physics with Core Science","Secondary[d]Science[d]Physics","Physics[d]Balanced science"
-"Physics with mathematics","Physics[d]Science[d]Secondary[d]Mathematics","Mathematics[d]Physics"
-"Physics (with Mathematics)","Mathematics[d]Secondary[d]Physics","Mathematics[d]Physics"
-"Physics (with Mathematics)","Mathematics[d]Secondary[d]Science[d]Physics","Mathematics[d]Physics"
-"Physics (with Mathematics)","Secondary[d]Science[d]Physics[d]Mathematics","Mathematics[d]Physics"
-"Physics with Mathematics","Mathematics[d]Physics[d]Science[d]Secondary","Mathematics[d]Physics"
-"Physics with Mathematics","Mathematics[d]Physics[d]Secondary","Mathematics[d]Physics"
-"Physics with Mathematics","Mathematics[d]Physics[d]Secondary[d]Science","Mathematics[d]Physics"
-"Physics with Mathematics","Mathematics[d]Science[d]Secondary[d]Physics","Mathematics[d]Physics"
-"Physics with Mathematics","Mathematics[d]Secondary[d]Science[d]Physics","Mathematics[d]Physics"
-"Physics with Mathematics","Physics[d]Mathematics[d]Science[d]Secondary","Mathematics[d]Physics"
-"Physics with Mathematics","Physics[d]Mathematics[d]Secondary[d]Science","Mathematics[d]Physics"
-"Physics with Mathematics","Physics[d]Science[d]Secondary[d]Mathematics","Mathematics[d]Physics"
-"Physics with Mathematics","Physics[d]Secondary[d]Mathematics","Mathematics[d]Physics"
-"Physics with Mathematics","Physics[d]Secondary[d]Mathematics[d]Science","Mathematics[d]Physics"
-"Physics with Mathematics","Physics[d]Secondary[d]Science[d]Mathematics","Mathematics[d]Physics"
-"Physics with Mathematics","Science[d]Mathematics[d]Physics[d]Secondary","Mathematics[d]Physics"
-"Physics with Mathematics","Science[d]Physics[d]Mathematics[d]Secondary","Mathematics[d]Physics"
-"Physics with Mathematics","Science[d]Physics[d]Secondary[d]Mathematics","Mathematics[d]Physics"
-"Physics with Mathematics","Science[d]Secondary[d]Mathematics[d]Physics","Mathematics[d]Physics"
-"Physics with Mathematics","Science[d]Secondary[d]Physics[d]Mathematics","Mathematics[d]Physics"
-"Physics with Mathematics","Secondary[d]Mathematics[d]Physics[d]Science","Mathematics[d]Physics"
-"Physics with Mathematics","Secondary[d]Physics[d]Mathematics","Mathematics[d]Physics"
-"Physics with Mathematics","Secondary[d]Physics[d]Mathematics[d]Science","Mathematics[d]Physics"
-"Physics with Mathematics","Secondary[d]Science[d]Mathematics[d]Physics","Mathematics[d]Physics"
-"Physics with Mathematics","Secondary[d]Science[d]Physics[d]Mathematics","Mathematics[d]Physics"
-"Physics With Mathematics","Physics[d]Mathematics[d]Secondary","Mathematics[d]Physics"
-"Physics with Maths","Physics[d]Secondary","Physics"
-"Physics with Maths","Secondary[d]Physics","Physics"
-"Physics (with Post-16 Enhancement)","Physics[d]Science[d]Secondary","Physics"
-"Post-16 and Further Education","Post-Compulsory[d]Further Education","Further education"
-"Post-Compulsory Education","Further Education[d]Post-Compulsory","Further education"
-"Post-Compulsory Education and Training","Further Education[d]Post-Compulsory","Further education"
-"Post-Compulsory Education and Training","Post-Compulsory[d]Further Education","Further education"
-"Post-Compulsory Education and Training","Secondary[d]Post-Compulsory","Further education"
-"Post-Compulsory Training and Education","Further Education[d]Post-Compulsory","Further education"
-"Postgraduate Primary Teaching Apprenticeships","Primary","Primary"
-"Postgraduate teaching apprenticeship","Primary","Primary"
-"Postgraduate Teaching Apprenticeship","Primary","Primary"
-"Postgraduate Teaching Apprenticeship Biology","Primary[d]Biology","Primary[d]Primary with science"
-"Postgraduate Teaching Apprenticeship Chemistry","Chemistry[d]Secondary","Chemistry"
-"Postgraduate Teaching Apprenticeship Computing","Primary","Primary"
-"Postgraduate Teaching Apprenticeship English","Secondary[d]English","English"
-"Postgraduate Teaching Apprenticeship Geography","Secondary[d]Geography","Geography"
-"Postgraduate Teaching Apprenticeship History","Secondary[d]History","History"
-"Postgraduate Teaching Apprenticeship Mathematics","Primary[d]Mathematics","Primary[d]Primary with mathematics"
-"Postgraduate Teaching Apprenticeship MFL","Languages[d]Secondary","Modern languages (other)"
-"Postgraduate Teaching Apprenticeship Physics","Physics[d]Secondary","Physics"
-"Postgraduate Teaching Apprenticeship Primary","Primary","Primary"
-"Postgraduate Teaching Apprenticeship RE","Primary","Primary"
-"Postrgraduate Teaching Apprenticeship Biology","Biology[d]Secondary","Biology"
-"Pre-Service Professional Graduate Certificate","Further Education[d]Post-Compulsory","Further education"
-"Primary","Primary","Primary"
-"Primary","Primary[d]English","Primary[d]Primary with English"
-"Primary","Primary[d]Special Educational Needs","Primary"
-"Primary","Secondary",""
-"Primary (0-5)","Primary","Primary"
-"Primary (3-11)","Primary","Primary"
-"Primary (3-5)","Primary","Primary"
-"Primary - (3-7)","Primary","Primary"
-"Primary (3 - 7)","Primary","Primary"
-"Primary (3-7)","Early Years[d]Primary","Primary"
-"Primary (3-7)","Primary","Primary"
-"Primary (3-7) Early Years","Primary","Primary"
-"Primary (3-7 years)","Primary","Primary"
-"Primary 3-7years (PG Teaching Apprenticeship)","Primary","Primary"
-"Primary 3-7years (PG Teaching Apprenticeship)","Primary[d]Early Years","Primary"
-"Primary (3-8)","Primary","Primary"
-"Primary (5 - 11)","Primary","Primary"
-"Primary (5 -11)","Primary","Primary"
-"Primary (5-11)","Primary","Primary"
-"Primary (5-11)","Primary[d]Upper Primary","Primary"
-"Primary 5-11","Primary","Primary"
-"Primary (5-11) - London","Primary","Primary"
-"Primary (5-11) Mathematics Specialism","Mathematics[d]Primary","Primary[d]Primary with mathematics"
-"Primary 5-11 (Physical Education)","Primary[d]Physical Education","Primary[d]Primary with physical education"
-"Primary (5-11) Special Educational Needs","Primary[d]Special Educational Needs","Primary"
-"Primary (5-11 years)","Primary","Primary"
-"Primary (5 to 11)","Primary","Primary"
-"Primary (7-11)","Primary","Primary"
-"Primary 7 -14","Primary[d]Middle Years","Primary"
-"Primary and Early Years (Part Time) - 5-11 QTS","Primary[d]Early Years","Primary"
-"Primary and Early Years (Part Time) - 7-11 QTS","Early Years[d]Primary","Primary"
-"Primary - Aycliffe Primary","Primary","Primary"
-"Primary - Aylesham","Primary","Primary"
-"Primary (Barton Junior School)","Primary","Primary"
-"Primary - Bromstone","Primary","Primary"
-"Primary - Canterbury Primary School","Primary","Primary"
-"Primary - Capel-Le-Ferne Primary School","Primary","Primary"
-"Primary - Challock Primary School","Primary","Primary"
-"Primary - Chilton Academy Primary School","Primary","Primary"
-"Primary - Christ Church Ramsgate","Primary","Primary"
-"Primary - Clifftonville","Primary","Primary"
-"Primary - Clifftonville Primary School","Primary","Primary"
-"Primary Early Years","Early Years[d]Primary","Primary"
-"Primary Early Years","Primary[d]Early Years","Primary"
-"Primary (Eastry Primary)","Primary","Primary"
-"Primary Education","Primary","Primary"
-"Primary Education (3-11) [CaBan Partnership]","Primary","Primary"
-"Primary (English)","Primary[d]English","Primary[d]Primary with English"
-"Primary (English with Special Educational Needs)","English[d]Special Educational Needs[d]Primary","Primary[d]Primary with English"
-"Primary (EYFS)","Primary","Primary"
-"Primary (EYFS and Key Stage One)","Primary","Primary"
-"Primary - Folkestone Academy","Primary","Primary"
-"Primary (Foundation, Key Stage 1)","Early Years[d]Primary","Primary"
-"Primary General","Primary","Primary"
-"Primary General 5-11 (with PE)","Primary","Primary"
-"Primary general (5-11) with Physical Education","Primary","Primary"
-"Primary - General (with Mathematics)","Primary[d]Mathematics","Primary[d]Primary with mathematics"
-"Primary - General (With Mathematics)","Primary[d]Mathematics","Primary[d]Primary with mathematics"
-"Primary general with Mathematics (Apprenticeship)","Primary[d]Mathematics","Primary[d]Primary with mathematics"
-"Primary (Geography and History)","History[d]Geography[d]Primary","Primary[d]Primary with geography and history"
-"Primary (Geography and History with SEN)","Geography[d]History[d]Primary[d]Special Educational Needs","Primary[d]Primary with geography and history"
-"Primary - Glyndwr University","Primary","Primary"
-"Primary Graduate Apprenticeship","Primary","Primary"
-"Primary - Green Park CP","Primary","Primary"
-"Primary - Herne Bay Infant School","Primary","Primary"
-"Primary - Herne Bay Junior School","Primary","Primary"
-"Primary - Herne CE Infant & Nursery School","Primary","Primary"
-"Primary - Herne CE Junior School","Primary","Primary"
-"Primary - Holywell","Primary","Primary"
-"Primary - Holywell Primary School","Primary","Primary"
-"Primary (January Intake)","Primary","Primary"
-"Primary - Joy Lane Primary School","Primary","Primary"
-"Primary (Key Stage 1 and 2)","Primary","Primary"
-"Primary (KS1 & KS2 with Primary French)","Languages (European)[d]Primary[d]French","Primary[d]Primary with modern languages"
-"Primary (KS1 & lower KS2 with Primary German)","Primary[d]German","Primary[d]Primary with modern languages"
-"Primary (KS1 & lower KS2 with Primary Spanish)","Primary[d]Spanish","Primary[d]Primary with modern languages"
-"Primary - Lyminge","Primary","Primary"
-"Primary - Lympne CEP","Primary","Primary"
-"Primary (Mathematics)","Middle Years[d]Mathematics","Mathematics"
-"Primary Mathematics","Mathematics[d]Secondary","Mathematics"
-"Primary (Mathematics Specialist)","Primary[d]Mathematics","Primary[d]Primary with mathematics"
-"Primary Mathematics Specialist","Mathematics[d]Primary","Primary[d]Primary with mathematics"
-"Primary Mathematics Specialist","Primary[d]Mathematics","Primary[d]Primary with mathematics"
-"Primary Maths","Primary","Primary"
-"PRIMARY - MATHS","Primary","Primary"
-"Primary Maths Specialist","Primary","Primary"
-"Primary - Minster Primary School","Primary","Primary"
-"Primary (Modern Languages)","Languages[d]Primary","Primary[d]Primary with modern languages"
-"Primary: Modern Languages","Primary[d]Languages","Primary[d]Primary with modern languages"
-"Primary (Modern Languages with SEN)","Primary[d]Languages[d]Special Educational Needs","Primary[d]Primary with modern languages"
-"Primary - Newington Ramsgate","Primary","Primary"
-"Primary - Palm Bay","Primary","Primary"
-"Primary - Palm Bay Primary School","Primary","Primary"
-"Primary - Part Time","Primary","Primary"
-"Primary (Part Time)","Art / Art & Design[d]Primary","Primary"
-"Primary Part Time","Art / Art & Design[d]Primary","Primary"
-"PRIMARY - Part time","Primary","Primary"
-"Primary (PE specialism)","Physical Education[d]Primary","Primary[d]Primary with physical education"
-"Primary PE Specialist","Physical Education[d]Primary","Primary[d]Primary with physical education"
-"Primary PE Specialist (5-11)","Physical Education[d]Primary","Primary[d]Primary with physical education"
-"Primary - Petham Primary School","Primary","Primary"
-"Primary 'PG Teaching Apprenticeship'","Primary","Primary"
-"Primary (PG Teaching Apprenticeship)","Primary","Primary"
-"Primary (Physical Education)","Physical Education[d]Primary","Primary[d]Primary with physical education"
-"Primary (Physical Education)","Primary[d]Physical Education","Primary[d]Primary with physical education"
-"Primary Physical Education (PE)","Special Educational Needs[d]Physical Education[d]Primary","Primary[d]Primary with physical education"
-"Primary Physical Education (PE) Specialist","Primary[d]Physical Education","Primary[d]Primary with physical education"
-"Primary (Physical Education Specialist)","Physical Education[d]Primary","Primary[d]Primary with physical education"
-"Primary Physical Education Specialist","Physical Education[d]Primary","Primary[d]Primary with physical education"
-"Primary  (Physical Education Subject Specialism)","Primary[d]Physical Education[d]Special Educational Needs","Primary[d]Primary with physical education"
-"Primary (Physical Education with SEN)","Primary[d]Physical Education[d]Special Educational Needs","Primary[d]Primary with physical education"
-"Primary - Pilgrims Way Primary School","Primary","Primary"
-"Primary (Preston & Wingham Primary Federation)","Primary","Primary"
-"Primary - Priory Fields Primary","Primary","Primary"
-"Primary PT","Primary","Primary"
-"Primary - Ramsgate Arts Primary School","Primary","Primary"
-"Primary - River","Primary","Primary"
-"Primary (Salaried)","Primary","Primary"
-"Primary (Sandwich Infant School)","Primary","Primary"
-"Primary School Direct","Primary","Primary"
-"Primary School Direct (salaried)","Primary","Primary"
-"Primary School Direct salaried","Primary","Primary"
-"Primary (Science)","Science[d]Primary","Primary[d]Primary with science"
-"Primary (Science with Special Educational Needs)","Special Educational Needs[d]Primary[d]Science","Primary[d]Primary with science"
-"Primary - Selling CE","Primary","Primary"
-"Primary SEND (PG Teaching Apprenticeship)","Primary","Primary"
-"Primary SEN provision for secondary aged children","Primary","Primary"
-"Primary (Shatterlocks Infant School)","Primary","Primary"
-"Primary - South Avenue","Primary","Primary"
-"Primary (Special Educational Needs)","Primary","Primary"
-"Primary (Special Educational Needs)","Primary[d]Special Educational Needs","Primary"
-"Primary (Special Educational Needs)","Special Educational Needs[d]Middle Years[d]Primary","Primary"
-"Primary (Special Educational Needs)","Special Educational Needs[d]Primary","Primary"
-"Primary (Special Educational Needs 7-14)","Middle Years[d]Special Educational Needs[d]Primary[d]Secondary","Primary"
-"Primary specialising in French","Primary[d]Languages[d]French[d]Languages (European)","Primary[d]Primary with modern languages"
-"Primary - St Crispins CP Infant School","Primary","Primary"
-"Primary - St Martins School","Primary","Primary"
-"Primary - St Mary's Catholic","Primary","Primary"
-"Primary - St Mildred's Primary Infant School","Primary","Primary"
-"Primary - St Peters Methodist School","Primary","Primary"
-"Primary - St Stephens Infant School","Primary","Primary"
-"Primary - St Stephens Junior School","Primary","Primary"
-"Primary Teacher Apprenticeship","Primary","Primary"
-"Primary Teacher Training","Primary","Primary"
-"Primary Teaching Apprentice","Primary","Primary"
-"Primary Teaching Apprenticeship","Primary","Primary"
-"Primary - Upton Junior School","Primary","Primary"
-"Primary (White Cliffs Primary)","Primary","Primary"
-"Primary with an I.T specialism","Primary","Primary"
-"Primary with Art","Primary[d]Art / Art & Design","Primary"
-"Primary with a specialism","Primary","Primary"
-"Primary with Creative Arts","Art / Art & Design[d]Primary","Primary"
-"Primary (with English)","English[d]Primary","Primary[d]Primary with English"
-"Primary (with English)","Primary","Primary"
-"Primary (with English)","Primary[d]English","Primary[d]Primary with English"
-"Primary with English","English[d]Primary","Primary[d]Primary with English"
-"Primary (with English as an Additional Language)","English[d]Primary","Primary[d]Primary with English"
-"Primary with English Specialism","Primary[d]English","Primary[d]Primary with English"
-"Primary with French","Languages[d]Languages (European)[d]Primary[d]French","Primary[d]Primary with modern languages"
-"Primary with French","Primary[d]French","Primary[d]Primary with modern languages"
-"Primary (with Geography and History)","Geography[d]Primary[d]History","Primary[d]Primary with geography and history"
-"Primary (with Geography and History)","History[d]Geography[d]Primary","Primary[d]Primary with geography and history"
-"Primary (with Geography and History)","Primary[d]Geography[d]History","Primary[d]Primary with geography and history"
-"Primary with German","Primary[d]Languages[d]Languages (European)[d]German","Primary[d]Primary with modern languages"
-"Primary with Humanities","Primary[d]Humanities","Primary"
-"Primary (with Humanities and Religious Education)","Primary[d]Humanities[d]Religious Education","Primary"
-"Primary (with ICT and Computing)","Computer Studies[d]Primary","Primary"
-"Primary with Languages Specialism","Languages[d]Primary","Primary[d]Primary with modern languages"
-"Primary with Leadership in Foreign Languages","Languages[d]Primary","Primary[d]Primary with modern languages"
-"Primary (with Mathematics)","Mathematics[d]Primary","Primary[d]Primary with mathematics"
-"Primary (with Mathematics)","Primary[d]Mathematics","Primary[d]Primary with mathematics"
-"Primary with Mathematics","Mathematics[d]Primary","Primary[d]Primary with mathematics"
-"Primary with Mathematics","Primary","Primary"
-"Primary with Mathematics","Primary[d]Mathematics","Primary[d]Primary with mathematics"
-"Primary With Mathematics","Mathematics[d]Primary","Primary[d]Primary with mathematics"
-"Primary With Mathematics","Primary[d]Mathematics","Primary[d]Primary with mathematics"
-"Primary with Mathematics (5-11)","Mathematics[d]Primary","Primary[d]Primary with mathematics"
-"Primary with Mathematics (Special Education Needs)","Primary[d]Special Educational Needs[d]Mathematics","Primary[d]Primary with mathematics"
-"Primary with Mathmatics","Primary","Primary"
-"Primary with Maths","Primary","Primary"
-"Primary with maths (salaried)","Primary","Primary"
-"Primary (with maths specialism)","Primary","Primary"
-"Primary (with Modern Langages)","Languages[d]Primary","Primary[d]Primary with modern languages"
-"Primary (with Modern Languages)","Languages[d]Primary","Primary[d]Primary with modern languages"
-"Primary (with Modern Languages)","Primary[d]Languages","Primary[d]Primary with modern languages"
-"Primary with Modern Languages","Languages[d]Primary","Primary[d]Primary with modern languages"
-"Primary (with Music)","Primary[d]Music","Primary"
-"Primary with PE","Primary","Primary"
-"Primary with PE","Primary[d]Physical Education","Primary[d]Primary with physical education"
-"Primary with PE Specialism","Primary","Primary"
-"Primary (with Physical Education)","Physical Education[d]Primary","Primary[d]Primary with physical education"
-"Primary (with Physical Education)","Primary[d]Physical Education","Primary[d]Primary with physical education"
-"Primary with Physical Education","Primary[d]Physical Education","Primary[d]Primary with physical education"
-"Primary (with Science)","Primary[d]Science","Primary[d]Primary with science"
-"Primary (with Science)","Science[d]Primary","Primary[d]Primary with science"
-"Primary with Science","Science[d]Primary","Primary[d]Primary with science"
-"Primary with Science Specialism","Science[d]Primary","Primary[d]Primary with science"
-"Primary with Spanish","Languages (European)[d]Languages[d]Spanish[d]Primary","Primary[d]Primary with modern languages"
-"Primary (with Special Educational Needs)","Primary[d]Special Educational Needs","Primary"
-"Primary (with Special Educational Needs)","Special Educational Needs[d]Primary","Primary"
-"Primary with Special Educational Needs","Special Educational Needs[d]Primary","Primary"
-"Primary with Special Education Needs","Special Educational Needs[d]Primary","Primary"
-"Primary with STEM","Primary","Primary"
-"Primay","Primary","Primary"
-"Professional Graduate Certificate in Education","Post-Compulsory[d]Further Education[d]Secondary","Further education"
-"Professional Graduate Certificate of Education","Secondary[d]Further Education[d]Post-Compulsory","Further education"
-"Psychology","Primary[d]Psychology","Primary"
-"Psychology","Psychology[d]Secondary","Psychology"
-"Psychology","Secondary[d]Psychology","Psychology"
-"Psychology - Part Time","Psychology[d]Art / Art & Design[d]Secondary","Psychology[d]Art and design"
-"Religious education","Religious Education[d]Secondary","Religious education"
-"Religious education","Secondary[d]Religious Education","Religious education"
-"Religious Education","Religious Education[d]Secondary","Religious education"
-"Religious Education","Secondary[d]Religious Education","Religious education"
-"Religious Education (11-16) with QTS","Secondary[d]Religious Education","Religious education"
-"Religious Education (CaBan Partnership)","Secondary[d]Religious Education","Religious education"
-"Religious Education & Citizenship","Citizenship[d]Religious Education[d]Secondary","Citizenship[d]Religious education"
-"Religious Education (Flexible)","Secondary[d]Religious Education","Religious education"
-"Religious Education - King Ethelbert School","Secondary[d]Religious Education","Religious education"
-"Religious Education - Part Time","Secondary[d]Religious Education","Religious education"
-"Religious Education (Special Educational Needs)","Religious Education[d]Special Educational Needs[d]Secondary","Religious education"
-"Religious Education with Citizenship","Primary[d]Citizenship[d]Religious Education","Primary"
-"Religious Education with Citizenship","Secondary[d]Religious Education[d]Citizenship","Religious education[d]Citizenship"
-"Religious studies","Religious Education[d]Secondary","Religious education"
-"Religious Studies","Middle Years[d]Religious Education","Religious education"
-"Religious Studies","Religious Education[d]Secondary","Religious education"
-"Religious Studies","Secondary[d]Religious Education","Religious education"
-"Religious Studies (with Citizenship)","Secondary[d]Citizenship[d]Religious Education","Citizenship[d]Religious education"
-"Rye College East Sussex","Primary","Primary"
-"School Direct non-salaried","Primary","Primary"
-"School Direct/PGCE","Primary","Primary"
-"School Direct PGCE with QTS","Primary","Primary"
-"School Direct salaried","Primary","Primary"
-"School Direct Salaried","Primary","Primary"
-"School Direct (salaried) Training Programme","Primary","Primary"
-"School Direct Training","Primary","Primary"
-"School Direct Training Programme KS2-3 with PE","Middle Years",""
-"School Direct training programme (tuition fee)","Primary","Primary"
-"School Direct with Manor Primary","Primary","Primary"
-"Science","Middle Years[d]Science","Balanced science"
-"Science","Science[d]Secondary","Balanced science"
-"Science","Secondary[d]Science","Balanced science"
-"Science (7-14)","Science[d]Middle Years","Balanced science"
-"Science (all)","Secondary[d]Science","Balanced science"
-"Science (Biology)","Biology[d]Science[d]Secondary","Biology[d]Balanced science"
-"Science with Biology","Secondary[d]Science[d]Biology","Biology[d]Balanced science"
-"Science with Biology (Flexible)","Secondary[d]Biology[d]Science","Biology[d]Balanced science"
-"Science with Chemistry","Secondary[d]Science[d]Chemistry","Chemistry[d]Balanced science"
-"Science with Chemistry (Flexible)","Chemistry[d]Science[d]Secondary","Chemistry[d]Balanced science"
-"Science with Physics","Physics[d]Science[d]Secondary","Physics[d]Balanced science"
-"Science with Physics (Flexible)","Science[d]Secondary[d]Physics","Physics[d]Balanced science"
-"Secondary","Secondary",""
-"Secondary Art and Design","Art / Art & Design[d]Secondary","Art and design"
-"Secondary - Biology","Biology[d]Secondary","Biology"
-"Secondary Biology","Secondary[d]Biology","Biology"
-"Secondary Business Studies","Secondary[d]Business Education","Business studies"
-"Secondary Computing","Computer Studies[d]Secondary","Computing"
-"Secondary Design and Technology","Secondary[d]Design and Technology","Design and technology"
-"Secondary Drama","Secondary[d]Drama and Theatre Studies","Drama"
-"Secondary English","English[d]Secondary[d]English as a Second or Other Language","English as a second or other language[d]English"
-"Secondary Geography","Geography[d]Secondary","Geography"
-"Secondary Modern Languages French","Languages (European)[d]Secondary[d]Languages[d]French","French"
-"Secondary Modern Languages German","Languages (European)[d]Secondary[d]German[d]Languages","German"
-"Secondary Modern Languages Spanish","Languages (European)[d]Secondary[d]Languages[d]Spanish","Spanish"
-"Secondary Religious Education","Secondary[d]Religious Education","Religious education"
-"Secondary Social Science","Social Science[d]Secondary[d]Science","Social sciences"
-"Social Science","Science[d]Secondary[d]Social Science","Social sciences"
-"Social Science","Secondary[d]Humanities[d]Social Science","Social sciences"
-"Social Science","Secondary[d]Science[d]Social Science","Social sciences"
-"Social Science","Social Science[d]Secondary","Social sciences"
-"Social Sciences","Science[d]Secondary",""
-"Social Sciences","Science[d]Secondary[d]Social Science","Social sciences"
-"Social Sciences","Secondary[d]Science[d]Social Science","Social sciences"
-"Social Sciences","Secondary[d]Social Science","Social sciences"
-"Social Sciences","Secondary[d]Social Science[d]Science","Social sciences"
-"Social Sciences","Social Science[d]Science[d]Secondary","Social sciences"
-"Social Sciences","Social Science[d]Secondary","Social sciences"
-"Social Sciences","Social Science[d]Secondary[d]Science","Social sciences"
-"Social Sci (North Charnwood Learning Partnership)","Secondary[d]Art / Art & Design[d]Social Science","Art and design[d]Social sciences"
-"Social Sci (North Charnwood Learning Partnership)","Secondary[d]Social Science","Social sciences"
-"Sociology","Secondary",""
-"Sociology","Secondary[d]Social Science","Social sciences"
-"Sociology and Psychology","Psychology[d]Secondary","Psychology"
-"Spanish","Secondary[d]Spanish","Spanish"
-"Spanish","Secondary[d]Spanish[d]Languages[d]Languages (European)","Spanish"
-"Spanish","Spanish[d]Secondary","Spanish"
-"Special Educational Needs","Special Educational Needs[d]Primary","Primary"
-"Special Educational Needs (7-14)","Special Educational Needs[d]Middle Years",""
-"Teacher Training","Secondary",""
-"Teaching Apprenticeship","Primary","Primary"
-"Teaching Apprenticeship - Secondary English","Secondary[d]English[d]English as a Second or Other Language","English as a second or other language[d]English"
-"Upper Primary","Primary[d]Upper Primary","Primary"
-"Vocational Studies","Secondary",""
+course_title,ucas_subjects,expected_subjects
+2S4X,Primary,Primary
+ART,"Art / Art & Design,Secondary",Art and design
+Art,"Art / Art & Design,Secondary",Art and design
+Art (CaBan Partnership),"Art / Art & Design,Secondary",Art and design
+Art (CaBan),"Art / Art & Design,Secondary",Art and design
+Art & Design,"Art / Art & Design,Middle Years",Art and design
+Art & Design,"Art / Art & Design,Secondary",Art and design
+Art and Design,"Art / Art & Design,Middle Years",Art and design
+Art And Design,"Art / Art & Design,Secondary",Art and design
+Art and Design,"Art / Art & Design,Secondary",Art and design
+Art and design,"Art / Art & Design,Secondary",Art and design
+Art and Design - Dane Court Grammar School,"Art / Art & Design,Secondary",Art and design
+Art and Design - Part Time,"Art / Art & Design,Secondary",Art and design
+ART-PART TIME,"Art / Art & Design,Secondary",Art and design
+Berwick Middle / Ponteland Middle,Primary,Primary
+Biology,"Biology,Primary","Primary,Primary with science"
+Biology,"Biology,Science,Secondary",Biology
+Biology,"Biology,Secondary",Biology
+Biology - Dane Court Grammar School,"Biology,Science,Secondary",Biology
+Biology (North Charnwood Learning Partnership),"Biology,Science,Secondary",Biology
+Biology (with Physical Education),"Biology,Physical Education,Science,Secondary","Biology,Physical education"
+Biology (with Post-16 Enhancement),"Biology,Science,Secondary",Biology
+Biology Part Time,"Biology,Science,Secondary",Biology
+Biology School Direct Salaried,"Biology,Secondary",Biology
+Biology with Psychology,"Biology,Psychology,Science,Secondary","Biology,Psychology"
+BIOLOGY-PART TIME,"Biology,Science,Secondary",Biology
+Bury St Edmunds Hub,Primary,Primary
+Business,"Business Education,Secondary",Business studies
+Business and Economics,"Business Education,Economics,Secondary","Business studies,Economics"
+Business Education,"Business Education,Secondary",Business studies
+Business Education (Flexible),"Business Education,Secondary",Business studies
+Business Studies,"Business Education,Primary",Primary
+Business Studies,"Business Education,Secondary",Business studies
+Business studies,"Business Education,Secondary",Business studies
+Business Studies - King Ethelbert School,"Business Education,Secondary",Business studies
+Business Studies - Part Time,"Business Education,Secondary",Business studies
+Business Studies (and Economics),"Business Education,Economics,Secondary","Business studies,Economics"
+Business with Economics,"Business Education,Economics,Secondary","Business studies,Economics"
+Chemistry,"Chemistry,Primary","Primary,Primary with science"
+Chemistry,"Chemistry,Science,Secondary",Chemistry
+Chemistry,"Chemistry,Secondary",Chemistry
+Chemistry - Canterbury High School,"Chemistry,Science,Secondary",Chemistry
+Chemistry - Dane Court Grammar School,"Chemistry,Science,Secondary",Chemistry
+Chemistry - Herne Bay High School,"Chemistry,Science,Secondary",Chemistry
+Chemistry - King Ethelbert School,"Chemistry,Science,Secondary",Chemistry
+Chemistry - Royal Harbour Academy,"Chemistry,Science,Secondary",Chemistry
+Chemistry (North Charnwood Learning Partnership),"Art / Art & Design,Chemistry,Secondary","Art and design,Chemistry"
+Chemistry (North Charnwood Learning Partnership),"Chemistry,Science,Secondary",Chemistry
+Chemistry (with Post-16 Enhancement),"Chemistry,Science,Secondary",Chemistry
+Chemistry Part Time,"Art / Art & Design,Chemistry,Secondary","Art and design,Chemistry"
+Chemistry Part Time,"Chemistry,Science,Secondary",Chemistry
+CHEMISTRY-PART TIME,"Chemistry,Science,Secondary",Chemistry
+Citizenship,"Citizenship,Secondary",Citizenship
+Citizenship with Social Science,"Citizenship,Secondary,Social Science","Citizenship,Social sciences"
+Classics,"Classics,Secondary",Classics
+Classics (Latin and Ancient Greek),"Classics,Greek,Latin,Secondary",Classics
+Classics (Latin and Ancient Greek),"Classics,Secondary",Classics
+Combined Science,"Biology,Chemistry,Physics,Science,Secondary","Balanced science,Biology,Chemistry,Physics"
+Computer Sci and Information Technology (flexible),"Computer Studies,Information Technology,Secondary",Computing
+Computer Science,"Computer Studies,Science,Secondary",Computing
+Computer Science,"Computer Studies,Secondary",Computing
+Computer Science (Researchers in Schools),"Computer Studies,Science,Secondary",Computing
+Computer Science with IT,"Computer Studies,Science,Secondary",Computing
+COMPUTER SCIENCE-PART TIME,"Computer Studies,Secondary",Computing
+Computing,"Computer Studies,Science,Secondary",Computing
+Computing,"Computer Studies,Secondary",Computing
+Computing,Primary,Primary
+computing,Primary,Primary
+Computing,"Science,Secondary",
+Computing,Secondary,
+Computing - Canterbury High School,"Computer Studies,Secondary",Computing
+Computing - King Ethelbert,"Computer Studies,Secondary",Computing
+Computing (Computer Science and IT),"Computer Studies,Secondary",Computing
+Computing (Special Educational Needs),"Computer Studies,Secondary,Special Educational Needs",Computing
+Computing Part Time,"Computer Studies,Secondary",Computing
+Computing School Direct Salaried,"Computer Studies,Secondary",Computing
+Computing with ICT,"Computer Studies,Information Communication Technology,Information Technology,Secondary",Computing
+Computing with ICT,"Computer Studies,Secondary",Computing
+D&T Engineering,"Design and Technology,Engineering,Secondary",Design and technology
+Dance,"Dance and Performance,Secondary",Dance
+Design & Technology,"Design and Technology,Secondary",Design and technology
+Design & Technology,Secondary,
+DESIGN & TECHNOLOGY - PART TIME,"Design and Technology,Secondary",Design and technology
+Design & Technology (Resistant Materials),Secondary,
+Design and Technology,"Design [TestCase(and Technology,Design and Technology (Food),Design and Technology (Product Design),Design and Technology (Textiles),Secondary",Design and technology
+Design and Technology,"Design and Technology (Food),Design and Technology (Product Design),Design and Technology (Textiles),Design and Technology[TestCase(,Secondary",Design and technology
+Design And Technology,"Design and Technology,Design and Technology (Food),Design and Technology (Product Design),Design and Technology (Systems and [TestCase(Control),Design and Technology (Textiles),Secondary",Design and technology
+Design and Technology,"Design and Technology,Design and Technology (Food),Design and Technology (Product Design),Design and Technology (Systems and Control),Design and [TestCase(Technology (Textiles),Secondary",Design and technology
+Design and Technology,"Design and Technology,Design and Technology (Food),Design and Technology (Product Design),Design and Technology (Textiles),Design and Technology [TestCase((Systems and Control),Secondary",Design and technology
+Design and Technology,"Design and Technology,Design and Technology (Food),Design and Technology (Product Design),Design and Technology (Textiles),Engineering,[TestCase(Secondary",Design and technology
+Design and Technology,"Design and Technology,Design and Technology (Food),Design and Technology (Product Design),Design and Technology (Textiles),Secondary,[TestCase(Engineering",Design and technology
+Design and Technology,"Design and Technology,Design and Technology (Food),Design and Technology (Product Design),Secondary",Design and technology
+Design and Technology,"Design and Technology,Design and Technology (Food),Design and Technology (Product Design)[TestCase(,Design and Technology (Textiles),Engineering,Secondary",Design and technology
+Design and Technology,"Design and Technology,Design and Technology (Food),Design and Technology (Textiles),Design and Technology [TestCase((Product Design),Engineering,Secondary",Design and technology
+Design and Technology,"Design and Technology,Design and Technology (Food),Design and Technology (Textiles),Design and Technology [TestCase((Product Design),Secondary",Design and technology
+Design and Technology,"Design and Technology,Design and Technology (Food),Secondary",Design and technology
+Design and Technology,"Design and Technology,Design and Technology (Product Design),Design and Technology (Textiles),Secondary",Design and technology
+Design and Technology,"Design and Technology,Design and Technology (Product Design),Secondary",Design and technology
+Design And Technology,"Design and Technology,Secondary",Design and technology
+Design and Technology,"Design and Technology,Secondary",Design and technology
+Design and technology,"Design and Technology,Secondary",Design and technology
+Design and Technology - Canterbury High School,"Design and Technology,Secondary",Design and technology
+Design and Technology - Part Time,"Design and Technology,Secondary",Design and technology
+Design and Technology ( Food),"Design and Technology,Design and Technology (Food),Secondary",Design and technology
+Design and Technology (CaBan Partnership),"Design and Technology,Secondary",Design and technology
+Design and Technology (Engineering),"Design and Technology,Engineering,Secondary",Design and technology
+Design and Technology (Flexible),"Design and Technology,Secondary",Design and technology
+Design and Technology (Food and Product Design),"Design and Technology,Design and Technology (Food),Design and Technology (Product Design),Secondary",Design and technology
+Design and Technology (Food and Textiles),"Design and Technology,Design and Technology (Food),Design and Technology (Textiles),Secondary",Design and technology
+Design and Technology (Food or Product Design),"Design and Technology,Secondary",Design and technology
+Design and Technology (Food or Textiles),"Design and Technology,Design and Technology (Food),Design and Technology (Textiles),Secondary",Design and technology
+"Design and Technology (Food, PD and Textiles)","Design and Technology (Food),Design and Technology (Product Design),Design and Technology (Textiles),Design and Technology[TestCase(,Secondary",Design and technology
+"Design and Technology (Food, PD and Textiles)","Design and Technology,Design and Technology (Food),Design and Technology (Product Design),Design and [TestCase(Technology (Textiles),Secondary",Design and technology
+"Design and Technology (Food, PD, Textiles)","Design and Technology,Design and Technology (Food),Design and Technology (Product Design)[TestCase(,Design and Technology (Textiles),Secondary",Design and technology
+"Design and Technology (Food, Resistant Materials)","Design and Technology,Design and Technology (Food),Secondary",Design and technology
+"Design and Technology (Food, Textiles and PD)","Design [TestCase(and Technology (Food),Design and Technology,Design and Technology (Product Design),Design and Technology (Textiles),Secondary",Design and technology
+"Design and Technology (Food, Textiles)","Design and Technology,Design and Technology (Food),Design and Technology (Textiles),Secondary",Design and technology
+"Design and Technology (Food,Product Design or Eng)","Design and Technology,Design and Technology (Food),Design and Technology (Product Design)[TestCase(,Secondary",Design and technology
+Design and Technology (Food),"Design and Technology (Food),Secondary",Design and technology
+Design And Technology (Food),"Design and Technology,Design and Technology (Food),Secondary",Design and technology
+Design and Technology (Food),"Design and Technology,Design and Technology (Food),Secondary",Design and technology
+Design and Technology (Food),"Design and Technology,Secondary",Design and technology
+"Design and Technology (PD, Systems and Control)","Design and Technology,Design and Technology (Product Design)[TestCase(,Design and Technology (Systems and Control),Secondary",Design and technology
+Design and Technology (Product Design or Food),"Design and Technology,Design and Technology (Food),Design and Technology (Product Design),Secondary",Design and technology
+"Design and Technology (Product Design,Engineering)","Design and Technology,Design and Technology (Product Design),Engineering,Secondary",Design and technology
+Design And Technology (Product Design),"Design and Technology,Design and Technology (Product Design),Secondary",Design and technology
+Design and Technology (Product Design),"Design and Technology,Design and Technology (Product Design),Secondary",Design and technology
+Design and Technology (Product Design),"Design and Technology,Design and Technology (Systems and Control),Secondary",Design and technology
+Design and Technology (Product Design),"Design and Technology,Secondary",Design and technology
+Design and Technology (Resistant Materials),"Design and Technology,Secondary",Design and technology
+Design and Technology (Systems and Control),"Design and Technology,Design and Technology (Systems and Control),Secondary",Design and technology
+Design and Technology (Textiles and Product Design,"Design and Technology (Product Design),Design and Technology (Textiles),Design and [TestCase(Technology,Secondary",Design and technology
+Design and Technology (Textiles and Product Design,"Design and Technology,Design and Technology (Product Design),Design and Technology (Textiles),[TestCase(Secondary",Design and technology
+"Design and Technology (Textiles, Product Design)","Design and Technology,Design and Technology (Product Design),Design and Technology (Textiles),[TestCase(Secondary",Design and technology
+Design and Technology (Textiles),"Design and Technology,Design and Technology (Textiles),Secondary",Design and technology
+Design and Technology(Textiles and Product Design),"Design and Technology (Product Design),Design and Technology (Textiles),Design and [TestCase(Technology,Secondary",Design and technology
+Design and Technology(Textiles and Product Design),"Design and Technology,Secondary",Design and technology
+Design Technology,"Design and Technology,Secondary",Design and technology
+Design Technology,Secondary,
+Design Technology - Systems,Primary,Primary
+Design Technology (Food Technology),"Design and Technology,Design and Technology (Food),Secondary",Design and technology
+"Design Technology (Food, Textiles, Product Design)","Design and Technology,Design and Technology (Food),Design and Technology (Product Design),Design and Technology (Textiles),Secondary[TestCase(",Design and technology
+Design Technology (Food),"Design and Technology,Design and Technology (Food),Secondary",Design and technology
+Design Technology Textiles / Food,"Design and Technology (Textiles),Secondary",Design and technology
+Drama,"Drama and Theatre Studies,English,Secondary",Drama
+Drama,"Drama and Theatre Studies,Primary",Primary
+DRAMA,"Drama and Theatre Studies,Secondary",Drama
+Drama,"Drama and Theatre Studies,Secondary",Drama
+Drama (with English),"Drama and Theatre Studies,English,Secondary","Drama,English"
+Drama with English,"Drama and Theatre Studies,English,Secondary","Drama,English"
+DRAMA-PART TIME,"Drama and Theatre Studies,Secondary",Drama
+DT,Secondary,
+Early Years (3-7),"Early Years,Primary",Primary
+Economics,"Economics,Secondary",Economics
+Economics (and Business Studies),"Business Education,Economics,Secondary","Business studies,Economics"
+Economics and Business Education,"Business Education,Economics,Secondary","Business studies,Economics"
+Economics with Business Education,"Economics,Secondary",Economics
+Education and Training,"Further Education,Post-Compulsory",Further education
+English,"English,Middle Years",English
+English,"English,Primary","Primary,Primary with English"
+English,"English,Secondary",English
+English  - Part Time,"English,Secondary",English
+English - Borden Grammar School,"English,Secondary",English
+English - Canterbury High,"English,Secondary",English
+English - Canterbury High School,"English,Secondary",English
+English - Dane Court Grammar School,"English,Secondary",English
+English - Herne Bay High School,"English,Secondary",English
+English - King Ethelbert School,"English,Secondary",English
+English - Royal Harbour Academy,"English,Secondary",English
+English (7-14),"English,Middle Years",English
+English (CaBan Partnership),"English,Secondary",English
+English (Flexible),"English,Secondary",English
+English (North Charnwood Learning Partnership),"Art / Art & Design,English,Secondary","Art and design,English"
+English (North Charnwood Learning Partnership),"English,Secondary",English
+English (RIS),"English,Secondary",English
+English (Special Educational Needs),"English,Secondary,Special Educational Needs",English
+English (with Drama),"Drama and Theatre Studies,English,Secondary","Drama,English"
+English (with Media),"Communication and Media Studies,English,Secondary","Communication and media studies,English"
+English and Drama,"Drama and Theatre Studies,English,Secondary","Drama,English"
+English and Media,"English,Secondary",English
+English and Media Studies,"Communication and Media Studies,English,Secondary","Communication and media studies,English"
+English Salaried,"English,Secondary",English
+English School Direct Salaried,"English,Secondary",English
+English with Drama,"Drama and Theatre Studies,English,Secondary","Drama,English"
+English with Media,"English,Secondary",English
+ENGLISH-PART TIME,"English,Secondary",English
+Food,"Design and Technology (Food),Secondary",Design and technology
+Food,Primary,Primary
+Food,Secondary,
+Food and Nutrition,"Design and Technology (Food),Secondary",Design and technology
+Food and Nutrition,Primary,Primary
+French,"French,Languages,Languages (European),Secondary",French
+French,"French,Secondary",French
+Further and Post-Compulsory Education,"Further Education,Post-Compulsory,Secondary",Further education
+Further and Post-Compulsory Education (English),"English,Further Education,Post-Compulsory,Secondary",Further education
+Further and Post-Compulsory Education (SEN),"Further Education,Post-Compulsory,Secondary,Special Educational Needs",Further education
+Further and Post-Compulsory Education Mathematics,"Further Education,Mathematics,Post-Compulsory,Secondary",Further education
+Further Education,"Further Education,Secondary",Further education
+Further Education and Training (Full-Time),"Further Education,Post-Compulsory",Further education
+Further Education and Training (Part-Time),"Further Education,Post-Compulsory",Further education
+General Primary,Primary,Primary
+General Primary and PGCE,Primary,Primary
+Geography,"Geography,Middle Years",Geography
+Geography,"Geography,Primary","Primary,Primary with geography and history"
+geography,"Geography,Primary","Primary,Primary with geography and history"
+Geography,"Geography,Secondary",Geography
+Geography - Herne Bay High School,"Geography,Secondary",Geography
+Geography - King Ethelbert School,"Geography,Secondary",Geography
+Geography (CaBan Partnership),"Geography,Secondary",Geography
+Geography (North Charnwood Learning Partnership),"Geography,Secondary",Geography
+Geography (with Humanities),"Geography,Humanities,Secondary","Geography,Humanities"
+Geography Part Time,"Geography,Secondary",Geography
+Geography School Direct Salaried,"Geography,Secondary",Geography
+Geography with Humanities,"Geography,Humanities,Secondary","Geography,Humanities"
+GEOGRAPHY-PART TIME,"Geography,Secondary",Geography
+German,"German,Languages,Languages (European),Secondary",German
+Health and Social Care,"Health and Social Care,Secondary",Health and social care
+Health and social care,"Health and Social Care,Secondary",Health and social care
+Health and Social Care,"Health and Social Care,Secondary,Social Science","Health and social care,Social sciences"
+History,"History,Middle Years",History
+History,"History,Primary","Primary,Primary with geography and history"
+HIstory,"History,Secondary",History
+History,"History,Secondary",History
+History - Part Time,"History,Secondary",History
+History (CaBan Partnership),"History,History of Art,Secondary",History
+History (North Charnwood Learning Partnership),"History,Secondary",History
+History (Special Educational Needs),"History,Secondary,Special Educational Needs",History
+History (with Humanities),"History,Humanities,Secondary","History,Humanities"
+History School Direct Salaried,"History,Secondary",History
+History Secondary Education (11-16) with QTS,"History,Secondary",History
+History with Humanities,"History,Humanities,Secondary","History,Humanities"
+HISTORY-PART TIME,"History,Secondary",History
+Hostory,Secondary,
+Humanities,"Humanities,Secondary",Humanities
+Humanities and Social Sciences (PCET),"Further Education,Humanities,Post-Compulsory,Social Science",Further education
+Information Technology (CaBan Partnership),"Information Technology,Secondary",
+INSPIRE Chemistry,"Chemistry,Secondary",Chemistry
+INSPIRE Mathematics,"Mathematics,Secondary",Mathematics
+INSPIRE Physics,"Physics,Secondary",Physics
+INSPIRE Physics With Maths,"Physics,Secondary",Physics
+Latin (with Classics),"Classics,Latin,Secondary",Classics
+Leisure and Tourism,"Leisure and Tourism,Secondary",
+Lifelong Learning (Pre-Service),"Further Education,Post-Compulsory",Further education
+Lifelong learning (Pre-Service),"Further Education,Post-Compulsory,Secondary",Further education
+Lifelong Learning (Pre-Service),"Post-Compulsory,Secondary",Further education
+Lifelong Learning PGCE (pre-service),"Further Education,Post-Compulsory",Further education
+Lifelong Learning Sector,"Post-Compulsory,Secondary",Further education
+Lifelong Learning Sector (ESOL),"English as a Second or Other Language,Post-Compulsory,Secondary",Further education
+Lifelong Learning Sector (Literacy & ESOL),"English as a Second or Other Language,Literacy,Post-Compulsory,Secondary",Further education
+Lifelong Learning Sector (Literacy),"Literacy,Post-Compulsory,Secondary",Further education
+Lifelong Learning Sector (Numeracy),"Numeracy,Post-Compulsory,Secondary",Further education
+Mandarin Chinese with a European Language or EAL,"Chinese,English as a Second or Other [TestCase(Language,Languages,Languages (Asian),Languages (European),Mandarin,Secondary",Mandarin
+Mathematics,"Mathematics,Middle Years",Mathematics
+Mathematics,"Mathematics,Primary","Primary,Primary with mathematics"
+Mathematics,"Mathematics,Secondary",Mathematics
+Mathematics - Borden Grammar School,"Mathematics,Secondary",Mathematics
+Mathematics - Canterbury High School,"Mathematics,Secondary",Mathematics
+Mathematics - Dane Court Grammar School,"Mathematics,Secondary",Mathematics
+Mathematics - Herne Bay High School,"Mathematics,Secondary",Mathematics
+Mathematics - King Ethelbert School,"Mathematics,Secondary",Mathematics
+Mathematics - Royal Harbour Academy,"Mathematics,Secondary",Mathematics
+Mathematics (7-14),"Mathematics,Middle Years",Mathematics
+Mathematics (Abridged),"Mathematics,Mathematics (abridged),Secondary",Mathematics
+Mathematics (abridged),"Mathematics,Mathematics (abridged),Secondary",Mathematics
+Mathematics (CaBan Partnership),"Mathematics,Secondary",Mathematics
+Mathematics (Flexible),"Mathematics,Secondary",Mathematics
+Mathematics (RIS),"Mathematics,Secondary",Mathematics
+Mathematics (Special Eduational Needs),"Mathematics,Secondary,Special Educational Needs",Mathematics
+Mathematics (Special Educational Needs),"Mathematics,Secondary,Special Educational Needs",Mathematics
+Mathematics (with Psychology),"Mathematics,Psychology,Secondary","Mathematics,Psychology"
+Mathematics Part Time,"Mathematics,Secondary",Mathematics
+Mathematics Teaching Apprenticeship,"Mathematics,Secondary",Mathematics
+Mathematics with,"Mathematics,Secondary",Mathematics
+Mathematicsy,"Mathematics,Secondary",Mathematics
+Maths,Primary,Primary
+Maths,Secondary,
+Maths (North Charnwood Learning Partnership),"Mathematics,Secondary",Mathematics
+MATHS-PART TIME,"Mathematics,Secondary",Mathematics
+Media,Secondary,
+Media Studies,"Communication and Media Studies,Secondary",Communication and media studies
+Media studies,"Communication and Media Studies,Secondary",Communication and media studies
+Media Studies (with English),"Communication and Media Studies,English,Secondary","Communication and media studies,English"
+Media with English,"Communication and Media Studies,English,Secondary","Communication and media studies,English"
+MFL,Secondary,
+MFL - Canterbury Academy,Secondary,
+MFL - French,"French,Languages (European),Secondary",French
+MFL - German,"German,Languages (European),Secondary",German
+MFL - Spanish,"Languages (European),Secondary,Spanish",Spanish
+MFL (German),"German,Primary","Primary,Primary with modern languages"
+MFL (German),"German,Secondary",German
+MFL (North Charnwood Learning Partnership),"Languages,Secondary",Modern languages (other)
+MFL (Spanish),"Secondary,Spanish",Spanish
+MFL Urdu,"Primary,Urdu","Primary,Primary with modern languages"
+Middle Years,Middle Years,
+Middle Years (9-13 years),"Middle Years,Primary",Primary
+Modern Foreign Language (French),"French,Secondary",French
+Modern Foreign Language (German),"German,Secondary",German
+Modern Foreign Language (Spanish & German),"German,Languages,Languages (European),Secondary,Spanish","German,Spanish"
+Modern Foreign Language (Spanish),"Secondary,Spanish",Spanish
+Modern Foreign Languages,"Languages,Secondary",Modern languages (other)
+MODERN FOREIGN LANGUAGES -PART TIME,"Languages,Secondary",Modern languages (other)
+Modern Foreign Languages ( French),"French,Languages,Secondary",French
+Modern Foreign Languages (CaBan Partnership),"Languages,Secondary",Modern languages (other)
+Modern Foreign Languages (French and Spanish),"French,Languages,Secondary,Spanish","French,Spanish"
+Modern Foreign Languages (French/Spanish),"French,Languages,Secondary,Spanish","French,Spanish"
+Modern Foreign Languages (Spanish),"Languages,Secondary,Spanish",Spanish
+Modern Foreign Languages Teaching Apprenticeship,"Languages,Secondary",Modern languages (other)
+Modern Langauges,"Languages,Secondary",Modern languages (other)
+Modern Language,"Languages,Secondary",Modern languages (other)
+Modern Language (Spanish),"Languages (European),Secondary,Spanish",Spanish
+Modern Languages,"French,German,Italian,Japanese,Languages,Languages (Asian),Languages (European),Mandarin[TestCase(,Secondary,Spanish","French,German,Italian,Japanese,Spanish"
+Modern Languages,"French,German,Italian,Languages,Languages (European),Secondary,Spanish","French,German,Italian,Spanish"
+Modern Languages,"French,German,Languages,Languages (Asian),Languages (European),Mandarin,Secondary,Spanish","French,German,Mandarin,Spanish"
+Modern Languages,"French,German,Languages,Languages (European),Russian,Secondary,Spanish","French,German,Russian,Spanish"
+Modern Languages,"French,German,Languages,Languages (European),Secondary","French,German"
+Modern Languages,"French,German,Languages,Languages (European),Secondary,Spanish","French,German,Spanish"
+Modern Languages,"French,German,Languages,Secondary,Spanish","French,German,Spanish"
+Modern Languages,"French,Languages,Languages (European),Secondary,Spanish","French,Spanish"
+Modern Languages,"French,Languages,Secondary,Spanish","French,Spanish"
+Modern Languages,"German,Languages,Languages (European),Secondary",German
+Modern Languages,"Languages,Languages (European),Secondary",Modern languages (other)
+Modern Languages,"Languages,Secondary",Modern languages (other)
+Modern languages,"Languages,Secondary",Modern languages (other)
+Modern Languages - Canterbury High School,"Languages,Secondary",Modern languages (other)
+Modern Languages (Arabic),"Arabic,Languages,Languages (African),Languages (Asian),Secondary",Modern languages (other)
+Modern Languages (Chinese),"Chinese,Languages,Languages (Asian),Secondary",Mandarin
+Modern Languages (European Language with Mandarin),"Languages,Languages (Asian),Languages (European),Mandarin,Secondary",Mandarin
+Modern Languages (European),"Languages,Languages (European),Secondary",Modern languages (other)
+Modern Languages (French and German),"French,German,Languages,Languages (European),Secondary","French,German"
+Modern Languages (French and German),"French,German,Languages,Secondary","French,German"
+Modern Languages (French and Italian),"French,Italian,Languages,Languages (European),Secondary","French,Italian"
+Modern Languages (French and Mandarin),"French,Languages,Languages (Asian),Languages (European),Mandarin,Secondary","French,Mandarin"
+Modern Languages (French and Spanish),"French,German,Languages,Languages (European),Secondary,Spanish","French,German,Spanish"
+Modern Languages (French and Spanish),"French,Languages,Languages (European),Secondary,Spanish","French,Spanish"
+Modern Languages (French and Spanish),"French,Languages,Secondary,Spanish","French,Spanish"
+Modern Languages (French and/or Spanish),"French,Languages,Languages (European),Secondary,Spanish","French,Spanish"
+Modern Languages (French or German),"French,German,Languages,Languages (European),Secondary","French,German"
+Modern Languages (French or Spanish),"French,Languages,Languages (European),Secondary,Spanish","French,Spanish"
+Modern Languages (French with additional language),"French,Languages,Languages (European),Secondary",French
+Modern Languages (French with another language),"French,Languages,Languages (European),Secondary",French
+Modern Languages (French with German),"French,German,Languages,Languages (European),Secondary","French,German"
+Modern Languages (French with German),"French,German,Languages,Secondary","French,German"
+Modern Languages (French with Italian),"French,Italian,Languages,Languages (European),Secondary","French,Italian"
+Modern Languages (French with Japanese),"French,Japanese,Languages,Languages (Asian),Languages (European),Secondary","French,Japanese"
+Modern Languages (French with Mandarin),"French,Languages,Languages (Asian),Languages (European),Mandarin,Secondary","French,Mandarin"
+Modern Languages (French with Russian),"French,Languages,Languages (European),Russian,Secondary","French,Russian"
+Modern Languages (French with some Spanish),"French,Languages,Secondary,Spanish","French,Spanish"
+Modern Languages (French with Spanish or German),"French,German,Languages,Languages (European),Secondary,Spanish","French,German,Spanish"
+Modern Languages (French with Spanish),"French,Languages,Languages (European),Secondary,Spanish","French,Spanish"
+Modern Languages (French with Spanish),"French,Languages,Secondary,Spanish","French,Spanish"
+Modern Languages (French with Urdu),"French,Languages,Languages (Asian),Languages (European),Secondary,Urdu",French
+"Modern Languages (French, German and Spanish)","French,German,Languages,Languages (European),Secondary,Spanish","French,German,Spanish"
+"Modern Languages (French, German and Spanish)","French,German,Languages,Secondary,Spanish","French,German,Spanish"
+"Modern Languages (French, German or Spanish)","French,German,Languages,Secondary,Spanish","French,German,Spanish"
+"Modern Languages (French, German, Spanish","French,German,Languages,Secondary,Spanish","French,German,Spanish"
+"Modern Languages (French, German, Spanish 7-14)","Languages,Middle Years",Modern languages (other)
+"Modern Languages (French, German, Spanish)","French,German,Languages,Languages (European),Secondary,Spanish","French,German,Spanish"
+"Modern Languages (French, German)","French,German,Languages,Languages (European),Secondary","French,German"
+"Modern Languages (French, Spanish or German)","French,German,Languages,Languages (European),Secondary,Spanish","French,German,Spanish"
+"Modern Languages (French, Spanish, German)","French,German,Languages,Languages (European),Secondary,Spanish","French,German,Spanish"
+"Modern Languages (French, Spanish,German)","French,German,Languages,Languages (European),Secondary,Spanish","French,German,Spanish"
+"Modern Languages (French, Spanish)","French,Languages,Languages (European),Secondary,Spanish","French,Spanish"
+Modern Languages (French),"French,Languages (European),Secondary",French
+Modern Languages (French),"French,Languages,Languages (European),Middle Years",French
+Modern Languages (French),"French,Languages,Languages (European),Secondary",French
+Modern languages (French),"French,Languages,Languages (European),Secondary",French
+Modern Languages (French),"French,Languages,Languages (European),Secondary,Spanish","French,Spanish"
+Modern Languages (French),"French,Languages,Middle Years",French
+Modern Languages (French),"French,Languages,Secondary",French
+Modern Languages (German and French),"French,German,Languages,Languages (European),Secondary","French,German"
+Modern Languages (German and Spanish),"German,Languages,Languages (European),Secondary,Spanish","German,Spanish"
+Modern Languages (German or French),"French,German,Languages,Languages (European),Secondary","French,German"
+Modern Languages (German with additional language),"German,Languages,Languages (European),Secondary",German
+Modern Languages (German with French),"French,German,Languages,Languages (European),Secondary","French,German"
+Modern Languages (German with Italian),"German,Italian,Languages,Languages (European),Secondary","German,Italian"
+Modern Languages (German with Japanese),"German,Japanese,Languages,Languages (Asian),Languages (European),Secondary","German,Japanese"
+Modern Languages (German with Mandarin),"German,Languages,Languages (Asian),Languages (European),Mandarin,Secondary","German,Mandarin"
+Modern Languages (German with Russian),"German,Languages,Languages (European),Russian,Secondary","German,Russian"
+Modern Languages (German with Spanish),"German,Languages,Languages (European),Middle Years,Spanish","German,Spanish"
+Modern Languages (German with Spanish),"German,Languages,Languages (European),Secondary,Spanish","German,Spanish"
+Modern Languages (German with Urdu),"German,Languages,Languages (Asian),Languages (European),Secondary,Urdu",German
+"Modern Languages (German, French, Spanish)","French,German,Languages,Languages (European),Secondary,Spanish","French,German,Spanish"
+Modern Languages (German),"German,Languages,Languages (European),Secondary",German
+Modern Languages (German),"German,Languages,Secondary",German
+Modern Languages (German/French),"French,German,Languages,Secondary","French,German"
+Modern Languages (Italian),"Italian,Languages,Languages (European),Secondary",Italian
+Modern Languages (Japanese with French),"French,Japanese,Languages,Languages (Asian),Languages (European),Secondary","French,Japanese"
+Modern Languages (Japanese with German),"German,Japanese,Languages,Languages (Asian),Languages (European),Secondary","German,Japanese"
+Modern Languages (Japanese with Spanish),"Japanese,Languages,Languages (Asian),Languages (European),Secondary,Spanish","Japanese,Spanish"
+Modern Languages (Mandarin with French),"French,Languages,Languages (Asian),Languages (European),Mandarin,Secondary","French,Mandarin"
+Modern Languages (Mandarin with German),"German,Languages,Languages (Asian),Languages (European),Mandarin,Secondary","German,Mandarin"
+Modern Languages (Mandarin with Spanish),"Languages,Languages (Asian),Languages (European),Mandarin,Secondary,Spanish","Mandarin,Spanish"
+"Modern Languages (Mandarin, French or Spanish)","French,Languages,Languages (African),Languages (European),Mandarin,Secondary[TestCase(,Spanish","French,Mandarin,Spanish"
+Modern Languages (Mandarin),"Languages,Languages (Asian),Mandarin,Secondary",Mandarin
+Modern Languages (Spanish and French),"French,Languages,Languages (European),Secondary,Spanish","French,Spanish"
+Modern Languages (Spanish and French),"French,Languages,Secondary,Spanish","French,Spanish"
+Modern Languages (Spanish and German),"German,Languages,Languages (European),Secondary,Spanish","German,Spanish"
+Modern Languages (Spanish or French),"French,Languages,Languages (European),Secondary,Spanish","French,Spanish"
+Modern Languages (Spanish or German),"German,Languages,Languages (European),Secondary,Spanish","German,Spanish"
+Modern Languages (Spanish with another language),"Languages,Languages (European),Secondary,Spanish",Spanish
+Modern Languages (Spanish with French),"French,Languages,Languages (European),Secondary,Spanish","French,Spanish"
+Modern Languages (Spanish with German),"German,Languages,Languages (European),Middle Years,Spanish","German,Spanish"
+Modern Languages (Spanish with German),"German,Languages,Languages (European),Secondary,Spanish","German,Spanish"
+Modern Languages (Spanish with German),"German,Languages,Secondary,Spanish","German,Spanish"
+Modern Languages (Spanish with Japanese),"Japanese,Languages,Languages (Asian),Languages (European),Secondary,Spanish","Japanese,Spanish"
+Modern Languages (Spanish with Mandarin),"Languages,Languages (Asian),Languages (European),Mandarin,Secondary,Spanish","Mandarin,Spanish"
+Modern Languages (Spanish with Russian),"Languages,Languages (European),Russian,Secondary,Spanish","Russian,Spanish"
+Modern Languages (Spanish with Urdu),"Languages,Languages (Asian),Languages (European),Secondary,Spanish,Urdu",Spanish
+"Modern Languages (Spanish, French or German)","French,German,Languages,Languages (European),Secondary,Spanish","French,German,Spanish"
+"Modern Languages (Spanish, French, Mandarin)","French,Languages,Languages (Asian),Languages [TestCase((European),Mandarin,Secondary,Spanish","French,Mandarin,Spanish"
+"Modern Languages (Spanish, French)","French,Languages,Languages (European),Secondary,Spanish","French,Spanish"
+"Modern Languages (Spanish, German, French)","French,German,Languages,Languages (European),Secondary,Spanish","French,German,Spanish"
+Modern Languages (Spanish),"Languages,Languages (European),Secondary,Spanish",Spanish
+Modern languages (Spanish),"Languages,Languages (European),Secondary,Spanish",Spanish
+Modern Languages (Spanish),"Languages,Secondary,Spanish",Spanish
+Modern Languages (Spanish/French),"French,Languages,Languages (European),Secondary,Spanish","French,Spanish"
+Modern Languages (Spanish/French/German),"French,German,Languages,Secondary,Spanish","French,German,Spanish"
+Modern Languages (Turkish),"Languages,Languages (European),Secondary",Modern languages (other)
+Modern Languages (Urdu with French),"French,Languages,Languages (Asian),Languages (European),Secondary,Urdu",French
+Modern Languages (Urdu with German),"German,Languages,Languages (Asian),Languages (European),Secondary,Urdu",German
+Modern Languages (Urdu),"Languages,Languages (Asian),Secondary,Urdu",Modern languages (other)
+Modern Languages (with French),"French,Languages,Languages (European),Secondary",French
+Modern Languages (with French),"French,Languages,Secondary",French
+Modern Languages (with German),"German,Languages,Secondary",German
+Modern Languages (with Spanish),"Languages,Secondary,Spanish",Spanish
+Modern Languages Part Time,"Languages,Secondary",Modern languages (other)
+Modern Languages with Post-16 Enhancement,"Languages,Secondary",Modern languages (other)
+Modern Languages(French or with Spanish or German),"French,German,Languages,Languages (European),Secondary,Spanish","French,German,Spanish"
+Modern Languages(German or with French or Spanish),"French,German,Languages,Languages (European),Secondary,Spanish","French,German,Spanish"
+Modern Languages(Spanish or with French or German),"French,German,Languages,Languages (European),Secondary,Spanish","French,German,Spanish"
+Music,"Music,Primary",Primary
+MUSIC,"Music,Secondary",Music
+Music,"Music,Secondary",Music
+Music - Canterbury High School,"Music,Secondary",Music
+Music - King Ethelbert School,"Music,Secondary",Music
+Music - Part Time,"Music,Secondary",Music
+Music (CaBan Partnership),"Music,Secondary",Music
+Music (with Specialist Instrument Training),"Music,Secondary",Music
+Nicholas Chamberlaine School,Secondary,
+OWLS School Direct,Primary,Primary
+Part Time,"Art / Art & Design,Primary",Primary
+Part Time PGCE with QTS,Primary,Primary
+Part time school direct,"Art / Art & Design,Primary",Primary
+Part-time PE Specialist,"Physical Education,Primary","Primary,Primary with physical education"
+"PCET (with specialism in Arts, Media and Perform)","Art / Art & Design,Drama and Theatre Studies,Further Education,Post-Compulsory",Further education
+"PCET (with specialism in English, Literacy & ESOL)","English,English as a Second or Other Language,Further Education,Literacy,Post-Compulsory",Further education
+PCET (with specialism in Maths and Numeracy),"Further Education,Mathematics,Numeracy,Post-Compulsory",Further education
+PCET (with specialism in Science and Technology),"Further Education,Post-Compulsory,Science",Further education
+PE,Primary,Primary
+PE,Secondary,
+PE (North Charnwood Learning Partnership),"Physical Education,Secondary",Physical education
+PE with EBacc,"Physical Education,Secondary",Physical education
+PE with EBACC (History),"History,Secondary",History
+PE with EBacc Specialism,"Physical Education,Secondary",Physical education
+PE with EBacc Specialism,Secondary,
+PE with Maths,"Mathematics,Physical Education,Secondary","Mathematics,Physical education"
+PGCE in Physics,"Physics,Primary","Primary,Primary with science"
+PGCE Post-14 (Education and Training),"Post-Compulsory,Secondary",Further education
+PGCE Primary,Primary,Primary
+PGCE Primary with QTS Full Time with Salary,Primary,Primary
+PGCE Secondary Social Sciences,"Science,Secondary,Social Science",Social sciences
+PGCE with QTS,Primary,Primary
+PGDE Post-14 (Education and Training),"Post-Compulsory,Secondary",Further education
+"PGDE, FE and Skills",Further Education,Further education
+"Philosophy, Religion and Ethics","Philosophy,Religious Education,Secondary",Religious education
+Physical Educaion,"Physical Education,Secondary",Physical education
+Physical Education,"Physical Education,Primary","Primary,Primary with physical education"
+Physical Education,"Physical Education,Secondary",Physical education
+Physical education,"Physical Education,Secondary",Physical education
+Physical Education - Canterbury High School,"Physical Education,Secondary",Physical education
+Physical Education - Chatham and Clarendon Grammar,"Physical Education,Secondary",Physical education
+Physical Education - Dane Court,"Physical Education,Secondary",Physical education
+Physical Education - Herne Bay High,"Physical Education,Secondary",Physical education
+Physical Education - Queen Elizabeth's Grammar Sch,"Physical Education,Secondary",Physical education
+Physical Education (Dance),"Dance and Performance,Physical Education,Secondary","Dance,Physical education"
+Physical Education (European Baccalaureate),"Physical Education,Secondary",Physical education
+Physical Education (Girls),"Physical Education,Secondary",Physical education
+Physical Education (Special Educational Needs),"Physical Education,Secondary,Special Educational Needs",Physical education
+Physical Education (with Art and Design 11-16),"Art / Art & Design,Physical Education,Secondary","Art and design,Physical education"
+Physical Education (with Biology EBacc),"Biology,Physical Education,Science,Secondary","Biology,Physical education"
+Physical Education (with Chemistry EBacc),"Chemistry,Physical Education,Science,Secondary","Chemistry,Physical education"
+Physical Education (with Computer Science 11-16),"Computer Studies,Physical Education,Science,Secondary","Computing,Physical education"
+Physical Education (with EBAcc Subject),"Physical Education,Secondary",Physical education
+Physical Education (with EBacc Subject),"Physical Education,Secondary",Physical education
+Physical Education (with English 11-16),"English,Physical Education,Secondary","English,Physical education"
+Physical Education (with English EBacc),"English,Physical Education,Secondary","English,Physical education"
+Physical Education (with French EBacc),"French,Languages,Languages (European),Physical Education,Secondary","French,Physical education"
+Physical Education (with Geography 11-16),"Geography,Physical Education,Secondary","Geography,Physical education"
+Physical Education (with Geography EBacc),"Geography,Physical Education,Secondary","Geography,Physical education"
+Physical Education (with German EBacc),"German,Languages,Languages (European),Physical Education,Secondary","German,Physical education"
+Physical Education (with History EBacc),"History,Physical Education,Secondary","History,Physical education"
+Physical Education (with KS3 Mathematics),"Mathematics,Physical Education,Secondary","Mathematics,Physical education"
+Physical Education (with KS3 Science),"Physical Education,Science,Secondary","Balanced science,Physical education"
+Physical Education (with Mathematics 11-16),"Mathematics,Physical Education,Secondary","Mathematics,Physical education"
+Physical Education (with Mathematics EBacc),"Mathematics,Physical Education,Secondary","Mathematics,Physical education"
+Physical Education (with Physics 11-16),"Physical Education,Physics,Science,Secondary","Physical education,Physics"
+Physical Education (with Physics EBacc),"Physical Education,Physics,Science,Secondary","Physical education,Physics"
+Physical Education (with Science EBacc),"Physical Education,Science,Secondary","Balanced science,Physical education"
+Physical Education (with Spanish EBacc),"Languages,Languages (European),Physical Education,Secondary,Spanish","Physical education,Spanish"
+Physical Education Boys,"Physical Education,Secondary",Physical education
+Physical Education with Biology,"Biology,Physical Education,Secondary","Biology,Physical education"
+Physical Education with Chemistry,"Chemistry,Physical Education,Secondary","Chemistry,Physical education"
+Physical Education with Computer Science,"Computer Studies,Physical Education,Science,Secondary","Computing,Physical education"
+Physical Education with EBacc,"Physical Education,Secondary",Physical education
+Physical Education with EBACC Subject,"Physical Education,Secondary",Physical education
+Physical Education with EBacc Subject,"Physical Education,Secondary",Physical education
+Physical Education with EBacc subject,"Physical Education,Secondary",Physical education
+Physical Education with English,"English,Physical Education,Secondary","English,Physical education"
+Physical Education with French,"French,Physical Education,Secondary","French,Physical education"
+Physical Education with Geography,"Geography,Physical Education,Primary","Primary,Primary with geography and history,Primary with physical education"
+Physical Education with Geography,"Geography,Physical Education,Secondary","Geography,Physical education"
+Physical Education with History,"History,Physical Education,Secondary","History,Physical education"
+Physical Education with Mathematics,"Mathematics,Physical Education,Secondary","Mathematics,Physical education"
+Physical Education with Maths specialism,"Mathematics,Physical Education,Secondary","Mathematics,Physical education"
+Physical Education with Physics,"Physical Education,Physics,Secondary","Physical education,Physics"
+Physical Education with Spanish,"Physical Education,Secondary,Spanish","Physical education,Spanish"
+Physical Educaton,"Physical Education,Secondary",Physical education
+Physics,"Physics,Primary","Primary,Primary with science"
+Physics,"Physics,Science,Secondary",Physics
+Physics,"Physics,Secondary",Physics
+physics,"Physics,Secondary",Physics
+Physics,Secondary,
+Physics - Canterbury High School,"Physics,Science,Secondary",Physics
+Physics - Dane Court,"Physics,Secondary",Physics
+Physics - Herne Bay High School,"Physics,Primary","Primary,Primary with science"
+Physics - Herne Bay High School,"Physics,Science,Secondary",Physics
+Physics - Queen Elizabeth's Grammar School,"Physics,Science,Secondary",Physics
+Physics - Royal Harbour Academy,"Physics,Science,Secondary",Physics
+Physics (Abridged),"Physics,Physics (abridged),Science,Secondary",Physics
+Physics (abridged),"Physics,Science,Secondary",Physics
+Physics (North Charnwood Learning Partnership),"Physics,Science,Secondary",Physics
+Physics (RIS),"Physics,Science,Secondary",Physics
+Physics (with Mathematics),"Mathematics,Physics,Science,Secondary","Mathematics,Physics"
+Physics (with Mathematics),"Mathematics,Physics,Secondary","Mathematics,Physics"
+Physics (with Post-16 Enhancement),"Physics,Science,Secondary",Physics
+Physics Part Time,"Physics,Science,Secondary",Physics
+Physics with Core Science,"Physics,Science,Secondary","Balanced science,Physics"
+Physics with Mathematics,"Mathematics,Physics,Science,Secondary","Mathematics,Physics"
+Physics with mathematics,"Mathematics,Physics,Science,Secondary","Mathematics,Physics"
+Physics With Mathematics,"Mathematics,Physics,Secondary","Mathematics,Physics"
+Physics with Mathematics,"Mathematics,Physics,Secondary","Mathematics,Physics"
+Physics with Maths,"Physics,Secondary",Physics
+PHYSICS-PART TIME,"Physics,Science,Secondary",Physics
+Post-16 and Further Education,"Further Education,Post-Compulsory",Further education
+Post-Compulsory Education,"Further Education,Post-Compulsory",Further education
+Post-Compulsory Education and Training,"Further Education,Post-Compulsory",Further education
+Post-Compulsory Education and Training,"Post-Compulsory,Secondary",Further education
+Post-Compulsory Training and Education,"Further Education,Post-Compulsory",Further education
+Postgraduate Primary Teaching Apprenticeships,Primary,Primary
+Postgraduate Teaching Apprenticeship,Primary,Primary
+Postgraduate teaching apprenticeship,Primary,Primary
+Postgraduate Teaching Apprenticeship Biology,"Biology,Primary","Primary,Primary with science"
+Postgraduate Teaching Apprenticeship Chemistry,"Chemistry,Secondary",Chemistry
+Postgraduate Teaching Apprenticeship Computing,Primary,Primary
+Postgraduate Teaching Apprenticeship English,"English,Secondary",English
+Postgraduate Teaching Apprenticeship Geography,"Geography,Secondary",Geography
+Postgraduate Teaching Apprenticeship History,"History,Secondary",History
+Postgraduate Teaching Apprenticeship Mathematics,"Mathematics,Primary","Primary,Primary with mathematics"
+Postgraduate Teaching Apprenticeship MFL,"Languages,Secondary",Modern languages (other)
+Postgraduate Teaching Apprenticeship Physics,"Physics,Secondary",Physics
+Postgraduate Teaching Apprenticeship Primary,Primary,Primary
+Postgraduate Teaching Apprenticeship RE,Primary,Primary
+Postrgraduate Teaching Apprenticeship Biology,"Biology,Secondary",Biology
+Pre-Service Professional Graduate Certificate,"Further Education,Post-Compulsory",Further education
+Primary,"English,Primary","Primary,Primary with English"
+Primary,Primary,Primary
+Primary,"Primary,Special Educational Needs",Primary
+Primary,Secondary,
+Primary  (Physical Education Subject Specialism),"Physical Education,Primary,Special Educational Needs","Primary,Primary with physical education"
+Primary - (3-7),Primary,Primary
+Primary - Aycliffe Primary,Primary,Primary
+Primary - Aylesham,Primary,Primary
+Primary - Bromstone,Primary,Primary
+Primary - Canterbury Primary School,Primary,Primary
+Primary - Capel-Le-Ferne Primary School,Primary,Primary
+Primary - Challock Primary School,Primary,Primary
+Primary - Chilton Academy Primary School,Primary,Primary
+Primary - Christ Church Ramsgate,Primary,Primary
+Primary - Clifftonville,Primary,Primary
+Primary - Clifftonville Primary School,Primary,Primary
+Primary - Folkestone Academy,Primary,Primary
+Primary - General (With Mathematics),"Mathematics,Primary","Primary,Primary with mathematics"
+Primary - General (with Mathematics),"Mathematics,Primary","Primary,Primary with mathematics"
+Primary - Glyndwr University,Primary,Primary
+Primary - Green Park CP,Primary,Primary
+Primary - Herne Bay Infant School,Primary,Primary
+Primary - Herne Bay Junior School,Primary,Primary
+Primary - Herne CE Infant & Nursery School,Primary,Primary
+Primary - Herne CE Junior School,Primary,Primary
+Primary - Holywell,Primary,Primary
+Primary - Holywell Primary School,Primary,Primary
+Primary - Joy Lane Primary School,Primary,Primary
+Primary - Lyminge,Primary,Primary
+Primary - Lympne CEP,Primary,Primary
+PRIMARY - MATHS,Primary,Primary
+Primary - Minster Primary School,Primary,Primary
+Primary - Newington Ramsgate,Primary,Primary
+Primary - Palm Bay,Primary,Primary
+Primary - Palm Bay Primary School,Primary,Primary
+PRIMARY - Part time,Primary,Primary
+Primary - Part Time,Primary,Primary
+Primary - Petham Primary School,Primary,Primary
+Primary - Pilgrims Way Primary School,Primary,Primary
+Primary - Priory Fields Primary,Primary,Primary
+Primary - Ramsgate Arts Primary School,Primary,Primary
+Primary - River,Primary,Primary
+Primary - Selling CE,Primary,Primary
+Primary - South Avenue,Primary,Primary
+Primary - St Crispins CP Infant School,Primary,Primary
+Primary - St Martins School,Primary,Primary
+Primary - St Mary's Catholic,Primary,Primary
+Primary - St Mildred's Primary Infant School,Primary,Primary
+Primary - St Peters Methodist School,Primary,Primary
+Primary - St Stephens Infant School,Primary,Primary
+Primary - St Stephens Junior School,Primary,Primary
+Primary - Upton Junior School,Primary,Primary
+Primary 'PG Teaching Apprenticeship',Primary,Primary
+Primary (0-5),Primary,Primary
+Primary (3 - 7),Primary,Primary
+Primary (3-11),Primary,Primary
+Primary (3-5),Primary,Primary
+Primary (3-7 years),Primary,Primary
+Primary (3-7),"Early Years,Primary",Primary
+Primary (3-7),Primary,Primary
+Primary (3-7) Early Years,Primary,Primary
+Primary (3-8),Primary,Primary
+Primary (5 - 11),Primary,Primary
+Primary (5 -11),Primary,Primary
+Primary (5 to 11),Primary,Primary
+Primary (5-11 years),Primary,Primary
+Primary (5-11),Primary,Primary
+Primary (5-11),"Primary,Upper Primary",Primary
+Primary (5-11) - London,Primary,Primary
+Primary (5-11) Mathematics Specialism,"Mathematics,Primary","Primary,Primary with mathematics"
+Primary (5-11) Special Educational Needs,"Primary,Special Educational Needs",Primary
+Primary (7-11),Primary,Primary
+Primary (Barton Junior School),Primary,Primary
+Primary (Eastry Primary),Primary,Primary
+Primary (English with Special Educational Needs),"English,Primary,Special Educational Needs","Primary,Primary with English"
+Primary (English),"English,Primary","Primary,Primary with English"
+Primary (EYFS and Key Stage One),Primary,Primary
+Primary (EYFS),Primary,Primary
+"Primary (Foundation, Key Stage 1)","Early Years,Primary",Primary
+Primary (Geography and History with SEN),"Geography,History,Primary,Special Educational Needs","Primary,Primary with geography and history"
+Primary (Geography and History),"Geography,History,Primary","Primary,Primary with geography and history"
+Primary (January Intake),Primary,Primary
+Primary (Key Stage 1 and 2),Primary,Primary
+Primary (KS1 & KS2 with Primary French),"French,Languages (European),Primary","Primary,Primary with modern languages"
+Primary (KS1 & lower KS2 with Primary German),"German,Primary","Primary,Primary with modern languages"
+Primary (KS1 & lower KS2 with Primary Spanish),"Primary,Spanish","Primary,Primary with modern languages"
+Primary (Mathematics Specialist),"Mathematics,Primary","Primary,Primary with mathematics"
+Primary (Mathematics),"Mathematics,Middle Years",Mathematics
+Primary (Modern Languages with SEN),"Languages,Primary,Special Educational Needs","Primary,Primary with modern languages"
+Primary (Modern Languages),"Languages,Primary","Primary,Primary with modern languages"
+Primary (Part Time),"Art / Art & Design,Primary",Primary
+Primary (PE specialism),"Physical Education,Primary","Primary,Primary with physical education"
+Primary (PG Teaching Apprenticeship),Primary,Primary
+Primary (Physical Education Specialist),"Physical Education,Primary","Primary,Primary with physical education"
+Primary (Physical Education with SEN),"Physical Education,Primary,Special Educational Needs","Primary,Primary with physical education"
+Primary (Physical Education),"Physical Education,Primary","Primary,Primary with physical education"
+Primary (Preston & Wingham Primary Federation),Primary,Primary
+Primary (Salaried),Primary,Primary
+Primary (Sandwich Infant School),Primary,Primary
+Primary (Science with Special Educational Needs),"Primary,Science,Special Educational Needs","Primary,Primary with science"
+Primary (Science),"Primary,Science","Primary,Primary with science"
+Primary (Shatterlocks Infant School),Primary,Primary
+Primary (Special Educational Needs 7-14),"Middle Years,Primary,Secondary,Special Educational Needs",Primary
+Primary (Special Educational Needs),"Middle Years,Primary,Special Educational Needs",Primary
+Primary (Special Educational Needs),Primary,Primary
+Primary (Special Educational Needs),"Primary,Special Educational Needs",Primary
+Primary (White Cliffs Primary),Primary,Primary
+Primary (with English as an Additional Language),"English,Primary","Primary,Primary with English"
+Primary (with English),"English,Primary","Primary,Primary with English"
+Primary (with English),Primary,Primary
+Primary (with Geography and History),"Geography,History,Primary","Primary,Primary with geography and history"
+Primary (with Humanities and Religious Education),"Humanities,Primary,Religious Education",Primary
+Primary (with ICT and Computing),"Computer Studies,Primary",Primary
+Primary (with Mathematics),"Mathematics,Primary","Primary,Primary with mathematics"
+Primary (with maths specialism),Primary,Primary
+Primary (with Modern Langages),"Languages,Primary","Primary,Primary with modern languages"
+Primary (with Modern Languages),"Languages,Primary","Primary,Primary with modern languages"
+Primary (with Music),"Music,Primary",Primary
+Primary (with Physical Education),"Physical Education,Primary","Primary,Primary with physical education"
+Primary (with Science),"Primary,Science","Primary,Primary with science"
+Primary (with Special Educational Needs),"Primary,Special Educational Needs",Primary
+Primary 3-7years (PG Teaching Apprenticeship),"Early Years,Primary",Primary
+Primary 3-7years (PG Teaching Apprenticeship),Primary,Primary
+Primary 5-11,Primary,Primary
+Primary 5-11 (Physical Education),"Physical Education,Primary","Primary,Primary with physical education"
+Primary 7 -14,"Middle Years,Primary",Primary
+Primary and Early Years (Part Time) - 5-11 QTS,"Early Years,Primary",Primary
+Primary and Early Years (Part Time) - 7-11 QTS,"Early Years,Primary",Primary
+Primary Early Years,"Early Years,Primary",Primary
+Primary Education,Primary,Primary
+Primary Education (3-11) [CaBan Partnership],Primary,Primary
+Primary General,Primary,Primary
+Primary general (5-11) with Physical Education,Primary,Primary
+Primary General 5-11 (with PE),Primary,Primary
+Primary general with Mathematics (Apprenticeship),"Mathematics,Primary","Primary,Primary with mathematics"
+Primary Graduate Apprenticeship,Primary,Primary
+Primary Mathematics,"Mathematics,Secondary",Mathematics
+Primary Mathematics Specialist,"Mathematics,Primary","Primary,Primary with mathematics"
+Primary Maths,Primary,Primary
+Primary Maths Specialist,Primary,Primary
+Primary Part Time,"Art / Art & Design,Primary",Primary
+Primary PE Specialist,"Physical Education,Primary","Primary,Primary with physical education"
+Primary PE Specialist (5-11),"Physical Education,Primary","Primary,Primary with physical education"
+Primary Physical Education (PE),"Physical Education,Primary,Special Educational Needs","Primary,Primary with physical education"
+Primary Physical Education (PE) Specialist,"Physical Education,Primary","Primary,Primary with physical education"
+Primary Physical Education Specialist,"Physical Education,Primary","Primary,Primary with physical education"
+Primary PT,Primary,Primary
+Primary School Direct,Primary,Primary
+Primary School Direct (salaried),Primary,Primary
+Primary School Direct salaried,Primary,Primary
+Primary SEN provision for secondary aged children,Primary,Primary
+Primary SEND (PG Teaching Apprenticeship),Primary,Primary
+Primary specialising in French,"French,Languages,Languages (European),Primary","Primary,Primary with modern languages"
+Primary Teacher Apprenticeship,Primary,Primary
+Primary Teacher Training,Primary,Primary
+Primary Teaching Apprentice,Primary,Primary
+Primary Teaching Apprenticeship,Primary,Primary
+Primary with a specialism,Primary,Primary
+Primary with an I.T specialism,Primary,Primary
+Primary with Art,"Art / Art & Design,Primary",Primary
+Primary with Creative Arts,"Art / Art & Design,Primary",Primary
+Primary with English,"English,Primary","Primary,Primary with English"
+Primary with English Specialism,"English,Primary","Primary,Primary with English"
+Primary with French,"French,Languages,Languages (European),Primary","Primary,Primary with modern languages"
+Primary with French,"French,Primary","Primary,Primary with modern languages"
+Primary with German,"German,Languages,Languages (European),Primary","Primary,Primary with modern languages"
+Primary with Humanities,"Humanities,Primary",Primary
+Primary with Languages Specialism,"Languages,Primary","Primary,Primary with modern languages"
+Primary with Leadership in Foreign Languages,"Languages,Primary","Primary,Primary with modern languages"
+Primary With Mathematics,"Mathematics,Primary","Primary,Primary with mathematics"
+Primary with Mathematics,"Mathematics,Primary","Primary,Primary with mathematics"
+Primary with Mathematics,Primary,Primary
+Primary with Mathematics (5-11),"Mathematics,Primary","Primary,Primary with mathematics"
+Primary with Mathematics (Special Education Needs),"Mathematics,Primary,Special Educational Needs","Primary,Primary with mathematics"
+Primary with Mathmatics,Primary,Primary
+Primary with Maths,Primary,Primary
+Primary with maths (salaried),Primary,Primary
+Primary with Modern Languages,"Languages,Primary","Primary,Primary with modern languages"
+Primary with PE,"Physical Education,Primary","Primary,Primary with physical education"
+Primary with PE,Primary,Primary
+Primary with PE Specialism,Primary,Primary
+Primary with Physical Education,"Physical Education,Primary","Primary,Primary with physical education"
+Primary with Science,"Primary,Science","Primary,Primary with science"
+Primary with Science Specialism,"Primary,Science","Primary,Primary with science"
+Primary with Spanish,"Languages,Languages (European),Primary,Spanish","Primary,Primary with modern languages"
+Primary with Special Education Needs,"Primary,Special Educational Needs",Primary
+Primary with Special Educational Needs,"Primary,Special Educational Needs",Primary
+Primary with STEM,Primary,Primary
+Primary: Modern Languages,"Languages,Primary","Primary,Primary with modern languages"
+Primay,Primary,Primary
+Professional Graduate Certificate in Education,"Further Education,Post-Compulsory,Secondary",Further education
+Professional Graduate Certificate of Education,"Further Education,Post-Compulsory,Secondary",Further education
+Psychology,"Primary,Psychology",Primary
+Psychology,"Psychology,Secondary",Psychology
+Psychology - Part Time,"Art / Art & Design,Psychology,Secondary","Art and design,Psychology"
+Religious Education,"Religious Education,Secondary",Religious education
+Religious education,"Religious Education,Secondary",Religious education
+Religious Education - King Ethelbert School,"Religious Education,Secondary",Religious education
+Religious Education - Part Time,"Religious Education,Secondary",Religious education
+Religious Education (11-16) with QTS,"Religious Education,Secondary",Religious education
+Religious Education (CaBan Partnership),"Religious Education,Secondary",Religious education
+Religious Education (Flexible),"Religious Education,Secondary",Religious education
+Religious Education (Special Educational Needs),"Religious Education,Secondary,Special Educational Needs",Religious education
+Religious Education & Citizenship,"Citizenship,Religious Education,Secondary","Citizenship,Religious education"
+Religious Education with Citizenship,"Citizenship,Primary,Religious Education",Primary
+Religious Education with Citizenship,"Citizenship,Religious Education,Secondary","Citizenship,Religious education"
+Religious Studies,"Middle Years,Religious Education",Religious education
+Religious Studies,"Religious Education,Secondary",Religious education
+Religious studies,"Religious Education,Secondary",Religious education
+Religious Studies (with Citizenship),"Citizenship,Religious Education,Secondary","Citizenship,Religious education"
+Rye College East Sussex,Primary,Primary
+School Direct (salaried) Training Programme,Primary,Primary
+School Direct non-salaried,Primary,Primary
+School Direct PGCE with QTS,Primary,Primary
+School Direct Salaried,Primary,Primary
+School Direct salaried,Primary,Primary
+School Direct Training,Primary,Primary
+School Direct training programme (tuition fee),Primary,Primary
+School Direct Training Programme KS2-3 with PE,Middle Years,
+School Direct with Manor Primary,Primary,Primary
+School Direct/PGCE,Primary,Primary
+Science,"Middle Years,Science",Balanced science
+Science,"Science,Secondary",Balanced science
+Science (7-14),"Middle Years,Science",Balanced science
+Science (all),"Science,Secondary",Balanced science
+Science (Biology),"Biology,Science,Secondary","Balanced science,Biology"
+Science with Biology,"Biology,Science,Secondary","Balanced science,Biology"
+Science with Biology (Flexible),"Biology,Science,Secondary","Balanced science,Biology"
+Science with Chemistry,"Chemistry,Science,Secondary","Balanced science,Chemistry"
+Science with Chemistry (Flexible),"Chemistry,Science,Secondary","Balanced science,Chemistry"
+Science with Physics,"Physics,Science,Secondary","Balanced science,Physics"
+Science with Physics (Flexible),"Physics,Science,Secondary","Balanced science,Physics"
+Secondary,Secondary,
+Secondary - Biology,"Biology,Secondary",Biology
+Secondary Art and Design,"Art / Art & Design,Secondary",Art and design
+Secondary Biology,"Biology,Secondary",Biology
+Secondary Business Studies,"Business Education,Secondary",Business studies
+Secondary Computing,"Computer Studies,Secondary",Computing
+Secondary Design and Technology,"Design and Technology,Secondary",Design and technology
+Secondary Drama,"Drama and Theatre Studies,Secondary",Drama
+Secondary English,"English,English as a Second or Other Language,Secondary","English,English as a second or other language"
+Secondary Geography,"Geography,Secondary",Geography
+Secondary Modern Languages French,"French,Languages,Languages (European),Secondary",French
+Secondary Modern Languages German,"German,Languages,Languages (European),Secondary",German
+Secondary Modern Languages Spanish,"Languages,Languages (European),Secondary,Spanish",Spanish
+Secondary Religious Education,"Religious Education,Secondary",Religious education
+Secondary Social Science,"Science,Secondary,Social Science",Social sciences
+Social Sci (North Charnwood Learning Partnership),"Art / Art & Design,Secondary,Social Science","Art and design,Social sciences"
+Social Sci (North Charnwood Learning Partnership),"Secondary,Social Science",Social sciences
+Social Science,"Humanities,Secondary,Social Science",Social sciences
+Social Science,"Science,Secondary,Social Science",Social sciences
+Social Science,"Secondary,Social Science",Social sciences
+Social Sciences,"Science,Secondary",
+Social Sciences,"Science,Secondary,Social Science",Social sciences
+Social Sciences,"Secondary,Social Science",Social sciences
+Sociology,Secondary,
+Sociology,"Secondary,Social Science",Social sciences
+Sociology and Psychology,"Psychology,Secondary",Psychology
+Spanish,"Languages,Languages (European),Secondary,Spanish",Spanish
+Spanish,"Secondary,Spanish",Spanish
+Special Educational Needs,"Primary,Special Educational Needs",Primary
+Special Educational Needs (7-14),"Middle Years,Special Educational Needs",
+Teacher Training,Secondary,
+Teaching Apprenticeship,Primary,Primary
+Teaching Apprenticeship - Secondary English,"English,English as a Second or Other Language,Secondary","English,English as a second or other language"
+Upper Primary,"Primary,Upper Primary",Primary
+Vocational Studies,Secondary,
