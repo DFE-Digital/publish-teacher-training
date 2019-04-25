@@ -1,7 +1,7 @@
 require "rails_helper"
 
 describe '/api/v2/users', type: :request do
-  let(:user)    { create(:user) }
+  let(:user) { create :user, first_name: 'Bob', last_name: 'Kim', email: 'bob.kim@local' }
   let(:payload) { { email: user.email } }
   let(:token) do
     JWT.encode payload,
