@@ -169,18 +169,19 @@ describe 'Courses API v2', type: :request do
   describe 'POST sync_with_search_and_compare' do
     let(:manage_api_status) { 200 }
     let(:manage_api_response) { '{ "result": true }' }
-    let!(:stubbed_manage_courses_api_request) do
+    let(:sync_path) do
+      "/api/v2/providers/#{provider.provider_code}" +
+        "/courses/#{course.course_code}/sync_with_search_and_compare"
+    end
+    let(:course) { findable_open_course }
+
+    before do
       stub_request(:post, %r{#{Settings.manage_api.base_url}/api/Publish/internal/course/})
         .to_return(
           status: manage_api_status,
           body: manage_api_response
         )
     end
-    let(:sync_path) do
-      "/api/v2/providers/#{provider.provider_code}" +
-        "/courses/#{course.course_code}/sync_with_search_and_compare"
-    end
-    let(:course) { findable_open_course }
 
     subject do
       post sync_path, headers: { 'HTTP_AUTHORIZATION' => credentials }
