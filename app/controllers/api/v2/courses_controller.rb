@@ -26,8 +26,8 @@ module API
       end
 
       def publish
-        # todo: set running
-        # todo: set enrichment published
+        @course.publish_sites if @provider.opted_in
+        @course.publish_enrichment(@current_user)
 
         response = ManageCoursesAPIService::Request.sync_course_with_search_and_compare(
           @current_user.email,

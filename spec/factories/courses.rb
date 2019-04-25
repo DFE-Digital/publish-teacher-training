@@ -70,11 +70,23 @@ FactoryBot.define do
           ucas_course_code: course.course_code,
           provider_code: course.provider.provider_code,
         }
+        if evaluator.age.present?
+          defaults = defaults.merge(
+            created_at: evaluator.age,
+            updated_at: evaluator.age,
+          )
+        end
         create(:course_enrichment, trait, attributes.merge(defaults))
       end
 
       course.enrichments += evaluator.enrichments.map do |enrichment|
         enrichment.tap { |e| e.provider_code = course.provider.provider_code }
+      end
+
+      if evaluator.age.present?
+        course.created_at = evaluator.age
+        course.updated_at = evaluator.age
+        course.changed_at = evaluator.age
       end
 
       # We've just created a course with this provider's code, so ensure it's

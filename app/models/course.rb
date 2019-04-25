@@ -164,4 +164,15 @@ class Course < ApplicationRecord
     newest_enrichment = enrichments.latest_first.first
     newest_enrichment&.last_published_timestamp_utc
   end
+
+  def publish_sites
+    site_statuses.status_new_status.each(&:status_running!)
+    site_statuses.status_running.unpublished_on_ucas.each(&:published_on_ucas!)
+  end
+
+  def publish_enrichment(current_user)
+    enrichments.draft.each do |enrichment|
+      enrichment.publish(current_user)
+    end
+  end
 end
