@@ -14,14 +14,4 @@ describe 'mcb apiv2 token generate' do
       )
     end
   end
-
-  describe 'generating a plain-text token' do
-    it 'returns a plain-text JSON string' do
-      result = with_stubbed_stdout do
-        $mcb.run(%w[apiv2 token generate -p user@local])
-      end
-
-      expect(result.chomp).to eq '{"email":"user@local"}'
-    end
-  end
 end
