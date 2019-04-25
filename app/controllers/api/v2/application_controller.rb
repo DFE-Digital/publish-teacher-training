@@ -7,17 +7,9 @@ module API
 
       def authenticate
         authenticate_or_request_with_http_token do |token|
-          email = email_from_token(token)
-
-          @current_user = User.find_by("lower(email) = ?", email.downcase)
-          if @current_user.present?
-            Raven.user_context(id: @current_user.id)
-            true
-          else
-            # Once DFE Sign-In ID is passed in, add that to the Raven user
-            # context.
-            false
-          end
+          @current_user = AuthenticationService.call(token)
+          assign_sentry_contexts
+          @current_user.present?
         end
       end
 
@@ -38,19 +30,9 @@ module API
         render json: error_body, status: :forbidden
       end
 
-      def email_from_token(token)
-        if Settings.authentication.algorithm == 'plain-text'
-          # This method can be used in development mode to simplify querying
-          # the API with curl. It should allow us to do:
-          #
-          #    curl -H 'Authorization: Bearer user@education.gov.uk' http://localhost:3001/api/v2/providers
-          token
-        else
-          (payload, _options) = JWT.decode(token,
-                                               Settings.authentication.secret,
-                                               Settings.authentication.algorithm)
-          payload['email']
-        end
+      def assign_sentry_contexts
+        Raven.user_context(id:              @current_user&.id)
+        Raven.tags_context(sign_in_user_id: @current_user&.sign_in_user_id)
       end
     end
   end
