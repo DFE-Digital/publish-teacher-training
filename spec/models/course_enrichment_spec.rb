@@ -77,4 +77,54 @@ describe CourseEnrichment, type: :model do
       its(:updated_by_user_id) { should eq user.id }
     end
   end
+
+  describe '.latest_first' do
+    let!(:old_enrichment) do
+      create(:course_enrichment, :published, created_at: Date.yesterday)
+    end
+    let!(:new_enrichment) { create(:course_enrichment, :published) }
+
+    it 'returns the new enrichment first' do
+      expect(CourseEnrichment.latest_first.first).to eq new_enrichment
+      expect(CourseEnrichment.latest_first.last).to eq old_enrichment
+    end
+  end
+
+  describe '#unpublish' do
+    let(:provider) { create(:provider) }
+    let(:course) { create(:course, provider: provider) }
+    let(:last_published_timestamp_utc) { Date.new(2017, 1, 1) }
+    subject {
+      create(:course_enrichment, :published,
+        last_published_timestamp_utc: last_published_timestamp_utc,
+        course: course,
+        provider: provider)
+    }
+
+    describe "to initial draft" do
+      it 'sets the course to draft' do
+        expect { subject.unpublish(initial_draft: true) }.to change { subject.reload.status }
+          .from("published")
+          .to("draft")
+      end
+
+      it 'sets the last_published_timestamp_utc to nil' do
+        expect { subject.unpublish(initial_draft: true) }.to change { subject.reload.last_published_timestamp_utc }
+          .from(last_published_timestamp_utc)
+          .to(nil)
+      end
+    end
+
+    describe "to subsequent draft" do
+      it 'sets the course to draft' do
+        expect { subject.unpublish(initial_draft: false) }.to change { subject.reload.status }
+          .from("published")
+          .to("draft")
+      end
+
+      it 'keeps the last_published_timestamp_utc as is' do
+        expect { subject.unpublish(initial_draft: false) }.not_to(change { subject.reload.last_published_timestamp_utc })
+      end
+    end
+  end
 end

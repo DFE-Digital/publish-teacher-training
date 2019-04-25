@@ -19,14 +19,18 @@ module API
         @object.start_date&.iso8601
       end
 
+      attribute :last_published_at do
+        @object.last_published_at&.iso8601
+      end
+
       attribute :subjects do
         ucas_subjects = @object.subjects.map(&:subject_name)
-        SubjectMapper.get_subject_list(@object.name, ucas_subjects)
+        SubjectMapperService.get_subject_list(@object.name, ucas_subjects)
       end
 
       attribute :level do
         ucas_subjects = @object.subjects.map(&:subject_name)
-        SubjectMapper.get_subject_level(ucas_subjects)
+        SubjectMapperService.get_subject_level(ucas_subjects)
       end
 
       attribute :is_send? do

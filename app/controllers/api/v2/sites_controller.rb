@@ -51,7 +51,7 @@ module API
       end
 
       def sync_courses_with_search_and_compare
-        ManageCoursesAPI::Request.sync_courses_with_search_and_compare(
+        ManageCoursesAPIService::Request.sync_courses_with_search_and_compare(
           @current_user.email,
           @provider.provider_code
         )

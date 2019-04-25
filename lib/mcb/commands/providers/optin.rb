@@ -9,6 +9,17 @@ run do |opts, args, _cmd|
       provider = Provider.find_by!(provider_code: provider_code)
       verbose "updating provider #{provider_code}"
       provider.update(opted_in: true)
+
+      provider.courses.each do |course|
+        next unless course.new?
+
+        enrichment = course.enrichments.latest_first.first
+        next unless enrichment&.published?
+
+        verbose "  resetting enrichment #{enrichment.id} for course #{course.course_code} to draft"
+        enrichment.unpublish(initial_draft: true)
+      end
+
       provider.courses.each do |c|
         verbose "  updating course #{c.course_code}"
         c.touch(:changed_at)

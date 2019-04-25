@@ -25,7 +25,7 @@ describe 'Courses API v2', type: :request do
            enrichments: [enrichment])
   }
 
-  let(:enrichment)     { build :course_enrichment }
+  let(:enrichment)     { build :course_enrichment, :published }
   let(:provider)       { create :provider, organisations: [organisation] }
   let(:course_subject) { course.subjects.first }
   let(:site_status)    { findable_open_course.site_statuses.first }
@@ -99,7 +99,7 @@ describe 'Courses API v2', type: :request do
               "study_mode" => "full_time",
               "qualifications" => %w[qts pgce],
               "description" => "PGCE with QTS full time teaching apprenticeship",
-              "content_status" => "draft",
+              "content_status" => "published",
               "ucas_status" => "running",
               "funding" => "apprenticeship",
               "is_send?" => true,
@@ -118,7 +118,8 @@ describe 'Courses API v2', type: :request do
               "other_requirements" => enrichment.other_requirements,
               "personal_qualities" => enrichment.personal_qualities,
               "required_qualifications" => enrichment.qualifications,
-              "salary_details" => enrichment.salary_details
+              "salary_details" => enrichment.salary_details,
+              "last_published_at" => enrichment.last_published_timestamp_utc.iso8601,
             },
             "relationships" => {
               "accrediting_provider" => { "meta" => { "included" => false } },
@@ -283,7 +284,7 @@ describe 'Courses API v2', type: :request do
               "study_mode" => "full_time",
               "qualifications" => %w[qts pgce],
               "description" => "PGCE with QTS full time teaching apprenticeship",
-              "content_status" => "draft",
+              "content_status" => "published",
               "ucas_status" => "running",
               "funding" => "apprenticeship",
               "is_send?" => true,
@@ -302,7 +303,8 @@ describe 'Courses API v2', type: :request do
               "other_requirements" => enrichment.other_requirements,
               "personal_qualities" => enrichment.personal_qualities,
               "required_qualifications" => enrichment.qualifications,
-              "salary_details" => enrichment.salary_details
+              "salary_details" => enrichment.salary_details,
+              "last_published_at" => enrichment.last_published_timestamp_utc.iso8601,
             },
             "relationships" => {
               "accrediting_provider" => { "meta" => { "included" => false } },

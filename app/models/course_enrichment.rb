@@ -40,6 +40,8 @@ class CourseEnrichment < ApplicationRecord
              foreign_key: :ucas_course_code,
              primary_key: :course_code
 
+  scope :latest_first, -> { order(created_at: :desc) }
+
   def has_been_published_before?
     last_published_timestamp_utc.present?
   end
@@ -48,5 +50,11 @@ class CourseEnrichment < ApplicationRecord
     update(status: 'published',
           last_published_timestamp_utc: Time.now.utc,
           updated_by_user_id: current_user.id)
+  end
+
+  def unpublish(initial_draft: true)
+    data = { status: :draft }
+    data[:last_published_timestamp_utc] = nil if initial_draft
+    update(data)
   end
 end

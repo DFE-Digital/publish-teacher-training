@@ -160,6 +160,11 @@ class Course < ApplicationRecord
     end
   end
 
+  def last_published_at
+    newest_enrichment = enrichments.latest_first.first
+    newest_enrichment&.last_published_timestamp_utc
+  end
+
   def publish_sites
     site_statuses.status_new_status.each(&:status_running!)
     site_statuses.status_running.unpublished_on_ucas.each(&:published_on_ucas!)

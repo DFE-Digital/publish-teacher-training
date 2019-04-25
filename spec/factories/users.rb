@@ -21,5 +21,10 @@ FactoryBot.define do
     first_name { Faker::Name.first_name }
     last_name { Faker::Name.last_name }
     accept_terms_date_utc { Faker::Time.backward(1).utc }
+    sign_in_user_id { SecureRandom.uuid }
+
+    trait :opted_in do
+      organisations { [create(:organisation, providers: [create(:provider, opted_in: true)])] }
+    end
   end
 end

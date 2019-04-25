@@ -16,7 +16,7 @@ module API
       end
 
       def sync_with_search_and_compare
-        response = ManageCoursesAPI::Request.sync_course_with_search_and_compare(
+        response = ManageCoursesAPIService::Request.sync_course_with_search_and_compare(
           @current_user.email,
           @provider.provider_code,
           @course.course_code
@@ -29,7 +29,7 @@ module API
         @course.publish_sites if @provider.opted_in
         @course.publish_enrichment(@current_user)
 
-        response = ManageCoursesAPI::Request.sync_course_with_search_and_compare(
+        response = ManageCoursesAPIService::Request.sync_course_with_search_and_compare(
           @current_user.email,
           @provider.provider_code,
           @course.course_code

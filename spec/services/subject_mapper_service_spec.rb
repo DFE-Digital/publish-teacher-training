@@ -1,7 +1,7 @@
 require "spec_helper"
 require "csv"
 
-describe SubjectMapper do
+describe SubjectMapperService do
   # Port of https://github.com/DFE-Digital/manage-courses-api/blob/master/tests/ManageCourses.Tests/UnitTesting/SubjectMapperTests.cs
   describe "#get_subject_list" do
     specs = [
@@ -141,7 +141,7 @@ describe SubjectMapper do
 
     specs.each do |spec|
       describe "Test case '#{spec[:test_case]}''" do
-        subject { SubjectMapper.get_subject_list(spec[:course_title], spec[:ucas_subjects]) }
+        subject { described_class.get_subject_list(spec[:course_title], spec[:ucas_subjects]) }
 
         it { should match_array spec[:expected_subjects] }
       end
@@ -149,25 +149,20 @@ describe SubjectMapper do
 
     describe "regression test" do
       xcontext "english" do
-        subject { SubjectMapper.get_subject_list(title, %w[english]) }
+        subject { described_class.get_subject_list(title, %w[english]) }
         it { should match_array %w[English] }
       end
     end
 
     describe "using subject-mapper-test-data.csv" do
-      data = CSV.read("#{Dir.pwd}/spec/services/subject-mapper-test-data.csv", encoding: "UTF-8", headers: true, header_converters: :symbol, converters: :all)
+      CSV.foreach("#{Dir.pwd}/spec/services/subject-mapper-test-data.csv",
+        encoding: "UTF-8",
+        headers: true,
+        header_converters: :symbol).with_index do |row, i|
 
-      hashed_data = data.map(&:to_hash)
-
-      hashed_data.each_with_index do |spec, index|
-        delimiter = "[d]" #This delimiter is used as the actual subject name may contain a comma
-        ucas_subjects_to_map = spec[:ucas_subjects].split(delimiter)
-        expected_dfe_subjects = spec[:expected_subjects].split(delimiter)
-        title = spec[:course_title]
-
-        describe "Test case row '#{index}': subjects #{ucas_subjects_to_map.join(', ')}, title: #{title}" do
-          subject { SubjectMapper.get_subject_list(title, ucas_subjects_to_map) }
-          it { should match_array expected_dfe_subjects }
+        describe "Test case row '#{i}': subjects #{row[:ucas_subjects]}, title: #{row[:course_title]}" do
+          subject { described_class.get_subject_list(row[:course_title], row[:ucas_subjects].split(",")) }
+          it { should match_array row[:expected_subjects]&.split(",") || [] }
         end
       end
     end

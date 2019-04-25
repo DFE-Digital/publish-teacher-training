@@ -1,8 +1,8 @@
 require "rails_helper"
 
-describe ManageCoursesAPI do
+describe ManageCoursesAPIService do
   describe "Connection.api" do
-    subject { ManageCoursesAPI::Connection.api }
+    subject { described_class::Connection.api }
 
     it "exposes an Faraday connection" do
       should be_instance_of(Faraday::Connection)
@@ -18,7 +18,7 @@ describe ManageCoursesAPI do
   end
 
   describe "Request" do
-    subject { ManageCoursesAPI::Request }
+    subject { described_class::Request }
     let(:provider_code) { 'X12' }
     let(:email) { 'foo@bar' }
     let(:body) { { "email": email } }

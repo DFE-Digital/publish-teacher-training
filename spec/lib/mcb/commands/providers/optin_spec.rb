@@ -51,5 +51,63 @@ describe 'mcb provider optin' do
       # These should be correct to the second, but not the nsec
       expect(course1.created_at.nsec).not_to eq course2.created_at.nsec
     end
+
+    context 'when the course has UCAS status "new"' do
+      let(:course1) do
+        create(
+          :course,
+          site_statuses: create_list(:site_status, 1, :new),
+          enrichments: enrichments
+        )
+      end
+
+      before do
+        enrichments.each do |enrichment|
+          enrichment.update(provider_code: provider.provider_code)
+        end
+      end
+
+      context 'when the course has publised course enrichments' do
+        let(:a_date_in_the_past) { Date.new(2017, 1, 1) }
+        let(:enrichments) do
+          [
+            create(:course_enrichment, :published, created_at: Date.yesterday),
+            create(:course_enrichment, :published, last_published_timestamp_utc: a_date_in_the_past)
+          ]
+        end
+
+        it 'changes the latest enrichment to draft' do
+          expect { subject }.to change { enrichments.last.reload.status }
+            .from('published')
+            .to('draft')
+        end
+
+        it 'blows away the last publication timestamp on the latest enrichment' do
+          expect { subject }.to change { enrichments.last.reload.last_published_timestamp_utc }
+            .from(a_date_in_the_past)
+            .to(nil)
+        end
+
+        it 'does not change the status of the second enrichment' do
+          expect { subject }.not_to(change { enrichments.first.reload.status })
+        end
+      end
+
+      context 'when the course does not have published enrichments' do
+        let(:enrichments) { create_list(:course_enrichment, 1, :initial_draft) }
+
+        it 'does not change the enrichment status' do
+          expect { subject }.not_to(change { course1.enrichments.first.reload.status })
+        end
+      end
+
+      context 'when the course has no enrichments' do
+        let(:enrichments) { [] }
+
+        it 'skips the course' do
+          expect { subject }.not_to raise_error
+        end
+      end
+    end
   end
 end
