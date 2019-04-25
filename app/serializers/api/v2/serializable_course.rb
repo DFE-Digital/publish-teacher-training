@@ -19,8 +19,8 @@ module API
         @object.start_date&.iso8601
       end
 
-      attribute :changed_at do
-        @object.changed_at&.iso8601
+      attribute :last_published_at do
+        @object.last_published_at&.iso8601
       end
 
       attribute :subjects do
