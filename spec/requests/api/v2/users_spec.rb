@@ -1,7 +1,7 @@
 require "rails_helper"
 
 describe '/api/v2/users', type: :request do
-  let(:user)    { create(:user) }
+  let(:user) { create :user, first_name: 'Bob', last_name: 'Kim', email: 'bob.kim@local' }
   let(:payload) { { email: user.email } }
   let(:token) do
     JWT.encode payload,
@@ -85,9 +85,9 @@ describe '/api/v2/users', type: :request do
       end
       let(:user_params)           { params.dig :_jsonapi, :data, :attributes }
       let(:accept_terms_date_utc) { DateTime.now.utc }
-      let(:first_name)            { Faker::Name.unique.first_name }
-      let(:last_name)             { Faker::Name.unique.last_name }
-      let(:email)                 { Faker::Internet.unique.email("#{first_name}.#{last_name}") }
+      let(:email)                 { 'dave.smith@gmail.com' }
+      let(:first_name)            { 'Dave' }
+      let(:last_name)             { 'Smith' }
       let(:json_data)             { JSON.parse(response.body)['data'] }
 
       before do
