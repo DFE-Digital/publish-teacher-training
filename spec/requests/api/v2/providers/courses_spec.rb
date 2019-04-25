@@ -166,13 +166,13 @@ describe 'Courses API v2', type: :request do
   end
 
   describe 'POST sync_with_search_and_compare' do
-    let(:api_status)   { 200 }
-    let(:api_response) { '{ "result": true }' }
+    let(:manage_api_status) { 200 }
+    let(:manage_api_response) { '{ "result": true }' }
     let!(:stubbed_manage_courses_api_request) do
       stub_request(:post, %r{#{Settings.manage_api.base_url}/api/Publish/internal/course/})
         .to_return(
-          status: api_status,
-          body: api_response
+          status: manage_api_status,
+          body: manage_api_response
         )
     end
     let(:sync_path) do
@@ -221,14 +221,14 @@ describe 'Courses API v2', type: :request do
     end
 
     context 'when the api responds with result: false' do
-      let(:api_response) { '{ "result": false }' }
+      let(:manage_api_response) { '{ "result": false }' }
 
       it { should have_http_status(:internal_server_error) }
     end
 
     context 'when the api sets http status to 500' do
-      let(:api_status)   { 500 }
-      let(:api_response) { '{ "result": true }' }
+      let(:manage_api_status) { 500 }
+      let(:manage_api_response) { '{ "result": true }' }
 
       it { should have_http_status(:internal_server_error) }
     end
