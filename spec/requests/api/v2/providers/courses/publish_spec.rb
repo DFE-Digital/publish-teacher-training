@@ -77,19 +77,16 @@ describe 'Publish API v2', type: :request do
                age: 17.days.ago)
       }
       it 'publishes a course' do
-        # run the POST
-        response = subject
-        course.reload
+        expect(subject).to have_http_status(:success)
+        assert_requested :post, %r{#{Settings.manage_api.base_url}/api/Publish/internal/course/}
 
-        expect(course.site_statuses.first).to be_status_running
+        expect(course.reload.site_statuses.first).to be_status_running
         expect(course.site_statuses.first).to be_published_on_ucas
         expect(course.enrichments.first).to be_published
         expect(course.enrichments.first.updated_by_user_id).to eq user.id
         expect(course.enrichments.first.updated_at).to be_within(1.second).of Time.now.utc
         expect(course.enrichments.first.last_published_timestamp_utc).to be_within(1.second).of Time.now.utc
         expect(course.changed_at).to be_within(1.second).of Time.now.utc
-        assert_requested :post, %r{#{Settings.manage_api.base_url}/api/Publish/internal/course/}
-        expect(response).to have_http_status(:success)
       end
     end
 
