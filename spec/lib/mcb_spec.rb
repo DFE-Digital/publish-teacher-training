@@ -100,32 +100,7 @@ describe 'mcb command' do
             secret: nil
           )
         }.to raise_error(
-          "Secret not provided, only valid when encoding is plain-text"
-        )
-      end
-    end
-
-    context 'plain-text encoding' do
-      let(:encoding) { 'plain-text' }
-
-      it 'returns the payload as JSON' do
-        token = MCB.generate_apiv2_token(
-          email: email,
-          encoding: encoding,
-          secret: nil
-        )
-        expect(token).to eq "{\"email\":\"#{email}\"}"
-      end
-
-      it 'gives a friendly error when secret is NOT nil' do
-        expect {
-          MCB.generate_apiv2_token(
-            email: email,
-            encoding: encoding,
-            secret: secret
-          )
-        }.to raise_error(
-          'Secret provided, only valid when encoding is NOT plain-text'
+          "Secret not provided"
         )
       end
     end
