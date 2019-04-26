@@ -2,7 +2,7 @@ require 'spec_helper'
 require 'mcb_helper'
 
 describe 'mcb command' do
-  describe '#load_commands' do
+  describe '.load_commands' do
     include FakeFS::SpecHelpers
 
     it 'loads the files in a directory' do
@@ -54,7 +54,7 @@ describe 'mcb command' do
     end
   end
 
-  describe '#apiv1_token' do
+  describe '.apiv1_token' do
     it 'returns the token' do
       expect(MCB.apiv1_token).to eq 'bats'
     end
@@ -73,7 +73,7 @@ describe 'mcb command' do
     end
   end
 
-  describe '#generate_apiv2_token' do
+  describe '.generate_apiv2_token' do
     let(:email)    { 'foo@local' }
     let(:secret)   { 'bar' }
 
