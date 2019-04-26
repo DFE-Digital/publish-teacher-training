@@ -75,6 +75,25 @@ class Course < ApplicationRecord
 
   scope :providers_have_opted_in, -> { joins(:provider).merge(Provider.opted_in) }
 
+  validates :enrichments, presence: true, length: { minimum: 1 }, on: :publish
+
+  validate :validate_enrichment, on: :publish
+
+  def publishable?
+    valid? :publish
+  end
+
+  def validate_enrichment
+    latest = enrichments.latest_first.first
+
+    if latest == nil
+      # system guard
+      errors.add(:enrichments, 'can not find any')
+    else
+      latest.valid? :publish
+    end
+  end
+
   def recruitment_cycle
     "2019"
   end

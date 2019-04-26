@@ -14,6 +14,14 @@
 #  updated_at                   :datetime         not null
 #
 
+class WordCountValidator < ActiveModel::EachValidator
+  def validate_each(record, attribute, value)
+    unless /^\s*(\S+\s+|\S+$){0,#{options[:max_word_count]}}$/i.match?(value)
+      record.errors[attribute] << (options[:message] || "Exceeded word count")
+    end
+  end
+end
+
 class CourseEnrichment < ApplicationRecord
   include TouchCourse
 
@@ -41,6 +49,24 @@ class CourseEnrichment < ApplicationRecord
              primary_key: :course_code
 
   scope :latest_first, -> { order(created_at: :desc) }
+
+
+
+  validates :about_course, word_count: { max_word_count: 400 }, on: :publish
+  validates :interview_process, word_count: { max_word_count: 250 }, on: :publish
+  validates :how_school_placements_work, word_count: { max_word_count: 350 }, on: :publish
+  validates :about_course, word_count: { max_word_count: 400 }, on: :publish
+
+  # salary vs fee needs forking
+  validates :fee_international, :fee_uk_eu, numericality: { only_integer: true, greater_than_or_equal_to: 0, less_than_or_equal_to: 100000 }, on: :publish
+  validates :fee_uk_eu, presence: true, on: :publish
+  validates :salary_details, presence: true, on: :publish
+  validates :fee_details, word_count: { max_word_count: 250 }, on: :publish
+  validates :salary_details, word_count: { max_word_count: 250 }, on: :publish
+  validates :financial_support, word_count: { max_word_count: 250 }, on: :publish
+
+
+  def publishable?; end
 
   def has_been_published_before?
     last_published_timestamp_utc.present?
