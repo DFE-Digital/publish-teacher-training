@@ -14,14 +14,6 @@
 #  updated_at                   :datetime         not null
 #
 
-class WordCountValidator < ActiveModel::EachValidator
-  def validate_each(record, attribute, value)
-    unless /^\s*(\S+\s+|\S+$){0,#{options[:max_word_count]}}$/i.match?(value)
-      record.errors[attribute] << (options[:message] || "Exceeded word count")
-    end
-  end
-end
-
 class CourseEnrichment < ApplicationRecord
   include TouchCourse
 
@@ -49,8 +41,6 @@ class CourseEnrichment < ApplicationRecord
              primary_key: :course_code
 
   scope :latest_first, -> { order(created_at: :desc) }
-
-
 
   validates :about_course, word_count: { max_word_count: 400 }, on: :publish
   validates :interview_process, word_count: { max_word_count: 250 }, on: :publish

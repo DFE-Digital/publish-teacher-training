@@ -76,7 +76,6 @@ class Course < ApplicationRecord
   scope :providers_have_opted_in, -> { joins(:provider).merge(Provider.opted_in) }
 
   validates :enrichments, presence: true, length: { minimum: 1 }, on: :publish
-
   validate :validate_enrichment, on: :publish
 
   def publishable?
@@ -90,6 +89,7 @@ class Course < ApplicationRecord
       # system guard
       errors.add(:enrichments, 'can not find any')
     else
+      pp latest.valid? :publish
       latest.valid? :publish
     end
   end
