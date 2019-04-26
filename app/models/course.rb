@@ -88,8 +88,13 @@ class Course < ApplicationRecord
     if latest == nil
       # system guard
       errors.add(:enrichments, 'can not find any')
-    else
-      latest.valid? :publish
+      # fork funding != fee
+      # if(!latest.valid? :publish-fee)
+      # if(!latest.valid? :publish-salary)
+    elsif(!latest.valid? :publish)
+      latest.errors.full_messages.each do |msg|
+        errors.add_to_base("Latest enrichment errors: #{msg}")
+      end
     end
   end
 
