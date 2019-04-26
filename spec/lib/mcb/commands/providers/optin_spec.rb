@@ -1,5 +1,5 @@
 require 'spec_helper'
-load 'bin/mcb'
+require 'mcb_helper'
 
 describe 'mcb provider optin' do
   let(:provider) { create :provider, opted_in: false }

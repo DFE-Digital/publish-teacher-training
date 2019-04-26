@@ -131,4 +131,39 @@ describe MCB::Azure do
       expect(ENV).to have_received(:[]=).with('DB_PASSWORD', 'pass')
     end
   end
+
+  describe '.configure_for_webapp' do
+    let(:app_config) do
+      {
+        'RAILS_ENV' => 'aztest'
+      }
+    end
+    let(:expected_rails_env) { 'aztest' }
+    let(:output) do
+      with_stubbed_stdout(stdin: expected_rails_env) do
+        MCB::Azure.configure_for_webapp(webapp: 'banana')
+      end
+    end
+
+
+    before do
+      allow(MCB::Azure).to receive(:get_config).and_return(app_config)
+      allow(MCB::Azure).to receive(:configure_database)
+      allow(MCB::Azure).to receive(:rgroup_for_app).and_return('banana-tree')
+    end
+
+    subject { output }
+
+    it 'prompts for the expected RAILS_ENV' do
+      expect(output).to match %r{enter the expected RAILS_ENV for banana:}
+    end
+
+    context 'expected RAILS_ENV does not match' do
+      let(:expected_rails_env) { 'qa' }
+
+      it 'raises an error if the expected RAILS_ENV does not match' do
+        expect { subject } .to raise_error(RuntimeError)
+      end
+    end
+  end
 end

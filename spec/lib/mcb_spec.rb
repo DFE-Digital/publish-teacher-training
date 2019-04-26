@@ -1,6 +1,5 @@
 require 'spec_helper'
-require "#{Rails.root}/lib/mcb"
-require "#{Rails.root}/lib/mcb/azure"
+require 'mcb_helper'
 
 describe 'mcb command' do
   describe '#load_commands' do
