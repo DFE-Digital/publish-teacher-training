@@ -82,38 +82,33 @@ curl http://localhost:3001/api/v1/2019/subjects.json -H "Authorization: Bearer b
 
 ### V2
 
-#### Development
+#### Authentication
 
-In development mode, authenticating with V2 of the API relies on an email
-address of an existing use in the database being supplied as the bearer token.
+Authenticating with V2 of the API relies on an email address of an existing user
+in the database being supplied as the bearer token.
+
 An example HTTP request would look like:
 
 ```
 GET /api/v2/providers.json
-Authorization: Bearer user@digital.education.gov.uk
+Authorization: Bearer <encoded JWT token>
 ```
 
 or with curl:
 
 ```bash
-curl http://localhost:3001/api/v2/providers.json -H "Authorization: Bearer user@digital.education.gov.uk"
+curl http://localhost:3001/api/v2/providers.json -H "Authorization: Bearer <encoded JWT token>"
 ```
 
-#### Production
-
-In production mode the bearer token is an encrypted JWT with the JSON payload:
+Encoding the payload can be done with an MCB command:
 
 ```
-{
-  "email": "user@digital.education.gov.uk"
-}
+$ bin/mcb apiv2 token generate -S secret user@example.com
+eyJhbGciOiJIUzI1NiJ9.IntcImVtYWlsXCI6XCJ1c2VyQGV4YW1wbGUuY29tXCJ9Ig.f9kNofCO0u35B01AUht1cJ472YSDjaol_iKScYuVux4
 ```
 
-Encoding the payload can be done with the [Ruby `jwt` gem](https://github.com/jwt/ruby-jwt):
-
-```
-JWT.encode payload, SECRET, 'HS256'
-```
+Where `-S secret` is the secret. In development, the secret should be set to
+`secret` by default on backend and frontend.
 
 ## Settings vs config vs Environment variables
 
