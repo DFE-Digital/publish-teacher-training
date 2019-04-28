@@ -133,11 +133,9 @@ describe SubjectMapperService do
       it { should map_to_dfe_subjects(["Further education"]).at_level(:further_education) }
     end
 
-    describe "regression test" do
-      xcontext "english" do
-        subject { described_class.get_subject_list(title, %w[english]) }
-        it { should match_array %w[English] }
-      end
+    describe "secondary English" do
+      subject { { ucas: %w[secondary english], title: "English" } }
+      it { should map_to_dfe_subjects(%w[English]).at_level(:secondary) }
     end
 
     describe "using subject-mapper-test-data.csv" do
