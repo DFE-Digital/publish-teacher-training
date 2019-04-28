@@ -28,146 +28,109 @@ describe SubjectMapperService do
 
   # Port of https://github.com/DFE-Digital/manage-courses-api/blob/master/tests/ManageCourses.Tests/UnitTesting/SubjectMapperTests.cs
   describe "#get_subject_list" do
-    specs = [
-      {
-        course_title: "",
-        ucas_subjects: %w[primary english],
-        expected_subjects: ["Primary", "Primary with English"],
-        test_case: "an example of a primary specialisation"
-      },
-      {
-        course_title: "",
-        ucas_subjects: %w[primary physics],
-        expected_subjects: ["Primary", "Primary with science"],
-        test_case: "another example of a primary specialisation"
-      },
-      {
-        course_title: "Early Years",
-        ucas_subjects: ["primary", "early years"],
-        expected_subjects: %w[Primary],
-        test_case: "an example of early years (which is absorbed into primary)"
-      },
-      {
-        course_title: "Physics",
-        ucas_subjects: ["physics (abridged)", "secondary", "science"],
-        expected_subjects: %w[Physics],
-        test_case: "an example where science should be excluded because it's used as a category"
-      },
-      {
-        course_title: "Physics",
-        ucas_subjects: %w[physics secondary science english],
-        expected_subjects: %w[Physics],
-        test_case: "examples of how the title is considered when adding additional subjects"
-      },
-      {
-        course_title: "Physics with English",
-        ucas_subjects: %w[physics secondary science english],
-        expected_subjects: %w[Physics English],
-        test_case: "examples of how the title is considered when adding additional subjects"
-      },
-      {
-        course_title: "Physics with Science",
-        ucas_subjects: %w[physics secondary science english],
-        expected_subjects: ["Physics", "Balanced science"],
-        test_case: "examples of how the title is considered when adding additional subjects"
-      },
-      {
-        course_title: "Physics with Science and English",
-        ucas_subjects: %w[physics secondary science english],
-        expected_subjects: ["Physics", "Balanced science", "English"],
-        test_case: "examples of how the title is considered when adding additional subjects"
-      },
-      {
-        course_title: "Physical Education",
-        ucas_subjects: ["secondary", "physical education"],
-        expected_subjects: ["Physical education"],
-        test_case: "PE",
-      },
-      {
-        course_title: "Further ed",
-        ucas_subjects: ["further education", "numeracy"],
-        expected_subjects: ["Further education"],
-        test_case: "further education example"
-      },
-      {
-        course_title: "MFL (Chinese)",
-        ucas_subjects: ["secondary", "languages", "languages (asian)", "chinese"],
-        expected_subjects: %w[Mandarin],
-        test_case: "a rename"
-      },
-      {
-        course_title: "Computer science",
-        ucas_subjects: ["computer studies", "science"],
-        expected_subjects: %w[Computing],
-        test_case: "here science is used as a category"
-      },
-      {
-        course_title: "Computer science with Science",
-        ucas_subjects: ["computer studies", "science"],
-        expected_subjects: ["Computing", "Balanced science"],
-        test_case: "here it is explicit"
-      },
-      {
-        course_title: "Primary with Mathematics",
-        ucas_subjects: %w[primary mathematics],
-        expected_subjects: ["Primary", "Primary with mathematics"],
-        test_case: "bug fix test:  accidentally included maths in the list of sciences"
-      },
-      {
-        course_title: "Mfl",
-        ucas_subjects: %w[languages],
-        expected_subjects: ["Modern languages (other)"],
-        test_case: "mfl"
-      },
-      {
-        course_title: "Latin",
-        ucas_subjects: %w[latin],
-        expected_subjects: %w[Classics],
-        test_case: "latin and classics have been merged"
-      },
-      {
-        course_title: "Primary (geo)",
-        ucas_subjects: %w[primary geography],
-        expected_subjects: ["Primary", "Primary with geography and history"],
-        test_case: "Primary with hist/geo have beeen merged"
-      },
-      {
-        course_title: "Primary (history)",
-        ucas_subjects: %w[primary history],
-        expected_subjects: ["Primary", "Primary with geography and history"],
-        test_case: "Primary with hist/geo have beeen merged"
-      },
-      {
-        course_title: "Primary (Physical Education)",
-        ucas_subjects: ["primary", "physical education"],
-        expected_subjects: ["Primary", "Primary with physical education"],
-        test_case: "Primary PE",
-      },
-      {
-        course_title: "Computing",
-        ucas_subjects: ["secondary", "computer studies", "information communication technology"],
-        expected_subjects: %w[Computing],
-        test_case: "no ICT"
-      },
-      {
-        course_title: "Mandarin and ESOL",
-        ucas_subjects: ["mandarin", "english as a second or other language"],
-        expected_subjects: ["Mandarin", "English as a second or other language"],
-        test_case: "secondary ESOL"
-      },
-    ]
+    describe "an example of a primary specialisation" do
+      subject { { ucas: %w[primary english] } }
+      it { should map_to_dfe_subjects(["Primary", "Primary with English"]).at_level(:primary) }
+    end
+
+    describe "another example of a primary specialisation" do
+      subject { { ucas: %w[primary physics] } }
+      it { should map_to_dfe_subjects(["Primary", "Primary with science"]).at_level(:primary) }
+    end
+
+    describe "an example of early years (which is absorbed into primary)" do
+      subject { { ucas: ["primary", "early years"] } }
+      it { should map_to_dfe_subjects(%w[Primary]).at_level(:primary) }
+    end
+
+    describe "an example where science should be excluded because it's used as a category" do
+      subject { { ucas: ["physics (abridged)", "secondary", "science"] } }
+      it { should map_to_dfe_subjects(%w[Physics]).at_level(:secondary) }
+    end
+
+    describe "Physics" do
+      subject { { ucas: %w[physics secondary science english], title: "Physics" } }
+      it { should map_to_dfe_subjects(%w[Physics]).at_level(:secondary) }
+    end
+
+    describe "Physics with English" do
+      subject { { ucas: %w[physics secondary science english], title: "Physics with English" } }
+      it { should map_to_dfe_subjects(%w[Physics English]).at_level(:secondary) }
+    end
+
+    describe "Physics with Science" do
+      subject { { ucas: %w[physics secondary science english], title: "Physics with Science" } }
+      it { should map_to_dfe_subjects(["Physics", "Balanced science"]).at_level(:secondary) }
+    end
+
+    describe "Physics with Science and English" do
+      subject { { ucas: %w[physics secondary science english], title: "Physics with Science and English" } }
+      it { should map_to_dfe_subjects(["Physics", "Balanced science", "English"]).at_level(:secondary) }
+    end
+
+    describe "PE (physical education)" do
+      subject { { ucas: ["secondary", "physical education"] } }
+      it { should map_to_dfe_subjects(["Physical education"]).at_level(:secondary) }
+    end
+
+    describe "further education example" do
+      subject { { ucas: ["further education", "numeracy"] } }
+      it { should map_to_dfe_subjects(["Further education"]).at_level(:further_education) }
+    end
+
+    describe "Science used as a category" do
+      subject { { ucas: ["computer studies", "science"], title: "Computer science" } }
+      it { should map_to_dfe_subjects(%w[Computing]).at_level(:secondary) }
+    end
+
+    describe "Computer science with Science" do
+      subject { { ucas: ["computer studies", "science"], title: "Computer science with Science" } }
+      it { should map_to_dfe_subjects(["Computing", "Balanced science"]).at_level(:secondary) }
+    end
+
+    describe "exclude maths from the list of sciences" do
+      subject { { ucas: %w[primary mathematics] } }
+      it { should map_to_dfe_subjects(["Primary", "Primary with mathematics"]).at_level(:primary) }
+    end
+
+    describe "modern foreign languages (Chinese)" do
+      subject { { ucas: ["secondary", "languages", "languages (asian)", "chinese"] } }
+      it { should map_to_dfe_subjects(%w[Mandarin]).at_level(:secondary) }
+    end
+
+    describe "modern foreign languages (other)" do
+      subject { { ucas: %w[languages] } }
+      it { should map_to_dfe_subjects(["Modern languages (other)"]).at_level(:secondary) }
+    end
+
+    describe "latin and classics have been merged" do
+      subject { { ucas: %w[latin] } }
+      it { should map_to_dfe_subjects(%w[Classics]).at_level(:secondary) }
+    end
+
+    describe "Primary with hist/geo have beeen merged" do
+      subject { { ucas: %w[primary history] } }
+      it { should map_to_dfe_subjects(["Primary", "Primary with geography and history"]).at_level(:primary) }
+    end
+
+    describe "primary PE" do
+      subject { { ucas: ["primary", "physical education"] } }
+      it { should map_to_dfe_subjects(["Primary", "Primary with physical education"]).at_level(:primary) }
+    end
+
+    describe "secondary computing" do
+      subject { { ucas: ["secondary", "computer studies", "information communication technology"] } }
+      it { should map_to_dfe_subjects(%w[Computing]).at_level(:secondary) }
+    end
+
+    describe "secondary ESOL" do
+      subject { { ucas: ["mandarin", "english as a second or other language"] } }
+      it { should map_to_dfe_subjects(["Mandarin", "English as a second or other language"]).at_level(:secondary) }
+    end
 
     describe "PCET ESOL" do
       subject { { ucas: ["further education", "english as a second or other language"] } }
       it { should map_to_dfe_subjects(["Further education"]).at_level(:further_education) }
-    end
-
-    specs.each do |spec|
-      describe "Test case '#{spec[:test_case]}''" do
-        subject { described_class.get_subject_list(spec[:course_title], spec[:ucas_subjects]) }
-
-        it { should match_array spec[:expected_subjects] }
-      end
     end
 
     describe "regression test" do
