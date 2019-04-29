@@ -5,4 +5,6 @@ Raven.configure do |config|
   # https://github.com/getsentry/raven-ruby/wiki/Advanced-Configuration#excluding-exceptions
   config.excluded_exceptions = Raven::Configuration::IGNORE_DEFAULT -
     ['ActiveRecord::RecordNotFound']
+
+  config.sanitize_fields = Rails.application.config.filter_parameters.map(&:to_s)
 end
