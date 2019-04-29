@@ -55,6 +55,12 @@ bundle exec rake
 bundle exec rspec
 ```
 
+Or through guard (`--no-interactions` allows the use of `pry` inside tests):
+
+```bash
+bundle exec guard --no-interactions
+```
+
 ## Linting
 
 It's best to lint just your app directories and not those belonging to the framework:

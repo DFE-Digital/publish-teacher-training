@@ -1,2 +1,10 @@
 inherit_gem:
   govuk-lint: configs/rubocop/all.yml
+
+AllCops:
+  Exclude:
+    - 'bin/rails'
+    - 'bin/rake'
+    - 'bin/setup'
+    - 'bin/update'
+    - 'db/schema.rb'
