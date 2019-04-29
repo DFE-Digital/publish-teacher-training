@@ -149,6 +149,7 @@ GEM
       guard (~> 2.0)
       rubocop (~> 0.20)
     hashdiff (0.3.8)
+    highline (2.0.2)
     httparty (0.17.0)
       mime-types (~> 3.0)
       multi_xml (>= 0.5.2)
@@ -398,6 +399,7 @@ DEPENDENCIES
   guard
   guard-rspec
   guard-rubocop
+  highline
   httparty
   jsonapi-rails
   jsonapi-rb
