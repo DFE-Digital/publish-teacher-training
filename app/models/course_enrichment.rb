@@ -45,7 +45,6 @@ class CourseEnrichment < ApplicationRecord
   validates :about_course, words_count: { max_words_count: 400 }, on: :publish
   validates :interview_process, words_count: { max_words_count: 250 }, on: :publish
   validates :how_school_placements_work, words_count: { max_words_count: 350 }, on: :publish
-  validates :about_course, words_count: { max_words_count: 400 }, on: :publish
 
   # salary vs fee needs forking
   validates :fee_international, :fee_uk_eu, numericality: { only_integer: true, greater_than_or_equal_to: 0, less_than_or_equal_to: 100000 }, on: :publish
@@ -54,9 +53,6 @@ class CourseEnrichment < ApplicationRecord
   validates :fee_details, words_count: { max_words_count: 250 }, on: :publish
   validates :salary_details, words_count: { max_words_count: 250 }, on: :publish
   validates :financial_support, words_count: { max_words_count: 250 }, on: :publish
-
-
-  def publishable?; end
 
   def has_been_published_before?
     last_published_timestamp_utc.present?

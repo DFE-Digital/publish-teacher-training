@@ -126,5 +126,70 @@ describe CourseEnrichment, type: :model do
         expect { subject.unpublish(initial_draft: false) }.not_to(change { subject.reload.last_published_timestamp_utc })
       end
     end
+
+    context 'publish context' do
+      let(:course_enrichment) { create(:course_enrichment) }
+
+      subject! { course_enrichment.valid? :publish }
+
+
+      describe 'validation' do
+        it { should be true }
+
+        context 'exceeded word count' do
+          let(:course_enrichment) {
+            create(:course_enrichment,
+             about_course: (%w[word] * 400).join(' ') + " exceeeded",
+             interview_process: (%w[word] * 250).join(' ') + " exceeeded",
+             how_school_placements_work: (%w[word] * 350).join(' ') + " exceeeded",
+
+             fee_details: (%w[word] * 250).join(' ') + " exceeeded",
+             salary_details: (%w[word] * 250).join(' ') + " exceeeded",
+             financial_support: (%w[word] * 250).join(' ') + " exceeeded",
+             created_at: 1.day.ago, updated_at: 20.minutes.ago)
+          }
+
+          it { should be false }
+          it 'add errors ' do
+            expect(course_enrichment.errors[:about_course]).to match_array ['it exceeded max words count']
+            expect(course_enrichment.errors[:interview_process]).to match_array ['it exceeded max words count']
+            expect(course_enrichment.errors[:how_school_placements_work]).to match_array ['it exceeded max words count']
+            expect(course_enrichment.errors[:fee_details]).to match_array ['it exceeded max words count']
+            expect(course_enrichment.errors[:salary_details]).to match_array ['it exceeded max words count']
+            expect(course_enrichment.errors[:financial_support]).to match_array ['it exceeded max words count']
+          end
+        end
+
+        context 'no presence' do
+          ['', nil].each do |presence|
+            let(:course_enrichment) {
+              create(:course_enrichment,
+                fee_uk_eu: presence,
+                salary_details: presence)
+            }
+            it { should be false }
+            it 'add errors ' do
+              expect(course_enrichment.errors[:salary_details]).to match_array ["can't be blank"]
+              expect(course_enrichment.errors[:fee_uk_eu]).to match_array ["is not a number", "can't be blank"]
+            end
+          end
+        end
+        context 'numericality' do
+          ['', -1, 100001, nil, 'one'].each do |numericality|
+            let(:course_enrichment) {
+              create(:course_enrichment,
+                fee_international: numericality,
+                fee_uk_eu: numericality)
+            }
+            it { should be false }
+
+            it 'add errors ' do
+              expect(course_enrichment.errors[:fee_international]).to match_array ["is not a number"]
+              expect(course_enrichment.errors[:fee_uk_eu]).to match_array ["is not a number"]
+            end
+          end
+        end
+      end
+    end
   end
 end

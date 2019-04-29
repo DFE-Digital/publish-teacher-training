@@ -5,7 +5,7 @@ class WordsCountValidator < ActiveModel::EachValidator
     end
 
     unless /^\s*(\S+\s+|\S+$){0,#{options[:max_words_count]}}$/i.match?(value)
-      record.errors[attribute] << (options[:message] || "Exceeded words count")
+      record.errors[attribute] << (options[:message] || "it exceeded max words count")
     end
   end
 end
