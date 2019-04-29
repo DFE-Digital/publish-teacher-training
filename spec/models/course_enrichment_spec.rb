@@ -145,8 +145,7 @@ describe CourseEnrichment, type: :model do
 
              fee_details: (%w[word] * 250).join(' ') + " exceeeded",
              salary_details: (%w[word] * 250).join(' ') + " exceeeded",
-             financial_support: (%w[word] * 250).join(' ') + " exceeeded",
-             created_at: 1.day.ago, updated_at: 20.minutes.ago)
+             financial_support: (%w[word] * 250).join(' ') + " exceeeded")
           }
 
           it { should be false }

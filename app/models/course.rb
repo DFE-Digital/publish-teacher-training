@@ -75,7 +75,7 @@ class Course < ApplicationRecord
 
   scope :providers_have_opted_in, -> { joins(:provider).merge(Provider.opted_in) }
 
-  validates :enrichments, presence: true, length: { minimum: 1 }, on: :publish
+  validates :enrichments, presence: true, on: :publish
   validate :validate_enrichment, on: :publish
 
   def publishable?
@@ -84,16 +84,10 @@ class Course < ApplicationRecord
 
   def validate_enrichment
     latest = enrichments.latest_first.first
-
-    if latest == nil
-      # system guard
-      errors.add(:enrichments, 'can not find any')
-      # fork funding != fee
-      # if(!latest.valid? :publish-fee)
-      # if(!latest.valid? :publish-salary)
-    elsif(!latest.valid? :publish)
+    if latest != nil
+      latest.valid? :publish
       latest.errors.full_messages.each do |msg|
-        errors.add_to_base("Latest enrichment errors: #{msg}")
+        errors.add :base, "Latest enrichment errors: #{msg}"
       end
     end
   end

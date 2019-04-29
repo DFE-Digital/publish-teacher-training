@@ -66,9 +66,6 @@ describe 'Courses API v2', type: :request do
       end
     end
 
-
-
-
     context 'when the api responds with a success' do
       it { should have_http_status(:success) }
     end
@@ -83,6 +80,28 @@ describe 'Courses API v2', type: :request do
       let(:manage_api_status) { 500 }
       let(:manage_api_response) { '{ "result": true }' }
       it { should have_http_status(:internal_server_error) }
+    end
+
+    describe 'failed validation' do
+      context 'no enrichments' do
+        let(:course) { create(:course, provider: provider, with_enrichments: []) }
+        it { should have_http_status(:unprocessable_entity) }
+        it 'has validation errors' do
+          expect(subject.body).to include('errors')
+        end
+      end
+
+      context 'invalid enrichment' do
+        let(:invalid_enrichment) {
+          create(:course_enrichment,
+         about_course: (%w[word] * 400).join(' ') + " exceeeded")
+        }
+        let(:course) { create(:course, provider: provider, enrichments: [invalid_enrichment]) }
+        it { should have_http_status(:unprocessable_entity) }
+        it 'has validation errors' do
+          expect(subject.body).to include('errors')
+        end
+      end
     end
   end
 end

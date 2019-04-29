@@ -25,7 +25,7 @@ module API
 
           head response ? :ok : :internal_server_error
         else
-          render jsonapi: @course, include: params[:include]
+          render jsonapi_errors: @course.errors, status: :unprocessable_entity
         end
       end
 
