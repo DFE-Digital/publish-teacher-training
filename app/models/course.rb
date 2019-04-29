@@ -87,7 +87,7 @@ class Course < ApplicationRecord
     if latest != nil
       latest.valid? :publish
       latest.errors.full_messages.each do |msg|
-        errors.add :base, "Latest enrichment errors: #{msg}"
+        errors.add :latest_enrichment, msg.to_s
       end
     end
   end

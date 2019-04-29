@@ -83,11 +83,15 @@ describe 'Courses API v2', type: :request do
     end
 
     describe 'failed validation' do
+      let(:json_data) { JSON.parse(subject.body)['errors'] }
+
       context 'no enrichments' do
         let(:course) { create(:course, provider: provider, with_enrichments: []) }
         it { should have_http_status(:unprocessable_entity) }
         it 'has validation errors' do
-          expect(subject.body).to include('errors')
+          expect(json_data.count).to eq 1
+          expect(response.body).to include('Invalid enrichment')
+          expect(response.body).to include("Enrichments can't be blank")
         end
       end
 
@@ -98,8 +102,11 @@ describe 'Courses API v2', type: :request do
         }
         let(:course) { create(:course, provider: provider, enrichments: [invalid_enrichment]) }
         it { should have_http_status(:unprocessable_entity) }
+
         it 'has validation errors' do
-          expect(subject.body).to include('errors')
+          expect(json_data.count).to eq 1
+          expect(response.body).to include('Invalid latest_enrichment')
+          expect(response.body).to include('Latest enrichment About course it exceeded max words count')
         end
       end
     end
