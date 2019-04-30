@@ -59,6 +59,9 @@ gem 'cri'
 gem 'table_print'
 #   terminal-table is a bit more flexible allowing us to use a headers column
 gem 'terminal-table'
+#   tabulo os even more flexible than terminal-table, used for the audit
+#   stuff for now, probably worth switching other commands to it later
+gem 'tabulo'
 
 # For querying third party APIs
 gem 'faraday'

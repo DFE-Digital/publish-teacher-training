@@ -17,9 +17,11 @@ module MCB
   # Not all mcb commands require the rails env, e.g. the API ones don't. Use
   # this method in those commands that do.
   def self.init_rails(**opts)
-    MCB::Azure.configure_for_webapp(opts) if opts.key? :webapp
+    MCB::Azure.configure_for_webapp(opts) if requesting_remote_connection?(opts)
 
-    unless defined?(Rails)
+    if defined?(Rails)
+      configure_audited_user if connecting_to_remote_db?
+    else
       app_root = File.expand_path(File.join(File.dirname($0), '..'))
       exec_path = File.join(app_root, 'bin', 'rails')
 
@@ -205,7 +207,42 @@ module MCB
   end
 
   class << self
-  private # rubocop: disable Layout/IndentationWidth
+    attr_reader :current_user
+
+    def get_user_from_config
+      unless config.key? :email
+        error 'No email set in config. You can set it like this:'
+        error ''
+        error "  $ #{$0} config set email <your-email-address>"
+        error ''
+        raise RuntimeError, 'email not configured'
+      end
+
+      user = User.find_by(email: MCB.config[:email])
+      unless user
+        error "User with email #{MCB.config[:email]} not found."
+        error "For auditing purposes a user with the configured email address must exist"
+        error "on the system being altered."
+        raise RuntimeError, "email not found: #{MCB.config[:email]}"
+      end
+      user
+    end
+
+  private
+
+    def configure_audited_user
+      @current_user = get_user_from_config
+      verbose "configuring user to be #{@current_user.email}"
+      Audited.store[:audited_user] = @current_user
+    end
+
+    def requesting_remote_connection?(opts)
+      opts.key?(:webapp)
+    end
+
+    def connecting_to_remote_db?
+      ENV.key?('DB_HOSTNAME')
+    end
 
     def remove_option_with_arg(argv, *options)
       argv.dup.tap do |new_argv|
