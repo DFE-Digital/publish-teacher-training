@@ -1,6 +1,8 @@
 name 'show'
 summary 'Show information about provider'
 param :code
+option :p, :'preview-courses', 'Show courses as a mini-preview of Find, instead of a database view.',
+      default: false
 
 run do |opts, args, _cmd|
   MCB.init_rails(opts)
@@ -27,6 +29,10 @@ run do |opts, args, _cmd|
        'address2', 'address3', 'address4', 'postcode', 'telephone'
 
     puts "\nProvider Courses:"
-    tp provider.courses
+    if opts[:'preview-courses']
+      provider.courses.map { |course| puts Terminal::Table.new rows: MCB::CourseShow.new(course).to_h }
+    else
+      tp provider.courses
+    end
   end
 end
