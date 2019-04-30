@@ -89,6 +89,10 @@ class SiteStatus < ApplicationRecord
     end
   end
 
+  def self.applications_accepted_from_default
+    Date.today
+  end
+
   def description
     "#{site.description} – #{status}/#{publish}"
   end
@@ -97,7 +101,7 @@ private
 
   def set_defaults
     self.status ||= :new_status
-    self.applications_accepted_from ||= Date.today
+    self.applications_accepted_from ||= self.class.applications_accepted_from_default
     self.publish ||= :unpublished
   end
 

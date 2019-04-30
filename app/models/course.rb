@@ -239,6 +239,10 @@ class Course < ApplicationRecord
     new? ? site_status.destroy! : site_status.suspend!
   end
 
+  def applications_accepted_from=(new_date)
+    site_statuses.each { |ss| ss.update(applications_accepted_from: new_date) }
+  end
+
   def sites_not_associated_with_course
     provider.sites - sites
   end
