@@ -28,6 +28,7 @@ class Course < ApplicationRecord
 
   has_associated_audits
   audited except: :changed_at
+  validates :course_code, uniqueness: { scope: :provider_id }
 
   enum program_type: {
     higher_education_programme: "HE",
@@ -158,6 +159,18 @@ class Course < ApplicationRecord
     else
       'fee'
     end
+  end
+
+  def dfe_subjects
+    SubjectMapperService.get_subject_list(name, subjects.map(&:subject_name))
+  end
+
+  def level
+    SubjectMapperService.get_subject_level(subjects.map(&:subject_name))
+  end
+
+  def is_send?
+    subjects.any?(&:is_send?)
   end
 
   def last_published_at

@@ -40,6 +40,10 @@ RSpec.describe Course, type: :model do
     it { should have_many(:sites) }
   end
 
+  describe 'validations' do
+    it { should validate_uniqueness_of(:course_code).scoped_to(:provider_id) }
+  end
+
   describe 'changed_at' do
     it 'is set on create' do
       course = create(:course)
@@ -383,6 +387,42 @@ RSpec.describe Course, type: :model do
       let(:provider) { create(:provider, opted_in: false) }
 
       it { should_not include(course) }
+    end
+  end
+
+  context "subjects & level" do
+    context 'with no subjects' do
+      subject { create(:course, subject_count: 0) }
+      its(:level) { should eq(:secondary) }
+      its(:dfe_subjects) { should be_empty }
+    end
+
+    context 'with primary subjects' do
+      subject { create(:course, subject_count: 0, subjects: [create(:subject, subject_name: "primary")]) }
+      its(:level) { should eq(:primary) }
+      its(:dfe_subjects) { should eq(%w[Primary]) }
+    end
+
+    context 'with secondary subjects' do
+      subject { create(:course, subject_count: 0, subjects: [create(:subject, subject_name: "physical education")]) }
+      its(:level) { should eq(:secondary) }
+      its(:dfe_subjects) { should eq(["Physical education"]) }
+    end
+
+    context 'with further education subjects' do
+      subject { create(:course, subject_count: 0, subjects: [create(:further_education_subject)]) }
+      its(:level) { should eq(:further_education) }
+      its(:dfe_subjects) { should eq(["Further education"]) }
+    end
+
+    describe "#is_send?" do
+      subject { create(:course, subject_count: 0) }
+      its(:is_send?) { should be_falsey }
+
+      context "with a SEND subject" do
+        subject { create(:course, subject_count: 0, subjects: [create(:send_subject)]) }
+        its(:is_send?) { should be_truthy }
+      end
     end
   end
 end

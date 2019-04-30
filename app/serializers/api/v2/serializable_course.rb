@@ -13,7 +13,8 @@ module API
 
       attributes :findable?, :open_for_applications?, :has_vacancies?,
                  :course_code, :name, :study_mode, :qualifications, :description,
-                 :content_status, :ucas_status, :funding, :applications_open_from
+                 :content_status, :ucas_status, :funding, :applications_open_from,
+                 :level, :is_send?
 
       attribute :start_date do
         @object.start_date&.iso8601
@@ -24,17 +25,7 @@ module API
       end
 
       attribute :subjects do
-        ucas_subjects = @object.subjects.map(&:subject_name)
-        SubjectMapperService.get_subject_list(@object.name, ucas_subjects)
-      end
-
-      attribute :level do
-        ucas_subjects = @object.subjects.map(&:subject_name)
-        SubjectMapperService.get_subject_level(ucas_subjects)
-      end
-
-      attribute :is_send? do
-        @object.subjects.any? { |subject| subject.subject_code.casecmp('U3').zero? }
+        @object.dfe_subjects
       end
 
       belongs_to :provider

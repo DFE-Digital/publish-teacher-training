@@ -98,28 +98,10 @@ describe API::V2::SerializableCourse do
   end
 
   context "subjects & level" do
-    context 'with no subjects' do
-      let(:course) { create(:course, subject_count: 0) }
-      it { expect(subject["attributes"]).to include("level" => "secondary") }
-      it { expect(subject["attributes"]).to include("subjects" => []) }
-    end
-
-    context 'with primary subjects' do
+    describe 'are taken from the course' do
       let(:course) { create(:course, subject_count: 0, subjects: [create(:subject, subject_name: "primary")]) }
       it { expect(subject["attributes"]).to include("level" => "primary") }
       it { expect(subject["attributes"]).to include("subjects" => %w[Primary]) }
-    end
-
-    context 'with secondary subjects' do
-      let(:course) { create(:course, subject_count: 0, subjects: [create(:subject, subject_name: "physical education")]) }
-      it { expect(subject["attributes"]).to include("level" => "secondary") }
-      it { expect(subject["attributes"]).to include("subjects" => ["Physical education"]) }
-    end
-
-    context 'with further education subjects' do
-      let(:course) { create(:course, subject_count: 0, subjects: [create(:further_education_subject)]) }
-      it { expect(subject["attributes"]).to include("level" => "further_education") }
-      it { expect(subject["attributes"]).to include("subjects" => ["Further education"]) }
     end
   end
 
