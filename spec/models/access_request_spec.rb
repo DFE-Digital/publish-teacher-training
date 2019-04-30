@@ -103,4 +103,16 @@ describe AccessRequest, type: :model do
       end
     end
   end
+
+  describe '#approve' do
+    let(:access_request) { build(:access_request) }
+
+    subject { access_request.approve }
+
+    it 'marks the access request as completed' do
+      expect { subject }.to change { access_request.status }
+        .from('requested')
+        .to('completed')
+    end
+  end
 end

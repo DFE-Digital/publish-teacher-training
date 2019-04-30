@@ -42,4 +42,6 @@ class AccessRequest < ApplicationRecord
       organisations: requesting_user.organisations
     )
   end
+
+  alias_method :approve, :completed!
 end

@@ -1,6 +1,6 @@
 describe AccessRequestApprovalService do
   describe '.call' do
-    let(:access_request) { build(:access_request) }
+    let!(:access_request) { create(:access_request) }
 
     subject { described_class.call(access_request) }
 
@@ -38,10 +38,20 @@ describe AccessRequestApprovalService do
         )
       end
 
-      xit 'should be marked completed'
+      it 'should be marked completed' do
+        expect { subject }.to change { access_request.status }
+          .from('requested')
+          .to('completed')
+      end
     end
 
     context 'for an existing user' do
+      let!(:user) { create(:user, email: access_request.email_address) }
+
+      it 'does not create a new user' do
+        expect { subject }.not_to(change { User.count })
+      end
+
       context 'with no organisations' do
       end
 
