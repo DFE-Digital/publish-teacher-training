@@ -8,7 +8,7 @@ describe 'mcb apiv2 token generate' do
         $mcb.run(%w[apiv2 token generate -S sekret user@local])
       end
 
-      payload = { email: 'user@local' }.to_json
+      payload = { email: 'user@local' }
       expect(result.chomp).to eq(
         JWT.encode(payload, 'sekret', 'HS256')
       )

@@ -87,7 +87,7 @@ describe 'mcb command' do
           encoding: encoding,
           secret: secret
         )
-        expect(token).to eq JWT.encode({ email: email }.to_json,
+        expect(token).to eq JWT.encode({ email: email },
                                        secret,
                                        encoding)
       end
