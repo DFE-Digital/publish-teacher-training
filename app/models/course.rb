@@ -160,6 +160,18 @@ class Course < ApplicationRecord
     end
   end
 
+  def dfe_subjects
+    SubjectMapperService.get_subject_list(name, subjects.map(&:subject_name))
+  end
+
+  def level
+    SubjectMapperService.get_subject_level(subjects.map(&:subject_name))
+  end
+
+  def is_send?
+    subjects.any?(&:is_send?)
+  end
+
   def last_published_at
     newest_enrichment = enrichments.latest_first.first
     newest_enrichment&.last_published_timestamp_utc
