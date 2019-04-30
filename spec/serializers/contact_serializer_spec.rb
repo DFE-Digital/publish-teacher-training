@@ -2,7 +2,7 @@
 #
 # Table name: contact
 #
-#  id          :bigint(8)        not null, primary key
+#  id          :bigint           not null, primary key
 #  provider_id :integer          not null
 #  type        :text             not null
 #  name        :text

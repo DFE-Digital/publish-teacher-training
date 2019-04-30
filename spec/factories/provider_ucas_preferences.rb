@@ -2,7 +2,7 @@
 #
 # Table name: provider_ucas_preference
 #
-#  id                        :bigint(8)        not null, primary key
+#  id                        :bigint           not null, primary key
 #  provider_id               :integer          not null
 #  type_of_gt12              :text
 #  send_application_alerts   :text
