@@ -28,6 +28,7 @@ class Course < ApplicationRecord
 
   has_associated_audits
   audited except: :changed_at
+  validates :course_code, uniqueness: { scope: :provider_id }
 
   enum program_type: {
     higher_education_programme: "HE",

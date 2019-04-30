@@ -40,6 +40,10 @@ RSpec.describe Course, type: :model do
     it { should have_many(:sites) }
   end
 
+  describe 'validations' do
+    it { should validate_uniqueness_of(:course_code).scoped_to(:provider_id) }
+  end
+
   describe 'changed_at' do
     it 'is set on create' do
       course = create(:course)
