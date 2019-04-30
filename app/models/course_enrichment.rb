@@ -42,7 +42,7 @@ class CourseEnrichment < ApplicationRecord
 
   scope :latest_first, -> { order(created_at: :desc) }
 
-  # manadory validation for any course to be published
+  # mandatory validation for any course to be published
   validates :about_course, words_count: { max_words_count: 400 }, on: :publish
   validates :interview_process, words_count: { max_words_count: 250 }, on: :publish
   validates :how_school_placements_work, words_count: { max_words_count: 350 }, on: :publish
