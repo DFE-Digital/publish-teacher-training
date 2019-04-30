@@ -25,7 +25,6 @@
 #  * 'just' rspec: 'rspec'
 
 
-# rubocop:disable Metrics/BlockLength
 group :red_green_refactor, halt_on_fail: true do
   guard :rspec, cmd: 'bundle exec spring rspec', failed_mode: :keep do
     require "guard/rspec/dsl"
@@ -65,4 +64,3 @@ group :red_green_refactor, halt_on_fail: true do
     watch(%r{(?:.+/)?\.rubocop(?:_todo)?\.yml$}) { |m| File.dirname(m[0]) }
   end
 end
-# rubocop:enable Metrics/BlockLength
