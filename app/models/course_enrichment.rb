@@ -53,7 +53,7 @@ class CourseEnrichment < ApplicationRecord
   validates :fee_details, words_count: { max_words_count: 250 }, on: :publish, if: :is_fee_based?
   validates :financial_support, words_count: { max_words_count: 250 }, on: :publish, if: :is_fee_based?
 
-  # manadory validation for salary based course to be published
+  # mandatory validation for salary based course to be published
   validates :salary_details, presence: true, words_count: { max_words_count: 250 }, on: :publish, unless: :is_fee_based?
 
   def is_fee_based?
