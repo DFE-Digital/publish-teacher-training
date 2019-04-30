@@ -16,6 +16,9 @@ RSpec.configure do |config|
   # the mcb CLI should, to be safe, have the 'mcb_cli: true' metadata to ensure
   # it's safe.
   config.before(:each, mcb_cli: true) do |example|
+    # This gets memoized so needs to be wiped out for every test.
+    MCB.instance_eval { @config = nil }
+
     unless example.metadata[:stub_init_rails] == false
       # "init_rails" will try to exec the Rails runner if Rails isn't already
       # loaded.
@@ -24,5 +27,15 @@ RSpec.configure do |config|
     # "run_command" is used to run "az" and maybe more. Any test relying on
     # this must stub for it specifically.
     allow(MCB).to receive(:run_command)
+  end
+
+  # Ensure that if the config file that is read is not the user's real data,
+  # and if saved for any reason it does not over-write the user's.
+  config.around(:each, mcb_cli: true) do |example|
+    @temp_config_file = Tempfile.new ['mcb_cli_config', '.yml']
+    @temp_config_file.close
+    MCB.config_file = @temp_config_file.path
+    example.run
+    @temp_config_file.unlink
   end
 end

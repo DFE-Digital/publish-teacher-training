@@ -104,4 +104,15 @@ describe 'mcb command' do
       end
     end
   end
+
+  describe '.config' do
+    it 'creates a config object with config_file setting' do
+      allow(MCB::Config).to receive(:new).and_return('foo' => 'bar')
+
+      MCB.config['foo']
+
+      expect(MCB::Config)
+        .to have_received(:new).with(config_file: MCB.config_file)
+    end
+  end
 end

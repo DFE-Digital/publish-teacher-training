@@ -18,6 +18,7 @@ lib_dir = File.expand_path 'lib'
 $LOAD_PATH << lib_dir
 require 'mcb'
 require 'mcb/azure'
+require 'mcb/config'
 
 tp.set :capitalize_headers, false
 
@@ -35,6 +36,11 @@ $mcb = Cri::Command.define do
   flag :h, :help, 'show help for this command' do |_value, cmd|
     puts cmd.help
     exit 0
+  end
+
+  option :c, :config, 'use provided config file',
+         argument: :required do |config_file|
+    MCB.config_file = config_file
   end
 end
 
