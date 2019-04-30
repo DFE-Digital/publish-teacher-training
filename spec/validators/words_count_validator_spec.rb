@@ -39,7 +39,7 @@ describe WordsCountValidator do
 
     it { should be false }
     it 'adds an error' do
-      expect(model.errors[:some_words]).to match_array ['it exceeded max words count']
+      expect(model.errors[:some_words]).to match_array ['Reduce the word count for some words']
     end
   end
 end

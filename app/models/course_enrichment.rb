@@ -42,17 +42,23 @@ class CourseEnrichment < ApplicationRecord
 
   scope :latest_first, -> { order(created_at: :desc) }
 
+  # manadory validation for any course to be published
   validates :about_course, words_count: { max_words_count: 400 }, on: :publish
   validates :interview_process, words_count: { max_words_count: 250 }, on: :publish
   validates :how_school_placements_work, words_count: { max_words_count: 350 }, on: :publish
 
-  # salary vs fee needs forking
-  validates :fee_international, :fee_uk_eu, numericality: { only_integer: true, greater_than_or_equal_to: 0, less_than_or_equal_to: 100000 }, on: :publish
-  validates :fee_uk_eu, presence: true, on: :publish
-  validates :salary_details, presence: true, on: :publish
-  validates :fee_details, words_count: { max_words_count: 250 }, on: :publish
-  validates :salary_details, words_count: { max_words_count: 250 }, on: :publish
-  validates :financial_support, words_count: { max_words_count: 250 }, on: :publish
+  # manadory validation for fee based course to be published
+  validates :fee_international, :fee_uk_eu, numericality: { only_integer: true, greater_than_or_equal_to: 0, less_than_or_equal_to: 100000 }, on: :publish, if: :is_fee_based?
+  validates :fee_uk_eu, presence: true, on: :publish, if: :is_fee_based?
+  validates :fee_details, words_count: { max_words_count: 250 }, on: :publish, if: :is_fee_based?
+  validates :financial_support, words_count: { max_words_count: 250 }, on: :publish, if: :is_fee_based?
+
+  # manadory validation for salary based course to be published
+  validates :salary_details, presence: true, words_count: { max_words_count: 250 }, on: :publish, unless: :is_fee_based?
+
+  def is_fee_based?
+    self.course.is_fee_based?
+  end
 
   def has_been_published_before?
     last_published_timestamp_utc.present?

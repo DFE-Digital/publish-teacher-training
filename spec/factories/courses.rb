@@ -137,5 +137,16 @@ FactoryBot.define do
     trait :with_salary do
       program_type { :school_direct_salaried_training_programme }
     end
+
+    trait :fee_type_based do
+      program_type {
+        %i[higher_education_programme school_direct_training_programme
+           scitt_programme].sample
+      }
+    end
+
+    trait :salary_type_based do
+      program_type { %i[pg_teaching_apprenticeship school_direct_salaried_training_programme].sample }
+    end
   end
 end

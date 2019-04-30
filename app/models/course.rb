@@ -190,6 +190,10 @@ class Course < ApplicationRecord
     subjects.any?(&:is_send?)
   end
 
+  def is_fee_based?
+    self.funding == 'fee'
+  end
+
   def last_published_at
     newest_enrichment = enrichments.latest_first.first
     newest_enrichment&.last_published_timestamp_utc
