@@ -20,6 +20,7 @@ class User < ApplicationRecord
 
   has_and_belongs_to_many :organisations
   has_many :providers, through: :organisations
+  has_many :access_requests, foreign_key: :requester_id, primary_key: :id
 
   validates :email, presence: true
 
@@ -36,5 +37,12 @@ class User < ApplicationRecord
 
   def opted_in?
     providers.any?(&:opted_in?)
+  end
+
+  def admin?
+    return true if email.end_with? "@education.gov.uk"
+    return true if email.end_with? "@digital.education.gov.uk"
+
+    false
   end
 end

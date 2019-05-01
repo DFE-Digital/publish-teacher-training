@@ -58,4 +58,24 @@ describe User, type: :model do
       its(:opted_in?) { should be_falsey }
     end
   end
+
+  describe '#admin?' do
+    context 'user has an education.gov.uk email' do
+      subject { create(:user, email: 'test@education.gov.uk') }
+
+      its(:admin?) { should be_truthy }
+    end
+
+    context 'user has a digital.education.gov.uk email' do
+      subject { create(:user, email: 'test@digital.education.gov.uk') }
+
+      its(:admin?) { should be_truthy }
+    end
+
+    context 'user does not have a digital.education or education.gov.uk email' do
+      subject { create(:user, email: 'test@hrmc.gov.uk') }
+
+      its(:admin?) { should be_falsey }
+    end
+  end
 end
