@@ -2,16 +2,16 @@ RSpec.describe Course, type: :model do
   describe '#publishable?' do
     let(:course) { create(:course) }
 
-    subject { course.publishable? }
+    subject { course }
 
-    it { should be false }
+    its(:publishable?) { should be_falsey }
 
     context 'with enrichment' do
       let(:course) {
         create(:course, with_enrichments: [[:subsequent_draft, created_at: 1.day.ago]])
       }
 
-      it { should be true }
+      its(:publishable?) { should be_truthy }
     end
 
     context 'with no enrichment' do
@@ -19,7 +19,7 @@ RSpec.describe Course, type: :model do
         create(:course, with_enrichments: [])
       }
 
-      it { should be false }
+      its(:publishable?) { should be_falsey }
 
       describe 'course errors' do
         subject do

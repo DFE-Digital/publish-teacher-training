@@ -1,23 +1,15 @@
 RSpec.describe Course, type: :model do
   describe '#is_fee_based?' do
-    let(:subject) {
-      course.is_fee_based?
-    }
-
     context 'salary based course' do
-      let(:course) {
-        create(:course, :salary_type_based)
-      }
+      subject { create(:course, :salary_type_based) }
 
-      it { should be false }
+      its(:is_fee_based?) { should be_falsey }
     end
 
-    context 'salary based course' do
-      let(:course) {
-        create(:course, :fee_type_based)
-      }
+    context 'fee based course' do
+      subject { create(:course, :fee_type_based) }
 
-      it { should be true }
+      its(:is_fee_based?) { should be_truthy }
     end
   end
 end
