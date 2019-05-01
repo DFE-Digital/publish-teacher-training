@@ -7,26 +7,26 @@ describe AccessRequestApprovalService do
     context 'for a new user' do
       let(:new_user) { User.find_by(email: access_request.email_address) }
 
-      it 'should create the new user'do
+      it 'should create the new user' do
         expect { subject }.to change { User.count }.by(1)
       end
 
-      it 'should set the email address'do
+      it 'should set the email address' do
         subject
         expect(User.where(email: access_request.email_address)).to exist
       end
 
-      it 'should set the first_name'do
+      it 'should set the first_name' do
         subject
         expect(new_user.first_name).to eq(access_request.first_name)
       end
 
-      it 'should set the last_name'do
+      it 'should set the last_name' do
         subject
         expect(new_user.last_name).to eq(access_request.last_name)
       end
 
-      it 'should set the invite date'do
+      it 'should set the invite date' do
         subject
         expect(new_user.invite_date_utc).to be_within(1.second).of Time.now.utc
       end
