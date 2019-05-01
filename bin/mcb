@@ -19,6 +19,7 @@ $LOAD_PATH << lib_dir
 require 'mcb'
 require 'mcb/azure'
 require 'mcb/config'
+require 'mcb/course_show'
 
 tp.set :capitalize_headers, false
 
