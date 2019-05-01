@@ -53,6 +53,10 @@ describe AccessRequestApprovalService do
       end
 
       context 'with no organisations' do
+        it "sets the target user's organisations to the requesting user's organisations" do
+          expect { subject }.to change { user.reload.organisations }
+            .to(access_request.user.organisations)
+        end
       end
 
       context 'with unrelated existing organisations' do
