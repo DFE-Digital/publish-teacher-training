@@ -34,7 +34,7 @@ describe AccessRequestApprovalService do
       it "should give the user access to the requestor's orgs" do
         subject
         expect(target_user.organisations).to(
-          match_array(access_request.user.organisations)
+          match_array(access_request.requester.organisations)
         )
       end
 
@@ -54,7 +54,7 @@ describe AccessRequestApprovalService do
 
       it "sets the target user's organisations to the requesting user's organisations" do
         expect { subject }.to change { target_user.reload.organisations }
-          .to(access_request.user.organisations)
+          .to(access_request.requester.organisations)
       end
 
       context 'with existing organisations' do
@@ -63,14 +63,14 @@ describe AccessRequestApprovalService do
         end
         let!(:access_request)   { create(:access_request) }
         let!(:old_organisation) { target_user.organisations.first }
-        let(:requesting_user)   { access_request.user }
+        let(:requester) { access_request.requester }
 
         it "should keep the existing organisation and gain access to new ones" do
           subject
           target_user.organisations.reload
 
           expect(target_user.organisations).to(
-            include(requesting_user.organisations.first)
+            include(requester.organisations.first)
           )
           expect(target_user.organisations).to include(old_organisation)
         end
@@ -82,7 +82,7 @@ describe AccessRequestApprovalService do
           create(
             :user,
             :opted_in,
-            organisations: access_request.user.organisations
+            organisations: access_request.requester.organisations
           )
         end
 

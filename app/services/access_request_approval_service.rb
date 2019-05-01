@@ -14,7 +14,7 @@ class AccessRequestApprovalService
       user.invite_date_utc = Time.now.utc
     end
 
-    target_user.organisations << @access_request.user.organisations
+    target_user.organisations << @access_request.requester.organisations
     @access_request.approve
   end
 end
