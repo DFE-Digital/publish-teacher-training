@@ -106,7 +106,7 @@ describe CourseEnrichment, type: :model do
       end
 
       context 'invalid content' do
-        let(:course_enrichment_traits) { %i[with_fee_based_course invalid_content] }
+        let(:course_enrichment_traits) { %i[with_fee_based_course with_invalid_content] }
         it { should_not be_valid :publish }
       end
     end
@@ -123,7 +123,7 @@ describe CourseEnrichment, type: :model do
       end
 
       context 'invalid content' do
-        let(:course_enrichment_traits) { %i[with_salary_based_course invalid_content] }
+        let(:course_enrichment_traits) { %i[with_salary_based_course with_invalid_content] }
         it { should_not be_valid :publish }
       end
     end

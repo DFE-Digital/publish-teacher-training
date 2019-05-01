@@ -96,7 +96,7 @@ describe 'Courses API v2', type: :request do
       end
 
       context 'invalid enrichment' do
-        let(:invalid_enrichment) { create(:course_enrichment, :invalid_content) }
+        let(:invalid_enrichment) { create(:course_enrichment, :with_invalid_content) }
 
         let(:course) { create(:course, :fee_type_based, provider: provider, enrichments: [invalid_enrichment]) }
         it { should have_http_status(:unprocessable_entity) }

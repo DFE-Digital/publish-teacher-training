@@ -99,7 +99,7 @@ FactoryBot.define do
     last_published_timestamp_utc { 5.days.ago }
   end
 
-  trait :invalid_content do
+  trait :with_invalid_content do
     about_course { Faker::Lorem.sentence(400 + 1) }
     interview_process { Faker::Lorem.sentence(250 + 1) }
     how_school_placements_work { Faker::Lorem.sentence(350 + 1) }
