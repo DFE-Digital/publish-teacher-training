@@ -18,6 +18,8 @@
 class User < ApplicationRecord
   include AASM
 
+  DFE_EMAIL_PATTERN = /@(digital.){0,1}education.gov.uk$/.freeze
+
   has_and_belongs_to_many :organisations
   has_many :providers, through: :organisations
   has_many :access_requests, foreign_key: :requester_id, primary_key: :id
@@ -40,9 +42,6 @@ class User < ApplicationRecord
   end
 
   def admin?
-    return true if email.end_with? "@education.gov.uk"
-    return true if email.end_with? "@digital.education.gov.uk"
-
-    false
+    email.match?(DFE_EMAIL_PATTERN)
   end
 end
