@@ -73,8 +73,6 @@ class Course < ApplicationRecord
     end.order(:changed_at, :id)
   end
 
-  scope :providers_have_opted_in, -> { joins(:provider).merge(Provider.opted_in) }
-
   validates :enrichments, presence: true, on: :publish
   validate :validate_enrichment, on: :publish
 

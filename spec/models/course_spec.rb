@@ -372,24 +372,6 @@ RSpec.describe Course, type: :model do
     end
   end
 
-  describe '.providers_have_opted_in' do
-    let(:course) { create(:course, provider: provider) }
-
-    subject { Course.providers_have_opted_in }
-
-    context 'provider is opted in' do
-      let(:provider) { create(:provider, opted_in: true) }
-
-      it { should include(course) }
-    end
-
-    context 'provider is not opted in' do
-      let(:provider) { create(:provider, opted_in: false) }
-
-      it { should_not include(course) }
-    end
-  end
-
   context "subjects & level" do
     context 'with no subjects' do
       subject { create(:course, subject_count: 0) }

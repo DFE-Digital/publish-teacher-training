@@ -59,7 +59,7 @@ describe AccessRequestApprovalService do
 
       context 'with existing organisations' do
         let(:target_user) do
-          create(:user, :opted_in, email: access_request.email_address)
+          create(:user, :with_organisation, email: access_request.email_address)
         end
         let!(:access_request)   { create(:access_request) }
         let!(:old_organisation) { target_user.organisations.first }

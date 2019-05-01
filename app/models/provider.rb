@@ -62,8 +62,6 @@ class Provider < ApplicationRecord
     end.order(:changed_at, :id)
   end
 
-  scope :opted_in, -> { where(opted_in: true) }
-
   scope :in_order, -> { order(:provider_name) }
 
   # Currently Provider#contact_info isn't used but will likely be needed when
