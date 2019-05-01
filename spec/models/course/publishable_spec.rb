@@ -1,12 +1,8 @@
 RSpec.describe Course, type: :model do
   describe '#publishable?' do
-    let(:course) {
-      create(:course)
-    }
+    let(:course) { create(:course) }
 
-    let!(:subject) {
-      course.publishable?
-    }
+    subject { course.publishable? }
 
     it { should be false }
 
@@ -24,8 +20,14 @@ RSpec.describe Course, type: :model do
       }
 
       it { should be false }
-      it 'added errors' do
-        expect(course.errors.empty?).to be false
+
+      describe 'course errors' do
+        subject do
+          course.publishable?
+          course.errors
+        end
+
+        it {should_not be_empty}
       end
     end
   end
