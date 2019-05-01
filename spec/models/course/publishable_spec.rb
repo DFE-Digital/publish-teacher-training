@@ -27,7 +27,7 @@ RSpec.describe Course, type: :model do
           course.errors
         end
 
-        it {should_not be_empty}
+        it { should_not be_empty }
       end
     end
   end

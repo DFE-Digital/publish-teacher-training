@@ -1,11 +1,11 @@
 describe WordsCountValidator do
-  max_words_count = 10
+  maximum = 10
 
   before do
     stub_const("Validatable", Class.new).class_eval do
       include ActiveModel::Validations
       attr_accessor :some_words
-      validates :some_words, words_count: { max_words_count: max_words_count }
+      validates :some_words, words_count: { maximum: maximum }
     end
   end
 
@@ -20,7 +20,7 @@ describe WordsCountValidator do
   }
 
   context "with max valid number of words" do
-    let(:some_words_field) { (%w[word] * max_words_count).join(' ') }
+    let(:some_words_field) { (%w[word] * maximum).join(' ') }
     it { should be true }
   end
 
@@ -35,7 +35,7 @@ describe WordsCountValidator do
   end
 
   context 'with invalid number of words' do
-    let(:some_words_field) { (%w[word] * max_words_count).join(' ') + ' popped' }
+    let(:some_words_field) { (%w[word] * maximum).join(' ') + ' popped' }
 
     it { should be false }
     it 'adds an error' do
