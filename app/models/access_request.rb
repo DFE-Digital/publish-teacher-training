@@ -25,4 +25,6 @@ class AccessRequest < ApplicationRecord
   ].freeze
 
   alias_method :approve, :completed!
+
+  audited
 end

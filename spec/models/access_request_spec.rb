@@ -20,6 +20,11 @@ describe AccessRequest, type: :model do
   describe 'associations' do
     it { should belong_to(:requester) }
   end
+
+  describe 'auditing' do
+    it { should be_audited }
+  end
+
   describe 'type' do
     it 'is an enum' do
       expect(subject)
