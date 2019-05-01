@@ -53,6 +53,18 @@ class Course < ApplicationRecord
     other: "O",
   }
 
+  ENTRY_REQUIREMENT_OPTIONS = {
+    must_have_qualification_at_application_time: 1,
+    expect_to_achieve_before_training_begins: 2,
+    equivalence_test: 3,
+    not_required: 9,
+    not_set: nil,
+  }.freeze
+
+  enum maths: ENTRY_REQUIREMENT_OPTIONS, _suffix: :for_maths
+  enum english: ENTRY_REQUIREMENT_OPTIONS, _suffix: :for_english
+  enum science: ENTRY_REQUIREMENT_OPTIONS, _suffix: :for_science
+
   belongs_to :provider
   belongs_to :accrediting_provider, class_name: 'Provider', optional: true
   has_and_belongs_to_many :subjects
