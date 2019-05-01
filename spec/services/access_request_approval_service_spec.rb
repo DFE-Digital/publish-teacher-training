@@ -81,9 +81,13 @@ describe AccessRequestApprovalService do
         let!(:target_user) do
           create(
             :user,
-            :opted_in,
+            email: access_request.email_address,
             organisations: access_request.requester.organisations
           )
+        end
+
+        it 'does not change the orgnisations of the target user' do
+          expect { subject }.not_to(change { target_user.organisations.reload })
         end
 
         it "shouldn't duplicate the records" do
@@ -91,7 +95,7 @@ describe AccessRequestApprovalService do
           target_user.organisations.reload
 
           expect(target_user.organisations).to(
-            match_array(target_user.organisations.uniq)
+            match_array(access_request.requester.organisations)
           )
         end
       end
