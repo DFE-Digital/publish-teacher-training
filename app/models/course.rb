@@ -84,7 +84,7 @@ class Course < ApplicationRecord
 
   def validate_enrichment
     latest = enrichments.latest_first.first
-    if latest != nil
+    if latest.present?
       latest.valid? :publish
       latest.errors.full_messages.each do |msg|
         errors.add :latest_enrichment, msg.to_s
