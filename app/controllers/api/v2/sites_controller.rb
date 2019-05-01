@@ -19,7 +19,7 @@ module API
 
           render jsonapi: @site
         else
-          render jsonapi_errors: @site.errors, status: 422
+          render jsonapi_errors: @site.errors, status: :unprocessable_entity
         end
       end
 

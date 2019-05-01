@@ -66,9 +66,6 @@ describe 'Courses API v2', type: :request do
       end
     end
 
-
-
-
     context 'when the api responds with a success' do
       it { should have_http_status(:success) }
     end
@@ -83,6 +80,38 @@ describe 'Courses API v2', type: :request do
       let(:manage_api_status) { 500 }
       let(:manage_api_response) { '{ "result": true }' }
       it { should have_http_status(:internal_server_error) }
+    end
+
+    describe 'failed validation' do
+      let(:json_data) { JSON.parse(subject.body)['errors'] }
+
+      context 'no enrichments' do
+        let(:course) { create(:course, provider: provider, with_enrichments: []) }
+        it { should have_http_status(:unprocessable_entity) }
+        it 'has validation errors' do
+          expect(json_data.count).to eq 1
+          expect(response.body).to include('Invalid enrichment')
+          expect(response.body).to include("Enrichments can't be blank")
+        end
+      end
+
+      context 'invalid enrichment' do
+        let(:invalid_enrichment) { create(:course_enrichment, :with_invalid_content) }
+
+        let(:course) { create(:course, :fee_type_based, provider: provider, enrichments: [invalid_enrichment]) }
+        it { should have_http_status(:unprocessable_entity) }
+
+        it 'has validation errors' do
+          expect(json_data.count).to eq 6
+          expect(response.body).to include('Invalid latest_enrichment')
+          expect(response.body).to include("Latest enrichment About course Reduce the word count for about course")
+          expect(response.body).to include("Latest enrichment Interview process Reduce the word count for interview process")
+          expect(response.body).to include("Latest enrichment How school placements work Reduce the word count for how school placements work")
+          expect(response.body).to include("Latest enrichment Fee international must be less than or equal to 100000")
+          expect(response.body).to include("Latest enrichment Fee uk eu must be less than or equal to 100000")
+          expect(response.body).to include("Latest enrichment Fee details Reduce the word count for fee details")
+        end
+      end
     end
   end
 end

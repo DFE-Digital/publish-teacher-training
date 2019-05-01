@@ -75,6 +75,23 @@ class Course < ApplicationRecord
 
   scope :providers_have_opted_in, -> { joins(:provider).merge(Provider.opted_in) }
 
+  validates :enrichments, presence: true, on: :publish
+  validate :validate_enrichment, on: :publish
+
+  def publishable?
+    valid? :publish
+  end
+
+  def validate_enrichment
+    latest = enrichments.latest_first.first
+    if latest.present?
+      latest.valid? :publish
+      latest.errors.full_messages.each do |msg|
+        errors.add :latest_enrichment, msg.to_s
+      end
+    end
+  end
+
   def recruitment_cycle
     "2019"
   end
@@ -171,6 +188,10 @@ class Course < ApplicationRecord
 
   def is_send?
     subjects.any?(&:is_send?)
+  end
+
+  def is_fee_based?
+    funding == 'fee'
   end
 
   def last_published_at

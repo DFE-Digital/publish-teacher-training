@@ -90,6 +90,44 @@ describe CourseEnrichment, type: :model do
     end
   end
 
+  describe 'validation for publish' do
+    subject { create(:course_enrichment, *course_enrichment_traits) }
+
+    context 'fee based course' do
+      let(:course_enrichment_traits) { [:with_fee_based_course] }
+
+      it { should_not validate_presence_of(:salary_details).on(:publish) }
+      it { should validate_presence_of(:fee_uk_eu).on(:publish) }
+      it { should validate_numericality_of(:fee_international).on(:publish) }
+      it { should validate_numericality_of(:fee_international).on(:publish) }
+
+      context 'valid content' do
+        it { should be_valid :publish }
+      end
+
+      context 'invalid content' do
+        let(:course_enrichment_traits) { %i[with_fee_based_course with_invalid_content] }
+        it { should_not be_valid :publish }
+      end
+    end
+
+    context 'salary based course' do
+      let(:course_enrichment_traits) { [:with_salary_based_course] }
+
+      it { should validate_presence_of(:salary_details).on(:publish) }
+      it { should_not validate_presence_of(:fee_uk_eu).on(:publish) }
+      it { should_not validate_numericality_of(:fee_international).on(:publish) }
+      it { should_not validate_numericality_of(:fee_international).on(:publish) }
+      context 'valid content' do
+        it { should be_valid :publish }
+      end
+
+      context 'invalid content' do
+        let(:course_enrichment_traits) { %i[with_salary_based_course with_invalid_content] }
+        it { should_not be_valid :publish }
+      end
+    end
+  end
   describe '#unpublish' do
     let(:provider) { create(:provider) }
     let(:course) { create(:course, provider: provider) }

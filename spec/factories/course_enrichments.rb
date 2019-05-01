@@ -53,8 +53,8 @@ FactoryBot.define do
         "Fees are made payable to the University.",
       ].sample
     end
-    fee_uk_eu         { fee_international * 2 }
-    fee_international { rand(100) * 10 }
+    fee_uk_eu         { Faker::Number.within(0..100000) }
+    fee_international { Faker::Number.within(0..100000) }
     financial_support do
       [
         "Please get in contact with the school for any further details.",
@@ -97,5 +97,24 @@ FactoryBot.define do
   trait :subsequent_draft do
     status { :draft }
     last_published_timestamp_utc { 5.days.ago }
+  end
+
+  trait :with_invalid_content do
+    about_course { Faker::Lorem.sentence(400 + 1) }
+    interview_process { Faker::Lorem.sentence(250 + 1) }
+    how_school_placements_work { Faker::Lorem.sentence(350 + 1) }
+
+    fee_details { Faker::Lorem.sentence(250 + 1) }
+    salary_details { Faker::Lorem.sentence(250 + 1) }
+
+    fee_uk_eu { 100001 }
+    fee_international { 100001 }
+  end
+
+  trait :with_fee_based_course do
+    course { create(:course, :fee_type_based) }
+  end
+  trait :with_salary_based_course do
+    course { create(:course, :salary_type_based) }
   end
 end
