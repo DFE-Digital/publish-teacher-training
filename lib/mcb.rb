@@ -184,6 +184,26 @@ module MCB
     end
   end
 
+  def self.config_dir=(dir)
+    @config_dir = dir
+  end
+
+  def self.config_dir
+    @config_dir ||= File.expand_path '~/.config/mcb-dfe/'
+  end
+
+  def self.config_file=(file)
+    @config_file = file
+  end
+
+  def self.config_file
+    @config_file ||= File.join config_dir, 'config.yml'
+  end
+
+  def self.config
+    @config ||= MCB::Config.new(config_file: config_file)
+  end
+
   class << self
   private # rubocop: disable Layout/IndentationWidth
 

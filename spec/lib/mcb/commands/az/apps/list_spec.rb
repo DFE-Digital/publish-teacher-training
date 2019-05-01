@@ -1,5 +1,5 @@
 require 'spec_helper'
-load 'bin/mcb'
+require 'mcb_helper'
 
 describe 'mcb az apps list' do
   before :each do

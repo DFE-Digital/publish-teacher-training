@@ -1,5 +1,5 @@
 require 'spec_helper'
-load 'bin/mcb'
+require 'mcb_helper'
 
 describe 'mcb apiv2 token generate' do
   describe 'generating a token with a secret' do
