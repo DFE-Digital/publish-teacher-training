@@ -28,10 +28,16 @@ FactoryBot.define do
     address3 { Faker::Address.city }
     address4 { Faker::Address.state }
     postcode { Faker::Address.postcode }
+    telephone { Faker::PhoneNumber.phone_number }
     region_code { 'eastern' }
     train_with_us { Faker::Lorem.sentence.to_s }
     train_with_disability { Faker::Lorem.sentence.to_s }
     created_at { Faker::Date.between 2.days.ago, 1.days.ago }
+
+    trait :published do
+      status { :published }
+      last_published_at { 5.days.ago }
+    end
 
     after(:build) do |enrichment, evaluator|
       if evaluator.age.present?

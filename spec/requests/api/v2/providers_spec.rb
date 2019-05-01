@@ -14,7 +14,11 @@ describe 'Providers API v2', type: :request do
       ActionController::HttpAuthentication::Token.encode_credentials(token)
     end
 
-    let!(:provider) { create(:provider, course_count: 0, site_count: 0, organisations: [organisation]) }
+    let!(:provider) { create(:provider,
+                             course_count: 0,
+                             site_count: 0,
+                             enrichments: [],
+                             organisations: [organisation]) }
 
     subject { response }
 
@@ -45,7 +49,17 @@ describe 'Providers API v2', type: :request do
               "provider_code" => provider.provider_code,
               "provider_name" => provider.provider_name,
               "accredited_body?" => false,
-              "can_add_more_sites?" => true
+              "can_add_more_sites?" => true,
+              "website" => provider.url,
+              "email" => provider.email,
+              "telephone" => provider.telephone,
+              "address1" => provider.address1,
+              "address2" => provider.address2,
+              "address3" => provider.address3,
+              "address4" => provider.address4,
+              "postcode" => provider.postcode,
+              "train_with_us" => nil,
+              "train_with_disability" => nil,
             },
             "relationships" => {
               "sites" => {
@@ -82,7 +96,17 @@ describe 'Providers API v2', type: :request do
               "provider_code" => provider.provider_code,
               "provider_name" => provider.provider_name,
               "accredited_body?" => false,
-              "can_add_more_sites?" => true
+              "can_add_more_sites?" => true,
+              "website" => provider.url,
+              "email" => provider.email,
+              "telephone" => provider.telephone,
+              "address1" => provider.address1,
+              "address2" => provider.address2,
+              "address3" => provider.address3,
+              "address4" => provider.address4,
+              "postcode" => provider.postcode,
+              "train_with_us" => nil,
+              "train_with_disability" => nil,
             },
             "relationships" => {
               "sites" => {
@@ -137,6 +161,61 @@ describe 'Providers API v2', type: :request do
         expect(provider_names_in_response).to eq(%w(Acme Zork))
       end
     end
+
+    context 'with provider enrichments' do
+      before do
+        get "/api/v2/users/#{user.id}/providers", headers: { 'HTTP_AUTHORIZATION' => credentials }
+      end
+
+      let(:organisation) { create(:organisation) }
+      let(:enrichment)   { build :provider_enrichment, :published }
+      let(:provider)    { create(:provider,
+                                  course_count: 0,
+                                  site_count: 0,
+                                  enrichments: [enrichment],
+                                  organisations: [organisation]) }
+
+      it 'has a data section with the correct attributes' do
+        json_response = JSON.parse(response.body)
+        expect(json_response).to eq(
+          "data" => [{
+            "id" => provider.id.to_s,
+            "type" => "providers",
+            "attributes" => {
+              "provider_code" => provider.provider_code,
+              "provider_name" => provider.provider_name,
+              "accredited_body?" => false,
+              "can_add_more_sites?" => true,
+              "website" => enrichment.website,
+              "email" => enrichment.email,
+              "telephone" => enrichment.telephone,
+              "address1" => enrichment.address1,
+              "address2" => enrichment.address2,
+              "address3" => enrichment.address3,
+              "address4" => enrichment.address4,
+              "postcode" => enrichment.postcode,
+              "train_with_us" => enrichment.train_with_us,
+              "train_with_disability" => enrichment.train_with_disability
+            },
+            "relationships" => {
+              "sites" => {
+                "meta" => {
+                  "included" => false
+                }
+              },
+              "courses" => {
+                "meta" => {
+                  "count" => provider.courses.count
+                }
+              }
+            }
+          }],
+          "jsonapi" => {
+            "version" => "1.0"
+          }
+        )
+      end
+    end
   end
 
   describe 'GET /providers#show' do
@@ -152,7 +231,11 @@ describe 'Providers API v2', type: :request do
       ActionController::HttpAuthentication::Token.encode_credentials(token)
     end
 
-    let!(:provider) { create(:provider, course_count: 0, site_count: 1, organisations: [organisation]) }
+    let!(:provider) { create(:provider,
+                             course_count: 0,
+                             site_count: 1,
+                             enrichments: [],
+                             organisations: [organisation]) }
 
     subject { response }
 
@@ -165,7 +248,17 @@ describe 'Providers API v2', type: :request do
             "provider_code" => provider.provider_code,
             "provider_name" => provider.provider_name,
             "accredited_body?" => false,
-            "can_add_more_sites?" => true
+            "can_add_more_sites?" => true,
+            "website" => provider.url,
+            "email" => provider.email,
+            "telephone" => provider.telephone,
+            "address1" => provider.address1,
+            "address2" => provider.address2,
+            "address3" => provider.address3,
+            "address4" => provider.address4,
+            "postcode" => provider.postcode,
+            "train_with_us" => nil,
+            "train_with_disability" => nil,
           },
           "relationships" => {
             "sites" => {
@@ -204,7 +297,17 @@ describe 'Providers API v2', type: :request do
                 "provider_code" => provider.provider_code,
                 "provider_name" => provider.provider_name,
                 "accredited_body?" => false,
-                "can_add_more_sites?" => true
+                "can_add_more_sites?" => true,
+                "website" => provider.url,
+                "email" => provider.email,
+                "telephone" => provider.telephone,
+                "address1" => provider.address1,
+                "address2" => provider.address2,
+                "address3" => provider.address3,
+                "address4" => provider.address4,
+                "postcode" => provider.postcode,
+                "train_with_us" => nil,
+                "train_with_disability" => nil,
               },
               "relationships" => {
                 "sites" => {
