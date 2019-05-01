@@ -26,5 +26,9 @@ FactoryBot.define do
     trait :opted_in do
       organisations { [create(:organisation, providers: [create(:provider, opted_in: true)])] }
     end
+
+    trait :admin do
+      email { "#{Faker::Internet.username}@#{['digital.education.gov.uk', 'education.gov.uk'].sample}" }
+    end
   end
 end

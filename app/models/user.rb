@@ -18,8 +18,11 @@
 class User < ApplicationRecord
   include AASM
 
+  DFE_EMAIL_PATTERN = /@(digital.){0,1}education.gov.uk$/.freeze
+
   has_and_belongs_to_many :organisations
   has_many :providers, through: :organisations
+  has_many :access_requests, foreign_key: :requester_id, primary_key: :id
 
   validates :email, presence: true
 
@@ -36,5 +39,9 @@ class User < ApplicationRecord
 
   def opted_in?
     providers.any?(&:opted_in?)
+  end
+
+  def admin?
+    email.match?(DFE_EMAIL_PATTERN)
   end
 end
