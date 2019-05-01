@@ -24,24 +24,5 @@ class AccessRequest < ApplicationRecord
     declined
   ].freeze
 
-  def update_access(access_request, requesting_user)
-    requested_user = User.find_by(email: access_request.email_address)
-    if requested_user == nil
-      access_request.create_requested_user(access_request, requesting_user)
-    else
-      requested_user.update(organisations: requesting_user.organisations)
-    end
-  end
-
-  def create_requested_user(access_request, requesting_user)
-    User.create(
-      email: access_request.email_address,
-      first_name: access_request.first_name,
-      last_name: access_request.last_name,
-      invite_date_utc: Time.now.utc,
-      organisations: requesting_user.organisations
-    )
-  end
-
   alias_method :approve, :completed!
 end

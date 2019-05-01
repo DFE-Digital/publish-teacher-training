@@ -57,6 +57,10 @@ describe 'Access Request API V2', type: :request do
         expect(access_request.reload.status). to eq 'completed'
       end
 
+      it 'has a successful response' do
+        expect(response.body).to eq({ result: true }.to_json)
+      end
+
       context 'when the user requested user already exists' do
         it 'gives a pre existing user access to the right organisations' do
           expect(requested_user.organisations).to eq requesting_user.organisations
