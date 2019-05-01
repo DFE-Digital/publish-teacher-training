@@ -5,7 +5,7 @@ describe AccessRequestApprovalService do
     subject { described_class.call(access_request) }
 
     context 'for a new user' do
-      let(:new_user) { User.find_by(email: access_request.email_address) }
+      let(:target_user) { User.find_by(email: access_request.email_address) }
 
       it 'should create the new user' do
         expect { subject }.to change { User.count }.by(1)
@@ -18,22 +18,22 @@ describe AccessRequestApprovalService do
 
       it 'should set the first_name' do
         subject
-        expect(new_user.first_name).to eq(access_request.first_name)
+        expect(target_user.first_name).to eq(access_request.first_name)
       end
 
       it 'should set the last_name' do
         subject
-        expect(new_user.last_name).to eq(access_request.last_name)
+        expect(target_user.last_name).to eq(access_request.last_name)
       end
 
       it 'should set the invite date' do
         subject
-        expect(new_user.invite_date_utc).to be_within(1.second).of Time.now.utc
+        expect(target_user.invite_date_utc).to be_within(1.second).of Time.now.utc
       end
 
       it "should give the user access to the requestor's orgs" do
         subject
-        expect(new_user.organisations).to(
+        expect(target_user.organisations).to(
           match_array(access_request.user.organisations)
         )
       end
@@ -46,25 +46,54 @@ describe AccessRequestApprovalService do
     end
 
     context 'for an existing user' do
-      let!(:user) { create(:user, email: access_request.email_address) }
+      let!(:target_user) { create(:user, email: access_request.email_address) }
 
       it 'does not create a new user' do
         expect { subject }.not_to(change { User.count })
       end
 
-      context 'with no organisations' do
-        it "sets the target user's organisations to the requesting user's organisations" do
-          expect { subject }.to change { user.reload.organisations }
-            .to(access_request.user.organisations)
+      it "sets the target user's organisations to the requesting user's organisations" do
+        expect { subject }.to change { target_user.reload.organisations }
+          .to(access_request.user.organisations)
+      end
+
+      context 'with existing organisations' do
+        let(:target_user) do
+          create(:user, :opted_in, email: access_request.email_address)
+        end
+        let!(:access_request)   { create(:access_request) }
+        let!(:old_organisation) { target_user.organisations.first }
+        let(:requesting_user)   { access_request.user }
+
+        it "should keep the existing organisation and gain access to new ones" do
+          subject
+          target_user.organisations.reload
+
+          expect(target_user.organisations).to(
+            include(requesting_user.organisations.first)
+          )
+          expect(target_user.organisations).to include(old_organisation)
         end
       end
 
-      context 'with unrelated existing organisations' do
-        xit "shouldn't lose them"
-      end
-
       context 'with matching existing organisations' do
-        xit "shouldn't duplicate the records"
+        let!(:access_request) { create(:access_request) }
+        let!(:target_user) do
+          create(
+            :user,
+            :opted_in,
+            organisations: access_request.user.organisations
+          )
+        end
+
+        it "shouldn't duplicate the records" do
+          subject
+          target_user.organisations.reload
+
+          expect(target_user.organisations).to(
+            match_array(target_user.organisations.uniq)
+          )
+        end
       end
     end
   end
