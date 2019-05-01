@@ -30,7 +30,7 @@ module API
       end
 
       def publish
-        @course.publish_sites if @provider.opted_in
+        @course.publish_sites
         @course.publish_enrichment(@current_user)
 
         response = ManageCoursesAPIService::Request.sync_course_with_search_and_compare(

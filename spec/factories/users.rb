@@ -23,12 +23,16 @@ FactoryBot.define do
     accept_terms_date_utc { Faker::Time.backward(1).utc }
     sign_in_user_id { SecureRandom.uuid }
 
-    trait :opted_in do
-      organisations { [create(:organisation, providers: [create(:provider, opted_in: true)])] }
-    end
-
     trait :admin do
       email { "#{Faker::Internet.username}@#{['digital.education.gov.uk', 'education.gov.uk'].sample}" }
+    end
+
+    trait :with_organisation do
+      organisations { [create(:organisation)] }
+    end
+
+    trait :with_provider do
+      organisations { [create(:organisation, providers: [create(:provider)])] }
     end
   end
 end

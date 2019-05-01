@@ -54,7 +54,6 @@ describe '/api/v2/users', type: :request do
       expect(data_attributes['first_name']).to eq(user.first_name)
       expect(data_attributes['last_name']).to eq(user.last_name)
       expect(data_attributes['state']).to eq(user.state)
-      expect(data_attributes['opted_in?']).to eq(user.opted_in?)
     end
   end
 

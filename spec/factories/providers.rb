@@ -41,7 +41,6 @@ FactoryBot.define do
     telephone { Faker::PhoneNumber.phone_number }
     accrediting_provider { 'N' }
     region_code { 'london' }
-    opted_in { true }
     organisations { build_list :organisation, 1 }
 
     transient do

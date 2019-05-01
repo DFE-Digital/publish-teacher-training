@@ -45,20 +45,6 @@ describe User, type: :model do
     it { should be_transitioned }
   end
 
-  describe '#opted_in?' do
-    context 'user is opted in' do
-      subject { create(:user, :opted_in) }
-
-      its(:opted_in?) { should be_truthy }
-    end
-
-    context 'user is not opted in' do
-      subject { create(:user) }
-
-      its(:opted_in?) { should be_falsey }
-    end
-  end
-
   describe '#admin?' do
     context 'user has an education.gov.uk email' do
       subject { create(:user, email: 'test@education.gov.uk') }

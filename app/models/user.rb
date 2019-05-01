@@ -37,10 +37,6 @@ class User < ApplicationRecord
     end
   end
 
-  def opted_in?
-    providers.any?(&:opted_in?)
-  end
-
   def admin?
     email.match?(DFE_EMAIL_PATTERN)
   end
