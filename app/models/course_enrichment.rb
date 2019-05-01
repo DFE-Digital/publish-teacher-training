@@ -57,7 +57,7 @@ class CourseEnrichment < ApplicationRecord
   validates :salary_details, presence: true, words_count: { maximum: 250 }, on: :publish, unless: :is_fee_based?
 
   def is_fee_based?
-    self.course.is_fee_based?
+    course.is_fee_based?
   end
 
   def has_been_published_before?

@@ -191,7 +191,7 @@ class Course < ApplicationRecord
   end
 
   def is_fee_based?
-    self.funding == 'fee'
+    funding == 'fee'
   end
 
   def last_published_at
