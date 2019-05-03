@@ -61,9 +61,7 @@ describe 'Courses API v2', type: :request do
     context 'when course and provider is not related' do
       let(:course) { create(:course) }
 
-      it 'raises an error' do
-        expect { subject }.to raise_error ActiveRecord::RecordNotFound
-      end
+      it { should have_http_status(:not_found) }
     end
 
     context 'when the api responds with a success' do

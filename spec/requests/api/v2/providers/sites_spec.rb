@@ -126,11 +126,13 @@ describe 'Sites API v2', type: :request do
       end
     end
 
-    it "raises a 'record not found' error when the provider doesn't exist" do
-      expect {
+    context "when the provider doesn't exist" do
+      before do
         get("/api/v2/providers/non-existent-provider/sites",
             headers: { 'HTTP_AUTHORIZATION' => credentials })
-      } .to raise_error ActiveRecord::RecordNotFound
+      end
+
+      it { should have_http_status(:not_found) }
     end
   end
 

@@ -69,9 +69,8 @@ describe 'Courses API v2', type: :request do
 
     context 'when course and provider is not related' do
       let(:course) { create(:course) }
-      it "raises an error" do
-        expect { subject }.to raise_error ActiveRecord::RecordNotFound
-      end
+
+      it { should have_http_status(:not_found) }
     end
 
     describe 'JSON generated for courses' do
@@ -250,11 +249,13 @@ describe 'Courses API v2', type: :request do
       end
     end
 
-    it "raises a 'record not found' error when the provider doesn't exist" do
-      expect {
+    context "when the provider doesn't exist" do
+      before do
         get("/api/v2/providers/non-existent-provider/courses",
             headers: { 'HTTP_AUTHORIZATION' => credentials })
-      } .to raise_error ActiveRecord::RecordNotFound
+      end
+
+      it { should have_http_status(:not_found) }
     end
   end
 end
