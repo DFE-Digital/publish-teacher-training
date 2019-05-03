@@ -425,4 +425,18 @@ RSpec.describe Course, type: :model do
       end
     end
   end
+
+  context "entry requirements" do
+    %i[maths science english].each do |gcse_subject|
+      describe gcse_subject do
+        it 'is an enum' do
+          expect(subject)
+            .to define_enum_for(gcse_subject)
+                  .backed_by_column_of_type(:integer)
+                  .with_values(Course::ENTRY_REQUIREMENT_OPTIONS)
+                  .with_suffix("for_#{gcse_subject}")
+        end
+      end
+    end
+  end
 end

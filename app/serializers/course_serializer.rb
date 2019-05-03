@@ -48,6 +48,18 @@ class CourseSerializer < ActiveModel::Serializer
     object.age_range_before_type_cast
   end
 
+  def maths
+    object.maths_before_type_cast
+  end
+
+  def english
+    object.english_before_type_cast
+  end
+
+  def science
+    object.science_before_type_cast
+  end
+
   def start_month
     object.start_date.iso8601 if object.start_date
   end
