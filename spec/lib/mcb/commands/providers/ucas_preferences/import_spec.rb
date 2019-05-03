@@ -30,16 +30,16 @@ describe 'mcb providers ucas_preferences import' do
   end
   let(:csv_headers) do
     %i[
-        INST_CODE
-        INST_ID
-        VERSION
-        INP_ID
-        PRF_ID
-        PRT_ID
-        PREF_TYPE
-        PREF_VALUE
-        PRV_ID
-      ]
+      INST_CODE
+      INST_ID
+      VERSION
+      INP_ID
+      PRF_ID
+      PRT_ID
+      PREF_TYPE
+      PREF_VALUE
+      PRV_ID
+    ]
   end
   let(:original_preferences) do
     build :provider_ucas_preference,

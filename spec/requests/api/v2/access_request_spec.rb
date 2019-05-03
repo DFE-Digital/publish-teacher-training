@@ -8,10 +8,10 @@ describe 'Access Request API V2', type: :request do
   let(:payload) { { email: admin_user.email } }
   let(:access_request) {
     create(:access_request,
-            email_address: requested_user.email,
-            requester_email: requesting_user.email,
-            requester_id: requesting_user.id,
-            organisation: organisation.name)
+           email_address: requested_user.email,
+           requester_email: requesting_user.email,
+           requester_id: requesting_user.id,
+           organisation: organisation.name)
   }
   let(:token) do
     JWT.encode payload,
@@ -27,7 +27,7 @@ describe 'Access Request API V2', type: :request do
   describe 'POST #approve' do
     let(:approve_route_request) do
       post "/api/v2/access_requests/#{access_request.id}/approve",
-      headers: { 'HTTP_AUTHORIZATION' => credentials }
+           headers: { 'HTTP_AUTHORIZATION' => credentials }
     end
     context 'when unauthenticated' do
       before do
@@ -70,17 +70,17 @@ describe 'Access Request API V2', type: :request do
       context 'when email address does not belong to a user' do
         let(:new_user_access_request) {
           create(:access_request,
-                  first_name: 'test',
-                  last_name: 'user',
-                  email_address: 'test@user.com',
-                  requester_email: requesting_user.email,
-                  requester_id: requesting_user.id,
-                  organisation: organisation.name)
+                 first_name: 'test',
+                 last_name: 'user',
+                 email_address: 'test@user.com',
+                 requester_email: requesting_user.email,
+                 requester_id: requesting_user.id,
+                 organisation: organisation.name)
         }
 
         before do
           post "/api/v2/access_requests/#{new_user_access_request.id}/approve",
-          headers: { 'HTTP_AUTHORIZATION' => credentials }
+               headers: { 'HTTP_AUTHORIZATION' => credentials }
         end
 
         it 'creates a new account for a new user and gives access to the right orgs' do

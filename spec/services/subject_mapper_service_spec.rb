@@ -140,9 +140,9 @@ describe SubjectMapperService do
 
     describe "using subject-mapper-test-data.csv" do
       CSV.foreach("#{Dir.pwd}/spec/services/subject-mapper-test-data.csv",
-        encoding: "UTF-8",
-        headers: true,
-        header_converters: :symbol).with_index do |row, i|
+                  encoding: "UTF-8",
+                  headers: true,
+                  header_converters: :symbol).with_index do |row, i|
 
         describe "Test case row '#{i}': subjects #{row[:ucas_subjects]}, title: #{row[:course_title]}" do
           subject { described_class.get_subject_list(row[:course_title], row[:ucas_subjects].split(",")) }

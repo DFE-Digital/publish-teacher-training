@@ -4,16 +4,16 @@ describe Course, type: :model do
   describe "#enrichments" do
     subject {
       create(:course, with_enrichments: [
-        [:published, created_at: 5.days.ago],
-        [:published, created_at: 3.days.ago],
-        [:subsequent_draft, created_at: 1.day.ago],
-      ]).enrichments
+               [:published, created_at: 5.days.ago],
+               [:published, created_at: 3.days.ago],
+               [:subsequent_draft, created_at: 1.day.ago],
+             ]).enrichments
     }
 
     let(:another_course) {
       create(:course, with_enrichments: [
-        [:published, created_at: 5.days.ago],
-      ])
+               [:published, created_at: 5.days.ago],
+             ])
     }
 
     its(:size) { should eq(3) }
@@ -61,10 +61,10 @@ describe Course, type: :model do
     context 'on a course with only a draft enrichment' do
       let(:subject) do
         create(:course,
-            changed_at: 10.minutes.ago,
-            with_enrichments: [[:initial_draft,
-                                created_at: 1.day.ago,
-                                updated_at: 20.minutes.ago]])
+               changed_at: 10.minutes.ago,
+               with_enrichments: [[:initial_draft,
+                                   created_at: 1.day.ago,
+                                   updated_at: 20.minutes.ago]])
       end
 
       let(:enrichment) { subject.enrichments.first }
@@ -91,10 +91,10 @@ describe Course, type: :model do
     context 'on a course with a draft enrichment and previously-published enrichments' do
       let(:subject) do
         create(:course, with_enrichments: [
-            [:published, created_at: 5.days.ago],
-            [:published, created_at: 3.days.ago],
-            [:subsequent_draft, created_at: 1.day.ago],
-        ])
+                 [:published, created_at: 5.days.ago],
+                 [:published, created_at: 3.days.ago],
+                 [:subsequent_draft, created_at: 1.day.ago],
+               ])
       end
 
       it 'publishes the draft' do

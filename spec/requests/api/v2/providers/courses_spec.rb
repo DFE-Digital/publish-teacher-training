@@ -144,10 +144,10 @@ describe 'Courses API v2', type: :request do
                 "data" => {
                   "type" => "sites",
                     "id" => site.id.to_s
-                  }
                 }
               }
-            }, {
+            }
+          }, {
             "id" => site.id.to_s,
             "type" => "sites",
             "attributes" => {
@@ -185,7 +185,7 @@ describe 'Courses API v2', type: :request do
       it "raises an error" do
         expect {
           get "/api/v2/providers/#{provider.provider_code}/courses",
-            headers: { 'HTTP_AUTHORIZATION' => credentials }
+              headers: { 'HTTP_AUTHORIZATION' => credentials }
         }.to raise_error Pundit::NotAuthorizedError
       end
     end
@@ -253,7 +253,7 @@ describe 'Courses API v2', type: :request do
     it "raises a 'record not found' error when the provider doesn't exist" do
       expect {
         get("/api/v2/providers/non-existent-provider/courses",
-         headers: { 'HTTP_AUTHORIZATION' => credentials })
+            headers: { 'HTTP_AUTHORIZATION' => credentials })
       } .to raise_error ActiveRecord::RecordNotFound
     end
   end

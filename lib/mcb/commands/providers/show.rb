@@ -2,7 +2,7 @@ name 'show'
 summary 'Show information about provider'
 param :code
 option :p, :'preview-courses', 'Show courses as a mini-preview of Find, instead of a database view.',
-      default: false
+       default: false
 
 run do |opts, args, _cmd|
   MCB.init_rails(opts)

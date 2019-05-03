@@ -16,10 +16,10 @@ describe SitePolicy do
     let(:site) { create(:site) }
     let!(:provider) {
       create(:provider,
-              course_count: 0,
-              site_count: 0,
-              sites: [site],
-              organisations: [organisation])
+             course_count: 0,
+             site_count: 0,
+             sites: [site],
+             organisations: [organisation])
     }
 
     it { should permit(user, site) }

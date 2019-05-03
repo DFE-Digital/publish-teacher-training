@@ -23,15 +23,15 @@ RSpec.describe Course, type: :model do
     context 'on a course with many sites' do
       let(:course) {
         create(:course, site_statuses: [
-          published_new_site,
-          published_running_site,
-          published_discontinued_site,
-          published_suspended_site,
-          unpublished_new_site,
-          unpublished_running_site,
-          unpublished_discontinued_site,
-          unpublished_suspended_site
-        ])
+                 published_new_site,
+                 published_running_site,
+                 published_discontinued_site,
+                 published_suspended_site,
+                 unpublished_new_site,
+                 unpublished_running_site,
+                 unpublished_discontinued_site,
+                 unpublished_suspended_site
+               ])
       }
 
       it 'sets all the sites to the right published/status states' do

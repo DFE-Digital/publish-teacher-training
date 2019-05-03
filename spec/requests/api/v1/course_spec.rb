@@ -18,12 +18,12 @@ describe "Courses API", type: :request do
 
     let(:provider) do
       FactoryBot.create(:provider,
-        provider_name: "ACME SCITT",
-        provider_code: "2LD",
-        provider_type: :scitt,
-        site_count: 0,
-        scheme_member: 'Y',
-        enrichments: [])
+                        provider_name: "ACME SCITT",
+                        provider_code: "2LD",
+                        provider_type: :scitt,
+                        site_count: 0,
+                        scheme_member: 'Y',
+                        enrichments: [])
     end
 
 
@@ -34,27 +34,27 @@ describe "Courses API", type: :request do
         subject2 = FactoryBot.create(:subject, subject_code: "2", subject_name: "Mathematics")
 
         course = FactoryBot.create(:course,
-          course_code: "2HPF",
-          start_date: Date.new(2019, 9, 1),
-          name: "Religious Education",
-          subjects: [subject1, subject2],
-          study_mode: :full_time,
-          age_range: 'primary',
-          english: 3,
-          maths: 9,
-          profpost_flag: :postgraduate,
-          program_type: :school_direct_training_programme,
-          modular: "",
-          provider: provider,
-          age: 2.hours.ago)
+                                   course_code: "2HPF",
+                                   start_date: Date.new(2019, 9, 1),
+                                   name: "Religious Education",
+                                   subjects: [subject1, subject2],
+                                   study_mode: :full_time,
+                                   age_range: 'primary',
+                                   english: 3,
+                                   maths: 9,
+                                   profpost_flag: :postgraduate,
+                                   program_type: :school_direct_training_programme,
+                                   modular: "",
+                                   provider: provider,
+                                   age: 2.hours.ago)
 
         FactoryBot.create(:site_status,
-          vac_status: :full_time_vacancies,
-          publish: 'Y',
-          status: :running,
-          applications_accepted_from: "2018-10-09 00:00:00",
-          course: course,
-          site: site)
+                          vac_status: :full_time_vacancies,
+                          publish: 'Y',
+                          status: :running,
+                          applications_accepted_from: "2018-10-09 00:00:00",
+                          course: course,
+                          site: site)
 
         course.update changed_at: 2.hours.ago
       end
@@ -75,51 +75,51 @@ describe "Courses API", type: :request do
 
         json = JSON.parse(response.body)
         expect(json). to eq([
-          {
-            "course_code" => "2HPF",
-            "start_month" => "2019-09-01T00:00:00Z",
-            "start_month_string" => "September",
-            "name" => "Religious Education",
-            "study_mode" => "F",
-            "copy_form_required" => "Y",
-            "profpost_flag" => "PG",
-            "program_type" => "SD",
-            "age_range" => "P",
-            "modular" => "",
-            "english" => 3,
-            "maths" => 9,
-            "science" => nil,
-            "recruitment_cycle" => "2019",
-            "campus_statuses" => [
-              {
-                "campus_code" => "-",
-                "name" => "Main Site",
-                "vac_status" => "F",
-                "publish" => "Y",
-                "status" => "R",
-                "course_open_date" => "2018-10-09",
-              }
-            ],
-            "subjects" => [
-              {
-                "subject_code" => "1",
-                "subject_name" => "Secondary"
-              },
-              {
-                "subject_code" => "2",
-                "subject_name" => "Mathematics"
-              }
-            ],
-            "provider" => {
-              "institution_code" => "2LD",
-              "institution_name" => "ACME SCITT",
-              "institution_type" => "B",
-              "accrediting_provider" => 'N',
-              "scheme_member" => "Y"
-            },
-            "accrediting_provider" => nil
-          }
-        ])
+                              {
+                                "course_code" => "2HPF",
+                                "start_month" => "2019-09-01T00:00:00Z",
+                                "start_month_string" => "September",
+                                "name" => "Religious Education",
+                                "study_mode" => "F",
+                                "copy_form_required" => "Y",
+                                "profpost_flag" => "PG",
+                                "program_type" => "SD",
+                                "age_range" => "P",
+                                "modular" => "",
+                                "english" => 3,
+                                "maths" => 9,
+                                "science" => nil,
+                                "recruitment_cycle" => "2019",
+                                "campus_statuses" => [
+                                  {
+                                    "campus_code" => "-",
+                                    "name" => "Main Site",
+                                    "vac_status" => "F",
+                                    "publish" => "Y",
+                                    "status" => "R",
+                                    "course_open_date" => "2018-10-09",
+                                  }
+                                ],
+                                "subjects" => [
+                                  {
+                                    "subject_code" => "1",
+                                    "subject_name" => "Secondary"
+                                  },
+                                  {
+                                    "subject_code" => "2",
+                                    "subject_name" => "Mathematics"
+                                  }
+                                ],
+                                "provider" => {
+                                  "institution_code" => "2LD",
+                                  "institution_name" => "ACME SCITT",
+                                  "institution_type" => "B",
+                                  "accrediting_provider" => 'N',
+                                  "scheme_member" => "Y"
+                                },
+                                "accrediting_provider" => nil
+                              }
+                            ])
       end
 
       it 'includes correct next link in response headers' do
@@ -135,7 +135,7 @@ describe "Courses API", type: :request do
                                          provider: provider)
 
         get '/api/v1/courses',
-          headers: { 'HTTP_AUTHORIZATION' => credentials }
+            headers: { 'HTTP_AUTHORIZATION' => credentials }
 
         expect(response.headers).to have_key "Link"
         url = url_for(
@@ -181,8 +181,8 @@ describe "Courses API", type: :request do
                                          provider: provider)
 
         get '/api/v1/courses',
-          headers: { 'HTTP_AUTHORIZATION' => credentials },
-          params: { changed_since: 30.minutes.ago.utc.iso8601 }
+            headers: { 'HTTP_AUTHORIZATION' => credentials },
+            params: { changed_since: 30.minutes.ago.utc.iso8601 }
 
 
         expect(response.headers).to have_key "Link"
@@ -197,8 +197,8 @@ describe "Courses API", type: :request do
         provided_timestamp = 5.seconds.ago.utc.iso8601
 
         get '/api/v1/courses',
-          headers: { 'HTTP_AUTHORIZATION' => credentials },
-          params: { changed_since: provided_timestamp }
+            headers: { 'HTTP_AUTHORIZATION' => credentials },
+            params: { changed_since: provided_timestamp }
 
         url = url_for(params: {
                         changed_since: provided_timestamp,

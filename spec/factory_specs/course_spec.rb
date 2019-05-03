@@ -14,10 +14,10 @@ describe "Course factory" do
   context "with_course_enrichments" do
     subject {
       create(:course, with_enrichments: [
-        [:published, created_at: 5.days.ago],
-        [:published, created_at: 3.days.ago],
-        [:subsequent_draft, created_at: 1.day.ago],
-      ])
+               [:published, created_at: 5.days.ago],
+               [:published, created_at: 3.days.ago],
+               [:subsequent_draft, created_at: 1.day.ago],
+             ])
     }
 
     it "has enrichments" do

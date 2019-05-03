@@ -17,7 +17,7 @@ describe '/api/v2/sessions', type: :request do
 
     before do
       post "/api/v2/sessions",
-          headers: { 'HTTP_AUTHORIZATION' => credentials }
+           headers: { 'HTTP_AUTHORIZATION' => credentials }
     end
 
     subject { response }
@@ -29,10 +29,10 @@ describe '/api/v2/sessions', type: :request do
     let(:params) do
       {
         "_jsonapi" => {
-            "data" => {
-              "type" => type,
-              "attributes" => attributes
-            }
+          "data" => {
+            "type" => type,
+            "attributes" => attributes
+          }
         }
       }
     end
@@ -41,8 +41,8 @@ describe '/api/v2/sessions', type: :request do
       let(:type) { "sessions" }
       let(:attributes) do
         {
-        "first_name" => user.first_name,
-        "last_name" => user.last_name,
+          "first_name" => user.first_name,
+          "last_name" => user.last_name,
         }
       end
 
@@ -52,8 +52,8 @@ describe '/api/v2/sessions', type: :request do
       before do
         Timecop.freeze
         post '/api/v2/sessions',
-              headers: { 'HTTP_AUTHORIZATION' => credentials },
-              params: params
+             headers: { 'HTTP_AUTHORIZATION' => credentials },
+             params: params
       end
 
       after do

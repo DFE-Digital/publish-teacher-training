@@ -19,7 +19,7 @@ class SiteStatus < ApplicationRecord
   audited associated_with: :course
 
   validate :vac_status_must_be_consistent_with_course_study_mode,
-    if: Proc.new { |s| s.course&.study_mode.present? }
+           if: Proc.new { |s| s.course&.study_mode.present? }
 
   enum vac_status: {
     both_full_time_and_part_time_vacancies: "B",
