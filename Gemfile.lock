@@ -1,3 +1,10 @@
+GIT
+  remote: https://github.com/nanamkim/custom-err-msg.git
+  revision: d72fb180d9dfd19f18622c978747dcc0aa5374e0
+  ref: d72fb18
+  specs:
+    custom_error_message (1.2.1)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -388,6 +395,7 @@ DEPENDENCIES
   byebug
   config
   cri
+  custom_error_message!
   data_migrate
   database_cleaner
   factory_bot_rails (~> 5.0)

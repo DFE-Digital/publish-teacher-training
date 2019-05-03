@@ -93,11 +93,18 @@ class Course < ApplicationRecord
   end
 
   def validate_enrichment
-    latest = enrichments.latest_first.first
-    if latest.present?
-      latest.valid? :publish
-      latest.errors.full_messages.each do |msg|
-        errors.add :latest_enrichment, msg.to_s
+    latest_enrichment = enrichments.latest_first.first
+    if latest_enrichment.present?
+      latest_enrichment.valid? :publish
+      latest_enrichment.errors.messages.each do |field, _error|
+        # Compute a key of `latest_enrichment__FIELD` to allow the frontend to determine
+        # which field should be linked to from the error title.
+        key = "latest_enrichment__#{field}".to_sym
+        # `full_messages_for` here will remove any `^`s defined in the validator or en.yml.
+        # We still need it for later, so re-add it.
+        # jsonapi_errors will throw if it's given an array, so we call `.first`.
+        message = "^" + latest_enrichment.errors.full_messages_for(field).first.to_s
+        errors.add key, message
       end
     end
   end
