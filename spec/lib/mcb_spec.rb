@@ -8,20 +8,9 @@ describe 'mcb command' do
     end
 
     context 'connecting to an Azure webapp' do
-      it 'configures for the webapp', stub_init_rails: false do
-        MCB.config[:email] = create(:user).email
-        allow(MCB::Azure).to receive(:configure_for_webapp)
-
-        MCB.init_rails(webapp: 'banana')
-
-        expect(MCB::Azure).to have_received(:configure_for_webapp)
-                                .with(webapp: 'banana')
-      end
-
       it 'sets the audited user', stub_init_rails: false do
         user = create :user
         MCB.config[:email] = user.email
-        allow(ENV).to receive(:key?).with('DB_HOSTNAME').and_return(true)
         MCB.init_rails
         expect(Audited.store[:audited_user]).to eq user
       end
