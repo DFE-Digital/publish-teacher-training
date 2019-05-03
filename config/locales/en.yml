@@ -4,8 +4,23 @@ en:
       course_enrichment:
         fee_uk_eu: "Course fees for UK and EU students"
         fee_international: "Course fees for international students"
+      site:
+        location_name: "Name"
+        address1: "Building and street"
+        address3: "Town or city"
     errors:
       models:
+        site:
+          attributes:
+            location_name:
+              blank: "is missing"
+              taken: "is in use by another location"
+            address1:
+              blank: "is missing"
+            address3:
+              blank: "is missing"
+            postcode:
+              blank: "is missing"
         course_enrichment:
           attributes:
             salary_details:
