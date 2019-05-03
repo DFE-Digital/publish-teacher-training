@@ -76,7 +76,7 @@ describe 'Sites API v2', type: :request do
       it "raises an error" do
         expect {
           get "/api/v2/providers/#{provider.provider_code}/sites",
-            headers: { 'HTTP_AUTHORIZATION' => credentials }
+              headers: { 'HTTP_AUTHORIZATION' => credentials }
         }.to raise_error Pundit::NotAuthorizedError
       end
     end
@@ -129,7 +129,7 @@ describe 'Sites API v2', type: :request do
     it "raises a 'record not found' error when the provider doesn't exist" do
       expect {
         get("/api/v2/providers/non-existent-provider/sites",
-         headers: { 'HTTP_AUTHORIZATION' => credentials })
+            headers: { 'HTTP_AUTHORIZATION' => credentials })
       } .to raise_error ActiveRecord::RecordNotFound
     end
   end

@@ -25,26 +25,26 @@ describe 'Providers API', type: :request do
       end
       let(:contacts) do
         [
-        build(:contact, type: 'admin',
-                        name: 'Admin Contact A123',
-                        email: 'admin@acmescitt.education.uk',
-                        telephone: '020 812 345 678'),
-        build(:contact, type: 'utt',
-                        name: 'Utt Contact A123',
-                        email: 'utt@acmescitt.education.uk',
-                        telephone: '020 812 345 678'),
-        build(:contact, type: 'web_link',
-                        name: 'Web Link Contact A123',
-                        email: 'web_link@acmescitt.education.uk',
-                        telephone: '020 812 345 678'),
-        build(:contact, type: 'fraud',
-                        name: 'Fraud Contact A123',
-                        email: 'fraud@acmescitt.education.uk',
-                        telephone: '020 812 345 678'),
-        build(:contact, type: 'finance',
-                        name: 'Finance Contact A123',
-                        email: 'finance@acmescitt.education.uk',
-                        telephone: '020 812 345 678')
+          build(:contact, type: 'admin',
+                          name: 'Admin Contact A123',
+                          email: 'admin@acmescitt.education.uk',
+                          telephone: '020 812 345 678'),
+          build(:contact, type: 'utt',
+                          name: 'Utt Contact A123',
+                          email: 'utt@acmescitt.education.uk',
+                          telephone: '020 812 345 678'),
+          build(:contact, type: 'web_link',
+                          name: 'Web Link Contact A123',
+                          email: 'web_link@acmescitt.education.uk',
+                          telephone: '020 812 345 678'),
+          build(:contact, type: 'fraud',
+                          name: 'Fraud Contact A123',
+                          email: 'fraud@acmescitt.education.uk',
+                          telephone: '020 812 345 678'),
+          build(:contact, type: 'finance',
+                          name: 'Finance Contact A123',
+                          email: 'finance@acmescitt.education.uk',
+                          telephone: '020 812 345 678')
         ]
       end
       let!(:provider) do
@@ -71,10 +71,10 @@ describe 'Providers API', type: :request do
       end
       let!(:site) do
         create(:site,
-              location_name: 'Main site 1',
-              code: '-',
-              region_code: :london,
-              provider: provider)
+               location_name: 'Main site 1',
+               code: '-',
+               region_code: :london,
+               provider: provider)
       end
       let(:ucas_preferences2) do
         build(:ucas_preferences,
@@ -84,56 +84,56 @@ describe 'Providers API', type: :request do
       end
       let(:contacts2) do
         [
-        build(:contact, type: 'admin',
-                        name: 'Admin Contact B123',
-                        email: 'admin@acmeuniversity.education.uk',
-                        telephone: '01273 345 678'),
-        build(:contact, type: 'utt',
-                        name: 'Utt Contact B123',
-                        email: 'utt@acmeuniversity.education.uk',
-                        telephone: '01273 345 678'),
-        build(:contact, type: 'web_link',
-                        name: 'Web Link Contact B123',
-                        email: 'web_link@acmeuniversity.education.uk',
-                        telephone: '01273 345 678'),
-        build(:contact, type: 'fraud',
-                        name: 'Fraud Contact B123',
-                        email: 'fraud@acmeuniversity.education.uk',
-                        telephone: '01273 345 678'),
-        build(:contact, type: 'finance',
-                        name: 'Finance Contact B123',
-                        email: 'finance@acmeuniversity.education.uk',
-                        telephone: '01273 345 678')
+          build(:contact, type: 'admin',
+                          name: 'Admin Contact B123',
+                          email: 'admin@acmeuniversity.education.uk',
+                          telephone: '01273 345 678'),
+          build(:contact, type: 'utt',
+                          name: 'Utt Contact B123',
+                          email: 'utt@acmeuniversity.education.uk',
+                          telephone: '01273 345 678'),
+          build(:contact, type: 'web_link',
+                          name: 'Web Link Contact B123',
+                          email: 'web_link@acmeuniversity.education.uk',
+                          telephone: '01273 345 678'),
+          build(:contact, type: 'fraud',
+                          name: 'Fraud Contact B123',
+                          email: 'fraud@acmeuniversity.education.uk',
+                          telephone: '01273 345 678'),
+          build(:contact, type: 'finance',
+                          name: 'Finance Contact B123',
+                          email: 'finance@acmeuniversity.education.uk',
+                          telephone: '01273 345 678')
         ]
       end
       let(:provider2) do
         create(:provider,
-              provider_name: 'ACME University',
-              provider_code: 'B123',
-              provider_type: :university,
-              address1: 'Bee School',
-              address2: 'Bee Avenue',
-              address3: 'Bee City',
-              address4: 'Bee Hive',
-              postcode: 'B3 3BB',
-              telephone: '01273 345 678',
-              email: 'info@acmeuniversity.education.uk',
-              contact_name: 'James Brown',
-              region_code: :south_west,
-              accrediting_provider: 'N',
-              scheme_member: 'N',
-              last_published_at: DateTime.now.utc,
-              enrichments: [],
-              site_count: 0,
-              ucas_preferences: ucas_preferences2,
-              contacts: contacts2)
+               provider_name: 'ACME University',
+               provider_code: 'B123',
+               provider_type: :university,
+               address1: 'Bee School',
+               address2: 'Bee Avenue',
+               address3: 'Bee City',
+               address4: 'Bee Hive',
+               postcode: 'B3 3BB',
+               telephone: '01273 345 678',
+               email: 'info@acmeuniversity.education.uk',
+               contact_name: 'James Brown',
+               region_code: :south_west,
+               accrediting_provider: 'N',
+               scheme_member: 'N',
+               last_published_at: DateTime.now.utc,
+               enrichments: [],
+               site_count: 0,
+               ucas_preferences: ucas_preferences2,
+               contacts: contacts2)
       end
       let!(:site2) do
         create(:site,
-              location_name: 'Main site 2',
-              code: '-',
-              region_code: :scotland,
-              provider: provider2)
+               location_name: 'Main site 2',
+               code: '-',
+               region_code: :scotland,
+               provider: provider2)
       end
 
       it 'returns http success' do
@@ -310,8 +310,8 @@ describe 'Providers API', type: :request do
                changed_at: timestamp_of_last_provider)
 
         get '/api/v1/providers',
-          headers: { 'HTTP_AUTHORIZATION' => credentials },
-          params: { changed_since: 30.minutes.ago.utc.iso8601 }
+            headers: { 'HTTP_AUTHORIZATION' => credentials },
+            params: { changed_since: 30.minutes.ago.utc.iso8601 }
 
         expect(response.headers).to have_key "Link"
         uri = URI.parse(response.headers["Link"].sub(/;.*/, ''))
@@ -325,8 +325,8 @@ describe 'Providers API', type: :request do
         provided_timestamp = 5.minutes.ago.utc.iso8601
 
         get '/api/v1/providers',
-          headers: { 'HTTP_AUTHORIZATION' => credentials },
-          params: { changed_since: provided_timestamp }
+            headers: { 'HTTP_AUTHORIZATION' => credentials },
+            params: { changed_since: provided_timestamp }
 
         uri = URI.parse(response.headers["Link"].sub(/;.*/, ''))
         query_params = Rack::Utils.parse_query(uri.query).with_indifferent_access

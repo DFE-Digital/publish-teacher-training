@@ -20,11 +20,11 @@ class Contact < ApplicationRecord
   audited associated_with: :provider
 
   enum type: {
-         admin: 'admin',
+    admin: 'admin',
          utt: 'utt',
          web_link: 'web_link',
          fraud: 'fraud',
          finance: 'finance'
-       },
+  },
        _suffix: 'contact'
 end

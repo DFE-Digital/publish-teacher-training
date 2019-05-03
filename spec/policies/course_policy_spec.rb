@@ -16,9 +16,9 @@ describe CoursePolicy do
     let(:course) { create(:course) }
     let!(:provider) {
       create(:provider,
-              course_count: 0,
-              courses: [course],
-              organisations: [organisation])
+             course_count: 0,
+             courses: [course],
+             organisations: [organisation])
     }
 
     it { should permit(user, course) }

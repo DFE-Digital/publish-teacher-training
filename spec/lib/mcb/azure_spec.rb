@@ -106,9 +106,9 @@ describe MCB::Azure do
       allow(ENV).to receive(:[]=)
       allow(MCB::Azure).to(
         receive(:get_apps).and_return([{
-                                         'name' => 'noapp',
+                                        'name' => 'noapp',
                                          'resourceGroup' => 'rgrrroup'
-                                       }])
+                                      }])
       )
 
       allow(MCB::Azure).to(

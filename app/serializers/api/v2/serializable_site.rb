@@ -4,7 +4,7 @@ module API
       type 'sites'
 
       attributes :code, :location_name, :address1, :address2,
-      :address3, :address4, :postcode, :region_code
+                 :address3, :address4, :postcode, :region_code
     end
   end
 end

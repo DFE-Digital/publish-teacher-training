@@ -125,10 +125,10 @@ module MCB
         # Send each provider to the consumer of this enumerator
         courses_list.each do |course|
           y << [course, {
-                  page: page_count,
+            page: page_count,
                   url: url,
                   next_url: next_url
-                }]
+          }]
         end
 
         break unless all_pages
@@ -172,10 +172,10 @@ module MCB
         # Send each provider to the consumer of this enumerator
         providers_list.each do |provider|
           y << [provider, {
-                  page: page_count,
+            page: page_count,
                   url: url,
                   next_url: next_url
-                }]
+          }]
         end
 
         break unless all_pages

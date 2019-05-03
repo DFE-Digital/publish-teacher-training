@@ -106,7 +106,7 @@ private
         name: '',
         email: object.ucas_preferences&.application_alert_email,
         telephone: ''
-        }]
+      }]
     end
   end
 end

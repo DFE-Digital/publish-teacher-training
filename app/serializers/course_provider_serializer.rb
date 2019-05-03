@@ -28,7 +28,7 @@ class CourseProviderSerializer < ActiveModel::Serializer
   has_many :sites, key: :campuses
 
   attributes :institution_code, :institution_name, :institution_type, :accrediting_provider,
-              :scheme_member
+             :scheme_member
 
   def institution_code
     object.provider_code

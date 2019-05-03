@@ -83,12 +83,12 @@ RSpec.describe Course, type: :model do
         context 'single site status as findable and mix site status as non findable' do
           let(:subject) {
             create(:course, with_site_statuses: [
-              [:findable],
-              [:with_any_vacancy],
-              [:default],
-              [:applications_being_accepted_now],
-              [:applications_being_accepted_in_future]
-            ])
+                     [:findable],
+                     [:with_any_vacancy],
+                     [:default],
+                     [:applications_being_accepted_now],
+                     [:applications_being_accepted_in_future]
+                   ])
           }
 
           its(:site_statuses) { should_not be_empty }
@@ -109,10 +109,10 @@ RSpec.describe Course, type: :model do
       context 'for a site status with vacancies and others without' do
         let(:subject) {
           create(:course, with_site_statuses: [
-            %i[findable applications_being_accepted_now with_any_vacancy],
-            %i[findable with_no_vacancies],
-            %i[findable with_no_vacancies],
-          ])
+                   %i[findable applications_being_accepted_now with_any_vacancy],
+                   %i[findable with_no_vacancies],
+                   %i[findable with_no_vacancies],
+                 ])
         }
 
         its(:has_vacancies?) { should be true }
@@ -121,9 +121,9 @@ RSpec.describe Course, type: :model do
       context 'when none of the sites have vacancies' do
         let(:subject) {
           create(:course, with_site_statuses: [
-            %i[findable with_no_vacancies],
-            %i[findable with_no_vacancies],
-          ])
+                   %i[findable with_no_vacancies],
+                   %i[findable with_no_vacancies],
+                 ])
         }
 
         its(:has_vacancies?) { should be false }
@@ -132,8 +132,8 @@ RSpec.describe Course, type: :model do
       context 'when the site is findable but only opens in the future' do
         let(:subject) {
           create(:course, with_site_statuses: [
-            %i[findable with_any_vacancy applications_being_accepted_in_future],
-          ])
+                   %i[findable with_any_vacancy applications_being_accepted_in_future],
+                 ])
         }
 
         its(:has_vacancies?) { should be true }
@@ -142,10 +142,10 @@ RSpec.describe Course, type: :model do
       context 'when only discontinued and suspended site statuses have vacancies' do
         let(:subject) {
           create(:course, with_site_statuses: [
-            %i[published suspended with_any_vacancy],
-            %i[published discontinued with_any_vacancy],
-            %i[findable with_no_vacancies],
-          ])
+                   %i[published suspended with_any_vacancy],
+                   %i[published discontinued with_any_vacancy],
+                   %i[findable with_no_vacancies],
+                 ])
         }
 
         its(:has_vacancies?) { should be false }
@@ -175,9 +175,9 @@ RSpec.describe Course, type: :model do
         context 'site statuses applications_being_accepted_now as it open now & future' do
           let(:subject) {
             create(:course, with_site_statuses: [
-              %i[findable applications_being_accepted_now with_any_vacancy],
-              %i[applications_being_accepted_in_future with_any_vacancy]
-            ])
+                     %i[findable applications_being_accepted_now with_any_vacancy],
+                     %i[applications_being_accepted_in_future with_any_vacancy]
+                   ])
           }
 
           its(:site_statuses) { should_not be_empty }
@@ -187,12 +187,12 @@ RSpec.describe Course, type: :model do
         context 'site statuses applications_being_accepted_now as it open now & future and mix site status as non findable' do
           let(:subject) {
             create(:course, with_site_statuses: [
-              [:findable],
-              [:with_any_vacancy],
-              [:default],
-              [:applications_being_accepted_now],
-              [:applications_being_accepted_in_future]
-            ])
+                     [:findable],
+                     [:with_any_vacancy],
+                     [:default],
+                     [:applications_being_accepted_now],
+                     [:applications_being_accepted_in_future]
+                   ])
           }
 
           its(:site_statuses) { should_not be_empty }

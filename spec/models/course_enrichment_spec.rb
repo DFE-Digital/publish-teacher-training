@@ -134,9 +134,9 @@ describe CourseEnrichment, type: :model do
     let(:last_published_timestamp_utc) { Date.new(2017, 1, 1) }
     subject {
       create(:course_enrichment, :published,
-        last_published_timestamp_utc: last_published_timestamp_utc,
-        course: course,
-        provider: provider)
+             last_published_timestamp_utc: last_published_timestamp_utc,
+             course: course,
+             provider: provider)
     }
 
     describe "to initial draft" do
