@@ -3,6 +3,8 @@ module API
     class ApplicationController < ::ApplicationController
       attr_reader :current_user
 
+      rescue_from ActiveRecord::RecordNotFound, with: :jsonapi_404
+
       before_action :check_terms_accepted
 
       def authenticate
@@ -11,6 +13,10 @@ module API
           assign_sentry_contexts
           @current_user.present?
         end
+      end
+
+      def jsonapi_404
+        render jsonapi: nil, status: 404
       end
 
     private
