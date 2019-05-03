@@ -37,4 +37,14 @@ class ProviderEnrichment < ApplicationRecord
                  train_with_us: [:string, store_key: 'TrainWithUs'],
                  train_with_disability: [:string,
                                          store_key: 'TrainWithDisability']
+
+  def contact_info_present?
+    email.present? &&
+      website.present? &&
+      address1.present? &&
+      address2.present? &&
+      address3.present? &&
+      address4.present? &&
+      postcode.present?
+  end
 end
