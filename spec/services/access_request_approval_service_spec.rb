@@ -43,6 +43,17 @@ describe AccessRequestApprovalService do
           .from('requested')
           .to('completed')
       end
+
+      context 'with capitals in the email address' do
+        let!(:access_request) { create(:access_request, email_address: 'Abc@de.com') }
+
+        it 'creates the target user with a lowercase email address' do
+          subject
+
+          expect(User.where(email: 'abc@de.com')).to exist
+          expect(User.where(email: 'Abc@de.com')).to_not exist
+        end
+      end
     end
 
     context 'for an existing user' do
@@ -94,6 +105,23 @@ describe AccessRequestApprovalService do
           subject
           target_user.organisations.reload
 
+          expect(target_user.organisations).to(
+            match_array(access_request.requester.organisations)
+          )
+        end
+      end
+
+      context 'when the requested email is different case to the existing user' do
+        let!(:target_user) do
+          create(:user, email: 'ab@c.com', organisations: [])
+        end
+        let!(:access_request) { create(:access_request, email_address: 'Ab@c.com') }
+
+        it "shouldn't duplicate the user" do
+          subject
+          target_user.organisations.reload
+
+          expect(User.where(email: 'Abc@de.com')).to_not exist
           expect(target_user.organisations).to(
             match_array(access_request.requester.organisations)
           )
