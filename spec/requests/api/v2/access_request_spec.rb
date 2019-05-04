@@ -55,8 +55,8 @@ describe 'Access Request API V2', type: :request do
     end
 
     context 'when authorised' do
-      let!(:first_access_request) { create(:access_request, request_date_utc: '2019-05-05 00:10:47 UTC') }
-      let!(:second_access_request) { create(:access_request, request_date_utc: '2019-05-05 00:10:48 UTC') }
+      let!(:first_access_request) { create(:access_request) }
+      let!(:second_access_request) { create(:access_request) }
 
       before do
         access_requests_index_route
@@ -66,32 +66,47 @@ describe 'Access Request API V2', type: :request do
         json_response = JSON.parse response.body
 
         expect(json_response).to eq(
-          [
+          "data" => [
             {
-              "id" => first_access_request.id,
-              "email_address" => first_access_request.recipient.email,
-              "first_name" => first_access_request.recipient.first_name,
-              "last_name" => first_access_request.recipient.last_name,
-              "requester_email" => first_access_request.requester.email,
-              "requester_id" => first_access_request.requester.id,
-              "organisation" => first_access_request.organisation,
-              "reason" => first_access_request.reason,
-              "request_date_utc" => '2019-05-05T00:10:47.000Z',
-              "status" => first_access_request.status
-            },
+              "id" => first_access_request.id.to_s,
+              "type" => "access_request",
+              "attributes" => {
+                "email_address" => first_access_request.recipient.email,
+                "first_name" => first_access_request.recipient.first_name,
+                "last_name" => first_access_request.recipient.last_name,
+                "requester_email" => first_access_request.requester.email,
+                "requester_id" => first_access_request.requester.id,
+                "organisation" => first_access_request.organisation,
+                "reason" => first_access_request.reason,
+                "request_date_utc" => first_access_request.request_date_utc.iso8601,
+                "status" => first_access_request.status
+              },
+              "relationships" => {
+                "requester" => { "meta" => { "included" => false } }
+                }
+              },
             {
-              "id" => second_access_request.id,
-              "email_address" => second_access_request.recipient.email,
-              "first_name" => second_access_request.recipient.first_name,
-              "last_name" => second_access_request.recipient.last_name,
-              "requester_email" => second_access_request.requester.email,
-              "requester_id" => second_access_request.requester.id,
-              "organisation" => second_access_request.organisation,
-              "reason" => second_access_request.reason,
-              "request_date_utc" => '2019-05-05T00:10:48.000Z',
-              "status" => second_access_request.status
+             "id" => second_access_request.id.to_s,
+             "type" => "access_request",
+             "attributes" => {
+               "email_address" => second_access_request.recipient.email,
+               "first_name" => second_access_request.recipient.first_name,
+               "last_name" => second_access_request.recipient.last_name,
+               "requester_email" => second_access_request.requester.email,
+               "requester_id" => second_access_request.requester.id,
+               "organisation" => second_access_request.organisation,
+               "reason" => second_access_request.reason,
+               "request_date_utc" => second_access_request.request_date_utc.iso8601,
+               "status" => second_access_request.status
+             },
+             "relationships" => {
+               "requester" => { "meta" => { "included" => false } }
+              }
             }
-          ]
+            ],
+        "jsonapi" => {
+          "version" => "1.0"
+        }
        )
       end
     end

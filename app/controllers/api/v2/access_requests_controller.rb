@@ -13,7 +13,7 @@ module API
         authorize AccessRequest
         @access_requests = AccessRequest.requested
 
-        render status: 200, json: @access_requests
+        render jsonapi: @access_requests
       end
 
     private
