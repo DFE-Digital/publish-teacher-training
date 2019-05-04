@@ -46,15 +46,15 @@ describe API::V2::SerializableAccessRequest do
           .and(have_id(requester.id.to_s))))
     end
   end
-  describe "has the correct attributes" do
-    it { expect(subject["attributes"]).to include("email_address" => access_request.email_address) }
-    it { expect(subject["attributes"]).to include("first_name" => access_request.first_name) }
-    it { expect(subject["attributes"]).to include("last_name" => access_request.last_name) }
-    it { expect(subject["attributes"]).to include("organisation" => access_request.organisation) }
-    it { expect(subject["attributes"]).to include("reason" => access_request.reason) }
-    it { expect(subject["attributes"]).to include("request_date_utc" => access_request.request_date_utc.iso8601) }
-    it { expect(subject["attributes"]).to include("requester_id" => access_request.requester_id) }
-    it { expect(subject["attributes"]).to include("status" => access_request.status) }
-    it { expect(subject["attributes"]).to include("requester_email" => access_request.requester_email) }
+  describe 'has the correct attributes' do
+    it { should have_attribute(:email_address).with_value(access_request.email_address) }
+    it { should have_attribute(:first_name).with_value(access_request.first_name) }
+    it { should have_attribute(:last_name).with_value(access_request.last_name) }
+    it { should have_attribute(:organisation).with_value(access_request.organisation) }
+    it { should have_attribute(:reason).with_value(access_request.reason) }
+    it { should have_attribute(:request_date_utc).with_value(access_request.request_date_utc.iso8601) }
+    it { should have_attribute(:requester_id).with_value(access_request.requester_id) }
+    it { should have_attribute(:status).with_value(access_request.status) }
+    it { should have_attribute(:requester_email).with_value(access_request.requester_email) }
   end
 end
