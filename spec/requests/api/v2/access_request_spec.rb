@@ -24,15 +24,15 @@ describe 'Access Request API V2', type: :request do
 
   subject { response }
 
-  describe 'GET #list' do
-    let(:list_access_requests_route) do
-      get "/api/v2/access_requests/#{admin_user.id}/list",
+  describe 'GET #index' do
+    let(:access_requests_index_route) do
+      get "/api/v2/access_requests",
           headers: { 'HTTP_AUTHORIZATION' => credentials }
     end
 
     context 'when unauthenticated' do
       before do
-        list_access_requests_route
+        access_requests_index_route
       end
 
       let(:payload) { { email: 'foo@bar' } }
@@ -44,7 +44,7 @@ describe 'Access Request API V2', type: :request do
       let(:unauthorised_user) { create(:user) }
       let(:payload) { { email: unauthorised_user.email } }
       let(:unauthorised_user_route) do
-        get "/api/v2/access_requests/#{unauthorised_user.id}/list",
+        get "/api/v2/access_requests",
             headers: { 'HTTP_AUTHORIZATION' => credentials }
       end
 
@@ -73,59 +73,61 @@ describe 'Access Request API V2', type: :request do
       }
       let!(:first_access_request) {
         create(:access_request,
-               first_name: 'test',
-               last_name: 'user',
+               first_name: first_user.first_name,
+               last_name: first_user.last_name,
                email_address: first_user.email,
                requester_email: second_user.email,
                requester_id: second_user.id,
-               organisation: first_organisation.name,
+               organisation: second_user.organisations.first.name,
                reason: 'Need additional support',
                request_date_utc: '2019-05-05 00:10:47 UTC',
                status: 'requested')
       }
       let!(:second_access_request) {
         create(:access_request,
-               first_name: 'test',
-               last_name: 'user',
-               email_address: 'test@user.com',
+               first_name: second_user.first_name,
+               last_name: second_user.last_name,
+               email_address: second_user.email,
                requester_email: first_user.email,
                requester_id: first_user.id,
-               organisation: second_organisation.name,
+               organisation: first_user.organisations.first.name,
                reason: 'Leaving current role',
                request_date_utc: '2019-05-05 00:10:48 UTC',
                status: 'requested')
       }
+      let!(:third_access_request) { create(:access_request, status: 'approved') }
       before do
-        list_access_requests_route
+        access_requests_index_route
       end
 
-      it 'JSON has a data section with the correct attributes' do
+      it 'JSON only includes requested access requests & displays the correct attributes' do
         json_response = JSON.parse response.body
+
         expect(json_response).to eq(
           [
             {
               "id" => first_access_request.id,
-              "email_address" => "first_user@test.com",
-              "first_name" => "test",
-              "last_name" => "user",
-              "requester_email" => "second_user@test.com",
-              "requester_id" => second_user.id,
-              "status" => "requested",
-              "organisation" => "First Organisation",
-              "reason" => "Need additional support",
-              "request_date_utc" => "2019-05-05T00:10:47.000Z"
+              "email_address" => first_access_request.recipient.email,
+              "first_name" => first_access_request.recipient.first_name,
+              "last_name" => first_access_request.recipient.last_name,
+              "requester_email" => first_access_request.requester.email,
+              "requester_id" => first_access_request.requester.id,
+              "organisation" => first_access_request.organisation,
+              "reason" => first_access_request.reason,
+              "request_date_utc" => '2019-05-05T00:10:47.000Z',
+              "status" => first_access_request.status
             },
             {
               "id" => second_access_request.id,
-              "email_address" => "test@user.com",
-              "first_name" => "test",
-              "last_name" => "user",
-              "requester_email" => "first_user@test.com",
-              "requester_id" => first_user.id,
-              "status" => "requested",
-              "organisation" => "Second Organisation",
-              "reason" => "Leaving current role",
-              "request_date_utc" => "2019-05-05T00:10:48.000Z"
+              "email_address" => second_access_request.recipient.email,
+              "first_name" => second_access_request.recipient.first_name,
+              "last_name" => second_access_request.recipient.last_name,
+              "requester_email" => second_access_request.requester.email,
+              "requester_id" => second_access_request.requester.id,
+              "organisation" => second_access_request.organisation,
+              "reason" => second_access_request.reason,
+              "request_date_utc" => '2019-05-05T00:10:48.000Z',
+              "status" => second_access_request.status
             }
           ]
        )

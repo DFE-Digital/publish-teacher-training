@@ -9,5 +9,5 @@ class AccessRequestPolicy
     @user.admin?
   end
 
-  alias_method :list?, :approve?
+  alias_method :index?, :approve?
 end
