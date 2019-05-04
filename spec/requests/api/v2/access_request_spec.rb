@@ -24,6 +24,115 @@ describe 'Access Request API V2', type: :request do
 
   subject { response }
 
+  describe 'GET #list' do
+    let(:list_access_requests_route) do
+      get "/api/v2/access_requests/#{admin_user.id}/list",
+          headers: { 'HTTP_AUTHORIZATION' => credentials }
+    end
+
+    context 'when unauthenticated' do
+      before do
+        list_access_requests_route
+      end
+
+      let(:payload) { { email: 'foo@bar' } }
+
+      it { should have_http_status(:unauthorized) }
+    end
+
+    context 'when unauthorized' do
+      let(:unauthorised_user) { create(:user) }
+      let(:payload) { { email: unauthorised_user.email } }
+      let(:unauthorised_user_route) do
+        get "/api/v2/access_requests/#{unauthorised_user.id}/list",
+            headers: { 'HTTP_AUTHORIZATION' => credentials }
+      end
+
+
+      it "should raise an error" do
+        expect { unauthorised_user_route }.to raise_error Pundit::NotAuthorizedError
+      end
+    end
+
+    context 'when authorised' do
+      let(:first_organisation) { create(:organisation, name: 'First Organisation') }
+      let(:second_organisation) { create(:organisation, name: 'Second Organisation') }
+      let(:first_user) {
+        create(:user,
+               first_name: 'First',
+               last_name: 'User',
+               email: 'first_user@test.com',
+               organisations: [first_organisation])
+      }
+      let(:second_user) {
+        create(:user,
+               first_name: 'Second',
+               last_name: 'User',
+               email: "second_user@test.com",
+               organisations: [second_organisation])
+      }
+      let!(:first_access_request) {
+        create(:access_request,
+               first_name: 'test',
+               last_name: 'user',
+               email_address: first_user.email,
+               requester_email: second_user.email,
+               requester_id: second_user.id,
+               organisation: first_organisation.name,
+               reason: 'Need additional support',
+               request_date_utc: '2019-05-05 00:10:47 UTC',
+               status: 'requested')
+      }
+      let!(:second_access_request) {
+        create(:access_request,
+               first_name: 'test',
+               last_name: 'user',
+               email_address: 'test@user.com',
+               requester_email: first_user.email,
+               requester_id: first_user.id,
+               organisation: second_organisation.name,
+               reason: 'Leaving current role',
+               request_date_utc: '2019-05-05 00:10:48 UTC',
+               status: 'requested')
+      }
+      before do
+        list_access_requests_route
+      end
+
+      it 'JSON has a data section with the correct attributes' do
+        json_response = JSON.parse response.body
+        expect(json_response).to eq(
+          [
+            {
+              "id" => first_access_request.id,
+              "email_address" => "first_user@test.com",
+              "first_name" => "test",
+              "last_name" => "user",
+              "requester_email" => "second_user@test.com",
+              "requester_id" => second_user.id,
+              "status" => "requested",
+              "organisation" => "First Organisation",
+              "reason" => "Need additional support",
+              "request_date_utc" => "2019-05-05T00:10:47.000Z"
+            },
+            {
+              "id" => second_access_request.id,
+              "email_address" => "test@user.com",
+              "first_name" => "test",
+              "last_name" => "user",
+              "requester_email" => "first_user@test.com",
+              "requester_id" => first_user.id,
+              "status" => "requested",
+              "organisation" => "Second Organisation",
+              "reason" => "Leaving current role",
+              "request_date_utc" => "2019-05-05T00:10:48.000Z"
+            }
+          ]
+       )
+      end
+    end
+  end
+
   describe 'POST #approve' do
     let(:approve_route_request) do
       post "/api/v2/access_requests/#{access_request.id}/approve",
@@ -77,7 +186,6 @@ describe 'Access Request API V2', type: :request do
                  requester_id: requesting_user.id,
                  organisation: organisation.name)
         }
-
         before do
           post "/api/v2/access_requests/#{new_user_access_request.id}/approve",
                headers: { 'HTTP_AUTHORIZATION' => credentials }
