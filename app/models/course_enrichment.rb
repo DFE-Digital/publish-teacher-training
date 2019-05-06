@@ -48,7 +48,6 @@ class CourseEnrichment < ApplicationRecord
   validates :how_school_placements_work, words_count: { maximum: 350 }, on: :publish
 
   # mandatory validation for fee based course to be published
-  validates :fee_international, :fee_uk_eu, numericality: { only_integer: true, greater_than_or_equal_to: 0, less_than_or_equal_to: 100000 }, on: :publish, if: :is_fee_based?
   validates :fee_uk_eu, presence: true, on: :publish, if: :is_fee_based?
   validates :fee_details, words_count: { maximum: 250 }, on: :publish, if: :is_fee_based?
   validates :financial_support, words_count: { maximum: 250 }, on: :publish, if: :is_fee_based?
