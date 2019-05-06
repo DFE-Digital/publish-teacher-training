@@ -98,8 +98,6 @@ describe CourseEnrichment, type: :model do
 
       it { should_not validate_presence_of(:salary_details).on(:publish) }
       it { should validate_presence_of(:fee_uk_eu).on(:publish) }
-      it { should validate_numericality_of(:fee_international).on(:publish) }
-      it { should validate_numericality_of(:fee_international).on(:publish) }
 
       context 'valid content' do
         it { should be_valid :publish }
@@ -116,8 +114,6 @@ describe CourseEnrichment, type: :model do
 
       it { should validate_presence_of(:salary_details).on(:publish) }
       it { should_not validate_presence_of(:fee_uk_eu).on(:publish) }
-      it { should_not validate_numericality_of(:fee_international).on(:publish) }
-      it { should_not validate_numericality_of(:fee_international).on(:publish) }
       context 'valid content' do
         it { should be_valid :publish }
       end
