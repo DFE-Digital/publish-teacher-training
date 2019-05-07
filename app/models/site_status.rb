@@ -13,6 +13,7 @@
 
 class SiteStatus < ApplicationRecord
   include TouchCourse
+  include AASM
 
   self.table_name = "course_site"
 
@@ -42,6 +43,27 @@ class SiteStatus < ApplicationRecord
     published: "Y",
     unpublished: "N",
   }, _suffix: :on_ucas
+
+  aasm column: :status, enum: true do
+    state :new_status, initial: true
+    state :running
+    state :suspended
+    state :discontinued
+
+    after_all_transitions :update_publish_flag
+
+    event :start do
+      transitions from: %i[new_status suspended discontinued], to: :running
+    end
+
+    event :suspend do
+      transitions from: :running, to: :suspended
+    end
+  end
+
+  def update_publish_flag
+    self.publish = (aasm.to_state == :running ? :published : :unpublished)
+  end
 
   belongs_to :site
   belongs_to :course

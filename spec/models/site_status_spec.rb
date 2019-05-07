@@ -185,4 +185,20 @@ RSpec.describe SiteStatus, type: :model do
       expect { subject.default_vac_status_given(study_mode: 'foo') }.to raise_error("Unexpected study mode foo")
     end
   end
+
+  describe "status changes" do
+    describe "when suspending a running, published site status" do
+      subject { create(:site_status, :running, :published).tap(&:suspend!).reload }
+      it { should be_status_suspended }
+      it { should be_unpublished_on_ucas }
+    end
+
+    %i[new suspended discontinued].each do |status|
+      describe "when starting a #{status}, unpublished site status" do
+        subject { create(:site_status, status, :unpublished).tap(&:start!).reload }
+        it { should be_status_running }
+        it { should be_published_on_ucas }
+      end
+    end
+  end
 end
