@@ -23,6 +23,10 @@ qa:
   <<: *default
   database: <%= ENV['DB_DATABASE'] || 'manage_courses_backend_qa' %>
 
+new_qa:
+  <<: *default
+  database: <%= ENV['DB_DATABASE'] || 'manage_courses_backend_new_qa' %>
+
 ucas:
   <<: *default
   database: <%= ENV['DB_DATABASE'] || 'manage_courses_backend_ucas' %>
