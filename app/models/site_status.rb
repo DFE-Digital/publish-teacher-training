@@ -34,6 +34,10 @@ class SiteStatus < ApplicationRecord
       transitions from: %i[new_status suspended discontinued], to: :running
       transitions from: :running, to: :suspended
     end
+
+    event :start do
+      transitions from: %i[new_status], to: :running
+    end
   end
 
   def update_publish_flag

@@ -1,6 +1,6 @@
-name 'sync-to-ucas-and-find'
-summary 'Sync a course with Find and send to UCAS'
-usage 'sync-to-ucas-and-find <provider_code> <course_code>'
+name 'sync_to_find'
+summary 'Send a course to Find'
+usage 'sync_to_find <provider_code> <course_code>'
 param :provider_code
 param :course_code
 
@@ -17,6 +17,5 @@ run do |opts, args, _cmd|
       args[:provider_code],
       args[:course_code]
     )
-    course.send :touch_course
   end
 end
