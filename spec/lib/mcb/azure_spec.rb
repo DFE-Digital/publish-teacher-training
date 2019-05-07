@@ -132,6 +132,21 @@ describe MCB::Azure do
     end
   end
 
+  describe '.configure_env' do
+    it 'sets all the SETTINGS__ env vars from the app config' do
+      allow(ENV).to receive(:update)
+      MCB::Azure.configure_env(
+        'SETTINGS__FOO' => 'bar',
+        'some_random_kind_of_yak' => 'shaving'
+      )
+      expect(ENV).to(
+        have_received(:update).with(
+          'SETTINGS__FOO' => 'bar',
+        )
+      )
+    end
+  end
+
   describe '.configure_for_webapp' do
     let(:app_config) do
       {

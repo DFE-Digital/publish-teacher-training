@@ -43,6 +43,12 @@ module MCB
       end
     end
 
+    def self.configure_env(app_config)
+      ENV.update(
+        app_config.select { |e| e.start_with?('SETTINGS__') }
+      )
+    end
+
     # Pull in the app config from Azure and prompt the user for the
     # RAILS_ENV to make sure they are running against the environment they
     # expect.
@@ -63,6 +69,7 @@ module MCB
       end
 
       MCB::Azure.configure_database(webapp, app_config: app_config)
+      MCB::Azure.configure_env(app_config)
     end
   end
 end
