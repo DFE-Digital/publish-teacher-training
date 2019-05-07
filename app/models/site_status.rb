@@ -13,6 +13,7 @@
 
 class SiteStatus < ApplicationRecord
   include TouchCourse
+  include AASM
 
   self.table_name = "course_site"
 
@@ -20,6 +21,24 @@ class SiteStatus < ApplicationRecord
 
   validate :vac_status_must_be_consistent_with_course_study_mode,
            if: Proc.new { |s| s.course&.study_mode.present? }
+
+  aasm column: :status, enum: true do
+    state :new_status, initial: true
+    state :running
+    state :suspended
+    state :discontinued
+
+    after_all_transitions :update_publish_flag
+
+    event :toggle do
+      transitions from: %i[new_status suspended discontinued], to: :running
+      transitions from: :running, to: :suspended
+    end
+  end
+
+  def update_publish_flag
+    self.publish = (aasm.to_state == :running ? :published : :unpublished)
+  end
 
   enum vac_status: {
     both_full_time_and_part_time_vacancies: "B",
