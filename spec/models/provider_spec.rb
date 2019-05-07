@@ -24,7 +24,6 @@
 #  accrediting_provider :text
 #  last_published_at    :datetime
 #  changed_at           :datetime         not null
-#  opted_in             :boolean          default(FALSE)
 #
 
 require 'rails_helper'
