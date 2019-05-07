@@ -21,18 +21,16 @@ module MCB
                         "is this the right subscription?")
     end
 
-    def self.get_config(app, rgroup: nil)
+    def self.get_config(app, rgroup: nil, subscription: nil)
       rgroup ||= rgroup_for_app(app)
-      raw_json = MCB::run_command(
-        "az webapp config appsettings list -g #{rgroup} -n #{app}"
-      )
+      cmd = "az webapp config appsettings list -g '#{rgroup}' -n '#{app}'"
+      cmd += " --subscription '#{subscription}'" if subscription
+      raw_json = MCB::run_command(cmd)
       config = JSON.parse(raw_json)
       config.map { |c| [c["name"], c["value"]] }.to_h
     end
 
-    def self.configure_database(app, app_config: nil)
-      app_config ||= MCB::Azure.get_config(app)
-
+    def self.configure_database(app_config)
       [%w[DB_HOSTNAME MANAGE_COURSES_POSTGRESQL_SERVICE_HOST],
        %w[DB_DATABASE PG_DATABASE],
        %w[DB_USERNAME PG_USERNAME],
@@ -55,9 +53,12 @@ module MCB
     #
     # We use keyword params here to accept the opts that are passed into
     # the commands.
-    def self.configure_for_webapp(webapp:, rgroup: nil, **_opts)
+    def self.configure_for_webapp(webapp:, rgroup: nil, subscription: nil, **_opts)
+      # switch_to_subscription(opts[:subscription])
       rgroup ||= rgroup_for_app(webapp)
-      app_config = MCB::Azure.get_config(webapp, rgroup: rgroup)
+      app_config = MCB::Azure.get_config(webapp,
+                                         rgroup: rgroup,
+                                         subscription: subscription)
 
       # TODO: only require confirmation on commands that write to the db
       print "As a safety measure, please enter the expected RAILS_ENV for #{webapp}: "
@@ -68,8 +69,10 @@ module MCB
               "#{app_config['RAILS_ENV']} != #{expected_environment}"
       end
 
-      MCB::Azure.configure_database(webapp, app_config: app_config)
+      MCB::Azure.configure_database(app_config)
       MCB::Azure.configure_env(app_config)
+
+      app_config['RAILS_ENV']
     end
   end
 end
