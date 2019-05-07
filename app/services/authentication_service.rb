@@ -11,7 +11,7 @@ class AuthenticationService
 
   def call
     @user = user_by_sign_in_user_id || user_by_email
-    update_user_email if user_email_does_not_match_token?
+    update_user_email if update_user_email_needed?
 
     user
   end
@@ -49,10 +49,18 @@ private
     User.find_by(sign_in_user_id: sign_in_user_id_from_token)
   end
 
+  def update_user_email_needed?
+    user_email_does_not_match_token? && !email_in_use_by_another_user?
+  end
+
   def user_email_does_not_match_token?
     return unless user
 
     user.email&.downcase != email_from_token
+  end
+
+  def email_in_use_by_another_user?
+    User.exists?(email: email_from_token)
   end
 
   def update_user_email
