@@ -1,6 +1,19 @@
 name 'edit_published'
 summary 'Edit publisheds course directly in the DB'
 
+def vacancy_status(course)
+  case course.study_mode
+  when "full_time"
+    :full_time_vacancies
+  when "part_time"
+    :part_time_vacancies
+  when "full_time_or_part_time"
+    :both_full_time_and_part_time_vacancies
+  else
+    raise "Unexpected study mode #{course.study_mode}"
+  end
+end
+
 run do |opts, args, _cmd|
   MCB.init_rails(opts)
 
@@ -33,7 +46,21 @@ run do |opts, args, _cmd|
           if cmd == 'exit'
             finished = true
           else
-            # either tweak the site status or add new site here
+            site_code = cmd.match(/\(code: (.*)\)/)[1]
+            if site_status = course.site_statuses.detect { |ss| ss.site.code == site_code }
+              puts "Toggling #{site_status}"
+              site_status.toggle!
+            else
+              site_status = SiteStatus.create!(
+                course: course,
+                site: new_sites_to_add.detect { |s| s.code == site_code },
+                vac_status: vacancy_status(course),
+                status: :new_status,
+                applications_accepted_from: Date.today,
+                publish: :unpublished,
+              )
+              site_status.start!
+            end
           end
         end
       end
