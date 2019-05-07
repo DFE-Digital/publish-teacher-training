@@ -3,7 +3,7 @@ summary 'Create a new site in db'
 usage 'create <provider_code>'
 param :provider_code
 
-module MCB
+# module MCB
   class SiteShow
     def initialize(site)
       @site = site
@@ -13,19 +13,21 @@ module MCB
       {
         "Name" => @site.location_name,
         "Building and street" => @site.address1,
-        "Building and street 2" => @site.address1,
+        "Building and street 2" => @site.address2,
         "Town or city" => @site.address3,
         "County" => @site.address4,
         "Postcode" => @site.postcode,
         "Region code" => @site.region_code,
+        "Code" => @site.code,
+        "Provider" => @site.provider.provider_code,
       }
     end
   end
-end
+# end
 
 def confirm_creation_of(site)
   puts "\nAbout to create the following site:"
-  puts Terminal::Table.new rows: MCB::SiteShow.new(site).to_h
+  puts Terminal::Table.new rows: SiteShow.new(site).to_h
 
   print "Continue? "
 
@@ -40,18 +42,18 @@ run do |opts, args, _cmd|
     args.each do |provider_code|
       provider = Provider.find_by!(provider_code: provider_code)
       site = Site.new(
-        location_name: '',
-        address1: '', # Building and street
+        provider: provider,
+        location_name: 'Hangleton Primary School',
+        address1: 'Dale View', # Building and street
         address2: '', # street 2
-        address3: '', # Town or city
-        address4: '', # county
-        postcode: '',
-        region_code: nil,
+        address3: 'Hove', # Town or city
+        address4: 'East Sussex', # county
+        postcode: 'BN3 8LF',
+        region_code: :south_east,
+        code: 'H',
       )
 
-      course = wizard_cli.course
-
-      if confirm_creation_of(course)
+      if confirm_creation_of(site)
         if site.valid?
           puts "Saving the site"
           site.save!
