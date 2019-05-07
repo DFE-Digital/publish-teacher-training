@@ -93,7 +93,7 @@ describe MCB::Azure do
       subject
       expect(MCB).to(
         have_received(:run_command).with(
-          'az webapp config appsettings list -g some-rgroup -n some-app'
+          "az webapp config appsettings list -g 'some-rgroup' -n 'some-app'"
         )
       )
     end
@@ -102,6 +102,15 @@ describe MCB::Azure do
   end
 
   describe '.configure_database' do
+    let(:app_config) do
+      {
+        'MANAGE_COURSES_POSTGRESQL_SERVICE_HOST' => 'host',
+        'PG_DATABASE'                            => 'pgdb',
+        'PG_USERNAME'                            => 'user',
+        'PG_PASSWORD'                            => 'pass',
+      }
+    end
+
     before :each do
       allow(ENV).to receive(:[]=)
       allow(MCB::Azure).to(
@@ -111,17 +120,10 @@ describe MCB::Azure do
                                       }])
       )
 
-      allow(MCB::Azure).to(
-        receive(:get_config).and_return(
-          'MANAGE_COURSES_POSTGRESQL_SERVICE_HOST' => 'host',
-          'PG_DATABASE'                            => 'pgdb',
-          'PG_USERNAME'                            => 'user',
-          'PG_PASSWORD'                            => 'pass',
-        )
-      )
+      allow(MCB::Azure).to(receive(:get_config).and_return(app_config))
     end
 
-    subject { MCB::Azure.configure_database('noapp') }
+    subject { MCB::Azure.configure_database(app_config) }
 
     it 'sets the env variables to the app settings' do
       subject
@@ -129,6 +131,21 @@ describe MCB::Azure do
       expect(ENV).to have_received(:[]=).with('DB_DATABASE', 'pgdb')
       expect(ENV).to have_received(:[]=).with('DB_USERNAME', 'user')
       expect(ENV).to have_received(:[]=).with('DB_PASSWORD', 'pass')
+    end
+  end
+
+  describe '.configure_env' do
+    it 'sets all the SETTINGS__ env vars from the app config' do
+      allow(ENV).to receive(:update)
+      MCB::Azure.configure_env(
+        'SETTINGS__FOO' => 'bar',
+        'some_random_kind_of_yak' => 'shaving'
+      )
+      expect(ENV).to(
+        have_received(:update).with(
+          'SETTINGS__FOO' => 'bar',
+        )
+      )
     end
   end
 

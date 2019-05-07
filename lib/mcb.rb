@@ -17,16 +17,22 @@ module MCB
   # Not all mcb commands require the rails env, e.g. the API ones don't. Use
   # this method in those commands that do.
   def self.init_rails(**opts)
-    MCB::Azure.configure_for_webapp(opts) if requesting_remote_connection?(opts)
+    load_env_azure_settings(opts)
 
     if defined?(Rails)
       configure_audited_user if connecting_to_remote_db?
     else
+      if requesting_remote_connection?(opts)
+        webapp_rails_env = MCB::Azure.configure_for_webapp(opts)
+
+        ENV['RAILS_ENV'] = webapp_rails_env
+      end
+
       app_root = File.expand_path(File.join(File.dirname($0), '..'))
       exec_path = File.join(app_root, 'bin', 'rails')
 
       # prevent caching of environment variables by spring
-      ENV["DISABLE_SPRING"] = "true"
+      ENV['DISABLE_SPRING'] = "true"
 
       verbose("Running #{exec_path}")
 
@@ -228,16 +234,54 @@ module MCB
       user
     end
 
+    def remote_connect_options
+      envs = env_to_azure_map.keys.join(', ')
+      Proc.new do
+        option :E, 'env',
+               "Connect to a pre-defined environment: #{envs}",
+               argument: :required
+        option :A, 'webapp',
+               'Connect to the database of this webapp',
+               argument: :required
+        option :G, 'rgroup',
+               'Use resource group for app (optional)',
+               argument: :required
+        option :S, 'subscription',
+               'Specify which Azure subscription to use',
+               argument: :required
+      end
+    end
+
+    def requesting_remote_connection?(opts)
+      opts.key?(:webapp)
+    end
+
+    def env_to_azure_map
+      {
+        'qa' => {
+          webapp: 'bat-dev-manage-courses-backend-app',
+          rgroup: 'bat-dev-linux-rgroup',
+          subscription: 'DFE BAT Development'
+        },
+        'staging' => {
+          webapp: 'bat-staging-manage-courses-backend-app',
+          rgroup: 'bat-staging-linux-rgroup',
+          subscription: 'DFE BAT Development'
+        },
+        'production' => {
+          webapp: 'bat-prod-manage-courses-backend-app',
+          rgroup: 'bat-prod-linux-rgroup',
+          subscription: 'DFE BAT Production'
+        }
+      }
+    end
+
   private
 
     def configure_audited_user
       @current_user = get_user_from_config
       verbose "configuring user to be #{@current_user.email}"
       Audited.store[:audited_user] = @current_user
-    end
-
-    def requesting_remote_connection?(opts)
-      opts.key?(:webapp)
     end
 
     def connecting_to_remote_db?
@@ -267,6 +311,15 @@ module MCB
         changed_since ||= DateTime.parse(opts[:'changed-since'])
         changed_since_param = CGI.escape(changed_since.strftime('%FT%T.%6NZ'))
         url.query = "changed_since=#{changed_since_param}"
+      end
+    end
+
+    def load_env_azure_settings(opts)
+      if opts.key?(:env)
+        env_settings = env_to_azure_map.fetch(opts[:env])
+        opts[:webapp] = env_settings[:webapp] unless opts.key? :webapp
+        opts[:rgroup] = env_settings[:rgroup] unless opts.key? :rgroup
+        opts[:subscription] = env_settings[:subscription] unless opts.key? :subscription
       end
     end
   end
