@@ -307,27 +307,27 @@ describe 'Sites API v2', type: :request do
 
             it 'checks the location_name is present' do
               expect(response.body).to include('Invalid location_name')
-              expect(response.body).to include("Location name can't be blank")
+              expect(response.body).to include("Name is missing")
             end
 
             it 'checks the address1 is present' do
               expect(response.body).to include('Invalid address1')
-              expect(response.body).to include("Address1 can't be blank")
+              expect(response.body).to include("Building and street is missing")
             end
 
             it 'checks the address3 is present' do
               expect(response.body).to include('Invalid address3')
-              expect(response.body).to include("Address3 can't be blank")
+              expect(response.body).to include("Town or city is missing")
             end
 
             it 'checks the postcode is present' do
               expect(response.body).to include('Invalid postcode')
-              expect(response.body).to include("Postcode can't be blank")
+              expect(response.body).to include("Postcode is missing")
             end
 
             it 'checks the postcode is present' do
               expect(response.body).to include('Invalid postcode')
-              expect(response.body).to include('Postcode not recognised as a UK postcode')
+              expect(response.body).to include('Postcode is not valid (for example, BN1 1AA)')
             end
 
             xit 'checks the region_code is present' do
@@ -341,7 +341,7 @@ describe 'Sites API v2', type: :request do
               it 'checks the location_name is unique' do
                 expect(json_data.count).to eq 1
                 expect(response.body).to include('Invalid location_name')
-                expect(response.body).to include('Location name has already been taken')
+                expect(response.body).to include('Name is in use by another location')
               end
             end
 

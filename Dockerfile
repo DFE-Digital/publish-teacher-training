@@ -5,7 +5,7 @@ RUN apk add --update --no-cache tzdata && \
     echo "Europe/London" > /etc/timezone
 
 RUN apk add --update --no-cache --virtual runtime-dependances \
- postgresql-dev
+ postgresql-dev git
 
 ENV APP_HOME /app
 RUN mkdir $APP_HOME

@@ -101,13 +101,12 @@ describe 'Courses API v2', type: :request do
 
         it 'has validation errors' do
           expect(json_data.count).to eq 6
-          expect(response.body).to include('Invalid latest_enrichment')
-          expect(response.body).to include("Latest enrichment About course Reduce the word count for about course")
-          expect(response.body).to include("Latest enrichment Interview process Reduce the word count for interview process")
-          expect(response.body).to include("Latest enrichment How school placements work Reduce the word count for how school placements work")
-          expect(response.body).to include("Latest enrichment Fee international must be less than or equal to 100000")
-          expect(response.body).to include("Latest enrichment Fee uk eu must be less than or equal to 100000")
-          expect(response.body).to include("Latest enrichment Fee details Reduce the word count for fee details")
+          expect(json_data[0]["detail"]).to eq("Reduce the word count for about course")
+          expect(json_data[1]["detail"]).to eq("Reduce the word count for interview process")
+          expect(json_data[2]["detail"]).to eq("Reduce the word count for how school placements work")
+          expect(json_data[3]["detail"]).to eq("Course fees for international students must be less than or equal to £100,000")
+          expect(json_data[4]["detail"]).to eq("Course fees for UK and EU students must be less than or equal to £100,000")
+          expect(json_data[5]["detail"]).to eq("Reduce the word count for fee details")
         end
       end
     end
