@@ -8,4 +8,6 @@ class AccessRequestPolicy
   def approve?
     @user.admin?
   end
+
+  alias_method :index?, :approve?
 end

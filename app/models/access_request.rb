@@ -24,6 +24,10 @@ class AccessRequest < ApplicationRecord
     declined
   ].freeze
 
+  def recipient
+    User.new(first_name: first_name, last_name: last_name, email: email_address)
+  end
+
   alias_method :approve, :completed!
 
   audited

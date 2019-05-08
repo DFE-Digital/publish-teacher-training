@@ -24,6 +24,94 @@ describe 'Access Request API V2', type: :request do
 
   subject { response }
 
+  describe 'GET #index' do
+    let(:access_requests_index_route) do
+      get "/api/v2/access_requests",
+          headers: { 'HTTP_AUTHORIZATION' => credentials }
+    end
+
+    context 'when unauthenticated' do
+      before do
+        access_requests_index_route
+      end
+
+      let(:payload) { { email: 'foo@bar' } }
+
+      it { should have_http_status(:unauthorized) }
+    end
+
+    context 'when unauthorized' do
+      let(:unauthorised_user) { create(:user) }
+      let(:payload) { { email: unauthorised_user.email } }
+      let(:unauthorised_user_route) do
+        get "/api/v2/access_requests",
+            headers: { 'HTTP_AUTHORIZATION' => credentials }
+      end
+
+
+      it "should raise an error" do
+        expect { unauthorised_user_route }.to raise_error Pundit::NotAuthorizedError
+      end
+    end
+
+    context 'when authorised' do
+      let!(:first_access_request) { create(:access_request) }
+      let!(:second_access_request) { create(:access_request) }
+
+      before do
+        access_requests_index_route
+      end
+
+      it 'JSON displays the correct attributes' do
+        json_response = JSON.parse response.body
+
+        expect(json_response).to eq(
+          "data" => [
+            {
+              "id" => first_access_request.id.to_s,
+              "type" => "access_request",
+              "attributes" => {
+                "email_address" => first_access_request.recipient.email,
+                "first_name" => first_access_request.recipient.first_name,
+                "last_name" => first_access_request.recipient.last_name,
+                "requester_email" => first_access_request.requester.email,
+                "requester_id" => first_access_request.requester.id,
+                "organisation" => first_access_request.organisation,
+                "reason" => first_access_request.reason,
+                "request_date_utc" => first_access_request.request_date_utc.iso8601,
+                "status" => first_access_request.status
+              },
+              "relationships" => {
+                "requester" => { "meta" => { "included" => false } }
+                }
+              },
+            {
+             "id" => second_access_request.id.to_s,
+             "type" => "access_request",
+             "attributes" => {
+               "email_address" => second_access_request.recipient.email,
+               "first_name" => second_access_request.recipient.first_name,
+               "last_name" => second_access_request.recipient.last_name,
+               "requester_email" => second_access_request.requester.email,
+               "requester_id" => second_access_request.requester.id,
+               "organisation" => second_access_request.organisation,
+               "reason" => second_access_request.reason,
+               "request_date_utc" => second_access_request.request_date_utc.iso8601,
+               "status" => second_access_request.status
+             },
+             "relationships" => {
+               "requester" => { "meta" => { "included" => false } }
+              }
+            }
+            ],
+        "jsonapi" => {
+          "version" => "1.0"
+        }
+       )
+      end
+    end
+  end
+
   describe 'POST #approve' do
     let(:approve_route_request) do
       post "/api/v2/access_requests/#{access_request.id}/approve",
@@ -77,7 +165,6 @@ describe 'Access Request API V2', type: :request do
                  requester_id: requesting_user.id,
                  organisation: organisation.name)
         }
-
         before do
           post "/api/v2/access_requests/#{new_user_access_request.id}/approve",
                headers: { 'HTTP_AUTHORIZATION' => credentials }

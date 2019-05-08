@@ -50,4 +50,19 @@ describe AccessRequest, type: :model do
         .to('completed')
     end
   end
+
+  describe '#index' do
+    context 'with all types of access requests' do
+      let!(:access_request1) { create(:access_request, :requested) }
+      let!(:access_request2) { create(:access_request, :requested) }
+      let!(:access_request3) { create(:access_request, :declined) }
+      let!(:access_request4) { create(:access_request, :approved) }
+      let!(:access_request5) { create(:access_request, :completed) }
+
+      subject { AccessRequest.requested }
+
+      it { should include access_request1, access_request2 }
+      it { should_not include access_request3, access_request4, access_request5 }
+    end
+  end
 end
