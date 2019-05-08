@@ -276,6 +276,15 @@ module MCB
       }
     end
 
+    def load_env_azure_settings(opts)
+      if opts.key?(:env)
+        env_settings = env_to_azure_map.fetch(opts[:env])
+        opts[:webapp] = env_settings[:webapp] unless opts.key? :webapp
+        opts[:rgroup] = env_settings[:rgroup] unless opts.key? :rgroup
+        opts[:subscription] = env_settings[:subscription] unless opts.key? :subscription
+      end
+    end
+
   private
 
     def configure_audited_user
@@ -311,15 +320,6 @@ module MCB
         changed_since ||= DateTime.parse(opts[:'changed-since'])
         changed_since_param = CGI.escape(changed_since.strftime('%FT%T.%6NZ'))
         url.query = "changed_since=#{changed_since_param}"
-      end
-    end
-
-    def load_env_azure_settings(opts)
-      if opts.key?(:env)
-        env_settings = env_to_azure_map.fetch(opts[:env])
-        opts[:webapp] = env_settings[:webapp] unless opts.key? :webapp
-        opts[:rgroup] = env_settings[:rgroup] unless opts.key? :rgroup
-        opts[:subscription] = env_settings[:subscription] unless opts.key? :subscription
       end
     end
   end
