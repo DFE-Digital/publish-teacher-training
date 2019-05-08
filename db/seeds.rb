@@ -150,7 +150,7 @@ AccessRequest.create!(
   last_name: Faker::Name.last_name,
   requester: access_requester_user,
   requester_email: access_requester_user.email,
-  request_date_utc: Time.now - 1.week,
+  request_date_utc: 1.week.ago,
   status: :requested,
 )
 
@@ -160,6 +160,6 @@ AccessRequest.create!(
   last_name: Faker::Name.last_name,
   requester: access_requester_user,
   requester_email: access_requester_user.email,
-  request_date_utc: Time.now - 2.weeks,
+  request_date_utc: 2.weeks.ago,
   status: :completed,
   )
