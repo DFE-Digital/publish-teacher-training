@@ -38,13 +38,19 @@ describe AuthenticationService do
       end
 
       context 'when the email is already in use' do
-        before do
-          create(:user, email: email)
-        end
+        let!(:existing_user) { create(:user, email: email) }
 
         it { should eq user }
         it "does not update the user's email" do
           expect { subject }.not_to(change { user.reload.email })
+        end
+
+        it 'generates an exception which is captured by Sentry' do
+          expect(Raven).to receive(:capture).with(
+            instance_of(AuthenticationService::DuplicateUserError)
+          )
+
+          subject
         end
       end
     end

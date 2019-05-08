@@ -11,7 +11,11 @@ class AuthenticationService
 
   def call
     @user = user_by_sign_in_user_id || user_by_email
-    update_user_email if update_user_email_needed?
+    update_user_email if user_email_does_not_match_token?
+
+    user
+  rescue DuplicateUserError => e
+    Raven.capture(e)
 
     user
   end
@@ -40,7 +44,7 @@ private
   def user_by_email
     return unless email_from_token.present?
 
-    User.find_by("lower(email) = ?", email_from_token)
+    @user_by_email ||= User.find_by("lower(email) = ?", email_from_token)
   end
 
   def user_by_sign_in_user_id
@@ -60,10 +64,20 @@ private
   end
 
   def email_in_use_by_another_user?
-    User.exists?(email: email_from_token)
+    user_by_email.present?
   end
 
   def update_user_email
-    user.update(email: email_from_token)
+    if email_in_use_by_another_user?
+      raise DuplicateUserError.new(
+        'Duplicate user detected',
+        user_id:                       user.id,
+        user_sign_in_user_id:          user.sign_in_user_id,
+        existing_user_id:              user_by_email.id,
+        existing_user_sign_in_user_id: user_by_email.sign_in_user_id
+      )
+    else
+      user.update(email: email_from_token)
+    end
   end
 end
