@@ -36,6 +36,23 @@ describe AuthenticationService do
       it "update's the user's email" do
         expect { subject }.to(change { user.reload.email }.to(email))
       end
+
+      context 'when the email is already in use' do
+        let!(:existing_user) { create(:user, email: email) }
+
+        it { should eq user }
+        it "does not update the user's email" do
+          expect { subject }.not_to(change { user.reload.email })
+        end
+
+        it 'generates an exception which is captured by Sentry' do
+          expect(Raven).to receive(:capture).with(
+            instance_of(AuthenticationService::DuplicateUserError)
+          )
+
+          subject
+        end
+      end
     end
 
     context 'with a valid email but an invalid DfE-SignIn ID' do
