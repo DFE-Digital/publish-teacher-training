@@ -46,6 +46,7 @@ run do |opts, args, _cmd|
               puts "Toggling #{site_status}"
               site_status.toggle!
             else
+              is_course_new = course.new? # persist this before we create the site status
               site_status = SiteStatus.create!(
                 course: course,
                 site: new_sites_to_add.detect { |s| s.code == site_code },
@@ -54,11 +55,13 @@ run do |opts, args, _cmd|
                 applications_accepted_from: Date.today,
                 publish: :unpublished,
               )
-              site_status.start! unless course.new?
+              site_status.start! unless is_course_new
             end
           end
         end
       end
+      course.reload
+      course.site_statuses.reload
     end
   end
 end
