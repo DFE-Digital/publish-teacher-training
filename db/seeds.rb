@@ -117,12 +117,12 @@ Course.create!(
   qualification: :pgce_with_qts
 )
 
-admin_user = User.create!(
+User.create!(
   first_name: 'Super',
   last_name: 'Admin',
   accept_terms_date_utc: Time.now.utc,
   email: 'super.admin@education.gov.uk', # matches authentication.rb
-  )
+)
 
 10.times do |i|
   provider = Provider.create!(
@@ -142,26 +142,7 @@ admin_user = User.create!(
   user.organisations << organisation
 end
 
-access_requester_user = User.create!(
-  first_name: Faker::Name.first_name,
-  last_name: Faker::Name.last_name,
-  email: Faker::Internet.email,
-  welcome_email_date_utc: 7.days.ago,
-  sign_in_user_id: SecureRandom.uuid,
-)
-
-Organisation.create!(
-  name: 'Acme',
-  org_id: '12345',
-  providers: [
-    accrediting_provider,
-    provider2,
-  ],
-  users: [
-    access_requester_user,
-    admin_user,
-  ],
-)
+access_requester_user = (User.select { |u| !u.admin? }).sample
 
 AccessRequest.create!(
   email_address: Faker::Internet.email,
