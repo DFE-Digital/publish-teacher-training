@@ -97,10 +97,12 @@ SiteStatus.create!(
   applications_accepted_from: Date.new(2018, 10, 2)
 )
 
+provider2 = Provider.create!(provider_name: "Acme Alliance", provider_code: "A02")
+
 Course.create!(
   name: Faker::ProgrammingLanguage.name,
   course_code: "5W2A",
-  provider: Provider.create!(provider_name: "Acme Alliance", provider_code: "A02"),
+  provider: provider2,
   accrediting_provider: accrediting_provider,
   qualification: :pgce_with_qts,
   subjects: [
@@ -114,6 +116,13 @@ Course.create!(
   provider: Provider.create!(provider_name: 'Big Uni', provider_code: 'B01'),
   qualification: :pgce_with_qts
 )
+
+admin_user = User.create!(
+  first_name: 'Super',
+  last_name: 'Admin',
+  accept_terms_date_utc: Time.now.utc,
+  email: 'super.admin@education.gov.uk', # matches authentication.rb
+  )
 
 10.times do |i|
   provider = Provider.create!(
@@ -132,3 +141,42 @@ Course.create!(
 
   user.organisations << organisation
 end
+
+access_requester_user = User.create!(
+  first_name: 'Jane',
+  last_name: 'Able',
+  email: 'jable@acme-scitt.org',
+  welcome_email_date_utc: 7.days.ago,
+  sign_in_user_id: 'uuid',
+)
+
+Organisation.create!(
+  name: 'Acme',
+  org_id: '12345',
+  providers: [
+    accrediting_provider,
+    provider2,
+  ],
+  users: [
+    access_requester_user,
+    admin_user,
+  ],
+)
+
+AccessRequest.create!(
+  email_address: 'new.user@acme-scitt.org',
+  first_name: 'New',
+  last_name: 'User',
+  requester: access_requester_user,
+  request_date_utc: Time.now - 1.week,
+  status: :requested,
+)
+
+AccessRequest.create!(
+  email_address: 'another.new.user@acme-scitt.org',
+  first_name: 'Another new',
+  last_name: 'User',
+  requester: access_requester_user,
+  request_date_utc: Time.now - 2.weeks,
+  status: :completed,
+  )
