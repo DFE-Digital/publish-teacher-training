@@ -122,6 +122,7 @@ User.create!(
   last_name: 'Admin',
   accept_terms_date_utc: Time.now.utc,
   email: 'super.admin@education.gov.uk', # matches authentication.rb
+  state: 'transitioned'
 )
 
 10.times do |i|
@@ -142,7 +143,7 @@ User.create!(
   user.organisations << organisation
 end
 
-access_requester_user = (User.select { |u| !u.admin? }).sample
+access_requester_user = User.all.reject(&:admin?).sample
 
 AccessRequest.create!(
   email_address: Faker::Internet.email,
@@ -162,4 +163,4 @@ AccessRequest.create!(
   requester_email: access_requester_user.email,
   request_date_utc: 2.weeks.ago,
   status: :completed,
-  )
+)
