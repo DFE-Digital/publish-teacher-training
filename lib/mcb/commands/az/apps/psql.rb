@@ -4,6 +4,7 @@ summary 'connect to the psql server for an app'
 instance_eval(&MCB.remote_connect_options)
 
 run do |opts, _args, _cmd|
+  MCB.load_env_azure_settings(opts)
   if MCB.requesting_remote_connection? opts
     MCB::Azure.configure_for_webapp(opts)
   end
