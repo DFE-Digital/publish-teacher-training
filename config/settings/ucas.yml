@@ -1,3 +1,0 @@
-manage_api:
-  base_url: https://bat-ucas-mcapi-as.azurewebsites.net
-  secret: please_change_me
