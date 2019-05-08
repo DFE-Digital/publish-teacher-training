@@ -28,11 +28,6 @@ run do |opts, args, _cmd|
 
     puts Terminal::Table.new rows: MCB::CourseShow.new(course).to_h
 
-    if course.new?
-      puts "This course is new, meaning the provider can edit them directly"
-      break
-    end
-
     puts "Course status: #{course.ucas_status}"
 
     finished = false
@@ -59,7 +54,7 @@ run do |opts, args, _cmd|
                 applications_accepted_from: Date.today,
                 publish: :unpublished,
               )
-              site_status.start!
+              site_status.start! unless course.new?
             end
           end
         end
