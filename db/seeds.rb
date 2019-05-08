@@ -143,11 +143,11 @@ admin_user = User.create!(
 end
 
 access_requester_user = User.create!(
-  first_name: 'Jane',
-  last_name: 'Able',
-  email: 'jable@acme-scitt.org',
+  first_name: Faker::Name.first_name,
+  last_name: Faker::Name.last_name,
+  email: Faker::Internet.email,
   welcome_email_date_utc: 7.days.ago,
-  sign_in_user_id: 'uuid',
+  sign_in_user_id: SecureRandom.uuid,
 )
 
 Organisation.create!(
@@ -164,18 +164,18 @@ Organisation.create!(
 )
 
 AccessRequest.create!(
-  email_address: 'new.user@acme-scitt.org',
-  first_name: 'New',
-  last_name: 'User',
+  email_address: Faker::Internet.email,
+  first_name: Faker::Name.first_name,
+  last_name: Faker::Name.last_name,
   requester: access_requester_user,
   request_date_utc: Time.now - 1.week,
   status: :requested,
 )
 
 AccessRequest.create!(
-  email_address: 'another.new.user@acme-scitt.org',
-  first_name: 'Another new',
-  last_name: 'User',
+  email_address: Faker::Internet.email,
+  first_name: Faker::Name.first_name,
+  last_name: Faker::Name.last_name,
   requester: access_requester_user,
   request_date_utc: Time.now - 2.weeks,
   status: :completed,
