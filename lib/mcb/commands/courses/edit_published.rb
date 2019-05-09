@@ -31,7 +31,9 @@ def site_choices(course, provider)
   site_status_choices + new_site_choices
 end
 
-def toggle_site(course, site_str)
+def toggle_site(course, provider, site_str)
+  existing_sites = course.site_statuses.map(&:site)
+  new_sites_to_add = provider.sites - existing_sites
   site_code = site_str.match(/\(code: (.*)\)/)[1]
   if site_status = course.site_statuses.detect { |ss| ss.site.code == site_code }
     puts "Toggling #{site_status}"
@@ -81,7 +83,7 @@ run do |opts, args, _cmd|
         menu.prompt = "Toggling course sites"
         menu.choice(:done) { flow = :root }
         menu.choices(*(site_choices(course, provider))) do |site_str|
-          toggle_site(course, site_str)
+          toggle_site(course, provider, site_str)
         end
       when :edit_route
         menu.prompt = "Editing course route"
