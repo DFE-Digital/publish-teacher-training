@@ -145,22 +145,14 @@ end
 
 access_requester_user = User.all.reject(&:admin?).sample
 
-AccessRequest.create!(
-  email_address: Faker::Internet.email,
-  first_name: Faker::Name.first_name,
-  last_name: Faker::Name.last_name,
-  requester: access_requester_user,
-  requester_email: access_requester_user.email,
-  request_date_utc: 1.week.ago,
-  status: :requested,
-)
-
-AccessRequest.create!(
-  email_address: Faker::Internet.email,
-  first_name: Faker::Name.first_name,
-  last_name: Faker::Name.last_name,
-  requester: access_requester_user,
-  requester_email: access_requester_user.email,
-  request_date_utc: 2.weeks.ago,
-  status: :completed,
-)
+10.times do
+  AccessRequest.create!(
+    email_address: Faker::Internet.email,
+    first_name: Faker::Name.first_name,
+    last_name: Faker::Name.last_name,
+    requester: access_requester_user,
+    requester_email: access_requester_user.email,
+    request_date_utc: (1 + rand(10)).days.ago,
+    status: %i[requested completed].sample
+  )
+end
