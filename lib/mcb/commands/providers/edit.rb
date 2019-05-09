@@ -16,7 +16,8 @@ run do |opts, args, _cmd|
       menu.prompt = "Choose a course"
       menu.choice(:exit) { finished = true }
       menu.choices(*courses.map(&:course_code)) do |course_code|
-        $mcb.run(['courses', 'edit_published', args[:code], course_code, '-E', opts[:env]])
+        command_params = ['courses', 'edit_published', args[:code], course_code] + (opts[:env].present? ? ['-E', opts[:env]] : [])
+        $mcb.run(command_params)
       end
     end
   end
