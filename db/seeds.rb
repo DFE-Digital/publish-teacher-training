@@ -137,7 +137,7 @@ User.create!(
   organisation.providers << provider
 
   user = User.create!(
-    email: Faker::Internet.email,
+    email: Faker::Internet.unique.email,
     first_name: Faker::Name.first_name,
     last_name: Faker::Name.last_name
   )
@@ -149,7 +149,7 @@ access_requester_user = User.all.reject(&:admin?).sample
 
 10.times do
   AccessRequest.create!(
-    email_address: Faker::Internet.email,
+    email_address: Faker::Internet.unique.email,
     first_name: Faker::Name.first_name,
     last_name: Faker::Name.last_name,
     requester: access_requester_user,
