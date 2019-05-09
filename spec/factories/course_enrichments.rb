@@ -113,6 +113,7 @@ FactoryBot.define do
     fee_uk_eu { nil }
     about_course { nil }
     qualifications { nil }
+    how_school_placements_work { nil }
     salary_details { nil }
   end
 

@@ -117,10 +117,11 @@ describe 'Courses API v2', type: :request do
           it { should have_http_status(:unprocessable_entity) }
 
           it 'has validation errors' do
-            expect(json_data.count).to eq 3
+            expect(json_data.count).to eq 4
             expect(json_data[0]["detail"]).to eq("About course can't be blank")
-            expect(json_data[1]["detail"]).to eq("Qualifications can't be blank")
-            expect(json_data[2]["detail"]).to eq("Enter course fees for UK and EU students")
+            expect(json_data[1]["detail"]).to eq("How school placements work can't be blank")
+            expect(json_data[2]["detail"]).to eq("Qualifications can't be blank")
+            expect(json_data[3]["detail"]).to eq("Enter course fees for UK and EU students")
           end
         end
       end
@@ -147,10 +148,11 @@ describe 'Courses API v2', type: :request do
           it { should have_http_status(:unprocessable_entity) }
 
           it 'has validation errors' do
-            expect(json_data.count).to eq 3
+            expect(json_data.count).to eq 4
             expect(json_data[0]["detail"]).to eq("About course can't be blank")
-            expect(json_data[1]["detail"]).to eq("Qualifications can't be blank")
-            expect(json_data[2]["detail"]).to eq("Enter salary details")
+            expect(json_data[1]["detail"]).to eq("How school placements work can't be blank")
+            expect(json_data[2]["detail"]).to eq("Qualifications can't be blank")
+            expect(json_data[3]["detail"]).to eq("Enter salary details")
           end
         end
       end
