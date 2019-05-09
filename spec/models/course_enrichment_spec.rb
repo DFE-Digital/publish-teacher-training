@@ -98,13 +98,20 @@ describe CourseEnrichment, type: :model do
 
       it { should_not validate_presence_of(:salary_details).on(:publish) }
       it { should validate_presence_of(:fee_uk_eu).on(:publish) }
+      it { should validate_presence_of(:about_course).on(:publish) }
+      it { should validate_presence_of(:qualifications).on(:publish) }
 
       context 'valid content' do
         it { should be_valid :publish }
       end
 
-      context 'invalid content' do
-        let(:course_enrichment_traits) { %i[with_fee_based_course with_invalid_content] }
+      context 'invalid content exceed word count fields' do
+        let(:course_enrichment_traits) { %i[with_fee_based_course with_invalid_content_exceed_word_count_fields] }
+        it { should_not be_valid :publish }
+      end
+
+      context 'invalid content lack presence fields' do
+        let(:course_enrichment_traits) { %i[with_fee_based_course with_invalid_content_lack_presence_fields] }
         it { should_not be_valid :publish }
       end
     end
@@ -113,13 +120,20 @@ describe CourseEnrichment, type: :model do
       let(:course_enrichment_traits) { [:with_salary_based_course] }
 
       it { should validate_presence_of(:salary_details).on(:publish) }
+      it { should validate_presence_of(:about_course).on(:publish) }
+      it { should validate_presence_of(:qualifications).on(:publish) }
       it { should_not validate_presence_of(:fee_uk_eu).on(:publish) }
       context 'valid content' do
         it { should be_valid :publish }
       end
 
-      context 'invalid content' do
-        let(:course_enrichment_traits) { %i[with_salary_based_course with_invalid_content] }
+      context 'invalid content exceed word count fields' do
+        let(:course_enrichment_traits) { %i[with_salary_based_course with_invalid_content_exceed_word_count_fields] }
+        it { should_not be_valid :publish }
+      end
+
+      context 'invalid content lack presence fields' do
+        let(:course_enrichment_traits) { %i[with_salary_based_course with_invalid_content_lack_presence_fields] }
         it { should_not be_valid :publish }
       end
     end
