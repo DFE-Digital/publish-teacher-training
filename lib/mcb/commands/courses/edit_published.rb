@@ -14,6 +14,15 @@ def vacancy_status(course)
   end
 end
 
+def site_choices(course, provider)
+  existing_sites = course.site_statuses.map(&:site)
+  new_sites_to_add = provider.sites - existing_sites
+  site_status_choices = course.site_statuses.map {|ss| "#{ss.site.location_name} (code: #{ss.site.code}) – #{ss.status}/#{ss.publish}" }
+  new_site_choices = new_sites_to_add.map {|s| "#{s.location_name} (code: #{s.code})" }
+
+  site_status_choices + new_site_choices
+end
+
 run do |opts, args, _cmd|
   MCB.init_rails(opts)
 
@@ -32,11 +41,7 @@ run do |opts, args, _cmd|
   finished = false
   until finished do
     cli.choose do |menu|
-      existing_sites = course.site_statuses.map(&:site)
-      new_sites_to_add = provider.sites - existing_sites
-      site_status_choices = course.site_statuses.map {|ss| "#{ss.site.location_name} (code: #{ss.site.code}) – #{ss.status}/#{ss.publish}" }
-      new_site_choices = new_sites_to_add.map {|s| "#{s.location_name} (code: #{s.code})" }
-      menu.choices(*(site_status_choices + new_site_choices + ['exit'])) do |cmd|
+      menu.choices(*(site_choices(course, provider) + ['exit'])) do |cmd|
         if cmd == 'exit'
           finished = true
         else
