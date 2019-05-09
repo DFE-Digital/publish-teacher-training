@@ -3,8 +3,33 @@ inherit_gem:
 
 AllCops:
   Exclude:
-    - 'bin/rails'
-    - 'bin/rake'
-    - 'bin/setup'
-    - 'bin/update'
-    - 'db/schema.rb'
+    - "bin/rails"
+    - "bin/rake"
+    - "bin/setup"
+    - "bin/update"
+    - "db/schema.rb"
+    - "node_modules/**/*"
+
+Layout/AccessModifierIndentation:
+  Enabled: false
+
+Layout/MultilineOperationIndentation:
+  Enabled: false
+
+Layout/SpaceInsideStringInterpolation:
+  Enabled: false
+
+Layout/IndentFirstArgument:
+  Enabled: false
+
+Style/MethodCalledOnDoEndBlock:
+  Enabled: false
+
+Metrics/BlockLength:
+  Enabled: false
+
+Layout/IndentHeredoc:
+  Enabled: false
+
+Layout/ClosingHeredocIndentation:
+  Enabled: false

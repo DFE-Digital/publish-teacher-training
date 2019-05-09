@@ -11,7 +11,7 @@ description <<-EODESCRIPTION
   changes are performed.
 EODESCRIPTION
 
-run do |opts, args, _cmd| # rubocop: disable Metrics/BlockLength
+run do |opts, args, _cmd|
   MCB.init_rails(opts)
 
   providers = Hash.new do |hash, code|
