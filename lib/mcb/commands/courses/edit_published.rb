@@ -85,39 +85,24 @@ run do |opts, args, _cmd|
         end
       when :edit_route
         menu.prompt = "Editing course route"
-        menu.choice(:done) { flow = :root }
-        menu.choices(*Course.program_types.keys) do |value|
-          course.program_type = value
-          flow = :root
-        end
+        menu.choices(*Course.program_types.keys) { |value| course.program_type = value }
+        flow = :root
       when :edit_qualifications
         menu.prompt = "Editing course qualifications"
-        menu.choice(:done) { flow = :root }
-        menu.choices(*Course.qualifications.keys) do |value|
-          course.qualification = value
-          flow = :root
-        end
+        menu.choices(*Course.qualifications.keys) { |value| course.qualification = value }
+        flow = :root
       when :edit_english
         menu.prompt = "Editing course english"
-        menu.choice(:done) { flow = :root }
-        menu.choices(*ENTRY_REQUIREMENT_OPTIONS.keys) do |value|
-          course.english = value
-          flow = :root
-        end
+        menu.choices(*ENTRY_REQUIREMENT_OPTIONS.keys) { |value| course.english = value }
+        flow = :root
       when :edit_maths
         menu.prompt = "Editing course maths"
-        menu.choice(:done) { flow = :root }
-        menu.choices(*ENTRY_REQUIREMENT_OPTIONS.keys) do |value|
-          course.maths = value
-          flow = :root
-        end
+        menu.choices(*ENTRY_REQUIREMENT_OPTIONS.keys) { |value| course.maths = value }
+        flow = :root
       when :edit_science
         menu.prompt = "Editing course science"
-        menu.choice(:done) { flow = :root }
-        menu.choices(*ENTRY_REQUIREMENT_OPTIONS.keys) do |value|
-          course.science = value
-          flow = :root
-        end
+        menu.choices(*ENTRY_REQUIREMENT_OPTIONS.keys) { |value| course.science = value }
+        flow = :root
       end
     end
     course.save!
