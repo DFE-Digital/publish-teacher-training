@@ -88,7 +88,6 @@ run do |opts, args, _cmd|
         menu.choice(:done) { flow = :root }
         menu.choices(*Course.program_types.keys) do |value|
           course.program_type = value
-          course.save!
           flow = :root
         end
       when :edit_qualifications
@@ -96,7 +95,6 @@ run do |opts, args, _cmd|
         menu.choice(:done) { flow = :root }
         menu.choices(*Course.qualifications.keys) do |value|
           course.qualification = value
-          course.save!
           flow = :root
         end
       when :edit_english
@@ -104,7 +102,6 @@ run do |opts, args, _cmd|
         menu.choice(:done) { flow = :root }
         menu.choices(*ENTRY_REQUIREMENT_OPTIONS.keys) do |value|
           course.english = value
-          course.save!
           flow = :root
         end
       when :edit_maths
@@ -112,7 +109,6 @@ run do |opts, args, _cmd|
         menu.choice(:done) { flow = :root }
         menu.choices(*ENTRY_REQUIREMENT_OPTIONS.keys) do |value|
           course.maths = value
-          course.save!
           flow = :root
         end
       when :edit_science
@@ -120,11 +116,11 @@ run do |opts, args, _cmd|
         menu.choice(:done) { flow = :root }
         menu.choices(*ENTRY_REQUIREMENT_OPTIONS.keys) do |value|
           course.science = value
-          course.save!
           flow = :root
         end
       end
     end
+    course.save!
     course.reload
     course.site_statuses.reload
   end
