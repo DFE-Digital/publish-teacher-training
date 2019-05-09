@@ -46,11 +46,13 @@ docker-compose exec web /bin/sh -c "bundle exec rails db:setup"
 Then open http://localhost:3001 to see the app.
 
 ## Running specs, linter(without auto correct) and annotate models and serializers
+
 ```
 bundle exec rake
 ```
 
 ## Running specs
+
 ```
 bundle exec rspec
 ```
@@ -72,6 +74,17 @@ or
 
 docker-compose exec web /bin/sh -c "bundle exec rubocop app config db lib spec Gemfile --format clang"
 ```
+
+### Prettier
+
+Auto-formatting is available using [prettier](https://github.com/prettier/plugin-ruby). To run on the entire project:
+
+```bash
+yarn
+./node_modules/.bin/prettier --write '{app,config,lib,spec}/**/*.rb'
+```
+
+It's easier if you install a [plugin for your editor](https://prettier.io/docs/en/editors.html) and run it automatically when you save a file.
 
 ## Accessing API
 
@@ -121,6 +134,7 @@ Where `-S secret` is the secret. In development, the secret should be set to
 Refer to the [the config gem](https://github.com/railsconfig/config#accessing-the-settings-object) to understand the `file based settings` loading order.
 
 To override file based via `Machine based env variables settings`
+
 ```bash
 cat config/settings.yml
 file
@@ -139,9 +153,7 @@ puts Settings.file.based.setting.env1
 machine wins
 ```
 
-Any `Machine based env variables settings` that is not prefixed with `SETTINGS`.* are not considered for general consumption.
-
-
+Any `Machine based env variables settings` that is not prefixed with `SETTINGS`.\* are not considered for general consumption.
 
 ## CI variables
 
