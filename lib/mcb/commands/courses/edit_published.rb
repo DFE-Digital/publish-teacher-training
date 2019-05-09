@@ -1,5 +1,7 @@
 name 'edit_published'
 summary 'Edit publisheds course directly in the DB'
+param :provider_code
+param :course_code
 
 ENTRY_REQUIREMENT_OPTIONS = {
   must_have_qualification_at_application_time: 1,
@@ -57,11 +59,8 @@ run do |opts, args, _cmd|
 
   cli = HighLine.new
 
-  provider_code = cli.ask("Provider code?  ")
-  provider = Provider.find_by!(provider_code: provider_code)
-
-  course_code = cli.ask("Course code?  ")
-  course = provider.courses.find_by!(course_code: course_code)
+  provider = Provider.find_by!(provider_code: args[:provider_code])
+  course = provider.courses.find_by!(course_code: args[:course_code])
 
   flow = :root
   loop do
