@@ -1,6 +1,14 @@
 name 'edit_published'
 summary 'Edit publisheds course directly in the DB'
 
+ENTRY_REQUIREMENT_OPTIONS = {
+  must_have_qualification_at_application_time: 1,
+  expect_to_achieve_before_training_begins: 2,
+  equivalence_test: 3,
+  not_required: 9,
+  not_set: nil,
+}.freeze
+
 def vacancy_status(course)
   case course.study_mode
   when "full_time"
@@ -66,6 +74,9 @@ run do |opts, args, _cmd|
         menu.choice(:toggle_sites) { flow = :toggle_sites }
         menu.choice(:edit_route) { flow = :edit_route }
         menu.choice(:edit_qualifications) { flow = :edit_qualifications }
+        menu.choice(:edit_english) { flow = :edit_english }
+        menu.choice(:edit_maths) { flow = :edit_maths }
+        menu.choice(:edit_science) { flow = :edit_science }
       when :toggle_sites
         menu.prompt = "Toggling course sites"
         menu.choice(:done) { flow = :root }
@@ -85,6 +96,30 @@ run do |opts, args, _cmd|
         menu.choice(:done) { flow = :root }
         menu.choices(*Course.qualifications.keys) do |value|
           course.qualification = value
+          course.save!
+          flow = :root
+        end
+      when :edit_english
+        menu.prompt = "Editing course english"
+        menu.choice(:done) { flow = :root }
+        menu.choices(*ENTRY_REQUIREMENT_OPTIONS.keys) do |value|
+          course.english = value
+          course.save!
+          flow = :root
+        end
+      when :edit_maths
+        menu.prompt = "Editing course maths"
+        menu.choice(:done) { flow = :root }
+        menu.choices(*ENTRY_REQUIREMENT_OPTIONS.keys) do |value|
+          course.maths = value
+          course.save!
+          flow = :root
+        end
+      when :edit_science
+        menu.prompt = "Editing course science"
+        menu.choice(:done) { flow = :root }
+        menu.choices(*ENTRY_REQUIREMENT_OPTIONS.keys) do |value|
+          course.science = value
           course.save!
           flow = :root
         end
