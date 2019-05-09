@@ -154,7 +154,7 @@ access_requester_user = User.all.reject(&:admin?).sample
     last_name: Faker::Name.last_name,
     requester: access_requester_user,
     requester_email: access_requester_user.email,
-    request_date_utc: (1 + rand(10)).days.ago,
+    request_date_utc: rand(1..20).days.ago,
     status: %i[requested completed].sample
   )
 end
