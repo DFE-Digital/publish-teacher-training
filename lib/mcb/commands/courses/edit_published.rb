@@ -65,6 +65,7 @@ run do |opts, args, _cmd|
         menu.choice(:exit) { exit }
         menu.choice(:toggle_sites) { flow = :toggle_sites }
         menu.choice(:edit_route) { flow = :edit_route }
+        menu.choice(:edit_qualifications) { flow = :edit_qualifications }
       when :toggle_sites
         menu.prompt = "Toggling course sites"
         menu.choice(:done) { flow = :root }
@@ -77,6 +78,15 @@ run do |opts, args, _cmd|
         menu.choices(*Course.program_types.keys) do |value|
           course.program_type = value
           course.save!
+          flow = :root
+        end
+      when :edit_qualifications
+        menu.prompt = "Editing course qualifications"
+        menu.choice(:done) { flow = :root }
+        menu.choices(*Course.qualifications.keys) do |value|
+          course.qualification = value
+          course.save!
+          flow = :root
         end
       end
     end
