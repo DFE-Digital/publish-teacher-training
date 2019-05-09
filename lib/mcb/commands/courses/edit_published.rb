@@ -53,19 +53,31 @@ run do |opts, args, _cmd|
   course_code = cli.ask("Course code?  ")
   course = provider.courses.find_by!(course_code: course_code)
 
-  puts Terminal::Table.new rows: MCB::CourseShow.new(course).to_h
-
-  puts "Course status: #{course.ucas_status}"
+  flow = :root
   loop do
     cli.choose do |menu|
-      menu.shell = true
+      case flow
+      when :root
+        puts Terminal::Table.new rows: MCB::CourseShow.new(course).to_h
+        puts "Course status: #{course.ucas_status}"
 
-      menu.choice('exit') do
-        exit
-      end
-
-      menu.choices(*(site_choices(course, provider))) do |site_str|
-        toggle_site(course, site_str)
+        menu.prompt = "Editing course"
+        menu.choice(:exit) { exit }
+        menu.choice(:toggle_sites) { flow = :toggle_sites }
+        menu.choice(:edit_route) { flow = :edit_route }
+      when :toggle_sites
+        menu.prompt = "Toggling course sites"
+        menu.choice(:done) { flow = :root }
+        menu.choices(*(site_choices(course, provider))) do |site_str|
+          toggle_site(course, site_str)
+        end
+      when :edit_route
+        menu.prompt = "Editing course route"
+        menu.choice(:done) { flow = :root }
+        menu.choices(*Course.program_types.keys) do |value|
+          course.program_type = value
+          course.save!
+        end
       end
     end
     course.reload
