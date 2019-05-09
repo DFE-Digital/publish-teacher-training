@@ -63,7 +63,8 @@ run do |opts, args, _cmd|
   course = provider.courses.find_by!(course_code: args[:course_code])
 
   flow = :root
-  loop do
+  finished = false
+  until finished do
     cli.choose do |menu|
       case flow
       when :root
@@ -71,7 +72,7 @@ run do |opts, args, _cmd|
         puts "Course status: #{course.ucas_status}"
 
         menu.prompt = "Editing course"
-        menu.choice(:exit) { exit }
+        menu.choice(:exit) { finished = true }
         menu.choice(:toggle_sites) { flow = :toggle_sites }
         menu.choice(:edit_route) { flow = :edit_route }
         menu.choice(:edit_qualifications) { flow = :edit_qualifications }
