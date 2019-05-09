@@ -91,50 +91,75 @@ describe CourseEnrichment, type: :model do
   end
 
   describe 'validation for publish' do
-    subject { create(:course_enrichment, *course_enrichment_traits) }
+    let(:course_enrichment) do
+      create(:course_enrichment, :with_fee_based_course)
+    end
+    subject { course_enrichment }
 
     context 'fee based course' do
-      let(:course_enrichment_traits) { [:with_fee_based_course] }
-
       it { should_not validate_presence_of(:salary_details).on(:publish) }
       it { should validate_presence_of(:fee_uk_eu).on(:publish) }
       it { should validate_presence_of(:about_course).on(:publish) }
       it { should validate_presence_of(:qualifications).on(:publish) }
 
-      context 'valid content' do
-        it { should be_valid :publish }
-      end
 
       context 'invalid content exceed word count fields' do
-        let(:course_enrichment_traits) { %i[with_fee_based_course with_invalid_content_exceed_word_count_fields] }
-        it { should_not be_valid :publish }
-      end
+        let(:course_enrichment) do
+          create(:course_enrichment, :with_fee_based_course,
+                 about_course:  Faker::Lorem.sentence(400 + 1),
+                 interview_process:  Faker::Lorem.sentence(250 + 1),
+                 qualifications:  Faker::Lorem.sentence(100 + 1),
+                 how_school_placements_work:  Faker::Lorem.sentence(350 + 1),
+                 fee_details:  Faker::Lorem.sentence(250 + 1),
+                 salary_details:  Faker::Lorem.sentence(250 + 1))
+        end
 
-      context 'invalid content lack presence fields' do
-        let(:course_enrichment_traits) { %i[with_fee_based_course with_invalid_content_lack_presence_fields] }
-        it { should_not be_valid :publish }
+        subject do
+          course_enrichment.valid? :publish
+          course_enrichment.errors
+        end
+
+        its([:about_course]) { should match_array ['^Reduce the word count for about course'] }
+        its([:interview_process]) { should match_array ['^Reduce the word count for interview process'] }
+        its([:qualifications]) { should match_array ['^Reduce the word count for qualifications'] }
+        its([:how_school_placements_work]) { should match_array ['^Reduce the word count for how school placements work'] }
+        its([:fee_details]) { should match_array ['^Reduce the word count for fee details'] }
+        its([:salary_details]) { should be_empty }
       end
     end
 
     context 'salary based course' do
-      let(:course_enrichment_traits) { [:with_salary_based_course] }
+      let(:course_enrichment) do
+        create(:course_enrichment, :with_salary_based_course)
+      end
 
       it { should validate_presence_of(:salary_details).on(:publish) }
       it { should validate_presence_of(:about_course).on(:publish) }
       it { should validate_presence_of(:qualifications).on(:publish) }
       it { should_not validate_presence_of(:fee_uk_eu).on(:publish) }
-      context 'valid content' do
-        it { should be_valid :publish }
-      end
 
       context 'invalid content exceed word count fields' do
-        let(:course_enrichment_traits) { %i[with_salary_based_course with_invalid_content_exceed_word_count_fields] }
-        it { should_not be_valid :publish }
-      end
+        let(:course_enrichment) do
+          create(:course_enrichment, :with_salary_based_course,
+                 about_course:  Faker::Lorem.sentence(400 + 1),
+                 interview_process:  Faker::Lorem.sentence(250 + 1),
+                 qualifications:  Faker::Lorem.sentence(100 + 1),
+                 how_school_placements_work:  Faker::Lorem.sentence(350 + 1),
+                 fee_details:  Faker::Lorem.sentence(250 + 1),
+                 salary_details:  Faker::Lorem.sentence(250 + 1))
+        end
 
-      context 'invalid content lack presence fields' do
-        let(:course_enrichment_traits) { %i[with_salary_based_course with_invalid_content_lack_presence_fields] }
-        it { should_not be_valid :publish }
+        subject do
+          course_enrichment.valid? :publish
+          course_enrichment.errors
+        end
+
+        its([:about_course]) { should match_array ['^Reduce the word count for about course'] }
+        its([:interview_process]) { should match_array ['^Reduce the word count for interview process'] }
+        its([:qualifications]) { should match_array ['^Reduce the word count for qualifications'] }
+        its([:how_school_placements_work]) { should match_array ['^Reduce the word count for how school placements work'] }
+        its([:fee_details]) { should be_empty }
+        its([:salary_details]) { should match_array ['^Reduce the word count for salary details'] }
       end
     end
   end
