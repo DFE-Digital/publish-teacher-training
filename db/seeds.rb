@@ -6,6 +6,8 @@ Course.destroy_all
 Site.destroy_all
 SiteStatus.destroy_all
 Provider.destroy_all
+User.destroy_all
+AccessRequest.destroy_all
 
 accrediting_provider = Provider.create!(provider_name: 'Acme SCITT', provider_code: 'A01')
 
@@ -135,7 +137,7 @@ User.create!(
   organisation.providers << provider
 
   user = User.create!(
-    email: Faker::Internet.email,
+    email: Faker::Internet.unique.email,
     first_name: Faker::Name.first_name,
     last_name: Faker::Name.last_name
   )
@@ -145,22 +147,14 @@ end
 
 access_requester_user = User.all.reject(&:admin?).sample
 
-AccessRequest.create!(
-  email_address: Faker::Internet.email,
-  first_name: Faker::Name.first_name,
-  last_name: Faker::Name.last_name,
-  requester: access_requester_user,
-  requester_email: access_requester_user.email,
-  request_date_utc: 1.week.ago,
-  status: :requested,
-)
-
-AccessRequest.create!(
-  email_address: Faker::Internet.email,
-  first_name: Faker::Name.first_name,
-  last_name: Faker::Name.last_name,
-  requester: access_requester_user,
-  requester_email: access_requester_user.email,
-  request_date_utc: 2.weeks.ago,
-  status: :completed,
-)
+10.times do
+  AccessRequest.create!(
+    email_address: Faker::Internet.unique.email,
+    first_name: Faker::Name.first_name,
+    last_name: Faker::Name.last_name,
+    requester: access_requester_user,
+    requester_email: access_requester_user.email,
+    request_date_utc: rand(1..20).days.ago,
+    status: %i[requested completed].sample
+  )
+end
