@@ -23,6 +23,25 @@ def site_choices(course, provider)
   site_status_choices + new_site_choices
 end
 
+def toggle_site(course, site_str)
+  site_code = site_str.match(/\(code: (.*)\)/)[1]
+  if site_status = course.site_statuses.detect { |ss| ss.site.code == site_code }
+    puts "Toggling #{site_status}"
+    site_status.toggle!
+  else
+    is_course_new = course.new? # persist this before we create the site status
+    site_status = SiteStatus.create!(
+      course: course,
+      site: new_sites_to_add.detect { |s| s.code == site_code },
+      vac_status: vacancy_status(course),
+      status: :new_status,
+      applications_accepted_from: Date.today,
+      publish: :unpublished,
+    )
+    site_status.start! unless is_course_new
+  end
+end
+
 run do |opts, args, _cmd|
   MCB.init_rails(opts)
 
@@ -37,31 +56,16 @@ run do |opts, args, _cmd|
   puts Terminal::Table.new rows: MCB::CourseShow.new(course).to_h
 
   puts "Course status: #{course.ucas_status}"
-
-  finished = false
-  until finished do
+  loop do
     cli.choose do |menu|
-      menu.choices(*(site_choices(course, provider) + ['exit'])) do |cmd|
-        if cmd == 'exit'
-          finished = true
-        else
-          site_code = cmd.match(/\(code: (.*)\)/)[1]
-          if site_status = course.site_statuses.detect { |ss| ss.site.code == site_code }
-            puts "Toggling #{site_status}"
-            site_status.toggle!
-          else
-            is_course_new = course.new? # persist this before we create the site status
-            site_status = SiteStatus.create!(
-              course: course,
-              site: new_sites_to_add.detect { |s| s.code == site_code },
-              vac_status: vacancy_status(course),
-              status: :new_status,
-              applications_accepted_from: Date.today,
-              publish: :unpublished,
-            )
-            site_status.start! unless is_course_new
-          end
-        end
+      menu.shell = true
+
+      menu.choice('exit') do
+        exit
+      end
+
+      menu.choices(*(site_choices(course, provider))) do |site_str|
+        toggle_site(course, site_str)
       end
     end
     course.reload
