@@ -6,6 +6,8 @@ Course.destroy_all
 Site.destroy_all
 SiteStatus.destroy_all
 Provider.destroy_all
+User.destroy_all
+AccessRequest.destroy_all
 
 accrediting_provider = Provider.create!(provider_name: 'Acme SCITT', provider_code: 'A01')
 
