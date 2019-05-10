@@ -133,6 +133,7 @@ describe 'Courses API v2', type: :request do
           end
         end
       end
+
       context 'salary type based course' do
         let(:course) { create(:course, :salary_type_based, provider: provider, enrichments: [invalid_enrichment]) }
 
