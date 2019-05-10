@@ -29,7 +29,8 @@ run do |opts, args, _cmd|
     cli.choose do |menu|
       case flow
       when :root
-        courses.each { |c| puts Terminal::Table.new rows: MCB::CourseShow.new(c).to_h }
+        courses[0..2].each { |c| puts Terminal::Table.new rows: MCB::CourseShow.new(c).to_h }
+        puts "Only showing first 2 courses of #{courses.size}." if courses.size > 2
 
         if multi_course_mode
           menu.prompt = "Editing multiple courses"
