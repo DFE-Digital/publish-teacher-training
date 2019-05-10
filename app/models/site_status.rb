@@ -51,6 +51,19 @@ class SiteStatus < ApplicationRecord
   scope :with_vacancies, -> { where.not(vac_status: :no_vacancies) }
   scope :open_for_applications, -> { findable.applications_being_accepted_now.with_vacancies }
 
+  def self.default_vac_status_given(study_mode:)
+    case study_mode
+    when "full_time"
+      :full_time_vacancies
+    when "part_time"
+      :part_time_vacancies
+    when "full_time_or_part_time"
+      :both_full_time_and_part_time_vacancies
+    else
+      raise "Unexpected study mode #{study_mode}"
+    end
+  end
+
   def description
     "#{site.description} – #{status}/#{publish}"
   end

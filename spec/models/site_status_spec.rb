@@ -173,4 +173,14 @@ RSpec.describe SiteStatus, type: :model do
     subject { build(:site_status, :running, :unpublished, site: create(:site, location_name: 'Foo', code: '1')) }
     its(:description) { should eq 'Foo (code: 1) – running/unpublished' }
   end
+
+  describe "default_vac_status_given" do
+    subject { SiteStatus }
+    it "should return correct default_vac_status" do
+      expect(subject.default_vac_status_given(study_mode: 'full_time')).to eq :full_time_vacancies
+      expect(subject.default_vac_status_given(study_mode: 'part_time')).to eq :part_time_vacancies
+      expect(subject.default_vac_status_given(study_mode: 'full_time_or_part_time')).to eq :both_full_time_and_part_time_vacancies
+      expect { subject.default_vac_status_given(study_mode: 'foo') }.to raise_error("Unexpected study mode foo")
+    end
+  end
 end
