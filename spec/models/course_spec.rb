@@ -415,4 +415,57 @@ RSpec.describe Course, type: :model do
 
     its(:sites_not_associated_with_course) { should eq([second_site]) }
   end
+
+  describe "adding and removing sites on a course" do
+    let(:provider) { create(:provider) }
+    let(:new_site) { create(:site, provider: provider) }
+    let(:existing_site) { create(:site, provider: provider) }
+    let(:new_site_status) { subject.site_statuses.find_by!(site: new_site) }
+    subject { create(:course, site_statuses: [existing_site_status]) }
+
+    context "for running courses" do
+      let(:existing_site_status) { create(:site_status, :running, site: existing_site) }
+
+      it "suspends the site when an existing site is removed" do
+        expect { subject.remove_site!(site: existing_site) }.
+          to change { existing_site_status.reload.status }.from("running").to("suspended")
+      end
+
+      it "adds a new site status and sets it to running when a new site is added" do
+        expect { subject.add_site!(site: new_site) }.to change { subject.reload.site_statuses.size }.
+          from(1).to(2)
+        expect(new_site_status.status).to eq("running")
+      end
+    end
+
+    context "for new courses" do
+      let(:existing_site_status) { create(:site_status, :new, site: existing_site) }
+
+      it "sets the site to new when a new site is added" do
+        expect { subject.add_site!(site: new_site) }.to change { subject.reload.site_statuses.size }.
+          from(1).to(2)
+        expect(new_site_status.status).to eq("new_status")
+      end
+
+      it "keeps the site status as new when an existing site is added" do
+        expect { subject.add_site!(site: existing_site) }.
+          to_not change { existing_site_status.reload.status }.from("new_status")
+      end
+    end
+
+    context "for suspended courses" do
+      let(:existing_site_status) { create(:site_status, :suspended, site: existing_site) }
+
+      it "sets the site to running when a new site is added" do
+        expect { subject.add_site!(site: new_site) }.to change { subject.reload.site_statuses.size }.
+          from(1).to(2)
+        expect(new_site_status.status).to eq("running")
+      end
+
+      it "sets the site to running when an existing site is added" do
+        expect { subject.add_site!(site: existing_site) }.
+          to change { existing_site_status.reload.status }.from("suspended").to("running")
+      end
+    end
+  end
 end

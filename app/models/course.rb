@@ -227,6 +227,16 @@ class Course < ApplicationRecord
     end
   end
 
+  def add_site!(site:)
+    is_course_new = new? # persist this before we change anything
+    site_status = site_statuses.find_or_create_by!(site: site)
+    site_status.start! unless is_course_new
+  end
+
+  def remove_site!(site:)
+    site_statuses.find_by!(site: site).suspend!
+  end
+
   def sites_not_associated_with_course
     provider.sites - sites
   end
