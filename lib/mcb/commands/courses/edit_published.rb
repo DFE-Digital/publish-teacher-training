@@ -35,6 +35,7 @@ run do |opts, args, _cmd|
         menu.choice(:toggle_sites) { flow = :toggle_sites } unless multi_course_mode
         menu.choice(:edit_route) { flow = :edit_route }
         menu.choice(:edit_qualifications) { flow = :edit_qualifications }
+        menu.choice(:edit_study_mode) { flow = :edit_study_mode }
         menu.choice(:edit_english) { flow = :edit_english }
         menu.choice(:edit_maths) { flow = :edit_maths }
         menu.choice(:edit_science) { flow = :edit_science }
@@ -52,6 +53,10 @@ run do |opts, args, _cmd|
       when :edit_qualifications
         menu.prompt = "Editing course qualifications"
         menu.choices(*Course.qualifications.keys) { |value| courses.each{ |c| c.qualification = value } }
+        flow = :root
+      when :edit_study_mode
+        menu.prompt = "Editing course study mode"
+        menu.choices(*Course.study_modes.keys) { |value| courses.each{ |c| c.study_mode = value } }
         flow = :root
       when :edit_english
         menu.prompt = "Editing course english"
