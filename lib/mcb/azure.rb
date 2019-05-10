@@ -23,8 +23,8 @@ module MCB
 
     def self.get_config(app, rgroup: nil, subscription: nil)
       rgroup ||= rgroup_for_app(app)
-      cmd = "az webapp config appsettings list -g '#{rgroup}' -n '#{app}'"
-      cmd += " --subscription '#{subscription}'" if subscription
+      cmd = "az webapp config appsettings list -g \"#{rgroup}\" -n \"#{app}\""
+      cmd += " --subscription \"#{subscription}\"" if subscription
       raw_json = MCB::run_command(cmd)
       config = JSON.parse(raw_json)
       config.map { |c| [c["name"], c["value"]] }.to_h
