@@ -1,12 +1,5 @@
 require 'mcb_helper'
 
-RSpec::Matchers.define :have_table_row do |*column_values|
-  match do |actual|
-    actual.match? column_values.join('\s+\|\s+')
-  end
-end
-
-
 describe 'mcb users list' do
   let(:lib_dir) { "#{Rails.root}/lib" }
   let(:cmd) do
@@ -42,8 +35,8 @@ describe 'mcb users list' do
       cmd.run([user1.id, user2.id])
     end
 
-    expect(output).to have_table_row(user1.id)
-    expect(output).to have_table_row(user2.id)
-    expect(output).not_to have_table_row(user3.id)
+    expect(output).to have_text_table_row(user1.id)
+    expect(output).to have_text_table_row(user2.id)
+    expect(output).not_to have_text_table_row(user3.id)
   end
 end
