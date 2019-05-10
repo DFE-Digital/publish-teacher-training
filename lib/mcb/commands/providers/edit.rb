@@ -22,6 +22,11 @@ run do |opts, args, _cmd|
 
       menu.choice(:exit) { finished = true }
 
+      unchosen_course_codes = (courses.map(&:course_code) - chosen_course_codes)
+      unless unchosen_course_codes.empty?
+        menu.choices(:all_courses) { chosen_course_codes = courses.map(&:course_code) }
+      end
+
       unless chosen_course_codes.empty?
         menu.choice(:edit_selected_courses) do
           command_params = ['courses', 'edit_published', args[:code], *chosen_course_codes] + (opts[:env].present? ? ['-E', opts[:env]] : [])
@@ -30,9 +35,12 @@ run do |opts, args, _cmd|
         end
       end
 
-      menu.choices(*courses.map(&:course_code)) do |course_code|
-        chosen_course_codes.push(course_code)
+      unless unchosen_course_codes.empty?
+        menu.choices(*unchosen_course_codes) do |course_code|
+          chosen_course_codes.push(course_code)
+        end
       end
+
     end
   end
 end
