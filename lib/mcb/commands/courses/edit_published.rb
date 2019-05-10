@@ -1,14 +1,6 @@
 name 'edit_published'
 summary 'Edit publisheds course directly in the DB'
 
-ENTRY_REQUIREMENT_OPTIONS = {
-  must_have_qualification_at_application_time: 1,
-  expect_to_achieve_before_training_begins: 2,
-  equivalence_test: 3,
-  not_required: 9,
-  not_set: nil,
-}.freeze
-
 run do |opts, args, _cmd|
   MCB.init_rails(opts)
 
@@ -63,15 +55,15 @@ run do |opts, args, _cmd|
         flow = :root
       when :edit_english
         menu.prompt = "Editing course english"
-        menu.choices(*ENTRY_REQUIREMENT_OPTIONS.keys) { |value| courses.each{ |c| c.english = value } }
+        menu.choices(*Course.englishes.keys) { |value| courses.each{ |c| c.english = value } }
         flow = :root
       when :edit_maths
         menu.prompt = "Editing course maths"
-        menu.choices(*ENTRY_REQUIREMENT_OPTIONS.keys) { |value| courses.each{ |c| c.maths = value } }
+        menu.choices(*Course.maths.keys) { |value| courses.each{ |c| c.maths = value } }
         flow = :root
       when :edit_science
         menu.prompt = "Editing course science"
-        menu.choices(*ENTRY_REQUIREMENT_OPTIONS.keys) { |value| courses.each{ |c| c.science = value } }
+        menu.choices(*Course.sciences.keys) { |value| courses.each{ |c| c.science = value } }
         flow = :root
       end
     end
