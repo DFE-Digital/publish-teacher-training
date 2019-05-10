@@ -20,19 +20,15 @@ run do |opts, args, _cmd|
         menu.prompt = "Chosen courses: #{chosen_course_codes.join(", ")}"
       end
 
+      unchosen_course_codes = (courses.map(&:course_code) - chosen_course_codes)
+
       menu.choice(:exit) { finished = true }
 
-      unchosen_course_codes = (courses.map(&:course_code) - chosen_course_codes)
-      unless unchosen_course_codes.empty?
-        menu.choices(:all_courses) { chosen_course_codes = courses.map(&:course_code) }
-      end
-
-      unless chosen_course_codes.empty?
-        menu.choice(:edit_selected_courses) do
-          command_params = ['courses', 'edit_published', args[:code], *chosen_course_codes] + (opts[:env].present? ? ['-E', opts[:env]] : [])
-          $mcb.run(command_params)
-          chosen_course_codes = []
-        end
+      all_courses_or_just_selected = chosen_course_codes.empty? ? :all_courses : :edit_selected_courses
+      menu.choice(all_courses_or_just_selected) do
+        command_params = ['courses', 'edit_published', args[:code], *chosen_course_codes] + (opts[:env].present? ? ['-E', opts[:env]] : [])
+        $mcb.run(command_params)
+        chosen_course_codes = []
       end
 
       unless unchosen_course_codes.empty?
@@ -40,7 +36,6 @@ run do |opts, args, _cmd|
           chosen_course_codes.push(course_code)
         end
       end
-
     end
   end
 end
