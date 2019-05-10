@@ -226,4 +226,8 @@ class Course < ApplicationRecord
       enrichment.publish(current_user)
     end
   end
+
+  def sites_not_associated_with_course
+    provider.sites - sites
+  end
 end
