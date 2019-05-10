@@ -1,12 +1,14 @@
 summary 'Show changes made to a user record'
-param :code
+param :id
+usage 'audit <id>'
 
 run do |opts, args, _cmd|
   MCB.init_rails(opts)
 
-  code = args[:code]
-  provider = Provider.find_by!(provider_code: code)
-  table = Tabulo::Table.new provider.audits do |t|
+  user_id = args[:id]
+  user = User.find(user_id)
+
+  table = Tabulo::Table.new user.audits do |t|
     t.add_column(:user_id, header: "user\nid", width: 6)
     t.add_column(:user, header: "user email") { |a| a.user&.email }
     t.add_column(:action, width: 8)
