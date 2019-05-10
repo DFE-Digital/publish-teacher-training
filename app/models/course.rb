@@ -217,7 +217,7 @@ class Course < ApplicationRecord
   end
 
   def publish_sites
-    site_statuses.status_new_status.each(&:status_running!)
+    site_statuses.status_new_status.each(&:start!)
     site_statuses.status_running.unpublished_on_ucas.each(&:published_on_ucas!)
   end
 
