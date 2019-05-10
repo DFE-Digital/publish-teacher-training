@@ -71,4 +71,9 @@ describe Provider, type: :model do
       expect(subject.code).to eq('A')
     end
   end
+
+  describe "description" do
+    subject { build(:site, location_name: 'Foo', code: '1') }
+    its(:description) { should eq 'Foo (code: 1)' }
+  end
 end
