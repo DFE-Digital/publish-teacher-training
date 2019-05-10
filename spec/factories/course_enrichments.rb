@@ -99,16 +99,12 @@ FactoryBot.define do
     last_published_timestamp_utc { 5.days.ago }
   end
 
-  trait :with_invalid_content do
-    about_course { Faker::Lorem.sentence(400 + 1) }
-    interview_process { Faker::Lorem.sentence(250 + 1) }
-    how_school_placements_work { Faker::Lorem.sentence(350 + 1) }
-
-    fee_details { Faker::Lorem.sentence(250 + 1) }
-    salary_details { Faker::Lorem.sentence(250 + 1) }
-
-    fee_uk_eu { 100001 }
-    fee_international { 100001 }
+  trait :without_content do
+    fee_uk_eu { nil }
+    about_course { nil }
+    qualifications { nil }
+    how_school_placements_work { nil }
+    salary_details { nil }
   end
 
   trait :with_fee_based_course do
