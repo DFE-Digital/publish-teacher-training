@@ -93,7 +93,7 @@ describe MCB::Azure do
       subject
       expect(MCB).to(
         have_received(:run_command).with(
-          "az webapp config appsettings list -g 'some-rgroup' -n 'some-app'"
+          'az webapp config appsettings list -g "some-rgroup" -n "some-app"'
         )
       )
     end
