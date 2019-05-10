@@ -168,4 +168,9 @@ RSpec.describe SiteStatus, type: :model do
       end
     end
   end
+
+  describe "description" do
+    subject { build(:site_status, :running, :unpublished, site: create(:site, location_name: 'Foo', code: '1')) }
+    its(:description) { should eq 'Foo (code: 1) – running/unpublished' }
+  end
 end
