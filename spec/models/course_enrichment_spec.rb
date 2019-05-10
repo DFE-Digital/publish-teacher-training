@@ -92,7 +92,7 @@ describe CourseEnrichment, type: :model do
 
   describe 'validation for publish' do
     let(:course_enrichment) do
-      create(:course_enrichment, :with_fee_based_course)
+      build(:course_enrichment, :with_fee_based_course)
     end
     subject { course_enrichment }
 
@@ -102,16 +102,15 @@ describe CourseEnrichment, type: :model do
       it { should validate_presence_of(:about_course).on(:publish) }
       it { should validate_presence_of(:qualifications).on(:publish) }
 
-
       context 'invalid content exceed word count fields' do
         let(:course_enrichment) do
-          create(:course_enrichment, :with_fee_based_course,
-                 about_course:  Faker::Lorem.sentence(400 + 1),
-                 interview_process:  Faker::Lorem.sentence(250 + 1),
-                 qualifications:  Faker::Lorem.sentence(100 + 1),
-                 how_school_placements_work:  Faker::Lorem.sentence(350 + 1),
-                 fee_details:  Faker::Lorem.sentence(250 + 1),
-                 salary_details:  Faker::Lorem.sentence(250 + 1))
+          build(:course_enrichment, :with_fee_based_course,
+                about_course:  Faker::Lorem.sentence(400 + 1),
+                interview_process:  Faker::Lorem.sentence(250 + 1),
+                qualifications:  Faker::Lorem.sentence(100 + 1),
+                how_school_placements_work:  Faker::Lorem.sentence(350 + 1),
+                fee_details:  Faker::Lorem.sentence(250 + 1),
+                salary_details:  Faker::Lorem.sentence(250 + 1))
         end
 
         subject do
@@ -130,7 +129,7 @@ describe CourseEnrichment, type: :model do
 
     context 'salary based course' do
       let(:course_enrichment) do
-        create(:course_enrichment, :with_salary_based_course)
+        build(:course_enrichment, :with_salary_based_course)
       end
 
       it { should validate_presence_of(:salary_details).on(:publish) }
@@ -140,13 +139,13 @@ describe CourseEnrichment, type: :model do
 
       context 'invalid content exceed word count fields' do
         let(:course_enrichment) do
-          create(:course_enrichment, :with_salary_based_course,
-                 about_course:  Faker::Lorem.sentence(400 + 1),
-                 interview_process:  Faker::Lorem.sentence(250 + 1),
-                 qualifications:  Faker::Lorem.sentence(100 + 1),
-                 how_school_placements_work:  Faker::Lorem.sentence(350 + 1),
-                 fee_details:  Faker::Lorem.sentence(250 + 1),
-                 salary_details:  Faker::Lorem.sentence(250 + 1))
+          build(:course_enrichment, :with_salary_based_course,
+                about_course:  Faker::Lorem.sentence(400 + 1),
+                interview_process:  Faker::Lorem.sentence(250 + 1),
+                qualifications:  Faker::Lorem.sentence(100 + 1),
+                how_school_placements_work:  Faker::Lorem.sentence(350 + 1),
+                fee_details:  Faker::Lorem.sentence(250 + 1),
+                salary_details:  Faker::Lorem.sentence(250 + 1))
         end
 
         subject do
