@@ -14,14 +14,16 @@ run do |opts, args, _cmd|
 
   cli = HighLine.new
 
-  multi_course_mode = args.size > 2
-  if multi_course_mode
-    provider = Provider.find_by!(provider_code: args[0])
-    courses = provider.courses.filter{ |course| args.include?(course.course_code) }
-  else
-    provider = Provider.find_by!(provider_code: args[0])
-    courses = [provider.courses.find_by!(course_code: args[1])]
-  end
+  provider = Provider.find_by!(provider_code: args[0])
+
+  all_courses_mode = args.size == 1
+  courses = if all_courses_mode
+              provider.courses
+            else
+              provider.courses.filter{ |course| args.include?(course.course_code) }
+            end
+
+  multi_course_mode = courses.size > 1
 
   flow = :root
   finished = false
