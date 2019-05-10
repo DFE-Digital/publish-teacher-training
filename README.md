@@ -1,7 +1,7 @@
 [![Build Status](https://travis-ci.org/DFE-Digital/manage-courses-backend.svg?branch=master)](https://travis-ci.org/DFE-Digital/manage-courses-backend)
 [![Build Status](https://dfe-ssp.visualstudio.com/Become-A-Teacher/_apis/build/status/Find/manage-courses-backend?branchName=master)](https://dfe-ssp.visualstudio.com/Become-A-Teacher/_build/latest?definitionId=46&branchName=master)
-[![Code Climate](https://codeclimate.com/github/DfE-Digital/manage-courses-backend/badges/gpa.svg)](https://codeclimate.com/github/DfE-Digital/manage-courses-backend)
-[![Test Coverage](https://codeclimate.com/github/DfE-Digital/manage-courses-backend/badges/coverage.svg)](https://codeclimate.com/github/DfE-Digital/manage-courses-backend/coverage)
+[![Maintainability](https://api.codeclimate.com/v1/badges/a45d9506b9c0e3f0fd8f/maintainability)](https://codeclimate.com/github/DFE-Digital/manage-courses-backend/maintainability)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/a45d9506b9c0e3f0fd8f/test_coverage)](https://codeclimate.com/github/DFE-Digital/manage-courses-backend/test_coverage)
 
 # Manage Courses Backend
 
