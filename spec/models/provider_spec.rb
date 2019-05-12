@@ -129,4 +129,15 @@ describe Provider, type: :model do
       expect(provider.updated_at).to eq timestamp
     end
   end
+
+  describe '#unassigned_site_codes' do
+    subject { create(:provider, site_count: 0) }
+
+    before do
+      %w[A B C D 1 2 3 -].each { |code| subject.sites << build(:site, code: code) }
+    end
+    let(:expected_unassigned_codes) { ('E'..'Z').to_a + %w[0] + ('4'..'9').to_a }
+
+    its(:unassigned_site_codes) { should eq(expected_unassigned_codes) }
+  end
 end
