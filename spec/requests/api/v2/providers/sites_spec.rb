@@ -183,7 +183,7 @@ describe 'Sites API v2', type: :request do
     end
 
     context 'when authenticated and authorised' do
-      let(:code)          { 'A3' }
+      let(:code)          { 'A' }
       let(:location_name) { 'New location name' }
       let(:address1)      { 'New street 1' }
       let(:address2)      { 'New street 2' }
