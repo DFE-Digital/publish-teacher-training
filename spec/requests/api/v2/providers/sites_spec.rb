@@ -9,15 +9,13 @@ describe 'Sites API v2', type: :request do
     ActionController::HttpAuthentication::Token.encode_credentials(token)
   end
 
-  let(:site1) { create :site, location_name: 'Main site 1' }
-  let(:site2) { create :site, location_name: 'Main site 2' }
-  let(:sites) { [site1, site2] }
-
+  let(:site1) { create :site, location_name: 'Main site 1', provider: provider }
+  let(:site2) { create :site, location_name: 'Main site 2', provider: provider }
+  let!(:sites) { [site1, site2] }
   let!(:provider) {
     create(:provider,
            course_count: 0,
            site_count: 0,
-           sites: sites,
            organisations: [organisation])
   }
 
