@@ -64,5 +64,11 @@ describe Provider, type: :model do
       expect { subject.valid? }.to change { subject.code.blank? }.from(true).to(false)
       expect(subject.errors[:code]).to be_empty
     end
+
+    it 'is assigned easily-confused codes only when all others have been used up' do
+      (Site::DESIRABLE_CODES - %w[A]).each { |code| create(:site, code: code, provider: provider) }
+      subject.validate
+      expect(subject.code).to eq('A')
+    end
   end
 end

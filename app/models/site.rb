@@ -22,6 +22,8 @@ class Site < ApplicationRecord
   include TouchProvider
 
   POSSIBLE_CODES = (('A'..'Z').to_a + ('0'..'9').to_a + ['-']).freeze
+  EASILY_CONFUSED_CODES = %w[1 I 0 O -].freeze # these ought to be assigned last
+  DESIRABLE_CODES = (POSSIBLE_CODES - EASILY_CONFUSED_CODES).freeze
 
   before_validation :assign_code, unless: :persisted?
 
@@ -41,6 +43,14 @@ class Site < ApplicationRecord
                    presence: true
 
   def assign_code
-    self.code ||= provider&.unassigned_site_codes&.sample
+    self.code ||= pick_next_available_code(available_codes: provider&.unassigned_site_codes)
+  end
+
+private
+
+  def pick_next_available_code(available_codes: [])
+    available_desirable_codes = available_codes & DESIRABLE_CODES
+    available_undesirable_codes = available_codes & EASILY_CONFUSED_CODES
+    available_desirable_codes.sample || available_undesirable_codes.sample
   end
 end
