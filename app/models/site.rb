@@ -32,5 +32,6 @@ class Site < ApplicationRecord
             :postcode,
             presence: true
   validates :postcode, postcode: true
-  validates :code, presence: true
+  validates :code, uniqueness: { scope: :provider_id, case_sensitive: false },
+                   presence: true
 end
