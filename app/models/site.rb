@@ -32,4 +32,5 @@ class Site < ApplicationRecord
             :postcode,
             presence: true
   validates :postcode, postcode: true
+  validates :code, presence: true
 end
