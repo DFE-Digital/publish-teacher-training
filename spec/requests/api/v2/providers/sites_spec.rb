@@ -89,8 +89,8 @@ describe 'Sites API v2', type: :request do
 
       it 'has a data section with the correct attributes' do
         json_response = JSON.parse response.body
-        expect(json_response).to eq(
-          "data" => [{
+        expect(json_response["data"]).to match_array([
+          {
             "id" => site1.id.to_s,
             "type" => "sites",
             "attributes" => {
@@ -103,7 +103,8 @@ describe 'Sites API v2', type: :request do
               "postcode" => site1.postcode,
               "region_code" => site1.region_code
             },
-          }, {
+          },
+          {
             "id" => site2.id.to_s,
             "type" => "sites",
             "attributes" => {
@@ -116,11 +117,9 @@ describe 'Sites API v2', type: :request do
               "postcode" => site2.postcode,
               "region_code" => site2.region_code
             }
-          }],
-          "jsonapi" => {
-            "version" => "1.0"
-          }
-        )
+          },
+        ])
+        expect(json_response["jsonapi"]).to eq("version" => "1.0")
       end
     end
 
