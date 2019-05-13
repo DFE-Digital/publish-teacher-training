@@ -20,9 +20,9 @@ run do |opts, args, _cmd|
   flow = :root
   finished = false
   until finished do
-    cli.choose do |menu|
-      case flow
-      when :root
+    case flow
+    when :root
+      cli.choose do |menu|
         courses[0..1].each { |c| puts Terminal::Table.new rows: MCB::CourseShow.new(c).to_h }
         puts "Only showing first 2 courses of #{courses.size}." if courses.size > 2
 
@@ -39,34 +39,48 @@ run do |opts, args, _cmd|
         menu.choice(:edit_english) { flow = :edit_english }
         menu.choice(:edit_maths) { flow = :edit_maths }
         menu.choice(:edit_science) { flow = :edit_science }
-      when :toggle_sites
+      end
+    when :toggle_sites
+      cli.choose do |menu|
         menu.prompt = "Toggling course sites"
         menu.choice(:done) { flow = :root }
         menu.choices(*(courses.first.actual_and_potential_site_statuses.map(&:description))) do |site_str|
           site_code = site_str.match(/\(code: (.*)\)/)[1]
           courses.first.toggle_site(provider.sites.find_by!(code: site_code))
         end
-      when :edit_route
+      end
+    when :edit_route
+      cli.choose do |menu|
         menu.prompt = "Editing course route"
         menu.choices(*Course.program_types.keys) { |value| courses.each{ |c| c.program_type = value } }
         flow = :root
-      when :edit_qualifications
+      end
+    when :edit_qualifications
+      cli.choose do |menu|
         menu.prompt = "Editing course qualifications"
         menu.choices(*Course.qualifications.keys) { |value| courses.each{ |c| c.qualification = value } }
         flow = :root
-      when :edit_study_mode
+      end
+    when :edit_study_mode
+      cli.choose do |menu|
         menu.prompt = "Editing course study mode"
         menu.choices(*Course.study_modes.keys) { |value| courses.each{ |c| c.study_mode = value } }
         flow = :root
-      when :edit_english
+      end
+    when :edit_english
+      cli.choose do |menu|
         menu.prompt = "Editing course english"
         menu.choices(*Course.englishes.keys) { |value| courses.each{ |c| c.english = value } }
         flow = :root
-      when :edit_maths
+      end
+    when :edit_maths
+      cli.choose do |menu|
         menu.prompt = "Editing course maths"
         menu.choices(*Course.maths.keys) { |value| courses.each{ |c| c.maths = value } }
         flow = :root
-      when :edit_science
+      end
+    when :edit_science
+      cli.choose do |menu|
         menu.prompt = "Editing course science"
         menu.choices(*Course.sciences.keys) { |value| courses.each{ |c| c.science = value } }
         flow = :root
