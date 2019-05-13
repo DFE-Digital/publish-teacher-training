@@ -16,6 +16,9 @@ class SiteStatus < ApplicationRecord
 
   self.table_name = "course_site"
 
+  after_initialize :set_defaults
+  before_validation :set_vac_status
+
   audited associated_with: :course
 
   validate :vac_status_must_be_consistent_with_course_study_mode,
@@ -69,6 +72,16 @@ class SiteStatus < ApplicationRecord
   end
 
 private
+
+  def set_defaults
+    self.status ||= :new_status
+    self.applications_accepted_from ||= Date.today
+    self.publish ||= :unpublished
+  end
+
+  def set_vac_status
+    self.vac_status ||= self.class.default_vac_status_given(study_mode: course.study_mode)
+  end
 
   def vac_status_must_be_consistent_with_course_study_mode
     unless vac_status_consistent_with_course_study_mode?

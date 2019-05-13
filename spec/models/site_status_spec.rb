@@ -39,6 +39,8 @@ RSpec.describe SiteStatus, type: :model do
   end
 
   describe 'associations' do
+    subject { build(:site_status) }
+
     it { should belong_to(:site) }
     it { should belong_to(:course) }
   end
