@@ -183,22 +183,6 @@ RSpec.describe Course, type: :model do
           its(:site_statuses) { should_not be_empty }
           its(:open_for_applications?) { should be true }
         end
-
-        context 'site statuses applications_being_accepted_now as it open now & future and mix site status as non findable' do
-          let(:subject) {
-            create(:course, with_site_statuses: [
-                     [:findable],
-                     [:with_any_vacancy],
-                     [:default],
-                     [:applications_being_accepted_now],
-                     [:applications_being_accepted_in_future]
-                   ])
-          }
-
-          its(:site_statuses) { should_not be_empty }
-          its(:findable?) { should be true }
-          its(:open_for_applications?) { should be false }
-        end
       end
     end
 
