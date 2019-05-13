@@ -53,6 +53,7 @@ gem 'config'
 
 # For building cmdline apps (mcb)
 gem 'cri'
+gem 'rainbow'
 
 # Build pretty tables in the terminal
 #   table_print handles ActiveRecord objects and collections really nicely

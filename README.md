@@ -176,6 +176,16 @@ commands available, and is accessable with the `--help` option:
 
 ```
 bin/mcb --help
+or
+bin/mcb -h
+```
+
+For a full list of subcommands:
+
+```
+bin/mcb --verbose --help
+or
+bin/mcb -v -h
 ```
 
 Commands for mcb are defined in `lib/mcb/commands` and any new commands should
