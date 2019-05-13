@@ -39,6 +39,7 @@ run do |opts, args, _cmd|
         menu.choice(:edit_english) { flow = :edit_english }
         menu.choice(:edit_maths) { flow = :edit_maths }
         menu.choice(:edit_science) { flow = :edit_science }
+        menu.choice(:edit_start_date) { flow = :edit_start_date }
       end
     when :toggle_sites
       cli.choose do |menu|
@@ -85,6 +86,12 @@ run do |opts, args, _cmd|
         menu.choices(*Course.sciences.keys) { |value| courses.each{ |c| c.science = value } }
         flow = :root
       end
+    when :edit_start_date
+      start_date = Date.parse(cli.ask("What's the new start date?  "))
+      if cli.agree("Start date will be set to #{start_date.strftime('%d %b %Y')}. Continue? ")
+        courses.each { |c| c.start_date = start_date }
+      end
+      flow = :root
     end
     courses.each(&:save!)
     courses.each(&:reload)
