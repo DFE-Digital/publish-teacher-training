@@ -9,6 +9,7 @@
 
 require 'ap'
 require 'cri'
+require 'rainbow'
 require 'pry'
 require 'table_print'
 require 'terminal-table'
@@ -36,12 +37,26 @@ $mcb = Cri::Command.define do
 
   flag :h, :help, 'show help for this command' do |_value, cmd|
     puts cmd.help
+    if $verbosity == :verbose
+      puts
+      puts Rainbow("SUBCOMMANDS").red.bright
+      show_all_commands(cmd, "")
+    end
     exit 0
   end
 
   option :c, :config, 'use provided config file',
          argument: :required do |config_file|
     MCB.config_file = config_file
+  end
+end
+
+def show_all_commands(cmd, indent)
+  cmd.commands.each do |c|
+    aligned_cmd_name = (indent + c.name).ljust(20, ' ')
+    coloured_name = Rainbow(aligned_cmd_name).green
+    puts "    #{coloured_name} #{c.summary}"
+    show_all_commands(c, indent + "  ")
   end
 end
 
