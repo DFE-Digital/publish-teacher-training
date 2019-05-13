@@ -30,6 +30,9 @@ describe Provider, type: :model do
   it { is_expected.to validate_presence_of(:address3) }
   it { is_expected.to validate_presence_of(:postcode) }
   it { is_expected.to validate_uniqueness_of(:location_name).scoped_to(:provider_id) }
+  it { is_expected.to validate_uniqueness_of(:code).case_insensitive.scoped_to(:provider_id) }
+  it { is_expected.to validate_presence_of(:code) }
+  it { is_expected.to validate_inclusion_of(:code).in_array(Site::POSSIBLE_CODES).with_message('must be A-Z, 0-9 or -') }
 
   describe 'associations' do
     it { should belong_to(:provider) }
@@ -50,6 +53,22 @@ describe Provider, type: :model do
       site.provider.update updated_at: timestamp
       site.touch
       expect(site.provider.updated_at).to eq timestamp
+    end
+  end
+
+  describe 'after running validation' do
+    let(:provider) { create(:provider, site_count: 0) }
+    subject { build(:site, provider: provider) }
+
+    it 'is assigned a valid code by default' do
+      expect { subject.valid? }.to change { subject.code.blank? }.from(true).to(false)
+      expect(subject.errors[:code]).to be_empty
+    end
+
+    it 'is assigned easily-confused codes only when all others have been used up' do
+      (Site::DESIRABLE_CODES - %w[A]).each { |code| create(:site, code: code, provider: provider) }
+      subject.validate
+      expect(subject.code).to eq('A')
     end
   end
 end

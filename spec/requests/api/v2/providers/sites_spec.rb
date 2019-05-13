@@ -9,15 +9,13 @@ describe 'Sites API v2', type: :request do
     ActionController::HttpAuthentication::Token.encode_credentials(token)
   end
 
-  let(:site1) { create :site, location_name: 'Main site 1' }
-  let(:site2) { create :site, location_name: 'Main site 2' }
-  let(:sites) { [site1, site2] }
-
+  let(:site1) { create :site, location_name: 'Main site 1', provider: provider }
+  let(:site2) { create :site, location_name: 'Main site 2', provider: provider }
+  let!(:sites) { [site1, site2] }
   let!(:provider) {
     create(:provider,
            course_count: 0,
            site_count: 0,
-           sites: sites,
            organisations: [organisation])
   }
 
@@ -91,8 +89,8 @@ describe 'Sites API v2', type: :request do
 
       it 'has a data section with the correct attributes' do
         json_response = JSON.parse response.body
-        expect(json_response).to eq(
-          "data" => [{
+        expect(json_response["data"]).to match_array([
+          {
             "id" => site1.id.to_s,
             "type" => "sites",
             "attributes" => {
@@ -105,7 +103,8 @@ describe 'Sites API v2', type: :request do
               "postcode" => site1.postcode,
               "region_code" => site1.region_code
             },
-          }, {
+          },
+          {
             "id" => site2.id.to_s,
             "type" => "sites",
             "attributes" => {
@@ -118,11 +117,9 @@ describe 'Sites API v2', type: :request do
               "postcode" => site2.postcode,
               "region_code" => site2.region_code
             }
-          }],
-          "jsonapi" => {
-            "version" => "1.0"
-          }
-        )
+          },
+        ])
+        expect(json_response["jsonapi"]).to eq("version" => "1.0")
       end
     end
 
@@ -186,7 +183,7 @@ describe 'Sites API v2', type: :request do
     end
 
     context 'when authenticated and authorised' do
-      let(:code)          { 'A3' }
+      let(:code)          { 'A' }
       let(:location_name) { 'New location name' }
       let(:address1)      { 'New street 1' }
       let(:address2)      { 'New street 2' }

@@ -90,4 +90,8 @@ class Provider < ApplicationRecord
   def accredited_body?
     accrediting_provider == 'Y'
   end
+
+  def unassigned_site_codes
+    Site::POSSIBLE_CODES - sites.pluck(:code)
+  end
 end
