@@ -118,7 +118,7 @@ class Course < ApplicationRecord
   end
 
   def new?
-    site_statuses.status_new_status.any?
+    site_statuses.empty? || site_statuses.status_new_status.any?
   end
 
   def open_for_applications?

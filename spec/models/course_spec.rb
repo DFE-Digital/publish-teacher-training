@@ -187,6 +187,12 @@ RSpec.describe Course, type: :model do
     end
 
     describe 'ucas_status' do
+      context 'without any site statuses' do
+        let(:subject) { create(:course, with_site_statuses: []) }
+
+        its(:ucas_status) { should eq :new }
+      end
+
       context 'with a running site_status' do
         let(:subject) { create(:course, with_site_statuses: [%i[findable]]) }
 
@@ -465,6 +471,16 @@ RSpec.describe Course, type: :model do
       it "sets the site to running when an existing site is added" do
         expect { subject.add_site!(site: existing_site) }.
           to change { existing_site_status.reload.status }.from("suspended").to("running")
+      end
+    end
+
+    context "for courses without any training locations" do
+      subject { create(:course, site_statuses: []) }
+
+      it "sets the site to new when a new site is added" do
+        expect { subject.add_site!(site: new_site) }.to change { subject.reload.site_statuses.size }.
+          from(0).to(1)
+        expect(new_site_status.status).to eq("new_status")
       end
     end
   end
