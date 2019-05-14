@@ -180,13 +180,5 @@ or
 bin/mcb -h
 ```
 
-For a full list of subcommands:
-
-```
-bin/mcb --verbose --help
-or
-bin/mcb -v -h
-```
-
 Commands for mcb are defined in `lib/mcb/commands` and any new commands should
 be organised in an appropriate sub-folder there.

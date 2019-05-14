@@ -37,11 +37,9 @@ $mcb = Cri::Command.define do
 
   flag :h, :help, 'show help for this command' do |_value, cmd|
     puts cmd.help
-    if $verbosity == :verbose
-      puts
-      puts Rainbow("SUBCOMMANDS").red.bright
-      show_all_commands(cmd, "")
-    end
+    puts
+    puts Rainbow("SUBCOMMANDS").red.bright
+    show_all_commands(cmd, "")
     exit 0
   end
 
