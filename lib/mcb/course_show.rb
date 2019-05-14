@@ -7,6 +7,7 @@ module MCB
     def to_h
       {
         "Course code" => @course.course_code,
+        "Title" => @course.name,
         "Description" => @course.description,
         "Provider" => @course.provider.provider_code,
         "Accredited body" => @course.accrediting_provider&.provider_code || "Self-accrediting",

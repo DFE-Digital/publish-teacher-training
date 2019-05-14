@@ -12,7 +12,7 @@ run do |opts, args, _cmd|
   courses = if all_courses_mode
               provider.courses
             else
-              provider.courses.filter{ |course| args.include?(course.course_code) }
+              provider.courses.where(course_code: args.to_a)
             end
 
   multi_course_mode = courses.size > 1
@@ -33,13 +33,9 @@ run do |opts, args, _cmd|
         end
         menu.choice(:exit) { finished = true }
         menu.choice(:toggle_sites) { flow = :toggle_sites } unless multi_course_mode
-        menu.choice(:edit_route) { flow = :edit_route }
-        menu.choice(:edit_qualifications) { flow = :edit_qualifications }
-        menu.choice(:edit_study_mode) { flow = :edit_study_mode }
-        menu.choice(:edit_english) { flow = :edit_english }
-        menu.choice(:edit_maths) { flow = :edit_maths }
-        menu.choice(:edit_science) { flow = :edit_science }
-        menu.choice(:edit_start_date) { flow = :edit_start_date }
+        %i[route qualification study_mode english maths science start_date title].each do |attr|
+          menu.choice("Edit #{attr}") { flow = attr }
+        end
       end
     when :toggle_sites
       cli.choose do |menu|
@@ -50,47 +46,52 @@ run do |opts, args, _cmd|
           courses.first.toggle_site(provider.sites.find_by!(code: site_code))
         end
       end
-    when :edit_route
+    when :route
       cli.choose do |menu|
         menu.prompt = "Editing course route"
         menu.choices(*Course.program_types.keys) { |value| courses.each{ |c| c.program_type = value } }
         flow = :root
       end
-    when :edit_qualifications
+    when :qualifications
       cli.choose do |menu|
         menu.prompt = "Editing course qualifications"
         menu.choices(*Course.qualifications.keys) { |value| courses.each{ |c| c.qualification = value } }
         flow = :root
       end
-    when :edit_study_mode
+    when :study_mode
       cli.choose do |menu|
         menu.prompt = "Editing course study mode"
         menu.choices(*Course.study_modes.keys) { |value| courses.each{ |c| c.study_mode = value } }
         flow = :root
       end
-    when :edit_english
+    when :english
       cli.choose do |menu|
         menu.prompt = "Editing course english"
         menu.choices(*Course.englishes.keys) { |value| courses.each{ |c| c.english = value } }
         flow = :root
       end
-    when :edit_maths
+    when :maths
       cli.choose do |menu|
         menu.prompt = "Editing course maths"
         menu.choices(*Course.maths.keys) { |value| courses.each{ |c| c.maths = value } }
         flow = :root
       end
-    when :edit_science
+    when :science
       cli.choose do |menu|
         menu.prompt = "Editing course science"
         menu.choices(*Course.sciences.keys) { |value| courses.each{ |c| c.science = value } }
         flow = :root
       end
-    when :edit_start_date
+    when :start_date
       start_date = Date.parse(cli.ask("What's the new start date?  "))
       if cli.agree("Start date will be set to #{start_date.strftime('%d %b %Y')}. Continue? ")
         courses.each { |c| c.start_date = start_date }
       end
+      flow = :root
+    when :title
+      current_course_names = courses.map(&:name).uniq
+      name = cli.ask("Course title? (current titles: #{current_course_names.join(', ')})  ").strip
+      courses.each { |c| c.name = name }
       flow = :root
     end
     courses.each(&:save!)
