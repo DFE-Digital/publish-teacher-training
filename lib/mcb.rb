@@ -285,6 +285,16 @@ module MCB
       end
     end
 
+    def find_user_by_identifier(identifier)
+      if identifier.include? '@'
+        User.find_by(email: identifier)
+      elsif identifier.match %r{^\d+$}
+        User.find(identifier.to_i)
+      else
+        User.find_by(sign_in_user_id: identifier)
+      end
+    end
+
   private
 
     def configure_audited_user

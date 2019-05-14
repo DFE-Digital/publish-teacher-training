@@ -4,7 +4,7 @@ run do |opts, args, _cmd|
   MCB.init_rails(opts)
 
   users = if args.any?
-            User.where(id: args.to_a)
+            args.map { |id| MCB.find_user_by_identifier id }
           else
             User.all
           end
@@ -12,5 +12,11 @@ run do |opts, args, _cmd|
   tp.set :capitalize_headers, false
 
   puts "\nUsers:"
-  tp users, 'id', 'email', 'first_name', 'last_name', 'last_login_date_utc'
+  puts Tabulo::Table.new(users,
+                         :id,
+                         :email,
+                         :sign_in_user_id,
+                         :first_name,
+                         :last_name,
+                         :last_login_date_utc).pack(max_table_width: nil)
 end
