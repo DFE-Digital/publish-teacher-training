@@ -39,6 +39,8 @@ RSpec.describe SiteStatus, type: :model do
   end
 
   describe 'associations' do
+    subject { build(:site_status) }
+
     it { should belong_to(:site) }
     it { should belong_to(:course) }
   end
@@ -165,6 +167,37 @@ RSpec.describe SiteStatus, type: :model do
             end
           end
         end
+      end
+    end
+  end
+
+  describe "description" do
+    subject { build(:site_status, :running, :unpublished, site: create(:site, location_name: 'Foo', code: '1')) }
+    its(:description) { should eq 'Foo (code: 1) – running/unpublished' }
+  end
+
+  describe "default_vac_status_given" do
+    subject { SiteStatus }
+    it "should return correct default_vac_status" do
+      expect(subject.default_vac_status_given(study_mode: 'full_time')).to eq :full_time_vacancies
+      expect(subject.default_vac_status_given(study_mode: 'part_time')).to eq :part_time_vacancies
+      expect(subject.default_vac_status_given(study_mode: 'full_time_or_part_time')).to eq :both_full_time_and_part_time_vacancies
+      expect { subject.default_vac_status_given(study_mode: 'foo') }.to raise_error("Unexpected study mode foo")
+    end
+  end
+
+  describe "status changes" do
+    describe "when suspending a running, published site status" do
+      subject { create(:site_status, :running, :published).tap(&:suspend!).reload }
+      it { should be_status_suspended }
+      it { should be_unpublished_on_ucas }
+    end
+
+    %i[new suspended discontinued].each do |status|
+      describe "when starting a #{status}, unpublished site status" do
+        subject { create(:site_status, status, :unpublished).tap(&:start!).reload }
+        it { should be_status_running }
+        it { should be_published_on_ucas }
       end
     end
   end
