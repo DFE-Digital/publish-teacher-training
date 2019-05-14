@@ -105,6 +105,7 @@ FactoryBot.define do
     qualifications { nil }
     how_school_placements_work { nil }
     salary_details { nil }
+    course_length { nil }
   end
 
   trait :with_fee_based_course do

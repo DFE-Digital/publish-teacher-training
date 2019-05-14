@@ -46,6 +46,7 @@ class CourseEnrichment < ApplicationRecord
   validates :about_course, presence: true, words_count: { maximum: 400 }, on: :publish
   validates :interview_process, words_count: { maximum: 250 }, on: :publish
   validates :how_school_placements_work, presence: true, words_count: { maximum: 350 }, on: :publish
+  validates :course_length, presence: true, on: :publish
   validates :qualifications, presence: true, words_count: { maximum: 100 }, on: :publish
 
   # mandatory validation for fee based course to be published
