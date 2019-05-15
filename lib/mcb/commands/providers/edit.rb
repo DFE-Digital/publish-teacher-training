@@ -8,12 +8,12 @@ run do |opts, args, _cmd|
   cli = HighLine.new
 
   provider = Provider.find_by!(provider_code: args[:code])
-  courses = provider.courses
 
   finished = false
   chosen_course_codes = []
   until finished do
     cli.choose do |menu|
+      courses = provider.courses
       if chosen_course_codes.empty?
         menu.prompt = "Choose one or multiple courses to edit."
       else
@@ -49,6 +49,6 @@ run do |opts, args, _cmd|
         chosen_course_codes = []
       end
     end
-    courses.each(&:reload)
+    provider.reload
   end
 end
