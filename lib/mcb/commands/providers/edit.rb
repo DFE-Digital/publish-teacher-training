@@ -36,6 +36,19 @@ run do |opts, args, _cmd|
           chosen_course_codes.push(course_code)
         end
       end
+
+      menu.choice("Create new course") do
+        command_params = ['courses', 'create', args[:code]] + (opts[:env].present? ? ['-E', opts[:env]] : [])
+        $mcb.run(command_params)
+        chosen_course_codes = []
+      end
+
+      menu.choice("Add a new location") do
+        command_params = ['sites', 'create', args[:code]] + (opts[:env].present? ? ['-E', opts[:env]] : [])
+        $mcb.run(command_params)
+        chosen_course_codes = []
+      end
     end
+    courses.each(&:reload)
   end
 end
