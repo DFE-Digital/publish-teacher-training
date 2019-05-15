@@ -1,6 +1,6 @@
 module SearchAndCompare
   class CourseSerializer < ActiveModel::Serializer
-    has_one :provider, key: :"Provider"
+    has_one :provider, key: :Provider
 
     # ucasProviderData = ucasProviderData ?? new Domain.Models.Provider();
     # ucasCourseData = ucasCourseData ?? new Domain.Models.Course();
@@ -14,7 +14,6 @@ module SearchAndCompare
     def course_enrichment
       @course_enrichment ||= object.enrichments.published.by_published_at.last
     end
-
 
     # var useUcasContact =
     #     string.IsNullOrWhiteSpace(providerEnrichmentModel.Email) &&
@@ -203,6 +202,5 @@ module SearchAndCompare
     #     Name = "training with disabilities",//CourseDetailsSections.TrainWithDisabilities,
     #     Text = providerEnrichmentModel.TrainWithDisability
     # });
-
   end
 end

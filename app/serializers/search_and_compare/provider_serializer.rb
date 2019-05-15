@@ -1,5 +1,5 @@
 module SearchAndCompare
   class ProviderSerializer < ActiveModel::Serializer
-    attribute(:"Id") { object.id }
+    attribute(:Id) { object.id }
   end
 end
