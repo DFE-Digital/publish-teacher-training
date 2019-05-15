@@ -38,12 +38,23 @@ run do |opts, args, _cmd|
         end
       end
     when :toggle_sites
+      course = courses.first
       cli.choose do |menu|
-        menu.prompt = "Toggling course sites"
+        menu.prompt = "Toggling course sites for #{course.course_code}"
         menu.choice(:done) { flow = :root }
-        menu.choices(*(courses.first.actual_and_potential_site_statuses.map(&:description))) do |site_str|
-          site_code = site_str.match(/\(code: (.*)\)/)[1]
-          courses.first.toggle_site(provider.sites.find_by!(code: site_code))
+        provider.sites.order(:location_name).each do |site|
+          if site.in?(course.sites_not_associated_with_course)
+            menu.choice(site.description) { course.add_site!(site: site) }
+          else
+            site_status = course.site_statuses.detect { |ss| ss.site == site }
+            menu.choice(site_status.description) do
+              if site_status.status_running?
+                course.remove_site!(site: site)
+              else
+                course.add_site!(site: site)
+              end
+            end
+          end
         end
       end
     when :route
