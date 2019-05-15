@@ -6,7 +6,6 @@ describe SearchAndCompare::CourseSerializer do
   describe 'json output' do
     subject { serialize(course, serializer_class: described_class) }
 
-
     context 'an existing course' do
       let(:accrediting_provider) do
         create :provider,

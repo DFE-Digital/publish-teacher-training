@@ -1,5 +1,7 @@
 module SearchAndCompare
   class CourseSerializer < ActiveModel::Serializer
+    has_one :provider, key: :"Provider"
+
     # ucasProviderData = ucasProviderData ?? new Domain.Models.Provider();
     # ucasCourseData = ucasCourseData ?? new Domain.Models.Course();
     # var sites = ucasCourseData.CourseSites ?? new ObservableCollection<CourseSite>();
