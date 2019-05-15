@@ -457,6 +457,11 @@ RSpec.describe Course, type: :model do
         expect { subject.add_site!(site: existing_site) }.
           to_not change { existing_site_status.reload.status }.from("new_status")
       end
+
+      it "removes the site status when an existing site is removed" do
+        expect { subject.remove_site!(site: existing_site) }.to change { subject.reload.site_statuses.size }.
+          from(1).to(0)
+      end
     end
 
     context "for suspended courses" do

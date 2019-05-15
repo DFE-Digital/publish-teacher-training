@@ -234,7 +234,8 @@ class Course < ApplicationRecord
   end
 
   def remove_site!(site:)
-    site_statuses.find_by!(site: site).suspend!
+    site_status = site_statuses.find_by!(site: site)
+    new? ? site_status.destroy! : site_status.suspend!
   end
 
   def sites_not_associated_with_course
