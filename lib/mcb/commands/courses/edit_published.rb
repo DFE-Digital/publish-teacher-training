@@ -37,6 +37,7 @@ run do |opts, args, _cmd|
           menu.choice("Edit #{attr}") { flow = attr }
         end
         menu.choice('Sync courses to Find') { flow = :sync_to_find }
+        menu.choice('Publish training locations (not enrichment)') { flow = :publish_sites }
       end
     when :toggle_sites
       course = courses.first
@@ -108,6 +109,12 @@ run do |opts, args, _cmd|
     when :sync_to_find
       command_params = ['courses', 'sync_to_find', provider.provider_code, *courses.map(&:course_code)] + (opts[:env].present? ? ['-E', opts[:env]] : [])
       $mcb.run(command_params)
+      flow = :root
+    when :publish_sites
+      courses.each do |course|
+        puts "Setting the training locations to running on #{course.provider.provider_code}/#{course.course_code}"
+        course.publish_sites
+      end
       flow = :root
     end
     courses.each(&:save!)
