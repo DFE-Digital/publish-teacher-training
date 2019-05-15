@@ -36,8 +36,8 @@ run do |opts, args, _cmd|
         %i[route qualification study_mode english maths science start_date title].each do |attr|
           menu.choice("Edit #{attr}") { flow = attr }
         end
-        menu.choice('Sync courses to Find') { flow = :sync_to_find }
         menu.choice('Publish training locations (not enrichment)') { flow = :publish_sites }
+        menu.choice('Sync courses to Find') { flow = :sync_to_find }
       end
     when :toggle_sites
       course = courses.first
