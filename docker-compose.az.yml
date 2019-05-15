@@ -3,4 +3,4 @@ services:
   web:
     build:
       context: .
-    image: ${dockerHubUsername}/manage-courses-backend-poc:latest
+    image: dfedigital/manage-courses-backend-poc:latest
