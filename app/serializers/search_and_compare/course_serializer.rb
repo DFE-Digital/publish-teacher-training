@@ -1,10 +1,18 @@
 module SearchAndCompare
-  class CourseSerializer
+  class CourseSerializer < ActiveModel::Serializer
     # ucasProviderData = ucasProviderData ?? new Domain.Models.Provider();
     # ucasCourseData = ucasCourseData ?? new Domain.Models.Course();
     # var sites = ucasCourseData.CourseSites ?? new ObservableCollection<CourseSite>();
     # providerEnrichmentModel = providerEnrichmentModel ?? new ProviderEnrichmentModel();
+    def provider_enrichment
+      @provider_enrichment ||= object.provider.enrichments.published.by_published_at.last
+    end
+
     # courseEnrichmentModel = courseEnrichmentModel ?? new CourseEnrichmentModel();
+    def course_enrichment
+      @course_enrichment ||= object.enrichments.published.by_published_at.last
+    end
+
 
     # var useUcasContact =
     #     string.IsNullOrWhiteSpace(providerEnrichmentModel.Email) &&
@@ -14,11 +22,17 @@ module SearchAndCompare
     #     string.IsNullOrWhiteSpace(providerEnrichmentModel.Address3) &&
     #     string.IsNullOrWhiteSpace(providerEnrichmentModel.Address4) &&
     #     string.IsNullOrWhiteSpace(providerEnrichmentModel.Postcode);
-    #
+    def use_ucas_contact?
+      provider_enrichment.contact_info_present?
+    end
+
     # var subjectStrings = ucasCourseData?.CourseSubjects != null
     #     ? subjectMapper.GetSubjectList(ucasCourseData.Name, ucasCourseData.CourseSubjects.Select(x => x.Subject.SubjectName))
     #     : new List<string>();
-    #
+    def subjects
+      object.dfe_subjects
+    end
+
     # var subjects = new Collection<SearchAndCompare.Domain.Models.Joins.CourseSubject>(subjectStrings.Select(subject =>
     #     new SearchAndCompare.Domain.Models.Joins.CourseSubject
     #     {
@@ -59,7 +73,11 @@ module SearchAndCompare
     #     ProviderLocation = new Location { Address = address },
     #     Duration = MapCourseLength(courseEnrichmentModel.CourseLength),
     #     StartDate = ucasCourseData.StartDate,
+
     #     Name = ucasCourseData.Name,
+    attribute(:Name)          { object.name }
+    attribute(:ProgrammeCode) { object.course_code }
+
     #     ProgrammeCode = ucasCourseData.CourseCode,
     #     Provider = provider,
     #     AccreditingProvider = accreditingProvider,
