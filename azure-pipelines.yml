@@ -30,6 +30,7 @@ steps:
   displayName: 'Build & setup'
   env:
     DOCKER_OVERRIDE: $(dockerOverride)
+    dockerHubUsername: $(dockerHubUsername)
 
 - script: |
     $DOCKER_OVERRIDE exec -T web /bin/sh -c 'bundle exec rake spec SPEC_OPTS="--format RspecJunitFormatter --out ./rspec-results.xml"'
@@ -43,13 +44,25 @@ steps:
   env:
     DOCKER_OVERRIDE: $(dockerOverride)
 
-- script: |
-    echo $password | docker login --username $(dockerHubUsername) --password-stdin
-    docker tag "$(docker_path):latest" "$(docker_path):$(Build.BuildNumber)"
-    docker push "$(docker_path):$(Build.BuildNumber)"
-  displayName: 'Push image'
-  env:
-    password: $(dockerHubPassword)
+- task: Docker@1
+  displayName: Tag image with current build number $(Build.BuildNumber)
+  inputs:
+    command: Tag image
+    imageName: "$(docker_path):latest"
+    arguments: "$(docker_path):$(Build.BuildNumber)"
+
+- task: Docker@1
+  displayName: Docker Hub login
+  inputs:
+    command: "login"
+    containerregistrytype: Container Registry
+    dockerRegistryEndpoint: DfE Docker Hub
+
+- task: Docker@1
+  displayName: Push tagged image
+  inputs:
+    command: Push an image
+    imageName: "$(docker_path):$(Build.BuildNumber)"
 
 - task: CopyFiles@2
   displayName: 'Copy Files to: $(build.artifactstagingdirectory)'

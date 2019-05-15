@@ -3,4 +3,4 @@ services:
   web:
     build:
       context: .
-    image: govukdfe/manage-courses-backend-poc:latest
+    image: ${dockerHubUsername}/manage-courses-backend-poc:latest
