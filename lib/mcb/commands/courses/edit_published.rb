@@ -36,6 +36,7 @@ run do |opts, args, _cmd|
         %i[route qualification study_mode english maths science start_date title].each do |attr|
           menu.choice("Edit #{attr}") { flow = attr }
         end
+        menu.choice('Sync courses to Find') { flow = :sync_to_find }
       end
     when :toggle_sites
       course = courses.first
@@ -103,6 +104,10 @@ run do |opts, args, _cmd|
       current_course_names = courses.map(&:name).uniq
       name = cli.ask("Course title? (current titles: #{current_course_names.join(', ')})  ").strip
       courses.each { |c| c.name = name }
+      flow = :root
+    when :sync_to_find
+      command_params = ['courses', 'sync_to_find', provider.provider_code, *courses.map(&:course_code)] + (opts[:env].present? ? ['-E', opts[:env]] : [])
+      $mcb.run(command_params)
       flow = :root
     end
     courses.each(&:save!)
