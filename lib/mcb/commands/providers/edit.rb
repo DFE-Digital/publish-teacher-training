@@ -48,6 +48,18 @@ run do |opts, args, _cmd|
         $mcb.run(command_params)
         chosen_course_codes = []
       end
+
+      menu.choice("Clone a course") do
+        provider_code = cli.ask("Provider code of course you want to clone? (#{provider.provider_code} if blank)  ") { |q| q.default = provider.provider_code }
+        course_code = cli.ask("Code of course you want to clone?  ")
+        original_course = Provider.find_by!(provider_code: provider_code).courses.find_by!(course_code: course_code)
+
+        new_course = original_course.dup
+        new_course.provider = provider
+        new_course.course_code = cli.ask("New course code?  ")
+        new_course.subjects = original_course.subjects
+        new_course.save!
+      end
     end
     provider.reload
   end
