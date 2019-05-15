@@ -30,6 +30,7 @@ steps:
   displayName: 'Build & setup'
   env:
     DOCKER_OVERRIDE: $(dockerOverride)
+    dockerHubUsername: $(dockerHubUsername)
 
 - script: |
     $DOCKER_OVERRIDE exec -T web /bin/sh -c 'bundle exec rake spec SPEC_OPTS="--format RspecJunitFormatter --out ./rspec-results.xml"'
