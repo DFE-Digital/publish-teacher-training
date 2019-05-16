@@ -1,0 +1,250 @@
+---
+# Shared/Nested/Complex
+Provider_Mapping: &Provider # Has a provider
+  Id: 0
+  _Id: default_value
+  Name: provider_name
+  _Name: mapped
+  ProviderCode: provider_code
+  _ProviderCode: mapped
+  Courses:
+  _Courses: default_value
+  AccreditedCourses:
+  _AccreditedCourses: default_value
+
+IsSalaried_Mapping: &IsSalaried
+  IsSalaried: '!course.is_fee_based?'
+  _IsSalaried: mapped
+
+Route_Mapping: &Route
+  Id: 0
+  _Id: default_value
+  Name: course.Route
+  _Name: mapped
+  <<: &IsSalaried_Mapping
+  Courses:
+  _Courses: default_value
+
+DescriptionSection_EnrichmentField_Mapping: &DescriptionSection_EnrichmentField
+  Text:
+  _Text: enrichment_field_key #
+  _Text_Notes: need_to_be_mapped
+
+DescriptionSection_SearchAndCompare_Mapping: &DescriptionSection_SearchAndCompare
+  Name:
+  _Name: sc_key # sc key
+
+DescriptionSection_Mapping: &DescriptionSection
+  Id: 0
+  _Id: default_value
+  Ordinal: 0
+  _Ordinal: default_value
+  CourseId: 0
+  _CourseId: default_value
+  Course:
+  _Course: default_value
+
+Location_Mapping: &Location
+  Id: 0
+  _Id: default_value
+  Address:
+  _Address: need_to_be_mapped
+  FormattedAddress:
+  _FormattedAddress: default_value
+  GeoAddress:
+  _GeoAddress: default_value
+  Latitude:
+  _Latitude: default_value
+  Longitude:
+  _Longitude: default_value
+  _LastGeocodedUtc: default_value
+  LastGeocodedUtc: '0001-01-01T00:00:00'
+  _LastGeocodedUtc: default_value
+
+Campus_Mapping: &Campus
+  Id: 0
+  _Id: default_value
+  Name:
+  _Name: need_to_be_mapped
+  CampusCode:
+  _CampusCode: need_to_be_mapped
+  LocationId:
+  _LocationId: default_value
+  VacStatus: F
+  Course:
+  _Course: default_value
+
+Subject_Mapping: &Subject
+  Id: 0
+  _Id: default_value
+  SubjectArea:
+  _SubjectArea: default_value
+  FundingId:
+  _FundingId: default_value
+  Funding:
+  _Funding: default_value
+  Name:
+  _Name: need_to_be_mapped
+  IsSubjectKnowledgeEnhancementAvailable: false
+  _IsSubjectKnowledgeEnhancementAvailable: need_to_be_mapped
+  CourseSubjects:
+  _CourseSubjects: default_value
+
+CourseSubject_Mapping: &CourseSubject
+  CourseId: 0
+  _CourseId: default_value
+  Course:
+  _Course: default_value
+  SubjectId: 0
+  _SubjectId: default_value
+  Subject:
+    <<: *Subject
+
+
+# based on <<: &IsSalaried_Mapping
+Fees_Mapping: &Fees
+  Uk: 0
+  _Uk: need_to_be_mapped
+  Eu: 0
+  _Eu: need_to_be_mapped
+  International: 0
+  _International: need_to_be_mapped
+Salary_Mapping: &Salary
+  Minimum:
+  _Minimum: need_to_be_mapped
+  Maximum:
+  _Maximum: need_to_be_mapped
+
+ContactDetails_Mapping: &ContactDetails
+  Id: 0
+  _Id: default_value
+  Phone:
+  _Phone: need_to_be_mapped
+  Fax:
+  _Fax: need_to_be_mapped
+  Email:
+  _Email: need_to_be_mapped
+  Website:
+  _Website: need_to_be_mapped
+  Address:
+  _Address: need_to_be_mapped
+  Course:
+  _Course: need_to_be_mapped
+
+Course_default_value_Mapping: &Course_default_value
+  Id: 0
+  _Id: default_value
+  ProviderCodeName:
+  _ProviderCodeName: default_value
+  ProviderId: 0
+  _ProviderId: default_value
+  AccreditingProviderId:
+  _AccreditingProviderId: default_value
+  AgeRange: 0
+  _AgeRange: default_value
+  RouteId: 0
+  _RouteId: default_value
+  ProviderLocationId:
+  _ProviderLocationId: default_value
+  Distance:
+  _Distance: default_value
+  DistanceAddress:
+  _DistanceAddress: default_value
+  ContactDetailsId:
+  _ContactDetailsId: default_value
+
+# Actual course
+Course_Mapping:
+  <<: *Course_default_value
+  Name: name
+  _Name: mapped
+  ProgrammeCode: course_code
+  _ProgrammeCode: mapped
+  Provider: # Has a provider
+    <<: *Provider
+  AccreditingProvider: # Optional accrediting provider (provider type)
+    <<: *Provider
+  Route:
+  <<: *Route
+  IncludesPgce: 1
+  _IncludesPgce: need_to_be_mapped
+  DescriptionSections:
+  - <<: *DescriptionSection
+    <<: *DescriptionSection_EnrichmentField
+    <<: *DescriptionSection_SearchAndCompare
+    Name: about this training programme
+  - <<: *DescriptionSection
+    <<: *DescriptionSection_EnrichmentField
+    <<: *DescriptionSection_SearchAndCompare
+    Name: interview process
+  - <<: *DescriptionSection
+    <<: *DescriptionSection_EnrichmentField
+    <<: *DescriptionSection_SearchAndCompare
+    Name: about fees
+  - <<: *DescriptionSection
+    <<: *DescriptionSection_EnrichmentField
+    <<: *DescriptionSection_SearchAndCompare
+    Name: about salary
+  - <<: *DescriptionSection
+    <<: *DescriptionSection_EnrichmentField
+    <<: *DescriptionSection_SearchAndCompare
+    Name: entry requirements
+  - <<: *DescriptionSection
+    <<: *DescriptionSection_EnrichmentField
+    <<: *DescriptionSection_SearchAndCompare
+    Name: entry requirements personal qualities
+  - <<: *DescriptionSection
+    <<: *DescriptionSection_EnrichmentField
+    <<: *DescriptionSection_SearchAndCompare
+    Name: entry requirements other
+  - <<: *DescriptionSection
+    <<: *DescriptionSection_EnrichmentField
+    <<: *DescriptionSection_SearchAndCompare
+    Name: financial support
+  - <<: *DescriptionSection
+    <<: *DescriptionSection_EnrichmentField
+    <<: *DescriptionSection_SearchAndCompare
+    Name: about school placements
+  - <<: *DescriptionSection
+    <<: *DescriptionSection_EnrichmentField
+    <<: *DescriptionSection_SearchAndCompare
+    Name: about this training provider
+  - <<: *DescriptionSection
+    <<: *DescriptionSection_EnrichmentField
+    <<: *DescriptionSection_SearchAndCompare
+    Name: about this training provider accrediting
+  - <<: *DescriptionSection
+    <<: *DescriptionSection_EnrichmentField
+    <<: *DescriptionSection_SearchAndCompare
+    Name: training with disabilities
+  Campuses:
+  - <<: *Campus
+    Location:
+      <<: *Location
+  CourseSubjects:
+  - <<: *CourseSubject
+  Fees:
+    <<: *Fees
+  <<: *IsSalaried
+  Salary:
+    <<: *Salary
+  ProviderLocation:
+    <<: *Location
+  ContactDetails:
+    <<: *ContactDetails
+  FullTime:
+  _FullTime: need_to_be_mapped
+  PartTime:
+  _PartTime: need_to_be_mapped
+  ApplicationsAcceptedFrom:
+  _ApplicationsAcceptedFrom: need_to_be_mapped
+  StartDate:
+  _StartDate: need_to_be_mapped
+  Duration:
+  _Duration: need_to_be_mapped
+  Mod:
+  _Mod: need_to_be_mapped
+  HasVacancies:
+  _HasVacancies: need_to_be_mapped
+  IsSen:
+  _IsSen: need_to_be_mapped
