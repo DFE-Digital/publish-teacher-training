@@ -16,7 +16,20 @@ module API
       end
 
       def sync_with_search_and_compare
+        response = ManageCoursesAPIService::Request.sync_course_with_search_and_compare(
+          @current_user.email,
+          @provider.provider_code,
+          @course.course_code
+        )
+
+        head response ? :ok : :internal_server_error
+      end
+
+      def publish
         if @course.publishable?
+          @course.publish_sites
+          @course.publish_enrichment(@current_user)
+
           response = ManageCoursesAPIService::Request.sync_course_with_search_and_compare(
             @current_user.email,
             @provider.provider_code,
@@ -27,19 +40,6 @@ module API
         else
           render jsonapi_errors: @course.errors, status: :unprocessable_entity
         end
-      end
-
-      def publish
-        @course.publish_sites
-        @course.publish_enrichment(@current_user)
-
-        response = ManageCoursesAPIService::Request.sync_course_with_search_and_compare(
-          @current_user.email,
-          @provider.provider_code,
-          @course.course_code
-        )
-
-        head response ? :ok : :internal_server_error
       end
 
     private
