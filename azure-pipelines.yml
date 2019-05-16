@@ -37,12 +37,14 @@ steps:
   displayName: 'Execute tests'
   env:
     DOCKER_OVERRIDE: $(dockerOverride)
+    dockerHubUsername: $(dockerHubUsername)
 
 - script: |
     $DOCKER_OVERRIDE exec -T web /bin/sh -c "bundle exec rubocop app config db lib spec --format clang"
   displayName: 'Execute linters'
   env:
     DOCKER_OVERRIDE: $(dockerOverride)
+    dockerHubUsername: $(dockerHubUsername)
 
 - task: Docker@1
   displayName: Tag image with current build number $(Build.BuildNumber)
