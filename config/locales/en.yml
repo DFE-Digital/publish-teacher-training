@@ -24,7 +24,7 @@ en:
         course_enrichment:
           attributes:
             salary_details:
-              blank: "^Give details about salary"
+              blank: "^Give details about the salary for this course"
             fee_uk_eu:
               blank: "^Give details about the fee for UK and EU students"
               greater_than_or_equal_to: "must be greater than or equal to £0"
@@ -37,6 +37,6 @@ en:
             how_school_placements_work:
               blank: "^Enter details about school placements"
             qualifications:
-              blank: "^Enter details for about qualifications needed"
+              blank: "^Enter details about the qualifications needed"
             course_length:
-              blank: "^Give details about course length"
+              blank: "^Enter a course length"
