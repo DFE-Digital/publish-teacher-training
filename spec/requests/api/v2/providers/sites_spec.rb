@@ -358,4 +358,98 @@ describe 'Sites API v2', type: :request do
       end
     end
   end
+
+  describe 'POST create' do
+    def perform_site_create
+      post(
+        api_v2_provider_sites_path(provider.provider_code),
+        headers: { 'HTTP_AUTHORIZATION' => credentials },
+        params: params
+      )
+    end
+
+    let(:jsonapi_renderer) { JSONAPI::Serializable::Renderer.new }
+    let(:params) do
+      {
+        _jsonapi: jsonapi_renderer.render(
+          site1,
+          class: {
+            Site: API::V2::SerializableSite
+          }
+        )
+      }
+    end
+    let(:site_params) { params.dig :_jsonapi, :data, :attributes }
+
+    context 'when unauthenticated' do
+      let(:payload) { { email: 'foo@bar' } }
+
+      subject { response }
+
+      before do
+        perform_site_create
+      end
+
+      it { should have_http_status(:unauthorized) }
+    end
+
+    context 'when authenticated and authorised' do
+      let(:code)          { 'FOO' }
+      let(:location_name) { 'Location name' }
+      let(:address1)      { 'Street 1' }
+      let(:address2)      { 'Street 2' }
+      let(:address3)      { 'City' }
+      let(:address4)      { 'State' }
+      let(:postcode)      { 'SW1A 1AA' }
+      let(:region_code)   { 'west_midlands' }
+
+      let(:site) { provider.sites.last }
+
+      before do
+        site_params.merge!(
+          code: code,
+          location_name: location_name,
+          address1: address1,
+          address2: address2,
+          address3: address3,
+          address4: address4,
+          postcode: postcode,
+          region_code: region_code
+        )
+        perform_site_create
+      end
+
+      it 'sets the location name of the site' do
+        expect(site.location_name).to eq(location_name)
+      end
+
+      it 'does not set the code of the site' do
+        expect(site.code).to_not eq(code)
+      end
+
+      it 'sets the address1 of the site' do
+        expect(site.address1).to eq(address1)
+      end
+
+      it 'sets the address2 of the site' do
+        expect(site.address2).to eq(address2)
+      end
+
+      it 'sets the address3 of the site' do
+        expect(site.address3).to eq(address3)
+      end
+
+      it 'sets the address4 of the site' do
+        expect(site.address4).to eq(address4)
+      end
+
+      it 'sets the postcode of the site' do
+        expect(site.postcode).to eq(postcode)
+      end
+
+      it 'sets the region_code of the site' do
+        expect(site.region_code).to eq(region_code)
+      end
+    end
+  end
 end

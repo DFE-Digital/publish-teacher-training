@@ -1,16 +1,28 @@
 module API
   module V2
     class SitesController < API::V2::ApplicationController
-      deserializable_resource :site, only: :update
+      deserializable_resource :site, only: %i[update create]
 
       before_action :build_provider
-      before_action :build_site, except: :index
+      before_action :build_site, except: %i[index create]
 
       def index
         authorize @provider, :can_list_courses?
         authorize Site
 
         render jsonapi: @provider.sites
+      end
+
+      def create
+        @site = Site.new(site_params)
+        @site.provider = @provider
+        authorize @site
+
+        if @site.save!
+          render jsonapi: @site
+        else
+          render jsonapi_errors: @site.errors, status: :unprocessable_entity
+        end
       end
 
       def update
