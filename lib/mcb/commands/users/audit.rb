@@ -1,12 +1,11 @@
 summary 'Show changes made to a user record'
-param :id
+param :id_or_email_or_sign_in_id
 usage 'audit <id>'
 
 run do |opts, args, _cmd|
   MCB.init_rails(opts)
 
-  user_id = args[:id]
-  user = User.find(user_id)
+  user = MCB.find_user_by_identifier args[:id_or_email_or_sign_in_id]
 
   table = Tabulo::Table.new user.audits do |t|
     t.add_column(:user_id, header: "user\nid", width: 6)
@@ -20,5 +19,5 @@ run do |opts, args, _cmd|
                  width: 40)
     t.add_column(:created_at, width: 23)
   end
-  puts table.pack
+  puts table.pack(max_table_width: nil)
 end
