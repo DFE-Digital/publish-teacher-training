@@ -1,7 +1,8 @@
 require 'rails_helper'
 
 describe 'Access Request API V2', type: :request do
-  let(:admin_user) { create(:user, :admin) }
+  # Specify a fixed admin email to avoid randomisation from the factory, must qualify as #admin?
+  let(:admin_user) { create(:user, email: "super.admin@digital.education.gov.uk") }
   let(:requesting_user) { create(:user, organisations: [organisation]) }
   let(:requested_user) { create(:user) }
   let(:organisation) { create(:organisation) }
@@ -174,6 +175,63 @@ describe 'Access Request API V2', type: :request do
           new_user = User.find_by!(email: 'test@user.com')
 
           expect(new_user.organisations).to eq requesting_user.organisations
+        end
+      end
+    end
+  end
+
+  describe 'POST #create' do
+    let(:do_post) do
+      post "/api/v2/access_requests",
+           headers: { 'HTTP_AUTHORIZATION' => credentials },
+           params: { access_request: {
+             email_address: "bob@example.org",
+             first_name: "bob",
+             last_name: "monkhouse",
+             organisation: "bbc",
+             reason: "star qualities",
+           } }.as_json
+    end
+    context 'when unauthenticated' do
+      before do
+        do_post
+      end
+
+      let(:payload) { { email: 'foo@bar' } }
+
+      it { should have_http_status(:unauthorized) }
+    end
+
+    context 'when unauthorized' do
+      let(:unauthorised_user) { create(:user) }
+      let(:payload) { { email: unauthorised_user.email } }
+
+      it "should raise an error" do
+        expect { do_post }.to raise_error Pundit::NotAuthorizedError
+      end
+    end
+
+    context 'when authorised' do
+      before do
+        Timecop.freeze
+        do_post
+      end
+
+      after do
+        Timecop.return
+      end
+
+      context 'with a user that does not already exist' do
+        it 'should create the access_request record' do
+          expect(response).to have_http_status(:success)
+          access_request = AccessRequest.find_by(email_address: "bob@example.org")
+          expect(access_request).not_to be_nil
+          expect(access_request.first_name).to eq("bob")
+          expect(access_request.last_name).to eq("monkhouse")
+          expect(access_request.organisation).to eq("bbc")
+          expect(access_request.reason).to eq("star qualities")
+          expect(access_request.request_date_utc).to be_within(1.second).of Time.now.utc # https://github.com/travisjeffery/timecop/issues/97
+          expect(access_request.requester.email).to eq("super.admin@digital.education.gov.uk")
         end
       end
     end

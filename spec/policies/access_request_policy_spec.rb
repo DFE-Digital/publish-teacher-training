@@ -3,7 +3,7 @@ require "rails_helper"
 describe AccessRequestPolicy do
   subject { described_class }
 
-  permissions :approve?, :index? do
+  permissions :approve?, :index?, :create? do
     let(:access_request) { build(:access_request) }
 
     context 'non-admin user' do
