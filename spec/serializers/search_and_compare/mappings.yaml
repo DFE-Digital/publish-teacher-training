@@ -28,7 +28,7 @@ Route_Mapping: &Route
 DescriptionSection_EnrichmentField_Mapping: &DescriptionSection_EnrichmentField
   Text:
   _Text: enrichment_field_key #
-  _Text_Notes: need_to_be_mapped
+  _Text_Notes: not_mapped
 
 DescriptionSection_SearchAndCompare_Mapping: &DescriptionSection_SearchAndCompare
   Name:
@@ -48,7 +48,7 @@ Location_Mapping: &Location
   Id: 0
   _Id: default_value
   Address:
-  _Address: need_to_be_mapped
+  _Address: not_mapped
   FormattedAddress:
   _FormattedAddress: default_value
   GeoAddress:
@@ -65,9 +65,9 @@ Campus_Mapping: &Campus
   Id: 0
   _Id: default_value
   Name:
-  _Name: need_to_be_mapped
+  _Name: not_mapped
   CampusCode:
-  _CampusCode: need_to_be_mapped
+  _CampusCode: not_mapped
   LocationId:
   _LocationId: default_value
   VacStatus: F
@@ -84,9 +84,9 @@ Subject_Mapping: &Subject
   Funding:
   _Funding: default_value
   Name:
-  _Name: need_to_be_mapped
+  _Name: not_mapped
   IsSubjectKnowledgeEnhancementAvailable: false
-  _IsSubjectKnowledgeEnhancementAvailable: need_to_be_mapped
+  _IsSubjectKnowledgeEnhancementAvailable: not_mapped
   CourseSubjects:
   _CourseSubjects: default_value
 
@@ -104,32 +104,32 @@ CourseSubject_Mapping: &CourseSubject
 # based on <<: &IsSalaried_Mapping
 Fees_Mapping: &Fees
   Uk: 0
-  _Uk: need_to_be_mapped
+  _Uk: not_mapped
   Eu: 0
-  _Eu: need_to_be_mapped
+  _Eu: not_mapped
   International: 0
-  _International: need_to_be_mapped
+  _International: not_mapped
 Salary_Mapping: &Salary
   Minimum:
-  _Minimum: need_to_be_mapped
+  _Minimum: not_mapped
   Maximum:
-  _Maximum: need_to_be_mapped
+  _Maximum: not_mapped
 
 ContactDetails_Mapping: &ContactDetails
   Id: 0
   _Id: default_value
   Phone:
-  _Phone: need_to_be_mapped
+  _Phone: not_mapped
   Fax:
-  _Fax: need_to_be_mapped
+  _Fax: not_mapped
   Email:
-  _Email: need_to_be_mapped
+  _Email: not_mapped
   Website:
-  _Website: need_to_be_mapped
+  _Website: not_mapped
   Address:
-  _Address: need_to_be_mapped
+  _Address: not_mapped
   Course:
-  _Course: need_to_be_mapped
+  _Course: not_mapped
 
 #Course mappings
 Course_default_value_Mapping: &Course_default_value
@@ -228,33 +228,122 @@ Course_nested_object_Mapping: &Course_nested_object
   ContactDetails:
     <<: *ContactDetails
 
-Course_direct_Mapping: &Course_direct
+Course_direct_simple_Mapping: &Course_direct_simple
   Name: name
   _Name: mapped
   ProgrammeCode: course_code
   _ProgrammeCode: mapped
-  IncludesPgce: 1
-  _IncludesPgce: need_to_be_mapped
-  FullTime:
-  _FullTime: need_to_be_mapped
-  PartTime:
-  _PartTime: need_to_be_mapped
+  StartDate: start_date
+  _StartDate: mapped
+
+Course_direct_complex_Mapping: &Course_direct_complex
+  HasVacancies: has_vacancies?
+  _HasVacancies: mapped
+  #  site related
+  IsSen: is_send?
+  _IsSen: mapped
+  #  site related
   ApplicationsAcceptedFrom:
-  _ApplicationsAcceptedFrom: need_to_be_mapped
-  StartDate:
-  _StartDate: need_to_be_mapped
+  _ApplicationsAcceptedFrom: not_mapped
+  #     ApplicationsAcceptedFrom = sites.Select(x => x.ApplicationsAcceptedFrom).Where(x => x.HasValue)
+  #         .OrderBy(x => x.Value)
+  #         .FirstOrDefault(),
+  Mod: #ucasCourseData.TypeDescription (course.rb program_type_description) need to reverse engineer
+  _Mod: not_mapped
+    #     Mod = ucasCourseData.TypeDescription,
+    # Course domain (csharp)
+    # public string TypeDescription => GetCourseVariantType();
+    # private string GetCourseVariantType()
+    #     {
+    #         string result;
+
+    #         switch(Qualification)
+    #         {
+    #             case CourseQualification.Qts:
+    #                 result = "QTS";
+    #                 break;
+    #             case CourseQualification.QtsWithPgce:
+    #                 result = "PGCE with QTS";
+    #                 break;
+    #             case CourseQualification.QtlsWithPgce:
+    #                 result = "PGCE";
+    #                 break;
+    #             case CourseQualification.QtlsWithPgde:
+    #                 result = "PGDE";
+    #                 break;
+    #             case CourseQualification.QtsWithPgde:
+    #                 result = "PGDE with QTS";
+    #                 break;
+    #             default:
+    #                 throw new ArgumentOutOfRangeException($"{nameof(Qualification)} is unknown value: {Qualification}");
+    #         }
+
+    #         if ((!string.IsNullOrWhiteSpace(result)) && string.Equals(StudyMode, "B", StringComparison.InvariantCultureIgnoreCase))
+    #         {
+    #             result += ", ";
+    #         }
+    #         else
+    #         {
+    #             result += " ";
+    #         }
+
+    #         result += GetStudyModeText(StudyMode);
+
+    #         result += string.Equals(ProgramType, "ss", StringComparison.InvariantCultureIgnoreCase)
+    #             ? " with salary"
+    #             : "";
+
+    #         result += string.Equals(ProgramType, "ta", StringComparison.InvariantCultureIgnoreCase)
+    #             ? " teaching apprenticeship"
+    #             : "";
+
+    #         return result;
+    #     }
+  IncludesPgce: 1 #MapQualification(ucasCourseData.Qualification) (enum)
+  _IncludesPgce: not_mapped
+#  private static IDictionary<CourseQualification, IncludesPgce> qualificationMap = new Dictionary<CourseQualification, IncludesPgce>
+#         {
+#             {CourseQualification.Qts, IncludesPgce.No},
+#             {CourseQualification.QtsWithPgce, IncludesPgce.Yes},
+#             {CourseQualification.QtsWithPgde, IncludesPgce.QtsWithPgde},
+#             {CourseQualification.QtlsWithPgce, IncludesPgce.QtlsWithPgce},
+#             {CourseQualification.QtlsWithPgde, IncludesPgce.QtlsWithPgde}
+#         };
+
+#         private IncludesPgce MapQualification(CourseQualification qualification)
+#         {
+#             if (qualificationMap.TryGetValue(qualification, out IncludesPgce result))
+#             {
+#                 return result;
+#             }
+#             throw new ArgumentOutOfRangeException(nameof(qualification), qualification, "Could not map qualifications");
+#         }
+  FullTime:
+  _FullTime: not_mapped
+      #     FullTime = ucasCourseData.StudyMode == "P" ? VacancyStatus.NA : VacancyStatus.Vacancies,
+  PartTime:
+  _PartTime: not_mapped
+      #     PartTime = ucasCourseData.StudyMode == "F" ? VacancyStatus.NA : VacancyStatus.Vacancies,
+  # public enum VacancyStatus
+  #   {
+  #       NoVacancies = 0,
+
+  #       Vacancies = 1,
+
+  #       WaitingList = 2,
+
+  #       NA = 3
+  #   }
+
+Course_direct_enrichment_Mapping: &Course_direct_enrichment
   Duration:
-  _Duration: need_to_be_mapped
-  Mod:
-  _Mod: need_to_be_mapped
-  HasVacancies:
-  _HasVacancies: need_to_be_mapped
-  IsSen:
-  _IsSen: need_to_be_mapped
+  _Duration: not_mapped
 
   # Actual course
 Course_Full_Mapping:
   <<: *Course_default_value
-  <<: *Course_direct
+  <<: *Course_direct_simple
+  <<: *Course_direct_complex
+  <<: *Course_direct_enrichment
   <<: *Course_nested_object
   <<: *Course_nested

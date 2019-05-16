@@ -9,23 +9,39 @@ describe SearchAndCompare::CourseSerializer do
     context 'an existing course' do
       let(:accrediting_provider) do
         create :provider,
-               provider_code: 'M80',
-               provider_name: 'Middlesex University'
+          provider_code: expected_json[:Provider][:ProviderCode],
+          provider_name: expected_json[:Provider][:Name]
       end
       let(:provider) do
         create :provider,
-               provider_code: '189',
-               provider_name: 'Bowes Primary School'
+          provider_code: expected_json[:AccreditingProvider][:ProviderCode],
+          provider_name: expected_json[:AccreditingProvider][:Name]
       end
+
+      let(:mappings_yaml) do
+        HashWithIndifferentAccess.new(YAML.load_file("#{Dir.pwd}/spec/serializers/search_and_compare/mappings.yaml"))
+      end
+
+      let(:course_factory_args) do
+        {
+          provider: provider,
+          accrediting_provider: accrediting_provider,
+          name: expected_json[:Name],
+          course_code: expected_json[:ProgrammeCode],
+          start_date: expected_json[:StartDate],
+        }
+          # # site_statuses.findable.with_vacancies
+          # has_vacancies?: expected_json[:HasVacancies],
+          # # should add sen subject
+          # is_send?: expected_json[:IsSen],
+      end
+
       let(:course) do
-        create :course,
-               provider: provider,
-               course_code: '22FV',
-               accrediting_provider: accrediting_provider
+        create :course, **course_factory_args
       end
       let(:expected_json) do
         file = File.read("#{Dir.pwd}/spec/serializers/search_and_compare/course_serializer_test_data.json")
-        JSON.parse(file)
+        HashWithIndifferentAccess.new(JSON.parse(file))
       end
 
       let(:json_stringifyed) do
@@ -36,6 +52,7 @@ describe SearchAndCompare::CourseSerializer do
         yaml = YAML.load_file("#{Dir.pwd}/spec/serializers/search_and_compare/test_data.yaml")
         JSON.pretty_generate(yaml)
       end
+
       it 'yaml and json should be the same' do
         # Sanity check,
         # annotated_yaml, is used for annotation in order to do the 'let' and flush out the serializer
@@ -44,8 +61,49 @@ describe SearchAndCompare::CourseSerializer do
         expect(json_stringifyed).to eq(annotated_yaml)
       end
 
-      it { should include(Name: course.name) }
-      it { should include(ProgrammeCode: course.course_code) }
+      # it 'x' do
+      #   pp '{'
+      #   blah = mappings_yaml[:Course_direct_simple_Mapping].select do |k, _v|
+      #     next if k.starts_with? '_'
+
+      #     # x = v.present? ? v.to_s : 'nil'
+      #     # pp "attribute(:#{k})".ljust(50) + "{ object.#{x} }"
+      #     ##pp "it { should include(#{k}: course.#{x}) }"
+      #     #pp v
+      #     #pp "#{v}: expected_json[#{k}],"
+      #     pp "it { should include(#{k}: #{expected_json[k]} },"
+      #   end
+      #   pp '}'
+      # end
+
+      describe 'Course_direct_Mapping' do
+        it { should include(Name: course.name) }
+        it { should include(ProgrammeCode: course.course_code) }
+        it { should include(StartDate: course.start_date) }
+        it { should include(HasVacancies: course.has_vacancies?) }
+        it { should include(IsSen: course.is_send?) }
+      end
+
+      describe 'Actual values' do
+        it { should include(Name: 'Primary') }
+        it { should include(ProgrammeCode: '22FV') }
+        it { should include(StartDate: '2019-09-01T00:00:00') }
+        # it { should include(HasVacancies: true },
+        # it { should include(IsSen: false },
+      end
+
+      describe 'Course_default_value_Mapping' do
+        it { should include(Id: 0) }
+        it { should include(ProviderCodeName: nil) }
+        it { should include(ProviderId: 0) }
+        it { should include(AccreditingProviderId: nil) }
+        it { should include(AgeRange: 0) }
+        it { should include(RouteId: 0) }
+        it { should include(ProviderLocationId: nil) }
+        it { should include(Distance: nil) }
+        it { should include(DistanceAddress: nil) }
+        it { should include(ContactDetailsId: nil) }
+      end
 
       xit { should eq expected_json }
     end

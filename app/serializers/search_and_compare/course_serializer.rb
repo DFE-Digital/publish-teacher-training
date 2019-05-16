@@ -34,6 +34,28 @@ module SearchAndCompare
       object.dfe_subjects
     end
 
+    # Course_default_value_Mapping
+    attribute(:Id)                                    { 0 }
+    attribute(:ProviderCodeName)                      { nil }
+    attribute(:ProviderId)                            { 0 }
+    attribute(:AccreditingProviderId)                 { nil }
+    attribute(:AgeRange)                              { 0 }
+    attribute(:RouteId)                               { 0 }
+    attribute(:ProviderLocationId)                    { nil }
+    attribute(:Distance)                              { nil }
+    attribute(:DistanceAddress)                       { nil }
+    attribute(:ContactDetailsId)                      { nil }
+
+    # Course_direct_simple_Mapping
+    attribute(:Name)                                  { object.name }
+    attribute(:ProgrammeCode)                         { object.course_code }
+
+    attribute(:HasVacancies)                          { object.has_vacancies? }
+    attribute(:IsSen)                                 { object.is_send? }
+
+    # using server time not utc, so it's local time?
+    attribute(:StartDate)                             { object.start_date.utc.strftime('%Y-%m-%dT%H:%M:%S') }
+
     # var subjects = new Collection<SearchAndCompare.Domain.Models.Joins.CourseSubject>(subjectStrings.Select(subject =>
     #     new SearchAndCompare.Domain.Models.Joins.CourseSubject
     #     {
@@ -73,16 +95,9 @@ module SearchAndCompare
     # {
     #     ProviderLocation = new Location { Address = address },
     #     Duration = MapCourseLength(courseEnrichmentModel.CourseLength),
-    #     StartDate = ucasCourseData.StartDate,
 
-    #     Name = ucasCourseData.Name,
-    attribute(:Name)          { object.name }
-    attribute(:ProgrammeCode) { object.course_code }
-
-    #     ProgrammeCode = ucasCourseData.CourseCode,
     #     Provider = provider,
     #     AccreditingProvider = accreditingProvider,
-    #     IsSen = ucasCourseData.IsSen,
     #     Route = new Route
     #     {
     #         Name = routeName,
@@ -121,11 +136,9 @@ module SearchAndCompare
     #         .OrderBy(x => x.Value)
     #         .FirstOrDefault(),
     #
-    #     FullTime = ucasCourseData.StudyMode == "P" ? VacancyStatus.NA : VacancyStatus.Vacancies,
-    #     PartTime = ucasCourseData.StudyMode == "F" ? VacancyStatus.NA : VacancyStatus.Vacancies,
-    #
-    #     Mod = ucasCourseData.TypeDescription,
-    # };
+
+
+
 
     # mappedCourse.DescriptionSections = new Collection<CourseDescriptionSection>();
 
