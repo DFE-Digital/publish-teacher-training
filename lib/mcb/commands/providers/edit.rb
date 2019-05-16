@@ -43,12 +43,6 @@ run do |opts, args, _cmd|
         chosen_course_codes = []
       end
 
-      menu.choice("Add a new location") do
-        command_params = ['sites', 'create', args[:code]] + (opts[:env].present? ? ['-E', opts[:env]] : [])
-        $mcb.run(command_params)
-        chosen_course_codes = []
-      end
-
       menu.choice("Clone a course") do
         provider_code = cli.ask("Provider code of course you want to clone? (#{provider.provider_code} if blank)  ") { |q| q.default = provider.provider_code }
         course_code = cli.ask("Code of course you want to clone?  ")
@@ -59,6 +53,12 @@ run do |opts, args, _cmd|
         new_course.course_code = cli.ask("New course code?  ")
         new_course.subjects = original_course.subjects
         new_course.save!
+      end
+
+      menu.choice("Add a new location") do
+        command_params = ['sites', 'create', args[:code]] + (opts[:env].present? ? ['-E', opts[:env]] : [])
+        $mcb.run(command_params)
+        chosen_course_codes = []
       end
     end
     provider.reload
