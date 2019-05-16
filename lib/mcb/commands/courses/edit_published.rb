@@ -50,7 +50,7 @@ run do |opts, args, _cmd|
           else
             site_status = course.site_statuses.detect { |ss| ss.site == site }
             menu.choice(site_status.description) do
-              if site_status.status_running?
+              if site_status.status_running? || site_status.status_new_status?
                 course.remove_site!(site: site)
               else
                 course.add_site!(site: site)
