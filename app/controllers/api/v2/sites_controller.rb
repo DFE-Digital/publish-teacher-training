@@ -18,7 +18,7 @@ module API
         @site.provider = @provider
         authorize @site
 
-        if @site.save!
+        if @site.save
           render jsonapi: @site
         else
           render jsonapi_errors: @site.errors, status: :unprocessable_entity
