@@ -42,6 +42,16 @@ module API
         end
       end
 
+      def update
+        if @course.enrichments.draft.any?
+          enrichment = @course.enrichments.draft.first
+        else
+          enrichment = @course.enrichments.new(status: 'draft')
+        end
+        enrichment.assign_attributes(update_params)
+        enrichment.save
+      end
+
     private
 
       def build_provider
@@ -51,6 +61,27 @@ module API
       def build_course
         @course = @provider.courses.find_by!(course_code: params[:code].upcase)
         authorize @course
+      end
+
+      def update_params
+        params
+          .require(:course)
+          .except(:id, :type)
+          .permit(
+            :about_course,
+            :course_length,
+            :fee_details,
+            :fee_international,
+            :fee_uk_eu,
+            :financial_support,
+            :how_school_placements_work,
+            :internal_server_error,
+            :interview_process,
+            :other_requirements,
+            :personal_qualities,
+            :qualifications,
+            :salary_details
+          )
       end
     end
   end
