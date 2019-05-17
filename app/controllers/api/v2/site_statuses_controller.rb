@@ -13,12 +13,15 @@ module API
     private
 
       def site_status_params
-        params.require(:site_status).permit(
-          :applications_accepted_from,
-          :publish,
-          :status,
-          :vac_status
-        )
+        params
+          .require(:site_status)
+          .except(:id, :type, :site_id, :site_type)
+          .permit(
+            :applications_accepted_from,
+            :publish,
+            :status,
+            :vac_status
+          )
       end
     end
   end
