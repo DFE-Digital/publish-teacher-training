@@ -60,8 +60,14 @@ describe 'Access Request API V2', type: :request do
       let!(:second_access_request) { create(:access_request) }
 
       before do
+        Timecop.freeze
         access_requests_index_route
       end
+
+      after do
+        Timecop.return
+      end
+
 
       it 'JSON displays the correct attributes' do
         json_response = JSON.parse response.body
