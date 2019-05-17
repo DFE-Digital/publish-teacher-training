@@ -94,4 +94,8 @@ class Provider < ApplicationRecord
   def unassigned_site_codes
     Site::POSSIBLE_CODES - sites.pluck(:code)
   end
+
+  def can_add_more_sites?
+    sites.size < Site::POSSIBLE_CODES.size
+  end
 end

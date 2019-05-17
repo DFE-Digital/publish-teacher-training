@@ -14,6 +14,7 @@ describe API::V2::SerializableProvider do
   it {
     should be_json.with_content(attributes: { provider_code: provider.provider_code,
                                               provider_name: provider.provider_name,
-                                              accredited_body?: true })
+                                              accredited_body?: true,
+                                              can_add_more_sites?: true })
   }
 end
