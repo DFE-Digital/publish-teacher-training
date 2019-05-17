@@ -1,6 +1,9 @@
 module SearchAndCompare
   class CourseSerializer < ActiveModel::Serializer
     has_one :provider, key: :Provider
+    has_one :accrediting_provider, key: :AccreditingProvider
+
+
 
     # ucasProviderData = ucasProviderData ?? new Domain.Models.Provider();
     # ucasCourseData = ucasCourseData ?? new Domain.Models.Course();
@@ -31,6 +34,7 @@ module SearchAndCompare
     #     ? subjectMapper.GetSubjectList(ucasCourseData.Name, ucasCourseData.CourseSubjects.Select(x => x.Subject.SubjectName))
     #     : new List<string>();
     def subjects
+      # this our filtered list
       object.dfe_subjects
     end
 

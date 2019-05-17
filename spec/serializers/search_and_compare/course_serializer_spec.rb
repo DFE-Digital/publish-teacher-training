@@ -4,18 +4,19 @@ describe SearchAndCompare::CourseSerializer do
   let(:course) { create :course }
 
   describe 'json output' do
-    subject { serialize(course, serializer_class: described_class) }
+    let(:resource) { serialize(course, serializer_class: described_class) }
 
+    subject { resource }
     context 'an existing course' do
-      let(:accrediting_provider) do
-        create :provider,
-          provider_code: expected_json[:Provider][:ProviderCode],
-          provider_name: expected_json[:Provider][:Name]
-      end
       let(:provider) do
         create :provider,
-          provider_code: expected_json[:AccreditingProvider][:ProviderCode],
-          provider_name: expected_json[:AccreditingProvider][:Name]
+               provider_code: expected_json[:Provider][:ProviderCode],
+               provider_name: expected_json[:Provider][:Name]
+      end
+      let(:accrediting_provider) do
+        create :provider,
+               provider_code: expected_json[:AccreditingProvider][:ProviderCode],
+               provider_name: expected_json[:AccreditingProvider][:Name]
       end
 
       let(:mappings_yaml) do
@@ -61,7 +62,8 @@ describe SearchAndCompare::CourseSerializer do
         expect(json_stringifyed).to eq(annotated_yaml)
       end
 
-      # it 'x' do
+      it 'x' do
+        # pp resource
       #   pp '{'
       #   blah = mappings_yaml[:Course_direct_simple_Mapping].select do |k, _v|
       #     next if k.starts_with? '_'
@@ -74,8 +76,9 @@ describe SearchAndCompare::CourseSerializer do
       #     pp "it { should include(#{k}: #{expected_json[k]} },"
       #   end
       #   pp '}'
-      # end
+      end
 
+      # actual vs db
       describe 'Course_direct_Mapping' do
         it { should include(Name: course.name) }
         it { should include(ProgrammeCode: course.course_code) }
@@ -84,7 +87,8 @@ describe SearchAndCompare::CourseSerializer do
         it { should include(IsSen: course.is_send?) }
       end
 
-      describe 'Actual values' do
+      # actual vs hardcoded
+      describe 'json Actual values' do
         it { should include(Name: 'Primary') }
         it { should include(ProgrammeCode: '22FV') }
         it { should include(StartDate: '2019-09-01T00:00:00') }
@@ -92,6 +96,7 @@ describe SearchAndCompare::CourseSerializer do
         # it { should include(IsSen: false },
       end
 
+      # actual vs hardcoded
       describe 'Course_default_value_Mapping' do
         it { should include(Id: 0) }
         it { should include(ProviderCodeName: nil) }
@@ -105,6 +110,42 @@ describe SearchAndCompare::CourseSerializer do
         it { should include(ContactDetailsId: nil) }
       end
 
+      # actual vs db
+
+      describe 'Course_nested_object_Mapping' do
+        # testing the provider serializer, its part of the json
+        describe 'Provider' do
+          subject { resource[:Provider] }
+
+
+          describe 'Provider_default_value_Mapping' do
+            it { should include(Id: 0) }
+            it { should include(Courses: nil) }
+            it { should include(AccreditedCourses: nil) }
+          end
+          describe 'Provider_direct_simple_Mappting' do
+            it { should include(Name: provider.provider_name) }
+            it { should include(ProviderCode: provider.provider_code) }
+          end
+        end
+
+        describe 'AccreditingProvider' do
+          subject { resource[:AccreditingProvider] }
+
+
+          describe 'Provider_default_value_Mapping' do
+            it { should include(Id: 0) }
+            it { should include(Courses: nil) }
+            it { should include(AccreditedCourses: nil) }
+          end
+          describe 'Provider_direct_simple_Mappting' do
+            it { should include(Name: accrediting_provider.provider_name) }
+            it { should include(ProviderCode: accrediting_provider.provider_code) }
+          end
+        end
+      end
+
+      # should work fine once hardcoded/db ones are flushed out
       xit { should eq expected_json }
     end
   end
