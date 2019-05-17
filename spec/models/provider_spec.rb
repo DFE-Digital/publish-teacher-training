@@ -140,4 +140,16 @@ describe Provider, type: :model do
 
     its(:unassigned_site_codes) { should eq(expected_unassigned_codes) }
   end
+
+  describe "#can_add_more_sites?" do
+    context "when provider has less sites than max allowed" do
+      subject { create(:provider, site_count: 0) }
+      its(:can_add_more_sites?) { should be_truthy }
+    end
+
+    context "when provider has the max sites allowed" do
+      subject { create(:provider, site_count: Site::POSSIBLE_CODES.size) }
+      its(:can_add_more_sites?) { should be_falsey }
+    end
+  end
 end

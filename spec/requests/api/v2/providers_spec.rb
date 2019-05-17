@@ -45,6 +45,7 @@ describe 'Providers API v2', type: :request do
               "provider_code" => provider.provider_code,
               "provider_name" => provider.provider_name,
               "accredited_body?" => false,
+              "can_add_more_sites?" => true
             },
             "relationships" => {
               "sites" => {
@@ -81,6 +82,7 @@ describe 'Providers API v2', type: :request do
               "provider_code" => provider.provider_code,
               "provider_name" => provider.provider_name,
               "accredited_body?" => false,
+              "can_add_more_sites?" => true
             },
             "relationships" => {
               "sites" => {
@@ -163,6 +165,7 @@ describe 'Providers API v2', type: :request do
             "provider_code" => provider.provider_code,
             "provider_name" => provider.provider_name,
             "accredited_body?" => false,
+            "can_add_more_sites?" => true
           },
           "relationships" => {
             "sites" => {
@@ -201,6 +204,7 @@ describe 'Providers API v2', type: :request do
                 "provider_code" => provider.provider_code,
                 "provider_name" => provider.provider_name,
                 "accredited_body?" => false,
+                "can_add_more_sites?" => true
               },
               "relationships" => {
                 "sites" => {
@@ -233,6 +237,20 @@ describe 'Providers API v2', type: :request do
             }
           )
         end
+      end
+    end
+
+    context "with the maximum number of sites" do
+      let(:provider) { create(:provider, course_count: 0, site_count: Site::POSSIBLE_CODES.size, organisations: [organisation]) }
+
+      before do
+        get "/api/v2/providers/#{provider.provider_code}",
+            headers: { 'HTTP_AUTHORIZATION' => credentials }
+      end
+
+      it 'has can_add_more_sites? set to false' do
+        json_response = JSON.parse(response.body)
+        expect(json_response["data"]["attributes"]["can_add_more_sites?"]).to eq(false)
       end
     end
 

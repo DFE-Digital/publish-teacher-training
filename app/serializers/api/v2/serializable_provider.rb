@@ -3,7 +3,7 @@ module API
     class SerializableProvider < JSONAPI::Serializable::Resource
       type 'providers'
 
-      attributes :provider_code, :provider_name, :accredited_body?
+      attributes :provider_code, :provider_name, :accredited_body?, :can_add_more_sites?
 
       has_many :sites
 
