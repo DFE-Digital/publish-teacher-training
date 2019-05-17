@@ -22,6 +22,8 @@ module API
         access_request.update(requester: @current_user,
                               request_date_utc: Time.now.utc,
                               status: :requested)
+
+        render jsonapi: access_request
       end
 
     private
