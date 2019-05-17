@@ -15,4 +15,5 @@ class SitePolicy
   end
 
   alias_method :update?, :show?
+  alias_method :create?, :show?
 end

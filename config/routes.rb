@@ -69,7 +69,7 @@ Rails.application.routes.draw do
           post :sync_with_search_and_compare, on: :member
           post :publish, on: :member
         end
-        resources :sites, only: %i[index update show]
+        resources :sites, only: %i[index update show create]
       end
 
       resource :sessions
