@@ -33,7 +33,7 @@ run do |opts, args, _cmd|
         end
         menu.choice(:exit) { finished = true }
         menu.choice(:toggle_sites) { flow = :toggle_sites } unless multi_course_mode
-        %i[route qualification study_mode english maths science start_date title].each do |attr|
+        %i[route qualifications study_mode english maths science start_date title].each do |attr|
           menu.choice("Edit #{attr}") { flow = attr }
         end
         menu.choice('Publish training locations (not enrichment)') { flow = :publish_sites }
@@ -115,6 +115,9 @@ run do |opts, args, _cmd|
         puts "Setting the training locations to running on #{course.provider.provider_code}/#{course.course_code}"
         course.publish_sites
       end
+      flow = :root
+    else
+      puts "Unexpected option: #{flow}"
       flow = :root
     end
     courses.each(&:save!)
