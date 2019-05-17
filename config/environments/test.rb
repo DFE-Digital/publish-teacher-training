@@ -35,4 +35,11 @@ Rails.application.configure do
   # config.action_view.raise_on_missing_translations = true
 
   config.authentication_token = "bats"
+
+  # Check for N+1 queries
+  config.after_initialize do
+    Bullet.enable = true
+    Bullet.bullet_logger = true
+    Bullet.raise = true # raise an error if an n+1 query occurs
+  end
 end
