@@ -60,6 +60,13 @@ run do |opts, args, _cmd|
         $mcb.run(command_params)
         chosen_course_codes = []
       end
+
+      menu.choice("Edit provider name") do
+        puts "Current name: #{provider.provider_name}"
+        new_name = cli.ask("Enter new name").strip
+        provider.provider_name = new_name
+        provider.save!
+      end
     end
     provider.reload
   end
