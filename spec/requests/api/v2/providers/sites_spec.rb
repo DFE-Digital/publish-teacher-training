@@ -450,6 +450,28 @@ describe 'Sites API v2', type: :request do
       it 'sets the region_code of the site' do
         expect(site.region_code).to eq(region_code)
       end
+
+      context 'response output with validation errors' do
+        let(:json_data) { JSON.parse(response.body)['errors'] }
+
+        before do
+          perform_site_create
+        end
+
+        context 'with missing attributes' do
+          let(:location_name) { '' }
+          let(:address1)      { '' }
+          let(:address3)      { '' }
+          let(:postcode)      { '' }
+          let(:region_code)   { '' }
+
+          it { should have_http_status(:unprocessable_entity) }
+
+          it 'has the right amount of errors' do
+            expect(json_data.count).to eq 5
+          end
+        end
+      end
     end
   end
 end
