@@ -117,4 +117,10 @@ RSpec.configure do |config|
   Kernel.srand config.seed
 =end
   config.include JSONAPI::RSpec
+
+  # Report N+1 queries
+  if Bullet.enable?
+    config.before(:each) { Bullet.start_request }
+    config.after(:each)  { Bullet.end_request }
+  end
 end
