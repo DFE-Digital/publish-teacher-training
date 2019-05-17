@@ -116,8 +116,6 @@ describe SearchAndCompare::CourseSerializer do
         # testing the provider serializer, its part of the json
         describe 'Provider' do
           subject { resource[:Provider] }
-
-
           describe 'Provider_default_value_Mapping' do
             it { should include(Id: 0) }
             it { should include(Courses: nil) }
@@ -132,7 +130,6 @@ describe SearchAndCompare::CourseSerializer do
         describe 'AccreditingProvider' do
           subject { resource[:AccreditingProvider] }
 
-
           describe 'Provider_default_value_Mapping' do
             it { should include(Id: 0) }
             it { should include(Courses: nil) }
@@ -142,6 +139,25 @@ describe SearchAndCompare::CourseSerializer do
             it { should include(Name: accrediting_provider.provider_name) }
             it { should include(ProviderCode: accrediting_provider.provider_code) }
           end
+        end
+
+        describe 'IsSalaried' do
+          it { should include(IsSalaried: !course.is_fee_based?) }
+        end
+
+        describe 'Route' do
+          subject { resource[:Route] }
+          # dont think that the right thing
+          it { should include(Name: course.program_type) }
+          it { should include(IsSalaried: !course.is_fee_based?) }
+        end
+
+        describe 'CourseSubjects' do
+          subject { resource[:CourseSubjects] }
+
+          it { pp course.subjects }
+          it { pp course.dfe_subjects }
+          its(:size) { should eq course.dfe_subjects.size }
         end
       end
 

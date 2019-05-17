@@ -30,15 +30,90 @@ module SearchAndCompare
       provider_enrichment.contact_info_present?
     end
 
-    # var subjectStrings = ucasCourseData?.CourseSubjects != null
-    #     ? subjectMapper.GetSubjectList(ucasCourseData.Name, ucasCourseData.CourseSubjects.Select(x => x.Subject.SubjectName))
-    #     : new List<string>();
-    def subjects
-      # this our filtered list
-      object.dfe_subjects
+    # # var subjectStrings = ucasCourseData?.CourseSubjects != null
+    # #     ? subjectMapper.GetSubjectList(ucasCourseData.Name, ucasCourseData.CourseSubjects.Select(x => x.Subject.SubjectName))
+    # #     : new List<string>();
+    # def subjects
+    #   # this is our filtered list
+    #   object.dfe_subjects
+    # end
+
+    # var isSalaried = string.Equals(ucasCourseData?.ProgramType, "ss", StringComparison.InvariantCultureIgnoreCase)
+    #               || string.Equals(ucasCourseData?.ProgramType, "ta", StringComparison.InvariantCultureIgnoreCase);
+    def is_salaried?
+      !object.is_fee_based?
     end
 
-    # Course_default_value_Mapping
+    ###################################
+    # PLACHEHOLDER start              #
+    ###################################
+    def get_route
+      {
+        Name: object.program_type,
+        IsSalaried: is_salaried?
+      }
+    end
+
+    # var address = useUcasContact ? MapAddress(ucasProviderData) : MapAddress(providerEnrichmentModel);
+    def get_provider_address; end
+
+    # IncludesPgce
+    def get_includes_pgce
+      [0..4].sample
+    end
+
+    # var subjects = new Collection<SearchAndCompare.Domain.Models.Joins.CourseSubject>(subjectStrings.Select(subject =>
+    #     new SearchAndCompare.Domain.Models.Joins.CourseSubject
+    #     {
+    #         Subject = new SearchAndCompare.Domain.Models.Subject
+    #         {
+    #             Name = subject
+    #         }
+    #     }).ToList());
+
+    def get_subjects
+      object.dfe_subjects.map do |subject|
+        {
+          CourseId: 0,
+          Course: nil,
+          SubjectId: 0,
+          Subject:        {
+            Id: 0,
+            SubjectArea: nil,
+            FundingId: nil,
+            Funding: nil,
+            Name: subject.subject_name,
+            IsSubjectKnowledgeEnhancementAvailable: false,
+            CourseSubjects: nil
+          }
+        }
+      end
+    end
+
+    # var fees = courseEnrichmentModel.FeeUkEu.HasValue ? new Fees
+    # {
+    #     Uk = (int)(courseEnrichmentModel.FeeUkEu ?? 0),
+    #     Eu = (int)(courseEnrichmentModel.FeeUkEu ?? 0),
+    #     International = (int)(courseEnrichmentModel.FeeInternational ?? 0),
+    # } : new Fees();
+
+    def get_fees
+    end
+
+    def get_salary
+
+    end
+    ###################################
+    # PLACHEHOLDER end                #
+    ###################################
+
+
+
+    #    # Course_default_value_Mapping
+
+
+
+
     attribute(:Id)                                    { 0 }
     attribute(:ProviderCodeName)                      { nil }
     attribute(:ProviderId)                            { 0 }
@@ -60,55 +135,23 @@ module SearchAndCompare
     # using server time not utc, so it's local time?
     attribute(:StartDate)                             { object.start_date.utc.strftime('%Y-%m-%dT%H:%M:%S') }
 
-    # var subjects = new Collection<SearchAndCompare.Domain.Models.Joins.CourseSubject>(subjectStrings.Select(subject =>
-    #     new SearchAndCompare.Domain.Models.Joins.CourseSubject
-    #     {
-    #         Subject = new SearchAndCompare.Domain.Models.Subject
-    #         {
-    #             Name = subject
-    #         }
-    #     }).ToList());
-    # var isFurtherEducation = subjects.Any(c =>
-    #     c.Subject.Name.Equals("Further education", StringComparison.InvariantCultureIgnoreCase));
-    #
-    # var provider = new SearchAndCompare.Domain.Models.Provider
-    # {
-    #     Name = ucasProviderData.ProviderName,
-    #     ProviderCode = ucasProviderData.ProviderCode
-    # };
-    #
-    # var accreditingProvider = ucasCourseData.AccreditingProvider == null ? null :
-    #     new SearchAndCompare.Domain.Models.Provider
-    #     {
-    #         Name = ucasCourseData.AccreditingProvider.ProviderName,
-    #         ProviderCode = ucasCourseData.AccreditingProvider.ProviderCode
-    #     };
-    #
-    # var routeName = ucasCourseData.Route;
-    # var isSalaried = string.Equals(ucasCourseData?.ProgramType, "ss", StringComparison.InvariantCultureIgnoreCase)
-    #               || string.Equals(ucasCourseData?.ProgramType, "ta", StringComparison.InvariantCultureIgnoreCase);
-    # var fees = courseEnrichmentModel.FeeUkEu.HasValue ? new Fees
-    # {
-    #     Uk = (int)(courseEnrichmentModel.FeeUkEu ?? 0),
-    #     Eu = (int)(courseEnrichmentModel.FeeUkEu ?? 0),
-    #     International = (int)(courseEnrichmentModel.FeeInternational ?? 0),
-    # } : new Fees();
-    #
+    attribute(:IsSalaried)                            { is_salaried? }
+    attribute(:Route)                                 { get_route }
+
+    # may need '%Y-%m-%dT%H:%M:%S'
+    attribute(:ApplicationsAcceptedFrom)              { object.applications_open_from }
+
+    attribute(:IncludesPgce)                          { get_includes_pgce }
+    attribute(:CourseSubjects)                        { get_subjects }
+
     # var address = useUcasContact ? MapAddress(ucasProviderData) : MapAddress(providerEnrichmentModel);
     # var mappedCourse = new SearchAndCompare.Domain.Models.Course
     # {
     #     ProviderLocation = new Location { Address = address },
     #     Duration = MapCourseLength(courseEnrichmentModel.CourseLength),
 
-    #     Provider = provider,
-    #     AccreditingProvider = accreditingProvider,
-    #     Route = new Route
-    #     {
-    #         Name = routeName,
-    #         IsSalaried = isSalaried
-    #     },
+
     #     IncludesPgce = MapQualification(ucasCourseData.Qualification),
-    #     HasVacancies = ucasCourseData.HasVacancies,
     #     Campuses = new Collection<SearchAndCompare.Domain.Models.Campus>(sites
     #         .Where(school => String.Equals(school.Status, "r", StringComparison.InvariantCultureIgnoreCase) && String.Equals(school.Publish, "y", StringComparison.InvariantCultureIgnoreCase))
     #         .Select(school =>
@@ -123,10 +166,7 @@ module SearchAndCompare
     #                 VacStatus = school.VacStatus
     #             }
     #         ).ToList()),
-    #     CourseSubjects = subjects,
-    #     Fees = fees,
 
-    #     IsSalaried = isSalaried,
 
     #     ContactDetails = new Contact
     #     {
@@ -135,89 +175,5 @@ module SearchAndCompare
     #         Website = useUcasContact ? ucasProviderData.Url : providerEnrichmentModel.Website,
     #         Address = address
     #     },
-
-    #     ApplicationsAcceptedFrom = sites.Select(x => x.ApplicationsAcceptedFrom).Where(x => x.HasValue)
-    #         .OrderBy(x => x.Value)
-    #         .FirstOrDefault(),
-    #
-
-
-
-
-    # mappedCourse.DescriptionSections = new Collection<CourseDescriptionSection>();
-
-    # mappedCourse.DescriptionSections.Add(new CourseDescriptionSection
-    # {
-    #     //TODO move the CourseDetailsSections constants into SearchAndCompare.Domain.Models
-    #     // but this will work ftm
-    #     Name = "about this training programme",//CourseDetailsSections.AboutTheCourse,
-    #     Text = courseEnrichmentModel.AboutCourse
-    # });
-
-    # mappedCourse.DescriptionSections.Add(new CourseDescriptionSection
-    # {
-    #     Name = "interview process",//CourseDetailsSections.InterviewProcess,
-    #     Text = courseEnrichmentModel.InterviewProcess
-    # });
-
-    # mappedCourse.DescriptionSections.Add(new CourseDescriptionSection
-    # {
-    #     Name = "about fees",//CourseDetailsSections.AboutFees,
-    #     Text = courseEnrichmentModel.FeeDetails
-    # });
-
-    # mappedCourse.DescriptionSections.Add(new CourseDescriptionSection
-    # {
-    #     Name = "about salary",//CourseDetailsSections.AboutSalary,
-    #     Text = courseEnrichmentModel.SalaryDetails
-    # });
-
-    # mappedCourse.DescriptionSections.Add(new CourseDescriptionSection
-    # {
-    #     Name = "entry requirements",//CourseDetailsSections.EntryRequirementsQualifications,
-    #     Text = courseEnrichmentModel.Qualifications
-    # });
-
-    # mappedCourse.DescriptionSections.Add(new CourseDescriptionSection
-    # {
-    #     Name = "entry requirements personal qualities",//CourseDetailsSections.EntryRequirementsPersonalQualities,
-    #     Text = courseEnrichmentModel.PersonalQualities
-    # });
-
-    # mappedCourse.DescriptionSections.Add(new CourseDescriptionSection
-    # {
-    #     Name = "entry requirements other",//CourseDetailsSections.EntryRequirementsOther,
-    #     Text = courseEnrichmentModel.OtherRequirements
-    # });
-
-    # mappedCourse.DescriptionSections.Add(new CourseDescriptionSection
-    # {
-    #     Name = "financial support",//CourseDetailsSections.FinancialSupport,
-    #     Text = courseEnrichmentModel.FinancialSupport
-    # });
-
-    # mappedCourse.DescriptionSections.Add(new CourseDescriptionSection
-    # {
-    #     Name = "about school placements",//CourseDetailsSections.AboutSchools,
-    #     Text = courseEnrichmentModel.HowSchoolPlacementsWork
-    # });
-
-    # mappedCourse.DescriptionSections.Add(new CourseDescriptionSection
-    # {
-    #     Name = "about this training provider",//CourseDetailsSections.AboutTheProvider,
-    #     Text = providerEnrichmentModel.TrainWithUs
-    # });
-
-    # mappedCourse.DescriptionSections.Add(new CourseDescriptionSection
-    # {
-    #     Name = "about this training provider accrediting",//CourseDetailsSections.AboutTheAccreditingProvider,
-    #     Text = GetAccreditingProviderEnrichment(ucasCourseData?.AccreditingProvider?.ProviderCode, providerEnrichmentModel)
-    # });
-
-    # mappedCourse.DescriptionSections.Add(new CourseDescriptionSection
-    # {
-    #     Name = "training with disabilities",//CourseDetailsSections.TrainWithDisabilities,
-    #     Text = providerEnrichmentModel.TrainWithDisability
-    # });
   end
 end

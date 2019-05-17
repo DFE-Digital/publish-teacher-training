@@ -22,8 +22,34 @@ IsSalaried_Mapping: &IsSalaried
 Route_Mapping: &Route
   Id: 0
   _Id: default_value
-  Name: course.Route
+  Name: course.program_type
   _Name: mapped
+    # public string Route => GetRoute();
+    # private string GetRoute()
+    # {
+    #     if (string.IsNullOrWhiteSpace(ProgramType))
+    #     {
+    #         return "";
+    #     }
+
+    #     var route = ProgramType.ToLowerInvariant();
+
+    #     switch (route)
+    #     {
+    #         case "he":
+    #             return "Higher education programme";
+    #         case "sd":
+    #             return "School Direct training programme";
+    #         case "ss":
+    #             return "School Direct (salaried) training programme";
+    #         case "sc":
+    #             return "SCITT programme";
+    #         case "ta":
+    #             return "PG Teaching Apprenticeship";
+    #         default:
+    #             return "";
+    #     }
+    # }
   <<: &IsSalaried_Mapping
   Courses:
   _Courses: default_value
@@ -272,14 +298,15 @@ Course_direct_simple_Mapping: &Course_direct_simple
   StartDate: start_date
 
 Course_direct_complex_Mapping: &Course_direct_complex
+  #  site related
   HasVacancies: has_vacancies?
   _HasVacancies: not_mapped_to_factory
-  #  site related
+  # subject related
   IsSen: is_send?
   _IsSen: not_mapped_to_factory
   #  site related
-  ApplicationsAcceptedFrom:
-  _ApplicationsAcceptedFrom: not_mapped
+  ApplicationsAcceptedFrom: applications_open_from
+  _ApplicationsAcceptedFrom: not_mapped_to_factory
   #     ApplicationsAcceptedFrom = sites.Select(x => x.ApplicationsAcceptedFrom).Where(x => x.HasValue)
   #         .OrderBy(x => x.Value)
   #         .FirstOrDefault(),
@@ -420,7 +447,7 @@ Course_direct_complex_Mapping: &Course_direct_complex
   #   }
 
 Course_direct_enrichment_Mapping: &Course_direct_enrichment
-  Duration:
+  Duration: enrichement.course_length
   _Duration: not_mapped
 
   # Actual course
