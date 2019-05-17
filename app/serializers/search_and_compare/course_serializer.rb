@@ -54,9 +54,6 @@ module SearchAndCompare
       }
     end
 
-    # var address = useUcasContact ? MapAddress(ucasProviderData) : MapAddress(providerEnrichmentModel);
-    def get_provider_address; end
-
     # IncludesPgce
     def get_includes_pgce
       [0..4].sample
@@ -98,10 +95,119 @@ module SearchAndCompare
     # } : new Fees();
 
     def get_fees
+    # if the thing is number else 0
+      {
+          Uk: 0,
+          Eu: 0,
+          International: 0,
+      }
     end
 
+    # why oh why
+    # not used
     def get_salary
+      {
+        Minimum: nil,
+        Maximum: nil,
+      }
+    end
 
+    def get_duration
+        # translation keys for 1/2 yrs if there else just use it
+      course_length = "OneYear" #enrichment.courseLength;
+
+      if course_length == "OneYear"
+        return "1 year"
+      elsif course_length == "TwoYears"
+        return "Up to 2 years"
+      else
+        course_length
+
+      end
+    end
+
+    def get_mod
+      {
+        # Lets hope jb's pj coding paid off
+        # Possible values
+        # "PGCE full time"
+        # "PGCE, full time or part time"
+        # "PGCE with QTS full time"
+        # "PGCE with QTS, full time or part time"
+        # "PGCE with QTS, full time or part time with salary"
+        # "PGCE with QTS full time teaching apprenticeship"
+        # "PGCE with QTS full time with salary"
+        # "PGCE with QTS part time"
+        # "PGDE full time"
+        # "PGDE with QTS full time"
+        # "QTS full time"
+        # "QTS, full time or part time"
+        # "QTS, full time or part time with salary"
+        # "QTS full time teaching apprenticeship"
+        # "QTS full time with salary"
+        # "QTS part time"
+        # "QTS part time with salary"
+
+      }
+    end
+
+    def contact_details
+#           string.IsNullOrWhiteSpace(providerEnrichmentModel.Email) &&
+#           string.IsNullOrWhiteSpace(providerEnrichmentModel.Website) &&
+#           string.IsNullOrWhiteSpace(providerEnrichmentModel.Address1) &&
+#           string.IsNullOrWhiteSpace(providerEnrichmentModel.Address2) &&
+#           string.IsNullOrWhiteSpace(providerEnrichmentModel.Address3) &&
+#           string.IsNullOrWhiteSpace(providerEnrichmentModel.Address4) &&
+# string.IsNullOrWhiteSpace(providerEnrichmentModel.Postcode);
+
+      {
+        address1: 'address1',
+      address2: 'address2',
+      address3: 'address3',
+      address4: 'address4',
+      postcode: 'postcode',
+      phone: 'Telephone',
+      email: 'Email',
+      website: 'Website',
+}
+    end
+
+    def get_contact_details
+      {
+        Id: 0,
+        Phone: contact_details[:phone],
+        Fax: nil, # need to check
+        Email: contact_details[:email],
+        Website: contact_details[:website],
+        Address: get_provider_address,
+        Course: nil
+      }
+    end
+
+    def get_address(_address_parts_list)
+      'address'
+    end
+
+    def get_provider_address
+      #use_address = contact_details
+      address_parts_list = { address1: 'use_address.address1', address2: 'use_address.address2', address3: 'use_address.address3', address4: 'use_address.address4', postcode: 'use_address.postcode' }
+      get_address(address_parts_list)
+    end
+
+    def get_provider_location
+      get_location_mapping(get_provider_address)
+    end
+
+    def get_location_mapping(address)
+      {
+        Id: 0,
+        Address: address,
+        FormattedAddress: nil,
+        GeoAddress: nil,
+        Latitude: nil,
+        Longitude: nil,
+        LastGeocodedUtc: '0001-01-01T00:00:00'
+      }
     end
     ###################################
     # PLACHEHOLDER end                #
@@ -110,10 +216,6 @@ module SearchAndCompare
 
 
     #    # Course_default_value_Mapping
-
-
-
-
     attribute(:Id)                                    { 0 }
     attribute(:ProviderCodeName)                      { nil }
     attribute(:ProviderId)                            { 0 }
@@ -143,6 +245,12 @@ module SearchAndCompare
 
     attribute(:IncludesPgce)                          { get_includes_pgce }
     attribute(:CourseSubjects)                        { get_subjects }
+    attribute(:Fees)                                  { get_fees }
+    attribute(:Salary)                                { get_salary }
+
+    attribute(:ProviderLocation)                      { get_provider_location }
+    attribute(:ContactDetails)                        { get_contact_details }
+
 
     # var address = useUcasContact ? MapAddress(ucasProviderData) : MapAddress(providerEnrichmentModel);
     # var mappedCourse = new SearchAndCompare.Domain.Models.Course

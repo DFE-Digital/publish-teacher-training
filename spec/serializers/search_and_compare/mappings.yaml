@@ -313,25 +313,6 @@ Course_direct_complex_Mapping: &Course_direct_complex
   Mod: #ucasCourseData.TypeDescription (course.rb program_type_description) need to reverse engineer
   _Mod: not_mapped
 
-    # Lets happy jb's pj coding paid off
-    # Possible values
-    # "PGCE full time"
-    # "PGCE, full time or part time"
-    # "PGCE with QTS full time"
-    # "PGCE with QTS, full time or part time"
-    # "PGCE with QTS, full time or part time with salary"
-    # "PGCE with QTS full time teaching apprenticeship"
-    # "PGCE with QTS full time with salary"
-    # "PGCE with QTS part time"
-    # "PGDE full time"
-    # "PGDE with QTS full time"
-    # "QTS full time"
-    # "QTS, full time or part time"
-    # "QTS, full time or part time with salary"
-    # "QTS full time teaching apprenticeship"
-    # "QTS full time with salary"
-    # "QTS part time"
-    # "QTS part time with salary"
 
     #     Mod = ucasCourseData.TypeDescription,
     # Course domain (csharp)

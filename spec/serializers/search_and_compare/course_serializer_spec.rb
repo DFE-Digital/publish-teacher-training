@@ -155,9 +155,30 @@ describe SearchAndCompare::CourseSerializer do
         describe 'CourseSubjects' do
           subject { resource[:CourseSubjects] }
 
-          it { pp course.subjects }
-          it { pp course.dfe_subjects }
           its(:size) { should eq course.dfe_subjects.size }
+        end
+
+        describe 'Fees' do
+          subject { resource[:Fees] }
+
+          # its(:size) { should eq course.dfe_subjects.size }
+        end
+
+        describe 'Salary' do
+          subject { resource[:Salary] }
+
+          # its(:size) { should eq course.dfe_subjects.size }
+        end
+        describe 'ProviderLocation' do
+          subject { resource[:ProviderLocation] }
+
+          # its(:size) { should eq course.dfe_subjects.size }
+        end
+
+        describe 'ContactDetails' do
+          subject { resource[:ContactDetails] }
+
+          # its(:size) { should eq course.dfe_subjects.size }
         end
       end
 
