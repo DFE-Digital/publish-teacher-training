@@ -95,24 +95,13 @@ class SubjectMapperService
     secondary_subject_mappings += [
       Subjects::ModernForeignLanguagesOtherMapping.new,
       Subjects::SecondaryEnglishMapping.new(course_title),
+      Subjects::SecondaryHumanitiesMapping.new(course_title),
+      Subjects::SecondaryBalancedScienceMapping.new(course_title),
     ]
 
-    secondary_subjects = secondary_subject_mappings.map { |mapping|
+    secondary_subject_mappings.map { |mapping|
       mapping.to_s if mapping.applicable_to?(ucas_subjects)
     }.compact
-
-    # TODO: remove this bonkers logic once course mapping is done by one app!
-    # There is absolutely no user need for it!
-    #
-    # Does the subject list mention a subject we are happy to translate if the course title contains a mention?
-    if "humanities".in?(ucas_subjects) && course_title =~ /humanities/
-      secondary_subjects << "Humanities"
-    end
-    if "science".in?(ucas_subjects) && course_title =~ /(?<!social |computer )science/
-      secondary_subjects << "Balanced science"
-    end
-
-    secondary_subjects
   end
 
   def self.map_to_primary_subjects(ucas_subjects)
