@@ -115,7 +115,7 @@ class SubjectMapperService
   end
 
   def self.get_subject_level(ucas_subjects)
-    ucas_subjects = ucas_subjects.map { |subject| (subject.strip! || subject).downcase }
+    ucas_subjects = ucas_subjects.map(&:strip).map(&:downcase)
     if (ucas_subjects & SUBJECT_LEVEL[:ucas_unexpected]).any?
       "found unsupported subject name(s): #{(ucas_subjects & SUBJECT_LEVEL[:ucas_unexpected]) * ', '}"
     elsif (ucas_subjects & SUBJECT_LEVEL[:ucas_primary]).any?
