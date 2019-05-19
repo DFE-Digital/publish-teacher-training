@@ -93,7 +93,7 @@ class SubjectMapperService
     end
 
     secondary_subject_mappings += [
-      Subjects::MFLOtherMapping.new,
+      Subjects::ModernForeignLanguagesOtherMapping.new,
       Subjects::SecondaryEnglishMapping.new(course_title),
     ]
 
