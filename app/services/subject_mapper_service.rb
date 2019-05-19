@@ -105,15 +105,11 @@ class SubjectMapperService
     # There is absolutely no user need for it!
     #
     # Does the subject list mention a subject we are happy to translate if the course title contains a mention?
-    ucas_needs_mention_in_title = {
-      "humanities" => /humanities/,
-      "science" => /(?<!social |computer )science/,
-    }
-    (ucas_subjects & %w[humanities science]).each do |ucas_subject|
-      if course_title.match?(ucas_needs_mention_in_title[ucas_subject])
-        renamed_subject = (ucas_subject == "science" ? "balanced science" : ucas_subject).capitalize
-        secondary_subjects << renamed_subject
-      end
+    if "humanities".in?(ucas_subjects) && course_title =~ /humanities/
+      secondary_subjects << "Humanities"
+    end
+    if "science".in?(ucas_subjects) && course_title =~ /(?<!social |computer )science/
+      secondary_subjects << "Balanced science"
     end
 
     secondary_subjects
