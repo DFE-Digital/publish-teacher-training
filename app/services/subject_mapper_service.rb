@@ -20,7 +20,7 @@ class SubjectMapperService
                       "law"]
   }.freeze
 
-  MAPPINGS = {
+  UCAS_TO_DFE_SUBJECT_MAPPINGS = {
     primary: {
       ["english", "english language", "english literature"] => "Primary with English",
       %w[geography history] => "Primary with geography and history",
@@ -88,13 +88,13 @@ class SubjectMapperService
   }.freeze
 
   def self.primary_subject_mappings
-    MAPPINGS[:primary].map do |ucas_input_subjects, dfe_subject|
+    UCAS_TO_DFE_SUBJECT_MAPPINGS[:primary].map do |ucas_input_subjects, dfe_subject|
       Subjects::UCASSubjectToDFESubjectStaticMapping.new(ucas_input_subjects, dfe_subject)
     end
   end
 
   def self.secondary_subject_mappings(course_title)
-    static_mappings = MAPPINGS[:secondary].map do |ucas_input_subjects, dfe_subject|
+    static_mappings = UCAS_TO_DFE_SUBJECT_MAPPINGS[:secondary].map do |ucas_input_subjects, dfe_subject|
       Subjects::UCASSubjectToDFESubjectStaticMapping.new(ucas_input_subjects, dfe_subject)
     end
 
