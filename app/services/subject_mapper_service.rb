@@ -87,89 +87,14 @@ class SubjectMapperService
     },
   }.freeze
 
-  class StaticMapping
-    def initialize(included_ucas_subjects, resulting_dfe_subject)
-      @included_ucas_subjects = included_ucas_subjects
-      @resulting_dfe_subject = resulting_dfe_subject
-    end
-
-    def applicable_to?(ucas_subjects_to_map)
-      (ucas_subjects_to_map & @included_ucas_subjects).any?
-    end
-
-    def to_s
-      @resulting_dfe_subject
-    end
-  end
-
-  #  Does the subject list mention languages but hasn't already been covered?
-  class MFLOtherMapping
-    def applicable_to?(ucas_subjects)
-      (ucas_subjects & language_categories).any? &&
-        (ucas_subjects & mandarin).none? &&
-        (ucas_subjects & mfl_main).none?
-    end
-
-    def to_s
-      "Modern languages (other)"
-    end
-
-  private
-
-    def language_categories
-      ["languages", "languages (african)", "languages (asian)", "languages (european)"]
-    end
-
-    def mandarin
-      %w[chinese mandarin]
-    end
-
-    def mfl_main
-      ["english as a second or other language",
-       "french",
-       "german",
-       "italian",
-       "japanese",
-       "russian",
-       "spanish"]
-    end
-  end
-
-  # TODO: remove this bonkers logic once course mapping is done by one app!
-  # The user need for this is unclear
-  #
-  # Does the subject list mention english, and it's mentioned in the title (or it's the only subject we know for this course)?
-  class SecondaryEnglishMapping
-    def initialize(course_title)
-      @course_title = course_title
-    end
-
-    def applicable_to?(ucas_subjects)
-      (ucas_subjects & ucas_english).any? &&
-        @course_title.index("english") != nil
-    end
-
-    def to_s
-      "English"
-    end
-
-  private
-
-    def ucas_english
-      ["english",
-       "english language",
-       "english literature"]
-    end
-  end
-
   def self.map_to_secondary_subjects(course_title, ucas_subjects)
     secondary_subject_mappings = MAPPINGS[:secondary].map do |ucas_input_subjects, dfe_subject|
-      StaticMapping.new(ucas_input_subjects, dfe_subject)
+      Subjects::UCASSubjectToDFESubjectStaticMapping.new(ucas_input_subjects, dfe_subject)
     end
 
     secondary_subject_mappings += [
-      MFLOtherMapping.new,
-      SecondaryEnglishMapping.new(course_title),
+      Subjects::MFLOtherMapping.new,
+      Subjects::SecondaryEnglishMapping.new(course_title),
     ]
 
     secondary_subjects = secondary_subject_mappings.map { |mapping|
@@ -196,7 +121,7 @@ class SubjectMapperService
 
   def self.map_to_primary_subjects(ucas_subjects)
     primary_subject_mappings = MAPPINGS[:primary].map do |ucas_input_subjects, dfe_subject|
-      StaticMapping.new(ucas_input_subjects, dfe_subject)
+      Subjects::UCASSubjectToDFESubjectStaticMapping.new(ucas_input_subjects, dfe_subject)
     end
 
     %w[Primary] + primary_subject_mappings.map { |mapping|
