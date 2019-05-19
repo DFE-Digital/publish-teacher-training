@@ -87,31 +87,31 @@ class SubjectMapperService
     },
   }.freeze
 
-  def self.map_to_secondary_subjects(course_title, ucas_subjects)
-    secondary_subject_mappings = MAPPINGS[:secondary].map do |ucas_input_subjects, dfe_subject|
+  def self.primary_subject_mappings
+    MAPPINGS[:primary].map do |ucas_input_subjects, dfe_subject|
+      Subjects::UCASSubjectToDFESubjectStaticMapping.new(ucas_input_subjects, dfe_subject)
+    end
+  end
+
+  def self.secondary_subject_mappings(course_title)
+    static_mappings = MAPPINGS[:secondary].map do |ucas_input_subjects, dfe_subject|
       Subjects::UCASSubjectToDFESubjectStaticMapping.new(ucas_input_subjects, dfe_subject)
     end
 
-    secondary_subject_mappings += [
+    bespoke_logic_mappings = [
       Subjects::ModernForeignLanguagesOtherMapping.new,
       Subjects::SecondaryEnglishMapping.new(course_title),
       Subjects::SecondaryHumanitiesMapping.new(course_title),
       Subjects::SecondaryBalancedScienceMapping.new(course_title),
     ]
 
-    secondary_subject_mappings.map { |mapping|
-      mapping.to_s if mapping.applicable_to?(ucas_subjects)
-    }.compact
+    static_mappings + bespoke_logic_mappings
   end
 
-  def self.map_to_primary_subjects(ucas_subjects)
-    primary_subject_mappings = MAPPINGS[:primary].map do |ucas_input_subjects, dfe_subject|
-      Subjects::UCASSubjectToDFESubjectStaticMapping.new(ucas_input_subjects, dfe_subject)
-    end
-
-    %w[Primary] + primary_subject_mappings.map { |mapping|
-      mapping.to_s if mapping.applicable_to?(ucas_subjects)
-    }.compact
+  def self.map_ucas_subjects_to_dfe_subjects(ucas_subjects:, mappings:)
+    mappings.
+      select { |mapping| mapping.applicable_to?(ucas_subjects) }.
+      collect(&:to_s)
   end
 
   def self.get_subject_level(ucas_subjects)
@@ -148,11 +148,17 @@ class SubjectMapperService
 
     case subject_level
     when :primary
-      map_to_primary_subjects(ucas_subjects)
+      %w[Primary] + map_ucas_subjects_to_dfe_subjects(
+        mappings: primary_subject_mappings,
+        ucas_subjects: ucas_subjects
+      )
     when :further_education
       ["Further education"]
     when :secondary
-      map_to_secondary_subjects(course_title.strip.downcase, ucas_subjects)
+      map_ucas_subjects_to_dfe_subjects(
+        mappings: secondary_subject_mappings(course_title.strip.downcase),
+        ucas_subjects: ucas_subjects
+      )
     else
       raise subject_level
     end
