@@ -84,28 +84,30 @@ class SubjectMapperService
        %w[psychology] => "Psychology",
        ["religious education"] => "Religious education",
        ["social science"] => "Social sciences",
+       { ucas_subjects_match: ->(ucas_subjects) {
+                                Subjects::ModernForeignLanguages.language_course?(ucas_subjects) &&
+                                  !Subjects::ModernForeignLanguages.mandarin?(ucas_subjects) &&
+                                  !Subjects::ModernForeignLanguages.main_mfl?(ucas_subjects)
+                              } } => "Modern languages (other)",
+       {
+         ucas_subjects: ["english", "english language", "english literature"],
+         course_title_matches: ->(course_title) { course_title.index("english") != nil },
+       } => "English",
+       {
+         ucas_subjects: %w[humanities],
+         course_title_matches: ->(course_title) { course_title =~ /humanities/ }
+       } => "Humanities",
+       {
+         ucas_subjects: %w[science],
+         course_title_matches: ->(course_title) { course_title =~ /(?<!social |computer )science/ }
+       } => "Balanced science",
     },
   }.freeze
 
-  def self.primary_subject_mappings
-    UCAS_TO_DFE_SUBJECT_MAPPINGS[:primary].map do |ucas_input_subjects, dfe_subject|
-      Subjects::UCASSubjectToDFESubjectStaticMapping.new(ucas_input_subjects, dfe_subject)
+  def self.subject_mappings(config:)
+    config.map do |ucas_input_subjects, dfe_subject|
+      Subjects::UCASSubjectToDFESubjectMapping.new(ucas_input_subjects, dfe_subject)
     end
-  end
-
-  def self.secondary_subject_mappings
-    static_mappings = UCAS_TO_DFE_SUBJECT_MAPPINGS[:secondary].map do |ucas_input_subjects, dfe_subject|
-      Subjects::UCASSubjectToDFESubjectStaticMapping.new(ucas_input_subjects, dfe_subject)
-    end
-
-    bespoke_logic_mappings = [
-      Subjects::ModernForeignLanguagesOtherMapping.new,
-      Subjects::SecondaryEnglishMapping.new,
-      Subjects::SecondaryHumanitiesMapping.new,
-      Subjects::SecondaryBalancedScienceMapping.new,
-    ]
-
-    static_mappings + bespoke_logic_mappings
   end
 
   def self.map_ucas_subjects_to_dfe_subjects(ucas_subjects:, course_title:, mappings:)
@@ -149,7 +151,7 @@ class SubjectMapperService
     case subject_level
     when :primary
       %w[Primary] + map_ucas_subjects_to_dfe_subjects(
-        mappings: primary_subject_mappings,
+        mappings: subject_mappings(config: UCAS_TO_DFE_SUBJECT_MAPPINGS[:primary]),
         ucas_subjects: ucas_subjects,
         course_title: course_title.strip.downcase
       )
@@ -157,7 +159,7 @@ class SubjectMapperService
       ["Further education"]
     when :secondary
       map_ucas_subjects_to_dfe_subjects(
-        mappings: secondary_subject_mappings,
+        mappings: subject_mappings(config: UCAS_TO_DFE_SUBJECT_MAPPINGS[:secondary]),
         ucas_subjects: ucas_subjects,
         course_title: course_title.strip.downcase
       )
