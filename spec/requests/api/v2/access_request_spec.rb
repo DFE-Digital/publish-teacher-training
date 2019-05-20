@@ -60,8 +60,14 @@ describe 'Access Request API V2', type: :request do
       let!(:second_access_request) { create(:access_request) }
 
       before do
+        Timecop.freeze
         access_requests_index_route
       end
+
+      after do
+        Timecop.return
+      end
+
 
       it 'JSON displays the correct attributes' do
         json_response = JSON.parse response.body
@@ -219,6 +225,23 @@ describe 'Access Request API V2', type: :request do
 
       after do
         Timecop.return
+      end
+
+      it 'returns the correct id' do
+        string_id = JSON.parse(response.body)["data"]['id']
+        id = Integer(string_id)
+
+        expect(id).to be > 0
+      end
+
+      describe 'JSON returns the correct attributes' do
+        subject { JSON.parse(response.body)["data"]['attributes'] }
+
+        its(%w[email_address]) { should eq('bob@example.org') }
+        its(%w[first_name]) { should eq('bob') }
+        its(%w[last_name]) { should eq('monkhouse') }
+        its(%w[organisation]) { should eq('bbc') }
+        its(%w[reason]) { should eq('star qualities') }
       end
 
       context 'with a user that does not already exist' do
