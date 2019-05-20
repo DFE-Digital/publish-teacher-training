@@ -60,4 +60,18 @@ describe 'mcb users list' do
     expect(output).to have_text_table_row(user1.id)
     expect(output).not_to have_text_table_row(user2.id)
   end
+
+  it 'lists active, non-admin users with the -o option' do
+    user1 = create(:user, :admin)
+    user2 = create(:user, :inactive)
+    user3 = create(:user, accept_terms_date_utc: Date.yesterday)
+
+    output = with_stubbed_stdout do
+      cmd.run(['-o'])
+    end
+
+    expect(output).not_to have_text_table_row(user1.id)
+    expect(output).not_to have_text_table_row(user2.id)
+    expect(output).to     have_text_table_row(user3.id)
+  end
 end
