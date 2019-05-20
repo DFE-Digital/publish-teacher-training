@@ -1,6 +1,7 @@
 module API
   module V2
     class AccessRequestsController < API::V2::ApplicationController
+      deserializable_resource :access_request, only: %i[create]
       before_action :build_access_request, only: :approve
 
       def approve
