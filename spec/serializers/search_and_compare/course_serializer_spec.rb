@@ -1,15 +1,16 @@
 require 'rails_helper'
 
 describe SearchAndCompare::CourseSerializer do
-  let(:course) { create :course }
-
   describe 'json output' do
     let(:resource) { serialize(course, serializer_class: described_class) }
 
     subject { resource }
+
     context 'an existing course' do
       let(:course_factory_args) do
         {
+          provider: provider,
+          accrediting_provider: accrediting_provider,
           name: expected_json[:Name],
           course_code: expected_json[:ProgrammeCode],
           start_date: expected_json[:StartDate],
@@ -19,11 +20,52 @@ describe SearchAndCompare::CourseSerializer do
       let(:course) do
         create :course, **course_factory_args
       end
+
+      let(:provider) do
+        create :provider,
+               provider_code: expected_json[:Provider][:ProviderCode],
+               provider_name: expected_json[:Provider][:Name]
+      end
+      let(:accrediting_provider) do
+        create :provider,
+               provider_code: expected_json[:AccreditingProvider][:ProviderCode],
+               provider_name: expected_json[:AccreditingProvider][:Name]
+      end
+
       let(:expected_json) do
         file = File.read("#{Dir.pwd}/spec/serializers/search_and_compare/test_data.json")
         HashWithIndifferentAccess.new(JSON.parse(file))
       end
 
+      describe 'Provider_serializer_Mapping' do
+        # testing the provider serializer, its part of the json
+        describe 'Provider' do
+          subject { resource[:Provider] }
+          describe 'Provider_default_value_Mapping' do
+            it { should include(Id: 0) }
+            it { should include(Courses: nil) }
+            it { should include(AccreditedCourses: nil) }
+          end
+          describe 'Provider_direct_simple_Mappting' do
+            it { should include(Name: provider.provider_name) }
+            it { should include(ProviderCode: provider.provider_code) }
+          end
+        end
+
+        describe 'AccreditingProvider' do
+          subject { resource[:AccreditingProvider] }
+
+          describe 'Provider_default_value_Mapping' do
+            it { should include(Id: 0) }
+            it { should include(Courses: nil) }
+            it { should include(AccreditedCourses: nil) }
+          end
+          describe 'Provider_direct_simple_Mappting' do
+            it { should include(Name: accrediting_provider.provider_name) }
+            it { should include(ProviderCode: accrediting_provider.provider_code) }
+          end
+        end
+      end
 
       describe 'Course_default_value_Mapping' do
         it { should include(Id: 0) }

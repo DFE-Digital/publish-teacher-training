@@ -17,7 +17,28 @@ Course_direct_simple_Mapping: &Course_direct_simple
   ProgrammeCode: "course_code"
   StartDate: "start_date"
 
-  # Actual course
+#Provider mappings
+Provider_default_value_Mapping: &Provider_default_value
+  Id: 0
+  Courses:
+  AccreditedCourses:
+
+Provider_direct_simple_Mapping: &Provider_direct_simple
+  Name: provider_name
+  ProviderCode: provider_code
+
+Provider_Mapping: &Provider # Has a provider
+  <<: *Provider_default_value
+  <<: *Provider_direct_simple
+
+Provider_serializer_Mapping: &Provider_serializer
+  Provider: # Has a provider
+    <<: *Provider
+  AccreditingProvider: # Optional accrediting provider (provider type)
+    <<: *Provider
+
+# Actual course
 Course_Full_Mapping:
+  <<: *Provider_serializer
   <<: *Course_default_value
   <<: *Course_direct_simple

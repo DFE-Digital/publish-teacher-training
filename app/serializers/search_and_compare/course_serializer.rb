@@ -1,5 +1,10 @@
 module SearchAndCompare
   class CourseSerializer < ActiveModel::Serializer
+    # Provider_serializer_Mapping
+    # Covered by
+    has_one :provider, key: :Provider, serializer: SearchAndCompare::ProviderSerializer
+    has_one :accrediting_provider, key: :AccreditingProvider, serializer: SearchAndCompare::ProviderSerializer
+
     # Course_default_value_Mapping
     attribute(:Id)                                    { 0 }
     attribute(:ProviderCodeName)                      { nil }
