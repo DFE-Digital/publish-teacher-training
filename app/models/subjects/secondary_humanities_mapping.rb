@@ -8,7 +8,7 @@ module Subjects
       "humanities".in?(ucas_subjects) && @course_title =~ /humanities/
     end
 
-    def to_s
+    def to_dfe_subject
       "Humanities"
     end
   end

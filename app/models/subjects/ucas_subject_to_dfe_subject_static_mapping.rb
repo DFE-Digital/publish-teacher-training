@@ -9,7 +9,7 @@ module Subjects
       (ucas_subjects_to_map & @included_ucas_subjects).any?
     end
 
-    def to_s
+    def to_dfe_subject
       @resulting_dfe_subject
     end
   end

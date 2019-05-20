@@ -11,7 +11,7 @@ module Subjects
         @course_title.index("english") != nil
     end
 
-    def to_s
+    def to_dfe_subject
       "English"
     end
 

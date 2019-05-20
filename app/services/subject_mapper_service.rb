@@ -111,7 +111,7 @@ class SubjectMapperService
   def self.map_ucas_subjects_to_dfe_subjects(ucas_subjects:, mappings:)
     mappings.
       select { |mapping| mapping.applicable_to?(ucas_subjects) }.
-      collect(&:to_s)
+      collect(&:to_dfe_subject)
   end
 
   def self.get_subject_level(ucas_subjects)

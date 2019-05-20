@@ -8,7 +8,7 @@ module Subjects
       "science".in?(ucas_subjects) && @course_title =~ /(?<!social |computer )science/
     end
 
-    def to_s
+    def to_dfe_subject
       "Balanced science"
     end
   end

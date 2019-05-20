@@ -18,7 +18,7 @@ module Subjects
       language_course?(ucas_subjects) && !mandarin?(ucas_subjects) && !main_mfl?(ucas_subjects)
     end
 
-    def to_s
+    def to_dfe_subject
       "Modern languages (other)"
     end
 
