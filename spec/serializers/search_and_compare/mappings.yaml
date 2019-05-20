@@ -1,0 +1,17 @@
+---
+#Course mappings
+Course_default_value_Mapping: &Course_default_value
+  Id: 0
+  ProviderCodeName:
+  ProviderId: 0
+  AccreditingProviderId:
+  AgeRange: 0
+  RouteId: 0
+  ProviderLocationId:
+  Distance:
+  DistanceAddress:
+  ContactDetailsId:
+
+  # Actual course
+Course_Full_Mapping:
+  <<: *Course_default_value
