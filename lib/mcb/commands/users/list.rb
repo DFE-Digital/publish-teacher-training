@@ -1,4 +1,5 @@
 summary 'List users in the tb'
+usage 'list [<id1> <id2> <id3>...] where id is either user email, user ID or DfE-Sign-in ID'
 
 run do |opts, args, _cmd|
   MCB.init_rails(opts)
