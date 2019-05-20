@@ -12,6 +12,12 @@ Course_default_value_Mapping: &Course_default_value
   DistanceAddress:
   ContactDetailsId:
 
+Course_direct_simple_Mapping: &Course_direct_simple
+  Name: "name"
+  ProgrammeCode: "course_code"
+  StartDate: "start_date"
+
   # Actual course
 Course_Full_Mapping:
   <<: *Course_default_value
+  <<: *Course_direct_simple

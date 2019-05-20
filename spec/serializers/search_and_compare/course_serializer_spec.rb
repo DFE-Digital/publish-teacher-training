@@ -8,8 +8,16 @@ describe SearchAndCompare::CourseSerializer do
 
     subject { resource }
     context 'an existing course' do
+      let(:course_factory_args) do
+        {
+          name: expected_json[:Name],
+          course_code: expected_json[:ProgrammeCode],
+          start_date: expected_json[:StartDate],
+        }
+      end
+
       let(:course) do
-        create :course
+        create :course, **course_factory_args
       end
       let(:expected_json) do
         file = File.read("#{Dir.pwd}/spec/serializers/search_and_compare/test_data.json")
@@ -28,6 +36,12 @@ describe SearchAndCompare::CourseSerializer do
         it { should include(Distance: nil) }
         it { should include(DistanceAddress: nil) }
         it { should include(ContactDetailsId: nil) }
+      end
+
+      describe 'Course_direct_Mapping' do
+        it { should include(Name: course.name) }
+        it { should include(ProgrammeCode: course.course_code) }
+        it { should include(StartDate: course.start_date) }
       end
 
       # should work fine once hardcoded/db ones are flushed out

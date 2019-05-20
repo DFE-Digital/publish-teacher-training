@@ -11,5 +11,11 @@ module SearchAndCompare
     attribute(:Distance)                              { nil }
     attribute(:DistanceAddress)                       { nil }
     attribute(:ContactDetailsId)                      { nil }
+
+    # Course_direct_simple_Mapping
+    attribute(:Name)                                  { object.name }
+    attribute(:ProgrammeCode)                         { object.course_code }
+    # using server time not utc, so it's local time?
+    attribute(:StartDate)                             { object.start_date.utc.strftime('%Y-%m-%dT%H:%M:%S') }
   end
 end
