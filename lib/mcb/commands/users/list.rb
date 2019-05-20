@@ -1,6 +1,7 @@
 summary 'List users in the tb'
 usage 'list [<id1> <id2> <id3>...] where id is either user email, user ID or DfE-Sign-in ID'
 flag :o, 'only-active-non-admins', 'Filter the user list to only active non-admin users for comms purposes'
+option :c, 'csv-output-filename', 'Write the output to a CVS file at the given path', argument: :required
 
 run do |opts, args, _cmd|
   MCB.init_rails(opts)
@@ -13,14 +14,23 @@ run do |opts, args, _cmd|
             User.all
           end
 
-  tp.set :capitalize_headers, false
+  if opts[:'csv-output-filename']
+    require 'csv'
+    headers = %w[id email sign_in_user_id first_name last_name last_login_date_utc]
+    results = CSV.open(opts[:'csv-output-filename'], "wb") do |csv|
+      csv << headers
+      users.pluck(*headers).each { |user| csv << user }
+    end
+  else
+    tp.set :capitalize_headers, false
 
-  puts "\nUsers:"
-  puts Tabulo::Table.new(users,
-                         :id,
-                         :email,
-                         :sign_in_user_id,
-                         :first_name,
-                         :last_name,
-                         :last_login_date_utc).pack(max_table_width: nil)
+    puts "\nUsers:"
+    puts Tabulo::Table.new(users,
+                           :id,
+                           :email,
+                           :sign_in_user_id,
+                           :first_name,
+                           :last_name,
+                           :last_login_date_utc).pack(max_table_width: nil)
+  end
 end
