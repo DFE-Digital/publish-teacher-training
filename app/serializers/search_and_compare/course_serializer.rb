@@ -2,8 +2,8 @@ module SearchAndCompare
   class CourseSerializer < ActiveModel::Serializer
     # Provider_serializer_Mapping
     # Covered by
-    has_one :provider, key: :Provider
-    has_one :accrediting_provider, key: :AccreditingProvider
+    has_one :provider, key: :Provider, serializer: SearchAndCompare::ProviderSerializer
+    has_one :accrediting_provider, key: :AccreditingProvider, serializer: SearchAndCompare::ProviderSerializer
 
     # ucasProviderData = ucasProviderData ?? new Domain.Models.Provider();
     # ucasCourseData = ucasCourseData ?? new Domain.Models.Course();
@@ -241,6 +241,7 @@ module SearchAndCompare
         Longitude: nil,
         LastGeocodedUtc: '0001-01-01T00:00:00',
 
+        # actual mapping needed
         Address: address,
       }
     end
@@ -271,6 +272,7 @@ module SearchAndCompare
     attribute(:IsSen)                                 { object.is_send? }
     # may need '%Y-%m-%dT%H:%M:%S'
     attribute(:ApplicationsAcceptedFrom)              { object.applications_open_from }
+
     attribute(:Mod)                                   { get_mod }
     attribute(:IncludesPgce)                          { get_includes_pgce }
     attribute(:FullTime)                              { [0, 3].sample }
