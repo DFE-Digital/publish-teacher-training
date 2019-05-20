@@ -20,5 +20,5 @@ ActiveSupport::Inflector.inflections do |inflect|
   inflect.acronym 'PGDE'
   inflect.acronym 'UCAS'
   inflect.acronym 'MFL' # Modern foreign languages
-  inflect.acronym 'DFE' # Department for Educatino
+  inflect.acronym 'DFE' # Department for Education
 end
