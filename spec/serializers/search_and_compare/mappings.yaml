@@ -19,40 +19,18 @@ IsSalaried_Mapping: &IsSalaried
   IsSalaried: '!course.is_fee_based?'
   _IsSalaried: mapped
 
-Route_Mapping: &Route
+Route_default_value_Mapping: &Route_default_value
   Id: 0
-  _Id: default_value
+  Courses:
+
+Route_Complex_value_Mapping: &Route_Complex_value
+  <<: *IsSalaried
   Name: course.program_type
   _Name: mapped
-    # public string Route => GetRoute();
-    # private string GetRoute()
-    # {
-    #     if (string.IsNullOrWhiteSpace(ProgramType))
-    #     {
-    #         return "";
-    #     }
 
-    #     var route = ProgramType.ToLowerInvariant();
-
-    #     switch (route)
-    #     {
-    #         case "he":
-    #             return "Higher education programme";
-    #         case "sd":
-    #             return "School Direct training programme";
-    #         case "ss":
-    #             return "School Direct (salaried) training programme";
-    #         case "sc":
-    #             return "SCITT programme";
-    #         case "ta":
-    #             return "PG Teaching Apprenticeship";
-    #         default:
-    #             return "";
-    #     }
-    # }
-  <<: &IsSalaried_Mapping
-  Courses:
-  _Courses: default_value
+Route_Mapping: &Route
+  <<: *Route_default_value
+  <<: *Route_Complex_value
 
 DescriptionSection_Mapping: &DescriptionSection
   Id: 0
@@ -64,22 +42,19 @@ DescriptionSection_Mapping: &DescriptionSection
   Course:
   _Course: default_value
 
-Location_Mapping: &Location
+Location_default_value_Mapping: &Location_default_value
   Id: 0
   _Id: default_value
+  FormattedAddress:
+  GeoAddress:
+  Latitude:
+  Longitude:
+  LastGeocodedUtc: '0001-01-01T00:00:00'
+
+Location_Mapping: &Location
+  *Location_default_value
   Address:
   _Address: not_mapped
-  FormattedAddress:
-  _FormattedAddress: default_value
-  GeoAddress:
-  _GeoAddress: default_value
-  Latitude:
-  _Latitude: default_value
-  Longitude:
-  _Longitude: default_value
-  _LastGeocodedUtc: default_value
-  LastGeocodedUtc: '0001-01-01T00:00:00'
-  _LastGeocodedUtc: default_value
 
 Campus_Mapping: &Campus
   Id: 0
@@ -94,32 +69,36 @@ Campus_Mapping: &Campus
   Course:
   _Course: default_value
 
-Subject_Mapping: &Subject
+Subject_default_value_Mapping: &Subject_default_value
   Id: 0
-  _Id: default_value
   SubjectArea:
-  _SubjectArea: default_value
   FundingId:
-  _FundingId: default_value
   Funding:
-  _Funding: default_value
-  Name:
-  _Name: not_mapped
   IsSubjectKnowledgeEnhancementAvailable: false
-  _IsSubjectKnowledgeEnhancementAvailable: not_mapped
   CourseSubjects:
-  _CourseSubjects: default_value
 
-CourseSubject_Mapping: &CourseSubject
+Subject_direct_Mapping: &Subject_direct
+  Name: 'subject_name'
+
+Subject_Mapping: &Subject
+  <<: &Subject_default_value
+  <<: &Subject_direct
+
+CourseSubject_default_value_Mapping: &CourseSubject_default_value
   CourseId: 0
   _CourseId: default_value
   Course:
   _Course: default_value
   SubjectId: 0
   _SubjectId: default_value
+
+CourseSubject_complex_Mapping: &CourseSubject_complex
   Subject:
     <<: *Subject
 
+CourseSubject_Mapping: &CourseSubject
+  <<: &CourseSubject_default_value
+  <<: &CourseSubject_complex
 
 # based on <<: &IsSalaried_Mapping
 Fees_Mapping: &Fees
@@ -136,9 +115,12 @@ Salary_Mapping: &Salary
   Maximum:
   _Maximum: not_mapped
 
-ContactDetails_Mapping: &ContactDetails
+ContactDetails_default_value_Mapping: &ContactDetails_default_value
   Id: 0
-  _Id: default_value
+  Course:
+
+ContactDetails_Mapping: &ContactDetails
+  *ContactDetails_default_value
   Phone:
   _Phone: not_mapped
   Fax:
@@ -149,8 +131,7 @@ ContactDetails_Mapping: &ContactDetails
   _Website: not_mapped
   Address:
   _Address: not_mapped
-  Course:
-  _Course: not_mapped
+
 
 #Course mappings
 Course_default_value_Mapping: &Course_default_value
@@ -165,13 +146,13 @@ Course_default_value_Mapping: &Course_default_value
   DistanceAddress:
   ContactDetailsId:
 
-Course_nested_complex_Mapping: &Course_nested_complex
+Course_nested_complex_DescriptionSections_Mapping: &Course_nested_complex_DescriptionSections
   DescriptionSections:
   - <<: *DescriptionSection
     Name: "about this training programme"
     Text: 'AboutCourse'
-    __Name: "about this training programme"
-    __Text: 'AboutCourse'
+    __Name: 'snc field key'
+    __Text: 'enrichment field key'
     __EnrichmentType: 'course_enrichment'
     __CourseDetailsSections: "AboutTheCourse" #snc ui section
 
@@ -186,72 +167,72 @@ Course_nested_complex_Mapping: &Course_nested_complex
   - <<: *DescriptionSection
     Name: "about fees"
     Text: 'FeeDetails'
-    __Name: "about fees"
-    __Text: 'FeeDetails'
+    __Name: 'snc field key'
+    __Text: 'enrichment field key'
     __EnrichmentType: 'course_enrichment'
     __CourseDetailsSections: "AboutFees" #snc ui section
 
   - <<: *DescriptionSection
     Name: "about salary"
     Text: 'SalaryDetails'
-    __Name: "about salary"
-    __Text: 'SalaryDetails'
+    __Name: 'snc field key'
+    __Text: 'enrichment field key'
     __EnrichmentType: 'course_enrichment'
     __CourseDetailsSections: "AboutSalary" #snc ui section
 
   - <<: *DescriptionSection
     Name: "entry requirements"
     Text: 'Qualifications'
-    __Name: "entry requirements"
-    __Text: 'Qualifications'
+    __Name: 'snc field key'
+    __Text: 'enrichment field key'
     __EnrichmentType: 'course_enrichment'
     __CourseDetailsSections: "EntryRequirementsQualifications" #snc ui section
 
   - <<: *DescriptionSection
     Name: "entry requirements personal qualities"
     Text: 'PersonalQualities'
-    __Name: "entry requirements personal qualities"
-    __Text: 'PersonalQualities'
+    __Name: 'snc field key'
+    __Text: 'enrichment field key'
     __EnrichmentType: 'course_enrichment'
     __CourseDetailsSections: "EntryRequirementsPersonalQualities" #snc ui section
 
   - <<: *DescriptionSection
     Name: "entry requirements other"
     Text: 'OtherRequirements'
-    __Name: "entry requirements other"
-    __Text: 'OtherRequirements'
+    __Name: 'snc field key'
+    __Text: 'enrichment field key'
     __EnrichmentType: 'course_enrichment'
     __CourseDetailsSections: "EntryRequirementsOther" #snc ui section
 
   - <<: *DescriptionSection
     Name: "financial support"
     Text: 'FinancialSupport'
-    __Name: "financial support"
-    __Text: 'FinancialSupport'
+    __Name: 'snc field key'
+    __Text: 'enrichment field key'
     __EnrichmentType: 'course_enrichment'
     __CourseDetailsSections: "FinancialSupport" #snc ui section
 
   - <<: *DescriptionSection
     Name: "about school placements"
     Text: 'HowSchoolPlacementsWork'
-    __Name: "about school placements"
-    __Text: 'HowSchoolPlacementsWork'
+    __Name: 'snc field key'
+    __Text: 'enrichment field key'
     __EnrichmentType: 'course_enrichment'
     __CourseDetailsSections: "AboutSchools" #snc ui section
 
   - <<: *DescriptionSection
     Name: "about this training provider"
     Text: 'TrainWithUs'
-    __Name: "about this training provider"
-    __Text: 'TrainWithUs'
+    __Name: 'snc field key'
+    __Text: 'enrichment field key'
     __EnrichmentType: 'provider_enrichment'
     __CourseDetailsSections: "AboutTheProvider" #snc ui section
 
   - <<: *DescriptionSection
     Name: "about this training provider accrediting"
     Text: GetAccreditingProviderEnrichment(ucasCourseData?.AccreditingProvider?.ProviderCode"
-    __Name: "about this training provider accrediting"
-    __Text: 'GetAccreditingProviderEnrichment(uproviderEnrichment)'
+    __Name: 'snc field key'
+    __Text: 'the accrediting provider code as identifier'
     EnrichmentType: 'accreditingProvider_provider_enrichment'
     #   var enrichment = enrichmentModel.AccreditingProviderEnrichments.FirstOrDefault(x => x.UcasProviderCode == accreditingProviderCode);
 
@@ -264,22 +245,45 @@ Course_nested_complex_Mapping: &Course_nested_complex
   - <<: *DescriptionSection
     Name: "training with disabilities"
     Text: 'TrainWithDisability'
-    __Name: "training with disabilities"
-    __Text: 'TrainWithDisability'
+    __Name: 'snc field key'
+    __Text: 'enrichment field key'
     __EnrichmentType: 'provider_enrichment'
     __CourseDetailsSections: "TrainWithDisabilities" #snc ui sectionmpuses:
 
-  - <<: *Campus
-    Location:
-      <<: *Location
+Course_nested_complex_Campuses_Mapping: &Course_nested_complex_Campuses
+  *Campus
+  Location:
+    <<: *Location
+ #     Campuses = new Collection<SearchAndCompare.Domain.Models.Campus>(sites
+    #         .Where(school => String.Equals(school.Status, "r", StringComparison.InvariantCultureIgnoreCase) && String.Equals(school.Publish, "y", StringComparison.InvariantCultureIgnoreCase))
+    #         .Select(school =>
+    #             new SearchAndCompare.Domain.Models.Campus
+    #             {
+    #                 Name = school.Site.LocationName,
+    #                 CampusCode = school.Site.Code,
+    #                 Location = new Location
+    #                 {
+    #                     Address = MapAddress(school.Site)
+    #                 },
+    #                 VacStatus = school.VacStatus
+    #             }
+    #         ).ToList()),
+
+Course_nested_complex_Mapping: &Course_nested_complex
+  <<: *Course_nested_complex_DescriptionSections
+  Campuses:
+  -  <<: *Course_nested_complex_Campuses
   CourseSubjects:
   - <<: *CourseSubject
 
-Course_nested_object_Mapping: &Course_nested_object
+
+Provider_serializer_Mapping: &Provider_serializer
   Provider: # Has a provider
     <<: *Provider
   AccreditingProvider: # Optional accrediting provider (provider type)
     <<: *Provider
+
+Course_nested_object_Mapping: &Course_nested_object
   Route:
     <<: *Route
   Fees:
@@ -310,88 +314,8 @@ Course_direct_complex_Mapping: &Course_direct_complex
   #     ApplicationsAcceptedFrom = sites.Select(x => x.ApplicationsAcceptedFrom).Where(x => x.HasValue)
   #         .OrderBy(x => x.Value)
   #         .FirstOrDefault(),
-  Mod: #ucasCourseData.TypeDescription (course.rb program_type_description) need to reverse engineer
-  _Mod: not_mapped
-
-
-    #     Mod = ucasCourseData.TypeDescription,
-    # Course domain (csharp)
-    # public string TypeDescription => GetCourseVariantType();
-    # private string GetCourseVariantType()
-    #     {
-    #         string result;
-
-    #         switch(Qualification)
-    #         {
-    #             case CourseQualification.Qts:
-    #                 result = "QTS";
-    #                 break;
-    #             case CourseQualification.QtsWithPgce:
-    #                 result = "PGCE with QTS";
-    #                 break;
-    #             case CourseQualification.QtlsWithPgce:
-    #                 result = "PGCE";
-    #                 break;
-    #             case CourseQualification.QtlsWithPgde:
-    #                 result = "PGDE";
-    #                 break;
-    #             case CourseQualification.QtsWithPgde:
-    #                 result = "PGDE with QTS";
-    #                 break;
-    #             default:
-    #                 throw new ArgumentOutOfRangeException($"{nameof(Qualification)} is unknown value: {Qualification}");
-    #         }
-
-    #         if ((!string.IsNullOrWhiteSpace(result)) && string.Equals(StudyMode, "B" StringComparison.InvariantCultureIgnoreCase))
-    #         {
-    #             result += " ";
-    #         }
-    #         else
-    #         {
-    #             result += " ";
-    #         }
-
-    #         result += GetStudyModeText(StudyMode);
-
-    #         result += string.Equals(ProgramType, "ss" StringComparison.InvariantCultureIgnoreCase)
-    #             ? " with salary"
-    #             : "";
-
-    #         result += string.Equals(ProgramType, "ta" StringComparison.InvariantCultureIgnoreCase)
-    #             ? " teaching apprenticeship"
-    #             : "";
-
-    #         return result;
-    #     }
-    # [TestCase(CourseQualification.Qts, "F", "SS", "QTS full time with salary")]
-
-    # [TestCase(CourseQualification.Qts, "F", "SS", "QTS full time with salary")]
-    # [TestCase(CourseQualification.QtsWithPgce, "f", "ss", "PGCE with QTS full time with salary")]
-    # [TestCase(CourseQualification.QtsWithPgce, "F", "SS", "PGCE with QTS full time with salary")]
-    # [TestCase(CourseQualification.QtsWithPgce, "p", "ss", "PGCE with QTS part time with salary")]
-    # [TestCase(CourseQualification.QtsWithPgce, "P", "SS", "PGCE with QTS part time with salary")]
-    # [TestCase(CourseQualification.Qts, "f", "sd", "QTS full time")]
-    # [TestCase(CourseQualification.Qts, "F", "SD", "QTS full time")]
-    # [TestCase(CourseQualification.Qts, "f", "sd", "QTS full time")]
-    # [TestCase(CourseQualification.Qts, "F", "SD", "QTS full time")]
-    # [TestCase(CourseQualification.QtsWithPgce, "f", "sd", "PGCE with QTS full time")]
-    # [TestCase(CourseQualification.QtsWithPgce, "F", "SD", "PGCE with QTS full time")]
-    # [TestCase(CourseQualification.QtsWithPgce, "p", "sd", "PGCE with QTS part time")]
-    # [TestCase(CourseQualification.QtsWithPgce, "P", "SD", "PGCE with QTS part time")]
-    # [TestCase(CourseQualification.QtsWithPgce, "B", "SD", "PGCE with QTS, full time or part time")]
-    # [TestCase(CourseQualification.QtsWithPgce, "b", "sd", "PGCE with QTS, full time or part time")]
-    # [TestCase(CourseQualification.Qts, "f", "ta", "QTS full time teaching apprenticeship")]
-    # public void TestGetCourseVariantType(CourseQualification qualification, string studyMode, string programType, string expectedResult)
-    # {
-    #     var course = new Course
-    #     {
-    #         Qualification = qualification,
-    #         StudyMode = studyMode,
-    #         ProgramType = programType
-    #     };
-    #     var result = course.TypeDescription;
-    #     result.Should().Be(expectedResult);
-    # }
+  Mod: program_type_description
+  _Mod: mapped_no_idea
   IncludesPgce: 1 #MapQualification(ucasCourseData.Qualification) (enum)
   _IncludesPgce: not_mapped
 #  private static IDictionary<CourseQualification, IncludesPgce> qualificationMap = new Dictionary<CourseQualification, IncludesPgce>
@@ -433,6 +357,7 @@ Course_direct_enrichment_Mapping: &Course_direct_enrichment
 
   # Actual course
 Course_Full_Mapping:
+  <<: *Provider_serializer      # mapped
   <<: *Course_default_value     # mapped
   <<: *Course_direct_simple     # mapped
   <<: *Course_direct_complex    # half

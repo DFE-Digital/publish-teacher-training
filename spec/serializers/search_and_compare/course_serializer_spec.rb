@@ -78,6 +78,36 @@ describe SearchAndCompare::CourseSerializer do
       #   pp '}'
       end
 
+      describe 'Provider_serializer_Mapping' do
+        # testing the provider serializer, its part of the json
+        describe 'Provider' do
+          subject { resource[:Provider] }
+          describe 'Provider_default_value_Mapping' do
+            it { should include(Id: 0) }
+            it { should include(Courses: nil) }
+            it { should include(AccreditedCourses: nil) }
+          end
+          describe 'Provider_direct_simple_Mappting' do
+            it { should include(Name: provider.provider_name) }
+            it { should include(ProviderCode: provider.provider_code) }
+          end
+        end
+
+        describe 'AccreditingProvider' do
+          subject { resource[:AccreditingProvider] }
+
+          describe 'Provider_default_value_Mapping' do
+            it { should include(Id: 0) }
+            it { should include(Courses: nil) }
+            it { should include(AccreditedCourses: nil) }
+          end
+          describe 'Provider_direct_simple_Mappting' do
+            it { should include(Name: accrediting_provider.provider_name) }
+            it { should include(ProviderCode: accrediting_provider.provider_code) }
+          end
+        end
+      end
+
       # actual vs db
       describe 'Course_direct_Mapping' do
         it { should include(Name: course.name) }
@@ -113,34 +143,6 @@ describe SearchAndCompare::CourseSerializer do
       # actual vs db
 
       describe 'Course_nested_object_Mapping' do
-        # testing the provider serializer, its part of the json
-        describe 'Provider' do
-          subject { resource[:Provider] }
-          describe 'Provider_default_value_Mapping' do
-            it { should include(Id: 0) }
-            it { should include(Courses: nil) }
-            it { should include(AccreditedCourses: nil) }
-          end
-          describe 'Provider_direct_simple_Mappting' do
-            it { should include(Name: provider.provider_name) }
-            it { should include(ProviderCode: provider.provider_code) }
-          end
-        end
-
-        describe 'AccreditingProvider' do
-          subject { resource[:AccreditingProvider] }
-
-          describe 'Provider_default_value_Mapping' do
-            it { should include(Id: 0) }
-            it { should include(Courses: nil) }
-            it { should include(AccreditedCourses: nil) }
-          end
-          describe 'Provider_direct_simple_Mappting' do
-            it { should include(Name: accrediting_provider.provider_name) }
-            it { should include(ProviderCode: accrediting_provider.provider_code) }
-          end
-        end
-
         describe 'IsSalaried' do
           it { should include(IsSalaried: !course.is_fee_based?) }
         end
@@ -183,7 +185,7 @@ describe SearchAndCompare::CourseSerializer do
       end
 
       # should work fine once hardcoded/db ones are flushed out
-      xit { should eq expected_json }
+      it { should eq expected_json }
     end
   end
 end
