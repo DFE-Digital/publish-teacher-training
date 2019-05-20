@@ -14,7 +14,7 @@ module Subjects
     ].freeze
     MANDARIN_UCAS_SUBJECTS = %w[chinese mandarin].freeze
 
-    def applicable_to?(ucas_subjects)
+    def applicable_to?(ucas_subjects, _)
       language_course?(ucas_subjects) && !mandarin?(ucas_subjects) && !main_mfl?(ucas_subjects)
     end
 

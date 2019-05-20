@@ -5,7 +5,7 @@ module Subjects
       @resulting_dfe_subject = resulting_dfe_subject
     end
 
-    def applicable_to?(ucas_subjects_to_map)
+    def applicable_to?(ucas_subjects_to_map, _)
       (ucas_subjects_to_map & @included_ucas_subjects).any?
     end
 

@@ -2,13 +2,9 @@
 # The user need for this is unclear
 module Subjects
   class SecondaryEnglishMapping
-    def initialize(course_title)
-      @course_title = course_title
-    end
-
-    def applicable_to?(ucas_subjects)
+    def applicable_to?(ucas_subjects, course_title)
       (ucas_subjects & ucas_english).any? &&
-        @course_title.index("english") != nil
+        course_title.index("english") != nil
     end
 
     def to_dfe_subject
