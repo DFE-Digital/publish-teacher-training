@@ -24,6 +24,8 @@ class User < ApplicationRecord
   has_many :providers, through: :organisations
   has_many :access_requests, foreign_key: :requester_id, primary_key: :id
 
+  scope :non_admins, -> { where.not('email ~ ?', DFE_EMAIL_PATTERN) }
+
   validates :email, presence: true
 
   audited
