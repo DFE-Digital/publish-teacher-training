@@ -76,4 +76,13 @@ describe User, type: :model do
       end
     end
   end
+
+  describe '.active' do
+    let!(:inactive_user) { create(:user, :inactive) }
+    let!(:active_user) { create(:user, accept_terms_date_utc: Date.yesterday) }
+
+    it "includes active users and excludes inactive users" do
+      expect(User.active).to eq([active_user])
+    end
+  end
 end

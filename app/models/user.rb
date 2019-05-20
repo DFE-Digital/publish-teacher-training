@@ -25,6 +25,7 @@ class User < ApplicationRecord
   has_many :access_requests, foreign_key: :requester_id, primary_key: :id
 
   scope :non_admins, -> { where.not('email ~ ?', DFE_EMAIL_PATTERN) }
+  scope :active, -> { where.not(accept_terms_date_utc: nil) }
 
   validates :email, presence: true
 

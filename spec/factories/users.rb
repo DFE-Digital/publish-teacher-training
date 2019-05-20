@@ -34,5 +34,9 @@ FactoryBot.define do
     trait :with_provider do
       organisations { [create(:organisation, providers: [create(:provider)])] }
     end
+
+    trait :inactive do
+      accept_terms_date_utc { nil }
+    end
   end
 end
