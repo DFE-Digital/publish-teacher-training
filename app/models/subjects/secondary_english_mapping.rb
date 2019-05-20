@@ -1,7 +1,5 @@
 # TODO: remove this bonkers logic once course mapping is done by one app!
 # The user need for this is unclear
-#
-# Does the subject list mention english, and it's mentioned in the title (or it's the only subject we know for this course)?
 module Subjects
   class SecondaryEnglishMapping
     def initialize(course_title)
