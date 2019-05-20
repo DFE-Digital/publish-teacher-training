@@ -18,7 +18,7 @@
 class User < ApplicationRecord
   include AASM
 
-  DFE_EMAIL_PATTERN = /@(digital.){0,1}education.gov.uk$/.freeze
+  DFE_EMAIL_PATTERN = '@(digital.){0,1}education.gov.uk$'.freeze
 
   has_and_belongs_to_many :organisations
   has_many :providers, through: :organisations
@@ -38,6 +38,6 @@ class User < ApplicationRecord
   end
 
   def admin?
-    email.match?(DFE_EMAIL_PATTERN)
+    email.match?(%r{#{DFE_EMAIL_PATTERN}})
   end
 end
