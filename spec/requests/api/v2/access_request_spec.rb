@@ -28,7 +28,8 @@ describe 'Access Request API V2', type: :request do
   describe 'GET #index' do
     let(:access_requests_index_route) do
       get "/api/v2/access_requests",
-          headers: { 'HTTP_AUTHORIZATION' => credentials }
+          headers: { 'HTTP_AUTHORIZATION' => credentials },
+          params: { include: 'requester' }
     end
 
     context 'when unauthenticated' do
@@ -89,9 +90,14 @@ describe 'Access Request API V2', type: :request do
                 "status" => first_access_request.status
               },
               "relationships" => {
-                "requester" => { "meta" => { "included" => false } }
+                "requester" => {
+                  "data" => {
+                    "type" => "users",
+                    "id" => first_access_request.requester.id.to_s
+                  }
                 }
-              },
+              }
+            },
             {
              "id" => second_access_request.id.to_s,
              "type" => "access_request",
@@ -107,13 +113,40 @@ describe 'Access Request API V2', type: :request do
                "status" => second_access_request.status
              },
              "relationships" => {
-               "requester" => { "meta" => { "included" => false } }
-              }
+               "requester" => {
+                 "data" => {
+                   "type" => "users",
+                   "id" => second_access_request.requester.id.to_s
+                 }
+               }
+             }
             }
             ],
         "jsonapi" => {
           "version" => "1.0"
-        }
+        },
+        "included" => [{
+          "id" => first_access_request.requester.id.to_s,
+          "type" => "users",
+          "attributes" => {
+            "first_name" => first_access_request.requester.first_name,
+            "last_name" => first_access_request.requester.last_name,
+            "email" => first_access_request.requester.email,
+            "accept_terms_date_utc" => first_access_request.requester.accept_terms_date_utc.utc.strftime('%FT%T.%3NZ'),
+            "state" => first_access_request.requester.state
+          }
+        }, {
+          "id" => second_access_request.requester.id.to_s,
+          "type" => "users",
+          "attributes" => {
+            "first_name" => second_access_request.requester.first_name,
+            "last_name" => second_access_request.requester.last_name,
+            "email" => second_access_request.requester.email,
+            "accept_terms_date_utc" => second_access_request.requester.accept_terms_date_utc.utc.strftime('%FT%T.%3NZ'),
+
+            "state" => second_access_request.requester.state
+          }
+        }]
        )
       end
     end

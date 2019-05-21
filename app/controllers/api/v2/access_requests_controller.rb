@@ -12,9 +12,9 @@ module API
 
       def index
         authorize AccessRequest
-        @access_requests = AccessRequest.requested
+        @access_requests = AccessRequest.requested.includes(:requester)
 
-        render jsonapi: @access_requests
+        render jsonapi: @access_requests, include: params[:include]
       end
 
       def create
