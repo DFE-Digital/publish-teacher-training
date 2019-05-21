@@ -22,6 +22,7 @@ class SubjectMapperService
 
   UCAS_TO_DFE_SUBJECT_MAPPINGS = {
     primary: {
+      %w[primary] => "Primary",
       ["english", "english language", "english literature"] => "Primary with English",
       %w[geography history] => "Primary with geography and history",
       ["mathematics", "mathematics (abridged)"] => "Primary with mathematics",
@@ -150,7 +151,7 @@ class SubjectMapperService
 
     case subject_level
     when :primary
-      %w[Primary] + map_ucas_subjects_to_dfe_subjects(
+      map_ucas_subjects_to_dfe_subjects(
         mappings: subject_mappings(config: UCAS_TO_DFE_SUBJECT_MAPPINGS[:primary]),
         ucas_subjects: ucas_subjects,
         course_title: course_title.strip.downcase
