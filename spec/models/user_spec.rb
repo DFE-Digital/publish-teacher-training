@@ -47,21 +47,42 @@ describe User, type: :model do
 
   describe '#admin?' do
     context 'user has an education.gov.uk email' do
-      subject { create(:user, email: 'test@education.gov.uk') }
+      subject! { create(:user, email: 'test@education.gov.uk') }
 
       its(:admin?) { should be_truthy }
+
+      it "doesn't show up in User.non_admins" do
+        expect(User.non_admins).to be_empty
+      end
     end
 
     context 'user has a digital.education.gov.uk email' do
-      subject { create(:user, email: 'test@digital.education.gov.uk') }
+      subject! { create(:user, email: 'test@digital.education.gov.uk') }
 
       its(:admin?) { should be_truthy }
+
+      it "doesn't show up in User.non_admins" do
+        expect(User.non_admins).to be_empty
+      end
     end
 
     context 'user does not have a digital.education or education.gov.uk email' do
       subject { create(:user, email: 'test@hrmc.gov.uk') }
 
       its(:admin?) { should be_falsey }
+
+      it "does shows up in User.non_admins" do
+        expect(User.non_admins).to eq([subject])
+      end
+    end
+  end
+
+  describe '.active' do
+    let!(:inactive_user) { create(:user, :inactive) }
+    let!(:active_user) { create(:user, accept_terms_date_utc: Date.yesterday) }
+
+    it "includes active users and excludes inactive users" do
+      expect(User.active).to eq([active_user])
     end
   end
 end
