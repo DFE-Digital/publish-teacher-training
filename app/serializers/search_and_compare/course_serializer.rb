@@ -22,5 +22,16 @@ module SearchAndCompare
     attribute(:ProgrammeCode)                         { object.course_code }
     # using server time not utc, so it's local time?
     attribute(:StartDate)                             { object.start_date.utc.strftime('%Y-%m-%dT%H:%M:%S') }
+
+
+    # Salary_nested_default_value_Mapping
+    attribute(:Salary)                                { default_salary }
+
+    def default_salary
+      {
+        Minimum: nil,
+        Maximum: nil,
+      }
+    end
   end
 end

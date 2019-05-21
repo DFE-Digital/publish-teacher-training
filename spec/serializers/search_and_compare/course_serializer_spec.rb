@@ -86,6 +86,13 @@ describe SearchAndCompare::CourseSerializer do
         it { should include(StartDate: course.start_date) }
       end
 
+      describe 'Salary_nested_default_value_Mapping' do
+        subject { resource[:Salary] }
+
+        it { should include(Minimum: nil) }
+        it { should include(Maximum: nil) }
+      end
+
       # should work fine once hardcoded/db ones are flushed out
       xit { should eq expected_json }
     end
