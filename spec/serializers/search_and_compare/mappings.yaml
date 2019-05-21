@@ -41,6 +41,39 @@ Salary_nested_default_value_Mapping: &Salary
   Minimum:
   Maximum:
 
+Subject_default_value_Mapping: &Subject_default_value
+  Id: 0
+  SubjectArea:
+  FundingId:
+  Funding:
+  IsSubjectKnowledgeEnhancementAvailable: false
+  CourseSubjects:
+
+Subject_direct_Mapping: &Subject_direct
+  Name: 'subject_name'
+
+Subject_Mapping: &Subject
+  <<: &Subject_default_value
+  <<: &Subject_direct
+
+CourseSubject_default_value_Mapping: &CourseSubject_default_value
+  CourseId: 0
+  Course:
+  SubjectId: 0
+
+CourseSubject_complex_Mapping: &CourseSubject_complex
+  Subject:
+    <<: *Subject
+
+CourseSubject_Mapping: &CourseSubject
+  <<: &CourseSubject_default_value
+  <<: &CourseSubject_complex
+
+Subjects_related_Mapping: &Subjects_related
+  IsSen: is_send?
+  CourseSubjects:
+  - <<: *CourseSubject
+
 # Actual course
 Course_Full_Mapping:
   <<: *Provider_serializer
@@ -48,3 +81,4 @@ Course_Full_Mapping:
   <<: *Course_direct_simple
   Salary:
     <<: *Salary
+  <<: *Subjects_related

@@ -7,6 +7,17 @@ describe SearchAndCompare::CourseSerializer do
     subject { resource }
 
     context 'an existing course' do
+      let(:with_send_subject) { true }
+      let(:subject_names) { %w[Primary] }
+      let(:course_subjects) do
+        subjects = subject_names.map do |subject_name|
+          build(:subject, subject_name: subject_name)
+        end
+
+        subjects << build(:send_subject) if with_send_subject
+        { subjects: subjects }
+      end
+
       let(:course_factory_args) do
         {
           provider: provider,
@@ -14,6 +25,8 @@ describe SearchAndCompare::CourseSerializer do
           name: 'Primary (Special Educational Needs)',
           course_code: '2KXB',
           start_date: '2019-08-01T00:00:00',
+          subject_count: 0,
+          **course_subjects
         }
       end
 
@@ -22,14 +35,14 @@ describe SearchAndCompare::CourseSerializer do
       end
 
       let(:provider) do
-        create :provider,
-               provider_name: 'Gateway Alliance (Midlands)',
-               provider_code: '23E'
+        build :provider,
+              provider_name: 'Gateway Alliance (Midlands)',
+              provider_code: '23E'
       end
       let(:accrediting_provider) do
-        create :provider,
-               provider_name: 'The University of Warwick',
-               provider_code: 'W20'
+        build :provider,
+              provider_name: 'The University of Warwick',
+              provider_code: 'W20'
       end
 
       let(:expected_json) do
@@ -91,6 +104,38 @@ describe SearchAndCompare::CourseSerializer do
 
         it { should include(Minimum: nil) }
         it { should include(Maximum: nil) }
+      end
+
+      describe 'Subjects_related_Mapping' do
+        it { should include(IsSen: course.is_send?) }
+
+        describe 'CourseSubjects' do
+          subject { resource[:CourseSubjects] }
+          let(:expected_course_subjects) do
+            subject_names.map do |subject_name|
+              { # CourseSubject_default_value_mapping
+                CourseId: 0,
+                Course: nil,
+                SubjectId: 0,
+                # CourseSubject_complex
+                Subject:
+                  {
+                    # Subject_default_value_Mapping
+                    Id: 0,
+                    SubjectArea: nil,
+                    FundingId: nil,
+                    Funding: nil,
+                    IsSubjectKnowledgeEnhancementAvailable: false,
+                    CourseSubjects: nil,
+
+                    # Subject_direct_Mapping
+                    Name: subject_name,
+                  }
+                }
+            end
+          end
+          it { should match_array expected_course_subjects }
+        end
       end
 
       # should work fine once hardcoded/db ones are flushed out
