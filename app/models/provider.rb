@@ -98,4 +98,20 @@ class Provider < ApplicationRecord
   def can_add_more_sites?
     sites.size < Site::POSSIBLE_CODES.size
   end
+
+  def external_contact_info
+    enrichments.published.order(last_published_at: :desc).first
+      .attributes
+      .slice(
+        'address1',
+        'address2',
+        'address3',
+        'address4',
+        'postcode',
+        'region_code',
+        'telephone',
+        'email',
+        'website'
+      )
+  end
 end
