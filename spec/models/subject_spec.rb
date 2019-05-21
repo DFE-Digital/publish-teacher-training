@@ -11,4 +11,6 @@ require 'rails_helper'
 
 RSpec.describe Subject, type: :model do
   subject { create(:subject) }
+
+  it { should have_many(:courses).through(:course_subjects) }
 end
