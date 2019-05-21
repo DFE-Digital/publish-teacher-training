@@ -3,4 +3,6 @@ services:
   web:
     build:
       context: .
+      cache_from:
+        - ${dockerHubUsername}/manage-courses-backend-poc:latest
     image: ${dockerHubUsername}/manage-courses-backend-poc:latest
