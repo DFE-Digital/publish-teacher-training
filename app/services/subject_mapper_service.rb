@@ -91,20 +91,6 @@ class SubjectMapperService
     },
   }.freeze
 
-  # <summary>
-  # This maps a list of of UCAS subjects to our interpretation of subjects.
-  # UCAS subjects are a pretty loose tagging system where individual tags don't always
-  # represent the subjects you will be able to teach but also categories (such as "secundary", "foreign languages" etc)
-  # there is also duplication ("chinese" vs "mandarin") and ambiguity
-  # (does "science" = Balanced science, a category, or Primary with science?)
-  #
-  # This takes this list of tags and the course title and applies heuristics to determine
-  # which subjects you will be allowed to teach when you graduate, making the subjects more suitable for searching.
-  # </summary>
-  #
-  # <param name="course_title">The name of the course</param>
-  # <param name="ucas_subjects">The subject tags from UCAS</param>
-  # <returns>An enumerable of all the subjects the course should be findable by.</returns>
   def self.get_subject_list(course_title, ucas_subjects)
     ucas_subjects = ucas_subjects.map(&:strip).map(&:downcase)
     level = Subjects::CourseLevel.new(ucas_subjects).level
