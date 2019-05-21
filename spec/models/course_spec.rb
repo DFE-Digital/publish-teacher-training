@@ -416,8 +416,8 @@ RSpec.describe Course, type: :model do
     let(:first_site) { create(:site) }
     let(:second_site) { create(:site) }
     let(:provider) { create(:provider, sites: [first_site, second_site]) }
-    let(:first_site_status) { create(:site_status, :findable, site: first_site) }
-    subject { create(:course, provider: provider, site_statuses: [first_site_status]) }
+
+    subject { create(:course, provider: provider, sites: [first_site]) }
 
     its(:sites_not_associated_with_course) { should eq([second_site]) }
   end
