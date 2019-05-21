@@ -105,18 +105,6 @@ class SubjectMapperService
     },
   }.freeze
 
-  def self.subject_mappings(config:)
-    config.map do |ucas_input_subjects, dfe_subject|
-      Subjects::UCASSubjectToDFESubjectMapping.new(ucas_input_subjects, dfe_subject)
-    end
-  end
-
-  def self.map_ucas_subjects_to_dfe_subjects(ucas_subjects:, course_title:, mappings:)
-    mappings.
-      select { |mapping| mapping.applicable_to?(ucas_subjects, course_title) }.
-      collect(&:to_dfe_subject)
-  end
-
   def self.get_subject_level(ucas_subjects)
     ucas_subjects = ucas_subjects.map(&:strip).map(&:downcase)
     if (ucas_subjects & SUBJECT_LEVEL[:ucas_unexpected]).any?
@@ -151,19 +139,21 @@ class SubjectMapperService
 
     case subject_level
     when :primary
-      map_ucas_subjects_to_dfe_subjects(
-        mappings: subject_mappings(config: UCAS_TO_DFE_SUBJECT_MAPPINGS[:primary]),
-        ucas_subjects: ucas_subjects,
-        course_title: course_title.strip.downcase
-      )
+      Subjects::UCASSubjectToDFESubjectMappings.
+        new(config: UCAS_TO_DFE_SUBJECT_MAPPINGS[:primary]).
+        to_dfe_subjects(
+          ucas_subjects: ucas_subjects,
+          course_title: course_title.strip.downcase
+        )
     when :further_education
       ["Further education"]
     when :secondary
-      map_ucas_subjects_to_dfe_subjects(
-        mappings: subject_mappings(config: UCAS_TO_DFE_SUBJECT_MAPPINGS[:secondary]),
-        ucas_subjects: ucas_subjects,
-        course_title: course_title.strip.downcase
-      )
+      Subjects::UCASSubjectToDFESubjectMappings.
+        new(config: UCAS_TO_DFE_SUBJECT_MAPPINGS[:secondary]).
+        to_dfe_subjects(
+          ucas_subjects: ucas_subjects,
+          course_title: course_title.strip.downcase
+        )
     else
       raise subject_level
     end
