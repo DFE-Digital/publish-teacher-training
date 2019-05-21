@@ -14,10 +14,10 @@ run do |opts, args, _cmd|
             User.all
           end
 
+  headers = %i[id email sign_in_user_id first_name last_name last_login_date_utc]
   if opts[:'csv-output-filename']
     require 'csv'
-    headers = %w[id email sign_in_user_id first_name last_name last_login_date_utc]
-    results = CSV.open(opts[:'csv-output-filename'], "wb") do |csv|
+    CSV.open(opts[:'csv-output-filename'], "wb") do |csv|
       csv << headers
       users.pluck(*headers).each { |user| csv << user }
     end
@@ -25,12 +25,6 @@ run do |opts, args, _cmd|
     tp.set :capitalize_headers, false
 
     puts "\nUsers:"
-    puts Tabulo::Table.new(users,
-                           :id,
-                           :email,
-                           :sign_in_user_id,
-                           :first_name,
-                           :last_name,
-                           :last_login_date_utc).pack(max_table_width: nil)
+    puts Tabulo::Table.new(users, *headers).pack(max_table_width: nil)
   end
 end
