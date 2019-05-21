@@ -15,6 +15,7 @@ describe 'Providers API v2', type: :request do
     end
 
     let!(:provider) { create(:provider, course_count: 0, site_count: 0, organisations: [organisation]) }
+    let(:enrichment) { provider.enrichments.first }
 
     subject { response }
 
@@ -45,7 +46,9 @@ describe 'Providers API v2', type: :request do
               "provider_code" => provider.provider_code,
               "provider_name" => provider.provider_name,
               "accredited_body?" => false,
-              "can_add_more_sites?" => true
+              "can_add_more_sites?" => true,
+              "train_with_us" => enrichment.train_with_us,
+              "train_with_disability" => enrichment.train_with_disability,
             },
             "relationships" => {
               "sites" => {
@@ -82,7 +85,9 @@ describe 'Providers API v2', type: :request do
               "provider_code" => provider.provider_code,
               "provider_name" => provider.provider_name,
               "accredited_body?" => false,
-              "can_add_more_sites?" => true
+              "can_add_more_sites?" => true,
+              "train_with_us" => enrichment.train_with_us,
+              "train_with_disability" => enrichment.train_with_disability,
             },
             "relationships" => {
               "sites" => {
@@ -153,6 +158,7 @@ describe 'Providers API v2', type: :request do
     end
 
     let!(:provider) { create(:provider, course_count: 0, site_count: 1, organisations: [organisation]) }
+    let(:enrichment) { provider.enrichments.first }
 
     subject { response }
 
@@ -165,7 +171,9 @@ describe 'Providers API v2', type: :request do
             "provider_code" => provider.provider_code,
             "provider_name" => provider.provider_name,
             "accredited_body?" => false,
-            "can_add_more_sites?" => true
+            "can_add_more_sites?" => true,
+            "train_with_us" => enrichment.train_with_us,
+            "train_with_disability" => enrichment.train_with_disability,
           },
           "relationships" => {
             "sites" => {
@@ -204,7 +212,9 @@ describe 'Providers API v2', type: :request do
                 "provider_code" => provider.provider_code,
                 "provider_name" => provider.provider_name,
                 "accredited_body?" => false,
-                "can_add_more_sites?" => true
+                "can_add_more_sites?" => true,
+                "train_with_us" => enrichment.train_with_us,
+                "train_with_disability" => enrichment.train_with_disability,
               },
               "relationships" => {
                 "sites" => {
