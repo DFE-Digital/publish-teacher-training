@@ -117,8 +117,9 @@ describe Provider, type: :model do
             'address4'    => latest_published_enrichment.address4,
             'postcode'    => latest_published_enrichment.postcode,
             'region_code' => latest_published_enrichment.region_code,
+            'telephone'   => latest_published_enrichment.telephone,
             'email'       => latest_published_enrichment.email,
-            'telephone'   => latest_published_enrichment.telephone
+            'website'     => latest_published_enrichment.website
           )
         )
       end

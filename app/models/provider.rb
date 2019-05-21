@@ -100,7 +100,7 @@ class Provider < ApplicationRecord
   end
 
   def external_contact_info
-    enrichments.published.order(created_at: :desc).first
+    enrichments.published.order(last_published_at: :desc).first
       .attributes
       .slice(
         'address1',
@@ -111,6 +111,7 @@ class Provider < ApplicationRecord
         'region_code',
         'telephone',
         'email',
+        'website'
       )
   end
 end

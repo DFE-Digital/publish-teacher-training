@@ -20,6 +20,7 @@ FactoryBot.define do
       age { nil }
     end
 
+    status { :draft }
     sequence(:provider_code) { |n| "A#{n}" }
     email { Faker::Internet.email }
     website { Faker::Internet.url }
@@ -38,6 +39,11 @@ FactoryBot.define do
         enrichment.created_at = evaluator.age
         enrichment.updated_at = evaluator.age
       end
+    end
+
+    trait :published do
+      status { :published }
+      last_published_at { 5.days.ago }
     end
   end
 end
