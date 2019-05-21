@@ -1,25 +1,6 @@
 # This is a port of https://github.com/DFE-Digital/manage-courses-api/blob/master/src/ManageCourses.Api/Mapping/SubjectMapper.cs
 
 class SubjectMapperService
-  SUBJECT_LEVEL = {
-    ucas_further_education: ["further education",
-                             "higher education",
-                             "post-compulsory"],
-    ucas_primary: ["early years",
-                   "upper primary",
-                   "primary",
-                   "lower primary"],
-    ucas_unexpected: ["construction and the built environment",
-                      # "history of art",
-                      "home economics",
-                      "hospitality and catering",
-                      "personal and social education",
-                      # "philosophy",
-                      "sport and leisure",
-                      "environmental science",
-                      "law"]
-  }.freeze
-
   UCAS_TO_DFE_SUBJECT_MAPPINGS = {
     primary: {
       %w[primary] => "Primary",
@@ -110,19 +91,6 @@ class SubjectMapperService
     },
   }.freeze
 
-  def self.get_subject_level(ucas_subjects)
-    ucas_subjects = ucas_subjects.map(&:strip).map(&:downcase)
-    if (ucas_subjects & SUBJECT_LEVEL[:ucas_unexpected]).any?
-      "found unsupported subject name(s): #{(ucas_subjects & SUBJECT_LEVEL[:ucas_unexpected]) * ', '}"
-    elsif (ucas_subjects & SUBJECT_LEVEL[:ucas_primary]).any?
-      :primary
-    elsif (ucas_subjects & SUBJECT_LEVEL[:ucas_further_education]).any?
-      :further_education
-    else
-      :secondary
-    end
-  end
-
   # <summary>
   # This maps a list of of UCAS subjects to our interpretation of subjects.
   # UCAS subjects are a pretty loose tagging system where individual tags don't always
@@ -139,9 +107,10 @@ class SubjectMapperService
   # <returns>An enumerable of all the subjects the course should be findable by.</returns>
   def self.get_subject_list(course_title, ucas_subjects)
     ucas_subjects = ucas_subjects.map(&:strip).map(&:downcase)
+    level = Subjects::CourseLevel.new(ucas_subjects).level
 
     Subjects::UCASSubjectToDFESubjectMappings.
-      new(config: UCAS_TO_DFE_SUBJECT_MAPPINGS[get_subject_level(ucas_subjects)]).
+      new(config: UCAS_TO_DFE_SUBJECT_MAPPINGS[level]).
       to_dfe_subjects(
         ucas_subjects: ucas_subjects,
         course_title: course_title.strip.downcase

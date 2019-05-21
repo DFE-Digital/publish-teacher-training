@@ -200,7 +200,7 @@ class Course < ApplicationRecord
   end
 
   def level
-    SubjectMapperService.get_subject_level(subjects.map(&:subject_name))
+    Subjects::CourseLevel.new(subjects.map(&:subject_name)).level
   end
 
   def is_send?

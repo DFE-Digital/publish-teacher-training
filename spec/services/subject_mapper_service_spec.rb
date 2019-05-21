@@ -5,7 +5,7 @@ describe SubjectMapperService do
     match do |input|
       @input = input
       @actual_dfe_subjects = mapped_subjects(input.fetch(:title, "Any title"), input[:ucas])
-      @actual_level = described_class.get_subject_level(input[:ucas])
+      @actual_level = Subjects::CourseLevel.new(input[:ucas]).level
       contain_exactly(*expected).matches?(@actual_dfe_subjects) &&
         (@actual_level == @expected_level)
     end
