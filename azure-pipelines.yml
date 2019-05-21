@@ -34,6 +34,7 @@ steps:
   env:
     DOCKER_OVERRIDE: $(dockerOverride)
     dockerHubUsername: $(dockerHubUsername)
+    dockerHubImageName: $(imageName)
 
 - script: |
     $DOCKER_OVERRIDE exec -T web /bin/sh -c 'bundle exec rake spec SPEC_OPTS="--format RspecJunitFormatter --out ./rspec-results.xml"'
@@ -41,6 +42,7 @@ steps:
   env:
     DOCKER_OVERRIDE: $(dockerOverride)
     dockerHubUsername: $(dockerHubUsername)
+    dockerHubImageName: $(imageName)
 
 - script: |
     $DOCKER_OVERRIDE exec -T web /bin/sh -c "bundle exec rubocop app config db lib spec --format clang"
@@ -48,6 +50,7 @@ steps:
   env:
     DOCKER_OVERRIDE: $(dockerOverride)
     dockerHubUsername: $(dockerHubUsername)
+    dockerHubImageName: $(imageName)
 
 - task: Docker@1
   displayName: Tag image with current build number $(Build.BuildNumber)
