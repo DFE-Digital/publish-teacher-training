@@ -103,6 +103,11 @@ class SubjectMapperService
          course_title_matches: ->(course_title) { course_title =~ /(?<!social |computer )science/ }
        } => "Balanced science",
     },
+    further_education: {
+      ["further education",
+       "higher education",
+       "post-compulsory"] => "Further education",
+    },
   }.freeze
 
   def self.get_subject_level(ucas_subjects)
@@ -146,7 +151,12 @@ class SubjectMapperService
           course_title: course_title.strip.downcase
         )
     when :further_education
-      ["Further education"]
+      Subjects::UCASSubjectToDFESubjectMappings.
+        new(config: UCAS_TO_DFE_SUBJECT_MAPPINGS[:further_education]).
+        to_dfe_subjects(
+          ucas_subjects: ucas_subjects,
+          course_title: course_title.strip.downcase
+        )
     when :secondary
       Subjects::UCASSubjectToDFESubjectMappings.
         new(config: UCAS_TO_DFE_SUBJECT_MAPPINGS[:secondary]).
