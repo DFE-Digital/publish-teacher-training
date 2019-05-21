@@ -37,8 +37,14 @@ Provider_serializer_Mapping: &Provider_serializer
   AccreditingProvider: # Optional accrediting provider (provider type)
     <<: *Provider
 
+Salary_nested_default_value_Mapping: &Salary
+  Minimum:
+  Maximum:
+
 # Actual course
 Course_Full_Mapping:
   <<: *Provider_serializer
   <<: *Course_default_value
   <<: *Course_direct_simple
+  Salary:
+    <<: *Salary

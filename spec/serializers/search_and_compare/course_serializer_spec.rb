@@ -11,9 +11,9 @@ describe SearchAndCompare::CourseSerializer do
         {
           provider: provider,
           accrediting_provider: accrediting_provider,
-          name: expected_json[:Name],
-          course_code: expected_json[:ProgrammeCode],
-          start_date: expected_json[:StartDate],
+          name: 'Primary (Special Educational Needs)',
+          course_code: '2KXB',
+          start_date: '2019-08-01T00:00:00',
         }
       end
 
@@ -23,13 +23,13 @@ describe SearchAndCompare::CourseSerializer do
 
       let(:provider) do
         create :provider,
-               provider_code: expected_json[:Provider][:ProviderCode],
-               provider_name: expected_json[:Provider][:Name]
+               provider_name: 'Gateway Alliance (Midlands)',
+               provider_code: '23E'
       end
       let(:accrediting_provider) do
         create :provider,
-               provider_code: expected_json[:AccreditingProvider][:ProviderCode],
-               provider_name: expected_json[:AccreditingProvider][:Name]
+               provider_name: 'The University of Warwick',
+               provider_code: 'W20'
       end
 
       let(:expected_json) do
@@ -84,6 +84,13 @@ describe SearchAndCompare::CourseSerializer do
         it { should include(Name: course.name) }
         it { should include(ProgrammeCode: course.course_code) }
         it { should include(StartDate: course.start_date) }
+      end
+
+      describe 'Salary_nested_default_value_Mapping' do
+        subject { resource[:Salary] }
+
+        it { should include(Minimum: nil) }
+        it { should include(Maximum: nil) }
       end
 
       # should work fine once hardcoded/db ones are flushed out
