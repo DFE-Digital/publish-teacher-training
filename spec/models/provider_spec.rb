@@ -96,6 +96,35 @@ describe Provider, type: :model do
     end
   end
 
+  describe '#external_contact_info' do
+    context 'provider has draft and multiple published enrichments' do
+      it 'returns contact info from the provider enrichment' do
+        published_enrichment = build(:provider_enrichment, :published,
+                                     last_published_at: 5.days.ago)
+        latest_published_enrichment = build(:provider_enrichment, :published,
+                                            last_published_at: 1.day.ago)
+        enrichment = build(:provider_enrichment)
+
+        provider = create(:provider, enrichments: [published_enrichment,
+                                                   latest_published_enrichment,
+                                                   enrichment])
+
+        expect(provider.external_contact_info).to(
+          eq(
+            'address1'    => latest_published_enrichment.address1,
+            'address2'    => latest_published_enrichment.address2,
+            'address3'    => latest_published_enrichment.address3,
+            'address4'    => latest_published_enrichment.address4,
+            'postcode'    => latest_published_enrichment.postcode,
+            'region_code' => latest_published_enrichment.region_code,
+            'email'       => latest_published_enrichment.email,
+            'telephone'   => latest_published_enrichment.telephone
+          )
+        )
+      end
+    end
+  end
+
   describe '.in_order' do
     let!(:second_alphabetical_provider) { create(:provider, provider_name: "Zork") }
     let!(:first_alphabetical_provider) { create(:provider, provider_name: "Acme") }
