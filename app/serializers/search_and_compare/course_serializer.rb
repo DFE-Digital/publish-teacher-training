@@ -33,5 +33,35 @@ module SearchAndCompare
         Maximum: nil,
       }
     end
+
+    # Subjects_related_Mapping
+    attribute(:IsSen)                                 { object.is_send? }
+    attribute(:CourseSubjects)                        { get_subjects }
+
+    def get_subjects
+      # CourseSubject_Mapping
+      object.dfe_subjects.map do |subject_name|
+        {
+          # CourseSubject_default_value_mapping
+          CourseId: 0,
+          Course: nil,
+          SubjectId: 0,
+          # CourseSubject_complex
+          Subject:
+            {
+              # Subject_default_value_Mapping
+              Id: 0,
+              SubjectArea: nil,
+              FundingId: nil,
+              Funding: nil,
+              IsSubjectKnowledgeEnhancementAvailable: false,
+              CourseSubjects: nil,
+
+              # Subject_direct_Mapping
+              Name: subject_name,
+            }
+        }
+      end
+    end
   end
 end
