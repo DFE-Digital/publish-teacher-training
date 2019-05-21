@@ -101,7 +101,7 @@ class Provider < ApplicationRecord
 
   def external_contact_info
     (enrichments.published.latest_published_at.first || self)
-      &.attributes
+      .attributes
       .slice(
         'address1',
         'address2',
