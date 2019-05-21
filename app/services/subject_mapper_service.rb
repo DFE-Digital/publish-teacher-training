@@ -140,32 +140,11 @@ class SubjectMapperService
   def self.get_subject_list(course_title, ucas_subjects)
     ucas_subjects = ucas_subjects.map(&:strip).map(&:downcase)
 
-    subject_level = get_subject_level(ucas_subjects)
-
-    case subject_level
-    when :primary
-      Subjects::UCASSubjectToDFESubjectMappings.
-        new(config: UCAS_TO_DFE_SUBJECT_MAPPINGS[:primary]).
-        to_dfe_subjects(
-          ucas_subjects: ucas_subjects,
-          course_title: course_title.strip.downcase
-        )
-    when :further_education
-      Subjects::UCASSubjectToDFESubjectMappings.
-        new(config: UCAS_TO_DFE_SUBJECT_MAPPINGS[:further_education]).
-        to_dfe_subjects(
-          ucas_subjects: ucas_subjects,
-          course_title: course_title.strip.downcase
-        )
-    when :secondary
-      Subjects::UCASSubjectToDFESubjectMappings.
-        new(config: UCAS_TO_DFE_SUBJECT_MAPPINGS[:secondary]).
-        to_dfe_subjects(
-          ucas_subjects: ucas_subjects,
-          course_title: course_title.strip.downcase
-        )
-    else
-      raise subject_level
-    end
+    Subjects::UCASSubjectToDFESubjectMappings.
+      new(config: UCAS_TO_DFE_SUBJECT_MAPPINGS[get_subject_level(ucas_subjects)]).
+      to_dfe_subjects(
+        ucas_subjects: ucas_subjects,
+        course_title: course_title.strip.downcase
+      )
   end
 end
