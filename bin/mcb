@@ -21,6 +21,7 @@ require 'mcb'
 require 'mcb/azure'
 require 'mcb/config'
 require 'mcb/course_show'
+require 'mcb/grant_access_wizard'
 
 tp.set :capitalize_headers, false
 
