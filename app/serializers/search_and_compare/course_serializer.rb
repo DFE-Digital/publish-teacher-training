@@ -65,6 +65,15 @@ module SearchAndCompare
     attribute(:FullTime)                              { object.part_time? ? 3 : 1 }
     attribute(:PartTime)                              { object.full_time? ? 3 : 1 }
 
+    # Campuses_related_Mapping
+    attribute(:Campuses)                              { get_campuses }
+    # using server time not utc, so it's local time?
+    attribute(:ApplicationsAcceptedFrom)              { object.applications_open_from.to_date.strftime('%Y-%m-%dT%H:%M:%S') }
+
+    # Subjects_related_Mapping
+    attribute(:IsSen)                                 { object.is_send? }
+    attribute(:CourseSubjects)                        { course_subjects }
+
   private
 
     def default_salary_value
@@ -133,6 +142,48 @@ module SearchAndCompare
       }
 
       include_pgces[object.qualification.to_sym]
+    end
+
+    def get_campus_default_value
+      {
+        Id: 0,
+        LocationId: nil,
+        Course: nil,
+      }
+    end
+
+    def get_location_default_value
+      {
+        Id: 0,
+        FormattedAddress: nil,
+        GeoAddress: nil,
+        Latitude: nil,
+        Longitude: nil,
+        LastGeocodedUtc: '0001-01-01T00:00:00'
+      }
+    end
+
+    def get_address(address1:, address2:, address3:, address4:, postcode:)
+      [address1, address2, address3, address4, postcode].reject(&:blank?).join('/n')
+    end
+
+    def get_campuses
+      object.site_statuses.findable.map do |site_status|
+        campus_default_value = get_campus_default_value
+
+        raw_address = { address1: site_status.site.address1, address2: site_status.site.address2, address3: site_status.site.address3, address4: site_status.site.address4, postcode: site_status.site.postcode }
+
+        address = get_address(raw_address)
+        location_default_value = get_location_default_value
+
+        {
+          **campus_default_value,
+          VacStatus: site_status.vac_status_before_type_cast,
+          Name: site_status.site.location_name,
+          CampusCode: site_status.site.code,
+          Location: { **location_default_value, Address: address }
+        }
+      end
     end
   end
 end
