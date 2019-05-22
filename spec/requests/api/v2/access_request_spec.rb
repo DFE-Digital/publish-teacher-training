@@ -152,6 +152,88 @@ describe 'Access Request API V2', type: :request do
     end
   end
 
+  describe 'GET #show' do
+    let(:first_access_request) { create(:access_request) }
+    let(:access_requests_show_route) do
+      get "/api/v2/access_requests/#{first_access_request.id}",
+          headers: { 'HTTP_AUTHORIZATION' => credentials }
+    end
+
+    context 'when unauthenticated' do
+      before do
+        access_requests_show_route
+      end
+
+      let(:payload) { { email: 'foo@bar' } }
+
+      it { should have_http_status(:unauthorized) }
+    end
+
+    context 'when unauthorized' do
+      let(:unauthorised_user) { create(:user) }
+      let(:payload) { { email: unauthorised_user.email } }
+
+      it "should raise an error" do
+        expect { access_requests_show_route }.to raise_error Pundit::NotAuthorizedError
+      end
+    end
+
+    context 'when authorised' do
+      before do
+        Timecop.freeze
+        access_requests_show_route
+      end
+
+      after do
+        Timecop.return
+      end
+
+      it 'JSON displays the correct attributes' do
+        json_response = JSON.parse response.body
+
+        expect(json_response).to eq(
+          "data" => {
+            "id" => first_access_request.id.to_s,
+            "type" => "access_request",
+            "attributes" => {
+              "email_address" => first_access_request.recipient.email,
+              "first_name" => first_access_request.recipient.first_name,
+              "last_name" => first_access_request.recipient.last_name,
+              "requester_email" => first_access_request.requester.email,
+              "requester_id" => first_access_request.requester.id,
+              "organisation" => first_access_request.organisation,
+              "reason" => first_access_request.reason,
+              "request_date_utc" => first_access_request.request_date_utc.iso8601,
+              "status" => first_access_request.status
+            },
+            "relationships" => {
+              "requester" => {
+                "data" => {
+                  "type" => "users",
+                  "id" => first_access_request.requester.id.to_s
+                }
+              }
+            }
+          },
+          "included" => [{
+            "id" => first_access_request.requester.id.to_s,
+            "type" => "users",
+            "attributes" => {
+              "first_name" => first_access_request.requester.first_name,
+              "last_name" => first_access_request.requester.last_name,
+              "email" => first_access_request.requester.email,
+              "accept_terms_date_utc" => first_access_request.requester.accept_terms_date_utc.utc.strftime('%FT%T.%3NZ'),
+              "state" => first_access_request.requester.state
+            }
+          }],
+          "jsonapi" => {
+            "version" => "1.0"
+          }
+         )
+      end
+    end
+  end
+
   describe 'POST #approve' do
     let(:approve_route_request) do
       post "/api/v2/access_requests/#{access_request.id}/approve",
