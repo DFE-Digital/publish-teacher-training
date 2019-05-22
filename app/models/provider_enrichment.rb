@@ -23,6 +23,7 @@ class ProviderEnrichment < ApplicationRecord
   belongs_to :provider, foreign_key: :provider_code, primary_key: :provider_code
 
   scope :latest_created_at, -> { order(created_at: :desc) }
+  scope :latest_published_at, -> { order(last_published_at: :desc) }
 
   jsonb_accessor :json_data,
                  email: [:string, store_key: 'Email'],

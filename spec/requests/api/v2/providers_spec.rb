@@ -14,8 +14,14 @@ describe 'Providers API v2', type: :request do
       ActionController::HttpAuthentication::Token.encode_credentials(token)
     end
 
-    let!(:provider) { create(:provider, course_count: 0, site_count: 0, organisations: [organisation]) }
-    let(:enrichment) { provider.enrichments.first }
+    let!(:provider) {
+      create(:provider,
+             course_count: 0,
+             site_count: 0,
+             organisations: [organisation],
+             enrichments: [enrichment])
+    }
+    let(:enrichment) { build(:provider_enrichment, :published) }
 
     subject { response }
 
@@ -49,6 +55,15 @@ describe 'Providers API v2', type: :request do
               "can_add_more_sites?" => true,
               "train_with_us" => enrichment.train_with_us,
               "train_with_disability" => enrichment.train_with_disability,
+              "address1" => enrichment.address1,
+              "address2" => enrichment.address2,
+              "address3" => enrichment.address3,
+              "address4" => enrichment.address4,
+              "postcode" => enrichment.postcode,
+              "region_code" => enrichment.region_code,
+              "telephone" => enrichment.telephone,
+              "email" => enrichment.email,
+              "website" => enrichment.website
             },
             "relationships" => {
               "sites" => {
@@ -88,6 +103,15 @@ describe 'Providers API v2', type: :request do
               "can_add_more_sites?" => true,
               "train_with_us" => enrichment.train_with_us,
               "train_with_disability" => enrichment.train_with_disability,
+              "address1" => enrichment.address1,
+              "address2" => enrichment.address2,
+              "address3" => enrichment.address3,
+              "address4" => enrichment.address4,
+              "postcode" => enrichment.postcode,
+              "region_code" => enrichment.region_code,
+              "telephone" => enrichment.telephone,
+              "email" => enrichment.email,
+              "website" => enrichment.website
             },
             "relationships" => {
               "sites" => {
@@ -174,6 +198,15 @@ describe 'Providers API v2', type: :request do
             "can_add_more_sites?" => true,
             "train_with_us" => enrichment.train_with_us,
             "train_with_disability" => enrichment.train_with_disability,
+            "address1" => provider.address1,
+            "address2" => provider.address2,
+            "address3" => provider.address3,
+            "address4" => provider.address4,
+            "postcode" => provider.postcode,
+            "region_code" => provider.region_code,
+            "telephone" => provider.telephone,
+            "email" => provider.email,
+            "website" => provider.url
           },
           "relationships" => {
             "sites" => {

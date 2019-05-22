@@ -100,7 +100,7 @@ class Provider < ApplicationRecord
   end
 
   def external_contact_info
-    enrichments.published.order(last_published_at: :desc).first
+    (enrichments.published.latest_published_at.first || self)
       .attributes
       .slice(
         'address1',
