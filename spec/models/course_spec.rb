@@ -372,19 +372,19 @@ RSpec.describe Course, type: :model do
     context 'with primary subjects' do
       subject { create(:course, subject_count: 0, subjects: [create(:subject, subject_name: "primary")]) }
       its(:level) { should eq(:primary) }
-      its(:dfe_subjects) { should eq(%w[Primary]) }
+      its(:dfe_subjects) { should eq([DFESubject.new("Primary")]) }
     end
 
     context 'with secondary subjects' do
       subject { create(:course, subject_count: 0, subjects: [create(:subject, subject_name: "physical education")]) }
       its(:level) { should eq(:secondary) }
-      its(:dfe_subjects) { should eq(["Physical education"]) }
+      its(:dfe_subjects) { should eq([DFESubject.new("Physical education")]) }
     end
 
     context 'with further education subjects' do
       subject { create(:course, subject_count: 0, subjects: [create(:further_education_subject)]) }
       its(:level) { should eq(:further_education) }
-      its(:dfe_subjects) { should eq(["Further education"]) }
+      its(:dfe_subjects) { should eq([DFESubject.new("Further education")]) }
     end
 
     describe "#is_send?" do

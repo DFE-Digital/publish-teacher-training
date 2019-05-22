@@ -25,7 +25,7 @@ module API
       end
 
       attribute :subjects do
-        @object.dfe_subjects
+        @object.dfe_subjects.map(&:to_s)
       end
 
       belongs_to :provider

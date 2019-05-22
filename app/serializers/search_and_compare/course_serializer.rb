@@ -40,7 +40,7 @@ module SearchAndCompare
 
     def get_subjects
       # CourseSubject_Mapping
-      object.dfe_subjects.map do |subject_name|
+      object.dfe_subjects.map do |subject|
         {
           # CourseSubject_default_value_mapping
           CourseId: 0,
@@ -58,7 +58,7 @@ module SearchAndCompare
               CourseSubjects: nil,
 
               # Subject_direct_Mapping
-              Name: subject_name,
+              Name: subject.to_s,
             }
         }
       end

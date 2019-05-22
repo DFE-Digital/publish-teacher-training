@@ -13,7 +13,7 @@ module Subjects
     subject { described_class.new(config: config) }
 
     it "applies individual mappings to derive the result" do
-      expect(subject.to_dfe_subjects(ucas_subjects: ["UCAS subject A1"], course_title: :anything)).
+      expect(subject.to_dfe_subjects(ucas_subjects: ["UCAS subject A1"], course_title: :anything).map(&:to_s)).
         to eq(["DfE subject A"])
     end
 
@@ -22,7 +22,7 @@ module Subjects
         subject.to_dfe_subjects(
           ucas_subjects: ["UCAS subject A1", "UCAS subject B", "UCAS subject W"],
           course_title: "XY with V"
-        )
+        ).map(&:to_s)
       ).to match_array(["DfE subject A", "DfE subject B", "DfE subject XY"])
     end
 

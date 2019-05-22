@@ -7,7 +7,7 @@ module Subjects
       it { should be_applicable_to(["maths (abridged)", "something else"], :anything) }
       it { should_not be_applicable_to(%w[english], :anything) }
 
-      its(:to_dfe_subject) { should eq("Mathematics") }
+      its(:to_dfe_subject) { should eq(DFESubject.new("Mathematics")) }
     end
 
     context "when passed a lambda that matches on the course title" do
@@ -25,7 +25,7 @@ module Subjects
       it { should_not be_applicable_to(["something else"], "english language") }
       it { should_not be_applicable_to(%w[english], "some other course title") }
 
-      its(:to_dfe_subject) { should eq("English") }
+      its(:to_dfe_subject) { should eq(DFESubject.new("English")) }
     end
 
     context "when passed a lambda that matches on the UCAS subjects list" do
@@ -42,7 +42,7 @@ module Subjects
       it { should_not be_applicable_to(%w[a], :anything) }
       it { should_not be_applicable_to(%[a b c], :anything) }
 
-      its(:to_dfe_subject) { should eq("English") }
+      its(:to_dfe_subject) { should eq(DFESubject.new("English")) }
     end
   end
 end
