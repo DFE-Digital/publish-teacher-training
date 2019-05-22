@@ -1,5 +1,5 @@
 module Subjects
-  class UCASSubjectToDFESubjectMapping
+  class UCASToDFESubjectMapping
     def initialize(ucas_input_subjects_or_options_hash, resulting_dfe_subject)
       if ucas_input_subjects_or_options_hash.is_a?(Array)
         @included_ucas_subjects = ucas_input_subjects_or_options_hash

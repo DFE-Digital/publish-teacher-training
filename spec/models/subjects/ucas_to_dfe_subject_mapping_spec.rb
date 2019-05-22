@@ -1,7 +1,7 @@
 module Subjects
-  describe UCASSubjectToDFESubjectMapping do
+  describe UCASToDFESubjectMapping do
     context "when passed a static array of UCAS subjects" do
-      subject { UCASSubjectToDFESubjectMapping.new(["maths", "maths (abridged)"], "Mathematics") }
+      subject { UCASToDFESubjectMapping.new(["maths", "maths (abridged)"], "Mathematics") }
 
       it { should be_applicable_to(%w[maths], :anything) }
       it { should be_applicable_to(["maths (abridged)", "something else"], :anything) }
@@ -12,7 +12,7 @@ module Subjects
 
     context "when passed a lambda that matches on the course title" do
       subject {
-        UCASSubjectToDFESubjectMapping.new(
+        UCASToDFESubjectMapping.new(
           {
             ucas_subjects: ["english", "english literature"],
             course_title_matches: ->(course_title) { course_title =~ /english/ }
@@ -30,7 +30,7 @@ module Subjects
 
     context "when passed a lambda that matches on the UCAS subjects list" do
       subject {
-        UCASSubjectToDFESubjectMapping.new(
+        UCASToDFESubjectMapping.new(
           {
             ucas_subjects_match: ->(ucas_subjects) { ucas_subjects.size == 2 },
           },

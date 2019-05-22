@@ -95,7 +95,7 @@ class SubjectMapperService
     ucas_subjects = ucas_subjects.map(&:strip).map(&:downcase)
     level = Subjects::CourseLevel.new(ucas_subjects).level
 
-    Subjects::UCASSubjectToDFESubjectMappings.
+    Subjects::UCASToDFESubjectMappingCollection.
       new(config: UCAS_TO_DFE_SUBJECT_MAPPINGS[level]).
       to_dfe_subjects(
         ucas_subjects: ucas_subjects,

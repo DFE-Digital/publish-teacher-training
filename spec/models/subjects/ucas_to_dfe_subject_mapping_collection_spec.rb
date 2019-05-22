@@ -1,5 +1,5 @@
 module Subjects
-  describe UCASSubjectToDFESubjectMappings do
+  describe UCASToDFESubjectMappingCollection do
     let(:config) {
       {
         ["UCAS subject A1", "UCAS subject A2"] => "DfE subject A",

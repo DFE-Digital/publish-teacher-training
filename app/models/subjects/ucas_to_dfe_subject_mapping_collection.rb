@@ -1,5 +1,5 @@
 module Subjects
-  class UCASSubjectToDFESubjectMappings
+  class UCASToDFESubjectMappingCollection
     def initialize(config:)
       @mappings = init_subject_mappings(config)
     end
@@ -14,7 +14,7 @@ module Subjects
 
     def init_subject_mappings(config)
       config.map do |ucas_input_subjects, dfe_subject|
-        UCASSubjectToDFESubjectMapping.new(ucas_input_subjects, dfe_subject)
+        UCASToDFESubjectMapping.new(ucas_input_subjects, dfe_subject)
       end
     end
   end
