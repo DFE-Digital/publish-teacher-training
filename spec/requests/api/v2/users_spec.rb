@@ -73,13 +73,15 @@ describe '/api/v2/users', type: :request do
     context 'when authenticated and authorised' do
       let(:jsonapi_renderer) { JSONAPI::Serializable::Renderer.new }
       let(:params) do
+        # simulate the JSONAPI params we would send in, but be sure to remove
+        # 'state' which is automatically included by the serialiser
         {
           _jsonapi: jsonapi_renderer.render(
             user,
             class: {
               User: API::V2::SerializableUser
             }
-          )
+          ).tap { |json| json[:data][:attributes].delete :state }
         }
       end
       let(:user_params)           { params.dig :_jsonapi, :data, :attributes }

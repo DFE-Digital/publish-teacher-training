@@ -42,15 +42,18 @@ module API
     private
 
       def site_params
-        params.require(:site).permit(
-          :location_name,
-          :address1,
-          :address2,
-          :address3,
-          :address4,
-          :postcode,
-          :region_code
-        )
+        params
+          .require(:site)
+          .except(:id, :type)
+          .permit(
+            :location_name,
+            :address1,
+            :address2,
+            :address3,
+            :address4,
+            :postcode,
+            :region_code
+          )
       end
 
       def build_provider

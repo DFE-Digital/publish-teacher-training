@@ -95,17 +95,22 @@ describe '/api/v2/sessions', type: :request do
           expect(user.last_name).to eq "updated last_name"
         end
       end
+    end
 
-      context "unpermitted fields" do
-        let(:attributes) do
-          {
-            "email" => "updated first_name",
-          }
-        end
+    context 'unpermitted parameters' do
+      let(:type) { "sessions" }
+      let(:attributes) do
+        {
+          "email" => "updated first_name",
+        }
+      end
 
-        it 'returns the user record with old email' do
-          expect(returned_json_response['data']).to have_attribute(:email).with_value(user.email)
-        end
+      it 'returns the user record with old email' do
+        expect {
+          post '/api/v2/sessions',
+               headers: { 'HTTP_AUTHORIZATION' => credentials },
+               params: params
+        }.to raise_error(ActionController::UnpermittedParameters)
       end
     end
 

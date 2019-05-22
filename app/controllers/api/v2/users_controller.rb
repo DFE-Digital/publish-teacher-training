@@ -28,17 +28,20 @@ module API
       end
 
       def user_params
-        params.require(:user).permit(
-          :email,
-          :first_name,
-          :last_name,
-          :first_login_date_utc,
-          :last_login_date_utc,
-          :sign_in_user_id,
-          :welcome_email_date_utc,
-          :invite_date_utc,
-          :accept_terms_date_utc,
-        )
+        params
+          .require(:user)
+          .except(:id, :type)
+          .permit(
+            :email,
+            :first_name,
+            :last_name,
+            :first_login_date_utc,
+            :last_login_date_utc,
+            :sign_in_user_id,
+            :welcome_email_date_utc,
+            :invite_date_utc,
+            :accept_terms_date_utc,
+          )
       end
     end
   end

@@ -144,13 +144,15 @@ describe 'Sites API v2', type: :request do
 
     let(:jsonapi_renderer) { JSONAPI::Serializable::Renderer.new }
     let(:params) do
+      # simulate the JSONAPI params we would send in, but be sure to remove
+      # 'code' which is automatically included by the serialiser
       {
         _jsonapi: jsonapi_renderer.render(
           site1,
           class: {
             Site: API::V2::SerializableSite
           }
-        )
+        ).tap { |json| json[:data][:attributes].delete :code }
       }
     end
     let(:site_params) { params.dig :_jsonapi, :data, :attributes }
@@ -196,7 +198,6 @@ describe 'Sites API v2', type: :request do
 
       before do
         site_params.merge!(
-          code: code,
           location_name: location_name,
           address1: address1,
           address2: address2,
@@ -370,13 +371,15 @@ describe 'Sites API v2', type: :request do
 
     let(:jsonapi_renderer) { JSONAPI::Serializable::Renderer.new }
     let(:params) do
+      # simulate the JSONAPI params we would send in, but be sure to remove
+      # 'code' which is automatically included by the serialiser
       {
         _jsonapi: jsonapi_renderer.render(
           site1,
           class: {
             Site: API::V2::SerializableSite
           }
-        )
+        ).tap { |json| json[:data][:attributes].delete :code }
       }
     end
     let(:site_params) { params.dig :_jsonapi, :data, :attributes }
@@ -405,56 +408,76 @@ describe 'Sites API v2', type: :request do
 
       let(:site) { provider.sites.last }
 
-      before do
-        site_params.merge!(
-          code: code,
-          location_name: location_name,
-          address1: address1,
-          address2: address2,
-          address3: address3,
-          address4: address4,
-          postcode: postcode,
-          region_code: region_code
-        )
-        perform_site_create
+      describe 'permitted parameters' do
+        before do
+          site_params.merge!(
+            location_name: location_name,
+            address1: address1,
+            address2: address2,
+            address3: address3,
+            address4: address4,
+            postcode: postcode,
+            region_code: region_code
+          )
+          perform_site_create
+        end
+
+        it 'sets the location name of the site' do
+          expect(site.location_name).to eq(location_name)
+        end
+
+        it 'sets the address1 of the site' do
+          expect(site.address1).to eq(address1)
+        end
+
+        it 'sets the address2 of the site' do
+          expect(site.address2).to eq(address2)
+        end
+
+        it 'sets the address3 of the site' do
+          expect(site.address3).to eq(address3)
+        end
+
+        it 'sets the address4 of the site' do
+          expect(site.address4).to eq(address4)
+        end
+
+        it 'sets the postcode of the site' do
+          expect(site.postcode).to eq(postcode)
+        end
+
+        it 'sets the region_code of the site' do
+          expect(site.region_code).to eq(region_code)
+        end
       end
 
-      it 'sets the location name of the site' do
-        expect(site.location_name).to eq(location_name)
+      describe 'unpermitted parameters' do
+        before do
+          site_params.merge!(
+            code: code
+          )
+        end
+
+        it 'raises an error when trying to set the site code' do
+          expect {
+            perform_site_create
+          }.to raise_error(ActionController::UnpermittedParameters)
+        end
       end
 
-      it 'does not set the code of the site' do
-        expect(site.code).to_not eq(code)
-      end
-
-      it 'sets the address1 of the site' do
-        expect(site.address1).to eq(address1)
-      end
-
-      it 'sets the address2 of the site' do
-        expect(site.address2).to eq(address2)
-      end
-
-      it 'sets the address3 of the site' do
-        expect(site.address3).to eq(address3)
-      end
-
-      it 'sets the address4 of the site' do
-        expect(site.address4).to eq(address4)
-      end
-
-      it 'sets the postcode of the site' do
-        expect(site.postcode).to eq(postcode)
-      end
-
-      it 'sets the region_code of the site' do
-        expect(site.region_code).to eq(region_code)
-      end
-
-      context 'response output with validation errors' do
+      describe 'response output with validation errors' do
         let(:json_data) { JSON.parse(response.body)['errors'] }
 
         before do
+          site_params.merge!(
+            location_name: location_name,
+            address1: address1,
+            address2: address2,
+            address3: address3,
+            address4: address4,
+            postcode: postcode,
+            region_code: region_code
+          )
           perform_site_create
         end
 

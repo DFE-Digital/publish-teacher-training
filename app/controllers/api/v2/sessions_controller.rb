@@ -22,7 +22,13 @@ module API
       def create_params
         validate_jsonapi_type(params, 'sessions')
 
-        params.require(:session).permit(:first_name, :last_name)
+        params
+          .require(:session)
+          .except(:id, :type)
+          .permit(
+            :first_name,
+            :last_name
+          )
       end
     end
   end
