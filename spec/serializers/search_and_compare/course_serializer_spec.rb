@@ -188,6 +188,7 @@ describe SearchAndCompare::CourseSerializer do
 
       describe 'Campuses_related_Mapping' do
         it { should include(ApplicationsAcceptedFrom: '2018-10-09T00:00:00') }
+        it { should include(HasVacancies: course.has_vacancies?) }
 
         describe 'Campuses' do
           subject { resource[:Campuses] }

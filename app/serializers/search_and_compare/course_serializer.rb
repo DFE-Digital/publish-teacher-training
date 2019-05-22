@@ -65,14 +65,15 @@ module SearchAndCompare
     attribute(:FullTime)                              { object.part_time? ? 3 : 1 }
     attribute(:PartTime)                              { object.full_time? ? 3 : 1 }
 
+    # Subjects_related_Mapping
+    attribute(:IsSen)                                 { object.is_send? }
+    attribute(:CourseSubjects)                        { course_subjects }
+
     # Campuses_related_Mapping
     attribute(:Campuses)                              { get_campuses }
     # using server time not utc, so it's local time?
     attribute(:ApplicationsAcceptedFrom)              { object.applications_open_from.to_date.strftime('%Y-%m-%dT%H:%M:%S') }
-
-    # Subjects_related_Mapping
-    attribute(:IsSen)                                 { object.is_send? }
-    attribute(:CourseSubjects)                        { course_subjects }
+    attribute(:HasVacancies)                          { object.has_vacancies? }
 
   private
 

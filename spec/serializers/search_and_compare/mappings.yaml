@@ -155,6 +155,7 @@ Campuses_related_Mapping: &Campuses_related
   ApplicationsAcceptedFrom: applications_open_from
   Campuses:
     - <<: *Campus
+  HasVacancies: has_vacancies?
 
 
 # Actual course
