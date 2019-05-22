@@ -124,6 +124,25 @@ describe Provider, type: :model do
         )
       end
     end
+
+    context 'provider has no published enrichments' do
+      it 'returns the info from the provider record' do
+        provider = create(:provider)
+        expect(provider.external_contact_info).to(
+          eq(
+            'address1'    => provider.address1,
+            'address2'    => provider.address2,
+            'address3'    => provider.address3,
+            'address4'    => provider.address4,
+            'postcode'    => provider.postcode,
+            'region_code' => provider.region_code,
+            'telephone'   => provider.telephone,
+            'email'       => provider.email,
+            'website'     => provider.url
+          )
+        )
+      end
+    end
   end
 
   describe '.in_order' do

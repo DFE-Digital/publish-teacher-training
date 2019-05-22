@@ -100,18 +100,22 @@ class Provider < ApplicationRecord
   end
 
   def external_contact_info
-    (enrichments.published.latest_published_at.first || self)
-      .attributes
-      .slice(
-        'address1',
-        'address2',
-        'address3',
-        'address4',
-        'postcode',
-        'region_code',
-        'telephone',
-        'email',
-        'website'
-      )
+    attribute_names = %w[
+      address1
+      address2
+      address3
+      address4
+      postcode
+      region_code
+      telephone
+      email
+    ]
+
+    enrichment = enrichments.published.latest_published_at.first
+    if enrichment
+      enrichment.attributes.slice(*(attribute_names + %w[website]))
+    else
+      attributes.slice(*attribute_names).merge('website' => url)
+    end
   end
 end
