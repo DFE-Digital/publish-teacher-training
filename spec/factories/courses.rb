@@ -57,6 +57,15 @@ FactoryBot.define do
         subject.is_a?(Subject) ? subject : create(*subject)
       }
 
+      evaluator.site_statuses_and_sites.each do |site_statuses_and_site|
+        site = build(:site, **site_statuses_and_site[:site_attrs])
+        site.save(validate: site_statuses_and_site[:site_save_validate])
+
+        site_status_attrs = { course: course, site: site, **site_statuses_and_site[:site_status_attrs] }
+
+        create(:site_status, *site_statuses_and_site[:site_status_traits], site_status_attrs)
+      end
+
       evaluator.with_site_statuses.each do |traits|
         attrs = { course: course }
         if traits == [:default]
