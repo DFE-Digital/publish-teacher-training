@@ -49,7 +49,11 @@ describe SearchAndCompare::CourseSerializer do
         build :site,
               location_name: 'Stratford-Upon-Avon & South Warwickshire',
               code: 'S',
-              address1: 'CV37'
+              address1: 'CV37',
+              address2: '',
+              address3: '',
+              address4: '',
+              postcode: ''
       end
       let(:site_status1) do
         build :site_status, :findable, :full_time_vacancies,
@@ -61,7 +65,11 @@ describe SearchAndCompare::CourseSerializer do
         build :site,
               location_name: 'Nuneaton & Bedworth',
               code: 'N',
-              address1: 'CV10'
+              address1: 'CV10',
+              address2: '',
+              address3: '',
+              address4: '',
+              postcode: ''
       end
       let(:site_status2) do
         build :site_status, :findable, :full_time_vacancies,

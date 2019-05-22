@@ -185,6 +185,18 @@ Provider_contact_info_Mapping: &Provider_contact_info
   ContactDetails:
     <<: *ContactDetails
 
+Location_default_value_Mapping: &Location_default_value
+  Id: 0
+  FormattedAddress:
+  GeoAddress:
+  Latitude:
+  Longitude:
+  LastGeocodedUtc: '0001-01-01T00:00:00'
+
+Location_Mapping: &Location
+  *Location_default_value
+  Address: "[address1, address2, address3, address4, postcode].reject(&:blank?).join('/n')"
+
 
 # Actual course
 Course_Full_Mapping:
