@@ -19,7 +19,7 @@ module API
 
       def index
         authorize AccessRequest
-        @access_requests = AccessRequest.requested.includes(:requester)
+        @access_requests = AccessRequest.requested.includes(:requester).by_request_date
 
         render jsonapi: @access_requests, include: params[:include]
       end

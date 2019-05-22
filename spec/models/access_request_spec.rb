@@ -65,4 +65,14 @@ describe AccessRequest, type: :model do
       it { should_not include access_request3, access_request4, access_request5 }
     end
   end
+
+  describe '#by_request_date' do
+    let!(:access_request1) { create(:access_request, request_date_utc: Time.now.utc) }
+    let!(:access_request2) { create(:access_request, request_date_utc: 2.minutes.ago.utc) }
+
+    it 'returns the new enrichment first' do
+      expect(AccessRequest.by_request_date.first).to eq access_request2
+      expect(AccessRequest.by_request_date.last).to eq access_request1
+    end
+  end
 end
