@@ -119,6 +119,8 @@ describe 'Courses API v2', type: :request do
               "required_qualifications" => enrichment.qualifications,
               "salary_details" => enrichment.salary_details,
               "last_published_at" => enrichment.last_published_timestamp_utc.iso8601,
+              "has_bursary?" => true,
+              "has_scholarship_and_bursary?" => false,
             },
             "relationships" => {
               "accrediting_provider" => { "meta" => { "included" => false } },
@@ -235,6 +237,8 @@ describe 'Courses API v2', type: :request do
               "required_qualifications" => enrichment.qualifications,
               "salary_details" => enrichment.salary_details,
               "last_published_at" => enrichment.last_published_timestamp_utc.iso8601,
+              "has_bursary?" => true,
+              "has_scholarship_and_bursary?" => false,
             },
             "relationships" => {
               "accrediting_provider" => { "meta" => { "included" => false } },
