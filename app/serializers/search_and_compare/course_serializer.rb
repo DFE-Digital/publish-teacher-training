@@ -39,7 +39,6 @@ module SearchAndCompare
     # using server time not utc, so it's local time?
     attribute(:StartDate)                             { object.start_date.utc.strftime('%Y-%m-%dT%H:%M:%S') }
 
-
     # Salary_nested_default_value_Mapping
     # TODO: After completion
     # TASK: Double check is Salary actual in use in snc else drop it
@@ -65,49 +64,34 @@ module SearchAndCompare
     attribute(:FullTime)                              { object.part_time? ? 3 : 1 }
     attribute(:PartTime)                              { object.full_time? ? 3 : 1 }
 
-    # Subjects_related_Mapping
-    attribute(:IsSen)                                 { object.is_send? }
-    attribute(:CourseSubjects)                        { course_subjects }
 
     # Campuses_related_Mapping
-    attribute(:Campuses)                              { get_campuses }
+    attribute(:Campuses)                              { campuses }
     # using server time not utc, so it's local time?
     attribute(:ApplicationsAcceptedFrom)              { object.applications_open_from.to_date.strftime('%Y-%m-%dT%H:%M:%S') }
     attribute(:HasVacancies)                          { object.has_vacancies? }
 
   private
 
-    def default_salary_value
-      {
-        Minimum: nil,
-        Maximum: nil,
-      }
-    end
-
     def course_subjects
       # CourseSubject_Mapping
       object.dfe_subjects.map do |subject|
         {
-          # CourseSubject_default_value_mapping
-          CourseId: 0,
-          Course: nil,
-          SubjectId: 0,
-          # CourseSubject_complex
+          **default_course_subjects_value,
           Subject:
             {
-              # Subject_default_value_Mapping
-              Id: 0,
-              SubjectArea: nil,
-              FundingId: nil,
-              Funding: nil,
-              IsSubjectKnowledgeEnhancementAvailable: false,
-              CourseSubjects: nil,
-
-              # Subject_direct_Mapping
+              **default_subject_value,
               Name: subject.to_s,
             }
         }
       end
+    end
+
+    def default_route_value
+      {
+        Id: 0,
+        Courses: nil,
+      }
     end
 
     def route
@@ -120,10 +104,7 @@ module SearchAndCompare
       }
 
       {
-        # Route_default_value_Mapping
-        Id: 0,
-        Courses: nil,
-        # Route_Complex_value_Mapping
+        **default_route_value,
         Name: route_names[object.program_type.to_sym],
         IsSalaried: is_salaried?
       }
@@ -145,7 +126,53 @@ module SearchAndCompare
       include_pgces[object.qualification.to_sym]
     end
 
-    def get_campus_default_value
+    def full_address(address1:, address2:, address3:, address4:, postcode:)
+      [address1, address2, address3, address4, postcode].reject(&:blank?).join('/n')
+    end
+
+    def campuses
+      object.site_statuses.findable.map do |site_status|
+        raw_address = { address1: site_status.site.address1, address2: site_status.site.address2, address3: site_status.site.address3, address4: site_status.site.address4, postcode: site_status.site.postcode }
+
+        address = full_address(raw_address)
+
+        {
+          **default_campus_value,
+          VacStatus: site_status.vac_status_before_type_cast,
+          Name: site_status.site.location_name,
+          CampusCode: site_status.site.code,
+          Location: { **default_location_value, Address: address }
+        }
+      end
+    end
+
+    def default_salary_value
+      {
+        Minimum: nil,
+        Maximum: nil,
+      }
+    end
+
+    def default_subject_value
+      {
+        Id: 0,
+        SubjectArea: nil,
+        FundingId: nil,
+        Funding: nil,
+        IsSubjectKnowledgeEnhancementAvailable: false,
+        CourseSubjects: nil,
+      }
+    end
+
+    def default_course_subjects_value
+      {
+        CourseId: 0,
+        Course: nil,
+        SubjectId: 0,
+      }
+    end
+
+    def default_campus_value
       {
         Id: 0,
         LocationId: nil,
@@ -153,7 +180,7 @@ module SearchAndCompare
       }
     end
 
-    def get_location_default_value
+    def default_location_value
       {
         Id: 0,
         FormattedAddress: nil,
@@ -162,29 +189,6 @@ module SearchAndCompare
         Longitude: nil,
         LastGeocodedUtc: '0001-01-01T00:00:00'
       }
-    end
-
-    def get_address(address1:, address2:, address3:, address4:, postcode:)
-      [address1, address2, address3, address4, postcode].reject(&:blank?).join('/n')
-    end
-
-    def get_campuses
-      object.site_statuses.findable.map do |site_status|
-        campus_default_value = get_campus_default_value
-
-        raw_address = { address1: site_status.site.address1, address2: site_status.site.address2, address3: site_status.site.address3, address4: site_status.site.address4, postcode: site_status.site.postcode }
-
-        address = get_address(raw_address)
-        location_default_value = get_location_default_value
-
-        {
-          **campus_default_value,
-          VacStatus: site_status.vac_status_before_type_cast,
-          Name: site_status.site.location_name,
-          CampusCode: site_status.site.code,
-          Location: { **location_default_value, Address: address }
-        }
-      end
     end
   end
 end
