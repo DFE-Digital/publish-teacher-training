@@ -396,6 +396,19 @@ RSpec.describe Course, type: :model do
         its(:is_send?) { should be_truthy }
       end
     end
+
+    describe "bursaries and scholarships" do
+      let(:subjects) {
+        [
+          build(:subject, subject_name: 'mathematics'),
+          build(:subject, subject_name: 'secondary'),
+        ]
+      }
+      subject { create(:course, subjects: subjects) }
+
+      it { should have_bursary }
+      it { should have_scholarship_and_bursary }
+    end
   end
 
   context "entry requirements" do

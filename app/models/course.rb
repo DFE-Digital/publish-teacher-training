@@ -242,4 +242,12 @@ class Course < ApplicationRecord
   def sites_not_associated_with_course
     provider.sites - sites
   end
+
+  def has_bursary?
+    dfe_subjects.any?(&:has_bursary?)
+  end
+
+  def has_scholarship_and_bursary?
+    dfe_subjects.any?(&:has_scholarship_and_bursary?)
+  end
 end
