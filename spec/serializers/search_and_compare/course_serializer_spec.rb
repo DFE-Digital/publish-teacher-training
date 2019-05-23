@@ -89,6 +89,19 @@ describe SearchAndCompare::CourseSerializer do
               website: "http://www.gatewayalliance.co.uk"
       end
 
+      let(:provider_enrichment) do
+        build :provider_enrichment,
+              :published,
+              address1: "c/o Claverdon Primary School",
+              address2: "Breach Lane",
+              address3: "Claverdon",
+              address4: "Warwick",
+              postcode: "CV35 8QA",
+              telephone: "02476 347697",
+              email: "info@gatewayalliance.co.uk",
+              website: "http://www.gatewayalliance.co.uk"
+      end
+
       let(:provider) do
         create :provider,
                provider_name: 'Gateway Alliance (Midlands)',
