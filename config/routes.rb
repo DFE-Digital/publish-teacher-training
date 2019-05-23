@@ -75,7 +75,7 @@ Rails.application.routes.draw do
       resource :sessions
       resources :site_statuses, only: :update
 
-      resources :access_requests, only: %i[update index create] do
+      resources :access_requests, only: %i[update index create show] do
         post :approve, on: :member
       end
     end

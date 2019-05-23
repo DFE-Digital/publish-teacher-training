@@ -10,9 +10,16 @@ module API
         render status: 200, json: { result: result }
       end
 
+      def show
+        authorize AccessRequest
+        @access_request = AccessRequest.find(params[:id])
+
+        render jsonapi: @access_request, include: [:requester]
+      end
+
       def index
         authorize AccessRequest
-        @access_requests = AccessRequest.requested.includes(:requester)
+        @access_requests = AccessRequest.requested.includes(:requester).by_request_date
 
         render jsonapi: @access_requests, include: params[:include]
       end
