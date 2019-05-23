@@ -239,5 +239,27 @@ describe CourseEnrichment, type: :model do
         expect { subject.unpublish(initial_draft: false) }.not_to(change { subject.reload.last_published_timestamp_utc })
       end
     end
+
+    describe '#duration' do
+      subject { create(:course_enrichment, course_length: course_length) }
+
+      context 'anyting' do
+        let(:course_length) { 'anything' }
+
+        its(:duration) { should eq 'anything' }
+      end
+
+      context '1 year' do
+        let(:course_length) { 'OneYear' }
+
+        its(:duration) { should eq '1 year' }
+      end
+
+      context 'Up to 2 years' do
+        let(:course_length) { 'TwoYears' }
+
+        its(:duration) { should eq 'Up to 2 years' }
+      end
+    end
   end
 end
