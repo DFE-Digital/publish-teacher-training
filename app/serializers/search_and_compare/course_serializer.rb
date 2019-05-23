@@ -68,9 +68,6 @@ module SearchAndCompare
     attribute(:FullTime)                              { object.part_time? ? 3 : 1 }
     attribute(:PartTime)                              { object.full_time? ? 3 : 1 }
 
-    # Subjects_related_Mapping
-    attribute(:IsSen)                                 { object.is_send? }
-    attribute(:CourseSubjects)                        { course_subjects }
 
     # Campuses_related_Mapping
     attribute(:Campuses)                              { campuses }
