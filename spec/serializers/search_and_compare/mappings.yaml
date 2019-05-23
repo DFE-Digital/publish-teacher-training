@@ -74,6 +74,54 @@ Subjects_related_Mapping: &Subjects_related
   CourseSubjects:
   - <<: *CourseSubject
 
+IsSalaried_Mapping: &IsSalaried
+  IsSalaried: '!course.is_fee_based?'
+
+Route_default_value_Mapping: &Route_default_value
+  Id: 0
+  Courses:
+
+Route_Complex_value_Mapping: &Route_Complex_value
+  <<: *IsSalaried
+  Name: course.program_type
+
+Route_Mapping: &Route
+  <<: *Route_default_value
+  <<: *Route_Complex_value
+
+Mod_Mapping: &Mod
+  Mod: course.description
+
+IncludesPgce_Mapping: &IncludesPgce
+  IncludesPgce: course.description
+  # {CourseQualification.Qts, IncludesPgce.No} 0,
+  # {CourseQualification.QtsWithPgce, IncludesPgce.Yes} 1,
+  # {CourseQualification.QtsWithPgde, IncludesPgce.QtsWithPgde} 3,
+  # {CourseQualification.QtlsWithPgce, IncludesPgce.QtlsWithPgce} 5,
+  # {CourseQualification.QtlsWithPgde, IncludesPgce.QtlsWithPgde} 6
+
+  # No = 0,
+  # Yes = 1,
+  # QtsWithOptionalPgce = 2,
+  # QtsWithPgde = 3,
+  # QtlsOnly = 4,
+  # QtlsWithPgce = 5,
+  # QtlsWithPgde = 6
+FullTime_mapping: &FullTime
+  FullTime: 'object.part_time? ? 3 : 1'
+  # FullTime = ucasCourseData.StudyMode == "P" ? VacancyStatus.NA : VacancyStatus.Vacancies,
+
+PartTime_mapping: &PartTime
+  PartTime: 'object.full_time? ? 3 : 1'
+  # PartTime = ucasCourseData.StudyMode == "F" ? VacancyStatus.NA : VacancyStatus.Vacancies,
+Course_variant_Mapping: &Course_variant
+  <<: *IsSalaried
+  <<: *Route
+  <<: *Mod
+  <<: *IncludesPgce
+  <<: *FullTime
+  <<: *PartTime
+
 # Actual course
 Course_Full_Mapping:
   <<: *Provider_serializer
@@ -82,3 +130,4 @@ Course_Full_Mapping:
   Salary:
     <<: *Salary
   <<: *Subjects_related
+  <<: *Course_variant
