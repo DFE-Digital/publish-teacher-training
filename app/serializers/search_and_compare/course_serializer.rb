@@ -20,12 +20,16 @@ module SearchAndCompare
     #       as long as its a valid date format it should work in snc
     # TASK: see attribute(:Route)
     # TASK: see attribute(:Salary)
+    # TASK: see attribute(:AgeRange)
 
     # Course_default_value_Mapping
     attribute(:Id)                                    { 0 }
     attribute(:ProviderCodeName)                      { nil }
     attribute(:ProviderId)                            { 0 }
     attribute(:AccreditingProviderId)                 { nil }
+
+    # TODO: After completion
+    # TASK: Double check is it actual in use in snc else drop it
     attribute(:AgeRange)                              { 0 }
     attribute(:RouteId)                               { 0 }
     attribute(:ProviderLocationId)                    { nil }
@@ -41,7 +45,7 @@ module SearchAndCompare
 
     # Salary_nested_default_value_Mapping
     # TODO: After completion
-    # TASK: Double check is Salary actual in use in snc else drop it
+    # TASK: Double check is it actual in use in snc else drop it
     attribute(:Salary)                                { default_salary_value }
 
     # Subjects_related_Mapping
@@ -53,7 +57,7 @@ module SearchAndCompare
     # TASK: Route.Name can be blank, snc needs to relax blank rule
     #       Route.Name can be dropped, snc don't use it
     #       Course.Route.IsSalaried should become Course.IsSalaried
-    #       Then Route
+    #       Then
     #       Route can be dropped altogether in snc
     attribute(:Route)                                 { route }
 
@@ -64,14 +68,37 @@ module SearchAndCompare
     attribute(:FullTime)                              { object.part_time? ? 3 : 1 }
     attribute(:PartTime)                              { object.full_time? ? 3 : 1 }
 
-
     # Campuses_related_Mapping
     attribute(:Campuses)                              { campuses }
     # using server date time not utc, so it's local date time?
     attribute(:ApplicationsAcceptedFrom)              { object.applications_open_from.to_date.strftime('%Y-%m-%dT%H:%M:%S') }
     attribute(:HasVacancies)                          { object.has_vacancies? }
 
+    # Course_direct_enrichment_Mapping
+    attribute(:Duration)                              { course_enrichment.duration }
+    attribute(:Fees)                                  { fees }
+
   private
+
+    def course_enrichment
+      @course_enrichment ||= object.enrichments.published.latest_first.first
+    end
+
+    def fees
+      if is_salaried?
+        {
+          Uk: 0,
+          Eu: 0,
+          International: 0,
+        }
+      else
+        {
+          Uk: course_enrichment.fee_uk_eu,
+          Eu: course_enrichment.fee_uk_eu,
+          International: course_enrichment.fee_international,
+        }
+      end
+    end
 
     def course_subjects
       # CourseSubject_Mapping
