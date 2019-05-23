@@ -36,7 +36,7 @@ module SearchAndCompare
     # Course_direct_simple_Mapping
     attribute(:Name)                                  { object.name }
     attribute(:ProgrammeCode)                         { object.course_code }
-    # using server time not utc, so it's local time?
+    # using server date time not utc, so it's local date time?
     attribute(:StartDate)                             { object.start_date.utc.strftime('%Y-%m-%dT%H:%M:%S') }
 
     # Salary_nested_default_value_Mapping
@@ -67,7 +67,7 @@ module SearchAndCompare
 
     # Campuses_related_Mapping
     attribute(:Campuses)                              { campuses }
-    # using server time not utc, so it's local time?
+    # using server date time not utc, so it's local date time?
     attribute(:ApplicationsAcceptedFrom)              { object.applications_open_from.to_date.strftime('%Y-%m-%dT%H:%M:%S') }
     attribute(:HasVacancies)                          { object.has_vacancies? }
 
