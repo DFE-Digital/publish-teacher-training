@@ -14,7 +14,7 @@ module API
       attributes :findable?, :open_for_applications?, :has_vacancies?,
                  :course_code, :name, :study_mode, :qualifications, :description,
                  :content_status, :ucas_status, :funding, :applications_open_from,
-                 :level, :is_send?
+                 :level, :is_send?, :has_bursary?, :has_scholarship_and_bursary?
 
       attribute :start_date do
         @object.start_date&.iso8601
@@ -25,7 +25,7 @@ module API
       end
 
       attribute :subjects do
-        @object.dfe_subjects
+        @object.dfe_subjects.map(&:to_s)
       end
 
       belongs_to :provider

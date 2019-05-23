@@ -11,7 +11,7 @@ describe SubjectMapperService do
     end
 
     def mapped_subjects(course_title, ucas_subjects)
-      described_class.get_subject_list(course_title, ucas_subjects)
+      described_class.get_subject_list(course_title, ucas_subjects).map(&:to_s)
     end
 
     chain :at_level do |level|
@@ -144,7 +144,7 @@ describe SubjectMapperService do
                   header_converters: :symbol).with_index do |row, i|
 
         describe "Test case row '#{i}': subjects #{row[:ucas_subjects]}, title: #{row[:course_title]}" do
-          subject { described_class.get_subject_list(row[:course_title], row[:ucas_subjects].split(",")) }
+          subject { described_class.get_subject_list(row[:course_title], row[:ucas_subjects].split(",")).map(&:to_s) }
           it { should match_array row[:expected_subjects]&.split(",") || [] }
         end
       end

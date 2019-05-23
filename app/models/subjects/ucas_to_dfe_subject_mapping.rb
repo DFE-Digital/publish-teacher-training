@@ -20,7 +20,7 @@ module Subjects
     end
 
     def to_dfe_subject
-      @resulting_dfe_subject
+      DFESubject.new(@resulting_dfe_subject)
     end
 
   private
