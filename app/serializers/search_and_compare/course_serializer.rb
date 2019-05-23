@@ -63,5 +63,48 @@ module SearchAndCompare
         }
       end
     end
+
+    attribute(:Route)                                 { get_route }
+    attribute(:IsSalaried)                            { is_salaried? }
+    attribute(:Mod)                                   { object.description }
+    attribute(:IncludesPgce)                          { get_include_pgce }
+
+    attribute(:FullTime)                              { object.part_time? ? 3 : 1 }
+    attribute(:PartTime)                              { object.full_time? ? 3 : 1 }
+
+    def get_route
+      route_names = {
+        higher_education_programme: "Higher education programme",
+        school_direct_training_programme: "School Direct training programme",
+        school_direct_salaried_training_programme: "School Direct (salaried) training programme",
+        scitt_programme: "SCITT programme",
+        pg_teaching_apprenticeship: "PG Teaching Apprenticeship",
+      }
+
+      {
+        # Route_default_value_Mapping
+        Id: 0,
+        Courses: nil,
+        # Route_Complex_value_Mapping
+        Name: route_names[object.program_type.to_sym],
+        IsSalaried: is_salaried?
+      }
+    end
+
+    def is_salaried?
+      !object.is_fee_based?
+    end
+
+    def get_include_pgce
+      include_pgces = {
+        qts: 0,
+        pgce_with_qts: 1,
+        pgde_with_qts: 3,
+        pgce: 5,
+        pgde: 6,
+      }
+
+      include_pgces[object.qualification.to_sym]
+    end
   end
 end

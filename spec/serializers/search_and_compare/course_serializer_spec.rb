@@ -18,6 +18,11 @@ describe SearchAndCompare::CourseSerializer do
         { subjects: subjects }
       end
 
+      let(:course_variant) do
+        { program_type: :school_direct_salaried_training_programme,
+          qualification: :pgce_with_qts,
+          study_mode:  :full_time, }
+      end
       let(:course_factory_args) do
         {
           provider: provider,
@@ -26,7 +31,8 @@ describe SearchAndCompare::CourseSerializer do
           course_code: '2KXB',
           start_date: '2019-08-01T00:00:00',
           subject_count: 0,
-          **course_subjects
+          **course_subjects,
+          **course_variant,
         }
       end
 
@@ -135,6 +141,40 @@ describe SearchAndCompare::CourseSerializer do
             end
           end
           it { should match_array expected_course_subjects }
+        end
+      end
+
+      describe 'Course_variant_Mapping' do
+        # related to the course's qualification + program_type + study_mode
+        it { should include(Mod: 'PGCE with QTS full time with salary') }
+
+        # related to the course's program_type
+        it { should include(IsSalaried: !course.is_fee_based?) }
+
+        # related to the course's qualification
+        it { should include(IncludesPgce: 1) }
+
+        # related to the course's study_mode
+        it { should include(FullTime: 1) }
+        it { should include(PartTime: 3) }
+
+        describe 'Route' do
+          subject { resource[:Route] }
+
+          describe 'Route_default_value_Mapping' do
+            it { should include(Id: 0) }
+            it { should include(Courses: nil) }
+          end
+          describe 'Route_Complex_value_Mapping'do
+            # related to the course's program_type
+            it { should include(Name: 'School Direct (salaried) training programme') }
+            # related to the course's program_type
+            it { should include(IsSalaried: !course.is_fee_based?) }
+          end
+
+          describe 'json' do
+            it { should eq expected_json[:Route] }
+          end
         end
       end
 
