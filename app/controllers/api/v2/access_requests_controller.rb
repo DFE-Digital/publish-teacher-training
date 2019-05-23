@@ -25,11 +25,13 @@ module API
       end
 
       def create
-        authorize AccessRequest # todo, generalise admin auth
         access_request = AccessRequest.new(access_request_params)
-        access_request.update(requester: @current_user,
-                              request_date_utc: Time.now.utc,
-                              status: :requested)
+        authorize access_request
+
+        access_request.requester        = User.find_by(email: access_request.requester_email)
+        access_request.request_date_utc = Time.now.utc
+        access_request.status           = :requested
+        access_request.save!
 
         render jsonapi: access_request
       end
@@ -41,7 +43,14 @@ module API
       end
 
       def access_request_params
-        params.require(:access_request).permit(:email_address, :first_name, :last_name, :organisation, :reason)
+        params.require(:access_request).permit(
+          :email_address,
+          :first_name,
+          :last_name,
+          :organisation,
+          :reason,
+          :requester_email
+        )
       end
     end
   end
