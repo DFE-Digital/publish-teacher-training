@@ -55,12 +55,6 @@ run do |opts, args, _cmd|
         new_course.save!
       end
 
-      menu.choice("Add a new location") do
-        command_params = ['sites', 'create', args[:code]] + (opts[:env].present? ? ['-E', opts[:env]] : [])
-        $mcb.run(command_params)
-        chosen_course_codes = []
-      end
-
       menu.choice("Edit provider name") do
         puts "Current name: #{provider.provider_name}"
         new_name = cli.ask("Enter new name").strip
