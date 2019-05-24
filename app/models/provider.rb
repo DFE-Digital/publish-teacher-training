@@ -76,6 +76,26 @@ class Provider < ApplicationRecord
   #     .slice('address1', 'address2', 'address3', 'address4', 'postcode', 'region_code', 'telephone', 'email')
   # end
 
+  # This is used by the providers index; it is a replacement for `.includes(:courses)`,
+  # but it only fetches the counts for the associated courses. By not fetching all the
+  # course objects for 1000+ providers, the db query runs much faster, and the view spends
+  # less time rendering because there's less data to comb through.
+  def self.include_courses_counts
+    joins(
+      %{
+        LEFT OUTER JOIN (
+          SELECT b.provider_id, COUNT(*) courses_count
+          FROM course b
+          GROUP BY b.provider_id
+        ) a ON a.provider_id = provider.id
+      }
+    ).select("provider.*, COALESCE(a.courses_count, 0) AS included_courses_count")
+  end
+
+  def courses_count
+    self.respond_to?("included_courses_count") ? included_courses_count : courses.size
+  end
+
   def update_changed_at(timestamp: Time.now.utc)
     # Changed_at represents changes to related records as well as provider
     # itself, so we don't want to alter the semantics of updated_at which
