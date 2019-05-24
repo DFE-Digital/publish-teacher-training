@@ -121,6 +121,7 @@ describe 'Courses API v2', type: :request do
               "last_published_at" => enrichment.last_published_timestamp_utc.iso8601,
               "has_bursary?" => true,
               "has_scholarship_and_bursary?" => false,
+              "has_early_career_payments?" => false,
             },
             "relationships" => {
               "accrediting_provider" => { "meta" => { "included" => false } },
@@ -239,6 +240,7 @@ describe 'Courses API v2', type: :request do
               "last_published_at" => enrichment.last_published_timestamp_utc.iso8601,
               "has_bursary?" => true,
               "has_scholarship_and_bursary?" => false,
+              "has_early_career_payments?" => false,
             },
             "relationships" => {
               "accrediting_provider" => { "meta" => { "included" => false } },

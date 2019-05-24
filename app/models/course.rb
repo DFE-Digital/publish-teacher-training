@@ -250,4 +250,8 @@ class Course < ApplicationRecord
   def has_scholarship_and_bursary?
     dfe_subjects.any?(&:has_scholarship_and_bursary?)
   end
+
+  def has_early_career_payments?
+    dfe_subjects.any?(&:has_early_career_payments?)
+  end
 end

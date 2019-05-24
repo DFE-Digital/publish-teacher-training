@@ -6,6 +6,7 @@ describe DFESubject do
 
     it { should have_bursary }
     it { should have_scholarship }
+    it { should have_early_career_payments }
 
     it { should eq(DFESubject.new("Mathematics")) }
   end
@@ -15,5 +16,6 @@ describe DFESubject do
 
     it { should_not have_bursary }
     it { should_not have_scholarship }
+    it { should_not have_early_career_payments }
   end
 end
