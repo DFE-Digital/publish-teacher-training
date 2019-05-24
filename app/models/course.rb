@@ -26,6 +26,8 @@ class Course < ApplicationRecord
   include WithQualifications
   include ChangedAt
 
+  after_initialize :set_defaults
+
   has_associated_audits
   audited except: :changed_at
   validates :course_code, uniqueness: { scope: :provider_id }
@@ -253,5 +255,14 @@ class Course < ApplicationRecord
 
   def has_scholarship_and_bursary?
     dfe_subjects.any?(&:has_scholarship_and_bursary?)
+  end
+
+private
+
+  def set_defaults
+    self.modular ||= ''
+    self.start_date ||= Date.new(2019, 9, 1)
+    self.study_mode ||= :full_time
+    self.qualification ||= :pgce_with_qts
   end
 end
