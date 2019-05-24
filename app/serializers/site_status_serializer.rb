@@ -23,7 +23,11 @@ class SiteStatusSerializer < ActiveModel::Serializer
   end
 
   def status
-    object.status_before_type_cast
+    if object.no_vacancies?
+      SiteStatus.statuses["suspended"]
+    else
+      object.status_before_type_cast
+    end
   end
 
   def publish

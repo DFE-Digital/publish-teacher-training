@@ -284,5 +284,21 @@ describe "Courses API", type: :request do
         end
       end
     end
+
+    describe "site status" do
+      context "when there are no vacancies" do
+        before do
+          create(:site_status, :running, :with_no_vacancies)
+        end
+
+        it 'presents the site status as suspended (so that the UTT Apply system hides the site altogether)' do
+          get "/api/v1/2019/courses", headers: { 'HTTP_AUTHORIZATION' => credentials }
+
+          json = JSON.parse(response.body)
+
+          expect(json[0]["campus_statuses"][0]["status"]). to eq(SiteStatus.statuses["suspended"])
+        end
+      end
+    end
   end
 end
