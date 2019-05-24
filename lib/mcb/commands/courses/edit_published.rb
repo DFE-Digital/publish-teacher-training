@@ -120,8 +120,11 @@ run do |opts, args, _cmd|
       puts "Unexpected option: #{flow}"
       flow = :root
     end
-    courses.each(&:save!)
-    courses.each(&:reload)
-    courses.first.site_statuses.reload unless multi_course_mode
+    unless finished
+      courses.each(&:save!)
+      provider.reload
+      courses.reload
+      courses.first.site_statuses.reload unless multi_course_mode
+    end
   end
 end
