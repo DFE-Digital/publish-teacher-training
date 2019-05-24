@@ -25,6 +25,10 @@ class DFESubject
     has_bursary? && has_scholarship?
   end
 
+  def has_early_career_payments?
+    financial_support&.fetch(:early_career_payments).present?
+  end
+
   def to_s
     @subject_name
   end
