@@ -22,15 +22,15 @@ describe SearchAndCompare::CourseSerializer do
         create(:course,
                provider: provider,
                accrediting_provider: accrediting_provider,
-               name: 'Primary (Special Educational Needs) zzz',
-               course_code: '2KXZ',
+               name: 'Primary (Special Educational Needs)',
+               course_code: '2KXB',
                start_date: '2019-08-01T00:00:00',
                subject_count: 0,
                program_type: :school_direct_salaried_training_programme,
                qualification: :pgce_with_qts,
                study_mode:  :full_time,
                site_statuses: [site_status1, site_status2],
-               with_enrichments: [[:published, course_length: "OneYear", created_at: 5.days.ago]],
+               with_enrichments: [[:published, course_length: "OneYear", created_at: 5.days.ago, **course_enrichment_fields]],
                **course_subjects).tap do |c|
 
           # These sites, taken from real prod data, aren't actually valid in
@@ -45,15 +45,58 @@ describe SearchAndCompare::CourseSerializer do
           end
         end
       end
+
+      let(:course_enrichment_fields) do
+        {
+          about_course: about_course,
+          interview_process: interview_process,
+          fee_details: fee_details,
+          salary_details: salary_details,
+          qualifications: qualifications,
+          personal_qualities: personal_qualities,
+          other_requirements: other_requirements,
+          financial_support: financial_support,
+          how_school_placements_work: how_school_placements_work,
+          }
+      end
+
+      let(:provider_enrichment_fields) do
+        {
+          train_with_us: train_with_us,
+          train_with_disability: train_with_disability,
+        }
+      end
+
+      let(:accrediting_provider_enrichments) { [accrediting_provider_enrichment] }
+
+      let(:accrediting_provider_enrichment) do
+        {
+          'UcasProviderCode' => accrediting_provider.provider_code,
+          'Description' => accrediting_provider_enrichment_description
+        }
+      end
+
+      let(:accrediting_provider_enrichment_description) {
+        'accrediting provider enrichment field'
+      }
+
+      let(:about_course) { "about_course" }
+      let(:interview_process) { "interview_process" }
+      let(:fee_details) { "fee_details" }
+      let(:salary_details) { "salary_details" }
+      let(:qualifications) { "qualifications" }
+      let(:personal_qualities) { "personal_qualities" }
+      let(:other_requirements) { "other_requirements" }
+      let(:financial_support) { "financial_support" }
+      let(:how_school_placements_work) { "how_school_placements_work" }
+      let(:train_with_us) { "train_with_us" }
+      let(:train_with_disability) { "train_with_disability" }
+
       let(:site1) do
         build :site,
               location_name: 'Stratford-Upon-Avon & South Warwickshire',
               code: 'S',
-              address1: 'CV37',
-              address2: '',
-              address3: '',
-              address4: '',
-              postcode: ''
+              address1: 'CV37'
       end
       let(:site_status1) do
         build :site_status, :findable, :full_time_vacancies,
@@ -65,11 +108,7 @@ describe SearchAndCompare::CourseSerializer do
         build :site,
               location_name: 'Nuneaton & Bedworth',
               code: 'N',
-              address1: 'CV10',
-              address2: '',
-              address3: '',
-              address4: '',
-              postcode: ''
+              address1: 'CV10'
       end
       let(:site_status2) do
         build :site_status, :findable, :full_time_vacancies,
@@ -92,6 +131,7 @@ describe SearchAndCompare::CourseSerializer do
       let(:provider_enrichment) do
         build :provider_enrichment,
               :published,
+              last_published_at: 1.day.ago,
               address1: "c/o Claverdon Primary School",
               address2: "Breach Lane",
               address3: "Claverdon",
@@ -99,7 +139,9 @@ describe SearchAndCompare::CourseSerializer do
               postcode: "CV35 8QA",
               telephone: "02476 347697",
               email: "info@gatewayalliance.co.uk",
-              website: "http://www.gatewayalliance.co.uk"
+              website: "http://www.gatewayalliance.co.uk",
+              **provider_enrichment_fields,
+              accrediting_provider_enrichments: accrediting_provider_enrichments
       end
 
       let(:provider) do
@@ -338,8 +380,39 @@ describe SearchAndCompare::CourseSerializer do
         end
       end
 
+      describe 'DescriptionSections_Mapping' do
+        subject { resource[:DescriptionSections] }
+
+        let(:expected_enrichments) do
+          { "about this training programme": about_course,
+            "interview process": interview_process,
+            "about fees": fee_details,
+            "about salary": salary_details,
+            "entry requirements": qualifications,
+            "entry requirements personal qualities": personal_qualities,
+            "entry requirements other": other_requirements,
+            "financial support": financial_support,
+            "about school placements": how_school_placements_work,
+            "about this training provider": train_with_us,
+            "about this training provider accrediting": accrediting_provider_enrichment_description,
+            "training with disabilities": train_with_disability }.freeze
+        end
+        it 'map the fields' do
+          subject.each do |description_section|
+            #default_description_section_value
+            expect(description_section[:Id]).to be_zero
+            expect(description_section[:Ordinal]).to be_zero
+            expect(description_section[:CourseId]).to be_zero
+            expect(description_section[:Course]).to be_nil
+
+            expected_text = expected_enrichments[description_section[:Name].to_sym]
+            expect(description_section[:Text]).to eq expected_text
+          end
+        end
+      end
+
       # should work fine once hardcoded/db ones are flushed out
-      xit { should eq expected_json }
+      it { should eq expected_json }
     end
   end
 end

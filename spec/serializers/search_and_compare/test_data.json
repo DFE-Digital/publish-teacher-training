@@ -33,7 +33,7 @@
       "Id": 0,
       "Ordinal": 0,
       "Name": "about this training programme",
-      "Text": "This 1-year postgraduate course will recommend you, on completion, for Qualified Teacher Status (QTS) with full PGCE, to teach children aged 5-11 in primary, infant, junior, first and middle schools (including 90 CATS points towards a Masters). \r\n\r\nOn this programme you will undertake your training in a special school and you will spend a term in each of the 3 primary age groups: Key stage 1, Lower Key Stage 2 and Upper Key Stage 2.\r\n\r\nYou will be supported by an in-school 'professional mentor', a 'personal tutor' at the University and a 'link tutor' who will span both. Gateway also provides access to a 'lead mentor' who will support your professional development, facilitate opportunities for you to network with other trainees and ensure the support received throughout the training year is of the highest quality. \r\n\r\nThe training programme has been developed to help you to feel part of the school team from day 1. You will undertake an in-school induction at the end of the summer term prior to starting your training, for up to 10 days, and this will be followed by a University induction during late August. \r\n\r\nYou will be in school from the first day of the school year so from the very start you will be treated as a member of staff and will attend staff meetings and development days. Your learning will be supported through structured training days at the University, complemented by your time in school to put the theory into practice and begin to develop your own skills in the classroom. Throughout the training year the amount of teaching that you take on will be gradually increased at a pace to suit you, supported at all times by in-school and academic mentoring. \r\n\r\nRunning alongside the University taught programme are a series of training days led by the Gateway Alliance, these sessions focus on key areas of practice and also provide a great opportunity for networking with other Gateway trainees.\r\n\r\nAs a salaried trainee you will be employed by your 'host school' for the duration of the course and receive a salary equivalent to point 1 of the unqualified teacher pay scale.  Please note, the University of Warwick currently charge a fee of £2,000, payable by ALL salaried trainees, to cover the cost of the accredited element of the course. Further details about this can be obtained from the University.\r\n\r\n\r\n",
+      "Text": "about_course",
       "CourseId": 0,
       "Course": null
     },
@@ -41,7 +41,7 @@
       "Id": 0,
       "Ordinal": 0,
       "Name": "interview process",
-      "Text": "The Gateway Alliance will be leading the recruitment process working in partnership with the University of Warwick. \r\n\r\nShort-Listing\r\nA panel comprising of headteachers and senior leaders from Gateway schools will short-list the applications on behalf of the partner schools. \r\n\r\nPlease note: \r\n* All candidates must meet the entry requirements and have prior experience (paid or voluntary) within schools.\r\n* Where candidates are from overseas please contact the University of Warwick or NARIC to check equivalency of qualifications.\r\n* Those candidates who have already completed their skills tests will be considered positively. \r\n* Where there are gaps within work history then this may delay your application as further checks may have to take place.\r\n\r\nInterviews\r\nAll shortlisted candidates will be invited to attend a school based interview.\r\n\r\nThis will involve the following: \r\n\r\n* 10-15 minute observed teaching task\r\n* Group discussion activity\r\n* Panel interview\r\n\r\n",
+      "Text": "interview_process",
       "CourseId": 0,
       "Course": null
     },
@@ -49,7 +49,7 @@
       "Id": 0,
       "Ordinal": 0,
       "Name": "about fees",
-      "Text": null,
+      "Text": "fee_details",
       "CourseId": 0,
       "Course": null
     },
@@ -57,7 +57,7 @@
       "Id": 0,
       "Ordinal": 0,
       "Name": "about salary",
-      "Text": "As a salaried trainee you will receive a salary equivalent to point 1 of the unqualified teacher pay scale.  ",
+      "Text": "salary_details",
       "CourseId": 0,
       "Course": null
     },
@@ -65,7 +65,7 @@
       "Id": 0,
       "Ordinal": 0,
       "Name": "entry requirements",
-      "Text": "You should be a graduate, or in your final year, preferably with a 1st or a 2:1, though we are willing to consider applicants who have a 2:2 who can demonstrate other academic success and a real aptitude for teaching. \r\n\r\nApplicants for the salaried route must have a minimum 3 years work experience (full time equivalent). \r\n\r\nYou will need at least a grade C (grade 4) in GCSE English, Maths & Science. \r\n",
+      "Text": "qualifications",
       "CourseId": 0,
       "Course": null
     },
@@ -73,7 +73,7 @@
       "Id": 0,
       "Ordinal": 0,
       "Name": "entry requirements personal qualities",
-      "Text": "We look for candidates with the following strengths: \r\n\r\n* Passion for learning and an interest in/knowledge of education\r\n* Excellent communication skills (both written and verbal)\r\n* Ability to stay calm and deal with stressful situations\r\n* Drive to succeed and resilience in the face of difficulty\r\n* Experience of working with children with Special Educational Needs\r\n* Being part of a team and working collaboratively\r\n* Sense of fun!\r\n* Reflective practitioner who responds to feedback\r\n* Willing to travel/ able to work in a range of locations\r\n",
+      "Text": "personal_qualities",
       "CourseId": 0,
       "Course": null
     },
@@ -81,7 +81,7 @@
       "Id": 0,
       "Ordinal": 0,
       "Name": "entry requirements other",
-      "Text": "We would expect all applicants to have experience of British primary schools. This could be as a volunteer or in paid work. \r\n\r\nAlthough there is no set amount of school experience that we require, the experience that you have gained should be meaningful, relevant and significant and it should enable you to talk about learning in a range of settings. Please reflect on this experience and explain in your application form what you have learnt from it. \r\n\r\nIt should also have given you an insight into the workload expectations and how highly demanding the role of a teacher is. \r\n",
+      "Text": "other_requirements",
       "CourseId": 0,
       "Course": null
     },
@@ -89,7 +89,7 @@
       "Id": 0,
       "Ordinal": 0,
       "Name": "financial support",
-      "Text": null,
+      "Text": "financial_support",
       "CourseId": 0,
       "Course": null
     },
@@ -97,7 +97,7 @@
       "Id": 0,
       "Ordinal": 0,
       "Name": "about school placements",
-      "Text": "As part of our selection process we will ask candidates to share their preferences regarding location of school.  We support a wide partnership of over 30 schools in a range of locations across Warwickshire and Coventry.\r\nSchool's will then select the trainee, at interview, that they feel will be most suitable for their school/setting.  Occasionally, where more than 1 school would like to support 1 applicant, the applicant will have the opportunity to choose which school they prefer.\r\n\r\nOn this programme you will undertake the majority of your training in a special school. You will spend a term in each of the 3 primary age groups: Key Stage 1, Lower Key Stage 2 and Upper Key Stage 2. Alongside your time in school, trainees will spend approximately 1 day per week at the University for the formally taught element of the programme.\r\n\r\nFor the majority of the training year you will be based at your 'host school', however you will spend 1 term on a complementary placement, in a mainstream primary school setting. You will also have the opportunity to  spend time in a secondary school and also in a number of the other partner schools to widen your experience of school life. \r\n",
+      "Text": "how_school_placements_work",
       "CourseId": 0,
       "Course": null
     },
@@ -105,7 +105,7 @@
       "Id": 0,
       "Ordinal": 0,
       "Name": "about this training provider",
-      "Text": "The Gateway Alliance specialise in supporting primary and special school teacher trainees and have led a School Direct Programme, in partnership with the University of Warwick, since 2012.\r\n\r\n“It has been great to train in one of the Gateway Alliance schools as it is such a well-respected and strong primary partnership. The Gateway team are specialists in supporting trainees in primary schools and the quality of training and support has been fantastic.” \r\nRichard – Gateway Alliance School Direct Trainee\r\n\r\nYou’ll be part of a school based teaching team, in one of our 30+ partner schools, from the very start; receiving intensive support from experienced teachers and mentors. You have the opportunity to become immersed in school life through your training year, which means when you begin your first job as a teacher you are better prepared for life in school. You will access an outstanding academic programme of study at the University of Warwick which will support you to understand the theory behind teaching whilst developing and practicing your skills in school.\r\n\r\nThe Gateway Alliance School Direct Partnership is made up of a wide range of schools from across the Warwickshire, Coventry and surrounding areas and we work together with the University of Warwick, to offer the best possible teacher training experience.  Through the training year we make full use of the strengths of our partnership and offer trainees access to a wide range of experiences and learning opportunities across a range of our partner schools.",
+      "Text": "train_with_us",
       "CourseId": 0,
       "Course": null
     },
@@ -113,7 +113,7 @@
       "Id": 0,
       "Ordinal": 0,
       "Name": "about this training provider accrediting",
-      "Text": "The Gateway Alliance School Direct Programme is accredited by our partner initial teacher training provider – the University of Warwick.\r\n\r\nThe University of Warwick…\r\n* is an (Ofsted) Outstanding teacher training provider\r\n* is one of the top 10 universities in the UK\r\n* has over 40 years experience of supporting teacher training\r\n* has a 94% course completion rate, with 97% of those trainees being graded as Outstanding or Good at the end of the course\r\n* has a 98% employment rate",
+      "Text": "accrediting provider enrichment field",
       "CourseId": 0,
       "Course": null
     },
@@ -121,7 +121,7 @@
       "Id": 0,
       "Ordinal": 0,
       "Name": "training with disabilities",
-      "Text": "The Gateway Alliance are an inclusive alliance and pride ourselves on supporting all of our trainees to reach there full potential regardless of any disabilities or other needs.\r\n\r\nWe welcome candidates with disabilities and, under the Disability Discrimination Act, those candidates who disclose their disability have the right to have reasonable adjustments made to enable them to train to teach.\r\n\r\nFor more information please contact us on info@gatewayalliance.co.uk ",
+      "Text": "train_with_disability",
       "CourseId": 0,
       "Course": null
     }

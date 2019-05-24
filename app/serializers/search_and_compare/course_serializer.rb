@@ -82,7 +82,106 @@ module SearchAndCompare
     attribute(:ProviderLocation)                      { provider_location }
     attribute(:ContactDetails)                        { contact_details }
 
+    # DescriptionSections_Mapping
+    attribute(:DescriptionSections)                   { description_sections }
+
   private
+
+    def default_description_section_value
+      {
+        Id: 0,
+        Ordinal: 0,
+        CourseId: 0,
+        Course: nil,
+      }
+    end
+
+    def text(enrichment_type, enrichment_key)
+      if enrichment_type == :course_enrichment
+        course_enrichment.send enrichment_key
+      elsif enrichment_type == :provider_enrichment
+        provider_enrichment.send enrichment_key
+      else
+        object.send enrichment_key
+      end
+    end
+
+    def description_sections
+      description_sections_enrichment_mappings.map do |mappings|
+        {
+          **default_description_section_value,
+          Name: mappings[:name],
+          Text: text(mappings[:enrichment_type], mappings[:enrichment_key])
+        }
+      end
+    end
+
+    def description_sections_enrichment_mappings
+      [{
+        name: "about this training programme",
+        enrichment_key: :about_course,
+        enrichment_type: :course_enrichment,
+       },
+       {
+         name: "interview process",
+         enrichment_key: :interview_process,
+         enrichment_type: :course_enrichment,
+       },
+       {
+         name: "about fees",
+         enrichment_key: :fee_details,
+         enrichment_type: :course_enrichment,
+       },
+       {
+         name: "about salary",
+         enrichment_key: :salary_details,
+         enrichment_type: :course_enrichment,
+       },
+       {
+         name: "entry requirements",
+         enrichment_key: :qualifications,
+         enrichment_type: :course_enrichment,
+       },
+       {
+         name: "entry requirements personal qualities",
+         enrichment_key: :personal_qualities,
+         enrichment_type: :course_enrichment,
+       },
+       {
+         name: "entry requirements other",
+         enrichment_key: :other_requirements,
+         enrichment_type: :course_enrichment,
+       },
+       {
+         name: "financial support",
+         enrichment_key: :financial_support,
+         enrichment_type: :course_enrichment,
+       },
+       {
+         name: "about school placements",
+         enrichment_key: :how_school_placements_work,
+         enrichment_type: :course_enrichment,
+       },
+       {
+         name: "about this training provider",
+         enrichment_key: :train_with_us,
+         enrichment_type: :provider_enrichment,
+       },
+       {
+         name: "about this training provider accrediting",
+         enrichment_key: :accrediting_provider_description,
+         enrichment_type: :accreditingProvider_provider_enrichment,
+       },
+       {
+         name: "training with disabilities",
+         enrichment_key: :train_with_disability,
+         enrichment_type: :provider_enrichment,
+       }].freeze
+    end
+
+    def provider_enrichment
+      @provider_enrichment ||= object.provider.enrichments.latest_published_at.first
+    end
 
     def course_enrichment
       @course_enrichment ||= object.enrichments.published.latest_first.first
