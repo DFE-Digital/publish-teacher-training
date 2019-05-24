@@ -49,6 +49,11 @@ class Provider < ApplicationRecord
            foreign_key: :provider_code,
            primary_key: :provider_code,
            class_name: "ProviderEnrichment"
+  has_one :latest_published_enrichment,
+          -> { published.latest_published_at },
+          foreign_key: :provider_code,
+          primary_key: :provider_code,
+          class_name: "ProviderEnrichment"
   has_many :courses
   has_one :ucas_preferences, class_name: 'ProviderUCASPreference'
   has_many :contacts
@@ -131,9 +136,8 @@ class Provider < ApplicationRecord
       email
     ]
 
-    enrichment = enrichments.published.latest_published_at.first
-    if enrichment
-      enrichment.attributes.slice(*(attribute_names + %w[website]))
+    if latest_published_enrichment
+      latest_published_enrichment.attributes.slice(*(attribute_names + %w[website]))
     else
       attributes.slice(*attribute_names).merge('website' => url)
     end

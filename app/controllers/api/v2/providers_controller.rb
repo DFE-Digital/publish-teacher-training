@@ -12,7 +12,7 @@ module API
       end
 
       def show
-        provider = Provider.find_by!(provider_code: params[:code].upcase)
+        provider = Provider.includes(:latest_published_enrichment).find_by!(provider_code: params[:code].upcase)
         authorize provider, :show?
 
         render jsonapi: provider, include: params[:include]
