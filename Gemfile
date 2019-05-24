@@ -51,8 +51,9 @@ gem 'jwt'
 # Formalise config settings with support for env vars
 gem 'config'
 
-# For building cmdline apps (mcb)
+# For building interactive cmdline apps (mcb)
 gem 'cri'
+gem 'highline'
 gem 'rainbow'
 
 # Build pretty tables in the terminal

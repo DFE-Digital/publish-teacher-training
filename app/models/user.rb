@@ -27,7 +27,8 @@ class User < ApplicationRecord
   scope :non_admins, -> { where.not('email ~ ?', DFE_EMAIL_PATTERN) }
   scope :active, -> { where.not(accept_terms_date_utc: nil) }
 
-  validates :email, presence: true
+  validates :email, presence: true, format: { with: /@/, message: "must contain @" }
+  validate :email_is_lowercase
 
   audited
 
@@ -42,5 +43,17 @@ class User < ApplicationRecord
 
   def admin?
     email.match?(%r{#{DFE_EMAIL_PATTERN}})
+  end
+
+  def to_s
+    "#{first_name} #{last_name} <#{email}>"
+  end
+
+private
+
+  def email_is_lowercase
+    if email.present? && email.downcase != email
+      errors.add(:email, "must be lowercase")
+    end
   end
 end

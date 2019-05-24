@@ -18,14 +18,18 @@
 require 'rails_helper'
 
 describe User, type: :model do
-  subject { create(:user) }
+  subject { create(:user, first_name: 'Jane', last_name: 'Smith', email: 'jsmith@scitt.org') }
 
   describe 'associations' do
     it { should have_and_belong_to_many(:organisations) }
     it { should have_many(:providers).through(:organisations) }
   end
 
-  it { is_expected.to validate_presence_of(:email) }
+  it { is_expected.to validate_presence_of(:email).with_message("must contain @") }
+  its(:to_s) { should eq("Jane Smith <jsmith@scitt.org>") }
+
+  it { should_not allow_value('CAPS_IN_EMAIL@ACME.ORG').for(:email) }
+  it { should_not allow_value('email_without_at').for(:email) }
 
   describe 'auditing' do
     it { should be_audited }
