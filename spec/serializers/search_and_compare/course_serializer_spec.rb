@@ -18,64 +18,54 @@ describe SearchAndCompare::CourseSerializer do
         { subjects: subjects }
       end
 
-      let(:course_variant) do
-        { program_type: :school_direct_salaried_training_programme,
-          qualification: :pgce_with_qts,
-          study_mode:  :full_time, }
-      end
+      let(:course) do
+        create(:course,
+               provider: provider,
+               accrediting_provider: accrediting_provider,
+               name: 'Primary (Special Educational Needs) zzz',
+               course_code: '2KXZ',
+               start_date: '2019-08-01T00:00:00',
+               subject_count: 0,
+               program_type: :school_direct_salaried_training_programme,
+               qualification: :pgce_with_qts,
+               study_mode:  :full_time,
+               site_statuses: [site_status1, site_status2],
+               **course_subjects).tap do |c|
 
-      let(:site_statuses_and_sites) do
-        site_statuses_and_sites = [
-          {
-            site_status_traits: %i[findable full_time_vacancies],
-            site_status_attrs: { applications_accepted_from: '2018-10-09T00:00:00' },
-            site_attrs: {
+          # These sites, taken from real prod data, aren't actually valid in
+          # that they're missing the following bits of data.
+          c.site_statuses.each do |site_status|
+            site_status.site.address2 = ''
+            site_status.site.address3 = ''
+            site_status.site.address4 = ''
+            site_status.site.postcode = ''
+            site_status.site.save validate: false
+            site_status.save validate: false
+          end
+        end
+      end
+      let(:site1) do
+        build :site,
               location_name: 'Stratford-Upon-Avon & South Warwickshire',
               code: 'S',
-              address1: 'CV37',
-              address2: '',
-              address3: '',
-              address4: '',
-              postcode: '',
+              address1: 'CV37'
+      end
+      let(:site_status1) do
+        build :site_status, :findable, :full_time_vacancies,
+              site: site1,
+              applications_accepted_from: '2018-10-09T00:00:00'
+      end
 
-            },
-            site_save_validate: false
-          },
-          {
-            site_status_traits: %i[findable full_time_vacancies],
-            site_status_attrs: { applications_accepted_from: '' },
-            site_attrs: {
+      let(:site2) do
+        build :site,
               location_name: 'Nuneaton & Bedworth',
               code: 'N',
-              address1: 'CV10',
-              address2: '',
-              address3: '',
-              address4: '',
-              postcode: ''
-            },
-            site_save_validate: false
-          },
-        ]
-        { site_statuses_and_sites: site_statuses_and_sites }
+              address1: 'CV10'
       end
-
-      let(:course_factory_args) do
-        {
-          provider: provider,
-          accrediting_provider: accrediting_provider,
-          name: 'Primary (Special Educational Needs)',
-          course_code: '2KXB',
-          start_date: '2019-08-01T00:00:00',
-          subject_count: 0,
-          **course_subjects,
-          **course_variant,
-          **site_statuses_and_sites,
-        }
+      let(:site_status2) do
+        build :site_status, :findable, :full_time_vacancies,
+              site: site2
       end
-
-      let(:course) {
-        create :course, **course_factory_args
-      }
 
       let(:provider) do
         build :provider,
