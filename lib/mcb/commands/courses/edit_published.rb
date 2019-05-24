@@ -33,7 +33,7 @@ run do |opts, args, _cmd|
         end
         menu.choice(:exit) { finished = true }
         menu.choice(:toggle_sites) { flow = :toggle_sites } unless multi_course_mode
-        %i[route qualifications study_mode english maths science start_date title].each do |attr|
+        %i[route qualifications study_mode accredited_body english maths science start_date title].each do |attr|
           menu.choice("Edit #{attr}") { flow = attr }
         end
         menu.choice('Publish training locations (not enrichment)') { flow = :publish_sites }
@@ -77,6 +77,11 @@ run do |opts, args, _cmd|
         menu.choices(*Course.study_modes.keys) { |value| courses.each{ |c| c.study_mode = value } }
         flow = :root
       end
+    when :accredited_body
+      accredited_body_provider_code = cli.ask("What's the provider code of the new accredited body? (can't be blank)  ")
+      accredited_body = Provider.find_by!(provider_code: accredited_body_provider_code)
+      courses.each { |c| c.accrediting_provider = accredited_body }
+      flow = :root
     when :english
       cli.choose do |menu|
         menu.prompt = "Editing course english"
