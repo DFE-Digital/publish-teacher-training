@@ -43,4 +43,8 @@ class User < ApplicationRecord
   def admin?
     email.match?(%r{#{DFE_EMAIL_PATTERN}})
   end
+
+  def to_s
+    "#{first_name} #{last_name} <#{email}>"
+  end
 end

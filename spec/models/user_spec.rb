@@ -18,7 +18,7 @@
 require 'rails_helper'
 
 describe User, type: :model do
-  subject { create(:user) }
+  subject { create(:user, first_name: 'Jane', last_name: 'Smith', email: 'jsmith@scitt.org') }
 
   describe 'associations' do
     it { should have_and_belong_to_many(:organisations) }
@@ -26,6 +26,7 @@ describe User, type: :model do
   end
 
   it { is_expected.to validate_presence_of(:email) }
+  its(:to_s) { should eq("Jane Smith <jsmith@scitt.org>") }
 
   describe 'auditing' do
     it { should be_audited }
