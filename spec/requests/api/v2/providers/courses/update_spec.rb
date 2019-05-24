@@ -1,12 +1,23 @@
 require "rails_helper"
 
 describe 'PATCH /providers/:provider_code/courses/:course_code' do
-  def perform_request(attributes)
-    patch "/api/v2/providers/#{provider.provider_code}" \
+  let(:jsonapi_renderer) { JSONAPI::Serializable::Renderer.new }
+
+  def perform_request(course)
+    jsonapi_data = jsonapi_renderer.render(
+      course,
+      class: {
+        Course: API::V2::SerializableCourse
+      }
+    )
+
+    jsonapi_data.dig(:data, :attributes).slice!(*permitted_params)
+
+    patch "/api/v2/providers/#{course.provider.provider_code}" \
             "/courses/#{course.course_code}",
           headers: { 'HTTP_AUTHORIZATION' => credentials },
           params: {
-            course: attributes
+            _jsonapi: jsonapi_data
           }
   end
 
@@ -16,6 +27,10 @@ describe 'PATCH /providers/:provider_code/courses/:course_code' do
   let(:payload)      { { email: user.email } }
   let(:token)        { build_jwt :apiv2, payload: payload }
   let(:course)       { create :course, provider: provider }
+  let(:update_enrichment) { build :course_enrichment, **update_attributes }
+  # we need an unsaved course to add the enrichment to (so that it isn't
+  # persisted)
+  let(:update_course) { course.dup.tap { |c| c.enrichments << update_enrichment } }
 
   let(:credentials) do
     ActionController::HttpAuthentication::Token.encode_credentials(token)
@@ -33,50 +48,131 @@ describe 'PATCH /providers/:provider_code/courses/:course_code' do
       interview_process: 'new interview process',
       other_requirements: 'new other requirements',
       personal_qualities: 'new personal qualities',
-      qualifications: 'new qualifications',
+      qualifications: 'new required qualifications',
       salary_details: 'new salary details'
-    }.stringify_keys
+    }
+  end
+  let(:permitted_params) do
+    %i[
+      about_course
+      course_length
+      fee_details
+      fee_international
+      fee_uk_eu
+      financial_support
+      how_school_placements_work
+      interview_process
+      other_requirements
+      personal_qualities
+      required_qualifications
+      salary_details
+    ]
   end
 
   describe 'with unpermitted attributes on course object' do
-    shared_examples 'does not allow assigning course attribute' do |attribute|
+    shared_examples 'does not allow assignment' do |attribute, value|
       it "doesn't permit #{attribute}" do
-        expect {
-          perform_request(attribute => "a new #{attribute}")
-        }.to raise_error(ActionController::UnpermittedParameters)
+        update_course = build(:course, attribute => value, provider: provider)
+        update_course.id = course.id
+        perform_request(course)
+        expect(course.reload.send(attribute)).not_to eq(value)
       end
     end
 
-    include_examples 'does not allow assigning course attribute', :age_range
-    include_examples 'does not allow assigning course attribute', :course_code
-    include_examples 'does not allow assigning course attribute', :name
-    include_examples 'does not allow assigning course attribute', :profpost_flag
-    include_examples 'does not allow assigning course attribute', :program_type
-    include_examples 'does not allow assigning course attribute', :qualification
-    include_examples 'does not allow assigning course attribute', :start_date
-    include_examples 'does not allow assigning course attribute', :study_mode
-    include_examples 'does not allow assigning course attribute', :accrediting_provider_id
-    include_examples 'does not allow assigning course attribute', :provider_id
-    include_examples 'does not allow assigning course attribute', :modular
-    include_examples 'does not allow assigning course attribute', :english
-    include_examples 'does not allow assigning course attribute', :maths
-    include_examples 'does not allow assigning course attribute', :science
-    include_examples 'does not allow assigning course attribute', :created_at
-    include_examples 'does not allow assigning course attribute', :updated_at
-    include_examples 'does not allow assigning course attribute', :changed_at
+    include_examples 'does not allow assignment', :age_range, 'primary'
+    include_examples 'does not allow assignment', :course_code, 'CZ'
+    include_examples 'does not allow assignment', :name, 'Name'
+    include_examples 'does not allow assignment', :profpost_flag, 'BO'
+    include_examples 'does not allow assignment', :program_type, 'SC'
+    include_examples 'does not allow assignment', :qualification, 2
+    include_examples 'does not allow assignment', :start_date, Date.yesterday
+    include_examples 'does not allow assignment', :study_mode, 'P'
+    include_examples 'does not allow assignment', :modular, 'Modular'
+    include_examples 'does not allow assignment', :english, 2
+    include_examples 'does not allow assignment', :maths, 2
+    include_examples 'does not allow assignment', :science, 2
+    include_examples 'does not allow assignment', :created_at, Date.yesterday
+    include_examples 'does not allow assignment', :updated_at, Date.yesterday
+    include_examples 'does not allow assignment', :changed_at, Date.yesterday
+
+    it "doesn't allow updating of provider" do
+      another_provider = create(:provider)
+      update_course    = build(
+        :course,
+        provider_id: another_provider.id,
+        provider:    provider
+      )
+      update_course.id = course.id
+
+      perform_request(course)
+
+      expect(course.reload.provider_id).not_to eq(another_provider.id)
+    end
+
+    it "doesn't allow updating of accrediting provider" do
+      another_provider = create(:provider)
+      update_course    = build(
+        :course,
+        accrediting_provider_id: another_provider.id,
+        provider:                provider
+      )
+      update_course.id = course.id
+
+      perform_request(course)
+
+      expect(course.reload.accrediting_provider_id).not_to eq(another_provider.id)
+    end
   end
 
   context 'course has no enrichments' do
     it "creates a draft enrichment for the course" do
       expect {
-        perform_request update_attributes
+        perform_request update_course
       }.to(change {
-             course.enrichments.reload.count
+             course.reload.enrichments.count
            }.from(0).to(1))
 
-      draft_enrichment = course.enrichments.reload.draft.first
-      expect(draft_enrichment.attributes.slice(*update_attributes.keys))
-        .to include(update_attributes)
+      draft_enrichment = course.enrichments.draft.first
+      expect(draft_enrichment.attributes.slice(*update_attributes.keys.map(&:to_s)))
+        .to include(update_attributes.stringify_keys)
+    end
+
+    it 'returns ok' do
+      perform_request update_course
+
+      expect(response).to be_ok
+    end
+
+    it 'returns the updated course' do
+      perform_request update_course
+      json_response = JSON.parse(response.body)['data']
+
+      expect(json_response).to have_id(course.id.to_s)
+      expect(json_response).to have_type('courses')
+      expect(json_response).to have_attribute(:about_course)
+        .with_value('new about course')
+      expect(json_response).to have_attribute(:course_length)
+        .with_value('new course length')
+      expect(json_response).to have_attribute(:fee_details)
+        .with_value('new fee details')
+      expect(json_response).to have_attribute(:fee_international)
+        .with_value('new fee international')
+      expect(json_response).to have_attribute(:fee_uk_eu)
+        .with_value('new fee uk eu')
+      expect(json_response).to have_attribute(:financial_support)
+        .with_value('new financial support')
+      expect(json_response).to have_attribute(:how_school_placements_work)
+        .with_value('new how school placements work')
+      expect(json_response).to have_attribute(:interview_process)
+        .with_value('new interview process')
+      expect(json_response).to have_attribute(:other_requirements)
+        .with_value('new other requirements')
+      expect(json_response).to have_attribute(:personal_qualities)
+        .with_value('new personal qualities')
+      expect(json_response).to have_attribute(:required_qualifications)
+        .with_value('new required qualifications')
+      expect(json_response).to have_attribute(:salary_details)
+        .with_value('new salary details')
     end
   end
 
@@ -88,14 +184,14 @@ describe 'PATCH /providers/:provider_code/courses/:course_code' do
 
     it "updates the course's draft enrichment" do
       expect {
-        perform_request update_attributes
+        perform_request update_course
       }.not_to(
         change { course.enrichments.reload.count }
       )
 
-      draft_enrichment = course.enrichments.reload.draft.first
-      expect(draft_enrichment.attributes.slice(*update_attributes.keys))
-        .to include(update_attributes)
+      draft_enrichment = course.enrichments.draft.first
+      expect(draft_enrichment.attributes.slice(*update_attributes.keys.map(&:to_s)))
+        .to include(update_attributes.stringify_keys)
     end
   end
 
@@ -106,13 +202,15 @@ describe 'PATCH /providers/:provider_code/courses/:course_code' do
     end
 
     it "creates a draft enrichment for the course" do
-      expect { perform_request update_attributes }
-        .to(change { course.enrichments.reload.count }
-              .from(1).to(2))
+      expect { perform_request update_course }
+        .to(
+          change { course.enrichments.reload.draft.count }
+            .from(0).to(1)
+        )
 
-      draft_enrichment = course.enrichments.reload.draft.first
-      expect(draft_enrichment.attributes.slice(*update_attributes.keys))
-        .to include(update_attributes)
+      draft_enrichment = course.enrichments.draft.first
+      expect(draft_enrichment.attributes.slice(*update_attributes.keys.map(&:to_s)))
+        .to include(update_attributes.stringify_keys)
     end
   end
 end

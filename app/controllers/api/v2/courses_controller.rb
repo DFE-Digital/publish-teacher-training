@@ -4,6 +4,10 @@ module API
       before_action :build_provider
       before_action :build_course, except: :index
 
+      deserializable_resource :course,
+                              only: %i[update],
+                              class: API::V2::DeserializableCourse
+
       def index
         authorize @provider, :can_list_courses?
         authorize Course
@@ -43,13 +47,20 @@ module API
       end
 
       def update
-        if @course.enrichments.draft.any?
-          enrichment = @course.enrichments.draft.first
-        else
-          enrichment = @course.enrichments.new(status: 'draft')
-        end
+        enrichment = if @course.enrichments.draft.any?
+                       @course.enrichments.draft.first
+                     else
+                       @course.enrichments.new(status: 'draft')
+                     end
+
         enrichment.assign_attributes(update_params)
         enrichment.save
+
+        if @course.valid?
+          render jsonapi: @course.reload
+        else
+          render jsonapi_errors: @course.errors, status: :unprocessable_entity
+        end
       end
 
     private
@@ -79,8 +90,8 @@ module API
             :interview_process,
             :other_requirements,
             :personal_qualities,
-            :qualifications,
-            :salary_details
+            :salary_details,
+            :qualifications
           )
       end
     end
