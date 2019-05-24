@@ -176,8 +176,5 @@ Course_Full_Mapping:
     <<: *Salary
   <<: *Subjects_related
   <<: *Course_variant
-<<<<<<< HEAD
   <<: *Campuses_related
-=======
   <<: *Course_direct_enrichment
->>>>>>> [1429] Added serialization for direct enrichment fields

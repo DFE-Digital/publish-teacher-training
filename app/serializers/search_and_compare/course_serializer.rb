@@ -75,13 +75,23 @@ module SearchAndCompare
     attribute(:HasVacancies)                          { object.has_vacancies? }
 
     # Course_direct_enrichment_Mapping
-    attribute(:Duration)                              { course_enrichment.duration }
+    attribute(:Duration)                              { duration }
     attribute(:Fees)                                  { fees }
 
   private
 
     def course_enrichment
       @course_enrichment ||= object.enrichments.published.latest_first.first
+    end
+
+    def duration
+      if course_enrichment.course_length == "OneYear"
+        "1 year"
+      elsif course_enrichment.course_length == "TwoYears"
+        "Up to 2 years"
+      else
+        course_enrichment.course_length
+      end
     end
 
     def fees

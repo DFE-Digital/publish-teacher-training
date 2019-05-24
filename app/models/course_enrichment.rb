@@ -61,16 +61,6 @@ class CourseEnrichment < ApplicationRecord
     course.is_fee_based?
   end
 
-  def duration
-    if course_length == "OneYear"
-      "1 year"
-    elsif course_length == "TwoYears"
-      "Up to 2 years"
-    else
-      course_length
-    end
-  end
-
   def has_been_published_before?
     last_published_timestamp_utc.present?
   end
