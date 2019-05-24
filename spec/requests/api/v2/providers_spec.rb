@@ -50,27 +50,9 @@ describe 'Providers API v2', type: :request do
             "type" => "providers",
             "attributes" => {
               "provider_code" => provider.provider_code,
-              "provider_name" => provider.provider_name,
-              "accredited_body?" => false,
-              "can_add_more_sites?" => true,
-              "train_with_us" => enrichment.train_with_us,
-              "train_with_disability" => enrichment.train_with_disability,
-              "address1" => enrichment.address1,
-              "address2" => enrichment.address2,
-              "address3" => enrichment.address3,
-              "address4" => enrichment.address4,
-              "postcode" => enrichment.postcode,
-              "region_code" => enrichment.region_code,
-              "telephone" => enrichment.telephone,
-              "email" => enrichment.email,
-              "website" => enrichment.website
+              "provider_name" => provider.provider_name
             },
             "relationships" => {
-              "sites" => {
-                "meta" => {
-                  "included" => false
-                }
-              },
               "courses" => {
                 "meta" => {
                   "count" => provider.courses.count
@@ -98,27 +80,9 @@ describe 'Providers API v2', type: :request do
             "type" => "providers",
             "attributes" => {
               "provider_code" => provider.provider_code,
-              "provider_name" => provider.provider_name,
-              "accredited_body?" => false,
-              "can_add_more_sites?" => true,
-              "train_with_us" => enrichment.train_with_us,
-              "train_with_disability" => enrichment.train_with_disability,
-              "address1" => enrichment.address1,
-              "address2" => enrichment.address2,
-              "address3" => enrichment.address3,
-              "address4" => enrichment.address4,
-              "postcode" => enrichment.postcode,
-              "region_code" => enrichment.region_code,
-              "telephone" => enrichment.telephone,
-              "email" => enrichment.email,
-              "website" => enrichment.website
+              "provider_name" => provider.provider_name
             },
             "relationships" => {
-              "sites" => {
-                "meta" => {
-                  "included" => false
-                }
-              },
               "courses" => {
                 "meta" => {
                   "count" => provider.courses.count
