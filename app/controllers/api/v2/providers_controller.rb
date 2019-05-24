@@ -5,7 +5,7 @@ module API
 
       def index
         authorize Provider
-        providers = policy_scope(Provider).includes(:courses)
+        providers = policy_scope(Provider).include_courses_counts
         providers = providers.where(id: @user.providers) if @user.present?
 
         render jsonapi: providers.in_order, fields: { providers: %i[provider_code provider_name courses] }

@@ -201,4 +201,39 @@ describe Provider, type: :model do
       its(:can_add_more_sites?) { should be_falsey }
     end
   end
+
+  describe "courses" do
+    let!(:provider) { create(:provider) }
+    let!(:course) { create(:course, provider: provider) }
+
+    describe "#courses_count" do
+      it 'returns course count using courses.size' do
+        allow(provider.courses).to receive(:size).and_return(1)
+
+        expect(provider.courses_count).to eq(1)
+        expect(provider.courses).to have_received(:size)
+      end
+
+      context "with .include_courses_counts" do
+        let(:provider_with_included) { Provider.include_courses_counts.first }
+
+        it "return course count using included_courses_count" do
+          allow(provider_with_included).to receive(:included_courses_count).and_return(1)
+          allow(provider_with_included.courses).to receive(:size)
+
+          expect(provider_with_included.courses_count).to eq(1)
+          expect(provider_with_included).to have_received(:included_courses_count)
+          expect(provider_with_included.courses).to_not have_received(:size)
+        end
+      end
+    end
+
+    describe ".include_courses_counts" do
+      let(:first_provider) { Provider.include_courses_counts.first }
+
+      it 'includes course counts' do
+        expect(first_provider.courses_count).to eq(1)
+      end
+    end
+  end
 end
