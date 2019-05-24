@@ -311,6 +311,7 @@ describe 'Access Request API V2', type: :request do
              last_name: "monkhouse",
              organisation: "bbc",
              reason: "star qualities",
+             requester_email: requesting_user.email
            } }.as_json
     end
     context 'when unauthenticated' do
@@ -369,7 +370,7 @@ describe 'Access Request API V2', type: :request do
           expect(access_request.organisation).to eq("bbc")
           expect(access_request.reason).to eq("star qualities")
           expect(access_request.request_date_utc).to be_within(1.second).of Time.now.utc # https://github.com/travisjeffery/timecop/issues/97
-          expect(access_request.requester.email).to eq("super.admin@digital.education.gov.uk")
+          expect(access_request.requester.email).to eq(requesting_user.email)
         end
       end
     end
