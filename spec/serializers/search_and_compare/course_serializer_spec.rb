@@ -18,26 +18,53 @@ describe SearchAndCompare::CourseSerializer do
         { subjects: subjects }
       end
 
-      let(:course_variant) do
-        { program_type: :school_direct_salaried_training_programme,
-          qualification: :pgce_with_qts,
-          study_mode:  :full_time, }
+      let(:course) do
+        create(:course,
+               provider: provider,
+               accrediting_provider: accrediting_provider,
+               name: 'Primary (Special Educational Needs) zzz',
+               course_code: '2KXZ',
+               start_date: '2019-08-01T00:00:00',
+               subject_count: 0,
+               program_type: :school_direct_salaried_training_programme,
+               qualification: :pgce_with_qts,
+               study_mode:  :full_time,
+               site_statuses: [site_status1, site_status2],
+               **course_subjects).tap do |c|
+
+          # These sites, taken from real prod data, aren't actually valid in
+          # that they're missing the following bits of data.
+          c.site_statuses.each do |site_status|
+            site_status.site.address2 = ''
+            site_status.site.address3 = ''
+            site_status.site.address4 = ''
+            site_status.site.postcode = ''
+            site_status.site.save validate: false
+            site_status.save validate: false
+          end
+        end
       end
-      let(:course_factory_args) do
-        {
-          provider: provider,
-          accrediting_provider: accrediting_provider,
-          name: 'Primary (Special Educational Needs)',
-          course_code: '2KXB',
-          start_date: '2019-08-01T00:00:00',
-          subject_count: 0,
-          **course_subjects,
-          **course_variant,
-        }
+      let(:site1) do
+        build :site,
+              location_name: 'Stratford-Upon-Avon & South Warwickshire',
+              code: 'S',
+              address1: 'CV37'
+      end
+      let(:site_status1) do
+        build :site_status, :findable, :full_time_vacancies,
+              site: site1,
+              applications_accepted_from: '2018-10-09T00:00:00'
       end
 
-      let(:course) do
-        create :course, **course_factory_args
+      let(:site2) do
+        build :site,
+              location_name: 'Nuneaton & Bedworth',
+              code: 'N',
+              address1: 'CV10'
+      end
+      let(:site_status2) do
+        build :site_status, :findable, :full_time_vacancies,
+              site: site2
       end
 
       let(:provider) do
@@ -141,6 +168,45 @@ describe SearchAndCompare::CourseSerializer do
             end
           end
           it { should match_array expected_course_subjects }
+
+          context 'json' do
+            subject { expected_json[:CourseSubjects] }
+            it { should match_array expected_course_subjects }
+          end
+        end
+      end
+
+      describe 'Campuses_related_Mapping' do
+        it { should include(ApplicationsAcceptedFrom: '2018-10-09T00:00:00') }
+        it { should include(HasVacancies: course.has_vacancies?) }
+
+        describe 'Campuses' do
+          subject { resource[:Campuses] }
+          let(:expected_campuses) {
+            course.site_statuses.findable.map do |site_status|
+              address = [site_status.site.address1, site_status.site.address2, site_status.site.address3, site_status.site.address4, site_status.site.postcode].reject(&:blank?).join('/n')
+              {
+                Id: 0,
+                LocationId: nil,
+                Course: nil,
+                VacStatus: site_status.vac_status_before_type_cast,
+                Name: site_status.site.location_name,
+                CampusCode: site_status.site.code,
+                Location: { Id: 0,
+                  FormattedAddress: nil,
+                  GeoAddress: nil,
+                  Latitude: nil,
+                  Longitude: nil,
+                  LastGeocodedUtc: '0001-01-01T00:00:00',
+                   Address: address }
+              }
+            end
+          }
+          it { should match_array expected_campuses }
+          context 'json' do
+            subject { expected_json[:Campuses] }
+            it { should match_array expected_campuses }
+          end
         end
       end
 

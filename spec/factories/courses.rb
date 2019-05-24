@@ -38,6 +38,7 @@ FactoryBot.define do
       subject_count      { 1 }
       subjects           { build_list(:subject, subject_count) }
       with_site_statuses { [] }
+      site_statuses_and_sites { [] }
       with_enrichments   { [] }
       age                { nil }
       enrichments        { [] }
