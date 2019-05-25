@@ -122,6 +122,8 @@ describe 'Courses API v2', type: :request do
               "has_bursary?" => true,
               "has_scholarship_and_bursary?" => false,
               "has_early_career_payments?" => false,
+              "bursary_amount" => nil,
+              "scholarship_amount" => nil,
             },
             "relationships" => {
               "accrediting_provider" => { "meta" => { "included" => false } },
@@ -241,6 +243,8 @@ describe 'Courses API v2', type: :request do
               "has_bursary?" => true,
               "has_scholarship_and_bursary?" => false,
               "has_early_career_payments?" => false,
+              "bursary_amount" => nil,
+              "scholarship_amount" => nil,
             },
             "relationships" => {
               "accrediting_provider" => { "meta" => { "included" => false } },

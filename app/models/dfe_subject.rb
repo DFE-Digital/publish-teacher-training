@@ -29,6 +29,14 @@ class DFESubject
     financial_support&.fetch(:early_career_payments).present?
   end
 
+  def bursary_amount
+    financial_support&.fetch(:bursary_amount)
+  end
+
+  def scholarship_amount
+    financial_support&.fetch(:scholarship)
+  end
+
   def to_s
     @subject_name
   end

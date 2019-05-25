@@ -254,4 +254,12 @@ class Course < ApplicationRecord
   def has_early_career_payments?
     dfe_subjects.any?(&:has_early_career_payments?)
   end
+
+  def bursary_amount
+    dfe_subjects&.first&.bursary_amount
+  end
+
+  def scholarship_amount
+    dfe_subjects&.first&.scholarship_amount
+  end
 end
