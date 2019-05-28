@@ -120,6 +120,13 @@
         "metadata": {
             "description": "The secret shared between manage courses backend and manage courses API to authorize requests."
         }
+    },
+    "databaseServiceName": {
+      "type": "string",
+      "defaultValue": "",
+      "metadata": {
+        "description": "The abbriviation of the database service name to be used when naming a resource."
+      }
     }
   },
   "variables": {
@@ -128,7 +135,10 @@
     "keyvaultCertificateName": "[if(greater(length(parameters('certificateName')),0), parameters('certificateName'), replace(parameters('customHostName'), '.', '-'))]",
     "appServiceName": "[concat(variables('resourceNamePrefix'), '-as')]",
     "appServicePlanName": "[concat(variables('resourceNamePrefix'), '-asp')]",
-    "appServiceRuntimeStack": "[concat('DOCKER|', parameters('dockerHubUsername'), '/', parameters('containerImageReference'))]"
+    "appServiceRuntimeStack": "[concat('DOCKER|', parameters('dockerHubUsername'), '/', parameters('containerImageReference'))]",
+    "databaseResourceNamePrefix": "[toLower(concat('bat-', parameters('resourceEnvironmentName'),'-', parameters('databaseServiceName')))]",
+    "databaseServerName": "[concat(variables('databaseResourceNamePrefix'), '-psql')]",
+    "databaseResourceGroup": "[concat(variables('databaseResourceNamePrefix'), '-rg')]"
   },
   "resources": [
     {
@@ -259,6 +269,32 @@
         "app-service-plan"
       ]
     },
+    {
+      "condition": "[parameters('databaseServiceName')]",
+      "apiVersion": "2017-05-10",
+      "name": "postgresql-server-firewall-rules",
+      "type": "Microsoft.Resources/deployments",
+      "resourceGroup": "[variables('databaseResourceGroup')]",
+      "properties": {
+          "mode": "Incremental",
+          "templateLink": {
+              "uri": "[concat(variables('deploymentUrlBase'),'postgresql-server-firewall-rules.json')]",
+              "contentVersion": "1.0.0.0"
+          },
+          "parameters": {
+              "firewallRuleNamePrefix": {
+                  "value": "[concat(variables('appServicePlanName'),'-AZURE_IP-')]"
+              },
+              "ipAddresses": {
+                  "value": "[reference('app-service').outputs.possibleOutboundIpAddresses.value]"
+              },
+              "serverName": {
+                  "value": "[variables('databaseServerName')]"
+              }
+          }
+      },
+      "dependsOn": []
+  },
     {
       "apiVersion": "2017-05-10",
       "name": "app-insights",
