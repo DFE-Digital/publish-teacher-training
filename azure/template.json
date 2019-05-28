@@ -270,7 +270,7 @@
       ]
     },
     {
-      "condition": "[parameters('databaseServiceName')]",
+      "condition": "[greater(length(parameters('databaseServiceName')),0)]",
       "apiVersion": "2017-05-10",
       "name": "postgresql-server-firewall-rules",
       "type": "Microsoft.Resources/deployments",
