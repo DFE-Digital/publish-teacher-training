@@ -68,7 +68,6 @@ module SearchAndCompare
     attribute(:FullTime)                              { object.part_time? ? 3 : 1 }
     attribute(:PartTime)                              { object.full_time? ? 3 : 1 }
 
-
     # Campuses_related_Mapping
     attribute(:Campuses)                              { campuses }
     # using server date time not utc, so it's local date time?

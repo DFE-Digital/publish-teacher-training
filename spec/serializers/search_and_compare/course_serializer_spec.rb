@@ -253,6 +253,7 @@ describe SearchAndCompare::CourseSerializer do
             it { should include(IsSalaried: !course.is_fee_based?) }
           end
 
+          # to be removed in later PR as its a subset test to check a section
           describe 'json' do
             it { should eq expected_json[:Route] }
           end
@@ -269,6 +270,7 @@ describe SearchAndCompare::CourseSerializer do
           it { should include(Eu: course.is_fee_based? ? course_enrichment.fee_uk_eu : 0) }
           it { should include(International: course.is_fee_based? ? course_enrichment.fee_international : 0) }
 
+          # to be removed in later PR as its a subset test to check a section
           describe 'json' do
             it { should eq expected_json[:Fees] }
           end
@@ -291,10 +293,12 @@ describe SearchAndCompare::CourseSerializer do
           it { should include(Course: nil) }
           it { should include(Address: expected_address) }
 
+          # to be removed in later PR as its a subset test to check a section
           describe 'json' do
             it { should eq expected_json[:ContactDetails] }
           end
         end
+
         describe 'ProviderLocation' do
           subject { resource[:ProviderLocation] }
 
@@ -306,6 +310,7 @@ describe SearchAndCompare::CourseSerializer do
           it { should include(LastGeocodedUtc: '0001-01-01T00:00:00') }
           it { should include(Address: expected_address) }
 
+          # to be removed in later PR as its a subset test to check a section
           describe 'json' do
             it { should eq expected_json[:ProviderLocation] }
           end
