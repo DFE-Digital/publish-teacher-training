@@ -272,7 +272,7 @@
     {
       "condition": "[greater(length(parameters('databaseServiceName')),0)]",
       "apiVersion": "2017-05-10",
-      "name": "postgresql-server-firewall-rules",
+      "name": "mcbe-postgresql-server-firewall-rules",
       "type": "Microsoft.Resources/deployments",
       "resourceGroup": "[variables('databaseResourceGroup')]",
       "properties": {
