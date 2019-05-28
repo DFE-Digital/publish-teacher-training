@@ -110,16 +110,16 @@
       }
     },
     "settingsAuthenticationSecret": {
-        "type": "string",
-        "metadata": {
-            "description": "Auth secret for manage back-end."
-        }
+      "type": "string",
+      "metadata": {
+        "description": "Auth secret for manage back-end."
+      }
     },
     "settingsManageApiSecret": {
-        "type": "string",
-        "metadata": {
-            "description": "The secret shared between manage courses backend and manage courses API to authorize requests."
-        }
+      "type": "string",
+      "metadata": {
+        "description": "The secret shared between manage courses backend and manage courses API to authorize requests."
+      }
     },
     "databaseServiceName": {
       "type": "string",
@@ -248,12 +248,12 @@
                 "value": "[parameters('sentryDSN')]"
               },
               {
-                  "name": "SETTINGS__AUTHENTICATION__SECRET",
-                  "value": "[parameters('settingsAuthenticationSecret')]"
+                "name": "SETTINGS__AUTHENTICATION__SECRET",
+                "value": "[parameters('settingsAuthenticationSecret')]"
               },
               {
-                  "name": "SETTINGS__MANAGE_API__SECRET",
-                  "value": "[parameters('settingsManageApiSecret')]"
+                "name": "SETTINGS__MANAGE_API__SECRET",
+                "value": "[parameters('settingsManageApiSecret')]"
               }
             ]
           },
@@ -276,25 +276,25 @@
       "type": "Microsoft.Resources/deployments",
       "resourceGroup": "[variables('databaseResourceGroup')]",
       "properties": {
-          "mode": "Incremental",
-          "templateLink": {
-              "uri": "[concat(variables('deploymentUrlBase'),'postgresql-server-firewall-rules.json')]",
-              "contentVersion": "1.0.0.0"
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(variables('deploymentUrlBase'),'postgresql-server-firewall-rules.json')]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "firewallRuleNamePrefix": {
+            "value": "[concat(variables('appServicePlanName'),'-AZURE_IP-')]"
           },
-          "parameters": {
-              "firewallRuleNamePrefix": {
-                  "value": "[concat(variables('appServicePlanName'),'-AZURE_IP-')]"
-              },
-              "ipAddresses": {
-                  "value": "[reference('app-service').outputs.possibleOutboundIpAddresses.value]"
-              },
-              "serverName": {
-                  "value": "[variables('databaseServerName')]"
-              }
+          "ipAddresses": {
+            "value": "[reference('app-service').outputs.possibleOutboundIpAddresses.value]"
+          },
+          "serverName": {
+            "value": "[variables('databaseServerName')]"
           }
+        }
       },
       "dependsOn": []
-  },
+    },
     {
       "apiVersion": "2017-05-10",
       "name": "app-insights",
