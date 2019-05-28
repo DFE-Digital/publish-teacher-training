@@ -40,7 +40,11 @@ $mcb = Cri::Command.define do
     puts cmd.help
     puts
     puts Rainbow("SUBCOMMANDS").red.bright
-    show_all_commands(cmd, "")
+    prefix = "    "
+    cmd.commands.each do |c|
+      show_all_commands(c, prefix + c.name + " ")
+      puts
+    end
     exit 0
   end
 
@@ -50,12 +54,12 @@ $mcb = Cri::Command.define do
   end
 end
 
-def show_all_commands(cmd, indent)
+def show_all_commands(cmd, prefix)
   cmd.commands.each do |c|
-    aligned_cmd_name = (indent + c.name).ljust(20, ' ')
+    aligned_cmd_name = (prefix + c.name).ljust(37, ' ')
     coloured_name = Rainbow(aligned_cmd_name).green
-    puts "    #{coloured_name} #{c.summary}"
-    show_all_commands(c, indent + "  ")
+    puts "#{coloured_name} #{c.summary}"
+    show_all_commands(c, prefix + c.name + " ")
   end
 end
 
