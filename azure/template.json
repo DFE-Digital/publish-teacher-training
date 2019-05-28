@@ -11,7 +11,7 @@
     "serviceName": {
       "type": "string",
       "metadata": {
-        "description": "The abbriviation of the service name to be used when naming a resource."
+        "description": "The abbreviation of the service name to be used when naming a resource."
       }
     },
     "keyVaultName": {
@@ -125,7 +125,7 @@
       "type": "string",
       "defaultValue": "",
       "metadata": {
-        "description": "The abbriviation of the database service name to be used when naming a resource."
+        "description": "The abbreviation of the service that contains the database used by this application."
       }
     }
   },
