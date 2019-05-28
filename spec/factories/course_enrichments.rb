@@ -24,6 +24,8 @@ FactoryBot.define do
     course_length do
       # samples taken from real data
       [
+        "OneYear",  # These are actual keys used on the fe
+        "TwoYears", # These are actual keys used on the fe
         "36 weeks",
         "38 weeks",
         "1 year Full-time or 2 years Part-time",
@@ -36,7 +38,6 @@ FactoryBot.define do
         "1 year plus ",
         "Other",
         "10 Months",
-        "OneYear",
         "This programme is offered as a one year full-time programme or as a two year part-time programme.  The P/T programme is typically 3 days a week.",
         "September 2019- December 2020",
         "September to June",

@@ -157,6 +157,15 @@ Campuses_related_Mapping: &Campuses_related
     - <<: *Campus
   HasVacancies: has_vacancies?
 
+Fees_Mapping: &Fees
+  Uk: "is_salaried? ? 0 : course_enrichment.fee_uk_eu"
+  Eu: "is_salaried? ? 0 : course_enrichment.fee_uk_eu"
+  International: "is_salaried? ? 0 : course_enrichment.fee_international,"
+
+Course_direct_enrichment_Mapping: &Course_direct_enrichment
+  Duration: enrichement.course_length
+  Fees:
+    <<: *Fees
 
 # Actual course
 Course_Full_Mapping:
@@ -168,3 +177,4 @@ Course_Full_Mapping:
   <<: *Subjects_related
   <<: *Course_variant
   <<: *Campuses_related
+  <<: *Course_direct_enrichment

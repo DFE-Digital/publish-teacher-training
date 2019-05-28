@@ -30,6 +30,7 @@ describe SearchAndCompare::CourseSerializer do
                qualification: :pgce_with_qts,
                study_mode:  :full_time,
                site_statuses: [site_status1, site_status2],
+               with_enrichments: [[:published, course_length: "OneYear", created_at: 5.days.ago]],
                **course_subjects).tap do |c|
 
           # These sites, taken from real prod data, aren't actually valid in
@@ -240,6 +241,22 @@ describe SearchAndCompare::CourseSerializer do
 
           describe 'json' do
             it { should eq expected_json[:Route] }
+          end
+        end
+      end
+
+      describe 'Course_direct_enrichment_Mapping' do
+        it { should include(Duration: '1 year') }
+        describe 'Fees' do
+          subject { resource[:Fees] }
+          let(:course_enrichment) { course.enrichments.published.latest_first.first }
+
+          it { should include(Uk: course.is_fee_based? ? course_enrichment.fee_uk_eu : 0) }
+          it { should include(Eu: course.is_fee_based? ? course_enrichment.fee_uk_eu : 0) }
+          it { should include(International: course.is_fee_based? ? course_enrichment.fee_international : 0) }
+
+          describe 'json' do
+            it { should eq expected_json[:Fees] }
           end
         end
       end
