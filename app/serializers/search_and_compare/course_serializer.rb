@@ -88,6 +88,14 @@ module SearchAndCompare
       @course_enrichment ||= object.enrichments.published.latest_first.first
     end
 
+    def provider_external_contact_info
+      @provider_external_contact_info ||= object.provider.external_contact_info
+    end
+
+    def provider_full_address
+      @provider_full_address ||= provider_external_contact_info_full_address
+    end
+
     def duration
       if course_enrichment.course_length == "OneYear"
         "1 year"
@@ -115,7 +123,7 @@ module SearchAndCompare
     end
 
     def contact_details
-      external_contact_info = object.provider.external_contact_info
+      external_contact_info = provider_external_contact_info
 
       {
         **default_contact_details_value,
@@ -134,8 +142,8 @@ module SearchAndCompare
       }
     end
 
-    def provider_full_address
-      external_contact_info = object.provider.external_contact_info
+    def provider_external_contact_info_full_address
+      external_contact_info = provider_external_contact_info
 
       raw_address = { address1: external_contact_info['address1'], address2: external_contact_info['address2'], address3: external_contact_info['address3'], address4: external_contact_info['address4'], postcode: external_contact_info['postcode'] }
 
