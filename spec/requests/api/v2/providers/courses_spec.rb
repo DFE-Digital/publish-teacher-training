@@ -124,6 +124,7 @@ describe 'Courses API v2', type: :request do
               "has_early_career_payments?" => false,
               "bursary_amount" => nil,
               "scholarship_amount" => nil,
+              "about_accrediting_body" => nil,
             },
             "relationships" => {
               "accrediting_provider" => { "meta" => { "included" => false } },
@@ -246,6 +247,7 @@ describe 'Courses API v2', type: :request do
               "has_early_career_payments?" => false,
               "bursary_amount" => nil,
               "scholarship_amount" => nil,
+              "about_accrediting_body" => nil,
             },
             "relationships" => {
               "accrediting_provider" => { "meta" => { "included" => false } },
