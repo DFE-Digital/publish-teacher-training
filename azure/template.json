@@ -11,7 +11,7 @@
     "serviceName": {
       "type": "string",
       "metadata": {
-        "description": "The abbriviation of the service name to be used when naming a resource."
+        "description": "The abbreviation of the service name to be used when naming a resource."
       }
     },
     "keyVaultName": {
@@ -110,16 +110,23 @@
       }
     },
     "settingsAuthenticationSecret": {
-        "type": "string",
-        "metadata": {
-            "description": "Auth secret for manage back-end."
-        }
+      "type": "string",
+      "metadata": {
+        "description": "Auth secret for manage back-end."
+      }
     },
     "settingsManageApiSecret": {
-        "type": "string",
-        "metadata": {
-            "description": "The secret shared between manage courses backend and manage courses API to authorize requests."
-        }
+      "type": "string",
+      "metadata": {
+        "description": "The secret shared between manage courses backend and manage courses API to authorize requests."
+      }
+    },
+    "databaseServiceName": {
+      "type": "string",
+      "defaultValue": "",
+      "metadata": {
+        "description": "The abbreviation of the service that contains the database used by this application."
+      }
     }
   },
   "variables": {
@@ -128,7 +135,10 @@
     "keyvaultCertificateName": "[if(greater(length(parameters('certificateName')),0), parameters('certificateName'), replace(parameters('customHostName'), '.', '-'))]",
     "appServiceName": "[concat(variables('resourceNamePrefix'), '-as')]",
     "appServicePlanName": "[concat(variables('resourceNamePrefix'), '-asp')]",
-    "appServiceRuntimeStack": "[concat('DOCKER|', parameters('dockerHubUsername'), '/', parameters('containerImageReference'))]"
+    "appServiceRuntimeStack": "[concat('DOCKER|', parameters('dockerHubUsername'), '/', parameters('containerImageReference'))]",
+    "databaseResourceNamePrefix": "[toLower(concat('bat-', parameters('resourceEnvironmentName'),'-', parameters('databaseServiceName')))]",
+    "databaseServerName": "[concat(variables('databaseResourceNamePrefix'), '-psql')]",
+    "databaseResourceGroup": "[concat(variables('databaseResourceNamePrefix'), '-rg')]"
   },
   "resources": [
     {
@@ -238,12 +248,12 @@
                 "value": "[parameters('sentryDSN')]"
               },
               {
-                  "name": "SETTINGS__AUTHENTICATION__SECRET",
-                  "value": "[parameters('settingsAuthenticationSecret')]"
+                "name": "SETTINGS__AUTHENTICATION__SECRET",
+                "value": "[parameters('settingsAuthenticationSecret')]"
               },
               {
-                  "name": "SETTINGS__MANAGE_API__SECRET",
-                  "value": "[parameters('settingsManageApiSecret')]"
+                "name": "SETTINGS__MANAGE_API__SECRET",
+                "value": "[parameters('settingsManageApiSecret')]"
               }
             ]
           },
@@ -258,6 +268,32 @@
       "dependsOn": [
         "app-service-plan"
       ]
+    },
+    {
+      "condition": "[greater(length(parameters('databaseServiceName')),0)]",
+      "apiVersion": "2017-05-10",
+      "name": "mcbe-postgresql-server-firewall-rules",
+      "type": "Microsoft.Resources/deployments",
+      "resourceGroup": "[variables('databaseResourceGroup')]",
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(variables('deploymentUrlBase'),'postgresql-server-firewall-rules.json')]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "firewallRuleNamePrefix": {
+            "value": "[concat(variables('appServicePlanName'),'-AZURE_IP-')]"
+          },
+          "ipAddresses": {
+            "value": "[reference('app-service').outputs.possibleOutboundIpAddresses.value]"
+          },
+          "serverName": {
+            "value": "[variables('databaseServerName')]"
+          }
+        }
+      },
+      "dependsOn": []
     },
     {
       "apiVersion": "2017-05-10",
