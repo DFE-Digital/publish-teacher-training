@@ -108,14 +108,15 @@ module MCB
 
     process_opt_changed_since(opts, url)
     page_count = 0
-    max_pages = 30
+    max_pages = opts.fetch(:'max-pages', '30').to_i
     all_pages = opts.fetch(:all, false)
 
     Enumerator.new do |y|
       loop do
         if page_count > max_pages
           raise "too many page requests, stopping at #{page_count}" \
-                " as a safeguard. Increase max page_count if necessary."
+                " as a safeguard. Use --max-pages to increase max page count" \
+                " if necessary."
         end
 
         verbose "Requesting page #{page_count + 1}: #{url}"
@@ -155,14 +156,15 @@ module MCB
 
     process_opt_changed_since(opts, url)
     page_count = 0
-    max_pages = 30
+    max_pages = opts.fetch(:'max-pages', '30').to_i
     all_pages = opts.fetch(:all, false)
 
     Enumerator.new do |y|
       loop do
         if page_count > max_pages
           raise "too many page requests, stopping at #{page_count}" \
-                " as a safeguard. Increase max page_count if necessary."
+                " as a safeguard. Use --max-pages to increase max page count" \
+                " if necessary."
         end
 
         verbose "Requesting page #{page_count + 1}: #{url}"

@@ -13,6 +13,7 @@ require 'rainbow'
 require 'pry'
 require 'table_print'
 require 'terminal-table'
+require 'tabulo'
 
 lib_dir = File.expand_path 'lib'
 
