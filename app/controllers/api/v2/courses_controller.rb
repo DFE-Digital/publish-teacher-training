@@ -50,6 +50,7 @@ module API
 
       def build_course
         @course = @provider.courses.find_by!(course_code: params[:code].upcase)
+
         authorize @course
       end
     end
