@@ -86,7 +86,6 @@ module API
             :fee_uk_eu,
             :financial_support,
             :how_school_placements_work,
-            :internal_server_error,
             :interview_process,
             :other_requirements,
             :personal_qualities,
