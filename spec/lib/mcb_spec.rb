@@ -83,7 +83,7 @@ describe 'mcb command' do
 
       it 'uses get_config to retrieve the app config' do
         expect(MCB.apiv1_token(webapp: 'az-app')).to eq 'bar'
-        expect(MCB::Azure).to have_received(:get_config).with('az-app',
+        expect(MCB::Azure).to have_received(:get_config).with(webapp: 'az-app',
                                                               rgroup: nil)
       end
     end

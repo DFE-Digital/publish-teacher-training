@@ -21,9 +21,9 @@ module MCB
                         "is this the right subscription?")
     end
 
-    def self.get_config(app, rgroup: nil, subscription: nil)
-      rgroup ||= rgroup_for_app(app)
-      cmd = "az webapp config appsettings list -g \"#{rgroup}\" -n \"#{app}\""
+    def self.get_config(webapp:, rgroup: nil, subscription: nil)
+      rgroup ||= rgroup_for_app(webapp)
+      cmd = "az webapp config appsettings list -g \"#{rgroup}\" -n \"#{webapp}\""
       cmd += " --subscription \"#{subscription}\"" if subscription
       raw_json = MCB::run_command(cmd)
       config = JSON.parse(raw_json)
@@ -56,7 +56,7 @@ module MCB
     def self.configure_for_webapp(webapp:, rgroup: nil, subscription: nil, **_opts)
       # switch_to_subscription(opts[:subscription])
       rgroup ||= rgroup_for_app(webapp)
-      app_config = MCB::Azure.get_config(webapp,
+      app_config = MCB::Azure.get_config(webapp: webapp,
                                          rgroup: rgroup,
                                          subscription: subscription)
 

@@ -80,7 +80,7 @@ module MCB
   def self.apiv1_token(webapp: nil, rgroup: nil)
     if webapp
       verbose "getting config for webapp: #{webapp} rgroup: #{rgroup}"
-      MCB::Azure.get_config(webapp, rgroup: rgroup).fetch('AUTHENTICATION_TOKEN')
+      MCB::Azure.get_config(webapp: webapp, rgroup: rgroup).fetch('AUTHENTICATION_TOKEN')
     else
       Rails.application.config.authentication_token
     end
