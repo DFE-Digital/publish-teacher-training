@@ -150,6 +150,17 @@ module MCB
       user
     end
 
+    def apiv1_opts(**opts)
+      opts.merge! azure_env_settings_for_opts(**opts)
+
+      if requesting_remote_connection?(**opts)
+        opts[:url] = MCB::Azure.get_urls(**opts).first
+        opts[:token] = MCB::Azure.get_config(**opts)['AUTHENTICATION_TOKEN']
+      end
+
+      opts
+    end
+
     def iterate_v1_endpoint(url:, endpoint:, **opts)
       # We only need httparty for API V1 calls
       require 'httparty'
@@ -171,7 +182,7 @@ module MCB
                   " if necessary."
           end
 
-          verbose "Requesting page #{page_count + 1}: #{url}"
+          verbose "Requesting page #{page_count + 1}: #{endpoint_url}"
           response = HTTParty.get(
             endpoint_url.to_s,
             headers: { authorization: "Bearer #{token}" }
@@ -198,7 +209,7 @@ module MCB
       end
     end
 
-  def remote_connect_options
+    def remote_connect_options
       envs = env_to_azure_map.keys.join(', ')
       Proc.new do
         option :E, 'env',
@@ -216,7 +227,7 @@ module MCB
       end
     end
 
-    def requesting_remote_connection?(opts)
+    def requesting_remote_connection?(**opts)
       opts.key?(:webapp)
     end
 
@@ -247,6 +258,18 @@ module MCB
         opts[:rgroup] = env_settings[:rgroup] unless opts.key? :rgroup
         opts[:subscription] = env_settings[:subscription] unless opts.key? :subscription
       end
+    end
+
+    # Temporary re-implementation of 'load_env_azure_settings'. Altering a hash
+    # that was passed in as an arg is asking for trouble (and really annoying
+    # to test). I should've known better.
+    #
+    # TODO: Replace calls to load_env_azure_settings with calls to
+    #       azure_env_settings_for_opts
+    def azure_env_settings_for_opts(opts)
+      new_opts = opts.dup
+      load_env_azure_settings new_opts
+      new_opts
     end
 
     def find_user_by_identifier(identifier)

@@ -131,4 +131,36 @@ describe 'mcb command' do
         .to have_received(:new).with(config_file: MCB.config_file)
     end
   end
+
+  describe '.apiv1_opts' do
+    context 'with the -E flag' do
+      let(:opts) { { env: 'low-cal' } }
+      let(:opts_with_webapp) do
+        opts.merge(
+          webapp: 'weebapp',
+          rgroup: 'rezgrp',
+          subscription: 'sub6'
+        )
+      end
+      let(:urls) { %w[http://web.local https://webs.local] }
+      let(:config) { { "AUTHENTICATION_TOKEN" => 'jrr' } }
+
+      before do
+        allow(MCB).to(receive(:azure_env_settings_for_opts)
+                        .with(opts) { |o| o.merge opts_with_webapp })
+        allow(MCB).to(receive(:requesting_remote_connection?).and_return(true))
+
+        allow(MCB::Azure).to receive(:get_urls).and_return(urls)
+        allow(MCB::Azure).to receive(:get_config).and_return(config)
+      end
+
+      subject { MCB.apiv1_opts(opts) }
+
+      it { should include url: 'http://web.local' }
+      it { should include webapp: 'weebapp' }
+      it { should include rgroup: 'rezgrp' }
+      it { should include subscription: 'sub6' }
+      it { should include token: 'jrr' }
+    end
+  end
 end

@@ -21,13 +21,28 @@ module MCB
                         "is this the right subscription?")
     end
 
-    def self.get_config(webapp:, rgroup: nil, subscription: nil)
+    def self.get_config(webapp:, rgroup: nil, subscription: nil, **_opts)
       rgroup ||= rgroup_for_app(webapp)
       cmd = "az webapp config appsettings list -g \"#{rgroup}\" -n \"#{webapp}\""
       cmd += " --subscription \"#{subscription}\"" if subscription
       raw_json = MCB::run_command(cmd)
       config = JSON.parse(raw_json)
       config.map { |c| [c["name"], c["value"]] }.to_h
+    end
+
+    def self.get_urls(webapp:, rgroup: nil, subscription: nil, **_opts)
+      rgroup ||= rgroup_for_app(webapp)
+      cmd = "az webapp config hostname list -g \"#{rgroup}\" --webapp-name \"#{webapp}\""
+      cmd += " --subscription \"#{subscription}\"" if subscription
+      raw_json = MCB::run_command(cmd)
+      hostname_config = JSON.parse(raw_json)
+      hostname_config.map do |conf|
+        if conf['sslState'] == 'SniEnabled'
+          "https://#{conf['name']}"
+        else
+          "http://#{conf['name']}"
+        end
+      end
     end
 
     def self.configure_database(app_config)

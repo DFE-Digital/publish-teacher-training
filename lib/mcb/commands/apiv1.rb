@@ -11,3 +11,4 @@ option :P, 'max-pages', 'maximum number of pages to request',
        argument: :required,
        default: '200',
        transform: method(:Integer)
+instance_eval(&MCB.remote_connect_options)

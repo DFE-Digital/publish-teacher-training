@@ -11,6 +11,7 @@ option :j, 'json', 'show the returned JSON response'
 
 
 run do |opts, args, _cmd|
+  opts = MCB.apiv1_opts(opts)
   opts[:all] ||= true
 
   provider_code = args[:provider_code].upcase

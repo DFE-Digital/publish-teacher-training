@@ -2,6 +2,7 @@ name 'list'
 summary 'List providers'
 
 run do |opts, _args, _cmd|
+  opts = MCB.apiv1_opts(opts)
   last_context = nil
 
   table = Terminal::Table.new headings: %w[Code Name] do |t|

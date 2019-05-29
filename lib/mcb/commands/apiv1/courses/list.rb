@@ -1,6 +1,7 @@
 summary 'List courses'
 
 run do |opts, _args, _cmd|
+  opts = MCB.apiv1_opts(opts)
   last_context = nil
 
   table = Terminal::Table.new headings: %w[Code Name Provider\ Code Provider\ Name] do |t|
