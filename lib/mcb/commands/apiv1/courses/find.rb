@@ -46,37 +46,16 @@ def find_course(provider_code, course_code, opts)
   end
 end
 
-def hashes_to_ostructs(hashes)
-  hashes.map { |hash| OpenStruct.new(hash) }
-end
-
 def print_course_info(course)
-  campus_statuses = hashes_to_ostructs course.delete('campus_statuses')
-  subjects        = hashes_to_ostructs course.delete('subjects')
+  campus_statuses = course.delete('campus_statuses')
+  subjects        = course.delete('subjects')
   provider        = course.delete('provider')
 
-  puts Terminal::Table.new rows: course
+  puts MCB::Render.course_record course
   puts "\n"
-  puts "Provider:"
-  puts Terminal::Table.new rows: provider
+  puts MCB::Render.provider_record provider
   puts "\n"
-  puts "Subjects:"
-
-  subjects_table = Tabulo::Table.new(subjects,
-                                     :subject_code,
-                                     :subject_name).pack(max_table_width: nil)
-  puts subjects_table
-  puts subjects_table.horizontal_rule
-
+  puts MCB::Render.subjects_table subjects
   puts "\n"
-  puts "Campus Statuses:"
-  campus_statuses_table = Tabulo::Table.new(campus_statuses,
-                                            :campus_code,
-                                            :name,
-                                            :vac_status,
-                                            :publish,
-                                            :status,
-                                            :course_open_date).pack(max_table_width: nil)
-  puts campus_statuses_table
-  puts campus_statuses_table.horizontal_rule
+  puts MCB::Render.site_statuses_table campus_statuses
 end
