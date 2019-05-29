@@ -89,6 +89,26 @@ class Course < ApplicationRecord
   validates :enrichments, presence: true, on: :publish
   validate :validate_enrichment, on: :publish
 
+  def accrediting_provider_description
+    return nil if accrediting_provider.blank?
+
+    provider_enrichment = provider
+                            .enrichments
+                            .published
+                            .latest_published_at
+                            .first
+
+    return nil if provider_enrichment&.accrediting_provider_enrichments.blank?
+
+    accrediting_provider_enrichment = provider_enrichment.accrediting_provider_enrichments
+      .find do |p|
+        # 'UcasInstitutionCode' is legacy named used
+      p['UcasInstitutionCode'] == accrediting_provider.provider_code
+    end
+
+    accrediting_provider_enrichment['Description'] unless accrediting_provider_enrichment.blank?
+  end
+
   def publishable?
     valid? :publish
   end

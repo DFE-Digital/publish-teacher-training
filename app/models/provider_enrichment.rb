@@ -37,5 +37,7 @@ class ProviderEnrichment < ApplicationRecord
                  telephone: [:string, store_key: 'Telephone'],
                  train_with_us: [:string, store_key: 'TrainWithUs'],
                  train_with_disability: [:string,
-                                         store_key: 'TrainWithDisability']
+                                         store_key: 'TrainWithDisability'],
+                 accrediting_provider_enrichments: [:json,
+                                                    store_key: 'AccreditingProviderEnrichments']
 end
