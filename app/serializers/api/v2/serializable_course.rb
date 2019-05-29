@@ -29,6 +29,10 @@ module API
         @object.dfe_subjects.map(&:to_s)
       end
 
+      attribute :about_accrediting_body do
+        @object.accrediting_provider_description
+      end
+
       belongs_to :provider
       belongs_to :accrediting_provider
 
