@@ -167,6 +167,25 @@ Course_direct_enrichment_Mapping: &Course_direct_enrichment
   Fees:
     <<: *Fees
 
+ContactDetails_default_value_Mapping: &ContactDetails_default_value
+  Id: 0
+  Course:
+  Fax:
+
+ContactDetails_Mapping: &ContactDetails
+  *ContactDetails_default_value
+  Phone:
+  Email:
+  Website:
+  Address:
+
+Provider_contact_info_Mapping: &Provider_contact_info
+  ProviderLocation:
+    <<: *Location
+  ContactDetails:
+    <<: *ContactDetails
+
+
 # Actual course
 Course_Full_Mapping:
   <<: *Provider_serializer
@@ -178,3 +197,4 @@ Course_Full_Mapping:
   <<: *Course_variant
   <<: *Campuses_related
   <<: *Course_direct_enrichment
+  <<: *Provider_contact_info

@@ -78,10 +78,22 @@ module SearchAndCompare
     attribute(:Duration)                              { duration }
     attribute(:Fees)                                  { fees }
 
+    # Provider_contact_info_Mapping
+    attribute(:ProviderLocation)                      { provider_location }
+    attribute(:ContactDetails)                        { contact_details }
+
   private
 
     def course_enrichment
       @course_enrichment ||= object.enrichments.published.latest_first.first
+    end
+
+    def provider_external_contact_info
+      @provider_external_contact_info ||= object.provider.external_contact_info
+    end
+
+    def provider_full_address
+      @provider_full_address ||= provider_external_contact_info_full_address
     end
 
     def duration
@@ -108,6 +120,38 @@ module SearchAndCompare
           International: course_enrichment.fee_international,
         }
       end
+    end
+
+    def contact_details
+      external_contact_info = provider_external_contact_info
+
+      {
+        **default_contact_details_value,
+        Phone: external_contact_info['telephone'],
+        Email: external_contact_info['email'],
+        Website: external_contact_info['website'],
+        Address: provider_full_address
+      }
+    end
+
+    def default_contact_details_value
+      {
+        Id: 0,
+        Course: nil,
+        Fax: nil,
+      }
+    end
+
+    def provider_external_contact_info_full_address
+      external_contact_info = provider_external_contact_info
+
+      raw_address = { address1: external_contact_info['address1'], address2: external_contact_info['address2'], address3: external_contact_info['address3'], address4: external_contact_info['address4'], postcode: external_contact_info['postcode'] }
+
+      full_address(raw_address)
+    end
+
+    def provider_location
+      { **default_location_value, Address: provider_full_address }
     end
 
     def course_subjects
@@ -164,7 +208,7 @@ module SearchAndCompare
     end
 
     def full_address(address1:, address2:, address3:, address4:, postcode:)
-      [address1, address2, address3, address4, postcode].reject(&:blank?).join('/n')
+      [address1, address2, address3, address4, postcode].reject(&:blank?).join("\n")
     end
 
     def campuses

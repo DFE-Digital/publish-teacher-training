@@ -68,10 +68,24 @@ describe SearchAndCompare::CourseSerializer do
               site: site2
       end
 
+      let(:provider_enrichment) do
+        build :provider_enrichment,
+              :published,
+              address1: "c/o Claverdon Primary School",
+              address2: "Breach Lane",
+              address3: "Claverdon",
+              address4: "Warwick",
+              postcode: "CV35 8QA",
+              telephone: "02476 347697",
+              email: "info@gatewayalliance.co.uk",
+              website: "http://www.gatewayalliance.co.uk"
+      end
+
       let(:provider) do
-        build :provider,
-              provider_name: 'Gateway Alliance (Midlands)',
-              provider_code: '23E'
+        create :provider,
+               provider_name: 'Gateway Alliance (Midlands)',
+               provider_code: '23E',
+               enrichments: [provider_enrichment]
       end
       let(:accrediting_provider) do
         build :provider,
@@ -185,7 +199,7 @@ describe SearchAndCompare::CourseSerializer do
           subject { resource[:Campuses] }
           let(:expected_campuses) {
             course.site_statuses.findable.map do |site_status|
-              address = [site_status.site.address1, site_status.site.address2, site_status.site.address3, site_status.site.address4, site_status.site.postcode].reject(&:blank?).join('/n')
+              address = [site_status.site.address1, site_status.site.address2, site_status.site.address3, site_status.site.address4, site_status.site.postcode].reject(&:blank?).join('\n')
               {
                 Id: 0,
                 LocationId: nil,
@@ -239,6 +253,7 @@ describe SearchAndCompare::CourseSerializer do
             it { should include(IsSalaried: !course.is_fee_based?) }
           end
 
+          # to be removed in later PR as its a subset test to check a section
           describe 'json' do
             it { should eq expected_json[:Route] }
           end
@@ -255,8 +270,49 @@ describe SearchAndCompare::CourseSerializer do
           it { should include(Eu: course.is_fee_based? ? course_enrichment.fee_uk_eu : 0) }
           it { should include(International: course.is_fee_based? ? course_enrichment.fee_international : 0) }
 
+          # to be removed in later PR as its a subset test to check a section
           describe 'json' do
             it { should eq expected_json[:Fees] }
+          end
+        end
+      end
+
+      describe 'Provider_contact_info_Mapping' do
+        let(:expected_address) do
+          "c/o Claverdon Primary School\nBreach Lane\nClaverdon\nWarwick\nCV35 8QA"
+        end
+
+        describe 'ContactDetails' do
+          subject { resource[:ContactDetails] }
+
+          it { should include(Id: 0) }
+          it { should include(Phone: "02476 347697") }
+          it { should include(Fax: nil) }
+          it { should include(Email: "info@gatewayalliance.co.uk") }
+          it { should include(Website: "http://www.gatewayalliance.co.uk") }
+          it { should include(Course: nil) }
+          it { should include(Address: expected_address) }
+
+          # to be removed in later PR as its a subset test to check a section
+          describe 'json' do
+            it { should eq expected_json[:ContactDetails] }
+          end
+        end
+
+        describe 'ProviderLocation' do
+          subject { resource[:ProviderLocation] }
+
+          it { should include(Id: 0) }
+          it { should include(FormattedAddress: nil) }
+          it { should include(GeoAddress: nil) }
+          it { should include(Latitude: nil) }
+          it { should include(Longitude: nil) }
+          it { should include(LastGeocodedUtc: '0001-01-01T00:00:00') }
+          it { should include(Address: expected_address) }
+
+          # to be removed in later PR as its a subset test to check a section
+          describe 'json' do
+            it { should eq expected_json[:ProviderLocation] }
           end
         end
       end
