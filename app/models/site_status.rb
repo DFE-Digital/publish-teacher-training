@@ -93,6 +93,10 @@ class SiteStatus < ApplicationRecord
     "#{site.description} – #{status}/#{publish}"
   end
 
+  def has_vacancies?
+    SiteStatus.findable.with_vacancies.any?
+  end
+
 private
 
   def set_defaults
