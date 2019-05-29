@@ -99,99 +99,13 @@ module MCB
   end
 
   def self.each_v1_course(opts)
-    # We only need httparty for API V1 calls
-    require 'httparty'
-
-    url = URI.join(opts[:url], opts[:endpoint])
-
-    token = opts.fetch(:token) { apiv1_token(opts.slice(:webapp, :rgroup)) }
-
-    process_opt_changed_since(opts, url)
-    page_count = 0
-    max_pages = opts.fetch(:'max-pages', '30').to_i
-    all_pages = opts.fetch(:all, false)
-
-    Enumerator.new do |y|
-      loop do
-        if page_count > max_pages
-          raise "too many page requests, stopping at #{page_count}" \
-                " as a safeguard. Use --max-pages to increase max page count" \
-                " if necessary."
-        end
-
-        verbose "Requesting page #{page_count + 1}: #{url}"
-        response = HTTParty.get(
-          url.to_s,
-          headers: { authorization: "Bearer #{token}" }
-        )
-        courses_list = JSON.parse(response.body)
-        break if courses_list.empty?
-
-        next_url = response.headers[:link].sub(/;.*/, '')
-
-        # Send each provider to the consumer of this enumerator
-        courses_list.each do |course|
-          y << [course, {
-            page: page_count,
-                  url: url,
-                  next_url: next_url
-          }]
-        end
-
-        break unless all_pages
-
-        url = next_url
-        page_count += 1
-      end
-    end
+    # This methods can actually be entirely driven by the args provided it. auto-configure!
+    iterate_v1_endpoint(**opts)
   end
 
   def self.each_v1_provider(opts)
-    # We only need httparty for API V1 calls
-    require 'httparty'
-
-    url = URI.join(opts[:url], opts[:endpoint])
-
-    token = opts.fetch(:token) { apiv1_token(opts.slice(:webapp, :rgroup)) }
-
-    process_opt_changed_since(opts, url)
-    page_count = 0
-    max_pages = opts.fetch(:'max-pages', '30').to_i
-    all_pages = opts.fetch(:all, false)
-
-    Enumerator.new do |y|
-      loop do
-        if page_count > max_pages
-          raise "too many page requests, stopping at #{page_count}" \
-                " as a safeguard. Use --max-pages to increase max page count" \
-                " if necessary."
-        end
-
-        verbose "Requesting page #{page_count + 1}: #{url}"
-        response = HTTParty.get(
-          url.to_s,
-          headers: { authorization: "Bearer #{token}" }
-        )
-        providers_list = JSON.parse(response.body)
-        break if providers_list.empty?
-
-        next_url = response.headers[:link].sub(/;.*/, '')
-
-        # Send each provider to the consumer of this enumerator
-        providers_list.each do |provider|
-          y << [provider, {
-            page: page_count,
-                  url: url,
-                  next_url: next_url
-          }]
-        end
-
-        break unless all_pages
-
-        url = next_url
-        page_count += 1
-      end
-    end
+    # This methods can actually be entirely driven by the args provided it. auto-configure!
+    iterate_v1_endpoint(**opts)
   end
 
   def self.config_dir=(dir)
@@ -236,7 +150,55 @@ module MCB
       user
     end
 
-    def remote_connect_options
+    def iterate_v1_endpoint(url:, endpoint:, **opts)
+      # We only need httparty for API V1 calls
+      require 'httparty'
+
+      endpoint_url = URI.join(url, endpoint)
+
+      token = opts.fetch(:token) { apiv1_token(opts.slice(:webapp, :rgroup)) }
+
+      process_opt_changed_since(opts, endpoint_url)
+      page_count = 0
+      max_pages = opts.fetch(:'max-pages', '30').to_i
+      all_pages = opts.fetch(:all, false)
+
+      Enumerator.new do |y|
+        loop do
+          if page_count > max_pages
+            raise "too many page requests, stopping at #{page_count}" \
+                  " as a safeguard. Use --max-pages to increase max page count" \
+                  " if necessary."
+          end
+
+          verbose "Requesting page #{page_count + 1}: #{url}"
+          response = HTTParty.get(
+            endpoint_url.to_s,
+            headers: { authorization: "Bearer #{token}" }
+          )
+          records = JSON.parse(response.body)
+          break if records.empty?
+
+          next_url = response.headers[:link].sub(/;.*/, '')
+
+          # Send each provider to the consumer of this enumerator
+          records.each do |record|
+            y << [record, {
+                    page: page_count,
+                    url: endpoint_url,
+                    next_url: next_url
+                  }]
+          end
+
+          break unless all_pages
+
+          endpoint_url = next_url
+          page_count += 1
+        end
+      end
+    end
+
+  def remote_connect_options
       envs = env_to_azure_map.keys.join(', ')
       Proc.new do
         option :E, 'env',
