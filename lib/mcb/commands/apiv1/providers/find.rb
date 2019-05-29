@@ -14,7 +14,7 @@ run do |opts, args, _cmd|
 
   verbose "looking for provider #{args[:code]}"
 
-  find_provider(args[:code], opts)
+  (provider, last_context) = find_provider(args[:code], opts)
 
   if provider.nil?
     error "Provider with code '#{args[:code]}' not found"
@@ -32,23 +32,23 @@ run do |opts, args, _cmd|
   else
     puts 'Only first page of results searched (use -a to retrieve all).'
   end
-  puts "To continue searching use the url: #{next_url}"
+  puts "To continue searching use the url: #{last_context[:next_url]}"
+
 end
 
 def find_provider(code, opts)
-  MCB.each_v1_provider(opts).detect do |p|
-    p['institution_code'] == code
+  MCB.each_v1_provider(opts).detect do |provider, _context|
+    provider['institution_code'] == code
   end
 end
 
 def print_provider_info(provider)
   campuses = provider.delete('campuses')
   contacts = provider.delete('contacts')
-  puts Terminal::Table.new rows: provider
-  puts ''
-  puts "Campuses:"
-  tp campuses
-  puts ''
-  puts "Contacts:"
-  tp contacts
+
+  puts MCB::Render.provider_record provider
+  puts "\n"
+  puts MCB::Render.campuses_table campuses
+  puts "\n"
+  puts MCB::Render.contacts_table contacts
 end
