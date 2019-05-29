@@ -15,7 +15,7 @@ module API
       def site_status_params
         params
           .require(:site_status)
-          .except(:id, :type, :site_id, :site_type)
+          .except(:id, :type, :site_id, :site_type, :has_vacancies?)
           .permit(
             :applications_accepted_from,
             :publish,
