@@ -8,7 +8,7 @@ option :t, 'token', 'set the authorization token',
        argument: :required,
        default: 'bats'
 option :P, 'max-pages', 'maximum number of pages to request',
-       argument: :required,
-       default: '200',
+       default: 200,
+       argument: :optional,
        transform: method(:Integer)
 instance_eval(&MCB.remote_connect_options)

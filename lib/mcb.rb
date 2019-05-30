@@ -165,47 +165,38 @@ module MCB
       # We only need httparty for API V1 calls
       require 'httparty'
 
-      endpoint_url = URI.join(url, endpoint)
-
+      endpoint_url = process_opt_changed_since(opts, URI.join(url, endpoint))
       token = opts.fetch(:token) { apiv1_token(opts.slice(:webapp, :rgroup)) }
-
-      process_opt_changed_since(opts, endpoint_url)
-      page_count = 0
-      max_pages = opts.fetch(:'max-pages', '30').to_i
-      all_pages = opts.fetch(:all, false)
+      max_pages = opts.fetch('max-pages', 1)
 
       Enumerator.new do |y|
-        loop do
-          if page_count > max_pages
-            raise "too many page requests, stopping at #{page_count}" \
-                  " as a safeguard. Use --max-pages to increase max page count" \
-                  " if necessary."
-          end
-
+        max_pages.times do |page_count|
           verbose "Requesting page #{page_count + 1}: #{endpoint_url}"
           response = HTTParty.get(
             endpoint_url.to_s,
             headers: { authorization: "Bearer #{token}" }
           )
           records = JSON.parse(response.body)
-          break if records.empty?
+          if records.any?
 
-          next_url = response.headers[:link].sub(/;.*/, '')
+            next_url = response.headers[:link].sub(/;.*/, '')
 
-          # Send each provider to the consumer of this enumerator
-          records.each do |record|
-            y << [record, {
-                    page: page_count,
-                    url: endpoint_url,
-                    next_url: next_url
-                  }]
+            # Send each provider to the consumer of this enumerator
+            records.each do |record|
+              y << [record, {
+                      page: page_count,
+                      url: endpoint_url,
+                      next_url: next_url
+                    }]
+            end
+
+            endpoint_url = next_url
+          else
+            break
           end
-
-          break unless all_pages
-
-          endpoint_url = next_url
-          page_count += 1
         end
+
+        puts "max page count of #{max_pages} reached" if page_count == max_pages
       end
     end
 
@@ -309,6 +300,7 @@ module MCB
     end
 
     def process_opt_changed_since(opts, url)
+      new_url = url.dup
       if opts.key? :'changed-since'
         changed_since = DateTime.strptime(
           CGI.unescape(opts[:'changed-since']),
@@ -316,8 +308,9 @@ module MCB
         ) rescue nil
         changed_since ||= DateTime.parse(opts[:'changed-since'])
         changed_since_param = CGI.escape(changed_since.strftime('%FT%T.%6NZ'))
-        url.query = "changed_since=#{changed_since_param}"
+        new_url.query = "changed_since=#{changed_since_param}"
       end
+      new_url
     end
   end
 end
