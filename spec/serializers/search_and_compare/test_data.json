@@ -113,7 +113,7 @@
       "Id": 0,
       "Ordinal": 0,
       "Name": "about this training provider accrediting",
-      "Text": "accrediting provider enrichment field",
+      "Text": "accrediting_provider_enrichment_description",
       "CourseId": 0,
       "Course": null
     },

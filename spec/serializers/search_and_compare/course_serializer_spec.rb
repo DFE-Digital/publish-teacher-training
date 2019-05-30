@@ -9,13 +9,14 @@ describe SearchAndCompare::CourseSerializer do
     context 'an existing course' do
       let(:with_send_subject) { true }
       let(:subject_names) { %w[Primary] }
-      let(:course_subjects) do
+      let(:subjects) do
         subjects = subject_names.map do |subject_name|
           build(:subject, subject_name: subject_name)
         end
 
         subjects << build(:send_subject) if with_send_subject
-        { subjects: subjects }
+
+        subjects
       end
 
       let(:course) do
@@ -30,8 +31,8 @@ describe SearchAndCompare::CourseSerializer do
                qualification: :pgce_with_qts,
                study_mode:  :full_time,
                site_statuses: [site_status1, site_status2],
-               with_enrichments: [published_enrichment],
-               **course_subjects).tap do |c|
+               enrichments: [published_enrichment],
+               subjects: subjects).tap do |c|
 
           # These sites, taken from real prod data, aren't actually valid in
           # that they're missing the following bits of data.
@@ -47,46 +48,28 @@ describe SearchAndCompare::CourseSerializer do
       end
 
       let(:published_enrichment) do
-        [
-          :published,
-          course_length: "OneYear",
-          created_at: 5.days.ago,
+        build :course_enrichment, :published,
+              course_length: "OneYear",
+              created_at: 5.days.ago,
 
-          # related to DescriptionSections_Mapping
-          about_course: about_course,
-          interview_process: interview_process,
-          fee_details: fee_details,
-          salary_details: salary_details,
-          qualifications: qualifications,
-          personal_qualities: personal_qualities,
-          other_requirements: other_requirements,
-          financial_support: financial_support,
-          how_school_placements_work: how_school_placements_work,
-        ]
+              # describe tattributes in the o DescriptionSections_Mapping section
+              about_course: 'about_course',
+              interview_process: 'interview_process',
+              fee_details: 'fee_details',
+              salary_details: 'salary_details',
+              qualifications: 'qualifications',
+              personal_qualities: 'personal_qualities',
+              other_requirements: 'other_requirements',
+              financial_support: 'financial_support',
+              how_school_placements_work: 'how_school_placements_work'
       end
 
       let(:accrediting_provider_enrichment) do
         {
           'UcasProviderCode' => accrediting_provider.provider_code,
-          'Description' => accrediting_provider_enrichment_description
+          'Description' => 'accrediting_provider_enrichment_description'
         }
       end
-
-      let(:accrediting_provider_enrichment_description) {
-        'accrediting provider enrichment field'
-      }
-
-      let(:about_course) { "about_course" }
-      let(:interview_process) { "interview_process" }
-      let(:fee_details) { "fee_details" }
-      let(:salary_details) { "salary_details" }
-      let(:qualifications) { "qualifications" }
-      let(:personal_qualities) { "personal_qualities" }
-      let(:other_requirements) { "other_requirements" }
-      let(:financial_support) { "financial_support" }
-      let(:how_school_placements_work) { "how_school_placements_work" }
-      let(:train_with_us) { "train_with_us" }
-      let(:train_with_disability) { "train_with_disability" }
 
       let(:site1) do
         build :site,
@@ -94,6 +77,7 @@ describe SearchAndCompare::CourseSerializer do
               code: 'S',
               address1: 'CV37'
       end
+
       let(:site_status1) do
         build :site_status, :findable, :full_time_vacancies,
               site: site1,
@@ -106,15 +90,14 @@ describe SearchAndCompare::CourseSerializer do
               code: 'N',
               address1: 'CV10'
       end
+
       let(:site_status2) do
         build :site_status, :findable, :full_time_vacancies,
               site: site2
       end
 
-
       let(:provider_enrichment) do
-        build :provider_enrichment,
-              :published,
+        build :provider_enrichment, :published,
               last_published_at: 1.day.ago,
               address1: "c/o Claverdon Primary School",
               address2: "Breach Lane",
@@ -125,9 +108,9 @@ describe SearchAndCompare::CourseSerializer do
               email: "info@gatewayalliance.co.uk",
               website: "http://www.gatewayalliance.co.uk",
 
-              # related to DescriptionSections_Mapping
-              train_with_us: train_with_us,
-              train_with_disability: train_with_disability,
+              # DescriptionSections_Mapping section
+              train_with_us: 'train_with_us',
+              train_with_disability: 'train_with_disability',
               accrediting_provider_enrichments: [accrediting_provider_enrichment]
       end
 
@@ -149,45 +132,43 @@ describe SearchAndCompare::CourseSerializer do
       end
 
       # This test is the overall test of 'rails' vs 'csharp' generated json
-      context 'orginal json' do
+      context 'original json' do
         it { should eq expected_json }
       end
 
-      # All the tests belows are the more intimate for expected 32 fields and its related nested fields
+      # All the tests belows are the more intimate for the expected 32 fields and its related nested fields
       # Tests consistence of
       #   database models mapping to json
       #   default values
-      context 'Provider_serializer_Mapping' do
-        # testing the provider serializer, its part of the json
+      describe 'attributes in the Provider_serializer_Mapping section' do
         describe 'Provider' do
           subject { resource[:Provider] }
-          context 'Provider_default_value_Mapping' do
-            it { should include(Id: 0) }
-            it { should include(Courses: nil) }
-            it { should include(AccreditedCourses: nil) }
+          let(:expected_provider) do
+            ActiveModelSerializers::SerializableResource.new(
+              provider,
+              serializer: SearchAndCompare::ProviderSerializer,
+              adapter: :attributes
+            ).serializable_hash.with_indifferent_access
           end
-          context 'Provider_direct_simple_Mappting' do
-            it { should include(Name: provider.provider_name) }
-            it { should include(ProviderCode: provider.provider_code) }
-          end
+
+          it { should eq expected_provider }
         end
 
         describe 'AccreditingProvider' do
           subject { resource[:AccreditingProvider] }
+          let(:expected_accrediting_provider) do
+            ActiveModelSerializers::SerializableResource.new(
+              accrediting_provider,
+              serializer: SearchAndCompare::ProviderSerializer,
+              adapter: :attributes
+            ).serializable_hash.with_indifferent_access
+          end
 
-          context 'Provider_default_value_Mapping' do
-            it { should include(Id: 0) }
-            it { should include(Courses: nil) }
-            it { should include(AccreditedCourses: nil) }
-          end
-          context 'Provider_direct_simple_Mappting' do
-            it { should include(Name: accrediting_provider.provider_name) }
-            it { should include(ProviderCode: accrediting_provider.provider_code) }
-          end
+          it { should eq expected_accrediting_provider }
         end
       end
 
-      context 'Course_default_value_Mapping' do
+      describe 'attributes in the Course_default_value_Mapping section' do
         it { should include(Id: 0) }
         it { should include(ProviderCodeName: nil) }
         it { should include(ProviderId: 0) }
@@ -200,57 +181,49 @@ describe SearchAndCompare::CourseSerializer do
         it { should include(ContactDetailsId: nil) }
       end
 
-      context 'Course_direct_Mapping' do
+      describe 'attributes in the Course_direct_Mapping section' do
         it { should include(Name: course.name) }
         it { should include(ProgrammeCode: course.course_code) }
         it { should include(StartDate: course.start_date) }
       end
 
-      context 'Salary_nested_default_value_Mapping' do
+      describe 'attributes in the Salary_nested_default_value_Mapping section' do
         subject { resource[:Salary] }
 
         it { should include(Minimum: nil) }
         it { should include(Maximum: nil) }
       end
 
-      context 'Subjects_related_Mapping' do
+      describe 'attributes in the Subjects_related_Mapping section' do
         it { should include(IsSen: course.is_send?) }
 
         describe 'CourseSubjects' do
           subject { resource[:CourseSubjects] }
           let(:expected_course_subjects) do
             subject_names.map do |subject_name|
-              { # CourseSubject_default_value_mapping
+              {
                 CourseId: 0,
                 Course: nil,
                 SubjectId: 0,
-                # CourseSubject_complex
                 Subject:
                   {
-                    # Subject_default_value_Mapping
                     Id: 0,
                     SubjectArea: nil,
                     FundingId: nil,
                     Funding: nil,
                     IsSubjectKnowledgeEnhancementAvailable: false,
                     CourseSubjects: nil,
-
-                    # Subject_direct_Mapping
                     Name: subject_name,
                   }
                 }
             end
           end
-          it { should match_array expected_course_subjects }
 
-          context 'json' do
-            subject { expected_json[:CourseSubjects] }
-            it { should match_array expected_course_subjects }
-          end
+          it { should match_array expected_course_subjects }
         end
       end
 
-      context 'Campuses_related_Mapping' do
+      describe 'attributes in the Campuses_related_Mapping section' do
         it { should include(ApplicationsAcceptedFrom: '2018-10-09T00:00:00') }
         it { should include(HasVacancies: course.has_vacancies?) }
 
@@ -258,7 +231,14 @@ describe SearchAndCompare::CourseSerializer do
           subject { resource[:Campuses] }
           let(:expected_campuses) {
             course.site_statuses.findable.map do |site_status|
-              address = [site_status.site.address1, site_status.site.address2, site_status.site.address3, site_status.site.address4, site_status.site.postcode].reject(&:blank?).join('\n')
+              address = [
+                site_status.site.address1,
+                site_status.site.address2,
+                site_status.site.address3,
+                site_status.site.address4,
+                site_status.site.postcode
+              ].reject(&:blank?).join('\n')
+
               {
                 Id: 0,
                 LocationId: nil,
@@ -272,7 +252,7 @@ describe SearchAndCompare::CourseSerializer do
                   Latitude: nil,
                   Longitude: nil,
                   LastGeocodedUtc: '0001-01-01T00:00:00',
-                   Address: address }
+                  Address: address }
               }
             end
           }
@@ -281,7 +261,7 @@ describe SearchAndCompare::CourseSerializer do
         end
       end
 
-      context 'Course_variant_Mapping' do
+      describe 'attributes in the Course_variant_Mapping section' do
         # related to the course's qualification + program_type + study_mode
         it { should include(Mod: 'PGCE with QTS full time with salary') }
 
@@ -298,12 +278,12 @@ describe SearchAndCompare::CourseSerializer do
         describe 'Route' do
           subject { resource[:Route] }
 
-          context 'Route_default_value_Mapping' do
+          describe 'attributes in the Route_default_value_Mapping section' do
             it { should include(Id: 0) }
             it { should include(Courses: nil) }
           end
 
-          context 'Route_Complex_value_Mapping'do
+          describe 'attributes in the Route_Complex_value_Mapping section'do
             # related to the course's program_type
             it { should include(Name: 'School Direct (salaried) training programme') }
             # related to the course's program_type
@@ -312,7 +292,7 @@ describe SearchAndCompare::CourseSerializer do
         end
       end
 
-      context 'Course_direct_enrichment_Mapping' do
+      describe 'attributes in the Course_direct_enrichment_Mapping section' do
         it { should include(Duration: '1 year') }
         describe 'Fees' do
           subject { resource[:Fees] }
@@ -324,7 +304,7 @@ describe SearchAndCompare::CourseSerializer do
         end
       end
 
-      context 'Provider_contact_info_Mapping' do
+      describe 'attributes in the Provider_contact_info_Mapping section' do
         let(:expected_address) do
           "c/o Claverdon Primary School\nBreach Lane\nClaverdon\nWarwick\nCV35 8QA"
         end
@@ -354,36 +334,36 @@ describe SearchAndCompare::CourseSerializer do
         end
       end
 
-      context 'DescriptionSections_Mapping' do
+      describe 'attributes in the DescriptionSections_Mapping section' do
         subject { resource[:DescriptionSections] }
 
-        let(:expected_enrichments) do
-          { "about this training programme": about_course,
-            "interview process": interview_process,
-            "about fees": fee_details,
-            "about salary": salary_details,
-            "entry requirements": qualifications,
-            "entry requirements personal qualities": personal_qualities,
-            "entry requirements other": other_requirements,
-            "financial support": financial_support,
-            "about school placements": how_school_placements_work,
-            "about this training provider": train_with_us,
-            "about this training provider accrediting": accrediting_provider_enrichment_description,
-            "training with disabilities": train_with_disability }.freeze
-        end
+        shared_examples 'mapped the description section' do |name, text|
+          describe "#{name} should be mapped to description section" do
+            expected_description_section = {
+              Id: 0,
+              Ordinal: 0,
+              CourseId: 0,
+              Course: nil,
+              Name: name,
+              Text: text,
+            }
 
-        it 'map the fields' do
-          subject.each do |description_section|
-            #default_description_section_value
-            expect(description_section[:Id]).to be_zero
-            expect(description_section[:Ordinal]).to be_zero
-            expect(description_section[:CourseId]).to be_zero
-            expect(description_section[:Course]).to be_nil
-
-            expected_text = expected_enrichments[description_section[:Name].to_sym]
-            expect(description_section[:Text]).to eq expected_text
+            it { should include expected_description_section }
           end
         end
+
+        include_examples 'mapped the description section', 'about this training programme', 'about_course'
+        include_examples 'mapped the description section', 'interview process', 'interview_process'
+        include_examples 'mapped the description section', 'about fees', 'fee_details'
+        include_examples 'mapped the description section', 'about salary', 'salary_details'
+        include_examples 'mapped the description section', 'entry requirements', 'qualifications'
+        include_examples 'mapped the description section', 'entry requirements personal qualities', 'personal_qualities'
+        include_examples 'mapped the description section', 'entry requirements other', 'other_requirements'
+        include_examples 'mapped the description section', 'financial support', 'financial_support'
+        include_examples 'mapped the description section', 'about school placements', 'how_school_placements_work'
+        include_examples 'mapped the description section', 'about this training provider', 'train_with_us'
+        include_examples 'mapped the description section', 'about this training provider accrediting', 'accrediting_provider_enrichment_description'
+        include_examples 'mapped the description section', 'training with disabilities', 'train_with_disability'
       end
     end
   end
