@@ -96,87 +96,57 @@ module SearchAndCompare
       }
     end
 
-    def text(enrichment_type, enrichment_key)
-      if enrichment_type == :course_enrichment
-        course_enrichment.send enrichment_key
-      elsif enrichment_type == :provider_enrichment
-        provider_enrichment.send enrichment_key
-      else
-        object.send enrichment_key
-      end
-    end
-
     def description_sections
-      description_sections_enrichment_mappings.map do |mappings|
-        {
-          **default_description_section_value,
-          Name: mappings[:name],
-          Text: text(mappings[:enrichment_type], mappings[:enrichment_key])
-        }
-      end
-    end
-
-    def description_sections_enrichment_mappings
       [{
-        name: "about this training programme",
-        enrichment_key: :about_course,
-        enrichment_type: :course_enrichment,
+        Name: "about this training programme",
+        Text: course_enrichment.about_course
        },
        {
-         name: "interview process",
-         enrichment_key: :interview_process,
-         enrichment_type: :course_enrichment,
+         Name: "interview process",
+         Text: course_enrichment.interview_process
        },
        {
-         name: "about fees",
-         enrichment_key: :fee_details,
-         enrichment_type: :course_enrichment,
+         Name: "about fees",
+         Text: course_enrichment.fee_details
        },
        {
-         name: "about salary",
-         enrichment_key: :salary_details,
-         enrichment_type: :course_enrichment,
+         Name: "about salary",
+         Text: course_enrichment.salary_details
        },
        {
-         name: "entry requirements",
-         enrichment_key: :qualifications,
-         enrichment_type: :course_enrichment,
+         Name: "entry requirements",
+         Text: course_enrichment.qualifications
        },
        {
-         name: "entry requirements personal qualities",
-         enrichment_key: :personal_qualities,
-         enrichment_type: :course_enrichment,
+         Name: "entry requirements personal qualities",
+         Text: course_enrichment.personal_qualities
        },
        {
-         name: "entry requirements other",
-         enrichment_key: :other_requirements,
-         enrichment_type: :course_enrichment,
+         Name: "entry requirements other",
+         Text: course_enrichment.other_requirements
        },
        {
-         name: "financial support",
-         enrichment_key: :financial_support,
-         enrichment_type: :course_enrichment,
+         Name: "financial support",
+         Text: course_enrichment.financial_support
        },
        {
-         name: "about school placements",
-         enrichment_key: :how_school_placements_work,
-         enrichment_type: :course_enrichment,
+         Name: "about school placements",
+         Text: course_enrichment.how_school_placements_work
        },
        {
-         name: "about this training provider",
-         enrichment_key: :train_with_us,
-         enrichment_type: :provider_enrichment,
+         Name: "about this training provider",
+         Text: provider_enrichment.train_with_us
        },
        {
-         name: "about this training provider accrediting",
-         enrichment_key: :accrediting_provider_description,
-         enrichment_type: :accreditingProvider_provider_enrichment,
+         Name: "about this training provider accrediting",
+         Text: object.accrediting_provider_description
        },
        {
-         name: "training with disabilities",
-         enrichment_key: :train_with_disability,
-         enrichment_type: :provider_enrichment,
-       }].freeze
+         Name: "training with disabilities",
+         Text: provider_enrichment.train_with_disability
+       }].map do |description_section|
+        description_section.merge default_description_section_value
+      end
     end
 
     def provider_enrichment

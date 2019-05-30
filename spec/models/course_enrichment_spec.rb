@@ -239,6 +239,5 @@ describe CourseEnrichment, type: :model do
         expect { subject.unpublish(initial_draft: false) }.not_to(change { subject.reload.last_published_timestamp_utc })
       end
     end
-
   end
 end
