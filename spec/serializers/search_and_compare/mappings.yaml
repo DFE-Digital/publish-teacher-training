@@ -1,3 +1,6 @@
+# TODO: this can removed, in next refactor.
+# This contains the json structure and the where the fields map to
+
 ---
 #Course mappings
 Course_default_value_Mapping: &Course_default_value
