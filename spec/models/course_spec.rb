@@ -531,7 +531,7 @@ RSpec.describe Course, type: :model do
             let(:accrediting_provider_enrichment_description) { Faker::Lorem.sentence.to_s }
             let(:accrediting_provider_enrichment) do
               {
-                'UcasInstitutionCode' => accrediting_provider.provider_code,
+                'UcasProviderCode' => accrediting_provider.provider_code,
                 'Description' => accrediting_provider_enrichment_description
               }
             end
