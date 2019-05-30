@@ -34,7 +34,6 @@ run do |opts, args, _cmd|
     puts 'Only first page of results searched (use -a to retrieve all).'
   end
   puts "To continue searching use the url: #{last_context[:next_url]}"
-
 end
 
 def find_provider(code, opts)

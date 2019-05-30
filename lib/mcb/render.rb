@@ -2,7 +2,7 @@ module MCB
   module Render
     class << self
       def campuses_table(campuses, name: 'Campuses')
-        if campuses.all? { |campuses| campuses.respond_to? :keys }
+        if campuses.all? { |campuse| campuse.respond_to? :keys }
           campuses = hashes_to_ostructs campuses
         end
 
@@ -112,7 +112,7 @@ module MCB
         ]
       end
 
-      private
+    private
 
       def hashes_to_ostructs(hashes)
         hashes.map { |hash| OpenStruct.new(hash) }
