@@ -1,3 +1,6 @@
 manage_api:
   base_url: https://bat-prod-manage-courses-api-app.azurewebsites.net
   secret: please_change_me
+search_api:
+  base_url: https://bat-prod-search-and-compare-api-app.azurewebsites.net
+  secret: please_change_me
