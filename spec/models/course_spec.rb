@@ -68,16 +68,33 @@ RSpec.describe Course, type: :model do
     its(:has_vacancies?) { should be false }
   end
 
-  describe "#sites" do
+  context "with sites" do
     let(:first_site) { create(:site) }
     let(:first_site_status) { create(:site_status, :running, site: first_site) }
     let(:second_site) { create(:site) }
     let(:second_site_status) { create(:site_status, :suspended, site: second_site) }
+    let(:new_site) { create(:site) }
 
     subject { create(:course, site_statuses: [first_site_status, second_site_status]) }
 
-    it "should only return new and running sites" do
-      expect(subject.sites.to_a).to eq([first_site])
+    describe "#sites" do
+      it "should only return new and running sites" do
+        expect(subject.sites.to_a).to eq([first_site])
+      end
+    end
+
+    describe "sites=" do
+      before do
+        subject.sites = [second_site, new_site]
+      end
+
+      it "should assign new sites" do
+        expect(subject.sites.to_a).to eq([second_site, new_site])
+      end
+
+      it "should set old site_status to suspended" do
+        expect(first_site_status.reload.status).to eq("suspended")
+      end
     end
   end
 
