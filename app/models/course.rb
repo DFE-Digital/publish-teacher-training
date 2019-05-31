@@ -270,6 +270,14 @@ class Course < ApplicationRecord
     # If more than one subject
     return false if dfe_subjects.size > 1
 
+    problematic_course_prefixes = [
+      "Drama",
+      "Media Studies",
+      "PE",
+      "Physical Education"
+    ]
+    return false if name.starts_with?(*problematic_course_prefixes)
+
     dfe_subjects.any?(&:has_bursary?)
   end
 
@@ -280,6 +288,14 @@ class Course < ApplicationRecord
 
     # If more than one subject
     return false if dfe_subjects.size > 1
+
+    problematic_course_prefixes = [
+      "Drama",
+      "Media Studies",
+      "PE",
+      "Physical Education"
+    ]
+    return false if name.starts_with?(*problematic_course_prefixes)
 
     dfe_subjects.any?(&:has_scholarship_and_bursary?)
   end
