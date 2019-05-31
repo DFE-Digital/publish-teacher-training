@@ -19,16 +19,6 @@ module API
         render jsonapi: @course, include: params[:include]
       end
 
-      def sync_with_search_and_compare
-        response = ManageCoursesAPIService::Request.sync_course_with_search_and_compare(
-          @current_user.email,
-          @provider.provider_code,
-          @course.course_code
-        )
-
-        head response ? :ok : :internal_server_error
-      end
-
       def publish
         if @course.publishable?
           @course.publish_sites
