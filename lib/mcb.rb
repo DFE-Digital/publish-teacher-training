@@ -99,12 +99,12 @@ module MCB
   end
 
   def self.each_v1_course(opts)
-    # This methods can actually be entirely driven by the args provided it. auto-configure!
+    # This method can actually be entirely driven by the args provided, it is auto-configure!
     iterate_v1_endpoint(**opts)
   end
 
   def self.each_v1_provider(opts)
-    # This methods can actually be entirely driven by the args provided it. auto-configure!
+    # This method can actually be entirely driven by the args provided, it is auto-configure!
     iterate_v1_endpoint(**opts)
   end
 
