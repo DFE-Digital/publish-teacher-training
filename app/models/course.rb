@@ -267,6 +267,9 @@ class Course < ApplicationRecord
     # If course name contains "with"
     return true if name.include?("with")
 
+    # If more than one subject
+    return false if dfe_subjects.size > 1
+
     dfe_subjects.any?(&:has_bursary?)
   end
 
@@ -274,6 +277,9 @@ class Course < ApplicationRecord
     # https://bat-design-history.herokuapp.com/find-teacher-training/financial-incentives-multiple-subjects
     # If course name contains "with"
     return true if name.include?("with")
+
+    # If more than one subject
+    return false if dfe_subjects.size > 1
 
     dfe_subjects.any?(&:has_scholarship_and_bursary?)
   end
