@@ -17,6 +17,8 @@ module API
                  :name,
                  :study_mode
 
+      has_many :sites
+
       attribute :required_qualifications do |value|
         { qualifications: value }
       end
