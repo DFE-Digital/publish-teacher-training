@@ -1,3 +1,6 @@
+# TODO: this can removed, in next refactor.
+# This contains the json structure and the where the fields map to
+
 ---
 #Course mappings
 Course_default_value_Mapping: &Course_default_value
@@ -185,6 +188,121 @@ Provider_contact_info_Mapping: &Provider_contact_info
   ContactDetails:
     <<: *ContactDetails
 
+Location_default_value_Mapping: &Location_default_value
+  Id: 0
+  FormattedAddress:
+  GeoAddress:
+  Latitude:
+  Longitude:
+  LastGeocodedUtc: '0001-01-01T00:00:00'
+
+Location_Mapping: &Location
+  *Location_default_value
+  Address: "[address1, address2, address3, address4, postcode].reject(&:blank?).join('/n')"
+
+DescriptionSection_Mapping: &DescriptionSection
+  Id: 0
+  Ordinal: 0
+  CourseId: 0
+  Course:
+
+DescriptionSections_Mapping: &DescriptionSections
+  DescriptionSections:
+  - <<: *DescriptionSection
+    Name: "about this training programme"
+    Text: 'AboutCourse'
+    __Name: 'snc field key'
+    __Text: 'enrichment field key'
+    __EnrichmentType: 'course_enrichment'
+    __CourseDetailsSections: "AboutTheCourse" #snc ui section
+
+  - <<: *DescriptionSection
+    Name: "interview process"
+    Text: 'InterviewProcess'
+    __Name: "interview process"
+    __Text: 'InterviewProcess'
+    __EnrichmentType: 'course_enrichment'
+    __CourseDetailsSections: "InterviewProcess" #snc ui section
+
+  - <<: *DescriptionSection
+    Name: "about fees"
+    Text: 'FeeDetails'
+    __Name: 'snc field key'
+    __Text: 'enrichment field key'
+    __EnrichmentType: 'course_enrichment'
+    __CourseDetailsSections: "AboutFees" #snc ui section
+
+  - <<: *DescriptionSection
+    Name: "about salary"
+    Text: 'SalaryDetails'
+    __Name: 'snc field key'
+    __Text: 'enrichment field key'
+    __EnrichmentType: 'course_enrichment'
+    __CourseDetailsSections: "AboutSalary" #snc ui section
+
+  - <<: *DescriptionSection
+    Name: "entry requirements"
+    Text: 'Qualifications'
+    __Name: 'snc field key'
+    __Text: 'enrichment field key'
+    __EnrichmentType: 'course_enrichment'
+    __CourseDetailsSections: "EntryRequirementsQualifications" #snc ui section
+
+  - <<: *DescriptionSection
+    Name: "entry requirements personal qualities"
+    Text: 'PersonalQualities'
+    __Name: 'snc field key'
+    __Text: 'enrichment field key'
+    __EnrichmentType: 'course_enrichment'
+    __CourseDetailsSections: "EntryRequirementsPersonalQualities" #snc ui section
+
+  - <<: *DescriptionSection
+    Name: "entry requirements other"
+    Text: 'OtherRequirements'
+    __Name: 'snc field key'
+    __Text: 'enrichment field key'
+    __EnrichmentType: 'course_enrichment'
+    __CourseDetailsSections: "EntryRequirementsOther" #snc ui section
+
+  - <<: *DescriptionSection
+    Name: "financial support"
+    Text: 'FinancialSupport'
+    __Name: 'snc field key'
+    __Text: 'enrichment field key'
+    __EnrichmentType: 'course_enrichment'
+    __CourseDetailsSections: "FinancialSupport" #snc ui section
+
+  - <<: *DescriptionSection
+    Name: "about school placements"
+    Text: 'HowSchoolPlacementsWork'
+    __Name: 'snc field key'
+    __Text: 'enrichment field key'
+    __EnrichmentType: 'course_enrichment'
+    __CourseDetailsSections: "AboutSchools" #snc ui section
+
+  - <<: *DescriptionSection
+    Name: "about this training provider"
+    Text: 'TrainWithUs'
+    __Name: 'snc field key'
+    __Text: 'enrichment field key'
+    __EnrichmentType: 'provider_enrichment'
+    __CourseDetailsSections: "AboutTheProvider" #snc ui section
+
+    - <<: *DescriptionSection
+    Name: "about this training provider accrediting"
+    Text: GetAccreditingProviderEnrichment(ucasCourseData?.AccreditingProvider?.ProviderCode"
+    __Name: 'snc field key'
+    __Text: 'the accrediting provider code as identifier'
+    __EnrichmentType: 'accreditingProvider_provider_enrichment'
+
+  - <<: *DescriptionSection
+    Name: "training with disabilities"
+    Text: 'TrainWithDisability'
+    __Name: 'snc field key'
+    __Text: 'enrichment field key'
+    __EnrichmentType: 'provider_enrichment'
+    __CourseDetailsSections: "TrainWithDisabilities" #snc ui sectionmpuses:
+
 
 # Actual course
 Course_Full_Mapping:
@@ -198,3 +316,4 @@ Course_Full_Mapping:
   <<: *Campuses_related
   <<: *Course_direct_enrichment
   <<: *Provider_contact_info
+  <<: *DescriptionSections

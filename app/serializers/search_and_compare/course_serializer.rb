@@ -82,7 +82,76 @@ module SearchAndCompare
     attribute(:ProviderLocation)                      { provider_location }
     attribute(:ContactDetails)                        { contact_details }
 
+    # DescriptionSections_Mapping
+    attribute(:DescriptionSections)                   { description_sections }
+
   private
+
+    def default_description_section_value
+      {
+        Id: 0,
+        Ordinal: 0,
+        CourseId: 0,
+        Course: nil,
+      }
+    end
+
+    def description_sections
+      [{
+        Name: "about this training programme",
+        Text: course_enrichment.about_course
+       },
+       {
+         Name: "interview process",
+         Text: course_enrichment.interview_process
+       },
+       {
+         Name: "about fees",
+         Text: course_enrichment.fee_details
+       },
+       {
+         Name: "about salary",
+         Text: course_enrichment.salary_details
+       },
+       {
+         Name: "entry requirements",
+         Text: course_enrichment.qualifications
+       },
+       {
+         Name: "entry requirements personal qualities",
+         Text: course_enrichment.personal_qualities
+       },
+       {
+         Name: "entry requirements other",
+         Text: course_enrichment.other_requirements
+       },
+       {
+         Name: "financial support",
+         Text: course_enrichment.financial_support
+       },
+       {
+         Name: "about school placements",
+         Text: course_enrichment.how_school_placements_work
+       },
+       {
+         Name: "about this training provider",
+         Text: provider_enrichment.train_with_us
+       },
+       {
+         Name: "about this training provider accrediting",
+         Text: object.accrediting_provider_description
+       },
+       {
+         Name: "training with disabilities",
+         Text: provider_enrichment.train_with_disability
+       }].map do |description_section|
+        description_section.merge default_description_section_value
+      end
+    end
+
+    def provider_enrichment
+      @provider_enrichment ||= object.provider.enrichments.latest_published_at.first
+    end
 
     def course_enrichment
       @course_enrichment ||= object.enrichments.published.latest_first.first
