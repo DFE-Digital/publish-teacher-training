@@ -1,7 +1,7 @@
 name 'create'
 summary 'Create a new course in db'
 usage 'create <provider_code>'
-param :provider_code
+param :provider_code, transform: ->(code) { code.upcase }
 
 class CourseEditor
   def initialize(cli:, course:)

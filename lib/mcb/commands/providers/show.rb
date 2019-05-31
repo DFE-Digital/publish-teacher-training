@@ -1,6 +1,6 @@
 name 'show'
 summary 'Show information about provider'
-param :code
+param :code, transform: ->(code) { code.upcase }
 option :p, :'preview-courses', 'Show courses as a mini-preview of Find, instead of a database view.',
        default: false
 

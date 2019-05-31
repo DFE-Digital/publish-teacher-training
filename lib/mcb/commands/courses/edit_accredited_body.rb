@@ -1,7 +1,7 @@
 name 'edit_accredited_body'
 summary 'Edit accredited bodies on courses directly in the DB'
 usage 'edit_accredited_body <provider_code>'
-param :provider_code
+param :provider_code, transform: ->(code) { code.upcase }
 
 run do |opts, args, _cmd|
   MCB.init_rails(opts)

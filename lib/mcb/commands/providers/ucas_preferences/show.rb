@@ -1,5 +1,5 @@
 summary 'Show UCAS preferences for provider with given code'
-param :code
+param :code, transform: ->(code) { code.upcase }
 
 run do |opts, args, _cmd|
   MCB.init_rails(opts)

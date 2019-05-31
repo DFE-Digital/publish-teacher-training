@@ -6,13 +6,13 @@ run do |opts, args, _cmd|
 
   cli = HighLine.new
 
-  provider = Provider.find_by!(provider_code: args[0])
+  provider = Provider.find_by!(provider_code: args[0].upcase)
 
   all_courses_mode = args.size == 1
   courses = if all_courses_mode
               provider.courses
             else
-              provider.courses.where(course_code: args.to_a)
+              provider.courses.where(course_code: args.to_a.map(&:upcase))
             end
 
   multi_course_mode = courses.size > 1

@@ -1,6 +1,6 @@
 name 'show'
 summary 'Edit information about provider'
-param :code
+param :code, transform: ->(code) { code.upcase }
 
 run do |opts, args, _cmd|
   MCB.init_rails(opts)
@@ -46,7 +46,9 @@ run do |opts, args, _cmd|
       menu.choice("Clone a course") do
         provider_code = cli.ask("Provider code of course you want to clone? (#{provider.provider_code} if blank)  ") { |q| q.default = provider.provider_code }
         course_code = cli.ask("Code of course you want to clone?  ")
-        original_course = Provider.find_by!(provider_code: provider_code).courses.find_by!(course_code: course_code)
+        original_course = Provider
+                            .find_by!(provider_code: provider_code.upcase)
+                            .courses.find_by!(course_code: course_code.upcase)
 
         new_course = original_course.dup
         new_course.provider = provider

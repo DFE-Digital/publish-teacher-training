@@ -1,8 +1,8 @@
 name 'assign_to_courses'
 summary 'Assign a new site to multiple courses in db'
 usage 'assign_to_courses <provider_code> <site_code<'
-param :provider_code
-param :site_code
+param :provider_code, transform: ->(code) { code.upcase }
+param :site_code, transform: ->(code) { code.upcase }
 
 run do |opts, args, _cmd|
   MCB.init_rails(opts)
