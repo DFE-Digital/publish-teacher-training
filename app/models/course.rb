@@ -260,10 +260,6 @@ class Course < ApplicationRecord
     new? ? site_status.destroy! : site_status.suspend!
   end
 
-  def sites_not_associated_with_course
-    provider.sites - sites
-  end
-
   def has_bursary?
     dfe_subjects.any?(&:has_bursary?)
   end

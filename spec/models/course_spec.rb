@@ -438,16 +438,6 @@ RSpec.describe Course, type: :model do
     end
   end
 
-  describe "#sites_not_associated_with_course" do
-    let(:first_site) { create(:site) }
-    let(:second_site) { create(:site) }
-    let(:provider) { create(:provider, sites: [first_site, second_site]) }
-
-    subject { create(:course, provider: provider, sites: [first_site]) }
-
-    its(:sites_not_associated_with_course) { should eq([second_site]) }
-  end
-
   describe "adding and removing sites on a course" do
     let(:provider) { create(:provider) }
     let(:new_site) { create(:site, provider: provider) }
