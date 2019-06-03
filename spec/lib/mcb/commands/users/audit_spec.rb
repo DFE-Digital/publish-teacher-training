@@ -24,7 +24,7 @@ describe 'mcb users audit' do
                                           'update',
                                           '',
                                           '',
-                                          '{"email"=>\["a@a", "b@b"\]}')
+                                          '{"email"=>["a@a", "b@b"]}')
   end
 
   it 'allows specifying user by email' do
@@ -43,7 +43,7 @@ describe 'mcb users audit' do
                                           'update',
                                           '',
                                           '',
-                                          '{"email"=>\["a@a", "b@b"\]}')
+                                          '{"email"=>["a@a", "b@b"]}')
   end
 
   it 'allows specifying user by sign-in id' do
@@ -62,6 +62,6 @@ describe 'mcb users audit' do
                                           'update',
                                           '',
                                           '',
-                                          '{"email"=>\["a@a", "b@b"\]}')
+                                          '{"email"=>["a@a", "b@b"]}')
   end
 end
