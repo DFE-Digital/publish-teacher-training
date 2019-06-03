@@ -428,16 +428,35 @@ RSpec.describe Course, type: :model do
     end
 
     describe "bursaries and scholarships" do
-      let(:subjects) {
-        [
-          build(:subject, subject_name: 'mathematics'),
-          build(:subject, subject_name: 'secondary'),
-        ]
-      }
       subject { create(:course, subjects: subjects) }
 
-      it { should have_bursary }
-      it { should have_scholarship_and_bursary }
+      context "for a shortage subject" do
+        let(:subjects) {
+          [
+            build(:subject, subject_name: 'mathematics'),
+            build(:subject, subject_name: 'secondary'),
+          ]
+        }
+
+        it { should have_bursary }
+        it { should have_scholarship_and_bursary }
+        its(:bursary_amount) { should eq(20_000) }
+        its(:scholarship_amount) { should eq(22_000) }
+      end
+
+      context "for an oversubscribed subject" do
+        let(:subjects) {
+          [
+            build(:subject, subject_name: 'primary'),
+            build(:subject, subject_name: 'physical education'),
+          ]
+        }
+
+        it { should_not have_bursary }
+        it { should_not have_scholarship_and_bursary }
+        its(:bursary_amount) { should be_nil }
+        its(:scholarship_amount) { should be_nil }
+      end
     end
   end
 
