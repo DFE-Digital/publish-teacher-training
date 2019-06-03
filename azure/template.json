@@ -121,6 +121,12 @@
         "description": "The secret shared between manage courses backend and manage courses API to authorize requests."
       }
     },
+    "settingsSearchApiSecret": {
+      "type": "string",
+      "metadata": {
+        "description": "The secret shared between manage courses backend and search and compare API to authorize requests."
+      }
+    },
     "databaseServiceName": {
       "type": "string",
       "defaultValue": "",
@@ -254,6 +260,10 @@
               {
                 "name": "SETTINGS__MANAGE_API__SECRET",
                 "value": "[parameters('settingsManageApiSecret')]"
+              },
+              {
+                "name": "SETTINGS__SEARCH_API__SECRET",
+                "value": "[parameters('settingsSearchApiSecret')]"
               }
             ]
           },
