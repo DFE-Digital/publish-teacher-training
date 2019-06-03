@@ -7,16 +7,10 @@ describe DFESubject do
     it { should have_bursary }
     it { should have_scholarship }
     it { should have_early_career_payments }
+    its(:bursary_amount) { should be_present }
+    its(:scholarship_amount) { should be_present }
 
     it { should eq(DFESubject.new("Mathematics")) }
-
-    it 'returns the #bursary_amount' do
-      expect(subject.bursary_amount).to be_present
-    end
-
-    it 'returns the #scholarship_amount' do
-      expect(subject.scholarship_amount).to be_present
-    end
   end
 
   context "(physical education)" do
@@ -25,13 +19,7 @@ describe DFESubject do
     it { should_not have_bursary }
     it { should_not have_scholarship }
     it { should_not have_early_career_payments }
-
-    it 'returns the #bursary_amount' do
-      expect(subject.bursary_amount).to_not be_present
-    end
-
-    it 'returns the #scholarship_amount' do
-      expect(subject.scholarship_amount).to_not be_present
-    end
+    its(:bursary_amount) { should be_nil }
+    its(:scholarship_amount) { should be_nil }
   end
 end
