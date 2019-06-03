@@ -362,7 +362,7 @@ GEM
       diff-lcs
       patience_diff
     table_print (1.5.6)
-    tabulo (1.4.1)
+    tabulo (1.5.0)
       tty-screen (= 0.6.5)
       unicode-display_width (= 1.5.0)
     terminal-table (1.8.0)
