@@ -22,7 +22,10 @@ describe 'Courses API v2', type: :request do
            subject_count: 0,
            subjects: [course_subject_primary, course_subject_mathematics, course_subject_send],
            with_site_statuses: [%i[findable with_any_vacancy applications_being_accepted_from_2019]],
-           enrichments: [enrichment])
+           enrichments: [enrichment],
+           maths: :must_have_qualification_at_application_time,
+           english: :must_have_qualification_at_application_time,
+           science: :must_have_qualification_at_application_time)
   }
 
   let(:enrichment)     { build :course_enrichment, :published }
@@ -125,6 +128,9 @@ describe 'Courses API v2', type: :request do
               "bursary_amount" => nil,
               "scholarship_amount" => nil,
               "about_accrediting_body" => nil,
+              "english" => 'must_have_qualification_at_application_time',
+              "maths" => 'must_have_qualification_at_application_time',
+              "science" => 'must_have_qualification_at_application_time'
             },
             "relationships" => {
               "accrediting_provider" => { "meta" => { "included" => false } },
@@ -248,6 +254,9 @@ describe 'Courses API v2', type: :request do
               "bursary_amount" => nil,
               "scholarship_amount" => nil,
               "about_accrediting_body" => nil,
+              "english" => 'must_have_qualification_at_application_time',
+              "maths" => 'must_have_qualification_at_application_time',
+              "science" => 'must_have_qualification_at_application_time'
             },
             "relationships" => {
               "accrediting_provider" => { "meta" => { "included" => false } },
