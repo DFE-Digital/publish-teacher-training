@@ -7,8 +7,8 @@ describe DFESubject do
     it { should have_bursary }
     it { should have_scholarship }
     it { should have_early_career_payments }
-    its(:bursary_amount) { should be_present }
-    its(:scholarship_amount) { should be_present }
+    its(:bursary_amount) { should eq(20_000) }
+    its(:scholarship_amount) { should eq(22_000) }
 
     it { should eq(DFESubject.new("Mathematics")) }
   end
@@ -19,7 +19,7 @@ describe DFESubject do
     it { should_not have_bursary }
     it { should_not have_scholarship }
     it { should_not have_early_career_payments }
-    its(:bursary_amount) { should be_nil }
-    its(:scholarship_amount) { should be_nil }
+    its(:bursary_amount) { should eq(0) }
+    its(:scholarship_amount) { should eq(0) }
   end
 end

@@ -286,10 +286,10 @@ class Course < ApplicationRecord
   end
 
   def bursary_amount
-    dfe_subjects.detect(&:bursary_amount)&.bursary_amount
+    dfe_subjects.map(&:bursary_amount).max
   end
 
   def scholarship_amount
-    dfe_subjects.detect(&:scholarship_amount)&.scholarship_amount
+    dfe_subjects.map(&:scholarship_amount).max
   end
 end

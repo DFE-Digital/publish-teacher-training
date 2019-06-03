@@ -454,8 +454,8 @@ RSpec.describe Course, type: :model do
 
         it { should_not have_bursary }
         it { should_not have_scholarship_and_bursary }
-        its(:bursary_amount) { should be_nil }
-        its(:scholarship_amount) { should be_nil }
+        its(:bursary_amount) { should eq(0) }
+        its(:scholarship_amount) { should eq(0) }
       end
 
       context "for a course covering both shortage and non-shortage subjects" do
@@ -470,7 +470,7 @@ RSpec.describe Course, type: :model do
 
         it { should have_bursary }
         its(:bursary_amount) { should eq(15_000) }
-        its(:scholarship_amount) { should be_nil }
+        its(:scholarship_amount) { should eq(0) }
       end
     end
   end
