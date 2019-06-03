@@ -2,5 +2,5 @@ manage_api:
   base_url: https://bat-qa-mcapi-as.azurewebsites.net
   secret: please_change_me
 search_api:
-  base_url: https://bat-dev-search-and-compare-api-app.azurewebsites.net
+  base_url: https://bat-qa-sacapi-as.azurewebsites.net
   secret: please_change_me
