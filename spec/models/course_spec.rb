@@ -457,6 +457,21 @@ RSpec.describe Course, type: :model do
         its(:bursary_amount) { should be_nil }
         its(:scholarship_amount) { should be_nil }
       end
+
+      context "for a course covering both shortage and non-shortage subjects" do
+        subject { create(:course, name: 'English (with Drama)', subjects: subjects) }
+        let(:subjects) {
+          [
+            build(:subject, subject_name: 'Drama and Theatre Studies'),
+            build(:subject, subject_name: 'English'),
+            build(:subject, subject_name: 'Secondary'),
+          ]
+        }
+
+        it { should have_bursary }
+        its(:bursary_amount) { should eq(15_000) }
+        its(:scholarship_amount) { should be_nil }
+      end
     end
   end
 
