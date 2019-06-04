@@ -15,11 +15,11 @@ module WithFinancialIncentives
     end
 
     def bursary_amount
-      dfe_subject_which_defines_financial_incentives.bursary_amount
+      dfe_subject_which_defines_financial_incentives&.bursary_amount || 0
     end
 
     def scholarship_amount
-      dfe_subject_which_defines_financial_incentives.scholarship_amount
+      dfe_subject_which_defines_financial_incentives&.scholarship_amount || 0
     end
 
   private

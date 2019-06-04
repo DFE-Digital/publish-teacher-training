@@ -489,6 +489,16 @@ RSpec.describe Course, type: :model do
           it { should have_early_career_payments }
         end
       end
+
+      context "for a course with no subjects" do
+        let(:subjects) { [] }
+
+        its(:bursary_amount) { should eq(0) }
+        its(:scholarship_amount) { should eq(0) }
+        it { should_not have_early_career_payments }
+        it { should_not have_bursary }
+        it { should_not have_scholarship_and_bursary }
+      end
     end
   end
 
