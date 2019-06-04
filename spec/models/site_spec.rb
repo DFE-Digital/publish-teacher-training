@@ -57,7 +57,7 @@ describe Provider, type: :model do
   end
 
   describe 'after running validation' do
-    let(:provider) { create(:provider, site_count: 0) }
+    let(:provider) { create(:provider) }
     subject { build(:site, provider: provider) }
 
     it 'is assigned a valid code by default' do
@@ -67,6 +67,7 @@ describe Provider, type: :model do
 
     it 'is assigned easily-confused codes only when all others have been used up' do
       (Site::DESIRABLE_CODES - %w[A]).each { |code| create(:site, code: code, provider: provider) }
+      provider.reload
       subject.validate
       expect(subject.code).to eq('A')
     end

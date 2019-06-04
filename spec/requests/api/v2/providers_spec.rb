@@ -17,7 +17,6 @@ describe 'Providers API v2', type: :request do
     let!(:provider) {
       create(:provider,
              course_count: 0,
-             site_count: 0,
              organisations: [organisation],
              enrichments: [enrichment])
     }
@@ -144,8 +143,8 @@ describe 'Providers API v2', type: :request do
     let(:credentials) do
       ActionController::HttpAuthentication::Token.encode_credentials(token)
     end
-
-    let!(:provider) { create(:provider, course_count: 0, site_count: 1, organisations: [organisation]) }
+    let(:site) { create(:site) }
+    let!(:provider) { create(:provider, course_count: 0, sites: [site], organisations: [organisation]) }
     let(:enrichment) { provider.enrichments.first }
 
     subject { response }
@@ -248,9 +247,13 @@ describe 'Providers API v2', type: :request do
     end
 
     context "with the maximum number of sites" do
-      let(:provider) { create(:provider, course_count: 0, site_count: Site::POSSIBLE_CODES.size, organisations: [organisation]) }
+      let(:all_site_codes) { ('A'..'Z').to_a + %w[0 -] + ('1'..'9').to_a }
+      let(:provider) { create(:provider, course_count: 0, organisations: [organisation]) }
+
 
       before do
+        all_site_codes.each { |code| provider.sites << create(:site, code: code) }
+
         get "/api/v2/providers/#{provider.provider_code}",
             headers: { 'HTTP_AUTHORIZATION' => credentials }
       end

@@ -46,8 +46,6 @@ FactoryBot.define do
     transient do
       changed_at           { nil }
       skip_associated_data { false }
-      site_count           { 1 }
-      sites                { build_list :site, site_count, provider: nil }
       course_count         { 0 }
       enrichments          { [build(:provider_enrichment)] }
     end
