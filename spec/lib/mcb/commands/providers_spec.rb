@@ -9,6 +9,6 @@ describe 'mcb providers' do
       $mcb.run(%w[providers --webapp=banana])
     end
 
-    expect(MCB).to have_received(:init_rails).with(webapp: 'banana')
+    expect(MCB).to have_received(:init_rails).with(hash_including(webapp: 'banana'))
   end
 end

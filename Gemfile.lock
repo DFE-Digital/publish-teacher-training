@@ -87,7 +87,7 @@ GEM
     crack (0.4.3)
       safe_yaml (~> 1.0.0)
     crass (1.0.4)
-    cri (2.15.6)
+    cri (2.15.7)
     data_migrate (5.3.2)
       rails (>= 4.2)
     database_cleaner (1.7.0)
