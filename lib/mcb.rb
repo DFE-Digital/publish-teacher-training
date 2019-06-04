@@ -80,7 +80,7 @@ module MCB
   def self.apiv1_token(webapp: nil, rgroup: nil)
     if webapp
       verbose "getting config for webapp: #{webapp} rgroup: #{rgroup}"
-      MCB::Azure.get_config(webapp, rgroup: rgroup).fetch('AUTHENTICATION_TOKEN')
+      MCB::Azure.get_config(webapp: webapp, rgroup: rgroup).fetch('AUTHENTICATION_TOKEN')
     else
       Rails.application.config.authentication_token
     end
@@ -99,97 +99,13 @@ module MCB
   end
 
   def self.each_v1_course(opts)
-    # We only need httparty for API V1 calls
-    require 'httparty'
-
-    url = URI.join(opts[:url], opts[:endpoint])
-
-    token = opts.fetch(:token) { apiv1_token(opts.slice(:webapp, :rgroup)) }
-
-    process_opt_changed_since(opts, url)
-    page_count = 0
-    max_pages = 30
-    all_pages = opts.fetch(:all, false)
-
-    Enumerator.new do |y|
-      loop do
-        if page_count > max_pages
-          raise "too many page requests, stopping at #{page_count}" \
-                " as a safeguard. Increase max page_count if necessary."
-        end
-
-        verbose "Requesting page #{page_count + 1}: #{url}"
-        response = HTTParty.get(
-          url.to_s,
-          headers: { authorization: "Bearer #{token}" }
-        )
-        courses_list = JSON.parse(response.body)
-        break if courses_list.empty?
-
-        next_url = response.headers[:link].sub(/;.*/, '')
-
-        # Send each provider to the consumer of this enumerator
-        courses_list.each do |course|
-          y << [course, {
-            page: page_count,
-                  url: url,
-                  next_url: next_url
-          }]
-        end
-
-        break unless all_pages
-
-        url = next_url
-        page_count += 1
-      end
-    end
+    # This method can actually be entirely driven by the args provided, it is auto-configure!
+    iterate_v1_endpoint(**opts)
   end
 
   def self.each_v1_provider(opts)
-    # We only need httparty for API V1 calls
-    require 'httparty'
-
-    url = URI.join(opts[:url], opts[:endpoint])
-
-    token = opts.fetch(:token) { apiv1_token(opts.slice(:webapp, :rgroup)) }
-
-    process_opt_changed_since(opts, url)
-    page_count = 0
-    max_pages = 30
-    all_pages = opts.fetch(:all, false)
-
-    Enumerator.new do |y|
-      loop do
-        if page_count > max_pages
-          raise "too many page requests, stopping at #{page_count}" \
-                " as a safeguard. Increase max page_count if necessary."
-        end
-
-        verbose "Requesting page #{page_count + 1}: #{url}"
-        response = HTTParty.get(
-          url.to_s,
-          headers: { authorization: "Bearer #{token}" }
-        )
-        providers_list = JSON.parse(response.body)
-        break if providers_list.empty?
-
-        next_url = response.headers[:link].sub(/;.*/, '')
-
-        # Send each provider to the consumer of this enumerator
-        providers_list.each do |provider|
-          y << [provider, {
-            page: page_count,
-                  url: url,
-                  next_url: next_url
-          }]
-        end
-
-        break unless all_pages
-
-        url = next_url
-        page_count += 1
-      end
-    end
+    # This method can actually be entirely driven by the args provided, it is auto-configure!
+    iterate_v1_endpoint(**opts)
   end
 
   def self.config_dir=(dir)
@@ -234,6 +150,58 @@ module MCB
       user
     end
 
+    def apiv1_opts(**opts)
+      opts.merge! azure_env_settings_for_opts(**opts)
+
+      if requesting_remote_connection?(**opts)
+        opts[:url] = MCB::Azure.get_urls(**opts).first
+        opts[:token] = MCB::Azure.get_config(**opts)['AUTHENTICATION_TOKEN']
+      end
+
+      opts
+    end
+
+    def iterate_v1_endpoint(url:, endpoint:, **opts)
+      # We only need httparty for API V1 calls
+      require 'httparty'
+
+      endpoint_url = process_opt_changed_since(opts, URI.join(url, endpoint))
+      token = opts.fetch(:token) { apiv1_token(opts.slice(:webapp, :rgroup)) }
+
+      # Safeguard to ensure we don't go off the deep end.
+      max_pages = opts.fetch(:'max-pages')
+
+      Enumerator.new do |y|
+        pages = max_pages.times do |page_count|
+          verbose "Requesting page #{page_count + 1}: #{endpoint_url}"
+          response = HTTParty.get(
+            endpoint_url.to_s,
+            headers: { authorization: "Bearer #{token}" }
+          )
+          records = JSON.parse(response.body)
+          if records.any?
+
+            next_url = response.headers[:link].sub(/;.*/, '')
+
+            # Send each provider to the consumer of this enumerator
+            records.each do |record|
+              y << [record, {
+                      page: page_count,
+                      url: endpoint_url,
+                      next_url: next_url
+                    }]
+            end
+
+            endpoint_url = next_url
+          else
+            break
+          end
+        end
+
+        puts "max page count of #{max_pages} reached" if pages == max_pages
+      end
+    end
+
     def remote_connect_options
       envs = env_to_azure_map.keys.join(', ')
       Proc.new do
@@ -252,7 +220,7 @@ module MCB
       end
     end
 
-    def requesting_remote_connection?(opts)
+    def requesting_remote_connection?(**opts)
       opts.key?(:webapp)
     end
 
@@ -283,6 +251,18 @@ module MCB
         opts[:rgroup] = env_settings[:rgroup] unless opts.key? :rgroup
         opts[:subscription] = env_settings[:subscription] unless opts.key? :subscription
       end
+    end
+
+    # Temporary re-implementation of 'load_env_azure_settings'. Altering a hash
+    # that was passed in as an arg is asking for trouble (and really annoying
+    # to test). I should've known better.
+    #
+    # TODO: Replace calls to load_env_azure_settings with calls to
+    #       azure_env_settings_for_opts
+    def azure_env_settings_for_opts(opts)
+      new_opts = opts.dup
+      load_env_azure_settings new_opts
+      new_opts
     end
 
     def find_user_by_identifier(identifier)
@@ -322,6 +302,7 @@ module MCB
     end
 
     def process_opt_changed_since(opts, url)
+      new_url = url.dup
       if opts.key? :'changed-since'
         changed_since = DateTime.strptime(
           CGI.unescape(opts[:'changed-since']),
@@ -329,8 +310,9 @@ module MCB
         ) rescue nil
         changed_since ||= DateTime.parse(opts[:'changed-since'])
         changed_since_param = CGI.escape(changed_since.strftime('%FT%T.%6NZ'))
-        url.query = "changed_since=#{changed_since_param}"
+        new_url.query = "changed_since=#{changed_since_param}"
       end
+      new_url
     end
   end
 end

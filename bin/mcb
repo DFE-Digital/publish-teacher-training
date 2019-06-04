@@ -13,6 +13,7 @@ require 'rainbow'
 require 'pry'
 require 'table_print'
 require 'terminal-table'
+require 'tabulo'
 
 lib_dir = File.expand_path 'lib'
 
@@ -22,6 +23,7 @@ require 'mcb/azure'
 require 'mcb/config'
 require 'mcb/course_show'
 require 'mcb/grant_access_wizard'
+require 'mcb/render'
 
 tp.set :capitalize_headers, false
 

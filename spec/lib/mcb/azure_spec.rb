@@ -83,7 +83,7 @@ describe MCB::Azure do
       EOCONFIG
     end
 
-    subject { MCB::Azure.get_config('some-app', rgroup: 'some-rgroup') }
+    subject { MCB::Azure.get_config(webapp: 'some-app', rgroup: 'some-rgroup') }
 
     before :each do
       allow(MCB).to receive(:run_command).and_return(config_json)
@@ -99,6 +99,40 @@ describe MCB::Azure do
     end
 
     it { should eq('SETTING_ONE' => 'UNO', 'SETTING_TWO' => 'DUO') }
+  end
+
+  describe '.get_urls' do
+    let(:config_json) do
+      <<~EOCONFIG
+        [
+          {
+            "name": "no_ssl.local",
+            "sslState": null
+          },
+          {
+            "name": "with_ssl.local",
+            "sslState": "SniEnabled"
+          }
+        ]
+      EOCONFIG
+    end
+
+    subject { MCB::Azure.get_urls(webapp: 'some-app', rgroup: 'some-rgroup', subscription: 'sup') }
+
+    before :each do
+      allow(MCB).to receive(:run_command).and_return(config_json)
+    end
+
+    it 'runs az' do
+      subject
+      expect(MCB).to(
+        have_received(:run_command).with(
+          'az webapp config hostname list -g "some-rgroup" --webapp-name "some-app" --subscription "sup"'
+        )
+      )
+    end
+
+    it { should eq(['http://no_ssl.local', 'https://with_ssl.local']) }
   end
 
   describe '.configure_database' do
