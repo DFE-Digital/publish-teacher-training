@@ -33,7 +33,6 @@ describe SearchAndCompare::CourseSerializer do
                site_statuses: [site_status1, site_status2],
                enrichments: [published_enrichment],
                subjects: subjects).tap do |c|
-
           # These sites, taken from real prod data, aren't actually valid in
           # that they're missing the following bits of data.
           c.site_statuses.each do |site_status|
