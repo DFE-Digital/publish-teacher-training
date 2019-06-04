@@ -2,7 +2,7 @@ summary 'Find a particular provider course entry'
 description <<~EODESCRIPTION
   Searches for a course with the given provider and course code by iterating
   through all the pages of results provided from the course endpoint, outputting
-  the found records.
+  the found record.
 EODESCRIPTION
 usage 'find [options] <provider_code> <course_code>'
 param :provider_code
