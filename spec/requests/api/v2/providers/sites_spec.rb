@@ -13,7 +13,6 @@ describe 'Sites API v2', type: :request do
   let(:site2) { create :site, location_name: 'Main site 2', provider: provider }
   let!(:provider) {
     create(:provider,
-           course_count: 0,
            organisations: [organisation])
   }
 
