@@ -72,7 +72,7 @@ describe ProviderSerializer do
     end
 
     context 'if nil' do
-      let(:ucas_preferences) { create :ucas_preferences, application_alert_email: nil }
+      let(:ucas_preferences) { build :ucas_preferences, application_alert_email: nil }
       let(:provider) { create :provider, ucas_preferences: ucas_preferences }
       let(:contacts) do
         serialize(provider)['contacts'].map { |contact| contact[:type] }
