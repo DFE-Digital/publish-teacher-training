@@ -200,12 +200,11 @@ describe Provider, type: :model do
 
     context "when provider has the max sites allowed" do
       let(:all_site_codes) { ('A'..'Z').to_a + %w[0 -] + ('1'..'9').to_a }
-
-      subject { create(:provider) }
-
-      before do
-        all_site_codes.each { |code| subject.sites << build(:site, code: code) }
+      let(:sites) do
+        all_site_codes.map { |code| build(:site, code: code) }
       end
+
+      subject { create(:provider, sites: sites) }
 
       its(:can_add_more_sites?) { should be_falsey }
     end
