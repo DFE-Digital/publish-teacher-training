@@ -394,35 +394,35 @@ RSpec.describe Course, type: :model do
 
   context "subjects & level" do
     context 'with no subjects' do
-      subject { create(:course, subject_count: 0) }
+      subject { create(:course) }
       its(:level) { should eq(:secondary) }
       its(:dfe_subjects) { should be_empty }
     end
 
     context 'with primary subjects' do
-      subject { create(:course, subject_count: 0, subjects: [create(:subject, subject_name: "primary")]) }
+      subject { create(:course,  subjects: [create(:subject, subject_name: "primary")]) }
       its(:level) { should eq(:primary) }
       its(:dfe_subjects) { should eq([DFESubject.new("Primary")]) }
     end
 
     context 'with secondary subjects' do
-      subject { create(:course, subject_count: 0, subjects: [create(:subject, subject_name: "physical education")]) }
+      subject { create(:course, subjects: [create(:subject, subject_name: "physical education")]) }
       its(:level) { should eq(:secondary) }
       its(:dfe_subjects) { should eq([DFESubject.new("Physical education")]) }
     end
 
     context 'with further education subjects' do
-      subject { create(:course, subject_count: 0, subjects: [create(:further_education_subject)]) }
+      subject { create(:course, subjects: [create(:further_education_subject)]) }
       its(:level) { should eq(:further_education) }
       its(:dfe_subjects) { should eq([DFESubject.new("Further education")]) }
     end
 
     describe "#is_send?" do
-      subject { create(:course, subject_count: 0) }
+      subject { create(:course,) }
       its(:is_send?) { should be_falsey }
 
       context "with a SEND subject" do
-        subject { create(:course, subject_count: 0, subjects: [create(:send_subject)]) }
+        subject { create(:course, subjects: [create(:send_subject)]) }
         its(:is_send?) { should be_truthy }
       end
     end

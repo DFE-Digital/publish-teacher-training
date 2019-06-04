@@ -26,7 +26,6 @@ describe SearchAndCompare::CourseSerializer do
                name: 'Primary (Special Educational Needs)',
                course_code: '2KXB',
                start_date: '2019-08-01T00:00:00',
-               subject_count: 0,
                program_type: :school_direct_salaried_training_programme,
                qualification: :pgce_with_qts,
                study_mode:  :full_time,
@@ -50,7 +49,6 @@ describe SearchAndCompare::CourseSerializer do
         build :course_enrichment, :published,
               course_length: "OneYear",
               created_at: 5.days.ago,
-
               # describe tattributes in the o DescriptionSections_Mapping section
               about_course: 'about_course',
               interview_process: 'interview_process',
@@ -106,7 +104,6 @@ describe SearchAndCompare::CourseSerializer do
               telephone: "02476 347697",
               email: "info@gatewayalliance.co.uk",
               website: "http://www.gatewayalliance.co.uk",
-
               # DescriptionSections_Mapping section
               train_with_us: 'train_with_us',
               train_with_disability: 'train_with_disability',

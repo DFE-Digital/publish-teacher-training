@@ -35,13 +35,17 @@ FactoryBot.define do
     resulting_in_pgce_with_qts
 
     transient do
-      subject_count      { 1 }
-      subjects           { build_list(:subject, subject_count) }
+      subjects           { [] }
       with_site_statuses { [] }
       with_enrichments   { [] }
       age                { nil }
       enrichments        { [] }
     end
+
+    trait :with_subject do
+      subjects { [build(:subject)] }
+    end
+
 
     after(:build) do |course, evaluator|
       if evaluator.age.present?

@@ -17,44 +17,47 @@ describe "Courses API", type: :request do
     end
 
     let(:provider) do
-      FactoryBot.create(:provider,
-                        provider_name: "ACME SCITT",
-                        provider_code: "2LD",
-                        provider_type: :scitt,
-                        scheme_member: 'Y',
-                        enrichments: [])
+      create(:provider,
+             provider_name: "ACME SCITT",
+             provider_code: "2LD",
+             provider_type: :scitt,
+             scheme_member: 'Y',
+             enrichments: [])
     end
 
 
     context "without changed_since parameter" do
+      let(:site) { create(:site, code: "-", location_name: "Main Site", provider: provider) }
+      let(:subject1) { create(:subject, subject_code: "1", subject_name: "Secondary") }
+      let(:subject2) { create(:subject, subject_code: "2", subject_name: "Mathematics") }
+      let!(:site_status) do
+        create(:site_status,
+               vac_status: :full_time_vacancies,
+               publish: 'Y',
+               status: :running,
+               applications_accepted_from: "2018-10-09 00:00:00",
+               course: course,
+               site: site)
+      end
+
+      let(:course) do
+        create(:course,
+               course_code: "2HPF",
+               start_date: Date.new(2019, 9, 1),
+               name: "Religious Education",
+               subjects: [subject1, subject2],
+               study_mode: :full_time,
+               age_range: 'primary',
+               english: :equivalence_test,
+               maths: :not_required,
+               profpost_flag: :postgraduate,
+               program_type: :school_direct_training_programme,
+               modular: "",
+               provider: provider,
+               age: 2.hours.ago)
+      end
+
       before do
-        site = FactoryBot.create(:site, code: "-", location_name: "Main Site", provider: provider)
-        subject1 = FactoryBot.create(:subject, subject_code: "1", subject_name: "Secondary")
-        subject2 = FactoryBot.create(:subject, subject_code: "2", subject_name: "Mathematics")
-
-        course = FactoryBot.create(:course,
-                                   course_code: "2HPF",
-                                   start_date: Date.new(2019, 9, 1),
-                                   name: "Religious Education",
-                                   subjects: [subject1, subject2],
-                                   study_mode: :full_time,
-                                   age_range: 'primary',
-                                   english: :equivalence_test,
-                                   maths: :not_required,
-                                   profpost_flag: :postgraduate,
-                                   program_type: :school_direct_training_programme,
-                                   modular: "",
-                                   provider: provider,
-                                   age: 2.hours.ago)
-
-        FactoryBot.create(:site_status,
-                          vac_status: :full_time_vacancies,
-                          publish: 'Y',
-                          status: :running,
-                          applications_accepted_from: "2018-10-09 00:00:00",
-                          course: course,
-                          site: site)
-
         course.update changed_at: 2.hours.ago
       end
 

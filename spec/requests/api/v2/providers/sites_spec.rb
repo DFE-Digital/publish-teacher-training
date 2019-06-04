@@ -11,7 +11,7 @@ describe 'Sites API v2', type: :request do
 
   let(:site1) { create :site, location_name: 'Main site 1', provider: provider }
   let(:site2) { create :site, location_name: 'Main site 2', provider: provider }
-  let!(:provider) {
+  let(:provider) {
     create(:provider,
            organisations: [organisation])
   }
