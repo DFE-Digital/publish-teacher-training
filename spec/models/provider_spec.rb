@@ -182,11 +182,11 @@ describe Provider, type: :model do
   end
 
   describe '#unassigned_site_codes' do
-    subject { create(:provider, site_count: 0) }
-
+    subject { create(:provider) }
     before do
       %w[A B C D 1 2 3 -].each { |code| subject.sites << build(:site, code: code) }
     end
+
     let(:expected_unassigned_codes) { ('E'..'Z').to_a + %w[0] + ('4'..'9').to_a }
 
     its(:unassigned_site_codes) { should eq(expected_unassigned_codes) }
@@ -194,12 +194,19 @@ describe Provider, type: :model do
 
   describe "#can_add_more_sites?" do
     context "when provider has less sites than max allowed" do
-      subject { create(:provider, site_count: 0) }
+      subject { create(:provider) }
       its(:can_add_more_sites?) { should be_truthy }
     end
 
     context "when provider has the max sites allowed" do
-      subject { create(:provider, site_count: Site::POSSIBLE_CODES.size) }
+      let(:all_site_codes) { ('A'..'Z').to_a + %w[0 -] + ('1'..'9').to_a }
+
+      subject { create(:provider) }
+
+      before do
+        all_site_codes.each { |code| subject.sites << build(:site, code: code) }
+      end
+
       its(:can_add_more_sites?) { should be_falsey }
     end
   end

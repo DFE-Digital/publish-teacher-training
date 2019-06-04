@@ -52,7 +52,6 @@ describe 'Providers API', type: :request do
                provider_name: 'ACME SCITT',
                provider_code: 'A123',
                provider_type: :scitt,
-               site_count: 0,
                address1: 'Shoreditch Park Primary School',
                address2: '313 Bridport Pl',
                address3: nil,
@@ -124,7 +123,6 @@ describe 'Providers API', type: :request do
                scheme_member: 'N',
                last_published_at: DateTime.now.utc,
                enrichments: [],
-               site_count: 0,
                ucas_preferences: ucas_preferences2,
                contacts: contacts2)
       end
