@@ -16,7 +16,6 @@ describe CoursePolicy do
     let(:course) { create(:course) }
     let!(:provider) {
       create(:provider,
-             course_count: 0,
              courses: [course],
              organisations: [organisation])
     }
