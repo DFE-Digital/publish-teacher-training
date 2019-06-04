@@ -67,6 +67,44 @@ describe API::V2::SerializableCourse do
     it { should have_relationship(:accrediting_provider) }
   end
 
+  context 'with a site_status' do
+    let(:course) { create(:course, site_statuses: [site_status]) }
+    let(:site_status) { create(:site_status) }
+    let(:course_json) do
+      jsonapi_renderer.render(
+        course,
+        class: {
+          Course:   API::V2::SerializableCourse,
+          Provider: API::V2::SerializableProvider
+        },
+        include: [
+          :site_status
+        ]
+      ).to_json
+    end
+
+    it { should have_relationship(:site_statuses) }
+  end
+
+  context 'with a site' do
+    let(:course) { create(:course, sites: [site]) }
+    let(:site) { create(:site) }
+    let(:course_json) do
+      jsonapi_renderer.render(
+        course,
+        class: {
+          Course:   API::V2::SerializableCourse,
+          Provider: API::V2::SerializableProvider
+        },
+        include: [
+          :site
+        ]
+      ).to_json
+    end
+
+    it { should have_relationship(:sites) }
+  end
+
   context "funding" do
     context "fee-paying" do
       let(:course) { create(:course) }
