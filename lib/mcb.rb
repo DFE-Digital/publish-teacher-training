@@ -167,10 +167,12 @@ module MCB
 
       endpoint_url = process_opt_changed_since(opts, URI.join(url, endpoint))
       token = opts.fetch(:token) { apiv1_token(opts.slice(:webapp, :rgroup)) }
-      max_pages = opts.fetch('max-pages', 1)
+
+      # Safeguard to ensure we don't go off the deep end.
+      max_pages = opts.fetch(:'max-pages')
 
       Enumerator.new do |y|
-        max_pages.times do |page_count|
+        pages = max_pages.times do |page_count|
           verbose "Requesting page #{page_count + 1}: #{endpoint_url}"
           response = HTTParty.get(
             endpoint_url.to_s,
@@ -196,7 +198,7 @@ module MCB
           end
         end
 
-        puts "max page count of #{max_pages} reached" if page_count == max_pages
+        puts "max page count of #{max_pages} reached" if pages == max_pages
       end
     end
 

@@ -8,6 +8,10 @@ usage 'find [options] <provider_code> <course_code>'
 param :provider_code
 param :course_code
 option :j, 'json', 'show the returned JSON response'
+option :P, 'max-pages', 'maximum number of pages to request',
+       default: 250,
+       argument: :required,
+       transform: method(:Integer)
 
 
 run do |opts, args, _cmd|
@@ -19,7 +23,7 @@ run do |opts, args, _cmd|
 
   verbose "looking for provider '#{provider_code}' course '#{course_code}'"
 
-  (course, last_context) = find_course(provider_code, course_code, opts)
+  (course, _last_context) = find_course(provider_code, course_code, opts)
 
   if course.nil?
     error "Provider '#{provider_code}' course '#{course_code}' not found"
@@ -31,13 +35,6 @@ run do |opts, args, _cmd|
   else
     print_course_info(course)
   end
-
-  if opts[:all]
-    puts 'All pages searched.'
-  else
-    puts 'Only first page of results searched (use -a to retrieve all).'
-  end
-  puts "To continue searching use the url: #{last_context[:next_url]}"
 end
 
 def find_course(provider_code, course_code, opts)
