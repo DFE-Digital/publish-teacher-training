@@ -21,7 +21,6 @@ describe "Courses API", type: :request do
                         provider_name: "ACME SCITT",
                         provider_code: "2LD",
                         provider_type: :scitt,
-                        site_count: 0,
                         scheme_member: 'Y',
                         enrichments: [])
     end
