@@ -286,10 +286,16 @@ class Course < ApplicationRecord
   end
 
   def bursary_amount
-    dfe_subjects.map(&:bursary_amount).max
+    dfe_subject_which_defines_financial_incentives.bursary_amount
   end
 
   def scholarship_amount
-    dfe_subjects.map(&:scholarship_amount).max
+    dfe_subject_which_defines_financial_incentives.scholarship_amount
+  end
+
+private
+
+  def dfe_subject_which_defines_financial_incentives
+    dfe_subjects.max_by(&:total_bursary_and_early_career_payments_amount)
   end
 end

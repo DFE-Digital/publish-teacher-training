@@ -440,6 +440,7 @@ RSpec.describe Course, type: :model do
 
         it { should have_bursary }
         it { should have_scholarship_and_bursary }
+        it { should have_early_career_payments }
         its(:bursary_amount) { should eq(20_000) }
         its(:scholarship_amount) { should eq(22_000) }
       end
@@ -471,6 +472,22 @@ RSpec.describe Course, type: :model do
         it { should have_bursary }
         its(:bursary_amount) { should eq(15_000) }
         its(:scholarship_amount) { should eq(0) }
+      end
+
+      context "for a Maths and Physics course" do
+        let(:subjects) {
+          [
+            build(:subject, subject_name: 'Physics'),
+            build(:subject, subject_name: 'Mathematics'),
+            build(:subject, subject_name: 'Secondary'),
+          ]
+        }
+
+        describe "the Maths incentives take precedence" do
+          its(:bursary_amount) { should eq(20_000) }
+          its(:scholarship_amount) { should eq(22_000) }
+          it { should have_early_career_payments }
+        end
       end
     end
   end

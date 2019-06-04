@@ -9,7 +9,7 @@ class DFESubject
     { subjects: ["Primary with mathematics"], bursary_amount: 6000, early_career_payments: 0, scholarship: 0 },
   ].freeze
 
-  NO_FINANCIAL_INCENTIVES = { bursary_amount: 0, early_career_payments: 0, scholarship: 0 }.freeze
+  NO_FINANCIAL_INCENTIVES = { bursary_amount: 0, early_career_payments: 0, scholarship: 0, precedence: 0 }.freeze
 
   def initialize(subject_name)
     @subject_name = subject_name
@@ -37,6 +37,10 @@ class DFESubject
 
   def scholarship_amount
     financial_support[:scholarship]
+  end
+
+  def total_bursary_and_early_career_payments_amount
+    financial_support.slice(:bursary_amount, :early_career_payments).values.sum
   end
 
   def to_s
