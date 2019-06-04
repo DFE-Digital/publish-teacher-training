@@ -559,8 +559,8 @@ RSpec.describe Course, type: :model do
         end
 
         context 'with published enrichment' do
-          let(:provider_enrichment) { build(:provider_enrichment, :published, last_published_at: 1.day.ago) }
-          let(:provider) { create(:provider, enrichments: [provider_enrichment]) }
+          let(:provider_enrichment) { create(:provider_enrichment, :published, last_published_at: 1.day.ago) }
+          let(:provider) { provider_enrichment.provider }
           let(:course) { create(:course, provider: provider, accrediting_provider: accrediting_provider) }
 
           context 'without any accrediting_provider_enrichments' do
@@ -578,10 +578,10 @@ RSpec.describe Course, type: :model do
 
             let(:accrediting_provider_enrichments) { [accrediting_provider_enrichment] }
             let(:provider_enrichment) do
-              build(:provider_enrichment,
-                    :published,
-                    last_published_at: 1.day.ago,
-                    accrediting_provider_enrichments: accrediting_provider_enrichments)
+              create(:provider_enrichment,
+                     :published,
+                     last_published_at: 1.day.ago,
+                     accrediting_provider_enrichments: accrediting_provider_enrichments)
             end
 
             it { should match accrediting_provider_enrichment_description }

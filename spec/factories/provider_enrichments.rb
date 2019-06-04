@@ -16,12 +16,8 @@
 
 FactoryBot.define do
   factory :provider_enrichment do
-    transient do
-      age { nil }
-    end
-
+    association :provider
     status { :draft }
-    sequence(:provider_code) { |n| "A#{n}" }
     email { Faker::Internet.email }
     website { Faker::Internet.url }
     address1 { Faker::Address.street_address }
@@ -35,6 +31,10 @@ FactoryBot.define do
     train_with_disability { Faker::Lorem.sentence.to_s }
     accrediting_provider_enrichments { nil }
     created_at { Faker::Date.between 2.days.ago, 1.days.ago }
+
+    transient do
+      age { nil }
+    end
 
     after(:build) do |enrichment, evaluator|
       if evaluator.age.present?
