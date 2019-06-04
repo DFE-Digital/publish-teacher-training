@@ -19,7 +19,7 @@ describe 'Courses API v2', type: :request do
            provider: provider,
            start_date: Time.now.utc,
            study_mode: :full_time,
-           subject_count: 0,
+
            subjects: [course_subject_primary, course_subject_mathematics, course_subject_send],
            with_site_statuses: [%i[findable with_any_vacancy applications_being_accepted_from_2019]],
            enrichments: [enrichment],

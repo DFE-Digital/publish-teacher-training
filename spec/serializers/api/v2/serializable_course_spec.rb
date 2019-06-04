@@ -127,17 +127,17 @@ describe API::V2::SerializableCourse do
   end
 
   describe "#is_send?" do
-    let(:course) { create(:course, subject_count: 0) }
+    let(:course) { create(:course,) }
     it { expect(subject["attributes"]).to include("is_send?" => false) }
 
     context "with a SEND subject" do
-      let(:course) { create(:course, subject_count: 0, subjects: [create(:send_subject)]) }
+      let(:course) { create(:course, subjects: [create(:send_subject)]) }
       it { expect(subject["attributes"]).to include("is_send?" => true) }
     end
   end
 
   context "subjects & level" do
-    let(:course) { create(:course, subject_count: 0, subjects: subjects) }
+    let(:course) { create(:course, subjects: subjects) }
 
     describe 'are taken from the course' do
       let(:subjects) { [create(:subject, subject_name: "primary")] }

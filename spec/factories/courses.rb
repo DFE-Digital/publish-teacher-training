@@ -33,15 +33,16 @@ FactoryBot.define do
 
     study_mode { :full_time }
     resulting_in_pgce_with_qts
-
     transient do
-      subject_count      { 1 }
-      subjects           { build_list(:subject, subject_count) }
-      with_site_statuses { [] }
       with_enrichments   { [] }
       age                { nil }
       enrichments        { [] }
     end
+
+    trait :with_subject do
+      subjects { [build(:subject)] }
+    end
+
 
     after(:build) do |course, evaluator|
       if evaluator.age.present?
@@ -52,19 +53,6 @@ FactoryBot.define do
     end
 
     after(:create) do |course, evaluator|
-      course.subjects << evaluator.subjects.map { |subject|
-        subject.is_a?(Subject) ? subject : create(*subject)
-      }
-
-      evaluator.with_site_statuses.each do |traits|
-        attrs = { course: course }
-        if traits == [:default]
-          create(:site_status, attrs)
-        else
-          create(:site_status, *traits, attrs)
-        end
-      end
-
       evaluator.with_enrichments.each do |trait, attributes = {}|
         defaults = {
           ucas_course_code: course.course_code,

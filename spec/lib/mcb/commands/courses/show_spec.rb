@@ -13,7 +13,9 @@ describe '"mcb courses show"' do
 
     site_status2 = create(:site_status)
     course2      = site_status2.course
-    subjects2    = course2.subjects
+    new_subject = create(:subject)
+    course2.subjects = [new_subject]
+    subjects2 = course2.subjects
 
     output = with_stubbed_stdout do
       cmd.run([course2.provider.provider_code, course2.course_code])
