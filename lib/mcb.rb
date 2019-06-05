@@ -227,8 +227,8 @@ module MCB
     def env_to_azure_map
       {
         'qa' => {
-          webapp: 'bat-dev-manage-courses-backend-app',
-          rgroup: 'bat-dev-linux-rgroup',
+          webapp: 'bat-qa-mcbe-as',
+          rgroup: 'bat-qa-mcbe-rg',
           subscription: 'DFE BAT Development'
         },
         'staging' => {
