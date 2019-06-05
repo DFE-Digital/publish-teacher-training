@@ -161,6 +161,31 @@ module MCB
       opts
     end
 
+    def display_pages_received(page:, max_pages:, next_url:)
+      # (current) page starts at 0
+      pages = page + 1
+
+      if pages == max_pages
+        puts "Max of #{pages} page(s) hit, use --max-pages to increase."
+
+        next_changed_since = extract_changed_at(next_url)
+
+        puts(
+          'To continue retrieving results use the changed-since: ' +
+          CGI.unescape(next_changed_since)
+        )
+      else
+        puts "All #{pages} pages from API retrieved."
+      end
+    end
+
+    def extract_changed_at(url)
+      url.sub(
+        /.*changed_since=(.*)(?:&.*)|$/,
+        '\1'
+      )
+    end
+
     def iterate_v1_endpoint(url:, endpoint:, **opts)
       # We only need httparty for API V1 calls
       require 'httparty'
@@ -172,7 +197,7 @@ module MCB
       max_pages = opts.fetch(:'max-pages')
 
       Enumerator.new do |y|
-        pages = max_pages.times do |page_count|
+        max_pages.times do |page_count|
           verbose "Requesting page #{page_count + 1}: #{endpoint_url}"
           response = HTTParty.get(
             endpoint_url.to_s,
@@ -197,8 +222,6 @@ module MCB
             break
           end
         end
-
-        puts "max page count of #{max_pages} reached" if pages == max_pages
       end
     end
 

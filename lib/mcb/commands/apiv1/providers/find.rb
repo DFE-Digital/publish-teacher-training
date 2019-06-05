@@ -6,7 +6,12 @@ description <<~EODESCRIPTION
 EODESCRIPTION
 usage 'find [options] <code>'
 param :code
+
 option :j, 'json', 'show the returned JSON response'
+option :P, 'max-pages', 'maximum number of pages to request',
+       default: 20,
+       argument: :required,
+       transform: method(:Integer)
 
 
 run do |opts, args, _cmd|
@@ -19,6 +24,10 @@ run do |opts, args, _cmd|
 
   if provider.nil?
     error "Provider with code '#{args[:code]}' not found"
+
+    MCB::display_pages_received(page: last_context[:page],
+                                max_pages: opts[:'max-pages'],
+                                next_url: last_context[:next_url])
     next
   end
 
@@ -27,19 +36,14 @@ run do |opts, args, _cmd|
   else
     print_provider_info(provider)
   end
-
-  if opts[:all]
-    puts 'All pages searched.'
-  else
-    puts 'Only first page of results searched (use -a to retrieve all).'
-  end
-  puts "To continue searching use the url: #{last_context[:next_url]}"
 end
 
 def find_provider(code, opts)
-  MCB.each_v1_provider(opts).detect do |provider, _context|
+  last_context = nil
+  MCB.each_v1_provider(opts).detect do |provider, context|
+    last_context = context
     provider['institution_code'] == code
-  end
+  end || [nil, last_context]
 end
 
 def print_provider_info(provider)

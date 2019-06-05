@@ -23,10 +23,15 @@ run do |opts, args, _cmd|
 
   verbose "looking for provider '#{provider_code}' course '#{course_code}'"
 
-  (course, _last_context) = find_course(provider_code, course_code, opts)
+  (course, last_context) = find_course(provider_code, course_code, opts)
 
   if course.nil?
     error "Provider '#{provider_code}' course '#{course_code}' not found"
+
+    MCB::display_pages_received(page: last_context[:page],
+                                max_pages: opts[:'max-pages'],
+                                next_url: last_context[:next_url])
+
     next
   end
 
@@ -38,10 +43,12 @@ run do |opts, args, _cmd|
 end
 
 def find_course(provider_code, course_code, opts)
-  MCB.each_v1_course(opts).detect do |course, _context|
+  last_context = nil
+  MCB.each_v1_course(opts).detect do |course, context|
+    last_context = context
     course['provider']['institution_code'] == provider_code &&
       course['course_code'] == course_code
-  end
+  end || [nil, last_context]
 end
 
 def print_course_info(course)
