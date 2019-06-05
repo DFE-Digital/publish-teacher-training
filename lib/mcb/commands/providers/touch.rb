@@ -7,4 +7,5 @@ run do |opts, args, _cmd|
 
   provider = Provider.find_by(provider_code: args[:provider_code])
   provider.touch
+  provider.update! audit_comment: 'timestamps updated to expose in api v1'
 end

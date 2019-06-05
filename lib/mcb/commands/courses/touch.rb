@@ -9,4 +9,5 @@ run do |opts, args, _cmd|
   provider = Provider.find_by(provider_code: args[:provider_code].upcase)
   course = provider.courses.find_by(course_code: args[:course_code].upcase)
   course.touch
+  course.update! audit_comment: 'timestamps updated to expose in api v1'
 end

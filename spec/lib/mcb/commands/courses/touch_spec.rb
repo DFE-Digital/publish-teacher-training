@@ -23,4 +23,13 @@ describe '"mcb courses touch"' do
       expect(course.reload.changed_at).to eq Time.now
     end
   end
+
+  it 'adds audit comment' do
+    expect {
+      with_stubbed_stdout do
+        $mcb.run(%W[course touch #{provider.provider_code} #{course.course_code}])
+      end
+    }.to change { course.reload.audits.count }
+           .from(1).to(2)
+  end
 end

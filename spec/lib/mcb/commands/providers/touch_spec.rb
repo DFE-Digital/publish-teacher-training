@@ -22,4 +22,13 @@ describe '"mcb providers touch"' do
       expect(provider.reload.changed_at).to eq Time.now
     end
   end
+
+  it 'adds audit comment' do
+    expect {
+      with_stubbed_stdout do
+        $mcb.run(%W[provider touch #{provider.provider_code}])
+      end
+    }.to change { provider.reload.audits.count }
+           .from(1).to(2)
+  end
 end
