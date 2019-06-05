@@ -135,6 +135,7 @@ describe 'Courses API v2', type: :request do
             "relationships" => {
               "accrediting_provider" => { "meta" => { "included" => false } },
               "provider" => { "meta" => { "included" => false } },
+              "sites" => { "meta" => { "included" => false } },
               "site_statuses" => { "data" => [{ "type" => "site_statuses", "id" => site_status.id.to_s }] },
             },
           },
@@ -262,6 +263,7 @@ describe 'Courses API v2', type: :request do
               "accrediting_provider" => { "meta" => { "included" => false } },
               "provider" => { "meta" => { "included" => false } },
               "site_statuses" => { "meta" => { "included" => false } },
+              "sites" => { "meta" => { "included" => false } },
             },
           }],
           "jsonapi" => {

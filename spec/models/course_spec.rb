@@ -68,6 +68,19 @@ RSpec.describe Course, type: :model do
     its(:has_vacancies?) { should be false }
   end
 
+  describe "#sites" do
+    let(:first_site) { create(:site) }
+    let(:first_site_status) { create(:site_status, :running, site: first_site) }
+    let(:second_site) { create(:site) }
+    let(:second_site_status) { create(:site_status, :suspended, site: second_site) }
+
+    subject { create(:course, site_statuses: [first_site_status, second_site_status]) }
+
+    it "should only return new and running sites" do
+      expect(subject.sites.to_a).to eq([first_site])
+    end
+  end
+
   context 'with site statuses' do
     describe 'findable?' do
       context 'with at least one site status as findable' do

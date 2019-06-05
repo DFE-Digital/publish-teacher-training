@@ -70,7 +70,9 @@ class Course < ApplicationRecord
   has_many :course_subjects
   has_many :subjects, through: :course_subjects
   has_many :site_statuses
-  has_many :sites, through: :site_statuses
+  has_many :sites,
+           -> { merge(SiteStatus.where(status: %i[new_status running])) },
+           through: :site_statuses
 
   has_many :enrichments,
            ->(course) { where(provider_code: course.provider.provider_code) },
