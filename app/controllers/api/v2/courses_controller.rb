@@ -56,6 +56,9 @@ module API
         enrichment.assign_attributes(update_params)
         enrichment.save
 
+        site_ids = params[:course][:sites_ids]
+        @course.sites = @provider.sites.where(id: site_ids) if site_ids.present?
+
         if @course.valid?
           render jsonapi: @course.reload
         else
@@ -78,7 +81,7 @@ module API
       def update_params
         params
           .require(:course)
-          .except(:id, :type)
+          .except(:id, :type, :sites_ids, :sites_types)
           .permit(
             :about_course,
             :course_length,

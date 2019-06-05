@@ -251,8 +251,9 @@ class Course < ApplicationRecord
 
   def add_site!(site:)
     is_course_new = new? # persist this before we change anything
-    site_status = site_statuses.find_or_create_by!(site: site)
+    site_status = site_statuses.find_or_initialize_by(site: site)
     site_status.start! unless is_course_new
+    site_status.save! if persisted?
   end
 
   def remove_site!(site:)
@@ -260,8 +261,16 @@ class Course < ApplicationRecord
     new? ? site_status.destroy! : site_status.suspend!
   end
 
-  def sites_not_associated_with_course
-    provider.sites - sites
+  def sites=(desired_sites)
+    existing_sites = sites
+
+    to_add = desired_sites - existing_sites
+    to_add.each { |site| add_site!(site: site) }
+
+    to_remove = existing_sites - desired_sites
+    to_remove.each { |site| remove_site!(site: site) }
+
+    sites.reload
   end
 
   def has_bursary?
