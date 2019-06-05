@@ -9,7 +9,9 @@ describe '"mcb providers touch"' do
         $mcb.run(%W[provider touch #{provider.provider_code}])
       end
 
-      expect(provider.reload.updated_at).to eq Time.now
+      # Use to_i compare seconds since epoch and side-step sub-second
+      # differences that show up even with Timecop on certain platforms.
+      expect(provider.reload.updated_at.to_i).to eq Time.now.to_i
     end
   end
 
@@ -19,7 +21,7 @@ describe '"mcb providers touch"' do
         $mcb.run(%W[provider touch #{provider.provider_code}])
       end
 
-      expect(provider.reload.changed_at).to eq Time.now
+      expect(provider.reload.changed_at.to_i).to eq Time.now.to_i
     end
   end
 
