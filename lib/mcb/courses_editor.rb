@@ -11,21 +11,32 @@ module MCB
     end
 
     def run
+      puts "Editing #{course_codes.join(', ')}"
       edit_title
     end
 
   private
 
     def edit_title
+      print_existing(:name)
       update(name: ask_title)
     end
 
     def ask_title
-      @cli.ask("Course title?  ")
+      @cli.ask("New course title?  ")
     end
 
     def check_authorisation
       @courses.each { |course| raise Pundit::NotAuthorizedError unless can_update?(course) }
+    end
+
+    def print_existing(attribute_name)
+      puts "Existing values for course #{attribute_name}:"
+      table = Tabulo::Table.new @courses.order(:course_code) do |t|
+        t.add_column(:course_code, header: "course\ncode", width: 4)
+        t.add_column(attribute_name)
+      end
+      puts table.pack(max_table_width: nil), table.horizontal_rule
     end
 
     def update(attrs)
@@ -34,6 +45,10 @@ module MCB
 
     def can_update?(course)
       CoursePolicy.new(@requester, course).update?
+    end
+
+    def course_codes
+      @courses.order(:course_code).pluck(:course_code)
     end
 
     def find_courses(course_codes)
