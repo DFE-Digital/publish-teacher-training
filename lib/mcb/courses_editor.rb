@@ -16,7 +16,7 @@ module MCB
       until finished
         choice = @cli.choose do |menu|
           menu.choice(:exit) { finished = true }
-          menu.choices("edit title", "edit maths", "edit english", "edit science")
+          menu.choices("edit title", "edit maths", "edit english", "edit science", "edit route")
         end
 
         if choice.is_a?(String) && choice.start_with?("edit")
@@ -56,6 +56,18 @@ module MCB
       @cli.choose do |menu|
         menu.prompt = "What's the #{subject} entry requirements?  "
         menu.choices(*Course::ENTRY_REQUIREMENT_OPTIONS.keys)
+      end
+    end
+
+    def edit_route
+      print_existing(:program_type)
+      update(program_type: ask_route)
+    end
+
+    def ask_route
+      @cli.choose do |menu|
+        menu.prompt = "What's the route?  "
+        menu.choices(*Course.program_types.keys)
       end
     end
 
