@@ -33,7 +33,7 @@ run do |opts, args, _cmd|
   if opts[:json]
     puts JSON.pretty_generate(JSON.parse(course.to_json))
   else
-    print_course_info(course)
+    puts MCB::Render::APIV1.course course
   end
 end
 
@@ -42,18 +42,4 @@ def find_course(provider_code, course_code, opts)
     course['provider']['institution_code'] == provider_code &&
       course['course_code'] == course_code
   end
-end
-
-def print_course_info(course)
-  campus_statuses = course.delete('campus_statuses')
-  subjects        = course.delete('subjects')
-  provider        = course.delete('provider')
-
-  puts MCB::Render::APIV1.course_record course
-  puts "\n"
-  puts MCB::Render::APIV1.provider_record provider
-  puts "\n"
-  puts MCB::Render::APIV1.subjects_table subjects
-  puts "\n"
-  puts MCB::Render::APIV1.site_statuses_table campus_statuses
 end

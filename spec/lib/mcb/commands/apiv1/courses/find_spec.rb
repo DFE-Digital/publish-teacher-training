@@ -40,7 +40,11 @@ describe '"mcb apiv1 courses find"' do
                  })
 
     output = with_stubbed_stdout do
-      $mcb.run(%W[apiv1 courses find #{course2.provider.provider_code} #{course2.course_code}])
+      $mcb.run(%W[apiv1
+                  courses
+                  find
+                  #{course2.provider.provider_code}
+                  #{course2.course_code}])
     end
 
     expect(output).to have_text_table_row('course_code',
@@ -51,8 +55,8 @@ describe '"mcb apiv1 courses find"' do
                         site_status2.site.code,
                         site_status2.site.location_name,
                         site_status2.vac_status_before_type_cast,
-                        site_status2.publish_before_type_cast,
                         site_status2.status_before_type_cast,
+                        site_status2.publish_before_type_cast,
                         site_status2.applications_accepted_from.strftime('%Y-%m-%d')
                       ))
   end
