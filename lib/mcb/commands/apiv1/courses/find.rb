@@ -49,11 +49,11 @@ def print_course_info(course)
   subjects        = course.delete('subjects')
   provider        = course.delete('provider')
 
-  puts MCB::Render.course_record course
+  puts MCB::Render::APIV1.course_record course
   puts "\n"
-  puts MCB::Render.provider_record provider
+  puts MCB::Render::APIV1.provider_record provider
   puts "\n"
-  puts MCB::Render.subjects_table subjects
+  puts MCB::Render::APIV1.subjects_table subjects
   puts "\n"
-  puts MCB::Render.site_statuses_table campus_statuses
+  puts MCB::Render::APIV1.site_statuses_table campus_statuses
 end

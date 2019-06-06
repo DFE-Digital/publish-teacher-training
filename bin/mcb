@@ -24,6 +24,8 @@ require 'mcb/config'
 require 'mcb/course_show'
 require 'mcb/grant_access_wizard'
 require 'mcb/render'
+require 'mcb/render/active_record'
+require 'mcb/render/apiv1'
 
 tp.set :capitalize_headers, false
 
