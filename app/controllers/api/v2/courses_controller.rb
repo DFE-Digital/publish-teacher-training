@@ -58,8 +58,9 @@ module API
 
         site_ids = params[:course][:sites_ids]
         @course.sites = @provider.sites.where(id: site_ids) if site_ids.present?
+        @course.errors[:sites] << "^You must choose at least one location" if site_ids == []
 
-        if @course.valid?
+        if @course.errors.empty? && @course.valid?
           render jsonapi: @course.reload
         else
           render jsonapi_errors: @course.errors, status: :unprocessable_entity

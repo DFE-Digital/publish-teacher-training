@@ -20,6 +20,13 @@ describe 'PATCH /providers/:provider_code/courses/:course_code with sites' do
     course.add_site!(site: unwanted_site)
   end
 
+  let(:sites_payload) {
+    [
+      { "type" => "sites", "id" => existing_site.id.to_s },
+      { "type" => "sites", "id" => site_to_add.id.to_s }
+    ]
+  }
+
   let(:jsonapi_data) do
     {
       "_jsonapi" => {
@@ -28,10 +35,7 @@ describe 'PATCH /providers/:provider_code/courses/:course_code with sites' do
           "type" => "courses",
           "relationships" => {
             "sites" => {
-              "data" => [
-                { "type" => "sites", "id" => existing_site.id.to_s },
-                { "type" => "sites", "id" => site_to_add.id.to_s }
-              ]
+              "data" => sites_payload
             }
           }
         }
@@ -42,8 +46,11 @@ describe 'PATCH /providers/:provider_code/courses/:course_code with sites' do
   def perform_request
     patch "/api/v2/providers/#{course.provider.provider_code}" \
             "/courses/#{course.course_code}",
-          headers: { 'HTTP_AUTHORIZATION' => credentials },
-          params: jsonapi_data
+          headers: {
+            'HTTP_AUTHORIZATION' => credentials,
+            'Content-Type': 'application/json'
+          },
+          params: jsonapi_data.to_json
   end
 
   context "course has some sites" do
@@ -79,6 +86,27 @@ describe 'PATCH /providers/:provider_code/courses/:course_code with sites' do
         expect(
           course.reload.site_statuses.find_by(site_id: unwanted_site.id).status
         ).to eq("suspended")
+      end
+    end
+
+    context "removing all sites" do
+      let(:sites_payload) { [] }
+
+      before do
+        perform_request
+      end
+
+      it "returns http 422" do
+        expect(response).to have_http_status(:unprocessable_entity)
+      end
+
+      it "leaves existing site in place" do
+        expect(course.reload.sites.exists?(existing_site.id)).to be(true)
+        expect(course.reload.sites.exists?(unwanted_site.id)).to be(true)
+      end
+
+      it "returns validation error" do
+        expect(response.body).to include("You must choose at least one location")
       end
     end
   end
