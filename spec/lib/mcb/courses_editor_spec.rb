@@ -19,7 +19,9 @@ describe MCB::CoursesEditor do
            provider: provider,
            course_code: course_code,
            name: 'Original name',
-           maths: 'must_have_qualification_at_application_time')
+           maths: 'must_have_qualification_at_application_time',
+           english: 'equivalence_test',
+           science: 'not_required')
   }
   subject { described_class.new(provider: provider, course_codes: course_codes, requester: requester) }
 
@@ -35,6 +37,16 @@ describe MCB::CoursesEditor do
       it 'updates the maths setting when that is valid' do
         expect { run_editor("edit maths", "equivalence_test", "exit") }.to change { course.reload.maths }.
           from("must_have_qualification_at_application_time").to("equivalence_test")
+      end
+
+      it 'updates the english setting when that is valid' do
+        expect { run_editor("edit english", "must_have_qualification_at_application_time", "exit") }.to change { course.reload.english }.
+          from("equivalence_test").to("must_have_qualification_at_application_time")
+      end
+
+      it 'updates the science setting when that is valid' do
+        expect { run_editor("edit science", "equivalence_test", "exit") }.to change { course.reload.science }.
+          from("not_required").to("equivalence_test")
       end
 
       it 'does nothing upon an immediate exit' do

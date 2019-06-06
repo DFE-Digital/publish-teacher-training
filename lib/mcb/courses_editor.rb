@@ -16,7 +16,7 @@ module MCB
       until finished
         choice = @cli.choose do |menu|
           menu.choice(:exit) { finished = true }
-          menu.choices("edit title", "edit maths")
+          menu.choices("edit title", "edit maths", "edit english", "edit science")
         end
 
         if choice.is_a?(String) && choice.start_with?("edit")
@@ -40,6 +40,16 @@ module MCB
     def edit_maths
       print_existing(:maths)
       update(maths: ask_gcse_subject(:maths))
+    end
+
+    def edit_english
+      print_existing(:english)
+      update(english: ask_gcse_subject(:english))
+    end
+
+    def edit_science
+      print_existing(:science)
+      update(science: ask_gcse_subject(:science))
     end
 
     def ask_gcse_subject(subject)
