@@ -13,6 +13,40 @@ module MCB
       %i[type name email telephone]
     end
 
+    # Render a course for output to the terminal.
+    #
+    # Takes care of rendering out all the attributes and related objects in
+    # the correct format. Associations are specified as params to allow the
+    # caller to decide how they are retrieved (ActiveRecord objects will
+    # access attributes and associations differently from JSON API
+    # responses).
+    def course(course,
+               provider:,
+               accrediting_provider:,
+               subjects:,
+               site_statuses:,
+               enrichments:)
+      [
+        course_record(course),
+        "\n",
+        providers_table([provider], name: "Provider"),
+        "\n",
+        providers_table(
+          [accrediting_provider],
+          name: "Accredited body",
+          add_columns: [[:accrediting_provider, header: 'accrediting']]
+        ),
+        "\n",
+        subjects_table(subjects),
+        "\n",
+        course_site_statuses_table(site_statuses),
+        "\n",
+        unless enrichments.nil?
+          course_enrichments_table(enrichments)
+        end
+      ]
+    end
+
     def course_enrichments_table(enrichments, name: 'Course Enrichments')
       return if enrichments.nil?
 

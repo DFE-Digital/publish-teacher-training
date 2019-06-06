@@ -9,6 +9,21 @@ module MCB
                 name: name)
         end
 
+        def course(course)
+          # duplicate this so we can remove keys we don't want displayed, as
+          # course_record below just outputs all the key-value pairs in course
+          render_course = course.dup
+
+          super(
+            render_course,
+            provider:             render_course.delete('provider'),
+            accrediting_provider: render_course.delete('accrediting_provider'),
+            subjects:             render_course.delete('subjects'),
+            site_statuses:        render_course.delete('campus_statuses'),
+            enrichments:          nil,
+          )
+        end
+
         def course_record(course, name: 'Course')
           course_table = Terminal::Table.new rows: course
 
