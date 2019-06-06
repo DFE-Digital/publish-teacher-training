@@ -22,6 +22,7 @@ require 'mcb'
 require 'mcb/azure'
 require 'mcb/config'
 require 'mcb/course_show'
+require 'mcb/courses_editor'
 require 'mcb/grant_access_wizard'
 require 'mcb/render'
 
