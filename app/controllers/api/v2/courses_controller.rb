@@ -47,12 +47,7 @@ module API
       end
 
       def update
-        enrichment = if @course.enrichments.draft.any?
-                       @course.enrichments.draft.first
-                     else
-                       @course.enrichments.new(status: 'draft')
-                     end
-
+        enrichment = first_draft_or_new_enrichment
         enrichment.assign_attributes(update_params)
         enrichment.save
 
@@ -67,6 +62,14 @@ module API
       end
 
     private
+
+      def first_draft_or_new_enrichment
+        if @course.enrichments.draft.any?
+          @course.enrichments.draft.first
+        else
+          @course.enrichments.new(status: 'draft')
+        end
+      end
 
       def build_provider
         @provider = Provider.find_by!(provider_code: params[:provider_code].upcase)
