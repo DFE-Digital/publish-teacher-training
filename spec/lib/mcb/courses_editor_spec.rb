@@ -27,8 +27,13 @@ describe MCB::CoursesEditor do
 
     describe 'runs the editor' do
       it 'updates the course title' do
-        expect { run_editor("Mathematics") }.to change { course.reload.name }.
+        expect { run_editor("edit title", "Mathematics", "exit") }.to change { course.reload.name }.
           from("Original name").to("Mathematics")
+      end
+
+      it 'does nothing upon an immediate exit' do
+        expect { run_editor("exit") }.to_not change { course.reload.name }.
+          from("Original name")
       end
     end
 
@@ -42,7 +47,7 @@ describe MCB::CoursesEditor do
       let(:course_codes) { [] }
 
       it 'edits all courses on the provider' do
-        expect { run_editor("Mathematics") }.
+        expect { run_editor("edit title", "Mathematics", "exit") }.
           to change { provider.reload.courses.order(:name).pluck(:name) }.
           from(["Another name", "Original name"]).to(%w[Mathematics Mathematics])
       end

@@ -33,7 +33,7 @@ describe 'mcb courses edit' do
 
     describe 'edits the course name for a single course' do
       it 'updates the course' do
-        expect { edit(provider_code, [course_code], "Mathematics") }.to change { course.reload.name }.
+        expect { edit(provider_code, [course_code], "edit title", "Mathematics", "exit") }.to change { course.reload.name }.
           from("Original name").to("Mathematics")
       end
     end
@@ -53,7 +53,7 @@ describe 'mcb courses edit' do
       }
 
       it 'edits all the courses on the provider' do
-        expect { edit(provider_code, [], "Mathematics") }.
+        expect { edit(provider_code, [], "edit title", "Mathematics", "exit") }.
           to change { provider.reload.courses.order(:name).pluck(:name) }.
           from(["Another name", "Original name"]).to(%w[Mathematics Mathematics])
       end

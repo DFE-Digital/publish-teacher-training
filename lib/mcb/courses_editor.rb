@@ -11,8 +11,19 @@ module MCB
     end
 
     def run
+      finished = false
       puts "Editing #{course_codes.join(', ')}"
-      edit_title
+      until finished
+        choice = @cli.choose do |menu|
+          menu.choice(:exit) { finished = true }
+          menu.choice("edit title")
+        end
+
+        case choice
+        when "edit title"
+          edit_title
+        end
+      end
     end
 
   private
