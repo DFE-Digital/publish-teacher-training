@@ -53,8 +53,13 @@ module API
 
         site_ids = params[:course][:sites_ids]
         @course.sites = @provider.sites.where(id: site_ids) if site_ids.present?
+        # This validation is done at the controller level instead of the model.
+        # This is because sites = [] is something that we can validate against,
+        # but we can't actually revert easily from what I can tell because of the
+        # remove_site! side effects that occur when it's called.
+        @course.errors[:sites] << "^You must choose at least one location" if site_ids == []
 
-        if @course.valid?
+        if @course.errors.empty? && @course.valid?
           render jsonapi: @course.reload
         else
           render jsonapi_errors: @course.errors, status: :unprocessable_entity
