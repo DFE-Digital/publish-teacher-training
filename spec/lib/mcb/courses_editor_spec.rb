@@ -18,7 +18,8 @@ describe MCB::CoursesEditor do
     create(:course,
            provider: provider,
            course_code: course_code,
-           name: 'Original name')
+           name: 'Original name',
+           maths: 'must_have_qualification_at_application_time')
   }
   subject { described_class.new(provider: provider, course_codes: course_codes, requester: requester) }
 
@@ -29,6 +30,11 @@ describe MCB::CoursesEditor do
       it 'updates the course title' do
         expect { run_editor("edit title", "Mathematics", "exit") }.to change { course.reload.name }.
           from("Original name").to("Mathematics")
+      end
+
+      it 'updates the maths setting when that is valid' do
+        expect { run_editor("edit maths", "equivalence_test", "exit") }.to change { course.reload.maths }.
+          from("must_have_qualification_at_application_time").to("equivalence_test")
       end
 
       it 'does nothing upon an immediate exit' do

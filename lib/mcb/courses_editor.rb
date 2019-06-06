@@ -16,12 +16,12 @@ module MCB
       until finished
         choice = @cli.choose do |menu|
           menu.choice(:exit) { finished = true }
-          menu.choice("edit title")
+          menu.choices("edit title", "edit maths")
         end
 
-        case choice
-        when "edit title"
-          edit_title
+        if choice.is_a?(String) && choice.start_with?("edit")
+          edit_method_name = choice.gsub(" ", "_").to_sym
+          send(edit_method_name)
         end
       end
     end
@@ -35,6 +35,18 @@ module MCB
 
     def ask_title
       @cli.ask("New course title?  ")
+    end
+
+    def edit_maths
+      print_existing(:maths)
+      update(maths: ask_gcse_subject(:maths))
+    end
+
+    def ask_gcse_subject(subject)
+      @cli.choose do |menu|
+        menu.prompt = "What's the #{subject} entry requirements?  "
+        menu.choices(*Course::ENTRY_REQUIREMENT_OPTIONS.keys)
+      end
     end
 
     def check_authorisation
