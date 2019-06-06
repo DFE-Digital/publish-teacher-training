@@ -1,6 +1,11 @@
 name 'list'
 summary 'List providers'
 
+option :P, 'max-pages', 'maximum number of pages to request',
+       default: 1,
+       argument: :required,
+       transform: method(:Integer)
+
 run do |opts, _args, _cmd|
   opts = MCB.apiv1_opts(opts)
   last_context = nil
@@ -14,16 +19,7 @@ run do |opts, _args, _cmd|
 
   puts table
 
-  if last_context
-    if opts[:all]
-      puts 'All pages retrieved.'
-    else
-      puts 'Only first page of results retrieved (use -a to retrieve all).'
-    end
-    next_changed_since = last_context[:next_url].sub(/.*changed_since=(.*)(&.*)|$/, '\1')
-    puts(
-      "To continue retrieving results use the changed-since: " +
-      CGI.unescape(next_changed_since)
-    )
-  end
+  MCB::display_pages_received(page: last_context[:page],
+                              max_pages: opts[:'max-pages'],
+                              next_url: last_context[:next_url])
 end
