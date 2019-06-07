@@ -50,9 +50,9 @@ def print_provider_info(provider)
   campuses = provider.delete('campuses')
   contacts = provider.delete('contacts')
 
-  puts MCB::Render.provider_record provider
+  puts MCB::Render::APIV1.provider_record provider
   puts "\n"
-  puts MCB::Render.campuses_table campuses
+  puts MCB::Render::APIV1.campuses_table campuses
   puts "\n"
-  puts MCB::Render.contacts_table contacts
+  puts MCB::Render::APIV1.contacts_table contacts
 end
