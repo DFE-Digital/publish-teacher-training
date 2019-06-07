@@ -137,6 +137,31 @@ describe 'PATCH /providers/:provider_code/courses/:course_code' do
         .to include(update_attributes.stringify_keys)
     end
 
+    context "with no attributes to update" do
+      let(:update_attributes) do
+        {
+          about_course: nil,
+          course_length: nil,
+          fee_details: nil,
+          fee_international: nil,
+          fee_uk_eu: nil,
+          financial_support: nil,
+          how_school_placements_work: nil,
+          interview_process: nil,
+          other_requirements: nil,
+          personal_qualities: nil,
+          qualifications: nil,
+          salary_details: nil
+        }
+      end
+
+      it "doesn't create a draft enrichment" do
+        expect {
+          perform_request update_course
+        }.to_not(change { course.reload.enrichments.count })
+      end
+    end
+
     it 'returns ok' do
       perform_request update_course
 
