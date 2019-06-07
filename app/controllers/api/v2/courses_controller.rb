@@ -47,17 +47,8 @@ module API
       end
 
       def update
-        enrichment = first_draft_or_new_enrichment
-        enrichment.assign_attributes(update_params)
-        enrichment.save
-
-        site_ids = params[:course][:sites_ids]
-        @course.sites = @provider.sites.where(id: site_ids) if site_ids.present?
-        # This validation is done at the controller level instead of the model.
-        # This is because sites = [] is something that we can validate against,
-        # but we can't actually revert easily from what I can tell because of the
-        # remove_site! side effects that occur when it's called.
-        @course.errors[:sites] << "^You must choose at least one location" if site_ids == []
+        update_enrichment
+        update_sites
 
         if @course.errors.empty? && @course.valid?
           render jsonapi: @course.reload
@@ -67,6 +58,25 @@ module API
       end
 
     private
+
+      def update_enrichment
+        return unless enrichment_params.values.any?
+
+        enrichment = first_draft_or_new_enrichment
+        enrichment.assign_attributes(enrichment_params)
+        enrichment.save
+      end
+
+      def update_sites
+        return if site_ids.nil?
+
+        @course.sites = @provider.sites.where(id: site_ids) if site_ids.any?
+        # This validation is done at the controller level instead of the model.
+        # This is because sites = [] is something that we can validate against,
+        # but we can't actually revert easily from what I can tell because of the
+        # remove_site! side effects that occur when it's called.
+        @course.errors[:sites] << "^You must choose at least one location" if site_ids.empty?
+      end
 
       def first_draft_or_new_enrichment
         if @course.enrichments.draft.any?
@@ -86,7 +96,7 @@ module API
         authorize @course
       end
 
-      def update_params
+      def enrichment_params
         params
           .require(:course)
           .except(:id, :type, :sites_ids, :sites_types)
@@ -104,6 +114,10 @@ module API
             :salary_details,
             :qualifications
           )
+      end
+
+      def site_ids
+        params.require(:course)[:sites_ids]
       end
     end
   end
