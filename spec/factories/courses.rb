@@ -43,7 +43,6 @@ FactoryBot.define do
       subjects { [build(:subject)] }
     end
 
-
     after(:build) do |course, evaluator|
       if evaluator.age.present?
         course.created_at = evaluator.age

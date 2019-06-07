@@ -12,27 +12,28 @@ describe 'Courses API v2', type: :request do
   let(:course_subject_primary) { find_or_create(:subject, subject_name: 'Primary', subject_code: 'P') }
   let(:course_subject_mathematics) { find_or_create(:subject, subject_name: 'Mathematics', subject_code: 'M') }
   let(:course_subject_send) { find_or_create(:send_subject) }
-
   let(:findable_open_course) {
     create(:course, :resulting_in_pgce_with_qts, :with_apprenticeship,
            name: "Primary (Mathematics Specialist)",
            provider: provider,
            start_date: Time.now.utc,
            study_mode: :full_time,
-
            subjects: [course_subject_primary, course_subject_mathematics, course_subject_send],
-           with_site_statuses: [%i[findable with_any_vacancy applications_being_accepted_from_2019]],
            enrichments: [enrichment],
            maths: :must_have_qualification_at_application_time,
            english: :must_have_qualification_at_application_time,
            science: :must_have_qualification_at_application_time)
   }
-
+  let(:create_site_status) { create(:site_status, :findable, :applications_being_accepted_from_2019, course: findable_open_course) }
   let(:enrichment)     { build :course_enrichment, :published }
   let(:provider)       { create :provider, organisations: [organisation] }
   let(:course_subject) { course.subjects.first }
   let(:site_status)    { findable_open_course.site_statuses.first }
   let(:site)           { site_status.site }
+
+  before do
+    findable_open_course.site_statuses = [create_site_status]
+  end
 
   subject { response }
 

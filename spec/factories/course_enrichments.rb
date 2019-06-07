@@ -16,8 +16,8 @@
 
 FactoryBot.define do
   factory :course_enrichment do
-    provider
     course
+    provider { course.provider }
     status { :draft }
 
     about_course { Faker::Books::Dune.quote }

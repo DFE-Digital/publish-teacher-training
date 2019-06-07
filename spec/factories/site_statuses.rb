@@ -13,8 +13,8 @@
 
 FactoryBot.define do
   factory :site_status do
-    association :course, study_mode: :full_time_or_part_time
-    association(:site)
+    course { build(:course, study_mode: :full_time) }
+    site { build(:site, provider: course.provider) }
     publish { 'N' }
     vac_status { :full_time_vacancies }
     status { 'running' }
@@ -42,6 +42,10 @@ FactoryBot.define do
 
     trait :both_full_time_and_part_time_vacancies do
       vac_status { :both_full_time_and_part_time_vacancies }
+    end
+
+    trait :no_vacancies do
+      vac_status { :no_vacancies }
     end
 
     trait :with_any_vacancy do
