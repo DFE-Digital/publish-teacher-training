@@ -1,3 +1,4 @@
+# coding: utf-8
 # == Schema Information
 #
 # Table name: course_site
@@ -36,6 +37,158 @@ RSpec.describe SiteStatus, type: :model do
 
   describe 'auditing' do
     it { should be_audited.associated_with(:course) }
+  end
+
+  describe 'creation' do
+    context 'when course has a running site' do
+      let(:site1)       { create(:site) }
+      let(:course)      { create(:course) }
+      let(:site_status) { create(:site_status, :running, site: site1, course: course) }
+      let(:site2)       { create(:site) }
+
+      before do
+        site_status
+        expect(course.reload).not_to be_new
+      end
+
+      describe 'the status' do
+        it 'is set to running' do
+          new_site_status = SiteStatus.create course: course, site: site2
+
+          expect(new_site_status).to be_status_running
+        end
+
+        context 'when using the course association' do
+          it 'is set to running' do
+            course.sites << site2
+
+            new_site_status = course.site_statuses.last
+            expect(new_site_status).to be_status_running
+          end
+        end
+      end
+    end
+
+    context 'when course has a new site' do
+      let(:site1)       { create(:site) }
+      let(:course)      { create(:course) }
+      let(:site_status) { create(:site_status, :new, site: site1, course: course) }
+      let(:site2)       { create(:site) }
+
+      before do
+        site_status
+        expect(course.reload).to be_new
+      end
+
+      describe 'the status' do
+        it 'is set to new' do
+          new_site_status = SiteStatus.create course: course, site: site2
+
+          expect(new_site_status).to be_status_new_status
+        end
+
+        describe 'when using the course association' do
+          it 'is set to new' do
+            course.sites << site2
+
+            site_status2 = course.site_statuses.last
+            expect(site_status2).to be_status_new_status
+          end
+        end
+      end
+    end
+
+    context 'when course has no sites' do
+      let(:course) { create(:course) }
+      let(:site2)  { create(:site) }
+
+      before do
+        expect(course).to be_new
+      end
+
+      describe 'the status' do
+        it 'is set to new' do
+          new_site_status = SiteStatus.create course: course, site: site2
+
+          expect(new_site_status).to be_status_new_status
+        end
+
+        describe 'when using the course association' do
+          it 'is set to new' do
+            course.sites << site2
+
+            site_status2 = course.site_statuses.last
+            expect(site_status2).to be_status_new_status
+          end
+        end
+      end
+    end
+  end
+
+  describe 'destruction' do
+    let(:site1)        { create(:site) }
+    let(:site2)        { create(:site) }
+    let(:course)       { create(:course) }
+    let(:site_status1) { create(:site_status, state, site: site1, course: course) }
+    let(:site_status2) { create(:site_status, state, site: site2, course: course) }
+
+    context 'when course has running sites' do
+      let(:state) { :running }
+
+      before do
+        site_status1
+        site_status2
+      end
+
+      describe 'the record' do
+        it 'is set to suspended' do
+          expect(course.reload).not_to be_new
+
+          site_status2.destroy
+
+          expect(site_status2.reload).to be_status_suspended
+        end
+      end
+
+      describe 'using courses association' do
+        it 'it is suspended' do
+          expect(course.reload).not_to be_new
+
+          course.sites = [site1]
+
+          expect(site_status2.reload).to be_status_suspended
+        end
+      end
+    end
+
+    context 'when course has new sites' do
+      let(:state) { :new }
+
+      before do
+        site_status1
+        site_status2
+      end
+
+      describe 'the record' do
+        it 'is destroyed' do
+          expect(course.reload).to be_new
+
+          site_status2.destroy
+
+          expect(SiteStatus.exists?(site_status2.id)).to be_falsey
+        end
+      end
+
+      describe 'using courses association' do
+        it 'it is destroyed' do
+          expect(course.reload).to be_new
+
+          course.sites = [site1]
+
+          expect(SiteStatus.exists?(site_status2.id)).to be_falsey
+        end
+      end
+    end
   end
 
   describe 'associations' do

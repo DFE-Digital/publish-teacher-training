@@ -1,3 +1,4 @@
+# coding: utf-8
 # == Schema Information
 #
 # Table name: course_site
@@ -19,6 +20,21 @@ class SiteStatus < ApplicationRecord
 
   after_initialize :set_defaults
   before_validation :set_vac_status
+  before_create :set_new_status
+
+  def set_new_status
+    if !course.site_statuses.empty? && !course.site_statuses.all?(&:status_new_status?)
+      self.status = 'R'
+    end
+  end
+
+  def destroy
+    if course.site_statuses.any?(&:status_new_status?)
+      self.delete
+    else
+      self.status_suspended!
+    end
+  end
 
   audited associated_with: :course
 

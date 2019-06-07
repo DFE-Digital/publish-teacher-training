@@ -72,7 +72,8 @@ class Course < ApplicationRecord
   has_many :site_statuses
   has_many :sites,
            -> { merge(SiteStatus.where(status: %i[new_status running])) },
-           through: :site_statuses
+           through: :site_statuses,
+           dependent: :destroy
 
   has_many :enrichments,
            ->(course) { where(provider_code: course.provider.provider_code) },
@@ -261,17 +262,17 @@ class Course < ApplicationRecord
     new? ? site_status.destroy! : site_status.suspend!
   end
 
-  def sites=(desired_sites)
-    existing_sites = sites
+  # def sites=(desired_sites)
+  #   existing_sites = sites
 
-    to_add = desired_sites - existing_sites
-    to_add.each { |site| add_site!(site: site) }
+  #   to_add = desired_sites - existing_sites
+  #   to_add.each { |site| add_site!(site: site) }
 
-    to_remove = existing_sites - desired_sites
-    to_remove.each { |site| remove_site!(site: site) }
+  #   to_remove = existing_sites - desired_sites
+  #   to_remove.each { |site| remove_site!(site: site) }
 
-    sites.reload
-  end
+  #   sites.reload
+  # end
 
   def has_bursary?
     dfe_subjects.any?(&:has_bursary?)
