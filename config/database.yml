@@ -32,3 +32,7 @@ production:
   username: <%= ENV['DB_USERNAME'] || 'postgres' %>
   password: <%= ENV['DB_PASSWORD'] %>
   database: <%= ENV['DB_DATABASE'] %>
+
+new_staging:
+  <<: *default
+  database: <%= ENV['DB_DATABASE'] || 'manage_courses_backend_new_staging' %>

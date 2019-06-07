@@ -1,0 +1,6 @@
+manage_api:
+  base_url: https://bat-stg-mcapi-as.azurewebsites.net
+  secret: please_change_me
+search_api:
+  base_url: https://bat-stg-sacapi-as.azurewebsites.net
+  secret: please_change_me
