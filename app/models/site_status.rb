@@ -24,7 +24,7 @@ class SiteStatus < ApplicationRecord
 
   def set_new_status
     if !course.site_statuses.empty? && !course.site_statuses.all?(&:status_new_status?)
-      self.status = 'R'
+      self.status = :running
     end
   end
 
