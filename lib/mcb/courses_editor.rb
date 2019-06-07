@@ -23,6 +23,7 @@ module MCB
             "edit science",
             "edit route",
             "edit qualifications",
+            "edit study mode",
           )
         end
 
@@ -88,6 +89,19 @@ module MCB
         menu.prompt = "What's the course outcome?  "
         menu.choices(*Course.qualifications.keys)
         menu.default = "pgce_with_qts"
+      end
+    end
+
+    def edit_study_mode
+      print_existing(:study_mode)
+      update(study_mode: ask_study_mode)
+    end
+
+    def ask_study_mode
+      @cli.choose do |menu|
+        menu.prompt = "Full time or part time?  "
+        menu.choices(*Course.study_modes.keys)
+        menu.default = "full_time"
       end
     end
 

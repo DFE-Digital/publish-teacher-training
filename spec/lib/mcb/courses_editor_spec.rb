@@ -23,7 +23,8 @@ describe MCB::CoursesEditor do
            english: 'equivalence_test',
            science: 'not_required',
            program_type: 'higher_education_programme',
-           qualification: 'qts')
+           qualification: 'qts',
+           study_mode: 'part_time')
   }
   subject { described_class.new(provider: provider, course_codes: course_codes, requester: requester) }
 
@@ -65,6 +66,18 @@ describe MCB::CoursesEditor do
         it 'updates the qualifications setting to pgce_with_qts by default' do
           expect { run_editor("edit qualifications", "", "exit") }.to change { course.reload.qualification }.
             from("qts").to("pgce_with_qts")
+        end
+      end
+
+      describe "(study mode)" do
+        it 'updates the study mode setting when that is valid' do
+          expect { run_editor("edit study mode", "full_time_or_part_time", "exit") }.to change { course.reload.study_mode }.
+            from("part_time").to("full_time_or_part_time")
+        end
+
+        it 'updates the study mode setting to full-time by default' do
+          expect { run_editor("edit study mode", "", "exit") }.to change { course.reload.study_mode }.
+            from("part_time").to("full_time")
         end
       end
 
