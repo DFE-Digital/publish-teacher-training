@@ -1,3 +1,5 @@
+# coding: utf-8
+
 module API
   module V2
     class CoursesController < API::V2::ApplicationController
@@ -26,7 +28,13 @@ module API
           @course.course_code
         )
 
-        head response ? :ok : :internal_server_error
+        if response
+          head :ok
+        else
+          raise RuntimeError.new(
+            'error received when syncing with search and compare'
+          )
+        end
       end
 
       def publish
@@ -40,7 +48,13 @@ module API
             @course.course_code
           )
 
-          head response ? :ok : :internal_server_error
+          if response
+            head :ok
+          else
+            raise RuntimeError.new(
+              'error received when syncing with search and compare'
+            )
+          end
         else
           render jsonapi_errors: @course.errors, status: :unprocessable_entity
         end
