@@ -22,7 +22,8 @@ describe MCB::CoursesEditor do
            maths: 'must_have_qualification_at_application_time',
            english: 'equivalence_test',
            science: 'not_required',
-           program_type: 'higher_education_programme')
+           program_type: 'higher_education_programme',
+           qualification: 'qts')
   }
   subject { described_class.new(provider: provider, course_codes: course_codes, requester: requester) }
 
@@ -53,6 +54,18 @@ describe MCB::CoursesEditor do
       it 'updates the route/program type setting when that is valid' do
         expect { run_editor("edit route", "scitt_programme", "exit") }.to change { course.reload.program_type }.
           from("higher_education_programme").to("scitt_programme")
+      end
+
+      describe "(qualifications)" do
+        it 'updates the qualifications setting when that is valid' do
+          expect { run_editor("edit qualifications", "pgde_with_qts", "exit") }.to change { course.reload.qualification }.
+            from("qts").to("pgde_with_qts")
+        end
+
+        it 'updates the qualifications setting to pgce_with_qts by default' do
+          expect { run_editor("edit qualifications", "", "exit") }.to change { course.reload.qualification }.
+            from("qts").to("pgce_with_qts")
+        end
       end
 
       it 'does nothing upon an immediate exit' do
