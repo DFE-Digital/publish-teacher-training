@@ -20,18 +20,23 @@ describe 'Publish API v2', type: :request do
     end
 
     before do
+      organisation.users = [user]
+      course.site_statuses = [site_status]
       stub_request(:post, %r{#{Settings.manage_api.base_url}/api/Publish/internal/course/})
         .to_return(
           status: manage_api_status,
           body: manage_api_response
         )
     end
-    let(:course) {
-      create(:course,
-             provider: provider,
-             with_site_statuses: [:new],
-             with_enrichments: [:initial_draft])
-    }
+
+    let(:enrichment) { create(:course_enrichment, last_published_timestamp_utc: nil) }
+    let(:provider) { enrichment.provider }
+    let(:course) { enrichment.course }
+    let(:site) { create(:site, provider: provider) }
+    let(:site_status) { create(:site_status, :new, provider: provider, course: course) }
+    let(:organisation) { create(:organisation, providers: [provider]) }
+    let(:user) { create(:user) }
+
 
     subject do
       post publish_path, headers: { 'HTTP_AUTHORIZATION' => credentials }
@@ -67,13 +72,21 @@ describe 'Publish API v2', type: :request do
     end
 
     context 'unpublished course with draft enrichment' do
-      let!(:course) {
-        create(:course,
-               provider: provider,
-               with_site_statuses: [:new],
-               with_enrichments: [:initial_draft],
-               age: 17.days.ago)
-      }
+      let(:enrichment) { create(:course_enrichment, last_published_timestamp_utc: nil, created_at: 17.days.ago.utc, updated_at: 17.days.ago.utc) }
+      let(:provider) { enrichment.provider }
+      let(:course) { enrichment.course }
+      let(:site) { create(:site, provider: provider) }
+      let(:site_status) { create(:site_status, :new, provider: provider, course: course) }
+      let(:organisation) { create(:organisation, providers: [provider]) }
+      let(:user) { create(:user) }
+
+      before do
+        organisation.users = [user]
+        course.site_statuses = [site_status]
+        response
+      end
+
+
       it 'publishes a course' do
         expect(subject).to have_http_status(:success)
         assert_requested :post, %r{#{Settings.manage_api.base_url}/api/Publish/internal/course/}

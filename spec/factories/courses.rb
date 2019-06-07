@@ -36,7 +36,6 @@ FactoryBot.define do
 
     transient do
       subjects           { [] }
-      with_site_statuses { [] }
       with_enrichments   { [] }
       age                { nil }
       enrichments        { [] }
@@ -45,7 +44,6 @@ FactoryBot.define do
     trait :with_subject do
       subjects { [build(:subject)] }
     end
-
 
     after(:build) do |course, evaluator|
       if evaluator.age.present?
@@ -59,15 +57,6 @@ FactoryBot.define do
       course.subjects << evaluator.subjects.map { |subject|
         subject.is_a?(Subject) ? subject : create(*subject)
       }
-
-      evaluator.with_site_statuses.each do |traits|
-        attrs = { course: course }
-        if traits == [:default]
-          create(:site_status, attrs)
-        else
-          create(:site_status, *traits, attrs)
-        end
-      end
 
       evaluator.with_enrichments.each do |trait, attributes = {}|
         defaults = {

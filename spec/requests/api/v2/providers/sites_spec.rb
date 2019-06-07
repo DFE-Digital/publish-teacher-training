@@ -403,7 +403,6 @@ describe 'Sites API v2', type: :request do
       let(:address4)      { 'State' }
       let(:postcode)      { 'SW1A 1AA' }
       let(:region_code)   { 'west_midlands' }
-
       let(:site) { provider.reload.sites.last }
 
       describe 'permitted parameters' do
