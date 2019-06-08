@@ -13,6 +13,7 @@ module MCB
     def run
       finished = false
       puts "Editing #{course_codes.join(', ')}"
+      print_at_most_two_courses
       until finished
         choice = @cli.choose do |menu|
           menu.choice(:exit) { finished = true }
@@ -150,6 +151,11 @@ module MCB
 
     def check_authorisation
       @courses.each { |course| raise Pundit::NotAuthorizedError unless can_update?(course) }
+    end
+
+    def print_at_most_two_courses
+      @courses.take(2).each { |course| puts MCB::Render::ActiveRecord.course(course) }
+      puts "Only showing first 2 courses" if @courses.size > 2
     end
 
     def print_existing(attribute_name)
