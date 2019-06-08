@@ -24,6 +24,7 @@ module MCB
             "edit route",
             "edit qualifications",
             "edit study mode",
+            "edit accredited body",
           )
         end
 
@@ -103,6 +104,28 @@ module MCB
         menu.choices(*Course.study_modes.keys)
         menu.default = "full_time"
       end
+    end
+
+    def edit_accredited_body
+      print_existing(:accrediting_provider)
+      update(accrediting_provider: ask_accredited_body)
+    end
+
+    def ask_accredited_body
+      new_accredited_body = nil
+      until new_accredited_body.present?
+        begin
+          new_accredited_body = ask_accredited_body_once
+        rescue ActiveRecord::RecordNotFound
+          puts "Can't find accredited body; please enter one that exists."
+        end
+      end
+      new_accredited_body
+    end
+
+    def ask_accredited_body_once
+      code = @cli.ask "Provider code of accredited body (leave blank if self-accredited)  ", ->(str) { str.upcase }
+      code.present? ? Provider.find_by!(provider_code: code) : @provider
     end
 
     def check_authorisation

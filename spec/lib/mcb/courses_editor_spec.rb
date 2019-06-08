@@ -14,9 +14,11 @@ describe MCB::CoursesEditor do
   let(:course_codes) { [course_code] }
   let(:email) { 'user@education.gov.uk' }
   let(:provider) { create(:provider, provider_code: provider_code) }
+  let(:accredited_body) { create(:provider, :accredited_body) }
   let!(:course) {
     create(:course,
            provider: provider,
+           accrediting_provider: accredited_body,
            course_code: course_code,
            name: 'Original name',
            maths: 'must_have_qualification_at_application_time',
@@ -30,6 +32,7 @@ describe MCB::CoursesEditor do
 
   context 'when an authorised user' do
     let!(:requester) { create(:user, email: email, organisations: provider.organisations) }
+    let!(:another_accredited_body) { create(:provider, :accredited_body) }
 
     describe 'runs the editor' do
       it 'updates the course title' do
@@ -78,6 +81,30 @@ describe MCB::CoursesEditor do
         it 'updates the study mode setting to full-time by default' do
           expect { run_editor("edit study mode", "", "exit") }.to change { course.reload.study_mode }.
             from("part_time").to("full_time")
+        end
+      end
+
+      describe "(accredited body)" do
+        it 'updates the accredited body for an existing accredited body' do
+          expect { run_editor("edit accredited body", another_accredited_body.provider_code, "exit") }.
+            to change { course.reload.accrediting_provider }.
+            from(accredited_body).to(another_accredited_body)
+        end
+
+        it 'upper-cases the accredited body code before looking it up' do
+          expect { run_editor("edit accredited body", another_accredited_body.provider_code.downcase, "exit") }.
+            to change { course.reload.accrediting_provider }.
+            from(accredited_body).to(another_accredited_body)
+        end
+
+        it 'updates the accredited body to self-accredited when no accredited body is specified' do
+          expect { run_editor("edit accredited body", "", "exit") }.to change { course.reload.accrediting_provider }.
+            from(accredited_body).to(provider)
+        end
+
+        it 'asks the accredited body again if the user provides a non-existent code' do
+          expect { run_editor("edit accredited body", "ABCDE", "XYZ", "", "exit") }.to change { course.reload.accrediting_provider }.
+            from(accredited_body).to(provider)
         end
       end
 
