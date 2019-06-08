@@ -455,6 +455,26 @@ RSpec.describe Course, type: :model do
     end
   end
 
+  describe "#applications_open_from=" do
+    let(:provider) { create(:provider) }
+    let(:sites) { create_list(:site, 3, provider: provider) }
+    let!(:existing_site_status) {
+      sites.each do |site|
+        create(:site_status,
+               :running,
+               site: site,
+               course: subject,
+               applications_accepted_from: Date.new(2018, 10, 9))
+      end
+    }
+
+    it "updates the applications_accepted_from date on the site statuses" do
+      expect { subject.applications_open_from = Date.new(2018, 10, 23) }.
+        to change { subject.reload.site_statuses.pluck(:applications_accepted_from).uniq }.
+        from([Date.new(2018, 10, 9)]).to([Date.new(2018, 10, 23)])
+    end
+  end
+
   describe "adding and removing sites on a course" do
     let(:provider) { create(:provider) }
     let(:new_site) { create(:site, provider: provider) }
