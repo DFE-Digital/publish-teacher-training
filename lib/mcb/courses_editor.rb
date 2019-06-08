@@ -29,6 +29,7 @@ module MCB
             "edit start date",
             "edit application opening date",
           )
+          menu.choice("sync #{'course'.pluralize(@courses.size)} to Find") { sync_courses_to_find }
         end
 
         if choice.is_a?(String) && choice.start_with?("edit")
@@ -173,6 +174,16 @@ module MCB
 
     def can_update?(course)
       CoursePolicy.new(@requester, course).update?
+    end
+
+    def sync_courses_to_find
+      @courses.each do |course|
+        ManageCoursesAPIService::Request.sync_course_with_search_and_compare(
+          @requester.email,
+          @provider.provider_code,
+          course.course_code
+        )
+      end
     end
 
     def course_codes

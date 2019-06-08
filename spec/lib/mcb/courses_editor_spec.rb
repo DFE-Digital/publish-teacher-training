@@ -150,6 +150,35 @@ describe MCB::CoursesEditor do
         end
       end
 
+      context "when syncing to Find" do
+        let!(:another_course) { create(:course, provider: provider) }
+        let(:course_codes) { [course_code, another_course.course_code] }
+
+        let!(:manage_api_request1) {
+          stub_request(:post, "#{Settings.manage_api.base_url}/api/Publish/internal/course/#{provider_code}/#{course_code}")
+            .with { |req| req.body == { "email": email }.to_json }
+            .to_return(
+              status: 200,
+              body: '{ "result": true }'
+            )
+        }
+        let!(:manage_api_request2) {
+          stub_request(:post, "#{Settings.manage_api.base_url}/api/Publish/internal/course/#{provider_code}/#{another_course.course_code}")
+            .with { |req| req.body == { "email": email }.to_json }
+            .to_return(
+              status: 200,
+              body: '{ "result": true }'
+            )
+        }
+
+        it 'syncs courses to Find' do
+          run_editor("sync courses to Find", "exit")
+
+          expect(manage_api_request1).to have_been_made
+          expect(manage_api_request2).to have_been_made
+        end
+      end
+
       it 'does nothing upon an immediate exit' do
         expect { run_editor("exit") }.to_not change { course.reload.name }.
           from("Original name")
