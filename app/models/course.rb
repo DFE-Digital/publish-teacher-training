@@ -158,6 +158,10 @@ class Course < ApplicationRecord
       &.iso8601
   end
 
+  def applications_open_from=(new_date)
+    site_statuses.each { |ss| ss.update(applications_accepted_from: new_date) }
+  end
+
   def has_vacancies?
     site_statuses.findable.with_vacancies.any?
   end
