@@ -26,7 +26,8 @@ describe MCB::CoursesEditor do
            science: 'not_required',
            program_type: 'higher_education_programme',
            qualification: 'qts',
-           study_mode: 'part_time')
+           study_mode: 'part_time',
+           start_date: Date.new(2019, 8, 1))
   }
   subject { described_class.new(provider: provider, course_codes: course_codes, requester: requester) }
 
@@ -105,6 +106,19 @@ describe MCB::CoursesEditor do
         it 'asks the accredited body again if the user provides a non-existent code' do
           expect { run_editor("edit accredited body", "ABCDE", "XYZ", "", "exit") }.to change { course.reload.accrediting_provider }.
             from(accredited_body).to(provider)
+        end
+      end
+
+      describe "(start date)" do
+        it 'updates the course start date when that is valid' do
+          expect { run_editor("edit start date", "October 2019", "exit") }.
+            to change { course.reload.start_date }.
+            from(Date.new(2019, 8, 1)).to(Date.new(2019, 10, 1))
+        end
+
+        it 'updates the start date to September of the recruitment cycle start year, when no start date is given' do
+          expect { run_editor("edit start date", "", "exit") }.to change { course.reload.start_date }.
+            from(Date.new(2019, 8, 1)).to(Date.new(2019, 9, 1))
         end
       end
 

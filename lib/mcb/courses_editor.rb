@@ -25,6 +25,7 @@ module MCB
             "edit qualifications",
             "edit study mode",
             "edit accredited body",
+            "edit start date",
           )
         end
 
@@ -126,6 +127,15 @@ module MCB
     def ask_accredited_body_once
       code = @cli.ask "Provider code of accredited body (leave blank if self-accredited)  ", ->(str) { str.upcase }
       code.present? ? Provider.find_by!(provider_code: code) : @provider
+    end
+
+    def edit_start_date
+      print_existing(:start_date)
+      update(start_date: ask_start_date)
+    end
+
+    def ask_start_date
+      Date.parse(@cli.ask("Start date?  ") { |q| q.default = "September #{@courses.first.recruitment_cycle}" })
     end
 
     def check_authorisation
