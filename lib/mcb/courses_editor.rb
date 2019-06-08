@@ -26,6 +26,7 @@ module MCB
             "edit study mode",
             "edit accredited body",
             "edit start date",
+            "edit application opening date",
           )
         end
 
@@ -136,6 +137,15 @@ module MCB
 
     def ask_start_date
       Date.parse(@cli.ask("Start date?  ") { |q| q.default = "September #{@courses.first.recruitment_cycle}" })
+    end
+
+    def edit_application_opening_date
+      print_existing(:applications_open_from)
+      update(applications_open_from: ask_application_opening_date)
+    end
+
+    def ask_application_opening_date
+      Date.parse(@cli.ask("Applications opening date?  ") { |q| q.default = Date.today.to_s })
     end
 
     def check_authorisation

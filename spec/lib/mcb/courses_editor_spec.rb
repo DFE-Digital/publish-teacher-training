@@ -122,6 +122,34 @@ describe MCB::CoursesEditor do
         end
       end
 
+      describe "(application opening date)" do
+        let(:sites) { create_list(:site, 2) }
+
+        before do
+          sites.collect do |site|
+            course.site_statuses.create(site: site,
+                                        status: :running,
+                                        vac_status: :part_time_vacancies,
+                                        publish: :published,
+                                        applications_accepted_from: Date.new(2018, 10, 9))
+          end
+        end
+
+        it 'updates the "applications open from" when that is valid' do
+          expect { run_editor("edit application opening date", "1 October 2018", "exit") }.
+            to change { Date.parse(course.reload.applications_open_from) }.
+            from(Date.new(2018, 10, 9)).to(Date.new(2018, 10, 1))
+        end
+
+        it 'updates the application opening date to today by default' do
+          Timecop.freeze do
+            expect { run_editor("edit application opening date", "", "exit") }.
+              to change { Date.parse(course.reload.applications_open_from) }.
+              from(Date.new(2018, 10, 9)).to(Date.today)
+          end
+        end
+      end
+
       it 'does nothing upon an immediate exit' do
         expect { run_editor("exit") }.to_not change { course.reload.name }.
           from("Original name")
