@@ -149,7 +149,8 @@ class Course < ApplicationRecord
 
   def applications_open_from
     site_statuses
-      .open_for_applications
+      .findable
+      .with_vacancies
       .order("applications_accepted_from ASC")
       .first
       &.applications_accepted_from

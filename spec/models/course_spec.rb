@@ -458,13 +458,6 @@ RSpec.describe Course, type: :model do
   describe "(application opening date)" do
     let(:provider) { create(:provider) }
     let(:sites) { create_list(:site, 3, provider: provider) }
-    let(:per_site_application_opening_dates) {
-      [
-        Date.new(2018, 10, 1),
-        Date.new(2018, 10, 2),
-        Date.new(2018, 10, 3)
-      ]
-    }
 
     before do
       sites.zip(per_site_application_opening_dates).map do |site, date|
@@ -477,14 +470,36 @@ RSpec.describe Course, type: :model do
       end
     end
 
-    its(:applications_open_from) { should eq(DateTime.new(2018, 10, 1, 0, 0, 0).utc) }
+    context "when applications opened in the past" do
+      let(:per_site_application_opening_dates) {
+        [
+          Date.new(2018, 10, 1),
+          Date.new(2018, 10, 2),
+          Date.new(2018, 10, 3)
+        ]
+      }
 
-    describe "#applications_open_from=" do
-      it "updates the applications_accepted_from date on the site statuses" do
-        expect { subject.applications_open_from = Date.new(2018, 10, 23) }.
-          to change { subject.reload.site_statuses.pluck(:applications_accepted_from).sort.uniq }.
-          from(per_site_application_opening_dates).to([Date.new(2018, 10, 23)])
+      its(:applications_open_from) { should eq(DateTime.new(2018, 10, 1, 0, 0, 0).utc) }
+
+      describe "#applications_open_from=" do
+        it "updates the applications_accepted_from date on the site statuses" do
+          expect { subject.applications_open_from = Date.new(2018, 10, 23) }.
+            to change { subject.reload.site_statuses.pluck(:applications_accepted_from).sort.uniq }.
+            from(per_site_application_opening_dates).to([Date.new(2018, 10, 23)])
+        end
       end
+    end
+
+    context "when applications open in the future" do
+      let(:per_site_application_opening_dates) {
+        [
+          7.days.from_now,
+          9.days.from_now,
+          10.days.from_now
+        ]
+      }
+
+      its(:applications_open_from) { should eq(7.days.from_now.beginning_of_day.utc) }
     end
   end
 
