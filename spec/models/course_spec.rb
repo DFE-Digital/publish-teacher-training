@@ -455,23 +455,36 @@ RSpec.describe Course, type: :model do
     end
   end
 
-  describe "#applications_open_from=" do
+  describe "(application opening date)" do
     let(:provider) { create(:provider) }
     let(:sites) { create_list(:site, 3, provider: provider) }
-    let!(:existing_site_status) {
-      sites.each do |site|
-        create(:site_status,
-               :running,
-               site: site,
-               course: subject,
-               applications_accepted_from: Date.new(2018, 10, 9))
-      end
+    let(:per_site_application_opening_dates) {
+      [
+        Date.new(2018, 10, 1),
+        Date.new(2018, 10, 2),
+        Date.new(2018, 10, 3)
+      ]
     }
 
-    it "updates the applications_accepted_from date on the site statuses" do
-      expect { subject.applications_open_from = Date.new(2018, 10, 23) }.
-        to change { subject.reload.site_statuses.pluck(:applications_accepted_from).uniq }.
-        from([Date.new(2018, 10, 9)]).to([Date.new(2018, 10, 23)])
+    before do
+      sites.zip(per_site_application_opening_dates).map do |site, date|
+        create(:site_status,
+               :findable,
+               :with_any_vacancy,
+               site: site,
+               course: subject,
+               applications_accepted_from: date)
+      end
+    end
+
+    its(:applications_open_from) { should eq("2018-10-01T00:00:00Z") }
+
+    describe "#applications_open_from=" do
+      it "updates the applications_accepted_from date on the site statuses" do
+        expect { subject.applications_open_from = Date.new(2018, 10, 23) }.
+          to change { subject.reload.site_statuses.pluck(:applications_accepted_from).sort.uniq }.
+          from(per_site_application_opening_dates).to([Date.new(2018, 10, 23)])
+      end
     end
   end
 
