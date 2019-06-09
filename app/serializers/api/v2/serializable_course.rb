@@ -34,6 +34,10 @@ module API
         @object.accrediting_provider_description
       end
 
+      attribute :applications_open_from do
+        @object.applications_open_from&.iso8601
+      end
+
       belongs_to :provider
       belongs_to :accrediting_provider
 

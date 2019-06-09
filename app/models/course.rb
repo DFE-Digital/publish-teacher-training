@@ -155,7 +155,6 @@ class Course < ApplicationRecord
       &.applications_accepted_from
       &.to_datetime
       &.utc
-      &.iso8601
   end
 
   def applications_open_from=(new_date)

@@ -477,7 +477,7 @@ RSpec.describe Course, type: :model do
       end
     end
 
-    its(:applications_open_from) { should eq("2018-10-01T00:00:00Z") }
+    its(:applications_open_from) { should eq(DateTime.new(2018, 10, 1, 0, 0, 0).utc) }
 
     describe "#applications_open_from=" do
       it "updates the applications_accepted_from date on the site statuses" do

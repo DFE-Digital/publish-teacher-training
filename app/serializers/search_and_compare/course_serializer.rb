@@ -71,7 +71,7 @@ module SearchAndCompare
     # Campuses_related_Mapping
     attribute(:Campuses)                              { campuses }
     # using server date time not utc, so it's local date time?
-    attribute(:ApplicationsAcceptedFrom)              { object.applications_open_from.to_date.strftime('%Y-%m-%dT%H:%M:%S') }
+    attribute(:ApplicationsAcceptedFrom)              { object.applications_open_from.strftime('%Y-%m-%dT%H:%M:%S') }
     attribute(:HasVacancies)                          { object.has_vacancies? }
 
     # Course_direct_enrichment_Mapping
