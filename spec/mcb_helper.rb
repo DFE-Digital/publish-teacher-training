@@ -24,6 +24,7 @@ RSpec.configure do |config|
       # loaded.
       allow(MCB).to receive(:init_rails)
     end
+
     # "run_command" is used to run "az" and maybe more. Any test relying on
     # this must stub for it specifically.
     allow(MCB).to receive(:run_command)
@@ -32,6 +33,15 @@ RSpec.configure do |config|
   # Ensure that if the config file that is read is not the user's real data,
   # and if saved for any reason it does not over-write the user's.
   config.around(:each, mcb_cli: true) do |example|
+    # Re-initialize $mcb and everything else. If we don't, then certain cmdline
+    # options might persist between commands, e.g. when testing
+    # lib/mcb/commands/apiv1/courses/find_spec.rb' and
+    # lib/mcb/commands/apiv1/providers/find_spec.rb the 'endpoint' option used
+    # by the two commands being tested gets set by the first test to the
+    # default value defined in courses/find_spec.rb and then persists to the
+    # providers/find_spec.rb
+    load 'bin/mcb'
+
     @temp_config_file = Tempfile.new ['mcb_cli_config', '.yml']
     @temp_config_file.close
     MCB.config_file = @temp_config_file.path

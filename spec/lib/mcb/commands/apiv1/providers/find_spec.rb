@@ -7,10 +7,8 @@ describe '"mcb apiv1 providers find"' do
   let(:contact2)  { build(:contact, :admin_type) }
   let(:provider1) { create(:provider, sites: [site1], contacts: [contact1]) }
   let(:provider2) { create(:provider, sites: [site2], contacts: [contact2]) }
-  let(:course1)   { create(:course, provider: provider1)}
-  let(:course2)   { create(:course, provider: provider2)}
 
-  it 'displays the info for the given course' do
+  it 'displays the info for the given provider' do
     url = 'http://localhost:3001/api/v1/2019/providers'
     next_url = url + '&' + {
         changed_since: provider2.created_at.utc.strftime('%FT%T.%16NZ'),
@@ -56,11 +54,11 @@ describe '"mcb apiv1 providers find"' do
 
     expect(output).to have_text_table_row('institution_code',
                                           provider2.provider_code)
-    expect(output).to have_text_table_row(
+    expect(output).to(have_text_table_row(
                         site2.code,
                         site2.location_name,
                         '%02d' % site2.region_code_before_type_cast
-                      )
+                      ))
     expect(output).to(have_text_table_row(
                         contact2.type,
                         contact2.name,
