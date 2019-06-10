@@ -172,7 +172,7 @@ describe MCB::CoursesEditor do
         }
 
         it 'syncs courses to Find' do
-          run_editor("sync courses to Find", "exit")
+          run_editor("sync course(s) to Find", "exit")
 
           expect(manage_api_request1).to have_been_made
           expect(manage_api_request2).to have_been_made

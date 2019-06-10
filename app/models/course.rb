@@ -23,6 +23,8 @@
 #
 
 class Course < ApplicationRecord
+  DEFAULT_RECRUITMENT_CYCLE_YEAR = "2019".freeze
+
   include WithQualifications
   include ChangedAt
 
@@ -132,7 +134,7 @@ class Course < ApplicationRecord
   end
 
   def recruitment_cycle
-    "2019"
+    DEFAULT_RECRUITMENT_CYCLE_YEAR
   end
 
   def findable?

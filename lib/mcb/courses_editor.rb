@@ -14,7 +14,7 @@ module MCB
     }.freeze
 
     def initialize(provider:, requester:, course_codes: [])
-      @cli = HighLine.new
+      @cli = CoursesEditorCLI.new(provider)
 
       @provider = provider
       @requester = requester
@@ -28,26 +28,15 @@ module MCB
       puts "Editing #{course_codes.join(', ')}"
       print_at_most_two_courses
       until finished
-        choice = @cli.choose do |menu|
-          menu.choice(:exit) { finished = true }
-          menu.choices(
-            "edit title",
-            "edit maths",
-            "edit english",
-            "edit science",
-            "edit route",
-            "edit qualifications",
-            "edit study mode",
-            "edit accredited body",
-            "edit start date",
-            "edit application opening date",
-          )
-          menu.choice("sync #{'course'.pluralize(@courses.size)} to Find") { sync_courses_to_find }
-        end
+        choice = @cli.main_loop
 
-        if choice.is_a?(String) && choice.start_with?("edit")
+        if choice.start_with?("edit")
           attribute = choice.gsub("edit ", "").gsub(" ", "_").to_sym
           edit(attribute)
+        elsif choice =~ /sync .* to Find/
+          sync_courses_to_find
+        elsif choice == "exit"
+          finished = true
         end
       end
     end
@@ -57,73 +46,8 @@ module MCB
     def edit(logical_attribute)
       database_attribute = LOGICAL_NAME_TO_DATABASE_NAME_MAPPING[logical_attribute]
       print_existing(database_attribute)
-      user_response_from_cli = send("ask_#{logical_attribute}".to_sym)
+      user_response_from_cli = @cli.send("ask_#{logical_attribute}".to_sym)
       update(database_attribute => user_response_from_cli)
-    end
-
-    def ask_title
-      @cli.ask("New course title?  ")
-    end
-
-    def ask_english; ask_gcse_subject(:english); end
-
-    def ask_maths; ask_gcse_subject(:maths); end
-
-    def ask_science; ask_gcse_subject(:science); end
-
-    def ask_gcse_subject(subject)
-      @cli.choose do |menu|
-        menu.prompt = "What's the #{subject} entry requirements?  "
-        menu.choices(*Course::ENTRY_REQUIREMENT_OPTIONS.keys)
-      end
-    end
-
-    def ask_route
-      @cli.choose do |menu|
-        menu.prompt = "What's the route?  "
-        menu.choices(*Course.program_types.keys)
-      end
-    end
-
-    def ask_qualifications
-      @cli.choose do |menu|
-        menu.prompt = "What's the course outcome?  "
-        menu.choices(*Course.qualifications.keys)
-        menu.default = "pgce_with_qts"
-      end
-    end
-
-    def ask_study_mode
-      @cli.choose do |menu|
-        menu.prompt = "Full time or part time?  "
-        menu.choices(*Course.study_modes.keys)
-        menu.default = "full_time"
-      end
-    end
-
-    def ask_accredited_body
-      new_accredited_body = nil
-      until new_accredited_body.present?
-        begin
-          new_accredited_body = ask_accredited_body_once
-        rescue ActiveRecord::RecordNotFound
-          puts "Can't find accredited body; please enter one that exists."
-        end
-      end
-      new_accredited_body
-    end
-
-    def ask_accredited_body_once
-      code = @cli.ask "Provider code of accredited body (leave blank if self-accredited)  ", ->(str) { str.upcase }
-      code.present? ? Provider.find_by!(provider_code: code) : @provider
-    end
-
-    def ask_start_date
-      Date.parse(@cli.ask("Start date?  ") { |q| q.default = "September #{@courses.first.recruitment_cycle}" })
-    end
-
-    def ask_application_opening_date
-      Date.parse(@cli.ask("Applications opening date?  ") { |q| q.default = Date.today.to_s })
     end
 
     def check_authorisation
