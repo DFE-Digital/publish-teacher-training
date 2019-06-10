@@ -34,6 +34,10 @@ module API
         @object.accrediting_provider_description
       end
 
+      attribute :provider_code do
+        @object.provider.provider_code
+      end
+
       belongs_to :provider
       belongs_to :accrediting_provider
 

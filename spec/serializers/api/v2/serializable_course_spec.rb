@@ -21,7 +21,8 @@ describe API::V2::SerializableCourse do
   it { should have_type('courses') }
   it {
     should have_attributes(:start_date, :content_status, :ucas_status,
-                           :funding, :subjects, :applications_open_from, :is_send?, :level)
+                           :funding, :subjects, :applications_open_from,
+                           :is_send?, :level, :provider_code)
   }
 
   context 'with a provider' do

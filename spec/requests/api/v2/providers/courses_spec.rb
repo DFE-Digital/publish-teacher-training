@@ -130,7 +130,8 @@ describe 'Courses API v2', type: :request do
               "about_accrediting_body" => nil,
               "english" => 'must_have_qualification_at_application_time',
               "maths" => 'must_have_qualification_at_application_time',
-              "science" => 'must_have_qualification_at_application_time'
+              "science" => 'must_have_qualification_at_application_time',
+              "provider_code" => provider.provider_code
             },
             "relationships" => {
               "accrediting_provider" => { "meta" => { "included" => false } },
@@ -257,7 +258,8 @@ describe 'Courses API v2', type: :request do
               "about_accrediting_body" => nil,
               "english" => 'must_have_qualification_at_application_time',
               "maths" => 'must_have_qualification_at_application_time',
-              "science" => 'must_have_qualification_at_application_time'
+              "science" => 'must_have_qualification_at_application_time',
+              "provider_code" => provider.provider_code
             },
             "relationships" => {
               "accrediting_provider" => { "meta" => { "included" => false } },
