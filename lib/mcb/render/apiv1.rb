@@ -4,6 +4,20 @@ module MCB
       class << self
         include MCB::Render
 
+        def campuses_table(campuses, name: 'Campuses')
+          return if campuses.nil?
+
+          [
+            "#{name}:",
+            render_table_or_none(hashes_to_ostructs(campuses),
+                                 campuses_table_columns)
+          ]
+        end
+
+        def campuses_table_columns
+          %i[campus_code name region_code]
+        end
+
         def contacts_table(contacts, name: 'Contacts')
           super(hashes_to_ostructs(contacts),
                 name: name)
