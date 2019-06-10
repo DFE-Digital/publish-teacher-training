@@ -23,6 +23,8 @@
 #
 
 class Course < ApplicationRecord
+  DEFAULT_RECRUITMENT_CYCLE_YEAR = "2019".freeze
+
   include WithQualifications
   include ChangedAt
 
@@ -132,7 +134,7 @@ class Course < ApplicationRecord
   end
 
   def recruitment_cycle
-    "2019"
+    DEFAULT_RECRUITMENT_CYCLE_YEAR
   end
 
   def findable?
@@ -156,6 +158,10 @@ class Course < ApplicationRecord
       &.to_datetime
       &.utc
       &.iso8601
+  end
+
+  def applications_open_from=(new_date)
+    site_statuses.each { |ss| ss.update(applications_accepted_from: new_date) }
   end
 
   def has_vacancies?

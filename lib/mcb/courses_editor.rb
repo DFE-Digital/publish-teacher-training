@@ -1,7 +1,20 @@
 module MCB
   class CoursesEditor
+    LOGICAL_NAME_TO_DATABASE_NAME_MAPPING = {
+      title: :name,
+      maths: :maths,
+      english: :english,
+      science: :science,
+      route: :program_type,
+      qualifications: :qualification,
+      study_mode: :study_mode,
+      accredited_body: :accrediting_provider,
+      start_date: :start_date,
+      application_opening_date: :applications_open_from,
+    }.freeze
+
     def initialize(provider:, requester:, course_codes: [])
-      @cli = HighLine.new
+      @cli = CoursesEditorCLI.new(provider)
 
       @provider = provider
       @requester = requester
@@ -13,66 +26,37 @@ module MCB
     def run
       finished = false
       puts "Editing #{course_codes.join(', ')}"
+      print_at_most_two_courses
       until finished
-        choice = @cli.choose do |menu|
-          menu.choice(:exit) { finished = true }
-          menu.choices("edit title", "edit maths", "edit english", "edit science", "edit route")
-        end
+        choice = @cli.main_loop
 
-        if choice.is_a?(String) && choice.start_with?("edit")
-          edit_method_name = choice.gsub(" ", "_").to_sym
-          send(edit_method_name)
+        if choice.start_with?("edit")
+          attribute = choice.gsub("edit ", "").gsub(" ", "_").to_sym
+          edit(attribute)
+        elsif choice =~ /sync .* to Find/
+          sync_courses_to_find
+        elsif choice == "exit"
+          finished = true
         end
       end
     end
 
   private
 
-    def edit_title
-      print_existing(:name)
-      update(name: ask_title)
-    end
-
-    def ask_title
-      @cli.ask("New course title?  ")
-    end
-
-    def edit_maths
-      print_existing(:maths)
-      update(maths: ask_gcse_subject(:maths))
-    end
-
-    def edit_english
-      print_existing(:english)
-      update(english: ask_gcse_subject(:english))
-    end
-
-    def edit_science
-      print_existing(:science)
-      update(science: ask_gcse_subject(:science))
-    end
-
-    def ask_gcse_subject(subject)
-      @cli.choose do |menu|
-        menu.prompt = "What's the #{subject} entry requirements?  "
-        menu.choices(*Course::ENTRY_REQUIREMENT_OPTIONS.keys)
-      end
-    end
-
-    def edit_route
-      print_existing(:program_type)
-      update(program_type: ask_route)
-    end
-
-    def ask_route
-      @cli.choose do |menu|
-        menu.prompt = "What's the route?  "
-        menu.choices(*Course.program_types.keys)
-      end
+    def edit(logical_attribute)
+      database_attribute = LOGICAL_NAME_TO_DATABASE_NAME_MAPPING[logical_attribute]
+      print_existing(database_attribute)
+      user_response_from_cli = @cli.send("ask_#{logical_attribute}".to_sym)
+      update(database_attribute => user_response_from_cli)
     end
 
     def check_authorisation
       @courses.each { |course| raise Pundit::NotAuthorizedError unless can_update?(course) }
+    end
+
+    def print_at_most_two_courses
+      @courses.take(2).each { |course| puts MCB::Render::ActiveRecord.course(course) }
+      puts "Only showing first 2 courses" if @courses.size > 2
     end
 
     def print_existing(attribute_name)
@@ -90,6 +74,16 @@ module MCB
 
     def can_update?(course)
       CoursePolicy.new(@requester, course).update?
+    end
+
+    def sync_courses_to_find
+      @courses.each do |course|
+        ManageCoursesAPIService::Request.sync_course_with_search_and_compare(
+          @requester.email,
+          @provider.provider_code,
+          course.course_code
+        )
+      end
     end
 
     def course_codes

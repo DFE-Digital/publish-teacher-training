@@ -29,7 +29,9 @@
 require 'rails_helper'
 
 describe Provider, type: :model do
-  subject { create(:provider) }
+  subject { create(:provider, provider_name: 'ACME SCITT', provider_code: 'A01') }
+
+  its(:to_s) { should eq('ACME SCITT (A01)') }
 
   describe 'auditing' do
     it { should be_audited.except(:changed_at) }

@@ -43,6 +43,10 @@ FactoryBot.define do
     region_code { 'london' }
     organisations { build_list :organisation, 1 }
 
+    trait :accredited_body do
+      accrediting_provider { 'Y' }
+    end
+
     transient do
       changed_at           { nil }
       skip_associated_data { false }

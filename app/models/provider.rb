@@ -142,4 +142,8 @@ class Provider < ApplicationRecord
       attributes.slice(*attribute_names).merge('website' => url)
     end
   end
+
+  def to_s
+    "#{provider_name} (#{provider_code})"
+  end
 end
