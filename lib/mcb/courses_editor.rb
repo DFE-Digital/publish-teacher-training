@@ -1,5 +1,18 @@
 module MCB
   class CoursesEditor
+    LOGICAL_NAME_TO_DATABASE_NAME_MAPPING = {
+      title: :name,
+      maths: :maths,
+      english: :english,
+      science: :science,
+      route: :program_type,
+      qualifications: :qualification,
+      study_mode: :study_mode,
+      accredited_body: :accrediting_provider,
+      start_date: :start_date,
+      application_opening_date: :applications_open_from,
+    }.freeze
+
     def initialize(provider:, requester:, course_codes: [])
       @cli = HighLine.new
 
@@ -33,37 +46,30 @@ module MCB
         end
 
         if choice.is_a?(String) && choice.start_with?("edit")
-          edit_method_name = choice.gsub(" ", "_").to_sym
-          send(edit_method_name)
+          attribute = choice.gsub("edit ", "").gsub(" ", "_").to_sym
+          edit(attribute)
         end
       end
     end
 
   private
 
-    def edit_title
-      print_existing(:name)
-      update(name: ask_title)
+    def edit(logical_attribute)
+      database_attribute = LOGICAL_NAME_TO_DATABASE_NAME_MAPPING[logical_attribute]
+      print_existing(database_attribute)
+      user_response_from_cli = send("ask_#{logical_attribute}".to_sym)
+      update(database_attribute => user_response_from_cli)
     end
 
     def ask_title
       @cli.ask("New course title?  ")
     end
 
-    def edit_maths
-      print_existing(:maths)
-      update(maths: ask_gcse_subject(:maths))
-    end
+    def ask_english; ask_gcse_subject(:english); end
 
-    def edit_english
-      print_existing(:english)
-      update(english: ask_gcse_subject(:english))
-    end
+    def ask_maths; ask_gcse_subject(:maths); end
 
-    def edit_science
-      print_existing(:science)
-      update(science: ask_gcse_subject(:science))
-    end
+    def ask_science; ask_gcse_subject(:science); end
 
     def ask_gcse_subject(subject)
       @cli.choose do |menu|
@@ -72,21 +78,11 @@ module MCB
       end
     end
 
-    def edit_route
-      print_existing(:program_type)
-      update(program_type: ask_route)
-    end
-
     def ask_route
       @cli.choose do |menu|
         menu.prompt = "What's the route?  "
         menu.choices(*Course.program_types.keys)
       end
-    end
-
-    def edit_qualifications
-      print_existing(:qualification)
-      update(qualification: ask_qualifications)
     end
 
     def ask_qualifications
@@ -97,22 +93,12 @@ module MCB
       end
     end
 
-    def edit_study_mode
-      print_existing(:study_mode)
-      update(study_mode: ask_study_mode)
-    end
-
     def ask_study_mode
       @cli.choose do |menu|
         menu.prompt = "Full time or part time?  "
         menu.choices(*Course.study_modes.keys)
         menu.default = "full_time"
       end
-    end
-
-    def edit_accredited_body
-      print_existing(:accrediting_provider)
-      update(accrediting_provider: ask_accredited_body)
     end
 
     def ask_accredited_body
@@ -132,18 +118,8 @@ module MCB
       code.present? ? Provider.find_by!(provider_code: code) : @provider
     end
 
-    def edit_start_date
-      print_existing(:start_date)
-      update(start_date: ask_start_date)
-    end
-
     def ask_start_date
       Date.parse(@cli.ask("Start date?  ") { |q| q.default = "September #{@courses.first.recruitment_cycle}" })
-    end
-
-    def edit_application_opening_date
-      print_existing(:applications_open_from)
-      update(applications_open_from: ask_application_opening_date)
     end
 
     def ask_application_opening_date
