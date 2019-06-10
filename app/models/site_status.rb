@@ -69,6 +69,7 @@ class SiteStatus < ApplicationRecord
   belongs_to :course
 
   scope :findable, -> { status_running.published_on_ucas }
+  scope :findable_or_new, -> { findable.or(status_new_status) }
   scope :applications_being_accepted_now, -> {
     where.not(applications_accepted_from: nil).
     where('applications_accepted_from <= ?', Time.now.utc)

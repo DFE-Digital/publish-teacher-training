@@ -71,7 +71,7 @@ class Course < ApplicationRecord
   has_many :subjects, through: :course_subjects
   has_many :site_statuses
   has_many :sites,
-           -> { merge(SiteStatus.where(status: %i[new_status running])) },
+           -> { merge(SiteStatus.findable_or_new) },
            through: :site_statuses
 
   has_many :enrichments,
@@ -149,7 +149,7 @@ class Course < ApplicationRecord
 
   def applications_open_from
     site_statuses
-      .findable
+      .findable_or_new
       .with_vacancies
       .order("applications_accepted_from ASC")
       .first
