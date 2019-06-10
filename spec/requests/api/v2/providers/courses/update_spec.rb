@@ -202,9 +202,13 @@ describe 'PATCH /providers/:provider_code/courses/:course_code' do
   end
 
   context 'course has a draft enrichment' do
-    let(:enrichment) { build :course_enrichment }
+    let(:enrichment) { create :course_enrichment, provider: provider, course: course }
     let(:course) do
-      create :course, provider: provider, enrichments: [enrichment]
+      create :course, provider: provider
+    end
+
+    before do
+      course.enrichments = [enrichment]
     end
 
     it "updates the course's draft enrichment" do
@@ -221,9 +225,9 @@ describe 'PATCH /providers/:provider_code/courses/:course_code' do
   end
 
   context 'course has only a published enrichment' do
-    let(:enrichment) { build :course_enrichment, :published }
+    let(:enrichment) { create :course_enrichment, :published, provider: provider, course: course }
     let(:course) do
-      create :course, provider: provider, enrichments: [enrichment]
+      create :course, provider: provider
     end
 
     it "creates a draft enrichment for the course" do

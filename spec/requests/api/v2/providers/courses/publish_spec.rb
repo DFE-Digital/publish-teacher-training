@@ -118,7 +118,7 @@ describe 'Publish API v2', type: :request do
       let(:json_data) { JSON.parse(subject.body)['errors'] }
 
       context 'no enrichments' do
-        let(:course) { create(:course, provider: provider, with_enrichments: []) }
+        let(:course) { create(:course, provider: provider) }
         it { should have_http_status(:unprocessable_entity) }
         it 'has validation errors' do
           expect(json_data.count).to eq 1
@@ -128,18 +128,25 @@ describe 'Publish API v2', type: :request do
       end
 
       context 'fee type based course' do
-        let(:course) { create(:course, :fee_type_based, provider: provider, enrichments: [invalid_enrichment]) }
+        let(:provider) { create(:provider) }
+        let(:course) { create(:course, :fee_type_based, provider: provider) }
 
         context 'invalid enrichment with invalid content exceed word count fields' do
           let(:invalid_enrichment) {
             create(:course_enrichment, :with_fee_based_course,
+                   provider: provider,
+                   course: course,
                    about_course:  Faker::Lorem.sentence(400 + 1),
-                             interview_process:  Faker::Lorem.sentence(250 + 1),
-                             qualifications:  Faker::Lorem.sentence(100 + 1),
-                             how_school_placements_work:  Faker::Lorem.sentence(350 + 1),
-                             fee_details:  Faker::Lorem.sentence(250 + 1),
-                             salary_details:  Faker::Lorem.sentence(250 + 1))
+                   interview_process:  Faker::Lorem.sentence(250 + 1),
+                   qualifications:  Faker::Lorem.sentence(100 + 1),
+                   how_school_placements_work:  Faker::Lorem.sentence(350 + 1),
+                   fee_details:  Faker::Lorem.sentence(250 + 1),
+                   salary_details:  Faker::Lorem.sentence(250 + 1))
           }
+
+          before do
+            course.enrichments = [invalid_enrichment]
+          end
 
           it { should have_http_status(:unprocessable_entity) }
 
@@ -154,7 +161,11 @@ describe 'Publish API v2', type: :request do
         end
 
         context 'invalid enrichment with invalid content lack_presence fields' do
-          let(:invalid_enrichment) { create(:course_enrichment, :without_content) }
+          let(:invalid_enrichment) { build(:course_enrichment, :without_content, provider: provider, course: course) }
+
+          before do
+            course.enrichments = [invalid_enrichment]
+          end
 
           it { should have_http_status(:unprocessable_entity) }
 
@@ -170,18 +181,25 @@ describe 'Publish API v2', type: :request do
       end
 
       context 'salary type based course' do
-        let(:course) { create(:course, :salary_type_based, provider: provider, enrichments: [invalid_enrichment]) }
+        let(:provider) { create(:provider) }
+        let(:course) { create(:course, :salary_type_based, provider: provider) }
 
         context 'invalid enrichment with invalid content exceed word count fields' do
           let(:invalid_enrichment) {
             create(:course_enrichment, :with_fee_based_course,
+                   provider: provider,
+                   course: course,
                    about_course:  Faker::Lorem.sentence(400 + 1),
-                             interview_process:  Faker::Lorem.sentence(250 + 1),
-                             qualifications:  Faker::Lorem.sentence(100 + 1),
-                             how_school_placements_work:  Faker::Lorem.sentence(350 + 1),
-                             fee_details:  Faker::Lorem.sentence(250 + 1),
-                             salary_details:  Faker::Lorem.sentence(250 + 1))
+                   interview_process:  Faker::Lorem.sentence(250 + 1),
+                   qualifications:  Faker::Lorem.sentence(100 + 1),
+                   how_school_placements_work:  Faker::Lorem.sentence(350 + 1),
+                   fee_details:  Faker::Lorem.sentence(250 + 1),
+                   salary_details:  Faker::Lorem.sentence(250 + 1))
           }
+
+          before do
+            course.enrichments = [invalid_enrichment]
+          end
 
           it { should have_http_status(:unprocessable_entity) }
 
@@ -195,7 +213,11 @@ describe 'Publish API v2', type: :request do
           end
         end
         context 'invalid enrichment with invalid content lack_presence fields' do
-          let(:invalid_enrichment) { create(:course_enrichment, :without_content) }
+          let(:invalid_enrichment) { create(:course_enrichment, :without_content, provider: provider, course: course) }
+
+          before do
+            course.enrichments = [invalid_enrichment]
+          end
 
           it { should have_http_status(:unprocessable_entity) }
 

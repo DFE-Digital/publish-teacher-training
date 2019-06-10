@@ -12,13 +12,16 @@ describe "Course factory" do
   end
 
   context "with_course_enrichments" do
-    subject {
-      create(:course, with_enrichments: [
-               [:published, created_at: 5.days.ago],
-               [:published, created_at: 3.days.ago],
-               [:subsequent_draft, created_at: 1.day.ago],
-             ])
-    }
+    let(:course) { first_enrichment.course }
+    let(:first_enrichment) { create(:course_enrichment, :published, created_at: 5.days.ago) }
+    let(:second_enrichment) { create(:course_enrichment, :published, created_at: 3.days.ago, course: course) }
+    let(:third_enrichment) { create(:course_enrichment, :subsequent_draft, created_at: 1.day.ago, course: course) }
+
+    before do
+      course.enrichments = [first_enrichment, second_enrichment, third_enrichment]
+    end
+
+    subject { course }
 
     it "has enrichments" do
       expect(subject.enrichments.size).to eq(3)

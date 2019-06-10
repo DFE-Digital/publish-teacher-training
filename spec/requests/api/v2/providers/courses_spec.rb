@@ -19,19 +19,19 @@ describe 'Courses API v2', type: :request do
            start_date: Time.now.utc,
            study_mode: :full_time,
            subjects: [course_subject_primary, course_subject_mathematics, course_subject_send],
-           enrichments: [enrichment],
            maths: :must_have_qualification_at_application_time,
            english: :must_have_qualification_at_application_time,
            science: :must_have_qualification_at_application_time)
   }
   let(:create_site_status) { create(:site_status, :findable, :applications_being_accepted_from_2019, course: findable_open_course) }
-  let(:enrichment)     { build :course_enrichment, :published }
+  let(:enrichment)     { build :course_enrichment, :published, provider: provider, course: findable_open_course }
   let(:provider)       { create :provider, organisations: [organisation] }
   let(:course_subject) { course.subjects.first }
   let(:site_status)    { findable_open_course.site_statuses.first }
   let(:site)           { site_status.site }
 
   before do
+    findable_open_course.enrichments = [enrichment]
     findable_open_course.site_statuses = [create_site_status]
   end
 
