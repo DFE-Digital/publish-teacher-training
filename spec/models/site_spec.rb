@@ -57,8 +57,9 @@ describe Provider, type: :model do
   end
 
   describe 'after running validation' do
-    let(:provider) { create(:provider, site_count: 0) }
-    subject { build(:site, provider: provider) }
+    let(:site) { build(:site, provider: provider) }
+    let(:provider) { build(:provider) }
+    subject { site }
 
     it 'is assigned a valid code by default' do
       expect { subject.valid? }.to change { subject.code.blank? }.from(true).to(false)

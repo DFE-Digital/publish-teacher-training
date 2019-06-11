@@ -29,7 +29,7 @@
 require "rails_helper"
 
 describe ProviderSerializer do
-  let(:provider) { create :provider, site_count: 0 }
+  let(:provider) { create :provider }
 
   subject { serialize(provider) }
 
@@ -72,8 +72,8 @@ describe ProviderSerializer do
     end
 
     context 'if nil' do
-      let(:ucas_preferences) { create :ucas_preferences, application_alert_email: nil }
-      let(:provider) { create :provider, ucas_preferences: ucas_preferences, site_count: 0 }
+      let(:ucas_preferences) { build :ucas_preferences, application_alert_email: nil }
+      let(:provider) { create :provider, ucas_preferences: ucas_preferences }
       let(:contacts) do
         serialize(provider)['contacts'].map { |contact| contact[:type] }
       end
@@ -101,7 +101,7 @@ describe ProviderSerializer do
   describe 'contacts' do
     describe 'generate provider object returns the providers contacts' do
       let(:contact)  { create :contact }
-      let(:provider) { create :provider, contacts: [contact], site_count: 0 }
+      let(:provider) { create :provider, contacts: [contact] }
 
       subject { serialize(provider)['contacts'].first }
 
@@ -121,7 +121,7 @@ describe ProviderSerializer do
 
       context 'exists in contacts table' do
         let(:contact)  { create :contact, type: 'admin' }
-        let(:provider) { create :provider, contacts: [contact], site_count: 0 }
+        let(:provider) { create :provider, contacts: [contact] }
 
         subject { serialize(provider)['contacts'].find { |c| c[:type] == 'admin' } }
 

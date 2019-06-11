@@ -11,11 +11,9 @@ describe 'Sites API v2', type: :request do
 
   let(:site1) { create :site, location_name: 'Main site 1', provider: provider }
   let(:site2) { create :site, location_name: 'Main site 2', provider: provider }
-  let!(:sites) { [site1, site2] }
   let!(:provider) {
     create(:provider,
            course_count: 0,
-           site_count: 0,
            organisations: [organisation])
   }
 
@@ -80,6 +78,7 @@ describe 'Sites API v2', type: :request do
     end
 
     describe 'JSON generated for sites' do
+      let!(:sites) { [site1, site2] }
       before do
         get "/api/v2/providers/#{provider.provider_code}/sites",
             headers: { 'HTTP_AUTHORIZATION' => credentials }
@@ -406,7 +405,7 @@ describe 'Sites API v2', type: :request do
       let(:postcode)      { 'SW1A 1AA' }
       let(:region_code)   { 'west_midlands' }
 
-      let(:site) { provider.sites.last }
+      let(:site) { provider.reload.sites.last }
 
       describe 'permitted parameters' do
         before do
