@@ -4,10 +4,10 @@ describe '"mcb apiv1 courses find"' do
   it 'displays the info for the given course' do
     course1 = create(:course)
 
-    subject2 = build(:subject)
-    site_status2 = build(:site_status)
+    subject = build(:subject)
+    site_status = build(:site_status)
 
-    course2 = create(:course, subjects: [subject2], site_statuses: [site_status2])
+    course2 = create(:course, subjects: [subject], site_statuses: [site_status])
 
 
     url = 'http://localhost:3001/api/v1/2019/courses'
@@ -49,15 +49,15 @@ describe '"mcb apiv1 courses find"' do
 
     expect(output).to have_text_table_row('course_code',
                                           course2.course_code)
-    expect(output).to have_text_table_row(subject2.subject_code,
-                                          subject2.subject_name)
+    expect(output).to have_text_table_row(subject.subject_code,
+                                          subject.subject_name)
     expect(output).to(have_text_table_row(
-                        site_status2.site.code,
-                        site_status2.site.location_name,
-                        site_status2.vac_status_before_type_cast,
-                        site_status2.status_before_type_cast,
-                        site_status2.publish_before_type_cast,
-                        site_status2.applications_accepted_from.strftime('%Y-%m-%d')
+                        site_status.site.code,
+                        site_status.site.location_name,
+                        site_status.vac_status_before_type_cast,
+                        site_status.status_before_type_cast,
+                        site_status.publish_before_type_cast,
+                        site_status.applications_accepted_from.strftime('%Y-%m-%d')
                       ))
   end
 end
