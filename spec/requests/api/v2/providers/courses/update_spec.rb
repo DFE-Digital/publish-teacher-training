@@ -218,6 +218,38 @@ describe 'PATCH /providers/:provider_code/courses/:course_code' do
       expect(draft_enrichment.attributes.slice(*update_attributes.keys.map(&:to_s)))
         .to include(update_attributes.stringify_keys)
     end
+
+    context "with invalid data" do
+      let(:update_attributes) do
+        {
+          about_course: Faker::Lorem.sentence(1000),
+          fee_details: Faker::Lorem.sentence(1000),
+          fee_international: 200_000,
+          fee_uk_eu: 200_000,
+          financial_support: Faker::Lorem.sentence(1000),
+          how_school_placements_work: Faker::Lorem.sentence(1000),
+          interview_process: Faker::Lorem.sentence(1000),
+          other_requirements: Faker::Lorem.sentence(1000),
+          personal_qualities: Faker::Lorem.sentence(1000),
+          qualifications: Faker::Lorem.sentence(1000),
+          salary_details: Faker::Lorem.sentence(1000)
+        }
+      end
+
+      subject { JSON.parse(response.body)["errors"].map { |e| e["title"] } }
+
+      it "returns validation errors" do
+        perform_request update_course
+
+        prefix = "Invalid latest_enrichment__"
+        expect("#{prefix}about_course".in?(subject)).to eq(true)
+        expect("#{prefix}interview_process".in?(subject)).to eq(true)
+        expect("#{prefix}how_school_placements_work".in?(subject)).to eq(true)
+        expect("#{prefix}qualifications".in?(subject)).to eq(true)
+        expect("#{prefix}fee_details".in?(subject)).to eq(true)
+        expect("#{prefix}financial_support".in?(subject)).to eq(true)
+      end
+    end
   end
 
   context 'course has only a published enrichment' do
