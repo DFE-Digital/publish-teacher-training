@@ -69,19 +69,13 @@ RSpec.describe Course, type: :model do
   end
 
   context "with sites" do
-    let(:course) { create(:course) }
-    let(:first_site) { create(:site, provider: course.provider) }
-    let(:first_site_status) { create(:site_status, :running, site: first_site, course: course) }
-    let(:second_site) { create(:site, provider: course.provider) }
-    let(:second_site_status) { create(:site_status, :suspended, site: second_site, course: course) }
-    let(:new_site) { create(:site, provider: course.provider) }
+    let(:provider) {build(:provider)}
+    let(:first_site) { build(:site) }
+    let(:first_site_status) { build(:site_status, :running, site: first_site) }
+    let(:second_site) { build(:site) }
+    let(:second_site_status) { build(:site_status, :suspended, site: second_site) }
 
-    before do
-      first_site_status
-      second_site_status
-    end
-
-    subject { course }
+    subject { create(:course, provider: provider, site_statuses: [first_site_status, second_site_status]) }
 
     describe "#sites" do
       it "should only return new and running sites" do
@@ -90,6 +84,9 @@ RSpec.describe Course, type: :model do
     end
 
     describe "sites=" do
+
+      let(:new_site) { create(:site, provider: provider) }
+
       before do
         subject.sites = [second_site, new_site]
       end
