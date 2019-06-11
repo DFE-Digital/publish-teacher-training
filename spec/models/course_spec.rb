@@ -483,7 +483,7 @@ RSpec.describe Course, type: :model do
     subject { create(:course, site_statuses: [existing_site_status]) }
 
     context "for running courses" do
-      let(:existing_site_status) { create(:site_status, :running, site: existing_site) }
+      let(:existing_site_status) { create(:site_status, :running, :published, site: existing_site) }
 
       it "suspends the site when an existing site is removed" do
         expect { subject.remove_site!(site: existing_site) }.
