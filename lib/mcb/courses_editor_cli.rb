@@ -37,6 +37,7 @@ module MCB
     def ask_gcse_subject(subject)
       @cli.choose do |menu|
         menu.prompt = "What's the #{subject} entry requirements?  "
+        menu.choice("exit") { nil }
         menu.choices(*Course::ENTRY_REQUIREMENT_OPTIONS.keys)
       end
     end
@@ -44,6 +45,7 @@ module MCB
     def ask_route
       @cli.choose do |menu|
         menu.prompt = "What's the route?  "
+        menu.choice("exit") { nil }
         menu.choices(*Course.program_types.keys)
       end
     end

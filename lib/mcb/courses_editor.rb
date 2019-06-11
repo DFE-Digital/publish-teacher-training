@@ -47,7 +47,9 @@ module MCB
       database_attribute = LOGICAL_NAME_TO_DATABASE_NAME_MAPPING[logical_attribute]
       print_existing(database_attribute)
       user_response_from_cli = @cli.send("ask_#{logical_attribute}".to_sym)
-      update(database_attribute => user_response_from_cli)
+      unless user_response_from_cli.nil?
+        update(database_attribute => user_response_from_cli)
+      end
     end
 
     def check_authorisation

@@ -41,24 +41,52 @@ describe MCB::CoursesEditor do
           from("Original name").to("Mathematics")
       end
 
-      it 'updates the maths setting when that is valid' do
-        expect { run_editor("edit maths", "equivalence_test", "exit") }.to change { course.reload.maths }.
-          from("must_have_qualification_at_application_time").to("equivalence_test")
+      describe "(maths)" do
+        it 'updates the maths setting when that is valid' do
+          expect { run_editor("edit maths", "equivalence_test", "exit") }.to change { course.reload.maths }.
+            from("must_have_qualification_at_application_time").to("equivalence_test")
+        end
+
+        it "doesn't change the setting if the user exits" do
+          expect { run_editor("edit maths", "exit", "exit") }.to_not change { course.reload.maths }.
+            from("must_have_qualification_at_application_time")
+        end
       end
 
-      it 'updates the english setting when that is valid' do
-        expect { run_editor("edit english", "must_have_qualification_at_application_time", "exit") }.to change { course.reload.english }.
-          from("equivalence_test").to("must_have_qualification_at_application_time")
+      describe "(english)" do
+        it 'updates the english setting when that is valid' do
+          expect { run_editor("edit english", "must_have_qualification_at_application_time", "exit") }.to change { course.reload.english }.
+            from("equivalence_test").to("must_have_qualification_at_application_time")
+        end
+
+        it "doesn't change the setting if the user exits" do
+          expect { run_editor("edit english", "exit", "exit") }.to_not change { course.reload.english }.
+            from("equivalence_test")
+        end
       end
 
-      it 'updates the science setting when that is valid' do
-        expect { run_editor("edit science", "equivalence_test", "exit") }.to change { course.reload.science }.
-          from("not_required").to("equivalence_test")
+      describe "(science)" do
+        it 'updates the science setting when that is valid' do
+          expect { run_editor("edit science", "equivalence_test", "exit") }.to change { course.reload.science }.
+            from("not_required").to("equivalence_test")
+        end
+
+        it "doesn't change the setting if the user exits" do
+          expect { run_editor("edit science", "exit", "exit") }.to_not change { course.reload.science }.
+            from("not_required")
+        end
       end
 
-      it 'updates the route/program type setting when that is valid' do
-        expect { run_editor("edit route", "scitt_programme", "exit") }.to change { course.reload.program_type }.
-          from("higher_education_programme").to("scitt_programme")
+      describe "(route)" do
+        it 'updates the route/program type setting when that is valid' do
+          expect { run_editor("edit route", "scitt_programme", "exit") }.to change { course.reload.program_type }.
+            from("higher_education_programme").to("scitt_programme")
+        end
+
+        it "doesn't change the setting if the user exits" do
+          expect { run_editor("edit route", "exit", "exit") }.to_not change { course.reload.program_type }.
+            from("higher_education_programme")
+        end
       end
 
       describe "(qualifications)" do
