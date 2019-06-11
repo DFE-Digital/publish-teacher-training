@@ -27,12 +27,6 @@ module API
       def create
         access_request = AccessRequest.new(access_request_params)
         authorize access_request
-
-        access_request.requester        = User.find_by(email: access_request.requester_email)
-        access_request.request_date_utc = Time.now.utc
-        access_request.status           = :requested
-        access_request.save!
-
         render jsonapi: access_request
       end
 

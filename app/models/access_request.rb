@@ -16,6 +16,7 @@
 
 class AccessRequest < ApplicationRecord
   belongs_to :requester, class_name: 'User'
+  after_commit :update_status_to_requested, on: :create
 
   enum status: %i[
     requested
@@ -33,4 +34,12 @@ class AccessRequest < ApplicationRecord
   alias_method :approve, :completed!
 
   audited
+
+private
+
+  def update_status_to_requested
+    self.requester        = User.find_by(email: self.requester_email)
+    self.request_date_utc = Time.now.utc
+    self.status           = :requested
+  end
 end
