@@ -112,7 +112,6 @@ group :development, :test do
   gem 'rspec-its'
 
   # Test framework
-  gem 'rspec-json_matchers'
   gem 'rspec-rails'
 
   # A Ruby static code analyzer and formatter

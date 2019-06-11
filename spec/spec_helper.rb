@@ -1,4 +1,3 @@
-require 'rspec-json_matchers'
 require 'pundit/rspec'
 require 'jsonapi/rspec'
 require "super_diff/rspec"
@@ -64,8 +63,6 @@ RSpec.configure do |config|
 
   config.filter_run focus: true
   config.run_all_when_everything_filtered = true
-
-  config.include RSpec::JsonMatchers::Matchers
 
 # The settings below are suggested to provide a good initial experience
 # with RSpec, but feel free to customize to your heart's content.
