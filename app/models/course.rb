@@ -141,10 +141,6 @@ class Course < ApplicationRecord
     site_statuses.findable.any?
   end
 
-  def new?
-    site_statuses.empty? || site_statuses.status_new_status.any?
-  end
-
   def open_for_applications?
     site_statuses.open_for_applications.any?
   end
@@ -208,7 +204,7 @@ class Course < ApplicationRecord
 
   def ucas_status
     return :running if findable?
-    return :new if new?
+    return :new if site_statuses.empty? || site_statuses.status_new_status.any?
 
     :not_running
   end
@@ -256,7 +252,7 @@ class Course < ApplicationRecord
   end
 
   def add_site!(site:)
-    is_course_new = new? # persist this before we change anything
+    is_course_new = ucas_status == :new # persist this before we change anything
     site_status = site_statuses.find_or_initialize_by(site: site)
     site_status.start! unless is_course_new
     site_status.save! if persisted?
@@ -264,7 +260,7 @@ class Course < ApplicationRecord
 
   def remove_site!(site:)
     site_status = site_statuses.find_by!(site: site)
-    new? ? site_status.destroy! : site_status.suspend!
+    ucas_status == :new ? site_status.destroy! : site_status.suspend!
   end
 
   def sites=(desired_sites)
