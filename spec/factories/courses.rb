@@ -49,22 +49,7 @@ FactoryBot.define do
         course.changed_at = evaluator.age
       end
     end
-    #
     after(:create) do |course, evaluator|
-      # evaluator.with_enrichments.each do |trait, attributes = {}|
-      #   defaults = {
-      #     ucas_course_code: course.course_code,
-      #     provider_code: course.provider.provider_code,
-      #   }
-      #   if evaluator.age.present?
-      #     defaults = defaults.merge(
-      #       created_at: evaluator.age,
-      #       updated_at: evaluator.age,
-      #     )
-      #   end
-        # create(:course_enrichment, trait, attributes.merge(defaults))
-      # end
-
       course.enrichments += evaluator.enrichments.map do |enrichment|
         enrichment.tap { |e| e.provider_code = course.provider.provider_code }
       end

@@ -16,7 +16,7 @@
 
 FactoryBot.define do
   factory :provider_enrichment do
-    association :provider
+    provider
     status { :draft }
     email { Faker::Internet.email }
     website { Faker::Internet.url }
