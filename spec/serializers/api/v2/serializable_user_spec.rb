@@ -8,8 +8,8 @@ describe API::V2::SerializableUser do
     expect(resource.jsonapi_type).to eq :users
   end
 
-  subject { resource.as_jsonapi.to_json }
+  subject { JSON.parse(resource.as_jsonapi.to_json) }
 
-  it { should be_json.with_content(type: 'users') }
-  it { should be_json.with_content(attributes: { state: user.state }) }
+  it { should have_type 'users' }
+  it { should have_attribute(:state).with_value(user.state.to_s) }
 end

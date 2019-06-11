@@ -8,16 +8,16 @@ describe API::V2::SerializableSite do
     expect(resource.jsonapi_type).to eq :sites
   end
 
-  subject { resource.as_jsonapi.to_json }
+  subject { JSON.parse(resource.as_jsonapi.to_json) }
 
-  it { should be_json.with_content(type: 'sites') }
+  it { should have_type 'sites' }
   it {
-    should be_json.with_content(attributes: { location_name: site.location_name,
-                                              address1: site.address1,
-                                              address2: site.address2,
-                                              address3: site.address3,
-                                              address4: site.address4,
-                                              postcode: site.postcode,
-                                              region_code: site.region_code })
+    should have_attribute(:location_name).with_value(site.location_name)
+    should have_attribute(:address1).with_value(site.address1)
+    should have_attribute(:address2).with_value(site.address2)
+    should have_attribute(:address3).with_value(site.address3)
+    should have_attribute(:address4).with_value(site.address4)
+    should have_attribute(:postcode).with_value(site.postcode)
+    should have_attribute(:region_code).with_value(site.region_code)
   }
 end

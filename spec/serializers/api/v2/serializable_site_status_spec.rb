@@ -8,7 +8,7 @@ describe API::V2::SerializableSiteStatus do
     expect(resource.jsonapi_type).to eq :site_statuses
   end
 
-  subject { resource.as_jsonapi.to_json }
+  subject { JSON.parse(resource.as_jsonapi.to_json) }
 
-  it { should be_json.with_content(type: 'site_statuses') }
+  it { should have_type 'site_statuses' }
 end
