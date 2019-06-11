@@ -20,8 +20,10 @@ FactoryBot.define do
       age { nil }
     end
 
+    provider
+
     status { :draft }
-    sequence(:provider_code) { |n| "A#{n}" }
+
     email { Faker::Internet.email }
     website { Faker::Internet.url }
     address1 { Faker::Address.street_address }
