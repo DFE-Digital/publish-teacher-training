@@ -542,6 +542,24 @@ RSpec.describe Course, type: :model do
       end
     end
 
+    context "for mixed courses with new and running locations" do
+      let(:existing_site_status) { create(:site_status, :running, :published, site: existing_site) }
+      let(:another_existing_site) { create(:site, provider: provider) }
+      let(:existing_new_site_status) { create(:site_status, :new, site: another_existing_site) }
+      subject { create(:course, site_statuses: [existing_site_status, existing_new_site_status]) }
+
+      it "adds a new site status and sets it to running when a new site is added" do
+        expect { subject.add_site!(site: new_site) }.to change { subject.reload.site_statuses.size }.
+          from(2).to(3)
+        expect(new_site_status.status).to eq("running")
+      end
+
+      it "suspends the site when an existing site is removed" do
+        expect { subject.remove_site!(site: existing_site) }.
+          to change { existing_site_status.reload.status }.from("running").to("suspended")
+      end
+    end
+
     describe '#accrediting_provider_description' do
       let(:accrediting_provider) { nil }
       let(:course) { create(:course, accrediting_provider: accrediting_provider) }
