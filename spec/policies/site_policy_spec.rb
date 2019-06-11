@@ -16,7 +16,6 @@ describe SitePolicy do
     let(:site) { create(:site) }
     let!(:provider) {
       create(:provider,
-             course_count: 0,
              sites: [site],
              organisations: [organisation])
     }
