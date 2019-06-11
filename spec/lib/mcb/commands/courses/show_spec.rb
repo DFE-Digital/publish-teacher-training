@@ -9,11 +9,10 @@ describe '"mcb courses show"' do
   end
 
   it 'displays the course info' do
-    _site_status1 = create(:site_status)
+    subject2 = build(:subject)
+    site_status2 = build(:site_status)
 
-    site_status2 = create(:site_status)
-    course2      = site_status2.course
-    subjects2    = course2.subjects
+    course2 = create(:course, subjects: [subject2], site_statuses: [site_status2])
 
     output = with_stubbed_stdout do
       cmd.run([course2.provider.provider_code, course2.course_code])
@@ -22,8 +21,8 @@ describe '"mcb courses show"' do
     expect(output).to have_text_table_row('course_code',
                                           course2.course_code)
 
-    expect(output).to have_text_table_row(subjects2.first.subject_code,
-                                          subjects2.first.subject_name)
+    expect(output).to have_text_table_row(subject2.subject_code,
+                                          subject2.subject_name)
 
     expect(output).to(
       have_text_table_row(

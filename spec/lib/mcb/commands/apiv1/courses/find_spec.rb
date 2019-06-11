@@ -2,13 +2,13 @@ require 'mcb_helper'
 
 describe '"mcb apiv1 courses find"' do
   it 'displays the info for the given course' do
-    # The site_status factory is an easy way to create a course and it's site
-    site_status1 = create(:site_status)
-    course1 = site_status1.course
+    course1 = create(:course)
 
-    site_status2 = create(:site_status)
-    course2 = site_status2.course
-    subject2 = course2.subjects.first
+    subject2 = build(:subject)
+    site_status2 = build(:site_status)
+
+    course2 = create(:course, subjects: [subject2], site_statuses: [site_status2])
+
 
     url = 'http://localhost:3001/api/v1/2019/courses'
     next_url = url + '&' + {

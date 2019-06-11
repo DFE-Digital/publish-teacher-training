@@ -26,7 +26,6 @@ describe SearchAndCompare::CourseSerializer do
                name: 'Primary (Special Educational Needs)',
                course_code: '2KXB',
                start_date: '2019-08-01T00:00:00',
-               subject_count: 0,
                program_type: :school_direct_salaried_training_programme,
                qualification: :pgce_with_qts,
                study_mode:  :full_time,
