@@ -20,11 +20,7 @@ module API
       end
 
       def sync_with_search_and_compare
-        response = ManageCoursesAPIService::Request.sync_course_with_search_and_compare(
-          @current_user.email,
-          @provider.provider_code,
-          @course.course_code
-        )
+        response = sync_courses
 
         head response ? :ok : :internal_server_error
       end
@@ -59,6 +55,14 @@ module API
 
     private
 
+      def sync_courses
+        ManageCoursesAPIService::Request.sync_course_with_search_and_compare(
+          @current_user.email,
+          @provider.provider_code,
+          @course.course_code
+        )
+      end
+
       def update_enrichment
         return unless enrichment_params.values.any?
 
@@ -76,6 +80,8 @@ module API
         # but we can't actually revert easily from what I can tell because of the
         # remove_site! side effects that occur when it's called.
         @course.errors[:sites] << "^You must choose at least one location" if site_ids.empty?
+
+        sync_courses if site_ids.any?
       end
 
       def first_draft_or_new_enrichment
