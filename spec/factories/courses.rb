@@ -36,7 +36,6 @@ FactoryBot.define do
 
     transient do
       with_site_statuses { [] }
-      with_enrichments   { [] }
       age                { nil }
       enrichments        { [] }
     end
@@ -59,22 +58,12 @@ FactoryBot.define do
         end
       end
 
-      evaluator.with_enrichments.each do |trait, attributes = {}|
-        defaults = {
-          ucas_course_code: course.course_code,
-          provider_code: course.provider.provider_code,
-        }
-        if evaluator.age.present?
-          defaults = defaults.merge(
-            created_at: evaluator.age,
-            updated_at: evaluator.age,
-          )
-        end
-        create(:course_enrichment, trait, attributes.merge(defaults))
-      end
-
+      # This is important to retain the relationship behaviour between
+      # course and it's enrichment
       course.enrichments += evaluator.enrichments.map do |enrichment|
-        enrichment.tap { |e| e.provider_code = course.provider.provider_code }
+        enrichment.tap do |e|
+          e.provider_code = course.provider.provider_code
+        end
       end
 
       if evaluator.age.present?

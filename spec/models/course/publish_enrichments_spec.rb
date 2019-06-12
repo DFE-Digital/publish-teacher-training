@@ -2,17 +2,17 @@ require 'rails_helper'
 
 describe Course, type: :model do
   describe "#enrichments" do
-    subject {
-      create(:course, with_enrichments: [
-               [:published, created_at: 5.days.ago],
-               [:published, created_at: 3.days.ago],
-               [:subsequent_draft, created_at: 1.day.ago],
-             ]).enrichments
-    }
+    let(:first_enrichment) { build(:course_enrichment, :published, created_at: 5.days.ago) }
+    let(:second_enrichment) { build(:course_enrichment, :published, created_at: 3.days.ago) }
+    let(:third_enrichment) { build(:course_enrichment, :subsequent_draft, created_at: 1.day.ago) }
+
+    let(:course) { create(:course, enrichments: [first_enrichment, second_enrichment, third_enrichment]) }
+
+    subject { course.reload.enrichments }
 
     let(:another_course) {
-      create(:course, with_enrichments: [
-               [:published, created_at: 5.days.ago],
+      create(:course, enrichments: [
+               build(:course_enrichment, :published, created_at: 5.days.ago),
              ])
     }
 
@@ -25,27 +25,32 @@ describe Course, type: :model do
 
   describe "#content_status" do
     context "for a course without any enrichments" do
-      subject { create(:course, with_enrichments: []) }
+      subject { create(:course) }
       its(:content_status) { should eq(:empty) }
     end
 
     context "for a course an initial draft enrichments" do
-      subject { create(:course, with_enrichments: [[:initial_draft]]) }
+      let(:course) { create(:course, enrichments: [build(:course_enrichment, :initial_draft)]) }
+      subject { course }
+
+      it "set to draft" do
+        expect(subject.content_status).to eq(:draft)
+      end
       its(:content_status) { should eq(:draft) }
     end
 
     context "for a course with a single published enrichment" do
-      subject { create(:course, with_enrichments: [[:published]]) }
+      subject { create(:course, enrichments: [build(:course_enrichment, :published)]) }
       its(:content_status) { should eq(:published) }
     end
 
     context "for a course with multiple published enrichments" do
-      subject { create(:course, with_enrichments: [[:published], [:published]]) }
+      subject { create(:course, enrichments: [build(:course_enrichment, :published), build(:course_enrichment, :published)]) }
       its(:content_status) { should eq(:published) }
     end
 
     context "for a course with published enrichments and a draft one" do
-      subject { create(:course, with_enrichments: [[:published], [:subsequent_draft]]) }
+      subject { create(:course, enrichments: [build(:course_enrichment, :published), build(:course_enrichment, :subsequent_draft)]) }
       its(:content_status) { should eq(:published_with_unpublished_changes) }
     end
   end
@@ -62,9 +67,9 @@ describe Course, type: :model do
       let(:subject) do
         create(:course,
                changed_at: 10.minutes.ago,
-               with_enrichments: [[:initial_draft,
+               enrichments: [build(:course_enrichment, :initial_draft,
                                    created_at: 1.day.ago,
-                                   updated_at: 20.minutes.ago]])
+                                   updated_at: 20.minutes.ago)])
       end
 
       let(:enrichment) { subject.enrichments.first }
@@ -90,10 +95,10 @@ describe Course, type: :model do
 
     context 'on a course with a draft enrichment and previously-published enrichments' do
       let(:subject) do
-        create(:course, with_enrichments: [
-                 [:published, created_at: 5.days.ago],
-                 [:published, created_at: 3.days.ago],
-                 [:subsequent_draft, created_at: 1.day.ago],
+        create(:course, enrichments: [
+                 build(:course_enrichment, :published, created_at: 5.days.ago),
+                 build(:course_enrichment, :published, created_at: 3.days.ago),
+                 build(:course_enrichment, :subsequent_draft, created_at: 1.day.ago),
                ])
       end
 
