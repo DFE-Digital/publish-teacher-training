@@ -456,7 +456,7 @@ RSpec.describe Course, type: :model do
   end
 
   describe "#applications_open_from=" do
-    let(:provider) { create(:provider, sites: [sites]) }
+    let(:provider) { build(:provider, sites: [sites]) }
     let(:sites) { build_list(:site, 3) }
     let!(:existing_site_status) {
       sites.each do |site|
@@ -476,7 +476,7 @@ RSpec.describe Course, type: :model do
   end
 
   describe "adding and removing sites on a course" do
-    let(:provider) { create(:provider) }
+    let(:provider) { build(:provider) }
       #this code will be removed and fixed properly in the next pr
     let(:new_site) { create(:site, provider: provider, code: 'A') }
      #this code will be removed and fixed properly in the next pr
@@ -563,51 +563,51 @@ RSpec.describe Course, type: :model do
           to change { existing_site_status.reload.status }.from("running").to("suspended")
       end
     end
+  end
 
-    describe '#accrediting_provider_description' do
-      let(:accrediting_provider) { nil }
-      let(:course) { create(:course, accrediting_provider: accrediting_provider) }
-      subject { course.accrediting_provider_description }
+  describe '#accrediting_provider_description' do
+    let(:accrediting_provider) { nil }
+    let(:course) { create(:course, accrediting_provider: accrediting_provider) }
+    subject { course.accrediting_provider_description }
 
-      context 'for courses without accrediting provider' do
+    context 'for courses without accrediting provider' do
+      it { should be_nil }
+    end
+
+    context 'for courses with accrediting provider' do
+      let(:accrediting_provider) { build(:provider) }
+
+      context 'without published enrichment' do
         it { should be_nil }
       end
 
-      context 'for courses with accrediting provider' do
-        let(:accrediting_provider) { build(:provider) }
+      context 'with published enrichment' do
+        let(:provider_enrichment) { build(:provider_enrichment, :published, last_published_at: 1.day.ago) }
+        let(:provider) { build(:provider, enrichments: [provider_enrichment]) }
+        let(:course) { create(:course, provider: provider, accrediting_provider: accrediting_provider) }
 
-        context 'without published enrichment' do
+        context 'without any accrediting_provider_enrichments' do
           it { should be_nil }
         end
 
-        context 'with published enrichment' do
-          let(:provider_enrichment) { build(:provider_enrichment, :published, last_published_at: 1.day.ago) }
-          let(:provider) { build(:provider, enrichments: [provider_enrichment]) }
-          let(:course) { create(:course, provider: provider, accrediting_provider: accrediting_provider) }
-
-          context 'without any accrediting_provider_enrichments' do
-            it { should be_nil }
+        context "with accrediting_provider_enrichments" do
+          let(:accrediting_provider_enrichment_description) { Faker::Lorem.sentence.to_s }
+          let(:accrediting_provider_enrichment) do
+            {
+              'UcasProviderCode' => accrediting_provider.provider_code,
+              'Description' => accrediting_provider_enrichment_description
+            }
           end
 
-          context "with accrediting_provider_enrichments" do
-            let(:accrediting_provider_enrichment_description) { Faker::Lorem.sentence.to_s }
-            let(:accrediting_provider_enrichment) do
-              {
-                'UcasProviderCode' => accrediting_provider.provider_code,
-                'Description' => accrediting_provider_enrichment_description
-              }
-            end
-
-            let(:accrediting_provider_enrichments) { [accrediting_provider_enrichment] }
-            let(:provider_enrichment) do
-              build(:provider_enrichment,
-                    :published,
-                    last_published_at: 1.day.ago,
-                    accrediting_provider_enrichments: accrediting_provider_enrichments)
-            end
-
-            it { should match accrediting_provider_enrichment_description }
+          let(:accrediting_provider_enrichments) { [accrediting_provider_enrichment] }
+          let(:provider_enrichment) do
+            build(:provider_enrichment,
+                  :published,
+                  last_published_at: 1.day.ago,
+                  accrediting_provider_enrichments: accrediting_provider_enrichments)
           end
+
+          it { should match accrediting_provider_enrichment_description }
         end
       end
     end
