@@ -125,6 +125,27 @@ RSpec.describe SiteStatus, type: :model do
         end
       end
     end
+
+    context "when course has new and running sites" do
+      let(:site1) { create(:site) }
+      let(:site2) { create(:site) }
+      let!(:site_status1) { create(:site_status, :running, :published, site: site1, course: course) }
+      let!(:site_status2) { create(:site_status, :new, site: site2, course: course) }
+      let(:course) { create(:course) }
+      let(:site3) { create(:site) }
+
+      before do
+        expect(course.reload.ucas_status).to be(:running)
+      end
+
+      describe "the status" do
+        it "is set to running" do
+          new_site_status = SiteStatus.create course: course, site: site3
+
+          expect(new_site_status).to be_status_running
+        end
+      end
+    end
   end
 
   describe 'destruction' do
