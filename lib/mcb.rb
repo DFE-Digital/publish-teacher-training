@@ -42,6 +42,36 @@ module MCB
     end
   end
 
+  # Load the rails environment.
+  #
+  # Not all mcb commands require the rails env, e.g. the API ones don't. Use
+  # this method in those commands that do.
+  def self.rails_console(**opts)
+    load_env_azure_settings(opts)
+
+    if defined?(Rails)
+      configure_audited_user if connecting_to_remote_db?
+    else
+      if requesting_remote_connection?(opts)
+        webapp_rails_env = MCB::Azure.configure_for_webapp(opts)
+
+        ENV['RAILS_ENV'] = webapp_rails_env
+      end
+
+      app_root = File.expand_path(File.join(File.dirname($0), '..'))
+      exec_path = File.join(app_root, 'bin', 'rails')
+
+      # prevent caching of environment variables by spring
+      ENV['DISABLE_SPRING'] = "true"
+
+      ENV['MCB_SETUP_AUDIT_USER'] = "1"
+
+      verbose("Running #{exec_path}")
+
+      exec(exec_path, 'console')
+    end
+  end
+
   # Load commands from dir adding them to cmd
   #
   # Recursively load all the commands in a dir creating a structure of commands
@@ -298,8 +328,6 @@ module MCB
       end
     end
 
-  private
-
     def configure_audited_user
       @current_user = get_user_from_config
       verbose "configuring user to be #{@current_user.email}"
@@ -309,6 +337,8 @@ module MCB
     def connecting_to_remote_db?
       ENV.key?('DB_HOSTNAME')
     end
+
+  private
 
     def remove_option_with_arg(argv, *options)
       argv.dup.tap do |new_argv|
