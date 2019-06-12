@@ -25,7 +25,8 @@
 require 'rails_helper'
 
 RSpec.describe Course, type: :model do
-  let(:subject) { create(:course) }
+  let(:course) { create(:course) }
+  let(:subject) { course }
 
   describe 'auditing' do
     it { should be_audited.except(:changed_at) }
@@ -42,6 +43,32 @@ RSpec.describe Course, type: :model do
 
   describe 'validations' do
     it { should validate_uniqueness_of(:course_code).scoped_to(:provider_id) }
+
+    describe 'saveable?' do
+      let(:course) { create(:course, enrichments: [invalid_enrichment]) }
+      let(:invalid_enrichment) { create(:course_enrichment, about_course: Faker::Lorem.sentence(1000)) }
+
+      before do
+        subject.saveable?
+      end
+
+      it 'should add enrichment errors' do
+        expect(subject.errors.full_messages).to_not be_empty
+      end
+    end
+
+    describe 'publishable?' do
+      let(:course) { create(:course, enrichments: [invalid_enrichment]) }
+      let(:invalid_enrichment) { create(:course_enrichment, about_course: '') }
+
+      before do
+        subject.publishable?
+      end
+
+      it 'should add enrichment errors' do
+        expect(subject.errors.full_messages).to_not be_empty
+      end
+    end
   end
 
   describe 'changed_at' do
