@@ -60,7 +60,7 @@ module API
         update_enrichment
         update_sites
 
-        if @course.errors.empty? && @course.publishable?
+        if @course.errors.empty? && @course.saveable?
           render jsonapi: @course.reload
         else
           render jsonapi_errors: @course.errors, status: :unprocessable_entity

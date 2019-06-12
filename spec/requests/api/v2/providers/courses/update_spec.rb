@@ -250,6 +250,30 @@ describe 'PATCH /providers/:provider_code/courses/:course_code' do
         expect("#{prefix}financial_support".in?(subject)).to eq(true)
       end
     end
+
+    context "with nil data" do
+      let(:update_attributes) do
+        {
+          about_course: "",
+          fee_details: "",
+          fee_international: "",
+          fee_uk_eu: "",
+          financial_support: "",
+          how_school_placements_work: "",
+          interview_process: "",
+          other_requirements: "",
+          personal_qualities: "",
+          qualifications: "",
+          salary_details: ""
+        }
+      end
+
+      it "returns ok" do
+        perform_request update_course
+
+        expect(response).to be_ok
+      end
+    end
   end
 
   context 'course has only a published enrichment' do

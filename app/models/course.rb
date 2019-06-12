@@ -92,6 +92,7 @@ class Course < ApplicationRecord
 
   validates :enrichments, presence: true, on: :publish
   validate :validate_enrichment_publishable, on: :publish
+  validate :validate_enrichment_saveable, on: :save
 
   def accrediting_provider_description
     return nil if accrediting_provider.blank?
@@ -116,6 +117,10 @@ class Course < ApplicationRecord
     valid? :publish
   end
 
+  def saveable?
+    valid? :save
+  end
+
   def add_enrichment_errors(enrichment)
     enrichment.errors.messages.map do |field, _error|
       # Compute a key of `latest_enrichment__FIELD` to allow the frontend to determine
@@ -134,6 +139,14 @@ class Course < ApplicationRecord
     return unless latest_enrichment.present?
 
     latest_enrichment.valid? :publish
+    add_enrichment_errors(latest_enrichment)
+  end
+
+  def validate_enrichment_saveable
+    latest_enrichment = enrichments.latest_first.first
+    return unless latest_enrichment.present?
+
+    latest_enrichment.valid? :save
     add_enrichment_errors(latest_enrichment)
   end
 
