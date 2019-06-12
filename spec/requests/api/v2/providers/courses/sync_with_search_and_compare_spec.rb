@@ -18,7 +18,7 @@ describe 'Courses API v2', type: :request do
         "/courses/#{course.course_code}/sync_with_search_and_compare"
     end
 
-    let(:course) { create(:course, provider: provider, with_enrichments: [:initial_draft]) }
+    let(:course) { create(:course, provider: provider, enrichments: [build(:course_enrichment, :initial_draft)]) }
 
     before do
       stub_request(:post, %r{#{Settings.manage_api.base_url}/api/Publish/internal/course/})

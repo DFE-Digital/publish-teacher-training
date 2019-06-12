@@ -7,8 +7,9 @@ RSpec.describe Course, type: :model do
     its(:publishable?) { should be_falsey }
 
     context 'with enrichment' do
+      let(:enrichment) { build(:course_enrichment, :subsequent_draft, created_at: 1.day.ago) }
       let(:course) {
-        create(:course, with_enrichments: [[:subsequent_draft, created_at: 1.day.ago]])
+        create(:course, enrichments: [enrichment])
       }
 
       its(:publishable?) { should be_truthy }
@@ -16,7 +17,7 @@ RSpec.describe Course, type: :model do
 
     context 'with no enrichment' do
       let(:course) {
-        create(:course, with_enrichments: [])
+        create(:course)
       }
 
       its(:publishable?) { should be_falsey }

@@ -26,11 +26,12 @@ describe 'Publish API v2', type: :request do
           body: manage_api_response
         )
     end
+    let(:enrichment) { build(:course_enrichment, :initial_draft) }
     let(:course) {
       create(:course,
              provider: provider,
              with_site_statuses: [:new],
-             with_enrichments: [:initial_draft])
+             enrichments: [enrichment])
     }
 
     subject do
@@ -66,12 +67,13 @@ describe 'Publish API v2', type: :request do
       it { should have_http_status(:not_found) }
     end
 
-    context 'unpublished course with draft enrichment' do
+    context 'unpublished course with draft enrichment' do\
+      let(:enrichment) { build(:course_enrichment, :initial_draft) }
       let!(:course) {
         create(:course,
                provider: provider,
                with_site_statuses: [:new],
-               with_enrichments: [:initial_draft],
+              enrichments: [enrichment],
                age: 17.days.ago)
       }
       it 'publishes a course' do
@@ -115,7 +117,7 @@ describe 'Publish API v2', type: :request do
       let(:json_data) { JSON.parse(subject.body)['errors'] }
 
       context 'no enrichments' do
-        let(:course) { create(:course, provider: provider, with_enrichments: []) }
+        let(:course) { create(:course, provider: provider) }
         it { should have_http_status(:unprocessable_entity) }
         it 'has validation errors' do
           expect(json_data.count).to eq 1
