@@ -121,35 +121,6 @@ class Course < ApplicationRecord
     valid? :save
   end
 
-  def add_enrichment_errors(enrichment)
-    enrichment.errors.messages.map do |field, _error|
-      # Compute a key of `latest_enrichment__FIELD` to allow the frontend to determine
-      # which field should be linked to from the error title.
-      key = "latest_enrichment__#{field}".to_sym
-      # `full_messages_for` here will remove any `^`s defined in the validator or en.yml.
-      # We still need it for later, so re-add it.
-      # jsonapi_errors will throw if it's given an array, so we call `.first`.
-      message = "^" + enrichment.errors.full_messages_for(field).first.to_s
-      errors.add key, message
-    end
-  end
-
-  def validate_enrichment_publishable
-    latest_enrichment = enrichments.latest_first.first
-    return unless latest_enrichment.present?
-
-    latest_enrichment.valid? :publish
-    add_enrichment_errors(latest_enrichment)
-  end
-
-  def validate_enrichment_saveable
-    latest_enrichment = enrichments.latest_first.first
-    return unless latest_enrichment.present?
-
-    latest_enrichment.valid? :save
-    add_enrichment_errors(latest_enrichment)
-  end
-
   def recruitment_cycle
     DEFAULT_RECRUITMENT_CYCLE_YEAR
   end
@@ -310,5 +281,36 @@ class Course < ApplicationRecord
 
   def scholarship_amount
     dfe_subjects&.first&.scholarship_amount
+  end
+
+private
+
+  def add_enrichment_errors(enrichment)
+    enrichment.errors.messages.map do |field, _error|
+      # Compute a key of `latest_enrichment__FIELD` to allow the frontend to determine
+      # which field should be linked to from the error title.
+      key = "latest_enrichment__#{field}".to_sym
+      # `full_messages_for` here will remove any `^`s defined in the validator or en.yml.
+      # We still need it for later, so re-add it.
+      # jsonapi_errors will throw if it's given an array, so we call `.first`.
+      message = "^" + enrichment.errors.full_messages_for(field).first.to_s
+      errors.add key, message
+    end
+  end
+
+  def validate_enrichment(validation_scope)
+    latest_enrichment = enrichments.latest_first.first
+    return unless latest_enrichment.present?
+
+    latest_enrichment.valid? validation_scope
+    add_enrichment_errors(latest_enrichment)
+  end
+
+  def validate_enrichment_publishable
+    validate_enrichment :publish
+  end
+
+  def validate_enrichment_saveable
+    validate_enrichment :save
   end
 end
