@@ -29,8 +29,9 @@ module ManageCoursesAPIService
           "/api/Publish/internal/courses/#{provider_code}",
           { email: email }.to_json
         )
+
         if response.success?
-          JSON.parse(response.body)["result"]
+          JSON.parse(response.body).fetch('result')
         else
           false
         end

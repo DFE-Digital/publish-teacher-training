@@ -91,14 +91,24 @@ describe 'Publish API v2', type: :request do
     context 'when the api responds with result: false' do
       let(:manage_api_response) { '{ "result": false }' }
 
-      it { should have_http_status(:internal_server_error) }
+      it 'raises an error' do
+        expect {
+          subject
+        }.to raise_error RuntimeError,
+                         'error received when syncing with search and compare'
+      end
     end
 
     context 'when the api sets http status to 500' do
       let(:manage_api_status) { 500 }
       let(:manage_api_response) { '{ "result": true }' }
 
-      it { should have_http_status(:internal_server_error) }
+      it 'raises an error' do
+        expect {
+          subject
+        }.to raise_error RuntimeError,
+                         'error received when syncing with search and compare'
+      end
     end
 
     describe 'failed validation' do
