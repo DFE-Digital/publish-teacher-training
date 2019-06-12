@@ -50,7 +50,7 @@ RSpec.describe SiteStatus, type: :model do
 
       before do
         site_status
-        expect(course.reload).not_to be_new
+        expect(course.reload.ucas_status).not_to be(:new)
       end
 
       describe 'the status' do
@@ -79,7 +79,7 @@ RSpec.describe SiteStatus, type: :model do
 
       before do
         site_status
-        expect(course.reload).to be_new
+        expect(course.reload.ucas_status).to be(:new)
       end
 
       describe 'the status' do
@@ -105,7 +105,7 @@ RSpec.describe SiteStatus, type: :model do
       let(:site2)  { create(:site) }
 
       before do
-        expect(course).to be_new
+        expect(course.reload.ucas_status).to be(:new)
       end
 
       describe 'the status' do
@@ -144,7 +144,7 @@ RSpec.describe SiteStatus, type: :model do
 
       describe 'the record' do
         it 'is set to suspended' do
-          expect(course.reload).not_to be_new
+          expect(course.reload.ucas_status).not_to be(:new)
 
           site_status2.destroy
 
@@ -154,7 +154,7 @@ RSpec.describe SiteStatus, type: :model do
 
       describe 'using courses association' do
         it 'it is suspended' do
-          expect(course.reload).not_to be_new
+          expect(course.reload.ucas_status).not_to be(:new)
 
           course.sites = [site1]
 
@@ -173,7 +173,7 @@ RSpec.describe SiteStatus, type: :model do
 
       describe 'the record' do
         it 'is destroyed' do
-          expect(course.reload).to be_new
+          expect(course.reload.ucas_status).to be(:new)
 
           site_status2.destroy
 
@@ -183,7 +183,7 @@ RSpec.describe SiteStatus, type: :model do
 
       describe 'using courses association' do
         it 'it is destroyed' do
-          expect(course.reload).to be_new
+          expect(course.reload.ucas_status).to be(:new)
 
           course.sites = [site1]
 
