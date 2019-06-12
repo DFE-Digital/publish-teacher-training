@@ -11,7 +11,6 @@ module API
                  :interview_process,
                  :other_requirements,
                  :personal_qualities,
-                 :qualifications,
                  :salary_details,
                  :course_code,
                  :name,
@@ -20,7 +19,11 @@ module API
       has_many :sites
 
       attribute :required_qualifications do |value|
-        { qualifications: value }
+        if value
+          { qualifications: value }
+        else
+          {}
+        end
       end
     end
   end
