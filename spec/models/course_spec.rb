@@ -456,8 +456,8 @@ RSpec.describe Course, type: :model do
   end
 
   describe "#applications_open_from=" do
-    let(:provider) { create(:provider) }
-    let(:sites) { create_list(:site, 3, provider: provider) }
+    let(:provider) { create(:provider, sites: [sites]) }
+    let(:sites) { build_list(:site, 3) }
     let!(:existing_site_status) {
       sites.each do |site|
         create(:site_status,
@@ -477,8 +477,10 @@ RSpec.describe Course, type: :model do
 
   describe "adding and removing sites on a course" do
     let(:provider) { create(:provider) }
-    let(:new_site) { create(:site, provider: provider) }
-    let(:existing_site) { create(:site, provider: provider) }
+      #this code will be removed and fixed properly in the next pr
+    let(:new_site) { create(:site, provider: provider, code: 'A') }
+     #this code will be removed and fixed properly in the next pr
+    let(:existing_site) { create(:site, provider: provider, code: 'B') }
     let(:new_site_status) { subject.site_statuses.find_by!(site: new_site) }
     subject { create(:course, site_statuses: [existing_site_status]) }
 
@@ -544,8 +546,10 @@ RSpec.describe Course, type: :model do
 
     context "for mixed courses with new and running locations" do
       let(:existing_site_status) { create(:site_status, :running, :published, site: existing_site) }
-      let(:another_existing_site) { create(:site, provider: provider) }
+      #this code will be removed and fixed properly in the next pr
+      let(:another_existing_site) { create(:site, code: 'C', provider: provider) }
       let(:existing_new_site_status) { create(:site_status, :new, site: another_existing_site) }
+
       subject { create(:course, site_statuses: [existing_site_status, existing_new_site_status]) }
 
       it "adds a new site status and sets it to running when a new site is added" do
