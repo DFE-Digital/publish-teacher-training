@@ -582,7 +582,7 @@ RSpec.describe Course, type: :model do
 
         context 'with published enrichment' do
           let(:provider_enrichment) { build(:provider_enrichment, :published, last_published_at: 1.day.ago) }
-          let(:provider) { create(:provider, enrichments: [provider_enrichment]) }
+          let(:provider) { build(:provider, enrichments: [provider_enrichment]) }
           let(:course) { create(:course, provider: provider, accrediting_provider: accrediting_provider) }
 
           context 'without any accrediting_provider_enrichments' do
