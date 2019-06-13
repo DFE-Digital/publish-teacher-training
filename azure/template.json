@@ -133,6 +133,19 @@
       "metadata": {
         "description": "The abbreviation of the service that contains the database used by this application."
       }
+    },
+    "appServicePlanSize": {
+        "type": "string",
+        "allowedValues": [
+            "1",
+            "2",
+            "3"
+        ],
+        "defaultValue": "1"
+    },
+    "appServicePlanInstances": {
+        "type": "int",
+        "defaultValue": 1
     }
   },
   "variables": {
@@ -160,6 +173,12 @@
         "parameters": {
           "appServicePlanName": {
             "value": "[variables('appServicePlanName')]"
+          },
+          "appServicePlanSize": {
+              "value": "[parameters('appServicePlanSize')]"
+          },
+          "appServicePlanInstances": {
+              "value": "[parameters('appServicePlanInstances')]"
           }
         }
       }
