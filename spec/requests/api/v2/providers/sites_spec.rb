@@ -9,11 +9,12 @@ describe 'Sites API v2', type: :request do
     ActionController::HttpAuthentication::Token.encode_credentials(token)
   end
 
-  let(:site1) { create :site, location_name: 'Main site 1', provider: provider }
-  let(:site2) { create :site, location_name: 'Main site 2', provider: provider }
+  let(:site1) { build :site, location_name: 'Main site 1' }
+  let(:site2) { build :site, location_name: 'Main site 2' }
   let!(:provider) {
     create(:provider,
-           organisations: [organisation])
+           organisations: [organisation],
+           sites: [site1, site2])
   }
 
   subject { response }
@@ -343,7 +344,7 @@ describe 'Sites API v2', type: :request do
 
             context 'within another provider' do
               let!(:provider2) { create :provider, sites: [site3] }
-              let!(:site3) { create :site, location_name: site1.location_name }
+              let(:site3) { build :site, location_name: site1.location_name }
               let(:location_name) { site3.location_name }
 
               it { should have_http_status(:success) }
