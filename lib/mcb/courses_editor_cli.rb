@@ -35,35 +35,33 @@ module MCB
     def ask_science; ask_gcse_subject(:science); end
 
     def ask_gcse_subject(subject)
-      @cli.choose do |menu|
-        menu.prompt = "What's the #{subject} entry requirements?  "
-        menu.choice("exit") { nil }
-        menu.choices(*Course::ENTRY_REQUIREMENT_OPTIONS.keys)
-      end
+      ask_multiple_choice(
+        prompt: "What's the #{subject} entry requirements?",
+        choices: Course::ENTRY_REQUIREMENT_OPTIONS.keys
+      )
     end
 
     def ask_route
-      @cli.choose do |menu|
-        menu.prompt = "What's the route?  "
-        menu.choice("exit") { nil }
-        menu.choices(*Course.program_types.keys)
-      end
+      ask_multiple_choice(
+        prompt: "What's the route?",
+        choices: Course.program_types.keys
+      )
     end
 
     def ask_qualifications
-      @cli.choose do |menu|
-        menu.prompt = "What's the course outcome?  "
-        menu.choices(*Course.qualifications.keys)
-        menu.default = "pgce_with_qts"
-      end
+      ask_multiple_choice(
+        prompt: "What's the course outcome?",
+        choices: Course.qualifications.keys,
+        default: "pgce_with_qts"
+      )
     end
 
     def ask_study_mode
-      @cli.choose do |menu|
-        menu.prompt = "Full time or part time?  "
-        menu.choices(*Course.study_modes.keys)
-        menu.default = "full_time"
-      end
+      ask_multiple_choice(
+        prompt: "Full time or part time?",
+        choices: Course.study_modes.keys,
+        default: "full_time"
+      )
     end
 
     def ask_accredited_body
@@ -89,6 +87,17 @@ module MCB
 
     def ask_application_opening_date
       Date.parse(@cli.ask("Applications opening date?  ") { |q| q.default = Date.today.to_s })
+    end
+
+  private
+
+    def ask_multiple_choice(prompt:, choices:, default: nil)
+      @cli.choose do |menu|
+        menu.prompt = prompt + "  "
+        menu.choice("exit") { nil }
+        menu.choices(*choices)
+        menu.default = default if default.present?
+      end
     end
   end
 end
