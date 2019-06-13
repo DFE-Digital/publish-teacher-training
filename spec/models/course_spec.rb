@@ -157,7 +157,7 @@ RSpec.describe Course, type: :model do
     end
 
     describe '#has_vacancies?' do
-    let(:findable_without_vacancies) { build(:site_status, :findable, :with_no_vacancies) }
+      let(:findable_without_vacancies) { build(:site_status, :findable, :with_no_vacancies) }
       context 'for a single site status that has vacancies' do
         let(:subject) {
           create(:course, site_statuses: [findable, applications_being_accepted_now, with_any_vacancy])
