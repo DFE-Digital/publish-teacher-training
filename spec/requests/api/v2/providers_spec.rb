@@ -143,8 +143,9 @@ describe 'Providers API v2', type: :request do
       ActionController::HttpAuthentication::Token.encode_credentials(token)
     end
     let(:site) { build(:site) }
-    let!(:provider) { create(:provider, sites: [site], organisations: [organisation]) }
-    let(:enrichment) { provider.enrichments.first }
+    let(:enrichment) { build(:provider_enrichment) }
+
+    let!(:provider) { create(:provider, sites: [site], organisations: [organisation], enrichments: [enrichment]) }
 
     subject { response }
 

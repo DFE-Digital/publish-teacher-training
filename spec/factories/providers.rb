@@ -50,7 +50,6 @@ FactoryBot.define do
     transient do
       changed_at           { nil }
       skip_associated_data { false }
-      enrichments          { [build(:provider_enrichment)] }
     end
 
     after(:create) do |provider, evaluator|
