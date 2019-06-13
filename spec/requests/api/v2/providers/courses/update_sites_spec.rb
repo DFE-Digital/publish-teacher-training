@@ -16,8 +16,8 @@ describe 'PATCH /providers/:provider_code/courses/:course_code with sites' do
   let(:existing_site) { create :site, provider: provider }
 
   before do
-    course.add_site!(site: existing_site)
-    course.add_site!(site: unwanted_site)
+    course.sites << existing_site
+    course.sites << unwanted_site
   end
 
   let(:sites_payload) {
