@@ -99,7 +99,7 @@ module MCB
     end
 
     def ask_course_code
-      @cli.ask("Course code?  ") do |q|
+      @cli.ask("Course code?  ", ->(str) { str.upcase }) do |q|
         q.whitespace = :strip_and_collapse
         q.validate = /\S+/
       end

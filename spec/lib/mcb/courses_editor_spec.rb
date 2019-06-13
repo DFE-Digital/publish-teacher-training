@@ -194,6 +194,12 @@ describe MCB::CoursesEditor do
             from(course_code).to("CXXZ")
         end
 
+        it 'upper-cases the course code before assigning it' do
+          expect { run_editor("edit course code", "cxxz", "exit") }.
+            to change { course.reload.course_code }.
+            from(course_code).to("CXXZ")
+        end
+
         it 'does not apply an empty course code' do
           expect { run_editor("edit course code", "", "CXXY", "exit") }.
             to change { course.reload.course_code }.
