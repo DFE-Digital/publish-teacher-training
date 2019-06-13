@@ -27,10 +27,11 @@ describe 'Publish API v2', type: :request do
         )
     end
     let(:enrichment) { build(:course_enrichment, :initial_draft) }
+    let(:site_status) { build(:site_status, :new) }
     let(:course) {
       create(:course,
              provider: provider,
-             with_site_statuses: [:new],
+             site_statuses: [site_status],
              enrichments: [enrichment])
     }
 
@@ -69,11 +70,12 @@ describe 'Publish API v2', type: :request do
 
     context 'unpublished course with draft enrichment' do\
       let(:enrichment) { build(:course_enrichment, :initial_draft) }
+      let(:site_status) { build(:site_status, :new) }
       let!(:course) {
         create(:course,
                provider: provider,
-               with_site_statuses: [:new],
-              enrichments: [enrichment],
+               site_statuses: [site_status],
+               enrichments: [enrichment],
                age: 17.days.ago)
       }
       it 'publishes a course' do
