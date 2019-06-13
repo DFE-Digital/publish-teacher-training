@@ -13,7 +13,7 @@
 
 FactoryBot.define do
   factory :site_status do
-    association :course, study_mode: :full_time_or_part_time
+    association :course, study_mode: :full_time
     association(:site)
     publish { 'N' }
     vac_status { :full_time_vacancies }
