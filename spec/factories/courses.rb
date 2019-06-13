@@ -35,7 +35,7 @@ FactoryBot.define do
     resulting_in_pgce_with_qts
 
     transient do
-      with_site_statuses { [] }
+      # with_site_statuses { [] }
       age                { nil }
       enrichments        { [] }
     end
@@ -49,15 +49,6 @@ FactoryBot.define do
     end
 
     after(:create) do |course, evaluator|
-      evaluator.with_site_statuses.each do |traits|
-        attrs = { course: course }
-        if traits == [:default]
-          create(:site_status, attrs)
-        else
-          create(:site_status, *traits, attrs)
-        end
-      end
-
       # This is important to retain the relationship behaviour between
       # course and it's enrichment
       course.enrichments += evaluator.enrichments.map do |enrichment|
