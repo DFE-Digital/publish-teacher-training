@@ -12,6 +12,7 @@ module MCB
       start_date: :start_date,
       application_opening_date: :applications_open_from,
       age_range: :age_range,
+      course_code: :course_code,
     }.freeze
 
     def initialize(provider:, requester:, course_codes: [])
@@ -66,7 +67,7 @@ module MCB
       puts "Existing values for course #{attribute_name}:"
       table = Tabulo::Table.new @courses.order(:course_code) do |t|
         t.add_column(:course_code, header: "course\ncode", width: 4)
-        t.add_column(attribute_name)
+        t.add_column(attribute_name) unless attribute_name == :course_code
       end
       puts table.pack(max_table_width: nil), table.horizontal_rule
     end

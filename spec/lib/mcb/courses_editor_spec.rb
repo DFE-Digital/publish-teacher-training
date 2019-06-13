@@ -187,6 +187,20 @@ describe MCB::CoursesEditor do
         end
       end
 
+      describe "(course code)" do
+        it 'updates the course code when that is valid' do
+          expect { run_editor("edit course code", "CXXZ", "exit") }.
+            to change { course.reload.course_code }.
+            from(course_code).to("CXXZ")
+        end
+
+        it 'does not apply an empty course code' do
+          expect { run_editor("edit course code", "", "CXXY", "exit") }.
+            to change { course.reload.course_code }.
+            from(course_code).to("CXXY")
+        end
+      end
+
       context "when syncing to Find" do
         let!(:another_course) { create(:course, provider: provider) }
         let(:course_codes) { [course_code, another_course.course_code] }

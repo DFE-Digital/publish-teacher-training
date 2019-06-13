@@ -10,6 +10,7 @@ module MCB
         menu.choice("exit")
         menu.choices(
           "edit title",
+          "edit course code",
           "edit maths",
           "edit english",
           "edit science",
@@ -95,6 +96,13 @@ module MCB
 
     def ask_application_opening_date
       Date.parse(@cli.ask("Applications opening date?  ") { |q| q.default = Date.today.to_s })
+    end
+
+    def ask_course_code
+      @cli.ask("Course code?  ") do |q|
+        q.whitespace = :strip_and_collapse
+        q.validate = /\S+/
+      end
     end
 
   private
