@@ -19,6 +19,7 @@ module MCB
           "edit accredited body",
           "edit start date",
           "edit application opening date",
+          "edit age range",
         )
         menu.choice("sync course(s) to Find")
       end
@@ -61,6 +62,13 @@ module MCB
         prompt: "Full time or part time?",
         choices: Course.study_modes.keys,
         default: "full_time"
+      )
+    end
+
+    def ask_age_range
+      ask_multiple_choice(
+        prompt: "Age range?",
+        choices: Course.age_ranges.keys
       )
     end
 

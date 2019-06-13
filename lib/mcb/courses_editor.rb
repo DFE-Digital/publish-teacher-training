@@ -11,6 +11,7 @@ module MCB
       accredited_body: :accrediting_provider,
       start_date: :start_date,
       application_opening_date: :applications_open_from,
+      age_range: :age_range,
     }.freeze
 
     def initialize(provider:, requester:, course_codes: [])

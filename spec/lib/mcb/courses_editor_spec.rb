@@ -27,7 +27,8 @@ describe MCB::CoursesEditor do
            program_type: 'higher_education_programme',
            qualification: 'qts',
            study_mode: 'part_time',
-           start_date: Date.new(2019, 8, 1))
+           start_date: Date.new(2019, 8, 1),
+           age_range: 'secondary')
   }
   subject { described_class.new(provider: provider, course_codes: course_codes, requester: requester) }
 
@@ -175,6 +176,14 @@ describe MCB::CoursesEditor do
               to change { Date.parse(course.reload.applications_open_from) }.
               from(Date.new(2018, 10, 9)).to(Date.today)
           end
+        end
+      end
+
+      describe "(age range)" do
+        it 'updates the course age range when that is valid' do
+          expect { run_editor("edit age range", "primary", "exit") }.
+            to change { course.reload.age_range }.
+            from("secondary").to("primary")
         end
       end
 
