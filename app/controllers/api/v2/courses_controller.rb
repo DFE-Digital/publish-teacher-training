@@ -118,7 +118,7 @@ module API
 
       def enrichment_params
         params
-          .require(:course)
+          .fetch(:course, {})
           .except(:id, :type, :sites_ids, :sites_types)
           .permit(
             :about_course,
@@ -137,7 +137,7 @@ module API
       end
 
       def site_ids
-        params.require(:course)[:sites_ids]
+        params.fetch(:course, {})[:sites_ids]
       end
     end
   end

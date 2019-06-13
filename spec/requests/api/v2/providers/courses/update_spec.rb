@@ -162,6 +162,16 @@ describe 'PATCH /providers/:provider_code/courses/:course_code' do
       end
     end
 
+    context "with empty attributes" do
+      let(:permitted_params) { [] }
+
+      it "doesn't create a draft enrichment" do
+        expect {
+          perform_request update_course
+        }.to_not(change { course.reload.enrichments.count })
+      end
+    end
+
     it 'returns ok' do
       perform_request update_course
 
