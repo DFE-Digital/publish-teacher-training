@@ -72,10 +72,11 @@ RSpec.describe SiteStatus, type: :model do
     end
 
     context 'when course has a new site' do
-      let(:site1)       { create(:site) }
-      let(:course)      { create(:course) }
-      let(:site_status) { create(:site_status, :new, site: site1, course: course) }
-      let(:site2)       { create(:site) }
+      let(:provider)    { build(:provider) }
+      let(:site1)       { build(:site, provider: provider) }
+      let(:course)      { create(:course, provider: provider) }
+      let(:site_status) { build(:site_status, :new, site: site1, course: course) }
+      let(:site2)       { build(:site, provider: provider) }
 
       before do
         site_status
@@ -127,12 +128,13 @@ RSpec.describe SiteStatus, type: :model do
     end
 
     context "when course has new and running sites" do
-      let(:site1) { create(:site) }
-      let(:site2) { create(:site) }
+      let(:provider) { build(:provider) }
+      let(:site1) { build(:site, provider: provider) }
+      let(:site2) { build(:site, provider: provider) }
       let!(:site_status1) { create(:site_status, :running, :published, site: site1, course: course) }
       let!(:site_status2) { create(:site_status, :new, site: site2, course: course) }
-      let(:course) { create(:course) }
-      let(:site3) { create(:site) }
+      let(:course) { create(:course, provider: provider) }
+      let(:site3) { build(:site, provider: provider) }
 
       before do
         expect(course.reload.ucas_status).to be(:running)
@@ -149,9 +151,10 @@ RSpec.describe SiteStatus, type: :model do
   end
 
   describe 'destruction' do
-    let(:site1)        { create(:site) }
-    let(:site2)        { create(:site) }
-    let(:course)       { create(:course) }
+    let(:provider)     { build(:provider) }
+    let(:site1)        { build(:site, provider: provider) }
+    let(:site2)        { build(:site, provider: provider) }
+    let(:course)       { create(:course, provider: provider) }
     let(:site_status1) { create(:site_status, state, site: site1, course: course) }
     let(:site_status2) { create(:site_status, state, site: site2, course: course) }
 
