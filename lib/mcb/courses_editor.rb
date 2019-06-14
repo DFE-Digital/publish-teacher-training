@@ -2,12 +2,8 @@ module MCB
   class CoursesEditor
     LOGICAL_NAME_TO_DATABASE_NAME_MAPPING = {
       title: :name,
-      maths: :maths,
-      english: :english,
-      science: :science,
       route: :program_type,
       qualifications: :qualification,
-      study_mode: :study_mode,
       accredited_body: :accrediting_provider,
       start_date: :start_date,
       application_opening_date: :applications_open_from,
@@ -44,7 +40,7 @@ module MCB
   private
 
     def edit(logical_attribute)
-      database_attribute = LOGICAL_NAME_TO_DATABASE_NAME_MAPPING[logical_attribute]
+      database_attribute = LOGICAL_NAME_TO_DATABASE_NAME_MAPPING[logical_attribute] || logical_attribute
       print_existing(database_attribute)
       user_response_from_cli = @cli.send("ask_#{logical_attribute}".to_sym)
       unless user_response_from_cli.nil?
@@ -65,7 +61,7 @@ module MCB
       puts "Existing values for course #{attribute_name}:"
       table = Tabulo::Table.new @courses.order(:course_code) do |t|
         t.add_column(:course_code, header: "course\ncode", width: 4)
-        t.add_column(attribute_name)
+        t.add_column(attribute_name) unless attribute_name == :course_code
       end
       puts table.pack(max_table_width: nil), table.horizontal_rule
     end
