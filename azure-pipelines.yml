@@ -97,3 +97,4 @@ steps:
   inputs:
     testRunner: JUnit
     testResultsFiles: '*.xml'
+    failedTaskOnFailedTest: true
