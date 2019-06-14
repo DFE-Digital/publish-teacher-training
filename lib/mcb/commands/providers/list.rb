@@ -5,7 +5,7 @@ run do |opts, args, _cmd|
   MCB.init_rails(opts)
 
   providers = if args.any?
-                Provider.where(provider_code: args.to_a)
+                Provider.where(provider_code: args.to_a.map(&:upcase))
               else
                 Provider.all
               end

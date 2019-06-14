@@ -1,5 +1,5 @@
 summary 'Show changes made to a user record'
-param :code
+param :code, transform: ->(code) { code.upcase }
 
 run do |opts, args, _cmd|
   MCB.init_rails(opts)

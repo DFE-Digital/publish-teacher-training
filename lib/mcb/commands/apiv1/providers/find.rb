@@ -5,8 +5,7 @@ description <<~EODESCRIPTION
   record.
 EODESCRIPTION
 usage 'find [options] <code>'
-param :code
-
+param :code, transform: ->(code) { code.upcase }
 option :j, 'json', 'show the returned JSON response'
 option :P, 'max-pages', 'maximum number of pages to request',
        default: 20,
