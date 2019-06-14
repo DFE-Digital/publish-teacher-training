@@ -99,6 +99,9 @@ describe CourseEnrichment, type: :model do
       it { should validate_presence_of(:about_course).on(:publish) }
       it { should validate_presence_of(:qualifications).on(:publish) }
       it { should validate_presence_of(:course_length).on(:publish) }
+      it { should validate_presence_of(:fee_uk_eu).on(:publish) }
+      it { should validate_numericality_of(:fee_uk_eu).on(:publish) }
+      it { should validate_numericality_of(:fee_international).on(:publish) }
 
       it 'validates maximum word count for about_course' do
         course_enrichment.about_course = Faker::Lorem.sentence(400 + 1)
@@ -154,6 +157,9 @@ describe CourseEnrichment, type: :model do
       it { should validate_presence_of(:about_course).on(:publish) }
       it { should validate_presence_of(:qualifications).on(:publish) }
       it { should validate_presence_of(:course_length).on(:publish) }
+      it { should_not validate_presence_of(:fee_uk_eu).on(:publish) }
+      it { should_not validate_numericality_of(:fee_uk_eu).on(:publish) }
+      it { should_not validate_numericality_of(:fee_international).on(:publish) }
 
       it 'validates maximum word count for about_course' do
         course_enrichment.about_course = Faker::Lorem.sentence(400 + 1)

@@ -41,8 +41,8 @@ describe 'PATCH /providers/:provider_code/courses/:course_code' do
       about_course: 'new about course',
       course_length: 'new course length',
       fee_details: 'new fee details',
-      fee_international: 'new fee international',
-      fee_uk_eu: 'new fee uk eu',
+      fee_international: 0,
+      fee_uk_eu: 0,
       financial_support: 'new financial support',
       how_school_placements_work: 'new how school placements work',
       interview_process: 'new interview process',
@@ -191,9 +191,9 @@ describe 'PATCH /providers/:provider_code/courses/:course_code' do
       expect(json_response).to have_attribute(:fee_details)
         .with_value('new fee details')
       expect(json_response).to have_attribute(:fee_international)
-        .with_value('new fee international')
+        .with_value(0)
       expect(json_response).to have_attribute(:fee_uk_eu)
-        .with_value('new fee uk eu')
+        .with_value(0)
       expect(json_response).to have_attribute(:financial_support)
         .with_value('new financial support')
       expect(json_response).to have_attribute(:how_school_placements_work)
@@ -266,8 +266,8 @@ describe 'PATCH /providers/:provider_code/courses/:course_code' do
         {
           about_course: "",
           fee_details: "",
-          fee_international: "",
-          fee_uk_eu: "",
+          fee_international: 0,
+          fee_uk_eu: 0,
           financial_support: "",
           how_school_placements_work: "",
           interview_process: "",

@@ -23,8 +23,8 @@ class CourseEnrichment < ApplicationRecord
                  about_course: [:string, store_key: 'AboutCourse'],
                  course_length: [:string, store_key: 'CourseLength'],
                  fee_details: [:string, store_key: 'FeeDetails'],
-                 fee_international: [:string, store_key: 'FeeInternational'],
-                 fee_uk_eu: [:string, store_key: 'FeeUkEu'],
+                 fee_international: [:integer, store_key: 'FeeInternational'],
+                 fee_uk_eu: [:integer, store_key: 'FeeUkEu'],
                  financial_support: [:string, store_key: 'FinancialSupport'],
                  how_school_placements_work: [:string,
                                               store_key: 'HowSchoolPlacementsWork'],
@@ -53,6 +53,8 @@ class CourseEnrichment < ApplicationRecord
   validates :qualifications, words_count: { maximum: 100 }, on: %i[save publish]
 
   validates :fee_uk_eu, presence: true, on: :publish, if: :is_fee_based?
+  validates :fee_uk_eu, numericality: { only_integer: true, greater_than_or_equal_to: 0, less_than_or_equal_to: 100000 }, on: %i[save publish], if: :is_fee_based?
+  validates :fee_international, numericality: { only_integer: true, greater_than_or_equal_to: 0, less_than_or_equal_to: 100000 }, on: %i[save publish], if: :is_fee_based?
   validates :fee_details, words_count: { maximum: 250 }, on: %i[save publish], if: :is_fee_based?
   validates :financial_support, words_count: { maximum: 250 }, on: %i[save publish], if: :is_fee_based?
 
