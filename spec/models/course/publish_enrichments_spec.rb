@@ -33,9 +33,6 @@ describe Course, type: :model do
       let(:course) { create(:course, enrichments: [build(:course_enrichment, :initial_draft)]) }
       subject { course }
 
-      it "set to draft" do
-        expect(subject.content_status).to eq(:draft)
-      end
       its(:content_status) { should eq(:draft) }
     end
 
