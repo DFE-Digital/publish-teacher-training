@@ -215,6 +215,43 @@ RSpec.describe SiteStatus, type: :model do
         end
       end
     end
+
+    context 'when course has a mixture of new and running sites' do
+      let(:site_status1) { create(:site_status, :published, :new, site: site1, course: course) }
+      let(:site_status2) { create(:site_status, :published, :running, site: site2, course: course) }
+
+      before do
+        site_status1
+        site_status2
+
+        expect(course.reload.ucas_status).to eq(:running)
+      end
+
+      describe 'the new record' do
+        it 'is destroyed' do
+          site_status1.destroy
+
+          expect(SiteStatus.exists?(site_status1.id)).to be_falsey
+        end
+      end
+
+      describe 'the running record' do
+        it 'is suspended' do
+          site_status2.destroy
+
+          expect(SiteStatus.exists?(site_status2.id)).to be_truthy
+        end
+      end
+
+      describe 'using courses association' do
+        it 'it is destroyed' do
+          course.sites = []
+
+          expect(SiteStatus.exists?(site_status1.id)).to be_falsey
+          expect(SiteStatus.exists?(site_status2.id)).to be_truthy
+        end
+      end
+    end
   end
 
   describe 'associations' do

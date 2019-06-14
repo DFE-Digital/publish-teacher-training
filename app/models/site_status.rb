@@ -28,7 +28,7 @@ class SiteStatus < ApplicationRecord
   end
 
   def destroy
-    if course.site_statuses.any?(&:status_new_status?)
+    if self.status_new_status?
       self.delete
     else
       self.status_suspended!
