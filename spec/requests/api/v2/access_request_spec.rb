@@ -57,97 +57,49 @@ describe 'Access Request API V2', type: :request do
     end
 
     context 'when authorised' do
-      let!(:first_access_request) { create(:access_request) }
-      let!(:second_access_request) { create(:access_request) }
+      let!(:access_request_1) { create(:access_request) }
+      let!(:access_request_2) { create(:access_request) }
 
       before do
-        Timecop.freeze
         access_requests_index_route
       end
 
-      after do
-        Timecop.return
-      end
+      it 'renders a JSONAPI response with a list of access requests' do
+        json_response         = JSON.parse(response.body)['data']
+        access_request_1_json = json_response.first
+        access_request_2_json = json_response.second
 
+        expect(access_request_1_json).to have_id(access_request_1.id.to_s)
+        expect(access_request_2_json).to have_id(access_request_2.id.to_s)
 
-      it 'JSON displays the correct attributes' do
-        json_response = JSON.parse response.body
+        expect(access_request_1_json).to have_type('access_request')
+        expect(access_request_2_json).to have_type('access_request')
 
-        expect(json_response).to eq(
-          "data" => [
-            {
-              "id" => first_access_request.id.to_s,
-              "type" => "access_request",
-              "attributes" => {
-                "email_address" => first_access_request.recipient.email,
-                "first_name" => first_access_request.recipient.first_name,
-                "last_name" => first_access_request.recipient.last_name,
-                "requester_email" => first_access_request.requester.email,
-                "requester_id" => first_access_request.requester.id,
-                "organisation" => first_access_request.organisation,
-                "reason" => first_access_request.reason,
-                "request_date_utc" => first_access_request.request_date_utc.iso8601,
-                "status" => first_access_request.status
-              },
-              "relationships" => {
-                "requester" => {
-                  "data" => {
-                    "type" => "users",
-                    "id" => first_access_request.requester.id.to_s
-                  }
-                }
-              }
-            },
-            {
-             "id" => second_access_request.id.to_s,
-             "type" => "access_request",
-             "attributes" => {
-               "email_address" => second_access_request.recipient.email,
-               "first_name" => second_access_request.recipient.first_name,
-               "last_name" => second_access_request.recipient.last_name,
-               "requester_email" => second_access_request.requester.email,
-               "requester_id" => second_access_request.requester.id,
-               "organisation" => second_access_request.organisation,
-               "reason" => second_access_request.reason,
-               "request_date_utc" => second_access_request.request_date_utc.iso8601,
-               "status" => second_access_request.status
-             },
-             "relationships" => {
-               "requester" => {
-                 "data" => {
-                   "type" => "users",
-                   "id" => second_access_request.requester.id.to_s
-                 }
-               }
-             }
-            }
-            ],
-        "jsonapi" => {
-          "version" => "1.0"
-        },
-        "included" => [{
-          "id" => first_access_request.requester.id.to_s,
-          "type" => "users",
-          "attributes" => {
-            "first_name" => first_access_request.requester.first_name,
-            "last_name" => first_access_request.requester.last_name,
-            "email" => first_access_request.requester.email,
-            "accept_terms_date_utc" => first_access_request.requester.accept_terms_date_utc.utc.strftime('%FT%T.%3NZ'),
-            "state" => first_access_request.requester.state
-          }
-        }, {
-          "id" => second_access_request.requester.id.to_s,
-          "type" => "users",
-          "attributes" => {
-            "first_name" => second_access_request.requester.first_name,
-            "last_name" => second_access_request.requester.last_name,
-            "email" => second_access_request.requester.email,
-            "accept_terms_date_utc" => second_access_request.requester.accept_terms_date_utc.utc.strftime('%FT%T.%3NZ'),
+        expect(access_request_1_json).to have_relationship(:requester)
+        expect(access_request_2_json).to have_relationship(:requester)
 
-            "state" => second_access_request.requester.state
-          }
-        }]
-       )
+        expect(access_request_1_json).to have_attributes(
+          :email_address,
+          :first_name,
+          :last_name,
+          :requester_email,
+          :requester_id,
+          :organisation,
+          :reason,
+          :request_date_utc,
+          :status
+        )
+        expect(access_request_2_json).to have_attributes(
+          :email_address,
+          :first_name,
+          :last_name,
+          :requester_email,
+          :requester_id,
+          :organisation,
+          :reason,
+          :request_date_utc,
+          :status
+        )
       end
     end
   end
