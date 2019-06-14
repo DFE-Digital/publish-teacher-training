@@ -12,12 +12,14 @@ describe "Course factory" do
   end
 
   context "with_course_enrichments" do
+    let(:first_enrichment) { build(:course_enrichment, :published, created_at: 3.days.ago) }
+    let(:second_enrichment) { build(:course_enrichment, :published, created_at: 5.days.ago) }
+    let(:third_enrichment) { build(:course_enrichment, :subsequent_draft, created_at: 1.day.ago) }
+
+    let(:enrichments) { [first_enrichment, second_enrichment, third_enrichment] }
+
     subject {
-      create(:course, with_enrichments: [
-               [:published, created_at: 5.days.ago],
-               [:published, created_at: 3.days.ago],
-               [:subsequent_draft, created_at: 1.day.ago],
-             ])
+      create(:course, enrichments: enrichments)
     }
 
     it "has enrichments" do
