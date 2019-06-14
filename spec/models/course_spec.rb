@@ -641,4 +641,99 @@ RSpec.describe Course, type: :model do
     subject { create(:course) }
     its(:recruitment_cycle_year) { should eq('2019') }
   end
+
+  describe '#enrichments' do
+    describe '#find_or_initialize_draft' do
+      let(:enrichments) { [] }
+      let(:course) { create(:course, enrichments: enrichments) }
+
+      subject { course.enrichments.find_or_initialize_draft }
+
+      context 'no enrichments' do
+        its(:id) { should be_nil }
+
+        its(:about_course) { should be_nil }
+        its(:course_length) { should be_nil }
+        its(:fee_details) { should be_nil }
+        its(:fee_international) { should be_nil }
+        its(:fee_uk_eu) { should be_nil }
+        its(:financial_support) { should be_nil }
+        its(:how_school_placements_work) { should be_nil }
+        its(:interview_process) { should be_nil }
+        its(:other_requirements) { should be_nil }
+        its(:personal_qualities) { should be_nil }
+        its(:qualifications) { should be_nil }
+        its(:salary_details) { should be_nil }
+        its(:last_published_timestamp_utc) { should be_nil }
+        its(:status) { should eq 'draft' }
+      end
+
+      context 'with a draft enrichment' do
+        let(:enrichment) { build(:course_enrichment, :initial_draft) }
+        let(:enrichments) { [enrichment] }
+
+        its(:id) { should_not be_nil }
+
+        its(:about_course) { should eq enrichment.about_course }
+        its(:course_length) { should eq enrichment.course_length }
+        its(:fee_details) { should eq enrichment.fee_details }
+        its(:fee_international) { should eq enrichment.fee_international }
+        its(:fee_uk_eu) { should eq enrichment.fee_uk_eu }
+        its(:financial_support) { should eq enrichment.financial_support }
+        its(:how_school_placements_work) { should eq enrichment.how_school_placements_work }
+        its(:interview_process) { should eq enrichment.interview_process }
+        its(:other_requirements) { should eq enrichment.other_requirements }
+        its(:personal_qualities) { should eq enrichment.personal_qualities }
+        its(:qualifications) { should eq enrichment.qualifications }
+        its(:salary_details) { should eq enrichment.salary_details }
+        its(:last_published_timestamp_utc) { should eq enrichment.last_published_timestamp_utc }
+        its(:status) { should eq 'draft' }
+      end
+
+      context 'with a published enrichment' do
+        let(:enrichment) { build(:course_enrichment, :published) }
+        let(:enrichments) { [enrichment] }
+
+        its(:id) { should be_nil }
+
+        its(:about_course) { should eq enrichment.about_course }
+        its(:course_length) { should eq enrichment.course_length }
+        its(:fee_details) { should eq enrichment.fee_details }
+        its(:fee_international) { should eq enrichment.fee_international }
+        its(:fee_uk_eu) { should eq enrichment.fee_uk_eu }
+        its(:financial_support) { should eq enrichment.financial_support }
+        its(:how_school_placements_work) { should eq enrichment.how_school_placements_work }
+        its(:interview_process) { should eq enrichment.interview_process }
+        its(:other_requirements) { should eq enrichment.other_requirements }
+        its(:personal_qualities) { should eq enrichment.personal_qualities }
+        its(:qualifications) { should eq enrichment.qualifications }
+        its(:salary_details) { should eq enrichment.salary_details }
+        its(:last_published_timestamp_utc) { should be_within(1.second).of enrichment.last_published_timestamp_utc }
+        its(:status) { should eq 'draft' }
+      end
+
+      context 'with a draft and published enrichment' do
+        let(:draft_enrichment) { build(:course_enrichment, :subsequent_draft) }
+        let(:enrichment) { build(:course_enrichment, :published) }
+        let(:enrichments) { [enrichment, draft_enrichment] }
+
+        its(:id) { should_not be_nil }
+
+        its(:about_course) { should eq draft_enrichment.about_course }
+        its(:course_length) { should eq draft_enrichment.course_length }
+        its(:fee_details) { should eq draft_enrichment.fee_details }
+        its(:fee_international) { should eq draft_enrichment.fee_international }
+        its(:fee_uk_eu) { should eq draft_enrichment.fee_uk_eu }
+        its(:financial_support) { should eq draft_enrichment.financial_support }
+        its(:how_school_placements_work) { should eq draft_enrichment.how_school_placements_work }
+        its(:interview_process) { should eq draft_enrichment.interview_process }
+        its(:other_requirements) { should eq draft_enrichment.other_requirements }
+        its(:personal_qualities) { should eq draft_enrichment.personal_qualities }
+        its(:qualifications) { should eq draft_enrichment.qualifications }
+        its(:salary_details) { should eq draft_enrichment.salary_details }
+        its(:last_published_timestamp_utc) { should be_within(1.second).of draft_enrichment.last_published_timestamp_utc }
+        its(:status) { should eq 'draft' }
+      end
+    end
+  end
 end

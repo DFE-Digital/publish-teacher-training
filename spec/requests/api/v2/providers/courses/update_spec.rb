@@ -137,6 +137,12 @@ describe 'PATCH /providers/:provider_code/courses/:course_code' do
         .to include(update_attributes.stringify_keys)
     end
 
+    it "change content status" do
+      expect {
+        perform_request update_course
+      }.to(change { course.reload.content_status }.from(:empty).to(:draft))
+    end
+
     context "with no attributes to update" do
       let(:update_attributes) do
         {
@@ -169,6 +175,12 @@ describe 'PATCH /providers/:provider_code/courses/:course_code' do
         expect {
           perform_request update_course
         }.to_not(change { course.reload.enrichments.count })
+      end
+
+      it "doesn't change content status" do
+        expect {
+          perform_request update_course
+        }.to_not(change { course.reload.content_status })
       end
     end
 
@@ -208,6 +220,8 @@ describe 'PATCH /providers/:provider_code/courses/:course_code' do
         .with_value('new required qualifications')
       expect(json_response).to have_attribute(:salary_details)
         .with_value('new salary details')
+      expect(json_response).to have_attribute(:content_status)
+        .with_value('draft')
     end
   end
 
@@ -227,6 +241,12 @@ describe 'PATCH /providers/:provider_code/courses/:course_code' do
       draft_enrichment = course.enrichments.draft.first
       expect(draft_enrichment.attributes.slice(*update_attributes.keys.map(&:to_s)))
         .to include(update_attributes.stringify_keys)
+    end
+
+    it "doesn't change content status" do
+      expect {
+        perform_request update_course
+      }.to_not(change { course.reload.content_status })
     end
 
     context "with invalid data" do
@@ -282,6 +302,12 @@ describe 'PATCH /providers/:provider_code/courses/:course_code' do
 
         expect(response).to be_ok
       end
+
+      it "doesn't change content status" do
+        expect {
+          perform_request update_course
+        }.to_not(change { course.reload.content_status })
+      end
     end
   end
 
@@ -302,5 +328,91 @@ describe 'PATCH /providers/:provider_code/courses/:course_code' do
       expect(draft_enrichment.attributes.slice(*update_attributes.keys.map(&:to_s)))
         .to include(update_attributes.stringify_keys)
     end
+
+    it do
+      expect { perform_request update_course }
+      .to(
+        change { course.enrichments.reload.count }
+          .from(1).to(2)
+      )
+    end
+
+    it "change content status" do
+      expect {
+        perform_request update_course
+      }.to(change { course.reload.content_status }.from(:published).to(:published_with_unpublished_changes))
+    end
+  end
+
+  describe 'from published to draft' do
+    shared_examples 'only one attribute has changed' do |attribute_key, attribute_value, jsonapi_serialized_name|
+      describe 'a subsequent draft enrichment is added' do
+        let(:update_attributes) do
+          attribute = {}
+          attribute[attribute_key] = attribute_value
+          attribute
+        end
+
+        let(:permitted_params) {
+          if jsonapi_serialized_name.blank?
+            [attribute_key]
+          else
+            [jsonapi_serialized_name]
+          end
+        }
+
+        before do
+          perform_request update_course
+        end
+
+        subject {
+          course.reload
+        }
+
+        its(:content_status) { should eq :published_with_unpublished_changes }
+
+        it "set #{attribute_key}" do
+          expect(subject.enrichments.draft.first[attribute_key]).to eq(attribute_value)
+        end
+
+        enrichments_attributes_key = %i[
+          about_course
+          fee_details
+          fee_international
+          fee_uk_eu
+          financial_support
+          how_school_placements_work
+          interview_process
+          other_requirements
+          personal_qualities
+          qualifications
+          salary_details
+        ].freeze
+
+        published_enrichment_attributes = (enrichments_attributes_key.filter { |x| x != attribute_key }).freeze
+
+        published_enrichment_attributes.each do |published_enrichment_attribute|
+          it "set #{published_enrichment_attribute} using published enrichment" do
+            expect(subject.enrichments.draft.first[published_enrichment_attribute]).to eq(original_enrichment[published_enrichment_attribute])
+          end
+        end
+      end
+    end
+
+    let(:original_enrichment) { build :course_enrichment, :published }
+    let(:course) do
+      create :course, provider: provider, enrichments: [original_enrichment]
+    end
+
+    include_examples 'only one attribute has changed', :fee_details, 'changed fee_details'
+    include_examples 'only one attribute has changed', :fee_international, 666
+    include_examples 'only one attribute has changed', :fee_uk_eu, 999
+    include_examples 'only one attribute has changed', :financial_support, 'changed financial_support'
+    include_examples 'only one attribute has changed', :how_school_placements_work, 'changed how_school_placements_work'
+    include_examples 'only one attribute has changed', :interview_process, 'changed interview_process'
+    include_examples 'only one attribute has changed', :other_requirements, 'changed other_requirements'
+    include_examples 'only one attribute has changed', :personal_qualities, 'changed personal_qualities'
+    include_examples 'only one attribute has changed', :qualifications, 'changed qualifications', :required_qualifications
+    include_examples 'only one attribute has changed', :salary_details, 'changed salary_details'
   end
 end

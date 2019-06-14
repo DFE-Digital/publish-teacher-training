@@ -80,7 +80,26 @@ class Course < ApplicationRecord
            ->(course) { where(provider_code: course.provider.provider_code) },
            foreign_key: :ucas_course_code,
            primary_key: :course_code,
-           class_name: 'CourseEnrichment'
+           class_name: 'CourseEnrichment' do
+    def find_or_initialize_draft
+      latest_enrichment = latest_first.first
+
+      if latest_enrichment&.draft?
+        latest_enrichment
+      else
+        new_enrichments_attributes = { status: :draft }.with_indifferent_access
+
+        if latest_enrichment.present?
+          published_enrichment_attributes = latest_enrichment.dup.attributes.with_indifferent_access
+            .except(:json_data, :status)
+
+          new_enrichments_attributes.merge!(published_enrichment_attributes)
+        end
+
+        new(new_enrichments_attributes)
+      end
+    end
+  end
 
   scope :changed_since, ->(timestamp) do
     if timestamp.present?
@@ -177,7 +196,7 @@ class Course < ApplicationRecord
   end
 
   def content_status
-    newest_enrichment = enrichments.order('created_at desc').first
+    newest_enrichment = enrichments.latest_first.first
 
     if newest_enrichment.nil?
       :empty

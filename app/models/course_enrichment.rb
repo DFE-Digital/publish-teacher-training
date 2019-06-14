@@ -40,7 +40,7 @@ class CourseEnrichment < ApplicationRecord
              foreign_key: :ucas_course_code,
              primary_key: :course_code
 
-  scope :latest_first, -> { order(created_at: :desc) }
+  scope :latest_first, -> { order(created_at: :desc, id: :desc) }
 
   validates :about_course, presence: true, on: :publish
   validates :how_school_placements_work, presence: true, on: :publish
