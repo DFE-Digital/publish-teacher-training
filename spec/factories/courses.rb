@@ -35,7 +35,6 @@ FactoryBot.define do
     resulting_in_pgce_with_qts
 
     transient do
-      # with_site_statuses { [] }
       age                { nil }
       enrichments        { [] }
     end

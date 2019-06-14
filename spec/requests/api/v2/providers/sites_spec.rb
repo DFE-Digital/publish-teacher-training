@@ -9,12 +9,13 @@ describe 'Sites API v2', type: :request do
     ActionController::HttpAuthentication::Token.encode_credentials(token)
   end
 
-  let(:site1) { build :site, location_name: 'Main site 1' }
-  let(:site2) { build :site, location_name: 'Main site 2' }
-  let!(:provider) {
-    create(:provider,
-           organisations: [organisation],
-           sites: [site1, site2])
+  let(:site1) { create :site, location_name: 'Main site 1', provider: provider }
+  let(:site2) { create :site, location_name: 'Main site 2', provider: provider }
+  let!(:sites) { [site1, site2] }
+
+  let(:provider) {
+    build(:provider,
+          organisations: [organisation],)
   }
 
   subject { response }
@@ -78,7 +79,6 @@ describe 'Sites API v2', type: :request do
     end
 
     describe 'JSON generated for sites' do
-      let!(:sites) { [site1, site2] }
       before do
         get "/api/v2/providers/#{provider.provider_code}/sites",
             headers: { 'HTTP_AUTHORIZATION' => credentials }
@@ -135,7 +135,7 @@ describe 'Sites API v2', type: :request do
   describe 'PATCH update' do
     def perform_site_update
       patch(
-        api_v2_provider_site_path(provider.provider_code, site1),
+        api_v2_provider_site_path(provider.provider_code, site1.reload),
         headers: { 'HTTP_AUTHORIZATION' => credentials },
         params: params
       )
@@ -405,7 +405,9 @@ describe 'Sites API v2', type: :request do
       let(:postcode)      { 'SW1A 1AA' }
       let(:region_code)   { 'west_midlands' }
 
-      let(:site) { provider.reload.sites.last }
+      let(:site) {
+        provider.reload.sites.last
+      }
 
       describe 'permitted parameters' do
         before do
