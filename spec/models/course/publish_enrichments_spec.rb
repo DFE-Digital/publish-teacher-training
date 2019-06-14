@@ -25,22 +25,22 @@ describe Course, type: :model do
   end
 
   describe "#content_status" do
+    let(:course) { create(:course, enrichments: enrichments) }
+    subject { course }
+
     context "for a course without any enrichments" do
-      subject { create(:course) }
+      let(:enrichments) { [] }
       its(:content_status) { should eq(:empty) }
     end
 
     context "for a course an initial draft enrichments" do
       let(:enrichments) { [build(:course_enrichment, :initial_draft)] }
-      let(:course) { create(:course, enrichments: enrichments) }
-      subject { course }
 
       its(:content_status) { should eq(:draft) }
     end
 
     context "for a course with a single published enrichment" do
       let(:enrichments) { [build(:course_enrichment, :published)] }
-      subject { create(:course, enrichments: enrichments) }
       its(:content_status) { should eq(:published) }
     end
 
@@ -52,14 +52,12 @@ describe Course, type: :model do
         ]
       end
 
-      subject { create(:course, enrichments: enrichments) }
       its(:content_status) { should eq(:published) }
     end
 
     context "for a course with published enrichments and a draft one" do
       let(:enrichments) { [build(:course_enrichment, :published), build(:course_enrichment, :subsequent_draft)] }
 
-      subject { create(:course, enrichments: enrichments) }
       its(:content_status) { should eq(:published_with_unpublished_changes) }
     end
   end
