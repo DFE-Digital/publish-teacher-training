@@ -141,6 +141,30 @@ RSpec.describe SiteStatus, type: :model do
         end
       end
     end
+
+    context "when course has suspended sites" do
+      let!(:site_status1) { create(:site_status, :suspended, :published, site: site1, course: course) }
+      let(:site3) { build(:site, provider: provider) }
+
+      before do
+        expect(course.reload.ucas_status).to be(:not_running)
+      end
+
+      describe "the status" do
+        it "is set to running if a completely new site is added" do
+          new_site_status = SiteStatus.create course: course, site: site3
+
+          expect(new_site_status).to be_status_running
+        end
+
+        it "is set to running if the suspended site is re-added" do
+          course.sites << [site1]
+
+          expect(course.site_statuses.reload.size).to eq(1)
+          expect(course.site_statuses.find_by(site: site1)).to be_status_running
+        end
+      end
+    end
   end
 
   describe 'destruction' do
