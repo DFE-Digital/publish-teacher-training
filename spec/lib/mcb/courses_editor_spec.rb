@@ -171,10 +171,10 @@ describe MCB::CoursesEditor do
         end
 
         it 'updates the application opening date to today by default' do
-          Timecop.freeze do
+          Timecop.freeze(Time.utc(2019, 6, 1, 12, 0, 0)) do
             expect { run_editor("edit application opening date", "", "exit") }.
               to change { Date.parse(course.reload.applications_open_from) }.
-              from(Date.new(2018, 10, 9)).to(Date.today)
+              from(Date.new(2018, 10, 9)).to(Date.new(2019, 6, 1))
           end
         end
       end
