@@ -75,4 +75,32 @@ describe AccessRequest, type: :model do
       expect(AccessRequest.by_request_date.last).to eq access_request1
     end
   end
+
+  describe '#add_additonal_attributes' do
+    let(:user) { create(:user, organisations: [organisation]) }
+    let(:organisation) { build(:organisation) }
+    let(:access_request) {
+      build(:access_request,
+            organisation: user.organisations.first.name,
+                requester_email: user.email,
+                requester: nil,
+                request_date_utc: nil,
+                status: nil)
+    }
+
+    before do
+      Timecop.freeze
+      access_request.add_additonal_attributes(access_request.requester_email)
+    end
+
+    after do
+      Timecop.return
+    end
+
+    subject { access_request }
+
+    its(:requester)         { should eq user }
+    its(:request_date_utc)  { should be_within(1.second).of Time.now.utc }
+    its(:status)            { should eq 'requested' }
+  end
 end
