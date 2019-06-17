@@ -79,12 +79,14 @@ RSpec.describe SiteStatus, type: :model do
     end
 
     describe 'if on find, application date open and has part-time vacancies' do
-      subject { create(:site_status, :findable, :applications_being_accepted_now, :part_time_vacancies) }
+      let(:course) { build(:course, study_mode: :part_time) }
+      subject { create(:site_status, :findable, :applications_being_accepted_now, :part_time_vacancies, course: course) }
       it { should be_open_for_applications }
     end
 
     describe 'if on find, application date open and has both full-time and part-time vacancies' do
-      subject { create(:site_status, :findable, :applications_being_accepted_now, :both_full_time_and_part_time_vacancies) }
+      let(:course) { build(:course, study_mode: :full_time_or_part_time) }
+      subject { create(:site_status, :findable, :applications_being_accepted_now, :both_full_time_and_part_time_vacancies, course: course) }
       it { should be_open_for_applications }
     end
 
@@ -106,7 +108,8 @@ RSpec.describe SiteStatus, type: :model do
 
   describe "has vacancies?" do
     describe 'if has part-time vacancies' do
-      subject { create(:site_status, :part_time_vacancies) }
+      let(:course) { build(:course, study_mode: :part_time) }
+      subject { create(:site_status, :part_time_vacancies, course: course) }
       it { should have_vacancies }
     end
 
@@ -116,7 +119,8 @@ RSpec.describe SiteStatus, type: :model do
     end
 
     describe 'if has both full-time and part-time vacancies' do
-      subject { create(:site_status, :both_full_time_and_part_time_vacancies) }
+      let(:course) { build(:course, study_mode: :full_time_or_part_time) }
+      subject { create(:site_status, :both_full_time_and_part_time_vacancies, course: course) }
       it { should have_vacancies }
     end
 
