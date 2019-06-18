@@ -182,3 +182,7 @@ bin/mcb -h
 
 Commands for mcb are defined in `lib/mcb/commands` and any new commands should
 be organised in an appropriate sub-folder there.
+
+### Dependencies
+
+* Requires an installation of the `az` command on the `PATH`. Get it at https://docs.microsoft.com/en-us/cli/azure/?view=azure-cli-latest
