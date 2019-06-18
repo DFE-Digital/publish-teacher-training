@@ -636,4 +636,9 @@ RSpec.describe Course, type: :model do
       end
     end
   end
+
+  describe '#recruitment_cycle_year' do
+    subject { create(:course) }
+    its(:recruitment_cycle_year) { should eq('2019') }
+  end
 end

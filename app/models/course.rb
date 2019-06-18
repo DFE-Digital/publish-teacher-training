@@ -121,7 +121,7 @@ class Course < ApplicationRecord
     valid? :save
   end
 
-  def recruitment_cycle
+  def recruitment_cycle_year
     DEFAULT_RECRUITMENT_CYCLE_YEAR
   end
 
