@@ -13,6 +13,31 @@ module MCB
       %i[type name email telephone]
     end
 
+    # Render a user for output to the terminal.
+    #
+    # Takes care of rendering out all the attributes and related objects in
+    # the correct format. Associations are specified as params to allow the
+    # caller to decide how they are retrieved (ActiveRecord objects will
+    # access attributes and associations differently from JSON API
+    # responses).
+    def user(user,
+             providers:)
+      [
+        user_record(user),
+        "\n",
+        providers_table(providers, name: "Has access to providers"),
+      ]
+    end
+
+    def user_record(user, name: 'User')
+      user_table = Terminal::Table.new rows: user
+
+      [
+        "#{name}:",
+        *user_table,
+      ]
+    end
+
     # Render a course for output to the terminal.
     #
     # Takes care of rendering out all the attributes and related objects in

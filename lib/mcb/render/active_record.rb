@@ -14,6 +14,13 @@ module MCB
             enrichments:          course.enrichments,
           )
         end
+
+        def user(user)
+          super(
+            user.attributes,
+            providers: user.providers,
+          )
+        end
       end
     end
   end
