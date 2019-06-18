@@ -251,13 +251,12 @@ describe 'PATCH /providers/:provider_code/courses/:course_code' do
       it "returns validation errors" do
         perform_request update_course
 
-        prefix = "Invalid latest_enrichment__"
-        expect("#{prefix}about_course".in?(subject)).to eq(true)
-        expect("#{prefix}interview_process".in?(subject)).to eq(true)
-        expect("#{prefix}how_school_placements_work".in?(subject)).to eq(true)
-        expect("#{prefix}qualifications".in?(subject)).to eq(true)
-        expect("#{prefix}fee_details".in?(subject)).to eq(true)
-        expect("#{prefix}financial_support".in?(subject)).to eq(true)
+        expect("Invalid about_course".in?(subject)).to eq(true)
+        expect("Invalid interview_process".in?(subject)).to eq(true)
+        expect("Invalid how_school_placements_work".in?(subject)).to eq(true)
+        expect("Invalid qualifications".in?(subject)).to eq(true)
+        expect("Invalid fee_details".in?(subject)).to eq(true)
+        expect("Invalid financial_support".in?(subject)).to eq(true)
       end
     end
 
