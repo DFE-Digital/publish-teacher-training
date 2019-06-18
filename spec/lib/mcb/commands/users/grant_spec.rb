@@ -1,7 +1,7 @@
 require 'mcb_helper'
 
-describe 'mcb users grant_access_to_provider' do
-  def grant_access_to_provider(provider_code, commands)
+describe 'mcb users grant' do
+  def grant(provider_code, commands)
     stderr = ""
     output = with_stubbed_stdout(stdin: commands, stderr: stderr) do
       cmd.run([provider_code])
@@ -12,12 +12,12 @@ describe 'mcb users grant_access_to_provider' do
   let(:lib_dir) { "#{Rails.root}/lib" }
   let(:cmd) do
     Cri::Command.load_file(
-      "#{lib_dir}/mcb/commands/users/grant_access_to_provider.rb"
+      "#{lib_dir}/mcb/commands/users/grant.rb"
     )
   end
   let(:organisation) { create(:organisation) }
   let(:provider) { create(:provider, organisations: [organisation]) }
-  let(:output) { grant_access_to_provider(provider.provider_code, input_commands.join("\n") + "\n").first }
+  let(:output) { grant(provider.provider_code, input_commands.join("\n") + "\n").first }
 
   context 'when the user exists and already has access to the provider' do
     let(:input_commands) { [user.email] }
