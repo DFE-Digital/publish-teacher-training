@@ -23,7 +23,7 @@ describe 'mcb users grant_access_to_provider' do
     let(:input_commands) { [user.email] }
     let(:user) { create(:user, organisations: [organisation]) }
 
-    it 'informs the support agen that it is not going to do anything' do
+    it 'informs the support agent that it is not going to do anything' do
       expect(output).to include("#{user} already belongs to #{organisation.name}")
     end
   end
