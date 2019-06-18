@@ -29,7 +29,8 @@
 require "rails_helper"
 
 describe ProviderSerializer do
-  let(:provider) { create :provider }
+  let(:ucas_preferences) { build(:provider_ucas_preference, type_of_gt12: :coming_or_not) }
+  let(:provider) { create :provider, ucas_preferences: ucas_preferences }
 
   subject { serialize(provider) }
 

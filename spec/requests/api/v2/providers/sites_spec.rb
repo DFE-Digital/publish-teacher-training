@@ -15,7 +15,7 @@ describe 'Sites API v2', type: :request do
 
   let(:provider) {
     build(:provider,
-          organisations: [organisation],)
+          organisations: [organisation])
   }
 
   subject { response }
