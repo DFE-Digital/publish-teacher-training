@@ -180,7 +180,15 @@ module MCB
       user
     end
 
-    def apiv1_opts(**opts)
+    def apiv1_opts(opts)
+      # the following lines are necessary to make opts work with double **splats and default values
+      # See the change introduced in https://github.com/ddfreyne/cri/pull/99 (cri 2.15.8)
+      opts[:url] = opts[:url]
+      opts[:endpoint] = opts[:endpoint]
+      opts[:'max-pages'] = opts[:'max-pages']
+      opts[:token] = opts[:token]
+      opts[:all] = opts[:all]
+
       opts.merge! azure_env_settings_for_opts(**opts)
 
       if requesting_remote_connection?(**opts)
