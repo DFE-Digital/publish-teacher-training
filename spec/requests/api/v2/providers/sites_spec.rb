@@ -207,6 +207,16 @@ describe 'Sites API v2', type: :request do
         )
       end
 
+      context 'with empty params' do
+        before do
+          site_params.clear
+        end
+
+        it 'does not raise an error' do
+          expect { subject }.not_to raise_error
+        end
+      end
+
       it 'updates the location name of the site' do
         expect { subject }.to change { site1.reload.location_name }
           .from(site1.location_name)
