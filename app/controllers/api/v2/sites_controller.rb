@@ -1,7 +1,9 @@
 module API
   module V2
     class SitesController < API::V2::ApplicationController
-      deserializable_resource :site, only: %i[update create]
+      deserializable_resource :site,
+                              only: %i[update create],
+                              class: API::V2::DeserializableSite
 
       before_action :build_provider
       before_action :build_site, except: %i[index create]
