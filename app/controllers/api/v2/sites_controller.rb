@@ -45,7 +45,7 @@ module API
 
       def site_params
         params
-          .require(:site)
+          .fetch(:site, {})
           .except(:id, :type)
           .permit(
             :location_name,
