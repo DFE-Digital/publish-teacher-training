@@ -287,14 +287,11 @@ private
 
   def add_enrichment_errors(enrichment)
     enrichment.errors.messages.map do |field, _error|
-      # Compute a key of `latest_enrichment__FIELD` to allow the frontend to determine
-      # which field should be linked to from the error title.
-      key = "latest_enrichment__#{field}".to_sym
       # `full_messages_for` here will remove any `^`s defined in the validator or en.yml.
       # We still need it for later, so re-add it.
       # jsonapi_errors will throw if it's given an array, so we call `.first`.
       message = "^" + enrichment.errors.full_messages_for(field).first.to_s
-      errors.add key, message
+      errors.add field.to_sym, message
     end
   end
 
