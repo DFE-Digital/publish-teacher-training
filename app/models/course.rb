@@ -28,6 +28,8 @@ class Course < ApplicationRecord
   include WithQualifications
   include ChangedAt
 
+  after_initialize :set_defaults
+
   has_associated_audits
   audited except: :changed_at
   validates :course_code, uniqueness: { scope: :provider_id }
@@ -338,5 +340,9 @@ private
 
   def validate_enrichment_saveable
     validate_enrichment :save
+  end
+
+  def set_defaults
+    self.modular ||= ''
   end
 end
