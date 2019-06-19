@@ -8,6 +8,7 @@ SiteStatus.destroy_all
 Provider.destroy_all
 User.destroy_all
 AccessRequest.destroy_all
+RecruitmentCycle.destroy_all
 
 accrediting_provider = Provider.create!(provider_name: 'Acme SCITT', provider_code: 'A01')
 
@@ -157,4 +158,8 @@ access_requester_user = User.all.reject(&:admin?).sample
     request_date_utc: rand(1..20).days.ago,
     status: %i[requested completed].sample
   )
+end
+
+%w[2019 2020].each do |year|
+  RecruitmentCycle.create(year: year)
 end
