@@ -20,4 +20,8 @@ describe RecruitmentCycle, type: :model do
   end
 
   it { is_expected.to validate_presence_of(:year) }
+
+  describe 'associations' do
+    it { should have_many(:courses) }
+  end
 end
