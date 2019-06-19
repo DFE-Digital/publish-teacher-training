@@ -8,7 +8,9 @@ SiteStatus.destroy_all
 Provider.destroy_all
 User.destroy_all
 AccessRequest.destroy_all
-RecruitmentCycle.destroy_all
+
+recruitment_cycle_2019 = RecruitmentCycle.create(year: '2019', application_start_date: Date.new(2018, 10, 9))
+recruitment_cycle_2020 = RecruitmentCycle.create(year: '2020')
 
 accrediting_provider = Provider.create!(provider_name: 'Acme SCITT', provider_code: 'A01')
 
@@ -55,6 +57,7 @@ course1 = Course.create!(
     Subject.find_by(subject_name: "Mathematics")
   ],
   study_mode: "F",
+  recruitment_cycle: recruitment_cycle_2019
 )
 
 SiteStatus.create!(
@@ -84,6 +87,7 @@ course2 = Course.create!(
     Subject.find_by(subject_name: "Further Education"),
   ],
   study_mode: "B",
+  recruitment_cycle: recruitment_cycle_2019
 )
 
 PGDECourse.create!(
@@ -110,14 +114,16 @@ Course.create!(
   qualification: :pgce_with_qts,
   subjects: [
     Subject.last
-  ]
+  ],
+  recruitment_cycle: recruitment_cycle_2019
 )
 
 Course.create!(
   name: Faker::ProgrammingLanguage.name,
   course_code: "9A5Y",
   provider: Provider.create!(provider_name: 'Big Uni', provider_code: 'B01'),
-  qualification: :pgce_with_qts
+  qualification: :pgce_with_qts,
+  recruitment_cycle: 2020_recruitment_cycle
 )
 
 User.create!(
@@ -158,8 +164,4 @@ access_requester_user = User.all.reject(&:admin?).sample
     request_date_utc: rand(1..20).days.ago,
     status: %i[requested completed].sample
   )
-end
-
-%w[2019 2020].each do |year|
-  RecruitmentCycle.create(year: year)
 end

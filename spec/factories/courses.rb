@@ -20,6 +20,7 @@
 #  created_at              :datetime         not null
 #  updated_at              :datetime         not null
 #  changed_at              :datetime         not null
+#  recruitment_cycle_id    :integer
 #
 
 FactoryBot.define do
@@ -30,6 +31,7 @@ FactoryBot.define do
     with_higher_education
 
     association(:provider)
+    association(:recruitment_cycle)
 
     study_mode { :full_time }
     resulting_in_pgce_with_qts
