@@ -41,7 +41,7 @@ module SearchAndCompare
     attribute(:Name)                                  { object.name }
     attribute(:ProgrammeCode)                         { object.course_code }
     # using server date time not utc, so it's local date time?
-    attribute(:StartDate)                             { object.start_date.utc.strftime('%Y-%m-%dT%H:%M:%S') }
+    attribute(:StartDate)                             { object.start_date&.utc&.strftime('%Y-%m-%dT%H:%M:%S') }
 
     # Salary_nested_default_value_Mapping
     # TODO: After completion
@@ -71,7 +71,7 @@ module SearchAndCompare
     # Campuses_related_Mapping
     attribute(:Campuses)                              { campuses }
     # using server date time not utc, so it's local date time?
-    attribute(:ApplicationsAcceptedFrom)              { object.applications_open_from.to_date.strftime('%Y-%m-%dT%H:%M:%S') }
+    attribute(:ApplicationsAcceptedFrom)              { object.applications_open_from&.to_date&.strftime('%Y-%m-%dT%H:%M:%S') }
     attribute(:HasVacancies)                          { object.has_vacancies? }
 
     # Course_direct_enrichment_Mapping
@@ -99,43 +99,43 @@ module SearchAndCompare
     def description_sections
       [{
         Name: "about this training programme",
-        Text: course_enrichment.about_course
+        Text: course_enrichment&.about_course
        },
        {
          Name: "interview process",
-         Text: course_enrichment.interview_process
+         Text: course_enrichment&.interview_process
        },
        {
          Name: "about fees",
-         Text: course_enrichment.fee_details
+         Text: course_enrichment&.fee_details
        },
        {
          Name: "about salary",
-         Text: course_enrichment.salary_details
+         Text: course_enrichment&.salary_details
        },
        {
          Name: "entry requirements",
-         Text: course_enrichment.qualifications
+         Text: course_enrichment&.qualifications
        },
        {
          Name: "entry requirements personal qualities",
-         Text: course_enrichment.personal_qualities
+         Text: course_enrichment&.personal_qualities
        },
        {
          Name: "entry requirements other",
-         Text: course_enrichment.other_requirements
+         Text: course_enrichment&.other_requirements
        },
        {
          Name: "financial support",
-         Text: course_enrichment.financial_support
+         Text: course_enrichment&.financial_support
        },
        {
          Name: "about school placements",
-         Text: course_enrichment.how_school_placements_work
+         Text: course_enrichment&.how_school_placements_work
        },
        {
          Name: "about this training provider",
-         Text: provider_enrichment.train_with_us
+         Text: provider_enrichment&.train_with_us
        },
        {
          Name: "about this training provider accrediting",
@@ -143,7 +143,7 @@ module SearchAndCompare
        },
        {
          Name: "training with disabilities",
-         Text: provider_enrichment.train_with_disability
+         Text: provider_enrichment&.train_with_disability
        }].map do |description_section|
         description_section.merge default_description_section_value
       end
@@ -166,12 +166,12 @@ module SearchAndCompare
     end
 
     def duration
-      if course_enrichment.course_length == "OneYear"
+      if course_enrichment&.course_length == "OneYear"
         "1 year"
-      elsif course_enrichment.course_length == "TwoYears"
+      elsif course_enrichment&.course_length == "TwoYears"
         "Up to 2 years"
       else
-        course_enrichment.course_length
+        course_enrichment&.course_length
       end
     end
 
@@ -184,9 +184,9 @@ module SearchAndCompare
         }
       else
         {
-          Uk: course_enrichment.fee_uk_eu,
-          Eu: course_enrichment.fee_uk_eu,
-          International: course_enrichment.fee_international,
+          Uk: course_enrichment&.fee_uk_eu.to_i,
+          Eu: course_enrichment&.fee_uk_eu.to_i,
+          International: course_enrichment&.fee_international.to_i,
         }
       end
     end

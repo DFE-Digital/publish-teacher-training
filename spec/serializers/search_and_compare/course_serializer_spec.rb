@@ -19,6 +19,9 @@ describe SearchAndCompare::CourseSerializer do
         subjects
       end
 
+      let(:program_type) { :school_direct_salaried_training_programme }
+
+      let(:course_enrichments) { [published_enrichment] }
       let(:course) do
         create(:course,
                provider: provider,
@@ -30,7 +33,7 @@ describe SearchAndCompare::CourseSerializer do
                qualification: :pgce_with_qts,
                study_mode:  :full_time,
                site_statuses: [site_status1, site_status2],
-               enrichments: [published_enrichment],
+               enrichments: course_enrichments,
                subjects: subjects).tap do |c|
           # These sites, taken from real prod data, aren't actually valid in
           # that they're missing the following bits of data.
@@ -50,7 +53,7 @@ describe SearchAndCompare::CourseSerializer do
               course_length: "OneYear",
               created_at: 5.days.ago,
 
-              # describe tattributes in the o DescriptionSections_Mapping section
+              # attributes in the DescriptionSections_Mapping section
               about_course: 'about_course',
               interview_process: 'interview_process',
               fee_details: 'fee_details',
@@ -112,11 +115,12 @@ describe SearchAndCompare::CourseSerializer do
               accrediting_provider_enrichments: [accrediting_provider_enrichment]
       end
 
+      let(:provider_enrichments) { [provider_enrichment] }
       let(:provider) do
         create :provider,
                provider_name: 'Gateway Alliance (Midlands)',
                provider_code: '23E',
-               enrichments: [provider_enrichment]
+               enrichments: provider_enrichments
       end
       let(:accrediting_provider) do
         build :provider,
@@ -299,6 +303,22 @@ describe SearchAndCompare::CourseSerializer do
           it { should include(Uk: course.is_fee_based? ? course_enrichment.fee_uk_eu : 0) }
           it { should include(Eu: course.is_fee_based? ? course_enrichment.fee_uk_eu : 0) }
           it { should include(International: course.is_fee_based? ? course_enrichment.fee_international : 0) }
+
+          context 'is a fee based course' do
+            let(:fee_uk_eu) { 19000 }
+            let(:fee_international) { 9100 }
+            let(:published_enrichment) do
+              build :course_enrichment, :published,
+                    fee_uk_eu: fee_uk_eu,
+                    fee_international: 9100
+            end
+            let(:course) { create(:course, enrichments: [published_enrichment]) }
+
+            let(:program_type) { :school_direct_training_programme }
+            it { should include(Uk: fee_uk_eu) }
+            it { should include(Eu: fee_uk_eu) }
+            it { should include(International: fee_international) }
+          end
         end
       end
 
@@ -362,6 +382,40 @@ describe SearchAndCompare::CourseSerializer do
         include_examples 'mapped the description section', 'about this training provider', 'train_with_us'
         include_examples 'mapped the description section', 'about this training provider accrediting', 'accrediting_provider_enrichment_description'
         include_examples 'mapped the description section', 'training with disabilities', 'train_with_disability'
+
+        context 'no published provider enrichment' do
+          let(:provider_enrichments) { [] }
+
+          include_examples 'mapped the description section', 'about this training programme', 'about_course'
+          include_examples 'mapped the description section', 'interview process', 'interview_process'
+          include_examples 'mapped the description section', 'about fees', 'fee_details'
+          include_examples 'mapped the description section', 'about salary', 'salary_details'
+          include_examples 'mapped the description section', 'entry requirements', 'qualifications'
+          include_examples 'mapped the description section', 'entry requirements personal qualities', 'personal_qualities'
+          include_examples 'mapped the description section', 'entry requirements other', 'other_requirements'
+          include_examples 'mapped the description section', 'financial support', 'financial_support'
+          include_examples 'mapped the description section', 'about school placements', 'how_school_placements_work'
+          include_examples 'mapped the description section', 'about this training provider', nil
+          include_examples 'mapped the description section', 'about this training provider accrediting', nil
+          include_examples 'mapped the description section', 'training with disabilities', nil
+        end
+
+        context 'no published course enrichment' do
+          let(:course_enrichments) { [] }
+
+          include_examples 'mapped the description section', 'about this training programme', nil
+          include_examples 'mapped the description section', 'interview process', nil
+          include_examples 'mapped the description section', 'about fees', nil
+          include_examples 'mapped the description section', 'about salary', nil
+          include_examples 'mapped the description section', 'entry requirements', nil
+          include_examples 'mapped the description section', 'entry requirements personal qualities', nil
+          include_examples 'mapped the description section', 'entry requirements other', nil
+          include_examples 'mapped the description section', 'financial support', nil
+          include_examples 'mapped the description section', 'about school placements', nil
+          include_examples 'mapped the description section', 'about this training provider', 'train_with_us'
+          include_examples 'mapped the description section', 'about this training provider accrediting', 'accrediting_provider_enrichment_description'
+          include_examples 'mapped the description section', 'training with disabilities', 'train_with_disability'
+        end
       end
     end
   end
