@@ -7,7 +7,21 @@
 # from that pipe and write to a StringIO object. Unfortunately that
 # implementation isn't threads-safe but this one should be.
 
-def with_stubbed_stdout(stdin: nil, stderr: nil)
+def with_stubbed_stdout(stdin: nil, stderr: nil, &block)
+  # if the parameters are wrong for a cli command then the error is written to
+  # stderr which is lost when we have it mocked out. This env gives us a way to
+  # disable redirection when trying to debug a failure in order to see the error
+  # message.
+  if ENV["WITHOUT_STUBBED_STDOUT"]
+    yield
+  else
+    run stdin: stdin, stderr: stderr, &block
+  end
+end
+
+private
+
+def run(stdin: nil, stderr: nil)
   # Here is where we'll redirect STDOUT to temporarily. Using a StringIO
   # doesn't seem to work, it seems to require a proper file.
   output_file = Tempfile.new('stdout.')
