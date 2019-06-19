@@ -378,6 +378,7 @@ GEM
     websocket-driver (0.7.0)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.3)
+    words_counted (1.0.2)
 
 PLATFORMS
   ruby
@@ -445,6 +446,7 @@ DEPENDENCIES
   tzinfo-data
   uk_postcode
   webmock
+  words_counted
 
 RUBY VERSION
    ruby 2.6.1p33
