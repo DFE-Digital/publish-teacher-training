@@ -25,8 +25,10 @@
 require 'rails_helper'
 
 RSpec.describe Course, type: :model do
-  let(:course) { create(:course) }
+  let(:course) { create(:course, name: 'Biology', course_code: '3X9F') }
   let(:subject) { course }
+
+  its(:to_s) { should eq('Biology (3X9F)') }
 
   describe 'auditing' do
     it { should be_audited.except(:changed_at) }

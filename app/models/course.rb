@@ -308,6 +308,10 @@ class Course < ApplicationRecord
     dfe_subjects&.first&.scholarship_amount
   end
 
+  def to_s
+    "#{name} (#{course_code})"
+  end
+
 private
 
   def add_enrichment_errors(enrichment)

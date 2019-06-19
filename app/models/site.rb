@@ -46,7 +46,7 @@ class Site < ApplicationRecord
     self.code ||= pick_next_available_code(available_codes: provider&.unassigned_site_codes)
   end
 
-  def description
+  def to_s
     "#{location_name} (code: #{code})"
   end
 

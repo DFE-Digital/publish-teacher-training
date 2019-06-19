@@ -16,4 +16,8 @@ class Subject < ApplicationRecord
   def is_send?
     subject_code.casecmp('U3').zero?
   end
+
+  def to_s
+    subject_name
+  end
 end
