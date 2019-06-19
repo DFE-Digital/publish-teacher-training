@@ -641,4 +641,87 @@ RSpec.describe Course, type: :model do
     subject { create(:course) }
     its(:recruitment_cycle_year) { should eq('2019') }
   end
+
+  describe '#enrichments' do
+    describe '#find_or_initialize_draft' do
+      let(:course) { create(:course, enrichments: enrichments) }
+
+      copyable_enrichment_attributes =
+        %w[
+          about_course
+          course_length
+          fee_details
+          fee_international
+          fee_uk_eu
+          financial_support
+          how_school_placements_work
+          interview_process
+          other_requirements
+          personal_qualities
+          qualifications
+          salary_details
+        ].freeze
+
+      let(:actual_enrichment_attributes) do
+        subject.attributes.slice(*copyable_enrichment_attributes)
+      end
+
+      subject { course.enrichments.find_or_initialize_draft }
+
+      context 'no enrichments' do
+        let(:enrichments) { [] }
+
+        it "sets all attributes to be nil" do
+          expect(actual_enrichment_attributes.values).to be_all(&:nil?)
+        end
+
+        its(:id) { should be_nil }
+        its(:last_published_timestamp_utc) { should be_nil }
+        its(:status) { should eq 'draft' }
+      end
+
+      context 'with a draft enrichment' do
+        let(:initial_draft_enrichment) { build(:course_enrichment, :initial_draft) }
+        let(:enrichments) { [initial_draft_enrichment] }
+        let(:expected_enrichment_attributes) { initial_draft_enrichment.attributes.slice(*copyable_enrichment_attributes) }
+
+        it "has all the same attributes as the initial draft enrichment" do
+          expect(actual_enrichment_attributes).to eq expected_enrichment_attributes
+        end
+
+        its(:id) { should_not be_nil }
+        its(:last_published_timestamp_utc) { should eq initial_draft_enrichment.last_published_timestamp_utc }
+        its(:status) { should eq 'draft' }
+      end
+
+      context 'with a published enrichment' do
+        let(:published_enrichment) { build(:course_enrichment, :published) }
+        let(:enrichments) { [published_enrichment] }
+        let(:expected_enrichment_attributes) { published_enrichment.attributes.slice(*copyable_enrichment_attributes) }
+
+        it "has all the same attributes as the published enrichment" do
+          expect(actual_enrichment_attributes).to eq expected_enrichment_attributes
+        end
+
+        its(:id) { should be_nil }
+        its(:last_published_timestamp_utc) { should be_within(1.second).of published_enrichment.last_published_timestamp_utc }
+        its(:status) { should eq 'draft' }
+      end
+
+      context 'with a draft and published enrichment' do
+        let(:published_enrichment) { build(:course_enrichment, :published) }
+        let(:subsequent_draft_enrichment) { build(:course_enrichment, :subsequent_draft) }
+        let(:enrichments) { [published_enrichment, subsequent_draft_enrichment] }
+        let(:expected_enrichment_attributes) { subsequent_draft_enrichment.attributes.slice(*copyable_enrichment_attributes) }
+
+        it "has all the same attributes as the subsequent draft enrichment" do
+          expect(actual_enrichment_attributes).to eq expected_enrichment_attributes
+        end
+
+        its(:id) { should_not be_nil }
+        its(:last_published_timestamp_utc) { should be_within(1.second).of subsequent_draft_enrichment.last_published_timestamp_utc }
+        its(:status) { should eq 'draft' }
+      end
+    end
+  end
 end

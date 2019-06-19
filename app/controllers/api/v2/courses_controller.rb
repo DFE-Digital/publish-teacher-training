@@ -80,7 +80,7 @@ module API
       def update_enrichment
         return unless enrichment_params.values.any?
 
-        enrichment = first_draft_or_new_enrichment
+        enrichment = @course.enrichments.find_or_initialize_draft
         enrichment.assign_attributes(enrichment_params)
         enrichment.save
       end
@@ -96,14 +96,6 @@ module API
         @course.errors[:sites] << "^You must choose at least one location" if site_ids.empty?
 
         sync_courses if site_ids.any?
-      end
-
-      def first_draft_or_new_enrichment
-        if @course.enrichments.draft.any?
-          @course.enrichments.draft.first
-        else
-          @course.enrichments.new(status: 'draft')
-        end
       end
 
       def build_provider
