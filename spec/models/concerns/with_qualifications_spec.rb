@@ -13,11 +13,31 @@ RSpec.describe WithQualifications, type: :model do
     specs.each do |spec|
       spec.each do |qualification, expected|
         context "course with qualification=#{qualification}" do
-          subject { create(:course, qualification: qualification) }
+          subject { build(:course, qualification: qualification) }
 
           its(:qualifications) { should eq(expected[:values]) }
           its(:qualifications_description) { should eq(expected[:description]) }
         end
+      end
+    end
+  end
+
+  describe "#qualification= and its dependent attribute profpost_flag" do
+    subject { build(:course, qualification: :pgce_with_qts) }
+
+    context "when the qualification is QTS only" do
+      before { subject.qualification = :qts }
+
+      its(:qualification) { should eq("qts") }
+      its(:profpost_flag) { should eq("recommendation_for_qts") }
+    end
+
+    (Course.qualifications.keys - %w[qts]).each do |qualification|
+      context "when the qualification is #{qualification}" do
+        before { subject.qualification = qualification }
+
+        its(:qualification) { should eq(qualification) }
+        its(:profpost_flag) { should eq("postgraduate") }
       end
     end
   end

@@ -63,5 +63,10 @@ module WithQualifications
     def qualifications_description
       qualifications.map(&:upcase).sort.join(" with ")
     end
+
+    def qualification=(value)
+      super(value)
+      self.profpost_flag = qts? ? :recommendation_for_qts : :postgraduate
+    end
   end
 end
