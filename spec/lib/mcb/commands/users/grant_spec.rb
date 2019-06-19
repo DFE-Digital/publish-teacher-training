@@ -48,7 +48,7 @@ describe 'mcb users grant' do
 
     it 'confirms user creation and organisation membership' do
       expect(output).to include("jsmith@acme.org appears to be a new user")
-      expect(output).to include("You're about to give Jane Smith <jsmith@acme.org> access to #{organisation.name}.")
+      expect(output).to include("You're about to give Jane Smith <jsmith@acme.org> access to organisation #{organisation.name}.")
     end
   end
 
@@ -83,7 +83,7 @@ describe 'mcb users grant' do
     end
 
     it 'confirms user creation and organisation membership' do
-      expect(output).to include("You're about to give #{user} access to #{organisation.name}.")
+      expect(output).to include("You're about to give #{user} access to organisation #{organisation.name}.")
     end
   end
 end

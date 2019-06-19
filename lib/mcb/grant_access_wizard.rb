@@ -9,6 +9,8 @@ module MCB
     def run
       fetch_organisation
       return unless find_or_init_user
+
+      puts MCB::Render::ActiveRecord.user @user
       return unless persist_user_if_new
 
       confirm_and_add_user_to_organisation
@@ -58,10 +60,9 @@ module MCB
       if @user.in?(@organisation.users)
         puts "#{@user} already belongs to #{@organisation.name}"
       else
-        puts "You're about to give #{@user} access to #{@organisation.name}. They will manage:"
-        @organisation.providers.each do |p|
-          puts " - #{p.provider_name} (#{p.provider_code})"
-        end
+        puts "\n"
+        puts "You're about to give #{@user} access to organisation #{@organisation.name}. They will manage:"
+        puts MCB::Render::ActiveRecord.providers_table @organisation.providers, name: "Additional Providers"
         @organisation.users << @user if @cli.agree("Agree?  ")
       end
     end
