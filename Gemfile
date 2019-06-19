@@ -83,6 +83,9 @@ gem 'data_migrate'
 # Allows writing of error full_messages for validations that don't start with the attribute name
 gem 'custom_error_message', git: 'https://github.com/nanamkim/custom-err-msg.git', ref: 'd72fb18'
 
+# Word count for validations
+gem 'words_counted'
+
 group :development, :test do
   # add info about db structure to models and other files
   gem 'annotate'
