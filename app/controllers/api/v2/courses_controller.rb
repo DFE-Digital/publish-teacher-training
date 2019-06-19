@@ -38,10 +38,8 @@ module API
           @course.publish_sites
           @course.publish_enrichment(@current_user)
 
-          response = ManageCoursesAPIService::Request.sync_course_with_search_and_compare(
-            @current_user.email,
-            @provider.provider_code,
-            @course.course_code
+          response = SearchAndCompareAPIService::Request.sync(
+            [@course]
           )
 
           if response
