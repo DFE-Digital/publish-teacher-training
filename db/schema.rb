@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_05_07_150812) do
+ActiveRecord::Schema.define(version: 2019_06_19_114150) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_buffercache"
@@ -207,6 +207,14 @@ ActiveRecord::Schema.define(version: 2019_05_07_150812) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["provider_id"], name: "index_provider_ucas_preference_on_provider_id"
+  end
+
+  create_table "recruitment_cycle", force: :cascade do |t|
+    t.string "year"
+    t.date "application_start_date"
+    t.date "application_end_date"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "session", id: :serial, force: :cascade do |t|
