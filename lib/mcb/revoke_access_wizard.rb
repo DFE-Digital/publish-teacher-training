@@ -30,7 +30,7 @@ module MCB
         puts "\n"
         puts "You're revoking access for #{@user.email} to organisation #{@organisation.name}."
         puts MCB::Render::ActiveRecord.providers_table @organisation.providers, name: "Provider access being revoked"
-        @organisation.users -= [@user] if @cli.agree("Agree?  ")
+        @organisation.users.delete(@user) if @cli.agree("Agree?  ")
       else
         puts "#{@user.email} already has no access to #{@organisation.name}"
       end
