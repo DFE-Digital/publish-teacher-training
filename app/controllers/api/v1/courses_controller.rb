@@ -5,14 +5,9 @@ module API
       include FirstItemFromNextPage
 
       def index
-        # only return 2019 courses until rollover is supported
-        if params[:recruitment_year].present? && params[:recruitment_year] != '2019'
-          render json: [], status: 404
-          return
-        end
-
         per_page = (params[:per_page] || 100).to_i
         changed_since = params[:changed_since]
+        recruitment_year = params[:recruitment_year]
 
         ActiveRecord::Base.transaction do
           ActiveRecord::Base.connection.execute('LOCK provider, provider_enrichment, site IN SHARE UPDATE EXCLUSIVE MODE')
@@ -23,6 +18,7 @@ module API
                                  :subjects,
                                  site_statuses: [:site])
                        .changed_since(changed_since)
+                       .by_recruitment_cycle(recruitment_year)
                        .limit(per_page)
         end
 

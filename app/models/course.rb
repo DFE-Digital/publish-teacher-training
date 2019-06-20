@@ -117,6 +117,8 @@ class Course < ApplicationRecord
     end.order(:changed_at, :id)
   end
 
+  scope :by_recruitment_cycle, ->(recruitment_year) { joins(:recruitment_cycle).merge(RecruitmentCycle.where(year: recruitment_year)) }
+
   validates :enrichments, presence: true, on: :publish
   validate :validate_enrichment_publishable, on: :publish
   validate :validate_enrichment_saveable, on: :save
