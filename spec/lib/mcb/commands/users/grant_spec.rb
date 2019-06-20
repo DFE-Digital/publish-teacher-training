@@ -17,7 +17,11 @@ describe 'mcb users grant' do
   end
   let(:organisation) { create(:organisation) }
   let(:provider) { create(:provider, organisations: [organisation]) }
-  let(:output) { grant(id_or_email_or_sign_in_id, provider.provider_code, input_commands.join("\n") + "\n").first }
+
+  let(:output) do
+    combined_input = input_commands.map { |c| "#{c}\n" }.join
+    grant(id_or_email_or_sign_in_id, provider.provider_code, combined_input).first
+  end
 
   context 'when the user exists and already has access to the provider' do
     let(:id_or_email_or_sign_in_id) { user.email }
