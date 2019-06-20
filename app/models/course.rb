@@ -28,6 +28,7 @@ class Course < ApplicationRecord
 
   include WithQualifications
   include ChangedAt
+  include AllocationSubjects
 
   after_initialize :set_defaults
 
