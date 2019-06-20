@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_06_19_114150) do
+ActiveRecord::Schema.define(version: 2019_06_19_142449) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_buffercache"
@@ -85,9 +85,11 @@ ActiveRecord::Schema.define(version: 2019_06_19_114150) do
     t.datetime "created_at", default: -> { "timezone('utc'::text, now())" }, null: false
     t.datetime "updated_at", default: -> { "timezone('utc'::text, now())" }, null: false
     t.datetime "changed_at", default: -> { "timezone('utc'::text, now())" }, null: false
+    t.integer "recruitment_cycle_id"
     t.index ["accrediting_provider_id"], name: "IX_course_accrediting_provider_id"
     t.index ["changed_at"], name: "index_course_on_changed_at", unique: true
     t.index ["provider_id", "course_code"], name: "IX_course_provider_id_course_code", unique: true
+    t.index ["recruitment_cycle_id"], name: "index_course_on_recruitment_cycle_id"
   end
 
   create_table "course_enrichment", id: :serial, force: :cascade do |t|

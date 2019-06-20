@@ -20,6 +20,7 @@
 #  created_at              :datetime         not null
 #  updated_at              :datetime         not null
 #  changed_at              :datetime         not null
+#  recruitment_cycle_id    :integer
 #
 
 require "rails_helper"

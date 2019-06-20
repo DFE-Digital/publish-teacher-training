@@ -20,6 +20,7 @@
 #  created_at              :datetime         not null
 #  updated_at              :datetime         not null
 #  changed_at              :datetime         not null
+#  recruitment_cycle_id    :integer
 #
 
 require 'rails_helper'
@@ -38,6 +39,7 @@ RSpec.describe Course, type: :model do
   describe 'associations' do
     it { should belong_to(:provider) }
     it { should belong_to(:accrediting_provider).optional }
+    it { should belong_to(:recruitment_cycle) }
     it { should have_many(:subjects).through(:course_subjects) }
     it { should have_many(:site_statuses) }
     it { should have_many(:sites) }

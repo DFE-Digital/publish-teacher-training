@@ -11,5 +11,7 @@
 #
 
 class RecruitmentCycle < ApplicationRecord
+  has_many :courses
+
   validates :year, presence: true
 end
