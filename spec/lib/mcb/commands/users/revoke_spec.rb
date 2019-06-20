@@ -24,9 +24,11 @@ describe 'mcb users revoke' do
   end
 
   context 'when the user exists and has access to the provider' do
+    let(:other_organisation) { create(:organisation) }
+    let(:other_provider) { create(:provider, organisations: [other_organisation]) }
     let(:id_or_email_or_sign_in_id) { user.email }
     let(:input_commands) { %w[y] }
-    let(:user) { create(:user, organisations: [organisation]) }
+    let(:user) { create(:user, organisations: [organisation, other_organisation]) }
 
     before do
       output
@@ -34,7 +36,7 @@ describe 'mcb users revoke' do
 
     it 'revokes organisation membership to that user' do
       user = User.find_by!(email: id_or_email_or_sign_in_id)
-      expect(user.organisations).to eq([])
+      expect(user.organisations).to eq([other_organisation])
     end
 
     it 'confirms removing organisation membership' do
