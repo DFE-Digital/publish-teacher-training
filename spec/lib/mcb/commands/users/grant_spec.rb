@@ -1,10 +1,10 @@
 require 'mcb_helper'
 
-describe 'mcb users grant_access_to_provider' do
-  def grant_access_to_provider(provider_code, commands)
+describe 'mcb users grant' do
+  def grant(id_or_email_or_sign_in_id, provider_code, commands)
     stderr = ""
     output = with_stubbed_stdout(stdin: commands, stderr: stderr) do
-      cmd.run([provider_code])
+      cmd.run([id_or_email_or_sign_in_id, provider_code])
     end
     [output, stderr]
   end
@@ -12,24 +12,26 @@ describe 'mcb users grant_access_to_provider' do
   let(:lib_dir) { "#{Rails.root}/lib" }
   let(:cmd) do
     Cri::Command.load_file(
-      "#{lib_dir}/mcb/commands/users/grant_access_to_provider.rb"
+      "#{lib_dir}/mcb/commands/users/grant.rb"
     )
   end
   let(:organisation) { create(:organisation) }
   let(:provider) { create(:provider, organisations: [organisation]) }
-  let(:output) { grant_access_to_provider(provider.provider_code, input_commands.join("\n") + "\n").first }
+  let(:output) { grant(id_or_email_or_sign_in_id, provider.provider_code, input_commands.join("\n") + "\n").first }
 
   context 'when the user exists and already has access to the provider' do
-    let(:input_commands) { [user.email] }
+    let(:id_or_email_or_sign_in_id) { user.email }
+    let(:input_commands) { [] }
     let(:user) { create(:user, organisations: [organisation]) }
 
-    it 'informs the support agen that it is not going to do anything' do
+    it 'informs the support agent that it is not going to do anything' do
       expect(output).to include("#{user} already belongs to #{organisation.name}")
     end
   end
 
   context 'when the user does not exist' do
-    let(:input_commands) { %w[jsmith@acme.org Jane Smith y y] }
+    let(:id_or_email_or_sign_in_id) { 'jsmith@acme.org' }
+    let(:input_commands) { %w[Jane Smith y y] }
 
     before do
       output
@@ -46,12 +48,13 @@ describe 'mcb users grant_access_to_provider' do
 
     it 'confirms user creation and organisation membership' do
       expect(output).to include("jsmith@acme.org appears to be a new user")
-      expect(output).to include("You're about to give Jane Smith <jsmith@acme.org> access to #{organisation.name}.")
+      expect(output).to include("You're about to give Jane Smith <jsmith@acme.org> access to organisation #{organisation.name}.")
     end
   end
 
   context 'when the user details are invalid' do
-    let(:input_commands) { %w[jsmith Jane Smith] }
+    let(:id_or_email_or_sign_in_id) { 'jsmith' }
+    let(:input_commands) { %w[Jane Smith] }
 
     before do
       output
@@ -62,13 +65,14 @@ describe 'mcb users grant_access_to_provider' do
     end
 
     it 'displays the validation errors' do
-      expect(output).to include("Email must contain @")
+      expect(output).to include("Specify an email address if you wish to create a user")
     end
   end
 
   context 'when the user exists but is not a member of the org' do
     let(:user) { create(:user, organisations: []) }
-    let(:input_commands) { [user.email, 'y'] }
+    let(:id_or_email_or_sign_in_id) { user.email }
+    let(:input_commands) { %w[y] }
 
     before do
       output
@@ -79,7 +83,7 @@ describe 'mcb users grant_access_to_provider' do
     end
 
     it 'confirms user creation and organisation membership' do
-      expect(output).to include("You're about to give #{user} access to #{organisation.name}.")
+      expect(output).to include("You're about to give #{user} access to organisation #{organisation.name}.")
     end
   end
 end
