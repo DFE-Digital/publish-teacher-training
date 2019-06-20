@@ -126,6 +126,26 @@ module MCB
       ]
     end
 
+    def nctl_organisations_table(nctl_organisations, name: 'NCTL Organsations')
+      return if nctl_organisations.nil?
+
+      [
+        "#{name}:",
+        render_table_or_none(nctl_organisations, nctl_organisations_table_columns)
+      ]
+    end
+
+    def nctl_organisations_table_columns
+      [
+        :id,
+        :name,
+        :urn,
+        :nctl_id,
+        :organisation_id,
+        [:organisation, ->(no) { no.organisation.name }]
+      ]
+    end
+
     def provider_record(provider, name: 'Provider')
       provider = provider.attributes if provider.respond_to?(:attributes)
 
