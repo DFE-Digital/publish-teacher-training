@@ -182,3 +182,12 @@ bin/mcb -h
 
 Commands for mcb are defined in `lib/mcb/commands` and any new commands should
 be organised in an appropriate sub-folder there.
+
+### Dependencies
+
+* Requires an installation of the `az` command on the `PATH`. Get it at
+  https://docs.microsoft.com/en-us/cli/azure/?view=azure-cli-latest
+* An Azure account with access to the subscription(s) - if you're on a non-DfE
+  device you need BYOD & 2FA set up.
+* A publish user with your email address with access to the organisation(s) you
+  want to modify.
