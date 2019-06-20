@@ -10,4 +10,5 @@
 class Organisation < ApplicationRecord
   has_and_belongs_to_many :users
   has_and_belongs_to_many :providers
+  has_many :nctl_organisations
 end
