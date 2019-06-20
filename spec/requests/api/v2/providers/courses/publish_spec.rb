@@ -131,29 +131,6 @@ describe 'Publish API v2', type: :request do
       context 'fee type based course' do
         let(:course) { create(:course, :fee_type_based, provider: provider, enrichments: [invalid_enrichment]) }
 
-        context 'invalid enrichment with invalid content exceed word count fields' do
-          let(:invalid_enrichment) {
-            create(:course_enrichment, :with_fee_based_course,
-                   about_course:  Faker::Lorem.sentence(400 + 1),
-                             interview_process:  Faker::Lorem.sentence(250 + 1),
-                             qualifications:  Faker::Lorem.sentence(100 + 1),
-                             how_school_placements_work:  Faker::Lorem.sentence(350 + 1),
-                             fee_details:  Faker::Lorem.sentence(250 + 1),
-                             salary_details:  Faker::Lorem.sentence(250 + 1))
-          }
-
-          it { should have_http_status(:unprocessable_entity) }
-
-          it 'has validation errors' do
-            expect(json_data.count).to eq 5
-            expect(json_data[0]["detail"]).to eq("Reduce the word count for about course")
-            expect(json_data[1]["detail"]).to eq("Reduce the word count for interview process")
-            expect(json_data[2]["detail"]).to eq("Reduce the word count for how school placements work")
-            expect(json_data[3]["detail"]).to eq("Reduce the word count for qualifications")
-            expect(json_data[4]["detail"]).to eq("Reduce the word count for fee details")
-          end
-        end
-
         context 'invalid enrichment with invalid content lack_presence fields' do
           let(:invalid_enrichment) { create(:course_enrichment, :without_content) }
 
@@ -162,10 +139,10 @@ describe 'Publish API v2', type: :request do
           it 'has validation errors' do
             expect(json_data.count).to eq 5
             expect(json_data[0]["detail"]).to eq("Enter details about this course")
-            expect(json_data[1]["detail"]).to eq("Enter details about school placements")
-            expect(json_data[2]["detail"]).to eq("Enter a course length")
-            expect(json_data[3]["detail"]).to eq("Enter details about the qualifications needed")
-            expect(json_data[4]["detail"]).to eq("Give details about the fee for UK and EU students")
+            expect(json_data[1]["detail"]).to eq("Enter a course length")
+            expect(json_data[2]["detail"]).to eq("Give details about the fee for UK and EU students")
+            expect(json_data[3]["detail"]).to eq("Enter details about school placements")
+            expect(json_data[4]["detail"]).to eq("Enter details about the qualifications needed")
           end
         end
       end
@@ -173,28 +150,6 @@ describe 'Publish API v2', type: :request do
       context 'salary type based course' do
         let(:course) { create(:course, :salary_type_based, provider: provider, enrichments: [invalid_enrichment]) }
 
-        context 'invalid enrichment with invalid content exceed word count fields' do
-          let(:invalid_enrichment) {
-            create(:course_enrichment, :with_fee_based_course,
-                   about_course:  Faker::Lorem.sentence(400 + 1),
-                             interview_process:  Faker::Lorem.sentence(250 + 1),
-                             qualifications:  Faker::Lorem.sentence(100 + 1),
-                             how_school_placements_work:  Faker::Lorem.sentence(350 + 1),
-                             fee_details:  Faker::Lorem.sentence(250 + 1),
-                             salary_details:  Faker::Lorem.sentence(250 + 1))
-          }
-
-          it { should have_http_status(:unprocessable_entity) }
-
-          it 'has validation errors' do
-            expect(json_data.count).to eq 5
-            expect(json_data[0]["detail"]).to eq("Reduce the word count for about course")
-            expect(json_data[1]["detail"]).to eq("Reduce the word count for interview process")
-            expect(json_data[2]["detail"]).to eq("Reduce the word count for how school placements work")
-            expect(json_data[3]["detail"]).to eq("Reduce the word count for qualifications")
-            expect(json_data[4]["detail"]).to eq("Reduce the word count for salary details")
-          end
-        end
         context 'invalid enrichment with invalid content lack_presence fields' do
           let(:invalid_enrichment) { create(:course_enrichment, :without_content) }
 
@@ -203,8 +158,8 @@ describe 'Publish API v2', type: :request do
           it 'has validation errors' do
             expect(json_data.count).to eq 5
             expect(json_data[0]["detail"]).to eq("Enter details about this course")
-            expect(json_data[1]["detail"]).to eq("Enter details about school placements")
-            expect(json_data[2]["detail"]).to eq("Enter a course length")
+            expect(json_data[1]["detail"]).to eq("Enter a course length")
+            expect(json_data[2]["detail"]).to eq("Enter details about school placements")
             expect(json_data[3]["detail"]).to eq("Enter details about the qualifications needed")
             expect(json_data[4]["detail"]).to eq("Give details about the salary for this course")
           end

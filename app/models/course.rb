@@ -84,7 +84,11 @@ class Course < ApplicationRecord
            primary_key: :course_code,
            class_name: 'CourseEnrichment' do
     def find_or_initialize_draft
-      latest_draft_enrichment = latest_first.draft.first
+      # This is a ruby search as opposed to an AR search, because calling `draft`
+      # will return a new instance of a CourseEnrichment object which is different
+      # to the ones in the cached `enrichments` association. This makes checking
+      # for validations later down non-trivial.
+      latest_draft_enrichment = select(&:draft?).last
 
       if latest_draft_enrichment.present?
         latest_draft_enrichment
@@ -323,7 +327,7 @@ private
   end
 
   def validate_enrichment(validation_scope)
-    latest_enrichment = enrichments.latest_first.first
+    latest_enrichment = enrichments.select(&:draft?).last
     return unless latest_enrichment.present?
 
     latest_enrichment.valid? validation_scope

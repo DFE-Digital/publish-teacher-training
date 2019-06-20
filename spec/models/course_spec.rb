@@ -51,9 +51,11 @@ RSpec.describe Course, type: :model do
 
     describe 'saveable?' do
       let(:course) { create(:course, enrichments: [invalid_enrichment]) }
-      let(:invalid_enrichment) { create(:course_enrichment, about_course: Faker::Lorem.sentence(1000)) }
+      let(:invalid_enrichment) { build(:course_enrichment, about_course: '') }
 
       before do
+        subject
+        invalid_enrichment.about_course = Faker::Lorem.sentence(1000)
         subject.saveable?
       end
 

@@ -17,6 +17,8 @@
 require 'rails_helper'
 
 describe CourseEnrichment, type: :model do
+  subject { build :course_enrichment }
+
   describe 'associations' do
     it 'belongs to a provider' do
       expect(subject).to belong_to(:provider)
@@ -90,45 +92,139 @@ describe CourseEnrichment, type: :model do
     end
   end
 
+  describe 'about_course attribute' do
+    let(:about_course_text) { 'this course is great' }
+
+    subject { build :course_enrichment, about_course: about_course_text }
+
+    context 'with over 400 words' do
+      let(:about_course_text) { Faker::Lorem.sentence(400 + 1) }
+
+      it { should_not be_valid }
+    end
+
+    context 'when nil' do
+      let(:about_course_text) { nil }
+
+      it { should be_valid }
+
+      describe 'on publish' do
+        it { should_not be_valid :publish }
+      end
+    end
+  end
+
+  describe 'course_length attribute' do
+    let(:course_length_text) { 'this course is great' }
+
+    subject { build :course_enrichment, course_length: course_length_text }
+
+    context 'when nil' do
+      let(:course_length_text) { nil }
+
+      it { should be_valid }
+
+      describe 'on publish' do
+        it { should_not be_valid :publish }
+      end
+    end
+  end
+
+  describe 'how_school_placements_work attribute' do
+    let(:how_school_placements_work_text) { 'this course is great' }
+
+    subject { build :course_enrichment, how_school_placements_work: how_school_placements_work_text }
+
+    context 'with over 400 words' do
+      let(:how_school_placements_work_text) { Faker::Lorem.sentence(400 + 1) }
+
+      it { should_not be_valid }
+    end
+
+    context 'when nil' do
+      let(:how_school_placements_work_text) { nil }
+
+      it { should be_valid }
+
+      describe 'on publish' do
+        it { should_not be_valid :publish }
+      end
+    end
+  end
+
+  describe 'interview_process attribute' do
+    let(:interview_process_text) { 'this course is great' }
+
+    subject { build :course_enrichment, interview_process: interview_process_text }
+
+    context 'with over 250 words' do
+      let(:interview_process_text) { Faker::Lorem.sentence(250 + 1) }
+
+      it { should_not be_valid }
+    end
+  end
+
+  describe 'qualifications attribute' do
+    let(:qualifications_text) { 'this course is great' }
+
+    subject { build :course_enrichment, qualifications: qualifications_text }
+
+    context 'with over 100 words' do
+      let(:qualifications_text) { Faker::Lorem.sentence(100 + 1) }
+
+      it { should_not be_valid }
+    end
+
+    context 'when nil' do
+      let(:qualifications_text) { nil }
+
+      it { should be_valid }
+
+      describe 'on publish' do
+        it { should_not be_valid :publish }
+      end
+    end
+  end
+
+  describe 'salary_details attribute' do
+    let(:salary_details_text) { 'this course is great' }
+
+    subject(:salaried_course) { build :course, :with_salary }
+    subject { build :course_enrichment, salary_details: salary_details_text, course: salaried_course }
+
+    context 'with over 250 words' do
+      let(:salary_details_text) { Faker::Lorem.sentence(250 + 1) }
+
+      it { should_not be_valid }
+    end
+
+    context 'when nil' do
+      let(:salary_details_text) { nil }
+
+      it { should be_valid }
+
+      describe 'on publish' do
+        it { should_not be_valid :publish }
+      end
+    end
+  end
+
   describe 'validation for publish' do
     let(:course_enrichment) { build(:course_enrichment, :with_fee_based_course) }
     subject { course_enrichment }
 
     context 'fee based course' do
       it { should validate_presence_of(:fee_uk_eu).on(:publish) }
-      it { should validate_presence_of(:about_course).on(:publish) }
       it { should validate_presence_of(:qualifications).on(:publish) }
-      it { should validate_presence_of(:course_length).on(:publish) }
       it { should validate_presence_of(:fee_uk_eu).on(:publish) }
       it { should validate_numericality_of(:fee_uk_eu).on(:publish) }
       it { should validate_numericality_of(:fee_international).on(:publish) }
-
-      it 'validates maximum word count for about_course' do
-        course_enrichment.about_course = Faker::Lorem.sentence(400 + 1)
-
-        expect(course_enrichment).not_to be_valid :publish
-        expect(course_enrichment.errors[:about_course]).to be_present
-      end
 
       it 'validates maximum word count for interview_process' do
         course_enrichment.interview_process = Faker::Lorem.sentence(250 + 1)
 
         expect(course_enrichment).not_to be_valid :publish
         expect(course_enrichment.errors[:interview_process]).to be_present
-      end
-
-      it 'validates maximum word count for qualifications' do
-        course_enrichment.qualifications = Faker::Lorem.sentence(100 + 1)
-
-        expect(course_enrichment).not_to be_valid :publish
-        expect(course_enrichment.errors[:qualifications]).to be_present
-      end
-
-      it 'validates maximum word count for how_school_placements_work' do
-        course_enrichment.how_school_placements_work = Faker::Lorem.sentence(350 + 1)
-
-        expect(course_enrichment).not_to be_valid :publish
-        expect(course_enrichment.errors[:how_school_placements_work]).to be_present
       end
 
       it 'validates maximum word count for fee_details' do
@@ -154,39 +250,16 @@ describe CourseEnrichment, type: :model do
       let(:course_enrichment) { build(:course_enrichment, :with_salary_based_course) }
 
       it { should validate_presence_of(:salary_details).on(:publish) }
-      it { should validate_presence_of(:about_course).on(:publish) }
       it { should validate_presence_of(:qualifications).on(:publish) }
-      it { should validate_presence_of(:course_length).on(:publish) }
       it { should_not validate_presence_of(:fee_uk_eu).on(:publish) }
       it { should_not validate_numericality_of(:fee_uk_eu).on(:publish) }
       it { should_not validate_numericality_of(:fee_international).on(:publish) }
-
-      it 'validates maximum word count for about_course' do
-        course_enrichment.about_course = Faker::Lorem.sentence(400 + 1)
-
-        expect(course_enrichment).not_to be_valid :publish
-        expect(course_enrichment.errors[:about_course]).to be_present
-      end
-
-      it 'validates maximum word count for interview_process' do
-        course_enrichment.interview_process = Faker::Lorem.sentence(250 + 1)
-
-        expect(course_enrichment).not_to be_valid :publish
-        expect(course_enrichment.errors[:interview_process]).to be_present
-      end
 
       it 'validates maximum word count for qualifications' do
         course_enrichment.qualifications = Faker::Lorem.sentence(100 + 1)
 
         expect(course_enrichment).not_to be_valid :publish
         expect(course_enrichment.errors[:qualifications]).to be_present
-      end
-
-      it 'validates maximum word count for how_school_placements_work' do
-        course_enrichment.how_school_placements_work = Faker::Lorem.sentence(350 + 1)
-
-        expect(course_enrichment).not_to be_valid :publish
-        expect(course_enrichment.errors[:how_school_placements_work]).to be_present
       end
 
       it 'validates maximum word count for salary_details' do
