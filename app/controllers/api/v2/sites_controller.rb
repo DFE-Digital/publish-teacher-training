@@ -17,6 +17,7 @@ module API
 
       def create
         @site = Site.new(site_params)
+        @site.recruitment_cycle = RecruitmentCycle.find_by(year: Settings.current_recruitment_cycle)
         @site.provider = @provider
         authorize @site
 
