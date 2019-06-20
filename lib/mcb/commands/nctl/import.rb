@@ -11,6 +11,7 @@ run do |opts, args, _cmd|
     headers: true,
     skip_lines: ',,.*'
   )
+
   import_csv.each do |row|
     nctl_org = NCTLOrganisation.find_by(nctl_id: row['nctl_id'].to_i)
     if nctl_org.nil?

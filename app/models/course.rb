@@ -28,6 +28,7 @@ class Course < ApplicationRecord
 
   include WithQualifications
   include ChangedAt
+  include AllocationSubjects
 
   has_associated_audits
   audited except: :changed_at
