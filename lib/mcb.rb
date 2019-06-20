@@ -20,7 +20,7 @@ module MCB
     load_env_azure_settings(opts)
 
     if defined?(Rails)
-      configure_audited_user if connecting_to_remote_db?
+      configure_audited_user(opts) if connecting_to_remote_db?
     else
       if requesting_remote_connection?(opts)
         webapp_rails_env = MCB::Azure.configure_for_webapp(opts)
@@ -50,7 +50,7 @@ module MCB
     load_env_azure_settings(opts)
 
     if defined?(Rails)
-      configure_audited_user if connecting_to_remote_db?
+      configure_audited_user(opts) if connecting_to_remote_db?
     else
       if requesting_remote_connection?(opts)
         webapp_rails_env = MCB::Azure.configure_for_webapp(opts)
@@ -161,8 +161,10 @@ module MCB
   class << self
     attr_reader :current_user
 
-    def get_user_from_config
-      unless config.key? :email
+    def get_user_from_config(opts)
+      email = opts.fetch(:email, config[:email])
+
+      unless email
         error 'No email set in config. You can set it like this:'
         error ''
         error "  $ #{$0} config set email <your-email-address>"
@@ -170,7 +172,7 @@ module MCB
         raise RuntimeError, 'email not configured'
       end
 
-      user = User.find_by(email: MCB.config[:email])
+      user = User.find_by(email: email)
       unless user
         error "User with email #{MCB.config[:email]} not found."
         error "For auditing purposes a user with the configured email address must exist"
@@ -270,6 +272,9 @@ module MCB
         option :S, 'subscription',
                'Specify which Azure subscription to use',
                argument: :required
+        option nil, 'email',
+               'Specify which email to connect to remote env as',
+               argument: :required
       end
     end
 
@@ -328,8 +333,8 @@ module MCB
       end
     end
 
-    def configure_audited_user
-      @current_user = get_user_from_config
+    def configure_audited_user(opts)
+      @current_user = get_user_from_config(opts)
       verbose "configuring user to be #{@current_user.email}"
       Audited.store[:audited_user] = @current_user
     end
