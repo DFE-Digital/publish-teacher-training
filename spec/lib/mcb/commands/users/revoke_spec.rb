@@ -36,7 +36,7 @@ describe 'mcb users revoke' do
 
     it 'revokes organisation membership to that user' do
       user = User.find_by!(email: id_or_email_or_sign_in_id)
-      expect(user.organisations).to eq([other_organisation])
+      expect(user.reload.organisations).to eq([other_organisation])
     end
 
     it 'confirms removing organisation membership' do
