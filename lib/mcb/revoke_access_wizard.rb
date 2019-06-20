@@ -1,21 +1,14 @@
 module MCB
   class RevokeAccessWizard
-    def initialize(cli, id_or_email_or_sign_in_id, provider)
+    def initialize(cli, user, provider)
       @cli = cli
-      @id_or_email_or_sign_in_id = id_or_email_or_sign_in_id
+      @user = user
       @provider = provider
     end
 
     def run
       fetch_organisation
-      @user = MCB.find_user_by_identifier @id_or_email_or_sign_in_id
-      if @user == nil
-        puts "#{@id_or_email_or_sign_in_id} does not exist."
-        return
-      end
-
       puts MCB::Render::ActiveRecord.user @user
-
       confirm_and_remove_user_from_organisation
     end
 

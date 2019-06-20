@@ -8,5 +8,11 @@ run do |opts, args, _cmd|
 
   cli = HighLine.new
   provider = Provider.find_by!(provider_code: args[:provider_code])
-  MCB::RevokeAccessWizard.new(cli, args[:id_or_email_or_sign_in_id], provider).run
+
+  user = MCB.find_user_by_identifier args[:id_or_email_or_sign_in_id]
+  if user == nil
+    puts "#{args[:id_or_email_or_sign_in_id]} does not exist."
+  else
+    MCB::RevokeAccessWizard.new(cli, user, provider).run
+  end
 end
