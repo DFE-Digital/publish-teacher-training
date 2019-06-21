@@ -38,6 +38,7 @@ Site.create!(
   address3: Faker::Address.city,
   address4: Faker::Address.state,
   postcode: Faker::Address.postcode,
+  recruitment_cycle: current_recruitment_cycle
 )
 
 course1 = Course.create!(

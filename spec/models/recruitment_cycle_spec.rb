@@ -23,5 +23,6 @@ describe RecruitmentCycle, type: :model do
 
   describe 'associations' do
     it { should have_many(:courses) }
+    it { should have_many(:sites) }
   end
 end

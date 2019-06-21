@@ -13,3 +13,4 @@ search_api:
   base_url: http://localhost:5001
   # Auth token used between backend and search-and-compare-api to authorize requests.
   secret: banana
+current_recruitment_cycle: 2019
