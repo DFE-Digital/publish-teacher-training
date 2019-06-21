@@ -31,6 +31,7 @@ class Course < ApplicationRecord
   include WithQualifications
   include ChangedAt
   include AllocationSubjects
+  include AllocationsReport
 
   has_associated_audits
   audited except: :changed_at
@@ -161,56 +162,6 @@ class Course < ApplicationRecord
 
   def not_discontinued?
     site_statuses.not_discontinued.any?
-  end
-
-  def allocations_report_fields
-    [
-      provider.provider_code,
-      accrediting_provider&.provider_code,
-      provider.organisations.first&.school_nctl_organisation&.urn,
-      allocation_subjects.join(' | '),
-      program_type,
-      qualification
-    ]
-  end
-
-  def spreadsheet_columns
-    [
-      ['Academic Year', '2020/21'],
-      ['Requested By (Name)', accrediting_provider&.provider_name],
-      ['Requested by (UKPRN)', ''],
-      ['Partner ITT Provider (Name)', provider.provider_name],
-      ['Partner ITT provider (UKPRN)', provider.organisations.first&.school_nctl_organisation&.urn],
-      ['Allocation Subject', allocation_subjects.join(' | ')],
-      ['Route', program_type],
-      ['Course Aim', qualification],
-      ['Course Level', 'PG'],
-      ['Min. no. of recruits', ''],
-      ['Forecast no. of recruits ', ''],
-      ['3 Year Intention', ''],
-      ['Awarding Institution', ''],
-      ['Other Institution', '']
-    ]
-  end
-
-  # Outputs an allocations XLSX with a randomly generated suffix to `public/`.
-  # The first argument is an optional prefix for the filename to make it
-  # easier to differentiate among ~200 other similar XLSX files. Defaults to
-  # the provider.provider_code.
-  # The filename will have a UUID prefix so that it can be hosted
-  # and linked to from an Azure bucket, but that the names can't be
-  # simply guessed.
-  # Example usage:
-  #    $ bin/rails c
-  #    > Course.save_xlsx(Course.first(20))
-  def self.save_allocations_report(file_name_prefix = all.first.provider.provider_code)
-    file_data = all.to_xlsx
-
-    file_name_suffix = SecureRandom.uuid
-
-    File.open(Rails.root.join("public", "allocations-#{file_name_prefix}-#{file_name_suffix}.xlsx"), 'w+b') do |f|
-      f.write file_data
-    end
   end
 
   def open_for_applications?
