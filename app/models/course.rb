@@ -26,6 +26,8 @@
 class Course < ApplicationRecord
   DEFAULT_RECRUITMENT_CYCLE_YEAR = "2019".freeze
 
+  include SpreadsheetArchitect
+
   include WithQualifications
   include ChangedAt
   include AllocationSubjects
@@ -170,6 +172,45 @@ class Course < ApplicationRecord
       program_type,
       qualification
     ]
+  end
+
+  def spreadsheet_columns
+    [
+      ['Academic Year', '2020/21'],
+      ['Requested By (Name)', accrediting_provider&.provider_name],
+      ['Requested by (UKPRN)', ''],
+      ['Partner ITT Provider (Name)', provider.provider_name],
+      ['Partner ITT provider (UKPRN)', provider.organisations.first&.school_nctl_organisation&.urn],
+      ['Allocation Subject', allocation_subjects.join(' | ')],
+      ['Route', program_type],
+      ['Course Aim', qualification],
+      ['Course Level', 'PG'],
+      ['Min. no. of recruits', ''],
+      ['Forecast no. of recruits ', ''],
+      ['3 Year Intention', ''],
+      ['Awarding Institution', ''],
+      ['Other Institution', '']
+    ]
+  end
+
+  # Outputs an allocations XLSX with a randomly generated suffix to `public/`.
+  # The first argument is the courses that should be used in the report.
+  # The second argument is a prefix for the filename to make it
+  # easier to differentiate among ~200 other similar XLSX files.
+  # The filename will have a UUID prefix so that it can be hosted
+  # and linked to from an Azure bucket, but that the names can't be
+  # simply guessed.
+  # Example usage:
+  #    $ bin/rails c
+  #    > Course.save_xlsx(Course.first(20))
+  def self.save_xlsx(courses, file_name_prefix = 'courses')
+    file_data = Course.to_xlsx(instances: courses)
+
+    file_name_suffix = SecureRandom.uuid
+
+    File.open(Rails.root.join("public", "#{file_name_prefix}-#{file_name_suffix}.xlsx"), 'w+b') do |f|
+      f.write file_data
+    end
   end
 
   def open_for_applications?
