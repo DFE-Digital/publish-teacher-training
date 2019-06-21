@@ -54,7 +54,10 @@ module AllocationsReport
       end
 
       def allocations_report_data
-        [allocations_report_headers] + all.map(&:allocations_report_fields).flatten(1)
+        [allocations_report_headers] +
+          all
+            .include_allocations_report_data
+            .map(&:allocations_report_fields).flatten(1)
       end
     end
 
