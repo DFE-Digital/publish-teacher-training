@@ -11,4 +11,7 @@
 
 class NCTLOrganisation < ApplicationRecord
   belongs_to :organisation
+
+  scope :accredited_body, -> { where(urn: nil) }
+  scope :school, -> { where.not(urn: nil) }
 end
