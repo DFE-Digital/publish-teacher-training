@@ -137,6 +137,24 @@ module MCB
       ]
     end
 
+    def organisations_table(organisations,
+                        name: 'Organisations',
+                        add_columns: [])
+      return if organisations.nil?
+
+      [
+        "#{name}:",
+        render_table_or_none(organisations, organisations_table_columns + add_columns)
+      ]
+    end
+
+    def organisations_table_columns
+      [
+        :id,
+        [:name, header: 'name'],
+      ]
+    end
+
     def providers_table(providers,
                         name: 'Providers',
                         add_columns: [])
