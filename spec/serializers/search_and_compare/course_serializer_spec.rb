@@ -39,7 +39,6 @@ describe SearchAndCompare::CourseSerializer do
           # that they're missing the following bits of data.
           c.site_statuses.each do |site_status|
             site_status.site.address2 = ''
-            site_status.site.address3 = ''
             site_status.site.address4 = ''
             site_status.site.postcode = ''
             site_status.site.save validate: false
@@ -76,7 +75,8 @@ describe SearchAndCompare::CourseSerializer do
         build :site,
               location_name: 'Stratford-Upon-Avon & South Warwickshire',
               code: 'S',
-              address1: 'CV37'
+              address1: 'CV37',
+              address3: 'somewhere'
       end
 
       let(:site_status1) do
@@ -89,7 +89,8 @@ describe SearchAndCompare::CourseSerializer do
         build :site,
               location_name: 'Nuneaton & Bedworth',
               code: 'N',
-              address1: 'CV10'
+              address1: 'CV10',
+              address3: 'else'
       end
 
       let(:site_status2) do
@@ -237,9 +238,8 @@ describe SearchAndCompare::CourseSerializer do
                 site_status.site.address1,
                 site_status.site.address2,
                 site_status.site.address3,
-                site_status.site.address4,
-                site_status.site.postcode
-              ].reject(&:blank?).join('\n')
+                site_status.site.address4
+              ].reject(&:blank?).join(', ') + (site_status.site.postcode.present? ? ' ' + site_status.site.postcode : '')
 
               {
                 Id: 0,
@@ -396,7 +396,7 @@ describe SearchAndCompare::CourseSerializer do
           include_examples 'mapped the description section', 'financial support', 'financial_support'
           include_examples 'mapped the description section', 'about school placements', 'how_school_placements_work'
           include_examples 'mapped the description section', 'about this training provider', nil
-          include_examples 'mapped the description section', 'about this training provider accrediting', nil
+          include_examples 'mapped the description section', 'about this training provider accrediting', ''
           include_examples 'mapped the description section', 'training with disabilities', nil
         end
 
