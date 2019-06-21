@@ -25,5 +25,10 @@ FactoryBot.define do
       subject_name { 'Special Educational Needs' }
       subject_code { 'U3' }
     end
+
+    trait :primary do
+      subject_name { 'Primary' }
+      subject_code { '00' }
+    end
   end
 end
