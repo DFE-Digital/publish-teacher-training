@@ -157,6 +157,10 @@ class Course < ApplicationRecord
     site_statuses.findable.any?
   end
 
+  def not_discontinued?
+    site_statuses.not_discontinued.any?
+  end
+
   def open_for_applications?
     site_statuses.open_for_applications.any?
   end

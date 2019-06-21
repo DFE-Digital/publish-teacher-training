@@ -75,6 +75,7 @@ class SiteStatus < ApplicationRecord
   }
   scope :with_vacancies, -> { where.not(vac_status: :no_vacancies) }
   scope :open_for_applications, -> { findable.applications_being_accepted_now.with_vacancies }
+  scope :not_discontinued, -> { where.not(status: :discontinued) }
 
   def self.default_vac_status_given(study_mode:)
     case study_mode
