@@ -18,6 +18,8 @@ run do |opts, args, _cmd|
       error "NCTL id not found: #{row['nctl_id']}"
     elsif row['URN'].present?
       nctl_org.update urn: row['URN'].to_i
+    elsif row['UKPRN'].present?
+      nctl_org.update ukprn: row['UKPRN'].to_i
     end
   end
 end
