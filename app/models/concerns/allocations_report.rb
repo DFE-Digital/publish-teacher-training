@@ -1,7 +1,7 @@
 module AllocationsReport
   extend ActiveSupport::Concern
 
-  included do
+  included do # rubocop:disable Metrics/BlockLength
     class << self
       def include_allocations_report_data
         all.includes(:provider,
@@ -29,6 +29,12 @@ module AllocationsReport
         File.open(Rails.root.join("public", "allocations-#{file_name_prefix}-#{file_name_suffix}.xlsx"), 'w+b') do |f|
           f.write file_data
         end
+      end
+
+      def allocations_report_csv
+        all
+          .include_allocations_report_data
+          .to_csv(spreadsheet_columns: :allocations_report_columns)
       end
     end
 
