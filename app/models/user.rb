@@ -49,6 +49,11 @@ class User < ApplicationRecord
     "#{first_name} #{last_name} <#{email}>"
   end
 
+  # accepts array or single organisation
+  def remove_access_to(organisations_to_remove)
+    self.organisations = self.organisations - [*organisations_to_remove]
+  end
+
 private
 
   def email_is_lowercase

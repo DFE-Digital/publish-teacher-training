@@ -33,7 +33,7 @@ module MCB
           return
         end
 
-        @user.organisations = @user.organisations - @organisations
+        @user.remove_access_to @organisations
       else
         puts "#{@user.email} already has no access to #{@provider}"
       end
