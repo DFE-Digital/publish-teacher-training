@@ -31,4 +31,5 @@ RSpec.describe CourseSerializer do
 
   it { should include(course_code: course.course_code) }
   it { should include(name: course.name) }
+  it { should include(recruitment_cycle: course.recruitment_cycle.year) }
 end
