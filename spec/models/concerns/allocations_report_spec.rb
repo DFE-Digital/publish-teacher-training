@@ -15,6 +15,15 @@ describe Course do
       expect(subject.last)
         .to eq course.allocations_report_fields.flatten
     end
+
+    context 'a course whose provider has no organisation' do
+      let(:provider) { create :provider, organisations: [] }
+      let(:course) { create :course, provider: provider, subjects: subjects }
+
+      it 'is not included in the output' do
+        expect(subject[1..]).to be_empty
+      end
+    end
   end
 
   describe '#allocations_report_fields' do

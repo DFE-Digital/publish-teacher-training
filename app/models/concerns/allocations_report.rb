@@ -57,6 +57,7 @@ module AllocationsReport
         [allocations_report_headers] +
           all
             .include_allocations_report_data
+            .select { |course| course.provider.organisations.any? }
             .map(&:allocations_report_fields).flatten(1)
       end
     end
