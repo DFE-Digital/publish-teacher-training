@@ -14,7 +14,7 @@
 #  region_code          :integer
 #  created_at           :datetime         not null
 #  updated_at           :datetime         not null
-#  recruitment_cycle_id :integer
+#  recruitment_cycle_id :integer          not null
 #
 
 class Site < ApplicationRecord
