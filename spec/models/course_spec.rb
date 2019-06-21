@@ -741,4 +741,28 @@ RSpec.describe Course, type: :model do
       end
     end
   end
+
+  describe '#syncable?' do
+    let(:subjects) { [build(:subject, subject_name: "primary")] }
+    let(:site_status) { build(:site_status, :findable) }
+
+    subject { create(:course, subjects: subjects, site_statuses: [site_status]) }
+
+    context 'course which is valid' do
+      let(:subject) { create(:course, subjects: subjects, site_statuses: [site_status]) }
+      its(:syncable?) { should be_truthy }
+    end
+
+    context'invalid courses' do
+      context 'course which has a dfe subject, but no findable site statuses' do
+        let(:site_status) { build(:site_status, :suspended) }
+        its(:syncable?) { should be_falsey }
+      end
+
+      context 'course which has a findable site status, but no dfe_subject' do
+        let(:subjects) { [build(:subject, subject_name: "secondary")] }
+        its(:syncable?) { should be_falsey }
+      end
+    end
+  end
 end

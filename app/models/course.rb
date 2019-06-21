@@ -307,6 +307,10 @@ class Course < ApplicationRecord
     "#{name} (#{course_code})"
   end
 
+  def syncable?
+    findable?.present? && dfe_subjects.present?
+  end
+
 private
 
   def add_enrichment_errors(enrichment)
