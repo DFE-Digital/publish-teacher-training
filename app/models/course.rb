@@ -163,6 +163,17 @@ class Course < ApplicationRecord
     site_statuses.not_discontinued.any?
   end
 
+  def allocations_report_fields
+    [
+      provider.provider_code,
+      accrediting_provider&.provider_code,
+      provider.organisations.first&.school_nctl_organisation&.urn,
+      allocation_subjects.join(' | '),
+      program_type,
+      qualification
+    ]
+  end
+
   def open_for_applications?
     site_statuses.open_for_applications.any?
   end
