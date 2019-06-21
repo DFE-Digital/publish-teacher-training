@@ -15,6 +15,8 @@ describe WordsCountValidator do
     model
   }
 
+  let(:expected_errors) { ['^Reduce the word count for some words'] }
+
   subject! {
     model.valid?
   }
@@ -39,7 +41,25 @@ describe WordsCountValidator do
 
     it { should be false }
     it 'adds an error' do
-      expect(model.errors[:some_words]).to match_array ['^Reduce the word count for some words']
+      expect(model.errors[:some_words]).to match_array expected_errors
+    end
+  end
+
+  context 'with newlines' do
+    let(:some_words_field) { (%w[word] * maximum).join("\n") + ' popped' }
+
+    it { should be false }
+    it 'adds an error' do
+      expect(model.errors[:some_words]).to match_array expected_errors
+    end
+  end
+
+  context 'with non-words such as markdown' do
+    let(:some_words_field) { (%w[word] * maximum).join(' ') + ' *' }
+
+    it { should be false }
+    it 'adds an error' do
+      expect(model.errors[:some_words]).to match_array expected_errors
     end
   end
 end
