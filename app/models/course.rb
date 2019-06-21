@@ -194,21 +194,21 @@ class Course < ApplicationRecord
   end
 
   # Outputs an allocations XLSX with a randomly generated suffix to `public/`.
-  # The first argument is the courses that should be used in the report.
-  # The second argument is a prefix for the filename to make it
-  # easier to differentiate among ~200 other similar XLSX files.
+  # The first argument is an optional prefix for the filename to make it
+  # easier to differentiate among ~200 other similar XLSX files. Defaults to
+  # the provider.provider_code.
   # The filename will have a UUID prefix so that it can be hosted
   # and linked to from an Azure bucket, but that the names can't be
   # simply guessed.
   # Example usage:
   #    $ bin/rails c
   #    > Course.save_xlsx(Course.first(20))
-  def self.save_xlsx(courses, file_name_prefix = 'courses')
-    file_data = Course.to_xlsx(instances: courses)
+  def self.save_allocations_report(file_name_prefix = all.first.provider.provider_code)
+    file_data = all.to_xlsx
 
     file_name_suffix = SecureRandom.uuid
 
-    File.open(Rails.root.join("public", "#{file_name_prefix}-#{file_name_suffix}.xlsx"), 'w+b') do |f|
+    File.open(Rails.root.join("public", "allocations-#{file_name_prefix}-#{file_name_suffix}.xlsx"), 'w+b') do |f|
       f.write file_data
     end
   end
