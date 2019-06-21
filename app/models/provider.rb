@@ -152,4 +152,8 @@ class Provider < ApplicationRecord
   def to_s
     "#{provider_name} (#{provider_code})"
   end
+
+  def organisation
+    organisations.first
+  end
 end

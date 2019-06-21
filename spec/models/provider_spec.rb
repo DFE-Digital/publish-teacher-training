@@ -50,6 +50,10 @@ describe Provider, type: :model do
     it { should validate_length_of(:organisations) }
   end
 
+  describe '#organisation' do
+    its(:organisation) { should eq subject.organisations.first }
+  end
+
   describe 'changed_at' do
     it 'is set on create' do
       provider = Provider.create
