@@ -7,6 +7,7 @@
 #  nctl_id         :text             not null
 #  organisation_id :integer
 #  urn             :integer
+#  ukprn           :integer
 #
 
 class NCTLOrganisation < ApplicationRecord
