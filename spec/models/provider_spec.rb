@@ -210,6 +210,13 @@ describe Provider, type: :model do
     end
   end
 
+  it 'defines an enum for accrediting_provider' do
+    expect(subject)
+      .to define_enum_for("accrediting_provider")
+            .backed_by_column_of_type(:text)
+            .with_values('accredited_body' => 'Y', 'not_an_accredited_body' => 'N')
+  end
+
   describe "courses" do
     let!(:provider) { create(:provider) }
     let!(:course) { create(:course, provider: provider) }

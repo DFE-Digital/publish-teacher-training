@@ -71,6 +71,10 @@ class ProviderSerializer < ActiveModel::Serializer
     @object.ucas_preferences&.type_of_gt12_before_type_cast
   end
 
+  def accrediting_provider
+    object.accrediting_provider_before_type_cast
+  end
+
 private
 
   def select_value_for_provider(provider_code, values)
