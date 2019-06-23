@@ -26,12 +26,9 @@
 class Course < ApplicationRecord
   DEFAULT_RECRUITMENT_CYCLE_YEAR = "2019".freeze
 
-  include SpreadsheetArchitect
-
   include WithQualifications
   include ChangedAt
   include AllocationSubjects
-  include AllocationsReport
 
   after_initialize :set_defaults
 

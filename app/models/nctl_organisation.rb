@@ -11,6 +11,8 @@
 #
 
 class NCTLOrganisation < ApplicationRecord
+  include AllocationsReport
+
   belongs_to :organisation
 
   scope :accredited_body, -> { where(urn: nil) }
@@ -18,6 +20,15 @@ class NCTLOrganisation < ApplicationRecord
 
   def accredited_body?
     urn.nil?
+  end
+
+  def courses
+    organisation
+      .provider_for(self)
+      .courses#.not_discontinued
+      .includes(:provider,
+               :subjects,
+               provider: { organisations: :nctl_organisations })
   end
 
   def provider
