@@ -46,6 +46,11 @@ class Provider < ApplicationRecord
     not_an_accredited_body: 'N',
   }
 
+  enum scheme_member: {
+    is_a_UCAS_ITT_member: 'Y',
+    not_a_UCAS_ITT_member: 'N',
+  }
+
   has_and_belongs_to_many :organisations, join_table: :organisation_provider
   has_many :users, through: :organisations
 
