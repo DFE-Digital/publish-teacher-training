@@ -15,4 +15,12 @@ class NCTLOrganisation < ApplicationRecord
 
   scope :accredited_body, -> { where(urn: nil) }
   scope :school, -> { where.not(urn: nil) }
+
+  def accredited_body?
+    urn.nil?
+  end
+
+  def provider
+    organisation.provider_for(self)
+  end
 end
