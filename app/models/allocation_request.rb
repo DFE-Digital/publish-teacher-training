@@ -56,4 +56,12 @@ class AllocationRequest
       COURSE_LEVEL_MAPPINGS[course_level.to_sym],
     ]
   end
+
+  def eql?(other)
+    self.to_a.eql?(other.to_a)
+  end
+
+  def hash
+    to_a.hash
+  end
 end
