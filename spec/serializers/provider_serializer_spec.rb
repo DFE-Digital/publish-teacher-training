@@ -43,7 +43,7 @@ describe ProviderSerializer do
   it { should include(postcode: provider.postcode) }
   it { should include(region_code: "%02d" % provider.region_code_before_type_cast) }
   it { should include(institution_type: provider.provider_type) }
-  it { should include(accrediting_provider: provider.accrediting_provider) }
+  it { should include(accrediting_provider: provider.accrediting_provider_before_type_cast) }
 
   describe 'type_of_gt12' do
     subject { serialize(provider)['type_of_gt12'] }

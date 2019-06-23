@@ -41,6 +41,11 @@ class Provider < ApplicationRecord
     invalid_value: "0", # there is only one of these in the data
   }
 
+  enum accrediting_provider: {
+    accredited_body: 'Y',
+    not_an_accredited_body: 'N',
+  }
+
   has_and_belongs_to_many :organisations, join_table: :organisation_provider
   has_many :users, through: :organisations
 
@@ -110,10 +115,6 @@ class Provider < ApplicationRecord
 
   def recruitment_cycle
     "2019"
-  end
-
-  def accredited_body?
-    accrediting_provider == 'Y'
   end
 
   def unassigned_site_codes
