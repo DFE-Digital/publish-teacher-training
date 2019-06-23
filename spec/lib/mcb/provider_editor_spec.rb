@@ -191,7 +191,7 @@ describe MCB::ProviderEditor do
           expect(@output).to include("New provider has been created")
 
           expect(created_provider.attributes).to include(expected_provider_attributes)
-          expect(created_provider.scheme_member).to eq('Y')
+          expect(created_provider.is_a_UCAS_ITT_member?).to be_truthy
           expect(created_provider.year_code).to eq(RecruitmentCycle.current_recruitment_cycle.year)
         end
 

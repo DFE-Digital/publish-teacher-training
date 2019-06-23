@@ -80,6 +80,10 @@ class ProviderSerializer < ActiveModel::Serializer
     object.accrediting_provider_before_type_cast
   end
 
+  def scheme_member
+    object.scheme_member_before_type_cast
+  end
+
   def recruitment_cycle
     object.recruitment_cycle.year
   end
