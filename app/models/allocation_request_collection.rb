@@ -16,7 +16,7 @@ private
       .uniq
       .sort_by { |request|
         [
-          request.requesting_nctl_organisation.name,
+          request.requesting_nctl_organisation&.name || "",
           request.partner_nctl_organisation&.name || "",
           request.subject,
         ]

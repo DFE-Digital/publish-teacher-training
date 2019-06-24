@@ -9,9 +9,10 @@ module AllocationsReport
     # The filename will have a UUID prefix so that it can be hosted
     # and linked to from an Azure bucket, but that the names can't be
     # simply guessed.
-    def save_allocations_report(file_name_prefix = nctl_id)
+    def save_allocations_report(file_name_prefix = nctl_id, type: :core_courses)
+      courses_to_use = type == :core_courses ? self.courses : self.courses_accredited_by_this_organisation
       file_data = SpreadsheetArchitect.to_xlsx(
-        data: allocations_report_data
+        data: allocations_report_data(courses_to_use)
       )
       file_name_suffix = SecureRandom.uuid
       file_name = "allocations-#{file_name_prefix}-#{file_name_suffix}.xlsx"
@@ -43,7 +44,7 @@ module AllocationsReport
       ]
     end
 
-    def allocations_report_data
+    def allocations_report_data(courses)
       [allocations_report_headers] +
         padded_allocation_requests_for(courses)
     end

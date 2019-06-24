@@ -31,6 +31,12 @@ class NCTLOrganisation < ApplicationRecord
                provider: { organisations: :nctl_organisations })
   end
 
+  def courses_accredited_by_this_organisation
+    Course
+      .where(accrediting_provider: organisation.provider_for(self))
+      .select { |course| course.provider.organisation.present? rescue false } # filter out any courses where the provider isn't mapped across
+  end
+
   def provider
     organisation.provider_for(self)
   end
