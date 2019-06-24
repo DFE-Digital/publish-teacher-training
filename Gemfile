@@ -83,8 +83,8 @@ gem 'data_migrate'
 # Allows writing of error full_messages for validations that don't start with the attribute name
 gem 'custom_error_message', git: 'https://github.com/nanamkim/custom-err-msg.git', ref: 'd72fb18'
 
-
-gem 'spreadsheet_architect'
+# For generating the allocation reports
+gem 'rubyXL'
 
 group :development, :test do
   # add info about db structure to models and other files
