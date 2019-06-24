@@ -53,7 +53,8 @@ class CourseEnrichment < ApplicationRecord
   validates :course_length, presence: true, on: :publish
 
   validates :fee_international,
-            numericality: { only_integer: true,
+            numericality: { allow_blank: true,
+                            only_integer: true,
                             greater_than_or_equal_to: 0,
                             less_than_or_equal_to: 100000 },
             if: :is_fee_based?
@@ -62,7 +63,8 @@ class CourseEnrichment < ApplicationRecord
 
   validates :fee_uk_eu, presence: true, on: :publish, if: :is_fee_based?
   validates :fee_uk_eu,
-            numericality: { only_integer: true,
+            numericality: { allow_blank: true,
+                            only_integer: true,
                             greater_than_or_equal_to: 0,
                             less_than_or_equal_to: 100000 },
             if: :is_fee_based?
