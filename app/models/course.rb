@@ -24,8 +24,6 @@
 #
 
 class Course < ApplicationRecord
-  DEFAULT_RECRUITMENT_CYCLE_YEAR = "2019".freeze
-
   include WithQualifications
   include ChangedAt
 
@@ -148,10 +146,6 @@ class Course < ApplicationRecord
 
   def saveable?
     valid? :save
-  end
-
-  def recruitment_cycle_year
-    DEFAULT_RECRUITMENT_CYCLE_YEAR
   end
 
   def findable?

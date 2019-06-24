@@ -642,11 +642,6 @@ RSpec.describe Course, type: :model do
     end
   end
 
-  describe '#recruitment_cycle_year' do
-    subject { create(:course) }
-    its(:recruitment_cycle_year) { should eq('2019') }
-  end
-
   describe '#enrichments' do
     describe '#find_or_initialize_draft' do
       let(:course) { create(:course, enrichments: enrichments) }
