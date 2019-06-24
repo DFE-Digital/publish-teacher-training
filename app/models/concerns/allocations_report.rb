@@ -1,3 +1,5 @@
+require 'rubyXL/convenience_methods'
+
 module AllocationsReport
   extend ActiveSupport::Concern
 
@@ -9,51 +11,32 @@ module AllocationsReport
     # The filename will have a UUID prefix so that it can be hosted
     # and linked to from an Azure bucket, but that the names can't be
     # simply guessed.
-    def save_allocations_report(file_name_prefix = nctl_id, type: :core_courses)
+    def save_allocations_report(template_path, file_name_prefix = nctl_id, type: :core_courses)
       courses_to_use = type == :core_courses ? self.courses : self.courses_accredited_by_this_organisation
-      file_data = SpreadsheetArchitect.to_xlsx(
-        data: allocations_report_data(courses_to_use)
-      )
+      data = AllocationRequestCollection.new(courses_to_use).to_a
+
+      workbook = RubyXL::Parser.parse(template_path)
+      worksheet = workbook["Provider Sheet "]
+
+      row_offset = 6
+      nctl_organisation = NCTLOrganisation.find_by!(nctl_id: '10763')
+      data.each_with_index do |row, row_index|
+        row.to_a.each_with_index do |value, column_index|
+          cell = worksheet[row_offset + row_index][column_index]
+
+          cell.nil? ? worksheet.add_cell(row_offset + row_index, column_index, value) : cell.change_contents(value)
+        end
+      end
+
       file_name_suffix = SecureRandom.uuid
       file_name = "allocations-#{file_name_prefix}-#{file_name_suffix}.xlsx"
-      file_path = Rails.root.join("public", file_name)
+      output_filename = Rails.root.join("public", file_name)
 
-      File.write(file_path, file_data, mode: 'w+b')
-    end
-
-    def allocations_report_csv
-      SpreadsheetArchitect.to_csv(data: allocations_report_data)
-    end
-
-    def allocations_report_headers
-      [
-        'Academic Year',
-        'Requested By (Name)',
-        'Requested by (UKPRN)',
-        'Partner ITT Provider (Name)',
-        'Partner ITT provider (UKPRN)',
-        'Allocation Subject',
-        'Route',
-        'Course Aim',
-        'Course Level',
-        'Min. no. of recruits',
-        'Forecast no. of recruits',
-        '3 Year Intention',
-        'Awarding Institution',
-        'Other Institution',
-      ]
+      workbook.write(output_filename)
     end
 
     def allocations_report_data(courses)
-      [allocations_report_headers] +
-        padded_allocation_requests_for(courses)
-    end
-
-    def padded_allocation_requests_for(courses)
-      AllocationRequestCollection
-        .new(courses)
-        .to_a
-        .map { |request| request.to_a + ([''] * 5) }
+      AllocationRequestCollection.new(courses).to_a
     end
   end
 end
