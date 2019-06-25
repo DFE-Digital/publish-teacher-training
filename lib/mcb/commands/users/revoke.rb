@@ -6,16 +6,11 @@ usage 'revoke <user_id/email/sign_in_user_id> [--provider-code <provider_code>]'
 
 run do |opts, args, _cmd|
   MCB.init_rails(opts)
-
   cli = HighLine.new
 
-  provider = nil
-  if opts[:provider_code]
-    provider = Provider.find_by!(provider_code: opts[:provider_code])
-  end
-
-
+  provider = Provider.find_by(provider_code: opts[:provider_code])
   user = MCB.find_user_by_identifier args[:id_or_email_or_sign_in_id]
+
   if user == nil
     puts "#{args[:id_or_email_or_sign_in_id]} does not exist."
   else

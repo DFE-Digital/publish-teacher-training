@@ -51,7 +51,7 @@ class User < ApplicationRecord
 
   # accepts array or single organisation
   def remove_access_to(organisations_to_remove)
-    self.organisations = self.organisations - [*organisations_to_remove]
+    self.organisations = self.organisations - Array(organisations_to_remove)
   end
 
 private
