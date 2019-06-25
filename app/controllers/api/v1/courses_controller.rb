@@ -25,7 +25,8 @@ module API
         set_next_link_header_using_changed_since_or_last_object(
           @courses.last,
           changed_since: changed_since,
-          per_page: per_page
+          per_page: per_page,
+          recruitment_year: recruitment_year
         )
 
         render json: @courses

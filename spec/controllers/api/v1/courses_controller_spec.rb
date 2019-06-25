@@ -12,7 +12,8 @@ describe API::V1::CoursesController, type: :controller do
     # Default sensible params used by tests.
     let(:params) do
       {
-        changed_since: format_timestamp(changed_since)
+        changed_since: format_timestamp(changed_since),
+        recruitment_year: '2019'
       }
     end
 
