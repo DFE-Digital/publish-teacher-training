@@ -33,6 +33,8 @@ module AllocationsReport
       output_filename = Rails.root.join("public", file_name)
 
       workbook.write(output_filename)
+
+      file_name
     end
   end
 end
