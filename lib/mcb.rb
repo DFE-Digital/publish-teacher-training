@@ -12,11 +12,11 @@ module MCB
     end
   end
 
-  # Load the rails environment.
+  # Run a rails command in the correct env environment.
   #
   # Not all mcb commands require the rails env, e.g. the API ones don't. Use
   # this method in those commands that do.
-  def self.init_rails(**opts)
+  def self.rails_runner(commands, **opts)
     load_env_azure_settings(opts)
 
     unless defined?(Rails)
@@ -35,37 +35,19 @@ module MCB
 
       verbose("Running #{exec_path}")
 
-      # --webapp only needs to be processed on the first time through
-      new_argv = remove_option_with_arg(ARGV, '--webapp', '-A')
-      exec(exec_path, 'runner', $0, *new_argv)
+      exec(exec_path, *commands)
     end
   end
 
-  # Load the rails environment.
-  #
-  # Not all mcb commands require the rails env, e.g. the API ones don't. Use
-  # this method in those commands that do.
+  def self.init_rails(**opts)
+    # --webapp only needs to be processed on the first time through
+    new_argv = remove_option_with_arg(ARGV, '--webapp', '-A')
+
+    rails_runner(['runner', $0, *new_argv], **opts)
+  end
+
   def self.rails_console(**opts)
-    load_env_azure_settings(opts)
-
-    unless defined?(Rails)
-      if requesting_remote_connection?(opts)
-        webapp_rails_env = MCB::Azure.configure_for_webapp(opts)
-
-        ENV['RAILS_ENV'] = webapp_rails_env
-      end
-
-      app_root = File.expand_path(File.join(File.dirname($0), '..'))
-      exec_path = File.join(app_root, 'bin', 'rails')
-
-      # prevent caching of environment variables by spring
-      ENV['DISABLE_SPRING'] = "true"
-      ENV['MCB_AUDIT_USER'] = get_user_email(opts)
-
-      verbose("Running #{exec_path}")
-
-      exec(exec_path, 'console')
-    end
+    rails_runner(%w[console], **opts)
   end
 
   # Load commands from dir adding them to cmd
