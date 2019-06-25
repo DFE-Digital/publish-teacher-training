@@ -114,7 +114,7 @@ describe "Courses API", type: :request do
                                   "institution_name" => "ACME SCITT",
                                   "institution_type" => "B",
                                   "accrediting_provider" => 'N',
-                                  "scheme_member" => "Y"
+                                  "scheme_member" => "is_a_UCAS_ITT_member"
                                 },
                                 "accrediting_provider" => nil
                               }

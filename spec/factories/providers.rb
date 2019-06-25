@@ -24,6 +24,7 @@
 #  accrediting_provider :text
 #  last_published_at    :datetime
 #  changed_at           :datetime         not null
+#  nctl_organisation_id :bigint
 #
 
 FactoryBot.define do

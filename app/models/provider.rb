@@ -24,6 +24,7 @@
 #  accrediting_provider :text
 #  last_published_at    :datetime
 #  changed_at           :datetime         not null
+#  nctl_organisation_id :bigint
 #
 
 class Provider < ApplicationRecord
@@ -67,7 +68,7 @@ class Provider < ApplicationRecord
   has_many :courses
   has_one :ucas_preferences, class_name: 'ProviderUCASPreference'
   has_many :contacts
-  belongs_to :nctl_organisation, validate: false
+  belongs_to :nctl_organisation, optional: true
 
   scope :changed_since, ->(timestamp) do
     if timestamp.present?
