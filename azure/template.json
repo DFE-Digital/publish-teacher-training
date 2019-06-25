@@ -175,10 +175,10 @@
             "value": "[variables('appServicePlanName')]"
           },
           "appServicePlanSize": {
-              "value": "[parameters('appServicePlanSize')]"
+            "value": "[parameters('appServicePlanSize')]"
           },
           "appServicePlanInstances": {
-              "value": "[parameters('appServicePlanInstances')]"
+            "value": "[parameters('appServicePlanInstances')]"
           }
         }
       }
@@ -296,6 +296,29 @@
       },
       "dependsOn": [
         "app-service-plan"
+      ]
+    },
+    {
+      "name": "app-service-logs",
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2017-05-10",
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(variables('deploymentUrlBase'), 'app-service-logs.json')]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "appServiceName": {
+            "value": "[variables('appServiceName')]"
+          },
+          "httpLoggingEnabled": {
+            "value": true
+          }
+        }
+      },
+      "dependsOn": [
+        "app-service"
       ]
     },
     {
