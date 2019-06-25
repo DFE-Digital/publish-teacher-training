@@ -229,10 +229,14 @@ describe Provider, type: :model do
   end
 
   describe "courses" do
-    let!(:provider) { create(:provider) }
-    let!(:course) { create(:course, provider: provider) }
+    let(:provider) { create(:provider, courses: [course]) }
+    let(:course) { build(:course) }
 
     describe "#courses_count" do
+      before do
+        provider
+      end
+
       it 'returns course count using courses.size' do
         allow(provider.courses).to receive(:size).and_return(1)
 
@@ -256,6 +260,9 @@ describe Provider, type: :model do
 
     describe ".include_courses_counts" do
       let(:first_provider) { Provider.include_courses_counts.first }
+      before do
+        provider
+      end
 
       it 'includes course counts' do
         expect(first_provider.courses_count).to eq(1)
@@ -268,6 +275,22 @@ describe Provider, type: :model do
           expect { course.discard }.to change { provider.courses.size }.by(-1)
         end
       end
+    end
+
+    describe '#syncable_courses' do
+      let(:site) { build(:site) }
+      let(:dfe_subject) { build(:subject, subject_name: "primary") }
+      let(:non_dfe_subject) { build(:subject, subject_name: "secondary") }
+      let(:findable_site_status_1) { build(:site_status, :findable, site: site) }
+      let(:findable_site_status_2) { build(:site_status, :findable, site: site) }
+      let(:suspended_site_status) { build(:site_status, :suspended, site: site) }
+      let(:syncable_course) { build(:course, site_statuses: [findable_site_status_1], subjects: [dfe_subject]) }
+      let(:suspended_course) { build(:course, site_statuses: [suspended_site_status], subjects: [dfe_subject]) }
+      let(:invalid_subject_course) { build(:course, site_statuses: [findable_site_status_2], subjects: [non_dfe_subject]) }
+
+      subject { create(:provider, courses: [syncable_course, suspended_course, invalid_subject_course], sites: [site]) }
+
+      its(:syncable_courses) { should eq [syncable_course] }
     end
   end
 
