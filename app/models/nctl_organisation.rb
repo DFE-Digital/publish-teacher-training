@@ -14,6 +14,7 @@ class NCTLOrganisation < ApplicationRecord
   include AllocationsReport
 
   belongs_to :organisation
+  has_many :providers
 
   scope :accredited_body, -> { where(urn: nil) }
   scope :school, -> { where.not(urn: nil) }
@@ -27,8 +28,8 @@ class NCTLOrganisation < ApplicationRecord
       .provider_for(self)
       .courses#.not_discontinued
       .includes(:provider,
-               :subjects,
-               provider: { organisations: :nctl_organisations })
+                :subjects,
+                provider: { organisations: :nctl_organisations })
   end
 
   def courses_accredited_by_this_organisation
