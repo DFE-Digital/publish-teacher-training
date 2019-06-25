@@ -1,10 +1,8 @@
-if ENV['MCB_SETUP_AUDIT_USER'].present?
-  require 'mcb'
-  require 'mcb/config'
+if ENV.key?('DB_HOSTNAME') && ENV.key?('MCB_AUDIT_USER')
+  user = User.find_by email: ENV['MCB_AUDIT_USER']
 
-  def verbose(msg)
-    Rails.logger.info msg
-  end
+  raise "Could not find user by email: #{ENV['MCB_AUDIT_USER']}" unless user
 
-  MCB.configure_audited_user if MCB.connecting_to_remote_db?
+  puts "Audit user: #{user}"
+  Audited.store[:audited_user] = user
 end
