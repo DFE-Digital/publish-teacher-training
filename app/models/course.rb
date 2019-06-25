@@ -30,7 +30,7 @@ class Course < ApplicationRecord
   after_initialize :set_defaults
 
   has_associated_audits
-  audited except: :changed_at
+  audited
   validates :course_code, uniqueness: { scope: :provider_id }
 
   enum program_type: {

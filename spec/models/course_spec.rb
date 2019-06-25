@@ -33,7 +33,7 @@ RSpec.describe Course, type: :model do
   its(:modular) { should eq('') }
 
   describe 'auditing' do
-    it { should be_audited.except(:changed_at) }
+    it { should be_audited }
     it { should have_associated_audits }
   end
 
