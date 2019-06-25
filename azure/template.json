@@ -135,17 +135,17 @@
       }
     },
     "appServicePlanSize": {
-        "type": "string",
-        "allowedValues": [
-            "1",
-            "2",
-            "3"
-        ],
-        "defaultValue": "1"
+      "type": "string",
+      "allowedValues": [
+        "1",
+        "2",
+        "3"
+      ],
+      "defaultValue": "1"
     },
     "appServicePlanInstances": {
-        "type": "int",
-        "defaultValue": 1
+      "type": "int",
+      "defaultValue": 1
     }
   },
   "variables": {
