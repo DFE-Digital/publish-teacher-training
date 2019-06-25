@@ -4,7 +4,7 @@ describe Course do
   let(:subjects) { [create(:subject, :primary), create(:subject, :english)] }
   let(:course) { create :course, subjects: subjects }
 
-  describe '#allocations_report_data' do
+  xdescribe '#allocations_report_data' do
     subject { Course.where(id: course.id).allocations_report_data }
 
     it 'returns the headers' do
@@ -26,7 +26,7 @@ describe Course do
     end
   end
 
-  describe '#allocations_report_fields' do
+  xdescribe '#allocations_report_fields' do
     subject { course.allocations_report_fields.flatten }
 
     its([0]) { should eq '2020/21' }

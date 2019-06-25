@@ -30,10 +30,11 @@ class Organisation < ApplicationRecord
                               else
                                 nctl_organisations.school
                               end
+
     if potential_organisations.size <= 1
       potential_organisations.first
     else
-      raise "Multiple potential NCTL orgs found: #{potential_organisations.pluck(:nctl_id).join(", ")} for provider #{provider.provider_code}"
+      raise "Multiple potential NCTL orgs found: #{potential_organisations.pluck(:nctl_id).join(', ')} for provider #{provider.provider_code}"
     end
   end
 
@@ -46,12 +47,13 @@ class Organisation < ApplicationRecord
                               .not_an_accredited_body
                               .include_courses_counts
                               .to_a
-                              .reject { |provider| provider.courses_count == 0 }
+                              .reject { |provider| provider.courses_count.zero? }
                           end
+
     if potential_providers.size <= 1
       potential_providers.first
     else
-      raise "Multiple potential providers found: #{potential_providers.pluck(:provider_code).join(", ")} for NCTL org #{nctl_organisation.nctl_id}"
+      raise "Multiple potential providers found: #{potential_providers.pluck(:provider_code).join(', ')} for NCTL org #{nctl_organisation.nctl_id}"
     end
   end
 end

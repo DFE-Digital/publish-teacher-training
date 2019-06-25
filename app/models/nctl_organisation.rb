@@ -40,4 +40,8 @@ class NCTLOrganisation < ApplicationRecord
   def provider
     organisation.provider_for(self)
   end
+
+  def to_s
+    "#{name} (#{nctl_id})"
+  end
 end
