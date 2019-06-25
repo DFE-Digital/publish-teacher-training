@@ -89,4 +89,32 @@ describe User, type: :model do
       expect(User.active).to eq([active_user])
     end
   end
+
+  describe '#remove_access_to' do
+    let(:organisation) { create(:organisation) }
+    let(:other_organisation) { create(:organisation) }
+    let(:yet_other_organisation) { create(:organisation) }
+
+    describe 'one organisation' do
+      before do
+        subject.organisations = [organisation, other_organisation]
+        subject.remove_access_to organisation
+      end
+
+      it 'removes the right organisation'do
+        expect(subject.reload.organisations).to eq([other_organisation])
+      end
+    end
+
+    describe 'multiple organisations' do
+      before do
+        subject.organisations = [organisation, other_organisation, yet_other_organisation]
+        subject.remove_access_to [organisation, yet_other_organisation]
+      end
+
+      it 'removes the right organisation'do
+        expect(subject.reload.organisations).to eq([other_organisation])
+      end
+    end
+  end
 end
