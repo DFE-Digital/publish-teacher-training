@@ -163,12 +163,4 @@ class Provider < ApplicationRecord
   def organisation
     organisations.first
   end
-
-  def nctl_organisation
-    if organisation.present?
-      organisation.nctl_organisation_for(self)
-    else
-      raise "Provider #{provider_code} is not mapped to an organisation"
-    end
-  end
 end

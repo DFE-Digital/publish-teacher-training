@@ -11,7 +11,10 @@ private
 
   def requests_from(courses)
     courses
-      .select(&:not_discontinued?) # should this also exclude courses from unmapped orgs?
+      .includes(:site_statuses, :subjects, provider: :nctl_organisation, accrediting_provider: :nctl_organisation)
+      .merge(SiteStatus.not_discontinued)
+      .references(:site_statuses)
+      .select { |course| course.provider.nctl_organisation.present? } # filter out any courses where the provider isn't mapped across
       .flat_map { |course| requests_for_single_course(course) }
       .uniq
       .sort_by { |request|
