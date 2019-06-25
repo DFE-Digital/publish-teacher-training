@@ -49,14 +49,14 @@ RSpec.describe Course, type: :model do
   describe 'validations' do
     it { should validate_uniqueness_of(:course_code).scoped_to(:provider_id) }
 
-    describe 'saveable?' do
+    describe 'valid?' do
       let(:course) { create(:course, enrichments: [invalid_enrichment]) }
       let(:invalid_enrichment) { build(:course_enrichment, about_course: '') }
 
       before do
         subject
         invalid_enrichment.about_course = Faker::Lorem.sentence(1000)
-        subject.saveable?
+        subject.valid?
       end
 
       it 'should add enrichment errors' do

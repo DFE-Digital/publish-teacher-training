@@ -123,7 +123,7 @@ class Course < ApplicationRecord
 
   validates :enrichments, presence: true, on: :publish
   validate :validate_enrichment_publishable, on: :publish
-  validate :validate_enrichment_saveable, on: :save
+  validate :validate_enrichment
 
   def accrediting_provider_description
     return nil if accrediting_provider.blank?
@@ -146,10 +146,6 @@ class Course < ApplicationRecord
 
   def publishable?
     valid? :publish
-  end
-
-  def saveable?
-    valid? :save
   end
 
   def findable?
@@ -326,7 +322,7 @@ private
     end
   end
 
-  def validate_enrichment(validation_scope)
+  def validate_enrichment(validation_scope = nil)
     latest_enrichment = enrichments.select(&:draft?).last
     return unless latest_enrichment.present?
 
@@ -336,10 +332,6 @@ private
 
   def validate_enrichment_publishable
     validate_enrichment :publish
-  end
-
-  def validate_enrichment_saveable
-    validate_enrichment :save
   end
 
   def set_defaults
