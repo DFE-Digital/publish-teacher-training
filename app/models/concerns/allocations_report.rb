@@ -11,9 +11,10 @@ module AllocationsReport
     # The filename will have a UUID prefix so that it can be hosted
     # and linked to from an Azure bucket, but that the names can't be
     # simply guessed.
-    def save_allocations_report(template_path, file_name_prefix = ukprn, type: :core_courses)
-      courses_to_use = (type == :core_courses ? self.courses : self.courses_accredited_by_this_organisation)
-      data = AllocationRequestCollection.new(courses_to_use).to_a
+    def save_allocations_report(template_path, file_name_prefix = ukprn)
+      data =
+        AllocationRequestCollection.new(self.courses).to_a + # put the core courses at the top of the spreadsheet
+        AllocationRequestCollection.new(self.courses_accredited_by_this_organisation).to_a
 
       workbook = RubyXL::Parser.parse(template_path)
       worksheet = workbook["Requests Sheet "]

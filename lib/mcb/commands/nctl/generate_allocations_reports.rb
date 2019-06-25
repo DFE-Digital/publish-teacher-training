@@ -15,8 +15,4 @@ run do |opts, args, _cmd|
 
   puts "Generating allocations report for #{nctl_organisation.name}"
   nctl_organisation.save_allocations_report(template_path)
-  if nctl_organisation.accredited_body?
-    puts "Generating allocations for orgs accredited by #{nctl_organisation.name}"
-    nctl_organisation.save_allocations_report(template_path, "accredited-by-#{nctl_organisation.ukprn}", type: :accredited_body)
-  end
 end
