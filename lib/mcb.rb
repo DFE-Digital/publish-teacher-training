@@ -19,9 +19,7 @@ module MCB
   def self.init_rails(**opts)
     load_env_azure_settings(opts)
 
-    if defined?(Rails)
-      configure_audited_user(opts) if connecting_to_remote_db?
-    else
+    unless defined?(Rails)
       if requesting_remote_connection?(opts)
         webapp_rails_env = MCB::Azure.configure_for_webapp(opts)
 
@@ -33,6 +31,7 @@ module MCB
 
       # prevent caching of environment variables by spring
       ENV['DISABLE_SPRING'] = "true"
+      ENV['MCB_AUDIT_USER'] = get_user_email(opts)
 
       verbose("Running #{exec_path}")
 
@@ -49,9 +48,7 @@ module MCB
   def self.rails_console(**opts)
     load_env_azure_settings(opts)
 
-    if defined?(Rails)
-      configure_audited_user(opts) if connecting_to_remote_db?
-    else
+    unless defined?(Rails)
       if requesting_remote_connection?(opts)
         webapp_rails_env = MCB::Azure.configure_for_webapp(opts)
 
@@ -63,8 +60,7 @@ module MCB
 
       # prevent caching of environment variables by spring
       ENV['DISABLE_SPRING'] = "true"
-
-      ENV['MCB_SETUP_AUDIT_USER'] = "1"
+      ENV['MCB_AUDIT_USER'] = get_user_email(opts)
 
       verbose("Running #{exec_path}")
 
@@ -159,9 +155,7 @@ module MCB
   end
 
   class << self
-    attr_reader :current_user
-
-    def get_user_from_config(opts)
+    def get_user_email(opts = {})
       email = opts.fetch(:email, config[:email])
 
       unless email
@@ -172,14 +166,7 @@ module MCB
         raise RuntimeError, 'email not configured'
       end
 
-      user = User.find_by(email: email)
-      unless user
-        error "User with email #{MCB.config[:email]} not found."
-        error "For auditing purposes a user with the configured email address must exist"
-        error "on the system being altered."
-        raise RuntimeError, "email not found: #{MCB.config[:email]}"
-      end
-      user
+      email
     end
 
     def apiv1_opts(opts)
@@ -339,12 +326,6 @@ module MCB
       else
         User.find_by(sign_in_user_id: identifier)
       end
-    end
-
-    def configure_audited_user(opts)
-      @current_user = get_user_from_config(opts)
-      verbose "configuring user to be #{@current_user.email}"
-      Audited.store[:audited_user] = @current_user
     end
 
     def connecting_to_remote_db?
