@@ -3,7 +3,7 @@ require 'rubyXL/convenience_methods'
 module AllocationsReport
   extend ActiveSupport::Concern
 
-  included do # rubocop:disable Metrics/BlockLength
+  included do
     # Outputs an allocations XLSX with a randomly generated suffix to `public/`.
     # The first argument is an optional prefix for the filename to make it
     # easier to differentiate among ~200 other similar XLSX files. Defaults to
