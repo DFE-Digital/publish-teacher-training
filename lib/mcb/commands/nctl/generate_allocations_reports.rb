@@ -1,6 +1,7 @@
 summary 'Generate allocation reports for a given NCTL ID'
 param :template_path
 param :nctl_id
+usage 'generate_allocations_report <template path> <nctl ID>'
 
 run do |opts, args, _cmd|
   MCB.init_rails(opts)
