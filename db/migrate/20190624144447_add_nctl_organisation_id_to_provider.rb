@@ -12,7 +12,7 @@ class AddNCTLOrganisationIdToProvider < ActiveRecord::Migration[5.2]
               nctl_id: fixed_mappings[provider.provider_code]
             )
           else
-            provider.organisation&.nctl_organisation_for(provider) rescue nil
+            nctl_organisation_for(provider) rescue nil
           end
 
         if nctl_organisation
@@ -24,6 +24,20 @@ class AddNCTLOrganisationIdToProvider < ActiveRecord::Migration[5.2]
 
   def down
     remove_reference :provider, :nctl_organisation
+  end
+
+  def nctl_organisation_for(provider)
+    potential_organisations = if provider.accredited_body?
+                                provider.organisation&.nctl_organisations.accredited_body
+                              else
+                                provider.organisation&.nctl_organisations.school
+                              end
+
+    if potential_organisations.size <= 1
+      potential_organisations.first
+    else
+      raise "Multiple potential NCTL orgs found: #{potential_organisations.pluck(:nctl_id).join(', ')} for provider #{provider.provider_code}"
+    end
   end
 
   def fixed_mappings
