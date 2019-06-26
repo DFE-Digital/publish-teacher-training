@@ -14,7 +14,7 @@ module MCB
 
       @provider = provider
       @requester = requester
-      @courses = course_codes.present? ? find_courses(course_codes) : provider.courses
+      @courses = course_codes.present? ? find_courses(provider, course_codes) : provider.courses
 
       check_authorisation
     end
@@ -88,8 +88,8 @@ module MCB
       @courses.order(:course_code).pluck(:course_code)
     end
 
-    def find_courses(course_codes)
-      courses = Course.where(course_code: course_codes)
+    def find_courses(provider, course_codes)
+      courses = provider.courses.where(course_code: course_codes)
       missing_course_codes = course_codes - courses.pluck(:course_code)
       raise ArgumentError, "Couldn't find course " + missing_course_codes.join(", ") unless missing_course_codes.empty?
 

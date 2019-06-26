@@ -258,6 +258,38 @@ describe MCB::CoursesEditor do
       end
     end
 
+    context 'when there are several courses with the same course code' do
+      let(:another_provider) { create(:provider) }
+      let!(:another_course_with_the_same_course_code) {
+        create(:course,
+               provider: another_provider,
+               course_code: course.course_code,
+               name: 'Another name')
+      }
+
+      it 'edits the course from the specified provider' do
+        expect { run_editor("edit title", "Mathematics", "exit") }.
+          to change { course.reload.name }.
+          from("Original name").to("Mathematics")
+      end
+    end
+
+    context "when trying to edit a course code that doesn't exist on this provider but exists on another one" do
+      let(:course_code) { 'ABCD' }
+      let(:another_provider) { create(:provider) }
+      let!(:another_course_with_another_provider) {
+        create(:course,
+               provider: another_provider,
+               course_code: 'XYZ1',
+               name: 'Another name')
+      }
+      subject { described_class.new(provider: provider, course_codes: %w{XYZ1}, requester: requester) }
+
+      it 'raises an error' do
+        expect { subject }.to raise_error(ArgumentError, /Couldn't find course XYZ1/)
+      end
+    end
+
     describe 'tries to edit a non-existent course' do
       let(:course_codes) { [course_code, "ABCD"] }
 
