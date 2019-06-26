@@ -42,27 +42,50 @@ class CourseEnrichment < ApplicationRecord
 
   scope :latest_first, -> { order(created_at: :desc, id: :desc) }
 
-  validates :about_course, presence: true, on: :publish
-  validates :how_school_placements_work, presence: true, on: :publish
-  validates :course_length, presence: true, on: :publish
-  validates :qualifications, presence: true, on: :publish
+  validates :ucas_course_code, presence: true
+  validates :course, presence: true
+  validates :provider_code, presence: true
+  validates :provider, presence: true
 
-  validates :about_course, words_count: { maximum: 400 }, on: %i[save publish]
-  validates :interview_process, words_count: { maximum: 250 }, on: %i[save publish]
-  validates :how_school_placements_work, words_count: { maximum: 350 }, on: %i[save publish]
-  validates :qualifications, words_count: { maximum: 100 }, on: %i[save publish]
+  validates :about_course, presence: true, on: :publish
+  validates :about_course, words_count: { maximum: 400 }
+
+  validates :course_length, presence: true, on: :publish
+
+  validates :fee_international,
+            numericality: { allow_blank: true,
+                            only_integer: true,
+                            greater_than_or_equal_to: 0,
+                            less_than_or_equal_to: 100000 },
+            if: :is_fee_based?
+
+  validates :fee_details, words_count: { maximum: 250 }, if: :is_fee_based?
 
   validates :fee_uk_eu, presence: true, on: :publish, if: :is_fee_based?
-  validates :fee_uk_eu, numericality: { only_integer: true, greater_than_or_equal_to: 0, less_than_or_equal_to: 100000 }, on: %i[save publish], if: :is_fee_based?
-  validates :fee_international, numericality: { only_integer: true, greater_than_or_equal_to: 0, less_than_or_equal_to: 100000 }, on: %i[save publish], if: :is_fee_based?
-  validates :fee_details, words_count: { maximum: 250 }, on: %i[save publish], if: :is_fee_based?
-  validates :financial_support, words_count: { maximum: 250 }, on: %i[save publish], if: :is_fee_based?
+  validates :fee_uk_eu,
+            numericality: { allow_blank: true,
+                            only_integer: true,
+                            greater_than_or_equal_to: 0,
+                            less_than_or_equal_to: 100000 },
+            if: :is_fee_based?
+
+  validates :financial_support,
+            words_count: { maximum: 250 },
+            if: :is_fee_based?
+
+  validates :how_school_placements_work, presence: true, on: :publish
+  validates :how_school_placements_work, words_count: { maximum: 350 }
+
+  validates :interview_process, words_count: { maximum: 250 }
+
+  validates :qualifications, presence: true, on: :publish
+  validates :qualifications, words_count: { maximum: 100 }
 
   validates :salary_details, presence: true, on: :publish, unless: :is_fee_based?
-  validates :salary_details, words_count: { maximum: 250 }, on: %i[save publish], unless: :is_fee_based?
+  validates :salary_details, words_count: { maximum: 250 }, unless: :is_fee_based?
 
   def is_fee_based?
-    course.is_fee_based?
+    course&.is_fee_based?
   end
 
   def has_been_published_before?

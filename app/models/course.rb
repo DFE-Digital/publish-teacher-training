@@ -84,7 +84,11 @@ class Course < ApplicationRecord
            primary_key: :course_code,
            class_name: 'CourseEnrichment' do
     def find_or_initialize_draft
-      latest_draft_enrichment = latest_first.draft.first
+      # This is a ruby search as opposed to an AR search, because calling `draft`
+      # will return a new instance of a CourseEnrichment object which is different
+      # to the ones in the cached `enrichments` association. This makes checking
+      # for validations later down non-trivial.
+      latest_draft_enrichment = select(&:draft?).last
 
       if latest_draft_enrichment.present?
         latest_draft_enrichment
@@ -121,7 +125,7 @@ class Course < ApplicationRecord
 
   validates :enrichments, presence: true, on: :publish
   validate :validate_enrichment_publishable, on: :publish
-  validate :validate_enrichment_saveable, on: :save
+  validate :validate_enrichment
 
   def accrediting_provider_description
     return nil if accrediting_provider.blank?
@@ -144,10 +148,6 @@ class Course < ApplicationRecord
 
   def publishable?
     valid? :publish
-  end
-
-  def saveable?
-    valid? :save
   end
 
   def findable?
@@ -324,8 +324,8 @@ private
     end
   end
 
-  def validate_enrichment(validation_scope)
-    latest_enrichment = enrichments.latest_first.first
+  def validate_enrichment(validation_scope = nil)
+    latest_enrichment = enrichments.select(&:draft?).last
     return unless latest_enrichment.present?
 
     latest_enrichment.valid? validation_scope
@@ -334,10 +334,6 @@ private
 
   def validate_enrichment_publishable
     validate_enrichment :publish
-  end
-
-  def validate_enrichment_saveable
-    validate_enrichment :save
   end
 
   def set_defaults
