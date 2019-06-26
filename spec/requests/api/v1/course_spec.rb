@@ -133,14 +133,15 @@ describe "Courses API", type: :request do
                                          age: timestamp_of_last_course,
                                          provider: provider)
 
-        get '/api/v1/courses',
+        get '/api/v1/2019/courses',
             headers: { 'HTTP_AUTHORIZATION' => credentials }
 
         expect(response.headers).to have_key "Link"
         url = url_for(
           params: {
             changed_since: timestamp_of_last_course.utc.strftime('%FT%T.%6NZ'),
-            per_page: 100
+            per_page: 100,
+            recruitment_year: 2019
           }
         )
 
@@ -154,7 +155,7 @@ describe "Courses API", type: :request do
           old_course = create(:course, course_code: "SINCE1", age: 1.hour.ago)
           updated_course = create(:course, course_code: "SINCE2", age: 5.minutes.ago)
 
-          get '/api/v1/courses',
+          get '/api/v1/2019/courses',
               headers: { 'HTTP_AUTHORIZATION' => credentials },
               params: { changed_since: 10.minutes.ago.utc.iso8601 }
 
@@ -179,7 +180,7 @@ describe "Courses API", type: :request do
                                          age: timestamp_of_last_course,
                                          provider: provider)
 
-        get '/api/v1/courses',
+        get '/api/v1/2019/courses',
             headers: { 'HTTP_AUTHORIZATION' => credentials },
             params: { changed_since: 30.minutes.ago.utc.iso8601 }
 
@@ -187,7 +188,8 @@ describe "Courses API", type: :request do
         expect(response.headers).to have_key "Link"
         url = url_for(params: {
                         changed_since: timestamp_of_last_course.utc.strftime('%FT%T.%6NZ'),
-                        per_page: 100
+                        per_page: 100,
+                        recruitment_year: 2019
                       })
         expect(response.headers["Link"]).to match "#{url}; rel=\"next\""
       end
@@ -222,7 +224,7 @@ describe "Courses API", type: :request do
         end
 
         it 'pages properly' do
-          get_next_courses '/api/v1/courses', per_page: 10
+          get_next_courses '/api/v1/courses', per_page: 10, recruitment_year: 2019
 
           expect(response.body)
             .to have_courses(@courses[0..9])
@@ -259,7 +261,7 @@ describe "Courses API", type: :request do
 
 
         it 'pages properly' do
-          get_next_courses '/api/v1/courses', per_page: 10
+          get_next_courses '/api/v1/courses', per_page: 10, recruitment_year: 2019
           expect(response.body)
             .to have_courses(@courses[0..9])
 

@@ -277,6 +277,20 @@ RSpec.describe Course, type: :model do
     its(:has_vacancies?) { should be false }
   end
 
+  describe '#by_recruitment_cycle' do
+    context 'with valid recruitment_year parameter' do
+      let(:current_cycle) { create(:recruitment_cycle, year: '2019') }
+      let(:next_cycle) { create(:recruitment_cycle, year: '2020') }
+      let(:course_1) { create(:course, recruitment_cycle: current_cycle) }
+      let(:course_2) { create(:course, recruitment_cycle: next_cycle) }
+
+      subject { Course.by_recruitment_cycle('2019') }
+
+      it { should include course_1 }
+      it { should_not include course_2 }
+    end
+  end
+
   describe '#changed_since' do
     context 'with no parameters' do
       let!(:old_course) { create(:course, age: 1.hour.ago) }
