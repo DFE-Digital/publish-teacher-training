@@ -13,7 +13,7 @@ module Subjects
     end
 
     context "for a further education course" do
-      let(:ucas_subjects) { ["Post-compulsory", "Humanities"] }
+      let(:ucas_subjects) { %w[Post-compulsory Humanities] }
       its(:level) { should eq(:further_education) }
     end
 
