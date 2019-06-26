@@ -13,7 +13,7 @@
 FactoryBot.define do
   factory :recruitment_cycle do
     year { '2019' }
-    application_start_date { Date.today }
-    application_end_date { Date.today + 30 }
+    application_start_date { Time.zone.today }
+    application_end_date { Time.zone.today + 30 }
   end
 end

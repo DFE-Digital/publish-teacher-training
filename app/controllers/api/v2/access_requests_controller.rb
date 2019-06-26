@@ -7,7 +7,7 @@ module API
       def approve
         result = AccessRequestApprovalService.call(@access_request)
 
-        render status: 200, json: { result: result }
+        render status: :ok, json: { result: result }
       end
 
       def show

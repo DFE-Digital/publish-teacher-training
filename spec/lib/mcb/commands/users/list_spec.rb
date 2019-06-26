@@ -2,7 +2,7 @@ require 'mcb_helper'
 require 'csv'
 
 describe 'mcb users list' do
-  let(:lib_dir) { "#{Rails.root}/lib" }
+  let(:lib_dir) { Rails.root.join('lib') }
   let(:cmd) do
     Cri::Command.load_file(
       "#{lib_dir}/mcb/commands/users/list.rb"

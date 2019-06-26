@@ -42,13 +42,13 @@ private
   end
 
   def user_by_email
-    return unless email_from_token.present?
+    return if email_from_token.blank?
 
     @user_by_email ||= User.find_by("lower(email) = ?", email_from_token)
   end
 
   def user_by_sign_in_user_id
-    return unless sign_in_user_id_from_token.present?
+    return if sign_in_user_id_from_token.blank?
 
     User.find_by(sign_in_user_id: sign_in_user_id_from_token)
   end

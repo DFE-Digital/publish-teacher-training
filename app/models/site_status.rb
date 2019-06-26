@@ -97,7 +97,7 @@ private
 
   def set_defaults
     self.status ||= :new_status
-    self.applications_accepted_from ||= Date.today
+    self.applications_accepted_from ||= Time.zone.today
     self.publish ||= :unpublished
   end
 

@@ -337,7 +337,7 @@ module MCB
           CGI.unescape(opts[:'changed-since']),
           '%FT%T.%NZ'
         ) rescue nil
-        changed_since ||= DateTime.parse(opts[:'changed-since'])
+        changed_since ||= DateTime.zone.parse(opts[:'changed-since']).utc
         changed_since_param = CGI.escape(changed_since.strftime('%FT%T.%6NZ'))
         new_url.query = "changed_since=#{changed_since_param}"
       end

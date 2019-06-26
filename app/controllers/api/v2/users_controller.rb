@@ -13,7 +13,7 @@ module API
         if @user.update(user_params)
           render jsonapi: @user
         else
-          render jsonapi_errors: @user.errors, status: 422
+          render jsonapi_errors: @user.errors, status: :unprocessable_entity
         end
       end
 

@@ -1,7 +1,7 @@
 require 'mcb_helper'
 
 describe '"mcb courses show"' do
-  let(:lib_dir) { "#{Rails.root}/lib" }
+  let(:lib_dir) { Rails.root.join('lib') }
   let(:cmd) do
     Cri::Command.load_file(
       "#{lib_dir}/mcb/commands/courses/show.rb"

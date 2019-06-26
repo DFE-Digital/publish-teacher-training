@@ -22,7 +22,7 @@ describe 'mcb providers ucas_preferences import' do
     [output, stderr]
   end
 
-  let(:lib_dir) { "#{Rails.root}/lib" }
+  let(:lib_dir) { Rails.root.join('lib') }
   let(:cmd) do
     Cri::Command.load_file(
       "#{lib_dir}/mcb/commands/providers/ucas_preferences/import.rb"

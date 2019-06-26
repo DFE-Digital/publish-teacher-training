@@ -17,7 +17,7 @@ module API
       def index
         # only return 2019 courses until rollover is supported
         if params[:recruitment_year].present? && params[:recruitment_year] != '2019'
-          render json: [], status: 404
+          render json: [], status: :not_found
           return
         end
 
@@ -40,7 +40,7 @@ module API
 
         render json: @providers
       rescue ActiveRecord::StatementInvalid
-        render json: { status: 400, message: 'Invalid changed_since value, the format should be an ISO8601 UTC timestamp, for example: `2019-01-01T12:01:00Z`' }.to_json, status: 400
+        render json: { status: 400, message: 'Invalid changed_since value, the format should be an ISO8601 UTC timestamp, for example: `2019-01-01T12:01:00Z`' }.to_json, status: :bad_request
       end
     end
   end

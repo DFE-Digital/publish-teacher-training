@@ -3,7 +3,7 @@ require 'mcb'
 require 'stringio'
 
 describe 'mcb providers ucas_preferences show' do
-  let(:lib_dir) { "#{Rails.root}/lib" }
+  let(:lib_dir) { Rails.root.join('lib') }
   let(:cmd) do
     Cri::Command.load_file(
       "#{lib_dir}/mcb/commands/providers/ucas_preferences/show.rb"
