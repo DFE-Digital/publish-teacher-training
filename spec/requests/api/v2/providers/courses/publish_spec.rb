@@ -139,9 +139,9 @@ describe 'Publish API v2', type: :request do
           it 'has validation errors' do
             expect(json_data.count).to eq 5
             expect(json_data[0]["detail"]).to eq("Enter details about this course")
-            expect(json_data[1]["detail"]).to eq("Enter a course length")
-            expect(json_data[2]["detail"]).to eq("Give details about the fee for UK and EU students")
-            expect(json_data[3]["detail"]).to eq("Enter details about school placements")
+            expect(json_data[1]["detail"]).to eq("Enter details about school placements")
+            expect(json_data[2]["detail"]).to eq("Enter a course length")
+            expect(json_data[3]["detail"]).to eq("Give details about the fee for UK and EU students")
             expect(json_data[4]["detail"]).to eq("Enter details about the qualifications needed")
           end
         end
@@ -158,10 +158,10 @@ describe 'Publish API v2', type: :request do
           it 'has validation errors' do
             expect(json_data.count).to eq 5
             expect(json_data[0]["detail"]).to eq("Enter details about this course")
-            expect(json_data[1]["detail"]).to eq("Enter a course length")
-            expect(json_data[2]["detail"]).to eq("Enter details about school placements")
-            expect(json_data[3]["detail"]).to eq("Enter details about the qualifications needed")
-            expect(json_data[4]["detail"]).to eq("Give details about the salary for this course")
+            expect(json_data[1]["detail"]).to eq("Enter details about school placements")
+            expect(json_data[2]["detail"]).to eq("Enter a course length")
+            expect(json_data[3]["detail"]).to eq("Give details about the salary for this course")
+            expect(json_data[4]["detail"]).to eq("Enter details about the qualifications needed")
           end
         end
       end
