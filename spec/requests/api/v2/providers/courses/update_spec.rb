@@ -27,7 +27,7 @@ describe 'PATCH /providers/:provider_code/courses/:course_code' do
   let(:payload)      { { email: user.email } }
   let(:token)        { build_jwt :apiv2, payload: payload }
   let(:course)       { create :course, provider: provider }
-  let(:update_enrichment) { build :course_enrichment, **update_attributes }
+  let(:update_enrichment) { build :course_enrichment, **updated_attributes }
   # we need an unsaved course to add the enrichment to (so that it isn't
   # persisted)
   let(:update_course) { course.dup.tap { |c| c.enrichments << update_enrichment } }
@@ -36,7 +36,7 @@ describe 'PATCH /providers/:provider_code/courses/:course_code' do
     ActionController::HttpAuthentication::Token.encode_credentials(token)
   end
 
-  let(:update_attributes) do
+  let(:updated_attributes) do
     {
       about_course: 'new about course',
       course_length: 'new course length',
@@ -133,8 +133,8 @@ describe 'PATCH /providers/:provider_code/courses/:course_code' do
            }.from(0).to(1))
 
       draft_enrichment = course.enrichments.draft.first
-      expect(draft_enrichment.attributes.slice(*update_attributes.keys.map(&:to_s)))
-        .to include(update_attributes.stringify_keys)
+      expect(draft_enrichment.attributes.slice(*updated_attributes.keys.map(&:to_s)))
+        .to include(updated_attributes.stringify_keys)
     end
 
     it "change content status" do
@@ -144,7 +144,7 @@ describe 'PATCH /providers/:provider_code/courses/:course_code' do
     end
 
     context "with no attributes to update" do
-      let(:update_attributes) do
+      let(:updated_attributes) do
         {
           about_course: nil,
           course_length: nil,
@@ -239,8 +239,8 @@ describe 'PATCH /providers/:provider_code/courses/:course_code' do
       )
 
       draft_enrichment = course.enrichments.draft.first
-      expect(draft_enrichment.attributes.slice(*update_attributes.keys.map(&:to_s)))
-        .to include(update_attributes.stringify_keys)
+      expect(draft_enrichment.attributes.slice(*updated_attributes.keys.map(&:to_s)))
+        .to include(updated_attributes.stringify_keys)
     end
 
     it "doesn't change content status" do
@@ -250,7 +250,7 @@ describe 'PATCH /providers/:provider_code/courses/:course_code' do
     end
 
     context "with invalid data" do
-      let(:update_attributes) do
+      let(:updated_attributes) do
         {
           about_course: Faker::Lorem.sentence(1000),
           fee_details: Faker::Lorem.sentence(1000),
@@ -281,7 +281,7 @@ describe 'PATCH /providers/:provider_code/courses/:course_code' do
     end
 
     context "with nil data" do
-      let(:update_attributes) do
+      let(:updated_attributes) do
         {
           about_course: "",
           fee_details: "",
@@ -325,8 +325,8 @@ describe 'PATCH /providers/:provider_code/courses/:course_code' do
         )
 
       draft_enrichment = course.enrichments.draft.first
-      expect(draft_enrichment.attributes.slice(*update_attributes.keys.map(&:to_s)))
-        .to include(update_attributes.stringify_keys)
+      expect(draft_enrichment.attributes.slice(*updated_attributes.keys.map(&:to_s)))
+        .to include(updated_attributes.stringify_keys)
     end
 
     it do
@@ -347,7 +347,7 @@ describe 'PATCH /providers/:provider_code/courses/:course_code' do
   describe 'from published to draft' do
     shared_examples 'only one attribute has changed' do |attribute_key, attribute_value, jsonapi_serialized_name|
       describe 'a subsequent draft enrichment is added' do
-        let(:update_attributes) do
+        let(:updated_attributes) do
           attribute = {}
           attribute[attribute_key] = attribute_value
           attribute

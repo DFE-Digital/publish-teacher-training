@@ -8,3 +8,6 @@ AllCops:
     - 'bin/setup'
     - 'bin/update'
     - 'db/schema.rb'
+
+Rails/HasManyOrHasOneDependent:
+  Enabled: false

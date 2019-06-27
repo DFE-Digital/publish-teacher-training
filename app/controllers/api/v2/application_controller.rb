@@ -16,7 +16,7 @@ module API
       end
 
       def jsonapi_404
-        render jsonapi: nil, status: 404
+        render jsonapi: nil, status: :not_found
       end
 
     private

@@ -73,7 +73,7 @@ FactoryBot.define do
     end
 
     trait :applications_being_accepted_from_2019 do
-      applications_accepted_from { DateTime.new(2019) }
+      applications_accepted_from { DateTime.new(2019).utc }
     end
 
     trait :applications_being_accepted_in_future do

@@ -34,7 +34,7 @@ describe API::V1::CoursesController, type: :controller do
     end
 
     context 'with two courses changed at different times' do
-      let(:old_course)  { create(:course, changed_at: 5.minute.ago.utc) }
+      let(:old_course)  { create(:course, changed_at: 5.minutes.ago.utc) }
       let(:last_course) { create(:course, changed_at: 1.minute.ago.utc) }
 
       # We need to define the before block after any let! statements since they

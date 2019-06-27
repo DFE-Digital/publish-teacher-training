@@ -95,7 +95,7 @@ module MCB
     end
 
     def ask_application_opening_date
-      Date.parse(@cli.ask("Applications opening date?  ") { |q| q.default = Date.today.to_s })
+      Date.parse(@cli.ask("Applications opening date?  ") { |q| q.default = Time.zone.today.to_s })
     end
 
     def ask_course_code

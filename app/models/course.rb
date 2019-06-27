@@ -82,6 +82,7 @@ class Course < ApplicationRecord
            ->(course) { where(provider_code: course.provider.provider_code) },
            foreign_key: :ucas_course_code,
            primary_key: :course_code,
+           inverse_of: 'course',
            class_name: 'CourseEnrichment' do
     def find_or_initialize_draft
       # This is a ruby search as opposed to an AR search, because calling `draft`
@@ -90,11 +91,7 @@ class Course < ApplicationRecord
       # for validations later down non-trivial.
       latest_draft_enrichment = select(&:draft?).last
 
-      if latest_draft_enrichment.present?
-        latest_draft_enrichment
-      else
-        new(new_draft_attributes)
-      end
+      latest_draft_enrichment.presence || new(new_draft_attributes)
     end
 
     def new_draft_attributes
@@ -143,7 +140,7 @@ class Course < ApplicationRecord
       provider['UcasProviderCode'] == accrediting_provider.provider_code
     end
 
-    accrediting_provider_enrichment['Description'] unless accrediting_provider_enrichment.blank?
+    accrediting_provider_enrichment['Description'] if accrediting_provider_enrichment.present?
   end
 
   def publishable?
@@ -326,7 +323,7 @@ private
 
   def validate_enrichment(validation_scope = nil)
     latest_enrichment = enrichments.select(&:draft?).last
-    return unless latest_enrichment.present?
+    return if latest_enrichment.blank?
 
     latest_enrichment.valid? validation_scope
     add_enrichment_errors(latest_enrichment)

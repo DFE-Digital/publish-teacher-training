@@ -1,7 +1,7 @@
 require 'mcb_helper'
 
 describe 'mcb users revoke' do
-  let(:lib_dir) { "#{Rails.root}/lib" }
+  let(:lib_dir) { Rails.root.join('lib') }
   let(:cmd) do
     Cri::Command.load_file(
       "#{lib_dir}/mcb/commands/users/revoke.rb"

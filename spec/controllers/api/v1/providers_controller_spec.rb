@@ -33,7 +33,7 @@ describe API::V1::ProvidersController, type: :controller do
     end
 
     context 'with two providers changed at different times' do
-      let(:old_provider)  { create(:provider, changed_at: 5.minute.ago.utc) }
+      let(:old_provider)  { create(:provider, changed_at: 5.minutes.ago.utc) }
       let(:last_provider) { create(:provider, changed_at: 1.minute.ago.utc) }
 
       # We need to define the before block after any let! statements since they
