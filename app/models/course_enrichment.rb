@@ -36,18 +36,11 @@ class CourseEnrichment < ApplicationRecord
 
   belongs_to :course
 
-  # belongs_to :provider, foreign_key: :provider_code, primary_key: :provider_code
-  # belongs_to :course,
-  #            ->(enrichment) { where(provider_id: enrichment.provider.id) },
-  #            foreign_key: :ucas_course_code,
-  #            primary_key: :course_code
-
   scope :latest_first, -> { order(created_at: :desc, id: :desc) }
 
   validates :ucas_course_code, presence: true
   validates :course, presence: true
   validates :provider_code, presence: true
-  validates :provider, presence: true
 
   # About this course
 
