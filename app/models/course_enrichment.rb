@@ -47,10 +47,27 @@ class CourseEnrichment < ApplicationRecord
   validates :provider_code, presence: true
   validates :provider, presence: true
 
+  # About this course
+
   validates :about_course, presence: true, on: :publish
   validates :about_course, words_count: { maximum: 400 }
 
+  validates :interview_process, words_count: { maximum: 250 }
+
+  validates :how_school_placements_work, presence: true, on: :publish
+  validates :how_school_placements_work, words_count: { maximum: 350 }
+
+  # Course length and fees
+
   validates :course_length, presence: true, on: :publish
+
+  validates :fee_uk_eu, presence: true, on: :publish, if: :is_fee_based?
+  validates :fee_uk_eu,
+            numericality: { allow_blank: true,
+                            only_integer: true,
+                            greater_than_or_equal_to: 0,
+                            less_than_or_equal_to: 100000 },
+            if: :is_fee_based?
 
   validates :fee_international,
             numericality: { allow_blank: true,
@@ -61,28 +78,23 @@ class CourseEnrichment < ApplicationRecord
 
   validates :fee_details, words_count: { maximum: 250 }, if: :is_fee_based?
 
-  validates :fee_uk_eu, presence: true, on: :publish, if: :is_fee_based?
-  validates :fee_uk_eu,
-            numericality: { allow_blank: true,
-                            only_integer: true,
-                            greater_than_or_equal_to: 0,
-                            less_than_or_equal_to: 100000 },
-            if: :is_fee_based?
-
   validates :financial_support,
             words_count: { maximum: 250 },
             if: :is_fee_based?
 
-  validates :how_school_placements_work, presence: true, on: :publish
-  validates :how_school_placements_work, words_count: { maximum: 350 }
+  # Course length and salary
 
-  validates :interview_process, words_count: { maximum: 250 }
+  validates :salary_details, presence: true, on: :publish, unless: :is_fee_based?
+  validates :salary_details, words_count: { maximum: 250 }, unless: :is_fee_based?
+
+  # Requirements and qualifications
 
   validates :qualifications, presence: true, on: :publish
   validates :qualifications, words_count: { maximum: 100 }
 
-  validates :salary_details, presence: true, on: :publish, unless: :is_fee_based?
-  validates :salary_details, words_count: { maximum: 250 }, unless: :is_fee_based?
+  validates :personal_qualities, words_count: { maximum: 100 }
+
+  validates :other_requirements, words_count: { maximum: 100 }
 
   def is_fee_based?
     course&.is_fee_based?
