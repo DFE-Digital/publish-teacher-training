@@ -2,6 +2,8 @@ name 'psql'
 summary 'connect to the psql server for an app'
 option :f, 'source_file', 'source sql file to pass to psql to run',
        argument: :optional
+option :c, 'sql_command', 'sql string to run',
+       argument: :optional
 
 instance_eval(&MCB.remote_connect_options)
 
@@ -15,6 +17,8 @@ run do |opts, _args, _cmd|
   psql = "psql -h #{ENV['DB_HOSTNAME']} -U #{ENV['DB_USERNAME']} -d #{ENV['DB_DATABASE']}"
   source_file = opts[:source_file]
   psql = "#{psql} --file '#{source_file}'" if source_file
+  sql_command = opts[:sql_command]
+  psql = "#{psql} --command '#{sql_command}'" if sql_command
 
   # could have used verbose() here, but it's worth being certain which psql server you are connected to
   puts psql
