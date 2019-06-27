@@ -92,6 +92,10 @@ class CourseEnrichment < ApplicationRecord
   validates :qualifications, presence: true, on: :publish
   validates :qualifications, words_count: { maximum: 100 }
 
+  validates :personal_qualities, words_count: { maximum: 100 }
+
+  validates :other_requirements, words_count: { maximum: 100 }
+
   def is_fee_based?
     course&.is_fee_based?
   end

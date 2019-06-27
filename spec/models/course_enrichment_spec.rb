@@ -186,6 +186,30 @@ describe CourseEnrichment, type: :model do
     end
   end
 
+  describe 'personal_qualities attribute' do
+    let(:personal_qualities_text) { 'this course is great' }
+
+    subject { build :course_enrichment, personal_qualities: personal_qualities_text }
+
+    context 'with over 100 words' do
+      let(:personal_qualities_text) { Faker::Lorem.sentence(100 + 1) }
+
+      it { should_not be_valid }
+    end
+  end
+
+  describe 'other_requirements attribute' do
+    let(:other_requirements_text) { 'this course is great' }
+
+    subject { build :course_enrichment, other_requirements: other_requirements_text }
+
+    context 'with over 100 words' do
+      let(:other_requirements_text) { Faker::Lorem.sentence(100 + 1) }
+
+      it { should_not be_valid }
+    end
+  end
+
   describe 'salary_details attribute' do
     let(:salary_details_text) { 'this course is great' }
 
