@@ -12,11 +12,12 @@
 #  ucas_course_code             :text             not null
 #  updated_by_user_id           :integer
 #  updated_at                   :datetime         not null
+#  course_id                    :integer          not null
 #
 
 class CourseEnrichment < ApplicationRecord
   include TouchCourse
-
+  after_validation :set_defaults
   enum status: %i[draft published]
 
   jsonb_accessor :json_data,
@@ -38,9 +39,7 @@ class CourseEnrichment < ApplicationRecord
 
   scope :latest_first, -> { order(created_at: :desc, id: :desc) }
 
-  validates :ucas_course_code, presence: true
   validates :course, presence: true
-  validates :provider_code, presence: true
 
   # About this course
 
@@ -109,5 +108,16 @@ class CourseEnrichment < ApplicationRecord
     data = { status: :draft }
     data[:last_published_timestamp_utc] = nil if initial_draft
     update(data)
+  end
+
+private
+
+  def set_defaults
+    is_new_enrichment = self.id.nil? && self.course_id.present?
+    if is_new_enrichment
+    # NOTE: Both ucas_course_code & provider_code can be removed after C# counterpart is retired.
+      self.ucas_course_code = course.course_code
+      self.provider_code = course.provider.provider_code
+    end
   end
 end

@@ -12,6 +12,7 @@
 #  ucas_course_code             :text             not null
 #  updated_by_user_id           :integer
 #  updated_at                   :datetime         not null
+#  course_id                    :integer          not null
 #
 
 require 'rails_helper'
