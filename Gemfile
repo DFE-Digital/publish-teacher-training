@@ -77,9 +77,6 @@ gem 'audited', '~> 4.7'
 # State machine to track users through their onboarding journey
 gem 'aasm'
 
-# Handle data migrations
-gem 'data_migrate'
-
 # Allows writing of error full_messages for validations that don't start with the attribute name
 gem 'custom_error_message', git: 'https://github.com/nanamkim/custom-err-msg.git', ref: 'd72fb18'
 
