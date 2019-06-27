@@ -78,11 +78,12 @@ class Course < ApplicationRecord
            -> { merge(SiteStatus.where(status: %i[new_status running])) },
            through: :site_statuses
 
+  # has_many :enrichments,
+  #          ->(course) { where(provider_code: course.provider.provider_code) },
+  #          foreign_key: :ucas_course_code,
+  #          primary_key: :course_code,
+  #          class_name: 'CourseEnrichment' do
   has_many :enrichments,
-           ->(course) { where(provider_code: course.provider.provider_code) },
-           foreign_key: :ucas_course_code,
-           primary_key: :course_code,
-           inverse_of: 'course',
            class_name: 'CourseEnrichment' do
     def find_or_initialize_draft
       # This is a ruby search as opposed to an AR search, because calling `draft`
