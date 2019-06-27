@@ -135,7 +135,7 @@
       "VacStatus": "F",
       "Location": {
         "Id": 0,
-        "Address": "CV37",
+        "Address": "CV37, somewhere",
         "FormattedAddress": null,
         "GeoAddress": null,
         "Latitude": null,
@@ -152,7 +152,7 @@
       "VacStatus": "F",
       "Location": {
         "Id": 0,
-        "Address": "CV10",
+        "Address": "CV10, else",
         "FormattedAddress": null,
         "GeoAddress": null,
         "Latitude": null,

@@ -139,7 +139,7 @@ module SearchAndCompare
        },
        {
          Name: "about this training provider accrediting",
-         Text: object.accrediting_provider_description
+         Text: object.accrediting_provider_description.to_s
        },
        {
          Name: "training with disabilities",
@@ -280,11 +280,15 @@ module SearchAndCompare
       [address1, address2, address3, address4, postcode].reject(&:blank?).join("\n")
     end
 
+    def campuses_full_address(address1:, address2:, address3:, address4:, postcode:)
+      [address1, address2, address3, address4].reject(&:blank?).join(", ") + (postcode.present? ? ' ' + postcode : '')
+    end
+
     def campuses
       object.site_statuses.findable.map do |site_status|
         raw_address = { address1: site_status.site.address1, address2: site_status.site.address2, address3: site_status.site.address3, address4: site_status.site.address4, postcode: site_status.site.postcode }
 
-        address = full_address(raw_address)
+        address = campuses_full_address(raw_address)
 
         {
           **default_campus_value,
