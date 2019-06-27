@@ -36,7 +36,16 @@ describe 'Publish API v2', type: :request do
     }
 
     subject do
-      post publish_path, headers: { 'HTTP_AUTHORIZATION' => credentials }
+      post publish_path,
+           headers: { 'HTTP_AUTHORIZATION' => credentials },
+           params: {
+             _jsonapi: {
+               data: {
+                 attributes: {},
+                 type: "course"
+               }
+             }
+           }
       response
     end
 
@@ -136,13 +145,21 @@ describe 'Publish API v2', type: :request do
 
           it { should have_http_status(:unprocessable_entity) }
 
-          it 'has validation errors' do
+          it 'has validation error details' do
             expect(json_data.count).to eq 5
             expect(json_data[0]["detail"]).to eq("Enter details about this course")
             expect(json_data[1]["detail"]).to eq("Enter details about school placements")
             expect(json_data[2]["detail"]).to eq("Enter a course length")
             expect(json_data[3]["detail"]).to eq("Give details about the fee for UK and EU students")
             expect(json_data[4]["detail"]).to eq("Enter details about the qualifications needed")
+          end
+
+          it 'has validation error pointers' do
+            expect(json_data[0]["source"]["pointer"]).to eq("/data/attributes/about_course")
+            expect(json_data[1]["source"]["pointer"]).to eq("/data/attributes/how_school_placements_work")
+            expect(json_data[2]["source"]["pointer"]).to eq("/data/attributes/course_length")
+            expect(json_data[3]["source"]["pointer"]).to eq("/data/attributes/fee_uk_eu")
+            expect(json_data[4]["source"]["pointer"]).to eq("/data/attributes/qualifications")
           end
         end
       end

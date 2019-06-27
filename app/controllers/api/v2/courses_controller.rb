@@ -7,7 +7,7 @@ module API
       before_action :build_course, except: :index
 
       deserializable_resource :course,
-                              only: %i[update],
+                              only: %i[update publish],
                               class: API::V2::DeserializableCourse
 
       def index
