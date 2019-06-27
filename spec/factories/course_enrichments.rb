@@ -16,10 +16,10 @@
 
 FactoryBot.define do
   factory :course_enrichment do
-    provider { course.provider }
     course
     status { :draft }
-
+    provider_code { course.provider.provider_code }
+    ucas_course_code { course.course_code }
     about_course { Faker::Books::Dune.quote }
     course_length do
       # samples taken from real data

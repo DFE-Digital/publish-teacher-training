@@ -37,8 +37,7 @@ FactoryBot.define do
     resulting_in_pgce_with_qts
 
     transient do
-      age                { nil }
-      enrichments        { [] }
+      age { nil }
     end
 
     after(:build) do |course, evaluator|
@@ -52,11 +51,6 @@ FactoryBot.define do
     after(:create) do |course, evaluator|
       # This is important to retain the relationship behaviour between
       # course and it's enrichment
-      course.enrichments += evaluator.enrichments.map do |enrichment|
-        enrichment.tap do |e|
-          e.provider_code = course.provider.provider_code
-        end
-      end
 
       if evaluator.age.present?
         course.created_at = evaluator.age
