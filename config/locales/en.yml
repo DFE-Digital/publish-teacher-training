@@ -21,6 +21,10 @@ en:
               blank: "is missing"
             postcode:
               blank: "is missing"
+        course:
+          attributes:
+            enrichments:
+              blank: "^Complete your course information before publishing"
         course_enrichment:
           attributes:
             salary_details:
