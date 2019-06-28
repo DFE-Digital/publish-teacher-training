@@ -11,6 +11,7 @@
 #  created_by_user_id :integer
 #  last_published_at  :datetime
 #  status             :integer          default("draft"), not null
+#  provider_id        :integer          not null
 #
 
 class ProviderEnrichment < ApplicationRecord
@@ -21,8 +22,6 @@ class ProviderEnrichment < ApplicationRecord
   enum status: { draft: 0, published: 1 }
 
   belongs_to :provider,
-             foreign_key: :provider_code,
-             primary_key: :provider_code,
              inverse_of: 'enrichments'
 
   scope :latest_created_at, -> { order(created_at: :desc) }

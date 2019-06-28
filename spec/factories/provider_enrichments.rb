@@ -11,6 +11,7 @@
 #  created_by_user_id :integer
 #  last_published_at  :datetime
 #  status             :integer          default("draft"), not null
+#  provider_id        :integer          not null
 #
 
 
@@ -21,6 +22,7 @@ FactoryBot.define do
     end
 
     provider
+    provider_code { provider.provider_code }
 
     status { :draft }
 

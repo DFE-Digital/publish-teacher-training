@@ -51,14 +51,10 @@ class Provider < ApplicationRecord
 
   has_many :sites
   has_many :enrichments,
-           foreign_key: :provider_code,
-           primary_key: :provider_code,
            class_name: "ProviderEnrichment",
            inverse_of: 'provider'
   has_one :latest_published_enrichment,
           -> { published.latest_published_at },
-          foreign_key: :provider_code,
-          primary_key: :provider_code,
           class_name: "ProviderEnrichment",
           inverse_of: 'provider'
   has_many :courses
