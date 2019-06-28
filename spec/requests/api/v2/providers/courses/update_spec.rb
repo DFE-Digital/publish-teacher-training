@@ -342,6 +342,21 @@ describe 'PATCH /providers/:provider_code/courses/:course_code' do
         perform_request update_course
       }.to(change { course.reload.content_status }.from(:published).to(:published_with_unpublished_changes))
     end
+
+    context "with invalid data" do
+      let(:updated_attributes) do
+        { about_course: Faker::Lorem.sentence(1000) }
+      end
+
+      subject { JSON.parse(response.body)["errors"].map { |e| e["title"] } }
+
+      it "returns validation errors" do
+        perform_request update_course
+
+        expect("Invalid enrichments".in?(subject)).to eq(false)
+        expect("Invalid about_course".in?(subject)).to eq(true)
+      end
+    end
   end
 
   describe 'from published to draft' do
