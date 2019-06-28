@@ -124,6 +124,8 @@ class Course < ApplicationRecord
   validate :validate_enrichment_publishable, on: :publish
   validate :validate_enrichment
 
+  after_validation :remove_unnecessary_enrichments_validation_message
+
   def accrediting_provider_description
     return nil if accrediting_provider.blank?
 
@@ -335,5 +337,9 @@ private
 
   def set_defaults
     self.modular ||= ''
+  end
+
+  def remove_unnecessary_enrichments_validation_message
+    self.errors.delete :enrichments if self.errors[:enrichments] == ['is invalid']
   end
 end
