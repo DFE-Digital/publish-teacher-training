@@ -212,6 +212,10 @@ module MCB
             endpoint_url.to_s,
             headers: { authorization: "Bearer #{token}" }
           )
+          verbose "Response headers:"
+          verbose response.headers
+          verbose "Response body:"
+          verbose response.body
           records = JSON.parse(response.body)
           if records.any?
 
