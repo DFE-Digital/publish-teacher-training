@@ -124,7 +124,7 @@ describe 'Publish API v2', type: :request do
         it 'has validation errors' do
           expect(json_data.count).to eq 1
           expect(response.body).to include('Invalid enrichment')
-          expect(response.body).to include("Enrichments can't be blank")
+          expect(response.body).to include("Complete your course information before publishing")
         end
       end
 
