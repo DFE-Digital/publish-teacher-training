@@ -12,14 +12,15 @@
 #  ucas_course_code             :text             not null
 #  updated_by_user_id           :integer
 #  updated_at                   :datetime         not null
+#  course_id                    :integer          not null
 #
 
 FactoryBot.define do
   factory :course_enrichment do
-    provider { course.provider }
     course
     status { :draft }
-
+    provider_code { course.provider.provider_code }
+    ucas_course_code { course.course_code }
     about_course { Faker::Books::Dune.quote }
     course_length do
       # samples taken from real data

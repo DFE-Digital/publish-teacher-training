@@ -12,11 +12,12 @@
 #  ucas_course_code             :text             not null
 #  updated_by_user_id           :integer
 #  updated_at                   :datetime         not null
+#  course_id                    :integer          not null
 #
 
 class CourseEnrichment < ApplicationRecord
   include TouchCourse
-
+  before_create :set_defaults
   enum status: %i[draft published]
 
   jsonb_accessor :json_data,
@@ -34,19 +35,11 @@ class CourseEnrichment < ApplicationRecord
                  qualifications: [:string, store_key: 'Qualifications'],
                  salary_details: [:string, store_key: 'SalaryDetails']
 
-  belongs_to :provider, foreign_key: :provider_code, primary_key: :provider_code # rubocop:disable Rails/InverseOf
-  belongs_to :course,
-             ->(enrichment) { where(provider_id: enrichment.provider.id) },
-             foreign_key: :ucas_course_code,
-             primary_key: :course_code,
-             inverse_of: 'enrichments'
+  belongs_to :course
 
   scope :latest_first, -> { order(created_at: :desc, id: :desc) }
 
-  validates :ucas_course_code, presence: true
   validates :course, presence: true
-  validates :provider_code, presence: true
-  validates :provider, presence: true
 
   # About this course
 
@@ -115,5 +108,13 @@ class CourseEnrichment < ApplicationRecord
     data = { status: :draft }
     data[:last_published_timestamp_utc] = nil if initial_draft
     update(data)
+  end
+
+private
+
+  def set_defaults
+    # NOTE: Both ucas_course_code & provider_code can be removed after C# counterpart is retired.
+    self.ucas_course_code = course.course_code
+    self.provider_code = course.provider.provider_code
   end
 end

@@ -44,6 +44,7 @@ RSpec.describe Course, type: :model do
     it { should have_many(:subjects).through(:course_subjects) }
     it { should have_many(:site_statuses) }
     it { should have_many(:sites) }
+    it { should have_many(:enrichments) }
   end
 
   describe 'validations' do

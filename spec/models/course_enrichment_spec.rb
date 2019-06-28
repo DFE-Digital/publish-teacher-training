@@ -12,6 +12,7 @@
 #  ucas_course_code             :text             not null
 #  updated_by_user_id           :integer
 #  updated_at                   :datetime         not null
+#  course_id                    :integer          not null
 #
 
 require 'rails_helper'
@@ -20,17 +21,7 @@ describe CourseEnrichment, type: :model do
   subject { build :course_enrichment }
 
   describe 'associations' do
-    it 'belongs to a provider' do
-      expect(subject).to belong_to(:provider)
-                           .with_foreign_key(:provider_code)
-                           .with_primary_key(:provider_code)
-    end
-
-    it 'belongs to a course' do
-      expect(subject).to belong_to(:course)
-                           .with_foreign_key(:ucas_course_code)
-                           .with_primary_key(:course_code)
-    end
+    it { should belong_to(:course) }
   end
 
   describe '#has_been_published_before?' do
@@ -313,8 +304,7 @@ describe CourseEnrichment, type: :model do
     subject {
       create(:course_enrichment, :published,
              last_published_timestamp_utc: last_published_timestamp_utc,
-             course: course,
-             provider: provider)
+             course: course)
     }
 
     describe "to initial draft" do
