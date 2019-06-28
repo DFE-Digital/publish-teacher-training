@@ -17,7 +17,7 @@
 
 class CourseEnrichment < ApplicationRecord
   include TouchCourse
-  after_validation :set_defaults
+  before_create :set_defaults
   enum status: %i[draft published]
 
   jsonb_accessor :json_data,
@@ -113,11 +113,8 @@ class CourseEnrichment < ApplicationRecord
 private
 
   def set_defaults
-    is_new_enrichment = self.id.nil? && self.course_id.present?
-    if is_new_enrichment
     # NOTE: Both ucas_course_code & provider_code can be removed after C# counterpart is retired.
-      self.ucas_course_code = course.course_code
-      self.provider_code = course.provider.provider_code
-    end
+    self.ucas_course_code = course.course_code
+    self.provider_code = course.provider.provider_code
   end
 end
