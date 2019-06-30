@@ -15,6 +15,9 @@ describe MCB::CoursesEditor do
   let(:email) { 'user@education.gov.uk' }
   let(:provider) { create(:provider, provider_code: provider_code) }
   let(:accredited_body) { create(:provider, :accredited_body) }
+  let!(:mathematics) { create(:subject, subject_name: "Mathematics") }
+  let!(:biology) { create(:subject, subject_name: "Biology") }
+  let!(:secondary) { create(:subject, subject_name: "Secondary") }
   let!(:course) {
     create(:course,
            provider: provider,
@@ -28,7 +31,8 @@ describe MCB::CoursesEditor do
            qualification: 'qts',
            study_mode: 'part_time',
            start_date: Date.new(2019, 8, 1),
-           age_range: 'secondary')
+           age_range: 'secondary',
+           subjects: [secondary, biology])
   }
   subject { described_class.new(provider: provider, course_codes: course_codes, requester: requester) }
 
@@ -204,6 +208,30 @@ describe MCB::CoursesEditor do
           expect { run_editor("edit course code", "", "CXXY", "exit") }.
             to change { course.reload.course_code }.
             from(course_code).to("CXXY")
+        end
+      end
+
+      describe "(subjects)" do
+        it "attaches new subjects" do
+          expect { run_editor("edit subjects", "[ ] Mathematics", "continue", "exit") }.
+            to change { course.subjects.reload.sort_by(&:subject_name) }.
+            from([biology, secondary]).to([biology, mathematics, secondary])
+        end
+
+        it "removes existing subjects" do
+          expect { run_editor("edit subjects", "[x] Biology", "continue", "exit") }.
+            to change { course.subjects.reload.sort_by(&:subject_name) }.
+            from([biology, secondary]).to([secondary])
+        end
+
+        context "when more than 1 course is being edited" do
+          let(:another_course) { create(:course, provider: provider) }
+          let(:course_codes) { [course_code, another_course.course_code] }
+
+          it "does not allow editing subjects" do
+            output, = run_editor("exit")
+            expect(output).to_not include("edit subjects")
+          end
         end
       end
 

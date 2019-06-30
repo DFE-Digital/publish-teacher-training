@@ -28,6 +28,8 @@ module MCB
 
         if choice.nil?
           finished = true
+        elsif choice == 'edit subjects'
+          edit_subjects
         elsif choice.start_with?("edit")
           attribute = choice.gsub("edit ", "").gsub(" ", "_").to_sym
           edit(attribute)
@@ -53,9 +55,15 @@ module MCB
         "edit start date",
         "edit application opening date",
         "edit age range",
+        "edit subjects",
         "sync course(s) to Find"
       ]
-      @cli.ask_multiple_choice(prompt: "What would you like to edit?", choices: choices)
+      filtered_choices = filter_single_course_options_if_necessary(choices)
+      @cli.ask_multiple_choice(prompt: "What would you like to edit?", choices: filtered_choices)
+    end
+
+    def filter_single_course_options_if_necessary(choices)
+      choices.grep_v(->(c) { c.in?(["edit subjects"]) && @courses.count != 1 })
     end
 
     def edit(logical_attribute)
@@ -65,6 +73,22 @@ module MCB
       unless user_response_from_cli.nil?
         update(database_attribute => user_response_from_cli)
       end
+    end
+
+    def edit_subjects
+      course.subjects = @cli.multiselect(
+        initial_items: course.subjects.to_a,
+        possible_items: ::Subject.all
+      )
+      course.reload
+    end
+
+    def course
+      if @courses.count != 1
+        raise ArgumentError, "Cannot do this operation when there are multiple courses"
+      end
+
+      @courses.first
     end
 
     def check_authorisation
