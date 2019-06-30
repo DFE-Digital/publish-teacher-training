@@ -24,20 +24,39 @@ module MCB
       puts "Editing #{course_codes.join(', ')}"
       print_at_most_two_courses
       until finished
-        choice = @cli.main_loop
+        choice = main_loop
 
-        if choice.start_with?("edit")
+        if choice.nil?
+          finished = true
+        elsif choice.start_with?("edit")
           attribute = choice.gsub("edit ", "").gsub(" ", "_").to_sym
           edit(attribute)
         elsif choice =~ /sync .* to Find/
           sync_courses_to_find
-        elsif choice == "exit"
-          finished = true
         end
       end
     end
 
   private
+
+    def main_loop
+      choices = [
+        "edit title",
+        "edit course code",
+        "edit maths",
+        "edit english",
+        "edit science",
+        "edit route",
+        "edit qualifications",
+        "edit study mode",
+        "edit accredited body",
+        "edit start date",
+        "edit application opening date",
+        "edit age range",
+        "sync course(s) to Find"
+      ]
+      @cli.ask_multiple_choice(prompt: "What would you like to edit?", choices: choices)
+    end
 
     def edit(logical_attribute)
       database_attribute = LOGICAL_NAME_TO_DATABASE_NAME_MAPPING[logical_attribute] || logical_attribute

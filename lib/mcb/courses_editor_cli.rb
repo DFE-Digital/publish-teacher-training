@@ -5,27 +5,6 @@ module MCB
       @provider = provider
     end
 
-    def main_loop
-      @cli.choose do |menu|
-        menu.choice("exit")
-        menu.choices(
-          "edit title",
-          "edit course code",
-          "edit maths",
-          "edit english",
-          "edit science",
-          "edit route",
-          "edit qualifications",
-          "edit study mode",
-          "edit accredited body",
-          "edit start date",
-          "edit application opening date",
-          "edit age range",
-        )
-        menu.choice("sync course(s) to Find")
-      end
-    end
-
     def ask_title
       @cli.ask("New course title?  ")
     end
@@ -104,8 +83,6 @@ module MCB
         q.validate = /\S+/
       end
     end
-
-  private
 
     def ask_multiple_choice(prompt:, choices:, default: nil)
       @cli.choose do |menu|
