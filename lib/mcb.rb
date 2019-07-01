@@ -85,6 +85,11 @@ module MCB
     `#{cmd}`
   end
 
+  def self.exec_command(cmd)
+    verbose("Running: #{cmd}")
+    exec(cmd)
+  end
+
   def self.apiv1_token(webapp: nil, rgroup: nil)
     if webapp
       verbose "getting config for webapp: #{webapp} rgroup: #{rgroup}"
@@ -316,6 +321,14 @@ module MCB
 
     def connecting_to_remote_db?
       ENV.key?('DB_HOSTNAME')
+    end
+
+    def configure_local_database_env
+      # values to match database.yml
+      ENV["DB_HOSTNAME"] = "localhost"
+      ENV["DB_USERNAME"] = "manage_courses_backend"
+      ENV["DB_PASSWORD"] = "manage_courses_backend"
+      ENV["DB_DATABASE"] = "manage_courses_backend_development"
     end
 
   private

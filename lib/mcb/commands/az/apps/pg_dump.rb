@@ -9,12 +9,14 @@ run do |opts, _args, _cmd|
   MCB.load_env_azure_settings(opts)
   if MCB.requesting_remote_connection? opts
     MCB::Azure.configure_for_webapp(opts)
+  else
+    MCB.configure_local_database_env
   end
 
   ENV['PGPASSWORD'] = ENV['DB_PASSWORD']
   target_file = opts[:target_file]
-  target_file ||= "#{opts[:env]}_#{ENV['DB_DATABASE']}.sql"
+  target_file ||= "#{opts[:env] || ENV['DB_HOSTNAME']}_#{ENV['DB_DATABASE']}.sql"
   cmd = "pg_dump --encoding utf8 --clean --if-exists -h #{ENV['DB_HOSTNAME']} -U #{ENV['DB_USERNAME']} -d #{ENV['DB_DATABASE']} --file '#{target_file}'"
-  verbose cmd
-  exec(cmd)
+
+  MCB::exec_command(cmd)
 end
