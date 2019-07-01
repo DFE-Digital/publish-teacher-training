@@ -38,6 +38,10 @@ module API
         @object.provider.provider_code
       end
 
+      attribute :recruitment_cycle do
+        @object.recruitment_cycle.year
+      end
+
       belongs_to :provider
       belongs_to :accrediting_provider
 
