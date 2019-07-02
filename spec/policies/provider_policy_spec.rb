@@ -16,6 +16,7 @@ describe ProviderPolicy do
   subject { described_class }
 
   permissions :show?, :update? do
+  permissions :show? do
     let(:user) { create(:user) }
     let(:user_outside_org) { create(:user) }
     let(:provider) { create(:provider) }

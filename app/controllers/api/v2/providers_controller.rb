@@ -57,6 +57,22 @@ module API
         end
       end
 
+      def sync_courses_with_search_and_compare
+        provider = Provider.find_by!(provider_code: params[:code].upcase)
+        authorize provider
+        syncable_courses = provider.syncable_courses
+        response = SearchAndCompareAPIService::Request.sync(
+          syncable_courses
+        )
+        if response
+          head :ok
+        else
+          raise RuntimeError.new(
+            'error received when syncing courses with search and compare'
+          )
+        end
+      end
+
     private
 
       def build_recruitment_cycle
