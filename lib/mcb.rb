@@ -1,4 +1,5 @@
 require 'logger'
+require 'open3'
 
 module MCB
   LOGGER = Logger.new(STDERR)
