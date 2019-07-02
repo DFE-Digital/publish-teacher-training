@@ -12,6 +12,7 @@ module MCB
             subjects:             course.subjects,
             site_statuses:        course.site_statuses,
             enrichments:          course.enrichments,
+            recruitment_cycle:    course.recruitment_cycle,
           )
         end
 

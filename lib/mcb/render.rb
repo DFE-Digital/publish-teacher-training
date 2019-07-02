@@ -50,7 +50,8 @@ module MCB
                accrediting_provider:,
                subjects:,
                site_statuses:,
-               enrichments:)
+               enrichments:,
+               recruitment_cycle:)
       [
         course_record(course),
         "\n",
@@ -61,6 +62,8 @@ module MCB
           name: "Accredited body",
           add_columns: [[:accrediting_provider, header: 'accrediting']]
         ),
+        "\n",
+        recruitment_cycle_table(recruitment_cycle),
         "\n",
         subjects_table(subjects),
         "\n",
@@ -194,6 +197,13 @@ module MCB
       [
         "#{name}:",
         render_table_or_none(subjects, subjects_table_columns)
+      ]
+    end
+
+    def recruitment_cycle_table(recruitment_cycle)
+      [
+        "Recruitment cycle:",
+        render_table_or_none([recruitment_cycle], %i[year application_start_date application_end_date])
       ]
     end
 
