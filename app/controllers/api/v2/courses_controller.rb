@@ -22,14 +22,16 @@ module API
       end
 
       def sync_with_search_and_compare
-        response = sync_courses
-
-        if response
-          head :ok
-        else
-          raise RuntimeError.new(
-            'error received when syncing with search and compare'
+        if @course.syncable?
+          response = SearchAndCompareAPIService::Request.sync(
+            [@course]
           )
+          if response
+          else
+            raise RuntimeError.new(
+              'error received when syncing with search and compare'
+            )
+          end
         end
       end
 
@@ -37,16 +39,20 @@ module API
         if @course.publishable?
           @course.publish_sites
           @course.publish_enrichment(@current_user)
-
-          response = SearchAndCompareAPIService::Request.sync(
-            [@course]
-          )
-
-          if response
-            head :ok
+          if @course.syncable?
+            has_synced = SearchAndCompareAPIService::Request.sync(
+              [@course]
+            )
+            if has_synced
+              head :ok
+            else
+              raise RuntimeError.new(
+                'error received when syncing with search and compare'
+              )
+            end
           else
             raise RuntimeError.new(
-              'error received when syncing with search and compare'
+              'course is not syncable'
             )
           end
         else
@@ -75,14 +81,6 @@ module API
 
     private
 
-      def sync_courses
-        ManageCoursesAPIService::Request.sync_course_with_search_and_compare(
-          @current_user.email,
-          @provider.provider_code,
-          @course.course_code
-        )
-      end
-
       def update_enrichment
         return unless enrichment_params.values.any?
 
@@ -101,7 +99,7 @@ module API
         # remove_site! side effects that occur when it's called.
         @course.errors[:sites] << "^You must choose at least one location" if site_ids.empty?
 
-        sync_courses if site_ids.any?
+        sync_with_search_and_compare if site_ids.any?
       end
 
       def build_provider

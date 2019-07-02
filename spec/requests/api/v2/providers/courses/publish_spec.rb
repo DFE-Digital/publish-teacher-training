@@ -26,11 +26,13 @@ describe 'Publish API v2', type: :request do
     end
     let(:enrichment) { build(:course_enrichment, :initial_draft) }
     let(:site_status) { build(:site_status, :new) }
+    let(:dfe_subject) { build(:subject, subject_name: 'primary') }
     let(:course) {
       create(:course,
              provider: provider,
              site_statuses: [site_status],
-             enrichments: [enrichment])
+             enrichments: [enrichment],
+             subjects: [dfe_subject])
     }
 
     subject do
@@ -75,14 +77,16 @@ describe 'Publish API v2', type: :request do
       it { should have_http_status(:not_found) }
     end
 
-    context 'unpublished course with draft enrichment' do\
+    context 'unpublished course with draft enrichment' do
       let(:enrichment) { build(:course_enrichment, :initial_draft) }
       let(:site_status) { build(:site_status, :new) }
+      let(:dfe_subjects) { [build(:subject, subject_name: 'primary')] }
       let!(:course) {
         create(:course,
                provider: provider,
                site_statuses: [site_status],
                enrichments: [enrichment],
+               subjects: dfe_subjects,
                age: 17.days.ago)
       }
       it 'publishes a course' do
@@ -96,6 +100,17 @@ describe 'Publish API v2', type: :request do
         expect(course.enrichments.first.updated_at).to be_within(1.second).of Time.now.utc
         expect(course.enrichments.first.last_published_timestamp_utc).to be_within(1.second).of Time.now.utc
         expect(course.changed_at).to be_within(1.second).of Time.now.utc
+      end
+
+      context 'without dfe subject' do
+        let(:dfe_subjects) { [] }
+
+        it 'raises an error' do
+          expect {
+            subject
+          }.to raise_error RuntimeError,
+                           'course is not syncable'
+        end
       end
     end
 
