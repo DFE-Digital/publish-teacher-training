@@ -21,23 +21,50 @@ module MCB
 
     def run
       finished = false
-      puts "Editing #{course_codes.join(', ')}"
-      print_at_most_two_courses
       until finished
-        choice = @cli.main_loop
+        puts "Editing #{course_codes.join(', ')}"
+        print_at_most_two_courses
+        choice = main_loop
 
-        if choice.start_with?("edit")
+        if choice.nil?
+          finished = true
+        elsif choice == 'edit subjects'
+          edit_subjects
+        elsif choice.start_with?("edit")
           attribute = choice.gsub("edit ", "").gsub(" ", "_").to_sym
           edit(attribute)
         elsif choice =~ /sync .* to Find/
           sync_courses_to_find
-        elsif choice == "exit"
-          finished = true
         end
       end
     end
 
   private
+
+    def main_loop
+      choices = [
+        "edit title",
+        "edit course code",
+        "edit maths",
+        "edit english",
+        "edit science",
+        "edit route",
+        "edit qualifications",
+        "edit study mode",
+        "edit accredited body",
+        "edit start date",
+        "edit application opening date",
+        "edit age range",
+        "edit subjects",
+        "sync course(s) to Find"
+      ]
+      filtered_choices = filter_single_course_options_if_necessary(choices)
+      @cli.ask_multiple_choice(prompt: "What would you like to edit?", choices: filtered_choices)
+    end
+
+    def filter_single_course_options_if_necessary(choices)
+      choices.grep_v(->(c) { c.in?(["edit subjects"]) && @courses.count != 1 })
+    end
 
     def edit(logical_attribute)
       database_attribute = LOGICAL_NAME_TO_DATABASE_NAME_MAPPING[logical_attribute] || logical_attribute
@@ -46,6 +73,22 @@ module MCB
       unless user_response_from_cli.nil?
         update(database_attribute => user_response_from_cli)
       end
+    end
+
+    def edit_subjects
+      course.subjects = @cli.multiselect(
+        initial_items: course.subjects.to_a,
+        possible_items: ::Subject.all
+      )
+      course.reload
+    end
+
+    def course
+      if @courses.count != 1
+        raise ArgumentError, "Cannot do this operation when there are multiple courses"
+      end
+
+      @courses.first
     end
 
     def check_authorisation

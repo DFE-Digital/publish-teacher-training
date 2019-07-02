@@ -5,27 +5,6 @@ module MCB
       @provider = provider
     end
 
-    def main_loop
-      @cli.choose do |menu|
-        menu.choice("exit")
-        menu.choices(
-          "edit title",
-          "edit course code",
-          "edit maths",
-          "edit english",
-          "edit science",
-          "edit route",
-          "edit qualifications",
-          "edit study mode",
-          "edit accredited body",
-          "edit start date",
-          "edit application opening date",
-          "edit age range",
-        )
-        menu.choice("sync course(s) to Find")
-      end
-    end
-
     def ask_title
       @cli.ask("New course title?  ")
     end
@@ -105,7 +84,21 @@ module MCB
       end
     end
 
-  private
+    def multiselect(initial_items:, possible_items:)
+      selected_items = initial_items
+      finished = false
+      until finished do
+        @cli.choose do |menu|
+          menu.choice("continue") { finished = true }
+          define_choices_for_each_possible_item(
+            menu: menu,
+            selected_items: selected_items,
+            possible_items: possible_items
+          )
+        end
+      end
+      selected_items
+    end
 
     def ask_multiple_choice(prompt:, choices:, default: nil)
       @cli.choose do |menu|
@@ -113,6 +106,18 @@ module MCB
         menu.choice("exit") { nil }
         menu.choices(*choices)
         menu.default = default if default.present?
+      end
+    end
+
+  private
+
+    def define_choices_for_each_possible_item(menu:, selected_items:, possible_items:)
+      possible_items.sort_by(&:to_s).each do |item|
+        if item.in?(selected_items)
+          menu.choice("[x] #{item}") { selected_items.delete(item) }
+        else
+          menu.choice("[ ] #{item}") { selected_items << item }
+        end
       end
     end
   end
