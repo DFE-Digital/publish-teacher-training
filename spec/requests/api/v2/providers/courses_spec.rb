@@ -130,7 +130,8 @@ describe 'Courses API v2', type: :request do
               "english" => 'must_have_qualification_at_application_time',
               "maths" => 'must_have_qualification_at_application_time',
               "science" => 'must_have_qualification_at_application_time',
-              "provider_code" => provider.provider_code
+              "provider_code" => provider.provider_code,
+              "recruitment_cycle" => "2019",
             },
             "relationships" => {
               "accrediting_provider" => { "meta" => { "included" => false } },
@@ -171,7 +172,8 @@ describe 'Courses API v2', type: :request do
               "address3" => site.address3,
               "address4" => site.address4,
               "postcode" => site.postcode,
-              "region_code" => site.region_code
+              "region_code" => site.region_code,
+              "recruitment_cycle" => "2019",
             }
           }]
         )
@@ -258,7 +260,8 @@ describe 'Courses API v2', type: :request do
               "english" => 'must_have_qualification_at_application_time',
               "maths" => 'must_have_qualification_at_application_time',
               "science" => 'must_have_qualification_at_application_time',
-              "provider_code" => provider.provider_code
+              "provider_code" => provider.provider_code,
+              "recruitment_cycle" => "2019",
             },
             "relationships" => {
               "accrediting_provider" => { "meta" => { "included" => false } },
