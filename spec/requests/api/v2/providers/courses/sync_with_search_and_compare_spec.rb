@@ -11,20 +11,20 @@ describe 'Courses API v2', type: :request do
   end
 
   describe 'POST sync_with_search_and_compare' do
-    let(:manage_api_status) { 200 }
-    let(:manage_api_response) { '{ "result": true }' }
+    let(:search_api_status) { 200 }
     let(:sync_path) do
       "/api/v2/providers/#{provider.provider_code}" +
         "/courses/#{course.course_code}/sync_with_search_and_compare"
     end
-
-    let(:course) { create(:course, provider: provider, enrichments: [build(:course_enrichment, :initial_draft)]) }
+    let(:course_enrichment) { build(:course_enrichment, :initial_draft) }
+    let(:site_status) { build(:site_status, :findable) }
+    let(:dfe_subject) { build(:subject, subject_name: 'primary') }
+    let(:course) { create(:course, provider: provider, enrichments: [course_enrichment], site_statuses: [site_status], subjects: [dfe_subject]) }
 
     before do
-      stub_request(:post, %r{#{Settings.manage_api.base_url}/api/Publish/internal/course/})
+      stub_request(:put, %r{#{Settings.search_api.base_url}/api/courses/})
         .to_return(
-          status: manage_api_status,
-          body: manage_api_response
+          status: search_api_status,
         )
     end
 
@@ -68,20 +68,8 @@ describe 'Courses API v2', type: :request do
       it { should have_http_status(:success) }
     end
 
-    context 'when the api responds with result: false' do
-      let(:manage_api_response) { '{ "result": false }' }
-
-      it 'raises an error' do
-        expect {
-          subject
-        }.to raise_error RuntimeError,
-                         'error received when syncing with search and compare'
-      end
-    end
-
-    context 'when the api sets http status to 500' do
-      let(:manage_api_status) { 500 }
-      let(:manage_api_response) { '{ "result": true }' }
+    context 'when the api was unsuccessful' do
+      let(:search_api_status) { 400 }
 
       it 'raises an error' do
         expect {
