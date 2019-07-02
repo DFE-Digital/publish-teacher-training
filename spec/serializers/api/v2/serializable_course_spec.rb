@@ -131,7 +131,7 @@ describe API::V2::SerializableCourse do
     it { expect(subject["attributes"]).to include("is_send?" => false) }
 
     context "with a SEND subject" do
-      let(:course) { create(:course, subjects: [create(:send_subject)]) }
+      let(:course) { create(:course, subjects: [find_or_create(:send_subject)]) }
       it { expect(subject["attributes"]).to include("is_send?" => true) }
     end
   end
@@ -140,13 +140,13 @@ describe API::V2::SerializableCourse do
     let(:course) { create(:course, subjects: subjects) }
 
     describe 'are taken from the course' do
-      let(:subjects) { [create(:subject, subject_name: "primary")] }
+      let(:subjects) { [find_or_create(:subject, :primary)] }
       it { expect(subject["attributes"]).to include("level" => "primary") }
       it { expect(subject["attributes"]).to include("subjects" => %w[Primary]) }
     end
 
     describe 'determine bursary and scholarship info' do
-      let(:subjects) { [create(:subject, subject_name: "Secondary"), create(:subject, subject_name: "Russian")] }
+      let(:subjects) { [find_or_create(:subject, :secondary), find_or_create(:subject, subject_name: "Russian")] }
       it { expect(subject["attributes"]).to include("has_bursary?" => true) }
       it { expect(subject["attributes"]).to include("has_scholarship_and_bursary?" => false) }
     end

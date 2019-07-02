@@ -15,9 +15,9 @@ describe MCB::CoursesEditor do
   let(:email) { 'user@education.gov.uk' }
   let(:provider) { create(:provider, provider_code: provider_code) }
   let(:accredited_body) { create(:provider, :accredited_body) }
-  let!(:mathematics) { create(:subject, subject_name: "Mathematics") }
-  let!(:biology) { create(:subject, subject_name: "Biology") }
-  let!(:secondary) { create(:subject, subject_name: "Secondary") }
+  let!(:mathematics) { find_or_create(:subject, :mathematics) }
+  let!(:biology) { find_or_create(:subject, subject_name: "Biology") }
+  let!(:secondary) { find_or_create(:subject, :secondary) }
   let!(:course) {
     create(:course,
            provider: provider,

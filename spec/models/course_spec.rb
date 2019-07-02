@@ -446,13 +446,13 @@ RSpec.describe Course, type: :model do
     end
 
     context 'with primary subjects' do
-      subject { create(:course, subjects: [create(:subject, subject_name: "primary")]) }
+      subject { create(:course, subjects: [find_or_create(:subject, :primary)]) }
       its(:level) { should eq(:primary) }
       its(:dfe_subjects) { should eq([DFESubject.new("Primary")]) }
     end
 
     context 'with secondary subjects' do
-      subject { create(:course, subjects: [create(:subject, subject_name: "physical education")]) }
+      subject { create(:course, subjects: [find_or_create(:subject, subject_name: "physical education")]) }
       its(:level) { should eq(:secondary) }
       its(:dfe_subjects) { should eq([DFESubject.new("Physical education")]) }
     end
@@ -476,8 +476,8 @@ RSpec.describe Course, type: :model do
     describe "bursaries and scholarships" do
       let(:subjects) {
         [
-          build(:subject, subject_name: 'mathematics'),
-          build(:subject, subject_name: 'secondary'),
+          build(:subject, :mathematics),
+          build(:subject, :secondary),
         ]
       }
       subject { create(:course, subjects: subjects) }

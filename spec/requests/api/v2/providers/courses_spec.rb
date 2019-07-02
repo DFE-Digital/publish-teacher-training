@@ -8,8 +8,8 @@ describe 'Courses API v2', type: :request do
   let(:credentials) do
     ActionController::HttpAuthentication::Token.encode_credentials(token)
   end
-  let(:course_subject_primary) { find_or_create(:subject, subject_name: 'Primary', subject_code: 'P') }
-  let(:course_subject_mathematics) { find_or_create(:subject, subject_name: 'Mathematics', subject_code: 'M') }
+  let(:course_subject_primary) { find_or_create(:subject, :primary) }
+  let(:course_subject_mathematics) { find_or_create(:subject, :mathematics) }
   let(:course_subject_send) { find_or_create(:send_subject) }
 
   let(:findable_open_course) {
