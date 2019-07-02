@@ -33,9 +33,11 @@ en:
               blank: "^Give details about the fee for UK and EU students"
               greater_than_or_equal_to: "must be greater than or equal to £0"
               less_than_or_equal_to: "must be less than or equal to £100,000"
+              not_an_integer: "must not include pence, like 1000 or 1500"
             fee_international:
               greater_than_or_equal_to: "must be greater than or equal to £0"
               less_than_or_equal_to: "must be less than or equal to £100,000"
+              not_an_integer: "must not include pence, like 1000 or 1500"
             about_course:
               blank: "^Enter details about this course"
             how_school_placements_work:
