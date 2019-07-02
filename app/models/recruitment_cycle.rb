@@ -15,4 +15,9 @@ class RecruitmentCycle < ApplicationRecord
   has_many :sites
 
   validates :year, presence: true
+
+  def to_s
+    following_year = Date.new(year.to_i, 1, 1) + 1.year
+    "#{year}/#{following_year.strftime('%y')}"
+  end
 end
