@@ -331,6 +331,46 @@ module MCB
       ENV["DB_DATABASE"] = "manage_courses_backend_development"
     end
 
+    def start_mcb_repl(start_argv)
+      $mcb_repl_mode = true
+
+      trap("INT", "SIG_IGN")
+
+      env = start_argv[1]
+      opts = {}
+      opts[:env] = env if env
+      MCB.init_rails(opts)
+
+      prompt = case env
+               when 'production' then Rainbow(env).red.inverse
+               when 'staging'    then Rainbow(env).yellow
+               when 'qa'         then Rainbow(env).yellow
+               when nil          then Rainbow(env).green
+               else                   env
+               end
+      while (input = Readline.readline("#{prompt}> ", true))
+        argv = input.split
+
+        case argv.first
+        when 'exit', 'q', 'quit'
+          break
+        when 'h', 'help'
+          $mcb.commands.each do |c|
+            show_all_commands(c, "#{c.name} ")
+            puts
+          end
+        when ''
+          next
+        else
+          begin
+            $mcb.run(argv, hard_exit: false)
+          rescue => e # rubocop: disable Style/RescueStandardError
+            puts e.to_s
+          end
+        end
+      end
+    end
+
   private
 
     def remove_option_with_arg(argv, *options)
