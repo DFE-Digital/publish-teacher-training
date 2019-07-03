@@ -24,6 +24,7 @@
 #  accrediting_provider :text
 #  last_published_at    :datetime
 #  changed_at           :datetime         not null
+#  recruitment_cycle_id :integer          not null
 #
 
 require "rails_helper"

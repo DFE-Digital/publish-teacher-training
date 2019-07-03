@@ -24,6 +24,7 @@
 #  accrediting_provider :text
 #  last_published_at    :datetime
 #  changed_at           :datetime         not null
+#  recruitment_cycle_id :integer          not null
 #
 
 require 'rails_helper'
@@ -47,7 +48,9 @@ describe Provider, type: :model do
 
   describe 'changed_at' do
     it 'is set on create' do
-      provider = Provider.create
+      provider = Provider.create(
+        recruitment_cycle: find_or_create(:recruitment_cycle)
+      )
       expect(provider.changed_at).to be_present
       expect(provider.changed_at).to eq provider.updated_at
     end
@@ -180,6 +183,8 @@ describe Provider, type: :model do
       expect(provider.updated_at).to eq timestamp
     end
   end
+
+  its(:recruitment_cycle) { should eq find(:recruitment_cycle) }
 
   describe '#unassigned_site_codes' do
     subject { create(:provider) }

@@ -85,11 +85,9 @@ ActiveRecord::Schema.define(version: 2019_07_04_134543) do
     t.datetime "created_at", default: -> { "timezone('utc'::text, now())" }, null: false
     t.datetime "updated_at", default: -> { "timezone('utc'::text, now())" }, null: false
     t.datetime "changed_at", default: -> { "timezone('utc'::text, now())" }, null: false
-    t.integer "recruitment_cycle_id", null: false
     t.index ["accrediting_provider_id"], name: "IX_course_accrediting_provider_id"
     t.index ["changed_at"], name: "index_course_on_changed_at", unique: true
     t.index ["provider_id", "course_code"], name: "IX_course_provider_id_course_code", unique: true
-    t.index ["recruitment_cycle_id"], name: "index_course_on_recruitment_cycle_id"
   end
 
   create_table "course_enrichment", id: :serial, force: :cascade do |t|
@@ -183,9 +181,10 @@ ActiveRecord::Schema.define(version: 2019_07_04_134543) do
     t.text "accrediting_provider"
     t.datetime "last_published_at"
     t.datetime "changed_at", default: -> { "timezone('utc'::text, now())" }, null: false
+    t.integer "recruitment_cycle_id", null: false
     t.index ["changed_at"], name: "index_provider_on_changed_at", unique: true
     t.index ["last_published_at"], name: "IX_provider_last_published_at"
-    t.index ["provider_code"], name: "IX_provider_provider_code", unique: true
+    t.index ["recruitment_cycle_id", "provider_code"], name: "index_provider_on_recruitment_cycle_id_and_provider_code", unique: true
   end
 
   create_table "provider_enrichment", id: :serial, force: :cascade do |t|
@@ -243,9 +242,7 @@ ActiveRecord::Schema.define(version: 2019_07_04_134543) do
     t.integer "region_code"
     t.datetime "created_at", default: -> { "timezone('utc'::text, now())" }, null: false
     t.datetime "updated_at", default: -> { "timezone('utc'::text, now())" }, null: false
-    t.integer "recruitment_cycle_id", null: false
     t.index ["provider_id", "code"], name: "IX_site_provider_id_code", unique: true
-    t.index ["recruitment_cycle_id"], name: "index_site_on_recruitment_cycle_id"
   end
 
   create_table "subject", id: :serial, force: :cascade do |t|
@@ -283,6 +280,7 @@ ActiveRecord::Schema.define(version: 2019_07_04_134543) do
   add_foreign_key "organisation_provider", "provider", name: "FK_organisation_provider_provider_provider_id"
   add_foreign_key "organisation_user", "\"user\"", column: "user_id", name: "FK_organisation_user_user_user_id"
   add_foreign_key "organisation_user", "organisation", name: "FK_organisation_user_organisation_organisation_id"
+  add_foreign_key "provider", "recruitment_cycle"
   add_foreign_key "provider_enrichment", "\"user\"", column: "created_by_user_id", name: "FK_provider_enrichment_user_created_by_user_id"
   add_foreign_key "provider_enrichment", "\"user\"", column: "updated_by_user_id", name: "FK_provider_enrichment_user_updated_by_user_id"
   add_foreign_key "provider_enrichment", "provider"
