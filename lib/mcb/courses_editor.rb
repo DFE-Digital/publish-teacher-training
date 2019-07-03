@@ -28,13 +28,8 @@ module MCB
 
         if choice.nil?
           finished = true
-        elsif choice == 'edit subjects'
-          edit_subjects
-        elsif choice.start_with?("edit")
-          attribute = choice.gsub("edit ", "").gsub(" ", "_").to_sym
-          edit(attribute)
-        elsif choice =~ /sync .* to Find/
-          sync_courses_to_find
+        else
+          perform_action(choice)
         end
       end
     end
@@ -56,6 +51,7 @@ module MCB
         "edit application opening date",
         "edit age range",
         "edit subjects",
+        "edit recruitment cycle",
         "sync course(s) to Find"
       ]
       filtered_choices = filter_single_course_options_if_necessary(choices)
@@ -64,6 +60,17 @@ module MCB
 
     def filter_single_course_options_if_necessary(choices)
       choices.grep_v(->(c) { c.in?(["edit subjects"]) && @courses.count != 1 })
+    end
+
+    def perform_action(choice)
+      if choice == 'edit subjects'
+        edit_subjects
+      elsif choice.start_with?("edit")
+        attribute = choice.gsub("edit ", "").gsub(" ", "_").to_sym
+        edit(attribute)
+      elsif choice =~ /sync .* to Find/
+        sync_courses_to_find
+      end
     end
 
     def edit(logical_attribute)

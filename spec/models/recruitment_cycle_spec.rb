@@ -13,7 +13,9 @@
 require 'rails_helper'
 
 describe RecruitmentCycle, type: :model do
-  subject { create(:recruitment_cycle) }
+  subject { create(:recruitment_cycle, year: "2019") }
+
+  its(:to_s) { should eq("2019/20") }
 
   it "is valid with valid attributes" do
     expect(subject).to be_valid

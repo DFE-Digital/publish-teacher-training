@@ -35,6 +35,7 @@ module MCB
             subjects:             render_course.delete('subjects'),
             site_statuses:        render_course.delete('campus_statuses'),
             enrichments:          nil,
+            recruitment_cycle:    nil,
           )
         end
 

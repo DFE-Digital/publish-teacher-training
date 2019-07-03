@@ -52,6 +52,13 @@ module MCB
       )
     end
 
+    def ask_recruitment_cycle
+      ask_multiple_choice(
+        prompt: "Recruitment cycle?",
+        choices: RecruitmentCycle.all.order(:year)
+      )
+    end
+
     def ask_accredited_body
       new_accredited_body = nil
       until new_accredited_body.present?
