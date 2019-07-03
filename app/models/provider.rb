@@ -147,6 +147,9 @@ class Provider < ApplicationRecord
   end
 
   def requested_cycles_courses(recruitment_year)
+    if recruitment_year.blank?
+      recruitment_year = '2019'
+    end
     courses.select { |course| course.recruitment_cycle.year == recruitment_year }
   end
 end

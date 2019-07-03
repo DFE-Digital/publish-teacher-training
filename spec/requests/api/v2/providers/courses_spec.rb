@@ -206,9 +206,13 @@ describe 'Courses API v2', type: :request do
     end
 
     describe 'JSON generated for courses' do
+      let(:next_cycle) { create(:recruitment_cycle, year: '2020') }
+      let(:course_next_cycle) { create(:course, provider: provider, recruitment_cycle_id: next_cycle.id) }
+
       before do
         findable_open_course
-        get "/api/v2/providers/#{provider.provider_code}/courses",
+        course_next_cycle
+        get "/api/v2/2019/providers/#{provider.provider_code}/courses",
             headers: { 'HTTP_AUTHORIZATION' => credentials }
       end
 

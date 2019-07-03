@@ -262,6 +262,8 @@ describe Provider, type: :model do
 
       it 'should only return the requested cycles courses' do
         expect(provider.requested_cycles_courses('2019')).to eq [course]
+        expect(provider.requested_cycles_courses('2020')).to eq [course2]
+        expect(provider.requested_cycles_courses(nil)).to eq [course]
       end
     end
   end

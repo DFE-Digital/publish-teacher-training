@@ -14,9 +14,6 @@ module API
         authorize @provider, :can_list_courses?
         authorize Course
         recruitment_year = params[:recruitment_year]
-        if recruitment_year.blank?
-          recruitment_year = '2019'
-        end
         @courses = @provider.requested_cycles_courses(recruitment_year)
         render jsonapi: @courses, include: params[:include]
       end
