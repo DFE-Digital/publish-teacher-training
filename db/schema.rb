@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_06_27_151832) do
+ActiveRecord::Schema.define(version: 2019_07_03_120855) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_buffercache"
@@ -271,8 +271,10 @@ ActiveRecord::Schema.define(version: 2019_06_27_151832) do
   add_foreign_key "access_request", "\"user\"", column: "requester_id", name: "FK_access_request_user_requester_id", on_delete: :nullify
   add_foreign_key "course", "provider", column: "accrediting_provider_id", name: "FK_course_provider_accrediting_provider_id"
   add_foreign_key "course", "provider", name: "FK_course_provider_provider_id", on_delete: :cascade
+  add_foreign_key "course", "recruitment_cycle"
   add_foreign_key "course_enrichment", "\"user\"", column: "created_by_user_id", name: "FK_course_enrichment_user_created_by_user_id"
   add_foreign_key "course_enrichment", "\"user\"", column: "updated_by_user_id", name: "FK_course_enrichment_user_updated_by_user_id"
+  add_foreign_key "course_enrichment", "course"
   add_foreign_key "course_site", "course", name: "FK_course_site_course_course_id", on_delete: :cascade
   add_foreign_key "course_site", "site", name: "FK_course_site_site_site_id", on_delete: :cascade
   add_foreign_key "course_subject", "course", name: "FK_course_subject_course_course_id", on_delete: :cascade
@@ -284,6 +286,8 @@ ActiveRecord::Schema.define(version: 2019_06_27_151832) do
   add_foreign_key "organisation_user", "organisation", name: "FK_organisation_user_organisation_organisation_id"
   add_foreign_key "provider_enrichment", "\"user\"", column: "created_by_user_id", name: "FK_provider_enrichment_user_created_by_user_id"
   add_foreign_key "provider_enrichment", "\"user\"", column: "updated_by_user_id", name: "FK_provider_enrichment_user_updated_by_user_id"
+  add_foreign_key "provider_enrichment", "provider"
   add_foreign_key "session", "\"user\"", column: "user_id", name: "FK_session_user_user_id", on_delete: :cascade
   add_foreign_key "site", "provider", name: "FK_site_provider_provider_id", on_delete: :cascade
+  add_foreign_key "site", "recruitment_cycle"
 end
