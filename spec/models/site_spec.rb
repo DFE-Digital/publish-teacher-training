@@ -2,19 +2,18 @@
 #
 # Table name: site
 #
-#  id                   :integer          not null, primary key
-#  address2             :text
-#  address3             :text
-#  address4             :text
-#  code                 :text             not null
-#  location_name        :text
-#  postcode             :text
-#  address1             :text
-#  provider_id          :integer          default(0), not null
-#  region_code          :integer
-#  created_at           :datetime         not null
-#  updated_at           :datetime         not null
-#  recruitment_cycle_id :integer          not null
+#  id            :integer          not null, primary key
+#  address2      :text
+#  address3      :text
+#  address4      :text
+#  code          :text             not null
+#  location_name :text
+#  postcode      :text
+#  address1      :text
+#  provider_id   :integer          default(0), not null
+#  region_code   :integer
+#  created_at    :datetime         not null
+#  updated_at    :datetime         not null
 #
 
 require 'rails_helper'
@@ -37,7 +36,6 @@ describe Provider, type: :model do
 
   describe 'associations' do
     it { should belong_to(:provider) }
-    it { should belong_to(:recruitment_cycle) }
   end
 
   describe '#touch_provider' do
@@ -74,6 +72,8 @@ describe Provider, type: :model do
       expect(subject.code).to eq('A')
     end
   end
+
+  its(:recruitment_cycle) { should eq find(:recruitment_cycle) }
 
   describe "description" do
     subject { build(:site, location_name: 'Foo', code: '1') }

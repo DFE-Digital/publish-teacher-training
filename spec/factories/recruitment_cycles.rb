@@ -15,5 +15,9 @@ FactoryBot.define do
     year { '2019' }
     application_start_date { Time.zone.today }
     application_end_date { Time.zone.today + 30 }
+
+    trait :next do
+      year { '2020' }
+    end
   end
 end

@@ -24,6 +24,7 @@
 #  accrediting_provider :text
 #  last_published_at    :datetime
 #  changed_at           :datetime         not null
+#  recruitment_cycle_id :integer          not null
 #
 
 class Provider < ApplicationRecord
@@ -45,6 +46,8 @@ class Provider < ApplicationRecord
     accredited_body: 'Y',
     not_an_accredited_body: 'N',
   }
+
+  belongs_to :recruitment_cycle
 
   has_and_belongs_to_many :organisations, join_table: :organisation_provider
   has_many :users, through: :organisations
@@ -109,10 +112,6 @@ class Provider < ApplicationRecord
     # itself, so we don't want to alter the semantics of updated_at which
     # represents changes to just the provider record.
     update_columns changed_at: timestamp
-  end
-
-  def recruitment_cycle
-    "2019"
   end
 
   def unassigned_site_codes
