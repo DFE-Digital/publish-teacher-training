@@ -354,7 +354,7 @@ module MCB
                when 'production' then Rainbow(env).red.inverse
                when 'staging'    then Rainbow(env).yellow
                when 'qa'         then Rainbow(env).yellow
-               when nil          then Rainbow(env).green
+               when nil          then Rainbow('local').green
                else                   env
                end
       while (input = Readline.readline("#{prompt}> ", true))
@@ -378,6 +378,10 @@ module MCB
           end
         end
       end
+    end
+
+    def launch_repl?(argv)
+      argv.empty? || (argv.first == '-E' && argv.length == 2)
     end
 
   private

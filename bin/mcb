@@ -82,7 +82,7 @@ def error(msg)
 end
 
 if File.basename(__FILE__) == File.basename($0)
-  if ARGV.empty? || ARGV.first == '-E'
+  if MCB.launch_repl?(ARGV)
     MCB.start_mcb_repl(ARGV)
   else
     $mcb.run(ARGV.dup)
