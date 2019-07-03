@@ -22,4 +22,14 @@ describe API::V2::DeserializableCourse do
       expect(subject[:qualifications]).to eq('test')
     end
   end
+
+  describe "reverse_mapping" do
+    subject { described_class.new({}).reverse_mapping }
+
+    it "always contains all attributes" do
+      API::V2::DeserializableCourse::COURSE_ATTRIBUTES.each do |attribute|
+        expect(subject[attribute.to_sym]).to eq("/data/attributes/#{attribute}")
+      end
+    end
+  end
 end
