@@ -64,6 +64,12 @@ Rails.application.routes.draw do
         patch :accept_transition_screen, on: :member
       end
 
+      scope "/(:recruitment_year)" do
+        resources :providers, param: :code  do
+          resources :courses, param: :code, only: %i[index]
+        end
+      end
+
       resources :providers, param: :code do
         resources :courses, param: :code, only: %i[index create show update] do
           post :sync_with_search_and_compare, on: :member

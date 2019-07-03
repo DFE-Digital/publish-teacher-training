@@ -145,4 +145,8 @@ class Provider < ApplicationRecord
   def to_s
     "#{provider_name} (#{provider_code})"
   end
+
+  def requested_cycles_courses(recruitment_year)
+    courses.select { |course| course.recruitment_cycle.year == recruitment_year }
+  end
 end

@@ -251,4 +251,18 @@ describe Provider, type: :model do
       end
     end
   end
+
+  describe '#requested_cycles_courses' do
+    context 'with a provider with courses in multiple cycles' do
+      let(:current_cycle) { create(:recruitment_cycle, year: '2019') }
+      let(:next_cycle) { create(:recruitment_cycle, year: '2020') }
+      let(:course) { build(:course, recruitment_cycle_id: current_cycle.id) }
+      let(:course2) { build(:course, recruitment_cycle_id: next_cycle.id) }
+      let(:provider) { create(:provider, courses: [course, course2]) }
+
+      it 'should only return the requested cycles courses' do
+        expect(provider.requested_cycles_courses('2019')).to eq [course]
+      end
+    end
+  end
 end
