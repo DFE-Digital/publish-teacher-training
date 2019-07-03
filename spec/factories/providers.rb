@@ -24,6 +24,7 @@
 #  accrediting_provider :text
 #  last_published_at    :datetime
 #  changed_at           :datetime         not null
+#  recruitment_cycle_id :integer          not null
 #
 
 FactoryBot.define do
@@ -42,6 +43,7 @@ FactoryBot.define do
     accrediting_provider { 'N' }
     region_code { 'london' }
     organisations { build_list :organisation, 1 }
+    association :recruitment_cycle, strategy: :find_or_create
 
     trait :accredited_body do
       accrediting_provider { 'Y' }

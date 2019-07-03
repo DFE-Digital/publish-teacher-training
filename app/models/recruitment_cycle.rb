@@ -11,8 +11,7 @@
 #
 
 class RecruitmentCycle < ApplicationRecord
-  has_many :courses
-  has_many :sites
+  has_many :providers
 
   validates :year, presence: true
 

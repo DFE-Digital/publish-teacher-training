@@ -20,7 +20,6 @@
 #  created_at              :datetime         not null
 #  updated_at              :datetime         not null
 #  changed_at              :datetime         not null
-#  recruitment_cycle_id    :integer          not null
 #
 
 class Course < ApplicationRecord
@@ -70,7 +69,8 @@ class Course < ApplicationRecord
 
   belongs_to :provider
   belongs_to :accrediting_provider, class_name: 'Provider', optional: true
-  belongs_to :recruitment_cycle
+
+  has_one :recruitment_cycle, through: :provider
   has_many :course_subjects
   has_many :subjects, through: :course_subjects
   has_many :site_statuses

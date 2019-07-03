@@ -2,19 +2,18 @@
 #
 # Table name: site
 #
-#  id                   :integer          not null, primary key
-#  address2             :text
-#  address3             :text
-#  address4             :text
-#  code                 :text             not null
-#  location_name        :text
-#  postcode             :text
-#  address1             :text
-#  provider_id          :integer          default(0), not null
-#  region_code          :integer
-#  created_at           :datetime         not null
-#  updated_at           :datetime         not null
-#  recruitment_cycle_id :integer          not null
+#  id            :integer          not null, primary key
+#  address2      :text
+#  address3      :text
+#  address4      :text
+#  code          :text             not null
+#  location_name :text
+#  postcode      :text
+#  address1      :text
+#  provider_id   :integer          default(0), not null
+#  region_code   :integer
+#  created_at    :datetime         not null
+#  updated_at    :datetime         not null
 #
 
 FactoryBot.define do
@@ -27,7 +26,6 @@ FactoryBot.define do
     postcode { Faker::Address.postcode }
     region_code { 'london' }
     association(:provider)
-    association :recruitment_cycle, strategy: :find_or_create
 
     transient do
       age { nil }
