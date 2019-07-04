@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_06_27_151832) do
+ActiveRecord::Schema.define(version: 2019_07_04_134543) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_buffercache"
@@ -197,7 +197,7 @@ ActiveRecord::Schema.define(version: 2019_06_27_151832) do
     t.integer "created_by_user_id"
     t.datetime "last_published_at"
     t.integer "status", default: 0, null: false
-    t.integer "provider_id", null: false
+    t.integer "provider_id"
     t.index ["created_by_user_id"], name: "IX_provider_enrichment_created_by_user_id"
     t.index ["provider_code"], name: "IX_provider_enrichment_provider_code"
     t.index ["provider_id"], name: "index_provider_enrichment_on_provider_id"
