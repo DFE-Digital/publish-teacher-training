@@ -16,13 +16,19 @@ run do |opts, _args, _cmd|
   end
 
   ENV['PGPASSWORD'] = ENV['DB_PASSWORD']
-  cmd = "psql -h #{ENV['DB_HOSTNAME']} -U #{ENV['DB_USERNAME']} -d #{ENV['DB_DATABASE']}"
+  psql_args = ["-h", ENV['DB_HOSTNAME'], "-U", ENV['DB_USERNAME'], "-d", ENV['DB_DATABASE']]
 
   source_file = opts[:source_file]
-  cmd = "#{cmd} --file '#{source_file}'" if source_file
+  if source_file
+    psql_args << "--file"
+    psql_args << source_file
+  end
 
   sql_command = opts[:sql_command]
-  cmd = "#{cmd} --command '#{sql_command}'" if sql_command
+  if sql_command
+    psql_args << "--command"
+    psql_args << sql_command
+  end
 
-  MCB::exec_command(cmd)
+  MCB::exec_command("psql", *psql_args)
 end

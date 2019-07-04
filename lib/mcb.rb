@@ -86,9 +86,9 @@ module MCB
     `#{cmd}`
   end
 
-  def self.exec_command(cmd)
-    verbose("Running: #{cmd}")
-    exec(cmd)
+  def self.exec_command(cmd, *command_args)
+    verbose("Running: #{cmd} #{command_args}")
+    exec(cmd, *command_args)
   end
 
   def self.apiv1_token(webapp: nil, rgroup: nil)
