@@ -31,7 +31,7 @@ FactoryBot.define do
     with_higher_education
 
     association(:provider)
-    association(:recruitment_cycle)
+    association :recruitment_cycle, strategy: :find_or_create
 
     study_mode { :full_time }
     resulting_in_pgce_with_qts
