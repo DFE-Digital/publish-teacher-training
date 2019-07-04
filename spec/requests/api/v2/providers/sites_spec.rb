@@ -101,7 +101,7 @@ describe 'Sites API v2', type: :request do
               "address4" => site1.address4,
               "postcode" => site1.postcode,
               "region_code" => site1.region_code,
-              "recruitment_cycle" => "2019",
+              "recruitment_cycle_year" => "2019",
             },
           },
           {
@@ -116,7 +116,7 @@ describe 'Sites API v2', type: :request do
               "address4" => site2.address4,
               "postcode" => site2.postcode,
               "region_code" => site2.region_code,
-              "recruitment_cycle" => "2019",
+              "recruitment_cycle_year" => "2019",
             }
           },
         ])

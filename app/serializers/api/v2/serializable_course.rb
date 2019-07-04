@@ -38,7 +38,7 @@ module API
         @object.provider.provider_code
       end
 
-      attribute :recruitment_cycle do
+      attribute :recruitment_cycle_year do
         @object.recruitment_cycle.year
       end
 
