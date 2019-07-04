@@ -18,8 +18,8 @@ describe MCB::CoursesEditor do
   let!(:mathematics) { find_or_create(:subject, :mathematics) }
   let!(:biology) { find_or_create(:subject, subject_name: "Biology") }
   let!(:secondary) { find_or_create(:subject, :secondary) }
-  let(:current_cycle) { create(:recruitment_cycle, year: '2019') }
-  let!(:next_cycle) { create(:recruitment_cycle, year: '2020') }
+  let(:current_cycle) { find_or_create(:recruitment_cycle, year: '2019') }
+  let!(:next_cycle) { find_or_create(:recruitment_cycle, year: '2020') }
   let!(:course) {
     create(:course,
            provider: provider,
