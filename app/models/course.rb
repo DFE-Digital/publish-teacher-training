@@ -21,7 +21,6 @@
 #  updated_at              :datetime         not null
 #  changed_at              :datetime         not null
 #  recruitment_cycle_id    :integer          not null
-#
 
 class Course < ApplicationRecord
   include WithQualifications
