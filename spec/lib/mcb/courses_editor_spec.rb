@@ -251,6 +251,36 @@ describe MCB::CoursesEditor do
         end
       end
 
+      describe "(training locations)" do
+        let!(:site_1) { create(:site, location_name: 'ACME school', provider: provider) }
+        let!(:site_2) { create(:site, location_name: 'Zebra school', provider: provider) }
+        let!(:site_1_status) {
+          create(:site_status, :running, :published, :part_time_vacancies, course: course, site: site_1)
+        }
+
+        it "adds new training locations" do
+          expect { run_editor("edit training locations", "[ ] Zebra school", "continue", "exit") }.
+            to change { course.sites.reload.sort_by(&:location_name) }.
+            from([site_1]).to([site_1, site_2])
+        end
+
+        it "removes existing training locations" do
+          expect { run_editor("edit training locations", "[x] ACME school", "continue", "exit") }.
+            to change { course.reload.sites }.
+            from([site_1]).to([])
+        end
+
+        context "when more than 1 course is being edited" do
+          let(:another_course) { create(:course, provider: provider) }
+          let(:course_codes) { [course_code, another_course.course_code] }
+
+          it "does not allow editing training locations" do
+            output, = run_editor("exit")
+            expect(output).to_not include("edit training locations")
+          end
+        end
+      end
+
       context "when syncing to Find" do
         let!(:another_course) { create(:course, provider: provider) }
         let(:course_codes) { [course_code, another_course.course_code] }
