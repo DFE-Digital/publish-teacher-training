@@ -30,6 +30,21 @@ RSpec.configure do |config|
     allow(MCB).to receive(:run_command)
   end
 
+  # Open3.pipeline_w is used to page stdout through less. For some reason Open3
+  # is undefined in our tests, but even if it were we'd probably want to stub
+  # it out.
+  config.around(:each, mcb_cli: true) do |example|
+    module ::Open3
+      def self.pipeline_w(_cmds)
+        yield STDOUT
+      end
+    end
+
+    example.run
+
+    Object.__send__(:remove_const, :Open3)
+  end
+
   # Ensure that if the config file that is read is not the user's real data,
   # and if saved for any reason it does not over-write the user's.
   config.around(:each, mcb_cli: true) do |example|

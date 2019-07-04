@@ -10,9 +10,15 @@ run do |opts, args, _cmd|
                 Provider.all
               end
 
-  tp.set :capitalize_headers, false
+  output = [
+    'Providers:',
+    Tabulo::Table.new(providers) { |t|
+      t.add_column :id
+      t.add_column(:provider_code)
+      t.add_column :provider_name
+      t.add_column :provider_type
+    }.pack(max_table_width: nil)
+  ]
 
-  puts "\nProviders:"
-  tp providers, 'id', 'provider_code', 'provider_name', 'provider_type',
-     'postcode'
+  MCB.pageable_output(output)
 end

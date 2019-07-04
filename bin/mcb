@@ -52,7 +52,8 @@ $mcb = Cri::Command.define do
       show_all_commands(c, prefix + c.name + " ")
       puts
     end
-    exit 0
+    # Don't exit if we're in repl-mode.
+    exit 0 unless $mcb_repl_mode
   end
 
   option :c, :config, 'use provided config file',
@@ -80,4 +81,10 @@ def error(msg)
   puts msg
 end
 
-$mcb.run(ARGV.dup) if File.basename(__FILE__) == File.basename($0)
+if File.basename(__FILE__) == File.basename($0)
+  if MCB.launch_repl?(ARGV)
+    MCB.start_mcb_repl(ARGV)
+  else
+    $mcb.run(ARGV.dup)
+  end
+end
