@@ -80,6 +80,10 @@ class ProviderSerializer < ActiveModel::Serializer
     object.accrediting_provider_before_type_cast
   end
 
+  def recruitment_cycle
+    object.recruitment_cycle.year
+  end
+
 private
 
   def select_value_for_provider(provider_code, values)
