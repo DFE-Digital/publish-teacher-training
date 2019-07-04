@@ -26,7 +26,13 @@ describe 'Courses API v2', type: :request do
            science: :must_have_qualification_at_application_time)
   }
 
-  let(:courses_site_status)    { build(:site_status, :findable, :with_any_vacancy, :applications_being_accepted_from_2019) }
+  let(:courses_site_status) {
+    build(:site_status,
+          :findable,
+          :with_any_vacancy,
+          :applications_being_accepted_from_2019,
+          site: create(:site, provider: provider))
+  }
   let(:enrichment)     { build :course_enrichment, :published }
   let(:provider)       { create :provider, organisations: [organisation] }
   let(:course_subject) { course.subjects.first }
@@ -206,15 +212,22 @@ describe 'Courses API v2', type: :request do
     end
 
     describe 'JSON generated for courses' do
-      before do
+      let(:request_path) { "/api/v2/providers/#{provider.provider_code}/courses" }
+
+      def make_request_get_response
         findable_open_course
-        get "/api/v2/providers/#{provider.provider_code}/courses",
+        get request_path,
             headers: { 'HTTP_AUTHORIZATION' => credentials }
+        response
       end
+
+      subject { make_request_get_response }
 
       it { should have_http_status(:success) }
 
       it 'has a data section with the correct attributes' do
+        make_request_get_response
+
         json_response = JSON.parse response.body
         expect(json_response).to eq(
           "data" => [{
@@ -274,6 +287,53 @@ describe 'Courses API v2', type: :request do
             "version" => "1.0"
           }
         )
+      end
+
+      context 'with two recruitment cycles' do
+        let(:next_recruitment_cycle) { create :recruitment_cycle, year: '2020' }
+        let(:next_provider) {
+          create :provider,
+                 organisations: [organisation],
+                 provider_code: provider.provider_code,
+                 recruitment_cycle: next_recruitment_cycle
+        }
+        let(:next_course) {
+          create :course,
+                 provider: next_provider,
+                 course_code: findable_open_course.course_code
+        }
+
+        describe 'making a request without specifying a recruitment cycle' do
+          it 'only returns data for the current recruitment cycle' do
+            next_course
+            findable_open_course
+
+            make_request_get_response
+
+            json_response = JSON.parse response.body
+            expect(json_response['data'].count).to eq 1
+            expect(json_response['data'].first)
+              .to have_attribute('recruitment_cycle').with_value('2019')
+          end
+        end
+
+        describe 'making a request for the next recruitment cycle' do
+          let(:request_path) {
+            "/api/v2/providers/#{next_provider.provider_code}/recruitment_cycles/2020/courses"
+          }
+
+          it 'only returns data for the next recruitment cycle' do
+            findable_open_course
+            next_course
+
+            make_request_get_response
+
+            json_response = JSON.parse response.body
+            expect(json_response['data'].count).to eq 1
+            expect(json_response['data'].first)
+              .to have_attribute('recruitment_cycle').with_value('2020')
+          end
+        end
       end
     end
 

@@ -15,6 +15,10 @@ class RecruitmentCycle < ApplicationRecord
 
   validates :year, presence: true
 
+  def self.current_recruitment_cycle
+    all.first
+  end
+
   def to_s
     following_year = Date.new(year.to_i, 1, 1) + 1.year
     "#{year}/#{following_year.strftime('%y')}"
