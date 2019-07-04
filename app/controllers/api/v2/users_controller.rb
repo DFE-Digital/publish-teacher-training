@@ -21,6 +21,10 @@ module API
         @user.accept_transition_screen!
       end
 
+      def accept_rollover_screen
+        @user.accept_rollover_screen!
+      end
+
     private
 
       def build_user

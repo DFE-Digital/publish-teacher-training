@@ -41,12 +41,21 @@ describe User, type: :model do
     end
   end
 
-  describe 'state events' do
+  describe 'transition state event' do
     before do
       subject.accept_transition_screen!
     end
 
     it { should be_transitioned }
+  end
+
+  describe 'rollover state event' do
+    before do
+      subject.accept_transition_screen!
+      subject.accept_rollover_screen!
+    end
+
+    it { should be_rolled_over }
   end
 
   describe '#admin?' do

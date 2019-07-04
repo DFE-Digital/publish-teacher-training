@@ -132,7 +132,7 @@ User.create!(
   last_name: 'Admin',
   accept_terms_date_utc: Time.now.utc,
   email: 'super.admin@education.gov.uk', # matches authentication.rb
-  state: 'transitioned'
+  state: 'rolled_over'
 )
 
 10.times do |i|
