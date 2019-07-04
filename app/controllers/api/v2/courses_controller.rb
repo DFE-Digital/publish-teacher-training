@@ -7,7 +7,7 @@ module API
       before_action :build_course, except: :index
 
       deserializable_resource :course,
-                              only: %i[update publish],
+                              only: %i[update publish publishable],
                               class: API::V2::DeserializableCourse
 
       def index
@@ -51,6 +51,14 @@ module API
               'error received when syncing with search and compare'
             )
           end
+        else
+          render jsonapi_errors: @course.errors, status: :unprocessable_entity
+        end
+      end
+
+      def publishable
+        if @course.publishable?
+          head :ok
         else
           render jsonapi_errors: @course.errors, status: :unprocessable_entity
         end
