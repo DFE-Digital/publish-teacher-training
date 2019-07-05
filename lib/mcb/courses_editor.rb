@@ -60,7 +60,7 @@ module MCB
     end
 
     def filter_single_course_options_if_necessary(choices)
-      choices.grep_v(->(c) { c.in?(["edit subjects", "edit training locations"]) && @courses.count != 1 })
+      choices.reject { |c| c.in?(["edit subjects", "edit training locations"]) && @courses.count != 1 }
     end
 
     def perform_action(choice)
