@@ -52,7 +52,6 @@ module MCB
         "edit age range",
         "edit subjects",
         "edit training locations",
-        "edit recruitment cycle",
         "sync course(s) to Find"
       ]
       filtered_choices = filter_single_course_options_if_necessary(choices)
