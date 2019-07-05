@@ -1,6 +1,6 @@
 require 'mcb_helper'
 
-describe MCB::CoursesEditorCLI do
+describe MCB::BaseCLI do
   def run_with_input_commands(*input_cmds)
     stderr = nil
     output = with_stubbed_stdout(stdin: input_cmds.join("\n"), stderr: stderr) do
@@ -9,7 +9,7 @@ describe MCB::CoursesEditorCLI do
     [output, stderr]
   end
 
-  subject { described_class.new(nil) } # provider is not needed for these specs
+  subject { described_class.new }
 
   describe "#multiselect" do
     let(:initial_items) { ["option A", "option C"] }

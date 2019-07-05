@@ -51,6 +51,7 @@ module MCB
         "edit application opening date",
         "edit age range",
         "edit subjects",
+        "edit training locations",
         "edit recruitment cycle",
         "sync course(s) to Find"
       ]
@@ -59,12 +60,14 @@ module MCB
     end
 
     def filter_single_course_options_if_necessary(choices)
-      choices.grep_v(->(c) { c.in?(["edit subjects"]) && @courses.count != 1 })
+      choices.reject { |c| c.in?(["edit subjects", "edit training locations"]) && @courses.count != 1 }
     end
 
     def perform_action(choice)
       if choice == 'edit subjects'
         edit_subjects
+      elsif choice == 'edit training locations'
+        edit_sites
       elsif choice.start_with?("edit")
         attribute = choice.gsub("edit ", "").gsub(" ", "_").to_sym
         edit(attribute)
@@ -86,6 +89,14 @@ module MCB
       course.subjects = @cli.multiselect(
         initial_items: course.subjects.to_a,
         possible_items: ::Subject.all
+      )
+      course.reload
+    end
+
+    def edit_sites
+      course.sites = @cli.multiselect(
+        initial_items: course.sites.to_a,
+        possible_items: @provider.sites
       )
       course.reload
     end

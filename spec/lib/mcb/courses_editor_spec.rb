@@ -18,8 +18,8 @@ describe MCB::CoursesEditor do
   let!(:mathematics) { find_or_create(:subject, :mathematics) }
   let!(:biology) { find_or_create(:subject, subject_name: "Biology") }
   let!(:secondary) { find_or_create(:subject, :secondary) }
-  let(:current_cycle) { create(:recruitment_cycle, year: '2019') }
-  let!(:next_cycle) { create(:recruitment_cycle, year: '2020') }
+  let(:current_cycle) { find_or_create(:recruitment_cycle, year: '2019') }
+  let!(:next_cycle) { find_or_create(:recruitment_cycle, year: '2020') }
   let!(:course) {
     create(:course,
            provider: provider,
@@ -247,6 +247,36 @@ describe MCB::CoursesEditor do
           it "does not allow editing subjects" do
             output, = run_editor("exit")
             expect(output).to_not include("edit subjects")
+          end
+        end
+      end
+
+      describe "(training locations)" do
+        let!(:site_1) { create(:site, location_name: 'ACME school', provider: provider) }
+        let!(:site_2) { create(:site, location_name: 'Zebra school', provider: provider) }
+        let!(:site_1_status) {
+          create(:site_status, :running, :published, :part_time_vacancies, course: course, site: site_1)
+        }
+
+        it "adds new training locations" do
+          expect { run_editor("edit training locations", "[ ] Zebra school", "continue", "exit") }.
+            to change { course.sites.reload.sort_by(&:location_name) }.
+            from([site_1]).to([site_1, site_2])
+        end
+
+        it "removes existing training locations" do
+          expect { run_editor("edit training locations", "[x] ACME school", "continue", "exit") }.
+            to change { course.reload.sites }.
+            from([site_1]).to([])
+        end
+
+        context "when more than 1 course is being edited" do
+          let(:another_course) { create(:course, provider: provider) }
+          let(:course_codes) { [course_code, another_course.course_code] }
+
+          it "does not allow editing training locations" do
+            output, = run_editor("exit")
+            expect(output).to_not include("edit training locations")
           end
         end
       end
