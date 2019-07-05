@@ -31,8 +31,6 @@ class Site < ApplicationRecord
 
   belongs_to :provider
 
-  has_one :recruitment_cycle, through: :provider
-
   validates :location_name, uniqueness: { scope: :provider_id }
   validates :location_name,
             :address1,
@@ -43,6 +41,10 @@ class Site < ApplicationRecord
   validates :code, uniqueness: { scope: :provider_id, case_sensitive: false },
                    inclusion: { in: POSSIBLE_CODES, message: "must be A-Z, 0-9 or -" },
                    presence: true
+
+  def recruitment_cycle
+    provider.recruitment_cycle
+  end
 
   def assign_code
     self.code ||= pick_next_available_code(available_codes: provider&.unassigned_site_codes)

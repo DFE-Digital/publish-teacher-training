@@ -36,7 +36,6 @@ describe Provider, type: :model do
 
   describe 'associations' do
     it { should belong_to(:provider) }
-    it { should belong_to(:recruitment_cycle) }
   end
 
   describe '#touch_provider' do
@@ -73,6 +72,8 @@ describe Provider, type: :model do
       expect(subject.code).to eq('A')
     end
   end
+
+  its(:recruitment_cycle) { should eq find(:recruitment_cycle) }
 
   describe "description" do
     subject { build(:site, location_name: 'Foo', code: '1') }

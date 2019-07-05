@@ -25,7 +25,8 @@ FactoryBot.define do
     address4 { Faker::Address.state }
     postcode { Faker::Address.postcode }
     region_code { 'london' }
-    association(:provider)
+    provider
+
 
     transient do
       age { nil }

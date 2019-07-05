@@ -24,7 +24,7 @@ describe RecruitmentCycle, type: :model do
   it { is_expected.to validate_presence_of(:year) }
 
   describe 'associations' do
-    it { should have_many(:sites) }
     it { should have_many(:courses).through(:providers) }
+    it { should have_many(:sites).through(:providers) }
   end
 end

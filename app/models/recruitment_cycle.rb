@@ -16,6 +16,7 @@ class RecruitmentCycle < ApplicationRecord
   # which is a good thing since we don't have a good way to "move" a course or
   # a site to a new recruitment_cycle
   has_many :courses, through: :providers
+  has_many :sites, through: :providers
 
   validates :year, presence: true
 
