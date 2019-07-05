@@ -70,7 +70,6 @@ class Course < ApplicationRecord
   belongs_to :provider
   belongs_to :accrediting_provider, class_name: 'Provider', optional: true
 
-  has_one :recruitment_cycle, through: :provider
   has_many :course_subjects
   has_many :subjects, through: :course_subjects
   has_many :site_statuses
@@ -114,13 +113,19 @@ class Course < ApplicationRecord
     end.order(:changed_at, :id)
   end
 
-  scope :by_recruitment_cycle, ->(recruitment_year) { joins(:recruitment_cycle).merge(RecruitmentCycle.where(year: recruitment_year)) }
+  scope :by_recruitment_cycle, ->(recruitment_year) {
+    joins(provider: :recruitment_cycle).merge(RecruitmentCycle.where(year: recruitment_year))
+  }
 
   validates :enrichments, presence: true, on: :publish
   validate :validate_enrichment_publishable, on: :publish
   validate :validate_enrichment
 
   after_validation :remove_unnecessary_enrichments_validation_message
+
+  def recruitment_cycle
+    provider.recruitment_cycle
+  end
 
   def accrediting_provider_description
     return nil if accrediting_provider.blank?

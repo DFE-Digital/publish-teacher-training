@@ -12,6 +12,10 @@
 
 class RecruitmentCycle < ApplicationRecord
   has_many :providers
+  # Because this is through a has_many, these associations can't be updated,
+  # which is a good thing since we don't have a good way to "move" a course or
+  # a site to a new recruitment_cycle
+  has_many :courses, through: :providers
 
   validates :year, presence: true
 
