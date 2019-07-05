@@ -34,8 +34,7 @@ describe MCB::CoursesEditor do
            study_mode: 'part_time',
            start_date: Date.new(2019, 8, 1),
            age_range: 'secondary',
-           subjects: [secondary, biology],
-           recruitment_cycle: current_cycle)
+           subjects: [secondary, biology])
   }
   subject { described_class.new(provider: provider, course_codes: course_codes, requester: requester) }
 
@@ -118,19 +117,6 @@ describe MCB::CoursesEditor do
         it 'updates the study mode setting to full-time by default' do
           expect { run_editor("edit study mode", "", "exit") }.to change { course.reload.study_mode }.
             from("part_time").to("full_time")
-        end
-      end
-
-      describe "(recruitment cycle)" do
-        it 'updates the recruitment cycle' do
-          expect {
-            run_editor(
-              "edit recruitment cycle",
-              "3", # 3rd option should be 2020/21, after exit and 2019/20
-              "exit"
-            )
-          }.to change { course.reload.recruitment_cycle }.
-            from(current_cycle).to(next_cycle)
         end
       end
 
