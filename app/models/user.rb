@@ -38,9 +38,14 @@ class User < ApplicationRecord
   aasm column: 'state' do
     state :new, initial: true
     state :transitioned
+    state :rolled_over
 
     event :accept_transition_screen do
       transitions from: :new, to: :transitioned
+    end
+
+    event :accept_rollover_screen do
+      transitions from: :transitioned, to: :rolled_over
     end
   end
 
