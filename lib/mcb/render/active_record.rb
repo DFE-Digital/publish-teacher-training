@@ -22,6 +22,14 @@ module MCB
             providers: user.providers,
           )
         end
+
+        def provider(provider)
+          super(
+            provider.attributes,
+            contacts:      provider.contacts,
+            organisations: provider.organisations,
+          )
+        end
       end
     end
   end

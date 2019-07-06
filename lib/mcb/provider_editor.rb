@@ -13,6 +13,7 @@ module MCB
     def run
       finished = false
       until finished
+        puts MCB::Render::ActiveRecord.provider(provider)
         choice = main_loop
 
         if choice.nil?

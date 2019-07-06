@@ -211,6 +211,25 @@ module MCB
       %i[subject_code subject_name]
     end
 
+    # Render a provider for output to the terminal.
+    #
+    # Takes care of rendering out all the attributes and related objects in
+    # the correct format. Associations are specified as params to allow the
+    # caller to decide how they are retrieved (ActiveRecord objects will
+    # access attributes and associations differently from JSON API
+    # responses).
+    def provider(provider,
+                 contacts:,
+                 organisations:)
+      [
+        provider_record(provider),
+        "\n",
+        contacts_table(contacts),
+        "\n",
+        organisations_table(organisations),
+      ]
+    end
+
   private
 
     def add_columns_to_table(columns, table:)
