@@ -15,11 +15,12 @@ describe MCB::BaseCLI do
     let(:initial_items) { ["option A", "option C"] }
     let(:possible_items) { ["option A", "option B", "option C"] }
 
-    def run_multiselect(select_all_option: false)
+    def run_multiselect(select_all_option: false, hidden_label: nil)
       subject.multiselect(
         initial_items: initial_items,
         possible_items: possible_items,
-        select_all_option: select_all_option
+        select_all_option: select_all_option,
+        hidden_label: hidden_label
       )
     end
 
@@ -66,6 +67,15 @@ describe MCB::BaseCLI do
         }
 
         expect(result.sort).to eq(["option A", "option B", "option C"])
+      end
+
+      it "supports an optional hidden alias for each option" do
+        result = nil
+        run_with_input_commands("A", "B", "continue") { # unselect A, select B
+          result = run_multiselect(hidden_label: ->(option) { option.split[1] })
+        }
+
+        expect(result.sort).to eq(["option B", "option C"])
       end
     end
   end

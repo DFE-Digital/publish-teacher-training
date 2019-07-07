@@ -53,6 +53,20 @@ describe MCB::ProviderEditor do
           expect($mcb).to have_received(:run).with(%w[courses edit X12 A01X A03X])
         end
 
+        it 'invokes course editing on courses selected by their course code' do
+          allow($mcb).to receive(:run)
+
+          run_editor(
+            "edit courses", # choose the option
+            "A01X", # pick the first course
+            "A03X", # pick the second course
+            "continue", # finish selecting courses
+            "exit" # from the command
+          )
+
+          expect($mcb).to have_received(:run).with(%w[courses edit X12 A01X A03X])
+        end
+
         it 'allows to easily select all courses' do
           allow($mcb).to receive(:run)
 

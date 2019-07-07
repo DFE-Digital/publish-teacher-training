@@ -53,7 +53,8 @@ module MCB
       @selected_courses = @cli.multiselect(
         initial_items: @selected_courses,
         possible_items: @provider.courses.order(:name),
-        select_all_option: true
+        select_all_option: true,
+        hidden_label: ->(course) { course.course_code }
       )
       mcb_courses_edit(@selected_courses.map(&:course_code).sort) unless @selected_courses.empty?
     end
