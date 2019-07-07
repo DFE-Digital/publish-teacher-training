@@ -15,8 +15,12 @@ describe MCB::BaseCLI do
     let(:initial_items) { ["option A", "option C"] }
     let(:possible_items) { ["option A", "option B", "option C"] }
 
-    def run_multiselect
-      subject.multiselect(initial_items: initial_items, possible_items: possible_items)
+    def run_multiselect(select_all_option: false)
+      subject.multiselect(
+        initial_items: initial_items,
+        possible_items: possible_items,
+        select_all_option: select_all_option
+      )
     end
 
     it "shows the initial values" do
@@ -53,6 +57,15 @@ describe MCB::BaseCLI do
         }
 
         expect(result.sort).to eq(["option B", "option C"])
+      end
+
+      it "supports an optional 'select all' option" do
+        result = nil
+        run_with_input_commands("select all", "continue") {
+          result = run_multiselect(select_all_option: true)
+        }
+
+        expect(result.sort).to eq(["option A", "option B", "option C"])
       end
     end
   end

@@ -53,6 +53,14 @@ describe MCB::ProviderEditor do
           expect($mcb).to have_received(:run).with(%w[courses edit X12 A01X A03X])
         end
 
+        it 'allows to easily select all courses' do
+          allow($mcb).to receive(:run)
+
+          run_editor("edit courses", "select all", "continue", "exit")
+
+          expect($mcb).to have_received(:run).with(%w[courses edit X12 A01X A02X A03X])
+        end
+
         context "(run against an Azure environment)" do
           let(:environment) { 'qa' }
           subject { described_class.new(provider: provider, requester: requester, environment: environment) }
