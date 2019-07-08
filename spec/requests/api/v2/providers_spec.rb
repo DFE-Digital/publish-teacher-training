@@ -142,6 +142,47 @@ describe 'Providers API v2', type: :request do
         expect(provider_names_in_response).to eq(%w(Acme Zork))
       end
     end
+
+    context 'with two recruitment cycles' do
+      let(:next_recruitment_cycle) { create :recruitment_cycle, year: '2020' }
+      let(:next_provider) {
+        create :provider,
+               organisations: [organisation],
+               provider_code: provider.provider_code,
+               recruitment_cycle: next_recruitment_cycle
+      }
+
+      describe 'making a request without specifying a recruitment cycle' do
+        let(:request_path) { "/api/v2/providers" }
+
+        it 'only returns data for the current recruitment cycle' do
+          next_provider
+
+          perform_request
+
+          expect(json_response['data'].count).to eq 1
+          expect(json_response['data'].first)
+            .to have_attribute('recruitment_cycle_year').with_value('2019')
+        end
+      end
+
+      describe 'making a request for the next recruitment cycle' do
+        let(:request_path) {
+          "/api/v2/recruitment_cycles/#{next_recruitment_cycle.year}/providers"
+        }
+
+        it 'only returns data for the next recruitment cycle' do
+          next_provider
+
+          perform_request
+
+          expect(json_response['data'].count).to eq 1
+          expect(json_response['data'].first)
+            .to have_attribute('recruitment_cycle_year')
+                  .with_value(next_recruitment_cycle.year)
+        end
+      end
+    end
   end
 
   describe 'GET /providers#show' do
@@ -327,6 +368,53 @@ describe 'Providers API v2', type: :request do
         perform_request
 
         expect(json_response).to eq(expected_response)
+      end
+    end
+
+    context 'with two recruitment cycles' do
+      let(:next_recruitment_cycle) { create :recruitment_cycle, year: '2020' }
+      let(:next_provider) {
+        create :provider,
+               organisations: [organisation],
+               provider_code: provider.provider_code,
+               recruitment_cycle: next_recruitment_cycle
+      }
+
+      describe 'making a request without specifying a recruitment cycle' do
+        let(:request_path) { "/api/v2/providers/#{provider.provider_code.downcase}" }
+
+        it 'only returns data for the current recruitment cycle' do
+          next_provider
+
+          perform_request
+
+          expect(json_response['data'])
+            .to have_attribute('recruitment_cycle_year')
+                  .with_value(provider.recruitment_cycle.year)
+          expect(json_response['data'])
+            .to have_attribute('provider_code')
+                  .with_value(provider.provider_code)
+        end
+      end
+
+      describe 'making a request for the next recruitment cycle' do
+        let(:request_path) {
+          "/api/v2/recruitment_cycles/#{next_recruitment_cycle.year}" \
+          "/providers/#{next_provider.provider_code}"
+        }
+
+        it 'only returns data for the next recruitment cycle' do
+          next_provider
+
+          perform_request
+
+          expect(json_response['data'])
+            .to have_attribute('recruitment_cycle_year')
+                  .with_value(next_recruitment_cycle.year)
+          expect(json_response['data'])
+            .to have_attribute('provider_code')
+                  .with_value(next_provider.provider_code)
+        end
       end
     end
   end
