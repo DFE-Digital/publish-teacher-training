@@ -18,7 +18,7 @@ describe MCB::CoursesEditor do
   let!(:mathematics) { find_or_create(:subject, :mathematics) }
   let!(:biology) { find_or_create(:subject, subject_name: "Biology") }
   let!(:secondary) { find_or_create(:subject, :secondary) }
-  let(:current_cycle) { find_or_create(:recruitment_cycle, year: '2019') }
+  let(:current_cycle) { RecruitmentCycle.current_recruitment_cycle }
   let!(:next_cycle) { find_or_create(:recruitment_cycle, year: '2020') }
   let!(:course) {
     create(:course,
@@ -355,6 +355,165 @@ describe MCB::CoursesEditor do
 
       it 'raises an error' do
         expect { subject }.to raise_error(ArgumentError, /Couldn't find course ABCD/)
+      end
+    end
+
+    describe 'runs the course creation wizard' do
+      def run_new_course_wizard(*input_cmds)
+        stderr = nil
+        output = with_stubbed_stdout(stdin: input_cmds.join("\n"), stderr: stderr) do
+          subject.new_course_wizard
+        end
+        [output, stderr]
+      end
+
+      let!(:site_1) { create(:site, provider: provider, location_name: 'Albemarle School') }
+      let!(:site_2) { create(:site, provider: provider, location_name: 'King Edward School') }
+      let!(:site_3) { create(:site, provider: provider, location_name: 'Emmanuel School') }
+      let(:new_course) { provider.courses.build }
+
+      subject {
+        MCB::CoursesEditor.new(
+          provider: provider,
+          requester: requester,
+          courses: [new_course]
+        )
+      }
+
+      before do
+        Timecop.freeze(Time.utc(2018, 11, 1))
+      end
+
+      after do
+        Timecop.return
+      end
+
+      let(:desired_attributes) {
+        {
+          title: "Biology",
+          qualification: 'qts',
+          study_mode: 'full_time',
+          accredited_body: accredited_body.provider_code,
+          start_date: '1 September 2019',
+          route: 'school_direct_salaried_training_programme',
+          maths: 'equivalence_test',
+          english: 'equivalence_test',
+          science: 'not_required',
+          age_range: 'secondary',
+          course_code: '1X2B',
+          recruitment_cycle: '2', # the 2nd option should always be the current recruitment cycle
+          application_opening_date: "18 October 2018",
+        }
+      }
+
+      it "creates a new course with the passed parameters" do
+        output, = run_new_course_wizard(
+          desired_attributes[:title],
+          desired_attributes[:qualification],
+          desired_attributes[:study_mode],
+          desired_attributes[:accredited_body],
+          desired_attributes[:start_date],
+          desired_attributes[:route],
+          desired_attributes[:maths],
+          desired_attributes[:english],
+          desired_attributes[:science],
+          desired_attributes[:age_range],
+          desired_attributes[:course_code],
+          desired_attributes[:recruitment_cycle],
+          "y", # confirm creation
+          # subject selection
+          "Biology",
+          "Secondary",
+          "continue",
+          # location selection
+          "[ ] #{site_1.location_name}",
+          "[ ] #{site_3.location_name}",
+          "continue",
+          desired_attributes[:application_opening_date],
+          "", # enter to finish
+          ""
+        )
+
+        expect(output).to include("Here's the final course that's been created")
+
+        created_course = provider.courses.find_by!(course_code: desired_attributes[:course_code])
+        expect(created_course.attributes).to include(
+          "name" => desired_attributes[:title],
+          "qualification" => desired_attributes[:qualification],
+          "study_mode" => desired_attributes[:study_mode],
+          "start_date" => Date.new(2019, 9, 1),
+          "program_type" => desired_attributes[:route],
+          "maths" => desired_attributes[:maths],
+          "english" => desired_attributes[:english],
+          "science" => desired_attributes[:science],
+          "age_range" => desired_attributes[:age_range],
+        )
+        expect(created_course.accrediting_provider).to eq(accredited_body)
+        expect(created_course.recruitment_cycle).to eq(current_cycle)
+        expect(created_course.sites).to include(site_1, site_3)
+        expect(created_course.site_statuses.map(&:applications_accepted_from).uniq).to eq([Date.new(2018, 10, 18)])
+        expect(created_course.ucas_status).to eq(:new)
+      end
+
+      it "creates a new course with sensible defaults when certain steps are left blank" do
+        run_new_course_wizard(
+          desired_attributes[:title],
+          "", # default qualifications
+          "", # default study mode
+          "", # default start date
+          "", # default accredited body
+          desired_attributes[:route],
+          desired_attributes[:maths],
+          desired_attributes[:english],
+          desired_attributes[:science],
+          desired_attributes[:age_range],
+          desired_attributes[:course_code],
+          desired_attributes[:recruitment_cycle],
+          "y", # confirm creation
+          # subject selection
+          "Biology",
+          "Secondary",
+          "continue",
+          # location selection
+          "[ ] #{site_1.location_name}",
+          "[ ] #{site_3.location_name}",
+          "continue",
+          "", # default application open date
+          "", # enter to finish
+          ""
+        )
+
+        created_course = provider.courses.find_by!(course_code: desired_attributes[:course_code])
+
+        expect(created_course.attributes).to include(
+          "qualification" => "pgce_with_qts",
+          "study_mode" => "full_time",
+          "start_date" => Date.new(2019, 9, 1),
+          "program_type" => desired_attributes[:route],
+        )
+        expect(created_course.accrediting_provider).to eq(provider)
+        expect(created_course.site_statuses.map(&:applications_accepted_from).uniq).to eq([Date.new(2018, 11, 1)])
+      end
+
+      it "does not create the course if creation isn't confirmed" do
+        output, = run_new_course_wizard(
+          desired_attributes[:title],
+          "", # default qualifications
+          "", # default study mode
+          "", # default start date
+          "", # default accredited body
+          desired_attributes[:route],
+          desired_attributes[:maths],
+          desired_attributes[:english],
+          desired_attributes[:science],
+          desired_attributes[:age_range],
+          desired_attributes[:course_code],
+          desired_attributes[:recruitment_cycle],
+          "n", # confirm creation
+        )
+
+        expect(Course.find_by(course_code: desired_attributes[:course_code])).to be_nil
+        expect(output).to include("Aborting")
       end
     end
   end

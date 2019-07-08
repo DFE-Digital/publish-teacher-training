@@ -31,6 +31,14 @@ module MCB
       end
     end
 
+    def confirm_creation?
+      @cli.agree("Continue? ")
+    end
+
+    def enter_to_continue
+      @cli.ask("Press Enter to continue")
+    end
+
   private
 
     def define_choices_for_each_possible_item(menu:, selected_items:, possible_items:, hidden_label:)
