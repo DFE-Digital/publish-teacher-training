@@ -21,7 +21,6 @@
 #  updated_at              :datetime         not null
 #  changed_at              :datetime         not null
 #  recruitment_cycle_id    :integer          not null
-#
 
 class Course < ApplicationRecord
   include WithQualifications
@@ -119,6 +118,7 @@ class Course < ApplicationRecord
   validates :enrichments, presence: true, on: :publish
   validate :validate_enrichment_publishable, on: :publish
   validate :validate_enrichment
+  validate :validate_course_syncable, on: :sync
 
   after_validation :remove_unnecessary_enrichments_validation_message
 
@@ -143,6 +143,10 @@ class Course < ApplicationRecord
 
   def publishable?
     valid? :publish
+  end
+
+  def syncable?
+    valid? :sync
   end
 
   def findable?
@@ -337,5 +341,14 @@ private
 
   def remove_unnecessary_enrichments_validation_message
     self.errors.delete :enrichments if self.errors[:enrichments] == ['is invalid']
+  end
+
+  def validate_course_syncable
+    if findable?.blank?
+      errors.add :site_statuses, 'No findable sites.'
+    end
+    if dfe_subjects.blank?
+      errors.add :dfe_subjects, 'No DfE subject.'
+    end
   end
 end

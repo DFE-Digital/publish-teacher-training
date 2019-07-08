@@ -22,9 +22,7 @@ module API
       end
 
       def sync_with_search_and_compare
-        response = sync_courses
-
-        if response
+        if has_synced?
           head :ok
         else
           raise RuntimeError.new(
@@ -37,20 +35,14 @@ module API
         if @course.publishable?
           @course.publish_sites
           @course.publish_enrichment(@current_user)
-
-          response = ManageCoursesAPIService::Request.sync_course_with_search_and_compare(
-            @current_user.email,
-            @provider.provider_code,
-            @course.course_code
-          )
-
-          if response
+          if has_synced?
             head :ok
           else
             raise RuntimeError.new(
               'error received when syncing with search and compare'
             )
           end
+
         else
           render jsonapi_errors: @course.errors, status: :unprocessable_entity
         end
@@ -67,6 +59,7 @@ module API
       def update
         update_enrichment
         update_sites
+        has_synced? if site_ids.present?
 
         if @course.errors.empty? && @course.valid?
           render jsonapi: @course.reload
@@ -76,14 +69,6 @@ module API
       end
 
     private
-
-      def sync_courses
-        ManageCoursesAPIService::Request.sync_course_with_search_and_compare(
-          @current_user.email,
-          @provider.provider_code,
-          @course.course_code
-        )
-      end
 
       def update_enrichment
         return unless enrichment_params.values.any?
@@ -102,8 +87,6 @@ module API
         # but we can't actually revert easily from what I can tell because of the
         # remove_site! side effects that occur when it's called.
         @course.errors[:sites] << "^You must choose at least one location" if site_ids.empty?
-
-        sync_courses if site_ids.any?
       end
 
       def build_provider
@@ -138,6 +121,16 @@ module API
 
       def site_ids
         params.fetch(:course, {})[:sites_ids]
+      end
+
+      def has_synced?
+        if @course.syncable?
+          SearchAndCompareAPIService::Request.sync([@course])
+        else
+          raise RuntimeError.new(
+            'course is not syncable'
+          )
+        end
       end
     end
   end

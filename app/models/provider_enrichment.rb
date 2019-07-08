@@ -11,7 +11,7 @@
 #  created_by_user_id :integer
 #  last_published_at  :datetime
 #  status             :integer          default("draft"), not null
-#  provider_id        :integer          not null
+#  provider_id        :integer
 #
 
 class ProviderEnrichment < ApplicationRecord
