@@ -29,4 +29,5 @@ class ProviderPolicy
 
   alias_method :can_list_courses?, :show?
   alias_method :can_list_sites?, :show?
+  alias_method :update?, :show?
 end
