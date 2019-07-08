@@ -12,8 +12,6 @@ AccessRequest.destroy_all
 current_recruitment_cycle = RecruitmentCycle.create(year: '2019', application_start_date: Date.new(2018, 10, 9))
 next_recruitment_cycle = RecruitmentCycle.create(year: '2020')
 
-accrediting_provider = Provider.create!(provider_name: 'Acme SCITT', provider_code: 'A01')
-
 {
   "Primary" => "00",
   "Secondary" => "05",
@@ -29,103 +27,89 @@ accrediting_provider = Provider.create!(provider_name: 'Acme SCITT', provider_co
   )
 end
 
-Site.create!(
-  provider: accrediting_provider,
-  code: Faker::Number.unique.number(1),
-  location_name: Faker::Company.name,
-  address1: Faker::Address.building_number,
-  address2: Faker::Address.street_name,
-  address3: Faker::Address.city,
-  address4: Faker::Address.state,
-  postcode: Faker::Address.postcode,
-  recruitment_cycle: current_recruitment_cycle
-)
+def create_standard_provider_and_courses_for_cycle(recruitment_cycle)
+  provider = Provider.create!(
+    provider_name: 'Acme SCITT',
+    provider_code: 'A01',
+    recruitment_cycle: recruitment_cycle
+  )
 
-course1 = Course.create!(
-  name: "Mathematics",
-  course_code: Faker::Number.unique.hexadecimal(3).upcase,
-  provider: accrediting_provider,
-  start_date: Date.new(2019, 9, 1),
-  profpost_flag: "PG",
-  program_type: "SD",
-  maths: 1,
-  english: 9,
-  science: nil,
-  modular: "M",
-  qualification: :pgce_with_qts,
-  subjects: [
-    Subject.find_by(subject_name: "Secondary"),
-    Subject.find_by(subject_name: "Mathematics")
-  ],
-  study_mode: "F",
-  recruitment_cycle: current_recruitment_cycle
-)
+  Site.create!(
+    provider: provider,
+    code: Faker::Number.unique.number(1),
+    location_name: Faker::Company.name,
+    address1: Faker::Address.building_number,
+    address2: Faker::Address.street_name,
+    address3: Faker::Address.city,
+    address4: Faker::Address.state,
+    postcode: Faker::Address.postcode,
+  )
 
-SiteStatus.create!(
-  site: Site.last,
-  vac_status: "F",
-  publish: "Y",
-  course: course1,
-  status: "R",
-  applications_accepted_from: Date.new(2018, 10, 23)
-)
+  course1 = Course.create!(
+    name: "Mathematics",
+    course_code: Faker::Number.unique.hexadecimal(3).upcase,
+    provider: provider,
+    start_date: Date.new(2019, 9, 1),
+    profpost_flag: "PG",
+    program_type: "SD",
+    maths: 1,
+    english: 9,
+    science: nil,
+    modular: "M",
+    qualification: :pgce_with_qts,
+    subjects: [
+      Subject.find_by(subject_name: "Secondary"),
+      Subject.find_by(subject_name: "Mathematics")
+    ],
+    study_mode: "F",
+  )
 
-course2 = Course.create!(
-  name: "Biology",
-  course_code: Faker::Number.unique.hexadecimal(3).upcase,
-  provider: accrediting_provider,
-  start_date: Date.new(2019, 9, 1),
-  profpost_flag: "BO",
-  program_type: "HE",
-  maths: 3,
-  english: 9,
-  science: nil,
-  modular: "",
-  qualification: :pgce_with_qts,
-  subjects: [
-    Subject.find_by(subject_name: "Secondary"),
-    Subject.find_by(subject_name: "Biology"),
-    Subject.find_by(subject_name: "Further Education"),
-  ],
-  study_mode: "B",
-  recruitment_cycle: current_recruitment_cycle
-)
+  SiteStatus.create!(
+    site: Site.last,
+    vac_status: "F",
+    publish: "Y",
+    course: course1,
+    status: "R",
+    applications_accepted_from: Date.new(2018, 10, 23)
+  )
 
-PGDECourse.create!(
-  provider_code: course2.provider.provider_code,
-  course_code: course2.course_code,
-)
+  course2 = Course.create!(
+    name: "Biology",
+    course_code: Faker::Number.unique.hexadecimal(3).upcase,
+    provider: provider,
+    start_date: Date.new(2019, 9, 1),
+    profpost_flag: "BO",
+    program_type: "HE",
+    maths: 3,
+    english: 9,
+    science: nil,
+    modular: "",
+    qualification: :pgce_with_qts,
+    subjects: [
+      Subject.find_by(subject_name: "Secondary"),
+      Subject.find_by(subject_name: "Biology"),
+      Subject.find_by(subject_name: "Further Education"),
+    ],
+    study_mode: "B",
+  )
 
-SiteStatus.create!(
-  site: Site.last,
-  vac_status: "B",
-  publish: "Y",
-  course: course2,
-  status: "N",
-  applications_accepted_from: Date.new(2018, 10, 2)
-)
+  PGDECourse.create!(
+    provider_code: course2.provider.provider_code,
+    course_code: course2.course_code,
+  )
 
-provider2 = Provider.create!(provider_name: "Acme Alliance", provider_code: "A02")
+  SiteStatus.create!(
+    site: Site.last,
+    vac_status: "B",
+    publish: "Y",
+    course: course2,
+    status: "N",
+    applications_accepted_from: Date.new(2018, 10, 2)
+  )
+end
 
-Course.create!(
-  name: Faker::ProgrammingLanguage.name,
-  course_code: "5W2A",
-  provider: provider2,
-  accrediting_provider: accrediting_provider,
-  qualification: :pgce_with_qts,
-  subjects: [
-    Subject.last
-  ],
-  recruitment_cycle: current_recruitment_cycle
-)
-
-Course.create!(
-  name: Faker::ProgrammingLanguage.name,
-  course_code: "9A5Y",
-  provider: Provider.create!(provider_name: 'Big Uni', provider_code: 'B01'),
-  qualification: :pgce_with_qts,
-  recruitment_cycle: next_recruitment_cycle
-)
+create_standard_provider_and_courses_for_cycle(current_recruitment_cycle)
+create_standard_provider_and_courses_for_cycle(next_recruitment_cycle)
 
 User.create!(
   first_name: 'Super',
@@ -138,7 +122,8 @@ User.create!(
 10.times do |i|
   provider = Provider.create!(
     provider_name: "ACME SCITT #{i}",
-    provider_code: "A#{i}"
+    provider_code: "A#{i}",
+    recruitment_cycle: current_recruitment_cycle
   )
 
   organisation = Organisation.create!(name: "ACME#{i}")
