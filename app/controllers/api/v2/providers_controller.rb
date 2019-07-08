@@ -60,11 +60,7 @@ module API
       def sync_courses_with_search_and_compare
         provider = Provider.find_by!(provider_code: params[:code].upcase)
         authorize provider
-        syncable_courses = provider.syncable_courses
-        response = SearchAndCompareAPIService::Request.sync(
-          syncable_courses
-        )
-        if response
+        if courses_synced?(provider.syncable_courses)
           head :ok
         else
           raise RuntimeError.new(
@@ -122,6 +118,12 @@ module API
             :postcode,
             :region_code
           )
+      end
+
+      def courses_synced?(syncable_courses)
+        SearchAndCompareAPIService::Request.sync(
+          syncable_courses
+        )
       end
     end
   end
