@@ -64,7 +64,7 @@ describe 'Courses API v2', type: :request do
 
     context 'when authorized' do
       context 'when a successful external call to search has been made' do
-      it { should have_http_status(:ok) }
+        it { should have_http_status(:ok) }
       end
 
       context 'when an unsuccessful external call to search has been made' do
