@@ -1,7 +1,7 @@
 name 'psql'
 summary 'connect to the psql server for an app'
-# h is used for help so used z instead
-option :z, 'host', 'override hostname of database - useful for connecting to restored copies.'\
+# h is used for help so used H instead
+option :H, 'host', 'override hostname of database - useful for connecting to restored copies.'\
        ' Just the hostname, not the fully qualified name. E.g. bat-mcapi-restore-psql',
        argument: :optional
 option :f, 'source_file', 'source sql file to pass to psql to run',
