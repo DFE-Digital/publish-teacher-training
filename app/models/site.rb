@@ -53,6 +53,14 @@ class Site < ApplicationRecord
     "#{location_name} (code: #{code})"
   end
 
+  def copy_to_provider(new_provider)
+    new_site = new_provider.sites.find_by(code: self.code)
+    unless new_site
+      new_site = self.dup
+      new_provider.sites << new_site
+    end
+  end
+
 private
 
   def pick_next_available_code(available_codes: [])
