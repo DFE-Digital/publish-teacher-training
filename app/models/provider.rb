@@ -180,6 +180,8 @@ class Provider < ApplicationRecord
       new_recruitment_cycle.providers << new_provider
     end
 
+    # Order is important here. Sites should be copied over before courses
+    # so that courses can link up to the correct sites in the new provider.
     sites.each do |site|
       site.copy_to_provider(new_provider)
     end

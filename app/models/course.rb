@@ -343,6 +343,20 @@ class Course < ApplicationRecord
         end
         new_course.enrichments << new_enrichment
       end
+
+      self.sites.each do |site|
+        new_site = new_provider.sites.find_by code: site.code
+        if new_site.present?
+          new_course.site_statuses.create(
+            site: new_site,
+            vac_status: SiteStatus.default_vac_status_given(
+              study_mode: new_course.study_mode
+            ),
+            applications_accepted_from: recruitment_cycle.application_start_date,
+            status: :new_status
+          )
+        end
+      end
     end
   end
 

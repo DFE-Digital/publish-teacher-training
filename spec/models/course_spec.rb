@@ -779,11 +779,16 @@ RSpec.describe Course, type: :model do
       new_provider.reload.courses.find_by(course_code: course.course_code)
     }
 
-
     it 'makes a copy of the course in the new provider' do
       course.copy_to_provider(new_provider)
 
       expect(new_course).not_to be_nil
+    end
+
+    it 'leaves the existing course alone' do
+      course.copy_to_provider(new_provider)
+
+      expect(provider.reload.courses).to eq [course]
     end
 
     context 'course has a published but no draft enrichment' do
@@ -828,12 +833,6 @@ RSpec.describe Course, type: :model do
       end
     end
 
-    it 'leaves the existing course alone' do
-      course.copy_to_provider(new_provider)
-
-      expect(provider.reload.courses).to eq [course]
-    end
-
     context 'the course already exists in the new provider' do
       let!(:new_course) {
         create :course,
@@ -849,6 +848,40 @@ RSpec.describe Course, type: :model do
       it 'does not make a copy of the enrichments' do
         expect { course.copy_to_provider(new_provider) }
           .not_to(change { new_course.reload.enrichments.count })
+      end
+    end
+
+    context 'the original course has sites' do
+      let(:site) { create :site, provider: provider }
+      let!(:new_site) { create :site, provider: new_provider, code: site.code }
+      let!(:site_status) {
+        create :site_status,
+               :with_no_vacancies,
+               course: course,
+               site: site
+      }
+
+      before { course.reload.copy_to_provider(new_provider) }
+
+      describe "the new course's list of sites" do
+        subject { new_course.sites }
+
+        its(:length) { should eq 1 }
+      end
+
+      describe 'the new site' do
+        subject { new_course.sites.first }
+
+        it { should eq new_site }
+        its(:code) { should eq site.code }
+      end
+
+      describe "the new site's status" do
+        subject { new_course.site_statuses.first }
+
+        it { should be_full_time_vacancies }
+        it { should be_status_new_status }
+        its(:applications_accepted_from) { should eq new_recruitment_cycle.application_start_date }
       end
     end
   end
