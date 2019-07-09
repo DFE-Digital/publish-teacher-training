@@ -327,6 +327,25 @@ class Course < ApplicationRecord
     "#{name} (#{course_code})"
   end
 
+  def copy_to_provider(new_provider)
+    new_course = new_provider
+                   .courses
+                   .find_by(course_code: self.course_code)
+    unless new_course
+      new_course = self.dup
+      new_provider.courses << new_course
+
+      if (last_enrichment = enrichments.latest_first.first)
+        new_enrichment = last_enrichment.dup
+        if new_enrichment.published?
+          new_enrichment.last_published_timestamp_utc = nil
+          new_enrichment.draft!
+        end
+        new_course.enrichments << new_enrichment
+      end
+    end
+  end
+
 private
 
   def add_enrichment_errors(enrichment)

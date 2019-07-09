@@ -764,4 +764,92 @@ RSpec.describe Course, type: :model do
              )).to eq course
     end
   end
+
+  describe '#copy_to_provider' do
+    let(:course) { build :course }
+    let(:provider) { create :provider, courses: [course] }
+    let(:recruitment_cycle) { find_or_create :recruitment_cycle }
+    let(:new_recruitment_cycle) { create :recruitment_cycle, :next }
+    let(:new_provider) {
+      create :provider,
+             provider_code: provider.provider_code,
+             recruitment_cycle: new_recruitment_cycle
+    }
+    let(:new_course) {
+      new_provider.reload.courses.find_by(course_code: course.course_code)
+    }
+
+
+    it 'makes a copy of the course in the new provider' do
+      course.copy_to_provider(new_provider)
+
+      expect(new_course).not_to be_nil
+    end
+
+    context 'course has a published but no draft enrichment' do
+      let!(:published_enrichment) do
+        create :course_enrichment, :published, course: course
+      end
+
+      before { course.copy_to_provider(new_provider) }
+
+      subject { new_course.enrichments }
+
+      its(:length) { should eq 1 }
+
+      describe 'the copied enrichment' do
+        subject { new_course.enrichments.first }
+
+        it { should be_draft }
+        its(:about_course) { should eq published_enrichment.about_course }
+        its(:last_published_timestamp_utc) { should be_nil }
+      end
+    end
+
+    context 'course has a published and a draft enrichment' do
+      let!(:published_enrichment) do
+        create :course_enrichment, :published, course: course
+      end
+      let!(:draft_enrichment) do
+        create :course_enrichment, course: course
+      end
+
+      before { course.copy_to_provider(new_provider) }
+
+      subject { new_course.enrichments }
+
+      its(:length) { should eq 1 }
+
+      describe 'the copied enrichment' do
+        subject { new_course.enrichments.first }
+
+        it { should be_draft }
+        its(:about_course) { should eq draft_enrichment.about_course }
+      end
+    end
+
+    it 'leaves the existing course alone' do
+      course.copy_to_provider(new_provider)
+
+      expect(provider.reload.courses).to eq [course]
+    end
+
+    context 'the course already exists in the new provider' do
+      let!(:new_course) {
+        create :course,
+               course_code: course.course_code,
+               provider: new_provider
+      }
+
+      it 'does not make a copy of the course' do
+        expect { course.copy_to_provider(new_provider) }
+          .not_to(change { new_provider.reload.courses.count })
+      end
+
+      it 'does not make a copy of the enrichments' do
+        expect { course.copy_to_provider(new_provider) }
+          .not_to(change { new_course.reload.enrichments.count })
+      end
+    end
+  end
 end
