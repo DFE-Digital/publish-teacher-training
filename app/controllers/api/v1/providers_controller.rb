@@ -16,10 +16,7 @@ module API
       # - clock drift between servers
       def index
         # only return 2019 courses until rollover is supported
-        if params[:recruitment_year].present? && params[:recruitment_year] != '2019'
-          render json: [], status: :not_found
-          return
-        end
+        build_recruitment_cycle
 
         per_page = params[:per_page] || 100
         changed_since = params[:changed_since]
@@ -29,6 +26,7 @@ module API
                          .includes(:sites, :ucas_preferences, :contacts)
                          .changed_since(changed_since)
                          .limit(per_page)
+                         .by_recruitment_cycle(@recruitment_cycle.year)
         end
 
 
@@ -41,6 +39,14 @@ module API
         render json: @providers
       rescue ActiveRecord::StatementInvalid
         render json: { status: 400, message: 'Invalid changed_since value, the format should be an ISO8601 UTC timestamp, for example: `2019-01-01T12:01:00Z`' }.to_json, status: :bad_request
+      end
+
+    private
+
+      def build_recruitment_cycle
+        @recruitment_cycle = RecruitmentCycle.find_by(
+          year: params[:recruitment_year]
+        ) || RecruitmentCycle.current_recruitment_cycle
       end
     end
   end

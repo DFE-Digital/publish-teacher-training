@@ -113,7 +113,7 @@ describe API::V1::ProvidersController, type: :controller do
     end
 
     context "for next recruitment year" do
-      let!(:course) { create(:provider) }
+      let!(:provider) { create(:provider) }
       let(:params) {
         { recruitment_year: '2020' }
       }
@@ -125,7 +125,7 @@ describe API::V1::ProvidersController, type: :controller do
       describe 'returned courses in JSON' do
         subject { response.body }
 
-        it { should_not have_providers }
+        it { should include provider.provider_code }
       end
     end
   end

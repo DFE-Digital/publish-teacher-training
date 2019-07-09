@@ -74,6 +74,10 @@ class Provider < ApplicationRecord
 
   scope :in_order, -> { order(:provider_name) }
 
+  scope :by_recruitment_cycle, ->(recruitment_year) {
+    joins(:recruitment_cycle).merge(RecruitmentCycle.where(year: recruitment_year))
+  }
+
   # Currently Provider#contact_info isn't used but will likely be needed when
   # we need to expose the candidate-facing contact info.
   #
