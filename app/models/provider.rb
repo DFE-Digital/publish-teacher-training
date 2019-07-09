@@ -170,4 +170,22 @@ class Provider < ApplicationRecord
   def to_s
     "#{provider_name} (#{provider_code})"
   end
+
+  def copy_to_recruitment_cycle(new_recruitment_cycle)
+    new_provider = new_recruitment_cycle
+                      .providers
+                      .find_by(provider_code: self.provider_code)
+    unless new_provider
+      new_provider = self.dup
+      new_recruitment_cycle.providers << new_provider
+    end
+
+    sites.each do |site|
+      site.copy_to_provider(new_provider)
+    end
+
+    courses.each do |course|
+      course.copy_to_provider(new_provider)
+    end
+  end
 end

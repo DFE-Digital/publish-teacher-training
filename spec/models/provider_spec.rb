@@ -256,4 +256,75 @@ describe Provider, type: :model do
       end
     end
   end
+
+  describe '#copy_to_recruitment_cycle' do
+    let(:site)   { build :site }
+    let(:course) { build :course }
+    let(:provider) {
+      create :provider,
+             courses: [course],
+             sites: [site]
+    }
+    let(:recruitment_cycle) { find_or_create :recruitment_cycle }
+    let(:new_recruitment_cycle) { create :recruitment_cycle, :next }
+
+    it 'makes a copy of the provider in the new recruitment cycle' do
+      expect(
+        new_recruitment_cycle.providers.find_by(
+          provider_code: provider.provider_code
+        )
+      ).to be_nil
+
+      provider.copy_to_recruitment_cycle(new_recruitment_cycle)
+
+      new_provider = new_recruitment_cycle.providers.find_by(
+        provider_code: provider.provider_code
+      )
+      expect(new_provider).not_to be_nil
+      expect(new_provider).not_to eq provider
+    end
+
+    it 'leaves the existing provider alone' do
+      provider.copy_to_recruitment_cycle(new_recruitment_cycle)
+
+      expect(recruitment_cycle.reload.providers).to eq [provider]
+    end
+
+    context 'the provider already exists in the new recruitment cycle' do
+      let(:new_provider) {
+        build :provider, provider_code: provider.provider_code
+      }
+      let(:new_recruitment_cycle) {
+        create :recruitment_cycle, :next,
+               providers: [new_provider]
+      }
+
+      it 'does not make a copy of the provider' do
+        expect { provider.copy_to_recruitment_cycle(new_recruitment_cycle) }
+          .not_to(change { new_recruitment_cycle.reload.providers.count })
+      end
+    end
+
+    it 'copies over the sites' do
+      allow(site).to receive(:copy_to_provider)
+
+      provider.copy_to_recruitment_cycle(new_recruitment_cycle)
+
+      new_provider = new_recruitment_cycle.reload.providers.find_by(
+        provider_code: provider.provider_code
+      )
+      expect(site).to have_received(:copy_to_provider).with(new_provider)
+    end
+
+    it 'copies over the courses' do
+      allow(course).to receive(:copy_to_provider)
+
+      provider.copy_to_recruitment_cycle(new_recruitment_cycle)
+
+      new_provider = new_recruitment_cycle.reload.providers.find_by(
+        provider_code: provider.provider_code
+      )
+      expect(course).to have_received(:copy_to_provider).with(new_provider)
+    end
+  end
 end
