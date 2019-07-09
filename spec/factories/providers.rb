@@ -55,8 +55,6 @@ FactoryBot.define do
     end
 
     after(:create) do |provider, evaluator|
-      provider.sites << evaluator.sites
-
       # Add the enrichments to the provider. Normally setting provider_code
       # would be the model's concern, but as we're still a read-only app we'll
       # have to do that here.
