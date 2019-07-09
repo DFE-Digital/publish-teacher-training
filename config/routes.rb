@@ -114,7 +114,7 @@ Rails.application.routes.draw do
       end
 
       resources :recruitment_cycles,
-                only: [],
+                only: :show,
                 param: :year do
         resources :providers,
                   only: %i[index show],
