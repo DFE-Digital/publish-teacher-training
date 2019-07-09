@@ -16,7 +16,7 @@ describe 'Providers API', type: :request do
         .encode_credentials('foo')
     end
 
-    let(:get_index) { get '2019/api/v1/providers', headers: { 'HTTP_AUTHORIZATION' => credentials }  }
+    let(:get_index) { get '/api/v1/2019/providers', headers: { 'HTTP_AUTHORIZATION' => credentials } }
 
     context "without changed_since parameter" do
       let(:ucas_preferences) do
@@ -73,9 +73,9 @@ describe 'Providers API', type: :request do
       end
       let(:site) do
         build(:site,
-               location_name: 'Main site 1',
-               code: '-',
-               region_code: :london)
+              location_name: 'Main site 1',
+              code: '-',
+              region_code: :london)
       end
       let(:ucas_preferences2) do
         build(:ucas_preferences,
@@ -131,9 +131,9 @@ describe 'Providers API', type: :request do
       end
       let(:site2) do
         build(:site,
-               location_name: 'Main site 2',
-               code: '-',
-               region_code: :scotland)
+              location_name: 'Main site 2',
+              code: '-',
+              region_code: :scotland)
       end
 
       before do
@@ -293,7 +293,7 @@ describe 'Providers API', type: :request do
         end
 
         context 'with no cycle specified in the route' do
-          let(:get_index) { get '/api/v1/providers', headers: { 'HTTP_AUTHORIZATION' => credentials }  }
+          let(:get_index) { get '/api/v1/providers', headers: { 'HTTP_AUTHORIZATION' => credentials } }
 
           it 'defaults to the current cycle when year' do
             returned_provider_codes = get_provider_codes_from_body(response.body)
@@ -302,9 +302,8 @@ describe 'Providers API', type: :request do
             expect(returned_provider_codes).to include provider.provider_code
           end
         end
-      #
         context 'with a future recruitment cycle specified in the route' do
-          let(:get_index) { get '2020/api/v1/providers', headers: { 'HTTP_AUTHORIZATION' => credentials }  }
+          let(:get_index) { get '/api/v1/2020/providers', headers: { 'HTTP_AUTHORIZATION' => credentials } }
 
           it 'only returns courses from the requested cycle' do
             returned_provider_codes = get_provider_codes_from_body(response.body)
