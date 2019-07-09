@@ -18,6 +18,12 @@ describe RecruitmentCyclePolicy do
 
   subject { described_class }
 
+  permissions :index? do
+    let(:user) { create(:user) }
+
+    it { should permit(user, RecruitmentCycle) }
+  end
+
   permissions :show? do
     let(:user) { create(:user) }
 

@@ -20,6 +20,10 @@ class RecruitmentCyclePolicy
     @recruitment_cycle = recycle
   end
 
+  def index?
+    user.present?
+  end
+
   def show?
     user.present?
   end
