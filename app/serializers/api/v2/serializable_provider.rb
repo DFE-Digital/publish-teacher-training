@@ -50,6 +50,10 @@ module API
         @object.external_contact_info['website']
       end
 
+      attribute :recruitment_cycle_year do
+        @object.recruitment_cycle.year
+      end
+
       enrichment_attribute :train_with_us
       enrichment_attribute :train_with_disability
 

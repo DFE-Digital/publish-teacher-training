@@ -169,7 +169,8 @@ describe 'Providers API v2', type: :request do
             "region_code" => provider.region_code,
             "telephone" => provider.telephone,
             "email" => provider.email,
-            "website" => provider.url
+            "website" => provider.url,
+            "recruitment_cycle_year" => provider.recruitment_cycle.year,
           },
           "relationships" => {
             "sites" => {

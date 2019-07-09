@@ -19,11 +19,16 @@ describe API::V2::SerializableCourse do
   subject { parsed_json['data'] }
 
   it { should have_type('courses') }
-  it {
-    should have_attributes(:start_date, :content_status, :ucas_status,
-                           :funding, :subjects, :applications_open_from,
-                           :is_send?, :level, :provider_code)
-  }
+  it { should have_attributes :start_date }
+  it { should have_attribute :content_status }
+  it { should have_attribute :ucas_status }
+  it { should have_attribute :funding }
+  it { should have_attribute :subjects }
+  it { should have_attribute :applications_open_from }
+  it { should have_attribute :is_send? }
+  it { should have_attribute :level }
+  it { should have_attribute :provider_code }
+  it { should have_attribute(:recruitment_cycle_year).with_value(course.recruitment_cycle.year) }
 
   context 'with a provider' do
     let(:provider) { course.provider }

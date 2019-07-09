@@ -20,7 +20,6 @@
 #  created_at              :datetime         not null
 #  updated_at              :datetime         not null
 #  changed_at              :datetime         not null
-#  recruitment_cycle_id    :integer          not null
 #
 
 require 'rails_helper'
@@ -40,7 +39,6 @@ RSpec.describe Course, type: :model do
   describe 'associations' do
     it { should belong_to(:provider) }
     it { should belong_to(:accrediting_provider).optional }
-    it { should belong_to(:recruitment_cycle) }
     it { should have_many(:subjects).through(:course_subjects) }
     it { should have_many(:site_statuses) }
     it { should have_many(:sites) }
@@ -95,6 +93,8 @@ RSpec.describe Course, type: :model do
       end
     end
   end
+
+  its(:recruitment_cycle) { should eq find(:recruitment_cycle) }
 
   describe 'no site statuses' do
     its(:site_statuses) { should be_empty }
@@ -284,8 +284,10 @@ RSpec.describe Course, type: :model do
     context 'with valid recruitment_year parameter' do
       let(:current_cycle) { create(:recruitment_cycle, year: '2019') }
       let(:next_cycle) { create(:recruitment_cycle, year: '2020') }
-      let(:course_1) { create(:course, recruitment_cycle: current_cycle) }
-      let(:course_2) { create(:course, recruitment_cycle: next_cycle) }
+      let(:provider_1) { create(:provider, recruitment_cycle: current_cycle) }
+      let(:provider_2) { create(:provider, recruitment_cycle: next_cycle) }
+      let(:course_1) { create(:course, provider: provider_1) }
+      let(:course_2) { create(:course, provider: provider_2) }
 
       subject { Course.by_recruitment_cycle('2019') }
 
