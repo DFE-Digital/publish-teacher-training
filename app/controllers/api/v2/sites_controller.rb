@@ -5,6 +5,7 @@ module API
                               only: %i[update create],
                               class: API::V2::DeserializableSite
 
+      before_action :build_recruitment_cycle
       before_action :build_provider
       before_action :build_site, except: %i[index create]
 
@@ -16,8 +17,7 @@ module API
       end
 
       def create
-        @site = Site.new(site_params)
-        @site.provider = @provider
+        @site = @provider.sites.new(site_params)
         authorize @site
 
         if @site.save
@@ -59,7 +59,15 @@ module API
       end
 
       def build_provider
-        @provider = Provider.find_by!(provider_code: params[:provider_code].upcase)
+        @provider = @recruitment_cycle.providers.find_by!(
+          provider_code: params[:provider_code].upcase
+        )
+      end
+
+      def build_recruitment_cycle
+        @recruitment_cycle = RecruitmentCycle.find_by(
+          year: params[:recruitment_cycle_year]
+        ) || RecruitmentCycle.current_recruitment_cycle
       end
 
       def build_site
