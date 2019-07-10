@@ -63,7 +63,7 @@ module MCB
                 add_columns: add_columns)
         end
 
-        def providers_table_columns
+        def providers_table_columns(*)
           %i[institution_name institution_code]
         end
 

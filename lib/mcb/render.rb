@@ -183,8 +183,6 @@ module MCB
           [:organisation, ->(p) { p.organisations.first&.name }],
           [:provider_type, header: 'type'],
           [:courses, ->(p) { p.courses.count }],
-          # :nctl_organisation_id,
-          # [:nctl_organisation, ->(p) { p.nctl_organisation&.name }],
           :postcode,
         ]
       else
@@ -194,7 +192,6 @@ module MCB
           [:provider_code, header: 'code'],
           [:organisation_id, ->(p) { p.organisation_ids.first }],
           [:provider_type, header: 'type'],
-          :nctl_organisation_id
         ]
       end
     end

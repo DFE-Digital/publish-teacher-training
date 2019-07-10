@@ -766,8 +766,14 @@ RSpec.describe Course, type: :model do
   end
 
   describe '#copy_to_provider' do
-    let(:course) { build :course }
+    let(:accrediting_provider) { create :provider, :accredited_body }
     let(:provider) { create :provider, courses: [course] }
+    let(:maths) { create :subject, :mathematics }
+    let(:course) {
+      build :course,
+            accrediting_provider: accrediting_provider,
+            subjects: [maths]
+    }
     let(:recruitment_cycle) { find_or_create :recruitment_cycle }
     let(:new_recruitment_cycle) { create :recruitment_cycle, :next }
     let(:new_provider) {
@@ -783,6 +789,12 @@ RSpec.describe Course, type: :model do
       course.copy_to_provider(new_provider)
 
       expect(new_course).not_to be_nil
+      expect(new_course.accrediting_provider_code)
+        .to eq course.accrediting_provider_code
+      expect(new_course.subjects).to eq course.subjects
+      expect(new_course.content_status).to eq :empty
+      expect(new_course.ucas_status).to eq :new
+      expect(new_course.open_for_applications?).to be_falsey
     end
 
     it 'leaves the existing course alone' do
@@ -802,12 +814,18 @@ RSpec.describe Course, type: :model do
 
       its(:length) { should eq 1 }
 
+      describe 'the new course' do
+        subject { new_course }
+
+        its(:content_status) { should eq :draft }
+      end
+
       describe 'the copied enrichment' do
         subject { new_course.enrichments.first }
 
-        it { should be_draft }
         its(:about_course) { should eq published_enrichment.about_course }
         its(:last_published_timestamp_utc) { should be_nil }
+        it { should be_rolled_over }
       end
     end
 
@@ -825,11 +843,17 @@ RSpec.describe Course, type: :model do
 
       its(:length) { should eq 1 }
 
+      describe 'the new course' do
+        subject { new_course }
+
+        its(:content_status) { should eq :draft }
+      end
+
       describe 'the copied enrichment' do
         subject { new_course.enrichments.first }
 
-        it { should be_draft }
         its(:about_course) { should eq draft_enrichment.about_course }
+        it { should be_rolled_over }
       end
     end
 
@@ -862,6 +886,13 @@ RSpec.describe Course, type: :model do
       }
 
       before { course.reload.copy_to_provider(new_provider) }
+
+      describe 'the new course' do
+        subject { new_course }
+
+        its(:ucas_status) { should eq :new }
+        its(:open_for_applications?) { should be_falsey }
+      end
 
       describe "the new course's list of sites" do
         subject { new_course.sites }

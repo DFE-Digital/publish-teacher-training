@@ -333,29 +333,17 @@ class Course < ApplicationRecord
                    .find_by(course_code: self.course_code)
     unless new_course
       new_course = self.dup
+      new_course.subjects << self.subjects
+
       new_provider.courses << new_course
 
       if (last_enrichment = enrichments.latest_first.first)
-        new_enrichment = last_enrichment.dup
-        if new_enrichment.published?
-          new_enrichment.last_published_timestamp_utc = nil
-          new_enrichment.draft!
-        end
-        new_course.enrichments << new_enrichment
+        last_enrichment.copy_to_course(new_course)
       end
 
       self.sites.each do |site|
         new_site = new_provider.sites.find_by code: site.code
-        if new_site.present?
-          new_course.site_statuses.create(
-            site: new_site,
-            vac_status: SiteStatus.default_vac_status_given(
-              study_mode: new_course.study_mode
-            ),
-            applications_accepted_from: recruitment_cycle.application_start_date,
-            status: :new_status
-          )
-        end
+        new_site&.copy_to_course(new_course)
       end
     end
   end

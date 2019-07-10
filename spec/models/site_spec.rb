@@ -120,5 +120,22 @@ describe Site, type: :model do
           .not_to(change { next_provider.reload.sites.count })
       end
     end
+
+    context 'the site is invalid' do
+      before do
+        provider
+        site.update_columns address1: ''
+        site.update_columns address3: ''
+        site.update_columns postcode: ''
+        site.update_columns location_name: ''
+      end
+
+      it 'makes a copy of the course in the new provider' do
+        site.copy_to_provider(next_provider)
+
+        next_site = next_provider.reload.sites.find_by(code: site.code)
+        expect(next_site).not_to be_nil
+      end
+    end
   end
 end

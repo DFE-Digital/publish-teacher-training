@@ -266,13 +266,30 @@ describe Provider, type: :model do
   describe '#copy_to_recruitment_cycle' do
     let(:site)   { build :site }
     let(:course) { build :course }
+    let(:ucas_preferences) { build(:ucas_preferences, type_of_gt12: :coming_or_not) }
+    let(:contacts) {
+      [
+        build(:contact, :admin_type),
+        build(:contact, :utt_type),
+        build(:contact, :web_link_type),
+        build(:contact, :finance_type),
+        build(:contact, :fraud_type)
+      ]
+    }
     let(:provider) {
       create :provider,
              courses: [course],
-             sites: [site]
+             sites: [site],
+             ucas_preferences: ucas_preferences,
+             contacts: contacts
     }
     let(:recruitment_cycle) { find_or_create :recruitment_cycle }
     let(:new_recruitment_cycle) { create :recruitment_cycle, :next }
+    let(:new_provider) do
+      new_recruitment_cycle.reload.providers.find_by(
+        provider_code: provider.provider_code
+      )
+    end
 
     it 'makes a copy of the provider in the new recruitment cycle' do
       expect(
@@ -283,9 +300,6 @@ describe Provider, type: :model do
 
       provider.copy_to_recruitment_cycle(new_recruitment_cycle)
 
-      new_provider = new_recruitment_cycle.providers.find_by(
-        provider_code: provider.provider_code
-      )
       expect(new_provider).not_to be_nil
       expect(new_provider).not_to eq provider
     end
@@ -311,14 +325,38 @@ describe Provider, type: :model do
       end
     end
 
+    it 'assigns the new provider to organisation' do
+      provider.copy_to_recruitment_cycle(new_recruitment_cycle)
+
+      expect(new_provider.organisation).to eq provider.organisation
+    end
+
+    it 'copies over the ucas_preferences' do
+      provider.copy_to_recruitment_cycle(new_recruitment_cycle)
+
+      compare_attrs = %w[
+        type_of_gt12
+        send_application_alerts
+        application_alert_email
+        gt12_response_destination
+      ]
+      expect(new_provider.ucas_preferences.attributes.slice(compare_attrs))
+        .to eq provider.ucas_preferences.attributes.slice(compare_attrs)
+    end
+
+    it 'copies over the contacts' do
+      provider.copy_to_recruitment_cycle(new_recruitment_cycle)
+
+      compare_attrs = %w[name email telephone]
+      expect(new_provider.contacts.map { |c| c.attributes.slice(compare_attrs) })
+        .to eq(provider.contacts.map { |c| c.attributes.slice(compare_attrs) })
+    end
+
     it 'copies over the sites' do
       allow(site).to receive(:copy_to_provider)
 
       provider.copy_to_recruitment_cycle(new_recruitment_cycle)
 
-      new_provider = new_recruitment_cycle.reload.providers.find_by(
-        provider_code: provider.provider_code
-      )
       expect(site).to have_received(:copy_to_provider).with(new_provider)
     end
 
@@ -327,9 +365,6 @@ describe Provider, type: :model do
 
       provider.copy_to_recruitment_cycle(new_recruitment_cycle)
 
-      new_provider = new_recruitment_cycle.reload.providers.find_by(
-        provider_code: provider.provider_code
-      )
       expect(course).to have_received(:copy_to_provider).with(new_provider)
     end
   end

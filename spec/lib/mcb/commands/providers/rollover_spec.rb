@@ -56,7 +56,7 @@ describe 'mcb providers rollover' do
     expect(new_course).not_to be_nil
     expect(new_course).not_to eq course
     expect(new_course.enrichments.count).to eq 1
-    expect(new_course.enrichments.first).to be_draft
+    expect(new_course.enrichments.first).to be_rolled_over
 
     new_site = new_provider.sites.find_by(code: site.code)
     expect(new_site).not_to be_nil
