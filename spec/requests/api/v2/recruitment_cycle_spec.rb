@@ -81,7 +81,7 @@ describe '/api/v2/recruitment_cycle', type: :request do
     end
   end
 
-  describe '/api/v2/providers/:provider_code/recruitment_cycles' do
+  describe '/api/v2/recruitment_cycles/:year/providers/:provider_code/recruitment_cycles' do
     let(:recruitment_cycle)      { find_or_create :recruitment_cycle }
     let(:next_recruitment_cycle) { find_or_create :recruitment_cycle, :next }
     let(:provider) { create :provider, organisations: [organisation] }
@@ -94,7 +94,9 @@ describe '/api/v2/recruitment_cycle', type: :request do
     let(:provider2) { create :provider }
 
     let(:request_path) {
-      "/api/v2/providers/#{provider.provider_code}/recruitment_cycles"
+      "/api/v2/recruitment_cycles/#{recruitment_cycle.year}" \
+      "/providers/#{provider.provider_code}" \
+      "/recruitment_cycles"
     }
 
     describe 'the JSON response' do

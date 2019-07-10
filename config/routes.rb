@@ -102,18 +102,19 @@ Rails.application.routes.draw do
         patch :accept_rollover_screen, on: :member
       end
 
-      concern :courses_and_sites do
+      concern :provider_routes do
         resources :courses, param: :code, only: %i[index create show update] do
           post :sync_with_search_and_compare, on: :member
           post :publish, on: :member
           post :publishable, on: :member
         end
         resources :sites, only: %i[index update show create]
+        resources :recruitment_cycles, only: %i[index]
       end
 
       resources :providers,
                 param: :code,
-                concerns: :courses_and_sites do
+                concerns: :provider_routes do
         resources :recruitment_cycles, only: :index
       end
 
@@ -123,7 +124,7 @@ Rails.application.routes.draw do
         resources :providers,
                   only: %i[index show],
                   param: :code,
-                  concerns: :courses_and_sites
+                  concerns: :provider_routes
       end
 
 
