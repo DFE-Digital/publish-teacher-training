@@ -46,6 +46,12 @@ describe Provider, type: :model do
     it { should have_many(:contacts) }
   end
 
+  describe 'organisation' do
+    it 'returns the only organisation a provider has' do
+      expect(subject.organisation).to eq subject.organisations.first
+    end
+  end
+
   describe 'changed_at' do
     it 'is set on create' do
       provider = Provider.create(

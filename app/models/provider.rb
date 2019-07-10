@@ -167,6 +167,11 @@ class Provider < ApplicationRecord
     newest_enrichment&.last_published_at
   end
 
+  # This reflects the fact that organisations should actually be a has_one.
+  def organisation
+    organisations.first
+  end
+
   def to_s
     "#{provider_name} (#{provider_code})"
   end
