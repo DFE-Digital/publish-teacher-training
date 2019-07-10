@@ -30,6 +30,7 @@
 #                                                           api_v2_user GET    /api/v2/users/:id(.:format)                                                                                                      api/v2/users#show
 #                                                                       PATCH  /api/v2/users/:id(.:format)                                                                                                      api/v2/users#update
 #                                                                       PUT    /api/v2/users/:id(.:format)                                                                                                      api/v2/users#update
+#                                    api_v2_provider_recruitment_cycles GET    /api/v2/providers/:provider_code/recruitment_cycles(.:format)                                                                    api/v2/recruitment_cycles#index
 #                   sync_with_search_and_compare_api_v2_provider_course POST   /api/v2/providers/:provider_code/courses/:code/sync_with_search_and_compare(.:format)                                            api/v2/courses#sync_with_search_and_compare
 #                                        publish_api_v2_provider_course POST   /api/v2/providers/:provider_code/courses/:code/publish(.:format)                                                                 api/v2/courses#publish
 #                                    publishable_api_v2_provider_course POST   /api/v2/providers/:provider_code/courses/:code/publishable(.:format)                                                             api/v2/courses#publishable
@@ -64,6 +65,8 @@
 #                                                                       PUT    /api/v2/recruitment_cycles/:recruitment_cycle_year/providers/:provider_code/sites/:id(.:format)                                  api/v2/sites#update
 #                                    api_v2_recruitment_cycle_providers GET    /api/v2/recruitment_cycles/:recruitment_cycle_year/providers(.:format)                                                           api/v2/providers#index
 #                                     api_v2_recruitment_cycle_provider GET    /api/v2/recruitment_cycles/:recruitment_cycle_year/providers/:code(.:format)                                                     api/v2/providers#show
+#                                             api_v2_recruitment_cycles GET    /api/v2/recruitment_cycles(.:format)                                                                                             api/v2/recruitment_cycles#index
+#                                              api_v2_recruitment_cycle GET    /api/v2/recruitment_cycles/:year(.:format)                                                                                       api/v2/recruitment_cycles#show
 #                                                       api_v2_sessions GET    /api/v2/sessions(.:format)                                                                                                       api/v2/sessions#show
 #                                                                       PATCH  /api/v2/sessions(.:format)                                                                                                       api/v2/sessions#update
 #                                                                       PUT    /api/v2/sessions(.:format)                                                                                                       api/v2/sessions#update
@@ -99,27 +102,29 @@ Rails.application.routes.draw do
         patch :accept_rollover_screen, on: :member
       end
 
-      concern :courses_and_sites do
+      concern :provider_routes do
         resources :courses, param: :code, only: %i[index create show update] do
           post :sync_with_search_and_compare, on: :member
           post :publish, on: :member
           post :publishable, on: :member
         end
         resources :sites, only: %i[index update show create]
+        resources :recruitment_cycles, only: %i[index]
       end
 
       resources :providers,
                 param: :code,
-                concerns: :courses_and_sites do
+                concerns: :provider_routes do
+        resources :recruitment_cycles, only: :index
       end
 
       resources :recruitment_cycles,
-                only: :show,
+                only: %i[index show],
                 param: :year do
         resources :providers,
                   only: %i[index show],
                   param: :code,
-                  concerns: :courses_and_sites
+                  concerns: :provider_routes
       end
 
 

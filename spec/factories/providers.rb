@@ -72,5 +72,9 @@ FactoryBot.define do
         provider.update changed_at: evaluator.changed_at
       end
     end
+
+    trait :next_recruitment_cycle do
+      recruitment_cycle { find_or_create :recruitment_cycle, :next }
+    end
   end
 end
