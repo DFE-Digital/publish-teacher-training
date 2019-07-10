@@ -114,7 +114,9 @@ describe API::V1::CoursesController, type: :controller do
     end
 
     context "for next recruitment year" do
-      let!(:course) { create(:course) }
+      let!(:course) { create(:course, provider: provider) }
+      let(:provider) { build(:provider, recruitment_cycle: next_cycle) }
+      let(:next_cycle) { build(:recruitment_cycle, year: '2020') }
       let(:params) {
         { recruitment_year: '2020' }
       }
@@ -126,7 +128,7 @@ describe API::V1::CoursesController, type: :controller do
       describe 'returned courses in JSON' do
         subject { response.body }
 
-        it { should_not have_courses }
+        it { should include course.course_code }
       end
     end
   end
