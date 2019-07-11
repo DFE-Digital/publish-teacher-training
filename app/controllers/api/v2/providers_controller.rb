@@ -8,6 +8,7 @@ module API
       def index
         authorize Provider
         providers = policy_scope(@recruitment_cycle.providers)
+                      .includes(:enrichments, :latest_published_enrichment)
                       .include_courses_counts
         providers = providers.where(id: @user.providers) if @user.present?
 

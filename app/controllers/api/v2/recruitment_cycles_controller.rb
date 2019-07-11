@@ -28,7 +28,9 @@ module API
     private
 
       def build_recruitment_cycle
-        @recruitment_cycle = RecruitmentCycle.find_by(year: params[:year])
+        @recruitment_cycle = RecruitmentCycle
+                               .includes(providers: [:enrichments, :latest_published_enrichment])
+                               .find_by(year: params[:year])
       end
     end
   end
