@@ -2,19 +2,18 @@
 #
 # Table name: site
 #
-#  id                   :integer          not null, primary key
-#  address2             :text
-#  address3             :text
-#  address4             :text
-#  code                 :text             not null
-#  location_name        :text
-#  postcode             :text
-#  address1             :text
-#  provider_id          :integer          default(0), not null
-#  region_code          :integer
-#  created_at           :datetime         not null
-#  updated_at           :datetime         not null
-#  recruitment_cycle_id :integer          not null
+#  id            :integer          not null, primary key
+#  address2      :text
+#  address3      :text
+#  address4      :text
+#  code          :text             not null
+#  location_name :text
+#  postcode      :text
+#  address1      :text
+#  provider_id   :integer          default(0), not null
+#  region_code   :integer
+#  created_at    :datetime         not null
+#  updated_at    :datetime         not null
 #
 
 class Site < ApplicationRecord
@@ -31,7 +30,6 @@ class Site < ApplicationRecord
   audited associated_with: :provider
 
   belongs_to :provider
-  belongs_to :recruitment_cycle
 
   validates :location_name, uniqueness: { scope: :provider_id }
   validates :location_name,
@@ -43,6 +41,10 @@ class Site < ApplicationRecord
   validates :code, uniqueness: { scope: :provider_id, case_sensitive: false },
                    inclusion: { in: POSSIBLE_CODES, message: "must be A-Z, 0-9 or -" },
                    presence: true
+
+  def recruitment_cycle
+    provider.recruitment_cycle
+  end
 
   def assign_code
     self.code ||= pick_next_available_code(available_codes: provider&.unassigned_site_codes)

@@ -3,6 +3,7 @@
 module API
   module V2
     class CoursesController < API::V2::ApplicationController
+      before_action :build_recruitment_cycle
       before_action :build_provider
       before_action :build_course, except: :index
 
@@ -90,7 +91,15 @@ module API
       end
 
       def build_provider
-        @provider = Provider.find_by!(provider_code: params[:provider_code].upcase)
+        @provider = @recruitment_cycle.providers.find_by!(
+          provider_code: params[:provider_code].upcase
+        )
+      end
+
+      def build_recruitment_cycle
+        @recruitment_cycle = RecruitmentCycle.find_by(
+          year: params[:recruitment_cycle_year]
+        ) || RecruitmentCycle.current_recruitment_cycle
       end
 
       def build_course

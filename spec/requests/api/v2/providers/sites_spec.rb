@@ -9,6 +9,7 @@ describe 'Sites API v2', type: :request do
     ActionController::HttpAuthentication::Token.encode_credentials(token)
   end
 
+  let(:current_recruitment_cycle) { find_or_create :recruitment_cycle }
   let(:site1) { create :site, location_name: 'Main site 1', provider: provider }
   let(:site2) { create :site, location_name: 'Main site 2', provider: provider }
   let!(:sites) { [site1, site2] }
@@ -55,12 +56,18 @@ describe 'Sites API v2', type: :request do
   end
 
   describe 'GET index' do
+    let(:request_path) { "/api/v2/providers/#{provider.provider_code}/sites" }
+
+    def perform_request
+      get request_path,
+          headers: { 'HTTP_AUTHORIZATION' => credentials }
+    end
+
     context 'when unauthenticated' do
       let(:payload) { { email: 'foo@bar' } }
 
       before do
-        get "/api/v2/providers/#{provider.provider_code}/sites",
-            headers: { 'HTTP_AUTHORIZATION' => credentials }
+        perform_request
       end
 
       it { should have_http_status(:unauthorized) }
@@ -72,16 +79,14 @@ describe 'Sites API v2', type: :request do
 
       it "raises an error" do
         expect {
-          get "/api/v2/providers/#{provider.provider_code}/sites",
-              headers: { 'HTTP_AUTHORIZATION' => credentials }
+          perform_request
         }.to raise_error Pundit::NotAuthorizedError
       end
     end
 
     describe 'JSON generated for sites' do
       before do
-        get "/api/v2/providers/#{provider.provider_code}/sites",
-            headers: { 'HTTP_AUTHORIZATION' => credentials }
+        perform_request
       end
 
       it { should have_http_status(:success) }
@@ -131,6 +136,76 @@ describe 'Sites API v2', type: :request do
       end
 
       it { should have_http_status(:not_found) }
+    end
+
+    context 'with two recruitment cycles' do
+      let(:next_recruitment_cycle) { create :recruitment_cycle, :next }
+      let(:next_provider) {
+        create :provider,
+               organisations: [organisation],
+               provider_code: provider.provider_code,
+               recruitment_cycle: next_recruitment_cycle
+      }
+      let(:next_site1) {
+        create :site,
+               location_name: 'Next Main site 1',
+               provider: next_provider
+      }
+      let(:next_site2) {
+        create :site,
+               location_name: 'Next Main site 2',
+               provider: next_provider
+      }
+      let(:next_sites) { [next_site1, next_site2] }
+
+      describe 'when not specifying the recruitment cycle' do
+        subject do
+          next_sites
+
+          perform_request
+          response
+        end
+
+        it 'uses the current recruitment cycle' do
+          json_response = JSON.parse subject.body
+          expect(json_response['data'].count).to eq 2
+          expect(json_response['data'].map { |d| d.dig('attributes', 'code') })
+            .to match_array sites.map(&:code)
+
+          recruitment_years_response = json_response['data'].map do |site_data|
+            site_data.dig('attributes', 'recruitment_cycle_year')
+          end
+          expect(recruitment_years_response)
+            .to eq [current_recruitment_cycle.year] * 2
+        end
+      end
+
+      describe 'when specifying the next recruitment cycle' do
+        let(:request_path) {
+          "/api/v2/recruitment_cycles/#{next_recruitment_cycle.year}" \
+           "/providers/#{provider.provider_code}/sites"
+        }
+
+        subject do
+          next_sites
+
+          perform_request
+          response
+        end
+
+        it 'uses the next recruitment cycle' do
+          json_response = JSON.parse subject.body
+          expect(json_response['data'].count).to eq 2
+          expect(json_response['data'].map { |d| d.dig('attributes', 'code') })
+            .to match_array next_sites.map(&:code)
+
+          recruitment_years_response = json_response['data'].map do |site_data|
+            site_data.dig('attributes', 'recruitment_cycle_year')
+          end
+          expect(recruitment_years_response)
+            .to eq [next_recruitment_cycle.year] * 2
+        end
+      end
     end
   end
 
