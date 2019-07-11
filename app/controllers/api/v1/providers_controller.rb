@@ -3,6 +3,8 @@ module API
     class ProvidersController < API::V1::ApplicationController
       include NextLinkHeader
 
+      before_action :build_recruitment_cycle
+
       # Potential edge case:
       #
       # It is possible for older updated_at values to written to the database
@@ -16,7 +18,6 @@ module API
       # - clock drift between servers
       def index
         # only return 2019 courses until rollover is supported
-        build_recruitment_cycle
 
         per_page = params[:per_page] || 100
         changed_since = params[:changed_since]
@@ -28,7 +29,6 @@ module API
                          .limit(per_page)
                          .by_recruitment_cycle(@recruitment_cycle.year)
         end
-
 
         set_next_link_header_using_changed_since_or_last_object(
           @providers.last,
