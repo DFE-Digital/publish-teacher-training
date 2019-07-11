@@ -14,7 +14,6 @@ module API
           @courses = Course
                        .includes(:provider,
                                  :site_statuses,
-                                 :accrediting_provider,
                                  :subjects,
                                  site_statuses: [:site])
                        .changed_since(changed_since)

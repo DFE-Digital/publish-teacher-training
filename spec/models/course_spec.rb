@@ -2,24 +2,24 @@
 #
 # Table name: course
 #
-#  id                      :integer          not null, primary key
-#  age_range               :text
-#  course_code             :text
-#  name                    :text
-#  profpost_flag           :text
-#  program_type            :text
-#  qualification           :integer          not null
-#  start_date              :datetime
-#  study_mode              :text
-#  accrediting_provider_id :integer
-#  provider_id             :integer          default(0), not null
-#  modular                 :text
-#  english                 :integer
-#  maths                   :integer
-#  science                 :integer
-#  created_at              :datetime         not null
-#  updated_at              :datetime         not null
-#  changed_at              :datetime         not null
+#  id                        :integer          not null, primary key
+#  age_range                 :text
+#  course_code               :text
+#  name                      :text
+#  profpost_flag             :text
+#  program_type              :text
+#  qualification             :integer          not null
+#  start_date                :datetime
+#  study_mode                :text
+#  provider_id               :integer          default(0), not null
+#  modular                   :text
+#  english                   :integer
+#  maths                     :integer
+#  science                   :integer
+#  created_at                :datetime         not null
+#  updated_at                :datetime         not null
+#  changed_at                :datetime         not null
+#  accrediting_provider_code :text
 #
 
 require 'rails_helper'
@@ -38,7 +38,12 @@ RSpec.describe Course, type: :model do
 
   describe 'associations' do
     it { should belong_to(:provider) }
-    it { should belong_to(:accrediting_provider).optional }
+    it {
+      should belong_to(:accrediting_provider)
+                  .with_foreign_key(:accrediting_provider_code)
+                  .with_primary_key(:provider_code)
+                  .optional
+    }
     it { should have_many(:subjects).through(:course_subjects) }
     it { should have_many(:site_statuses) }
     it { should have_many(:sites) }

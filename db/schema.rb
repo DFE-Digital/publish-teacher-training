@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_07_04_134543) do
+ActiveRecord::Schema.define(version: 2019_07_11_074433) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_buffercache"
@@ -76,7 +76,6 @@ ActiveRecord::Schema.define(version: 2019_07_04_134543) do
     t.integer "qualification", null: false
     t.datetime "start_date"
     t.text "study_mode"
-    t.integer "accrediting_provider_id"
     t.integer "provider_id", default: 0, null: false
     t.text "modular"
     t.integer "english"
@@ -85,7 +84,7 @@ ActiveRecord::Schema.define(version: 2019_07_04_134543) do
     t.datetime "created_at", default: -> { "timezone('utc'::text, now())" }, null: false
     t.datetime "updated_at", default: -> { "timezone('utc'::text, now())" }, null: false
     t.datetime "changed_at", default: -> { "timezone('utc'::text, now())" }, null: false
-    t.index ["accrediting_provider_id"], name: "IX_course_accrediting_provider_id"
+    t.text "accrediting_provider_code"
     t.index ["changed_at"], name: "index_course_on_changed_at", unique: true
     t.index ["provider_id", "course_code"], name: "IX_course_provider_id_course_code", unique: true
   end
@@ -266,7 +265,6 @@ ActiveRecord::Schema.define(version: 2019_07_04_134543) do
   end
 
   add_foreign_key "access_request", "\"user\"", column: "requester_id", name: "FK_access_request_user_requester_id", on_delete: :nullify
-  add_foreign_key "course", "provider", column: "accrediting_provider_id", name: "FK_course_provider_accrediting_provider_id"
   add_foreign_key "course", "provider", name: "FK_course_provider_provider_id", on_delete: :cascade
   add_foreign_key "course_enrichment", "\"user\"", column: "created_by_user_id", name: "FK_course_enrichment_user_created_by_user_id"
   add_foreign_key "course_enrichment", "\"user\"", column: "updated_by_user_id", name: "FK_course_enrichment_user_updated_by_user_id"
