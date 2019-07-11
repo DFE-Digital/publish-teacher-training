@@ -1,14 +1,18 @@
 name 'list'
+usage 'list [<code>...]'
 summary 'List providers in db'
 
 run do |opts, args, _cmd|
   MCB.init_rails(opts)
 
-  providers = if args.any?
-                Provider.where(provider_code: args.to_a.map(&:upcase))
-              else
-                Provider.all
-              end
+  recruitment_cycle = if opts[:recruitment_year].nil?
+                        RecruitmentCycle.current_recruitment_cycle
+                      else
+                        RecruitmentCycle.find_by(year: opts[:recruitment_year])
+                      end
+
+  providers = recruitment_cycle.providers
+  providers = providers.where(provider_code: args.to_a) if args.any?
 
   output = [
     'Providers:',

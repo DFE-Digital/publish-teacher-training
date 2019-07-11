@@ -247,6 +247,9 @@ module MCB
     def remote_connect_options
       envs = env_to_azure_map.keys.join(', ')
       Proc.new do
+        option :R, 'recruitment_year',
+               "Set the recruitment year, defaults to the current recruitment year",
+               argument: :required
         option :E, 'env',
                "Connect to a pre-defined environment: #{envs}",
                argument: :required
