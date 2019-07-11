@@ -73,6 +73,6 @@ class CourseSerializer < ActiveModel::Serializer
   end
 
   def recruitment_cycle
-    object.recruitment_cycle.year
+    object.provider.recruitment_cycle.year
   end
 end
