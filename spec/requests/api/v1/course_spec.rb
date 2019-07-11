@@ -140,8 +140,7 @@ describe "Courses API", type: :request do
         url = url_for(
           params: {
             changed_since: timestamp_of_last_course.utc.strftime('%FT%T.%6NZ'),
-            per_page: 100,
-            recruitment_year: 2019
+            per_page: 100
           }
         )
 
@@ -228,8 +227,7 @@ describe "Courses API", type: :request do
         expect(response.headers).to have_key "Link"
         url = url_for(params: {
                         changed_since: timestamp_of_last_course.utc.strftime('%FT%T.%6NZ'),
-                        per_page: 100,
-                        recruitment_year: 2019
+                        per_page: 100
                       })
         expect(response.headers["Link"]).to match "#{url}; rel=\"next\""
       end

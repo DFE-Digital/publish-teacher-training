@@ -4,11 +4,11 @@ module API
       include NextLinkHeader
       include FirstItemFromNextPage
 
+      before_action :build_recruitment_cycle
+
       def index
-        build_recruitment_cycle
         per_page = (params[:per_page] || 100).to_i
         changed_since = params[:changed_since]
-        recruitment_year = @recruitment_cycle.year
 
         ActiveRecord::Base.transaction do
           ActiveRecord::Base.connection.execute('LOCK provider, provider_enrichment, site IN SHARE UPDATE EXCLUSIVE MODE')
