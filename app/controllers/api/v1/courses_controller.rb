@@ -26,6 +26,7 @@ module API
           @courses.last,
           changed_since: changed_since,
           per_page: per_page,
+          recruitment_year: params[:recruitment_year]
         )
 
         render json: @courses
