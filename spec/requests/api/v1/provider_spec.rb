@@ -359,6 +359,34 @@ describe 'Providers API', type: :request do
         expect(query_params[:per_page]).to eq '100'
       end
 
+      context 'with recruitment year specified in route' do
+        it 'includes correct next link in response headers' do
+          create(:provider,
+                 provider_code: "LAST1",
+                 changed_at: 10.minutes.ago)
+
+          timestamp_of_last_provider = 2.minutes.ago
+          create(:provider,
+                 provider_code: "LAST2",
+                 changed_at: timestamp_of_last_provider)
+
+          get '/api/v1/providers?recruitment_year=2020',
+              headers: { 'HTTP_AUTHORIZATION' => credentials },
+              params: { changed_since: 30.minutes.ago.utc.iso8601 }
+
+
+          expect(response.headers).to have_key "Link"
+          url = url_for(
+            recruitment_year: 2020,
+            params: {
+              changed_since: timestamp_of_last_provider.utc.strftime('%FT%T.%6NZ'),
+              per_page: 100
+            }
+  )
+          expect(response.headers["Link"]).to match "#{url}; rel=\"next\""
+        end
+      end
+
       it 'includes correct next link when there is an empty set' do
         provided_timestamp = 5.minutes.ago.utc.iso8601
 
