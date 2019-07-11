@@ -206,7 +206,34 @@ describe "Courses API", type: :request do
         end
       end
 
+      context 'with recruitment year specified in params' do
+        it 'includes the correct next link in the header' do
+          create(:course,
+                 course_code: "LAST1",
+                 age: 10.minutes.ago,
+                 provider: provider)
 
+          timestamp_of_last_course = 2.minutes.ago
+          _last_course_in_results = create(:course,
+                                           course_code: "LAST2",
+                                           age: timestamp_of_last_course,
+                                           provider: provider)
+
+          get '/api/v1/courses?recruitment_year=2019',
+              headers: { 'HTTP_AUTHORIZATION' => credentials },
+              params: { changed_since: 30.minutes.ago.utc.iso8601 }
+
+
+          expect(response.headers).to have_key "Link"
+          url = url_for(
+            recruitment_year: 2019,
+            params: {
+              changed_since: timestamp_of_last_course.utc.strftime('%FT%T.%6NZ'),
+              per_page: 100,
+            })
+          expect(response.headers["Link"]).to match "#{url}; rel=\"next\""
+        end
+      end
 
       it 'includes correct next link in response headers' do
         create(:course,
