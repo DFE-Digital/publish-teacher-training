@@ -34,7 +34,6 @@ class Site < ApplicationRecord
   validates :location_name, uniqueness: { scope: :provider_id }
   validates :location_name,
             :address1,
-            :address3,
             :postcode,
             presence: true
   validates :postcode, postcode: true
