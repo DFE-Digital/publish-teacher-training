@@ -8,7 +8,6 @@ module API
         build_recruitment_cycle
         per_page = (params[:per_page] || 100).to_i
         changed_since = params[:changed_since]
-        recruitment_year = @recruitment_cycle.year
 
         ActiveRecord::Base.transaction do
           ActiveRecord::Base.connection.execute('LOCK provider, provider_enrichment, site IN SHARE UPDATE EXCLUSIVE MODE')
@@ -27,6 +26,7 @@ module API
           @courses.last,
           changed_since: changed_since,
           per_page: per_page,
+          recruitment_year: params[:recruitment_year]
         )
 
         render json: @courses
