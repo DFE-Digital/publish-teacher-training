@@ -23,17 +23,18 @@ module API
         changed_since = params[:changed_since]
         ActiveRecord::Base.transaction do
           ActiveRecord::Base.connection.execute('LOCK provider, provider_enrichment, site IN SHARE UPDATE EXCLUSIVE MODE')
-          @providers = Provider
+          @providers = @recruitment_cycle
+                         .providers
                          .includes(:sites, :ucas_preferences, :contacts)
                          .changed_since(changed_since)
                          .limit(per_page)
-                         .by_recruitment_cycle(@recruitment_cycle.year)
         end
 
         set_next_link_header_using_changed_since_or_last_object(
           @providers.last,
           changed_since: changed_since,
-          per_page: per_page
+          per_page: per_page,
+          recruitment_year: params[:recruitment_year]
         )
 
         render json: @providers

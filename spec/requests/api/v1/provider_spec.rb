@@ -281,8 +281,7 @@ describe 'Providers API', type: :request do
 
     context 'with multiple recruitment cycles' do
       describe 'JSON body response' do
-        let(:provider) { create(:provider, recruitment_cycle: current_cycle) }
-        let(:current_cycle) { build(:recruitment_cycle, year: '2019') }
+        let(:provider) { create(:provider) }
         let(:provider2) { create(:provider, recruitment_cycle: next_cycle) }
         let(:next_cycle) { build(:recruitment_cycle, year: '2020') }
 
