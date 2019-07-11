@@ -144,23 +144,22 @@ describe 'Sites API v2', type: :request do
         create :provider,
                organisations: [organisation],
                provider_code: provider.provider_code,
-               recruitment_cycle: next_recruitment_cycle
+               recruitment_cycle: next_recruitment_cycle,
+               sites: [next_site1, next_site2]
       }
       let(:next_site1) {
-        create :site,
-               location_name: 'Next Main site 1',
-               provider: next_provider
+        build :site,
+              location_name: 'Next Main site 1'
       }
       let(:next_site2) {
-        create :site,
-               location_name: 'Next Main site 2',
-               provider: next_provider
+        build :site,
+              location_name: 'Next Main site 2'
       }
       let(:next_sites) { [next_site1, next_site2] }
 
       describe 'when not specifying the recruitment cycle' do
         subject do
-          next_sites
+          next_provider
 
           perform_request
           response
@@ -187,8 +186,7 @@ describe 'Sites API v2', type: :request do
         }
 
         subject do
-          next_sites
-
+          next_provider
           perform_request
           response
         end
