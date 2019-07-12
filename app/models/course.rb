@@ -2,24 +2,24 @@
 #
 # Table name: course
 #
-#  id                      :integer          not null, primary key
-#  age_range               :text
-#  course_code             :text
-#  name                    :text
-#  profpost_flag           :text
-#  program_type            :text
-#  qualification           :integer          not null
-#  start_date              :datetime
-#  study_mode              :text
-#  accrediting_provider_id :integer
-#  provider_id             :integer          default(0), not null
-#  modular                 :text
-#  english                 :integer
-#  maths                   :integer
-#  science                 :integer
-#  created_at              :datetime         not null
-#  updated_at              :datetime         not null
-#  changed_at              :datetime         not null
+#  id                        :integer          not null, primary key
+#  age_range                 :text
+#  course_code               :text
+#  name                      :text
+#  profpost_flag             :text
+#  program_type              :text
+#  qualification             :integer          not null
+#  start_date                :datetime
+#  study_mode                :text
+#  provider_id               :integer          default(0), not null
+#  modular                   :text
+#  english                   :integer
+#  maths                     :integer
+#  science                   :integer
+#  created_at                :datetime         not null
+#  updated_at                :datetime         not null
+#  changed_at                :datetime         not null
+#  accrediting_provider_code :text
 #
 
 class Course < ApplicationRecord
@@ -68,7 +68,14 @@ class Course < ApplicationRecord
   enum science: ENTRY_REQUIREMENT_OPTIONS, _suffix: :for_science
 
   belongs_to :provider
-  belongs_to :accrediting_provider, class_name: 'Provider', optional: true
+
+  belongs_to :accrediting_provider,
+             ->(c) { where(recruitment_cycle: c.recruitment_cycle) },
+             class_name: 'Provider',
+             foreign_key: :accrediting_provider_code,
+             primary_key: :provider_code,
+             inverse_of: :accredited_courses,
+             optional: true
 
   has_many :course_subjects
   has_many :subjects, through: :course_subjects

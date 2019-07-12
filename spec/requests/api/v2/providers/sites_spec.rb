@@ -377,14 +377,13 @@ describe 'Sites API v2', type: :request do
           context 'with missing attributes' do
             let(:location_name) { '' }
             let(:address1)      { '' }
-            let(:address3)      { '' }
             let(:postcode)      { '' }
             let(:region_code)   { '' }
 
             it { should have_http_status(:unprocessable_entity) }
 
             it 'has the right amount of errors' do
-              expect(json_data.count).to eq 5
+              expect(json_data.count).to eq 4
             end
 
             it 'checks the location_name is present' do
@@ -395,11 +394,6 @@ describe 'Sites API v2', type: :request do
             it 'checks the address1 is present' do
               expect(response.body).to include('Invalid address1')
               expect(response.body).to include("Building and street is missing")
-            end
-
-            it 'checks the address3 is present' do
-              expect(response.body).to include('Invalid address3')
-              expect(response.body).to include("Town or city is missing")
             end
 
             it 'checks the postcode is present' do
@@ -559,7 +553,6 @@ describe 'Sites API v2', type: :request do
             location_name: location_name,
             address1: address1,
             address2: address2,
-            address3: address3,
             address4: address4,
             postcode: postcode,
             region_code: region_code
@@ -570,14 +563,13 @@ describe 'Sites API v2', type: :request do
         context 'with missing attributes' do
           let(:location_name) { '' }
           let(:address1)      { '' }
-          let(:address3)      { '' }
           let(:postcode)      { '' }
           let(:region_code)   { '' }
 
           it { should have_http_status(:unprocessable_entity) }
 
           it 'has the right amount of errors' do
-            expect(json_data.count).to eq 5
+            expect(json_data.count).to eq 4
           end
         end
       end

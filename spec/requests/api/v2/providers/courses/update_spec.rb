@@ -113,14 +113,14 @@ describe 'PATCH /providers/:provider_code/courses/:course_code' do
       another_provider = create(:provider)
       update_course    = build(
         :course,
-        accrediting_provider_id: another_provider.id,
-        provider:                provider
+        accrediting_provider: another_provider,
+        provider:             provider
       )
       update_course.id = course.id
 
       perform_request(course)
 
-      expect(course.reload.accrediting_provider_id).not_to eq(another_provider.id)
+      expect(course.reload.accrediting_provider).not_to eq(another_provider)
     end
   end
 
