@@ -30,15 +30,5 @@ class ChangeCourseAccreditingProviderIdToCode < ActiveRecord::Migration[5.2]
         end
       end
     end
-
-    revert do
-      add_column :course, :accrediting_provider_id, :integer
-      add_foreign_key :course,
-                      :provider,
-                      column: :accrediting_provider_id,
-                      name: "FK_course_provider_accrediting_provider_id"
-      add_index :course, %w[accrediting_provider_id],
-                name: "IX_course_accrediting_provider_id"
-    end
   end
 end
