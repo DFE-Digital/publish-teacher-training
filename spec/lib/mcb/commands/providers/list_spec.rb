@@ -9,12 +9,6 @@ describe 'mcb providers list' do
     { stdout: output, stderr: stderr }
   end
 
-  let(:email) { 'user@education.gov.uk' }
-
-  before do
-    allow(MCB).to receive(:config).and_return(email: email)
-  end
-
   let(:current_cycle) { RecruitmentCycle.current_recruitment_cycle }
   let(:additional_cycle) { find_or_create(:recruitment_cycle, year: '2020') }
 
@@ -46,6 +40,14 @@ describe 'mcb providers list' do
 
         expect(command_output).to match(/A12/)
         expect(command_output).to match(/Provider of Learning/)
+      end
+
+      it 'is case insensitive' do
+        provider1
+        provider2
+
+        command_output = list('x13')[:stdout]
+        expect(command_output).to match(/X13/)
       end
     end
 
