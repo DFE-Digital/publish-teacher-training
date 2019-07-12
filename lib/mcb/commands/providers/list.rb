@@ -12,7 +12,7 @@ run do |opts, args, _cmd|
                       end
 
   providers = recruitment_cycle.providers
-  providers = providers.where(provider_code: args.to_a) if args.any?
+  providers = providers.where(provider_code: args.map(&:upcase)) if args.any?
 
   output = [
     'Providers:',

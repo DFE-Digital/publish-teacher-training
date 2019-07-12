@@ -4,11 +4,14 @@ summary 'List courses in db'
 run do |opts, args, _cmd|
   MCB.init_rails(opts)
 
-  courses = if args.any?
-              Course.where(course_code: args.to_a.map(&:upcase))
-            else
-              Course.all
-            end
+  recruitment_cycle = if opts[:recruitment_year].nil?
+                        RecruitmentCycle.current_recruitment_cycle
+                      else
+                        RecruitmentCycle.find_by(year: opts[:recruitment_year])
+                      end
+
+  courses = recruitment_cycle.courses
+  courses = courses.where(course_code: args.map(&:upcase)) if args.any?
 
   tp.set :capitalize_headers, false
 
