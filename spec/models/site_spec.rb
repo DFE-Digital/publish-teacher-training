@@ -27,7 +27,6 @@ describe Provider, type: :model do
 
   it { is_expected.to validate_presence_of(:location_name) }
   it { is_expected.to validate_presence_of(:address1) }
-  it { is_expected.to validate_presence_of(:address3) }
   it { is_expected.to validate_presence_of(:postcode) }
   it { is_expected.to validate_uniqueness_of(:location_name).scoped_to(:provider_id) }
   it { is_expected.to validate_uniqueness_of(:code).case_insensitive.scoped_to(:provider_id) }
