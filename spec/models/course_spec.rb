@@ -754,4 +754,14 @@ RSpec.describe Course, type: :model do
       end
     end
   end
+
+  describe 'self.get_by_codes' do
+    it 'should return the found course' do
+      expect(Course.get_by_codes(
+               course.recruitment_cycle.year,
+               course.provider.provider_code,
+               course.course_code
+             )).to eq course
+    end
+  end
 end

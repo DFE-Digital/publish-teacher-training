@@ -128,6 +128,12 @@ class Course < ApplicationRecord
 
   after_validation :remove_unnecessary_enrichments_validation_message
 
+  def self.get_by_codes(year, provider_code, course_code)
+    RecruitmentCycle.find_by(year: year)
+      .providers.find_by(provider_code: provider_code)
+      .courses.find_by(course_code: course_code)
+  end
+
   def recruitment_cycle
     provider.recruitment_cycle
   end
