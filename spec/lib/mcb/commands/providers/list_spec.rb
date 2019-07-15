@@ -10,44 +10,63 @@ describe 'mcb providers list' do
   end
 
   let(:current_cycle) { RecruitmentCycle.current_recruitment_cycle }
-  let(:additional_cycle) { find_or_create(:recruitment_cycle, year: '2020') }
+  let(:additional_cycle) { find_or_create(:recruitment_cycle, year: '2018') }
 
   context 'when recruitment cycle is unspecified' do
-    let(:provider1) { create(:provider, provider_code: 'X13', provider_name: 'Learning Provider', recruitment_cycle: current_cycle) }
-    let(:provider2) { create(:provider, provider_code: 'A12', provider_name: 'Provider of Learning', recruitment_cycle: current_cycle) }
+    let(:provider1) { create(:provider, recruitment_cycle: current_cycle) }
+    let(:provider2) { create(:provider, recruitment_cycle: current_cycle) }
+    let(:provider3) { create(:provider, recruitment_cycle: additional_cycle) }
+
+    it 'lists all courses for the default recruitment cycle' do
+      provider1
+      provider2
+      provider3
+
+      command_output = list[:stdout]
+
+      expect(command_output).to include(provider1.provider_code)
+      expect(command_output).to include(provider1.provider_name)
+
+      expect(command_output).to include(provider2.provider_code)
+      expect(command_output).to include(provider2.provider_name)
+
+      expect(command_output).not_to include(provider3.provider_name)
+      expect(command_output).not_to include(provider3.provider_code)
+    end
+
     context 'when provider is specified' do
       it 'displays the provider information' do
         provider1
         provider2
 
-        command_output = list('X13')[:stdout]
+        command_output = list(provider1.provider_code)[:stdout]
 
-        expect(command_output).to match(/X13/)
-        expect(command_output).to match(/Learning Provider/)
+        expect(command_output).to include(provider1.provider_code)
+        expect(command_output).to include(provider1.provider_name)
 
-        expect(command_output).not_to match(/A12/)
-        expect(command_output).not_to match(/Provider of Learning/)
+        expect(command_output).not_to include(provider2.provider_code)
+        expect(command_output).not_to include(provider2.provider_name)
       end
 
-      it 'displays all specified providers' do
+      it 'displays multiple specified providers' do
         provider1
         provider2
 
-        command_output = list('X13', 'A12')[:stdout]
+        command_output = list(provider1.provider_code, provider2.provider_code)[:stdout]
 
-        expect(command_output).to match(/X13/)
-        expect(command_output).to match(/Learning Provider/)
+        expect(command_output).to include(provider1.provider_code)
+        expect(command_output).to include(provider1.provider_name)
 
-        expect(command_output).to match(/A12/)
-        expect(command_output).to match(/Provider of Learning/)
+        expect(command_output).to include(provider2.provider_code)
+        expect(command_output).to include(provider2.provider_name)
       end
 
       it 'is case insensitive' do
         provider1
         provider2
 
-        command_output = list('x13')[:stdout]
-        expect(command_output).to match(/X13/)
+        command_output = list(provider1.provider_code.downcase)[:stdout]
+        expect(command_output).to include(provider1.provider_code)
       end
     end
 
@@ -58,29 +77,29 @@ describe 'mcb providers list' do
 
         command_output = list[:stdout]
 
-        expect(command_output).to match(/A12/)
-        expect(command_output).to match(/Provider of Learning/)
+        expect(command_output).to include(provider1.provider_code)
+        expect(command_output).to include(provider1.provider_name)
 
-        expect(command_output).to match(/X13/)
-        expect(command_output).to match(/Learning Provider/)
+        expect(command_output).to include(provider2.provider_code)
+        expect(command_output).to include(provider2.provider_name)
       end
     end
   end
 
   context 'when recruitment cycle is specified' do
-    let(:provider1) { create(:provider, provider_code: 'A12', provider_name: 'Provider of Learning', recruitment_cycle: current_cycle) }
-    let(:provider2) { create(:provider, provider_code: 'X13', provider_name: 'Learning Provider', recruitment_cycle: additional_cycle) }
+    let(:provider1) { create(:provider, recruitment_cycle: current_cycle) }
+    let(:provider2) { create(:provider, recruitment_cycle: additional_cycle) }
 
     it 'displays information about providers for the specified recruitment cycle' do
       provider1
       provider2
 
-      command_output = list("-R", additional_cycle.year)[:stdout]
-      expect(command_output).to match(/X13/)
-      expect(command_output).to match(/Learning Provider/)
+      command_output = list("-r", additional_cycle.year)[:stdout]
+      expect(command_output).to include(provider2.provider_code)
+      expect(command_output).to include(provider2.provider_name)
 
-      expect(command_output).not_to match(/A12/)
-      expect(command_output).not_to match(/Provider of Learning/)
+      expect(command_output).not_to include(provider1.provider_code)
+      expect(command_output).not_to include(provider1.provider_code)
     end
   end
 end

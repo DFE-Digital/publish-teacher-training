@@ -10,7 +10,7 @@ run do |opts, _args, _cmd|
   last_context = nil
 
   table = Terminal::Table.new headings: %w[Code Name Provider\ Code Provider\ Name] do |t|
-    MCB.each_v1_provider(opts).each do |course, context|
+    MCB.each_v1_course(opts).each do |course, context|
       last_context = context
       provider_info = course['provider']
                         .slice('institution_code', 'institution_name')
