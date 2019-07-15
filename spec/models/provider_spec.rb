@@ -256,22 +256,4 @@ describe Provider, type: :model do
       end
     end
   end
-
-  describe 'by_recruitment_cycle' do
-    let(:provider) { create(:provider, recruitment_cycle: current_cycle) }
-    let(:current_cycle) { build(:recruitment_cycle, year: '2019') }
-    let(:provider2) { create(:provider, recruitment_cycle: next_cycle) }
-    let(:next_cycle) { build(:recruitment_cycle, year: '2020') }
-
-    before do
-      provider
-      provider2
-    end
-
-    context 'with courses from multiple recuritment cycles' do
-      it 'should only return courses from  the requested cycle' do
-        expect(Provider.by_recruitment_cycle('2020')). to eq [provider2]
-      end
-    end
-  end
 end
