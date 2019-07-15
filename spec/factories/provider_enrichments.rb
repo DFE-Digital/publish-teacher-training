@@ -51,5 +51,15 @@ FactoryBot.define do
       status { :published }
       last_published_at { 5.days.ago }
     end
+
+    trait :initial_draft do
+      status { :draft }
+      last_published_at { nil }
+    end
+
+    trait :subsequent_draft do
+      status { :draft }
+      last_published_at { 5.days.ago }
+    end
   end
 end

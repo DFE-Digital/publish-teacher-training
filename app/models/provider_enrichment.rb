@@ -42,4 +42,8 @@ class ProviderEnrichment < ApplicationRecord
                                          store_key: 'TrainWithDisability'],
                  accrediting_provider_enrichments: [:json,
                                                     store_key: 'AccreditingProviderEnrichments']
+
+  def has_been_published_before?
+    last_published_at.present?
+  end
 end

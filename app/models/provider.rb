@@ -148,6 +148,25 @@ class Provider < ApplicationRecord
     end
   end
 
+  def content_status
+    newest_enrichment = enrichments.latest_created_at.first
+
+    if newest_enrichment.nil?
+      :empty
+    elsif newest_enrichment.published?
+      :published
+    elsif newest_enrichment.has_been_published_before?
+      :published_with_unpublished_changes
+    else
+      :draft
+    end
+  end
+
+  def last_published_at
+    newest_enrichment = enrichments.latest_created_at.first
+    newest_enrichment&.last_published_at
+  end
+
   def to_s
     "#{provider_name} (#{provider_code})"
   end
