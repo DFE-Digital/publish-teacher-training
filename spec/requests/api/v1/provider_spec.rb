@@ -16,6 +16,8 @@ describe 'Providers API', type: :request do
         .encode_credentials('foo')
     end
 
+    let(:get_index) { get '/api/v1/2019/providers', headers: { 'HTTP_AUTHORIZATION' => credentials } }
+
     context "without changed_since parameter" do
       let(:ucas_preferences) do
         build(:ucas_preferences,
@@ -47,7 +49,7 @@ describe 'Providers API', type: :request do
                           telephone: '020 812 345 678')
         ]
       end
-      let!(:provider) do
+      let(:provider) do
         create(:provider,
                provider_name: 'ACME SCITT',
                provider_code: 'A123',
@@ -66,14 +68,14 @@ describe 'Providers API', type: :request do
                last_published_at: DateTime.now.utc,
                enrichments: [],
                ucas_preferences: ucas_preferences,
-               contacts: contacts)
+               contacts: contacts,
+               sites: [site])
       end
-      let!(:site) do
-        create(:site,
-               location_name: 'Main site 1',
-               code: '-',
-               region_code: :london,
-               provider: provider)
+      let(:site) do
+        build(:site,
+              location_name: 'Main site 1',
+              code: '-',
+              region_code: :london)
       end
       let(:ucas_preferences2) do
         build(:ucas_preferences,
@@ -124,18 +126,23 @@ describe 'Providers API', type: :request do
                last_published_at: DateTime.now.utc,
                enrichments: [],
                ucas_preferences: ucas_preferences2,
-               contacts: contacts2)
+               contacts: contacts2,
+               sites: [site2])
       end
-      let!(:site2) do
-        create(:site,
-               location_name: 'Main site 2',
-               code: '-',
-               region_code: :scotland,
-               provider: provider2)
+      let(:site2) do
+        build(:site,
+              location_name: 'Main site 2',
+              code: '-',
+              region_code: :scotland)
+      end
+
+      before do
+        provider
+        provider2
+        get_index
       end
 
       it 'returns http success' do
-        get '/api/v1/2019/providers', headers: { 'HTTP_AUTHORIZATION' => credentials }
         expect(response).to have_http_status(:success)
       end
 
@@ -148,9 +155,6 @@ describe 'Providers API', type: :request do
       it 'includes correct next link in response headers'
 
       it 'JSON body response contains expected provider attributes' do
-        get '/api/v1/2019/providers',
-            headers: { 'HTTP_AUTHORIZATION' => credentials }
-
         json = JSON.parse(response.body)
         expect(json).to eq(
           [
@@ -275,6 +279,41 @@ describe 'Providers API', type: :request do
       end
     end
 
+    context 'with multiple recruitment cycles' do
+      describe 'JSON body response' do
+        let(:provider) { create(:provider) }
+        let(:provider2) { create(:provider, recruitment_cycle: next_cycle) }
+        let(:next_cycle) { build(:recruitment_cycle, year: '2020') }
+
+        before do
+          provider
+          provider2
+          get_index
+        end
+
+        context 'with no cycle specified in the route' do
+          let(:get_index) { get '/api/v1/providers', headers: { 'HTTP_AUTHORIZATION' => credentials } }
+
+          it 'defaults to the current cycle when year' do
+            returned_provider_codes = get_provider_codes_from_body(response.body)
+
+            expect(returned_provider_codes).not_to include provider2.provider_code
+            expect(returned_provider_codes).to include provider.provider_code
+          end
+        end
+        context 'with a future recruitment cycle specified in the route' do
+          let(:get_index) { get '/api/v1/2020/providers', headers: { 'HTTP_AUTHORIZATION' => credentials } }
+
+          it 'only returns courses from the requested cycle' do
+            returned_provider_codes = get_provider_codes_from_body(response.body)
+
+            expect(returned_provider_codes).to include provider2.provider_code
+            expect(returned_provider_codes).not_to include provider.provider_code
+          end
+        end
+      end
+    end
+
     context "with changed_since parameter" do
       describe "JSON body response" do
         it 'contains expected providers' do
@@ -317,6 +356,34 @@ describe 'Providers API', type: :request do
         expect(query_params[:changed_since])
           .to eq timestamp_of_last_provider.utc.strftime('%FT%T.%6NZ')
         expect(query_params[:per_page]).to eq '100'
+      end
+
+      context 'with recruitment year specified in route' do
+        it 'includes correct next link in response headers' do
+          create(:provider,
+                 provider_code: "LAST1",
+                 changed_at: 10.minutes.ago)
+
+          timestamp_of_last_provider = 2.minutes.ago
+          create(:provider,
+                 provider_code: "LAST2",
+                 changed_at: timestamp_of_last_provider)
+
+          get '/api/v1/providers?recruitment_year=2020',
+              headers: { 'HTTP_AUTHORIZATION' => credentials },
+              params: { changed_since: 30.minutes.ago.utc.iso8601 }
+
+
+          expect(response.headers).to have_key "Link"
+          url = url_for(
+            recruitment_year: 2020,
+            params: {
+              changed_since: timestamp_of_last_provider.utc.strftime('%FT%T.%6NZ'),
+              per_page: 100
+            }
+  )
+          expect(response.headers["Link"]).to match "#{url}; rel=\"next\""
+        end
       end
 
       it 'includes correct next link when there is an empty set' do
