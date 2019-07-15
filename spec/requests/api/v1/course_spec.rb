@@ -138,10 +138,10 @@ describe "Courses API", type: :request do
 
         expect(response.headers).to have_key "Link"
         url = url_for(
+          recruitment_year: 2019,
           params: {
             changed_since: timestamp_of_last_course.utc.strftime('%FT%T.%6NZ'),
-            per_page: 100,
-            recruitment_year: 2019
+            per_page: 100
           }
         )
 
@@ -186,11 +186,13 @@ describe "Courses API", type: :request do
 
 
         expect(response.headers).to have_key "Link"
-        url = url_for(params: {
-                        changed_since: timestamp_of_last_course.utc.strftime('%FT%T.%6NZ'),
-                        per_page: 100,
-                        recruitment_year: 2019
-                      })
+        url = url_for(
+          recruitment_year: 2019,
+          params: {
+            changed_since: timestamp_of_last_course.utc.strftime('%FT%T.%6NZ'),
+            per_page: 100
+          }
+)
         expect(response.headers["Link"]).to match "#{url}; rel=\"next\""
       end
 
@@ -201,7 +203,22 @@ describe "Courses API", type: :request do
             headers: { 'HTTP_AUTHORIZATION' => credentials },
             params: { changed_since: provided_timestamp }
 
-        url = url_for(params: {
+        url = url_for(recruitment_year: 2019, params: {
+                        changed_since: provided_timestamp,
+                        per_page: 100
+                      })
+        expect(response.headers["Link"]).to match "#{url}; rel=\"next\""
+      end
+
+      it 'includes correct next link when there is an empty set' do
+        provided_timestamp = 5.seconds.ago.utc.iso8601
+
+
+        get '/api/v1/2020/courses',
+            headers: { 'HTTP_AUTHORIZATION' => credentials },
+            params: { changed_since: provided_timestamp }
+
+        url = url_for(recruitment_year: 2020, params: {
                         changed_since: provided_timestamp,
                         per_page: 100
                       })
@@ -224,7 +241,7 @@ describe "Courses API", type: :request do
         end
 
         it 'pages properly' do
-          get_next_courses '/api/v1/courses', per_page: 10, recruitment_year: 2019
+          get_next_courses '/api/v1/courses', per_page: 10
 
           expect(response.body)
             .to have_courses(@courses[0..9])
@@ -250,6 +267,7 @@ describe "Courses API", type: :request do
       end
 
       context "with many courses updated in the same second" do
+        let!(:next_cycle) { create(:recruitment_cycle, year: '2020') }
         timestamp = 1.second.ago
         before do
           @courses = Array.new(25) do |i|
@@ -282,6 +300,11 @@ describe "Courses API", type: :request do
           get_next_courses response.headers['Link'].split(';').first
           expect(response.body)
             .to have_courses([random_course])
+        end
+
+        it 'pages properly with specified recruitment year' do
+          get_next_courses '/api/v1/2020/courses', per_page: 10
+          expect(response.body).to eq '[]'
         end
       end
     end

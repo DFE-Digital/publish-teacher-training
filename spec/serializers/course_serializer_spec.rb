@@ -20,15 +20,17 @@
 #  updated_at                :datetime         not null
 #  changed_at                :datetime         not null
 #  accrediting_provider_code :text
+#  accrediting_provider_id   :integer
 #
 
 require "rails_helper"
 
 RSpec.describe CourseSerializer do
-  let(:course) { create :course }
+  let(:course) { create :course, provider: provider }
+  let(:provider) { build(:provider) }
   subject { serialize(course) }
 
   it { should include(course_code: course.course_code) }
   it { should include(name: course.name) }
-  it { should include(recruitment_cycle: course.recruitment_cycle.year) }
+  it { should include(recruitment_cycle: course.provider.recruitment_cycle.year) }
 end

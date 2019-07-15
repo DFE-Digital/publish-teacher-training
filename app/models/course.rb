@@ -20,6 +20,7 @@
 #  updated_at                :datetime         not null
 #  changed_at                :datetime         not null
 #  accrediting_provider_code :text
+#  accrediting_provider_id   :integer
 #
 
 class Course < ApplicationRecord
@@ -119,10 +120,6 @@ class Course < ApplicationRecord
       where.not(changed_at: nil)
     end.order(:changed_at, :id)
   end
-
-  scope :by_recruitment_cycle, ->(recruitment_year) {
-    joins(provider: :recruitment_cycle).merge(RecruitmentCycle.where(year: recruitment_year))
-  }
 
   validates :enrichments, presence: true, on: :publish
   validate :validate_enrichment_publishable, on: :publish
