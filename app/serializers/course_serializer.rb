@@ -20,6 +20,7 @@
 #  updated_at                :datetime         not null
 #  changed_at                :datetime         not null
 #  accrediting_provider_code :text
+#  accrediting_provider_id   :integer
 #
 
 class CourseSerializer < ActiveModel::Serializer

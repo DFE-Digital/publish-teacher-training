@@ -1,5 +1,4 @@
 describe "Courses API", type: :request do
-
   def get_course_codes_from_body(body)
     json = JSON.parse(body)
     json.map { |course| course["course_code"] }
