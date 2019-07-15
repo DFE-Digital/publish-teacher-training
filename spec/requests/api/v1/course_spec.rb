@@ -149,46 +149,6 @@ describe "Courses API", type: :request do
       end
     end
 
-
-    context 'with multiple recruitment cycles' do
-      describe 'JSON body response' do
-        let(:provider) { build(:provider, recruitment_cycle: current_cycle) }
-        let(:current_cycle) { build(:recruitment_cycle, year: '2019') }
-        let(:course) { create(:course, provider: provider) }
-        let(:provider2) { build(:provider, recruitment_cycle: next_cycle) }
-        let(:next_cycle) { build(:recruitment_cycle, year: '2020') }
-        let(:course2) { create(:course, provider: provider2) }
-
-        before do
-          course
-          course2
-          get_index
-        end
-
-        context 'with no cycle specified in the route' do
-          let(:get_index) { get '/api/v1/courses', headers: { 'HTTP_AUTHORIZATION' => credentials } }
-
-          it 'defaults to the current cycle when year' do
-            returned_course_codes = get_course_codes_from_body(response.body)
-
-            expect(returned_course_codes).not_to include course2.course_code
-            expect(returned_course_codes).to include course.course_code
-          end
-        end
-        context 'with a future recruitment cycle specified in the route' do
-          let(:get_index) { get '/api/v1/2020/courses', headers: { 'HTTP_AUTHORIZATION' => credentials } }
-
-          it 'only returns courses from the requested cycle' do
-            returned_course_codes = get_course_codes_from_body(response.body)
-
-            expect(returned_course_codes).to include course2.course_code
-            expect(returned_course_codes).not_to include course.course_code
-          end
-        end
-      end
-    end
-
-
     context "with changed_since parameter" do
       describe "JSON body response" do
         it 'contains expected courses' do
@@ -252,6 +212,7 @@ describe "Courses API", type: :request do
 
       it 'includes correct next link when there is an empty set' do
         provided_timestamp = 5.seconds.ago.utc.iso8601
+
 
         get '/api/v1/2020/courses',
             headers: { 'HTTP_AUTHORIZATION' => credentials },
