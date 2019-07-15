@@ -4,11 +4,7 @@ summary 'List courses in db'
 run do |opts, args, _cmd|
   MCB.init_rails(opts)
 
-  recruitment_cycle = if opts[:recruitment_year].nil?
-                        RecruitmentCycle.current_recruitment_cycle
-                      else
-                        RecruitmentCycle.find_by(year: opts[:recruitment_year])
-                      end
+  recruitment_cycle = MCB.get_recruitment_cycle(opts)
 
   courses = recruitment_cycle.courses
   courses = courses.where(course_code: args.map(&:upcase)) if args.any?

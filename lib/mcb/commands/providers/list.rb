@@ -5,11 +5,7 @@ summary 'List providers in db'
 run do |opts, args, _cmd|
   MCB.init_rails(opts)
 
-  recruitment_cycle = if opts[:recruitment_year].nil?
-                        RecruitmentCycle.current_recruitment_cycle
-                      else
-                        RecruitmentCycle.find_by(year: opts[:recruitment_year])
-                      end
+  recruitment_cycle = MCB.get_recruitment_cycle(opts)
 
   providers = recruitment_cycle.providers
   providers = providers.where(provider_code: args.map(&:upcase)) if args.any?
