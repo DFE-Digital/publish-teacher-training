@@ -15,11 +15,11 @@ private
     end
 
     if params[:recruitment_year].nil?
-      response.headers['Link'] = "#{url_for(recruitment_year: Settings.current_recruitment_cycle, params: next_url_params)}; rel=\"next\""
-      return
+      cycle_year = Settings.current_recruitment_cycle
+      response.headers['Link'] = "#{url_for(recruitment_year: cycle_year, params: next_url_params)}; rel=\"next\""
+    else
+      response.headers['Link'] = "#{url_for(recruitment_year: params[:recruitment_year], params: next_url_params)}; rel=\"next\""
     end
-
-    response.headers['Link'] = "#{url_for(recruitment_year: params[:recruitment_year], params: next_url_params)}; rel=\"next\""
   end
 
   def incremental_load_timestamp_format(timestamp)
