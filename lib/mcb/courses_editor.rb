@@ -22,6 +22,7 @@ module MCB
     def run
       finished = false
       until finished
+        course_codes = @courses.order(:course_code).pluck(:course_code)
         puts "Editing #{course_codes.join(', ')}"
         print_at_most_two_courses
         choice = main_loop
@@ -192,10 +193,6 @@ module MCB
           course.course_code
         )
       end
-    end
-
-    def course_codes
-      @courses.order(:course_code).pluck(:course_code)
     end
 
     def find_courses(provider, course_codes)
