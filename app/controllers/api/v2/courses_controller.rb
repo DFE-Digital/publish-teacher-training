@@ -60,7 +60,9 @@ module API
       def update
         update_enrichment
         update_sites
+        update_gcse_requirements
         has_synced? if site_ids.present?
+
 
         if @course.errors.empty? && @course.valid?
           render jsonapi: @course.reload
@@ -88,6 +90,22 @@ module API
         # but we can't actually revert easily from what I can tell because of the
         # remove_site! side effects that occur when it's called.
         @course.errors[:sites] << "^You must choose at least one location" if site_ids.empty?
+      end
+
+      def update_gcse_requirements
+        data = params.dig("_jsonapi", "data")
+
+        if data.dig("attributes", "english").present?
+          @course.update(english: data.dig("attributes", "english"))
+        end
+
+        if data.dig("attributes", "maths").present?
+          @course.update(maths: data.dig("attributes", "maths"))
+        end
+
+        if data.dig("attributes", "science").present?
+          @course.update(science: data.dig("attributes", "science"))
+        end
       end
 
       def build_provider
