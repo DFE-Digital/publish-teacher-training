@@ -5,7 +5,7 @@ run do |opts, args, _cmd|
   MCB.init_rails(opts)
 
   code = args[:code]
-  provider = Provider.find_by!(provider_code: code)
+  provider = MCB.get_recruitment_cycle(opts).providers.find_by!(provider_code: code)
   table = Tabulo::Table.new provider.audits do |t|
     t.add_column(:user_id, header: "user\nid", width: 6)
     t.add_column(:user, header: "user email") { |a| a.user&.email }
