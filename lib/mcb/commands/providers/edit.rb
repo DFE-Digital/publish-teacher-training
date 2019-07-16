@@ -6,6 +6,6 @@ run do |opts, args, _cmd|
 
   MCB::ProviderEditor.new(
     requester: User.find_by!(email: MCB.config[:email]),
-    provider: Provider.find_by!(provider_code: args[:code])
+    provider: MCB.get_recruitment_cycle(opts).providers.find_by!(provider_code: args[:code])
   ).run
 end
