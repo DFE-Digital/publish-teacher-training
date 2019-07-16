@@ -43,8 +43,7 @@ module MCB
 
       puts "\nAbout to create the following course:"
       print_at_most_two_courses
-      if @cli.confirm_creation?
-        try_saving_course
+      if @cli.confirm_creation? && try_saving_course
         edit_subjects
         edit_sites
         edit(:application_opening_date)
@@ -165,9 +164,11 @@ module MCB
       if course.valid?
         puts "Saving the course"
         course.save!
+        true
       else
         puts "Course isn't valid:"
         course.errors.full_messages.each { |error| puts " - #{error}" }
+        false
       end
     end
 

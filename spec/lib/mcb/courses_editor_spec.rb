@@ -515,6 +515,28 @@ describe MCB::CoursesEditor do
         expect(Course.find_by(course_code: desired_attributes[:course_code])).to be_nil
         expect(output).to include("Aborting")
       end
+
+      it "aborts the wizard if specified course fails validation" do
+        output, = run_new_course_wizard(
+          desired_attributes[:title],
+          "", # default qualifications
+          "", # default study mode
+          "", # default start date
+          "", # default accredited body
+          desired_attributes[:route],
+          desired_attributes[:maths],
+          desired_attributes[:english],
+          desired_attributes[:science],
+          desired_attributes[:age_range],
+          course_code, # a duplicate course code
+          desired_attributes[:recruitment_cycle],
+          "y", # confirm creation
+        )
+
+        expect(Course.where(course_code: course_code).count).to eq(1)
+        expect(output).to include("Course isn't valid")
+        expect(output).to include("Aborting")
+      end
     end
   end
 
