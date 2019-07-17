@@ -1,8 +1,9 @@
 require "rails_helper"
 
 describe ProviderPolicy do
+  let(:user) { create(:user) }
+
   describe 'scope' do
-    let(:user) { create(:user) }
     let(:organisation) { create(:organisation, users: [user]) }
 
     it 'limits the providers to those the user is assigned to' do
@@ -26,8 +27,6 @@ describe ProviderPolicy do
   end
 
   permissions :index? do
-    let(:user) { create(:user) }
-
     it { should permit user }
   end
 end
