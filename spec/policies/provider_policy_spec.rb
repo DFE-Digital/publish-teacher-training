@@ -29,4 +29,15 @@ describe ProviderPolicy do
   permissions :index? do
     it { should permit user }
   end
+
+  permissions :create? do
+    let(:user_outside_org) { create(:user) }
+    let(:admin) { create(:user, :admin) }
+    let(:provider) { create(:provider) }
+    let!(:organisation) { create(:organisation, providers: [provider], users: [user]) }
+
+    it { should_not permit(user, provider) }
+    it { should_not permit(user_outside_org, provider) }
+    it { should permit(admin, provider) }
+  end
 end
