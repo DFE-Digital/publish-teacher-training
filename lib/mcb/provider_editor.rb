@@ -3,7 +3,7 @@ module MCB
     attr_reader :provider
 
     def initialize(provider:, requester:, environment: nil)
-      @cli = ProviderCLI.new(provider)
+      @cli = ProviderCLI.new
       @provider = provider
       @requester = requester
       @environment = environment
