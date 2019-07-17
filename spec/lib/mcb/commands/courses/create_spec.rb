@@ -1,14 +1,11 @@
 require 'mcb_helper'
 
 describe 'mcb courses create' do
-  def create_new_course_on(provider_code)
-    cmd.run([provider_code])
+  def create_new_course_on(provider_code, in_recruitment_year: nil)
+    args = in_recruitment_year.present? ? ['-r', in_recruitment_year] : []
+    $mcb.run(['courses', 'create', provider_code] + args)
   end
 
-  let(:lib_dir) { Rails.root.join('lib') }
-  let(:cmd) do
-    Cri::Command.load_file("#{lib_dir}/mcb/commands/courses/create.rb")
-  end
   let(:provider_code) { 'X12' }
   let(:email) { 'user@education.gov.uk' }
   let!(:provider) { create(:provider, provider_code: provider_code) }
@@ -48,18 +45,20 @@ describe 'mcb courses create' do
           .and_return(instance_double(MCB::CoursesEditor, new_course_wizard: nil))
       end
 
-      it 'picks the correct provider' do
+      it 'picks the provider in the current cycle by default' do
         create_new_course_on(provider_code)
 
-        expect(MCB::CoursesEditor).to have_received(:new)
+        expect(MCB::CoursesEditor)
+          .to have_received(:new)
+          .with(hash_including(provider: provider, requester: requester))
       end
 
-      it 'ignores providers associated with the next cycle' do
-        provider.destroy
+      it 'picks the provider in the specified recruitment cycle when appropriate' do
+        create_new_course_on(provider_code, in_recruitment_year: next_recruitment_cycle.year)
 
-        expect { create_new_course_on(provider_code) }.
-          to raise_error(ActiveRecord::RecordNotFound, /Couldn't find Provider/)
-        expect(MCB::CoursesEditor).to_not have_received(:new)
+        expect(MCB::CoursesEditor)
+          .to have_received(:new)
+          .with(hash_including(provider: provider_in_the_next_recruitment_cycle, requester: requester))
       end
     end
   end

@@ -6,7 +6,7 @@ run do |opts, args, _cmd|
   MCB.init_rails(opts)
 
   Course.connection.transaction do
-    provider = RecruitmentCycle.current_recruitment_cycle.providers.find_by!(provider_code: args[:provider_code])
+    provider = MCB.get_recruitment_cycle(opts).providers.find_by!(provider_code: args[:provider_code])
     requester = User.find_by!(email: MCB.config[:email])
 
     MCB::CoursesEditor.new(
