@@ -9,12 +9,12 @@ module MCB
       application_opening_date: :applications_open_from,
     }.freeze
 
-    def initialize(provider:, requester:, course_codes: [])
+    def initialize(provider:, requester:, course_codes: [], courses: nil)
       @cli = CoursesEditorCLI.new(provider)
 
       @provider = provider
       @requester = requester
-      @courses = course_codes.present? ? find_courses(provider, course_codes) : provider.courses
+      @courses = courses || load_courses(provider, course_codes)
 
       check_authorisation
     end
@@ -22,6 +22,7 @@ module MCB
     def run
       finished = false
       until finished
+        course_codes = @courses.order(:course_code).pluck(:course_code)
         puts "Editing #{course_codes.join(', ')}"
         print_at_most_two_courses
         choice = main_loop
@@ -31,6 +32,24 @@ module MCB
         else
           perform_action(choice)
         end
+      end
+    end
+
+    def new_course_wizard
+      %i[title qualifications study_mode accredited_body start_date route maths
+         english science age_range course_code].each do |attribute|
+        edit(attribute)
+      end
+
+      puts "\nAbout to create the following course:"
+      print_at_most_two_courses
+      if @cli.confirm_creation? && try_saving_course
+        edit_subjects
+        edit_sites
+        edit(:application_opening_date)
+        print_summary
+      else
+        puts "Aborting"
       end
     end
 
@@ -100,6 +119,11 @@ module MCB
       course.reload
     end
 
+    def load_courses(provider, course_codes)
+      (course_codes.present? ? find_courses(provider, course_codes) : provider.courses).
+        order(:course_code)
+    end
+
     def course
       if @courses.count != 1
         raise ArgumentError, "Cannot do this operation when there are multiple courses"
@@ -118,16 +142,44 @@ module MCB
     end
 
     def print_existing(attribute_name)
-      puts "Existing values for course #{attribute_name}:"
-      table = Tabulo::Table.new @courses.order(:course_code) do |t|
-        t.add_column(:course_code, header: "course\ncode", width: 4)
-        t.add_column(attribute_name) unless attribute_name == :course_code
+      # don't print the existing attributes when creating a new course, since
+      # this will be null in the majority of cases
+      if @courses.select(&:persisted?).all?
+        puts "Existing values for course #{attribute_name}:"
+        table = Tabulo::Table.new @courses do |t|
+          t.add_column(:course_code, header: "course\ncode", width: 4)
+          t.add_column(attribute_name) unless attribute_name == :course_code
+        end
+        puts table.pack(max_table_width: nil), table.horizontal_rule
       end
-      puts table.pack(max_table_width: nil), table.horizontal_rule
+    end
+
+    def print_summary
+      puts "\nHere's the final course that's been created:"
+      print_at_most_two_courses
+      @cli.enter_to_continue
+    end
+
+    def try_saving_course
+      if course.valid?
+        puts "Saving the course"
+        course.save!
+        true
+      else
+        puts "Course isn't valid:"
+        course.errors.full_messages.each { |error| puts " - #{error}" }
+        false
+      end
     end
 
     def update(attrs)
-      @courses.each { |course| course.update(attrs) }
+      @courses.each do |course|
+        if course.new_record?
+          attrs.each { |key, value| course.send("#{key}=".to_sym, value) }
+        else
+          course.update(attrs)
+        end
+      end
     end
 
     def can_update?(course)
@@ -142,10 +194,6 @@ module MCB
           course.course_code
         )
       end
-    end
-
-    def course_codes
-      @courses.order(:course_code).pluck(:course_code)
     end
 
     def find_courses(provider, course_codes)
