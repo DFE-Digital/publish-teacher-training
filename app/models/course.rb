@@ -321,6 +321,20 @@ class Course < ApplicationRecord
     "#{name} (#{course_code})"
   end
 
+  def update_courses_gcse_requirements(params)
+    if params['english'].present?
+      update(english: params['english'])
+    end
+
+    if params['maths'].present?
+      update(maths: params['maths'])
+    end
+
+    if params['science'].present?
+      update(science: params['science'])
+    end
+  end
+
 private
 
   def add_enrichment_errors(enrichment)

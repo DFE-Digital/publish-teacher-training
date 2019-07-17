@@ -93,19 +93,8 @@ module API
       end
 
       def update_gcse_requirements
-        data = params.dig("_jsonapi", "data")
-
-        if data.dig("attributes", "english").present?
-          @course.update(english: data.dig("attributes", "english"))
-        end
-
-        if data.dig("attributes", "maths").present?
-          @course.update(maths: data.dig("attributes", "maths"))
-        end
-
-        if data.dig("attributes", "science").present?
-          @course.update(science: data.dig("attributes", "science"))
-        end
+        attributes = params.dig("_jsonapi", "data", "attributes")
+        update_courses_gcse_requirements(attributes) if attributes
       end
 
       def build_provider
