@@ -1,7 +1,8 @@
 #Issues to be mindful of when using this function
 # It is coupled to the border styling
 # All whitespace is discarded
-# Rows containing entirely dashes will be interpretted as the beginning of a new row
+# Rows containing entirely dashes and/or plusses will be interpretted as the
+# beginning of a new row
 def parse_text_table(text_table)
   cells = parse_cells(text_table)
 

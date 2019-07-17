@@ -1,6 +1,6 @@
 require 'mcb_helper'
 
-describe 'mcb providers list', :focus do
+describe 'mcb providers list' do
   def show(*arguments)
     stderr = nil
     output = with_stubbed_stdout(stdin: "", stderr: stderr) do
