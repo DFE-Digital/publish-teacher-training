@@ -15,6 +15,8 @@ option :P, 'max-pages', 'maximum number of pages to request',
 
 
 run do |opts, args, _cmd|
+  MCB.init_rails(opts)
+
   opts = MCB.apiv1_opts(opts)
   opts[:all] ||= true
 
