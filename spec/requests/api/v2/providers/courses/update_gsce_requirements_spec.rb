@@ -77,34 +77,61 @@ describe 'PATCH /providers/:provider_code/courses/:course_code' do
     end
   end
 
-  context "course has updated gcse requirements" do
-    let(:gcse_requirements) do
-      {
-        english: 1,
-        maths: 1,
-        science: 1
-      }
+  context "course has no updated gcse requirements" do
+    context "with values passed into the params" do
+      let(:gcse_requirements) do
+        {
+          english: 1,
+          maths: 1,
+          science: 1
+        }
+      end
+
+      before do
+        updated_course.id = course.id
+        perform_request(updated_course)
+      end
+
+      it "returns http success" do
+        expect(response).to have_http_status(:success)
+      end
+
+      it "does not change english attribute" do
+        expect(course.reload.english).to eq(course.english)
+      end
+
+      it "does not change maths attribute" do
+        expect(course.reload.maths).to eq(course.maths)
+      end
+
+      it "does not change the science attribute" do
+        expect(course.reload.science).to eq(course.science)
+      end
     end
 
-    before do
-      updated_course.id = course.id
-      perform_request(updated_course)
-    end
+    context "with no values passed into the params" do
+      let(:gcse_requirements) { {} }
 
-    it "returns http success" do
-      expect(response).to have_http_status(:success)
-    end
+      before do
+        updated_course.id = course.id
+        perform_request(updated_course)
+      end
 
-    it "updates the english attribute to the correct value" do
-      expect(course.reload.english).to eq(course.english)
-    end
+      it "returns http success" do
+        expect(response).to have_http_status(:success)
+      end
 
-    it "updates the maths attribute to the correct value" do
-      expect(course.reload.maths).to eq(course.maths)
-    end
+      it "does not change english attribute" do
+        expect(course.reload.english).to eq(course.english)
+      end
 
-    it "updates the science attribute to the correct value" do
-      expect(course.reload.science).to eq(course.science)
+      it "does not change maths attribute" do
+        expect(course.reload.maths).to eq(course.maths)
+      end
+
+      it "does not change science attribute" do
+        expect(course.reload.science).to eq(course.science)
+      end
     end
   end
 end
