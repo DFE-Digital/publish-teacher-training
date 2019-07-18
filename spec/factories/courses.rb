@@ -11,6 +11,7 @@
 #  qualification             :integer          not null
 #  start_date                :datetime
 #  study_mode                :text
+#  accrediting_provider_id   :integer
 #  provider_id               :integer          default(0), not null
 #  modular                   :text
 #  english                   :integer
@@ -20,7 +21,7 @@
 #  updated_at                :datetime         not null
 #  changed_at                :datetime         not null
 #  accrediting_provider_code :text
-#  accrediting_provider_id   :integer
+#  discarded_at              :datetime
 #
 
 FactoryBot.define do
