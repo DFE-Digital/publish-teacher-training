@@ -117,7 +117,7 @@ The API uses the following error codes:
 During a given recruitment cycle, there will be a period when providers have
 two sets of courses to manage – one set of courses that are currently
 published for the current recruitment cycle, and unpublished courses being
-preparated for the next recruitment cycle. Additionally, the providers who
+prepared for the next recruitment cycle. Additionally, the providers who
 deliver next year's courses may change, and they may have different campuses
 for the same courses. The point in time when the overlap starts is referred
 to as rollover, and typically happens in or around May.
