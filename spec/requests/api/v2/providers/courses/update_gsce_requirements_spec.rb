@@ -28,7 +28,7 @@ describe 'PATCH /providers/:provider_code/courses/:course_code' do
   let(:course)            { create :course, provider: provider, site_statuses: [site_status], subjects: [primary_subject] }
   let(:site_status)       { build(:site_status, :findable, site: site) }
   let(:site)              { build(:site) }
-  let(:primary_subject)   { build(:subject, subject_name: 'primary') }
+  let(:primary_subject)   { build(:subject, :primary) }
   let(:updated_course)    {
     build :course,
           course_code: course.course_code,
@@ -49,9 +49,9 @@ describe 'PATCH /providers/:provider_code/courses/:course_code' do
   context "course has updated gcse requirements" do
     let(:gcse_requirements) do
       {
-        english: 2,
-        maths: 2,
-        science: 2
+        english: 'expect_to_achieve_before_training_begins',
+        maths: 'expect_to_achieve_before_training_begins',
+        science: 'expect_to_achieve_before_training_begins'
       }
     end
 
@@ -81,9 +81,9 @@ describe 'PATCH /providers/:provider_code/courses/:course_code' do
     context "with values passed into the params" do
       let(:gcse_requirements) do
         {
-          english: 1,
-          maths: 1,
-          science: 1
+          english: 'must_have_qualification_at_application_time',
+          maths: 'must_have_qualification_at_application_time',
+          science: 'must_have_qualification_at_application_time'
         }
       end
 

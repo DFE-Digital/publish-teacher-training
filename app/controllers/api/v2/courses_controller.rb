@@ -63,7 +63,6 @@ module API
         update_course
         has_synced? if site_ids.present?
 
-
         if @course.errors.empty? && @course.valid?
           render jsonapi: @course.reload
         else
@@ -83,10 +82,10 @@ module API
 
       def update_course
         return unless course_params.values.any?
+
         @course.assign_attributes(course_params)
         @course.save
       end
-
 
       def update_sites
         return if site_ids.nil?
@@ -141,21 +140,21 @@ module API
         params
           .fetch(:course, {})
           .except(:about_course,
-            :course_length,
-            :fee_details,
-            :fee_international,
-            :fee_uk_eu,
-            :financial_support,
-            :how_school_placements_work,
-            :interview_process,
-            :other_requirements,
-            :personal_qualities,
-            :salary_details,
-            :qualifications,
-            :id,
-            :type,
-            :sites_ids,
-            :sites_types)
+                  :course_length,
+                  :fee_details,
+                  :fee_international,
+                  :fee_uk_eu,
+                  :financial_support,
+                  :how_school_placements_work,
+                  :interview_process,
+                  :other_requirements,
+                  :personal_qualities,
+                  :salary_details,
+                  :qualifications,
+                  :id,
+                  :type,
+                  :sites_ids,
+                  :sites_types)
           .permit(
             :english,
             :maths,
