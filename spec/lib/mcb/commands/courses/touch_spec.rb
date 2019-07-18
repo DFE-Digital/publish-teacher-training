@@ -2,7 +2,7 @@ require 'mcb_helper'
 
 describe 'mcb courses touch' do
   let(:touch) { MCBCommand.new('courses', 'touch') }
-  let(:recruitment_year1) { create :recruitment_cycle, year: '2018' }
+  let(:recruitment_year1) { create :recruitment_cycle, :next }
   let(:recruitment_year2) { RecruitmentCycle.current_recruitment_cycle }
 
   let(:provider) { create :provider, updated_at: 1.day.ago, changed_at: 1.day.ago, recruitment_cycle: recruitment_year1 }

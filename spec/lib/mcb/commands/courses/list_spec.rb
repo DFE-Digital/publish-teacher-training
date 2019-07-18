@@ -4,7 +4,7 @@ describe 'mcb providers list' do
   let(:list) { MCBCommand.new('courses', 'list') }
 
   let(:current_cycle) { RecruitmentCycle.current_recruitment_cycle }
-  let(:additional_cycle) { find_or_create(:recruitment_cycle, year: '2020') }
+  let(:additional_cycle) { find_or_create(:recruitment_cycle, :next) }
 
   context 'when recruitment cycle is unspecified' do
     let(:provider1) { create(:provider, recruitment_cycle: current_cycle) }
