@@ -60,7 +60,8 @@ module API
       def update
         update_enrichment
         update_sites
-        has_synced? if site_ids.present?
+        should_sync = site_ids.present? && @course.recruitment_cycle.current?
+        has_synced? if should_sync
 
         if @course.errors.empty? && @course.valid?
           render jsonapi: @course.reload
