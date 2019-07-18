@@ -283,7 +283,7 @@ describe 'Providers API', type: :request do
       describe 'JSON body response' do
         let(:provider) { create(:provider) }
         let(:provider2) { create(:provider, recruitment_cycle: next_cycle) }
-        let(:next_cycle) { build(:recruitment_cycle, year: '2020') }
+        let(:next_cycle) { find_or_create(:recruitment_cycle, year: '2020') }
 
         before do
           provider

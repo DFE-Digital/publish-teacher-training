@@ -2,7 +2,7 @@ require 'mcb_helper'
 
 describe '"mcb providers touch"' do
   let(:recruitment_year1) { create :recruitment_cycle, year: '2018' }
-  let(:recruitment_year2) { RecruitmentCycle.current_recruitment_cycle }
+  let(:recruitment_year2) { find_or_create :recruitment_cycle, year: '2019' }
 
   let(:provider) { create :provider, updated_at: 1.day.ago, changed_at: 1.day.ago, recruitment_cycle: recruitment_year1 }
   let(:rolled_over_provider) do
@@ -23,8 +23,8 @@ describe '"mcb providers touch"' do
 
         # Use to_i compare seconds since epoch and side-step sub-second
         # differences that show up even with Timecop on certain platforms.
-        expect(rolled_over_provider.reload.updated_at.to_i).to eq Time.now.to_i
-        expect(provider.reload.updated_at.to_i).not_to eq Time.now.to_i
+        expect(provider.reload.updated_at.to_i).to eq Time.now.to_i
+        expect(rolled_over_provider.reload.updated_at.to_i).not_to eq Time.now.to_i
       end
     end
 
@@ -36,8 +36,8 @@ describe '"mcb providers touch"' do
           $mcb.run(%W[provider touch #{rolled_over_provider.provider_code}])
         end
 
-        expect(rolled_over_provider.reload.changed_at.to_i).to eq Time.now.to_i
-        expect(provider.reload.changed_at.to_i).not_to eq Time.now.to_i
+        expect(provider.reload.changed_at.to_i).to eq Time.now.to_i
+        expect(rolled_over_provider.reload.changed_at.to_i).not_to eq Time.now.to_i
       end
     end
 
@@ -48,7 +48,7 @@ describe '"mcb providers touch"' do
         with_stubbed_stdout do
           $mcb.run(%W[provider touch #{rolled_over_provider.provider_code}])
         end
-      }.to change { rolled_over_provider.reload.audits.count }
+      }.to change { provider.reload.audits.count }
              .from(1).to(2)
     end
   end

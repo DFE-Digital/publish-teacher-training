@@ -46,6 +46,12 @@ describe Provider, type: :model do
     it { should have_many(:contacts) }
   end
 
+  describe 'organisation' do
+    it 'returns the only organisation a provider has' do
+      expect(subject.organisation).to eq subject.organisations.first
+    end
+  end
+
   describe 'changed_at' do
     it 'is set on create' do
       provider = Provider.create(
@@ -254,6 +260,112 @@ describe Provider, type: :model do
       it 'includes course counts' do
         expect(first_provider.courses_count).to eq(1)
       end
+    end
+  end
+
+  describe '#copy_to_recruitment_cycle' do
+    let(:site)   { build :site }
+    let(:course) { build :course }
+    let(:ucas_preferences) { build(:ucas_preferences, type_of_gt12: :coming_or_not) }
+    let(:contacts) {
+      [
+        build(:contact, :admin_type),
+        build(:contact, :utt_type),
+        build(:contact, :web_link_type),
+        build(:contact, :finance_type),
+        build(:contact, :fraud_type)
+      ]
+    }
+    let(:provider) {
+      create :provider,
+             courses: [course],
+             sites: [site],
+             ucas_preferences: ucas_preferences,
+             contacts: contacts
+    }
+    let(:recruitment_cycle) { find_or_create :recruitment_cycle }
+    let(:new_recruitment_cycle) { create :recruitment_cycle, :next }
+    let(:new_provider) do
+      new_recruitment_cycle.reload.providers.find_by(
+        provider_code: provider.provider_code
+      )
+    end
+
+    it 'makes a copy of the provider in the new recruitment cycle' do
+      expect(
+        new_recruitment_cycle.providers.find_by(
+          provider_code: provider.provider_code
+        )
+      ).to be_nil
+
+      provider.copy_to_recruitment_cycle(new_recruitment_cycle)
+
+      expect(new_provider).not_to be_nil
+      expect(new_provider).not_to eq provider
+    end
+
+    it 'leaves the existing provider alone' do
+      provider.copy_to_recruitment_cycle(new_recruitment_cycle)
+
+      expect(recruitment_cycle.reload.providers).to eq [provider]
+    end
+
+    context 'the provider already exists in the new recruitment cycle' do
+      let(:new_provider) {
+        build :provider, provider_code: provider.provider_code
+      }
+      let(:new_recruitment_cycle) {
+        create :recruitment_cycle, :next,
+               providers: [new_provider]
+      }
+
+      it 'does not make a copy of the provider' do
+        expect { provider.copy_to_recruitment_cycle(new_recruitment_cycle) }
+          .not_to(change { new_recruitment_cycle.reload.providers.count })
+      end
+    end
+
+    it 'assigns the new provider to organisation' do
+      provider.copy_to_recruitment_cycle(new_recruitment_cycle)
+
+      expect(new_provider.organisation).to eq provider.organisation
+    end
+
+    it 'copies over the ucas_preferences' do
+      provider.copy_to_recruitment_cycle(new_recruitment_cycle)
+
+      compare_attrs = %w[
+        type_of_gt12
+        send_application_alerts
+        application_alert_email
+        gt12_response_destination
+      ]
+      expect(new_provider.ucas_preferences.attributes.slice(compare_attrs))
+        .to eq provider.ucas_preferences.attributes.slice(compare_attrs)
+    end
+
+    it 'copies over the contacts' do
+      provider.copy_to_recruitment_cycle(new_recruitment_cycle)
+
+      compare_attrs = %w[name email telephone]
+      expect(new_provider.contacts.map { |c| c.attributes.slice(compare_attrs) })
+        .to eq(provider.contacts.map { |c| c.attributes.slice(compare_attrs) })
+    end
+
+    it 'copies over the sites' do
+      allow(site).to receive(:copy_to_provider)
+
+      provider.copy_to_recruitment_cycle(new_recruitment_cycle)
+
+      expect(site).to have_received(:copy_to_provider).with(new_provider)
+    end
+
+    it 'copies over the courses' do
+      allow(course).to receive(:copy_to_provider)
+
+      provider.copy_to_recruitment_cycle(new_recruitment_cycle)
+
+      expect(course).to have_received(:copy_to_provider).with(new_provider)
     end
   end
 end

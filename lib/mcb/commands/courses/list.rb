@@ -11,6 +11,8 @@ run do |opts, args, _cmd|
 
   tp.set :capitalize_headers, false
 
+  puts "Your terminal is --> TTY::Screen.cols <-- wide"
+
   output = [
     '',
     'Course:',

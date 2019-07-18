@@ -11,7 +11,7 @@ describe 'mcb providers sync_to_find' do
   end
 
   let(:email) { 'user@education.gov.uk' }
-  let(:recruitment_year1) { create :recruitment_cycle, year: '2018' }
+  let(:recruitment_year1) { find_or_create(:recruitment_cycle, year: '2020') }
   let(:recruitment_year2) { RecruitmentCycle.current_recruitment_cycle }
 
   let(:provider) { create :provider, recruitment_cycle: recruitment_year1 }

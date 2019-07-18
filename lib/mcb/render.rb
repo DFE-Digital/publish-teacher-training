@@ -160,21 +160,40 @@ module MCB
 
     def providers_table(providers,
                         name: 'Providers',
-                        add_columns: [])
+                        add_columns: [],
+                        **opts)
       return if providers.nil?
+
+      columns =
+        providers_table_columns(extended: opts[:'extended-listing']) + add_columns
 
       [
         "#{name}:",
-        render_table_or_none(providers, providers_table_columns + add_columns)
+        render_table_or_none(providers, columns)
       ]
     end
 
-    def providers_table_columns
-      [
-        :id,
-        [:provider_name, header: 'name'],
-        [:provider_code, header: 'code']
-      ]
+    def providers_table_columns(extended: false)
+      if extended
+        [
+          :id,
+          [:provider_name, header: 'name'],
+          [:provider_code, header: 'code'],
+          [:organisation_id, ->(p) { p.organisation_ids.first }],
+          [:organisation, ->(p) { p.organisations.first&.name }],
+          [:provider_type, header: 'type'],
+          [:courses, ->(p) { p.courses.count }],
+          :postcode,
+        ]
+      else
+        [
+          :id,
+          [:provider_name, header: 'name'],
+          [:provider_code, header: 'code'],
+          [:organisation_id, ->(p) { p.organisation_ids.first }],
+          [:provider_type, header: 'type'],
+        ]
+      end
     end
 
     def sites_table(sites, name: 'Sites')
