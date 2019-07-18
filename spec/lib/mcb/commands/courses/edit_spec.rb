@@ -1,18 +1,14 @@
 require 'mcb_helper'
 
 describe 'mcb courses edit' do
-  def edit(provider_code, course_codes, *input_cmds)
+  def edit(arguments: [], input: [])
     stderr = nil
-    output = with_stubbed_stdout(stdin: input_cmds.join("\n"), stderr: stderr) do
-      cmd.run([provider_code] + course_codes)
+    output = with_stubbed_stdout(stdin: input.join("\n"), stderr: stderr) do
+      $mcb.run(%W[courses edit] + arguments)
     end
-    [output, stderr]
+    { stdout: output, stderr: stderr }
   end
 
-  let(:lib_dir) { Rails.root.join('lib') }
-  let(:cmd) do
-    Cri::Command.load_file("#{lib_dir}/mcb/commands/courses/edit.rb")
-  end
   let(:provider_code) { 'X12' }
   let(:course_code) { '3FC4' }
   let(:email) { 'user@education.gov.uk' }
@@ -33,14 +29,14 @@ describe 'mcb courses edit' do
 
     describe 'edits the course name for a single course' do
       it 'updates the course' do
-        expect { edit(provider_code, [course_code], "edit title", "Mathematics", "exit") }.to change { course.reload.name }.
+        expect { edit(arguments: [provider_code, course_code], input: ['edit title', 'Mathematics', 'exit']) }.to change { course.reload.name }.
           from("Original name").to("Mathematics")
       end
     end
 
     describe 'trying to edit a course on a nonexistent provider' do
       it 'raises an error' do
-        expect { edit("ABC", [course_code]) }.to raise_error(ActiveRecord::RecordNotFound, /Couldn't find Provider/)
+        expect { edit(arguments: ['ABC', course_code]) }.to raise_error(ActiveRecord::RecordNotFound, /Couldn't find Provider/)
       end
     end
 
@@ -53,7 +49,7 @@ describe 'mcb courses edit' do
       }
 
       it 'edits all the courses on the provider' do
-        expect { edit(provider_code, [], "edit title", "Mathematics", "exit") }.
+        expect { edit(arguments: [provider_code], input: ['edit title', 'Mathematics', 'exit']) }.
           to change { provider.reload.courses.order(:name).pluck(:name) }.
           from(["Another name", "Original name"]).to(%w[Mathematics Mathematics])
       end
@@ -74,22 +70,34 @@ describe 'mcb courses edit' do
                name: 'Original name')
       }
 
-      it 'picks the correct provider and course' do
-        expect { edit(provider_code, [course_code], "edit title", "Mathematics", "exit") }.
-          to change { course.reload.name }.
-          from("Original name").to("Mathematics")
+      context 'when recruitment cycle is unspecified' do
+        it 'picks the provider and course from the current recruitment year' do
+          expect { edit(arguments: [provider_code, course_code], input: ['edit title', 'Mathematics', 'exit']) }.
+            to change { course.reload.name }.
+            from("Original name").to("Mathematics")
 
-        expect(course_in_the_next_recruitment_cycle.reload.name).to eq("Original name")
+          expect(course_in_the_next_recruitment_cycle.reload.name).to eq("Original name")
+        end
+
+        it 'ignores providers associated with the next cycle' do
+          provider.destroy
+          course.destroy
+
+          expect { edit(arguments: [provider_code, course_code], input: ['edit title', 'Mathematics', 'exit']) }.
+            to raise_error(ActiveRecord::RecordNotFound, /Couldn't find Provider/)
+
+          expect(course_in_the_next_recruitment_cycle.reload.name).to eq("Original name")
+        end
       end
 
-      it 'ignores providers associated with the next cycle' do
-        provider.destroy
-        course.destroy
+      context 'when recruitment cycle is specified' do
+        it 'picks the provider and course for the specified recruitment year' do
+          expect { edit(arguments: [provider_code, course_code, '-r', next_recruitment_cycle.year], input: ['edit title', 'Chemistry', 'exit']) }.
+            to change { course_in_the_next_recruitment_cycle.reload.name }.
+            from('Original name').to('Chemistry')
 
-        expect { edit(provider_code, [course_code], "edit title", "Mathematics", "exit") }.
-          to raise_error(ActiveRecord::RecordNotFound, /Couldn't find Provider/)
-
-        expect(course_in_the_next_recruitment_cycle.reload.name).to eq("Original name")
+          expect(course.reload.name).to eq('Original name')
+        end
       end
     end
   end
@@ -98,7 +106,7 @@ describe 'mcb courses edit' do
     let!(:requester) { create(:user, email: 'someother@email.com') }
 
     it 'raises an error' do
-      expect { edit(provider_code, [course_code]) }.to raise_error(ActiveRecord::RecordNotFound, /Couldn't find User/)
+      expect { edit(arguments: [provider_code, course_code]) }.to raise_error(ActiveRecord::RecordNotFound, /Couldn't find User/)
     end
   end
 end

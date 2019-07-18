@@ -10,7 +10,7 @@ run do |opts, args, _cmd|
 
   MCB::CoursesEditor.new(
     requester: User.find_by!(email: MCB.config[:email]),
-    provider: RecruitmentCycle.current_recruitment_cycle.providers.find_by!(provider_code: provider_code),
+    provider: MCB.get_recruitment_cycle(opts).providers.find_by!(provider_code: provider_code),
     course_codes: course_codes
   ).run
 end
