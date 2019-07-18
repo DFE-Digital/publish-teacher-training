@@ -60,7 +60,7 @@ module API
       def update
         update_enrichment
         update_sites
-        update_gcse_requirements
+        update_course
         has_synced? if site_ids.present?
 
 
@@ -81,6 +81,13 @@ module API
         enrichment.save
       end
 
+      def update_course
+        return unless course_params.values.any?
+        @course.assign_attributes(course_params)
+        @course.save
+      end
+
+
       def update_sites
         return if site_ids.nil?
 
@@ -90,11 +97,6 @@ module API
         # but we can't actually revert easily from what I can tell because of the
         # remove_site! side effects that occur when it's called.
         @course.errors[:sites] << "^You must choose at least one location" if site_ids.empty?
-      end
-
-      def update_gcse_requirements
-        attributes = params.dig("_jsonapi", "data", "attributes")
-        @course.update_courses_gcse_requirements(attributes) if attributes
       end
 
       def build_provider
@@ -118,7 +120,7 @@ module API
       def enrichment_params
         params
           .fetch(:course, {})
-          .except(:id, :type, :sites_ids, :sites_types)
+          .except(:id, :type, :sites_ids, :sites_types, :english, :maths, :science)
           .permit(
             :about_course,
             :course_length,
@@ -132,6 +134,32 @@ module API
             :personal_qualities,
             :salary_details,
             :qualifications
+          )
+      end
+
+      def course_params
+        params
+          .fetch(:course, {})
+          .except(:about_course,
+            :course_length,
+            :fee_details,
+            :fee_international,
+            :fee_uk_eu,
+            :financial_support,
+            :how_school_placements_work,
+            :interview_process,
+            :other_requirements,
+            :personal_qualities,
+            :salary_details,
+            :qualifications,
+            :id,
+            :type,
+            :sites_ids,
+            :sites_types)
+          .permit(
+            :english,
+            :maths,
+            :science
           )
       end
 
