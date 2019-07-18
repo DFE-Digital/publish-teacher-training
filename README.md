@@ -47,7 +47,7 @@ docker-compose exec web /bin/sh -c "bundle exec rails db:setup"
 
 Then open http://localhost:3001 to see the app.
 
-## Running specs, linter(without auto correct) and annotate models and serializers
+## Running specs, linter (with auto correct) and annotate models and serializers
 ```
 bundle exec rake
 ```
@@ -191,3 +191,20 @@ be organised in an appropriate sub-folder there.
   device you need BYOD & 2FA set up.
 * A publish user with your email address with access to the organisation(s) you
   want to modify.
+
+### Mandatory requirements
+
+To successfully log into the system, you will need to:
+1. Create an account on DfE Sign-in
+   1. Get a DfE Sign-in admin to invite you (give them this link: 
+      https://signin-test-sup-as.azurewebsites.net/users)
+   2. Sign up from the email sent from DfE Sign-in
+2. Grant access to some providers: 
+   1. For local: `bundle exec bin/mcb users grant {email} {provider_code}`
+   2. For `qa` and `production`:
+      1. You will need to log into Azure first: `az login`
+      2. `bundle exec bin/mcb -E {env} users grant {email} {provider_code}`
+
+Users not matching
+`%@digital.education.gov.uk` and `%@education.gov.uk`
+will be anonymized for non production environment.
