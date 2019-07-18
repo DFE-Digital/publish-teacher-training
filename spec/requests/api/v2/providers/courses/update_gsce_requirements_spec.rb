@@ -46,6 +46,11 @@ describe 'PATCH /providers/:provider_code/courses/:course_code' do
             **gcse_requirements
   }
 
+  before do
+    updated_course.id = course.id
+    perform_request(updated_course)
+  end
+
   let(:credentials) do
     ActionController::HttpAuthentication::Token.encode_credentials(token)
   end
@@ -61,11 +66,6 @@ describe 'PATCH /providers/:provider_code/courses/:course_code' do
         maths: 'expect_to_achieve_before_training_begins',
         science: 'expect_to_achieve_before_training_begins'
       }
-    end
-
-    before do
-      updated_course.id = course.id
-      perform_request(updated_course)
     end
 
     it "returns http success" do
@@ -93,11 +93,6 @@ describe 'PATCH /providers/:provider_code/courses/:course_code' do
           maths: 'must_have_qualification_at_application_time',
           science: 'must_have_qualification_at_application_time'
         }
-      end
-
-      before do
-        updated_course.id = course.id
-        perform_request(updated_course)
       end
 
       it "returns http success" do
@@ -143,6 +138,14 @@ describe 'PATCH /providers/:provider_code/courses/:course_code' do
       it "does not change science attribute" do
         expect(course.reload.science).to eq(@science)
       end
+    end
+  end
+
+  describe 'error messaging' do
+    let(:gcse_requirements) { { english: nil, maths: nil, science: nil } }
+
+    it "returns http success" do
+      expect(response).to have_http_status(:unprocessable_entity)
     end
   end
 end

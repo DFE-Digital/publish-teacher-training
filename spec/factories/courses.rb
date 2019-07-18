@@ -34,6 +34,9 @@ FactoryBot.define do
 
     study_mode { :full_time }
     resulting_in_pgce_with_qts
+    maths { :must_have_qualification_at_application_time }
+    english { :must_have_qualification_at_application_time }
+    science { :must_have_qualification_at_application_time }
 
     transient do
       age { nil }

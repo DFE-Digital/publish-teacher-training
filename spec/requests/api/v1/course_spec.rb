@@ -87,7 +87,7 @@ describe "Courses API", type: :request do
                                 "modular" => "",
                                 "english" => 3,
                                 "maths" => 9,
-                                "science" => nil,
+                                "science" => 1,
                                 "recruitment_cycle" => "2019",
                                 "campus_statuses" => [
                                   {

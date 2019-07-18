@@ -58,9 +58,9 @@ module API
       end
 
       def update
+        update_course
         update_enrichment
         update_sites
-        update_course
         has_synced? if site_ids.present?
 
         if @course.errors.empty? && @course.valid?
@@ -81,8 +81,6 @@ module API
       end
 
       def update_course
-        return unless course_params.values.any?
-
         @course.assign_attributes(course_params)
         @course.save
       end
