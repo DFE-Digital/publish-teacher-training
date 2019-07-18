@@ -220,7 +220,11 @@ class Course < ApplicationRecord
     newest_enrichment = enrichments.latest_first.first
 
     if newest_enrichment.nil?
-      :empty
+      if next_recruitment_cycle?
+        :rolled_over
+      else
+        :empty
+      end
     elsif newest_enrichment.published?
       :published
     elsif newest_enrichment.has_been_published_before?
@@ -348,6 +352,10 @@ class Course < ApplicationRecord
         new_site&.copy_to_course(new_course)
       end
     end
+  end
+
+  def next_recruitment_cycle?
+    recruitment_cycle.year > RecruitmentCycle.current_recruitment_cycle.year
   end
 
 private

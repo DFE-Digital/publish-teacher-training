@@ -38,6 +38,11 @@ class CourseEnrichment < ApplicationRecord
   belongs_to :course
 
   scope :latest_first, -> { order(created_at: :desc, id: :desc) }
+  scope :draft, -> { where(status: 'draft').or(CourseEnrichment.rolled_over) }
+
+  def draft?
+    status.in? %w[draft rolled_over]
+  end
 
   validates :course, presence: true
 

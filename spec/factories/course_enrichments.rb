@@ -85,6 +85,10 @@ FactoryBot.define do
         "Using the unqualified teachers scale"
       ].sample
     end
+
+    trait :rolled_over do
+      status { :rolled_over }
+    end
   end
 
   trait :initial_draft do

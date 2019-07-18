@@ -2,6 +2,11 @@ require "rails_helper"
 
 describe 'PATCH /providers/:provider_code/courses/:course_code' do
   let(:jsonapi_renderer) { JSONAPI::Serializable::Renderer.new }
+  let(:request_path) do
+    "/api/v2/recruitment_cycles/#{recruitment_cycle.year}" +
+      "/providers/#{course.provider.provider_code}" +
+      "/courses/#{course.course_code}"
+  end
 
   def perform_request(course)
     jsonapi_data = jsonapi_renderer.render(
@@ -13,16 +18,20 @@ describe 'PATCH /providers/:provider_code/courses/:course_code' do
 
     jsonapi_data.dig(:data, :attributes).slice!(*permitted_params)
 
-    patch "/api/v2/providers/#{course.provider.provider_code}" \
-            "/courses/#{course.course_code}",
+    patch request_path,
           headers: { 'HTTP_AUTHORIZATION' => credentials },
           params: {
             _jsonapi: jsonapi_data
           }
   end
 
+  let(:recruitment_cycle) { find_or_create :recruitment_cycle }
   let(:organisation) { create :organisation }
-  let(:provider)     { create :provider, organisations: [organisation] }
+  let(:provider)     do
+    create :provider,
+           organisations: [organisation],
+           recruitment_cycle: recruitment_cycle
+  end
   let(:user)         { create :user, organisations: [organisation] }
   let(:payload)      { { email: user.email } }
   let(:token)        { build_jwt :apiv2, payload: payload }
@@ -141,6 +150,109 @@ describe 'PATCH /providers/:provider_code/courses/:course_code' do
       expect {
         perform_request update_course
       }.to(change { course.reload.content_status }.from(:empty).to(:draft))
+    end
+
+    context "with no attributes to update" do
+      let(:updated_attributes) do
+        {
+          about_course: nil,
+          course_length: nil,
+          fee_details: nil,
+          fee_international: nil,
+          fee_uk_eu: nil,
+          financial_support: nil,
+          how_school_placements_work: nil,
+          interview_process: nil,
+          other_requirements: nil,
+          personal_qualities: nil,
+          qualifications: nil,
+          salary_details: nil
+        }
+      end
+
+      it "doesn't create a draft enrichment" do
+        expect {
+          perform_request update_course
+        }.to_not(change { course.reload.enrichments.count })
+      end
+    end
+
+    context "with empty attributes" do
+      let(:permitted_params) { [] }
+
+      it "doesn't create a draft enrichment" do
+        expect {
+          perform_request update_course
+        }.to_not(change { course.reload.enrichments.count })
+      end
+
+      it "doesn't change content status" do
+        expect {
+          perform_request update_course
+        }.to_not(change { course.reload.content_status })
+      end
+    end
+
+    it 'returns ok' do
+      perform_request update_course
+
+      expect(response).to be_ok
+    end
+
+    it 'returns the updated course' do
+      perform_request update_course
+      json_response = JSON.parse(response.body)['data']
+
+      expect(json_response).to have_id(course.id.to_s)
+      expect(json_response).to have_type('courses')
+      expect(json_response).to have_attribute(:about_course)
+        .with_value('new about course')
+      expect(json_response).to have_attribute(:course_length)
+        .with_value('new course length')
+      expect(json_response).to have_attribute(:fee_details)
+        .with_value('new fee details')
+      expect(json_response).to have_attribute(:fee_international)
+        .with_value(0)
+      expect(json_response).to have_attribute(:fee_uk_eu)
+        .with_value(0)
+      expect(json_response).to have_attribute(:financial_support)
+        .with_value('new financial support')
+      expect(json_response).to have_attribute(:how_school_placements_work)
+        .with_value('new how school placements work')
+      expect(json_response).to have_attribute(:interview_process)
+        .with_value('new interview process')
+      expect(json_response).to have_attribute(:other_requirements)
+        .with_value('new other requirements')
+      expect(json_response).to have_attribute(:personal_qualities)
+        .with_value('new personal qualities')
+      expect(json_response).to have_attribute(:required_qualifications)
+        .with_value('new required qualifications')
+      expect(json_response).to have_attribute(:salary_details)
+        .with_value('new salary details')
+      expect(json_response).to have_attribute(:content_status)
+        .with_value('draft')
+    end
+  end
+
+  context 'course has no enrichments and is in the next recruitment cycle' do
+    let(:recruitment_cycle) { create :recruitment_cycle, :next }
+
+    it "creates a draft enrichment for the course" do
+      expect {
+        perform_request update_course
+      }.to(change {
+             course.reload.enrichments.count
+           }.from(0).to(1))
+
+      draft_enrichment = course.enrichments.draft.first
+      expect(draft_enrichment.attributes.slice(*updated_attributes.keys.map(&:to_s)))
+        .to include(updated_attributes.stringify_keys)
+    end
+
+    it "change content status" do
+      expect {
+        perform_request update_course
+      }.to(change { course.reload.content_status }.from(:rolled_over).to(:draft))
     end
 
     context "with no attributes to update" do
@@ -355,6 +467,104 @@ describe 'PATCH /providers/:provider_code/courses/:course_code' do
 
         expect("Invalid enrichments".in?(subject)).to eq(false)
         expect("Invalid about_course".in?(subject)).to eq(true)
+      end
+    end
+  end
+
+  context 'course has a rolled-over enrichment' do
+    let(:enrichment) { build :course_enrichment, :rolled_over }
+    let(:course) do
+      create :course, provider: provider, enrichments: [enrichment]
+    end
+
+    it "updates the course's draft enrichment" do
+      expect {
+        perform_request update_course
+      }.not_to(
+        change { course.enrichments.reload.count }
+      )
+
+      draft_enrichment = course.enrichments.draft.first
+      expect(draft_enrichment.attributes.slice(*updated_attributes.keys.map(&:to_s)))
+        .to include(updated_attributes.stringify_keys)
+    end
+
+    it "changes the content status to draft" do
+      expect {
+        perform_request update_course
+      }.to(
+        change { course.reload.content_status }
+          .from(:rolled_over).to(:draft)
+      )
+    end
+
+    context "with invalid data" do
+      let(:updated_attributes) do
+        {
+          about_course: Faker::Lorem.sentence(1000),
+          fee_details: Faker::Lorem.sentence(1000),
+          fee_international: 200_000,
+          fee_uk_eu: 200_000,
+          financial_support: Faker::Lorem.sentence(1000),
+          how_school_placements_work: Faker::Lorem.sentence(1000),
+          interview_process: Faker::Lorem.sentence(1000),
+          other_requirements: Faker::Lorem.sentence(1000),
+          personal_qualities: Faker::Lorem.sentence(1000),
+          qualifications: Faker::Lorem.sentence(1000),
+          salary_details: Faker::Lorem.sentence(1000)
+        }
+      end
+
+      subject { JSON.parse(response.body)["errors"].map { |e| e["title"] } }
+
+      it "returns validation errors" do
+        perform_request update_course
+
+        expect("Invalid about_course".in?(subject)).to eq(true)
+        expect("Invalid interview_process".in?(subject)).to eq(true)
+        expect("Invalid how_school_placements_work".in?(subject)).to eq(true)
+        expect("Invalid qualifications".in?(subject)).to eq(true)
+        expect("Invalid fee_details".in?(subject)).to eq(true)
+        expect("Invalid financial_support".in?(subject)).to eq(true)
+      end
+
+      it "doesn't change content status" do
+        expect {
+          perform_request update_course
+        }.to_not(change { course.reload.content_status })
+      end
+    end
+
+    context "with nil data" do
+      let(:updated_attributes) do
+        {
+          about_course: "",
+          fee_details: "",
+          fee_international: 0,
+          fee_uk_eu: 0,
+          financial_support: "",
+          how_school_placements_work: "",
+          interview_process: "",
+          other_requirements: "",
+          personal_qualities: "",
+          qualifications: "",
+          salary_details: ""
+        }
+      end
+
+      it "returns ok" do
+        perform_request update_course
+
+        expect(response).to be_ok
+      end
+
+      it "changes the content status to draft" do
+        expect {
+          perform_request update_course
+        }.to(
+          change { course.reload.content_status }
+            .from(:rolled_over).to(:draft)
+        )
       end
     end
   end
