@@ -11,7 +11,7 @@ module API
 
       type 'providers'
 
-      attributes :provider_code, :provider_name, :accredited_body?, :can_add_more_sites?
+      attributes :provider_code, :provider_name, :accredited_body?, :can_add_more_sites?, :content_status
 
 
       attribute :address1 do
@@ -52,6 +52,10 @@ module API
 
       attribute :recruitment_cycle_year do
         @object.recruitment_cycle.year
+      end
+
+      attribute :last_published_at do
+        @object.last_published_at&.iso8601
       end
 
       enrichment_attribute :train_with_us
