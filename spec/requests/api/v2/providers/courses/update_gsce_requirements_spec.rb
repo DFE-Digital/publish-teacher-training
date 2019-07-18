@@ -25,11 +25,19 @@ describe 'PATCH /providers/:provider_code/courses/:course_code' do
   let(:user)              { create :user, organisations: [organisation] }
   let(:payload)           { { email: user.email } }
   let(:token)             { build_jwt :apiv2, payload: payload }
-  let(:course)            { create :course, provider: provider, site_statuses: [site_status], subjects: [primary_subject] }
   let(:site_status)       { build(:site_status, :findable, site: site) }
   let(:site)              { build(:site) }
   let(:primary_subject)   { build(:subject, :primary) }
-  let(:updated_course)    {
+  let(:course)            {
+    create :course,
+           provider: provider,
+             site_statuses: [site_status],
+             subjects: [primary_subject],
+             english: 1,
+             maths: 1,
+             science: 1
+  }
+  let(:updated_course) {
     build :course,
           course_code: course.course_code,
             provider: provider,
@@ -115,6 +123,9 @@ describe 'PATCH /providers/:provider_code/courses/:course_code' do
       before do
         updated_course.id = course.id
         perform_request(updated_course)
+        @english = course.english
+        @maths = course.maths
+        @science = course.science
       end
 
       it "returns http success" do
@@ -122,15 +133,15 @@ describe 'PATCH /providers/:provider_code/courses/:course_code' do
       end
 
       it "does not change english attribute" do
-        expect(course.reload.english).to eq(course.english)
+        expect(course.reload.english).to eq(@english)
       end
 
       it "does not change maths attribute" do
-        expect(course.reload.maths).to eq(course.maths)
+        expect(course.reload.maths).to eq(@maths)
       end
 
       it "does not change science attribute" do
-        expect(course.reload.science).to eq(course.science)
+        expect(course.reload.science).to eq(@science)
       end
     end
   end
