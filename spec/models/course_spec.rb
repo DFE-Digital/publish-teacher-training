@@ -398,6 +398,44 @@ RSpec.describe Course, type: :model do
     end
   end
 
+  describe 'content_status' do
+    let(:course) { create :course, enrichments: [enrichment] }
+
+    context 'when enrichment is published' do
+      let(:enrichment) { create :course_enrichment, status: :published }
+
+      subject { course.content_status }
+
+      it { should eq :published }
+    end
+
+    context 'when enrichment is rolled-over' do
+      let(:enrichment) { create :course_enrichment, status: :rolled_over }
+
+      subject { course.content_status }
+
+      it { should eq :rolled_over }
+    end
+
+    context 'when there are no enrichments' do
+      let(:course) { create :course, enrichments: [] }
+
+      subject { course.content_status }
+
+      it { should eq :empty }
+    end
+
+    context 'when there are no enrichments and the course is rolled-over' do
+      let(:next_recruitment_cycle) { create :recruitment_cycle, :next }
+      let(:next_provider) { create :provider, recruitment_cycle: next_recruitment_cycle }
+      let(:course) { create :course, provider: next_provider, enrichments: [] }
+
+      subject { course.content_status }
+
+      it { should eq :rolled_over }
+    end
+  end
+
   describe 'qualifications' do
     context "course with qts qualication" do
       let(:subject) { create(:course, :resulting_in_qts) }
@@ -792,7 +830,7 @@ RSpec.describe Course, type: :model do
       expect(new_course.accrediting_provider_code)
         .to eq course.accrediting_provider_code
       expect(new_course.subjects).to eq course.subjects
-      expect(new_course.content_status).to eq :empty
+      expect(new_course.content_status).to eq :rolled_over
       expect(new_course.ucas_status).to eq :new
       expect(new_course.open_for_applications?).to be_falsey
     end
@@ -817,7 +855,7 @@ RSpec.describe Course, type: :model do
       describe 'the new course' do
         subject { new_course }
 
-        its(:content_status) { should eq :draft }
+        its(:content_status) { should eq :rolled_over }
       end
 
       describe 'the copied enrichment' do
@@ -846,7 +884,7 @@ RSpec.describe Course, type: :model do
       describe 'the new course' do
         subject { new_course }
 
-        its(:content_status) { should eq :draft }
+        its(:content_status) { should eq :rolled_over }
       end
 
       describe 'the copied enrichment' do
@@ -914,6 +952,22 @@ RSpec.describe Course, type: :model do
         it { should be_status_new_status }
         its(:applications_accepted_from) { should eq new_recruitment_cycle.application_start_date }
       end
+    end
+  end
+
+  describe 'next_recruitment_cycle?' do
+    subject { course.next_recruitment_cycle? }
+
+    context 'course is in current recruitment cycle' do
+      it { should be_falsey }
+    end
+
+    context 'course is in the next recruitment cycle' do
+      let(:recruitment_cycle) { create :recruitment_cycle, :next }
+      let(:provider)          { create :provider, recruitment_cycle: recruitment_cycle }
+      let(:course) { create :course, provider: provider }
+
+      it { should be_truthy }
     end
   end
 end

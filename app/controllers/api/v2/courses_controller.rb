@@ -76,6 +76,7 @@ module API
 
         enrichment = @course.enrichments.find_or_initialize_draft
         enrichment.assign_attributes(enrichment_params)
+        enrichment.status = :draft if enrichment.rolled_over?
         enrichment.save
       end
 
