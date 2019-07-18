@@ -21,6 +21,7 @@
 
 ### Native
 
+0. If you haven't already, follow this [tutorial](https://gorails.com/setup) to setup your Rails environment, make sure to install PostgreSQL 9.6 as the database
 1. Run `bundle install` to install the gem dependencies
 2. Run `bundle exec rails db:setup` to create a development and testing database
 3. Run `bundle exec rails server` to launch the app on http://localhost:3001.
@@ -172,7 +173,7 @@ complex operations that just aren't already packaged up in the app.
 
 The script's functionality is accessed using sub-commands with built-in
 documentation. This is the best way to discover it's functionality and the
-commands available, and is accessable with the `--help` option:
+commands available, and is accessible with the `--help` option:
 
 ```
 bin/mcb --help
