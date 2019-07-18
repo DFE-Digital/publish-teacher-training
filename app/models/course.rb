@@ -24,6 +24,7 @@
 #
 
 class Course < ApplicationRecord
+  include Discard::Model
   include WithQualifications
   include ChangedAt
 
