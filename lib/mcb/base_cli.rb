@@ -35,6 +35,10 @@ module MCB
       @cli.agree("Continue? ")
     end
 
+    def confirm_deletion?(subject)
+      @cli.agree("Are you sure you want to delete #{subject}? ")
+    end
+
     def enter_to_continue
       @cli.ask("Press Enter to continue")
     end
