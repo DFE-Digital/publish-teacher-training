@@ -149,6 +149,41 @@ describe "Courses API", type: :request do
       end
     end
 
+    describe 'JSON body response' do
+      let(:provider) { build(:provider) }
+      let(:course) { create(:course, provider: provider) }
+      let(:provider2) { build(:provider, recruitment_cycle: next_cycle) }
+      let(:course2) { create(:course, provider: provider2) }
+      let(:next_cycle) { build(:recruitment_cycle, year: '2020') }
+
+      before do
+        course
+        course2
+        get_index
+      end
+
+      context 'with no cycle specified in the route' do
+        let(:get_index) { get '/api/v1/courses', headers: { 'HTTP_AUTHORIZATION' => credentials } }
+
+        it 'defaults to the current cycle when year' do
+          returned_course_codes = get_course_codes_from_body(response.body)
+
+          expect(returned_course_codes).not_to include course2.course_code
+          expect(returned_course_codes).to include course.course_code
+        end
+      end
+      context 'with a future recruitment cycle specified in the route' do
+        let(:get_index) { get '/api/v1/2020/courses', headers: { 'HTTP_AUTHORIZATION' => credentials } }
+
+        it 'only returns courses from the requested cycle' do
+          returned_course_codes = get_course_codes_from_body(response.body)
+
+          expect(returned_course_codes).to include course2.course_code
+          expect(returned_course_codes).not_to include course.course_code
+        end
+      end
+    end
+
     context "with changed_since parameter" do
       describe "JSON body response" do
         it 'contains expected courses' do
@@ -166,35 +201,73 @@ describe "Courses API", type: :request do
         end
       end
 
+      describe 'response headers' do
+        context 'when the recruitment year is in the path' do
+          it 'includes the correct next link' do
+            create(:course,
+                   course_code: "LAST1",
+                   age: 10.minutes.ago,
+                   provider: provider)
+
+            timestamp_of_last_course = 2.minutes.ago
+            _last_course_in_results = create(:course,
+                                             course_code: "LAST2",
+                                             age: timestamp_of_last_course,
+                                             provider: provider)
+
+            get '/api/v1/2019/courses',
+                headers: { 'HTTP_AUTHORIZATION' => credentials },
+                params: { changed_since: 30.minutes.ago.utc.iso8601 }
 
 
-      it 'includes correct next link in response headers' do
-        create(:course,
-               course_code: "LAST1",
-               age: 10.minutes.ago,
-               provider: provider)
+            expect(response.headers).to have_key "Link"
+            url = url_for(
+              recruitment_year: 2019,
+              params: {
+                changed_since: timestamp_of_last_course.utc.strftime('%FT%T.%6NZ'),
+                per_page: 100
+              }
+    )
+            expect(response.headers["Link"]).to match "#{url}; rel=\"next\""
+          end
+        end
 
-        timestamp_of_last_course = 2.minutes.ago
-        _last_course_in_results = create(:course,
-                                         course_code: "LAST2",
-                                         age: timestamp_of_last_course,
-                                         provider: provider)
+        context 'when the recruitment year is in the params' do
+          # We want to keep legacy support for year as a param in order to
+           # maintain backwards compatibility. This will avoid breaking calls
+           # from UCAS should they use this older style. The next links we
+           # generate used to were of this style, and the UCAS systems
+           # were making requests in this style.
+          it 'includes the correct next link' do
+            create(:course,
+                   course_code: "LAST1",
+                   age: 10.minutes.ago,
+                   provider: provider)
 
-        get '/api/v1/2019/courses',
-            headers: { 'HTTP_AUTHORIZATION' => credentials },
-            params: { changed_since: 30.minutes.ago.utc.iso8601 }
+            timestamp_of_last_course = 2.minutes.ago
+            create(:course,
+                   course_code: "LAST2",
+                   age: timestamp_of_last_course,
+                   provider: provider)
+
+            get '/api/v1/courses?recruitment_year=2020',
+                headers: { 'HTTP_AUTHORIZATION' => credentials },
+                params: { changed_since: 30.minutes.ago.utc.iso8601 }
 
 
-        expect(response.headers).to have_key "Link"
-        url = url_for(
-          recruitment_year: 2019,
-          params: {
-            changed_since: timestamp_of_last_course.utc.strftime('%FT%T.%6NZ'),
-            per_page: 100
-          }
-)
-        expect(response.headers["Link"]).to match "#{url}; rel=\"next\""
+            expect(response.headers).to have_key "Link"
+            url = url_for(
+              recruitment_year: 2020,
+              params: {
+                changed_since: timestamp_of_last_course.utc.strftime('%FT%T.%6NZ'),
+                per_page: 100
+              }
+    )
+            expect(response.headers["Link"]).to match "#{url}; rel=\"next\""
+          end
+        end
       end
+
 
       it 'includes correct next link when there is an empty set' do
         provided_timestamp = 5.seconds.ago.utc.iso8601
