@@ -86,9 +86,11 @@ ActiveRecord::Schema.define(version: 2019_07_24_112016) do
     t.datetime "updated_at", default: -> { "timezone('utc'::text, now())" }, null: false
     t.datetime "changed_at", default: -> { "timezone('utc'::text, now())" }, null: false
     t.text "accrediting_provider_code"
+    t.datetime "discarded_at"
     t.index ["accrediting_provider_code"], name: "index_course_on_accrediting_provider_code"
     t.index ["accrediting_provider_id"], name: "IX_course_accrediting_provider_id"
     t.index ["changed_at"], name: "index_course_on_changed_at", unique: true
+    t.index ["discarded_at"], name: "index_course_on_discarded_at"
     t.index ["provider_id", "course_code"], name: "IX_course_provider_id_course_code", unique: true
   end
 
