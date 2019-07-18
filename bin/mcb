@@ -48,13 +48,10 @@ $mcb = Cri::Command.define do
 
   flag :h, :help, 'show help for this command' do |_value, cmd|
     puts cmd.help
-    puts
-    puts Rainbow("SUBCOMMANDS").red.bright
-    prefix = "    "
-    cmd.commands.each do |c|
-      show_all_commands(c, prefix + c.name + " ")
-      puts
-    end
+
+    prefix = "    #{cmd.name == "mcb" ? "bin/mcb" : cmd.name} "
+    puts_command_index(cmd, prefix, 1)
+
     # Don't exit if we're in repl-mode.
     exit 0 unless $mcb_repl_mode
   end
@@ -65,13 +62,29 @@ $mcb = Cri::Command.define do
   end
 end
 
-def show_all_commands(cmd, prefix)
-  cmd.commands.each do |c|
-    aligned_cmd_name = (prefix + c.name).ljust(37, ' ')
-    coloured_name = Rainbow(aligned_cmd_name).green
-    puts "#{coloured_name} #{c.summary}"
-    show_all_commands(c, prefix + c.name + " ")
+def puts_command_index(cmd, prefix, depth)
+  if depth == 1
+    return if cmd.commands.empty?
+
+    puts
+    puts Rainbow("INDEX").red.bright
   end
+
+  # split up top level groups
+  puts "    ---" if depth == 2 && !cmd.commands.count.zero?
+
+  pretty_cmd(cmd, prefix)
+
+  # recurse
+  cmd.commands.sort_by(&:name).each do |c|
+    puts_command_index(c, prefix + c.name + " ", depth + 1)
+  end
+end
+
+def pretty_cmd(cmd, prefix)
+  aligned_cmd_name = prefix.ljust(35, ' ')
+  coloured_name = Rainbow(aligned_cmd_name).green
+  puts "#{coloured_name} #{cmd.summary}"
 end
 
 MCB.load_commands($mcb, "#{lib_dir}/mcb/commands")
