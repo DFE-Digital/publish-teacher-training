@@ -1,6 +1,7 @@
 require 'mcb_helper'
 
-describe 'mcb courses touch', :focus do
+describe 'mcb courses touch' do
+  let(:touch) { MCBCommand.new('courses', 'touch') }
   let(:recruitment_year1) { create :recruitment_cycle, year: '2018' }
   let(:recruitment_year2) { RecruitmentCycle.current_recruitment_cycle }
 
@@ -25,9 +26,7 @@ describe 'mcb courses touch', :focus do
       rolled_over_course
 
       Timecop.freeze(Date.today + 1) do
-        with_stubbed_stdout do
-          $mcb.run(%W[courses touch #{rolled_over_provider.provider_code} #{rolled_over_course.course_code}])
-        end
+        touch.execute(arguments: [rolled_over_provider.provider_code, rolled_over_course.course_code])
 
         # Use to_i compare seconds since epoch and side-step sub-second
         # differences that show up even with Timecop on certain platforms.
@@ -40,9 +39,7 @@ describe 'mcb courses touch', :focus do
       rolled_over_course
 
       Timecop.freeze(Date.today + 1) do
-        with_stubbed_stdout do
-          $mcb.run(%W[courses touch #{rolled_over_provider.provider_code} #{rolled_over_course.course_code}])
-        end
+        touch.execute(arguments: [rolled_over_provider.provider_code, rolled_over_course.course_code])
 
         expect(rolled_over_course.reload.changed_at.to_i).to eq Time.now.to_i
         expect(course.reload.changed_at.to_i).not_to eq Time.now.to_i
@@ -53,9 +50,7 @@ describe 'mcb courses touch', :focus do
       rolled_over_course
 
       expect {
-        with_stubbed_stdout do
-          $mcb.run(%W[courses touch #{rolled_over_provider.provider_code} #{rolled_over_course.course_code}])
-        end
+        touch.execute(arguments: [rolled_over_provider.provider_code, rolled_over_course.course_code])
       }.to change { rolled_over_course.reload.audits.count }
              .from(1).to(2)
     end
@@ -66,9 +61,7 @@ describe 'mcb courses touch', :focus do
       rolled_over_course
 
       Timecop.freeze(Date.today + 1) do
-        with_stubbed_stdout do
-          $mcb.run(%W[courses touch #{provider.provider_code} #{course.course_code} -r 2018])
-        end
+        touch.execute(arguments: [provider.provider_code, course.course_code, '-r', recruitment_year1.year])
 
         # Use to_i compare seconds since epoch and side-step sub-second
         # differences that show up even with Timecop on certain platforms.
@@ -81,9 +74,7 @@ describe 'mcb courses touch', :focus do
       rolled_over_course
 
       Timecop.freeze(Date.today + 1) do
-        with_stubbed_stdout do
-          $mcb.run(%W[courses touch #{provider.provider_code} #{course.course_code} -r 2018])
-        end
+        touch.execute(arguments: [provider.provider_code, course.course_code, '-r', recruitment_year1.year])
 
         expect(course.reload.changed_at.to_i).to eq Time.now.to_i
         expect(rolled_over_course.reload.changed_at.to_i).not_to eq Time.now.to_i
@@ -94,9 +85,7 @@ describe 'mcb courses touch', :focus do
       rolled_over_course
 
       expect {
-        with_stubbed_stdout do
-          $mcb.run(%W[courses touch #{provider.provider_code} #{course.course_code} -r 2018])
-        end
+        touch.execute(arguments: [provider.provider_code, course.course_code, '-r', recruitment_year1.year])
       }.to change { course.reload.audits.count }
              .from(1).to(2)
     end

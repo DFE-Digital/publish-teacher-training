@@ -1,13 +1,7 @@
 require 'mcb_helper'
 
 describe 'mcb courses audit' do
-  def audit(*arguments)
-    stderr = nil
-    output = with_stubbed_stdout(stdin: "", stderr: stderr) do
-      $mcb.run(%W[courses audit] + arguments)
-    end
-    { stdout: output, stderr: stderr }
-  end
+  let(:audit) { MCBCommand.new('courses', 'audit') }
 
   let(:admin_user) { create :user, :admin, email: 'h@i' }
 
@@ -39,7 +33,12 @@ describe 'mcb courses audit' do
       rolled_over_course.update(name: 'Y')
       course.update(name: 'B')
 
-      output = audit(rolled_over_provider.provider_code, rolled_over_course.course_code)[:stdout]
+      output = audit.execute(
+        arguments: [
+          rolled_over_provider.provider_code,
+          rolled_over_course.course_code
+        ]
+      )[:stdout]
 
       expect(output).to have_text_table_row(admin_user.id,
                                             'h@i',
@@ -62,7 +61,14 @@ describe 'mcb courses audit' do
       rolled_over_course.update(name: 'Y')
       course.update(name: 'B')
 
-      output = audit(provider.provider_code, course.course_code, '-r', recruitment_year1.year)[:stdout]
+      output = audit.execute(
+        arguments: [
+          provider.provider_code,
+          course.course_code,
+          '-r',
+          recruitment_year1.year
+        ]
+      )[:stdout]
 
       expect(output).to have_text_table_row(admin_user.id,
                                             'h@i',
