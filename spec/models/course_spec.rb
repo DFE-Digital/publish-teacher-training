@@ -398,6 +398,26 @@ RSpec.describe Course, type: :model do
     end
   end
 
+  describe 'content_status' do
+    let(:course) { create :course, enrichments: [enrichment] }
+
+    context 'when enrichment is published' do
+      let(:enrichment) { create :course_enrichment, status: :published }
+
+      subject { course.content_status }
+
+      it { should eq :published }
+    end
+
+    context 'when enrichment is rolled-over' do
+      let(:enrichment) { create :course_enrichment, status: :rolled_over }
+
+      subject { course.content_status }
+
+      it { should eq :rolled_over }
+    end
+  end
+
   describe 'qualifications' do
     context "course with qts qualication" do
       let(:subject) { create(:course, :resulting_in_qts) }

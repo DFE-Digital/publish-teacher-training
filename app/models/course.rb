@@ -225,6 +225,8 @@ class Course < ApplicationRecord
       :published
     elsif newest_enrichment.has_been_published_before?
       :published_with_unpublished_changes
+    elsif newest_enrichment.rolled_over?
+      :rolled_over
     else
       :draft
     end
