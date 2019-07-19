@@ -193,7 +193,7 @@ ActiveRecord::Schema.define(version: 2019_07_24_112016) do
     t.integer "created_by_user_id"
     t.datetime "last_published_at"
     t.integer "status", default: 0, null: false
-    t.integer "provider_id"
+    t.integer "provider_id", null: false
     t.index ["created_by_user_id"], name: "IX_provider_enrichment_created_by_user_id"
     t.index ["provider_code"], name: "IX_provider_enrichment_provider_code"
     t.index ["provider_id"], name: "index_provider_enrichment_on_provider_id"
