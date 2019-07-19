@@ -5,6 +5,10 @@ module API
       before_action :build_recruitment_cycle
       before_action :build_provider, except: :index
 
+      deserializable_resource :course,
+                              only: :update,
+                              class: API::V2::DeserializableProvider
+
       def index
         authorize Provider
         providers = policy_scope(@recruitment_cycle.providers)
