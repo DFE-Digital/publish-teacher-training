@@ -17,6 +17,9 @@ module API
         name
         study_mode
         qualifications
+        english
+        maths
+        science
       ].freeze
 
       attributes(*COURSE_ATTRIBUTES)

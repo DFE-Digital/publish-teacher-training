@@ -60,8 +60,10 @@ module API
       def update
         update_enrichment
         update_sites
+        update_course
         should_sync = site_ids.present? && @course.recruitment_cycle.current?
         has_synced? if should_sync
+
 
         if @course.errors.empty? && @course.valid?
           render jsonapi: @course.reload
@@ -79,6 +81,13 @@ module API
         enrichment.assign_attributes(enrichment_params)
         enrichment.status = :draft if enrichment.rolled_over?
         enrichment.save
+      end
+
+      def update_course
+        return unless course_params.values.any?
+
+        @course.assign_attributes(course_params)
+        @course.save
       end
 
       def update_sites
@@ -113,7 +122,7 @@ module API
       def enrichment_params
         params
           .fetch(:course, {})
-          .except(:id, :type, :sites_ids, :sites_types)
+          .except(:id, :type, :sites_ids, :sites_types, :english, :maths, :science)
           .permit(
             :about_course,
             :course_length,
@@ -127,6 +136,32 @@ module API
             :personal_qualities,
             :salary_details,
             :qualifications
+          )
+      end
+
+      def course_params
+        params
+          .fetch(:course, {})
+          .except(:about_course,
+                  :course_length,
+                  :fee_details,
+                  :fee_international,
+                  :fee_uk_eu,
+                  :financial_support,
+                  :how_school_placements_work,
+                  :interview_process,
+                  :other_requirements,
+                  :personal_qualities,
+                  :salary_details,
+                  :qualifications,
+                  :id,
+                  :type,
+                  :sites_ids,
+                  :sites_types)
+          .permit(
+            :english,
+            :maths,
+            :science
           )
       end
 
