@@ -28,6 +28,10 @@ class RecruitmentCycle < ApplicationRecord
     all.order(:year).second
   end
 
+  def current?
+    RecruitmentCycle.current_recruitment_cycle == self
+  end
+
   def to_s
     following_year = Date.new(year.to_i, 1, 1) + 1.year
     "#{year}/#{following_year.strftime('%y')}"
