@@ -13,7 +13,7 @@
 require 'rails_helper'
 
 describe RecruitmentCycle, type: :model do
-  subject { create(:recruitment_cycle, year: "2019") }
+  subject { RecruitmentCycle.find_by(year: "2019") }
 
   its(:to_s) { should eq("2019/20") }
 
@@ -26,5 +26,18 @@ describe RecruitmentCycle, type: :model do
   describe 'associations' do
     it { should have_many(:courses).through(:providers) }
     it { should have_many(:sites).through(:providers) }
+  end
+
+  describe "current?" do
+    let(:current_cycle) { subject }
+    let(:second_cycle) { create(:recruitment_cycle, year: "2020") }
+
+    it "should return true when it's the current cycle" do
+      expect(current_cycle.current?).to be(true)
+    end
+
+    it "should return true false it's not the current cycle" do
+      expect(second_cycle.current?).to be(false)
+    end
   end
 end

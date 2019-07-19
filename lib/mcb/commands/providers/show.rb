@@ -10,7 +10,7 @@ run do |opts, args, _cmd|
 
   code = args[:code]
 
-  provider = Provider.find_by!(provider_code: code)
+  provider = MCB.get_recruitment_cycle(opts).providers.find_by!(provider_code: code)
 
   if provider.nil?
     error "Provider with code '#{code}' not found"

@@ -128,6 +128,12 @@ class Course < ApplicationRecord
 
   after_validation :remove_unnecessary_enrichments_validation_message
 
+  def self.get_by_codes(year, provider_code, course_code)
+    RecruitmentCycle.find_by(year: year)
+      .providers.find_by(provider_code: provider_code)
+      .courses.find_by(course_code: course_code)
+  end
+
   def recruitment_cycle
     provider.recruitment_cycle
   end
@@ -214,11 +220,17 @@ class Course < ApplicationRecord
     newest_enrichment = enrichments.latest_first.first
 
     if newest_enrichment.nil?
-      :empty
+      if next_recruitment_cycle?
+        :rolled_over
+      else
+        :empty
+      end
     elsif newest_enrichment.published?
       :published
     elsif newest_enrichment.has_been_published_before?
       :published_with_unpublished_changes
+    elsif newest_enrichment.rolled_over?
+      :rolled_over
     else
       :draft
     end
@@ -319,6 +331,31 @@ class Course < ApplicationRecord
 
   def to_s
     "#{name} (#{course_code})"
+  end
+
+  def copy_to_provider(new_provider)
+    new_course = new_provider
+                   .courses
+                   .find_by(course_code: self.course_code)
+    unless new_course
+      new_course = self.dup
+      new_course.subjects << self.subjects
+
+      new_provider.courses << new_course
+
+      if (last_enrichment = enrichments.latest_first.first)
+        last_enrichment.copy_to_course(new_course)
+      end
+
+      self.sites.each do |site|
+        new_site = new_provider.sites.find_by code: site.code
+        new_site&.copy_to_course(new_course)
+      end
+    end
+  end
+
+  def next_recruitment_cycle?
+    recruitment_cycle.year > RecruitmentCycle.current_recruitment_cycle.year
   end
 
 private

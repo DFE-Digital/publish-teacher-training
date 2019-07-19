@@ -65,8 +65,8 @@ GEM
     application_insights (0.5.6)
     arel (9.0.0)
     ast (2.4.0)
-    audited (4.8.0)
-      activerecord (>= 4.0, < 5.3)
+    audited (4.9.0)
+      activerecord (>= 4.2, < 6.1)
     awesome_print (1.8.0)
     bootsnap (1.4.4)
       msgpack (~> 1.0)
@@ -309,7 +309,7 @@ GEM
     rspec-support (3.8.0)
     rspec_junit_formatter (0.4.1)
       rspec-core (>= 2, < 4, != 2.12.0)
-    rubocop (0.72.0)
+    rubocop (0.73.0)
       jaro_winkler (~> 1.5.1)
       parallel (~> 1.10)
       parser (>= 2.6)
@@ -337,7 +337,7 @@ GEM
     sentry-raven (2.9.0)
       faraday (>= 0.7.6, < 1.0)
     shellany (0.0.1)
-    shoulda-matchers (4.1.0)
+    shoulda-matchers (4.1.1)
       activesupport (>= 4.2.0)
     simplecov (0.17.0)
       docile (~> 1.1)
@@ -393,7 +393,7 @@ DEPENDENCIES
   annotate
   api-pagination
   application_insights
-  audited (~> 4.7)
+  audited (~> 4.9)
   awesome_print
   bootsnap (>= 1.1.0)
   bullet
@@ -446,6 +446,7 @@ DEPENDENCIES
   tabulo
   terminal-table
   timecop
+  tty-screen
   tzinfo-data
   uk_postcode
   webmock

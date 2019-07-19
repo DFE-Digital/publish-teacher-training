@@ -148,7 +148,77 @@ class Provider < ApplicationRecord
     end
   end
 
+  def content_status
+    newest_enrichment = enrichments.latest_created_at.first
+
+    if newest_enrichment.nil?
+      :empty
+    elsif newest_enrichment.published?
+      :published
+    elsif newest_enrichment.has_been_published_before?
+      :published_with_unpublished_changes
+    else
+      :draft
+    end
+  end
+
+  def last_published_at
+    newest_enrichment = enrichments.latest_created_at.first
+    newest_enrichment&.last_published_at
+  end
+
+  # This reflects the fact that organisations should actually be a has_one.
+  def organisation
+    organisations.first
+  end
+
   def to_s
     "#{provider_name} (#{provider_code})"
+  end
+
+  def copy_to_recruitment_cycle(new_recruitment_cycle)
+    new_provider = new_recruitment_cycle
+                      .providers
+                      .find_by(provider_code: self.provider_code)
+    providers_count = 0
+    unless new_provider
+      providers_count = 1
+      new_provider = self.dup
+      new_provider.organisations << self.organisations
+      new_provider.ucas_preferences = self.ucas_preferences.dup
+      new_provider.contacts << self.contacts.map(&:dup)
+      new_recruitment_cycle.providers << new_provider
+    end
+
+    # Order is important here. Sites should be copied over before courses
+    # so that courses can link up to the correct sites in the new provider.
+    sites_count = copy_sites_to_new_provider(new_provider)
+    courses_count = copy_courses_to_new_provider(new_provider)
+
+    {
+      providers: providers_count,
+      sites: sites_count,
+      courses: courses_count
+    }
+  end
+
+  def copy_courses_to_new_provider(new_provider)
+    courses_count = 0
+
+    courses.each do |course|
+      courses_count += 1 if course.copy_to_provider(new_provider)
+    end
+
+    courses_count
+  end
+
+  def copy_sites_to_new_provider(new_provider)
+    sites_count = 0
+
+    self.sites.each do |site|
+      sites_count += 1 if site.copy_to_provider(new_provider)
+    end
+
+    sites_count
   end
 end

@@ -283,7 +283,7 @@ describe 'Providers API', type: :request do
       describe 'JSON body response' do
         let(:provider) { create(:provider) }
         let(:provider2) { create(:provider, recruitment_cycle: next_cycle) }
-        let(:next_cycle) { build(:recruitment_cycle, year: '2020') }
+        let(:next_cycle) { find_or_create(:recruitment_cycle, year: '2020') }
 
         before do
           provider
@@ -336,53 +336,62 @@ describe 'Providers API', type: :request do
         end
       end
 
-      it 'includes correct next link in response headers' do
-        create(:provider,
-               provider_code: "LAST1",
-               changed_at: 10.minutes.ago)
+      describe 'response headers' do
+        context 'when the recruitment year is in the path' do
+          it 'includes the correct next link' do
+            create(:provider,
+                   provider_code: "LAST1",
+                   changed_at: 10.minutes.ago)
 
-        timestamp_of_last_provider = 2.minutes.ago
-        create(:provider,
-               provider_code: "LAST2",
-               changed_at: timestamp_of_last_provider)
+            timestamp_of_last_provider = 2.minutes.ago
+            create(:provider,
+                   provider_code: "LAST2",
+                   changed_at: timestamp_of_last_provider)
 
-        get '/api/v1/providers',
-            headers: { 'HTTP_AUTHORIZATION' => credentials },
-            params: { changed_since: 30.minutes.ago.utc.iso8601 }
+            get '/api/v1/providers',
+                headers: { 'HTTP_AUTHORIZATION' => credentials },
+                params: { changed_since: 30.minutes.ago.utc.iso8601 }
 
-        expect(response.headers).to have_key "Link"
-        uri = URI.parse(response.headers["Link"].sub(/;.*/, ''))
-        query_params = Rack::Utils.parse_query(uri.query).with_indifferent_access
-        expect(query_params[:changed_since])
-          .to eq timestamp_of_last_provider.utc.strftime('%FT%T.%6NZ')
-        expect(query_params[:per_page]).to eq '100'
-      end
+            expect(response.headers).to have_key "Link"
+            uri = URI.parse(response.headers["Link"].sub(/;.*/, ''))
+            query_params = Rack::Utils.parse_query(uri.query).with_indifferent_access
+            expect(query_params[:changed_since])
+              .to eq timestamp_of_last_provider.utc.strftime('%FT%T.%6NZ')
+            expect(query_params[:per_page]).to eq '100'
+          end
+        end
 
-      context 'with recruitment year specified in route' do
-        it 'includes correct next link in response headers' do
-          create(:provider,
-                 provider_code: "LAST1",
-                 changed_at: 10.minutes.ago)
+        context 'when the recruitment year is in the params' do
+          # We want to keep legacy support for year as a param in order to
+           # maintain backwards compatibility. This will avoid breaking calls
+           # from UCAS should they use this older style. The next links we
+           # generate used to were of this style, and the UCAS systems
+           # were making requests in this style.
+          it 'includes the correct next link' do
+            create(:provider,
+                   provider_code: "LAST1",
+                   changed_at: 10.minutes.ago)
 
-          timestamp_of_last_provider = 2.minutes.ago
-          create(:provider,
-                 provider_code: "LAST2",
-                 changed_at: timestamp_of_last_provider)
+            timestamp_of_last_provider = 2.minutes.ago
+            create(:provider,
+                   provider_code: "LAST2",
+                   changed_at: timestamp_of_last_provider)
 
-          get '/api/v1/providers?recruitment_year=2020',
-              headers: { 'HTTP_AUTHORIZATION' => credentials },
-              params: { changed_since: 30.minutes.ago.utc.iso8601 }
+            get '/api/v1/providers?recruitment_year=2020',
+                headers: { 'HTTP_AUTHORIZATION' => credentials },
+                params: { changed_since: 30.minutes.ago.utc.iso8601 }
 
 
-          expect(response.headers).to have_key "Link"
-          url = url_for(
-            recruitment_year: 2020,
-            params: {
-              changed_since: timestamp_of_last_provider.utc.strftime('%FT%T.%6NZ'),
-              per_page: 100
-            }
-  )
-          expect(response.headers["Link"]).to match "#{url}; rel=\"next\""
+            expect(response.headers).to have_key "Link"
+            url = url_for(
+              recruitment_year: 2020,
+              params: {
+                changed_since: timestamp_of_last_provider.utc.strftime('%FT%T.%6NZ'),
+                per_page: 100
+              }
+    )
+            expect(response.headers["Link"]).to match "#{url}; rel=\"next\""
+          end
         end
       end
 
@@ -397,8 +406,6 @@ describe 'Providers API', type: :request do
         query_params = Rack::Utils.parse_query(uri.query).with_indifferent_access
         expect(query_params[:changed_since]).to eq provided_timestamp
       end
-
-
 
       def get_next_providers(link, params = {})
         get link,

@@ -76,6 +76,7 @@ ActiveRecord::Schema.define(version: 2019_07_11_074433) do
     t.integer "qualification", null: false
     t.datetime "start_date"
     t.text "study_mode"
+    t.integer "accrediting_provider_id"
     t.integer "provider_id", default: 0, null: false
     t.text "modular"
     t.integer "english"
@@ -85,7 +86,6 @@ ActiveRecord::Schema.define(version: 2019_07_11_074433) do
     t.datetime "updated_at", default: -> { "timezone('utc'::text, now())" }, null: false
     t.datetime "changed_at", default: -> { "timezone('utc'::text, now())" }, null: false
     t.text "accrediting_provider_code"
-    t.integer "accrediting_provider_id"
     t.index ["accrediting_provider_code"], name: "index_course_on_accrediting_provider_code"
     t.index ["accrediting_provider_id"], name: "IX_course_accrediting_provider_id"
     t.index ["changed_at"], name: "index_course_on_changed_at", unique: true

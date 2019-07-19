@@ -20,4 +20,21 @@ describe ProviderEnrichment, type: :model do
   describe 'associations' do
     it { should belong_to(:provider) }
   end
+
+  describe '#has_been_published_before?' do
+    context 'when the enrichment is an initial draft' do
+      subject { create(:provider_enrichment, :initial_draft) }
+      it { should_not have_been_published_before }
+    end
+
+    context 'when the enrichment is published' do
+      subject { create(:provider_enrichment, :published) }
+      it { should have_been_published_before }
+    end
+
+    context 'when the enrichment is a subsequent draft' do
+      subject { create(:provider_enrichment, :subsequent_draft) }
+      it { should have_been_published_before }
+    end
+  end
 end

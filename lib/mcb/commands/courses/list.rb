@@ -4,13 +4,14 @@ summary 'List courses in db'
 run do |opts, args, _cmd|
   MCB.init_rails(opts)
 
-  courses = if args.any?
-              Course.where(course_code: args.to_a.map(&:upcase))
-            else
-              Course.all
-            end
+  recruitment_cycle = MCB.get_recruitment_cycle(opts)
+
+  courses = recruitment_cycle.courses
+  courses = courses.where(course_code: args.map(&:upcase)) if args.any?
 
   tp.set :capitalize_headers, false
+
+  puts "Your terminal is --> TTY::Screen.cols <-- wide"
 
   output = [
     '',

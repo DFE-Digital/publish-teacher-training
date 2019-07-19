@@ -2,7 +2,7 @@ require "rails_helper"
 
 describe RecruitmentCyclePolicy do
   let(:current_recruitment_cycle) { find_or_create :recruitment_cycle }
-  let(:next_recruitment_cycle) { create :recruitment_cycle, :next }
+  let(:next_recruitment_cycle) { find_or_create :recruitment_cycle, :next }
 
   describe 'scope' do
     let(:user) { create(:user) }

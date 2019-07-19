@@ -61,9 +61,11 @@ gem 'rainbow'
 gem 'table_print'
 #   terminal-table is a bit more flexible allowing us to use a headers column
 gem 'terminal-table'
-#   tabulo os even more flexible than terminal-table, used for the audit
+#   tabulo is even more flexible than terminal-table, used for the audit
 #   stuff for now, probably worth switching other commands to it later
 gem 'tabulo'
+#   terminfo allows us to get terminal info like width, etc.
+gem 'tty-screen'
 
 # For querying third party APIs
 gem 'faraday'
@@ -72,7 +74,7 @@ gem 'faraday'
 gem 'uk_postcode'
 
 # For change history on provider, courses, sites, etc
-gem 'audited', '~> 4.7'
+gem 'audited', '~> 4.9'
 
 # State machine to track users through their onboarding journey
 gem 'aasm'

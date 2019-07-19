@@ -21,7 +21,15 @@ class RecruitmentCycle < ApplicationRecord
   validates :year, presence: true
 
   def self.current_recruitment_cycle
-    all.first
+    all.order(:year).first
+  end
+
+  def self.next_recruitment_cycle
+    all.order(:year).second
+  end
+
+  def current?
+    RecruitmentCycle.current_recruitment_cycle == self
   end
 
   def to_s

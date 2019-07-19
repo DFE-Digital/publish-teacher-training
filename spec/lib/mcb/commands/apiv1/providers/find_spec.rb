@@ -9,7 +9,7 @@ describe '"mcb apiv1 providers find"' do
   let(:provider2) { create(:provider, sites: [site2], contacts: [contact2]) }
 
   it 'displays the info for the given provider' do
-    url = 'http://localhost:3001/api/v1/2019/providers'
+    url = "http://localhost:3001/api/v1/#{RecruitmentCycle.current_recruitment_cycle.year}/providers"
     next_url = url + '&' + {
         changed_since: provider2.created_at.utc.strftime('%FT%T.%16NZ'),
         per_page: 100

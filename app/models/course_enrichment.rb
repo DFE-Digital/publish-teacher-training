@@ -18,7 +18,7 @@
 class CourseEnrichment < ApplicationRecord
   include TouchCourse
   before_create :set_defaults
-  enum status: %i[draft published]
+  enum status: %i[draft published rolled_over]
 
   jsonb_accessor :json_data,
                  about_course: [:string, store_key: 'AboutCourse'],
@@ -38,6 +38,11 @@ class CourseEnrichment < ApplicationRecord
   belongs_to :course
 
   scope :latest_first, -> { order(created_at: :desc, id: :desc) }
+  scope :draft, -> { where(status: 'draft').or(CourseEnrichment.rolled_over) }
+
+  def draft?
+    status.in? %w[draft rolled_over]
+  end
 
   validates :course, presence: true
 
@@ -108,6 +113,13 @@ class CourseEnrichment < ApplicationRecord
     data = { status: :draft }
     data[:last_published_timestamp_utc] = nil if initial_draft
     update(data)
+  end
+
+  def copy_to_course(new_course)
+    new_enrichment = self.dup
+    new_enrichment.last_published_timestamp_utc = nil
+    new_enrichment.rolled_over!
+    new_course.enrichments << new_enrichment
   end
 
 private

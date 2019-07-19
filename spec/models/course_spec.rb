@@ -398,6 +398,44 @@ RSpec.describe Course, type: :model do
     end
   end
 
+  describe 'content_status' do
+    let(:course) { create :course, enrichments: [enrichment] }
+
+    context 'when enrichment is published' do
+      let(:enrichment) { create :course_enrichment, status: :published }
+
+      subject { course.content_status }
+
+      it { should eq :published }
+    end
+
+    context 'when enrichment is rolled-over' do
+      let(:enrichment) { create :course_enrichment, status: :rolled_over }
+
+      subject { course.content_status }
+
+      it { should eq :rolled_over }
+    end
+
+    context 'when there are no enrichments' do
+      let(:course) { create :course, enrichments: [] }
+
+      subject { course.content_status }
+
+      it { should eq :empty }
+    end
+
+    context 'when there are no enrichments and the course is rolled-over' do
+      let(:next_recruitment_cycle) { create :recruitment_cycle, :next }
+      let(:next_provider) { create :provider, recruitment_cycle: next_recruitment_cycle }
+      let(:course) { create :course, provider: next_provider, enrichments: [] }
+
+      subject { course.content_status }
+
+      it { should eq :rolled_over }
+    end
+  end
+
   describe 'qualifications' do
     context "course with qts qualication" do
       let(:subject) { create(:course, :resulting_in_qts) }
@@ -752,6 +790,184 @@ RSpec.describe Course, type: :model do
         let(:courses_subjects) { [build(:subject, subject_name: "secondary")] }
         its(:syncable?) { should be_falsey }
       end
+    end
+  end
+
+  describe 'self.get_by_codes' do
+    it 'should return the found course' do
+      expect(Course.get_by_codes(
+               course.recruitment_cycle.year,
+               course.provider.provider_code,
+               course.course_code
+             )).to eq course
+    end
+  end
+
+  describe '#copy_to_provider' do
+    let(:accrediting_provider) { create :provider, :accredited_body }
+    let(:provider) { create :provider, courses: [course] }
+    let(:maths) { create :subject, :mathematics }
+    let(:course) {
+      build :course,
+            accrediting_provider: accrediting_provider,
+            subjects: [maths]
+    }
+    let(:recruitment_cycle) { find_or_create :recruitment_cycle }
+    let(:new_recruitment_cycle) { create :recruitment_cycle, :next }
+    let(:new_provider) {
+      create :provider,
+             provider_code: provider.provider_code,
+             recruitment_cycle: new_recruitment_cycle
+    }
+    let(:new_course) {
+      new_provider.reload.courses.find_by(course_code: course.course_code)
+    }
+
+    it 'makes a copy of the course in the new provider' do
+      course.copy_to_provider(new_provider)
+
+      expect(new_course).not_to be_nil
+      expect(new_course.accrediting_provider_code)
+        .to eq course.accrediting_provider_code
+      expect(new_course.subjects).to eq course.subjects
+      expect(new_course.content_status).to eq :rolled_over
+      expect(new_course.ucas_status).to eq :new
+      expect(new_course.open_for_applications?).to be_falsey
+    end
+
+    it 'leaves the existing course alone' do
+      course.copy_to_provider(new_provider)
+
+      expect(provider.reload.courses).to eq [course]
+    end
+
+    context 'course has a published but no draft enrichment' do
+      let!(:published_enrichment) do
+        create :course_enrichment, :published, course: course
+      end
+
+      before { course.copy_to_provider(new_provider) }
+
+      subject { new_course.enrichments }
+
+      its(:length) { should eq 1 }
+
+      describe 'the new course' do
+        subject { new_course }
+
+        its(:content_status) { should eq :rolled_over }
+      end
+
+      describe 'the copied enrichment' do
+        subject { new_course.enrichments.first }
+
+        its(:about_course) { should eq published_enrichment.about_course }
+        its(:last_published_timestamp_utc) { should be_nil }
+        it { should be_rolled_over }
+      end
+    end
+
+    context 'course has a published and a draft enrichment' do
+      let!(:published_enrichment) do
+        create :course_enrichment, :published, course: course
+      end
+      let!(:draft_enrichment) do
+        create :course_enrichment, course: course
+      end
+
+      before { course.copy_to_provider(new_provider) }
+
+      subject { new_course.enrichments }
+
+      its(:length) { should eq 1 }
+
+      describe 'the new course' do
+        subject { new_course }
+
+        its(:content_status) { should eq :rolled_over }
+      end
+
+      describe 'the copied enrichment' do
+        subject { new_course.enrichments.first }
+
+        its(:about_course) { should eq draft_enrichment.about_course }
+        it { should be_rolled_over }
+      end
+    end
+
+    context 'the course already exists in the new provider' do
+      let!(:new_course) {
+        create :course,
+               course_code: course.course_code,
+               provider: new_provider
+      }
+
+      it 'does not make a copy of the course' do
+        expect { course.copy_to_provider(new_provider) }
+          .not_to(change { new_provider.reload.courses.count })
+      end
+
+      it 'does not make a copy of the enrichments' do
+        expect { course.copy_to_provider(new_provider) }
+          .not_to(change { new_course.reload.enrichments.count })
+      end
+    end
+
+    context 'the original course has sites' do
+      let(:site) { create :site, provider: provider }
+      let!(:new_site) { create :site, provider: new_provider, code: site.code }
+      let!(:site_status) {
+        create :site_status,
+               :with_no_vacancies,
+               course: course,
+               site: site
+      }
+
+      before { course.reload.copy_to_provider(new_provider) }
+
+      describe 'the new course' do
+        subject { new_course }
+
+        its(:ucas_status) { should eq :new }
+        its(:open_for_applications?) { should be_falsey }
+      end
+
+      describe "the new course's list of sites" do
+        subject { new_course.sites }
+
+        its(:length) { should eq 1 }
+      end
+
+      describe 'the new site' do
+        subject { new_course.sites.first }
+
+        it { should eq new_site }
+        its(:code) { should eq site.code }
+      end
+
+      describe "the new site's status" do
+        subject { new_course.site_statuses.first }
+
+        it { should be_full_time_vacancies }
+        it { should be_status_new_status }
+        its(:applications_accepted_from) { should eq new_recruitment_cycle.application_start_date }
+      end
+    end
+  end
+
+  describe 'next_recruitment_cycle?' do
+    subject { course.next_recruitment_cycle? }
+
+    context 'course is in current recruitment cycle' do
+      it { should be_falsey }
+    end
+
+    context 'course is in the next recruitment cycle' do
+      let(:recruitment_cycle) { create :recruitment_cycle, :next }
+      let(:provider)          { create :provider, recruitment_cycle: recruitment_cycle }
+      let(:course) { create :course, provider: provider }
+
+      it { should be_truthy }
     end
   end
 end

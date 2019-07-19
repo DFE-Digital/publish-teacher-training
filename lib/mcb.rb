@@ -86,9 +86,9 @@ module MCB
     `#{cmd}`
   end
 
-  def self.exec_command(cmd)
-    verbose("Running: #{cmd}")
-    exec(cmd)
+  def self.exec_command(cmd, *command_args)
+    verbose("Running: #{cmd} #{command_args}")
+    exec(cmd, *command_args)
   end
 
   def self.apiv1_token(webapp: nil, rgroup: nil)
@@ -113,13 +113,33 @@ module MCB
   end
 
   def self.each_v1_course(opts)
+    endpoint = "/api/v1/#{get_recruitment_year(opts)}/courses"
+
     # This method can actually be entirely driven by the args provided, it is auto-configure!
-    iterate_v1_endpoint(**opts)
+    iterate_v1_endpoint(endpoint: endpoint, **opts)
   end
 
   def self.each_v1_provider(opts)
+    endpoint = "/api/v1/#{get_recruitment_year(opts)}/providers"
+
     # This method can actually be entirely driven by the args provided, it is auto-configure!
-    iterate_v1_endpoint(**opts)
+    iterate_v1_endpoint(endpoint: endpoint, **opts)
+  end
+
+  def self.get_recruitment_year(opts)
+    raise RuntimeError, 'Rails has not been initialised' if !defined? Rails
+
+    opts[:'recruitment-year'] || RecruitmentCycle.current_recruitment_cycle.year
+  end
+
+  def self.get_recruitment_cycle(opts)
+    raise RuntimeError, 'Rails has not been initialised' if !defined? Rails
+
+    if opts.key? :'recruitment-year'
+      RecruitmentCycle.find_by(year: opts[:'recruitment-year'])
+    else
+      RecruitmentCycle.current_recruitment_cycle
+    end
   end
 
   def self.config_dir=(dir)
@@ -161,7 +181,6 @@ module MCB
       # the following lines are necessary to make opts work with double **splats and default values
       # See the change introduced in https://github.com/ddfreyne/cri/pull/99 (cri 2.15.8)
       opts[:url] = opts[:url]
-      opts[:endpoint] = opts[:endpoint]
       opts[:'max-pages'] = opts[:'max-pages']
       opts[:token] = opts[:token]
       opts[:all] = opts[:all]
@@ -205,7 +224,7 @@ module MCB
       # We only need httparty for API V1 calls
       require 'httparty'
 
-      endpoint_url = process_opt_changed_since(opts, URI.join(url, endpoint))
+      endpoint_url = add_url_params_from_opts(opts, URI.join(url, endpoint))
       token = opts.fetch(:token) { apiv1_token(opts.slice(:webapp, :rgroup)) }
 
       # Safeguard to ensure we don't go off the deep end.
@@ -218,10 +237,6 @@ module MCB
             endpoint_url.to_s,
             headers: { authorization: "Bearer #{token}" }
           )
-          verbose "Response headers:"
-          verbose response.headers
-          verbose "Response body:"
-          verbose response.body
           records = JSON.parse(response.body)
           if records.any?
 
@@ -247,6 +262,9 @@ module MCB
     def remote_connect_options
       envs = env_to_azure_map.keys.join(', ')
       Proc.new do
+        option :r, 'recruitment-year',
+               "Set the recruitment year, defaults to the current recruitment year",
+               argument: :required
         option :E, 'env',
                "Connect to a pre-defined environment: #{envs}",
                argument: :required
@@ -400,7 +418,7 @@ module MCB
       end
     end
 
-    def process_opt_changed_since(opts, url)
+    def add_url_params_from_opts(opts, url)
       new_url = url.dup
       if opts.key? :'changed-since'
         changed_since = DateTime.strptime(
@@ -411,6 +429,7 @@ module MCB
         changed_since_param = CGI.escape(changed_since.strftime('%FT%T.%6NZ'))
         new_url.query = "changed_since=#{changed_since_param}"
       end
+
       new_url
     end
   end

@@ -61,7 +61,9 @@ module API
         update_enrichment
         update_sites
         update_course
-        has_synced? if site_ids.present?
+        should_sync = site_ids.present? && @course.recruitment_cycle.current?
+        has_synced? if should_sync
+
 
         if @course.errors.empty? && @course.valid?
           render jsonapi: @course.reload
@@ -77,6 +79,7 @@ module API
 
         enrichment = @course.enrichments.find_or_initialize_draft
         enrichment.assign_attributes(enrichment_params)
+        enrichment.status = :draft if enrichment.rolled_over?
         enrichment.save
       end
 
