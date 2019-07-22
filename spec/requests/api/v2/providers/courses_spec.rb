@@ -351,4 +351,49 @@ describe 'Courses API v2', type: :request do
       end
     end
   end
+
+  describe 'DELETE destory' do
+    let(:path) do
+      "/api/v2/providers/#{provider.provider_code}" +
+        "/courses/#{course.course_code}"
+    end
+    let(:course) { findable_open_course }
+
+    subject do
+      delete path, headers: { 'HTTP_AUTHORIZATION' => credentials }
+      response
+    end
+
+    context 'when unauthenticated' do
+      let(:payload) { { email: 'foo@bar' } }
+
+      it { should have_http_status(:unauthorized) }
+    end
+
+    context 'when user has not accepted terms' do
+      let(:user)         { create(:user, accept_terms_date_utc: nil) }
+      let(:organisation) { create(:organisation, users: [user]) }
+
+      it { should have_http_status(:forbidden) }
+    end
+
+    context 'when unauthorised' do
+      let(:unauthorised_user) { create(:user) }
+      let(:payload)           { { email: unauthorised_user.email } }
+
+      it "raises an error" do
+        expect { subject }.to raise_error Pundit::NotAuthorizedError
+      end
+    end
+
+    context 'when course and provider is not related' do
+      let(:course) { create(:course) }
+
+      it { should have_http_status(:not_found) }
+    end
+
+    describe 'when authorized' do
+      it { should have_http_status(:success) }
+    end
+  end
 end
