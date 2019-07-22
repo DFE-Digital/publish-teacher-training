@@ -37,4 +37,17 @@ describe ProviderEnrichment, type: :model do
       it { should have_been_published_before }
     end
   end
+
+  describe '.latest_first' do
+    let!(:old_enrichment) do
+      create(:provider_enrichment, :published, created_at: Date.yesterday)
+    end
+    let!(:new_enrichment) { create(:provider_enrichment, :published) }
+
+    it 'returns the new enrichment first' do
+      binding.pry
+      expect(ProviderEnrichment.latest_created_at.first).to eq new_enrichment
+      expect(ProviderEnrichment.latest_created_at.last).to eq old_enrichment
+    end
+  end
 end

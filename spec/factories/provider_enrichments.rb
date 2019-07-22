@@ -37,8 +37,7 @@ FactoryBot.define do
     region_code { 'eastern' }
     train_with_us { Faker::Lorem.sentence.to_s }
     train_with_disability { Faker::Lorem.sentence.to_s }
-    accrediting_provider_enrichments { nil }
-    created_at { Faker::Date.between 2.days.ago, 1.day.ago }
+    accrediting_provider_enrichments { nil }  
 
     after(:build) do |enrichment, evaluator|
       if evaluator.age.present?

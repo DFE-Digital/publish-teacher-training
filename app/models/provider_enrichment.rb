@@ -26,6 +26,7 @@ class ProviderEnrichment < ApplicationRecord
 
   scope :latest_created_at, -> { order(created_at: :desc) }
   scope :latest_published_at, -> { order(last_published_at: :desc) }
+  scope :draft, -> { where(status: 'draft') }
 
   jsonb_accessor :json_data,
                  email: [:string, store_key: 'Email'],
