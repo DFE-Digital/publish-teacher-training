@@ -115,7 +115,7 @@ describe ProviderSerializer do
 
     describe 'admin contact' do
       context 'exists on provider record and not in contacts table' do
-        subject { serialize(provider)['contacts'].find { |c| c[:type] == 'admin' } }
+        subject { serialize(provider)['contacts'].find { |c| c[:type] == 'admin_contact' } }
 
         its([:name]) { should eq provider.contact_name }
         its([:email]) { should eq provider.email }
@@ -126,9 +126,10 @@ describe ProviderSerializer do
         let(:contact)  { create :contact, type: 'admin' }
         let(:provider) { create :provider, contacts: [contact] }
 
-        subject { serialize(provider)['contacts'].find { |c| c[:type] == 'admin' } }
+        subject { serialize(provider)['contacts'].find { |c| c[:type] == 'admin_contact' } }
 
         its([:name]) { should eq contact.name }
+        its([:type]) { should eq 'admin_contact' }
         its([:email]) { should eq contact.email }
         its([:telephone]) { should eq contact.telephone }
       end

@@ -95,13 +95,17 @@ private
 
   def generate_provider_contacts
     provider_contacts = object.contacts.map do |c|
-      c.attributes.slice('type', 'name', 'email', 'telephone')
+      contact = c.attributes.slice('type', 'name', 'email', 'telephone')
+      if c.type == 'admin'
+        contact['type'] = 'admin_contact'
+      end
+      contact
     end
 
-    has_admin_contact = provider_contacts.any? { |c| c['type'] == 'admin' }
+    has_admin_contact = provider_contacts.any? { |c| c['type'] == 'admin_contact' }
     unless has_admin_contact
       provider_contacts.prepend(
-        type: 'admin',
+        type: 'admin_contact',
         name: object.contact_name,
         email: object.email,
         telephone: object.telephone
