@@ -6,8 +6,10 @@ Course.destroy_all
 Site.destroy_all
 SiteStatus.destroy_all
 Provider.destroy_all
+Organisation.destroy_all
 User.destroy_all
 AccessRequest.destroy_all
+RecruitmentCycle.destroy_all
 
 current_recruitment_cycle = RecruitmentCycle.create(year: '2019', application_start_date: Date.new(2018, 10, 9))
 next_recruitment_cycle = RecruitmentCycle.create(year: '2020')
@@ -27,12 +29,24 @@ next_recruitment_cycle = RecruitmentCycle.create(year: '2020')
   )
 end
 
-def create_standard_provider_and_courses_for_cycle(recruitment_cycle)
+superuser = User.create!(
+  first_name: 'Super',
+  last_name: 'Admin',
+  accept_terms_date_utc: Time.now.utc,
+  email: 'super.admin@education.gov.uk', # matches authentication.rb
+  state: 'rolled_over'
+)
+
+
+def create_standard_provider_and_courses_for_cycle(recruitment_cycle, superuser)
   provider = Provider.create!(
     provider_name: 'Acme SCITT',
     provider_code: 'A01',
     recruitment_cycle: recruitment_cycle
   )
+  organisation = Organisation.create!(name: "ACME SCITT Org")
+  organisation.providers << provider
+  superuser.organisations << organisation
 
   Site.create!(
     provider: provider,
@@ -47,7 +61,7 @@ def create_standard_provider_and_courses_for_cycle(recruitment_cycle)
 
   course1 = Course.create!(
     name: "Mathematics",
-    course_code: Faker::Number.unique.hexadecimal(3).upcase,
+    course_code: "MAT2",
     provider: provider,
     start_date: Date.new(2019, 9, 1),
     profpost_flag: "PG",
@@ -75,7 +89,7 @@ def create_standard_provider_and_courses_for_cycle(recruitment_cycle)
 
   course2 = Course.create!(
     name: "Biology",
-    course_code: Faker::Number.unique.hexadecimal(3).upcase,
+    course_code: "BIO3",
     provider: provider,
     start_date: Date.new(2019, 9, 1),
     profpost_flag: "BO",
@@ -104,16 +118,8 @@ def create_standard_provider_and_courses_for_cycle(recruitment_cycle)
   )
 end
 
-create_standard_provider_and_courses_for_cycle(current_recruitment_cycle)
-create_standard_provider_and_courses_for_cycle(next_recruitment_cycle)
-
-User.create!(
-  first_name: 'Super',
-  last_name: 'Admin',
-  accept_terms_date_utc: Time.now.utc,
-  email: 'super.admin@education.gov.uk', # matches authentication.rb
-  state: 'rolled_over'
-)
+create_standard_provider_and_courses_for_cycle(current_recruitment_cycle, superuser)
+create_standard_provider_and_courses_for_cycle(next_recruitment_cycle, superuser)
 
 10.times do |i|
   provider = Provider.create!(
@@ -132,6 +138,7 @@ User.create!(
   )
 
   user.organisations << organisation
+  superuser.organisations << organisation
 end
 
 access_requester_user = User.all.reject(&:admin?).sample
