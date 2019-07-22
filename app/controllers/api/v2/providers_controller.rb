@@ -5,7 +5,7 @@ module API
       before_action :build_recruitment_cycle
       before_action :build_provider, except: :index
 
-      deserializable_resource :course,
+      deserializable_resource :provider,
                               only: :update,
                               class: API::V2::DeserializableProvider
 
@@ -24,6 +24,10 @@ module API
         authorize @provider, :show?
 
         render jsonapi: @provider, include: params[:include]
+      end
+
+      def update
+        update_enrichment
       end
 
     private
@@ -45,6 +49,33 @@ module API
 
       def get_user
         @user = User.find(params[:user_id])
+      end
+
+      def update_enrichment
+        return unless enrichment_params.values.any?
+
+        enrichment = @provider.enrichments.find_or_initialize_draft
+        enrichment.assign_attributes(enrichment_params)
+        enrichment.status = :draft if enrichment.rolled_over?
+        enrichment.save
+      end
+
+      def enrichment_params
+        params
+          .fetch(:provider, {})
+          .except()
+          .permit(
+            :train_with_us,
+            :train_with_disability,
+            :email,
+            :telephone,
+            :website,
+            :address1,
+            :address2,
+            :address3,
+            :address4,
+            :postcode
+          )
       end
     end
   end

@@ -122,7 +122,7 @@ Rails.application.routes.draw do
                 only: %i[index show],
                 param: :year do
         resources :providers,
-                  only: %i[index show],
+                  only: %i[index show update],
                   param: :code,
                   concerns: :provider_routes
       end
