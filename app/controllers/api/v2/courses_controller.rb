@@ -135,7 +135,7 @@ module API
             :other_requirements,
             :personal_qualities,
             :salary_details,
-            :qualifications
+            :required_qualifications
           )
       end
 
@@ -153,6 +153,7 @@ module API
                   :other_requirements,
                   :personal_qualities,
                   :salary_details,
+                  :required_qualifications,
                   :qualifications,
                   :id,
                   :type,

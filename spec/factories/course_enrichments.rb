@@ -72,7 +72,7 @@ FactoryBot.define do
     interview_process { Faker::TvShows::Seinfeld.quote }
     other_requirements { Faker::TvShows::TheITCrowd.quote }
     personal_qualities { Faker::Hipster.paragraph }
-    qualifications { Faker::Educator.degree }
+    required_qualifications { Faker::Educator.degree }
     # Technically, salary_details should align with whether the course is
     # salaried or not. Maybe worth implementing this somehow at some point.
     salary_details do
@@ -108,7 +108,7 @@ FactoryBot.define do
   trait :without_content do
     fee_uk_eu { nil }
     about_course { nil }
-    qualifications { nil }
+    required_qualifications { nil }
     how_school_placements_work { nil }
     salary_details { nil }
     course_length { nil }

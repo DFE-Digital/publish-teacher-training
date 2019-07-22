@@ -57,7 +57,7 @@ describe 'PATCH /providers/:provider_code/courses/:course_code' do
       interview_process: 'new interview process',
       other_requirements: 'new other requirements',
       personal_qualities: 'new personal qualities',
-      qualifications: 'new required qualifications',
+      required_qualifications: 'new required qualifications',
       salary_details: 'new salary details'
     }
   end
@@ -165,7 +165,7 @@ describe 'PATCH /providers/:provider_code/courses/:course_code' do
           interview_process: nil,
           other_requirements: nil,
           personal_qualities: nil,
-          qualifications: nil,
+          required_qualifications: nil,
           salary_details: nil
         }
       end
@@ -268,7 +268,7 @@ describe 'PATCH /providers/:provider_code/courses/:course_code' do
           interview_process: nil,
           other_requirements: nil,
           personal_qualities: nil,
-          qualifications: nil,
+          required_qualifications: nil,
           salary_details: nil
         }
       end
@@ -373,7 +373,7 @@ describe 'PATCH /providers/:provider_code/courses/:course_code' do
           interview_process: Faker::Lorem.sentence(1000),
           other_requirements: Faker::Lorem.sentence(1000),
           personal_qualities: Faker::Lorem.sentence(1000),
-          qualifications: Faker::Lorem.sentence(1000),
+          required_qualifications: Faker::Lorem.sentence(1000),
           salary_details: Faker::Lorem.sentence(1000)
         }
       end
@@ -386,7 +386,7 @@ describe 'PATCH /providers/:provider_code/courses/:course_code' do
         expect("Invalid about_course".in?(subject)).to eq(true)
         expect("Invalid interview_process".in?(subject)).to eq(true)
         expect("Invalid how_school_placements_work".in?(subject)).to eq(true)
-        expect("Invalid qualifications".in?(subject)).to eq(true)
+        expect("Invalid required_qualifications".in?(subject)).to eq(true)
         expect("Invalid fee_details".in?(subject)).to eq(true)
         expect("Invalid financial_support".in?(subject)).to eq(true)
       end
@@ -404,7 +404,7 @@ describe 'PATCH /providers/:provider_code/courses/:course_code' do
           interview_process: "",
           other_requirements: "",
           personal_qualities: "",
-          qualifications: "",
+          required_qualifications: "",
           salary_details: ""
         }
       end
@@ -510,7 +510,7 @@ describe 'PATCH /providers/:provider_code/courses/:course_code' do
           interview_process: Faker::Lorem.sentence(1000),
           other_requirements: Faker::Lorem.sentence(1000),
           personal_qualities: Faker::Lorem.sentence(1000),
-          qualifications: Faker::Lorem.sentence(1000),
+          required_qualifications: Faker::Lorem.sentence(1000),
           salary_details: Faker::Lorem.sentence(1000)
         }
       end
@@ -523,7 +523,7 @@ describe 'PATCH /providers/:provider_code/courses/:course_code' do
         expect("Invalid about_course".in?(subject)).to eq(true)
         expect("Invalid interview_process".in?(subject)).to eq(true)
         expect("Invalid how_school_placements_work".in?(subject)).to eq(true)
-        expect("Invalid qualifications".in?(subject)).to eq(true)
+        expect("Invalid required_qualifications".in?(subject)).to eq(true)
         expect("Invalid fee_details".in?(subject)).to eq(true)
         expect("Invalid financial_support".in?(subject)).to eq(true)
       end
@@ -547,7 +547,7 @@ describe 'PATCH /providers/:provider_code/courses/:course_code' do
           interview_process: "",
           other_requirements: "",
           personal_qualities: "",
-          qualifications: "",
+          required_qualifications: "",
           salary_details: ""
         }
       end
@@ -610,7 +610,7 @@ describe 'PATCH /providers/:provider_code/courses/:course_code' do
           interview_process
           other_requirements
           personal_qualities
-          qualifications
+          required_qualifications
           salary_details
         ].freeze
 
@@ -637,7 +637,7 @@ describe 'PATCH /providers/:provider_code/courses/:course_code' do
     include_examples 'only one attribute has changed', :interview_process, 'changed interview_process'
     include_examples 'only one attribute has changed', :other_requirements, 'changed other_requirements'
     include_examples 'only one attribute has changed', :personal_qualities, 'changed personal_qualities'
-    include_examples 'only one attribute has changed', :qualifications, 'changed qualifications', :required_qualifications
+    include_examples 'only one attribute has changed', :required_qualifications, 'changed required_qualifications'
     include_examples 'only one attribute has changed', :salary_details, 'changed salary_details'
   end
 end

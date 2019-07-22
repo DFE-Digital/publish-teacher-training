@@ -13,6 +13,7 @@ module API
         other_requirements
         personal_qualities
         salary_details
+        required_qualifications
         course_code
         name
         study_mode
@@ -31,14 +32,6 @@ module API
         declared_attributes
           .map { |key| [key.to_sym, "/data/attributes/#{key}"] }
           .to_h
-      end
-
-      attribute :required_qualifications do |value|
-        if value
-          { qualifications: value }
-        else
-          {}
-        end
       end
     end
   end

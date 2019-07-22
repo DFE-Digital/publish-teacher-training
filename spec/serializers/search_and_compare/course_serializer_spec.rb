@@ -57,7 +57,7 @@ describe SearchAndCompare::CourseSerializer do
               interview_process: 'interview_process',
               fee_details: 'fee_details',
               salary_details: 'salary_details',
-              qualifications: 'qualifications',
+              required_qualifications: 'required_qualifications',
               personal_qualities: 'personal_qualities',
               other_requirements: 'other_requirements',
               financial_support: 'financial_support',
@@ -374,7 +374,7 @@ describe SearchAndCompare::CourseSerializer do
         include_examples 'mapped the description section', 'interview process', 'interview_process'
         include_examples 'mapped the description section', 'about fees', 'fee_details'
         include_examples 'mapped the description section', 'about salary', 'salary_details'
-        include_examples 'mapped the description section', 'entry requirements', 'qualifications'
+        include_examples 'mapped the description section', 'entry requirements', 'required_qualifications'
         include_examples 'mapped the description section', 'entry requirements personal qualities', 'personal_qualities'
         include_examples 'mapped the description section', 'entry requirements other', 'other_requirements'
         include_examples 'mapped the description section', 'financial support', 'financial_support'
@@ -390,7 +390,7 @@ describe SearchAndCompare::CourseSerializer do
           include_examples 'mapped the description section', 'interview process', 'interview_process'
           include_examples 'mapped the description section', 'about fees', 'fee_details'
           include_examples 'mapped the description section', 'about salary', 'salary_details'
-          include_examples 'mapped the description section', 'entry requirements', 'qualifications'
+          include_examples 'mapped the description section', 'entry requirements', 'required_qualifications'
           include_examples 'mapped the description section', 'entry requirements personal qualities', 'personal_qualities'
           include_examples 'mapped the description section', 'entry requirements other', 'other_requirements'
           include_examples 'mapped the description section', 'financial support', 'financial_support'

@@ -65,7 +65,7 @@
       "Id": 0,
       "Ordinal": 0,
       "Name": "entry requirements",
-      "Text": "qualifications",
+      "Text": "required_qualifications",
       "CourseId": 0,
       "Course": null
     },

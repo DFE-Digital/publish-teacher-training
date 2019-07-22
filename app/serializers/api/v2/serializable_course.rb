@@ -58,7 +58,7 @@ module API
       enrichment_attribute :interview_process
       enrichment_attribute :other_requirements
       enrichment_attribute :personal_qualities
-      enrichment_attribute :required_qualifications, :qualifications
+      enrichment_attribute :required_qualifications
       enrichment_attribute :salary_details
     end
   end

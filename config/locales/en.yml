@@ -42,7 +42,7 @@ en:
               blank: "^Enter details about this course"
             how_school_placements_work:
               blank: "^Enter details about school placements"
-            qualifications:
+            required_qualifications:
               blank: "^Enter details about the qualifications needed"
             course_length:
               blank: "^Enter a course length"

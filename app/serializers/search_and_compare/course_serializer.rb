@@ -115,7 +115,7 @@ module SearchAndCompare
        },
        {
          Name: "entry requirements",
-         Text: course_enrichment&.qualifications
+         Text: course_enrichment&.required_qualifications
        },
        {
          Name: "entry requirements personal qualities",
