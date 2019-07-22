@@ -126,8 +126,7 @@ class Course < ApplicationRecord
   validate :validate_enrichment
   validate :validate_course_syncable, on: :sync
   validates :english, presence: true
-  validates :maths, presence: true
-  validates :science, presence: true
+  validates :maths, presence: true  
 
   after_validation :remove_unnecessary_enrichments_validation_message
 
