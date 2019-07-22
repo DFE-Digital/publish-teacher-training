@@ -45,7 +45,6 @@ describe ProviderEnrichment, type: :model do
     let!(:new_enrichment) { create(:provider_enrichment, :published) }
 
     it 'returns the new enrichment first' do
-      binding.pry
       expect(ProviderEnrichment.latest_created_at.first).to eq new_enrichment
       expect(ProviderEnrichment.latest_created_at.last).to eq old_enrichment
     end

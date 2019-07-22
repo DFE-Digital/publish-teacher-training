@@ -55,7 +55,33 @@ class Provider < ApplicationRecord
   has_many :sites
   has_many :enrichments,
            class_name: "ProviderEnrichment",
-           inverse_of: 'provider'
+           inverse_of: 'provider' do
+             def find_or_initialize_draft
+               # This is a ruby search as opposed to an AR search, because calling `draft`
+               # will return a new instance of a CourseEnrichment object which is different
+               # to the ones in the cached `enrichments` association. This makes checking
+               # for validations later down non-trivial.
+               latest_draft_enrichment = select(&:draft?).last
+
+               latest_draft_enrichment.presence || new(new_draft_attributes)
+             end
+
+             def new_draft_attributes
+               latest_published_enrichment = latest_created_at.published.first
+
+               new_enrichments_attributes = { status: :draft }.with_indifferent_access
+
+               if latest_published_enrichment.present?
+                 published_enrichment_attributes = latest_published_enrichment.dup.attributes.with_indifferent_access
+                   .except(:json_data, :status)
+
+                 new_enrichments_attributes.merge!(published_enrichment_attributes)
+               end
+
+               new_enrichments_attributes
+             end
+           end
+
   has_one :latest_published_enrichment,
           -> { published.latest_published_at },
           class_name: "ProviderEnrichment",
