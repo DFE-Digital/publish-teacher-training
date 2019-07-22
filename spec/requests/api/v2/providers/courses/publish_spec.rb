@@ -109,7 +109,7 @@ describe 'Publish API v2', type: :request do
           expect {
             subject
           }.to raise_error RuntimeError,
-                           'course is not syncable'
+                           "'#{course}' '#{course.provider}' sync error: {:dfe_subjects=>[{:error=>\"No DfE subject.\"}]}"
         end
       end
     end

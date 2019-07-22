@@ -174,7 +174,7 @@ module API
           SearchAndCompareAPIService::Request.sync([@course])
         else
           raise RuntimeError.new(
-            'course is not syncable'
+            "'#{@course}' '#{@course.provider}' sync error: #{@course.errors.details}"
           )
         end
       end
