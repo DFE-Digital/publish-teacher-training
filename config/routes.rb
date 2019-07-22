@@ -103,7 +103,7 @@ Rails.application.routes.draw do
       end
 
       concern :provider_routes do
-        resources :courses, param: :code, only: %i[index create show update] do
+        resources :courses, param: :code do
           post :sync_with_search_and_compare, on: :member
           post :publish, on: :member
           post :publishable, on: :member

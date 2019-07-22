@@ -31,6 +31,10 @@ class Course < ApplicationRecord
 
   after_initialize :set_defaults
 
+  before_discard do
+    raise "You cannot delete a running course (Course: #{self}, Provider: #{provider_id})" if ucas_status != :new
+  end
+
   has_associated_audits
   audited
   validates :course_code, uniqueness: { scope: :provider_id }
