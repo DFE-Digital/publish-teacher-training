@@ -1,16 +1,10 @@
 require 'mcb_helper'
 
 describe 'mcb providers list' do
-  def list(*arguments)
-    stderr = nil
-    output = with_stubbed_stdout(stdin: "", stderr: stderr) do
-      $mcb.run %W[courses list] + arguments
-    end
-    { stdout: output, stderr: stderr }
-  end
+  let(:list) { MCBCommand.new('courses', 'list') }
 
   let(:current_cycle) { RecruitmentCycle.current_recruitment_cycle }
-  let(:additional_cycle) { find_or_create(:recruitment_cycle, year: '2020') }
+  let(:additional_cycle) { find_or_create(:recruitment_cycle, :next) }
 
   context 'when recruitment cycle is unspecified' do
     let(:provider1) { create(:provider, recruitment_cycle: current_cycle) }
@@ -26,7 +20,7 @@ describe 'mcb providers list' do
       course2
       course3
 
-      command_output = list[:stdout]
+      command_output = list.execute[:stdout]
 
       expect(command_output).to include(course1.course_code)
       expect(command_output).to include(course1.name)
@@ -43,7 +37,7 @@ describe 'mcb providers list' do
         course1
         course2
 
-        command_output = list(course1.course_code)[:stdout]
+        command_output = list.execute(arguments: [course1.course_code])[:stdout]
 
         expect(command_output).to include(course1.course_code)
         expect(command_output).to include(course1.name)
@@ -56,7 +50,7 @@ describe 'mcb providers list' do
         course1
         course2
 
-        command_output = list(course1.course_code, course2.course_code)[:stdout]
+        command_output = list.execute(arguments: [course1.course_code, course2.course_code])[:stdout]
 
         expect(command_output).to include(course1.course_code)
         expect(command_output).to include(course1.name)
@@ -69,7 +63,7 @@ describe 'mcb providers list' do
         course1
         course2
 
-        command_output = list(course2.course_code.downcase)[:stdout]
+        command_output = list.execute(arguments: [course2.course_code.downcase])[:stdout]
         expect(command_output).to include(course2.course_code)
       end
     end
@@ -79,7 +73,7 @@ describe 'mcb providers list' do
         course1
         course2
 
-        command_output = list[:stdout]
+        command_output = list.execute[:stdout]
 
         expect(command_output).to include(course1.course_code)
         expect(command_output).to include(course1.name)
@@ -101,7 +95,7 @@ describe 'mcb providers list' do
       course1
       course2
 
-      command_output = list("-r", additional_cycle.year)[:stdout]
+      command_output = list.execute(arguments: ["-r", additional_cycle.year])[:stdout]
 
       expect(command_output).to include(course2.course_code)
       expect(command_output).to include(course2.name)

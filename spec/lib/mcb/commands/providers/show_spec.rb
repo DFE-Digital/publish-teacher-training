@@ -1,13 +1,7 @@
 require 'mcb_helper'
 
 describe 'mcb providers list' do
-  def show(*arguments)
-    stderr = nil
-    output = with_stubbed_stdout(stdin: "", stderr: stderr) do
-      $mcb.run %W[provider show] + arguments
-    end
-    { stdout: output, stderr: stderr }
-  end
+  let(:show) { MCBCommand.new('provider', 'show') }
 
   let(:recruitment_year1) { find_or_create(:recruitment_cycle, year: '2020') }
   let(:recruitment_year2) { RecruitmentCycle.current_recruitment_cycle }
@@ -22,7 +16,7 @@ describe 'mcb providers list' do
 
   context 'when recruitment cycle is unspecified' do
     it 'shows information for the provider with the default recruitment cycle' do
-      output = show(rolled_over_provider.provider_code)[:stdout]
+      output = show.execute(arguments: [rolled_over_provider.provider_code])[:stdout]
 
       expect(output).to have_text_table_row('id', rolled_over_provider.id.to_s)
       expect(output).to have_text_table_row('provider_code', rolled_over_provider.provider_code)
@@ -33,7 +27,7 @@ describe 'mcb providers list' do
     it 'shows information for the provider with the default recruitment cycle' do
       rolled_over_provider
 
-      output = show(provider.provider_code, '-r', recruitment_year1.year)[:stdout]
+      output = show.execute(arguments: [provider.provider_code, '-r', recruitment_year1.year])[:stdout]
       expect(output).to have_text_table_row('id', provider.id.to_s)
       expect(output).to have_text_table_row('provider_code', provider.provider_code)
     end
