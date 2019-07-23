@@ -60,7 +60,7 @@ describe '"mcb apiv1 providers find"' do
                         '%02d' % site2.region_code_before_type_cast
                       ))
     expect(output).to(have_text_table_row(
-                        'admin_contact',
+                        contact2.type,
                         contact2.name,
                         contact2.email,
                         contact2.telephone
