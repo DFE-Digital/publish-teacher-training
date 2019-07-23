@@ -261,6 +261,22 @@ describe Provider, type: :model do
         expect(first_provider.courses_count).to eq(1)
       end
     end
+
+    describe '#courses' do
+      describe 'discard' do
+        it 'reduces courses when one is discarded' do
+          expect { course.discard }.to change { provider.courses.size }.by(-1)
+        end
+      end
+
+      context 'when course is discarded' do
+        it 'does not show up in kept' do
+          course.discard
+
+          expect(provider.courses.size).to be(0)
+        end
+      end
+    end
   end
 
   describe '#copy_to_recruitment_cycle' do

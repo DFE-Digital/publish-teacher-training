@@ -974,4 +974,56 @@ RSpec.describe Course, type: :model do
       it { should be_truthy }
     end
   end
+
+  describe '#discard' do
+    context 'new course' do
+      let!(:subject) do
+        course = create(:course)
+
+        site = create(:site)
+        create(:site_status, :new, site: site, course: course)
+
+        course
+      end
+
+      context 'before discarding' do
+        its(:discarded?) { should be false }
+
+        it 'is in kept' do
+          expect(described_class.kept.size).to eq(1)
+        end
+
+        it 'is not in discarded' do
+          expect(described_class.discarded.size).to eq(0)
+        end
+      end
+
+      context 'after discarding' do
+        before do
+          subject.discard
+        end
+
+        its(:discarded?) { should be true }
+
+        it 'is not in kept' do
+          expect(described_class.kept.size).to eq(0)
+        end
+
+        it 'is in discarded' do
+          expect(described_class.discarded.size).to eq(1)
+        end
+      end
+
+      context 'incorrect actions' do
+        it 'raises error when deleted and course status is running' do
+          course = subject
+
+          site = create(:site)
+          create(:site_status, :running, :published, site: site, course: course)
+
+          expect { course.discard }.to raise_error("You cannot delete a running course")
+        end
+      end
+    end
+  end
 end
