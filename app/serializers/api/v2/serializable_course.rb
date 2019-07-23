@@ -16,7 +16,7 @@ module API
                  :content_status, :ucas_status, :funding, :applications_open_from,
                  :level, :is_send?, :has_bursary?, :has_scholarship_and_bursary?,
                  :has_early_career_payments?, :bursary_amount, :scholarship_amount,
-                 :english, :maths, :science
+                 :english, :maths, :science, :gcse_subjects_required
 
       attribute :start_date do
         @object.start_date&.iso8601

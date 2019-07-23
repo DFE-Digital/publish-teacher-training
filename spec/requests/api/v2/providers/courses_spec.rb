@@ -138,6 +138,7 @@ describe 'Courses API v2', type: :request do
               "science" => 'must_have_qualification_at_application_time',
               "provider_code" => provider.provider_code,
               "recruitment_cycle_year" => "2019",
+              "gcse_subjects_required" => %w[maths english science],
             },
             "relationships" => {
               "accrediting_provider" => { "meta" => { "included" => false } },
@@ -275,6 +276,7 @@ describe 'Courses API v2', type: :request do
               "science" => 'must_have_qualification_at_application_time',
               "provider_code" => provider.provider_code,
               "recruitment_cycle_year" => "2019",
+              "gcse_subjects_required" => %w[maths english science],
             },
             "relationships" => {
               "accrediting_provider" => { "meta" => { "included" => false } },

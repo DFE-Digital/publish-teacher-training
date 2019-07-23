@@ -27,6 +27,10 @@ describe API::V2::SerializableCourse do
   it { should have_attribute :applications_open_from }
   it { should have_attribute :is_send? }
   it { should have_attribute :level }
+  it { should have_attribute :english }
+  it { should have_attribute :maths }
+  it { should have_attribute :science }
+  it { should have_attribute :gcse_subjects_required }
   it { should have_attribute :provider_code }
   it { should have_attribute(:recruitment_cycle_year).with_value(course.recruitment_cycle.year) }
 
