@@ -140,7 +140,10 @@ RSpec.describe Course, type: :model do
   end
 
   context 'with site statuses' do
+    let(:new_site_status) { build(:site_status, :new) }
+    let(:new_site_status2) { build(:site_status, :new) }
     let(:findable) { build(:site_status, :findable) }
+    let(:suspended) { build(:site_status, :suspended) }
     let(:with_any_vacancy) { build(:site_status, :with_any_vacancy) }
     let(:default) { build(:site_status) }
     let(:applications_being_accepted_now) { build(:site_status, :applications_being_accepted_now) }
@@ -277,6 +280,30 @@ RSpec.describe Course, type: :model do
         let(:subject) { create(:course, site_statuses: [suspended]) }
 
         its(:ucas_status) { should eq :not_running }
+      end
+    end
+
+    describe '#not_new' do
+      let(:new_course) do
+        create(:course, site_statuses: [new_site_status])
+      end
+
+      let(:suspended_course_with_new_site) do
+        create(:course, site_statuses: [suspended, new_site_status2])
+      end
+
+      let(:findable_course) do
+        create(:course, site_statuses: [findable])
+      end
+
+      it 'only returns courses that arent new' do
+        new_course
+        findable_course
+        suspended_course_with_new_site
+
+        expect(Course.not_new.count).to eq(2)
+        expect(Course.not_new.first.sites.count).to eq(1)
+        expect(Course.not_new.second.sites.count).to eq(1)
       end
     end
 
