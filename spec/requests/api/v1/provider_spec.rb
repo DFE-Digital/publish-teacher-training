@@ -182,7 +182,7 @@ describe 'Providers API', type: :request do
               'utt_application_alerts' => 'Yes, required',
               'contacts' => [
                 {
-                  'type' => 'admin_contact',
+                  'type' => 'admin',
                   'name' => 'Admin Contact A123',
                   'email' => 'admin@acmescitt.education.uk',
                   'telephone' => '020 812 345 678'
@@ -243,7 +243,7 @@ describe 'Providers API', type: :request do
               'utt_application_alerts' => 'No, not required',
               'contacts' => [
                 {
-                  'type' => 'admin_contact',
+                  'type' => 'admin',
                   'name' => 'Admin Contact B123',
                   'email' => 'admin@acmeuniversity.education.uk',
                   'telephone' => '01273 345 678'
