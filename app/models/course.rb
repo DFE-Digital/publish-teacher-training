@@ -269,6 +269,18 @@ class Course < ApplicationRecord
     funding == 'fee'
   end
 
+  # https://www.gov.uk/government/publications/initial-teacher-training-criteria/initial-teacher-training-itt-criteria-and-supporting-advice#c11-gcse-standard-equivalent
+  def gcse_subjects_required
+    case level
+    when :primary
+      %w[maths english science]
+    when :secondary
+      %w[maths english]
+    else
+      []
+    end
+  end
+
   def last_published_at
     newest_enrichment = enrichments.latest_first.first
     newest_enrichment&.last_published_timestamp_utc

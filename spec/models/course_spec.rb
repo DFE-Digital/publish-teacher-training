@@ -478,18 +478,21 @@ RSpec.describe Course, type: :model do
     context 'with primary subjects' do
       subject { create(:course, subjects: [find_or_create(:subject, :primary)]) }
       its(:level) { should eq(:primary) }
+      its(:gcse_subjects_required) { should eq(%w[maths english science]) }
       its(:dfe_subjects) { should eq([DFESubject.new("Primary")]) }
     end
 
     context 'with secondary subjects' do
       subject { create(:course, subjects: [find_or_create(:subject, subject_name: "physical education")]) }
       its(:level) { should eq(:secondary) }
+      its(:gcse_subjects_required) { should eq(%w[maths english]) }
       its(:dfe_subjects) { should eq([DFESubject.new("Physical education")]) }
     end
 
     context 'with further education subjects' do
       subject { create(:course, subjects: [create(:further_education_subject)]) }
       its(:level) { should eq(:further_education) }
+      its(:gcse_subjects_required) { should eq([]) }
       its(:dfe_subjects) { should eq([DFESubject.new("Further education")]) }
     end
 
