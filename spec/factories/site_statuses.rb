@@ -22,6 +22,7 @@ FactoryBot.define do
     transient do
       any_vancancy { false }
       provider { build :provider }
+      age { nil }
     end
 
     trait :published do
