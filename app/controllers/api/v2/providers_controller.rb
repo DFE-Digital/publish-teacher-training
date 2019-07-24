@@ -58,13 +58,17 @@ module API
       end
 
       def sync_courses_with_search_and_compare
-        provider = Provider.find_by!(provider_code: params[:code].upcase)
-        authorize provider
-        if courses_synced?(provider.syncable_courses)
+        authorize @provider
+        if @recruitment_cycle.year != Settings.current_recruitment_cycle.to_s
+          raise RuntimeError.new(
+            "provider is not from the current recrutiment cycle"
+          )
+        end
+        if courses_synced?(@provider.syncable_courses)
           head :ok
         else
           raise RuntimeError.new(
-            'error received when syncing courses with search and compare'
+            "#{@provider} failed to sync these courses #{@provider.syncable_courses.pluck(:course_code)}"
           )
         end
       end

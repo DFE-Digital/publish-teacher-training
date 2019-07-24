@@ -111,6 +111,7 @@ Rails.application.routes.draw do
         end
         resources :sites, only: %i[index update show create]
         resources :recruitment_cycles, only: %i[index]
+        post :sync_courses_with_search_and_compare, on: :member
       end
 
       resources :providers,

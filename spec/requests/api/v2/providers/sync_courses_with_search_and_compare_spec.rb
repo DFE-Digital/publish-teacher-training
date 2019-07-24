@@ -15,15 +15,14 @@ describe 'Courses API v2', type: :request do
   let(:syncable_course) { build(:course, site_statuses: [findable_site_status_1], subjects: [dfe_subject]) }
   let(:suspended_course) { build(:course, site_statuses: [suspended_site_status], subjects: [dfe_subject]) }
   let(:invalid_subject_course) { build(:course, site_statuses: [findable_site_status_2], subjects: [non_dfe_subject]) }
-  let(:provider) { create(:provider, organisations: [organisation], courses: [syncable_course, suspended_course, invalid_subject_course], sites: [site]) }
-
-
-  subject { response }
+  let(:provider) {
+    create(:provider,
+           organisations: [organisation],
+             courses: [syncable_course, suspended_course, invalid_subject_course],
+             sites: [site])
+  }
 
   describe 'POST ' do
-    let(:sync_path) do
-      "/api/v2/providers/#{provider.provider_code}/sync_courses_with_search_and_compare"
-    end
     let(:status) { 200 }
     let(:has_synced) { true }
 
@@ -38,6 +37,10 @@ describe 'Courses API v2', type: :request do
     subject do
       post sync_path, headers: { 'HTTP_AUTHORIZATION' => credentials }
       response
+    end
+
+    let(:sync_path) do
+      "/api/v2/providers/#{provider.provider_code}/sync_courses_with_search_and_compare"
     end
 
     context 'when unauthenticated' do
@@ -63,14 +66,40 @@ describe 'Courses API v2', type: :request do
     end
 
     context 'when authorized' do
-      context 'when a successful external call to search has been made' do
-        it { should have_http_status(:ok) }
+      context 'current recruitment cycle ' do
+        let(:sync_path) do
+          "/api/v2/recruitment_cycles/#{provider.recruitment_cycle.year}" +
+            "/providers/#{provider.provider_code}/sync_courses_with_search_and_compare"
+        end
+
+        context 'when a successful external call to search has been made' do
+          it { should have_http_status(:ok) }
+        end
+
+        context 'when an unsuccessful external call to search has been made' do
+          let(:has_synced) { false }
+          it 'should throw an error' do
+            expect { subject }.to raise_error("#{provider} failed to sync these courses #{provider.syncable_courses.pluck(:course_code)}")
+          end
+        end
       end
 
-      context 'when an unsuccessful external call to search has been made' do
-        let(:has_synced) { false }
+      context 'next recruitment cycle' do
+        let(:sync_path) do
+          "/api/v2/recruitment_cycles/#{provider.recruitment_cycle.year}" +
+            "/providers/#{provider.provider_code}/sync_courses_with_search_and_compare"
+        end
+        let(:next_cycle) { build(:recruitment_cycle, year: 2020) }
+        let(:provider) {
+          create(:provider,
+                 organisations: [organisation],
+                         courses: [syncable_course],
+                         sites: [site],
+                         recruitment_cycle: next_cycle)
+        }
+
         it 'should throw an error' do
-          expect { subject }.to raise_error('error received when syncing courses with search and compare')
+          expect { subject }.to raise_error("provider is not from the current recrutiment cycle")
         end
       end
     end
