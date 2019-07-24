@@ -239,7 +239,8 @@ describe 'Providers API v2', type: :request do
             "website" => provider.url,
             "recruitment_cycle_year" => provider.recruitment_cycle.year,
             "content_status" => provider.content_status.to_s,
-            "last_published_at" => provider.last_published_at
+            "last_published_at" => provider.last_published_at,
+            "accrediting_providers" => nil,
           },
           "relationships" => {
             "sites" => {
@@ -293,6 +294,7 @@ describe 'Providers API v2', type: :request do
               "recruitment_cycle_year" => provider.recruitment_cycle.year,
               "content_status" => provider.content_status.to_s,
               "last_published_at" => provider.last_published_at,
+              "accrediting_providers" => nil,
             },
             "relationships" => {
               "sites" => {

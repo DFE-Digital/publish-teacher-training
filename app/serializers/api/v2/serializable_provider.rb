@@ -58,6 +58,10 @@ module API
         @object.last_published_at&.iso8601
       end
 
+      attribute :accrediting_providers do
+        @object.enrichments.last&.__send__(:accrediting_provider_enrichments)
+      end
+
       enrichment_attribute :train_with_us
       enrichment_attribute :train_with_disability
 
