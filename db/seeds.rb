@@ -93,10 +93,6 @@ def create_standard_provider_and_courses_for_cycle(recruitment_cycle)
     study_mode: "B",
   )
 
-  PGDECourse.create!(
-    provider_code: course2.provider.provider_code,
-    course_code: course2.course_code,
-  )
 
   SiteStatus.create!(
     site: Site.last,

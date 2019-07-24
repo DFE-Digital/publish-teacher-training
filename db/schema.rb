@@ -156,11 +156,6 @@ ActiveRecord::Schema.define(version: 2019_07_23_092536) do
     t.index ["user_id"], name: "IX_organisation_user_user_id"
   end
 
-  create_table "pgde_course", id: :serial, force: :cascade do |t|
-    t.text "course_code", null: false
-    t.text "provider_code", null: false
-  end
-
   create_table "provider", id: :serial, force: :cascade do |t|
     t.text "address4"
     t.text "provider_name"
