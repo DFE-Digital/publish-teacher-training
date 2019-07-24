@@ -69,8 +69,12 @@ describe 'Publish API v2', type: :request do
                subjects: dfe_subjects,
                age: 17.days.ago)
       }
+
       it 'publishes a course' do
-        expect(subject).to have_http_status(:success)
+        perform_enqueued_jobs do
+          expect(subject).to have_http_status(:success)
+        end
+
         assert_requested :put, "#{Settings.search_api.base_url}/api/courses/"
 
         expect(course.reload.site_statuses.first).to be_status_running
@@ -87,21 +91,18 @@ describe 'Publish API v2', type: :request do
 
         it 'raises an error' do
           expect {
-            subject
-          }.to raise_error RuntimeError,
-                           "'#{course}' '#{course.provider}' sync error: {:dfe_subjects=>[{:error=>\"No DfE subject.\"}]}"
+            perform_enqueued_jobs do
+              subject
+            end
+          }.to(raise_error(
+                 RuntimeError,
+                 "'#{course}' '#{course.provider}' sync error: {:dfe_subjects=>[{:error=>\"No DfE subject.\"}]}"
+               ))
+
+          expect(WebMock).not_to(
+            have_requested(:put, "#{Settings.search_api.base_url}/api/courses/")
+          )
         end
-      end
-    end
-
-    context 'when the api responds sets http status code to 400' do
-      let(:status) { 400 }
-
-      it 'raises an error' do
-        expect {
-          subject
-        }.to raise_error RuntimeError,
-                         'error received when syncing with search and compare'
       end
     end
 

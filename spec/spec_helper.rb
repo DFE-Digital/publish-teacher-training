@@ -122,4 +122,6 @@ RSpec.configure do |config|
   end
 
   config.include ActiveJob::TestHelper, type: :request
+
+  ActiveJob::Base.queue_adapter = :test
 end
