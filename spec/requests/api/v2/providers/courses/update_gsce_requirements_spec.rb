@@ -168,4 +168,18 @@ describe 'PATCH /providers/:provider_code/courses/:course_code' do
       expect(course.reload.science).to eq('must_have_qualification_at_application_time')
     end
   end
+
+  context "when unknown values are provided on a course" do
+    let(:json_data) { JSON.parse(response.body)['errors'] }
+    let(:gcse_requirements) { { english: 'must_have_qualification_at_application_time', maths: nil, science: 'blah' } }
+
+    it "returns an error" do
+      expect(response).to have_http_status(:unprocessable_entity)
+    end
+
+    it "has validation errors" do
+      expect(json_data.count).to eq 1
+      expect(response.body).to include('Science is invalid')
+    end
+  end
 end

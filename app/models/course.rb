@@ -381,6 +381,16 @@ class Course < ApplicationRecord
     recruitment_cycle.year > RecruitmentCycle.current_recruitment_cycle.year
   end
 
+  # Ideally this would just use the validation, but:
+  # https://github.com/rails/rails/issues/13971
+  def entry_requirements_assignable(course_params)
+    course_params.slice(:maths, :english, :science)
+      .to_h
+      .select { |_subject, value| value && !ENTRY_REQUIREMENT_OPTIONS.key?(value.to_sym) }
+      .map { |subject, _value| errors.add(subject.to_sym, "is invalid") }
+      .empty?
+  end
+
 private
 
   def add_enrichment_errors(enrichment)
