@@ -9,16 +9,22 @@ module MCB
       @cli.ask("New course title?  ")
     end
 
-    def ask_english; ask_gcse_subject(:english); end
+    def ask_english
+      ask_gcse_subject(:english, Course::entry_requirement_options_without_nil_choice)
+    end
 
-    def ask_maths; ask_gcse_subject(:maths); end
+    def ask_maths
+      ask_gcse_subject(:maths, Course::entry_requirement_options_without_nil_choice)
+    end
 
-    def ask_science; ask_gcse_subject(:science); end
+    def ask_science
+      ask_gcse_subject(:science, Course::ENTRY_REQUIREMENT_OPTIONS.keys)
+    end
 
-    def ask_gcse_subject(subject)
+    def ask_gcse_subject(subject, choices)
       ask_multiple_choice(
         prompt: "What's the #{subject} entry requirements?",
-        choices: Course::ENTRY_REQUIREMENT_OPTIONS.keys
+        choices: choices
       )
     end
 

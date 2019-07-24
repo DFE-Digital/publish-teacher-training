@@ -121,6 +121,10 @@ class Course < ApplicationRecord
     end.order(:changed_at, :id)
   end
 
+  def self.entry_requirement_options_without_nil_choice
+    ENTRY_REQUIREMENT_OPTIONS.reject { |option| option == :not_set }.keys.map(&:to_s)
+  end
+
   validates :enrichments, presence: true, on: :publish
   validate :validate_enrichment_publishable, on: :publish
   validate :validate_enrichment
