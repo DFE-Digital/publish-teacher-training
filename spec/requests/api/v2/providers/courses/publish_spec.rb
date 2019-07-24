@@ -160,7 +160,7 @@ describe 'Publish API v2', type: :request do
             expect(json_data[1]["source"]["pointer"]).to eq("/data/attributes/how_school_placements_work")
             expect(json_data[2]["source"]["pointer"]).to eq("/data/attributes/course_length")
             expect(json_data[3]["source"]["pointer"]).to eq("/data/attributes/fee_uk_eu")
-            expect(json_data[4]["source"]["pointer"]).to eq("/data/attributes/qualifications")
+            expect(json_data[4]["source"]["pointer"]).to eq("/data/attributes/required_qualifications")
           end
         end
       end

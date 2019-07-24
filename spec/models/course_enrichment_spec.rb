@@ -155,19 +155,19 @@ describe CourseEnrichment, type: :model do
     end
   end
 
-  describe 'qualifications attribute' do
-    let(:qualifications_text) { 'this course is great' }
+  describe 'required_qualifications attribute' do
+    let(:required_qualifications_text) { 'this course is great' }
 
-    subject { build :course_enrichment, qualifications: qualifications_text }
+    subject { build :course_enrichment, required_qualifications: required_qualifications_text }
 
     context 'with over 100 words' do
-      let(:qualifications_text) { Faker::Lorem.sentence(100 + 1) }
+      let(:required_qualifications_text) { Faker::Lorem.sentence(100 + 1) }
 
       it { should_not be_valid }
     end
 
     context 'when nil' do
-      let(:qualifications_text) { nil }
+      let(:required_qualifications_text) { nil }
 
       it { should be_valid }
 
@@ -230,7 +230,7 @@ describe CourseEnrichment, type: :model do
 
     context 'fee based course' do
       it { should validate_presence_of(:fee_uk_eu).on(:publish) }
-      it { should validate_presence_of(:qualifications).on(:publish) }
+      it { should validate_presence_of(:required_qualifications).on(:publish) }
       it { should validate_presence_of(:fee_uk_eu).on(:publish) }
       it { should validate_numericality_of(:fee_uk_eu).on(:publish) }
       it { should validate_numericality_of(:fee_international).on(:publish) }
@@ -265,16 +265,16 @@ describe CourseEnrichment, type: :model do
       let(:course_enrichment) { build(:course_enrichment, :with_salary_based_course) }
 
       it { should validate_presence_of(:salary_details).on(:publish) }
-      it { should validate_presence_of(:qualifications).on(:publish) }
+      it { should validate_presence_of(:required_qualifications).on(:publish) }
       it { should_not validate_presence_of(:fee_uk_eu).on(:publish) }
       it { should_not validate_numericality_of(:fee_uk_eu).on(:publish) }
       it { should_not validate_numericality_of(:fee_international).on(:publish) }
 
-      it 'validates maximum word count for qualifications' do
-        course_enrichment.qualifications = Faker::Lorem.sentence(100 + 1)
+      it 'validates maximum word count for required_qualifications' do
+        course_enrichment.required_qualifications = Faker::Lorem.sentence(100 + 1)
 
         expect(course_enrichment).not_to be_valid :publish
-        expect(course_enrichment.errors[:qualifications]).to be_present
+        expect(course_enrichment.errors[:required_qualifications]).to be_present
       end
 
       it 'validates maximum word count for salary_details' do

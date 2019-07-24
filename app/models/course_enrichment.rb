@@ -32,7 +32,7 @@ class CourseEnrichment < ApplicationRecord
                  interview_process: [:string, store_key: 'InterviewProcess'],
                  other_requirements: [:string, store_key: 'OtherRequirements'],
                  personal_qualities: [:string, store_key: 'PersonalQualities'],
-                 qualifications: [:string, store_key: 'Qualifications'],
+                 required_qualifications: [:string, store_key: 'Qualifications'],
                  salary_details: [:string, store_key: 'SalaryDetails']
 
   belongs_to :course
@@ -88,8 +88,8 @@ class CourseEnrichment < ApplicationRecord
 
   # Requirements and qualifications
 
-  validates :qualifications, presence: true, on: :publish
-  validates :qualifications, words_count: { maximum: 100 }
+  validates :required_qualifications, presence: true, on: :publish
+  validates :required_qualifications, words_count: { maximum: 100 }
 
   validates :personal_qualities, words_count: { maximum: 100 }
 

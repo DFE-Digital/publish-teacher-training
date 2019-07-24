@@ -174,7 +174,7 @@ describe API::V2::SerializableCourse do
     its(%w[interview_process])          { should eq enrichment.interview_process }
     its(%w[other_requirements])         { should eq enrichment.other_requirements }
     its(%w[personal_qualities])         { should eq enrichment.personal_qualities }
-    its(%w[required_qualifications])    { should eq enrichment.qualifications }
+    its(%w[required_qualifications])    { should eq enrichment.required_qualifications }
     its(%w[salary_details])             { should eq enrichment.salary_details }
   end
 end
