@@ -3,7 +3,7 @@ require "rails_helper"
 describe 'PATCH /providers/:provider_code/courses/:course_code' do
   let(:jsonapi_renderer) { JSONAPI::Serializable::Renderer.new }
 
-  def perform_request(course)
+  def perform_request(gcse_requirements)
     jsonapi_data = jsonapi_renderer.render(
       course,
       class: {
@@ -11,7 +11,7 @@ describe 'PATCH /providers/:provider_code/courses/:course_code' do
       }
     )
 
-    jsonapi_data.dig(:data, :attributes).slice!(*permitted_params)
+    jsonapi_data[:data][:attributes] = gcse_requirements
 
     patch "/api/v2/providers/#{course.provider.provider_code}" \
             "/courses/#{course.course_code}",
@@ -25,18 +25,11 @@ describe 'PATCH /providers/:provider_code/courses/:course_code' do
   let(:user)              { create :user, organisations: [organisation] }
   let(:payload)           { { email: user.email } }
   let(:token)             { build_jwt :apiv2, payload: payload }
-  let(:primary_subject)   { build(:subject, :primary) }
+
   let(:course)            {
     create :course,
            provider: provider,
-             subjects: [primary_subject],
-  }
-  let(:updated_course) {
-    build :course,
-          course_code: course.course_code,
-            provider: provider,
-            subjects: [primary_subject],
-            **gcse_requirements
+           subjects: [build(:subject, :primary)]
   }
 
   let(:credentials) do
@@ -45,6 +38,10 @@ describe 'PATCH /providers/:provider_code/courses/:course_code' do
 
   let(:permitted_params) do
     %i[english maths science]
+  end
+
+  before do
+    perform_request(gcse_requirements)
   end
 
   context "course has updated gcse requirements" do
@@ -56,25 +53,20 @@ describe 'PATCH /providers/:provider_code/courses/:course_code' do
       }
     end
 
-    before do
-      updated_course.id = course.id
-      perform_request(updated_course)
-    end
-
     it "returns http success" do
       expect(response).to have_http_status(:success)
     end
 
     it "updates the english attribute to the correct value" do
-      expect(course.reload.english).to eq(updated_course.english)
+      expect(course.reload.english).to eq(gcse_requirements[:english])
     end
 
     it "updates the maths attribute to the correct value" do
-      expect(course.reload.maths).to eq(updated_course.maths)
+      expect(course.reload.maths).to eq(gcse_requirements[:maths])
     end
 
     it "updates the science attribute to the correct value" do
-      expect(course.reload.science).to eq(updated_course.science)
+      expect(course.reload.science).to eq(gcse_requirements[:science])
     end
   end
 
@@ -86,11 +78,6 @@ describe 'PATCH /providers/:provider_code/courses/:course_code' do
           maths: 'must_have_qualification_at_application_time',
           science: 'must_have_qualification_at_application_time'
         }
-      end
-
-      before do
-        updated_course.id = course.id
-        perform_request(updated_course)
       end
 
       it "returns http success" do
@@ -114,8 +101,6 @@ describe 'PATCH /providers/:provider_code/courses/:course_code' do
       let(:gcse_requirements) { {} }
 
       before do
-        updated_course.id = course.id
-        perform_request(updated_course)
         @english = course.english
         @maths = course.maths
         @science = course.science
