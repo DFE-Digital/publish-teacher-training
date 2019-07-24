@@ -121,6 +121,13 @@ class Course < ApplicationRecord
     end.order(:changed_at, :id)
   end
 
+  def self.entry_requirement_options_without_nil_choice
+    ENTRY_REQUIREMENT_OPTIONS.reject { |option| option == :not_set }.keys.map(&:to_s)
+  end
+
+  validates :maths,   inclusion: { in: entry_requirement_options_without_nil_choice }
+  validates :english, inclusion: { in: entry_requirement_options_without_nil_choice }
+  validates :science, inclusion: { in: entry_requirement_options_without_nil_choice }, if: :gcse_science_required?
   validates :enrichments, presence: true, on: :publish
   validate :validate_enrichment_publishable, on: :publish
   validate :validate_enrichment
@@ -281,6 +288,10 @@ class Course < ApplicationRecord
     end
   end
 
+  def gcse_science_required?
+    gcse_subjects_required.include?('science')
+  end
+
   def last_published_at
     newest_enrichment = enrichments.latest_first.first
     newest_enrichment&.last_published_timestamp_utc
@@ -368,6 +379,16 @@ class Course < ApplicationRecord
 
   def next_recruitment_cycle?
     recruitment_cycle.year > RecruitmentCycle.current_recruitment_cycle.year
+  end
+
+  # Ideally this would just use the validation, but:
+  # https://github.com/rails/rails/issues/13971
+  def entry_requirements_assignable(course_params)
+    course_params.slice(:maths, :english, :science)
+      .to_h
+      .select { |_subject, value| value && !ENTRY_REQUIREMENT_OPTIONS.key?(value.to_sym) }
+      .map { |subject, _value| errors.add(subject.to_sym, "is invalid") }
+      .empty?
   end
 
 private

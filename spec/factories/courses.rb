@@ -33,6 +33,9 @@ FactoryBot.define do
     provider
 
     study_mode { :full_time }
+    maths { :must_have_qualification_at_application_time }
+    english { :must_have_qualification_at_application_time }
+    science { :must_have_qualification_at_application_time }
     resulting_in_pgce_with_qts
 
     transient do

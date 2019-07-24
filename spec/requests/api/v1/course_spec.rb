@@ -41,6 +41,7 @@ describe "Courses API", type: :request do
                                    age_range: 'primary',
                                    english: :equivalence_test,
                                    maths: :not_required,
+                                   science: :not_set,
                                    profpost_flag: :postgraduate,
                                    program_type: :school_direct_training_programme,
                                    modular: "",
