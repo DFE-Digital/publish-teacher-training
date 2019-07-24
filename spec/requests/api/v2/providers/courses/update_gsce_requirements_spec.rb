@@ -30,9 +30,6 @@ describe 'PATCH /providers/:provider_code/courses/:course_code' do
     create :course,
            provider: provider,
              subjects: [primary_subject],
-             english: 1,
-             maths: 1,
-             science: 1
   }
   let(:updated_course) {
     build :course,
