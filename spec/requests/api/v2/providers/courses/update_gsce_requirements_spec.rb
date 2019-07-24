@@ -21,17 +21,14 @@ describe 'PATCH /providers/:provider_code/courses/:course_code' do
           }
   end
   let(:organisation)      { create :organisation }
-  let(:provider)          { create :provider, organisations: [organisation], sites: [site] }
+  let(:provider)          { create :provider, organisations: [organisation] }
   let(:user)              { create :user, organisations: [organisation] }
   let(:payload)           { { email: user.email } }
   let(:token)             { build_jwt :apiv2, payload: payload }
-  let(:site_status)       { build(:site_status, :findable, site: site) }
-  let(:site)              { build(:site) }
   let(:primary_subject)   { build(:subject, :primary) }
   let(:course)            {
     create :course,
            provider: provider,
-             site_statuses: [site_status],
              subjects: [primary_subject],
              english: 1,
              maths: 1,
@@ -41,7 +38,6 @@ describe 'PATCH /providers/:provider_code/courses/:course_code' do
     build :course,
           course_code: course.course_code,
             provider: provider,
-            site_statuses: [site_status],
             subjects: [primary_subject],
             **gcse_requirements
   }
