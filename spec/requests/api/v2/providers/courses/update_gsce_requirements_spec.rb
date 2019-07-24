@@ -123,4 +123,49 @@ describe 'PATCH /providers/:provider_code/courses/:course_code' do
       end
     end
   end
+
+  context "when not_set is provided on a primary course" do
+    let(:json_data) { JSON.parse(response.body)['errors'] }
+    let(:gcse_requirements) { { english: 'not_set', maths: 'not_set', science: 'not_set' } }
+
+    it "returns an error" do
+      expect(response).to have_http_status(:unprocessable_entity)
+    end
+
+    it "has Maths, English and Science validation errors" do
+      expect(json_data.count).to eq 3
+      expect(response.body).to include('Pick an option for Maths')
+      expect(response.body).to include('Pick an option for English')
+      expect(response.body).to include('Pick an option for Science')
+    end
+  end
+
+  context "when not_set is provided on a secondary course" do
+    let(:secondary_subject) { build(:subject, :secondary) }
+    let(:json_data) { JSON.parse(response.body)['errors'] }
+    let(:gcse_requirements) { { english: 'not_set', maths: 'not_set', science: 'not_set' } }
+
+    let(:course) {
+      create :course,
+             provider: provider,
+             subjects: [secondary_subject]
+    }
+
+    it "returns an error" do
+      expect(response).to have_http_status(:unprocessable_entity)
+    end
+
+    it "has Maths and English validation errors" do
+      expect(json_data.count).to eq 2
+      expect(response.body).to include('Pick an option for Maths')
+      expect(response.body).to include('Pick an option for English')
+      expect(response.body).not_to include('Pick an option for Science')
+    end
+
+    it "does not change any attribute" do
+      expect(course.reload.maths).to eq('must_have_qualification_at_application_time')
+      expect(course.reload.english).to eq('must_have_qualification_at_application_time')
+      expect(course.reload.science).to eq('must_have_qualification_at_application_time')
+    end
+  end
 end

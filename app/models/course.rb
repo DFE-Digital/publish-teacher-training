@@ -125,6 +125,9 @@ class Course < ApplicationRecord
     ENTRY_REQUIREMENT_OPTIONS.reject { |option| option == :not_set }.keys.map(&:to_s)
   end
 
+  validates :maths,   inclusion: { in: entry_requirement_options_without_nil_choice }
+  validates :english, inclusion: { in: entry_requirement_options_without_nil_choice }
+  validates :science, inclusion: { in: entry_requirement_options_without_nil_choice }, if: :gcse_science_required?
   validates :enrichments, presence: true, on: :publish
   validate :validate_enrichment_publishable, on: :publish
   validate :validate_enrichment
@@ -283,6 +286,10 @@ class Course < ApplicationRecord
     else
       []
     end
+  end
+
+  def gcse_science_required?
+    gcse_subjects_required.include?('science')
   end
 
   def last_published_at
