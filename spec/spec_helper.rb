@@ -120,4 +120,6 @@ RSpec.configure do |config|
     config.before(:each) { Bullet.start_request }
     config.after(:each)  { Bullet.end_request }
   end
+
+  config.include ActiveJob::TestHelper, type: :request
 end

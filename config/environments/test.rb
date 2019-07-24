@@ -42,4 +42,6 @@ Rails.application.configure do
     Bullet.bullet_logger = true
     Bullet.raise = false # don't raise an error if an n+1 query occurs
   end
+
+  config.active_job.queue_adapter = :test
 end
