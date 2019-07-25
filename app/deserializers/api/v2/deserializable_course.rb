@@ -21,6 +21,7 @@ module API
         english
         maths
         science
+        qualification
       ].freeze
 
       attributes(*COURSE_ATTRIBUTES)
