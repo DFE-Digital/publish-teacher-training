@@ -29,8 +29,11 @@ describe 'PATCH /providers/:provider_code/courses/:course_code' do
   let(:course)            {
     create :course,
            provider: provider,
-           subjects: [build(:subject, :primary)]
+           subjects: [subject],
+           qualification: qualification
   }
+  let(:qualification) { :pgce_with_qts }
+  let(:subject) { build(:subject, :primary) }
 
   let(:credentials) do
     ActionController::HttpAuthentication::Token.encode_credentials(token)
@@ -58,11 +61,7 @@ describe 'PATCH /providers/:provider_code/courses/:course_code' do
 
   context "course has the same qualification" do
     context "with values passed into the params" do
-      let(:updated_qualification) do
-        {
-          qualification: 'pgce_with_qts'
-        }
-      end
+      let(:updated_qualification) { { qualification: 'pgce_with_qts' } }
 
       it "returns http success" do
         expect(response).to have_http_status(:success)
@@ -88,6 +87,37 @@ describe 'PATCH /providers/:provider_code/courses/:course_code' do
 
     it "does not change english attribute" do
       expect(course.reload.qualification).to eq(@qualification)
+    end
+  end
+
+  context "when courses level is further education" do
+    context "with an invalid qualification" do
+      let(:json_data) { JSON.parse(response.body)['errors'] }
+      let(:updated_qualification) { { qualification: 'pgce_with_qts' } }
+      let(:subject) { build(:further_education_subject) }
+      let(:qualification) { :pgce }
+
+      it "returns an error" do
+        expect(response).to have_http_status(:unprocessable_entity)
+        expect(json_data.count).to eq 1
+        expect(response.body).to include("#{updated_qualification[:qualification]} " +
+                                         "is not valid for a #{course.level} course")
+      end
+    end
+  end
+
+  context "when course level is not further education" do
+    context "with an invalid qualification" do
+      let(:json_data) { JSON.parse(response.body)['errors'] }
+      let(:updated_qualification) { { qualification: 'pgce' } }
+      let(:qualification) { :pgce_with_qts }
+
+      it "returns an error" do
+        expect(response).to have_http_status(:unprocessable_entity)
+        expect(json_data.count).to eq 1
+        expect(response.body).to include("#{updated_qualification[:qualification]} " +
+                                         "is not valid for a #{course.level} course")
+      end
     end
   end
 end
