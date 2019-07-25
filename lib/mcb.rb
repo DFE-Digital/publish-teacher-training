@@ -361,6 +361,10 @@ module MCB
     def start_mcb_repl(start_argv)
       $mcb_repl_mode = true
 
+      command_names = $mcb.commands.map(&:name)
+      Readline.completion_proc = proc do |s|
+        command_names.grep(/^#{Regexp.escape(s)}/)
+      end
       trap("INT", "SIG_IGN")
 
       env = start_argv[1]
@@ -375,6 +379,7 @@ module MCB
                when nil          then Rainbow('local').green
                else                   env
                end
+
       while (input = Readline.readline("#{prompt}> ", true))
         argv = input.split
 

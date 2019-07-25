@@ -63,9 +63,7 @@ module API
 
       meta do
         {
-          edit_options: {
-            entry_requirements: @object.edit_options.entry_requirements
-          }
+          edit_options: @object.edit_options.all
         }
       end
     end
