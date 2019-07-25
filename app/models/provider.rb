@@ -60,7 +60,7 @@ class Provider < ApplicationRecord
           -> { published.latest_published_at },
           class_name: "ProviderEnrichment",
           inverse_of: 'provider'
-  has_many :courses
+  has_many :courses, -> { kept }
   has_one :ucas_preferences, class_name: 'ProviderUCASPreference'
   has_many :contacts
   has_many :accredited_courses,

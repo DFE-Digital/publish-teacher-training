@@ -46,32 +46,147 @@ describe 'Courses API v2', type: :request do
       "/api/v2/providers/#{provider.provider_code}" +
         "/courses/#{course.course_code}"
     end
-    let(:course) { findable_open_course }
 
     subject do
       get show_path, headers: { 'HTTP_AUTHORIZATION' => credentials }
       response
     end
 
-    context 'when unauthenticated' do
-      let(:payload) { { email: 'foo@bar' } }
+    context 'with a findable_open_course' do
+      let(:course) { findable_open_course }
 
-      it { should have_http_status(:unauthorized) }
-    end
+      context 'when unauthenticated' do
+        let(:payload) { { email: 'foo@bar' } }
 
-    context 'when user has not accepted terms' do
-      let(:user)         { create(:user, accept_terms_date_utc: nil) }
-      let(:organisation) { create(:organisation, users: [user]) }
+        it { should have_http_status(:unauthorized) }
+      end
 
-      it { should have_http_status(:forbidden) }
-    end
+      context 'when user has not accepted terms' do
+        let(:user)         { create(:user, accept_terms_date_utc: nil) }
+        let(:organisation) { create(:organisation, users: [user]) }
 
-    context 'when unauthorised' do
-      let(:unauthorised_user) { create(:user) }
-      let(:payload)           { { email: unauthorised_user.email } }
+        it { should have_http_status(:forbidden) }
+      end
 
-      it "raises an error" do
-        expect { subject }.to raise_error Pundit::NotAuthorizedError
+      context 'when unauthorised' do
+        let(:unauthorised_user) { create(:user) }
+        let(:payload)           { { email: unauthorised_user.email } }
+
+        it "raises an error" do
+          expect { subject }.to raise_error Pundit::NotAuthorizedError
+        end
+      end
+
+      describe 'JSON generated for courses' do
+        before do
+          get "/api/v2/providers/#{provider.provider_code.downcase}/courses/#{findable_open_course.course_code.downcase}",
+              headers: { 'HTTP_AUTHORIZATION' => credentials },
+              params: { include: 'subjects,site_statuses.site' }
+        end
+
+        it { should have_http_status(:success) }
+
+        it 'has a data section with the correct attributes' do
+          json_response = JSON.parse response.body
+          expect(json_response).to eq(
+            "data" => {
+              "id" => provider.courses[0].id.to_s,
+              "type" => "courses",
+              "attributes" => {
+                "findable?" => true,
+                "open_for_applications?" => true,
+                "has_vacancies?" => true,
+                "name" => provider.courses[0].name,
+                "course_code" => provider.courses[0].course_code,
+                "start_date" => provider.courses[0].start_date.iso8601,
+                "study_mode" => "full_time",
+                "qualifications" => %w[qts pgce],
+                "description" => "PGCE with QTS full time teaching apprenticeship",
+                "content_status" => "published",
+                "ucas_status" => "running",
+                "funding" => "apprenticeship",
+                "is_send?" => true,
+                "subjects" => ["Primary",
+                               "Primary with mathematics"],
+                "level" => "primary",
+                "applications_open_from" => "2019-01-01T00:00:00Z",
+                "about_course" => enrichment.about_course,
+                "course_length" => enrichment.course_length,
+                "fee_details" => enrichment.fee_details,
+                "fee_international" => enrichment.fee_international,
+                "fee_uk_eu" => enrichment.fee_uk_eu,
+                "financial_support" => enrichment.financial_support,
+                "how_school_placements_work" => enrichment.how_school_placements_work,
+                "interview_process" => enrichment.interview_process,
+                "other_requirements" => enrichment.other_requirements,
+                "personal_qualities" => enrichment.personal_qualities,
+                "required_qualifications" => enrichment.required_qualifications,
+                "salary_details" => enrichment.salary_details,
+                "last_published_at" => enrichment.last_published_timestamp_utc.iso8601,
+                "has_bursary?" => true,
+                "has_scholarship_and_bursary?" => false,
+                "has_early_career_payments?" => false,
+                "bursary_amount" => nil,
+                "scholarship_amount" => nil,
+                "about_accrediting_body" => nil,
+                "english" => 'must_have_qualification_at_application_time',
+                "maths" => 'must_have_qualification_at_application_time',
+                "science" => 'must_have_qualification_at_application_time',
+                "provider_code" => provider.provider_code,
+                "recruitment_cycle_year" => "2019",
+                "gcse_subjects_required" => %w[maths english science],
+              },
+              "relationships" => {
+                "accrediting_provider" => { "meta" => { "included" => false } },
+                "provider" => { "meta" => { "included" => false } },
+                "sites" => { "meta" => { "included" => false } },
+                "site_statuses" => { "data" => [{ "type" => "site_statuses", "id" => site_status.id.to_s }] },
+              },
+              "meta" => {
+                "edit_options" => {
+                  "entry_requirements" => %w[must_have_qualification_at_application_time expect_to_achieve_before_training_begins equivalence_test],
+                  "qualifications" => %w[qts pgce_with_qts pgde_with_qts]
+                }
+              }
+            },
+            "jsonapi" => {
+              "version" => "1.0"
+            },
+            "included" => [{
+              "id" => site_status.id.to_s,
+              "type" => "site_statuses",
+              "attributes" => {
+                "vac_status" => site_status.vac_status,
+                "publish" => site_status.publish,
+                "status" => site_status.status,
+                "applications_accepted_from" => site_status.applications_accepted_from.strftime("%Y-%m-%d"),
+                "has_vacancies?" => true
+              },
+              "relationships" => {
+                "site" => {
+                  "data" => {
+                    "type" => "sites",
+                      "id" => site.id.to_s
+                  }
+                }
+              }
+            }, {
+              "id" => site.id.to_s,
+              "type" => "sites",
+              "attributes" => {
+                "code" => site.code,
+                "location_name" => site.location_name,
+                "address1" => site.address1,
+                "address2" => site.address2,
+                "address3" => site.address3,
+                "address4" => site.address4,
+                "postcode" => site.postcode,
+                "region_code" => site.region_code,
+                "recruitment_cycle_year" => "2019",
+              }
+            }]
+          )
+        end
       end
     end
 
@@ -81,116 +196,15 @@ describe 'Courses API v2', type: :request do
       it { should have_http_status(:not_found) }
     end
 
-    describe 'JSON generated for courses' do
-      before do
-        get "/api/v2/providers/#{provider.provider_code.downcase}/courses/#{findable_open_course.course_code.downcase}",
-            headers: { 'HTTP_AUTHORIZATION' => credentials },
-            params: { include: 'subjects,site_statuses.site' }
+    context 'when a course is discarded' do
+      let(:course) do
+        course = create(:course, provider: provider)
+        create(:site_status, :new, site: create(:site), course: course)
+        course.discard
+        course
       end
 
-      it { should have_http_status(:success) }
-
-      it 'has a data section with the correct attributes' do
-        json_response = JSON.parse response.body
-        expect(json_response).to eq(
-          "data" => {
-            "id" => provider.courses[0].id.to_s,
-            "type" => "courses",
-            "attributes" => {
-              "findable?" => true,
-              "open_for_applications?" => true,
-              "has_vacancies?" => true,
-              "name" => provider.courses[0].name,
-              "course_code" => provider.courses[0].course_code,
-              "start_date" => provider.courses[0].start_date.iso8601,
-              "study_mode" => "full_time",
-              "qualifications" => %w[qts pgce],
-              "description" => "PGCE with QTS full time teaching apprenticeship",
-              "content_status" => "published",
-              "ucas_status" => "running",
-              "funding" => "apprenticeship",
-              "is_send?" => true,
-              "subjects" => ["Primary",
-                             "Primary with mathematics"],
-              "level" => "primary",
-              "applications_open_from" => "2019-01-01T00:00:00Z",
-              "about_course" => enrichment.about_course,
-              "course_length" => enrichment.course_length,
-              "fee_details" => enrichment.fee_details,
-              "fee_international" => enrichment.fee_international,
-              "fee_uk_eu" => enrichment.fee_uk_eu,
-              "financial_support" => enrichment.financial_support,
-              "how_school_placements_work" => enrichment.how_school_placements_work,
-              "interview_process" => enrichment.interview_process,
-              "other_requirements" => enrichment.other_requirements,
-              "personal_qualities" => enrichment.personal_qualities,
-              "required_qualifications" => enrichment.required_qualifications,
-              "salary_details" => enrichment.salary_details,
-              "last_published_at" => enrichment.last_published_timestamp_utc.iso8601,
-              "has_bursary?" => true,
-              "has_scholarship_and_bursary?" => false,
-              "has_early_career_payments?" => false,
-              "bursary_amount" => nil,
-              "scholarship_amount" => nil,
-              "about_accrediting_body" => nil,
-              "english" => 'must_have_qualification_at_application_time',
-              "maths" => 'must_have_qualification_at_application_time',
-              "science" => 'must_have_qualification_at_application_time',
-              "provider_code" => provider.provider_code,
-              "recruitment_cycle_year" => "2019",
-              "gcse_subjects_required" => %w[maths english science],
-            },
-            "relationships" => {
-              "accrediting_provider" => { "meta" => { "included" => false } },
-              "provider" => { "meta" => { "included" => false } },
-              "sites" => { "meta" => { "included" => false } },
-              "site_statuses" => { "data" => [{ "type" => "site_statuses", "id" => site_status.id.to_s }] },
-            },
-            "meta" => {
-              "edit_options" => {
-                "entry_requirements" => %w[must_have_qualification_at_application_time expect_to_achieve_before_training_begins equivalence_test],
-                "qualifications" => %w[qts pgce_with_qts pgde_with_qts]
-              }
-            }
-          },
-          "jsonapi" => {
-            "version" => "1.0"
-          },
-          "included" => [{
-            "id" => site_status.id.to_s,
-            "type" => "site_statuses",
-            "attributes" => {
-              "vac_status" => site_status.vac_status,
-              "publish" => site_status.publish,
-              "status" => site_status.status,
-              "applications_accepted_from" => site_status.applications_accepted_from.strftime("%Y-%m-%d"),
-              "has_vacancies?" => true
-            },
-            "relationships" => {
-              "site" => {
-                "data" => {
-                  "type" => "sites",
-                    "id" => site.id.to_s
-                }
-              }
-            }
-          }, {
-            "id" => site.id.to_s,
-            "type" => "sites",
-            "attributes" => {
-              "code" => site.code,
-              "location_name" => site.location_name,
-              "address1" => site.address1,
-              "address2" => site.address2,
-              "address3" => site.address3,
-              "address4" => site.address4,
-              "postcode" => site.postcode,
-              "region_code" => site.region_code,
-              "recruitment_cycle_year" => "2019",
-            }
-          }]
-        )
-      end
+      it { should have_http_status(:not_found) }
     end
   end
 
@@ -361,6 +375,57 @@ describe 'Courses API v2', type: :request do
             .to have_attribute('recruitment_cycle_year').with_value('2020')
         end
       end
+    end
+  end
+
+  describe 'DELETE destroy' do
+    let(:path) do
+      "/api/v2/providers/#{provider.provider_code}" +
+        "/courses/#{course.course_code}"
+    end
+
+    let(:course) { create(:course, provider: provider, site_statuses: [site_status]) }
+    let(:site_status) { build(:site_status, :new) }
+
+    before do
+      course
+    end
+
+    subject do
+      delete path, headers: { 'HTTP_AUTHORIZATION' => credentials }
+      response
+    end
+
+    context 'when unauthenticated' do
+      let(:payload) { { email: 'foo@bar' } }
+
+      it { should have_http_status(:unauthorized) }
+    end
+
+    context 'when user has not accepted terms' do
+      let(:user)         { create(:user, accept_terms_date_utc: nil) }
+      let(:organisation) { create(:organisation, users: [user]) }
+
+      it { should have_http_status(:forbidden) }
+    end
+
+    context 'when unauthorised' do
+      let(:unauthorised_user) { create(:user) }
+      let(:payload)           { { email: unauthorised_user.email } }
+
+      it "raises an error" do
+        expect { subject }.to raise_error Pundit::NotAuthorizedError
+      end
+    end
+
+    context 'when course and provider is not related' do
+      let(:course) { create(:course) }
+
+      it { should have_http_status(:not_found) }
+    end
+
+    describe 'when authorized' do
+      it { should have_http_status(:success) }
     end
   end
 end

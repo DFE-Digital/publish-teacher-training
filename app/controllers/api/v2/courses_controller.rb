@@ -72,6 +72,10 @@ module API
         end
       end
 
+      def destroy
+        @course.discard
+      end
+
     private
 
       def update_enrichment

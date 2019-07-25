@@ -11,6 +11,7 @@
 #  qualification             :integer          not null
 #  start_date                :datetime
 #  study_mode                :text
+#  accrediting_provider_id   :integer
 #  provider_id               :integer          default(0), not null
 #  modular                   :text
 #  english                   :integer
@@ -20,14 +21,19 @@
 #  updated_at                :datetime         not null
 #  changed_at                :datetime         not null
 #  accrediting_provider_code :text
-#  accrediting_provider_id   :integer
+#  discarded_at              :datetime
 #
 
 class Course < ApplicationRecord
+  include Discard::Model
   include WithQualifications
   include ChangedAt
 
   after_initialize :set_defaults
+
+  before_discard do
+    raise "You cannot delete a running course (Course: #{self}, Provider: #{provider_id})" if ucas_status != :new
+  end
 
   has_associated_audits
   audited
