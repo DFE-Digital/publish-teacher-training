@@ -26,6 +26,8 @@ module MCB
       end
     end
 
+    def new_provider_wizard; end
+
   private
 
     def main_loop
