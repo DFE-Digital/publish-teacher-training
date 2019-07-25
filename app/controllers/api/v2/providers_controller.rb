@@ -27,7 +27,10 @@ module API
       end
 
       def update
+        authorize @provider, :update?
         update_enrichment
+
+        render jsonapi: @provider.reload, include: params[:include]
       end
 
     private
@@ -41,7 +44,7 @@ module API
       def build_provider
         code = params.fetch(:code, params[:provider_code])
         @provider = @recruitment_cycle.providers
-                      .includes(:latest_published_enrichment)
+                      .includes(:latest_published_enrichment, :latest_enrichment)
                       .find_by!(
                         provider_code: code.upcase
                       )
@@ -56,13 +59,16 @@ module API
 
         enrichment = @provider.enrichments.find_or_initialize_draft
         enrichment.assign_attributes(enrichment_params)
+
+        # Note: provider_code is only here to support c# counterpart, until provide_code is removed from database
+        enrichment.provider_code = @provider.provider_code if enrichment.provider_code.blank?
         enrichment.save
       end
 
       def enrichment_params
         params
           .fetch(:provider, {})
-          .except()
+          .except
           .permit(
             :train_with_us,
             :train_with_disability,
@@ -73,7 +79,8 @@ module API
             :address2,
             :address3,
             :address4,
-            :postcode
+            :postcode,
+            :region_code
           )
       end
     end

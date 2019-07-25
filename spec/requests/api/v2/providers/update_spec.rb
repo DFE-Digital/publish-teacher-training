@@ -17,10 +17,16 @@ describe 'PATCH /providers/:provider_code' do
 
     jsonapi_data.dig(:data, :attributes).slice!(*permitted_params)
 
+    if provider.enrichments.first.present?
+      enrichment_data = provider.enrichments.first.slice(*permitted_params)
+      jsonapi_data.dig(:data, :attributes).merge!(enrichment_data)
+    end
+
     patch request_path,
           headers: { 'HTTP_AUTHORIZATION' => credentials },
           params: {
-            _jsonapi: jsonapi_data
+            _jsonapi: jsonapi_data,
+            include: 'latest_enrichment'
           }
   end
 
@@ -29,8 +35,7 @@ describe 'PATCH /providers/:provider_code' do
   let(:provider)     do
     create :provider,
            organisations: [organisation],
-           recruitment_cycle: recruitment_cycle,
-           enrichments: [enrichment]
+           recruitment_cycle: recruitment_cycle
   end
   let(:user)         { create :user, organisations: [organisation] }
   let(:payload)      { { email: user.email } }
@@ -40,7 +45,6 @@ describe 'PATCH /providers/:provider_code' do
   # we need an unsaved provider to add the enrichment to (so that it isn't
   # persisted)
   let(:update_provider) { provider.dup.tap { |p| p.enrichments << update_enrichment } }
-  let(:site) { build(:site) }
 
   let(:credentials) do
     ActionController::HttpAuthentication::Token.encode_credentials(token)
@@ -48,17 +52,17 @@ describe 'PATCH /providers/:provider_code' do
 
   let(:updated_attributes) do
     {
-      email: 'Email',
-      website: 'Website',
-      address1: 'Address1',
-      address2: 'Address2',
-      address3: 'Address3',
-      address4: 'Address4',
-      postcode: 'Postcode',
-      region_code: 'RegionCode',
-      telephone: 'Telephone',
-      train_with_us: 'TrainWithUs',
-      train_with_disability: 'TrainWithDisability'
+      email: 'email_address',
+      website: 'url',
+      address1: 'number',
+      address2: 'street',
+      address3: 'town',
+      address4: 'county',
+      postcode: 'sw1p 3bt',
+      region_code: 'london',
+      telephone: '01234 567890',
+      train_with_us: 'train with us',
+      train_with_disability: 'train with disability'
     }
   end
   let(:permitted_params) do
@@ -80,314 +84,193 @@ describe 'PATCH /providers/:provider_code' do
   describe 'with unpermitted attributes on provider object' do
     shared_examples 'does not allow assignment' do |attribute, value|
       it "doesn't permit #{attribute}" do
-        update_provider = build(:provider, attribute => value, sites: [site])
+        update_provider = build(:provider, attribute => value)
         update_provider.id = provider.id
         perform_request(provider)
         expect(provider.reload.send(attribute)).not_to eq(value)
       end
     end
 
-    include_examples 'does not allow assignment', :email, 'email@email.com'
-    include_examples 'does not allow assignment', :website, 'www.website.com'
-    include_examples 'does not allow assignment', :address1, 'number'
-    include_examples 'does not allow assignment', :address2, 'road'
-    include_examples 'does not allow assignment', :address3, 'town'
-    include_examples 'does not allow assignment', :address4, 'county'
-    include_examples 'does not allow assignment', :postcode, 'postcode'
-    include_examples 'does not allow assignment', :region_code, 1
-    include_examples 'does not allow assignment', :telephone, '01234 567890'
-    include_examples 'does not allow assignment', :train_with_us, 'TrainWithUs'
-    include_examples 'does not allow assignment', :train_with_disability, 'TrainWithDisability'
+    include_examples 'does not allow assignment', :id,                   9999
+    include_examples 'does not allow assignment', :provider_name,        'provider name'
+    include_examples 'does not allow assignment', :scheme_member,        'scheme member'
+    include_examples 'does not allow assignment', :contact_name,         'contact name'
+    include_examples 'does not allow assignment', :year_code,            'year code'
+    include_examples 'does not allow assignment', :provider_code,        'provider code'
+    include_examples 'does not allow assignment', :provider_type,        :lead_school
+    include_examples 'does not allow assignment', :scitt,                'scitt'
+    include_examples 'does not allow assignment', :url,                  'url'
+    include_examples 'does not allow assignment', :created_at,           Time.now
+    include_examples 'does not allow assignment', :updated_at,           Time.now
+    include_examples 'does not allow assignment', :accrediting_provider, :accredited_body
+    include_examples 'does not allow assignment', :last_published_at,    Time.now
+    include_examples 'does not allow assignment', :changed_at,           Time.now
+    include_examples 'does not allow assignment', :recruitment_cycle_id, 9999
 
-  #
-  #   it "doesn't allow updating of provider" do
-  #     another_provider = create(:provider)
-  #     update_course    = build(
-  #       :course,
-  #       provider_id: another_provider.id,
-  #       provider:    provider
-  #     )
-  #     update_course.id = course.id
-  #
-  #     perform_request(course)
-  #
-  #     expect(course.reload.provider_id).not_to eq(another_provider.id)
-  #   end
-  #
-  #   it "doesn't allow updating of accrediting provider" do
-  #     another_provider = create(:provider)
-  #     update_course    = build(
-  #       :course,
-  #       accrediting_provider: another_provider,
-  #       provider:             provider
-  #     )
-  #     update_course.id = course.id
-  #
-  #     perform_request(course)
-  #
-  #     expect(course.reload.accrediting_provider).not_to eq(another_provider)
-  #   end
-  # end
-  #
-  # context 'course has no enrichments' do
-  #   it "creates a draft enrichment for the course" do
-  #     expect {
-  #       perform_request update_course
-  #     }.to(change {
-  #            course.reload.enrichments.count
-  #          }.from(0).to(1))
-  #
-  #     draft_enrichment = course.enrichments.draft.first
-  #     expect(draft_enrichment.attributes.slice(*updated_attributes.keys.map(&:to_s)))
-  #       .to include(updated_attributes.stringify_keys)
-  #   end
-  #
-  #   it "change content status" do
-  #     expect {
-  #       perform_request update_course
-  #     }.to(change { course.reload.content_status }.from(:empty).to(:draft))
-  #   end
-  #
-  #   context "with no attributes to update" do
-  #     let(:updated_attributes) do
-  #       {
-  #         about_course: nil,
-  #         course_length: nil,
-  #         fee_details: nil,
-  #         fee_international: nil,
-  #         fee_uk_eu: nil,
-  #         financial_support: nil,
-  #         how_school_placements_work: nil,
-  #         interview_process: nil,
-  #         other_requirements: nil,
-  #         personal_qualities: nil,
-  #         qualifications: nil,
-  #         salary_details: nil
-  #       }
-  #     end
-  #
-  #     it "doesn't create a draft enrichment" do
-  #       expect {
-  #         perform_request update_course
-  #       }.to_not(change { course.reload.enrichments.count })
-  #     end
-  #   end
-  #
-  #   context "with empty attributes" do
-  #     let(:permitted_params) { [] }
-  #
-  #     it "doesn't create a draft enrichment" do
-  #       expect {
-  #         perform_request update_course
-  #       }.to_not(change { course.reload.enrichments.count })
-  #     end
-  #
-  #     it "doesn't change content status" do
-  #       expect {
-  #         perform_request update_course
-  #       }.to_not(change { course.reload.content_status })
-  #     end
-  #   end
-  #
-  #   it 'returns ok' do
-  #     perform_request update_course
-  #
-  #     expect(response).to be_ok
-  #   end
-  #
-  #   it 'returns the updated course' do
-  #     perform_request update_course
-  #     json_response = JSON.parse(response.body)['data']
-  #
-  #     expect(json_response).to have_id(course.id.to_s)
-  #     expect(json_response).to have_type('courses')
-  #     expect(json_response).to have_attribute(:about_course)
-  #       .with_value('new about course')
-  #     expect(json_response).to have_attribute(:course_length)
-  #       .with_value('new course length')
-  #     expect(json_response).to have_attribute(:fee_details)
-  #       .with_value('new fee details')
-  #     expect(json_response).to have_attribute(:fee_international)
-  #       .with_value(0)
-  #     expect(json_response).to have_attribute(:fee_uk_eu)
-  #       .with_value(0)
-  #     expect(json_response).to have_attribute(:financial_support)
-  #       .with_value('new financial support')
-  #     expect(json_response).to have_attribute(:how_school_placements_work)
-  #       .with_value('new how school placements work')
-  #     expect(json_response).to have_attribute(:interview_process)
-  #       .with_value('new interview process')
-  #     expect(json_response).to have_attribute(:other_requirements)
-  #       .with_value('new other requirements')
-  #     expect(json_response).to have_attribute(:personal_qualities)
-  #       .with_value('new personal qualities')
-  #     expect(json_response).to have_attribute(:required_qualifications)
-  #       .with_value('new required qualifications')
-  #     expect(json_response).to have_attribute(:salary_details)
-  #       .with_value('new salary details')
-  #     expect(json_response).to have_attribute(:content_status)
-  #       .with_value('draft')
-  #   end
-  # end
-  #
-  # context 'course has no enrichments and is in the next recruitment cycle' do
-  #   let(:recruitment_cycle) { create :recruitment_cycle, :next }
-  #
-  #   it "creates a draft enrichment for the course" do
-  #     expect {
-  #       perform_request update_course
-  #     }.to(change {
-  #            course.reload.enrichments.count
-  #          }.from(0).to(1))
-  #
-  #     draft_enrichment = course.enrichments.draft.first
-  #     expect(draft_enrichment.attributes.slice(*updated_attributes.keys.map(&:to_s)))
-  #       .to include(updated_attributes.stringify_keys)
-  #   end
-  #
-  #   it "change content status" do
-  #     expect {
-  #       perform_request update_course
-  #     }.to(change { course.reload.content_status }.from(:rolled_over).to(:draft))
-  #   end
-  #
-  #   context "with no attributes to update" do
-  #     let(:updated_attributes) do
-  #       {
-  #         about_course: nil,
-  #         course_length: nil,
-  #         fee_details: nil,
-  #         fee_international: nil,
-  #         fee_uk_eu: nil,
-  #         financial_support: nil,
-  #         how_school_placements_work: nil,
-  #         interview_process: nil,
-  #         other_requirements: nil,
-  #         personal_qualities: nil,
-  #         qualifications: nil,
-  #         salary_details: nil
-  #       }
-  #     end
-  #
-  #     it "doesn't create a draft enrichment" do
-  #       expect {
-  #         perform_request update_course
-  #       }.to_not(change { course.reload.enrichments.count })
-  #     end
-  #   end
-  #
-  #   context "with empty attributes" do
-  #     let(:permitted_params) { [] }
-  #
-  #     it "doesn't create a draft enrichment" do
-  #       expect {
-  #         perform_request update_course
-  #       }.to_not(change { course.reload.enrichments.count })
-  #     end
-  #
-  #     it "doesn't change content status" do
-  #       expect {
-  #         perform_request update_course
-  #       }.to_not(change { course.reload.content_status })
-  #     end
-  #   end
-  #
-  #   it 'returns ok' do
-  #     perform_request update_course
-  #
-  #     expect(response).to be_ok
-  #   end
-  #
-  #   it 'returns the updated course' do
-  #     perform_request update_course
-  #     json_response = JSON.parse(response.body)['data']
-  #
-  #     expect(json_response).to have_id(course.id.to_s)
-  #     expect(json_response).to have_type('courses')
-  #     expect(json_response).to have_attribute(:about_course)
-  #       .with_value('new about course')
-  #     expect(json_response).to have_attribute(:course_length)
-  #       .with_value('new course length')
-  #     expect(json_response).to have_attribute(:fee_details)
-  #       .with_value('new fee details')
-  #     expect(json_response).to have_attribute(:fee_international)
-  #       .with_value(0)
-  #     expect(json_response).to have_attribute(:fee_uk_eu)
-  #       .with_value(0)
-  #     expect(json_response).to have_attribute(:financial_support)
-  #       .with_value('new financial support')
-  #     expect(json_response).to have_attribute(:how_school_placements_work)
-  #       .with_value('new how school placements work')
-  #     expect(json_response).to have_attribute(:interview_process)
-  #       .with_value('new interview process')
-  #     expect(json_response).to have_attribute(:other_requirements)
-  #       .with_value('new other requirements')
-  #     expect(json_response).to have_attribute(:personal_qualities)
-  #       .with_value('new personal qualities')
-  #     expect(json_response).to have_attribute(:required_qualifications)
-  #       .with_value('new required qualifications')
-  #     expect(json_response).to have_attribute(:salary_details)
-  #       .with_value('new salary details')
-  #     expect(json_response).to have_attribute(:content_status)
-  #       .with_value('draft')
-  #   end
-  # end
-  #
-  # context 'course has a draft enrichment' do
-  #   let(:enrichment) { build :course_enrichment }
-  #   let(:course) do
-  #     create :course, provider: provider, enrichments: [enrichment]
-  #   end
-  #
-  #   it "updates the course's draft enrichment" do
-  #     expect {
-  #       perform_request update_course
-  #     }.not_to(
-  #       change { course.enrichments.reload.count }
-  #     )
-  #
-  #     draft_enrichment = course.enrichments.draft.first
-  #     expect(draft_enrichment.attributes.slice(*updated_attributes.keys.map(&:to_s)))
-  #       .to include(updated_attributes.stringify_keys)
-  #   end
-  #
-  #   it "doesn't change content status" do
-  #     expect {
-  #       perform_request update_course
-  #     }.to_not(change { course.reload.content_status })
-  #   end
-  #
-  #   context "with invalid data" do
-  #     let(:updated_attributes) do
-  #       {
-  #         about_course: Faker::Lorem.sentence(1000),
-  #         fee_details: Faker::Lorem.sentence(1000),
-  #         fee_international: 200_000,
-  #         fee_uk_eu: 200_000,
-  #         financial_support: Faker::Lorem.sentence(1000),
-  #         how_school_placements_work: Faker::Lorem.sentence(1000),
-  #         interview_process: Faker::Lorem.sentence(1000),
-  #         other_requirements: Faker::Lorem.sentence(1000),
-  #         personal_qualities: Faker::Lorem.sentence(1000),
-  #         qualifications: Faker::Lorem.sentence(1000),
-  #         salary_details: Faker::Lorem.sentence(1000)
-  #       }
-  #     end
-  #
-  #     subject { JSON.parse(response.body)["errors"].map { |e| e["title"] } }
-  #
-  #     it "returns validation errors" do
-  #       perform_request update_course
-  #
-  #       expect("Invalid about_course".in?(subject)).to eq(true)
-  #       expect("Invalid interview_process".in?(subject)).to eq(true)
-  #       expect("Invalid how_school_placements_work".in?(subject)).to eq(true)
-  #       expect("Invalid qualifications".in?(subject)).to eq(true)
-  #       expect("Invalid fee_details".in?(subject)).to eq(true)
-  #       expect("Invalid financial_support".in?(subject)).to eq(true)
-  #     end
-  #   end
-  #
+    context 'attributes from other models' do
+      let(:provider2) { create(:provider, courses: [course2], sites: [site]) }
+      let(:course2) { build(:course) }
+      let(:site) { build(:site) }
+
+      before do
+        provider2.id = provider.id
+        perform_request(provider2)
+      end
+
+      subject { provider.reload }
+
+      context 'with a course' do
+        its(:courses) { should_not include(course2) }
+      end
+
+      context 'with sites' do
+        its(:sites) { should_not include(site) }
+      end
+    end
+
+    context 'provider has no enrichments' do
+      it "creates a draft enrichment for the provider" do
+        expect {
+          perform_request update_provider
+        }.to(change {
+               provider.reload.enrichments.count
+             }.from(0).to(1))
+
+        draft_enrichment = provider.enrichments.draft.first
+
+        expect(draft_enrichment.attributes.slice(*updated_attributes.keys.map(&:to_s)))
+          .to include(updated_attributes.stringify_keys)
+      end
+
+      it "change content status" do
+        expect {
+          perform_request update_provider
+        }.to(change { provider.reload.content_status }.from(:empty).to(:draft))
+      end
+
+      context "with no attributes to update" do
+        let(:updated_attributes) do
+          {
+            email: nil,
+            website: nil,
+            address1: nil,
+            address2: nil,
+            address3: nil,
+            address4: nil,
+            postcode: nil,
+            region_code: nil,
+            telephone: nil,
+            train_with_us: nil,
+            train_with_disability: nil
+          }
+        end
+
+        it "doesn't create a draft provider enrichment" do
+          expect {
+            perform_request update_provider
+          }.to_not(change { provider.reload.enrichments.count })
+        end
+      end
+
+      context "with empty attributes" do
+        let(:permitted_params) { [] }
+
+        it "doesn't create a draft enrichment" do
+          expect {
+            perform_request update_provider
+          }.to_not(change { provider.reload.enrichments.count })
+        end
+
+        it "doesn't change content status" do
+          expect {
+            perform_request update_provider
+          }.to_not(change { provider.reload.content_status })
+        end
+      end
+
+      it 'returns ok' do
+        perform_request update_provider
+
+        expect(response).to be_ok
+      end
+
+      it 'returns the updated provider with the enrichment included' do
+        perform_request update_provider
+        json_response = JSON.parse(response.body)["included"].first
+
+        expect(json_response).to have_id(provider.reload.enrichments.first.id.to_s)
+        expect(json_response).to have_type('provider_enrichment')
+        expect(json_response).to have_attribute(:email).with_value('email_address')
+        expect(json_response).to have_attribute(:website).with_value('url')
+        expect(json_response).to have_attribute(:address1).with_value('number')
+        expect(json_response).to have_attribute(:address2).with_value('street')
+        expect(json_response).to have_attribute(:address3).with_value('town')
+        expect(json_response).to have_attribute(:address4).with_value('county')
+        expect(json_response).to have_attribute(:postcode).with_value('sw1p 3bt')
+        expect(json_response).to have_attribute(:region_code).with_value('london')
+        expect(json_response).to have_attribute(:telephone).with_value('01234 567890')
+        expect(json_response).to have_attribute(:train_with_us).with_value('train with us')
+        expect(json_response).to have_attribute(:train_with_disability).with_value('train with disability')
+        expect(json_response).to have_attribute(:status).with_value('draft')
+      end
+
+
+  context 'provider has a draft enrichment' do
+    let(:enrichment) { build(:provider_enrichment) }
+    let(:provider) { create :provider,
+                              enrichments: [enrichment],
+                              organisations: [organisation],
+                            recruitment_cycle: recruitment_cycle }
+
+    it "updates the provider's draft enrichment" do
+      expect {
+        perform_request update_provider
+      }.not_to(
+        change { provider.enrichments.reload.count }
+      )
+
+      draft_enrichment = provider.enrichments.draft.first
+      expect(draft_enrichment.attributes.slice(*updated_attributes.keys.map(&:to_s)))
+        .to include(updated_attributes.stringify_keys)
+    end
+
+    it "doesn't change content status" do
+      expect {
+        perform_request update_provider
+      }.to_not(change { provider.reload.content_status })
+    end
+
+    context "with invalid data" do
+      let(:updated_attributes) do
+        {
+          about_course: Faker::Lorem.sentence(1000),
+          fee_details: Faker::Lorem.sentence(1000),
+          fee_international: 200_000,
+          fee_uk_eu: 200_000,
+          financial_support: Faker::Lorem.sentence(1000),
+          how_school_placements_work: Faker::Lorem.sentence(1000),
+          interview_process: Faker::Lorem.sentence(1000),
+          other_requirements: Faker::Lorem.sentence(1000),
+          personal_qualities: Faker::Lorem.sentence(1000),
+          qualifications: Faker::Lorem.sentence(1000),
+          salary_details: Faker::Lorem.sentence(1000)
+        }
+      end
+
+      subject { JSON.parse(response.body)["errors"].map { |e| e["title"] } }
+
+      it "returns validation errors" do
+        perform_request update_course
+
+        expect("Invalid about_course".in?(subject)).to eq(true)
+        expect("Invalid interview_process".in?(subject)).to eq(true)
+        expect("Invalid how_school_placements_work".in?(subject)).to eq(true)
+        expect("Invalid qualifications".in?(subject)).to eq(true)
+        expect("Invalid fee_details".in?(subject)).to eq(true)
+        expect("Invalid financial_support".in?(subject)).to eq(true)
+      end
+    end
+
   #   context "with nil data" do
   #     let(:updated_attributes) do
   #       {
@@ -617,8 +500,8 @@ describe 'PATCH /providers/:provider_code' do
   #           expect(subject.enrichments.draft.first[published_enrichment_attribute]).to eq(original_enrichment[published_enrichment_attribute])
   #         end
   #       end
-  #     end
-  #   end
+        end
+      end
   #
   #   let(:original_enrichment) { build :course_enrichment, :published }
   #   let(:course) do

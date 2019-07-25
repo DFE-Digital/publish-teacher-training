@@ -12,6 +12,7 @@ module API
         address3
         address4
         postcode
+        region_code
       ].freeze
 
       attributes(*PROVIDER_ATTRIBUTES)
