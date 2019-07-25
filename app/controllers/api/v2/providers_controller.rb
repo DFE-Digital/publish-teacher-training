@@ -30,7 +30,11 @@ module API
         authorize @provider, :update?
         update_enrichment
 
-        render jsonapi: @provider.reload, include: params[:include]
+        if @provider.valid?
+          render jsonapi: @provider.reload, include: params[:include]
+        else
+          render jsonapi_errors: @provider.errors, status: :unprocessable_entity, include: params[:include]
+        end
       end
 
     private

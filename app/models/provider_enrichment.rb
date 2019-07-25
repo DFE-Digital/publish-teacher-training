@@ -2,8 +2,8 @@
 #
 # Table name: provider_enrichment
 #
-#  id                 :integer          not null
-#  provider_code      :text             not null, primary key
+#  id                 :integer          not null, primary key
+#  provider_code      :text             not null
 #  json_data          :jsonb
 #  updated_by_user_id :integer
 #  created_at         :datetime         not null
@@ -43,6 +43,10 @@ class ProviderEnrichment < ApplicationRecord
                                          store_key: 'TrainWithDisability'],
                  accrediting_provider_enrichments: [:json,
                                                     store_key: 'AccreditingProviderEnrichments']
+
+
+  validates :train_with_us, words_count: { maximum: 250 }
+  validates :train_with_disability, words_count: { maximum: 250 }
 
   def has_been_published_before?
     last_published_at.present?

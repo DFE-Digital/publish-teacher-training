@@ -54,9 +54,10 @@ class Provider < ApplicationRecord
 
   has_many :sites
   has_one :latest_enrichment,
-     class_name: "ProviderEnrichment" do
-            enrichments.latest_created_at
-          end
+          class_name: "ProviderEnrichment" do
+    enrichments.latest_created_at
+  end
+
   has_many :enrichments,
            class_name: "ProviderEnrichment",
            inverse_of: 'provider' do
@@ -72,7 +73,6 @@ class Provider < ApplicationRecord
 
              def new_draft_attributes
                latest_published_enrichment = latest_created_at.published.first
-
                new_enrichments_attributes = { status: :draft }.with_indifferent_access
 
                if latest_published_enrichment.present?
@@ -110,6 +110,10 @@ class Provider < ApplicationRecord
   end
 
   scope :in_order, -> { order(:provider_name) }
+
+  validate :validate_enrichment
+
+  after_validation :remove_unnecessary_enrichments_validation_message
 
   # Currently Provider#contact_info isn't used but will likely be needed when
   # we need to expose the candidate-facing contact info.
@@ -250,5 +254,29 @@ class Provider < ApplicationRecord
     end
 
     sites_count
+  end
+
+private
+
+  def add_enrichment_errors(enrichment)
+    enrichment.errors.messages.map do |field, _error|
+      # `full_messages_for` here will remove any `^`s defined in the validator or en.yml.
+      # We still need it for later, so re-add it.
+      # jsonapi_errors will throw if it's given an array, so we call `.first`.
+      message = "^" + enrichment.errors.full_messages_for(field).first.to_s
+      errors.add field.to_sym, message
+    end
+  end
+
+  def validate_enrichment(validation_scope = nil)
+    latest_enrichment = enrichments.select(&:draft?).last
+    return if latest_enrichment.blank?
+
+    latest_enrichment.valid? validation_scope
+    add_enrichment_errors(latest_enrichment)
+  end
+
+  def remove_unnecessary_enrichments_validation_message
+    self.errors.delete :enrichments if self.errors[:enrichments] == ['is invalid']
   end
 end

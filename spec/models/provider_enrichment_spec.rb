@@ -2,8 +2,8 @@
 #
 # Table name: provider_enrichment
 #
-#  id                 :integer          not null
-#  provider_code      :text             not null, primary key
+#  id                 :integer          not null, primary key
+#  provider_code      :text             not null
 #  json_data          :jsonb
 #  updated_by_user_id :integer
 #  created_at         :datetime         not null
