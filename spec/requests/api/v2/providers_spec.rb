@@ -251,6 +251,9 @@ describe 'Providers API v2', type: :request do
               "meta" => {
                 "count" => provider.courses.count
               }
+            },
+            "latest_enrichment" => {
+              "meta" => { "included" => false }
             }
           }
         },
@@ -307,6 +310,9 @@ describe 'Providers API v2', type: :request do
                 "meta" => {
                   "count" => provider.courses.count
                 }
+              },
+              "latest_enrichment" => {
+                "meta" => { "included" => false }
               }
             }
           },
