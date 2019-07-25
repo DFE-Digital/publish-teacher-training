@@ -60,6 +60,14 @@ module API
       enrichment_attribute :personal_qualities
       enrichment_attribute :required_qualifications
       enrichment_attribute :salary_details
+
+      meta do
+        {
+          edit_options: {
+            entry_requirements: @object.edit_options.entry_requirements
+          }
+        }
+      end
     end
   end
 end
