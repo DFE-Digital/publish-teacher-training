@@ -53,6 +53,10 @@ class Provider < ApplicationRecord
   has_many :users, through: :organisations
 
   has_many :sites
+  has_one :latest_enrichment,
+     class_name: "ProviderEnrichment" do
+            enrichments.latest_created_at
+          end
   has_many :enrichments,
            class_name: "ProviderEnrichment",
            inverse_of: 'provider' do
