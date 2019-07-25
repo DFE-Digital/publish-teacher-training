@@ -70,10 +70,6 @@ class Course < ApplicationRecord
     not_set: nil,
   }.freeze
 
-  VALID_FURTHER_EDUCTION_QUALIFICATIONS = %w[pgce pdge].freeze
-
-  VALID_PRIMARY_AND_SECONDARY_QUALIFICATIONS = %w[qts pgce_with_qts pgde_with_qts].freeze
-
   enum maths: ENTRY_REQUIREMENT_OPTIONS, _suffix: :for_maths
   enum english: ENTRY_REQUIREMENT_OPTIONS, _suffix: :for_english
   enum science: ENTRY_REQUIREMENT_OPTIONS, _suffix: :for_science
@@ -142,7 +138,7 @@ class Course < ApplicationRecord
   validate :validate_enrichment_publishable, on: :publish
   validate :validate_enrichment
   validate :validate_course_syncable, on: :sync
-  validate :validate_qualification_valid?, on: :update
+  validate :validate_qualification, on: :update
 
   after_validation :remove_unnecessary_enrichments_validation_message
 
@@ -181,10 +177,6 @@ class Course < ApplicationRecord
 
   def syncable?
     valid? :sync
-  end
-
-  def qualifcation_valid
-    valid? :update
   end
 
   def findable?
@@ -451,11 +443,7 @@ private
     end
   end
 
-  def validate_qualification_valid?
-    if level == :further_education && VALID_FURTHER_EDUCTION_QUALIFICATIONS.exclude?(qualification)
-      errors.add(:qualification, "#{qualification} is not valid for a #{level} course")
-    elsif VALID_PRIMARY_AND_SECONDARY_QUALIFICATIONS.exclude?(qualification)
-      errors.add(:qualification, "#{qualification} is not valid for a #{level} course")
-    end
+  def validate_qualification
+    errors.add(:qualification, "#{qualification} is not valid for a #{level} course") if !qualification_valid?(self)
   end
 end

@@ -68,5 +68,13 @@ module WithQualifications
       super(value)
       self.profpost_flag = qts? ? :recommendation_for_qts : :postgraduate
     end
+
+    def qualification_valid?(course)
+      if course.level == :further_education
+        course.qualifications.exclude?(:qts)
+      else
+        course.qualifications.include?(:qts)
+      end
+    end
   end
 end
