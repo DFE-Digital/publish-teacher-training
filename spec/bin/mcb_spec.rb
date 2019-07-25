@@ -16,4 +16,36 @@ describe 'running the mcb script' do
       expect(result).to eq config.to_yaml
     end
   end
+
+  describe 'REPL' do
+    it 'provides completions for empty prompt' do
+      output = with_stubbed_stdout(stdin: "\t\t") do
+        MCB.start_mcb_repl([])
+      end
+
+      expect(output).to include("providers")
+      expect(output).to include("console")
+      expect(output).to include("courses")
+      expect(output).to include("config")
+      expect(output).to include("apiv1")
+      expect(output).to include("apiv2")
+      expect(output).to include("users")
+      expect(output).to include("az")
+    end
+
+    it 'provides relevant completions for a main command' do
+      output = with_stubbed_stdout(stdin: "co\t\t") do
+        MCB.start_mcb_repl([])
+      end
+
+      expect(output).not_to include("providers")
+      expect(output).to include("console")
+      expect(output).to include("courses")
+      expect(output).to include("config")
+      expect(output).not_to include("apiv1")
+      expect(output).not_to include("apiv2")
+      expect(output).not_to include("users")
+      expect(output)
+    end
+  end
 end
