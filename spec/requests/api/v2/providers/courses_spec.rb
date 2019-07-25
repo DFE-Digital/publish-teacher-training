@@ -142,6 +142,11 @@ describe 'Courses API v2', type: :request do
                 "sites" => { "meta" => { "included" => false } },
                 "site_statuses" => { "data" => [{ "type" => "site_statuses", "id" => site_status.id.to_s }] },
               },
+              "meta" => {
+                "edit_options" => {
+                  "entry_requirements" => %w[must_have_qualification_at_application_time expect_to_achieve_before_training_begins equivalence_test]
+                }
+              }
             },
             "jsonapi" => {
               "version" => "1.0"
@@ -297,6 +302,11 @@ describe 'Courses API v2', type: :request do
               "provider" => { "meta" => { "included" => false } },
               "site_statuses" => { "meta" => { "included" => false } },
               "sites" => { "meta" => { "included" => false } },
+            },
+            "meta" => {
+              "edit_options" => {
+                "entry_requirements" => %w[must_have_qualification_at_application_time expect_to_achieve_before_training_begins equivalence_test]
+              }
             },
           }],
           "jsonapi" => {

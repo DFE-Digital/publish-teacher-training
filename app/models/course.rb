@@ -266,6 +266,10 @@ class Course < ApplicationRecord
     end
   end
 
+  def edit_options
+    @edit_options ||= EditCourseOptions.new(self)
+  end
+
   def dfe_subjects
     SubjectMapperService.get_subject_list(name, subjects.map(&:subject_name))
   end
