@@ -63,7 +63,7 @@ class Provider < ApplicationRecord
            inverse_of: 'provider' do
              def find_or_initialize_draft
                # This is a ruby search as opposed to an AR search, because calling `draft`
-               # will return a new instance of a CourseEnrichment object which is different
+               # will return a new instance of a ProviderEnrichment object which is different
                # to the ones in the cached `enrichments` association. This makes checking
                # for validations later down non-trivial.
                latest_draft_enrichment = select(&:draft?).last

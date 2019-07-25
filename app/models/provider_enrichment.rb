@@ -15,8 +15,6 @@
 #
 
 class ProviderEnrichment < ApplicationRecord
-  # self.primary_key = "provider_code"
-
   include RegionCode
 
   enum status: { draft: 0, published: 1 }
