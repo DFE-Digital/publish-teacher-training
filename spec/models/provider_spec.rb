@@ -268,14 +268,6 @@ describe Provider, type: :model do
           expect { course.discard }.to change { provider.courses.size }.by(-1)
         end
       end
-
-      context 'when course is discarded' do
-        it 'does not show up in kept' do
-          course.discard
-
-          expect(provider.courses.size).to be(0)
-        end
-      end
     end
   end
 
