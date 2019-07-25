@@ -62,6 +62,7 @@ module API
       enrichment_attribute :train_with_disability
 
       has_many :sites
+      has_one :latest_enrichment, key: :ProviderEnrichment, serializer: API::V2::SerializableProviderEnrichment
 
       has_many :courses do
         meta do
