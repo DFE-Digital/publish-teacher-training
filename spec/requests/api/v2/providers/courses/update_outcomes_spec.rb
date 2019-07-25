@@ -85,7 +85,7 @@ describe 'PATCH /providers/:provider_code/courses/:course_code' do
       expect(response).to have_http_status(:success)
     end
 
-    it "does not change english attribute" do
+    it "does not change qualification attribute" do
       expect(course.reload.qualification).to eq(@qualification)
     end
   end

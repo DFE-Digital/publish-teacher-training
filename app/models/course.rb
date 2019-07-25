@@ -27,6 +27,7 @@
 class Course < ApplicationRecord
   include Discard::Model
   include WithQualifications
+  include ValidQualification
   include ChangedAt
 
   after_initialize :set_defaults
@@ -444,6 +445,6 @@ private
   end
 
   def validate_qualification
-    errors.add(:qualification, "#{qualification} is not valid for a #{level} course") if !qualification_valid?(self)
+    errors.add(:qualification, "#{qualification} is not valid for a #{level} course") if !valid_qualification?(self)
   end
 end
