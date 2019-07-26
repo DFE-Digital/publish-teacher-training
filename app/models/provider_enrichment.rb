@@ -2,8 +2,8 @@
 #
 # Table name: provider_enrichment
 #
-#  id                 :integer          not null
-#  provider_code      :text             not null, primary key
+#  id                 :integer          not null, primary key
+#  provider_code      :text             not null
 #  json_data          :jsonb
 #  updated_by_user_id :integer
 #  created_at         :datetime         not null
@@ -15,8 +15,6 @@
 #
 
 class ProviderEnrichment < ApplicationRecord
-  self.primary_key = "provider_code"
-
   include RegionCode
 
   enum status: { draft: 0, published: 1 }
@@ -26,6 +24,7 @@ class ProviderEnrichment < ApplicationRecord
 
   scope :latest_created_at, -> { order(created_at: :desc) }
   scope :latest_published_at, -> { order(last_published_at: :desc) }
+  scope :draft, -> { where(status: 'draft') }
 
   jsonb_accessor :json_data,
                  email: [:string, store_key: 'Email'],
@@ -42,6 +41,10 @@ class ProviderEnrichment < ApplicationRecord
                                          store_key: 'TrainWithDisability'],
                  accrediting_provider_enrichments: [:json,
                                                     store_key: 'AccreditingProviderEnrichments']
+
+
+  validates :train_with_us, words_count: { maximum: 250 }
+  validates :train_with_disability, words_count: { maximum: 250 }
 
   def has_been_published_before?
     last_published_at.present?
