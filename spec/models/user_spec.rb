@@ -64,6 +64,10 @@ describe User, type: :model do
 
       its(:admin?) { should be_truthy }
 
+      it "shows up in User.admins" do
+        expect(User.admins).to eq([subject])
+      end
+
       it "doesn't show up in User.non_admins" do
         expect(User.non_admins).to be_empty
       end
@@ -73,6 +77,10 @@ describe User, type: :model do
       subject! { create(:user, email: 'test@digital.education.gov.uk') }
 
       its(:admin?) { should be_truthy }
+
+      it "shows up in User.admins" do
+        expect(User.admins).to eq([subject])
+      end
 
       it "doesn't show up in User.non_admins" do
         expect(User.non_admins).to be_empty
@@ -86,6 +94,10 @@ describe User, type: :model do
 
       it "does shows up in User.non_admins" do
         expect(User.non_admins).to eq([subject])
+      end
+
+      it "doesn't show up in User.admins" do
+        expect(User.admins).to be_empty
       end
     end
   end
