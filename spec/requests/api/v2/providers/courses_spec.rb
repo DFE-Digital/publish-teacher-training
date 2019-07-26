@@ -23,7 +23,8 @@ describe 'Courses API v2', type: :request do
            enrichments: [enrichment],
            maths: :must_have_qualification_at_application_time,
            english: :must_have_qualification_at_application_time,
-           science: :must_have_qualification_at_application_time)
+           science: :must_have_qualification_at_application_time,
+           age_range_in_years: '3 to 7')
   }
 
   let(:courses_site_status) {
@@ -135,6 +136,7 @@ describe 'Courses API v2', type: :request do
                 "provider_code" => provider.provider_code,
                 "recruitment_cycle_year" => "2019",
                 "gcse_subjects_required" => %w[maths english science],
+                "age_range_in_years" => provider.courses[0].age_range_in_years,
               },
               "relationships" => {
                 "accrediting_provider" => { "meta" => { "included" => false } },
@@ -297,6 +299,7 @@ describe 'Courses API v2', type: :request do
               "provider_code" => provider.provider_code,
               "recruitment_cycle_year" => "2019",
               "gcse_subjects_required" => %w[maths english science],
+              "age_range_in_years" => provider.courses[0].age_range_in_years,
             },
             "relationships" => {
               "accrediting_provider" => { "meta" => { "included" => false } },
