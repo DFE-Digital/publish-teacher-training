@@ -78,7 +78,7 @@ The way we do it:
 4. Provide a way to overide associated objects, for has_* relationships this
    will need to build associated objects by default, and add them to the parent
    object in an `after_create` hook.
-5. Provide a way to specify exactly what associated object(s) override
+5. Provide a way to specify exactly what associated object(s) override.
 6. When creating a memoized object that is included in the creation of another
    object, use `build` to prevent secondary objects from being created.
 7. Factories can be tested too, e.g.
