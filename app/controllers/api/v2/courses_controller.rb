@@ -89,7 +89,7 @@ module API
 
       def update_course
         return unless course_params.values.any?
-        return unless @course.entry_requirements_assignable(course_params)
+        return unless @course.course_params_assignable(course_params)
 
         @course.assign_attributes(course_params)
         @course.save

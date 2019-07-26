@@ -394,6 +394,13 @@ class Course < ApplicationRecord
 
   # Ideally this would just use the validation, but:
   # https://github.com/rails/rails/issues/13971
+  def course_params_assignable(course_params)
+    entry_requirements_assignable(course_params) &&
+      qualification_assignable(course_params)
+  end
+
+private
+
   def entry_requirements_assignable(course_params)
     course_params.slice(:maths, :english, :science)
       .to_h
@@ -402,7 +409,12 @@ class Course < ApplicationRecord
       .empty?
   end
 
-private
+  def qualification_assignable(course_params)
+    assignable = course_params[:qualification].nil? || Course::qualifications.include?(course_params[:qualification].to_sym)
+    errors.add(:qualification, "is invalid") unless assignable
+
+    assignable
+  end
 
   def add_enrichment_errors(enrichment)
     enrichment.errors.messages.map do |field, _error|
