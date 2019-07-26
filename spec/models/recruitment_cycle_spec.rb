@@ -40,4 +40,20 @@ describe RecruitmentCycle, type: :model do
       expect(second_cycle.current?).to be(false)
     end
   end
+
+  describe "#next" do
+    let(:current_cycle) { subject }
+    let!(:second_cycle) { create(:recruitment_cycle, year: "2020") }
+    let!(:third_cycle) { create(:recruitment_cycle, year: "2021") }
+
+    its(:next) { should eq(second_cycle) }
+
+    it "is nil for the newest cycle" do
+      expect(third_cycle.next).to be_nil
+    end
+
+    it "returns the next cycle along when there is one" do
+      expect(second_cycle.next).to eq(third_cycle)
+    end
+  end
 end

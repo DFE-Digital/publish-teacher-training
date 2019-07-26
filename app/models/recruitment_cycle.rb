@@ -28,6 +28,10 @@ class RecruitmentCycle < ApplicationRecord
     all.order(:year).second
   end
 
+  def next
+    RecruitmentCycle.find_by(year: year.to_i + 1)
+  end
+
   def current?
     RecruitmentCycle.current_recruitment_cycle == self
   end
