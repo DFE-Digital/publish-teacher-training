@@ -52,3 +52,23 @@ en:
               blank: "^Enter details about the qualifications needed"
             course_length:
               blank: "^Enter a course length"
+        provider_enrichment:
+          attributes:
+            email:
+              blank: "^Enter email address"
+            website:
+              blank: "^Enter website"
+            telephone:
+              blank: "^Enter telephone"
+            address1:
+              blank: "^Enter building or street"
+            address3:
+              blank: "^Enter town or city"
+            address4:
+              blank: "^Enter county"
+            postcode:
+              blank: "^Enter a postcode in the format ‘SW10 1AA’"
+            train_with_us:
+              blank: "^Enter details about training with you"
+            train_with_disability:
+              blank: "^Enter details about training with a disability"

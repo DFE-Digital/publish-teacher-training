@@ -6,7 +6,7 @@ module API
       before_action :build_provider, except: :index
 
       deserializable_resource :provider,
-                              only: :update,
+                              only: %i[update publish publishable],
                               class: API::V2::DeserializableProvider
 
       def index
@@ -34,6 +34,26 @@ module API
           render jsonapi: @provider.reload, include: params[:include]
         else
           render jsonapi_errors: @provider.errors, status: :unprocessable_entity, include: params[:include]
+        end
+      end
+
+      def publish
+        authorize @provider, :publish?
+
+        if @provider.publishable?
+          head :ok
+        else
+          render jsonapi_errors: @provider.errors, status: :unprocessable_entity
+        end
+      end
+
+      def publishable
+        authorize @provider, :publishable?
+
+        if @provider.publishable?
+          head :ok
+        else
+          render jsonapi_errors: @provider.errors, status: :unprocessable_entity
         end
       end
 
