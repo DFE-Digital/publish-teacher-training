@@ -12,7 +12,7 @@ module API
       type 'courses'
 
       attributes :findable?, :open_for_applications?, :has_vacancies?,
-                 :course_code, :name, :study_mode, :qualifications, :description,
+                 :course_code, :name, :study_mode, :qualifications, :qualification, :description,
                  :content_status, :ucas_status, :funding, :applications_open_from,
                  :level, :is_send?, :has_bursary?, :has_scholarship_and_bursary?,
                  :has_early_career_payments?, :bursary_amount, :scholarship_amount,

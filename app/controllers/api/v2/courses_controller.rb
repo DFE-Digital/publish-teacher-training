@@ -58,9 +58,9 @@ module API
       end
 
       def update
+        update_course
         update_enrichment
         update_sites
-        update_course
         should_sync = site_ids.present? && @course.recruitment_cycle.current?
         has_synced? if should_sync
 
@@ -89,7 +89,7 @@ module API
 
       def update_course
         return unless course_params.values.any?
-        return unless @course.entry_requirements_assignable(course_params)
+        return unless @course.course_params_assignable(course_params)
 
         @course.assign_attributes(course_params)
         @course.save
@@ -127,7 +127,7 @@ module API
       def enrichment_params
         params
           .fetch(:course, {})
-          .except(:id, :type, :sites_ids, :sites_types, :english, :maths, :science)
+          .except(:id, :type, :sites_ids, :sites_types, :english, :maths, :science, :qualification)
           .permit(
             :about_course,
             :course_length,
@@ -167,7 +167,8 @@ module API
           .permit(
             :english,
             :maths,
-            :science
+            :science,
+            :qualification
           )
       end
 

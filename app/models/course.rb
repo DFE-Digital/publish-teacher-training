@@ -145,6 +145,7 @@ class Course < ApplicationRecord
   validate :validate_enrichment_publishable, on: :publish
   validate :validate_enrichment
   validate :validate_course_syncable, on: :sync
+  validate :validate_qualification, on: :update
 
   after_validation :remove_unnecessary_enrichments_validation_message
 
@@ -400,6 +401,13 @@ class Course < ApplicationRecord
 
   # Ideally this would just use the validation, but:
   # https://github.com/rails/rails/issues/13971
+  def course_params_assignable(course_params)
+    entry_requirements_assignable(course_params) &&
+      qualification_assignable(course_params)
+  end
+
+private
+
   def entry_requirements_assignable(course_params)
     course_params.slice(:maths, :english, :science)
       .to_h
@@ -408,7 +416,12 @@ class Course < ApplicationRecord
       .empty?
   end
 
-private
+  def qualification_assignable(course_params)
+    assignable = course_params[:qualification].nil? || Course::qualifications.include?(course_params[:qualification].to_sym)
+    errors.add(:qualification, "is invalid") unless assignable
+
+    assignable
+  end
 
   def add_enrichment_errors(enrichment)
     enrichment.errors.messages.map do |field, _error|
@@ -447,5 +460,9 @@ private
     if dfe_subjects.blank?
       errors.add :dfe_subjects, 'No DfE subject.'
     end
+  end
+
+  def validate_qualification
+    errors.add(:qualification, "^#{qualifications_description} is not valid for a #{level.to_s.humanize.downcase} course") unless edit_options.qualifications.include?(qualification)
   end
 end
