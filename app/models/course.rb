@@ -22,6 +22,7 @@
 #  changed_at                :datetime         not null
 #  accrediting_provider_code :text
 #  discarded_at              :datetime
+#  age_range_in_years        :string
 #
 
 class Course < ApplicationRecord

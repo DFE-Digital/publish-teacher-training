@@ -32,6 +32,7 @@ describe API::V2::SerializableCourse do
   it { should have_attribute :science }
   it { should have_attribute :gcse_subjects_required }
   it { should have_attribute :provider_code }
+  it { should have_attribute :age_range_in_years }
   it { should have_attribute(:recruitment_cycle_year).with_value(course.recruitment_cycle.year) }
 
   context 'with a provider' do
