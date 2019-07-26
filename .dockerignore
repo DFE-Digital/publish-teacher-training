@@ -3,3 +3,6 @@ log
 tmp
 .byebug_history
 coverage
+
+# work is my local project-specific non-committed workspace --Misha
+work
