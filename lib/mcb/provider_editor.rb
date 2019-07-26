@@ -26,6 +26,59 @@ module MCB
       end
     end
 
+    def new_provider_wizard
+      provider.scheme_member = 'Y'
+      provider.year_code = provider.recruitment_cycle.year
+      provider.last_published_at = Time.zone.now
+      provider.changed_at = Time.zone.now
+
+      name = @cli.ask_name
+      provider.provider_name = name
+      provider.provider_code = @cli.ask_new_provider_code
+      provider.provider_type = @cli.ask_provider_type
+
+      provider.scitt = provider.scitt? ? 'Y' : 'N'
+      provider.accrediting_provider = if provider.scitt? || provider.university?
+                                        :accredited_body
+                                      else
+                                        :not_an_accredited_body
+                                      end
+
+      address = @cli.ask_address
+      provider.address1 = address[:address1]
+      provider.address2 = address[:address2]
+      provider.address3 = address[:town_or_city]
+      provider.address4 = address[:county]
+      provider.postcode = address[:postcode]
+      provider.region_code = @cli.ask_region_code
+
+      contact = @cli.ask_contact
+      provider.contact_name = contact[:name]
+      provider.email = contact[:email]
+      provider.telephone = contact[:telephone]
+
+      provider.url = @cli.ask_url
+
+      provider.save!
+
+      finished_picking_organisation = false
+      until finished_picking_organisation
+        organisation = Organisation.find_or_initialize_by(name: @cli.ask_organisation_name)
+        if organisation.persisted?
+          finished_picking_organisation = true
+        elsif organisation.new_record? && @cli.confirm_new_organisation_needed?
+          organisation.save!
+          finished_picking_organisation = true
+        end
+      end
+
+      # connect provider to org
+      provider.organisations << organisation
+
+      # add god users to the org, for any that aren't already in it
+      organisation.users << (User.admins - organisation.users)
+    end
+
   private
 
     def main_loop
@@ -69,7 +122,8 @@ module MCB
     end
 
     def check_authorisation
-      raise Pundit::NotAuthorizedError unless ProviderPolicy.new(@requester, @provider).update?
+      action = @provider.persisted? ? :update? : :create?
+      raise Pundit::NotAuthorizedError unless Pundit.policy(@requester, @provider).send(action)
     end
 
     def environment_options
