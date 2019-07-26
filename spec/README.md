@@ -75,14 +75,14 @@ The way we do it:
    associations are built/created.
 2. Avoid building/creating associations that aren't necessary. (i.e. nullable
    foreign keys, and many-to-many relationships with join tables).
-4. Provide a way to overide associated objects, for has_* relationships this
+3. Provide a way to overide associated objects, for has_* relationships this
    will need to build associated objects by default, and add them to the parent
    object in an `after_create` hook.
-5. Provide a way to specify exactly what associated object(s) override.
-6. When creating a memoized object that is included in the creation of another
+4. Provide a way to specify exactly what associated object(s) override.
+5. When creating a memoized object that is included in the creation of another
    object, use `build` to prevent secondary objects from being created.
-7. Factories can be tested too, e.g.
+6. Factories can be tested too, e.g.
    <https://github.com/DFE-Digital/manage-courses-backend/blob/master/spec/factory_specs/course_spec.rb>
-8. Don't continue the `count` trait pattern you might find already in the code
+7. Don't continue the `count` trait pattern you might find already in the code
    for creating many related objects, that turned out not to be such a great
    idea. Help eliminate them if you can.
