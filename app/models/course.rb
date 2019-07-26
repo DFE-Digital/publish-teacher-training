@@ -127,6 +127,12 @@ class Course < ApplicationRecord
     end.order(:changed_at, :id)
   end
 
+  scope :not_new, -> do
+    includes(site_statuses: %i[site course])
+      .where
+      .not(SiteStatus.table_name => { status: SiteStatus.statuses[:new_status] })
+  end
+
   def self.entry_requirement_options_without_nil_choice
     ENTRY_REQUIREMENT_OPTIONS.reject { |option| option == :not_set }.keys.map(&:to_s)
   end

@@ -12,13 +12,15 @@ module API
 
         ActiveRecord::Base.transaction do
           ActiveRecord::Base.connection.execute('LOCK provider, provider_enrichment, site IN SHARE UPDATE EXCLUSIVE MODE')
+
           @courses = @recruitment_cycle
              .courses
              .includes(:provider,
                        :site_statuses,
                        :subjects,
-                       site_statuses: [:site])
+                       site_statuses: %i[site course])
              .changed_since(changed_since)
+             .not_new
              .limit(per_page)
         end
 
