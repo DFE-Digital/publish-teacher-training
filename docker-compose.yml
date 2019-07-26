@@ -23,3 +23,20 @@ services:
     environment:
       - DB_HOSTNAME=db
       - DB_USERNAME=postgres
+  bg-find-sync:
+    build:
+      args:
+        - DOCKER_REPOSITORY=${dockerHubUsername:-dfedigital}
+        - MANAGE_COURSES_BACKEND_IMAGE=${dockerHubImageName:-manage-courses-backend}
+      context: bg-find-sync
+      cache_from:
+        - ${dockerHubUsername:-dfedigital}/manage-courses-bg-find-sync:latest
+    image: ${dockerHubUsername:-dfedigital}/manage-courses-bg-find-sync:latest
+    volumes:
+      - .:/app
+    depends_on:
+      - web
+      - db
+    environment:
+      - DB_HOSTNAME=db
+      - DB_USERNAME=postgres
