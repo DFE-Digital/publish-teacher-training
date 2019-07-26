@@ -78,6 +78,16 @@ module MCB
       # add god users to the org, for any that aren't already in it
       organisation.users << (User.admins - organisation.users)
 
+      provider.sites.create(
+        location_name: @cli.ask_name_of_first_location,
+        address1: provider.address1,
+        address2: provider.address2,
+        address3: provider.address3,
+        address4: provider.address4,
+        postcode: provider.postcode,
+        region_code: provider.region_code
+      )
+
       next_recruitment_cycle = provider.recruitment_cycle.next
       while next_recruitment_cycle
         provider.copy_to_recruitment_cycle(next_recruitment_cycle)

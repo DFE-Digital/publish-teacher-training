@@ -48,6 +48,10 @@ module MCB
       @cli.ask("What organisation should the new provider be added to?  ")
     end
 
+    def ask_name_of_first_location
+      @cli.ask("What's the name of the first location?  ")
+    end
+
     def confirm_new_organisation_needed?
       @cli.agree("This organisation doesn't exist. Do you want to create a new one?  ")
     end
