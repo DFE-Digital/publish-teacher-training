@@ -90,7 +90,7 @@ describe 'PATCH /providers/:provider_code/courses/:course_code' do
     end
   end
 
-  context "when courses level is further education" do
+  context "when course level is further education" do
     context "with an invalid qualification" do
       let(:json_data) { JSON.parse(response.body)['errors'] }
       let(:updated_qualification) { { qualification: 'pgce_with_qts' } }
@@ -100,8 +100,7 @@ describe 'PATCH /providers/:provider_code/courses/:course_code' do
       it "returns an error" do
         expect(response).to have_http_status(:unprocessable_entity)
         expect(json_data.count).to eq 1
-        expect(response.body).to include("#{updated_qualification[:qualification]} " +
-                                         "is not valid for a #{course.level} course")
+        expect(response.body).to include("PGCE with QTS is not valid for a further education course")
       end
     end
   end
@@ -115,8 +114,7 @@ describe 'PATCH /providers/:provider_code/courses/:course_code' do
       it "returns an error" do
         expect(response).to have_http_status(:unprocessable_entity)
         expect(json_data.count).to eq 1
-        expect(response.body).to include("#{updated_qualification[:qualification]} " +
-                                         "is not valid for a #{course.level} course")
+        expect(response.body).to include("PGCE is not valid for a primary course")
       end
     end
   end
