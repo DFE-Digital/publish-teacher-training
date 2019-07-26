@@ -77,6 +77,12 @@ module MCB
 
       # add god users to the org, for any that aren't already in it
       organisation.users << (User.admins - organisation.users)
+
+      next_recruitment_cycle = provider.recruitment_cycle.next
+      while next_recruitment_cycle
+        provider.copy_to_recruitment_cycle(next_recruitment_cycle)
+        next_recruitment_cycle = next_recruitment_cycle.next
+      end
     end
 
   private
