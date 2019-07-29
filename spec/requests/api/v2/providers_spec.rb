@@ -186,34 +186,24 @@ describe 'Providers API v2', type: :request do
   end
 
   describe 'GET /providers#show' do
+    let(:request_params) { {} }
+
     let(:user) { create(:user, organisations: [organisation]) }
     let(:organisation) { create(:organisation) }
     let(:payload) { { email: user.email } }
+
+    let(:site) { build(:site) }
+    let(:enrichment) { build(:provider_enrichment) }
+    let!(:provider) { create(:provider, sites: [site], organisations: [organisation], enrichments: [enrichment]) }
+
     let(:token) do
       JWT.encode payload,
                  Settings.authentication.secret,
                  Settings.authentication.algorithm
     end
+
     let(:credentials) do
       ActionController::HttpAuthentication::Token.encode_credentials(token)
-    end
-    let(:site) { build(:site) }
-    let(:enrichment) { build(:provider_enrichment) }
-
-    let!(:provider) { create(:provider, sites: [site], organisations: [organisation], enrichments: [enrichment]) }
-
-    let(:request_params) { {} }
-
-    subject do
-      perform_request
-
-      response
-    end
-
-    def perform_request
-      get request_path,
-          headers: { 'HTTP_AUTHORIZATION' => credentials },
-          params: request_params
     end
 
     let(:expected_response) {
@@ -262,7 +252,19 @@ describe 'Providers API v2', type: :request do
         }
       }
     }
+
     let(:json_response) { JSON.parse(response.body) }
+
+    subject do
+      perform_request
+      response
+    end
+
+    def perform_request
+      get request_path,
+          headers: { 'HTTP_AUTHORIZATION' => credentials },
+          params: request_params
+    end
 
     context 'including sites' do
       let(:request_path) { "/api/v2/providers/#{provider.provider_code}" }
