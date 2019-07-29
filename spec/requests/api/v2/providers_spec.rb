@@ -275,70 +275,32 @@ describe 'Providers API v2', type: :request do
       it 'has a data section with the correct attributes' do
         perform_request
 
-        expect(json_response).to eq(
-          "data" => {
-            "id" => provider.id.to_s,
-            "type" => "providers",
-            "attributes" => {
-              "provider_code" => provider.provider_code,
-              "provider_name" => provider.provider_name,
-              "accredited_body?" => false,
-              "can_add_more_sites?" => true,
-              "train_with_us" => enrichment.train_with_us,
-              "train_with_disability" => enrichment.train_with_disability,
-              "address1" => provider.address1,
-              "address2" => provider.address2,
-              "address3" => provider.address3,
-              "address4" => provider.address4,
-              "postcode" => provider.postcode,
-              "region_code" => provider.region_code,
-              "telephone" => provider.telephone,
-              "email" => provider.email,
-              "website" => provider.url,
-              "recruitment_cycle_year" => provider.recruitment_cycle.year,
-              "content_status" => provider.content_status.to_s,
-              "last_published_at" => provider.last_published_at,
-            },
-            "relationships" => {
-              "sites" => {
-                "data" => [
-                  {
-                    "type" => "sites",
-                    "id" => site.id.to_s,
-                  }
-                ]
-              },
-              "courses" => {
-                "meta" => {
-                  "count" => provider.courses.count
-                }
-              },
-              "latest_enrichment" => {
-                "meta" => { "included" => false }
-              }
-            }
-          },
-          "included" => [
+        expect(json_response.dig("data", "relationships", "sites", "data")).to eq(
+          [
             {
-              "id" => site.id.to_s,
               "type" => "sites",
-              "attributes" => {
-                "code" => site.code,
-                "location_name" => site.location_name,
-                "address1" => site.address1,
-                "address2" => site.address2,
-                "address3" => site.address3,
-                "address4" => site.address4,
-                "postcode" => site.postcode,
-                "region_code" => site.region_code,
-                "recruitment_cycle_year" => site.recruitment_cycle.year
-              }
+              "id" => site.id.to_s,
             }
-          ],
-          "jsonapi" => {
-            "version" => "1.0"
-          }
-        )
+          ]
+)
+
+        expect(json_response["included"]).to eq(
+          [{
+           "id" => site.id.to_s,
+           "type" => "sites",
+           "attributes" => {
+             "code" => site.code,
+             "location_name" => site.location_name,
+             "address1" => site.address1,
+             "address2" => site.address2,
+             "address3" => site.address3,
+             "address4" => site.address4,
+             "postcode" => site.postcode,
+             "region_code" => site.region_code,
+             "recruitment_cycle_year" => site.recruitment_cycle.year
+ }
+ }]
+)
       end
     end
 
