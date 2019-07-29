@@ -14,10 +14,29 @@ class EditCourseOptions
     @course.level == :further_education ? qualifications_without_qts : qualifications_with_qts
   end
 
+  def age_range_in_years
+    case @course.level
+    when :primary
+      %w[
+        3_to_7
+        5_to_11
+        7_to_11
+        7_to_14
+      ]
+    when :secondary
+      %w[
+        11_to_16
+        11_to_18
+        14_to_19
+      ]
+    end
+  end
+
   def all
     {
       entry_requirements: entry_requirements,
-      qualifications: qualifications
+      qualifications: qualifications,
+      age_range_in_years: age_range_in_years
     }
   end
 end
