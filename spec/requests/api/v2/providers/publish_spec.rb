@@ -32,27 +32,7 @@ describe 'Provider Publish API v2', type: :request do
       response
     end
 
-    context 'when unauthenticated' do
-      let(:payload) { { email: 'foo@bar' } }
-
-      it { should have_http_status(:unauthorized) }
-    end
-
-    context 'when user has not accepted terms' do
-      let(:user)         { create(:user, accept_terms_date_utc: nil) }
-      let(:organisation) { create(:organisation, users: [user]) }
-
-      it { should have_http_status(:forbidden) }
-    end
-
-    context 'when unauthorised' do
-      let(:unauthorised_user) { create(:user) }
-      let(:payload)           { { email: unauthorised_user.email } }
-
-      it "raises an error" do
-        expect { subject }.to raise_error Pundit::NotAuthorizedError
-      end
-    end
+    include_examples "Unauthenticated, unauthorised, or not accepted T&Cs"
 
     context 'unpublished provider with draft enrichment' do
       let(:enrichment) { build(:provider_enrichment, :initial_draft) }
