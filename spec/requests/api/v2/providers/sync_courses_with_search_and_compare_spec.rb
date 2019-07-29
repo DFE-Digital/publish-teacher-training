@@ -24,14 +24,17 @@ describe 'Courses API v2', type: :request do
 
   describe 'POST ' do
     let(:status) { 200 }
-    let(:has_synced) { true }
-
-    before do
+    let(:stubbed_request_body) { WebMock::Matchers::AnyArgMatcher.new(nil) }
+    let(:stubbed_request) do
       stub_request(:put, "#{Settings.search_api.base_url}/api/courses/")
+        .with(body: stubbed_request_body)
         .to_return(
           status: status,
         )
-      allow(SearchAndCompareAPIService::Request).to receive(:sync).with([syncable_course]).and_return(has_synced)
+    end
+
+    before do
+      stubbed_request
     end
 
     subject do
@@ -73,11 +76,21 @@ describe 'Courses API v2', type: :request do
         end
 
         context 'when a successful external call to search has been made' do
-          it { should have_http_status(:ok) }
+          let(:stubbed_request_body) { include("\"ProviderCode\":\"#{provider.provider_code}\"", "\"ProgrammeCode\":\"#{syncable_course.course_code}\"") }
+
+          it 'should be successful' do
+            expect(subject).to have_http_status(:ok)
+          end
+
+          it 'should make the appropriate request' do
+            subject
+            expect(stubbed_request).to have_been_requested
+          end
         end
 
         context 'when an unsuccessful external call to search has been made' do
-          let(:has_synced) { false }
+          let(:status) { 451 }
+
           it 'should throw an error' do
             expect { subject }.to raise_error("#{provider} failed to sync these courses #{provider.syncable_courses.pluck(:course_code)}")
           end
