@@ -127,7 +127,15 @@ module API
       def enrichment_params
         params
           .fetch(:course, {})
-          .except(:id, :type, :sites_ids, :sites_types, :english, :maths, :science, :qualification)
+          .except(:id,
+                  :type,
+                  :sites_ids,
+                  :sites_types,
+                  :english,
+                  :maths,
+                  :science,
+                  :qualification,
+                  :age_range_in_years)
           .permit(
             :about_course,
             :course_length,
@@ -168,7 +176,8 @@ module API
             :english,
             :maths,
             :science,
-            :qualification
+            :qualification,
+            :age_range_in_years,
           )
       end
 

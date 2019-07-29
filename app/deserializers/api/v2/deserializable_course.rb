@@ -22,6 +22,7 @@ module API
         maths
         science
         qualification
+        age_range_in_years
       ].freeze
 
       attributes(*COURSE_ATTRIBUTES)
