@@ -271,6 +271,17 @@ describe Provider, type: :model do
     end
   end
 
+  describe "accredited_providers" do
+    let(:provider) { create :provider, accrediting_provider: 'N' }
+    let!(:course) { create :course, :with_accrediting_provider, provider: provider }
+
+    it "gets the accrediting provider" do
+      expect(provider.accrediting_providers.count).to eq(1)
+      expect(provider.accrediting_providers.first.provider_code).to eq(course.accrediting_provider.provider_code)
+      expect(provider.accrediting_providers.first.provider_name).to eq(course.accrediting_provider.provider_name)
+    end
+  end
+
   describe '#copy_to_recruitment_cycle' do
     let(:site)   { build :site }
     let(:course) { build :course }

@@ -99,7 +99,7 @@ class Provider < ApplicationRecord
            primary_key: :provider_code,
            inverse_of: :accrediting_provider
 
-
+  has_many :accrediting_providers, through: :courses
 
   scope :changed_since, ->(timestamp) do
     if timestamp.present?
