@@ -233,19 +233,10 @@ describe 'Providers API v2', type: :request do
             "last_published_at" => provider.last_published_at
           },
           "relationships" => {
-            "sites" => {
-              "meta" => {
-                "included" => false
-              }
-            },
-            "courses" => {
-              "meta" => {
-                "count" => provider.courses.count
-              }
-            },
-            "latest_enrichment" => {
-              "meta" => { "included" => false }
-            }
+            "sites" => { "meta" => { "included" => false } },
+            "accrediting_providers" => { "meta" => { "included" => false } },
+            "latest_enrichment" => { "meta" => { "included" => false } },
+            "courses" => { "meta" => { "count" => provider.courses.count } }
           }
         },
         "jsonapi" => {
@@ -301,6 +292,41 @@ describe 'Providers API v2', type: :request do
  }
  }]
 )
+      end
+    end
+
+    context 'including accrediting_providers' do
+      let!(:provider) {
+        create(:provider, sites: [site], organisations: [organisation],
+               enrichments: [enrichment], accrediting_provider: 'N')
+      }
+      let!(:course) { create :course, :with_accrediting_provider, provider: provider }
+      let(:accrediting_provider) { course.accrediting_provider }
+      let(:request_params) { { include: "accrediting_providers" } }
+
+      it { should have_http_status(:success) }
+
+      it 'includes the accrediting_provider in the relationships' do
+        perform_request
+
+        expect(json_response.dig("data", "relationships", "accrediting_providers", "data")).to eq(
+          [{
+             "type" => "providers",
+             "id" => accrediting_provider.id.to_s,
+           }]
+)
+      end
+
+      it 'includes the accrediting_provider in the included data' do
+        perform_request
+
+        # assumes nothing else is included so we can use zero index
+
+        expect(json_response.dig("included", 0, "type")).to eq("providers")
+        expect(json_response.dig("included", 0, "id")).to eq(accrediting_provider.id.to_s)
+
+        expect(json_response.dig("included", 0, "attributes", "provider_code")).to eq(accrediting_provider.provider_code)
+        expect(json_response.dig("included", 0, "attributes", "provider_name")).to eq(accrediting_provider.provider_name)
       end
     end
 
