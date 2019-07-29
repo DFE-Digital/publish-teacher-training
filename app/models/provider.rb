@@ -111,6 +111,7 @@ class Provider < ApplicationRecord
 
   scope :in_order, -> { order(:provider_name) }
 
+  validate :validate_enrichment_publishable, on: :publish
   validate :validate_enrichment
 
   after_validation :remove_unnecessary_enrichments_validation_message
@@ -256,6 +257,10 @@ class Provider < ApplicationRecord
     sites_count
   end
 
+  def publishable?
+    valid? :publish
+  end
+
 private
 
   def add_enrichment_errors(enrichment)
@@ -274,6 +279,10 @@ private
 
     latest_enrichment.valid? validation_scope
     add_enrichment_errors(latest_enrichment)
+  end
+
+  def validate_enrichment_publishable
+    validate_enrichment :publish
   end
 
   def remove_unnecessary_enrichments_validation_message

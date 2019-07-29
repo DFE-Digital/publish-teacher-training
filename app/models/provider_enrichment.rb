@@ -46,6 +46,11 @@ class ProviderEnrichment < ApplicationRecord
   validates :train_with_us, words_count: { maximum: 250 }
   validates :train_with_disability, words_count: { maximum: 250 }
 
+  validates :email, :website, :telephone,
+            :address1, :address2, :address3, :address4,
+            :postcode, :train_with_us, :train_with_disability,
+            presence: true, on: :publish
+
   def has_been_published_before?
     last_published_at.present?
   end

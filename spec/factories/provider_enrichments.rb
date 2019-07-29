@@ -61,5 +61,18 @@ FactoryBot.define do
       status { :draft }
       last_published_at { 5.days.ago }
     end
+
+    trait :without_content do
+      email { nil }
+      website { nil }
+      telephone { nil }
+
+      address1 { nil }
+      address3 { nil }
+      address4 { nil }
+      postcode { nil }
+      train_with_us { nil }
+      train_with_disability { nil }
+    end
   end
 end
