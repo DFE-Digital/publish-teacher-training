@@ -27,9 +27,9 @@ module MCB
     end
 
     def new_provider_wizard
+      # TODO: this should live in Provider
       provider.scheme_member = 'Y'
       provider.year_code = provider.recruitment_cycle.year
-      provider.last_published_at = Time.zone.now
       provider.changed_at = Time.zone.now
 
       name = @cli.ask_name
@@ -37,12 +37,14 @@ module MCB
       provider.provider_code = @cli.ask_new_provider_code
       provider.provider_type = @cli.ask_provider_type
 
-      provider.scitt = provider.scitt? ? 'Y' : 'N'
-      provider.accrediting_provider = if provider.scitt? || provider.university?
-                                        :accredited_body
-                                      else
-                                        :not_an_accredited_body
-                                      end
+      contact = @cli.ask_contact
+      provider.contact_name = contact[:name]
+      provider.email = contact[:email]
+      provider.telephone = contact[:telephone]
+
+      provider.url = @cli.ask_url
+
+      location_name = @cli.ask_name_of_first_location
 
       address = @cli.ask_address
       provider.address1 = address[:address1]
@@ -52,14 +54,9 @@ module MCB
       provider.postcode = address[:postcode]
       provider.region_code = @cli.ask_region_code
 
-      contact = @cli.ask_contact
-      provider.contact_name = contact[:name]
-      provider.email = contact[:email]
-      provider.telephone = contact[:telephone]
-
-      provider.url = @cli.ask_url
-
+      # TODO: confirm creation if valid
       provider.save!
+      puts "New provider has been created: #{provider}"
 
       finished_picking_organisation = false
       until finished_picking_organisation
@@ -79,7 +76,7 @@ module MCB
       organisation.users << (User.admins - organisation.users)
 
       provider.sites.create(
-        location_name: @cli.ask_name_of_first_location,
+        location_name: location_name,
         address1: provider.address1,
         address2: provider.address2,
         address3: provider.address3,
