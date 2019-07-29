@@ -320,11 +320,9 @@ describe 'Providers API v2', type: :request do
       it 'includes the accrediting_provider in the included data' do
         perform_request
 
-        # assumes nothing else is included so we can use zero index
-
+        expect(json_response["included"].count).to eq(1)
         expect(json_response.dig("included", 0, "type")).to eq("providers")
         expect(json_response.dig("included", 0, "id")).to eq(accrediting_provider.id.to_s)
-
         expect(json_response.dig("included", 0, "attributes", "provider_code")).to eq(accrediting_provider.provider_code)
         expect(json_response.dig("included", 0, "attributes", "provider_name")).to eq(accrediting_provider.provider_name)
       end
