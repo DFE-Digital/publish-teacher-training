@@ -59,10 +59,6 @@ private
     system("which #{name} 2>&1 >/dev/null")
   end
 
-  def darwin_install_package(package)
-    system('brew', 'install', package)
-  end
-
   def dbname
     Rails.application.config.database_configuration.fetch(Rails.env).fetch('database')
   end
