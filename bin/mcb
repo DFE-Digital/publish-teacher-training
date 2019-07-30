@@ -49,7 +49,7 @@ $mcb = Cri::Command.define do
   flag :h, :help, 'show help for this command' do |_value, cmd|
     puts cmd.help
 
-    prefix = "    #{cmd.name == "mcb" ? "bin/mcb" : cmd.name} "
+    prefix = "    #{cmd.name == 'mcb' ? 'bin/mcb' : cmd.name} "
     puts_command_index(cmd, prefix, 1)
 
     # Don't exit if we're in repl-mode.
