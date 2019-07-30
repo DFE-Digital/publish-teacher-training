@@ -36,7 +36,7 @@ describe 'Provider Publish API v2', type: :request do
 
     context 'unpublished provider with draft enrichment' do
       let(:enrichment) { build(:provider_enrichment, :initial_draft) }
-      let(:provider) {
+      let!(:provider) {
         create(
           :provider,
           organisations: [organisation],
@@ -44,8 +44,11 @@ describe 'Provider Publish API v2', type: :request do
         )
       }
 
-      xit 'publishes a provider' do
-        # TODO
+      fit 'publishes a provider' do
+        subject
+        enrichment.reload
+        expect(enrichment.status).to eq('published')
+        expect(enrichment.updated_by_user_id).to eq(user.id)
       end
     end
 

@@ -49,4 +49,20 @@ describe ProviderEnrichment, type: :model do
       expect(ProviderEnrichment.latest_created_at.last).to eq old_enrichment
     end
   end
+
+  fdescribe '#publish' do
+    let(:user) { create :user }
+    let!(:provider_enrichment) { create(:provider_enrichment, :initial_draft) }
+
+    it 'sets the status to published' do
+      publish_time = Time.parse("2019-07-30")
+      Timecop.freeze(publish_time) do
+        provider_enrichment.publish(user)
+        provider_enrichment.reload
+        expect(provider_enrichment.status).to eq('published')
+        expect(provider_enrichment.last_published_at).to eq(publish_time.utc)
+        expect(provider_enrichment.updated_by_user_id).to eq(user.id)
+      end
+    end
+  end
 end

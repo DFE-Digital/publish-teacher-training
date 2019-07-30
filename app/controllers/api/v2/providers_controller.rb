@@ -41,6 +41,7 @@ module API
         authorize @provider, :publish?
 
         if @provider.publishable?
+          @provider.publish_enrichment(@current_user)
           head :ok
         else
           render jsonapi_errors: @provider.errors, status: :unprocessable_entity
