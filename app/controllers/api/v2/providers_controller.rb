@@ -42,7 +42,14 @@ module API
 
         if @provider.publishable?
           @provider.publish_enrichment(@current_user)
-          head :ok
+
+          if courses_synced?(@provider.syncable_courses)
+            head :ok
+          else
+            raise RuntimeError.new(
+              "#{@provider} failed to sync these courses #{@provider.syncable_courses.pluck(:course_code)}"
+            )
+          end
         else
           render jsonapi_errors: @provider.errors, status: :unprocessable_entity
         end

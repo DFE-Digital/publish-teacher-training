@@ -36,19 +36,53 @@ describe 'Provider Publish API v2', type: :request do
 
     context 'unpublished provider with draft enrichment' do
       let(:enrichment) { build(:provider_enrichment, :initial_draft) }
-      let!(:provider) {
+      let(:site1) { create(:site_status, :findable) }
+      let(:site2) { create(:site_status, :findable) }
+      let(:course1) { build(:course, site_statuses: [site1], subjects: [dfe_subject]) }
+      let(:course2) { build(:course, site_statuses: [site2], subjects: [dfe_subject]) }
+
+      let!(:dfe_subject) { build(:subject, subject_name: 'primary') }
+      let(:non_dfe_subject) { build(:subject, subject_name: "secondary") }
+
+      let!(:provider) do
         create(
           :provider,
           organisations: [organisation],
-          enrichments: [enrichment]
+          enrichments: [enrichment],
+          courses: [course1, course2]
         )
-      }
+      end
 
-      fit 'publishes a provider' do
+      let(:search_api_status) { 200 }
+      let(:sync_body) { WebMock::Matchers::AnyArgMatcher.new(nil) }
+      let!(:sync_stub) do
+        stub_request(:put, %r{#{Settings.search_api.base_url}/api/courses/})
+          .with(body: sync_body)
+          .to_return(
+            status: search_api_status
+          )
+      end
+
+      it 'publishes a provider' do
         subject
         enrichment.reload
         expect(enrichment.status).to eq('published')
         expect(enrichment.updated_by_user_id).to eq(user.id)
+      end
+
+      context 'when the sync API is available' do
+        let(:sync_body) { include("\"ProgrammeCode\":\"#{course1.course_code}\"", "\"ProgrammeCode\":\"#{course2.course_code}\"") }
+        it 'syncs a providers courses' do
+          subject
+          expect(sync_stub).to have_been_requested
+        end
+      end
+
+      context 'when the sync API is unavailable' do
+        let(:search_api_status) { 409 }
+        it 'raises an error' do
+          expect { subject }.to raise_error(RuntimeError, "#{provider} failed to sync these courses #{[course1.course_code, course2.course_code]}")
+        end
       end
     end
 

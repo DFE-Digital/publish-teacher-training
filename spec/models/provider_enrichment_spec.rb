@@ -50,7 +50,7 @@ describe ProviderEnrichment, type: :model do
     end
   end
 
-  fdescribe '#publish' do
+  describe '#publish' do
     let(:user) { create :user }
     let!(:provider_enrichment) { create(:provider_enrichment, :initial_draft) }
 
