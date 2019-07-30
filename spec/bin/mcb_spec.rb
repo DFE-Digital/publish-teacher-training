@@ -20,7 +20,8 @@ describe 'running the mcb script' do
   describe 'REPL' do
     context 'completion' do
       it 'provides completions for empty prompt' do
-        output = with_stubbed_stdout(stdin: "\t\t") do
+        stderr = ''
+        output = with_stubbed_stdout(stdin: "\t\t", stderr: stderr) do
           FakeFS do
             FileUtils.mkdir_p(File.expand_path('/tmp'))
             FileUtils.mkdir_p(File.expand_path('~'))
@@ -29,18 +30,19 @@ describe 'running the mcb script' do
           end
         end
 
-        expect(output).to include("providers")
-        expect(output).to include("console")
-        expect(output).to include("courses")
-        expect(output).to include("config")
-        expect(output).to include("apiv1")
-        expect(output).to include("apiv2")
-        expect(output).to include("users")
-        expect(output).to include("az")
+        expect(output).to include('providers')
+        expect(output).to include('console')
+        expect(output).to include('courses')
+        expect(output).to include('config')
+        expect(output).to include('apiv1')
+        expect(output).to include('apiv2')
+        expect(output).to include('users')
+        expect(output).to include('az')
       end
 
       it 'provides relevant completions for a main command' do
-        output = with_stubbed_stdout(stdin: "co\t\t") do
+        stderr = ''
+        output = with_stubbed_stdout(stdin: "co\t\t", stderr: stderr) do
           FakeFS do
             FileUtils.mkdir_p(File.expand_path('/tmp'))
             FileUtils.mkdir_p(File.expand_path('~'))
@@ -49,21 +51,22 @@ describe 'running the mcb script' do
           end
         end
 
-        expect(output).not_to include("providers")
-        expect(output).to include("console")
-        expect(output).to include("courses")
-        expect(output).to include("config")
-        expect(output).not_to include("apiv1")
-        expect(output).not_to include("apiv2")
-        expect(output).not_to include("users")
-        expect(output)
+        expect(output).not_to include('providers')
+        expect(output).to include('console')
+        expect(output).to include('courses')
+        expect(output).to include('config')
+        expect(output).not_to include('apiv1')
+        expect(output).not_to include('apiv2')
+        expect(output).not_to include('users')
+        expect(output).not_to include('az')
       end
     end
 
     context 'history' do
       let(:up_key) { "\e[A" }
       it 'loads commands from saved history file' do
-        output = with_stubbed_stdout(stdin: up_key) do
+        stderr = ''
+        output = with_stubbed_stdout(stdin: up_key, stderr: stderr) do
           FakeFS do
             FileUtils.mkdir_p(File.expand_path('/tmp'))
 
@@ -78,7 +81,8 @@ describe 'running the mcb script' do
       end
 
       it 'eliminates duplicates from history' do
-        output = with_stubbed_stdout(stdin: "i want to show this command\nduplicate command\nduplicate command\n#{up_key}#{up_key}") do
+        stderr = ''
+        output = with_stubbed_stdout(stdin: "i want to show this command\nduplicate command\nduplicate command\n#{up_key}#{up_key}", stderr: stderr) do
           FakeFS do
             FileUtils.mkdir_p(File.expand_path('/tmp'))
 
@@ -90,7 +94,8 @@ describe 'running the mcb script' do
       end
 
       it 'eliminates empty items from history' do
-        output = with_stubbed_stdout(stdin: "i want to show this command\n\n#{up_key}") do
+        stderr = ''
+        output = with_stubbed_stdout(stdin: "i want to show this command\n\n#{up_key}", stderr: stderr) do
           FakeFS do
             FileUtils.mkdir_p(File.expand_path('/tmp'))
 
@@ -102,8 +107,9 @@ describe 'running the mcb script' do
       end
 
       it 'starts normally when history file is not present' do
+        stderr = ''
         expect {
-          with_stubbed_stdout(stdin: up_key) do
+          with_stubbed_stdout(stdin: up_key, stderr: stderr) do
             FakeFS do
               FileUtils.mkdir_p(File.expand_path('/tmp'))
               FileUtils.mkdir_p(File.expand_path('~'))
@@ -115,7 +121,8 @@ describe 'running the mcb script' do
 
       it 'appends to the history file on exit' do
         file_contents = nil
-        with_stubbed_stdout(stdin: "my first command\nmy second command\n") do
+        stderr = ''
+        with_stubbed_stdout(stdin: "my first command\nmy second command\n", stderr: stderr) do
           FakeFS do
             FileUtils.mkdir_p(File.expand_path('/tmp'))
             FileUtils.mkdir_p(File.expand_path('~'))
