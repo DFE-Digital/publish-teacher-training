@@ -358,13 +358,34 @@ module MCB
       end
     end
 
-    def start_mcb_repl(start_argv)
-      $mcb_repl_mode = true
+    def load_history
+      File.open(File.expand_path('~/.mcb_history'), 'r').each do |line|
+        Readline::HISTORY.push(line.chomp)
+      end
+    rescue Errno::ENOENT
+      nil
+    end
 
+    def append_to_history(input)
+      if !input.blank? && Readline::HISTORY.to_a.last != input.chomp
+        Readline::HISTORY.push(input.chomp)
+        File.open(File.expand_path('~/.mcb_history'), 'a+') do |f|
+          f.puts(input.chomp)
+        end
+      end
+    end
+
+    def enable_completion
       command_names = $mcb.commands.map(&:name)
       Readline.completion_proc = proc do |s|
         command_names.grep(/^#{Regexp.escape(s)}/)
       end
+    end
+
+    def start_mcb_repl(start_argv)
+      $mcb_repl_mode = true
+      load_history
+      enable_completion
       trap("INT", "SIG_IGN")
 
       env = start_argv[1]
@@ -380,7 +401,8 @@ module MCB
                else                   env
                end
 
-      while (input = Readline.readline("#{prompt}> ", true))
+      while (input = Readline.readline("#{prompt}> ", false))
+        append_to_history(input)
         argv = input.split
 
         case argv.first
