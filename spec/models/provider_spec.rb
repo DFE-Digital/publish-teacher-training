@@ -272,7 +272,7 @@ describe Provider, type: :model do
     describe '#courses' do
       describe 'discard' do
         it 'reduces courses when one is discarded' do
-          expect { course.discard }.to change { provider.courses.size }.by(-1)
+          expect { course.discard }.to change { provider.reload.courses.size }.by(-1)
         end
       end
     end

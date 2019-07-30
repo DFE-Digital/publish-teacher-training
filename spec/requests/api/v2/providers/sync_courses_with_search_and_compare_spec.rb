@@ -112,7 +112,7 @@ describe 'Courses API v2', type: :request do
         }
 
         it 'should throw an error' do
-          expect { subject }.to raise_error("provider is not from the current recrutiment cycle")
+          expect { subject }.to raise_error("#{provider} is not from the current recruitment cycle")
         end
       end
     end

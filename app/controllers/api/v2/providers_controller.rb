@@ -59,9 +59,10 @@ module API
 
       def sync_courses_with_search_and_compare
         authorize @provider
-        if @recruitment_cycle.year != Settings.current_recruitment_cycle.to_s
+
+        if !@recruitment_cycle.current?
           raise RuntimeError.new(
-            "provider is not from the current recrutiment cycle"
+            "#{@provider} is not from the current recruitment cycle"
           )
         end
         if courses_synced?(@provider.syncable_courses)
