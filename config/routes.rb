@@ -103,6 +103,7 @@ Rails.application.routes.draw do
       end
 
       concern :provider_routes do
+        post :sync_courses_with_search_and_compare, on: :member
         resources :courses, param: :code do
           post :sync_with_search_and_compare, on: :member
           post :publish, on: :member
@@ -110,6 +111,7 @@ Rails.application.routes.draw do
         end
         resources :sites, only: %i[index update show create]
         resources :recruitment_cycles, only: %i[index]
+        post :sync_courses_with_search_and_compare, on: :member
       end
 
       resources :providers,

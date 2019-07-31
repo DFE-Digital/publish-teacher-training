@@ -57,6 +57,23 @@ module API
         end
       end
 
+      def sync_courses_with_search_and_compare
+        authorize @provider
+
+        if !@recruitment_cycle.current?
+          raise RuntimeError.new(
+            "#{@provider} is not from the current recruitment cycle"
+          )
+        end
+        if courses_synced?(@provider.syncable_courses)
+          head :ok
+        else
+          raise RuntimeError.new(
+            "#{@provider} failed to sync these courses #{@provider.syncable_courses.pluck(:course_code)}"
+          )
+        end
+      end
+
     private
 
       def build_recruitment_cycle
@@ -106,6 +123,12 @@ module API
             :postcode,
             :region_code
           )
+      end
+
+      def courses_synced?(syncable_courses)
+        SearchAndCompareAPIService::Request.sync(
+          syncable_courses
+        )
       end
     end
   end

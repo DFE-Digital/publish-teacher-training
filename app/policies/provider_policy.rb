@@ -32,4 +32,5 @@ class ProviderPolicy
   alias_method :update?, :show?
   alias_method :publish?, :show?
   alias_method :publishable?, :show?
+  alias_method :sync_courses_with_search_and_compare?, :show?
 end
