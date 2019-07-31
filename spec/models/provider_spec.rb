@@ -271,19 +271,19 @@ describe Provider, type: :model do
     end
   end
 
-  describe "accredited_providers" do
+  describe "accrediting_providers" do
     let(:provider) { create :provider, accrediting_provider: 'N' }
 
-    # two courses with same accrediting provider to ensure returned data is not duplicated
-    let!(:course1) { create :course, :with_accrediting_provider, provider: provider }
-    let!(:course2) { create :course, accrediting_provider: course1.accrediting_provider, provider: provider }
+    let(:accrediting_provider) { create :provider, accrediting_provider: 'Y' }
+    let!(:course1) { create :course, accrediting_provider: accrediting_provider, provider: provider }
+    let!(:course2) { create :course, accrediting_provider: accrediting_provider, provider: provider }
 
-    context 'getting the accrediting provider' do
-      it 'does not duplicate data' do
-        expect(provider.accrediting_providers.count).to eq(1)
-        expect(provider.accrediting_providers.first.provider_code).to eq(course1.accrediting_provider.provider_code)
-        expect(provider.accrediting_providers.first.provider_name).to eq(course1.accrediting_provider.provider_name)
-      end
+    it "returns the course's accrediting provider" do
+      expect(provider.accrediting_providers.first).to eq(accrediting_provider)
+    end
+
+    it 'does not duplicate data' do
+      expect(provider.accrediting_providers.count).to eq(1)
     end
   end
 
