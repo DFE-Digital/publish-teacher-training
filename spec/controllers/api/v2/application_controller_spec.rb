@@ -43,7 +43,7 @@ describe API::V2::ApplicationController, type: :controller do
       end
     end
 
-    context 'manage course api integration' do
+    describe 'manage course api integration' do
       let(:email) { "manage_courses@api.com" }
       let(:sign_in_user_id) { "manage_courses_api" }
       let(:existing_user) { create(:user, email: email, sign_in_user_id: sign_in_user_id) }
@@ -55,7 +55,7 @@ describe API::V2::ApplicationController, type: :controller do
       end
 
       # NOTES:
-      # This is hardcode as the ruby version of JWT encoding is not asymmetrical with csharp and does not applies
+      # This is hardcode as the ruby version of JWT encoding is not symmetrical with csharp and does not applies
       #
       # RECOMMENDED (Notational Conventions) for the "typ" (Type) Header Parameter see (https://tools.ietf.org/html/rfc7519#section-5.1)
       # as default.
