@@ -18,7 +18,7 @@ describe SearchAndCompareAPIService do
   end
 
   describe "Request" do
-    let(:request) { described_class::Request }
+    let(:request) { described_class::Request.new }
     let(:body) do
       ActiveModel::Serializer::CollectionSerializer.new(
         [course],

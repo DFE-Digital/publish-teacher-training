@@ -4,7 +4,8 @@ describe SyncCoursesToFindJob, type: :job do
   let(:course) { create :course }
 
   before do
-    allow(SearchAndCompareAPIService::Request).to receive(:sync)
+    allow_any_instance_of(SearchAndCompareAPIService::Request)
+      .to receive(:sync).and_return(true)
   end
 
   it 'queues the expected job' do
@@ -15,9 +16,9 @@ describe SyncCoursesToFindJob, type: :job do
   end
 
   it 'syncs using the SearchAndCompareAPIService' do
-    described_class.perform_now(course)
+    expect_any_instance_of(SearchAndCompareAPIService::Request)
+      .to receive(:sync).with([course])
 
-    expect(SearchAndCompareAPIService::Request)
-      .to have_received(:sync).with([course])
+    described_class.perform_now(course)
   end
 end
