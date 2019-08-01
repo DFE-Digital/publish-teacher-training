@@ -242,8 +242,8 @@ describe 'PATCH /providers/:provider_code' do
       context "with invalid data" do
         let(:updated_attributes) do
           {
-            train_with_us: Faker::Lorem.sentence(251),
-            train_with_disability: Faker::Lorem.sentence(251)
+            train_with_us: Faker::Lorem.sentence(word_count: 251),
+            train_with_disability: Faker::Lorem.sentence(word_count: 251)
           }
         end
 
@@ -312,7 +312,7 @@ describe 'PATCH /providers/:provider_code' do
 
       context "with invalid data" do
         let(:updated_attributes) do
-          { train_with_us: Faker::Lorem.sentence(251) }
+          { train_with_us: Faker::Lorem.sentence(word_count: 251) }
         end
 
         subject { JSON.parse(response.body)["errors"].map { |e| e["title"] } }

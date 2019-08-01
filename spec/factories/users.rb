@@ -20,7 +20,7 @@ FactoryBot.define do
     email { Faker::Internet.email }
     first_name { Faker::Name.first_name }
     last_name { Faker::Name.last_name }
-    accept_terms_date_utc { Faker::Time.backward(1).utc }
+    accept_terms_date_utc { Faker::Time.backward(days: 1).utc }
     sign_in_user_id { SecureRandom.uuid }
 
     trait :admin do

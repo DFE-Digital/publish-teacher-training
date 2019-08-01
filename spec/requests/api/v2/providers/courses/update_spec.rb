@@ -364,17 +364,17 @@ describe 'PATCH /providers/:provider_code/courses/:course_code' do
     context "with invalid data" do
       let(:updated_attributes) do
         {
-          about_course: Faker::Lorem.sentence(1000),
-          fee_details: Faker::Lorem.sentence(1000),
+          about_course: Faker::Lorem.sentence(word_count: 1000),
+          fee_details: Faker::Lorem.sentence(word_count: 1000),
           fee_international: 200_000,
           fee_uk_eu: 200_000,
-          financial_support: Faker::Lorem.sentence(1000),
-          how_school_placements_work: Faker::Lorem.sentence(1000),
-          interview_process: Faker::Lorem.sentence(1000),
-          other_requirements: Faker::Lorem.sentence(1000),
-          personal_qualities: Faker::Lorem.sentence(1000),
-          required_qualifications: Faker::Lorem.sentence(1000),
-          salary_details: Faker::Lorem.sentence(1000)
+          financial_support: Faker::Lorem.sentence(word_count: 1000),
+          how_school_placements_work: Faker::Lorem.sentence(word_count: 1000),
+          interview_process: Faker::Lorem.sentence(word_count: 1000),
+          other_requirements: Faker::Lorem.sentence(word_count: 1000),
+          personal_qualities: Faker::Lorem.sentence(word_count: 1000),
+          required_qualifications: Faker::Lorem.sentence(word_count: 1000),
+          salary_details: Faker::Lorem.sentence(word_count: 1000)
         }
       end
 
@@ -457,7 +457,7 @@ describe 'PATCH /providers/:provider_code/courses/:course_code' do
 
     context "with invalid data" do
       let(:updated_attributes) do
-        { about_course: Faker::Lorem.sentence(1000) }
+        { about_course: Faker::Lorem.sentence(word_count: 1000) }
       end
 
       subject { JSON.parse(response.body)["errors"].map { |e| e["title"] } }
@@ -501,17 +501,17 @@ describe 'PATCH /providers/:provider_code/courses/:course_code' do
     context "with invalid data" do
       let(:updated_attributes) do
         {
-          about_course: Faker::Lorem.sentence(1000),
-          fee_details: Faker::Lorem.sentence(1000),
+          about_course: Faker::Lorem.sentence(word_count: 1000),
+          fee_details: Faker::Lorem.sentence(word_count: 1000),
           fee_international: 200_000,
           fee_uk_eu: 200_000,
-          financial_support: Faker::Lorem.sentence(1000),
-          how_school_placements_work: Faker::Lorem.sentence(1000),
-          interview_process: Faker::Lorem.sentence(1000),
-          other_requirements: Faker::Lorem.sentence(1000),
-          personal_qualities: Faker::Lorem.sentence(1000),
-          required_qualifications: Faker::Lorem.sentence(1000),
-          salary_details: Faker::Lorem.sentence(1000)
+          financial_support: Faker::Lorem.sentence(word_count: 1000),
+          how_school_placements_work: Faker::Lorem.sentence(word_count: 1000),
+          interview_process: Faker::Lorem.sentence(word_count: 1000),
+          other_requirements: Faker::Lorem.sentence(word_count: 1000),
+          personal_qualities: Faker::Lorem.sentence(word_count: 1000),
+          required_qualifications: Faker::Lorem.sentence(word_count: 1000),
+          salary_details: Faker::Lorem.sentence(word_count: 1000)
         }
       end
 
