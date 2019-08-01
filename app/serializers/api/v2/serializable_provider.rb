@@ -62,7 +62,25 @@ module API
       enrichment_attribute :train_with_disability
 
       has_many :sites
-      has_many :accrediting_providers, serializer: API::V2::SerializableAccreditingProvider
+
+      meta do
+        {
+          accredited_bodies:
+            @object.accrediting_providers.map do |ap|
+              accrediting_provider_entry = @object.latest_enrichment.accrediting_provider_enrichments.find do |ape|
+                ape['UcasProviderCode'] == ap.provider_code
+              end
+
+              {
+                provider_name: ap.provider_name,
+                provider_code: ap.provider_code,
+                description: accrediting_provider_entry['Description']
+              }
+            end
+        }
+      end
+
+      has_many :accrediting_provider_enrichments
       has_one :latest_enrichment, key: :ProviderEnrichment, serializer: API::V2::SerializableProviderEnrichment
 
       has_many :courses do
