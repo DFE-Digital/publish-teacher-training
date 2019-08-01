@@ -122,15 +122,15 @@ describe Provider, type: :model do
 
         expect(provider.external_contact_info).to(
           eq(
-            'address1'    => latest_published_enrichment.address1,
-            'address2'    => latest_published_enrichment.address2,
-            'address3'    => latest_published_enrichment.address3,
-            'address4'    => latest_published_enrichment.address4,
-            'postcode'    => latest_published_enrichment.postcode,
-            'region_code' => latest_published_enrichment.region_code,
-            'telephone'   => latest_published_enrichment.telephone,
-            'email'       => latest_published_enrichment.email,
-            'website'     => latest_published_enrichment.website
+            'address1'    => enrichment.address1,
+            'address2'    => enrichment.address2,
+            'address3'    => enrichment.address3,
+            'address4'    => enrichment.address4,
+            'postcode'    => enrichment.postcode,
+            'region_code' => enrichment.region_code,
+            'telephone'   => enrichment.telephone,
+            'email'       => enrichment.email,
+            'website'     => enrichment.website
           )
         )
       end

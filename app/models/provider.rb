@@ -180,8 +180,8 @@ class Provider < ApplicationRecord
       email
     ]
 
-    if latest_published_enrichment
-      latest_published_enrichment.attributes.slice(*(attribute_names + %w[website]))
+    if enrichments.last
+      enrichments.last.attributes.slice(*(attribute_names + %w[website]))
     else
       attributes.slice(*attribute_names).merge('website' => url)
     end
