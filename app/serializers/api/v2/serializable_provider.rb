@@ -63,9 +63,7 @@ module API
 
       has_many :sites
 
-      meta do
-        {
-          accredited_bodies:
+      attribute :accredited_bodies do
             @object.accrediting_providers.map do |ap|
               accrediting_provider_entry = @object.latest_enrichment.accrediting_provider_enrichments.find do |ape|
                 ape['UcasProviderCode'] == ap.provider_code
@@ -77,7 +75,6 @@ module API
                 description: accrediting_provider_entry['Description']
               }
             end
-        }
       end
 
       has_many :accrediting_provider_enrichments
