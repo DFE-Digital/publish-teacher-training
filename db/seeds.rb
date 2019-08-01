@@ -50,7 +50,7 @@ def create_standard_provider_and_courses_for_cycle(recruitment_cycle, superuser)
 
   Site.create!(
     provider: provider,
-    code: Faker::Number.unique.number(1),
+    code: Faker::Number.number(digits: 1),
     location_name: Faker::Company.name,
     address1: Faker::Address.building_number,
     address2: Faker::Address.street_name,

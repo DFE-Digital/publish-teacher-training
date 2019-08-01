@@ -62,7 +62,7 @@ RSpec.describe Course, type: :model do
 
       before do
         subject
-        invalid_enrichment.about_course = Faker::Lorem.sentence(1000)
+        invalid_enrichment.about_course = Faker::Lorem.sentence(word_count: 1000)
         subject.valid?
       end
 

@@ -89,7 +89,7 @@ describe CourseEnrichment, type: :model do
     subject { build :course_enrichment, about_course: about_course_text }
 
     context 'with over 400 words' do
-      let(:about_course_text) { Faker::Lorem.sentence(400 + 1) }
+      let(:about_course_text) { Faker::Lorem.sentence(word_count: 400 + 1) }
 
       it { should_not be_valid }
     end
@@ -127,7 +127,7 @@ describe CourseEnrichment, type: :model do
     subject { build :course_enrichment, how_school_placements_work: how_school_placements_work_text }
 
     context 'with over 400 words' do
-      let(:how_school_placements_work_text) { Faker::Lorem.sentence(400 + 1) }
+      let(:how_school_placements_work_text) { Faker::Lorem.sentence(word_count: 400 + 1) }
 
       it { should_not be_valid }
     end
@@ -149,7 +149,7 @@ describe CourseEnrichment, type: :model do
     subject { build :course_enrichment, interview_process: interview_process_text }
 
     context 'with over 250 words' do
-      let(:interview_process_text) { Faker::Lorem.sentence(250 + 1) }
+      let(:interview_process_text) { Faker::Lorem.sentence(word_count: 250 + 1) }
 
       it { should_not be_valid }
     end
@@ -161,7 +161,7 @@ describe CourseEnrichment, type: :model do
     subject { build :course_enrichment, required_qualifications: required_qualifications_text }
 
     context 'with over 100 words' do
-      let(:required_qualifications_text) { Faker::Lorem.sentence(100 + 1) }
+      let(:required_qualifications_text) { Faker::Lorem.sentence(word_count: 100 + 1) }
 
       it { should_not be_valid }
     end
@@ -183,7 +183,7 @@ describe CourseEnrichment, type: :model do
     subject { build :course_enrichment, personal_qualities: personal_qualities_text }
 
     context 'with over 100 words' do
-      let(:personal_qualities_text) { Faker::Lorem.sentence(100 + 1) }
+      let(:personal_qualities_text) { Faker::Lorem.sentence(word_count: 100 + 1) }
 
       it { should_not be_valid }
     end
@@ -195,7 +195,7 @@ describe CourseEnrichment, type: :model do
     subject { build :course_enrichment, other_requirements: other_requirements_text }
 
     context 'with over 100 words' do
-      let(:other_requirements_text) { Faker::Lorem.sentence(100 + 1) }
+      let(:other_requirements_text) { Faker::Lorem.sentence(word_count: 100 + 1) }
 
       it { should_not be_valid }
     end
@@ -208,7 +208,7 @@ describe CourseEnrichment, type: :model do
     subject { build :course_enrichment, salary_details: salary_details_text, course: salaried_course }
 
     context 'with over 250 words' do
-      let(:salary_details_text) { Faker::Lorem.sentence(250 + 1) }
+      let(:salary_details_text) { Faker::Lorem.sentence(word_count: 250 + 1) }
 
       it { should_not be_valid }
     end
@@ -236,14 +236,14 @@ describe CourseEnrichment, type: :model do
       it { should validate_numericality_of(:fee_international).on(:publish) }
 
       it 'validates maximum word count for interview_process' do
-        course_enrichment.interview_process = Faker::Lorem.sentence(250 + 1)
+        course_enrichment.interview_process = Faker::Lorem.sentence(word_count: 250 + 1)
 
         expect(course_enrichment).not_to be_valid :publish
         expect(course_enrichment.errors[:interview_process]).to be_present
       end
 
       it 'validates maximum word count for fee_details' do
-        course_enrichment.fee_details = Faker::Lorem.sentence(250 + 1)
+        course_enrichment.fee_details = Faker::Lorem.sentence(word_count: 250 + 1)
 
         expect(course_enrichment).not_to be_valid :publish
         expect(course_enrichment.errors[:fee_details]).to be_present
@@ -251,7 +251,7 @@ describe CourseEnrichment, type: :model do
 
       context 'salary based fields' do
         it 'does not validates maximum word count for salary_details' do
-          course_enrichment.salary_details = Faker::Lorem.sentence(250 + 1)
+          course_enrichment.salary_details = Faker::Lorem.sentence(word_count: 250 + 1)
 
           expect(course_enrichment).to be_valid :publish
           expect(course_enrichment.errors[:salary_details]).to be_empty
@@ -271,14 +271,14 @@ describe CourseEnrichment, type: :model do
       it { should_not validate_numericality_of(:fee_international).on(:publish) }
 
       it 'validates maximum word count for required_qualifications' do
-        course_enrichment.required_qualifications = Faker::Lorem.sentence(100 + 1)
+        course_enrichment.required_qualifications = Faker::Lorem.sentence(word_count: 100 + 1)
 
         expect(course_enrichment).not_to be_valid :publish
         expect(course_enrichment.errors[:required_qualifications]).to be_present
       end
 
       it 'validates maximum word count for salary_details' do
-        course_enrichment.salary_details = Faker::Lorem.sentence(250 + 1)
+        course_enrichment.salary_details = Faker::Lorem.sentence(word_count: 250 + 1)
 
         expect(course_enrichment).not_to be_valid :publish
         expect(course_enrichment.errors[:salary_details]).to be_present
@@ -286,7 +286,7 @@ describe CourseEnrichment, type: :model do
 
       context 'fee based fields' do
         it 'does not validates maximum word count for fee_details' do
-          course_enrichment.fee_details = Faker::Lorem.sentence(250 + 1)
+          course_enrichment.fee_details = Faker::Lorem.sentence(word_count: 250 + 1)
 
           expect(course_enrichment).to be_valid :publish
           expect(course_enrichment.errors[:fee_details]).to be_empty

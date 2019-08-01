@@ -55,8 +55,8 @@ FactoryBot.define do
         "Fees are made payable to the University.",
       ].sample
     end
-    fee_uk_eu         { Faker::Number.within(0..100000).to_i }
-    fee_international { Faker::Number.within(0..100000).to_i }
+    fee_uk_eu         { Faker::Number.within(range: 0..100000).to_i }
+    fee_international { Faker::Number.within(range: 0..100000).to_i }
     financial_support do
       [
         "Please get in contact with the school for any further details.",
