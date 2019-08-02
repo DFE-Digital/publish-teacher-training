@@ -217,6 +217,11 @@ class Provider < ApplicationRecord
     organisations.first
   end
 
+  def provider_type=(new_value)
+    super
+    self.scitt = scitt? ? 'Y' : 'N'
+  end
+
   def to_s
     "#{provider_name} (#{provider_code})"
   end

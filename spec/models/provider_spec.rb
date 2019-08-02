@@ -190,6 +190,26 @@ describe Provider, type: :model do
     end
   end
 
+  describe "#provider_type=" do
+    it "sets the provider type" do
+      expect { subject.provider_type = "scitt" }
+        .to change { subject.provider_type }
+        .from(nil).to('scitt')
+    end
+
+    it "sets 'scitt=Y' when the provider type is set to scitt" do
+      expect { subject.provider_type = "scitt" }
+        .to change { subject.scitt }
+        .from(nil).to('Y')
+    end
+
+    it "sets 'scitt=N' when the provider type is not a scitt" do
+      expect { subject.provider_type = "university" }
+        .to change { subject.scitt }
+        .from(nil).to('N')
+    end
+  end
+
   its(:recruitment_cycle) { should eq find(:recruitment_cycle) }
 
   describe '#unassigned_site_codes' do
