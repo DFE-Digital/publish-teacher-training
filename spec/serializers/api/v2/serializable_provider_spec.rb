@@ -2,7 +2,7 @@ require 'rails_helper'
 
 describe API::V2::SerializableProvider do
   let(:provider) { create :provider, accrediting_provider: 'Y' }
-  let(:resource) { API::V2::SerializableProvider.new object: provider }
+  let(:resource) { described_class.new object: provider }
 
   it 'sets type to providers' do
     expect(resource.jsonapi_type).to eq :providers
