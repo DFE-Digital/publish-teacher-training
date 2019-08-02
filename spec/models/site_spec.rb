@@ -56,7 +56,7 @@ describe Site, type: :model do
   end
 
   describe 'after running validation' do
-    let(:site) { build(:site, provider: provider) }
+    let(:site) { build(:site, provider: provider, code: nil) }
     let(:provider) { build(:provider) }
     subject { site }
 
