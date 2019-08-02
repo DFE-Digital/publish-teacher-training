@@ -149,6 +149,12 @@ class Provider < ApplicationRecord
     ).select("provider.*, COALESCE(a.courses_count, 0) AS included_courses_count")
   end
 
+  def publish_enrichment(current_user)
+    enrichments.draft.each do |enrichment|
+      enrichment.publish(current_user)
+    end
+  end
+
   def courses_count
     self.respond_to?("included_courses_count") ? included_courses_count : courses.size
   end

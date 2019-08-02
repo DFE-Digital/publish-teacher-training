@@ -43,7 +43,6 @@ module API
               'error received when syncing with search and compare'
             )
           end
-
         else
           render jsonapi_errors: @course.errors, status: :unprocessable_entity
         end

@@ -92,7 +92,7 @@ describe 'Courses API v2', type: :request do
           let(:status) { 451 }
 
           it 'should throw an error' do
-            expect { subject }.to raise_error("#{provider} failed to sync these courses #{provider.syncable_courses.pluck(:course_code)}")
+            expect { subject }.to raise_error("#{provider} failed to sync these courses #{[syncable_course.course_code]}")
           end
         end
       end

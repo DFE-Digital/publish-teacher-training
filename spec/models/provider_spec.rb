@@ -481,4 +481,16 @@ describe Provider, type: :model do
       end
     end
   end
+
+  describe '#publish_enrichment' do
+    let(:user) { create :user }
+    let(:provider) { create :provider }
+    let!(:provider_enrichment1) { create :provider_enrichment, provider: provider }
+    let!(:provider_enrichment2) { create :provider_enrichment, provider: provider }
+
+    it 'sets the status of all draft enrichments to published' do
+      provider.publish_enrichment(user)
+      expect(provider.reload.enrichments.draft.size).to eq(0)
+    end
+  end
 end
