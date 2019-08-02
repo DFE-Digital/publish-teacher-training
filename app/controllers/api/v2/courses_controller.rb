@@ -60,6 +60,7 @@ module API
         update_course
         update_enrichment
         update_sites
+        update_subjects
         should_sync = site_ids.present? && @course.recruitment_cycle.current?
         has_synced? if should_sync
 
@@ -105,6 +106,12 @@ module API
         @course.errors[:sites] << "^You must choose at least one location" if site_ids.empty?
       end
 
+      def update_subjects
+        return if subject_params.nil?
+
+        @course.subjects = Subject.where(subject_name: subject_params)
+      end
+
       def build_provider
         @provider = @recruitment_cycle.providers.find_by!(
           provider_code: params[:provider_code].upcase
@@ -134,7 +141,8 @@ module API
                   :maths,
                   :science,
                   :qualification,
-                  :age_range_in_years)
+                  :age_range_in_years,
+                  :subjects)
           .permit(
             :about_course,
             :course_length,
@@ -170,7 +178,8 @@ module API
                   :id,
                   :type,
                   :sites_ids,
-                  :sites_types)
+                  :sites_types,
+                  :subjects)
           .permit(
             :english,
             :maths,
@@ -178,6 +187,10 @@ module API
             :qualification,
             :age_range_in_years,
           )
+      end
+
+      def subject_params
+        params.fetch(:course, {})[:subjects]
       end
 
       def site_ids
