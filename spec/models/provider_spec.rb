@@ -191,6 +191,8 @@ describe Provider, type: :model do
   end
 
   describe "#provider_type=" do
+    subject { build(:provider, accrediting_provider: nil) }
+
     it "sets the provider type" do
       expect { subject.provider_type = "scitt" }
         .to change { subject.provider_type }
@@ -207,6 +209,24 @@ describe Provider, type: :model do
       expect { subject.provider_type = "university" }
         .to change { subject.scitt }
         .from(nil).to('N')
+    end
+
+    it "sets 'accrediting_provider' correctly for SCITTs" do
+      expect { subject.provider_type = "scitt" }
+        .to change { subject.accrediting_provider }
+        .from(nil).to('accredited_body')
+    end
+
+    it "sets 'accrediting_provider' correctly for universities" do
+      expect { subject.provider_type = "university" }
+        .to change { subject.accrediting_provider }
+        .from(nil).to('accredited_body')
+    end
+
+    it "sets 'accrediting_provider' correctly for universities" do
+      expect { subject.provider_type = "lead_school" }
+        .to change { subject.accrediting_provider }
+        .from(nil).to('not_an_accredited_body')
     end
   end
 

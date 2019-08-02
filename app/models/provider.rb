@@ -220,6 +220,11 @@ class Provider < ApplicationRecord
   def provider_type=(new_value)
     super
     self.scitt = scitt? ? 'Y' : 'N'
+    self.accrediting_provider = if scitt? || university?
+                                  :accredited_body
+                                else
+                                  :not_an_accredited_body
+                                end
   end
 
   def to_s
