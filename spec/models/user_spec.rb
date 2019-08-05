@@ -88,12 +88,26 @@ describe User, type: :model do
     end
 
     context 'user does not have a digital.education or education.gov.uk email' do
-      subject { create(:user, email: 'test@hrmc.gov.uk') }
+      subject { create(:user, email: email) }
 
-      its(:admin?) { should be_falsey }
+      context 'when other doamin' do
+        let(:email) { 'test@hrmc.gov.uk' }
 
-      it "does shows up in User.non_admins" do
-        expect(User.non_admins).to eq([subject])
+        its(:admin?) { should be_falsey }
+
+        it "does shows up in User.non_admins" do
+          expect(User.non_admins).to eq([subject])
+        end
+      end
+
+      context 'when an email has a domain similar but not identical to "digital.education.gov.uk"' do
+        let(:email) { 'test@digitalaeducationagov.uk' }
+
+        its(:admin?) { should be_falsey }
+
+        it "does shows up in User.non_admins" do
+          expect(User.non_admins).to eq([subject])
+        end
       end
 
       it "doesn't show up in User.admins" do
