@@ -273,10 +273,9 @@ class Provider < ApplicationRecord
 
   def accredited_bodies
     accrediting_providers.map do |ap|
-      accrediting_provider_entry = latest_enrichment&.accrediting_provider_enrichments&.find do |ape|
-        ape['UcasProviderCode'] == ap.provider_code
-      end
+      accrediting_provider_entry = latest_enrichment&.accrediting_provider_enrichment(ap.provider_code)
 
+      # map() to this hash:
       {
         provider_name: ap.provider_name,
         provider_code: ap.provider_code,
