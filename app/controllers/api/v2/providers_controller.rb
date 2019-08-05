@@ -29,6 +29,7 @@ module API
       def update
         authorize @provider, :update?
         update_enrichment
+        update_accrediting_enrichment
 
         if @provider.valid?
           render jsonapi: @provider.reload, include: params[:include]
@@ -103,21 +104,61 @@ module API
         @user = User.find(params[:user_id])
       end
 
+      def update_accrediting_enrichment
+        return if accredited_bodies_params.values.none?
+
+        enrichment = @provider.enrichments.find_or_initialize_draft
+
+        enrichment.accrediting_provider_enrichments =
+          accredited_bodies_params["accredited_bodies"].map do |accredited_body|
+            {
+              UcasProviderCode: accredited_body["provider_code"],
+              Description: accredited_body["description"],
+            }
+          end
+
+        set_provider_code enrichment
+        enrichment.save
+      end
+
       def update_enrichment
         return unless enrichment_params.values.any?
 
         enrichment = @provider.enrichments.find_or_initialize_draft
         enrichment.assign_attributes(enrichment_params)
 
+        set_provider_code enrichment
+        enrichment.save
+      end
+
+      def set_provider_code(enrichment)
         # Note: provider_code is only here to support c# counterpart, until provide_code is removed from database
         enrichment.provider_code = @provider.provider_code if enrichment.provider_code.blank?
-        enrichment.save
+      end
+
+      def accredited_bodies_params
+        params
+          .fetch(:provider, {})
+          .except(
+            :train_with_us,
+            :train_with_disability,
+            :email,
+            :telephone,
+            :website,
+            :address1,
+            :address2,
+            :address3,
+            :address4,
+            :postcode,
+            :region_code
+          )
+          .permit(accredited_bodies: %i[provider_code provider_name description])
       end
 
       def enrichment_params
         params
           .fetch(:provider, {})
-          .except
+          .except(:accredited_bodies)
           .permit(
             :train_with_us,
             :train_with_disability,

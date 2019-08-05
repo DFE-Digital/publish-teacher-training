@@ -294,6 +294,22 @@ describe Provider, type: :model do
     end
   end
 
+  describe "accrediting_providers" do
+    let(:provider) { create :provider, accrediting_provider: 'N' }
+
+    let(:accrediting_provider) { create :provider, accrediting_provider: 'Y' }
+    let!(:course1) { create :course, accrediting_provider: accrediting_provider, provider: provider }
+    let!(:course2) { create :course, accrediting_provider: accrediting_provider, provider: provider }
+
+    it "returns the course's accrediting provider" do
+      expect(provider.accrediting_providers.first).to eq(accrediting_provider)
+    end
+
+    it 'does not duplicate data' do
+      expect(provider.accrediting_providers.count).to eq(1)
+    end
+  end
+
   describe '#copy_to_recruitment_cycle' do
     let(:site)   { build :site }
     let(:course) { build :course }

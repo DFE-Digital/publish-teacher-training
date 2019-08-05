@@ -99,7 +99,7 @@ class Provider < ApplicationRecord
            primary_key: :provider_code,
            inverse_of: :accrediting_provider
 
-
+  has_many :accrediting_providers, -> { distinct }, through: :courses
 
   scope :changed_since, ->(timestamp) do
     if timestamp.present?
@@ -269,6 +269,20 @@ class Provider < ApplicationRecord
 
   def publishable?
     valid? :publish
+  end
+
+  def accredited_bodies
+    accrediting_providers.map do |ap|
+      accrediting_provider_entry = latest_enrichment&.accrediting_provider_enrichments&.find do |ape|
+        ape['UcasProviderCode'] == ap.provider_code
+      end
+
+      {
+        provider_name: ap.provider_name,
+        provider_code: ap.provider_code,
+        description: accrediting_provider_entry.present? ? accrediting_provider_entry['Description'] : ""
+      }
+    end
   end
 
 private
