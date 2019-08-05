@@ -42,8 +42,6 @@ module MCB
       provider.email = contact[:email]
       provider.telephone = contact[:telephone]
 
-      provider.url = @cli.ask_url
-
       location_name = @cli.ask_name_of_first_location
 
       address = @cli.ask_address

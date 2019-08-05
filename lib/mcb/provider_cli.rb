@@ -27,9 +27,9 @@ module MCB
 
     def ask_contact
       {
-        name: @cli.ask('Contact name: '),
-        email: @cli.ask('Internal contact email (for sharing with UCAS): '),
-        telephone: @cli.ask('Internal contact phone number (for sharing with UCAS): '),
+        name: @cli.ask('UCAS admin account - name: '),
+        email: @cli.ask('UCAS admin account - email: '),
+        telephone: @cli.ask('UCAS admin account - phone number: '),
       }
     end
 
@@ -38,10 +38,6 @@ module MCB
         prompt: "Region code?",
         choices: Provider.region_codes.keys
       )
-    end
-
-    def ask_url
-      @cli.ask('Provider URL? ')
     end
 
     def ask_organisation_name

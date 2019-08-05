@@ -120,7 +120,6 @@ describe MCB::ProviderEditor do
           contact_name: 'Jane Smith',
           email: 'jsmith@acme-scitt.org.uk',
           telephone: "0123456",
-          url: 'https://www.acme-scitt.org.uk/default.htm',
           organisation_name: 'ACME SCITT',
         }
       }
@@ -133,7 +132,6 @@ describe MCB::ProviderEditor do
           desired_attributes[:contact_name],
           desired_attributes[:email],
           desired_attributes[:telephone],
-          desired_attributes[:url],
           desired_attributes[:first_location_name],
           desired_attributes[:address1],
           desired_attributes[:address2],
@@ -152,7 +150,6 @@ describe MCB::ProviderEditor do
           "contact_name" => desired_attributes[:contact_name],
           "email" => desired_attributes[:email],
           "telephone" => desired_attributes[:telephone],
-          "url" => desired_attributes[:url],
           "address1" => desired_attributes[:address1],
           "address2" => desired_attributes[:address2],
           "address3" => desired_attributes[:town_or_city],

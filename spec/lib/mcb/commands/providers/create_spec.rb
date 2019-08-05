@@ -1,6 +1,6 @@
 require 'mcb_helper'
 
-fdescribe 'mcb providers create' do
+describe 'mcb providers create' do
   let(:cmd) { MCBCommand.new('providers', 'create') }
 
   let(:email) { 'user@education.gov.uk' }
