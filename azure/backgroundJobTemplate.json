@@ -111,10 +111,6 @@
           "environmentVariables": {
             "value": [
               {
-                "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
-                "value": "[reference('app-insights').outputs.instrumentationKey.value]"
-              },
-              {
                 "name": "RAILS_ENV",
                 "value": "[parameters('railsEnv')]"
               },
