@@ -533,4 +533,42 @@ describe Provider, type: :model do
       expect(provider.reload.enrichments.draft.size).to eq(0)
     end
   end
+
+  describe '#before_create' do
+    describe '#set_defaults' do
+      let(:provider) { build :provider }
+
+      it 'sets scheme_member to "Y"' do
+        expect(provider.scheme_member).to be_nil
+
+        provider.save!
+
+        expect(provider.scheme_member).to eq('Y')
+      end
+
+      it 'sets the year_code from the recruitment_cycle' do
+        expect(provider.year_code).to be_nil
+
+        provider.save!
+
+        expect(provider.year_code).to eq(provider.recruitment_cycle.year)
+      end
+
+      it 'does not override a given value for scheme_member' do
+        provider.scheme_member = 'A'
+
+        provider.save!
+
+        expect(provider.scheme_member).to eq('A')
+      end
+
+      it 'does not override a given value for recruitment_cycle' do
+        provider.scheme_member = 2020
+
+        provider.save!
+
+        expect(provider.scheme_member).to eq("2020")
+      end
+    end
+  end
 end

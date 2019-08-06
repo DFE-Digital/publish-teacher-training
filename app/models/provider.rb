@@ -31,6 +31,8 @@ class Provider < ApplicationRecord
   include RegionCode
   include ChangedAt
 
+  before_create :set_defaults
+
   has_associated_audits
   audited except: :changed_at
 
@@ -307,5 +309,10 @@ private
 
   def remove_unnecessary_enrichments_validation_message
     self.errors.delete :enrichments if self.errors[:enrichments] == ['is invalid']
+  end
+
+  def set_defaults
+    self.scheme_member ||= 'Y'
+    self.year_code ||= recruitment_cycle.year
   end
 end

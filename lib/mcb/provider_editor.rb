@@ -27,19 +27,12 @@ module MCB
     end
 
     def new_provider_wizard
-      # QUESTION: Should live in Provider?
-      provider.scheme_member = 'Y'
-      provider.year_code = provider.recruitment_cycle.year
-
       ask_and_set_provider_details
       ask_and_set_contact_info
 
       location_name = @cli.ask_name_of_first_location
 
       ask_and_set_address_info
-
-      # Not using `Provider#update_changed_at` as we have not created a Provider at this point.
-      provider.changed_at = Time.now.utc
 
       puts "\nAbout to create the Provider"
       if @cli.confirm_creation? && try_saving_provider

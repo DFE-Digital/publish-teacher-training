@@ -159,7 +159,12 @@ describe MCB::ProviderEditor do
       }
 
       context "when adding a new provider into a completely new organisation" do
+        let(:frozen_time) { Time.parse('10:00 20/01/2019').utc }
+        let(:created_provider) { RecruitmentCycle.current_recruitment_cycle.providers.find_by!(provider_code: desired_attributes[:code]) }
+
         before do
+          Timecop.freeze(frozen_time)
+
           @output, = run_new_provider_wizard(
             *valid_answers,
             'y', # confirm creation
@@ -169,16 +174,22 @@ describe MCB::ProviderEditor do
           )
         end
 
-        let(:created_provider) { RecruitmentCycle.current_recruitment_cycle.providers.find_by!(provider_code: desired_attributes[:code]) }
+        after do
+          Timecop.return
+        end
 
-        it "creates a new provider with the passed parameters" do
+        it "creates a new provider with the passed parameters and defaults" do
           expect(@output).to include("New provider has been created")
 
           expect(created_provider.attributes).to include(expected_provider_attributes)
-
-          expect(created_provider.changed_at).to be_present
           expect(created_provider.scheme_member).to eq('Y')
           expect(created_provider.year_code).to eq(RecruitmentCycle.current_recruitment_cycle.year)
+        end
+
+        it "creates a new Provider with the correct 'changed_at' time" do
+          expect(@output).to include("New provider has been created")
+
+          expect(created_provider.changed_at).to eq(frozen_time)
         end
 
         it "creates a new organisation with the passed parameters" do
