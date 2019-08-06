@@ -254,17 +254,23 @@ describe 'Access Request API V2', type: :request do
   end
 
   describe 'POST #create' do
+    let(:params) {
+      {
+        access_request: {
+          email_address: "bob@example.org",
+          first_name: "bob",
+          last_name: "monkhouse",
+          organisation: "bbc",
+          reason: "star qualities",
+          requester_email: requesting_user.email
+        }
+      }
+    }
+
     let(:do_post) do
       post "/api/v2/access_requests",
            headers: { 'HTTP_AUTHORIZATION' => credentials },
-           params: { access_request: {
-             email_address: "bob@example.org",
-             first_name: "bob",
-             last_name: "monkhouse",
-             organisation: "bbc",
-             reason: "star qualities",
-             requester_email: requesting_user.email
-           } }.as_json
+           params: params.as_json
     end
     context 'when unauthenticated' do
       before do
@@ -295,34 +301,76 @@ describe 'Access Request API V2', type: :request do
         Timecop.return
       end
 
-      it 'returns the correct id' do
-        string_id = JSON.parse(response.body)["data"]['id']
-        id = Integer(string_id)
+      describe "successful validation" do
+        it 'returns the correct id' do
+          string_id = JSON.parse(response.body)["data"]['id']
+          id = Integer(string_id)
 
-        expect(id).to be > 0
+          expect(id).to be > 0
+        end
+
+        describe 'JSON returns the correct attributes' do
+          subject { JSON.parse(response.body)["data"]['attributes'] }
+
+          its(%w[email_address]) { should eq('bob@example.org') }
+          its(%w[first_name]) { should eq('bob') }
+          its(%w[last_name]) { should eq('monkhouse') }
+          its(%w[organisation]) { should eq('bbc') }
+          its(%w[reason]) { should eq('star qualities') }
+        end
+
+        context 'with a user that does not already exist' do
+          it 'should create the access_request record' do
+            expect(response).to have_http_status(:success)
+            access_request = AccessRequest.find_by(email_address: "bob@example.org")
+            expect(access_request).not_to be_nil
+            expect(access_request.first_name).to eq("bob")
+            expect(access_request.last_name).to eq("monkhouse")
+            expect(access_request.organisation).to eq("bbc")
+            expect(access_request.reason).to eq("star qualities")
+            expect(access_request.request_date_utc).to be_within(1.second).of Time.now.utc # https://github.com/travisjeffery/timecop/issues/97
+            expect(access_request.requester.email).to eq(requesting_user.email)
+          end
+        end
       end
 
-      describe 'JSON returns the correct attributes' do
-        subject { JSON.parse(response.body)["data"]['attributes'] }
+      describe 'failed validation' do
+        let(:params) {
+          {
+            _jsonapi: {
+              data: {
+                attributes: {
+                  email_address: "",
+                  first_name: "",
+                  last_name: "",
+                  organisation: "",
+                  reason: ""
+                },
+                type: "access_request"
+              }
+            }
+          }
+        }
 
-        its(%w[email_address]) { should eq('bob@example.org') }
-        its(%w[first_name]) { should eq('bob') }
-        its(%w[last_name]) { should eq('monkhouse') }
-        its(%w[organisation]) { should eq('bbc') }
-        its(%w[reason]) { should eq('star qualities') }
-      end
+        let(:json_data) { JSON.parse(response.body)['errors'] }
 
-      context 'with a user that does not already exist' do
-        it 'should create the access_request record' do
-          expect(response).to have_http_status(:success)
-          access_request = AccessRequest.find_by(email_address: "bob@example.org")
-          expect(access_request).not_to be_nil
-          expect(access_request.first_name).to eq("bob")
-          expect(access_request.last_name).to eq("monkhouse")
-          expect(access_request.organisation).to eq("bbc")
-          expect(access_request.reason).to eq("star qualities")
-          expect(access_request.request_date_utc).to be_within(1.second).of Time.now.utc # https://github.com/travisjeffery/timecop/issues/97
-          expect(access_request.requester.email).to eq(requesting_user.email)
+        it { should have_http_status(:unprocessable_entity) }
+
+        it 'has validation error details' do
+          expect(json_data.count).to eq 5
+          expect(json_data[0]["detail"]).to eq("Enter your first name")
+          expect(json_data[1]["detail"]).to eq("Enter your last name")
+          expect(json_data[2]["detail"]).to eq("Enter your email address")
+          expect(json_data[3]["detail"]).to eq("Enter their organisation")
+          expect(json_data[4]["detail"]).to eq("Why do they need access?")
+        end
+
+        it 'has validation error pointers' do
+          expect(json_data[0]["source"]["pointer"]).to eq("/data/attributes/first_name")
+          expect(json_data[1]["source"]["pointer"]).to eq("/data/attributes/last_name")
+          expect(json_data[2]["source"]["pointer"]).to eq("/data/attributes/email_address")
+          expect(json_data[3]["source"]["pointer"]).to eq("/data/attributes/organisation")
+          expect(json_data[4]["source"]["pointer"]).to eq("/data/attributes/reason")
         end
       end
     end
