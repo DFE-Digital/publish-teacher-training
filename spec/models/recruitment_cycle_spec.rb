@@ -41,19 +41,33 @@ describe RecruitmentCycle, type: :model do
     end
   end
 
-  describe "#next" do
+  context 'when there are multiple cycles' do
     let(:current_cycle) { subject }
     let!(:second_cycle) { create(:recruitment_cycle, year: "2020") }
     let!(:third_cycle) { create(:recruitment_cycle, year: "2021") }
 
-    its(:next) { should eq(second_cycle) }
-
-    it "is nil for the newest cycle" do
-      expect(third_cycle.next).to be_nil
+    describe '.current_recruitment_cycle' do
+      it 'returns the first cycle, ordered by year' do
+        expect(RecruitmentCycle.current_recruitment_cycle).to eq(current_cycle)
+      end
     end
 
-    it "returns the next cycle along when there is one" do
-      expect(second_cycle.next).to eq(third_cycle)
+    describe '.next_recruitment_cycle' do
+      it 'returns the next cycle after the current one' do
+        expect(RecruitmentCycle.next_recruitment_cycle).to eq(second_cycle)
+      end
+    end
+
+    describe "#next" do
+      its(:next) { should eq(second_cycle) }
+
+      it "is nil for the newest cycle" do
+        expect(third_cycle.next).to be_nil
+      end
+
+      it "returns the next cycle along when there is one" do
+        expect(second_cycle.next).to eq(third_cycle)
+      end
     end
   end
 end
