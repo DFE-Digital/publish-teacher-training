@@ -116,7 +116,7 @@
               },
               {
                 "name": "AUTHENTICATION_TOKEN",
-                "value": "[parameters('authenticationToken')]"
+                "secureValue": "[parameters('authenticationToken')]"
               },
               {
                 "name": "DB_DATABASE",
@@ -128,7 +128,7 @@
               },
               {
                 "name": "DB_PASSWORD",
-                "value": "[parameters('databasePassword')]"
+                "secureValue": "[parameters('databasePassword')]"
               },
               {
                 "name": "DB_USERNAME",
@@ -140,23 +140,23 @@
               },
               {
                 "name": "SECRET_KEY_BASE",
-                "value": "[parameters('secretKeyBase')]"
+                "secureValue": "[parameters('secretKeyBase')]"
               },
               {
                 "name": "SENTRY_DSN",
-                "value": "[parameters('sentryDSN')]"
+                "secureValue": "[parameters('sentryDSN')]"
               },
               {
                 "name": "SETTINGS__AUTHENTICATION__SECRET",
-                "value": "[parameters('settingsAuthenticationSecret')]"
+                "secureValue": "[parameters('settingsAuthenticationSecret')]"
               },
               {
                 "name": "SETTINGS__MANAGE_API__SECRET",
-                "value": "[parameters('settingsManageApiSecret')]"
+                "secureValue": "[parameters('settingsManageApiSecret')]"
               },
               {
                 "name": "SETTINGS__SEARCH_API__SECRET",
-                "value": "[parameters('settingsSearchApiSecret')]"
+                "secureValue": "[parameters('settingsSearchApiSecret')]"
               }
             ]
           }
