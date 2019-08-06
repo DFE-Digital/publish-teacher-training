@@ -113,7 +113,7 @@ describe "Courses API", type: :request do
                                   "institution_code" => "2LD",
                                   "institution_name" => "ACME SCITT",
                                   "institution_type" => "B",
-                                  "accrediting_provider" => 'N',
+                                  "accrediting_provider" => 'Y',
                                   "scheme_member" => "Y"
                                 },
                                 "accrediting_provider" => nil

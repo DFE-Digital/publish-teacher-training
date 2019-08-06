@@ -220,7 +220,7 @@ describe 'Providers API', type: :request do
               ]
             },
             {
-              'accrediting_provider' => 'N',
+              'accrediting_provider' => 'Y',
               'campuses' => [
                 {
                   'campus_code' => '-',
