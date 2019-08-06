@@ -23,6 +23,7 @@
 #  accrediting_provider_code :text
 #  discarded_at              :datetime
 #  age_range_in_years        :string
+#  applications_open_from    :date
 #
 
 require "rails_helper"

@@ -23,6 +23,7 @@
 #  accrediting_provider_code :text
 #  discarded_at              :datetime
 #  age_range_in_years        :string
+#  applications_open_from    :date
 #
 
 require 'rails_helper'
@@ -563,26 +564,6 @@ RSpec.describe Course, type: :model do
     end
   end
 
-  describe "#applications_open_from=" do
-    let(:provider) { build(:provider, sites: [sites]) }
-    let(:sites) { build_list(:site, 3) }
-    let!(:existing_site_status) {
-      sites.each do |site|
-        create(:site_status,
-               :running,
-               site: site,
-               course: subject,
-               applications_accepted_from: Date.new(2018, 10, 9))
-      end
-    }
-
-    it "updates the applications_accepted_from date on the site statuses" do
-      expect { subject.applications_open_from = Date.new(2018, 10, 23) }.
-        to change { subject.reload.site_statuses.pluck(:applications_accepted_from).uniq }.
-        from([Date.new(2018, 10, 9)]).to([Date.new(2018, 10, 23)])
-    end
-  end
-
   describe "adding and removing sites on a course" do
     let(:provider) { build(:provider) }
       #this code will be removed and fixed properly in the next pr
@@ -1054,6 +1035,23 @@ RSpec.describe Course, type: :model do
           )
         end
       end
+    end
+  end
+
+  describe '#applications_open_from' do
+    context 'a new course with a given date' do
+      let(:applications_open_from) { Date.today }
+      let(:subject) { create(:course, applications_open_from: applications_open_from) }
+
+      its(:applications_open_from) { should eq applications_open_from }
+    end
+
+    context 'a new course within a recruitment cycle' do
+      let(:recruitment_cycle) { build :recruitment_cycle, :next }
+      let(:provider)          { build :provider, recruitment_cycle: recruitment_cycle }
+      let(:subject) { create :course, provider: provider }
+
+      its(:applications_open_from) { should eq recruitment_cycle.application_start_date }
     end
   end
 end

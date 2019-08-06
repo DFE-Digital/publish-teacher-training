@@ -13,13 +13,17 @@ module API
 
       attributes :findable?, :open_for_applications?, :has_vacancies?,
                  :course_code, :name, :study_mode, :qualification, :description,
-                 :content_status, :ucas_status, :funding, :applications_open_from,
+                 :content_status, :ucas_status, :funding,
                  :level, :is_send?, :has_bursary?, :has_scholarship_and_bursary?,
                  :has_early_career_payments?, :bursary_amount, :scholarship_amount,
                  :english, :maths, :science, :gcse_subjects_required, :age_range_in_years
 
       attribute :start_date do
         @object.start_date&.iso8601
+      end
+
+      attribute :applications_open_from do
+        @object.applications_open_from&.iso8601
       end
 
       attribute :last_published_at do

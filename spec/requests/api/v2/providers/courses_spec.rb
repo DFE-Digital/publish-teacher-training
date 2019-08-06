@@ -24,7 +24,8 @@ describe 'Courses API v2', type: :request do
            maths: :must_have_qualification_at_application_time,
            english: :must_have_qualification_at_application_time,
            science: :must_have_qualification_at_application_time,
-           age_range_in_years: '3_to_7')
+           age_range_in_years: '3_to_7',
+           applications_open_from: Date.new(2019, 1, 1))
   }
 
   let(:courses_site_status) {
@@ -90,7 +91,7 @@ describe 'Courses API v2', type: :request do
                 "subjects" => ["Primary",
                                "Primary with mathematics"],
                 "level" => "primary",
-                "applications_open_from" => "2019-01-01T00:00:00Z",
+                "applications_open_from" => "2019-01-01",
                 "about_course" => enrichment.about_course,
                 "course_length" => enrichment.course_length,
                 "fee_details" => enrichment.fee_details,
@@ -254,7 +255,7 @@ describe 'Courses API v2', type: :request do
               "subjects" => ["Primary",
                              "Primary with mathematics"],
               "level" => "primary",
-              "applications_open_from" => "2019-01-01T00:00:00Z",
+              "applications_open_from" => "2019-01-01",
               "about_course" => enrichment.about_course,
               "course_length" => enrichment.course_length,
               "fee_details" => enrichment.fee_details,

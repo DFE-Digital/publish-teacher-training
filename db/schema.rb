@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_07_30_133727) do
+ActiveRecord::Schema.define(version: 2019_08_06_102256) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_buffercache"
@@ -88,6 +88,7 @@ ActiveRecord::Schema.define(version: 2019_07_30_133727) do
     t.text "accrediting_provider_code"
     t.datetime "discarded_at"
     t.string "age_range_in_years"
+    t.date "applications_open_from"
     t.index ["accrediting_provider_code"], name: "index_course_on_accrediting_provider_code"
     t.index ["accrediting_provider_id"], name: "IX_course_accrediting_provider_id"
     t.index ["changed_at"], name: "index_course_on_changed_at", unique: true
