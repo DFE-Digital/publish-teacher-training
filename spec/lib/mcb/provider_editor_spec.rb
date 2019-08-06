@@ -136,7 +136,7 @@ describe MCB::ProviderEditor do
           desired_attributes[:town_or_city],
           desired_attributes[:county],
           desired_attributes[:postcode],
-          desired_attributes[:region_code],
+          desired_attributes[:region_code]
         ]
       }
 
@@ -162,6 +162,7 @@ describe MCB::ProviderEditor do
         before do
           @output, = run_new_provider_wizard(
             *valid_answers,
+            'y', # confirm creation
             # adding the provider into a new organisation
             desired_attributes[:organisation_name],
             "y" # confirm creation of a new org
@@ -204,6 +205,7 @@ describe MCB::ProviderEditor do
         it "creates a new provider into the existing organisation with the passed parameters" do
           output, = run_new_provider_wizard(
             *valid_answers,
+            'y', # confirm creation
             desired_attributes[:organisation_name], # adding the provider into an existing organisation
           )
 
@@ -219,6 +221,7 @@ describe MCB::ProviderEditor do
         it "creates a new provider into the existing organisation, even if the user makes and then corrects a typo in the org name" do
           output, = run_new_provider_wizard(
             *valid_answers,
+            'y', # confirm creation
             "ACCCCME SCITT", # mistyped organisation name
             "no", # don't create the mistyped org
             desired_attributes[:organisation_name], # try typing in the org name again
@@ -241,6 +244,7 @@ describe MCB::ProviderEditor do
         it "clones the provider into all subsequent recruitment cycles" do
           run_new_provider_wizard(
             *valid_answers,
+            'y', # confirm creation
             desired_attributes[:organisation_name],
             "yes"
           )
@@ -251,6 +255,29 @@ describe MCB::ProviderEditor do
           expect(one_after_next_recruitment_cycle.providers.count).to eq(1)
           expect(one_after_next_recruitment_cycle.providers.first.attributes).to include(expected_provider_attributes)
         end
+      end
+
+      it "does not create a Provider if creation isn't confirmed" do
+        output, = run_new_provider_wizard(
+          *valid_answers,
+          'n' # Do not confirm creation
+        )
+
+        expect(Provider.find_by(provider_code: desired_attributes[:provider_code])).to be_nil
+        expect(output).to include("Aborting")
+      end
+
+      it "does not create a Provider when the provider is not valid" do
+        expect(provider).to receive(:valid?).and_return(false)
+
+        output, = run_new_provider_wizard(
+          *valid_answers,
+          'y' # confirm creation
+        )
+
+        expect(Provider.find_by(provider_code: desired_attributes[:provider_code])).to be_nil
+        expect(output).to include("Provider isn't valid")
+        expect(output).to include("Aborting")
       end
     end
   end

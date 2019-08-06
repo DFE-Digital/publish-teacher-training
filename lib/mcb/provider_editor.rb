@@ -38,18 +38,22 @@ module MCB
 
       ask_and_set_address_info
 
-      # TODO: confirm creation if valid
+      # Not using `Provider#update_changed_at` as we have not created a Provider at this point.
       provider.changed_at = Time.now.utc
-      provider.save!
 
-      organisation = find_or_create_organisation
+      puts "\nAbout to create the Provider"
+      if @cli.confirm_creation? && try_saving_provider
+        organisation = find_or_create_organisation
 
-      update_organisation_with_admins(organisation)
+        update_organisation_with_admins(organisation)
 
-      create_provider_site(location_name)
-      create_next_recruitment_cycle
+        create_provider_site(location_name)
+        create_next_recruitment_cycle
 
-      puts "New provider has been created: #{provider}"
+        puts "New provider has been created: #{provider}"
+      else
+        puts 'Aborting...'
+      end
     end
 
   private
@@ -75,6 +79,18 @@ module MCB
       provider.address4 = address[:county]
       provider.postcode = address[:postcode]
       provider.region_code = @cli.ask_region_code
+    end
+
+    def try_saving_provider
+      if provider.valid?
+        puts "Saving the provider"
+        provider.save!
+        true
+      else
+        puts "Provider isn't valid:"
+        provider.errors.full_messages.each { |error| puts " - #{error}" }
+        false
+      end
     end
 
     def find_or_create_organisation
@@ -117,7 +133,7 @@ module MCB
 
     # Make sure that the organisation has up-to-date Admin users.
     def update_organisation_with_admins(organisation)
-    # Remove Admins if they're already present
+      # Remove Admins if they're already present
       organisation.users << (User.admins - organisation.users)
     end
 
