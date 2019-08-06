@@ -1,0 +1,171 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "containerName": {
+      "type": "string",
+      "defaultValue": ""
+    },
+    "authenticationToken": {
+      "type": "string",
+      "metadata": {
+        "description": "Authentication token for api access."
+      }
+    },
+    "imageName": {
+      "type": "string",
+      "metadata": {
+        "description": "The container image to pull from the server. Should be in image:tag format."
+      }
+    },
+    "railsEnv": {
+      "type": "string",
+      "defaultValue": "production",
+      "metadata": {
+        "description": "Environment for the rails app."
+      }
+    },
+    "databaseName": {
+      "type": "string",
+      "metadata": {
+        "description": "The name of the database that the app will connect to."
+      }
+    },
+    "databaseServerHostName": {
+      "type": "string",
+      "metadata": {
+        "description": "The fqdn of the psql server hosting the database."
+      }
+    },
+    "databasePort": {
+      "type": "string",
+      "metadata": {
+        "description": "The default port for the psql server."
+      }
+    },
+    "databaseUsername": {
+      "type": "string",
+      "metadata": {
+        "description": "The username used to connect to the database."
+      }
+    },
+    "databasePassword": {
+      "type": "string",
+      "metadata": {
+        "description": "The password used to connect to the database."
+      }
+    },
+    "secretKeyBase": {
+      "type": "string",
+      "metadata": {
+        "description": "Secret Key Base."
+      }
+    },
+    "sentryDSN": {
+      "type": "string",
+      "metadata": {
+        "description": "Connection string for Sentry monitoring."
+      }
+    },
+    "settingsAuthenticationSecret": {
+      "type": "string",
+      "metadata": {
+        "description": "Auth secret for manage back-end."
+      }
+    },
+    "settingsManageApiSecret": {
+      "type": "string",
+      "metadata": {
+        "description": "The secret shared between manage courses backend and manage courses API to authorize requests."
+      }
+    },
+    "settingsSearchApiSecret": {
+      "type": "string",
+      "metadata": {
+        "description": "The secret shared between manage courses backend and search and compare API to authorize requests."
+      }
+    }
+  },
+  "variables": {
+    "deploymentUrlBase": "https://raw.githubusercontent.com/DFE-Digital/bat-platform-building-blocks/ARM-Template-for-Azure-Container-Instances/templates/",
+  },
+  "resources": [
+
+    {
+      "name": "container-instances",
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2017-05-10",
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(variables('deploymentUrlBase'), 'container-instances.json')]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "containerName": {
+            "value": "[parameters('containerName')]"
+          },
+          "imageName": {
+            "value": "[parameters('imageName')]"
+          },
+          "environmentVariables": {
+            "value": [
+              {
+                "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
+                "value": "[reference('app-insights').outputs.instrumentationKey.value]"
+              },
+              {
+                "name": "RAILS_ENV",
+                "value": "[parameters('railsEnv')]"
+              },
+              {
+                "name": "AUTHENTICATION_TOKEN",
+                "value": "[parameters('authenticationToken')]"
+              },
+              {
+                "name": "DB_DATABASE",
+                "value": "[parameters('databaseName')]"
+              },
+              {
+                "name": "DB_HOSTNAME",
+                "value": "[parameters('databaseServerHostName')]"
+              },
+              {
+                "name": "DB_PASSWORD",
+                "value": "[parameters('databasePassword')]"
+              },
+              {
+                "name": "DB_USERNAME",
+                "value": "[parameters('databaseUsername')]"
+              },
+              {
+                "name": "DB_PORT",
+                "value": "[parameters('databasePort')]"
+              },
+              {
+                "name": "SECRET_KEY_BASE",
+                "value": "[parameters('secretKeyBase')]"
+              },
+              {
+                "name": "SENTRY_DSN",
+                "value": "[parameters('sentryDSN')]"
+              },
+              {
+                "name": "SETTINGS__AUTHENTICATION__SECRET",
+                "value": "[parameters('settingsAuthenticationSecret')]"
+              },
+              {
+                "name": "SETTINGS__MANAGE_API__SECRET",
+                "value": "[parameters('settingsManageApiSecret')]"
+              },
+              {
+                "name": "SETTINGS__SEARCH_API__SECRET",
+                "value": "[parameters('settingsSearchApiSecret')]"
+              }
+            ]
+          }
+        }
+      }
+    }
+  ]
+}
