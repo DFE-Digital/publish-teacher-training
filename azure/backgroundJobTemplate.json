@@ -87,7 +87,7 @@
     }
   },
   "variables": {
-    "deploymentUrlBase": "https://raw.githubusercontent.com/DFE-Digital/bat-platform-building-blocks/ARM-Template-for-Azure-Container-Instances/templates/",
+    "deploymentUrlBase": "https://raw.githubusercontent.com/DFE-Digital/bat-platform-building-blocks/ARM-Template-for-Azure-Container-Instances/templates/"
   },
   "resources": [
 
