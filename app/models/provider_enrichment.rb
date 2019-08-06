@@ -58,4 +58,10 @@ class ProviderEnrichment < ApplicationRecord
   def publish(current_user)
     update(status: 'published', last_published_at: Time.now.utc, updated_by_user_id: current_user.id)
   end
+
+  def accrediting_provider_enrichment(provider_code)
+    accrediting_provider_enrichments&.find do |enrichment|
+      enrichment['UcasProviderCode'] == provider_code
+    end
+  end
 end

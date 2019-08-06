@@ -13,6 +13,7 @@ module API
         address4
         postcode
         region_code
+        accredited_bodies
       ].freeze
 
       attributes(*PROVIDER_ATTRIBUTES)

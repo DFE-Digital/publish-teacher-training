@@ -194,8 +194,23 @@ describe 'Providers API v2', type: :request do
     let(:payload) { { email: user.email } }
 
     let(:site) { build(:site) }
-    let(:enrichment) { build(:provider_enrichment) }
-    let!(:provider) { create(:provider, sites: [site], organisations: [organisation], enrichments: [enrichment]) }
+    let(:description) { "An accredited body description" }
+    let(:enrichment) do
+      create(:provider_enrichment, accrediting_provider_enrichments: [{
+        "UcasProviderCode" => accrediting_provider.provider_code,
+        "Description" => description,
+      }])
+    end
+    let(:accrediting_provider) { create :provider }
+    let(:course) { create :course, accrediting_provider: accrediting_provider }
+    let(:courses) { [course] }
+    let!(:provider) do
+      create(:provider,
+             sites: [site],
+             organisations: [organisation],
+             enrichments: [enrichment],
+             courses: courses)
+    end
 
     let(:token) do
       JWT.encode payload,
@@ -230,7 +245,12 @@ describe 'Providers API v2', type: :request do
             "website" => enrichment.website,
             "recruitment_cycle_year" => provider.recruitment_cycle.year,
             "content_status" => provider.content_status.to_s,
-            "last_published_at" => provider.last_published_at
+            "last_published_at" => provider.last_published_at,
+            "accredited_bodies" => [{
+              "provider_code" => accrediting_provider.provider_code,
+              "provider_name" => accrediting_provider.provider_name,
+              "description" => description,
+            }],
           },
           "relationships" => {
             "sites" => {
@@ -298,6 +318,11 @@ describe 'Providers API v2', type: :request do
               "recruitment_cycle_year" => provider.recruitment_cycle.year,
               "content_status" => provider.content_status.to_s,
               "last_published_at" => provider.last_published_at,
+              "accredited_bodies" => [{
+                "provider_code" => accrediting_provider.provider_code,
+                "provider_name" => accrediting_provider.provider_name,
+                "description" => description,
+              }],
             },
             "relationships" => {
               "sites" => {

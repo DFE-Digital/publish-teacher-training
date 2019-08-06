@@ -11,8 +11,7 @@ module API
 
       type 'providers'
 
-      attributes :provider_code, :provider_name, :accredited_body?, :can_add_more_sites?, :content_status
-
+      attributes :provider_code, :provider_name, :accredited_body?, :can_add_more_sites?, :content_status, :accredited_bodies
 
       attribute :address1 do
         @object.external_contact_info['address1']
@@ -62,6 +61,7 @@ module API
       enrichment_attribute :train_with_disability
 
       has_many :sites
+
       has_one :latest_enrichment, key: :ProviderEnrichment, serializer: API::V2::SerializableProviderEnrichment
 
       has_many :courses do
