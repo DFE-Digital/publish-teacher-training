@@ -18,7 +18,6 @@ module MCB
     def ask_address
       {
         address1: @cli.ask('Building and street: '),
-        address2: @cli.ask('Building and street (2nd line): '),
         town_or_city: @cli.ask('Town and city: '),
         county: @cli.ask('County: '),
         postcode: @cli.ask('Postcode: '),

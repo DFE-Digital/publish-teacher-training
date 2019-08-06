@@ -112,7 +112,6 @@ describe MCB::ProviderEditor do
           type: 'scitt',
           first_location_name: "ACME Primary School",
           address1: '123 Acme Lane',
-          address2: '',
           town_or_city: 'Acmeton',
           county: '',
           postcode: 'SW13 9AA',
@@ -134,7 +133,6 @@ describe MCB::ProviderEditor do
           desired_attributes[:telephone],
           desired_attributes[:first_location_name],
           desired_attributes[:address1],
-          desired_attributes[:address2],
           desired_attributes[:town_or_city],
           desired_attributes[:county],
           desired_attributes[:postcode],
@@ -151,7 +149,6 @@ describe MCB::ProviderEditor do
           "email" => desired_attributes[:email],
           "telephone" => desired_attributes[:telephone],
           "address1" => desired_attributes[:address1],
-          "address2" => desired_attributes[:address2],
           "address3" => desired_attributes[:town_or_city],
           "address4" => desired_attributes[:county],
           "postcode" => desired_attributes[:postcode],
@@ -193,7 +190,7 @@ describe MCB::ProviderEditor do
 
           site = created_provider.sites.first
           expect(site.address1).to eq(desired_attributes[:address1])
-          expect(site.address2).to eq(desired_attributes[:address2])
+          expect(site.address2).to be_nil
           expect(site.address3).to eq(desired_attributes[:town_or_city])
           expect(site.address4).to eq(desired_attributes[:county])
           expect(site.postcode).to eq(desired_attributes[:postcode])

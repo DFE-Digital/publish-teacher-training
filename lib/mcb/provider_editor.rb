@@ -27,35 +27,57 @@ module MCB
     end
 
     def new_provider_wizard
-      # TODO: this should live in Provider
+      # QUESTION: Should live in Provider?
       provider.scheme_member = 'Y'
       provider.year_code = provider.recruitment_cycle.year
-      provider.changed_at = Time.zone.now
 
-      name = @cli.ask_name
-      provider.provider_name = name
+      ask_and_set_provider_details
+      ask_and_set_contact_info
+
+      location_name = @cli.ask_name_of_first_location
+
+      ask_and_set_address_info
+
+      # TODO: confirm creation if valid
+      provider.changed_at = Time.now.utc
+      provider.save!
+
+      organisation = find_or_create_organisation
+
+      update_organisation_with_admins(organisation)
+
+      create_provider_site(location_name)
+      create_next_recruitment_cycle
+
+      puts "New provider has been created: #{provider}"
+    end
+
+  private
+
+    def ask_and_set_provider_details
+      provider.provider_name = @cli.ask_name
       provider.provider_code = @cli.ask_new_provider_code
       provider.provider_type = @cli.ask_provider_type
+    end
 
+    def ask_and_set_contact_info
       contact = @cli.ask_contact
       provider.contact_name = contact[:name]
       provider.email = contact[:email]
       provider.telephone = contact[:telephone]
+    end
 
-      location_name = @cli.ask_name_of_first_location
-
+    def ask_and_set_address_info
       address = @cli.ask_address
+
       provider.address1 = address[:address1]
-      provider.address2 = address[:address2]
       provider.address3 = address[:town_or_city]
       provider.address4 = address[:county]
       provider.postcode = address[:postcode]
       provider.region_code = @cli.ask_region_code
+    end
 
-      # TODO: confirm creation if valid
-      provider.save!
-      puts "New provider has been created: #{provider}"
-
+    def find_or_create_organisation
       finished_picking_organisation = false
       until finished_picking_organisation
         organisation = Organisation.find_or_initialize_by(name: @cli.ask_organisation_name)
@@ -70,9 +92,10 @@ module MCB
       # connect provider to org
       provider.organisations << organisation
 
-      # add god users to the org, for any that aren't already in it
-      organisation.users << (User.admins - organisation.users)
+      organisation
+    end
 
+    def create_provider_site(location_name)
       provider.sites.create(
         location_name: location_name,
         address1: provider.address1,
@@ -82,7 +105,9 @@ module MCB
         postcode: provider.postcode,
         region_code: provider.region_code
       )
+    end
 
+    def create_next_recruitment_cycle
       next_recruitment_cycle = provider.recruitment_cycle.next
       while next_recruitment_cycle
         provider.copy_to_recruitment_cycle(next_recruitment_cycle)
@@ -90,7 +115,11 @@ module MCB
       end
     end
 
-  private
+    # Make sure that the organisation has up-to-date Admin users.
+    def update_organisation_with_admins(organisation)
+    # Remove Admins if they're already present
+      organisation.users << (User.admins - organisation.users)
+    end
 
     def main_loop
       choices = [
