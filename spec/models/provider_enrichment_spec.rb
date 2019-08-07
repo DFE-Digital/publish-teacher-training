@@ -65,4 +65,22 @@ describe ProviderEnrichment, type: :model do
       end
     end
   end
+
+  describe 'before_create hook' do
+    # Note: provider_code is only here to support c# counterpart, until provide_code is removed from database
+    let(:provider) { build(:provider) }
+    let(:existing_provider_code) { nil }
+    let(:enrichment) { create(:provider_enrichment, provider: provider, provider_code: existing_provider_code) }
+    subject { enrichment }
+
+    context 'when provider_code is blank' do
+      its(:provider_code) { should eq(provider.provider_code) }
+    end
+
+    context 'when provider code is already set' do
+      let(:existing_provider_code) { "XX4" }
+
+      its(:provider_code) { should eq(existing_provider_code) }
+    end
+  end
 end

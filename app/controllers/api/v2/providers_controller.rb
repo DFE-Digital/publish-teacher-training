@@ -117,7 +117,6 @@ module API
             }
           end
 
-        set_provider_code enrichment
         enrichment.save
       end
 
@@ -127,13 +126,7 @@ module API
         enrichment = @provider.enrichments.find_or_initialize_draft
         enrichment.assign_attributes(enrichment_params)
 
-        set_provider_code enrichment
         enrichment.save
-      end
-
-      def set_provider_code(enrichment)
-        # Note: provider_code is only here to support c# counterpart, until provide_code is removed from database
-        enrichment.provider_code = @provider.provider_code if enrichment.provider_code.blank?
       end
 
       def accredited_bodies_params
