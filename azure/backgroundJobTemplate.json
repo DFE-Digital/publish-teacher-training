@@ -4,7 +4,9 @@
   "parameters": {
     "containerName": {
       "type": "string",
-      "defaultValue": ""
+      "metadata": {
+        "description": "The name of the Azure Container Instances resource. This will be its identifier in Azure and can be different from the image name."
+      }
     },
     "authenticationToken": {
       "type": "string",
