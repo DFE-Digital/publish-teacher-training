@@ -149,6 +149,7 @@ class Course < ApplicationRecord
   validate :validate_enrichment
   validate :validate_course_syncable, on: :sync
   validate :validate_qualification, on: :update
+  validate :validate_start_date, on: :update
 
   after_validation :remove_unnecessary_enrichments_validation_message
 
@@ -456,5 +457,13 @@ private
 
   def set_applications_open_from
     self.applications_open_from ||= recruitment_cycle.application_start_date
+  end
+
+  def validate_start_date
+    valid_start_date_range(recruitment_cycle.year.to_i).cover?(start_date)
+  end
+
+  def valid_start_date_range(recruitment_year)
+    DateTime.new(recruitment_year,8,1)..(DateTime.new(recruitment_year + 1,7,31))
   end
 end
