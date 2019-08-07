@@ -17,6 +17,8 @@
 class ProviderEnrichment < ApplicationRecord
   include RegionCode
 
+  before_create :set_provider_code
+
   enum status: { draft: 0, published: 1 }
 
   belongs_to :provider,
@@ -63,5 +65,12 @@ class ProviderEnrichment < ApplicationRecord
     accrediting_provider_enrichments&.find do |enrichment|
       enrichment['UcasProviderCode'] == provider_code
     end
+  end
+
+private
+
+  def set_provider_code
+    # Note: provider_code is only here to support c# counterpart, until provide_code is removed from database
+    self.provider_code = provider.provider_code if provider_code.blank?
   end
 end
