@@ -12,7 +12,7 @@ AccessRequest.destroy_all
 RecruitmentCycle.destroy_all
 
 current_recruitment_cycle = RecruitmentCycle.create(year: '2019', application_start_date: Date.new(2018, 10, 9))
-next_recruitment_cycle = RecruitmentCycle.create(year: '2020')
+next_recruitment_cycle = RecruitmentCycle.create(year: '2020', application_start_date: Date.new(2019, 10, 8))
 
 {
   "Primary" => "00",
@@ -75,7 +75,7 @@ def create_standard_provider_and_courses_for_cycle(recruitment_cycle, superuser)
       Subject.find_by(subject_name: "Secondary"),
       Subject.find_by(subject_name: "Mathematics")
     ],
-    study_mode: "F",
+    study_mode: "F"
   )
 
   SiteStatus.create!(
@@ -98,13 +98,13 @@ def create_standard_provider_and_courses_for_cycle(recruitment_cycle, superuser)
     english: 9,
     science: nil,
     modular: "",
-    qualification: :pgce_with_qts,
+    qualification: :pgce,
     subjects: [
       Subject.find_by(subject_name: "Secondary"),
       Subject.find_by(subject_name: "Biology"),
       Subject.find_by(subject_name: "Further Education"),
     ],
-    study_mode: "B",
+    study_mode: "B"
   )
 
 

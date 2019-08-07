@@ -34,7 +34,8 @@ describe SearchAndCompare::CourseSerializer do
                study_mode:  :full_time,
                site_statuses: [site_status1, site_status2],
                enrichments: course_enrichments,
-               subjects: subjects).tap do |c|
+               subjects: subjects,
+               applications_open_from: '2018-10-09T00:00:00').tap do |c|
           # These sites, taken from real prod data, aren't actually valid in
           # that they're missing the following bits of data.
           c.site_statuses.each do |site_status|

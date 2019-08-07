@@ -34,7 +34,8 @@ describe MCB::CoursesEditor do
            study_mode: 'part_time',
            start_date: Date.new(2019, 8, 1),
            age_range: 'secondary',
-           subjects: [secondary, biology])
+           subjects: [secondary, biology],
+           applications_open_from: Date.new(2018, 10, 9))
   }
   subject { described_class.new(provider: provider, course_codes: course_codes, requester: requester) }
 
@@ -172,14 +173,14 @@ describe MCB::CoursesEditor do
 
         it 'updates the "applications open from" when that is valid' do
           expect { run_editor("edit application opening date", "1 October 2018", "exit") }.
-            to change { Date.parse(course.reload.applications_open_from) }.
+            to change { Date.parse(course.reload.applications_open_from.to_s) }.
             from(Date.new(2018, 10, 9)).to(Date.new(2018, 10, 1))
         end
 
         it 'updates the application opening date to today by default' do
           Timecop.freeze(Time.utc(2019, 6, 1, 12, 0, 0)) do
             expect { run_editor("edit application opening date", "", "exit") }.
-              to change { Date.parse(course.reload.applications_open_from) }.
+              to change { Date.parse(course.reload.applications_open_from.to_s) }.
               from(Date.new(2018, 10, 9)).to(Date.new(2019, 6, 1))
           end
         end
@@ -451,7 +452,7 @@ describe MCB::CoursesEditor do
         expect(created_course.accrediting_provider).to eq(accredited_body)
         expect(created_course.recruitment_cycle).to eq(current_cycle)
         expect(created_course.sites).to include(site_1, site_3)
-        expect(created_course.site_statuses.map(&:applications_accepted_from).uniq).to eq([Date.new(2018, 10, 18)])
+        expect(created_course.applications_open_from).to eq(Date.new(2018, 10, 18))
         expect(created_course.ucas_status).to eq(:new)
       end
 

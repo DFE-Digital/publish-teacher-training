@@ -23,6 +23,7 @@
 #  accrediting_provider_code :text
 #  discarded_at              :datetime
 #  age_range_in_years        :string
+#  applications_open_from    :date
 #
 
 class Course < ApplicationRecord
@@ -74,6 +75,8 @@ class Course < ApplicationRecord
   enum maths: ENTRY_REQUIREMENT_OPTIONS, _suffix: :for_maths
   enum english: ENTRY_REQUIREMENT_OPTIONS, _suffix: :for_english
   enum science: ENTRY_REQUIREMENT_OPTIONS, _suffix: :for_science
+
+  before_save :set_applications_open_from
 
   belongs_to :provider
 
@@ -192,21 +195,6 @@ class Course < ApplicationRecord
 
   def open_for_applications?
     site_statuses.open_for_applications.any?
-  end
-
-  def applications_open_from
-    site_statuses
-      .open_for_applications
-      .order("applications_accepted_from ASC")
-      .first
-      &.applications_accepted_from
-      &.to_datetime
-      &.utc
-      &.iso8601
-  end
-
-  def applications_open_from=(new_date)
-    site_statuses.each { |ss| ss.update(applications_accepted_from: new_date) }
   end
 
   def has_vacancies?
@@ -464,5 +452,9 @@ private
 
   def validate_qualification
     errors.add(:qualification, "^#{qualifications_description} is not valid for a #{level.to_s.humanize.downcase} course") unless edit_options.qualifications.include?(qualification)
+  end
+
+  def set_applications_open_from
+    self.applications_open_from ||= recruitment_cycle.application_start_date
   end
 end

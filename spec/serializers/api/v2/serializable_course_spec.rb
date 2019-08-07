@@ -3,8 +3,10 @@ require "rails_helper"
 describe API::V2::SerializableCourse do
   let(:jsonapi_renderer) { JSONAPI::Serializable::Renderer.new }
   let(:enrichment)       { build :course_enrichment }
-  let(:course)           do
-    create(:course, enrichments: [enrichment], start_date: Time.now.utc)
+  let(:date_today) { Date.today }
+  let(:time_now) { Time.now.utc }
+  let(:course) do
+    create(:course, enrichments: [enrichment], start_date: time_now, applications_open_from: date_today)
   end
   let(:course_json) do
     jsonapi_renderer.render(
@@ -19,12 +21,12 @@ describe API::V2::SerializableCourse do
   subject { parsed_json['data'] }
 
   it { should have_type('courses') }
-  it { should have_attributes :start_date }
+  it { should have_attribute(:start_date).with_value(time_now.iso8601) }
   it { should have_attribute :content_status }
   it { should have_attribute :ucas_status }
   it { should have_attribute :funding }
   it { should have_attribute :subjects }
-  it { should have_attribute :applications_open_from }
+  it { should have_attribute(:applications_open_from).with_value(date_today.to_s) }
   it { should have_attribute :is_send? }
   it { should have_attribute :level }
   it { should have_attribute :english }
