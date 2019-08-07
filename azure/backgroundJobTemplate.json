@@ -113,7 +113,7 @@
             "value": "[parameters('containerName')]"
           },
           "containerGroupName": {
-            "value": "[parameters('containerName')]"
+            "value": "[parameters('containerGroupName')]"
           },
           "imageName": {
             "value": "[parameters('imageName')]"
