@@ -8,6 +8,12 @@
         "description": "The name of the Azure Container Instances resource. This will be its identifier in Azure and can be different from the image name."
       }
     },
+    "containerGroupName": {
+      "type": "string",
+      "metadata": {
+        "description": "The name of the Azure Container Instances resource. This will be its identifier in Azure and can be different from the image name."
+      }
+    },
     "authenticationToken": {
       "type": "string",
       "metadata": {
@@ -92,7 +98,6 @@
     "deploymentUrlBase": "https://raw.githubusercontent.com/DFE-Digital/bat-platform-building-blocks/130-create-a-release-pipeline-for-background-web-app/templates/"
   },
   "resources": [
-
     {
       "name": "container-instances",
       "type": "Microsoft.Resources/deployments",
@@ -105,6 +110,9 @@
         },
         "parameters": {
           "containerName": {
+            "value": "[parameters('containerName')]"
+          },
+          "containerGroupName": {
             "value": "[parameters('containerName')]"
           },
           "imageName": {
