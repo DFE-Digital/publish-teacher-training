@@ -25,7 +25,11 @@ class RecruitmentCycle < ApplicationRecord
   end
 
   def self.next_recruitment_cycle
-    all.order(:year).second
+    current_recruitment_cycle.next
+  end
+
+  def next
+    RecruitmentCycle.find_by(year: year.to_i + 1)
   end
 
   def current?

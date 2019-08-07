@@ -27,6 +27,7 @@ class User < ApplicationRecord
            primary_key: :id,
            inverse_of: 'requester'
 
+  scope :admins, -> { where('email ~ ?', DFE_EMAIL_PATTERN) }
   scope :non_admins, -> { where.not('email ~ ?', DFE_EMAIL_PATTERN) }
   scope :active, -> { where.not(accept_terms_date_utc: nil) }
 

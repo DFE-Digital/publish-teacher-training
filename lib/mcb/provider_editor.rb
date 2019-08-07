@@ -3,7 +3,7 @@ module MCB
     attr_reader :provider
 
     def initialize(provider:, requester:, environment: nil)
-      @cli = ProviderCLI.new(provider)
+      @cli = ProviderCLI.new
       @provider = provider
       @requester = requester
       @environment = environment
@@ -26,7 +26,109 @@ module MCB
       end
     end
 
+    def new_provider_wizard
+      ask_and_set_provider_details
+      ask_and_set_contact_info
+
+      location_name = @cli.ask_name_of_first_location
+
+      ask_and_set_address_info
+
+      puts "\nAbout to create the Provider"
+      if @cli.confirm_creation? && try_saving_provider
+        organisation = find_or_create_organisation
+
+        update_organisation_with_admins(organisation)
+
+        create_provider_site(location_name)
+        create_next_recruitment_cycle
+
+        puts "New provider has been created: #{provider}"
+      else
+        puts 'Aborting...'
+      end
+    end
+
   private
+
+    def ask_and_set_provider_details
+      provider.provider_name = @cli.ask_name
+      provider.provider_code = @cli.ask_new_provider_code
+      provider.provider_type = @cli.ask_provider_type
+    end
+
+    def ask_and_set_contact_info
+      contact = @cli.ask_contact
+      provider.contact_name = contact[:name]
+      provider.email = contact[:email]
+      provider.telephone = contact[:telephone]
+    end
+
+    def ask_and_set_address_info
+      address = @cli.ask_address
+
+      provider.address1 = address[:address1]
+      provider.address3 = address[:town_or_city]
+      provider.address4 = address[:county]
+      provider.postcode = address[:postcode]
+      provider.region_code = @cli.ask_region_code
+    end
+
+    def try_saving_provider
+      if provider.valid?
+        puts "Saving the provider"
+        provider.save!
+        true
+      else
+        puts "Provider isn't valid:"
+        provider.errors.full_messages.each { |error| puts " - #{error}" }
+        false
+      end
+    end
+
+    def find_or_create_organisation
+      finished_picking_organisation = false
+      until finished_picking_organisation
+        organisation = Organisation.find_or_initialize_by(name: @cli.ask_organisation_name)
+        if organisation.persisted?
+          finished_picking_organisation = true
+        elsif organisation.new_record? && @cli.confirm_new_organisation_needed?
+          organisation.save!
+          finished_picking_organisation = true
+        end
+      end
+
+      # connect provider to org
+      provider.organisations << organisation
+
+      organisation
+    end
+
+    def create_provider_site(location_name)
+      provider.sites.create(
+        location_name: location_name,
+        address1: provider.address1,
+        address2: provider.address2,
+        address3: provider.address3,
+        address4: provider.address4,
+        postcode: provider.postcode,
+        region_code: provider.region_code
+      )
+    end
+
+    def create_next_recruitment_cycle
+      next_recruitment_cycle = provider.recruitment_cycle.next
+      while next_recruitment_cycle
+        provider.copy_to_recruitment_cycle(next_recruitment_cycle)
+        next_recruitment_cycle = next_recruitment_cycle.next
+      end
+    end
+
+    # Make sure that the organisation has up-to-date Admin users.
+    def update_organisation_with_admins(organisation)
+      # Remove Admins if they're already present
+      organisation.users << (User.admins - organisation.users)
+    end
 
     def main_loop
       choices = [
@@ -69,7 +171,8 @@ module MCB
     end
 
     def check_authorisation
-      raise Pundit::NotAuthorizedError unless ProviderPolicy.new(@requester, @provider).update?
+      action = @provider.persisted? ? :update? : :create?
+      raise Pundit::NotAuthorizedError unless Pundit.policy(@requester, @provider).send(action)
     end
 
     def environment_options

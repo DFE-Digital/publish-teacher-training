@@ -200,6 +200,46 @@ describe Provider, type: :model do
     end
   end
 
+  describe "#provider_type=" do
+    subject { build(:provider, accrediting_provider: nil) }
+
+    it "sets the provider type" do
+      expect { subject.provider_type = "scitt" }
+        .to change { subject.provider_type }
+        .from(nil).to('scitt')
+    end
+
+    it "sets 'scitt=Y' when the provider type is set to scitt" do
+      expect { subject.provider_type = "scitt" }
+        .to change { subject.scitt }
+        .from(nil).to('Y')
+    end
+
+    it "sets 'scitt=N' when the provider type is not a scitt" do
+      expect { subject.provider_type = "university" }
+        .to change { subject.scitt }
+        .from(nil).to('N')
+    end
+
+    it "sets 'accrediting_provider' correctly for SCITTs" do
+      expect { subject.provider_type = "scitt" }
+        .to change { subject.accrediting_provider }
+        .from(nil).to('accredited_body')
+    end
+
+    it "sets 'accrediting_provider' correctly for universities" do
+      expect { subject.provider_type = "university" }
+        .to change { subject.accrediting_provider }
+        .from(nil).to('accredited_body')
+    end
+
+    it "sets 'accrediting_provider' correctly for universities" do
+      expect { subject.provider_type = "lead_school" }
+        .to change { subject.accrediting_provider }
+        .from(nil).to('not_an_accredited_body')
+    end
+  end
+
   its(:recruitment_cycle) { should eq find(:recruitment_cycle) }
 
   describe '#unassigned_site_codes' do
@@ -596,6 +636,44 @@ describe Provider, type: :model do
     it 'sets the status of all draft enrichments to published' do
       provider.publish_enrichment(user)
       expect(provider.reload.enrichments.draft.size).to eq(0)
+    end
+  end
+
+  describe '#before_create' do
+    describe '#set_defaults' do
+      let(:provider) { build :provider }
+
+      it 'sets scheme_member to "Y"' do
+        expect(provider.scheme_member).to be_nil
+
+        provider.save!
+
+        expect(provider.scheme_member).to eq('Y')
+      end
+
+      it 'sets the year_code from the recruitment_cycle' do
+        expect(provider.year_code).to be_nil
+
+        provider.save!
+
+        expect(provider.year_code).to eq(provider.recruitment_cycle.year)
+      end
+
+      it 'does not override a given value for scheme_member' do
+        provider.scheme_member = 'A'
+
+        provider.save!
+
+        expect(provider.scheme_member).to eq('A')
+      end
+
+      it 'does not override a given value for recruitment_cycle' do
+        provider.scheme_member = 2020
+
+        provider.save!
+
+        expect(provider.scheme_member).to eq("2020")
+      end
     end
   end
 end

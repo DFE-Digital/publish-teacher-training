@@ -31,6 +31,8 @@ class Provider < ApplicationRecord
   include RegionCode
   include ChangedAt
 
+  before_create :set_defaults
+
   has_associated_audits
   audited except: :changed_at
 
@@ -217,6 +219,16 @@ class Provider < ApplicationRecord
     organisations.first
   end
 
+  def provider_type=(new_value)
+    super
+    self.scitt = scitt? ? 'Y' : 'N'
+    self.accrediting_provider = if scitt? || university?
+                                  :accredited_body
+                                else
+                                  :not_an_accredited_body
+                                end
+  end
+
   def to_s
     "#{provider_name} (#{provider_code})"
   end
@@ -310,5 +322,10 @@ private
 
   def remove_unnecessary_enrichments_validation_message
     self.errors.delete :enrichments if self.errors[:enrichments] == ['is invalid']
+  end
+
+  def set_defaults
+    self.scheme_member ||= 'Y'
+    self.year_code ||= recruitment_cycle.year
   end
 end

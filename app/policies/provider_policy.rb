@@ -27,6 +27,10 @@ class ProviderPolicy
     user.providers.include?(provider)
   end
 
+  def create?
+    user.admin?
+  end
+
   alias_method :can_list_courses?, :show?
   alias_method :can_list_sites?, :show?
   alias_method :update?, :show?
