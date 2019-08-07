@@ -88,13 +88,22 @@ module MCB
 
     def find_or_create_organisation
       finished_picking_organisation = false
-      until finished_picking_organisation
-        organisation = Organisation.find_or_initialize_by(name: @cli.ask_organisation_name)
-        if organisation.persisted?
-          finished_picking_organisation = true
-        elsif organisation.new_record? && @cli.confirm_new_organisation_needed?
-          organisation.save!
-          finished_picking_organisation = true
+      org_name_input = nil
+
+      until finished_picking_organisation && org_name_input.present?
+        org_name_input = @cli.ask_organisation_name
+
+        if org_name_input.present?
+          organisation = Organisation.find_or_initialize_by(name: org_name_input)
+
+          if organisation.persisted?
+            finished_picking_organisation = true
+          elsif organisation.new_record? && @cli.confirm_new_organisation_needed?
+            organisation.save!
+            finished_picking_organisation = true
+          end
+        else
+          puts "Organisation name cannot be blank."
         end
       end
 

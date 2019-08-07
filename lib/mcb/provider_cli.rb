@@ -40,7 +40,7 @@ module MCB
     end
 
     def ask_organisation_name
-      @cli.ask("What organisation should the new provider be added to?  ")
+      @cli.ask("What Organisation should the new provider be added to? (Enter Org Name)  ")
     end
 
     def ask_name_of_first_location

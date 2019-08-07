@@ -210,6 +210,47 @@ describe MCB::ProviderEditor do
         end
       end
 
+      context "when adding a new provider into an organisation" do
+        it "does not accept zero input" do
+          output, = run_new_provider_wizard(
+            *valid_answers,
+            'y', # confirm creation
+            '', # Empty Org Name
+            # adding the provider into a new organisation
+            desired_attributes[:organisation_name],
+            "y" # confirm creation of a new org
+          )
+
+          expect(output).to include('Organisation name cannot be blank.')
+        end
+
+        it "does not accept new line" do
+          output, = run_new_provider_wizard(
+            *valid_answers,
+            'y', # confirm creation
+            "\n", # Empty Org Name
+            # adding the provider into a new organisation
+            desired_attributes[:organisation_name],
+            "y" # confirm creation of a new org
+          )
+
+          expect(output).to include('Organisation name cannot be blank.')
+        end
+
+        it "does not accept only whitespace" do
+          output, = run_new_provider_wizard(
+            *valid_answers,
+            'y', # confirm creation
+            "   ", # Empty Org Name
+            # adding the provider into a new organisation
+            desired_attributes[:organisation_name],
+            "y" # confirm creation of a new org
+          )
+
+          expect(output).to include('Organisation name cannot be blank.')
+        end
+      end
+
       context "when adding a new provider into an existing organisation" do
         let!(:existing_organisation) { create(:organisation, name: desired_attributes[:organisation_name]) }
 
