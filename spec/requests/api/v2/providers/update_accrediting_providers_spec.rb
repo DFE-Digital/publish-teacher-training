@@ -99,6 +99,33 @@ describe 'PATCH /providers/:provider_code' do
           expect(json_data[0]["source"]["pointer"]).to eq("/data/attributes/accredited_bodies")
         end
       end
+
+      context 'failed validation' do
+        let(:new_description) {
+          Faker::Lorem.sentence(word_count: 101)
+        }
+        it "creates a draft enrichment for the provider with the accredited body enrichment" do
+          expect {
+            patch_request(enrichment_payload)
+          }.to_not(change { provider.reload.enrichments.count })
+        end
+        let(:json_data) { JSON.parse(subject.body)['errors'] }
+        subject do
+          patch_request(enrichment_payload)
+          response
+        end
+
+        it { should have_http_status(:unprocessable_entity) }
+
+        it 'has validation error details' do
+          expect(json_data.count).to eq 1
+          expect(json_data[0]["detail"]).to eq("Reduce the word count for #{accrediting_provider.provider_name}")
+        end
+
+        it 'has validation error pointers' do
+          expect(json_data[0]["source"]["pointer"]).to eq("/data/attributes/accredited_bodies")
+        end
+      end
     end
 
     context 'provider has only a single draft enrichments' do
