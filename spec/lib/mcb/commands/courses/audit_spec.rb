@@ -20,6 +20,7 @@ describe 'mcb courses audit' do
   let(:rolled_over_course) do
     new_course = course.dup
     new_course.update(provider: rolled_over_provider)
+    new_course.update(start_date: course.start_date - 1.year)
     new_course.save
     new_course
   end

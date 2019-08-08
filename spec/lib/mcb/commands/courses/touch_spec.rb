@@ -17,6 +17,7 @@ describe 'mcb courses touch' do
   let(:rolled_over_course) do
     new_course = course.dup
     new_course.update(provider: rolled_over_provider)
+    new_course.update(start_date: course.start_date - 1.year)
     new_course.save
     new_course
   end
@@ -52,7 +53,7 @@ describe 'mcb courses touch' do
       expect {
         touch.execute(arguments: [rolled_over_provider.provider_code, rolled_over_course.course_code])
       }.to change { rolled_over_course.reload.audits.count }
-             .from(1).to(2)
+             .from(2).to(3)
     end
   end
 

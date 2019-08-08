@@ -30,6 +30,7 @@ class Course < ApplicationRecord
   include Discard::Model
   include WithQualifications
   include ChangedAt
+  include StartDateValid
 
   after_initialize :set_defaults
 
@@ -188,6 +189,10 @@ class Course < ApplicationRecord
 
   def syncable?
     valid? :sync
+  end
+
+  def update_valid?
+    valid? :update
   end
 
   def findable?
@@ -460,10 +465,6 @@ private
   end
 
   def validate_start_date
-    valid_start_date_range(recruitment_cycle.year.to_i).cover?(start_date)
-  end
-
-  def valid_start_date_range(recruitment_year)
-    DateTime.new(recruitment_year,8,1)..(DateTime.new(recruitment_year + 1,7,31))
+    start_date_valid?(recruitment_cycle.year.to_i, self) if provider.present?
   end
 end

@@ -21,7 +21,7 @@ describe 'PATCH /providers/:provider_code/courses/:course_code' do
           }
   end
   let(:organisation)      { create :organisation }
-  let(:provider)          { create :provider, organisations: [organisation] }
+  let(:provider)          { build :provider, organisations: [organisation] }
   let(:user)              { create :user, organisations: [organisation] }
   let(:payload)           { { email: user.email } }
   let(:token)             { build_jwt :apiv2, payload: payload }
@@ -79,16 +79,25 @@ describe 'PATCH /providers/:provider_code/courses/:course_code' do
     let(:updated_start_date) { {} }
     let!(:start_date) { course.start_date }
 
-    before do
-      perform_request(updated_start_date)
-    end
-
     it "returns http success" do
       expect(response).to have_http_status(:success)
     end
 
     it "does not change start_date attribute" do
       expect(course.reload.start_date).to eq(start_date)
+    end
+  end
+
+  context 'for a course in the current cycle' do
+    context 'with an invalid start date' do
+      let(:updated_start_date) { { start_date: DateTime.new(2020, 9, 1).utc } }
+      let(:json_data) { JSON.parse(response.body)['errors'] }
+
+      it "returns an error" do
+        expect(response).to have_http_status(:unprocessable_entity)
+        expect(json_data.count).to eq 1
+        expect(response.body).to include("#{updated_start_date[:start_date]} is not in the #{provider.recruitment_cycle.year} cycle")
+      end
     end
   end
 end
