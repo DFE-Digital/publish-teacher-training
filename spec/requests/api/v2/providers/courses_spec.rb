@@ -130,7 +130,21 @@ describe 'Courses API v2', type: :request do
                   "entry_requirements" => %w[must_have_qualification_at_application_time expect_to_achieve_before_training_begins equivalence_test],
                   "qualifications" => %w[qts pgce_with_qts pgde_with_qts],
                   "age_range_in_years" => %w[3_to_7 5_to_11 7_to_11 7_to_14]
-                }
+                },
+                "start_dates" => {
+                   "august" => "August 2019",
+                   "september" => "September 2019",
+                   "october" => "October 2019",
+                   "november" => "November 2019",
+                   "decemember" => "December 2019",
+                   "january" => "January 2019",
+                   "february" => "February 2019",
+                   "march" => "March 2019",
+                   "april" => "April 2019",
+                   "may" => "May 2019",
+                   "june" => "June 2019",
+                   "july" => "July 2019"
+                 }
               }
             },
             "jsonapi" => {
@@ -294,7 +308,21 @@ describe 'Courses API v2', type: :request do
                 "entry_requirements" => %w[must_have_qualification_at_application_time expect_to_achieve_before_training_begins equivalence_test],
                 "qualifications" => %w[qts pgce_with_qts pgde_with_qts],
                 "age_range_in_years" => %w[3_to_7 5_to_11 7_to_11 7_to_14]
-              }
+              },
+              "start_dates" => {
+                 "august" => "August 2019",
+                 "september" => "September 2019",
+                 "october" => "October 2019",
+                 "november" => "November 2019",
+                 "decemember" => "December 2019",
+                 "january" => "January 2019",
+                 "february" => "February 2019",
+                 "march" => "March 2019",
+                 "april" => "April 2019",
+                 "may" => "May 2019",
+                 "june" => "June 2019",
+                 "july" => "July 2019"
+               }
             },
           }],
           "jsonapi" => {

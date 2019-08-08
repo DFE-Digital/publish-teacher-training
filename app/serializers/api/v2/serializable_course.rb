@@ -8,6 +8,7 @@ module API
           end
         end
       end
+      include AvailableStartDates
 
       type 'courses'
 
@@ -67,7 +68,8 @@ module API
 
       meta do
         {
-          edit_options: @object.edit_options.all
+          edit_options: @object.edit_options.all,
+          start_dates: start_dates(@object.recruitment_cycle.year)
         }
       end
     end
