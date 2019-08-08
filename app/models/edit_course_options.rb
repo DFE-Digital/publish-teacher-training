@@ -44,17 +44,17 @@ class EditCourseOptions
   def start_dates
     recruitment_year = @course.provider.recruitment_cycle.year.to_i
 
-    dates = ["August #{recruitment_year}",
-             "September #{recruitment_year}",
-             "October #{recruitment_year}",
-             "November #{recruitment_year}",
-             "December #{recruitment_year}",
-             "January #{recruitment_year + 1}",
-             "February #{recruitment_year + 1}",
-             "March #{recruitment_year + 1}",
-             "April #{recruitment_year + 1}",
-             "May #{recruitment_year + 1}",
-             "June #{recruitment_year + 1}",
-             "July #{recruitment_year + 1}"]
+    ["August #{recruitment_year}",
+     "September #{recruitment_year}",
+     "October #{recruitment_year}",
+     "November #{recruitment_year}",
+     "December #{recruitment_year}",
+     "January #{recruitment_year + 1}",
+     "February #{recruitment_year + 1}",
+     "March #{recruitment_year + 1}",
+     "April #{recruitment_year + 1}",
+     "May #{recruitment_year + 1}",
+     "June #{recruitment_year + 1}",
+     "July #{recruitment_year + 1}"]
   end
 end

@@ -52,29 +52,29 @@ describe 'PATCH /providers/:provider_code/courses/:course_code' do
   end
 
   context "course has an updated start_date" do
-    let(:time_utc) { DateTime.new(course.provider.recruitment_cycle.year.to_i, 10, 1).utc }
-    let(:updated_start_date) { { start_date: time_utc.strftime("%b %Y") } }
+    let(:timestamp_utc) { DateTime.new(course.provider.recruitment_cycle.year.to_i, 10, 1).utc }
+    let(:updated_start_date) { { start_date: timestamp_utc.strftime("%b %Y") } }
 
     it "returns http success" do
       expect(response).to have_http_status(:success)
     end
 
     it "updates start_date attribute to the correct value" do
-      expect(course.reload.start_date.to_date).to eq(time_utc)
+      expect(course.reload.start_date.to_date).to eq(timestamp_utc)
     end
   end
 
   context "course has the same start_date" do
     context "with values passed into the params" do
-      let(:time_utc) { start_date }
-      let(:updated_start_date) { { start_date: time_utc.strftime("%b %Y") } }
+      let(:timestamp_utc) { start_date }
+      let(:updated_start_date) { { start_date: timestamp_utc.strftime("%b %Y") } }
 
       it "returns http success" do
         expect(response).to have_http_status(:success)
       end
 
       it "does not change qualification attribute" do
-        expect(course.reload.start_date).to eq(time_utc)
+        expect(course.reload.start_date).to eq(timestamp_utc)
       end
     end
   end
