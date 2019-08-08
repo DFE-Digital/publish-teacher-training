@@ -45,7 +45,6 @@ describe 'PATCH /providers/:provider_code/courses/:course_code with sites' do
     }
   end
 
-
   let!(:sync_courses_request_stub) do
     stub_request(:put, %r{#{Settings.search_api.base_url}/api/courses/})
       .to_return(
@@ -67,7 +66,9 @@ describe 'PATCH /providers/:provider_code/courses/:course_code with sites' do
   context "course has some sites" do
     context "course is new" do
       before do
-        perform_request
+        perform_enqueued_jobs do
+          perform_request
+        end
       end
 
       it "returns http success" do
@@ -108,7 +109,9 @@ describe 'PATCH /providers/:provider_code/courses/:course_code with sites' do
       let(:sites_payload) { [] }
 
       before do
-        perform_request
+        perform_enqueued_jobs do
+          perform_request
+        end
       end
 
       it "returns http 422" do

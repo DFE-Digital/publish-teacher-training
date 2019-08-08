@@ -33,6 +33,19 @@ describe 'Courses API v2', type: :request do
       response
     end
 
+    it { should have_http_status(:success) }
+
+    its(:body) { should be_empty }
+
+    it 'makes syncs to search and compare' do
+      perform_enqueued_jobs do
+        subject
+      end
+
+      expect(WebMock)
+        .to have_requested(:put, "#{Settings.search_api.base_url}/api/courses/")
+    end
+
     context 'when unauthenticated' do
       let(:payload) { { email: 'foo@bar' } }
       let(:credentials) do
@@ -62,21 +75,6 @@ describe 'Courses API v2', type: :request do
       let(:course) { create(:course) }
 
       it { should have_http_status(:not_found) }
-    end
-
-    context 'when the api responds with a success' do
-      it { should have_http_status(:success) }
-    end
-
-    context 'when the api was unsuccessful' do
-      let(:search_api_status) { 400 }
-
-      it 'raises an error' do
-        expect {
-          subject
-        }.to raise_error RuntimeError,
-                         'error received when syncing with search and compare'
-      end
     end
   end
 end

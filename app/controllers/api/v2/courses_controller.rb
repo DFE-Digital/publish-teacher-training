@@ -23,26 +23,18 @@ module API
       end
 
       def sync_with_search_and_compare
-        if has_synced?
-          head :ok
-        else
-          raise RuntimeError.new(
-            'error received when syncing with search and compare'
-          )
-        end
+        has_synced?
+
+        head :ok
       end
 
       def publish
         if @course.publishable?
           @course.publish_sites
           @course.publish_enrichment(@current_user)
-          if has_synced?
-            head :ok
-          else
-            raise RuntimeError.new(
-              'error received when syncing with search and compare'
-            )
-          end
+          has_synced?
+
+          head :ok
         else
           render jsonapi_errors: @course.errors, status: :unprocessable_entity
         end
@@ -186,7 +178,7 @@ module API
 
       def has_synced?
         if @course.syncable?
-          SearchAndCompareAPIService::Request.sync([@course])
+          SyncCoursesToFindJob.perform_later(@course)
         else
           raise RuntimeError.new(
             "'#{@course}' '#{@course.provider}' sync error: #{@course.errors.details}"
