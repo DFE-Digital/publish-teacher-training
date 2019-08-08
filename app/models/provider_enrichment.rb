@@ -46,6 +46,8 @@ class ProviderEnrichment < ApplicationRecord
                                                     store_key: 'AccreditingProviderEnrichments']
 
 
+  validate :validate_accrediting_provider_enrichments_descriptions
+
   validates :train_with_us, words_count: { maximum: 250 }
   validates :train_with_disability, words_count: { maximum: 250 }
 
@@ -53,6 +55,16 @@ class ProviderEnrichment < ApplicationRecord
             :address1, :address3, :address4,
             :postcode, :train_with_us, :train_with_disability,
             presence: true, on: :publish
+
+  def validate_accrediting_provider_enrichments_descriptions
+    if accrediting_provider_enrichments.present? && accrediting_provider_enrichments.is_a?(Array)
+
+      if accrediting_provider_enrichments.any? { |enrichment| enrichment['Description'].scan(/\S+/).size > 100 }
+        errors.add(:accrediting_provider_enrichments, "^Reduce the word count")
+      end
+
+    end
+  end
 
   def has_been_published_before?
     last_published_at.present?

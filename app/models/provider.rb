@@ -302,8 +302,22 @@ private
       # `full_messages_for` here will remove any `^`s defined in the validator or en.yml.
       # We still need it for later, so re-add it.
       # jsonapi_errors will throw if it's given an array, so we call `.first`.
+
       message = "^" + enrichment.errors.full_messages_for(field).first.to_s
-      errors.add field.to_sym, message
+
+      if field == :accrediting_provider_enrichments
+
+        enrichment.accrediting_provider_enrichments.each_with_index { |accrediting_provider_enrichment, _index|
+          if accrediting_provider_enrichment['Description'].scan(/\S+/).size > 100
+            accrediting_provider = accrediting_providers.find { |ap| ap.provider_code == accrediting_provider_enrichment['UcasProviderCode'] }
+
+            errors.add "accredited_bodies".to_sym, "#{message} for #{accrediting_provider.provider_name}"
+          end
+        }
+      else
+
+        errors.add field.to_sym, message
+      end
     end
   end
 
