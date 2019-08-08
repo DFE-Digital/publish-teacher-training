@@ -20,7 +20,7 @@ module API
                  :english, :maths, :science, :gcse_subjects_required, :age_range_in_years
 
       attribute :start_date do
-        @object.start_date&.iso8601
+        @object.start_date.strftime("%b %Y")
       end
 
       attribute :applications_open_from do

@@ -5,7 +5,7 @@ module StartDateValid
       if valid_start_date_range(recruitment_year).cover?(course.start_date)
         true
       else
-        course.errors.add :start_date, "#{start_date} is not in the #{recruitment_cycle.year} cycle"
+        course.errors.add :start_date, "#{start_date.strftime('%b %Y')} is not in the #{recruitment_cycle.year} cycle"
       end
     end
 
