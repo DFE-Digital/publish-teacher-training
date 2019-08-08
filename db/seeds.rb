@@ -151,6 +151,8 @@ access_requester_user = User.all.reject(&:admin?).sample
     requester: access_requester_user,
     requester_email: access_requester_user.email,
     request_date_utc: rand(1..20).days.ago,
-    status: %i[requested completed].sample
+    status: %i[requested completed].sample,
+    reason: 'No reason',
+    organisation: Organisation.first.name
   )
 end

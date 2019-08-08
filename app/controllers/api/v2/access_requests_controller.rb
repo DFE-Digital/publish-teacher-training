@@ -1,7 +1,10 @@
 module API
   module V2
     class AccessRequestsController < API::V2::ApplicationController
-      deserializable_resource :access_request, only: %i[create]
+      deserializable_resource :access_request,
+                              only: %i[create],
+                              class: API::V2::DeserializableAccessRequest
+
       before_action :build_access_request, only: :approve
 
       def approve
@@ -29,7 +32,11 @@ module API
         @access_request = AccessRequest.new(access_request_params)
         @access_request.add_additonal_attributes(@access_request.requester_email)
 
-        render jsonapi: @access_request
+        if @access_request.valid?
+          render jsonapi: @access_request
+        else
+          render jsonapi_errors: @access_request.errors, status: :unprocessable_entity
+        end
       end
 
     private
@@ -46,7 +53,7 @@ module API
           :organisation,
           :reason,
           :requester_email
-        )
+        ).with_defaults requester_email: current_user.email
       end
     end
   end
