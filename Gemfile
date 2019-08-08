@@ -64,8 +64,6 @@ gem 'terminal-table'
 #   tabulo is even more flexible than terminal-table, used for the audit
 #   stuff for now, probably worth switching other commands to it later
 gem 'tabulo'
-#   terminfo allows us to get terminal info like width, etc.
-gem 'tty-screen'
 
 # For querying third party APIs
 gem 'faraday'

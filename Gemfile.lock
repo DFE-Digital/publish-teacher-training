@@ -449,7 +449,6 @@ DEPENDENCIES
   tabulo
   terminal-table
   timecop
-  tty-screen
   tzinfo-data
   uk_postcode
   webmock
