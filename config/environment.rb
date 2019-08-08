@@ -7,5 +7,5 @@ Rails.application.initialize!
 Rails.application.configure do
   config.action_controller.action_on_unpermitted_parameters = :raise
 
-  config.active_job.queue_adapter = :async
+  config.active_job.queue_adapter = :inline
 end
