@@ -44,13 +44,9 @@ module API
         if @provider.publishable?
           @provider.publish_enrichment(@current_user)
 
-          if courses_synced?(@provider.syncable_courses)
-            head :ok
-          else
-            raise RuntimeError.new(
-              "#{@provider} failed to sync these courses #{@provider.syncable_courses.pluck(:course_code)}"
-            )
-          end
+          courses_synced?(@provider.syncable_courses)
+
+          head :ok
         else
           render jsonapi_errors: @provider.errors, status: :unprocessable_entity
         end
@@ -74,13 +70,10 @@ module API
             "#{@provider} is not from the current recruitment cycle"
           )
         end
-        if courses_synced?(@provider.syncable_courses)
-          head :ok
-        else
-          raise RuntimeError.new(
-            "#{@provider} failed to sync these courses #{@provider.syncable_courses.pluck(:course_code)}"
-          )
-        end
+
+        courses_synced?(@provider.syncable_courses)
+
+        head :ok
       end
 
     private
@@ -168,9 +161,7 @@ module API
       end
 
       def courses_synced?(syncable_courses)
-        SearchAndCompareAPIService::Request.sync(
-          syncable_courses
-        )
+        SyncCoursesToFindJob.perform_later(*syncable_courses)
       end
     end
   end
