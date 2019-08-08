@@ -95,8 +95,12 @@ describe User, type: :model do
 
         its(:admin?) { should be_falsey }
 
-        it "does shows up in User.non_admins" do
+        it "is an non-admin user" do
           expect(User.non_admins).to eq([subject])
+        end
+
+        it "is not an admin" do
+          expect(User.admins).to be_empty
         end
       end
 
@@ -105,13 +109,13 @@ describe User, type: :model do
 
         its(:admin?) { should be_falsey }
 
-        it "does shows up in User.non_admins" do
+        it "is an non-admin user" do
           expect(User.non_admins).to eq([subject])
         end
-      end
 
-      it "doesn't show up in User.admins" do
-        expect(User.admins).to be_empty
+        it "is not an admin" do
+          expect(User.admins).to be_empty
+        end
       end
     end
   end
