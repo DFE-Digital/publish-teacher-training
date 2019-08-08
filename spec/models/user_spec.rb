@@ -87,15 +87,15 @@ describe User, type: :model do
       end
     end
 
-    context 'user does not have a digital.education or education.gov.uk email' do
+    context 'user does not have a digital.education.gov.uk or education.gov.uk email' do
       subject { create(:user, email: email) }
 
-      context 'when other doamin' do
+      context 'when other domain' do
         let(:email) { 'test@hrmc.gov.uk' }
 
         its(:admin?) { should be_falsey }
 
-        it "is an non-admin user" do
+        it "is a non-admin user" do
           expect(User.non_admins).to eq([subject])
         end
 
@@ -109,7 +109,7 @@ describe User, type: :model do
 
         its(:admin?) { should be_falsey }
 
-        it "is an non-admin user" do
+        it "is a non-admin user" do
           expect(User.non_admins).to eq([subject])
         end
 
