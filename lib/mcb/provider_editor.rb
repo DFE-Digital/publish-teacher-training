@@ -36,7 +36,7 @@ module MCB
 
       puts "\nAbout to create the Provider"
       if @cli.confirm_creation? && try_saving_provider
-        organisation = find_or_create_organisation
+        organisation = ask_and_set_organisation
 
         update_organisation_with_admins(organisation)
 
@@ -86,20 +86,36 @@ module MCB
       end
     end
 
-    def find_or_create_organisation
-      finished_picking_organisation = false
-      until finished_picking_organisation
-        organisation = Organisation.find_or_initialize_by(name: @cli.ask_organisation_name)
-        if organisation.persisted?
-          finished_picking_organisation = true
-        elsif organisation.new_record? && @cli.confirm_new_organisation_needed?
-          organisation.save!
-          finished_picking_organisation = true
+    def ask_and_set_organisation
+      organisation = nil
+
+      until organisation.present?
+        organisation_name = @cli.ask_organisation_name
+
+        if organisation_name.blank?
+          puts "Organisation name cannot be blank."
+          next
         end
+
+        organisation = find_or_create_organisation(organisation_name)
       end
 
       # connect provider to org
       provider.organisations << organisation
+
+      organisation
+    end
+
+    def find_or_create_organisation(organisation_name)
+      organisation = Organisation.find_or_initialize_by(name: organisation_name)
+
+      if organisation.new_record?
+        if @cli.confirm_new_organisation_needed?
+          organisation.save!
+        else
+          organisation = nil
+        end
+      end
 
       organisation
     end
