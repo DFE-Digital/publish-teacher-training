@@ -29,6 +29,7 @@ module API
       def update
         authorize @provider, :update?
         update_enrichment
+
         update_accrediting_enrichment
 
         if @provider.valid?

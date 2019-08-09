@@ -64,6 +64,13 @@ describe 'PATCH /providers/:provider_code' do
         expect(provider.enrichments.draft.first.accrediting_provider_enrichments.first).to eq(
           "Description" => new_description, "UcasProviderCode" => accrediting_provider.provider_code
         )
+
+        expect(response).to have_http_status(:ok)
+        accredited_body = JSON.parse(response.body).dig("data", "attributes", "accredited_bodies").first
+
+        expect(accredited_body.dig("provider_code")).to eq(accrediting_provider.provider_code)
+        expect(accredited_body.dig("provider_name")).to eq(accrediting_provider.provider_name)
+        expect(accredited_body.dig("description")).to eq(new_description)
       end
     end
 
@@ -82,6 +89,13 @@ describe 'PATCH /providers/:provider_code' do
         expect(provider.enrichments.draft.first.accrediting_provider_enrichments.first).to eq(
           "Description" => new_description, "UcasProviderCode" => accrediting_provider.provider_code
         )
+
+        expect(response).to have_http_status(:ok)
+        accredited_body = JSON.parse(response.body).dig("data", "attributes", "accredited_bodies").first
+
+        expect(accredited_body.dig("provider_code")).to eq(accrediting_provider.provider_code)
+        expect(accredited_body.dig("provider_name")).to eq(accrediting_provider.provider_name)
+        expect(accredited_body.dig("description")).to eq(new_description)
       end
     end
   end
@@ -105,6 +119,13 @@ describe 'PATCH /providers/:provider_code' do
         expect(provider.enrichments.draft.first.accrediting_provider_enrichments.first).to eq(
           "Description" => new_description, "UcasProviderCode" => accrediting_provider.provider_code
         )
+
+        expect(response).to have_http_status(:ok)
+        accredited_body = JSON.parse(response.body).dig("data", "attributes", "accredited_bodies").first
+
+        expect(accredited_body.dig("provider_code")).to eq(accrediting_provider.provider_code)
+        expect(accredited_body.dig("provider_name")).to eq(accrediting_provider.provider_name)
+        expect(accredited_body.dig("description")).to eq(new_description)
       end
     end
 
@@ -123,6 +144,13 @@ describe 'PATCH /providers/:provider_code' do
         expect(provider.enrichments.draft.first.accrediting_provider_enrichments.first).to eq(
           "Description" => new_description, "UcasProviderCode" => accrediting_provider.provider_code
         )
+
+        expect(response).to have_http_status(:ok)
+        accredited_body = JSON.parse(response.body).dig("data", "attributes", "accredited_bodies").first
+
+        expect(accredited_body.dig("provider_code")).to eq(accrediting_provider.provider_code)
+        expect(accredited_body.dig("provider_name")).to eq(accrediting_provider.provider_name)
+        expect(accredited_body.dig("description")).to eq(new_description)
       end
     end
   end
