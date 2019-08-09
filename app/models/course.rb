@@ -175,10 +175,10 @@ class Course < ApplicationRecord
 
     accrediting_provider_enrichment = provider_enrichment.accrediting_provider_enrichments
       .find do |provider|
-      provider['UcasProviderCode'] == accrediting_provider.provider_code
+      provider.UcasProviderCode == accrediting_provider.provider_code
     end
 
-    accrediting_provider_enrichment['Description'] if accrediting_provider_enrichment.present?
+    accrediting_provider_enrichment.Description if accrediting_provider_enrichment.present?
   end
 
   def publishable?

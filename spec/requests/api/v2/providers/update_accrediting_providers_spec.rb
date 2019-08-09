@@ -61,9 +61,10 @@ describe 'PATCH /providers/:provider_code' do
         }.to(change { provider.reload.enrichments.count }.from(0).to(1))
 
         expect(provider.enrichments.draft.first.accrediting_provider_enrichments.count).to eq(courses.size)
-        expect(provider.enrichments.draft.first.accrediting_provider_enrichments.first).to eq(
-          "Description" => new_description, "UcasProviderCode" => accrediting_provider.provider_code
-        )
+
+        accrediting_provider_enrichment = provider.enrichments.draft.first.accrediting_provider_enrichments.first
+        expect(accrediting_provider_enrichment.Description).to eq(new_description)
+        expect(accrediting_provider_enrichment.UcasProviderCode).to eq(accrediting_provider.provider_code)
 
         expect(response).to have_http_status(:ok)
         accredited_body = JSON.parse(response.body).dig("data", "attributes", "accredited_bodies").first
@@ -140,9 +141,10 @@ describe 'PATCH /providers/:provider_code' do
         }.to_not(change { provider.reload.enrichments.count })
 
         expect(provider.enrichments.draft.first.accrediting_provider_enrichments.count).to eq(courses.size)
-        expect(provider.enrichments.draft.first.accrediting_provider_enrichments.first).to eq(
-          "Description" => new_description, "UcasProviderCode" => accrediting_provider.provider_code
-        )
+
+        accrediting_provider_enrichment = provider.enrichments.draft.first.accrediting_provider_enrichments.first
+        expect(accrediting_provider_enrichment.Description).to eq(new_description)
+        expect(accrediting_provider_enrichment.UcasProviderCode).to eq(accrediting_provider.provider_code)
 
         expect(response).to have_http_status(:ok)
         accredited_body = JSON.parse(response.body).dig("data", "attributes", "accredited_bodies").first
@@ -170,9 +172,10 @@ describe 'PATCH /providers/:provider_code' do
         }.to(change { provider.reload.enrichments.count }.from(0).to(1))
 
         expect(provider.enrichments.draft.first.accrediting_provider_enrichments.count).to eq(courses.size)
-        expect(provider.enrichments.draft.first.accrediting_provider_enrichments.first).to eq(
-          "Description" => new_description, "UcasProviderCode" => accrediting_provider.provider_code
-        )
+        accrediting_provider_enrichment = provider.enrichments.draft.first.accrediting_provider_enrichments.first
+
+        expect(accrediting_provider_enrichment.Description).to eq(new_description)
+        expect(accrediting_provider_enrichment.UcasProviderCode).to eq(accrediting_provider.provider_code)
 
         expect(response).to have_http_status(:ok)
         accredited_body = JSON.parse(response.body).dig("data", "attributes", "accredited_bodies").first
@@ -195,9 +198,10 @@ describe 'PATCH /providers/:provider_code' do
         }.to_not(change { provider.reload.enrichments.count })
 
         expect(provider.enrichments.draft.first.accrediting_provider_enrichments.count).to eq(courses.size)
-        expect(provider.enrichments.draft.first.accrediting_provider_enrichments.first).to eq(
-          "Description" => new_description, "UcasProviderCode" => accrediting_provider.provider_code
-        )
+
+        accrediting_provider_enrichment = provider.enrichments.draft.first.accrediting_provider_enrichments.first
+        expect(accrediting_provider_enrichment.Description).to eq(new_description)
+        expect(accrediting_provider_enrichment.UcasProviderCode).to eq(accrediting_provider.provider_code)
 
         expect(response).to have_http_status(:ok)
         accredited_body = JSON.parse(response.body).dig("data", "attributes", "accredited_bodies").first

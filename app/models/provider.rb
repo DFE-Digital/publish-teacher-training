@@ -284,13 +284,13 @@ class Provider < ApplicationRecord
 
   def accredited_bodies
     accrediting_providers.map do |ap|
-      accrediting_provider_entry = latest_enrichment&.accrediting_provider_enrichment(ap.provider_code)
+      accrediting_provider_enrichment = latest_enrichment&.accrediting_provider_enrichment(ap.provider_code)
 
       # map() to this hash:
       {
         provider_name: ap.provider_name,
         provider_code: ap.provider_code,
-        description: accrediting_provider_entry.present? ? accrediting_provider_entry['Description'] : ""
+        description: accrediting_provider_enrichment&.Description || ""
       }
     end
   end
@@ -303,19 +303,16 @@ private
       # We still need it for later, so re-add it.
       # jsonapi_errors will throw if it's given an array, so we call `.first`.
 
-      message = "^" + enrichment.errors.full_messages_for(field).first.to_s
-
       if field == :accrediting_provider_enrichments
+        enrichment.errors.details[field].each { |item|
+          provider_name = accrediting_providers.find { |accrediting_provider| accrediting_provider.provider_code == item[:value].first.UcasProviderCode }.provider_name
 
-        enrichment.accrediting_provider_enrichments.each_with_index { |accrediting_provider_enrichment, _index|
-          if accrediting_provider_enrichment['Description'].scan(/\S+/).size > 100
-            accrediting_provider = accrediting_providers.find { |ap| ap.provider_code == accrediting_provider_enrichment['UcasProviderCode'] }
-
-            errors.add "accredited_bodies".to_sym, "#{message} for #{accrediting_provider.provider_name}"
-          end
+          message = "^Reduce the word count for #{provider_name}"
+          errors.add :accredited_bodies, message
         }
-      else
 
+      else
+        message = "^" + enrichment.errors.full_messages_for(field).first.to_s
         errors.add field.to_sym, message
       end
     end
