@@ -14,13 +14,7 @@ describe 'mcb courses touch' do
   end
 
   let(:course) { create :course, updated_at: 1.day.ago, changed_at: 1.day.ago, provider: provider }
-  let(:rolled_over_course) do
-    new_course = course.dup
-    new_course.update(provider: rolled_over_provider)
-    new_course.update(start_date: course.start_date - 1.year)
-    new_course.save
-    new_course
-  end
+  let(:rolled_over_course) { create(:course, provider: rolled_over_provider) }
 
   context 'when the recruitment year is unspecified' do
     it 'updates the course updated_at for the current recruitment cycle' do
@@ -53,7 +47,7 @@ describe 'mcb courses touch' do
       expect {
         touch.execute(arguments: [rolled_over_provider.provider_code, rolled_over_course.course_code])
       }.to change { rolled_over_course.reload.audits.count }
-             .from(2).to(3)
+             .from(1).to(2)
     end
   end
 

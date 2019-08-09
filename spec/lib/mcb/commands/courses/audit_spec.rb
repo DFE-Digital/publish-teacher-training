@@ -17,13 +17,7 @@ describe 'mcb courses audit' do
   end
 
   let(:course) { create(:course, name: 'P', provider: provider) }
-  let(:rolled_over_course) do
-    new_course = course.dup
-    new_course.update(provider: rolled_over_provider)
-    new_course.update(start_date: course.start_date - 1.year)
-    new_course.save
-    new_course
-  end
+  let(:rolled_over_course) { create(:course, name: 'P', provider: rolled_over_provider) }
 
   before do
     Audited.store[:audited_user] = admin_user
