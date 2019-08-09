@@ -56,9 +56,8 @@ class Provider < ApplicationRecord
 
   has_many :sites
   has_one :latest_enrichment,
-          class_name: "ProviderEnrichment" do
-    enrichments.latest_created_at
-  end
+          -> { latest_created_at },
+          class_name: "ProviderEnrichment"
 
   has_many :enrichments,
            class_name: "ProviderEnrichment",

@@ -676,4 +676,14 @@ describe Provider, type: :model do
       end
     end
   end
+
+  describe "#latest_enrichment" do
+    let(:old_enrichment) { create(:provider_enrichment, created_at: 1.day.ago) }
+    let(:new_enrichment) { create(:provider_enrichment, created_at: 1.second.ago) }
+    let(:enrichments) { [new_enrichment, old_enrichment] }
+
+    it 'returns correct enrichment' do
+      expect(provider.latest_enrichment).to eq(new_enrichment)
+    end
+  end
 end
