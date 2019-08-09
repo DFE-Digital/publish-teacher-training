@@ -53,7 +53,7 @@ describe 'PATCH /providers/:provider_code/courses/:course_code' do
 
   context "course has an updated start_date" do
     let(:timestamp_utc) { DateTime.new(course.provider.recruitment_cycle.year.to_i, 10, 1).utc }
-    let(:updated_start_date) { { start_date: timestamp_utc.strftime("%b %Y") } }
+    let(:updated_start_date) { { start_date: timestamp_utc.strftime("%B %Y") } }
 
     it "returns http success" do
       expect(response).to have_http_status(:success)
@@ -67,7 +67,7 @@ describe 'PATCH /providers/:provider_code/courses/:course_code' do
   context "course has the same start_date" do
     context "with values passed into the params" do
       let(:timestamp_utc) { start_date }
-      let(:updated_start_date) { { start_date: timestamp_utc.strftime("%b %Y") } }
+      let(:updated_start_date) { { start_date: timestamp_utc.strftime("%B %Y") } }
 
       it "returns http success" do
         expect(response).to have_http_status(:success)
@@ -95,7 +95,7 @@ describe 'PATCH /providers/:provider_code/courses/:course_code' do
   context 'for a course in the current cycle' do
     context 'with an invalid start date' do
       let(:next_cycles_year) { provider.recruitment_cycle.year.to_i + 1 }
-      let(:updated_start_date) { { start_date: DateTime.new(next_cycles_year, 9, 1).strftime("%b %Y") } }
+      let(:updated_start_date) { { start_date: DateTime.new(next_cycles_year, 9, 1).strftime("%B %Y") } }
       let(:json_data) { JSON.parse(response.body)['errors'] }
 
       it "returns an error" do

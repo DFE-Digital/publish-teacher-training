@@ -1,16 +1,13 @@
 module StartDateValid
   extend ActiveSupport::Concern
   included do
-    def start_date_valid?(recruitment_year, course)
-      if valid_start_date_range(recruitment_year).cover?(course.start_date)
+    def start_date_valid?(_recruitment_year, course)
+      course_options = EditCourseOptions.new(course)
+      if course_options.start_dates.include?(course.start_date.strftime('%B %Y'))
         true
       else
-        course.errors.add :start_date, "#{start_date.strftime('%b %Y')} is not in the #{recruitment_cycle.year} cycle"
+        course.errors.add :start_date, "#{start_date.strftime('%B %Y')} is not in the #{recruitment_cycle.year} cycle"
       end
-    end
-
-    def valid_start_date_range(recruitment_year)
-      DateTime.new(recruitment_year, 8, 1)..(DateTime.new(recruitment_year + 1, 7, 31))
     end
   end
 end
