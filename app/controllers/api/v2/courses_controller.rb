@@ -127,7 +127,8 @@ module API
                   :science,
                   :qualification,
                   :age_range_in_years,
-                  :start_date)
+                  :start_date,
+                  :applications_open_from)
           .permit(
             :about_course,
             :course_length,
@@ -170,7 +171,11 @@ module API
             :science,
             :qualification,
             :age_range_in_years,
+<<<<<<< HEAD
             :start_date
+=======
+            :applications_open_from
+>>>>>>> [1856] Permit applications open attribute and add request spec
           )
       end
 
