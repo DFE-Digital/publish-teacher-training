@@ -13,7 +13,7 @@ describe 'mcb courses touch' do
     new_provider
   end
 
-  let(:course) { create :course, updated_at: 1.day.ago, changed_at: 1.day.ago, provider: provider }
+  let(:course) { create :course, updated_at: 1.day.ago, changed_at: 1.day.ago, provider: provider, applications_open_from: DateTime.new(provider.recruitment_cycle.year.to_i, 1, 1) }
   let(:rolled_over_course) { create(:course, provider: rolled_over_provider) }
 
   context 'when the recruitment year is unspecified' do
@@ -47,7 +47,7 @@ describe 'mcb courses touch' do
       expect {
         touch.execute(arguments: [rolled_over_provider.provider_code, rolled_over_course.course_code])
       }.to change { rolled_over_course.reload.audits.count }
-             .from(2).to(3)
+             .from(1).to(2)
     end
   end
 

@@ -101,7 +101,7 @@ describe 'PATCH /providers/:provider_code/courses/:course_code' do
 
   context 'for a course in the next cycle' do
     context 'with an invalid applications_open_from' do
-      let(:updated_applications_open_from) { { applications_open_from: DateTime.new(provider.recruitment_cycle.year.to_i - 1, 9, 31)  } }
+      let(:updated_applications_open_from) { { applications_open_from: DateTime.new(provider.recruitment_cycle.year.to_i - 1, 9, 31) } }
       let(:json_data) { JSON.parse(response.body)['errors'] }
 
       it "returns an error" do
