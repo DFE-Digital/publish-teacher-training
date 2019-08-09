@@ -30,7 +30,6 @@ class Course < ApplicationRecord
   include Discard::Model
   include WithQualifications
   include ChangedAt
-  include StartDateValid
 
   after_initialize :set_defaults
 
@@ -465,6 +464,8 @@ private
   end
 
   def validate_start_date
-    start_date_valid?(recruitment_cycle.year.to_i, self) if provider.present?
+    if provider.present?
+      errors.add :start_date, "#{start_date.strftime('%B %Y')} is not in the #{recruitment_cycle.year} cycle" unless edit_options.start_dates.include?(start_date.strftime('%B %Y'))
+    end
   end
 end
