@@ -41,6 +41,7 @@ FactoryBot.define do
     science { :must_have_qualification_at_application_time }
     resulting_in_pgce_with_qts
     start_date { DateTime.new(provider.recruitment_cycle.year.to_i, 9, 1) }
+    applications_open_from { provider.recruitment_cycle.application_start_date }
 
     transient do
       age { nil }
