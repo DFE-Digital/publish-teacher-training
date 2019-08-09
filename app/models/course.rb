@@ -148,8 +148,7 @@ class Course < ApplicationRecord
   validate :validate_enrichment_publishable, on: :publish
   validate :validate_enrichment
   validate :validate_course_syncable, on: :sync
-  validate :validate_qualification, on: :update
-  validate :validate_start_date, on: :update
+  validate :validate_qualification, :validate_start_date, on: :update
 
   after_validation :remove_unnecessary_enrichments_validation_message
 
