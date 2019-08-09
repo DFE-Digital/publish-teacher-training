@@ -10,7 +10,7 @@ RSpec.describe Course, type: :model do
       end
 
       context 'with an invalid date' do
-        let(:course) { create(:course, applications_open_from: DateTime.new(2019, 10, 1))  }
+        let(:course) { create(:course, applications_open_from: DateTime.new(2019, 10, 1)) }
         its(:update_valid?) { should be false }
       end
     end

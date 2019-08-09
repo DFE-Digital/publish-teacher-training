@@ -71,7 +71,7 @@ describe 'PATCH /providers/:provider_code/courses/:course_code' do
       end
     end
   end
-  #
+
   context "with no values passed into the params" do
     let(:updated_applications_open_from) { {} }
     let!(:course_applications_open_from) { course.applications_open_from }
@@ -85,8 +85,9 @@ describe 'PATCH /providers/:provider_code/courses/:course_code' do
     end
   end
 
+
   context 'for a course in the current cycle' do
-    context 'with an invalid applicatons_open_from' do
+    context 'with an invalid applications_open_from' do
       let(:updated_applications_open_from) { { applications_open_from: DateTime.new(provider.recruitment_cycle.year.to_i - 2, 1, 1).utc } }
       let(:json_data) { JSON.parse(response.body)['errors'] }
 
@@ -96,18 +97,18 @@ describe 'PATCH /providers/:provider_code/courses/:course_code' do
         expect(response.body).to include("#{updated_applications_open_from[:applications_open_from]} is not valid for the #{provider.recruitment_cycle.year} cycle")
       end
     end
-  #
-  # context 'for a course in the next cycle' do
-  #   context 'with a date that starts before the cycle' do
-  #     let(:next_cycles_year) { provider.recruitment_cycle.year.to_i + 1 }
-  #     let(:updated_applications_open_from) { { applications_open_from: DateTime.new(provider.recruitment_cycle.year.to_i - 1, 9, 31)  } }
-  #     let(:json_data) { JSON.parse(response.body)['errors'] }
-  #
-  #     it "returns an error" do
-  #       expect(response).to have_http_status(:unprocessable_entity)
-  #       expect(json_data.count).to eq 1
-  #       expect(response.body).to include("#{updated_applications_open_from[:applications_open_from]} is not valid for the #{provider.recruitment_cycle.year} cycle")
-  #     end
-  #   end
+  end
+
+  context 'for a course in the next cycle' do
+    context 'with an invalid applications_open_from' do
+      let(:updated_applications_open_from) { { applications_open_from: DateTime.new(provider.recruitment_cycle.year.to_i - 1, 9, 31)  } }
+      let(:json_data) { JSON.parse(response.body)['errors'] }
+
+      it "returns an error" do
+        expect(response).to have_http_status(:unprocessable_entity)
+        expect(json_data.count).to eq 1
+        expect(response.body).to include("#{updated_applications_open_from[:applications_open_from]} is not valid for the #{provider.recruitment_cycle.year} cycle")
+      end
+    end
   end
 end

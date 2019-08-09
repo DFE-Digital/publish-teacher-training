@@ -47,7 +47,7 @@ describe 'mcb courses touch' do
       expect {
         touch.execute(arguments: [rolled_over_provider.provider_code, rolled_over_course.course_code])
       }.to change { rolled_over_course.reload.audits.count }
-             .from(1).to(2)
+             .from(2).to(3)
     end
   end
 
