@@ -245,7 +245,7 @@ describe "Courses API", type: :request do
                 changed_since: timestamp_of_last_course.utc.strftime('%FT%T.%6NZ'),
                 per_page: 100
               }
-    )
+            )
             expect(response.headers["Link"]).to match "#{url}; rel=\"next\""
           end
         end
@@ -287,7 +287,7 @@ describe "Courses API", type: :request do
                 changed_since: timestamp_of_last_course.utc.strftime('%FT%T.%6NZ'),
                 per_page: 100
               }
-    )
+            )
             expect(response.headers["Link"]).to match "#{url}; rel=\"next\""
           end
         end
