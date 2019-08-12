@@ -94,4 +94,83 @@ describe ProviderEnrichment, type: :model do
       its(:provider_code) { should eq(existing_provider_code) }
     end
   end
+
+  describe 'validation' do
+    describe 'on publish' do
+      it { should validate_presence_of(:email).on(:publish) }
+      it { should validate_presence_of(:website).on(:publish) }
+      it { should validate_presence_of(:telephone).on(:publish) }
+
+      it { should validate_presence_of(:address1).on(:publish) }
+      it { should validate_presence_of(:address3).on(:publish) }
+      it { should validate_presence_of(:address4).on(:publish) }
+
+      it { should validate_presence_of(:postcode).on(:publish) }
+      it { should validate_presence_of(:train_with_us).on(:publish) }
+      it { should validate_presence_of(:train_with_disability).on(:publish) }
+    end
+
+    describe '#train_with_us' do
+      let(:word_count) { 250 }
+      let(:train_with_us) { Faker::Lorem.sentence(word_count: word_count) }
+
+      subject { build :provider_enrichment, train_with_us: train_with_us }
+
+      context 'word count within limit' do
+        it { should be_valid }
+      end
+
+      context 'word count exceed limit' do
+        let(:word_count) { 250 + 1 }
+        it { should_not be_valid }
+      end
+    end
+
+    describe '#train_with_disability' do
+      let(:word_count) { 250 }
+      let(:train_with_disability) { Faker::Lorem.sentence(word_count: word_count) }
+
+      subject { build :provider_enrichment, train_with_disability: train_with_disability }
+
+      context 'word count within limit' do
+        it { should be_valid }
+      end
+
+      context 'word count exceed limit' do
+        let(:word_count) { 250 + 1 }
+        it { should_not be_valid }
+      end
+    end
+
+    describe '#accrediting_provider_enrichments' do
+      let(:word_count) { 100 }
+
+      let(:accrediting_provider_enrichments) {
+        result = []
+        10.times do |index|
+          result <<
+            {
+              "Description" => Faker::Lorem.sentence(word_count: word_count),
+              "UcasProviderCode" => "UPC#{index}"
+            }
+        end
+        result
+      }
+
+      let(:provider_enrichment) do
+        build :provider_enrichment, accrediting_provider_enrichments: accrediting_provider_enrichments
+      end
+
+      subject { provider_enrichment }
+
+      context 'word count within limit' do
+        it { should be_valid }
+      end
+
+      context 'word count exceed limit' do
+        let(:word_count) { 100 + 1 }
+        it { should_not be_valid }
+      end
+    end
+  end
 end

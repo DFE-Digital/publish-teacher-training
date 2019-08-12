@@ -25,6 +25,10 @@ class ProviderEnrichment < ApplicationRecord
              inverse_of: 'enrichments'
   audited associated_with: :provider
 
+  serialize :accrediting_provider_enrichments, AccreditingProviderEnrichment::ArraySerializer
+
+  validates_associated :accrediting_provider_enrichments
+
   scope :latest_created_at, -> { order(created_at: :desc) }
   scope :latest_published_at, -> { order(last_published_at: :desc) }
   scope :draft, -> { where(status: 'draft') }
@@ -45,7 +49,6 @@ class ProviderEnrichment < ApplicationRecord
                  accrediting_provider_enrichments: [:json,
                                                     store_key: 'AccreditingProviderEnrichments']
 
-
   validates :train_with_us, words_count: { maximum: 250 }
   validates :train_with_disability, words_count: { maximum: 250 }
 
@@ -64,7 +67,7 @@ class ProviderEnrichment < ApplicationRecord
 
   def accrediting_provider_enrichment(provider_code)
     accrediting_provider_enrichments&.find do |enrichment|
-      enrichment['UcasProviderCode'] == provider_code
+      enrichment.UcasProviderCode == provider_code
     end
   end
 

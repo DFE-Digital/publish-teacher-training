@@ -284,13 +284,13 @@ class Provider < ApplicationRecord
 
   def accredited_bodies
     accrediting_providers.map do |ap|
-      accrediting_provider_entry = latest_enrichment&.accrediting_provider_enrichment(ap.provider_code)
+      accrediting_provider_enrichment = latest_enrichment&.accrediting_provider_enrichment(ap.provider_code)
 
       # map() to this hash:
       {
         provider_name: ap.provider_name,
         provider_code: ap.provider_code,
-        description: accrediting_provider_entry.present? ? accrediting_provider_entry['Description'] : ""
+        description: accrediting_provider_enrichment&.Description || ""
       }
     end
   end
@@ -302,8 +302,19 @@ private
       # `full_messages_for` here will remove any `^`s defined in the validator or en.yml.
       # We still need it for later, so re-add it.
       # jsonapi_errors will throw if it's given an array, so we call `.first`.
-      message = "^" + enrichment.errors.full_messages_for(field).first.to_s
-      errors.add field.to_sym, message
+
+      if field == :accrediting_provider_enrichments
+        enrichment.errors.details[field].each { |item|
+          provider_name = accrediting_providers.find { |accrediting_provider| accrediting_provider.provider_code == item[:value].first.UcasProviderCode }.provider_name
+
+          message = "^Reduce the word count for #{provider_name}"
+          errors.add :accredited_bodies, message
+        }
+
+      else
+        message = "^" + enrichment.errors.full_messages_for(field).first.to_s
+        errors.add field.to_sym, message
+      end
     end
   end
 

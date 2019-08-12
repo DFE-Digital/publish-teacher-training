@@ -61,9 +61,10 @@ describe 'PATCH /providers/:provider_code' do
         }.to(change { provider.reload.enrichments.count }.from(0).to(1))
 
         expect(provider.enrichments.draft.first.accrediting_provider_enrichments.count).to eq(courses.size)
-        expect(provider.enrichments.draft.first.accrediting_provider_enrichments.first).to eq(
-          "Description" => new_description, "UcasProviderCode" => accrediting_provider.provider_code
-        )
+
+        accrediting_provider_enrichment = provider.enrichments.draft.first.accrediting_provider_enrichments.first
+        expect(accrediting_provider_enrichment.Description).to eq(new_description)
+        expect(accrediting_provider_enrichment.UcasProviderCode).to eq(accrediting_provider.provider_code)
 
         expect(response).to have_http_status(:ok)
         accredited_body = JSON.parse(response.body).dig("data", "attributes", "accredited_bodies").first
@@ -71,6 +72,60 @@ describe 'PATCH /providers/:provider_code' do
         expect(accredited_body.dig("provider_code")).to eq(accrediting_provider.provider_code)
         expect(accredited_body.dig("provider_name")).to eq(accrediting_provider.provider_name)
         expect(accredited_body.dig("description")).to eq(new_description)
+      end
+
+      context 'failed validation' do
+        let(:new_description) {
+          Faker::Lorem.sentence(word_count: 101)
+        }
+        it "creates a draft enrichment for the provider with the accredited body enrichment" do
+          expect {
+            patch_request(enrichment_payload)
+          }.to_not(change { provider.reload.enrichments.count })
+        end
+        let(:json_data) { JSON.parse(subject.body)['errors'] }
+        subject do
+          patch_request(enrichment_payload)
+          response
+        end
+
+        it { should have_http_status(:unprocessable_entity) }
+
+        it 'has validation error details' do
+          expect(json_data.count).to eq 1
+          expect(json_data[0]["detail"]).to eq("Reduce the word count for #{accrediting_provider.provider_name}")
+        end
+
+        it 'has validation error pointers' do
+          expect(json_data[0]["source"]["pointer"]).to eq("/data/attributes/accredited_bodies")
+        end
+      end
+
+      context 'failed validation' do
+        let(:new_description) {
+          Faker::Lorem.sentence(word_count: 101)
+        }
+        it "creates a draft enrichment for the provider with the accredited body enrichment" do
+          expect {
+            patch_request(enrichment_payload)
+          }.to_not(change { provider.reload.enrichments.count })
+        end
+        let(:json_data) { JSON.parse(subject.body)['errors'] }
+        subject do
+          patch_request(enrichment_payload)
+          response
+        end
+
+        it { should have_http_status(:unprocessable_entity) }
+
+        it 'has validation error details' do
+          expect(json_data.count).to eq 1
+          expect(json_data[0]["detail"]).to eq("Reduce the word count for #{accrediting_provider.provider_name}")
+        end
+
+        it 'has validation error pointers' do
+          expect(json_data[0]["source"]["pointer"]).to eq("/data/attributes/accredited_bodies")
+        end
       end
     end
 
@@ -86,9 +141,10 @@ describe 'PATCH /providers/:provider_code' do
         }.to_not(change { provider.reload.enrichments.count })
 
         expect(provider.enrichments.draft.first.accrediting_provider_enrichments.count).to eq(courses.size)
-        expect(provider.enrichments.draft.first.accrediting_provider_enrichments.first).to eq(
-          "Description" => new_description, "UcasProviderCode" => accrediting_provider.provider_code
-        )
+
+        accrediting_provider_enrichment = provider.enrichments.draft.first.accrediting_provider_enrichments.first
+        expect(accrediting_provider_enrichment.Description).to eq(new_description)
+        expect(accrediting_provider_enrichment.UcasProviderCode).to eq(accrediting_provider.provider_code)
 
         expect(response).to have_http_status(:ok)
         accredited_body = JSON.parse(response.body).dig("data", "attributes", "accredited_bodies").first
@@ -116,9 +172,10 @@ describe 'PATCH /providers/:provider_code' do
         }.to(change { provider.reload.enrichments.count }.from(0).to(1))
 
         expect(provider.enrichments.draft.first.accrediting_provider_enrichments.count).to eq(courses.size)
-        expect(provider.enrichments.draft.first.accrediting_provider_enrichments.first).to eq(
-          "Description" => new_description, "UcasProviderCode" => accrediting_provider.provider_code
-        )
+        accrediting_provider_enrichment = provider.enrichments.draft.first.accrediting_provider_enrichments.first
+
+        expect(accrediting_provider_enrichment.Description).to eq(new_description)
+        expect(accrediting_provider_enrichment.UcasProviderCode).to eq(accrediting_provider.provider_code)
 
         expect(response).to have_http_status(:ok)
         accredited_body = JSON.parse(response.body).dig("data", "attributes", "accredited_bodies").first
@@ -141,9 +198,10 @@ describe 'PATCH /providers/:provider_code' do
         }.to_not(change { provider.reload.enrichments.count })
 
         expect(provider.enrichments.draft.first.accrediting_provider_enrichments.count).to eq(courses.size)
-        expect(provider.enrichments.draft.first.accrediting_provider_enrichments.first).to eq(
-          "Description" => new_description, "UcasProviderCode" => accrediting_provider.provider_code
-        )
+
+        accrediting_provider_enrichment = provider.enrichments.draft.first.accrediting_provider_enrichments.first
+        expect(accrediting_provider_enrichment.Description).to eq(new_description)
+        expect(accrediting_provider_enrichment.UcasProviderCode).to eq(accrediting_provider.provider_code)
 
         expect(response).to have_http_status(:ok)
         accredited_body = JSON.parse(response.body).dig("data", "attributes", "accredited_bodies").first
