@@ -21,6 +21,17 @@ describe ProviderEnrichment, type: :model do
     it { should belong_to(:provider) }
   end
 
+  describe 'auditing' do
+    it { should be_audited }
+
+    it 'can link to Provider' do
+      provider = create(:provider)
+      provider_enrichment = create(:provider_enrichment, provider: provider)
+
+      expect(provider_enrichment.audits.last.associated).to eq(provider)
+    end
+  end
+
   describe '#has_been_published_before?' do
     context 'when the enrichment is an initial draft' do
       subject { create(:provider_enrichment, :initial_draft) }
