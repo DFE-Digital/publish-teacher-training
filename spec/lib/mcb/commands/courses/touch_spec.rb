@@ -14,12 +14,7 @@ describe 'mcb courses touch' do
   end
 
   let(:course) { create :course, updated_at: 1.day.ago, changed_at: 1.day.ago, provider: provider }
-  let(:rolled_over_course) do
-    new_course = course.dup
-    new_course.update(provider: rolled_over_provider)
-    new_course.save
-    new_course
-  end
+  let(:rolled_over_course) { create(:course, provider: rolled_over_provider) }
 
   context 'when the recruitment year is unspecified' do
     it 'updates the course updated_at for the current recruitment cycle' do

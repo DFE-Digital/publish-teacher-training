@@ -21,7 +21,7 @@ describe API::V2::SerializableCourse do
   subject { parsed_json['data'] }
 
   it { should have_type('courses') }
-  it { should have_attribute(:start_date).with_value(time_now.iso8601) }
+  it { should have_attribute(:start_date).with_value(time_now.strftime("%B %Y")) }
   it { should have_attribute :content_status }
   it { should have_attribute :ucas_status }
   it { should have_attribute :funding }

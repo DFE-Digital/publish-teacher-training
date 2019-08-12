@@ -23,6 +23,7 @@ module API
         science
         qualification
         age_range_in_years
+        start_date
       ].freeze
 
       attributes(*COURSE_ATTRIBUTES)

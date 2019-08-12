@@ -80,7 +80,7 @@ describe 'Courses API v2', type: :request do
                 "has_vacancies?" => true,
                 "name" => provider.courses[0].name,
                 "course_code" => provider.courses[0].course_code,
-                "start_date" => provider.courses[0].start_date.iso8601,
+                "start_date" => provider.courses[0].start_date.strftime("%B %Y"),
                 "study_mode" => "full_time",
                 "qualification" => "pgce_with_qts",
                 "description" => "PGCE with QTS full time teaching apprenticeship",
@@ -129,7 +129,8 @@ describe 'Courses API v2', type: :request do
                 "edit_options" => {
                   "entry_requirements" => %w[must_have_qualification_at_application_time expect_to_achieve_before_training_begins equivalence_test],
                   "qualifications" => %w[qts pgce_with_qts pgde_with_qts],
-                  "age_range_in_years" => %w[3_to_7 5_to_11 7_to_11 7_to_14]
+                  "age_range_in_years" => %w[3_to_7 5_to_11 7_to_11 7_to_14],
+                  "start_dates" => ["August 2019", "September 2019", "October 2019", "November 2019", "December 2019", "January 2020", "February 2020", "March 2020", "April 2020", "May 2020", "June 2020", "July 2020"]
                 }
               }
             },
@@ -244,7 +245,7 @@ describe 'Courses API v2', type: :request do
               "has_vacancies?" => true,
               "name" => provider.courses[0].name,
               "course_code" => provider.courses[0].course_code,
-              "start_date" => provider.courses[0].start_date.iso8601,
+              "start_date" => provider.courses[0].start_date.strftime("%B %Y"),
               "study_mode" => "full_time",
               "qualification" => "pgce_with_qts",
               "description" => "PGCE with QTS full time teaching apprenticeship",
@@ -293,7 +294,8 @@ describe 'Courses API v2', type: :request do
               "edit_options" => {
                 "entry_requirements" => %w[must_have_qualification_at_application_time expect_to_achieve_before_training_begins equivalence_test],
                 "qualifications" => %w[qts pgce_with_qts pgde_with_qts],
-                "age_range_in_years" => %w[3_to_7 5_to_11 7_to_11 7_to_14]
+                "age_range_in_years" => %w[3_to_7 5_to_11 7_to_11 7_to_14],
+                "start_dates" => ["August 2019", "September 2019", "October 2019", "November 2019", "December 2019", "January 2020", "February 2020", "March 2020", "April 2020", "May 2020", "June 2020", "July 2020"]
               }
             },
           }],

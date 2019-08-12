@@ -126,7 +126,8 @@ module API
                   :maths,
                   :science,
                   :qualification,
-                  :age_range_in_years)
+                  :age_range_in_years,
+                  :start_date)
           .permit(
             :about_course,
             :course_length,
@@ -169,6 +170,7 @@ module API
             :science,
             :qualification,
             :age_range_in_years,
+            :start_date
           )
       end
 

@@ -21,12 +21,11 @@ describe 'mcb courses show' do
 
   let(:course) { create(:course, name: 'P', provider: provider, subjects: [subject1], site_statuses: [site_status1]) }
   let(:rolled_over_course) do
-    new_course = course.dup
-    new_course.update(provider: rolled_over_provider)
-    new_course.update(subjects: [subject2])
-    new_course.update(site_statuses: [site_status2])
-    new_course.save
-    new_course
+    create(:course,
+           name: 'P',
+           provider: rolled_over_provider,
+           subjects: [subject2],
+           site_statuses: [site_status2])
   end
 
   context 'when the recruitment year is unspecified' do

@@ -36,7 +36,25 @@ class EditCourseOptions
     {
       entry_requirements: entry_requirements,
       qualifications: qualifications,
-      age_range_in_years: age_range_in_years
+      age_range_in_years: age_range_in_years,
+      start_dates: start_dates
     }
+  end
+
+  def start_dates
+    recruitment_year = @course.provider.recruitment_cycle.year.to_i
+
+    ["August #{recruitment_year}",
+     "September #{recruitment_year}",
+     "October #{recruitment_year}",
+     "November #{recruitment_year}",
+     "December #{recruitment_year}",
+     "January #{recruitment_year + 1}",
+     "February #{recruitment_year + 1}",
+     "March #{recruitment_year + 1}",
+     "April #{recruitment_year + 1}",
+     "May #{recruitment_year + 1}",
+     "June #{recruitment_year + 1}",
+     "July #{recruitment_year + 1}"]
   end
 end
