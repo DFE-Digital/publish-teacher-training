@@ -86,7 +86,9 @@ describe 'Courses API v2', type: :request do
             perform_enqueued_jobs do
               subject
             end
-            expect(stubbed_request).to have_been_requested
+
+            expect(WebMock)
+              .to have_requested(:put, "#{Settings.search_api.base_url}/api/courses/")
           end
         end
       end
