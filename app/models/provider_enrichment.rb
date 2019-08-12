@@ -49,8 +49,8 @@ class ProviderEnrichment < ApplicationRecord
                  accrediting_provider_enrichments: [:json,
                                                     store_key: 'AccreditingProviderEnrichments']
 
-  validates :train_with_us, words_count: { maximum: 250 }
-  validates :train_with_disability, words_count: { maximum: 250 }
+  validates :train_with_us, words_count: { maximum: 250, message: "^Reduce the word count for training with you" }
+  validates :train_with_disability, words_count: { maximum: 250, message: "^Reduce the word count for training with disabilities and other needs" }
 
   validates :email, :website, :telephone,
             :address1, :address3, :address4,
