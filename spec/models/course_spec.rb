@@ -531,7 +531,7 @@ RSpec.describe Course, type: :model do
       its(:is_send?) { should be_falsey }
 
       context "with a SEND subject" do
-        subject { create(:course, subjects: [create(:send_subject)]) }
+        subject { create(:course, is_send: true) }
         its(:is_send?) { should be_truthy }
       end
     end

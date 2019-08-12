@@ -10,7 +10,6 @@ describe 'Courses API v2', type: :request do
   end
   let(:course_subject_primary) { find_or_create(:subject, :primary) }
   let(:course_subject_mathematics) { find_or_create(:subject, :mathematics) }
-  let(:course_subject_send) { find_or_create(:send_subject) }
 
   let(:findable_open_course) {
     create(:course, :resulting_in_pgce_with_qts, :with_apprenticeship,
@@ -18,7 +17,8 @@ describe 'Courses API v2', type: :request do
            provider: provider,
            start_date: Time.now.utc,
            study_mode: :full_time,
-           subjects: [course_subject_primary, course_subject_mathematics, course_subject_send],
+           subjects: [course_subject_primary, course_subject_mathematics],
+           is_send: true,
            site_statuses: [courses_site_status],
            enrichments: [enrichment],
            maths: :must_have_qualification_at_application_time,

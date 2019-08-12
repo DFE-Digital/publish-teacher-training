@@ -435,7 +435,7 @@ describe "Courses API", type: :request do
     end
 
     context 'with a SEND course' do
-      let(:course) { create(:course, provider: provider, subjects: [create(:subject), create(:send_subject)]) }
+      let(:course) { create(:course, provider: provider, is_send: true, subjects: [create(:subject)]) }
       let(:site) { create(:site_status, :published, course: course) }
 
       before do
@@ -454,6 +454,10 @@ describe "Courses API", type: :request do
         expect(json['subjects']).to include(
           'subject_code' => 'U3', 'subject_name' => 'Special Educational Needs'
         )
+      end
+
+      it 'does not create a SEND subject' do
+        expect(Subject.where(subject_code: 'U3').count).to eq(0)
       end
     end
   end

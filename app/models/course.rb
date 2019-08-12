@@ -24,6 +24,7 @@
 #  discarded_at              :datetime
 #  age_range_in_years        :string
 #  applications_open_from    :date
+#  is_send                   :boolean          default(false)
 #
 
 class Course < ApplicationRecord
@@ -276,10 +277,6 @@ class Course < ApplicationRecord
 
   def level
     Subjects::CourseLevel.new(subjects.map(&:subject_name)).level
-  end
-
-  def is_send?
-    subjects.any?(&:is_send?)
   end
 
   def is_fee_based?

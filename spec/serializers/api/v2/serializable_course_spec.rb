@@ -143,7 +143,7 @@ describe API::V2::SerializableCourse do
     it { expect(subject["attributes"]).to include("is_send?" => false) }
 
     context "with a SEND subject" do
-      let(:course) { create(:course, subjects: [find_or_create(:send_subject)]) }
+      let(:course) { create(:course, is_send: true) }
       it { expect(subject["attributes"]).to include("is_send?" => true) }
     end
   end
