@@ -6,12 +6,12 @@ module Courses
     include QualificationOptions
     include StartDateOptions
     included do
-      def edit_course_options(course)
+      def edit_course_options
         {
           entry_requirements: entry_requirements,
-          qualifications: qualification_options(course),
-          age_range_in_years: age_range_options(course),
-          start_dates: start_date_options(course)
+          qualifications: qualification_options,
+          age_range_in_years: age_range_options,
+          start_dates: start_date_options
         }
       end
     end

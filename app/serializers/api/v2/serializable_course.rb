@@ -8,7 +8,7 @@ module API
           end
         end
       end
-      include Courses::EditCourseOptions
+
       type 'courses'
 
       attributes :findable?, :open_for_applications?, :has_vacancies?,
@@ -67,7 +67,7 @@ module API
 
       meta do
         {
-          edit_options: edit_course_options(@object)
+          edit_options: @object.edit_course_options
         }
       end
     end

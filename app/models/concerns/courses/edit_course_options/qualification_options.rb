@@ -3,9 +3,9 @@ module Courses
     module QualificationOptions
       extend ActiveSupport::Concern
       included do
-        def qualification_options(course)
+        def qualification_options
           qualifications_with_qts, qualifications_without_qts = Course::qualifications.keys.partition { |q| q.include?('qts') }
-          course.level == :further_education ? qualifications_without_qts : qualifications_with_qts
+          level == :further_education ? qualifications_without_qts : qualifications_with_qts
         end
       end
     end

@@ -13,8 +13,8 @@ RSpec.describe Course, type: :model do
   context 'qualifications' do
     context 'for a course that’s not further education' do
       it 'returns only QTS options for users to choose between' do
-        expect(course.qualification_options(course)).to eq(%w[qts pgce_with_qts pgde_with_qts])
-        course.qualification_options(course).each do |q|
+        expect(course.qualification_options).to eq(%w[qts pgce_with_qts pgde_with_qts])
+        course.qualification_options.each do |q|
           expect(q.include?('qts')).to be_truthy
         end
       end
@@ -23,8 +23,8 @@ RSpec.describe Course, type: :model do
     context 'for a further education course' do
       let(:subjects) { create(:further_education_subject) }
       it 'returns only QTS options for users to choose between' do
-        expect(course.qualification_options(course)).to eq(%w[pgce pgde])
-        course.qualification_options(course).each do |q|
+        expect(course.qualification_options).to eq(%w[pgce pgde])
+        course.qualification_options.each do |q|
           expect(q.include?('qts')).to be_falsy
         end
       end
@@ -34,14 +34,14 @@ RSpec.describe Course, type: :model do
   context 'age_range' do
     context 'for primary' do
       it 'returns the correct ages range for users to co choose between' do
-        expect(course.age_range_options(course)).to eq(%w[3_to_7 5_to_11 7_to_11 7_to_14])
+        expect(course.age_range_options).to eq(%w[3_to_7 5_to_11 7_to_11 7_to_14])
       end
     end
 
     context 'for secondary' do
       let(:subjects) { create(:subject, :secondary) }
       it 'returns the correct age ranges for users to co choose between' do
-        expect(course.age_range_options(course)).to eq(%w[11_to_16 11_to_18 14_to_19])
+        expect(course.age_range_options).to eq(%w[11_to_16 11_to_18 14_to_19])
       end
     end
   end
@@ -50,7 +50,7 @@ RSpec.describe Course, type: :model do
     let(:recruitment_year) { course.provider.recruitment_cycle.year.to_i }
 
     it 'should return the correct options for the recruitment_cycle' do
-      expect(course.start_date_options(course)).to eq(
+      expect(course.start_date_options).to eq(
         ["August #{recruitment_year}",
          "September #{recruitment_year}",
          "October #{recruitment_year}",

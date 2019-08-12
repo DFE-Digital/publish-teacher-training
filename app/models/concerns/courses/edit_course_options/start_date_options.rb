@@ -3,8 +3,8 @@ module Courses
     module StartDateOptions
       extend ActiveSupport::Concern
       included do
-        def start_date_options(course)
-          recruitment_year = course.provider.recruitment_cycle.year.to_i
+        def start_date_options
+          recruitment_year = provider.recruitment_cycle.year.to_i
 
           ["August #{recruitment_year}",
            "September #{recruitment_year}",

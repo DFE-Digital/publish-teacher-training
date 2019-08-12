@@ -3,8 +3,8 @@ module Courses
     module AgeRangeOptions
       extend ActiveSupport::Concern
       included do
-        def age_range_options(course)
-          case course.level
+        def age_range_options
+          case level
           when :primary
             %w[
               3_to_7
