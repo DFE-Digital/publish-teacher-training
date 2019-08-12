@@ -433,5 +433,28 @@ describe "Courses API", type: :request do
         expect(data.first['campus_statuses'].first['campus_code']).to eq(status3.site.code)
       end
     end
+
+    context 'with a SEND course' do
+      let(:course) { create(:course, provider: provider, subjects: [create(:subject), create(:send_subject)]) }
+      let(:site) { create(:site_status, :published, course: course) }
+
+      before do
+        course
+        site
+
+        get '/api/v1/courses', headers: { 'HTTP_AUTHORIZATION' => credentials }
+      end
+
+      it 'contains a SEND subject' do
+        json = JSON.parse(response.body).first
+
+        expect(json).to_not have_key('is_send') # API v2
+
+        expect(json['subjects'].length).to eq(2)
+        expect(json['subjects']).to include(
+          'subject_code' => 'U3', 'subject_name' => 'Special Educational Needs'
+        )
+      end
+    end
   end
 end
