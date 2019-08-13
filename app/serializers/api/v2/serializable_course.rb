@@ -67,7 +67,7 @@ module API
 
       meta do
         {
-          edit_options: @object.edit_options.all
+          edit_options: @object.edit_course_options
         }
       end
     end

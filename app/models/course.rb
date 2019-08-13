@@ -30,6 +30,7 @@ class Course < ApplicationRecord
   include Discard::Model
   include WithQualifications
   include ChangedAt
+  include Courses::EditOptions
 
   after_initialize :set_defaults
 
@@ -266,10 +267,6 @@ class Course < ApplicationRecord
     end
   end
 
-  def edit_options
-    @edit_options ||= EditCourseOptions.new(self)
-  end
-
   def dfe_subjects
     SubjectMapperService.get_subject_list(name, subjects.map(&:subject_name))
   end
@@ -455,7 +452,7 @@ private
   end
 
   def validate_qualification
-    errors.add(:qualification, "^#{qualifications_description} is not valid for a #{level.to_s.humanize.downcase} course") unless edit_options.qualifications.include?(qualification)
+    errors.add(:qualification, "^#{qualifications_description} is not valid for a #{level.to_s.humanize.downcase} course") unless qualification_options.include?(qualification)
   end
 
   def set_applications_open_from
@@ -464,7 +461,7 @@ private
 
   def validate_start_date
     if provider.present?
-      errors.add :start_date, "#{start_date.strftime('%B %Y')} is not in the #{recruitment_cycle.year} cycle" unless edit_options.start_dates.include?(start_date.strftime('%B %Y'))
+      errors.add :start_date, "#{start_date.strftime('%B %Y')} is not in the #{recruitment_cycle.year} cycle" unless start_date_options.include?(start_date.strftime('%B %Y'))
     end
   end
 end
