@@ -22,13 +22,37 @@ describe ProviderEnrichment, type: :model do
   end
 
   describe 'auditing' do
-    it { should be_audited }
+    it { should be_audited.except(:json_data) }
 
     it 'can link to Provider' do
       provider = create(:provider)
       provider_enrichment = create(:provider_enrichment, provider: provider)
 
       expect(provider_enrichment.audits.last.associated).to eq(provider)
+    end
+
+    context 'when dealing with a `jsonb_accessor` attribute' do
+      let(:accrediting_provider_enrichment) do
+        { "UcasProviderCode" => "ABC", "Description" => "A test value" }
+      end
+      let(:provider_enrichment) { create(:provider_enrichment) }
+
+      before do
+        provider_enrichment.accrediting_provider_enrichments = [accrediting_provider_enrichment]
+        provider_enrichment.save
+      end
+
+      it 'does not audit `json_data` attribute' do
+        expect(provider_enrichment.audits.last.audited_changes).to_not have_key('json_data')
+      end
+
+      it 'does include `accrediting_provider_enrichments` at top level of audited_changes' do
+        changes = provider_enrichment.audits.last.audited_changes
+        expect(changes['accrediting_provider_enrichments']).to include(
+          nil,
+          [include(accrediting_provider_enrichment)]
+        )
+      end
     end
   end
 

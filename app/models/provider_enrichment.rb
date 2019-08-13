@@ -23,7 +23,9 @@ class ProviderEnrichment < ApplicationRecord
 
   belongs_to :provider,
              inverse_of: 'enrichments'
-  audited associated_with: :provider
+
+  audited except: :json_data,
+          associated_with: :provider
 
   scope :latest_created_at, -> { order(created_at: :desc) }
   scope :latest_published_at, -> { order(last_published_at: :desc) }
