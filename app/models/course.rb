@@ -147,6 +147,7 @@ class Course < ApplicationRecord
   validates :english, inclusion: { in: entry_requirement_options_without_nil_choice }
   validates :science, inclusion: { in: entry_requirement_options_without_nil_choice }, if: :gcse_science_required?
   validates :enrichments, presence: true, on: :publish
+  validates :is_send, inclusion: { in: [true, false] }
   validate :validate_enrichment_publishable, on: :publish
   validate :validate_enrichment
   validate :validate_course_syncable, on: :sync
@@ -161,6 +162,16 @@ class Course < ApplicationRecord
     RecruitmentCycle.find_by(year: year)
       .providers.find_by(provider_code: provider_code)
       .courses.find_by(course_code: course_code)
+  end
+
+  # To stop the API sending not valid values we have to write our own setter to ensure we get
+  # correct booleans stored.
+  def is_send=(value)
+    if value.to_s.in?(%w[true false 0 1])
+      super(value)
+    else
+      super(nil)
+    end
   end
 
   def recruitment_cycle
