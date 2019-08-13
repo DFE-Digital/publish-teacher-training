@@ -128,7 +128,8 @@ module API
                   :qualification,
                   :age_range_in_years,
                   :start_date,
-                  :applications_open_from)
+                  :applications_open_from,
+                  :study_mode,)
           .permit(
             :about_course,
             :course_length,
@@ -173,6 +174,7 @@ module API
             :age_range_in_years,
             :start_date,
             :applications_open_from,
+            :study_mode,
           )
       end
 
