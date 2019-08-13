@@ -1049,7 +1049,7 @@ RSpec.describe Course, type: :model do
     context 'a new course within a recruitment cycle' do
       let(:recruitment_cycle) { build :recruitment_cycle, :next }
       let(:provider)          { build :provider, recruitment_cycle: recruitment_cycle }
-      let(:subject) { create :course, provider: provider }
+      let(:subject) { create :course, :applications_open_from_not_set, provider: provider }
 
       its(:applications_open_from) { should eq recruitment_cycle.application_start_date }
     end

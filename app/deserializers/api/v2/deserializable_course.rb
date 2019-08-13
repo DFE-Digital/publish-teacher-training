@@ -24,6 +24,7 @@ module API
         qualification
         age_range_in_years
         start_date
+        applications_open_from
       ].freeze
 
       attributes(*COURSE_ATTRIBUTES)

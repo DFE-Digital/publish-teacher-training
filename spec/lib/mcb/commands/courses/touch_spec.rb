@@ -13,7 +13,7 @@ describe 'mcb courses touch' do
     new_provider
   end
 
-  let(:course) { create :course, updated_at: 1.day.ago, changed_at: 1.day.ago, provider: provider }
+  let(:course) { create :course, updated_at: 1.day.ago, changed_at: 1.day.ago, provider: provider, applications_open_from: DateTime.new(provider.recruitment_cycle.year.to_i, 1, 1) }
   let(:rolled_over_course) { create(:course, provider: rolled_over_provider) }
 
   context 'when the recruitment year is unspecified' do

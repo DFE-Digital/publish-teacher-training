@@ -149,7 +149,10 @@ class Course < ApplicationRecord
   validate :validate_enrichment_publishable, on: :publish
   validate :validate_enrichment
   validate :validate_course_syncable, on: :sync
+
   validate :validate_qualification, :validate_start_date, on: :update
+  validate :validate_qualification, on: :update
+  validate :validate_applications_open_from, on: :update
 
   after_validation :remove_unnecessary_enrichments_validation_message
 
@@ -463,5 +466,16 @@ private
     if provider.present?
       errors.add :start_date, "#{start_date.strftime('%B %Y')} is not in the #{recruitment_cycle.year} cycle" unless start_date_options.include?(start_date.strftime('%B %Y'))
     end
+  end
+
+  def validate_applications_open_from
+    if provider.present? && valid_date_range.exclude?(applications_open_from)
+      errors.add(:applications_open_from, "#{applications_open_from} is not valid for the #{provider.recruitment_cycle.year} cycle. " +
+        "A valid date must be between 1/10/#{recruitment_cycle.year.to_i - 1} and 30/09/#{recruitment_cycle.year}")
+    end
+  end
+
+  def valid_date_range
+    DateTime.new(recruitment_cycle.year.to_i - 1, 10, 1)..DateTime.new(recruitment_cycle.year.to_i, 9, 30)
   end
 end
