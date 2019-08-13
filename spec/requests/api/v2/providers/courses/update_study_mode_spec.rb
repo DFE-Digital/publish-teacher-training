@@ -21,7 +21,7 @@ describe 'PATCH /providers/:provider_code/courses/:course_code' do
           }
   end
   let(:organisation)      { create :organisation }
-  let(:provider)          { create :provider, organisations: [organisation] }
+  let(:provider)          { create :provider, organisations: [organisation], sites: [site] }
   let(:user)              { create :user, organisations: [organisation] }
   let(:payload)           { { email: user.email } }
   let(:token)             { build_jwt :apiv2, payload: payload }
@@ -29,9 +29,15 @@ describe 'PATCH /providers/:provider_code/courses/:course_code' do
   let(:course)            {
     create :course,
            provider: provider,
-           study_mode: study_mode
+           study_mode: study_mode,
+           site_statuses: [site_status1, site_status2, site_status3, site_status4]
   }
-  let(:study_mode) { :full_time }
+  let(:site_status1) { build(:site_status, :part_time_vacancies, site: site) }
+  let(:site_status2) { build(:site_status, :full_time_vacancies, site: site) }
+  let(:site_status3) { build(:site_status, :both_full_time_and_part_time_vacancies, site: site) }
+  let(:site_status4) { build(:site_status, :with_no_vacancies, site: site) }
+  let(:site) { build(:site) }
+  let(:study_mode) { :full_time_or_part_time }
 
   let(:credentials) do
     ActionController::HttpAuthentication::Token.encode_credentials(token)
@@ -45,7 +51,26 @@ describe 'PATCH /providers/:provider_code/courses/:course_code' do
     perform_request(updated_study_mode)
   end
 
-  context "course has an updated age range in years" do
+  context "course has is updated to full time" do
+    let(:updated_study_mode) { { study_mode: :full_time } }
+
+    it "returns http success" do
+      expect(response).to have_http_status(:success)
+    end
+
+    it "updates the study_mode attribute to the correct value" do
+      expect(course.reload.study_mode).to eq(updated_study_mode[:study_mode].to_s)
+    end
+
+    it 'should update all site_statuses vac_status to full_time_vacancies except no_vacancies' do
+      expect(site_status1.reload.vac_status).to eq('full_time_vacancies')
+      expect(site_status2.reload.vac_status).to eq('full_time_vacancies')
+      expect(site_status3.reload.vac_status).to eq('full_time_vacancies')
+      expect(site_status4.reload.vac_status).to eq('no_vacancies')
+    end
+  end
+
+  context 'when a course is updated to part time' do
     let(:updated_study_mode) { { study_mode: :part_time } }
 
     it "returns http success" do
@@ -54,6 +79,13 @@ describe 'PATCH /providers/:provider_code/courses/:course_code' do
 
     it "updates the study_mode attribute to the correct value" do
       expect(course.reload.study_mode).to eq(updated_study_mode[:study_mode].to_s)
+    end
+
+    it 'should update all site_statuses vac_status to part_time_vacancies except no_vacancies' do
+      expect(site_status1.reload.vac_status).to eq('part_time_vacancies')
+      expect(site_status2.reload.vac_status).to eq('part_time_vacancies')
+      expect(site_status3.reload.vac_status).to eq('part_time_vacancies')
+      expect(site_status4.reload.vac_status).to eq('no_vacancies')
     end
   end
 
@@ -69,7 +101,7 @@ describe 'PATCH /providers/:provider_code/courses/:course_code' do
       expect(response).to have_http_status(:success)
     end
 
-    it "does not change age_range_in_years attribute" do
+    it "does not change study_mode attribute" do
       expect(course.reload.study_mode).to eq(courses_study_mode)
     end
   end
