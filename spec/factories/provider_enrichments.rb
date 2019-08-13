@@ -33,7 +33,7 @@ FactoryBot.define do
     address3 { Faker::Address.city }
     address4 { Faker::Address.state }
     postcode { Faker::Address.postcode }
-    telephone { Faker::PhoneNumber.phone_number }
+    telephone { '01234 123 123 ext 123' }
     region_code { 'eastern' }
     train_with_us { Faker::Lorem.sentence.to_s }
     train_with_disability { Faker::Lorem.sentence.to_s }

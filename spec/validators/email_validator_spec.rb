@@ -1,5 +1,15 @@
 describe EmailValidator do
-  let(:model) { ExampleModel.new }
+  let(:model) do
+    cls = Class.new do
+      include ActiveRecord::Validations
+
+      attr_accessor :email
+
+      validates :email, email: true
+    end
+
+    cls.new
+  end
 
   describe 'With nil email address' do
     before do
@@ -53,15 +63,5 @@ describe EmailValidator do
 
       expect(model.valid?(:no_context)).to be true
     end
-  end
-
-private
-
-  class ExampleModel
-    include ActiveRecord::Validations
-
-    attr_accessor :email
-
-    validates :email, email: true
   end
 end

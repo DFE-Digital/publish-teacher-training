@@ -59,7 +59,7 @@ en:
             website:
               blank: "^Enter website"
             telephone:
-              blank: "^Enter telephone"
+              blank: "^Enter a valid telephone number"
             address1:
               blank: "^Enter building or street"
             address3:

@@ -100,7 +100,7 @@ describe 'Provider Publish API v2', type: :request do
           expect(json_data.count).to eq 9
           expect(json_data[0]["detail"]).to eq("Enter an email address in the correct format, like name@example.com")
           expect(json_data[1]["detail"]).to eq("Enter website")
-          expect(json_data[2]["detail"]).to eq("Enter telephone")
+          expect(json_data[2]["detail"]).to eq("Enter a valid telephone number")
           expect(json_data[3]["detail"]).to eq("Enter building or street")
           expect(json_data[4]["detail"]).to eq("Enter town or city")
           expect(json_data[5]["detail"]).to eq("Enter county")
