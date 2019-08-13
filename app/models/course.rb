@@ -194,7 +194,7 @@ class Course < ApplicationRecord
   end
 
   def update_valid?
-   valid? :update
+    valid? :update
   end
 
   def findable?
@@ -466,10 +466,12 @@ private
     if provider.present?
       errors.add :start_date, "#{start_date.strftime('%B %Y')} is not in the #{recruitment_cycle.year} cycle" unless start_date_options.include?(start_date.strftime('%B %Y'))
     end
+  end
 
   def validate_applications_open_from
-    if provider.present?
-      errors.add(:applications_open_from, "#{applications_open_from} is not valid for the #{provider.recruitment_cycle.year} cycle") unless valid_date_range.cover?(applications_open_from)
+    if provider.present? && valid_date_range.exclude?(applications_open_from)
+      errors.add(:applications_open_from, "#{applications_open_from} is not valid for the #{provider.recruitment_cycle.year} cycle. " +
+        "A valid date must be between 1/10/#{recruitment_cycle.year.to_i - 1} and 30/09/#{recruitment_cycle.year}")
     end
   end
 

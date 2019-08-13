@@ -164,18 +164,15 @@ module API
                   :id,
                   :type,
                   :sites_ids,
-                  :sites_types)
+                  :sites_types,)
           .permit(
             :english,
             :maths,
             :science,
             :qualification,
             :age_range_in_years,
-<<<<<<< HEAD
-            :start_date
-=======
-            :applications_open_from
->>>>>>> [1856] Permit applications open attribute and add request spec
+            :start_date,
+            :applications_open_from,
           )
       end
 

@@ -41,7 +41,7 @@ FactoryBot.define do
     science { :must_have_qualification_at_application_time }
     resulting_in_pgce_with_qts
     start_date { DateTime.new(provider.recruitment_cycle.year.to_i, 9, 1) }
-    applications_open_from { provider.recruitment_cycle.application_start_date }
+    applications_open_from { Faker::Time.between(from: DateTime.new(provider.recruitment_cycle.year.to_i - 1, 10, 1), to: DateTime.new(provider.recruitment_cycle.year.to_i, 9, 29)) }
 
     transient do
       age { nil }
@@ -123,6 +123,10 @@ FactoryBot.define do
 
     trait :salary_type_based do
       program_type { %i[pg_teaching_apprenticeship school_direct_salaried_training_programme].sample }
+    end
+
+    trait :applications_open_from_not_set do
+      applications_open_from { nil }
     end
   end
 end
