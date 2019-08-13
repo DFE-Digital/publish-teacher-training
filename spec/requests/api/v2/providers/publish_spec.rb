@@ -73,15 +73,10 @@ describe 'Provider Publish API v2', type: :request do
       context 'when the sync API is available' do
         let(:sync_body) { include("\"ProgrammeCode\":\"#{course1.course_code}\"", "\"ProgrammeCode\":\"#{course2.course_code}\"") }
         it 'syncs a providers courses' do
-          subject
+          perform_enqueued_jobs do
+            subject
+          end
           expect(sync_stub).to have_been_requested
-        end
-      end
-
-      context 'when the sync API is unavailable' do
-        let(:search_api_status) { 409 }
-        it 'raises an error' do
-          expect { subject }.to raise_error(RuntimeError, "#{provider} failed to sync these courses #{[course1.course_code, course2.course_code]}")
         end
       end
     end

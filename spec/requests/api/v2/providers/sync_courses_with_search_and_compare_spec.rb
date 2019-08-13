@@ -83,16 +83,12 @@ describe 'Courses API v2', type: :request do
           end
 
           it 'should make the appropriate request' do
-            subject
-            expect(stubbed_request).to have_been_requested
-          end
-        end
+            perform_enqueued_jobs do
+              subject
+            end
 
-        context 'when an unsuccessful external call to search has been made' do
-          let(:status) { 451 }
-
-          it 'should throw an error' do
-            expect { subject }.to raise_error("#{provider} failed to sync these courses #{[syncable_course.course_code]}")
+            expect(WebMock)
+              .to have_requested(:put, "#{Settings.search_api.base_url}/api/courses/")
           end
         end
       end
