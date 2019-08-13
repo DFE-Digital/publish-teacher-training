@@ -81,12 +81,6 @@
         "description": "Auth secret for manage back-end."
       }
     },
-    "settingsManageApiSecret": {
-      "type": "string",
-      "metadata": {
-        "description": "The secret shared between manage courses backend and manage courses API to authorize requests."
-      }
-    },
     "settingsSearchApiSecret": {
       "type": "string",
       "metadata": {
@@ -159,10 +153,6 @@
               {
                 "name": "SETTINGS__AUTHENTICATION__SECRET",
                 "secureValue": "[parameters('settingsAuthenticationSecret')]"
-              },
-              {
-                "name": "SETTINGS__MANAGE_API__SECRET",
-                "secureValue": "[parameters('settingsManageApiSecret')]"
               },
               {
                 "name": "SETTINGS__SEARCH_API__SECRET",
