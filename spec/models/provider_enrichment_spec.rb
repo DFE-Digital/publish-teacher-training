@@ -96,8 +96,35 @@ describe ProviderEnrichment, type: :model do
   end
 
   describe 'validation' do
+    describe 'on update' do
+      let(:provider) { build(:provider) }
+      let(:existing_provider_code) { nil }
+      let(:enrichment) { create(:provider_enrichment, provider: provider, provider_code: existing_provider_code) }
+
+      describe 'email' do
+        it 'validates email is present' do
+          enrichment.email = ""
+          enrichment.valid?
+
+          expect(enrichment.errors[:email]).to include("^Enter an email address in the correct format, like name@example.com")
+        end
+
+        it 'validates email contains an @ symbol' do
+          enrichment.email = "meow"
+          enrichment.valid?
+
+          expect(enrichment.errors[:email]).to include("^Enter an email address in the correct format, like name@example.com")
+        end
+
+        it 'does not validate if the email was not updated' do
+          enrichment.website = "cats4lyf.cat"
+          expect(enrichment.valid?).to be true
+        end
+      end
+    end
+
     describe 'on publish' do
-      it { should validate_presence_of(:email).on(:publish) }
+      it { should validate_presence_of(:email).on(:publish).with_message("^Enter an email address in the correct format, like name@example.com") }
       it { should validate_presence_of(:website).on(:publish) }
       it { should validate_presence_of(:telephone).on(:publish) }
 

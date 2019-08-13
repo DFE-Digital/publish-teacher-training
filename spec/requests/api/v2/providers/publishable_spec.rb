@@ -66,7 +66,7 @@ describe 'Provider Publishable API v2', type: :request do
 
         it 'has validation error details' do
           expect(json_data.count).to eq 9
-          expect(json_data[0]["detail"]).to eq("Enter email address")
+          expect(json_data[0]["detail"]).to eq("Enter an email address in the correct format, like name@example.com")
           expect(json_data[1]["detail"]).to eq("Enter website")
           expect(json_data[2]["detail"]).to eq("Enter telephone")
           expect(json_data[3]["detail"]).to eq("Enter building or street")
