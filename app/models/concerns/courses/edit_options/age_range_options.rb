@@ -1,5 +1,5 @@
 module Courses
-  module EditCourseOptions
+  module EditOptions
     module AgeRangeOptions
       extend ActiveSupport::Concern
       included do

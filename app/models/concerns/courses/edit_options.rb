@@ -1,5 +1,5 @@
 module Courses
-  module EditCourseOptions
+  module EditOptions
     extend ActiveSupport::Concern
     include AgeRangeOptions
     include EntryRequirements

@@ -1,5 +1,5 @@
 module Courses
-  module EditCourseOptions
+  module EditOptions
     module StartDateOptions
       extend ActiveSupport::Concern
       included do

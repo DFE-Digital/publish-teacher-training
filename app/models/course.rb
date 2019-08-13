@@ -30,7 +30,7 @@ class Course < ApplicationRecord
   include Discard::Model
   include WithQualifications
   include ChangedAt
-  include Courses::EditCourseOptions
+  include Courses::EditOptions
 
   after_initialize :set_defaults
 

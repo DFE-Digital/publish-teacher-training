@@ -1,5 +1,5 @@
 module Courses
-  module EditCourseOptions
+  module EditOptions
     module EntryRequirements
       extend ActiveSupport::Concern
       included do
