@@ -18,7 +18,9 @@ module API
       end
 
       def accept_transition_screen
-        @user.accept_transition_screen!
+        if @user.state == 'new'
+          @user.accept_transition_screen!
+        end
       end
 
       def accept_rollover_screen

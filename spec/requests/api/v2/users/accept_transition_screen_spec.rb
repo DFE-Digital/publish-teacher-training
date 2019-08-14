@@ -60,7 +60,7 @@ describe 'PATCH /api/v2/users/:id/accept_transition_screen', type: :request do
       end
 
       it 'returns error' do
-        expect { perform_request }.to raise_error AASM::InvalidTransition
+        expect { perform_request }.not_to raise_error
       end
     end
   end
