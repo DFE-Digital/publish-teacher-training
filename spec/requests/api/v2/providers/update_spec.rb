@@ -53,7 +53,7 @@ describe 'PATCH /providers/:provider_code' do
 
   let(:updated_attributes) do
     {
-      email: 'email_address',
+      email: 'cats@cats4lyf.cat',
       website: 'url',
       address1: 'number',
       address2: 'street',
@@ -202,7 +202,7 @@ describe 'PATCH /providers/:provider_code' do
 
       expect(json_response).to have_id(provider.reload.enrichments.first.id.to_s)
       expect(json_response).to have_type('provider_enrichment')
-      expect(json_response).to have_attribute(:email).with_value('email_address')
+      expect(json_response).to have_attribute(:email).with_value('cats@cats4lyf.cat')
       expect(json_response).to have_attribute(:website).with_value('url')
       expect(json_response).to have_attribute(:address1).with_value('number')
       expect(json_response).to have_attribute(:address2).with_value('street')

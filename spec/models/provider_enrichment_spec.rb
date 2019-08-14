@@ -120,10 +120,64 @@ describe ProviderEnrichment, type: :model do
   end
 
   describe 'validation' do
+    describe 'on update' do
+      let(:provider) { build(:provider) }
+      let(:existing_provider_code) { nil }
+      let(:enrichment) { create(:provider_enrichment, provider: provider, provider_code: existing_provider_code) }
+
+      describe 'email' do
+        it 'validates email is present' do
+          enrichment.email = ''
+          enrichment.valid?
+
+          expect(enrichment.errors[:email]).to include("^Enter an email address in the correct format, like name@example.com")
+        end
+
+        it 'validates email contains an @ symbol' do
+          enrichment.email = 'meow'
+          enrichment.valid?
+
+          expect(enrichment.errors[:email]).to include("^Enter an email address in the correct format, like name@example.com")
+        end
+
+        it 'Does not validate the email if it is not present'do
+          enrichment.website = 'cats4lyf.cat'
+
+          expect(enrichment.valid?).to be true
+        end
+      end
+
+      describe 'telephone' do
+        it 'validates telephone is present' do
+          enrichment.telephone = ""
+          enrichment.valid?
+
+          expect(enrichment.errors[:telephone]).to include("^Enter a valid telephone number")
+        end
+
+        it 'Correctly validates valid phone numbers' do
+          enrichment.telephone = "+447 123 123 123"
+          expect(enrichment.valid?).to be true
+        end
+
+        it 'Correctly invalidates invalid phone numbers' do
+          enrichment.telephone = "123cat456"
+          expect(enrichment.valid?).to be false
+          expect(enrichment.errors[:telephone]).to include("^Enter a valid telephone number")
+        end
+
+        it 'Does not validate the telephone if it is not present'do
+          enrichment.website = 'cats4lyf.cat'
+
+          expect(enrichment.valid?).to be true
+        end
+      end
+    end
+
     describe 'on publish' do
-      it { should validate_presence_of(:email).on(:publish) }
+      it { should validate_presence_of(:email).on(:publish).with_message("^Enter an email address in the correct format, like name@example.com") }
       it { should validate_presence_of(:website).on(:publish) }
-      it { should validate_presence_of(:telephone).on(:publish) }
+      it { should validate_presence_of(:telephone).on(:publish).with_message("^Enter a valid telephone number") }
 
       it { should validate_presence_of(:address1).on(:publish) }
       it { should validate_presence_of(:address3).on(:publish) }

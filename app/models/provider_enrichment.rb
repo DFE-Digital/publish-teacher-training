@@ -54,7 +54,12 @@ class ProviderEnrichment < ApplicationRecord
   validates :train_with_us, words_count: { maximum: 250, message: "^Reduce the word count for training with you" }
   validates :train_with_disability, words_count: { maximum: 250, message: "^Reduce the word count for training with disabilities and other needs" }
 
-  validates :email, :website, :telephone,
+  validates :email, email: true, on: :update, allow_nil: true
+  validates :email, email: true, on: :publish
+
+  validates :telephone, phone: { message: '^Enter a valid telephone number' }, on: :update, allow_nil: true
+
+  validates :website, :telephone,
             :address1, :address3, :address4,
             :postcode, :train_with_us, :train_with_disability,
             presence: true, on: :publish
