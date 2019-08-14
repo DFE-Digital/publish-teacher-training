@@ -24,6 +24,7 @@
 #  discarded_at              :datetime
 #  age_range_in_years        :string
 #  applications_open_from    :date
+#  is_send                   :boolean          default(FALSE)
 #
 
 require 'rails_helper'
@@ -531,7 +532,7 @@ RSpec.describe Course, type: :model do
       its(:is_send?) { should be_falsey }
 
       context "with a SEND subject" do
-        subject { create(:course, subjects: [create(:send_subject)]) }
+        subject { create(:course, is_send: true) }
         its(:is_send?) { should be_truthy }
       end
     end

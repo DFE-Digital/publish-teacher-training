@@ -245,7 +245,7 @@ describe "Courses API", type: :request do
                 changed_since: timestamp_of_last_course.utc.strftime('%FT%T.%6NZ'),
                 per_page: 100
               }
-    )
+            )
             expect(response.headers["Link"]).to match "#{url}; rel=\"next\""
           end
         end
@@ -287,7 +287,7 @@ describe "Courses API", type: :request do
                 changed_since: timestamp_of_last_course.utc.strftime('%FT%T.%6NZ'),
                 per_page: 100
               }
-    )
+            )
             expect(response.headers["Link"]).to match "#{url}; rel=\"next\""
           end
         end
@@ -431,6 +431,33 @@ describe "Courses API", type: :request do
         expect(data.first['course_code']).to eq(course2.course_code)
         expect(data.first['campus_statuses'].length).to eq(1)
         expect(data.first['campus_statuses'].first['campus_code']).to eq(status3.site.code)
+      end
+    end
+
+    context 'with a SEND course' do
+      let(:course) { create(:course, provider: provider, is_send: true, subjects: [create(:subject)]) }
+      let(:site) { create(:site_status, :published, course: course) }
+
+      before do
+        course
+        site
+
+        get '/api/v1/courses', headers: { 'HTTP_AUTHORIZATION' => credentials }
+      end
+
+      it 'contains a SEND subject' do
+        json = JSON.parse(response.body).first
+
+        expect(json).to_not have_key('is_send') # API v2
+
+        expect(json['subjects'].length).to eq(2)
+        expect(json['subjects']).to include(
+          'subject_code' => 'U3', 'subject_name' => 'Special Educational Needs'
+        )
+      end
+
+      it 'does not create a SEND subject' do
+        expect(Subject.where(subject_code: 'U3').count).to eq(0)
       end
     end
   end

@@ -7,14 +7,11 @@ describe SearchAndCompare::CourseSerializer do
     subject { resource }
 
     context 'an existing course' do
-      let(:with_send_subject) { true }
       let(:subject_names) { %w[Primary] }
       let(:subjects) do
         subjects = subject_names.map do |subject_name|
           build(:subject, subject_name: subject_name)
         end
-
-        subjects << build(:send_subject) if with_send_subject
 
         subjects
       end
@@ -35,6 +32,7 @@ describe SearchAndCompare::CourseSerializer do
                site_statuses: [site_status1, site_status2],
                enrichments: course_enrichments,
                subjects: subjects,
+               is_send: true,
                applications_open_from: '2018-10-09T00:00:00').tap do |c|
           # These sites, taken from real prod data, aren't actually valid in
           # that they're missing the following bits of data.
