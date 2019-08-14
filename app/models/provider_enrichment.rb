@@ -23,7 +23,9 @@ class ProviderEnrichment < ApplicationRecord
 
   belongs_to :provider,
              inverse_of: 'enrichments'
-  audited associated_with: :provider
+
+  audited except: :json_data,
+          associated_with: :provider
 
   serialize :accrediting_provider_enrichments, AccreditingProviderEnrichment::ArraySerializer
 
