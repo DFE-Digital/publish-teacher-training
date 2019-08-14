@@ -59,7 +59,7 @@ describe 'PATCH /api/v2/users/:id/accept_transition_screen', type: :request do
         user.accept_transition_screen!
       end
 
-      it 'returns error' do
+      it 'does not return an error' do
         expect { perform_request }.not_to raise_error
       end
     end

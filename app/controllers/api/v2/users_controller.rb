@@ -24,7 +24,9 @@ module API
       end
 
       def accept_rollover_screen
-        @user.accept_rollover_screen!
+        if @user.state == 'transitioned'
+          @user.accept_rollover_screen!
+        end
       end
 
     private
