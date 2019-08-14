@@ -80,7 +80,7 @@ describe 'PATCH /providers/:provider_code/courses/:course_code' do
         expect(response).to have_http_status(:unprocessable_entity)
         expect(json_data.count).to eq 1
         expect(response.body).to include("#{updated_applications_open_from[:applications_open_from]} is not valid for the #{provider.recruitment_cycle.year} cycle. " +
-            "A valid date must be between 1/10/#{course.recruitment_cycle.year.to_i - 1} and 30/09/#{course.recruitment_cycle.year}")
+            "A valid date must be between #{provider.recruitment_cycle.application_start_date} and #{provider.recruitment_cycle.application_end_date}")
       end
     end
   end
@@ -99,7 +99,7 @@ describe 'PATCH /providers/:provider_code/courses/:course_code' do
         expect(response).to have_http_status(:unprocessable_entity)
         expect(json_data.count).to eq 1
         expect(response.body).to include("#{updated_applications_open_from[:applications_open_from]} is not valid for the #{provider.recruitment_cycle.year} cycle. " +
-            "A valid date must be between 1/10/#{course.recruitment_cycle.year.to_i - 1} and 30/09/#{course.recruitment_cycle.year}")
+            "A valid date must be between #{provider.recruitment_cycle.application_start_date} and #{provider.recruitment_cycle.application_end_date}")
       end
     end
   end
