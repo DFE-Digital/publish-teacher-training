@@ -51,7 +51,7 @@ describe 'PATCH /providers/:provider_code/courses/:course_code' do
     perform_request(updated_study_mode)
   end
 
-  context "course has is updated to full time" do
+  context "when  a course is updated to full time" do
     let(:updated_study_mode) { { study_mode: :full_time } }
 
     it "returns http success" do

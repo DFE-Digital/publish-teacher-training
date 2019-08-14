@@ -51,14 +51,12 @@ module API
       end
 
       def update
-        study_mode_updated = params.fetch(:course, {})[:study_mode] != @course.study_mode
         update_course
         update_enrichment
         update_sites
-        update_site_statuses if @course.errors.empty? && study_mode_updated
+        update_site_status_vac_statuses if @course.study_mode_previously_changed?
         should_sync = site_ids.present? && @course.recruitment_cycle.current?
         has_synced? if should_sync
-
 
         if @course.errors.empty? && @course.valid?
           render jsonapi: @course.reload
@@ -101,7 +99,7 @@ module API
         @course.errors[:sites] << "^You must choose at least one location" if site_ids.empty?
       end
 
-      def update_site_statuses
+      def update_site_status_vac_statuses
         @course.site_statuses.each do |site_status|
           if site_status.vac_status != 'no_vacancies'
             update_vac_status(@course.study_mode, site_status)
@@ -192,10 +190,6 @@ module API
 
       def site_ids
         params.fetch(:course, {})[:sites_ids]
-      end
-
-      def study_mode_params
-        params.fetch(:course, {})[:study_mode]
       end
 
       def has_synced?
