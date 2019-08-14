@@ -282,13 +282,15 @@ describe 'Access Request API V2', type: :request do
       it { should have_http_status(:unauthorized) }
     end
 
-    context 'when unauthorized' do
-      let(:unauthorised_user) { create(:user) }
-      let(:payload) { { email: unauthorised_user.email } }
+    context 'authorises non-admin users' do
+      let(:non_admin_user) { create(:user) }
+      let(:payload) { { email: non_admin_user.email } }
 
-      it "should raise an error" do
-        expect { do_post }.to raise_error Pundit::NotAuthorizedError
+      before do
+        do_post
       end
+
+      it { should have_http_status(:ok) }
     end
 
     context 'when authorised' do

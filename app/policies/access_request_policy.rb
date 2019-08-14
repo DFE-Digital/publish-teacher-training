@@ -9,7 +9,10 @@ class AccessRequestPolicy
     @user.admin?
   end
 
+  def create?
+    @user.present?
+  end
+
   alias_method :index?, :approve?
-  alias_method :create?, :approve?
   alias_method :show?, :approve?
 end
