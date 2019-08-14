@@ -471,11 +471,11 @@ private
   def validate_applications_open_from
     if provider.present? && valid_date_range.exclude?(applications_open_from)
       errors.add(:applications_open_from, "#{applications_open_from} is not valid for the #{provider.recruitment_cycle.year} cycle. " +
-        "A valid date must be between 1/10/#{recruitment_cycle.year.to_i - 1} and 30/09/#{recruitment_cycle.year}")
+        "A valid date must be between #{recruitment_cycle.application_start_date} and #{recruitment_cycle.application_end_date}")
     end
   end
 
   def valid_date_range
-    DateTime.new(recruitment_cycle.year.to_i - 1, 10, 1)..DateTime.new(recruitment_cycle.year.to_i, 9, 30)
+    recruitment_cycle.application_start_date..recruitment_cycle.application_end_date
   end
 end
