@@ -59,8 +59,8 @@ describe 'PATCH /api/v2/users/:id/accept_rollover_screen', type: :request do
         user.accept_rollover_screen!
       end
 
-      it 'returns error' do
-        expect { perform_request }.to raise_error AASM::InvalidTransition
+      it 'does not return an error' do
+        expect { perform_request }.not_to raise_error
       end
     end
   end
