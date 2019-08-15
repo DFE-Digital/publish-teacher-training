@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_08_15_091422) do
+ActiveRecord::Schema.define(version: 2019_08_15_095339) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_buffercache"
@@ -218,8 +218,8 @@ ActiveRecord::Schema.define(version: 2019_08_15_091422) do
 
   create_table "recruitment_cycle", force: :cascade do |t|
     t.string "year"
-    t.date "application_start_date"
-    t.date "application_end_date"
+    t.date "application_start_date", null: false
+    t.date "application_end_date", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
