@@ -279,6 +279,52 @@ describe 'PATCH /providers/:provider_code' do
           }.to_not(change { provider.reload.content_status })
         end
       end
+
+      context 'nil telephone number' do
+        let(:updated_attributes) do
+          { telephone: nil }
+        end
+
+        it "returns ok" do
+          perform_request update_provider
+
+          expect(response).to be_ok
+        end
+
+        it "doesn't change content status" do
+          expect {
+            perform_request update_provider
+          }.to_not(change { provider.reload.content_status })
+        end
+      end
+
+      context 'bad telephone number' do
+        let(:updated_attributes) do
+          { telephone: 'CALL NOW 0123456789' }
+        end
+
+        subject { JSON.parse(response.body)["errors"].map { |e| e["title"] } }
+
+        it "returns validation errors" do
+          perform_request update_provider
+
+          expect("Invalid enrichments".in?(subject)).to eq(false)
+          expect("Invalid telephone".in?(subject)).to eq(true)
+        end
+
+        it "doesn't change content status" do
+          expect {
+            perform_request update_provider
+          }.to_not(change { provider.reload.content_status })
+        end
+
+        it "doesn't add an enrichment" do
+          expect { perform_request update_provider }
+          .to_not(
+            change { provider.enrichments.reload.count }
+          )
+        end
+      end
     end
 
     context 'provider has only a published enrichment' do
@@ -322,6 +368,34 @@ describe 'PATCH /providers/:provider_code' do
 
           expect("Invalid enrichments".in?(subject)).to eq(false)
           expect("Invalid train_with_us".in?(subject)).to eq(true)
+        end
+      end
+
+      context 'bad telephone number' do
+        let(:updated_attributes) do
+          { telephone: 'CALL NOW 0123456789' }
+        end
+
+        subject { JSON.parse(response.body)["errors"].map { |e| e["title"] } }
+
+        it "returns validation errors" do
+          perform_request update_provider
+
+          expect("Invalid enrichments".in?(subject)).to eq(false)
+          expect("Invalid telephone".in?(subject)).to eq(true)
+        end
+
+        it "doesn't change content status" do
+          expect {
+            perform_request update_provider
+          }.to_not(change { provider.reload.content_status })
+        end
+
+        it "doesn't add an enrichment" do
+          expect { perform_request update_provider }
+          .to_not(
+            change { provider.enrichments.reload.count }
+          )
         end
       end
     end
@@ -393,7 +467,7 @@ describe 'PATCH /providers/:provider_code' do
     include_examples 'only one attribute has changed', :address4, 'changed county'
     include_examples 'only one attribute has changed', :postcode, 'changed sw1p 3bt'
     include_examples 'only one attribute has changed', :region_code, 'yorkshire_and_the_humber'
-    include_examples 'only one attribute has changed', :telephone, 'changed 01234 567890'
+    include_examples 'only one attribute has changed', :telephone, '01234 999999'
     include_examples 'only one attribute has changed', :train_with_us, 'changed train with us'
     include_examples 'only one attribute has changed', :train_with_disability, 'changed train with disability'
   end
