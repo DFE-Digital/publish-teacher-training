@@ -1,6 +1,6 @@
 module Courses
   module EditOptions
-    module AgeRangeOptions
+    module AgeRangeConcern
       extend ActiveSupport::Concern
       included do
         def age_range_options

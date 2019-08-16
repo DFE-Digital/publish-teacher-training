@@ -1,11 +1,11 @@
 module Courses
   module EditOptions
     extend ActiveSupport::Concern
-    include AgeRangeOptions
-    include EntryRequirements
-    include QualificationOptions
-    include StartDateOptions
-    include StudyModeOptions
+    include AgeRangeConcern
+    include EntryRequirementsConcern
+    include QualificationConcern
+    include StartDateConcern
+    include StudyModeConcern
     included do
       def edit_course_options
         {

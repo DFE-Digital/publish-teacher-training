@@ -1,6 +1,6 @@
 module Courses
   module EditOptions
-    module StudyModeOptions
+    module StudyModeConcern
       extend ActiveSupport::Concern
       included do
         def study_mode_options
