@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_08_15_095339) do
+ActiveRecord::Schema.define(version: 2019_08_16_111150) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_buffercache"
@@ -157,6 +157,7 @@ ActiveRecord::Schema.define(version: 2019_08_15_095339) do
   create_table "organisation_user", id: :serial, force: :cascade do |t|
     t.integer "organisation_id"
     t.integer "user_id"
+    t.index ["organisation_id", "user_id"], name: "index_organisation_user_on_organisation_id_and_user_id", unique: true
     t.index ["organisation_id"], name: "IX_organisation_user_organisation_id"
     t.index ["user_id"], name: "IX_organisation_user_user_id"
   end
