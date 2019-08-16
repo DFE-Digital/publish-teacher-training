@@ -130,7 +130,8 @@ describe 'Courses API v2', type: :request do
                   "entry_requirements" => %w[must_have_qualification_at_application_time expect_to_achieve_before_training_begins equivalence_test],
                   "qualifications" => %w[qts pgce_with_qts pgde_with_qts],
                   "age_range_in_years" => %w[3_to_7 5_to_11 7_to_11 7_to_14],
-                  "start_dates" => ["August 2019", "September 2019", "October 2019", "November 2019", "December 2019", "January 2020", "February 2020", "March 2020", "April 2020", "May 2020", "June 2020", "July 2020"]
+                  "start_dates" => ["August 2019", "September 2019", "October 2019", "November 2019", "December 2019", "January 2020", "February 2020", "March 2020", "April 2020", "May 2020", "June 2020", "July 2020"],
+                  "study_modes" => %w[full_time part_time full_time_or_part_time],
                 }
               }
             },
@@ -295,7 +296,8 @@ describe 'Courses API v2', type: :request do
                 "entry_requirements" => %w[must_have_qualification_at_application_time expect_to_achieve_before_training_begins equivalence_test],
                 "qualifications" => %w[qts pgce_with_qts pgde_with_qts],
                 "age_range_in_years" => %w[3_to_7 5_to_11 7_to_11 7_to_14],
-                "start_dates" => ["August 2019", "September 2019", "October 2019", "November 2019", "December 2019", "January 2020", "February 2020", "March 2020", "April 2020", "May 2020", "June 2020", "July 2020"]
+                "start_dates" => ["August 2019", "September 2019", "October 2019", "November 2019", "December 2019", "January 2020", "February 2020", "March 2020", "April 2020", "May 2020", "June 2020", "July 2020"],
+                "study_modes" => %w[full_time part_time full_time_or_part_time],
               }
             },
           }],

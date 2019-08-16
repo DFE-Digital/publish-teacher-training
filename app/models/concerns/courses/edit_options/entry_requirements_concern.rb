@@ -1,6 +1,6 @@
 module Courses
   module EditOptions
-    module EntryRequirements
+    module EntryRequirementsConcern
       extend ActiveSupport::Concern
       included do
         def entry_requirements

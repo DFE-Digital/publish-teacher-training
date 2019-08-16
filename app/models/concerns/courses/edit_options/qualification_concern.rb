@@ -1,6 +1,6 @@
 module Courses
   module EditOptions
-    module QualificationOptions
+    module QualificationConcern
       extend ActiveSupport::Concern
       included do
         def qualification_options

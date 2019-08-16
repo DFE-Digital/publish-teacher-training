@@ -1,6 +1,6 @@
 module Courses
   module EditOptions
-    module StartDateOptions
+    module StartDateConcern
       extend ActiveSupport::Concern
       included do
         def start_date_options
