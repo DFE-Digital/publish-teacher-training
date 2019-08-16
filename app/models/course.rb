@@ -374,27 +374,6 @@ class Course < ApplicationRecord
     "#{name} (#{course_code})"
   end
 
-  def copy_to_provider(new_provider)
-    new_course = new_provider
-                   .courses
-                   .find_by(course_code: self.course_code)
-    unless new_course
-      new_course = self.dup
-      new_course.subjects << self.subjects
-
-      new_provider.courses << new_course
-
-      if (last_enrichment = enrichments.latest_first.first)
-        last_enrichment.copy_to_course(new_course)
-      end
-
-      self.sites.each do |site|
-        new_site = new_provider.sites.find_by code: site.code
-        new_site&.copy_to_course(new_course)
-      end
-    end
-  end
-
   def next_recruitment_cycle?
     recruitment_cycle.year > RecruitmentCycle.current_recruitment_cycle.year
   end

@@ -537,11 +537,12 @@ describe Provider, type: :model do
     end
 
     it 'copies over the courses' do
-      allow(course).to receive(:copy_to_provider)
+      service_spy = spy
+      allow(Courses::CopyToProviderService).to receive(:new).with(course: course).and_return(service_spy)
 
       provider.copy_to_recruitment_cycle(new_recruitment_cycle)
 
-      expect(course).to have_received(:copy_to_provider).with(new_provider)
+      expect(service_spy).to have_received(:execute).with(new_provider)
     end
   end
 
