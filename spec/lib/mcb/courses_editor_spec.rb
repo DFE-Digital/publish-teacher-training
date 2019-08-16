@@ -20,6 +20,7 @@ describe MCB::CoursesEditor do
   let!(:secondary) { find_or_create(:subject, :secondary) }
   let(:current_cycle) { RecruitmentCycle.current_recruitment_cycle }
   let!(:next_cycle) { find_or_create(:recruitment_cycle, year: '2020') }
+  let(:is_send) { false }
   let!(:course) {
     create(:course,
            provider: provider,
@@ -35,7 +36,8 @@ describe MCB::CoursesEditor do
            start_date: Date.new(2019, 8, 1),
            age_range: 'secondary',
            subjects: [secondary, biology],
-           applications_open_from: Date.new(2018, 10, 9))
+           applications_open_from: Date.new(2018, 10, 9),
+           is_send: is_send)
   }
   subject { described_class.new(provider: provider, course_codes: course_codes, requester: requester) }
 
@@ -268,6 +270,26 @@ describe MCB::CoursesEditor do
         end
       end
 
+      describe "(is_send)" do
+        context 'when course is not SEND' do
+          it 'turns "yes" into true boolean on Course' do
+            expect { run_editor("edit is SEND", "yes", "exit") }.
+              to change { course.reload.is_send? }.
+              from(is_send).to(true)
+          end
+        end
+
+        context 'when course is SEND' do
+          let(:is_send) { true }
+
+          it 'turns "no" into false sboolean on Course' do
+            expect { run_editor("edit is SEND", "no", "exit") }.
+              to change { course.reload.is_send? }.
+              from(is_send).to(false)
+          end
+        end
+      end
+
       context "when syncing to Find" do
         let!(:another_course) { create(:course, provider: provider) }
         let(:course_codes) { [course_code, another_course.course_code] }
@@ -404,6 +426,7 @@ describe MCB::CoursesEditor do
           course_code: '1X2B',
           recruitment_cycle: '2', # the 2nd option should always be the current recruitment cycle
           application_opening_date: "18 October 2018",
+          is_send: true
         }
       }
 
@@ -420,6 +443,7 @@ describe MCB::CoursesEditor do
           desired_attributes[:science],
           desired_attributes[:age_range],
           desired_attributes[:course_code],
+          'y', # is SEND confirmation
           desired_attributes[:recruitment_cycle],
           "y", # confirm creation
           # subject selection
@@ -449,6 +473,7 @@ describe MCB::CoursesEditor do
           "science" => desired_attributes[:science],
           "age_range" => desired_attributes[:age_range],
         )
+        expect(created_course.is_send?).to be_truthy
         expect(created_course.accrediting_provider).to eq(accredited_body)
         expect(created_course.recruitment_cycle).to eq(current_cycle)
         expect(created_course.sites).to include(site_1, site_3)
@@ -469,6 +494,7 @@ describe MCB::CoursesEditor do
           desired_attributes[:science],
           desired_attributes[:age_range],
           desired_attributes[:course_code],
+          'n', # is SEND
           desired_attributes[:recruitment_cycle],
           "y", # confirm creation
           # subject selection
@@ -509,6 +535,7 @@ describe MCB::CoursesEditor do
           desired_attributes[:science],
           desired_attributes[:age_range],
           desired_attributes[:course_code],
+          'n', # is SEND
           desired_attributes[:recruitment_cycle],
           "n", # confirm creation
         )
@@ -530,6 +557,7 @@ describe MCB::CoursesEditor do
           desired_attributes[:science],
           desired_attributes[:age_range],
           course_code, # a duplicate course code
+          'n', # is SEND
           desired_attributes[:recruitment_cycle],
           "y", # confirm creation
         )

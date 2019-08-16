@@ -7,6 +7,7 @@ module MCB
       accredited_body: :accrediting_provider,
       start_date: :start_date,
       application_opening_date: :applications_open_from,
+      is_send: :is_send
     }.freeze
 
     def initialize(provider:, requester:, course_codes: [], courses: nil)
@@ -37,7 +38,7 @@ module MCB
 
     def new_course_wizard
       %i[title qualifications study_mode accredited_body start_date route maths
-         english science age_range course_code].each do |attribute|
+         english science age_range course_code is_send].each do |attribute|
         edit(attribute)
       end
 
@@ -70,6 +71,7 @@ module MCB
         "edit application opening date",
         "edit age range",
         "edit subjects",
+        "edit is SEND",
         "edit training locations",
         "sync course(s) to Find"
       ]
@@ -87,7 +89,7 @@ module MCB
       elsif choice == 'edit training locations'
         edit_sites
       elsif choice.start_with?("edit")
-        attribute = choice.gsub("edit ", "").gsub(" ", "_").to_sym
+        attribute = choice.gsub("edit ", "").gsub(" ", "_").downcase.to_sym
         edit(attribute)
       elsif choice =~ /sync .* to Find/
         sync_courses_to_find

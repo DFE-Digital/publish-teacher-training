@@ -58,6 +58,10 @@ module MCB
       )
     end
 
+    def ask_is_send
+      @cli.agree("Is the course SEND?   ")
+    end
+
     def ask_accredited_body
       new_accredited_body = nil
       until new_accredited_body.present?
