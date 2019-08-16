@@ -11,8 +11,8 @@ User.destroy_all
 AccessRequest.destroy_all
 RecruitmentCycle.destroy_all
 
-current_recruitment_cycle = RecruitmentCycle.create(year: '2019', application_start_date: Date.new(2018, 10, 9))
-next_recruitment_cycle = RecruitmentCycle.create(year: '2020', application_start_date: Date.new(2019, 10, 8))
+current_recruitment_cycle = RecruitmentCycle.create(year: '2019', application_start_date: Date.new(2018, 10, 9), application_end_date: Date.new(2019, 9, 30))
+next_recruitment_cycle = RecruitmentCycle.create(year: '2020', application_start_date: Date.new(2019, 10, 8), application_end_date: Date.new(2019, 9, 30))
 
 {
   "Primary" => "00",
