@@ -1055,4 +1055,55 @@ RSpec.describe Course, type: :model do
       its(:applications_open_from) { should eq recruitment_cycle.application_start_date }
     end
   end
+
+  describe "#is_send=" do
+    let(:subject) { build(:course) }
+
+    before do
+      subject.is_send = value
+    end
+
+    context 'when value is `true`' do
+      let(:value) { true }
+
+      its(:is_send) { is_expected.to be(true) }
+    end
+
+    context 'when value is `"true"`' do
+      let(:value) { "true" }
+
+      its(:is_send) { is_expected.to be(true) }
+    end
+
+    context 'when value is `1`' do
+      let(:value) { 1 }
+
+      its(:is_send) { is_expected.to be(true) }
+    end
+
+    context 'when value is `0`' do
+      let(:value) { 0 }
+
+      its(:is_send) { is_expected.to be(false) }
+    end
+
+    context 'when value is `false`' do
+      let(:value) { false }
+
+      its(:is_send) { is_expected.to be(false) }
+    end
+
+    context 'when value is `"false"`' do
+      let(:value) { "false" }
+
+      its(:is_send) { is_expected.to be(false) }
+    end
+
+    context 'when value is a string that is not like a boolean' do
+      let(:value) { "blah-blah" }
+
+      its(:is_send) { is_expected.to be_nil }
+      it { is_expected.to_not be_valid }
+    end
+  end
 end

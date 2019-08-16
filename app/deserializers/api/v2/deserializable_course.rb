@@ -26,6 +26,7 @@ module API
         start_date
         applications_open_from
         study_mode
+        is_send
       ].freeze
 
       attributes(*COURSE_ATTRIBUTES)
