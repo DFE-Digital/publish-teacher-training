@@ -178,7 +178,7 @@ module MCB
     end
 
     def mcb_courses_edit(course_codes)
-      command_params = ['courses', 'edit', provider.provider_code] + course_codes + environment_options
+      command_params = ['courses', 'edit', provider.provider_code] + course_codes + environment_options + recruitment_cycle_year_options
       $mcb.run(command_params)
     end
 
@@ -189,6 +189,10 @@ module MCB
     def check_authorisation
       action = @provider.persisted? ? :update? : :create?
       raise Pundit::NotAuthorizedError unless Pundit.policy(@requester, @provider).send(action)
+    end
+
+    def recruitment_cycle_year_options
+      ["-r", provider.recruitment_cycle.year]
     end
 
     def environment_options
