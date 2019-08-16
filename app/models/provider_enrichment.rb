@@ -17,6 +17,7 @@
 class ProviderEnrichment < ApplicationRecord
   include RegionCode
 
+  before_save :ensure_region_code_is_an_integer_in_json_data
   before_create :set_provider_code
 
   enum status: { draft: 0, published: 1 }
@@ -79,6 +80,13 @@ class ProviderEnrichment < ApplicationRecord
   end
 
 private
+
+  def ensure_region_code_is_an_integer_in_json_data
+    return if json_data['RegionCode'].blank?
+    return if json_data['RegionCode'].is_a?(Integer)
+
+    json_data['RegionCode'] = ProviderEnrichment.region_codes[json_data['RegionCode']]
+  end
 
   def set_provider_code
     # Note: provider_code is only here to support c# counterpart, until provide_code is removed from database

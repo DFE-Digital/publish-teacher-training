@@ -251,4 +251,76 @@ describe ProviderEnrichment, type: :model do
       end
     end
   end
+
+  describe "#before_save" do
+    describe "#ensure_region_code_is_an_integer_in_json_data" do
+      let(:subject) { build(:provider_enrichment, region_code: nil) }
+      let(:wanted_region_code_string) { ProviderEnrichment.region_codes.keys.sample }
+      let(:wanted_region_code_int) {  ProviderEnrichment.region_codes[wanted_region_code_string] }
+
+      it 'is called when saved' do
+        allow(subject).to receive(:ensure_region_code_is_an_integer_in_json_data)
+
+        subject.save
+
+        expect(subject).to have_received(:ensure_region_code_is_an_integer_in_json_data)
+      end
+
+      context 'when region code is set via accessor as number' do
+        before do
+          subject.region_code = wanted_region_code_int
+        end
+
+        it 'converts the string into an Integer' do
+          expect(subject.json_data['RegionCode']).to eq(wanted_region_code_string)
+
+          subject.send(:ensure_region_code_is_an_integer_in_json_data)
+
+          expect(subject.json_data['RegionCode']).to eq(wanted_region_code_int)
+        end
+      end
+
+      context 'when region code is set via accessor as string' do
+        before do
+          subject.region_code = wanted_region_code_string
+        end
+
+        it 'keeps the integer as an integer' do
+          expect(subject.json_data['RegionCode']).to eq(wanted_region_code_string)
+
+          subject.send(:ensure_region_code_is_an_integer_in_json_data)
+
+          expect(subject.json_data['RegionCode']).to eq(wanted_region_code_int)
+        end
+      end
+
+      context 'when region code has been set in `json_data` as String' do
+        before do
+          subject.json_data = { region_code: wanted_region_code_string }
+        end
+
+        it 'converts the string into an Integer' do
+          expect(subject.json_data['RegionCode']).to eq(wanted_region_code_string)
+
+          subject.send(:ensure_region_code_is_an_integer_in_json_data)
+
+          expect(subject.json_data['RegionCode']).to eq(wanted_region_code_int)
+        end
+      end
+
+      context 'when region code has been set in `json_data` as Integer' do
+        before do
+          subject.json_data = { region_code: wanted_region_code_int }
+        end
+
+        it 'keeps the region code as an Integer' do
+          expect(subject.json_data['RegionCode']).to eq(wanted_region_code_int)
+
+          subject.send(:ensure_region_code_is_an_integer_in_json_data)
+
+          expect(subject.json_data['RegionCode']).to eq(wanted_region_code_int)
+        end
+      end
+    end
+  end
 end
