@@ -108,6 +108,7 @@ Rails.application.routes.draw do
           post :sync_with_search_and_compare, on: :member
           post :publish, on: :member
           post :publishable, on: :member
+          get :new, on: :new
         end
         resources :sites, only: %i[index update show create]
         resources :recruitment_cycles, only: %i[index]

@@ -7,11 +7,20 @@ module API
 
       before_action :build_recruitment_cycle
       before_action :build_provider
-      before_action :build_course, except: :index
+      before_action :build_course, except: %i[index new]
 
       deserializable_resource :course,
                               only: %i[update publish publishable],
                               class: API::V2::DeserializableCourse
+
+      def new
+        authorize Course
+
+        @course = @provider.courses.new
+        @course.valid?
+
+        render jsonapi: @course, include: params[:include]
+      end
 
       def index
         authorize @provider, :can_list_courses?

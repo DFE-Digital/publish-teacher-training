@@ -5,10 +5,8 @@ describe CoursePolicy do
 
   subject { described_class }
 
-  permissions :index? do
-    it 'allows the :index action for any authenticated user' do
-      should permit(user)
-    end
+  permissions :index?, :new? do
+    it { should permit(user, Course) }
   end
 
   permissions :show?, :update? do

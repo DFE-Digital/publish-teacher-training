@@ -22,6 +22,14 @@ RSpec.describe WithQualifications, type: :model do
     end
   end
 
+  describe '#qualifications_description' do
+    context 'no qualification present' do
+      subject { build(:course, qualification: nil) }
+
+      its(:qualifications_description) { should eq '' }
+    end
+  end
+
   describe "#qualification= and its dependent attribute profpost_flag" do
     subject { build(:course, qualification: :pgce_with_qts) }
 
