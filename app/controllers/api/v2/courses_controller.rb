@@ -17,7 +17,6 @@ module API
         authorize Course
 
         @course = @provider.courses.new
-        @course.valid?
 
         render jsonapi: @course, include: params[:include]
       end
