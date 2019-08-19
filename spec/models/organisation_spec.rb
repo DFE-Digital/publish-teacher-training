@@ -13,7 +13,8 @@ RSpec.describe Organisation, type: :model do
   subject { create(:organisation) }
 
   describe 'associations' do
-    it { should have_and_belong_to_many(:users) }
+    it { should have_many(:organisation_users) }
+    it { should have_many(:users).through(:organisation_users) }
     it { should have_and_belong_to_many(:providers) }
   end
 
