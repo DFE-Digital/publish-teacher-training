@@ -83,6 +83,9 @@ gem 'custom_error_message', git: 'https://github.com/nanamkim/custom-err-msg.git
 # Soft delete
 gem 'discard'
 
+# Gov Notify
+gem 'govuk_notify_rails'
+
 group :development, :test do
   # add info about db structure to models and other files
   gem 'annotate'
