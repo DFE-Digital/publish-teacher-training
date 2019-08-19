@@ -164,7 +164,7 @@ module MCB
 
     def edit_provider_name
       puts "Current name: #{provider.provider_name}"
-      update(provider_name: @cli.ask_name)
+      provider.update(provider_name: @cli.ask_name)
     end
 
     def select_courses_to_edit_and_launch_editor
@@ -180,10 +180,6 @@ module MCB
     def mcb_courses_edit(course_codes)
       command_params = ['courses', 'edit', provider.provider_code] + course_codes + environment_options + recruitment_cycle_year_options
       $mcb.run(command_params)
-    end
-
-    def update(attrs)
-      @provider.update(attrs)
     end
 
     def check_authorisation
