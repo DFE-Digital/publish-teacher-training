@@ -14,6 +14,8 @@ module API
           )
         )
 
+        send_welcome_email
+
         render jsonapi: @current_user
       end
 
@@ -29,6 +31,11 @@ module API
             :first_name,
             :last_name
           )
+      end
+
+      def send_welcome_email
+        welcome_email_service = SendWelcomeEmailService.new(mailer: WelcomeEmailMailer)
+        welcome_email_service.execute(current_user: @current_user)
       end
     end
   end
