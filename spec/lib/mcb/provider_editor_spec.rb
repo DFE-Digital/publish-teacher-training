@@ -33,6 +33,7 @@ describe MCB::ProviderEditor do
         let!(:courses) { create(:course, course_code: 'A01X', name: 'Biology', provider: provider) }
         let!(:course2) { create(:course, course_code: 'A02X', name: 'History', provider: provider) }
         let!(:course3) { create(:course, course_code: 'A03X', name: 'Economics', provider: provider) }
+        let(:recruitment_cycle_year) { ["-r", provider.recruitment_cycle.year] }
 
         it 'lists the courses for the given provider' do
           output, = run_editor("edit courses", "continue", "exit")
@@ -50,7 +51,9 @@ describe MCB::ProviderEditor do
             "exit" # from the command
           )
 
-          expect($mcb).to have_received(:run).with(%w[courses edit X12 A01X A03X])
+          expect($mcb).to have_received(:run).with(
+            %w[courses edit X12 A01X A03X] + recruitment_cycle_year
+          )
         end
 
         it 'invokes course editing on courses selected by their course code' do
@@ -64,7 +67,9 @@ describe MCB::ProviderEditor do
             "exit" # from the command
           )
 
-          expect($mcb).to have_received(:run).with(%w[courses edit X12 A01X A03X])
+          expect($mcb).to have_received(:run).with(
+            %w[courses edit X12 A01X A03X] + recruitment_cycle_year
+          )
         end
 
         it 'allows to easily select all courses' do
@@ -72,7 +77,9 @@ describe MCB::ProviderEditor do
 
           run_editor("edit courses", "select all", "continue", "exit")
 
-          expect($mcb).to have_received(:run).with(%w[courses edit X12 A01X A02X A03X])
+          expect($mcb).to have_received(:run).with(
+            %w[courses edit X12 A01X A02X A03X] + recruitment_cycle_year
+          )
         end
 
         context "(run against an Azure environment)" do
@@ -84,7 +91,9 @@ describe MCB::ProviderEditor do
 
             run_editor("edit courses", "[ ] Biology (A01X)", "continue", "exit")
 
-            expect($mcb).to have_received(:run).with(%w[courses edit X12 A01X -E qa])
+            expect($mcb).to have_received(:run).with(
+              %w[courses edit X12 A01X -E qa] + recruitment_cycle_year
+            )
           end
         end
       end
