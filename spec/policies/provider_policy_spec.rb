@@ -16,7 +16,7 @@ describe ProviderPolicy do
 
   subject { described_class }
 
-  permissions :show?, :update?, :sync_courses_with_search_and_compare? do
+  permissions :show?, :update?, :sync_courses_with_search_and_compare?, :can_list_courses? do
     let(:user) { create(:user) }
     let(:user_outside_org) { create(:user) }
     let(:provider) { create(:provider) }

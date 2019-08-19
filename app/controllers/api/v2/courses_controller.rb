@@ -7,7 +7,7 @@ module API
 
       before_action :build_recruitment_cycle
       before_action :build_provider
-      before_action :build_course, except: %i[index new]
+      before_action :build_course, except: %i[index new create]
 
       deserializable_resource :course,
                               only: %i[update publish publishable],
@@ -75,6 +75,10 @@ module API
 
       def destroy
         @course.discard
+      end
+
+      def create
+        authorize @provider, :can_create_course?
       end
 
     private
