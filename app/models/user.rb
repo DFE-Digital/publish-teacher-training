@@ -21,7 +21,9 @@ class User < ApplicationRecord
   DFE_EMAIL_PATTERN = '@(digital\.){0,1}education\.gov\.uk$'.freeze
 
   has_many :organisation_users
-  has_many :organisations, through: :organisation_users
+
+  # dependent destroy because https://stackoverflow.com/questions/34073757/removing-relations-is-not-being-audited-by-audited-gem/34078860#34078860
+  has_many :organisations, through: :organisation_users, dependent: :destroy
 
   has_many :providers, through: :organisations
   has_many :access_requests,

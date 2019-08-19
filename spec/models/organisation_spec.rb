@@ -39,4 +39,9 @@ RSpec.describe Organisation, type: :model do
       it { should be_valid }
     end
   end
+
+  describe 'auditing' do
+    it { should be_audited }
+    it { should have_associated_audits }
+  end
 end
