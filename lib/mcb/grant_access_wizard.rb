@@ -22,37 +22,37 @@ module MCB
     def setup_user
       return false unless find_or_init_user
 
-      puts MCB::Render::ActiveRecord.user @user
+      puts MCB::Render::ActiveRecord.user @user_to_grant
 
       persist_user_if_new
     end
 
     def find_or_init_user
-      @user = MCB.find_user_by_identifier @id_or_email_or_sign_in_id
-      return @user if @user != nil
+      @user_to_grant = MCB.find_user_by_identifier @id_or_email_or_sign_in_id
+      return @user_to_grant if @user_to_grant != nil
 
       unless @id_or_email_or_sign_in_id.include? '@'
         puts "#{@id_or_email_or_sign_in_id} not found. Specify an email address if you wish to create a user"
         return nil
       end
 
-      @user = User.new(email: @id_or_email_or_sign_in_id)
+      @user_to_grant = User.new(email: @id_or_email_or_sign_in_id)
       puts "#{@id_or_email_or_sign_in_id} appears to be a new user"
-      @user.first_name = @cli.ask("First name?  ").strip
-      @user.last_name = @cli.ask("Last name?  ").strip
-      @user
+      @user_to_grant.first_name = @cli.ask("First name?  ").strip
+      @user_to_grant.last_name = @cli.ask("Last name?  ").strip
+      @user_to_grant
     end
 
     def persist_user_if_new
-      if @user.new_record?
-        if !@user.valid?
+      if @user_to_grant.new_record?
+        if !@user_to_grant.valid?
           puts "Cannot create this user:"
-          @user.errors.full_messages.each do |message|
+          @user_to_grant.errors.full_messages.each do |message|
             puts "- #{message}"
           end
           return false
-        elsif @cli.agree("About to create #{@user}. Continue? ")
-          @user.save!
+        elsif @cli.agree("About to create #{@user_to_grant}. Continue? ")
+          @user_to_grant.save!
           true
         else
           return false
@@ -69,8 +69,8 @@ module MCB
       end
 
       @organisation = @provider.organisations.first # a provider should only ever be associated with one organisation
-      if @user.in?(@organisation.users)
-        puts "#{@user} already belongs to #{@organisation.name}"
+      if @user_to_grant.in?(@organisation.users)
+        puts "#{@user_to_grant} already belongs to #{@organisation.name}"
         return
       end
 
@@ -79,14 +79,14 @@ module MCB
 
     def add_user_to_org
       puts "\n"
-      puts "You're about to give #{@user} access to organisation #{@organisation.name}. They will manage:"
+      puts "You're about to give #{@user_to_grant} access to organisation #{@organisation.name}. They will manage:"
       puts MCB::Render::ActiveRecord.providers_table @organisation.providers, name: "Additional Providers"
-      @organisation.users << @user if @cli.agree("Agree?  ")
+      @organisation.users << @user_to_grant if @cli.agree("Agree?  ")
     end
 
     def confirm_and_add_user_to_all_organisations
-      unless @user.admin?
-        puts "Refusing to give non-admin user #{@user} access to all orgs"
+      unless @user_to_grant.admin?
+        puts "Refusing to give non-admin user #{@user_to_grant} access to all orgs"
         return nil
       end
 
@@ -94,10 +94,10 @@ module MCB
     end
 
     def add_user_to_all_organisations
-      @user.organisations = Organisation.all
+      @user_to_grant.organisations = Organisation.all
 
       puts "\n"
-      puts "#{@user} given access to all orgs"
+      puts "#{@user_to_grant} given access to all orgs"
     end
   end
 end
