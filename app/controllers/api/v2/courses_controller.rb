@@ -10,7 +10,7 @@ module API
       before_action :build_course, except: %i[index new create]
 
       deserializable_resource :course,
-                              only: %i[update publish publishable],
+                              only: %i[update publish publishable create],
                               class: API::V2::DeserializableCourse
 
       def new
@@ -79,6 +79,17 @@ module API
 
       def create
         authorize @provider, :can_create_course?
+        return unless new_course_params.values.any?
+
+        course = Course.new
+        course.assign_attributes(new_course_params)
+        course.update(provider: @provider)
+
+        if course.errors.empty?
+          render jsonapi: course.reload
+        else
+          render jsonapi_errors: course.errors, status: :unprocessable_entity
+        end
       end
 
     private
@@ -188,6 +199,41 @@ module API
                   :id,
                   :type,
                   :sites_ids,
+                  :sites_types,
+                  :course_code,)
+          .permit(
+            :english,
+            :maths,
+            :science,
+            :qualification,
+            :age_range_in_years,
+            :start_date,
+            :applications_open_from,
+            :study_mode,
+            :is_send,
+            :name,
+          )
+      end
+
+      def new_course_params
+        params
+          .fetch(:course, {})
+          .except(:about_course,
+                  :course_length,
+                  :fee_details,
+                  :fee_international,
+                  :fee_uk_eu,
+                  :financial_support,
+                  :how_school_placements_work,
+                  :interview_process,
+                  :other_requirements,
+                  :personal_qualities,
+                  :salary_details,
+                  :required_qualifications,
+                  :qualifications,
+                  :id,
+                  :type,
+                  :sites_ids,
                   :sites_types,)
           .permit(
             :english,
@@ -198,7 +244,9 @@ module API
             :start_date,
             :applications_open_from,
             :study_mode,
-            :is_send
+            :is_send,
+            :name,
+            :course_code,
           )
       end
 
