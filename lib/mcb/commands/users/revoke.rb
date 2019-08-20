@@ -2,7 +2,7 @@ summary 'Remove a user from an organisation/provider in the DB.'
 param :id_or_email_or_sign_in_id
 option :p, 'provider_code', 'provider code',
        argument: :optional, transform: ->(code) { code.upcase }
-usage 'revoke <user_id/email/sign_in_user_id> [--provider-code <provider_code>]'
+usage 'revoke <user_id/email/sign_in_user_id> [--provider_code <provider_code>]'
 
 run do |opts, args, _cmd|
   MCB.init_rails(opts)
