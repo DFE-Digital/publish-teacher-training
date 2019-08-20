@@ -23,6 +23,12 @@ describe 'mcb users grant' do
     grant(id_or_email_or_sign_in_id, provider.provider_code, combined_input).first
   end
 
+  let(:requester) { create(:user) }
+
+  before do
+    allow(MCB).to receive(:config).and_return(email: requester.email)
+  end
+
   context 'when the user exists and already has access to the provider' do
     let(:id_or_email_or_sign_in_id) { user.email }
     let(:input_commands) { [] }
@@ -64,8 +70,9 @@ describe 'mcb users grant' do
       output
     end
 
+    # Should not be more than one, as we have a Requester User
     it 'does not create the user' do
-      expect(User.count).to eq(0)
+      expect(User.count).to eq(1)
     end
 
     it 'displays the validation errors' do

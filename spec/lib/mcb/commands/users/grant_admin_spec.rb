@@ -25,6 +25,11 @@ describe 'mcb users grant --admin' do
     combined_input = input_commands.map { |c| "#{c}\n" }.join
     grant(id_or_email_or_sign_in_id, combined_input).first
   end
+  let(:requester) { create(:user) }
+
+  before do
+    allow(MCB).to receive(:config).and_return(email: requester.email)
+  end
 
   context 'admin email' do
     context 'when the user exists but is not a member of any orgs' do

@@ -8,11 +8,9 @@ usage 'grant --admin <user_id/email/sign_in_user_id> -p <provider_code>'
 run do |opts, args, _cmd|
   MCB.init_rails(opts)
 
-  cli = HighLine.new
   provider = nil
   admin = opts[:admin]
-  if opts[:provider_code]
-    provider = Provider.find_by!(provider_code: opts[:provider_code])
-  end
-  MCB::GrantAccessWizard.new(cli, args[:id_or_email_or_sign_in_id], provider, admin).run
+  provider = Provider.find_by!(provider_code: opts[:provider_code]) if opts[:provider_code]
+
+  MCB::Editor::GrantAccessWizard.new(provider, args[:id_or_email_or_sign_in_id], admin).run
 end

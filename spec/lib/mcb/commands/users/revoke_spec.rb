@@ -13,6 +13,13 @@ describe 'mcb users revoke' do
   let(:other_provider) { create(:provider, organisations: [other_organisation]) }
   let(:other_user) { create(:user, organisations: [organisation, other_organisation]) }
 
+  let(:requester) { create(:user) }
+
+  before do
+    allow(MCB).to receive(:config).and_return(email: requester.email)
+  end
+
+
   describe 'one provider' do
     def revoke(id_or_email_or_sign_in_id, provider_code, commands)
       stderr = ""
