@@ -1,7 +1,7 @@
 module WithQualifications
   extend ActiveSupport::Concern
 
-  included do
+  included do # rubocop: disable Metrics/BlockLength
     # The training programme outcome that originated in the UCAS NetUpdate system.
     #
     # See [UCAS Teacher Training Set-up Guide](https://www.ucas.com/file/115581/download?token=mv-G6P53),
@@ -16,19 +16,19 @@ module WithQualifications
       # Professional: the student will receive a Professional Graduate
       # Certificate of Education (offered at Level 6) or Professional
       # Graduate Diploma in Education (PGDE), with no credits or
-      # modules at postgraduate (master’s) Level 7 on successful
+      # modules at postgraduate (master's) Level 7 on successful
       # completion of the programme.
       professional: "PF",
 
       # Postgraduate: the student will receive a Postgraduate Certificate
       # of Education (PGCE) or other qualification which includes at
       # least one module or some credits at postgraduate
-      # (master’s) Level 7 on successful completion the
+      # (master's) Level 7 on successful completion the
       # programme.
       postgraduate: "PG",
 
       # Both professional and postgraduate: the student has the option of taking at least one
-      # postgraduate (master’s) Level 7 module or obtaining some
+      # postgraduate (master's) Level 7 module or obtaining some
       # postgraduate-level credits as part of the programme.
       professional_postgraduate: "BO",
     }
@@ -61,7 +61,11 @@ module WithQualifications
     end
 
     def qualifications_description
-      qualifications.map(&:upcase).sort.join(" with ")
+      if qualifications
+        qualifications.map(&:upcase).sort.join(" with ")
+      else
+        ''
+      end
     end
 
     def qualification=(value)

@@ -6,7 +6,12 @@ module Courses
     include QualificationConcern
     include StartDateConcern
     include StudyModeConcern
+
     included do
+      # When changing edit options here be sure to update the edit_options in the
+      # courses factory in manage-courses-frontend:
+      #
+      # https://github.com/DFE-Digital/manage-courses-frontend/blob/master/spec/factories/courses.rb
       def edit_course_options
         {
           entry_requirements: entry_requirements,

@@ -92,6 +92,8 @@ class SubjectMapperService
   }.freeze
 
   def self.get_subject_list(course_title, ucas_subjects)
+    return [] if course_title.nil?
+
     ucas_subjects = ucas_subjects.map(&:strip).map(&:downcase)
     level = Subjects::CourseLevel.new(ucas_subjects).level
 

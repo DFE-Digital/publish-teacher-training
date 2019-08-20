@@ -180,4 +180,13 @@ describe API::V2::SerializableCourse do
     its(%w[required_qualifications])    { should eq enrichment.required_qualifications }
     its(%w[salary_details])             { should eq enrichment.salary_details }
   end
+
+  context 'a new course' do
+    let(:provider) { create :provider }
+    let(:course) { Course.new(provider: provider) }
+
+    subject { parsed_json['data'] }
+
+    it { should have_attribute(:start_date).with_value(nil) }
+  end
 end
