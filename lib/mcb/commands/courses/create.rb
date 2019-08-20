@@ -9,7 +9,7 @@ run do |opts, args, _cmd|
     provider = MCB.get_recruitment_cycle(opts).providers.find_by!(provider_code: args[:provider_code])
     requester = User.find_by!(email: MCB.config[:email])
 
-    MCB::CoursesEditor.new(
+    MCB::Editor::CoursesEditor.new(
       provider: provider,
       requester: requester,
       courses: [provider.courses.build]

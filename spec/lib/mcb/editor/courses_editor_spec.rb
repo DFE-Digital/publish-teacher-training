@@ -1,6 +1,6 @@
 require 'mcb_helper'
 
-describe MCB::CoursesEditor do
+describe MCB::Editor::CoursesEditor do
   def run_editor(*input_cmds)
     stderr = nil
     output = with_stubbed_stdout(stdin: input_cmds.join("\n"), stderr: stderr) do
@@ -49,6 +49,13 @@ describe MCB::CoursesEditor do
       it 'updates the course title' do
         expect { run_editor("edit title", "Mathematics", "exit") }.to change { course.reload.name }.
           from("Original name").to("Mathematics")
+      end
+
+      it 'creates a Course audit with the correct requester when Editing' do
+        run_editor("edit title", "Mathematics", "exit")
+        course.reload
+
+        expect(course.audits.last.user).to eq(requester)
       end
 
       describe "(maths)" do
@@ -396,7 +403,7 @@ describe MCB::CoursesEditor do
       let(:new_course) { provider.courses.build }
 
       subject {
-        MCB::CoursesEditor.new(
+        described_class.new(
           provider: provider,
           requester: requester,
           courses: [new_course]
@@ -479,6 +486,40 @@ describe MCB::CoursesEditor do
         expect(created_course.sites).to include(site_1, site_3)
         expect(created_course.applications_open_from).to eq(Date.new(2018, 10, 18))
         expect(created_course.ucas_status).to eq(:new)
+      end
+
+      it "creates a new course with an Aduit with the correct requester" do
+        run_new_course_wizard(
+          desired_attributes[:title],
+          desired_attributes[:qualification],
+          desired_attributes[:study_mode],
+          desired_attributes[:accredited_body],
+          desired_attributes[:start_date],
+          desired_attributes[:route],
+          desired_attributes[:maths],
+          desired_attributes[:english],
+          desired_attributes[:science],
+          desired_attributes[:age_range],
+          desired_attributes[:course_code],
+          'y', # is SEND confirmation
+          desired_attributes[:recruitment_cycle],
+          "y", # confirm creation
+          # subject selection
+          "Biology",
+          "Secondary",
+          "continue",
+          # location selection
+          "[ ] #{site_1.location_name}",
+          "[ ] #{site_3.location_name}",
+          "continue",
+          desired_attributes[:application_opening_date],
+          "", # enter to finish
+          ""
+        )
+
+        created_course = provider.courses.find_by!(course_code: desired_attributes[:course_code])
+
+        expect(created_course.audits.last.user).to eq(requester)
       end
 
       it "creates a new course with sensible defaults when certain steps are left blank" do

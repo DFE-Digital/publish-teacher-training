@@ -1,6 +1,6 @@
 require 'mcb_helper'
 
-describe MCB::ProviderEditor do
+describe MCB::Editor::ProviderEditor do
   def run_editor(*input_cmds)
     stderr = nil
     output = with_stubbed_stdout(stdin: input_cmds.join("\n"), stderr: stderr) do
@@ -27,6 +27,13 @@ describe MCB::ProviderEditor do
         expect { run_editor("edit provider name", "ACME SCITT", "exit") }
           .to change { provider.reload.provider_name }
           .from("Original name").to("ACME SCITT")
+      end
+
+      it 'creates a provider audit with the correct requester' do
+        run_editor("edit provider name", "ACME SCITT", "exit")
+        provider.reload
+
+        expect(provider.audits.last.user).to eq(requester)
       end
 
       describe "(course editing)" do
@@ -199,6 +206,10 @@ describe MCB::ProviderEditor do
           expect(@output).to include("New provider has been created")
 
           expect(created_provider.changed_at).to eq(frozen_time)
+        end
+
+        it "creates a new Provider with an audit with the correct User" do
+          expect(created_provider.audits.last.user).to eq(requester)
         end
 
         it "creates a new organisation with the passed parameters" do

@@ -18,11 +18,11 @@ describe 'mcb courses create' do
     let!(:requester) { create(:user, email: email, organisations: provider.organisations) }
 
     it 'launches the courses editor' do
-      allow(MCB::CoursesEditor).to receive(:new).and_return(instance_double(MCB::CoursesEditor, new_course_wizard: nil))
+      allow(MCB::Editor::CoursesEditor).to receive(:new).and_return(instance_double(MCB::Editor::CoursesEditor, new_course_wizard: nil))
 
       create_new_course_on(provider_code)
 
-      expect(MCB::CoursesEditor).to have_received(:new)
+      expect(MCB::Editor::CoursesEditor).to have_received(:new)
     end
 
     describe 'trying to edit a course on a nonexistent provider' do
@@ -41,14 +41,14 @@ describe 'mcb courses create' do
       }
 
       before do
-        allow(MCB::CoursesEditor).to receive(:new)
-          .and_return(instance_double(MCB::CoursesEditor, new_course_wizard: nil))
+        allow(MCB::Editor::CoursesEditor).to receive(:new)
+          .and_return(instance_double(MCB::Editor::CoursesEditor, new_course_wizard: nil))
       end
 
       it 'picks the provider in the current cycle by default' do
         create_new_course_on(provider_code)
 
-        expect(MCB::CoursesEditor)
+        expect(MCB::Editor::CoursesEditor)
           .to have_received(:new)
           .with(hash_including(provider: provider, requester: requester))
       end
@@ -56,7 +56,7 @@ describe 'mcb courses create' do
       it 'picks the provider in the specified recruitment cycle when appropriate' do
         create_new_course_on(provider_code, in_recruitment_year: next_recruitment_cycle.year)
 
-        expect(MCB::CoursesEditor)
+        expect(MCB::Editor::CoursesEditor)
           .to have_received(:new)
           .with(hash_including(provider: provider_in_the_next_recruitment_cycle, requester: requester))
       end
