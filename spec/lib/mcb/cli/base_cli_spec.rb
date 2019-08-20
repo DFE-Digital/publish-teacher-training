@@ -1,6 +1,6 @@
 require 'mcb_helper'
 
-describe MCB::BaseCLI do
+describe MCB::Cli::BaseCli do
   def run_with_input_commands(*input_cmds)
     stderr = nil
     output = with_stubbed_stdout(stdin: input_cmds.join("\n"), stderr: stderr) do

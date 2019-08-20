@@ -11,7 +11,7 @@ module MCB
     }.freeze
 
     def initialize(provider:, requester:, course_codes: [], courses: nil)
-      @cli = CoursesEditorCLI.new(provider)
+      @cli = MCB::Cli::CourseCli.new(provider)
 
       @provider = provider
       @requester = requester
