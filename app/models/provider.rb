@@ -262,7 +262,8 @@ class Provider < ApplicationRecord
     courses_count = 0
 
     courses.each do |course|
-      courses_count += 1 if course.copy_to_provider(new_provider)
+      new_course = Courses::CopyToProviderService.new(course: course).execute(new_provider)
+      courses_count += 1 if new_course.present?
     end
 
     courses_count
