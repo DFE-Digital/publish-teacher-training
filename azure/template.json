@@ -146,6 +146,20 @@
     "appServicePlanInstances": {
       "type": "int",
       "defaultValue": 1
+    },
+    "govukNotifyApiKey": {
+      "type": "string",
+      "defaultValue": "",
+      "metadata": {
+        "description": "The API Key for GOV.UK Notify"
+      }
+    },
+    "govukNotifyWelcomeEmailTemplateId": {
+      "type": "string",
+      "defaultValue": "",
+      "metadata": {
+        "description": "The GOV.UK Notify template id for the find welcome email"
+      }
     }
   },
   "variables": {
@@ -283,6 +297,14 @@
               {
                 "name": "SETTINGS__SEARCH_API__SECRET",
                 "value": "[parameters('settingsSearchApiSecret')]"
+              },
+              {
+                "name": "SETTINGS__GOVUK_NOTIFY__API_KEY",
+                "value": "[parameters('govukNotifyApiKey')]"
+              },
+              {
+                "name": "SETTINGS__GOVUK_NOTIFY__WELCOME_EMAIL_TEMPLATE_ID",
+                "value": "[parameters('govukNotifyWelcomeEmailTemplateId')]"
               }
             ]
           },
