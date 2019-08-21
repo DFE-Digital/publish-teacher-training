@@ -53,7 +53,7 @@ describe 'Course POST #create API V2', type: :request do
   end
 
   context 'when authorised' do
-    let(:created_course) { provider.courses.first }
+    let(:created_course) { provider.courses.last }
 
     it 'returns http success' do
       expect(subject).to have_http_status(:success)
@@ -71,7 +71,17 @@ describe 'Course POST #create API V2', type: :request do
       expect(created_course.study_mode).to eq(course.study_mode)
       expect(created_course.is_send).to eq(course.is_send)
       expect(created_course.name).to eq(course.name)
-      expect(created_course.course_code).to be_present 
+      expect(created_course.course_code).to match(/^[A-Z]\d{3}$/)
+    end
+
+    context "when a provider already has a course" do
+      let!(:existing_course) { create(:course, provider: provider) }
+
+      it 'creates a course with a different code' do
+        expect { perform_request(course) }.to change { provider.reload.courses.count }.from(1).to(2)
+        expect(created_course.course_code).to match(/^[A-Z]\d{3}$/)
+        expect(created_course.course_code).to_not eq(existing_course.course_code)
+      end
     end
   end
 end

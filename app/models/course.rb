@@ -385,24 +385,6 @@ class Course < ApplicationRecord
       qualification_assignable(course_params)
   end
 
-  def valid_course_code(current_course_codes)
-    loop do
-      course_code = generate_course_code
-      if current_course_codes.exclude?(course_code)
-        course_code
-        break
-      end
-    end
-  end
-
-  def generate_course_code
-    undesirable_letters = ["O", "I"]
-    all_letters = ('A'..'Z').to_a
-    selected_letter = (all_letters - undesirable_letters).sample
-    all_numbers = (0..9).to_a
-    selected_code = selected_letter + all_numbers.to_a.sample(3).join
-  end
-
 private
 
   def entry_requirements_assignable(course_params)

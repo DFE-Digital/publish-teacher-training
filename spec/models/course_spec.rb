@@ -954,12 +954,4 @@ RSpec.describe Course, type: :model do
       it { is_expected.to_not be_valid }
     end
   end
-
-  describe '#valid_course_code' do
-    let(:course) { build :course, course_code: nil }
-
-    it 'should have a length of 4' do
-      expect(course.generate_course_code.length).to eq 4
-    end
-  end
 end

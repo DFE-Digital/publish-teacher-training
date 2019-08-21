@@ -80,10 +80,14 @@ module API
       def create
         authorize @provider, :can_create_course?
         return unless course_params.values.any?
-        providers_course_codes = @provider.courses.map(&:course_code)
-        course_code = self.valid_course_code(providers_course_codes)
-        course = Course.new(new_course_params.merge(provider: @provider, course_code: course_code))
 
+        generate_code_service = Courses::GenerateUniqueCourseCodeService.new(
+          existing_codes: @provider.courses.pluck(:course_code),
+          generate_course_code_service: Courses::GenerateCourseCodeService.new
+        )
+        course_code = generate_code_service.execute
+
+        course = Course.new(course_params.merge(provider: @provider, course_code: course_code))
 
         if course.save
           render jsonapi: course.reload
@@ -133,7 +137,6 @@ module API
       def providers_course_codes
         @provider.courses.map(&:course_code)
       end
-
 
       def build_provider
         @provider = @recruitment_cycle.providers.find_by!(
@@ -219,41 +222,6 @@ module API
             :name,
           )
       end
-
-      # def new_course_params
-      #   params
-      #     .fetch(:course, {})
-      #     .except(:about_course,
-      #             :course_length,
-      #             :fee_details,
-      #             :fee_international,
-      #             :fee_uk_eu,
-      #             :financial_support,
-      #             :how_school_placements_work,
-      #             :interview_process,
-      #             :other_requirements,
-      #             :personal_qualities,
-      #             :salary_details,
-      #             :required_qualifications,
-      #             :qualifications,
-      #             :id,
-      #             :type,
-      #             :sites_ids,
-      #             :sites_types,)
-      #     .permit(
-      #       :english,
-      #       :maths,
-      #       :science,
-      #       :qualification,
-      #       :age_range_in_years,
-      #       :start_date,
-      #       :applications_open_from,
-      #       :study_mode,
-      #       :is_send,
-      #       :name,
-      #       :course_code,
-      #     )
-      # end
 
       def site_ids
         params.fetch(:course, {})[:sites_ids]
