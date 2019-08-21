@@ -21,7 +21,8 @@ describe User, type: :model do
   subject { create(:user, first_name: 'Jane', last_name: 'Smith', email: 'jsmith@scitt.org') }
 
   describe 'associations' do
-    it { should have_and_belong_to_many(:organisations) }
+    it { should have_many(:organisation_users) }
+    it { should have_many(:organisations).through(:organisation_users) }
     it { should have_many(:providers).through(:organisations) }
   end
 
