@@ -44,6 +44,17 @@ describe 'mcb users grant --admin' do
       it 'grants membership of all organisations to that user' do
         expect(user.reload.organisations).to eq([organisation1, organisation2, organisation3])
       end
+
+      it 'audits the User has been added correctly' do
+        audit1 = organisation1.associated_audits.last
+        audit2 = organisation2.associated_audits.last
+        audit3 = organisation3.associated_audits.last
+
+        [audit1, audit2, audit3].each do |audit|
+          expect(audit.user).to eq(requester)
+          expect(audit.action).to eq('create')
+        end
+      end
     end
 
     context 'when the user exists and is not a member of all orgs' do
@@ -57,6 +68,21 @@ describe 'mcb users grant --admin' do
 
       it 'grants membership of all organisations to that user' do
         expect(user.reload.organisations).to eq([organisation1, organisation2, organisation3])
+      end
+
+      it 'audits the User has been added correctly' do
+        audit1 = organisation1.associated_audits.last
+        audit3 = organisation3.associated_audits.last
+        audit2 = organisation2.associated_audits.last
+
+        [audit1, audit3].each do |audit|
+          expect(audit.user).to eq(requester)
+          expect(audit.action).to eq('create')
+        end
+
+        # This is not set as it is setup in conext.
+        expect(audit2.user).to be_nil
+        expect(audit2.action).to eq('create')
       end
     end
   end

@@ -51,9 +51,21 @@ describe 'mcb users grant' do
       expect(User.find_by(first_name: 'Jane', last_name: 'Smith', email: 'jsmith@acme.org')).to be_present
     end
 
+    it 'creates the user with the correct audited by' do
+      user = User.find_by(first_name: 'Jane', last_name: 'Smith', email: 'jsmith@acme.org')
+      expect(user.audits.last.user).to eq(requester)
+    end
+
     it 'grants organisation membership to that user' do
       user = User.find_by!(first_name: 'Jane', last_name: 'Smith', email: 'jsmith@acme.org')
       expect(user.organisations).to eq([organisation])
+    end
+
+    it 'audits the User has been added correctly' do
+      audit = organisation.associated_audits.last
+
+      expect(audit.user).to eq(requester)
+      expect(audit.action).to eq('create')
     end
 
     it 'confirms user creation and organisation membership' do
@@ -95,6 +107,13 @@ describe 'mcb users grant' do
 
     it 'confirms user creation and organisation membership' do
       expect(output).to include("You're about to give #{user} access to organisation #{organisation.name}.")
+    end
+
+    it 'audits the User has been added correctly' do
+      audit = organisation.associated_audits.last
+
+      expect(audit.user).to eq(requester)
+      expect(audit.action).to eq('create')
     end
   end
 end

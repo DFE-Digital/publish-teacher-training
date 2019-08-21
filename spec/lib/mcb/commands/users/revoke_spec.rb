@@ -52,6 +52,13 @@ describe 'mcb users revoke' do
       it 'confirms removing organisation membership' do
         expect(output).to include("You're revoking access for #{user.email}")
       end
+
+      it 'audits that the User is removed correctly' do
+        audit = organisation.associated_audits.last
+
+        expect(audit.user).to eq(requester)
+        expect(audit.action).to eq('destroy')
+      end
     end
 
     context 'when the user does not exist' do
