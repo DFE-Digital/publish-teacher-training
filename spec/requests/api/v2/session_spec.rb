@@ -49,7 +49,17 @@ describe '/api/v2/sessions', type: :request do
       let(:user) { create(:user, last_login_date_utc: 10.days.ago) }
       let(:returned_json_response) { JSON.parse response.body }
 
+      let(:govuk_notify_request) do
+        stub_request(:post, "https://api.notifications.service.gov.uk/v2/notifications/email").
+           with(
+             body: { email_address: user.email, template_id: Settings.govuk_notify.welcome_email_template_id, personalisation: { first_name: user.first_name } }.to_json
+            ).
+            to_return(status: 200, body: "{}", headers: {})
+      end
+
+
       before do
+        govuk_notify_request
         Timecop.freeze
         post '/api/v2/sessions',
              headers: { 'HTTP_AUTHORIZATION' => credentials },
@@ -93,6 +103,22 @@ describe '/api/v2/sessions', type: :request do
           user.reload
           expect(user.first_name).to eq "updated first_name"
           expect(user.last_name).to eq "updated last_name"
+        end
+      end
+
+      context 'on first login' do
+        let(:user) { create(:user, first_login_date_utc: nil) }
+
+        it 'Sends a welcome email to the user' do
+          expect(govuk_notify_request).to have_been_made
+        end
+      end
+
+      context 'on second login' do
+        let(:user) { create(:user, first_login_date_utc: 10.days.ago) }
+
+        it 'Does not send a welcome email to the user' do
+          expect(govuk_notify_request).not_to have_been_made
         end
       end
     end

@@ -143,6 +143,9 @@ GEM
       rubocop-rails (~> 2)
       rubocop-rspec (~> 1.28)
       scss_lint
+    govuk_notify_rails (2.1.0)
+      notifications-ruby-client (>= 2.9.0)
+      rails (>= 4.1.0)
     guard (2.15.0)
       formatador (>= 0.2.4)
       listen (>= 2.7, < 4.0)
@@ -228,6 +231,8 @@ GEM
     notiffany (0.1.1)
       nenv (~> 0.1)
       shellany (~> 0.0)
+    notifications-ruby-client (4.0.0)
+      jwt (>= 1.5, < 3)
     parallel (1.17.0)
     parser (2.6.3.0)
       ast (~> 2.4.0)
@@ -410,6 +415,7 @@ DEPENDENCIES
   faker
   faraday
   govuk-lint
+  govuk_notify_rails
   guard
   guard-rspec
   guard-rubocop

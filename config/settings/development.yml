@@ -1,2 +1,4 @@
 authentication:
   secret: secret
+govuk_notify:
+  api_key: its_a_secret
