@@ -71,7 +71,7 @@ describe 'Course POST #create API V2', type: :request do
       expect(created_course.study_mode).to eq(course.study_mode)
       expect(created_course.is_send).to eq(course.is_send)
       expect(created_course.name).to eq(course.name)
-      expect(created_course.course_code).to eq(course.course_code)
+      expect(created_course.course_code).to be_present 
     end
   end
 end

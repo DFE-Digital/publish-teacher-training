@@ -79,13 +79,13 @@ module API
 
       def create
         authorize @provider, :can_create_course?
-        return unless new_course_params.values.any?
+        return unless course_params.values.any?
+        providers_course_codes = @provider.courses.map(&:course_code)
+        course_code = self.valid_course_code(providers_course_codes)
+        course = Course.new(new_course_params.merge(provider: @provider, course_code: course_code))
 
-        course = Course.new
-        course.assign_attributes(new_course_params)
-        course.update(provider: @provider)
 
-        if course.errors.empty?
+        if course.save
           render jsonapi: course.reload
         else
           render jsonapi_errors: course.errors, status: :unprocessable_entity
@@ -129,6 +129,11 @@ module API
           end
         end
       end
+
+      def providers_course_codes
+        @provider.courses.map(&:course_code)
+      end
+
 
       def build_provider
         @provider = @recruitment_cycle.providers.find_by!(
@@ -215,40 +220,40 @@ module API
           )
       end
 
-      def new_course_params
-        params
-          .fetch(:course, {})
-          .except(:about_course,
-                  :course_length,
-                  :fee_details,
-                  :fee_international,
-                  :fee_uk_eu,
-                  :financial_support,
-                  :how_school_placements_work,
-                  :interview_process,
-                  :other_requirements,
-                  :personal_qualities,
-                  :salary_details,
-                  :required_qualifications,
-                  :qualifications,
-                  :id,
-                  :type,
-                  :sites_ids,
-                  :sites_types,)
-          .permit(
-            :english,
-            :maths,
-            :science,
-            :qualification,
-            :age_range_in_years,
-            :start_date,
-            :applications_open_from,
-            :study_mode,
-            :is_send,
-            :name,
-            :course_code,
-          )
-      end
+      # def new_course_params
+      #   params
+      #     .fetch(:course, {})
+      #     .except(:about_course,
+      #             :course_length,
+      #             :fee_details,
+      #             :fee_international,
+      #             :fee_uk_eu,
+      #             :financial_support,
+      #             :how_school_placements_work,
+      #             :interview_process,
+      #             :other_requirements,
+      #             :personal_qualities,
+      #             :salary_details,
+      #             :required_qualifications,
+      #             :qualifications,
+      #             :id,
+      #             :type,
+      #             :sites_ids,
+      #             :sites_types,)
+      #     .permit(
+      #       :english,
+      #       :maths,
+      #       :science,
+      #       :qualification,
+      #       :age_range_in_years,
+      #       :start_date,
+      #       :applications_open_from,
+      #       :study_mode,
+      #       :is_send,
+      #       :name,
+      #       :course_code,
+      #     )
+      # end
 
       def site_ids
         params.fetch(:course, {})[:sites_ids]
