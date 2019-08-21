@@ -31,6 +31,8 @@ en:
               inclusion: "^Pick an option for Science"
             enrichments:
               blank: "^Complete your course information before publishing"
+            sites:
+              blank: "^You must pick at least one location for this course"
         course_enrichment:
           attributes:
             salary_details:
