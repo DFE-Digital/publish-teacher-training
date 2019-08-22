@@ -34,7 +34,7 @@ FactoryBot.define do
     address4 { Faker::Address.state }
     postcode { Faker::Address.postcode }
     telephone { '01234 123 123 ext 123' }
-    region_code { 'eastern' }
+    region_code { ProviderEnrichment.region_codes.values.sample }
     train_with_us { Faker::Lorem.sentence.to_s }
     train_with_disability { Faker::Lorem.sentence.to_s }
     accrediting_provider_enrichments { nil }
