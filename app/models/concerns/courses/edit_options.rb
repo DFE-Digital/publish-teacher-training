@@ -6,6 +6,7 @@ module Courses
     include QualificationConcern
     include StartDateConcern
     include StudyModeConcern
+    include ProgramTypeConcern
 
     included do
       # When changing edit options here be sure to update the edit_options in the
@@ -19,6 +20,7 @@ module Courses
           age_range_in_years: age_range_options,
           start_dates: start_date_options,
           study_modes: study_mode_options,
+          program_type: program_type_options,
         }
       end
     end

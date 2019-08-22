@@ -1,15 +1,18 @@
 module Courses
   module EditOptions
-    module QualificationConcern
+    module ProgramTypeConcern
       extend ActiveSupport::Concern
       included do
         # When changing anything here be sure to update the edit_options in the
         # courses factory in manage-courses-frontend:
         #
         # https://github.com/DFE-Digital/manage-courses-frontend/blob/master/spec/factories/courses.rb
-        def qualification_options
-          qualifications_with_qts, qualifications_without_qts = Course.qualifications.keys.partition { |q| q.include?('qts') }
-          level == :further_education ? qualifications_without_qts : qualifications_with_qts
+        def program_type_options
+          if self_accredited?
+            %w[Apprenticeship]
+          else
+            %w[Fee paying (no salary), Salaried, Teaching apprenticeship (with salary)]
+          end
         end
       end
     end

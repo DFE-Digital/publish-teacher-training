@@ -371,6 +371,10 @@ class Course < ApplicationRecord
     dfe_subjects&.first&.scholarship_amount
   end
 
+  def self_accredited?
+    accrediting_provider_id.blank?
+  end
+
   def to_s
     "#{name} (#{provider.provider_code}/#{course_code}) [#{recruitment_cycle}]"
   end
