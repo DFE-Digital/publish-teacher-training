@@ -19,6 +19,13 @@
 
 ## Setting up the app in development
 
+### Settings
+
+If you are going to login with a user who hasn't recieved the welcome email - you will need to set the following settings to their correct values in `config/settings/development.local.yml`:
+
+- `govuk_notify.api_key`
+- `govuk_notify.welcome_email_template_id`
+
 ### Native
 
 0. If you haven't already, follow this [tutorial](https://gorails.com/setup) to setup your Rails environment, make sure to install PostgreSQL 9.6 as the database
