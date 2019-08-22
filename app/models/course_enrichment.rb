@@ -115,13 +115,6 @@ class CourseEnrichment < ApplicationRecord
     update(data)
   end
 
-  def copy_to_course(new_course)
-    new_enrichment = self.dup
-    new_enrichment.last_published_timestamp_utc = nil
-    new_enrichment.rolled_over!
-    new_course.enrichments << new_enrichment
-  end
-
 private
 
   def set_defaults

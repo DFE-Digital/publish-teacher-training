@@ -1,7 +1,8 @@
 module Courses
   class CopyToProviderService
-    def initialize(sites_copy_to_course:)
+    def initialize(sites_copy_to_course:, enrichments_copy_to_course:)
       @sites_copy_to_course = sites_copy_to_course
+      @enrichments_copy_to_course = enrichments_copy_to_course
     end
 
     def execute(course:, new_provider:)
@@ -19,7 +20,7 @@ module Courses
         new_course.subjects << course.subjects
 
         last_enrichment = course.enrichments.latest_first.first
-        last_enrichment.copy_to_course(new_course) if last_enrichment.present?
+        @enrichments_copy_to_course.execute(enrichment: last_enrichment, new_course: new_course) if last_enrichment.present?
 
         course.sites.each do |site|
           new_site = new_provider.sites.find_by(code: site.code)

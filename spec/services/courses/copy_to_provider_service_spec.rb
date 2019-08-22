@@ -21,7 +21,13 @@ RSpec.describe Courses::CopyToProviderService do
   }
 
   let(:mocked_sites_copy_to_course_service) { double(execute: nil) }
-  let(:service) { described_class.new(sites_copy_to_course: mocked_sites_copy_to_course_service) }
+  let(:mocked_enrichments_copy_to_course_service) { double(execute: nil) }
+  let(:service) do
+    described_class.new(
+      sites_copy_to_course: mocked_sites_copy_to_course_service,
+      enrichments_copy_to_course: mocked_enrichments_copy_to_course_service
+    )
+  end
 
   it 'makes a copy of the course in the new provider' do
     service.execute(course: course, new_provider: new_provider)
@@ -41,29 +47,23 @@ RSpec.describe Courses::CopyToProviderService do
     expect(provider.reload.courses).to eq [course]
   end
 
-  context 'course has a published but no draft enrichment' do
+  it "doesn't copy enrichments when they do not exist" do
+    service.execute(course: course, new_provider: new_provider)
+
+    expect(mocked_enrichments_copy_to_course_service).to_not have_received(:execute)
+  end
+
+  context 'when a published enrichment exists' do
     let!(:published_enrichment) do
       create :course_enrichment, :published, course: course
     end
 
-    before { service.execute(course: course, new_provider: new_provider) }
+    it 'copies the published enrichment' do
+      service.execute(course: course, new_provider: new_provider)
 
-    subject { new_course.enrichments }
-
-    its(:length) { should eq 1 }
-
-    describe 'the new course' do
-      subject { new_course }
-
-      its(:content_status) { should eq :rolled_over }
-    end
-
-    describe 'the copied enrichment' do
-      subject { new_course.enrichments.first }
-
-      its(:about_course) { should eq published_enrichment.about_course }
-      its(:last_published_timestamp_utc) { should be_nil }
-      it { should be_rolled_over }
+      expect(mocked_enrichments_copy_to_course_service).to have_received(:execute).with(
+        enrichment: published_enrichment, new_course: new_course
+      )
     end
   end
 
@@ -75,23 +75,12 @@ RSpec.describe Courses::CopyToProviderService do
       create :course_enrichment, course: course
     end
 
-    before { service.execute(course: course, new_provider: new_provider) }
+    it 'copies the draft enrichment' do
+      service.execute(course: course, new_provider: new_provider)
 
-    subject { new_course.enrichments }
-
-    its(:length) { should eq 1 }
-
-    describe 'the new course' do
-      subject { new_course }
-
-      its(:content_status) { should eq :rolled_over }
-    end
-
-    describe 'the copied enrichment' do
-      subject { new_course.enrichments.first }
-
-      its(:about_course) { should eq draft_enrichment.about_course }
-      it { should be_rolled_over }
+      expect(mocked_enrichments_copy_to_course_service).to have_received(:execute).with(
+        enrichment: draft_enrichment, new_course: new_course
+      )
     end
   end
 
@@ -103,13 +92,11 @@ RSpec.describe Courses::CopyToProviderService do
     }
 
     it 'does not make a copy of the course' do
-      expect { service.execute(course: course, new_provider: new_provider) }
-        .not_to(change { new_provider.reload.courses.count })
+      expect(mocked_sites_copy_to_course_service).to_not have_received(:execute)
     end
 
     it 'does not make a copy of the enrichments' do
-      expect { service.execute(course: course, new_provider: new_provider) }
-        .not_to(change { new_course.reload.enrichments.count })
+      expect(mocked_enrichments_copy_to_course_service).to_not have_received(:execute)
     end
   end
 
@@ -124,8 +111,10 @@ RSpec.describe Courses::CopyToProviderService do
     }
 
     before do
-      described_class.new(sites_copy_to_course: mocked_sites_copy_to_course_service)
-                     .execute(course: course, new_provider: new_provider)
+      described_class.new(
+        sites_copy_to_course: mocked_sites_copy_to_course_service,
+        enrichments_copy_to_course: mocked_enrichments_copy_to_course_service
+      ).execute(course: course, new_provider: new_provider)
     end
 
     describe 'the new course' do
