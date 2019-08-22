@@ -38,9 +38,10 @@ describe SearchAndCompareAPIService do
     let(:provider_code) { course.provider.provider_code }
 
     let(:status) { 200 }
+    let(:http_verb) { :put }
 
     before do
-      stub_request(:put, "#{Settings.search_api.base_url}/api/courses/")
+      stub_request(http_verb, "#{Settings.search_api.base_url}/api/courses/")
         .with { |req| req.body == body.to_json }
         .to_return(
           status: status
@@ -50,6 +51,24 @@ describe SearchAndCompareAPIService do
     describe 'sync' do
       subject {
         request.sync(
+          [course]
+        )
+      }
+      describe "with a normal response" do
+        it { should eq true }
+      end
+
+      describe "with a bad response" do
+        let(:status) { 400 }
+        it { should eq false }
+      end
+    end
+
+    describe 'bulk_sync' do
+      let(:http_verb) { :post }
+
+      subject {
+        request.bulk_sync(
           [course]
         )
       }

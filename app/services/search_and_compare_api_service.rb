@@ -15,6 +15,23 @@ module SearchAndCompareAPIService
   class Request
     attr_reader :response
 
+
+    # NOTE:
+    #   HTTP POST "/api/courses" accepts a list of courses
+    #   It will DELETE and then create.
+    def bulk_sync(courses)
+      @response = api.post(
+        "/api/courses/",
+        serialize(courses)
+      ) do |req|
+        # NOTE:
+        #   It's going to be a long process
+        req.options.timeout = 600
+      end
+
+      @response.success?
+    end
+
     # NOTE:
     #   HTTP PUT "/api/courses" accepts a list of courses
     #   It will only add or update, no DELETION.
