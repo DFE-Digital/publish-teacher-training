@@ -20,7 +20,7 @@ class ProviderEnrichment < ApplicationRecord
   before_save :ensure_region_code_is_an_integer_in_json_data
   before_create :set_provider_code
 
-  enum status: { draft: 0, published: 1 }
+  enum status: { draft: 0, published: 1, rolled_over: 2 }
 
   belongs_to :provider,
              inverse_of: 'enrichments'
@@ -34,7 +34,7 @@ class ProviderEnrichment < ApplicationRecord
 
   scope :latest_created_at, -> { order(created_at: :desc) }
   scope :latest_published_at, -> { order(last_published_at: :desc) }
-  scope :draft, -> { where(status: 'draft') }
+  scope :draft, -> { where(status: %w[draft rolled_over]) }
 
   jsonb_accessor :json_data,
                  email: [:string, store_key: 'Email'],
@@ -64,6 +64,10 @@ class ProviderEnrichment < ApplicationRecord
             :address1, :address3, :address4,
             :postcode, :train_with_us, :train_with_disability,
             presence: true, on: :publish
+
+  def draft?
+    status.in? %w[draft rolled_over]
+  end
 
   def has_been_published_before?
     last_published_at.present?

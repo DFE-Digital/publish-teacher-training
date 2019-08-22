@@ -471,4 +471,19 @@ describe 'PATCH /providers/:provider_code' do
     include_examples 'only one attribute has changed', :train_with_us, 'changed train with us'
     include_examples 'only one attribute has changed', :train_with_disability, 'changed train with disability'
   end
+
+  describe 'Updating a rolled over enrichment' do
+    let(:enrichment) { build :provider_enrichment, status: 'rolled_over' }
+    let(:enrichments) { [enrichment] }
+
+    let(:updated_enrichment) { enrichment.reload }
+
+    before do
+      perform_request update_provider
+    end
+
+    it 'Sets the provider enrichment status to draft' do
+      expect(updated_enrichment.status).to eq('draft')
+    end
+  end
 end

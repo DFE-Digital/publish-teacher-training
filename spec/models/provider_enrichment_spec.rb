@@ -323,4 +323,18 @@ describe ProviderEnrichment, type: :model do
       end
     end
   end
+
+  describe 'Rollover' do
+    let(:enrichment) { build(:provider_enrichment) }
+
+    before { enrichment.rolled_over! }
+
+    it 'has a status of "rolled over"' do
+      expect(enrichment.status).to eq("rolled_over")
+    end
+
+    it 'is marked as a draft' do
+      expect(enrichment.draft?). to be true
+    end
+  end
 end
