@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe Courses::GenerateUniqueCourseCodeService do
+describe Courses::GenerateUniqueCourseCodeService do
   let(:existing_codes) { [] }
   let(:mocked_gen_code_service) { double }
   let(:service) do

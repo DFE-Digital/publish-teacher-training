@@ -134,10 +134,6 @@ module API
         end
       end
 
-      def providers_course_codes
-        @provider.courses.map(&:course_code)
-      end
-
       def build_provider
         @provider = @recruitment_cycle.providers.find_by!(
           provider_code: params[:provider_code].upcase

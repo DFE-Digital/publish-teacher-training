@@ -1,7 +1,7 @@
 module Courses
   class GenerateCourseCodeService
     def execute
-      "#{valid_letters.sample}#{3.times.map { valid_number }.join}"
+      "#{valid_letters.sample}#{valid_number}"
     end
 
   private
@@ -11,7 +11,7 @@ module Courses
     end
 
     def valid_number
-      (0..9).to_a.sample.to_s
+      [*0..999].sample.to_s.rjust(3, "0")
     end
   end
 end

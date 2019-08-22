@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe Courses::GenerateCourseCodeService do
+describe Courses::GenerateCourseCodeService do
   let(:service) { described_class.new }
 
   it 'returns a course code like A000' do
@@ -22,11 +22,11 @@ RSpec.describe Courses::GenerateCourseCodeService do
   end
 
   it 'does not include I' do
-    expect(service.send(:valid_number)).to match(/^\d{1}$/)
+    expect(service.send(:valid_number)).to match(/^\d{3}$/)
   end
 
-  it 'calls "valid_number three times' do
-    expect(service).to receive(:valid_number).exactly(3).times.and_return('1', '1', '1')
+  it 'calls "valid_number once' do
+    expect(service).to receive(:valid_number).once.and_return('111')
 
     service.execute
   end
