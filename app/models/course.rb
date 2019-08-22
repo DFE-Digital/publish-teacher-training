@@ -148,6 +148,7 @@ class Course < ApplicationRecord
   validates :science, inclusion: { in: entry_requirement_options_without_nil_choice }, if: :gcse_science_required?
   validates :enrichments, presence: true, on: :publish
   validates :is_send, inclusion: { in: [true, false] }
+  validates :sites, presence: true, on: :publish
   validate :validate_enrichment_publishable, on: :publish
   validate :validate_enrichment
   validate :validate_course_syncable, on: :sync

@@ -71,14 +71,21 @@ describe 'Publishable API v2', type: :request do
         let(:course) { create(:course, provider: provider) }
         it { should have_http_status(:unprocessable_entity) }
         it 'has validation errors' do
-          expect(json_data.count).to eq 1
+          expect(json_data.count).to eq 2
           expect(response.body).to include('Invalid enrichment')
           expect(response.body).to include("Complete your course information before publishing")
+          expect(response.body).to include("Invalid sites")
+          expect(response.body).to include("You must pick at least one location for this course")
         end
       end
 
       context 'fee type based course' do
-        let(:course) { create(:course, :fee_type_based, provider: provider, enrichments: [invalid_enrichment]) }
+        let(:course) {
+          create(:course, :fee_type_based,
+                 provider: provider,
+                 enrichments: [invalid_enrichment],
+                 site_statuses: [site_status])
+        }
 
         context 'invalid enrichment with invalid content lack_presence fields' do
           let(:invalid_enrichment) { create(:course_enrichment, :without_content) }
