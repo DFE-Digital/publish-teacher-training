@@ -20,10 +20,10 @@ RSpec.describe Courses::CopyToProviderService do
     new_provider.reload.courses.find_by(course_code: course.course_code)
   }
 
-  let(:service) { described_class.new(course: course) }
+  let(:service) { described_class.new }
 
   it 'makes a copy of the course in the new provider' do
-    service.execute(new_provider)
+    service.execute(course: course, new_provider: new_provider)
 
     expect(new_course).not_to be_nil
     expect(new_course.accrediting_provider_code)
@@ -35,7 +35,7 @@ RSpec.describe Courses::CopyToProviderService do
   end
 
   it 'leaves the existing course alone' do
-    service.execute(new_provider)
+    service.execute(course: course, new_provider: new_provider)
 
     expect(provider.reload.courses).to eq [course]
   end
@@ -45,7 +45,7 @@ RSpec.describe Courses::CopyToProviderService do
       create :course_enrichment, :published, course: course
     end
 
-    before { service.execute(new_provider) }
+    before { service.execute(course: course, new_provider: new_provider) }
 
     subject { new_course.enrichments }
 
@@ -74,7 +74,7 @@ RSpec.describe Courses::CopyToProviderService do
       create :course_enrichment, course: course
     end
 
-    before { service.execute(new_provider) }
+    before { service.execute(course: course, new_provider: new_provider) }
 
     subject { new_course.enrichments }
 
@@ -102,12 +102,12 @@ RSpec.describe Courses::CopyToProviderService do
     }
 
     it 'does not make a copy of the course' do
-      expect { service.execute(new_provider) }
+      expect { service.execute(course: course, new_provider: new_provider) }
         .not_to(change { new_provider.reload.courses.count })
     end
 
     it 'does not make a copy of the enrichments' do
-      expect { service.execute(new_provider) }
+      expect { service.execute(course: course, new_provider: new_provider) }
         .not_to(change { new_course.reload.enrichments.count })
     end
   end
@@ -123,7 +123,7 @@ RSpec.describe Courses::CopyToProviderService do
     }
 
     before do
-      described_class.new(course: course).execute(new_provider)
+      described_class.new.execute(course: course, new_provider: new_provider)
     end
 
     describe 'the new course' do

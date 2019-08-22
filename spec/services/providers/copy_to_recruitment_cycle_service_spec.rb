@@ -28,7 +28,13 @@ describe Providers::CopyToRecruitmentCycleService do
         provider_code: provider.provider_code
       )
     end
-    let(:service) { described_class.new(provider: provider) }
+    let(:mocked_copy_course_service) { double(execute: nil) }
+    let(:service) do
+      described_class.new(
+        provider: provider,
+        copy_course_to_provider_service: mocked_copy_course_service
+      )
+    end
 
     it 'makes a copy of the provider in the new recruitment cycle' do
       expect(
@@ -100,18 +106,17 @@ describe Providers::CopyToRecruitmentCycleService do
     end
 
     it 'copies over the courses' do
-      service_spy = spy
-      allow(Courses::CopyToProviderService).to receive(:new).with(course: course).and_return(service_spy)
-
       service.execute(new_recruitment_cycle)
 
-      expect(service_spy).to have_received(:execute).with(new_provider)
+      expect(mocked_copy_course_service).to have_received(:execute).with(course: course, new_provider: new_provider)
     end
 
     it 'returns a hash of the counts of copied objects' do
       output = service.execute(new_recruitment_cycle)
 
-      expect(output).to eq(providers: 1, sites: 1, courses: 1)
+      expect(output).to have_key(:providers)
+      expect(output).to have_key(:sites)
+      expect(output).to have_key(:courses)
     end
   end
 end
