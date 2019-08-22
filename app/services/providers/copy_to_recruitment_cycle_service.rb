@@ -1,8 +1,9 @@
 module Providers
   class CopyToRecruitmentCycleService
-    def initialize(provider:, copy_course_to_provider_service:)
+    def initialize(provider:, copy_course_to_provider_service:, copy_site_to_provider_service:)
       @provider = provider
       @copy_course_to_provider_service = copy_course_to_provider_service
+      @copy_site_to_provider_service = copy_site_to_provider_service
     end
 
     def execute(new_recruitment_cycle)
@@ -56,7 +57,8 @@ module Providers
       sites_count = 0
 
       @provider.sites.each do |site|
-        sites_count += 1 if site.copy_to_provider(new_provider)
+        new_site = @copy_site_to_provider_service.execute(site: site, new_provider: new_provider)
+        sites_count += 1 if new_site.present?
       end
 
       sites_count

@@ -29,10 +29,12 @@ describe Providers::CopyToRecruitmentCycleService do
       )
     end
     let(:mocked_copy_course_service) { double(execute: nil) }
+    let(:mocked_copy_site_service) { double(execute: nil) }
     let(:service) do
       described_class.new(
         provider: provider,
-        copy_course_to_provider_service: mocked_copy_course_service
+        copy_course_to_provider_service: mocked_copy_course_service,
+        copy_site_to_provider_service: mocked_copy_site_service
       )
     end
 
@@ -98,11 +100,9 @@ describe Providers::CopyToRecruitmentCycleService do
     end
 
     it 'copies over the sites' do
-      allow(site).to receive(:copy_to_provider)
-
       service.execute(new_recruitment_cycle)
 
-      expect(site).to have_received(:copy_to_provider).with(new_provider)
+      expect(mocked_copy_site_service).to have_received(:execute).with(site: site, new_provider: new_provider)
     end
 
     it 'copies over the courses' do

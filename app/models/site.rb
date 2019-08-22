@@ -53,16 +53,6 @@ class Site < ApplicationRecord
     "#{location_name} (code: #{code})"
   end
 
-  def copy_to_provider(new_provider)
-    new_site = new_provider.sites.find_by(code: self.code)
-    unless new_site
-      new_site = self.dup
-      new_site.provider_id = new_provider.id
-      new_site.save(validate: false)
-      new_provider.reload
-    end
-  end
-
   def copy_to_course(new_course)
     new_vac_status = SiteStatus.default_vac_status_given(
       study_mode: new_course.study_mode
