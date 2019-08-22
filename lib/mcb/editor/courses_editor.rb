@@ -59,6 +59,10 @@ module MCB
         @cli = MCB::Cli::CourseCli.new(@provider)
       end
 
+      def check_authorisation
+        @courses.each { |course| raise Pundit::NotAuthorizedError unless can_update?(course) }
+      end
+
     private
 
       def main_loop
@@ -137,10 +141,6 @@ module MCB
         end
 
         @courses.first
-      end
-
-      def check_authorisation
-        @courses.each { |course| raise Pundit::NotAuthorizedError unless can_update?(course) }
       end
 
       def print_at_most_two_courses

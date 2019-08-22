@@ -20,7 +20,7 @@ module MCB
         end
       end
 
-    private
+    protected
 
       def setup_cli
         @cli = HighLine.new
@@ -30,6 +30,8 @@ module MCB
         # There is no authorisation for Granting users.
         true
       end
+
+    private
 
       def setup_user
         return false unless find_or_init_user

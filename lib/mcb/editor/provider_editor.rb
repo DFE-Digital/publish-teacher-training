@@ -53,6 +53,11 @@ module MCB
         @cli = MCB::Cli::ProviderCli.new
       end
 
+      def check_authorisation
+        action = @provider.persisted? ? :update? : :create?
+        raise Pundit::NotAuthorizedError unless Pundit.policy(@requester, @provider).send(action)
+      end
+
     private
 
       def ask_and_set_provider_details
@@ -184,11 +189,6 @@ module MCB
       def mcb_courses_edit(course_codes)
         command_params = ['courses', 'edit', provider.provider_code] + course_codes + environment_options + recruitment_cycle_year_options
         $mcb.run(command_params)
-      end
-
-      def check_authorisation
-        action = @provider.persisted? ? :update? : :create?
-        raise Pundit::NotAuthorizedError unless Pundit.policy(@requester, @provider).send(action)
       end
 
       def recruitment_cycle_year_options

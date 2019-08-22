@@ -13,7 +13,7 @@ module MCB
         audit { confirm_and_remove_user_from_organisation }
       end
 
-    private
+    protected
 
       def setup_cli
         @cli = HighLine.new
@@ -23,6 +23,8 @@ module MCB
         # There is no authorisation for Granting users.
         true
       end
+
+    private
 
       def fetch_organisations
         @organisations = if @provider
