@@ -1,5 +1,9 @@
 module Courses
   class CopyToProviderService
+    def initialize(sites_copy_to_course:)
+      @sites_copy_to_course = sites_copy_to_course
+    end
+
     def execute(course:, new_provider:)
       new_course = new_provider.courses.find_by(course_code: course.course_code)
 
@@ -19,7 +23,8 @@ module Courses
 
         course.sites.each do |site|
           new_site = new_provider.sites.find_by(code: site.code)
-          new_site&.copy_to_course(new_course)
+
+          @sites_copy_to_course.execute(new_site: new_site, new_course: new_course) if new_site.present?
         end
       end
 

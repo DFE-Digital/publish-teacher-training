@@ -20,7 +20,8 @@ RSpec.describe Courses::CopyToProviderService do
     new_provider.reload.courses.find_by(course_code: course.course_code)
   }
 
-  let(:service) { described_class.new }
+  let(:mocked_sites_copy_to_course_service) { double(execute: nil) }
+  let(:service) { described_class.new(sites_copy_to_course: mocked_sites_copy_to_course_service) }
 
   it 'makes a copy of the course in the new provider' do
     service.execute(course: course, new_provider: new_provider)
@@ -123,7 +124,8 @@ RSpec.describe Courses::CopyToProviderService do
     }
 
     before do
-      described_class.new.execute(course: course, new_provider: new_provider)
+      described_class.new(sites_copy_to_course: mocked_sites_copy_to_course_service)
+                     .execute(course: course, new_provider: new_provider)
     end
 
     describe 'the new course' do
@@ -133,25 +135,8 @@ RSpec.describe Courses::CopyToProviderService do
       its(:open_for_applications?) { should be_falsey }
     end
 
-    describe "the new course's list of sites" do
-      subject { new_course.sites }
-
-      its(:length) { should eq 1 }
-    end
-
-    describe 'the new site' do
-      subject { new_course.sites.first }
-
-      it { should eq new_site }
-      its(:code) { should eq site.code }
-    end
-
-    describe "the new site's status" do
-      subject { new_course.site_statuses.first }
-
-      it { should be_full_time_vacancies }
-      it { should be_status_new_status }
-      its(:applications_accepted_from) { should eq new_recruitment_cycle.application_start_date }
+    it "copies over the course's sites" do
+      expect(mocked_sites_copy_to_course_service).to have_received(:execute).with(new_site: new_site, new_course: new_course)
     end
   end
 end
