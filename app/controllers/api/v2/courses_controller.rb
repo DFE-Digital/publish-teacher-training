@@ -7,10 +7,10 @@ module API
 
       before_action :build_recruitment_cycle
       before_action :build_provider
-      before_action :build_course, except: %i[index new]
+      before_action :build_course, except: %i[index new create]
 
       deserializable_resource :course,
-                              only: %i[update publish publishable],
+                              only: %i[update publish publishable create],
                               class: API::V2::DeserializableCourse
 
       def new
@@ -75,6 +75,25 @@ module API
 
       def destroy
         @course.discard
+      end
+
+      def create
+        authorize @provider, :can_create_course?
+        return unless course_params.values.any?
+
+        generate_code_service = Courses::GenerateUniqueCourseCodeService.new(
+          existing_codes: @provider.courses.pluck(:course_code),
+          generate_course_code_service: Courses::GenerateCourseCodeService.new
+        )
+        course_code = generate_code_service.execute
+
+        course = Course.new(course_params.merge(provider: @provider, course_code: course_code))
+
+        if course.save
+          render jsonapi: course.reload
+        else
+          render jsonapi_errors: course.errors, status: :unprocessable_entity
+        end
       end
 
     private
@@ -184,7 +203,8 @@ module API
                   :id,
                   :type,
                   :sites_ids,
-                  :sites_types,)
+                  :sites_types,
+                  :course_code,)
           .permit(
             :english,
             :maths,
@@ -194,7 +214,8 @@ module API
             :start_date,
             :applications_open_from,
             :study_mode,
-            :is_send
+            :is_send,
+            :name,
           )
       end
 
