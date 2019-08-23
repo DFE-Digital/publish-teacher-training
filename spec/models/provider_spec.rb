@@ -675,12 +675,12 @@ describe Provider, type: :model do
         expect(provider.scheme_member).to eq('not_a_UCAS_ITT_member')
       end
 
-      it 'does not override a given value for recruitment_cycle' do
-        provider.scheme_member = 2020
+      it 'does not override a given value for year_code' do
+        provider.year_code = 2020
 
         provider.save!
 
-        expect(provider.scheme_member).to eq("2020")
+        expect(provider.year_code).to eq("2020")
       end
     end
   end
