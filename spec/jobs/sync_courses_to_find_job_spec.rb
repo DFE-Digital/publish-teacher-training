@@ -12,7 +12,7 @@ describe SyncCoursesToFindJob, type: :job do
     described_class.perform_later(course)
 
     expect(SyncCoursesToFindJob)
-      .to have_been_enqueued.with(course).on_queue('find_sync')
+      .to have_been_enqueued.with.on_queue('find_sync')
   end
 
   it 'syncs using the SearchAndCompareAPIService' do
