@@ -21,6 +21,7 @@ FactoryBot.define do
     first_name { Faker::Name.first_name }
     last_name { Faker::Name.last_name }
     first_login_date_utc { Faker::Time.backward(days: 1).utc }
+    welcome_email_date_utc { Faker::Time.backward(days: 1).utc }
     accept_terms_date_utc { Faker::Time.backward(days: 1).utc }
     sign_in_user_id { SecureRandom.uuid }
 

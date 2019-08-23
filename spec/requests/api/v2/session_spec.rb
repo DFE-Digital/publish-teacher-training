@@ -106,16 +106,16 @@ describe '/api/v2/sessions', type: :request do
         end
       end
 
-      context 'on first login' do
-        let(:user) { create(:user, first_login_date_utc: nil) }
+      context 'When the user has not received a welcome email' do
+        let(:user) { create(:user, welcome_email_date_utc: nil) }
 
         it 'Sends a welcome email to the user' do
           expect(govuk_notify_request).to have_been_made
         end
       end
 
-      context 'on second login' do
-        let(:user) { create(:user, first_login_date_utc: 10.days.ago) }
+      context 'When the user has received a welcome email' do
+        let(:user) { create(:user) }
 
         it 'Does not send a welcome email to the user' do
           expect(govuk_notify_request).not_to have_been_made
