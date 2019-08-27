@@ -96,8 +96,8 @@ describe MCB::Editor::CoursesEditor, :needs_audit_user do
 
       describe "(route)" do
         it 'updates the route/program type setting when that is valid' do
-          expect { run_editor("edit route", "scitt_programme", "exit") }.to change { course.reload.program_type }.
-            from("higher_education_programme").to("scitt_programme")
+          expect { run_editor("edit route", "pg_teaching_apprenticeship", "exit") }.to change { course.reload.program_type }.
+            from("higher_education_programme").to("pg_teaching_apprenticeship")
         end
 
         it "doesn't change the setting if the user exits" do
@@ -425,7 +425,7 @@ describe MCB::Editor::CoursesEditor, :needs_audit_user do
           study_mode: 'full_time',
           accredited_body: accredited_body.provider_code,
           start_date: '1 September 2019',
-          route: 'school_direct_salaried_training_programme',
+          route: 'pg_teaching_apprenticeship',
           maths: 'equivalence_test',
           english: 'equivalence_test',
           science: 'not_required',

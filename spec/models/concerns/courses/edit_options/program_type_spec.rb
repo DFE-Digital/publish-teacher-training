@@ -6,6 +6,7 @@ describe Courses::EditOptions::ProgramTypeConcern do
       include Courses::EditOptions::ProgramTypeConcern
 
       def self_accredited?; end
+
       def provider_is_a_scitt?; end
     end
 

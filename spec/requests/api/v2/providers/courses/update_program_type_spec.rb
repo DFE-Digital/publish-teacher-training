@@ -82,7 +82,7 @@ describe 'PATCH /providers/:provider_code/courses/:course_code' do
     it "returns an error" do
       expect(response).to have_http_status(:unprocessable_entity)
       expect(json_data.count).to eq 1
-      expect(response.body).to include("#{updated_program_type[:program_type]} is not valid for a externally accredited course")
+      expect(response.body).to include("#{updated_program_type[:program_type]} is not valid for an externally accredited course")
     end
   end
 end

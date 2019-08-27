@@ -476,7 +476,9 @@ private
   end
 
   def validate_program_type
-    accreditation = self.self_accredited? ? "self accredited" : "externally accredited"
-    errors.add :program_type, "#{program_type} is not valid for a #{accreditation} course" unless program_type_options.include?(program_type.to_sym)
+    if provider.present? && program_type_options.exclude?(program_type.to_sym)
+      accreditation = self.self_accredited? ? "a self accredited" : "an externally accredited"
+      errors.add :program_type, "#{program_type} is not valid for #{accreditation} course"
+    end
   end
 end
