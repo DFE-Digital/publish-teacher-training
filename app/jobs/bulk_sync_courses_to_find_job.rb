@@ -2,17 +2,9 @@ class BulkSyncCoursesToFindJob < ApplicationJob
   queue_as :find_sync
 
   def perform
-    syncable_courses = []
+    syncable_courses = RecruitmentCycle.syncable_courses
 
-    RecruitmentCycle.current_recruitment_cycle.providers
-      .includes(:latest_published_enrichment)
-      .each do |provider|
-        if provider.publishable?
-          syncable_courses.push(*provider.syncable_courses)
-        end
-      end
-
-    if !syncable_courses.empty?
+    if syncable_courses.present?
       request = SearchAndCompareAPIService::Request.new
 
       unless request.bulk_sync(syncable_courses)
