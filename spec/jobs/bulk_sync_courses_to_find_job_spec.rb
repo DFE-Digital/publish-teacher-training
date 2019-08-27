@@ -1,19 +1,17 @@
 require 'rails_helper'
 
 describe BulkSyncCoursesToFindJob, type: :job do
-  let(:site) { build(:site) }
-  let(:provider) { build(:provider, sites: [site]) }
-  let(:site_status) do
-    build(:site_status, :findable, site: provider.sites.first)
-  end
-  let(:course_enrichment) { build(:course_enrichment, :published) }
-  let(:subjects) { [create(:further_education_subject)] }
   let(:course) do
-    create(:course, provider: provider, site_statuses: [site_status],
-      enrichments: [course_enrichment], subjects: subjects)
+    create(:course)
   end
-  let!(:syncable_courses) { [course] }
+  let(:syncable_courses) { [course] }
+
   before do
+    syncable_courses
+
+    allow(RecruitmentCycle)
+      .to receive(:syncable_courses).and_return(syncable_courses)
+
     allow_any_instance_of(SearchAndCompareAPIService::Request)
       .to receive(:bulk_sync).and_return(true)
   end
