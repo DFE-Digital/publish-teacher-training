@@ -154,7 +154,7 @@ class Course < ApplicationRecord
   validate :validate_course_syncable, on: :sync
 
   validate :validate_qualification, :validate_start_date, on: :update
-  validate :validate_qualification, on: :update
+  validate :validate_program_type, on: :update
   validate :validate_applications_open_from, on: :update
 
   after_validation :remove_unnecessary_enrichments_validation_message
@@ -375,6 +375,10 @@ class Course < ApplicationRecord
     accrediting_provider_id.blank?
   end
 
+  def provider_is_a_scitt?
+    provider.scitt == 'Y'
+  end
+
   def to_s
     "#{name} (#{provider.provider_code}/#{course_code}) [#{recruitment_cycle}]"
   end
@@ -469,5 +473,10 @@ private
 
   def valid_date_range
     recruitment_cycle.application_start_date..recruitment_cycle.application_end_date
+  end
+
+  def validate_program_type
+    accreditation = self.self_accredited? ? "self accredited" : "externally accredited"
+    errors.add :program_type, "#{program_type} is not valid for a #{accreditation} course" unless program_type_options.include?(program_type.to_sym)
   end
 end

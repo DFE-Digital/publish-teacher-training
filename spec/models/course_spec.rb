@@ -972,4 +972,20 @@ describe Course, type: :model do
       its(:self_accredited?) { should be_falsey }
     end
   end
+
+  describe '#provider_is_a_scitt?' do
+    let(:provider) { build(:provider, scitt: scitt_value) }
+    let(:scitt_value) { 'Y' }
+
+    subject { create(:course, provider: provider) }
+
+    context 'when provider is a scitt' do
+      its(:provider_is_a_scitt?) { should be_truthy }
+    end
+
+    context 'when provider is not a scitt' do
+      let(:scitt_value) { nil }
+      its(:provider_is_a_scitt?) { should be_falsey }
+    end
+  end
 end

@@ -27,7 +27,7 @@ describe Courses::EditOptions::QualificationConcern do
   end
 
   context 'for a further education course' do
-    let(:level_value) { :further_education}
+    let(:level_value) { :further_education }
 
     it 'returns only QTS options for users to choose between' do
       expect(example_model.qualification_options).to eq(%w[pgce pgde])

@@ -28,6 +28,7 @@ describe 'PATCH /providers/:provider_code/courses/:course_code' do
 
   let(:course)            {
     create :course,
+           :with_accrediting_provider,
            provider: provider,
            program_type: program_type
   }
@@ -59,9 +60,9 @@ describe 'PATCH /providers/:provider_code/courses/:course_code' do
 
   context "with no values passed into the params" do
     let(:updated_program_type) { {} }
+    let!(:previous_program_type) { course.program_type }
 
     before do
-      @program_type = course.program_type
       perform_request(updated_program_type)
     end
 
@@ -70,7 +71,18 @@ describe 'PATCH /providers/:provider_code/courses/:course_code' do
     end
 
     it "does not change program_type attribute" do
-      expect(course.reload.program_type).to eq(@program_type)
+      expect(course.reload.program_type).to eq(previous_program_type)
+    end
+  end
+
+  context 'with an invalid start date' do
+    let(:updated_program_type) { { program_type: :scitt_programme } }
+    let(:json_data) { JSON.parse(response.body)['errors'] }
+
+    it "returns an error" do
+      expect(response).to have_http_status(:unprocessable_entity)
+      expect(json_data.count).to eq 1
+      expect(response.body).to include("#{updated_program_type[:program_type]} is not valid for a externally accredited course")
     end
   end
 end

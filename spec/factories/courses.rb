@@ -93,6 +93,7 @@ FactoryBot.define do
 
     trait :with_accrediting_provider do
       association(:accrediting_provider, factory: :provider)
+      accrediting_provider_id { accrediting_provider.id }
     end
 
     trait :with_higher_education do
