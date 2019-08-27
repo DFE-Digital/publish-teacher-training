@@ -167,7 +167,8 @@ module API
                   :start_date,
                   :applications_open_from,
                   :study_mode,
-                  :is_send)
+                  :is_send,
+                  :accrediting_provider_code)
           .permit(
             :about_course,
             :course_length,
@@ -216,6 +217,7 @@ module API
             :study_mode,
             :is_send,
             :name,
+            :accrediting_provider_code
           )
       end
 
