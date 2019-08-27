@@ -54,11 +54,14 @@ RSpec.describe Courses::CopyToProviderService do
   end
 
   context 'when a published enrichment exists' do
+    let!(:old_published_enrichment) do
+      create :course_enrichment, :published, last_published_timestamp_utc: 10.days.ago, course: course
+    end
     let!(:published_enrichment) do
       create :course_enrichment, :published, course: course
     end
 
-    it 'copies the published enrichment' do
+    it 'copies the latest published enrichment' do
       service.execute(course: course, new_provider: new_provider)
 
       expect(mocked_enrichments_copy_to_course_service).to have_received(:execute).with(

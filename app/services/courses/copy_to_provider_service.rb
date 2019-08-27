@@ -6,9 +6,7 @@ module Courses
     end
 
     def execute(course:, new_provider:)
-      new_course = new_provider.courses.find_by(course_code: course.course_code)
-
-      return nil if new_course.present?
+      return nil if course_code_already_exists_on_provider?(course: course, new_provider: new_provider)
 
       new_course = nil
 
@@ -19,8 +17,7 @@ module Courses
 
         new_course.subjects << course.subjects
 
-        last_enrichment = course.enrichments.latest_first.first
-        @enrichments_copy_to_course.execute(enrichment: last_enrichment, new_course: new_course) if last_enrichment.present?
+        copy_latest_enrichment_to_course(course, new_course)
 
         course.sites.each do |site|
           new_site = new_provider.sites.find_by(code: site.code)
@@ -30,6 +27,19 @@ module Courses
       end
 
       new_course
+    end
+
+  private
+
+    def course_code_already_exists_on_provider?(course:, new_provider:)
+      new_provider.courses.where(course_code: course.course_code).any?
+    end
+
+    def copy_latest_enrichment_to_course(course, new_course)
+      last_enrichment = course.enrichments.latest_first.first
+      return if last_enrichment.blank?
+
+      @enrichments_copy_to_course.execute(enrichment: last_enrichment, new_course: new_course)
     end
   end
 end

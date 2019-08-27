@@ -32,7 +32,6 @@ describe Providers::CopyToRecruitmentCycleService do
     let(:mocked_copy_site_service) { double(execute: nil) }
     let(:service) do
       described_class.new(
-        provider: provider,
         copy_course_to_provider_service: mocked_copy_course_service,
         copy_site_to_provider_service: mocked_copy_site_service
       )
@@ -45,14 +44,14 @@ describe Providers::CopyToRecruitmentCycleService do
         )
       ).to be_nil
 
-      service.execute(new_recruitment_cycle)
+      service.execute(provider: provider, new_recruitment_cycle: new_recruitment_cycle)
 
       expect(new_provider).not_to be_nil
       expect(new_provider).not_to eq provider
     end
 
     it 'leaves the existing provider alone' do
-      service.execute(new_recruitment_cycle)
+      service.execute(provider: provider, new_recruitment_cycle: new_recruitment_cycle)
 
       expect(recruitment_cycle.reload.providers).to eq [provider]
     end
@@ -67,19 +66,19 @@ describe Providers::CopyToRecruitmentCycleService do
       }
 
       it 'does not make a copy of the provider' do
-        expect { service.execute(new_recruitment_cycle) }
+        expect { service.execute(provider: provider, new_recruitment_cycle: new_recruitment_cycle) }
           .not_to(change { new_recruitment_cycle.reload.providers.count })
       end
     end
 
     it 'assigns the new provider to organisation' do
-      service.execute(new_recruitment_cycle)
+      service.execute(provider: provider, new_recruitment_cycle: new_recruitment_cycle)
 
       expect(new_provider.organisation).to eq provider.organisation
     end
 
     it 'copies over the ucas_preferences' do
-      service.execute(new_recruitment_cycle)
+      service.execute(provider: provider, new_recruitment_cycle: new_recruitment_cycle)
 
       compare_attrs = %w[
         type_of_gt12
@@ -92,7 +91,7 @@ describe Providers::CopyToRecruitmentCycleService do
     end
 
     it 'copies over the contacts' do
-      service.execute(new_recruitment_cycle)
+      service.execute(provider: provider, new_recruitment_cycle: new_recruitment_cycle)
 
       compare_attrs = %w[name email telephone]
       expect(new_provider.contacts.map { |c| c.attributes.slice(compare_attrs) })
@@ -100,23 +99,28 @@ describe Providers::CopyToRecruitmentCycleService do
     end
 
     it 'copies over the sites' do
-      service.execute(new_recruitment_cycle)
+      service.execute(provider: provider, new_recruitment_cycle: new_recruitment_cycle)
 
       expect(mocked_copy_site_service).to have_received(:execute).with(site: site, new_provider: new_provider)
     end
 
     it 'copies over the courses' do
-      service.execute(new_recruitment_cycle)
+      service.execute(provider: provider, new_recruitment_cycle: new_recruitment_cycle)
 
       expect(mocked_copy_course_service).to have_received(:execute).with(course: course, new_provider: new_provider)
     end
 
     it 'returns a hash of the counts of copied objects' do
-      output = service.execute(new_recruitment_cycle)
+      allow(mocked_copy_course_service).to receive(:execute).and_return(double)
+      allow(mocked_copy_site_service).to receive(:execute).and_return(double)
 
-      expect(output).to have_key(:providers)
-      expect(output).to have_key(:sites)
-      expect(output).to have_key(:courses)
+      output = service.execute(provider: provider, new_recruitment_cycle: new_recruitment_cycle)
+
+      expect(output).to eq(
+        providers: 1,
+        sites: 1,
+        courses: 1
+      )
     end
   end
 end
