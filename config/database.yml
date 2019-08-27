@@ -40,3 +40,7 @@ new_staging:
 new_prod:
   <<: *default
   database: <%= ENV['DB_DATABASE'] || 'manage_courses_backend_new_prod' %>
+
+prod:
+  <<: *default
+  database: <%= ENV['DB_DATABASE'] || 'manage_courses_backend_new_prod' %>
