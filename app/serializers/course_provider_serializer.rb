@@ -45,4 +45,8 @@ class CourseProviderSerializer < ActiveModel::Serializer
   def accrediting_provider
     object.accrediting_provider_before_type_cast
   end
+
+  def scheme_member
+    object.scheme_member_before_type_cast
+  end
 end

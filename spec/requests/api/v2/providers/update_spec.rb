@@ -94,7 +94,7 @@ describe 'PATCH /providers/:provider_code' do
 
     include_examples 'does not allow assignment', :id,                   9999
     include_examples 'does not allow assignment', :provider_name,        'provider name'
-    include_examples 'does not allow assignment', :scheme_member,        'scheme member'
+    include_examples 'does not allow assignment', :scheme_member,        :not_a_UCAS_ITT_member
     include_examples 'does not allow assignment', :contact_name,         'contact name'
     include_examples 'does not allow assignment', :year_code,            'year code'
     include_examples 'does not allow assignment', :provider_code,        'provider code'
