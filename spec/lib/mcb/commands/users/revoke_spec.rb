@@ -76,7 +76,7 @@ describe 'mcb users revoke' do
       end
 
       it 'informs the support agent that it is not going to do anything' do
-        expect(output).to include("#{id_or_email_or_sign_in_id} already has no access to #{provider.provider_name}")
+        expect(output).to include("#{id_or_email_or_sign_in_id} already has no access to #{provider}")
       end
     end
 
