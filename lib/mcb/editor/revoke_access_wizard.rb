@@ -3,8 +3,9 @@ module MCB
     class RevokeAccessWizard < MCB::Editor::Base
       def initialize(provider, user)
         @user = user
+        @requester = User.find_by!(email: MCB.config[:email])
 
-        super(provider: provider, requester: User.find_by!(email: MCB.config[:email]))
+        super(provider: provider, requester: @requester)
       end
 
       def run
@@ -20,8 +21,7 @@ module MCB
       end
 
       def check_authorisation
-        # There is no authorisation for Granting users.
-        true
+        UserPolicy.new(@requester, @user).remove_access_to?
       end
 
     private

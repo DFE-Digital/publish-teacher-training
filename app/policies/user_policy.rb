@@ -10,6 +10,10 @@ class UserPolicy
     user == accessed_user
   end
 
+  def remove_access_to?
+    user == accessed_user || user.admin?
+  end
+
   alias_method :update?, :show?
   alias_method :accept_transition_screen?, :update?
   alias_method :accept_rollover_screen?, :update?
