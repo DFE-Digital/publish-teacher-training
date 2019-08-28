@@ -23,9 +23,6 @@ qa:
   <<: *default
   database: <%= ENV['DB_DATABASE'] || 'manage_courses_backend_qa' %>
 
-new_qa:
-  <<: *default
-  database: <%= ENV['DB_DATABASE'] || 'manage_courses_backend_new_qa' %>
 
 production:
   <<: *default
@@ -33,14 +30,3 @@ production:
   password: <%= ENV['DB_PASSWORD'] %>
   database: <%= ENV['DB_DATABASE'] %>
 
-new_staging:
-  <<: *default
-  database: <%= ENV['DB_DATABASE'] || 'manage_courses_backend_new_staging' %>
-
-new_prod:
-  <<: *default
-  database: <%= ENV['DB_DATABASE'] || 'manage_courses_backend_new_prod' %>
-
-prod:
-  <<: *default
-  database: <%= ENV['DB_DATABASE'] || 'manage_courses_backend_new_prod' %>
