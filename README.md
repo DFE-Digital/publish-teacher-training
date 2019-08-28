@@ -12,6 +12,12 @@
 - Ruby 2.6.1
 - postgresql-9.6 postgresql-contrib-9.6
 
+#### Linux
+
+To be able to bundle on linux (for the `pg` gem) you need the postgres header files:
+
+   sudo apt install libpq-dev
+
 ### Docker
 
 - docker
