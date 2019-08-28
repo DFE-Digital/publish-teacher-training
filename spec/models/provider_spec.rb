@@ -42,7 +42,7 @@ describe Provider, type: :model do
 
   subject { provider }
 
-  its(:to_s) { should eq('ACME SCITT (A01)') }
+  its(:to_s) { should eq('[A01] ACME SCITT (2019/20)') }
 
   describe 'auditing' do
     it { should be_audited.except(:changed_at) }
