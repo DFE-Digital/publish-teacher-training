@@ -1,6 +1,0 @@
-manage_api:
-  base_url: https://api.publish-teacher-training-courses.service.gov.uk
-  secret: please_change_me
-search_api:
-  base_url: https://api.find-postgraduate-teacher-training.service.gov.uk
-  secret: please_change_me
