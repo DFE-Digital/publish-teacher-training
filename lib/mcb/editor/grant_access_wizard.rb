@@ -9,14 +9,12 @@ module MCB
       end
 
       def run
-        audit do
-          return unless setup_user
+        return unless setup_user
 
-          if @admin
-            confirm_and_add_user_to_all_organisations
-          else
-            confirm_and_add_user_to_organisation
-          end
+        if @admin
+          confirm_and_add_user_to_all_organisations
+        else
+          confirm_and_add_user_to_organisation
         end
       end
 

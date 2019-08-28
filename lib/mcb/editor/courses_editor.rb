@@ -28,28 +28,26 @@ module MCB
           if choice.nil?
             finished = true
           else
-            audit { perform_action(choice) }
+            perform_action(choice)
           end
         end
       end
 
       def new_course_wizard
-        audit do
-          %i[title qualifications study_mode accredited_body start_date route maths
-             english science age_range course_code is_send].each do |attribute|
-            edit(attribute)
-          end
+        %i[title qualifications study_mode accredited_body start_date route maths
+           english science age_range course_code is_send].each do |attribute|
+          edit(attribute)
+        end
 
-          puts "\nAbout to create the following course:"
-          print_at_most_two_courses
-          if @cli.confirm_creation? && try_saving_course
-            edit_subjects
-            edit_sites
-            edit(:application_opening_date)
-            print_summary
-          else
-            puts "Aborting"
-          end
+        puts "\nAbout to create the following course:"
+        print_at_most_two_courses
+        if @cli.confirm_creation? && try_saving_course
+          edit_subjects
+          edit_sites
+          edit(:application_opening_date)
+          print_summary
+        else
+          puts "Aborting"
         end
       end
 

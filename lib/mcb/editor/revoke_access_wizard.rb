@@ -10,7 +10,7 @@ module MCB
       def run
         fetch_organisations
         puts MCB::Render::ActiveRecord.user @user
-        audit { confirm_and_remove_user_from_organisation }
+        confirm_and_remove_user_from_organisation
       end
 
     protected

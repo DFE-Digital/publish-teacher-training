@@ -1,5 +1,19 @@
 load 'bin/mcb'
 
+def audit_user_tag(example)
+  if example.metadata[:needs_audit_user]
+    Audited.store[:audited_user] = requester
+  end
+end
+
+def stub_init_rails_tag(example)
+  unless example.metadata[:stub_init_rails] == false
+    # "init_rails" will try to exec the Rails runner if Rails isn't already
+    # loaded.
+    allow(MCB).to receive(:init_rails)
+  end
+end
+
 RSpec.configure do |config|
   # Ensure all mcb specs are tagged up so that the below hooks run to stub out
   # the dangerous things that we wouldn't want to leak through to the user's
@@ -19,11 +33,8 @@ RSpec.configure do |config|
     # This gets memoized so needs to be wiped out for every test.
     MCB.instance_eval { @config = nil }
 
-    unless example.metadata[:stub_init_rails] == false
-      # "init_rails" will try to exec the Rails runner if Rails isn't already
-      # loaded.
-      allow(MCB).to receive(:init_rails)
-    end
+    stub_init_rails_tag(example)
+    audit_user_tag(example)
 
     # "run_command" is used to run "az" and maybe more. Any test relying on
     # this must stub for it specifically.

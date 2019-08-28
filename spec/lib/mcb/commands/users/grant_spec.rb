@@ -1,6 +1,6 @@
 require 'mcb_helper'
 
-describe 'mcb users grant' do
+describe 'mcb users grant', :needs_audit_user do
   def grant(id_or_email_or_sign_in_id, provider_code, commands)
     stderr = ""
     output = with_stubbed_stdout(stdin: commands, stderr: stderr) do

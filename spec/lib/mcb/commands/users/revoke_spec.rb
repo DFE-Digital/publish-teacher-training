@@ -1,6 +1,6 @@
 require 'mcb_helper'
 
-describe 'mcb users revoke' do
+describe 'mcb users revoke', :needs_audit_user do
   let(:lib_dir) { Rails.root.join('lib') }
   let(:cmd) do
     Cri::Command.load_file(

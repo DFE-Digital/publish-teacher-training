@@ -17,33 +17,31 @@ module MCB
           if choice.nil?
             finished = true
           else
-            audit { perform_action(choice) }
+            perform_action(choice)
           end
         end
       end
 
       def new_provider_wizard
-        audit do
-          ask_and_set_provider_details
-          ask_and_set_contact_info
+        ask_and_set_provider_details
+        ask_and_set_contact_info
 
-          location_name = @cli.ask_name_of_first_location
+        location_name = @cli.ask_name_of_first_location
 
-          ask_and_set_address_info
+        ask_and_set_address_info
 
-          puts "\nAbout to create the Provider"
-          if @cli.confirm_creation? && try_saving_provider
-            organisation = ask_and_set_organisation
+        puts "\nAbout to create the Provider"
+        if @cli.confirm_creation? && try_saving_provider
+          organisation = ask_and_set_organisation
 
-            update_organisation_with_admins(organisation)
+          update_organisation_with_admins(organisation)
 
-            create_provider_site(location_name)
-            create_next_recruitment_cycle
+          create_provider_site(location_name)
+          create_next_recruitment_cycle
 
-            puts "New provider has been created: #{provider}"
-          else
-            puts 'Aborting...'
-          end
+          puts "New provider has been created: #{provider}"
+        else
+          puts 'Aborting...'
         end
       end
 

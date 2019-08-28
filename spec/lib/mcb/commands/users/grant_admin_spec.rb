@@ -1,6 +1,6 @@
 require 'mcb_helper'
 
-describe 'mcb users grant --admin' do
+describe 'mcb users grant --admin', :needs_audit_user do
   def grant(id_or_email_or_sign_in_id, commands)
     stderr = ""
     output = with_stubbed_stdout(stdin: commands, stderr: stderr) do
@@ -75,14 +75,10 @@ describe 'mcb users grant --admin' do
         audit3 = organisation3.associated_audits.last
         audit2 = organisation2.associated_audits.last
 
-        [audit1, audit3].each do |audit|
+        [audit1, audit2, audit3].each do |audit|
           expect(audit.user).to eq(requester)
           expect(audit.action).to eq('create')
         end
-
-        # This is not set as it is setup in conext.
-        expect(audit2.user).to be_nil
-        expect(audit2.action).to eq('create')
       end
     end
   end

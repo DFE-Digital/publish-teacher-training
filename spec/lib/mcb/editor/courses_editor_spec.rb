@@ -1,6 +1,6 @@
 require 'mcb_helper'
 
-describe MCB::Editor::CoursesEditor do
+describe MCB::Editor::CoursesEditor, :needs_audit_user do
   def run_editor(*input_cmds)
     stderr = nil
     output = with_stubbed_stdout(stdin: input_cmds.join("\n"), stderr: stderr) do
