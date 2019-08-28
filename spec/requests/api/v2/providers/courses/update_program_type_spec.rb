@@ -46,7 +46,7 @@ describe 'PATCH /providers/:provider_code/courses/:course_code' do
     perform_request(updated_program_type)
   end
 
-  context "course has an updated age range in years" do
+  context "course has an updated program type" do
     let(:updated_program_type) { { program_type: :school_direct_salaried_training_programme } }
 
     it "returns http success" do
@@ -75,7 +75,7 @@ describe 'PATCH /providers/:provider_code/courses/:course_code' do
     end
   end
 
-  context 'with an invalid start date' do
+  context 'with an invaild program type' do
     let(:updated_program_type) { { program_type: :scitt_programme } }
     let(:json_data) { JSON.parse(response.body)['errors'] }
 
