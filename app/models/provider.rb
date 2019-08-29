@@ -234,7 +234,7 @@ class Provider < ApplicationRecord
   end
 
   def to_s
-    "[#{provider_code}] #{provider_name} (#{recruitment_cycle})"
+    "#{provider_name} (#{provider_code}) [#{recruitment_cycle}]"
   end
 
   def copy_to_recruitment_cycle(new_recruitment_cycle)
