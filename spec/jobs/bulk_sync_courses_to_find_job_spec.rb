@@ -16,12 +16,11 @@ describe BulkSyncCoursesToFindJob, type: :job do
       .to receive(:bulk_sync).and_return(true)
   end
 
-  xit 'queues the expected job' do
+  it 'queues the expected job' do
     described_class.perform_later
 
-    # this is filmsy see SyncCoursesToFindJob verion and replace course with nil
     expect(BulkSyncCoursesToFindJob)
-      .to have_been_enqueued.with(syncable_courses).on_queue(:find_sync)
+      .to have_been_enqueued.on_queue('find_sync')
   end
 
   it 'syncs using the SearchAndCompareAPIService' do
