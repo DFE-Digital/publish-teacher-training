@@ -2,7 +2,7 @@ class AccreditingProviderEnrichment
   include ActiveModel::Validations
   include ActiveModel::Model
 
-  # Pascal cased as the original is store like so.
+  # Pascal cased as the original is stored like so.
   attr_accessor :UcasProviderCode, :Description
 
   validates :Description, words_count: { maximum: 100 }
