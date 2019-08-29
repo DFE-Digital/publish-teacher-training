@@ -968,4 +968,71 @@ describe Course, type: :model do
       its(:self_accredited?) { should be_falsey }
     end
   end
+
+  describe '#course_params_assignable' do
+    context 'entry requirement' do
+      it 'can assign a valid value' do
+        expect(course.course_params_assignable(maths: 'equivalence_test')).to eq(true)
+        expect(course.errors.messages).to eq(enrichments: [])
+      end
+
+      it 'cannot be assigned an invalid value' do
+        expect(course.course_params_assignable(maths: 'test')).to eq(false)
+        expect(course.errors.messages).to eq(enrichments: [], maths: ['is invalid'])
+      end
+    end
+
+    context 'qualification' do
+      it 'can assign a valid qualification' do
+        expect(course.course_params_assignable(qualification: 'pgce_with_qts')).to eq(true)
+        expect(course.errors.messages).to eq(enrichments: [])
+      end
+
+      it 'cannot assign invalid qualification' do
+        expect(course.course_params_assignable(qualification: 'invalid')).to eq(false)
+        expect(course.errors.messages).to eq(enrichments: [], qualification: ['is invalid'])
+      end
+    end
+
+    context 'published' do
+      let(:user) { create(:user) }
+
+      context 'not published' do
+        it 'can assign to SEND' do
+          expect(course.course_params_assignable(is_send: true)).to eq(true)
+          expect(course.errors.messages).to eq(enrichments: [])
+        end
+
+        it 'can assign to applications open from' do
+          expect(course.course_params_assignable(applications_open_from: '25/08/2019')).to eq(true)
+          expect(course.errors.messages).to eq(enrichments: [])
+        end
+
+        it 'can assign to applications open from' do
+          expect(course.course_params_assignable(application_start_date: '25/08/2019')).to eq(true)
+          expect(course.errors.messages).to eq(enrichments: [])
+        end
+      end
+
+      context 'course is published' do
+        let(:enrichment) { create(:course_enrichment, :published) }
+        let(:course) { create(:course, enrichments: [enrichment]) }
+
+        it 'cannot assign to SEND' do
+          expect(course.course_params_assignable(is_send: true)).to eq(false)
+          expect(course.errors.messages).to eq(enrichments: [], is_send: ['cannot be changed after publish'])
+        end
+
+        it 'cannot assign to applications open from' do
+          expect(course.course_params_assignable(applications_open_from: '25/08/2019')).to eq(false)
+          expect(course.errors.messages).to eq(enrichments: [], applications_open_from: ['cannot be changed after publish'])
+        end
+
+        it 'cannot assign to applications open from' do
+          expect(course.course_params_assignable(application_start_date: '25/08/2019')).to eq(false)
+          expect(course.errors.messages).to eq(enrichments: [], application_start_date: ['cannot be changed after publish'])
+        end
+      end
+    end
+  end
 end
