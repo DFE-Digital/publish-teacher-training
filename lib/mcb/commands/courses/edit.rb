@@ -8,7 +8,7 @@ run do |opts, args, _cmd|
   provider_code = args[0].upcase
   course_codes = args.to_a[1..-1].map(&:upcase)
 
-  MCB::CoursesEditor.new(
+  MCB::Editor::CoursesEditor.new(
     requester: User.find_by!(email: MCB.config[:email]),
     provider: MCB.get_recruitment_cycle(opts).providers.find_by!(provider_code: provider_code),
     course_codes: course_codes

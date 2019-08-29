@@ -9,7 +9,7 @@
 
 require 'rails_helper'
 
-RSpec.describe Organisation, type: :model do
+describe Organisation, type: :model do
   subject { create(:organisation) }
 
   describe 'associations' do
@@ -43,5 +43,13 @@ RSpec.describe Organisation, type: :model do
   describe 'auditing' do
     it { should be_audited }
     it { should have_associated_audits }
+  end
+
+  describe '#add_user' do
+    let(:user) { create(:user) }
+    it 'adds a user' do
+      subject.add_user(user)
+      expect(subject.users).to contain_exactly(user)
+    end
   end
 end

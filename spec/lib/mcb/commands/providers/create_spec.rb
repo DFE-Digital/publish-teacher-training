@@ -15,13 +15,13 @@ describe 'mcb providers create' do
     let!(:requester) { create(:user, email: email, organisations: [organisation]) }
 
     before do
-      allow(MCB::ProviderEditor).to receive(:new).and_return(instance_double(MCB::ProviderEditor, new_provider_wizard: nil))
+      allow(MCB::Editor::ProviderEditor).to receive(:new).and_return(instance_double(MCB::Editor::ProviderEditor, new_provider_wizard: nil))
     end
 
     it 'starts the new provider creation in the current cycle by default' do
       cmd.execute
 
-      expect(MCB::ProviderEditor).to have_received(:new) do |args|
+      expect(MCB::Editor::ProviderEditor).to have_received(:new) do |args|
         expect(args[:provider].recruitment_cycle).to eq(RecruitmentCycle.current_recruitment_cycle)
         expect(args[:provider]).to be_new_record
       end
@@ -33,7 +33,7 @@ describe 'mcb providers create' do
       it 'starts the new provider creation in the specified cycle' do
         cmd.execute
 
-        expect(MCB::ProviderEditor).to have_received(:new) do |args|
+        expect(MCB::Editor::ProviderEditor).to have_received(:new) do |args|
           expect(args[:provider].recruitment_cycle).to eq(next_recruitment_cycle)
           expect(args[:provider]).to be_new_record
         end

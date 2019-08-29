@@ -1,6 +1,6 @@
 require 'mcb_helper'
 
-describe 'mcb users revoke' do
+describe 'mcb users revoke', :needs_audit_user do
   let(:lib_dir) { Rails.root.join('lib') }
   let(:cmd) do
     Cri::Command.load_file(
@@ -12,6 +12,13 @@ describe 'mcb users revoke' do
   let(:other_organisation) { create(:organisation) }
   let(:other_provider) { create(:provider, organisations: [other_organisation]) }
   let(:other_user) { create(:user, organisations: [organisation, other_organisation]) }
+
+  let(:requester) { create(:user) }
+
+  before do
+    allow(MCB).to receive(:config).and_return(email: requester.email)
+  end
+
 
   describe 'one provider' do
     def revoke(id_or_email_or_sign_in_id, provider_code, commands)
@@ -44,6 +51,13 @@ describe 'mcb users revoke' do
 
       it 'confirms removing organisation membership' do
         expect(output).to include("You're revoking access for #{user.email}")
+      end
+
+      it 'audits that the User is removed correctly' do
+        audit = organisation.associated_audits.last
+
+        expect(audit.user).to eq(requester)
+        expect(audit.action).to eq('destroy')
       end
     end
 
