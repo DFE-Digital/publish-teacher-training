@@ -19,4 +19,8 @@ class Organisation < ApplicationRecord
 
   has_associated_audits
   audited
+
+  def add_user(user)
+    users << user
+  end
 end

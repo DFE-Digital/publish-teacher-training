@@ -4,8 +4,9 @@ module MCB
       def initialize(provider, id_or_email_or_sign_in_id, admin)
         @id_or_email_or_sign_in_id = id_or_email_or_sign_in_id
         @admin = admin
+        @requester = User.find_by!(email: MCB.config[:email])
 
-        super(provider: provider, requester: User.find_by!(email: MCB.config[:email]))
+        super(provider: provider, requester: @requester)
       end
 
       def run
@@ -25,8 +26,7 @@ module MCB
       end
 
       def check_authorisation
-        # There is no authorisation for Granting users.
-        true
+        OrganisationPolicy.new(@requester, @organisation).add_user?
       end
 
     private
@@ -93,7 +93,7 @@ module MCB
         puts "\n"
         puts "You're about to give #{@user_to_grant} access to organisation #{@organisation.name}. They will manage:"
         puts MCB::Render::ActiveRecord.providers_table @organisation.providers, name: "Additional Providers"
-        @organisation.users << @user_to_grant if @cli.agree("Agree?  ")
+        @organisation.add_user(@user_to_grant) if @cli.agree("Agree?  ")
       end
 
       def confirm_and_add_user_to_all_organisations
