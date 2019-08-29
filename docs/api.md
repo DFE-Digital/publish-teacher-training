@@ -178,25 +178,27 @@ endpoint) if any of these are true:
 
 ### Entity documentation
 
-| Parameter            | Data type                   | Possible values              | Description                                                        |
-| -------------------- | --------------------------- | ---------------------------- | ------------------------------------------------------------------ |
-| course_code          | Text                        | 4-character strings          | 4-character course code                                            |
-| start_month          | ISO 8601 date/time string   |                              | The month and year when the course starts                          |
-| start_month_string   | Text                        | January, February, etc       | The month when the course starts as a string                       |
-| name                 | Text                        |                              | Course title                                                       |
-| copy_form_required   | Text                        | 'Y' or 'N'                   |
-| profpost_flag        | Text                        | "", "PF", "PG", "BO"         | Maximum of 2-characters                                            |
-| program_type         | Text                        | "SC", "SS", "TA", "SD", "HE" | Maximum of 2-characters                                            |
-| modular              | Text                        | "", "M"                      | Maximum of 1-character                                             |
-| english              | Integer                     | 1, 2, 3, 9                   |
-| maths                | Integer                     | 1, 2, 3, 9                   |
-| science              | Integer                     | 1, 2, 3, 9, null             |
-| recruitment_cycle    | Text                        |                              | 4-character year                                                   |
-| campus_statuses      | An array of campus statuses |                              | See the campus status entity documentation below                   |
-| subjects             | An array of subjects        |                              | See the subject entity documentation below                         |
-| provider             | Provider                    | A provider entity            | See the provider entity documentation below (without address data) |
-| accrediting_provider | Provider                    | null or a provider entity    | See the provider entity documentation below (without address data) |
-| age_range            | Text                        | "P", "S", "M", "O"           | Age of students targeted by this course.                           |
+| Parameter            | Data type                   | Possible values              | Description                                                         |
+| -------------------- | --------------------------- | ---------------------------- | ------------------------------------------------------------------  |
+| course_code          | Text                        | 4-character strings          | 4-character course code                                             |
+| start_month          | ISO 8601 date/time string   |                              | The month and year when the course starts                           |
+| start_month_string   | Text                        | January, February, etc       | The month when the course starts as a string                        |
+| name                 | Text                        |                              | Course title                                                        |
+| copy_form_required   | Text                        | 'Y' or 'N'                   |                                                                     |
+| profpost_flag        | Text                        | "", "PF", "PG", "BO"         | Maximum of 2-characters                                             |
+| program_type         | Text                        | "SC", "SS", "TA", "SD", "HE" | Maximum of 2-characters                                             |
+| modular              | Text                        | "", "M"                      | Maximum of 1-character                                              |
+| english              | Integer                     | 1, 2, 3, 9                   |                                                                     |
+| maths                | Integer                     | 1, 2, 3, 9                   |                                                                     |
+| science              | Integer                     | 1, 2, 3, 9, null             |                                                                     |
+| recruitment_cycle    | Text                        |                              | 4-character year                                                    |
+| campus_statuses      | An array of campus statuses |                              | See the campus status entity documentation below                    |
+| subjects             | An array of subjects        |                              | See the subject entity documentation below                          |
+| provider             | Provider                    | A provider entity            | See the provider entity documentation below (without address data)  |
+| accrediting_provider | Provider                    | null or a provider entity    | See the provider entity documentation below (without address data)  |
+| age_range            | Text                        | "P", "S", "M", "O"           | Age of students targeted by this course.                            |
+| created_at           | ISO 8601 date string        | "2019-07-18T12:00:00Z"       | (NOT YET IMPLEMENTED) A timestamp of when this provider was first added to the database. |
+| changed_at           | ISO 8601 date string        | "2019-07-18T14:14:07Z"       | (NOT YET IMPLEMENTED) A timestamp of when this provider was last changed in the database. |
 
 ### Course codes
 
