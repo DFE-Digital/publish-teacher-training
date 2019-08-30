@@ -89,8 +89,8 @@ describe 'mcb providers list' do
     let(:provider1) { create(:provider, recruitment_cycle: current_cycle) }
     let(:provider2) { create(:provider, recruitment_cycle: additional_cycle) }
 
-    let(:course1) { create(:course, provider: provider1) }
-    let(:course2) { create(:course, provider: provider2) }
+    let(:course1) { create(:course, name: 'C1', provider: provider1) }
+    let(:course2) { create(:course, name: 'C2', provider: provider2) }
 
     it 'displays information about courses for the specified recruitment cycle' do
       course1
