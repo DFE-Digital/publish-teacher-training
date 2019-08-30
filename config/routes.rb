@@ -108,7 +108,10 @@ Rails.application.routes.draw do
           post :sync_with_search_and_compare, on: :member
           post :publish, on: :member
           post :publishable, on: :member
-          get :new, on: :new
+          # We use build_new instead of new because of limitation in using a
+          # custom endpoint called "new" in JSON API Client. See the course.rb
+          # model in frontend.
+          get :build_new, on: :collection
         end
         resources :sites, only: %i[index update show create]
         resources :recruitment_cycles, only: %i[index]

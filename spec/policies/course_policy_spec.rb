@@ -5,7 +5,7 @@ describe CoursePolicy do
 
   subject { described_class }
 
-  permissions :index?, :new? do
+  permissions :index?, :build_new? do
     it { should permit(user, Course) }
   end
 

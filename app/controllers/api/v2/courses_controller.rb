@@ -7,13 +7,13 @@ module API
 
       before_action :build_recruitment_cycle
       before_action :build_provider
-      before_action :build_course, except: %i[index new create]
+      before_action :build_course, except: %i[index build_new create]
 
       deserializable_resource :course,
                               only: %i[update publish publishable create],
                               class: API::V2::DeserializableCourse
 
-      def new
+      def build_new
         authorize Course
 
         @course = @provider.courses.new
