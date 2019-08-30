@@ -394,7 +394,7 @@ class Course < ApplicationRecord
   def is_published?
     content_status == :published
   end
-  
+
 private
 
   def assignable_after_publish(course_params)

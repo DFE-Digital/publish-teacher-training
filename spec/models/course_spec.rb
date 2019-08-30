@@ -970,7 +970,7 @@ describe Course, type: :model do
   end
 
   describe '#course_params_assignable' do
-    context 'entry requirement' do
+    describe 'when setting the entry requirement' do
       it 'can assign a valid value' do
         expect(course.course_params_assignable(maths: 'equivalence_test')).to eq(true)
         expect(course.errors.messages).to eq(enrichments: [])
@@ -982,7 +982,7 @@ describe Course, type: :model do
       end
     end
 
-    context 'qualification' do
+    describe 'when setting the qualification' do
       it 'can assign a valid qualification' do
         expect(course.course_params_assignable(qualification: 'pgce_with_qts')).to eq(true)
         expect(course.errors.messages).to eq(enrichments: [])
@@ -994,10 +994,13 @@ describe Course, type: :model do
       end
     end
 
-    context 'published' do
+    describe 'for publishing' do
       let(:user) { create(:user) }
 
-      context 'not published' do
+      context 'when not published' do
+        let(:enrichment) { create(:course_enrichment, :initial_draft) }
+        let(:course) { create(:course, enrichments: [enrichment]) }
+
         it 'can assign to SEND' do
           expect(course.course_params_assignable(is_send: true)).to eq(true)
           expect(course.errors.messages).to eq(enrichments: [])
@@ -1014,7 +1017,7 @@ describe Course, type: :model do
         end
       end
 
-      context 'course is published' do
+      context 'when published' do
         let(:enrichment) { create(:course_enrichment, :published) }
         let(:course) { create(:course, enrichments: [enrichment]) }
 
@@ -1032,6 +1035,26 @@ describe Course, type: :model do
           expect(course.course_params_assignable(application_start_date: '25/08/2019')).to eq(false)
           expect(course.errors.messages).to eq(enrichments: [], application_start_date: ['cannot be changed after publish'])
         end
+      end
+    end
+  end
+
+  describe '#is_published?' do
+    context 'course is not published' do
+      let(:enrichment) { create(:course_enrichment, :initial_draft) }
+      let(:course) { create(:course, enrichments: [enrichment]) }
+
+      it 'returns false' do
+        expect(course.is_published?).to eq(false)
+      end
+    end
+
+    context 'course is published' do
+      let(:enrichment) { create(:course_enrichment, :published) }
+      let(:course) { create(:course, enrichments: [enrichment]) }
+
+      it 'returns true' do
+        expect(course.is_published?).to eq(true)
       end
     end
   end
