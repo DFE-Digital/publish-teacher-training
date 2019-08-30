@@ -30,7 +30,7 @@ describe MCB::Editor::CoursesEditor, :needs_audit_user do
            maths: 'must_have_qualification_at_application_time',
            english: 'equivalence_test',
            science: 'not_required',
-           program_type: 'higher_education_programme',
+           program_type: 'pg_teaching_apprenticeship',
            qualification: 'qts',
            study_mode: 'part_time',
            start_date: Date.new(2019, 8, 1),
@@ -96,13 +96,13 @@ describe MCB::Editor::CoursesEditor, :needs_audit_user do
 
       describe "(route)" do
         it 'updates the route/program type setting when that is valid' do
-          expect { run_editor("edit route", "scitt_programme", "exit") }.to change { course.reload.program_type }.
-            from("higher_education_programme").to("scitt_programme")
+          expect { run_editor("edit route", "school_direct_training_programme", "exit") }.to change { course.reload.program_type }.
+            from("pg_teaching_apprenticeship").to("school_direct_training_programme")
         end
 
         it "doesn't change the setting if the user exits" do
           expect { run_editor("edit route", "exit", "exit") }.to_not change { course.reload.program_type }.
-            from("higher_education_programme")
+            from("pg_teaching_apprenticeship")
         end
       end
 
@@ -425,7 +425,7 @@ describe MCB::Editor::CoursesEditor, :needs_audit_user do
           study_mode: 'full_time',
           accredited_body: accredited_body.provider_code,
           start_date: '1 September 2019',
-          route: 'school_direct_salaried_training_programme',
+          route: 'pg_teaching_apprenticeship',
           maths: 'equivalence_test',
           english: 'equivalence_test',
           science: 'not_required',

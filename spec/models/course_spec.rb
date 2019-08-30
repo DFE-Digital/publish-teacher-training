@@ -954,4 +954,18 @@ describe Course, type: :model do
       it { is_expected.to_not be_valid }
     end
   end
+
+  describe '#self_accredited?' do
+    let(:provider) { build(:provider) }
+
+    context 'when self accredited' do
+      subject { create(:course, provider: provider) }
+      its(:self_accredited?) { should be_truthy }
+    end
+
+    context 'when self accredited' do
+      subject { create(:course, :with_accrediting_provider, provider: provider) }
+      its(:self_accredited?) { should be_falsey }
+    end
+  end
 end

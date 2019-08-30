@@ -42,7 +42,7 @@ describe "Courses API", type: :request do
                                    maths: :not_required,
                                    science: :not_set,
                                    profpost_flag: :postgraduate,
-                                   program_type: :school_direct_training_programme,
+                                   program_type: :scitt_programme,
                                    modular: "",
                                    provider: provider,
                                    age: 2.hours.ago)
@@ -82,7 +82,7 @@ describe "Courses API", type: :request do
                                 "study_mode" => "F",
                                 "copy_form_required" => "Y",
                                 "profpost_flag" => "PG",
-                                "program_type" => "SD",
+                                "program_type" => "SC",
                                 "age_range" => "P",
                                 "modular" => "",
                                 "english" => 3,

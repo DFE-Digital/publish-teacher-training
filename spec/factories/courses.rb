@@ -32,7 +32,7 @@ FactoryBot.define do
     sequence(:course_code) { |n| "C#{n}#{(0..9).to_a.sample(2).join}" }
     name { Faker::Lorem.word }
     qualification { :pgce_with_qts }
-    with_higher_education
+    with_apprenticeship
 
     provider
 

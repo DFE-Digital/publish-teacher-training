@@ -340,7 +340,7 @@ describe 'PATCH /providers/:provider_code/courses/:course_code' do
   context 'course has a draft enrichment' do
     let(:enrichment) { build :course_enrichment }
     let(:course) do
-      create :course, provider: provider, enrichments: [enrichment]
+      create :course, :with_accrediting_provider, provider: provider, program_type: :school_direct_training_programme, enrichments: [enrichment]
     end
 
     it "updates the course's draft enrichment" do
@@ -474,7 +474,7 @@ describe 'PATCH /providers/:provider_code/courses/:course_code' do
   context 'course has a rolled-over enrichment' do
     let(:enrichment) { build :course_enrichment, :rolled_over }
     let(:course) do
-      create :course, provider: provider, enrichments: [enrichment]
+      create :course, :with_accrediting_provider, provider: provider, program_type: :school_direct_training_programme, enrichments: [enrichment]
     end
 
     it "updates the course's draft enrichment" do

@@ -301,6 +301,11 @@ class Provider < ApplicationRecord
     end
   end
 
+  def is_it_really_really_a_scitt?
+    #is purposely named poorly to remind us that this needs to be refactored. We should be using the prgram type enum not an attribute
+    scitt == 'Y'
+  end
+
 private
 
   def add_enrichment_errors(enrichment)
