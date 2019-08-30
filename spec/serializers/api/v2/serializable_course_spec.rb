@@ -122,7 +122,7 @@ describe API::V2::SerializableCourse do
     context "fee-paying" do
       let(:course) { create(:course) }
 
-      it { expect(subject["attributes"]).to include("funding" => "fee") }
+      it { expect(subject["attributes"]).to include("funding" => "apprenticeship") }
     end
 
     context "apprenticeship" do

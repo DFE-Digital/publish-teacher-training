@@ -957,35 +957,15 @@ describe Course, type: :model do
 
   describe '#self_accredited?' do
     let(:provider) { build(:provider) }
-    let(:accrediting_provider_id) { nil }
-
-    subject { create(:course, provider: provider, accrediting_provider_id: accrediting_provider_id) }
 
     context 'when self accredited' do
+      subject { create(:course, provider: provider) }
       its(:self_accredited?) { should be_truthy }
     end
 
     context 'when self accredited' do
-      let(:accrediting_provider) { create(:provider) }
-      let(:accrediting_provider_id) { accrediting_provider.id }
-
+      subject { create(:course, :with_accrediting_provider, provider: provider) }
       its(:self_accredited?) { should be_falsey }
-    end
-  end
-
-  describe '#provider_is_a_scitt?' do
-    let(:provider) { build(:provider, scitt: scitt_value) }
-    let(:scitt_value) { 'Y' }
-
-    subject { create(:course, provider: provider) }
-
-    context 'when provider is a scitt' do
-      its(:provider_is_a_scitt?) { should be_truthy }
-    end
-
-    context 'when provider is not a scitt' do
-      let(:scitt_value) { nil }
-      its(:provider_is_a_scitt?) { should be_falsey }
     end
   end
 end

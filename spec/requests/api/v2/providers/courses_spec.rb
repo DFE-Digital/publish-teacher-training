@@ -288,12 +288,9 @@ describe 'Courses API v2', type: :request do
               "recruitment_cycle_year" => "2019",
               "gcse_subjects_required" => %w[maths english science],
               "age_range_in_years" => provider.courses[0].age_range_in_years,
-<<<<<<< HEAD
               "accrediting_provider" => nil,
               "accrediting_provider_code" => nil,
-=======
               "program_type" => "pg_teaching_apprenticeship",
->>>>>>> [2001] Amend concern to use enum values and add validations
             },
             "relationships" => {
               "accrediting_provider" => { "meta" => { "included" => false } },

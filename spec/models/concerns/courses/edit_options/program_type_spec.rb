@@ -5,24 +5,23 @@ describe Courses::EditOptions::ProgramTypeConcern do
     klass = Class.new do
       include Courses::EditOptions::ProgramTypeConcern
       attr_accessor :self_accredited_value
-      attr_accessor :scitt_value
+      attr_accessor :provider
 
       def self_accredited?
         self_accredited_value
-      end
-
-      def provider_is_a_scitt?
-        scitt_value
       end
     end
 
     klass.new
   end
 
+  let(:provider) { build(:provider) }
+
   context 'for a SCITTs self accredited courses' do
     before do
       example_model.self_accredited_value = true
-      example_model.scitt_value = 'Y'
+      example_model.provider = provider
+      example_model.provider.scitt = 'Y'
     end
 
     it 'returns the correct pgoramme type' do
@@ -33,7 +32,8 @@ describe Courses::EditOptions::ProgramTypeConcern do
   context 'for a HEIs self accredited courses' do
     before do
       example_model.self_accredited_value = true
-      example_model.scitt_value = nil
+      example_model.provider = provider
+      example_model.provider.scitt = nil
     end
 
     it 'returns the correct pgoramme type' do
@@ -43,6 +43,8 @@ describe Courses::EditOptions::ProgramTypeConcern do
 
   context 'for non-self accredited courses' do
     before do
+      example_model.provider = provider
+      example_model.provider.scitt = nil
       example_model.self_accredited_value = false
     end
 

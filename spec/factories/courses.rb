@@ -32,7 +32,7 @@ FactoryBot.define do
     sequence(:course_code) { |n| "C#{n}#{(0..9).to_a.sample(2).join}" }
     name { Faker::Lorem.word }
     qualification { :pgce_with_qts }
-    with_higher_education
+    with_apprenticeship
 
     provider
 
@@ -93,7 +93,6 @@ FactoryBot.define do
 
     trait :with_accrediting_provider do
       association(:accrediting_provider, factory: :provider)
-      accrediting_provider_id { accrediting_provider.id }
     end
 
     trait :with_higher_education do

@@ -8,7 +8,7 @@ module Courses
         #
         # https://github.com/DFE-Digital/manage-courses-frontend/blob/master/spec/factories/courses.rb
         def program_type_options
-          if self_accredited? && provider_is_a_scitt?
+          if self_accredited? && provider.is_it_really_really_a_scitt?
             %i[pg_teaching_apprenticeship scitt_programme]
           elsif self_accredited?
             %i[pg_teaching_apprenticeship higher_education_programme]

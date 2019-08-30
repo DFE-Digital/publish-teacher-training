@@ -76,13 +76,27 @@ describe 'PATCH /providers/:provider_code/courses/:course_code' do
   end
 
   context 'with an invaild program type' do
-    let(:updated_program_type) { { program_type: :scitt_programme } }
     let(:json_data) { JSON.parse(response.body)['errors'] }
 
-    it "returns an error" do
-      expect(response).to have_http_status(:unprocessable_entity)
-      expect(json_data.count).to eq 1
-      expect(response.body).to include("#{updated_program_type[:program_type]} is not valid for an externally accredited course")
+    context 'a self accredited course' do
+      let(:course) { create(:course, provider: provider, program_type: program_type) }
+      let(:updated_program_type) { { program_type: :school_direct_training_programme } }
+
+      it "returns an error" do
+        expect(response).to have_http_status(:unprocessable_entity)
+        expect(json_data.count).to eq 1
+        expect(response.body).to include("#{updated_program_type[:program_type]} is not valid for a self accredited course")
+      end
+    end
+
+    context 'an externally accredited course' do
+      let(:updated_program_type) { { program_type: :scitt_programme } }
+
+      it "returns an error" do
+        expect(response).to have_http_status(:unprocessable_entity)
+        expect(json_data.count).to eq 1
+        expect(response.body).to include("#{updated_program_type[:program_type]} is not valid for an externally accredited course")
+      end
     end
   end
 end

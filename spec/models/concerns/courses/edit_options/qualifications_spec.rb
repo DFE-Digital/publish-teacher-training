@@ -20,7 +20,7 @@ describe Courses::EditOptions::QualificationConcern do
     it 'returns only QTS options for users to choose between' do
       expect(example_model.qualification_options).to eq(%w[qts pgce_with_qts pgde_with_qts])
       example_model.qualification_options.each do |q|
-        expect(q.include?('qts')).to be_truthy
+        expect(q).to include('qts')
       end
     end
   end
@@ -31,7 +31,7 @@ describe Courses::EditOptions::QualificationConcern do
     it 'returns only QTS options for users to choose between' do
       expect(example_model.qualification_options).to eq(%w[pgce pgde])
       example_model.qualification_options.each do |q|
-        expect(q.include?('qts')).to be_falsy
+        expect(q).not_to include('qts')
       end
     end
   end

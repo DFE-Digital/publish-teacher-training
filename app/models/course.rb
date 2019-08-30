@@ -152,7 +152,10 @@ class Course < ApplicationRecord
   validate :validate_enrichment_publishable, on: :publish
   validate :validate_enrichment
   validate :validate_course_syncable, on: :sync
-  validate :validate_qualification, :validate_start_date, :validate_program_type, :validate_applications_open_from, on: :update
+  validate :validate_qualification, on: :update
+  validate :validate_start_date, on: :update, if: -> { provider.present? }
+  validate :validate_program_type, on: :update, if: -> { provider.present? }
+  validate :validate_applications_open_from, on: :update, if: -> { provider.present? }
 
   after_validation :remove_unnecessary_enrichments_validation_message
 
@@ -369,11 +372,7 @@ class Course < ApplicationRecord
   end
 
   def self_accredited?
-    accrediting_provider_id.blank?
-  end
-
-  def provider_is_a_scitt?
-    provider.scitt == 'Y'
+    accrediting_provider.blank?
   end
 
   def to_s
@@ -456,15 +455,13 @@ private
   end
 
   def validate_start_date
-    if provider.present?
-      errors.add :start_date, "#{start_date.strftime('%B %Y')} is not in the #{recruitment_cycle.year} cycle" unless start_date_options.include?(start_date.strftime('%B %Y'))
-    end
+    errors.add :start_date, "#{start_date.strftime('%B %Y')} is not in the #{recruitment_cycle.year} cycle" unless start_date_options.include?(start_date.strftime('%B %Y'))
   end
 
   def validate_applications_open_from
-    if provider.present? && valid_date_range.exclude?(applications_open_from)
+    unless valid_date_range.include?(applications_open_from)
       errors.add(:applications_open_from, "#{applications_open_from} is not valid for the #{provider.recruitment_cycle.year} cycle. " +
-        "A valid date must be between #{recruitment_cycle.application_start_date} and #{recruitment_cycle.application_end_date}")
+      "A valid date must be between #{recruitment_cycle.application_start_date} and #{recruitment_cycle.application_end_date}")
     end
   end
 
@@ -473,9 +470,7 @@ private
   end
 
   def validate_program_type
-    if provider.present? && program_type_options.exclude?(program_type.to_sym)
-      accreditation = self.self_accredited? ? "a self accredited" : "an externally accredited"
-      errors.add :program_type, "#{program_type} is not valid for #{accreditation} course"
-    end
+    accreditation = self.self_accredited? ? "a self accredited" : "an externally accredited"
+    errors.add :program_type, "#{program_type} is not valid for #{accreditation} course" unless program_type_options.include?(program_type.to_sym)
   end
 end

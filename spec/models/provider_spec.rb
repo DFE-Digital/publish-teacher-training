@@ -694,4 +694,21 @@ describe Provider, type: :model do
       expect(provider.latest_enrichment).to eq(new_enrichment)
     end
   end
+
+
+  describe '#is_it_really_really_a_scitt?' do
+    let(:provider) { build(:provider, scitt: scitt_value) }
+    let(:scitt_value) { 'Y' }
+
+    subject { create(:provider, scitt: scitt_value) }
+
+    context 'when provider is a scitt' do
+      its(:is_it_really_really_a_scitt?) { should be_truthy }
+    end
+
+    context 'when provider is not a scitt' do
+      let(:scitt_value) { nil }
+      its(:is_it_really_really_a_scitt?) { should be_falsey }
+    end
+  end
 end

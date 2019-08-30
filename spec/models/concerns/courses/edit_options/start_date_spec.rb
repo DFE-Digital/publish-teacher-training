@@ -4,7 +4,6 @@ describe Courses::EditOptions::StartDateConcern do
   let(:example_model) do
     klass = Class.new do
       include Courses::EditOptions::StartDateConcern
-
       attr_accessor :provider
     end
 

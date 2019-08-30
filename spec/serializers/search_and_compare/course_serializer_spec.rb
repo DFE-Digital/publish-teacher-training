@@ -311,7 +311,7 @@ describe SearchAndCompare::CourseSerializer do
                     fee_uk_eu: fee_uk_eu,
                     fee_international: 9100
             end
-            let(:course) { create(:course, enrichments: [published_enrichment]) }
+            let(:course) { create(:course, program_type: program_type, enrichments: [published_enrichment]) }
 
             let(:program_type) { :school_direct_training_programme }
             it { should include(Uk: fee_uk_eu) }
