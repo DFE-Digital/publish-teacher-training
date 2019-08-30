@@ -32,7 +32,7 @@ class ProviderSerializer < ActiveModel::Serializer
 
   attributes :institution_code, :institution_name, :institution_type, :accrediting_provider,
              :address1, :address2, :address3, :address4, :postcode, :region_code, :scheme_member,
-             :utt_application_alerts, :type_of_gt12
+             :utt_application_alerts, :type_of_gt12, :created_at, :changed_at
 
              # application alert recipient has not been added into the enum in the contact model
              # as it does not share the name and email attribute. It is simply a contact email
@@ -86,6 +86,14 @@ class ProviderSerializer < ActiveModel::Serializer
 
   def recruitment_cycle
     object.recruitment_cycle.year
+  end
+
+  def created_at
+    object.created_at.iso8601
+  end
+
+  def changed_at
+    object.changed_at.iso8601
   end
 
 private
