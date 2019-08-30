@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe 'GET /providers/:provider_code/courses/new' do
+describe 'GET /providers/:provider_code/courses/build_new' do
   let(:recruitment_cycle) { find_or_create :recruitment_cycle }
   let(:organisation)      { create :organisation }
   let(:provider) do
@@ -16,14 +16,14 @@ describe 'GET /providers/:provider_code/courses/new' do
   end
   let(:jsonapi_renderer) { JSONAPI::Serializable::Renderer.new }
 
-  describe '#new' do
+  describe '#build_new' do
     it 'returns a new course resource' do
       get "/api/v2/recruitment_cycles/#{recruitment_cycle.year}" \
           "/providers/#{provider.provider_code}" \
-          "/courses/new",
+          "/courses/build_new",
           headers: { 'HTTP_AUTHORIZATION' => credentials }
 
-      course = provider.courses.new # Course.new(provider: provider)
+      course = provider.courses.new
       rendered_course = jsonapi_renderer.render(
         course,
         class: {

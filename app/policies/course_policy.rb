@@ -19,5 +19,5 @@ class CoursePolicy
   alias_method :sync_with_search_and_compare?, :update?
   alias_method :publish?, :update?
   alias_method :publishable?, :update?
-  alias_method :new?, :index?
+  alias_method :build_new?, :index?
 end
