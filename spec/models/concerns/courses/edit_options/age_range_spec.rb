@@ -4,15 +4,14 @@ describe Courses::EditOptions::AgeRangeConcern do
   let(:example_model) do
     klass = Class.new do
       include Courses::EditOptions::AgeRangeConcern
-
-      def level; end
+      attr_accessor :level
     end
 
     klass.new
   end
 
   before do
-    allow(example_model).to receive(:level).and_return(level_value)
+    example_model.level = level_value
   end
 
   context 'for primary' do

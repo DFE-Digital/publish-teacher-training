@@ -4,22 +4,25 @@ describe Courses::EditOptions::ProgramTypeConcern do
   let(:example_model) do
     klass = Class.new do
       include Courses::EditOptions::ProgramTypeConcern
+      attr_accessor :self_accredited_value
+      attr_accessor :scitt_value
 
-      def self_accredited?; end
+      def self_accredited?
+        self_accredited_value
+      end
 
-      def provider_is_a_scitt?; end
+      def provider_is_a_scitt?
+        scitt_value
+      end
     end
 
     klass.new
   end
 
   context 'for a SCITTs self accredited courses' do
-    let(:self_accredited_value) { true }
-    let(:provider_is_a_scitt_value) { 'Y' }
-
     before do
-      allow(example_model).to receive(:self_accredited?).and_return(self_accredited_value)
-      allow(example_model).to receive(:provider_is_a_scitt?).and_return(provider_is_a_scitt_value)
+      example_model.self_accredited_value = true
+      example_model.scitt_value = 'Y'
     end
 
     it 'returns the correct pgoramme type' do
@@ -28,12 +31,9 @@ describe Courses::EditOptions::ProgramTypeConcern do
   end
 
   context 'for a HEIs self accredited courses' do
-    let(:self_accredited_value) { true }
-    let(:provider_is_a_scitt_value) { false }
-
     before do
-      allow(example_model).to receive(:self_accredited?).and_return(self_accredited_value)
-      allow(example_model).to receive(:provider_is_a_scitt?).and_return(provider_is_a_scitt_value)
+      example_model.self_accredited_value = true
+      example_model.scitt_value = nil
     end
 
     it 'returns the correct pgoramme type' do
@@ -42,10 +42,8 @@ describe Courses::EditOptions::ProgramTypeConcern do
   end
 
   context 'for non-self accredited courses' do
-    let(:self_accredited_value) { false }
-
     before do
-      allow(example_model).to receive(:self_accredited?).and_return(self_accredited_value)
+      example_model.self_accredited_value = false
     end
 
     it 'returns the correct programme types for users to co choose between' do

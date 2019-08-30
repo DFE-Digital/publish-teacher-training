@@ -5,7 +5,7 @@ describe Courses::EditOptions::StartDateConcern do
     klass = Class.new do
       include Courses::EditOptions::StartDateConcern
 
-      def provider; end
+      attr_accessor :provider
     end
 
     klass.new
@@ -14,7 +14,7 @@ describe Courses::EditOptions::StartDateConcern do
   let(:provider) { build(:provider) }
 
   before do
-    allow(example_model).to receive(:provider).and_return(provider)
+    example_model.provider = provider
   end
 
   context 'start_date_options' do
