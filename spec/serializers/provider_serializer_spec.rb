@@ -31,7 +31,7 @@ require "rails_helper"
 
 describe ProviderSerializer do
   let(:ucas_preferences) { build(:provider_ucas_preference, type_of_gt12: :coming_or_not) }
-  let(:provider) { create :provider, ucas_preferences: ucas_preferences }
+  let(:provider) { create :provider, ucas_preferences: ucas_preferences, changed_at: Time.now + 60 }
 
   subject { serialize(provider) }
 
