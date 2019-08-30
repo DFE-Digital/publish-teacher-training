@@ -217,7 +217,9 @@ describe 'Providers API', type: :request do
                   'email' => 'application_alert_recipient@acmescitt.education.uk',
                   'telephone' => ''
                 }
-              ]
+              ],
+              'created_at' => provider.created_at.iso8601,
+              'changed_at' => provider.changed_at.iso8601
             },
             {
               'accrediting_provider' => 'Y',
@@ -272,7 +274,9 @@ describe 'Providers API', type: :request do
                   'email' => 'finance@acmeuniversity.education.uk',
                   'telephone' => '01273 345 678'
                 }
-              ]
+              ],
+              'created_at' => provider2.created_at.iso8601,
+              'changed_at' => provider2.changed_at.iso8601
             }
           ]
         )

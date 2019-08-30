@@ -31,7 +31,7 @@ require "rails_helper"
 
 describe ProviderSerializer do
   let(:ucas_preferences) { build(:provider_ucas_preference, type_of_gt12: :coming_or_not) }
-  let(:provider) { create :provider, ucas_preferences: ucas_preferences }
+  let(:provider) { create :provider, ucas_preferences: ucas_preferences, changed_at: Time.now + 60 }
 
   subject { serialize(provider) }
 
@@ -46,6 +46,8 @@ describe ProviderSerializer do
   it { should include(institution_type: provider.provider_type) }
   it { should include(accrediting_provider: provider.accrediting_provider_before_type_cast) }
   it { should include(recruitment_cycle: provider.recruitment_cycle.year) }
+  it { should include(created_at: provider.created_at.iso8601) }
+  it { should include(changed_at: provider.changed_at.iso8601) }
 
   describe 'type_of_gt12' do
     subject { serialize(provider)['type_of_gt12'] }

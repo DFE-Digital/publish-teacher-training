@@ -403,8 +403,8 @@ endpoint) if any of these are true:
 | scheme_member          | Text                 | `Y` or `N`                                                                                                 |                                                                                                      |
 | recruitment_cycle      | Text                 |                                                                                                            | 4-character year                                                                                     |
 | gt12_contact_address   | Text                 |                                                                                                            | Email or URL for the candidate to contact that will be inserted into the GT12 letter sent them.      |
-| created_at             | ISO 8601 date string | "2019-07-18T12:00:00Z"                                                                                     | (NOT YET IMPLEMENTED) A timestamp of when this provider was first added to the database.             |
-| changed_at             | ISO 8601 date string | "2019-07-18T14:14:07Z"                                                                                     | (NOT YET IMPLEMENTED) A timestamp of when this provider was last changed in the database.                                  |
+| created_at             | ISO 8601 date string | "2019-07-18T12:00:00Z"                                                                                     | A timestamp of when this provider was first added to the database.             |
+| changed_at             | ISO 8601 date string | "2019-07-18T14:14:07Z"                                                                                     | A timestamp of when this provider was last changed in the database.                                  |
 
 
 ### Example response body
@@ -428,6 +428,8 @@ endpoint) if any of these are true:
     "scheme_member": "Y",
     "recruitment_cycle": "2019",
     "gt12_contact_address": "info@asmescitt.education.uk",
+    "created_at": "2019-07-18T12:00:00Z",
+    "changed_at": "2019-07-18T14:14:07Z",
     "campuses": [
       {
         "campus_code": "",
