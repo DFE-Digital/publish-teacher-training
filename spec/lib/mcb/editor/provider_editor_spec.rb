@@ -44,7 +44,11 @@ describe MCB::Editor::ProviderEditor, :needs_audit_user do
 
         it 'lists the courses for the given provider' do
           output, = run_editor("edit courses", "continue", "exit")
-          expect(output).to include("[ ] Biology (A01X)", "[ ] History (A02X)", "[ ] Economics (A03X)")
+          expect(output).to include(
+            "[ ] Biology (#{provider_code}/A01X) [#{provider.recruitment_cycle}]",
+            "[ ] History (#{provider_code}/A02X) [#{provider.recruitment_cycle}]",
+            "[ ] Economics (#{provider_code}/A03X) [#{provider.recruitment_cycle}]"
+          )
         end
 
         it 'invokes course editing on the selected courses' do
@@ -52,8 +56,8 @@ describe MCB::Editor::ProviderEditor, :needs_audit_user do
 
           run_editor(
             "edit courses", # choose the option
-            "[ ] Biology (A01X)", # pick the first course
-            "[ ] Economics (A03X)", # pick the second course
+            "[ ] Biology (#{provider_code}/A01X) [#{provider.recruitment_cycle}]", # pick the first course
+            "[ ] Economics (#{provider_code}/A03X) [#{provider.recruitment_cycle}]", # pick the second course
             "continue", # finish selecting courses
             "exit" # from the command
           )
@@ -96,7 +100,12 @@ describe MCB::Editor::ProviderEditor, :needs_audit_user do
           it 'invokes course editing in the environment that the "providers edit" command was invoked' do
             allow($mcb).to receive(:run)
 
-            run_editor("edit courses", "[ ] Biology (A01X)", "continue", "exit")
+            run_editor(
+              "edit courses",
+              "[ ] Biology (#{provider_code}/A01X) [#{provider.recruitment_cycle}]",
+              "continue",
+              "exit"
+            )
 
             expect($mcb).to have_received(:run).with(
               %w[courses edit X12 A01X -E qa] + recruitment_cycle_year

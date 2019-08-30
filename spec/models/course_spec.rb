@@ -29,11 +29,11 @@
 
 require 'rails_helper'
 
-RSpec.describe Course, type: :model do
+describe Course, type: :model do
   let(:course) { create(:course, name: 'Biology', course_code: '3X9F') }
   let(:subject) { course }
 
-  its(:to_s) { should eq('Biology (3X9F)') }
+  its(:to_s) { should eq("Biology (#{course.provider.provider_code}/3X9F) [2019/20]") }
   its(:modular) { should eq('') }
 
   describe 'auditing' do

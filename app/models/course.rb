@@ -372,7 +372,7 @@ class Course < ApplicationRecord
   end
 
   def to_s
-    "#{name} (#{course_code})"
+    "#{name} (#{provider.provider_code}/#{course_code}) [#{recruitment_cycle}]"
   end
 
   def next_recruitment_cycle?
