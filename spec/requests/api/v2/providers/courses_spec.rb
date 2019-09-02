@@ -376,27 +376,6 @@ describe 'Courses API v2', type: :request do
     end
   end
 
-  describe 'PATCH course' do
-    let(:path) do
-      "/api/v2/providers/#{provider.provider_code}" +
-        "/courses/#{course.course_code}"
-    end
-    let(:accrediting_provider) { create(:provider, accrediting_provider: 'Y') }
-    let(:course) { create(:course, provider: provider, site_statuses: [site_status]) }
-    let(:site_status) { build(:site_status, :new) }
-
-    before do
-      course
-    end
-
-    it 'can update the accrediting provider' do
-      patch path, headers: { 'HTTP_AUTHORIZATION' => credentials }, params: { 'course' => { 'accrediting_provider_code' => accrediting_provider.provider_code } }
-      attributes = JSON.parse(response.body)['data']['attributes']
-      expect(attributes['accrediting_provider_code']).to eq(accrediting_provider.provider_code)
-      expect(attributes['accrediting_provider']['provider_code']).to eq(accrediting_provider.provider_code)
-    end
-  end
-
   describe 'DELETE destroy' do
     let(:path) do
       "/api/v2/providers/#{provider.provider_code}" +
