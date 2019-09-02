@@ -35,7 +35,7 @@ class CourseSerializer < ActiveModel::Serializer
 
   attributes :course_code, :start_month, :name, :study_mode, :copy_form_required, :profpost_flag,
              :program_type, :modular, :english, :maths, :science, :recruitment_cycle,
-             :start_month_string, :age_range
+             :start_month_string, :age_range, :created_at, :changed_at
 
   def profpost_flag
     object.profpost_flag_before_type_cast
@@ -79,6 +79,14 @@ class CourseSerializer < ActiveModel::Serializer
 
   def recruitment_cycle
     object.provider.recruitment_cycle.year
+  end
+
+  def created_at
+    object.created_at.iso8601
+  end
+
+  def changed_at
+    object.changed_at.iso8601
   end
 
   # Course now has a `is_send` attribute so we do not need to model `SEND` courses using the
