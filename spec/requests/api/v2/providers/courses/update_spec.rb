@@ -94,7 +94,7 @@ describe 'PATCH /providers/:provider_code/courses/:course_code' do
     include_examples 'does not allow assignment', :profpost_flag, 'BO'
     include_examples 'does not allow assignment', :program_type, 'SC'
     include_examples 'does not allow assignment', :qualification, 2
-    include_examples 'does not allow assignment', :start_date, Date.yesterday
+    include_examples 'does not allow assignment', :start_date, DateTime.new(Settings.current_recruitment_cycle, 10, 10)
     include_examples 'does not allow assignment', :study_mode, 'P'
     include_examples 'does not allow assignment', :modular, 'Modular'
     include_examples 'does not allow assignment', :english, 2
