@@ -30,13 +30,15 @@
 require "rails_helper"
 
 RSpec.describe CourseSerializer do
-  let(:course) { create :course, provider: provider }
+  let(:course) { create :course, provider: provider, changed_at: Time.now + 60 }
   let(:provider) { build(:provider) }
   subject { serialize(course) }
 
   it { should include(course_code: course.course_code) }
   it { should include(name: course.name) }
   it { should include(recruitment_cycle: course.provider.recruitment_cycle.year) }
+  it { should include(created_at: course.created_at.iso8601) }
+  it { should include(changed_at: course.changed_at.iso8601) }
   it { is_expected.to_not have_key(:is_send) } # Ensure V2 API is not being included.
 
   context 'when the course is SEND' do

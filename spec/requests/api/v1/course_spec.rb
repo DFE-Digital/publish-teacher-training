@@ -116,7 +116,9 @@ describe "Courses API", type: :request do
                                   "accrediting_provider" => 'Y',
                                   "scheme_member" => "Y"
                                 },
-                                "accrediting_provider" => nil
+                                "accrediting_provider" => nil,
+                                "created_at" => provider.courses.first.created_at.iso8601,
+                                "changed_at" => provider.courses.first.changed_at.iso8601
                               }
                             ])
       end
