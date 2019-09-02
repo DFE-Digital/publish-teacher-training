@@ -197,8 +197,8 @@ endpoint) if any of these are true:
 | provider             | Provider                    | A provider entity            | See the provider entity documentation below (without address data)  |
 | accrediting_provider | Provider                    | null or a provider entity    | See the provider entity documentation below (without address data)  |
 | age_range            | Text                        | "P", "S", "M", "O"           | Age of students targeted by this course.                            |
-| created_at           | ISO 8601 date string        | "2019-07-18T12:00:00Z"       | (NOT YET IMPLEMENTED) A timestamp of when this provider was first added to the database. |
-| changed_at           | ISO 8601 date string        | "2019-07-18T14:14:07Z"       | (NOT YET IMPLEMENTED) A timestamp of when this provider was last changed in the database. |
+| created_at           | ISO 8601 date string        | "2019-07-18T12:00:00Z"       | A timestamp of when this provider was first added to the database. |
+| changed_at           | ISO 8601 date string        | "2019-07-18T14:14:07Z"       | A timestamp of when this provider was last changed in the database. |
 
 ### Course codes
 
@@ -228,6 +228,8 @@ endpoint) if any of these are true:
     "qualification": 1,
     "recruitment_cycle": "2019",
     "age_range": "S",
+    "created_at": "2019-07-18T12:00:00Z",
+    "changed_at": "2019-07-18T14:14:07Z",
     "campus_statuses": [
       {
         "campus_code": "-",
