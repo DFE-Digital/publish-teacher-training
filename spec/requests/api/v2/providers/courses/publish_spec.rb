@@ -70,6 +70,14 @@ describe 'Publish API v2', type: :request do
                age: 17.days.ago)
       }
 
+      before do
+        Timecop.freeze
+      end
+
+      after do
+        Timecop.return
+      end
+
       context 'in the current cycle' do
         it 'publishes a course' do
           perform_enqueued_jobs do
