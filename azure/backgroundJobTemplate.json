@@ -20,12 +20,6 @@
         "description": "The container image to pull from the server. Should be in image:tag format."
       }
     },
-    "authenticationToken": {
-      "type": "string",
-      "metadata": {
-        "description": "Authentication token for api access."
-      }
-    },
     "railsEnv": {
       "type": "string",
       "defaultValue": "production",
@@ -117,10 +111,6 @@
               {
                 "name": "RAILS_ENV",
                 "value": "[parameters('railsEnv')]"
-              },
-              {
-                "name": "AUTHENTICATION_TOKEN",
-                "secureValue": "[parameters('authenticationToken')]"
               },
               {
                 "name": "DB_DATABASE",
