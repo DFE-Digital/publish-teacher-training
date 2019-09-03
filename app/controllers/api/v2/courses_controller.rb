@@ -18,7 +18,11 @@ module API
 
         @course = @provider.courses.new
 
-        render jsonapi: @course, include: params[:include]
+        if build_new_course(course_params)
+          render jsonapi: @course
+        else
+          render jsonapi_errors: @course.errors, status: :unprocessable_entity
+        end
       end
 
       def index
@@ -105,6 +109,17 @@ module API
         enrichment.assign_attributes(enrichment_params)
         enrichment.status = :draft if enrichment.rolled_over?
         enrichment.save
+      end
+
+      def build_new_course(course_params)
+        # first request has params so return true to indicate success
+        return true unless course_params.values.any?
+
+        # add any enum related validation errors
+        return unless @course.course_params_assignable(course_params)
+
+        @course.assign_attributes(course_params)
+        @course.valid?
       end
 
       def update_course
