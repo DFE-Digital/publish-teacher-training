@@ -28,10 +28,13 @@
 #
 
 class Provider < ApplicationRecord
+  include PgSearch::Model
   include RegionCode
   include ChangedAt
 
   before_create :set_defaults
+
+  pg_search_scope :search_by_code_or_name, against: [:provider_code, :provider_name]
 
   has_associated_audits
   audited except: :changed_at
