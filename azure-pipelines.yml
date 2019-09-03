@@ -3,9 +3,7 @@ trigger:
   branches:
     include:
       - "*"
-
 pr: none
-
 pool:
   vmImage: 'Ubuntu-16.04'
 
@@ -27,7 +25,6 @@ steps:
 
 - script: docker pull $(docker_path):latest || true
   displayName: "Pull latest docker image to cache"
-
 - script: |
     $DOCKER_OVERRIDE build
     $DOCKER_OVERRIDE up --no-build -d
@@ -38,7 +35,6 @@ steps:
     DOCKER_OVERRIDE: $(dockerOverride)
     dockerHubUsername: $(dockerHubUsername)
     dockerHubImageName: $(imageName)
-
 - script: |
     $DOCKER_OVERRIDE exec -T web /bin/sh -c 'bundle exec rake spec SPEC_OPTS="--format RspecJunitFormatter --out ./rspec-results.xml"'
   displayName: 'Execute tests'
@@ -46,7 +42,6 @@ steps:
     DOCKER_OVERRIDE: $(dockerOverride)
     dockerHubUsername: $(dockerHubUsername)
     dockerHubImageName: $(imageName)
-
 - script: |
     $DOCKER_OVERRIDE exec -T web /bin/sh -c "bundle exec rubocop app config db lib spec --format clang"
   displayName: 'Execute linters'
@@ -54,27 +49,23 @@ steps:
     DOCKER_OVERRIDE: $(dockerOverride)
     dockerHubUsername: $(dockerHubUsername)
     dockerHubImageName: $(imageName)
-
 - task: Docker@1
   displayName: Tag image with current build number $(Build.BuildNumber)
   inputs:
     command: Tag image
     imageName: "$(docker_path):latest"
     arguments: "$(docker_path):$(Build.BuildNumber)"
-
 - task: Docker@1
   displayName: Docker Hub login
   inputs:
     command: "login"
     containerregistrytype: Container Registry
     dockerRegistryEndpoint: DfE Docker Hub
-
 - task: Docker@1
   displayName: Push tagged image
   inputs:
     command: Push an image
     imageName: "$(docker_path):$(Build.BuildNumber)"
-
 - task: Docker@1
   displayName: Push tagged image (latest) if master
   condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
@@ -102,12 +93,10 @@ steps:
      azure/**
     TargetFolder: '$(build.artifactstagingdirectory)'
     OverWrite: true
-
 - task: PublishBuildArtifacts@1
   displayName: 'Publish Artifact'
   inputs:
     PathtoPublish: '$(build.artifactstagingdirectory)'
-
 - task: PublishTestResults@2
   condition: succeededOrFailed()
   inputs:
