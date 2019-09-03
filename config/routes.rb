@@ -141,6 +141,10 @@ Rails.application.routes.draw do
         post :approve, on: :member
       end
     end
+
+    namespace :system do
+      post :sync, to: 'force_sync#sync'
+    end
   end
 
   get 'error_500', to: 'error#error_500'
