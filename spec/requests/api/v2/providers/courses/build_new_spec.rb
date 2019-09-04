@@ -28,12 +28,18 @@ describe 'GET /providers/:provider_code/courses/build_new' do
       expect(response['data']).to eq expected_course_jsonapi['data']
     end
 
+    # todo: add another test: pass in nothing (i.e. initial request) > get object back with all validation errors
+    # todo: should always get object back
+    # todo: check meta.edit-options returned (for lookups on forms etc)
+    # todo: return nil for edit-options which rely on fields that aren't set yet (i.e. don't blow up)
+
     context 'with course attributes set in query parameters' do
       it 'intialises the course with the provider attributes' do
         params = { course: {
           name: 'Foo Bar Course',
           maths: 'must_have_qualification_at_application_time',
           english: 'must_have_qualification_at_application_time',
+          # todo: why is this valid when level not set?
         } }
         response = do_get params
 
@@ -58,10 +64,12 @@ describe 'GET /providers/:provider_code/courses/build_new' do
 
           expect(response['errors']).to eq [{
                                               "detail" => "Is send is not included in the list",
-                                              "source" => {},
+                                              "source" => {}, # todo: make this work
                                               "title" => "Invalid is_send"
                                             }]
-          expect(response['data']).to be_nil
+          expect(response['data']).to_not be_nil
+          # todo: check shape of object returned
+          # todo: check status is unprocessable
         end
       end
 
@@ -79,7 +87,9 @@ describe 'GET /providers/:provider_code/courses/build_new' do
                                               "source" => {},
                                               "title" => "Invalid maths"
                                             }]
-          expect(response['data']).to be_nil
+          expect(response['data']).to_not be_nil
+          # todo: check shape of object returned
+          # todo: check status is unprocessable
         end
       end
     end
