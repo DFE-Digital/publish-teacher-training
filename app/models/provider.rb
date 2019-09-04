@@ -116,6 +116,9 @@ class Provider < ApplicationRecord
   end
 
   scope :in_order, -> { order(:provider_name) }
+  scope :search_by_code_or_name, ->(search_term) {
+    where("provider_name ILIKE ? OR provider_code ILIKE ?", "%#{search_term}%", "%#{search_term}%")
+  }
 
   validate :validate_enrichment_publishable, on: :publish
   validate :validate_enrichment
