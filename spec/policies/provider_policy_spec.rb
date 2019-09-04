@@ -1,4 +1,4 @@
-require "rails_helper"
+require 'rails_helper'
 
 describe ProviderPolicy do
   let(:user) { create(:user) }
@@ -26,7 +26,7 @@ describe ProviderPolicy do
     it { should_not permit(user_outside_org, provider) }
   end
 
-  permissions :index? do
+  permissions :index?, :suggest? do
     it { should permit user }
   end
 

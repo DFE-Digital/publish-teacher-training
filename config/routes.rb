@@ -101,6 +101,7 @@ Rails.application.routes.draw do
         patch :accept_transition_screen, on: :member
         patch :accept_rollover_screen, on: :member
       end
+      get 'providers/suggest', to: 'providers#suggest'
 
       concern :provider_routes do
         post :sync_courses_with_search_and_compare, on: :member
@@ -132,7 +133,6 @@ Rails.application.routes.draw do
           post :publishable, on: :member
         end
       end
-
 
       resource :sessions
       resources :site_statuses, only: :update

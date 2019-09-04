@@ -3,7 +3,7 @@ module API
     class ProvidersController < API::V2::ApplicationController
       before_action :get_user, if: -> { params[:user_id].present? }
       before_action :build_recruitment_cycle
-      before_action :build_provider, except: :index
+      before_action :build_provider, except: %i[index suggest]
 
       deserializable_resource :provider,
                               only: %i[update publish publishable],
@@ -75,6 +75,14 @@ module API
         courses_synced?(@provider.syncable_courses)
 
         head :ok
+      end
+
+      def suggest
+        authorize Provider
+        render(
+          jsonapi: Provider.where(id: @current_user.providers),
+          class: { Provider: SerializableProviderSuggestion }
+        )
       end
 
     private
