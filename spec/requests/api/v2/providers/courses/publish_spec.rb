@@ -14,7 +14,7 @@ describe 'Publish API v2', type: :request do
     let(:status) { 200 }
     let(:course) { findable_open_course }
     let(:publish_path) do
-      "/api/v2/providers/#{provider.provider_code}" +
+      "/api/v2/recruitment_cycles/#{provider.recruitment_cycle.year}/providers/#{provider.provider_code}" +
         "/courses/#{course.course_code}/publish"
     end
 
@@ -57,7 +57,7 @@ describe 'Publish API v2', type: :request do
       it { should have_http_status(:not_found) }
     end
 
-    context 'unpublished course with draft enrichment' do
+    context 'an unpublished course with a draft enrichment' do
       let(:enrichment) { build(:course_enrichment, :initial_draft) }
       let(:site_status) { build(:site_status, :new) }
       let(:dfe_subjects) { [build(:subject, subject_name: 'primary')] }
@@ -70,20 +70,50 @@ describe 'Publish API v2', type: :request do
                age: 17.days.ago)
       }
 
-      it 'publishes a course' do
-        perform_enqueued_jobs do
-          expect(subject).to have_http_status(:success)
+      before do
+        Timecop.freeze
+      end
+
+      after do
+        Timecop.return
+      end
+
+      context 'in the current cycle' do
+        it 'publishes a course' do
+          perform_enqueued_jobs do
+            expect(subject).to have_http_status(:success)
+          end
+
+          assert_requested :put, "#{Settings.search_api.base_url}/api/courses/"
+
+          expect(course.reload.site_statuses.first).to be_status_running
+          expect(course.site_statuses.first).to be_published_on_ucas
+          expect(course.enrichments.first).to be_published
+          expect(course.enrichments.first.updated_by_user_id).to eq user.id
+          expect(course.enrichments.first.updated_at).to be_within(1.second).of Time.now.utc
+          expect(course.enrichments.first.last_published_timestamp_utc).to be_within(1.second).of Time.now.utc
+          expect(course.changed_at).to be_within(1.second).of Time.now.utc
         end
+      end
 
-        assert_requested :put, "#{Settings.search_api.base_url}/api/courses/"
+      context 'in the next cycle' do
+        let(:provider) { create :provider, :next_recruitment_cycle, organisations: [organisation] }
 
-        expect(course.reload.site_statuses.first).to be_status_running
-        expect(course.site_statuses.first).to be_published_on_ucas
-        expect(course.enrichments.first).to be_published
-        expect(course.enrichments.first.updated_by_user_id).to eq user.id
-        expect(course.enrichments.first.updated_at).to be_within(1.second).of Time.now.utc
-        expect(course.enrichments.first.last_published_timestamp_utc).to be_within(1.second).of Time.now.utc
-        expect(course.changed_at).to be_within(1.second).of Time.now.utc
+        it 'publishes a course' do
+          perform_enqueued_jobs do
+            expect(subject).to have_http_status(:success)
+          end
+
+          assert_requested :put, "#{Settings.search_api.base_url}/api/courses/"
+
+          expect(course.reload.site_statuses.first).to be_status_running
+          expect(course.site_statuses.first).to be_published_on_ucas
+          expect(course.enrichments.first).to be_published
+          expect(course.enrichments.first.updated_by_user_id).to eq user.id
+          expect(course.enrichments.first.updated_at).to be_within(1.second).of Time.now.utc
+          expect(course.enrichments.first.last_published_timestamp_utc).to be_within(1.second).of Time.now.utc
+          expect(course.changed_at).to be_within(1.second).of Time.now.utc
+        end
       end
 
       context 'without dfe subject' do
