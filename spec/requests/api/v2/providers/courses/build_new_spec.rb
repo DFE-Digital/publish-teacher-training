@@ -38,16 +38,14 @@ describe 'GET /providers/:provider_code/courses/build_new' do
 
       fit 'intialises the course' do
         response = do_get params
-        binding.pry
 
-        course = provider.courses.new
-        expected_course_jsonapi = course_to_jsonapi(course)
-        expect(response['errors']).not_to be_nil
-        # todo: expect errors
-        expect(response['data']).not_to be_nil
-        expect(response['data']).to eq expected_course_jsonapi['data']
+        expect(response['errors']).not_to be_nil # because it's not valid yet
+        expect(response['data']).to be_nil # because it's not valid yet
         expect(response['meta']).not_to be_nil
         expect(response['meta']['edit_options']).not_to be_nil
+        # todo: test "level" edit_options when it's implemented
+        expect(response['meta']['edit_options'].length).to be at least 5
+        expect(response['meta']['edit_options']['study_modes'].length).to be longer than one
       end
     end
 
