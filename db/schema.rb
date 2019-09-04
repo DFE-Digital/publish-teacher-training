@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_08_20_095253) do
+ActiveRecord::Schema.define(version: 2019_09_04_131906) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_buffercache"
@@ -64,6 +64,7 @@ ActiveRecord::Schema.define(version: 2019_08_20_095253) do
     t.text "telephone"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["provider_id", "type"], name: "index_contact_on_provider_id_and_type", unique: true
     t.index ["provider_id"], name: "index_contact_on_provider_id"
   end
 
