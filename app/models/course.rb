@@ -386,23 +386,44 @@ class Course < ApplicationRecord
   # Ideally this would just use the validation, but:
   # https://github.com/rails/rails/issues/13971
   def course_params_assignable(course_params)
-    entry_requirements_assignable(course_params) &&
+    assignable_after_publish(course_params) &&
+      entry_requirements_assignable(course_params) &&
       qualification_assignable(course_params)
+  end
+
+  def is_published?
+    content_status == :published
   end
 
 private
 
+  def assignable_after_publish(course_params)
+    relevant_params = course_params.slice(:is_send, :applications_open_from, :application_start_date)
+
+    return true if relevant_params.empty? || !is_published?
+
+    relevant_params.each do |field, _value|
+      errors.add(field.to_sym, 'cannot be changed after publish')
+    end
+    false
+  end
+
   def entry_requirements_assignable(course_params)
-    course_params.slice(:maths, :english, :science)
-      .to_h
-      .select { |_subject, value| value && !ENTRY_REQUIREMENT_OPTIONS.key?(value.to_sym) }
-      .map { |subject, _value| errors.add(subject.to_sym, "is invalid") }
-      .empty?
+    relevant_params = course_params.slice(:maths, :english, :science)
+
+    invalid_params = relevant_params.select do |_subject, value|
+      value && !ENTRY_REQUIREMENT_OPTIONS.key?(value.to_sym)
+    end
+    invalid_params.each do |subject, _value|
+      errors.add(subject.to_sym, 'is invalid')
+    end
+
+    invalid_params.empty?
   end
 
   def qualification_assignable(course_params)
     assignable = course_params[:qualification].nil? || Course::qualifications.include?(course_params[:qualification].to_sym)
-    errors.add(:qualification, "is invalid") unless assignable
+    errors.add(:qualification, 'is invalid') unless assignable
 
     assignable
   end

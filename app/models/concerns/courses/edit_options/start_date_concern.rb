@@ -23,6 +23,10 @@ module Courses
            "June #{recruitment_year + 1}",
            "July #{recruitment_year + 1}"]
         end
+
+        def show_start_date?
+          !is_published?
+        end
       end
     end
   end

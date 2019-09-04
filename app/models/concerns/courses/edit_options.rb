@@ -7,6 +7,8 @@ module Courses
     include StartDateConcern
     include StudyModeConcern
     include ProgramTypeConcern
+    include IsSendConcern
+    include ApplicationsOpenConcern
 
     included do
       # When changing edit options here be sure to update the edit_options in the
@@ -21,6 +23,9 @@ module Courses
           start_dates: start_date_options,
           study_modes: study_mode_options,
           program_type: program_type_options,
+          show_is_send: show_is_send?,
+          show_start_date: show_start_date?,
+          show_applications_open: show_applications_open?
         }
       end
     end
