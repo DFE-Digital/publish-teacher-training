@@ -24,7 +24,7 @@ describe 'GET /providers/:provider_code/courses/build_new' do
       course = provider.courses.new
       expected_course_jsonapi = course_to_jsonapi(course)
       expect(response['errors']).to be_nil
-      expect(response['data']).to_not be_nil
+      expect(response['data']).not_to be_nil
       expect(response['data']).to eq expected_course_jsonapi['data']
     end
 
@@ -32,6 +32,24 @@ describe 'GET /providers/:provider_code/courses/build_new' do
     # todo: should always get object back
     # todo: check meta.edit-options returned (for lookups on forms etc)
     # todo: return nil for edit-options which rely on fields that aren't set yet (i.e. don't blow up)
+
+    context 'with no parameters set request' do
+      let(:params) { { course: {} } }
+
+      fit 'intialises the course' do
+        response = do_get params
+        binding.pry
+
+        course = provider.courses.new
+        expected_course_jsonapi = course_to_jsonapi(course)
+        expect(response['errors']).not_to be_nil
+        # todo: expect errors
+        expect(response['data']).not_to be_nil
+        expect(response['data']).to eq expected_course_jsonapi['data']
+        expect(response['meta']).not_to be_nil
+        expect(response['meta']['edit_options']).not_to be_nil
+      end
+    end
 
     context 'with course attributes set in query parameters' do
       it 'intialises the course with the provider attributes' do
@@ -48,7 +66,7 @@ describe 'GET /providers/:provider_code/courses/build_new' do
         course.english = :must_have_qualification_at_application_time
         expected_course_jsonapi = course_to_jsonapi(course)
         expect(response['errors']).to be_nil
-        expect(response['data']).to_not be_nil
+        expect(response['data']).not_to be_nil
         expect(response['data']).to eq expected_course_jsonapi['data']
       end
 
@@ -67,7 +85,7 @@ describe 'GET /providers/:provider_code/courses/build_new' do
                                               "source" => {}, # todo: make this work
                                               "title" => "Invalid is_send"
                                             }]
-          expect(response['data']).to_not be_nil
+          expect(response['data']).not_to be_nil
           # todo: check shape of object returned
           # todo: check status is unprocessable
         end
@@ -87,7 +105,7 @@ describe 'GET /providers/:provider_code/courses/build_new' do
                                               "source" => {},
                                               "title" => "Invalid maths"
                                             }]
-          expect(response['data']).to_not be_nil
+          expect(response['data']).not_to be_nil
           # todo: check shape of object returned
           # todo: check status is unprocessable
         end
