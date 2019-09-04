@@ -175,6 +175,16 @@ describe Provider, type: :model do
     end
   end
 
+  describe '.search_by_code_or_name' do
+    let(:provider1) { create(:provider, provider_name: "Zork") }
+    let(:provider2) { create(:provider, provider_name: "Acme") }
+
+    subject { Provider.search_by_code_or_name('zork') }
+
+    it { should include(provider1) }
+    it { should_not include(provider2) }
+  end
+
   describe '#update_changed_at' do
     let(:provider) { create(:provider, changed_at: 1.hour.ago) }
 

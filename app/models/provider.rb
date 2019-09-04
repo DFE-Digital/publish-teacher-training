@@ -28,13 +28,10 @@
 #
 
 class Provider < ApplicationRecord
-  include PgSearch::Model
   include RegionCode
   include ChangedAt
 
   before_create :set_defaults
-
-  pg_search_scope :search_by_code_or_name, against: [:provider_code, :provider_name]
 
   has_associated_audits
   audited except: :changed_at
@@ -119,6 +116,9 @@ class Provider < ApplicationRecord
   end
 
   scope :in_order, -> { order(:provider_name) }
+  scope :search_by_code_or_name, ->(search_term) {
+    where("provider_name ILIKE ? OR provider_code ILIKE ?", "%#{search_term}%", "%#{search_term}%")
+  }
 
   validate :validate_enrichment_publishable, on: :publish
   validate :validate_enrichment

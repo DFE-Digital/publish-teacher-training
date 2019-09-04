@@ -86,9 +86,6 @@ gem 'discard'
 # Gov Notify
 gem 'govuk_notify_rails'
 
-# PG Searching
-gem 'pg_search'
-
 group :development, :test do
   # add info about db structure to models and other files
   gem 'annotate'
