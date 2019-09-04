@@ -112,9 +112,9 @@ module API
       end
 
       def build_new_course(course_params)
-        # first request has params so return true to indicate success
-        return true unless course_params.values.any?
-
+        # # first request has params so return true to indicate success
+        # return true unless course_params.values.any?
+        #
         # add any enum related validation errors
         return unless @course.course_params_assignable(course_params)
 
