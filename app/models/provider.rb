@@ -306,6 +306,10 @@ class Provider < ApplicationRecord
     scitt == 'Y'
   end
 
+  def generated_ucas_contact(type)
+    contacts.find_by!(type: type).slice('name', 'email', 'telephone') if contacts.map(&:type).include?(type)
+  end
+
 private
 
   def add_enrichment_errors(enrichment)
