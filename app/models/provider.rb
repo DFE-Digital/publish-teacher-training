@@ -240,53 +240,6 @@ class Provider < ApplicationRecord
     "#{provider_name} (#{provider_code}) [#{recruitment_cycle}]"
   end
 
-  def copy_to_recruitment_cycle(new_recruitment_cycle)
-    new_provider = new_recruitment_cycle
-                      .providers
-                      .find_by(provider_code: self.provider_code)
-    providers_count = 0
-    unless new_provider
-      providers_count = 1
-      new_provider = self.dup
-      new_provider.organisations << self.organisations
-      new_provider.ucas_preferences = self.ucas_preferences.dup
-      new_provider.contacts << self.contacts.map(&:dup)
-      new_recruitment_cycle.providers << new_provider
-    end
-
-    # Order is important here. Sites should be copied over before courses
-    # so that courses can link up to the correct sites in the new provider.
-    sites_count = copy_sites_to_new_provider(new_provider)
-    courses_count = copy_courses_to_new_provider(new_provider)
-
-    {
-      providers: providers_count,
-      sites: sites_count,
-      courses: courses_count
-    }
-  end
-
-  def copy_courses_to_new_provider(new_provider)
-    courses_count = 0
-
-    courses.each do |course|
-      new_course = Courses::CopyToProviderService.new(course: course).execute(new_provider)
-      courses_count += 1 if new_course.present?
-    end
-
-    courses_count
-  end
-
-  def copy_sites_to_new_provider(new_provider)
-    sites_count = 0
-
-    self.sites.each do |site|
-      sites_count += 1 if site.copy_to_provider(new_provider)
-    end
-
-    sites_count
-  end
-
   def publishable?
     valid? :publish
   end

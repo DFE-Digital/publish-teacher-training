@@ -142,7 +142,19 @@ module MCB
       def create_next_recruitment_cycle
         next_recruitment_cycle = provider.recruitment_cycle.next
         while next_recruitment_cycle
-          provider.copy_to_recruitment_cycle(next_recruitment_cycle)
+          copy_courses_to_provider_service = Courses::CopyToProviderService.new(
+            sites_copy_to_course: Sites::CopyToCourseService.new,
+            enrichments_copy_to_course: Enrichments::CopyToCourseService.new
+          )
+
+          copy_provider_to_recruitment_cycle = Providers::CopyToRecruitmentCycleService.new(
+            copy_course_to_provider_service: copy_courses_to_provider_service,
+            copy_site_to_provider_service: Sites::CopyToProviderService.new
+          )
+
+          copy_provider_to_recruitment_cycle.execute(
+            provider: provider, new_recruitment_cycle: next_recruitment_cycle
+          )
           next_recruitment_cycle = next_recruitment_cycle.next
         end
       end

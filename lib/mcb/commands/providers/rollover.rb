@@ -19,7 +19,19 @@ run do |opts, args, _cmd| # rubocop:disable Metrics/BlockLength
       counts = nil
       bm = Benchmark.measure do
         Provider.connection.transaction do
-          counts = provider.copy_to_recruitment_cycle(new_recruitment_cycle)
+          copy_courses_to_provider_service = Courses::CopyToProviderService.new(
+            sites_copy_to_course: Sites::CopyToCourseService.new,
+            enrichments_copy_to_course: Enrichments::CopyToCourseService.new
+          )
+
+          copy_prodiver_to_recruitment_cycle = Providers::CopyToRecruitmentCycleService.new(
+            copy_course_to_provider_service: copy_courses_to_provider_service,
+            copy_site_to_provider_service: Sites::CopyToProviderService.new
+          )
+
+          counts = copy_prodiver_to_recruitment_cycle.execute(
+            provider: provider, new_recruitment_cycle: new_recruitment_cycle
+          )
         end
       end
       puts "provider #{counts[:providers] ? 'copied' : 'skipped'}, " \

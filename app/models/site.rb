@@ -53,30 +53,6 @@ class Site < ApplicationRecord
     "#{location_name} (code: #{code})"
   end
 
-  def copy_to_provider(new_provider)
-    new_site = new_provider.sites.find_by(code: self.code)
-    unless new_site
-      new_site = self.dup
-      new_site.provider_id = new_provider.id
-      new_site.save(validate: false)
-      new_provider.reload
-    end
-  end
-
-  def copy_to_course(new_course)
-    new_vac_status = SiteStatus.default_vac_status_given(
-      study_mode: new_course.study_mode
-    )
-    new_start_date = new_course.recruitment_cycle.application_start_date
-
-    new_course.site_statuses.create(
-      site: self,
-      vac_status: new_vac_status,
-      applications_accepted_from: new_start_date,
-      status: :new_status
-    )
-  end
-
 private
 
   def pick_next_available_code(available_codes: [])
