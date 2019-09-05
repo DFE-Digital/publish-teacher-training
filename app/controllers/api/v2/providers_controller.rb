@@ -79,13 +79,25 @@ module API
 
       def suggest
         authorize Provider
+
+        return render(status: :bad_request) if params[:query].nil? || params[:query].length < 3
+        return render(status: :bad_request) unless begins_with_alphanumeric(params[:query])
+
+        found_providers = policy_scope(@recruitment_cycle.providers)
+          .search_by_code_or_name(params[:query])
+          .limit(30)
+
         render(
-          jsonapi: Provider.where(id: @current_user.providers),
+          jsonapi: found_providers,
           class: { Provider: SerializableProviderSuggestion }
         )
       end
 
     private
+
+      def begins_with_alphanumeric(string)
+        string.match?(/^[[:alnum:]].*$/)
+      end
 
       def build_recruitment_cycle
         @recruitment_cycle = RecruitmentCycle.find_by(
