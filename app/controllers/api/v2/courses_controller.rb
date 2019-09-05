@@ -19,9 +19,9 @@ module API
         @course = @provider.courses.new
 
         if build_new_course(course_params)
-          render jsonapi: @course
+          render jsonapi: @course, meta: { edit_options: @course.edit_course_options }
         else
-          render jsonapi_errors: @course.errors, status: :unprocessable_entity
+          render jsonapi_errors: @course.errors, status: :unprocessable_entity, meta: { edit_options: @course.edit_course_options }
         end
       end
 
@@ -112,8 +112,9 @@ module API
       end
 
       def build_new_course(course_params)
-        # first request has params so return true to indicate success
-        return true unless course_params.values.any?
+        # Skip validations when building a new course with no params,
+        # so that frontend can get the initial edit_options:
+        # return true unless course_params.values.any?
 
         # add any enum related validation errors
         return unless @course.course_params_assignable(course_params)
