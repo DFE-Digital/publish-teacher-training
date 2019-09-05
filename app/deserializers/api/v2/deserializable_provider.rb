@@ -14,6 +14,11 @@ module API
         postcode
         region_code
         accredited_bodies
+        admin_contact
+        utt_contact
+        web_link_contact
+        fraud_contact
+        finance_contact
       ].freeze
 
       attributes(*PROVIDER_ATTRIBUTES)
