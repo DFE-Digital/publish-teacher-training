@@ -721,4 +721,61 @@ describe Provider, type: :model do
       its(:is_it_really_really_a_scitt?) { should be_falsey }
     end
   end
+
+  describe '#generated_ucas_contact' do
+    let(:provider) { create :provider, contacts: [contact1, contact2, contact3, contact4, contact5] }
+    let(:contact1)  { build(:contact, :admin_type) }
+    let(:contact2)  { build(:contact, :utt_type) }
+    let(:contact3)  { build(:contact, :web_link_type) }
+    let(:contact4)  { build(:contact, :fraud_type) }
+    let(:contact5)  { build(:contact, :finance_type) }
+
+    context 'for an admin contact' do
+      subject { provider.generated_ucas_contact(contact1.type) }
+
+      its([:name]) { should eq contact1.name }
+      its([:email]) { should eq contact1.email }
+      its([:telephone]) { should eq contact1.telephone }
+    end
+
+    context 'for a utt contact' do
+      subject { provider.generated_ucas_contact(contact2.type) }
+
+      its([:name]) { should eq contact2.name }
+      its([:email]) { should eq contact2.email }
+      its([:telephone]) { should eq contact2.telephone }
+    end
+
+    context 'for a web link contact' do
+      subject { provider.generated_ucas_contact(contact3.type) }
+
+      its([:name]) { should eq contact3.name }
+      its([:email]) { should eq contact3.email }
+      its([:telephone]) { should eq contact3.telephone }
+    end
+
+    context 'for a fraud contact' do
+      subject { provider.generated_ucas_contact(contact4.type) }
+
+      its([:name]) { should eq contact4.name }
+      its([:email]) { should eq contact4.email }
+      its([:telephone]) { should eq contact4.telephone }
+    end
+
+    context 'for a finance contact' do
+      subject { provider.generated_ucas_contact(contact5.type) }
+
+      its([:name]) { should eq contact5.name }
+      its([:email]) { should eq contact5.email }
+      its([:telephone]) { should eq contact5.telephone }
+    end
+
+    context 'when there is no contact' do
+      let(:provider) { create(:provider) }
+
+      subject { provider.generated_ucas_contact('admin') }
+
+      it { should eq nil }
+    end
+  end
 end

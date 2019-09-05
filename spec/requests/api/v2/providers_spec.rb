@@ -18,8 +18,10 @@ describe 'Providers API v2', type: :request do
     let!(:provider) {
       create(:provider,
              organisations: [organisation],
-             enrichments: [enrichment])
+             enrichments: [enrichment],
+             contacts: [contact])
     }
+    let(:contact) { build(:contact) }
     let(:enrichment) { build(:provider_enrichment, :published) }
 
     let(:json_response) { JSON.parse(response.body) }
@@ -209,8 +211,10 @@ describe 'Providers API v2', type: :request do
              sites: [site],
              organisations: [organisation],
              enrichments: [enrichment],
-             courses: courses)
+             courses: courses,
+             contacts: [contact])
     end
+    let(:contact) { build(:contact) }
 
     let(:token) do
       JWT.encode payload,
@@ -251,6 +255,15 @@ describe 'Providers API v2', type: :request do
               "provider_name" => accrediting_provider.provider_name,
               "description" => description,
             }],
+            "admin_contact" => {
+                "name" => contact.name,
+                "email" => contact.email,
+                "telephone" => contact.telephone
+               },
+               "utt_contact" => nil,
+               "web_link_contact" => nil,
+               "fraud_contact" => nil,
+               "finance_contact" => nil
           },
           "relationships" => {
             "sites" => {
@@ -323,6 +336,15 @@ describe 'Providers API v2', type: :request do
                 "provider_name" => accrediting_provider.provider_name,
                 "description" => description,
               }],
+              "admin_contact" => {
+                   "name" => contact.name,
+                   "email" => contact.email,
+                   "telephone" => contact.telephone
+                 },
+                 "utt_contact" => nil,
+                 "web_link_contact" => nil,
+                 "fraud_contact" => nil,
+                 "finance_contact" => nil
             },
             "relationships" => {
               "sites" => {

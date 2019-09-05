@@ -57,6 +57,27 @@ module API
         @object.last_published_at&.iso8601
       end
 
+      attribute :admin_contact do
+        @object.generated_ucas_contact('admin')
+      end
+
+      attribute :utt_contact do
+        @object.generated_ucas_contact('utt')
+      end
+
+      attribute :web_link_contact do
+        @object.generated_ucas_contact('web_link')
+      end
+
+      attribute :fraud_contact do
+        @object.generated_ucas_contact('fraud')
+      end
+
+      attribute :finance_contact do
+        @object.generated_ucas_contact('finance')
+      end
+
+
       enrichment_attribute :train_with_us
       enrichment_attribute :train_with_disability
 
