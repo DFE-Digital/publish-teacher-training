@@ -7,7 +7,7 @@ module API
 
       before_action :build_recruitment_cycle
       before_action :build_provider
-      before_action :build_course, except: %i[index new create]
+      before_action :build_course, except: %i[index new create build_new]
 
       deserializable_resource :course,
                               only: %i[update publish publishable create],
@@ -19,6 +19,21 @@ module API
         @course = @provider.courses.new
 
         render jsonapi: @course, include: params[:include]
+      end
+
+      # For creating and validating a course model without persisting it to the database.
+      # Used by the new course wizard in frontend.
+      def build_new
+        authorize @provider
+        course = Course.new(provider: @provider)
+        course.assign_attributes(course_params)
+        course.valid?
+        response = {
+          course: course,
+          errors: course.errors,
+          edit_options: course.edit_course_options,
+        }
+        render json: response
       end
 
       def index
