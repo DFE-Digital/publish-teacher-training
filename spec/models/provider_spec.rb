@@ -479,7 +479,7 @@ describe Provider, type: :model do
         subject.attributes.slice(*copyable_enrichment_attributes)
       end
 
-      subject { provider.enrichments.find_or_initialize_draft }
+      subject { provider.enrichments.find_or_initialize_draft(create(:user)) }
 
       context 'no enrichments' do
         let(:enrichments) { [] }

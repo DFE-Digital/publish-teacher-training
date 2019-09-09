@@ -101,7 +101,7 @@ module API
       def update_accrediting_enrichment
         return if accredited_bodies_params.values.none?
 
-        enrichment = @provider.enrichments.find_or_initialize_draft
+        enrichment = @provider.enrichments.find_or_initialize_draft(current_user)
 
         enrichment.accrediting_provider_enrichments =
           accredited_bodies_params["accredited_bodies"].map do |accredited_body|
@@ -117,7 +117,7 @@ module API
       def update_enrichment
         return unless enrichment_params.values.any?
 
-        enrichment = @provider.enrichments.find_or_initialize_draft
+        enrichment = @provider.enrichments.find_or_initialize_draft(current_user)
         enrichment.assign_attributes(enrichment_params)
         enrichment.status = 'draft' if enrichment.rolled_over?
 
