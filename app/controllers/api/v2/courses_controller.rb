@@ -28,12 +28,25 @@ module API
         course = Course.new(provider: @provider)
         course.assign_attributes(course_params)
         course.valid?
-        response = {
-          course: course,
-          errors: course.errors,
-          edit_options: course.edit_course_options,
-        }
-        render json: response
+
+        jsonapi_data = JSONAPI::Serializable::Renderer.new.render(
+          course,
+          class: { Course: API::V2::SerializableCourse }
+        )
+
+        jsonapi_data[:data][:errors] = []
+
+        course.errors.messages.each do |error_key, _|
+          course.errors.full_messages_for(error_key).each do |error_message|
+            jsonapi_data[:data][:errors] << {
+              "title" => "Invalid #{error_key.to_s}",
+              "detail" => error_message,
+              "source" => { "pointer" => "/data/attributes/#{error_key}" }
+            }
+          end
+        end
+
+        render json: jsonapi_data
       end
 
       def index
