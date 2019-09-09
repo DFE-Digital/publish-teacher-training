@@ -39,6 +39,9 @@ FactoryBot.define do
     train_with_disability { Faker::Lorem.sentence.to_s }
     accrediting_provider_enrichments { nil }
 
+    updated_by_user_id { create(:user).id }
+    created_by_user_id { create(:user).id }
+
 
     after(:build) do |enrichment, evaluator|
       if evaluator.age.present?
