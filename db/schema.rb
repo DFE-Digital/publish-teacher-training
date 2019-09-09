@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_09_04_131906) do
+ActiveRecord::Schema.define(version: 2019_09_09_105439) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_buffercache"
@@ -194,10 +194,10 @@ ActiveRecord::Schema.define(version: 2019_09_04_131906) do
   create_table "provider_enrichment", id: :serial, force: :cascade do |t|
     t.text "provider_code", null: false
     t.jsonb "json_data"
-    t.integer "updated_by_user_id"
+    t.integer "updated_by_user_id", null: false
     t.datetime "created_at", default: -> { "timezone('utc'::text, now())" }, null: false
     t.datetime "updated_at", default: -> { "timezone('utc'::text, now())" }, null: false
-    t.integer "created_by_user_id"
+    t.integer "created_by_user_id", null: false
     t.datetime "last_published_at"
     t.integer "status", default: 0, null: false
     t.integer "provider_id", null: false

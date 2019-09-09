@@ -5,10 +5,10 @@
 #  id                 :integer          not null, primary key
 #  provider_code      :text             not null
 #  json_data          :jsonb
-#  updated_by_user_id :integer
+#  updated_by_user_id :integer          not null
 #  created_at         :datetime         not null
 #  updated_at         :datetime         not null
-#  created_by_user_id :integer
+#  created_by_user_id :integer          not null
 #  last_published_at  :datetime
 #  status             :integer          default("draft"), not null
 #  provider_id        :integer          not null
