@@ -394,6 +394,23 @@ class Course < ApplicationRecord
     content_status == :published
   end
 
+  def assign_program_type(funding_type)
+    case funding_type
+    when 'salary'
+      update(program_type: :school_direct_salaried_training_programme)
+    when 'apprenticeship'
+      update(program_type: :pg_teaching_apprenticeship)
+    when 'fee'
+      if !self_accredited?
+        update(program_type: :school_direct_training_programme)
+      elsif provider.is_it_really_really_a_scitt?
+        update(program_type: :scitt_programme)
+      else
+        update(program_type: :higher_education_programme)
+      end
+    end
+  end
+
 private
 
   def assignable_after_publish(course_params)

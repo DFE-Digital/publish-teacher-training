@@ -28,6 +28,7 @@ module API
         study_mode
         is_send
         accrediting_provider_code
+        funding_type
       ].freeze
 
       attributes(*COURSE_ATTRIBUTES)
