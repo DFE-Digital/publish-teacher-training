@@ -397,7 +397,11 @@ class Course < ApplicationRecord
   def assign_program_type(funding_type)
     case funding_type
     when 'salary'
-      update(program_type: :school_direct_salaried_training_programme)
+      if !self_accredited?
+        update(program_type: :school_direct_salaried_training_programme)
+      else
+        errors.add(:program_type, "Fee is not valid for a self accredited course")
+      end
     when 'apprenticeship'
       update(program_type: :pg_teaching_apprenticeship)
     when 'fee'
