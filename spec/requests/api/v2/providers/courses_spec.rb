@@ -120,7 +120,6 @@ describe 'Courses API v2', type: :request do
                 "age_range_in_years" => provider.courses[0].age_range_in_years,
                 "accrediting_provider" => nil,
                 "accrediting_provider_code" => nil,
-                "program_type" => "pg_teaching_apprenticeship",
               },
               "relationships" => {
                 "accrediting_provider" => { "meta" => { "included" => false } },
@@ -148,7 +147,6 @@ describe 'Courses API v2', type: :request do
                     "July 2020"
                   ],
                   "study_modes" => %w[full_time part_time full_time_or_part_time],
-                  "program_type" => %w[pg_teaching_apprenticeship higher_education_programme],
                   "show_is_send" => false,
                   "show_start_date" => false,
                   "show_applications_open" => false
@@ -306,7 +304,6 @@ describe 'Courses API v2', type: :request do
               "age_range_in_years" => provider.courses[0].age_range_in_years,
               "accrediting_provider" => nil,
               "accrediting_provider_code" => nil,
-              "program_type" => "pg_teaching_apprenticeship",
             },
             "relationships" => {
               "accrediting_provider" => { "meta" => { "included" => false } },
@@ -334,7 +331,6 @@ describe 'Courses API v2', type: :request do
                   "July 2020"
                 ],
                 "study_modes" => %w[full_time part_time full_time_or_part_time],
-                "program_type" => %w[pg_teaching_apprenticeship higher_education_programme],
                 "show_is_send" => false,
                 "show_start_date" => false,
                 "show_applications_open" => false
