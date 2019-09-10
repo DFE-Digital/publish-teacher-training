@@ -108,7 +108,7 @@ describe '/api/v2/recruitment_cycle', type: :request do
         perform_request
 
         expect(json_response)
-          .to(match_array(
+          .to(eq(
                 'data' => [
                   {
                     'id' => recruitment_cycle.id.to_s,
