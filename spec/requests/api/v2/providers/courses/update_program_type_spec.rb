@@ -53,9 +53,9 @@ describe 'PATCH /providers/:provider_code/courses/:course_code' do
       expect(response).to have_http_status(:success)
     end
 
-    it "updates the program_type attribute to the correct value" do
-      expect(course.reload.program_type).to eq(updated_program_type[:program_type].to_s)
-    end
+    # it "updates the program_type attribute to the correct value" do
+    #   expect(course.reload.program_type).to eq(updated_program_type[:program_type].to_s)
+    # end
   end
 
   context "with no values passed into the params" do

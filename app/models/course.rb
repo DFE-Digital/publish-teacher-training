@@ -272,7 +272,7 @@ class Course < ApplicationRecord
     :not_running
   end
 
-  def funding
+  def funding_type
     if school_direct_salaried_training_programme?
       'salary'
     elsif pg_teaching_apprenticeship?
@@ -291,7 +291,7 @@ class Course < ApplicationRecord
   end
 
   def is_fee_based?
-    funding == 'fee'
+    funding_type == 'fee'
   end
 
   # https://www.gov.uk/government/publications/initial-teacher-training-criteria/initial-teacher-training-itt-criteria-and-supporting-advice#c11-gcse-standard-equivalent
