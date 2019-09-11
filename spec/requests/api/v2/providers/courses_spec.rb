@@ -17,7 +17,7 @@ describe 'Courses API v2', type: :request do
            provider: provider,
            start_date: Time.now.utc,
            study_mode: :full_time,
-           subjects: [course_subject_primary, course_subject_mathematics],
+           ucas_subjects: [course_subject_primary, course_subject_mathematics],
            is_send: true,
            site_statuses: [courses_site_status],
            enrichments: [enrichment],

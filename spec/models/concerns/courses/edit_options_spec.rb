@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 describe Course, type: :model do
-  let(:course) { create(:course, subjects: [subjects]) }
+  let(:course) { create(:course, ucas_subjects: [subjects]) }
   let(:subjects) { create(:ucas_subject, :primary) }
 
   context 'entry_requirements' do
