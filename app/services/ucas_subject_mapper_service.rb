@@ -1,6 +1,6 @@
 # This is a port of https://github.com/DFE-Digital/manage-courses-api/blob/master/src/ManageCourses.Api/Mapping/SubjectMapper.cs
 
-class SubjectMapperService
+class UCASSubjectMapperService
   UCAS_TO_DFE_SUBJECT_MAPPINGS = {
     primary: {
       %w[primary] => "Primary",
@@ -67,9 +67,9 @@ class SubjectMapperService
        ["religious education"] => "Religious education",
        ["social science"] => "Social sciences",
        { ucas_subjects_match: ->(ucas_subjects) {
-                                Subjects::ModernForeignLanguages.language_course?(ucas_subjects) &&
-                                  !Subjects::ModernForeignLanguages.mandarin?(ucas_subjects) &&
-                                  !Subjects::ModernForeignLanguages.main_mfl?(ucas_subjects)
+                                UCASSubjects::ModernForeignLanguages.language_course?(ucas_subjects) &&
+                                  !UCASSubjects::ModernForeignLanguages.mandarin?(ucas_subjects) &&
+                                  !UCASSubjects::ModernForeignLanguages.main_mfl?(ucas_subjects)
                               } } => "Modern languages (other)",
        {
          ucas_subjects: ["english", "english language", "english literature"],
@@ -95,9 +95,9 @@ class SubjectMapperService
     return [] if course_title.nil?
 
     ucas_subjects = ucas_subjects.map(&:strip).map(&:downcase)
-    ucas_level = Subjects::CourseLevel.new(ucas_subjects).ucas_level
+    ucas_level = UCASSubjects::CourseLevel.new(ucas_subjects).ucas_level
 
-    Subjects::UCASToDFESubjectMappingCollection.
+    UCASSubjects::UCASToDFESubjectMappingCollection.
       new(config: UCAS_TO_DFE_SUBJECT_MAPPINGS[ucas_level]).
       to_dfe_subjects(
         ucas_subjects: ucas_subjects,

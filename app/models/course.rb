@@ -308,11 +308,11 @@ class Course < ApplicationRecord
   end
 
   def dfe_subjects
-    SubjectMapperService.get_subject_list(name, subjects.map(&:subject_name))
+    UCASSubjectMapperService.get_subject_list(name, ucas_subjects.map(&:subject_name))
   end
 
-  def ucas_level
-    Subjects::CourseLevel.new(subjects.map(&:subject_name)).ucas_level
+  def level
+    UCASSubjects::CourseLevel.new(ucas_subjects.map(&:subject_name)).level
   end
 
   def is_fee_based?
