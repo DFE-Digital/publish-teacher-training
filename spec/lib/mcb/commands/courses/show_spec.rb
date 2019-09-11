@@ -18,8 +18,8 @@ describe "mcb courses show" do
     new_provider
   end
 
-  let(:subject1) { build(:subject) }
-  let(:subject2) { build(:subject) }
+  let(:subject1) { build(:ucas_subject) }
+  let(:subject2) { build(:ucas_subject) }
   let(:site_status1) { build(:site_status) }
   let(:site_status2) { build(:site_status) }
 

@@ -13,9 +13,9 @@ describe MCB::Editor::CoursesEditor, :needs_audit_user do
   let(:email) { "user@education.gov.uk" }
   let(:provider) { create(:provider, provider_code: provider_code) }
   let(:accredited_body) { create(:provider, :accredited_body) }
-  let!(:mathematics) { find_or_create(:subject, :mathematics) }
-  let!(:biology) { find_or_create(:subject, subject_name: "Biology") }
-  let!(:secondary) { find_or_create(:subject, :secondary) }
+  let!(:mathematics) { find_or_create(:ucas_subject, :mathematics) }
+  let!(:biology) { find_or_create(:ucas_subject, subject_name: "Biology") }
+  let!(:secondary) { find_or_create(:ucas_subject, :secondary) }
   let(:current_cycle) { RecruitmentCycle.current_recruitment_cycle }
   let!(:next_cycle) { find_or_create(:recruitment_cycle, year: "2020") }
   let(:is_send) { false }

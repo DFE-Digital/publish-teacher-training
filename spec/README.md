@@ -36,7 +36,7 @@ let(:provider) { course.provider }
 ## Overriding the creation of a dependent object
 
 ```
-let(:english_subject) { create :subject, :english }
+let(:english_subject) { create :ucas_subject, :english }
 let(:course)          { create :course, subjects: [english_subject] }
 ```
 
