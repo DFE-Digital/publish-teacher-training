@@ -7,7 +7,7 @@
 #  subject_code :text             not null
 #
 
-class Subject < ApplicationRecord
+class UCASSubject < ApplicationRecord
   has_many :course_subjects
   has_many :courses, through: :course_subjects
 
