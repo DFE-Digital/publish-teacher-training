@@ -1,4 +1,4 @@
-module Subjects
+module UCASSubjects
   class CourseLevel
     SUBJECT_LEVEL = {
       ucas_further_education: ["further education",
