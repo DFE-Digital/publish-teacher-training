@@ -7,6 +7,6 @@
 #  subject_code :text             not null
 #
 
-class SubjectSerializer < ActiveModel::Serializer
+class UCASSubjectSerializer < ActiveModel::Serializer
   attributes :subject_name, :subject_code
 end
