@@ -35,7 +35,7 @@ RSpec.describe Courses::CopyToProviderService do
     expect(new_course).not_to be_nil
     expect(new_course.accrediting_provider_code)
       .to eq course.accrediting_provider_code
-    expect(new_course.subjects).to eq course.subjects
+    expect(new_course.ucas_subjects).to eq course.ucas_subjects
     expect(new_course.content_status).to eq :rolled_over
     expect(new_course.ucas_status).to eq :new
     expect(new_course.open_for_applications?).to be_falsey
