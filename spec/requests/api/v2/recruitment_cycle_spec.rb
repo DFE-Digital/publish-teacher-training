@@ -107,6 +107,8 @@ describe '/api/v2/recruitment_cycle', type: :request do
 
         perform_request
 
+        json_response["data"].sort_by! { |cycle| cycle["id"] }
+
         expect(json_response)
           .to(eq(
                 'data' => [
