@@ -8,6 +8,6 @@
 #  subject_name :text
 #
 
-class SubjectSerializer < ActiveModel::Serializer
+class UCASSubjectSerializer < ActiveModel::Serializer
   attributes :subject_name, :subject_code
 end

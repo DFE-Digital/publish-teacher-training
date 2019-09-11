@@ -96,7 +96,7 @@ class CourseSerializer < ActiveModel::Serializer
     return object.ucas_subjects unless object.is_send?
 
     subjects_array = object.ucas_subjects.to_a
-    subjects_array << Subject.new(subject_code: 'U3', subject_name: 'Special Educational Needs')
+    subjects_array << UCASSubject.new(subject_code: 'U3', subject_name: 'Special Educational Needs')
 
     subjects_array
   end

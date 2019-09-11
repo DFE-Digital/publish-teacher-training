@@ -459,7 +459,7 @@ describe "Courses API", type: :request do
       end
 
       it 'does not create a SEND subject' do
-        expect(Subject.where(subject_code: 'U3').count).to eq(0)
+        expect(UCASSubject.where(subject_code: 'U3').count).to eq(0)
       end
     end
   end
