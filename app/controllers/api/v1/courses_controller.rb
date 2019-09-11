@@ -17,7 +17,7 @@ module API
              .courses
              .includes(:provider,
                        :site_statuses,
-                       :subjects,
+                       :ucas_subjects,
                        site_statuses: %i[site course])
              .changed_since(changed_since)
              .not_new
