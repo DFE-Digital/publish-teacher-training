@@ -10,7 +10,7 @@
 require "rails_helper"
 
 RSpec.describe UCASSubject, type: :model do
-  subject { find_or_create(:subject, :mathematics) }
+  subject { find_or_create(:ucas_subject, :mathematics) }
 
   it { should have_many(:courses).through(:course_subjects) }
   its(:to_s) { should eq("Mathematics") }
