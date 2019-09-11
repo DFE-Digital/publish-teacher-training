@@ -29,7 +29,7 @@ describe "PATCH /providers/:provider_code/courses/:course_code" do
   let(:course)            {
     create :course,
            provider: provider,
-           subjects: [build(:ucas_subject, :primary)],
+           ucas_subjects: [build(:ucas_subject, :primary)],
            is_send: false
   }
 

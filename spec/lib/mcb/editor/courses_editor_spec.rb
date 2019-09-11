@@ -33,7 +33,7 @@ describe MCB::Editor::CoursesEditor, :needs_audit_user do
            study_mode: "part_time",
            start_date: Date.new(2019, 8, 1),
            age_range: "secondary",
-           subjects: [secondary, biology],
+           ucas_subjects: [secondary, biology],
            applications_open_from: Date.new(2018, 10, 9),
            is_send: is_send)
   }

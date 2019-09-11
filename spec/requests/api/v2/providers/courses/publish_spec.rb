@@ -32,7 +32,7 @@ describe "Publish API v2", type: :request do
              provider: provider,
              site_statuses: [site_status],
              enrichments: [enrichment],
-             subjects: [dfe_subject])
+             ucas_subjects: [dfe_subject])
     }
 
     subject do
@@ -66,7 +66,7 @@ describe "Publish API v2", type: :request do
                provider: provider,
                site_statuses: [site_status],
                enrichments: [enrichment],
-               subjects: dfe_subjects,
+               ucas_subjects: dfe_subjects,
                age: 17.days.ago)
       }
 

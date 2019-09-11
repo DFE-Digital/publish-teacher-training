@@ -1,12 +1,12 @@
 class DFESubject
   FINANCIAL_SUPPORT_FOR_2019_20_RECRUITMENT_CYCLE = [
-    { subjects: %w[Mathematics], bursary_amount: 20000, early_career_payments: 10000, scholarship: 22000 },
-    { subjects: %w[French Chemistry Computing Spanish Geography Physics German], bursary_amount: 26000, early_career_payments: nil, scholarship: 28000 },
-    { subjects: ["Modern languages (other)", "Classics", "Italian", "Japanese", "Mandarin", "Russian", "Biology"], bursary_amount: 26000, early_career_payments: nil, scholarship: nil },
-    { subjects: %w[English], bursary_amount: 15000, early_career_payments: nil, scholarship: nil },
-    { subjects: ["Design and technology", "History"], bursary_amount: 12000, early_career_payments: nil, scholarship: nil },
-    { subjects: %w[Music], bursary_amount: 9000, early_career_payments: nil, scholarship: nil },
-    { subjects: ["Primary with mathematics"], bursary_amount: 6000, early_career_payments: nil, scholarship: nil },
+    { ucas_subjects: %w[Mathematics], bursary_amount: 20000, early_career_payments: 10000, scholarship: 22000 },
+    { ucas_subjects: %w[French Chemistry Computing Spanish Geography Physics German], bursary_amount: 26000, early_career_payments: nil, scholarship: 28000 },
+    { ucas_subjects: ["Modern languages (other)", "Classics", "Italian", "Japanese", "Mandarin", "Russian", "Biology"], bursary_amount: 26000, early_career_payments: nil, scholarship: nil },
+    { ucas_subjects: %w[English], bursary_amount: 15000, early_career_payments: nil, scholarship: nil },
+    { ucas_subjects: ["Design and technology", "History"], bursary_amount: 12000, early_career_payments: nil, scholarship: nil },
+    { ucas_subjects: %w[Music], bursary_amount: 9000, early_career_payments: nil, scholarship: nil },
+    { ucas_subjects: ["Primary with mathematics"], bursary_amount: 6000, early_career_payments: nil, scholarship: nil },
   ].freeze
 
   def initialize(subject_name)
