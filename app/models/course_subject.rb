@@ -8,8 +8,8 @@
 #
 
 class CourseUCASSubject < ApplicationRecord
-  self.table_name = 'course_subject'
+  self.table_name = 'course_ucas_subject'
 
   belongs_to :course
-  belongs_to :subject
+  belongs_to :ucas_subject
 end
