@@ -32,7 +32,7 @@ module MCB
             render_course,
             provider:             render_course.delete("provider"),
             accrediting_provider: render_course.delete("accrediting_provider"),
-            subjects:             render_course.delete("subjects"),
+            ucas_subjects:        render_course.delete("subjects"),
             site_statuses:        render_course.delete("campus_statuses"),
             enrichments:          nil,
             recruitment_cycle:    nil,

@@ -7,7 +7,7 @@ RSpec.describe Courses::CopyToProviderService do
   let(:course) {
     build :course,
           accrediting_provider: accrediting_provider,
-          subjects: [maths]
+          ucas_subjects: [maths]
   }
   let(:recruitment_cycle) { find_or_create :recruitment_cycle }
   let(:new_recruitment_cycle) { create :recruitment_cycle, :next }

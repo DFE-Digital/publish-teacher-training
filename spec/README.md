@@ -37,7 +37,7 @@ let(:provider) { course.provider }
 
 ```
 let(:english_subject) { create :ucas_subject, :english }
-let(:course)          { create :course, subjects: [english_subject] }
+let(:course)          { create :course, ucas_subjects: [english_subject] }
 ```
 
 When creating associated data, keep in mind which object is the `belongs_to`
