@@ -1,4 +1,4 @@
-module Subjects
+module UCASSubjects
   describe UCASToDFESubjectMapping do
     context "when passed a static array of UCAS subjects" do
       subject { UCASToDFESubjectMapping.new(["maths", "maths (abridged)"], "Mathematics") }

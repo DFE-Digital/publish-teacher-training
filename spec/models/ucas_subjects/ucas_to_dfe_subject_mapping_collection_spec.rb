@@ -1,4 +1,4 @@
-module Subjects
+module UCASSubjects
   describe UCASToDFESubjectMappingCollection do
     let(:config) {
       {
