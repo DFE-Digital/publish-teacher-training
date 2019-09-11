@@ -35,7 +35,7 @@ describe "Courses API", type: :request do
                                    course_code: "2HPF",
                                    start_date: Date.new(2019, 9, 1),
                                    name: "Religious Education",
-                                   subjects: [subject1, subject2],
+                                   ucas_subjects: [subject1, subject2],
                                    study_mode: :full_time,
                                    age_range: 'primary',
                                    english: :equivalence_test,
@@ -437,7 +437,7 @@ describe "Courses API", type: :request do
     end
 
     context 'with a SEND course' do
-      let(:course) { create(:course, provider: provider, is_send: true, subjects: [create(:ucas_subject)]) }
+      let(:course) { create(:course, provider: provider, is_send: true, ucas_subjects: [create(:ucas_subject)]) }
       let(:site) { create(:site_status, :published, course: course) }
 
       before do

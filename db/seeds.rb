@@ -71,7 +71,7 @@ def create_standard_provider_and_courses_for_cycle(recruitment_cycle, superuser)
     science: nil,
     modular: "M",
     qualification: :pgce_with_qts,
-    subjects: [
+    ucas_subjects: [
       Subject.find_by(subject_name: "Secondary"),
       Subject.find_by(subject_name: "Mathematics")
     ],
@@ -99,7 +99,7 @@ def create_standard_provider_and_courses_for_cycle(recruitment_cycle, superuser)
     science: nil,
     modular: "",
     qualification: :pgce,
-    subjects: [
+    ucas_subjects: [
       Subject.find_by(subject_name: "Secondary"),
       Subject.find_by(subject_name: "Biology"),
       Subject.find_by(subject_name: "Further Education"),

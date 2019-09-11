@@ -48,7 +48,7 @@ module MCB
     def course(course,
                provider:,
                accrediting_provider:,
-               subjects:,
+               ucas_subjects:,
                site_statuses:,
                enrichments:,
                recruitment_cycle:)
