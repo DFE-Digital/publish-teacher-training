@@ -7,7 +7,7 @@
 #  subject_id :integer
 #
 
-class CourseSubject < ApplicationRecord
+class CourseUCASSubject < ApplicationRecord
   self.table_name = 'course_subject'
 
   belongs_to :course
