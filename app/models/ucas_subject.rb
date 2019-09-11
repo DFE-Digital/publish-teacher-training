@@ -9,8 +9,8 @@
 #
 
 class UCASSubject < ApplicationRecord
-  has_many :course_subjects
-  has_many :courses, through: :course_subjects
+  has_many :course_ucas_subjects
+  has_many :courses, through: :course_ucas_subjects
 
   scope :further_education, -> { where(subject_name: 'Further Education') }
 
