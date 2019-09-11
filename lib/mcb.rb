@@ -295,14 +295,9 @@ module MCB
           subscription: 'DFE BAT Development'
         },
         'staging' => {
-          webapp: 'bat-staging-manage-courses-backend-app',
-          rgroup: 'bat-staging-linux-rgroup',
+          webapp: 'bat-stg-mcbe-as',
+          rgroup: 'bat-stg-mcbe-rg',
           subscription: 'DFE BAT Development'
-        },
-        'old-prod' => {
-          webapp: 'bat-prod-manage-courses-backend-app',
-          rgroup: 'bat-prod-linux-rgroup',
-          subscription: 'DFE BAT Production'
         },
         'production' => {
           webapp: 'bat-prod-mcbe-as',
