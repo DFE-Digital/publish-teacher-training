@@ -3,8 +3,8 @@ require "rails_helper"
 RSpec.describe "Subjecs API", type: :request do
   describe 'GET index' do
     before do
-      FactoryBot.find_or_create(:subject, :mathematics)
-      FactoryBot.find_or_create(:subject,
+      FactoryBot.find_or_create(:ucas_subject, :mathematics)
+      FactoryBot.find_or_create(:ucas_subject,
                                 subject_name: "Biology",
                                 subject_code: "M4")
     end

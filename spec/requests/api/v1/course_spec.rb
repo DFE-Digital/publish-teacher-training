@@ -28,8 +28,8 @@ describe "Courses API", type: :request do
     context "without changed_since parameter" do
       before do
         site = FactoryBot.create(:site, code: "-", location_name: "Main Site", provider: provider)
-        subject1 = FactoryBot.find_or_create(:subject, :secondary)
-        subject2 = FactoryBot.find_or_create(:subject, :mathematics)
+        subject1 = FactoryBot.find_or_create(:ucas_subject, :secondary)
+        subject2 = FactoryBot.find_or_create(:ucas_subject, :mathematics)
 
         course = FactoryBot.create(:course,
                                    course_code: "2HPF",
@@ -437,7 +437,7 @@ describe "Courses API", type: :request do
     end
 
     context 'with a SEND course' do
-      let(:course) { create(:course, provider: provider, is_send: true, subjects: [create(:subject)]) }
+      let(:course) { create(:course, provider: provider, is_send: true, subjects: [create(:ucas_subject)]) }
       let(:site) { create(:site_status, :published, course: course) }
 
       before do
