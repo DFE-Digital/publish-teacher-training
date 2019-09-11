@@ -8,7 +8,7 @@
 #
 
 FactoryBot.define do
-  factory :subject do
+  factory :ucas_subject do
     sequence(:subject_code, &:to_s)
     subject_name { Faker::ProgrammingLanguage.name }
 
