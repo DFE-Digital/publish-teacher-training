@@ -48,6 +48,6 @@ class DFESubject
 private
 
   def financial_support
-    FINANCIAL_SUPPORT_FOR_2019_20_RECRUITMENT_CYCLE.detect { |entry| @subject_name.in?(entry[:subjects]) }
+    FINANCIAL_SUPPORT_FOR_2019_20_RECRUITMENT_CYCLE.detect { |entry| @subject_name.in?(entry[:ucas_subjects]) }
   end
 end
