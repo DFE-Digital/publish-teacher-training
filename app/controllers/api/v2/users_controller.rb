@@ -3,6 +3,7 @@ module API
     class UsersController < API::V2::ApplicationController
       before_action :build_user
       deserializable_resource :user, only: :update
+      skip_before_action :check_terms_accepted, only: :accept_terms
 
       def show
         render jsonapi: @user,
@@ -21,6 +22,11 @@ module API
         if @user.state == 'new'
           @user.accept_transition_screen!
         end
+      end
+
+      def accept_terms
+        @user.accept_terms_date_utc = Time.now
+        @user.save
       end
 
       def accept_rollover_screen
