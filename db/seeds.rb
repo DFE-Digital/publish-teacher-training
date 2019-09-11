@@ -23,7 +23,7 @@ next_recruitment_cycle = RecruitmentCycle.create(year: '2020', application_start
   "Biology" => "C1",
   "Further Education" => "41",
 }.each do |name, code|
-  Subject.create!(
+ UCASSubject.create!(
     subject_name: name,
     subject_code: code
   )
@@ -72,8 +72,8 @@ def create_standard_provider_and_courses_for_cycle(recruitment_cycle, superuser)
     modular: "M",
     qualification: :pgce_with_qts,
     ucas_subjects: [
-      Subject.find_by(subject_name: "Secondary"),
-      Subject.find_by(subject_name: "Mathematics")
+     UCASSubject.find_by(subject_name: "Secondary"),
+     UCASSubject.find_by(subject_name: "Mathematics")
     ],
     study_mode: "F"
   )
@@ -100,9 +100,9 @@ def create_standard_provider_and_courses_for_cycle(recruitment_cycle, superuser)
     modular: "",
     qualification: :pgce,
     ucas_subjects: [
-      Subject.find_by(subject_name: "Secondary"),
-      Subject.find_by(subject_name: "Biology"),
-      Subject.find_by(subject_name: "Further Education"),
+     UCASSubject.find_by(subject_name: "Secondary"),
+     UCASSubject.find_by(subject_name: "Biology"),
+     UCASSubject.find_by(subject_name: "Further Education"),
     ],
     study_mode: "B"
   )
