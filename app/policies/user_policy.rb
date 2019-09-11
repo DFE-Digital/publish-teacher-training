@@ -17,4 +17,5 @@ class UserPolicy
   alias_method :update?, :show?
   alias_method :accept_transition_screen?, :update?
   alias_method :accept_rollover_screen?, :update?
+  alias_method :accept_terms?, :update?
 end

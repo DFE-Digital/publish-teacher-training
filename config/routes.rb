@@ -100,6 +100,7 @@ Rails.application.routes.draw do
 
         patch :accept_transition_screen, on: :member
         patch :accept_rollover_screen, on: :member
+        patch :accept_terms, on: :member
       end
 
       concern :provider_routes do
