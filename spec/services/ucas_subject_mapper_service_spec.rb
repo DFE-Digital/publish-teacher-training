@@ -1,11 +1,11 @@
 require "csv"
 
-describe SubjectMapperService do
+describe UCASSubjectMapperService do
   RSpec::Matchers.define :map_to_dfe_subjects do |expected|
     match do |input|
       @input = input
       @actual_dfe_subjects = mapped_subjects(input.fetch(:title, "Any title"), input[:ucas])
-      @actual_level = Subjects::CourseLevel.new(input[:ucas]).ucas_level
+      @actual_level = UCASSubjects::CourseLevel.new(input[:ucas]).ucas_level
       contain_exactly(*expected).matches?(@actual_dfe_subjects) &&
         (@actual_level == @expected_level)
     end
