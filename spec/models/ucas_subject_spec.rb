@@ -9,7 +9,7 @@
 
 require "rails_helper"
 
-RSpec.describe Subject, type: :model do
+RSpec.describe UCASSubject, type: :model do
   subject { find_or_create(:subject, :mathematics) }
 
   it { should have_many(:courses).through(:course_subjects) }
