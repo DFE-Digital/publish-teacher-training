@@ -9,7 +9,7 @@
 
 require "rails_helper"
 
-RSpec.describe SubjectSerializer do
+RSpec.describe UCASSubjectSerializer do
   let(:subject_object) { create :ucas_subject }
   subject { serialize(subject_object) }
 
