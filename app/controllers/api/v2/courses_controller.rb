@@ -21,32 +21,30 @@ module API
         render jsonapi: @course, include: params[:include]
       end
 
-      # For creating and validating a course model without persisting it to the database.
-      # Used by the new course wizard in frontend.
       def build_new
         authorize @provider
         course = Course.new(provider: @provider)
         course.assign_attributes(course_params)
         course.valid?
 
-        jsonapi_data = JSONAPI::Serializable::Renderer.new.render(
+        json_data = JSONAPI::Serializable::Renderer.new.render(
           course,
           class: { Course: API::V2::SerializableCourse }
         )
 
-        jsonapi_data[:data][:errors] = []
+        json_data[:data][:errors] = []
 
         course.errors.messages.each do |error_key, _|
           course.errors.full_messages_for(error_key).each do |error_message|
-            jsonapi_data[:data][:errors] << {
-              "title" => "Invalid #{error_key.to_s}",
+            json_data[:data][:errors] << {
+              "title" => "Invalid #{error_key}",
               "detail" => error_message,
               "source" => { "pointer" => "/data/attributes/#{error_key}" }
             }
           end
         end
 
-        render json: jsonapi_data
+        render json: json_data
       end
 
       def index

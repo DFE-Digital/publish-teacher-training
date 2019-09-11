@@ -32,7 +32,7 @@ describe '/api/v2/build_new_course', type: :request do
   context 'with no parameters' do
     let(:params) { { course: {} } }
 
-    it 'returns a blank course, a bunch of errors and loads of edit_options' do
+    it 'returns a new course with errors' do
       response = do_get params
       expect(response).to have_http_status(:ok)
       json_response = parse_response(response)
@@ -54,19 +54,18 @@ describe '/api/v2/build_new_course', type: :request do
     end
   end
 
-  context 'with enough attributes set in query parameters to make a valid course' do
+  context 'with sufficient parameters to make a valid course' do
     let(:params) do
       { course: {
         name: 'Foo Bar Course',
         maths: 'must_have_qualification_at_application_time',
         english: 'must_have_qualification_at_application_time',
-        # todo: why is this valid when level not set? A: because level has a default. What to do about that if anything?
       } }
     end
 
     let(:course) { Course.new({ provider: provider }.merge(params[:course])) }
 
-    it 'returns the course model and edit_options with no errors' do
+    it 'returns a matching course with no errors' do
       response = do_get params
       expect(response).to have_http_status(:ok)
       json_response = parse_response(response)
