@@ -7,7 +7,7 @@ module API
 
       before_action :build_recruitment_cycle
       before_action :build_provider
-      before_action :build_course, except: %i[index new create]
+      before_action :build_course, except: %i[index new create build_new]
 
       deserializable_resource :course,
                               only: %i[update publish publishable create],
@@ -19,6 +19,32 @@ module API
         @course = @provider.courses.new
 
         render jsonapi: @course, include: params[:include]
+      end
+
+      def build_new
+        authorize @provider
+        course = Course.new(provider: @provider)
+        course.assign_attributes(course_params)
+        course.valid?
+
+        json_data = JSONAPI::Serializable::Renderer.new.render(
+          course,
+          class: { Course: API::V2::SerializableCourse }
+        )
+
+        json_data[:data][:errors] = []
+
+        course.errors.messages.each do |error_key, _|
+          course.errors.full_messages_for(error_key).each do |error_message|
+            json_data[:data][:errors] << {
+              "title" => "Invalid #{error_key}",
+              "detail" => error_message,
+              "source" => { "pointer" => "/data/attributes/#{error_key}" }
+            }
+          end
+        end
+
+        render json: json_data
       end
 
       def index

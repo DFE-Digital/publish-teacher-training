@@ -140,6 +140,8 @@ Rails.application.routes.draw do
       resources :access_requests, only: %i[update index create show] do
         post :approve, on: :member
       end
+
+      get 'build_new_course', to: 'courses#build_new'
     end
   end
 
