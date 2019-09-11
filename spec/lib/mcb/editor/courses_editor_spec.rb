@@ -224,13 +224,13 @@ describe MCB::Editor::CoursesEditor, :needs_audit_user do
       describe "(subjects)" do
         it "attaches new subjects" do
           expect { run_editor("edit subjects", "[ ] Mathematics", "continue", "exit") }.
-            to change { course.subjects.reload.sort_by(&:subject_name) }.
+            to change { course.ucas_subjects.reload.sort_by(&:subject_name) }.
             from([biology, secondary]).to([biology, mathematics, secondary])
         end
 
         it "removes existing subjects" do
           expect { run_editor("edit subjects", "[x] Biology", "continue", "exit") }.
-            to change { course.subjects.reload.sort_by(&:subject_name) }.
+            to change { course.ucas_subjects.reload.sort_by(&:subject_name) }.
             from([biology, secondary]).to([secondary])
         end
 

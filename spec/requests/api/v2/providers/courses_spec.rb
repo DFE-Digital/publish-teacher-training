@@ -37,7 +37,7 @@ describe 'Courses API v2', type: :request do
   }
   let(:enrichment)     { build :course_enrichment, :published }
   let(:provider)       { create :provider, organisations: [organisation] }
-  let(:course_subject) { course.subjects.first }
+  let(:course_subject) { course.ucas_subjects.first }
   let(:site_status)    { findable_open_course.site_statuses.first }
   let(:site)           { site_status.site }
 
