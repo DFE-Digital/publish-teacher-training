@@ -10,7 +10,17 @@ module Courses
         def start_date_options
           recruitment_year = provider.recruitment_cycle.year.to_i
 
-          ["August #{recruitment_year}",
+          ["October #{recruitment_year - 1}",
+           "November #{recruitment_year - 1}",
+           "December #{recruitment_year - 1}",
+           "January #{recruitment_year}",
+           "February #{recruitment_year}",
+           "March #{recruitment_year}",
+           "April #{recruitment_year}",
+           "May #{recruitment_year}",
+           "June #{recruitment_year}",
+           "July #{recruitment_year}",
+           "August #{recruitment_year}",
            "September #{recruitment_year}",
            "October #{recruitment_year}",
            "November #{recruitment_year}",
