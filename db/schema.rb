@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_09_12_150048) do
+ActiveRecord::Schema.define(version: 2019_09_12_162820) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_buffercache"
@@ -263,6 +263,12 @@ ActiveRecord::Schema.define(version: 2019_09_12_150048) do
     t.datetime "created_at", default: -> { "timezone('utc'::text, now())" }, null: false
     t.datetime "updated_at", default: -> { "timezone('utc'::text, now())" }, null: false
     t.index ["provider_id", "code"], name: "IX_site_provider_id_code", unique: true
+  end
+
+  create_table "subject", force: :cascade do |t|
+    t.text "type"
+    t.text "subject_code"
+    t.text "subject_name"
   end
 
   create_table "ucas_subject", id: :serial, force: :cascade do |t|
