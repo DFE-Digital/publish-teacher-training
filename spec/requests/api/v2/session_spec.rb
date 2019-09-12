@@ -178,6 +178,25 @@ describe '/api/v2/sessions', type: :request do
         }.not_to(change { user.reload })
       end
     end
+
+    context "with inactive user" do
+      let(:user) { create(:user, :inactive) }
+      let(:type) { "sessions" }
+      let(:attributes) do
+        {
+          "first_name" => user.first_name,
+          "last_name" => user.last_name,
+        }
+      end
+
+      it 'succeeds' do
+        expect(
+          post('/api/v2/sessions',
+               headers: { 'HTTP_AUTHORIZATION' => credentials },
+               params: params)
+        ).to be(200)
+      end
+    end
   end
 
   context "no params" do
