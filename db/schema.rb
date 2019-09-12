@@ -91,7 +91,11 @@ ActiveRecord::Schema.define(version: 2019_09_13_112820) do
     t.string "age_range_in_years"
     t.date "applications_open_from"
     t.boolean "is_send", default: false
+<<<<<<< HEAD
     t.string "level"
+=======
+    t.integer "level", default: 0
+>>>>>>> [2128] Add level to course via migration
     t.index ["accrediting_provider_code"], name: "index_course_on_accrediting_provider_code"
     t.index ["accrediting_provider_id"], name: "IX_course_accrediting_provider_id"
     t.index ["changed_at"], name: "index_course_on_changed_at", unique: true
