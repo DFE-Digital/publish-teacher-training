@@ -100,7 +100,11 @@ class Course < ApplicationRecord
              optional: true
 
   has_many :course_subjects
+<<<<<<< HEAD
   has_many :subjects, through: :course_subjects
+=======
+  has_many :subjects, through: :cours_subjects
+>>>>>>> [2127] Add migration to create subject table
   has_many :course_ucas_subjects
   has_many :ucas_subjects, through: :course_ucas_subjects
   has_many :site_statuses
