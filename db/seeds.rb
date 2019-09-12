@@ -23,10 +23,10 @@ next_recruitment_cycle = RecruitmentCycle.create(year: '2020', application_start
   "Biology" => "C1",
   "Further Education" => "41",
 }.each do |name, code|
- UCASSubject.create!(
+  UCASSubject.create!(
     subject_name: name,
     subject_code: code
-  )
+   )
 end
 
 superuser = User.create!(

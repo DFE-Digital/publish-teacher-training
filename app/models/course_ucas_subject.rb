@@ -1,10 +1,10 @@
 # == Schema Information
 #
-# Table name: course_subject
+# Table name: course_ucas_subject
 #
-#  id         :integer          not null, primary key
-#  course_id  :integer
-#  subject_id :integer
+#  id              :integer          not null, primary key
+#  course_id       :integer
+#  ucas_subject_id :integer
 #
 
 class CourseUCASSubject < ApplicationRecord

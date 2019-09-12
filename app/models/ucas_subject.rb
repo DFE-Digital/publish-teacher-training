@@ -1,6 +1,6 @@
 # == Schema Information
 #
-# Table name: subject
+# Table name: ucas_subject
 #
 #  id           :bigint           not null, primary key
 #  type         :text
