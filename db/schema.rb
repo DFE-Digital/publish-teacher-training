@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_09_13_125905) do
+ActiveRecord::Schema.define(version: 2019_09_12_131116) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_buffercache"
@@ -92,7 +92,11 @@ ActiveRecord::Schema.define(version: 2019_09_13_125905) do
     t.date "applications_open_from"
     t.boolean "is_send", default: false
 <<<<<<< HEAD
+<<<<<<< HEAD
     t.string "level"
+=======
+    t.integer "level", default: 0
+>>>>>>> [2128] Add level to course via migration
 =======
     t.integer "level", default: 0
 >>>>>>> [2128] Add level to course via migration
