@@ -25,6 +25,7 @@
 #  age_range_in_years        :string
 #  applications_open_from    :date
 #  is_send                   :boolean          default(FALSE)
+#  level                     :string
 #
 
 class Course < ApplicationRecord
@@ -67,6 +68,12 @@ class Course < ApplicationRecord
     # the above categories
     other: "O",
   }
+
+  enum level: {
+    primary: 'Primary',
+    secondary: 'Secondary',
+    further_education: 'Further education'
+  }, _suffix: :course
 
   ENTRY_REQUIREMENT_OPTIONS = {
     must_have_qualification_at_application_time: 1,
