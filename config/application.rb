@@ -34,5 +34,6 @@ module ManageCoursesBackend
       "PG::ConnectionBad" => :service_unavailable,
       "AASM::InvalidTransition" => :bad_request,
     }
+    config.autoload_paths += %W(#{config.root}/app/models/subjects)
   end
 end
