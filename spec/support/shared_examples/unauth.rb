@@ -8,7 +8,7 @@ shared_examples 'Unauthenticated, unauthorised, or not accepted T&Cs' do
   end
 
   context 'when user has not accepted terms' do
-    let(:user)         { create(:user, accept_terms_date_utc: nil) }
+    let(:user)         { create(:user, :inactive) }
     let(:organisation) { create(:organisation, users: [user]) }
 
     it { should have_http_status(:forbidden) }

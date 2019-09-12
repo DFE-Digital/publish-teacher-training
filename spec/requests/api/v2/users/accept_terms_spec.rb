@@ -1,7 +1,7 @@
 require "rails_helper"
 
 describe 'PATCH /api/v2/users/:id/accept_terms', type: :request do
-  let(:user)    { create(:user, state: 'new', accept_terms_date_utc: nil) }
+  let(:user)    { create(:user, :inactive, state: 'new') }
   let(:payload) { { email: user.email } }
 
   let(:token) do
@@ -55,7 +55,7 @@ describe 'PATCH /api/v2/users/:id/accept_terms', type: :request do
     end
 
     describe 'for wrong user' do
-      let(:other_user) { create(:user, state: 'new', accept_terms_date_utc: nil) }
+      let(:other_user) { create(:user, :inactive, state: 'new') }
 
       it "raises an error" do
         expect { perform_request(other_user) }.to raise_error Pundit::NotAuthorizedError

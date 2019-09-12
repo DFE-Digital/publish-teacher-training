@@ -2,6 +2,7 @@ module API
   module V2
     class SessionsController < API::V2::ApplicationController
       include ValidateJsonapiType
+      skip_before_action :check_terms_accepted, only: :create
 
       deserializable_resource :session
 
