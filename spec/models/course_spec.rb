@@ -25,6 +25,7 @@
 #  age_range_in_years        :string
 #  applications_open_from    :date
 #  is_send                   :boolean          default(FALSE)
+#  level                     :string
 #
 
 require 'rails_helper'
