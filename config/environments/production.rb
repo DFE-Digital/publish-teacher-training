@@ -53,5 +53,5 @@ Rails.application.configure do
 
   config.authentication_token = ENV["AUTHENTICATION_TOKEN"]
 
-  config.active_job.queue_adapter = :delayed_job
+  config.active_job.queue_adapter = :sidekiq
 end

@@ -46,5 +46,5 @@ Rails.application.configure do
 
   config.authentication_token = ENV.fetch("AUTHENTICATION_TOKEN", "bats")
 
-  config.active_job.queue_adapter = :delayed_job
+  config.active_job.queue_adapter = :sidekiq
 end
