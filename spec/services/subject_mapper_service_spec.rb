@@ -5,7 +5,7 @@ describe SubjectMapperService do
     match do |input|
       @input = input
       @actual_dfe_subjects = mapped_subjects(input.fetch(:title, "Any title"), input[:ucas])
-      @actual_level = Subjects::CourseLevel.new(input[:ucas]).level
+      @actual_level = Subjects::CourseLevel.new(input[:ucas]).ucas_level
       contain_exactly(*expected).matches?(@actual_dfe_subjects) &&
         (@actual_level == @expected_level)
     end
@@ -14,14 +14,14 @@ describe SubjectMapperService do
       described_class.get_subject_list(course_title, ucas_subjects).map(&:to_s)
     end
 
-    chain :at_level do |level|
-      @expected_level = level
+    chain :at_level do |ucas_level|
+      @expected_level = ucas_level
     end
 
     failure_message do |_|
       "expected that UCAS subjects '#{@input[:ucas].join(', ')}' would map to DfE subjects '#{expected.join(', ')}' " +
-        "at #{@expected_level} level but was DfE subjects '#{@actual_dfe_subjects.join(', ')}' " +
-        "at #{@actual_level} level"
+        "at #{@expected_level} ucas_level but was DfE subjects '#{@actual_dfe_subjects.join(', ')}' " +
+        "at #{@actual_level} ucas_level"
     end
   end
 

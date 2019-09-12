@@ -286,8 +286,8 @@ class Course < ApplicationRecord
     SubjectMapperService.get_subject_list(name, subjects.map(&:subject_name))
   end
 
-  def level
-    Subjects::CourseLevel.new(subjects.map(&:subject_name)).level
+  def ucas_level
+    Subjects::CourseLevel.new(subjects.map(&:subject_name)).ucas_level
   end
 
   def is_fee_based?
@@ -296,7 +296,7 @@ class Course < ApplicationRecord
 
   # https://www.gov.uk/government/publications/initial-teacher-training-criteria/initial-teacher-training-itt-criteria-and-supporting-advice#c11-gcse-standard-equivalent
   def gcse_subjects_required
-    case level
+    case ucas_level
     when :primary
       %w[maths english science]
     when :secondary
@@ -467,7 +467,7 @@ private
   end
 
   def validate_qualification
-    errors.add(:qualification, "^#{qualifications_description} is not valid for a #{level.to_s.humanize.downcase} course") unless qualification_options.include?(qualification)
+    errors.add(:qualification, "^#{qualifications_description} is not valid for a #{ucas_level.to_s.humanize.downcase} course") unless qualification_options.include?(qualification)
   end
 
   def set_applications_open_from

@@ -4,14 +4,14 @@ describe Courses::EditOptions::QualificationConcern do
   let(:example_model) do
     klass = Class.new do
       include Courses::EditOptions::QualificationConcern
-      attr_accessor :level
+      attr_accessor :ucas_level
     end
 
     klass.new
   end
 
   before do
-    example_model.level = level_value
+    example_model.ucas_level = level_value
   end
 
   context 'for a course that’s not further education' do

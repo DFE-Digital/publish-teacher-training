@@ -23,7 +23,7 @@ module Subjects
       @ucas_subjects = ucas_subjects
     end
 
-    def level
+    def ucas_level
       ucas_subjects = @ucas_subjects.map(&:strip).map(&:downcase)
       if (ucas_subjects & SUBJECT_LEVEL[:ucas_unexpected]).any?
         raise "found unsupported subject name(s): #{(ucas_subjects & SUBJECT_LEVEL[:ucas_unexpected]) * ', '}"

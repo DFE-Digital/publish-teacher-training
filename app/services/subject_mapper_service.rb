@@ -95,10 +95,10 @@ class SubjectMapperService
     return [] if course_title.nil?
 
     ucas_subjects = ucas_subjects.map(&:strip).map(&:downcase)
-    level = Subjects::CourseLevel.new(ucas_subjects).level
+    ucas_level = Subjects::CourseLevel.new(ucas_subjects).ucas_level
 
     Subjects::UCASToDFESubjectMappingCollection.
-      new(config: UCAS_TO_DFE_SUBJECT_MAPPINGS[level]).
+      new(config: UCAS_TO_DFE_SUBJECT_MAPPINGS[ucas_level]).
       to_dfe_subjects(
         ucas_subjects: ucas_subjects,
         course_title: course_title.strip.downcase

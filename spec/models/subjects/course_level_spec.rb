@@ -4,24 +4,24 @@ module Subjects
 
     context "for a primary course" do
       let(:ucas_subjects) { %w[Primary Mathematics] }
-      its(:level) { should eq(:primary) }
+      its(:ucas_level) { should eq(:primary) }
     end
 
     context "for a secondary course" do
       let(:ucas_subjects) { %w[Secondary English] }
-      its(:level) { should eq(:secondary) }
+      its(:ucas_level) { should eq(:secondary) }
     end
 
     context "for a further education course" do
       let(:ucas_subjects) { %w[Post-compulsory Humanities] }
-      its(:level) { should eq(:further_education) }
+      its(:ucas_level) { should eq(:further_education) }
     end
 
     context "for a course with an unmapped subject" do
       let(:ucas_subjects) { ["Law", "Home economics"] }
 
       it "raises an error when fetching the level" do
-        expect { subject.level }.to raise_error(RuntimeError, "found unsupported subject name(s): law, home economics")
+        expect { subject.ucas_level }.to raise_error(RuntimeError, "found unsupported subject name(s): law, home economics")
       end
     end
   end
