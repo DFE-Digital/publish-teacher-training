@@ -1,7 +1,7 @@
 require "faker"
 Faker::Config.locale = "en-GB"
 
-Subject.destroy_all
+UCASSubject.destroy_all
 Course.destroy_all
 Site.destroy_all
 SiteStatus.destroy_all
