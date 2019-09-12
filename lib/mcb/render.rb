@@ -65,7 +65,7 @@ module MCB
         "\n",
         recruitment_cycle_table(recruitment_cycle),
         "\n",
-        subjects_table(subjects),
+        subjects_table(ucas_subjects),
         "\n",
         course_site_statuses_table(site_statuses),
         "\n",
