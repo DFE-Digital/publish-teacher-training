@@ -21,7 +21,17 @@ describe Courses::EditOptions::StartDateConcern do
 
     it 'should return the correct options for the recruitment_cycle' do
       expect(example_model.start_date_options).to eq(
-        ["August #{year}",
+        ["October #{year - 1}",
+         "November #{year - 1}",
+         "December #{year - 1}",
+         "January #{year}",
+         "February #{year}",
+         "March #{year}",
+         "April #{year}",
+         "May #{year}",
+         "June #{year}",
+         "July #{year}",
+         "August #{year}",
          "September #{year}",
          "October #{year}",
          "November #{year}",
