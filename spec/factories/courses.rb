@@ -25,7 +25,7 @@
 #  age_range_in_years        :string
 #  applications_open_from    :date
 #  is_send                   :boolean          default(FALSE)
-#  level                     :integer          default(0)
+#  level                     :string
 #
 
 FactoryBot.define do
@@ -41,6 +41,7 @@ FactoryBot.define do
     maths { :must_have_qualification_at_application_time }
     english { :must_have_qualification_at_application_time }
     science { :must_have_qualification_at_application_time }
+    level { :primary }
     resulting_in_pgce_with_qts
     start_date { DateTime.new(provider.recruitment_cycle.year.to_i, 9, 1) }
     applications_open_from { Faker::Time.between(from: DateTime.new(provider.recruitment_cycle.year.to_i - 1, 10, 1), to: DateTime.new(provider.recruitment_cycle.year.to_i, 9, 29)) }
