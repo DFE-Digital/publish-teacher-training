@@ -25,7 +25,11 @@
 #  age_range_in_years        :string
 #  applications_open_from    :date
 #  is_send                   :boolean          default(FALSE)
+<<<<<<< HEAD
 #  level                     :string
+=======
+#  level                     :integer          default("primary")
+>>>>>>> [2128] Fixed lint issues
 #
 
 class CourseSerializer < ActiveModel::Serializer
