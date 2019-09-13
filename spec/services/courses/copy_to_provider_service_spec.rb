@@ -94,11 +94,19 @@ RSpec.describe Courses::CopyToProviderService do
              provider: new_provider
     }
 
+    it 'returns nil' do
+      expect(service.execute(course: course, new_provider: new_provider)).to be_nil
+    end
+
     it 'does not make a copy of the course' do
+      service.execute(course: course, new_provider: new_provider)
+
       expect(mocked_sites_copy_to_course_service).to_not have_received(:execute)
     end
 
     it 'does not make a copy of the enrichments' do
+      service.execute(course: course, new_provider: new_provider)
+
       expect(mocked_enrichments_copy_to_course_service).to_not have_received(:execute)
     end
   end
