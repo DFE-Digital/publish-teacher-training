@@ -1,2 +1,4 @@
 authentication:
   secret: secret
+mcbg:
+  redis_password:
