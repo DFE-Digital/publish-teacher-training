@@ -4,3 +4,8 @@ manage_api:
 search_api:
   base_url: https://api.staging.find-postgraduate-teacher-training.service.gov.uk
   secret: please_change_me
+bg_jobs:
+  find_bulk_sync:
+    cron: "0 */2 * * *"
+    class: "BulkSyncCoursesToFindJob"
+    queue: find_sync
