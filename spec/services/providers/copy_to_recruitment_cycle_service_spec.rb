@@ -69,6 +69,18 @@ describe Providers::CopyToRecruitmentCycleService do
         expect { service.execute(provider: provider, new_recruitment_cycle: new_recruitment_cycle) }
           .not_to(change { new_recruitment_cycle.reload.providers.count })
       end
+
+      it 'copies over the sites' do
+        service.execute(provider: provider, new_recruitment_cycle: new_recruitment_cycle)
+
+        expect(mocked_copy_site_service).to have_received(:execute).with(site: site, new_provider: new_provider)
+      end
+
+      it 'copies over the courses' do
+        service.execute(provider: provider, new_recruitment_cycle: new_recruitment_cycle)
+
+        expect(mocked_copy_course_service).to have_received(:execute).with(course: course, new_provider: new_provider)
+      end
     end
 
     it 'assigns the new provider to organisation' do

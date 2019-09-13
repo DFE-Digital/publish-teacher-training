@@ -11,21 +11,22 @@ module Providers
       courses_count = 0
 
       ActiveRecord::Base.transaction do
-        unless provider_code_already_exists_on_recruitment_cycle?(provider, new_recruitment_cycle)
+        rolled_over_provider = new_recruitment_cycle.providers.find_by(provider_code: provider.provider_code)
+        if rolled_over_provider == nil
           providers_count = 1
-          new_provider = provider.dup
-          new_provider.organisations << provider.organisations
-          new_provider.ucas_preferences = provider.ucas_preferences.dup
-          new_provider.contacts << provider.contacts.map(&:dup)
-          new_provider.recruitment_cycle = new_recruitment_cycle
+          rolled_over_provider = provider.dup
+          rolled_over_provider.organisations << provider.organisations
+          rolled_over_provider.ucas_preferences = provider.ucas_preferences.dup
+          rolled_over_provider.contacts << provider.contacts.map(&:dup)
+          rolled_over_provider.recruitment_cycle = new_recruitment_cycle
 
-          new_provider.save!
+          rolled_over_provider.save!
         end
 
         # Order is important here. Sites should be copied over before courses
         # so that courses can link up to the correct sites in the new provider.
-        sites_count = copy_sites_to_new_provider(provider, new_provider)
-        courses_count = copy_courses_to_new_provider(provider, new_provider)
+        sites_count = copy_sites_to_new_provider(provider, rolled_over_provider)
+        courses_count = copy_courses_to_new_provider(provider, rolled_over_provider)
       end
 
       {
@@ -37,9 +38,6 @@ module Providers
 
   private
 
-    def provider_code_already_exists_on_recruitment_cycle?(provider, new_recruitment_cycle)
-      new_recruitment_cycle.providers.where(provider_code: provider.provider_code).any?
-    end
 
     def copy_courses_to_new_provider(provider, new_provider)
       courses_count = 0
