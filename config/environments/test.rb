@@ -35,7 +35,6 @@ Rails.application.configure do
   # config.action_view.raise_on_missing_translations = true
 
   config.authentication_token = "bats"
-  config.system_authentication_token = "Ge32"
 
   # Check for N+1 queries
   config.after_initialize do

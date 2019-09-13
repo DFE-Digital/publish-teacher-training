@@ -5,7 +5,10 @@ module API
 
       def authenticate
         authenticate_or_request_with_http_token do |token|
-          ActiveSupport::SecurityUtils.secure_compare(token, Rails.application.config.system_authentication_token)
+          ActiveSupport::SecurityUtils.secure_compare(
+            token,
+            Settings.system_authentication_token
+          )
         end
       end
     end
