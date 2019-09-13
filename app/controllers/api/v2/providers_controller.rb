@@ -86,7 +86,7 @@ module API
 
         found_providers = policy_scope(@recruitment_cycle.providers)
           .search_by_code_or_name(params[:query])
-          .limit(30)
+          .limit(5)
 
         render(
           jsonapi: found_providers,
