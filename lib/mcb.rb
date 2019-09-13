@@ -195,6 +195,38 @@ module MCB
       opts
     end
 
+    # Return options necessary to connect to API V2.
+    #
+    # The opts passed in are examined determine which opts need to be added,
+    # this function essentially just fills in any missing options.
+    #
+    #   opts = apiv2_opts(opts)
+    def apiv2_opts(opts)
+      opts[:url] = opts[:url]
+      opts[:'max-pages'] = opts[:'max-pages']
+      opts[:token] = opts[:token]
+      opts[:all] = opts[:all]
+
+      opts.merge! azure_env_settings_for_opts(**opts)
+
+      if requesting_remote_connection?(**opts)
+        opts[:url] = MCB::Azure.get_urls(**opts).first
+        opts[:token] = MCB::Azure.get_config(**opts)['AUTHENTICATION_TOKEN']
+      end
+
+      opts
+    end
+
+    # Return the base url to the API V2 for the given opts.
+    #
+    # <tt>opts</tt> should be filled-in using <tt>apiv2_opts</tt>
+    def apiv2_base_url(opts)
+      url = MCB::Azure.get_urls(**opts)
+        .grep(/^https.*gov\.uk$/)
+        .first
+      "#{url}/api/v2"
+    end
+
     def display_pages_received(page:, max_pages:, next_url:)
       # (current) page starts at 0
       pages = page + 1
