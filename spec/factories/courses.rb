@@ -129,5 +129,9 @@ FactoryBot.define do
     trait :applications_open_from_not_set do
       applications_open_from { nil }
     end
+
+    trait :deleted do
+      discarded_at { Time.now - 1.days }
+    end
   end
 end
