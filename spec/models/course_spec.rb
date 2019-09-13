@@ -509,21 +509,21 @@ describe Course, type: :model do
 
     context 'with primary ucas_subjects' do
       subject { create(:course, ucas_subjects: [find_or_create(:ucas_subject, :primary)]) }
-      its(:level) { should eq(:primary) }
+      its(:ucas_level) { should eq(:primary) }
       its(:gcse_subjects_required) { should eq(%w[maths english science]) }
       its(:dfe_subjects) { should eq([DFESubject.new("Primary")]) }
     end
 
     context 'with secondary ucas_subjects' do
       subject { create(:course, ucas_subjects: [find_or_create(:ucas_subject, subject_name: "physical education")]) }
-      its(:level) { should eq(:secondary) }
+      its(:ucas_level) { should eq(:secondary) }
       its(:gcse_subjects_required) { should eq(%w[maths english]) }
       its(:dfe_subjects) { should eq([DFESubject.new("Physical education")]) }
     end
 
     context 'with further education ucas_subjects' do
       subject { create(:course, ucas_subjects: [create(:further_education_subject)]) }
-      its(:level) { should eq(:further_education) }
+      its(:ucas_level) { should eq(:further_education) }
       its(:gcse_subjects_required) { should eq([]) }
       its(:dfe_subjects) { should eq([DFESubject.new("Further education")]) }
     end
