@@ -69,7 +69,7 @@ describe 'GET /suggest' do
     ])
   end
 
-  it 'limits responses to a maximum of 30 items' do
+  it 'limits responses to a maximum of 5 items' do
     36.times do
       create(:provider, provider_name: 'provider X', organisations: [organisation], recruitment_cycle: next_recruitment_cycle)
     end
@@ -77,7 +77,7 @@ describe 'GET /suggest' do
     get "/api/v2/recruitment_cycles/#{next_recruitment_cycle.year}/providers/suggest?query=provider",
         headers: { 'HTTP_AUTHORIZATION' => credentials }
 
-    expect(JSON.parse(response.body)['data'].length).to eq(30)
+    expect(JSON.parse(response.body)['data'].length).to eq(5)
   end
 
   it 'returns bad request if query is empty' do
