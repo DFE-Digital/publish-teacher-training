@@ -23,6 +23,10 @@ module API
         @object.start_date.strftime("%B %Y") if @object.start_date
       end
 
+      attribute :level do
+        @object.ucas_level
+      end
+
       attribute :applications_open_from do
         @object.applications_open_from&.iso8601
       end

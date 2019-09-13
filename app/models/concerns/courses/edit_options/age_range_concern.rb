@@ -8,7 +8,7 @@ module Courses
         #
         # https://github.com/DFE-Digital/manage-courses-frontend/blob/master/spec/factories/courses.rb
         def age_range_options
-          case level
+          case ucas_level
           when :primary
             %w[
               3_to_7
