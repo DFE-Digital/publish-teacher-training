@@ -400,7 +400,7 @@ class Course < ApplicationRecord
       if !self_accredited?
         update(program_type: :school_direct_salaried_training_programme)
       else
-        errors.add(:program_type, "Fee is not valid for a self accredited course")
+        errors.add(:program_type, "Salary is not valid for a self accredited course")
       end
     when 'apprenticeship'
       update(program_type: :pg_teaching_apprenticeship)
