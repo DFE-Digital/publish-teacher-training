@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_09_12_162820) do
+ActiveRecord::Schema.define(version: 2019_09_13_112820) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_buffercache"
@@ -124,6 +124,13 @@ ActiveRecord::Schema.define(version: 2019_09_12_162820) do
     t.text "vac_status"
     t.index ["course_id"], name: "IX_course_site_course_id"
     t.index ["site_id"], name: "IX_course_site_site_id"
+  end
+
+  create_table "course_subject", id: :serial, force: :cascade do |t|
+    t.integer "course_id"
+    t.integer "subject_id"
+    t.index ["course_id"], name: "index_course_subject_on_course_id"
+    t.index ["subject_id"], name: "index_course_subject_on_subject_id"
   end
 
   create_table "course_ucas_subject", id: :serial, force: :cascade do |t|
