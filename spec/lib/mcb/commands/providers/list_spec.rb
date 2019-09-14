@@ -1,7 +1,11 @@
 require 'mcb_helper'
 
 describe 'mcb providers list' do
-  let(:list) { MCBCommand.new('providers', 'list') }
+  def execute_list(arguments: [], input: [])
+    with_stubbed_stdout(stdin: input.join("\n")) do
+      $mcb.run(['providers', 'list', *arguments])
+    end
+  end
 
   let(:current_cycle) { RecruitmentCycle.current_recruitment_cycle }
   let(:additional_cycle) { find_or_create(:recruitment_cycle, year: '2020') }
@@ -16,7 +20,7 @@ describe 'mcb providers list' do
       provider2
       provider3
 
-      command_output = list.execute[:stdout]
+      command_output = execute_list[:stdout]
 
       expect(command_output).to include(provider1.provider_code)
       expect(command_output).to include(provider1.provider_name)
@@ -33,7 +37,7 @@ describe 'mcb providers list' do
         provider1
         provider2
 
-        command_output = list.execute(arguments: [provider1.provider_code])[:stdout]
+        command_output = execute_list(arguments: [provider1.provider_code])[:stdout]
 
         expect(command_output).to include(provider1.provider_code)
         expect(command_output).to include(provider1.provider_name)
@@ -46,7 +50,7 @@ describe 'mcb providers list' do
         provider1
         provider2
 
-        command_output = list.execute(arguments: [provider1.provider_code, provider2.provider_code])[:stdout]
+        command_output = execute_list(arguments: [provider1.provider_code, provider2.provider_code])[:stdout]
 
         expect(command_output).to include(provider1.provider_code)
         expect(command_output).to include(provider1.provider_name)
@@ -59,7 +63,7 @@ describe 'mcb providers list' do
         provider1
         provider2
 
-        command_output = list.execute(arguments: [provider1.provider_code.downcase])[:stdout]
+        command_output = execute_list(arguments: [provider1.provider_code.downcase])[:stdout]
         expect(command_output).to include(provider1.provider_code)
       end
     end
@@ -69,7 +73,7 @@ describe 'mcb providers list' do
         provider1
         provider2
 
-        command_output = list.execute[:stdout]
+        command_output = execute_list[:stdout]
 
         expect(command_output).to include(provider1.provider_code)
         expect(command_output).to include(provider1.provider_name)
@@ -88,7 +92,7 @@ describe 'mcb providers list' do
       provider1
       provider2
 
-      command_output = list.execute(arguments: ["-r", additional_cycle.year])[:stdout]
+      command_output = execute_list(arguments: ["-r", additional_cycle.year])[:stdout]
       expect(command_output).to include(provider2.provider_code)
       expect(command_output).to include(provider2.provider_name)
 

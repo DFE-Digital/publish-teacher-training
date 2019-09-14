@@ -7,6 +7,7 @@ describe 'mcb apiv1 token show' do
       result = with_stubbed_stdout do
         $mcb.run(%w[apiv1 token show])
       end
+      result = result[:stdout]
 
       expect(result.chomp).to eq 'bats'
     end
@@ -21,6 +22,7 @@ describe 'mcb apiv1 token show' do
       result = with_stubbed_stdout do
         $mcb.run(%w[apiv1 token --webapp az-app show])
       end
+      result = result[:stdout]
 
       expect(result.chomp).to eq 'toke'
     end

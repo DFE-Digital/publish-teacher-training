@@ -19,6 +19,7 @@ describe 'mcb az apps list' do
     result = with_stubbed_stdout do
       $mcb.run(%w[az apps list])
     end
+    result = result[:stdout]
 
     expect(result).to match %r{^dapp \| aregrp\s+$}
   end

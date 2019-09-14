@@ -15,11 +15,9 @@ describe 'mcb providers ucas_preferences import' do
   end
 
   def import_csv_file(tmpfile, opts = [])
-    stderr = ""
-    output = with_stubbed_stdout(stdin: "yes\n", stderr: stderr) do
+    with_stubbed_stdout(stdin: "yes\n") do
       cmd.run(opts + [tmpfile.path])
     end
-    [output, stderr]
   end
 
   let(:lib_dir) { Rails.root.join('lib') }
@@ -64,7 +62,7 @@ describe 'mcb providers ucas_preferences import' do
           PREF_TYPE: 'Copy Form Sequence',
           PREF_VALUE: 'Alphabetic coming'
   end
-  let(:output) { import_csv_file(tmpfile).first }
+  let(:output) { import_csv_file(tmpfile)[:stdout] }
 
   after :each do
     # NB: If ... IF ... something goes wrong in the spec before tmpfile gets
@@ -112,6 +110,7 @@ describe 'mcb providers ucas_preferences import' do
       output = with_stubbed_stdout(stdin: "yes\n") do
         cmd.run([tmpfile.path])
       end
+      output = output[:stdout]
 
       expected_output_regexp = Regexp.new([
         "\s*#{provider.provider_code}\s*type_of_gt12:\s*Coming or Not -> Not coming\s*",
@@ -159,7 +158,7 @@ describe 'mcb providers ucas_preferences import' do
         preferences_for_unknown_provider
       )
 
-      (_output, stderr) = import_csv_file(tmpfile)
+      stderr = import_csv_file(tmpfile)[:stderr]
 
       expected_code = nonexistent_provider.provider_code
       expect(stderr).to match <<~EOMESSAGE
@@ -184,7 +183,7 @@ describe 'mcb providers ucas_preferences import' do
           preferences_for_unknown_provider
         )
 
-        (_output, stderr) = import_csv_file(tmpfile, opts)
+        stderr = import_csv_file(tmpfile, opts)[:stderr]
 
         expected_code = nonexistent_provider.provider_code
         expect(stderr).to match <<~EOMESSAGE

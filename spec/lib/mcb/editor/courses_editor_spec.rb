@@ -2,11 +2,9 @@ require 'mcb_helper'
 
 describe MCB::Editor::CoursesEditor, :needs_audit_user do
   def run_editor(*input_cmds)
-    stderr = nil
-    output = with_stubbed_stdout(stdin: input_cmds.join("\n"), stderr: stderr) do
+    with_stubbed_stdout(stdin: input_cmds.join("\n")) do
       subject.run
     end
-    [output, stderr]
   end
 
   let(:provider_code) { 'X12' }
@@ -390,11 +388,9 @@ describe MCB::Editor::CoursesEditor, :needs_audit_user do
 
     describe 'runs the course creation wizard' do
       def run_new_course_wizard(*input_cmds)
-        stderr = nil
-        output = with_stubbed_stdout(stdin: input_cmds.join("\n"), stderr: stderr) do
+        with_stubbed_stdout(stdin: input_cmds.join("\n")) do
           subject.new_course_wizard
         end
-        [output, stderr]
       end
 
       let!(:site_1) { create(:site, provider: provider, location_name: 'Albemarle School') }
@@ -438,7 +434,7 @@ describe MCB::Editor::CoursesEditor, :needs_audit_user do
       }
 
       it "creates a new course with the passed parameters" do
-        output, = run_new_course_wizard(
+        output = run_new_course_wizard(
           desired_attributes[:title],
           desired_attributes[:qualification],
           desired_attributes[:study_mode],
@@ -464,7 +460,7 @@ describe MCB::Editor::CoursesEditor, :needs_audit_user do
           desired_attributes[:application_opening_date],
           "", # enter to finish
           ""
-        )
+        )[:stdout]
 
         expect(output).to include("Here's the final course that's been created")
 
@@ -564,7 +560,7 @@ describe MCB::Editor::CoursesEditor, :needs_audit_user do
       end
 
       it "does not create the course if creation isn't confirmed" do
-        output, = run_new_course_wizard(
+        output = run_new_course_wizard(
           desired_attributes[:title],
           "", # default qualifications
           "", # default study mode
@@ -579,14 +575,14 @@ describe MCB::Editor::CoursesEditor, :needs_audit_user do
           'n', # is SEND
           desired_attributes[:recruitment_cycle],
           "n", # confirm creation
-        )
+        )[:stdout]
 
         expect(Course.find_by(course_code: desired_attributes[:course_code])).to be_nil
         expect(output).to include("Aborting")
       end
 
       it "aborts the wizard if specified course fails validation" do
-        output, = run_new_course_wizard(
+        output = run_new_course_wizard(
           desired_attributes[:title],
           "", # default qualifications
           "", # default study mode
@@ -601,7 +597,7 @@ describe MCB::Editor::CoursesEditor, :needs_audit_user do
           'n', # is SEND
           desired_attributes[:recruitment_cycle],
           "y", # confirm creation
-        )
+        )[:stdout]
 
         expect(Course.where(course_code: course_code).count).to eq(1)
         expect(output).to include("Course isn't valid")

@@ -1,7 +1,11 @@
 require 'mcb_helper'
 
 describe 'mcb courses show' do
-  let(:show) { MCBCommand.new('courses', 'show') }
+  def execute_show(arguments: [], input: [])
+    with_stubbed_stdout(stdin: input.join("\n")) do
+      $mcb.run(['courses', 'show', *arguments])
+    end
+  end
 
   let(:recruitment_year1) { create :recruitment_cycle, year: '2020' }
   let(:recruitment_year2) { RecruitmentCycle.current_recruitment_cycle }
@@ -32,7 +36,7 @@ describe 'mcb courses show' do
     it 'displays the course info with the default recruitment year' do
       rolled_over_course
 
-      output = show.execute(arguments: [rolled_over_provider.provider_code, rolled_over_course.course_code])[:stdout]
+      output = execute_show(arguments: [rolled_over_provider.provider_code, rolled_over_course.course_code])[:stdout]
 
       expect(output).to have_text_table_row('course_code',
                                             rolled_over_course.course_code)
@@ -58,7 +62,7 @@ describe 'mcb courses show' do
     it 'displays the course info for the specified recruitment year' do
       rolled_over_course
 
-      output = show.execute(arguments: [provider.provider_code, course.course_code, '-r', recruitment_year1.year])[:stdout]
+      output = execute_show(arguments: [provider.provider_code, course.course_code, '-r', recruitment_year1.year])[:stdout]
 
       expect(output).to have_text_table_row('course_code',
                                             course.course_code)

@@ -1,7 +1,11 @@
 require 'mcb_helper'
 
 describe 'mcb providers touch' do
-  let(:touch) { MCBCommand.new('providers', 'touch') }
+  def execute_touch(arguments: [], input: [])
+    with_stubbed_stdout(stdin: input.join("\n")) do
+      $mcb.run(['providers', 'touch', *arguments])
+    end
+  end
 
   let(:recruitment_year1) { create :recruitment_cycle, year: '2018' }
   let(:recruitment_year2) { find_or_create :recruitment_cycle, year: '2019' }
@@ -19,7 +23,7 @@ describe 'mcb providers touch' do
       rolled_over_provider
 
       Timecop.freeze(Date.today + 1) do
-        touch.execute(arguments: [rolled_over_provider.provider_code])
+        execute_touch(arguments: [rolled_over_provider.provider_code])
 
         # Use to_i compare seconds since epoch and side-step sub-second
         # differences that show up even with Timecop on certain platforms.
@@ -32,7 +36,7 @@ describe 'mcb providers touch' do
       rolled_over_provider
 
       Timecop.freeze(Date.today + 1) do
-        touch.execute(arguments: [rolled_over_provider.provider_code])
+        execute_touch(arguments: [rolled_over_provider.provider_code])
 
         expect(provider.reload.changed_at.to_i).to eq Time.now.to_i
         expect(rolled_over_provider.reload.changed_at.to_i).not_to eq Time.now.to_i
@@ -43,7 +47,7 @@ describe 'mcb providers touch' do
       rolled_over_provider
 
       expect {
-        touch.execute(arguments: [rolled_over_provider.provider_code])
+        execute_touch(arguments: [rolled_over_provider.provider_code])
       }.to change { provider.reload.audits.count }
              .from(1).to(2)
     end
@@ -54,7 +58,7 @@ describe 'mcb providers touch' do
       rolled_over_provider
 
       Timecop.freeze(Date.today + 1) do
-        touch.execute(arguments: [provider.provider_code, '-r', recruitment_year1.year])
+        execute_touch(arguments: [provider.provider_code, '-r', recruitment_year1.year])
 
         # Use to_i compare seconds since epoch and side-step sub-second
         # differences that show up even with Timecop on certain platforms.
@@ -67,7 +71,7 @@ describe 'mcb providers touch' do
       rolled_over_provider
 
       Timecop.freeze(Date.today + 1) do
-        touch.execute(arguments: [provider.provider_code, '-r', recruitment_year1.year])
+        execute_touch(arguments: [provider.provider_code, '-r', recruitment_year1.year])
 
         expect(provider.reload.changed_at.to_i).to eq Time.now.to_i
         expect(rolled_over_provider.reload.changed_at.to_i).not_to eq Time.now.to_i
@@ -78,7 +82,7 @@ describe 'mcb providers touch' do
       rolled_over_provider
 
       expect {
-        touch.execute(arguments: [provider.provider_code, '-r', recruitment_year1.year])
+        execute_touch(arguments: [provider.provider_code, '-r', recruitment_year1.year])
       }.to change { provider.reload.audits.count }
              .from(1).to(2)
     end

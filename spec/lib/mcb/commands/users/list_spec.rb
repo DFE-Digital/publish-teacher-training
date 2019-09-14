@@ -15,6 +15,7 @@ describe 'mcb users list' do
     output = with_stubbed_stdout do
       cmd.run([])
     end
+    output = output[:stdout]
 
     expect(output).to have_text_table_row(user.id,
                                           user.email,
@@ -31,6 +32,7 @@ describe 'mcb users list' do
     output = with_stubbed_stdout do
       cmd.run([])
     end
+    output = output[:stdout]
 
     expect(output).to have_text_table_row(user1.id)
     expect(output).to have_text_table_row(user2.id)
@@ -44,6 +46,7 @@ describe 'mcb users list' do
     output = with_stubbed_stdout do
       cmd.run([user1.id.to_s, user2.id.to_s])
     end
+    output = output[:stdout]
 
     expect(output).to have_text_table_row(user1.id)
     expect(output).to have_text_table_row(user2.id)
@@ -57,6 +60,7 @@ describe 'mcb users list' do
     output = with_stubbed_stdout do
       cmd.run([user1.email])
     end
+    output = output[:stdout]
 
     expect(output).to have_text_table_row(user1.id)
     expect(output).not_to have_text_table_row(user2.id)
@@ -70,6 +74,7 @@ describe 'mcb users list' do
     output = with_stubbed_stdout do
       cmd.run(['-o'])
     end
+    output = output[:stdout]
 
     expect(output).not_to have_text_table_row(user1.id)
     expect(output).not_to have_text_table_row(user2.id)

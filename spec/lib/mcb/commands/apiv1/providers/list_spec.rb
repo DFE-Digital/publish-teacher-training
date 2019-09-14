@@ -41,6 +41,7 @@ describe '"mcb apiv1 providers list"' do
                   providers
                   list])
     end
+    output = output[:stdout]
 
     expect(output).to have_text_table_row('Code',
                                           'Name')
@@ -82,6 +83,7 @@ describe '"mcb apiv1 providers list"' do
                   providers
                   list -r #{next_cycle.year}])
     end
+    output = output[:stdout]
 
     expect(output).to have_text_table_row('Code',
                                           'Name')

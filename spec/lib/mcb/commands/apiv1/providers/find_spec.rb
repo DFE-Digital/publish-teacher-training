@@ -51,6 +51,7 @@ describe '"mcb apiv1 providers find"' do
                   find
                   #{provider2.provider_code}])
     end
+    output = output[:stdout]
 
     expect(output).to have_text_table_row('institution_code',
                                           provider2.provider_code)

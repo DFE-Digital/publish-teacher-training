@@ -21,6 +21,7 @@ describe 'mcb providers ucas_preferences show' do
     output = with_stubbed_stdout do
       cmd.run([provider.provider_code])
     end
+    output = output[:stdout]
 
     expect(output).to match %r{type_of_gt12\s+\|\scoming_or_not}
   end

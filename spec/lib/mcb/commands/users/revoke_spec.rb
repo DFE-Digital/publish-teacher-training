@@ -22,16 +22,14 @@ describe 'mcb users revoke', :needs_audit_user do
 
   describe 'one provider' do
     def revoke(id_or_email_or_sign_in_id, provider_code, commands)
-      stderr = ""
-      output = with_stubbed_stdout(stdin: commands, stderr: stderr) do
+      with_stubbed_stdout(stdin: commands) do
         cmd.run([id_or_email_or_sign_in_id, '-p', provider_code])
       end
-      [output, stderr]
     end
 
     let(:output) do
       combined_input = input_commands.map { |c| "#{c}\n" }.join
-      revoke(id_or_email_or_sign_in_id, provider.provider_code, combined_input).first
+      revoke(id_or_email_or_sign_in_id, provider.provider_code, combined_input)[:stdout]
     end
 
     context 'when the user exists and has access to the provider' do
@@ -96,16 +94,14 @@ describe 'mcb users revoke', :needs_audit_user do
 
     describe 'all providers' do
       def revoke_all(id_or_email_or_sign_in_id, commands)
-        stderr = ""
-        output = with_stubbed_stdout(stdin: commands, stderr: stderr) do
+        with_stubbed_stdout(stdin: commands) do
           cmd.run([id_or_email_or_sign_in_id])
         end
-        [output, stderr]
       end
 
       let(:output) do
         combined_input = input_commands.map { |c| "#{c}\n" }.join
-        revoke_all(id_or_email_or_sign_in_id, combined_input).first
+        revoke_all(id_or_email_or_sign_in_id, combined_input)[:stdout]
       end
 
       context 'when the user exists and has access to the provider' do

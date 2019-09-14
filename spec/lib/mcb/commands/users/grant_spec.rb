@@ -2,11 +2,9 @@ require 'mcb_helper'
 
 describe 'mcb users grant', :needs_audit_user do
   def grant(id_or_email_or_sign_in_id, provider_code, commands)
-    stderr = ""
-    output = with_stubbed_stdout(stdin: commands, stderr: stderr) do
+    with_stubbed_stdout(stdin: commands) do
       cmd.run([id_or_email_or_sign_in_id, '-p', provider_code])
     end
-    [output, stderr]
   end
 
   let(:lib_dir) { Rails.root.join('lib') }
@@ -20,7 +18,7 @@ describe 'mcb users grant', :needs_audit_user do
 
   let(:output) do
     combined_input = input_commands.map { |c| "#{c}\n" }.join
-    grant(id_or_email_or_sign_in_id, provider.provider_code, combined_input).first
+    grant(id_or_email_or_sign_in_id, provider.provider_code, combined_input)[:stdout]
   end
 
   let(:requester) { create(:user) }

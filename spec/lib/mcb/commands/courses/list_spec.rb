@@ -1,7 +1,11 @@
 require 'mcb_helper'
 
 describe 'mcb providers list' do
-  let(:list) { MCBCommand.new('courses', 'list') }
+  def execute_list(arguments: [], input: [])
+    with_stubbed_stdout(stdin: input.join("\n")) do
+      $mcb.run(['courses', 'list', *arguments])
+    end
+  end
 
   let(:current_cycle) { RecruitmentCycle.current_recruitment_cycle }
   let(:additional_cycle) { find_or_create(:recruitment_cycle, :next) }
@@ -21,7 +25,7 @@ describe 'mcb providers list' do
       course_present2
       course_not_present
 
-      command_output = list.execute[:stdout]
+      command_output = execute_list[:stdout]
 
       expect(command_output).to include(course_present.course_code)
       expect(command_output).to include(course_present.name)
@@ -38,7 +42,7 @@ describe 'mcb providers list' do
         course_present
         course_present2
 
-        command_output = list.execute(arguments: [course_present.course_code])[:stdout]
+        command_output = execute_list(arguments: [course_present.course_code])[:stdout]
 
         expect(command_output).to include(course_present.course_code)
         expect(command_output).to include(course_present.name)
@@ -51,7 +55,7 @@ describe 'mcb providers list' do
         course_present
         course_present2
 
-        command_output = list.execute(arguments: [course_present.course_code, course_present2.course_code])[:stdout]
+        command_output = execute_list(arguments: [course_present.course_code, course_present2.course_code])[:stdout]
 
         expect(command_output).to include(course_present.course_code)
         expect(command_output).to include(course_present.name)
@@ -64,7 +68,7 @@ describe 'mcb providers list' do
         course_present
         course_present2
 
-        command_output = list.execute(arguments: [course_present2.course_code.downcase])[:stdout]
+        command_output = execute_list(arguments: [course_present2.course_code.downcase])[:stdout]
         expect(command_output).to include(course_present2.course_code)
       end
     end
@@ -74,7 +78,7 @@ describe 'mcb providers list' do
         course_present
         course_present2
 
-        command_output = list.execute[:stdout]
+        command_output = execute_list[:stdout]
 
         expect(command_output).to include(course_present.course_code)
         expect(command_output).to include(course_present.name)
@@ -96,13 +100,15 @@ describe 'mcb providers list' do
       course1
       course2
 
-      command_output = list.execute(arguments: ["-r", additional_cycle.year])[:stdout]
+      command_output = execute_list(arguments: ["-r", additional_cycle.year])[:stdout]
 
       expect(command_output).to include(course2.course_code)
       expect(command_output).to include(course2.name)
 
-      expect(command_output).not_to include(course1.course_code)
-      expect(command_output).not_to include(course1.name)
+      expect(command_output)
+        .not_to have_cell_containing(course1.course_code).at_column(2)
+      expect(command_output)
+        .not_to have_cell_containing(course1.name).at_column(3)
     end
   end
 end

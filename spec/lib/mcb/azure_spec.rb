@@ -206,7 +206,7 @@ describe MCB::Azure do
     subject { output }
 
     it 'prompts for the expected RAILS_ENV' do
-      expect(output).to match %r{enter the expected RAILS_ENV for banana:}
+      expect(output[:stdout]).to match %r{enter the expected RAILS_ENV for banana:}
     end
 
     context 'expected RAILS_ENV does not match' do
