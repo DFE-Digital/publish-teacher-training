@@ -14,6 +14,12 @@
         "description": "The name or role of the container to identify individual containers in multi-container setup."
       }
     },
+    "redisCacheName": {
+      "type": "string",
+      "metadata": {
+        "description": "The name of the Azure Redis Cache to create."
+      }
+    },
     "imageName": {
       "type": "string",
       "metadata": {
@@ -83,9 +89,30 @@
     }
   },
   "variables": {
-    "deploymentUrlBase": "https://raw.githubusercontent.com/DFE-Digital/bat-platform-building-blocks/master/templates/"
+    "deploymentUrlBase": "https://raw.githubusercontent.com/DFE-Digital/bat-platform-building-blocks/master/templates/",
+    "deploymentUrlBaseDas": "https://raw.githubusercontent.com/SkillsFundingAgency/das-platform-building-blocks/master/templates/"
   },
   "resources": [
+    {
+      "name": "redis-cache",
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2017-05-10",
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(variables('deploymentUrlBaseDas'), 'redis.json')]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "redisCacheName": {
+            "value": "[parameters('redisCacheName')]"
+          },
+          "enableNonSslPort": {
+            "value": true
+          }
+        }
+      }
+    },
     {
       "name": "container-instances",
       "type": "Microsoft.Resources/deployments",
@@ -147,11 +174,22 @@
               {
                 "name": "SETTINGS__SEARCH_API__SECRET",
                 "secureValue": "[parameters('settingsSearchApiSecret')]"
+              },
+              {
+                "name": "SETTINGS__MCBG__REDIS_PASSWORD",
+                "secureValue": "[concat(listKeys(resourceId('Microsoft.Cache/Redis', parameters('redisCacheName')), '2018-03-01').primaryKey)]"
+              },
+              {
+                "name": "REDIS_URL",
+                "value": "[concat ('redis://',parameters('redisCacheName'),'.redis.cache.windows.net:6379')]"
               }
             ]
           }
         }
-      }
+      },
+      "dependsOn": [
+        "redis-cache"
+      ]
     }
   ]
 }
