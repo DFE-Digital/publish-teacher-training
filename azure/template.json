@@ -178,6 +178,12 @@
       "metadata": {
         "description": "The name of the Azure Redis Cache to create."
       }
+    },
+    "backgroundContainerImageReference": {
+      "type": "string",
+      "metadata": {
+        "description": "The container image to pull from the server. Should be in image:tag format."
+      }
     }
   },
   "variables": {
@@ -455,7 +461,7 @@
             "value": "[parameters('containerName')]"
           },
           "imageName": {
-            "value": "[parameters('containerImageReference')]"
+            "value": "[parameters('backgroundContainerImageReference')]"
           },
           "environmentVariables": {
             "value": [
