@@ -32,7 +32,7 @@ module Courses
   private
 
     def course_code_already_exists_on_provider?(course:, new_provider:)
-      new_provider.courses.where(course_code: course.course_code).any?
+      new_provider.courses.with_discarded.where(course_code: course.course_code).any?
     end
 
     def copy_latest_enrichment_to_course(course, new_course)
