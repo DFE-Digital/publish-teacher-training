@@ -160,10 +160,29 @@
       "metadata": {
         "description": "The GOV.UK Notify template id for the find welcome email"
       }
+    },
+    "containerInstanceName": {
+      "type": "string",
+      "metadata": {
+        "description": "The name of the Azure Container Instances resource. This will be its identifier in Azure and can be different from the image name."
+      }
+    },
+    "containerName": {
+      "type": "string",
+      "metadata": {
+        "description": "The name or role of the container to identify individual containers in multi-container setup."
+      }
+    },
+    "redisCacheName": {
+      "type": "string",
+      "metadata": {
+        "description": "The name of the Azure Redis Cache to create."
+      }
     }
   },
   "variables": {
     "deploymentUrlBase": "https://raw.githubusercontent.com/DFE-Digital/bat-platform-building-blocks/master/templates/",
+    "deploymentUrlBaseDas": "https://raw.githubusercontent.com/SkillsFundingAgency/das-platform-building-blocks/master/templates/",
     "resourceNamePrefix": "[toLower(concat(parameters('resourceEnvironmentName'),'-', parameters('serviceName')))]",
     "keyvaultCertificateName": "[if(greater(length(parameters('certificateName')),0), parameters('certificateName'), replace(parameters('customHostName'), '.', '-'))]",
     "appServiceName": "[concat(variables('resourceNamePrefix'), '-as')]",
@@ -305,6 +324,14 @@
               {
                 "name": "SETTINGS__GOVUK_NOTIFY__WELCOME_EMAIL_TEMPLATE_ID",
                 "value": "[parameters('govukNotifyWelcomeEmailTemplateId')]"
+              },
+              {
+                "name": "SETTINGS__MCBG__REDIS_PASSWORD",
+                "secureValue": "[concat(listKeys(resourceId('Microsoft.Cache/Redis', parameters('redisCacheName')), '2018-03-01').primaryKey)]"
+              },
+              {
+                "name": "REDIS_URL",
+                "value": "[concat ('redis://',parameters('redisCacheName'),'.redis.cache.windows.net:6379')]"
               }
             ]
           },
@@ -317,7 +344,8 @@
         }
       },
       "dependsOn": [
-        "app-service-plan"
+        "app-service-plan",
+        "redis-cache"
       ]
     },
     {
@@ -388,6 +416,104 @@
           }
         }
       }
+    },
+    {
+      "name": "redis-cache",
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2017-05-10",
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(variables('deploymentUrlBaseDas'), 'redis.json')]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "redisCacheName": {
+            "value": "[parameters('redisCacheName')]"
+          },
+          "enableNonSslPort": {
+            "value": true
+          }
+        }
+      }
+    },
+    {
+      "name": "container-instances",
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2017-05-10",
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(variables('deploymentUrlBase'), 'container-instances.json')]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "containerInstanceName": {
+            "value": "[parameters('containerInstanceName')]"
+          },
+          "containerName": {
+            "value": "[parameters('containerName')]"
+          },
+          "imageName": {
+            "value": "[parameters('containerImageReference')]"
+          },
+          "environmentVariables": {
+            "value": [
+              {
+                "name": "RAILS_ENV",
+                "value": "[parameters('railsEnv')]"
+              },
+              {
+                "name": "DB_DATABASE",
+                "value": "[parameters('databaseName')]"
+              },
+              {
+                "name": "DB_HOSTNAME",
+                "value": "[parameters('databaseServerHostName')]"
+              },
+              {
+                "name": "DB_PASSWORD",
+                "secureValue": "[parameters('databasePassword')]"
+              },
+              {
+                "name": "DB_USERNAME",
+                "value": "[parameters('databaseUsername')]"
+              },
+              {
+                "name": "DB_PORT",
+                "value": "[parameters('databasePort')]"
+              },
+              {
+                "name": "SECRET_KEY_BASE",
+                "secureValue": "[parameters('secretKeyBase')]"
+              },
+              {
+                "name": "SENTRY_DSN",
+                "secureValue": "[parameters('sentryDSN')]"
+              },
+              {
+                "name": "SETTINGS__AUTHENTICATION__SECRET",
+                "secureValue": "[parameters('settingsAuthenticationSecret')]"
+              },
+              {
+                "name": "SETTINGS__SEARCH_API__SECRET",
+                "secureValue": "[parameters('settingsSearchApiSecret')]"
+              },
+              {
+                "name": "SETTINGS__MCBG__REDIS_PASSWORD",
+                "secureValue": "[concat(listKeys(resourceId('Microsoft.Cache/Redis', parameters('redisCacheName')), '2018-03-01').primaryKey)]"
+              },
+              {
+                "name": "REDIS_URL",
+                "value": "[concat ('redis://',parameters('redisCacheName'),'.redis.cache.windows.net:6379')]"
+              }
+            ]
+          }
+        }
+      },
+      "dependsOn": [
+        "redis-cache"
+      ]
     }
   ],
   "outputs": {
