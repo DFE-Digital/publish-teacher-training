@@ -28,7 +28,7 @@
 #  level                     :string
 require "rails_helper"
 
-RSpec.describe CourseSerializer do
+describe CourseSerializer do
   let(:course) { create :course, provider: provider, changed_at: Time.now + 60 }
   let(:provider) { build(:provider) }
   subject { serialize(course) }

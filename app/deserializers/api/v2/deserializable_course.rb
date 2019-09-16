@@ -35,6 +35,7 @@ module API
       attributes(*COURSE_ATTRIBUTES)
 
       has_many :sites
+      has_many :subjects
 
       def reverse_mapping
         declared_attributes = DeserializableCourse.attr_blocks.keys

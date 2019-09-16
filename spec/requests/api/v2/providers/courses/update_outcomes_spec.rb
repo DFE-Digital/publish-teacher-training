@@ -33,7 +33,7 @@ describe "PATCH /providers/:provider_code/courses/:course_code" do
            qualification: qualification
   }
   let(:qualification) { :pgce_with_qts }
-  let(:subject) { build(:subject, :primary) }
+  let(:subject) { create(:subject, :primary) }
 
   let(:credentials) do
     ActionController::HttpAuthentication::Token.encode_credentials(token)
@@ -101,7 +101,7 @@ describe "PATCH /providers/:provider_code/courses/:course_code" do
       }
       let(:json_data) { JSON.parse(response.body)["errors"] }
       let(:updated_qualification) { { qualification: "pgce_with_qts" } }
-      let(:subject) { build(:subject, :further_education) }
+      let(:subject) { create(:subject, :further_education) }
       let(:qualification) { :pgce }
 
       it "returns an error" do

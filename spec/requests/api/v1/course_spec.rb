@@ -17,12 +17,12 @@ describe "Courses API", type: :request do
     end
 
     let(:provider) do
-      FactoryBot.create(:provider,
-                        provider_name: "ACME SCITT",
-                        provider_code: "2LD",
-                        provider_type: :scitt,
-                        scheme_member: "Y",
-                        enrichments: [])
+      create(:provider,
+             provider_name: "ACME SCITT",
+             provider_code: "2LD",
+             provider_type: :scitt,
+             scheme_member: "Y",
+             enrichments: [])
     end
     let(:current_cycle) { find_or_create :recruitment_cycle }
     let(:current_year)  { current_cycle.year.to_i }
@@ -34,36 +34,35 @@ describe "Courses API", type: :request do
       let(:age_range_in_years) { "3_to_7" }
 
       before do
-        site = FactoryBot.create(:site, code: "-", location_name: "Main Site", provider: provider)
-        subject1 = FactoryBot.find_or_create(:subject, :modern_languages)
-        subject2 = FactoryBot.find_or_create(:subject, :german)
+        Timecop.freeze(2.hours.ago) do
+          site = create(:site, code: "-", location_name: "Main Site", provider: provider)
+          subject1 = find_or_create(:subject, :modern_languages)
+          subject2 = find_or_create(:subject, :german)
 
-        course = FactoryBot.create(:course,
-                                   course_code: "2HPF",
-                                   start_date: Date.new(current_year, 9, 1),
-                                   name: "Religious Education",
-                                   subjects: [subject1, subject2],
-                                   study_mode: :full_time,
-                                   level: "primary",
-                                   age_range_in_years: age_range_in_years,
-                                   english: :equivalence_test,
-                                   maths: :equivalence_test,
-                                   science: :equivalence_test,
-                                   profpost_flag: :postgraduate,
-                                   program_type: :scitt_programme,
-                                   modular: "",
-                                   provider: provider,
-                                   applications_open_from: "#{previous_year}-10-09 00:00:00",
-                                   age: 2.hours.ago)
+          course = create(:course,
+                          level: "secondary",
+                          course_code: "2HPF",
+                          start_date: Date.new(current_year, 9, 1),
+                          name: "Religious Education",
+                          subjects: [subject1, subject2],
+                          study_mode: :full_time,
+                          age_range_in_years: age_range_in_years,
+                          english: :equivalence_test,
+                          maths: :equivalence_test,
+                          science: :equivalence_test,
+                          profpost_flag: :postgraduate,
+                          program_type: :scitt_programme,
+                          applications_open_from: "#{previous_year}-10-09 00:00:00",
+                          modular: "",
+                          provider: provider)
 
-        FactoryBot.create(:site_status,
-                          vac_status: :full_time_vacancies,
-                          publish: "Y",
-                          status: :running,
-                          course: course,
-                          site: site)
-
-        course.update changed_at: 2.hours.ago
+          create(:site_status,
+                 vac_status: :full_time_vacancies,
+                 publish: "Y",
+                 status: :running,
+                 course: course,
+                 site: site)
+        end
       end
 
       context "age ranges" do
@@ -188,8 +187,10 @@ describe "Courses API", type: :request do
       end
 
       it "includes correct next link in response headers" do
-        Timecop.freeze(10.minutes.ago) do
+        timestamp_of_first_course = 10.minutes.ago
+        Timecop.freeze(timestamp_of_first_course) do
           first_course = create(:course,
+                                :infer_level,
                                 course_code: "LAST1",
                                 provider: provider)
 
@@ -200,6 +201,7 @@ describe "Courses API", type: :request do
 
         Timecop.freeze(timestamp_of_last_course) do
           last_course_in_results = create(:course,
+                                          :infer_level,
                                           course_code: "LAST2",
                                           provider: provider)
           create(:site_status, :published, course: last_course_in_results)

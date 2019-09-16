@@ -158,7 +158,9 @@ class Course < ApplicationRecord
   validate :validate_qualification, on: :update
   validate :validate_start_date, on: :update, if: -> { provider.present? }
   validate :validate_applications_open_from, on: :update, if: -> { provider.present? }
-  validate :validate_subjects
+  validate :validate_modern_languages
+  validate :validate_subject_count
+  validate :validate_subject_consistency
 
   after_validation :remove_unnecessary_enrichments_validation_message
 
@@ -554,9 +556,15 @@ private
     end
   end
 
-  def validate_subjects
+  def validate_modern_languages
     if has_any_modern_language_subject_type? && !has_the_modern_languages_secondary_subject_type?
       errors.add(:subjects, "Modern languages subjects must also have the modern_languages subject")
+    end
+  end
+
+  def validate_site_status_findable
+    unless findable?
+      errors.add(:site_statuses, "must be findable")
     end
   end
 
@@ -569,6 +577,44 @@ private
     raise "SecondarySubject.modern_languages not found" if SecondarySubject.modern_languages == nil
 
     subjects.any? { |subject| subject&.id == SecondarySubject.modern_languages.id }
+  end
+
+  def validate_subject_count
+    return if subjects.empty?
+
+    case level
+    when "primary", "further_education"
+      if subjects.count > 1
+        errors.add(:subjects, "has too many subjects")
+      end
+    when "secondary"
+      if subjects.count > 2 && !has_any_modern_language_subject_type?
+        errors.add(:subjects, "has too many subjects")
+      end
+    end
+  end
+
+  def validate_subject_consistency
+    subjects_excluding_discontinued = subjects.reject do |subject|
+      DiscontinuedSubject.exists?(id: subject.id)
+    end
+
+    return if subjects_excluding_discontinued.empty?
+
+    case level
+    when "primary"
+      unless PrimarySubject.exists?(id: subjects_excluding_discontinued.map(&:id))
+        errors.add(:subjects, "must be primary")
+      end
+    when "secondary"
+      unless SecondarySubject.exists?(id: subjects_excluding_discontinued.map(&:id))
+        errors.add(:subjects, "must be secondary")
+      end
+    when "further_education"
+      unless FurtherEducationSubject.exists?(id: subjects_excluding_discontinued.map(&:id))
+        errors.add(:subjects, "must be further education")
+      end
+    end
   end
 
   def valid_date_range

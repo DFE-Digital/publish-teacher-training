@@ -87,10 +87,14 @@ describe RecruitmentCycle, type: :model do
       let(:course_enrichment) { build(:course_enrichment, :published) }
       let(:subjects) { [create(:subject, :further_education)] }
       let(:course) do
-        create(:course, provider: provider,
-               site_statuses: [site_status],
-               enrichments: [course_enrichment],
-               subjects: subjects)
+        create(
+          :course,
+          :infer_level,
+          provider: provider,
+          site_statuses: [site_status],
+          enrichments: [course_enrichment],
+          subjects: subjects,
+        )
       end
       let(:syncable_courses) { [course] }
 

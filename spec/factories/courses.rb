@@ -65,6 +65,16 @@ FactoryBot.define do
     end
 
     after(:create) do |course, evaluator|
+      if evaluator.level.nil?
+        if course.subjects.exists?(type: "PrimarySubject")
+          course.level = "primary"
+        elsif course.subjects.exists?(type: "SecondarySubject")
+          course.level = "secondary"
+        elsif course.subjects.exists?(type: "FurtherEducationSubject")
+          course.level = "further_education"
+        end
+      end
+
       # This is important to retain the relationship behaviour between
       # course and it's enrichment
 
@@ -77,6 +87,10 @@ FactoryBot.define do
       # We've just created a course with this provider's code, so ensure it's
       # up-to-date and has this course loaded.
       course.provider.reload
+    end
+
+    trait :infer_level do
+      level { nil }
     end
 
     trait :resulting_in_qts do
