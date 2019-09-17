@@ -2,7 +2,7 @@ module API
   module V1
     class SubjectsController < API::V1::ApplicationController
       def index
-        @subjects = UCASSubject.all
+        @subjects = Subject.all
         paginate json: @subjects
       end
     end
