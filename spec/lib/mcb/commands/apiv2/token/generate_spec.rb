@@ -7,6 +7,7 @@ describe 'mcb apiv2 token generate' do
       result = with_stubbed_stdout do
         $mcb.run(%w[apiv2 token generate -S sekret user@local])
       end
+      result = result[:stdout]
 
       payload = { email: 'user@local' }
       expect(result.chomp).to eq(

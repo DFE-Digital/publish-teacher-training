@@ -14,6 +14,7 @@ describe 'mcb users show' do
     output = with_stubbed_stdout do
       cmd.run([user.id.to_s])
     end
+    output = output[:stdout]
 
     expect(output).to have_text_table_row('id', user.id)
     expect(output).to have_text_table_row('email', user.email)
@@ -27,6 +28,7 @@ describe 'mcb users show' do
     output = with_stubbed_stdout do
       cmd.run([user.email])
     end
+    output = output[:stdout]
 
     expect(output).to have_text_table_row('id', user.id)
     expect(output).to have_text_table_row('email', user.email)
@@ -38,6 +40,7 @@ describe 'mcb users show' do
     output = with_stubbed_stdout do
       cmd.run([user.sign_in_user_id])
     end
+    output = output[:stdout]
 
     expect(output).to have_text_table_row('id', user.id)
     expect(output).to have_text_table_row('email', user.email)
@@ -49,6 +52,7 @@ describe 'mcb users show' do
     output = with_stubbed_stdout do
       cmd.run(%w[foobaz])
     end
+    output = output[:stdout]
 
     expect(output).to include "User not found: foobaz"
     expect(output).not_to have_text_table_row('id', user.id)
@@ -61,6 +65,7 @@ describe 'mcb users show' do
     output = with_stubbed_stdout do
       cmd.run([user.id.to_s])
     end
+    output = output[:stdout]
 
     provider = user.providers.first
     expect(output).to have_text_table_row(provider.id,

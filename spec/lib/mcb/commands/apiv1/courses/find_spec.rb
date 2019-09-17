@@ -46,6 +46,7 @@ describe '"mcb apiv1 courses find"' do
                   #{course2.provider.provider_code}
                   #{course2.course_code}])
     end
+    output = output[:stdout]
 
     expect(output).to have_text_table_row('course_code',
                                           course2.course_code)

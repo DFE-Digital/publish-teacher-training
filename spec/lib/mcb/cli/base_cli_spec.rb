@@ -2,11 +2,9 @@ require 'mcb_helper'
 
 describe MCB::Cli::BaseCli do
   def run_with_input_commands(*input_cmds)
-    stderr = nil
-    output = with_stubbed_stdout(stdin: input_cmds.join("\n"), stderr: stderr) do
+    with_stubbed_stdout(stdin: input_cmds.join("\n")) do
       yield
     end
-    [output, stderr]
   end
 
   subject { described_class.new }
@@ -25,7 +23,8 @@ describe MCB::Cli::BaseCli do
     end
 
     it "shows the initial values" do
-      output, = run_with_input_commands("continue") { run_multiselect }
+      outputs = run_with_input_commands("continue") { run_multiselect }
+      output = outputs[:stdout]
 
       expect(output).to include("[x] option A")
       expect(output).to include("[ ] option B")
@@ -44,7 +43,8 @@ describe MCB::Cli::BaseCli do
 
     context "with modifications" do
       it "shows the updates once an item has been selected or deselected" do
-        output, = run_with_input_commands("[x] option A", "[ ] option B", "continue") { run_multiselect }
+        outputs = run_with_input_commands("[x] option A", "[ ] option B", "continue") { run_multiselect }
+        output = outputs[:stdout]
 
         expect(output).to include("[ ] option A")
         expect(output).to include("[x] option B")

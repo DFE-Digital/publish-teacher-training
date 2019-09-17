@@ -1,7 +1,11 @@
 require 'mcb_helper'
 
 describe 'mcb courses audit' do
-  let(:audit) { MCBCommand.new('courses', 'audit') }
+  def execute_audit(arguments: [], input: [])
+    with_stubbed_stdout(stdin: input.join("\n")) do
+      $mcb.run(['courses', 'audit', *arguments])
+    end
+  end
 
   let(:admin_user) { create :user, :admin, email: 'h@i' }
 
@@ -28,7 +32,7 @@ describe 'mcb courses audit' do
       rolled_over_course.update(name: 'Y')
       course.update(name: 'B')
 
-      output = audit.execute(
+      output = execute_audit(
         arguments: [
           rolled_over_provider.provider_code,
           rolled_over_course.course_code
@@ -56,7 +60,7 @@ describe 'mcb courses audit' do
       rolled_over_course.update(name: 'Y')
       course.update(name: 'B')
 
-      output = audit.execute(
+      output = execute_audit(
         arguments: [
           provider.provider_code,
           course.course_code,

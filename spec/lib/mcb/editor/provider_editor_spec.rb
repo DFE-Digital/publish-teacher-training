@@ -2,11 +2,9 @@ require 'mcb_helper'
 
 describe MCB::Editor::ProviderEditor, :needs_audit_user do
   def run_editor(*input_cmds)
-    stderr = nil
-    output = with_stubbed_stdout(stdin: input_cmds.join("\n"), stderr: stderr) do
+    with_stubbed_stdout(stdin: input_cmds.join("\n")) do
       subject.run
     end
-    [output, stderr]
   end
 
   let(:provider_code) { 'X12' }
@@ -43,7 +41,7 @@ describe MCB::Editor::ProviderEditor, :needs_audit_user do
         let(:recruitment_cycle_year) { ["-r", provider.recruitment_cycle.year] }
 
         it 'lists the courses for the given provider' do
-          output, = run_editor("edit courses", "continue", "exit")
+          output = run_editor("edit courses", "continue", "exit")[:stdout]
           expect(output).to include(
             "[ ] Biology (#{provider_code}/A01X) [#{provider.recruitment_cycle}]",
             "[ ] History (#{provider_code}/A02X) [#{provider.recruitment_cycle}]",
@@ -122,11 +120,9 @@ describe MCB::Editor::ProviderEditor, :needs_audit_user do
 
     describe 'runs the provider creation wizard' do
       def run_new_provider_wizard(*input_cmds)
-        stderr = nil
-        output = with_stubbed_stdout(stdin: input_cmds.join("\n"), stderr: stderr) do
+        with_stubbed_stdout(stdin: input_cmds.join("\n")) do
           subject.new_provider_wizard
         end
-        [output, stderr]
       end
       let(:provider) { RecruitmentCycle.current_recruitment_cycle.providers.build }
 
@@ -190,13 +186,13 @@ describe MCB::Editor::ProviderEditor, :needs_audit_user do
         before do
           Timecop.freeze(frozen_time)
 
-          @output, = run_new_provider_wizard(
+          @output = run_new_provider_wizard(
             *valid_answers,
             'y', # confirm creation
             # adding the provider into a new organisation
             desired_attributes[:organisation_name],
             "y" # confirm creation of a new org
-          )
+          )[:stdout]
         end
 
         after do
@@ -241,40 +237,40 @@ describe MCB::Editor::ProviderEditor, :needs_audit_user do
 
       context "when adding a new provider into an organisation" do
         it "does not accept zero input" do
-          output, = run_new_provider_wizard(
+          output = run_new_provider_wizard(
             *valid_answers,
             'y', # confirm creation
             '', # Empty Org Name
             # adding the provider into a new organisation
             desired_attributes[:organisation_name],
             "y" # confirm creation of a new org
-          )
+          )[:stdout]
 
           expect(output).to include('Organisation name cannot be blank.')
         end
 
         it "does not accept new line" do
-          output, = run_new_provider_wizard(
+          output = run_new_provider_wizard(
             *valid_answers,
             'y', # confirm creation
             "\n", # Empty Org Name
             # adding the provider into a new organisation
             desired_attributes[:organisation_name],
             "y" # confirm creation of a new org
-          )
+          )[:stdout]
 
           expect(output).to include('Organisation name cannot be blank.')
         end
 
         it "does not accept only whitespace" do
-          output, = run_new_provider_wizard(
+          output = run_new_provider_wizard(
             *valid_answers,
             'y', # confirm creation
             "   ", # Empty Org Name
             # adding the provider into a new organisation
             desired_attributes[:organisation_name],
             "y" # confirm creation of a new org
-          )
+          )[:stdout]
 
           expect(output).to include('Organisation name cannot be blank.')
         end
@@ -284,11 +280,11 @@ describe MCB::Editor::ProviderEditor, :needs_audit_user do
         let!(:existing_organisation) { create(:organisation, name: desired_attributes[:organisation_name]) }
 
         it "creates a new provider into the existing organisation with the passed parameters" do
-          output, = run_new_provider_wizard(
+          output = run_new_provider_wizard(
             *valid_answers,
             'y', # confirm creation
             desired_attributes[:organisation_name], # adding the provider into an existing organisation
-          )
+          )[:stdout]
 
           expect(output).to include("New provider has been created")
 
@@ -300,13 +296,13 @@ describe MCB::Editor::ProviderEditor, :needs_audit_user do
         end
 
         it "creates a new provider into the existing organisation, even if the user makes and then corrects a typo in the org name" do
-          output, = run_new_provider_wizard(
+          output = run_new_provider_wizard(
             *valid_answers,
             'y', # confirm creation
             "ACCCCME SCITT", # mistyped organisation name
             "no", # don't create the mistyped org
             desired_attributes[:organisation_name], # try typing in the org name again
-          )
+          )[:stdout]
 
           expect(output).to include("New provider has been created")
 
@@ -339,10 +335,10 @@ describe MCB::Editor::ProviderEditor, :needs_audit_user do
       end
 
       it "does not create a Provider if creation isn't confirmed" do
-        output, = run_new_provider_wizard(
+        output = run_new_provider_wizard(
           *valid_answers,
           'n' # Do not confirm creation
-        )
+        )[:stdout]
 
         expect(Provider.find_by(provider_code: desired_attributes[:provider_code])).to be_nil
         expect(output).to include("Aborting")
@@ -351,10 +347,10 @@ describe MCB::Editor::ProviderEditor, :needs_audit_user do
       it "does not create a Provider when the provider is not valid" do
         expect(provider).to receive(:valid?).and_return(false)
 
-        output, = run_new_provider_wizard(
+        output = run_new_provider_wizard(
           *valid_answers,
           'y' # confirm creation
-        )
+        )[:stdout]
 
         expect(Provider.find_by(provider_code: desired_attributes[:provider_code])).to be_nil
         expect(output).to include("Provider isn't valid")

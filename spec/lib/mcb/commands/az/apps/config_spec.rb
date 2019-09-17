@@ -19,6 +19,7 @@ describe 'mcb az apps config' do
     result = with_stubbed_stdout do
       $mcb.run(%w[az apps config dapp aregrp])
     end
+    result = result[:stdout]
 
     expect(result.chomp).to eq '{"SETTING"=>"valoo"}'
     expect(MCB).to have_received(:run_command)

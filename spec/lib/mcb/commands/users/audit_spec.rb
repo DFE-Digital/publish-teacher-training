@@ -18,6 +18,7 @@ describe 'mcb users audit' do
     output = with_stubbed_stdout do
       cmd.run([user.id.to_s])
     end
+    output = output[:stdout]
 
     expect(output).to have_text_table_row(admin_user.id,
                                           'h@i',
@@ -37,6 +38,7 @@ describe 'mcb users audit' do
     output = with_stubbed_stdout do
       cmd.run([user.email])
     end
+    output = output[:stdout]
 
     expect(output).to have_text_table_row(admin_user.id,
                                           'h@i',
@@ -56,6 +58,7 @@ describe 'mcb users audit' do
     output = with_stubbed_stdout do
       cmd.run([user.sign_in_user_id])
     end
+    output = output[:stdout]
 
     expect(output).to have_text_table_row(admin_user.id,
                                           'h@i',

@@ -14,8 +14,11 @@ def with_stubbed_stdout(stdin: nil, stderr: nil, &block)
   # message.
   if ENV["WITHOUT_STUBBED_STDOUT"]
     yield
+    { stdout: nil, stderr: nil }
   else
-    run stdin: stdin, stderr: stderr, &block
+    stderr ||= ''
+    stdout = run stdin: stdin, stderr: stderr, &block
+    { stdout: stdout, stderr: stderr }
   end
 end
 
@@ -48,7 +51,12 @@ def run(stdin: nil, stderr: nil)
     $stdin = StringIO.new(stdin)
   end
 
+  allow_any_instance_of(Binding).to receive(:pry)
+                                      .and_raise("Cannot use pry with stubbed stdout")
+
   yield
+
+  allow_any_instance_of(Binding).to receive(:pry).and_call_original
 
   # Restore STDOUT before we read back from the output file, which is why we
   # can't just rely on the ensure block to do it.

@@ -12,11 +12,15 @@ describe 'mcb providers audit' do
     new_provider
   end
 
-  let(:audit) { MCBCommand.new('providers', 'audit') }
+  def execute_audit(arguments: [], input: [])
+    with_stubbed_stdout(stdin: input.join("\n")) do
+      $mcb.run(['providers', 'audit', *arguments])
+    end
+  end
 
   context 'with an unspecified recruitment year' do
     it 'displays audit for provider for default recruitment year' do
-      output = parse_text_table(audit.execute(arguments: [rolled_over_provider.provider_code])[:stdout])
+      output = parse_text_table(execute_audit(arguments: [rolled_over_provider.provider_code])[:stdout])
 
       expect(output[0]).to eq(%w[userid useremail action associatedid associatedtype changes created_at])
       expect(output[1][5]).to include("\"recruitment_cycle_id\"=>#{recruitment_year2.id}")
@@ -25,7 +29,7 @@ describe 'mcb providers audit' do
 
   context 'with a specified recruitment year' do
     it 'displays audit for provider for specified recruitment year' do
-      output = parse_text_table(audit.execute(arguments: [rolled_over_provider.provider_code, '-r', recruitment_year1.year])[:stdout])
+      output = parse_text_table(execute_audit(arguments: [rolled_over_provider.provider_code, '-r', recruitment_year1.year])[:stdout])
 
       expect(output[0]).to eq(%w[userid useremail action associatedid associatedtype changes created_at])
       expect(output[1][5]).to include("\"recruitment_cycle_id\"=>#{recruitment_year1.id}")

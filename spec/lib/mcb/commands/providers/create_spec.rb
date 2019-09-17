@@ -1,7 +1,11 @@
 require 'mcb_helper'
 
 describe 'mcb providers create' do
-  let(:cmd) { MCBCommand.new('providers', 'create') }
+  def execute_cmd(arguments: [], input: [])
+    with_stubbed_stdout(stdin: input.join("\n")) do
+      $mcb.run(['providers', 'create', *arguments])
+    end
+  end
 
   let(:email) { 'user@education.gov.uk' }
   let(:organisation) { create(:organisation) }
@@ -19,7 +23,7 @@ describe 'mcb providers create' do
     end
 
     it 'starts the new provider creation in the current cycle by default' do
-      cmd.execute
+      execute_cmd
 
       expect(MCB::Editor::ProviderEditor).to have_received(:new) do |args|
         expect(args[:provider].recruitment_cycle).to eq(RecruitmentCycle.current_recruitment_cycle)
@@ -28,10 +32,8 @@ describe 'mcb providers create' do
     end
 
     context 'when a recruitment cycle is explicitly specified' do
-      let(:cmd) { MCBCommand.new('providers', 'create', '-r', next_recruitment_cycle.year) }
-
       it 'starts the new provider creation in the specified cycle' do
-        cmd.execute
+        execute_cmd(arguments: ['-r', next_recruitment_cycle.year])
 
         expect(MCB::Editor::ProviderEditor).to have_received(:new) do |args|
           expect(args[:provider].recruitment_cycle).to eq(next_recruitment_cycle)
