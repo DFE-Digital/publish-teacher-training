@@ -103,10 +103,16 @@
         "description": "Secret Key Base."
       }
     },
-    "sentryDSN": {
+    "sentryDSNBackend": {
       "type": "string",
       "metadata": {
-        "description": "Connection string for Sentry monitoring."
+        "description": "Connection string for Sentry monitoring for backend app."
+      }
+    },
+    "sentryDSNBGFindSync": {
+      "type": "string",
+      "metadata": {
+        "description": "Connection string for Sentry monitoring for background find sync container."
       }
     },
     "settingsAuthenticationSecret": {
@@ -309,7 +315,7 @@
               },
               {
                 "name": "SENTRY_DSN",
-                "value": "[parameters('sentryDSN')]"
+                "value": "[parameters('sentryDSNBackend')]"
               },
               {
                 "name": "SETTINGS__AUTHENTICATION__SECRET",
@@ -338,6 +344,10 @@
               {
                 "name": "REDIS_URL",
                 "value": "[concat ('redis://',parameters('redisCacheName'),'.redis.cache.windows.net:6379')]"
+              },
+              {
+                "name": "WEBSITE_SLOT_POLL_WORKER_FOR_CHANGE_NOTIFICATION",
+                "value": "0"
               }
             ]
           },
@@ -495,7 +505,7 @@
               },
               {
                 "name": "SENTRY_DSN",
-                "secureValue": "[parameters('sentryDSN')]"
+                "secureValue": "[parameters('sentryDSNBGFindSync')]"
               },
               {
                 "name": "SETTINGS__AUTHENTICATION__SECRET",
