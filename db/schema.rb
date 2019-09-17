@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_09_13_125905) do
+ActiveRecord::Schema.define(version: 2019_09_13_112820) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_buffercache"
@@ -91,11 +91,7 @@ ActiveRecord::Schema.define(version: 2019_09_13_125905) do
     t.string "age_range_in_years"
     t.date "applications_open_from"
     t.boolean "is_send", default: false
-<<<<<<< HEAD
     t.string "level"
-=======
-    t.integer "level", default: 0
->>>>>>> [2128] Add level to course via migration
     t.index ["accrediting_provider_code"], name: "index_course_on_accrediting_provider_code"
     t.index ["accrediting_provider_id"], name: "IX_course_accrediting_provider_id"
     t.index ["changed_at"], name: "index_course_on_changed_at", unique: true
@@ -280,14 +276,12 @@ ActiveRecord::Schema.define(version: 2019_09_13_125905) do
     t.text "type"
     t.text "subject_code"
     t.text "subject_name"
-    t.index ["subject_name"], name: "index_subject_on_subject_name"
   end
 
   create_table "ucas_subject", id: :serial, force: :cascade do |t|
     t.text "subject_name"
     t.text "subject_code", null: false
     t.index ["subject_code"], name: "AK_subject_subject_code", unique: true
-    t.index ["subject_name"], name: "index_ucas_subject_on_subject_name"
   end
 
   create_table "user", id: :serial, force: :cascade do |t|
