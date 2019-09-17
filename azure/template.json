@@ -333,7 +333,7 @@
               },
               {
                 "name": "SETTINGS__MCBG__REDIS_PASSWORD",
-                "secureValue": "[concat(listKeys(resourceId('Microsoft.Cache/Redis', parameters('redisCacheName')), '2018-03-01').primaryKey)]"
+                "value": "[concat(listKeys(resourceId('Microsoft.Cache/Redis', parameters('redisCacheName')), '2018-03-01').primaryKey)]"
               },
               {
                 "name": "REDIS_URL",
