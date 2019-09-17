@@ -17,3 +17,5 @@ current_recruitment_cycle: 2019
 govuk_notify:
   api_key: please_change_me
   welcome_email_template_id: please_change_me
+mcbg:
+  redis_password: <%= SecureRandom.base64 %>

@@ -86,6 +86,10 @@ gem 'discard'
 # Gov Notify
 gem 'govuk_notify_rails'
 
+# Run jobs in the background. Good enough until we know we need more firepower
+# (i.e. SideKiq)
+gem 'sidekiq'
+
 group :development, :test do
   # add info about db structure to models and other files
   gem 'annotate'

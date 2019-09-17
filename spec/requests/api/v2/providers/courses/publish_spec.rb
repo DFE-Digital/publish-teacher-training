@@ -134,6 +134,25 @@ describe 'Publish API v2', type: :request do
           )
         end
       end
+
+      # In production this job would be performed asynchronous, but in tests
+      # it's synchronous. Which is handy for testing what happens when
+      # search-and-compare returns an error, otherwise the error would be
+      # thrown in the delayed_job process.
+      context 'performing the job synchronously and search-and-compare failing the request ' do
+        let(:status) { 404 }
+
+        it 'raises an error' do
+          expect {
+            perform_enqueued_jobs do
+              subject
+            end
+          }.to(raise_error(
+                 RuntimeError,
+                 "Error 404 received syncing courses: #{course}"
+               ))
+        end
+      end
     end
 
     describe 'failed validation' do

@@ -13,32 +13,32 @@ module SearchAndCompareAPIService
   end
 
   class Request
-    class << self
-      # NOTE:
-      #   HTTP PUT "/api/courses" accepts a list of courses
-      #   It will only add or update, no DELETION.
-      def sync(course)
-        response = api.put(
-          "/api/courses/",
-          serialize(course)
-        )
+    attr_reader :response
 
-        response.success?
-      end
+    # NOTE:
+    #   HTTP PUT "/api/courses" accepts a list of courses
+    #   It will only add or update, no DELETION.
+    def sync(courses)
+      @response = api.put(
+        "/api/courses/",
+        serialize(courses)
+      )
 
-      def api
-        Connection.api
-      end
+      @response.success?
+    end
 
-    private
+    def api
+      Connection.api
+    end
 
-      def serialize(payload)
-        ActiveModel::Serializer::CollectionSerializer.new(
-          payload,
-          serializer: SearchAndCompare::CourseSerializer,
-          adapter: ActiveModel::Serializer::Adapter::JsonApi
-        ).to_json
-      end
+  private
+
+    def serialize(payload)
+      ActiveModel::Serializer::CollectionSerializer.new(
+        payload,
+        serializer: SearchAndCompare::CourseSerializer,
+        adapter: ActiveModel::Serializer::Adapter::JsonApi
+      ).to_json
     end
   end
 end

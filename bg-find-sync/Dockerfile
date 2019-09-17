@@ -1,0 +1,7 @@
+ARG  DOCKER_REPOSITORY
+ARG  MANAGE_COURSES_BACKEND_IMAGE
+ARG  CODE_VERSION=latest
+
+FROM ${DOCKER_REPOSITORY}/${MANAGE_COURSES_BACKEND_IMAGE}:${CODE_VERSION}
+
+CMD bundle exec rails db:migrate && bundle exec sidekiq -q find_sync
