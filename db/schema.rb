@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_09_13_112820) do
+ActiveRecord::Schema.define(version: 2019_09_13_125905) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_buffercache"
@@ -276,12 +276,14 @@ ActiveRecord::Schema.define(version: 2019_09_13_112820) do
     t.text "type"
     t.text "subject_code"
     t.text "subject_name"
+    t.index ["subject_name"], name: "index_subject_on_subject_name"
   end
 
   create_table "ucas_subject", id: :serial, force: :cascade do |t|
     t.text "subject_name"
     t.text "subject_code", null: false
     t.index ["subject_code"], name: "AK_subject_subject_code", unique: true
+    t.index ["subject_name"], name: "index_ucas_subject_on_subject_name"
   end
 
   create_table "user", id: :serial, force: :cascade do |t|
