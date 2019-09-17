@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # == Schema Information
 #
 # Table name: course_subject
@@ -8,8 +7,6 @@
 #  subject_id :integer
 #
 
-=======
->>>>>>> [2127] Add migration to create subject table
 class CourseSubject < ApplicationRecord
   self.table_name = 'course_subject'
 
