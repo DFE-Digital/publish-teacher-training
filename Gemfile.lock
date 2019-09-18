@@ -345,7 +345,7 @@ GEM
     scss_lint (0.58.0)
       rake (>= 0.9, < 13)
       sass (~> 3.5, >= 3.5.5)
-    sentry-raven (2.11.1)
+    sentry-raven (2.11.2)
       faraday (>= 0.7.6, < 1.0)
     shellany (0.0.1)
     shoulda-matchers (4.1.2)
