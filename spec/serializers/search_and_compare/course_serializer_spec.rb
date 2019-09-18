@@ -7,13 +7,8 @@ describe SearchAndCompare::CourseSerializer do
     subject { resource }
 
     context "an existing course" do
-      let(:ucas_subject_names) { %w[Primary] }
-      let(:ucas_subjects) do
-        subjects = ucas_subject_names.map do |ucas_subject_name|
-          build(:ucas_subject, subject_name: ucas_subject_name)
-        end
-
-        subjects
+      let(:subjects) do
+        [build(:subject, :primary)]
       end
 
       let(:program_type) { :school_direct_salaried_training_programme }
@@ -31,7 +26,7 @@ describe SearchAndCompare::CourseSerializer do
                study_mode:  :full_time,
                site_statuses: [site_status1, site_status2],
                enrichments: course_enrichments,
-               ucas_subjects: ucas_subjects,
+               subjects: subjects,
                is_send: true,
                applications_open_from: "2018-10-09T00:00:00").tap do |c|
           # These sites, taken from real prod data, aren't actually valid in
@@ -202,7 +197,7 @@ describe SearchAndCompare::CourseSerializer do
         describe "CourseSubjects" do
           subject { resource[:CourseSubjects] }
           let(:expected_course_subjects) do
-            ucas_subject_names.map do |subject_name|
+            subjects.map do |subject|
               {
                 CourseId: 0,
                 Course: nil,
@@ -215,7 +210,7 @@ describe SearchAndCompare::CourseSerializer do
                     Funding: nil,
                     IsSubjectKnowledgeEnhancementAvailable: false,
                     CourseSubjects: nil,
-                    Name: subject_name,
+                    Name: subject.subject_name,
                   },
                 }
             end
