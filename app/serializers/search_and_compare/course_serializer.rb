@@ -150,11 +150,15 @@ module SearchAndCompare
     end
 
     def provider_enrichment
-      @provider_enrichment ||= object.provider.enrichments.latest_published_at.first
+      @provider_enrichment ||= object.provider
+                                 .enrichments
+                                 .max_by(&:last_published_at)
     end
 
     def course_enrichment
-      @course_enrichment ||= object.enrichments.published.latest_first.first
+      @course_enrichment ||= object.enrichments
+                               .select(&:published?)
+                               .max_by { |e| [e.created_at, e.id] }
     end
 
     def provider_external_contact_info
@@ -285,7 +289,7 @@ module SearchAndCompare
     end
 
     def campuses
-      object.site_statuses.findable.map do |site_status|
+      object.findable_site_statuses.map do |site_status|
         raw_address = { address1: site_status.site.address1, address2: site_status.site.address2, address3: site_status.site.address3, address4: site_status.site.address4, postcode: site_status.site.postcode }
 
         address = campuses_full_address(raw_address)

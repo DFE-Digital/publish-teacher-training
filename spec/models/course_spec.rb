@@ -153,25 +153,73 @@ describe Course, type: :model do
     let(:applications_being_accepted_now) { build(:site_status, :applications_being_accepted_now) }
     let(:applications_being_accepted_in_future) { build(:site_status, :applications_being_accepted_in_future) }
     let(:site_status_with_no_vacancies) { build(:site_status, :with_no_vacancies) }
-    describe 'findable?' do
-      context 'with at least one site status as findable' do
-        context 'single site status as findable' do
-          let(:subject) { create(:course, site_statuses: [findable]) }
 
-          its(:site_statuses) { should_not be_empty }
+    describe 'findable?' do
+      context 'with a site_statuses association that have been loaded' do
+        let(:course) { create(:course, site_statuses: []) }
+
+        it 'uses #select on the association' do
+          allow(course.site_statuses).to receive(:select).and_return([])
+
+          course.findable?
+
+          expect(course.site_statuses).to have_received(:select)
+        end
+
+        context 'with a findable site' do
+          subject { create(:course, site_statuses: [findable]) }
+
           its(:findable?) { should be true }
         end
 
-        context 'single site status as findable and mix site status as non findable' do
-          let(:subject) {
-            create(:course, site_statuses: [findable,
-                                            with_any_vacancy,
-                                            default,
-                                            applications_being_accepted_now,
-                                            applications_being_accepted_in_future])
-          }
+        context 'with no findable sites' do
+          subject { create(:course, site_statuses: [suspended]) }
 
-          its(:site_statuses) { should_not be_empty }
+          its(:findable?) { should be false }
+        end
+
+        context 'with at least one findable sites' do
+          subject { create(:course, site_statuses: [findable, suspended]) }
+
+          its(:findable?) { should be true }
+        end
+      end
+
+      describe 'on a course with a site_statuses association that has not been loaded' do
+        let(:course) { create(:course, site_statuses: []) }
+
+        it 'uses #select on the association' do
+          course_with_site_statuses_not_loaded = Course.find(course.id)
+          allow(course_with_site_statuses_not_loaded.site_statuses)
+            .to receive(:findable).and_return([])
+
+          course_with_site_statuses_not_loaded.findable?
+
+          expect(course_with_site_statuses_not_loaded.site_statuses)
+            .to have_received(:findable)
+        end
+
+        context 'with a findable site' do
+          let(:course) { create(:course, site_statuses: [findable]) }
+
+          subject { Course.find(course.id) }
+
+          its(:findable?) { should be true }
+        end
+
+        context 'with no findable sites' do
+          let(:course) { create(:course, site_statuses: [suspended]) }
+
+          subject { Course.find(course.id) }
+
+          its(:findable?) { should be false }
+        end
+
+        context 'with at least one findable sites' do
+          let(:course) { create(:course, site_statuses: [findable, suspended]) }
+
+          subject { Course.find(course.id) }
+
           its(:findable?) { should be true }
         end
       end

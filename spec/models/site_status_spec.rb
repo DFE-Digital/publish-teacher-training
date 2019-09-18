@@ -16,11 +16,11 @@ require 'rails_helper'
 RSpec.describe SiteStatus, type: :model do
   it_behaves_like 'Touch course', :site_status
 
-  RSpec::Matchers.define :be_findable do
-    match do |actual|
-      SiteStatus.findable.include?(actual)
-    end
-  end
+  # RSpec::Matchers.define :be_findable do
+  #   match do |actual|
+  #     SiteStatus.findable.include?(actual)
+  #   end
+  # end
 
   RSpec::Matchers.define :be_open_for_applications do
     match do |actual|
@@ -45,7 +45,7 @@ RSpec.describe SiteStatus, type: :model do
     it { should belong_to(:course) }
   end
 
-  describe 'is it on find?' do
+  describe 'findable?' do
     describe 'if discontinued on UCAS' do
       subject { create(:site_status, :discontinued) }
       it { should_not be_findable }
@@ -69,6 +69,30 @@ RSpec.describe SiteStatus, type: :model do
     describe 'if running and published on UCAS' do
       subject { create(:site_status, :running, :published) }
       it { should be_findable }
+    end
+  end
+
+  describe 'findable scope' do
+    subject { SiteStatus.findable }
+
+    context 'with a course discontinued on UCAS' do
+      it { should_not include(create(:site_status, :discontinued)) }
+    end
+
+    context 'if suspended on UCAS' do
+      it { should_not include(create(:site_status, :suspended)) }
+    end
+
+    context 'if new on UCAS' do
+      it { should_not include(create(:site_status, :new)) }
+    end
+
+    describe 'if running but not published on UCAS' do
+      it { should_not include(create(:site_status, :running, :unpublished)) }
+    end
+
+    describe 'if running and published on UCAS' do
+      it { should include(create(:site_status, :running, :published)) }
     end
   end
 
