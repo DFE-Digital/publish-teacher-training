@@ -3,10 +3,12 @@ require "rails_helper"
 RSpec.describe "Subjecs API", type: :request do
   describe "GET index" do
     before do
-      FactoryBot.find_or_create(:subject, :mathematics)
-      FactoryBot.find_or_create(:subject,
-                                subject_name: "Biology",
-                                subject_code: "M4")
+      FactoryBot.find_or_create(:subject, :modern_languages)
+      FactoryBot.find_or_create(:subject, :english)
+      FactoryBot.find_or_create(:subject, :french)
+      FactoryBot.find_or_create(:subject, :primary)
+      FactoryBot.find_or_create(:subject, :further_education)
+      FactoryBot.find_or_create(:subject, :humanities)
     end
 
     it "returns http success" do
@@ -24,15 +26,23 @@ RSpec.describe "Subjecs API", type: :request do
 
       json = JSON.parse(response.body)
       expect(json).to eq([
-                           {
-                             "subject_name" => "Mathematics",
-                             "subject_code" => "G1",
-                           },
-                           {
-                             "subject_name" => "Biology",
-                             "subject_code" => "M4",
-                           },
-                         ])
+          {
+            "subject_name" => "English",
+            "subject_code" => "E",
+          },
+          {
+            "subject_name" => "French",
+            "subject_code" => "F1",
+          },
+          {
+            "subject_name" => "Primary",
+            "subject_code" => "00",
+          },
+          {
+            "subject_name" => "Further Education",
+            "subject_code" => "FE",
+          },
+        ])
     end
   end
 end

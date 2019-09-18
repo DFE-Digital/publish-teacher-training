@@ -1,6 +1,6 @@
 # == Schema Information
 #
-# Table name: ucas_subject
+# Table name: subject
 #
 #  id           :integer          not null, primary key
 #  subject_name :text
