@@ -158,12 +158,14 @@ describe 'mcb command' do
     end
 
     it 'returns the first https url on gov.uk' do
-      allow(MCB::Azure).to receive(:get_urls).with(opts).and_return(
-                             %w[http://svc.azure.net
-                                https://svc.azure.net
-                                http://svc.service.gov.uk
-                                https://svc.service.gov.uk]
-                           )
+      allow(MCB::Azure).to(
+        receive(:get_urls).with(opts).and_return(
+          %w[http://svc.azure.net
+             https://svc.azure.net
+             http://svc.service.gov.uk
+             https://svc.service.gov.uk]
+        )
+      )
 
       expect(MCB.apiv2_base_url(opts))
         .to eq 'https://svc.service.gov.uk/api/v2'

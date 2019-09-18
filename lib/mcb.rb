@@ -180,10 +180,7 @@ module MCB
     def apiv1_opts(opts)
       # the following lines are necessary to make opts work with double **splats and default values
       # See the change introduced in https://github.com/ddfreyne/cri/pull/99 (cri 2.15.8)
-      opts[:url] = opts[:url]
-      opts[:'max-pages'] = opts[:'max-pages']
-      opts[:token] = opts[:token]
-      opts[:all] = opts[:all]
+      opts = expose_opts_defaults_for_splat(opts, :url, :'max-pages', :token, :all)
 
       opts.merge! azure_env_settings_for_opts(**opts)
 
@@ -202,11 +199,7 @@ module MCB
     #
     #   opts = apiv2_opts(opts)
     def apiv2_opts(opts)
-      opts[:url] = opts[:url]
-      opts[:'max-pages'] = opts[:'max-pages']
-      opts[:token] = opts[:token]
-      opts[:all] = opts[:all]
-
+      opts = expose_opts_defaults_for_splat(opts, :url, :'max-pages', :token, :all)
       opts.merge! azure_env_settings_for_opts(**opts)
 
       if requesting_remote_connection?(**opts)
@@ -490,6 +483,17 @@ module MCB
       end
 
       new_url
+    end
+
+    # The following utility method is necessary because without processing the
+    # opts like this, default values won't be retrieved when using the splat
+    # operator. See the change introduced in
+    # https://github.com/ddfreyne/cri/pull/99 (cri 2.15.8)
+    def expose_opts_defaults_for_splat(opts, *keys)
+      keys.each do |key|
+        opts[key] = opts[key]
+      end
+      opts
     end
   end
 end

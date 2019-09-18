@@ -65,7 +65,12 @@ describe 'mcb users grant --admin', :needs_audit_user do
       end
 
       it 'grants membership of all organisations to that user' do
-        expect(user.reload.organisations).to eq([organisation1, organisation2, organisation3])
+        expect(user.reload.organisations)
+          .to match_array([
+                            organisation1,
+                            organisation2,
+                            organisation3
+                          ])
       end
 
       it 'audits the User has been added correctly' do

@@ -136,7 +136,7 @@ class Provider < ApplicationRecord
       :subjects,
       :sites,
       site_statuses: :site,
-      provider: [:enrichments, :latest_published_enrichment, :sites]
+      provider: %i[enrichments latest_published_enrichment sites]
     ).select(&:syncable?)
   end
 
