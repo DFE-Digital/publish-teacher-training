@@ -97,6 +97,8 @@ class Course < ApplicationRecord
              inverse_of: :accredited_courses,
              optional: true
 
+  has_many :course_subjects
+  has_many :subjects, through: :course_subjects
   has_many :course_ucas_subjects
   has_many :ucas_subjects, through: :course_ucas_subjects
   has_many :site_statuses
