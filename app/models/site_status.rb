@@ -88,6 +88,7 @@ class SiteStatus < ApplicationRecord
   def with_vacancies?
     !no_vacancies?
   end
+
   scope :open_for_applications, -> { findable.applications_being_accepted_now.with_vacancies }
   def open_for_applications?
     findable? && applications_being_accepted_now?
