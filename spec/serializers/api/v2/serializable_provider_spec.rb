@@ -1,9 +1,10 @@
 require 'rails_helper'
 
 describe API::V2::SerializableProvider do
+  let(:ucas_preferences) { build(:provider_ucas_preference, type_of_gt12: :coming_or_not) }
   let(:accrediting_provider) { create(:provider, :accredited_body) }
   let(:course) { create(:course, accrediting_provider: accrediting_provider) }
-  let(:provider) { create :provider, courses: [course], contacts: [contact1, contact2, contact3, contact4, contact5] }
+  let(:provider) { create :provider, ucas_preferences: ucas_preferences, courses: [course], contacts: [contact1, contact2, contact3, contact4, contact5] }
   let(:resource) { described_class.new object: provider }
   let(:contact1)  { build(:contact, :admin_type) }
   let(:contact2)  { build(:contact, :utt_type) }
@@ -24,6 +25,8 @@ describe API::V2::SerializableProvider do
   it { should have_attribute(:accredited_body?).with_value(false) }
   it { should have_attribute(:can_add_more_sites?).with_value(true) }
   it { should have_attribute(:recruitment_cycle_year).with_value(provider.recruitment_cycle.year) }
+  it { should have_attribute(:gt12_contact).with_value(provider.ucas_preferences.gt12_response_destination) }
+  it { should have_attribute(:application_alert_contact).with_value(provider.ucas_preferences.application_alert_email) }
   it do
     should have_attribute(:accredited_bodies).with_value([
       {
