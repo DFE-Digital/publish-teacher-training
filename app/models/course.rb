@@ -25,6 +25,7 @@
 #  age_range_in_years        :string
 #  applications_open_from    :date
 #  is_send                   :boolean          default(FALSE)
+#  level                     :integer          default(0)
 #
 
 class Course < ApplicationRecord
@@ -394,7 +395,7 @@ class Course < ApplicationRecord
     content_status == :published
   end
 
-  def assign_program_type(funding_type)
+  def funding_type=(funding_type)
     case funding_type
     when 'salary'
       if !self_accredited?

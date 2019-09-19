@@ -1,7 +1,7 @@
 RSpec.describe Course, type: :model do
-  describe '#assign_program_type' do
+  describe '#funding_type=' do
     before do
-      subject.assign_program_type(funding_type)
+      subject.funding_type = funding_type
     end
 
     describe 'when funding type is salary' do

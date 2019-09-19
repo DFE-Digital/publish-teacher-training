@@ -112,7 +112,6 @@ module API
         return unless @course.course_params_assignable(course_params)
 
         @course.assign_attributes(course_params)
-        @course.assign_program_type(funding_type_params) if @course.errors.blank?
         @course.save
       end
 
@@ -207,8 +206,7 @@ module API
                   :type,
                   :sites_ids,
                   :sites_types,
-                  :course_code,
-                  :funding_type)
+                  :course_code)
           .permit(
             :english,
             :maths,
@@ -221,7 +219,7 @@ module API
             :is_send,
             :name,
             :accrediting_provider_code,
-            :funding_type,
+            :funding_type
           )
       end
 
