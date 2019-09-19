@@ -9,6 +9,7 @@
 #
 
 FactoryBot.define do
+  # TODO: use known subject list
   factory :subject do
     sequence(:subject_code, &:to_s)
     subject_name { Faker::ProgrammingLanguage.name }

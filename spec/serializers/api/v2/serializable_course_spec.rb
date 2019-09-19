@@ -148,6 +148,10 @@ describe API::V2::SerializableCourse do
     end
   end
 
+  # TODO: level now drives the valid subjects that can be assigned to a
+  #       given course
+  # TODO: bursary and scholarship info should now live in the database
+  # TODO: chase up FINANCIAL_SUPPORT
   xcontext "subjects & level" do
     let(:course) { create(:course, subjects: subjects) }
 
