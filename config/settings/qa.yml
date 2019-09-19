@@ -6,6 +6,6 @@ search_api:
   secret: please_change_me
 bg_jobs:
   find_bulk_sync:
-    cron: "0 */2 * * *"
+    cron: "0 */6 * * *"
     class: "BulkSyncCoursesToFindJob"
     queue: find_sync
