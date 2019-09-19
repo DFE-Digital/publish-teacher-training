@@ -203,8 +203,8 @@ module MCB
       opts.merge! azure_env_settings_for_opts(**opts)
 
       if requesting_remote_connection?(**opts)
-        opts[:url] = MCB::Azure.get_urls(**opts).first
-        opts[:token] = MCB::Azure.get_config(**opts)['AUTHENTICATION_TOKEN']
+        opts[:url] ||= MCB::Azure.get_urls(**opts).first
+        opts[:token] ||= MCB::Azure.get_config(**opts)['AUTHENTICATION_TOKEN']
       end
 
       opts
