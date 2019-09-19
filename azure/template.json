@@ -181,18 +181,21 @@
     },
     "mcbeSystemAuthenticationToken":{
       "type": "string",
+      "defaultValue": "",
       "metadata": {
         "description": "The token used for system level API requests."
       }
     },
     "containerCPUCores": {
       "type": "string",
+      "defaultValue": "1",
       "metadata": {
         "description": "The number of CPU cores for Azure Container Instance."
       }
     },
     "containerMemory": {
       "type": "string",
+      "defaultValue": "1.5",
       "metadata": {
         "description": "The number of memory in GB for Azure Container Instance."
       }
