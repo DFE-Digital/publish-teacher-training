@@ -8,16 +8,15 @@ describe "Courses API v2", type: :request do
   let(:credentials) do
     ActionController::HttpAuthentication::Token.encode_credentials(token)
   end
-  let(:course_subject_primary) { find_or_create(:ucas_subject, :primary) }
-  let(:course_subject_mathematics) { find_or_create(:ucas_subject, :mathematics) }
+  let(:course_subject_mathematics) { find_or_create(:subject, :mathematics) }
 
   let(:findable_open_course) {
     create(:course, :resulting_in_pgce_with_qts, :with_apprenticeship,
-           name: "Primary (Mathematics Specialist)",
+           name: "Mathematics",
            provider: provider,
            start_date: Time.now.utc,
            study_mode: :full_time,
-           ucas_subjects: [course_subject_primary, course_subject_mathematics],
+           subjects: [course_subject_mathematics],
            is_send: true,
            site_statuses: [courses_site_status],
            enrichments: [enrichment],
@@ -37,7 +36,7 @@ describe "Courses API v2", type: :request do
   }
   let(:enrichment)     { build :course_enrichment, :published }
   let(:provider)       { create :provider, organisations: [organisation] }
-  let(:course_subject) { course.ucas_subjects.first }
+
   let(:site_status)    { findable_open_course.site_statuses.first }
   let(:site)           { site_status.site }
 
@@ -88,9 +87,8 @@ describe "Courses API v2", type: :request do
                 "ucas_status" => "running",
                 "funding_type" => "apprenticeship",
                 "is_send?" => true,
-                "subjects" => ["Primary",
-                               "Primary with mathematics"],
-                "level" => "primary",
+                "subjects" => %w[Mathematics],
+                "level" => "secondary",
                 "applications_open_from" => "2019-01-01",
                 "about_course" => enrichment.about_course,
                 "course_length" => enrichment.course_length,
@@ -105,7 +103,7 @@ describe "Courses API v2", type: :request do
                 "required_qualifications" => enrichment.required_qualifications,
                 "salary_details" => enrichment.salary_details,
                 "last_published_at" => enrichment.last_published_timestamp_utc.iso8601,
-                "has_bursary?" => true,
+                "has_bursary?" => false,
                 "has_scholarship_and_bursary?" => false,
                 "has_early_career_payments?" => false,
                 "bursary_amount" => nil,
@@ -116,7 +114,7 @@ describe "Courses API v2", type: :request do
                 "science" => "must_have_qualification_at_application_time",
                 "provider_code" => provider.provider_code,
                 "recruitment_cycle_year" => "2019",
-                "gcse_subjects_required" => %w[maths english science],
+                "gcse_subjects_required" => %w[maths english],
                 "age_range_in_years" => provider.courses[0].age_range_in_years,
                 "accrediting_provider" => nil,
                 "accrediting_provider_code" => nil,
@@ -131,7 +129,7 @@ describe "Courses API v2", type: :request do
                 "edit_options" => {
                   "entry_requirements" => %w[must_have_qualification_at_application_time expect_to_achieve_before_training_begins equivalence_test],
                   "qualifications" => %w[qts pgce_with_qts pgde_with_qts],
-                  "age_range_in_years" => %w[3_to_7 5_to_11 7_to_11 7_to_14],
+                  "age_range_in_years" => %w[11_to_16 11_to_18 14_to_19],
                   "start_dates" => [
                     "October 2018",
                     "November 2018",
@@ -282,9 +280,8 @@ describe "Courses API v2", type: :request do
               "ucas_status" => "running",
               "funding_type" => "apprenticeship",
               "is_send?" => true,
-              "subjects" => ["Primary",
-                             "Primary with mathematics"],
-              "level" => "primary",
+              "subjects" => %w[Mathematics],
+              "level" => "secondary",
               "applications_open_from" => "2019-01-01",
               "about_course" => enrichment.about_course,
               "course_length" => enrichment.course_length,
@@ -299,7 +296,7 @@ describe "Courses API v2", type: :request do
               "required_qualifications" => enrichment.required_qualifications,
               "salary_details" => enrichment.salary_details,
               "last_published_at" => enrichment.last_published_timestamp_utc.iso8601,
-              "has_bursary?" => true,
+              "has_bursary?" => false,
               "has_scholarship_and_bursary?" => false,
               "has_early_career_payments?" => false,
               "bursary_amount" => nil,
@@ -310,7 +307,7 @@ describe "Courses API v2", type: :request do
               "science" => "must_have_qualification_at_application_time",
               "provider_code" => provider.provider_code,
               "recruitment_cycle_year" => "2019",
-              "gcse_subjects_required" => %w[maths english science],
+              "gcse_subjects_required" => %w[maths english],
               "age_range_in_years" => provider.courses[0].age_range_in_years,
               "accrediting_provider" => nil,
               "accrediting_provider_code" => nil,
@@ -325,7 +322,7 @@ describe "Courses API v2", type: :request do
               "edit_options" => {
                 "entry_requirements" => %w[must_have_qualification_at_application_time expect_to_achieve_before_training_begins equivalence_test],
                 "qualifications" => %w[qts pgce_with_qts pgde_with_qts],
-                "age_range_in_years" => %w[3_to_7 5_to_11 7_to_11 7_to_14],
+                "age_range_in_years" => %w[11_to_16 11_to_18 14_to_19],
                 "start_dates" => [
                   "October 2018",
                   "November 2018",

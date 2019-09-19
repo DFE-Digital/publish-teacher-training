@@ -25,6 +25,12 @@ FactoryBot.define do
       type { "PrimarySubject" }
     end
 
+    trait :primary_with_mathematics do
+      subject_name { 'Primary with mathematics' }
+      subject_code { '01' }
+      type { 'PrimarySubject' }
+    end
+
     trait :mathematics do
       subject_name { "Mathematics" }
       subject_code { "G1" }
