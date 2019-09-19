@@ -2,9 +2,10 @@
 #
 # Table name: subject
 #
-#  id           :integer          not null, primary key
+#  id           :bigint           not null, primary key
+#  type         :text
+#  subject_code :text
 #  subject_name :text
-#  subject_code :text             not null
 #
 
 require 'rails_helper'

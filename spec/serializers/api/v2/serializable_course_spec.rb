@@ -24,7 +24,7 @@ describe API::V2::SerializableCourse do
   it { should have_attribute(:start_date).with_value(time_now.strftime("%B %Y")) }
   it { should have_attribute :content_status }
   it { should have_attribute :ucas_status }
-  it { should have_attribute :funding }
+  it { should have_attribute :funding_type }
   it { should have_attribute :subjects }
   it { should have_attribute(:applications_open_from).with_value(date_today.to_s) }
   it { should have_attribute :is_send? }
@@ -118,23 +118,23 @@ describe API::V2::SerializableCourse do
     it { should have_relationship(:sites) }
   end
 
-  context "funding" do
+  context "funding_type" do
     context "fee-paying" do
       let(:course) { create(:course) }
 
-      it { expect(subject["attributes"]).to include("funding" => "apprenticeship") }
+      it { expect(subject["attributes"]).to include("funding_type" => "apprenticeship") }
     end
 
     context "apprenticeship" do
       let(:course) { create(:course, :with_apprenticeship) }
 
-      it { expect(subject["attributes"]).to include("funding" => "apprenticeship") }
+      it { expect(subject["attributes"]).to include("funding_type" => "apprenticeship") }
     end
 
     context "salaried" do
       let(:course) { create(:course, :with_salary) }
 
-      it { expect(subject["attributes"]).to include("funding" => "salary") }
+      it { expect(subject["attributes"]).to include("funding_type" => "salary") }
     end
   end
 

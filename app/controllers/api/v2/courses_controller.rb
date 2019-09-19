@@ -134,7 +134,7 @@ module API
       end
 
       def update_course
-        return unless course_params.values.any?
+        return unless course_params.values.any? || funding_type_params.present?
         return unless @course.course_params_assignable(course_params)
 
         @course.assign_attributes(course_params)
@@ -195,7 +195,7 @@ module API
                   :study_mode,
                   :is_send,
                   :accrediting_provider_code,
-                  :program_type,)
+                  :funding_type)
           .permit(
             :about_course,
             :course_length,
@@ -232,7 +232,7 @@ module API
                   :type,
                   :sites_ids,
                   :sites_types,
-                  :course_code,)
+                  :course_code)
           .permit(
             :english,
             :maths,
@@ -245,12 +245,16 @@ module API
             :is_send,
             :name,
             :accrediting_provider_code,
-            :program_type,
+            :funding_type
           )
       end
 
       def site_ids
         params.fetch(:course, {})[:sites_ids]
+      end
+
+      def funding_type_params
+        params.fetch(:course, {})[:funding_type]
       end
 
       def has_synced?

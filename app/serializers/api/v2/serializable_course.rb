@@ -13,11 +13,11 @@ module API
 
       attributes :findable?, :open_for_applications?, :has_vacancies?,
                  :course_code, :name, :study_mode, :qualification, :description,
-                 :content_status, :ucas_status, :funding,
+                 :content_status, :ucas_status, :funding_type,
                  :level, :is_send?, :has_bursary?, :has_scholarship_and_bursary?,
                  :has_early_career_payments?, :bursary_amount, :scholarship_amount,
                  :english, :maths, :science, :gcse_subjects_required, :age_range_in_years,
-                 :accrediting_provider, :accrediting_provider_code, :program_type
+                 :accrediting_provider, :accrediting_provider_code
 
       attribute :start_date do
         @object.start_date.strftime("%B %Y") if @object.start_date

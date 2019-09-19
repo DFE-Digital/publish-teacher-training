@@ -6,7 +6,6 @@ module Courses
     include QualificationConcern
     include StartDateConcern
     include StudyModeConcern
-    include ProgramTypeConcern
     include IsSendConcern
     include ApplicationsOpenConcern
 
@@ -22,7 +21,6 @@ module Courses
           age_range_in_years: age_range_options,
           start_dates: start_date_options,
           study_modes: study_mode_options,
-          program_type: program_type_options,
           show_is_send: show_is_send?,
           show_start_date: show_start_date?,
           show_applications_open: show_applications_open?

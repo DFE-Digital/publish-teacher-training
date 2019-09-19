@@ -27,8 +27,8 @@ module API
         applications_open_from
         study_mode
         is_send
-        program_type
         accrediting_provider_code
+        funding_type
       ].freeze
 
       attributes(*COURSE_ATTRIBUTES)

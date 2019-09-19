@@ -25,6 +25,7 @@
 #  age_range_in_years        :string
 #  applications_open_from    :date
 #  is_send                   :boolean          default(FALSE)
+#  level                     :integer          default(0)
 #
 
 class Course < ApplicationRecord
@@ -290,7 +291,7 @@ class Course < ApplicationRecord
     :not_running
   end
 
-  def funding
+  def funding_type
     if school_direct_salaried_training_programme?
       'salary'
     elsif pg_teaching_apprenticeship?
@@ -309,7 +310,7 @@ class Course < ApplicationRecord
   end
 
   def is_fee_based?
-    funding == 'fee'
+    funding_type == 'fee'
   end
 
   # https://www.gov.uk/government/publications/initial-teacher-training-criteria/initial-teacher-training-itt-criteria-and-supporting-advice#c11-gcse-standard-equivalent
@@ -410,6 +411,27 @@ class Course < ApplicationRecord
 
   def is_published?
     content_status == :published
+  end
+
+  def funding_type=(funding_type)
+    case funding_type
+    when 'salary'
+      if !self_accredited?
+        update(program_type: :school_direct_salaried_training_programme)
+      else
+        errors.add(:program_type, "Salary is not valid for a self accredited course")
+      end
+    when 'apprenticeship'
+      update(program_type: :pg_teaching_apprenticeship)
+    when 'fee'
+      if !self_accredited?
+        update(program_type: :school_direct_training_programme)
+      elsif provider.is_it_really_really_a_scitt?
+        update(program_type: :scitt_programme)
+      else
+        update(program_type: :higher_education_programme)
+      end
+    end
   end
 
 private
