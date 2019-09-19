@@ -179,6 +179,24 @@
         "description": "The name or role of the container to identify individual containers in multi-container setup."
       }
     },
+    "mcbeSystemAuthenticationToken":{
+      "type": "string",
+      "metadata": {
+        "description": "The token used for system level API requests."
+      }
+    },
+    "containerCPUCores": {
+      "type": "string",
+      "metadata": {
+        "description": "The number of CPU cores for Azure Container Instance."
+      }
+    },
+    "containerMemory": {
+      "type": "string",
+      "metadata": {
+        "description": "The number of memory in GB for Azure Container Instance."
+      }
+    },
     "redisCacheName": {
       "type": "string",
       "metadata": {
@@ -338,6 +356,10 @@
                 "value": "[parameters('govukNotifyWelcomeEmailTemplateId')]"
               },
               {
+                "name": "SETTINGS__SYSTEM_AUTHENTICATION_TOKEN",
+                "value": "[parameters('mcbeSystemAuthenticationToken')]"
+              },
+              {
                 "name": "SETTINGS__MCBG__REDIS_PASSWORD",
                 "value": "[concat(listKeys(resourceId('Microsoft.Cache/Redis', parameters('redisCacheName')), '2018-03-01').primaryKey)]"
               },
@@ -472,6 +494,12 @@
           },
           "imageName": {
             "value": "[parameters('backgroundContainerImageReference')]"
+          },
+          "numberCpuCores":{
+            "value": "[parameters('containerCPUCores')]"
+          },
+          "memory":{
+            "value": "[parameters('containerMemory')]"
           },
           "environmentVariables": {
             "value": [
