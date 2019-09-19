@@ -77,6 +77,13 @@ module API
         @object.generated_ucas_contact('finance')
       end
 
+      attribute :gt12_contact do
+        @object.ucas_preferences&.gt12_response_destination
+      end
+
+      attribute :application_alert_contact do
+        @object.ucas_preferences&.application_alert_email
+      end
 
       enrichment_attribute :train_with_us
       enrichment_attribute :train_with_disability

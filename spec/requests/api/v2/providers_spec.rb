@@ -256,14 +256,16 @@ describe 'Providers API v2', type: :request do
               "description" => description,
             }],
             "admin_contact" => {
-                "name" => contact.name,
-                "email" => contact.email,
-                "telephone" => contact.telephone
-               },
-               "utt_contact" => nil,
-               "web_link_contact" => nil,
-               "fraud_contact" => nil,
-               "finance_contact" => nil
+              "name" => contact.name,
+              "email" => contact.email,
+              "telephone" => contact.telephone
+            },
+            "utt_contact" => nil,
+            "web_link_contact" => nil,
+            "fraud_contact" => nil,
+            "finance_contact" => nil,
+            "gt12_contact" => nil,
+            "application_alert_contact" => nil,
           },
           "relationships" => {
             "sites" => {
@@ -337,14 +339,16 @@ describe 'Providers API v2', type: :request do
                 "description" => description,
               }],
               "admin_contact" => {
-                   "name" => contact.name,
-                   "email" => contact.email,
-                   "telephone" => contact.telephone
-                 },
-                 "utt_contact" => nil,
-                 "web_link_contact" => nil,
-                 "fraud_contact" => nil,
-                 "finance_contact" => nil
+                "name" => contact.name,
+                "email" => contact.email,
+                "telephone" => contact.telephone
+              },
+              "utt_contact" => nil,
+              "web_link_contact" => nil,
+              "fraud_contact" => nil,
+              "finance_contact" => nil,
+              "gt12_contact" => nil,
+              "application_alert_contact" => nil,
             },
             "relationships" => {
               "sites" => {
