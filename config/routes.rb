@@ -145,6 +145,10 @@ Rails.application.routes.draw do
 
       get 'build_new_course', to: 'courses#build_new'
     end
+
+    namespace :system do
+      post :sync, to: 'force_sync#sync'
+    end
   end
 
   get 'error_500', to: 'error#error_500'

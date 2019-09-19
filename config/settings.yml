@@ -19,3 +19,4 @@ govuk_notify:
   welcome_email_template_id: please_change_me
 mcbg:
   redis_password: <%= SecureRandom.base64 %>
+system_authentication_token: <%= SecureRandom.base64 %>

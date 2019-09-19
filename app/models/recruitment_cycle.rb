@@ -36,6 +36,13 @@ class RecruitmentCycle < ApplicationRecord
     RecruitmentCycle.current_recruitment_cycle == self
   end
 
+  def self.syncable_courses
+    current_recruitment_cycle.providers
+      .includes(:enrichments, :latest_published_enrichment)
+      .select(&:publishable?)
+      .flat_map(&:syncable_courses)
+  end
+
   def to_s
     following_year = Date.new(year.to_i, 1, 1) + 1.year
     "#{year}/#{following_year.strftime('%y')}"

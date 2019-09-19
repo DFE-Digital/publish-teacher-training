@@ -56,7 +56,11 @@ describe Course, type: :model do
   end
 
   describe 'validations' do
-    it { should validate_uniqueness_of(:course_code).scoped_to(:provider_id) }
+    it 'validates scoped to provider_id and only on create and update' do
+      expect(create(:course)).to validate_uniqueness_of(:course_code)
+                                  .scoped_to(:provider_id)
+                                  .on(%i[create update])
+    end
 
     describe 'valid?' do
       let(:course) { create(:course, enrichments: [invalid_enrichment]) }
@@ -153,26 +157,90 @@ describe Course, type: :model do
     let(:applications_being_accepted_now) { build(:site_status, :applications_being_accepted_now) }
     let(:applications_being_accepted_in_future) { build(:site_status, :applications_being_accepted_in_future) }
     let(:site_status_with_no_vacancies) { build(:site_status, :with_no_vacancies) }
-    describe 'findable?' do
-      context 'with at least one site status as findable' do
-        context 'single site status as findable' do
-          let(:subject) { create(:course, site_statuses: [findable]) }
 
-          its(:site_statuses) { should_not be_empty }
-          its(:findable?) { should be true }
+    describe '#findable_site_statuses' do
+      context 'with a site_statuses association that have been loaded' do
+        let(:course) { create(:course, site_statuses: []) }
+
+        it 'uses #select on the association' do
+          allow(course.site_statuses).to receive(:select).and_return([])
+
+          course.findable_site_statuses
+
+          expect(course.site_statuses).to have_received(:select)
         end
 
-        context 'single site status as findable and mix site status as non findable' do
-          let(:subject) {
-            create(:course, site_statuses: [findable,
-                                            with_any_vacancy,
-                                            default,
-                                            applications_being_accepted_now,
-                                            applications_being_accepted_in_future])
-          }
+        context 'with a findable site' do
+          subject { create(:course, site_statuses: [findable]) }
 
-          its(:site_statuses) { should_not be_empty }
-          its(:findable?) { should be true }
+          its(:findable_site_statuses) { should_not be_empty }
+        end
+
+        context 'with no findable sites' do
+          subject { create(:course, site_statuses: [suspended]) }
+
+          its(:findable_site_statuses) { should be_empty }
+        end
+
+        context 'with at least one findable sites' do
+          subject { create(:course, site_statuses: [findable, suspended]) }
+
+          its(:findable_site_statuses) { should_not be_empty }
+        end
+      end
+
+      context 'with a site_statuses association that has not been loaded' do
+        let(:course) { create(:course, site_statuses: []) }
+
+        it 'uses #select on the association' do
+          course_with_site_statuses_not_loaded = Course.find(course.id)
+          allow(course_with_site_statuses_not_loaded.site_statuses)
+            .to receive(:findable).and_return([])
+
+          course_with_site_statuses_not_loaded.findable_site_statuses
+
+          expect(course_with_site_statuses_not_loaded.site_statuses)
+            .to have_received(:findable)
+        end
+
+        context 'with a findable site' do
+          let(:course) { create(:course, site_statuses: [findable]) }
+
+          subject { Course.find(course.id) }
+
+          its(:findable_site_statuses) { should_not be_empty }
+        end
+
+        context 'with no findable sites' do
+          let(:course) { create(:course, site_statuses: [suspended]) }
+
+          subject { Course.find(course.id) }
+
+          its(:findable_site_statuses) { should be_empty }
+        end
+
+        context 'with at least one findable sites' do
+          let(:course) { create(:course, site_statuses: [findable, suspended]) }
+
+          subject { Course.find(course.id) }
+
+          its(:findable_site_statuses) { should_not be_empty }
+        end
+      end
+    end
+
+    describe '#findable?' do
+      context 'when #findable_site_statuses returns site statuses' do
+        it 'returns true' do
+          allow(course).to receive(:findable_site_statuses).and_return([findable])
+          expect(course.findable?).to be_truthy
+        end
+      end
+
+      context 'when #findable_site_statuses returns no site statuses' do
+        it 'returns false' do
+          allow(course).to receive(:findable_site_statuses).and_return([])
+          expect(course.findable?).to be_falsey
         end
       end
     end
@@ -225,6 +293,55 @@ describe Course, type: :model do
       end
     end
 
+    describe '#has_vacancies? (when site_statuses not loaded)' do
+      let(:findable_without_vacancies) { build(:site_status, :findable, :with_no_vacancies) }
+
+      context 'for a single site status that has vacancies' do
+        let(:subject) {
+          create(:course, site_statuses: [findable, applications_being_accepted_now, with_any_vacancy]).reload
+        }
+
+        its(:has_vacancies?) { should be true }
+      end
+
+      context 'for a site status with vacancies and others without' do
+        let(:findable_with_vacancies) { build(:site_status, :findable, :with_any_vacancy, :applications_being_accepted_now) }
+        let(:subject) {
+          create(:course, site_statuses: [findable_with_vacancies, findable_without_vacancies]).reload
+        }
+
+        its(:has_vacancies?) { should be true }
+      end
+
+      context 'when none of the sites have vacancies' do
+        let(:subject) {
+          create(:course, site_statuses: [findable_without_vacancies, findable_without_vacancies]).reload
+        }
+
+        its(:has_vacancies?) { should be false }
+      end
+
+      context 'when the site is findable but only opens in the future' do
+        let(:findable_with_vacancies) { build(:site_status, :findable, :with_any_vacancy, :applications_being_accepted_in_future) }
+        let(:subject) {
+          create(:course, site_statuses: [findable_with_vacancies]).reload
+        }
+        its(:has_vacancies?) { should be true }
+      end
+
+      context 'when only discontinued and suspended site statuses have vacancies' do
+        let(:findable_with_no_vacancies) { build(:site_status, :findable, :with_no_vacancies) }
+        let(:published_suspended_with_any_vacancy) { build(:site_status, :published, :discontinued, :with_any_vacancy) }
+        let(:published_discontinued_with_any_vacancy) { build(:site_status, :published, :suspended, :with_any_vacancy) }
+
+        let(:subject) {
+          create(:course, site_statuses: [findable_with_no_vacancies, published_suspended_with_any_vacancy, published_discontinued_with_any_vacancy]).reload
+        }
+
+        its(:has_vacancies?) { should be false }
+      end
+    end
+
     describe 'open_for_applications?' do
       context 'with at least one site status applications_being_accepted_now' do
         context 'single site status applications_being_accepted_now as it open now' do
@@ -251,6 +368,40 @@ describe Course, type: :model do
           let(:findable_with_vacancies_in_future) { build(:site_status, :findable, :with_any_vacancy, :applications_being_accepted_in_future) }
           let(:subject) {
             create(:course, site_statuses: [findable_with_vacancies_now, findable_with_vacancies_in_future])
+          }
+
+          its(:site_statuses) { should_not be_empty }
+          its(:open_for_applications?) { should be true }
+        end
+      end
+    end
+
+    describe 'open_for_applications? (when site_statuses not loaded)' do
+      context 'with at least one site status applications_being_accepted_now' do
+        context 'single site status applications_being_accepted_now as it open now' do
+          let(:findable_with_vacancies) { build(:site_status, :findable, :with_any_vacancy, :applications_being_accepted_now) }
+          let(:subject) {
+            create(:course, site_statuses: [findable_with_vacancies]).reload
+          }
+
+          its(:site_statuses) { should_not be_empty }
+          its(:open_for_applications?) { should be true }
+        end
+
+        context 'single site status applications_being_accepted_now as it open future' do
+          let(:subject) {
+            create(:course, site_statuses: [applications_being_accepted_in_future]).reload
+          }
+
+          its(:site_statuses) { should_not be_empty }
+          its(:open_for_applications?) { should be false }
+        end
+
+        context 'site statuses applications_being_accepted_now as it open now & future' do
+          let(:findable_with_vacancies_now) { build(:site_status, :findable, :with_any_vacancy, :applications_being_accepted_now) }
+          let(:findable_with_vacancies_in_future) { build(:site_status, :findable, :with_any_vacancy, :applications_being_accepted_in_future) }
+          let(:subject) {
+            create(:course, site_statuses: [findable_with_vacancies_now, findable_with_vacancies_in_future]).reload
           }
 
           its(:site_statuses) { should_not be_empty }

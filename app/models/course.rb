@@ -41,7 +41,9 @@ class Course < ApplicationRecord
 
   has_associated_audits
   audited
-  validates :course_code, uniqueness: { scope: :provider_id }
+  validates :course_code,
+            uniqueness: { scope: :provider_id },
+            on: %i[create update]
 
   enum program_type: {
     higher_education_programme: "HE",
@@ -210,15 +212,31 @@ class Course < ApplicationRecord
   end
 
   def findable?
-    site_statuses.findable.any?
+    findable_site_statuses.any?
+  end
+
+  def findable_site_statuses
+    if site_statuses.loaded?
+      site_statuses.select(&:findable?)
+    else
+      site_statuses.findable
+    end
   end
 
   def open_for_applications?
-    site_statuses.open_for_applications.any?
+    if site_statuses.loaded?
+      site_statuses.select(&:open_for_applications?).any?
+    else
+      site_statuses.open_for_applications.any?
+    end
   end
 
   def has_vacancies?
-    site_statuses.findable.with_vacancies.any?
+    if site_statuses.loaded?
+      site_statuses.select(&:findable?).select(&:with_vacancies?).any?
+    else
+      site_statuses.findable.with_vacancies.any?
+    end
   end
 
   def update_changed_at(timestamp: Time.now.utc)

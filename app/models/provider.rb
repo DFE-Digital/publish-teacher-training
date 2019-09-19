@@ -131,7 +131,13 @@ class Provider < ApplicationRecord
   after_validation :remove_unnecessary_enrichments_validation_message
 
   def syncable_courses
-    courses.select(&:syncable?)
+    courses.includes(
+      :enrichments,
+      :subjects,
+      :sites,
+      site_statuses: :site,
+      provider: %i[enrichments latest_published_enrichment sites]
+    ).select(&:syncable?)
   end
 
   # Currently Provider#contact_info isn't used but will likely be needed when
