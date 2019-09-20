@@ -73,7 +73,7 @@ describe RecruitmentCycle, type: :model do
         create(:course, provider: provider,
                site_statuses: [site_status],
                enrichments: [course_enrichment],
-               subjects: subjects)
+               ucas_subjects: subjects)
       end
       let(:syncable_courses) { [course] }
 
