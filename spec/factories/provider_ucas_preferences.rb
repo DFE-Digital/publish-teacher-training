@@ -17,6 +17,7 @@ FactoryBot.define do
     provider
 
     application_alert_email { Faker::Internet.email }
+    gt12_response_destination { Faker::Internet.email }
 
     type_of_gt12 do
       %i[

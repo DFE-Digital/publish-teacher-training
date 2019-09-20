@@ -212,9 +212,11 @@ describe 'Providers API v2', type: :request do
              organisations: [organisation],
              enrichments: [enrichment],
              courses: courses,
-             contacts: [contact])
+             contacts: [contact],
+             ucas_preferences: ucas_preferences)
     end
     let(:contact) { build(:contact) }
+    let(:ucas_preferences) { build(:provider_ucas_preference) }
 
     let(:token) do
       JWT.encode payload,
@@ -264,8 +266,9 @@ describe 'Providers API v2', type: :request do
             "web_link_contact" => nil,
             "fraud_contact" => nil,
             "finance_contact" => nil,
-            "gt12_contact" => nil,
-            "application_alert_contact" => nil,
+            "gt12_contact" => provider.ucas_preferences.gt12_response_destination.to_s,
+            "application_alert_contact" => provider.ucas_preferences.application_alert_email,
+            "type_of_gt12" => provider.ucas_preferences.type_of_gt12.to_s
           },
           "relationships" => {
             "sites" => {
@@ -347,8 +350,9 @@ describe 'Providers API v2', type: :request do
               "web_link_contact" => nil,
               "fraud_contact" => nil,
               "finance_contact" => nil,
-              "gt12_contact" => nil,
-              "application_alert_contact" => nil,
+              "gt12_contact" => provider.ucas_preferences.gt12_response_destination.to_s,
+              "application_alert_contact" => provider.ucas_preferences.application_alert_email,
+              "type_of_gt12" => provider.ucas_preferences.type_of_gt12.to_s
             },
             "relationships" => {
               "sites" => {

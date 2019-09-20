@@ -32,6 +32,7 @@ module API
         update_enrichment
         update_accrediting_enrichment
         update_ucas_contacts
+        update_ucas_preferences
 
         if @provider.valid?
           render jsonapi: @provider.reload, include: params[:include]
@@ -155,6 +156,13 @@ module API
         end
       end
 
+      def update_ucas_preferences
+        return if ucas_preferences_params.blank?
+
+        @provider.ucas_preferences.assign_attributes(ucas_preferences_params)
+        @provider.ucas_preferences.save
+      end
+
       def accredited_bodies_params
         params
           .fetch(:provider, {})
@@ -175,6 +183,8 @@ module API
             :web_link_contact,
             :fraud_contact,
             :finance_contact,
+            :type_of_gt12,
+            :gt12_contact,
           )
           .permit(accredited_bodies: %i[provider_code provider_name description])
       end
@@ -189,6 +199,8 @@ module API
             :web_link_contact,
             :fraud_contact,
             :finance_contact,
+            :type_of_gt12,
+            :gt12_contact,
           )
           .permit(
             :train_with_us,
@@ -221,6 +233,8 @@ module API
             :postcode,
             :region_code,
             :accredited_bodies,
+            :type_of_gt12,
+            :gt12_contact,
           )
           .permit(
             admin_contact: %w[name email telephone],
@@ -228,6 +242,34 @@ module API
             web_link_contact: %w[name email telephone],
             fraud_contact: %w[name email telephone],
             finance_contact: %w[name email telephone],
+          )
+      end
+
+      def ucas_preferences_params
+        params
+          .fetch(:provider, {})
+          .except(
+            :accredited_bodies,
+            :admin_contact,
+            :utt_contact,
+            :web_link_contact,
+            :fraud_contact,
+            :finance_contact,
+            :train_with_us,
+            :train_with_disability,
+            :email,
+            :telephone,
+            :website,
+            :address1,
+            :address2,
+            :address3,
+            :address4,
+            :postcode,
+            :region_code,
+          )
+          .permit(
+            :type_of_gt12,
+            :gt12_contact,
           )
       end
 
