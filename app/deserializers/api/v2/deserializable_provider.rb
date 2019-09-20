@@ -19,6 +19,8 @@ module API
         web_link_contact
         fraud_contact
         finance_contact
+        type_of_gt12
+        gt12_contact
       ].freeze
 
       attributes(*PROVIDER_ATTRIBUTES)

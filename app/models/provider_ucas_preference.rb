@@ -30,4 +30,8 @@ class ProviderUCASPreference < ApplicationRecord
          accredited_programmes: 'Yes - for accredited programmes only',
   },
        _prefix: 'send_application_alerts_for'
+
+  def gt12_contact=(gt12_contact)
+    update(gt12_response_destination: gt12_contact)
+  end
 end
