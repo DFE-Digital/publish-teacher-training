@@ -85,6 +85,10 @@ module API
         @object.ucas_preferences&.application_alert_email
       end
 
+      attribute :type_of_gt12 do
+        @object.ucas_preferences&.type_of_gt12
+      end
+
       enrichment_attribute :train_with_us
       enrichment_attribute :train_with_disability
 

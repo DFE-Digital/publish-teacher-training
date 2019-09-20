@@ -27,6 +27,8 @@ describe API::V2::SerializableProvider do
   it { should have_attribute(:recruitment_cycle_year).with_value(provider.recruitment_cycle.year) }
   it { should have_attribute(:gt12_contact).with_value(provider.ucas_preferences.gt12_response_destination) }
   it { should have_attribute(:application_alert_contact).with_value(provider.ucas_preferences.application_alert_email) }
+  it { should have_attribute(:type_of_gt12).with_value(provider.ucas_preferences.type_of_gt12) }
+
   it do
     should have_attribute(:accredited_bodies).with_value([
       {
