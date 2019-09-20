@@ -10,7 +10,7 @@ class BulkSyncCoursesToFindJob < ApplicationJob
       unless request.bulk_sync(syncable_courses)
         raise(RuntimeError.new(
                 "Error #{request.response.status} received syncing courses: " \
-                + courses.join('; ')
+                + syncable_courses.join('; ')
               ))
       end
     end
