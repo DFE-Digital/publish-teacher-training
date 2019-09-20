@@ -2,10 +2,9 @@
 #
 # Table name: subject
 #
-#  id           :bigint           not null, primary key
-#  type         :text
-#  subject_code :text
+#  id           :integer          not null, primary key
 #  subject_name :text
+#  subject_code :text             not null
 #
 
 FactoryBot.define do
