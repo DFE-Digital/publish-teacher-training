@@ -60,4 +60,18 @@ describe ProviderUCASPreference, type: :model do
       expect(provider.ucas_preferences.gt12_response_destination).to eq new_email_address
     end
   end
+
+  describe 'application_alert_contact=' do
+    let(:provider) { create(:provider, ucas_preferences: ucas_preferences) }
+    let(:ucas_preferences) { build(:provider_ucas_preference) }
+    let(:new_email_address) { 'test@email.com' }
+
+    before do
+      provider.ucas_preferences.application_alert_contact = new_email_address
+    end
+
+    it 'updates the providers gt12_response_destination attribute' do
+      expect(provider.ucas_preferences.application_alert_email).to eq new_email_address
+    end
+  end
 end

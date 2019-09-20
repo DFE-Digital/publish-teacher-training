@@ -34,4 +34,8 @@ class ProviderUCASPreference < ApplicationRecord
   def gt12_contact=(gt12_contact)
     update(gt12_response_destination: gt12_contact)
   end
+
+  def application_alert_contact=(application_alert_contact)
+    update(application_alert_email: application_alert_contact)
+  end
 end

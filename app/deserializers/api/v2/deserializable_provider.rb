@@ -21,6 +21,8 @@ module API
         finance_contact
         type_of_gt12
         gt12_contact
+        send_application_alerts
+        application_alert_contact
       ].freeze
 
       attributes(*PROVIDER_ATTRIBUTES)
