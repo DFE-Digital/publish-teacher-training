@@ -7,7 +7,7 @@ describe 'PATCH recruitment_cycles/year/providers/:provider_code/courses/:course
       "/providers/#{provider.provider_code}"
   end
 
-  def perform_request(updated_gt12_preferences)
+  def perform_request(updated_provider_ucas_preferences)
     jsonapi_data = jsonapi_renderer.render(
       provider,
       class: {
@@ -15,7 +15,7 @@ describe 'PATCH recruitment_cycles/year/providers/:provider_code/courses/:course
       }
     )
 
-    jsonapi_data[:data][:attributes] = updated_gt12_preferences
+    jsonapi_data[:data][:attributes] = updated_provider_ucas_preferences
 
     patch request_path,
           headers: { 'HTTP_AUTHORIZATION' => credentials },
@@ -38,21 +38,23 @@ describe 'PATCH recruitment_cycles/year/providers/:provider_code/courses/:course
   let(:credentials) do
     ActionController::HttpAuthentication::Token.encode_credentials(token)
   end
-  let(:ucas_preferences) { build(:provider_ucas_preference, type_of_gt12: :no_response) }
+  let(:ucas_preferences) { build(:provider_ucas_preference, type_of_gt12: :no_response, send_application_alerts: :all) }
 
 
-  let(:updated_gt12_preferences) do
+  let(:updated_provider_ucas_preferences) do
     {
       type_of_gt12: 'coming_or_not',
-      gt12_contact: 'test@mail.com'
+      gt12_contact: 'test@mail.com',
+      application_alert_contact: 'application_alert@mail.com',
+      send_application_alerts: 'none'
     }
   end
 
   before do
-    perform_request(updated_gt12_preferences)
+    perform_request(updated_provider_ucas_preferences)
   end
 
-  context "provider has updated g12 preferences" do
+  context "provider has updated provider ucas_preferences" do
     it "returns http success" do
       expect(response).to have_http_status(:success)
     end
@@ -60,8 +62,10 @@ describe 'PATCH recruitment_cycles/year/providers/:provider_code/courses/:course
     subject { provider.ucas_preferences.reload }
 
     describe 'type_of_gt12' do
-      its(:type_of_gt12) { should eq updated_gt12_preferences[:type_of_gt12] }
-      its(:gt12_response_destination) { should eq updated_gt12_preferences[:gt12_contact] }
+      its(:type_of_gt12) { should eq updated_provider_ucas_preferences[:type_of_gt12] }
+      its(:gt12_response_destination) { should eq updated_provider_ucas_preferences[:gt12_contact] }
+      its(:application_alert_email) { should eq updated_provider_ucas_preferences[:application_alert_contact] }
+      its(:send_application_alerts) { should eq updated_provider_ucas_preferences[:send_application_alerts] }
     end
   end
 end

@@ -185,6 +185,8 @@ module API
             :finance_contact,
             :type_of_gt12,
             :gt12_contact,
+            :application_alert_contact,
+            :send_application_alerts,
           )
           .permit(accredited_bodies: %i[provider_code provider_name description])
       end
@@ -201,6 +203,8 @@ module API
             :finance_contact,
             :type_of_gt12,
             :gt12_contact,
+            :application_alert_contact,
+            :send_application_alerts,
           )
           .permit(
             :train_with_us,
@@ -235,6 +239,8 @@ module API
             :accredited_bodies,
             :type_of_gt12,
             :gt12_contact,
+            :application_alert_contact,
+            :send_application_alerts,
           )
           .permit(
             admin_contact: %w[name email telephone],
@@ -270,6 +276,8 @@ module API
           .permit(
             :type_of_gt12,
             :gt12_contact,
+            :application_alert_contact,
+            :send_application_alerts,
           )
       end
 

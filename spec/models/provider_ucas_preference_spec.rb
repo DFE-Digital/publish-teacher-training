@@ -60,4 +60,32 @@ describe ProviderUCASPreference, type: :model do
       expect(provider.ucas_preferences.gt12_response_destination).to eq new_email_address
     end
   end
+
+  describe 'application_alert_contact= (email)' do
+    let(:provider) { create(:provider, ucas_preferences: ucas_preferences) }
+    let(:old_application_alert_contact) { 'old@example.org' }
+    let(:ucas_preferences) { build(:provider_ucas_preference, application_alert_email: old_application_alert_contact) }
+    let(:new_application_alert_contact) { 'new@example.com' }
+
+    it 'updates the providers application_alert_email attribute' do
+      expect { provider.ucas_preferences.application_alert_contact = new_application_alert_contact }
+        .to change { provider.ucas_preferences.application_alert_email }
+              .from(old_application_alert_contact)
+              .to(new_application_alert_contact)
+    end
+  end
+
+  describe 'application_alert_contact= (url)' do
+    let(:provider) { create(:provider, ucas_preferences: ucas_preferences) }
+    let(:old_application_alert_contact) { 'https://example.org/foo/bar' }
+    let(:ucas_preferences) { build(:provider_ucas_preference, application_alert_email: old_application_alert_contact) }
+    let(:new_application_alert_contact) { 'http://example.com/' }
+
+    it 'updates the providers application_alert_email attribute' do
+      expect { provider.ucas_preferences.application_alert_contact = new_application_alert_contact }
+        .to change { provider.ucas_preferences.application_alert_email }
+              .from(old_application_alert_contact)
+              .to(new_application_alert_contact)
+    end
+  end
 end
