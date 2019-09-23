@@ -44,7 +44,8 @@ class CreateSubjectTable < ActiveRecord::Migration[5.2]
         { subject_name: 'Psychology', subject_code: 'C8' },
         { subject_name: 'Religious Education', subject_code: 'V6' },
         { subject_name: 'Social Sciences', subject_code: '14' },
-        #no subject_code
+        # NOTE: no subject_code for 'Modern Languages' because this is just a stub used to trigger
+        # selection of actual entries from `modern_languages` list
         { subject_name: 'Modern Languages', subject_code: nil }
       ]
 
