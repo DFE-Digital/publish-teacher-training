@@ -14,7 +14,7 @@ class CleanUpCourseSubjectDataPostMigration < ActiveRecord::Migration[5.2]
       end
 
       geography = Subject.find_by!(subject_name: 'Geography')
-      pe = Subject.find_by!(subject_name: 'Physical Education')
+      pe = Subject.find_by!(subject_name: 'Physical education')
 
       c = courses.find_by!(course_code: '3CZ2')
       c.update(level: 'secondary', subjects: [pe, geography])
@@ -22,7 +22,7 @@ class CleanUpCourseSubjectDataPostMigration < ActiveRecord::Migration[5.2]
       modern_languages = Subject.find_by!(subject_name: 'Modern Languages')
 
       modern_language_courses = courses.where(subject: { subject_name: ['French',
-                                                                        'English as a Second Language',
+                                                                        'English as a second or other language',
                                                                         'German',
                                                                         'Italian',
                                                                         'Japanese',
