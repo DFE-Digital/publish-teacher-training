@@ -21,9 +21,9 @@ mcbg:
   redis_password: <%= SecureRandom.base64 %>
 system_authentication_token: <%= SecureRandom.base64 %>
 logstash:
-  type: tcp,
-  host: our logstash host
-  port: our port
+  type: tcp
+  host: # Our hostname here
+  port: # Our port here
   ssl_enable: true
 
 
