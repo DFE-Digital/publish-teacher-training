@@ -385,6 +385,14 @@
               {
                 "name": "WEBSITE_SLOT_POLL_WORKER_FOR_CHANGE_NOTIFICATION",
                 "value": "0"
+              },
+              {
+                "name": "SETTINGS__LOGSTASH__HOST",
+                "value": "[parameters('logstashHost')]"
+              },
+              {
+                "name": "SETTINGS__LOGSTASH__PORT",
+                "value": "[parameters('logstashPort')]"
               }
             ]
           },
@@ -574,7 +582,6 @@
                 "name": "SETTINGS__LOGSTASH__PORT",
                 "value": "[parameters('logstashPort')]"
               }
-
             ]
           }
         }
