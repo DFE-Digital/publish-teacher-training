@@ -35,7 +35,7 @@ Rails.application.configure do
   # Logging
   config.log_level = :info
   config.log_tags = [:request_id] # Prepend all log lines with the following tags.
-  config.logger = ActiveSupport::Logger.new(STDOUT)
+  config.logger = LogStashLogger.new(Settings.logstash.to_h)
   config.active_record.logger = nil # Don't log SQL in production
 
   # Use a different cache store in production.

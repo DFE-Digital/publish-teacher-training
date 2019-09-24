@@ -91,6 +91,9 @@ gem 'govuk_notify_rails'
 gem 'sidekiq'
 gem 'sidekiq-cron'
 
+# Offshore logging
+gem 'logstash-logger', '~> 0.26.1'
+
 group :development, :test do
   # add info about db structure to models and other files
   gem 'annotate'

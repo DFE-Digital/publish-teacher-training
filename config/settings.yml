@@ -20,3 +20,10 @@ govuk_notify:
 mcbg:
   redis_password: <%= SecureRandom.base64 %>
 system_authentication_token: <%= SecureRandom.base64 %>
+logstash:
+  type: tcp,
+  host: our logstash host
+  port: our port
+  ssl_enable: true
+
+
