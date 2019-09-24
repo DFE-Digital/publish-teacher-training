@@ -1,23 +1,23 @@
 require "rails_helper"
 
-describe 'PATCH /providers/:provider_code/courses/:course_code' do
+describe "PATCH /providers/:provider_code/courses/:course_code" do
   let(:jsonapi_renderer) { JSONAPI::Serializable::Renderer.new }
 
   def perform_request(updated_accrediting_provider_code)
     jsonapi_data = jsonapi_renderer.render(
       course,
       class: {
-        Course: API::V2::SerializableCourse
-      }
+        Course: API::V2::SerializableCourse,
+      },
     )
 
     jsonapi_data[:data][:attributes] = updated_accrediting_provider_code
 
     patch "/api/v2/providers/#{course.provider.provider_code}" \
             "/courses/#{course.course_code}",
-          headers: { 'HTTP_AUTHORIZATION' => credentials },
+          headers: { "HTTP_AUTHORIZATION" => credentials },
           params: {
-            _jsonapi: jsonapi_data
+            _jsonapi: jsonapi_data,
           }
   end
   let(:organisation)      { create :organisation }
@@ -37,7 +37,7 @@ describe 'PATCH /providers/:provider_code/courses/:course_code' do
   end
 
   context "course has an updated accrediting_provider_code attribute" do
-    let(:accrediting_provider_code) { { accrediting_provider_code: '1AA' } }
+    let(:accrediting_provider_code) { { accrediting_provider_code: "1AA" } }
 
     it "returns http success" do
       expect(response).to have_http_status(:success)
@@ -50,7 +50,7 @@ describe 'PATCH /providers/:provider_code/courses/:course_code' do
 
   context "course has the same accrediting_provider_code value" do
     context "with values passed into the params" do
-      let(:accrediting_provider_code) { { accrediting_provider_code: '1AA' } }
+      let(:accrediting_provider_code) { { accrediting_provider_code: "1AA" } }
 
       it "returns http success" do
         expect(response).to have_http_status(:success)

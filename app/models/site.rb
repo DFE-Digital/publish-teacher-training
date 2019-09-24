@@ -21,7 +21,7 @@ class Site < ApplicationRecord
   include RegionCode
   include TouchProvider
 
-  POSSIBLE_CODES = (('A'..'Z').to_a + ('0'..'9').to_a + ['-']).freeze
+  POSSIBLE_CODES = (("A".."Z").to_a + ("0".."9").to_a + ["-"]).freeze
   EASILY_CONFUSED_CODES = %w[1 I 0 O -].freeze # these ought to be assigned last
   DESIRABLE_CODES = (POSSIBLE_CODES - EASILY_CONFUSED_CODES).freeze
 

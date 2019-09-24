@@ -1,5 +1,5 @@
-name 'console'
-summary 'Launch a rails console (useful for remote environments)'
+name "console"
+summary "Launch a rails console (useful for remote environments)"
 
 instance_eval(&MCB.remote_connect_options)
 

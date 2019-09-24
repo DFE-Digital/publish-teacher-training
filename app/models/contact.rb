@@ -13,18 +13,18 @@
 #
 
 class Contact < ApplicationRecord
-  self.inheritance_column = '_unused'
+  self.inheritance_column = "_unused"
 
   belongs_to :provider
 
   audited associated_with: :provider
 
   enum type: {
-    admin: 'admin',
-         utt: 'utt',
-         web_link: 'web_link',
-         fraud: 'fraud',
-         finance: 'finance'
+    admin: "admin",
+         utt: "utt",
+         web_link: "web_link",
+         fraud: "fraud",
+         finance: "finance",
   },
-       _suffix: 'contact'
+       _suffix: "contact"
 end

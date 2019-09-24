@@ -1,4 +1,4 @@
-require 'rails_helper'
+require "rails_helper"
 
 describe SyncCoursesToFindJob, type: :job do
   let(:course) { create :course }
@@ -8,14 +8,14 @@ describe SyncCoursesToFindJob, type: :job do
       .to receive(:sync).and_return(true)
   end
 
-  it 'queues the expected job' do
+  it "queues the expected job" do
     described_class.perform_later(course)
 
     expect(SyncCoursesToFindJob)
-      .to have_been_enqueued.with.on_queue('find_sync')
+      .to have_been_enqueued.with.on_queue("find_sync")
   end
 
-  it 'syncs using the SearchAndCompareAPIService' do
+  it "syncs using the SearchAndCompareAPIService" do
     expect_any_instance_of(SearchAndCompareAPIService::Request)
       .to receive(:sync).with([course])
 

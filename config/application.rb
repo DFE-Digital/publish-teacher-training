@@ -1,4 +1,4 @@
-require_relative 'boot'
+require_relative "boot"
 
 require "rails"
 # Pick the frameworks you want:
@@ -30,9 +30,9 @@ module ManageCoursesBackend
     config.active_record.pluralize_table_names = false
 
     config.action_dispatch.rescue_responses = {
-      'Pundit::NotAuthorizedError' => :forbidden,
-      'PG::ConnectionBad' => :service_unavailable,
-      'AASM::InvalidTransition' => :bad_request
+      "Pundit::NotAuthorizedError" => :forbidden,
+      "PG::ConnectionBad" => :service_unavailable,
+      "AASM::InvalidTransition" => :bad_request,
     }
   end
 end

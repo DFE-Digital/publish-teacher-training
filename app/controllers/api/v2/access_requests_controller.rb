@@ -52,7 +52,7 @@ module API
           :last_name,
           :organisation,
           :reason,
-          :requester_email
+          :requester_email,
         ).with_defaults requester_email: current_user.email
       end
     end

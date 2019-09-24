@@ -1,16 +1,16 @@
-require 'rails_helper'
+require "rails_helper"
 
 describe API::V2::SerializableSite do
   let(:site)     { create :site }
   let(:resource) { API::V2::SerializableSite.new object: site }
 
-  it 'sets type to sites' do
+  it "sets type to sites" do
     expect(resource.jsonapi_type).to eq :sites
   end
 
   subject { JSON.parse(resource.as_jsonapi.to_json) }
 
-  it { should have_type 'sites' }
+  it { should have_type "sites" }
   it { should have_attribute(:location_name).with_value(site.location_name) }
   it { should have_attribute(:address1).with_value(site.address1) }
   it { should have_attribute(:address2).with_value(site.address2) }

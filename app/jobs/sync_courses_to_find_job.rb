@@ -6,7 +6,7 @@ class SyncCoursesToFindJob < ApplicationJob
     unless request.sync(courses)
       raise(RuntimeError.new(
               "Error #{request.response.status} received syncing courses: " \
-              + courses.join('; ')
+              + courses.join("; "),
             ))
     end
   end

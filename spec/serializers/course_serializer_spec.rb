@@ -41,12 +41,12 @@ RSpec.describe CourseSerializer do
   it { should include(changed_at: course.changed_at.iso8601) }
   it { is_expected.to_not have_key(:is_send) } # Ensure V2 API is not being included.
 
-  context 'when the course is SEND' do
+  context "when the course is SEND" do
     let(:course) { create :course, provider: provider, is_send: true }
 
-    it 'includes a SEND subject' do
+    it "includes a SEND subject" do
       expect(subject[:subjects]).to include(
-        'subject_code' => 'U3', 'subject_name' => 'Special Educational Needs'
+        "subject_code" => "U3", "subject_name" => "Special Educational Needs",
       )
     end
   end

@@ -1,5 +1,5 @@
-summary 'Show changes made to a course record'
-usage 'audit <provider_code> <course_code>'
+summary "Show changes made to a course record"
+usage "audit <provider_code> <course_code>"
 param :provider_code, transform: ->(code) { code.upcase }
 param :course_code, transform: ->(code) { code.upcase }
 

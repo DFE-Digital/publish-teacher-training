@@ -1,4 +1,4 @@
-require 'rails_helper'
+require "rails_helper"
 
 describe BulkSyncCoursesToFindJob, type: :job do
   let(:course) do
@@ -16,14 +16,14 @@ describe BulkSyncCoursesToFindJob, type: :job do
       .to receive(:bulk_sync).and_return(true)
   end
 
-  it 'queues the expected job' do
+  it "queues the expected job" do
     described_class.perform_later
 
     expect(BulkSyncCoursesToFindJob)
-      .to have_been_enqueued.on_queue('find_sync')
+      .to have_been_enqueued.on_queue("find_sync")
   end
 
-  it 'syncs using the SearchAndCompareAPIService' do
+  it "syncs using the SearchAndCompareAPIService" do
     expect_any_instance_of(SearchAndCompareAPIService::Request)
       .to receive(:bulk_sync).with(syncable_courses)
 
@@ -40,7 +40,7 @@ describe BulkSyncCoursesToFindJob, type: :job do
                                                       .and_return(sacapi_service)
     end
 
-    it 'raises an error if it gets an error' do
+    it "raises an error if it gets an error" do
       expect {
         described_class.perform_now
       }.to raise_error(BulkSyncCoursesToFindJob::SearchAndCompareRequestError)
@@ -57,7 +57,7 @@ describe BulkSyncCoursesToFindJob, type: :job do
                                                       .and_return(sacapi_service)
     end
 
-    it 'raises an error if it gets an error' do
+    it "raises an error if it gets an error" do
       expect {
         described_class.perform_now
       }.not_to raise_error

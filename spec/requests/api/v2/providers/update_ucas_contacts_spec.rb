@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe 'PATCH recruitment_cycles/year/providers/:provider_code/courses/:course_code' do
+describe "PATCH recruitment_cycles/year/providers/:provider_code/courses/:course_code" do
   let(:jsonapi_renderer) { JSONAPI::Serializable::Renderer.new }
   let(:request_path) do
     "/api/v2/recruitment_cycles/#{recruitment_cycle.year}" +
@@ -11,21 +11,21 @@ describe 'PATCH recruitment_cycles/year/providers/:provider_code/courses/:course
     jsonapi_data = jsonapi_renderer.render(
       provider,
       class: {
-        Provider: API::V2::SerializableProvider
-      }
+        Provider: API::V2::SerializableProvider,
+      },
     )
 
     jsonapi_data[:data][:attributes] = updated_contacts
 
     patch request_path,
-          headers: { 'HTTP_AUTHORIZATION' => credentials },
+          headers: { "HTTP_AUTHORIZATION" => credentials },
           params: {
-            _jsonapi: jsonapi_data
+            _jsonapi: jsonapi_data,
           }
   end
 
   def slice_contact(contact)
-    contact.slice('name', 'email', 'telephone')
+    contact.slice("name", "email", "telephone")
   end
 
   def find_contact(type)
@@ -73,40 +73,40 @@ describe 'PATCH recruitment_cycles/year/providers/:provider_code/courses/:course
 
     subject { find_contact(type) }
 
-    describe 'admin contact' do
-      let(:type) { 'admin' }
+    describe "admin contact" do
+      let(:type) { "admin" }
 
       its(:name) { should eq admin_contact.name }
       its(:email) { should eq admin_contact.email }
       its(:telephone) { should eq admin_contact.telephone }
     end
 
-    describe 'utt contact' do
-      let(:type) { 'utt' }
+    describe "utt contact" do
+      let(:type) { "utt" }
 
       its(:name) { should eq utt_contact.name }
       its(:email) { should eq utt_contact.email }
       its(:telephone) { should eq utt_contact.telephone }
     end
 
-    describe 'web link contact' do
-      let(:type) { 'web_link' }
+    describe "web link contact" do
+      let(:type) { "web_link" }
 
       its(:name) { should eq web_link_contact.name }
       its(:email) { should eq web_link_contact.email }
       its(:telephone) { should eq web_link_contact.telephone }
     end
 
-    describe 'fraud contact' do
-      let(:type) { 'fraud' }
+    describe "fraud contact" do
+      let(:type) { "fraud" }
 
       its(:name) { should eq fraud_contact.name }
       its(:email) { should eq fraud_contact.email }
       its(:telephone) { should eq fraud_contact.telephone }
     end
 
-    describe 'finance contact' do
-      let(:type) { 'finance' }
+    describe "finance contact" do
+      let(:type) { "finance" }
 
       its(:name) { should eq finance_contact.name }
       its(:email) { should eq finance_contact.email }

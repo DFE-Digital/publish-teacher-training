@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe 'PATCH /providers/:provider_code/courses/:course_code with sites' do
+describe "PATCH /providers/:provider_code/courses/:course_code with sites" do
   let(:organisation) { create :organisation }
   let(:provider)     { create :provider, organisations: [organisation] }
   let(:user)         { create :user, organisations: [organisation] }
@@ -12,7 +12,7 @@ describe 'PATCH /providers/:provider_code/courses/:course_code with sites' do
 
   let(:course) { create :course, provider: provider, site_statuses: [site_status], subjects: [primary_subject] }
   let(:site_status) { build(:site_status) }
-  let(:primary_subject) { build(:subject, subject_name: 'primary') }
+  let(:primary_subject) { build(:subject, subject_name: "primary") }
   let(:site_to_add) { create :site, provider: provider }
   let(:unwanted_site) { create :site, provider: provider }
   let(:existing_site) { create :site, provider: provider }
@@ -25,7 +25,7 @@ describe 'PATCH /providers/:provider_code/courses/:course_code with sites' do
   let(:sites_payload) {
     [
       { "type" => "sites", "id" => existing_site.id.to_s },
-      { "type" => "sites", "id" => site_to_add.id.to_s }
+      { "type" => "sites", "id" => site_to_add.id.to_s },
     ]
   }
 
@@ -37,11 +37,11 @@ describe 'PATCH /providers/:provider_code/courses/:course_code with sites' do
           "type" => "courses",
           "relationships" => {
             "sites" => {
-              "data" => sites_payload
-            }
-          }
-        }
-      }
+              "data" => sites_payload,
+            },
+          },
+        },
+      },
     }
   end
 
@@ -49,7 +49,7 @@ describe 'PATCH /providers/:provider_code/courses/:course_code with sites' do
     stub_request(:put, %r{#{Settings.search_api.base_url}/api/courses/})
       .to_return(
         status: 200,
-        body: '{ "result": true }'
+        body: '{ "result": true }',
       )
   end
 
@@ -57,8 +57,8 @@ describe 'PATCH /providers/:provider_code/courses/:course_code with sites' do
     patch "/api/v2/providers/#{course.provider.provider_code}" \
             "/courses/#{course.course_code}",
           headers: {
-            'HTTP_AUTHORIZATION' => credentials,
-            'Content-Type': 'application/json'
+            "HTTP_AUTHORIZATION" => credentials,
+            'Content-Type': "application/json",
           },
           params: jsonapi_data.to_json
   end
@@ -100,7 +100,7 @@ describe 'PATCH /providers/:provider_code/courses/:course_code with sites' do
 
       it "suspends an unwanted site" do
         expect(
-          course.reload.site_statuses.find_by(site_id: unwanted_site.id).status
+          course.reload.site_statuses.find_by(site_id: unwanted_site.id).status,
         ).to eq("suspended")
       end
     end

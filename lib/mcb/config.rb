@@ -1,4 +1,4 @@
-require 'active_support/hash_with_indifferent_access'
+require "active_support/hash_with_indifferent_access"
 
 module MCB
   class Config < ActiveSupport::HashWithIndifferentAccess
@@ -11,7 +11,7 @@ module MCB
     def save
       FileUtils.mkdir_p(File.expand_path(@config_dir))
 
-      File.open(File.expand_path(@config_file), 'w', 0o600) do |f|
+      File.open(File.expand_path(@config_file), "w", 0o600) do |f|
         f.write(YAML.dump(to_h))
       end
     end

@@ -28,13 +28,13 @@ module API
           errors: [
             {
               status: 403,
-              title: 'Forbidden',
-              detail: 'The user has not accepted terms and conditions.'
-            }
+              title: "Forbidden",
+              detail: "The user has not accepted terms and conditions.",
+            },
           ],
           meta: {
-            error_type: :user_not_accepted_terms_and_conditions
-          }
+            error_type: :user_not_accepted_terms_and_conditions,
+          },
         }
         render json: error_body, status: :forbidden
       end

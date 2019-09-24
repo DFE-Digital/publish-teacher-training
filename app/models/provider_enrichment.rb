@@ -23,7 +23,7 @@ class ProviderEnrichment < ApplicationRecord
   enum status: { draft: 0, published: 1, rolled_over: 2 }
 
   belongs_to :provider,
-             inverse_of: 'enrichments'
+             inverse_of: "enrichments"
 
   audited except: :json_data,
           associated_with: :provider
@@ -37,20 +37,20 @@ class ProviderEnrichment < ApplicationRecord
   scope :draft, -> { where(status: %w[draft rolled_over]) }
 
   jsonb_accessor :json_data,
-                 email: [:string, store_key: 'Email'],
-                 website: [:string, store_key: 'Website'],
-                 address1: [:string, store_key: 'Address1'],
-                 address2: [:string, store_key: 'Address2'],
-                 address3: [:string, store_key: 'Address3'],
-                 address4: [:string, store_key: 'Address4'],
-                 postcode: [:string, store_key: 'Postcode'],
-                 region_code: [:integer, store_key: 'RegionCode'],
-                 telephone: [:string, store_key: 'Telephone'],
-                 train_with_us: [:string, store_key: 'TrainWithUs'],
+                 email: [:string, store_key: "Email"],
+                 website: [:string, store_key: "Website"],
+                 address1: [:string, store_key: "Address1"],
+                 address2: [:string, store_key: "Address2"],
+                 address3: [:string, store_key: "Address3"],
+                 address4: [:string, store_key: "Address4"],
+                 postcode: [:string, store_key: "Postcode"],
+                 region_code: [:integer, store_key: "RegionCode"],
+                 telephone: [:string, store_key: "Telephone"],
+                 train_with_us: [:string, store_key: "TrainWithUs"],
                  train_with_disability: [:string,
-                                         store_key: 'TrainWithDisability'],
+                                         store_key: "TrainWithDisability"],
                  accrediting_provider_enrichments: [:json,
-                                                    store_key: 'AccreditingProviderEnrichments']
+                                                    store_key: "AccreditingProviderEnrichments"]
 
   validates :train_with_us, words_count: { maximum: 250, message: "^Reduce the word count for training with you" }
   validates :train_with_disability, words_count: { maximum: 250, message: "^Reduce the word count for training with disabilities and other needs" }
@@ -58,7 +58,7 @@ class ProviderEnrichment < ApplicationRecord
   validates :email, email: true, on: :update, allow_nil: true
   validates :email, email: true, on: :publish
 
-  validates :telephone, phone: { message: '^Enter a valid telephone number' }, allow_nil: true
+  validates :telephone, phone: { message: "^Enter a valid telephone number" }, allow_nil: true
 
   validates :website, :telephone,
             :address1, :address3, :address4,
@@ -74,7 +74,7 @@ class ProviderEnrichment < ApplicationRecord
   end
 
   def publish(current_user)
-    update(status: 'published', last_published_at: Time.now.utc, updated_by_user_id: current_user.id)
+    update(status: "published", last_published_at: Time.now.utc, updated_by_user_id: current_user.id)
   end
 
   def accrediting_provider_enrichment(provider_code)
@@ -86,10 +86,10 @@ class ProviderEnrichment < ApplicationRecord
 private
 
   def ensure_region_code_is_an_integer_in_json_data
-    return if json_data['RegionCode'].blank?
-    return if json_data['RegionCode'].is_a?(Integer)
+    return if json_data["RegionCode"].blank?
+    return if json_data["RegionCode"].is_a?(Integer)
 
-    json_data['RegionCode'] = ProviderEnrichment.region_codes[json_data['RegionCode']]
+    json_data["RegionCode"] = ProviderEnrichment.region_codes[json_data["RegionCode"]]
   end
 
   def set_provider_code

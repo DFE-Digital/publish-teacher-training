@@ -26,7 +26,7 @@ RSpec.describe SiteSerializer do
   it { is_expected.to include(name: site.location_name, campus_code: site.code) }
   it { is_expected.to include(region_code: "%02d" % site.region_code_before_type_cast) }
 
-  describe 'SiteSerializer#region_code' do
+  describe "SiteSerializer#region_code" do
     subject do
       serialize(site)["region_code"]
     end

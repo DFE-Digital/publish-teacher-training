@@ -1,5 +1,5 @@
-name 'show'
-summary 'View a config value, or all config'
+name "show"
+summary "View a config value, or all config"
 
 run do |_opts, args, _cmd|
   if args.any?

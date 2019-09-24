@@ -23,7 +23,7 @@ describe SearchAndCompareAPIService do
       ActiveModel::Serializer::CollectionSerializer.new(
         [course],
         serializer: SearchAndCompare::CourseSerializer,
-        adapter: :attributes
+        adapter: :attributes,
       )
     end
 
@@ -44,14 +44,14 @@ describe SearchAndCompareAPIService do
       stub_request(http_verb, "#{Settings.search_api.base_url}/api/courses/")
         .with { |req| req.body == body.to_json }
         .to_return(
-          status: status
+          status: status,
         )
     end
 
-    describe 'sync' do
+    describe "sync" do
       subject {
         request.sync(
-          [course]
+          [course],
         )
       }
       describe "with a normal response" do
@@ -64,12 +64,12 @@ describe SearchAndCompareAPIService do
       end
     end
 
-    describe 'bulk_sync' do
+    describe "bulk_sync" do
       let(:http_verb) { :post }
 
       subject {
         request.bulk_sync(
-          [course]
+          [course],
         )
       }
       describe "with a normal response" do

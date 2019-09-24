@@ -1,4 +1,4 @@
-require 'rails_helper'
+require "rails_helper"
 
 describe Course, type: :model do
   describe "#enrichments" do
@@ -48,7 +48,7 @@ describe Course, type: :model do
       let(:enrichments) do
         [
           build(:course_enrichment, :published),
-          build(:course_enrichment, :published)
+          build(:course_enrichment, :published),
         ]
       end
 
@@ -70,7 +70,7 @@ describe Course, type: :model do
       subject.reload
     end
 
-    context 'on a course with only a draft enrichment' do
+    context "on a course with only a draft enrichment" do
       let(:enrichments) {
         [build(:course_enrichment, :initial_draft,
                created_at: 1.day.ago,
@@ -86,24 +86,24 @@ describe Course, type: :model do
 
       its(:changed_at) { should be_within(1.second).of Time.now.utc }
 
-      it 'publishes the draft' do
+      it "publishes the draft" do
         expect(enrichment).to be_published
       end
 
-      it 'updates enrichment updated_at to the current time' do
+      it "updates enrichment updated_at to the current time" do
         expect(enrichment.updated_at).to be_within(1.second).of Time.now.utc
       end
 
-      it 'updates last_published to the current time' do
+      it "updates last_published to the current time" do
         expect(enrichment.last_published_timestamp_utc).to be_within(1.second).of Time.now.utc
       end
 
-      it 'updates updated_by to the current user' do
+      it "updates updated_by to the current user" do
         expect(enrichment.updated_by_user_id).to eq user.id
       end
     end
 
-    context 'on a course with a draft enrichment and previously-published enrichments' do
+    context "on a course with a draft enrichment and previously-published enrichments" do
       let(:enrichments) do
         [
           build(:course_enrichment, :published, created_at: 5.days.ago),
@@ -114,7 +114,7 @@ describe Course, type: :model do
 
       subject { create(:course, enrichments: enrichments) }
 
-      it 'publishes the draft' do
+      it "publishes the draft" do
         subject.enrichments.each do |enrichment|
           expect(enrichment).to be_published
         end

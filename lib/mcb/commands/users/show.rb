@@ -1,6 +1,6 @@
-summary 'Show users info'
+summary "Show users info"
 param :id_or_email_or_sign_in_id
-usage 'show <id or email or sign-in id>'
+usage "show <id or email or sign-in id>"
 
 run do |opts, args, _cmd|
   MCB.init_rails(opts)

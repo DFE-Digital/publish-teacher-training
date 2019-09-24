@@ -70,7 +70,7 @@ module API
 
         if !@recruitment_cycle.current?
           raise RuntimeError.new(
-            "#{@provider} is not from the current recruitment cycle"
+            "#{@provider} is not from the current recruitment cycle",
           )
         end
 
@@ -91,7 +91,7 @@ module API
 
         render(
           jsonapi: found_providers,
-          class: { Provider: SerializableProviderSuggestion }
+          class: { Provider: SerializableProviderSuggestion },
         )
       end
 
@@ -103,7 +103,7 @@ module API
 
       def build_recruitment_cycle
         @recruitment_cycle = RecruitmentCycle.find_by(
-          year: params[:recruitment_cycle_year]
+          year: params[:recruitment_cycle_year],
         ) || RecruitmentCycle.current_recruitment_cycle
       end
 
@@ -112,7 +112,7 @@ module API
         @provider = @recruitment_cycle.providers
                       .includes(:latest_published_enrichment, :latest_enrichment)
                       .find_by!(
-                        provider_code: code.upcase
+                        provider_code: code.upcase,
                       )
       end
 
@@ -141,7 +141,7 @@ module API
 
         enrichment = @provider.enrichments.find_or_initialize_draft(current_user)
         enrichment.assign_attributes(enrichment_params)
-        enrichment.status = 'draft' if enrichment.rolled_over?
+        enrichment.status = "draft" if enrichment.rolled_over?
 
         enrichment.save
       end
@@ -150,7 +150,7 @@ module API
         return if ucas_contact_params.blank?
 
         ucas_contact_params.keys.each do |type|
-          contact = @provider.contacts.find_or_initialize_by(type: type.gsub(/_contact$/, ''))
+          contact = @provider.contacts.find_or_initialize_by(type: type.gsub(/_contact$/, ""))
           contact.assign_attributes(ucas_contact_params[type])
           contact.save
         end
@@ -217,7 +217,7 @@ module API
             :address3,
             :address4,
             :postcode,
-            :region_code
+            :region_code,
           )
       end
 

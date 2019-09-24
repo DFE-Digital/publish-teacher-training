@@ -1,4 +1,4 @@
-require 'mcb_helper'
+require "mcb_helper"
 
 describe MCB::Cli::BaseCli do
   def run_with_input_commands(*input_cmds)
@@ -18,7 +18,7 @@ describe MCB::Cli::BaseCli do
         initial_items: initial_items,
         possible_items: possible_items,
         select_all_option: select_all_option,
-        hidden_label: hidden_label
+        hidden_label: hidden_label,
       )
     end
 

@@ -29,7 +29,7 @@
 
 FactoryBot.define do
   factory :provider do
-    provider_name { 'ACME SCITT' + rand(1000000).to_s }
+    provider_name { "ACME SCITT" + rand(1000000).to_s }
     sequence(:provider_code) { |n| "A#{n}" }
     address1 { Faker::Address.street_address }
     address2 { Faker::Address.community }
@@ -40,13 +40,13 @@ FactoryBot.define do
     email { Faker::Internet.email }
     telephone { Faker::PhoneNumber.phone_number }
     url { Faker::Internet.url }
-    accrediting_provider { 'N' }
-    region_code { 'london' }
+    accrediting_provider { "N" }
+    region_code { "london" }
     organisations { build_list :organisation, 1 }
     association :recruitment_cycle, strategy: :find_or_create
 
     trait :accredited_body do
-      accrediting_provider { 'Y' }
+      accrediting_provider { "Y" }
     end
 
     transient do

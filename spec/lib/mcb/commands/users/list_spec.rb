@@ -1,15 +1,15 @@
-require 'mcb_helper'
-require 'csv'
+require "mcb_helper"
+require "csv"
 
-describe 'mcb users list' do
-  let(:lib_dir) { Rails.root.join('lib') }
+describe "mcb users list" do
+  let(:lib_dir) { Rails.root.join("lib") }
   let(:cmd) do
     Cri::Command.load_file(
-      "#{lib_dir}/mcb/commands/users/list.rb"
+      "#{lib_dir}/mcb/commands/users/list.rb",
     )
   end
 
-  it 'lists all the columns' do
+  it "lists all the columns" do
     user = create(:user)
 
     output = with_stubbed_stdout do
@@ -25,7 +25,7 @@ describe 'mcb users list' do
                                           user.last_login_date_utc)
   end
 
-  it 'lists all the users by default' do
+  it "lists all the users by default" do
     user1 = create(:user)
     user2 = create(:user)
 
@@ -38,7 +38,7 @@ describe 'mcb users list' do
     expect(output).to have_text_table_row(user2.id)
   end
 
-  it 'lists the given users by id' do
+  it "lists the given users by id" do
     user1 = create(:user)
     user2 = create(:user)
     user3 = create(:user)
@@ -53,7 +53,7 @@ describe 'mcb users list' do
     expect(output).not_to have_text_table_row(user3.id)
   end
 
-  it 'lists the given users by email' do
+  it "lists the given users by email" do
     user1 = create(:user)
     user2 = create(:user)
 
@@ -66,13 +66,13 @@ describe 'mcb users list' do
     expect(output).not_to have_text_table_row(user2.id)
   end
 
-  it 'lists active, non-admin users with the -o option' do
+  it "lists active, non-admin users with the -o option" do
     user1 = create(:user, :admin)
     user2 = create(:user, :inactive)
     user3 = create(:user, accept_terms_date_utc: Date.yesterday)
 
     output = with_stubbed_stdout do
-      cmd.run(['-o'])
+      cmd.run(["-o"])
     end
     output = output[:stdout]
 
@@ -81,7 +81,7 @@ describe 'mcb users list' do
     expect(output).to     have_text_table_row(user3.id)
   end
 
-  it 'exports the results to a CSV file' do
+  it "exports the results to a CSV file" do
     tmpfile = Tempfile.new
     tmpfile.close
 
@@ -89,7 +89,7 @@ describe 'mcb users list' do
     user2 = create(:user)
 
     with_stubbed_stdout do
-      cmd.run(['-c', tmpfile.path])
+      cmd.run(["-c", tmpfile.path])
     end
     table = CSV.read(tmpfile.path, headers: true)
 

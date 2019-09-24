@@ -1,6 +1,6 @@
-name 'set'
-summary 'Set a config value'
-usage 'set <key> <value>'
+name "set"
+summary "Set a config value"
+usage "set <key> <value>"
 param :name
 param :value
 

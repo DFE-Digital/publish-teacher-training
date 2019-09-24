@@ -1,12 +1,12 @@
-name 'psql'
-summary 'connect to the psql server for an app'
+name "psql"
+summary "connect to the psql server for an app"
 # h is used for help so used H instead
-option :H, 'host', 'override hostname of database - useful for connecting to restored copies.'\
-       ' Just the hostname, not the fully qualified name. E.g. bat-mcapi-restore-psql',
+option :H, "host", "override hostname of database - useful for connecting to restored copies."\
+       " Just the hostname, not the fully qualified name. E.g. bat-mcapi-restore-psql",
        argument: :optional
-option :f, 'source_file', 'source sql file to pass to psql to run',
+option :f, "source_file", "source sql file to pass to psql to run",
        argument: :optional
-option :c, 'sql_command', 'sql string to run',
+option :c, "sql_command", "sql string to run",
        argument: :optional
 
 instance_eval(&MCB.remote_connect_options)
@@ -19,9 +19,9 @@ run do |opts, _args, _cmd|
     MCB.configure_local_database_env
   end
 
-  ENV['PGPASSWORD'] = ENV['DB_PASSWORD']
-  user = ENV['DB_USERNAME']
-  host = ENV['DB_HOSTNAME']
+  ENV["PGPASSWORD"] = ENV["DB_PASSWORD"]
+  user = ENV["DB_USERNAME"]
+  host = ENV["DB_HOSTNAME"]
   if opts[:host]
     host = opts[:host] + ".postgres.database.azure.com"
     # The part of the username after the @ is the actual host you are actually connecting to.
@@ -30,7 +30,7 @@ run do |opts, _args, _cmd|
     # There was an attempt. https://is.gd/kT9DBe
     user = user.sub(/@.*/, "@#{opts[:host]}")
   end
-  psql_args = ["-h", host, "-U", user, "-d", ENV['DB_DATABASE']]
+  psql_args = ["-h", host, "-U", user, "-d", ENV["DB_DATABASE"]]
 
   source_file = opts[:source_file]
   if source_file

@@ -1,6 +1,6 @@
-summary 'Show changes made to a user record'
+summary "Show changes made to a user record"
 param :id_or_email_or_sign_in_id
-usage 'audit <id>'
+usage "audit <id>"
 
 run do |opts, args, _cmd|
   MCB.init_rails(opts)

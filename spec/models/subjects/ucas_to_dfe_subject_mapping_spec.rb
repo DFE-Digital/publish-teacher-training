@@ -15,9 +15,9 @@ module Subjects
         UCASToDFESubjectMapping.new(
           {
             ucas_subjects: ["english", "english literature"],
-            course_title_matches: ->(course_title) { course_title =~ /english/ }
+            course_title_matches: ->(course_title) { course_title =~ /english/ },
           },
-          "English"
+          "English",
         )
       }
 
@@ -34,7 +34,7 @@ module Subjects
           {
             ucas_subjects_match: ->(ucas_subjects) { ucas_subjects.size == 2 },
           },
-          "English"
+          "English",
         )
       }
 

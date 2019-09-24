@@ -9,44 +9,44 @@ module API
         end
       end
 
-      type 'providers'
+      type "providers"
 
       attributes :provider_code, :provider_name, :accredited_body?, :can_add_more_sites?, :content_status, :accredited_bodies
 
       attribute :address1 do
-        @object.external_contact_info['address1']
+        @object.external_contact_info["address1"]
       end
 
       attribute :address2 do
-        @object.external_contact_info['address2']
+        @object.external_contact_info["address2"]
       end
 
       attribute :address3 do
-        @object.external_contact_info['address3']
+        @object.external_contact_info["address3"]
       end
 
       attribute :address4 do
-        @object.external_contact_info['address4']
+        @object.external_contact_info["address4"]
       end
 
       attribute :postcode do
-        @object.external_contact_info['postcode']
+        @object.external_contact_info["postcode"]
       end
 
       attribute :region_code do
-        @object.external_contact_info['region_code']
+        @object.external_contact_info["region_code"]
       end
 
       attribute :telephone do
-        @object.external_contact_info['telephone']
+        @object.external_contact_info["telephone"]
       end
 
       attribute :email do
-        @object.external_contact_info['email']
+        @object.external_contact_info["email"]
       end
 
       attribute :website do
-        @object.external_contact_info['website']
+        @object.external_contact_info["website"]
       end
 
       attribute :recruitment_cycle_year do
@@ -58,23 +58,23 @@ module API
       end
 
       attribute :admin_contact do
-        @object.generated_ucas_contact('admin')
+        @object.generated_ucas_contact("admin")
       end
 
       attribute :utt_contact do
-        @object.generated_ucas_contact('utt')
+        @object.generated_ucas_contact("utt")
       end
 
       attribute :web_link_contact do
-        @object.generated_ucas_contact('web_link')
+        @object.generated_ucas_contact("web_link")
       end
 
       attribute :fraud_contact do
-        @object.generated_ucas_contact('fraud')
+        @object.generated_ucas_contact("fraud")
       end
 
       attribute :finance_contact do
-        @object.generated_ucas_contact('finance')
+        @object.generated_ucas_contact("finance")
       end
 
       attribute :gt12_contact do

@@ -1,6 +1,6 @@
-name 'logout'
-summary 'run az logout'
+name "logout"
+summary "run az logout"
 
 run do |_opts, _args, _cmd|
-  system('az logout')
+  system("az logout")
 end

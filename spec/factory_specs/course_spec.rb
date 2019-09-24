@@ -1,4 +1,4 @@
-require 'rails_helper'
+require "rails_helper"
 
 describe "Course factory" do
   subject { create(:course) }
@@ -25,9 +25,9 @@ describe "Course factory" do
     it "has enrichments" do
       expect(subject.enrichments.size).to eq(3)
 
-      expect(CourseEnrichment.where('created_at < ?', Time.zone.now).count).to eq(3)
-      expect(CourseEnrichment.where('created_at < ?', 2.days.ago).count).to eq(2)
-      expect(CourseEnrichment.where('created_at < ?', 4.days.ago).count).to eq(1)
+      expect(CourseEnrichment.where("created_at < ?", Time.zone.now).count).to eq(3)
+      expect(CourseEnrichment.where("created_at < ?", 2.days.ago).count).to eq(2)
+      expect(CourseEnrichment.where("created_at < ?", 4.days.ago).count).to eq(1)
     end
   end
 end

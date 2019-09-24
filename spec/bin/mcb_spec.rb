@@ -1,12 +1,12 @@
-require 'spec_helper'
-require 'mcb_helper'
+require "spec_helper"
+require "mcb_helper"
 
-describe 'running the mcb script' do
-  describe 'config flag' do
-    let(:config_file) { Tempfile.new(['new_config_file', '.yml']) }
-    let(:config)      { { 'new' => 'day' } }
+describe "running the mcb script" do
+  describe "config flag" do
+    let(:config_file) { Tempfile.new(["new_config_file", ".yml"]) }
+    let(:config)      { { "new" => "day" } }
 
-    it 'can set the path to the config file' do
+    it "can set the path to the config file" do
       result = with_stubbed_stdout do
         File.write config_file.path, config.to_yaml
         $mcb.run(%W[-c #{config_file.path} config show])
@@ -18,117 +18,117 @@ describe 'running the mcb script' do
     end
   end
 
-  describe 'REPL' do
-    context 'completion' do
-      it 'provides completions for empty prompt' do
+  describe "REPL" do
+    context "completion" do
+      it "provides completions for empty prompt" do
         output = with_stubbed_stdout(stdin: "\t\t") do
           FakeFS do
-            FileUtils.mkdir_p(File.expand_path('/tmp'))
-            FileUtils.mkdir_p(File.expand_path('~'))
+            FileUtils.mkdir_p(File.expand_path("/tmp"))
+            FileUtils.mkdir_p(File.expand_path("~"))
 
             MCB.start_mcb_repl([])
           end
         end
         output = output[:stdout]
 
-        expect(output).to include('providers')
-        expect(output).to include('console')
-        expect(output).to include('courses')
-        expect(output).to include('config')
-        expect(output).to include('apiv1')
-        expect(output).to include('apiv2')
-        expect(output).to include('users')
-        expect(output).to include('az')
+        expect(output).to include("providers")
+        expect(output).to include("console")
+        expect(output).to include("courses")
+        expect(output).to include("config")
+        expect(output).to include("apiv1")
+        expect(output).to include("apiv2")
+        expect(output).to include("users")
+        expect(output).to include("az")
       end
 
-      it 'provides relevant completions for a main command' do
+      it "provides relevant completions for a main command" do
         output = with_stubbed_stdout(stdin: "co\t\t") do
           FakeFS do
-            FileUtils.mkdir_p(File.expand_path('/tmp'))
-            FileUtils.mkdir_p(File.expand_path('~'))
+            FileUtils.mkdir_p(File.expand_path("/tmp"))
+            FileUtils.mkdir_p(File.expand_path("~"))
 
             MCB.start_mcb_repl([])
           end
         end
         output = output[:stdout]
 
-        expect(output).not_to include('providers')
-        expect(output).to include('console')
-        expect(output).to include('courses')
-        expect(output).to include('config')
-        expect(output).not_to include('apiv1')
-        expect(output).not_to include('apiv2')
-        expect(output).not_to include('users')
-        expect(output).not_to include('az')
+        expect(output).not_to include("providers")
+        expect(output).to include("console")
+        expect(output).to include("courses")
+        expect(output).to include("config")
+        expect(output).not_to include("apiv1")
+        expect(output).not_to include("apiv2")
+        expect(output).not_to include("users")
+        expect(output).not_to include("az")
       end
     end
 
-    context 'history' do
+    context "history" do
       let(:up_key) { "\e[A" }
-      it 'loads commands from saved history file' do
+      it "loads commands from saved history file" do
         output = with_stubbed_stdout(stdin: up_key) do
           FakeFS do
-            FileUtils.mkdir_p(File.expand_path('/tmp'))
+            FileUtils.mkdir_p(File.expand_path("/tmp"))
 
-            FileUtils.mkdir_p(File.expand_path('~'))
-            File.open(File.expand_path('~/.mcb_history'), 'w') do |f|
-              f.puts('previous command')
+            FileUtils.mkdir_p(File.expand_path("~"))
+            File.open(File.expand_path("~/.mcb_history"), "w") do |f|
+              f.puts("previous command")
             end
             MCB.start_mcb_repl([])
           end
         end
-        expect(output[:stdout]).to match('previous command')
+        expect(output[:stdout]).to match("previous command")
       end
 
-      it 'eliminates duplicates from history' do
+      it "eliminates duplicates from history" do
         output = with_stubbed_stdout(stdin: "i want to show this command\nduplicate command\nduplicate command\n#{up_key}#{up_key}") do
           FakeFS do
-            FileUtils.mkdir_p(File.expand_path('/tmp'))
+            FileUtils.mkdir_p(File.expand_path("/tmp"))
 
-            FileUtils.mkdir_p(File.expand_path('~'))
+            FileUtils.mkdir_p(File.expand_path("~"))
             MCB.start_mcb_repl([])
           end
         end
-        expect(output[:stdout].scan('i want to show this command').size).to eq(2)
+        expect(output[:stdout].scan("i want to show this command").size).to eq(2)
       end
 
-      it 'eliminates empty items from history' do
+      it "eliminates empty items from history" do
         output = with_stubbed_stdout(stdin: "i want to show this command\n\n#{up_key}") do
           FakeFS do
-            FileUtils.mkdir_p(File.expand_path('/tmp'))
+            FileUtils.mkdir_p(File.expand_path("/tmp"))
 
-            FileUtils.mkdir_p(File.expand_path('~'))
+            FileUtils.mkdir_p(File.expand_path("~"))
             MCB.start_mcb_repl([])
           end
         end
-        expect(output[:stdout].scan('i want to show this command').size).to eq(2)
+        expect(output[:stdout].scan("i want to show this command").size).to eq(2)
       end
 
-      it 'starts normally when history file is not present' do
+      it "starts normally when history file is not present" do
         expect {
           with_stubbed_stdout(stdin: up_key) do
             FakeFS do
-              FileUtils.mkdir_p(File.expand_path('/tmp'))
-              FileUtils.mkdir_p(File.expand_path('~'))
+              FileUtils.mkdir_p(File.expand_path("/tmp"))
+              FileUtils.mkdir_p(File.expand_path("~"))
               MCB.start_mcb_repl([])
             end
           end
         }.not_to raise_error
       end
 
-      it 'appends to the history file on exit' do
+      it "appends to the history file on exit" do
         file_contents = nil
         with_stubbed_stdout(stdin: "my first command\nmy second command\n") do
           FakeFS do
-            FileUtils.mkdir_p(File.expand_path('/tmp'))
-            FileUtils.mkdir_p(File.expand_path('~'))
+            FileUtils.mkdir_p(File.expand_path("/tmp"))
+            FileUtils.mkdir_p(File.expand_path("~"))
 
-            File.open(File.expand_path('~/.mcb_history'), 'w') do |f|
-              f.puts('old command')
+            File.open(File.expand_path("~/.mcb_history"), "w") do |f|
+              f.puts("old command")
             end
             MCB.start_mcb_repl([])
 
-            file_contents = File.open(File.expand_path('~/.mcb_history'), 'r').read
+            file_contents = File.open(File.expand_path("~/.mcb_history"), "r").read
           end
         end
 

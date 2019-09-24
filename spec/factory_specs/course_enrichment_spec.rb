@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe 'Course enrichment factory' do
+describe "Course enrichment factory" do
   context "initial draft enrichment" do
     subject { create(:course_enrichment, :initial_draft) }
 

@@ -1,7 +1,7 @@
-require 'mcb_helper'
+require "mcb_helper"
 
 describe '"mcb apiv1 courses find"' do
-  it 'displays the info for the given course' do
+  it "displays the info for the given course" do
     course1 = create(:course)
 
     subject = build(:subject)
@@ -11,32 +11,32 @@ describe '"mcb apiv1 courses find"' do
 
 
     url = "http://localhost:3001/api/v1/#{RecruitmentCycle.current_recruitment_cycle.year}/courses"
-    next_url = url + '&' + {
-        changed_since: course2.created_at.utc.strftime('%FT%T.%6NZ'),
-        per_page: 100
+    next_url = url + "&" + {
+        changed_since: course2.created_at.utc.strftime("%FT%T.%6NZ"),
+        per_page: 100,
       }.to_query
     json = ActiveModel::Serializer::CollectionSerializer.new(
       [
         course1,
-        course2
+        course2,
       ],
-      serializer: CourseSerializer
+      serializer: CourseSerializer,
     )
 
     stub_request(:get, url)
       .with(headers: {
-              'Authorization' => 'Bearer bats'
+              "Authorization" => "Bearer bats",
             })
       .to_return(status: 200,
                  body: json.to_json,
                  headers: {
-                   link: next_url + '; rel="next"'
+                   link: next_url + '; rel="next"',
                  })
     stub_request(:get, next_url)
       .to_return(status: 200,
                  body: [].to_json,
                  headers: {
-                   link: next_url + '; rel="next"'
+                   link: next_url + '; rel="next"',
                  })
 
     output = with_stubbed_stdout do
@@ -48,7 +48,7 @@ describe '"mcb apiv1 courses find"' do
     end
     output = output[:stdout]
 
-    expect(output).to have_text_table_row('course_code',
+    expect(output).to have_text_table_row("course_code",
                                           course2.course_code)
     expect(output).to have_text_table_row(subject.subject_code,
                                           subject.subject_name)
@@ -58,7 +58,7 @@ describe '"mcb apiv1 courses find"' do
                         site_status.vac_status_before_type_cast,
                         site_status.status_before_type_cast,
                         site_status.publish_before_type_cast,
-                        site_status.applications_accepted_from.strftime('%Y-%m-%d')
+                        site_status.applications_accepted_from.strftime("%Y-%m-%d"),
                       ))
   end
 end

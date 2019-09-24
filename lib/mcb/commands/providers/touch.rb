@@ -1,5 +1,5 @@
-summary 'Update a provider so that it will be at the top of the apiv1 results'
-usage 'touch <provider_code>'
+summary "Update a provider so that it will be at the top of the apiv1 results"
+usage "touch <provider_code>"
 param :provider_code, transform: ->(code) { code.upcase }
 
 run do |opts, args, _cmd|
@@ -7,5 +7,5 @@ run do |opts, args, _cmd|
 
   provider = MCB.get_recruitment_cycle(opts).providers.find_by!(provider_code: args[:provider_code])
   provider.touch
-  provider.update! audit_comment: 'timestamps updated to expose in api v1'
+  provider.update! audit_comment: "timestamps updated to expose in api v1"
 end

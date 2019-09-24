@@ -45,13 +45,13 @@ class Provider < ApplicationRecord
   }
 
   enum accrediting_provider: {
-    accredited_body: 'Y',
-    not_an_accredited_body: 'N',
+    accredited_body: "Y",
+    not_an_accredited_body: "N",
   }
 
   enum scheme_member: {
-    is_a_UCAS_ITT_member: 'Y',
-    not_a_UCAS_ITT_member: 'N',
+    is_a_UCAS_ITT_member: "Y",
+    not_a_UCAS_ITT_member: "N",
   }
 
   belongs_to :recruitment_cycle
@@ -66,7 +66,7 @@ class Provider < ApplicationRecord
 
   has_many :enrichments,
            class_name: "ProviderEnrichment",
-           inverse_of: 'provider' do
+           inverse_of: "provider" do
              def find_or_initialize_draft(current_user)
                # This is a ruby search as opposed to an AR search, because calling `draft`
                # will return a new instance of a ProviderEnrichment object which is different
@@ -83,7 +83,7 @@ class Provider < ApplicationRecord
                new_enrichments_attributes = {
                  status: :draft,
                  updated_by_user_id: current_user.id,
-                 created_by_user_id: current_user.id
+                 created_by_user_id: current_user.id,
                }.with_indifferent_access
 
                if latest_published_enrichment.present?
@@ -100,12 +100,12 @@ class Provider < ApplicationRecord
   has_one :latest_published_enrichment,
           -> { published.latest_published_at },
           class_name: "ProviderEnrichment",
-          inverse_of: 'provider'
+          inverse_of: "provider"
   has_many :courses, -> { kept }
-  has_one :ucas_preferences, class_name: 'ProviderUCASPreference'
+  has_one :ucas_preferences, class_name: "ProviderUCASPreference"
   has_many :contacts
   has_many :accredited_courses,
-           class_name: 'Course',
+           class_name: "Course",
            foreign_key: :accrediting_provider_code,
            primary_key: :provider_code,
            inverse_of: :accrediting_provider
@@ -136,7 +136,7 @@ class Provider < ApplicationRecord
       :subjects,
       :sites,
       site_statuses: :site,
-      provider: %i[enrichments latest_published_enrichment sites]
+      provider: %i[enrichments latest_published_enrichment sites],
     ).select(&:syncable?)
   end
 
@@ -165,7 +165,7 @@ class Provider < ApplicationRecord
           FROM course b
           GROUP BY b.provider_id
         ) a ON a.provider_id = provider.id
-      }
+      },
     ).select("provider.*, COALESCE(a.courses_count, 0) AS included_courses_count")
   end
 
@@ -209,7 +209,7 @@ class Provider < ApplicationRecord
     if enrichments.last
       enrichments.last.attributes.slice(*(attribute_names + %w[website]))
     else
-      attributes.slice(*attribute_names).merge('website' => url)
+      attributes.slice(*attribute_names).merge("website" => url)
     end
   end
 
@@ -239,7 +239,7 @@ class Provider < ApplicationRecord
 
   def provider_type=(new_value)
     super
-    self.scitt = scitt? ? 'Y' : 'N'
+    self.scitt = scitt? ? "Y" : "N"
     self.accrediting_provider = if scitt? || university?
                                   :accredited_body
                                 else
@@ -263,18 +263,18 @@ class Provider < ApplicationRecord
       {
         provider_name: ap.provider_name,
         provider_code: ap.provider_code,
-        description: accrediting_provider_enrichment&.Description || ""
+        description: accrediting_provider_enrichment&.Description || "",
       }
     end
   end
 
   def is_it_really_really_a_scitt?
     #is purposely named poorly to remind us that this needs to be refactored. We should be using the prgram type enum not an attribute
-    scitt == 'Y'
+    scitt == "Y"
   end
 
   def generated_ucas_contact(type)
-    contacts.find_by!(type: type).slice('name', 'email', 'telephone') if contacts.map(&:type).include?(type)
+    contacts.find_by!(type: type).slice("name", "email", "telephone") if contacts.map(&:type).include?(type)
   end
 
 private
@@ -313,11 +313,11 @@ private
   end
 
   def remove_unnecessary_enrichments_validation_message
-    self.errors.delete :enrichments if self.errors[:enrichments] == ['is invalid']
+    self.errors.delete :enrichments if self.errors[:enrichments] == ["is invalid"]
   end
 
   def set_defaults
-    self.scheme_member ||= 'is_a_UCAS_ITT_member'
+    self.scheme_member ||= "is_a_UCAS_ITT_member"
     self.year_code ||= recruitment_cycle.year
   end
 end

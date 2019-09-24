@@ -54,19 +54,19 @@ module API
             :address3,
             :address4,
             :postcode,
-            :region_code
+            :region_code,
           )
       end
 
       def build_provider
         @provider = @recruitment_cycle.providers.find_by!(
-          provider_code: params[:provider_code].upcase
+          provider_code: params[:provider_code].upcase,
         )
       end
 
       def build_recruitment_cycle
         @recruitment_cycle = RecruitmentCycle.find_by(
-          year: params[:recruitment_cycle_year]
+          year: params[:recruitment_cycle_year],
         ) || RecruitmentCycle.current_recruitment_cycle
       end
 
@@ -78,7 +78,7 @@ module API
       def sync_courses_with_search_and_compare
         ManageCoursesAPIService::Request.sync_courses_with_search_and_compare(
           @current_user.email,
-          @provider.provider_code
+          @provider.provider_code,
         )
       rescue StandardError
         false

@@ -1,5 +1,5 @@
-require 'logger'
-require 'open3'
+require "logger"
+require "open3"
 
 module MCB
   LOGGER = Logger.new(STDERR)
@@ -24,15 +24,15 @@ module MCB
       if requesting_remote_connection?(opts)
         webapp_rails_env = MCB::Azure.configure_for_webapp(opts)
 
-        ENV['RAILS_ENV'] = webapp_rails_env
+        ENV["RAILS_ENV"] = webapp_rails_env
       end
 
-      app_root = File.expand_path(File.join(File.dirname($0), '..'))
-      exec_path = File.join(app_root, 'bin', 'rails')
+      app_root = File.expand_path(File.join(File.dirname($0), ".."))
+      exec_path = File.join(app_root, "bin", "rails")
 
       # prevent caching of environment variables by spring
-      ENV['DISABLE_SPRING'] = "true"
-      ENV['MCB_AUDIT_USER'] = get_user_email(opts)
+      ENV["DISABLE_SPRING"] = "true"
+      ENV["MCB_AUDIT_USER"] = get_user_email(opts)
 
       verbose("Running #{exec_path}")
 
@@ -42,9 +42,9 @@ module MCB
 
   def self.init_rails(**opts)
     # --webapp only needs to be processed on the first time through
-    new_argv = remove_option_with_arg(ARGV, '--webapp', '-A')
+    new_argv = remove_option_with_arg(ARGV, "--webapp", "-A")
 
-    rails_runner(['runner', $0, *new_argv], **opts)
+    rails_runner(["runner", $0, *new_argv], **opts)
   end
 
   def self.rails_console(**opts)
@@ -65,7 +65,7 @@ module MCB
 
     files.each do |path|
       new_cmd = Cri::Command.load_file(path.to_s, infer_name: true)
-      commands[path.basename('.rb').to_s] = new_cmd
+      commands[path.basename(".rb").to_s] = new_cmd
       cmd.add_command(new_cmd)
     end
 
@@ -94,19 +94,19 @@ module MCB
   def self.apiv1_token(webapp: nil, rgroup: nil)
     if webapp
       verbose "getting config for webapp: #{webapp} rgroup: #{rgroup}"
-      MCB::Azure.get_config(webapp: webapp, rgroup: rgroup).fetch('AUTHENTICATION_TOKEN')
+      MCB::Azure.get_config(webapp: webapp, rgroup: rgroup).fetch("AUTHENTICATION_TOKEN")
     else
       Rails.application.config.authentication_token
     end
   end
 
   def self.generate_apiv2_token(email:, encoding:, secret: nil)
-    require 'jwt'
+    require "jwt"
 
     payload = { email: email }
 
     if secret.nil?
-      raise 'Secret not provided'
+      raise "Secret not provided"
     end
 
     JWT.encode(payload, secret, encoding)
@@ -127,13 +127,13 @@ module MCB
   end
 
   def self.get_recruitment_year(opts)
-    raise RuntimeError, 'Rails has not been initialised' if !defined? Rails
+    raise RuntimeError, "Rails has not been initialised" if !defined? Rails
 
     opts[:'recruitment-year'] || RecruitmentCycle.current_recruitment_cycle.year
   end
 
   def self.get_recruitment_cycle(opts)
-    raise RuntimeError, 'Rails has not been initialised' if !defined? Rails
+    raise RuntimeError, "Rails has not been initialised" if !defined? Rails
 
     if opts.key? :'recruitment-year'
       RecruitmentCycle.find_by(year: opts[:'recruitment-year'])
@@ -147,7 +147,7 @@ module MCB
   end
 
   def self.config_dir
-    @config_dir ||= File.expand_path '~/.config/mcb-dfe/'
+    @config_dir ||= File.expand_path "~/.config/mcb-dfe/"
   end
 
   def self.config_file=(file)
@@ -155,7 +155,7 @@ module MCB
   end
 
   def self.config_file
-    @config_file ||= File.join config_dir, 'config.yml'
+    @config_file ||= File.join config_dir, "config.yml"
   end
 
   def self.config
@@ -167,11 +167,11 @@ module MCB
       email = opts.fetch(:email, config[:email])
 
       unless email
-        error 'No email set in config. You can set it like this:'
-        error ''
+        error "No email set in config. You can set it like this:"
+        error ""
         error "  $ #{$0} config set email <your-email-address>"
-        error ''
-        raise RuntimeError, 'email not configured'
+        error ""
+        raise RuntimeError, "email not configured"
       end
 
       email
@@ -186,7 +186,7 @@ module MCB
 
       if requesting_remote_connection?(**opts)
         opts[:url] = MCB::Azure.get_urls(**opts).first
-        opts[:token] = MCB::Azure.get_config(**opts)['AUTHENTICATION_TOKEN']
+        opts[:token] = MCB::Azure.get_config(**opts)["AUTHENTICATION_TOKEN"]
       end
 
       opts
@@ -204,7 +204,7 @@ module MCB
 
       if requesting_remote_connection?(**opts)
         opts[:url] ||= MCB::Azure.get_urls(**opts).first
-        opts[:token] ||= MCB::Azure.get_config(**opts)['AUTHENTICATION_TOKEN']
+        opts[:token] ||= MCB::Azure.get_config(**opts)["AUTHENTICATION_TOKEN"]
       end
 
       opts
@@ -230,8 +230,8 @@ module MCB
         next_changed_since = extract_changed_at(next_url)
 
         puts(
-          'To continue retrieving results use the changed-since: ' +
-          CGI.unescape(next_changed_since)
+          "To continue retrieving results use the changed-since: " +
+          CGI.unescape(next_changed_since),
         )
       else
         puts "All #{pages} pages from API retrieved."
@@ -241,13 +241,13 @@ module MCB
     def extract_changed_at(url)
       url.sub(
         /.*changed_since=(.*)(?:&.*)|$/,
-        '\1'
+        '\1',
       )
     end
 
     def iterate_v1_endpoint(url:, endpoint:, **opts)
       # We only need httparty for API V1 calls
-      require 'httparty'
+      require "httparty"
 
       endpoint_url = add_url_params_from_opts(opts, URI.join(url, endpoint))
       token = opts.fetch(:token) { apiv1_token(opts.slice(:webapp, :rgroup)) }
@@ -260,19 +260,19 @@ module MCB
           verbose "Requesting page #{page_count + 1}: #{endpoint_url}"
           response = HTTParty.get(
             endpoint_url.to_s,
-            headers: { authorization: "Bearer #{token}" }
+            headers: { authorization: "Bearer #{token}" },
           )
           records = JSON.parse(response.body)
           if records.any?
 
-            next_url = response.headers[:link].sub(/;.*/, '')
+            next_url = response.headers[:link].sub(/;.*/, "")
 
             # Send each provider to the consumer of this enumerator
             records.each do |record|
               y << [record, {
                       page: page_count,
                       url: endpoint_url,
-                      next_url: next_url
+                      next_url: next_url,
                     }]
             end
 
@@ -285,25 +285,25 @@ module MCB
     end
 
     def remote_connect_options
-      envs = env_to_azure_map.keys.join(', ')
+      envs = env_to_azure_map.keys.join(", ")
       Proc.new do
-        option :r, 'recruitment-year',
+        option :r, "recruitment-year",
                "Set the recruitment year, defaults to the current recruitment year",
                argument: :required
-        option :E, 'env',
+        option :E, "env",
                "Connect to a pre-defined environment: #{envs}",
                argument: :required
-        option :A, 'webapp',
-               'Connect to the database of this webapp',
+        option :A, "webapp",
+               "Connect to the database of this webapp",
                argument: :required
-        option :G, 'rgroup',
-               'Use resource group for app (optional)',
+        option :G, "rgroup",
+               "Use resource group for app (optional)",
                argument: :required
-        option :S, 'subscription',
-               'Specify which Azure subscription to use',
+        option :S, "subscription",
+               "Specify which Azure subscription to use",
                argument: :required
-        option nil, 'email',
-               'Specify which email to connect to remote env as',
+        option nil, "email",
+               "Specify which email to connect to remote env as",
                argument: :required
       end
     end
@@ -314,21 +314,21 @@ module MCB
 
     def env_to_azure_map
       {
-        'qa' => {
-          webapp: 'bat-qa-mcbe-as',
-          rgroup: 'bat-qa-mcbe-rg',
-          subscription: 'DFE BAT Development'
+        "qa" => {
+          webapp: "bat-qa-mcbe-as",
+          rgroup: "bat-qa-mcbe-rg",
+          subscription: "DFE BAT Development",
         },
-        'staging' => {
-          webapp: 'bat-stg-mcbe-as',
-          rgroup: 'bat-stg-mcbe-rg',
-          subscription: 'DFE BAT Development'
+        "staging" => {
+          webapp: "bat-stg-mcbe-as",
+          rgroup: "bat-stg-mcbe-rg",
+          subscription: "DFE BAT Development",
         },
-        'production' => {
-          webapp: 'bat-prod-mcbe-as',
-          rgroup: 'bat-prod-mcbe-rg',
-          subscription: 'DFE BAT Production'
-        }
+        "production" => {
+          webapp: "bat-prod-mcbe-as",
+          rgroup: "bat-prod-mcbe-rg",
+          subscription: "DFE BAT Production",
+        },
       }
     end
 
@@ -354,7 +354,7 @@ module MCB
     end
 
     def find_user_by_identifier(identifier)
-      if identifier.include? '@'
+      if identifier.include? "@"
         User.find_by(email: identifier)
       elsif identifier.match %r{^\d+$}
         User.find(identifier.to_i)
@@ -364,7 +364,7 @@ module MCB
     end
 
     def connecting_to_remote_db?
-      ENV.key?('DB_HOSTNAME')
+      ENV.key?("DB_HOSTNAME")
     end
 
     def configure_local_database_env
@@ -376,7 +376,7 @@ module MCB
     end
 
     def pageable_output(output)
-      ::Open3.pipeline_w('less -FX') do |io|
+      ::Open3.pipeline_w("less -FX") do |io|
         io.puts output
       rescue Errno::EPIPE
         nil
@@ -384,7 +384,7 @@ module MCB
     end
 
     def load_history
-      File.open(File.expand_path('~/.mcb_history'), 'r').each do |line|
+      File.open(File.expand_path("~/.mcb_history"), "r").each do |line|
         Readline::HISTORY.push(line.chomp)
       end
     rescue Errno::ENOENT
@@ -394,7 +394,7 @@ module MCB
     def append_to_history(input)
       if !input.blank? && Readline::HISTORY.to_a.last != input.chomp
         Readline::HISTORY.push(input.chomp)
-        File.open(File.expand_path('~/.mcb_history'), 'a+') do |f|
+        File.open(File.expand_path("~/.mcb_history"), "a+") do |f|
           f.puts(input.chomp)
         end
       end
@@ -419,10 +419,10 @@ module MCB
       MCB.init_rails(opts)
 
       prompt = case env
-               when 'production' then Rainbow(env).red.inverse
-               when 'staging'    then Rainbow(env).yellow
-               when 'qa'         then Rainbow(env).yellow
-               when nil          then Rainbow('local').green
+               when "production" then Rainbow(env).red.inverse
+               when "staging"    then Rainbow(env).yellow
+               when "qa"         then Rainbow(env).yellow
+               when nil          then Rainbow("local").green
                else                   env
                end
 
@@ -431,14 +431,14 @@ module MCB
         argv = input.split
 
         case argv.first
-        when 'exit', 'q', 'quit'
+        when "exit", "q", "quit"
           break
-        when 'h', 'help'
+        when "h", "help"
           $mcb.commands.each do |c|
             show_all_commands(c, "#{c.name} ")
             puts
           end
-        when ''
+        when ""
           next
         else
           begin
@@ -451,7 +451,7 @@ module MCB
     end
 
     def launch_repl?(argv)
-      argv.empty? || (argv.first == '-E' && argv.length == 2)
+      argv.empty? || (argv.first == "-E" && argv.length == 2)
     end
 
   private
@@ -475,10 +475,10 @@ module MCB
       if opts.key? :'changed-since'
         changed_since = DateTime.strptime(
           CGI.unescape(opts[:'changed-since']),
-          '%FT%T.%NZ'
+          "%FT%T.%NZ",
         ) rescue nil
         changed_since ||= DateTime.parse(opts[:'changed-since'])
-        changed_since_param = CGI.escape(changed_since.strftime('%FT%T.%6NZ'))
+        changed_since_param = CGI.escape(changed_since.strftime("%FT%T.%6NZ"))
         new_url.query = "changed_since=#{changed_since_param}"
       end
 

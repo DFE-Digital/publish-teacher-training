@@ -1,4 +1,4 @@
-describe 'Courses API v2', type: :request do
+describe "Courses API v2", type: :request do
   let(:user)         { create(:user) }
   let(:organisation) { create(:organisation, users: [user]) }
   let(:payload)      { { email: user.email } }
@@ -22,7 +22,7 @@ describe 'Courses API v2', type: :request do
              sites: [site])
   }
 
-  describe 'POST ' do
+  describe "POST " do
     let(:status) { 200 }
     let(:stubbed_request_body) { WebMock::Matchers::AnyArgMatcher.new(nil) }
     let(:stubbed_request) do
@@ -38,7 +38,7 @@ describe 'Courses API v2', type: :request do
     end
 
     subject do
-      post sync_path, headers: { 'HTTP_AUTHORIZATION' => credentials }
+      post sync_path, headers: { "HTTP_AUTHORIZATION" => credentials }
       response
     end
 
@@ -46,20 +46,20 @@ describe 'Courses API v2', type: :request do
       "/api/v2/providers/#{provider.provider_code}/sync_courses_with_search_and_compare"
     end
 
-    context 'when unauthenticated' do
-      let(:payload) { { email: 'foo@bar' } }
+    context "when unauthenticated" do
+      let(:payload) { { email: "foo@bar" } }
 
       it { should have_http_status(:unauthorized) }
     end
 
-    context 'when user has not accepted terms' do
+    context "when user has not accepted terms" do
       let(:user)         { create(:user, accept_terms_date_utc: nil) }
       let(:organisation) { create(:organisation, users: [user]) }
 
       it { should have_http_status(:forbidden) }
     end
 
-    context 'when unauthorised' do
+    context "when unauthorised" do
       let(:unauthorised_user) { create(:user) }
       let(:payload)           { { email: unauthorised_user.email } }
 
@@ -68,21 +68,21 @@ describe 'Courses API v2', type: :request do
       end
     end
 
-    context 'when authorized' do
-      context 'current recruitment cycle ' do
+    context "when authorized" do
+      context "current recruitment cycle " do
         let(:sync_path) do
           "/api/v2/recruitment_cycles/#{provider.recruitment_cycle.year}" +
             "/providers/#{provider.provider_code}/sync_courses_with_search_and_compare"
         end
 
-        context 'when a successful external call to search has been made' do
+        context "when a successful external call to search has been made" do
           let(:stubbed_request_body) { include("\"ProviderCode\":\"#{provider.provider_code}\"", "\"ProgrammeCode\":\"#{syncable_course.course_code}\"") }
 
-          it 'should be successful' do
+          it "should be successful" do
             expect(subject).to have_http_status(:ok)
           end
 
-          it 'should make the appropriate request' do
+          it "should make the appropriate request" do
             perform_enqueued_jobs do
               subject
             end
@@ -93,7 +93,7 @@ describe 'Courses API v2', type: :request do
         end
       end
 
-      context 'next recruitment cycle' do
+      context "next recruitment cycle" do
         let(:sync_path) do
           "/api/v2/recruitment_cycles/#{provider.recruitment_cycle.year}" +
             "/providers/#{provider.provider_code}/sync_courses_with_search_and_compare"
@@ -107,7 +107,7 @@ describe 'Courses API v2', type: :request do
                          recruitment_cycle: next_cycle)
         }
 
-        it 'should throw an error' do
+        it "should throw an error" do
           expect { subject }.to raise_error("#{provider} is not from the current recruitment cycle")
         end
       end

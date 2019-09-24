@@ -1,6 +1,6 @@
-name 'sync_to_find'
-summary 'Send all courses for a particular provider to Find'
-usage 'sync_to_find <provider_code>'
+name "sync_to_find"
+summary "Send all courses for a particular provider to Find"
+usage "sync_to_find <provider_code>"
 param :provider_code, transform: ->(code) { code.upcase }
 
 run do |opts, args, _cmd|
@@ -15,6 +15,6 @@ run do |opts, args, _cmd|
 
   ManageCoursesAPIService::Request.sync_courses_with_search_and_compare(
     user.email,
-    provider.provider_code
+    provider.provider_code,
   )
 end

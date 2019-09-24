@@ -1,10 +1,10 @@
-require 'spec_helper'
-require 'mcb_helper'
+require "spec_helper"
+require "mcb_helper"
 
-describe 'mcb az apps list' do
+describe "mcb az apps list" do
   before :each do
     allow(MCB).to receive(:run_command)
-                    .with('az webapp list')
+                    .with("az webapp list")
                     .and_return(<<~EOAPPS)
                       [
                         {
@@ -15,7 +15,7 @@ describe 'mcb az apps list' do
                     EOAPPS
   end
 
-  it 'returns the listing of apps' do
+  it "returns the listing of apps" do
     result = with_stubbed_stdout do
       $mcb.run(%w[az apps list])
     end

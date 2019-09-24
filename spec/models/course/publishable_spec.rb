@@ -1,5 +1,5 @@
 RSpec.describe Course, type: :model do
-  describe '#publishable?' do
+  describe "#publishable?" do
     let(:course) { create(:course) }
     let(:site) { create(:site) }
     let(:site_status) { create(:site_status, :new, site: site) }
@@ -8,7 +8,7 @@ RSpec.describe Course, type: :model do
 
     its(:publishable?) { should be_falsey }
 
-    context 'with enrichment' do
+    context "with enrichment" do
       let(:enrichment) { build(:course_enrichment, :subsequent_draft, created_at: 1.day.ago) }
       let(:course) {
         create(:course, enrichments: [enrichment], site_statuses: [site_status])
@@ -17,14 +17,14 @@ RSpec.describe Course, type: :model do
       its(:publishable?) { should be_truthy }
     end
 
-    context 'with no enrichment' do
+    context "with no enrichment" do
       let(:course) {
         create(:course, site_statuses: [site_status])
       }
 
       its(:publishable?) { should be_falsey }
 
-      describe 'course errors' do
+      describe "course errors" do
         subject do
           course.publishable?
           course.errors
@@ -34,7 +34,7 @@ RSpec.describe Course, type: :model do
       end
     end
 
-    context 'with no sites' do
+    context "with no sites" do
       let(:enrichment) { build(:course_enrichment, :subsequent_draft, created_at: 1.day.ago) }
       let(:course) {
         create(:course, site_statuses: [], enrichments: [enrichment])
@@ -42,7 +42,7 @@ RSpec.describe Course, type: :model do
 
       its(:publishable?) { should be_falsey }
 
-      describe 'course errors' do
+      describe "course errors" do
         subject do
           course.publishable?
           course.errors

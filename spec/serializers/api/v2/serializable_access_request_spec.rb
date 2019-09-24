@@ -8,46 +8,46 @@ describe API::V2::SerializableAccessRequest do
     jsonapi_renderer.render(
       access_request,
       class: {
-        AccessRequest: API::V2::SerializableAccessRequest
-      }
+        AccessRequest: API::V2::SerializableAccessRequest,
+      },
     ).to_json
   end
   let(:parsed_json) { JSON.parse(access_request_json) }
 
-  subject { parsed_json['data'] }
+  subject { parsed_json["data"] }
 
-  it { should have_type('access_request') }
+  it { should have_type("access_request") }
 
   it {
     should have_attributes(:email_address, :first_name, :last_name, :organisation,
                            :request_date_utc, :requester_id, :status, :requester_email)
   }
 
-  context 'with a requester' do
+  context "with a requester" do
     let(:requester) { User.find_by!(id: access_request.requester_id) }
     let(:access_request_json) do
       jsonapi_renderer.render(
         access_request,
         class: {
           AccessRequest: API::V2::SerializableAccessRequest,
-          User: API::V2::SerializableUser
+          User: API::V2::SerializableUser,
         },
         include: [
-          :requester
-        ]
+          :requester,
+        ],
       ).to_json
     end
 
     it { should have_relationship(:requester) }
 
-    it 'includes the provider' do
-      expect(parsed_json['included'])
-        .to(include(have_type('users')
+    it "includes the provider" do
+      expect(parsed_json["included"])
+        .to(include(have_type("users")
           .and(have_id(requester.id.to_s))))
     end
   end
 
-  describe 'has the correct attributes' do
+  describe "has the correct attributes" do
     before { Timecop.freeze }
     after  { Timecop.return }
 

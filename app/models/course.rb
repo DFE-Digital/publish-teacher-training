@@ -86,7 +86,7 @@ class Course < ApplicationRecord
 
   belongs_to :accrediting_provider,
              ->(c) { where(recruitment_cycle: c.recruitment_cycle) },
-             class_name: 'Provider',
+             class_name: "Provider",
              foreign_key: :accrediting_provider_code,
              primary_key: :provider_code,
              inverse_of: :accredited_courses,
@@ -100,7 +100,7 @@ class Course < ApplicationRecord
            through: :site_statuses
 
   has_many :enrichments,
-           class_name: 'CourseEnrichment' do
+           class_name: "CourseEnrichment" do
     def find_or_initialize_draft
       # This is a ruby search as opposed to an AR search, because calling `draft`
       # will return a new instance of a CourseEnrichment object which is different
@@ -292,11 +292,11 @@ class Course < ApplicationRecord
 
   def funding_type
     if school_direct_salaried_training_programme?
-      'salary'
+      "salary"
     elsif pg_teaching_apprenticeship?
-      'apprenticeship'
+      "apprenticeship"
     else
-      'fee'
+      "fee"
     end
   end
 
@@ -309,7 +309,7 @@ class Course < ApplicationRecord
   end
 
   def is_fee_based?
-    funding_type == 'fee'
+    funding_type == "fee"
   end
 
   # https://www.gov.uk/government/publications/initial-teacher-training-criteria/initial-teacher-training-itt-criteria-and-supporting-advice#c11-gcse-standard-equivalent
@@ -325,7 +325,7 @@ class Course < ApplicationRecord
   end
 
   def gcse_science_required?
-    gcse_subjects_required.include?('science')
+    gcse_subjects_required.include?("science")
   end
 
   def last_published_at
@@ -414,15 +414,15 @@ class Course < ApplicationRecord
 
   def funding_type=(funding_type)
     case funding_type
-    when 'salary'
+    when "salary"
       if !self_accredited?
         update(program_type: :school_direct_salaried_training_programme)
       else
         errors.add(:program_type, "Salary is not valid for a self accredited course")
       end
-    when 'apprenticeship'
+    when "apprenticeship"
       update(program_type: :pg_teaching_apprenticeship)
-    when 'fee'
+    when "fee"
       if !self_accredited?
         update(program_type: :school_direct_training_programme)
       elsif provider.is_it_really_really_a_scitt?
@@ -441,7 +441,7 @@ private
     return true if relevant_params.empty? || !is_published?
 
     relevant_params.each do |field, _value|
-      errors.add(field.to_sym, 'cannot be changed after publish')
+      errors.add(field.to_sym, "cannot be changed after publish")
     end
     false
   end
@@ -453,7 +453,7 @@ private
       value && !ENTRY_REQUIREMENT_OPTIONS.key?(value.to_sym)
     end
     invalid_params.each do |subject, _value|
-      errors.add(subject.to_sym, 'is invalid')
+      errors.add(subject.to_sym, "is invalid")
     end
 
     invalid_params.empty?
@@ -461,7 +461,7 @@ private
 
   def qualification_assignable(course_params)
     assignable = course_params[:qualification].nil? || Course::qualifications.include?(course_params[:qualification].to_sym)
-    errors.add(:qualification, 'is invalid') unless assignable
+    errors.add(:qualification, "is invalid") unless assignable
 
     assignable
   end
@@ -489,19 +489,19 @@ private
   end
 
   def set_defaults
-    self.modular ||= ''
+    self.modular ||= ""
   end
 
   def remove_unnecessary_enrichments_validation_message
-    self.errors.delete :enrichments if self.errors[:enrichments] == ['is invalid']
+    self.errors.delete :enrichments if self.errors[:enrichments] == ["is invalid"]
   end
 
   def validate_course_syncable
     if findable?.blank?
-      errors.add :site_statuses, 'No findable sites.'
+      errors.add :site_statuses, "No findable sites."
     end
     if dfe_subjects.blank?
-      errors.add :dfe_subjects, 'No DfE subject.'
+      errors.add :dfe_subjects, "No DfE subject."
     end
   end
 
@@ -514,7 +514,7 @@ private
   end
 
   def validate_start_date
-    errors.add :start_date, "#{start_date.strftime('%B %Y')} is not in the #{recruitment_cycle.year} cycle" unless start_date_options.include?(start_date.strftime('%B %Y'))
+    errors.add :start_date, "#{start_date.strftime('%B %Y')} is not in the #{recruitment_cycle.year} cycle" unless start_date_options.include?(start_date.strftime("%B %Y"))
   end
 
   def validate_applications_open_from

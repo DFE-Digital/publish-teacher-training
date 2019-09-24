@@ -8,7 +8,7 @@ module Courses
         #
         # https://github.com/DFE-Digital/manage-courses-frontend/blob/master/spec/factories/courses.rb
         def qualification_options
-          qualifications_with_qts, qualifications_without_qts = Course.qualifications.keys.partition { |q| q.include?('qts') }
+          qualifications_with_qts, qualifications_without_qts = Course.qualifications.keys.partition { |q| q.include?("qts") }
           ucas_level == :further_education ? qualifications_without_qts : qualifications_with_qts
         end
       end

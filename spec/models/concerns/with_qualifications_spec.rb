@@ -1,4 +1,4 @@
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe WithQualifications, type: :model do
   specs = [
@@ -22,11 +22,11 @@ RSpec.describe WithQualifications, type: :model do
     end
   end
 
-  describe '#qualifications_description' do
-    context 'no qualification present' do
+  describe "#qualifications_description" do
+    context "no qualification present" do
       subject { build(:course, qualification: nil) }
 
-      its(:qualifications_description) { should eq '' }
+      its(:qualifications_description) { should eq "" }
     end
   end
 

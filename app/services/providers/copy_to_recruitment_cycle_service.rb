@@ -32,7 +32,7 @@ module Providers
       {
         providers: providers_count,
         sites: sites_count,
-        courses: courses_count
+        courses: courses_count,
       }
     end
 

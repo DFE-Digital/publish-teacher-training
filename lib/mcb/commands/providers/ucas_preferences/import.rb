@@ -1,8 +1,8 @@
-summary 'Import UCAS preferences for providers. ' \
-        'Requires a filename to import as an argument.'
+summary "Import UCAS preferences for providers. " \
+        "Requires a filename to import as an argument."
 param :filename
-usage 'import [options] <preferences_csv_filename>'
-option :n, 'dry_run', "don't update anything, display what would be done"
+usage "import [options] <preferences_csv_filename>"
+option :n, "dry_run", "don't update anything, display what would be done"
 
 description <<-EODESCRIPTION
   Use this command to import UCAS preferences for providers. It will display the
@@ -20,7 +20,7 @@ run do |opts, args, _cmd| # rubocop: disable Metrics/BlockLength
 
   changed_preferences = Hash.new do |hash, provider|
     hash[provider] = ProviderUCASPreference.find_or_initialize_by(
-      provider: provider
+      provider: provider,
     )
   end
   changed_preference_count = 0
@@ -29,12 +29,12 @@ run do |opts, args, _cmd| # rubocop: disable Metrics/BlockLength
   import_file = File.open(import_filename)
   csv = CSV.new(import_file, headers: true)
   csv.each do |row|
-    provider = providers[row['INST_CODE']]
-    preference_type = translate_ucas_preference_attribute(row['PREF_TYPE'])
+    provider = providers[row["INST_CODE"]]
+    preference_type = translate_ucas_preference_attribute(row["PREF_TYPE"])
     if preference_type.present?
-      if changed_preferences[provider].attributes_before_type_cast[preference_type] != row['PREF_VALUE']
-        log_attribute_change(provider, preference_type, row['PREF_VALUE'])
-        changed_preferences[provider][preference_type] = row['PREF_VALUE']
+      if changed_preferences[provider].attributes_before_type_cast[preference_type] != row["PREF_VALUE"]
+        log_attribute_change(provider, preference_type, row["PREF_VALUE"])
+        changed_preferences[provider][preference_type] = row["PREF_VALUE"]
         changed_preference_count += 1
       else
         verbose "#{preference_type} value '#{row['PREF_VALUE']} " \
@@ -46,8 +46,8 @@ run do |opts, args, _cmd| # rubocop: disable Metrics/BlockLength
       '[%<lineno>d] Message "%<message>s" while processing %<code>s' % {
         lineno: csv.lineno,
         message: e.message,
-        code: row['INST_CODE']
-      }
+        code: row["INST_CODE"],
+      },
     )
   end
 
@@ -56,8 +56,8 @@ end
 
 def translate_ucas_preference_attribute(ucas_preference)
   case ucas_preference
-  when 'Type of GT12 required' then 'type_of_gt12'
-  when 'New UTT application alerts' then 'send_application_alerts'
+  when "Type of GT12 required" then "type_of_gt12"
+  when "New UTT application alerts" then "send_application_alerts"
   end
 end
 
@@ -71,7 +71,7 @@ def log_attribute_change(provider, attribute, new_value)
     code: provider.provider_code,
     attribute: attribute,
     old_value: old_value,
-    new_value: new_value
+    new_value: new_value,
   }
 end
 
@@ -81,7 +81,7 @@ def commit_changes(changed_preferences, providers, changed_preference_count, opt
       changed_preferences.values.each(&:save!)
     end
   else
-    puts 'Aborting without updating.'
+    puts "Aborting without updating."
   end
 end
 

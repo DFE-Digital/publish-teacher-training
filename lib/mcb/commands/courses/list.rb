@@ -1,5 +1,5 @@
-name 'list'
-summary 'List courses in db'
+name "list"
+summary "List courses in db"
 
 run do |opts, args, _cmd|
   MCB.init_rails(opts)
@@ -12,14 +12,14 @@ run do |opts, args, _cmd|
   tp.set :capitalize_headers, false
 
   output = [
-    '',
-    'Course:',
+    "",
+    "Course:",
     Tabulo::Table.new(courses) { |t|
       t.add_column :id
       t.add_column(:provider_code) { |c| c.provider.provider_code }
       t.add_column :course_code
       t.add_column :name
-    }.pack(max_table_width: nil)
+    }.pack(max_table_width: nil),
   ]
   MCB.pageable_output(output)
 end

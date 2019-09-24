@@ -1,12 +1,12 @@
-name 'bulk_sync_to_find'
-summary 'Bulk sync all course to Find'
-usage 'bulk_sync_to_find'
-option :u, 'url', 'set the base url to connect to',
+name "bulk_sync_to_find"
+summary "Bulk sync all course to Find"
+usage "bulk_sync_to_find"
+option :u, "url", "set the base url to connect to",
        argument: :required
-option nil, :email, 'the email to encode',
+option nil, :email, "the email to encode",
        argument: :required,
        default: -> { MCB.config[:email] }
-option :t, 'token', 'set the authorization token',
+option :t, "token", "set the authorization token",
        argument: :required
 
 run do |opts, _args, _cmd|
@@ -16,7 +16,7 @@ run do |opts, _args, _cmd|
   url = "#{base_url}/api/system/sync"
   token = get_token_from_opts(opts)
 
-  require 'httparty'
+  require "httparty"
 
   verbose "POST #{url}"
   response = HTTParty.post(url, headers: { authorization: "Bearer #{token}" })
@@ -44,7 +44,7 @@ def get_url_from_opts(opts)
     # Connect out to get the Azure app settings if we need to.
     MCB.apiv2_base_url(opts)
   else
-    'http://localhost:3001'
+    "http://localhost:3001"
   end
 end
 

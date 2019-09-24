@@ -7,7 +7,7 @@ module API
         authenticate_or_request_with_http_token do |token|
           ActiveSupport::SecurityUtils.secure_compare(
             token,
-            Settings.system_authentication_token
+            Settings.system_authentication_token,
           )
         end
       end

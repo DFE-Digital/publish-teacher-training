@@ -1,12 +1,12 @@
 JSONAPI::Rails.configure do |config|
   # Set a default serializable class mapping.
   config.jsonapi_class = Hash.new { |h, k|
-    names = k.to_s.split('::')
+    names = k.to_s.split("::")
     klass = names.pop
 
     h[k] = [
       "API::V2::Serializable#{klass}",
-      [*names, klass].join('::')
+      [*names, klass].join("::"),
     ].lazy
      .map(&:safe_constantize)
      .detect(&:present?)

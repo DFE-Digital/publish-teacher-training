@@ -23,7 +23,7 @@ module Courses
           study_modes: study_mode_options,
           show_is_send: show_is_send?,
           show_start_date: show_start_date?,
-          show_applications_open: show_applications_open?
+          show_applications_open: show_applications_open?,
         }
       end
     end

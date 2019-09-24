@@ -1,12 +1,12 @@
-require 'rails_helper'
+require "rails_helper"
 
 describe ProviderPolicy do
   let(:user) { create(:user) }
 
-  describe 'scope' do
+  describe "scope" do
     let(:organisation) { create(:organisation, users: [user]) }
 
-    it 'limits the providers to those the user is assigned to' do
+    it "limits the providers to those the user is assigned to" do
       provider1 = create(:provider, organisations: [organisation])
       _provider2 = create(:provider)
 

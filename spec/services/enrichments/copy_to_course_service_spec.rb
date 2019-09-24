@@ -1,4 +1,4 @@
-require 'rails_helper'
+require "rails_helper"
 
 describe Enrichments::CopyToCourseService do
   let(:service) { described_class.new }
@@ -14,13 +14,13 @@ describe Enrichments::CopyToCourseService do
 
   its(:length) { should eq 1 }
 
-  describe 'the new course' do
+  describe "the new course" do
     subject { new_course }
 
     its(:content_status) { should eq :rolled_over }
   end
 
-  describe 'the copied enrichment' do
+  describe "the copied enrichment" do
     subject { new_course.enrichments.first }
 
     its(:about_course) { should eq published_enrichment.about_course }

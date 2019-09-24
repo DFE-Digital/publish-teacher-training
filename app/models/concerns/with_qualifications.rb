@@ -64,7 +64,7 @@ module WithQualifications
       if qualifications
         qualifications.map(&:upcase).sort.join(" with ")
       else
-        ''
+        ""
       end
     end
 

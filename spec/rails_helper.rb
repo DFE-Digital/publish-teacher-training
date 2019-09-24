@@ -1,21 +1,21 @@
 # This file is copied to spec/ when you run 'rails generate rspec:install'
-require 'database_cleaner'
-require 'spec_helper'
+require "database_cleaner"
+require "spec_helper"
 
-require 'simplecov'
+require "simplecov"
 SimpleCov.start
 
-ENV['RAILS_ENV'] ||= 'test'
-require File.expand_path('../config/environment', __dir__)
+ENV["RAILS_ENV"] ||= "test"
+require File.expand_path("../config/environment", __dir__)
 # Prevent database truncation if the environment is production
 abort("The Rails environment is running in production mode!") if Rails.env.production?
-require 'rspec/rails'
+require "rspec/rails"
 # Add additional requires below this line. Rails is not loaded until this point!
 
 # Pull in all the files in spec/support automatically.
-Dir['./spec/strategies/**/*.rb'].each { |file| require file }
+Dir["./spec/strategies/**/*.rb"].each { |file| require file }
 
-Faker::Config.locale = 'en-GB'
+Faker::Config.locale = "en-GB"
 
 # configure shoulda matchers to use rspec as the test framework and full matcher libraries for rails
 Shoulda::Matchers.configure do |config|

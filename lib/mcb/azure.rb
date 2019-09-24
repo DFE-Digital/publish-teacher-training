@@ -1,12 +1,12 @@
 module MCB
   module Azure
     def self.get_subs
-      raw_json = MCB::run_command 'az account list'
+      raw_json = MCB::run_command "az account list"
       JSON.parse(raw_json)
     end
 
     def self.get_apps
-      raw_json = MCB::run_command 'az webapp list'
+      raw_json = MCB::run_command "az webapp list"
       JSON.parse(raw_json)
     end
 
@@ -15,7 +15,7 @@ module MCB
         .get_apps
         .select { |s| s["name"] == app }
         .first
-        .fetch('resourceGroup')
+        .fetch("resourceGroup")
     rescue # rubocop: disable Style/RescueStandardError
       MCB::LOGGER.error("could not retrieve resource group for app #{app}, " \
                         "is this the right subscription?")
@@ -37,7 +37,7 @@ module MCB
       raw_json = MCB::run_command(cmd)
       hostname_config = JSON.parse(raw_json)
       hostname_config.map do |conf|
-        if conf['sslState'] == 'SniEnabled'
+        if conf["sslState"] == "SniEnabled"
           "https://#{conf['name']}"
         else
           "http://#{conf['name']}"
@@ -58,7 +58,7 @@ module MCB
 
     def self.configure_env(app_config)
       ENV.update(
-        app_config.select { |e| e.start_with?('SETTINGS__') }
+        app_config.select { |e| e.start_with?("SETTINGS__") },
       )
     end
 
@@ -79,7 +79,7 @@ module MCB
       print "As a safety measure, please enter the expected RAILS_ENV for #{webapp}: "
       expected_environment = $stdin.readline.chomp
 
-      if app_config['RAILS_ENV'] != expected_environment
+      if app_config["RAILS_ENV"] != expected_environment
         raise "RAILS_ENV for #{webapp} does not match: " \
               "#{app_config['RAILS_ENV']} != #{expected_environment}"
       end
@@ -87,7 +87,7 @@ module MCB
       MCB::Azure.configure_database(app_config)
       MCB::Azure.configure_env(app_config)
 
-      app_config['RAILS_ENV']
+      app_config["RAILS_ENV"]
     end
   end
 end

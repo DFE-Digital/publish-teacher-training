@@ -1,4 +1,4 @@
-require 'mcb_helper'
+require "mcb_helper"
 
 describe MCB::Editor::CoursesEditor, :needs_audit_user do
   def run_editor(*input_cmds)
@@ -7,49 +7,49 @@ describe MCB::Editor::CoursesEditor, :needs_audit_user do
     end
   end
 
-  let(:provider_code) { 'X12' }
-  let(:course_code) { '3FC4' }
+  let(:provider_code) { "X12" }
+  let(:course_code) { "3FC4" }
   let(:course_codes) { [course_code] }
-  let(:email) { 'user@education.gov.uk' }
+  let(:email) { "user@education.gov.uk" }
   let(:provider) { create(:provider, provider_code: provider_code) }
   let(:accredited_body) { create(:provider, :accredited_body) }
   let!(:mathematics) { find_or_create(:subject, :mathematics) }
   let!(:biology) { find_or_create(:subject, subject_name: "Biology") }
   let!(:secondary) { find_or_create(:subject, :secondary) }
   let(:current_cycle) { RecruitmentCycle.current_recruitment_cycle }
-  let!(:next_cycle) { find_or_create(:recruitment_cycle, year: '2020') }
+  let!(:next_cycle) { find_or_create(:recruitment_cycle, year: "2020") }
   let(:is_send) { false }
   let!(:course) {
     create(:course,
            provider: provider,
            accrediting_provider: accredited_body,
            course_code: course_code,
-           name: 'Original name',
-           maths: 'must_have_qualification_at_application_time',
-           english: 'equivalence_test',
-           science: 'not_required',
-           program_type: 'pg_teaching_apprenticeship',
-           qualification: 'qts',
-           study_mode: 'part_time',
+           name: "Original name",
+           maths: "must_have_qualification_at_application_time",
+           english: "equivalence_test",
+           science: "not_required",
+           program_type: "pg_teaching_apprenticeship",
+           qualification: "qts",
+           study_mode: "part_time",
            start_date: Date.new(2019, 8, 1),
-           age_range: 'secondary',
+           age_range: "secondary",
            subjects: [secondary, biology],
            applications_open_from: Date.new(2018, 10, 9),
            is_send: is_send)
   }
   subject { described_class.new(provider: provider, course_codes: course_codes, requester: requester) }
 
-  context 'when an authorised user' do
+  context "when an authorised user" do
     let!(:requester) { create(:user, email: email, organisations: provider.organisations) }
     let!(:another_accredited_body) { create(:provider, :accredited_body) }
 
-    describe 'runs the editor' do
-      it 'updates the course title' do
+    describe "runs the editor" do
+      it "updates the course title" do
         expect { run_editor("edit title", "Mathematics", "exit") }.to change { course.reload.name }.
           from("Original name").to("Mathematics")
       end
 
-      it 'creates a Course audit with the correct requester when Editing' do
+      it "creates a Course audit with the correct requester when Editing" do
         run_editor("edit title", "Mathematics", "exit")
         course.reload
 
@@ -57,7 +57,7 @@ describe MCB::Editor::CoursesEditor, :needs_audit_user do
       end
 
       describe "(maths)" do
-        it 'updates the maths setting when that is valid' do
+        it "updates the maths setting when that is valid" do
           expect { run_editor("edit maths", "equivalence_test", "exit") }.to change { course.reload.maths }.
             from("must_have_qualification_at_application_time").to("equivalence_test")
         end
@@ -69,7 +69,7 @@ describe MCB::Editor::CoursesEditor, :needs_audit_user do
       end
 
       describe "(english)" do
-        it 'updates the english setting when that is valid' do
+        it "updates the english setting when that is valid" do
           expect { run_editor("edit english", "must_have_qualification_at_application_time", "exit") }.to change { course.reload.english }.
             from("equivalence_test").to("must_have_qualification_at_application_time")
         end
@@ -81,7 +81,7 @@ describe MCB::Editor::CoursesEditor, :needs_audit_user do
       end
 
       describe "(science)" do
-        it 'updates the science setting when that is valid' do
+        it "updates the science setting when that is valid" do
           expect { run_editor("edit science", "equivalence_test", "exit") }.to change { course.reload.science }.
             from("not_required").to("equivalence_test")
         end
@@ -93,7 +93,7 @@ describe MCB::Editor::CoursesEditor, :needs_audit_user do
       end
 
       describe "(route)" do
-        it 'updates the route/program type setting when that is valid' do
+        it "updates the route/program type setting when that is valid" do
           expect { run_editor("edit route", "school_direct_training_programme", "exit") }.to change { course.reload.program_type }.
             from("pg_teaching_apprenticeship").to("school_direct_training_programme")
         end
@@ -105,61 +105,61 @@ describe MCB::Editor::CoursesEditor, :needs_audit_user do
       end
 
       describe "(qualifications)" do
-        it 'updates the qualifications setting when that is valid' do
+        it "updates the qualifications setting when that is valid" do
           expect { run_editor("edit qualifications", "pgde_with_qts", "exit") }.to change { course.reload.qualification }.
             from("qts").to("pgde_with_qts")
         end
 
-        it 'updates the qualifications setting to pgce_with_qts by default' do
+        it "updates the qualifications setting to pgce_with_qts by default" do
           expect { run_editor("edit qualifications", "", "exit") }.to change { course.reload.qualification }.
             from("qts").to("pgce_with_qts")
         end
       end
 
       describe "(study mode)" do
-        it 'updates the study mode setting when that is valid' do
+        it "updates the study mode setting when that is valid" do
           expect { run_editor("edit study mode", "full_time_or_part_time", "exit") }.to change { course.reload.study_mode }.
             from("part_time").to("full_time_or_part_time")
         end
 
-        it 'updates the study mode setting to full-time by default' do
+        it "updates the study mode setting to full-time by default" do
           expect { run_editor("edit study mode", "", "exit") }.to change { course.reload.study_mode }.
             from("part_time").to("full_time")
         end
       end
 
       describe "(accredited body)" do
-        it 'updates the accredited body for an existing accredited body' do
+        it "updates the accredited body for an existing accredited body" do
           expect { run_editor("edit accredited body", another_accredited_body.provider_code, "exit") }.
             to change { course.reload.accrediting_provider }.
             from(accredited_body).to(another_accredited_body)
         end
 
-        it 'upper-cases the accredited body code before looking it up' do
+        it "upper-cases the accredited body code before looking it up" do
           expect { run_editor("edit accredited body", another_accredited_body.provider_code.downcase, "exit") }.
             to change { course.reload.accrediting_provider }.
             from(accredited_body).to(another_accredited_body)
         end
 
-        it 'updates the accredited body to self-accredited when no accredited body is specified' do
+        it "updates the accredited body to self-accredited when no accredited body is specified" do
           expect { run_editor("edit accredited body", "", "exit") }.to change { course.reload.accrediting_provider }.
             from(accredited_body).to(provider)
         end
 
-        it 'asks the accredited body again if the user provides a non-existent code' do
+        it "asks the accredited body again if the user provides a non-existent code" do
           expect { run_editor("edit accredited body", "ABCDE", "XYZ", "", "exit") }.to change { course.reload.accrediting_provider }.
             from(accredited_body).to(provider)
         end
       end
 
       describe "(start date)" do
-        it 'updates the course start date when that is valid' do
+        it "updates the course start date when that is valid" do
           expect { run_editor("edit start date", "October 2019", "exit") }.
             to change { course.reload.start_date }.
             from(Date.new(2019, 8, 1)).to(Date.new(2019, 10, 1))
         end
 
-        it 'updates the start date to September of the recruitment cycle start year, when no start date is given' do
+        it "updates the start date to September of the recruitment cycle start year, when no start date is given" do
           expect { run_editor("edit start date", "", "exit") }.to change { course.reload.start_date }.
             from(Date.new(2019, 8, 1)).to(Date.new(2019, 9, 1))
         end
@@ -184,7 +184,7 @@ describe MCB::Editor::CoursesEditor, :needs_audit_user do
             from(Date.new(2018, 10, 9)).to(Date.new(2018, 10, 1))
         end
 
-        it 'updates the application opening date to today by default' do
+        it "updates the application opening date to today by default" do
           Timecop.freeze(Time.utc(2019, 6, 1, 12, 0, 0)) do
             expect { run_editor("edit application opening date", "", "exit") }.
               to change { Date.parse(course.reload.applications_open_from.to_s) }.
@@ -194,7 +194,7 @@ describe MCB::Editor::CoursesEditor, :needs_audit_user do
       end
 
       describe "(age range)" do
-        it 'updates the course age range when that is valid' do
+        it "updates the course age range when that is valid" do
           expect { run_editor("edit age range", "primary", "exit") }.
             to change { course.reload.age_range }.
             from("secondary").to("primary")
@@ -202,19 +202,19 @@ describe MCB::Editor::CoursesEditor, :needs_audit_user do
       end
 
       describe "(course code)" do
-        it 'updates the course code when that is valid' do
+        it "updates the course code when that is valid" do
           expect { run_editor("edit course code", "CXXZ", "exit") }.
             to change { course.reload.course_code }.
             from(course_code).to("CXXZ")
         end
 
-        it 'upper-cases the course code before assigning it' do
+        it "upper-cases the course code before assigning it" do
           expect { run_editor("edit course code", "cxxz", "exit") }.
             to change { course.reload.course_code }.
             from(course_code).to("CXXZ")
         end
 
-        it 'does not apply an empty course code' do
+        it "does not apply an empty course code" do
           expect { run_editor("edit course code", "", "CXXY", "exit") }.
             to change { course.reload.course_code }.
             from(course_code).to("CXXY")
@@ -246,8 +246,8 @@ describe MCB::Editor::CoursesEditor, :needs_audit_user do
       end
 
       describe "(training locations)" do
-        let!(:site_1) { create(:site, location_name: 'ACME school', provider: provider) }
-        let!(:site_2) { create(:site, location_name: 'Zebra school', provider: provider) }
+        let!(:site_1) { create(:site, location_name: "ACME school", provider: provider) }
+        let!(:site_2) { create(:site, location_name: "Zebra school", provider: provider) }
         let!(:site_1_status) {
           create(:site_status, :running, :published, :part_time_vacancies, course: course, site: site_1)
         }
@@ -276,7 +276,7 @@ describe MCB::Editor::CoursesEditor, :needs_audit_user do
       end
 
       describe "(is_send)" do
-        context 'when course is not SEND' do
+        context "when course is not SEND" do
           it 'turns "yes" into true boolean on Course' do
             expect { run_editor("edit is SEND", "yes", "exit") }.
               to change { course.reload.is_send? }.
@@ -284,7 +284,7 @@ describe MCB::Editor::CoursesEditor, :needs_audit_user do
           end
         end
 
-        context 'when course is SEND' do
+        context "when course is SEND" do
           let(:is_send) { true }
 
           it 'turns "no" into false sboolean on Course' do
@@ -304,7 +304,7 @@ describe MCB::Editor::CoursesEditor, :needs_audit_user do
             .with { |req| req.body == { "email": email }.to_json }
             .to_return(
               status: 200,
-              body: '{ "result": true }'
+              body: '{ "result": true }',
             )
         }
         let!(:manage_api_request2) {
@@ -312,11 +312,11 @@ describe MCB::Editor::CoursesEditor, :needs_audit_user do
             .with { |req| req.body == { "email": email }.to_json }
             .to_return(
               status: 200,
-              body: '{ "result": true }'
+              body: '{ "result": true }',
             )
         }
 
-        it 'syncs courses to Find' do
+        it "syncs courses to Find" do
           run_editor("sync course(s) to Find", "exit")
 
           expect(manage_api_request1).to have_been_made
@@ -324,38 +324,38 @@ describe MCB::Editor::CoursesEditor, :needs_audit_user do
         end
       end
 
-      it 'does nothing upon an immediate exit' do
+      it "does nothing upon an immediate exit" do
         expect { run_editor("exit") }.to_not change { course.reload.name }.
           from("Original name")
       end
     end
 
-    describe 'does not specify any course codes' do
+    describe "does not specify any course codes" do
       let!(:another_course) {
         create(:course,
                provider: provider,
                course_code: "A123",
-               name: 'Another name')
+               name: "Another name")
       }
       let(:course_codes) { [] }
 
-      it 'edits all courses on the provider' do
+      it "edits all courses on the provider" do
         expect { run_editor("edit title", "Mathematics", "exit") }.
           to change { provider.reload.courses.order(:name).pluck(:name) }.
           from(["Another name", "Original name"]).to(%w[Mathematics Mathematics])
       end
     end
 
-    context 'when there are several courses with the same course code' do
+    context "when there are several courses with the same course code" do
       let(:another_provider) { create(:provider) }
       let!(:another_course_with_the_same_course_code) {
         create(:course,
                provider: another_provider,
                course_code: course.course_code,
-               name: 'Another name')
+               name: "Another name")
       }
 
-      it 'edits the course from the specified provider' do
+      it "edits the course from the specified provider" do
         expect { run_editor("edit title", "Mathematics", "exit") }.
           to change { course.reload.name }.
           from("Original name").to("Mathematics")
@@ -363,46 +363,46 @@ describe MCB::Editor::CoursesEditor, :needs_audit_user do
     end
 
     context "when trying to edit a course code that doesn't exist on this provider but exists on another one" do
-      let(:course_code) { 'ABCD' }
+      let(:course_code) { "ABCD" }
       let(:another_provider) { create(:provider) }
       let!(:another_course_with_another_provider) {
         create(:course,
                provider: another_provider,
-               course_code: 'XYZ1',
-               name: 'Another name')
+               course_code: "XYZ1",
+               name: "Another name")
       }
       subject { described_class.new(provider: provider, course_codes: %w{XYZ1}, requester: requester) }
 
-      it 'raises an error' do
+      it "raises an error" do
         expect { subject }.to raise_error(ArgumentError, /Couldn't find course XYZ1/)
       end
     end
 
-    describe 'tries to edit a non-existent course' do
+    describe "tries to edit a non-existent course" do
       let(:course_codes) { [course_code, "ABCD"] }
 
-      it 'raises an error' do
+      it "raises an error" do
         expect { subject }.to raise_error(ArgumentError, /Couldn't find course ABCD/)
       end
     end
 
-    describe 'runs the course creation wizard' do
+    describe "runs the course creation wizard" do
       def run_new_course_wizard(*input_cmds)
         with_stubbed_stdout(stdin: input_cmds.join("\n")) do
           subject.new_course_wizard
         end
       end
 
-      let!(:site_1) { create(:site, provider: provider, location_name: 'Albemarle School') }
-      let!(:site_2) { create(:site, provider: provider, location_name: 'King Edward School') }
-      let!(:site_3) { create(:site, provider: provider, location_name: 'Emmanuel School') }
+      let!(:site_1) { create(:site, provider: provider, location_name: "Albemarle School") }
+      let!(:site_2) { create(:site, provider: provider, location_name: "King Edward School") }
+      let!(:site_3) { create(:site, provider: provider, location_name: "Emmanuel School") }
       let(:new_course) { provider.courses.build }
 
       subject {
         described_class.new(
           provider: provider,
           requester: requester,
-          courses: [new_course]
+          courses: [new_course],
         )
       }
 
@@ -417,19 +417,19 @@ describe MCB::Editor::CoursesEditor, :needs_audit_user do
       let(:desired_attributes) {
         {
           title: "Biology",
-          qualification: 'qts',
-          study_mode: 'full_time',
+          qualification: "qts",
+          study_mode: "full_time",
           accredited_body: accredited_body.provider_code,
-          start_date: '1 September 2019',
-          route: 'pg_teaching_apprenticeship',
-          maths: 'equivalence_test',
-          english: 'equivalence_test',
-          science: 'not_required',
-          age_range: 'secondary',
-          course_code: '1X2B',
-          recruitment_cycle: '2', # the 2nd option should always be the current recruitment cycle
+          start_date: "1 September 2019",
+          route: "pg_teaching_apprenticeship",
+          maths: "equivalence_test",
+          english: "equivalence_test",
+          science: "not_required",
+          age_range: "secondary",
+          course_code: "1X2B",
+          recruitment_cycle: "2", # the 2nd option should always be the current recruitment cycle
           application_opening_date: "18 October 2018",
-          is_send: true
+          is_send: true,
         }
       }
 
@@ -446,7 +446,7 @@ describe MCB::Editor::CoursesEditor, :needs_audit_user do
           desired_attributes[:science],
           desired_attributes[:age_range],
           desired_attributes[:course_code],
-          'y', # is SEND confirmation
+          "y", # is SEND confirmation
           desired_attributes[:recruitment_cycle],
           "y", # confirm creation
           # subject selection
@@ -459,7 +459,7 @@ describe MCB::Editor::CoursesEditor, :needs_audit_user do
           "continue",
           desired_attributes[:application_opening_date],
           "", # enter to finish
-          ""
+          "",
         )[:stdout]
 
         expect(output).to include("Here's the final course that's been created")
@@ -497,7 +497,7 @@ describe MCB::Editor::CoursesEditor, :needs_audit_user do
           desired_attributes[:science],
           desired_attributes[:age_range],
           desired_attributes[:course_code],
-          'y', # is SEND confirmation
+          "y", # is SEND confirmation
           desired_attributes[:recruitment_cycle],
           "y", # confirm creation
           # subject selection
@@ -510,7 +510,7 @@ describe MCB::Editor::CoursesEditor, :needs_audit_user do
           "continue",
           desired_attributes[:application_opening_date],
           "", # enter to finish
-          ""
+          "",
         )
 
         created_course = provider.courses.find_by!(course_code: desired_attributes[:course_code])
@@ -531,7 +531,7 @@ describe MCB::Editor::CoursesEditor, :needs_audit_user do
           desired_attributes[:science],
           desired_attributes[:age_range],
           desired_attributes[:course_code],
-          'n', # is SEND
+          "n", # is SEND
           desired_attributes[:recruitment_cycle],
           "y", # confirm creation
           # subject selection
@@ -544,7 +544,7 @@ describe MCB::Editor::CoursesEditor, :needs_audit_user do
           "continue",
           "", # default application open date
           "", # enter to finish
-          ""
+          "",
         )
 
         created_course = provider.courses.find_by!(course_code: desired_attributes[:course_code])
@@ -572,7 +572,7 @@ describe MCB::Editor::CoursesEditor, :needs_audit_user do
           desired_attributes[:science],
           desired_attributes[:age_range],
           desired_attributes[:course_code],
-          'n', # is SEND
+          "n", # is SEND
           desired_attributes[:recruitment_cycle],
           "n", # confirm creation
         )[:stdout]
@@ -594,7 +594,7 @@ describe MCB::Editor::CoursesEditor, :needs_audit_user do
           desired_attributes[:science],
           desired_attributes[:age_range],
           course_code, # a duplicate course code
-          'n', # is SEND
+          "n", # is SEND
           desired_attributes[:recruitment_cycle],
           "y", # confirm creation
         )[:stdout]
@@ -606,10 +606,10 @@ describe MCB::Editor::CoursesEditor, :needs_audit_user do
     end
   end
 
-  context 'for an unauthorised user' do
+  context "for an unauthorised user" do
     let!(:requester) { create(:user, email: email, organisations: []) }
 
-    it 'raises an error' do
+    it "raises an error" do
       expect { subject }.to raise_error(Pundit::NotAuthorizedError)
     end
   end

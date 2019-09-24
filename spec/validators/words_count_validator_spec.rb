@@ -15,19 +15,19 @@ describe WordsCountValidator do
     model
   }
 
-  let(:expected_errors) { ['^Reduce the word count for some words'] }
+  let(:expected_errors) { ["^Reduce the word count for some words"] }
 
   subject! {
     model.valid?
   }
 
   context "with max valid number of words" do
-    let(:some_words_field) { (%w[word] * maximum).join(' ') }
+    let(:some_words_field) { (%w[word] * maximum).join(" ") }
     it { should be true }
   end
 
   context "with no words" do
-    let(:some_words_field) { '' }
+    let(:some_words_field) { "" }
     it { should be true }
   end
 
@@ -36,29 +36,29 @@ describe WordsCountValidator do
     it { should be true }
   end
 
-  context 'with invalid number of words' do
-    let(:some_words_field) { (%w[word] * maximum).join(' ') + ' popped' }
+  context "with invalid number of words" do
+    let(:some_words_field) { (%w[word] * maximum).join(" ") + " popped" }
 
     it { should be false }
-    it 'adds an error' do
+    it "adds an error" do
       expect(model.errors[:some_words]).to match_array expected_errors
     end
   end
 
-  context 'with newlines' do
-    let(:some_words_field) { (%w[word] * maximum).join("\n") + ' popped' }
+  context "with newlines" do
+    let(:some_words_field) { (%w[word] * maximum).join("\n") + " popped" }
 
     it { should be false }
-    it 'adds an error' do
+    it "adds an error" do
       expect(model.errors[:some_words]).to match_array expected_errors
     end
   end
 
-  context 'with non-words such as markdown' do
-    let(:some_words_field) { (%w[word] * maximum).join(' ') + ' *' }
+  context "with non-words such as markdown" do
+    let(:some_words_field) { (%w[word] * maximum).join(" ") + " *" }
 
     it { should be false }
-    it 'adds an error' do
+    it "adds an error" do
       expect(model.errors[:some_words]).to match_array expected_errors
     end
   end

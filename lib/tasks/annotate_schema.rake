@@ -1,8 +1,8 @@
 desc "Annotate models, routes and serializers"
 namespace :db do
-  task 'schema:load' => [:annotate]
+  task "schema:load" => [:annotate]
   task :annotate do
-    puts 'Annotating models...'
-    system 'bundle exec annotate'
+    puts "Annotating models..."
+    system "bundle exec annotate"
   end
 end

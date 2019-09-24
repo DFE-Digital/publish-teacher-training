@@ -9,7 +9,7 @@ module API
         end
       end
 
-      type 'courses'
+      type "courses"
 
       attributes :findable?, :open_for_applications?, :has_vacancies?,
                  :course_code, :name, :study_mode, :qualification, :description,
@@ -72,7 +72,7 @@ module API
 
       meta do
         {
-          edit_options: @object.edit_course_options
+          edit_options: @object.edit_course_options,
         }
       end
     end
