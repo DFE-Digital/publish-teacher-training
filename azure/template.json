@@ -206,6 +206,18 @@
         "description": "The name of the Azure Redis Cache to create."
       }
     },
+    "logstashHost": {
+      "type": "string",
+      "metadata": {
+        "description": "The host name of the logstash server."
+      }
+    },
+    "logstashPort": {
+      "type": "string",
+      "metadata": {
+        "description": "The port number for the logstash server connection."
+      }
+    },
     "backgroundContainerImageReference": {
       "type": "string",
       "metadata": {
@@ -553,7 +565,16 @@
               {
                 "name": "REDIS_URL",
                 "value": "[concat ('redis://',parameters('redisCacheName'),'.redis.cache.windows.net:6379')]"
+              },
+              {
+                "name": "SETTINGS__LOGSTASH__HOST",
+                "value": "[parameters('logitHost')]"
+              },
+              {
+                "name": "SETTINGS__LOGSTASH__PORT",
+                "value": "[parameters('logitPort')]"
               }
+
             ]
           }
         }
