@@ -580,7 +580,7 @@
               },
               {
                 "name": "SETTINGS__LOGSTASH__PORT",
-                "value": "[parameters('logstashPort')]"
+                "secureValue": "[parameters('logstashPort')]"
               }
             ]
           }
