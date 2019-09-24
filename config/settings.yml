@@ -20,10 +20,9 @@ govuk_notify:
 mcbg:
   redis_password: <%= SecureRandom.base64 %>
 system_authentication_token: <%= SecureRandom.base64 %>
+application: manage-courses-backend
 logstash:
   type: tcp
   host: # Our hostname here
   port: # Our port here
   ssl_enable: true
-
-
