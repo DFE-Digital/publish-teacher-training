@@ -22,6 +22,10 @@ class AuthenticationService
 
 private
 
+  def logger
+    Rails.logger
+  end
+
   def decoded_token
     @decoded_token ||= JWT.decode(
       encoded_token,
@@ -42,15 +46,35 @@ private
   end
 
   def user_by_email
-    return if email_from_token.blank?
+    if email_from_token.blank?
+      logger.debug("No email in token")
+      return
+    end
 
     @user_by_email ||= User.find_by("lower(email) = ?", email_from_token)
+    if @user_by_email
+      logger.debug("User found from sign_in_user_id in token " + {
+                     email: email_from_token,
+                     user: @user_by_email,
+                   }.to_s)
+    end
+    @user_by_email
   end
 
   def user_by_sign_in_user_id
-    return if sign_in_user_id_from_token.blank?
+    if sign_in_user_id_from_token.blank?
+      logger.debug("No sign_in_user_id in token")
+      return
+    end
 
-    User.find_by(sign_in_user_id: sign_in_user_id_from_token)
+    user = User.find_by(sign_in_user_id: sign_in_user_id_from_token)
+    if user
+      logger.debug("User found from sign_in_user_id in token " + {
+                     sign_in_user_id: sign_in_user_id_from_token,
+                     user: user,
+                   }.to_s)
+    end
+    user
   end
 
   def update_user_email_needed?
@@ -77,6 +101,10 @@ private
         existing_user_sign_in_user_id: user_by_email.sign_in_user_id
       )
     else
+      logger.debug("Updating user email " + {
+                     old: user.email,
+                     new: email_from_token,
+                   }.to_s)
       user.update(email: email_from_token)
     end
   end
