@@ -576,7 +576,7 @@
               },
               {
                 "name": "SETTINGS__LOGSTASH__HOST",
-                "value": "[parameters('logstashHost')]"
+                "secureValue": "[parameters('logstashHost')]"
               },
               {
                 "name": "SETTINGS__LOGSTASH__PORT",
