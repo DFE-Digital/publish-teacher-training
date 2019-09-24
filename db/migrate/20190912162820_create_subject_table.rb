@@ -39,11 +39,11 @@ class CreateSubjectTable < ActiveRecord::Migration[5.2]
         { subject_name: 'Mathematics', subject_code: 'G1' },
         { subject_name: 'Music', subject_code: 'W3' },
         { subject_name: 'Philosophy', subject_code: 'P1' },
-        { subject_name: 'Physical Education', subject_code: 'C6' },
+        { subject_name: 'Physical education', subject_code: 'C6' },
         { subject_name: 'Physics', subject_code: 'F3' },
         { subject_name: 'Psychology', subject_code: 'C8' },
-        { subject_name: 'Religious Education', subject_code: 'V6' },
-        { subject_name: 'Social Sciences', subject_code: '14' },
+        { subject_name: 'Religious education', subject_code: 'V6' },
+        { subject_name: 'Social sciences', subject_code: '14' },
         # NOTE: no subject_code for 'Modern Languages' because this is just a stub used to trigger
         # selection of actual entries from `modern_languages` list
         { subject_name: 'Modern Languages', subject_code: nil }
