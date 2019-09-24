@@ -568,11 +568,11 @@
               },
               {
                 "name": "SETTINGS__LOGSTASH__HOST",
-                "value": "[parameters('logitHost')]"
+                "value": "[parameters('logstashHost')]"
               },
               {
                 "name": "SETTINGS__LOGSTASH__PORT",
-                "value": "[parameters('logitPort')]"
+                "value": "[parameters('logstashPort')]"
               }
 
             ]
