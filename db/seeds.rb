@@ -73,7 +73,7 @@ def create_standard_provider_and_courses_for_cycle(recruitment_cycle, superuser)
     qualification: :pgce_with_qts,
     ucas_subjects: [
      UCASSubject.find_by(subject_name: "Secondary"),
-     UCASSubject.find_by(subject_name: "Mathematics")
+     UCASSubject.find_by(subject_name: "Mathematics"),
     ],
     study_mode: "F",
   )

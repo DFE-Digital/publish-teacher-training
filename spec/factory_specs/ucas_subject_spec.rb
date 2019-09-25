@@ -6,7 +6,7 @@ describe "UCASSubject Factory" do
 
     it { should be_instance_of(UCASSubject) }
     it { should be_valid }
-    its(:subject_name) { should eq 'Further Education' }
+    its(:subject_name) { should eq "Further Education" }
     it { should be_in(UCASSubject.further_education) }
   end
 end

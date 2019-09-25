@@ -8,7 +8,7 @@
 #
 
 class CourseUCASSubject < ApplicationRecord
-  self.table_name = 'course_ucas_subject'
+  self.table_name = "course_ucas_subject"
 
   belongs_to :course
   belongs_to :ucas_subject
