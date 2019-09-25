@@ -33,8 +33,9 @@ Rails.application.configure do
   # config.force_ssl = true
 
   # Logging
-  config.log_level = :info
   config.log_tags = [:request_id] # Prepend all log lines with the following tags.
+  config.log_level = Settings.log_level
+
   if Settings.logstash.host && Settings.logstash.port
     config.logger = LogStashLogger.new(Settings.logstash.to_h)
   else

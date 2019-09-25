@@ -22,6 +22,10 @@ class AuthenticationService
 
 private
 
+  def logger
+    Rails.logger
+  end
+
   def decoded_token
     @decoded_token ||= JWT.decode(
       encoded_token,
@@ -42,15 +46,36 @@ private
   end
 
   def user_by_email
-    return if email_from_token.blank?
+    if email_from_token.blank?
+      logger.debug("No email in token")
+      return
+    end
 
     @user_by_email ||= User.find_by("lower(email) = ?", email_from_token)
+    if @user_by_email
+      logger.debug {
+        "User found by email address " + {
+          user: log_safe_user(@user_by_email),
+        }.to_s
+      }
+    end
+    @user_by_email
   end
 
   def user_by_sign_in_user_id
-    return if sign_in_user_id_from_token.blank?
+    if sign_in_user_id_from_token.blank?
+      logger.debug("No sign_in_user_id in token")
+      return
+    end
 
-    User.find_by(sign_in_user_id: sign_in_user_id_from_token)
+    user = User.find_by(sign_in_user_id: sign_in_user_id_from_token)
+    if user
+      logger.debug("User found from sign_in_user_id in token " + {
+                     sign_in_user_id: sign_in_user_id_from_token,
+                     user: log_safe_user(user),
+                   }.to_s)
+    end
+    user
   end
 
   def update_user_email_needed?
@@ -77,7 +102,35 @@ private
         existing_user_sign_in_user_id: user_by_email.sign_in_user_id,
       )
     else
+      logger.debug("Updating user email for " + {
+        user: log_safe_user(user),
+        new_email_md5: md5_email(email_from_token),
+      }.to_s)
+
       user.update(email: email_from_token)
     end
+  end
+
+  def log_safe_user(user, reload: false)
+    if @log_safe_user.nil? || reload
+      @log_safe_user = user.slice(
+        'id',
+        'state',
+        'first_login_date_utc',
+        'last_login_date_utc',
+        'sign_in_user_id',
+        'welcome_email_date_utc',
+        'invite_date_utc',
+        'accept_terms_date_utc'
+      )
+      @log_safe_user.merge!(
+        Hash[user.slice('email').map { |k, v| [k + '_md5', Digest::MD5.hexdigest(v)] }]
+      )
+    end
+    @log_safe_user
+  end
+
+  def md5_email(email)
+    "MD5:" + Digest::MD5.hexdigest(email)
   end
 end

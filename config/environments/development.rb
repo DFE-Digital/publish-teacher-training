@@ -1,4 +1,4 @@
-Rails.application.configure do
+Rails.application.configure do # rubocop: disable Metrics/BlockLength
   # Settings specified here will take precedence over those in config/application.rb.
 
   # In the development environment your application's code is reloaded on
@@ -47,4 +47,15 @@ Rails.application.configure do
   config.authentication_token = ENV.fetch("AUTHENTICATION_TOKEN", "bats")
 
   config.active_job.queue_adapter = :sidekiq
+
+  # Logging
+  config.log_level = Settings.log_level
+
+  if Settings.logstash.host && Settings.logstash.port
+    config.active_record.logger = nil # Don't log SQL to logstash
+    config.logger = LogStashLogger.new(Settings.logstash.to_h)
+  else
+    config.logger = ActiveSupport::Logger.new(STDOUT)
+    config.logger.warn("logstash not configured, falling back to standard Rails logging")
+  end
 end
