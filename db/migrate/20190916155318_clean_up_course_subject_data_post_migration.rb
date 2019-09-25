@@ -2,7 +2,7 @@
 class CleanUpCourseSubjectDataPostMigration < ActiveRecord::Migration[5.2]
   def change
     say_with_time "cleansing subject data" do
-      courses = RecruitmentCycle.second.courses.includes(:subjects)
+      courses = RecruitmentCycle.find_by(year: "2020").courses.includes(:subjects)
 
       # targetting primary courses
       primary = Subject.find_by!(subject_name: "Primary")
