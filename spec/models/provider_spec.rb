@@ -346,14 +346,13 @@ describe Provider, type: :model do
 
     describe "#syncable_courses" do
       let(:site) { build(:site) }
-      let(:dfe_subject) { build(:ucas_subject, subject_name: "primary") }
-      let(:non_dfe_subject) { build(:ucas_subject, subject_name: "secondary") }
+      let(:dfe_subject) { build(:subject, :primary) }
       let(:findable_site_status_1) { build(:site_status, :findable, site: site) }
       let(:findable_site_status_2) { build(:site_status, :findable, site: site) }
       let(:suspended_site_status) { build(:site_status, :suspended, site: site) }
-      let(:syncable_course) { build(:course, site_statuses: [findable_site_status_1], ucas_subjects: [dfe_subject]) }
-      let(:suspended_course) { build(:course, site_statuses: [suspended_site_status], ucas_subjects: [dfe_subject]) }
-      let(:invalid_subject_course) { build(:course, site_statuses: [findable_site_status_2], ucas_subjects: [non_dfe_subject]) }
+      let(:syncable_course) { build(:course, site_statuses: [findable_site_status_1], subjects: [dfe_subject]) }
+      let(:suspended_course) { build(:course, site_statuses: [suspended_site_status], subjects: [dfe_subject]) }
+      let(:invalid_subject_course) { build(:course, site_statuses: [findable_site_status_2], subjects: []) }
 
       subject { create(:provider, courses: [syncable_course, suspended_course, invalid_subject_course], sites: [site]) }
 

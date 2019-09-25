@@ -38,11 +38,10 @@ describe "Provider Publish API v2", type: :request do
       let(:enrichment) { build(:provider_enrichment, :initial_draft) }
       let(:site1) { create(:site_status, :findable) }
       let(:site2) { create(:site_status, :findable) }
-      let(:course1) { build(:course, site_statuses: [site1], ucas_subjects: [dfe_subject]) }
-      let(:course2) { build(:course, site_statuses: [site2], ucas_subjects: [dfe_subject]) }
+      let(:course1) { build(:course, site_statuses: [site1], subjects: [dfe_subject]) }
+      let(:course2) { build(:course, site_statuses: [site2], subjects: [dfe_subject]) }
 
-      let!(:dfe_subject) { build(:ucas_subject, subject_name: "primary") }
-      let(:non_dfe_subject) { build(:ucas_subject, subject_name: "secondary") }
+      let!(:dfe_subject) { build(:subject, :primary) }
 
       let!(:provider) do
         create(

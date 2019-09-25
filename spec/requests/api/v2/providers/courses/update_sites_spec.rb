@@ -10,9 +10,9 @@ describe "PATCH /providers/:provider_code/courses/:course_code with sites" do
     ActionController::HttpAuthentication::Token.encode_credentials(token)
   end
 
-  let(:course) { create :course, provider: provider, site_statuses: [site_status], ucas_subjects: [primary_subject] }
+  let(:course) { create :course, provider: provider, site_statuses: [site_status], subjects: [primary_subject] }
   let(:site_status) { build(:site_status) }
-  let(:primary_subject) { build(:ucas_subject, subject_name: "primary") }
+  let(:primary_subject) { build(:subject, :primary) }
   let(:site_to_add) { create :site, provider: provider }
   let(:unwanted_site) { create :site, provider: provider }
   let(:existing_site) { create :site, provider: provider }

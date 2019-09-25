@@ -26,9 +26,9 @@ FactoryBot.define do
     end
 
     trait :primary_with_mathematics do
-      subject_name { 'Primary with mathematics' }
-      subject_code { '01' }
-      type { 'PrimarySubject' }
+      subject_name { "Primary with mathematics" }
+      subject_code { "01" }
+      type { "PrimarySubject" }
     end
 
     trait :mathematics do
@@ -69,13 +69,8 @@ FactoryBot.define do
 
     trait :humanities do
       subject_name { "Humanities" }
-      subject_code { "U0" }
+      subject_code { nil }
       type { "DiscontinuedSubject" }
-    end
-
-    trait :secondary do
-      subject_name { "Secondary" }
-      subject_code { "05" }
     end
   end
 end
