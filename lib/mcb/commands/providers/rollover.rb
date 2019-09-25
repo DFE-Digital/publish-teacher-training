@@ -21,23 +21,23 @@ run do |opts, args, _cmd| # rubocop:disable Metrics/BlockLength
         Provider.connection.transaction do
           copy_courses_to_provider_service = Courses::CopyToProviderService.new(
             sites_copy_to_course: Sites::CopyToCourseService.new,
-            enrichments_copy_to_course: Enrichments::CopyToCourseService.new
+            enrichments_copy_to_course: Enrichments::CopyToCourseService.new,
           )
 
           copy_prodiver_to_recruitment_cycle = Providers::CopyToRecruitmentCycleService.new(
             copy_course_to_provider_service: copy_courses_to_provider_service,
-            copy_site_to_provider_service: Sites::CopyToProviderService.new
+            copy_site_to_provider_service: Sites::CopyToProviderService.new,
           )
 
           counts = copy_prodiver_to_recruitment_cycle.execute(
-            provider: provider, new_recruitment_cycle: new_recruitment_cycle
+            provider: provider, new_recruitment_cycle: new_recruitment_cycle,
           )
         end
       end
       puts "provider #{counts[:providers] ? 'copied' : 'skipped'}, " \
            "#{counts[:sites]} sites copied, " \
            "#{counts[:courses]} courses copied " \
-           'in %.3f seconds' % bm.real
+           "in %.3f seconds" % bm.real
       total_counts.merge!(counts) { |_, total, count| total + count }
     end
   end

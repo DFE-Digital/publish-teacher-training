@@ -29,10 +29,10 @@ class User < ApplicationRecord
   has_many :access_requests,
            foreign_key: :requester_id,
            primary_key: :id,
-           inverse_of: 'requester'
+           inverse_of: "requester"
 
-  scope :admins, -> { where('email ~ ?', DFE_EMAIL_PATTERN) }
-  scope :non_admins, -> { where.not('email ~ ?', DFE_EMAIL_PATTERN) }
+  scope :admins, -> { where("email ~ ?", DFE_EMAIL_PATTERN) }
+  scope :non_admins, -> { where.not("email ~ ?", DFE_EMAIL_PATTERN) }
   scope :active, -> { where.not(accept_terms_date_utc: nil) }
 
   validates :email, presence: true, format: { with: /@/, message: "must contain @" }
@@ -40,7 +40,7 @@ class User < ApplicationRecord
 
   audited
 
-  aasm column: 'state' do
+  aasm column: "state" do
     state :new, initial: true
     state :transitioned
     state :rolled_over

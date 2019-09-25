@@ -1,2 +1,2 @@
-name 'az'
-summary 'Operate azure things'
+name "az"
+summary "Operate azure things"

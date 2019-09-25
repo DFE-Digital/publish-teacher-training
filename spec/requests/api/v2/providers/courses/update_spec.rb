@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe 'PATCH /providers/:provider_code/courses/:course_code' do
+describe "PATCH /providers/:provider_code/courses/:course_code" do
   let(:jsonapi_renderer) { JSONAPI::Serializable::Renderer.new }
   let(:request_path) do
     "/api/v2/recruitment_cycles/#{recruitment_cycle.year}" +
@@ -12,16 +12,16 @@ describe 'PATCH /providers/:provider_code/courses/:course_code' do
     jsonapi_data = jsonapi_renderer.render(
       course,
       class: {
-        Course: API::V2::SerializableCourse
-      }
+        Course: API::V2::SerializableCourse,
+      },
     )
 
     jsonapi_data.dig(:data, :attributes).slice!(*permitted_params)
 
     patch request_path,
-          headers: { 'HTTP_AUTHORIZATION' => credentials },
+          headers: { "HTTP_AUTHORIZATION" => credentials },
           params: {
-            _jsonapi: jsonapi_data
+            _jsonapi: jsonapi_data,
           }
   end
 
@@ -47,18 +47,18 @@ describe 'PATCH /providers/:provider_code/courses/:course_code' do
 
   let(:updated_attributes) do
     {
-      about_course: 'new about course',
-      course_length: 'new course length',
-      fee_details: 'new fee details',
+      about_course: "new about course",
+      course_length: "new course length",
+      fee_details: "new fee details",
       fee_international: 0,
       fee_uk_eu: 0,
-      financial_support: 'new financial support',
-      how_school_placements_work: 'new how school placements work',
-      interview_process: 'new interview process',
-      other_requirements: 'new other requirements',
-      personal_qualities: 'new personal qualities',
-      required_qualifications: 'new required qualifications',
-      salary_details: 'new salary details'
+      financial_support: "new financial support",
+      how_school_placements_work: "new how school placements work",
+      interview_process: "new interview process",
+      other_requirements: "new other requirements",
+      personal_qualities: "new personal qualities",
+      required_qualifications: "new required qualifications",
+      salary_details: "new salary details",
     }
   end
   let(:permitted_params) do
@@ -78,8 +78,8 @@ describe 'PATCH /providers/:provider_code/courses/:course_code' do
     ]
   end
 
-  describe 'with unpermitted attributes on course object' do
-    shared_examples 'does not allow assignment' do |attribute, value|
+  describe "with unpermitted attributes on course object" do
+    shared_examples "does not allow assignment" do |attribute, value|
       it "doesn't permit #{attribute}" do
         update_course = build(:course, attribute => value, provider: provider)
         update_course.id = course.id
@@ -88,28 +88,28 @@ describe 'PATCH /providers/:provider_code/courses/:course_code' do
       end
     end
 
-    include_examples 'does not allow assignment', :age_range, 'primary'
-    include_examples 'does not allow assignment', :course_code, 'CZ'
-    include_examples 'does not allow assignment', :name, 'Name'
-    include_examples 'does not allow assignment', :profpost_flag, 'BO'
-    include_examples 'does not allow assignment', :program_type, 'SC'
-    include_examples 'does not allow assignment', :qualification, 2
-    include_examples 'does not allow assignment', :start_date, DateTime.new(Settings.current_recruitment_cycle, 10, 10)
-    include_examples 'does not allow assignment', :study_mode, 'P'
-    include_examples 'does not allow assignment', :modular, 'Modular'
-    include_examples 'does not allow assignment', :english, 2
-    include_examples 'does not allow assignment', :maths, 2
-    include_examples 'does not allow assignment', :science, 2
-    include_examples 'does not allow assignment', :created_at, Date.yesterday
-    include_examples 'does not allow assignment', :updated_at, Date.yesterday
-    include_examples 'does not allow assignment', :changed_at, Date.yesterday
+    include_examples "does not allow assignment", :age_range, "primary"
+    include_examples "does not allow assignment", :course_code, "CZ"
+    include_examples "does not allow assignment", :name, "Name"
+    include_examples "does not allow assignment", :profpost_flag, "BO"
+    include_examples "does not allow assignment", :program_type, "SC"
+    include_examples "does not allow assignment", :qualification, 2
+    include_examples "does not allow assignment", :start_date, DateTime.new(Settings.current_recruitment_cycle, 10, 10)
+    include_examples "does not allow assignment", :study_mode, "P"
+    include_examples "does not allow assignment", :modular, "Modular"
+    include_examples "does not allow assignment", :english, 2
+    include_examples "does not allow assignment", :maths, 2
+    include_examples "does not allow assignment", :science, 2
+    include_examples "does not allow assignment", :created_at, Date.yesterday
+    include_examples "does not allow assignment", :updated_at, Date.yesterday
+    include_examples "does not allow assignment", :changed_at, Date.yesterday
 
     it "doesn't allow updating of provider" do
       another_provider = create(:provider)
       update_course    = build(
         :course,
         provider_id: another_provider.id,
-        provider:    provider
+        provider:    provider,
       )
       update_course.id = course.id
 
@@ -123,7 +123,7 @@ describe 'PATCH /providers/:provider_code/courses/:course_code' do
       update_course    = build(
         :course,
         accrediting_provider: another_provider,
-        provider:             provider
+        provider:             provider,
       )
       update_course.id = course.id
 
@@ -133,7 +133,7 @@ describe 'PATCH /providers/:provider_code/courses/:course_code' do
     end
   end
 
-  context 'course has no enrichments' do
+  context "course has no enrichments" do
     it "creates a draft enrichment for the course" do
       expect {
         perform_request update_course
@@ -166,7 +166,7 @@ describe 'PATCH /providers/:provider_code/courses/:course_code' do
           other_requirements: nil,
           personal_qualities: nil,
           required_qualifications: nil,
-          salary_details: nil
+          salary_details: nil,
         }
       end
 
@@ -193,48 +193,48 @@ describe 'PATCH /providers/:provider_code/courses/:course_code' do
       end
     end
 
-    it 'returns ok' do
+    it "returns ok" do
       perform_request update_course
 
       expect(response).to be_ok
     end
 
-    it 'returns the updated course' do
+    it "returns the updated course" do
       perform_request update_course
-      json_response = JSON.parse(response.body)['data']
+      json_response = JSON.parse(response.body)["data"]
 
       expect(json_response).to have_id(course.id.to_s)
-      expect(json_response).to have_type('courses')
+      expect(json_response).to have_type("courses")
       expect(json_response).to have_attribute(:about_course)
-        .with_value('new about course')
+        .with_value("new about course")
       expect(json_response).to have_attribute(:course_length)
-        .with_value('new course length')
+        .with_value("new course length")
       expect(json_response).to have_attribute(:fee_details)
-        .with_value('new fee details')
+        .with_value("new fee details")
       expect(json_response).to have_attribute(:fee_international)
         .with_value(0)
       expect(json_response).to have_attribute(:fee_uk_eu)
         .with_value(0)
       expect(json_response).to have_attribute(:financial_support)
-        .with_value('new financial support')
+        .with_value("new financial support")
       expect(json_response).to have_attribute(:how_school_placements_work)
-        .with_value('new how school placements work')
+        .with_value("new how school placements work")
       expect(json_response).to have_attribute(:interview_process)
-        .with_value('new interview process')
+        .with_value("new interview process")
       expect(json_response).to have_attribute(:other_requirements)
-        .with_value('new other requirements')
+        .with_value("new other requirements")
       expect(json_response).to have_attribute(:personal_qualities)
-        .with_value('new personal qualities')
+        .with_value("new personal qualities")
       expect(json_response).to have_attribute(:required_qualifications)
-        .with_value('new required qualifications')
+        .with_value("new required qualifications")
       expect(json_response).to have_attribute(:salary_details)
-        .with_value('new salary details')
+        .with_value("new salary details")
       expect(json_response).to have_attribute(:content_status)
-        .with_value('draft')
+        .with_value("draft")
     end
   end
 
-  context 'course has no enrichments and is in the next recruitment cycle' do
+  context "course has no enrichments and is in the next recruitment cycle" do
     let(:recruitment_cycle) { create :recruitment_cycle, :next }
 
     it "creates a draft enrichment for the course" do
@@ -269,7 +269,7 @@ describe 'PATCH /providers/:provider_code/courses/:course_code' do
           other_requirements: nil,
           personal_qualities: nil,
           required_qualifications: nil,
-          salary_details: nil
+          salary_details: nil,
         }
       end
 
@@ -296,48 +296,48 @@ describe 'PATCH /providers/:provider_code/courses/:course_code' do
       end
     end
 
-    it 'returns ok' do
+    it "returns ok" do
       perform_request update_course
 
       expect(response).to be_ok
     end
 
-    it 'returns the updated course' do
+    it "returns the updated course" do
       perform_request update_course
-      json_response = JSON.parse(response.body)['data']
+      json_response = JSON.parse(response.body)["data"]
 
       expect(json_response).to have_id(course.id.to_s)
-      expect(json_response).to have_type('courses')
+      expect(json_response).to have_type("courses")
       expect(json_response).to have_attribute(:about_course)
-        .with_value('new about course')
+        .with_value("new about course")
       expect(json_response).to have_attribute(:course_length)
-        .with_value('new course length')
+        .with_value("new course length")
       expect(json_response).to have_attribute(:fee_details)
-        .with_value('new fee details')
+        .with_value("new fee details")
       expect(json_response).to have_attribute(:fee_international)
         .with_value(0)
       expect(json_response).to have_attribute(:fee_uk_eu)
         .with_value(0)
       expect(json_response).to have_attribute(:financial_support)
-        .with_value('new financial support')
+        .with_value("new financial support")
       expect(json_response).to have_attribute(:how_school_placements_work)
-        .with_value('new how school placements work')
+        .with_value("new how school placements work")
       expect(json_response).to have_attribute(:interview_process)
-        .with_value('new interview process')
+        .with_value("new interview process")
       expect(json_response).to have_attribute(:other_requirements)
-        .with_value('new other requirements')
+        .with_value("new other requirements")
       expect(json_response).to have_attribute(:personal_qualities)
-        .with_value('new personal qualities')
+        .with_value("new personal qualities")
       expect(json_response).to have_attribute(:required_qualifications)
-        .with_value('new required qualifications')
+        .with_value("new required qualifications")
       expect(json_response).to have_attribute(:salary_details)
-        .with_value('new salary details')
+        .with_value("new salary details")
       expect(json_response).to have_attribute(:content_status)
-        .with_value('draft')
+        .with_value("draft")
     end
   end
 
-  context 'course has a draft enrichment' do
+  context "course has a draft enrichment" do
     let(:enrichment) { build :course_enrichment }
     let(:course) do
       create :course, :with_accrediting_provider, provider: provider, program_type: :school_direct_training_programme, enrichments: [enrichment]
@@ -347,7 +347,7 @@ describe 'PATCH /providers/:provider_code/courses/:course_code' do
       expect {
         perform_request update_course
       }.not_to(
-        change { course.enrichments.reload.count }
+        change { course.enrichments.reload.count },
       )
 
       draft_enrichment = course.enrichments.draft.first
@@ -374,7 +374,7 @@ describe 'PATCH /providers/:provider_code/courses/:course_code' do
           other_requirements: Faker::Lorem.sentence(word_count: 1000),
           personal_qualities: Faker::Lorem.sentence(word_count: 1000),
           required_qualifications: Faker::Lorem.sentence(word_count: 1000),
-          salary_details: Faker::Lorem.sentence(word_count: 1000)
+          salary_details: Faker::Lorem.sentence(word_count: 1000),
         }
       end
 
@@ -405,7 +405,7 @@ describe 'PATCH /providers/:provider_code/courses/:course_code' do
           other_requirements: "",
           personal_qualities: "",
           required_qualifications: "",
-          salary_details: ""
+          salary_details: "",
         }
       end
 
@@ -423,7 +423,7 @@ describe 'PATCH /providers/:provider_code/courses/:course_code' do
     end
   end
 
-  context 'course has only a published enrichment' do
+  context "course has only a published enrichment" do
     let(:enrichment) { build :course_enrichment, :published }
     let(:course) do
       create :course, provider: provider, enrichments: [enrichment]
@@ -433,7 +433,7 @@ describe 'PATCH /providers/:provider_code/courses/:course_code' do
       expect { perform_request update_course }
         .to(
           change { course.enrichments.reload.draft.count }
-            .from(0).to(1)
+            .from(0).to(1),
         )
 
       draft_enrichment = course.enrichments.draft.first
@@ -445,7 +445,7 @@ describe 'PATCH /providers/:provider_code/courses/:course_code' do
       expect { perform_request update_course }
       .to(
         change { course.enrichments.reload.count }
-          .from(1).to(2)
+          .from(1).to(2),
       )
     end
 
@@ -471,7 +471,7 @@ describe 'PATCH /providers/:provider_code/courses/:course_code' do
     end
   end
 
-  context 'course has a rolled-over enrichment' do
+  context "course has a rolled-over enrichment" do
     let(:enrichment) { build :course_enrichment, :rolled_over }
     let(:course) do
       create :course, :with_accrediting_provider, provider: provider, program_type: :school_direct_training_programme, enrichments: [enrichment]
@@ -481,7 +481,7 @@ describe 'PATCH /providers/:provider_code/courses/:course_code' do
       expect {
         perform_request update_course
       }.not_to(
-        change { course.enrichments.reload.count }
+        change { course.enrichments.reload.count },
       )
 
       draft_enrichment = course.enrichments.draft.first
@@ -494,7 +494,7 @@ describe 'PATCH /providers/:provider_code/courses/:course_code' do
         perform_request update_course
       }.to(
         change { course.reload.content_status }
-          .from(:rolled_over).to(:draft)
+          .from(:rolled_over).to(:draft),
       )
     end
 
@@ -511,7 +511,7 @@ describe 'PATCH /providers/:provider_code/courses/:course_code' do
           other_requirements: Faker::Lorem.sentence(word_count: 1000),
           personal_qualities: Faker::Lorem.sentence(word_count: 1000),
           required_qualifications: Faker::Lorem.sentence(word_count: 1000),
-          salary_details: Faker::Lorem.sentence(word_count: 1000)
+          salary_details: Faker::Lorem.sentence(word_count: 1000),
         }
       end
 
@@ -548,7 +548,7 @@ describe 'PATCH /providers/:provider_code/courses/:course_code' do
           other_requirements: "",
           personal_qualities: "",
           required_qualifications: "",
-          salary_details: ""
+          salary_details: "",
         }
       end
 
@@ -563,15 +563,15 @@ describe 'PATCH /providers/:provider_code/courses/:course_code' do
           perform_request update_course
         }.to(
           change { course.reload.content_status }
-            .from(:rolled_over).to(:draft)
+            .from(:rolled_over).to(:draft),
         )
       end
     end
   end
 
-  describe 'from published to draft' do
-    shared_examples 'only one attribute has changed' do |attribute_key, attribute_value, jsonapi_serialized_name|
-      describe 'a subsequent draft enrichment is added' do
+  describe "from published to draft" do
+    shared_examples "only one attribute has changed" do |attribute_key, attribute_value, jsonapi_serialized_name|
+      describe "a subsequent draft enrichment is added" do
         let(:updated_attributes) do
           attribute = {}
           attribute[attribute_key] = attribute_value
@@ -629,15 +629,15 @@ describe 'PATCH /providers/:provider_code/courses/:course_code' do
       create :course, provider: provider, enrichments: [original_enrichment]
     end
 
-    include_examples 'only one attribute has changed', :fee_details, 'changed fee_details'
-    include_examples 'only one attribute has changed', :fee_international, 666
-    include_examples 'only one attribute has changed', :fee_uk_eu, 999
-    include_examples 'only one attribute has changed', :financial_support, 'changed financial_support'
-    include_examples 'only one attribute has changed', :how_school_placements_work, 'changed how_school_placements_work'
-    include_examples 'only one attribute has changed', :interview_process, 'changed interview_process'
-    include_examples 'only one attribute has changed', :other_requirements, 'changed other_requirements'
-    include_examples 'only one attribute has changed', :personal_qualities, 'changed personal_qualities'
-    include_examples 'only one attribute has changed', :required_qualifications, 'changed required_qualifications'
-    include_examples 'only one attribute has changed', :salary_details, 'changed salary_details'
+    include_examples "only one attribute has changed", :fee_details, "changed fee_details"
+    include_examples "only one attribute has changed", :fee_international, 666
+    include_examples "only one attribute has changed", :fee_uk_eu, 999
+    include_examples "only one attribute has changed", :financial_support, "changed financial_support"
+    include_examples "only one attribute has changed", :how_school_placements_work, "changed how_school_placements_work"
+    include_examples "only one attribute has changed", :interview_process, "changed interview_process"
+    include_examples "only one attribute has changed", :other_requirements, "changed other_requirements"
+    include_examples "only one attribute has changed", :personal_qualities, "changed personal_qualities"
+    include_examples "only one attribute has changed", :required_qualifications, "changed required_qualifications"
+    include_examples "only one attribute has changed", :salary_details, "changed salary_details"
   end
 end

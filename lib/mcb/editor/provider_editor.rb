@@ -41,7 +41,7 @@ module MCB
 
           puts "New provider has been created: #{provider}"
         else
-          puts 'Aborting...'
+          puts "Aborting..."
         end
       end
 
@@ -135,7 +135,7 @@ module MCB
           address3: provider.address3,
           address4: provider.address4,
           postcode: provider.postcode,
-          region_code: provider.region_code
+          region_code: provider.region_code,
         )
       end
 
@@ -144,16 +144,16 @@ module MCB
         while next_recruitment_cycle
           copy_courses_to_provider_service = Courses::CopyToProviderService.new(
             sites_copy_to_course: Sites::CopyToCourseService.new,
-            enrichments_copy_to_course: Enrichments::CopyToCourseService.new
+            enrichments_copy_to_course: Enrichments::CopyToCourseService.new,
           )
 
           copy_provider_to_recruitment_cycle = Providers::CopyToRecruitmentCycleService.new(
             copy_course_to_provider_service: copy_courses_to_provider_service,
-            copy_site_to_provider_service: Sites::CopyToProviderService.new
+            copy_site_to_provider_service: Sites::CopyToProviderService.new,
           )
 
           copy_provider_to_recruitment_cycle.execute(
-            provider: provider, new_recruitment_cycle: next_recruitment_cycle
+            provider: provider, new_recruitment_cycle: next_recruitment_cycle,
           )
           next_recruitment_cycle = next_recruitment_cycle.next
         end
@@ -191,13 +191,13 @@ module MCB
           initial_items: @selected_courses,
           possible_items: @provider.courses.order(:name),
           select_all_option: true,
-          hidden_label: ->(course) { course.course_code }
+          hidden_label: ->(course) { course.course_code },
         )
         mcb_courses_edit(@selected_courses.map(&:course_code).sort) unless @selected_courses.empty?
       end
 
       def mcb_courses_edit(course_codes)
-        command_params = ['courses', 'edit', provider.provider_code] + course_codes + environment_options + recruitment_cycle_year_options
+        command_params = ["courses", "edit", provider.provider_code] + course_codes + environment_options + recruitment_cycle_year_options
         $mcb.run(command_params)
       end
 
@@ -206,7 +206,7 @@ module MCB
       end
 
       def environment_options
-        @environment.present? ? ['-E', @environment] : []
+        @environment.present? ? ["-E", @environment] : []
       end
     end
   end

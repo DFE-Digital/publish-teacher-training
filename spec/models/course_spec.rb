@@ -27,21 +27,21 @@
 #  is_send                   :boolean          default(FALSE)
 #
 
-require 'rails_helper'
+require "rails_helper"
 
 describe Course, type: :model do
-  let(:course) { create(:course, name: 'Biology', course_code: '3X9F') }
+  let(:course) { create(:course, name: "Biology", course_code: "3X9F") }
   let(:subject) { course }
 
   its(:to_s) { should eq("Biology (#{course.provider.provider_code}/3X9F) [2019/20]") }
-  its(:modular) { should eq('') }
+  its(:modular) { should eq("") }
 
-  describe 'auditing' do
+  describe "auditing" do
     it { should be_audited }
     it { should have_associated_audits }
   end
 
-  describe 'associations' do
+  describe "associations" do
     it { should belong_to(:provider) }
     it {
       should belong_to(:accrediting_provider)
@@ -55,16 +55,16 @@ describe Course, type: :model do
     it { should have_many(:enrichments) }
   end
 
-  describe 'validations' do
-    it 'validates scoped to provider_id and only on create and update' do
+  describe "validations" do
+    it "validates scoped to provider_id and only on create and update" do
       expect(create(:course)).to validate_uniqueness_of(:course_code)
                                   .scoped_to(:provider_id)
                                   .on(%i[create update])
     end
 
-    describe 'valid?' do
+    describe "valid?" do
       let(:course) { create(:course, enrichments: [invalid_enrichment]) }
-      let(:invalid_enrichment) { build(:course_enrichment, about_course: '') }
+      let(:invalid_enrichment) { build(:course_enrichment, about_course: "") }
 
       before do
         subject
@@ -72,33 +72,33 @@ describe Course, type: :model do
         subject.valid?
       end
 
-      it 'should add enrichment errors' do
+      it "should add enrichment errors" do
         expect(subject.errors.full_messages).to_not be_empty
       end
     end
 
-    describe 'publishable?' do
+    describe "publishable?" do
       let(:course) { create(:course, enrichments: [invalid_enrichment]) }
-      let(:invalid_enrichment) { create(:course_enrichment, about_course: '') }
+      let(:invalid_enrichment) { create(:course_enrichment, about_course: "") }
 
       before do
         subject.publishable?
       end
 
-      it 'should add enrichment errors' do
+      it "should add enrichment errors" do
         expect(subject.errors.full_messages).to_not be_empty
       end
     end
   end
 
-  describe 'changed_at' do
-    it 'is set on create' do
+  describe "changed_at" do
+    it "is set on create" do
       course = create(:course)
       expect(course.changed_at).to be_present
       expect(course.changed_at).to eq course.updated_at
     end
 
-    it 'is set on update' do
+    it "is set on update" do
       Timecop.freeze do
         course = create(:course, changed_at: 1.hour.ago)
         course.touch
@@ -110,7 +110,7 @@ describe Course, type: :model do
 
   its(:recruitment_cycle) { should eq find(:recruitment_cycle) }
 
-  describe 'no site statuses' do
+  describe "no site statuses" do
     its(:site_statuses) { should be_empty }
     its(:findable?) { should be false }
     its(:open_for_applications?) { should be false }
@@ -147,7 +147,7 @@ describe Course, type: :model do
     end
   end
 
-  context 'with site statuses' do
+  context "with site statuses" do
     let(:new_site_status) { build(:site_status, :new) }
     let(:new_site_status2) { build(:site_status, :new) }
     let(:findable) { build(:site_status, :findable) }
@@ -158,11 +158,11 @@ describe Course, type: :model do
     let(:applications_being_accepted_in_future) { build(:site_status, :applications_being_accepted_in_future) }
     let(:site_status_with_no_vacancies) { build(:site_status, :with_no_vacancies) }
 
-    describe '#findable_site_statuses' do
-      context 'with a site_statuses association that have been loaded' do
+    describe "#findable_site_statuses" do
+      context "with a site_statuses association that have been loaded" do
         let(:course) { create(:course, site_statuses: []) }
 
-        it 'uses #select on the association' do
+        it "uses #select on the association" do
           allow(course.site_statuses).to receive(:select).and_return([])
 
           course.findable_site_statuses
@@ -170,29 +170,29 @@ describe Course, type: :model do
           expect(course.site_statuses).to have_received(:select)
         end
 
-        context 'with a findable site' do
+        context "with a findable site" do
           subject { create(:course, site_statuses: [findable]) }
 
           its(:findable_site_statuses) { should_not be_empty }
         end
 
-        context 'with no findable sites' do
+        context "with no findable sites" do
           subject { create(:course, site_statuses: [suspended]) }
 
           its(:findable_site_statuses) { should be_empty }
         end
 
-        context 'with at least one findable sites' do
+        context "with at least one findable sites" do
           subject { create(:course, site_statuses: [findable, suspended]) }
 
           its(:findable_site_statuses) { should_not be_empty }
         end
       end
 
-      context 'with a site_statuses association that has not been loaded' do
+      context "with a site_statuses association that has not been loaded" do
         let(:course) { create(:course, site_statuses: []) }
 
-        it 'uses #select on the association' do
+        it "uses #select on the association" do
           course_with_site_statuses_not_loaded = Course.find(course.id)
           allow(course_with_site_statuses_not_loaded.site_statuses)
             .to receive(:findable).and_return([])
@@ -203,7 +203,7 @@ describe Course, type: :model do
             .to have_received(:findable)
         end
 
-        context 'with a findable site' do
+        context "with a findable site" do
           let(:course) { create(:course, site_statuses: [findable]) }
 
           subject { Course.find(course.id) }
@@ -211,7 +211,7 @@ describe Course, type: :model do
           its(:findable_site_statuses) { should_not be_empty }
         end
 
-        context 'with no findable sites' do
+        context "with no findable sites" do
           let(:course) { create(:course, site_statuses: [suspended]) }
 
           subject { Course.find(course.id) }
@@ -219,7 +219,7 @@ describe Course, type: :model do
           its(:findable_site_statuses) { should be_empty }
         end
 
-        context 'with at least one findable sites' do
+        context "with at least one findable sites" do
           let(:course) { create(:course, site_statuses: [findable, suspended]) }
 
           subject { Course.find(course.id) }
@@ -229,25 +229,25 @@ describe Course, type: :model do
       end
     end
 
-    describe '#findable?' do
-      context 'when #findable_site_statuses returns site statuses' do
-        it 'returns true' do
+    describe "#findable?" do
+      context "when #findable_site_statuses returns site statuses" do
+        it "returns true" do
           allow(course).to receive(:findable_site_statuses).and_return([findable])
           expect(course.findable?).to be_truthy
         end
       end
 
-      context 'when #findable_site_statuses returns no site statuses' do
-        it 'returns false' do
+      context "when #findable_site_statuses returns no site statuses" do
+        it "returns false" do
           allow(course).to receive(:findable_site_statuses).and_return([])
           expect(course.findable?).to be_falsey
         end
       end
     end
 
-    describe '#has_vacancies?' do
+    describe "#has_vacancies?" do
       let(:findable_without_vacancies) { build(:site_status, :findable, :with_no_vacancies) }
-      context 'for a single site status that has vacancies' do
+      context "for a single site status that has vacancies" do
         let(:subject) {
           create(:course, site_statuses: [findable, applications_being_accepted_now, with_any_vacancy])
         }
@@ -255,7 +255,7 @@ describe Course, type: :model do
         its(:has_vacancies?) { should be true }
       end
 
-      context 'for a site status with vacancies and others without' do
+      context "for a site status with vacancies and others without" do
         let(:findable_with_vacancies) { build(:site_status, :findable, :with_any_vacancy, :applications_being_accepted_now) }
         let(:subject) {
           create(:course, site_statuses: [findable_with_vacancies, findable_without_vacancies])
@@ -264,7 +264,7 @@ describe Course, type: :model do
         its(:has_vacancies?) { should be true }
       end
 
-      context 'when none of the sites have vacancies' do
+      context "when none of the sites have vacancies" do
         let(:subject) {
           create(:course, site_statuses: [findable_without_vacancies, findable_without_vacancies])
         }
@@ -272,7 +272,7 @@ describe Course, type: :model do
         its(:has_vacancies?) { should be false }
       end
 
-      context 'when the site is findable but only opens in the future' do
+      context "when the site is findable but only opens in the future" do
         let(:findable_with_vacancies) { build(:site_status, :findable, :with_any_vacancy, :applications_being_accepted_in_future) }
         let(:subject) {
           create(:course, site_statuses: [findable_with_vacancies])
@@ -280,7 +280,7 @@ describe Course, type: :model do
         its(:has_vacancies?) { should be true }
       end
 
-      context 'when only discontinued and suspended site statuses have vacancies' do
+      context "when only discontinued and suspended site statuses have vacancies" do
         let(:findable_with_no_vacancies) { build(:site_status, :findable, :with_no_vacancies) }
         let(:published_suspended_with_any_vacancy) { build(:site_status, :published, :discontinued, :with_any_vacancy) }
         let(:published_discontinued_with_any_vacancy) { build(:site_status, :published, :suspended, :with_any_vacancy) }
@@ -293,10 +293,10 @@ describe Course, type: :model do
       end
     end
 
-    describe '#has_vacancies? (when site_statuses not loaded)' do
+    describe "#has_vacancies? (when site_statuses not loaded)" do
       let(:findable_without_vacancies) { build(:site_status, :findable, :with_no_vacancies) }
 
-      context 'for a single site status that has vacancies' do
+      context "for a single site status that has vacancies" do
         let(:subject) {
           create(:course, site_statuses: [findable, applications_being_accepted_now, with_any_vacancy]).reload
         }
@@ -304,7 +304,7 @@ describe Course, type: :model do
         its(:has_vacancies?) { should be true }
       end
 
-      context 'for a site status with vacancies and others without' do
+      context "for a site status with vacancies and others without" do
         let(:findable_with_vacancies) { build(:site_status, :findable, :with_any_vacancy, :applications_being_accepted_now) }
         let(:subject) {
           create(:course, site_statuses: [findable_with_vacancies, findable_without_vacancies]).reload
@@ -313,7 +313,7 @@ describe Course, type: :model do
         its(:has_vacancies?) { should be true }
       end
 
-      context 'when none of the sites have vacancies' do
+      context "when none of the sites have vacancies" do
         let(:subject) {
           create(:course, site_statuses: [findable_without_vacancies, findable_without_vacancies]).reload
         }
@@ -321,7 +321,7 @@ describe Course, type: :model do
         its(:has_vacancies?) { should be false }
       end
 
-      context 'when the site is findable but only opens in the future' do
+      context "when the site is findable but only opens in the future" do
         let(:findable_with_vacancies) { build(:site_status, :findable, :with_any_vacancy, :applications_being_accepted_in_future) }
         let(:subject) {
           create(:course, site_statuses: [findable_with_vacancies]).reload
@@ -329,7 +329,7 @@ describe Course, type: :model do
         its(:has_vacancies?) { should be true }
       end
 
-      context 'when only discontinued and suspended site statuses have vacancies' do
+      context "when only discontinued and suspended site statuses have vacancies" do
         let(:findable_with_no_vacancies) { build(:site_status, :findable, :with_no_vacancies) }
         let(:published_suspended_with_any_vacancy) { build(:site_status, :published, :discontinued, :with_any_vacancy) }
         let(:published_discontinued_with_any_vacancy) { build(:site_status, :published, :suspended, :with_any_vacancy) }
@@ -342,9 +342,9 @@ describe Course, type: :model do
       end
     end
 
-    describe 'open_for_applications?' do
-      context 'with at least one site status applications_being_accepted_now' do
-        context 'single site status applications_being_accepted_now as it open now' do
+    describe "open_for_applications?" do
+      context "with at least one site status applications_being_accepted_now" do
+        context "single site status applications_being_accepted_now as it open now" do
           let(:findable_with_vacancies) { build(:site_status, :findable, :with_any_vacancy, :applications_being_accepted_now) }
           let(:subject) {
             create(:course, site_statuses: [findable_with_vacancies])
@@ -354,7 +354,7 @@ describe Course, type: :model do
           its(:open_for_applications?) { should be true }
         end
 
-        context 'single site status applications_being_accepted_now as it open future' do
+        context "single site status applications_being_accepted_now as it open future" do
           let(:subject) {
             create(:course, site_statuses: [applications_being_accepted_in_future])
           }
@@ -363,7 +363,7 @@ describe Course, type: :model do
           its(:open_for_applications?) { should be false }
         end
 
-        context 'site statuses applications_being_accepted_now as it open now & future' do
+        context "site statuses applications_being_accepted_now as it open now & future" do
           let(:findable_with_vacancies_now) { build(:site_status, :findable, :with_any_vacancy, :applications_being_accepted_now) }
           let(:findable_with_vacancies_in_future) { build(:site_status, :findable, :with_any_vacancy, :applications_being_accepted_in_future) }
           let(:subject) {
@@ -376,9 +376,9 @@ describe Course, type: :model do
       end
     end
 
-    describe 'open_for_applications? (when site_statuses not loaded)' do
-      context 'with at least one site status applications_being_accepted_now' do
-        context 'single site status applications_being_accepted_now as it open now' do
+    describe "open_for_applications? (when site_statuses not loaded)" do
+      context "with at least one site status applications_being_accepted_now" do
+        context "single site status applications_being_accepted_now as it open now" do
           let(:findable_with_vacancies) { build(:site_status, :findable, :with_any_vacancy, :applications_being_accepted_now) }
           let(:subject) {
             create(:course, site_statuses: [findable_with_vacancies]).reload
@@ -388,7 +388,7 @@ describe Course, type: :model do
           its(:open_for_applications?) { should be true }
         end
 
-        context 'single site status applications_being_accepted_now as it open future' do
+        context "single site status applications_being_accepted_now as it open future" do
           let(:subject) {
             create(:course, site_statuses: [applications_being_accepted_in_future]).reload
           }
@@ -397,7 +397,7 @@ describe Course, type: :model do
           its(:open_for_applications?) { should be false }
         end
 
-        context 'site statuses applications_being_accepted_now as it open now & future' do
+        context "site statuses applications_being_accepted_now as it open now & future" do
           let(:findable_with_vacancies_now) { build(:site_status, :findable, :with_any_vacancy, :applications_being_accepted_now) }
           let(:findable_with_vacancies_in_future) { build(:site_status, :findable, :with_any_vacancy, :applications_being_accepted_in_future) }
           let(:subject) {
@@ -410,27 +410,27 @@ describe Course, type: :model do
       end
     end
 
-    describe 'ucas_status' do
-      context 'without any site statuses' do
+    describe "ucas_status" do
+      context "without any site statuses" do
         let(:subject) { create(:course) }
 
         its(:ucas_status) { should eq :new }
       end
 
-      context 'with a running site_status' do
+      context "with a running site_status" do
         let(:subject) { create(:course, site_statuses: [findable]) }
 
         its(:ucas_status) { should eq :running }
       end
 
-      context 'with a new site_status' do
+      context "with a new site_status" do
         let(:new) { build(:site_status, :new) }
         let(:subject) { create(:course, site_statuses: [new]) }
 
         its(:ucas_status) { should eq :new }
       end
 
-      context 'with a not running site_status' do
+      context "with a not running site_status" do
         let(:suspended) { build(:site_status, :suspended) }
         let(:subject) { create(:course, site_statuses: [suspended]) }
 
@@ -438,7 +438,7 @@ describe Course, type: :model do
       end
     end
 
-    describe '#not_new' do
+    describe "#not_new" do
       let(:new_course) do
         create(:course, site_statuses: [new_site_status])
       end
@@ -451,7 +451,7 @@ describe Course, type: :model do
         create(:course, site_statuses: [findable])
       end
 
-      it 'only returns courses that arent new' do
+      it "only returns courses that arent new" do
         new_course
         findable_course
         suspended_course_with_new_site
@@ -468,8 +468,8 @@ describe Course, type: :model do
     its(:has_vacancies?) { should be false }
   end
 
-  describe '#changed_since' do
-    context 'with no parameters' do
+  describe "#changed_since" do
+    context "with no parameters" do
       let!(:old_course) { create(:course, age: 1.hour.ago) }
       let!(:course) { create(:course, age: 1.hour.ago) }
 
@@ -479,7 +479,7 @@ describe Course, type: :model do
       it { should include old_course }
     end
 
-    context 'with a course that was just updated' do
+    context "with a course that was just updated" do
       let(:course) { create(:course, age: 1.hour.ago) }
       let!(:old_course) { create(:course, age: 1.hour.ago) }
 
@@ -491,7 +491,7 @@ describe Course, type: :model do
       it { should_not include old_course }
     end
 
-    context 'with a course that has been changed less than a second after the given timestamp' do
+    context "with a course that has been changed less than a second after the given timestamp" do
       let(:timestamp) { 5.minutes.ago }
       let(:course) { create(:course, changed_at: timestamp + 0.001.seconds) }
 
@@ -500,7 +500,7 @@ describe Course, type: :model do
       it { should include course }
     end
 
-    context 'with a course that has been changed exactly at the given timestamp' do
+    context "with a course that has been changed exactly at the given timestamp" do
       let(:timestamp) { 10.minutes.ago }
       let(:course) { create(:course, changed_at: timestamp) }
 
@@ -512,9 +512,9 @@ describe Course, type: :model do
 
   describe "#study_mode_description" do
     specs = {
-      full_time: 'full time',
-      part_time: 'part time',
-      full_time_or_part_time: 'full time or part time',
+      full_time: "full time",
+      part_time: "part time",
+      full_time_or_part_time: "full time or part time",
     }.freeze
 
     specs.each do |study_mode, expected_description|
@@ -547,7 +547,7 @@ describe Course, type: :model do
         study_mode: :full_time,
         program_type: :school_direct_salaried_training_programme,
         qualification: :pgce_with_qts,
-      }
+      },
     }.freeze
 
     specs.each do |expected_description, course_attributes|
@@ -580,10 +580,10 @@ describe Course, type: :model do
     end
   end
 
-  describe 'content_status' do
+  describe "content_status" do
     let(:course) { create :course, enrichments: [enrichment] }
 
-    context 'when enrichment is published' do
+    context "when enrichment is published" do
       let(:enrichment) { create :course_enrichment, status: :published }
 
       subject { course.content_status }
@@ -591,7 +591,7 @@ describe Course, type: :model do
       it { should eq :published }
     end
 
-    context 'when enrichment is rolled-over' do
+    context "when enrichment is rolled-over" do
       let(:enrichment) { create :course_enrichment, status: :rolled_over }
 
       subject { course.content_status }
@@ -599,7 +599,7 @@ describe Course, type: :model do
       it { should eq :rolled_over }
     end
 
-    context 'when there are no enrichments' do
+    context "when there are no enrichments" do
       let(:course) { create :course, enrichments: [] }
 
       subject { course.content_status }
@@ -607,7 +607,7 @@ describe Course, type: :model do
       it { should eq :empty }
     end
 
-    context 'when there are no enrichments and the course is rolled-over' do
+    context "when there are no enrichments and the course is rolled-over" do
       let(:next_recruitment_cycle) { create :recruitment_cycle, :next }
       let(:next_provider) { create :provider, recruitment_cycle: next_recruitment_cycle }
       let(:course) { create :course, provider: next_provider, enrichments: [] }
@@ -618,7 +618,7 @@ describe Course, type: :model do
     end
   end
 
-  describe 'qualifications' do
+  describe "qualifications" do
     context "course with qts qualication" do
       let(:subject) { create(:course, :resulting_in_qts) }
 
@@ -651,27 +651,27 @@ describe Course, type: :model do
   end
 
   context "subjects & level" do
-    context 'with no subjects' do
+    context "with no subjects" do
       subject { create(:course) }
       its(:ucas_level) { should eq(:secondary) }
       its(:dfe_subjects) { should be_empty }
     end
 
-    context 'with primary subjects' do
+    context "with primary subjects" do
       subject { create(:course, subjects: [find_or_create(:subject, :primary)]) }
       its(:ucas_level) { should eq(:primary) }
       its(:gcse_subjects_required) { should eq(%w[maths english science]) }
       its(:dfe_subjects) { should eq([DFESubject.new("Primary")]) }
     end
 
-    context 'with secondary subjects' do
+    context "with secondary subjects" do
       subject { create(:course, subjects: [find_or_create(:subject, subject_name: "physical education")]) }
       its(:ucas_level) { should eq(:secondary) }
       its(:gcse_subjects_required) { should eq(%w[maths english]) }
       its(:dfe_subjects) { should eq([DFESubject.new("Physical education")]) }
     end
 
-    context 'with further education subjects' do
+    context "with further education subjects" do
       subject { create(:course, subjects: [create(:further_education_subject)]) }
       its(:ucas_level) { should eq(:further_education) }
       its(:gcse_subjects_required) { should eq([]) }
@@ -705,7 +705,7 @@ describe Course, type: :model do
   context "entry requirements" do
     %i[maths science english].each do |gcse_subject|
       describe gcse_subject do
-        it 'is an enum' do
+        it "is an enum" do
           expect(subject)
             .to define_enum_for(gcse_subject)
                   .backed_by_column_of_type(:integer)
@@ -719,9 +719,9 @@ describe Course, type: :model do
   describe "adding and removing sites on a course" do
     let(:provider) { build(:provider) }
       #this code will be removed and fixed properly in the next pr
-    let(:new_site) { create(:site, provider: provider, code: 'A') }
+    let(:new_site) { create(:site, provider: provider, code: "A") }
      #this code will be removed and fixed properly in the next pr
-    let(:existing_site) { create(:site, provider: provider, code: 'B') }
+    let(:existing_site) { create(:site, provider: provider, code: "B") }
     let(:new_site_status) { subject.site_statuses.find_by!(site: new_site) }
     subject { create(:course, site_statuses: [existing_site_status]) }
 
@@ -788,7 +788,7 @@ describe Course, type: :model do
     context "for mixed courses with new and running locations" do
       let(:existing_site_status) { create(:site_status, :running, :published, site: existing_site) }
       #this code will be removed and fixed properly in the next pr
-      let(:another_existing_site) { create(:site, code: 'C', provider: provider) }
+      let(:another_existing_site) { create(:site, code: "C", provider: provider) }
       let(:existing_new_site_status) { create(:site_status, :new, site: another_existing_site) }
 
       subject { create(:course, site_statuses: [existing_site_status, existing_new_site_status]) }
@@ -806,28 +806,28 @@ describe Course, type: :model do
     end
   end
 
-  describe '#accrediting_provider_description' do
+  describe "#accrediting_provider_description" do
     let(:accrediting_provider) { nil }
     let(:course) { create(:course, accrediting_provider: accrediting_provider) }
     subject { course.accrediting_provider_description }
 
-    context 'for courses without accrediting provider' do
+    context "for courses without accrediting provider" do
       it { should be_nil }
     end
 
-    context 'for courses with accrediting provider' do
+    context "for courses with accrediting provider" do
       let(:accrediting_provider) { build(:provider) }
 
-      context 'without published enrichment' do
+      context "without published enrichment" do
         it { should be_nil }
       end
 
-      context 'with published enrichment' do
+      context "with published enrichment" do
         let(:provider_enrichment) { build(:provider_enrichment, :published, last_published_at: 1.day.ago) }
         let(:provider) { build(:provider, enrichments: [provider_enrichment]) }
         let(:course) { create(:course, provider: provider, accrediting_provider: accrediting_provider) }
 
-        context 'without any accrediting_provider_enrichments' do
+        context "without any accrediting_provider_enrichments" do
           it { should be_nil }
         end
 
@@ -835,8 +835,8 @@ describe Course, type: :model do
           let(:accrediting_provider_enrichment_description) { Faker::Lorem.sentence.to_s }
           let(:accrediting_provider_enrichment) do
             {
-              'UcasProviderCode' => accrediting_provider.provider_code,
-              'Description' => accrediting_provider_enrichment_description
+              "UcasProviderCode" => accrediting_provider.provider_code,
+              "Description" => accrediting_provider_enrichment_description,
             }
           end
 
@@ -854,8 +854,8 @@ describe Course, type: :model do
     end
   end
 
-  describe '#enrichments' do
-    describe '#find_or_initialize_draft' do
+  describe "#enrichments" do
+    describe "#find_or_initialize_draft" do
       let(:course) { create(:course, enrichments: enrichments) }
 
       copyable_enrichment_attributes =
@@ -880,7 +880,7 @@ describe Course, type: :model do
 
       subject { course.enrichments.find_or_initialize_draft }
 
-      context 'no enrichments' do
+      context "no enrichments" do
         let(:enrichments) { [] }
 
         it "sets all attributes to be nil" do
@@ -889,10 +889,10 @@ describe Course, type: :model do
 
         its(:id) { should be_nil }
         its(:last_published_timestamp_utc) { should be_nil }
-        its(:status) { should eq 'draft' }
+        its(:status) { should eq "draft" }
       end
 
-      context 'with a draft enrichment' do
+      context "with a draft enrichment" do
         let(:initial_draft_enrichment) { build(:course_enrichment, :initial_draft) }
         let(:enrichments) { [initial_draft_enrichment] }
         let(:expected_enrichment_attributes) { initial_draft_enrichment.attributes.slice(*copyable_enrichment_attributes) }
@@ -903,10 +903,10 @@ describe Course, type: :model do
 
         its(:id) { should_not be_nil }
         its(:last_published_timestamp_utc) { should eq initial_draft_enrichment.last_published_timestamp_utc }
-        its(:status) { should eq 'draft' }
+        its(:status) { should eq "draft" }
       end
 
-      context 'with a published enrichment' do
+      context "with a published enrichment" do
         let(:published_enrichment) { build(:course_enrichment, :published) }
         let(:enrichments) { [published_enrichment] }
         let(:expected_enrichment_attributes) { published_enrichment.attributes.slice(*copyable_enrichment_attributes) }
@@ -917,10 +917,10 @@ describe Course, type: :model do
 
         its(:id) { should be_nil }
         its(:last_published_timestamp_utc) { should be_within(1.second).of published_enrichment.last_published_timestamp_utc }
-        its(:status) { should eq 'draft' }
+        its(:status) { should eq "draft" }
       end
 
-      context 'with a draft and published enrichment' do
+      context "with a draft and published enrichment" do
         let(:published_enrichment) { build(:course_enrichment, :published) }
         let(:subsequent_draft_enrichment) { build(:course_enrichment, :subsequent_draft) }
         let(:enrichments) { [published_enrichment, subsequent_draft_enrichment] }
@@ -932,12 +932,12 @@ describe Course, type: :model do
 
         its(:id) { should_not be_nil }
         its(:last_published_timestamp_utc) { should be_within(1.second).of subsequent_draft_enrichment.last_published_timestamp_utc }
-        its(:status) { should eq 'draft' }
+        its(:status) { should eq "draft" }
       end
     end
   end
 
-  describe '#syncable?' do
+  describe "#syncable?" do
     let(:courses_subjects) { [build(:subject, subject_name: "primary")] }
     let(:site_status) { build(:site_status, :findable) }
 
@@ -945,37 +945,37 @@ describe Course, type: :model do
 
     its(:syncable?) { should be_truthy }
 
-    context'invalid courses' do
-      context 'course which has a dfe subject, but no findable site statuses' do
+    context"invalid courses" do
+      context "course which has a dfe subject, but no findable site statuses" do
         let(:site_status) { build(:site_status, :suspended) }
         its(:syncable?) { should be_falsey }
       end
 
-      context 'course which has a findable site status, but no dfe_subject' do
+      context "course which has a findable site status, but no dfe_subject" do
         let(:courses_subjects) { [build(:subject, subject_name: "secondary")] }
         its(:syncable?) { should be_falsey }
       end
     end
   end
 
-  describe 'self.get_by_codes' do
-    it 'should return the found course' do
+  describe "self.get_by_codes" do
+    it "should return the found course" do
       expect(Course.get_by_codes(
                course.recruitment_cycle.year,
                course.provider.provider_code,
-               course.course_code
+               course.course_code,
              )).to eq course
     end
   end
 
-  describe 'next_recruitment_cycle?' do
+  describe "next_recruitment_cycle?" do
     subject { course.next_recruitment_cycle? }
 
-    context 'course is in current recruitment cycle' do
+    context "course is in current recruitment cycle" do
       it { should be_falsey }
     end
 
-    context 'course is in the next recruitment cycle' do
+    context "course is in the next recruitment cycle" do
       let(:recruitment_cycle) { create :recruitment_cycle, :next }
       let(:provider)          { create :provider, recruitment_cycle: recruitment_cycle }
       let(:course) { create :course, provider: provider }
@@ -984,8 +984,8 @@ describe Course, type: :model do
     end
   end
 
-  describe '#discard' do
-    context 'new course' do
+  describe "#discard" do
+    context "new course" do
       let!(:subject) do
         course = create(:course)
 
@@ -995,58 +995,58 @@ describe Course, type: :model do
         course
       end
 
-      context 'before discarding' do
+      context "before discarding" do
         its(:discarded?) { should be false }
 
-        it 'is in kept' do
+        it "is in kept" do
           expect(described_class.kept.size).to eq(1)
         end
 
-        it 'is not in discarded' do
+        it "is not in discarded" do
           expect(described_class.discarded.size).to eq(0)
         end
       end
 
-      context 'after discarding' do
+      context "after discarding" do
         before do
           subject.discard
         end
 
         its(:discarded?) { should be true }
 
-        it 'is not in kept' do
+        it "is not in kept" do
           expect(described_class.kept.size).to eq(0)
         end
 
-        it 'is in discarded' do
+        it "is in discarded" do
           expect(described_class.discarded.size).to eq(1)
         end
       end
 
-      context 'incorrect actions' do
-        it 'raises error when deleted and course status is running' do
+      context "incorrect actions" do
+        it "raises error when deleted and course status is running" do
           course = subject
 
           site = create(:site)
           create(:site_status, :running, :published, site: site, course: course)
 
           expect { course.discard }.to raise_error(
-            "You cannot delete a running course (Course: #{course}, Provider: #{course.provider_id})"
+            "You cannot delete a running course (Course: #{course}, Provider: #{course.provider_id})",
           )
         end
       end
     end
   end
 
-  describe '#applications_open_from' do
-    context 'a new course with a given date' do
+  describe "#applications_open_from" do
+    context "a new course with a given date" do
       let(:applications_open_from) { Date.today }
       let(:subject) { create(:course, applications_open_from: applications_open_from) }
 
       its(:applications_open_from) { should eq applications_open_from }
     end
 
-    context 'a new course within a recruitment cycle' do
+    context "a new course within a recruitment cycle" do
       let(:recruitment_cycle) { build :recruitment_cycle, :next }
       let(:provider)          { build :provider, recruitment_cycle: recruitment_cycle }
       let(:subject) { create :course, :applications_open_from_not_set, provider: provider }
@@ -1062,7 +1062,7 @@ describe Course, type: :model do
       subject.is_send = value
     end
 
-    context 'when value is `true`' do
+    context "when value is `true`" do
       let(:value) { true }
 
       its(:is_send) { is_expected.to be(true) }
@@ -1074,19 +1074,19 @@ describe Course, type: :model do
       its(:is_send) { is_expected.to be(true) }
     end
 
-    context 'when value is `1`' do
+    context "when value is `1`" do
       let(:value) { 1 }
 
       its(:is_send) { is_expected.to be(true) }
     end
 
-    context 'when value is `0`' do
+    context "when value is `0`" do
       let(:value) { 0 }
 
       its(:is_send) { is_expected.to be(false) }
     end
 
-    context 'when value is `false`' do
+    context "when value is `false`" do
       let(:value) { false }
 
       its(:is_send) { is_expected.to be(false) }
@@ -1098,7 +1098,7 @@ describe Course, type: :model do
       its(:is_send) { is_expected.to be(false) }
     end
 
-    context 'when value is a string that is not like a boolean' do
+    context "when value is a string that is not like a boolean" do
       let(:value) { "blah-blah" }
 
       its(:is_send) { is_expected.to be_nil }
@@ -1106,105 +1106,105 @@ describe Course, type: :model do
     end
   end
 
-  describe '#self_accredited?' do
+  describe "#self_accredited?" do
     let(:provider) { build(:provider) }
 
-    context 'when self accredited' do
+    context "when self accredited" do
       subject { create(:course, provider: provider) }
       its(:self_accredited?) { should be_truthy }
     end
 
-    context 'when self accredited' do
+    context "when self accredited" do
       subject { create(:course, :with_accrediting_provider, provider: provider) }
       its(:self_accredited?) { should be_falsey }
     end
   end
 
-  describe '#course_params_assignable' do
-    describe 'when setting the entry requirement' do
-      it 'can assign a valid value' do
-        expect(course.course_params_assignable(maths: 'equivalence_test')).to eq(true)
+  describe "#course_params_assignable" do
+    describe "when setting the entry requirement" do
+      it "can assign a valid value" do
+        expect(course.course_params_assignable(maths: "equivalence_test")).to eq(true)
         expect(course.errors.messages).to eq(enrichments: [])
       end
 
-      it 'cannot be assigned an invalid value' do
-        expect(course.course_params_assignable(maths: 'test')).to eq(false)
-        expect(course.errors.messages).to eq(enrichments: [], maths: ['is invalid'])
+      it "cannot be assigned an invalid value" do
+        expect(course.course_params_assignable(maths: "test")).to eq(false)
+        expect(course.errors.messages).to eq(enrichments: [], maths: ["is invalid"])
       end
     end
 
-    describe 'when setting the qualification' do
-      it 'can assign a valid qualification' do
-        expect(course.course_params_assignable(qualification: 'pgce_with_qts')).to eq(true)
+    describe "when setting the qualification" do
+      it "can assign a valid qualification" do
+        expect(course.course_params_assignable(qualification: "pgce_with_qts")).to eq(true)
         expect(course.errors.messages).to eq(enrichments: [])
       end
 
-      it 'cannot assign invalid qualification' do
-        expect(course.course_params_assignable(qualification: 'invalid')).to eq(false)
-        expect(course.errors.messages).to eq(enrichments: [], qualification: ['is invalid'])
+      it "cannot assign invalid qualification" do
+        expect(course.course_params_assignable(qualification: "invalid")).to eq(false)
+        expect(course.errors.messages).to eq(enrichments: [], qualification: ["is invalid"])
       end
     end
 
-    describe 'for publishing' do
+    describe "for publishing" do
       let(:user) { create(:user) }
 
-      context 'when not published' do
+      context "when not published" do
         let(:enrichment) { create(:course_enrichment, :initial_draft) }
         let(:course) { create(:course, enrichments: [enrichment]) }
 
-        it 'can assign to SEND' do
+        it "can assign to SEND" do
           expect(course.course_params_assignable(is_send: true)).to eq(true)
           expect(course.errors.messages).to eq(enrichments: [])
         end
 
-        it 'can assign to applications open from' do
-          expect(course.course_params_assignable(applications_open_from: '25/08/2019')).to eq(true)
+        it "can assign to applications open from" do
+          expect(course.course_params_assignable(applications_open_from: "25/08/2019")).to eq(true)
           expect(course.errors.messages).to eq(enrichments: [])
         end
 
-        it 'can assign to applications open from' do
-          expect(course.course_params_assignable(application_start_date: '25/08/2019')).to eq(true)
+        it "can assign to applications open from" do
+          expect(course.course_params_assignable(application_start_date: "25/08/2019")).to eq(true)
           expect(course.errors.messages).to eq(enrichments: [])
         end
       end
 
-      context 'when published' do
+      context "when published" do
         let(:enrichment) { create(:course_enrichment, :published) }
         let(:course) { create(:course, enrichments: [enrichment]) }
 
-        it 'cannot assign to SEND' do
+        it "cannot assign to SEND" do
           expect(course.course_params_assignable(is_send: true)).to eq(false)
-          expect(course.errors.messages).to eq(enrichments: [], is_send: ['cannot be changed after publish'])
+          expect(course.errors.messages).to eq(enrichments: [], is_send: ["cannot be changed after publish"])
         end
 
-        it 'cannot assign to applications open from' do
-          expect(course.course_params_assignable(applications_open_from: '25/08/2019')).to eq(false)
-          expect(course.errors.messages).to eq(enrichments: [], applications_open_from: ['cannot be changed after publish'])
+        it "cannot assign to applications open from" do
+          expect(course.course_params_assignable(applications_open_from: "25/08/2019")).to eq(false)
+          expect(course.errors.messages).to eq(enrichments: [], applications_open_from: ["cannot be changed after publish"])
         end
 
-        it 'cannot assign to applications open from' do
-          expect(course.course_params_assignable(application_start_date: '25/08/2019')).to eq(false)
-          expect(course.errors.messages).to eq(enrichments: [], application_start_date: ['cannot be changed after publish'])
+        it "cannot assign to applications open from" do
+          expect(course.course_params_assignable(application_start_date: "25/08/2019")).to eq(false)
+          expect(course.errors.messages).to eq(enrichments: [], application_start_date: ["cannot be changed after publish"])
         end
       end
     end
   end
 
-  describe '#is_published?' do
-    context 'course is not published' do
+  describe "#is_published?" do
+    context "course is not published" do
       let(:enrichment) { create(:course_enrichment, :initial_draft) }
       let(:course) { create(:course, enrichments: [enrichment]) }
 
-      it 'returns false' do
+      it "returns false" do
         expect(course.is_published?).to eq(false)
       end
     end
 
-    context 'course is published' do
+    context "course is published" do
       let(:enrichment) { create(:course_enrichment, :published) }
       let(:course) { create(:course, enrichments: [enrichment]) }
 
-      it 'returns true' do
+      it "returns true" do
         expect(course.is_published?).to eq(true)
       end
     end

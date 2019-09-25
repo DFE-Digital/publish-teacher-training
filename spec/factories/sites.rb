@@ -18,13 +18,13 @@
 
 FactoryBot.define do
   factory :site do
-    location_name { 'Main Site' + rand(1000000).to_s }
+    location_name { "Main Site" + rand(1000000).to_s }
     address1 { Faker::Address.street_address }
     address2 { Faker::Address.community }
     address3 { Faker::Address.city }
     address4 { Faker::Address.state }
     postcode { Faker::Address.postcode }
-    region_code { 'london' }
+    region_code { "london" }
 
     # When we retrieve a random code (as Site#pick_next_available_code does),
     # there is the possibility we'll end up with this code duplicated when

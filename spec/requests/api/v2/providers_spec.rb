@@ -1,7 +1,7 @@
 require "rails_helper"
 
-describe 'Providers API v2', type: :request do
-  describe 'GET /providers' do
+describe "Providers API v2", type: :request do
+  describe "GET /providers" do
     let(:user) { create(:user, organisations: [organisation]) }
     let(:organisation) { create(:organisation) }
     let(:recruitment_cycle) { find_or_create :recruitment_cycle }
@@ -27,7 +27,7 @@ describe 'Providers API v2', type: :request do
     let(:json_response) { JSON.parse(response.body) }
 
     def perform_request
-      get request_path, headers: { 'HTTP_AUTHORIZATION' => credentials }
+      get request_path, headers: { "HTTP_AUTHORIZATION" => credentials }
     end
 
     subject do
@@ -36,19 +36,19 @@ describe 'Providers API v2', type: :request do
       response
     end
 
-    context 'when unauthorized' do
-      let(:request_path) { '/api/v2/providers' }
-      let(:payload)      { { email: 'foo@bar' } }
+    context "when unauthorized" do
+      let(:request_path) { "/api/v2/providers" }
+      let(:payload)      { { email: "foo@bar" } }
 
       it { should have_http_status(:unauthorized) }
     end
 
-    describe 'JSON generated for a providers' do
-      let(:request_path) { '/api/v2/providers' }
+    describe "JSON generated for a providers" do
+      let(:request_path) { "/api/v2/providers" }
 
       it { should have_http_status(:success) }
 
-      it 'has a data section with the correct attributes' do
+      it "has a data section with the correct attributes" do
         perform_request
 
         expect(json_response).to eq(
@@ -63,22 +63,22 @@ describe 'Providers API v2', type: :request do
             "relationships" => {
               "courses" => {
                 "meta" => {
-                  "count" => provider.courses.count
-                }
-              }
-            }
+                  "count" => provider.courses.count,
+                },
+              },
+            },
           }],
           "jsonapi" => {
-            "version" => "1.0"
-          }
+            "version" => "1.0",
+          },
         )
       end
     end
 
-    context 'nested within current user' do
+    context "nested within current user" do
       let(:request_path) { "/api/v2/users/#{user.id}/providers" }
 
-      it 'has a data section with the correct attributes' do
+      it "has a data section with the correct attributes" do
         perform_request
 
         expect(json_response).to eq(
@@ -93,37 +93,37 @@ describe 'Providers API v2', type: :request do
             "relationships" => {
               "courses" => {
                 "meta" => {
-                  "count" => provider.courses.count
-                }
-              }
-            }
+                  "count" => provider.courses.count,
+                },
+              },
+            },
           }],
           "jsonapi" => {
-            "version" => "1.0"
-          }
+            "version" => "1.0",
+          },
         )
       end
     end
 
-    context 'nested within a different user' do
+    context "nested within a different user" do
       let(:different_user) { create(:user) }
       let(:request_path)   { "/api/v2/users/#{different_user.id}/providers" }
 
-      it 'has no providers' do
+      it "has no providers" do
         perform_request
 
         expect(json_response).to eq(
           "data" => [],
           "jsonapi" => {
-            "version" => "1.0"
-          }
+            "version" => "1.0",
+          },
         )
       end
     end
 
-    context 'with unalphabetical ordering in the database' do
+    context "with unalphabetical ordering in the database" do
       let(:second_alphabetical_provider) do
-        create(:provider, provider_name: 'Zork', organisations: [organisation])
+        create(:provider, provider_name: "Zork", organisations: [organisation])
       end
       let(:request_path) { "/api/v2/users/#{user.id}/providers" }
 
@@ -131,7 +131,7 @@ describe 'Providers API v2', type: :request do
         second_alphabetical_provider
 
         # This moves it last in the order that it gets fetched by default.
-        provider.update(provider_name: 'Acme')
+        provider.update(provider_name: "Acme")
       end
 
       let(:provider_names_in_response) {
@@ -140,13 +140,13 @@ describe 'Providers API v2', type: :request do
         }
       }
 
-      it 'returns them in alphabetical order' do
+      it "returns them in alphabetical order" do
         expect(provider_names_in_response).to eq(%w(Acme Zork))
       end
     end
 
-    context 'with two recruitment cycles' do
-      let(:next_recruitment_cycle) { create :recruitment_cycle, year: '2020' }
+    context "with two recruitment cycles" do
+      let(:next_recruitment_cycle) { create :recruitment_cycle, year: "2020" }
       let(:next_provider) {
         create :provider,
                organisations: [organisation],
@@ -154,40 +154,40 @@ describe 'Providers API v2', type: :request do
                recruitment_cycle: next_recruitment_cycle
       }
 
-      describe 'making a request without specifying a recruitment cycle' do
+      describe "making a request without specifying a recruitment cycle" do
         let(:request_path) { "/api/v2/providers" }
 
-        it 'only returns data for the current recruitment cycle' do
+        it "only returns data for the current recruitment cycle" do
           next_provider
 
           perform_request
 
-          expect(json_response['data'].count).to eq 1
-          expect(json_response['data'].first)
-            .to have_attribute('recruitment_cycle_year').with_value('2019')
+          expect(json_response["data"].count).to eq 1
+          expect(json_response["data"].first)
+            .to have_attribute("recruitment_cycle_year").with_value("2019")
         end
       end
 
-      describe 'making a request for the next recruitment cycle' do
+      describe "making a request for the next recruitment cycle" do
         let(:request_path) {
           "/api/v2/recruitment_cycles/#{next_recruitment_cycle.year}/providers"
         }
 
-        it 'only returns data for the next recruitment cycle' do
+        it "only returns data for the next recruitment cycle" do
           next_provider
 
           perform_request
 
-          expect(json_response['data'].count).to eq 1
-          expect(json_response['data'].first)
-            .to have_attribute('recruitment_cycle_year')
+          expect(json_response["data"].count).to eq 1
+          expect(json_response["data"].first)
+            .to have_attribute("recruitment_cycle_year")
                   .with_value(next_recruitment_cycle.year)
         end
       end
     end
   end
 
-  describe 'GET /providers#show' do
+  describe "GET /providers#show" do
     let(:request_path) { "/api/v2/providers/#{provider.provider_code}" }
     let(:request_params) { {} }
 
@@ -260,7 +260,7 @@ describe 'Providers API v2', type: :request do
             "admin_contact" => {
               "name" => contact.name,
               "email" => contact.email,
-              "telephone" => contact.telephone
+              "telephone" => contact.telephone,
             },
             "utt_contact" => nil,
             "web_link_contact" => nil,
@@ -269,27 +269,27 @@ describe 'Providers API v2', type: :request do
             "gt12_contact" => provider.ucas_preferences.gt12_response_destination.to_s,
             "application_alert_contact" => provider.ucas_preferences.application_alert_email,
             "type_of_gt12" => provider.ucas_preferences.type_of_gt12.to_s,
-            "send_application_alerts" =>  provider.ucas_preferences.send_application_alerts
+            "send_application_alerts" =>  provider.ucas_preferences.send_application_alerts,
           },
           "relationships" => {
             "sites" => {
               "meta" => {
-                "included" => false
-              }
+                "included" => false,
+              },
             },
             "courses" => {
               "meta" => {
-                "count" => provider.courses.count
-              }
+                "count" => provider.courses.count,
+              },
             },
             "latest_enrichment" => {
-              "meta" => { "included" => false }
-            }
-          }
+              "meta" => { "included" => false },
+            },
+          },
         },
         "jsonapi" => {
-          "version" => "1.0"
-        }
+          "version" => "1.0",
+        },
       }
     }
 
@@ -302,16 +302,16 @@ describe 'Providers API v2', type: :request do
 
     def perform_request
       get request_path,
-          headers: { 'HTTP_AUTHORIZATION' => credentials },
+          headers: { "HTTP_AUTHORIZATION" => credentials },
           params: request_params
     end
 
-    context 'including sites' do
+    context "including sites" do
       let(:request_params) { { include: "sites" } }
 
       it { should have_http_status(:success) }
 
-      it 'has a data section with the correct attributes' do
+      it "has a data section with the correct attributes" do
         perform_request
 
         expect(json_response).to eq(
@@ -345,7 +345,7 @@ describe 'Providers API v2', type: :request do
               "admin_contact" => {
                 "name" => contact.name,
                 "email" => contact.email,
-                "telephone" => contact.telephone
+                "telephone" => contact.telephone,
               },
               "utt_contact" => nil,
               "web_link_contact" => nil,
@@ -354,7 +354,7 @@ describe 'Providers API v2', type: :request do
               "gt12_contact" => provider.ucas_preferences.gt12_response_destination.to_s,
               "application_alert_contact" => provider.ucas_preferences.application_alert_email,
               "type_of_gt12" => provider.ucas_preferences.type_of_gt12.to_s,
-              "send_application_alerts" =>  provider.ucas_preferences.send_application_alerts
+              "send_application_alerts" =>  provider.ucas_preferences.send_application_alerts,
             },
             "relationships" => {
               "sites" => {
@@ -362,18 +362,18 @@ describe 'Providers API v2', type: :request do
                   {
                     "type" => "sites",
                     "id" => site.id.to_s,
-                  }
-                ]
+                  },
+                ],
               },
               "courses" => {
                 "meta" => {
-                  "count" => provider.courses.count
-                }
+                  "count" => provider.courses.count,
+                },
               },
               "latest_enrichment" => {
-                "meta" => { "included" => false }
-              }
-            }
+                "meta" => { "included" => false },
+              },
+            },
           },
           "included" => [
             {
@@ -388,37 +388,37 @@ describe 'Providers API v2', type: :request do
                 "address4" => site.address4,
                 "postcode" => site.postcode,
                 "region_code" => site.region_code,
-                "recruitment_cycle_year" => site.recruitment_cycle.year
-              }
-            }
+                "recruitment_cycle_year" => site.recruitment_cycle.year,
+              },
+            },
           ],
           "jsonapi" => {
-            "version" => "1.0"
-          }
+            "version" => "1.0",
+          },
         )
       end
     end
 
     context "with the maximum number of sites" do
       let(:sites) {
-        [*'A'..'Z', '0', '-', *'1'..'9'].map { |code|
+        [*"A".."Z", "0", "-", *"1".."9"].map { |code|
           build(:site, code: code)
         }
       }
       let(:provider) { create(:provider, sites: sites, organisations: [organisation]) }
 
-      it 'has can_add_more_sites? set to false' do
+      it "has can_add_more_sites? set to false" do
         perform_request
 
-        expect(json_response['data'])
+        expect(json_response["data"])
           .to have_attribute(:can_add_more_sites?).with_value(false)
       end
     end
 
-    describe 'JSON generated for a provider' do
+    describe "JSON generated for a provider" do
       it { should have_http_status(:success) }
 
-      it 'has a data section with the correct attributes' do
+      it "has a data section with the correct attributes" do
         perform_request
 
         expect(json_response).to eq(expected_response)
@@ -430,15 +430,15 @@ describe 'Providers API v2', type: :request do
 
       it { should have_http_status(:success) }
 
-      it 'has a data section with the correct attributes' do
+      it "has a data section with the correct attributes" do
         perform_request
 
         expect(json_response).to eq(expected_response)
       end
     end
 
-    context 'with two recruitment cycles' do
-      let(:next_recruitment_cycle) { create :recruitment_cycle, year: '2020' }
+    context "with two recruitment cycles" do
+      let(:next_recruitment_cycle) { create :recruitment_cycle, year: "2020" }
       let(:next_provider) {
         create :provider,
                organisations: [organisation],
@@ -446,37 +446,37 @@ describe 'Providers API v2', type: :request do
                recruitment_cycle: next_recruitment_cycle
       }
 
-      describe 'making a request without specifying a recruitment cycle' do
-        it 'only returns data for the current recruitment cycle' do
+      describe "making a request without specifying a recruitment cycle" do
+        it "only returns data for the current recruitment cycle" do
           next_provider
 
           perform_request
 
-          expect(json_response['data'])
-            .to have_attribute('recruitment_cycle_year')
+          expect(json_response["data"])
+            .to have_attribute("recruitment_cycle_year")
                   .with_value(provider.recruitment_cycle.year)
-          expect(json_response['data'])
-            .to have_attribute('provider_code')
+          expect(json_response["data"])
+            .to have_attribute("provider_code")
                   .with_value(provider.provider_code)
         end
       end
 
-      describe 'making a request for the next recruitment cycle' do
+      describe "making a request for the next recruitment cycle" do
         let(:request_path) {
           "/api/v2/recruitment_cycles/#{next_recruitment_cycle.year}" \
           "/providers/#{next_provider.provider_code}"
         }
 
-        it 'only returns data for the next recruitment cycle' do
+        it "only returns data for the next recruitment cycle" do
           next_provider
 
           perform_request
 
-          expect(json_response['data'])
-            .to have_attribute('recruitment_cycle_year')
+          expect(json_response["data"])
+            .to have_attribute("recruitment_cycle_year")
                   .with_value(next_recruitment_cycle.year)
-          expect(json_response['data'])
-            .to have_attribute('provider_code')
+          expect(json_response["data"])
+            .to have_attribute("provider_code")
                   .with_value(next_provider.provider_code)
         end
       end

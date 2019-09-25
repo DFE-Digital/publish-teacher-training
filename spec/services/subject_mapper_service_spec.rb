@@ -149,8 +149,8 @@ describe SubjectMapperService do
       end
     end
 
-    context 'a new course' do
-      it 'returns an empty list of subjects' do
+    context "a new course" do
+      it "returns an empty list of subjects" do
         subjects = described_class.get_subject_list(nil, [])
         expect(subjects).to eq []
       end

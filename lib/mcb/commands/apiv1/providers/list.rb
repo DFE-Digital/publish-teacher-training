@@ -1,7 +1,7 @@
-name 'list'
-summary 'List providers'
+name "list"
+summary "List providers"
 
-option :P, 'max-pages', 'maximum number of pages to request',
+option :P, "max-pages", "maximum number of pages to request",
        default: 1,
        argument: :required,
        transform: method(:Integer)
@@ -15,7 +15,7 @@ run do |opts, _args, _cmd|
   table = Terminal::Table.new headings: %w[Code Name] do |t|
     MCB.each_v1_provider(opts).each do |provider, context|
       last_context = context
-      t << provider.slice('institution_code', 'institution_name').values
+      t << provider.slice("institution_code", "institution_name").values
     end
   end
 

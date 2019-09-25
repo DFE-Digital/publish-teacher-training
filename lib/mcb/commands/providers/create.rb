@@ -1,4 +1,4 @@
-summary 'Create a new provider via the DB'
+summary "Create a new provider via the DB"
 
 run do |opts, _args, _cmd|
   MCB.init_rails(opts)
@@ -9,7 +9,7 @@ run do |opts, _args, _cmd|
 
     MCB::Editor::ProviderEditor.new(
       provider: provider,
-      requester: requester
+      requester: requester,
     ).new_provider_wizard
   end
 end

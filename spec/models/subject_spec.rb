@@ -7,11 +7,11 @@
 #  subject_code :text             not null
 #
 
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe Subject, type: :model do
   subject { find_or_create(:subject, :mathematics) }
 
   it { should have_many(:courses).through(:course_subjects) }
-  its(:to_s) { should eq('Mathematics') }
+  its(:to_s) { should eq("Mathematics") }
 end

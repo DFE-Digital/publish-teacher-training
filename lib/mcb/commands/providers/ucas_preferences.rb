@@ -1,1 +1,1 @@
-summary 'Commands that act on provider UCAS preferences'
+summary "Commands that act on provider UCAS preferences"

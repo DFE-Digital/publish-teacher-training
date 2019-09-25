@@ -1,9 +1,9 @@
-require 'spec_helper'
-require Rails.root.join('lib', 'mcb')
-require Rails.root.join('lib', 'mcb', 'azure')
+require "spec_helper"
+require Rails.root.join("lib", "mcb")
+require Rails.root.join("lib", "mcb", "azure")
 
 describe MCB::Azure do
-  describe '.get_subs' do
+  describe ".get_subs" do
     let(:subs_json) do
       <<~EOSUBS
         [
@@ -27,15 +27,15 @@ describe MCB::Azure do
       allow(MCB).to receive(:run_command).and_return(subs_json)
     end
 
-    it 'runs az' do
+    it "runs az" do
       subject
-      expect(MCB).to have_received(:run_command).with('az account list')
+      expect(MCB).to have_received(:run_command).with("az account list")
     end
 
     it { should eq JSON.parse(subs_json) }
   end
 
-  describe '.get_apps' do
+  describe ".get_apps" do
     let(:apps_json) do
       <<~EOAPPS
         [
@@ -59,15 +59,15 @@ describe MCB::Azure do
       allow(MCB).to receive(:run_command).and_return(apps_json)
     end
 
-    it 'runs az' do
+    it "runs az" do
       subject
-      expect(MCB).to have_received(:run_command).with('az webapp list')
+      expect(MCB).to have_received(:run_command).with("az webapp list")
     end
 
     it { should eq JSON.parse(apps_json) }
   end
 
-  describe '.get_config' do
+  describe ".get_config" do
     let(:config_json) do
       <<~EOCONFIG
         [
@@ -83,25 +83,25 @@ describe MCB::Azure do
       EOCONFIG
     end
 
-    subject { MCB::Azure.get_config(webapp: 'some-app', rgroup: 'some-rgroup') }
+    subject { MCB::Azure.get_config(webapp: "some-app", rgroup: "some-rgroup") }
 
     before :each do
       allow(MCB).to receive(:run_command).and_return(config_json)
     end
 
-    it 'runs az' do
+    it "runs az" do
       subject
       expect(MCB).to(
         have_received(:run_command).with(
-          'az webapp config appsettings list -g "some-rgroup" -n "some-app"'
-        )
+          'az webapp config appsettings list -g "some-rgroup" -n "some-app"',
+        ),
       )
     end
 
-    it { should eq('SETTING_ONE' => 'UNO', 'SETTING_TWO' => 'DUO') }
+    it { should eq("SETTING_ONE" => "UNO", "SETTING_TWO" => "DUO") }
   end
 
-  describe '.get_urls' do
+  describe ".get_urls" do
     let(:config_json) do
       <<~EOCONFIG
         [
@@ -117,31 +117,31 @@ describe MCB::Azure do
       EOCONFIG
     end
 
-    subject { MCB::Azure.get_urls(webapp: 'some-app', rgroup: 'some-rgroup', subscription: 'sup') }
+    subject { MCB::Azure.get_urls(webapp: "some-app", rgroup: "some-rgroup", subscription: "sup") }
 
     before :each do
       allow(MCB).to receive(:run_command).and_return(config_json)
     end
 
-    it 'runs az' do
+    it "runs az" do
       subject
       expect(MCB).to(
         have_received(:run_command).with(
-          'az webapp config hostname list -g "some-rgroup" --webapp-name "some-app" --subscription "sup"'
-        )
+          'az webapp config hostname list -g "some-rgroup" --webapp-name "some-app" --subscription "sup"',
+        ),
       )
     end
 
-    it { should eq(['http://no_ssl.local', 'https://with_ssl.local']) }
+    it { should eq(["http://no_ssl.local", "https://with_ssl.local"]) }
   end
 
-  describe '.configure_database' do
+  describe ".configure_database" do
     let(:app_config) do
       {
-        'MANAGE_COURSES_POSTGRESQL_SERVICE_HOST' => 'host',
-        'PG_DATABASE'                            => 'pgdb',
-        'PG_USERNAME'                            => 'user',
-        'PG_PASSWORD'                            => 'pass',
+        "MANAGE_COURSES_POSTGRESQL_SERVICE_HOST" => "host",
+        "PG_DATABASE"                            => "pgdb",
+        "PG_USERNAME"                            => "user",
+        "PG_PASSWORD"                            => "pass",
       }
     end
 
@@ -149,9 +149,9 @@ describe MCB::Azure do
       allow(ENV).to receive(:[]=)
       allow(MCB::Azure).to(
         receive(:get_apps).and_return([{
-                                        'name' => 'noapp',
-                                         'resourceGroup' => 'rgrrroup'
-                                      }])
+                                        "name" => "noapp",
+                                         "resourceGroup" => "rgrrroup",
+                                      }]),
       )
 
       allow(MCB::Azure).to(receive(:get_config).and_return(app_config))
@@ -159,40 +159,40 @@ describe MCB::Azure do
 
     subject { MCB::Azure.configure_database(app_config) }
 
-    it 'sets the env variables to the app settings' do
+    it "sets the env variables to the app settings" do
       subject
-      expect(ENV).to have_received(:[]=).with('DB_HOSTNAME', 'host')
-      expect(ENV).to have_received(:[]=).with('DB_DATABASE', 'pgdb')
-      expect(ENV).to have_received(:[]=).with('DB_USERNAME', 'user')
-      expect(ENV).to have_received(:[]=).with('DB_PASSWORD', 'pass')
+      expect(ENV).to have_received(:[]=).with("DB_HOSTNAME", "host")
+      expect(ENV).to have_received(:[]=).with("DB_DATABASE", "pgdb")
+      expect(ENV).to have_received(:[]=).with("DB_USERNAME", "user")
+      expect(ENV).to have_received(:[]=).with("DB_PASSWORD", "pass")
     end
   end
 
-  describe '.configure_env' do
-    it 'sets all the SETTINGS__ env vars from the app config' do
+  describe ".configure_env" do
+    it "sets all the SETTINGS__ env vars from the app config" do
       allow(ENV).to receive(:update)
       MCB::Azure.configure_env(
-        'SETTINGS__FOO' => 'bar',
-        'some_random_kind_of_yak' => 'shaving'
+        "SETTINGS__FOO" => "bar",
+        "some_random_kind_of_yak" => "shaving",
       )
       expect(ENV).to(
         have_received(:update).with(
-          'SETTINGS__FOO' => 'bar',
-        )
+          "SETTINGS__FOO" => "bar",
+        ),
       )
     end
   end
 
-  describe '.configure_for_webapp' do
+  describe ".configure_for_webapp" do
     let(:app_config) do
       {
-        'RAILS_ENV' => 'aztest'
+        "RAILS_ENV" => "aztest",
       }
     end
-    let(:expected_rails_env) { 'aztest' }
+    let(:expected_rails_env) { "aztest" }
     let(:output) do
       with_stubbed_stdout(stdin: expected_rails_env) do
-        MCB::Azure.configure_for_webapp(webapp: 'banana')
+        MCB::Azure.configure_for_webapp(webapp: "banana")
       end
     end
 
@@ -200,19 +200,19 @@ describe MCB::Azure do
     before do
       allow(MCB::Azure).to receive(:get_config).and_return(app_config)
       allow(MCB::Azure).to receive(:configure_database)
-      allow(MCB::Azure).to receive(:rgroup_for_app).and_return('banana-tree')
+      allow(MCB::Azure).to receive(:rgroup_for_app).and_return("banana-tree")
     end
 
     subject { output }
 
-    it 'prompts for the expected RAILS_ENV' do
+    it "prompts for the expected RAILS_ENV" do
       expect(output[:stdout]).to match %r{enter the expected RAILS_ENV for banana:}
     end
 
-    context 'expected RAILS_ENV does not match' do
-      let(:expected_rails_env) { 'qa' }
+    context "expected RAILS_ENV does not match" do
+      let(:expected_rails_env) { "qa" }
 
-      it 'raises an error if the expected RAILS_ENV does not match' do
+      it "raises an error if the expected RAILS_ENV does not match" do
         expect { subject } .to raise_error(RuntimeError)
       end
     end

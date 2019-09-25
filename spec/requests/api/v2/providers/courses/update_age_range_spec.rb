@@ -1,23 +1,23 @@
 require "rails_helper"
 
-describe 'PATCH /providers/:provider_code/courses/:course_code' do
+describe "PATCH /providers/:provider_code/courses/:course_code" do
   let(:jsonapi_renderer) { JSONAPI::Serializable::Renderer.new }
 
   def perform_request(updated_age_range_in_years)
     jsonapi_data = jsonapi_renderer.render(
       course,
       class: {
-        Course: API::V2::SerializableCourse
-      }
+        Course: API::V2::SerializableCourse,
+      },
     )
 
     jsonapi_data[:data][:attributes] = updated_age_range_in_years
 
     patch "/api/v2/providers/#{course.provider.provider_code}" \
             "/courses/#{course.course_code}",
-          headers: { 'HTTP_AUTHORIZATION' => credentials },
+          headers: { "HTTP_AUTHORIZATION" => credentials },
           params: {
-            _jsonapi: jsonapi_data
+            _jsonapi: jsonapi_data,
           }
   end
   let(:organisation)      { create :organisation }
@@ -31,7 +31,7 @@ describe 'PATCH /providers/:provider_code/courses/:course_code' do
            provider: provider,
            age_range_in_years: age_range_in_years
   }
-  let(:age_range_in_years) { '3_to_7' }
+  let(:age_range_in_years) { "3_to_7" }
 
   let(:credentials) do
     ActionController::HttpAuthentication::Token.encode_credentials(token)
@@ -46,7 +46,7 @@ describe 'PATCH /providers/:provider_code/courses/:course_code' do
   end
 
   context "course has an updated age range in years" do
-    let(:updated_age_range_in_years) { { age_range_in_years: '3_to_7' } }
+    let(:updated_age_range_in_years) { { age_range_in_years: "3_to_7" } }
 
     it "returns http success" do
       expect(response).to have_http_status(:success)
@@ -59,7 +59,7 @@ describe 'PATCH /providers/:provider_code/courses/:course_code' do
 
   context "course has the same age_range_in_years" do
     context "with values passed into the params" do
-      let(:updated_age_range_in_years) { { age_range_in_years: '3_to_7' } }
+      let(:updated_age_range_in_years) { { age_range_in_years: "3_to_7" } }
 
       it "returns http success" do
         expect(response).to have_http_status(:success)

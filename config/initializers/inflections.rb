@@ -16,10 +16,10 @@
 # end
 
 ActiveSupport::Inflector.inflections do |inflect|
-  inflect.acronym 'API'
-  inflect.acronym 'PGDE'
-  inflect.acronym 'UCAS'
-  inflect.acronym 'MFL' # Modern foreign languages
-  inflect.acronym 'DFE' # Department for Education
-  inflect.acronym 'NCTL' # National College for Teaching and Leadership
+  inflect.acronym "API"
+  inflect.acronym "PGDE"
+  inflect.acronym "UCAS"
+  inflect.acronym "MFL" # Modern foreign languages
+  inflect.acronym "DFE" # Department for Education
+  inflect.acronym "NCTL" # National College for Teaching and Leadership
 end

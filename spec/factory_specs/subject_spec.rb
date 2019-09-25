@@ -1,4 +1,4 @@
-require 'rails_helper'
+require "rails_helper"
 
 describe "Subject Factory" do
   describe "Subject 'Further Education' Factory" do
@@ -6,7 +6,7 @@ describe "Subject Factory" do
 
     it { should be_instance_of(Subject) }
     it { should be_valid }
-    its(:subject_name) { should eq 'Further Education' }
+    its(:subject_name) { should eq "Further Education" }
     it { should be_in(Subject.further_education) }
   end
 end

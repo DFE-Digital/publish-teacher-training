@@ -1,5 +1,5 @@
-summary 'Create a new course in db'
-usage 'create <provider_code>'
+summary "Create a new course in db"
+usage "create <provider_code>"
 param :provider_code, transform: ->(code) { code.upcase }
 
 run do |opts, args, _cmd|
@@ -12,7 +12,7 @@ run do |opts, args, _cmd|
     MCB::Editor::CoursesEditor.new(
       provider: provider,
       requester: requester,
-      courses: [provider.courses.build]
+      courses: [provider.courses.build],
     ).new_course_wizard
   end
 end

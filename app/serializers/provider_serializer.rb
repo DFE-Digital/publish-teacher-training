@@ -107,16 +107,16 @@ private
 
   def generate_provider_contacts
     provider_contacts = object.contacts.map do |c|
-      c.attributes.slice('type', 'name', 'email', 'telephone')
+      c.attributes.slice("type", "name", "email", "telephone")
     end
 
-    has_admin_contact = provider_contacts.any? { |c| c['type'] == 'admin' }
+    has_admin_contact = provider_contacts.any? { |c| c["type"] == "admin" }
     unless has_admin_contact
       provider_contacts.prepend(
-        type: 'admin',
+        type: "admin",
         name: object.contact_name,
         email: object.email,
-        telephone: object.telephone
+        telephone: object.telephone,
       )
     end
 
@@ -126,10 +126,10 @@ private
   def application_alert_recipient
     if object.ucas_preferences&.application_alert_email
       [{
-        type: 'application_alert_recipient',
-        name: '',
+        type: "application_alert_recipient",
+        name: "",
         email: object.ucas_preferences&.application_alert_email,
-        telephone: ''
+        telephone: "",
       }]
     end
   end

@@ -41,7 +41,7 @@ module SearchAndCompare
     attribute(:Name)                                  { object.name }
     attribute(:ProgrammeCode)                         { object.course_code }
     # using server date time not utc, so it's local date time?
-    attribute(:StartDate)                             { object.start_date&.utc&.strftime('%Y-%m-%dT%H:%M:%S') }
+    attribute(:StartDate)                             { object.start_date&.utc&.strftime("%Y-%m-%dT%H:%M:%S") }
 
     # Salary_nested_default_value_Mapping
     # TODO: After completion
@@ -71,7 +71,7 @@ module SearchAndCompare
     # Campuses_related_Mapping
     attribute(:Campuses)                              { campuses }
     # using server date time not utc, so it's local date time?
-    attribute(:ApplicationsAcceptedFrom)              { object.applications_open_from&.to_date&.strftime('%Y-%m-%dT%H:%M:%S') }
+    attribute(:ApplicationsAcceptedFrom)              { object.applications_open_from&.to_date&.strftime("%Y-%m-%dT%H:%M:%S") }
     attribute(:HasVacancies)                          { object.has_vacancies? }
 
     # Course_direct_enrichment_Mapping
@@ -99,51 +99,51 @@ module SearchAndCompare
     def description_sections
       [{
         Name: "about this training programme",
-        Text: course_enrichment&.about_course
+        Text: course_enrichment&.about_course,
        },
        {
          Name: "interview process",
-         Text: course_enrichment&.interview_process
+         Text: course_enrichment&.interview_process,
        },
        {
          Name: "about fees",
-         Text: course_enrichment&.fee_details
+         Text: course_enrichment&.fee_details,
        },
        {
          Name: "about salary",
-         Text: course_enrichment&.salary_details
+         Text: course_enrichment&.salary_details,
        },
        {
          Name: "entry requirements",
-         Text: course_enrichment&.required_qualifications
+         Text: course_enrichment&.required_qualifications,
        },
        {
          Name: "entry requirements personal qualities",
-         Text: course_enrichment&.personal_qualities
+         Text: course_enrichment&.personal_qualities,
        },
        {
          Name: "entry requirements other",
-         Text: course_enrichment&.other_requirements
+         Text: course_enrichment&.other_requirements,
        },
        {
          Name: "financial support",
-         Text: course_enrichment&.financial_support
+         Text: course_enrichment&.financial_support,
        },
        {
          Name: "about school placements",
-         Text: course_enrichment&.how_school_placements_work
+         Text: course_enrichment&.how_school_placements_work,
        },
        {
          Name: "about this training provider",
-         Text: provider_enrichment&.train_with_us
+         Text: provider_enrichment&.train_with_us,
        },
        {
          Name: "about this training provider accrediting",
-         Text: object.accrediting_provider_description.to_s
+         Text: object.accrediting_provider_description.to_s,
        },
        {
          Name: "training with disabilities",
-         Text: provider_enrichment&.train_with_disability
+         Text: provider_enrichment&.train_with_disability,
        }].map do |description_section|
         description_section.merge default_description_section_value
       end
@@ -200,10 +200,10 @@ module SearchAndCompare
 
       {
         **default_contact_details_value,
-        Phone: external_contact_info['telephone'],
-        Email: external_contact_info['email'],
-        Website: external_contact_info['website'],
-        Address: provider_full_address
+        Phone: external_contact_info["telephone"],
+        Email: external_contact_info["email"],
+        Website: external_contact_info["website"],
+        Address: provider_full_address,
       }
     end
 
@@ -218,7 +218,7 @@ module SearchAndCompare
     def provider_external_contact_info_full_address
       external_contact_info = provider_external_contact_info
 
-      raw_address = { address1: external_contact_info['address1'], address2: external_contact_info['address2'], address3: external_contact_info['address3'], address4: external_contact_info['address4'], postcode: external_contact_info['postcode'] }
+      raw_address = { address1: external_contact_info["address1"], address2: external_contact_info["address2"], address3: external_contact_info["address3"], address4: external_contact_info["address4"], postcode: external_contact_info["postcode"] }
 
       full_address(raw_address)
     end
@@ -236,7 +236,7 @@ module SearchAndCompare
             {
               **default_subject_value,
               Name: subject.to_s,
-            }
+            },
         }
       end
     end
@@ -260,7 +260,7 @@ module SearchAndCompare
       {
         **default_route_value,
         Name: route_names[object.program_type.to_sym],
-        IsSalaried: is_salaried?
+        IsSalaried: is_salaried?,
       }
     end
 
@@ -285,7 +285,7 @@ module SearchAndCompare
     end
 
     def campuses_full_address(address1:, address2:, address3:, address4:, postcode:)
-      [address1, address2, address3, address4].reject(&:blank?).join(", ") + (postcode.present? ? ' ' + postcode : '')
+      [address1, address2, address3, address4].reject(&:blank?).join(", ") + (postcode.present? ? " " + postcode : "")
     end
 
     def campuses
@@ -299,7 +299,7 @@ module SearchAndCompare
           VacStatus: site_status.vac_status_before_type_cast,
           Name: site_status.site.location_name,
           CampusCode: site_status.site.code,
-          Location: { **default_location_value, Address: address }
+          Location: { **default_location_value, Address: address },
         }
       end
     end
@@ -345,7 +345,7 @@ module SearchAndCompare
         GeoAddress: nil,
         Latitude: nil,
         Longitude: nil,
-        LastGeocodedUtc: '0001-01-01T00:00:00'
+        LastGeocodedUtc: "0001-01-01T00:00:00",
       }
     end
   end

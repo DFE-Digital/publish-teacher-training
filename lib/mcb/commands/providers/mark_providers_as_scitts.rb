@@ -1,6 +1,6 @@
 # rubocop:disable Metrics/BlockLength
-name 'mark_providers_as_scitts'
-summary 'Mark SCITT providers as scitt in the program type'
+name "mark_providers_as_scitts"
+summary "Mark SCITT providers as scitt in the program type"
 
 run do |opts, _args, _cmd|
   MCB.init_rails(opts)

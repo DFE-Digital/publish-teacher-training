@@ -1,7 +1,7 @@
-name 'list'
-usage 'list [<code>...]'
-summary 'List providers in db'
-option :x, :'extended-listing', 'Display extra attributes in output'
+name "list"
+usage "list [<code>...]"
+summary "List providers in db"
+option :x, :'extended-listing', "Display extra attributes in output"
 
 run do |opts, args, _cmd|
   MCB.init_rails(opts)

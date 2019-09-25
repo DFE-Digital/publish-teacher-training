@@ -10,7 +10,7 @@
 #  updated_at             :datetime         not null
 #
 
-require 'rails_helper'
+require "rails_helper"
 
 describe RecruitmentCycle, type: :model do
   subject { RecruitmentCycle.find_by(year: "2019") }
@@ -23,7 +23,7 @@ describe RecruitmentCycle, type: :model do
 
   it { is_expected.to validate_presence_of(:year) }
 
-  describe 'associations' do
+  describe "associations" do
     it { should have_many(:courses).through(:providers) }
     it { should have_many(:sites).through(:providers) }
   end
@@ -41,24 +41,24 @@ describe RecruitmentCycle, type: :model do
     end
   end
 
-  context 'when there are multiple cycles' do
+  context "when there are multiple cycles" do
     let(:current_cycle) { subject }
     let!(:second_cycle) { create(:recruitment_cycle, year: "2020") }
     let!(:third_cycle) { create(:recruitment_cycle, year: "2021") }
 
-    describe '.current_recruitment_cycle' do
-      it 'returns the first cycle, ordered by year' do
+    describe ".current_recruitment_cycle" do
+      it "returns the first cycle, ordered by year" do
         expect(RecruitmentCycle.current_recruitment_cycle).to eq(current_cycle)
       end
     end
 
-    describe '.next_recruitment_cycle' do
-      it 'returns the next cycle after the current one' do
+    describe ".next_recruitment_cycle" do
+      it "returns the next cycle after the current one" do
         expect(RecruitmentCycle.next_recruitment_cycle).to eq(second_cycle)
       end
     end
 
-    describe '.syncable_courses' do
+    describe ".syncable_courses" do
       let(:site) { build(:site) }
       let(:provider) do
         build(:provider, sites: [site],
@@ -81,19 +81,19 @@ describe RecruitmentCycle, type: :model do
         syncable_courses
       end
 
-      context 'current_cycle' do
-        it 'returns the syncable_courses' do
+      context "current_cycle" do
+        it "returns the syncable_courses" do
           expect(RecruitmentCycle.syncable_courses).to eq(syncable_courses)
         end
       end
 
-      context 'next_recruitment_cycle' do
+      context "next_recruitment_cycle" do
         let(:provider) do
           build(:provider, sites: [site],
                 recruitment_cycle: second_cycle)
         end
 
-        it 'returns the empty' do
+        it "returns the empty" do
           expect(RecruitmentCycle.syncable_courses).to eq([])
         end
       end

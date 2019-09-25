@@ -1,4 +1,4 @@
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe ErrorController, type: :controller do
   describe "GET error_500" do

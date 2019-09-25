@@ -6,7 +6,7 @@ module Subjects
         ["UCAS subject B"] => "DfE subject B",
         {
           course_title_matches: ->(course_title) { course_title =~ /XY/ },
-          ucas_subjects: ["UCAS subject W"]
+          ucas_subjects: ["UCAS subject W"],
         } => "DfE subject XY",
       }
     }
@@ -21,8 +21,8 @@ module Subjects
       expect(
         subject.to_dfe_subjects(
           ucas_subjects: ["UCAS subject A1", "UCAS subject B", "UCAS subject W"],
-          course_title: "XY with V"
-        ).map(&:to_s)
+          course_title: "XY with V",
+        ).map(&:to_s),
       ).to match_array(["DfE subject A", "DfE subject B", "DfE subject XY"])
     end
 

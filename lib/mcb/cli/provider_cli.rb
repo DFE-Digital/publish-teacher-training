@@ -8,7 +8,7 @@ module MCB
       def ask_provider_type
         ask_multiple_choice(
           prompt: "What kind of provider is it?",
-          choices: Provider.provider_types.keys
+          choices: Provider.provider_types.keys,
         )
       end
 
@@ -18,25 +18,25 @@ module MCB
 
       def ask_address
         {
-          address1: @cli.ask('Building and street: '),
-          town_or_city: @cli.ask('Town and city: '),
-          county: @cli.ask('County: '),
-          postcode: @cli.ask('Postcode: '),
+          address1: @cli.ask("Building and street: "),
+          town_or_city: @cli.ask("Town and city: "),
+          county: @cli.ask("County: "),
+          postcode: @cli.ask("Postcode: "),
         }
       end
 
       def ask_contact
         {
-          name: @cli.ask('UCAS admin account - name: '),
-          email: @cli.ask('UCAS admin account - email: '),
-          telephone: @cli.ask('UCAS admin account - phone number: '),
+          name: @cli.ask("UCAS admin account - name: "),
+          email: @cli.ask("UCAS admin account - email: "),
+          telephone: @cli.ask("UCAS admin account - phone number: "),
         }
       end
 
       def ask_region_code
         ask_multiple_choice(
           prompt: "Region code?",
-          choices: Provider.region_codes.keys
+          choices: Provider.region_codes.keys,
         )
       end
 

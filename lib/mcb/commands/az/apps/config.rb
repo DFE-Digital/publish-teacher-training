@@ -1,7 +1,7 @@
-require 'json'
+require "json"
 
-name 'config'
-summary 'read webapp config from azure, requires app name and resource from `mcb az list`'
+name "config"
+summary "read webapp config from azure, requires app name and resource from `mcb az list`"
 param :app
 param :rgroup
 

@@ -19,8 +19,8 @@ describe ManageCoursesAPIService do
 
   describe "Request" do
     subject { described_class::Request }
-    let(:provider_code) { 'X12' }
-    let(:email) { 'foo@bar' }
+    let(:provider_code) { "X12" }
+    let(:email) { "foo@bar" }
     let(:body) { { "email": email } }
 
     before do
@@ -28,12 +28,12 @@ describe ManageCoursesAPIService do
         .with { |req| req.body == body.to_json }
         .to_return(
           status: 200,
-          body: '{ "result": true }'
+          body: '{ "result": true }',
         )
     end
 
-    describe 'sync_course_with_search_and_compare' do
-      let(:course_code) { 'X123' }
+    describe "sync_course_with_search_and_compare" do
+      let(:course_code) { "X123" }
 
       describe "with a normal response" do
         let(:endpoint) { "api/Publish/internal/course/#{provider_code}/#{course_code}" }
@@ -46,7 +46,7 @@ describe ManageCoursesAPIService do
         end
       end
 
-      describe 'sync_courses_with_search_and_compare' do
+      describe "sync_courses_with_search_and_compare" do
         let(:endpoint) { "api/Publish/internal/courses/#{provider_code}" }
 
         describe "with a normal response" do

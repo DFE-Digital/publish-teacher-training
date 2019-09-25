@@ -1,4 +1,4 @@
-summary 'Show changes made to a user record'
+summary "Show changes made to a user record"
 param :code, transform: ->(code) { code.upcase }
 
 run do |opts, args, _cmd|

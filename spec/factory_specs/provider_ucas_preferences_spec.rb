@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe 'ProviderUCASPreference factory' do
+describe "ProviderUCASPreference factory" do
   subject { create(:provider_ucas_preference) }
 
   let(:valid_types_of_gt12) do

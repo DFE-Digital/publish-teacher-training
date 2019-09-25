@@ -9,7 +9,7 @@
 
 FactoryBot.define do
   factory :organisation do
-    name { 'LONDON SCITT' + rand(1000000).to_s }
+    name { "LONDON SCITT" + rand(1000000).to_s }
     sequence(:org_id)
   end
 end

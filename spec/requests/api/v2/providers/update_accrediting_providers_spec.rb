@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe 'PATCH /providers/:provider_code' do
+describe "PATCH /providers/:provider_code" do
   let(:jsonapi_renderer) { JSONAPI::Serializable::Renderer.new }
   let(:request_path) do
     "/api/v2/recruitment_cycles/#{recruitment_cycle.year}" +
@@ -32,8 +32,8 @@ describe 'PATCH /providers/:provider_code' do
     jsonapi_data = jsonapi_renderer.render(
       provider,
       class: {
-        Provider: API::V2::SerializableProvider
-      }
+        Provider: API::V2::SerializableProvider,
+      },
     )
     jsonapi_data.dig(:data, :attributes).slice!(*permitted_params)
     jsonapi_data
@@ -41,9 +41,9 @@ describe 'PATCH /providers/:provider_code' do
 
   def patch_request(jsonapi_data)
     patch request_path,
-          headers: { 'HTTP_AUTHORIZATION' => credentials },
+          headers: { "HTTP_AUTHORIZATION" => credentials },
           params: {
-            _jsonapi: jsonapi_data
+            _jsonapi: jsonapi_data,
           }
   end
 
@@ -53,8 +53,8 @@ describe 'PATCH /providers/:provider_code' do
     jsonapi_data
   end
 
-  context 'provider with a single accrediting provider' do
-    context 'provider has no enrichments' do
+  context "provider with a single accrediting provider" do
+    context "provider has no enrichments" do
       it "creates a draft enrichment for the provider with the accredited body enrichment" do
         expect {
           patch_request(enrichment_payload)
@@ -74,7 +74,7 @@ describe 'PATCH /providers/:provider_code' do
         expect(accredited_body.dig("description")).to eq(new_description)
       end
 
-      context 'failed validation' do
+      context "failed validation" do
         let(:new_description) {
           Faker::Lorem.sentence(word_count: 101)
         }
@@ -83,7 +83,7 @@ describe 'PATCH /providers/:provider_code' do
             patch_request(enrichment_payload)
           }.to_not(change { provider.reload.enrichments.count })
         end
-        let(:json_data) { JSON.parse(subject.body)['errors'] }
+        let(:json_data) { JSON.parse(subject.body)["errors"] }
         subject do
           patch_request(enrichment_payload)
           response
@@ -91,17 +91,17 @@ describe 'PATCH /providers/:provider_code' do
 
         it { should have_http_status(:unprocessable_entity) }
 
-        it 'has validation error details' do
+        it "has validation error details" do
           expect(json_data.count).to eq 1
           expect(json_data[0]["detail"]).to eq("Reduce the word count for #{accrediting_provider.provider_name}")
         end
 
-        it 'has validation error pointers' do
+        it "has validation error pointers" do
           expect(json_data[0]["source"]["pointer"]).to eq("/data/attributes/accredited_bodies")
         end
       end
 
-      context 'failed validation' do
+      context "failed validation" do
         let(:new_description) {
           Faker::Lorem.sentence(word_count: 101)
         }
@@ -110,7 +110,7 @@ describe 'PATCH /providers/:provider_code' do
             patch_request(enrichment_payload)
           }.to_not(change { provider.reload.enrichments.count })
         end
-        let(:json_data) { JSON.parse(subject.body)['errors'] }
+        let(:json_data) { JSON.parse(subject.body)["errors"] }
         subject do
           patch_request(enrichment_payload)
           response
@@ -118,18 +118,18 @@ describe 'PATCH /providers/:provider_code' do
 
         it { should have_http_status(:unprocessable_entity) }
 
-        it 'has validation error details' do
+        it "has validation error details" do
           expect(json_data.count).to eq 1
           expect(json_data[0]["detail"]).to eq("Reduce the word count for #{accrediting_provider.provider_name}")
         end
 
-        it 'has validation error pointers' do
+        it "has validation error pointers" do
           expect(json_data[0]["source"]["pointer"]).to eq("/data/attributes/accredited_bodies")
         end
       end
     end
 
-    context 'provider has only a single draft enrichments' do
+    context "provider has only a single draft enrichments" do
       let(:enrichments) do
         [create(:provider_enrichment,
                 accrediting_provider_enrichments: [{ "Description" => "old stuff", "UcasProviderCode" => accrediting_provider.provider_code }])]
@@ -156,7 +156,7 @@ describe 'PATCH /providers/:provider_code' do
     end
   end
 
-  context 'provider with multiple accrediting providers' do
+  context "provider with multiple accrediting providers" do
     let(:additional_acrediting_courses) {
       result = []
       10.times { result << create(:course, accrediting_provider: create(:provider)) }
@@ -165,7 +165,7 @@ describe 'PATCH /providers/:provider_code' do
 
     let(:courses) { [course] + additional_acrediting_courses }
 
-    context 'provider has no enrichments' do
+    context "provider has no enrichments" do
       it "creates a draft enrichment for the provider with the accredited body enrichment" do
         expect {
           patch_request(enrichment_payload)
@@ -186,7 +186,7 @@ describe 'PATCH /providers/:provider_code' do
       end
     end
 
-    context 'provider has only a single draft enrichments' do
+    context "provider has only a single draft enrichments" do
       let(:enrichments) do
         [create(:provider_enrichment,
                 accrediting_provider_enrichments: [{ "Description" => "old stuff", "UcasProviderCode" => accrediting_provider.provider_code }])]

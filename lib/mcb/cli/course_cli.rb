@@ -25,14 +25,14 @@ module MCB
       def ask_gcse_subject(subject, choices)
         ask_multiple_choice(
           prompt: "What's the #{subject} entry requirements?",
-          choices: choices
+          choices: choices,
         )
       end
 
       def ask_route
         ask_multiple_choice(
           prompt: "What's the route?",
-          choices: Course.program_types.keys
+          choices: Course.program_types.keys,
         )
       end
 
@@ -40,7 +40,7 @@ module MCB
         ask_multiple_choice(
           prompt: "What's the course outcome?",
           choices: Course.qualifications.keys,
-          default: "pgce_with_qts"
+          default: "pgce_with_qts",
         )
       end
 
@@ -48,14 +48,14 @@ module MCB
         ask_multiple_choice(
           prompt: "Full time or part time?",
           choices: Course.study_modes.keys,
-          default: "full_time"
+          default: "full_time",
         )
       end
 
       def ask_age_range
         ask_multiple_choice(
           prompt: "Age range?",
-          choices: Course.age_ranges.keys
+          choices: Course.age_ranges.keys,
         )
       end
 

@@ -1,13 +1,13 @@
-require 'mcb_helper'
+require "mcb_helper"
 
-describe 'mcb providers rollover' do
-  let(:lib_dir) { Rails.root.join('lib') }
+describe "mcb providers rollover" do
+  let(:lib_dir) { Rails.root.join("lib") }
   let(:cmd) do
     Cri::Command.load_file("#{lib_dir}/mcb/commands/providers/rollover.rb")
   end
 
   let!(:next_recruitment_cycle) { find_or_create :recruitment_cycle, :next }
-  let(:email) { 'user@education.gov.uk' }
+  let(:email) { "user@education.gov.uk" }
   let(:course)              { build :course, enrichments: [course_enrichment] }
   let(:course_enrichment)   { build :course_enrichment, :published }
   let(:provider_enrichment) { build :provider_enrichment, :published }
@@ -33,13 +33,13 @@ describe 'mcb providers rollover' do
 
   subject(:next_cycle_provider) do
     next_recruitment_cycle.providers.find_by(
-      provider_code: current_cycle_provider.provider_code
+      provider_code: current_cycle_provider.provider_code,
     )
   end
 
   let(:new_course) do
     next_cycle_provider.courses.find_by(
-      course_code: course.course_code
+      course_code: course.course_code,
     )
   end
 
@@ -78,7 +78,7 @@ describe 'mcb providers rollover' do
   end
 
   context "when provider already rolled over" do
-    it 'copies a new course' do
+    it "copies a new course" do
       course2 = create(:course, provider: current_cycle_provider)
       current_cycle_provider.courses.reload
 
@@ -90,7 +90,7 @@ describe 'mcb providers rollover' do
       expect(next_cycle_provider.courses.length).to eq(current_cycle_provider.courses.length)
     end
 
-    it 'copies a new site' do
+    it "copies a new site" do
       site2 = create(:site, provider: current_cycle_provider)
       current_cycle_provider.sites.reload
 

@@ -1,6 +1,6 @@
-require 'rails_helper'
+require "rails_helper"
 
-describe 'Provider Publishable API v2', type: :request do
+describe "Provider Publishable API v2", type: :request do
   let(:user)         { create(:user) }
   let(:organisation) { create(:organisation, users: [user]) }
   let(:provider)     { create :provider, organisations: [organisation] }
@@ -10,7 +10,7 @@ describe 'Provider Publishable API v2', type: :request do
     ActionController::HttpAuthentication::Token.encode_credentials(token)
   end
 
-  describe 'POST publishable' do
+  describe "POST publishable" do
     let(:publishable_path) do
       "/api/v2/recruitment_cycles/#{provider.recruitment_cycle.year}" +
         "/providers/#{provider.provider_code}/publishable"
@@ -20,51 +20,51 @@ describe 'Provider Publishable API v2', type: :request do
 
     subject do
       post publishable_path,
-           headers: { 'HTTP_AUTHORIZATION' => credentials },
+           headers: { "HTTP_AUTHORIZATION" => credentials },
            params: {
              _jsonapi: {
                data: {
                  attributes: {},
-                 type: "provider"
-               }
-             }
+                 type: "provider",
+               },
+             },
            }
       response
     end
 
     include_examples "Unauthenticated, unauthorised, or not accepted T&Cs"
 
-    context 'unpublished provider with draft enrichment' do
+    context "unpublished provider with draft enrichment" do
       let(:enrichment) { build(:provider_enrichment, :initial_draft) }
       let(:provider) {
         create(
           :provider,
           organisations: [organisation],
-          enrichments: [enrichment]
+          enrichments: [enrichment],
         )
       }
 
-      it 'returns ok' do
+      it "returns ok" do
         expect(subject).to have_http_status(:success)
       end
     end
 
-    describe 'failed validation' do
-      let(:json_data) { JSON.parse(subject.body)['errors'] }
+    describe "failed validation" do
+      let(:json_data) { JSON.parse(subject.body)["errors"] }
 
-      context 'invalid enrichment with invalid content lack_presence fields' do
+      context "invalid enrichment with invalid content lack_presence fields" do
         let(:invalid_enrichment) { build(:provider_enrichment, :without_content) }
         let(:provider) {
           create(
             :provider,
             organisations: [organisation],
-            enrichments: [invalid_enrichment]
+            enrichments: [invalid_enrichment],
           )
         }
 
         it { should have_http_status(:unprocessable_entity) }
 
-        it 'has validation error details' do
+        it "has validation error details" do
           expect(json_data.count).to eq 9
           expect(json_data[0]["detail"]).to eq("Enter an email address in the correct format, like name@example.com")
           expect(json_data[1]["detail"]).to eq("Enter website")
@@ -77,7 +77,7 @@ describe 'Provider Publishable API v2', type: :request do
           expect(json_data[8]["detail"]).to eq("Enter details about training with a disability")
         end
 
-        it 'has validation error pointers' do
+        it "has validation error pointers" do
           expect(json_data[0]["source"]["pointer"]).to eq("/data/attributes/email")
           expect(json_data[1]["source"]["pointer"]).to eq("/data/attributes/website")
           expect(json_data[2]["source"]["pointer"]).to eq("/data/attributes/telephone")

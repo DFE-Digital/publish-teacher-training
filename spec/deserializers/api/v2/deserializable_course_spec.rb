@@ -4,9 +4,9 @@ describe API::V2::DeserializableCourse do
     JSON.parse(jsonapi_renderer.render(
       course,
       class: {
-        Course: API::V2::SerializableCourse
-      }
-    ).to_json)['data']
+        Course: API::V2::SerializableCourse,
+      },
+    ).to_json)["data"]
   end
   let(:jsonapi_renderer) { JSONAPI::Serializable::Renderer.new }
 

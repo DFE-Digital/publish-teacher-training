@@ -7,7 +7,7 @@ module Courses
   private
 
     def valid_letters
-      ('A'..'Z').to_a - %w[O I]
+      ("A".."Z").to_a - %w[O I]
     end
 
     def valid_number

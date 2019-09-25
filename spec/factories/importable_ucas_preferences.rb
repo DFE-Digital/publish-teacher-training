@@ -1,4 +1,4 @@
-require 'ostruct'
+require "ostruct"
 
 FactoryBot.define do
   factory :importable_ucas_preference, class: OpenStruct do
@@ -18,8 +18,8 @@ FactoryBot.define do
     initialize_with { attributes }
 
     trait(:type_of_gt12_not_coming) do
-      PREF_TYPE  { 'Type of GT12 required' }
-      PREF_VALUE { 'Not coming' }
+      PREF_TYPE  { "Type of GT12 required" }
+      PREF_VALUE { "Not coming" }
     end
   end
 end

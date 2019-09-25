@@ -1,4 +1,4 @@
-require 'rails_helper'
+require "rails_helper"
 
 describe SiteStatusPolicy do
   let(:organisation) { site_status.course.provider.organisations.first }
@@ -9,11 +9,11 @@ describe SiteStatusPolicy do
   permissions :update? do
     let(:user) { create(:user).tap { |u| organisation.users << u } }
 
-    context 'with an user inside the organisation' do
+    context "with an user inside the organisation" do
       it { should permit(user, site_status) }
     end
 
-    context 'with a user outside the organisation' do
+    context "with a user outside the organisation" do
       let(:user) { build(:user) }
 
       it { should_not permit(user, site_status) }

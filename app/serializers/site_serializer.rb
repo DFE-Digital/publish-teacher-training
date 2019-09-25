@@ -28,6 +28,6 @@ class SiteSerializer < ActiveModel::Serializer
   end
 
   def region_code
-    '%02d' % object.region_code_before_type_cast if object.region_code.present?
+    "%02d" % object.region_code_before_type_cast if object.region_code.present?
   end
 end

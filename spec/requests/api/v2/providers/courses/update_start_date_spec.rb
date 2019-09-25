@@ -1,23 +1,23 @@
 require "rails_helper"
 
-describe 'PATCH /providers/:provider_code/courses/:course_code' do
+describe "PATCH /providers/:provider_code/courses/:course_code" do
   let(:jsonapi_renderer) { JSONAPI::Serializable::Renderer.new }
 
   def perform_request(updated_start_date)
     jsonapi_data = jsonapi_renderer.render(
       course,
       class: {
-        Course: API::V2::SerializableCourse
-      }
+        Course: API::V2::SerializableCourse,
+      },
     )
 
     jsonapi_data[:data][:attributes] = updated_start_date
 
     patch "/api/v2/providers/#{course.provider.provider_code}" \
             "/courses/#{course.course_code}",
-          headers: { 'HTTP_AUTHORIZATION' => credentials },
+          headers: { "HTTP_AUTHORIZATION" => credentials },
           params: {
-            _jsonapi: jsonapi_data
+            _jsonapi: jsonapi_data,
           }
   end
   let(:organisation)      { create :organisation }
@@ -92,11 +92,11 @@ describe 'PATCH /providers/:provider_code/courses/:course_code' do
     end
   end
 
-  context 'for a course in the current cycle' do
-    context 'with an invalid start date' do
+  context "for a course in the current cycle" do
+    context "with an invalid start date" do
       let(:next_cycles_year) { provider.recruitment_cycle.year.to_i + 1 }
       let(:updated_start_date) { { start_date: DateTime.new(next_cycles_year, 9, 1).strftime("%B %Y") } }
-      let(:json_data) { JSON.parse(response.body)['errors'] }
+      let(:json_data) { JSON.parse(response.body)["errors"] }
 
       it "returns an error" do
         expect(response).to have_http_status(:unprocessable_entity)

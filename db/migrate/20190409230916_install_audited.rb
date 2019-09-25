@@ -17,9 +17,9 @@ class InstallAudited < ActiveRecord::Migration[5.2]
       t.datetime :created_at
     end
 
-    add_index :audit, %i[auditable_type auditable_id version], name: 'auditable_index'
-    add_index :audit, %i[associated_type associated_id], name: 'associated_index'
-    add_index :audit, %i[user_id user_type], name: 'user_index'
+    add_index :audit, %i[auditable_type auditable_id version], name: "auditable_index"
+    add_index :audit, %i[associated_type associated_id], name: "associated_index"
+    add_index :audit, %i[user_id user_type], name: "user_index"
     add_index :audit, :request_uuid
     add_index :audit, :created_at
   end

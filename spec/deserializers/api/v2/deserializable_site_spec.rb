@@ -4,15 +4,15 @@ describe API::V2::DeserializableSite do
     JSON.parse(jsonapi_renderer.render(
       site,
       class: {
-        Site: API::V2::SerializableSite
-      }
-    ).to_json)['data']
+        Site: API::V2::SerializableSite,
+      },
+    ).to_json)["data"]
   end
   let(:jsonapi_renderer) { JSONAPI::Serializable::Renderer.new }
 
   subject { described_class.new(site_jsonapi).to_h }
 
-  describe 'attributes' do
+  describe "attributes" do
     it { should include(address1: site.address1) }
     it { should include(address2: site.address2) }
     it { should include(address3: site.address3) }

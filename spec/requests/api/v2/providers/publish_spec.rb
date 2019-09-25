@@ -1,6 +1,6 @@
-require 'rails_helper'
+require "rails_helper"
 
-describe 'Provider Publish API v2', type: :request do
+describe "Provider Publish API v2", type: :request do
   let(:user)         { create(:user) }
   let(:organisation) { create(:organisation, users: [user]) }
   let(:provider)     { create :provider, organisations: [organisation] }
@@ -10,7 +10,7 @@ describe 'Provider Publish API v2', type: :request do
     ActionController::HttpAuthentication::Token.encode_credentials(token)
   end
 
-  describe 'POST publish' do
+  describe "POST publish" do
     let(:publish_path) do
       "/api/v2/recruitment_cycles/#{provider.recruitment_cycle.year}" +
         "/providers/#{provider.provider_code}/publish"
@@ -20,28 +20,28 @@ describe 'Provider Publish API v2', type: :request do
 
     subject do
       post publish_path,
-           headers: { 'HTTP_AUTHORIZATION' => credentials },
+           headers: { "HTTP_AUTHORIZATION" => credentials },
            params: {
              _jsonapi: {
                data: {
                  attributes: {},
-                 type: "provider"
-               }
-             }
+                 type: "provider",
+               },
+             },
            }
       response
     end
 
     include_examples "Unauthenticated, unauthorised, or not accepted T&Cs"
 
-    context 'unpublished provider with draft enrichment' do
+    context "unpublished provider with draft enrichment" do
       let(:enrichment) { build(:provider_enrichment, :initial_draft) }
       let(:site1) { create(:site_status, :findable) }
       let(:site2) { create(:site_status, :findable) }
       let(:course1) { build(:course, site_statuses: [site1], subjects: [dfe_subject]) }
       let(:course2) { build(:course, site_statuses: [site2], subjects: [dfe_subject]) }
 
-      let!(:dfe_subject) { build(:subject, subject_name: 'primary') }
+      let!(:dfe_subject) { build(:subject, subject_name: "primary") }
       let(:non_dfe_subject) { build(:subject, subject_name: "secondary") }
 
       let!(:provider) do
@@ -49,7 +49,7 @@ describe 'Provider Publish API v2', type: :request do
           :provider,
           organisations: [organisation],
           enrichments: [enrichment],
-          courses: [course1, course2]
+          courses: [course1, course2],
         )
       end
 
@@ -59,20 +59,20 @@ describe 'Provider Publish API v2', type: :request do
         stub_request(:put, %r{#{Settings.search_api.base_url}/api/courses/})
           .with(body: sync_body)
           .to_return(
-            status: search_api_status
+            status: search_api_status,
           )
       end
 
-      it 'publishes a provider' do
+      it "publishes a provider" do
         subject
         enrichment.reload
-        expect(enrichment.status).to eq('published')
+        expect(enrichment.status).to eq("published")
         expect(enrichment.updated_by_user_id).to eq(user.id)
       end
 
-      context 'when the sync API is available' do
+      context "when the sync API is available" do
         let(:sync_body) { include("\"ProgrammeCode\":\"#{course1.course_code}\"", "\"ProgrammeCode\":\"#{course2.course_code}\"") }
-        it 'syncs a providers courses' do
+        it "syncs a providers courses" do
           perform_enqueued_jobs do
             subject
           end
@@ -81,22 +81,22 @@ describe 'Provider Publish API v2', type: :request do
       end
     end
 
-    describe 'failed validation' do
-      let(:json_data) { JSON.parse(subject.body)['errors'] }
+    describe "failed validation" do
+      let(:json_data) { JSON.parse(subject.body)["errors"] }
 
-      context 'invalid enrichment with invalid content lack_presence fields' do
+      context "invalid enrichment with invalid content lack_presence fields" do
         let(:invalid_enrichment) { build(:provider_enrichment, :without_content) }
         let(:provider) {
           create(
             :provider,
             organisations: [organisation],
-            enrichments: [invalid_enrichment]
+            enrichments: [invalid_enrichment],
           )
         }
 
         it { should have_http_status(:unprocessable_entity) }
 
-        it 'has validation error details' do
+        it "has validation error details" do
           expect(json_data.count).to eq 9
           expect(json_data[0]["detail"]).to eq("Enter an email address in the correct format, like name@example.com")
           expect(json_data[1]["detail"]).to eq("Enter website")
@@ -109,7 +109,7 @@ describe 'Provider Publish API v2', type: :request do
           expect(json_data[8]["detail"]).to eq("Enter details about training with a disability")
         end
 
-        it 'has validation error pointers' do
+        it "has validation error pointers" do
           expect(json_data[0]["source"]["pointer"]).to eq("/data/attributes/email")
           expect(json_data[1]["source"]["pointer"]).to eq("/data/attributes/website")
           expect(json_data[2]["source"]["pointer"]).to eq("/data/attributes/telephone")

@@ -1,11 +1,11 @@
 module MCB
   module Render
-    def contacts_table(contacts, name: 'Contacts')
+    def contacts_table(contacts, name: "Contacts")
       return if contacts.nil?
 
       [
         "#{name}:",
-        render_table_or_none(contacts, contacts_table_columns)
+        render_table_or_none(contacts, contacts_table_columns),
       ]
     end
 
@@ -29,7 +29,7 @@ module MCB
       ]
     end
 
-    def user_record(user, name: 'User')
+    def user_record(user, name: "User")
       user_table = Terminal::Table.new rows: user
 
       [
@@ -60,7 +60,7 @@ module MCB
         providers_table(
           [accrediting_provider],
           name: "Accredited body",
-          add_columns: [[:accrediting_provider, header: 'accrediting']]
+          add_columns: [[:accrediting_provider, header: "accrediting"]],
         ),
         "\n",
         recruitment_cycle_table(recruitment_cycle),
@@ -71,16 +71,16 @@ module MCB
         "\n",
         unless enrichments.nil?
           course_enrichments_table(enrichments)
-        end
+        end,
       ]
     end
 
-    def course_enrichments_table(enrichments, name: 'Course Enrichments')
+    def course_enrichments_table(enrichments, name: "Course Enrichments")
       return if enrichments.nil?
 
       [
         "#{name}:",
-        render_table_or_none(enrichments, course_enrichments_table_columns)
+        render_table_or_none(enrichments, course_enrichments_table_columns),
       ]
     end
 
@@ -88,11 +88,11 @@ module MCB
       [
         :id,
         :status,
-        [:last_published, ->(ce) { ce.last_published_timestamp_utc }]
+        [:last_published, ->(ce) { ce.last_published_timestamp_utc }],
       ]
     end
 
-    def course_record(course, name: 'Course')
+    def course_record(course, name: "Course")
       course_table = Terminal::Table.new rows: course
 
       [
@@ -102,7 +102,7 @@ module MCB
     end
 
     def course_site_statuses_table(site_statuses,
-                                   name: 'Site Statuses',
+                                   name: "Site Statuses",
                                    add_columns: [])
       columns = course_site_statuses_table_columns + add_columns
 
@@ -113,7 +113,7 @@ module MCB
       [
         "#{name}:",
         *site_statuses_table.pack(max_table_width: nil),
-        site_statuses_table.horizontal_rule
+        site_statuses_table.horizontal_rule,
       ]
     end
 
@@ -125,11 +125,11 @@ module MCB
         :vac_status,
         :status,
         :publish,
-        :applications_accepted_from
+        :applications_accepted_from,
       ]
     end
 
-    def provider_record(provider, name: 'Provider')
+    def provider_record(provider, name: "Provider")
       provider = provider.attributes if provider.respond_to?(:attributes)
 
       provider_table = Terminal::Table.new rows: provider
@@ -141,25 +141,25 @@ module MCB
     end
 
     def organisations_table(organisations,
-                        name: 'Organisations',
+                        name: "Organisations",
                         add_columns: [])
       return if organisations.nil?
 
       [
         "#{name}:",
-        render_table_or_none(organisations, organisations_table_columns + add_columns)
+        render_table_or_none(organisations, organisations_table_columns + add_columns),
       ]
     end
 
     def organisations_table_columns
       [
         :id,
-        [:name, header: 'name'],
+        [:name, header: "name"],
       ]
     end
 
     def providers_table(providers,
-                        name: 'Providers',
+                        name: "Providers",
                         add_columns: [],
                         **opts)
       return if providers.nil?
@@ -169,7 +169,7 @@ module MCB
 
       [
         "#{name}:",
-        render_table_or_none(providers, columns)
+        render_table_or_none(providers, columns),
       ]
     end
 
@@ -177,31 +177,31 @@ module MCB
       if extended
         [
           :id,
-          [:provider_name, header: 'name'],
-          [:provider_code, header: 'code'],
+          [:provider_name, header: "name"],
+          [:provider_code, header: "code"],
           [:organisation_id, ->(p) { p.organisation_ids.first }],
           [:organisation, ->(p) { p.organisations.first&.name }],
-          [:provider_type, header: 'type'],
+          [:provider_type, header: "type"],
           [:courses, ->(p) { p.courses.count }],
           :postcode,
         ]
       else
         [
           :id,
-          [:provider_name, header: 'name'],
-          [:provider_code, header: 'code'],
+          [:provider_name, header: "name"],
+          [:provider_code, header: "code"],
           [:organisation_id, ->(p) { p.organisation_ids.first }],
-          [:provider_type, header: 'type'],
+          [:provider_type, header: "type"],
         ]
       end
     end
 
-    def sites_table(sites, name: 'Sites')
+    def sites_table(sites, name: "Sites")
       return if sites.nil?
 
       [
         "#{name}:",
-        render_table_or_none(sites, sites_table_columns)
+        render_table_or_none(sites, sites_table_columns),
       ]
     end
 
@@ -210,19 +210,19 @@ module MCB
          region_code]
     end
 
-    def subjects_table(subjects, name: 'Subjects')
+    def subjects_table(subjects, name: "Subjects")
       return if subjects.nil?
 
       [
         "#{name}:",
-        render_table_or_none(subjects, subjects_table_columns)
+        render_table_or_none(subjects, subjects_table_columns),
       ]
     end
 
     def recruitment_cycle_table(recruitment_cycle)
       [
         "Recruitment cycle:",
-        render_table_or_none([recruitment_cycle], %i[year application_start_date application_end_date])
+        render_table_or_none([recruitment_cycle], %i[year application_start_date application_end_date]),
       ]
     end
 
@@ -280,10 +280,10 @@ module MCB
 
         [
           table.pack(max_table_width: nil),
-          table.horizontal_rule
+          table.horizontal_rule,
         ]
       else
-        ['-none-']
+        ["-none-"]
       end
     end
   end

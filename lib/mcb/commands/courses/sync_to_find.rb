@@ -1,6 +1,6 @@
-name 'sync_to_find'
-summary 'Send a course to Find'
-usage 'sync_to_find <provider_code> <course_code1> [<course_code2> ...]'
+name "sync_to_find"
+summary "Send a course to Find"
+usage "sync_to_find <provider_code> <course_code1> [<course_code2> ...]"
 
 run do |opts, args, _cmd|
   MCB.init_rails(opts)
@@ -27,7 +27,7 @@ run do |opts, args, _cmd|
     ManageCoursesAPIService::Request.sync_course_with_search_and_compare(
       user.email,
       provider.provider_code,
-      course.course_code
+      course.course_code,
     )
   end
 end

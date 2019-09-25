@@ -20,7 +20,7 @@ module API
             :applications_accepted_from,
             :publish,
             :status,
-            :vac_status
+            :vac_status,
           )
       end
     end

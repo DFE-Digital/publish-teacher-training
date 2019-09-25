@@ -16,7 +16,7 @@ module MCB
               menu: menu,
               selected_items: selected_items,
               possible_items: possible_items,
-              hidden_label: hidden_label
+              hidden_label: hidden_label,
             )
           end
         end

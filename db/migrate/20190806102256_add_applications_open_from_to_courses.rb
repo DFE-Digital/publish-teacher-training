@@ -2,11 +2,11 @@ class AddApplicationsOpenFromToCourses < ActiveRecord::Migration[5.2]
   def up
     add_column :course, :applications_open_from, :date
 
-    say_with_time 'Ensuring next recruitment cycle has the correct application start date' do
+    say_with_time "Ensuring next recruitment cycle has the correct application start date" do
       RecruitmentCycle.next_recruitment_cycle.update!(application_start_date: Date.new(2019, 10, 8))
     end
 
-    say_with_time 'Setting applications_open_from to one held within sites' do
+    say_with_time "Setting applications_open_from to one held within sites" do
       current_recruitment_cycle = RecruitmentCycle.current_recruitment_cycle
       current_recruitment_cycle.courses.includes(:site_statuses).includes(provider: :recruitment_cycle).all.each do |course|
         if !course.site_statuses.empty?

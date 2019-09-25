@@ -65,7 +65,7 @@ FactoryBot.define do
         "Bursaries and scholarships are available to trainees",
         "You may be eligible for a government bursary if you are applying to teach one of our secondary subjects",
         "DfE bursaries are available for select trainees ",
-        "You can find information about tuition fee loans and other financial help on the Gov.uk website - (https://www.gov.uk/student-finance)"
+        "You can find information about tuition fee loans and other financial help on the Gov.uk website - (https://www.gov.uk/student-finance)",
       ].sample
     end
     how_school_placements_work { Faker::TvShows::GameOfThrones.quote }
@@ -82,7 +82,7 @@ FactoryBot.define do
         "Salary negotiable.",
         "Applicants will be paid as an unqualified teacher.",
         "The trainee will be paid and taxed as an unqualified teacher.",
-        "Using the unqualified teachers scale"
+        "Using the unqualified teachers scale",
       ].sample
     end
 

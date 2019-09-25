@@ -1,4 +1,4 @@
-require 'rails_helper'
+require "rails_helper"
 
 describe Courses::GenerateUniqueCourseCodeService do
   let(:existing_codes) { [] }
@@ -6,13 +6,13 @@ describe Courses::GenerateUniqueCourseCodeService do
   let(:service) do
     described_class.new(
       existing_codes: existing_codes,
-      generate_course_code_service: mocked_gen_code_service
+      generate_course_code_service: mocked_gen_code_service,
     )
   end
 
   describe "when there are no existing codes" do
     it 'calls "Courses::GenerateCourseCodeService" once' do
-      expect(mocked_gen_code_service).to receive(:execute).once.and_return('A000')
+      expect(mocked_gen_code_service).to receive(:execute).once.and_return("A000")
 
       service.execute
     end
@@ -23,7 +23,7 @@ describe Courses::GenerateUniqueCourseCodeService do
       let(:existing_codes) { %w[A111] }
 
       it 'calls "Courses::GenerateCourseCodeService" once' do
-        expect(mocked_gen_code_service).to receive(:execute).once.and_return('A000')
+        expect(mocked_gen_code_service).to receive(:execute).once.and_return("A000")
 
         service.execute
       end
@@ -33,7 +33,7 @@ describe Courses::GenerateUniqueCourseCodeService do
       let(:existing_codes) { %w[A111] }
 
       it 'calls "Courses::GenerateCourseCodeService" twice' do
-        expect(mocked_gen_code_service).to receive(:execute).twice.and_return('A111', 'A000')
+        expect(mocked_gen_code_service).to receive(:execute).twice.and_return("A111", "A000")
 
         service.execute
       end
@@ -45,7 +45,7 @@ describe Courses::GenerateUniqueCourseCodeService do
 
     context "and the code generator generates the same codes" do
       it "still generates a new code" do
-        expected_code = 'B123'
+        expected_code = "B123"
         expect(mocked_gen_code_service).to receive(:execute).exactly(4)
                                                             .times
                                                             .and_return(*existing_codes, expected_code)

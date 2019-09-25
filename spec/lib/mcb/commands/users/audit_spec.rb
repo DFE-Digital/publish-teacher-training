@@ -1,19 +1,19 @@
-require 'mcb_helper'
+require "mcb_helper"
 
-describe 'mcb users audit' do
-  let(:lib_dir) { Rails.root.join('lib') }
+describe "mcb users audit" do
+  let(:lib_dir) { Rails.root.join("lib") }
   let(:cmd) do
     Cri::Command.load_file(
-      "#{lib_dir}/mcb/commands/users/audit.rb"
+      "#{lib_dir}/mcb/commands/users/audit.rb",
     )
   end
 
-  it 'shows the list of changes for a given user' do
-    user = create(:user, email: 'a@a')
-    admin_user = create :user, :admin, email: 'h@i'
+  it "shows the list of changes for a given user" do
+    user = create(:user, email: "a@a")
+    admin_user = create :user, :admin, email: "h@i"
 
     Audited.store[:audited_user] = admin_user
-    user.update(email: 'b@b')
+    user.update(email: "b@b")
 
     output = with_stubbed_stdout do
       cmd.run([user.id.to_s])
@@ -21,19 +21,19 @@ describe 'mcb users audit' do
     output = output[:stdout]
 
     expect(output).to have_text_table_row(admin_user.id,
-                                          'h@i',
-                                          'update',
-                                          '',
-                                          '',
+                                          "h@i",
+                                          "update",
+                                          "",
+                                          "",
                                           '{"email"=>["a@a", "b@b"]}')
   end
 
-  it 'allows specifying user by email' do
-    user = create(:user, email: 'a@a')
-    admin_user = create :user, :admin, email: 'h@i'
+  it "allows specifying user by email" do
+    user = create(:user, email: "a@a")
+    admin_user = create :user, :admin, email: "h@i"
 
     Audited.store[:audited_user] = admin_user
-    user.update(email: 'b@b')
+    user.update(email: "b@b")
 
     output = with_stubbed_stdout do
       cmd.run([user.email])
@@ -41,19 +41,19 @@ describe 'mcb users audit' do
     output = output[:stdout]
 
     expect(output).to have_text_table_row(admin_user.id,
-                                          'h@i',
-                                          'update',
-                                          '',
-                                          '',
+                                          "h@i",
+                                          "update",
+                                          "",
+                                          "",
                                           '{"email"=>["a@a", "b@b"]}')
   end
 
-  it 'allows specifying user by sign-in id' do
-    user = create(:user, email: 'a@a')
-    admin_user = create :user, :admin, email: 'h@i'
+  it "allows specifying user by sign-in id" do
+    user = create(:user, email: "a@a")
+    admin_user = create :user, :admin, email: "h@i"
 
     Audited.store[:audited_user] = admin_user
-    user.update(email: 'b@b')
+    user.update(email: "b@b")
 
     output = with_stubbed_stdout do
       cmd.run([user.sign_in_user_id])
@@ -61,10 +61,10 @@ describe 'mcb users audit' do
     output = output[:stdout]
 
     expect(output).to have_text_table_row(admin_user.id,
-                                          'h@i',
-                                          'update',
-                                          '',
-                                          '',
+                                          "h@i",
+                                          "update",
+                                          "",
+                                          "",
                                           '{"email"=>["a@a", "b@b"]}')
   end
 end

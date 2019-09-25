@@ -29,7 +29,7 @@ module API
 
         json_data = JSONAPI::Serializable::Renderer.new.render(
           course,
-          class: { Course: API::V2::SerializableCourse }
+          class: { Course: API::V2::SerializableCourse },
         )
 
         json_data[:data][:errors] = []
@@ -39,7 +39,7 @@ module API
             json_data[:data][:errors] << {
               "title" => "Invalid #{error_key}",
               "detail" => error_message,
-              "source" => { "pointer" => "/data/attributes/#{error_key}" }
+              "source" => { "pointer" => "/data/attributes/#{error_key}" },
             }
           end
         end
@@ -109,7 +109,7 @@ module API
 
         generate_code_service = Courses::GenerateUniqueCourseCodeService.new(
           existing_codes: @provider.courses.pluck(:course_code),
-          generate_course_code_service: Courses::GenerateCourseCodeService.new
+          generate_course_code_service: Courses::GenerateCourseCodeService.new,
         )
         course_code = generate_code_service.execute
 
@@ -154,7 +154,7 @@ module API
 
       def update_site_status_vac_statuses
         @course.site_statuses.each do |site_status|
-          if site_status.vac_status != 'no_vacancies'
+          if site_status.vac_status != "no_vacancies"
             update_vac_status(@course.study_mode, site_status)
           end
         end
@@ -162,13 +162,13 @@ module API
 
       def build_provider
         @provider = @recruitment_cycle.providers.find_by!(
-          provider_code: params[:provider_code].upcase
+          provider_code: params[:provider_code].upcase,
         )
       end
 
       def build_recruitment_cycle
         @recruitment_cycle = RecruitmentCycle.find_by(
-          year: params[:recruitment_cycle_year]
+          year: params[:recruitment_cycle_year],
         ) || RecruitmentCycle.current_recruitment_cycle
       end
 
@@ -208,7 +208,7 @@ module API
             :other_requirements,
             :personal_qualities,
             :salary_details,
-            :required_qualifications
+            :required_qualifications,
           )
       end
 
@@ -245,7 +245,7 @@ module API
             :is_send,
             :name,
             :accrediting_provider_code,
-            :funding_type
+            :funding_type,
           )
       end
 
@@ -262,7 +262,7 @@ module API
           SyncCoursesToFindJob.perform_later(@course)
         else
           raise RuntimeError.new(
-            "'#{@course}' '#{@course.provider}' sync error: #{@course.errors.details}"
+            "'#{@course}' '#{@course.provider}' sync error: #{@course.errors.details}",
           )
         end
       end

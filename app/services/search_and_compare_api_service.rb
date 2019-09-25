@@ -5,8 +5,8 @@ module SearchAndCompareAPIService
         Faraday.new(url: Settings.search_api.base_url) do |faraday|
           faraday.response :logger unless Rails.env.test?
           faraday.adapter Faraday.default_adapter
-          faraday.headers['Content-Type'] = 'application/json; charset=utf-8;'
-          faraday.headers['Authorization'] = "Bearer #{Settings.search_api.secret}"
+          faraday.headers["Content-Type"] = "application/json; charset=utf-8;"
+          faraday.headers["Authorization"] = "Bearer #{Settings.search_api.secret}"
         end
       end
     end
@@ -22,7 +22,7 @@ module SearchAndCompareAPIService
     def bulk_sync(courses)
       @response = api.post(
         "/api/courses/",
-        serialize(courses)
+        serialize(courses),
       ) do |req|
         # NOTE:
         #   It's going to be a long process
@@ -38,7 +38,7 @@ module SearchAndCompareAPIService
     def sync(courses)
       @response = api.put(
         "/api/courses/",
-        serialize(courses)
+        serialize(courses),
       )
 
       @response.success?
@@ -54,7 +54,7 @@ module SearchAndCompareAPIService
       ActiveModel::Serializer::CollectionSerializer.new(
         payload,
         serializer: SearchAndCompare::CourseSerializer,
-        adapter: ActiveModel::Serializer::Adapter::JsonApi
+        adapter: ActiveModel::Serializer::Adapter::JsonApi,
       ).to_json
     end
   end

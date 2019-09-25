@@ -1,21 +1,21 @@
-require 'mcb_helper'
+require "mcb_helper"
 
-describe 'mcb providers list' do
+describe "mcb providers list" do
   def execute_list(arguments: [], input: [])
     with_stubbed_stdout(stdin: input.join("\n")) do
-      $mcb.run(['providers', 'list', *arguments])
+      $mcb.run(["providers", "list", *arguments])
     end
   end
 
   let(:current_cycle) { RecruitmentCycle.current_recruitment_cycle }
-  let(:additional_cycle) { find_or_create(:recruitment_cycle, year: '2020') }
+  let(:additional_cycle) { find_or_create(:recruitment_cycle, year: "2020") }
 
-  context 'when recruitment cycle is unspecified' do
+  context "when recruitment cycle is unspecified" do
     let(:provider1) { create(:provider, recruitment_cycle: current_cycle) }
     let(:provider2) { create(:provider, recruitment_cycle: current_cycle) }
     let(:provider3) { create(:provider, recruitment_cycle: additional_cycle) }
 
-    it 'lists all courses for the default recruitment cycle' do
+    it "lists all courses for the default recruitment cycle" do
       provider1
       provider2
       provider3
@@ -32,8 +32,8 @@ describe 'mcb providers list' do
       expect(command_output).not_to include(provider3.provider_code)
     end
 
-    context 'when provider is specified' do
-      it 'displays the provider information' do
+    context "when provider is specified" do
+      it "displays the provider information" do
         provider1
         provider2
 
@@ -46,7 +46,7 @@ describe 'mcb providers list' do
         expect(command_output).not_to include(provider2.provider_name)
       end
 
-      it 'displays multiple specified providers' do
+      it "displays multiple specified providers" do
         provider1
         provider2
 
@@ -59,7 +59,7 @@ describe 'mcb providers list' do
         expect(command_output).to include(provider2.provider_name)
       end
 
-      it 'is case insensitive' do
+      it "is case insensitive" do
         provider1
         provider2
 
@@ -68,8 +68,8 @@ describe 'mcb providers list' do
       end
     end
 
-    context 'when provider is unspecified' do
-      it 'displays information about providers for the current recruitment cycle' do
+    context "when provider is unspecified" do
+      it "displays information about providers for the current recruitment cycle" do
         provider1
         provider2
 
@@ -84,11 +84,11 @@ describe 'mcb providers list' do
     end
   end
 
-  context 'when recruitment cycle is specified' do
+  context "when recruitment cycle is specified" do
     let(:provider1) { create(:provider, recruitment_cycle: current_cycle) }
     let(:provider2) { create(:provider, recruitment_cycle: additional_cycle) }
 
-    it 'displays information about providers for the specified recruitment cycle' do
+    it "displays information about providers for the specified recruitment cycle" do
       provider1
       provider2
 

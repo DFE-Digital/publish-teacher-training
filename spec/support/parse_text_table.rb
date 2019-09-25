@@ -35,7 +35,7 @@ def parse_text_table(text_table)
       end
 
       real_rows.last.map! do |cell|
-        cell.gsub(/\s/, '')
+        cell.gsub(/\s/, "")
       end
     end
   end

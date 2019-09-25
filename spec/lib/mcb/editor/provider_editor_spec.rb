@@ -1,4 +1,4 @@
-require 'mcb_helper'
+require "mcb_helper"
 
 describe MCB::Editor::ProviderEditor, :needs_audit_user do
   def run_editor(*input_cmds)
@@ -7,27 +7,27 @@ describe MCB::Editor::ProviderEditor, :needs_audit_user do
     end
   end
 
-  let(:provider_code) { 'X12' }
-  let(:email) { 'user@education.gov.uk' }
+  let(:provider_code) { "X12" }
+  let(:email) { "user@education.gov.uk" }
   let(:provider) {
     create(:provider,
            provider_code: provider_code,
-           provider_name: 'Original name')
+           provider_name: "Original name")
   }
 
   subject { described_class.new(provider: provider, requester: requester) }
 
-  context 'when an authorised user' do
+  context "when an authorised user" do
     let!(:requester) { create(:user, email: email, organisations: provider.organisations) }
 
-    describe 'runs the editor' do
-      it 'updates the provider name' do
+    describe "runs the editor" do
+      it "updates the provider name" do
         expect { run_editor("edit provider name", "ACME SCITT", "exit") }
           .to change { provider.reload.provider_name }
           .from("Original name").to("ACME SCITT")
       end
 
-      it 'creates a provider audit with the correct requester' do
+      it "creates a provider audit with the correct requester" do
         run_editor("edit provider name", "ACME SCITT", "exit")
         provider.reload
 
@@ -35,21 +35,21 @@ describe MCB::Editor::ProviderEditor, :needs_audit_user do
       end
 
       describe "(course editing)" do
-        let!(:courses) { create(:course, course_code: 'A01X', name: 'Biology', provider: provider) }
-        let!(:course2) { create(:course, course_code: 'A02X', name: 'History', provider: provider) }
-        let!(:course3) { create(:course, course_code: 'A03X', name: 'Economics', provider: provider) }
+        let!(:courses) { create(:course, course_code: "A01X", name: "Biology", provider: provider) }
+        let!(:course2) { create(:course, course_code: "A02X", name: "History", provider: provider) }
+        let!(:course3) { create(:course, course_code: "A03X", name: "Economics", provider: provider) }
         let(:recruitment_cycle_year) { ["-r", provider.recruitment_cycle.year] }
 
-        it 'lists the courses for the given provider' do
+        it "lists the courses for the given provider" do
           output = run_editor("edit courses", "continue", "exit")[:stdout]
           expect(output).to include(
             "[ ] Biology (#{provider_code}/A01X) [#{provider.recruitment_cycle}]",
             "[ ] History (#{provider_code}/A02X) [#{provider.recruitment_cycle}]",
-            "[ ] Economics (#{provider_code}/A03X) [#{provider.recruitment_cycle}]"
+            "[ ] Economics (#{provider_code}/A03X) [#{provider.recruitment_cycle}]",
           )
         end
 
-        it 'invokes course editing on the selected courses' do
+        it "invokes course editing on the selected courses" do
           allow($mcb).to receive(:run)
 
           run_editor(
@@ -57,15 +57,15 @@ describe MCB::Editor::ProviderEditor, :needs_audit_user do
             "[ ] Biology (#{provider_code}/A01X) [#{provider.recruitment_cycle}]", # pick the first course
             "[ ] Economics (#{provider_code}/A03X) [#{provider.recruitment_cycle}]", # pick the second course
             "continue", # finish selecting courses
-            "exit" # from the command
+            "exit", # from the command
           )
 
           expect($mcb).to have_received(:run).with(
-            %w[courses edit X12 A01X A03X] + recruitment_cycle_year
+            %w[courses edit X12 A01X A03X] + recruitment_cycle_year,
           )
         end
 
-        it 'invokes course editing on courses selected by their course code' do
+        it "invokes course editing on courses selected by their course code" do
           allow($mcb).to receive(:run)
 
           run_editor(
@@ -73,26 +73,26 @@ describe MCB::Editor::ProviderEditor, :needs_audit_user do
             "A01X", # pick the first course
             "A03X", # pick the second course
             "continue", # finish selecting courses
-            "exit" # from the command
+            "exit", # from the command
           )
 
           expect($mcb).to have_received(:run).with(
-            %w[courses edit X12 A01X A03X] + recruitment_cycle_year
+            %w[courses edit X12 A01X A03X] + recruitment_cycle_year,
           )
         end
 
-        it 'allows to easily select all courses' do
+        it "allows to easily select all courses" do
           allow($mcb).to receive(:run)
 
           run_editor("edit courses", "select all", "continue", "exit")
 
           expect($mcb).to have_received(:run).with(
-            %w[courses edit X12 A01X A02X A03X] + recruitment_cycle_year
+            %w[courses edit X12 A01X A02X A03X] + recruitment_cycle_year,
           )
         end
 
         context "(run against an Azure environment)" do
-          let(:environment) { 'qa' }
+          let(:environment) { "qa" }
           subject { described_class.new(provider: provider, requester: requester, environment: environment) }
 
           it 'invokes course editing in the environment that the "providers edit" command was invoked' do
@@ -102,23 +102,23 @@ describe MCB::Editor::ProviderEditor, :needs_audit_user do
               "edit courses",
               "[ ] Biology (#{provider_code}/A01X) [#{provider.recruitment_cycle}]",
               "continue",
-              "exit"
+              "exit",
             )
 
             expect($mcb).to have_received(:run).with(
-              %w[courses edit X12 A01X -E qa] + recruitment_cycle_year
+              %w[courses edit X12 A01X -E qa] + recruitment_cycle_year,
             )
           end
         end
       end
 
-      it 'does nothing upon an immediate exit' do
+      it "does nothing upon an immediate exit" do
         expect { run_editor("exit") }.to_not change { provider.reload.provider_name }.
           from("Original name")
       end
     end
 
-    describe 'runs the provider creation wizard' do
+    describe "runs the provider creation wizard" do
       def run_new_provider_wizard(*input_cmds)
         with_stubbed_stdout(stdin: input_cmds.join("\n")) do
           subject.new_provider_wizard
@@ -129,18 +129,18 @@ describe MCB::Editor::ProviderEditor, :needs_audit_user do
       let(:desired_attributes) {
         {
           name: "ACME SCITT",
-          code: 'X01',
-          type: 'scitt',
+          code: "X01",
+          type: "scitt",
           first_location_name: "ACME Primary School",
-          address1: '123 Acme Lane',
-          town_or_city: 'Acmeton',
-          county: '',
-          postcode: 'SW13 9AA',
-          region_code: 'london',
-          contact_name: 'Jane Smith',
-          email: 'jsmith@acme-scitt.org.uk',
+          address1: "123 Acme Lane",
+          town_or_city: "Acmeton",
+          county: "",
+          postcode: "SW13 9AA",
+          region_code: "london",
+          contact_name: "Jane Smith",
+          email: "jsmith@acme-scitt.org.uk",
           telephone: "0123456",
-          organisation_name: 'ACME SCITT',
+          organisation_name: "ACME SCITT",
         }
       }
 
@@ -157,7 +157,7 @@ describe MCB::Editor::ProviderEditor, :needs_audit_user do
           desired_attributes[:town_or_city],
           desired_attributes[:county],
           desired_attributes[:postcode],
-          desired_attributes[:region_code]
+          desired_attributes[:region_code],
         ]
       }
 
@@ -174,13 +174,13 @@ describe MCB::Editor::ProviderEditor, :needs_audit_user do
           "address4" => desired_attributes[:county],
           "postcode" => desired_attributes[:postcode],
           "region_code" => desired_attributes[:region_code],
-          "scitt" => 'Y',
+          "scitt" => "Y",
           "accrediting_provider" => "accredited_body",
         }
       }
 
       context "when adding a new provider into a completely new organisation" do
-        let(:frozen_time) { Time.parse('10:00 20/01/2019').utc }
+        let(:frozen_time) { Time.parse("10:00 20/01/2019").utc }
         let(:created_provider) { RecruitmentCycle.current_recruitment_cycle.providers.find_by!(provider_code: desired_attributes[:code]) }
 
         before do
@@ -188,10 +188,10 @@ describe MCB::Editor::ProviderEditor, :needs_audit_user do
 
           @output = run_new_provider_wizard(
             *valid_answers,
-            'y', # confirm creation
+            "y", # confirm creation
             # adding the provider into a new organisation
             desired_attributes[:organisation_name],
-            "y" # confirm creation of a new org
+            "y", # confirm creation of a new org
           )[:stdout]
         end
 
@@ -239,40 +239,40 @@ describe MCB::Editor::ProviderEditor, :needs_audit_user do
         it "does not accept zero input" do
           output = run_new_provider_wizard(
             *valid_answers,
-            'y', # confirm creation
-            '', # Empty Org Name
+            "y", # confirm creation
+            "", # Empty Org Name
             # adding the provider into a new organisation
             desired_attributes[:organisation_name],
-            "y" # confirm creation of a new org
+            "y", # confirm creation of a new org
           )[:stdout]
 
-          expect(output).to include('Organisation name cannot be blank.')
+          expect(output).to include("Organisation name cannot be blank.")
         end
 
         it "does not accept new line" do
           output = run_new_provider_wizard(
             *valid_answers,
-            'y', # confirm creation
+            "y", # confirm creation
             "\n", # Empty Org Name
             # adding the provider into a new organisation
             desired_attributes[:organisation_name],
-            "y" # confirm creation of a new org
+            "y", # confirm creation of a new org
           )[:stdout]
 
-          expect(output).to include('Organisation name cannot be blank.')
+          expect(output).to include("Organisation name cannot be blank.")
         end
 
         it "does not accept only whitespace" do
           output = run_new_provider_wizard(
             *valid_answers,
-            'y', # confirm creation
+            "y", # confirm creation
             "   ", # Empty Org Name
             # adding the provider into a new organisation
             desired_attributes[:organisation_name],
-            "y" # confirm creation of a new org
+            "y", # confirm creation of a new org
           )[:stdout]
 
-          expect(output).to include('Organisation name cannot be blank.')
+          expect(output).to include("Organisation name cannot be blank.")
         end
       end
 
@@ -282,7 +282,7 @@ describe MCB::Editor::ProviderEditor, :needs_audit_user do
         it "creates a new provider into the existing organisation with the passed parameters" do
           output = run_new_provider_wizard(
             *valid_answers,
-            'y', # confirm creation
+            "y", # confirm creation
             desired_attributes[:organisation_name], # adding the provider into an existing organisation
           )[:stdout]
 
@@ -298,7 +298,7 @@ describe MCB::Editor::ProviderEditor, :needs_audit_user do
         it "creates a new provider into the existing organisation, even if the user makes and then corrects a typo in the org name" do
           output = run_new_provider_wizard(
             *valid_answers,
-            'y', # confirm creation
+            "y", # confirm creation
             "ACCCCME SCITT", # mistyped organisation name
             "no", # don't create the mistyped org
             desired_attributes[:organisation_name], # try typing in the org name again
@@ -321,9 +321,9 @@ describe MCB::Editor::ProviderEditor, :needs_audit_user do
         it "clones the provider into all subsequent recruitment cycles" do
           run_new_provider_wizard(
             *valid_answers,
-            'y', # confirm creation
+            "y", # confirm creation
             desired_attributes[:organisation_name],
-            "yes"
+            "yes",
           )
 
           expect(next_recruitment_cycle.providers.count).to eq(1)
@@ -337,7 +337,7 @@ describe MCB::Editor::ProviderEditor, :needs_audit_user do
       it "does not create a Provider if creation isn't confirmed" do
         output = run_new_provider_wizard(
           *valid_answers,
-          'n' # Do not confirm creation
+          "n", # Do not confirm creation
         )[:stdout]
 
         expect(Provider.find_by(provider_code: desired_attributes[:provider_code])).to be_nil
@@ -349,7 +349,7 @@ describe MCB::Editor::ProviderEditor, :needs_audit_user do
 
         output = run_new_provider_wizard(
           *valid_answers,
-          'y' # confirm creation
+          "y", # confirm creation
         )[:stdout]
 
         expect(Provider.find_by(provider_code: desired_attributes[:provider_code])).to be_nil
@@ -359,10 +359,10 @@ describe MCB::Editor::ProviderEditor, :needs_audit_user do
     end
   end
 
-  context 'for an unauthorised user' do
+  context "for an unauthorised user" do
     let!(:requester) { create(:user, email: email, organisations: []) }
 
-    it 'raises an error' do
+    it "raises an error" do
       expect { subject }.to raise_error(Pundit::NotAuthorizedError)
     end
   end

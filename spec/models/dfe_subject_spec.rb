@@ -10,11 +10,11 @@ describe DFESubject do
 
     it { should eq(DFESubject.new("Mathematics")) }
 
-    it 'returns the #bursary_amount' do
+    it "returns the #bursary_amount" do
       expect(subject.bursary_amount).to be_present
     end
 
-    it 'returns the #scholarship_amount' do
+    it "returns the #scholarship_amount" do
       expect(subject.scholarship_amount).to be_present
     end
   end
@@ -26,11 +26,11 @@ describe DFESubject do
     it { should_not have_scholarship }
     it { should_not have_early_career_payments }
 
-    it 'returns the #bursary_amount' do
+    it "returns the #bursary_amount" do
       expect(subject.bursary_amount).to_not be_present
     end
 
-    it 'returns the #scholarship_amount' do
+    it "returns the #scholarship_amount" do
       expect(subject.scholarship_amount).to_not be_present
     end
   end

@@ -11,8 +11,8 @@ module API
 
         @current_user.update(
           create_params.merge(
-            last_login_date_utc: Time.now.utc
-          )
+            last_login_date_utc: Time.now.utc,
+          ),
         )
 
         send_welcome_email
@@ -23,14 +23,14 @@ module API
     private
 
       def create_params
-        validate_jsonapi_type(params, 'sessions')
+        validate_jsonapi_type(params, "sessions")
 
         params
           .require(:session)
           .except(:id, :type)
           .permit(
             :first_name,
-            :last_name
+            :last_name,
           )
       end
 

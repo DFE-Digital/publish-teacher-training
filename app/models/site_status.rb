@@ -76,7 +76,7 @@ class SiteStatus < ApplicationRecord
 
   scope :applications_being_accepted_now, -> {
     where.not(applications_accepted_from: nil).
-    where('applications_accepted_from <= ?', Time.now.utc)
+    where("applications_accepted_from <= ?", Time.now.utc)
   }
 
   def applications_being_accepted_now?
@@ -131,13 +131,13 @@ private
 
   def vac_status_consistent_with_course_study_mode?
     case vac_status
-    when 'no_vacancies'
+    when "no_vacancies"
       true
-    when 'full_time_vacancies'
+    when "full_time_vacancies"
       course.full_time? || course.full_time_or_part_time?
-    when 'part_time_vacancies'
+    when "part_time_vacancies"
       course.part_time? || course.full_time_or_part_time?
-    when 'both_full_time_and_part_time_vacancies'
+    when "both_full_time_and_part_time_vacancies"
       course.full_time_or_part_time?
     else
       false

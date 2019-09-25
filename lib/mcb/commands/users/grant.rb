@@ -1,9 +1,9 @@
-summary 'Attach a user to an organisation/provider in the DB. Will prompt to create user if email address is unknown.'
+summary "Attach a user to an organisation/provider in the DB. Will prompt to create user if email address is unknown."
 param :id_or_email_or_sign_in_id
-option :p, 'provider_code', 'provider code',
+option :p, "provider_code", "provider code",
        argument: :optional, transform: ->(code) { code.upcase }
-flag nil, 'admin', 'admin'
-usage 'grant --admin <user_id/email/sign_in_user_id> -p <provider_code>'
+flag nil, "admin", "admin"
+usage "grant --admin <user_id/email/sign_in_user_id> -p <provider_code>"
 
 run do |opts, args, _cmd|
   MCB.init_rails(opts)

@@ -8,7 +8,7 @@ module MCB
         accredited_body: :accrediting_provider,
         start_date: :start_date,
         application_opening_date: :applications_open_from,
-        is_send: :is_send
+        is_send: :is_send,
       }.freeze
 
       def initialize(provider:, requester:, course_codes: [], courses: nil)
@@ -80,7 +80,7 @@ module MCB
           "edit subjects",
           "edit is SEND",
           "edit training locations",
-          "sync course(s) to Find"
+          "sync course(s) to Find",
         ]
         filtered_choices = filter_single_course_options_if_necessary(choices)
         @cli.ask_multiple_choice(prompt: "What would you like to edit?", choices: filtered_choices)
@@ -91,9 +91,9 @@ module MCB
       end
 
       def perform_action(choice)
-        if choice == 'edit subjects'
+        if choice == "edit subjects"
           edit_subjects
-        elsif choice == 'edit training locations'
+        elsif choice == "edit training locations"
           edit_sites
         elsif choice.start_with?("edit")
           attribute = choice.gsub("edit ", "").gsub(" ", "_").downcase.to_sym
@@ -115,7 +115,7 @@ module MCB
       def edit_subjects
         course.subjects = @cli.multiselect(
           initial_items: course.subjects.to_a,
-          possible_items: ::Subject.all
+          possible_items: ::Subject.all,
         )
         course.reload
       end
@@ -123,7 +123,7 @@ module MCB
       def edit_sites
         course.sites = @cli.multiselect(
           initial_items: course.sites.to_a,
-          possible_items: @provider.sites
+          possible_items: @provider.sites,
         )
         course.reload
       end
@@ -196,7 +196,7 @@ module MCB
           ManageCoursesAPIService::Request.sync_course_with_search_and_compare(
             @requester.email,
             @provider.provider_code,
-            course.course_code
+            course.course_code,
           )
         end
       end

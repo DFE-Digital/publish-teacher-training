@@ -21,24 +21,24 @@ class CourseEnrichment < ApplicationRecord
   enum status: %i[draft published rolled_over]
 
   jsonb_accessor :json_data,
-                 about_course: [:string, store_key: 'AboutCourse'],
-                 course_length: [:string, store_key: 'CourseLength'],
-                 fee_details: [:string, store_key: 'FeeDetails'],
-                 fee_international: [:integer, store_key: 'FeeInternational'],
-                 fee_uk_eu: [:integer, store_key: 'FeeUkEu'],
-                 financial_support: [:string, store_key: 'FinancialSupport'],
+                 about_course: [:string, store_key: "AboutCourse"],
+                 course_length: [:string, store_key: "CourseLength"],
+                 fee_details: [:string, store_key: "FeeDetails"],
+                 fee_international: [:integer, store_key: "FeeInternational"],
+                 fee_uk_eu: [:integer, store_key: "FeeUkEu"],
+                 financial_support: [:string, store_key: "FinancialSupport"],
                  how_school_placements_work: [:string,
-                                              store_key: 'HowSchoolPlacementsWork'],
-                 interview_process: [:string, store_key: 'InterviewProcess'],
-                 other_requirements: [:string, store_key: 'OtherRequirements'],
-                 personal_qualities: [:string, store_key: 'PersonalQualities'],
-                 required_qualifications: [:string, store_key: 'Qualifications'],
-                 salary_details: [:string, store_key: 'SalaryDetails']
+                                              store_key: "HowSchoolPlacementsWork"],
+                 interview_process: [:string, store_key: "InterviewProcess"],
+                 other_requirements: [:string, store_key: "OtherRequirements"],
+                 personal_qualities: [:string, store_key: "PersonalQualities"],
+                 required_qualifications: [:string, store_key: "Qualifications"],
+                 salary_details: [:string, store_key: "SalaryDetails"]
 
   belongs_to :course
 
   scope :latest_first, -> { order(created_at: :desc, id: :desc) }
-  scope :draft, -> { where(status: 'draft').or(CourseEnrichment.rolled_over) }
+  scope :draft, -> { where(status: "draft").or(CourseEnrichment.rolled_over) }
 
   def draft?
     status.in? %w[draft rolled_over]
@@ -104,7 +104,7 @@ class CourseEnrichment < ApplicationRecord
   end
 
   def publish(current_user)
-    update(status: 'published',
+    update(status: "published",
           last_published_timestamp_utc: Time.now.utc,
           updated_by_user_id: current_user.id)
   end

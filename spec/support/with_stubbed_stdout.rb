@@ -16,7 +16,7 @@ def with_stubbed_stdout(stdin: nil, stderr: nil, &block)
     yield
     { stdout: nil, stderr: nil }
   else
-    stderr ||= ''
+    stderr ||= ""
     stdout = run stdin: stdin, stderr: stderr, &block
     { stdout: stdout, stderr: stderr }
   end
@@ -27,7 +27,7 @@ private
 def run(stdin: nil, stderr: nil)
   # Here is where we'll redirect STDOUT to temporarily. Using a StringIO
   # doesn't seem to work, it seems to require a proper file.
-  output_file = Tempfile.new('stdout.')
+  output_file = Tempfile.new("stdout.")
 
   # We neeed to save a duplicate of the original STDOUT so that we can
   # re-instate it when we're done fiddling.
@@ -38,7 +38,7 @@ def run(stdin: nil, stderr: nil)
   STDOUT.sync
 
   if stderr
-    stderr_file = Tempfile.new('stderr.')
+    stderr_file = Tempfile.new("stderr.")
     original_stderr = STDERR.dup
     STDERR.reopen(stderr_file)
     STDERR.sync

@@ -12,15 +12,15 @@ describe API::V2::SerializableCourse do
     jsonapi_renderer.render(
       course,
       class: {
-        Course: API::V2::SerializableCourse
-      }
+        Course: API::V2::SerializableCourse,
+      },
     ).to_json
   end
   let(:parsed_json) { JSON.parse(course_json) }
 
-  subject { parsed_json['data'] }
+  subject { parsed_json["data"] }
 
-  it { should have_type('courses') }
+  it { should have_type("courses") }
   it { should have_attribute(:start_date).with_value(time_now.strftime("%B %Y")) }
   it { should have_attribute :content_status }
   it { should have_attribute :ucas_status }
@@ -37,31 +37,31 @@ describe API::V2::SerializableCourse do
   it { should have_attribute :age_range_in_years }
   it { should have_attribute(:recruitment_cycle_year).with_value(course.recruitment_cycle.year) }
 
-  context 'with a provider' do
+  context "with a provider" do
     let(:provider) { course.provider }
     let(:course_json) do
       jsonapi_renderer.render(
         course,
         class: {
           Course:   API::V2::SerializableCourse,
-          Provider: API::V2::SerializableProvider
+          Provider: API::V2::SerializableProvider,
         },
         include: [
-          :provider
-        ]
+          :provider,
+        ],
       ).to_json
     end
 
     it { should have_relationship(:provider) }
 
-    it 'includes the provider' do
-      expect(parsed_json['included'])
-        .to(include(have_type('providers')
+    it "includes the provider" do
+      expect(parsed_json["included"])
+        .to(include(have_type("providers")
           .and(have_id(provider.id.to_s))))
     end
   end
 
-  context 'with an accrediting_provider' do
+  context "with an accrediting_provider" do
     let(:course) { create(:course, :with_accrediting_provider) }
     let(:accrediting_provider) { course.accrediting_provider }
     let(:course_json) do
@@ -69,18 +69,18 @@ describe API::V2::SerializableCourse do
         course,
         class: {
           Course:   API::V2::SerializableCourse,
-          Provider: API::V2::SerializableProvider
+          Provider: API::V2::SerializableProvider,
         },
         include: [
-          :accrediting_provider
-        ]
+          :accrediting_provider,
+        ],
       ).to_json
     end
 
     it { should have_relationship(:accrediting_provider) }
   end
 
-  context 'with a site_status' do
+  context "with a site_status" do
     let(:course) { create(:course, site_statuses: [site_status]) }
     let(:site_status) { create(:site_status) }
     let(:course_json) do
@@ -88,18 +88,18 @@ describe API::V2::SerializableCourse do
         course,
         class: {
           Course:   API::V2::SerializableCourse,
-          Provider: API::V2::SerializableProvider
+          Provider: API::V2::SerializableProvider,
         },
         include: [
-          :site_status
-        ]
+          :site_status,
+        ],
       ).to_json
     end
 
     it { should have_relationship(:site_statuses) }
   end
 
-  context 'with a site' do
+  context "with a site" do
     let(:course) { create(:course, sites: [site]) }
     let(:site) { create(:site) }
     let(:course_json) do
@@ -107,11 +107,11 @@ describe API::V2::SerializableCourse do
         course,
         class: {
           Course:   API::V2::SerializableCourse,
-          Provider: API::V2::SerializableProvider
+          Provider: API::V2::SerializableProvider,
         },
         include: [
-          :site
-        ]
+          :site,
+        ],
       ).to_json
     end
 
@@ -151,21 +151,21 @@ describe API::V2::SerializableCourse do
   context "subjects & level" do
     let(:course) { create(:course, subjects: subjects) }
 
-    describe 'are taken from the course' do
+    describe "are taken from the course" do
       let(:subjects) { [find_or_create(:subject, :primary)] }
       it { expect(subject["attributes"]).to include("level" => "primary") }
       it { expect(subject["attributes"]).to include("subjects" => %w[Primary]) }
     end
 
-    describe 'determine bursary and scholarship info' do
+    describe "determine bursary and scholarship info" do
       let(:subjects) { [find_or_create(:subject, :secondary), find_or_create(:subject, subject_name: "Russian")] }
       it { expect(subject["attributes"]).to include("has_bursary?" => true) }
       it { expect(subject["attributes"]).to include("has_scholarship_and_bursary?" => false) }
     end
   end
 
-  describe 'attributes retrieved from enrichments' do
-    subject { parsed_json['data']['attributes'] }
+  describe "attributes retrieved from enrichments" do
+    subject { parsed_json["data"]["attributes"] }
 
     its(%w[about_course])               { should eq enrichment.about_course }
     its(%w[course_length])              { should eq enrichment.course_length }
@@ -181,11 +181,11 @@ describe API::V2::SerializableCourse do
     its(%w[salary_details])             { should eq enrichment.salary_details }
   end
 
-  context 'a new course' do
+  context "a new course" do
     let(:provider) { create :provider }
     let(:course) { Course.new(provider: provider) }
 
-    subject { parsed_json['data'] }
+    subject { parsed_json["data"] }
 
     it { should have_attribute(:start_date).with_value(nil) }
   end

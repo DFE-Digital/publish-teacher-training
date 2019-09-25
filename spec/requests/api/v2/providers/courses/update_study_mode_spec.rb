@@ -1,23 +1,23 @@
 require "rails_helper"
 
-describe 'PATCH /providers/:provider_code/courses/:course_code' do
+describe "PATCH /providers/:provider_code/courses/:course_code" do
   let(:jsonapi_renderer) { JSONAPI::Serializable::Renderer.new }
 
   def perform_request(updated_study_mode)
     jsonapi_data = jsonapi_renderer.render(
       course,
       class: {
-        Course: API::V2::SerializableCourse
-      }
+        Course: API::V2::SerializableCourse,
+      },
     )
 
     jsonapi_data[:data][:attributes] = updated_study_mode
 
     patch "/api/v2/providers/#{course.provider.provider_code}" \
             "/courses/#{course.course_code}",
-          headers: { 'HTTP_AUTHORIZATION' => credentials },
+          headers: { "HTTP_AUTHORIZATION" => credentials },
           params: {
-            _jsonapi: jsonapi_data
+            _jsonapi: jsonapi_data,
           }
   end
   let(:organisation)      { create :organisation }
@@ -62,15 +62,15 @@ describe 'PATCH /providers/:provider_code/courses/:course_code' do
       expect(course.reload.study_mode).to eq(updated_study_mode[:study_mode].to_s)
     end
 
-    it 'should update all site_statuses vac_status to full_time_vacancies except no_vacancies' do
-      expect(site_status1.reload.vac_status).to eq('full_time_vacancies')
-      expect(site_status2.reload.vac_status).to eq('full_time_vacancies')
-      expect(site_status3.reload.vac_status).to eq('full_time_vacancies')
-      expect(site_status4.reload.vac_status).to eq('no_vacancies')
+    it "should update all site_statuses vac_status to full_time_vacancies except no_vacancies" do
+      expect(site_status1.reload.vac_status).to eq("full_time_vacancies")
+      expect(site_status2.reload.vac_status).to eq("full_time_vacancies")
+      expect(site_status3.reload.vac_status).to eq("full_time_vacancies")
+      expect(site_status4.reload.vac_status).to eq("no_vacancies")
     end
   end
 
-  context 'when a course is updated to part time' do
+  context "when a course is updated to part time" do
     let(:updated_study_mode) { { study_mode: :part_time } }
 
     it "returns http success" do
@@ -81,11 +81,11 @@ describe 'PATCH /providers/:provider_code/courses/:course_code' do
       expect(course.reload.study_mode).to eq(updated_study_mode[:study_mode].to_s)
     end
 
-    it 'should update all site_statuses vac_status to part_time_vacancies except no_vacancies' do
-      expect(site_status1.reload.vac_status).to eq('part_time_vacancies')
-      expect(site_status2.reload.vac_status).to eq('part_time_vacancies')
-      expect(site_status3.reload.vac_status).to eq('part_time_vacancies')
-      expect(site_status4.reload.vac_status).to eq('no_vacancies')
+    it "should update all site_statuses vac_status to part_time_vacancies except no_vacancies" do
+      expect(site_status1.reload.vac_status).to eq("part_time_vacancies")
+      expect(site_status2.reload.vac_status).to eq("part_time_vacancies")
+      expect(site_status3.reload.vac_status).to eq("part_time_vacancies")
+      expect(site_status4.reload.vac_status).to eq("no_vacancies")
     end
   end
 

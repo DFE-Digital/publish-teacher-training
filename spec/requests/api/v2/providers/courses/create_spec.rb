@@ -1,6 +1,6 @@
-require 'rails_helper'
+require "rails_helper"
 
-describe 'Course POST #create API V2', type: :request do
+describe "Course POST #create API V2", type: :request do
   let(:user)         { create(:user) }
   let(:organisation) { create(:organisation, users: [user]) }
   let(:payload)      { { email: user.email } }
@@ -21,14 +21,14 @@ describe 'Course POST #create API V2', type: :request do
     jsonapi_data = jsonapi_renderer.render(
       course,
       class: {
-        Course: API::V2::SerializableCourse
-      }
+        Course: API::V2::SerializableCourse,
+      },
     )
 
     post  create_path,
-          headers: { 'HTTP_AUTHORIZATION' => credentials },
+          headers: { "HTTP_AUTHORIZATION" => credentials },
           params: {
-            _jsonapi: jsonapi_data
+            _jsonapi: jsonapi_data,
           }
   end
 
@@ -37,13 +37,13 @@ describe 'Course POST #create API V2', type: :request do
     response
   end
 
-  context 'when unauthenticated' do
-    let(:payload) { { email: 'foo@bar' } }
+  context "when unauthenticated" do
+    let(:payload) { { email: "foo@bar" } }
 
     it { should have_http_status(:unauthorized) }
   end
 
-  context 'when unauthorised' do
+  context "when unauthorised" do
     let(:unauthorised_user) { create(:user) }
     let(:payload) { { email: unauthorised_user.email } }
 
@@ -52,14 +52,14 @@ describe 'Course POST #create API V2', type: :request do
     end
   end
 
-  context 'when authorised' do
+  context "when authorised" do
     let(:created_course) { provider.courses.last }
 
-    it 'returns http success' do
+    it "returns http success" do
       expect(subject).to have_http_status(:success)
     end
 
-    it 'creates a course with the correct attributes' do
+    it "creates a course with the correct attributes" do
       expect { perform_request(course) }.to change { provider.reload.courses.count }.from(0).to(1)
       expect(created_course.english).to eq(course.english)
       expect(created_course.maths).to eq(course.maths)
@@ -77,7 +77,7 @@ describe 'Course POST #create API V2', type: :request do
     context "when a provider already has a course" do
       let!(:existing_course) { create(:course, provider: provider) }
 
-      it 'creates a course with a different code' do
+      it "creates a course with a different code" do
         expect { perform_request(course) }.to change { provider.reload.courses.count }.from(1).to(2)
         expect(created_course.course_code).to match(/^[A-Z]\d{3}$/)
         expect(created_course.course_code).to_not eq(existing_course.course_code)

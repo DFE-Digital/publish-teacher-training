@@ -16,7 +16,7 @@ module Subjects
                         # "philosophy",
                         "sport and leisure",
                         "environmental science",
-                        "law"]
+                        "law"],
     }.freeze
 
     def initialize(ucas_subjects)

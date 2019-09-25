@@ -1,4 +1,4 @@
-require 'rails_helper'
+require "rails_helper"
 
 describe API::V2::SerializableProvider do
   let(:ucas_preferences) { build(:provider_ucas_preference, type_of_gt12: :coming_or_not) }
@@ -13,13 +13,13 @@ describe API::V2::SerializableProvider do
   let(:contact5)  { build(:contact, :finance_type) }
 
 
-  it 'sets type to providers' do
+  it "sets type to providers" do
     expect(resource.jsonapi_type).to eq :providers
   end
 
   subject { JSON.parse(resource.as_jsonapi.to_json) }
 
-  it { should have_type 'providers' }
+  it { should have_type "providers" }
   it { should have_attribute(:provider_code).with_value(provider.provider_code) }
   it { should have_attribute(:provider_name).with_value(provider.provider_name) }
   it { should have_attribute(:accredited_body?).with_value(false) }
@@ -34,10 +34,10 @@ describe API::V2::SerializableProvider do
   it do
     should have_attribute(:accredited_bodies).with_value([
       {
-        'provider_name' => accrediting_provider.provider_name,
-        'provider_code' => accrediting_provider.provider_code,
-        'description' => ''
-      }
+        "provider_name" => accrediting_provider.provider_name,
+        "provider_code" => accrediting_provider.provider_code,
+        "description" => "",
+      },
     ])
   end
 
@@ -45,7 +45,7 @@ describe API::V2::SerializableProvider do
     should have_attribute(:admin_contact).with_value(
       "name" => contact1.name,
       "email" => contact1.email,
-      "telephone" => contact1.telephone
+      "telephone" => contact1.telephone,
     )
   }
 
@@ -53,7 +53,7 @@ describe API::V2::SerializableProvider do
     should have_attribute(:utt_contact).with_value(
       "name" => contact2.name,
       "email" => contact2.email,
-      "telephone" => contact2.telephone
+      "telephone" => contact2.telephone,
     )
   }
 
@@ -61,7 +61,7 @@ describe API::V2::SerializableProvider do
     should have_attribute(:web_link_contact).with_value(
       "name" => contact3.name,
       "email" => contact3.email,
-      "telephone" => contact3.telephone
+      "telephone" => contact3.telephone,
     )
   }
 
@@ -69,7 +69,7 @@ describe API::V2::SerializableProvider do
     should have_attribute(:fraud_contact).with_value(
       "name" => contact4.name,
       "email" => contact4.email,
-      "telephone" => contact4.telephone
+      "telephone" => contact4.telephone,
     )
   }
 
@@ -77,7 +77,7 @@ describe API::V2::SerializableProvider do
     should have_attribute(:finance_contact).with_value(
       "name" => contact5.name,
       "email" => contact5.email,
-      "telephone" => contact5.telephone
+      "telephone" => contact5.telephone,
     )
   }
 end

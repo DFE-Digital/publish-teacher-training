@@ -4,10 +4,10 @@ describe RecruitmentCyclePolicy do
   let(:current_recruitment_cycle) { find_or_create :recruitment_cycle }
   let(:next_recruitment_cycle) { find_or_create :recruitment_cycle, :next }
 
-  describe 'scope' do
+  describe "scope" do
     let(:user) { create(:user) }
 
-    it 'limits the providers to those the user is assigned to' do
+    it "limits the providers to those the user is assigned to" do
       current_recruitment_cycle
       next_recruitment_cycle
 

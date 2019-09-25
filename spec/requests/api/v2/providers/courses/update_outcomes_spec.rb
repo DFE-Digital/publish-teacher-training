@@ -1,23 +1,23 @@
 require "rails_helper"
 
-describe 'PATCH /providers/:provider_code/courses/:course_code' do
+describe "PATCH /providers/:provider_code/courses/:course_code" do
   let(:jsonapi_renderer) { JSONAPI::Serializable::Renderer.new }
 
   def perform_request(updated_qualification)
     jsonapi_data = jsonapi_renderer.render(
       course,
       class: {
-        Course: API::V2::SerializableCourse
-      }
+        Course: API::V2::SerializableCourse,
+      },
     )
 
     jsonapi_data[:data][:attributes] = updated_qualification
 
     patch "/api/v2/providers/#{course.provider.provider_code}" \
             "/courses/#{course.course_code}",
-          headers: { 'HTTP_AUTHORIZATION' => credentials },
+          headers: { "HTTP_AUTHORIZATION" => credentials },
           params: {
-            _jsonapi: jsonapi_data
+            _jsonapi: jsonapi_data,
           }
   end
   let(:organisation)      { create :organisation }
@@ -48,7 +48,7 @@ describe 'PATCH /providers/:provider_code/courses/:course_code' do
   end
 
   context "course has an updated qualification" do
-    let(:updated_qualification) { { qualification: 'pgde_with_qts' } }
+    let(:updated_qualification) { { qualification: "pgde_with_qts" } }
 
     it "returns http success" do
       expect(response).to have_http_status(:success)
@@ -61,7 +61,7 @@ describe 'PATCH /providers/:provider_code/courses/:course_code' do
 
   context "course has the same qualification" do
     context "with values passed into the params" do
-      let(:updated_qualification) { { qualification: 'pgce_with_qts' } }
+      let(:updated_qualification) { { qualification: "pgce_with_qts" } }
 
       it "returns http success" do
         expect(response).to have_http_status(:success)
@@ -92,8 +92,8 @@ describe 'PATCH /providers/:provider_code/courses/:course_code' do
 
   context "when course level is further education" do
     context "with an invalid qualification" do
-      let(:json_data) { JSON.parse(response.body)['errors'] }
-      let(:updated_qualification) { { qualification: 'pgce_with_qts' } }
+      let(:json_data) { JSON.parse(response.body)["errors"] }
+      let(:updated_qualification) { { qualification: "pgce_with_qts" } }
       let(:subject) { build(:further_education_subject) }
       let(:qualification) { :pgce }
 
@@ -107,8 +107,8 @@ describe 'PATCH /providers/:provider_code/courses/:course_code' do
 
   context "for any course" do
     context "when a bad qualification is submitted" do
-      let(:json_data) { JSON.parse(response.body)['errors'] }
-      let(:updated_qualification) { { qualification: 'blah_blah' } }
+      let(:json_data) { JSON.parse(response.body)["errors"] }
+      let(:updated_qualification) { { qualification: "blah_blah" } }
 
       it "returns an error" do
         expect(response).to have_http_status(:unprocessable_entity)
@@ -120,8 +120,8 @@ describe 'PATCH /providers/:provider_code/courses/:course_code' do
 
   context "when course level is not further education" do
     context "with an invalid qualification" do
-      let(:json_data) { JSON.parse(response.body)['errors'] }
-      let(:updated_qualification) { { qualification: 'pgce' } }
+      let(:json_data) { JSON.parse(response.body)["errors"] }
+      let(:updated_qualification) { { qualification: "pgce" } }
       let(:qualification) { :pgce_with_qts }
 
       it "returns an error" do

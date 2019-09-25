@@ -77,11 +77,11 @@ class SubjectMapperService
        } => "English",
        {
          ucas_subjects: %w[humanities],
-         course_title_matches: ->(course_title) { course_title =~ /humanities/ }
+         course_title_matches: ->(course_title) { course_title =~ /humanities/ },
        } => "Humanities",
        {
          ucas_subjects: %w[science],
-         course_title_matches: ->(course_title) { course_title =~ /(?<!social |computer )science/ }
+         course_title_matches: ->(course_title) { course_title =~ /(?<!social |computer )science/ },
        } => "Balanced science",
     },
     further_education: {
@@ -101,7 +101,7 @@ class SubjectMapperService
       new(config: UCAS_TO_DFE_SUBJECT_MAPPINGS[ucas_level]).
       to_dfe_subjects(
         ucas_subjects: ucas_subjects,
-        course_title: course_title.strip.downcase
+        course_title: course_title.strip.downcase,
       )
   end
 end

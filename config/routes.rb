@@ -102,8 +102,8 @@ Rails.application.routes.draw do
         patch :accept_rollover_screen, on: :member
         patch :accept_terms, on: :member
       end
-      get 'providers/suggest', to: 'providers#suggest'
-      get '/recruitment_cycles/:recruitment_cycle_year/providers/suggest', to: 'providers#suggest'
+      get "providers/suggest", to: "providers#suggest"
+      get "/recruitment_cycles/:recruitment_cycle_year/providers/suggest", to: "providers#suggest"
 
       concern :provider_routes do
         post :sync_courses_with_search_and_compare, on: :member
@@ -143,15 +143,15 @@ Rails.application.routes.draw do
         post :approve, on: :member
       end
 
-      get 'build_new_course', to: 'courses#build_new'
+      get "build_new_course", to: "courses#build_new"
     end
 
     namespace :system do
-      post :sync, to: 'force_sync#sync'
+      post :sync, to: "force_sync#sync"
     end
   end
 
-  get 'error_500', to: 'error#error_500'
-  get 'error_nodb', to: 'error#error_nodb'
+  get "error_500", to: "error#error_500"
+  get "error_nodb", to: "error#error_nodb"
 end
 # rubocop:enable Metrics/BlockLength

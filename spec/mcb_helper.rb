@@ -1,4 +1,4 @@
-load 'bin/mcb'
+load "bin/mcb"
 
 def audit_user_tag(example)
   if example.metadata[:needs_audit_user]
@@ -19,7 +19,7 @@ RSpec.configure do |config|
   # the dangerous things that we wouldn't want to leak through to the user's
   # system or dirty the test environment.
   config.define_derived_metadata(
-    file_path: %r{spec/lib/mcb.* | bin/mcb_spec.rb}x
+    file_path: %r{spec/lib/mcb.* | bin/mcb_spec.rb}x,
   ) do |metadata|
     metadata[:mcb_cli] = true
   end
@@ -66,9 +66,9 @@ RSpec.configure do |config|
     # by the two commands being tested gets set by the first test to the
     # default value defined in courses/find_spec.rb and then persists to the
     # providers/find_spec.rb
-    load 'bin/mcb'
+    load "bin/mcb"
 
-    @temp_config_file = Tempfile.new ['mcb_cli_config', '.yml']
+    @temp_config_file = Tempfile.new ["mcb_cli_config", ".yml"]
     @temp_config_file.close
     MCB.config_file = @temp_config_file.path
     example.run

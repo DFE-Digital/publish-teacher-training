@@ -1,23 +1,23 @@
 require "rails_helper"
 
-describe 'PATCH /providers/:provider_code/courses/:course_code' do
+describe "PATCH /providers/:provider_code/courses/:course_code" do
   let(:jsonapi_renderer) { JSONAPI::Serializable::Renderer.new }
 
   def perform_request(funding_type)
     jsonapi_data = jsonapi_renderer.render(
       course,
       class: {
-        Course: API::V2::SerializableCourse
-      }
+        Course: API::V2::SerializableCourse,
+      },
     )
 
     jsonapi_data[:data][:attributes] = funding_type
 
     patch "/api/v2/providers/#{course.provider.provider_code}" \
             "/courses/#{course.course_code}",
-          headers: { 'HTTP_AUTHORIZATION' => credentials },
+          headers: { "HTTP_AUTHORIZATION" => credentials },
           params: {
-            _jsonapi: jsonapi_data
+            _jsonapi: jsonapi_data,
           }
   end
   let(:organisation)      { create :organisation }
@@ -47,14 +47,14 @@ describe 'PATCH /providers/:provider_code/courses/:course_code' do
   end
 
   context "course has an updated program type" do
-    let(:funding_type) { { funding_type: 'salary' } }
+    let(:funding_type) { { funding_type: "salary" } }
 
     it "returns http success" do
       expect(response).to have_http_status(:success)
     end
 
     it "updates the program_type attribute to the correct value" do
-      expect(course.reload.program_type).to eq('school_direct_salaried_training_programme')
+      expect(course.reload.program_type).to eq("school_direct_salaried_training_programme")
     end
   end
 

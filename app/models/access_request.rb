@@ -15,7 +15,7 @@
 #
 
 class AccessRequest < ApplicationRecord
-  belongs_to :requester, class_name: 'User'
+  belongs_to :requester, class_name: "User"
 
   enum status: %i[
     requested
