@@ -53,7 +53,7 @@ private
 
     @user_by_email ||= User.find_by("lower(email) = ?", email_from_token)
     if @user_by_email
-      logger.debug("User found from sign_in_user_id in token " + {
+      logger.debug("User found by email address " + {
                      email: email_from_token,
                      user: @user_by_email,
                    }.to_s)
