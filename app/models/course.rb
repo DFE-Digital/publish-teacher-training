@@ -70,9 +70,9 @@ class Course < ApplicationRecord
   }
 
   enum level: {
-    primary: 'Primary',
-    secondary: 'Secondary',
-    further_education: 'Further education'
+    primary: "Primary",
+    secondary: "Secondary",
+    further_education: "Further education",
   }, _suffix: :course
 
   ENTRY_REQUIREMENT_OPTIONS = {
