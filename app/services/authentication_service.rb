@@ -53,10 +53,11 @@ private
 
     @user_by_email ||= User.find_by("lower(email) = ?", email_from_token)
     if @user_by_email
-      logger.debug("User found by email address " + {
-                     email: email_from_token,
-                     user: @user_by_email,
-                   }.to_s)
+      logger.debug {
+        "User found by email address " + {
+          user: log_safe_user(@user_by_email),
+        }.to_s
+      }
     end
     @user_by_email
   end
@@ -71,7 +72,7 @@ private
     if user
       logger.debug("User found from sign_in_user_id in token " + {
                      sign_in_user_id: sign_in_user_id_from_token,
-                     user: user,
+                     user: log_safe_user(user),
                    }.to_s)
     end
     user
@@ -101,11 +102,35 @@ private
         existing_user_sign_in_user_id: user_by_email.sign_in_user_id
       )
     else
-      logger.debug("Updating user email " + {
-                     old: user.email,
-                     new: email_from_token,
-                   }.to_s)
+      logger.debug("Updating user email for " + {
+        user: log_safe_user(user),
+        new_email_md5: md5_email(email_from_token),
+      }.to_s)
+
       user.update(email: email_from_token)
     end
+  end
+
+  def log_safe_user(user, reload: false)
+    if @log_safe_user.nil? || reload
+      @log_safe_user = user.slice(
+        'id',
+        'state',
+        'first_login_date_utc',
+        'last_login_date_utc',
+        'sign_in_user_id',
+        'welcome_email_date_utc',
+        'invite_date_utc',
+        'accept_terms_date_utc'
+      )
+      @log_safe_user.merge!(
+        Hash[user.slice('email').map { |k, v| [k + '_md5', Digest::MD5.hexdigest(v)] }]
+      )
+    end
+    @log_safe_user
+  end
+
+  def md5_email(email)
+    "MD5:" + Digest::MD5.hexdigest(email)
   end
 end
