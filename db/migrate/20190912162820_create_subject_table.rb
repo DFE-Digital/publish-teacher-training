@@ -58,8 +58,7 @@ class CreateSubjectTable < ActiveRecord::Migration[5.2]
         { subject_name: "Mandarin", subject_code:  "20" },
         { subject_name: "Russian", subject_code:  "21" },
         { subject_name: "Spanish", subject_code:  "22" },
-        # NOTE: added placeholder 'XX' for 'Modern languages (other)'
-        { subject_name: "Modern languages (other)", subject_code: "XX" },
+        { subject_name: "Modern languages (other)", subject_code: "24" },
       ]
 
       further_education = [
