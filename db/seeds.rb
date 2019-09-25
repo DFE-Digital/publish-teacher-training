@@ -4,6 +4,7 @@ Faker::Config.locale = "en-GB"
 # TODO: this can be removed ucas subjects related
 UCASSubject.destroy_all
 Course.destroy_all
+Subject.destroy_all
 Site.destroy_all
 SiteStatus.destroy_all
 Provider.destroy_all
@@ -16,21 +17,7 @@ RecruitmentCycle.destroy_all
 current_recruitment_cycle = RecruitmentCycle.create(year: "2019", application_start_date: Date.new(2018, 10, 9), application_end_date: Date.new(2019, 9, 30))
 next_recruitment_cycle = RecruitmentCycle.create(year: "2020", application_start_date: Date.new(2019, 10, 8), application_end_date: Date.new(2019, 9, 30))
 
-# TODO: use known subject list
-{
-  "Primary" => "00",
-  "Secondary" => "05",
-  "Chinese" => "T1",
-  "English" => "Q3",
-  "Mathematics" => "G1",
-  "Biology" => "C1",
-  "Further Education" => "41",
-}.each do |name, code|
-  UCASSubject.create!(
-    subject_name: name,
-    subject_code: code,
-  )
-end
+SubjectCreatorService.new.execute
 
 superuser = User.create!(
   first_name: "Super",
@@ -69,7 +56,7 @@ def create_standard_provider_and_courses_for_cycle(recruitment_cycle, superuser)
     postcode: Faker::Address.postcode,
   )
 
-  course1 = Course.create!(
+  primary_course = Course.create!(
     name: "Mathematics",
     course_code: "MAT2",
     provider: provider,
@@ -81,10 +68,9 @@ def create_standard_provider_and_courses_for_cycle(recruitment_cycle, superuser)
     science: nil,
     modular: "M",
     qualification: :pgce_with_qts,
-    # TODO: when level is set, set subjects instead ucas_subjects
-    ucas_subjects: [
-     UCASSubject.find_by(subject_name: "Secondary"),
-     UCASSubject.find_by(subject_name: "Mathematics"),
+    level: "primary",
+    subjects: [
+      PrimarySubject.find_by(subject_name: "Primary with mathematics"),
     ],
     study_mode: "F",
   )
@@ -93,12 +79,12 @@ def create_standard_provider_and_courses_for_cycle(recruitment_cycle, superuser)
     site: Site.last,
     vac_status: "F",
     publish: "Y",
-    course: course1,
+    course: primary_course,
     status: "R",
     applications_accepted_from: Date.new(2018, 10, 23),
   )
 
-  course2 = Course.create!(
+  secondary_course1 = Course.create!(
     name: "Biology",
     course_code: "BIO3",
     provider: provider,
@@ -110,12 +96,9 @@ def create_standard_provider_and_courses_for_cycle(recruitment_cycle, superuser)
     science: nil,
     modular: "",
     qualification: :pgce,
-    # TODO: when level is set, set subjects instead ucas_subjects
-    # This course is a really bad example
-    ucas_subjects: [
-     UCASSubject.find_by(subject_name: "Secondary"),
-     UCASSubject.find_by(subject_name: "Biology"),
-     UCASSubject.find_by(subject_name: "Further Education"),
+    level: "secondary",
+    subjects: [
+      SecondarySubject.find_by(subject_name: "Biology"),
     ],
     study_mode: "B",
   )
@@ -125,7 +108,154 @@ def create_standard_provider_and_courses_for_cycle(recruitment_cycle, superuser)
     site: Site.last,
     vac_status: "B",
     publish: "Y",
-    course: course2,
+    course: secondary_course1,
+    status: "N",
+    applications_accepted_from: Date.new(2018, 10, 2),
+  )
+
+  secondary_course2 = Course.create!(
+    name: "Arts",
+    course_code: "AT05",
+    provider: provider,
+    start_date: Date.new(2019, 9, 1),
+    profpost_flag: "BO",
+    program_type: "HE",
+    maths: 3,
+    english: 9,
+    science: nil,
+    modular: "",
+    qualification: :pgce,
+    level: "secondary",
+    subjects: [
+      SecondarySubject.find_by(subject_name: "Art and design"),
+      SecondarySubject.find_by(subject_name: "Music"),
+    ],
+    study_mode: "B",
+  )
+
+  SiteStatus.create!(
+    site: Site.last,
+    vac_status: "B",
+    publish: "Y",
+    course: secondary_course2,
+    status: "N",
+    applications_accepted_from: Date.new(2018, 10, 2),
+  )
+
+  further_education_course = Course.create!(
+    name: "Further Education",
+    course_code: "FE11",
+    provider: provider,
+    start_date: Date.new(2019, 9, 1),
+    profpost_flag: "BO",
+    program_type: "HE",
+    maths: 3,
+    english: 9,
+    science: nil,
+    modular: "",
+    qualification: :pgce,
+    level: "secondary",
+    subjects: [
+      FurtherEducationSubject.find_by(subject_name: "Further education"),
+    ],
+    study_mode: "B",
+  )
+
+  SiteStatus.create!(
+    site: Site.last,
+    vac_status: "B",
+    publish: "Y",
+    course: further_education_course,
+    status: "N",
+    applications_accepted_from: Date.new(2018, 10, 2),
+  )
+
+  modern_language_course1 = Course.create!(
+    name: "Other Languages",
+    course_code: "OML9",
+    provider: provider,
+    start_date: Date.new(2019, 9, 1),
+    profpost_flag: "BO",
+    program_type: "HE",
+    maths: 3,
+    english: 9,
+    science: nil,
+    modular: "",
+    qualification: :pgce,
+    level: "secondary",
+    subjects: [
+      SecondarySubject.find_by(subject_name: "Modern Languages"),
+      ModernLanguagesSubject.find_by(subject_name: "Modern languages (other)"),
+    ],
+    study_mode: "B",
+  )
+
+  SiteStatus.create!(
+    site: Site.last,
+    vac_status: "B",
+    publish: "Y",
+    course: modern_language_course1,
+    status: "N",
+    applications_accepted_from: Date.new(2018, 10, 2),
+  )
+
+  modern_language_course2 = Course.create!(
+    name: "Japanese",
+    course_code: "N7",
+    provider: provider,
+    start_date: Date.new(2019, 9, 1),
+    profpost_flag: "BO",
+    program_type: "HE",
+    maths: 3,
+    english: 9,
+    science: nil,
+    modular: "",
+    qualification: :pgce,
+    level: "secondary",
+    subjects: [
+      SecondarySubject.find_by(subject_name: "Modern Languages"),
+      ModernLanguagesSubject.find_by(subject_name: "Japanese"),
+    ],
+    study_mode: "B",
+  )
+
+  SiteStatus.create!(
+    site: Site.last,
+    vac_status: "B",
+    publish: "Y",
+    course: modern_language_course2,
+    status: "N",
+    applications_accepted_from: Date.new(2018, 10, 2),
+  )
+
+  modern_language_course3 = Course.create!(
+    name: "Modern Languages",
+    course_code: "ML1",
+    provider: provider,
+    start_date: Date.new(2019, 9, 1),
+    profpost_flag: "BO",
+    program_type: "HE",
+    maths: 3,
+    english: 9,
+    science: nil,
+    modular: "",
+    qualification: :pgce,
+    level: "secondary",
+    subjects: [
+      SecondarySubject.find_by(subject_name: "Modern Languages"),
+      ModernLanguagesSubject.find_by(subject_name: "Japanese"),
+      ModernLanguagesSubject.find_by(subject_name: "French"),
+      ModernLanguagesSubject.find_by(subject_name: "Russian"),
+      ModernLanguagesSubject.find_by(subject_name: "German"),
+    ],
+    study_mode: "B",
+  )
+
+  SiteStatus.create!(
+    site: Site.last,
+    vac_status: "B",
+    publish: "Y",
+    course: modern_language_course3,
     status: "N",
     applications_accepted_from: Date.new(2018, 10, 2),
   )

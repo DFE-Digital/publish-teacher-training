@@ -1,14 +1,14 @@
 require "rails_helper"
 
-RSpec.describe "Subjecs API", type: :request do
+describe "Subjecs API", type: :request do
   describe "GET index" do
     before do
-      FactoryBot.find_or_create(:subject, :modern_languages)
-      FactoryBot.find_or_create(:subject, :english)
-      FactoryBot.find_or_create(:subject, :french)
-      FactoryBot.find_or_create(:subject, :primary)
-      FactoryBot.find_or_create(:subject, :further_education)
-      FactoryBot.find_or_create(:subject, :humanities)
+      find_or_create(:subject, :modern_languages)
+      find_or_create(:subject, :english)
+      find_or_create(:subject, :french)
+      find_or_create(:subject, :primary)
+      find_or_create(:subject, :further_education)
+      find_or_create(:subject, :humanities)
     end
 
     it "returns http success" do
@@ -39,8 +39,8 @@ RSpec.describe "Subjecs API", type: :request do
             "subject_code" => "00",
           },
           {
-            "subject_name" => "Further Education",
-            "subject_code" => "FE",
+            "subject_name" => "Further education",
+            "subject_code" => "41",
           },
         ])
     end
