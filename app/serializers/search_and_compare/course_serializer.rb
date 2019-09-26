@@ -229,13 +229,16 @@ module SearchAndCompare
 
     def course_subjects
       # CourseSubject_Mapping
-      object.dfe_subjects.map do |subject|
+      object.subjects
+      .where.not(type: "DiscontinuedSubject")
+      .where.not(subject_code: nil)
+      .map do |subject|
         {
           **default_course_subjects_value,
           Subject:
             {
               **default_subject_value,
-              Name: subject.to_s,
+              Name: subject.subject_name,
             },
         }
       end

@@ -4,10 +4,10 @@ describe '"mcb apiv1 courses find"' do
   it "displays the info for the given course" do
     course1 = create(:course)
 
-    subject = build(:ucas_subject)
+    subject = build(:subject)
     site_status = build(:site_status)
 
-    course2 = create(:course, ucas_subjects: [subject], site_statuses: [site_status])
+    course2 = create(:course, subjects: [subject], site_statuses: [site_status])
 
 
     url = "http://localhost:3001/api/v1/#{RecruitmentCycle.current_recruitment_cycle.year}/courses"

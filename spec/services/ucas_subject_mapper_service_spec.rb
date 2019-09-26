@@ -1,6 +1,7 @@
 require "csv"
 
-describe UCASSubjectMapperService do
+# TODO: this can be removed ucas subjects related
+xdescribe UCASSubjectMapperService do
   RSpec::Matchers.define :map_to_dfe_subjects do |expected|
     match do |input|
       @input = input

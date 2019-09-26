@@ -7,6 +7,8 @@
 #  subject_code :text             not null
 #
 
+# TODO: this can be removed ucas subjects related
+
 FactoryBot.define do
   factory :ucas_subject do
     sequence(:subject_code, &:to_s)

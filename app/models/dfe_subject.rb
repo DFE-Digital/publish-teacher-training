@@ -1,3 +1,4 @@
+  # TODO: chase up FINANCIAL_SUPPORT
 class DFESubject
   FINANCIAL_SUPPORT_FOR_2019_20_RECRUITMENT_CYCLE = [
     { ucas_subjects: %w[Mathematics], bursary_amount: 20000, early_career_payments: 10000, scholarship: 22000 },

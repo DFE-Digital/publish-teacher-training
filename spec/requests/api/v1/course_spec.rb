@@ -28,14 +28,14 @@ describe "Courses API", type: :request do
     context "without changed_since parameter" do
       before do
         site = FactoryBot.create(:site, code: "-", location_name: "Main Site", provider: provider)
-        subject1 = FactoryBot.find_or_create(:ucas_subject, :secondary)
-        subject2 = FactoryBot.find_or_create(:ucas_subject, :mathematics)
+        subject1 = FactoryBot.find_or_create(:subject, :modern_languages)
+        subject2 = FactoryBot.find_or_create(:subject, :german)
 
         course = FactoryBot.create(:course,
                                    course_code: "2HPF",
                                    start_date: Date.new(2019, 9, 1),
                                    name: "Religious Education",
-                                   ucas_subjects: [subject1, subject2],
+                                   subjects: [subject1, subject2],
                                    study_mode: :full_time,
                                    age_range: "primary",
                                    english: :equivalence_test,
@@ -101,12 +101,8 @@ describe "Courses API", type: :request do
                                 ],
                                 "subjects" => [
                                   {
-                                    "subject_code" => "05",
-                                    "subject_name" => "Secondary",
-                                  },
-                                  {
-                                    "subject_code" => "G1",
-                                    "subject_name" => "Mathematics",
+                                    "subject_code" => "G2",
+                                    "subject_name" => "German",
                                   },
                                 ],
                                 "provider" => {
@@ -437,7 +433,7 @@ describe "Courses API", type: :request do
     end
 
     context "with a SEND course" do
-      let(:course) { create(:course, provider: provider, is_send: true, ucas_subjects: [create(:ucas_subject)]) }
+      let(:course) { create(:course, provider: provider, is_send: true, subjects: [create(:subject, :primary)]) }
       let(:site) { create(:site_status, :published, course: course) }
 
       before do
@@ -459,7 +455,7 @@ describe "Courses API", type: :request do
       end
 
       it "does not create a SEND subject" do
-        expect(UCASSubject.where(subject_code: "U3").count).to eq(0)
+        expect(Subject.where(subject_code: "U3").count).to eq(0)
       end
     end
   end

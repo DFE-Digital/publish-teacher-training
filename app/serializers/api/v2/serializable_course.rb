@@ -36,7 +36,7 @@ module API
       end
 
       attribute :subjects do
-        @object.dfe_subjects.map(&:to_s)
+        @object.subjects.map(&:subject_name)
       end
 
       attribute :about_accrediting_body do

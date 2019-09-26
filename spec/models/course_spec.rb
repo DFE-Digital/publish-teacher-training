@@ -939,21 +939,31 @@ describe Course, type: :model do
   end
 
   describe "#syncable?" do
-    let(:courses_subjects) { [build(:ucas_subject, subject_name: "primary")] }
+    let(:courses_subjects) { [build(:subject, :primary)] }
     let(:site_status) { build(:site_status, :findable) }
 
-    subject { create(:course, ucas_subjects: courses_subjects, site_statuses: [site_status]) }
+    subject { create(:course, subjects: courses_subjects, site_statuses: [site_status]) }
 
     its(:syncable?) { should be_truthy }
 
     context"invalid courses" do
+      context "course which has only discontinued subject subject type" do
+        let(:courses_subjects) { [build(:subject, :humanities)] }
+        its(:syncable?) { should be_falsey }
+      end
+
+      context "course which has only mordern lanaguage secondary subject type" do
+        let(:courses_subjects) { [build(:subject, :modern_languages)] }
+        its(:syncable?) { should be_falsey }
+      end
+
       context "course which has a dfe subject, but no findable site statuses" do
         let(:site_status) { build(:site_status, :suspended) }
         its(:syncable?) { should be_falsey }
       end
 
       context "course which has a findable site status, but no dfe_subject" do
-        let(:courses_subjects) { [build(:ucas_subject, subject_name: "secondary")] }
+        let(:courses_subjects) { [] }
         its(:syncable?) { should be_falsey }
       end
     end

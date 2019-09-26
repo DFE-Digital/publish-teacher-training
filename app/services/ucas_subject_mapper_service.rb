@@ -1,5 +1,6 @@
 # This is a port of https://github.com/DFE-Digital/manage-courses-api/blob/master/src/ManageCourses.Api/Mapping/SubjectMapper.cs
 
+# TODO: this can be removed ucas subjects related
 class UCASSubjectMapperService
   UCAS_TO_DFE_SUBJECT_MAPPINGS = {
     primary: {

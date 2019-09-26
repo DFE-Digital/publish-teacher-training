@@ -7,6 +7,7 @@
 #  subject_code :text             not null
 #
 
+# TODO: this can be removed ucas subjects related
 class UCASSubject < ApplicationRecord
   has_many :course_ucas_subjects
   has_many :courses, through: :course_ucas_subjects

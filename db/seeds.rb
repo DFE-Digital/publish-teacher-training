@@ -1,6 +1,7 @@
 require "faker"
 Faker::Config.locale = "en-GB"
 
+# TODO: this can be removed ucas subjects related
 UCASSubject.destroy_all
 Course.destroy_all
 Site.destroy_all
@@ -11,9 +12,11 @@ User.destroy_all
 AccessRequest.destroy_all
 RecruitmentCycle.destroy_all
 
+# TODO: revisit current year
 current_recruitment_cycle = RecruitmentCycle.create(year: "2019", application_start_date: Date.new(2018, 10, 9), application_end_date: Date.new(2019, 9, 30))
 next_recruitment_cycle = RecruitmentCycle.create(year: "2020", application_start_date: Date.new(2019, 10, 8), application_end_date: Date.new(2019, 9, 30))
 
+# TODO: use known subject list
 {
   "Primary" => "00",
   "Secondary" => "05",
@@ -37,7 +40,14 @@ superuser = User.create!(
   state: "rolled_over",
 )
 
-
+# TODO: create at least
+#       a primary course
+#       a secondary course, with 1 subject
+#       a secondary course, with 2 subject
+#       a further_education course
+#       a modern language course, with subject other
+#       a modern language course, with using 1 named language subject
+#       a modern language course, with using 4 named language subject
 def create_standard_provider_and_courses_for_cycle(recruitment_cycle, superuser)
   provider = Provider.create!(
     provider_name: "Acme SCITT",
@@ -71,6 +81,7 @@ def create_standard_provider_and_courses_for_cycle(recruitment_cycle, superuser)
     science: nil,
     modular: "M",
     qualification: :pgce_with_qts,
+    # TODO: when level is set, set subjects instead ucas_subjects
     ucas_subjects: [
      UCASSubject.find_by(subject_name: "Secondary"),
      UCASSubject.find_by(subject_name: "Mathematics"),
@@ -99,6 +110,8 @@ def create_standard_provider_and_courses_for_cycle(recruitment_cycle, superuser)
     science: nil,
     modular: "",
     qualification: :pgce,
+    # TODO: when level is set, set subjects instead ucas_subjects
+    # This course is a really bad example
     ucas_subjects: [
      UCASSubject.find_by(subject_name: "Secondary"),
      UCASSubject.find_by(subject_name: "Biology"),

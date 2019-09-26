@@ -509,8 +509,11 @@ private
     if findable?.blank?
       errors.add :site_statuses, "No findable sites."
     end
-    if dfe_subjects.blank?
-      errors.add :dfe_subjects, "No DfE subject."
+    if subjects
+        .where.not(type: "DiscontinuedSubject")
+        .where.not(subject_code: nil)
+        .blank?
+      errors.add :subjects, "No subjects."
     end
   end
 

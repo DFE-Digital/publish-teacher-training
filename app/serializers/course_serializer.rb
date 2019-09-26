@@ -91,12 +91,15 @@ class CourseSerializer < ActiveModel::Serializer
   end
 
   # Course now has a `is_send` attribute so we do not need to model `SEND` courses using the
-  #UCASSubject. However, API V1 is still expecting the Subject so we add it back in.
+  # Subject. However, API V1 is still expecting the Subject so we add it back in.
   def subjects
-    return object.ucas_subjects unless object.is_send?
+    subjects_array = object.subjects
+      .where.not(type: "DiscontinuedSubject")
+      .where.not(subject_code: nil).to_a
 
-    subjects_array = object.ucas_subjects.to_a
-    subjects_array << UCASSubject.new(subject_code: "U3", subject_name: "Special Educational Needs")
+    return subjects_array unless object.is_send?
+
+    subjects_array << Subject.new(subject_code: "U3", subject_name: "Special Educational Needs")
 
     subjects_array
   end
