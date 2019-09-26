@@ -5,9 +5,15 @@ require "rails"
 require "active_model/railtie"
 require "active_job/railtie"
 require "active_record/railtie"
+# require "active_storage/engine"
 require "action_controller/railtie"
-require "action_view/railtie"
 require "action_mailer/railtie"
+# require "action_mailbox/engine"
+# require "action_text/engine"
+require "action_view/railtie"
+# require "action_cable/engine"
+# require "sprockets/railtie"
+# require "rails/test_unit/railtie"
 
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
@@ -34,5 +40,8 @@ module ManageCoursesBackend
       "PG::ConnectionBad" => :service_unavailable,
       "AASM::InvalidTransition" => :bad_request,
     }
+
+    # https://github.com/rails/rails/commit/ddb6d788d6a611fd1ba6cf92ad6d1342079517a8
+    config.action_dispatch.return_only_media_type_on_content_type = false
   end
 end
