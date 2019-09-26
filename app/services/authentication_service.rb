@@ -114,17 +114,17 @@ private
   def log_safe_user(user, reload: false)
     if @log_safe_user.nil? || reload
       @log_safe_user = user.slice(
-        'id',
-        'state',
-        'first_login_date_utc',
-        'last_login_date_utc',
-        'sign_in_user_id',
-        'welcome_email_date_utc',
-        'invite_date_utc',
-        'accept_terms_date_utc'
+        "id",
+        "state",
+        "first_login_date_utc",
+        "last_login_date_utc",
+        "sign_in_user_id",
+        "welcome_email_date_utc",
+        "invite_date_utc",
+        "accept_terms_date_utc",
       )
       @log_safe_user.merge!(
-        Hash[user.slice('email').map { |k, v| [k + '_md5', Digest::MD5.hexdigest(v)] }]
+        Hash[user.slice("email").map { |k, v| [k + "_md5", Digest::MD5.hexdigest(v)] }],
       )
     end
     @log_safe_user
