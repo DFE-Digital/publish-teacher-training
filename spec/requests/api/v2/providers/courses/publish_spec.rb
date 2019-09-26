@@ -126,7 +126,7 @@ describe "Publish API v2", type: :request do
             end
           }.to(raise_error(
                  RuntimeError,
-                 "'#{course}' '#{course.provider}' sync error: {:dfe_subjects=>[{:error=>\"No DfE subject.\"}]}",
+                 "'#{course}' '#{course.provider}' sync error: {:subjects=>[{:error=>\"No subjects.\"}]}",
                ))
 
           expect(WebMock).not_to(

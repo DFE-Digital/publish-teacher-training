@@ -513,7 +513,7 @@ private
         .where.not(type: "DiscontinuedSubject")
         .where.not(subject_code: nil)
         .blank?
-      errors.add :dfe_subjects, "No DfE subject."
+      errors.add :subjects, "No subjects."
     end
   end
 
