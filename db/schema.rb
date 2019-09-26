@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_09_09_105439) do
+ActiveRecord::Schema.define(version: 2019_09_16_155318) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_buffercache"
@@ -91,6 +91,7 @@ ActiveRecord::Schema.define(version: 2019_09_09_105439) do
     t.string "age_range_in_years"
     t.date "applications_open_from"
     t.boolean "is_send", default: false
+    t.string "level"
     t.index ["accrediting_provider_code"], name: "index_course_on_accrediting_provider_code"
     t.index ["accrediting_provider_id"], name: "IX_course_accrediting_provider_id"
     t.index ["changed_at"], name: "index_course_on_changed_at", unique: true
@@ -128,8 +129,15 @@ ActiveRecord::Schema.define(version: 2019_09_09_105439) do
   create_table "course_subject", id: :serial, force: :cascade do |t|
     t.integer "course_id"
     t.integer "subject_id"
+    t.index ["course_id"], name: "index_course_subject_on_course_id"
+    t.index ["subject_id"], name: "index_course_subject_on_subject_id"
+  end
+
+  create_table "course_ucas_subject", id: :serial, force: :cascade do |t|
+    t.integer "course_id"
+    t.integer "ucas_subject_id"
     t.index ["course_id"], name: "IX_course_subject_course_id"
-    t.index ["subject_id"], name: "IX_course_subject_subject_id"
+    t.index ["ucas_subject_id"], name: "IX_course_subject_subject_id"
   end
 
   create_table "data_migrations", primary_key: "version", id: :string, force: :cascade do |t|
@@ -264,10 +272,18 @@ ActiveRecord::Schema.define(version: 2019_09_09_105439) do
     t.index ["provider_id", "code"], name: "IX_site_provider_id_code", unique: true
   end
 
-  create_table "subject", id: :serial, force: :cascade do |t|
+  create_table "subject", force: :cascade do |t|
+    t.text "type"
+    t.text "subject_code"
+    t.text "subject_name"
+    t.index ["subject_name"], name: "index_subject_on_subject_name"
+  end
+
+  create_table "ucas_subject", id: :serial, force: :cascade do |t|
     t.text "subject_name"
     t.text "subject_code", null: false
     t.index ["subject_code"], name: "AK_subject_subject_code", unique: true
+    t.index ["subject_name"], name: "index_ucas_subject_on_subject_name"
   end
 
   create_table "user", id: :serial, force: :cascade do |t|
@@ -292,8 +308,8 @@ ActiveRecord::Schema.define(version: 2019_09_09_105439) do
   add_foreign_key "course_enrichment", "course"
   add_foreign_key "course_site", "course", name: "FK_course_site_course_course_id", on_delete: :cascade
   add_foreign_key "course_site", "site", name: "FK_course_site_site_site_id", on_delete: :cascade
-  add_foreign_key "course_subject", "course", name: "FK_course_subject_course_course_id", on_delete: :cascade
-  add_foreign_key "course_subject", "subject", name: "FK_course_subject_subject_subject_id", on_delete: :cascade
+  add_foreign_key "course_ucas_subject", "course", name: "FK_course_subject_course_course_id", on_delete: :cascade
+  add_foreign_key "course_ucas_subject", "ucas_subject", name: "FK_course_subject_subject_subject_id", on_delete: :cascade
   add_foreign_key "nctl_organisation", "organisation", name: "FK_nctl_organisation_organisation_organisation_id", on_delete: :cascade
   add_foreign_key "organisation_provider", "organisation", name: "FK_organisation_provider_organisation_organisation_id"
   add_foreign_key "organisation_provider", "provider", name: "FK_organisation_provider_provider_provider_id"

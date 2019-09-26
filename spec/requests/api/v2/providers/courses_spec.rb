@@ -8,8 +8,8 @@ describe "Courses API v2", type: :request do
   let(:credentials) do
     ActionController::HttpAuthentication::Token.encode_credentials(token)
   end
-  let(:course_subject_primary) { find_or_create(:subject, :primary) }
-  let(:course_subject_mathematics) { find_or_create(:subject, :mathematics) }
+  let(:course_subject_primary) { find_or_create(:ucas_subject, :primary) }
+  let(:course_subject_mathematics) { find_or_create(:ucas_subject, :mathematics) }
 
   let(:findable_open_course) {
     create(:course, :resulting_in_pgce_with_qts, :with_apprenticeship,
@@ -17,7 +17,7 @@ describe "Courses API v2", type: :request do
            provider: provider,
            start_date: Time.now.utc,
            study_mode: :full_time,
-           subjects: [course_subject_primary, course_subject_mathematics],
+           ucas_subjects: [course_subject_primary, course_subject_mathematics],
            is_send: true,
            site_statuses: [courses_site_status],
            enrichments: [enrichment],
@@ -37,7 +37,7 @@ describe "Courses API v2", type: :request do
   }
   let(:enrichment)     { build :course_enrichment, :published }
   let(:provider)       { create :provider, organisations: [organisation] }
-  let(:course_subject) { course.subjects.first }
+  let(:course_subject) { course.ucas_subjects.first }
   let(:site_status)    { findable_open_course.site_statuses.first }
   let(:site)           { site_status.site }
 

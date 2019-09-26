@@ -15,7 +15,7 @@ module Courses
         new_course.provider = new_provider
         new_course.save!
 
-        new_course.subjects << course.subjects
+        new_course.ucas_subjects << course.ucas_subjects
 
         copy_latest_enrichment_to_course(course, new_course)
 

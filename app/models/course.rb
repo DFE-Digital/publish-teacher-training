@@ -25,6 +25,7 @@
 #  age_range_in_years        :string
 #  applications_open_from    :date
 #  is_send                   :boolean          default(FALSE)
+#  level                     :string
 #
 
 class Course < ApplicationRecord
@@ -68,6 +69,12 @@ class Course < ApplicationRecord
     other: "O",
   }
 
+  enum level: {
+    primary: "Primary",
+    secondary: "Secondary",
+    further_education: "Further education",
+  }, _suffix: :course
+
   ENTRY_REQUIREMENT_OPTIONS = {
     must_have_qualification_at_application_time: 1,
     expect_to_achieve_before_training_begins: 2,
@@ -94,6 +101,8 @@ class Course < ApplicationRecord
 
   has_many :course_subjects
   has_many :subjects, through: :course_subjects
+  has_many :course_ucas_subjects
+  has_many :ucas_subjects, through: :course_ucas_subjects
   has_many :site_statuses
   has_many :sites,
            -> { merge(SiteStatus.where(status: %i[new_status running])) },
@@ -301,11 +310,11 @@ class Course < ApplicationRecord
   end
 
   def dfe_subjects
-    SubjectMapperService.get_subject_list(name, subjects.map(&:subject_name))
+    UCASSubjectMapperService.get_subject_list(name, ucas_subjects.map(&:subject_name))
   end
 
   def ucas_level
-    Subjects::CourseLevel.new(subjects.map(&:subject_name)).ucas_level
+    UCASSubjects::CourseLevel.new(ucas_subjects.map(&:subject_name)).ucas_level
   end
 
   def is_fee_based?

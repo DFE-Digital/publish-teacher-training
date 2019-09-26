@@ -1,7 +1,7 @@
 require "faker"
 Faker::Config.locale = "en-GB"
 
-Subject.destroy_all
+UCASSubject.destroy_all
 Course.destroy_all
 Site.destroy_all
 SiteStatus.destroy_all
@@ -23,7 +23,7 @@ next_recruitment_cycle = RecruitmentCycle.create(year: "2020", application_start
   "Biology" => "C1",
   "Further Education" => "41",
 }.each do |name, code|
-  Subject.create!(
+  UCASSubject.create!(
     subject_name: name,
     subject_code: code,
   )
@@ -71,9 +71,9 @@ def create_standard_provider_and_courses_for_cycle(recruitment_cycle, superuser)
     science: nil,
     modular: "M",
     qualification: :pgce_with_qts,
-    subjects: [
-      Subject.find_by(subject_name: "Secondary"),
-      Subject.find_by(subject_name: "Mathematics"),
+    ucas_subjects: [
+     UCASSubject.find_by(subject_name: "Secondary"),
+     UCASSubject.find_by(subject_name: "Mathematics"),
     ],
     study_mode: "F",
   )
@@ -99,10 +99,10 @@ def create_standard_provider_and_courses_for_cycle(recruitment_cycle, superuser)
     science: nil,
     modular: "",
     qualification: :pgce,
-    subjects: [
-      Subject.find_by(subject_name: "Secondary"),
-      Subject.find_by(subject_name: "Biology"),
-      Subject.find_by(subject_name: "Further Education"),
+    ucas_subjects: [
+     UCASSubject.find_by(subject_name: "Secondary"),
+     UCASSubject.find_by(subject_name: "Biology"),
+     UCASSubject.find_by(subject_name: "Further Education"),
     ],
     study_mode: "B",
   )

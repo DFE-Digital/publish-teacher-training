@@ -149,16 +149,16 @@ describe API::V2::SerializableCourse do
   end
 
   context "subjects & level" do
-    let(:course) { create(:course, subjects: subjects) }
+    let(:course) { create(:course, ucas_subjects: subjects) }
 
     describe "are taken from the course" do
-      let(:subjects) { [find_or_create(:subject, :primary)] }
+      let(:subjects) { [find_or_create(:ucas_subject, :primary)] }
       it { expect(subject["attributes"]).to include("level" => "primary") }
       it { expect(subject["attributes"]).to include("subjects" => %w[Primary]) }
     end
 
     describe "determine bursary and scholarship info" do
-      let(:subjects) { [find_or_create(:subject, :secondary), find_or_create(:subject, subject_name: "Russian")] }
+      let(:subjects) { [find_or_create(:ucas_subject, :secondary), find_or_create(:ucas_subject, subject_name: "Russian")] }
       it { expect(subject["attributes"]).to include("has_bursary?" => true) }
       it { expect(subject["attributes"]).to include("has_scholarship_and_bursary?" => false) }
     end

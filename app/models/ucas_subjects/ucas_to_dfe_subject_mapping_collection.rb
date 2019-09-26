@@ -1,4 +1,4 @@
-module Subjects
+module UCASSubjects
   class UCASToDFESubjectMappingCollection
     def initialize(config:)
       @mappings = init_subject_mappings(config)

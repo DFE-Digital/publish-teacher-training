@@ -26,13 +26,13 @@ describe "Publish API v2", type: :request do
     end
     let(:enrichment) { build(:course_enrichment, :initial_draft) }
     let(:site_status) { build(:site_status, :new) }
-    let(:dfe_subject) { build(:subject, subject_name: "primary") }
+    let(:dfe_subject) { build(:ucas_subject, subject_name: "primary") }
     let(:course) {
       create(:course,
              provider: provider,
              site_statuses: [site_status],
              enrichments: [enrichment],
-             subjects: [dfe_subject])
+             ucas_subjects: [dfe_subject])
     }
 
     subject do
@@ -60,13 +60,13 @@ describe "Publish API v2", type: :request do
     context "an unpublished course with a draft enrichment" do
       let(:enrichment) { build(:course_enrichment, :initial_draft) }
       let(:site_status) { build(:site_status, :new) }
-      let(:dfe_subjects) { [build(:subject, subject_name: "primary")] }
+      let(:dfe_subjects) { [build(:ucas_subject, subject_name: "primary")] }
       let!(:course) {
         create(:course,
                provider: provider,
                site_statuses: [site_status],
                enrichments: [enrichment],
-               subjects: dfe_subjects,
+               ucas_subjects: dfe_subjects,
                age: 17.days.ago)
       }
 

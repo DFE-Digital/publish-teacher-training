@@ -8,11 +8,5 @@
 #  subject_name :text
 #
 
-class Subject < ApplicationRecord
-  has_many :course_subjects
-  has_many :courses, through: :course_subjects
-
-  def to_sym
-    subject_name.parameterize.underscore.to_sym
-  end
+class PrimarySubject < Subject
 end

@@ -2,16 +2,17 @@
 #
 # Table name: subject
 #
-#  id           :integer          not null, primary key
+#  id           :bigint           not null, primary key
+#  type         :text
+#  subject_code :text
 #  subject_name :text
-#  subject_code :text             not null
 #
 
 require "rails_helper"
 
-RSpec.describe Subject, type: :model do
-  subject { find_or_create(:subject, :mathematics) }
+describe Subject, type: :model do
+  subject { find_or_create(:subject, subject_name: "Modern languages (other)") }
 
   it { should have_many(:courses).through(:course_subjects) }
-  its(:to_s) { should eq("Mathematics") }
+  its(:to_sym) { should eq(:modern_languages_other) }
 end

@@ -9,7 +9,7 @@ module MCB
             course.attributes,
             provider:             course.provider,
             accrediting_provider: course.accrediting_provider,
-            subjects:             course.subjects,
+            ucas_subjects:             course.ucas_subjects,
             site_statuses:        course.site_statuses,
             enrichments:          course.enrichments,
             recruitment_cycle:    course.recruitment_cycle,

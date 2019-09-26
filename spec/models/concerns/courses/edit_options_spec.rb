@@ -1,8 +1,8 @@
 require "rails_helper"
 
 describe Course, type: :model do
-  let(:course) { create(:course, subjects: [subjects]) }
-  let(:subjects) { create(:subject, :primary) }
+  let(:course) { create(:course, ucas_subjects: [subjects]) }
+  let(:subjects) { create(:ucas_subject, :primary) }
 
   context "entry_requirements" do
     it "returns the entry requirements that users can choose between" do
@@ -39,7 +39,7 @@ describe Course, type: :model do
     end
 
     context "for secondary" do
-      let(:subjects) { create(:subject, :secondary) }
+      let(:subjects) { create(:ucas_subject, :secondary) }
       it "returns the correct age ranges for users to co choose between" do
         expect(course.age_range_options).to eq(%w[11_to_16 11_to_18 14_to_19])
       end

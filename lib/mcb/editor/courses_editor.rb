@@ -113,9 +113,9 @@ module MCB
       end
 
       def edit_subjects
-        course.subjects = @cli.multiselect(
-          initial_items: course.subjects.to_a,
-          possible_items: ::Subject.all,
+        course.ucas_subjects = @cli.multiselect(
+          initial_items: course.ucas_subjects.to_a,
+          possible_items: ::UCASSubject.all,
         )
         course.reload
       end

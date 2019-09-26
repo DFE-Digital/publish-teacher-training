@@ -29,11 +29,11 @@ describe "PATCH /providers/:provider_code/courses/:course_code" do
   let(:course)            {
     create :course,
            provider: provider,
-           subjects: [subject],
+           ucas_subjects: [subject],
            qualification: qualification
   }
   let(:qualification) { :pgce_with_qts }
-  let(:subject) { build(:subject, :primary) }
+  let(:subject) { build(:ucas_subject, :primary) }
 
   let(:credentials) do
     ActionController::HttpAuthentication::Token.encode_credentials(token)

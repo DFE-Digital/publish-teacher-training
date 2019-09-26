@@ -1,6 +1,6 @@
 # Does the subject list mention languages but hasn't already been covered?
 # TODO: this should be replaced with an explicit static mapping
-module Subjects
+module UCASSubjects
   class ModernForeignLanguages
     LANGUAGE_CATEGORIES = ["languages", "languages (african)", "languages (asian)", "languages (european)"].freeze
     MAIN_MODERN_FOREIGN_LANGUAGES = [

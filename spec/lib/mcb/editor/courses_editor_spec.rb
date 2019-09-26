@@ -13,9 +13,9 @@ describe MCB::Editor::CoursesEditor, :needs_audit_user do
   let(:email) { "user@education.gov.uk" }
   let(:provider) { create(:provider, provider_code: provider_code) }
   let(:accredited_body) { create(:provider, :accredited_body) }
-  let!(:mathematics) { find_or_create(:subject, :mathematics) }
-  let!(:biology) { find_or_create(:subject, subject_name: "Biology") }
-  let!(:secondary) { find_or_create(:subject, :secondary) }
+  let!(:mathematics) { find_or_create(:ucas_subject, :mathematics) }
+  let!(:biology) { find_or_create(:ucas_subject, subject_name: "Biology") }
+  let!(:secondary) { find_or_create(:ucas_subject, :secondary) }
   let(:current_cycle) { RecruitmentCycle.current_recruitment_cycle }
   let!(:next_cycle) { find_or_create(:recruitment_cycle, year: "2020") }
   let(:is_send) { false }
@@ -33,7 +33,7 @@ describe MCB::Editor::CoursesEditor, :needs_audit_user do
            study_mode: "part_time",
            start_date: Date.new(2019, 8, 1),
            age_range: "secondary",
-           subjects: [secondary, biology],
+           ucas_subjects: [secondary, biology],
            applications_open_from: Date.new(2018, 10, 9),
            is_send: is_send)
   }
@@ -224,13 +224,13 @@ describe MCB::Editor::CoursesEditor, :needs_audit_user do
       describe "(subjects)" do
         it "attaches new subjects" do
           expect { run_editor("edit subjects", "[ ] Mathematics", "continue", "exit") }.
-            to change { course.subjects.reload.sort_by(&:subject_name) }.
+            to change { course.ucas_subjects.reload.sort_by(&:subject_name) }.
             from([biology, secondary]).to([biology, mathematics, secondary])
         end
 
         it "removes existing subjects" do
           expect { run_editor("edit subjects", "[x] Biology", "continue", "exit") }.
-            to change { course.subjects.reload.sort_by(&:subject_name) }.
+            to change { course.ucas_subjects.reload.sort_by(&:subject_name) }.
             from([biology, secondary]).to([secondary])
         end
 

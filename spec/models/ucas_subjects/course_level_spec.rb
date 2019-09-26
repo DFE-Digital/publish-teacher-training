@@ -1,4 +1,4 @@
-module Subjects
+module UCASSubjects
   describe CourseLevel do
     subject { CourseLevel.new(ucas_subjects) }
 

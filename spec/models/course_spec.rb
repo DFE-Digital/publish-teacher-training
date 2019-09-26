@@ -25,6 +25,7 @@
 #  age_range_in_years        :string
 #  applications_open_from    :date
 #  is_send                   :boolean          default(FALSE)
+#  level                     :string
 #
 
 require "rails_helper"
@@ -49,7 +50,7 @@ describe Course, type: :model do
                   .with_primary_key(:provider_code)
                   .optional
     }
-    it { should have_many(:subjects).through(:course_subjects) }
+    it { should have_many(:ucas_subjects).through(:course_ucas_subjects) }
     it { should have_many(:site_statuses) }
     it { should have_many(:sites) }
     it { should have_many(:enrichments) }
@@ -651,28 +652,28 @@ describe Course, type: :model do
   end
 
   context "subjects & level" do
-    context "with no subjects" do
+    context "with no ucas_subjects" do
       subject { create(:course) }
       its(:ucas_level) { should eq(:secondary) }
       its(:dfe_subjects) { should be_empty }
     end
 
-    context "with primary subjects" do
-      subject { create(:course, subjects: [find_or_create(:subject, :primary)]) }
+    context "with primary ucas_subjects" do
+      subject { create(:course, ucas_subjects: [find_or_create(:ucas_subject, :primary)]) }
       its(:ucas_level) { should eq(:primary) }
       its(:gcse_subjects_required) { should eq(%w[maths english science]) }
       its(:dfe_subjects) { should eq([DFESubject.new("Primary")]) }
     end
 
-    context "with secondary subjects" do
-      subject { create(:course, subjects: [find_or_create(:subject, subject_name: "physical education")]) }
+    context "with secondary ucas_subjects" do
+      subject { create(:course, ucas_subjects: [find_or_create(:ucas_subject, subject_name: "physical education")]) }
       its(:ucas_level) { should eq(:secondary) }
       its(:gcse_subjects_required) { should eq(%w[maths english]) }
       its(:dfe_subjects) { should eq([DFESubject.new("Physical education")]) }
     end
 
-    context "with further education subjects" do
-      subject { create(:course, subjects: [create(:further_education_subject)]) }
+    context "with further education ucas_subjects" do
+      subject { create(:course, ucas_subjects: [create(:further_education_subject)]) }
       its(:ucas_level) { should eq(:further_education) }
       its(:gcse_subjects_required) { should eq([]) }
       its(:dfe_subjects) { should eq([DFESubject.new("Further education")]) }
@@ -691,11 +692,11 @@ describe Course, type: :model do
     describe "bursaries and scholarships" do
       let(:subjects) {
         [
-          build(:subject, :mathematics),
-          build(:subject, :secondary),
+          build(:ucas_subject, :mathematics),
+          build(:ucas_subject, :secondary),
         ]
       }
-      subject { create(:course, subjects: subjects) }
+      subject { create(:course, ucas_subjects: subjects) }
 
       it { should have_bursary }
       it { should have_scholarship_and_bursary }
@@ -938,10 +939,10 @@ describe Course, type: :model do
   end
 
   describe "#syncable?" do
-    let(:courses_subjects) { [build(:subject, subject_name: "primary")] }
+    let(:courses_subjects) { [build(:ucas_subject, subject_name: "primary")] }
     let(:site_status) { build(:site_status, :findable) }
 
-    subject { create(:course, subjects: courses_subjects, site_statuses: [site_status]) }
+    subject { create(:course, ucas_subjects: courses_subjects, site_statuses: [site_status]) }
 
     its(:syncable?) { should be_truthy }
 
@@ -952,7 +953,7 @@ describe Course, type: :model do
       end
 
       context "course which has a findable site status, but no dfe_subject" do
-        let(:courses_subjects) { [build(:subject, subject_name: "secondary")] }
+        let(:courses_subjects) { [build(:ucas_subject, subject_name: "secondary")] }
         its(:syncable?) { should be_falsey }
       end
     end

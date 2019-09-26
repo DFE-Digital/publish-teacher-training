@@ -1,15 +1,14 @@
 # == Schema Information
 #
-# Table name: subject
+# Table name: ucas_subject
 #
-#  id           :bigint           not null, primary key
-#  type         :text
-#  subject_code :text
+#  id           :integer          not null, primary key
 #  subject_name :text
+#  subject_code :text             not null
 #
 
 FactoryBot.define do
-  factory :subject do
+  factory :ucas_subject do
     sequence(:subject_code, &:to_s)
     subject_name { Faker::ProgrammingLanguage.name }
 
@@ -28,13 +27,18 @@ FactoryBot.define do
       subject_code { "G1" }
     end
 
-    trait :further_education do
+    factory :further_education_subject do
       subject_name { "Further Education" }
     end
 
     trait :english do
       subject_name { "English" }
       subject_code { "E" }
+    end
+
+    factory :send_subject do
+      subject_name { "Special Educational Needs" }
+      subject_code { "U3" }
     end
   end
 end
