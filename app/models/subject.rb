@@ -15,4 +15,8 @@ class Subject < ApplicationRecord
   def to_sym
     subject_name.parameterize.underscore.to_sym
   end
+
+  def to_s
+    "#{subject_name} (#{subject_code})"
+  end
 end

@@ -13,7 +13,6 @@ module MCB
 
       def initialize(provider:, requester:, course_codes: [], courses: nil)
         @courses = courses || load_courses(provider, course_codes)
-
         super(provider: provider, requester: requester)
       end
 
@@ -35,7 +34,7 @@ module MCB
 
       def new_course_wizard
         %i[title qualifications study_mode accredited_body start_date route maths
-           english science age_range course_code is_send].each do |attribute|
+           english science age_range level course_code is_send].each do |attribute|
           edit(attribute)
         end
 
@@ -113,9 +112,9 @@ module MCB
       end
 
       def edit_subjects
-        course.ucas_subjects = @cli.multiselect(
-          initial_items: course.ucas_subjects.to_a,
-          possible_items: ::UCASSubject.all,
+        course.subjects = @cli.multiselect(
+          initial_items: course.subjects.to_a,
+          possible_items: ::CourseAssignableSubjectService.new.execute(course),
         )
         course.reload
       end

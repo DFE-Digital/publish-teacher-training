@@ -166,6 +166,7 @@ class Course < ApplicationRecord
   validate :validate_qualification, on: :update
   validate :validate_start_date, on: :update, if: -> { provider.present? }
   validate :validate_applications_open_from, on: :update, if: -> { provider.present? }
+  validate :validate_subjects
 
   after_validation :remove_unnecessary_enrichments_validation_message
 
@@ -534,6 +535,20 @@ private
       errors.add(:applications_open_from, "#{applications_open_from} is not valid for the #{provider.recruitment_cycle.year} cycle. " +
       "A valid date must be between #{recruitment_cycle.application_start_date} and #{recruitment_cycle.application_end_date}")
     end
+  end
+
+  def validate_subjects
+    if has_any_modern_language_subject_type? & !has_the_modern_languages_secondary_subject_type?
+      subjects << SecondarySubject.modern_languages
+    end
+  end
+
+  def has_any_modern_language_subject_type?
+    subjects.any? { |subject| subject.type == "ModernLanguagesSubject" }
+  end
+
+  def has_the_modern_languages_secondary_subject_type?
+    subjects.any? { |subject| subject == SecondarySubject.modern_languages }
   end
 
   def valid_date_range

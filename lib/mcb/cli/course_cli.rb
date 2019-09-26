@@ -10,6 +10,13 @@ module MCB
         @cli.ask("New course title?  ")
       end
 
+      def ask_level
+        ask_multiple_choice(
+          prompt: "What level is this course?",
+          choices: Course.levels.keys,
+        )
+      end
+
       def ask_english
         ask_gcse_subject(:english, Course::entry_requirement_options_without_nil_choice)
       end

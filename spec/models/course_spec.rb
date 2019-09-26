@@ -33,6 +33,8 @@ require "rails_helper"
 describe Course, type: :model do
   let(:course) { create(:course, name: "Biology", course_code: "3X9F") }
   let(:subject) { course }
+  let(:arabic) { create(:subject, subject_name: "Arabic", type: :ModernLanguagesSubject).becomes(ModernLanguagesSubject) }
+  let!(:modern_languages) { create(:subject, subject_name: "Modern Languages", type: :SecondarySubject).becomes(SecondarySubject) }
 
   its(:to_s) { should eq("Biology (#{course.provider.provider_code}/3X9F) [2019/20]") }
   its(:modular) { should eq("") }
@@ -54,6 +56,14 @@ describe Course, type: :model do
     it { should have_many(:site_statuses) }
     it { should have_many(:sites) }
     it { should have_many(:enrichments) }
+  end
+
+  it "implies modern languages if a languages subject is selected" do
+    expect(create(:course, subjects: [arabic]).subjects).to match_array([modern_languages, arabic])
+  end
+
+  it "does not continue to add modern language if it has already been added" do
+    expect(create(:course, subjects: [modern_languages, arabic]).subjects).to match_array([modern_languages, arabic])
   end
 
   describe "validations" do

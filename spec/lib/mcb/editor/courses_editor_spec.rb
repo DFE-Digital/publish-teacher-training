@@ -13,12 +13,16 @@ describe MCB::Editor::CoursesEditor, :needs_audit_user do
   let(:email) { "user@education.gov.uk" }
   let(:provider) { create(:provider, provider_code: provider_code) }
   let(:accredited_body) { create(:provider, :accredited_body) }
-  let!(:mathematics) { find_or_create(:ucas_subject, :mathematics) }
-  let!(:biology) { find_or_create(:ucas_subject, subject_name: "Biology") }
-  let!(:secondary) { find_or_create(:ucas_subject, :secondary) }
+  let!(:japanese) { find_or_create(:subject, :japanese) }
+  let!(:primary_with_mathematics) { find_or_create(:subject, :primary_with_mathematics) }
+  let!(:biology) { find_or_create(:subject, :biology) }
+  let!(:modern_languages) { find_or_create(:subject, :modern_languages) }
+  let!(:further_education) { find_or_create(:subject, :further_education) }
   let(:current_cycle) { RecruitmentCycle.current_recruitment_cycle }
   let!(:next_cycle) { find_or_create(:recruitment_cycle, year: "2020") }
   let(:is_send) { false }
+  let(:subjects) { [] }
+  let(:level) { "primary" }
   let!(:course) {
     create(:course,
            provider: provider,
@@ -32,8 +36,9 @@ describe MCB::Editor::CoursesEditor, :needs_audit_user do
            qualification: "qts",
            study_mode: "part_time",
            start_date: Date.new(2019, 8, 1),
-           age_range: "secondary",
-           ucas_subjects: [secondary, biology],
+           age_range: "primary",
+           level: level,
+           subjects: subjects,
            applications_open_from: Date.new(2018, 10, 9),
            is_send: is_send)
   }
@@ -195,9 +200,9 @@ describe MCB::Editor::CoursesEditor, :needs_audit_user do
 
       describe "(age range)" do
         it "updates the course age range when that is valid" do
-          expect { run_editor("edit age range", "primary", "exit") }.
+          expect { run_editor("edit age range", "secondary", "exit") }.
             to change { course.reload.age_range }.
-            from("secondary").to("primary")
+            from("primary").to("secondary")
         end
       end
 
@@ -222,17 +227,26 @@ describe MCB::Editor::CoursesEditor, :needs_audit_user do
       end
 
       describe "(subjects)" do
-        it "attaches new subjects" do
-          expect { run_editor("edit subjects", "[ ] Mathematics", "continue", "exit") }.
-            to change { course.ucas_subjects.reload.sort_by(&:subject_name) }.
-            from([biology, secondary]).to([biology, mathematics, secondary])
+        context "with no subjects" do
+          let(:subjects) { [] }
+          let(:level) { "secondary" }
+          it "attaches new subjects" do
+            expect { run_editor("edit subjects", "2", "continue", "exit") }.
+              to change { course.subjects.reload.sort_by(&:subject_name) }.
+              from([]).to(match_array([biology.becomes(SecondarySubject)]))
+          end
         end
 
-        it "removes existing subjects" do
-          expect { run_editor("edit subjects", "[x] Biology", "continue", "exit") }.
-            to change { course.ucas_subjects.reload.sort_by(&:subject_name) }.
-            from([biology, secondary]).to([secondary])
+        context "with a subject" do
+          let(:subjects) { [biology] }
+          let(:level) { "secondary" }
+          it "removes existing subjects" do
+            expect { run_editor("edit subjects", "2", "continue", "exit")[:stdout] }.
+            to change { course.subjects.reload.sort_by(&:subject_name) }.
+            from(match_array([biology.becomes(SecondarySubject)])).to([])
+          end
         end
+
 
         context "when more than 1 course is being edited" do
           let(:another_course) { create(:course, provider: provider) }
@@ -426,12 +440,135 @@ describe MCB::Editor::CoursesEditor, :needs_audit_user do
           english: "equivalence_test",
           science: "not_required",
           age_range: "secondary",
+          level: "secondary",
           course_code: "1X2B",
           recruitment_cycle: "2", # the 2nd option should always be the current recruitment cycle
           application_opening_date: "18 October 2018",
           is_send: true,
         }
       }
+
+      describe "selects the correctly leveled subject" do
+        it "in a secondary course shows secondary subjects" do
+          run_new_course_wizard(
+            desired_attributes[:title],
+            desired_attributes[:qualification],
+            desired_attributes[:study_mode],
+            desired_attributes[:accredited_body],
+            desired_attributes[:start_date],
+            desired_attributes[:route],
+            desired_attributes[:maths],
+            desired_attributes[:english],
+            desired_attributes[:science],
+            desired_attributes[:age_range],
+            desired_attributes[:level],
+            desired_attributes[:course_code],
+            "y", # is SEND confirmation
+            "y", # confirm creation
+            "[ ] Biology",
+            "continue",
+            # location selection
+            "[ ] #{site_1.location_name}",
+            "[ ] #{site_3.location_name}",
+            "continue",
+            desired_attributes[:application_opening_date],
+            "", # enter to finish
+            "",
+          )[:stdout]
+
+          expect(Course.find_by(course_code: desired_attributes[:course_code]).subjects).to match_array([biology.becomes(SecondarySubject)])
+        end
+
+        it "in a secondary course implicitly select modern language if language subject is selected" do
+          run_new_course_wizard(
+            desired_attributes[:title],
+            desired_attributes[:qualification],
+            desired_attributes[:study_mode],
+            desired_attributes[:accredited_body],
+            desired_attributes[:start_date],
+            desired_attributes[:route],
+            desired_attributes[:maths],
+            desired_attributes[:english],
+            desired_attributes[:science],
+            desired_attributes[:age_range],
+            desired_attributes[:level],
+            desired_attributes[:course_code],
+            "y", # is SEND confirmation
+            "y", # confirm creation
+            "[ ] Japanese",
+            "continue",
+            # location selection
+            "[ ] #{site_1.location_name}",
+            "[ ] #{site_3.location_name}",
+            "continue",
+            desired_attributes[:application_opening_date],
+            "", # enter to finish
+            "",
+          )[:stdout]
+
+          expect(Course.find_by(course_code: desired_attributes[:course_code]).subjects).to match_array([modern_languages.becomes(SecondarySubject), japanese.becomes(ModernLanguagesSubject)])
+        end
+
+        it "only shows primary subjects if primary level is selected" do
+          run_new_course_wizard(
+            desired_attributes[:title],
+            desired_attributes[:qualification],
+            desired_attributes[:study_mode],
+            desired_attributes[:accredited_body],
+            desired_attributes[:start_date],
+            desired_attributes[:route],
+            desired_attributes[:maths],
+            desired_attributes[:english],
+            desired_attributes[:science],
+            desired_attributes[:age_range],
+            "primary",
+            desired_attributes[:course_code],
+            "y", # is SEND confirmation
+            "y", # confirm creation
+            "[ ] Primary with mathematics",
+            "continue",
+            # location selection
+            "[ ] #{site_1.location_name}",
+            "[ ] #{site_3.location_name}",
+            "continue",
+            desired_attributes[:application_opening_date],
+            "", # enter to finish
+            "",
+          )[:stdout]
+
+          expect(Course.find_by(course_code: desired_attributes[:course_code]).subjects).to match_array(primary_with_mathematics.becomes(PrimarySubject))
+        end
+
+        it "only shows further education subjects if further education level is selected" do
+          run_new_course_wizard(
+            desired_attributes[:title],
+            desired_attributes[:qualification],
+            desired_attributes[:study_mode],
+            desired_attributes[:accredited_body],
+            desired_attributes[:start_date],
+            desired_attributes[:route],
+            desired_attributes[:maths],
+            desired_attributes[:english],
+            desired_attributes[:science],
+            desired_attributes[:age_range],
+            "further_education",
+            desired_attributes[:course_code],
+            "y", # is SEND confirmation
+            "y", # confirm creation
+            "[ ] Further education",
+            "continue",
+            # location selection
+            "[ ] #{site_1.location_name}",
+            "[ ] #{site_3.location_name}",
+            "continue",
+            desired_attributes[:application_opening_date],
+            "", # enter to finish
+            "",
+          )[:stdout]
+
+          expect(Course.find_by(course_code: desired_attributes[:course_code]).subjects).to eq([further_education.becomes(FurtherEducationSubject)])
+        end
+      end
 
       it "creates a new course with the passed parameters" do
         output = run_new_course_wizard(
@@ -445,13 +582,12 @@ describe MCB::Editor::CoursesEditor, :needs_audit_user do
           desired_attributes[:english],
           desired_attributes[:science],
           desired_attributes[:age_range],
+          desired_attributes[:level],
           desired_attributes[:course_code],
           "y", # is SEND confirmation
-          desired_attributes[:recruitment_cycle],
           "y", # confirm creation
           # subject selection
-          "Biology",
-          "Secondary",
+          "[ ] Mathematics",
           "continue",
           # location selection
           "[ ] #{site_1.location_name}",
@@ -475,6 +611,7 @@ describe MCB::Editor::CoursesEditor, :needs_audit_user do
           "english" => desired_attributes[:english],
           "science" => desired_attributes[:science],
           "age_range" => desired_attributes[:age_range],
+          "level" => desired_attributes[:level],
         )
         expect(created_course.is_send?).to be_truthy
         expect(created_course.accrediting_provider).to eq(accredited_body)
@@ -484,7 +621,7 @@ describe MCB::Editor::CoursesEditor, :needs_audit_user do
         expect(created_course.ucas_status).to eq(:new)
       end
 
-      it "creates a new course with an Aduit with the correct requester" do
+      it "creates a new course with an audit with the correct requester" do
         run_new_course_wizard(
           desired_attributes[:title],
           desired_attributes[:qualification],
@@ -496,13 +633,12 @@ describe MCB::Editor::CoursesEditor, :needs_audit_user do
           desired_attributes[:english],
           desired_attributes[:science],
           desired_attributes[:age_range],
+          desired_attributes[:level],
           desired_attributes[:course_code],
           "y", # is SEND confirmation
-          desired_attributes[:recruitment_cycle],
           "y", # confirm creation
           # subject selection
-          "Biology",
-          "Secondary",
+          "[ ] Mathematics",
           "continue",
           # location selection
           "[ ] #{site_1.location_name}",
@@ -530,13 +666,13 @@ describe MCB::Editor::CoursesEditor, :needs_audit_user do
           desired_attributes[:english],
           desired_attributes[:science],
           desired_attributes[:age_range],
+          desired_attributes[:level],
           desired_attributes[:course_code],
           "n", # is SEND
           desired_attributes[:recruitment_cycle],
           "y", # confirm creation
           # subject selection
-          "Biology",
-          "Secondary",
+          "[ ] Mathematics",
           "continue",
           # location selection
           "[ ] #{site_1.location_name}",
@@ -571,6 +707,7 @@ describe MCB::Editor::CoursesEditor, :needs_audit_user do
           desired_attributes[:english],
           desired_attributes[:science],
           desired_attributes[:age_range],
+          desired_attributes[:level],
           desired_attributes[:course_code],
           "n", # is SEND
           desired_attributes[:recruitment_cycle],
@@ -593,6 +730,7 @@ describe MCB::Editor::CoursesEditor, :needs_audit_user do
           desired_attributes[:english],
           desired_attributes[:science],
           desired_attributes[:age_range],
+          desired_attributes[:level],
           course_code, # a duplicate course code
           "n", # is SEND
           desired_attributes[:recruitment_cycle],
