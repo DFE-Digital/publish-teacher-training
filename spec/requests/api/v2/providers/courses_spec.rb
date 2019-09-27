@@ -179,8 +179,8 @@ describe "Courses API v2", type: :request do
                 "vac_status" => site_status.vac_status,
                 "publish" => site_status.publish,
                 "status" => site_status.status,
-                "applications_accepted_from" => site_status.applications_accepted_from.strftime("%Y-%m-%d"),
                 "has_vacancies?" => true,
+                "applications_accepted_from" => "2019-01-01",
               },
               "relationships" => {
                 "site" => {

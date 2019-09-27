@@ -54,7 +54,6 @@ describe "mcb courses show" do
           site_status2.vac_status,
           site_status2.status,
           site_status2.publish,
-          site_status2.applications_accepted_from.strftime("%Y-%m-%d"),
         ),
       )
     end
@@ -80,7 +79,6 @@ describe "mcb courses show" do
           site_status1.vac_status,
           site_status1.status,
           site_status1.publish,
-          site_status1.applications_accepted_from.strftime("%Y-%m-%d"),
         ),
       )
     end
