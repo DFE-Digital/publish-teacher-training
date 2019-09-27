@@ -74,25 +74,10 @@ class SiteStatus < ApplicationRecord
     status_running? && published_on_ucas?
   end
 
-  # scope :applications_being_accepted_now, -> {
-  #   where.not(applications_accepted_from: nil).
-  #   where("applications_accepted_from <= ?", Time.now.utc)
-  # }
-
-  # def applications_being_accepted_now?
-  #   applications_accepted_from.present? &&
-  #     applications_accepted_from <= Time.now.utc
-  # end
-
   scope :with_vacancies, -> { where.not(vac_status: :no_vacancies) }
   def with_vacancies?
     !no_vacancies?
   end
-
-  # scope :open_for_applications, -> { findable.applications_being_accepted_now.with_vacancies }
-  # def open_for_applications?
-  #   findable? && applications_being_accepted_now?
-  # end
 
   def self.default_vac_status_given(study_mode:)
     case study_mode
@@ -115,7 +100,6 @@ private
 
   def set_defaults
     self.status ||= :new_status
-    # self.applications_accepted_from = nil
     self.publish ||= :unpublished
   end
 

@@ -68,18 +68,6 @@ FactoryBot.define do
       status { :suspended }
     end
 
-    trait :applications_being_accepted_now do
-      applications_accepted_from { Faker::Date.between(from: 2.days.ago, to: 0.days.ago) }
-    end
-
-    trait :applications_being_accepted_from_2019 do
-      applications_accepted_from { DateTime.new(2019).utc }
-    end
-
-    trait :applications_being_accepted_in_future do
-      applications_accepted_from { Faker::Date.forward(days: 90) }
-    end
-
     trait :findable do
       running
       published

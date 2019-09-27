@@ -182,13 +182,10 @@ describe MCB::Editor::CoursesEditor, :needs_audit_user do
 
         before do
           sites.collect do |site|
-            course.site_statuses.create(
-              site: site,
-              status: :running,
-              vac_status: :part_time_vacancies,
-              publish: :published,
-              applications_accepted_from: Date.new(last_year, 10, 9),
-            )
+            course.site_statuses.create(site: site,
+                                        status: :running,
+                                        vac_status: :part_time_vacancies,
+                                        publish: :published)
           end
         end
 
