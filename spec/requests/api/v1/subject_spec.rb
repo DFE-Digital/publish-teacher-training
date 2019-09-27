@@ -39,8 +39,8 @@ RSpec.describe "Subjecs API", type: :request do
             "subject_code" => "00",
           },
           {
-            "subject_name" => "Further Education",
-            "subject_code" => "FE",
+            "subject_name" => "Further education",
+            "subject_code" => "41",
           },
         ])
     end
