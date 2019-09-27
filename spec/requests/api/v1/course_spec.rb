@@ -53,13 +53,13 @@ describe "Courses API", type: :request do
                                    program_type: :scitt_programme,
                                    modular: "",
                                    provider: provider,
+                                   applications_open_from: "#{previous_year}-10-09 00:00:00",
                                    age: 2.hours.ago)
 
         FactoryBot.create(:site_status,
                           vac_status: :full_time_vacancies,
                           publish: "Y",
                           status: :running,
-                          applications_accepted_from: "#{previous_year}-10-09 00:00:00",
                           course: course,
                           site: site)
 

@@ -58,7 +58,6 @@ describe '"mcb apiv1 courses find"' do
                         site_status.vac_status_before_type_cast,
                         site_status.status_before_type_cast,
                         site_status.publish_before_type_cast,
-                        site_status.applications_accepted_from.strftime("%Y-%m-%d"),
                       ))
   end
 end

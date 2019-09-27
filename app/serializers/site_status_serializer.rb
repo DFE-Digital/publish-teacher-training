@@ -35,7 +35,7 @@ class SiteStatusSerializer < ActiveModel::Serializer
   end
 
   def course_open_date
-    object.applications_accepted_from
+    object.course.applications_open_from
   end
 
   def name
