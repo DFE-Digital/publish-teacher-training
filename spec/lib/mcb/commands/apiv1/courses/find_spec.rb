@@ -4,7 +4,7 @@ describe '"mcb apiv1 courses find"' do
   it "displays the info for the given course" do
     course1 = create(:course)
 
-    subject = build(:subject)
+    subject = build(:subject, :primary)
     site_status = build(:site_status)
 
     course2 = create(:course, subjects: [subject], site_statuses: [site_status])
