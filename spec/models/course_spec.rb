@@ -150,7 +150,7 @@ describe Course, type: :model do
   describe "no site statuses" do
     its(:site_statuses) { should be_empty }
     its(:findable?) { should be false }
-    its(:open_for_applications?) { should be false }
+    # its(:open_for_applications?) { should be false }
     its(:has_vacancies?) { should be false }
   end
 

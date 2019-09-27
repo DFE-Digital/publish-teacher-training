@@ -703,10 +703,8 @@ describe MCB::Editor::CoursesEditor, :needs_audit_user do
           "start_date" => Date.new(current_year, 9, 1),
           "program_type" => desired_attributes[:route],
         )
+
         expect(created_course.accrediting_provider).to eq(provider)
-        expect(
-          created_course.site_statuses.map(&:applications_accepted_from).uniq,
-        ).to eq([Date.new(last_year, 11, 1)])
       end
 
       it "does not create the course if creation isn't confirmed" do
