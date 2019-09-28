@@ -9,13 +9,13 @@ describe "mcb providers edit" do
 
   let(:email) { "user@education.gov.uk" }
 
-  let(:recruitment_year1) { find_or_create(:recruitment_cycle, year: "2020") }
-  let(:recruitment_year2) { RecruitmentCycle.current_recruitment_cycle }
+  let(:next_cycle)    { find_or_create :recruitment_cycle, :next }
+  let(:current_cycle) { find_or_create :recruitment_cycle }
 
-  let(:provider) { create :provider, provider_name: "Z", updated_at: 1.day.ago, changed_at: 1.day.ago, recruitment_cycle: recruitment_year1 }
+  let(:provider) { create :provider, provider_name: "Z", updated_at: 1.day.ago, changed_at: 1.day.ago, recruitment_cycle: next_cycle }
   let(:rolled_over_provider) do
     new_provider = provider.dup
-    new_provider.update(recruitment_cycle: recruitment_year2)
+    new_provider.update(recruitment_cycle: current_cycle)
     new_provider.update(organisations: provider.organisations)
     new_provider.update(provider_name: "A")
     new_provider.save
@@ -47,7 +47,7 @@ describe "mcb providers edit" do
       let!(:requester) { create(:user, email: email, organisations: provider.organisations) }
 
       it "updates the name of the provider" do
-        expect { execute_edit(arguments: [provider.provider_code, "-r", recruitment_year1.year], input: ["edit provider name", "Y", "exit"]) }
+        expect { execute_edit(arguments: [provider.provider_code, "-r", next_cycle.year], input: ["edit provider name", "Y", "exit"]) }
           .to change { provider.reload.provider_name }
           .from("Z").to("Y")
       end

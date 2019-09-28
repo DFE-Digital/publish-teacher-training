@@ -31,12 +31,13 @@
 require "rails_helper"
 
 describe Course, type: :model do
+  let(:recruitment_cycle) { course.recruitment_cycle }
   let(:course) { create(:course, name: "Biology", course_code: "3X9F") }
   let(:subject) { course }
   let(:arabic) { create(:subject, subject_name: "Arabic", type: :ModernLanguagesSubject).becomes(ModernLanguagesSubject) }
   let!(:modern_languages) { create(:subject, subject_name: "Modern Languages", type: :SecondarySubject).becomes(SecondarySubject) }
 
-  its(:to_s) { should eq("Biology (#{course.provider.provider_code}/3X9F) [2019/20]") }
+  its(:to_s) { should eq("Biology (#{course.provider.provider_code}/3X9F) [#{course.recruitment_cycle}]") }
   its(:modular) { should eq("") }
 
   describe "auditing" do

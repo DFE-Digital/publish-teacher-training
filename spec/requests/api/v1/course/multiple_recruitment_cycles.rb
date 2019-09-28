@@ -14,6 +14,10 @@ describe "Courses API", type: :request do
         .encode_credentials("foo")
     end
 
+    let(:current_cycle) { find_or_create :recruitment_cycle }
+    let(:current_year)  { current_cycle.year.to_i }
+    let(:next_year)     { current_year + 1 }
+
     context "with multiple recruitment cycles" do
       describe "JSON body response" do
         let(:provider) { create(:provider, courses: [course]) }
@@ -37,7 +41,7 @@ describe "Courses API", type: :request do
           end
         end
         context "with a future recruitment cycle specified in the route" do
-          let(:get_index) { get "/api/v1/2020/courses", headers: { "HTTP_AUTHORIZATION" => credentials } }
+          let(:get_index) { get "/api/v1/#{next_year}/courses", headers: { "HTTP_AUTHORIZATION" => credentials } }
 
           it "only returns courses from the requested cycle" do
             returned_course_codes = get_course_codes_from_body(response.body)

@@ -24,6 +24,10 @@ describe "Courses API", type: :request do
                         scheme_member: "Y",
                         enrichments: [])
     end
+    let(:current_cycle) { find_or_create :recruitment_cycle }
+    let(:current_year)  { current_cycle.year.to_i }
+    let(:previous_year) { current_year - 1 }
+    let(:next_year)     { current_year + 1 }
 
     context "without changed_since parameter" do
       before do
@@ -33,7 +37,7 @@ describe "Courses API", type: :request do
 
         course = FactoryBot.create(:course,
                                    course_code: "2HPF",
-                                   start_date: Date.new(2019, 9, 1),
+                                   start_date: Date.new(current_year, 9, 1),
                                    name: "Religious Education",
                                    subjects: [subject1, subject2],
                                    study_mode: :full_time,
@@ -51,7 +55,7 @@ describe "Courses API", type: :request do
                           vac_status: :full_time_vacancies,
                           publish: "Y",
                           status: :running,
-                          applications_accepted_from: "2018-10-09 00:00:00",
+                          applications_accepted_from: "#{previous_year}-10-09 00:00:00",
                           course: course,
                           site: site)
 
@@ -59,24 +63,26 @@ describe "Courses API", type: :request do
       end
 
       it "returns http success" do
-        get "/api/v1/2019/courses",
+        get "/api/v1/#{current_year}/courses",
             headers: { "HTTP_AUTHORIZATION" => credentials }
         expect(response).to have_http_status(:success)
       end
 
       it "returns http unauthorised" do
-        get "/api/v1/2019/courses", headers: { "HTTP_AUTHORIZATION" => unauthorized_credentials }
+        get "/api/v1/#{current_year}/courses",
+            headers: { "HTTP_AUTHORIZATION" => unauthorized_credentials }
         expect(response).to have_http_status(:unauthorized)
       end
 
       it "JSON body response contains expected course attributes" do
-        get "/api/v1/2019/courses", headers: { "HTTP_AUTHORIZATION" => credentials }
+        get "/api/v1/#{current_year}/courses",
+            headers: { "HTTP_AUTHORIZATION" => credentials }
 
         json = JSON.parse(response.body)
         expect(json). to eq([
                               {
                                 "course_code" => "2HPF",
-                                "start_month" => "2019-09-01T00:00:00Z",
+                                "start_month" => "#{current_year}-09-01T00:00:00Z",
                                 "start_month_string" => "September",
                                 "name" => "Religious Education",
                                 "study_mode" => "F",
@@ -88,7 +94,7 @@ describe "Courses API", type: :request do
                                 "english" => 3,
                                 "maths" => 9,
                                 "science" => nil,
-                                "recruitment_cycle" => "2019",
+                                "recruitment_cycle" => current_year.to_s,
                                 "campus_statuses" => [
                                   {
                                     "campus_code" => "-",
@@ -96,7 +102,7 @@ describe "Courses API", type: :request do
                                     "vac_status" => "F",
                                     "publish" => "Y",
                                     "status" => "R",
-                                    "course_open_date" => "2018-10-09",
+                                    "course_open_date" => "#{previous_year}-10-09",
                                   },
                                 ],
                                 "subjects" => [
@@ -137,12 +143,12 @@ describe "Courses API", type: :request do
           create(:site_status, :published, course: last_course_in_results)
         end
 
-        get "/api/v1/2019/courses",
+        get "/api/v1/#{current_year}/courses",
             headers: { "HTTP_AUTHORIZATION" => credentials }
 
         expect(response.headers).to have_key "Link"
         url = url_for(
-          recruitment_year: 2019,
+          recruitment_year: current_year,
           params: {
             changed_since: timestamp_of_last_course.utc.strftime("%FT%T.%6NZ"),
             per_page: 100,
@@ -158,7 +164,7 @@ describe "Courses API", type: :request do
       let(:course) { create(:course, provider: provider, site_statuses: [create(:site_status, :published)]) }
       let(:provider2) { build(:provider, recruitment_cycle: next_cycle) }
       let(:course2) { create(:course, provider: provider2, site_statuses: [create(:site_status, :published)]) }
-      let(:next_cycle) { build(:recruitment_cycle, year: "2020") }
+      let(:next_cycle) { build(:recruitment_cycle, :next) }
 
       before do
         course
@@ -177,7 +183,7 @@ describe "Courses API", type: :request do
         end
       end
       context "with a future recruitment cycle specified in the route" do
-        let(:get_index) { get "/api/v1/2020/courses", headers: { "HTTP_AUTHORIZATION" => credentials } }
+        let(:get_index) { get "/api/v1/#{next_year}/courses", headers: { "HTTP_AUTHORIZATION" => credentials } }
 
         it "only returns courses from the requested cycle" do
           returned_course_codes = get_course_codes_from_body(response.body)
@@ -198,7 +204,7 @@ describe "Courses API", type: :request do
           Timecop.freeze(5.minutes.from_now) do
             new_course = create(:course, course_code: "SINCE2", site_statuses: [site_status2])
 
-            get "/api/v1/2019/courses?changed_since=#{3.minutes.ago.utc.iso8601}",
+            get "/api/v1/#{current_year}/courses?changed_since=#{3.minutes.ago.utc.iso8601}",
                 headers: { "HTTP_AUTHORIZATION" => credentials }
 
             returned_course_codes = get_course_codes_from_body(response.body)
@@ -231,14 +237,14 @@ describe "Courses API", type: :request do
               create(:site_status, :published, course: last_course_in_results)
             end
 
-            get "/api/v1/2019/courses",
+            get "/api/v1/#{current_year}/courses",
                 headers: { "HTTP_AUTHORIZATION" => credentials },
                 params: { changed_since: 30.minutes.ago.utc.iso8601 }
 
 
             expect(response.headers).to have_key "Link"
             url = url_for(
-              recruitment_year: 2019,
+              recruitment_year: current_year,
               params: {
                 changed_since: timestamp_of_last_course.utc.strftime("%FT%T.%6NZ"),
                 per_page: 100,
@@ -273,14 +279,14 @@ describe "Courses API", type: :request do
                                               provider: provider)
               create(:site_status, :published, course: last_course_in_results)
             end
-            get "/api/v1/courses?recruitment_year=2020",
+            get "/api/v1/courses?recruitment_year=#{next_year}",
                 headers: { "HTTP_AUTHORIZATION" => credentials },
                 params: { changed_since: 30.minutes.ago.utc.iso8601 }
 
 
             expect(response.headers).to have_key "Link"
             url = url_for(
-              recruitment_year: 2020,
+              recruitment_year: next_year,
               params: {
                 changed_since: timestamp_of_last_course.utc.strftime("%FT%T.%6NZ"),
                 per_page: 100,
@@ -299,7 +305,7 @@ describe "Courses API", type: :request do
             headers: { "HTTP_AUTHORIZATION" => credentials },
             params: { changed_since: provided_timestamp }
 
-        url = url_for(recruitment_year: 2019, params: {
+        url = url_for(recruitment_year: current_year, params: {
                         changed_since: provided_timestamp,
                         per_page: 100,
                       })
@@ -310,11 +316,11 @@ describe "Courses API", type: :request do
         provided_timestamp = 5.seconds.ago.utc.iso8601
 
 
-        get "/api/v1/2020/courses",
+        get "/api/v1/#{next_year}/courses",
             headers: { "HTTP_AUTHORIZATION" => credentials },
             params: { changed_since: provided_timestamp }
 
-        url = url_for(recruitment_year: 2020, params: {
+        url = url_for(recruitment_year: next_year, params: {
                         changed_since: provided_timestamp,
                         per_page: 100,
                       })
@@ -357,7 +363,7 @@ describe "Courses API", type: :request do
       end
 
       context "with many courses updated in the same second" do
-        let!(:next_cycle) { create(:recruitment_cycle, year: "2020") }
+        let!(:next_cycle) { create(:recruitment_cycle, year: next_year) }
         timestamp = 1.second.ago
         before do
           @courses = Array.new(25) do |i|
@@ -370,7 +376,9 @@ describe "Courses API", type: :request do
 
 
         it "pages properly" do
-          get_next_courses "/api/v1/courses", per_page: 10, recruitment_year: 2019
+          get_next_courses "/api/v1/courses",
+                           per_page: 10,
+                           recruitment_year: current_year
           expect(response.body)
             .to have_courses(@courses[0..9])
 
@@ -387,7 +395,7 @@ describe "Courses API", type: :request do
         end
 
         it "pages properly with specified recruitment year" do
-          get_next_courses "/api/v1/2020/courses", per_page: 10
+          get_next_courses "/api/v1/#{next_year}/courses", per_page: 10
           expect(response.body).to eq "[]"
         end
       end
@@ -400,7 +408,8 @@ describe "Courses API", type: :request do
         end
 
         it "presents the site status as suspended (so that the UTT Apply system hides the site altogether)" do
-          get "/api/v1/2019/courses", headers: { "HTTP_AUTHORIZATION" => credentials }
+          get "/api/v1/#{current_year}/courses",
+              headers: { "HTTP_AUTHORIZATION" => credentials }
 
           json = JSON.parse(response.body)
 
@@ -417,12 +426,14 @@ describe "Courses API", type: :request do
       let(:course1) { create(:course, study_mode: "full_time", profpost_flag: "postgraduate", program_type: "higher_education_programme", provider: provider1) }
       let(:course2) { create(:course, study_mode: "full_time", profpost_flag: "postgraduate", program_type: "higher_education_programme", provider: provider1) }
 
-      let!(:status1) { create(:site_status, status: :new_status, course: course1, vac_status: "full_time_vacancies", applications_accepted_from: Date.new(2019, 7, 23)) }
-      let!(:status2) { create(:site_status, status: :new_status, course: course2, vac_status: "full_time_vacancies", applications_accepted_from: Date.new(2019, 7, 24)) }
-      let!(:status3) { create(:site_status, status: :running, course: course2, vac_status: "full_time_vacancies", applications_accepted_from: Date.new(2019, 7, 24)) }
+      let!(:status1) do
+        create(:site_status, status: :new_status, course: course1, vac_status: "full_time_vacancies", applications_accepted_from: Date.new(current_year, 7, 23))
+      end
+      let!(:status2) { create(:site_status, status: :new_status, course: course2, vac_status: "full_time_vacancies", applications_accepted_from: Date.new(current_year, 7, 24)) }
+      let!(:status3) { create(:site_status, status: :running, course: course2, vac_status: "full_time_vacancies", applications_accepted_from: Date.new(current_year, 7, 24)) }
 
       it "does not send courses marked new" do
-        get "/api/v1/2019/courses", headers: { "HTTP_AUTHORIZATION" => credentials }
+        get "/api/v1/#{current_year}/courses", headers: { "HTTP_AUTHORIZATION" => credentials }
 
         data = JSON.parse(response.body)
         expect(data.length).to eq(1)

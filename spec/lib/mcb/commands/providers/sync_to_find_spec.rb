@@ -11,13 +11,13 @@ describe "mcb providers sync_to_find" do
   end
 
   let(:email) { "user@education.gov.uk" }
-  let(:recruitment_year1) { find_or_create(:recruitment_cycle, year: "2020") }
-  let(:recruitment_year2) { RecruitmentCycle.current_recruitment_cycle }
+  let(:next_cycle)    { find_or_create :recruitment_cycle, :next }
+  let(:current_cycle) { find_or_create :recruitment_cycle }
 
-  let(:provider) { create :provider, recruitment_cycle: recruitment_year1 }
+  let(:provider) { create :provider, recruitment_cycle: next_cycle }
   let(:rolled_over_provider) do
     new_provider = provider.dup
-    new_provider.update(recruitment_cycle: recruitment_year2)
+    new_provider.update(recruitment_cycle: current_cycle)
     new_provider.update(organisations: provider.organisations)
     new_provider.save
     new_provider
@@ -51,7 +51,7 @@ describe "mcb providers sync_to_find" do
     xcontext "with a specified recruitment cycle" do
       it "calls Manage API successfully with the provider" do
         manage_api_request = stub_manage_api_request(provider.provider_code)
-        expect { sync_to_find(provider.provider_code, "-r", recruitment_year1.year) }.to_not raise_error
+        expect { sync_to_find(provider.provider_code, "-r", next_cycle.year) }.to_not raise_error
         expect(manage_api_request).to have_been_made
       end
     end

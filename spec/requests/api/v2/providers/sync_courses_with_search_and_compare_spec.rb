@@ -98,7 +98,7 @@ describe "Courses API v2", type: :request do
           "/api/v2/recruitment_cycles/#{provider.recruitment_cycle.year}" +
             "/providers/#{provider.provider_code}/sync_courses_with_search_and_compare"
         end
-        let(:next_cycle) { build(:recruitment_cycle, year: 2020) }
+        let(:next_cycle) { build(:recruitment_cycle, :next) }
         let(:provider) {
           create(:provider,
                  organisations: [organisation],

@@ -146,7 +146,7 @@ describe "Providers API v2", type: :request do
     end
 
     context "with two recruitment cycles" do
-      let(:next_recruitment_cycle) { create :recruitment_cycle, year: "2020" }
+      let(:next_recruitment_cycle) { create :recruitment_cycle, :next }
       let(:next_provider) {
         create :provider,
                organisations: [organisation],
@@ -164,7 +164,8 @@ describe "Providers API v2", type: :request do
 
           expect(json_response["data"].count).to eq 1
           expect(json_response["data"].first)
-            .to have_attribute("recruitment_cycle_year").with_value("2019")
+            .to have_attribute("recruitment_cycle_year")
+                  .with_value(recruitment_cycle.year)
         end
       end
 
@@ -438,7 +439,7 @@ describe "Providers API v2", type: :request do
     end
 
     context "with two recruitment cycles" do
-      let(:next_recruitment_cycle) { create :recruitment_cycle, year: "2020" }
+      let(:next_recruitment_cycle) { create :recruitment_cycle, :next }
       let(:next_provider) {
         create :provider,
                organisations: [organisation],

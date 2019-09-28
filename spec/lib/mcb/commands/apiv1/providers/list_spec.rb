@@ -1,8 +1,8 @@
 require "mcb_helper"
 
 describe '"mcb apiv1 providers list"' do
-  let(:current_cycle) { find_or_create(:recruitment_cycle, year: "2019") }
-  let(:next_cycle) { find_or_create(:recruitment_cycle, year: "2020") }
+  let(:current_cycle) { find_or_create(:recruitment_cycle) }
+  let(:next_cycle) { find_or_create(:recruitment_cycle, :next) }
   let(:provider1) { create(:provider, recruitment_cycle: current_cycle) }
   let(:provider2) { create(:provider, recruitment_cycle: next_cycle) }
 

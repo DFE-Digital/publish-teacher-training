@@ -13,7 +13,7 @@
 require "rails_helper"
 
 describe RecruitmentCycle, type: :model do
-  subject { RecruitmentCycle.find_by(year: "2019") }
+  subject { find_or_create :recruitment_cycle, year: "2019" }
 
   its(:to_s) { should eq("2019/20") }
 
@@ -29,8 +29,8 @@ describe RecruitmentCycle, type: :model do
   end
 
   describe "current?" do
-    let(:current_cycle) { subject }
-    let(:second_cycle) { create(:recruitment_cycle, year: "2020") }
+    let(:current_cycle) { find_or_create :recruitment_cycle }
+    let(:second_cycle) { find_or_create :recruitment_cycle, :next }
 
     it "should return true when it's the current cycle" do
       expect(current_cycle.current?).to be(true)
@@ -42,9 +42,11 @@ describe RecruitmentCycle, type: :model do
   end
 
   context "when there are multiple cycles" do
-    let(:current_cycle) { subject }
-    let!(:second_cycle) { create(:recruitment_cycle, year: "2020") }
-    let!(:third_cycle) { create(:recruitment_cycle, year: "2021") }
+    let(:current_cycle) { find_or_create :recruitment_cycle }
+    let!(:second_cycle) { find_or_create :recruitment_cycle, :next }
+    let!(:third_cycle) do
+      find_or_create :recruitment_cycle, year: second_cycle.year.to_i + 1
+    end
 
     describe ".current_recruitment_cycle" do
       it "returns the first cycle, ordered by year" do
@@ -100,6 +102,7 @@ describe RecruitmentCycle, type: :model do
     end
 
     describe "#next" do
+      subject { current_cycle }
       its(:next) { should eq(second_cycle) }
 
       it "is nil for the newest cycle" do
