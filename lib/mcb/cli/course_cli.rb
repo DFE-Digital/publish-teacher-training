@@ -88,7 +88,7 @@ module MCB
       end
 
       def ask_start_date
-        Date.parse(@cli.ask("Start date?  ") { |q| q.default = "September #{Settings.current_recruitment_cycle}" })
+        Date.parse(@cli.ask("Start date?  ") { |q| q.default = "September #{Settings.current_recruitment_cycle_year}" })
       end
 
       def ask_application_opening_date
