@@ -13,7 +13,7 @@ search_api:
   base_url: http://localhost:5001
   # Auth token used between backend and search-and-compare-api to authorize requests.
   secret: banana
-current_recruitment_cycle_year: 2019
+current_recruitment_cycle_year: 2020
 govuk_notify:
   api_key: please_change_me
   welcome_email_template_id: please_change_me
