@@ -20,12 +20,23 @@ class RecruitmentCycle < ApplicationRecord
 
   validates :year, presence: true
 
-  def self.current_recruitment_cycle
-    all.order(:year).first
-  end
+  class << self
+    def current_recruitment_cycle
+      find_by(year: Settings.current_recruitment_cycle_year)
+    end
+    alias_method :current, :current_recruitment_cycle
 
-  def self.next_recruitment_cycle
-    current_recruitment_cycle.next
+    def next_recruitment_cycle
+      current_recruitment_cycle.next
+    end
+    alias_method :next, :next_recruitment_cycle
+
+    def syncable_courses
+      current_recruitment_cycle.providers
+        .includes(:enrichments, :latest_published_enrichment)
+        .select(&:publishable?)
+        .flat_map(&:syncable_courses)
+    end
   end
 
   def next
@@ -34,13 +45,6 @@ class RecruitmentCycle < ApplicationRecord
 
   def current?
     RecruitmentCycle.current_recruitment_cycle == self
-  end
-
-  def self.syncable_courses
-    current_recruitment_cycle.providers
-      .includes(:enrichments, :latest_published_enrichment)
-      .select(&:publishable?)
-      .flat_map(&:syncable_courses)
   end
 
   def to_s

@@ -10,6 +10,12 @@ describe "Courses API v2", type: :request do
   end
   let(:course_subject_mathematics) { find_or_create(:subject, :mathematics) }
 
+  let(:current_cycle) { find_or_create :recruitment_cycle }
+  let(:next_cycle)    { find_or_create :recruitment_cycle, :next }
+  let(:current_year)  { current_cycle.year.to_i }
+  let(:previous_year) { current_year - 1 }
+  let(:next_year)     { current_year + 1 }
+
   let(:findable_open_course) {
     create(:course, :resulting_in_pgce_with_qts, :with_apprenticeship,
            name: "Mathematics",
@@ -24,14 +30,14 @@ describe "Courses API v2", type: :request do
            english: :must_have_qualification_at_application_time,
            science: :must_have_qualification_at_application_time,
            age_range_in_years: "3_to_7",
-           applications_open_from: Date.new(2019, 1, 1))
+           applications_open_from: Date.new(current_year, 1, 1))
   }
 
   let(:courses_site_status) {
     build(:site_status,
           :findable,
           :with_any_vacancy,
-          :applications_being_accepted_from_2019,
+          :applications_being_accepted_now,
           site: create(:site, provider: provider))
   }
   let(:enrichment)     { build :course_enrichment, :published }
@@ -89,7 +95,8 @@ describe "Courses API v2", type: :request do
                 "is_send?" => true,
                 "subjects" => %w[Mathematics],
                 "level" => "secondary",
-                "applications_open_from" => "2019-01-01",
+                "applications_open_from" =>
+                  findable_open_course.applications_open_from.to_s,
                 "about_course" => enrichment.about_course,
                 "course_length" => enrichment.course_length,
                 "fee_details" => enrichment.fee_details,
@@ -113,7 +120,7 @@ describe "Courses API v2", type: :request do
                 "maths" => "must_have_qualification_at_application_time",
                 "science" => "must_have_qualification_at_application_time",
                 "provider_code" => provider.provider_code,
-                "recruitment_cycle_year" => "2019",
+                "recruitment_cycle_year" => current_year.to_s,
                 "gcse_subjects_required" => %w[maths english],
                 "age_range_in_years" => provider.courses[0].age_range_in_years,
                 "accrediting_provider" => nil,
@@ -131,28 +138,28 @@ describe "Courses API v2", type: :request do
                   "qualifications" => %w[qts pgce_with_qts pgde_with_qts],
                   "age_range_in_years" => %w[11_to_16 11_to_18 14_to_19],
                   "start_dates" => [
-                    "October 2018",
-                    "November 2018",
-                    "December 2018",
-                    "January 2019",
-                    "February 2019",
-                    "March 2019",
-                    "April 2019",
-                    "May 2019",
-                    "June 2019",
-                    "July 2019",
-                    "August 2019",
-                    "September 2019",
-                    "October 2019",
-                    "November 2019",
-                    "December 2019",
-                    "January 2020",
-                    "February 2020",
-                    "March 2020",
-                    "April 2020",
-                    "May 2020",
-                    "June 2020",
-                    "July 2020",
+                    "October #{previous_year}",
+                    "November #{previous_year}",
+                    "December #{previous_year}",
+                    "January #{current_year}",
+                    "February #{current_year}",
+                    "March #{current_year}",
+                    "April #{current_year}",
+                    "May #{current_year}",
+                    "June #{current_year}",
+                    "July #{current_year}",
+                    "August #{current_year}",
+                    "September #{current_year}",
+                    "October #{current_year}",
+                    "November #{current_year}",
+                    "December #{current_year}",
+                    "January #{next_year}",
+                    "February #{next_year}",
+                    "March #{next_year}",
+                    "April #{next_year}",
+                    "May #{next_year}",
+                    "June #{next_year}",
+                    "July #{next_year}",
                   ],
                   "study_modes" => %w[full_time part_time full_time_or_part_time],
                   "show_is_send" => false,
@@ -194,7 +201,7 @@ describe "Courses API v2", type: :request do
                 "address4" => site.address4,
                 "postcode" => site.postcode,
                 "region_code" => site.region_code,
-                "recruitment_cycle_year" => "2019",
+                "recruitment_cycle_year" => current_year.to_s,
               },
             }],
           )
@@ -282,7 +289,7 @@ describe "Courses API v2", type: :request do
               "is_send?" => true,
               "subjects" => %w[Mathematics],
               "level" => "secondary",
-              "applications_open_from" => "2019-01-01",
+              "applications_open_from" => "#{current_year}-01-01",
               "about_course" => enrichment.about_course,
               "course_length" => enrichment.course_length,
               "fee_details" => enrichment.fee_details,
@@ -304,9 +311,9 @@ describe "Courses API v2", type: :request do
               "about_accrediting_body" => nil,
               "english" => "must_have_qualification_at_application_time",
               "maths" => "must_have_qualification_at_application_time",
-              "science" => "must_have_qualification_at_application_time",
+                "science" => "must_have_qualification_at_application_time",
               "provider_code" => provider.provider_code,
-              "recruitment_cycle_year" => "2019",
+              "recruitment_cycle_year" => current_year.to_s,
               "gcse_subjects_required" => %w[maths english],
               "age_range_in_years" => provider.courses[0].age_range_in_years,
               "accrediting_provider" => nil,
@@ -324,28 +331,28 @@ describe "Courses API v2", type: :request do
                 "qualifications" => %w[qts pgce_with_qts pgde_with_qts],
                 "age_range_in_years" => %w[11_to_16 11_to_18 14_to_19],
                 "start_dates" => [
-                  "October 2018",
-                  "November 2018",
-                  "December 2018",
-                  "January 2019",
-                  "February 2019",
-                  "March 2019",
-                  "April 2019",
-                  "May 2019",
-                  "June 2019",
-                  "July 2019",
-                  "August 2019",
-                  "September 2019",
-                  "October 2019",
-                  "November 2019",
-                  "December 2019",
-                  "January 2020",
-                  "February 2020",
-                  "March 2020",
-                  "April 2020",
-                  "May 2020",
-                  "June 2020",
-                  "July 2020",
+                  "October #{previous_year}",
+                  "November #{previous_year}",
+                  "December #{previous_year}",
+                  "January #{current_year}",
+                  "February #{current_year}",
+                  "March #{current_year}",
+                  "April #{current_year}",
+                  "May #{current_year}",
+                  "June #{current_year}",
+                  "July #{current_year}",
+                  "August #{current_year}",
+                  "September #{current_year}",
+                  "October #{current_year}",
+                  "November #{current_year}",
+                  "December #{current_year}",
+                  "January #{next_year}",
+                  "February #{next_year}",
+                  "March #{next_year}",
+                  "April #{next_year}",
+                  "May #{next_year}",
+                  "June #{next_year}",
+                  "July #{next_year}",
                 ],
                 "study_modes" => %w[full_time part_time full_time_or_part_time],
                 "show_is_send" => false,
@@ -371,12 +378,12 @@ describe "Courses API v2", type: :request do
     end
 
     context "with two recruitment cycles" do
-      let(:next_recruitment_cycle) { create :recruitment_cycle, year: "2020" }
+      let(:next_cycle) { create :recruitment_cycle, :next }
       let(:next_provider) {
         create :provider,
                organisations: [organisation],
                provider_code: provider.provider_code,
-               recruitment_cycle: next_recruitment_cycle
+               recruitment_cycle: next_cycle
       }
       let(:next_course) {
         create :course,
@@ -396,13 +403,13 @@ describe "Courses API v2", type: :request do
           json_response = JSON.parse response.body
           expect(json_response["data"].count).to eq 1
           expect(json_response["data"].first)
-            .to have_attribute("recruitment_cycle_year").with_value("2019")
+            .to have_attribute("recruitment_cycle_year").with_value(current_year.to_s)
         end
       end
 
       describe "making a request for the next recruitment cycle" do
         let(:request_path) {
-          "/api/v2/recruitment_cycles/#{next_recruitment_cycle.year}" \
+          "/api/v2/recruitment_cycles/#{next_cycle.year}" \
           "/providers/#{next_provider.provider_code}/courses"
         }
 
@@ -415,7 +422,7 @@ describe "Courses API v2", type: :request do
           json_response = JSON.parse response.body
           expect(json_response["data"].count).to eq 1
           expect(json_response["data"].first)
-            .to have_attribute("recruitment_cycle_year").with_value("2020")
+            .to have_attribute("recruitment_cycle_year").with_value(next_year.to_s)
         end
       end
     end

@@ -15,8 +15,13 @@ describe "Providers API", type: :request do
       ActionController::HttpAuthentication::Token
         .encode_credentials("foo")
     end
+    let(:current_cycle) { find_or_create :recruitment_cycle }
+    let(:next_cycle)    { find_or_create :recruitment_cycle, :next }
+    let(:current_year)  { current_cycle.year.to_i }
+    let(:previous_year) { current_year - 1 }
+    let(:next_year)     { current_year + 1 }
 
-    let(:get_index) { get "/api/v1/2019/providers", headers: { "HTTP_AUTHORIZATION" => credentials } }
+    let(:get_index) { get "/api/v1/#{current_year}/providers", headers: { "HTTP_AUTHORIZATION" => credentials } }
 
     context "without changed_since parameter" do
       let(:ucas_preferences) do
@@ -147,7 +152,7 @@ describe "Providers API", type: :request do
       end
 
       it "returns http unauthorised" do
-        get "/api/v1/2019/providers",
+        get "/api/v1/#{current_year}/providers",
             headers: { "HTTP_AUTHORIZATION" => unauthorized_credentials }
         expect(response).to have_http_status(:unauthorized)
       end
@@ -177,7 +182,7 @@ describe "Providers API", type: :request do
               "postcode" => "N1 5JN",
               "region_code" => "01",
               "scheme_member" => "Y",
-              "recruitment_cycle" => "2019",
+              "recruitment_cycle" => current_cycle.year,
               "type_of_gt12" => "Not coming",
               "utt_application_alerts" => "Yes, required",
               "contacts" => [
@@ -240,7 +245,7 @@ describe "Providers API", type: :request do
               "postcode" => "B3 3BB",
               "region_code" => "03",
               "scheme_member" => "N",
-              "recruitment_cycle" => "2019",
+              "recruitment_cycle" => current_cycle.year,
               "type_of_gt12" => "Coming or Not",
               "utt_application_alerts" => "No, not required",
               "contacts" => [
@@ -287,7 +292,6 @@ describe "Providers API", type: :request do
       describe "JSON body response" do
         let(:provider) { create(:provider) }
         let(:provider2) { create(:provider, recruitment_cycle: next_cycle) }
-        let(:next_cycle) { find_or_create(:recruitment_cycle, year: "2020") }
 
         before do
           provider
@@ -306,7 +310,7 @@ describe "Providers API", type: :request do
           end
         end
         context "with a future recruitment cycle specified in the route" do
-          let(:get_index) { get "/api/v1/2020/providers", headers: { "HTTP_AUTHORIZATION" => credentials } }
+          let(:get_index) { get "/api/v1/#{next_year}/providers", headers: { "HTTP_AUTHORIZATION" => credentials } }
 
           it "only returns courses from the requested cycle" do
             returned_provider_codes = get_provider_codes_from_body(response.body)
@@ -381,14 +385,14 @@ describe "Providers API", type: :request do
                    provider_code: "LAST2",
                    changed_at: timestamp_of_last_provider)
 
-            get "/api/v1/providers?recruitment_year=2020",
+            get "/api/v1/providers?recruitment_year=#{next_year}",
                 headers: { "HTTP_AUTHORIZATION" => credentials },
                 params: { changed_since: 30.minutes.ago.utc.iso8601 }
 
 
             expect(response.headers).to have_key "Link"
             url = url_for(
-              recruitment_year: 2020,
+              recruitment_year: next_year,
               params: {
                 changed_since: timestamp_of_last_provider.utc.strftime("%FT%T.%6NZ"),
                 per_page: 100,

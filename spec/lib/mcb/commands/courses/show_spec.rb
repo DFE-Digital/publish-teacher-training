@@ -7,8 +7,8 @@ describe "mcb courses show" do
     end
   end
 
-  let(:recruitment_year1) { create :recruitment_cycle, year: "2020" }
-  let(:recruitment_year2) { RecruitmentCycle.current_recruitment_cycle }
+  let(:recruitment_year1) { find_or_create :recruitment_cycle, :next }
+  let(:recruitment_year2) { find_or_create :recruitment_cycle }
 
   let(:provider) { create :provider, updated_at: 1.day.ago, changed_at: 1.day.ago, recruitment_cycle: recruitment_year1 }
   let(:rolled_over_provider) do

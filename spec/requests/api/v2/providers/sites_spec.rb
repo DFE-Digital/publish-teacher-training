@@ -10,6 +10,12 @@ describe "Sites API v2", type: :request do
   end
 
   let(:current_recruitment_cycle) { find_or_create :recruitment_cycle }
+  let(:current_cycle) { find_or_create :recruitment_cycle }
+  let(:next_cycle)    { find_or_create :recruitment_cycle, :next }
+  let(:current_year)  { current_cycle.year.to_i }
+  let(:previous_year) { current_year - 1 }
+  let(:next_year)     { current_year + 1 }
+
   let(:site1) { create :site, location_name: "Main site 1", provider: provider }
   let(:site2) { create :site, location_name: "Main site 2", provider: provider }
   let!(:sites) { [site1, site2] }
@@ -86,7 +92,7 @@ describe "Sites API v2", type: :request do
               "address4" => site1.address4,
               "postcode" => site1.postcode,
               "region_code" => site1.region_code,
-              "recruitment_cycle_year" => "2019",
+              "recruitment_cycle_year" => current_cycle.year,
             },
           },
           {
@@ -101,7 +107,7 @@ describe "Sites API v2", type: :request do
               "address4" => site2.address4,
               "postcode" => site2.postcode,
               "region_code" => site2.region_code,
-              "recruitment_cycle_year" => "2019",
+              "recruitment_cycle_year" => current_cycle.year,
             },
           },
         ])
@@ -119,12 +125,11 @@ describe "Sites API v2", type: :request do
     end
 
     context "with two recruitment cycles" do
-      let(:next_recruitment_cycle) { create :recruitment_cycle, :next }
       let(:next_provider) {
         create :provider,
                organisations: [organisation],
                provider_code: provider.provider_code,
-               recruitment_cycle: next_recruitment_cycle,
+               recruitment_cycle: next_cycle,
                sites: [next_site1, next_site2]
       }
       let(:next_site1) {
@@ -155,13 +160,13 @@ describe "Sites API v2", type: :request do
             site_data.dig("attributes", "recruitment_cycle_year")
           end
           expect(recruitment_years_response)
-            .to eq [current_recruitment_cycle.year] * 2
+            .to eq [current_cycle.year] * 2
         end
       end
 
       describe "when specifying the next recruitment cycle" do
         let(:request_path) {
-          "/api/v2/recruitment_cycles/#{next_recruitment_cycle.year}" \
+          "/api/v2/recruitment_cycles/#{next_cycle.year}" \
            "/providers/#{provider.provider_code}/sites"
         }
 
@@ -180,8 +185,7 @@ describe "Sites API v2", type: :request do
           recruitment_years_response = json_response["data"].map do |site_data|
             site_data.dig("attributes", "recruitment_cycle_year")
           end
-          expect(recruitment_years_response)
-            .to eq [next_recruitment_cycle.year] * 2
+          expect(recruitment_years_response).to eq [next_cycle.year] * 2
         end
       end
     end

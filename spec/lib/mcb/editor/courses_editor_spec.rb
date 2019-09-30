@@ -18,8 +18,11 @@ describe MCB::Editor::CoursesEditor, :needs_audit_user do
   let!(:biology) { find_or_create(:subject, :biology) }
   let!(:modern_languages) { find_or_create(:subject, :modern_languages) }
   let!(:further_education) { find_or_create(:subject, :further_education) }
-  let(:current_cycle) { RecruitmentCycle.current_recruitment_cycle }
-  let!(:next_cycle) { find_or_create(:recruitment_cycle, year: "2020") }
+  let(:current_cycle) { find_or_create :recruitment_cycle }
+  let!(:next_cycle) { find_or_create :recruitment_cycle, :next }
+  let(:current_year) { current_cycle.year.to_i }
+  let(:next_year) { next_cycle.year.to_i }
+  let(:last_year) { current_year - 1 }
   let(:is_send) { false }
   let(:subjects) { [] }
   let(:level) { "primary" }
@@ -35,11 +38,11 @@ describe MCB::Editor::CoursesEditor, :needs_audit_user do
            program_type: "pg_teaching_apprenticeship",
            qualification: "qts",
            study_mode: "part_time",
-           start_date: Date.new(2019, 8, 1),
+           start_date: Date.new(current_year, 8, 1),
            age_range: "primary",
            level: level,
            subjects: subjects,
-           applications_open_from: Date.new(2018, 10, 9),
+           applications_open_from: Date.new(last_year, 10, 9),
            is_send: is_send)
   }
   subject { described_class.new(provider: provider, course_codes: course_codes, requester: requester) }
@@ -159,14 +162,17 @@ describe MCB::Editor::CoursesEditor, :needs_audit_user do
 
       describe "(start date)" do
         it "updates the course start date when that is valid" do
-          expect { run_editor("edit start date", "October 2019", "exit") }.
+          expect { run_editor("edit start date", "October #{current_year}", "exit") }.
             to change { course.reload.start_date }.
-            from(Date.new(2019, 8, 1)).to(Date.new(2019, 10, 1))
+                 from(Date.new(current_year, 8, 1)).
+                 to(Date.new(current_year, 10, 1))
         end
 
         it "updates the start date to September of the recruitment cycle start year, when no start date is given" do
-          expect { run_editor("edit start date", "", "exit") }.to change { course.reload.start_date }.
-            from(Date.new(2019, 8, 1)).to(Date.new(2019, 9, 1))
+          expect { run_editor("edit start date", "", "exit") }.
+            to change { course.reload.start_date }.
+                 from(Date.new(current_year, 8, 1)).
+                 to(Date.new(current_year, 9, 1))
         end
       end
 
@@ -175,25 +181,28 @@ describe MCB::Editor::CoursesEditor, :needs_audit_user do
 
         before do
           sites.collect do |site|
-            course.site_statuses.create(site: site,
-                                        status: :running,
-                                        vac_status: :part_time_vacancies,
-                                        publish: :published,
-                                        applications_accepted_from: Date.new(2018, 10, 9))
+            course.site_statuses.create(
+              site: site,
+              status: :running,
+              vac_status: :part_time_vacancies,
+              publish: :published,
+              applications_accepted_from: Date.new(last_year, 10, 9),
+            )
           end
         end
 
         it 'updates the "applications open from" when that is valid' do
-          expect { run_editor("edit application opening date", "1 October 2018", "exit") }.
+          expect { run_editor("edit application opening date", "1 October #{last_year}", "exit") }.
             to change { Date.parse(course.reload.applications_open_from.to_s) }.
-            from(Date.new(2018, 10, 9)).to(Date.new(2018, 10, 1))
+                 from(Date.new(last_year, 10, 9)).
+                 to(Date.new(last_year, 10, 1))
         end
 
         it "updates the application opening date to today by default" do
-          Timecop.freeze(Time.utc(2019, 6, 1, 12, 0, 0)) do
+          Timecop.freeze(Time.utc(current_year, 6, 1, 12, 0, 0)) do
             expect { run_editor("edit application opening date", "", "exit") }.
               to change { Date.parse(course.reload.applications_open_from.to_s) }.
-              from(Date.new(2018, 10, 9)).to(Date.new(2019, 6, 1))
+              from(Date.new(last_year, 10, 9)).to(Date.new(current_year, 6, 1))
           end
         end
       end
@@ -421,7 +430,7 @@ describe MCB::Editor::CoursesEditor, :needs_audit_user do
       }
 
       before do
-        Timecop.freeze(Time.utc(2018, 11, 1))
+        Timecop.freeze(Time.utc(last_year, 11, 1))
       end
 
       after do
@@ -434,7 +443,7 @@ describe MCB::Editor::CoursesEditor, :needs_audit_user do
           qualification: "qts",
           study_mode: "full_time",
           accredited_body: accredited_body.provider_code,
-          start_date: "1 September 2019",
+          start_date: "1 September #{current_year}",
           route: "pg_teaching_apprenticeship",
           maths: "equivalence_test",
           english: "equivalence_test",
@@ -443,7 +452,7 @@ describe MCB::Editor::CoursesEditor, :needs_audit_user do
           level: "secondary",
           course_code: "1X2B",
           recruitment_cycle: "2", # the 2nd option should always be the current recruitment cycle
-          application_opening_date: "18 October 2018",
+          application_opening_date: "18 October #{last_year}",
           is_send: true,
         }
       }
@@ -605,7 +614,7 @@ describe MCB::Editor::CoursesEditor, :needs_audit_user do
           "name" => desired_attributes[:title],
           "qualification" => desired_attributes[:qualification],
           "study_mode" => desired_attributes[:study_mode],
-          "start_date" => Date.new(2019, 9, 1),
+          "start_date" => Date.new(current_year, 9, 1),
           "program_type" => desired_attributes[:route],
           "maths" => desired_attributes[:maths],
           "english" => desired_attributes[:english],
@@ -617,7 +626,7 @@ describe MCB::Editor::CoursesEditor, :needs_audit_user do
         expect(created_course.accrediting_provider).to eq(accredited_body)
         expect(created_course.recruitment_cycle).to eq(current_cycle)
         expect(created_course.sites).to include(site_1, site_3)
-        expect(created_course.applications_open_from).to eq(Date.new(2018, 10, 18))
+        expect(created_course.applications_open_from).to eq(Date.new(last_year, 10, 18))
         expect(created_course.ucas_status).to eq(:new)
       end
 
@@ -688,11 +697,13 @@ describe MCB::Editor::CoursesEditor, :needs_audit_user do
         expect(created_course.attributes).to include(
           "qualification" => "pgce_with_qts",
           "study_mode" => "full_time",
-          "start_date" => Date.new(2019, 9, 1),
+          "start_date" => Date.new(current_year, 9, 1),
           "program_type" => desired_attributes[:route],
         )
         expect(created_course.accrediting_provider).to eq(provider)
-        expect(created_course.site_statuses.map(&:applications_accepted_from).uniq).to eq([Date.new(2018, 11, 1)])
+        expect(
+          created_course.site_statuses.map(&:applications_accepted_from).uniq,
+        ).to eq([Date.new(last_year, 11, 1)])
       end
 
       it "does not create the course if creation isn't confirmed" do
