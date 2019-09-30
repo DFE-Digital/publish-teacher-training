@@ -90,15 +90,30 @@ describe Course, type: :model do
     end
 
     describe "publishable?" do
-      let(:course) { create(:course, enrichments: [invalid_enrichment]) }
-      let(:invalid_enrichment) { create(:course_enrichment, about_course: "") }
+      context "invalid enrichment" do
+        let(:course) { create(:course, enrichments: [invalid_enrichment]) }
+        let(:invalid_enrichment) { create(:course_enrichment, about_course: "") }
 
-      before do
-        subject.publishable?
+        before do
+          subject.publishable?
+        end
+
+        it "should add enrichment errors" do
+          expect(subject.errors.full_messages).to_not be_empty
+        end
       end
 
-      it "should add enrichment errors" do
-        expect(subject.errors.full_messages).to_not be_empty
+      context "invalid level and subjects" do
+        let(:initial_draft_enrichment) { build(:course_enrichment, :published) }
+        let(:course) { create(:course, level: nil, site_statuses: [create(:site_status, :new)], enrichments: [initial_draft_enrichment]) }
+
+        before do
+          subject.publishable?
+        end
+
+        it "should add level and subjects" do
+          expect(subject.errors.full_messages).to match_array(["There is a problem with this course. Contact support to fix it (Error: L)", "There is a problem with this course. Contact support to fix it (Error: S)"])
+        end
       end
     end
   end

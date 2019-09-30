@@ -160,6 +160,8 @@ class Course < ApplicationRecord
   validates :enrichments, presence: true, on: :publish
   validates :is_send, inclusion: { in: [true, false] }
   validates :sites, presence: true, on: :publish
+  validates :level, presence: true, on: :publish
+  validates :subjects, presence: true, on: :publish
   validate :validate_enrichment_publishable, on: :publish
   validate :validate_enrichment
   validate :validate_course_syncable, on: :sync

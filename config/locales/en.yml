@@ -33,6 +33,10 @@ en:
               blank: "^Complete your course information before publishing"
             sites:
               blank: "^You must pick at least one location for this course"
+            level:
+              blank: "^There is a problem with this course. Contact support to fix it (Error: L)"
+            subjects:
+              blank: "^There is a problem with this course. Contact support to fix it (Error: S)"
         course_enrichment:
           attributes:
             salary_details:
