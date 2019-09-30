@@ -35,6 +35,7 @@ describe Course, type: :model do
   let(:course) { create(:course, name: "Biology", course_code: "3X9F") }
   let(:subject) { course }
   let(:arabic) { create(:subject, subject_name: "Arabic", type: :ModernLanguagesSubject).becomes(ModernLanguagesSubject) }
+  let!(:financial_incentive) { create(:financial_incentive, subject: modern_languages) }
   let!(:modern_languages) { create(:subject, subject_name: "Modern Languages", type: :SecondarySubject).becomes(SecondarySubject) }
 
   its(:to_s) { should eq("Biology (#{course.provider.provider_code}/3X9F) [#{course.recruitment_cycle}]") }
@@ -57,6 +58,7 @@ describe Course, type: :model do
     it { should have_many(:site_statuses) }
     it { should have_many(:sites) }
     it { should have_many(:enrichments) }
+    it { should have_many(:financial_incentives) }
   end
 
   it "implies modern languages if a languages subject is selected" do
@@ -677,32 +679,28 @@ describe Course, type: :model do
     end
   end
 
-  context "subjects & level" do
+  context "UCAS level (deprecated)" do
     context "with no ucas_subjects" do
       subject { create(:course) }
       its(:ucas_level) { should eq(:secondary) }
-      its(:dfe_subjects) { should be_empty }
     end
 
     context "with primary ucas_subjects" do
       subject { create(:course, ucas_subjects: [find_or_create(:ucas_subject, :primary)]) }
       its(:ucas_level) { should eq(:primary) }
       its(:gcse_subjects_required) { should eq(%w[maths english science]) }
-      its(:dfe_subjects) { should eq([DFESubject.new("Primary")]) }
     end
 
     context "with secondary ucas_subjects" do
       subject { create(:course, ucas_subjects: [find_or_create(:ucas_subject, subject_name: "physical education")]) }
       its(:ucas_level) { should eq(:secondary) }
       its(:gcse_subjects_required) { should eq(%w[maths english]) }
-      its(:dfe_subjects) { should eq([DFESubject.new("Physical education")]) }
     end
 
     context "with further education ucas_subjects" do
       subject { create(:course, ucas_subjects: [create(:further_education_subject)]) }
       its(:ucas_level) { should eq(:further_education) }
       its(:gcse_subjects_required) { should eq([]) }
-      its(:dfe_subjects) { should eq([DFESubject.new("Further education")]) }
     end
 
     describe "#is_send?" do
@@ -714,19 +712,18 @@ describe Course, type: :model do
         its(:is_send?) { should be_truthy }
       end
     end
+  end
 
-    describe "bursaries and scholarships" do
-      let(:subjects) {
-        [
-          build(:ucas_subject, :mathematics),
-          build(:ucas_subject, :secondary),
-        ]
-      }
-      subject { create(:course, ucas_subjects: subjects) }
+  context "bursaries and scholarships" do
+    let!(:financial_incentive) { create(:financial_incentive, subject: modern_languages, bursary_amount: 255, scholarship: 1415, early_career_payments: 32) }
+    subject { create(:course, subjects: [modern_languages]) }
 
-      it { should have_bursary }
-      it { should have_scholarship_and_bursary }
-    end
+    it { should have_bursary }
+    it { should have_scholarship_and_bursary }
+    it { should have_early_career_payments }
+
+    it { expect(subject.bursary_amount).to eq("255") }
+    it { expect(subject.scholarship_amount).to eq("1415") }
   end
 
   context "entry requirements" do
