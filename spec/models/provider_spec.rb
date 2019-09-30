@@ -11,7 +11,6 @@
 #  provider_code        :text
 #  provider_type        :text
 #  postcode             :text
-#  scitt                :text
 #  url                  :text
 #  address1             :text
 #  address2             :text
@@ -217,18 +216,6 @@ describe Provider, type: :model do
       expect { subject.provider_type = "scitt" }
         .to change { subject.provider_type }
         .from(nil).to("scitt")
-    end
-
-    it "sets 'scitt=Y' when the provider type is set to scitt" do
-      expect { subject.provider_type = "scitt" }
-        .to change { subject.scitt }
-        .from(nil).to("Y")
-    end
-
-    it "sets 'scitt=N' when the provider type is not a scitt" do
-      expect { subject.provider_type = "university" }
-        .to change { subject.scitt }
-        .from(nil).to("N")
     end
 
     it "sets 'accrediting_provider' correctly for SCITTs" do
@@ -594,23 +581,6 @@ describe Provider, type: :model do
 
     it "returns correct enrichment" do
       expect(provider.latest_enrichment).to eq(new_enrichment)
-    end
-  end
-
-
-  describe "#is_it_really_really_a_scitt?" do
-    let(:provider) { build(:provider, scitt: scitt_value) }
-    let(:scitt_value) { "Y" }
-
-    subject { create(:provider, scitt: scitt_value) }
-
-    context "when provider is a scitt" do
-      its(:is_it_really_really_a_scitt?) { should be_truthy }
-    end
-
-    context "when provider is not a scitt" do
-      let(:scitt_value) { nil }
-      its(:is_it_really_really_a_scitt?) { should be_falsey }
     end
   end
 
