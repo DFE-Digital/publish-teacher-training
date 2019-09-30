@@ -6,7 +6,7 @@ describe API::V2::SerializableCourse do
   let(:date_today) { Date.today }
   let(:time_now) { Time.now.utc }
   let(:course) do
-    create(:course, enrichments: [enrichment], start_date: time_now, applications_open_from: date_today)
+    create(:course, enrichments: [enrichment], start_date: time_now, applications_open_from: date_today, level: :primary)
   end
   let(:course_json) do
     jsonapi_renderer.render(
@@ -28,7 +28,7 @@ describe API::V2::SerializableCourse do
   it { should have_attribute :subjects }
   it { should have_attribute(:applications_open_from).with_value(date_today.to_s) }
   it { should have_attribute :is_send? }
-  it { should have_attribute :level }
+  it { should have_attribute(:level).with_value("primary") }
   it { should have_attribute :english }
   it { should have_attribute :maths }
   it { should have_attribute :science }

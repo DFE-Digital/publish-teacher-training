@@ -18,6 +18,7 @@ describe "Courses API v2", type: :request do
 
   let(:findable_open_course) {
     create(:course, :resulting_in_pgce_with_qts, :with_apprenticeship,
+           level: :secondary,
            name: "Mathematics",
            provider: provider,
            start_date: Time.now.utc,
