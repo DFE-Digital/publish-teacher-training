@@ -61,6 +61,7 @@ describe "Course POST #create API V2", type: :request do
 
     it "creates a course with the correct attributes" do
       expect { perform_request(course) }.to change { provider.reload.courses.count }.from(0).to(1)
+      expect(created_course.level).to eq(course.level)
       expect(created_course.english).to eq(course.english)
       expect(created_course.maths).to eq(course.maths)
       expect(created_course.science).to eq(course.science)

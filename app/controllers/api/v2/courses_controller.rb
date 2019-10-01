@@ -246,6 +246,7 @@ module API
             :name,
             :accrediting_provider_code,
             :funding_type,
+            :level,
           )
       end
 
