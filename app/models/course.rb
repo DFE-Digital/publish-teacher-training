@@ -557,7 +557,7 @@ private
   end
 
   def has_the_modern_languages_secondary_subject_type?
-    subjects.any? { |subject| subject == SecondarySubject.modern_languages }
+    subjects.any? { |subject| subject&.id == SecondarySubject.modern_languages.id }
   end
 
   def valid_date_range
