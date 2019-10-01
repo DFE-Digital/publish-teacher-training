@@ -443,6 +443,12 @@ class Course < ApplicationRecord
     end
   end
 
+  def fixup_languages
+    if has_any_modern_language_subject_type? && !has_the_modern_languages_secondary_subject_type?
+      subjects << SecondarySubject.modern_languages
+    end
+  end
+
 private
 
   def assignable_after_publish(course_params)
@@ -538,8 +544,8 @@ private
   end
 
   def validate_subjects
-    if has_any_modern_language_subject_type? & !has_the_modern_languages_secondary_subject_type?
-      subjects << SecondarySubject.modern_languages
+    if has_any_modern_language_subject_type? && !has_the_modern_languages_secondary_subject_type?
+      errors.add(:subjects, "Modern languages subjects must also have the modern_languages subject")
     end
   end
 
@@ -554,6 +560,9 @@ private
   end
 
   def has_the_modern_languages_secondary_subject_type?
+    raise "SecondarySubject not found" if SecondarySubject == nil
+    raise "SecondarySubject.modern_languages not found" if SecondarySubject.modern_languages == nil
+
     subjects.any? { |subject| subject&.id == SecondarySubject.modern_languages.id }
   end
 
