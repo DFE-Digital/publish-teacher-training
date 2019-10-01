@@ -1,17 +1,17 @@
 require "rails_helper"
 
-RSpec.describe "Subjecs API", type: :request do
+describe "Subjecs API", type: :request do
   describe "GET index" do
     let(:current_cycle) { find_or_create :recruitment_cycle }
     let(:current_year)  { current_cycle.year.to_i }
 
     before do
-      FactoryBot.find_or_create(:subject, :modern_languages)
-      FactoryBot.find_or_create(:subject, :english)
-      FactoryBot.find_or_create(:subject, :french)
-      FactoryBot.find_or_create(:subject, :primary)
-      FactoryBot.find_or_create(:subject, :further_education)
-      FactoryBot.find_or_create(:subject, :humanities)
+      find_or_create(:subject, :modern_languages)
+      find_or_create(:subject, :english)
+      find_or_create(:subject, :french)
+      find_or_create(:subject, :primary)
+      find_or_create(:subject, :further_education)
+      find_or_create(:subject, :humanities)
     end
 
     it "returns http success" do
