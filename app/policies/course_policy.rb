@@ -20,4 +20,5 @@ class CoursePolicy
   alias_method :publish?, :update?
   alias_method :publishable?, :update?
   alias_method :new?, :index?
+  alias_method :withdraw?, :show?
 end

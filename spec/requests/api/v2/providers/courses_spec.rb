@@ -460,17 +460,19 @@ describe "Courses API v2", type: :request do
     end
   end
 
-  describe "WITHDRAW" do
+  describe "POST withdraw" do
     let(:path) do
-      "/api/v2/providers/#{provider.provider_code}" +
+      "/api/v2/recruitment_cycles/#{provider.recruitment_cycle.year}/providers/#{provider.provider_code}" +
         "/courses/#{course.course_code}/withdraw"
     end
 
-    let(:course) { create(:course, provider: provider, site_statuses: [site_status], enrichments: [enrichment]) }
-    let(:enrichment) { build(:course_enrichment, last_published_timestamp_utc: 1.day.ago)}
-    let(:site_status1) { build(:site_status, :running) }
-    let(:site_status2) { build(:site_status, :new) }
-    let(:site_status3) { build(:site_status, :suspeneded) }
+    let(:course) { create(:course, provider: provider, site_statuses: [site_status1, site_status2, site_status3], enrichments: [enrichment]) }
+    let(:enrichment) { build(:course_enrichment, last_published_timestamp_utc: nil) }
+    let(:site_status1) { build(:site_status, :running, :published, :full_time_vacancies, site: site) }
+    let(:site_status2) { build(:site_status, :new, :full_time_vacancies, site: site) }
+    let(:site_status3) { build(:site_status, :suspended, :with_no_vacancies, site: site) }
+    let(:site) { build(:site, provider: provider) }
+    let(:post_withdraw) { post path, headers: { "HTTP_AUTHORIZATION" => credentials } }
 
     before do
       course
@@ -483,6 +485,33 @@ describe "Courses API v2", type: :request do
 
     include_examples "Unauthenticated, unauthorised, or not accepted T&Cs"
 
-    it { should have_http_status(:success) }
+    context "when the course has not been published" do
+      before do
+        post_withdraw
+      end
+
+      it { should have_http_status(:success) }
+
+      it "should have updated the courses site statuses to be suspended and have no vacancies" do
+        expect(site_status1.reload.vac_status).to eq("no_vacancies")
+        expect(site_status1.reload.status).to eq("suspended")
+        expect(site_status2.reload.vac_status).to eq("no_vacancies")
+        expect(site_status2.reload.status).to eq("suspended")
+        expect(site_status3.reload.vac_status).to eq("no_vacancies")
+        expect(site_status3.reload.status).to eq("suspended")
+      end
+
+      it "should no longer be findable" do
+        expect(course.reload.findable?).to be_falsey
+      end
+    end
+
+    context "when the course has not been published" do
+      let(:enrichment) { build(:course_enrichment, :published) }
+
+      it "should raise an error" do
+        expect { post_withdraw }.to raise_error("This course has not been published and should be deleted not withdrawn")
+      end
+    end
   end
 end

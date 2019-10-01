@@ -9,7 +9,7 @@ describe CoursePolicy do
     it { should permit(user, Course) }
   end
 
-  permissions :show?, :update? do
+  permissions :show?, :update?, :withdraw? do
     let(:organisation) { create(:organisation, users: [user]) }
     let(:course) { create(:course) }
     let!(:provider) {

@@ -454,6 +454,16 @@ class Course < ApplicationRecord
     end
   end
 
+  def withdraw
+    if last_published_at.blank?
+      site_statuses.each do |site_status|
+        site_status.update(vac_status: :no_vacancies, status: :suspended)
+      end
+    else
+      errors.add(:withdraw, "Courses that have not been published should be deleted not withdrawn")
+    end
+  end
+
 private
 
   def assignable_after_publish(course_params)
