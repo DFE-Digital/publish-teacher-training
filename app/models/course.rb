@@ -542,7 +542,7 @@ private
 
   def validate_subjects
     if has_any_modern_language_subject_type? & !has_the_modern_languages_secondary_subject_type?
-      subjects << SecondarySubject.modern_languages
+      errors.add(:subjects, "Modern languages subjects must also have the modern_languages subject")
     end
   end
 
