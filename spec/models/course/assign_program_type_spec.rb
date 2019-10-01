@@ -38,7 +38,7 @@ RSpec.describe Course, type: :model do
       end
 
       context "a SCITTs self accredited courses" do
-        let(:provider) { build(:provider, scitt: "Y") }
+        let(:provider) { build(:provider, provider_type: :scitt) }
         let(:subject) { create(:course, provider: provider) }
 
         its(:program_type) { should eq("scitt_programme") }

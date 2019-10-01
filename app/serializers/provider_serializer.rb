@@ -11,7 +11,6 @@
 #  provider_code        :text
 #  provider_type        :text
 #  postcode             :text
-#  scitt                :text
 #  url                  :text
 #  address1             :text
 #  address2             :text

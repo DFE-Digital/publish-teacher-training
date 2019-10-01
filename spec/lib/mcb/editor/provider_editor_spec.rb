@@ -174,7 +174,6 @@ describe MCB::Editor::ProviderEditor, :needs_audit_user do
           "address4" => desired_attributes[:county],
           "postcode" => desired_attributes[:postcode],
           "region_code" => desired_attributes[:region_code],
-          "scitt" => "Y",
           "accrediting_provider" => "accredited_body",
         }
       }

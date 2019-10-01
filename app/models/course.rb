@@ -435,7 +435,7 @@ class Course < ApplicationRecord
     when "fee"
       if !self_accredited?
         update(program_type: :school_direct_training_programme)
-      elsif provider.is_it_really_really_a_scitt?
+      elsif provider.scitt?
         update(program_type: :scitt_programme)
       else
         update(program_type: :higher_education_programme)

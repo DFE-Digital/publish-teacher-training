@@ -11,7 +11,6 @@
 #  provider_code        :text
 #  provider_type        :text
 #  postcode             :text
-#  scitt                :text
 #  url                  :text
 #  address1             :text
 #  address2             :text
@@ -239,7 +238,6 @@ class Provider < ApplicationRecord
 
   def provider_type=(new_value)
     super
-    self.scitt = scitt? ? "Y" : "N"
     self.accrediting_provider = if scitt? || university?
                                   :accredited_body
                                 else
@@ -266,11 +264,6 @@ class Provider < ApplicationRecord
         description: accrediting_provider_enrichment&.Description || "",
       }
     end
-  end
-
-  def is_it_really_really_a_scitt?
-    #is purposely named poorly to remind us that this needs to be refactored. We should be using the prgram type enum not an attribute
-    scitt == "Y"
   end
 
   def generated_ucas_contact(type)
