@@ -459,4 +459,30 @@ describe "Courses API v2", type: :request do
       it { should have_http_status(:success) }
     end
   end
+
+  describe "WITHDRAW" do
+    let(:path) do
+      "/api/v2/providers/#{provider.provider_code}" +
+        "/courses/#{course.course_code}/withdraw"
+    end
+
+    let(:course) { create(:course, provider: provider, site_statuses: [site_status], enrichments: [enrichment]) }
+    let(:enrichment) { build(:course_enrichment, last_published_timestamp_utc: 1.day.ago)}
+    let(:site_status1) { build(:site_status, :running) }
+    let(:site_status2) { build(:site_status, :new) }
+    let(:site_status3) { build(:site_status, :suspeneded) }
+
+    before do
+      course
+    end
+
+    subject do
+      post path, headers: { "HTTP_AUTHORIZATION" => credentials }
+      response
+    end
+
+    include_examples "Unauthenticated, unauthorised, or not accepted T&Cs"
+
+    it { should have_http_status(:success) }
+  end
 end
