@@ -116,25 +116,6 @@ describe "Publish API v2", type: :request do
         end
       end
 
-      context "without dfe subject" do
-        let(:dfe_subjects) { [] }
-
-        it "raises an error" do
-          expect {
-            perform_enqueued_jobs do
-              subject
-            end
-          }.to(raise_error(
-                 RuntimeError,
-                 "'#{course}' '#{course.provider}' sync error: {:subjects=>[{:error=>\"No subjects.\"}]}",
-               ))
-
-          expect(WebMock).not_to(
-            have_requested(:put, "#{Settings.search_api.base_url}/api/courses/"),
-          )
-        end
-      end
-
       # In production this job would be performed asynchronous, but in tests
       # it's synchronous. Which is handy for testing what happens when
       # search-and-compare returns an error, otherwise the error would be
@@ -158,15 +139,15 @@ describe "Publish API v2", type: :request do
     describe "failed validation" do
       let(:json_data) { JSON.parse(subject.body)["errors"] }
 
-      context "no enrichments or sites" do
+      context "no enrichments, sites and subjects" do
         let(:course) { create(:course, provider: provider, enrichments: [], site_statuses: []) }
         it { should have_http_status(:unprocessable_entity) }
         it "has validation errors" do
-          expect(json_data.count).to eq 2
-          expect(response.body).to include("Invalid enrichment")
-          expect(response.body).to include("Complete your course information before publishing")
-          expect(response.body).to include("Invalid sites")
-          expect(response.body).to include("You must pick at least one location for this course")
+          expect(json_data.map { |error| error["detail"] }).to match_array([
+            "Complete your course information before publishing",
+            "There is a problem with this course. Contact support to fix it (Error: S)",
+            "You must pick at least one location for this course",
+          ])
         end
       end
 
@@ -184,20 +165,25 @@ describe "Publish API v2", type: :request do
           it { should have_http_status(:unprocessable_entity) }
 
           it "has validation error details" do
-            expect(json_data.count).to eq 5
-            expect(json_data[0]["detail"]).to eq("Enter details about this course")
-            expect(json_data[1]["detail"]).to eq("Enter details about school placements")
-            expect(json_data[2]["detail"]).to eq("Enter a course length")
-            expect(json_data[3]["detail"]).to eq("Give details about the fee for UK and EU students")
-            expect(json_data[4]["detail"]).to eq("Enter details about the qualifications needed")
+            expect(json_data.map { |error| error["detail"] }).to match_array([
+              "Enter details about this course",
+              "Enter details about school placements",
+              "Enter a course length",
+              "Give details about the fee for UK and EU students",
+              "Enter details about the qualifications needed",
+              "There is a problem with this course. Contact support to fix it (Error: S)",
+            ])
           end
 
           it "has validation error pointers" do
-            expect(json_data[0]["source"]["pointer"]).to eq("/data/attributes/about_course")
-            expect(json_data[1]["source"]["pointer"]).to eq("/data/attributes/how_school_placements_work")
-            expect(json_data[2]["source"]["pointer"]).to eq("/data/attributes/course_length")
-            expect(json_data[3]["source"]["pointer"]).to eq("/data/attributes/fee_uk_eu")
-            expect(json_data[4]["source"]["pointer"]).to eq("/data/attributes/required_qualifications")
+            expect(json_data.map { |error| error["source"]["pointer"] }).to match_array([
+              nil,
+              "/data/attributes/about_course",
+              "/data/attributes/how_school_placements_work",
+              "/data/attributes/course_length",
+              "/data/attributes/fee_uk_eu",
+              "/data/attributes/required_qualifications",
+            ])
           end
         end
       end
@@ -216,12 +202,14 @@ describe "Publish API v2", type: :request do
           it { should have_http_status(:unprocessable_entity) }
 
           it "has validation errors" do
-            expect(json_data.count).to eq 5
-            expect(json_data[0]["detail"]).to eq("Enter details about this course")
-            expect(json_data[1]["detail"]).to eq("Enter details about school placements")
-            expect(json_data[2]["detail"]).to eq("Enter a course length")
-            expect(json_data[3]["detail"]).to eq("Give details about the salary for this course")
-            expect(json_data[4]["detail"]).to eq("Enter details about the qualifications needed")
+            expect(json_data.map { |error| error["detail"] }).to match_array([
+              "Enter details about this course",
+              "Enter details about school placements",
+              "Enter a course length",
+              "Give details about the salary for this course",
+              "Enter details about the qualifications needed",
+              "There is a problem with this course. Contact support to fix it (Error: S)",
+            ])
           end
         end
       end

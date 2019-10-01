@@ -50,14 +50,16 @@ describe "Publishable API v2", type: :request do
 
     context "unpublished course with draft enrichment" do\
       let(:enrichment) { build(:course_enrichment, :initial_draft) }
+      let(:primary_with_mathematics) { create(:subject, :primary_with_mathematics) }
       let(:site_status) { build(:site_status, :new) }
-      let!(:course) {
+      let!(:course) do
         create(:course,
                provider: provider,
                site_statuses: [site_status],
                enrichments: [enrichment],
-               age: 17.days.ago)
-      }
+               age: 17.days.ago,
+               subjects: [primary_with_mathematics])
+      end
 
       it "returns ok" do
         expect(subject).to have_http_status(:success)
@@ -71,11 +73,11 @@ describe "Publishable API v2", type: :request do
         let(:course) { create(:course, provider: provider) }
         it { should have_http_status(:unprocessable_entity) }
         it "has validation errors" do
-          expect(json_data.count).to eq 2
-          expect(response.body).to include("Invalid enrichment")
-          expect(response.body).to include("Complete your course information before publishing")
-          expect(response.body).to include("Invalid sites")
-          expect(response.body).to include("You must pick at least one location for this course")
+          expect(json_data.map { |error| error["detail"] }).to match_array([
+            "Complete your course information before publishing",
+            "You must pick at least one location for this course",
+            "There is a problem with this course. Contact support to fix it (Error: S)",
+          ])
         end
       end
 
@@ -93,20 +95,26 @@ describe "Publishable API v2", type: :request do
           it { should have_http_status(:unprocessable_entity) }
 
           it "has validation error details" do
-            expect(json_data.count).to eq 5
-            expect(json_data[0]["detail"]).to eq("Enter details about this course")
-            expect(json_data[1]["detail"]).to eq("Enter details about school placements")
-            expect(json_data[2]["detail"]).to eq("Enter a course length")
-            expect(json_data[3]["detail"]).to eq("Give details about the fee for UK and EU students")
-            expect(json_data[4]["detail"]).to eq("Enter details about the qualifications needed")
+            expect(json_data.count).to eq 6
+            expect(json_data.map { |error| error["detail"] }).to match_array([
+              "There is a problem with this course. Contact support to fix it (Error: S)",
+              "Enter details about this course",
+              "Enter a course length",
+              "Give details about the fee for UK and EU students",
+              "Enter details about the qualifications needed",
+              "Enter details about school placements",
+            ])
           end
 
           it "has validation error pointers" do
-            expect(json_data[0]["source"]["pointer"]).to eq("/data/attributes/about_course")
-            expect(json_data[1]["source"]["pointer"]).to eq("/data/attributes/how_school_placements_work")
-            expect(json_data[2]["source"]["pointer"]).to eq("/data/attributes/course_length")
-            expect(json_data[3]["source"]["pointer"]).to eq("/data/attributes/fee_uk_eu")
-            expect(json_data[4]["source"]["pointer"]).to eq("/data/attributes/required_qualifications")
+            expect(json_data.map { |error| error["source"]["pointer"] }).to match_array([
+              nil,
+              "/data/attributes/about_course",
+              "/data/attributes/how_school_placements_work",
+              "/data/attributes/course_length",
+              "/data/attributes/fee_uk_eu",
+              "/data/attributes/required_qualifications",
+            ])
           end
         end
       end
