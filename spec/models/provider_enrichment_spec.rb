@@ -175,15 +175,6 @@ describe ProviderEnrichment, type: :model do
     end
 
     describe "on publish" do
-      it { should validate_presence_of(:email).on(:publish).with_message("^Enter an email address in the correct format, like name@example.com") }
-      it { should validate_presence_of(:website).on(:publish) }
-      it { should validate_presence_of(:telephone).on(:publish).with_message("^Enter a valid telephone number") }
-
-      it { should validate_presence_of(:address1).on(:publish) }
-      it { should validate_presence_of(:address3).on(:publish) }
-      it { should validate_presence_of(:address4).on(:publish) }
-
-      it { should validate_presence_of(:postcode).on(:publish) }
       it { should validate_presence_of(:train_with_us).on(:publish) }
       it { should validate_presence_of(:train_with_disability).on(:publish) }
     end

@@ -96,28 +96,16 @@ describe "Provider Publish API v2", type: :request do
         it { should have_http_status(:unprocessable_entity) }
 
         it "has validation error details" do
-          expect(json_data.count).to eq 9
+          expect(json_data.count).to eq 3
           expect(json_data[0]["detail"]).to eq("Enter an email address in the correct format, like name@example.com")
-          expect(json_data[1]["detail"]).to eq("Enter website")
-          expect(json_data[2]["detail"]).to eq("Enter a valid telephone number")
-          expect(json_data[3]["detail"]).to eq("Enter building or street")
-          expect(json_data[4]["detail"]).to eq("Enter town or city")
-          expect(json_data[5]["detail"]).to eq("Enter county")
-          expect(json_data[6]["detail"]).to eq("Enter a postcode in the format ‘SW10 1AA’")
-          expect(json_data[7]["detail"]).to eq("Enter details about training with you")
-          expect(json_data[8]["detail"]).to eq("Enter details about training with a disability")
+          expect(json_data[1]["detail"]).to eq("Enter details about training with you")
+          expect(json_data[2]["detail"]).to eq("Enter details about training with a disability")
         end
 
         it "has validation error pointers" do
           expect(json_data[0]["source"]["pointer"]).to eq("/data/attributes/email")
-          expect(json_data[1]["source"]["pointer"]).to eq("/data/attributes/website")
-          expect(json_data[2]["source"]["pointer"]).to eq("/data/attributes/telephone")
-          expect(json_data[3]["source"]["pointer"]).to eq("/data/attributes/address1")
-          expect(json_data[4]["source"]["pointer"]).to eq("/data/attributes/address3")
-          expect(json_data[5]["source"]["pointer"]).to eq("/data/attributes/address4")
-          expect(json_data[6]["source"]["pointer"]).to eq("/data/attributes/postcode")
-          expect(json_data[7]["source"]["pointer"]).to eq("/data/attributes/train_with_us")
-          expect(json_data[8]["source"]["pointer"]).to eq("/data/attributes/train_with_disability")
+          expect(json_data[1]["source"]["pointer"]).to eq("/data/attributes/train_with_us")
+          expect(json_data[2]["source"]["pointer"]).to eq("/data/attributes/train_with_disability")
         end
       end
     end

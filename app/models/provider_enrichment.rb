@@ -60,10 +60,8 @@ class ProviderEnrichment < ApplicationRecord
 
   validates :telephone, phone: { message: "^Enter a valid telephone number" }, allow_nil: true
 
-  validates :website, :telephone,
-            :address1, :address3, :address4,
-            :postcode, :train_with_us, :train_with_disability,
-            presence: true, on: :publish
+  validates :train_with_us, presence: true, on: :publish
+  validates :train_with_disability, presence: true, on: :publish
 
   def draft?
     status.in? %w[draft rolled_over]
