@@ -2,7 +2,7 @@ describe Course, type: :model do
   describe "#publishable?" do
     let(:course) { create(:course) }
     let(:site) { create(:site) }
-    let(:site_status) { create(:site_status, :new, site: site) }
+    let(:site_status) { create(:site_status, :findable, site: site) }
 
     subject { course }
 
@@ -11,9 +11,9 @@ describe Course, type: :model do
     context "with enrichment" do
       let(:enrichment) { build(:course_enrichment, :subsequent_draft, created_at: 1.day.ago) }
       let(:primary_with_mathematics) { create(:subject, :primary_with_mathematics) }
-      let(:course) {
+      let(:course) do
         create(:course, subjects: [primary_with_mathematics], enrichments: [enrichment], site_statuses: [site_status])
-      }
+      end
 
       its(:publishable?) { should be_truthy }
     end
