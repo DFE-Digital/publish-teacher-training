@@ -1269,5 +1269,15 @@ describe Course, type: :model do
         expect(course.is_published?).to eq(true)
       end
     end
+
+    context "course is published with unpublished changes" do
+      let(:enrichment) { create(:course_enrichment, :subsequent_draft) }
+      let(:course) { create(:course, enrichments: [enrichment]) }
+
+      it "returns true" do
+        expect(course.content_status).to eq(:published_with_unpublished_changes)
+        expect(course.is_published?).to eq(true)
+      end
+    end
   end
 end
