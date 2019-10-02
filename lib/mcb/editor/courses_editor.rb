@@ -116,7 +116,7 @@ module MCB
           initial_items: course.subjects.to_a,
           possible_items: ::CourseAssignableSubjectService.new.execute(course),
         )
-        course.fixup_languages
+        course.ensure_modern_languages
         course.reload
       end
 

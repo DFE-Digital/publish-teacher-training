@@ -443,7 +443,7 @@ class Course < ApplicationRecord
     end
   end
 
-  def fixup_languages
+  def ensure_modern_languages
     if has_any_modern_language_subject_type? && !has_the_modern_languages_secondary_subject_type?
       subjects << SecondarySubject.modern_languages
     end

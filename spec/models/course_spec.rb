@@ -61,17 +61,17 @@ describe Course, type: :model do
     it { should have_many(:financial_incentives) }
   end
 
-  describe "#fixup_languages" do
+  describe "#ensure_modern_languages" do
     it "adds modern languages if a languages subject is selected" do
       course = build(:course, subjects: [arabic])
-      course.fixup_languages
+      course.ensure_modern_languages
       expect(course.subjects).to match_array([modern_languages, arabic])
       expect(course).to be_valid
     end
 
     it "does not duplicate add modern language if it has already been added" do
       course = build(:course, subjects: [modern_languages, arabic])
-      course.fixup_languages
+      course.ensure_modern_languages
       expect(course.subjects).to match_array([modern_languages, arabic])
       expect(course).to be_valid
     end
