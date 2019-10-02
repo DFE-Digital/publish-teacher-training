@@ -993,13 +993,13 @@ describe Course, type: :model do
 
     its(:syncable?) { should be_truthy }
 
-    context"invalid courses" do
+    context "invalid courses" do
       context "course which has only discontinued subject subject type" do
         let(:courses_subjects) { [build(:subject, :humanities)] }
         its(:syncable?) { should be_falsey }
       end
 
-      context "course which has only mordern lanaguage secondary subject type" do
+      context "course which has only modern lanaguage secondary subject type" do
         let(:courses_subjects) { [build(:subject, :modern_languages)] }
         its(:syncable?) { should be_falsey }
       end
@@ -1013,6 +1013,25 @@ describe Course, type: :model do
         let(:courses_subjects) { [] }
         its(:syncable?) { should be_falsey }
       end
+    end
+  end
+
+  describe "#should_sync?" do
+    let(:course_enrichment) { build :course_enrichment, :published }
+    let(:site_status) { build(:site_status, :findable) }
+    let(:provider) { build(:provider) }
+    subject { create(:course, provider: provider, site_statuses: [site_status], enrichments: [course_enrichment]) }
+
+    its(:should_sync?) { should be_truthy }
+
+    context "course not yet published" do
+      let(:course_enrichment) { build :course_enrichment }
+      its(:should_sync?) { should be_falsey }
+    end
+
+    context "course in next cycle" do
+      let(:provider) { build :provider, :next_recruitment_cycle }
+      its(:should_sync?) { should be_falsey }
     end
   end
 

@@ -10,7 +10,8 @@ describe "PATCH /providers/:provider_code/courses/:course_code with sites" do
     ActionController::HttpAuthentication::Token.encode_credentials(token)
   end
 
-  let(:course) { create :course, provider: provider, site_statuses: [site_status], subjects: [primary_subject] }
+  let(:course) { create :course, provider: provider, site_statuses: [site_status], subjects: [primary_subject], enrichments: [course_enrichment] }
+  let(:course_enrichment) { build :course_enrichment }
   let(:site_status) { build(:site_status) }
   let(:primary_subject) { build(:subject, :primary) }
   let(:site_to_add) { create :site, provider: provider }
@@ -87,15 +88,24 @@ describe "PATCH /providers/:provider_code/courses/:course_code with sites" do
         expect(course.reload.sites.exists?(unwanted_site.id)).to be(false)
       end
 
-      it "syncs the course" do
-        expect(sync_courses_request_stub).to have_been_requested
+      it "does not sync the course" do
+        expect(sync_courses_request_stub).not_to have_been_requested
       end
     end
 
     context "course is running" do
+      let(:course_enrichment) { build :course_enrichment, :published }
+
       before do
         course.publish_sites
-        perform_request
+        perform_enqueued_jobs do
+          perform_request
+        end
+      end
+
+      it "syncs the course" do
+        expect(course.is_published?).to be(true)
+        expect(sync_courses_request_stub).to have_been_requested
       end
 
       it "suspends an unwanted site" do

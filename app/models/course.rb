@@ -217,8 +217,14 @@ class Course < ApplicationRecord
     valid? :publish
   end
 
+  # Is course in syncable condition
   def syncable?
     valid? :sync
+  end
+
+  # Should we attempt to sync this course with Find
+  def should_sync?
+    recruitment_cycle.current? && is_published?
   end
 
   def update_valid?
