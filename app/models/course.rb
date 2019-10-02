@@ -164,7 +164,6 @@ class Course < ApplicationRecord
   validates :level, presence: true, on: :publish
   validates :subjects, presence: true, on: :publish
   validate :validate_enrichment_publishable, on: :publish
-  validate :validate_site_status_findable, on: :publish
   validate :validate_enrichment
   validate :validate_course_syncable, on: :sync
   validate :validate_qualification, on: :update
@@ -519,7 +518,7 @@ private
   end
 
   def validate_course_syncable
-    unless findable?
+    if findable?.blank?
       errors.add :site_statuses, "No findable sites."
     end
     if subjects
@@ -552,12 +551,6 @@ private
   def validate_subjects
     if has_any_modern_language_subject_type? && !has_the_modern_languages_secondary_subject_type?
       errors.add(:subjects, "Modern languages subjects must also have the modern_languages subject")
-    end
-  end
-
-  def validate_site_status_findable
-    unless findable?
-      errors.add(:site_statuses, "must be findable")
     end
   end
 
