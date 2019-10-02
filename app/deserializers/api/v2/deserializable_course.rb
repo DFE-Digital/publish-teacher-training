@@ -29,6 +29,7 @@ module API
         is_send
         accrediting_provider_code
         funding_type
+        level
       ].freeze
 
       attributes(*COURSE_ATTRIBUTES)
