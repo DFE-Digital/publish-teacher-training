@@ -59,16 +59,16 @@ describe "Publish API v2", type: :request do
 
     context "an unpublished course with a draft enrichment" do
       let(:enrichment) { build(:course_enrichment, :initial_draft) }
-      let(:site_status) { build(:site_status, :findable) }
+      let(:site_status) { build(:site_status, :new) }
       let(:dfe_subjects) { [build(:subject, :primary)] }
-      let!(:course) do
+      let!(:course) {
         create(:course,
                provider: provider,
                site_statuses: [site_status],
                enrichments: [enrichment],
                subjects: dfe_subjects,
                age: 17.days.ago)
-      end
+      }
 
       before do
         Timecop.freeze
@@ -147,7 +147,6 @@ describe "Publish API v2", type: :request do
             "Complete your course information before publishing",
             "There is a problem with this course. Contact support to fix it (Error: S)",
             "You must pick at least one location for this course",
-            "Site statuses must be findable",
           ])
         end
       end
@@ -173,13 +172,11 @@ describe "Publish API v2", type: :request do
               "Give details about the fee for UK and EU students",
               "Enter details about the qualifications needed",
               "There is a problem with this course. Contact support to fix it (Error: S)",
-              "Site statuses must be findable",
             ])
           end
 
           it "has validation error pointers" do
             expect(json_data.map { |error| error["source"]["pointer"] }).to match_array([
-              nil,
               nil,
               "/data/attributes/about_course",
               "/data/attributes/how_school_placements_work",
@@ -212,7 +209,6 @@ describe "Publish API v2", type: :request do
               "Give details about the salary for this course",
               "Enter details about the qualifications needed",
               "There is a problem with this course. Contact support to fix it (Error: S)",
-              "Site statuses must be findable",
             ])
           end
         end

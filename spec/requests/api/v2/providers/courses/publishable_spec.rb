@@ -51,7 +51,7 @@ describe "Publishable API v2", type: :request do
     context "unpublished course with draft enrichment" do\
       let(:enrichment) { build(:course_enrichment, :initial_draft) }
       let(:primary_with_mathematics) { create(:subject, :primary_with_mathematics) }
-      let(:site_status) { build(:site_status, :findable) }
+      let(:site_status) { build(:site_status, :new) }
       let!(:course) do
         create(:course,
                provider: provider,
@@ -74,7 +74,6 @@ describe "Publishable API v2", type: :request do
         it { should have_http_status(:unprocessable_entity) }
         it "has validation errors" do
           expect(json_data.map { |error| error["detail"] }).to match_array([
-            "Site statuses must be findable",
             "Complete your course information before publishing",
             "You must pick at least one location for this course",
             "There is a problem with this course. Contact support to fix it (Error: S)",
@@ -96,8 +95,8 @@ describe "Publishable API v2", type: :request do
           it { should have_http_status(:unprocessable_entity) }
 
           it "has validation error details" do
+            expect(json_data.count).to eq 6
             expect(json_data.map { |error| error["detail"] }).to match_array([
-              "Site statuses must be findable",
               "There is a problem with this course. Contact support to fix it (Error: S)",
               "Enter details about this course",
               "Enter a course length",
@@ -109,7 +108,6 @@ describe "Publishable API v2", type: :request do
 
           it "has validation error pointers" do
             expect(json_data.map { |error| error["source"]["pointer"] }).to match_array([
-              nil,
               nil,
               "/data/attributes/about_course",
               "/data/attributes/how_school_placements_work",
