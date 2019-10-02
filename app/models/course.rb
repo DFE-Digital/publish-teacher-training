@@ -101,6 +101,7 @@ class Course < ApplicationRecord
 
   has_many :course_subjects
   has_many :subjects, through: :course_subjects
+  has_many :financial_incentives, through: :subjects
   has_many :course_ucas_subjects
   has_many :ucas_subjects, through: :course_ucas_subjects
   has_many :site_statuses
@@ -313,10 +314,6 @@ class Course < ApplicationRecord
     end
   end
 
-  def dfe_subjects
-    UCASSubjectMapperService.get_subject_list(name, ucas_subjects.map(&:subject_name))
-  end
-
   def ucas_level
     UCASSubjects::CourseLevel.new(ucas_subjects.map(&:subject_name)).ucas_level
   end
@@ -382,23 +379,23 @@ class Course < ApplicationRecord
   end
 
   def has_bursary?
-    dfe_subjects.any?(&:has_bursary?)
+    financial_incentives.any?(&:bursary_amount?)
   end
 
   def has_scholarship_and_bursary?
-    dfe_subjects.any?(&:has_scholarship_and_bursary?)
+    financial_incentives.any?(&:scholarship?) && financial_incentives.any?(&:bursary_amount?)
   end
 
   def has_early_career_payments?
-    dfe_subjects.any?(&:has_early_career_payments?)
+    financial_incentives.any?(&:early_career_payments?)
   end
 
   def bursary_amount
-    dfe_subjects&.first&.bursary_amount
+    financial_incentives&.first&.bursary_amount
   end
 
   def scholarship_amount
-    dfe_subjects&.first&.scholarship_amount
+    financial_incentives&.first&.scholarship
   end
 
   def self_accredited?

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_09_30_102958) do
+ActiveRecord::Schema.define(version: 2019_09_30_110525) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_buffercache"
@@ -156,6 +156,16 @@ ActiveRecord::Schema.define(version: 2019_09_30_102958) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.index ["priority", "run_at"], name: "delayed_jobs_priority"
+  end
+
+  create_table "financial_incentive", force: :cascade do |t|
+    t.bigint "subject_id", null: false
+    t.string "bursary_amount"
+    t.string "early_career_payments"
+    t.string "scholarship"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["subject_id"], name: "index_financial_incentive_on_subject_id"
   end
 
   create_table "nctl_organisation", id: :serial, force: :cascade do |t|
@@ -309,6 +319,7 @@ ActiveRecord::Schema.define(version: 2019_09_30_102958) do
   add_foreign_key "course_site", "site", name: "FK_course_site_site_site_id", on_delete: :cascade
   add_foreign_key "course_ucas_subject", "course", name: "FK_course_subject_course_course_id", on_delete: :cascade
   add_foreign_key "course_ucas_subject", "ucas_subject", name: "FK_course_subject_subject_subject_id", on_delete: :cascade
+  add_foreign_key "financial_incentive", "subject"
   add_foreign_key "nctl_organisation", "organisation", name: "FK_nctl_organisation_organisation_organisation_id", on_delete: :cascade
   add_foreign_key "organisation_provider", "organisation", name: "FK_organisation_provider_organisation_organisation_id"
   add_foreign_key "organisation_provider", "provider", name: "FK_organisation_provider_provider_provider_id"
