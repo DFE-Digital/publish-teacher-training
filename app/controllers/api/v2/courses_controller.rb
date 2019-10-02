@@ -89,7 +89,7 @@ module API
         update_enrichment
         update_sites
         update_site_status_vac_statuses if @course.study_mode_previously_changed?
-        should_sync = site_ids.present? && @course.recruitment_cycle.current? && @course.is_published?
+        should_sync = site_ids.present? && @course.should_sync?
         has_synced? if should_sync
 
         if @course.errors.empty? && @course.valid?
