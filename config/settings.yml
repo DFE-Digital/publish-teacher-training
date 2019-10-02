@@ -27,3 +27,5 @@ logstash:
   port: # Our port here
   ssl_enable: true
 log_level: info
+feature:
+  v3_routes: true

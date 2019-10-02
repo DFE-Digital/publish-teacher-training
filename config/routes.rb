@@ -147,6 +147,20 @@ Rails.application.routes.draw do
       get "build_new_course", to: "courses#build_new"
     end
 
+    if Settings.feature.v3_routes
+      namespace :v3 do
+        resources :recruitment_cycles,
+                  only: %i[index show],
+                  param: :year do
+          resources :providers,
+                    only: %i[index show update],
+                    param: :code do
+            resources :courses, param: :code
+          end
+        end
+      end
+    end
+
     namespace :system do
       post :sync, to: "force_sync#sync"
     end
