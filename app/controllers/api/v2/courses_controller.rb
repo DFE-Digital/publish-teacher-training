@@ -103,6 +103,15 @@ module API
         @course.discard
       end
 
+      def withdraw
+        authorize @course
+        if @course.is_published?
+          raise RuntimeError.new("This course has not been published and should be deleted not withdrawn")
+        else
+          @course.withdraw
+        end
+      end
+
       def create
         authorize @provider, :can_create_course?
         return unless course_params.values.any?
