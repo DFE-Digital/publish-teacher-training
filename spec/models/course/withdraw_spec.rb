@@ -12,7 +12,9 @@ describe Course, type: :model do
       course.withdraw
     end
 
-    context "an unpublished course" do
+    context "an published course" do
+      let(:enrichment) { build(:course_enrichment, :published) }
+
       it "should not be findable" do
         expect(course.findable?).to be_falsey
       end
@@ -27,9 +29,7 @@ describe Course, type: :model do
       end
     end
 
-    context "a published course" do
-      let(:enrichment) { build(:course_enrichment, :published) }
-
+    context "an unpublished course" do
       it "should not have updated the courses site statuses or vac status" do
         expect(site_status1.vac_status).to eq("full_time_vacancies")
         expect(site_status1.status).to eq("running")
