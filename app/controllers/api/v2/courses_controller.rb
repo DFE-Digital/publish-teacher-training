@@ -105,8 +105,7 @@ module API
 
       def withdraw
         authorize @course
-        if @course.last_published_at.present?
-          #perhaps this should just be @course.discard . Not 100% sure
+        if @course.is_published?
           raise RuntimeError.new("This course has not been published and should be deleted not withdrawn")
         else
           @course.withdraw

@@ -2,7 +2,7 @@ describe Course, type: :model do
   describe "withdraw" do
     let(:course) { create(:course, provider: provider, site_statuses: [site_status1, site_status2, site_status3], enrichments: [enrichment]) }
     let(:provider) { build(:provider) }
-    let(:enrichment) { build(:course_enrichment, last_published_timestamp_utc: nil) }
+    let(:enrichment) { build(:course_enrichment) }
     let(:site_status1) { build(:site_status, :running, :published, :full_time_vacancies, site: site) }
     let(:site_status2) { build(:site_status, :new, :full_time_vacancies, site: site) }
     let(:site_status3) { build(:site_status, :suspended, :with_no_vacancies, site: site) }
@@ -13,7 +13,7 @@ describe Course, type: :model do
     end
 
     context "an unpublished course" do
-      it "should  not be findable" do
+      it "should not be findable" do
         expect(course.findable?).to be_falsey
       end
 
@@ -27,7 +27,7 @@ describe Course, type: :model do
       end
     end
 
-    context "an unpublished course" do
+    context "a published course" do
       let(:enrichment) { build(:course_enrichment, :published) }
 
       it "should not have updated the courses site statuses or vac status" do

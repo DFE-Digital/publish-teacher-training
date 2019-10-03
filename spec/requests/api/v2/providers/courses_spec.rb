@@ -467,7 +467,7 @@ describe "Courses API v2", type: :request do
     end
 
     let(:course) { create(:course, provider: provider, site_statuses: [site_status1, site_status2, site_status3], enrichments: [enrichment]) }
-    let(:enrichment) { build(:course_enrichment, last_published_timestamp_utc: nil) }
+    let(:enrichment) { build(:course_enrichment) }
     let(:site_status1) { build(:site_status, :running, :published, :full_time_vacancies, site: site) }
     let(:site_status2) { build(:site_status, :new, :full_time_vacancies, site: site) }
     let(:site_status3) { build(:site_status, :suspended, :with_no_vacancies, site: site) }
