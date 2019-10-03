@@ -11,8 +11,8 @@ class AuthenticationService
 
   def call
     @user = user_by_sign_in_user_id || user_by_email
-    update_user_email if user_email_does_not_match_token?
-    update_user_sign_in_id if user_sign_in_id_does_not_match_token?
+
+    update_user_information_if_required
 
     user
   rescue DuplicateUserError => e
@@ -46,6 +46,11 @@ private
     decoded_token["sign_in_user_id"]
   end
 
+  def update_user_information_if_required
+    update_user_email if user_email_does_not_match_token?
+    update_user_sign_in_id if user_sign_in_id_does_not_match_token?
+  end
+
   def user_by_email
     if email_from_token.blank?
       logger.debug("No email in token")
@@ -77,10 +82,6 @@ private
                    }.to_s)
     end
     user
-  end
-
-  def update_user_email_needed?
-    user_email_does_not_match_token? && !email_in_use_by_another_user?
   end
 
   def user_email_does_not_match_token?
