@@ -2,11 +2,15 @@ describe AuthenticationService do
   describe ".call" do
     let(:user) { create(:user) }
     let(:email) { user.email }
+    let(:first_name) { user.first_name }
+    let(:last_name) { user.last_name }
     let(:sign_in_user_id) { user.sign_in_user_id }
     let(:payload) do
       {
         email:           email,
         sign_in_user_id: sign_in_user_id,
+        first_name: first_name,
+        last_name: last_name,
       }
     end
 
@@ -21,7 +25,18 @@ describe AuthenticationService do
     end
 
     context "with a valid DfE-SignIn ID and email" do
+      let(:first_name) { "#{user.first_name}_new" }
+      let(:last_name) { "#{user.last_name}_new" }
+
       it { should eq user }
+
+      it "Sets the users first name" do
+        expect { subject }.to(change { user.reload.first_name }.to(first_name))
+      end
+
+      it "Sets the users last name" do
+        expect { subject }.to(change { user.reload.last_name }.to(last_name))
+      end
     end
 
     context "with a valid DfE-SignIn ID but invalid email" do
@@ -105,6 +120,22 @@ describe AuthenticationService do
 
       it "does not authenticate the user based on a nil match" do
         expect(subject).not_to eq user
+      end
+    end
+
+    context "When the first name is nil" do
+      let(:first_name) { nil }
+
+      it "does not set the first name to nil" do
+        expect { subject }.not_to(change { user.reload.first_name })
+      end
+    end
+
+    context "When the last name is nil" do
+      let(:last_name) { nil }
+
+      it "does not set the last name to nil" do
+        expect { subject }.not_to(change { user.reload.last_name })
       end
     end
   end

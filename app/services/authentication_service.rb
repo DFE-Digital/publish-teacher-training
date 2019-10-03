@@ -12,7 +12,7 @@ class AuthenticationService
   def call
     @user = user_by_sign_in_user_id || user_by_email
 
-    update_user_information_if_required
+    update_user_information
 
     user
   rescue DuplicateUserError => e
@@ -46,9 +46,21 @@ private
     decoded_token["sign_in_user_id"]
   end
 
-  def update_user_information_if_required
-    update_user_email if user_email_does_not_match_token?
-    update_user_sign_in_id if user_sign_in_id_does_not_match_token?
+  def first_name_from_token
+    decoded_token["first_name"]
+  end
+
+  def last_name_from_token
+    decoded_token["last_name"]
+  end
+
+  def update_user_information
+    return unless user
+
+    update_user_email
+    update_user_sign_in_id
+    update_user_first_name
+    update_user_last_name
   end
 
   def user_by_email
@@ -85,8 +97,6 @@ private
   end
 
   def user_email_does_not_match_token?
-    return unless user
-
     user.email&.downcase != email_from_token
   end
 
@@ -101,6 +111,8 @@ private
   end
 
   def update_user_email
+    return unless user_email_does_not_match_token?
+
     if email_in_use_by_another_user?
       raise DuplicateUserError.new(
         "Duplicate user detected",
@@ -120,7 +132,21 @@ private
   end
 
   def update_user_sign_in_id
+    return unless user_sign_in_id_does_not_match_token?
+
     user.update(sign_in_user_id: sign_in_user_id_from_token)
+  end
+
+  def update_user_first_name
+    return unless first_name_from_token.present?
+
+    user.update(first_name: first_name_from_token)
+  end
+
+  def update_user_last_name
+    return unless last_name_from_token.present?
+
+    user.update(last_name: last_name_from_token)
   end
 
   def log_safe_user(user, reload: false)
