@@ -293,6 +293,8 @@ class Course < ApplicationRecord
       end
     elsif newest_enrichment.published?
       :published
+    elsif newest_enrichment.withdrawn?
+      :withdrawn
     elsif newest_enrichment.has_been_published_before?
       :published_with_unpublished_changes
     elsif newest_enrichment.rolled_over?
@@ -459,12 +461,19 @@ class Course < ApplicationRecord
       site_statuses.each do |site_status|
         site_status.update(vac_status: :no_vacancies, status: :suspended)
       end
+
+      withdraw_latest_enrichment
     else
       errors.add(:withdraw, "Courses that have not been published should be deleted not withdrawn")
     end
   end
 
 private
+
+  def withdraw_latest_enrichment
+    newest_enrichment = enrichments.latest_first.first
+    newest_enrichment.withdraw
+  end
 
   def assignable_after_publish(course_params)
     relevant_params = course_params.slice(:is_send, :applications_open_from, :application_start_date)

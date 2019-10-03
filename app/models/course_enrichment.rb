@@ -18,7 +18,7 @@
 class CourseEnrichment < ApplicationRecord
   include TouchCourse
   before_create :set_defaults
-  enum status: %i[draft published rolled_over]
+  enum status: %i[draft published rolled_over withdrawn]
 
   jsonb_accessor :json_data,
                  about_course: [:string, store_key: "AboutCourse"],
@@ -113,6 +113,10 @@ class CourseEnrichment < ApplicationRecord
     data = { status: :draft }
     data[:last_published_timestamp_utc] = nil if initial_draft
     update(data)
+  end
+
+  def withdraw
+    update(status: "withdrawn")
   end
 
 private

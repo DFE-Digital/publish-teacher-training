@@ -479,20 +479,20 @@ describe "Courses API v2", type: :request do
     end
 
     subject do
-      post path, headers: { "HTTP_AUTHORIZATION" => credentials }
+      post_withdraw
       response
     end
 
     include_examples "Unauthenticated, unauthorised, or not accepted T&Cs"
 
-    context "when the course has not been published" do
-      before do
-        post_withdraw
-      end
+    context "when the course has been published" do
+      let(:enrichment) { build(:course_enrichment, :published) }
 
       it { should have_http_status(:success) }
 
       it "should have updated the courses site statuses to be suspended and have no vacancies" do
+        post_withdraw
+
         expect(site_status1.reload.vac_status).to eq("no_vacancies")
         expect(site_status1.reload.status).to eq("suspended")
         expect(site_status2.reload.vac_status).to eq("no_vacancies")
@@ -502,12 +502,14 @@ describe "Courses API v2", type: :request do
       end
 
       it "should no longer be findable" do
+        post_withdraw
+
         expect(course.reload.findable?).to be_falsey
       end
     end
 
     context "when the course has not been published" do
-      let(:enrichment) { build(:course_enrichment, :published) }
+      let(:enrichment) { build(:course_enrichment) }
 
       it "should raise an error" do
         expect { post_withdraw }.to raise_error("This course has not been published and should be deleted not withdrawn")

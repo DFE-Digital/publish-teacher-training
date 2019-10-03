@@ -12,11 +12,19 @@ describe Course, type: :model do
       course.withdraw
     end
 
-    context "an published course" do
+    context "a published course" do
       let(:enrichment) { build(:course_enrichment, :published) }
 
       it "should not be findable" do
-        expect(course.findable?).to be_falsey
+        expect(course.findable?).to eq(false)
+      end
+
+      it "should not be published" do
+        expect(course.is_published?).to eq(false)
+      end
+
+      it "should not be syncable" do
+        expect(course.syncable?).to eq(false)
       end
 
       it "should have updated the courses site statuses to be suspended and have no vacancies" do
@@ -26,6 +34,10 @@ describe Course, type: :model do
         expect(site_status2.status).to eq("suspended")
         expect(site_status3.vac_status).to eq("no_vacancies")
         expect(site_status3.status).to eq("suspended")
+      end
+
+      it "should have a content_status of withdrawn" do
+        expect(course.content_status).to eq(:withdrawn)
       end
     end
 
