@@ -1,6 +1,14 @@
 describe AuthenticationService do
   describe ".call" do
     let(:user) { create(:user) }
+    let(:email) { user.email }
+    let(:sign_in_user_id) { user.sign_in_user_id }
+    let(:payload) do
+      {
+        email:           email,
+        sign_in_user_id: sign_in_user_id,
+      }
+    end
 
     subject { described_class.call(encode_token(payload)) }
 
@@ -13,24 +21,11 @@ describe AuthenticationService do
     end
 
     context "with a valid DfE-SignIn ID and email" do
-      let(:payload) do
-        {
-          email:           user.email,
-          sign_in_user_id: user.sign_in_user_id,
-        }
-      end
-
       it { should eq user }
     end
 
     context "with a valid DfE-SignIn ID but invalid email" do
       let(:email) { Faker::Internet.email }
-      let(:payload) do
-        {
-          email:           email,
-          sign_in_user_id: user.sign_in_user_id,
-        }
-      end
 
       it { should eq user }
       it "update's the user's email" do
@@ -57,12 +52,6 @@ describe AuthenticationService do
 
     context "with a valid email but invalid DfE-SignIn ID" do
       let(:sign_in_user_id) { SecureRandom.uuid }
-      let(:payload) do
-        {
-          email:           user.email,
-          sign_in_user_id: sign_in_user_id,
-        }
-      end
 
       it { should eq user }
       it "update's the user's SignIn ID" do
@@ -73,12 +62,6 @@ describe AuthenticationService do
     context "with a valid email but nil DfE-SignIn ID" do
       let(:user) { create(:user, sign_in_user_id: nil) }
       let(:sign_in_user_id) { SecureRandom.uuid }
-      let(:payload) do
-        {
-          email:           user.email,
-          sign_in_user_id: sign_in_user_id,
-        }
-      end
 
       it { should eq user }
       it "update's the user's SignIn ID" do
@@ -87,18 +70,13 @@ describe AuthenticationService do
     end
 
     context "with a valid email but an invalid DfE-SignIn ID" do
-      let(:payload) do
-        {
-          email:           user.email,
-          sign_in_user_id: SecureRandom.uuid,
-        }
-      end
+      let(:sign_in_user_id) { SecureRandom.uuid }
 
       it { should eq user }
     end
 
     context "with an email that has different case from the database" do
-      let(:payload) { { email: user.email.upcase } }
+      let(:email) { user.email.upcase }
 
       before do
         user.update(email: user.email.capitalize)
@@ -108,15 +86,11 @@ describe AuthenticationService do
     end
 
     context "when the email is an empty string" do
+      let(:email) { "" }
+      let(:sign_in_user_id) { SecureRandom.uuid }
+
       before do
         user.update_attribute(:email, "")
-      end
-
-      let(:payload) do
-        {
-          email:           "",
-          sign_in_user_id: SecureRandom.uuid,
-        }
       end
 
       it "does not authenticate the user based on an empty string match" do
@@ -126,12 +100,8 @@ describe AuthenticationService do
 
     context "when the sign_in_user_id is nil" do
       let!(:user) { create(:user, sign_in_user_id: nil) }
-      let(:payload) do
-        {
-          email:           Faker::Internet.email,
-          sign_in_user_id: nil,
-        }
-      end
+      let(:email) { Faker::Internet.email }
+      let(:sign_in_user_id) { nil }
 
       it "does not authenticate the user based on a nil match" do
         expect(subject).not_to eq user
