@@ -12,6 +12,7 @@ class AuthenticationService
   def call
     @user = user_by_sign_in_user_id || user_by_email
     update_user_email if user_email_does_not_match_token?
+    update_user_sign_in_id if user_sign_in_id_does_not_match_token?
 
     user
   rescue DuplicateUserError => e
@@ -88,6 +89,12 @@ private
     user.email&.downcase != email_from_token
   end
 
+  def user_sign_in_id_does_not_match_token?
+    return unless user
+
+    user.sign_in_user_id != sign_in_user_id_from_token
+  end
+
   def email_in_use_by_another_user?
     user_by_email.present?
   end
@@ -109,6 +116,10 @@ private
 
       user.update(email: email_from_token)
     end
+  end
+
+  def update_user_sign_in_id
+    user.update(sign_in_user_id: sign_in_user_id_from_token)
   end
 
   def log_safe_user(user, reload: false)

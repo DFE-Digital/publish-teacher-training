@@ -55,6 +55,37 @@ describe AuthenticationService do
       end
     end
 
+    context "with a valid email but invalid DfE-SignIn ID" do
+      let(:sign_in_user_id) { SecureRandom.uuid }
+      let(:payload) do
+        {
+          email:           user.email,
+          sign_in_user_id: sign_in_user_id,
+        }
+      end
+
+      it { should eq user }
+      it "update's the user's SignIn ID" do
+        expect { subject }.to(change { user.reload.sign_in_user_id }.to(sign_in_user_id))
+      end
+    end
+
+    context "with a valid email but nil DfE-SignIn ID" do
+      let(:user) { create(:user, sign_in_user_id: nil) }
+      let(:sign_in_user_id) { SecureRandom.uuid }
+      let(:payload) do
+        {
+          email:           user.email,
+          sign_in_user_id: sign_in_user_id,
+        }
+      end
+
+      it { should eq user }
+      it "update's the user's SignIn ID" do
+        expect { subject }.to(change { user.reload.sign_in_user_id }.to(sign_in_user_id))
+      end
+    end
+
     context "with a valid email but an invalid DfE-SignIn ID" do
       let(:payload) do
         {
