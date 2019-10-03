@@ -34,7 +34,6 @@ class RecruitmentCycle < ApplicationRecord
     def syncable_courses
       current_recruitment_cycle.providers
         .includes(:enrichments, :latest_published_enrichment)
-        .select(&:publishable?)
         .flat_map(&:syncable_courses)
     end
   end
