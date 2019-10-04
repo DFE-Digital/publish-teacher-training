@@ -311,7 +311,7 @@ ActiveRecord::Schema.define(version: 2019_10_04_152235) do
   end
 
   add_foreign_key "access_request", "\"user\"", column: "requester_id", name: "FK_access_request_user_requester_id", on_delete: :nullify
-  add_foreign_key "contact", "provider"
+  add_foreign_key "contact", "provider", name: "fk_contact_provider"
   add_foreign_key "course", "provider", column: "accrediting_provider_id", name: "FK_course_provider_accrediting_provider_id"
   add_foreign_key "course", "provider", name: "FK_course_provider_provider_id", on_delete: :cascade
   add_foreign_key "course_enrichment", "\"user\"", column: "created_by_user_id", name: "FK_course_enrichment_user_created_by_user_id"
