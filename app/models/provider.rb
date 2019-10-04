@@ -162,6 +162,7 @@ class Provider < ApplicationRecord
         LEFT OUTER JOIN (
           SELECT b.provider_id, COUNT(*) courses_count
           FROM course b
+          WHERE b.discarded_at IS NULL
           GROUP BY b.provider_id
         ) a ON a.provider_id = provider.id
       },
