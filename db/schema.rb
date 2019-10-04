@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_10_04_152235) do
+ActiveRecord::Schema.define(version: 2019_10_04_152952) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_buffercache"
@@ -319,6 +319,8 @@ ActiveRecord::Schema.define(version: 2019_10_04_152235) do
   add_foreign_key "course_enrichment", "course"
   add_foreign_key "course_site", "course", name: "FK_course_site_course_course_id", on_delete: :cascade
   add_foreign_key "course_site", "site", name: "FK_course_site_site_site_id", on_delete: :cascade
+  add_foreign_key "course_subject", "course"
+  add_foreign_key "course_subject", "subject"
   add_foreign_key "course_ucas_subject", "course", name: "FK_course_subject_course_course_id", on_delete: :cascade
   add_foreign_key "course_ucas_subject", "ucas_subject", name: "FK_course_subject_subject_subject_id", on_delete: :cascade
   add_foreign_key "financial_incentive", "subject"
