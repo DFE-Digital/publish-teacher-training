@@ -694,19 +694,19 @@ describe Course, type: :model do
     end
 
     context "with primary ucas_subjects" do
-      subject { create(:course, ucas_subjects: [find_or_create(:ucas_subject, :primary)]) }
+      subject { create(:course, level: "primary", ucas_subjects: [find_or_create(:ucas_subject, :primary)]) }
       its(:ucas_level) { should eq(:primary) }
       its(:gcse_subjects_required) { should eq(%w[maths english science]) }
     end
 
     context "with secondary ucas_subjects" do
-      subject { create(:course, ucas_subjects: [find_or_create(:ucas_subject, subject_name: "physical education")]) }
+      subject { create(:course, level: "secondary", ucas_subjects: [find_or_create(:ucas_subject, subject_name: "physical education")]) }
       its(:ucas_level) { should eq(:secondary) }
       its(:gcse_subjects_required) { should eq(%w[maths english]) }
     end
 
     context "with further education ucas_subjects" do
-      subject { create(:course, ucas_subjects: [create(:further_education_subject)]) }
+      subject { create(:course, level: "further_education", ucas_subjects: [create(:further_education_subject)]) }
       its(:ucas_level) { should eq(:further_education) }
       its(:gcse_subjects_required) { should eq([]) }
     end
@@ -719,6 +719,26 @@ describe Course, type: :model do
         subject { create(:course, is_send: true) }
         its(:is_send?) { should be_truthy }
       end
+    end
+  end
+
+  context "gcse_subjects_required" do
+    context "with primary level" do
+      subject { create(:course, level: "primary") }
+      its(:level) { should eq("primary") }
+      its(:gcse_subjects_required) { should eq(%w[maths english science]) }
+    end
+
+    context "with secondary level" do
+      subject { create(:course, level: "secondary") }
+      its(:level) { should eq("secondary") }
+      its(:gcse_subjects_required) { should eq(%w[maths english]) }
+    end
+
+    context "with secondary level" do
+      subject { create(:course, level: "further_education") }
+      its(:level) { should eq("further_education") }
+      its(:gcse_subjects_required) { should eq([]) }
     end
   end
 

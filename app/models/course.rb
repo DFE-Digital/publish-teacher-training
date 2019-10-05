@@ -329,10 +329,10 @@ class Course < ApplicationRecord
 
   # https://www.gov.uk/government/publications/initial-teacher-training-criteria/initial-teacher-training-itt-criteria-and-supporting-advice#c11-gcse-standard-equivalent
   def gcse_subjects_required
-    case ucas_level
-    when :primary
+    case level
+    when "primary"
       %w[maths english science]
-    when :secondary
+    when "secondary"
       %w[maths english]
     else
       []

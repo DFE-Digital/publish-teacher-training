@@ -148,6 +148,7 @@ describe "PATCH /providers/:provider_code/courses/:course_code" do
     let(:course) {
       create :course,
              provider: provider,
+             level: "secondary",
              ucas_subjects: [secondary_subject]
     }
 
