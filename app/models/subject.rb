@@ -18,6 +18,6 @@ class Subject < ApplicationRecord
   end
 
   def to_s
-    "#{subject_name} (#{subject_code})"
+    subject_name
   end
 end
