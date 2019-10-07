@@ -333,4 +333,14 @@ describe CourseEnrichment, type: :model do
       end
     end
   end
+
+  describe "#withdraw" do
+    let(:enrichment) { create(:course_enrichment, :published) }
+
+    it "sets the status to withdrawn" do
+      enrichment.withdraw
+
+      expect(enrichment.status).to eq("withdrawn")
+    end
+  end
 end
