@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_10_07_103707) do
+ActiveRecord::Schema.define(version: 2019_10_07_163334) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_buffercache"
@@ -219,7 +219,9 @@ ActiveRecord::Schema.define(version: 2019_10_07_103707) do
     t.datetime "last_published_at"
     t.datetime "changed_at", default: -> { "timezone('utc'::text, now())" }, null: false
     t.integer "recruitment_cycle_id", null: false
+    t.datetime "discarded_at"
     t.index ["changed_at"], name: "index_provider_on_changed_at", unique: true
+    t.index ["discarded_at"], name: "index_provider_on_discarded_at"
     t.index ["last_published_at"], name: "IX_provider_last_published_at"
     t.index ["recruitment_cycle_id", "provider_code"], name: "index_provider_on_recruitment_cycle_id_and_provider_code", unique: true
   end
