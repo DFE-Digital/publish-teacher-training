@@ -148,7 +148,7 @@ GEM
     fakefs (0.20.1)
     faker (2.5.0)
       i18n (~> 1.6.0)
-    faraday (0.16.2)
+    faraday (0.17.0)
       multipart-post (>= 1.2, < 3)
     ffi (1.11.1)
     formatador (0.2.5)
