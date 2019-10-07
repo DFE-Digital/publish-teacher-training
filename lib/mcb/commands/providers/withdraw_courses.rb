@@ -1,5 +1,5 @@
 summary "Withdraw courses for a pre determined list of providers"
-usage "withdraw_courses <provider code1> [provider code2] ...""
+usage "withdraw_courses <provider code1> [provider code2] ..."
 
 run do |opts, args, _cmd|
   MCB.init_rails(opts)
