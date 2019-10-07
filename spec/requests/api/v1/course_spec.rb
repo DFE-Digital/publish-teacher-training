@@ -170,13 +170,13 @@ describe "Courses API", type: :request do
       before do
         course
         course2
-        get_index
       end
 
       context "with no cycle specified in the route" do
-        let(:get_index) { get "/api/v1/courses", headers: { "HTTP_AUTHORIZATION" => credentials } }
-
         it "defaults to the current cycle when year" do
+          get "/api/v1/courses",
+              headers: { "HTTP_AUTHORIZATION" => credentials }
+
           returned_course_codes = get_course_codes_from_body(response.body)
 
           expect(returned_course_codes).not_to include course2.course_code
@@ -184,13 +184,23 @@ describe "Courses API", type: :request do
         end
       end
       context "with a future recruitment cycle specified in the route" do
-        let(:get_index) { get "/api/v1/#{next_year}/courses", headers: { "HTTP_AUTHORIZATION" => credentials } }
-
         it "only returns courses from the requested cycle" do
+          get "/api/v1/#{next_year}/courses",
+              headers: { "HTTP_AUTHORIZATION" => credentials }
+
           returned_course_codes = get_course_codes_from_body(response.body)
 
           expect(returned_course_codes).to include course2.course_code
           expect(returned_course_codes).not_to include course.course_code
+        end
+      end
+
+      context "with a past recruitment cycle specified in the route" do
+        it "returns not found" do
+          expect {
+            get "/api/v1/#{previous_year}/courses",
+                headers: { "HTTP_AUTHORIZATION" => credentials }
+          }.to raise_error(ActionController::RoutingError)
         end
       end
     end
@@ -294,6 +304,14 @@ describe "Courses API", type: :request do
               },
             )
             expect(response.headers["Link"]).to match "#{url}; rel=\"next\""
+          end
+
+          it "returns bad_request for previous year" do
+            get "/api/v1/courses?recruitment_year=#{previous_year}",
+                headers: { "HTTP_AUTHORIZATION" => credentials },
+                params: { changed_since: 30.minutes.ago.utc.iso8601 }
+
+            expect(response).to have_http_status(:bad_request)
           end
         end
       end
