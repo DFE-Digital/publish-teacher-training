@@ -653,6 +653,14 @@ describe Course, type: :model do
 
       it { should eq :rolled_over }
     end
+
+    context "When the enrichments are withdrawn" do
+      let(:enrichment) { create :course_enrichment, status: :withdrawn }
+
+      it "should have a content status of withdrawn" do
+        expect(course.content_status).to eq(:withdrawn)
+      end
+    end
   end
 
   describe "qualifications" do
@@ -1277,6 +1285,16 @@ describe Course, type: :model do
       it "returns true" do
         expect(course.content_status).to eq(:published_with_unpublished_changes)
         expect(course.is_published?).to eq(true)
+      end
+    end
+
+    context "course is withdrawn" do
+      let(:enrichment) { create(:course_enrichment, :withdrawn) }
+      let(:course) { create(:course, enrichments: [enrichment]) }
+
+      it "returns false" do
+        expect(course.content_status).to eq(:withdrawn)
+        expect(course.is_published?).to eq(false)
       end
     end
   end

@@ -100,6 +100,11 @@ FactoryBot.define do
     last_published_timestamp_utc { 5.days.ago }
   end
 
+  trait :withdrawn do
+    status { :withdrawn }
+    last_published_timestamp_utc { 5.days.ago }
+  end
+
   trait :subsequent_draft do
     status { :draft }
     last_published_timestamp_utc { 5.days.ago }
