@@ -35,6 +35,7 @@ module API
         update_ucas_preferences
 
         if @provider.valid?
+          courses_synced?(@provider.syncable_courses) if @recruitment_cycle.current?
           render jsonapi: @provider.reload, include: params[:include]
         else
           render jsonapi_errors: @provider.errors, status: :unprocessable_entity, include: params[:include]
