@@ -92,6 +92,13 @@ describe "PATCH /providers/:provider_code/courses/:course_code" do
 
   context "when course level is further education" do
     context "with an invalid qualification" do
+      let(:course) {
+        create(:course,
+               provider: provider,
+               ucas_subjects: [subject],
+               qualification: qualification,
+               level: "further_education")
+      }
       let(:json_data) { JSON.parse(response.body)["errors"] }
       let(:updated_qualification) { { qualification: "pgce_with_qts" } }
       let(:subject) { build(:further_education_subject) }

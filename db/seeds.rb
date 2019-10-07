@@ -65,7 +65,7 @@ def create_standard_provider_and_courses_for_cycle(recruitment_cycle, superuser)
     program_type: "SD",
     maths: 1,
     english: 9,
-    science: nil,
+    science: 9,
     modular: "M",
     qualification: :pgce_with_qts,
     level: "primary",

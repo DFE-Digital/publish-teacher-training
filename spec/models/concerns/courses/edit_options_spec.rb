@@ -1,7 +1,7 @@
 require "rails_helper"
 
 describe Course, type: :model do
-  let(:course) { create(:course, ucas_subjects: [subjects]) }
+  let(:course) { create(:course, level: "primary", ucas_subjects: [subjects]) }
   let(:subjects) { create(:ucas_subject, :primary) }
 
   context "entry_requirements" do
@@ -21,6 +21,7 @@ describe Course, type: :model do
     end
 
     context "for a further education course" do
+      let(:course) { create(:course, level: "further_education", ucas_subjects: [subjects]) }
       let(:subjects) { create(:further_education_subject) }
       it "returns only QTS options for users to choose between" do
         expect(course.qualification_options).to eq(%w[pgce pgde])
@@ -39,6 +40,7 @@ describe Course, type: :model do
     end
 
     context "for secondary" do
+      let(:course) { create(:course, level: "secondary", ucas_subjects: [subjects]) }
       let(:subjects) { create(:ucas_subject, :secondary) }
       it "returns the correct age ranges for users to co choose between" do
         expect(course.age_range_options).to eq(%w[11_to_16 11_to_18 14_to_19])
