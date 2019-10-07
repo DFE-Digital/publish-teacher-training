@@ -152,7 +152,7 @@ module SearchAndCompare
     def provider_enrichment
       @provider_enrichment ||= object.provider
                                  .enrichments
-                                 .max_by(&:last_published_at)
+                                 .max_by(&:updated_at)
     end
 
     def course_enrichment
