@@ -1,10 +1,13 @@
 require "rails_helper"
 
-fdescribe "Provider Publish API v2", type: :request do
+describe "Provider Publish API v2", type: :request do
   let(:user)         { create(:user) }
   let(:organisation) { create(:organisation, users: [user]) }
-  let(:provider)     do
-    create(:provider, organisations: [organisation])
+  let(:recruitment_cycle) { find_or_create(:recruitment_cycle) }
+  let(:provider) do
+    create(:provider,
+           recruitment_cycle: recruitment_cycle,
+           organisations: [organisation])
   end
   let(:payload)      { { email: user.email } }
   let(:token)        { build_jwt :apiv2, payload: payload }
@@ -14,7 +17,7 @@ fdescribe "Provider Publish API v2", type: :request do
 
   describe "PATCH /providers/:provider_code" do
     let(:publish_path) do
-      "/api/v2/recruitment_cycles/#{provider.recruitment_cycle.year}" +
+      "/api/v2/recruitment_cycles/#{recruitment_cycle.year}" +
         "/providers/#{provider.provider_code}"
     end
 
@@ -59,17 +62,20 @@ fdescribe "Provider Publish API v2", type: :request do
           )
       end
 
-      describe "current recruitment cycle" do
-        let!(:provider) do
-          create(
-            :provider,
-            organisations: [organisation],
-            enrichments: [enrichment],
-            courses: courses,
-          )
-        end
+      let!(:provider) do
+        create(
+          :provider,
+          organisations: [organisation],
+          enrichments: [enrichment],
+          courses: courses,
+          recruitment_cycle: recruitment_cycle,
+        )
+      end
 
-        describe "only syncable courses on provider" do
+      describe "search and compare api sync on provider" do
+        context "current recruitment cycle" do
+          let(:recruitment_cycle) { find_or_create(:recruitment_cycle) }
+
           context "no courses" do
             it "does not syncs a provider's courses" do
               perform_enqueued_jobs do
@@ -78,7 +84,7 @@ fdescribe "Provider Publish API v2", type: :request do
               expect(sync_stub).to_not have_been_requested
             end
           end
-          context "its fine" do
+          context "syncable courses" do
             let(:courses) {
               [course1, course2]
             }
@@ -92,7 +98,7 @@ fdescribe "Provider Publish API v2", type: :request do
             end
           end
 
-          context "mixed" do
+          context "one syncable and one invalid courses" do
             let(:course3) { build(:course) }
             let(:courses) {
               [course1, course3]
@@ -106,20 +112,10 @@ fdescribe "Provider Publish API v2", type: :request do
             end
           end
         end
-      end
 
-      describe "next recruitment cycle" do
-        let!(:provider) do
-          create(
-            :provider,
-            :next_recruitment_cycle,
-            organisations: [organisation],
-            enrichments: [enrichment],
-            courses: courses,
-          )
-        end
+        context "next recruitment cycle" do
+          let(:recruitment_cycle) { find_or_create(:recruitment_cycle, :next) }
 
-        describe "only syncable courses on provider" do
           context "no courses" do
             it "does not syncs a provider's courses" do
               perform_enqueued_jobs do
@@ -128,11 +124,11 @@ fdescribe "Provider Publish API v2", type: :request do
               expect(sync_stub).to_not have_been_requested
             end
           end
-          context "its fine" do
+
+          context "syncable courses" do
             let(:courses) {
               [course1, course2]
             }
-
             it "does not syncs a provider's courses" do
               perform_enqueued_jobs do
                 subject
@@ -140,7 +136,8 @@ fdescribe "Provider Publish API v2", type: :request do
               expect(sync_stub).to_not have_been_requested
             end
           end
-          context "mixed" do
+
+          context "one syncable and one invalid courses" do
             let(:course3) { build(:course) }
             let(:courses) {
               [course1, course3]
@@ -153,19 +150,10 @@ fdescribe "Provider Publish API v2", type: :request do
             end
           end
         end
-      end
-      describe "previous recruitment cycle" do
-        let!(:provider) do
-          create(
-            :provider,
-            :previous_recruitment_cycle,
-            organisations: [organisation],
-            enrichments: [enrichment],
-            courses: courses,
-          )
-        end
 
-        describe "only syncable courses on provider" do
+        context "previous recruitment cycle" do
+          let(:recruitment_cycle) { find_or_create(:recruitment_cycle, :previous) }
+
           context "no courses" do
             it "does not syncs a provider's courses" do
               perform_enqueued_jobs do
@@ -174,11 +162,10 @@ fdescribe "Provider Publish API v2", type: :request do
               expect(sync_stub).to_not have_been_requested
             end
           end
-          context "its fine" do
+          context "syncable courses" do
             let(:courses) {
               [course1, course2]
             }
-
             it "does not syncs a provider's courses" do
               perform_enqueued_jobs do
                 subject
@@ -187,7 +174,7 @@ fdescribe "Provider Publish API v2", type: :request do
             end
           end
 
-          context "mixed" do
+          context "one syncable and one invalid courses" do
             let(:course3) { build(:course) }
             let(:courses) {
               [course1, course3]
