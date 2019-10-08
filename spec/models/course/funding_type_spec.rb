@@ -1,5 +1,15 @@
 RSpec.describe Course, type: :model do
   describe "#funding_type" do
+    describe "self accredited salary" do
+      let(:provider) { create(:provider) }
+      let(:course) { create(:course, provider: provider) }
+
+      it "adds an error" do
+        course.funding_type = "salary"
+        expect(course.errors.messages[:program_type]).to eq(["Salary is not valid for a self accredited course"])
+      end
+    end
+
     describe "higher education programme" do
       subject { create(:course, :with_higher_education) }
 
