@@ -21,7 +21,6 @@ $LOAD_PATH << lib_dir
 require 'mcb'
 require 'mcb/azure'
 require 'mcb/config'
-require 'mcb/course_show'
 
 require 'mcb/cli/base_cli'
 require 'mcb/cli/course_cli'

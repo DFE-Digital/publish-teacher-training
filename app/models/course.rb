@@ -60,14 +60,21 @@ class Course < ApplicationRecord
     full_time_or_part_time: "B",
   }
 
-  enum age_range: {
-    primary: "P",
-    secondary: "S",
-    middle_years: "M",
+  # enum age_range: {
+    # primary: "P",
+    # secondary: "S",
+    # middle_years: "M",
     # 'other' doesn't exist in the data yet but is reserved for courses that don't fit
     # the above categories
-    other: "O",
-  }
+    # other: "O",
+  # }
+  def age_range
+    raise "RIP"
+  end
+
+  def age_range=(*)
+    raise "= RIP ="
+  end
 
   enum level: {
     primary: "Primary",
