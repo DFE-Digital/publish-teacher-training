@@ -24,7 +24,22 @@ describe RecruitmentCycle, type: :model do
   it { is_expected.to validate_presence_of(:year) }
 
   describe "associations" do
-    it { should have_many(:courses).through(:providers) }
+    describe "providers" do
+      it { should have_many(:courses).through(:providers) }
+
+      context "with discarded providers" do
+        let(:provider)           { create :provider, recruitment_cycle: subject }
+        let(:discarded_provider) { create :provider, :discarded, recruitment_cycle: subject }
+
+        it "does not include the discarded providers" do
+          provider
+          discarded_provider
+
+          expect(subject.providers).to include(provider)
+          expect(subject.providers).not_to include(discarded_provider)
+        end
+      end
+    end
     it { should have_many(:sites).through(:providers) }
   end
 

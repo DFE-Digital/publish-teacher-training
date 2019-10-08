@@ -29,6 +29,7 @@
 class Provider < ApplicationRecord
   include RegionCode
   include ChangedAt
+  include Discard::Model
 
   before_create :set_defaults
 

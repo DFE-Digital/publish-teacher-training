@@ -640,4 +640,37 @@ describe Provider, type: :model do
       it { should eq nil }
     end
   end
+
+  describe "#discard" do
+    subject { create(:provider) }
+
+    context "before discarding" do
+      its(:discarded?) { should be false }
+
+      it "is in kept" do
+        provider
+        expect(described_class.kept.size).to eq(1)
+      end
+
+      it "is not in discarded" do
+        expect(described_class.discarded.size).to eq(0)
+      end
+    end
+
+    context "after discarding" do
+      before do
+        subject.discard
+      end
+
+      its(:discarded?) { should be true }
+
+      it "is not in kept" do
+        expect(described_class.kept.size).to eq(0)
+      end
+
+      it "is in discarded" do
+        expect(described_class.discarded.size).to eq(1)
+      end
+    end
+  end
 end
