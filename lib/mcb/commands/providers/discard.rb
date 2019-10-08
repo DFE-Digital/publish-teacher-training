@@ -1,14 +1,9 @@
 summary "Discards a provider"
 usage "discard <provider code>"
-param :provider_code, transform: ->(code) { code.upcase }
+param :code, transform: ->(code) { code.upcase }
 
 run do |opts, args, _cmd|
   MCB.init_rails(opts)
-  current_cycle = RecruitmentCycle.current
-  provider = if opts&.first&.second == current_cycle.year || opts.blank?
-               current_cycle.providers.find_by!(provider_code: args[:provider_code])
-             else
-               RecruitmentCycle.find_by!(year: opts.first.second).providers.find_by!(provider_code: args[:provider_code])
-             end
+  provider = MCB.get_recruitment_cycle(opts).providers.find_by!(provider_code: args[:code])
   provider.discard
 end
