@@ -73,5 +73,9 @@ FactoryBot.define do
     trait :next_recruitment_cycle do
       recruitment_cycle { find_or_create :recruitment_cycle, :next }
     end
+
+    trait :discarded do
+      discarded_at { Time.now.utc }
+    end
   end
 end
