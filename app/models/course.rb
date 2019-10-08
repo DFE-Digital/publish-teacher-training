@@ -3,7 +3,6 @@
 # Table name: course
 #
 #  id                        :integer          not null, primary key
-#  age_range                 :text
 #  course_code               :text
 #  name                      :text
 #  profpost_flag             :text
@@ -59,22 +58,6 @@ class Course < ApplicationRecord
     part_time: "P",
     full_time_or_part_time: "B",
   }
-
-  # enum age_range: {
-    # primary: "P",
-    # secondary: "S",
-    # middle_years: "M",
-    # 'other' doesn't exist in the data yet but is reserved for courses that don't fit
-    # the above categories
-    # other: "O",
-  # }
-  def age_range
-    raise "RIP"
-  end
-
-  def age_range=(*)
-    raise "= RIP ="
-  end
 
   enum level: {
     primary: "Primary",
