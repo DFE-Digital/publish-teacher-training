@@ -36,6 +36,7 @@ module API
 
         if @provider.valid?
           courses_synced?(@provider.syncable_courses) if @recruitment_cycle.current? && @provider.syncable_courses.present?
+
           render jsonapi: @provider.reload, include: params[:include]
         else
           render jsonapi_errors: @provider.errors, status: :unprocessable_entity, include: params[:include]
