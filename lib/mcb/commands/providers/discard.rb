@@ -1,5 +1,5 @@
 summary "Discards a provider"
-usage "discard provider <provider code>"
+usage "discard <provider code>"
 param :provider_code, transform: ->(code) { code.upcase }
 
 run do |opts, args, _cmd|
