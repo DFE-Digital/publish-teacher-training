@@ -51,7 +51,15 @@ class CourseSerializer < ActiveModel::Serializer
   end
 
   def age_range
-    object.age_range_before_type_cast
+    if %w[3_to_7 5_to_11 7_to_11].include?(object.age_range_in_years)
+      "P"
+    elsif object.age_range_in_years == "7_to_14"
+      "M"
+    elsif %w[11_to_16 11_to_18 14_to_19].include?(object.age_range_in_years)
+      "S"
+    else
+      "O"
+    end
   end
 
   def maths
