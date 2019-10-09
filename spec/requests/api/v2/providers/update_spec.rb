@@ -22,21 +22,27 @@ describe "PATCH /providers/:provider_code" do
       jsonapi_data.dig(:data, :attributes).merge!(enrichment_data)
     end
 
-    patch request_path,
-          headers: { "HTTP_AUTHORIZATION" => credentials },
-          params: {
-            _jsonapi: jsonapi_data,
-            include: "latest_enrichment",
-          }
+    perform_enqueued_jobs do
+      patch request_path,
+            headers: { "HTTP_AUTHORIZATION" => credentials },
+            params: {
+              _jsonapi: jsonapi_data,
+              include: "latest_enrichment",
+            }
+    end
   end
 
   let(:recruitment_cycle) { find_or_create :recruitment_cycle }
   let(:organisation) { create :organisation }
+  let(:site1) { build(:site_status, :findable) }
+  let(:course1) { build(:course, site_statuses: [site1], subjects: [dfe_subject]) }
+  let!(:dfe_subject) { build(:subject, :primary) }
   let(:provider)     do
     create :provider,
            organisations: [organisation],
            recruitment_cycle: recruitment_cycle,
-           enrichments: enrichments
+           enrichments: enrichments,
+           courses: [course1]
   end
   let(:user)         { create :user, organisations: [organisation] }
   let(:payload)      { { email: user.email } }
@@ -82,6 +88,16 @@ describe "PATCH /providers/:provider_code" do
     ]
   end
 
+  let(:search_api_status) { 200 }
+  let(:sync_body) { WebMock::Matchers::AnyArgMatcher.new(nil) }
+  let!(:sync_stub) do
+    stub_request(:put, %r{#{Settings.search_api.base_url}/api/courses/})
+      .with(body: sync_body)
+      .to_return(
+        status: search_api_status,
+      )
+  end
+
   describe "with unpermitted attributes on provider object" do
     shared_examples "does not allow assignment" do |attribute, value|
       it "doesn't permit #{attribute}" do
@@ -89,6 +105,7 @@ describe "PATCH /providers/:provider_code" do
         update_provider.id = provider.id
         perform_request(provider)
         expect(provider.reload.send(attribute)).not_to eq(value)
+        expect(sync_stub).to have_been_requested
       end
     end
 
@@ -126,6 +143,10 @@ describe "PATCH /providers/:provider_code" do
       context "with sites" do
         its(:sites) { should_not include(site) }
       end
+
+      it "syncs a provider's courses" do
+        expect(sync_stub).to have_been_requested
+      end
     end
   end
 
@@ -147,6 +168,13 @@ describe "PATCH /providers/:provider_code" do
       expect {
         perform_request update_provider
       }.to(change { provider.reload.content_status }.from(:empty).to(:draft))
+    end
+
+
+    it "syncs a provider's courses" do
+      perform_request update_provider
+
+      expect(sync_stub).to have_been_requested
     end
 
     context "with no attributes to update" do
@@ -219,6 +247,11 @@ describe "PATCH /providers/:provider_code" do
     context "provider has a draft enrichment" do
       let(:enrichment) { build(:provider_enrichment) }
       let(:enrichments) { [enrichment] }
+
+      it "syncs a provider's courses" do
+        perform_request update_provider
+        expect(sync_stub).to have_been_requested
+      end
 
       it "updates the provider's draft enrichment" do
         expect {
@@ -329,6 +362,13 @@ describe "PATCH /providers/:provider_code" do
     context "provider has only a published enrichment" do
       let(:enrichment) { build :provider_enrichment, :published }
       let(:enrichments) { [enrichment] }
+
+      it "syncs a provider's courses" do
+        perform_request update_provider
+
+        expect(sync_stub).to have_been_requested
+      end
+
       it "creates a draft enrichment for the provider" do
         expect { perform_request update_provider }
           .to(
@@ -368,6 +408,12 @@ describe "PATCH /providers/:provider_code" do
           expect("Invalid enrichments".in?(subject)).to eq(false)
           expect("Invalid train_with_us".in?(subject)).to eq(true)
         end
+
+        it "does not syncs a provider's courses" do
+          perform_request update_provider
+
+          expect(sync_stub).to_not have_been_requested
+        end
       end
 
       context "bad telephone number" do
@@ -395,6 +441,12 @@ describe "PATCH /providers/:provider_code" do
           .to_not(
             change { provider.enrichments.reload.count },
           )
+        end
+
+        it "does not syncs a provider's courses" do
+          perform_request update_provider
+
+          expect(sync_stub).to_not have_been_requested
         end
       end
     end
@@ -431,6 +483,10 @@ describe "PATCH /providers/:provider_code" do
           expect(subject.enrichments.draft.first[attribute_key]).to eq(attribute_value)
         end
 
+        it "syncs a provider's courses" do
+          expect(sync_stub).to have_been_requested
+        end
+
         enrichments_attributes_key = %i[
           email
           website
@@ -458,7 +514,7 @@ describe "PATCH /providers/:provider_code" do
     let(:original_enrichment) { build :provider_enrichment, :published, created_at: Date.yesterday }
     let(:enrichments) { [original_enrichment] }
 
-    include_examples "only one attribute has changed", :email, "changed email_address"
+    include_examples "only one attribute has changed", :email, "changed@email_address.com"
     include_examples "only one attribute has changed", :website, "changed url"
     include_examples "only one attribute has changed", :address1, "changed number"
     include_examples "only one attribute has changed", :address2, "changed street"
@@ -483,6 +539,10 @@ describe "PATCH /providers/:provider_code" do
 
     it "Sets the provider enrichment status to draft" do
       expect(updated_enrichment.status).to eq("draft")
+    end
+
+    it "syncs a provider's courses" do
+      expect(sync_stub).to have_been_requested
     end
   end
 end
