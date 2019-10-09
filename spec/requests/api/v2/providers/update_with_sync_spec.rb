@@ -37,8 +37,6 @@ describe "Provider Publish API v2", type: :request do
       response
     end
 
-    include_examples "Unauthenticated, unauthorised, or not accepted T&Cs"
-
     context "sync provider with latests enrichments" do
       let(:enrichment) { build(:provider_enrichment, :initial_draft) }
       let(:site1) { create(:site_status, :findable) }
