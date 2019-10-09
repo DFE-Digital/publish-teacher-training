@@ -233,11 +233,7 @@ class Course < ApplicationRecord
   end
 
   def open_for_applications?
-    if site_statuses.loaded?
-      site_statuses.select(&:open_for_applications?).any?
-    else
-      site_statuses.open_for_applications.any?
-    end
+    applications_open_from.present? && applications_open_from <= Time.now.utc && findable?
   end
 
   def has_vacancies?

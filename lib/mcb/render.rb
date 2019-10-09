@@ -125,7 +125,6 @@ module MCB
         :vac_status,
         :status,
         :publish,
-        :applications_accepted_from,
       ]
     end
 

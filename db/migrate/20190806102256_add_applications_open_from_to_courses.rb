@@ -9,10 +9,7 @@ class AddApplicationsOpenFromToCourses < ActiveRecord::Migration[5.2]
     say_with_time "Setting applications_open_from to one held within sites" do
       current_recruitment_cycle = RecruitmentCycle.current_recruitment_cycle
       current_recruitment_cycle.courses.includes(:site_statuses).includes(provider: :recruitment_cycle).all.each do |course|
-        if !course.site_statuses.empty?
-          applications_open_from = course.site_statuses.min_by(&:applications_accepted_from).applications_accepted_from
-          course.update_column(:applications_open_from, applications_open_from)
-        else
+        if course.site_statuses.empty?
           course.update_column(:applications_open_from, current_recruitment_cycle.application_start_date)
         end
       end

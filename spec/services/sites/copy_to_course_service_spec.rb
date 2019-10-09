@@ -28,6 +28,5 @@ describe Sites::CopyToCourseService do
 
     it { should be_full_time_vacancies }
     it { should be_status_new_status }
-    its(:applications_accepted_from) { should eq new_recruitment_cycle.application_start_date }
   end
 end

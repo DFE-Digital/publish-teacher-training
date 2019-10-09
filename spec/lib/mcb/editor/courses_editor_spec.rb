@@ -182,13 +182,10 @@ describe MCB::Editor::CoursesEditor, :needs_audit_user do
 
         before do
           sites.collect do |site|
-            course.site_statuses.create(
-              site: site,
-              status: :running,
-              vac_status: :part_time_vacancies,
-              publish: :published,
-              applications_accepted_from: Date.new(last_year, 10, 9),
-            )
+            course.site_statuses.create(site: site,
+                                        status: :running,
+                                        vac_status: :part_time_vacancies,
+                                        publish: :published)
           end
         end
 
@@ -703,10 +700,8 @@ describe MCB::Editor::CoursesEditor, :needs_audit_user do
           "start_date" => Date.new(current_year, 9, 1),
           "program_type" => desired_attributes[:route],
         )
+
         expect(created_course.accrediting_provider).to eq(provider)
-        expect(
-          created_course.site_statuses.map(&:applications_accepted_from).uniq,
-        ).to eq([Date.new(last_year, 11, 1)])
       end
 
       it "does not create the course if creation isn't confirmed" do

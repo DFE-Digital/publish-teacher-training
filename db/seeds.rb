@@ -81,7 +81,6 @@ def create_standard_provider_and_courses_for_cycle(recruitment_cycle, superuser)
     publish: "Y",
     course: primary_course,
     status: "R",
-    applications_accepted_from: Date.new(2018, 10, 23),
   )
 
   secondary_course1 = Course.create!(
@@ -110,7 +109,6 @@ def create_standard_provider_and_courses_for_cycle(recruitment_cycle, superuser)
     publish: "Y",
     course: secondary_course1,
     status: "N",
-    applications_accepted_from: Date.new(2018, 10, 2),
   )
 
   secondary_course2 = Course.create!(
@@ -139,7 +137,6 @@ def create_standard_provider_and_courses_for_cycle(recruitment_cycle, superuser)
     publish: "Y",
     course: secondary_course2,
     status: "N",
-    applications_accepted_from: Date.new(2018, 10, 2),
   )
 
   further_education_course = Course.create!(
@@ -167,7 +164,6 @@ def create_standard_provider_and_courses_for_cycle(recruitment_cycle, superuser)
     publish: "Y",
     course: further_education_course,
     status: "N",
-    applications_accepted_from: Date.new(2018, 10, 2),
   )
 
   modern_language_course1 = Course.create!(
@@ -196,7 +192,6 @@ def create_standard_provider_and_courses_for_cycle(recruitment_cycle, superuser)
     publish: "Y",
     course: modern_language_course1,
     status: "N",
-    applications_accepted_from: Date.new(2018, 10, 2),
   )
 
   modern_language_course2 = Course.create!(
@@ -225,7 +220,6 @@ def create_standard_provider_and_courses_for_cycle(recruitment_cycle, superuser)
     publish: "Y",
     course: modern_language_course2,
     status: "N",
-    applications_accepted_from: Date.new(2018, 10, 2),
   )
 
   modern_language_course3 = Course.create!(
@@ -257,7 +251,6 @@ def create_standard_provider_and_courses_for_cycle(recruitment_cycle, superuser)
     publish: "Y",
     course: modern_language_course3,
     status: "N",
-    applications_accepted_from: Date.new(2018, 10, 2),
   )
 end
 

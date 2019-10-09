@@ -3,7 +3,7 @@ module API
     class SerializableSiteStatus < JSONAPI::Serializable::Resource
       type "site_statuses"
 
-      attributes :vac_status, :publish, :status, :applications_accepted_from, :has_vacancies?
+      attributes :vac_status, :publish, :status, :has_vacancies?
 
       has_one :site
     end

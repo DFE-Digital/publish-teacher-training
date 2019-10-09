@@ -17,7 +17,6 @@ module API
           .require(:site_status)
           .except(:id, :type, :site_id, :site_type, :has_vacancies?)
           .permit(
-            :applications_accepted_from,
             :publish,
             :status,
             :vac_status,

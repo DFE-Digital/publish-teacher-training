@@ -191,8 +191,6 @@ describe Course, type: :model do
     let(:suspended) { build(:site_status, :suspended) }
     let(:with_any_vacancy) { build(:site_status, :with_any_vacancy) }
     let(:default) { build(:site_status) }
-    let(:applications_being_accepted_now) { build(:site_status, :applications_being_accepted_now) }
-    let(:applications_being_accepted_in_future) { build(:site_status, :applications_being_accepted_in_future) }
     let(:site_status_with_no_vacancies) { build(:site_status, :with_no_vacancies) }
 
     describe "#findable_site_statuses" do
@@ -286,14 +284,14 @@ describe Course, type: :model do
       let(:findable_without_vacancies) { build(:site_status, :findable, :with_no_vacancies) }
       context "for a single site status that has vacancies" do
         let(:subject) {
-          create(:course, site_statuses: [findable, applications_being_accepted_now, with_any_vacancy])
+          create(:course, site_statuses: [findable, with_any_vacancy])
         }
 
         its(:has_vacancies?) { should be true }
       end
 
       context "for a site status with vacancies and others without" do
-        let(:findable_with_vacancies) { build(:site_status, :findable, :with_any_vacancy, :applications_being_accepted_now) }
+        let(:findable_with_vacancies) { build(:site_status, :findable, :with_any_vacancy) }
         let(:subject) {
           create(:course, site_statuses: [findable_with_vacancies, findable_without_vacancies])
         }
@@ -307,14 +305,6 @@ describe Course, type: :model do
         }
 
         its(:has_vacancies?) { should be false }
-      end
-
-      context "when the site is findable but only opens in the future" do
-        let(:findable_with_vacancies) { build(:site_status, :findable, :with_any_vacancy, :applications_being_accepted_in_future) }
-        let(:subject) {
-          create(:course, site_statuses: [findable_with_vacancies])
-        }
-        its(:has_vacancies?) { should be true }
       end
 
       context "when only discontinued and suspended site statuses have vacancies" do
@@ -335,14 +325,14 @@ describe Course, type: :model do
 
       context "for a single site status that has vacancies" do
         let(:subject) {
-          create(:course, site_statuses: [findable, applications_being_accepted_now, with_any_vacancy]).reload
+          create(:course, site_statuses: [findable, with_any_vacancy]).reload
         }
 
         its(:has_vacancies?) { should be true }
       end
 
       context "for a site status with vacancies and others without" do
-        let(:findable_with_vacancies) { build(:site_status, :findable, :with_any_vacancy, :applications_being_accepted_now) }
+        let(:findable_with_vacancies) { build(:site_status, :findable, :with_any_vacancy) }
         let(:subject) {
           create(:course, site_statuses: [findable_with_vacancies, findable_without_vacancies]).reload
         }
@@ -356,14 +346,6 @@ describe Course, type: :model do
         }
 
         its(:has_vacancies?) { should be false }
-      end
-
-      context "when the site is findable but only opens in the future" do
-        let(:findable_with_vacancies) { build(:site_status, :findable, :with_any_vacancy, :applications_being_accepted_in_future) }
-        let(:subject) {
-          create(:course, site_statuses: [findable_with_vacancies]).reload
-        }
-        its(:has_vacancies?) { should be true }
       end
 
       context "when only discontinued and suspended site statuses have vacancies" do
@@ -380,69 +362,139 @@ describe Course, type: :model do
     end
 
     describe "open_for_applications?" do
-      context "with at least one site status applications_being_accepted_now" do
-        context "single site status applications_being_accepted_now as it open now" do
-          let(:findable_with_vacancies) { build(:site_status, :findable, :with_any_vacancy, :applications_being_accepted_now) }
-          let(:subject) {
-            create(:course, site_statuses: [findable_with_vacancies])
-          }
+      let(:site_statuses) { [] }
 
-          its(:site_statuses) { should_not be_empty }
-          its(:open_for_applications?) { should be true }
-        end
+      let(:applications_open_from) { Time.now.utc }
 
-        context "single site status applications_being_accepted_now as it open future" do
-          let(:subject) {
-            create(:course, site_statuses: [applications_being_accepted_in_future])
-          }
+      let(:course) do
+        create(:course,
+               site_statuses: site_statuses,
+               applications_open_from: applications_open_from)
+      end
 
-          its(:site_statuses) { should_not be_empty }
+      let(:subject) {
+        course
+      }
+
+      context "no site statuses" do
+        context "applications_open_from is in present or past" do
           its(:open_for_applications?) { should be false }
         end
+        context "applications_open_from is in future" do
+          let(:applications_open_from) { Time.now.utc + 1.days }
+          its(:open_for_applications?) { should be false }
+        end
+      end
 
-        context "site statuses applications_being_accepted_now as it open now & future" do
-          let(:findable_with_vacancies_now) { build(:site_status, :findable, :with_any_vacancy, :applications_being_accepted_now) }
-          let(:findable_with_vacancies_in_future) { build(:site_status, :findable, :with_any_vacancy, :applications_being_accepted_in_future) }
-          let(:subject) {
-            create(:course, site_statuses: [findable_with_vacancies_now, findable_with_vacancies_in_future])
-          }
+      context "with site statuses" do
+        context "with only a single findable site statuses" do
+          let(:site_statuses) { [findable] }
+          context "applications_open_from is in present or past" do
+            its(:open_for_applications?) { should be true }
+          end
+          context "applications_open_from is in future" do
+            let(:applications_open_from) { Time.now.utc + 1.days }
+            its(:open_for_applications?) { should be false }
+          end
+        end
 
-          its(:site_statuses) { should_not be_empty }
-          its(:open_for_applications?) { should be true }
+        context "with at least a single findable site statuses" do
+          let(:site_statuses) do
+            [default, findable, new_site_status,
+             site_status_with_no_vacancies, suspended, with_any_vacancy]
+          end
+
+          context "applications_open_from is in present or past" do
+            its(:open_for_applications?) { should be true }
+          end
+          context "applications_open_from is in future" do
+            let(:applications_open_from) { Time.now.utc + 1.days }
+            its(:open_for_applications?) { should be false }
+          end
+        end
+
+        context "with no findable site statuses" do
+          let(:site_statuses) do
+            [default, new_site_status, site_status_with_no_vacancies,
+             suspended, with_any_vacancy]
+          end
+
+          context "applications_open_from is in present or past" do
+            its(:open_for_applications?) { should be false }
+          end
+          context "applications_open_from is in future" do
+            let(:applications_open_from) { Time.now.utc + 1.days }
+            its(:open_for_applications?) { should be false }
+          end
         end
       end
     end
 
     describe "open_for_applications? (when site_statuses not loaded)" do
-      context "with at least one site status applications_being_accepted_now" do
-        context "single site status applications_being_accepted_now as it open now" do
-          let(:findable_with_vacancies) { build(:site_status, :findable, :with_any_vacancy, :applications_being_accepted_now) }
-          let(:subject) {
-            create(:course, site_statuses: [findable_with_vacancies]).reload
-          }
+      let(:site_statuses) { [] }
 
-          its(:site_statuses) { should_not be_empty }
-          its(:open_for_applications?) { should be true }
-        end
+      let(:applications_open_from) { Time.now.utc }
 
-        context "single site status applications_being_accepted_now as it open future" do
-          let(:subject) {
-            create(:course, site_statuses: [applications_being_accepted_in_future]).reload
-          }
+      let(:course) do
+        create(:course,
+               site_statuses: site_statuses,
+               applications_open_from: applications_open_from)
+      end
 
-          its(:site_statuses) { should_not be_empty }
+      let(:subject) {
+        course.reload
+      }
+
+      context "no site statuses" do
+        context "applications_open_from is in present or past" do
           its(:open_for_applications?) { should be false }
         end
+        context "applications_open_from is in future" do
+          let(:applications_open_from) { Time.now.utc + 1.days }
+          its(:open_for_applications?) { should be false }
+        end
+      end
 
-        context "site statuses applications_being_accepted_now as it open now & future" do
-          let(:findable_with_vacancies_now) { build(:site_status, :findable, :with_any_vacancy, :applications_being_accepted_now) }
-          let(:findable_with_vacancies_in_future) { build(:site_status, :findable, :with_any_vacancy, :applications_being_accepted_in_future) }
-          let(:subject) {
-            create(:course, site_statuses: [findable_with_vacancies_now, findable_with_vacancies_in_future]).reload
-          }
+      context "with site statuses" do
+        context "with only a single findable site statuses" do
+          let(:site_statuses) { [findable] }
+          context "applications_open_from is in present or past" do
+            its(:open_for_applications?) { should be true }
+          end
+          context "applications_open_from is in future" do
+            let(:applications_open_from) { Time.now.utc + 1.days }
+            its(:open_for_applications?) { should be false }
+          end
+        end
 
-          its(:site_statuses) { should_not be_empty }
-          its(:open_for_applications?) { should be true }
+        context "with at least a single findable site statuses" do
+          let(:site_statuses) do
+            [default, findable, new_site_status,
+             site_status_with_no_vacancies, suspended, with_any_vacancy]
+          end
+
+          context "applications_open_from is in present or past" do
+            its(:open_for_applications?) { should be true }
+          end
+          context "applications_open_from is in future" do
+            let(:applications_open_from) { Time.now.utc + 1.days }
+            its(:open_for_applications?) { should be false }
+          end
+        end
+
+        context "with no findable site statuses" do
+          let(:site_statuses) do
+            [default, new_site_status, site_status_with_no_vacancies,
+             suspended, with_any_vacancy]
+          end
+
+          context "applications_open_from is in present or past" do
+            its(:open_for_applications?) { should be false }
+          end
+          context "applications_open_from is in future" do
+            let(:applications_open_from) { Time.now.utc + 1.days }
+            its(:open_for_applications?) { should be false }
+          end
         end
       end
     end

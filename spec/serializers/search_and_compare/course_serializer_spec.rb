@@ -75,8 +75,7 @@ describe SearchAndCompare::CourseSerializer do
 
       let(:site_status1) do
         build :site_status, :findable, :full_time_vacancies,
-              site: site1,
-              applications_accepted_from: "2018-10-09T00:00:00"
+              site: site1
       end
 
       let(:site2) do

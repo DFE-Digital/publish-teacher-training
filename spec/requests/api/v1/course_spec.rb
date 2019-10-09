@@ -53,13 +53,13 @@ describe "Courses API", type: :request do
                                    program_type: :scitt_programme,
                                    modular: "",
                                    provider: provider,
+                                   applications_open_from: "#{previous_year}-10-09 00:00:00",
                                    age: 2.hours.ago)
 
         FactoryBot.create(:site_status,
                           vac_status: :full_time_vacancies,
                           publish: "Y",
                           status: :running,
-                          applications_accepted_from: "#{previous_year}-10-09 00:00:00",
                           course: course,
                           site: site)
 
@@ -506,11 +506,9 @@ describe "Courses API", type: :request do
       let(:course1) { create(:course, study_mode: "full_time", profpost_flag: "postgraduate", program_type: "higher_education_programme", provider: provider1) }
       let(:course2) { create(:course, study_mode: "full_time", profpost_flag: "postgraduate", program_type: "higher_education_programme", provider: provider1) }
 
-      let!(:status1) do
-        create(:site_status, status: :new_status, course: course1, vac_status: "full_time_vacancies", applications_accepted_from: Date.new(current_year, 7, 23))
-      end
-      let!(:status2) { create(:site_status, status: :new_status, course: course2, vac_status: "full_time_vacancies", applications_accepted_from: Date.new(current_year, 7, 24)) }
-      let!(:status3) { create(:site_status, status: :running, course: course2, vac_status: "full_time_vacancies", applications_accepted_from: Date.new(current_year, 7, 24)) }
+      let!(:status1) { create(:site_status, status: :new_status, course: course1, vac_status: "full_time_vacancies") }
+      let!(:status2) { create(:site_status, status: :new_status, course: course2, vac_status: "full_time_vacancies") }
+      let!(:status3) { create(:site_status, status: :running, course: course2, vac_status: "full_time_vacancies") }
 
       it "does not send courses marked new" do
         get "/api/v1/#{current_year}/courses", headers: { "HTTP_AUTHORIZATION" => credentials }

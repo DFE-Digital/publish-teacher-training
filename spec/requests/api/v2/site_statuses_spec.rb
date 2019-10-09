@@ -58,7 +58,6 @@ describe "Site Helpers API V2" do
         }
       end
       let(:site_status_params)         { params.dig :_jsonapi, :data, :attributes }
-      let(:applications_accepted_from) { "2019-01-01 00:00:00" }
       let(:publish)                    { "published" }
       let(:status)                     { "discontinued" }
       let(:vac_status)                 { "no_vacancies" }
@@ -66,7 +65,6 @@ describe "Site Helpers API V2" do
 
       before do
         site_status_params.merge!(
-          applications_accepted_from: applications_accepted_from,
           publish:                    publish,
           status:                     status,
           vac_status:                 vac_status,
@@ -74,13 +72,6 @@ describe "Site Helpers API V2" do
       end
 
       subject { perform_request }
-
-      it "updates applications_accepted_from on the site status" do
-        expect { subject }.to(
-          change { site_status.reload.applications_accepted_from }
-          .to(Date.parse(applications_accepted_from)),
-        )
-      end
 
       it "updates publish on the site status" do
         expect { subject }.to(change { site_status.reload.publish }
@@ -112,7 +103,6 @@ describe "Site Helpers API V2" do
           expect(json_data).to have_id(site_status.id.to_s)
           expect(json_data).to have_type("site_statuses")
           expect(json_data).to have_attributes(
-            :applications_accepted_from,
             :publish,
             :status,
             :vac_status,

@@ -16,6 +16,7 @@ describe "Courses API v2", type: :request do
   let(:previous_year) { current_year - 1 }
   let(:next_year)     { current_year + 1 }
 
+  let(:applications_open_from) { Time.now.utc }
   let(:findable_open_course) {
     create(:course, :resulting_in_pgce_with_qts, :with_apprenticeship,
            level: :secondary,
@@ -31,14 +32,13 @@ describe "Courses API v2", type: :request do
            english: :must_have_qualification_at_application_time,
            science: :must_have_qualification_at_application_time,
            age_range_in_years: "3_to_7",
-           applications_open_from: Date.new(current_year, 1, 1))
+           applications_open_from: applications_open_from)
   }
 
   let(:courses_site_status) {
     build(:site_status,
           :findable,
           :with_any_vacancy,
-          :applications_being_accepted_now,
           site: create(:site, provider: provider))
   }
   let(:enrichment)     { build :course_enrichment, :published }
@@ -179,7 +179,6 @@ describe "Courses API v2", type: :request do
                 "vac_status" => site_status.vac_status,
                 "publish" => site_status.publish,
                 "status" => site_status.status,
-                "applications_accepted_from" => site_status.applications_accepted_from.strftime("%Y-%m-%d"),
                 "has_vacancies?" => true,
               },
               "relationships" => {
@@ -290,7 +289,7 @@ describe "Courses API v2", type: :request do
               "is_send?" => true,
               "subjects" => %w[Mathematics],
               "level" => "secondary",
-              "applications_open_from" => "#{current_year}-01-01",
+              "applications_open_from" => provider.courses[0].applications_open_from.strftime("%Y-%m-%d"),
               "about_course" => enrichment.about_course,
               "course_length" => enrichment.course_length,
               "fee_details" => enrichment.fee_details,
