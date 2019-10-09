@@ -29,7 +29,10 @@ describe "Courses API", type: :request do
     let(:previous_year) { current_year - 1 }
     let(:next_year)     { current_year + 1 }
 
+
     context "without changed_since parameter" do
+      let(:age_range_in_years) { "3_to_7" }
+
       before do
         site = FactoryBot.create(:site, code: "-", location_name: "Main Site", provider: provider)
         subject1 = FactoryBot.find_or_create(:subject, :modern_languages)
@@ -42,7 +45,7 @@ describe "Courses API", type: :request do
                                    subjects: [subject1, subject2],
                                    study_mode: :full_time,
                                    level: "primary",
-                                   age_range: "primary",
+                                   age_range_in_years: age_range_in_years,
                                    english: :equivalence_test,
                                    maths: :equivalence_test,
                                    science: :equivalence_test,
@@ -61,6 +64,64 @@ describe "Courses API", type: :request do
                           site: site)
 
         course.update changed_at: 2.hours.ago
+      end
+
+      context "age ranges" do
+        subject do
+          get "/api/v1/#{current_year}/courses",
+              headers: { "HTTP_AUTHORIZATION" => credentials }
+
+          courses = JSON.parse(response.body)
+          courses.first["age_range"]
+        end
+
+        context "3_to_7" do
+          let(:age_range_in_years) { "3_to_7" }
+
+          it { should eq("P") }
+        end
+
+        context "5_to_11" do
+          let(:age_range_in_years) { "5_to_11" }
+
+          it { should eq("P") }
+        end
+
+        context "7_to_11" do
+          let(:age_range_in_years) { "7_to_11" }
+
+          it { should eq("P") }
+        end
+
+        context "7_to_14" do
+          let(:age_range_in_years) { "7_to_14" }
+
+          it { should eq("M") }
+        end
+
+        context "11_to_16" do
+          let(:age_range_in_years) { "11_to_16" }
+
+          it { should eq("S") }
+        end
+
+        context "11_to_18" do
+          let(:age_range_in_years) { "11_to_18" }
+
+          it { should eq("S") }
+        end
+
+        context "14_to_19" do
+          let(:age_range_in_years) { "14_to_19" }
+
+          it { should eq("S") }
+        end
+
+        context "Other" do
+          let(:age_range_in_years) { "Meow" }
+
+          it { should eq("O") }
+        end
       end
 
       it "returns http success" do

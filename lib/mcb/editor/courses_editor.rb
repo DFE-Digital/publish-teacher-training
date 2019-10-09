@@ -34,7 +34,7 @@ module MCB
 
       def new_course_wizard
         %i[title qualifications study_mode accredited_body start_date route maths
-           english science age_range level course_code is_send].each do |attribute|
+           english science age_range_in_years level course_code is_send].each do |attribute|
           edit(attribute)
         end
 
@@ -75,7 +75,7 @@ module MCB
           "edit accredited body",
           "edit start date",
           "edit application opening date",
-          "edit age range",
+          "edit age range in years",
           "edit subjects",
           "edit is SEND",
           "edit training locations",

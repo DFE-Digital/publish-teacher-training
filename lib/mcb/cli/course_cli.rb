@@ -59,10 +59,18 @@ module MCB
         )
       end
 
-      def ask_age_range
+      def ask_age_range_in_years
         ask_multiple_choice(
           prompt: "Age range?",
-          choices: Course.age_ranges.keys,
+          choices: %w[
+            3_to_7
+            5_to_11
+            7_to_11
+            7_to_14
+            11_to_16
+            11_to_18
+            14_to_19
+          ],
         )
       end
 

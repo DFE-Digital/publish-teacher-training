@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_10_07_163334) do
+ActiveRecord::Schema.define(version: 2019_10_08_103747) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_buffercache"
@@ -69,7 +69,6 @@ ActiveRecord::Schema.define(version: 2019_10_07_163334) do
   end
 
   create_table "course", id: :serial, force: :cascade do |t|
-    t.text "age_range"
     t.text "course_code"
     t.text "name"
     t.text "profpost_flag"

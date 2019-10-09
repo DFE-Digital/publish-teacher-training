@@ -40,6 +40,8 @@ describe "mcb courses show" do
 
       expect(output).to have_text_table_row("course_code",
                                             rolled_over_course.course_code)
+      expect(output).to have_text_table_row("age_range_in_years",
+                                            rolled_over_course.age_range_in_years)
 
       expect(output).to have_text_table_row(subject2.subject_code,
                                             subject2.subject_name)

@@ -26,6 +26,7 @@ describe MCB::Editor::CoursesEditor, :needs_audit_user do
   let(:is_send) { false }
   let(:subjects) { [] }
   let(:level) { "primary" }
+  let(:age_range_in_years) { "3_to_7" }
   let!(:course) {
     create(:course,
            provider: provider,
@@ -38,8 +39,8 @@ describe MCB::Editor::CoursesEditor, :needs_audit_user do
            program_type: "pg_teaching_apprenticeship",
            qualification: "qts",
            study_mode: "part_time",
+           age_range_in_years: age_range_in_years,
            start_date: Date.new(current_year, 8, 1),
-           age_range: "primary",
            level: level,
            subjects: subjects,
            applications_open_from: Date.new(last_year, 10, 9),
@@ -209,9 +210,9 @@ describe MCB::Editor::CoursesEditor, :needs_audit_user do
 
       describe "(age range)" do
         it "updates the course age range when that is valid" do
-          expect { run_editor("edit age range", "secondary", "exit") }.
-            to change { course.reload.age_range }.
-            from("primary").to("secondary")
+          expect { run_editor("edit age range", "5_to_11", "exit") }.
+            to change { course.reload.age_range_in_years }.
+            from("3_to_7").to("5_to_11")
         end
       end
 
@@ -239,6 +240,7 @@ describe MCB::Editor::CoursesEditor, :needs_audit_user do
         context "with no subjects" do
           let(:subjects) { [] }
           let(:level) { "secondary" }
+          let(:age_range_in_years) { "11_to_16" }
           it "attaches new subjects" do
             expect { run_editor("edit subjects", "2", "continue", "exit") }.
               to change { course.subjects.reload.sort_by(&:subject_name) }.
@@ -249,6 +251,7 @@ describe MCB::Editor::CoursesEditor, :needs_audit_user do
         context "with a subject" do
           let(:subjects) { [biology] }
           let(:level) { "secondary" }
+          let(:age_range_in_years) { "11_to_16" }
           it "removes existing subjects" do
             expect { run_editor("edit subjects", "2", "continue", "exit")[:stdout] }.
             to change { course.subjects.reload.sort_by(&:subject_name) }.
@@ -448,7 +451,7 @@ describe MCB::Editor::CoursesEditor, :needs_audit_user do
           maths: "equivalence_test",
           english: "equivalence_test",
           science: "not_required",
-          age_range: "secondary",
+          age_range_in_years: "11_to_18",
           level: "secondary",
           course_code: "1X2B",
           recruitment_cycle: "2", # the 2nd option should always be the current recruitment cycle
@@ -469,7 +472,7 @@ describe MCB::Editor::CoursesEditor, :needs_audit_user do
             desired_attributes[:maths],
             desired_attributes[:english],
             desired_attributes[:science],
-            desired_attributes[:age_range],
+            desired_attributes[:age_range_in_years],
             desired_attributes[:level],
             desired_attributes[:course_code],
             "y", # is SEND confirmation
@@ -499,7 +502,7 @@ describe MCB::Editor::CoursesEditor, :needs_audit_user do
             desired_attributes[:maths],
             desired_attributes[:english],
             desired_attributes[:science],
-            desired_attributes[:age_range],
+            desired_attributes[:age_range_in_years],
             desired_attributes[:level],
             desired_attributes[:course_code],
             "y", # is SEND confirmation
@@ -529,7 +532,7 @@ describe MCB::Editor::CoursesEditor, :needs_audit_user do
             desired_attributes[:maths],
             desired_attributes[:english],
             desired_attributes[:science],
-            desired_attributes[:age_range],
+            desired_attributes[:age_range_in_years],
             "primary",
             desired_attributes[:course_code],
             "y", # is SEND confirmation
@@ -559,7 +562,7 @@ describe MCB::Editor::CoursesEditor, :needs_audit_user do
             desired_attributes[:maths],
             desired_attributes[:english],
             desired_attributes[:science],
-            desired_attributes[:age_range],
+            desired_attributes[:age_range_in_years],
             "further_education",
             desired_attributes[:course_code],
             "y", # is SEND confirmation
@@ -590,7 +593,7 @@ describe MCB::Editor::CoursesEditor, :needs_audit_user do
           desired_attributes[:maths],
           desired_attributes[:english],
           desired_attributes[:science],
-          desired_attributes[:age_range],
+          desired_attributes[:age_range_in_years],
           desired_attributes[:level],
           desired_attributes[:course_code],
           "y", # is SEND confirmation
@@ -619,7 +622,7 @@ describe MCB::Editor::CoursesEditor, :needs_audit_user do
           "maths" => desired_attributes[:maths],
           "english" => desired_attributes[:english],
           "science" => desired_attributes[:science],
-          "age_range" => desired_attributes[:age_range],
+          "age_range_in_years" => desired_attributes[:age_range_in_years],
           "level" => desired_attributes[:level],
         )
         expect(created_course.is_send?).to be_truthy
@@ -641,7 +644,7 @@ describe MCB::Editor::CoursesEditor, :needs_audit_user do
           desired_attributes[:maths],
           desired_attributes[:english],
           desired_attributes[:science],
-          desired_attributes[:age_range],
+          desired_attributes[:age_range_in_years],
           desired_attributes[:level],
           desired_attributes[:course_code],
           "y", # is SEND confirmation
@@ -674,7 +677,7 @@ describe MCB::Editor::CoursesEditor, :needs_audit_user do
           desired_attributes[:maths],
           desired_attributes[:english],
           desired_attributes[:science],
-          desired_attributes[:age_range],
+          desired_attributes[:age_range_in_years],
           desired_attributes[:level],
           desired_attributes[:course_code],
           "n", # is SEND
@@ -717,7 +720,7 @@ describe MCB::Editor::CoursesEditor, :needs_audit_user do
           desired_attributes[:maths],
           desired_attributes[:english],
           desired_attributes[:science],
-          desired_attributes[:age_range],
+          desired_attributes[:age_range_in_years],
           desired_attributes[:level],
           desired_attributes[:course_code],
           "n", # is SEND
@@ -740,7 +743,7 @@ describe MCB::Editor::CoursesEditor, :needs_audit_user do
           desired_attributes[:maths],
           desired_attributes[:english],
           desired_attributes[:science],
-          desired_attributes[:age_range],
+          desired_attributes[:age_range_in_years],
           desired_attributes[:level],
           course_code, # a duplicate course code
           "n", # is SEND

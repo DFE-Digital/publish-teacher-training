@@ -88,7 +88,6 @@ describe "PATCH /providers/:provider_code/courses/:course_code" do
       end
     end
 
-    include_examples "does not allow assignment", :age_range, "primary"
     include_examples "does not allow assignment", :course_code, "CZ"
     include_examples "does not allow assignment", :name, "Name"
     include_examples "does not allow assignment", :profpost_flag, "BO"
