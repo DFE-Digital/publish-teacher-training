@@ -36,8 +36,8 @@ let(:provider) { course.provider }
 ## Overriding the creation of a dependent object
 
 ```
-let(:english_subject) { create :ucas_subject, :english }
-let(:course)          { create :course, ucas_subjects: [english_subject] }
+let(:english_subject) { create :subject, :english }
+let(:course)          { create :course, subjects: [english_subject] }
 ```
 
 When creating associated data, keep in mind which object is the `belongs_to`
@@ -66,7 +66,7 @@ memoized provider and second as part of the `create :course`.
 * Use find_or_create for objects that should be singletons (e.g. "English"
   subject)
 
-  
+
 # Creating Factories
 
 The way we do it:

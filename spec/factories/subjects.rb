@@ -16,7 +16,6 @@ FactoryBot.define do
     type {
       %w[PrimarySubject
          SecondarySubject
-         ModernLanguagesSubject
          FurtherEducationSubject].sample
     }
 
@@ -24,6 +23,10 @@ FactoryBot.define do
       subject_name { "Primary" }
       subject_code { "00" }
       type { "PrimarySubject" }
+    end
+
+    trait :secondary do
+      type { "SecondarySubject" }
     end
 
     trait :primary_with_mathematics do

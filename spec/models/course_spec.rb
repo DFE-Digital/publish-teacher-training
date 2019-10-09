@@ -54,7 +54,7 @@ describe Course, type: :model do
                   .with_primary_key(:provider_code)
                   .optional
     }
-    it { should have_many(:ucas_subjects).through(:course_ucas_subjects) }
+    it { should have_many(:subjects).through(:course_subjects) }
     it { should have_many(:site_statuses) }
     it { should have_many(:sites) }
     it { should have_many(:enrichments) }
@@ -747,38 +747,13 @@ describe Course, type: :model do
     end
   end
 
-  context "UCAS level (deprecated)" do
-    context "with no ucas_subjects" do
-      subject { create(:course) }
-      its(:ucas_level) { should eq(:secondary) }
-    end
+  describe "#is_send?" do
+    subject { create(:course) }
+    its(:is_send?) { should be_falsey }
 
-    context "with primary ucas_subjects" do
-      subject { create(:course, level: "primary", ucas_subjects: [find_or_create(:ucas_subject, :primary)]) }
-      its(:ucas_level) { should eq(:primary) }
-      its(:gcse_subjects_required) { should eq(%w[maths english science]) }
-    end
-
-    context "with secondary ucas_subjects" do
-      subject { create(:course, level: "secondary", ucas_subjects: [find_or_create(:ucas_subject, subject_name: "physical education")]) }
-      its(:ucas_level) { should eq(:secondary) }
-      its(:gcse_subjects_required) { should eq(%w[maths english]) }
-    end
-
-    context "with further education ucas_subjects" do
-      subject { create(:course, level: "further_education", ucas_subjects: [create(:further_education_subject)]) }
-      its(:ucas_level) { should eq(:further_education) }
-      its(:gcse_subjects_required) { should eq([]) }
-    end
-
-    describe "#is_send?" do
-      subject { create(:course) }
-      its(:is_send?) { should be_falsey }
-
-      context "with a SEND subject" do
-        subject { create(:course, is_send: true) }
-        its(:is_send?) { should be_truthy }
-      end
+    context "with a SEND subject" do
+      subject { create(:course, is_send: true) }
+      its(:is_send?) { should be_truthy }
     end
   end
 

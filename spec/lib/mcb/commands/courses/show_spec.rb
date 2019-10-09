@@ -18,17 +18,17 @@ describe "mcb courses show" do
     new_provider
   end
 
-  let(:subject1) { build(:ucas_subject) }
-  let(:subject2) { build(:ucas_subject) }
+  let(:subject1) { build(:subject) }
+  let(:subject2) { build(:subject) }
   let(:site_status1) { build(:site_status) }
   let(:site_status2) { build(:site_status) }
 
-  let(:course) { create(:course, name: "P", provider: provider, ucas_subjects: [subject1], site_statuses: [site_status1]) }
+  let(:course) { create(:course, name: "P", provider: provider, subjects: [subject1], site_statuses: [site_status1]) }
   let(:rolled_over_course) do
     create(:course,
            name: "P",
            provider: rolled_over_provider,
-           ucas_subjects: [subject2],
+           subjects: [subject2],
            site_statuses: [site_status2])
   end
 

@@ -156,7 +156,7 @@ describe API::V2::SerializableCourse do
     let(:course) { create(:course, subjects: subjects) }
 
     describe "are taken from the course" do
-      let(:subjects) { [find_or_create(:ucas_subject, :primary)] }
+      let(:subjects) { [find_or_create(:subject, :primary)] }
       it { expect(subject["attributes"]).to include("level" => "primary") }
       it { expect(subject["attributes"]).to include("subjects" => %w[Primary]) }
     end

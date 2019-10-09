@@ -3,11 +3,12 @@ require "rails_helper"
 RSpec.describe Courses::CopyToProviderService do
   let(:accrediting_provider) { create :provider, :accredited_body }
   let(:provider) { create :provider, courses: [course] }
-  let(:maths) { create :ucas_subject, :mathematics }
+  let(:maths) { create :subject, :mathematics }
   let(:course) {
     build :course,
           accrediting_provider: accrediting_provider,
-          ucas_subjects: [maths]
+          subjects: [maths],
+          level: "secondary"
   }
   let(:recruitment_cycle) { find_or_create :recruitment_cycle }
   let(:new_recruitment_cycle) { create :recruitment_cycle, :next }
@@ -33,12 +34,21 @@ RSpec.describe Courses::CopyToProviderService do
     service.execute(course: course, new_provider: new_provider)
 
     expect(new_course).not_to be_nil
-    expect(new_course.accrediting_provider_code)
-      .to eq course.accrediting_provider_code
-    expect(new_course.ucas_subjects).to eq course.ucas_subjects
+    expect(new_course.accrediting_provider_code).to eq course.accrediting_provider_code
+    expect(new_course.subjects.count).to eq course.subjects.count
+    expect(new_course.subjects.first.id).to eq course.subjects.first.id
+    expect(new_course.subjects.first.type).to eq course.subjects.first.type
+    expect(new_course.subjects.first.subject_code).to eq course.subjects.first.subject_code
+    expect(new_course.subjects.first.subject_name).to eq course.subjects.first.subject_name
     expect(new_course.content_status).to eq :rolled_over
     expect(new_course.ucas_status).to eq :new
     expect(new_course.open_for_applications?).to be_falsey
+  end
+
+  it "updates the applications_open_from and start date attributes" do
+    service.execute(course: course, new_provider: new_provider)
+    expect(new_course.start_date).to eq course.start_date + 1.year
+    expect(new_course.applications_open_from).to eq course.applications_open_from + 1.year
   end
 
   it "leaves the existing course alone" do
