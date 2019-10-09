@@ -1,7 +1,7 @@
 require "spec_helper"
 require "mcb_helper"
 
-describe "mcb az apps psql" do
+describe "mcb db" do
   it "runs psql for localhost" do
     allow(MCB).to receive(:exec_command).with(
       "psql",
@@ -11,7 +11,7 @@ describe "mcb az apps psql" do
     )
 
     with_stubbed_stdout do
-      $mcb.run(%w[az apps psql])
+      $mcb.run(%w[db])
     end
   end
 
@@ -36,7 +36,7 @@ describe "mcb az apps psql" do
       )
 
       with_stubbed_stdout(stdin: "qa") do
-        $mcb.run(%w[az apps psql -E qa])
+        $mcb.run(%w[db -E qa])
       end
     end
 
@@ -49,7 +49,7 @@ describe "mcb az apps psql" do
       )
 
       with_stubbed_stdout(stdin: "qa") do
-        $mcb.run(%w[az apps psql -E qa -H backup-host])
+        $mcb.run(%w[db -E qa -H backup-host])
       end
     end
   end
