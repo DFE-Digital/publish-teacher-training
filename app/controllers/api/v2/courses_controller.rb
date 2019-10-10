@@ -21,19 +21,29 @@ module API
 
       def build_new
         authorize @provider
-        course = Course.new(provider: @provider)
-        course.assign_attributes(course_params)
-        course.valid?
+        @course = Course.new(provider: @provider)
+        update_subjects
+        @course.assign_attributes(course_params)
+        @course.valid?
 
+        # https://github.com/jsonapi-rb/jsonapi-rails/issues/113
         json_data = JSONAPI::Serializable::Renderer.new.render(
-          course,
-          class: { Course: API::V2::SerializableCourse },
+          @course,
+          class: {
+            Course: SerializableCourse,
+            Subject: SerializableSubject,
+            PrimarySubject: SerializableSubject,
+            SecondarySubject: SerializableSubject,
+            ModernLanguagesSubject: SerializableSubject,
+            FurtherEducationSubject: SerializableSubject,
+          },
+          include: [:subjects],
         )
 
         json_data[:data][:errors] = []
 
-        course.errors.messages.each do |error_key, _|
-          course.errors.full_messages_for(error_key).each do |error_message|
+        @course.errors.messages.each do |error_key, _|
+          @course.errors.full_messages_for(error_key).each do |error_message|
             json_data[:data][:errors] << {
               "title" => "Invalid #{error_key}",
               "detail" => error_message,
@@ -53,7 +63,20 @@ module API
       end
 
       def show
-        render jsonapi: @course, include: params[:include]
+        # https://github.com/jsonapi-rb/jsonapi-rails/issues/113
+        render jsonapi: @course, include: params[:include], class: {
+          Course: SerializableCourse,
+          SiteStatus: SerializableSiteStatus,
+          Site: SerializableSite,
+          Subject: SerializableSubject,
+          PrimarySubject: SerializableSubject,
+          SecondarySubject: SerializableSubject,
+          ModernLanguagesSubject: SerializableSubject,
+          FurtherEducationSubject: SerializableSubject,
+          Provider: SerializableProvider,
+          ProviderEnrichment: SerializableProviderEnrichment,
+          RecruitmentCycle: SerializableRecruitmentCycle,
+        }
       end
 
       def sync_with_search_and_compare

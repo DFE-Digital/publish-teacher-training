@@ -170,6 +170,7 @@ describe "Courses API", type: :request do
                                   {
                                     "subject_code" => "G2",
                                     "subject_name" => "German",
+                                    "type" => "ModernLanguagesSubject",
                                   },
                                 ],
                                 "provider" => {
@@ -541,7 +542,9 @@ describe "Courses API", type: :request do
 
         expect(json["subjects"].length).to eq(2)
         expect(json["subjects"]).to include(
-          "subject_code" => "U3", "subject_name" => "Special Educational Needs",
+          "subject_code" => "U3",
+          "subject_name" => "Special Educational Needs",
+          "type" => nil,
         )
       end
 

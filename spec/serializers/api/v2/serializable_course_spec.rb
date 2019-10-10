@@ -25,7 +25,6 @@ describe API::V2::SerializableCourse do
   it { should have_attribute :content_status }
   it { should have_attribute :ucas_status }
   it { should have_attribute :funding_type }
-  it { should have_attribute :subjects }
   it { should have_attribute(:applications_open_from).with_value(date_today.to_s) }
   it { should have_attribute :is_send? }
   it { should have_attribute(:level).with_value("primary") }
@@ -59,6 +58,25 @@ describe API::V2::SerializableCourse do
         .to(include(have_type("providers")
           .and(have_id(provider.id.to_s))))
     end
+  end
+
+  context "with a subject" do
+    let(:course) { create(:course, subjects: [find_or_create(:subject, :primary_with_mathematics)]) }
+    let(:accrediting_provider) { course.accrediting_provider }
+    let(:course_json) do
+      jsonapi_renderer.render(
+        course,
+        class: {
+          Course: API::V2::SerializableCourse,
+          Subject: API::V2::SerializableSubject,
+        },
+        include: [
+          :subjects,
+        ],
+      ).to_json
+    end
+
+    it { should have_relationship(:accrediting_provider) }
   end
 
   context "with an accrediting_provider" do

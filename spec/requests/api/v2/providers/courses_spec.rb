@@ -15,6 +15,7 @@ describe "Courses API v2", type: :request do
   let(:current_year)  { current_cycle.year.to_i }
   let(:previous_year) { current_year - 1 }
   let(:next_year)     { current_year + 1 }
+  let(:subjects) { [course_subject_mathematics] }
 
   let(:applications_open_from) { Time.now.utc }
   let(:findable_open_course) do
@@ -24,7 +25,7 @@ describe "Courses API v2", type: :request do
            provider: provider,
            start_date: Time.now.utc,
            study_mode: :full_time,
-           subjects: [course_subject_mathematics],
+           subjects: subjects,
            is_send: true,
            site_statuses: [courses_site_status],
            enrichments: [enrichment],
@@ -94,7 +95,6 @@ describe "Courses API v2", type: :request do
                 "ucas_status" => "running",
                 "funding_type" => "apprenticeship",
                 "is_send?" => true,
-                "subjects" => ["Primary with mathematics"],
                 "level" => "primary",
                 "applications_open_from" =>
                   findable_open_course.applications_open_from.to_s,
@@ -132,6 +132,7 @@ describe "Courses API v2", type: :request do
                 "provider" => { "meta" => { "included" => false } },
                 "sites" => { "meta" => { "included" => false } },
                 "site_statuses" => { "data" => [{ "type" => "site_statuses", "id" => site_status.id.to_s }] },
+                "subjects" => { "data" => [{ "type" => "subjects", "id" => course_subject_mathematics.id.to_s }] },
               },
               "meta" => {
                 "edit_options" => {
@@ -172,38 +173,49 @@ describe "Courses API v2", type: :request do
             "jsonapi" => {
               "version" => "1.0",
             },
-            "included" => [{
-              "id" => site_status.id.to_s,
-              "type" => "site_statuses",
-              "attributes" => {
-                "vac_status" => site_status.vac_status,
-                "publish" => site_status.publish,
-                "status" => site_status.status,
-                "has_vacancies?" => true,
-              },
-              "relationships" => {
-                "site" => {
-                  "data" => {
-                    "type" => "sites",
+            "included" => [
+              {
+                "id" => site_status.id.to_s,
+                "type" => "site_statuses",
+                "attributes" => {
+                  "vac_status" => site_status.vac_status,
+                  "publish" => site_status.publish,
+                  "status" => site_status.status,
+                  "has_vacancies?" => true,
+                },
+                "relationships" => {
+                  "site" => {
+                    "data" => {
+                      "type" => "sites",
                       "id" => site.id.to_s,
+                    },
                   },
                 },
               },
-            }, {
-              "id" => site.id.to_s,
-              "type" => "sites",
-              "attributes" => {
-                "code" => site.code,
-                "location_name" => site.location_name,
-                "address1" => site.address1,
-                "address2" => site.address2,
-                "address3" => site.address3,
-                "address4" => site.address4,
-                "postcode" => site.postcode,
-                "region_code" => site.region_code,
-                "recruitment_cycle_year" => current_year.to_s,
+              {
+                "id" => course_subject_mathematics.id.to_s,
+                "type" => "subjects",
+                "attributes" => {
+                  "subject_name" => course_subject_mathematics.subject_name,
+                  "subject_code" => course_subject_mathematics.subject_code,
+                },
               },
-            }],
+              {
+                "id" => site.id.to_s,
+                "type" => "sites",
+                "attributes" => {
+                  "code" => site.code,
+                  "location_name" => site.location_name,
+                  "address1" => site.address1,
+                  "address2" => site.address2,
+                  "address3" => site.address3,
+                  "address4" => site.address4,
+                  "postcode" => site.postcode,
+                  "region_code" => site.region_code,
+                  "recruitment_cycle_year" => current_year.to_s,
+                },
+              },
+            ],
           )
         end
       end
@@ -302,9 +314,6 @@ describe "Courses API v2", type: :request do
               "required_qualifications" => enrichment.required_qualifications,
               "salary_details" => enrichment.salary_details,
               "last_published_at" => enrichment.last_published_timestamp_utc.iso8601,
-              "subjects" => [
-                "Primary with mathematics",
-              ],
               "has_bursary?" => false,
               "has_scholarship_and_bursary?" => false,
               "has_early_career_payments?" => false,
@@ -326,6 +335,7 @@ describe "Courses API v2", type: :request do
               "provider" => { "meta" => { "included" => false } },
               "site_statuses" => { "meta" => { "included" => false } },
               "sites" => { "meta" => { "included" => false } },
+              "subjects" => { "meta" => { "included" => false } },
             },
             "meta" => {
               "edit_options" => {

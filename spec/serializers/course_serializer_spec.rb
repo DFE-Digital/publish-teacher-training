@@ -45,7 +45,9 @@ describe CourseSerializer do
 
     it "includes a SEND subject" do
       expect(subject[:subjects]).to include(
-        "subject_code" => "U3", "subject_name" => "Special Educational Needs",
+        "subject_code" => "U3",
+        "subject_name" => "Special Educational Needs",
+        "type" => nil,
       )
     end
   end
