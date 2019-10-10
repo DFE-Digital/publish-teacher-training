@@ -58,21 +58,28 @@ describe "/api/v2/build_new_course", type: :request do
       expect(response).to have_http_status(:ok)
       json_response = parse_response(response)
 
-      expect(json_response["data"]["errors"]).to match_array([
-        { "title" => "Invalid maths",
-          "detail" => "Pick an option for Maths",
-          "source" => { "pointer" => "/data/attributes/maths" } },
-        { "title" => "Invalid english",
-          "detail" => "Pick an option for English",
-          "source" => { "pointer" => "/data/attributes/english" } },
-      ])
+      course_jsonapi["attributes"]["name"] = ""
+
+      expected = {
+        "data" => course_jsonapi.merge(
+          "errors" => [
+            { "title" => "Invalid maths",
+              "detail" => "Pick an option for Maths",
+              "source" => { "pointer" => "/data/attributes/maths" } },
+            { "title" => "Invalid english",
+              "detail" => "Pick an option for English",
+              "source" => { "pointer" => "/data/attributes/english" } },
+          ],
+        ),
+      }
+
+      expect(json_response).to eq expected
     end
   end
 
   context "with sufficient parameters to make a valid course" do
     let(:params) do
       { course: {
-        name: "Foo Bar Course",
         maths: "must_have_qualification_at_application_time",
         english: "must_have_qualification_at_application_time",
       } }
@@ -85,7 +92,11 @@ describe "/api/v2/build_new_course", type: :request do
       expect(response).to have_http_status(:ok)
       json_response = parse_response(response)
 
-      expect(json_response["data"]["errors"]).to match_array([])
+      course_jsonapi["attributes"]["name"] = ""
+
+      expected = { "data" => course_jsonapi.merge("errors" => []) }
+
+      expect(json_response).to eq expected
     end
   end
 

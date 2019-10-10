@@ -20,10 +20,12 @@ module API
       end
 
       def build_new
+        generate_course_title_service = Courses::GenerateCourseTitleService.new
         authorize @provider
         @course = Course.new(provider: @provider)
         update_subjects
         @course.assign_attributes(course_params)
+        @course.name = generate_course_title_service.execute(course: course)
         @course.valid?
 
         # https://github.com/jsonapi-rb/jsonapi-rails/issues/113
