@@ -26,7 +26,7 @@ HealthCheck.setup do |config|
   # config.buckets = {'bucket_name' => [:R, :W, :D]}
 
   # You can customize which checks happen on a standard health check, eg to set an explicit list use:
-  config.standard_checks = %w[database migrations]
+  config.standard_checks = %w[database migrations sidekiq-redis]
 
   # Or to exclude one check:
   # config.standard_checks -= [ 'emailconf' ]
