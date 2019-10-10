@@ -26,15 +26,15 @@ module Courses
 
       languages = subjects.select { |s| s.type == "ModernLanguagesSubject" }
 
-      if languages.length == 1
-        title += " (#{languages[0]})"
-      elsif languages.length == 2
-        title += " (#{languages[0]} and #{languages[1]})"
-      elsif languages.length == 3
-        title += " (#{languages[0]}, #{languages[1]}, #{languages[2]})"
-      end
+      return title if languages.empty? || languages.length >= 4
 
-      title
+      if languages.length == 1
+        title + " (#{languages[0]})"
+      elsif languages.length == 2
+        title + " (#{languages[0]} and #{languages[1]})"
+      elsif languages.length == 3
+        title + " (#{languages[0]}, #{languages[1]}, #{languages[2]})"
+      end
     end
 
     def generated_title(subjects)
