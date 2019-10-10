@@ -315,14 +315,14 @@ module MCB
     def env_to_azure_map
       {
         "qa" => {
-          webapp: "bat-qa-mcbe-as",
-          rgroup: "bat-qa-mcbe-rg",
-          subscription: "DFE BAT Development",
+          webapp: "s121d01-mcbe-as",
+          rgroup: "s121d01-mcbe-rg",
+          subscription: "s121-findpostgraduateteachertraining-development",
         },
         "staging" => {
-          webapp: "bat-stg-mcbe-as",
-          rgroup: "bat-stg-mcbe-rg",
-          subscription: "DFE BAT Development",
+          webapp: "s121t01-mcbe-as",
+          rgroup: "s121t01-mcbe-rg",
+          subscription: "s121-findpostgraduateteachertraining-test",
         },
         "production" => {
           webapp: "bat-prod-mcbe-as",
