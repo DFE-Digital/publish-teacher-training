@@ -89,6 +89,12 @@ FactoryBot.define do
       type { :ModernLanguagesSubject }
     end
 
+    trait :spanish do
+      subject_name { "Spanish" }
+      subject_code { "22" }
+      type { :ModernLanguagesSubject }
+    end
+
     trait :biology do
       subject_name { "Biology" }
       subject_code { "C1" }

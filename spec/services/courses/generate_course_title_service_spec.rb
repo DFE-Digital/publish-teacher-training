@@ -61,7 +61,7 @@ describe Courses::GenerateCourseTitleService do
 
     context "With modern languages" do
       context "with one language" do
-        let(:subjects) { [modern_languages, Subject.new(subject_name: "French")] }
+        let(:subjects) { [modern_languages, create(:subject, :french)] }
 
         it "Returns a name modern language with language" do
           expect(generated_title).to eq("Modern Languages (French)")
@@ -74,8 +74,8 @@ describe Courses::GenerateCourseTitleService do
         let(:subjects) do
           [
             modern_languages,
-            Subject.new(subject_name: "French"),
-            Subject.new(subject_name: "German"),
+            create(:subject, :french),
+            create(:subject, :german),
           ]
         end
 
@@ -90,9 +90,9 @@ describe Courses::GenerateCourseTitleService do
         let(:subjects) do
           [
             modern_languages,
-            Subject.new(subject_name: "French"),
-            Subject.new(subject_name: "German"),
-            Subject.new(subject_name: "Japanese"),
+            create(:subject, :french),
+            create(:subject, :german),
+            create(:subject, :japanese),
           ]
         end
 
@@ -107,10 +107,10 @@ describe Courses::GenerateCourseTitleService do
         let(:subjects) do
           [
             modern_languages,
-            Subject.new(subject_name: "French"),
-            Subject.new(subject_name: "German"),
-            Subject.new(subject_name: "Japanese"),
-            Subject.new(subject_name: "Spanish"),
+            create(:subject, :french),
+            create(:subject, :german),
+            create(:subject, :japanese),
+            create(:subject, :spanish),
           ]
         end
 

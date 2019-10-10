@@ -18,18 +18,20 @@ module Courses
   private
 
     def is_modern_lanuage_course?(subjects)
-      subjects[0] == SecondarySubject.modern_languages
+      subjects.any? { |s| s == SecondarySubject.modern_languages }
     end
 
     def modern_language_title(subjects)
       title = "Modern Languages"
 
-      if subjects.length == 2
-        title += " (#{subjects[1]})"
-      elsif subjects.length == 3
-        title += " (#{subjects[1]} and #{subjects[2]})"
-      elsif subjects.length == 4
-        title += " (#{subjects[1]}, #{subjects[2]}, #{subjects[3]})"
+      languages = subjects.select { |s| s.type == "ModernLanguagesSubject" }
+
+      if languages.length == 1
+        title += " (#{languages[0]})"
+      elsif languages.length == 2
+        title += " (#{languages[0]} and #{languages[1]})"
+      elsif languages.length == 3
+        title += " (#{languages[0]}, #{languages[1]}, #{languages[2]})"
       end
 
       title
