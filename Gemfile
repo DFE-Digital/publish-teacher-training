@@ -32,6 +32,9 @@ gem "kaminari"
 gem "jsonapi-rails"
 gem "jsonapi-rb"
 
+# Healthcheck endpoing
+gem "health_check"
+
 # Access jsonb attributes like normal ActiveRecord model attributes
 gem "jsonb_accessor"
 

@@ -184,6 +184,8 @@ GEM
       guard (~> 2.0)
       rubocop (~> 0.20)
     hashdiff (1.0.0)
+    health_check (3.0.0)
+      railties (>= 5.0)
     highline (2.0.2)
     httparty (0.17.1)
       mime-types (~> 3.0)
@@ -457,6 +459,7 @@ DEPENDENCIES
   guard
   guard-rspec
   guard-rubocop
+  health_check
   highline
   httparty
   jsonapi-rails
