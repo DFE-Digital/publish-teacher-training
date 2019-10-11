@@ -59,7 +59,19 @@ module API
         authorize @provider, :can_list_courses?
         authorize Course
 
-        render jsonapi: @provider.courses, include: params[:include]
+        render jsonapi: @provider.courses, include: params[:include], class: {
+          Course: SerializableCourse,
+          SiteStatus: SerializableSiteStatus,
+          Site: SerializableSite,
+          Subject: SerializableSubject,
+          PrimarySubject: SerializableSubject,
+          SecondarySubject: SerializableSubject,
+          ModernLanguagesSubject: SerializableSubject,
+          FurtherEducationSubject: SerializableSubject,
+          Provider: SerializableProvider,
+          ProviderEnrichment: SerializableProviderEnrichment,
+          RecruitmentCycle: SerializableRecruitmentCycle,
+        }
       end
 
       def show
