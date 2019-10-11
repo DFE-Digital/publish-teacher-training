@@ -32,6 +32,7 @@ class Course < ApplicationRecord
   include WithQualifications
   include ChangedAt
   include Courses::EditOptions
+  include StudyModeVacancyMapper
 
   after_initialize :set_defaults
 
@@ -439,6 +440,12 @@ class Course < ApplicationRecord
   def ensure_modern_languages
     if has_any_modern_language_subject_type? && !has_the_modern_languages_secondary_subject_type?
       subjects << SecondarySubject.modern_languages
+    end
+  end
+
+  def ensure_site_statuses_match_study_mode
+    site_statuses.select(&:with_vacancies?).each do |site_status|
+      update_vac_status(study_mode, site_status)
     end
   end
 

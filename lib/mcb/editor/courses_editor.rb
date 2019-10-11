@@ -94,6 +94,8 @@ module MCB
           edit_subjects
         elsif choice == "edit training locations"
           edit_sites
+        elsif choice == "edit study mode"
+          edit_study_mode
         elsif choice.start_with?("edit")
           attribute = choice.gsub("edit ", "").gsub(" ", "_").downcase.to_sym
           edit(attribute)
@@ -118,6 +120,11 @@ module MCB
         )
         course.ensure_modern_languages
         course.reload
+      end
+
+      def edit_study_mode
+        edit(:study_mode)
+        course.ensure_site_statuses_match_study_mode if course.study_mode_previously_changed?
       end
 
       def edit_sites

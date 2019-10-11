@@ -126,14 +126,39 @@ describe MCB::Editor::CoursesEditor, :needs_audit_user do
       end
 
       describe "(study mode)" do
+        let(:sites) { create_list(:site, 3) }
+        before do
+          sites.collect.with_index do |site, i|
+            vac_status = i == 0 ? :no_vacancies : :part_time_vacancies
+            course.site_statuses.create(site: site,
+                                        status: :running,
+                                        vac_status: vac_status,
+                                        publish: :published)
+          end
+        end
+
         it "updates the study mode setting when that is valid" do
           expect { run_editor("edit study mode", "full_time_or_part_time", "exit") }.to change { course.reload.study_mode }.
             from("part_time").to("full_time_or_part_time")
         end
 
-        it "updates the study mode setting to full-time by default" do
+        it "updates the site status's vacancy status to match study mode" do
+          expect { run_editor("edit study mode", "full_time_or_part_time", "exit") }.
+            to change { course.reload.site_statuses.map(&:vac_status) }.
+            from(%w[no_vacancies part_time_vacancies part_time_vacancies]).
+            to(%w[no_vacancies both_full_time_and_part_time_vacancies both_full_time_and_part_time_vacancies])
+        end
+
+        it "updates the study mode setting to full time by default" do
           expect { run_editor("edit study mode", "", "exit") }.to change { course.reload.study_mode }.
             from("part_time").to("full_time")
+        end
+
+        it "updates the site status's vacancy status to match full time study mode by default" do
+          expect { run_editor("edit study mode", "", "exit") }.
+            to change { course.reload.site_statuses.map(&:vac_status) }.
+            from(%w[no_vacancies part_time_vacancies part_time_vacancies]).
+            to(%w[no_vacancies full_time_vacancies full_time_vacancies])
         end
       end
 
