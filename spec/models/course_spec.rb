@@ -156,6 +156,12 @@ describe Course, type: :model do
         expect(course.errors[:subjects]).to eq(["must be secondary"])
       end
 
+      it "validates if there are only 2 subjects" do
+        course.subjects = [create(:subject, :mathematics, type: :SecondarySubject), create(:subject, :mathematics, type: :SecondarySubject)]
+        expect(course.valid?).to be_truthy
+        expect(course.errors[:subjects]).to eq([])
+      end
+
       it "does not validate if there are more than 2 subjects" do
         course.subjects = [create(:subject, :mathematics, type: :SecondarySubject), create(:subject, :mathematics, type: :SecondarySubject), create(:subject, :mathematics, type: :SecondarySubject)]
         expect(course.valid?).to be_falsey

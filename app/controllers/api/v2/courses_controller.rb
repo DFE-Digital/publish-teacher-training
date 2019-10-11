@@ -29,14 +29,7 @@ module API
         # https://github.com/jsonapi-rb/jsonapi-rails/issues/113
         json_data = JSONAPI::Serializable::Renderer.new.render(
           @course,
-          class: {
-            Course: SerializableCourse,
-            Subject: SerializableSubject,
-            PrimarySubject: SerializableSubject,
-            SecondarySubject: SerializableSubject,
-            ModernLanguagesSubject: SerializableSubject,
-            FurtherEducationSubject: SerializableSubject,
-          },
+          class: CourseSerializersService.new.execute,
           include: [:subjects],
         )
 
@@ -59,36 +52,12 @@ module API
         authorize @provider, :can_list_courses?
         authorize Course
 
-        render jsonapi: @provider.courses, include: params[:include], class: {
-          Course: SerializableCourse,
-          SiteStatus: SerializableSiteStatus,
-          Site: SerializableSite,
-          Subject: SerializableSubject,
-          PrimarySubject: SerializableSubject,
-          SecondarySubject: SerializableSubject,
-          ModernLanguagesSubject: SerializableSubject,
-          FurtherEducationSubject: SerializableSubject,
-          Provider: SerializableProvider,
-          ProviderEnrichment: SerializableProviderEnrichment,
-          RecruitmentCycle: SerializableRecruitmentCycle,
-        }
+        render jsonapi: @provider.courses, include: params[:include], class: CourseSerializersService.new.execute
       end
 
       def show
         # https://github.com/jsonapi-rb/jsonapi-rails/issues/113
-        render jsonapi: @course, include: params[:include], class: {
-          Course: SerializableCourse,
-          SiteStatus: SerializableSiteStatus,
-          Site: SerializableSite,
-          Subject: SerializableSubject,
-          PrimarySubject: SerializableSubject,
-          SecondarySubject: SerializableSubject,
-          ModernLanguagesSubject: SerializableSubject,
-          FurtherEducationSubject: SerializableSubject,
-          Provider: SerializableProvider,
-          ProviderEnrichment: SerializableProviderEnrichment,
-          RecruitmentCycle: SerializableRecruitmentCycle,
-        }
+        render jsonapi: @course, include: params[:include], class: CourseSerializersService.new.execute
       end
 
       def sync_with_search_and_compare
