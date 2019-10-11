@@ -3,8 +3,6 @@
 module API
   module V2
     class CoursesController < API::V2::ApplicationController
-      include StudyModeVacancyMapper
-
       before_action :build_recruitment_cycle
       before_action :build_provider
       before_action :build_course, except: %i[index new create build_new]
@@ -88,7 +86,7 @@ module API
         update_course
         update_enrichment
         update_sites
-        update_site_status_vac_statuses if @course.study_mode_previously_changed?
+        @course.ensure_site_statuses_match_study_mode if @course.study_mode_previously_changed?
         should_sync = site_ids.present? && @course.should_sync?
         has_synced? if should_sync
 
@@ -159,14 +157,6 @@ module API
         # but we can't actually revert easily from what I can tell because of the
         # remove_site! side effects that occur when it's called.
         @course.errors[:sites] << "^You must choose at least one location" if site_ids.empty?
-      end
-
-      def update_site_status_vac_statuses
-        @course.site_statuses.each do |site_status|
-          if site_status.vac_status != "no_vacancies"
-            update_vac_status(@course.study_mode, site_status)
-          end
-        end
       end
 
       def build_provider
