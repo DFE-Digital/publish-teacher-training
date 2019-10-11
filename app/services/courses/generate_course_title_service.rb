@@ -57,7 +57,7 @@ module Courses
     end
 
     def append_send_info(title)
-      title + " with Special educational needs and disability"
+      title + " (SEND)"
     end
 
     def format_subject_name(subject)
