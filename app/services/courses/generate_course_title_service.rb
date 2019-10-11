@@ -25,17 +25,18 @@ module Courses
       title = "Modern Languages"
 
       languages = subjects.select { |s| s.type == "ModernLanguagesSubject" }
+      languages = languages.reject { |language| language.subject_name == "Modern languages (other)" }
 
       return title if languages.empty? || languages.length >= 4
 
-      languages = languages.map { |language| format_language_name(language) }
+      language_names = languages.map { |language| format_language_name(language) }
 
-      if languages.length == 1
-        title + " (#{languages[0]})"
-      elsif languages.length == 2
-        title + " (#{languages.join(' and ')})"
-      elsif languages.length == 3
-        title + " (#{languages.join(', ')})"
+      if language_names.length == 1
+        title + " (#{language_names[0]})"
+      elsif language_names.length == 2
+        title + " (#{language_names.join(' and ')})"
+      elsif language_names.length == 3
+        title + " (#{language_names.join(', ')})"
       end
     end
 
@@ -70,8 +71,6 @@ module Courses
     def format_language_name(language)
       if language.subject_name == "English as a second or other language"
         "English"
-      elsif language.subject_name == "Modern languages (other)"
-        "Other"
       else
         language.to_s
       end

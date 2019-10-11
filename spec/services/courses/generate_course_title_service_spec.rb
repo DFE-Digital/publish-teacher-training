@@ -123,7 +123,7 @@ describe Courses::GenerateCourseTitleService do
     end
 
     context "Names which require altering" do
-      context "Communications and media studies" do
+      context "Communications and media studies -> Media studies" do
         context "With single subject" do
           let(:subjects) do
             [create(:subject, :communication_and_media_studies)]
@@ -149,7 +149,7 @@ describe Courses::GenerateCourseTitleService do
       end
 
 
-      context "English as a second language" do
+      context "English as a second language -> English" do
         context "With a single language" do
           let(:subjects) do
             [modern_languages, create(:subject, :english_as_a_second_language)]
@@ -190,14 +190,14 @@ describe Courses::GenerateCourseTitleService do
         end
       end
 
-      context "Modern Languages (Other)" do
+      context "Modern Languages (Other) -> Should be ignored for the title" do
         context "With a single language" do
           let(:subjects) do
             [modern_languages, create(:subject, :modern_languages_other)]
           end
 
-          it "Returns the title Modern Languages (Other)" do
-            expect(generated_title).to eq("Modern Languages (Other)")
+          it "Returns the title Modern Languages" do
+            expect(generated_title).to eq("Modern Languages")
           end
         end
 
@@ -210,8 +210,8 @@ describe Courses::GenerateCourseTitleService do
             ]
           end
 
-          it "Returns the title Modern Languages (Other and Spanish)" do
-            expect(generated_title).to eq("Modern Languages (Other and Spanish)")
+          it "Returns the title Modern Languages (Spanish)" do
+            expect(generated_title).to eq("Modern Languages (Spanish)")
           end
         end
 
@@ -225,8 +225,8 @@ describe Courses::GenerateCourseTitleService do
             ]
           end
 
-          it "Returns the title Modern Languages (Other, French, Spanish)" do
-            expect(generated_title).to eq("Modern Languages (Other, French, Spanish)")
+          it "Returns the title Modern Languages (French and Spanish)" do
+            expect(generated_title).to eq("Modern Languages (French and Spanish)")
           end
         end
       end
