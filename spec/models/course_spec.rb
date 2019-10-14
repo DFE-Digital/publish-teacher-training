@@ -63,14 +63,14 @@ describe Course, type: :model do
 
   describe "#ensure_modern_languages" do
     it "adds modern languages if a languages subject is selected" do
-      course = build(:course, subjects: [arabic])
+      course = build(:course, level: "secondary", subjects: [arabic])
       course.ensure_modern_languages
       expect(course.subjects).to match_array([modern_languages, arabic])
       expect(course).to be_valid
     end
 
     it "does not duplicate add modern language if it has already been added" do
-      course = build(:course, subjects: [modern_languages, arabic])
+      course = build(:course, level: "secondary", subjects: [modern_languages, arabic])
       course.ensure_modern_languages
       expect(course.subjects).to match_array([modern_languages, arabic])
       expect(course).to be_valid
@@ -124,6 +124,90 @@ describe Course, type: :model do
         it "should add level and subjects" do
           expect(subject.errors.full_messages).to match_array(["There is a problem with this course. Contact support to fix it (Error: L)", "There is a problem with this course. Contact support to fix it (Error: S)"])
         end
+      end
+    end
+
+    context "if subjects are empty" do
+      let(:course) { create(:course) }
+
+      it "passes validation" do
+        expect(course.valid?).to be_truthy
+      end
+    end
+
+    context "course has been assigned secondary level" do
+      let(:course) { create(:course, level: "secondary", subjects: [create(:subject, :english, type: :SecondarySubject)]) }
+
+      context "modern foreign languages" do
+        it "validates even with multiple languages" do
+          course.subjects = [modern_languages, create(:subject, :japanese), create(:subject, :french)]
+          expect(course.valid?).to be_truthy
+        end
+      end
+
+      it "validates if the subject is of that level" do
+        course.subjects = [create(:subject, :mathematics, type: :SecondarySubject)]
+        expect(course.valid?).to be_truthy
+      end
+
+      it "does not validate if the subject is not of that level" do
+        course.subjects = [create(:subject, :mathematics, type: :PrimarySubject)]
+        expect(course.valid?).to be_falsey
+        expect(course.errors[:subjects]).to eq(["must be secondary"])
+      end
+
+      it "validates if there are only 2 subjects" do
+        course.subjects = [create(:subject, :mathematics, type: :SecondarySubject), create(:subject, :mathematics, type: :SecondarySubject)]
+        expect(course.valid?).to be_truthy
+        expect(course.errors[:subjects]).to eq([])
+      end
+
+      it "does not validate if there are more than 2 subjects" do
+        course.subjects = [create(:subject, :mathematics, type: :SecondarySubject), create(:subject, :mathematics, type: :SecondarySubject), create(:subject, :mathematics, type: :SecondarySubject)]
+        expect(course.valid?).to be_falsey
+        expect(course.errors[:subjects]).to eq(["has too many subjects"])
+      end
+    end
+
+    context "course has been assigned primary level" do
+      let(:course) { create(:course, level: :primary, subjects: [create(:subject, :english, type: :PrimarySubject)]) }
+
+      it "validates if the subject is of that level" do
+        course.subjects = [create(:subject, :mathematics, type: :PrimarySubject)]
+        expect(course.valid?).to be_truthy
+      end
+
+      it "does not validate if the subject is not of that level" do
+        course.subjects = [create(:subject, :mathematics, type: :SecondarySubject)]
+        expect(course.valid?).to be_falsey
+        expect(course.errors[:subjects]).to eq(["must be primary"])
+      end
+
+      it "does not validate if there is more than one subject" do
+        course.subjects = [create(:subject, :mathematics, type: :PrimarySubject), create(:subject, :mathematics, type: :PrimarySubject)]
+        expect(course.valid?).to be_falsey
+        expect(course.errors[:subjects]).to eq(["has too many subjects"])
+      end
+    end
+
+    context "course has been assigned further education level" do
+      let(:course) { create(:course, :infer_level, qualification: "pgce", subjects: [create(:subject, :english, type: :FurtherEducationSubject)]) }
+
+      it "validates if the subject is of that level" do
+        course.subjects = [create(:subject, :further_education)]
+        expect(course.valid?).to be_truthy
+      end
+
+      it "does not validate if the subject is not of that level" do
+        course.subjects = [create(:subject, :biology)]
+        expect(course.valid?).to be_falsey
+        expect(course.errors[:subjects]).to eq(["must be further education"])
+      end
+
+      it "does not validate if there is more than one subject" do
+        course.subjects = [create(:subject, :further_education), create(:subject, :further_education)]
+        expect(course.valid?).to be_falsey
+        expect(course.errors[:subjects]).to eq(["has too many subjects"])
       end
     end
   end
@@ -779,7 +863,7 @@ describe Course, type: :model do
 
   context "bursaries and scholarships" do
     let!(:financial_incentive) { create(:financial_incentive, subject: modern_languages, bursary_amount: 255, scholarship: 1415, early_career_payments: 32) }
-    subject { create(:course, subjects: [modern_languages]) }
+    subject { create(:course, level: "secondary", subjects: [modern_languages]) }
 
     it { should have_bursary }
     it { should have_scholarship_and_bursary }
@@ -1025,21 +1109,21 @@ describe Course, type: :model do
   end
 
   describe "#syncable?" do
-    let(:courses_subjects) { [build(:subject, :primary)] }
+    let(:courses_subjects) { [create(:subject, :biology)] }
     let(:site_status) { build(:site_status, :findable) }
 
-    subject { create(:course, subjects: courses_subjects, site_statuses: [site_status]) }
+    subject { create(:course, :infer_level, subjects: courses_subjects, site_statuses: [site_status]) }
 
     its(:syncable?) { should be_truthy }
 
     context "invalid courses" do
       context "course which has only discontinued subject subject type" do
-        let(:courses_subjects) { [build(:subject, :humanities)] }
+        let(:courses_subjects) { [create(:subject, :humanities)] }
         its(:syncable?) { should be_falsey }
       end
 
       context "course which has only modern lanaguage secondary subject type" do
-        let(:courses_subjects) { [build(:subject, :modern_languages)] }
+        let(:courses_subjects) { [create(:subject, :modern_languages)] }
         its(:syncable?) { should be_falsey }
       end
 

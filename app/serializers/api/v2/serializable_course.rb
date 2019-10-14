@@ -31,10 +31,6 @@ module API
         @object.last_published_at&.iso8601
       end
 
-      attribute :subjects do
-        @object.subjects.map(&:subject_name)
-      end
-
       attribute :about_accrediting_body do
         @object.accrediting_provider_description
       end
@@ -52,6 +48,7 @@ module API
 
       has_many :site_statuses
       has_many :sites
+      has_many :subjects
 
       enrichment_attribute :about_course
       enrichment_attribute :course_length

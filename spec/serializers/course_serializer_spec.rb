@@ -28,7 +28,7 @@
 #  level                     :string
 require "rails_helper"
 
-RSpec.describe CourseSerializer do
+describe CourseSerializer do
   let(:course) { create :course, provider: provider, changed_at: Time.now + 60 }
   let(:provider) { build(:provider) }
   subject { serialize(course) }
@@ -45,7 +45,9 @@ RSpec.describe CourseSerializer do
 
     it "includes a SEND subject" do
       expect(subject[:subjects]).to include(
-        "subject_code" => "U3", "subject_name" => "Special Educational Needs",
+        "subject_code" => "U3",
+        "subject_name" => "Special Educational Needs",
+        "type" => nil,
       )
     end
   end

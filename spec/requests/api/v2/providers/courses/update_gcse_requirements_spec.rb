@@ -29,7 +29,7 @@ describe "PATCH /providers/:provider_code/courses/:course_code" do
   let(:course)            {
     create :course,
            provider: provider,
-           subjects: [build(:subject, :primary)]
+           subjects: [create(:subject, :primary)]
   }
 
   let(:credentials) do
@@ -141,7 +141,7 @@ describe "PATCH /providers/:provider_code/courses/:course_code" do
   end
 
   context "when not_set is provided on a secondary course" do
-    let(:secondary_subject) { build(:subject, :secondary) }
+    let(:secondary_subject) { create(:subject, :secondary) }
     let(:json_data) { JSON.parse(response.body)["errors"] }
     let(:gcse_requirements) { { english: "not_set", maths: "not_set", science: "not_set" } }
 

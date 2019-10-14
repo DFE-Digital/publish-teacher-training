@@ -8,7 +8,7 @@ describe SearchAndCompare::CourseSerializer do
 
     context "an existing course" do
       let(:subjects) do
-        [build(:subject, :primary)]
+        [create(:subject, :primary)]
       end
 
       let(:program_type) { :school_direct_salaried_training_programme }
@@ -16,6 +16,7 @@ describe SearchAndCompare::CourseSerializer do
       let(:course_enrichments) { [published_enrichment] }
       let(:course) do
         create(:course,
+               level: "primary",
                provider: provider,
                accrediting_provider: accrediting_provider,
                name: "Primary (Special Educational Needs)",

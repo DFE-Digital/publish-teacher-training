@@ -10,7 +10,7 @@
 
 require "rails_helper"
 
-RSpec.describe SubjectSerializer do
+describe SubjectSerializer do
   let(:subject_object) { create :subject }
   subject { serialize(subject_object) }
 

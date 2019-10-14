@@ -21,19 +21,22 @@ module API
 
       def build_new
         authorize @provider
-        course = Course.new(provider: @provider)
-        course.assign_attributes(course_params)
-        course.valid?
+        @course = Course.new(provider: @provider)
+        update_subjects
+        @course.assign_attributes(course_params)
+        @course.valid?
 
+        # https://github.com/jsonapi-rb/jsonapi-rails/issues/113
         json_data = JSONAPI::Serializable::Renderer.new.render(
-          course,
-          class: { Course: API::V2::SerializableCourse },
+          @course,
+          class: CourseSerializersService.new.execute,
+          include: [:subjects],
         )
 
         json_data[:data][:errors] = []
 
-        course.errors.messages.each do |error_key, _|
-          course.errors.full_messages_for(error_key).each do |error_message|
+        @course.errors.messages.each do |error_key, _|
+          @course.errors.full_messages_for(error_key).each do |error_message|
             json_data[:data][:errors] << {
               "title" => "Invalid #{error_key}",
               "detail" => error_message,
@@ -49,11 +52,12 @@ module API
         authorize @provider, :can_list_courses?
         authorize Course
 
-        render jsonapi: @provider.courses, include: params[:include]
+        render jsonapi: @provider.courses, include: params[:include], class: CourseSerializersService.new.execute
       end
 
       def show
-        render jsonapi: @course, include: params[:include]
+        # https://github.com/jsonapi-rb/jsonapi-rails/issues/113
+        render jsonapi: @course, include: params[:include], class: CourseSerializersService.new.execute
       end
 
       def sync_with_search_and_compare
@@ -86,7 +90,9 @@ module API
         update_course
         update_enrichment
         update_sites
+        update_subjects
         @course.ensure_site_statuses_match_study_mode if @course.study_mode_previously_changed?
+
         should_sync = site_ids.present? && @course.should_sync?
         has_synced? if should_sync
 
@@ -159,6 +165,12 @@ module API
         @course.errors[:sites] << "^You must choose at least one location" if site_ids.empty?
       end
 
+      def update_subjects
+        return if subject_ids.nil?
+
+        @course.subjects = Subject.where(id: subject_ids)
+      end
+
       def build_provider
         @provider = @recruitment_cycle.providers.find_by!(
           provider_code: params[:provider_code].upcase,
@@ -194,7 +206,12 @@ module API
                   :study_mode,
                   :is_send,
                   :accrediting_provider_code,
-                  :funding_type)
+                  :funding_type,
+                  :name,
+                  :course_code,
+                  :subjects_ids,
+                  :subjects_types,
+                  :level)
           .permit(
             :about_course,
             :course_length,
@@ -231,7 +248,9 @@ module API
                   :type,
                   :sites_ids,
                   :sites_types,
-                  :course_code)
+                  :course_code,
+                  :subjects_ids,
+                  :subjects_types)
           .permit(
             :english,
             :maths,
@@ -255,6 +274,10 @@ module API
 
       def funding_type_params
         params.fetch(:course, {})[:funding_type]
+      end
+
+      def subject_ids
+        params.fetch(:course, {})[:subjects_ids]
       end
 
       def has_synced?

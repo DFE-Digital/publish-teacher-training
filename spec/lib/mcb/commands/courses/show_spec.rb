@@ -18,8 +18,8 @@ describe "mcb courses show" do
     new_provider
   end
 
-  let(:subject1) { build(:subject) }
-  let(:subject2) { build(:subject) }
+  let(:subject1) { create(:subject, :primary_with_mathematics) }
+  let(:subject2) { create(:subject, :primary_with_mathematics) }
   let(:site_status1) { build(:site_status) }
   let(:site_status2) { build(:site_status) }
 

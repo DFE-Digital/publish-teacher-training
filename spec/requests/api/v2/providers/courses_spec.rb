@@ -8,23 +8,24 @@ describe "Courses API v2", type: :request do
   let(:credentials) do
     ActionController::HttpAuthentication::Token.encode_credentials(token)
   end
-  let(:course_subject_mathematics) { find_or_create(:subject, :mathematics) }
+  let(:course_subject_mathematics) { find_or_create(:subject, :primary_with_mathematics) }
 
   let(:current_cycle) { find_or_create :recruitment_cycle }
   let(:next_cycle)    { find_or_create :recruitment_cycle, :next }
   let(:current_year)  { current_cycle.year.to_i }
   let(:previous_year) { current_year - 1 }
   let(:next_year)     { current_year + 1 }
+  let(:subjects) { [course_subject_mathematics] }
 
   let(:applications_open_from) { Time.now.utc }
-  let(:findable_open_course) {
+  let(:findable_open_course) do
     create(:course, :resulting_in_pgce_with_qts, :with_apprenticeship,
-           level: :secondary,
+           level: "primary",
            name: "Mathematics",
            provider: provider,
            start_date: Time.now.utc,
            study_mode: :full_time,
-           subjects: [course_subject_mathematics],
+           subjects: subjects,
            is_send: true,
            site_statuses: [courses_site_status],
            enrichments: [enrichment],
@@ -33,7 +34,7 @@ describe "Courses API v2", type: :request do
            science: :must_have_qualification_at_application_time,
            age_range_in_years: "3_to_7",
            applications_open_from: applications_open_from)
-  }
+  end
 
   let(:courses_site_status) {
     build(:site_status,
@@ -94,8 +95,7 @@ describe "Courses API v2", type: :request do
                 "ucas_status" => "running",
                 "funding_type" => "apprenticeship",
                 "is_send?" => true,
-                "subjects" => %w[Mathematics],
-                "level" => "secondary",
+                "level" => "primary",
                 "applications_open_from" =>
                   findable_open_course.applications_open_from.to_s,
                 "about_course" => enrichment.about_course,
@@ -122,7 +122,7 @@ describe "Courses API v2", type: :request do
                 "science" => "must_have_qualification_at_application_time",
                 "provider_code" => provider.provider_code,
                 "recruitment_cycle_year" => current_year.to_s,
-                "gcse_subjects_required" => %w[maths english],
+                "gcse_subjects_required" => %w[maths english science],
                 "age_range_in_years" => provider.courses[0].age_range_in_years,
                 "accrediting_provider" => nil,
                 "accrediting_provider_code" => nil,
@@ -132,12 +132,13 @@ describe "Courses API v2", type: :request do
                 "provider" => { "meta" => { "included" => false } },
                 "sites" => { "meta" => { "included" => false } },
                 "site_statuses" => { "data" => [{ "type" => "site_statuses", "id" => site_status.id.to_s }] },
+                "subjects" => { "data" => [{ "type" => "subjects", "id" => course_subject_mathematics.id.to_s }] },
               },
               "meta" => {
                 "edit_options" => {
                   "entry_requirements" => %w[must_have_qualification_at_application_time expect_to_achieve_before_training_begins equivalence_test],
                   "qualifications" => %w[qts pgce_with_qts pgde_with_qts],
-                  "age_range_in_years" => %w[11_to_16 11_to_18 14_to_19],
+                  "age_range_in_years" => %w[3_to_7 5_to_11 7_to_11 7_to_14],
                   "start_dates" => [
                     "October #{previous_year}",
                     "November #{previous_year}",
@@ -172,38 +173,49 @@ describe "Courses API v2", type: :request do
             "jsonapi" => {
               "version" => "1.0",
             },
-            "included" => [{
-              "id" => site_status.id.to_s,
-              "type" => "site_statuses",
-              "attributes" => {
-                "vac_status" => site_status.vac_status,
-                "publish" => site_status.publish,
-                "status" => site_status.status,
-                "has_vacancies?" => true,
-              },
-              "relationships" => {
-                "site" => {
-                  "data" => {
-                    "type" => "sites",
+            "included" => [
+              {
+                "id" => site_status.id.to_s,
+                "type" => "site_statuses",
+                "attributes" => {
+                  "vac_status" => site_status.vac_status,
+                  "publish" => site_status.publish,
+                  "status" => site_status.status,
+                  "has_vacancies?" => true,
+                },
+                "relationships" => {
+                  "site" => {
+                    "data" => {
+                      "type" => "sites",
                       "id" => site.id.to_s,
+                    },
                   },
                 },
               },
-            }, {
-              "id" => site.id.to_s,
-              "type" => "sites",
-              "attributes" => {
-                "code" => site.code,
-                "location_name" => site.location_name,
-                "address1" => site.address1,
-                "address2" => site.address2,
-                "address3" => site.address3,
-                "address4" => site.address4,
-                "postcode" => site.postcode,
-                "region_code" => site.region_code,
-                "recruitment_cycle_year" => current_year.to_s,
+              {
+                "id" => course_subject_mathematics.id.to_s,
+                "type" => "subjects",
+                "attributes" => {
+                  "subject_name" => course_subject_mathematics.subject_name,
+                  "subject_code" => course_subject_mathematics.subject_code,
+                },
               },
-            }],
+              {
+                "id" => site.id.to_s,
+                "type" => "sites",
+                "attributes" => {
+                  "code" => site.code,
+                  "location_name" => site.location_name,
+                  "address1" => site.address1,
+                  "address2" => site.address2,
+                  "address3" => site.address3,
+                  "address4" => site.address4,
+                  "postcode" => site.postcode,
+                  "region_code" => site.region_code,
+                  "recruitment_cycle_year" => current_year.to_s,
+                },
+              },
+            ],
           )
         end
       end
@@ -287,8 +299,7 @@ describe "Courses API v2", type: :request do
               "ucas_status" => "running",
               "funding_type" => "apprenticeship",
               "is_send?" => true,
-              "subjects" => %w[Mathematics],
-              "level" => "secondary",
+              "level" => "primary",
               "applications_open_from" => provider.courses[0].applications_open_from.strftime("%Y-%m-%d"),
               "about_course" => enrichment.about_course,
               "course_length" => enrichment.course_length,
@@ -314,7 +325,7 @@ describe "Courses API v2", type: :request do
                 "science" => "must_have_qualification_at_application_time",
               "provider_code" => provider.provider_code,
               "recruitment_cycle_year" => current_year.to_s,
-              "gcse_subjects_required" => %w[maths english],
+              "gcse_subjects_required" => %w[maths english science],
               "age_range_in_years" => provider.courses[0].age_range_in_years,
               "accrediting_provider" => nil,
               "accrediting_provider_code" => nil,
@@ -324,12 +335,13 @@ describe "Courses API v2", type: :request do
               "provider" => { "meta" => { "included" => false } },
               "site_statuses" => { "meta" => { "included" => false } },
               "sites" => { "meta" => { "included" => false } },
+              "subjects" => { "meta" => { "included" => false } },
             },
             "meta" => {
               "edit_options" => {
                 "entry_requirements" => %w[must_have_qualification_at_application_time expect_to_achieve_before_training_begins equivalence_test],
                 "qualifications" => %w[qts pgce_with_qts pgde_with_qts],
-                "age_range_in_years" => %w[11_to_16 11_to_18 14_to_19],
+                "age_range_in_years" => %w[3_to_7 5_to_11 7_to_11 7_to_14],
                 "start_dates" => [
                   "October #{previous_year}",
                   "November #{previous_year}",

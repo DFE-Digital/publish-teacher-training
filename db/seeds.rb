@@ -1,6 +1,7 @@
 require "faker"
 Faker::Config.locale = "en-GB"
 
+CourseSubject.destroy_all
 Course.destroy_all
 Subject.destroy_all
 Site.destroy_all
@@ -142,7 +143,7 @@ def create_standard_provider_and_courses_for_cycle(recruitment_cycle, superuser)
     science: nil,
     modular: "",
     qualification: :pgce,
-    level: "secondary",
+    level: "Further education",
     subjects: [
       FurtherEducationSubject.find_by(subject_name: "Further education"),
     ],

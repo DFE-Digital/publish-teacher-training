@@ -17,7 +17,6 @@ describe CourseAssignableSubjectService do
   it "gets all primary subjects if the level is primary" do
     course = create(:course, level: "primary")
 
-
     expect(service.execute(course)).to eq([])
     expect(primary_model).to have_received(:all)
   end

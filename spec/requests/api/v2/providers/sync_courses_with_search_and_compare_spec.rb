@@ -7,20 +7,20 @@ describe "Courses API v2", type: :request do
     ActionController::HttpAuthentication::Token.encode_credentials(token)
   end
   let(:site) { build(:site) }
-  let(:dfe_subject) { build(:subject, :primary) }
-  let(:non_dfe_subject) { build(:subject, :modern_languages) }
+  let(:dfe_subject) { create(:subject, :primary_with_mathematics) }
+  let(:non_dfe_subject) { create(:subject, :modern_languages) }
   let(:findable_site_status_1) { build(:site_status, :findable, site: site) }
   let(:findable_site_status_2) { build(:site_status, :findable, site: site) }
   let(:suspended_site_status) { build(:site_status, :suspended, site: site) }
-  let(:syncable_course) { build(:course, site_statuses: [findable_site_status_1], subjects: [dfe_subject]) }
-  let(:suspended_course) { build(:course, site_statuses: [suspended_site_status], subjects: [dfe_subject]) }
-  let(:invalid_subject_course) { build(:course, site_statuses: [findable_site_status_2], subjects: [non_dfe_subject]) }
-  let(:provider) {
+  let(:syncable_course) { create(:course, :infer_level, site_statuses: [findable_site_status_1], subjects: [dfe_subject]) }
+  let(:suspended_course) { create(:course, :infer_level, site_statuses: [suspended_site_status], subjects: [dfe_subject]) }
+  let(:invalid_subject_course) { create(:course, :infer_level, site_statuses: [findable_site_status_2], subjects: [non_dfe_subject]) }
+  let(:provider) do
     create(:provider,
            organisations: [organisation],
              courses: [syncable_course, suspended_course, invalid_subject_course],
              sites: [site])
-  }
+  end
 
   describe "POST " do
     let(:status) { 200 }
@@ -99,13 +99,14 @@ describe "Courses API v2", type: :request do
             "/providers/#{provider.provider_code}/sync_courses_with_search_and_compare"
         end
         let(:next_cycle) { build(:recruitment_cycle, :next) }
-        let(:provider) {
+        let(:syncable_course) { build(:course, :infer_level, site_statuses: [findable_site_status_1], subjects: [dfe_subject]) }
+        let(:provider) do
           create(:provider,
                  organisations: [organisation],
                          courses: [syncable_course],
                          sites: [site],
                          recruitment_cycle: next_cycle)
-        }
+        end
 
         it "should throw an error" do
           expect { subject }.to raise_error("#{provider} is not from the current recruitment cycle")
