@@ -25,7 +25,7 @@ module API
         @course = Course.new(provider: @provider)
         update_subjects
         @course.assign_attributes(course_params)
-        @course.name = generate_course_title_service.execute(course: course)
+        @course.name = generate_course_title_service.execute(course: @course)
         @course.valid?
 
         # https://github.com/jsonapi-rb/jsonapi-rails/issues/113
