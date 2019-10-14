@@ -16,7 +16,7 @@ describe Courses::GenerateCourseTitleService do
       let(:is_send) { true }
 
       it "Appends SEND information to the title" do
-        expect(generated_title).to end_with("(SEND)")
+        expect(generated_title).to end_with(" (SEND)")
       end
     end
   end

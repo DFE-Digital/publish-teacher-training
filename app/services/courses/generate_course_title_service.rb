@@ -11,7 +11,7 @@ module Courses
                 generated_title(subjects)
               end
 
-      title = append_send_info(title) if course.is_send?
+      title += " (SEND)" if course.is_send?
       title
     end
 
@@ -22,10 +22,10 @@ module Courses
     end
 
     def modern_language_title(subjects)
-      title = "Modern Languages"
+      title = SecondarySubject.modern_languages.to_s
 
       languages = subjects.select { |s| s.type == "ModernLanguagesSubject" }
-      languages = languages.reject { |language| language.subject_name == "Modern languages (other)" }
+      languages = languages.reject { |language| language.subject_name.casecmp?("Modern languages (other)") }
 
       return title if languages.empty? || languages.length >= 4
 
@@ -56,12 +56,8 @@ module Courses
       "Further education"
     end
 
-    def append_send_info(title)
-      title + " (SEND)"
-    end
-
     def format_subject_name(subject)
-      if subject.subject_name == "Communication and media studies"
+      if subject.subject_name.casecmp?("Communication and media studies")
         "Media studies"
       else
         subject.to_s
@@ -69,7 +65,7 @@ module Courses
     end
 
     def format_language_name(language)
-      if language.subject_name == "English as a second or other language"
+      if language.subject_name.casecmp?("English as a second or other language")
         "English"
       else
         language.to_s
