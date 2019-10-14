@@ -47,6 +47,12 @@ FactoryBot.define do
       type { "SecondarySubject" }
     end
 
+    trait :communication_and_media_studies do
+      subject_name { "Communication and media studies" }
+      subject_code { "P3" }
+      type { "SecondarySubject" }
+    end
+
     trait :french do
       subject_name { "French" }
       subject_code { "F1" }
@@ -86,6 +92,24 @@ FactoryBot.define do
     trait :japanese do
       subject_name { "Japanese" }
       subject_code { "19" }
+      type { :ModernLanguagesSubject }
+    end
+
+    trait :spanish do
+      subject_name { "Spanish" }
+      subject_code { "22" }
+      type { :ModernLanguagesSubject }
+    end
+
+    trait :english_as_a_second_language do
+      subject_name { "English as a second or other language" }
+      subject_code { "16" }
+      type { :ModernLanguagesSubject }
+    end
+
+    trait :modern_languages_other do
+      subject_name { "Modern languages (other)" }
+      subject_code { "24" }
       type { :ModernLanguagesSubject }
     end
 

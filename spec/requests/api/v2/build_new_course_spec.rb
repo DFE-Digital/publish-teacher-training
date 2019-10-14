@@ -49,7 +49,16 @@ describe "/api/v2/build_new_course", type: :request do
       json_response = parse_response(response)
       expect(json_response["data"]["relationships"]).to eq(course_jsonapi["data"]["relationships"])
     end
+
+    it "returns the generated title" do
+      response = do_get params
+      expect(response).to have_http_status(:ok)
+      json_response = parse_response(response)
+
+      expect(json_response["data"]["attributes"]["name"]).to eq("Primary with mathematics")
+    end
   end
+
   context "with no parameters" do
     let(:params) { { course: {} } }
 
@@ -58,21 +67,24 @@ describe "/api/v2/build_new_course", type: :request do
       expect(response).to have_http_status(:ok)
       json_response = parse_response(response)
 
-      expect(json_response["data"]["errors"]).to match_array([
+      expected = course_jsonapi
+      expected["data"]["attributes"]["name"] = ""
+      expected["data"]["errors"] = [
         { "title" => "Invalid maths",
           "detail" => "Pick an option for Maths",
           "source" => { "pointer" => "/data/attributes/maths" } },
         { "title" => "Invalid english",
           "detail" => "Pick an option for English",
           "source" => { "pointer" => "/data/attributes/english" } },
-      ])
+      ]
+
+      expect(json_response).to eq expected
     end
   end
 
   context "with sufficient parameters to make a valid course" do
     let(:params) do
       { course: {
-        name: "Foo Bar Course",
         maths: "must_have_qualification_at_application_time",
         english: "must_have_qualification_at_application_time",
       } }
@@ -85,7 +97,12 @@ describe "/api/v2/build_new_course", type: :request do
       expect(response).to have_http_status(:ok)
       json_response = parse_response(response)
 
-      expect(json_response["data"]["errors"]).to match_array([])
+      expected = course_jsonapi
+      expected["data"]["attributes"]["name"] = ""
+      expected["data"]["errors"] = []
+
+
+      expect(json_response).to eq expected
     end
   end
 
