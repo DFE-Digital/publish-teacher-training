@@ -85,6 +85,8 @@
 
 # rubocop:disable Metrics/BlockLength
 Rails.application.routes.draw do
+  get :ping, controller: :health_checks
+
   namespace :api do
     namespace :v1 do
       scope "/(:recruitment_year)", constraints: { recruitment_year: /2020|2021/ } do
