@@ -93,8 +93,6 @@ class Course < ApplicationRecord
   has_many :course_subjects
   has_many :subjects, through: :course_subjects
   has_many :financial_incentives, through: :subjects
-  has_many :course_ucas_subjects
-  has_many :ucas_subjects, through: :course_ucas_subjects
   has_many :site_statuses
   has_many :sites,
            -> { merge(SiteStatus.where(status: %i[new_status running])) },
@@ -306,10 +304,6 @@ class Course < ApplicationRecord
     else
       "fee"
     end
-  end
-
-  def ucas_level
-    UCASSubjects::CourseLevel.new(ucas_subjects.map(&:subject_name)).ucas_level
   end
 
   def is_fee_based?
@@ -542,7 +536,7 @@ private
   end
 
   def validate_qualification
-    errors.add(:qualification, "^#{qualifications_description} is not valid for a #{ucas_level.to_s.humanize.downcase} course") unless qualification_options.include?(qualification)
+    errors.add(:qualification, "^#{qualifications_description} is not valid for a #{level.to_s.humanize.downcase} course") unless qualification_options.include?(qualification)
   end
 
   def set_applications_open_from

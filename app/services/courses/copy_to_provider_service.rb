@@ -13,9 +13,11 @@ module Courses
       Course.transaction do
         new_course = course.dup
         new_course.provider = new_provider
+        year_differential = new_course.recruitment_cycle.year.to_i - course.recruitment_cycle.year.to_i
+        new_course.applications_open_from = course.applications_open_from + year_differential.year
+        new_course.start_date = course.start_date + year_differential.year
+        new_course.subjects = course.subjects
         new_course.save!
-
-        new_course.ucas_subjects << course.ucas_subjects
 
         copy_latest_enrichment_to_course(course, new_course)
 
@@ -25,7 +27,6 @@ module Courses
           @sites_copy_to_course.execute(new_site: new_site, new_course: new_course) if new_site.present?
         end
       end
-
       new_course
     end
 
