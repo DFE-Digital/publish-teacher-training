@@ -167,6 +167,16 @@ describe "Courses API v2", type: :request do
                   "show_is_send" => false,
                   "show_start_date" => false,
                   "show_applications_open" => false,
+                  "subjects" => [
+                    {
+                      "id" => course_subject_mathematics.id.to_s,
+                      "type" => "subjects",
+                      "attributes" => {
+                        "subject_name" => course_subject_mathematics.subject_name,
+                        "subject_code" => course_subject_mathematics.subject_code,
+                      },
+                    },
+                  ],
                 },
               },
             },
@@ -370,6 +380,16 @@ describe "Courses API v2", type: :request do
                 "show_is_send" => false,
                 "show_start_date" => false,
                 "show_applications_open" => false,
+                "subjects" => [
+                  {
+                    "id" => course_subject_mathematics.id.to_s,
+                    "type" => "subjects",
+                    "attributes" => {
+                      "subject_name" => course_subject_mathematics.subject_name,
+                      "subject_code" => course_subject_mathematics.subject_code,
+                    },
+                  },
+                ],
               },
             },
           }],
