@@ -128,6 +128,19 @@ class Provider < ApplicationRecord
   validate :validate_enrichment_publishable, on: :publish
   validate :validate_enrichment
 
+  serialize :accrediting_provider_enrichments, AccreditingProviderEnrichment::ArraySerializer
+
+  validates_associated :accrediting_provider_enrichments
+
+  validates :train_with_us, words_count: { maximum: 250, message: "^Reduce the word count for training with you" }
+  validates :train_with_disability, words_count: { maximum: 250, message: "^Reduce the word count for training with disabilities and other needs" }
+
+  validates :email, email: true, on: :update, allow_nil: true
+  validates :telephone, phone: { message: "^Enter a valid telephone number" }, on: :update, allow_nil: true
+  validates :train_with_us, presence: true, on: :update, allow_nil: true
+  validates :train_with_disability, presence: true, on: :update, allow_nil: true
+
+
   after_validation :remove_unnecessary_enrichments_validation_message
 
   def syncable_courses
