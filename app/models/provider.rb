@@ -11,7 +11,7 @@
 #  provider_code        :text
 #  provider_type        :text
 #  postcode             :text
-#  url                  :text
+#  website              :text
 #  address1             :text
 #  address2             :text
 #  address3             :text
@@ -205,12 +205,13 @@ class Provider < ApplicationRecord
       region_code
       telephone
       email
+      website
     ]
 
     if enrichments.last
-      enrichments.last.attributes.slice(*(attribute_names + %w[website]))
+      enrichments.last.attributes.slice(*attribute_names)
     else
-      attributes.slice(*attribute_names).merge("website" => url)
+      attributes.slice(*attribute_names)
     end
   end
 

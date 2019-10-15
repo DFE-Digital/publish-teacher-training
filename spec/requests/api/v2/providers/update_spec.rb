@@ -116,7 +116,7 @@ describe "PATCH /providers/:provider_code" do
     include_examples "does not allow assignment", :year_code,            "year code"
     include_examples "does not allow assignment", :provider_code,        "provider code"
     include_examples "does not allow assignment", :provider_type,        :lead_school
-    include_examples "does not allow assignment", :url,                  "url"
+    include_examples "does not allow assignment", :website,              "website"
     include_examples "does not allow assignment", :created_at,           Time.now
     include_examples "does not allow assignment", :updated_at,           Time.now
     include_examples "does not allow assignment", :accrediting_provider, :accredited_body

@@ -11,7 +11,7 @@
 #  provider_code        :text
 #  provider_type        :text
 #  postcode             :text
-#  url                  :text
+#  website                  :text
 #  address1             :text
 #  address2             :text
 #  address3             :text
@@ -158,7 +158,7 @@ describe Provider, type: :model do
             "region_code" => provider.region_code,
             "telephone"   => provider.telephone,
             "email"       => provider.email,
-            "website"     => provider.url,
+            "website"     => provider.website,
           ),
         )
       end

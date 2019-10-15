@@ -11,7 +11,7 @@
 #  provider_code        :text
 #  provider_type        :text
 #  postcode             :text
-#  url                  :text
+#  website              :text
 #  address1             :text
 #  address2             :text
 #  address3             :text
@@ -38,7 +38,7 @@ FactoryBot.define do
     contact_name { Faker::Name.name }
     email { Faker::Internet.email }
     telephone { Faker::PhoneNumber.phone_number }
-    url { Faker::Internet.url }
+    website { Faker::Internet.url }
     accrediting_provider { "N" }
     region_code { "london" }
     organisations { build_list :organisation, 1 }
