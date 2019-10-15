@@ -348,6 +348,30 @@ describe Course, type: :model do
       end
     end
 
+    describe "#syncable_subjects" do
+      let(:subject) { create :subject, :primary }
+      let(:subject_discontinued) { create :subject, :primary, type: "DiscontinuedSubject" }
+      let(:subject_without_code) { create :subject, :primary, subject_code: nil }
+      let(:course) do
+        create :course,
+               subjects: [subject, subject_discontinued, subject_without_code]
+      end
+
+      it "returns none-discontinued subjects that have a code present" do
+        expect(course.syncable_subjects).to eq [subject]
+      end
+
+      context "with a subjects that has been loaded" do
+        it "does not use where to reload subjects" do
+          allow(course.subjects).to receive(:where)
+
+          expect(course.syncable_subjects).to eq [subject]
+
+          expect(course.subjects).not_to have_received(:where)
+        end
+      end
+    end
+
     describe "#findable?" do
       context "when #findable_site_statuses returns site statuses" do
         it "returns true" do

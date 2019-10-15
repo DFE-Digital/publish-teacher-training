@@ -229,10 +229,8 @@ module SearchAndCompare
 
     def course_subjects
       # CourseSubject_Mapping
-      object.subjects
-      .where.not(type: "DiscontinuedSubject")
-      .where.not(subject_code: nil)
-      .map do |subject|
+      object.syncable_subjects
+        .map do |subject|
         {
           **default_course_subjects_value,
           Subject:

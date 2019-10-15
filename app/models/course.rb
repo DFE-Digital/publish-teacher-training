@@ -233,6 +233,18 @@ class Course < ApplicationRecord
     end
   end
 
+  def syncable_subjects
+    if subjects.loaded?
+      subjects
+        .reject { |s| s.type == "DiscontinuedSubject" }
+        .select { |s| s.subject_code.present? }
+    else
+      subjects
+        .where.not(type: "DiscontinuedSubject")
+        .where.not(subject_code: nil)
+    end
+  end
+
   def open_for_applications?
     applications_open_from.present? && applications_open_from <= Time.now.utc && findable?
   end
@@ -529,10 +541,8 @@ private
     if findable?.blank?
       errors.add :site_statuses, "No findable sites."
     end
-    if subjects
-        .where.not(type: "DiscontinuedSubject")
-        .where.not(subject_code: nil)
-        .blank?
+
+    if syncable_subjects.none?
       errors.add :subjects, "No subjects."
     end
   end
