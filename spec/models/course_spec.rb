@@ -349,12 +349,11 @@ describe Course, type: :model do
     end
 
     describe "#syncable_subjects" do
-      let(:subject) { create :subject, :primary }
-      let(:subject_discontinued) { create :subject, :primary, type: "DiscontinuedSubject" }
-      let(:subject_without_code) { create :subject, :primary, subject_code: nil }
+      let(:subject)          { create :subject, :primary }
+      let(:humanities)       { create :subject, :humanities }
+      let(:modern_languages) { create :secondary_subject, :modern_languages }
       let(:course) do
-        create :course,
-               subjects: [subject, subject_discontinued, subject_without_code]
+        create :course, subjects: [subject, modern_languages, humanities]
       end
 
       it "returns none-discontinued subjects that have a code present" do
