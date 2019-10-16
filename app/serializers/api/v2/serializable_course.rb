@@ -14,10 +14,9 @@ module API
       attributes :findable?, :open_for_applications?, :has_vacancies?,
                  :course_code, :name, :study_mode, :qualification, :description,
                  :content_status, :ucas_status, :funding_type,
-                 :level, :is_send?, :has_bursary?, :has_scholarship_and_bursary?,
-                 :has_early_career_payments?, :bursary_amount, :scholarship_amount,
-                 :english, :maths, :science, :gcse_subjects_required, :age_range_in_years,
-                 :accrediting_provider, :accrediting_provider_code, :level
+                 :level, :is_send?, :english, :maths, :science, :gcse_subjects_required,
+                 :age_range_in_years, :accrediting_provider,
+                 :accrediting_provider_code, :level
 
       attribute :start_date do
         @object.start_date.strftime("%B %Y") if @object.start_date
@@ -41,6 +40,26 @@ module API
 
       attribute :recruitment_cycle_year do
         @object.recruitment_cycle.year
+      end
+
+      attribute :has_bursary? do
+        false
+      end
+
+      attribute :has_scholarship_and_bursary? do
+        false
+      end
+
+      attribute :has_early_career_payments? do
+        false
+      end
+
+      attribute :bursary_amount do
+        nil
+      end
+
+      attribute :scholarship_amount do
+        nil
       end
 
       belongs_to :provider
