@@ -28,7 +28,7 @@ describe CourseAssignableSubjectService do
     let!(:biology) { create(:subject, subject_name: "Biology", type: :SecondarySubject).becomes(SecondarySubject) }
     let!(:arabic) { create(:subject, subject_name: "Arabic", type: :ModernLanguagesSubject).becomes(ModernLanguagesSubject) }
 
-    it "returns subjects other than modern language" do
+    it "returns subjects other than modern language", without_subjects: true do
       course = create(:course, level: "secondary")
       expect(service.execute(course)).to match_array([biology, arabic])
     end

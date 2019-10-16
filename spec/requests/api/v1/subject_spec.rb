@@ -24,7 +24,7 @@ describe "Subjecs API", type: :request do
       expect(response).to have_http_status(:unauthorized)
     end
 
-    it "JSON body response contains expected provider attributes" do
+    it "JSON body response contains expected provider attributes", without_subjects: true do
       get "/api/v1/#{current_year}/subjects", headers: { "HTTP_AUTHORIZATION" => ActionController::HttpAuthentication::Token.encode_credentials("bats") }
 
       json = JSON.parse(response.body)

@@ -31,14 +31,8 @@ FactoryBot.define do
 
     trait :primary_with_mathematics do
       subject_name { "Primary with mathematics" }
-      subject_code { "01" }
+      subject_code { "03" }
       type { "PrimarySubject" }
-    end
-
-    trait :primary_with_mathematics do
-      subject_name { "Primary with mathematics" }
-      subject_code { "04" }
-      type { :PrimarySubject }
     end
 
     trait :mathematics do
@@ -118,6 +112,17 @@ FactoryBot.define do
       subject_code { "C1" }
       type { :SecondarySubject }
     end
+
+    trait :modern_languages do
+      subject_name { "Modern Languages" }
+      subject_code { nil }
+      type { :SecondarySubject }
+    end
+  end
+
+  factory :secondary_subject do
+    sequence(:subject_code, &:to_s)
+    subject_name { Faker::ProgrammingLanguage.name }
 
     trait :modern_languages do
       subject_name { "Modern Languages" }

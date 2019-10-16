@@ -18,4 +18,15 @@ RSpec.configure do |config|
       find_or_create :recruitment_cycle
     end
   end
+
+  # It's standard to have subjects in the DB, so create them by default, and use
+  # the tag "without_subjects: true" to make sure the subjects table is empty
+  # for tests that need it.
+  config.before(:all) do
+    SubjectCreatorService.new.execute
+  end
+
+  config.before(:each, without_subjects: true) do
+    Subject.delete_all
+  end
 end

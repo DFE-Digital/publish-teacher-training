@@ -10,6 +10,6 @@
 
 class SecondarySubject < Subject
   def self.modern_languages
-    find_by(subject_name: "Modern Languages")
+    @modern_languages ||= find_by(subject_name: "Modern Languages")
   end
 end

@@ -34,9 +34,9 @@ describe Course, type: :model do
   let(:recruitment_cycle) { course.recruitment_cycle }
   let(:course) { create(:course, name: "Biology", course_code: "3X9F") }
   let(:subject) { course }
-  let(:arabic) { create(:subject, subject_name: "Arabic", type: :ModernLanguagesSubject).becomes(ModernLanguagesSubject) }
+  let(:arabic) { find_or_create(:subject, subject_name: "Arabic", type: :ModernLanguagesSubject).becomes(ModernLanguagesSubject) }
   let!(:financial_incentive) { create(:financial_incentive, subject: modern_languages) }
-  let!(:modern_languages) { create(:subject, subject_name: "Modern Languages", type: :SecondarySubject).becomes(SecondarySubject) }
+  let(:modern_languages) { find_or_create(:secondary_subject, :modern_languages) }
 
   its(:to_s) { should eq("Biology (#{course.provider.provider_code}/3X9F) [#{course.recruitment_cycle}]") }
   its(:modular) { should eq("") }
@@ -344,6 +344,29 @@ describe Course, type: :model do
           subject { Course.find(course.id) }
 
           its(:findable_site_statuses) { should_not be_empty }
+        end
+      end
+    end
+
+    describe "#syncable_subjects" do
+      let(:subject)          { create :subject, :primary }
+      let(:humanities)       { create :subject, :humanities }
+      let(:modern_languages) { create :secondary_subject, :modern_languages }
+      let(:course) do
+        create :course, subjects: [subject, modern_languages, humanities]
+      end
+
+      it "returns none-discontinued subjects that have a code present" do
+        expect(course.syncable_subjects).to eq [subject]
+      end
+
+      context "with a subjects that has been loaded" do
+        it "does not use where to reload subjects" do
+          allow(course.subjects).to receive(:where)
+
+          expect(course.syncable_subjects).to eq [subject]
+
+          expect(course.subjects).not_to have_received(:where)
         end
       end
     end

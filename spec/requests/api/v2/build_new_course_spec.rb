@@ -27,6 +27,7 @@ describe "/api/v2/build_new_course", type: :request do
       class: {
         Course: API::V2::SerializableCourse,
         Subject: API::V2::SerializableSubject,
+        PrimarySubject: API::V2::SerializableSubject,
       },
       include: [:subjects],
     ).to_json)
