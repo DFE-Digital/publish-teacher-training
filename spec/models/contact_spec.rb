@@ -33,7 +33,7 @@ describe Contact, type: :model do
     end
   end
 
-  describe 'on update' do
+  describe "on update" do
     let(:provider) { create(:provider, contacts: contacts, changed_at: 5.minute.ago) }
     let(:contacts) { [build(:contact)] }
 
@@ -41,7 +41,7 @@ describe Contact, type: :model do
       provider
     end
 
-    it 'should touch the provider' do
+    it "should touch the provider" do
       contacts.first.save
       expect(provider.reload.changed_at).to be_within(1.second).of Time.now.utc
     end
