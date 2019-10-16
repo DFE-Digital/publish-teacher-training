@@ -15,6 +15,8 @@
 class Contact < ApplicationRecord
   self.inheritance_column = "_unused"
 
+  include TouchProvider
+
   belongs_to :provider
 
   audited associated_with: :provider

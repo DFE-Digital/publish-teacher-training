@@ -32,4 +32,18 @@ describe Contact, type: :model do
               .with_suffix("contact")
     end
   end
+
+  describe "on update" do
+    let(:provider) { create(:provider, contacts: contacts, changed_at: 5.minute.ago) }
+    let(:contacts) { [build(:contact)] }
+
+    before do
+      provider
+    end
+
+    it "should touch the provider" do
+      contacts.first.save
+      expect(provider.reload.changed_at).to be_within(1.second).of Time.now.utc
+    end
+  end
 end
