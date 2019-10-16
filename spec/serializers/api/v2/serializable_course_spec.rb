@@ -69,6 +69,7 @@ describe API::V2::SerializableCourse do
         class: {
           Course: API::V2::SerializableCourse,
           Subject: API::V2::SerializableSubject,
+          PrimarySubject: API::V2::SerializableSubject,
         },
         include: [
           :subjects,

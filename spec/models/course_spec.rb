@@ -34,9 +34,9 @@ describe Course, type: :model do
   let(:recruitment_cycle) { course.recruitment_cycle }
   let(:course) { create(:course, name: "Biology", course_code: "3X9F") }
   let(:subject) { course }
-  let(:arabic) { create(:subject, subject_name: "Arabic", type: :ModernLanguagesSubject).becomes(ModernLanguagesSubject) }
+  let(:arabic) { find_or_create(:subject, subject_name: "Arabic", type: :ModernLanguagesSubject).becomes(ModernLanguagesSubject) }
   let!(:financial_incentive) { create(:financial_incentive, subject: modern_languages) }
-  let!(:modern_languages) { create(:subject, subject_name: "Modern Languages", type: :SecondarySubject).becomes(SecondarySubject) }
+  let(:modern_languages) { find_or_create(:secondary_subject, :modern_languages) }
 
   its(:to_s) { should eq("Biology (#{course.provider.provider_code}/3X9F) [#{course.recruitment_cycle}]") }
   its(:modular) { should eq("") }

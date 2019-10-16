@@ -6,7 +6,7 @@ describe Courses::GenerateCourseTitleService do
   let(:is_send) { false }
   let(:level) { "primary" }
   let(:course) { Course.new(level: level, subjects: subjects, is_send: is_send) }
-  let(:modern_languages) { create(:subject, subject_name: "Modern Languages", type: :SecondarySubject).becomes(SecondarySubject) }
+  let(:modern_languages) { find_or_create(:secondary_subject, :modern_languages) }
   let(:generated_title) { service.execute(course: course) }
 
   before { modern_languages }

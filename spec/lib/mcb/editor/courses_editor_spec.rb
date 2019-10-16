@@ -16,7 +16,7 @@ describe MCB::Editor::CoursesEditor, :needs_audit_user do
   let!(:japanese) { find_or_create(:subject, :japanese) }
   let!(:primary_with_mathematics) { find_or_create(:subject, :primary_with_mathematics) }
   let!(:biology) { find_or_create(:subject, :biology) }
-  let!(:modern_languages) { find_or_create(:subject, :modern_languages) }
+  let(:modern_languages) { find_or_create(:secondary_subject, :modern_languages) }
   let!(:further_education) { find_or_create(:subject, :further_education) }
   let(:current_cycle) { find_or_create :recruitment_cycle }
   let!(:next_cycle) { find_or_create :recruitment_cycle, :next }
@@ -264,9 +264,11 @@ describe MCB::Editor::CoursesEditor, :needs_audit_user do
           let(:level) { "secondary" }
           let(:age_range_in_years) { "11_to_16" }
           it "attaches new subjects" do
-            expect { run_editor("edit subjects", "2", "continue", "exit") }.
-              to change { course.subjects.reload.sort_by(&:subject_name) }.
-              from([]).to(match_array([biology.becomes(SecondarySubject)]))
+            expect {
+              run_editor("edit subjects", "[ ] Biology", "continue", "exit")
+            }.to change { course.subjects.reload.sort_by(&:subject_name) }
+                   .from([])
+                   .to(match_array([biology.becomes(SecondarySubject)]))
           end
         end
 
@@ -275,9 +277,11 @@ describe MCB::Editor::CoursesEditor, :needs_audit_user do
           let(:level) { "secondary" }
           let(:age_range_in_years) { "11_to_16" }
           it "removes existing subjects" do
-            expect { run_editor("edit subjects", "2", "continue", "exit")[:stdout] }.
-            to change { course.subjects.reload.sort_by(&:subject_name) }.
-            from(match_array([biology.becomes(SecondarySubject)])).to([])
+            expect {
+              run_editor("edit subjects", "[x] Biology", "continue", "exit")
+            }.to change { course.subjects.reload.sort_by(&:subject_name) }
+                   .from(match_array([biology.becomes(SecondarySubject)]))
+                   .to([])
           end
         end
 
@@ -570,7 +574,8 @@ describe MCB::Editor::CoursesEditor, :needs_audit_user do
             "",
           )[:stdout]
 
-          expect(Course.find_by(course_code: desired_attributes[:course_code]).subjects).to match_array(primary_with_mathematics.becomes(PrimarySubject))
+          expect(Course.find_by(course_code: desired_attributes[:course_code]).subjects)
+            .to match_array(primary_with_mathematics.becomes(PrimarySubject))
         end
 
         it "only shows further education subjects if further education level is selected" do
