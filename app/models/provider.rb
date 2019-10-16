@@ -60,7 +60,11 @@ class Provider < ApplicationRecord
   has_many :users, through: :organisations
 
   has_many :sites
+
+  # NOTE: To be removed as "ProviderEnrichment" is no longer
+  #       START
   has_one :latest_enrichment,
+
           -> { latest_created_at },
           class_name: "ProviderEnrichment"
 
@@ -101,6 +105,8 @@ class Provider < ApplicationRecord
           -> { published.latest_published_at },
           class_name: "ProviderEnrichment",
           inverse_of: "provider"
+
+  #      END
   has_many :courses, -> { kept }
   has_one :ucas_preferences, class_name: "ProviderUCASPreference"
   has_many :contacts
@@ -149,7 +155,7 @@ class Provider < ApplicationRecord
       :subjects,
       :sites,
       site_statuses: :site,
-      provider: %i[enrichments latest_published_enrichment sites],
+      provider: %i[sites],
     ).select(&:syncable?)
   end
 
@@ -221,30 +227,26 @@ class Provider < ApplicationRecord
       website
     ]
 
-    if enrichments.last
-      enrichments.last.attributes.slice(*attribute_names)
-    else
-      attributes.slice(*attribute_names)
-    end
+    attributes.slice(*attribute_names)
   end
 
   def content_status
-    newest_enrichment = enrichments.latest_created_at.first
+    # newest_enrichment = enrichments.latest_created_at.first
 
-    if newest_enrichment.nil?
-      :empty
-    elsif newest_enrichment.published?
-      :published
-    elsif newest_enrichment.has_been_published_before?
-      :published_with_unpublished_changes
-    else
-      :draft
-    end
+    # if newest_enrichment.nil?
+    #   :empty
+    # elsif newest_enrichment.published?
+    #   :published
+    # elsif newest_enrichment.has_been_published_before?
+    #   :published_with_unpublished_changes
+    # else
+    #   :draft
+    # end
   end
 
   def last_published_at
-    newest_enrichment = enrichments.latest_created_at.first
-    newest_enrichment&.last_published_at
+    # newest_enrichment = enrichments.latest_created_at.first
+    # newest_enrichment&.last_published_at
   end
 
   # This reflects the fact that organisations should actually be a has_one.
@@ -271,7 +273,7 @@ class Provider < ApplicationRecord
 
   def accredited_bodies
     accrediting_providers.map do |ap|
-      accrediting_provider_enrichment = latest_enrichment&.accrediting_provider_enrichment(ap.provider_code)
+      accrediting_provider_enrichment = accrediting_provider_enrichment(ap.provider_code)
 
       # map() to this hash:
       {
@@ -288,41 +290,47 @@ class Provider < ApplicationRecord
 
 private
 
-  def add_enrichment_errors(enrichment)
-    enrichment.errors.messages.map do |field, _error|
-      # `full_messages_for` here will remove any `^`s defined in the validator or en.yml.
-      # We still need it for later, so re-add it.
-      # jsonapi_errors will throw if it's given an array, so we call `.first`.
-
-      if field == :accrediting_provider_enrichments
-        enrichment.errors.details[field].each { |item|
-          provider_name = accrediting_providers.find { |accrediting_provider| accrediting_provider.provider_code == item[:value].first.UcasProviderCode }.provider_name
-
-          message = "^Reduce the word count for #{provider_name}"
-          errors.add :accredited_bodies, message
-        }
-
-      else
-        message = "^" + enrichment.errors.full_messages_for(field).first.to_s
-        errors.add field.to_sym, message
-      end
+  def accrediting_provider_enrichment(provider_code)
+    accrediting_provider_enrichments&.find do |enrichment|
+      enrichment.UcasProviderCode == provider_code
     end
   end
 
-  def validate_enrichment(validation_scope = nil)
-    latest_enrichment = enrichments.select(&:draft?).last
-    return if latest_enrichment.blank?
+  def add_enrichment_errors(enrichment)
+    # enrichment.errors.messages.map do |field, _error|
+    #   # `full_messages_for` here will remove any `^`s defined in the validator or en.yml.
+    #   # We still need it for later, so re-add it.
+    #   # jsonapi_errors will throw if it's given an array, so we call `.first`.
 
-    latest_enrichment.valid? validation_scope
-    add_enrichment_errors(latest_enrichment)
+    #   if field == :accrediting_provider_enrichments
+    #     enrichment.errors.details[field].each { |item|
+    #       provider_name = accrediting_providers.find { |accrediting_provider| accrediting_provider.provider_code == item[:value].first.UcasProviderCode }.provider_name
+
+    #       message = "^Reduce the word count for #{provider_name}"
+    #       errors.add :accredited_bodies, message
+    #     }
+
+    #   else
+    #     message = "^" + enrichment.errors.full_messages_for(field).first.to_s
+    #     errors.add field.to_sym, message
+    #   end
+    # end
+  end
+
+  def validate_enrichment(validation_scope = nil)
+    # latest_enrichment = enrichments.select(&:draft?).last
+    # return if latest_enrichment.blank?
+
+    # latest_enrichment.valid? validation_scope
+    # add_enrichment_errors(latest_enrichment)
   end
 
   def validate_enrichment_publishable
-    validate_enrichment :publish
+    # validate_enrichment :publish
   end
 
   def remove_unnecessary_enrichments_validation_message
-    self.errors.delete :enrichments if self.errors[:enrichments] == ["is invalid"]
+    # self.errors.delete :enrichments if self.errors[:enrichments] == ["is invalid"]
   end
 
   def set_defaults

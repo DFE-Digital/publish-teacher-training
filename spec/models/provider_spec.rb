@@ -29,13 +29,13 @@
 require "rails_helper"
 
 describe Provider, type: :model do
+  let(:accrediting_provider_enrichments) { [] }
   let(:courses) { [] }
-  let(:enrichments) { [] }
   let(:provider) do
     create(:provider,
            provider_name: "ACME SCITT",
            provider_code: "A01",
-           enrichments: enrichments,
+           accrediting_provider_enrichments: accrediting_provider_enrichments,
            courses: courses)
   end
 
@@ -117,51 +117,21 @@ describe Provider, type: :model do
   end
 
   describe "#external_contact_info" do
-    context "provider has draft and multiple published enrichments" do
-      it "returns contact info from the provider enrichment" do
-        published_enrichment = build(:provider_enrichment, :published,
-                                     last_published_at: 5.days.ago)
-        latest_published_enrichment = build(:provider_enrichment, :published,
-                                            last_published_at: 1.day.ago)
-        enrichment = build(:provider_enrichment)
-
-        provider = create(:provider, enrichments: [published_enrichment,
-                                                   latest_published_enrichment,
-                                                   enrichment])
-
-        expect(provider.external_contact_info).to(
-          eq(
-            "address1"    => enrichment.address1,
-            "address2"    => enrichment.address2,
-            "address3"    => enrichment.address3,
-            "address4"    => enrichment.address4,
-            "postcode"    => enrichment.postcode,
-            "region_code" => enrichment.region_code,
-            "telephone"   => enrichment.telephone,
-            "email"       => enrichment.email,
-            "website"     => enrichment.website,
-          ),
-        )
-      end
-    end
-
-    context "provider has no published enrichments" do
-      it "returns the info from the provider record" do
-        provider = create(:provider)
-        expect(provider.external_contact_info).to(
-          eq(
-            "address1"    => provider.address1,
-            "address2"    => provider.address2,
-            "address3"    => provider.address3,
-            "address4"    => provider.address4,
-            "postcode"    => provider.postcode,
-            "region_code" => provider.region_code,
-            "telephone"   => provider.telephone,
-            "email"       => provider.email,
-            "website"     => provider.website,
-          ),
-        )
-      end
+    it "returns the info from the provider record" do
+      provider = create(:provider)
+      expect(provider.external_contact_info).to(
+        eq(
+          "address1"    => provider.address1,
+          "address2"    => provider.address2,
+          "address3"    => provider.address3,
+          "address4"    => provider.address4,
+          "postcode"    => provider.postcode,
+          "region_code" => provider.region_code,
+          "telephone"   => provider.telephone,
+          "email"       => provider.email,
+          "website"     => provider.website,
+        ),
+      )
     end
   end
 
@@ -364,11 +334,7 @@ describe Provider, type: :model do
   end
 
   describe "#accredited_bodies" do
-    let(:accrediting_provider_enrichments) { [] }
     let(:description) { "Ye olde establishmente" }
-    let(:enrichments) do
-      [build(:provider_enrichment, accrediting_provider_enrichments: accrediting_provider_enrichments)]
-    end
 
     subject { provider.accredited_bodies }
 
@@ -442,100 +408,6 @@ describe Provider, type: :model do
     end
   end
 
-  describe "#enrichments" do
-    describe "#find_or_initialize_draft" do
-      let(:provider) { create(:provider, enrichments: enrichments) }
-
-      copyable_enrichment_attributes =
-        %w[
-          email
-          website
-          address1
-          address2
-          address3
-          address4
-          postcode
-          region_code
-          telephone
-          train_with_us
-          train_with_disability
-        ].freeze
-
-      let(:actual_enrichment_attributes) do
-        subject.attributes.slice(*copyable_enrichment_attributes)
-      end
-
-      subject { provider.enrichments.find_or_initialize_draft(create(:user)) }
-
-      context "no enrichments" do
-        let(:enrichments) { [] }
-
-        it "sets all attributes to be nil" do
-          expect(actual_enrichment_attributes.values).to be_all(&:nil?)
-        end
-
-        its(:id) { should be_nil }
-        its(:last_published_at) { should be_nil }
-        its(:status) { should eq "draft" }
-      end
-
-      context "with a draft enrichment" do
-        let(:initial_draft_enrichment) { build(:provider_enrichment, :initial_draft) }
-        let(:enrichments) { [initial_draft_enrichment] }
-        let(:expected_enrichment_attributes) { initial_draft_enrichment.attributes.slice(*copyable_enrichment_attributes) }
-
-        it "has all the same attributes as the initial draft enrichment" do
-          expect(actual_enrichment_attributes).to eq expected_enrichment_attributes
-        end
-
-        its(:id) { should_not be_nil }
-        its(:last_published_at) { should eq initial_draft_enrichment.last_published_at }
-        its(:status) { should eq "draft" }
-      end
-
-      context "with a published enrichment" do
-        let(:published_enrichment) { build(:provider_enrichment, :published) }
-        let(:enrichments) { [published_enrichment] }
-        let(:expected_enrichment_attributes) { published_enrichment.attributes.slice(*copyable_enrichment_attributes) }
-
-        it "has all the same attributes as the published enrichment" do
-          expect(actual_enrichment_attributes).to eq expected_enrichment_attributes
-        end
-
-        its(:id) { should be_nil }
-        its(:last_published_at) { should be_within(1.second).of published_enrichment.last_published_at }
-        its(:status) { should eq "draft" }
-      end
-
-      context "with a draft and published enrichment" do
-        let(:published_enrichment) { build(:provider_enrichment, :published) }
-        let(:subsequent_draft_enrichment) { build(:provider_enrichment, :subsequent_draft) }
-        let(:enrichments) { [published_enrichment, subsequent_draft_enrichment] }
-        let(:expected_enrichment_attributes) { subsequent_draft_enrichment.attributes.slice(*copyable_enrichment_attributes) }
-
-        it "has all the same attributes as the subsequent draft enrichment" do
-          expect(actual_enrichment_attributes).to eq expected_enrichment_attributes
-        end
-
-        its(:id) { should_not be_nil }
-        its(:last_published_at) { should be_within(1.second).of subsequent_draft_enrichment.last_published_at }
-        its(:status) { should eq "draft" }
-      end
-    end
-  end
-
-  describe "#publish_enrichment" do
-    let(:user) { create :user }
-    let(:provider) { create :provider }
-    let!(:provider_enrichment1) { create :provider_enrichment, provider: provider }
-    let!(:provider_enrichment2) { create :provider_enrichment, provider: provider }
-
-    it "sets the status of all draft enrichments to published" do
-      provider.publish_enrichment(user)
-      expect(provider.reload.enrichments.draft.size).to eq(0)
-    end
-  end
-
   describe "#before_create" do
     describe "#set_defaults" do
       let(:provider) { build :provider }
@@ -571,16 +443,6 @@ describe Provider, type: :model do
 
         expect(provider.year_code).to eq("2020")
       end
-    end
-  end
-
-  describe "#latest_enrichment" do
-    let(:old_enrichment) { create(:provider_enrichment, created_at: 1.day.ago) }
-    let(:new_enrichment) { create(:provider_enrichment, created_at: 1.second.ago) }
-    let(:enrichments) { [new_enrichment, old_enrichment] }
-
-    it "returns correct enrichment" do
-      expect(provider.latest_enrichment).to eq(new_enrichment)
     end
   end
 
