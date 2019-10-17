@@ -168,14 +168,62 @@ describe "Courses API v2", type: :request do
                   "show_start_date" => false,
                   "show_applications_open" => false,
                   "subjects" => [
-                    {
-                      "id" => course_subject_mathematics.id.to_s,
-                      "type" => "subjects",
-                      "attributes" => {
-                        "subject_name" => course_subject_mathematics.subject_name,
-                        "subject_code" => course_subject_mathematics.subject_code,
-                      },
-                    },
+                     {
+                       "id" => "1",
+                       "type" => "subjects",
+                       "attributes" => {
+                         "subject_name" => "Primary",
+                         "subject_code" => "00",
+                       },
+                     },
+                     {
+                       "id" => "2",
+                       "type" => "subjects",
+                       "attributes" => {
+                         "subject_name" => "Primary with English",
+                         "subject_code" => "01",
+                       },
+                     },
+                     {
+                       "id" => "3",
+                       "type" => "subjects",
+                       "attributes" => {
+                         "subject_name" => "Primary with geography and history",
+                         "subject_code" => "02",
+                       },
+                     },
+                     {
+                       "id" => "4",
+                       "type" => "subjects",
+                       "attributes" => {
+                         "subject_name" => "Primary with mathematics",
+                         "subject_code" => "03",
+                       },
+                     },
+                     {
+                       "id" => "5",
+                       "type" => "subjects",
+                       "attributes" => {
+                         "subject_name" => "Primary with modern languages",
+                         "subject_code" => "04",
+                       },
+                     },
+                     {
+                       "id" => "6",
+                       "type" => "subjects",
+                       "attributes" => {
+                         "subject_name" => "Primary with physical education",
+                         "subject_code" => "06",
+                       },
+                     },
+                     {
+                       "id" => "7",
+                       "type" => "subjects",
+                       "attributes" => {
+                         "subject_name" => "Primary with science",
+                         "subject_code" => "07",
+                       },
+                     },
                   ],
                 },
               },
@@ -382,11 +430,59 @@ describe "Courses API v2", type: :request do
                 "show_applications_open" => false,
                 "subjects" => [
                   {
-                    "id" => course_subject_mathematics.id.to_s,
+                    "id" => "1",
                     "type" => "subjects",
                     "attributes" => {
-                      "subject_name" => course_subject_mathematics.subject_name,
-                      "subject_code" => course_subject_mathematics.subject_code,
+                      "subject_name" => "Primary",
+                      "subject_code" => "00",
+                    },
+                  },
+                  {
+                    "id" => "2",
+                    "type" => "subjects",
+                    "attributes" => {
+                      "subject_name" => "Primary with English",
+                      "subject_code" => "01",
+                    },
+                  },
+                  {
+                    "id" => "3",
+                    "type" => "subjects",
+                    "attributes" => {
+                      "subject_name" => "Primary with geography and history",
+                      "subject_code" => "02",
+                    },
+                  },
+                  {
+                    "id" => "4",
+                    "type" => "subjects",
+                    "attributes" => {
+                      "subject_name" => "Primary with mathematics",
+                      "subject_code" => "03",
+                    },
+                  },
+                  {
+                    "id" => "5",
+                    "type" => "subjects",
+                    "attributes" => {
+                      "subject_name" => "Primary with modern languages",
+                      "subject_code" => "04",
+                    },
+                  },
+                  {
+                    "id" => "6",
+                    "type" => "subjects",
+                    "attributes" => {
+                      "subject_name" => "Primary with physical education",
+                      "subject_code" => "06",
+                    },
+                  },
+                  {
+                    "id" => "7",
+                    "type" => "subjects",
+                    "attributes" => {
+                      "subject_name" => "Primary with science",
+                      "subject_code" => "07",
                     },
                   },
                 ],
