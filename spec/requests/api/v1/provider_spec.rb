@@ -71,7 +71,6 @@ describe "Providers API", type: :request do
                accrediting_provider: "Y",
                scheme_member: "Y",
                last_published_at: DateTime.now.utc,
-               enrichments: [],
                ucas_preferences: ucas_preferences,
                contacts: contacts,
                sites: [site])
@@ -129,7 +128,6 @@ describe "Providers API", type: :request do
                accrediting_provider: "N",
                scheme_member: "N",
                last_published_at: DateTime.now.utc,
-               enrichments: [],
                ucas_preferences: ucas_preferences2,
                contacts: contacts2,
                sites: [site2])
@@ -426,8 +424,7 @@ describe "Providers API", type: :request do
           @providers = Array.new(25) do |i|
             create(:provider, provider_code: "PROV#{i + 1}",
               changed_at: (30 - i).minutes.ago,
-              sites: [],
-              enrichments: [])
+              sites: [])
           end
         end
 
@@ -462,8 +459,7 @@ describe "Providers API", type: :request do
           @providers = Array.new(25) do |i|
             create(:provider, provider_code: "PROV#{i + 1}",
               changed_at: timestamp + i / 1000.0,
-              sites: [],
-              enrichments: [])
+              sites: [])
           end
         end
 
