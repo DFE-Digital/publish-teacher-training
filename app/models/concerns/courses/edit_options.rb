@@ -8,6 +8,7 @@ module Courses
     include StudyModeConcern
     include IsSendConcern
     include ApplicationsOpenConcern
+    include SubjectsConcern
 
     included do
       # When changing edit options here be sure to update the edit_options in the
@@ -24,6 +25,7 @@ module Courses
           show_is_send: show_is_send?,
           show_start_date: show_start_date?,
           show_applications_open: show_applications_open?,
+          subjects: potential_subjects,
         }
       end
     end

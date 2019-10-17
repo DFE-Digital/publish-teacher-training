@@ -4,13 +4,28 @@ describe Course, type: :model do
   let(:course) { create(:course, level: "primary", subjects: [subjects]) }
   let(:subjects) { create(:subject, :primary) }
 
-  context "entry_requirements" do
+  describe "subjects" do
+    let(:course) { create(:course, level: "primary", subjects: []) }
+
+    it "returns the subjects the user can choose according to their level" do
+      primary_subject = create(:subject, :primary_with_mathematics)
+      create(:subject, :biology)
+
+      expect(course.potential_subjects).to match_array(
+        [
+          { id: primary_subject.id.to_s, type: :subjects, attributes: { subject_name: primary_subject.subject_name, subject_code: primary_subject.subject_code } },
+        ],
+      )
+    end
+  end
+
+  describe "entry_requirements" do
     it "returns the entry requirements that users can choose between" do
       expect(course.entry_requirements).to eq(%i[must_have_qualification_at_application_time expect_to_achieve_before_training_begins equivalence_test])
     end
   end
 
-  context "qualifications" do
+  describe "qualifications" do
     context "for a course that’s not further education" do
       it "returns only QTS options for users to choose between" do
         expect(course.qualification_options).to eq(%w[qts pgce_with_qts pgde_with_qts])
@@ -32,7 +47,7 @@ describe Course, type: :model do
     end
   end
 
-  context "age_range" do
+  describe "age_range" do
     context "for primary" do
       it "returns the correct ages range for users to co choose between" do
         expect(course.age_range_options).to eq(%w[3_to_7 5_to_11 7_to_11 7_to_14])
@@ -48,7 +63,7 @@ describe Course, type: :model do
     end
   end
 
-  context "start_date_options" do
+  describe "start_date_options" do
     let(:recruitment_year) { course.provider.recruitment_cycle.year.to_i }
 
     it "should return the correct options for the recruitment_cycle" do
@@ -79,7 +94,7 @@ describe Course, type: :model do
     end
   end
 
-  context "available_start_date_options" do
+  describe "available_start_date_options" do
     let(:recruitment_year) { course.provider.recruitment_cycle.year.to_i }
 
     context "when unpublished" do
@@ -98,7 +113,7 @@ describe Course, type: :model do
     end
   end
 
-  context "is_send" do
+  describe "is_send" do
     let(:recruitment_year) { course.provider.recruitment_cycle.year.to_i }
 
     context "when unpublished" do
@@ -117,7 +132,7 @@ describe Course, type: :model do
     end
   end
 
-  context "applications_open" do
+  describe "applications_open" do
     let(:recruitment_year) { course.provider.recruitment_cycle.year.to_i }
 
     context "when unpublished" do
