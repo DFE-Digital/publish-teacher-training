@@ -124,9 +124,7 @@ module API
       def update_accrediting_enrichment
         return if accredited_bodies_params.values.none?
 
-        enrichment = @provider.enrichments.find_or_initialize_draft(current_user)
-
-        enrichment.accrediting_provider_enrichments =
+        @provider.accrediting_provider_enrichments =
           accredited_bodies_params["accredited_bodies"].map do |accredited_body|
             {
               UcasProviderCode: accredited_body["provider_code"],
@@ -134,7 +132,7 @@ module API
             }
           end
 
-        enrichment.save
+        @provider.save
       end
 
       def update_enrichment

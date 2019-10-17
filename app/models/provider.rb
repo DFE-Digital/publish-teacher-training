@@ -131,9 +131,6 @@ class Provider < ApplicationRecord
     where("provider_name ILIKE ? OR provider_code ILIKE ?", "%#{search_term}%", "%#{search_term}%")
   }
 
-  validate :validate_enrichment_publishable, on: :publish
-  validate :validate_enrichment
-
   serialize :accrediting_provider_enrichments, AccreditingProviderEnrichment::ArraySerializer
 
   validates_associated :accrediting_provider_enrichments
@@ -146,8 +143,7 @@ class Provider < ApplicationRecord
   validates :train_with_us, presence: true, on: :update, allow_nil: true
   validates :train_with_disability, presence: true, on: :update, allow_nil: true
 
-
-  after_validation :remove_unnecessary_enrichments_validation_message
+  after_validation :add_enrichment_errors
 
   def syncable_courses
     courses.includes(
@@ -296,41 +292,28 @@ private
     end
   end
 
-  def add_enrichment_errors(enrichment)
-    # enrichment.errors.messages.map do |field, _error|
-    #   # `full_messages_for` here will remove any `^`s defined in the validator or en.yml.
-    #   # We still need it for later, so re-add it.
-    #   # jsonapi_errors will throw if it's given an array, so we call `.first`.
+  def add_enrichment_errors
+    provider_errors = ActiveModel::Errors.new(self)
 
-    #   if field == :accrediting_provider_enrichments
-    #     enrichment.errors.details[field].each { |item|
-    #       provider_name = accrediting_providers.find { |accrediting_provider| accrediting_provider.provider_code == item[:value].first.UcasProviderCode }.provider_name
+    self.errors.messages.map do |field, _error|
+      # `full_messages_for` here will remove any `^`s defined in the validator or en.yml.
+      # We still need it for later, so re-add it.
+      # jsonapi_errors will throw if it's given an array, so we call `.first`.
 
-    #       message = "^Reduce the word count for #{provider_name}"
-    #       errors.add :accredited_bodies, message
-    #     }
+      if field == :accrediting_provider_enrichments
+        self.errors.details[field].each { |item|
+          provider_name = accrediting_providers.find { |accrediting_provider| accrediting_provider.provider_code == item[:value].first.UcasProviderCode }.provider_name
 
-    #   else
-    #     message = "^" + enrichment.errors.full_messages_for(field).first.to_s
-    #     errors.add field.to_sym, message
-    #   end
-    # end
-  end
+          message = "^Reduce the word count for #{provider_name}"
+          provider_errors.add :accredited_bodies, message
+        }
 
-  def validate_enrichment(validation_scope = nil)
-    # latest_enrichment = enrichments.select(&:draft?).last
-    # return if latest_enrichment.blank?
-
-    # latest_enrichment.valid? validation_scope
-    # add_enrichment_errors(latest_enrichment)
-  end
-
-  def validate_enrichment_publishable
-    # validate_enrichment :publish
-  end
-
-  def remove_unnecessary_enrichments_validation_message
-    # self.errors.delete :enrichments if self.errors[:enrichments] == ["is invalid"]
+      else
+        message = "^" + self.errors.full_messages_for(field).first.to_s
+        provider_errors.add field.to_sym, message
+      end
+    end
+    @errors = provider_errors
   end
 
   def set_defaults
