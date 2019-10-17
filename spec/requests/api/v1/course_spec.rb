@@ -21,8 +21,7 @@ describe "Courses API", type: :request do
              provider_name: "ACME SCITT",
              provider_code: "2LD",
              provider_type: :scitt,
-             scheme_member: "Y",
-             enrichments: [])
+             scheme_member: "Y")
     end
     let(:current_cycle) { find_or_create :recruitment_cycle }
     let(:current_year)  { current_cycle.year.to_i }
