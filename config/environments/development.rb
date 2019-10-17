@@ -51,7 +51,7 @@ Rails.application.configure do # rubocop: disable Metrics/BlockLength
 
   config.authentication_token = ENV.fetch("AUTHENTICATION_TOKEN", "bats")
 
-  config.active_job.queue_adapter = :sidekiq
+  config.active_job.queue_adapter = :async
 
   # Logging
   config.log_level = Settings.log_level
