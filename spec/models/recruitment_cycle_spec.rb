@@ -85,7 +85,7 @@ describe RecruitmentCycle, type: :model do
         build(:site_status, :findable, site: provider.sites.first)
       end
       let(:course_enrichment) { build(:course_enrichment, :published) }
-      let(:subjects) { [create(:subject, :further_education)] }
+      let(:subjects) { [create(:further_education_subject)] }
       let(:course) do
         create(
           :course,

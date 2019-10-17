@@ -11,7 +11,7 @@
 require "rails_helper"
 
 describe Subject, type: :model do
-  subject { find_or_create(:subject, subject_name: "Modern languages (other)", subject_code: "101") }
+  subject { find_or_create(:modern_languages_subject, subject_name: "Modern languages (other)", subject_code: "101") }
 
   it { should have_many(:courses).through(:course_subjects) }
   its(:to_sym) { should eq(:modern_languages_other) }
