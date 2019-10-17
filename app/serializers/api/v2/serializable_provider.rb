@@ -1,17 +1,9 @@
 module API
   module V2
     class SerializableProvider < JSONAPI::Serializable::Resource
-      class << self
-        def enrichment_attribute(name, enrichment_name = name)
-          attribute name do
-            @object.enrichments.last&.__send__(enrichment_name)
-          end
-        end
-      end
-
       type "providers"
 
-      attributes :provider_code, :provider_name, :accredited_body?, :can_add_more_sites?, :content_status, :accredited_bodies
+      attributes :provider_code, :provider_name, :accredited_body?, :can_add_more_sites?, :content_status, :accredited_bodies, :train_with_us, :train_with_disability
 
       attribute :address1 do
         @object.external_contact_info["address1"]
@@ -93,12 +85,7 @@ module API
         @object.ucas_preferences&.send_application_alerts
       end
 
-      enrichment_attribute :train_with_us
-      enrichment_attribute :train_with_disability
-
       has_many :sites
-
-      has_one :latest_enrichment, key: :ProviderEnrichment, serializer: API::V2::SerializableProviderEnrichment
 
       has_many :courses do
         meta do
