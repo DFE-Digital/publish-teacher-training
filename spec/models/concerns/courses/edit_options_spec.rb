@@ -8,12 +8,15 @@ describe Course, type: :model do
     let(:course) { create(:course, level: "primary", subjects: []) }
 
     it "returns the subjects the user can choose according to their level" do
-      primary_subject = create(:subject, :primary_with_mathematics)
-      create(:subject, :biology)
-
       expect(course.potential_subjects).to match_array(
         [
-          { id: primary_subject.id.to_s, type: :subjects, attributes: { subject_name: primary_subject.subject_name, subject_code: primary_subject.subject_code } },
+          { id: "1", type: :subjects, attributes: { subject_name: "Primary", subject_code: "00" } },
+          { id: "2", type: :subjects, attributes: { subject_name: "Primary with English", subject_code: "01" } },
+          { id: "3", type: :subjects, attributes: { subject_name: "Primary with geography and history", subject_code: "02" } },
+          { id: "4", type: :subjects, attributes: { subject_name: "Primary with mathematics", subject_code: "03" } },
+          { id: "5", type: :subjects, attributes: { subject_name: "Primary with modern languages", subject_code: "04" } },
+          { id: "6", type: :subjects, attributes: { subject_name: "Primary with physical education", subject_code: "06" } },
+          { id: "7", type: :subjects, attributes: { subject_name: "Primary with science", subject_code: "07" } },
         ],
       )
     end
