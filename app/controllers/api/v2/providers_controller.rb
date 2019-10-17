@@ -112,7 +112,6 @@ module API
       def build_provider
         code = params.fetch(:code, params[:provider_code])
         @provider = @recruitment_cycle.providers
-                      .includes(:latest_published_enrichment, :latest_enrichment)
                       .find_by!(
                         provider_code: code.upcase,
                       )
