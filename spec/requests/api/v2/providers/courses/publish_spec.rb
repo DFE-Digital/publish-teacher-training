@@ -26,7 +26,7 @@ describe "Publish API v2", type: :request do
     end
     let(:enrichment) { build(:course_enrichment, :initial_draft) }
     let(:site_status) { build(:site_status, :new) }
-    let(:dfe_subject) { create(:subject, :primary) }
+    let(:dfe_subject) { create(:primary_subject, :primary) }
     let(:course) {
       create(:course,
              provider: provider,
@@ -60,7 +60,7 @@ describe "Publish API v2", type: :request do
     context "an unpublished course with a draft enrichment" do
       let(:enrichment) { build(:course_enrichment, :initial_draft) }
       let(:site_status) { build(:site_status, :findable) }
-      let(:dfe_subjects) { [create(:subject, :primary_with_mathematics)] }
+      let(:dfe_subjects) { [create(:primary_subject, :primary_with_mathematics)] }
       let!(:course) do
         create(:course,
                level: "primary",

@@ -6,12 +6,12 @@ describe "Subjecs API", type: :request do
     let(:current_year)  { current_cycle.year.to_i }
 
     before do
-      find_or_create(:subject, :modern_languages)
-      find_or_create(:subject, :english)
-      find_or_create(:subject, :french)
-      find_or_create(:subject, :primary)
-      find_or_create(:subject, :further_education)
-      find_or_create(:subject, :humanities)
+      find_or_create(:secondary_subject, :modern_languages)
+      find_or_create(:secondary_subject, :english)
+      find_or_create(:modern_languages_subject, :french)
+      find_or_create(:primary_subject, :primary)
+      find_or_create(:further_education_subject)
+      find_or_create(:discontinued_subject, :humanities)
     end
 
     it "returns http success" do
@@ -31,12 +31,12 @@ describe "Subjecs API", type: :request do
       expect(json).to eq([
           {
             "subject_name" => "English",
-            "subject_code" => "E",
+            "subject_code" => "Q3",
             "type" => "SecondarySubject",
           },
           {
             "subject_name" => "French",
-            "subject_code" => "F1",
+            "subject_code" => "15",
             "type" => "ModernLanguagesSubject",
           },
           {

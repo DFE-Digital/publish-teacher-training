@@ -13,7 +13,7 @@ describe "PATCH /providers/:provider_code/courses/:course_code with sites" do
   let(:course) { create(:course, :infer_level, provider: provider, site_statuses: [site_status], subjects: [primary_subject], enrichments: [course_enrichment]) }
   let(:course_enrichment) { build :course_enrichment }
   let(:site_status) { build(:site_status) }
-  let(:primary_subject) { create(:subject, :primary_with_mathematics) }
+  let(:primary_subject) { create(:primary_subject, :primary_with_mathematics) }
   let(:site_to_add) { create :site, provider: provider }
   let(:unwanted_site) { create :site, provider: provider }
   let(:existing_site) { create :site, provider: provider }

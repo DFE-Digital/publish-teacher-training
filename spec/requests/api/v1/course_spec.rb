@@ -36,8 +36,8 @@ describe "Courses API", type: :request do
       before do
         Timecop.freeze(2.hours.ago) do
           site = create(:site, code: "-", location_name: "Main Site", provider: provider)
-          subject1 = find_or_create(:subject, :modern_languages)
-          subject2 = find_or_create(:subject, :german)
+          subject1 = find_or_create(:secondary_subject, :modern_languages)
+          subject2 = find_or_create(:modern_languages_subject, :german)
 
           course = create(:course,
                           level: "secondary",
@@ -168,7 +168,7 @@ describe "Courses API", type: :request do
                                 ],
                                 "subjects" => [
                                   {
-                                    "subject_code" => "G2",
+                                    "subject_code" => "17",
                                     "subject_name" => "German",
                                     "type" => "ModernLanguagesSubject",
                                   },
@@ -525,7 +525,7 @@ describe "Courses API", type: :request do
     end
 
     context "with a SEND course" do
-      let(:course) { create(:course, provider: provider, is_send: true, subjects: [create(:subject, :primary)]) }
+      let(:course) { create(:course, provider: provider, is_send: true, subjects: [create(:primary_subject, :primary)]) }
       let(:site) { create(:site_status, :published, course: course) }
 
       before do

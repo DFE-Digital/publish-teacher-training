@@ -44,7 +44,7 @@ describe "Provider Publish API v2", type: :request do
       let(:course1) { build(:course, site_statuses: [site1], subjects: [dfe_subject]) }
       let(:course2) { build(:course, site_statuses: [site2], subjects: [dfe_subject]) }
 
-      let!(:dfe_subject) { create(:subject, :primary) }
+      let!(:dfe_subject) { create(:primary_subject, :primary) }
 
       let(:courses) {
         []

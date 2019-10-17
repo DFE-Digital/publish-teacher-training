@@ -42,7 +42,7 @@ describe "/api/v2/build_new_course", type: :request do
         subjects_ids: subjects.map(&:id),
       } }
     end
-    let(:subjects) { [find_or_create(:subject, :primary_with_mathematics)] }
+    let(:subjects) { [find_or_create(:primary_subject, :primary_with_mathematics)] }
 
     it "returns a course with subject relationships" do
       response = do_get params
