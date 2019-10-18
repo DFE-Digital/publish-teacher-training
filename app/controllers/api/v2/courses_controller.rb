@@ -128,12 +128,13 @@ module API
         )
         course_code = generate_code_service.execute
 
-        course = Course.new(course_params.merge(provider: @provider, course_code: course_code))
+        @course = Course.new(course_params.merge(provider: @provider, course_code: course_code))
+        update_subjects
 
-        if course.save
-          render jsonapi: course.reload
+        if @course.save
+          render jsonapi: @course.reload
         else
-          render jsonapi_errors: course.errors, status: :unprocessable_entity
+          render jsonapi_errors: @course.errors, status: :unprocessable_entity
         end
       end
 
