@@ -47,7 +47,6 @@ module API
         authorize @provider, :publish?
 
         if @provider.publishable?
-          @provider.publish_enrichment(@current_user)
 
           courses_synced?(@provider.syncable_courses)
 

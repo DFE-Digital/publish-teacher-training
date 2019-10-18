@@ -64,7 +64,6 @@ class Provider < ApplicationRecord
   # NOTE: To be removed as "ProviderEnrichment" is no longer
   #       START
   has_one :latest_enrichment,
-
           -> { latest_created_at },
           class_name: "ProviderEnrichment"
 
@@ -139,9 +138,12 @@ class Provider < ApplicationRecord
   validates :train_with_disability, words_count: { maximum: 250, message: "^Reduce the word count for training with disabilities and other needs" }
 
   validates :email, email: true, on: :update, allow_nil: true
+  validates :email, email: true, on: :publish
+
   validates :telephone, phone: { message: "^Enter a valid telephone number" }, on: :update, allow_nil: true
-  validates :train_with_us, presence: true, on: :update, allow_nil: true
-  validates :train_with_disability, presence: true, on: :update, allow_nil: true
+
+  validates :train_with_us, presence: true, on: :publish
+  validates :train_with_disability, presence: true, on: :publish
 
   after_validation :add_enrichment_errors
 
@@ -185,12 +187,6 @@ class Provider < ApplicationRecord
     ).select("provider.*, COALESCE(a.courses_count, 0) AS included_courses_count")
   end
 
-  def publish_enrichment(current_user)
-    enrichments.draft.each do |enrichment|
-      enrichment.publish(current_user)
-    end
-  end
-
   def courses_count
     self.respond_to?("included_courses_count") ? included_courses_count : courses.size
   end
@@ -229,11 +225,6 @@ class Provider < ApplicationRecord
   # NOTE: This can be removed, it should not be in use any more
   def content_status
     :published
-  end
-
-  def last_published_at
-    # newest_enrichment = enrichments.latest_created_at.first
-    # newest_enrichment&.last_published_at
   end
 
   # This reflects the fact that organisations should actually be a has_one.
