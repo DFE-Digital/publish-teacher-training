@@ -258,8 +258,40 @@ describe Course, type: :model do
         subject.sites = [second_site, new_site]
       end
 
+      context "with a ucas_status of new" do
+        let(:new_site_status) { create(:site_status, :new, site: site_with_new_site_status) }
+        let(:site_with_new_site_status) { create(:site) }
+        let(:subject) { create(:course, site_statuses: [new_site_status]) }
+
+        it "does not set the site to running" do
+          expect(second_site_status.reload.status).to eq("suspended")
+        end
+
+        it "should destroy the old site status" do
+          expect(SiteStatus.where(id: new_site_status.id)).to be_empty
+        end
+      end
+
+      context "With an unpersisted course" do
+        let(:course) { build(:course) }
+
+        before { course.sites = [first_site, second_site] }
+
+        it "sets the sites" do
+          expect(course.sites).to eq([first_site, second_site])
+        end
+
+        it "does not persist the course" do
+          expect(course).not_to be_persisted
+        end
+      end
+
       it "should assign new sites" do
         expect(subject.sites.to_a).to eq([second_site, new_site])
+      end
+
+      it "should set the sites to running" do
+        expect(second_site_status.reload.status).to eq("running")
       end
 
       it "should set old site_status to suspended" do
