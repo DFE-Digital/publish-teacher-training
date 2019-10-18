@@ -1,4 +1,5 @@
-describe ProviderEnrichments::RolloverEnrichmentToProviderService do
+# NOTE: can be removed
+xdescribe ProviderEnrichments::RolloverEnrichmentToProviderService do
   let(:service) { described_class.new }
 
   def duplicated_provider_enrichments(enrichment)

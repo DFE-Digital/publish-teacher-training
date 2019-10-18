@@ -16,7 +16,8 @@
 
 require "rails_helper"
 
-describe ProviderEnrichment, type: :model do
+# NOTE: can be removed
+xdescribe ProviderEnrichment, type: :model do
   describe "associations" do
     it { should belong_to(:provider) }
   end
