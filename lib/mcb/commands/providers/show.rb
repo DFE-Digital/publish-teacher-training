@@ -25,10 +25,6 @@ run do |opts, args, _cmd|
       puts "no preferences found"
     end
 
-    puts "\nProvider Enrichments:"
-    tp provider.enrichments, "id", "status", "email", "website", "address1",
-       "address2", "address3", "address4", "postcode", "telephone"
-
     puts "\nProvider Courses:"
     if opts[:'preview-courses']
       provider.courses.map { |course| puts Terminal::Table.new rows: MCB::CourseShow.new(course).to_h }
