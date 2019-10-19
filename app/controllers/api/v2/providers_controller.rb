@@ -137,11 +137,8 @@ module API
       def update_enrichment
         return unless enrichment_params.values.any?
 
-        enrichment = @provider.enrichments.find_or_initialize_draft(current_user)
-        enrichment.assign_attributes(enrichment_params)
-        enrichment.status = "draft" if enrichment.rolled_over?
-
-        enrichment.save
+        @provider.assign_attributes(enrichment_params)
+        @provider.save
       end
 
       def update_ucas_contacts
