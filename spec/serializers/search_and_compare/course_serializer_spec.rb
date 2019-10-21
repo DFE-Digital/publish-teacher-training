@@ -8,7 +8,7 @@ describe SearchAndCompare::CourseSerializer do
 
     context "an existing course" do
       let(:subjects) do
-        [create(:subject, :primary)]
+        [find_or_create(:primary_subject, :primary)]
       end
 
       let(:program_type) { :school_direct_salaried_training_programme }

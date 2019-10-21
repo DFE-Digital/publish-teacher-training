@@ -7,8 +7,8 @@ describe "Courses API v2", type: :request do
     ActionController::HttpAuthentication::Token.encode_credentials(token)
   end
   let(:site) { build(:site) }
-  let(:dfe_subject) { create(:subject, :primary_with_mathematics) }
-  let(:non_dfe_subject) { create(:subject, :modern_languages) }
+  let(:dfe_subject) { find_or_create(:primary_subject, :primary_with_mathematics) }
+  let(:non_dfe_subject) { find_or_create(:secondary_subject, :modern_languages) }
   let(:findable_site_status_1) { build(:site_status, :findable, site: site) }
   let(:findable_site_status_2) { build(:site_status, :findable, site: site) }
   let(:suspended_site_status) { build(:site_status, :suspended, site: site) }

@@ -61,7 +61,7 @@ describe API::V2::SerializableCourse do
   end
 
   context "with a subject" do
-    let(:course) { create(:course, subjects: [find_or_create(:subject, :primary_with_mathematics)]) }
+    let(:course) { create(:course, subjects: [find_or_create(:primary_subject, :primary_with_mathematics)]) }
     let(:accrediting_provider) { course.accrediting_provider }
     let(:course_json) do
       jsonapi_renderer.render(

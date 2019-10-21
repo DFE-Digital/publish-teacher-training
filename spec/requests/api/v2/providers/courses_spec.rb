@@ -8,7 +8,7 @@ describe "Courses API v2", type: :request do
   let(:credentials) do
     ActionController::HttpAuthentication::Token.encode_credentials(token)
   end
-  let(:course_subject_mathematics) { find_or_create(:subject, :primary_with_mathematics) }
+  let(:course_subject_mathematics) { find_or_create(:primary_subject, :primary_with_mathematics) }
 
   let(:current_cycle) { find_or_create :recruitment_cycle }
   let(:next_cycle)    { find_or_create :recruitment_cycle, :next }

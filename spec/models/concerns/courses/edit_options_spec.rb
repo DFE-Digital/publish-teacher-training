@@ -2,7 +2,7 @@ require "rails_helper"
 
 describe Course, type: :model do
   let(:course) { create(:course, level: "primary", subjects: [subjects]) }
-  let(:subjects) { create(:subject, :primary) }
+  let(:subjects) { find_or_create(:primary_subject, :primary) }
 
   describe "subjects" do
     let(:course) { create(:course, level: "primary", subjects: []) }
@@ -40,7 +40,7 @@ describe Course, type: :model do
 
     context "for a further education course" do
       let(:course) { create(:course, level: "further_education", subjects: [subjects]) }
-      let(:subjects) { create(:subject, :further_education) }
+      let(:subjects) { find_or_create(:further_education_subject) }
       it "returns only QTS options for users to choose between" do
         expect(course.qualification_options).to eq(%w[pgce pgde])
         course.qualification_options.each do |q|
@@ -59,7 +59,7 @@ describe Course, type: :model do
 
     context "for secondary" do
       let(:course) { create(:course, level: "secondary", subjects: [subjects]) }
-      let(:subjects) { create(:subject, :biology) }
+      let(:subjects) { find_or_create(:secondary_subject, :biology) }
       it "returns the correct age ranges for users to co choose between" do
         expect(course.age_range_options).to eq(%w[11_to_16 11_to_18 14_to_19])
       end

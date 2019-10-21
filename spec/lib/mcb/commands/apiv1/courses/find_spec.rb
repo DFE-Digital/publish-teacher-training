@@ -4,7 +4,7 @@ describe '"mcb apiv1 courses find"' do
   it "displays the info for the given course" do
     course1 = create(:course)
 
-    subject = create(:subject, :biology)
+    subject = find_or_create(:secondary_subject, :biology)
     site_status = build(:site_status)
 
     course2 = create(:course, :infer_level, subjects: [subject], site_statuses: [site_status])

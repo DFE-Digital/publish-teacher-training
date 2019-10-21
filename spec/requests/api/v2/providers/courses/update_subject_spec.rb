@@ -38,7 +38,7 @@ describe "PATCH /providers/:provider_code/courses/:course_code" do
 
   context "course has no subjects" do
     let(:course) { create(:course, :infer_level, provider: provider) }
-    let(:subject) { find_or_create(:subject, :mathematics, type: :SecondarySubject) }
+    let(:subject) { find_or_create(:secondary_subject, :mathematics) }
     let(:updated_subjects) do
       {
         subjects: {
@@ -58,8 +58,8 @@ describe "PATCH /providers/:provider_code/courses/:course_code" do
 
   context "course has subjects" do
     let(:course) { create(:course, :infer_level, provider: provider, subjects: []) }
-    let(:subject1) { create(:subject, :english, type: :SecondarySubject) }
-    let(:subject2) { create(:subject, :mathematics, type: :SecondarySubject) }
+    let(:subject1) { find_or_create(:secondary_subject, :english) }
+    let(:subject2) { find_or_create(:secondary_subject, :mathematics) }
     let(:updated_subjects) do
       {
         subjects: {

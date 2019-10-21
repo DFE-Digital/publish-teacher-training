@@ -13,11 +13,11 @@ describe MCB::Editor::CoursesEditor, :needs_audit_user do
   let(:email) { "user@education.gov.uk" }
   let(:provider) { create(:provider, provider_code: provider_code) }
   let(:accredited_body) { create(:provider, :accredited_body) }
-  let!(:japanese) { find_or_create(:subject, :japanese) }
-  let!(:primary_with_mathematics) { find_or_create(:subject, :primary_with_mathematics) }
-  let!(:biology) { find_or_create(:subject, :biology) }
+  let!(:japanese) { find_or_create(:modern_languages_subject, :japanese) }
+  let!(:primary_with_mathematics) { find_or_create(:primary_subject, :primary_with_mathematics) }
+  let!(:biology) { find_or_create(:secondary_subject, :biology) }
   let(:modern_languages) { find_or_create(:secondary_subject, :modern_languages) }
-  let!(:further_education) { find_or_create(:subject, :further_education) }
+  let!(:further_education) { find_or_create(:further_education_subject) }
   let(:current_cycle) { find_or_create :recruitment_cycle }
   let!(:next_cycle) { find_or_create :recruitment_cycle, :next }
   let(:current_year) { current_cycle.year.to_i }

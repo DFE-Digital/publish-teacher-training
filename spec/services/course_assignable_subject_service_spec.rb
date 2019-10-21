@@ -24,9 +24,9 @@ describe CourseAssignableSubjectService do
   context "secondary subjects" do
     let(:secondary_model) { SecondarySubject }
     let(:modern_language_model) { ModernLanguagesSubject }
-    let!(:modern_languages_parent_subject) { create(:subject, subject_name: "Modern Languages", type: :SecondarySubject).becomes(SecondarySubject) }
-    let!(:biology) { create(:subject, subject_name: "Biology", type: :SecondarySubject).becomes(SecondarySubject) }
-    let!(:arabic) { create(:subject, subject_name: "Arabic", type: :ModernLanguagesSubject).becomes(ModernLanguagesSubject) }
+    let!(:modern_languages_parent_subject) { find_or_create(:secondary_subject, subject_name: "Modern Languages", type: :SecondarySubject).becomes(SecondarySubject) }
+    let!(:biology) { find_or_create(:secondary_subject, subject_name: "Biology", type: :SecondarySubject).becomes(SecondarySubject) }
+    let!(:arabic) { find_or_create(:modern_languages_subject, subject_name: "French").becomes(ModernLanguagesSubject) }
 
     it "returns subjects other than modern language", without_subjects: true do
       course = create(:course, level: "secondary")
