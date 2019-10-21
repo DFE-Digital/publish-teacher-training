@@ -11,6 +11,13 @@ describe Provider, type: :model do
            courses: courses)
   end
 
+  before do
+    # Note: provider needs to be reloaded due to
+    #       provider.accrediting_providers
+    #       provider.accredited_bodies
+    provider.reload
+  end
+
   describe "#accredited_bodies" do
     let(:description) { "Ye olde establishmente" }
 
@@ -33,8 +40,6 @@ describe Provider, type: :model do
         it { should be_empty }
       end
     end
-
-
 
     context "with an accrediting provider (via courses)" do
       let(:accrediting_provider) { build :provider, provider_code: "AP1" }

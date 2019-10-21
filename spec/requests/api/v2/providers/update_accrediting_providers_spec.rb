@@ -9,12 +9,13 @@ describe "PATCH /providers/:provider_code" do
   let(:permitted_params) { %i[accredited_bodies] }
   let(:recruitment_cycle) { find_or_create :recruitment_cycle }
   let(:organisation) { create :organisation }
-  let(:accrediting_provider) { create :provider }
-  let(:course) { create :course, accrediting_provider: accrediting_provider }
+  let(:accrediting_provider) { create :provider, provider_code: "AP1" }
+  let(:course) { create :course, accrediting_provider: accrediting_provider, course_code: "P33P" }
   let(:courses) { [course] }
   let(:accrediting_provider_enrichments) { nil }
   let(:provider) do
     create :provider,
+           provider_code: "A01",
            organisations: [organisation],
            recruitment_cycle: recruitment_cycle,
            accrediting_provider_enrichments: accrediting_provider_enrichments,
@@ -51,6 +52,13 @@ describe "PATCH /providers/:provider_code" do
     jsonapi_data = json_payload(provider)
     jsonapi_data.dig(:data, :attributes, :accredited_bodies, 0)[:description] = new_description
     jsonapi_data
+  end
+
+  before do
+    provider.reload
+    # Note: provider needs to be reloaded due to
+    #       provider.accrediting_providers
+    #       provider.accredited_bodies
   end
 
   context "provider has no accredited body enrichment" do
@@ -130,6 +138,7 @@ describe "PATCH /providers/:provider_code" do
       let(:new_description) {
         Faker::Lorem.sentence(word_count: 101)
       }
+
       it "did not updates an existing accredited body enrichment" do
         expect {
           patch_request(enrichment_payload)
@@ -157,7 +166,6 @@ describe "PATCH /providers/:provider_code" do
       end
     end
   end
-
 
   context "provider with multiple accrediting providers" do
     let(:additional_acrediting_courses) {
