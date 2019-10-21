@@ -525,7 +525,7 @@ describe "Courses API", type: :request do
     end
 
     context "with a SEND course" do
-      let(:course) { create(:course, provider: provider, is_send: true, subjects: [create(:primary_subject, :primary)]) }
+      let(:course) { create(:course, provider: provider, is_send: true, subjects: [find_or_create(:primary_subject, :primary)]) }
       let(:site) { create(:site_status, :published, course: course) }
 
       before do

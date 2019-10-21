@@ -36,7 +36,7 @@ describe "PATCH /providers/:provider_code" do
   let(:organisation) { create :organisation }
   let(:site1) { build(:site_status, :findable) }
   let(:course1) { build(:course, level: "primary", site_statuses: [site1], subjects: [dfe_subject]) }
-  let!(:dfe_subject) { create(:primary_subject, :primary) }
+  let!(:dfe_subject) { find_or_create(:primary_subject, :primary) }
   let(:provider)     do
     create :provider,
            organisations: [organisation],

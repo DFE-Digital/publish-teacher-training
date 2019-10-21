@@ -1,7 +1,7 @@
 require "rails_helper"
 
 describe "FurtherEducationSubject factory" do
-  subject { create(:further_education_subject) }
+  subject { find_or_create(:further_education_subject) }
 
   it { should be_instance_of(FurtherEducationSubject) }
   it { should be_valid }

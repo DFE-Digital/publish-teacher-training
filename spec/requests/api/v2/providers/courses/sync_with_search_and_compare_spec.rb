@@ -18,7 +18,7 @@ describe "Courses API v2", type: :request do
     end
     let(:course_enrichment) { build(:course_enrichment, :initial_draft) }
     let(:site_status) { build(:site_status, :findable) }
-    let(:dfe_subject) { create(:primary_subject, :primary_with_mathematics) }
+    let(:dfe_subject) { find_or_create(:primary_subject, :primary_with_mathematics) }
     let(:course) { create(:course, level: :primary, provider: provider, enrichments: [course_enrichment], site_statuses: [site_status], subjects: [dfe_subject]) }
 
     before do

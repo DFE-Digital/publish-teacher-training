@@ -50,7 +50,7 @@ describe "Publishable API v2", type: :request do
 
     context "unpublished course with draft enrichment" do\
       let(:enrichment) { build(:course_enrichment, :initial_draft) }
-      let(:primary_with_mathematics) { create(:primary_subject, :primary_with_mathematics) }
+      let(:primary_with_mathematics) { find_or_create(:primary_subject, :primary_with_mathematics) }
       let(:site_status) { build(:site_status, :new) }
       let!(:course) do
         create(:course,

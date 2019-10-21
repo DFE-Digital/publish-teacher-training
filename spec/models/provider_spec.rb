@@ -333,7 +333,7 @@ describe Provider, type: :model do
 
     describe "#syncable_courses" do
       let(:site) { create(:site) }
-      let(:dfe_subject) { create(:primary_subject, :primary) }
+      let(:dfe_subject) { find_or_create(:primary_subject, :primary) }
       let(:findable_site_status_1) { create(:site_status, :findable, site: site) }
       let(:findable_site_status_2) { create(:site_status, :findable, site: site) }
       let(:suspended_site_status) { create(:site_status, :suspended, site: site) }

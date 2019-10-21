@@ -10,7 +10,7 @@ describe Course, type: :model do
 
     context "with enrichment" do
       let(:enrichment) { build(:course_enrichment, :subsequent_draft, created_at: 1.day.ago) }
-      let(:primary_with_mathematics) { create(:primary_subject, :primary_with_mathematics) }
+      let(:primary_with_mathematics) { find_or_create(:primary_subject, :primary_with_mathematics) }
       let(:course) {
         create(:course, subjects: [primary_with_mathematics], enrichments: [enrichment], site_statuses: [site_status])
       }

@@ -61,7 +61,7 @@ describe Courses::GenerateCourseTitleService do
 
     context "With modern languages" do
       context "with one language" do
-        let(:subjects) { [modern_languages, create(:modern_languages_subject, :french)] }
+        let(:subjects) { [modern_languages, find_or_create(:modern_languages_subject, :french)] }
 
         it "Returns a name modern language with language" do
           expect(generated_title).to eq("Modern Languages (French)")
@@ -74,8 +74,8 @@ describe Courses::GenerateCourseTitleService do
         let(:subjects) do
           [
             modern_languages,
-            create(:modern_languages_subject, :french),
-            create(:modern_languages_subject, :german),
+            find_or_create(:modern_languages_subject, :french),
+            find_or_create(:modern_languages_subject, :german),
           ]
         end
 
@@ -90,9 +90,9 @@ describe Courses::GenerateCourseTitleService do
         let(:subjects) do
           [
             modern_languages,
-            create(:modern_languages_subject, :french),
-            create(:modern_languages_subject, :german),
-            create(:modern_languages_subject, :japanese),
+            find_or_create(:modern_languages_subject, :french),
+            find_or_create(:modern_languages_subject, :german),
+            find_or_create(:modern_languages_subject, :japanese),
           ]
         end
 
@@ -107,10 +107,10 @@ describe Courses::GenerateCourseTitleService do
         let(:subjects) do
           [
             modern_languages,
-            create(:modern_languages_subject, :french),
-            create(:modern_languages_subject, :german),
-            create(:modern_languages_subject, :japanese),
-            create(:modern_languages_subject, :spanish),
+            find_or_create(:modern_languages_subject, :french),
+            find_or_create(:modern_languages_subject, :german),
+            find_or_create(:modern_languages_subject, :japanese),
+            find_or_create(:modern_languages_subject, :spanish),
           ]
         end
 
@@ -126,7 +126,7 @@ describe Courses::GenerateCourseTitleService do
       context "Communications and media studies -> Media studies" do
         context "With single subject" do
           let(:subjects) do
-            [create(:secondary_subject, :communication_and_media_studies)]
+            [find_or_create(:secondary_subject, :communication_and_media_studies)]
           end
 
           it "Returns the title Media studies" do
@@ -137,8 +137,8 @@ describe Courses::GenerateCourseTitleService do
         context "With multiple subjects" do
           let(:subjects) do
             [
-              create(:secondary_subject, :communication_and_media_studies),
-              create(:secondary_subject, :mathematics),
+              find_or_create(:secondary_subject, :communication_and_media_studies),
+              find_or_create(:secondary_subject, :mathematics),
             ]
           end
 
@@ -152,7 +152,7 @@ describe Courses::GenerateCourseTitleService do
       context "English as a second language -> English" do
         context "With a single language" do
           let(:subjects) do
-            [modern_languages, create(:modern_languages_subject, :english_as_a_second_lanaguge_or_other_language)]
+            [modern_languages, find_or_create(:modern_languages_subject, :english_as_a_second_lanaguge_or_other_language)]
           end
 
           it "Returns the title Modern Languages (English)" do
@@ -164,8 +164,8 @@ describe Courses::GenerateCourseTitleService do
           let(:subjects) do
             [
               modern_languages,
-              create(:modern_languages_subject, :english_as_a_second_lanaguge_or_other_language),
-              create(:modern_languages_subject, :spanish),
+              find_or_create(:modern_languages_subject, :english_as_a_second_lanaguge_or_other_language),
+              find_or_create(:modern_languages_subject, :spanish),
             ]
           end
 
@@ -178,9 +178,9 @@ describe Courses::GenerateCourseTitleService do
           let(:subjects) do
             [
               modern_languages,
-              create(:modern_languages_subject, :english_as_a_second_lanaguge_or_other_language),
-              create(:modern_languages_subject, :french),
-              create(:modern_languages_subject, :spanish),
+              find_or_create(:modern_languages_subject, :english_as_a_second_lanaguge_or_other_language),
+              find_or_create(:modern_languages_subject, :french),
+              find_or_create(:modern_languages_subject, :spanish),
             ]
           end
 
@@ -193,7 +193,7 @@ describe Courses::GenerateCourseTitleService do
       context "Modern Languages (Other) -> Should be ignored for the title" do
         context "With a single language" do
           let(:subjects) do
-            [modern_languages, create(:modern_languages_subject, :modern_languages_other)]
+            [modern_languages, find_or_create(:modern_languages_subject, :modern_languages_other)]
           end
 
           it "Returns the title Modern Languages" do
@@ -205,8 +205,8 @@ describe Courses::GenerateCourseTitleService do
           let(:subjects) do
             [
               modern_languages,
-              create(:modern_languages_subject, :modern_languages_other),
-              create(:modern_languages_subject, :spanish),
+              find_or_create(:modern_languages_subject, :modern_languages_other),
+              find_or_create(:modern_languages_subject, :spanish),
             ]
           end
 
@@ -219,9 +219,9 @@ describe Courses::GenerateCourseTitleService do
           let(:subjects) do
             [
               modern_languages,
-              create(:modern_languages_subject, :modern_languages_other),
-              create(:modern_languages_subject, :french),
-              create(:modern_languages_subject, :spanish),
+              find_or_create(:modern_languages_subject, :modern_languages_other),
+              find_or_create(:modern_languages_subject, :french),
+              find_or_create(:modern_languages_subject, :spanish),
             ]
           end
 

@@ -41,7 +41,7 @@ describe "Provider Publish API v2", type: :request do
       let(:course1) { build(:course, :infer_level, site_statuses: [site1], subjects: [dfe_subject]) }
       let(:course2) { build(:course, :infer_level, site_statuses: [site2], subjects: [dfe_subject]) }
 
-      let!(:dfe_subject) { create(:primary_subject, :primary_with_mathematics) }
+      let!(:dfe_subject) { find_or_create(:primary_subject, :primary_with_mathematics) }
 
       let!(:provider) do
         create(
