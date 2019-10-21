@@ -33,6 +33,7 @@ class Course < ApplicationRecord
   include ChangedAt
   include Courses::EditOptions
   include StudyModeVacancyMapper
+  include AASM
 
   after_initialize :set_defaults
 
@@ -163,6 +164,61 @@ class Course < ApplicationRecord
   validate :validate_subject_consistency
 
   after_validation :remove_unnecessary_enrichments_validation_message
+
+  aasm column: :state do
+    state :new, initial: true
+    # validate has no enrichments
+    # validate has only "new" sites
+    state :draft
+    # validate has a draft enrichment
+    # validate has "new" or "running" sites
+    state :published
+    # validate has published enrichments and no draft enrichment
+    # validate has "running" sites
+    state :published_with_draft
+    # validate has published enrichments and a draft enrichment
+    # validate has "running" sites
+    state :withdrawn
+    # validate has "suspended" sites
+    state :rolled_over
+    # validate has no published enrichments
+
+    event :publish do
+      transitions from: %i[draft rolled_over published_with_draft],
+                  to: :published,
+                  guard: :has_draft_enrichment?
+      # perform: promote draft enrichment to published
+      # perform: start any new sites
+      # perform: set all sites to published
+      # perform: set last_published_at on site (?)
+    end
+
+    event :withdraw do
+      # guard: has been published (implied by transitions?)
+      transitions from: %i[published published_with_draft],
+                  to: :withdrawn,
+                  guard: :has_running_sites?
+      # perform: suspend all running sites
+      # perform: set withdrawn_at on course (?)
+    end
+
+    # # This is getting in the way of the existing "discard" action, we'll have to
+    # # integrate the two somewhow
+    # event :discard do
+    #   # guard: has not been published (implied by transitions?)
+    #   transitions from: %i[new draft rolled_over],
+    #               to: :discarded,
+    #               guard: :has_no_or_new_sites
+    #   # perform: set discarded_at on course
+    #   # perform: remove all site_statuses
+    # end
+
+    event :rollover do
+      transitions from: %[new draft published published_with_draft],
+                  to: :rolled_over
+      # perform: copy course to new cycle
+    end
+  end
 
   def self.get_by_codes(year, provider_code, course_code)
     RecruitmentCycle.find_by(year: year)
