@@ -51,4 +51,21 @@ describe CourseSerializer do
       )
     end
   end
+
+  describe "#age_range" do
+    context "when the course 'age_range_in_years' is '7_to_14'" do
+      let(:course) { create :course, age_range_in_years: "7_to_14" }
+      it { should include(age_range: "M") }
+    end
+
+    context "when the course 'level' is 'primary'" do
+      let(:course) { create :course, level: "primary" }
+      it { should include(age_range: "P") }
+    end
+
+    context "default age_range" do
+      let(:course) { create :course, level: "secondary" }
+      it { should include(age_range: "S") }
+    end
+  end
 end
