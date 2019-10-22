@@ -305,7 +305,7 @@ class Course < ApplicationRecord
 
   def ucas_status
     return :running if findable?
-    return :new if site_statuses.empty? || site_statuses.status_new_status.any?
+    return :new if site_statuses.empty? || site_statuses.any?(&:status_new_status?)
 
     :not_running
   end
@@ -377,7 +377,11 @@ class Course < ApplicationRecord
     to_remove = existing_sites - desired_sites
     to_remove.each { |site| remove_site!(site: site) }
 
-    sites.reload
+    if persisted?
+      sites.reload
+    else
+      super(desired_sites)
+    end
   end
 
   def has_bursary?
