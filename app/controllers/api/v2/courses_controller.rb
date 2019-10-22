@@ -24,6 +24,7 @@ module API
         authorize @provider
         @course = Course.new(provider: @provider)
         update_subjects
+        update_sites
         @course.assign_attributes(course_params)
         @course.name = generate_course_title_service.execute(course: @course)
         @course.valid?
@@ -32,7 +33,7 @@ module API
         json_data = JSONAPI::Serializable::Renderer.new.render(
           @course,
           class: CourseSerializersService.new.execute,
-          include: [:subjects],
+          include: %i[subjects sites],
         )
 
         json_data[:data][:errors] = []
