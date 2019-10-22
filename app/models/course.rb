@@ -377,8 +377,11 @@ class Course < ApplicationRecord
     to_remove = existing_sites - desired_sites
     to_remove.each { |site| remove_site!(site: site) }
 
-    sites.reload if persisted?
-    super(desired_sites) unless persisted?
+    if persisted?
+      sites.reload
+    else
+      super(desired_sites)
+    end
   end
 
   def has_bursary?
