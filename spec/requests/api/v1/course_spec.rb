@@ -65,64 +65,6 @@ describe "Courses API", type: :request do
         end
       end
 
-      context "age ranges" do
-        subject do
-          get "/api/v1/#{current_year}/courses",
-              headers: { "HTTP_AUTHORIZATION" => credentials }
-
-          courses = JSON.parse(response.body)
-          courses.first["age_range"]
-        end
-
-        context "3_to_7" do
-          let(:age_range_in_years) { "3_to_7" }
-
-          it { should eq("P") }
-        end
-
-        context "5_to_11" do
-          let(:age_range_in_years) { "5_to_11" }
-
-          it { should eq("P") }
-        end
-
-        context "7_to_11" do
-          let(:age_range_in_years) { "7_to_11" }
-
-          it { should eq("P") }
-        end
-
-        context "7_to_14" do
-          let(:age_range_in_years) { "7_to_14" }
-
-          it { should eq("M") }
-        end
-
-        context "11_to_16" do
-          let(:age_range_in_years) { "11_to_16" }
-
-          it { should eq("S") }
-        end
-
-        context "11_to_18" do
-          let(:age_range_in_years) { "11_to_18" }
-
-          it { should eq("S") }
-        end
-
-        context "14_to_19" do
-          let(:age_range_in_years) { "14_to_19" }
-
-          it { should eq("S") }
-        end
-
-        context "Other" do
-          let(:age_range_in_years) { "Meow" }
-
-          it { should eq("O") }
-        end
-      end
-
       it "returns http success" do
         get "/api/v1/#{current_year}/courses",
             headers: { "HTTP_AUTHORIZATION" => credentials }
@@ -150,7 +92,7 @@ describe "Courses API", type: :request do
                                 "copy_form_required" => "Y",
                                 "profpost_flag" => "PG",
                                 "program_type" => "SC",
-                                "age_range" => "P",
+                                "age_range" => "S",
                                 "modular" => "",
                                 "english" => 3,
                                 "maths" => 3,
@@ -550,6 +492,62 @@ describe "Courses API", type: :request do
 
       it "does not create a SEND subject" do
         expect(Subject.where(subject_code: "U3").count).to eq(0)
+      end
+    end
+
+    describe "age_range" do
+      context "when level is 'primary'" do
+        let(:course) { create(:course, provider: provider, age_range_in_years: "3_to_7", level: "primary", subjects: [find_or_create(:primary_subject, :primary)]) }
+        let(:site) { create(:site_status, :published, course: course) }
+
+        before do
+          course
+          site
+
+          get "/api/v1/#{current_year}/courses",
+              headers: { "HTTP_AUTHORIZATION" => credentials }
+        end
+
+        it "should equal 'P'" do
+          json = JSON.parse(response.body).first
+          expect(json["age_range"]).to eq("P")
+        end
+      end
+
+      context "when age_range_in_years is '7_to_14'" do
+        let(:course) { create(:course, provider: provider, age_range_in_years: "7_to_14", level: "secondary", subjects: [find_or_create(:secondary_subject, :modern_languages)]) }
+        let(:site) { create(:site_status, :published, course: course) }
+
+        before do
+          course
+          site
+
+          get "/api/v1/#{current_year}/courses",
+              headers: { "HTTP_AUTHORIZATION" => credentials }
+        end
+
+        it "should equal 'M'" do
+          json = JSON.parse(response.body).first
+          expect(json["age_range"]).to eq("M")
+        end
+      end
+
+      context "default" do
+        let(:course) { create(:course, provider: provider, age_range_in_years: "16_to_18", level: "secondary", subjects: [find_or_create(:secondary_subject, :modern_languages)]) }
+        let(:site) { create(:site_status, :published, course: course) }
+
+        before do
+          course
+          site
+
+          get "/api/v1/#{current_year}/courses",
+              headers: { "HTTP_AUTHORIZATION" => credentials }
+        end
+
+        it "should equal 'S'" do
+          json = JSON.parse(response.body).first
+          expect(json["age_range"]).to eq("S")
+        end
       end
     end
   end
