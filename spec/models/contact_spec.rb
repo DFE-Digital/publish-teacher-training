@@ -36,6 +36,7 @@ describe Contact, type: :model do
   describe "on update" do
     let(:provider) { create(:provider, contacts: contacts, changed_at: 5.minute.ago) }
     let(:contacts) { [build(:contact)] }
+    let(:contact) { contacts.first }
 
     before do
       provider
@@ -44,6 +45,57 @@ describe Contact, type: :model do
     it "should touch the provider" do
       contacts.first.save
       expect(provider.reload.changed_at).to be_within(1.second).of Time.now.utc
+    end
+
+
+    it { should validate_presence_of(:name) }
+
+    describe "telephone" do
+      it "validates telephone is present" do
+        contact.telephone = ""
+        contact.valid?
+
+        expect(contact.errors[:telephone]).to include("^Enter a valid telephone number")
+      end
+
+      it "Correctly validates valid phone numbers" do
+        contact.telephone = "+447 123 123 123"
+        expect(contact.valid?).to be true
+      end
+
+      it "Correctly invalidates invalid phone numbers" do
+        contact.telephone = "123foo456"
+        expect(contact.valid?).to be false
+        expect(contact.errors[:telephone]).to include("^Enter a valid telephone number")
+      end
+
+      it "Does not validate the telephone if it is not present"do
+        contact.email = "foo@bar.com"
+
+        expect(contact.valid?).to be true
+      end
+    end
+
+    describe "email" do
+      it "validates email is present" do
+        contact.email = ""
+        contact.valid?
+
+        expect(contact.errors[:email]).to include("^Enter an email address in the correct format, like name@example.com")
+      end
+
+      it "validates email contains an @ symbol" do
+        contact.email = "bar"
+        contact.valid?
+
+        expect(contact.errors[:email]).to include("^Enter an email address in the correct format, like name@example.com")
+      end
+
+      it "Does not validate the email if it is not present"do
+        contact.email = "foo@bar.com"
+
+        expect(contact.valid?).to be true
+      end
     end
   end
 end
