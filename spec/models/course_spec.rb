@@ -78,6 +78,24 @@ describe Course, type: :model do
   end
 
   describe "validations" do
+    it { should validate_presence_of(:name) }
+    it { should validate_presence_of(:level) }
+    it { should validate_presence_of(:profpost_flag) }
+    it { should validate_presence_of(:program_type) }
+    it { should validate_presence_of(:qualification) }
+    it { should validate_presence_of(:start_date) }
+    it { should validate_presence_of(:study_mode) }
+
+
+    it { should validate_presence_of(:sites).on(:publish) }
+    it { should validate_presence_of(:level).on(:publish) }
+    it { should validate_presence_of(:subjects).on(:publish) }
+    it { should validate_presence_of(:enrichments).on(:publish) }
+
+    it { should validate_presence_of(:maths) }
+    it { should validate_presence_of(:english) }
+    it { should validate_presence_of(:science) }
+
     it "validates scoped to provider_id and only on create and update" do
       expect(create(:course)).to validate_uniqueness_of(:course_code)
                                   .scoped_to(:provider_id)

@@ -156,7 +156,7 @@ class Course < ApplicationRecord
   validate :validate_enrichment
   validate :validate_course_syncable, on: :sync
   validate :validate_qualification, on: :update
-  validate :validate_start_date, on: :update, if: -> { provider.present? }
+  validate :validate_start_date, on: :update, if: -> { provider.present? && start_date.present? }
   validate :validate_applications_open_from, on: :update, if: -> { provider.present? }
   validate :validate_modern_languages
   validate :validate_subject_count
