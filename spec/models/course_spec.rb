@@ -284,6 +284,13 @@ describe Course, type: :model do
         it "does not persist the course" do
           expect(course).not_to be_persisted
         end
+
+        xcontext "Which is then saved" do
+          it "Should only have two site statuses" do
+            course.save
+            expect(course.site_statuses.count).to eq(2)
+          end
+        end
       end
 
       it "should assign new sites" do

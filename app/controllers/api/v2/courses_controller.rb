@@ -131,6 +131,7 @@ module API
 
         @course = Course.new(course_params.merge(provider: @provider, course_code: course_code))
         update_subjects
+        update_sites
 
         if @course.save
           render jsonapi: @course.reload
