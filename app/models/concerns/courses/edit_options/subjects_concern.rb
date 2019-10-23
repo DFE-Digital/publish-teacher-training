@@ -13,6 +13,16 @@ module Courses
             class: CourseSerializersService.new.execute,
           )[:data]
         end
+
+        def potential_modern_languages
+          return unless has_the_modern_languages_secondary_subject_type?
+          return unless level == "secondary"
+
+          JSONAPI::Serializable::Renderer.new.render(
+            ModernLanguagesSubject.all,
+            class: CourseSerializersService.new.execute,
+          )[:data]
+        end
       end
     end
   end

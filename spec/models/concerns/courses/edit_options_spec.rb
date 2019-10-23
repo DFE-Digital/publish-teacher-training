@@ -4,19 +4,57 @@ describe Course, type: :model do
   let(:course) { create(:course, level: "primary", subjects: [subjects]) }
   let(:subjects) { find_or_create(:primary_subject, :primary) }
 
+  describe "modern languages" do
+    context "primary level" do
+      let(:course) { create(:course, level: "primary", subjects: []) }
+
+      it "returns no modern languages subjects" do
+        expect(course.potential_modern_languages).to eq(nil)
+      end
+    end
+
+    context "secondary level" do
+      context "with the modern language subject" do
+        let(:course) { create(:course, level: "secondary", subjects: [find_or_create(:secondary_subject, :modern_languages)]) }
+
+        it "returns modern languages subjects" do
+          expect(course.potential_modern_languages).to match_array([
+            include(attributes: { subject_name: "French", subject_code: "15" }),
+            include(attributes: { subject_name: "English as a second or other language", subject_code: "16" }),
+            include(attributes: { subject_name: "German", subject_code: "17" }),
+            include(attributes: { subject_name: "Italian", subject_code: "18" }),
+            include(attributes: { subject_name: "Japanese", subject_code: "19" }),
+            include(attributes: { subject_name: "Mandarin", subject_code: "20" }),
+            include(attributes: { subject_name: "Russian", subject_code: "21" }),
+            include(attributes: { subject_name: "Spanish", subject_code: "22" }),
+            include(attributes: { subject_name: "Modern languages (other)", subject_code: "24" }),
+          ])
+        end
+      end
+
+      context "without the modern language subject" do
+        let(:course) { create(:course, level: "secondary", subjects: []) }
+
+        it "returns no modern languages subjects" do
+          expect(course.potential_modern_languages).to eq(nil)
+        end
+      end
+    end
+  end
+
   describe "subjects" do
     let(:course) { create(:course, level: "primary", subjects: []) }
 
     it "returns the subjects the user can choose according to their level" do
       expect(course.potential_subjects).to match_array(
         [
-          { id: "1", type: :subjects, attributes: { subject_name: "Primary", subject_code: "00" } },
-          { id: "2", type: :subjects, attributes: { subject_name: "Primary with English", subject_code: "01" } },
-          { id: "3", type: :subjects, attributes: { subject_name: "Primary with geography and history", subject_code: "02" } },
-          { id: "4", type: :subjects, attributes: { subject_name: "Primary with mathematics", subject_code: "03" } },
-          { id: "5", type: :subjects, attributes: { subject_name: "Primary with modern languages", subject_code: "04" } },
-          { id: "6", type: :subjects, attributes: { subject_name: "Primary with physical education", subject_code: "06" } },
-          { id: "7", type: :subjects, attributes: { subject_name: "Primary with science", subject_code: "07" } },
+          include(attributes: { subject_name: "Primary", subject_code: "00" }),
+          include(attributes: { subject_name: "Primary with English", subject_code: "01" }),
+          include(attributes: { subject_name: "Primary with geography and history", subject_code: "02" }),
+          include(attributes: { subject_name: "Primary with mathematics", subject_code: "03" }),
+          include(attributes: { subject_name: "Primary with modern languages", subject_code: "04" }),
+          include(attributes: { subject_name: "Primary with physical education", subject_code: "06" }),
+          include(attributes: { subject_name: "Primary with science", subject_code: "07" }),
         ],
       )
     end

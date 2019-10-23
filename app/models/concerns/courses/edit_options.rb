@@ -26,6 +26,7 @@ module Courses
           show_start_date: show_start_date?,
           show_applications_open: show_applications_open?,
           subjects: potential_subjects,
+          potential_modern_languages: potential_modern_languages,
         }
       end
     end
