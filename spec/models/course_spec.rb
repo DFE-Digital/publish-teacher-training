@@ -113,16 +113,16 @@ describe Course, type: :model do
         end
       end
 
-      context "invalid level and subjects" do
+      context "invalid subjects" do
         let(:initial_draft_enrichment) { build(:course_enrichment, :published) }
-        let(:course) { create(:course, level: nil, site_statuses: [create(:site_status, :new)], enrichments: [initial_draft_enrichment]) }
+        let(:course) { create(:course, level: :secondary, site_statuses: [create(:site_status, :new)], enrichments: [initial_draft_enrichment]) }
 
         before do
           subject.publishable?
         end
 
-        it "should add level and subjects" do
-          expect(subject.errors.full_messages).to match_array(["There is a problem with this course. Contact support to fix it (Error: L)", "There is a problem with this course. Contact support to fix it (Error: S)"])
+        it "should add subjects" do
+          expect(subject.errors.full_messages).to match_array(["There is a problem with this course. Contact support to fix it (Error: S)"])
         end
       end
     end

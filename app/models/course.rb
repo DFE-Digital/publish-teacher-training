@@ -144,9 +144,9 @@ class Course < ApplicationRecord
     ENTRY_REQUIREMENT_OPTIONS.reject { |option| option == :not_set }.keys.map(&:to_s)
   end
 
-  validates :maths,   inclusion: { in: entry_requirement_options_without_nil_choice }
-  validates :english, inclusion: { in: entry_requirement_options_without_nil_choice }
-  validates :science, inclusion: { in: entry_requirement_options_without_nil_choice }, if: :gcse_science_required?
+  validates :maths,   presence: true, inclusion: { in: entry_requirement_options_without_nil_choice }
+  validates :english, presence: true, inclusion: { in: entry_requirement_options_without_nil_choice }
+  validates :science, presence: true, inclusion: { in: entry_requirement_options_without_nil_choice }, if: :gcse_science_required?
   validates :enrichments, presence: true, on: :publish
   validates :is_send, inclusion: { in: [true, false] }
   validates :sites, presence: true, on: :publish
@@ -161,6 +161,8 @@ class Course < ApplicationRecord
   validate :validate_modern_languages
   validate :validate_subject_count
   validate :validate_subject_consistency
+
+  validates :name, :level, :profpost_flag, :program_type, :qualification, :start_date, :study_mode, presence: true
 
   after_validation :remove_unnecessary_enrichments_validation_message
 
