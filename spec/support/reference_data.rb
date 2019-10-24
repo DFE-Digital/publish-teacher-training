@@ -24,9 +24,11 @@ RSpec.configure do |config|
   # for tests that need it.
   config.before(:all) do
     SubjectCreatorService.new.execute
+    SubjectFinancialIncentiveCreatorService.new.execute
   end
 
   config.before(:each, without_subjects: true) do
+    FinancialIncentive.delete_all
     Subject.delete_all
   end
 end
