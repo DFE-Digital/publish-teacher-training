@@ -23,7 +23,7 @@ class Contact < ApplicationRecord
 
   validates :name, presence: true
   validates :email, email: true, presence: true
-  validates :telephone, phone: { message: "^Enter a valid telephone number" }, allow_nil: true
+  validates :telephone, phone: true, allow_nil: true
 
   enum type: {
     admin: "admin",

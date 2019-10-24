@@ -68,12 +68,6 @@ describe Contact, type: :model do
         expect(contact.valid?).to be false
         expect(contact.errors[:telephone]).to include("^Enter a valid telephone number")
       end
-
-      it "Does not validate the telephone if it is not present"do
-        contact.email = "foo@bar.com"
-
-        expect(contact.valid?).to be true
-      end
     end
 
     describe "email" do
@@ -91,7 +85,7 @@ describe Contact, type: :model do
         expect(contact.errors[:email]).to include("^Enter an email address in the correct format, like name@example.com")
       end
 
-      it "Does not validate the email if it is not present"do
+      it "Does not validate the email if it is present"do
         contact.email = "foo@bar.com"
 
         expect(contact.valid?).to be true
