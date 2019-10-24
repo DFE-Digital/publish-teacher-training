@@ -10,6 +10,14 @@ en:
         address3: "Town or city"
     errors:
       models:
+        contact:
+          attributes:
+            email:
+              blank: "^Enter email address"
+            name:
+              blank: "^Enter name"
+            telephone:
+              blank: "^Enter a valid telephone number"
         site:
           attributes:
             location_name:
