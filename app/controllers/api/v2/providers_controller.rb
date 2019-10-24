@@ -29,7 +29,7 @@ module API
       def update
         authorize @provider, :update?
 
-        update_enrichment
+        update_provider
         update_accrediting_enrichment
         update_ucas_contacts
         update_ucas_preferences
@@ -134,10 +134,10 @@ module API
         @provider.save
       end
 
-      def update_enrichment
-        return unless enrichment_params.values.any?
+      def update_provider
+        return unless provider_params.values.any?
 
-        @provider.assign_attributes(enrichment_params)
+        @provider.assign_attributes(provider_params)
         @provider.save
       end
 
@@ -186,7 +186,7 @@ module API
           .permit(accredited_bodies: %i[provider_code provider_name description])
       end
 
-      def enrichment_params
+      def provider_params
         params
           .fetch(:provider, {})
           .except(
