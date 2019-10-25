@@ -14,7 +14,7 @@ module Courses
           )[:data]
         end
 
-        def potential_modern_languages
+        def available_modern_languages
           return unless has_the_modern_languages_secondary_subject_type?
           return unless level == "secondary"
 

@@ -9,7 +9,7 @@ describe Course, type: :model do
       let(:course) { create(:course, level: "primary", subjects: []) }
 
       it "returns no modern languages subjects" do
-        expect(course.potential_modern_languages).to eq(nil)
+        expect(course.available_modern_languages).to eq(nil)
       end
     end
 
@@ -18,7 +18,7 @@ describe Course, type: :model do
         let(:course) { create(:course, level: "secondary", subjects: [find_or_create(:secondary_subject, :modern_languages)]) }
 
         it "returns modern languages subjects" do
-          expect(course.potential_modern_languages).to match_array([
+          expect(course.available_modern_languages).to match_array([
             include(attributes: { subject_name: "French", subject_code: "15" }),
             include(attributes: { subject_name: "English as a second or other language", subject_code: "16" }),
             include(attributes: { subject_name: "German", subject_code: "17" }),
@@ -36,7 +36,7 @@ describe Course, type: :model do
         let(:course) { create(:course, level: "secondary", subjects: []) }
 
         it "returns no modern languages subjects" do
-          expect(course.potential_modern_languages).to eq(nil)
+          expect(course.available_modern_languages).to eq(nil)
         end
       end
     end
@@ -67,7 +67,7 @@ describe Course, type: :model do
   end
 
   describe "qualifications" do
-    context "for a course that’s not further education" do
+    context "for a course that's not further education" do
       it "returns only QTS options for users to choose between" do
         expect(course.qualification_options).to eq(%w[qts pgce_with_qts pgde_with_qts])
         course.qualification_options.each do |q|
