@@ -135,7 +135,7 @@ module SearchAndCompare
        },
        {
          Name: "about this training provider",
-         Text: provider_enrichment&.train_with_us,
+         Text: object.provider.train_with_us,
        },
        {
          Name: "about this training provider accrediting",
@@ -143,16 +143,10 @@ module SearchAndCompare
        },
        {
          Name: "training with disabilities",
-         Text: provider_enrichment&.train_with_disability,
+         Text: object.provider.train_with_disability,
        }].map do |description_section|
         description_section.merge default_description_section_value
       end
-    end
-
-    def provider_enrichment
-      @provider_enrichment ||= object.provider
-                                 .enrichments
-                                 .max_by(&:updated_at)
     end
 
     def course_enrichment

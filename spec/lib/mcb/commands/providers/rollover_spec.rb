@@ -10,7 +10,6 @@ describe "mcb providers rollover" do
   let(:email) { "user@education.gov.uk" }
   let(:course)              { build :course, enrichments: [course_enrichment] }
   let(:course_enrichment)   { build :course_enrichment, :published }
-  let(:provider_enrichment) { build :provider_enrichment, :published }
   let(:site)                { build :site }
 
   let!(:site_status) {
@@ -22,7 +21,6 @@ describe "mcb providers rollover" do
 
   let(:current_cycle_provider) {
     create :provider,
-           enrichments: [provider_enrichment],
            courses: [course],
            sites: [site]
   }
@@ -69,12 +67,6 @@ describe "mcb providers rollover" do
     expect(new_course.sites).to eq [new_site]
     expect(new_course.site_statuses.first).to be_full_time_vacancies
     expect(new_course.site_statuses.first).to be_status_new_status
-  end
-
-  xit "copies the provider enrichments" do
-    # todo: ?? Currently failing, uncomment when fixed.
-    expect(next_cycle_provider.enrichments.count).to eq 1
-    expect(next_cycle_provider.enrichments.first).to be_draft
   end
 
   context "when provider already rolled over" do

@@ -187,15 +187,9 @@ class Course < ApplicationRecord
   def accrediting_provider_description
     return nil if accrediting_provider.blank?
 
-    provider_enrichment = provider
-                            .enrichments
-                            .published
-                            .latest_published_at
-                            .first
+    return nil if provider.accrediting_provider_enrichments.blank?
 
-    return nil if provider_enrichment&.accrediting_provider_enrichments.blank?
-
-    accrediting_provider_enrichment = provider_enrichment.accrediting_provider_enrichments
+    accrediting_provider_enrichment = provider.accrediting_provider_enrichments
       .find do |provider|
       provider.UcasProviderCode == accrediting_provider.provider_code
     end

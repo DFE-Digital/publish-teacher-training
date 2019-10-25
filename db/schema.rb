@@ -197,7 +197,7 @@ ActiveRecord::Schema.define(version: 2019_10_23_195941) do
     t.text "provider_code"
     t.text "provider_type"
     t.text "postcode"
-    t.text "url"
+    t.text "website"
     t.text "address1"
     t.text "address2"
     t.text "address3"
@@ -211,6 +211,9 @@ ActiveRecord::Schema.define(version: 2019_10_23_195941) do
     t.datetime "changed_at", default: -> { "timezone('utc'::text, now())" }, null: false
     t.integer "recruitment_cycle_id", null: false
     t.datetime "discarded_at"
+    t.text "train_with_us"
+    t.text "train_with_disability"
+    t.jsonb "accrediting_provider_enrichments"
     t.index ["changed_at"], name: "index_provider_on_changed_at", unique: true
     t.index ["discarded_at"], name: "index_provider_on_discarded_at"
     t.index ["last_published_at"], name: "IX_provider_last_published_at"

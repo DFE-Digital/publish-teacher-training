@@ -29,7 +29,7 @@ module API
       def update
         authorize @provider, :update?
 
-        update_enrichment
+        update_provider
         update_accrediting_enrichment
         update_ucas_contacts
         update_ucas_preferences
@@ -47,7 +47,6 @@ module API
         authorize @provider, :publish?
 
         if @provider.publishable?
-          @provider.publish_enrichment(@current_user)
 
           courses_synced?(@provider.syncable_courses)
 
@@ -112,7 +111,6 @@ module API
       def build_provider
         code = params.fetch(:code, params[:provider_code])
         @provider = @recruitment_cycle.providers
-                      .includes(:latest_published_enrichment, :latest_enrichment)
                       .find_by!(
                         provider_code: code.upcase,
                       )
@@ -125,9 +123,7 @@ module API
       def update_accrediting_enrichment
         return if accredited_bodies_params.values.none?
 
-        enrichment = @provider.enrichments.find_or_initialize_draft(current_user)
-
-        enrichment.accrediting_provider_enrichments =
+        @provider.accrediting_provider_enrichments =
           accredited_bodies_params["accredited_bodies"].map do |accredited_body|
             {
               UcasProviderCode: accredited_body["provider_code"],
@@ -135,17 +131,14 @@ module API
             }
           end
 
-        enrichment.save
+        @provider.save
       end
 
-      def update_enrichment
-        return unless enrichment_params.values.any?
+      def update_provider
+        return unless provider_params.values.any?
 
-        enrichment = @provider.enrichments.find_or_initialize_draft(current_user)
-        enrichment.assign_attributes(enrichment_params)
-        enrichment.status = "draft" if enrichment.rolled_over?
-
-        enrichment.save
+        @provider.assign_attributes(provider_params)
+        @provider.save
       end
 
       def update_ucas_contacts
@@ -193,7 +186,7 @@ module API
           .permit(accredited_bodies: %i[provider_code provider_name description])
       end
 
-      def enrichment_params
+      def provider_params
         params
           .fetch(:provider, {})
           .except(

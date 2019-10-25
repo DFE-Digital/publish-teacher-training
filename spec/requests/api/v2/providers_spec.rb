@@ -18,11 +18,9 @@ describe "Providers API v2", type: :request do
     let!(:provider) {
       create(:provider,
              organisations: [organisation],
-             enrichments: [enrichment],
              contacts: [contact])
     }
     let(:contact) { build(:contact) }
-    let(:enrichment) { build(:provider_enrichment, :published) }
 
     let(:json_response) { JSON.parse(response.body) }
 
@@ -198,11 +196,11 @@ describe "Providers API v2", type: :request do
 
     let(:site) { build(:site) }
     let(:description) { "An accredited body description" }
-    let(:enrichment) do
-      create(:provider_enrichment, accrediting_provider_enrichments: [{
+    let(:accrediting_provider_enrichments) do
+      [{
         "UcasProviderCode" => accrediting_provider.provider_code,
         "Description" => description,
-      }])
+      }]
     end
     let(:accrediting_provider) { create :provider }
     let(:course) { create :course, accrediting_provider: accrediting_provider }
@@ -211,7 +209,7 @@ describe "Providers API v2", type: :request do
       create(:provider,
              sites: [site],
              organisations: [organisation],
-             enrichments: [enrichment],
+             accrediting_provider_enrichments: accrediting_provider_enrichments,
              courses: courses,
              contacts: [contact],
              ucas_preferences: ucas_preferences)
@@ -239,17 +237,17 @@ describe "Providers API v2", type: :request do
             "provider_name" => provider.provider_name,
             "accredited_body?" => false,
             "can_add_more_sites?" => true,
-            "train_with_us" => enrichment.train_with_us,
-            "train_with_disability" => enrichment.train_with_disability,
-            "address1" => enrichment.address1,
-            "address2" => enrichment.address2,
-            "address3" => enrichment.address3,
-            "address4" => enrichment.address4,
-            "postcode" => enrichment.postcode,
-            "region_code" => enrichment.region_code,
-            "telephone" => enrichment.telephone,
-            "email" => enrichment.email,
-            "website" => enrichment.website,
+            "train_with_us" => provider.train_with_us,
+            "train_with_disability" => provider.train_with_disability,
+            "address1" => provider.address1,
+            "address2" => provider.address2,
+            "address3" => provider.address3,
+            "address4" => provider.address4,
+            "postcode" => provider.postcode,
+            "region_code" => provider.region_code,
+            "telephone" => provider.telephone,
+            "email" => provider.email,
+            "website" => provider.website,
             "recruitment_cycle_year" => provider.recruitment_cycle.year,
             "content_status" => provider.content_status.to_s,
             "last_published_at" => provider.last_published_at,
@@ -282,9 +280,6 @@ describe "Providers API v2", type: :request do
               "meta" => {
                 "count" => provider.courses.count,
               },
-            },
-            "latest_enrichment" => {
-              "meta" => { "included" => false },
             },
           },
         },
@@ -324,17 +319,17 @@ describe "Providers API v2", type: :request do
               "provider_name" => provider.provider_name,
               "accredited_body?" => false,
               "can_add_more_sites?" => true,
-              "train_with_us" => enrichment.train_with_us,
-              "train_with_disability" => enrichment.train_with_disability,
-              "address1" => enrichment.address1,
-              "address2" => enrichment.address2,
-              "address3" => enrichment.address3,
-              "address4" => enrichment.address4,
-              "postcode" => enrichment.postcode,
-              "region_code" => enrichment.region_code,
-              "telephone" => enrichment.telephone,
-              "email" => enrichment.email,
-              "website" => enrichment.website,
+              "train_with_us" => provider.train_with_us,
+              "train_with_disability" => provider.train_with_disability,
+              "address1" => provider.address1,
+              "address2" => provider.address2,
+              "address3" => provider.address3,
+              "address4" => provider.address4,
+              "postcode" => provider.postcode,
+              "region_code" => provider.region_code,
+              "telephone" => provider.telephone,
+              "email" => provider.email,
+              "website" => provider.website,
               "recruitment_cycle_year" => provider.recruitment_cycle.year,
               "content_status" => provider.content_status.to_s,
               "last_published_at" => provider.last_published_at,
@@ -370,9 +365,6 @@ describe "Providers API v2", type: :request do
                 "meta" => {
                   "count" => provider.courses.count,
                 },
-              },
-              "latest_enrichment" => {
-                "meta" => { "included" => false },
               },
             },
           },

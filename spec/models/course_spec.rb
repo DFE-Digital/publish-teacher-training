@@ -1043,39 +1043,28 @@ describe Course, type: :model do
 
     context "for courses with accrediting provider" do
       let(:accrediting_provider) { build(:provider) }
+      let(:course) { create(:course, provider: provider, accrediting_provider: accrediting_provider) }
 
-      context "without published enrichment" do
+      let(:provider) { build(:provider, accrediting_provider_enrichments: accrediting_provider_enrichments) }
+
+      context "without any accrediting_provider_enrichments" do
+        let(:accrediting_provider_enrichments) { nil }
+
         it { should be_nil }
       end
 
-      context "with published enrichment" do
-        let(:provider_enrichment) { build(:provider_enrichment, :published, last_published_at: 1.day.ago) }
-        let(:provider) { build(:provider, enrichments: [provider_enrichment]) }
-        let(:course) { create(:course, provider: provider, accrediting_provider: accrediting_provider) }
-
-        context "without any accrediting_provider_enrichments" do
-          it { should be_nil }
+      context "with accrediting_provider_enrichments" do
+        let(:accrediting_provider_enrichment_description) { Faker::Lorem.sentence.to_s }
+        let(:accrediting_provider_enrichment) do
+          {
+            "UcasProviderCode" => accrediting_provider.provider_code,
+            "Description" => accrediting_provider_enrichment_description,
+          }
         end
 
-        context "with accrediting_provider_enrichments" do
-          let(:accrediting_provider_enrichment_description) { Faker::Lorem.sentence.to_s }
-          let(:accrediting_provider_enrichment) do
-            {
-              "UcasProviderCode" => accrediting_provider.provider_code,
-              "Description" => accrediting_provider_enrichment_description,
-            }
-          end
+        let(:accrediting_provider_enrichments) { [accrediting_provider_enrichment] }
 
-          let(:accrediting_provider_enrichments) { [accrediting_provider_enrichment] }
-          let(:provider_enrichment) do
-            build(:provider_enrichment,
-                  :published,
-                  last_published_at: 1.day.ago,
-                  accrediting_provider_enrichments: accrediting_provider_enrichments)
-          end
-
-          it { should match accrediting_provider_enrichment_description }
-        end
+        it { should match accrediting_provider_enrichment_description }
       end
     end
   end

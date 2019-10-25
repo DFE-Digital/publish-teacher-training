@@ -34,8 +34,7 @@ describe "Provider Publish API v2", type: :request do
 
     include_examples "Unauthenticated, unauthorised, or not accepted T&Cs"
 
-    context "unpublished provider with draft enrichment" do
-      let(:enrichment) { build(:provider_enrichment, :initial_draft) }
+    context "sync provider and its courses" do
       let(:site1) { create(:site_status, :findable) }
       let(:site2) { create(:site_status, :findable) }
       let(:course1) { build(:course, :infer_level, site_statuses: [site1], subjects: [dfe_subject]) }
@@ -47,7 +46,6 @@ describe "Provider Publish API v2", type: :request do
         create(
           :provider,
           organisations: [organisation],
-          enrichments: [enrichment],
           courses: [course1, course2],
         )
       end
@@ -60,13 +58,6 @@ describe "Provider Publish API v2", type: :request do
           .to_return(
             status: search_api_status,
           )
-      end
-
-      it "publishes a provider" do
-        subject
-        enrichment.reload
-        expect(enrichment.status).to eq("published")
-        expect(enrichment.updated_by_user_id).to eq(user.id)
       end
 
       context "when the sync API is available" do
@@ -83,13 +74,29 @@ describe "Provider Publish API v2", type: :request do
     describe "failed validation" do
       let(:json_data) { JSON.parse(subject.body)["errors"] }
 
-      context "invalid enrichment with invalid content lack_presence fields" do
-        let(:invalid_enrichment) { build(:provider_enrichment, :without_content) }
+      context "invalid content lack_presence fields" do
+        let(:invalid_content) {
+          {
+            # These should not cause validation
+            website: nil,
+            telephone: nil,
+
+            address1: nil,
+            address3: nil,
+            address4: nil,
+            postcode: nil,
+
+            # Only the below is items of interest
+            email: nil,
+            train_with_us: nil,
+            train_with_disability: nil,
+          }
+        }
         let(:provider) {
           create(
             :provider,
             organisations: [organisation],
-            enrichments: [invalid_enrichment],
+            **invalid_content,
           )
         }
 

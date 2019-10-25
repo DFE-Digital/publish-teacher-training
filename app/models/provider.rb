@@ -11,7 +11,7 @@
 #  provider_code        :text
 #  provider_type        :text
 #  postcode             :text
-#  url                  :text
+#  website              :text
 #  address1             :text
 #  address2             :text
 #  address3             :text
@@ -60,6 +60,9 @@ class Provider < ApplicationRecord
   has_many :users, through: :organisations
 
   has_many :sites
+
+  # NOTE: To be removed as "ProviderEnrichment" is no longer
+  #       START
   has_one :latest_enrichment,
           -> { latest_created_at },
           class_name: "ProviderEnrichment"
@@ -101,6 +104,8 @@ class Provider < ApplicationRecord
           -> { published.latest_published_at },
           class_name: "ProviderEnrichment",
           inverse_of: "provider"
+
+  #      END
   has_many :courses, -> { kept }
   has_one :ucas_preferences, class_name: "ProviderUCASPreference"
   has_many :contacts
@@ -125,10 +130,20 @@ class Provider < ApplicationRecord
     where("provider_name ILIKE ? OR provider_code ILIKE ?", "%#{search_term}%", "%#{search_term}%")
   }
 
-  validate :validate_enrichment_publishable, on: :publish
-  validate :validate_enrichment
+  serialize :accrediting_provider_enrichments, AccreditingProviderEnrichment::ArraySerializer
 
-  after_validation :remove_unnecessary_enrichments_validation_message
+  validates :train_with_us, words_count: { maximum: 250, message: "^Reduce the word count for training with you" }
+  validates :train_with_disability, words_count: { maximum: 250, message: "^Reduce the word count for training with disabilities and other needs" }
+
+  validates :email, email: true, on: :update, allow_nil: true
+  validates :email, email: true, on: :publish
+
+  validates :telephone, phone: { message: "^Enter a valid telephone number" }, on: :update, allow_nil: true
+
+  validates :train_with_us, presence: true, on: :publish
+  validates :train_with_disability, presence: true, on: :publish
+
+  validate :add_enrichment_errors
 
   def syncable_courses
     courses.includes(
@@ -136,7 +151,7 @@ class Provider < ApplicationRecord
       :subjects,
       :sites,
       site_statuses: :site,
-      provider: %i[enrichments latest_published_enrichment sites],
+      provider: %i[sites],
     ).select(&:syncable?)
   end
 
@@ -170,12 +185,6 @@ class Provider < ApplicationRecord
     ).select("provider.*, COALESCE(a.courses_count, 0) AS included_courses_count")
   end
 
-  def publish_enrichment(current_user)
-    enrichments.draft.each do |enrichment|
-      enrichment.publish(current_user)
-    end
-  end
-
   def courses_count
     self.respond_to?("included_courses_count") ? included_courses_count : courses.size
   end
@@ -205,32 +214,15 @@ class Provider < ApplicationRecord
       region_code
       telephone
       email
+      website
     ]
 
-    if enrichments.last
-      enrichments.last.attributes.slice(*(attribute_names + %w[website]))
-    else
-      attributes.slice(*attribute_names).merge("website" => url)
-    end
+    attributes.slice(*attribute_names)
   end
 
+  # NOTE: This can be removed, it should not be in use any more
   def content_status
-    newest_enrichment = enrichments.latest_created_at.first
-
-    if newest_enrichment.nil?
-      :empty
-    elsif newest_enrichment.published?
-      :published
-    elsif newest_enrichment.has_been_published_before?
-      :published_with_unpublished_changes
-    else
-      :draft
-    end
-  end
-
-  def last_published_at
-    newest_enrichment = enrichments.latest_created_at.first
-    newest_enrichment&.last_published_at
+    :published
   end
 
   # This reflects the fact that organisations should actually be a has_one.
@@ -257,9 +249,7 @@ class Provider < ApplicationRecord
 
   def accredited_bodies
     accrediting_providers.map do |ap|
-      accrediting_provider_enrichment = latest_enrichment&.accrediting_provider_enrichment(ap.provider_code)
-
-      # map() to this hash:
+      accrediting_provider_enrichment = accrediting_provider_enrichment(ap.provider_code)
       {
         provider_name: ap.provider_name,
         provider_code: ap.provider_code,
@@ -274,41 +264,21 @@ class Provider < ApplicationRecord
 
 private
 
-  def add_enrichment_errors(enrichment)
-    enrichment.errors.messages.map do |field, _error|
-      # `full_messages_for` here will remove any `^`s defined in the validator or en.yml.
-      # We still need it for later, so re-add it.
-      # jsonapi_errors will throw if it's given an array, so we call `.first`.
-
-      if field == :accrediting_provider_enrichments
-        enrichment.errors.details[field].each { |item|
-          provider_name = accrediting_providers.find { |accrediting_provider| accrediting_provider.provider_code == item[:value].first.UcasProviderCode }.provider_name
-
-          message = "^Reduce the word count for #{provider_name}"
-          errors.add :accredited_bodies, message
-        }
-
-      else
-        message = "^" + enrichment.errors.full_messages_for(field).first.to_s
-        errors.add field.to_sym, message
-      end
+  def accrediting_provider_enrichment(provider_code)
+    accrediting_provider_enrichments&.find do |enrichment|
+      enrichment.UcasProviderCode == provider_code
     end
   end
 
-  def validate_enrichment(validation_scope = nil)
-    latest_enrichment = enrichments.select(&:draft?).last
-    return if latest_enrichment.blank?
+  def add_enrichment_errors
+    accrediting_provider_enrichments&.each do |item|
+      accrediting_provider = accrediting_providers.find { |ap| ap.provider_code == item.UcasProviderCode }
 
-    latest_enrichment.valid? validation_scope
-    add_enrichment_errors(latest_enrichment)
-  end
-
-  def validate_enrichment_publishable
-    validate_enrichment :publish
-  end
-
-  def remove_unnecessary_enrichments_validation_message
-    self.errors.delete :enrichments if self.errors[:enrichments] == ["is invalid"]
+      if accrediting_provider.present? && item.invalid?
+        message = "^Reduce the word count for #{accrediting_provider.provider_name}"
+        errors.add :accredited_bodies, message
+      end
+    end
   end
 
   def set_defaults

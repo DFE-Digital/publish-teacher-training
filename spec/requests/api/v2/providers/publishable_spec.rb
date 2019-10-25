@@ -34,13 +34,11 @@ describe "Provider Publishable API v2", type: :request do
 
     include_examples "Unauthenticated, unauthorised, or not accepted T&Cs"
 
-    context "unpublished provider with draft enrichment" do
-      let(:enrichment) { build(:provider_enrichment, :initial_draft) }
+    context "provider with valid content" do
       let(:provider) {
         create(
           :provider,
           organisations: [organisation],
-          enrichments: [enrichment],
         )
       }
 
@@ -52,13 +50,14 @@ describe "Provider Publishable API v2", type: :request do
     describe "failed validation" do
       let(:json_data) { JSON.parse(subject.body)["errors"] }
 
-      context "invalid enrichment with invalid content lack_presence fields" do
-        let(:invalid_enrichment) { build(:provider_enrichment, :without_content) }
+      context "provider with invalid content lack_presence fields" do
         let(:provider) {
           create(
             :provider,
             organisations: [organisation],
-            enrichments: [invalid_enrichment],
+            email: nil,
+            train_with_us: nil,
+            train_with_disability: nil,
           )
         }
 

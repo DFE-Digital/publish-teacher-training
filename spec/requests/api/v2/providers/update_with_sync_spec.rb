@@ -37,8 +37,7 @@ describe "Provider Publish API v2", type: :request do
       response
     end
 
-    context "sync provider with latests enrichments" do
-      let(:enrichment) { build(:provider_enrichment, :initial_draft) }
+    context "sync provider" do
       let(:site1) { create(:site_status, :findable) }
       let(:site2) { create(:site_status, :findable) }
       let(:course1) { build(:course, site_statuses: [site1], subjects: [dfe_subject]) }
@@ -64,7 +63,6 @@ describe "Provider Publish API v2", type: :request do
         create(
           :provider,
           organisations: [organisation],
-          enrichments: [enrichment],
           courses: courses,
           recruitment_cycle: recruitment_cycle,
         )

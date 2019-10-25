@@ -29,7 +29,8 @@ describe API::V2::SerializableProvider do
   it { should have_attribute(:application_alert_contact).with_value(provider.ucas_preferences.application_alert_email) }
   it { should have_attribute(:type_of_gt12).with_value(provider.ucas_preferences.type_of_gt12) }
   it { should have_attribute(:send_application_alerts).with_value(provider.ucas_preferences.send_application_alerts) }
-
+  it { should have_attribute(:train_with_us).with_value(provider.train_with_us) }
+  it { should have_attribute(:train_with_disability).with_value(provider.train_with_disability) }
 
   it do
     should have_attribute(:accredited_bodies).with_value([

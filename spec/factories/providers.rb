@@ -11,7 +11,7 @@
 #  provider_code        :text
 #  provider_type        :text
 #  postcode             :text
-#  url                  :text
+#  website              :text
 #  address1             :text
 #  address2             :text
 #  address3             :text
@@ -38,11 +38,15 @@ FactoryBot.define do
     contact_name { Faker::Name.name }
     email { Faker::Internet.email }
     telephone { Faker::PhoneNumber.phone_number }
-    url { Faker::Internet.url }
+    website { Faker::Internet.url }
     accrediting_provider { "N" }
     region_code { "london" }
     organisations { build_list :organisation, 1 }
     association :recruitment_cycle, strategy: :find_or_create
+
+    train_with_us { Faker::Lorem.sentence.to_s }
+    train_with_disability { Faker::Lorem.sentence.to_s }
+    accrediting_provider_enrichments { nil }
 
     trait :accredited_body do
       accrediting_provider { "Y" }
@@ -54,13 +58,6 @@ FactoryBot.define do
     end
 
     after(:create) do |provider, evaluator|
-      # Add the enrichments to the provider. Normally setting provider_code
-      # would be the model's concern, but as we're still a read-only app we'll
-      # have to do that here.
-      provider.enrichments << evaluator.enrichments.each do |enrichment|
-        enrichment.provider_code = provider.provider_code
-      end
-
       # Strangely, changed_at doesn't get set if we don't do this, even though
       # updated_at does. Maybe this is because we've added changed_at to
       # timestamp_attributes_for_update but FactoryBot doesn't actually

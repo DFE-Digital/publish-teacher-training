@@ -93,29 +93,29 @@ describe SearchAndCompare::CourseSerializer do
       end
 
       let(:provider_enrichment) do
-        build :provider_enrichment, :published,
-              last_published_at: 1.day.ago,
-              address1: "c/o Claverdon Primary School",
-              address2: "Breach Lane",
-              address3: "Claverdon",
-              address4: "Warwick",
-              postcode: "CV35 8QA",
-              telephone: "02476 347697",
-              email: "info@gatewayalliance.co.uk",
-              website: "http://www.gatewayalliance.co.uk",
+        {
+          last_published_at: 1.day.ago,
+          address1: "c/o Claverdon Primary School",
+          address2: "Breach Lane",
+          address3: "Claverdon",
+          address4: "Warwick",
+          postcode: "CV35 8QA",
+          telephone: "02476 347697",
+          email: "info@gatewayalliance.co.uk",
+          website: "http://www.gatewayalliance.co.uk",
 
-              # DescriptionSections_Mapping section
-              train_with_us: "train_with_us",
-              train_with_disability: "train_with_disability",
-              accrediting_provider_enrichments: [accrediting_provider_enrichment]
+          # DescriptionSections_Mapping section
+          train_with_us: "train_with_us",
+          train_with_disability: "train_with_disability",
+          accrediting_provider_enrichments: [accrediting_provider_enrichment],
+        }
       end
 
-      let(:provider_enrichments) { [provider_enrichment] }
       let(:provider) do
         create :provider,
                provider_name: "Gateway Alliance (Midlands)",
                provider_code: "23E",
-               enrichments: provider_enrichments
+               **provider_enrichment
       end
       let(:accrediting_provider) do
         build :provider,
@@ -377,56 +377,15 @@ describe SearchAndCompare::CourseSerializer do
         include_examples "mapped the description section", "about this training provider accrediting", "accrediting_provider_enrichment_description"
         include_examples "mapped the description section", "training with disabilities", "train_with_disability"
 
-        context "provider has draft and published enrichments with identical last_published_at" do
-          let(:last_published_at) do
-            1.day.ago
-          end
-
-          let(:published_provider_enrichment) do
-            build :provider_enrichment, :published,
-                  last_published_at: last_published_at,
-                  address1: "c/o Claverdon Primary School",
-                  address2: "Breach Lane",
-                  address3: "Claverdon",
-                  address4: "Warwick",
-                  postcode: "CV35 8QA",
-                  telephone: "02476 347697",
-                  email: "info@gatewayalliance.co.uk",
-                  website: "http://www.gatewayalliance.co.uk",
-
-                  # DescriptionSections_Mapping section
-                  train_with_us: "train_with_us",
-                  train_with_disability: "train_with_disability",
-                  accrediting_provider_enrichments: [accrediting_provider_enrichment]
-          end
-
-          let(:draft_provider_enrichment) do
-            build :provider_enrichment, :subsequent_draft,
-                  last_published_at: last_published_at,
-                  address1: "draft_c/o Claverdon Primary School",
-                  address2: "draft_Breach Lane",
-                  address3: "draft_Claverdon",
-                  address4: "draft_Warwick",
-                  postcode: "draft_CV35 8QA",
-                  telephone: "000 000000",
-                  email: "draft_info@gatewayalliance.co.uk",
-                  website: "http://draft.co.uk",
-
-                  # DescriptionSections_Mapping section
-                  train_with_us: " draft train_with_us",
-                  train_with_disability: " draft train_with_disability",
-                  accrediting_provider_enrichments: []
-          end
-
-          let(:provider_enrichments) { [draft_provider_enrichment, published_provider_enrichment] }
-
-          include_examples "mapped the description section", "about this training provider", "train_with_us"
-          include_examples "mapped the description section", "about this training provider accrediting", "accrediting_provider_enrichment_description"
-          include_examples "mapped the description section", "training with disabilities", "train_with_disability"
-        end
-
         context "no published provider enrichment" do
-          let(:provider_enrichments) { [] }
+          let(:provider_enrichment) do
+            {
+              # DescriptionSections_Mapping section
+              train_with_us: nil,
+              train_with_disability: nil,
+              accrediting_provider_enrichments: nil,
+            }
+          end
 
           include_examples "mapped the description section", "about this training programme", "about_course"
           include_examples "mapped the description section", "interview process", "interview_process"
