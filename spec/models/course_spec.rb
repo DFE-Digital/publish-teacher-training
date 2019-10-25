@@ -112,6 +112,12 @@ describe Course, type: :model do
           course.errors.full_messages.first
         end
 
+        context "age_range_in_years" do
+          let(:blank_field) { { age_range_in_years: nil } }
+
+          it { should include "Age range in years can't be blank" }
+        end
+
         context "maths" do
           let(:blank_field) { { maths: nil } }
 

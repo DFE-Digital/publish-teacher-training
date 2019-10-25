@@ -134,6 +134,13 @@ describe "/api/v2/build_new_course", type: :request do
                   "pointer" => "/data/attributes/level",
                 },
               },
+              {
+                "title" => "Invalid age_range_in_years",
+                "detail" => "Age range in years can't be blank",
+                "source" => {
+                  "pointer" => "/data/attributes/age_range_in_years",
+                },
+              },
         ]
 
       expect(json_response).to eq expected
@@ -153,6 +160,7 @@ describe "/api/v2/build_new_course", type: :request do
         funding_type: "fee",
         subjects_ids: subjects.map(&:id),
         level: :primary,
+        age_range_in_years: "3_to_7",
         } }
     end
 
