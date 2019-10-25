@@ -14,5 +14,7 @@
 require "rails_helper"
 
 describe FinancialIncentive, type: :model do
-  pending
+  describe "associations" do
+    it { should belong_to(:subject) }
+  end
 end
