@@ -58,7 +58,7 @@ FactoryBot.define do
     end
 
     trait :secondary do
-      age_range_in_years { "11_to_18" }
+      age_range_in_years { "16_to_18" }
       level { :secondary }
     end
 
