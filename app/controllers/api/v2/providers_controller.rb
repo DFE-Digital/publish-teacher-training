@@ -13,6 +13,7 @@ module API
         authorize Provider
         providers = policy_scope(@recruitment_cycle.providers)
                       .include_courses_counts
+                      .includes(:recruitment_cycle)
         providers = providers.where(id: @user.providers) if @user.present?
 
         render jsonapi: providers.in_order,
