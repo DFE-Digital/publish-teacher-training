@@ -8,10 +8,20 @@ describe "Course POST #create API V2", type: :request do
   let(:credentials) do
     ActionController::HttpAuthentication::Token.encode_credentials(token)
   end
+
   let(:provider) { create(:provider, organisations: [organisation]) }
+  let(:site_one) { create(:site, provider: provider) }
+  let(:site_two) { create(:site, provider: provider) }
   let(:recruitment_cycle) { provider.recruitment_cycle }
   let(:primary_with_mathematics) { find_or_create(:primary_subject, :primary_with_mathematics) }
-  let(:course) { build(:course, provider: provider, subjects: [primary_with_mathematics]) }
+  let(:course) do
+    build(
+      :course,
+      provider: provider,
+      subjects: [primary_with_mathematics],
+      sites: [site_one, site_two],
+    )
+  end
   let(:jsonapi_renderer) { JSONAPI::Serializable::Renderer.new }
   let(:create_path) do
     "/api/v2/recruitment_cycles/#{recruitment_cycle.year}" +
@@ -24,8 +34,9 @@ describe "Course POST #create API V2", type: :request do
       class: {
         Course: API::V2::SerializableCourse,
         PrimarySubject: API::V2::SerializableSubject,
+        Site: API::V2::SerializableSite,
       },
-      include: [:subjects],
+      include: %i[subjects sites],
     )
 
     # jsonapi can't send included objects but the renderer will render it with
@@ -79,6 +90,7 @@ describe "Course POST #create API V2", type: :request do
       expect(created_course.name).to eq(course.name)
       expect(created_course.course_code).to match(/^[A-Z]\d{3}$/)
       expect(created_course.subjects).to match_array([primary_with_mathematics])
+      expect(created_course.sites).to match_array([site_one, site_two])
     end
 
     context "when a provider already has a course" do

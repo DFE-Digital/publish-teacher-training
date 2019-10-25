@@ -29,7 +29,7 @@ describe "/api/v2/build_new_course", type: :request do
         Subject: API::V2::SerializableSubject,
         PrimarySubject: API::V2::SerializableSubject,
       },
-      include: [:subjects],
+      include: %i[subjects sites],
     ).to_json)
   end
 
@@ -104,6 +104,29 @@ describe "/api/v2/build_new_course", type: :request do
 
 
       expect(json_response).to eq expected
+    end
+  end
+
+  context "With sites_ids" do
+    let(:site_one) { create(:site, provider: provider) }
+    let(:site_two) { create(:site, provider: provider) }
+    let(:site_ids) { [site_one.id, site_two.id] }
+
+    let(:params) do
+      {
+        course: {
+          study_mode: "full_time",
+          sites_ids: site_ids,
+        },
+      }
+    end
+
+    it "returns a matching course with site information" do
+      response = do_get params
+      json_response = parse_response(response)
+
+      course_site_ids = json_response["data"]["relationships"]["sites"]["data"].map { |s| s["id"].to_i }
+      expect(course_site_ids).to eq(site_ids)
     end
   end
 

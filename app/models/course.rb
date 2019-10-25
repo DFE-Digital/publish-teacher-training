@@ -95,7 +95,7 @@ class Course < ApplicationRecord
   has_many :financial_incentives, through: :subjects
   has_many :site_statuses
   has_many :sites,
-           -> { merge(SiteStatus.where(status: %i[new_status running])) },
+           -> { distinct.merge(SiteStatus.where(status: %i[new_status running])) },
            through: :site_statuses
 
   has_many :enrichments,
