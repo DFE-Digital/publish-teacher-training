@@ -79,7 +79,6 @@ describe Course, type: :model do
 
   describe "validations" do
     it { should validate_presence_of(:name) }
-    it { should validate_presence_of(:level) }
     it { should validate_presence_of(:profpost_flag) }
     it { should validate_presence_of(:program_type) }
     it { should validate_presence_of(:qualification) }
@@ -88,9 +87,15 @@ describe Course, type: :model do
 
 
     it { should validate_presence_of(:sites).on(:publish) }
-    it { should validate_presence_of(:level).on(:publish) }
     it { should validate_presence_of(:subjects).on(:publish) }
     it { should validate_presence_of(:enrichments).on(:publish) }
+
+    it { should validate_presence_of(:level).on(:create) }
+    it {
+      should validate_presence_of(:level)
+        .on(:publish)
+        .with_message("^There is a problem with this course. Contact support to fix it (Error: L)")
+    }
 
     it "validates scoped to provider_id and only on create and update" do
       expect(create(:course)).to validate_uniqueness_of(:course_code)

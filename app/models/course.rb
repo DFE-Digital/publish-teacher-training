@@ -150,7 +150,7 @@ class Course < ApplicationRecord
   validates :enrichments, presence: true, on: :publish
   validates :is_send, inclusion: { in: [true, false] }
   validates :sites, presence: true, on: :publish
-  validates :level, presence: true, on: :publish
+  validates :level, presence: { message: "^There is a problem with this course. Contact support to fix it (Error: L)" }, on: :publish
   validates :subjects, presence: true, on: :publish
   validate :validate_enrichment_publishable, on: :publish
   validate :validate_enrichment
@@ -162,7 +162,8 @@ class Course < ApplicationRecord
   validate :validate_subject_count
   validate :validate_subject_consistency
 
-  validates :name, :level, :profpost_flag, :program_type, :qualification, :start_date, :study_mode, presence: true
+  validates :name, :profpost_flag, :program_type, :qualification, :start_date, :study_mode, presence: true
+  validates :level, presence: true, on: :create
 
   after_validation :remove_unnecessary_enrichments_validation_message
 

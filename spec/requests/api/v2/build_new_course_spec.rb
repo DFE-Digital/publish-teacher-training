@@ -93,13 +93,6 @@ describe "/api/v2/build_new_course", type: :request do
                 },
               },
               {
-                "title" => "Invalid level",
-                "detail" => "There is a problem with this course. Contact support to fix it (Error: L)",
-                "source" => {
-                  "pointer" => "/data/attributes/level",
-                },
-              },
-              {
                 "title" => "Invalid profpost_flag",
                 "detail" => "Profpost flag can't be blank",
                 "source" => {
@@ -132,6 +125,13 @@ describe "/api/v2/build_new_course", type: :request do
                 "detail" => "Study mode can't be blank",
                 "source" => {
                   "pointer" => "/data/attributes/study_mode",
+                },
+              },
+              {
+                "title" => "Invalid level",
+                "detail" => "Level can't be blank",
+                "source" => {
+                  "pointer" => "/data/attributes/level",
                 },
               },
         ]
