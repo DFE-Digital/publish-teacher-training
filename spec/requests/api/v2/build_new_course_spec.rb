@@ -73,23 +73,9 @@ describe "/api/v2/build_new_course", type: :request do
       expected["data"]["errors"] = [
               {
                 "title" => "Invalid maths",
-                "detail" => "Maths can't be blank",
-                "source" => {
-                  "pointer" => "/data/attributes/maths",
-                },
-              },
-              {
-                "title" => "Invalid maths",
                 "detail" => "Pick an option for Maths",
                 "source" => {
                   "pointer" => "/data/attributes/maths",
-                },
-              },
-              {
-                "title" => "Invalid english",
-                "detail" => "English can't be blank",
-                "source" => {
-                  "pointer" => "/data/attributes/english",
                 },
               },
               {

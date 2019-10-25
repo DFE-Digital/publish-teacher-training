@@ -92,10 +92,6 @@ describe Course, type: :model do
     it { should validate_presence_of(:subjects).on(:publish) }
     it { should validate_presence_of(:enrichments).on(:publish) }
 
-    it { should validate_presence_of(:maths) }
-    it { should validate_presence_of(:english) }
-    it { should validate_presence_of(:science) }
-
     it "validates scoped to provider_id and only on create and update" do
       expect(create(:course)).to validate_uniqueness_of(:course_code)
                                   .scoped_to(:provider_id)
@@ -103,17 +99,46 @@ describe Course, type: :model do
     end
 
     describe "valid?" do
-      let(:course) { create(:course, enrichments: [invalid_enrichment]) }
-      let(:invalid_enrichment) { build(:course_enrichment, about_course: "") }
+      context "blank attribute" do
+        let(:course) { build(:course, **blank_field) }
 
-      before do
-        subject
-        invalid_enrichment.about_course = Faker::Lorem.sentence(word_count: 1000)
-        subject.valid?
+        subject do
+          course.valid?
+          course.errors.full_messages.first
+        end
+
+        context "maths" do
+          let(:blank_field) { { maths: nil } }
+
+          it { should include "Pick an option for Maths" }
+        end
+
+        context "english" do
+          let(:blank_field) { { english: nil } }
+
+          it { should include "Pick an option for English" }
+        end
+
+        context "science" do
+          let(:blank_field) { { science: nil } }
+
+          it { should include "Pick an option for Science" }
+        end
       end
 
-      it "should add enrichment errors" do
-        expect(subject.errors.full_messages).to_not be_empty
+      context "invalid_enrichment" do
+        let(:course) { create(:course, enrichments: [invalid_enrichment]) }
+        let(:invalid_enrichment) { build(:course_enrichment, about_course: "") }
+
+        before do
+          subject
+          invalid_enrichment.about_course = Faker::Lorem.sentence(word_count: 1000)
+          subject.valid?
+        end
+
+        it "should add enrichment errors" do
+          expect(subject.errors.full_messages).to_not be_empty
+        end
       end
     end
 
