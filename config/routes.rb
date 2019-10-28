@@ -134,8 +134,6 @@ Rails.application.routes.draw do
                   only: %i[index show update],
                   param: :code,
                   concerns: :provider_routes do
-          post :publish, on: :member
-          post :publishable, on: :member
         end
       end
 
