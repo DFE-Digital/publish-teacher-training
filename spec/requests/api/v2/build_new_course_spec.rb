@@ -202,7 +202,7 @@ describe "/api/v2/build_new_course", type: :request do
       json_response = parse_response(response)
 
       course_site_ids = json_response["data"]["relationships"]["sites"]["data"].map { |s| s["id"].to_i }
-      expect(course_site_ids).to eq(site_ids)
+      expect(course_site_ids).to match_array(site_ids)
     end
   end
 
