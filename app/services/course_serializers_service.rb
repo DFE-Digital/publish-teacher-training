@@ -25,7 +25,26 @@ class CourseSerializersService
     @recruitment_cycle_serializer = recruitment_cycle_serializer
   end
 
-  def execute
+  # Convenience method to serialize an object.
+  #
+  # This method also provides backwards compatibility to return a set of class
+  # names and their serializers, as this was how this service was originally
+  # conceived.
+  def execute(object = nil, opts = {})
+    if object.present?
+      renderer.render(object, class: serialization_classes, **opts)
+    else
+      serialization_classes
+    end
+  end
+
+private
+
+  def renderer
+    JSONAPI::Serializable::Renderer.new
+  end
+
+  def serialization_classes
     {
       Course: @course_serializer,
       Subject: @subject_serializer,
