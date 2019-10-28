@@ -71,13 +71,77 @@ describe "/api/v2/build_new_course", type: :request do
       expected = course_jsonapi
       expected["data"]["attributes"]["name"] = ""
       expected["data"]["errors"] = [
-        { "title" => "Invalid maths",
-          "detail" => "Pick an option for Maths",
-          "source" => { "pointer" => "/data/attributes/maths" } },
-        { "title" => "Invalid english",
-          "detail" => "Pick an option for English",
-          "source" => { "pointer" => "/data/attributes/english" } },
-      ]
+              {
+                "title" => "Invalid maths",
+                "detail" => "Pick an option for Maths",
+                "source" => {
+                  "pointer" => "/data/attributes/maths",
+                },
+              },
+              {
+                "title" => "Invalid english",
+                "detail" => "Pick an option for English",
+                "source" => {
+                  "pointer" => "/data/attributes/english",
+                },
+              },
+              {
+                "title" => "Invalid name",
+                "detail" => "Name can't be blank",
+                "source" => {
+                  "pointer" => "/data/attributes/name",
+                },
+              },
+              {
+                "title" => "Invalid profpost_flag",
+                "detail" => "Profpost flag can't be blank",
+                "source" => {
+                  "pointer" => "/data/attributes/profpost_flag",
+                },
+              },
+              {
+                "title" => "Invalid program_type",
+                "detail" => "Program type can't be blank",
+                "source" => {
+                  "pointer" => "/data/attributes/program_type",
+                },
+              },
+              {
+                "title" => "Invalid qualification",
+                "detail" => "Qualification can't be blank",
+                "source" => {
+                  "pointer" => "/data/attributes/qualification",
+                },
+              },
+              {
+                "title" => "Invalid start_date",
+                "detail" => "Start date can't be blank",
+                "source" => {
+                  "pointer" => "/data/attributes/start_date",
+                },
+              },
+              {
+                "title" => "Invalid study_mode",
+                "detail" => "Study mode can't be blank",
+                "source" => {
+                  "pointer" => "/data/attributes/study_mode",
+                },
+              },
+              {
+                "title" => "Invalid level",
+                "detail" => "Level can't be blank",
+                "source" => {
+                  "pointer" => "/data/attributes/level",
+                },
+              },
+              {
+                "title" => "Invalid age_range_in_years",
+                "detail" => "Age range in years can't be blank",
+                "source" => {
+                  "pointer" => "/data/attributes/age_range_in_years",
+                },
+              },
+        ]
 
       expect(json_response).to eq expected
     end
@@ -88,10 +152,22 @@ describe "/api/v2/build_new_course", type: :request do
       { course: {
         maths: "must_have_qualification_at_application_time",
         english: "must_have_qualification_at_application_time",
-      } }
+        science: "must_have_qualification_at_application_time",
+        name: "Primary",
+        study_mode: "full_time",
+        start_date: DateTime.new(provider.recruitment_cycle.year.to_i, 9, 1),
+        qualification: "qts",
+        funding_type: "fee",
+        subjects_ids: subjects.map(&:id),
+        level: :primary,
+        age_range_in_years: "3_to_7",
+        } }
     end
 
-    let(:course) { Course.new({ provider: provider }.merge(params[:course])) }
+    let(:subjects) { [find_or_create(:primary_subject, :primary_with_mathematics)] }
+    let(:course) do
+      Course.new({ provider: provider, subjects: subjects }.merge(params[:course].slice!(:subjects_ids)))
+    end
 
     it "returns a matching course with no errors" do
       response = do_get params
@@ -99,7 +175,7 @@ describe "/api/v2/build_new_course", type: :request do
       json_response = parse_response(response)
 
       expected = course_jsonapi
-      expected["data"]["attributes"]["name"] = ""
+      expected["data"]["attributes"]["name"] = "Primary with mathematics"
       expected["data"]["errors"] = []
 
 
@@ -126,7 +202,7 @@ describe "/api/v2/build_new_course", type: :request do
       json_response = parse_response(response)
 
       course_site_ids = json_response["data"]["relationships"]["sites"]["data"].map { |s| s["id"].to_i }
-      expect(course_site_ids).to eq(site_ids)
+      expect(course_site_ids).to match_array(site_ids)
     end
   end
 
