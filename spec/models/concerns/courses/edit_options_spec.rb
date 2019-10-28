@@ -18,17 +18,21 @@ describe Course, type: :model do
         let(:course) { create(:course, level: "secondary", subjects: [find_or_create(:secondary_subject, :modern_languages)]) }
 
         it "returns modern languages subjects" do
-          expect(course.available_modern_languages).to match_array([
-            include(attributes: { subject_name: "French", subject_code: "15" }),
-            include(attributes: { subject_name: "English as a second or other language", subject_code: "16" }),
-            include(attributes: { subject_name: "German", subject_code: "17" }),
-            include(attributes: { subject_name: "Italian", subject_code: "18" }),
-            include(attributes: { subject_name: "Japanese", subject_code: "19" }),
-            include(attributes: { subject_name: "Mandarin", subject_code: "20" }),
-            include(attributes: { subject_name: "Russian", subject_code: "21" }),
-            include(attributes: { subject_name: "Spanish", subject_code: "22" }),
-            include(attributes: { subject_name: "Modern languages (other)", subject_code: "24" }),
-          ])
+          expect(course.available_modern_languages).to(
+            match_array(
+              [
+                find_or_create(:modern_languages_subject, :french),
+                find_or_create(:modern_languages_subject, :english_as_a_second_lanaguge_or_other_language),
+                find_or_create(:modern_languages_subject, :german),
+                find_or_create(:modern_languages_subject, :italian),
+                find_or_create(:modern_languages_subject, :japanese),
+                find_or_create(:modern_languages_subject, :mandarin),
+                find_or_create(:modern_languages_subject, :russian),
+                find_or_create(:modern_languages_subject, :spanish),
+                find_or_create(:modern_languages_subject, :modern_languages_other),
+              ],
+            ),
+          )
         end
       end
 

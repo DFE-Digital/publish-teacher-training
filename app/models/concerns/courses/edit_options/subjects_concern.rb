@@ -18,10 +18,7 @@ module Courses
           return unless has_the_modern_languages_secondary_subject_type?
           return unless level == "secondary"
 
-          JSONAPI::Serializable::Renderer.new.render(
-            ModernLanguagesSubject.all,
-            class: CourseSerializersService.new.execute,
-          )[:data]
+          ModernLanguagesSubject.all
         end
       end
     end
