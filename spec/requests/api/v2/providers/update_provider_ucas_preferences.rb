@@ -30,7 +30,7 @@ describe "PATCH recruitment_cycles/year/providers/:provider_code/courses/:course
     perform_request(updated_provider_ucas_preferences)
   end
 
-  subject { provider.ucas_preferences.reload }
+  subject { provider.reload.ucas_preferences.reload }
 
   context "for a provider with existing preferences" do
     let(:provider) do
