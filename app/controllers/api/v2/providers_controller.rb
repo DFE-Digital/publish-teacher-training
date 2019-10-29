@@ -155,7 +155,9 @@ module API
       def update_ucas_preferences
         return if ucas_preferences_params.blank?
 
-        @provider.ucas_preferences = ProviderUCASPreference.new if @provider.ucas_preferences.nil?
+        if @provider.ucas_preferences.nil?
+          @provider.ucas_preferences = ProviderUCASPreference.new
+        end
         @provider.ucas_preferences.assign_attributes(ucas_preferences_params)
         @provider.ucas_preferences.save
       end
