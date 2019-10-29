@@ -8,10 +8,7 @@ module Courses
         #
         # https://github.com/DFE-Digital/manage-courses-frontend/blob/master/spec/factories/courses.rb
         def potential_subjects
-          JSONAPI::Serializable::Renderer.new.render(
-            CourseAssignableMasterSubjectService.new.execute(self),
-            class: CourseSerializersService.new.execute,
-          )[:data]
+          CourseAssignableMasterSubjectService.new.execute(self)
         end
 
         def available_modern_languages

@@ -83,11 +83,13 @@ module API
       enrichment_attribute :salary_details
 
       meta do
-        serializer_service = CourseSerializersService.new
-
+        serializer_service = SerializeCourseService.new
         edit_options = @object.edit_course_options
+
         edit_options[:modern_languages] =
-          serializer_service.execute(edit_options[:modern_languages])[:data]
+          serializer_service.execute(object: edit_options[:modern_languages])[:serialized][:data]
+        edit_options[:subjects] =
+          serializer_service.execute(object: edit_options[:subjects])[:serialized][:data]
 
         {
           edit_options: edit_options,

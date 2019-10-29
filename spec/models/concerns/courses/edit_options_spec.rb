@@ -52,13 +52,13 @@ describe Course, type: :model do
     it "returns the subjects the user can choose according to their level" do
       expect(course.potential_subjects).to match_array(
         [
-          include(attributes: { subject_name: "Primary", subject_code: "00" }),
-          include(attributes: { subject_name: "Primary with English", subject_code: "01" }),
-          include(attributes: { subject_name: "Primary with geography and history", subject_code: "02" }),
-          include(attributes: { subject_name: "Primary with mathematics", subject_code: "03" }),
-          include(attributes: { subject_name: "Primary with modern languages", subject_code: "04" }),
-          include(attributes: { subject_name: "Primary with physical education", subject_code: "06" }),
-          include(attributes: { subject_name: "Primary with science", subject_code: "07" }),
+          find_or_create(:primary_subject, :primary),
+          find_or_create(:primary_subject, :primary_with_english),
+          find_or_create(:primary_subject, :primary_with_geography_and_history),
+          find_or_create(:primary_subject, :primary_with_mathematics),
+          find_or_create(:primary_subject, :primary_with_modern_languages),
+          find_or_create(:primary_subject, :primary_with_physical_education),
+          find_or_create(:primary_subject, :primary_with_science),
         ],
       )
     end
