@@ -127,11 +127,15 @@ module API
           existing_codes: @provider.courses.pluck(:course_code),
           generate_course_code_service: Courses::GenerateCourseCodeService.new,
         )
+
+        generate_course_title_service = Courses::GenerateCourseTitleService.new
         course_code = generate_code_service.execute
 
         @course = Course.new(course_params.merge(provider: @provider, course_code: course_code))
         update_subjects
         update_sites
+
+        @course.name = generate_course_title_service.execute(course: @course)
 
         if @course.save
           render jsonapi: @course.reload
