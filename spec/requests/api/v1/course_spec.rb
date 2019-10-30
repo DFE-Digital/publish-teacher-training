@@ -79,14 +79,13 @@ describe "Courses API", type: :request do
       it "JSON body response contains expected course attributes" do
         get "/api/v1/#{current_year}/courses",
             headers: { "HTTP_AUTHORIZATION" => credentials }
-
         json = JSON.parse(response.body)
         expect(json). to eq([
                               {
                                 "course_code" => "2HPF",
                                 "start_month" => "#{current_year}-09-01T00:00:00Z",
                                 "start_month_string" => "September",
-                                "name" => "Religious Education",
+                                "name" => Course.first.name,
                                 "study_mode" => "F",
                                 "copy_form_required" => "Y",
                                 "profpost_flag" => "PG",

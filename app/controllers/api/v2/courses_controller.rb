@@ -178,6 +178,9 @@ module API
         return if subject_ids.nil?
 
         @course.subjects = Subject.where(id: subject_ids)
+        generate_course_title_service = Courses::GenerateCourseTitleService.new
+        @course.name = generate_course_title_service.execute(course: @course)
+        @course.save
       end
 
       def build_provider
@@ -259,7 +262,8 @@ module API
                   :sites_types,
                   :course_code,
                   :subjects_ids,
-                  :subjects_types)
+                  :subjects_types,
+                  :name)
           .permit(
             :english,
             :maths,
@@ -270,7 +274,6 @@ module API
             :applications_open_from,
             :study_mode,
             :is_send,
-            :name,
             :accrediting_provider_code,
             :funding_type,
             :level,

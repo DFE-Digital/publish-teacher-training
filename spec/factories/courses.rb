@@ -87,16 +87,26 @@ FactoryBot.define do
           course.level = "further_education"
         end
       end
+
+      if course.subjects.any?
+        generate_course_title_service = Courses::GenerateCourseTitleService.new
+        course.name = generate_course_title_service.execute(course: course)
+      end
     end
 
     after(:create) do |course, evaluator|
       # This is important to retain the relationship behaviour between
       # course and it's enrichment
-
       if evaluator.age.present?
         course.created_at = evaluator.age
         course.updated_at = evaluator.age
         course.changed_at = evaluator.age
+      end
+
+      if course.subjects.any?
+        generate_course_title_service = Courses::GenerateCourseTitleService.new
+        course.name = generate_course_title_service.execute(course: course)
+        course.save
       end
 
       # We've just created a course with this provider's code, so ensure it's
