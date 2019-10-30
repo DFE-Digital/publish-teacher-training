@@ -62,10 +62,13 @@ describe Provider, type: :model do
   end
 
   describe "changed_at" do
-    it "is set on create" do
+    fit "is set on create" do
       provider = Provider.create(
         recruitment_cycle: find_or_create(:recruitment_cycle),
+        email: "email@test.com",
+        telephone: "0123456789",
       )
+
       expect(provider.changed_at).to be_present
       expect(provider.changed_at).to eq provider.updated_at
     end

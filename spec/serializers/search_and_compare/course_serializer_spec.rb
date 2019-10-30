@@ -379,30 +379,6 @@ describe SearchAndCompare::CourseSerializer do
         include_examples "mapped the description section", "about this training provider accrediting", "accrediting_provider_enrichment_description"
         include_examples "mapped the description section", "training with disabilities", "train_with_disability"
 
-        context "no published provider enrichment" do
-          let(:provider_enrichment) do
-            {
-              # DescriptionSections_Mapping section
-              train_with_us: nil,
-              train_with_disability: nil,
-              accrediting_provider_enrichments: nil,
-            }
-          end
-
-          include_examples "mapped the description section", "about this training programme", "about_course"
-          include_examples "mapped the description section", "interview process", "interview_process"
-          include_examples "mapped the description section", "about fees", "fee_details"
-          include_examples "mapped the description section", "about salary", "salary_details"
-          include_examples "mapped the description section", "entry requirements", "required_qualifications"
-          include_examples "mapped the description section", "entry requirements personal qualities", "personal_qualities"
-          include_examples "mapped the description section", "entry requirements other", "other_requirements"
-          include_examples "mapped the description section", "financial support", "financial_support"
-          include_examples "mapped the description section", "about school placements", "how_school_placements_work"
-          include_examples "mapped the description section", "about this training provider", nil
-          include_examples "mapped the description section", "about this training provider accrediting", ""
-          include_examples "mapped the description section", "training with disabilities", nil
-        end
-
         context "no published course enrichment" do
           let(:course_enrichments) { [] }
 
