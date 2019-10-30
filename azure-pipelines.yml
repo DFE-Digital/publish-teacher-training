@@ -12,6 +12,8 @@ variables:
   imageNameBgFindSync: 'manage-courses-bg-find-sync'
   # Support multiple docker-compose files to allow travis and az pipelines to co exist: https://docs.docker.com/compose/extends/#multiple-compose-files
   dockerOverride: 'docker-compose -f docker-compose.yml -f docker-compose.az.yml'
+  cc_Reporter_ID: 'de006d3ac97520a939b8c9b67af12b9e85438b9e9fd4255e78651800b36f48ae'
+  AGENT_JOBSTATUS: $(Agent.JobStatus)
 
 steps:
 - script: |
@@ -30,11 +32,13 @@ steps:
     $DOCKER_OVERRIDE up --no-build -d
     $DOCKER_OVERRIDE exec -T web /bin/sh -c "./wait-for-command.sh -c 'nc -z db 5432' -s 0 -t 20"
     $DOCKER_OVERRIDE exec -T web /bin/sh -c "bundle exec rails db:setup"
+    $DOCKER_OVERRIDE exec -T web /bin/sh -c "bundle exec rake cc:setup"
   displayName: 'Build & setup'
   env:
     DOCKER_OVERRIDE: $(dockerOverride)
     dockerHubUsername: $(dockerHubUsername)
     dockerHubImageName: $(imageName)
+    CC_TEST_REPORTER_ID: $(cc_Reporter_ID)
 - script: |
     $DOCKER_OVERRIDE exec -T web /bin/sh -c 'bundle exec rake spec SPEC_OPTS="--format RspecJunitFormatter --out ./rspec-results.xml"'
   displayName: 'Execute tests'
@@ -49,6 +53,15 @@ steps:
     DOCKER_OVERRIDE: $(dockerOverride)
     dockerHubUsername: $(dockerHubUsername)
     dockerHubImageName: $(imageName)
+  - script: |
+    $DOCKER_OVERRIDE exec -T web /bin/sh -c "bundle exec rake cc:report"
+  displayName: 'Execute Code Climate reporter'
+  env:
+    DOCKER_OVERRIDE: $(dockerOverride)
+    dockerHubUsername: $(dockerHubUsername)
+    dockerHubImageName: $(imageName)
+    CC_TEST_REPORTER_ID: $(cc_Reporter_ID)
+    AGENT_JOBSTATUS: $(Agent.JobStatus)
 - task: Docker@1
   displayName: Tag image with current build number $(Build.BuildNumber)
   inputs:

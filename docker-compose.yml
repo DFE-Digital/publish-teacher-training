@@ -23,6 +23,8 @@ services:
     environment:
       - DB_HOSTNAME=db
       - DB_USERNAME=postgres
+      - CC_TEST_REPORTER_ID=${CC_TEST_REPORTER_ID}
+      - AGENT_JOBSTATUS=${AGENT_JOBSTATUS}
   bg-find-sync:
     build:
       args:
