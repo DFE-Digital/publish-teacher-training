@@ -466,7 +466,7 @@ describe "Courses API", type: :request do
     end
 
     context "with a SEND course" do
-      let(:course) { create(:course, provider: provider, is_send: true, subjects: [find_or_create(:primary_subject, :primary)]) }
+      let(:course) { create(:course, is_send: true, subjects: [find_or_create(:primary_subject, :primary)]) }
       let(:site) { create(:site_status, :published, course: course) }
 
       before do
@@ -496,7 +496,7 @@ describe "Courses API", type: :request do
 
     describe "age_range" do
       context "when level is 'primary'" do
-        let(:course) { create(:course, provider: provider, age_range_in_years: "3_to_7", level: "primary", subjects: [find_or_create(:primary_subject, :primary)]) }
+        let(:course) { create(:course, :primary) }
         let(:site) { create(:site_status, :published, course: course) }
 
         before do
@@ -514,7 +514,7 @@ describe "Courses API", type: :request do
       end
 
       context "when age_range_in_years is '7_to_14'" do
-        let(:course) { create(:course, provider: provider, age_range_in_years: "7_to_14", level: "secondary", subjects: [find_or_create(:secondary_subject, :modern_languages)]) }
+        let(:course) { create(:course, :primary, age_range_in_years: "7_to_14") }
         let(:site) { create(:site_status, :published, course: course) }
 
         before do
@@ -532,7 +532,7 @@ describe "Courses API", type: :request do
       end
 
       context "default" do
-        let(:course) { create(:course, provider: provider, age_range_in_years: "16_to_18", level: "secondary", subjects: [find_or_create(:secondary_subject, :modern_languages)]) }
+        let(:course) { create(:course, :secondary) }
         let(:site) { create(:site_status, :published, course: course) }
 
         before do

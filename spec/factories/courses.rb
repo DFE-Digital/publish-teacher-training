@@ -52,6 +52,16 @@ FactoryBot.define do
       )
     }
 
+    trait :primary do
+      level { :primary }
+      age_range_in_years { "3_to_7" }
+    end
+
+    trait :secondary do
+      age_range_in_years { "11_to_18" }
+      level { :secondary }
+    end
+
     transient do
       age { nil }
       infer_level? { false }
