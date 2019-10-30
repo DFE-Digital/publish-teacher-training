@@ -87,7 +87,7 @@ describe "Course POST #create API V2", type: :request do
       expect(created_course.applications_open_from).to eq(course.applications_open_from)
       expect(created_course.study_mode).to eq(course.study_mode)
       expect(created_course.is_send).to eq(course.is_send)
-      expect(created_course.name).to eq(course.name)
+      expect(created_course.name).to eq("Primary with mathematics")
       expect(created_course.course_code).to match(/^[A-Z]\d{3}$/)
       expect(created_course.subjects).to match_array([primary_with_mathematics])
       expect(created_course.sites).to match_array([site_one, site_two])
