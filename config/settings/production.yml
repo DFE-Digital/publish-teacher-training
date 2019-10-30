@@ -9,5 +9,3 @@ bg_jobs:
     cron: "0 */2 * * *"
     class: "BulkSyncCoursesToFindJob"
     queue: find_sync
-feature:
-  v3_routes: false
