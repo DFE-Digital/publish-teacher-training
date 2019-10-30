@@ -61,16 +61,18 @@ module WithQualifications
     end
 
     def qualifications_description
-      if qualifications
-        qualifications.map(&:upcase).sort.join(" with ")
-      else
-        ""
-      end
+      return "" unless qualifications
+
+      qualifications.map(&:upcase).sort.join(" with ")
     end
 
     def qualification=(value)
       super(value)
-      self.profpost_flag = qts? ? :recommendation_for_qts : :postgraduate
+      self.profpost_flag = if qts?
+                             :recommendation_for_qts
+                           else
+                             :postgraduate
+                           end
     end
   end
 end

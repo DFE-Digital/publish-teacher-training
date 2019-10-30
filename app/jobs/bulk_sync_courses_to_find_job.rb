@@ -18,10 +18,11 @@ class BulkSyncCoursesToFindJob < ApplicationJob
           Rails.logger.error "Error 502 received syncing courses: " \
                              + syncable_courses.join("; ")
         else
-          raise(SearchAndCompareRequestError.new(
-                  "Error #{request.response.status} received syncing courses: " \
-                  + syncable_courses.join("; "),
-                ))
+          raise(
+            SearchAndCompareRequestError.new(
+              "Error #{request.response.status} received syncing courses: #{syncable_courses.join('; ')}",
+            ),
+          )
         end
       end
     end
