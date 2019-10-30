@@ -33,6 +33,8 @@ def create_standard_provider_and_courses_for_cycle(recruitment_cycle, superuser)
     provider_name: "Acme SCITT",
     provider_code: "A01",
     recruitment_cycle: recruitment_cycle,
+    email: Faker::Internet.email,
+    telephone: Faker::PhoneNumber.phone_number,
   )
   organisation = Organisation.create!(name: "ACME SCITT Org")
   organisation.providers << provider
@@ -262,6 +264,8 @@ create_standard_provider_and_courses_for_cycle(next_recruitment_cycle, superuser
     provider_name: "ACME SCITT #{i}",
     provider_code: "A#{i}",
     recruitment_cycle: current_recruitment_cycle,
+    email: Faker::Internet.email,
+    telephone: Faker::PhoneNumber.phone_number,
   )
 
   organisation = Organisation.create!(name: "ACME#{i}")
