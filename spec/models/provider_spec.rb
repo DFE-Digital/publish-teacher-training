@@ -62,7 +62,7 @@ describe Provider, type: :model do
   end
 
   describe "changed_at" do
-    fit "is set on create" do
+    it "is set on create" do
       provider = Provider.create(
         recruitment_cycle: find_or_create(:recruitment_cycle),
         email: "email@test.com",

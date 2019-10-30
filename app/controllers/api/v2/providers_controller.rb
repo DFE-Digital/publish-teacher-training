@@ -6,7 +6,7 @@ module API
       before_action :build_provider, except: %i[index suggest]
 
       deserializable_resource :provider,
-                              only: %i[update],
+                              only: :update,
                               class: API::V2::DeserializableProvider
 
       def index
