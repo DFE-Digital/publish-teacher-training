@@ -51,13 +51,16 @@ describe "Courses API v2", type: :request do
   subject { response }
 
   describe "GET show" do
+    let(:get_params) { { include: "subjects,site_statuses.site" } }
     let(:show_path) do
       "/api/v2/providers/#{provider.provider_code}" +
         "/courses/#{course.course_code}"
     end
 
     subject do
-      get show_path, headers: { "HTTP_AUTHORIZATION" => credentials }
+      get show_path,
+          headers: { "HTTP_AUTHORIZATION" => credentials },
+          params: get_params
       response
     end
 
@@ -67,16 +70,10 @@ describe "Courses API v2", type: :request do
       include_examples "Unauthenticated, unauthorised, or not accepted T&Cs"
 
       describe "JSON generated for courses" do
-        before do
-          get "/api/v2/providers/#{provider.provider_code.downcase}/courses/#{findable_open_course.course_code.downcase}",
-              headers: { "HTTP_AUTHORIZATION" => credentials },
-              params: { include: "subjects,site_statuses.site" }
-        end
-
         it { should have_http_status(:success) }
 
         it "has a data section with the correct attributes" do
-          json_response = JSON.parse response.body
+          json_response = JSON.parse subject.body
           expect(json_response).to eq(
             "data" => {
               "id" => provider.courses[0].id.to_s,
@@ -225,6 +222,7 @@ describe "Courses API v2", type: :request do
                        },
                      },
                   ],
+                  "modern_languages" => nil,
                 },
               },
             },
@@ -294,6 +292,100 @@ describe "Courses API v2", type: :request do
       end
 
       it { should have_http_status(:not_found) }
+    end
+
+    context "when the course is a modern languages secondary course" do
+      let(:course) do
+        findable_open_course.subjects = [
+          find_or_create(:secondary_subject, :modern_languages),
+          find_or_create(:modern_languages_subject, :italian),
+        ]
+        findable_open_course.level = "secondary"
+        findable_open_course.save!
+        findable_open_course
+      end
+
+      it "has the correct edit options for the modern languages" do
+        json_response = JSON.parse subject.body
+        expect(json_response["data"]["meta"]["edit_options"]["modern_languages"]).to(
+          eq(
+            [
+              {
+                "id" => "34",
+                "type" => "subjects",
+                "attributes" => {
+                 "subject_name" => "French",
+                 "subject_code" => "15",
+                },
+              },
+              {
+                "id" => "35",
+                "type" => "subjects",
+                "attributes" => {
+                 "subject_name" => "English as a second or other language",
+                 "subject_code" => "16",
+                },
+              },
+              {
+                "id" => "36",
+                "type" => "subjects",
+                "attributes" => {
+                 "subject_name" => "German",
+                 "subject_code" => "17",
+                },
+              },
+              {
+                "id" => "37",
+                "type" => "subjects",
+                "attributes" => {
+                 "subject_name" => "Italian",
+                 "subject_code" => "18",
+                },
+              },
+              {
+                "id" => "38",
+                "type" => "subjects",
+                "attributes" => {
+                 "subject_name" => "Japanese",
+                 "subject_code" => "19",
+                },
+              },
+              {
+                "id" => "39",
+                "type" => "subjects",
+                "attributes" => {
+                 "subject_name" => "Mandarin",
+                 "subject_code" => "20",
+                },
+              },
+              {
+                "id" => "40",
+                "type" => "subjects",
+                "attributes" => {
+                 "subject_name" => "Russian",
+                 "subject_code" => "21",
+                },
+              },
+              {
+                "id" => "41",
+                "type" => "subjects",
+                "attributes" => {
+                 "subject_name" => "Spanish",
+                 "subject_code" => "22",
+                },
+              },
+              {
+                "id" => "42",
+                "type" => "subjects",
+                "attributes" => {
+                 "subject_name" => "Modern languages (other)",
+                 "subject_code" => "24",
+                },
+              },
+            ],
+          ),
+        )
+      end
     end
   end
 
@@ -486,6 +578,7 @@ describe "Courses API v2", type: :request do
                     },
                   },
                 ],
+                "modern_languages" => nil,
               },
             },
           }],

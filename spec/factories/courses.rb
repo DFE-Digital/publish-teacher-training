@@ -64,6 +64,7 @@ FactoryBot.define do
 
     transient do
       age { nil }
+      infer_level? { false }
     end
 
     after(:build) do |course, evaluator|
@@ -72,19 +73,23 @@ FactoryBot.define do
         course.updated_at = evaluator.age
         course.changed_at = evaluator.age
       end
-    end
 
-    after(:create) do |course, evaluator|
-      if evaluator.level.nil?
-        if course.subjects.exists?(type: "PrimarySubject")
+      if evaluator.infer_level? && course.subjects.present?
+        subjects = course.subjects
+          .reject { |s| s.type == "DiscontinuedSubject" }
+          .reject { |s| s.type == "MordernLanguagesSubject" }
+
+        if subjects.all? do |subject| subject.type == "PrimarySubject" end
           course.level = "primary"
-        elsif course.subjects.exists?(type: "SecondarySubject")
+        elsif subjects.all? do |subject| subject.type == "SecondarySubject" end
           course.level = "secondary"
-        elsif course.subjects.exists?(type: "FurtherEducationSubject")
+        elsif subjects.all? do |subject| subject.type == "FurtherEducationSubject" end
           course.level = "further_education"
         end
       end
+    end
 
+    after(:create) do |course, evaluator|
       # This is important to retain the relationship behaviour between
       # course and it's enrichment
 
@@ -100,7 +105,9 @@ FactoryBot.define do
     end
 
     trait :infer_level do
-      level { nil }
+      transient do
+        infer_level? { true }
+      end
     end
 
     trait :resulting_in_qts do

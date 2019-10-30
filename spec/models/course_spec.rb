@@ -78,6 +78,25 @@ describe Course, type: :model do
   end
 
   describe "validations" do
+    it { should validate_presence_of(:name) }
+    it { should validate_presence_of(:profpost_flag) }
+    it { should validate_presence_of(:program_type) }
+    it { should validate_presence_of(:qualification) }
+    it { should validate_presence_of(:start_date) }
+    it { should validate_presence_of(:study_mode) }
+
+
+    it { should validate_presence_of(:sites).on(:publish) }
+    it { should validate_presence_of(:subjects).on(:publish) }
+    it { should validate_presence_of(:enrichments).on(:publish) }
+
+    it { should validate_presence_of(:level).on(:create) }
+    it {
+      should validate_presence_of(:level)
+        .on(:publish)
+        .with_message("^There is a problem with this course. Contact support to fix it (Error: L)")
+    }
+
     it "validates scoped to provider_id and only on create and update" do
       expect(create(:course)).to validate_uniqueness_of(:course_code)
                                   .scoped_to(:provider_id)
@@ -85,17 +104,52 @@ describe Course, type: :model do
     end
 
     describe "valid?" do
-      let(:course) { create(:course, enrichments: [invalid_enrichment]) }
-      let(:invalid_enrichment) { build(:course_enrichment, about_course: "") }
+      context "blank attribute" do
+        let(:course) { build(:course, **blank_field) }
 
-      before do
-        subject
-        invalid_enrichment.about_course = Faker::Lorem.sentence(word_count: 1000)
-        subject.valid?
+        subject do
+          course.valid?
+          course.errors.full_messages.first
+        end
+
+        context "age_range_in_years" do
+          let(:blank_field) { { age_range_in_years: nil } }
+
+          it { should include "Age range in years can't be blank" }
+        end
+
+        context "maths" do
+          let(:blank_field) { { maths: nil } }
+
+          it { should include "Pick an option for Maths" }
+        end
+
+        context "english" do
+          let(:blank_field) { { english: nil } }
+
+          it { should include "Pick an option for English" }
+        end
+
+        context "science" do
+          let(:blank_field) { { science: nil } }
+
+          it { should include "Pick an option for Science" }
+        end
       end
 
-      it "should add enrichment errors" do
-        expect(subject.errors.full_messages).to_not be_empty
+      context "invalid_enrichment" do
+        let(:course) { create(:course, enrichments: [invalid_enrichment]) }
+        let(:invalid_enrichment) { build(:course_enrichment, about_course: "") }
+
+        before do
+          subject
+          invalid_enrichment.about_course = Faker::Lorem.sentence(word_count: 1000)
+          subject.valid?
+        end
+
+        it "should add enrichment errors" do
+          expect(subject.errors.full_messages).to_not be_empty
+        end
       end
     end
 
@@ -113,16 +167,16 @@ describe Course, type: :model do
         end
       end
 
-      context "invalid level and subjects" do
+      context "invalid subjects" do
         let(:initial_draft_enrichment) { build(:course_enrichment, :published) }
-        let(:course) { create(:course, level: nil, site_statuses: [create(:site_status, :new)], enrichments: [initial_draft_enrichment]) }
+        let(:course) { create(:course, level: :secondary, site_statuses: [create(:site_status, :new)], enrichments: [initial_draft_enrichment]) }
 
         before do
           subject.publishable?
         end
 
-        it "should add level and subjects" do
-          expect(subject.errors.full_messages).to match_array(["There is a problem with this course. Contact support to fix it (Error: L)", "There is a problem with this course. Contact support to fix it (Error: S)"])
+        it "should add subjects" do
+          expect(subject.errors.full_messages).to match_array(["There is a problem with this course. Contact support to fix it (Error: S)"])
         end
       end
     end

@@ -4,19 +4,61 @@ describe Course, type: :model do
   let(:course) { create(:course, level: "primary", subjects: [subjects]) }
   let(:subjects) { find_or_create(:primary_subject, :primary) }
 
+  describe "modern languages" do
+    context "primary level" do
+      let(:course) { create(:course, level: "primary", subjects: []) }
+
+      it "returns no modern languages subjects" do
+        expect(course.available_modern_languages).to eq(nil)
+      end
+    end
+
+    context "secondary level" do
+      context "with the modern language subject" do
+        let(:course) { create(:course, level: "secondary", subjects: [find_or_create(:secondary_subject, :modern_languages)]) }
+
+        it "returns modern languages subjects" do
+          expect(course.available_modern_languages).to(
+            match_array(
+              [
+                find_or_create(:modern_languages_subject, :french),
+                find_or_create(:modern_languages_subject, :english_as_a_second_lanaguge_or_other_language),
+                find_or_create(:modern_languages_subject, :german),
+                find_or_create(:modern_languages_subject, :italian),
+                find_or_create(:modern_languages_subject, :japanese),
+                find_or_create(:modern_languages_subject, :mandarin),
+                find_or_create(:modern_languages_subject, :russian),
+                find_or_create(:modern_languages_subject, :spanish),
+                find_or_create(:modern_languages_subject, :modern_languages_other),
+              ],
+            ),
+          )
+        end
+      end
+
+      context "without the modern language subject" do
+        let(:course) { create(:course, level: "secondary", subjects: []) }
+
+        it "returns no modern languages subjects" do
+          expect(course.available_modern_languages).to eq(nil)
+        end
+      end
+    end
+  end
+
   describe "subjects" do
     let(:course) { create(:course, level: "primary", subjects: []) }
 
     it "returns the subjects the user can choose according to their level" do
       expect(course.potential_subjects).to match_array(
         [
-          { id: "1", type: :subjects, attributes: { subject_name: "Primary", subject_code: "00" } },
-          { id: "2", type: :subjects, attributes: { subject_name: "Primary with English", subject_code: "01" } },
-          { id: "3", type: :subjects, attributes: { subject_name: "Primary with geography and history", subject_code: "02" } },
-          { id: "4", type: :subjects, attributes: { subject_name: "Primary with mathematics", subject_code: "03" } },
-          { id: "5", type: :subjects, attributes: { subject_name: "Primary with modern languages", subject_code: "04" } },
-          { id: "6", type: :subjects, attributes: { subject_name: "Primary with physical education", subject_code: "06" } },
-          { id: "7", type: :subjects, attributes: { subject_name: "Primary with science", subject_code: "07" } },
+          find_or_create(:primary_subject, :primary),
+          find_or_create(:primary_subject, :primary_with_english),
+          find_or_create(:primary_subject, :primary_with_geography_and_history),
+          find_or_create(:primary_subject, :primary_with_mathematics),
+          find_or_create(:primary_subject, :primary_with_modern_languages),
+          find_or_create(:primary_subject, :primary_with_physical_education),
+          find_or_create(:primary_subject, :primary_with_science),
         ],
       )
     end
@@ -29,7 +71,7 @@ describe Course, type: :model do
   end
 
   describe "qualifications" do
-    context "for a course that’s not further education" do
+    context "for a course that's not further education" do
       it "returns only QTS options for users to choose between" do
         expect(course.qualification_options).to eq(%w[qts pgce_with_qts pgde_with_qts])
         course.qualification_options.each do |q|

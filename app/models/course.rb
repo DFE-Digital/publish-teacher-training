@@ -150,17 +150,20 @@ class Course < ApplicationRecord
   validates :enrichments, presence: true, on: :publish
   validates :is_send, inclusion: { in: [true, false] }
   validates :sites, presence: true, on: :publish
-  validates :level, presence: true, on: :publish
+  validates :level, presence: { message: "^There is a problem with this course. Contact support to fix it (Error: L)" }, on: :publish
   validates :subjects, presence: true, on: :publish
   validate :validate_enrichment_publishable, on: :publish
   validate :validate_enrichment
   validate :validate_course_syncable, on: :sync
   validate :validate_qualification, on: :update
-  validate :validate_start_date, on: :update, if: -> { provider.present? }
+  validate :validate_start_date, on: :update, if: -> { provider.present? && start_date.present? }
   validate :validate_applications_open_from, on: :update, if: -> { provider.present? }
   validate :validate_modern_languages
   validate :validate_subject_count
   validate :validate_subject_consistency
+
+  validates :name, :profpost_flag, :program_type, :qualification, :start_date, :study_mode, presence: true
+  validates :level, :age_range_in_years, presence: true, on: :create
 
   after_validation :remove_unnecessary_enrichments_validation_message
 
