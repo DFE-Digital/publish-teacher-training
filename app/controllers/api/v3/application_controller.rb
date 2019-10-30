@@ -14,16 +14,6 @@ module API
           year: params[:recruitment_cycle_year],
         ) || RecruitmentCycle.current_recruitment_cycle
       end
-
-      def build_provider
-        @provider = @recruitment_cycle.providers.find_by!(
-          provider_code: params[:provider_code].upcase,
-        )
-      end
-
-      def build_course
-        @course = @provider.courses.find_by!(course_code: params[:code].upcase)
-      end
     end
   end
 end
