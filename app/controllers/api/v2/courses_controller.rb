@@ -132,7 +132,8 @@ module API
         generate_course_title_service = Courses::GenerateCourseTitleService.new
         course_code = generate_code_service.execute
 
-        @course = Course.new(course_params.merge(provider: @provider, course_code: course_code))
+        @course = Course.new(provider: @provider)
+        @course.assign_attributes(course_params.merge(course_code: course_code))
         update_subjects
         update_sites
 
