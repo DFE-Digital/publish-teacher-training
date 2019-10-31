@@ -70,9 +70,9 @@ describe ProviderSerializer do
 
       subject { application_alert_recipient }
 
-      its([:name]) { should eq "" }
+      its([:name]) { should eq provider.contact_name }
       its([:email]) { should eq provider.ucas_preferences.application_alert_email }
-      its([:telephone]) { should eq "" }
+      its([:telephone]) { should eq provider.telephone }
     end
 
     context "if nil" do

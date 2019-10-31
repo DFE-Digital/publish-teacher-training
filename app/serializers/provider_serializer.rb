@@ -126,9 +126,9 @@ private
     if object.ucas_preferences&.application_alert_email
       [{
         type: "application_alert_recipient",
-        name: "",
+        name: object.contact_name,
         email: object.ucas_preferences&.application_alert_email,
-        telephone: "",
+        telephone: object.telephone,
       }]
     end
   end
