@@ -135,9 +135,9 @@ class Provider < ApplicationRecord
   validates :train_with_us, words_count: { maximum: 250, message: "^Reduce the word count for training with you" }
   validates :train_with_disability, words_count: { maximum: 250, message: "^Reduce the word count for training with disabilities and other needs" }
 
-  validates :email, email: true
+  validates :email, email: true, if: :email_changed?
 
-  validates :telephone, phone: { message: "^Enter a valid telephone number" }
+  validates :telephone, phone: { message: "^Enter a valid telephone number" }, if: :telephone_changed?
 
   validates :train_with_us, presence: true, on: :update, if: :train_with_us_changed?
   validates :train_with_disability, presence: true, on: :update, if: :train_with_disability_changed?
