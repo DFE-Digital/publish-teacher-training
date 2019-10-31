@@ -1,14 +1,13 @@
 module Courses
   class GenerateUniqueCourseCodeService
-    def initialize(existing_codes:, generate_course_code_service:)
-      @existing_codes = existing_codes
+    def initialize(generate_course_code_service:)
       @generate_course_code_service = generate_course_code_service
     end
 
-    def execute
+    def execute(existing_codes:)
       code = nil
 
-      while code.nil? || code.in?(@existing_codes)
+      while code.nil? || code.in?(existing_codes)
         code = @generate_course_code_service.execute
       end
 

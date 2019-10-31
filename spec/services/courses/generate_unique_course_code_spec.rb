@@ -5,7 +5,6 @@ describe Courses::GenerateUniqueCourseCodeService do
   let(:mocked_gen_code_service) { double }
   let(:service) do
     described_class.new(
-      existing_codes: existing_codes,
       generate_course_code_service: mocked_gen_code_service,
     )
   end
@@ -14,7 +13,7 @@ describe Courses::GenerateUniqueCourseCodeService do
     it 'calls "Courses::GenerateCourseCodeService" once' do
       expect(mocked_gen_code_service).to receive(:execute).once.and_return("A000")
 
-      service.execute
+      service.execute(existing_codes: existing_codes)
     end
   end
 
@@ -25,7 +24,7 @@ describe Courses::GenerateUniqueCourseCodeService do
       it 'calls "Courses::GenerateCourseCodeService" once' do
         expect(mocked_gen_code_service).to receive(:execute).once.and_return("A000")
 
-        service.execute
+        service.execute(existing_codes: existing_codes)
       end
     end
 
@@ -35,7 +34,7 @@ describe Courses::GenerateUniqueCourseCodeService do
       it 'calls "Courses::GenerateCourseCodeService" twice' do
         expect(mocked_gen_code_service).to receive(:execute).twice.and_return("A111", "A000")
 
-        service.execute
+        service.execute(existing_codes: existing_codes)
       end
     end
   end
@@ -49,7 +48,8 @@ describe Courses::GenerateUniqueCourseCodeService do
         expect(mocked_gen_code_service).to receive(:execute).exactly(4)
                                                             .times
                                                             .and_return(*existing_codes, expected_code)
-        expect(service.execute).to eq(expected_code)
+
+        expect(service.execute(existing_codes: existing_codes)).to eq(expected_code)
       end
     end
   end

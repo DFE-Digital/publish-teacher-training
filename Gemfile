@@ -97,6 +97,9 @@ gem "logstash-logger", "~> 0.26.1"
 # Semantic Logger makes logs pretty
 gem "rails_semantic_logger"
 
+# IoC Container
+gem "dry-container"
+
 group :development, :test do
   # add info about db structure to models and other files
   gem "annotate"
