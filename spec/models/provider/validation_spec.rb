@@ -64,9 +64,12 @@ describe Provider, type: :model do
       end
     end
 
-    describe "on publish" do
-      it { should validate_presence_of(:train_with_us).on(:publish) }
-      it { should validate_presence_of(:train_with_disability).on(:publish) }
+    describe "on update" do
+      context "setting field to nil" do
+        subject { provider }
+        it { should validate_presence_of(:train_with_us).on(:update) }
+        it { should validate_presence_of(:train_with_disability).on(:update) }
+      end
     end
 
     describe "#train_with_us" do

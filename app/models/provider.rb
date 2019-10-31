@@ -135,13 +135,12 @@ class Provider < ApplicationRecord
   validates :train_with_us, words_count: { maximum: 250, message: "^Reduce the word count for training with you" }
   validates :train_with_disability, words_count: { maximum: 250, message: "^Reduce the word count for training with disabilities and other needs" }
 
-  validates :email, email: true, on: :update, allow_nil: true
-  validates :email, email: true, on: :publish
+  validates :email, email: true, if: :email_changed?
 
-  validates :telephone, phone: { message: "^Enter a valid telephone number" }, on: :update, allow_nil: true
+  validates :telephone, phone: { message: "^Enter a valid telephone number" }, if: :telephone_changed?
 
-  validates :train_with_us, presence: true, on: :publish
-  validates :train_with_disability, presence: true, on: :publish
+  validates :train_with_us, presence: true, on: :update, if: :train_with_us_changed?
+  validates :train_with_disability, presence: true, on: :update, if: :train_with_disability_changed?
 
   validate :add_enrichment_errors
 
@@ -241,10 +240,6 @@ class Provider < ApplicationRecord
 
   def to_s
     "#{provider_name} (#{provider_code}) [#{recruitment_cycle}]"
-  end
-
-  def publishable?
-    valid? :publish
   end
 
   def accredited_bodies

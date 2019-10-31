@@ -226,33 +226,6 @@ describe "PATCH /providers/:provider_code" do
     end
   end
 
-  context "with blank data" do
-    let(:updated_attributes) do
-      {
-        train_with_us: "",
-        train_with_disability: "",
-      }
-    end
-
-    it "returns ok" do
-      perform_request update_provider
-
-      expect(response).to be_ok
-    end
-  end
-
-  context "nil telephone number" do
-    let(:updated_attributes) do
-      { telephone: nil }
-    end
-
-    it "returns ok" do
-      perform_request update_provider
-
-      expect(response).to be_ok
-    end
-  end
-
   context "bad telephone number" do
     let(:updated_attributes) do
       { telephone: "CALL NOW 0123456789" }
