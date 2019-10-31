@@ -216,9 +216,9 @@ describe "Providers API", type: :request do
                 },
                 {
                   "type" => "application_alert_recipient",
-                  "name" => "",
+                  "name" => "Amy Smith",
                   "email" => "application_alert_recipient@acmescitt.education.uk",
-                  "telephone" => "",
+                  "telephone" => "020 812 345 678",
                 },
               ],
               "created_at" => provider.created_at.iso8601,
