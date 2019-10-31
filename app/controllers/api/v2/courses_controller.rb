@@ -94,6 +94,7 @@ module API
         update_enrichment
         update_sites
         update_subjects
+
         @course.ensure_site_statuses_match_study_mode if @course.study_mode_previously_changed?
 
         should_sync = site_ids.present? && @course.should_sync?
@@ -178,6 +179,9 @@ module API
         return if subject_ids.nil?
 
         @course.subjects = Subject.where(id: subject_ids)
+        generate_course_title_service = Courses::GenerateCourseTitleService.new
+        @course.name = generate_course_title_service.execute(course: @course)
+        @course.save
       end
 
       def build_provider
@@ -259,7 +263,8 @@ module API
                   :sites_types,
                   :course_code,
                   :subjects_ids,
-                  :subjects_types)
+                  :subjects_types,
+                  :name)
           .permit(
             :english,
             :maths,
@@ -270,7 +275,6 @@ module API
             :applications_open_from,
             :study_mode,
             :is_send,
-            :name,
             :accrediting_provider_code,
             :funding_type,
             :level,

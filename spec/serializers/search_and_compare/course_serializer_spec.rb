@@ -19,7 +19,7 @@ describe SearchAndCompare::CourseSerializer do
                level: "primary",
                provider: provider,
                accrediting_provider: accrediting_provider,
-               name: "Primary (Special Educational Needs)",
+               name: "Primary (SEND)",
                course_code: "2KXB",
                start_date: "2019-08-01T00:00:00",
                program_type: :school_direct_salaried_training_programme,
@@ -41,6 +41,8 @@ describe SearchAndCompare::CourseSerializer do
           end
         end
       end
+
+
 
       let(:published_enrichment) do
         build :course_enrichment, :published,

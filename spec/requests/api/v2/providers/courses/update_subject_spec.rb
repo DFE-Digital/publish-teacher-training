@@ -79,5 +79,9 @@ describe "PATCH /providers/:provider_code/courses/:course_code" do
       expect(course.reload.subjects.first.id).to eq(subject1.id)
       expect(course.reload.subjects.second.id).to eq(subject2.id)
     end
+
+    it "updates the name of the course" do
+      expect(course.reload.name).to eq("English with Mathematics")
+    end
   end
 end
