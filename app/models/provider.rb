@@ -139,8 +139,8 @@ class Provider < ApplicationRecord
 
   validates :telephone, phone: { message: "^Enter a valid telephone number" }
 
-  validates :train_with_us, presence: true, on: :update
-  validates :train_with_disability, presence: true, on: :update
+  validates :train_with_us, presence: true, on: :update, if: :train_with_us_changed?
+  validates :train_with_disability, presence: true, on: :update, if: :train_with_disability_changed?
 
   validate :add_enrichment_errors
 
