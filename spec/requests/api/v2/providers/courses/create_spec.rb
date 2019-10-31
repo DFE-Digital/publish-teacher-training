@@ -102,5 +102,22 @@ describe "Course POST #create API V2", type: :request do
         expect(created_course.course_code).to_not eq(existing_course.course_code)
       end
     end
+
+    context "When a provider is not accredited" do
+      let(:provider) { create(:provider, :accredited_body, organisations: [organisation]) }
+      let(:course) do
+        build(
+          :course,
+          provider: provider,
+          subjects: [primary_with_mathematics],
+          sites: [site_one, site_two],
+          funding_type: "fee",
+        )
+      end
+
+      it "Creates a course" do
+        expect { perform_request(course) }.to change { provider.reload.courses.count }.from(0).to(1)
+      end
+    end
   end
 end
