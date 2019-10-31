@@ -325,9 +325,9 @@ module MCB
           subscription: "s121-findpostgraduateteachertraining-test",
         },
         "production" => {
-          webapp: "bat-prod-mcbe-as",
-          rgroup: "bat-prod-mcbe-rg",
-          subscription: "DFE BAT Production",
+          webapp: "s121p01-mcbe-as",
+          rgroup: "s121p01-mcbe-rg",
+          subscription: "s121-findpostgraduateteachertraining-production",
         },
       }
     end
