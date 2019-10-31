@@ -94,6 +94,7 @@ module API
         update_enrichment
         update_sites
         update_subjects
+
         @course.ensure_site_statuses_match_study_mode if @course.study_mode_previously_changed?
 
         should_sync = site_ids.present? && @course.should_sync?

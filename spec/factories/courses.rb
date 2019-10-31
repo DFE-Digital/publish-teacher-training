@@ -58,7 +58,7 @@ FactoryBot.define do
     end
 
     trait :secondary do
-      age_range_in_years { "16_to_18" }
+      age_range_in_years { "11_to_18" }
       level { :secondary }
     end
 
@@ -106,7 +106,6 @@ FactoryBot.define do
       if course.subjects.any?
         generate_course_title_service = Courses::GenerateCourseTitleService.new
         course.name = generate_course_title_service.execute(course: course)
-        course.save
       end
 
       # We've just created a course with this provider's code, so ensure it's
