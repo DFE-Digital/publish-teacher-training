@@ -293,13 +293,14 @@ describe Course, type: :model do
   end
 
   context "with sites" do
-    let(:first_site) { create(:site) }
+    let(:provider) { build(:provider) }
+    let(:first_site) { build(:site, provider: provider) }
     let(:first_site_status) { create(:site_status, :running, site: first_site) }
-    let(:second_site) { create(:site) }
+    let(:second_site) { build(:site, provider: provider) }
     let(:second_site_status) { create(:site_status, :suspended, site: second_site) }
-    let(:new_site) { create(:site) }
+    let(:new_site) { build(:site, provider: provider) }
 
-    subject { create(:course, site_statuses: [first_site_status, second_site_status]) }
+    subject { create(:course, provider: provider, site_statuses: [first_site_status, second_site_status]) }
 
     describe "#sites" do
       it "should only return new and running sites" do
@@ -308,14 +309,15 @@ describe Course, type: :model do
     end
 
     describe "sites=" do
+      let(:new_site_status) { build(:site_status, :new, site: site_with_new_site_status) }
+      let(:site_with_new_site_status) { build(:site, provider: provider) }
+
       before do
         subject.sites = [second_site, new_site]
       end
 
       context "with a ucas_status of new" do
-        let(:new_site_status) { create(:site_status, :new, site: site_with_new_site_status) }
-        let(:site_with_new_site_status) { create(:site) }
-        let(:subject) { create(:course, site_statuses: [new_site_status]) }
+        let(:subject) { create(:course, provider: provider, site_statuses: [new_site_status]) }
 
         it "does not set the site to running" do
           expect(second_site_status.reload.status).to eq("suspended")
@@ -362,48 +364,50 @@ describe Course, type: :model do
   end
 
   context "with site statuses" do
-    let(:new_site_status) { build(:site_status, :new) }
-    let(:new_site_status2) { build(:site_status, :new) }
-    let(:findable) { build(:site_status, :findable) }
-    let(:suspended) { build(:site_status, :suspended) }
-    let(:with_any_vacancy) { build(:site_status, :with_any_vacancy) }
-    let(:default) { build(:site_status) }
-    let(:site_status_with_no_vacancies) { build(:site_status, :with_no_vacancies) }
+    let(:provider) { build(:provider, sites: [site]) }
+    let(:site) { build(:site) }
+    let(:new_site_status) { build(:site_status, :new, site: site) }
+    let(:new_site_status2) { build(:site_status, :new, site: site) }
+    let(:findable) { build(:site_status, :findable, site: site) }
+    let(:suspended) { build(:site_status, :suspended, site: site) }
+    let(:with_any_vacancy) { build(:site_status, :with_any_vacancy, site: site) }
+    let(:default) { build(:site_status, site: site) }
+    let(:site_status_with_no_vacancies) { build(:site_status, :with_no_vacancies, site: site) }
+    let(:findable_without_vacancies) { build(:site_status, :findable, :with_no_vacancies, site: site) }
+    let(:findable_with_vacancies) { build(:site_status, :findable, :with_any_vacancy, site: site) }
+    let(:published_suspended_with_any_vacancy) { build(:site_status, :published, :discontinued, :with_any_vacancy, site: site) }
+    let(:published_discontinued_with_any_vacancy) { build(:site_status, :published, :suspended, :with_any_vacancy, site: site) }
+    let(:site_statuses) { [] }
+
+    subject { create(:course, provider: provider, site_statuses: site_statuses) }
 
     describe "#findable_site_statuses" do
       context "with a site_statuses association that have been loaded" do
-        let(:course) { create(:course, site_statuses: []) }
-
         it "uses #select on the association" do
-          allow(course.site_statuses).to receive(:select).and_return([])
+          allow(subject.site_statuses).to receive(:select).and_return([])
 
-          course.findable_site_statuses
+          subject.findable_site_statuses
 
-          expect(course.site_statuses).to have_received(:select)
+          expect(subject.site_statuses).to have_received(:select)
         end
 
         context "with a findable site" do
-          subject { create(:course, site_statuses: [findable]) }
-
+          let(:site_statuses) { [findable] }
           its(:findable_site_statuses) { should_not be_empty }
         end
 
         context "with no findable sites" do
-          subject { create(:course, site_statuses: [suspended]) }
-
+          let(:site_statuses) { [suspended] }
           its(:findable_site_statuses) { should be_empty }
         end
 
         context "with at least one findable sites" do
-          subject { create(:course, site_statuses: [findable, suspended]) }
-
+          let(:site_statuses) { [findable, suspended] }
           its(:findable_site_statuses) { should_not be_empty }
         end
       end
 
       context "with a site_statuses association that has not been loaded" do
-        let(:course) { create(:course, site_statuses: []) }
-
         it "uses #select on the association" do
           course_with_site_statuses_not_loaded = Course.find(course.id)
           allow(course_with_site_statuses_not_loaded.site_statuses)
@@ -416,26 +420,17 @@ describe Course, type: :model do
         end
 
         context "with a findable site" do
-          let(:course) { create(:course, site_statuses: [findable]) }
-
-          subject { Course.find(course.id) }
-
+          let(:site_statuses) { [findable] }
           its(:findable_site_statuses) { should_not be_empty }
         end
 
         context "with no findable sites" do
-          let(:course) { create(:course, site_statuses: [suspended]) }
-
-          subject { Course.find(course.id) }
-
+          let(:site_statuses) { [suspended] }
           its(:findable_site_statuses) { should be_empty }
         end
 
         context "with at least one findable sites" do
-          let(:course) { create(:course, site_statuses: [findable, suspended]) }
-
-          subject { Course.find(course.id) }
-
+          let(:site_statuses) { [findable, suspended] }
           its(:findable_site_statuses) { should_not be_empty }
         end
       end
@@ -481,82 +476,48 @@ describe Course, type: :model do
     end
 
     describe "#has_vacancies?" do
-      let(:findable_without_vacancies) { build(:site_status, :findable, :with_no_vacancies) }
       context "for a single site status that has vacancies" do
-        let(:subject) {
-          create(:course, site_statuses: [findable, with_any_vacancy])
-        }
-
+        let(:site_statuses) { [findable, with_any_vacancy] }
         its(:has_vacancies?) { should be true }
       end
 
       context "for a site status with vacancies and others without" do
-        let(:findable_with_vacancies) { build(:site_status, :findable, :with_any_vacancy) }
-        let(:subject) {
-          create(:course, site_statuses: [findable_with_vacancies, findable_without_vacancies])
-        }
-
+        let(:site_statuses) { [findable_with_vacancies, findable_without_vacancies] }
         its(:has_vacancies?) { should be true }
       end
 
       context "when none of the sites have vacancies" do
-        let(:subject) {
-          create(:course, site_statuses: [findable_without_vacancies, findable_without_vacancies])
-        }
-
+        let(:site_statuses) { [findable_without_vacancies, findable_without_vacancies] }
         its(:has_vacancies?) { should be false }
       end
 
       context "when only discontinued and suspended site statuses have vacancies" do
-        let(:findable_with_no_vacancies) { build(:site_status, :findable, :with_no_vacancies) }
-        let(:published_suspended_with_any_vacancy) { build(:site_status, :published, :discontinued, :with_any_vacancy) }
-        let(:published_discontinued_with_any_vacancy) { build(:site_status, :published, :suspended, :with_any_vacancy) }
-
-        let(:subject) {
-          create(:course, site_statuses: [findable_with_no_vacancies, published_suspended_with_any_vacancy, published_discontinued_with_any_vacancy])
-        }
-
+        let(:site_statuses) { [findable_without_vacancies, published_suspended_with_any_vacancy, published_discontinued_with_any_vacancy] }
         its(:has_vacancies?) { should be false }
       end
     end
 
     describe "#has_vacancies? (when site_statuses not loaded)" do
-      let(:findable_without_vacancies) { build(:site_status, :findable, :with_no_vacancies) }
-
+      let(:subject) {
+        create(:course, site_statuses: site_statuses).reload
+      }
       context "for a single site status that has vacancies" do
-        let(:subject) {
-          create(:course, site_statuses: [findable, with_any_vacancy]).reload
-        }
-
+        let(:site_statuses) { [findable, with_any_vacancy] }
         its(:has_vacancies?) { should be true }
       end
 
       context "for a site status with vacancies and others without" do
-        let(:findable_with_vacancies) { build(:site_status, :findable, :with_any_vacancy) }
-        let(:subject) {
-          create(:course, site_statuses: [findable_with_vacancies, findable_without_vacancies]).reload
-        }
-
+        let(:site_statuses) { [findable_with_vacancies, findable_without_vacancies] }
         its(:has_vacancies?) { should be true }
       end
 
       context "when none of the sites have vacancies" do
-        let(:subject) {
-          create(:course, site_statuses: [findable_without_vacancies, findable_without_vacancies]).reload
-        }
-
+        let(:site_statuses) { [findable_without_vacancies, findable_without_vacancies] }
         its(:has_vacancies?) { should be false }
       end
 
       context "when only discontinued and suspended site statuses have vacancies" do
-        let(:findable_with_no_vacancies) { build(:site_status, :findable, :with_no_vacancies) }
-        let(:published_suspended_with_any_vacancy) { build(:site_status, :published, :discontinued, :with_any_vacancy) }
-        let(:published_discontinued_with_any_vacancy) { build(:site_status, :published, :suspended, :with_any_vacancy) }
-
-        let(:subject) {
-          create(:course, site_statuses: [findable_with_no_vacancies, published_suspended_with_any_vacancy, published_discontinued_with_any_vacancy]).reload
-        }
-
+        let(:site_statuses) { [findable_without_vacancies, published_suspended_with_any_vacancy, published_discontinued_with_any_vacancy] }
         its(:has_vacancies?) { should be false }
       end
     end
@@ -572,9 +533,7 @@ describe Course, type: :model do
                applications_open_from: applications_open_from)
       end
 
-      let(:subject) {
-        course
-      }
+      subject { course }
 
       context "no site statuses" do
         context "applications_open_from is in present or past" do
