@@ -11,8 +11,8 @@ services:
     build:
       context: .
       cache_from:
-        - batdevcontainerregistry.azurecr.io/manage-courses-backend:latest
-    image: batdevcontainerregistry.azurecr.io/manage-courses-backend:latest
+        - ${dockerHubUsername:-dfedigital}/manage-courses-backend-poc:latest
+    image: ${dockerHubUsername:-dfedigital}/manage-courses-backend-poc:latest
     command: ash -c "rm -f tmp/pids/server.pid && bundle exec rails server -p 3001 -b '0.0.0.0'"
     volumes:
       - .:/app
