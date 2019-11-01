@@ -11,7 +11,7 @@ variables:
   imageName: 'manage-courses-backend-poc'
   imageNameBgFindSync: 'manage-courses-bg-find-sync'
   # Support multiple docker-compose files to allow travis and az pipelines to co exist: https://docs.docker.com/compose/extends/#multiple-compose-files
-  dockerOverride: 'docker-compose -f docker-compose.yml -f docker-compose.az.yml'
+  dockerOverride: 'docker-compose -f docker-compose.yml
 
 steps:
 - script: |
