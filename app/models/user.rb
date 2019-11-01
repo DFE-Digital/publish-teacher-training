@@ -3,6 +3,7 @@
 # Table name: user
 #
 #  accept_terms_date_utc  :datetime
+#  admin                  :boolean          default(FALSE)
 #  email                  :text
 #  first_login_date_utc   :datetime
 #  first_name             :text
@@ -22,8 +23,6 @@
 class User < ApplicationRecord
   include AASM
 
-  DFE_EMAIL_PATTERN = '@(digital\.){0,1}education\.gov\.uk$'.freeze
-
   has_many :organisation_users
 
   # dependent destroy because https://stackoverflow.com/questions/34073757/removing-relations-is-not-being-audited-by-audited-gem/34078860#34078860
@@ -35,8 +34,8 @@ class User < ApplicationRecord
            primary_key: :id,
            inverse_of: "requester"
 
-  scope :admins, -> { where("email ~ ?", DFE_EMAIL_PATTERN) }
-  scope :non_admins, -> { where.not("email ~ ?", DFE_EMAIL_PATTERN) }
+  scope :admins, -> { where(admin: true) }
+  scope :non_admins, -> { where.not(admin: true) }
   scope :active, -> { where.not(accept_terms_date_utc: nil) }
 
   validates :email, presence: true, format: { with: /@/, message: "must contain @" }
@@ -56,10 +55,6 @@ class User < ApplicationRecord
     event :accept_rollover_screen do
       transitions from: :transitioned, to: :rolled_over
     end
-  end
-
-  def admin?
-    email.match?(%r{#{DFE_EMAIL_PATTERN}})
   end
 
   def to_s

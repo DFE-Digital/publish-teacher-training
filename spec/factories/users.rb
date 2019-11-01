@@ -3,6 +3,7 @@
 # Table name: user
 #
 #  accept_terms_date_utc  :datetime
+#  admin                  :boolean          default(FALSE)
 #  email                  :text
 #  first_login_date_utc   :datetime
 #  first_name             :text
@@ -30,7 +31,7 @@ FactoryBot.define do
     sign_in_user_id { SecureRandom.uuid }
 
     trait :admin do
-      email { "#{Faker::Internet.username}@#{['digital.education.gov.uk', 'education.gov.uk'].sample}" }
+      admin { true }
     end
 
     trait :with_organisation do
