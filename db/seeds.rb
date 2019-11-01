@@ -26,6 +26,7 @@ superuser = User.create!(
   accept_terms_date_utc: Time.now.utc,
   email: "super.admin@education.gov.uk", # matches authentication.rb
   state: "rolled_over",
+  admin: true,
 )
 
 def create_standard_provider_and_courses_for_cycle(recruitment_cycle, superuser)

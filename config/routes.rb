@@ -1,5 +1,9 @@
 # == Route Map
 #
+# logstash not configured, falling back to standard Rails logging
+# Raven 2.12.2 configured not to capture errors: DSN not set
+# DEPRECATION WARNING: Using `bin/rake routes` is deprecated and will be removed in Rails 6.1. Use `bin/rails routes` instead.
+#  (called from load at /Users/Dan/.rbenv/versions/2.6.1/bin/rake:23)
 #                                                                 Prefix Verb   URI Pattern                                                                                                                      Controller#Action
 #                                                                   ping GET    /ping(.:format)                                                                                                                  health_checks#ping
 #                                                       api_v1_providers GET    /api/v1(/:recruitment_year)/providers(.:format)                                                                                  api/v1/providers#index {:recruitment_year=>/2020|2021/}

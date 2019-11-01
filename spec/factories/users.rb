@@ -3,6 +3,7 @@
 # Table name: user
 #
 #  accept_terms_date_utc  :datetime
+#  admin                  :boolean          default(FALSE)
 #  email                  :text
 #  first_login_date_utc   :datetime
 #  first_name             :text
@@ -43,6 +44,10 @@ FactoryBot.define do
 
     trait :inactive do
       accept_terms_date_utc { nil }
+    end
+
+    trait :is_admin do
+      admin { true }
     end
   end
 end
