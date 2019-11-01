@@ -2,28 +2,39 @@
 #
 # Table name: provider
 #
-#  id                   :integer          not null, primary key
-#  address4             :text
-#  provider_name        :text
-#  scheme_member        :text
-#  contact_name         :text
-#  year_code            :text
-#  provider_code        :text
-#  provider_type        :text
-#  postcode             :text
-#  website                  :text
-#  address1             :text
-#  address2             :text
-#  address3             :text
-#  email                :text
-#  telephone            :text
-#  region_code          :integer
-#  created_at           :datetime         not null
-#  updated_at           :datetime         not null
-#  accrediting_provider :text
-#  last_published_at    :datetime
-#  changed_at           :datetime         not null
-#  recruitment_cycle_id :integer          not null
+#  accrediting_provider             :text
+#  accrediting_provider_enrichments :jsonb
+#  address1                         :text
+#  address2                         :text
+#  address3                         :text
+#  address4                         :text
+#  changed_at                       :datetime         not null
+#  contact_name                     :text
+#  created_at                       :datetime         not null
+#  discarded_at                     :datetime
+#  email                            :text
+#  id                               :integer          not null, primary key
+#  last_published_at                :datetime
+#  postcode                         :text
+#  provider_code                    :text
+#  provider_name                    :text
+#  provider_type                    :text
+#  recruitment_cycle_id             :integer          not null
+#  region_code                      :integer
+#  scheme_member                    :text
+#  telephone                        :text
+#  train_with_disability            :text
+#  train_with_us                    :text
+#  updated_at                       :datetime         not null
+#  website                          :text
+#  year_code                        :text
+#
+# Indexes
+#
+#  IX_provider_last_published_at                             (last_published_at)
+#  index_provider_on_changed_at                              (changed_at) UNIQUE
+#  index_provider_on_discarded_at                            (discarded_at)
+#  index_provider_on_recruitment_cycle_id_and_provider_code  (recruitment_cycle_id,provider_code) UNIQUE
 #
 
 require "rails_helper"

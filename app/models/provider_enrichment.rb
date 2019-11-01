@@ -2,16 +2,23 @@
 #
 # Table name: provider_enrichment
 #
-#  id                 :integer          not null, primary key
-#  provider_code      :text             not null
-#  json_data          :jsonb
-#  updated_by_user_id :integer          not null
 #  created_at         :datetime         not null
-#  updated_at         :datetime         not null
 #  created_by_user_id :integer          not null
+#  id                 :integer          not null, primary key
+#  json_data          :jsonb
 #  last_published_at  :datetime
-#  status             :integer          default("draft"), not null
+#  provider_code      :text             not null
 #  provider_id        :integer          not null
+#  status             :integer          default("draft"), not null
+#  updated_at         :datetime         not null
+#  updated_by_user_id :integer          not null
+#
+# Indexes
+#
+#  IX_provider_enrichment_created_by_user_id  (created_by_user_id)
+#  IX_provider_enrichment_provider_code       (provider_code)
+#  IX_provider_enrichment_updated_by_user_id  (updated_by_user_id)
+#  index_provider_enrichment_on_provider_id   (provider_id)
 #
 
 class ProviderEnrichment < ApplicationRecord
