@@ -37,7 +37,7 @@ steps:
     DOCKER_OVERRIDE: $(dockerOverride)
     dockerHubUsername: $(dockerHubUsername)
     dockerHubImageName: $(imageName)
-    CC_TEST_REPORTER_ID: $(cc_Reporter_ID)
+    CC_TEST_REPORTER_ID: $(ccReporterID)
 - script: |
     $DOCKER_OVERRIDE exec -T web /bin/sh -c 'bundle exec rake spec SPEC_OPTS="--format RspecJunitFormatter --out ./rspec-results.xml"'
   displayName: 'Execute tests'
