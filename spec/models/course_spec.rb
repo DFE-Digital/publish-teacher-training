@@ -533,9 +533,7 @@ describe Course, type: :model do
                applications_open_from: applications_open_from)
       end
 
-      let(:subject) {
-        course
-      }
+      subject { course }
 
       context "no site statuses" do
         context "applications_open_from is in present or past" do
