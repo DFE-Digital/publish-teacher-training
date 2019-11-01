@@ -41,7 +41,6 @@ describe "GET v3/providers/:provider_code" do
           "provider_code" => provider.provider_code,
           "provider_name" => provider.provider_name,
           "accredited_body?" => false,
-          "can_add_more_sites?" => true,
           "train_with_us" => provider.train_with_us,
           "train_with_disability" => provider.train_with_disability,
           "address1" => provider.address1,
@@ -54,26 +53,11 @@ describe "GET v3/providers/:provider_code" do
           "email" => provider.email,
           "website" => provider.website,
           "recruitment_cycle_year" => provider.recruitment_cycle.year,
-          "content_status" => provider.content_status.to_s,
-          "last_published_at" => provider.last_published_at,
           "accredited_bodies" => [{
             "provider_code" => accrediting_provider.provider_code,
             "provider_name" => accrediting_provider.provider_name,
             "description" => description,
           }],
-          "admin_contact" => {
-            "name" => contact.name,
-            "email" => contact.email,
-            "telephone" => contact.telephone,
-          },
-          "utt_contact" => nil,
-          "web_link_contact" => nil,
-          "fraud_contact" => nil,
-          "finance_contact" => nil,
-          "gt12_contact" => provider.ucas_preferences.gt12_response_destination.to_s,
-          "application_alert_contact" => provider.ucas_preferences.application_alert_email,
-          "type_of_gt12" => provider.ucas_preferences.type_of_gt12.to_s,
-          "send_application_alerts" =>  provider.ucas_preferences.send_application_alerts,
         },
         "relationships" => {
           "sites" => {
@@ -121,7 +105,6 @@ describe "GET v3/providers/:provider_code" do
             "provider_code" => provider.provider_code,
             "provider_name" => provider.provider_name,
             "accredited_body?" => false,
-            "can_add_more_sites?" => true,
             "train_with_us" => provider.train_with_us,
             "train_with_disability" => provider.train_with_disability,
             "address1" => provider.address1,
@@ -134,26 +117,11 @@ describe "GET v3/providers/:provider_code" do
             "email" => provider.email,
             "website" => provider.website,
             "recruitment_cycle_year" => provider.recruitment_cycle.year,
-            "content_status" => provider.content_status.to_s,
-            "last_published_at" => provider.last_published_at,
             "accredited_bodies" => [{
               "provider_code" => accrediting_provider.provider_code,
               "provider_name" => accrediting_provider.provider_name,
               "description" => description,
             }],
-            "admin_contact" => {
-              "name" => contact.name,
-              "email" => contact.email,
-              "telephone" => contact.telephone,
-            },
-            "utt_contact" => nil,
-            "web_link_contact" => nil,
-            "fraud_contact" => nil,
-            "finance_contact" => nil,
-            "gt12_contact" => provider.ucas_preferences.gt12_response_destination.to_s,
-            "application_alert_contact" => provider.ucas_preferences.application_alert_email,
-            "type_of_gt12" => provider.ucas_preferences.type_of_gt12.to_s,
-            "send_application_alerts" =>  provider.ucas_preferences.send_application_alerts,
           },
           "relationships" => {
             "sites" => {
@@ -192,22 +160,6 @@ describe "GET v3/providers/:provider_code" do
           "version" => "1.0",
         },
       )
-    end
-  end
-
-  context "with the maximum number of sites" do
-    let(:sites) {
-      [*"A".."Z", "0", "-", *"1".."9"].map { |code|
-        build(:site, code: code)
-      }
-    }
-    let(:provider) { create(:provider, sites: sites, organisations: [organisation]) }
-
-    it "has can_add_more_sites? set to false" do
-      perform_request
-
-      expect(json_response["data"])
-        .to have_attribute(:can_add_more_sites?).with_value(false)
     end
   end
 
