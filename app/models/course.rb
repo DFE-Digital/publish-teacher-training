@@ -184,16 +184,6 @@ class Course < ApplicationRecord
       .courses.find_by(course_code: course_code)
   end
 
-  # To stop the API sending not valid values we have to write our own setter to ensure we get
-  # correct booleans stored.
-  def is_send=(value)
-    if value.to_s.in?(%w[true false 0 1])
-      super(value)
-    else
-      super(nil)
-    end
-  end
-
   def recruitment_cycle
     provider.recruitment_cycle
   end

@@ -1368,13 +1368,6 @@ describe Course, type: :model do
 
       its(:is_send) { is_expected.to be(false) }
     end
-
-    context "when value is a string that is not like a boolean" do
-      let(:value) { "blah-blah" }
-
-      its(:is_send) { is_expected.to be_nil }
-      it { is_expected.to_not be_valid }
-    end
   end
 
   describe "#self_accredited?" do

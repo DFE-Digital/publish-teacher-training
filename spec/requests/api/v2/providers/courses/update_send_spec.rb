@@ -87,17 +87,4 @@ describe "PATCH /providers/:provider_code/courses/:course_code" do
       expect(course.reload.is_send).to eq(@is_send)
     end
   end
-
-  context "for any course" do
-    context "when a bad `is_send` is submitted" do
-      let(:json_data) { JSON.parse(response.body)["errors"] }
-      let(:updated_is_send) { { is_send: "blah_blah" } }
-
-      it "returns an error" do
-        expect(response).to have_http_status(:unprocessable_entity)
-        expect(json_data.count).to eq 1
-        expect(response.body).to include("Invalid is_send")
-      end
-    end
-  end
 end
