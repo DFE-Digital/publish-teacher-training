@@ -45,7 +45,7 @@ class Course < ApplicationRecord
   after_initialize :set_defaults
 
   before_discard do
-    raise "You cannot delete a running course (Course: #{self}, Provider: #{provider_id})" if ucas_status != :new
+    raise "You cannot delete the running course #{self}" unless ucas_status == :new
   end
 
   has_associated_audits
@@ -115,22 +115,24 @@ class Course < ApplicationRecord
       # for validations later down non-trivial.
       latest_draft_enrichment = select(&:draft?).last
 
-      latest_draft_enrichment.presence || new(new_draft_attributes)
+      latest_draft_enrichment || new(new_draft_attributes)
     end
 
     def new_draft_attributes
       latest_published_enrichment = latest_first.published.first
 
-      new_enrichments_attributes = { status: :draft }.with_indifferent_access
-
       if latest_published_enrichment.present?
-        published_enrichment_attributes = latest_published_enrichment.dup.attributes.with_indifferent_access
-          .except(:json_data, :status)
+        latest_published_enrichment_attributes = latest_published_enrichment
+          .dup
+          .attributes
+          .with_indifferent_access
+          .except(:json_data)
 
-        new_enrichments_attributes.merge!(published_enrichment_attributes)
+        latest_published_enrichment_attributes[:status] = :draft
+        latest_published_enrichment_attributes
+      else
+        { status: :draft }.with_indifferent_access
       end
-
-      new_enrichments_attributes
     end
   end
 

@@ -1302,7 +1302,7 @@ describe Course, type: :model do
           create(:site_status, :running, :published, site: site, course: course)
 
           expect { course.discard }.to raise_error(
-            "You cannot delete a running course (Course: #{course}, Provider: #{course.provider_id})",
+            "You cannot delete the running course #{course}",
           )
         end
       end
