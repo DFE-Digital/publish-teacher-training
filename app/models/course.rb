@@ -281,24 +281,8 @@ class Course < ApplicationRecord
 
   def content_status
     newest_enrichment = enrichments.latest_first.first
-
-    if newest_enrichment.nil?
-      if next_recruitment_cycle?
-        :rolled_over
-      else
-        :empty
-      end
-    elsif newest_enrichment.published?
-      :published
-    elsif newest_enrichment.withdrawn?
-      :withdrawn
-    elsif newest_enrichment.has_been_published_before?
-      :published_with_unpublished_changes
-    elsif newest_enrichment.rolled_over?
-      :rolled_over
-    else
-      :draft
-    end
+    content_status_service = Courses::ContentStatusService.new
+    content_status_service.execute(newest_enrichment, next_recruitment_cycle?)
   end
 
   def ucas_status
