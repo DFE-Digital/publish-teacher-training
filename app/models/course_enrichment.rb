@@ -2,17 +2,23 @@
 #
 # Table name: course_enrichment
 #
-#  id                           :integer          not null, primary key
-#  created_by_user_id           :integer
+#  course_id                    :integer          not null
 #  created_at                   :datetime         not null
-#  provider_code                :text             not null
+#  created_by_user_id           :integer
+#  id                           :integer          not null, primary key
 #  json_data                    :jsonb
 #  last_published_timestamp_utc :datetime
+#  provider_code                :text             not null
 #  status                       :integer          not null
 #  ucas_course_code             :text             not null
-#  updated_by_user_id           :integer
 #  updated_at                   :datetime         not null
-#  course_id                    :integer          not null
+#  updated_by_user_id           :integer
+#
+# Indexes
+#
+#  IX_course_enrichment_created_by_user_id  (created_by_user_id)
+#  IX_course_enrichment_updated_by_user_id  (updated_by_user_id)
+#  index_course_enrichment_on_course_id     (course_id)
 #
 
 class CourseEnrichment < ApplicationRecord

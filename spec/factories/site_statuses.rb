@@ -2,13 +2,17 @@
 #
 # Table name: course_site
 #
-#  id                         :integer          not null, primary key
-#  applications_accepted_from :date
-#  course_id                  :integer
-#  publish                    :text
-#  site_id                    :integer
-#  status                     :text
-#  vac_status                 :text
+#  course_id  :integer
+#  id         :integer          not null, primary key
+#  publish    :text
+#  site_id    :integer
+#  status     :text
+#  vac_status :text
+#
+# Indexes
+#
+#  IX_course_site_course_id  (course_id)
+#  IX_course_site_site_id    (site_id)
 #
 
 FactoryBot.define do

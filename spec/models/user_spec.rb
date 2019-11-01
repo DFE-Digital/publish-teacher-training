@@ -2,17 +2,21 @@
 #
 # Table name: user
 #
-#  id                     :integer          not null, primary key
-#  email                  :text
-#  first_name             :text
-#  last_name              :text
-#  first_login_date_utc   :datetime
-#  last_login_date_utc    :datetime
-#  sign_in_user_id        :text
-#  welcome_email_date_utc :datetime
-#  invite_date_utc        :datetime
 #  accept_terms_date_utc  :datetime
+#  email                  :text
+#  first_login_date_utc   :datetime
+#  first_name             :text
+#  id                     :integer          not null, primary key
+#  invite_date_utc        :datetime
+#  last_login_date_utc    :datetime
+#  last_name              :text
+#  sign_in_user_id        :text
 #  state                  :string           not null
+#  welcome_email_date_utc :datetime
+#
+# Indexes
+#
+#  IX_user_email  (email) UNIQUE
 #
 
 require "rails_helper"

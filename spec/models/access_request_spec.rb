@@ -2,16 +2,20 @@
 #
 # Table name: access_request
 #
-#  id               :integer          not null, primary key
 #  email_address    :text
 #  first_name       :text
+#  id               :integer          not null, primary key
 #  last_name        :text
 #  organisation     :text
 #  reason           :text
 #  request_date_utc :datetime         not null
+#  requester_email  :text
 #  requester_id     :integer
 #  status           :integer          not null
-#  requester_email  :text
+#
+# Indexes
+#
+#  IX_access_request_requester_id  (requester_id)
 #
 
 require "rails_helper"

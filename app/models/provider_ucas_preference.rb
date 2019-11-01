@@ -2,14 +2,18 @@
 #
 # Table name: provider_ucas_preference
 #
+#  application_alert_email   :text
+#  created_at                :datetime         not null
+#  gt12_response_destination :text
 #  id                        :bigint           not null, primary key
 #  provider_id               :integer          not null
-#  type_of_gt12              :text
 #  send_application_alerts   :text
-#  application_alert_email   :text
-#  gt12_response_destination :text
-#  created_at                :datetime         not null
+#  type_of_gt12              :text
 #  updated_at                :datetime         not null
+#
+# Indexes
+#
+#  index_provider_ucas_preference_on_provider_id  (provider_id)
 #
 
 class ProviderUCASPreference < ApplicationRecord
