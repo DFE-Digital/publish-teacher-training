@@ -12,8 +12,7 @@ variables:
   imageNameBgFindSync: 'manage-courses-bg-find-sync'
   # Support multiple docker-compose files to allow travis and az pipelines to co exist: https://docs.docker.com/compose/extends/#multiple-compose-files
   dockerOverride: 'docker-compose -f docker-compose.yml -f docker-compose.az.yml'
-  cc_Reporter_ID: 'de006d3ac97520a939b8c9b67af12b9e85438b9e9fd4255e78651800b36f48ae'
-  AGENT_JOBSTATUS: $(Agent.JobStatus)
+
 steps:
 - script: |
     GIT_SHORT_SHA=$(echo $(Build.SourceVersion) | cut -c 1-7)
@@ -38,7 +37,7 @@ steps:
     DOCKER_OVERRIDE: $(dockerOverride)
     dockerHubUsername: $(dockerHubUsername)
     dockerHubImageName: $(imageName)
-    CC_TEST_REPORTER_ID: $(cc_Reporter_ID)
+    CC_TEST_REPORTER_ID: $(ccReporterID)
 - script: |
     $DOCKER_OVERRIDE exec -T web /bin/sh -c 'bundle exec rake spec SPEC_OPTS="--format RspecJunitFormatter --out ./rspec-results.xml"'
   displayName: 'Execute tests'
@@ -60,7 +59,7 @@ steps:
     DOCKER_OVERRIDE: $(dockerOverride)
     dockerHubUsername: $(dockerHubUsername)
     dockerHubImageName: $(imageName)
-    CC_TEST_REPORTER_ID: $(cc_Reporter_ID)
+    CC_TEST_REPORTER_ID: $(ccReporterID)
     AGENT_JOBSTATUS: $(Agent.JobStatus)
 - task: Docker@1
   displayName: Tag image with current build number $(Build.BuildNumber)
