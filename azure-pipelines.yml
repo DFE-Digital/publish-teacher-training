@@ -12,7 +12,6 @@ variables:
   imageNameBgFindSync: 'manage-courses-bg-find-sync'
   # Support multiple docker-compose files to allow travis and az pipelines to co exist: https://docs.docker.com/compose/extends/#multiple-compose-files
   dockerOverride: 'docker-compose -f docker-compose.yml -f docker-compose.az.yml'
-  cc_Reporter_ID: '$(ccReporterID)'
 
 steps:
 - script: |
@@ -60,7 +59,7 @@ steps:
     DOCKER_OVERRIDE: $(dockerOverride)
     dockerHubUsername: $(dockerHubUsername)
     dockerHubImageName: $(imageName)
-    CC_TEST_REPORTER_ID: $(cc_Reporter_ID)
+    CC_TEST_REPORTER_ID: $(ccReporterID)
     AGENT_JOBSTATUS: $(Agent.JobStatus)
 - task: Docker@1
   displayName: Tag image with current build number $(Build.BuildNumber)
