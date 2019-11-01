@@ -65,8 +65,8 @@ describe User, type: :model do
   end
 
   describe "#admin?" do
-    context "user has an education.gov.uk email" do
-      subject! { create(:user, email: "test@education.gov.uk") }
+    context "user is an admin" do
+      subject! { create(:user, :admin) }
 
       its(:admin?) { should be_truthy }
 
@@ -79,40 +79,10 @@ describe User, type: :model do
       end
     end
 
-    context "user has a digital.education.gov.uk email" do
-      subject! { create(:user, email: "test@digital.education.gov.uk") }
-
-      its(:admin?) { should be_truthy }
-
-      it "shows up in User.admins" do
-        expect(User.admins).to eq([subject])
-      end
-
-      it "doesn't show up in User.non_admins" do
-        expect(User.non_admins).to be_empty
-      end
-    end
-
-    context "user does not have a digital.education.gov.uk or education.gov.uk email" do
-      subject { create(:user, email: email) }
+    context "user is not an admin" do
+      subject { create(:user) }
 
       context "when other domain" do
-        let(:email) { "test@hrmc.gov.uk" }
-
-        its(:admin?) { should be_falsey }
-
-        it "is a non-admin user" do
-          expect(User.non_admins).to eq([subject])
-        end
-
-        it "is not an admin" do
-          expect(User.admins).to be_empty
-        end
-      end
-
-      context 'when an email has a domain similar but not identical to "digital.education.gov.uk"' do
-        let(:email) { "test@digitalaeducationagov.uk" }
-
         its(:admin?) { should be_falsey }
 
         it "is a non-admin user" do

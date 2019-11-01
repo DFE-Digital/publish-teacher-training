@@ -11,7 +11,7 @@ class UserPolicy
   end
 
   def remove_access_to?
-    user == accessed_user || user.admin?
+    user.admin? || user == accessed_user
   end
 
   alias_method :update?, :show?

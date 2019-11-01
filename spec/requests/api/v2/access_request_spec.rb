@@ -2,7 +2,7 @@ require "rails_helper"
 
 describe "Access Request API V2", type: :request do
   # Specify a fixed admin email to avoid randomisation from the factory, must qualify as #admin?
-  let(:admin_user) { create(:user, email: "super.admin@digital.education.gov.uk") }
+  let(:admin_user) { create(:user, :admin) }
   let(:requesting_user) { create(:user, organisations: [organisation]) }
   let(:requested_user) { create(:user) }
   let(:organisation) { create(:organisation) }

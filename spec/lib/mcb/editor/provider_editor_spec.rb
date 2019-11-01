@@ -18,7 +18,7 @@ describe MCB::Editor::ProviderEditor, :needs_audit_user do
   subject { described_class.new(provider: provider, requester: requester) }
 
   context "when an authorised user" do
-    let!(:requester) { create(:user, email: email, organisations: provider.organisations) }
+    let!(:requester) { create(:user, :admin, email: email, organisations: provider.organisations) }
 
     describe "runs the editor" do
       it "updates the provider name" do

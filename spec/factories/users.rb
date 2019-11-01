@@ -31,7 +31,7 @@ FactoryBot.define do
     sign_in_user_id { SecureRandom.uuid }
 
     trait :admin do
-      email { "#{Faker::Internet.username}@#{['digital.education.gov.uk', 'education.gov.uk'].sample}" }
+      admin { true }
     end
 
     trait :with_organisation do
@@ -44,10 +44,6 @@ FactoryBot.define do
 
     trait :inactive do
       accept_terms_date_utc { nil }
-    end
-
-    trait :is_admin do
-      admin { true }
     end
   end
 end

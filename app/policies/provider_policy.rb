@@ -10,7 +10,11 @@ class ProviderPolicy
     end
 
     def resolve
-      scope.where(id: user.providers)
+      if user.admin?
+        scope.all
+      else
+        scope.where(id: user.providers)
+      end
     end
   end
 
@@ -24,7 +28,7 @@ class ProviderPolicy
   end
 
   def show?
-    user.providers.include?(provider)
+    user.admin? || user.providers.include?(provider)
   end
 
   def create?
