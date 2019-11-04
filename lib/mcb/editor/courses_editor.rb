@@ -116,7 +116,7 @@ module MCB
       def edit_subjects
         course.subjects = @cli.multiselect(
           initial_items: course.subjects.to_a,
-          possible_items: ::CourseAssignableSubjectService.new.execute(course),
+          possible_items: ServiceContainer.new.get(:courses, :assignable_subjects).execute(course),
         )
         course.ensure_modern_languages
         course.reload

@@ -1,4 +1,4 @@
-require 'dry/container'
+require "dry/container"
 
 class ServiceContainer
   def initialize
@@ -29,7 +29,7 @@ private
       Sites::CopyToProviderService.new
     end
 
-    define(:enrichments, :copy_to_course) do
+    define(:course_enrichments, :copy_to_course) do
       Enrichments::CopyToCourseService.new
     end
 

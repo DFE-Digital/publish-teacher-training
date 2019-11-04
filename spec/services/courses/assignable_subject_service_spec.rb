@@ -1,4 +1,4 @@
-describe CourseAssignableSubjectService do
+describe Courses::AssignableSubjectService do
   let(:service) do
     described_class.new(
       primary_subject: primary_model,
