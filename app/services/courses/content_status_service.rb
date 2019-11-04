@@ -1,8 +1,8 @@
 module Courses
   class ContentStatusService
-    def execute(enrichment, next_cycle_boolean)
+    def execute(enrichment, recruitment_cycle)
       if !enrichment.present?
-        if next_cycle_boolean
+        if recruitment_cycle.next?
           :rolled_over
         else
           :empty

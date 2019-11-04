@@ -2,14 +2,14 @@ require "rails_helper"
 
 describe Courses::ContentStatusService do
   let(:service) { described_class.new }
-  let(:execute_service) { service.execute(enrichment, next_cycle_boolean) }
-  let(:next_cycle_boolean) { false }
+  let(:execute_service) { service.execute(enrichment, recruitment_cycle) }
+  let(:recruitment_cycle) { find_or_create(:recruitment_cycle) }
 
   context "when the enrichment parameter is nil" do
     let(:enrichment) { nil }
 
     context "and belongs to the next recruitment" do
-      let(:next_cycle_boolean) { true }
+      let(:recruitment_cycle) { find_or_create(:recruitment_cycle, :next) }
 
       it "returns rolled over" do
         expect(execute_service).to eq :rolled_over
