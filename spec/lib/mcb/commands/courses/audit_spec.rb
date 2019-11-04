@@ -7,7 +7,8 @@ describe "mcb courses audit" do
     end
   end
 
-  let(:admin_user) { create :user, :admin, email: "h@i" }
+  let(:admin_email) { "aa@education.gov.uk" }
+  let(:admin_user) { create :user, :admin, email: admin_email }
 
   let(:recruitment_year1) { create :recruitment_cycle, :next }
   let(:recruitment_year2) { RecruitmentCycle.current_recruitment_cycle }
@@ -40,14 +41,14 @@ describe "mcb courses audit" do
       )[:stdout]
 
       expect(output).to have_text_table_row(admin_user.id,
-                                            "h@i",
+                                            admin_email,
                                             "update",
                                             "",
                                             "",
                                             '{"name"=>["P", "Y"],')
 
       expect(output).not_to have_text_table_row(admin_user.id,
-                                                "h@i",
+                                                admin_email,
                                                 "update",
                                                 "",
                                                 "",
@@ -70,14 +71,14 @@ describe "mcb courses audit" do
       )[:stdout]
 
       expect(output).to have_text_table_row(admin_user.id,
-                                            "h@i",
+                                            admin_email,
                                             "update",
                                             "",
                                             "",
                                             '{"name"=>["P", "B"],')
 
       expect(output).not_to have_text_table_row(admin_user.id,
-                                                "h@i",
+                                                admin_email,
                                                 "update",
                                                 "",
                                                 "",
