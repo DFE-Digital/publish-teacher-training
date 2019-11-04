@@ -98,6 +98,7 @@
 #                                                  api_v2_access_request GET    /api/v2/access_requests/:id(.:format)                                                                                            api/v2/access_requests#show
 #                                                                        PATCH  /api/v2/access_requests/:id(.:format)                                                                                            api/v2/access_requests#update
 #                                                                        PUT    /api/v2/access_requests/:id(.:format)                                                                                            api/v2/access_requests#update
+#                                                                        DELETE /api/v2/access_requests/:id(.:format)                                                                                            api/v2/access_requests#destroy
 #                                                api_v2_build_new_course GET    /api/v2/build_new_course(.:format)                                                                                               api/v2/courses#build_new
 #                              api_v3_recruitment_cycle_provider_courses GET    /api/v3/recruitment_cycles/:recruitment_cycle_year/providers/:provider_code/courses(.:format)                                    api/v3/courses#index
 #                               api_v3_recruitment_cycle_provider_course GET    /api/v3/recruitment_cycles/:recruitment_cycle_year/providers/:provider_code/courses/:code(.:format)                              api/v3/courses#show
@@ -165,7 +166,7 @@ Rails.application.routes.draw do
       resource :sessions
       resources :site_statuses, only: :update
 
-      resources :access_requests, only: %i[update index create show] do
+      resources :access_requests, except: :edit do
         post :approve, on: :member
       end
 

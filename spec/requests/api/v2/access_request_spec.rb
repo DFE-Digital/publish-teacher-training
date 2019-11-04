@@ -184,6 +184,20 @@ describe "Access Request API V2", type: :request do
          )
       end
     end
+
+    context "when discarded" do
+      let(:first_access_request) do
+        access_request = create(:access_request)
+        access_request.discard
+        access_request
+      end
+
+      before do
+        access_requests_show_route
+      end
+
+      it { should have_http_status(:not_found) }
+    end
   end
 
   describe "POST #approve" do
@@ -375,6 +389,23 @@ describe "Access Request API V2", type: :request do
           expect(json_data[4]["source"]["pointer"]).to eq("/data/attributes/reason")
         end
       end
+    end
+  end
+
+  describe "DELETE #destroy" do
+    let(:first_access_request) do
+      access_request = create(:access_request)
+      access_request.discard
+      access_request
+    end
+
+    before do
+      delete "/api/v2/access_requests/#{first_access_request.id}",
+             headers: { "HTTP_AUTHORIZATION" => credentials }
+    end
+
+    it "should add a discarded_at timestamp" do
+      expect(first_access_request.discarded_at).to be_within(1.second).of(Time.now.utc)
     end
   end
 end

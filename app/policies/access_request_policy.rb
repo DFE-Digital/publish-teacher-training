@@ -15,4 +15,5 @@ class AccessRequestPolicy
 
   alias_method :index?, :approve?
   alias_method :show?, :approve?
+  alias_method :destroy?, :approve?
 end

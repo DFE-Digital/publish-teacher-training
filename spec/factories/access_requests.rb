@@ -2,6 +2,7 @@
 #
 # Table name: access_request
 #
+#  discarded_at     :datetime
 #  email_address    :text
 #  first_name       :text
 #  id               :integer          not null, primary key
@@ -15,7 +16,8 @@
 #
 # Indexes
 #
-#  IX_access_request_requester_id  (requester_id)
+#  IX_access_request_requester_id        (requester_id)
+#  index_access_request_on_discarded_at  (discarded_at)
 #
 
 FactoryBot.define do
