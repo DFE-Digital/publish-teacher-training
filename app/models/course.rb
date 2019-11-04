@@ -544,7 +544,7 @@ private
   def validate_site_statuses_publishable
     site_statuses.each do |site_status|
       unless site_status.valid?
-        raise RuntimeError.new("Site status invalid: #{site_status.errors.full_messages.first}")
+        raise RuntimeError.new("Site status invalid on course #{provider.provider_code}/#{course_code}: #{site_status.errors.full_messages.first}")
       end
     end
   end
