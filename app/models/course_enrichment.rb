@@ -8,9 +8,7 @@
 #  id                           :integer          not null, primary key
 #  json_data                    :jsonb
 #  last_published_timestamp_utc :datetime
-#  provider_code                :text             not null
 #  status                       :integer          not null
-#  ucas_course_code             :text             not null
 #  updated_at                   :datetime         not null
 #  updated_by_user_id           :integer
 #
@@ -23,7 +21,6 @@
 
 class CourseEnrichment < ApplicationRecord
   include TouchCourse
-  before_create :set_defaults
   enum status: %i[draft published rolled_over withdrawn]
 
   jsonb_accessor :json_data,
@@ -123,13 +120,5 @@ class CourseEnrichment < ApplicationRecord
 
   def withdraw
     update(status: "withdrawn")
-  end
-
-private
-
-  def set_defaults
-    # NOTE: Both ucas_course_code & provider_code can be removed after C# counterpart is retired.
-    self.ucas_course_code = course.course_code
-    self.provider_code = course.provider.provider_code
   end
 end

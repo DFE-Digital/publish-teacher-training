@@ -22,7 +22,7 @@ module API
         per_page = params[:per_page] || 100
         changed_since = params[:changed_since]
         ActiveRecord::Base.transaction do
-          ActiveRecord::Base.connection.execute("LOCK provider, provider_enrichment, site IN SHARE UPDATE EXCLUSIVE MODE")
+          ActiveRecord::Base.connection.execute("LOCK provider, site IN SHARE UPDATE EXCLUSIVE MODE")
           @providers = @recruitment_cycle
                          .providers
                          .includes(:sites, :ucas_preferences, :contacts)

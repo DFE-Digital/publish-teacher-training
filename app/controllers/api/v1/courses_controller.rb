@@ -11,7 +11,7 @@ module API
         changed_since = params[:changed_since]
 
         ActiveRecord::Base.transaction do
-          ActiveRecord::Base.connection.execute("LOCK provider, provider_enrichment, site IN SHARE UPDATE EXCLUSIVE MODE")
+          ActiveRecord::Base.connection.execute("LOCK provider, site IN SHARE UPDATE EXCLUSIVE MODE")
 
           @courses = @recruitment_cycle
              .courses
