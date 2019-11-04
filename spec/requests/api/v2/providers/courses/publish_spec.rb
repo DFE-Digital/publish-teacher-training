@@ -214,6 +214,27 @@ describe "Publish API v2", type: :request do
           end
         end
       end
+
+      context "an inconsistent course and site status", focus: true do
+        let(:course) {
+          create(:course,
+                 provider: provider,
+                 study_mode: "full_time",
+                 enrichments: [enrichment],
+                 site_statuses: [build(:site_status, :new, :full_time_vacancies)])
+        }
+
+        before do
+          course.update_attribute(:study_mode, "part_time")
+        end
+
+        it "raises an error" do
+          expect { subject }.to(raise_error(
+                                  RuntimeError,
+                                  "Site status invalid: Vac status (full_time_vacancies) must be consistent with course study mode part_time",
+               ))
+        end
+      end
     end
   end
 end

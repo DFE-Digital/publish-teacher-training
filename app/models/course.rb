@@ -163,6 +163,7 @@ class Course < ApplicationRecord
   validates :level, presence: { message: "^There is a problem with this course. Contact support to fix it (Error: L)" }, on: :publish
   validates :subjects, presence: true, on: :publish
   validate :validate_enrichment_publishable, on: :publish
+  validate :validate_site_statuses_publishable, on: :publish
   validate :validate_enrichment
   validate :validate_course_syncable, on: :sync
   validate :validate_qualification, on: :update
@@ -538,6 +539,14 @@ private
 
   def validate_enrichment_publishable
     validate_enrichment :publish
+  end
+
+  def validate_site_statuses_publishable
+    site_statuses.each do |site_status|
+      unless site_status.valid?
+        raise RuntimeError.new("Site status invalid: #{site_status.errors.full_messages.first}")
+      end
+    end
   end
 
   def set_defaults
