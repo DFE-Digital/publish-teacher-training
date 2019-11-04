@@ -41,6 +41,11 @@ class User < ApplicationRecord
   validates :email, presence: true, format: { with: /@/, message: "must contain @" }
   validate :email_is_lowercase
 
+  validates :email, if: :admin?, format: {
+    with: /@(digital\.){0,1}education\.gov\.uk\z/,
+    message: "must be an @[digital.]education.gov.uk domain",
+  }
+
   audited
 
   aasm column: "state" do
