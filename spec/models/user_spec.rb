@@ -125,7 +125,7 @@ describe User, type: :model do
     describe "one organisation" do
       before do
         subject.organisations = [organisation, other_organisation]
-        subject.remove_access_to organisation
+        subject.remove_access_to(organisation)
       end
 
       it "removes the right organisation"do

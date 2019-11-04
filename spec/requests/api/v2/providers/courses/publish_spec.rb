@@ -215,7 +215,7 @@ describe "Publish API v2", type: :request do
         end
       end
 
-      context "an inconsistent course and site status", focus: true do
+      context "an inconsistent course and site status" do
         let(:course) {
           create(:course,
                  provider: provider,

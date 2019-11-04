@@ -47,6 +47,16 @@ describe Organisation, type: :model do
   describe "auditing" do
     it { should be_audited }
     it { should have_associated_audits }
+
+    it "a destroyed user" do
+      user = create(:user)
+      user.save!
+      organisation = create(:organisation)
+      organisation.add_user(user)
+      user.remove_access_to(organisation)
+      organisation.reload
+      expect(organisation.associated_audits.last.action).to eq("destroy")
+    end
   end
 
   describe "#add_user" do
