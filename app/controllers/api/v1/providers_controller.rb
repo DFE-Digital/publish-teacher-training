@@ -5,20 +5,7 @@ module API
 
       before_action :build_recruitment_cycle
 
-      # Potential edge case:
-      #
-      # It is possible for older updated_at values to written to the database
-      # after this API has been queried for changes. This would mean that these
-      # changes are missed when the client makes a subsequent request using the
-      # next-link.
-      #
-      # Possible causes of older updated_at values:
-      # - delay between c# calculating datetime.UtcNow and value being written
-      #   to postgres
-      # - clock drift between servers
       def index
-        # only return 2019 courses until rollover is supported
-
         per_page = params[:per_page] || 100
         changed_since = params[:changed_since]
         ActiveRecord::Base.transaction do
