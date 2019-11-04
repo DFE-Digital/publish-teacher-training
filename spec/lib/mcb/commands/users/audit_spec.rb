@@ -7,11 +7,11 @@ describe "mcb users audit" do
       "#{lib_dir}/mcb/commands/users/audit.rb",
     )
   end
+  let(:admin_email) { "aa@education.gov.uk" }
+  let(:admin_user) { create :user, :admin, email: admin_email }
+  let(:user) { create :user, email: "a@a" }
 
   it "shows the list of changes for a given user" do
-    user = create(:user, email: "a@a")
-    admin_user = create :user, :admin, email: "h@i"
-
     Audited.store[:audited_user] = admin_user
     user.update(email: "b@b")
 
@@ -21,7 +21,7 @@ describe "mcb users audit" do
     output = output[:stdout]
 
     expect(output).to have_text_table_row(admin_user.id,
-                                          "h@i",
+                                          admin_email,
                                           "update",
                                           "",
                                           "",
@@ -29,9 +29,6 @@ describe "mcb users audit" do
   end
 
   it "allows specifying user by email" do
-    user = create(:user, email: "a@a")
-    admin_user = create :user, :admin, email: "h@i"
-
     Audited.store[:audited_user] = admin_user
     user.update(email: "b@b")
 
@@ -41,7 +38,7 @@ describe "mcb users audit" do
     output = output[:stdout]
 
     expect(output).to have_text_table_row(admin_user.id,
-                                          "h@i",
+                                          admin_email,
                                           "update",
                                           "",
                                           "",
@@ -49,9 +46,6 @@ describe "mcb users audit" do
   end
 
   it "allows specifying user by sign-in id" do
-    user = create(:user, email: "a@a")
-    admin_user = create :user, :admin, email: "h@i"
-
     Audited.store[:audited_user] = admin_user
     user.update(email: "b@b")
 
@@ -61,7 +55,7 @@ describe "mcb users audit" do
     output = output[:stdout]
 
     expect(output).to have_text_table_row(admin_user.id,
-                                          "h@i",
+                                          admin_email,
                                           "update",
                                           "",
                                           "",

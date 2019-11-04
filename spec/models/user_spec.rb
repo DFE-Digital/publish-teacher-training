@@ -31,11 +31,19 @@ describe User, type: :model do
     it { should have_many(:providers).through(:organisations) }
   end
 
-  it { is_expected.to validate_presence_of(:email).with_message("must contain @") }
-  its(:to_s) { should eq("Jane Smith <jsmith@scitt.org>") }
+  describe "validations" do
+    it { is_expected.to validate_presence_of(:email).with_message("must contain @") }
+    it { should_not allow_value("CAPS_IN_EMAIL@ACME.ORG").for(:email) }
+    it { should_not allow_value("email_without_at").for(:email) }
 
-  it { should_not allow_value("CAPS_IN_EMAIL@ACME.ORG").for(:email) }
-  it { should_not allow_value("email_without_at").for(:email) }
+    context "for an admin-user" do
+      subject { create(:user, :admin) }
+      it { should_not allow_value("general.public@example.org").for(:email) }
+      it { should_not allow_value("some.provider@devon.gov.uk").for(:email) }
+      it { should allow_value("bobs.your.uncle@digital.education.gov.uk").for(:email) }
+      it { should allow_value("right.malarky@education.gov.uk").for(:email) }
+    end
+  end
 
   describe "auditing" do
     it { should be_audited }
@@ -62,6 +70,10 @@ describe User, type: :model do
     end
 
     it { should be_rolled_over }
+  end
+
+  describe "#to_s" do
+    its(:to_s) { should eq("Jane Smith <jsmith@scitt.org>") }
   end
 
   describe "#admin?" do
