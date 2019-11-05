@@ -57,7 +57,7 @@ end
 RSpec::Matchers.define :have_cell_containing do |text|
   match do |table_output|
     cells = get_row_and_column_cells_in_output(table_output)
-    cells.any? { |cell| cell.match?(text) }
+    cells.any? { |cell| cell&.match?(text) }
   end
 
   def get_row_and_column_cells_in_output(table_output)
