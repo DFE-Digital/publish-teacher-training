@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_11_01_211119) do
+ActiveRecord::Schema.define(version: 2019_11_04_160651) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_buffercache"
@@ -101,11 +101,9 @@ ActiveRecord::Schema.define(version: 2019_11_01_211119) do
   create_table "course_enrichment", id: :serial, force: :cascade do |t|
     t.integer "created_by_user_id"
     t.datetime "created_at", default: -> { "timezone('utc'::text, now())" }, null: false
-    t.text "provider_code", null: false
     t.jsonb "json_data"
     t.datetime "last_published_timestamp_utc"
     t.integer "status", null: false
-    t.text "ucas_course_code", null: false
     t.integer "updated_by_user_id"
     t.datetime "updated_at", default: -> { "timezone('utc'::text, now())" }, null: false
     t.integer "course_id", null: false
@@ -220,22 +218,6 @@ ActiveRecord::Schema.define(version: 2019_11_01_211119) do
     t.index ["recruitment_cycle_id", "provider_code"], name: "index_provider_on_recruitment_cycle_id_and_provider_code", unique: true
   end
 
-  create_table "provider_enrichment", id: :serial, force: :cascade do |t|
-    t.text "provider_code", null: false
-    t.jsonb "json_data"
-    t.integer "updated_by_user_id", null: false
-    t.datetime "created_at", default: -> { "timezone('utc'::text, now())" }, null: false
-    t.datetime "updated_at", default: -> { "timezone('utc'::text, now())" }, null: false
-    t.integer "created_by_user_id", null: false
-    t.datetime "last_published_at"
-    t.integer "status", default: 0, null: false
-    t.integer "provider_id", null: false
-    t.index ["created_by_user_id"], name: "IX_provider_enrichment_created_by_user_id"
-    t.index ["provider_code"], name: "IX_provider_enrichment_provider_code"
-    t.index ["provider_id"], name: "index_provider_enrichment_on_provider_id"
-    t.index ["updated_by_user_id"], name: "IX_provider_enrichment_updated_by_user_id"
-  end
-
   create_table "provider_ucas_preference", force: :cascade do |t|
     t.integer "provider_id", null: false
     t.text "type_of_gt12"
@@ -318,9 +300,6 @@ ActiveRecord::Schema.define(version: 2019_11_01_211119) do
   add_foreign_key "organisation_user", "\"user\"", column: "user_id", name: "FK_organisation_user_user_user_id"
   add_foreign_key "organisation_user", "organisation", name: "FK_organisation_user_organisation_organisation_id"
   add_foreign_key "provider", "recruitment_cycle"
-  add_foreign_key "provider_enrichment", "\"user\"", column: "created_by_user_id", name: "FK_provider_enrichment_user_created_by_user_id"
-  add_foreign_key "provider_enrichment", "\"user\"", column: "updated_by_user_id", name: "FK_provider_enrichment_user_updated_by_user_id"
-  add_foreign_key "provider_enrichment", "provider"
   add_foreign_key "provider_ucas_preference", "provider", name: "fk_provider_ucas_preference__provider"
   add_foreign_key "session", "\"user\"", column: "user_id", name: "FK_session_user_user_id", on_delete: :cascade
   add_foreign_key "site", "provider", name: "FK_site_provider_provider_id", on_delete: :cascade

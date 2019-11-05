@@ -8,9 +8,7 @@
 #  id                           :integer          not null, primary key
 #  json_data                    :jsonb
 #  last_published_timestamp_utc :datetime
-#  provider_code                :text             not null
 #  status                       :integer          not null
-#  ucas_course_code             :text             not null
 #  updated_at                   :datetime         not null
 #  updated_by_user_id           :integer
 #
