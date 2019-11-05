@@ -1,0 +1,4 @@
+# This is to allow specs to be run in parallel without falling over
+# See discussion on https://github.com/DFE-Digital/manage-courses-backend/pull/970
+---
+BUNDLE_DISABLE_EXEC_LOAD: "true"

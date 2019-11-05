@@ -29,8 +29,8 @@ If you are going to login with a user who hasn't recieved the welcome email - yo
 ### Native
 
 0. If you haven't already, follow this [tutorial](https://gorails.com/setup) to setup your Rails environment, make sure to install PostgreSQL 9.6 as the database
-1. Run `bundle install` to install the gem dependencies
-2. Run `bundle exec rails db:setup` to create a development and testing database
+1. Run `bundle install` to install the gem dependencies.
+2. Run `bundle exec rails db:setup` to create a development and testing database.
 3. Run `bundle exec rails server` to launch the app on http://localhost:3001.
 
 ### Docker
@@ -55,10 +55,6 @@ docker-compose exec web /bin/sh -c "bundle exec rails db:setup"
 
 Then open http://localhost:3001 to see the app.
 
-## Running specs, linter (with auto correct) and annotate models and serializers
-```
-bundle exec rake
-```
 
 ## Running specs
 ```
@@ -71,6 +67,19 @@ Or through guard (`--no-interactions` allows the use of `pry` inside tests):
 bundle exec guard --no-interactions
 ```
 
+## Running specs in parallel
+
+When running specs in parallel for the first time you will first need to set up
+your test databases. 
+
+`bundle exec rails parallel:setup`
+
+To run the specs in parallel:
+`bundle exec rails parallel:spec`
+
+To drop the test databases:
+`bundle exec rails parallel:drop`
+
 ## Linting
 
 It's best to lint just your app directories and not those belonging to the framework:
@@ -81,6 +90,12 @@ bundle exec rubocop app config db lib spec --format clang
 or
 
 docker-compose exec web /bin/sh -c "bundle exec rubocop app config db lib spec Gemfile --format clang"
+```
+
+## Running specs, linter (with auto correct) and annotate models and serializers
+
+```
+bundle exec rake
 ```
 
 ## Accessing API

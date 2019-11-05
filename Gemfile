@@ -110,6 +110,9 @@ group :development, :test do
   # GOV.UK interpretation of rubocop for linting Ruby
   gem "govuk-lint"
 
+  # run specs in parallel
+  gem "parallel_tests"
+
   # A little extra console goodness
   gem "pry"
   gem "pry-byebug"
