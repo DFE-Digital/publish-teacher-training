@@ -15,6 +15,7 @@ module API
           ),
         )
 
+        record_first_login
         send_welcome_email
 
         render jsonapi: @current_user
@@ -32,6 +33,10 @@ module API
             :first_name,
             :last_name,
           )
+      end
+
+      def record_first_login
+        RecordFirstLoginService.new.execute(current_user: @current_user)
       end
 
       def send_welcome_email
