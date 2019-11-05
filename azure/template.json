@@ -380,7 +380,7 @@
               },
               {
                 "name": "REDIS_URL",
-                "value": "[concat ('redis://',parameters('redisCacheName'),'.redis.cache.windows.net:6379')]"
+                "value": "[concat ('rediss://',parameters('redisCacheName'),'.redis.cache.windows.net:6380')]"
               },
               {
                 "name": "WEBSITE_SLOT_POLL_WORKER_FOR_CHANGE_NOTIFICATION",
@@ -572,7 +572,7 @@
               },
               {
                 "name": "REDIS_URL",
-                "value": "[concat ('redis://',parameters('redisCacheName'),'.redis.cache.windows.net:6379')]"
+                "value": "[concat ('rediss://',parameters('redisCacheName'),'.redis.cache.windows.net:6380')]"
               },
               {
                 "name": "SETTINGS__LOGSTASH__HOST",
