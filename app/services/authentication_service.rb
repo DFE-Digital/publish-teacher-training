@@ -7,13 +7,12 @@ class AuthenticationService
 
   def execute(encoded_token)
     @encoded_token = encoded_token
-    @user = user_by_sign_in_user_id || user_by_email
-
-    update_user_information
-
-    user
-  rescue DuplicateUserError => e
-    Raven.capture(e)
+    begin
+      @user = user_by_sign_in_user_id || user_by_email
+      update_user_information
+    rescue DuplicateUserError => e
+      Raven.capture(e)
+    end
 
     user
   end
@@ -121,7 +120,7 @@ private
     else
       logger.debug("Updating user email for " + {
         user: log_safe_user(user),
-        new_email_md5: md5_email(email_from_token),
+        new_email_md5: "MD5:#{obfuscate_email(email_from_token)}",
       }.to_s)
 
       user.update(email: email_from_token)
@@ -146,8 +145,8 @@ private
     user.update(last_name: last_name_from_token)
   end
 
-  def log_safe_user(user, reload: false)
-    if @log_safe_user.nil? || reload
+  def log_safe_user(user)
+    if @log_safe_user.nil?
       @log_safe_user = user.slice(
         "id",
         "state",
@@ -158,14 +157,12 @@ private
         "invite_date_utc",
         "accept_terms_date_utc",
       )
-      @log_safe_user.merge!(
-        Hash[user.slice("email").map { |k, v| [k + "_md5", Digest::MD5.hexdigest(v)] }],
-      )
+      @log_safe_user["email_md5"] = obfuscate_email(user[:email])
     end
     @log_safe_user
   end
 
-  def md5_email(email)
-    "MD5:" + Digest::MD5.hexdigest(email)
+  def obfuscate_email(email)
+    Digest::MD5.hexdigest(email)
   end
 end

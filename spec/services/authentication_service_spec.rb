@@ -8,7 +8,7 @@ describe AuthenticationService do
     let(:logger_spy) { spy }
     let(:payload) do
       {
-        email:           email,
+        email: email,
         sign_in_user_id: sign_in_user_id,
         first_name: first_name,
         last_name: last_name,
