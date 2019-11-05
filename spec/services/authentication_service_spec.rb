@@ -1,5 +1,5 @@
 describe AuthenticationService do
-  describe ".call" do
+  describe "#execute" do
     let(:user) { create(:user) }
     let(:email) { user.email }
     let(:first_name) { user.first_name }
@@ -14,7 +14,7 @@ describe AuthenticationService do
       }
     end
 
-    subject { described_class.call(encode_token(payload)) }
+    subject { described_class.new.execute(encode_token(payload)) }
 
     def encode_token(payload)
       JWT.encode(

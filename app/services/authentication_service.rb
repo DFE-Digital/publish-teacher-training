@@ -1,15 +1,8 @@
 class AuthenticationService
   attr_accessor :encoded_token, :user
 
-  def self.call(encoded_token)
-    new(encoded_token).call
-  end
-
-  def initialize(encoded_token)
+  def execute(encoded_token)
     @encoded_token = encoded_token
-  end
-
-  def call
     @user = user_by_sign_in_user_id || user_by_email
 
     update_user_information
