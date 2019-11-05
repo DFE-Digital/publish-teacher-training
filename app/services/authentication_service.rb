@@ -1,6 +1,10 @@
 class AuthenticationService
   attr_accessor :encoded_token, :user
 
+  def initialize(logger:)
+    @logger = logger
+  end
+
   def execute(encoded_token)
     @encoded_token = encoded_token
     @user = user_by_sign_in_user_id || user_by_email
@@ -16,9 +20,7 @@ class AuthenticationService
 
 private
 
-  def logger
-    Rails.logger
-  end
+  attr_reader :logger
 
   def decoded_token
     @decoded_token ||= JWT.decode(

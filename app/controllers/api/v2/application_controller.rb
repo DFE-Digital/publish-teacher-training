@@ -9,7 +9,7 @@ module API
 
       def authenticate
         authenticate_or_request_with_http_token do |token|
-          @current_user = AuthenticationService.new.execute(token)
+          @current_user = AuthenticationService.new(logger: Rails.logger).execute(token)
           assign_sentry_contexts
           assign_logstash_contexts
           @current_user.present?

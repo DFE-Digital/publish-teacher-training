@@ -5,6 +5,7 @@ describe AuthenticationService do
     let(:first_name) { user.first_name }
     let(:last_name) { user.last_name }
     let(:sign_in_user_id) { user.sign_in_user_id }
+    let(:logger_spy) { spy }
     let(:payload) do
       {
         email:           email,
@@ -13,8 +14,9 @@ describe AuthenticationService do
         last_name: last_name,
       }
     end
+    let(:service) { described_class.new(logger: logger_spy) }
 
-    subject { described_class.new.execute(encode_token(payload)) }
+    subject { service.execute(encode_token(payload)) }
 
     def encode_token(payload)
       JWT.encode(
