@@ -102,8 +102,10 @@ describe "mcb providers list" do
 
       command_output = execute_list(arguments: ["-r", additional_cycle.year])[:stdout]
 
-      expect(command_output).to include(course2.course_code)
-      expect(command_output).to include(course2.name)
+      expect(command_output)
+        .to have_cell_containing(course2.course_code).at_column(2)
+      expect(command_output)
+        .to have_cell_containing(course2.name).at_column(3)
 
       expect(command_output)
         .not_to have_cell_containing(course1.course_code).at_column(2)
