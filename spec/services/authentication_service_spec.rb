@@ -39,6 +39,16 @@ describe AuthenticationService do
       it "Sets the users last name" do
         expect { subject }.to(change { user.reload.last_name }.to(last_name))
       end
+
+      it "Safely logs that the user was found by sign_in_user_id" do
+        subject
+        expect(logger_spy).to have_received(:debug) do |*_args, &block|
+          message = block.call
+          expect(message).to start_with("User found from sign_in_user_id in token")
+          expect(message).to include("sign_in_user_id=>\"#{sign_in_user_id}\"")
+          expect(message).not_to include(user.email)
+        end
+      end
     end
 
     context "with a valid DfE-SignIn ID but invalid email" do
@@ -47,6 +57,11 @@ describe AuthenticationService do
       it { should eq user }
       it "update's the user's email" do
         expect { subject }.to(change { user.reload.email }.to(email))
+      end
+
+      it "Should log that the users email was updated" do
+        subject
+        expect(logger_spy).to have_received(:debug).with(/Updating user email for/)
       end
 
       context "when the email is already in use" do
@@ -73,6 +88,16 @@ describe AuthenticationService do
       it { should eq user }
       it "update's the user's SignIn ID" do
         expect { subject }.to(change { user.reload.sign_in_user_id }.to(sign_in_user_id))
+      end
+
+      it "Safely logs that the user was found by their email" do
+        subject
+
+        expect(logger_spy).to have_received(:debug) do |*_args, &block|
+          message = block.call
+          expect(message).to start_with("User found by email address")
+          expect(message).not_to include(user.email)
+        end
       end
     end
 
@@ -113,6 +138,11 @@ describe AuthenticationService do
       it "does not authenticate the user based on an empty string match" do
         expect(subject).not_to eq user
       end
+
+      it "Logs that there was no email in the token" do
+        subject
+        expect(logger_spy).to have_received(:debug).with("No email in token")
+      end
     end
 
     context "when the sign_in_user_id is nil" do
@@ -122,6 +152,11 @@ describe AuthenticationService do
 
       it "does not authenticate the user based on a nil match" do
         expect(subject).not_to eq user
+      end
+
+      it "Logs that there was no signin user id in the token" do
+        subject
+        expect(logger_spy).to have_received(:debug).with("No sign_in_user_id in token")
       end
     end
 

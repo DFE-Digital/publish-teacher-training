@@ -83,10 +83,12 @@ private
 
     user = User.find_by(sign_in_user_id: sign_in_user_id_from_token)
     if user
-      logger.debug("User found from sign_in_user_id in token " + {
+      logger.debug {
+        "User found from sign_in_user_id in token " + {
                      sign_in_user_id: sign_in_user_id_from_token,
                      user: log_safe_user(user),
-                   }.to_s)
+                   }.to_s
+      }
     end
     user
   end
