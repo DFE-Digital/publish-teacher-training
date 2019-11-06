@@ -111,7 +111,7 @@ describe AccessRequest, type: :model do
   end
 
   describe "default scope" do
-    context "discared records should not be returned" do
+    context "discarded records should not be returned" do
       let(:access_request1) { create(:access_request) }
       let(:access_request2) { create(:access_request) }
       let(:access_request3) { create(:access_request) }
