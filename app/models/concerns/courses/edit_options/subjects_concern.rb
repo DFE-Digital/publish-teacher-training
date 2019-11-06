@@ -8,7 +8,7 @@ module Courses
         #
         # https://github.com/DFE-Digital/manage-courses-frontend/blob/master/spec/factories/courses.rb
         def potential_subjects
-          ServiceContainer.new.get(:courses, :assignable_master_subjects).execute(self)
+          self.assignable_master_subjects
         end
 
         def available_modern_languages

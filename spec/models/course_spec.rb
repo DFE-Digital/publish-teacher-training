@@ -1464,4 +1464,43 @@ describe Course, type: :model do
       end
     end
   end
+
+  describe "#generate_name" do
+    it "Generates a title using the correct service" do
+      expect(course).to(
+        delegate_method_to_service(
+          :generate_name,
+          "Courses::GenerateCourseTitleService",
+        ).with_arguments(
+          course: course,
+        ),
+      )
+    end
+  end
+
+  describe "#assignable_master_subjects" do
+    it "Returns the master subjects using the correct service" do
+      expect(course).to(
+        delegate_method_to_service(
+          :assignable_master_subjects,
+          "Courses::AssignableMasterSubjectService"
+        ).with_arguments(
+          course: course
+        )
+      )
+    end
+  end
+
+  describe "#assignable_subjects" do
+    it "Returns the subjects using the correct service" do
+      expect(course).to(
+        delegate_method_to_service(
+          :assignable_subjects,
+          "Courses::AssignableSubjectService"
+        ).with_arguments(
+          course: course
+        )
+      )
+    end
+  end
 end

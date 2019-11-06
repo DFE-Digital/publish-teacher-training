@@ -10,7 +10,7 @@ module Courses
       @further_education_subject = further_education_subject
     end
 
-    def execute(course)
+    def execute(course:)
       case course.level
       when "primary"
         @primary_subject.all

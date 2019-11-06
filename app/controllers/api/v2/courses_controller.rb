@@ -25,7 +25,7 @@ module API
         update_subjects
         update_sites
         @course.assign_attributes(course_params)
-        @course.name = @services.get(:courses, :generate_course_title).execute(course: @course)
+        @course.name = @course.generate_name
         @course.valid?
 
         # https://github.com/jsonapi-rb/jsonapi-rails/issues/113
@@ -132,8 +132,7 @@ module API
         @course.assign_attributes(course_params.merge(course_code: course_code))
         update_subjects
         update_sites
-
-        @course.name = @services.get(:courses, :generate_course_title).execute(course: @course)
+        @course.name = @course.generate_name
 
         if @course.save
           render jsonapi: @course.reload
@@ -176,8 +175,7 @@ module API
         return if subject_ids.nil?
 
         @course.subjects = Subject.where(id: subject_ids)
-        generate_course_title_service = Courses::GenerateCourseTitleService.new
-        @course.name = generate_course_title_service.execute(course: @course)
+        @course.name = @course.generate_name
         @course.save
       end
 

@@ -1,20 +1,8 @@
 module Courses
   class RegisterServices
     def self.execute(container)
-      container.define(:courses, :assignable_master_subjects) do
-        Courses::AssignableMasterSubjectService.new
-      end
-
-      container.define(:courses, :assignable_subjects) do
-        Courses::AssignableSubjectService.new
-      end
-
       container.define(:courses, :generate_course_code) do
         Courses::GenerateCourseCodeService.new
-      end
-
-      container.define(:courses, :generate_course_title) do
-        Courses::GenerateCourseTitleService.new
       end
 
       container.define(:courses, :generate_unique_course_code) do

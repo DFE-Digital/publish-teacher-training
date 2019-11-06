@@ -188,6 +188,10 @@ class Course < ApplicationRecord
     provider.recruitment_cycle
   end
 
+  def generate_name
+    services[:generate_course_title].execute(course: self)
+  end
+
   def accrediting_provider_description
     return nil if accrediting_provider.blank?
 
@@ -439,6 +443,14 @@ class Course < ApplicationRecord
     end
   end
 
+  def assignable_master_subjects
+    services[:assignable_master_subjects].execute(course: self)
+  end
+
+  def assignable_subjects
+    services[:assignable_subjects].execute(course: self)
+  end
+
 private
 
   def withdraw_latest_enrichment
@@ -607,5 +619,20 @@ private
 
   def valid_date_range
     recruitment_cycle.application_start_date..recruitment_cycle.application_end_date
+  end
+
+  def services
+    return @services if @services.present?
+
+    @services = Dry::Container.new
+    @services.register(:generate_course_title) do
+      Courses::GenerateCourseTitleService.new
+    end
+    @services.register(:assignable_master_subjects) do
+      Courses::AssignableMasterSubjectService.new
+    end
+    @services.register(:assignable_subjects) do
+      Courses::AssignableSubjectService.new
+    end
   end
 end

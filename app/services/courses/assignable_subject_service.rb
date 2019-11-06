@@ -14,7 +14,7 @@ module Courses
       @modern_languages_parent_subject = modern_languages_parent_subject
     end
 
-    def execute(course)
+    def execute(course:)
       case course.level
       when "primary"
         @primary_subject.all
