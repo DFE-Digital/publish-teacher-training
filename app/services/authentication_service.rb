@@ -1,15 +1,12 @@
 class AuthenticationService
   attr_accessor :encoded_token, :user
 
-  def self.call(encoded_token)
-    new(encoded_token).call
+  def initialize(logger:)
+    @logger = logger
   end
 
-  def initialize(encoded_token)
+  def execute(encoded_token)
     @encoded_token = encoded_token
-  end
-
-  def call
     @user = user_by_sign_in_user_id || user_by_email
 
     update_user_information
@@ -23,9 +20,7 @@ class AuthenticationService
 
 private
 
-  def logger
-    Rails.logger
-  end
+  attr_reader :logger
 
   def decoded_token
     @decoded_token ||= JWT.decode(
@@ -88,10 +83,12 @@ private
 
     user = User.find_by(sign_in_user_id: sign_in_user_id_from_token)
     if user
-      logger.debug("User found from sign_in_user_id in token " + {
+      logger.debug {
+        "User found from sign_in_user_id in token " + {
                      sign_in_user_id: sign_in_user_id_from_token,
                      user: log_safe_user(user),
-                   }.to_s)
+                   }.to_s
+      }
     end
     user
   end
