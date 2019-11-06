@@ -73,12 +73,6 @@
         "description": "The name of the database that the app will connect to."
       }
     },
-    "databaseServerHostName": {
-      "type": "string",
-      "metadata": {
-        "description": "The fqdn of the psql server hosting the database."
-      }
-    },
     "databasePort": {
       "type": "string",
       "metadata": {
@@ -179,7 +173,7 @@
         "description": "The name or role of the container to identify individual containers in multi-container setup."
       }
     },
-    "mcbeSystemAuthenticationToken":{
+    "mcbeSystemAuthenticationToken": {
       "type": "string",
       "defaultValue": "",
       "metadata": {
@@ -218,6 +212,12 @@
         "description": "The port number for the logstash server connection."
       }
     },
+    "securityAlertEmail": {
+      "type": "string",
+      "metadata": {
+        "description": "The email address to be used for psql security alerts."
+      }
+    },
     "backgroundContainerImageReference": {
       "type": "string",
       "metadata": {
@@ -235,7 +235,8 @@
     "appServiceRuntimeStack": "[concat('DOCKER|', parameters('dockerHubUsername'), '/', parameters('containerImageReference'))]",
     "databaseResourceNamePrefix": "[toLower(concat(parameters('resourceEnvironmentName'),'-', parameters('databaseServiceName')))]",
     "databaseServerName": "[concat(variables('databaseResourceNamePrefix'), '-psql')]",
-    "databaseResourceGroup": "[concat(variables('databaseResourceNamePrefix'), '-rg')]"
+    "databaseUsername": "[concat(parameters('databaseUsername'), '@', variables('databaseServerName'))]",
+    "storageAccountName": "[replace(concat(variables('resourceNamePrefix'), 'str'), '-', '')]"
   },
   "resources": [
     {
@@ -328,7 +329,7 @@
               },
               {
                 "name": "DB_HOSTNAME",
-                "value": "[parameters('databaseServerHostName')]"
+                "value": "[reference('postgresql-server').outputs.fullyQualifiedDomainName.value]"
               },
               {
                 "name": "DB_PASSWORD",
@@ -336,7 +337,7 @@
               },
               {
                 "name": "DB_USERNAME",
-                "value": "[parameters('databaseUsername')]"
+                "value": "[variables('databaseUsername')]"
               },
               {
                 "name": "DB_PORT",
@@ -433,11 +434,81 @@
       ]
     },
     {
-      "condition": "[greater(length(parameters('databaseServiceName')),0)]",
-      "apiVersion": "2017-05-10",
-      "name": "mcbe-postgresql-server-firewall-rules",
+      "name": "storage-account",
       "type": "Microsoft.Resources/deployments",
-      "resourceGroup": "[variables('databaseResourceGroup')]",
+      "apiVersion": "2017-05-10",
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(variables('deploymentUrlBase'), 'storage-account.json')]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "storageAccountName": {
+            "value": "[variables('storageAccountName')]"
+          }
+        }
+      }
+    },
+    {
+      "apiVersion": "2017-05-10",
+      "name": "postgresql-server",
+      "type": "Microsoft.Resources/deployments",
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(variables('deploymentUrlBase'),'postgresql-server.json')]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "postgresServerName": {
+            "value": "[variables('databaseServerName')]"
+          },
+          "postgresAdminLogin": {
+            "value": "[parameters('databaseUsername')]"
+          },
+          "postgresAdminPassword": {
+            "value": "[parameters('databasePassword')]"
+          },
+          "securityAlertEmailAddress": {
+            "value": "[parameters('securityAlertEmail')]"
+          },
+          "storageAccountName": {
+            "value": "[variables('storageAccountName')]"
+          }
+        }
+      },
+      "dependsOn": [
+        "storage-account"
+      ]
+    },
+    {
+      "apiVersion": "2017-05-10",
+      "name": "postgresql-database",
+      "type": "Microsoft.Resources/deployments",
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(variables('deploymentUrlBase'),'postgresql-database.json')]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "serverName": {
+            "value": "[variables('databaseServerName')]"
+          },
+          "databaseName": {
+            "value": "[parameters('databaseName')]"
+          }
+        }
+      },
+      "dependsOn": [
+        "postgresql-server"
+      ]
+    },
+    {
+      "apiVersion": "2017-05-10",
+      "name": "postgresql-server-firewall-rules",
+      "type": "Microsoft.Resources/deployments",
       "properties": {
         "mode": "Incremental",
         "templateLink": {
@@ -456,7 +527,9 @@
           }
         }
       },
-      "dependsOn": []
+      "dependsOn": [
+        "postgresql-server"
+      ]
     },
     {
       "apiVersion": "2017-05-10",
@@ -518,10 +591,10 @@
           "imageName": {
             "value": "[parameters('backgroundContainerImageReference')]"
           },
-          "numberCpuCores":{
+          "numberCpuCores": {
             "value": "[parameters('containerCPUCores')]"
           },
-          "memory":{
+          "memory": {
             "value": "[parameters('containerMemory')]"
           },
           "environmentVariables": {
@@ -536,7 +609,7 @@
               },
               {
                 "name": "DB_HOSTNAME",
-                "value": "[parameters('databaseServerHostName')]"
+                "value": "[reference('postgresql-server').outputs.fullyQualifiedDomainName.value]"
               },
               {
                 "name": "DB_PASSWORD",
@@ -544,7 +617,7 @@
               },
               {
                 "name": "DB_USERNAME",
-                "value": "[parameters('databaseUsername')]"
+                "value": "[variables('databaseUsername')]"
               },
               {
                 "name": "DB_PORT",
