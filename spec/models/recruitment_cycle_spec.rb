@@ -132,5 +132,18 @@ describe RecruitmentCycle, type: :model do
         expect(second_cycle.next).to eq(third_cycle)
       end
     end
+
+    describe "next?" do
+      let(:current_cycle) { find_or_create :recruitment_cycle }
+      let(:next_cycle) { find_or_create :recruitment_cycle, :next }
+
+      it "should return true when it's the next cycle" do
+        expect(next_cycle.next?).to be(true)
+      end
+
+      it "should return true false it's not the next cycle" do
+        expect(current_cycle.next?).to be(false)
+      end
+    end
   end
 end

@@ -836,48 +836,19 @@ describe Course, type: :model do
   end
 
   describe "content_status" do
-    let(:course) { create :course, enrichments: [enrichment] }
+    let(:course) { create :course, enrichments: [enrichment1, enrichment2] }
+    let(:enrichment1) {  build(:course_enrichment, :subsequent_draft, created_at: Time.now) }
+    let(:enrichment2) {  build(:course_enrichment, :published, created_at: 1.minute.ago) }
+    let(:service_spy) { spy(execute: :published_with_unpublished_changes) }
+    let(:content_status) { course.content_status }
 
-    context "when enrichment is published" do
-      let(:enrichment) { create :course_enrichment, status: :published }
-
-      subject { course.content_status }
-
-      it { should eq :published }
+    before do
+      stub_const("Courses::ContentStatusService", double(new: service_spy))
+      content_status
     end
 
-    context "when enrichment is rolled-over" do
-      let(:enrichment) { create :course_enrichment, status: :rolled_over }
-
-      subject { course.content_status }
-
-      it { should eq :rolled_over }
-    end
-
-    context "when there are no enrichments" do
-      let(:course) { create :course, enrichments: [] }
-
-      subject { course.content_status }
-
-      it { should eq :empty }
-    end
-
-    context "when there are no enrichments and the course is rolled-over" do
-      let(:next_recruitment_cycle) { create :recruitment_cycle, :next }
-      let(:next_provider) { create :provider, recruitment_cycle: next_recruitment_cycle }
-      let(:course) { create :course, provider: next_provider, enrichments: [] }
-
-      subject { course.content_status }
-
-      it { should eq :rolled_over }
-    end
-
-    context "When the enrichments are withdrawn" do
-      let(:enrichment) { create :course_enrichment, status: :withdrawn }
-
-      it "should have a content status of withdrawn" do
-        expect(course.content_status).to eq(:withdrawn)
-      end
+    it "should pass the latest enrichment to the service" do
+      expect(service_spy).to have_received(:execute) { |enrichment| expect(enrichment.id).to eq(enrichment1.id) }
     end
   end
 

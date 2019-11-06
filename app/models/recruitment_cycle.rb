@@ -41,6 +41,10 @@ class RecruitmentCycle < ApplicationRecord
     RecruitmentCycle.find_by(year: year.to_i + 1)
   end
 
+  def next?
+    RecruitmentCycle.next_recruitment_cycle == self
+  end
+
   def current?
     RecruitmentCycle.current_recruitment_cycle == self
   end
