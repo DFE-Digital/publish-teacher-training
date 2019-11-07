@@ -285,8 +285,7 @@ class Course < ApplicationRecord
 
   def content_status
     newest_enrichment = enrichments.latest_first.first
-    content_status_service = Courses::ContentStatusService.new
-    content_status_service.execute(newest_enrichment, recruitment_cycle)
+    services[:content_status].execute(enrichment: newest_enrichment, recruitment_cycle: recruitment_cycle)
   end
 
   def ucas_status
@@ -633,6 +632,9 @@ private
     end
     @services.register(:assignable_subjects) do
       Courses::AssignableSubjectService.new
+    end
+    @services.register(:content_status) do
+      Courses::ContentStatusService.new
     end
   end
 end

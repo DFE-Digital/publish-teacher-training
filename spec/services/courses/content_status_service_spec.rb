@@ -2,7 +2,7 @@ require "rails_helper"
 
 describe Courses::ContentStatusService do
   let(:service) { described_class.new }
-  let(:execute_service) { service.execute(enrichment, recruitment_cycle) }
+  let(:execute_service) { service.execute(enrichment: enrichment, recruitment_cycle: recruitment_cycle) }
   let(:recruitment_cycle) { find_or_create(:recruitment_cycle) }
 
   context "when the enrichment parameter is nil" do

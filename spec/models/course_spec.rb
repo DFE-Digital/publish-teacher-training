@@ -842,13 +842,11 @@ describe Course, type: :model do
     let(:service_spy) { spy(execute: :published_with_unpublished_changes) }
     let(:content_status) { course.content_status }
 
-    before do
-      stub_const("Courses::ContentStatusService", double(new: service_spy))
-      content_status
-    end
-
-    it "should pass the latest enrichment to the service" do
-      expect(service_spy).to have_received(:execute) { |enrichment| expect(enrichment.id).to eq(enrichment1.id) }
+    it "Delegate the method to the service" do
+      expect(course).to delegate_method_to_service(
+        :content_status,
+        "Courses::ContentStatusService",
+      ).with_arguments(enrichment: enrichment1, recruitment_cycle: recruitment_cycle)
     end
   end
 
