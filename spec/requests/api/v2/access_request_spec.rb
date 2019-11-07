@@ -176,6 +176,7 @@ describe "Access Request API V2", type: :request do
               "email" => first_access_request.requester.email,
               "accept_terms_date_utc" => first_access_request.requester.accept_terms_date_utc.utc.strftime("%FT%T.%3NZ"),
               "state" => first_access_request.requester.state,
+              "admin" => first_access_request.requester.admin,
             },
           }],
           "jsonapi" => {

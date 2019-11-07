@@ -44,7 +44,7 @@ module API
       def user_params
         params
           .require(:user)
-          .except(:id, :type)
+          .except(:id, :type, :admin)
           .permit(
             :email,
             :first_name,
