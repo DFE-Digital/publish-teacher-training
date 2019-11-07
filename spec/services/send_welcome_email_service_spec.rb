@@ -17,10 +17,6 @@ describe SendWelcomeEmailService do
 
     before { service.execute(current_user: current_user_spy) }
 
-    it "sets their first login date to now" do
-      expect(current_user_spy).to have_received(:update).with(hash_including(first_login_date_utc: Time.now.utc))
-    end
-
     it "sets their welcome email date to now" do
       expect(current_user_spy).to have_received(:update).with(hash_including(welcome_email_date_utc: Time.now.utc))
     end
