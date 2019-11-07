@@ -4,6 +4,19 @@ require "super_diff/rspec"
 require "fakefs/spec_helpers"
 require "webmock/rspec"
 require "audited-rspec"
+require "simplecov"
+require "simplecov-console"
+
+SimpleCov.formatter = SimpleCov::Formatter::Console
+SimpleCov.start
+# If running specs in parallel this ensures SimpleCov results appears
+# upon completion of all specs
+if ENV["PARALLEL_TEST_GROUPS"]
+  SimpleCov.at_exit do
+    result = SimpleCov.result
+    result.format! if ParallelTests.number_of_running_processes <= 1
+  end
+end
 
 # Pull in all the files in spec/support automatically.
 Dir["./spec/support/**/*.rb"].each { |file| require file }

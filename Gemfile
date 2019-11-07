@@ -110,6 +110,9 @@ group :development, :test do
   # GOV.UK interpretation of rubocop for linting Ruby
   gem "govuk-lint"
 
+  # run specs in parallel
+  gem "parallel_tests"
+
   # A little extra console goodness
   gem "pry"
   gem "pry-byebug"
@@ -164,5 +167,6 @@ group :test do
   gem "rspec_junit_formatter"
   gem "shoulda-matchers", "~> 4.1"
   gem "simplecov", require: false
+  gem "simplecov-console"
   gem "webmock"
 end

@@ -75,6 +75,7 @@ GEM
     annotate (3.0.2)
       activerecord (>= 3.2, < 7.0)
       rake (>= 10.4, < 13.0)
+    ansi (1.5.0)
     api-pagination (4.8.2)
     application_insights (0.5.6)
     ast (2.4.0)
@@ -256,6 +257,8 @@ GEM
     notifications-ruby-client (4.0.0)
       jwt (>= 1.5, < 3)
     parallel (1.17.0)
+    parallel_tests (2.29.2)
+      parallel
     parser (2.6.5.0)
       ast (~> 2.4.0)
     patience_diff (1.1.0)
@@ -385,6 +388,10 @@ GEM
       docile (~> 1.1)
       json (>= 1.8, < 3)
       simplecov-html (~> 0.10.0)
+    simplecov-console (0.5.0)
+      ansi
+      simplecov
+      terminal-table
     simplecov-html (0.10.2)
     spring (2.1.0)
     spring-commands-rspec (1.0.4)
@@ -467,6 +474,7 @@ DEPENDENCIES
   kaminari
   listen (>= 3.0.5, < 3.3)
   logstash-logger (~> 0.26.1)
+  parallel_tests
   pg
   pkg-config (~> 1.4.0)
   pry
@@ -488,6 +496,7 @@ DEPENDENCIES
   sidekiq
   sidekiq-cron
   simplecov
+  simplecov-console
   spring
   spring-commands-rspec
   spring-watcher-listen (~> 2.0.0)
