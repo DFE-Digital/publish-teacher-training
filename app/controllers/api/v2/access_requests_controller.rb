@@ -17,7 +17,11 @@ module API
         authorize AccessRequest
         @access_request = AccessRequest.find(params[:id])
 
-        render jsonapi: @access_request, include: [:requester]
+        if @access_request.discarded?
+          render jsonapi: nil, status: :not_found
+        else
+          render jsonapi: @access_request, include: [:requester]
+        end
       end
 
       def index
@@ -37,6 +41,12 @@ module API
         else
           render jsonapi_errors: @access_request.errors, status: :unprocessable_entity
         end
+      end
+
+      def destroy
+        authorize AccessRequest
+        @access_request = AccessRequest.find(params[:id])
+        @access_request.discard
       end
 
     private

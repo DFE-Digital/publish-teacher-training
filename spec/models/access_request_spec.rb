@@ -2,6 +2,7 @@
 #
 # Table name: access_request
 #
+#  discarded_at     :datetime
 #  email_address    :text
 #  first_name       :text
 #  id               :integer          not null, primary key
@@ -15,7 +16,8 @@
 #
 # Indexes
 #
-#  IX_access_request_requester_id  (requester_id)
+#  IX_access_request_requester_id        (requester_id)
+#  index_access_request_on_discarded_at  (discarded_at)
 #
 
 require "rails_helper"
@@ -106,5 +108,21 @@ describe AccessRequest, type: :model do
     its(:requester)         { should eq user }
     its(:request_date_utc)  { should be_within(1.second).of Time.now.utc }
     its(:status)            { should eq "requested" }
+  end
+
+  describe "default scope" do
+    context "discarded records should not be returned" do
+      let(:access_request1) { create(:access_request) }
+      let(:access_request2) { create(:access_request) }
+      let(:access_request3) { create(:access_request) }
+
+      before do
+        access_request2.discard
+      end
+
+      subject { AccessRequest.all }
+
+      it { should include access_request1, access_request3 }
+    end
   end
 end

@@ -31,6 +31,8 @@ ActiveRecord::Schema.define(version: 2019_11_04_160651) do
     t.integer "requester_id"
     t.integer "status", null: false
     t.text "requester_email"
+    t.datetime "discarded_at"
+    t.index ["discarded_at"], name: "index_access_request_on_discarded_at"
     t.index ["requester_id"], name: "IX_access_request_requester_id"
   end
 
