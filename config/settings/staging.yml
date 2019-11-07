@@ -1,6 +1,3 @@
-manage_api:
-  base_url: https://api.staging.publish-teacher-training-courses.service.gov.uk
-  secret: please_change_me
 search_api:
   base_url: https://api.staging.find-postgraduate-teacher-training.service.gov.uk
   secret: please_change_me
