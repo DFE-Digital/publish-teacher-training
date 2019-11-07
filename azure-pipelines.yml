@@ -38,7 +38,9 @@ steps:
     dockerHubImageName: $(imageName)
     CC_TEST_REPORTER_ID: $(ccReporterID)
 - script: |
-    $DOCKER_OVERRIDE exec -T web /bin/sh -c 'bundle exec rake spec SPEC_OPTS="--format RspecJunitFormatter --out ./rspec-results.xml"'
+    $DOCKER_OVERRIDE exec -T web /bin/sh -c 'bundle config --local disable_exec_load true'
+    $DOCKER_OVERRIDE exec -T web /bin/sh -c 'bundle exec rake parallel:setup'
+    $DOCKER_OVERRIDE exec -T web /bin/sh -c 'bundle exec rake parallel:spec SPEC_OPTS="--format RspecJunitFormatter --out ./rspec-results.xml"'
   displayName: 'Execute tests'
   env:
     DOCKER_OVERRIDE: $(dockerOverride)
