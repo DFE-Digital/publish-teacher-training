@@ -1483,10 +1483,10 @@ describe Course, type: :model do
       expect(course).to(
         delegate_method_to_service(
           :assignable_master_subjects,
-          "Courses::AssignableMasterSubjectService"
+          "Courses::AssignableMasterSubjectService",
         ).with_arguments(
-          course: course
-        )
+          course: course,
+        ),
       )
     end
   end
@@ -1496,10 +1496,10 @@ describe Course, type: :model do
       expect(course).to(
         delegate_method_to_service(
           :assignable_subjects,
-          "Courses::AssignableSubjectService"
+          "Courses::AssignableSubjectService",
         ).with_arguments(
-          course: course
-        )
+          course: course,
+        ),
       )
     end
   end

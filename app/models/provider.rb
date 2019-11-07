@@ -223,6 +223,12 @@ class Provider < ApplicationRecord
     contacts.find_by!(type: type).slice("name", "email", "telephone") if contacts.map(&:type).include?(type)
   end
 
+  def next_available_course_code
+    services[:generate_unique_course_code].execute(
+      existing_codes: courses.pluck(:course_code),
+    )
+  end
+
 private
 
   def accrediting_provider_enrichment(provider_code)
@@ -245,5 +251,16 @@ private
   def set_defaults
     self.scheme_member ||= "is_a_UCAS_ITT_member"
     self.year_code ||= recruitment_cycle.year
+  end
+
+  def services
+    return @services if @services.present?
+
+    @services = Dry::Container.new
+    @services.register(:generate_unique_course_code) do
+      Courses::GenerateUniqueCourseCodeService.new(
+        generate_course_code_service: Courses::GenerateCourseCodeService.new,
+      )
+    end
   end
 end

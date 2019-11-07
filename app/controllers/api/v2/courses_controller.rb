@@ -124,10 +124,7 @@ module API
         authorize @provider, :can_create_course?
         return unless course_params.values.any?
 
-        course_code = @services.get(:courses, :generate_unique_course_code).execute(
-          existing_codes: @provider.courses.pluck(:course_code),
-        )
-
+        course_code = @provider.next_available_course_code
         @course = Course.new(provider: @provider)
         @course.assign_attributes(course_params.merge(course_code: course_code))
         update_subjects

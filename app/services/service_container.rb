@@ -19,7 +19,12 @@ class ServiceContainer
 private
 
   def register_services
-    Courses::RegisterServices.execute(self)
+    define(:courses, :copy_to_provider) do
+      Courses::CopyToProviderService.new(
+        sites_copy_to_course: get(:sites, :copy_to_course),
+        enrichments_copy_to_course: get(:course_enrichments, :copy_to_course),
+      )
+    end
 
     define(:sites, :copy_to_course) do
       Sites::CopyToCourseService.new
