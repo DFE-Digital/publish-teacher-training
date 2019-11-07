@@ -12,4 +12,13 @@ describe API::V2::SerializableUser do
 
   it { should have_type "users" }
   it { should have_attribute(:state).with_value(user.state.to_s) }
+
+  context "when a non admin user" do
+    it { should have_attribute(:admin).with_value(false) }
+  end
+
+  context "when an admin user" do
+    let(:user)     { create :user, :admin }
+    it { should have_attribute(:admin).with_value(true) }
+  end
 end
