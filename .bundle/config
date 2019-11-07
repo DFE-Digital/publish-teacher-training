@@ -1,4 +1,7 @@
 # This is to allow specs to be run in parallel without falling over
+# due to a subtle bug in bundler load paths
+# https://github.com/grosser/parallel_tests/issues/649
+# https://github.com/bundler/bundler/issues/5005#issuecomment-251025953
 # See discussion on https://github.com/DFE-Digital/manage-courses-backend/pull/970
 ---
 BUNDLE_DISABLE_EXEC_LOAD: "true"
