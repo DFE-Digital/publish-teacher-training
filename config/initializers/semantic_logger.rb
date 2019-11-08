@@ -9,7 +9,7 @@ if Settings.logstash.host && Settings.logstash.port
     # event, anyway, so we move it there.
     if event["payload"].present?
       event.append(event["payload"])
-      event["payload"] = event["payload"].to_json
+      event["payload"] = nil
     end
   end
 
