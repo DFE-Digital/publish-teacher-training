@@ -38,11 +38,11 @@ class User < ApplicationRecord
   scope :non_admins, -> { where.not(admin: true) }
   scope :active, -> { where.not(accept_terms_date_utc: nil) }
 
-  validates :email, presence: true, format: { with: /@/, message: "must contain @" }
+  validates :email, presence: true, format: { with: /\A.*@.*\z/, message: "must contain @" }
   validate :email_is_lowercase
 
   validates :email, if: :admin?, format: {
-    with: /@(digital\.){0,1}education\.gov\.uk\z/,
+    with: /\A.*@(digital\.){0,1}education\.gov\.uk\z/,
     message: "must be an @[digital.]education.gov.uk domain",
   }
 
