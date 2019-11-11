@@ -8,4 +8,4 @@ Rails.application.load_tasks
 
 task lint: ["lint:ruby"]
 task annotate: ["db:annotate"]
-task default: %i[spec annotate lint]
+task default: %i[brakeman]

@@ -85,6 +85,7 @@ GEM
     awesome_print (1.8.0)
     bootsnap (1.4.5)
       msgpack (~> 1.0)
+    brakeman (4.7.1)
     builder (3.2.3)
     bullet (6.0.2)
       activesupport (>= 3.0.0)
@@ -454,6 +455,7 @@ DEPENDENCIES
   audited (~> 4.9)
   awesome_print
   bootsnap (>= 1.1.0)
+  brakeman
   bullet
   byebug
   config
