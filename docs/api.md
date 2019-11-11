@@ -337,6 +337,55 @@ This endpoint retrieves all subjects.
 curl "https://api2.publish-teacher-training-courses.service.gov.uk/api/v1/2019/subjects" -H "Authorization: Bearer your_api_key"
 ```
 
+### List of known subjects
+
+| Subject Code | Subject Name                         |
+|--            |--                                    |
+| 00           | Primary                              |
+| 01           | Primary with English                 |
+| 02           | Primary with geography and history   |
+| 03           | Primary with mathematics             |
+| 04           | Primary with modern languages        |
+| 06           | Primary with physical education      |
+| 07           | Primary with science                 |
+| W1           | Art and design                       |
+| F0           | Science                              |
+| C1           | Biology                              |
+| 08           | Business studies                     |
+| F1           | Chemistry                            |
+| 09           | Citizenship                          |
+| Q8           | Classics                             |
+| P3           | Communication and media studies      |
+| 11           | Computing                            |
+| 12           | Dance                                |
+| DT           | Design and technology                |
+| 13           | Drama                                |
+| L1           | Economics                            |
+| Q3           | English                              |
+| F8           | Geography                            |
+| L5           | Health and social care               |
+| V1           | History                              |
+| G1           | Mathematics                          |
+| W3           | Music                                |
+| P1           | Philosophy                           |
+| C6           | Physical education                   |
+| F3           | Physics                              |
+| C8           | Psychology                           |
+| V6           | Religious education                  |
+| 14           | Social sciences                      |
+| 15           | French                               |
+| 16           | English as a second or other language|
+| 17           | German                               |
+| 18           | Italian                              |
+| 19           | Japanese                             |
+| 20           | Mandarin                             |
+| 21           | Russian                              |
+| 22           | Spanish                              |
+| 24           | Modern languages (other)             |
+| 41           | Further education                    |
+| U3           | Special Educational Needs            |
+
+
 ### Entity documentation
 
 | Parameter    | Data type | Possible values     | Description               |
