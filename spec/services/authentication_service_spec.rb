@@ -42,7 +42,7 @@ describe AuthenticationService do
 
       it "Safely logs that the user was found by sign_in_user_id" do
         subject
-        expect(logger_spy).to have_received(:debug) do |*_args, &block|
+        expect(logger_spy).to have_received(:info) do |*_args, &block|
           message = block.call
           expect(message).to start_with("User found from sign_in_user_id in token")
           expect(message).to include("sign_in_user_id=>\"#{sign_in_user_id}\"")
@@ -93,7 +93,7 @@ describe AuthenticationService do
       it "Safely logs that the user was found by their email" do
         subject
 
-        expect(logger_spy).to have_received(:debug) do |*_args, &block|
+        expect(logger_spy).to have_received(:info) do |*_args, &block|
           message = block.call
           expect(message).to start_with("User found by email address")
           expect(message).not_to include(user.email)

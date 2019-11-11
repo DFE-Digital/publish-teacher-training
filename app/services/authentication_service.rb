@@ -65,7 +65,7 @@ private
 
     @user_by_email ||= User.find_by("lower(email) = ?", email_from_token)
     if @user_by_email
-      logger.debug {
+      logger.info {
         "User found by email address " + {
           user: log_safe_user(@user_by_email),
         }.to_s
@@ -82,7 +82,7 @@ private
 
     user = User.find_by(sign_in_user_id: sign_in_user_id_from_token)
     if user
-      logger.debug {
+      logger.info {
         "User found from sign_in_user_id in token " + {
                      sign_in_user_id: sign_in_user_id_from_token,
                      user: log_safe_user(user),

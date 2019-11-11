@@ -11,7 +11,6 @@ module API
         authenticate_or_request_with_http_token do |token|
           @current_user = AuthenticationService.new(logger: Rails.logger).execute(token)
           assign_sentry_contexts
-          assign_logstash_contexts
           @current_user.present?
         end
       end
@@ -45,10 +44,15 @@ module API
         Raven.tags_context(sign_in_user_id: @current_user&.sign_in_user_id)
       end
 
-      def assign_logstash_contexts
-        Thread.current[:logstash] ||= {}
-        Thread.current[:logstash][:user_id] = current_user&.id
-        Thread.current[:logstash][:sign_in_user_id] = current_user&.sign_in_user_id
+      def append_info_to_payload(payload)
+        super
+
+        if current_user.present?
+          payload[:user] = {
+            id:         current_user.id,
+            sign_in_id: current_user.sign_in_user_id,
+          }
+        end
       end
     end
   end
