@@ -199,13 +199,8 @@ module MCB
       end
 
       def sync_courses_to_find
-        @courses.each do |course|
-          ManageCoursesAPIService::Request.sync_course_with_search_and_compare(
-            @requester.email,
-            @provider.provider_code,
-            course.course_code,
-          )
-        end
+        request = SearchAndCompareAPIService::Request.new
+        request.sync(@courses)
       end
 
       def find_courses(provider, course_codes)
