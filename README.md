@@ -242,3 +242,7 @@ To successfully log into the system, you will need to:
 Users not matching
 `%@digital.education.gov.uk` and `%@education.gov.uk`
 will be anonymized for non production environment.
+
+## Using services
+
+[See the services README](./app/services/README.md)
