@@ -1,5 +1,5 @@
 module Courses
-  class GenerateCourseTitleService
+  class GenerateCourseNameService
     def execute(course:)
       subjects = course.subjects
 

@@ -488,7 +488,7 @@ describe Provider, type: :model do
     it "Delegates to the correct service" do
       expect(provider).to delegate_method_to_service(
         :next_available_course_code,
-        "Courses::GenerateUniqueCourseCodeService",
+        "Providers::GenerateUniqueCourseCodeService",
       ).with_arguments(
         existing_codes: %w[A123 B456],
       )

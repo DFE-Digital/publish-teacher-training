@@ -96,8 +96,7 @@ FactoryBot.define do
       end
 
       if course.subjects.any?
-        generate_course_title_service = Courses::GenerateCourseTitleService.new
-        course.name = generate_course_title_service.execute(course: course)
+        course.name = course.generate_name
       end
     end
 
@@ -111,8 +110,7 @@ FactoryBot.define do
       end
 
       if course.subjects.any?
-        generate_course_title_service = Courses::GenerateCourseTitleService.new
-        course.name = generate_course_title_service.execute(course: course)
+        course.name = course.generate_name
       end
 
       # We've just created a course with this provider's code, so ensure it's

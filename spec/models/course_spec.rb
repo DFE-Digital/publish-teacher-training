@@ -1464,11 +1464,11 @@ describe Course, type: :model do
   end
 
   describe "#generate_name" do
-    it "Generates a title using the correct service" do
+    it "Generates a name using the correct service" do
       expect(course).to(
         delegate_method_to_service(
           :generate_name,
-          "Courses::GenerateCourseTitleService",
+          "Courses::GenerateCourseNameService",
         ).with_arguments(
           course: course,
         ),

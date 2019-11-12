@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe Courses::GenerateCourseTitleService do
+describe Courses::GenerateCourseNameService do
   let(:service) { described_class.new }
   let(:subjects) { [] }
   let(:is_send) { false }

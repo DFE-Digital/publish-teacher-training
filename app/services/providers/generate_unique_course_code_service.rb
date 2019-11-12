@@ -1,4 +1,4 @@
-module Courses
+module Providers
   class GenerateUniqueCourseCodeService
     def initialize(generate_course_code_service:)
       @generate_course_code_service = generate_course_code_service

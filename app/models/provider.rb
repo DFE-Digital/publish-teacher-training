@@ -258,8 +258,8 @@ private
 
     @services = Dry::Container.new
     @services.register(:generate_unique_course_code) do
-      Courses::GenerateUniqueCourseCodeService.new(
-        generate_course_code_service: Courses::GenerateCourseCodeService.new,
+      Providers::GenerateUniqueCourseCodeService.new(
+        generate_course_code_service: Providers::GenerateCourseCodeService.new,
       )
     end
   end

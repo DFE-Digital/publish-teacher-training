@@ -1,4 +1,4 @@
-module Courses
+module Providers
   class GenerateCourseCodeService
     def execute
       "#{valid_letters.sample}#{valid_number}"
