@@ -23,6 +23,6 @@ run do |opts, args, _cmd|
     raise CriExitException.new(is_error: true)
   end
 
-  request = SearchAndCompareAPIService::Request.new
-  request.sync(courses)
+  request = SyncCoursesToFindJob.new
+  request.perform(*courses)
 end

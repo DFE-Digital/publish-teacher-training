@@ -199,8 +199,8 @@ module MCB
       end
 
       def sync_courses_to_find
-        request = SearchAndCompareAPIService::Request.new
-        request.sync(@courses)
+        request = SyncCoursesToFindJob.new
+        request.perform(*@courses)
       end
 
       def find_courses(provider, course_codes)

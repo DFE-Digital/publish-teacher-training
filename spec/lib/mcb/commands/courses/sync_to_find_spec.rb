@@ -40,7 +40,7 @@ describe "mcb courses sync_to_find" do
     let!(:requester) { create(:user, email: email, organisations: provider.organisations) }
 
     describe "syncs an existing course" do
-      it "calls Seach API successfully" do
+      it "calls Search API successfully" do
         expect { sync_to_find(provider_code, course_code) }.to_not raise_error
         expect(search_api_request).to have_been_made
       end
