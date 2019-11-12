@@ -7,7 +7,8 @@ describe "/api/v2/build_new_course", type: :request do
   let(:provider) do
     create :provider,
            organisations: [organisation],
-           recruitment_cycle: recruitment_cycle
+           recruitment_cycle: recruitment_cycle,
+           provider_type: "Y"
   end
   let(:payload) { { email: user.email } }
   let(:token) do
@@ -67,7 +68,6 @@ describe "/api/v2/build_new_course", type: :request do
       response = do_get params
       expect(response).to have_http_status(:ok)
       json_response = parse_response(response)
-
       expected = course_jsonapi
       expected["data"]["attributes"]["name"] = ""
       expected["data"]["errors"] = [
