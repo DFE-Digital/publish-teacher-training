@@ -135,6 +135,24 @@ describe "Publish API v2", type: :request do
                ))
         end
       end
+
+      context "with a new site_status" do
+        let(:site_status) { build(:site_status, :new) }
+
+        it "Successfully publishes the course" do
+          perform_enqueued_jobs do
+            expect(subject).to have_http_status(:success)
+          end
+
+          expect(course.reload.site_statuses.first).to be_status_running
+          expect(course.site_statuses.first).to be_published_on_ucas
+          expect(course.enrichments.first).to be_published
+          expect(course.enrichments.first.updated_by_user_id).to eq user.id
+          expect(course.enrichments.first.updated_at).to be_within(1.second).of Time.now.utc
+          expect(course.enrichments.first.last_published_timestamp_utc).to be_within(1.second).of Time.now.utc
+          expect(course.changed_at).to be_within(1.second).of Time.now.utc
+        end
+      end
     end
 
     describe "failed validation" do
