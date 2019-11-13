@@ -41,7 +41,7 @@ tp.set :capitalize_headers, false
 $mcb = Cri::Command.define do
   name        'mcb'
   usage       'mcb [options]'
-  summary     'wrapper for management of manage-curses-backend app'
+  summary     'wrapper for management of manage-courses-backend app'
 
   option :v, 'verbose',
          'display additional info (for commands that support it)' do |value|
