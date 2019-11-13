@@ -223,6 +223,34 @@
       "metadata": {
         "description": "The container image to pull from the server. Should be in image:tag format."
       }
+    },
+    "vnetProfileName": {
+      "type": "string",
+      "defaultValue": "",
+      "metadata": {
+        "description": "Virtual network profile name for container instance. This needs to be pre-created see example for help: https://github.com/DFE-Digital/bat-platform-building-blocks/blob/master/templates/container-instance-network-profile.json"
+      }
+    },
+    "vnetResourceGroup": {
+      "type": "string",
+      "defaultValue": "",
+      "metadata": {
+        "description": "Virtual network resource group name. This needs to be pre-created. This information is used for network profile resourceid in container instance."
+      }
+    },
+    "vnetName": {
+      "type": "string",
+      "defaultValue": "",
+      "metadata": {
+        "description": "Virtual network name. This needs to be pre-created. This information is used for network profile resourceid."
+      }
+    },
+    "vnetSubnetName": {
+      "type": "string",
+      "defaultValue": "",
+      "metadata": {
+        "description": "Virtual network name. This needs to be pre-created. This information is used for network profile resourceid."
+      }
     }
   },
   "variables": {
@@ -566,7 +594,7 @@
             "value": "[parameters('redisCacheName')]"
           },
           "enableNonSslPort": {
-            "value": true
+            "value": false
           }
         }
       }
@@ -596,6 +624,12 @@
           },
           "memory": {
             "value": "[parameters('containerMemory')]"
+          },
+          "networkProfileName": {
+            "value": "[parameters('vnetProfileName')]"
+          },
+          "networkResourceGroup": {
+            "value": "[parameters('vnetResourceGroup')]"
           },
           "environmentVariables": {
             "value": [
@@ -662,6 +696,32 @@
       "dependsOn": [
         "redis-cache"
       ]
+    },
+    {
+      "name": "aci-postgres-firewall-rule",
+      "condition": "[and(greater(length(parameters('vnetProfileName')), 0),greater(length(parameters('vnetName')), 0),greater(length(parameters('vnetSubnetName')), 0),greater(length(parameters('vnetResourceGroup')), 0))]",
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2017-05-10",
+      "dependsOn": [
+        "container-instances"
+      ],
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(variables('deploymentUrlBase'), 'postgresql-server-firewall-rules.json')]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "serverName": {
+            "value": "[variables('databaseServerName')]"
+          },
+          "subnetResourceIdList": {
+            "value": [
+              "[resourceId(parameters('vnetResourceGroup'),'Microsoft.Network/virtualNetworks/subnets', parameters('vnetName'), parameters('vnetSubnetName'))]"
+            ]
+          }
+        }
+      }
     }
   ],
   "outputs": {
