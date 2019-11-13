@@ -4,7 +4,7 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 ruby "2.6.1"
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem "rails", "~> 6.0"
+gem "rails", "6.0.0"
 
 # Use PostgreSQL as the database for Active Record
 gem "pg"
@@ -13,7 +13,7 @@ gem "pg"
 gem "pundit"
 
 # Use Puma as the app server
-gem "puma", "~> 4.2"
+gem "puma", "~> 4.3"
 
 # Reduces boot times through caching; required in config/boot.rb
 gem "bootsnap", ">= 1.1.0", require: false
@@ -93,6 +93,9 @@ gem "sidekiq-cron"
 
 # Offshore logging
 gem "logstash-logger", "~> 0.26.1"
+
+# Semantic Logger makes logs pretty
+gem "rails_semantic_logger"
 
 group :development, :test do
   # add info about db structure to models and other files
