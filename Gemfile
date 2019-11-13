@@ -142,6 +142,9 @@ group :development, :test do
 end
 
 group :development do
+  # Static analysis
+  gem "brakeman"
+
   gem "listen", ">= 3.0.5", "< 3.3"
 
   # Output scaffold commands based on schema
