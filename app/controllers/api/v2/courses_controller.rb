@@ -73,6 +73,7 @@ module API
         if @course.publishable?
           @course.publish_sites
           @course.publish_enrichment(@current_user)
+          @course.reload
           has_synced?
 
           head :ok

@@ -1,0 +1,26 @@
+{
+  "ignored_warnings": [
+    {
+      "warning_type": "Command Injection",
+      "warning_code": 14,
+      "fingerprint": "21580fcfd1da2ed6689c6569a08286c35b9b269c65cb791a519b96c761b22cef",
+      "check_name": "Execute",
+      "message": "Possible command injection",
+      "file": "lib/mcb.rb",
+      "line": 86,
+      "link": "https://brakemanscanner.org/docs/warning_types/command_injection/",
+      "code": "`#{cmd}`",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "MCB",
+        "method": "s(:self).run_command"
+      },
+      "user_input": "cmd",
+      "confidence": "Medium",
+      "note": ""
+    }
+  ],
+  "updated": "2019-11-13 12:04:09 +0000",
+  "brakeman_version": "4.7.1"
+}

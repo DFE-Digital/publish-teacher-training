@@ -85,6 +85,7 @@ GEM
     awesome_print (1.8.0)
     bootsnap (1.4.5)
       msgpack (~> 1.0)
+    brakeman (4.7.1)
     builder (3.2.3)
     bullet (6.0.2)
       activesupport (>= 3.0.0)
@@ -377,7 +378,7 @@ GEM
       sass (~> 3.5, >= 3.5.5)
     semantic_logger (4.6.0)
       concurrent-ruby (~> 1.0)
-    sentry-raven (2.12.2)
+    sentry-raven (2.12.3)
       faraday (>= 0.7.6, < 1.0)
     shellany (0.0.1)
     shoulda-matchers (4.1.2)
@@ -454,6 +455,7 @@ DEPENDENCIES
   audited (~> 4.9)
   awesome_print
   bootsnap (>= 1.1.0)
+  brakeman
   bullet
   byebug
   config
