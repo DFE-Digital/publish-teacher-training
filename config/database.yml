@@ -23,6 +23,9 @@ qa:
   <<: *default
   database: <%= ENV['DB_DATABASE'] || 'manage_courses_backend_qa' %>
 
+pentest:
+  <<: *default
+  database: <%= ENV['DB_DATABASE'] || 'manage_courses_backend_pentest' %>
 
 production:
   <<: *default
