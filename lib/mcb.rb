@@ -1,5 +1,7 @@
 require "logger"
 require "open3"
+require "config"
+require "securerandom"
 
 module MCB
   LOGGER = Logger.new(STDERR)
@@ -127,13 +129,13 @@ module MCB
   end
 
   def self.get_recruitment_year(opts)
-    raise RuntimeError, "Rails has not been initialised" if !defined? Rails
+    raise RuntimeError, "Rails has not been initialised" unless defined? Rails
 
     opts[:'recruitment-year'] || RecruitmentCycle.current_recruitment_cycle.year
   end
 
   def self.get_recruitment_cycle(opts)
-    raise RuntimeError, "Rails has not been initialised" if !defined? Rails
+    raise RuntimeError, "Rails has not been initialised" unless defined? Rails
 
     if opts.key? :'recruitment-year'
       RecruitmentCycle.find_by(year: opts[:'recruitment-year'])
@@ -313,28 +315,15 @@ module MCB
     end
 
     def env_to_azure_map
-      {
-        "qa" => {
-          webapp: "s121d01-mcbe-as",
-          rgroup: "s121d01-mcbe-rg",
-          subscription: "s121-findpostgraduateteachertraining-development",
-        },
-        "staging" => {
-          webapp: "s121t01-mcbe-as",
-          rgroup: "s121t01-mcbe-rg",
-          subscription: "s121-findpostgraduateteachertraining-test",
-        },
-        "production" => {
-          webapp: "s121p01-mcbe-as",
-          rgroup: "s121p01-mcbe-rg",
-          subscription: "s121-findpostgraduateteachertraining-production",
-        },
-      }
+      setting_files = ::Config.setting_files("#{__dir__}/../config", "development")
+      ::Config.load_and_set_settings(setting_files)
+
+      Settings.azure.to_hash
     end
 
     def load_env_azure_settings(opts)
       if opts.key?(:env)
-        env_settings = env_to_azure_map.fetch(opts[:env])
+        env_settings = env_to_azure_map.fetch(opts[:env].to_sym)
         opts[:webapp] = env_settings[:webapp] unless opts.key? :webapp
         opts[:rgroup] = env_settings[:rgroup] unless opts.key? :rgroup
         opts[:subscription] = env_settings[:subscription] unless opts.key? :subscription
