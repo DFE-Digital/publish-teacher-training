@@ -16,24 +16,10 @@ describe "mcb courses sync_to_find" do
   let(:email) { "user@education.gov.uk" }
   let(:provider) { create(:provider, provider_code: provider_code) }
   let!(:course) { create(:course, provider: provider, course_code: course_code) }
-  let(:body) do
-    ActiveModel::Serializer::CollectionSerializer.new(
-      [course],
-      serializer: SearchAndCompare::CourseSerializer,
-      adapter: :attributes,
-    )
-  end
-  let(:search_api_request) do
-    stub_request(:put, "#{Settings.search_api.base_url}/api/courses/")
-      .with { |req| req.body == body.to_json }
-      .to_return(
-        status: 200,
-      )
-  end
 
   before do
     allow(MCB).to receive(:config).and_return(email: email)
-    search_api_request
+    allow_any_instance_of(SyncCoursesToFindJob).to receive(:perform)
   end
 
   context "when an authorised user" do
@@ -41,29 +27,29 @@ describe "mcb courses sync_to_find" do
 
     describe "syncs an existing course" do
       it "calls Search API successfully" do
+        expect_any_instance_of(SyncCoursesToFindJob).to receive(:perform).with(course)
         expect { sync_to_find(provider_code, course_code) }.to_not raise_error
-        expect(search_api_request).to have_been_made
       end
     end
 
     describe "tries to sync a nonexistent provider" do
       it "raises an error" do
+        expect_any_instance_of(SyncCoursesToFindJob).to_not receive(:perform)
         expect { sync_to_find("ABC", course_code) }.to raise_error(ActiveRecord::RecordNotFound, /Couldn't find Provider/)
-        expect(search_api_request).to_not have_been_made
       end
     end
 
     describe "provides no course codes" do
       it "raises an error" do
+        expect_any_instance_of(SyncCoursesToFindJob).to_not receive(:perform)
         expect { sync_to_find(provider_code) }.to raise_error(ArgumentError, /No courses provided/)
-        expect(search_api_request).to_not have_been_made
       end
     end
 
     describe "tries to sync a nonexistent course" do
       it "raises an error" do
+        expect_any_instance_of(SyncCoursesToFindJob).to_not receive(:perform)
         expect { sync_to_find(provider_code, course_code, "ABCD") }.to raise_error(ArgumentError, /Couldn't find course ABCD/)
-        expect(search_api_request).to_not have_been_made
       end
     end
   end
@@ -72,8 +58,8 @@ describe "mcb courses sync_to_find" do
     let!(:requester) { create(:user, email: "someother@email.com") }
 
     it "raises an error" do
+      expect_any_instance_of(SyncCoursesToFindJob).to_not receive(:perform)
       expect { sync_to_find(provider_code, course_code) }.to raise_error(ActiveRecord::RecordNotFound, /Couldn't find User/)
-      expect(search_api_request).to_not have_been_made
     end
   end
 
@@ -81,8 +67,8 @@ describe "mcb courses sync_to_find" do
     let!(:requester) { create(:user, email: email, organisations: []) }
 
     it "raises an error" do
+      expect_any_instance_of(SyncCoursesToFindJob).to_not receive(:perform)
       expect { sync_to_find(provider_code, course_code) }.to raise_error(SystemExit)
-      expect(search_api_request).to_not have_been_made
     end
   end
 end
