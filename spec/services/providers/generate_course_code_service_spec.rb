@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe Courses::GenerateCourseCodeService do
+describe Providers::GenerateCourseCodeService do
   let(:service) { described_class.new }
 
   it "returns a course code like A000" do

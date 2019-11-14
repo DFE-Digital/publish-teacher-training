@@ -458,6 +458,7 @@ DEPENDENCIES
   custom_error_message!
   database_cleaner
   discard
+  dry-container
   factory_bot_rails (~> 5.1)
   fakefs
   faker

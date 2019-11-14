@@ -474,4 +474,24 @@ describe Provider, type: :model do
       end
     end
   end
+
+  describe "#next_available_course_code" do
+    let(:provider) { create(:provider) }
+    let(:course1) { create(:course, provider: provider, course_code: "A123") }
+    let(:course2) { create(:course, provider: provider, course_code: "B456") }
+
+    before do
+      course1
+      course2
+    end
+
+    it "Delegates to the correct service" do
+      expect(provider).to delegate_method_to_service(
+        :next_available_course_code,
+        "Providers::GenerateUniqueCourseCodeService",
+      ).with_arguments(
+        existing_codes: %w[A123 B456],
+      )
+    end
+  end
 end

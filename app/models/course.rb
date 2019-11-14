@@ -188,6 +188,10 @@ class Course < ApplicationRecord
     provider.recruitment_cycle
   end
 
+  def generate_name
+    services[:generate_course_name].execute(course: self)
+  end
+
   def accrediting_provider_description
     return nil if accrediting_provider.blank?
 
@@ -281,8 +285,7 @@ class Course < ApplicationRecord
 
   def content_status
     newest_enrichment = enrichments.latest_first.first
-    content_status_service = Courses::ContentStatusService.new
-    content_status_service.execute(newest_enrichment, recruitment_cycle)
+    services[:content_status].execute(enrichment: newest_enrichment, recruitment_cycle: recruitment_cycle)
   end
 
   def ucas_status
@@ -437,6 +440,14 @@ class Course < ApplicationRecord
     else
       errors.add(:withdraw, "Courses that have not been published should be deleted not withdrawn")
     end
+  end
+
+  def assignable_master_subjects
+    services[:assignable_master_subjects].execute(course: self)
+  end
+
+  def assignable_subjects
+    services[:assignable_subjects].execute(course: self)
   end
 
 private
@@ -607,5 +618,23 @@ private
 
   def valid_date_range
     recruitment_cycle.application_start_date..recruitment_cycle.application_end_date
+  end
+
+  def services
+    return @services if @services.present?
+
+    @services = Dry::Container.new
+    @services.register(:generate_course_name) do
+      Courses::GenerateCourseNameService.new
+    end
+    @services.register(:assignable_master_subjects) do
+      Courses::AssignableMasterSubjectService.new
+    end
+    @services.register(:assignable_subjects) do
+      Courses::AssignableSubjectService.new
+    end
+    @services.register(:content_status) do
+      Courses::ContentStatusService.new
+    end
   end
 end

@@ -20,13 +20,12 @@ module API
       end
 
       def build_new
-        generate_course_title_service = Courses::GenerateCourseTitleService.new
         authorize @provider
         @course = Course.new(provider: @provider)
         update_subjects
         update_sites
         @course.assign_attributes(course_params)
-        @course.name = generate_course_title_service.execute(course: @course)
+        @course.name = @course.generate_name
         @course.valid?
 
         # https://github.com/jsonapi-rb/jsonapi-rails/issues/113
@@ -125,20 +124,12 @@ module API
         authorize @provider, :can_create_course?
         return unless course_params.values.any?
 
-        generate_code_service = Courses::GenerateUniqueCourseCodeService.new(
-          existing_codes: @provider.courses.pluck(:course_code),
-          generate_course_code_service: Courses::GenerateCourseCodeService.new,
-        )
-
-        generate_course_title_service = Courses::GenerateCourseTitleService.new
-        course_code = generate_code_service.execute
-
+        course_code = @provider.next_available_course_code
         @course = Course.new(provider: @provider)
         @course.assign_attributes(course_params.merge(course_code: course_code))
         update_subjects
         update_sites
-
-        @course.name = generate_course_title_service.execute(course: @course)
+        @course.name = @course.generate_name
 
         if @course.save
           render jsonapi: @course.reload
@@ -181,8 +172,7 @@ module API
         return if subject_ids.nil?
 
         @course.subjects = Subject.where(id: subject_ids)
-        generate_course_title_service = Courses::GenerateCourseTitleService.new
-        @course.name = generate_course_title_service.execute(course: @course)
+        @course.name = @course.generate_name
         @course.save
       end
 

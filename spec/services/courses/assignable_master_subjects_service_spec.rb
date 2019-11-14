@@ -1,4 +1,6 @@
-describe CourseAssignableMasterSubjectService do
+require "rails_helper"
+
+describe Courses::AssignableMasterSubjectService do
   let(:service) do
     described_class.new(
       primary_subject: primary_model,
@@ -13,21 +15,21 @@ describe CourseAssignableMasterSubjectService do
   it "gets all primary subjects if the level is primary" do
     course = create(:course, level: "primary")
 
-    expect(service.execute(course)).to eq([])
+    expect(service.execute(course: course)).to eq([])
     expect(primary_model).to have_received(:all)
   end
 
   it "gets all secondary subjects if the level is secondary" do
     course = create(:course, level: "secondary")
 
-    expect(service.execute(course)).to eq([])
+    expect(service.execute(course: course)).to eq([])
     expect(secondary_model).to have_received(:all)
   end
 
   it "gets all further education subjects if the level is further education" do
     course = create(:course, level: "further_education")
 
-    expect(service.execute(course)).to eq([])
+    expect(service.execute(course: course)).to eq([])
     expect(further_education_model).to have_received(:all)
   end
 end

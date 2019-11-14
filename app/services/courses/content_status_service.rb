@@ -1,6 +1,6 @@
 module Courses
   class ContentStatusService
-    def execute(enrichment, recruitment_cycle)
+    def execute(enrichment:, recruitment_cycle:)
       if !enrichment.present?
         if recruitment_cycle.next?
           :rolled_over
