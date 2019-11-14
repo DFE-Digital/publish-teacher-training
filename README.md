@@ -70,7 +70,7 @@ bundle exec guard --no-interactions
 ## Running specs in parallel
 
 When running specs in parallel for the first time you will first need to set up
-your test databases. 
+your test databases.
 
 `bundle exec rails parallel:setup`
 
@@ -193,6 +193,17 @@ way that is safer and better sign-posted than using the raw Rails console. This
 can be useful for people who aren't as familiar with the app, or with certain
 complex operations that just aren't already packaged up in the app.
 
+In order to use the external environment functionality you must set the
+environments in `config/settings/development.local.yml` like so:  
+```
+azure:
+  <environment name>:
+    webapp: <webapp>
+    rgroup: <rgroup>
+    subscription: <subscription>
+```
+If you are a member of the Find team you may find a filled out config [here](https://dfedigital.atlassian.net/wiki/spaces/BaT/pages/1182761062/MCB+Configuration?atlOrigin=eyJpIjoiMzdkOGJlNGU0NTNhNDYyMGI4NTI3Mzg2ZTVjZGEyMjUiLCJwIjoiYyJ9).
+
 The script's functionality is accessed using sub-commands with built-in
 documentation. This is the best way to discover it's functionality and the
 commands available, and is accessible with the `--help` option:
@@ -219,10 +230,10 @@ be organised in an appropriate sub-folder there.
 
 To successfully log into the system, you will need to:
 1. Create an account on DfE Sign-in
-   1. Get a DfE Sign-in admin to invite you (give them this link: 
+   1. Get a DfE Sign-in admin to invite you (give them this link:
       https://signin-test-sup-as.azurewebsites.net/users)
    2. Sign up from the email sent from DfE Sign-in
-2. Grant access to some providers: 
+2. Grant access to some providers:
    1. For local: `bundle exec bin/mcb users grant {email} {provider_code}`
    2. For `qa` and `production`:
       1. You will need to log into Azure first: `az login`
