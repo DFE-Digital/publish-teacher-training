@@ -5,13 +5,12 @@ require "fakefs/spec_helpers"
 require "webmock/rspec"
 require "audited-rspec"
 require "simplecov"
-require "simplecov-console"
 
-SimpleCov.formatter = SimpleCov::Formatter::Console
-SimpleCov.start
+SimpleCov.minimum_coverage 75
+SimpleCov.start "rails"
 # If running specs in parallel this ensures SimpleCov results appears
 # upon completion of all specs
-if ENV["PARALLEL_TEST_GROUPS"]
+if ENV["TEST_ENV_NUMBER"]
   SimpleCov.at_exit do
     result = SimpleCov.result
     result.format! if ParallelTests.number_of_running_processes <= 1
@@ -37,6 +36,8 @@ Dir["./spec/support/**/*.rb"].each { |file| require file }
 #
 # See http://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
 RSpec.configure do |config|
+  # Reduce noise in console when running specs in parallel
+  config.silence_filter_announcements = true if ENV["TEST_ENV_NUMBER"]
   # rspec-expectations config goes here. You can use an alternate
   # assertion/expectation library such as wrong or the stdlib/minitest
   # assertions if you prefer.

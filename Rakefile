@@ -5,7 +5,9 @@ require "simplecov"
 require_relative "config/application"
 
 Rails.application.load_tasks
+Rake::Task["default"].clear 
 
 task lint: ["lint:ruby"]
 task annotate: ["db:annotate"]
-task default: %i[spec annotate lint brakeman]
+task parallel: ["parallel:spec"]
+task default: %i[parallel annotate lint brakeman]

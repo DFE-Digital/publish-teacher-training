@@ -173,6 +173,5 @@ group :test do
   gem "rspec_junit_formatter"
   gem "shoulda-matchers", "~> 4.1"
   gem "simplecov", require: false
-  gem "simplecov-console"
   gem "webmock"
 end
