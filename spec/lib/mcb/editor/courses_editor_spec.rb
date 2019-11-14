@@ -350,29 +350,26 @@ describe MCB::Editor::CoursesEditor, :needs_audit_user do
       context "when syncing to Find" do
         let!(:another_course) { create(:course, provider: provider) }
         let(:course_codes) { [course_code, another_course.course_code] }
+        let!(:search_api_request) do
+          stub_request(:put, "#{Settings.search_api.base_url}/api/courses/")
+            .with { |req| req.body == body.to_json }
+            .to_return(
+              status: 200,
+            )
+        end
 
-        let!(:manage_api_request1) {
-          stub_request(:post, "#{Settings.manage_api.base_url}/api/Publish/internal/course/#{provider_code}/#{course_code}")
-            .with { |req| req.body == { "email": email }.to_json }
-            .to_return(
-              status: 200,
-              body: '{ "result": true }',
-            )
-        }
-        let!(:manage_api_request2) {
-          stub_request(:post, "#{Settings.manage_api.base_url}/api/Publish/internal/course/#{provider_code}/#{another_course.course_code}")
-            .with { |req| req.body == { "email": email }.to_json }
-            .to_return(
-              status: 200,
-              body: '{ "result": true }',
-            )
-        }
+        let(:body) do
+          ActiveModel::Serializer::CollectionSerializer.new(
+            [course, another_course],
+            serializer: SearchAndCompare::CourseSerializer,
+            adapter: :attributes,
+          )
+        end
 
         it "syncs courses to Find" do
           run_editor("sync course(s) to Find", "exit")
 
-          expect(manage_api_request1).to have_been_made
-          expect(manage_api_request2).to have_been_made
+          expect(search_api_request).to have_been_made
         end
       end
 

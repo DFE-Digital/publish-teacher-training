@@ -23,11 +23,6 @@ run do |opts, args, _cmd|
     raise CriExitException.new(is_error: true)
   end
 
-  courses.each do |course|
-    ManageCoursesAPIService::Request.sync_course_with_search_and_compare(
-      user.email,
-      provider.provider_code,
-      course.course_code,
-    )
-  end
+  request = SyncCoursesToFindJob.new
+  request.perform(*courses)
 end
