@@ -184,6 +184,9 @@ describe "GET v3/providers/:provider_code/courses/:course_code" do
                    "attributes" => {
                      "subject_name" => "Primary",
                      "subject_code" => "00",
+                     "bursary_amount" => nil,
+                     "early_career_payments" => nil,
+                     "scholarship" => nil,
                    },
                  },
                  {
@@ -192,6 +195,9 @@ describe "GET v3/providers/:provider_code/courses/:course_code" do
                    "attributes" => {
                      "subject_name" => "Primary with English",
                      "subject_code" => "01",
+                     "bursary_amount" => nil,
+                     "early_career_payments" => nil,
+                     "scholarship" => nil,
                    },
                  },
                  {
@@ -200,6 +206,9 @@ describe "GET v3/providers/:provider_code/courses/:course_code" do
                    "attributes" => {
                      "subject_name" => "Primary with geography and history",
                      "subject_code" => "02",
+                     "bursary_amount" => nil,
+                     "early_career_payments" => nil,
+                     "scholarship" => nil,
                    },
                  },
                  {
@@ -208,6 +217,9 @@ describe "GET v3/providers/:provider_code/courses/:course_code" do
                    "attributes" => {
                      "subject_name" => "Primary with mathematics",
                      "subject_code" => "03",
+                     "bursary_amount" => "6000",
+                     "early_career_payments" => nil,
+                     "scholarship" => nil,
                    },
                  },
                  {
@@ -216,6 +228,9 @@ describe "GET v3/providers/:provider_code/courses/:course_code" do
                    "attributes" => {
                      "subject_name" => "Primary with modern languages",
                      "subject_code" => "04",
+                     "bursary_amount" => nil,
+                     "early_career_payments" => nil,
+                     "scholarship" => nil,
                    },
                  },
                  {
@@ -224,6 +239,9 @@ describe "GET v3/providers/:provider_code/courses/:course_code" do
                    "attributes" => {
                      "subject_name" => "Primary with physical education",
                      "subject_code" => "06",
+                     "bursary_amount" => nil,
+                     "early_career_payments" => nil,
+                     "scholarship" => nil,
                    },
                  },
                  {
@@ -232,6 +250,9 @@ describe "GET v3/providers/:provider_code/courses/:course_code" do
                    "attributes" => {
                      "subject_name" => "Primary with science",
                      "subject_code" => "07",
+                     "bursary_amount" => nil,
+                     "early_career_payments" => nil,
+                     "scholarship" => nil,
                    },
                  },
               ],

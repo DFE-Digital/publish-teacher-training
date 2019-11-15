@@ -171,6 +171,9 @@ describe "Courses API v2", type: :request do
                        "attributes" => {
                          "subject_name" => "Primary",
                          "subject_code" => "00",
+                         "bursary_amount" => nil,
+                         "early_career_payments" => nil,
+                         "scholarship" => nil,
                        },
                      },
                      {
@@ -179,6 +182,9 @@ describe "Courses API v2", type: :request do
                        "attributes" => {
                          "subject_name" => "Primary with English",
                          "subject_code" => "01",
+                         "bursary_amount" => nil,
+                         "early_career_payments" => nil,
+                         "scholarship" => nil,
                        },
                      },
                      {
@@ -187,6 +193,9 @@ describe "Courses API v2", type: :request do
                        "attributes" => {
                          "subject_name" => "Primary with geography and history",
                          "subject_code" => "02",
+                         "bursary_amount" => nil,
+                         "early_career_payments" => nil,
+                         "scholarship" => nil,
                        },
                      },
                      {
@@ -195,6 +204,9 @@ describe "Courses API v2", type: :request do
                        "attributes" => {
                          "subject_name" => "Primary with mathematics",
                          "subject_code" => "03",
+                         "bursary_amount" => "6000",
+                         "early_career_payments" => nil,
+                         "scholarship" => nil,
                        },
                      },
                      {
@@ -203,6 +215,9 @@ describe "Courses API v2", type: :request do
                        "attributes" => {
                          "subject_name" => "Primary with modern languages",
                          "subject_code" => "04",
+                         "bursary_amount" => nil,
+                         "early_career_payments" => nil,
+                         "scholarship" => nil,
                        },
                      },
                      {
@@ -211,6 +226,9 @@ describe "Courses API v2", type: :request do
                        "attributes" => {
                          "subject_name" => "Primary with physical education",
                          "subject_code" => "06",
+                         "bursary_amount" => nil,
+                         "early_career_payments" => nil,
+                         "scholarship" => nil,
                        },
                      },
                      {
@@ -219,6 +237,9 @@ describe "Courses API v2", type: :request do
                        "attributes" => {
                          "subject_name" => "Primary with science",
                          "subject_code" => "07",
+                         "bursary_amount" => nil,
+                         "early_career_payments" => nil,
+                         "scholarship" => nil,
                        },
                      },
                   ],
@@ -254,6 +275,9 @@ describe "Courses API v2", type: :request do
                 "attributes" => {
                   "subject_name" => course_subject_mathematics.subject_name,
                   "subject_code" => course_subject_mathematics.subject_code,
+                  "bursary_amount" => "6000",
+                  "early_career_payments" => nil,
+                  "scholarship" => nil,
                 },
               },
               {
@@ -316,6 +340,9 @@ describe "Courses API v2", type: :request do
                 "attributes" => {
                  "subject_name" => "French",
                  "subject_code" => "15",
+                 "bursary_amount" => "26000",
+                 "early_career_payments" => "2000",
+                 "scholarship" => "28000",
                 },
               },
               {
@@ -324,6 +351,9 @@ describe "Courses API v2", type: :request do
                 "attributes" => {
                  "subject_name" => "English as a second or other language",
                  "subject_code" => "16",
+                 "bursary_amount" => nil,
+                 "early_career_payments" => nil,
+                 "scholarship" => nil,
                 },
               },
               {
@@ -332,6 +362,9 @@ describe "Courses API v2", type: :request do
                 "attributes" => {
                  "subject_name" => "German",
                  "subject_code" => "17",
+                 "bursary_amount" => "26000",
+                 "early_career_payments" => "2000",
+                 "scholarship" => "28000",
                 },
               },
               {
@@ -340,6 +373,9 @@ describe "Courses API v2", type: :request do
                 "attributes" => {
                  "subject_name" => "Italian",
                  "subject_code" => "18",
+                 "bursary_amount" => "26000",
+                 "early_career_payments" => "2000",
+                 "scholarship" => nil,
                 },
               },
               {
@@ -348,6 +384,9 @@ describe "Courses API v2", type: :request do
                 "attributes" => {
                  "subject_name" => "Japanese",
                  "subject_code" => "19",
+                 "bursary_amount" => "26000",
+                 "early_career_payments" => "2000",
+                 "scholarship" => nil,
                 },
               },
               {
@@ -356,6 +395,9 @@ describe "Courses API v2", type: :request do
                 "attributes" => {
                  "subject_name" => "Mandarin",
                  "subject_code" => "20",
+                 "bursary_amount" => "26000",
+                 "early_career_payments" => "2000",
+                 "scholarship" => nil,
                 },
               },
               {
@@ -364,6 +406,9 @@ describe "Courses API v2", type: :request do
                 "attributes" => {
                  "subject_name" => "Russian",
                  "subject_code" => "21",
+                 "bursary_amount" => "26000",
+                 "early_career_payments" => "2000",
+                 "scholarship" => nil,
                 },
               },
               {
@@ -372,6 +417,9 @@ describe "Courses API v2", type: :request do
                 "attributes" => {
                  "subject_name" => "Spanish",
                  "subject_code" => "22",
+                 "bursary_amount" => "26000",
+                 "early_career_payments" => "2000",
+                 "scholarship" => "28000",
                 },
               },
               {
@@ -380,6 +428,9 @@ describe "Courses API v2", type: :request do
                 "attributes" => {
                  "subject_name" => "Modern languages (other)",
                  "subject_code" => "24",
+                 "bursary_amount" => "26000",
+                 "early_career_payments" => "2000",
+                 "scholarship" => nil,
                 },
               },
             ],
@@ -527,6 +578,9 @@ describe "Courses API v2", type: :request do
                     "attributes" => {
                       "subject_name" => "Primary",
                       "subject_code" => "00",
+                      "bursary_amount" => nil,
+                      "early_career_payments" => nil,
+                      "scholarship" => nil,
                     },
                   },
                   {
@@ -535,6 +589,9 @@ describe "Courses API v2", type: :request do
                     "attributes" => {
                       "subject_name" => "Primary with English",
                       "subject_code" => "01",
+                      "bursary_amount" => nil,
+                      "early_career_payments" => nil,
+                      "scholarship" => nil,
                     },
                   },
                   {
@@ -543,6 +600,9 @@ describe "Courses API v2", type: :request do
                     "attributes" => {
                       "subject_name" => "Primary with geography and history",
                       "subject_code" => "02",
+                      "bursary_amount" => nil,
+                      "early_career_payments" => nil,
+                      "scholarship" => nil,
                     },
                   },
                   {
@@ -551,6 +611,9 @@ describe "Courses API v2", type: :request do
                     "attributes" => {
                       "subject_name" => "Primary with mathematics",
                       "subject_code" => "03",
+                      "bursary_amount" => "6000",
+                      "early_career_payments" => nil,
+                      "scholarship" => nil,
                     },
                   },
                   {
@@ -559,6 +622,9 @@ describe "Courses API v2", type: :request do
                     "attributes" => {
                       "subject_name" => "Primary with modern languages",
                       "subject_code" => "04",
+                      "bursary_amount" => nil,
+                      "early_career_payments" => nil,
+                      "scholarship" => nil,
                     },
                   },
                   {
@@ -567,6 +633,9 @@ describe "Courses API v2", type: :request do
                     "attributes" => {
                       "subject_name" => "Primary with physical education",
                       "subject_code" => "06",
+                      "bursary_amount" => nil,
+                      "early_career_payments" => nil,
+                      "scholarship" => nil,
                     },
                   },
                   {
@@ -575,6 +644,9 @@ describe "Courses API v2", type: :request do
                     "attributes" => {
                       "subject_name" => "Primary with science",
                       "subject_code" => "07",
+                      "bursary_amount" => nil,
+                      "early_career_payments" => nil,
+                      "scholarship" => nil,
                     },
                   },
                 ],
