@@ -71,4 +71,17 @@ describe API::V2::ApplicationController, type: :controller do
       end
     end
   end
+
+  describe "#append_info_to_payload" do
+    it "sets the request_id in the payload to the request uuid" do
+      payload = {}
+      request_uuid = SecureRandom.uuid
+
+      allow(request).to receive(:uuid).and_return(request_uuid)
+
+      controller.__send__(:append_info_to_payload, payload)
+
+      expect(payload[:request_id]).to eq request_uuid
+    end
+  end
 end
