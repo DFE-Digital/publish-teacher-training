@@ -128,6 +128,8 @@ group :development, :test do
 
   gem "rb-readline"
 
+  gem "request_store"
+
   # Enable shorter notation for rspec one-liners
   gem "rspec-its"
 
