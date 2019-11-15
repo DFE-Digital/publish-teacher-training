@@ -128,6 +128,7 @@ group :development, :test do
 
   gem "rb-readline"
 
+  # Thread-safe global state
   gem "request_store"
 
   # Enable shorter notation for rspec one-liners
