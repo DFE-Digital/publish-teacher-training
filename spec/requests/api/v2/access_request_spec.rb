@@ -107,7 +107,7 @@ describe "Access Request API V2", type: :request do
   describe "GET #show" do
     let(:first_access_request) { create(:access_request) }
     let(:access_requests_show_route) do
-      get "/api/v2/access_requests/#{first_access_request.id}",
+      get "/api/v2/access_requests/#{first_access_request.id}?include=requester",
           headers: { "HTTP_AUTHORIZATION" => credentials }
     end
 
@@ -177,6 +177,13 @@ describe "Access Request API V2", type: :request do
               "accept_terms_date_utc" => first_access_request.requester.accept_terms_date_utc.utc.strftime("%FT%T.%3NZ"),
               "state" => first_access_request.requester.state,
               "admin" => first_access_request.requester.admin,
+            },
+            "relationships" => {
+              "organisations" => {
+                "meta" => {
+                  "included" => false,
+                },
+              },
             },
           }],
           "jsonapi" => {
