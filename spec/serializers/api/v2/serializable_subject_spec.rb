@@ -1,7 +1,7 @@
 require "rails_helper"
 
 describe API::V2::SerializableSubject do
-  let(:non_bursary_subject) { find_or_create :primary_subject }
+  let(:non_bursary_subject) { find_or_create :primary_subject, :primary_with_english }
   let(:resource) { API::V2::SerializableSubject.new object: non_bursary_subject }
 
   it "sets type to users" do
