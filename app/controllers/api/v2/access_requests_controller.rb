@@ -20,7 +20,7 @@ module API
         if @access_request.discarded?
           render jsonapi: nil, status: :not_found
         else
-          render jsonapi: @access_request, include: [:requester]
+          render jsonapi: @access_request, include: params[:include]
         end
       end
 
