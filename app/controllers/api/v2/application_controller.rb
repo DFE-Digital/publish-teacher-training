@@ -5,6 +5,7 @@ module API
 
       rescue_from ActiveRecord::RecordNotFound, with: :jsonapi_404
 
+      before_action :store_request_id
       before_action :check_terms_accepted
 
       def authenticate
@@ -42,7 +43,7 @@ module API
       def assign_sentry_contexts
         Raven.user_context(id:              @current_user&.id)
         Raven.tags_context(sign_in_user_id: @current_user&.sign_in_user_id)
-        Raven.extra_context(request_id: request.uuid)
+        Raven.extra_context(request_id: RequestStore.store[:request_id])
       end
 
       def append_info_to_payload(payload)
@@ -54,7 +55,11 @@ module API
             sign_in_id: current_user.sign_in_user_id,
           }
         end
-        payload[:request_id] = request.uuid
+        payload[:request_id] = RequestStore.store[:request_id]
+      end
+
+      def store_request_id
+        RequestStore.store[:request_id] = request.uuid
       end
     end
   end

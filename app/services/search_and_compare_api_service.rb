@@ -7,6 +7,7 @@ module SearchAndCompareAPIService
           faraday.adapter Faraday.default_adapter
           faraday.headers["Content-Type"] = "application/json; charset=utf-8;"
           faraday.headers["Authorization"] = "Bearer #{Settings.search_api.secret}"
+          faraday.headers["X-Request-ID"] = RequestStore.store[:request_id]
         end
       end
     end
