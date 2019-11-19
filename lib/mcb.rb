@@ -36,7 +36,7 @@ module MCB
       ENV["DISABLE_SPRING"] = "true"
       ENV["MCB_AUDIT_USER"] = get_user_email(opts)
 
-      verbose("Running #{exec_path}")
+      verbose("Running #{exec_path} #{commands.join(' ')}")
 
       exec(exec_path, *commands)
     end
@@ -287,13 +287,12 @@ module MCB
     end
 
     def remote_connect_options
-      envs = env_to_azure_map.keys.join(", ")
       Proc.new do
         option :r, "recruitment-year",
                "Set the recruitment year, defaults to the current recruitment year",
                argument: :required
         option :E, "env",
-               "Connect to a pre-defined environment: #{envs}",
+               "Connect to a pre-defined environment: development, qa, staging or production",
                argument: :required
         option :A, "webapp",
                "Connect to the database of this webapp",
@@ -314,19 +313,18 @@ module MCB
       opts.key?(:webapp)
     end
 
-    def env_to_azure_map
-      setting_files = ::Config.setting_files("#{__dir__}/../config", "development")
-      ::Config.load_and_set_settings(setting_files)
-
-      Settings.azure.to_hash
+    def env_to_azure_map(opts)
+      azure_environments_file = File.join("config", "azure_environments.yml")
+      azure_environments = YAML.safe_load(File.read(azure_environments_file))
+      azure_environments[opts[:env]]
     end
 
     def load_env_azure_settings(opts)
       if opts.key?(:env)
-        env_settings = env_to_azure_map.fetch(opts[:env].to_sym)
-        opts[:webapp] = env_settings[:webapp] unless opts.key? :webapp
-        opts[:rgroup] = env_settings[:rgroup] unless opts.key? :rgroup
-        opts[:subscription] = env_settings[:subscription] unless opts.key? :subscription
+        env_settings = env_to_azure_map(opts)
+        opts[:webapp] = env_settings["webapp"] unless opts.key? :webapp
+        opts[:rgroup] = env_settings["rgroup"] unless opts.key? :rgroup
+        opts[:subscription] = env_settings["subscription"] unless opts.key? :subscription
       end
     end
 

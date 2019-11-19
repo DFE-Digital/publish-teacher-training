@@ -24,7 +24,12 @@ describe "mcb db" do
         "PG_PASSWORD"                            => "azpass",
         "RAILS_ENV"                              => "qa",
       }
+
+      azure_qa_settings = { webapp: "s121d01-mcbe-as",
+                            rgroup: "s121d01-mcbe-rg",
+                            subscription: "s121-findpostgraduateteachertraining-development" }
       allow(MCB::Azure).to(receive(:get_config).and_return(app_config))
+      allow(MCB).to(receive(:env_to_azure_map)).and_return(azure_qa_settings)
     end
 
     it "runs psql for azure server" do
