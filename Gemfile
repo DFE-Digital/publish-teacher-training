@@ -97,6 +97,9 @@ gem "logstash-logger", "~> 0.26.1"
 # Semantic Logger makes logs pretty
 gem "rails_semantic_logger"
 
+# Thread-safe global state
+gem "request_store"
+
 # IoC Container
 gem "dry-container"
 
@@ -127,9 +130,6 @@ group :development, :test do
   gem "rails-controller-testing"
 
   gem "rb-readline"
-
-  # Thread-safe global state
-  gem "request_store"
 
   # Enable shorter notation for rspec one-liners
   gem "rspec-its"
