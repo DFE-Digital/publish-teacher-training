@@ -7,7 +7,9 @@ require "audited-rspec"
 require "simplecov"
 
 SimpleCov.minimum_coverage 75
-SimpleCov.start "rails"
+SimpleCov.start "rails" do
+  add_filter "/mcb/"
+end
 # If running specs in parallel this ensures SimpleCov results appears
 # upon completion of all specs
 if ENV["TEST_ENV_NUMBER"]
