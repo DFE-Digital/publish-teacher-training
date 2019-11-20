@@ -13,21 +13,19 @@ describe MCB::Editor::CoursesEditor, :needs_audit_user do
   let(:email) { "user@education.gov.uk" }
   let(:provider) { create(:provider, provider_code: provider_code) }
   let(:accredited_body) { create(:provider, :accredited_body) }
-  let!(:japanese) { find_or_create(:modern_languages_subject, :japanese) }
-  let!(:primary_with_mathematics) { find_or_create(:primary_subject, :primary_with_mathematics) }
-  let!(:biology) { find_or_create(:secondary_subject, :biology) }
+  let(:japanese) { find_or_create(:modern_languages_subject, :japanese) }
+  let(:primary_with_mathematics) { find_or_create(:primary_subject, :primary_with_mathematics) }
+  let(:biology) { find_or_create(:secondary_subject, :biology) }
   let(:modern_languages) { find_or_create(:secondary_subject, :modern_languages) }
-  let!(:further_education) { find_or_create(:further_education_subject) }
+  let(:further_education) { find_or_create(:further_education_subject) }
   let(:current_cycle) { find_or_create :recruitment_cycle }
-  let!(:next_cycle) { find_or_create :recruitment_cycle, :next }
   let(:current_year) { current_cycle.year.to_i }
-  let(:next_year) { next_cycle.year.to_i }
   let(:last_year) { current_year - 1 }
   let(:is_send) { false }
   let(:subjects) { [] }
   let(:level) { "primary" }
   let(:age_range_in_years) { "3_to_7" }
-  let!(:course) {
+  let(:course) {
     create(:course,
            provider: provider,
            accrediting_provider: accredited_body,
@@ -46,6 +44,15 @@ describe MCB::Editor::CoursesEditor, :needs_audit_user do
            applications_open_from: Date.new(last_year, 10, 9),
            is_send: is_send)
   }
+
+  before do
+    course
+    japanese
+    primary_with_mathematics
+    biology
+    further_education
+  end
+
   subject { described_class.new(provider: provider, course_codes: course_codes, requester: requester) }
 
   context "when an authorised user" do
@@ -65,179 +72,6 @@ describe MCB::Editor::CoursesEditor, :needs_audit_user do
         expect(course.audits.last.user).to eq(requester)
       end
 
-      describe "(maths)" do
-        it "updates the maths setting when that is valid" do
-          expect { run_editor("edit maths", "equivalence_test", "exit") }.to change { course.reload.maths }.
-            from("must_have_qualification_at_application_time").to("equivalence_test")
-        end
-
-        it "doesn't change the setting if the user exits" do
-          expect { run_editor("edit maths", "exit", "exit") }.to_not change { course.reload.maths }.
-            from("must_have_qualification_at_application_time")
-        end
-      end
-
-      describe "(english)" do
-        it "updates the english setting when that is valid" do
-          expect { run_editor("edit english", "must_have_qualification_at_application_time", "exit") }.to change { course.reload.english }.
-            from("equivalence_test").to("must_have_qualification_at_application_time")
-        end
-
-        it "doesn't change the setting if the user exits" do
-          expect { run_editor("edit english", "exit", "exit") }.to_not change { course.reload.english }.
-            from("equivalence_test")
-        end
-      end
-
-      describe "(science)" do
-        it "updates the science setting when that is valid" do
-          expect { run_editor("edit science", "equivalence_test", "exit") }.to change { course.reload.science }.
-            from("not_required").to("equivalence_test")
-        end
-
-        it "doesn't change the setting if the user exits" do
-          expect { run_editor("edit science", "exit", "exit") }.to_not change { course.reload.science }.
-            from("not_required")
-        end
-      end
-
-      describe "(route)" do
-        it "updates the route/program type setting when that is valid" do
-          expect { run_editor("edit route", "school_direct_training_programme", "exit") }.to change { course.reload.program_type }.
-            from("pg_teaching_apprenticeship").to("school_direct_training_programme")
-        end
-
-        it "doesn't change the setting if the user exits" do
-          expect { run_editor("edit route", "exit", "exit") }.to_not change { course.reload.program_type }.
-            from("pg_teaching_apprenticeship")
-        end
-      end
-
-      describe "(qualifications)" do
-        it "updates the qualifications setting when that is valid" do
-          expect { run_editor("edit qualifications", "pgde_with_qts", "exit") }.to change { course.reload.qualification }.
-            from("qts").to("pgde_with_qts")
-        end
-
-        it "updates the qualifications setting to pgce_with_qts by default" do
-          expect { run_editor("edit qualifications", "", "exit") }.to change { course.reload.qualification }.
-            from("qts").to("pgce_with_qts")
-        end
-      end
-
-      describe "(study mode)" do
-        let(:sites) { create_list(:site, 3) }
-        before do
-          sites.collect.with_index do |site, i|
-            vac_status = i == 0 ? :no_vacancies : :part_time_vacancies
-            course.site_statuses.create(site: site,
-                                        status: :running,
-                                        vac_status: vac_status,
-                                        publish: :published)
-          end
-        end
-
-        it "updates the study mode setting when that is valid" do
-          expect { run_editor("edit study mode", "full_time_or_part_time", "exit") }.to change { course.reload.study_mode }.
-            from("part_time").to("full_time_or_part_time")
-        end
-
-        it "updates the site status's vacancy status to match study mode" do
-          expect { run_editor("edit study mode", "full_time_or_part_time", "exit") }.
-            to change { course.reload.site_statuses.map(&:vac_status) }.
-            from(%w[no_vacancies part_time_vacancies part_time_vacancies]).
-            to(%w[no_vacancies both_full_time_and_part_time_vacancies both_full_time_and_part_time_vacancies])
-        end
-
-        it "updates the study mode setting to full time by default" do
-          expect { run_editor("edit study mode", "", "exit") }.to change { course.reload.study_mode }.
-            from("part_time").to("full_time")
-        end
-
-        it "updates the site status's vacancy status to match full time study mode by default" do
-          expect { run_editor("edit study mode", "", "exit") }.
-            to change { course.reload.site_statuses.map(&:vac_status) }.
-            from(%w[no_vacancies part_time_vacancies part_time_vacancies]).
-            to(%w[no_vacancies full_time_vacancies full_time_vacancies])
-        end
-      end
-
-      describe "(accredited body)" do
-        it "updates the accredited body for an existing accredited body" do
-          expect { run_editor("edit accredited body", another_accredited_body.provider_code, "exit") }.
-            to change { course.reload.accrediting_provider }.
-            from(accredited_body).to(another_accredited_body)
-        end
-
-        it "upper-cases the accredited body code before looking it up" do
-          expect { run_editor("edit accredited body", another_accredited_body.provider_code.downcase, "exit") }.
-            to change { course.reload.accrediting_provider }.
-            from(accredited_body).to(another_accredited_body)
-        end
-
-        it "updates the accredited body to self-accredited when no accredited body is specified" do
-          expect { run_editor("edit accredited body", "", "exit") }.to change { course.reload.accrediting_provider }.
-            from(accredited_body).to(provider)
-        end
-
-        it "asks the accredited body again if the user provides a non-existent code" do
-          expect { run_editor("edit accredited body", "ABCDE", "XYZ", "", "exit") }.to change { course.reload.accrediting_provider }.
-            from(accredited_body).to(provider)
-        end
-      end
-
-      describe "(start date)" do
-        it "updates the course start date when that is valid" do
-          expect { run_editor("edit start date", "October #{current_year}", "exit") }.
-            to change { course.reload.start_date }.
-                 from(Date.new(current_year, 8, 1)).
-                 to(Date.new(current_year, 10, 1))
-        end
-
-        it "updates the start date to September of the recruitment cycle start year, when no start date is given" do
-          expect { run_editor("edit start date", "", "exit") }.
-            to change { course.reload.start_date }.
-                 from(Date.new(current_year, 8, 1)).
-                 to(Date.new(current_year, 9, 1))
-        end
-      end
-
-      describe "(application opening date)" do
-        let(:sites) { create_list(:site, 2) }
-
-        before do
-          sites.collect do |site|
-            course.site_statuses.create(site: site,
-                                        status: :running,
-                                        vac_status: :part_time_vacancies,
-                                        publish: :published)
-          end
-        end
-
-        it 'updates the "applications open from" when that is valid' do
-          expect { run_editor("edit application opening date", "1 October #{last_year}", "exit") }.
-            to change { Date.parse(course.reload.applications_open_from.to_s) }.
-                 from(Date.new(last_year, 10, 9)).
-                 to(Date.new(last_year, 10, 1))
-        end
-
-        it "updates the application opening date to today by default" do
-          Timecop.freeze(Time.utc(current_year, 6, 1, 12, 0, 0)) do
-            expect { run_editor("edit application opening date", "", "exit") }.
-              to change { Date.parse(course.reload.applications_open_from.to_s) }.
-              from(Date.new(last_year, 10, 9)).to(Date.new(current_year, 6, 1))
-          end
-        end
-      end
-
-      describe "(age range)" do
-        it "updates the course age range when that is valid" do
-          expect { run_editor("edit age range", "5_to_11", "exit") }.
-            to change { course.reload.age_range_in_years }.
-            from("3_to_7").to("5_to_11")
-        end
-      end
-
       describe "(course code)" do
         it "updates the course code when that is valid" do
           expect { run_editor("edit course code", "CXXZ", "exit") }.
@@ -255,95 +89,6 @@ describe MCB::Editor::CoursesEditor, :needs_audit_user do
           expect { run_editor("edit course code", "", "CXXY", "exit") }.
             to change { course.reload.course_code }.
             from(course_code).to("CXXY")
-        end
-      end
-
-      describe "(subjects)" do
-        context "with no subjects" do
-          let(:subjects) { [] }
-          let(:level) { "secondary" }
-          let(:age_range_in_years) { "11_to_16" }
-          it "attaches new subjects" do
-            expect {
-              run_editor("edit subjects", "[ ] Biology", "continue", "exit")
-            }.to change { course.subjects.reload.sort_by(&:subject_name) }
-                   .from([])
-                   .to(match_array([biology.becomes(SecondarySubject)]))
-          end
-        end
-
-        context "with a subject" do
-          let(:subjects) { [biology] }
-          let(:level) { "secondary" }
-          let(:age_range_in_years) { "11_to_16" }
-          it "removes existing subjects" do
-            expect {
-              run_editor("edit subjects", "[x] Biology", "continue", "exit")
-            }.to change { course.subjects.reload.sort_by(&:subject_name) }
-                   .from(match_array([biology.becomes(SecondarySubject)]))
-                   .to([])
-          end
-        end
-
-
-        context "when more than 1 course is being edited" do
-          let(:another_course) { create(:course, provider: provider) }
-          let(:course_codes) { [course_code, another_course.course_code] }
-
-          it "does not allow editing subjects" do
-            output, = run_editor("exit")
-            expect(output).to_not include("edit subjects")
-          end
-        end
-      end
-
-      describe "(training locations)" do
-        let!(:site_1) { create(:site, location_name: "ACME school", provider: provider) }
-        let!(:site_2) { create(:site, location_name: "Zebra school", provider: provider) }
-        let!(:site_1_status) {
-          create(:site_status, :running, :published, :part_time_vacancies, course: course, site: site_1)
-        }
-
-        it "adds new training locations" do
-          expect { run_editor("edit training locations", "[ ] Zebra school", "continue", "exit") }.
-            to change { course.sites.reload.sort_by(&:location_name) }.
-            from([site_1]).to([site_1, site_2])
-        end
-
-        it "removes existing training locations" do
-          expect { run_editor("edit training locations", "[x] ACME school", "continue", "exit") }.
-            to change { course.reload.sites }.
-            from([site_1]).to([])
-        end
-
-        context "when more than 1 course is being edited" do
-          let(:another_course) { create(:course, provider: provider) }
-          let(:course_codes) { [course_code, another_course.course_code] }
-
-          it "does not allow editing training locations" do
-            output, = run_editor("exit")
-            expect(output).to_not include("edit training locations")
-          end
-        end
-      end
-
-      describe "(is_send)" do
-        context "when course is not SEND" do
-          it 'turns "yes" into true boolean on Course' do
-            expect { run_editor("edit is SEND", "yes", "exit") }.
-              to change { course.reload.is_send? }.
-              from(is_send).to(true)
-          end
-        end
-
-        context "when course is SEND" do
-          let(:is_send) { true }
-
-          it 'turns "no" into false sboolean on Course' do
-            expect { run_editor("edit is SEND", "no", "exit") }.
-              to change { course.reload.is_send? }.
-              from(is_send).to(false)
-          end
         end
       end
 

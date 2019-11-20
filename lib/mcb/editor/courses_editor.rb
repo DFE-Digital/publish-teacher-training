@@ -66,37 +66,13 @@ module MCB
         choices = [
           "edit title",
           "edit course code",
-          "edit maths",
-          "edit english",
-          "edit science",
-          "edit route",
-          "edit qualifications",
-          "edit study mode",
-          "edit accredited body",
-          "edit start date",
-          "edit application opening date",
-          "edit age range in years",
-          "edit subjects",
-          "edit is SEND",
-          "edit training locations",
           "sync course(s) to Find",
         ]
-        filtered_choices = filter_single_course_options_if_necessary(choices)
-        @cli.ask_multiple_choice(prompt: "What would you like to edit?", choices: filtered_choices)
-      end
-
-      def filter_single_course_options_if_necessary(choices)
-        choices.reject { |c| c.in?(["edit subjects", "edit training locations"]) && @courses.count != 1 }
+        @cli.ask_multiple_choice(prompt: "What would you like to edit?", choices: choices)
       end
 
       def perform_action(choice)
-        if choice == "edit subjects"
-          edit_subjects
-        elsif choice == "edit training locations"
-          edit_sites
-        elsif choice == "edit study mode"
-          edit_study_mode
-        elsif choice.start_with?("edit")
+        if choice.start_with?("edit")
           attribute = choice.gsub("edit ", "").gsub(" ", "_").downcase.to_sym
           edit(attribute)
         elsif choice =~ /sync .* to Find/
