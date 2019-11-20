@@ -43,7 +43,7 @@ module API
       def assign_sentry_contexts
         Raven.user_context(id:              @current_user&.id)
         Raven.tags_context(sign_in_user_id: @current_user&.sign_in_user_id)
-        Raven.extra_context(request_id: RequestStore.store[:request_id])
+        Raven.extra_context(request_id: request.uuid)
       end
 
       def append_info_to_payload(payload)
@@ -55,7 +55,7 @@ module API
             sign_in_id: current_user.sign_in_user_id,
           }
         end
-        payload[:request_id] = RequestStore.store[:request_id]
+        payload[:request_id] = request.uuid
       end
 
       def store_request_id
