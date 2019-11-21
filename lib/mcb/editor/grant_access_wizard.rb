@@ -1,9 +1,8 @@
 module MCB
   module Editor
     class GrantAccessWizard < MCB::Editor::Base
-      def initialize(provider, id_or_email_or_sign_in_id, admin)
+      def initialize(provider, id_or_email_or_sign_in_id)
         @id_or_email_or_sign_in_id = id_or_email_or_sign_in_id
-        @admin = admin
         @requester = User.find_by!(email: MCB.config[:email])
 
         super(provider: provider, requester: @requester)
@@ -12,11 +11,7 @@ module MCB
       def run
         return unless setup_user
 
-        if @admin
-          confirm_and_add_user_to_all_organisations
-        else
-          confirm_and_add_user_to_organisation
-        end
+        confirm_and_add_user_to_organisation
       end
 
     protected
@@ -94,15 +89,6 @@ module MCB
         puts "You're about to give #{@user_to_grant} access to organisation #{@organisation.name}. They will manage:"
         puts MCB::Render::ActiveRecord.providers_table @organisation.providers, name: "Additional Providers"
         @organisation.add_user(@user_to_grant) if @cli.agree("Agree?  ")
-      end
-
-      def confirm_and_add_user_to_all_organisations
-        unless @user_to_grant.admin?
-          puts "Refusing to give non-admin user #{@user_to_grant} access to all orgs"
-          return nil
-        end
-
-        add_user_to_all_organisations
       end
 
       def add_user_to_all_organisations
