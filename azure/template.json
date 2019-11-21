@@ -430,7 +430,7 @@
                 "value": "[parameters('logstashPort')]"
               },
               {
-                "name": "GCP_API_KEY",
+                "name": "SETTINGS__GCP_API_KEY",
                 "value": "[parameters('googleCloudPlatformAPIKey')]"
               }
             ]
