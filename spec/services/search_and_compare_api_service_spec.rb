@@ -15,6 +15,14 @@ describe SearchAndCompareAPIService do
     it "uses the configured secret for the bearer token" do
       expect(subject.headers["Authorization"]).to eq("Bearer #{Settings.search_api.secret}")
     end
+
+    it "uses the RequestStore for the request_id" do
+      request_id = SecureRandom.uuid
+
+      allow(RequestStore).to receive(:store).and_return(request_id: request_id)
+
+      expect(subject.headers["X-Request-ID"]).to eq(request_id)
+    end
   end
 
   describe "Request" do
