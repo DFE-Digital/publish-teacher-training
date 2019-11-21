@@ -251,6 +251,12 @@
       "metadata": {
         "description": "Virtual network name. This needs to be pre-created. This information is used for network profile resourceid."
       }
+    },
+    "googleCloudPlatformAPIKey": {
+      "type": "securestring",
+      "metadata": {
+        "description": "The API key for Google Cloud Platform."
+      }
     }
   },
   "variables": {
@@ -422,6 +428,10 @@
               {
                 "name": "SETTINGS__LOGSTASH__PORT",
                 "value": "[parameters('logstashPort')]"
+              },
+              {
+                "name": "SETTINGS__GCP_API_KEY",
+                "value": "[parameters('googleCloudPlatformAPIKey')]"
               }
             ]
           },
@@ -626,7 +636,7 @@
             "value": "[parameters('containerMemory')]"
           },
           "networkProfileName": {
-            "value": "[parameters('vnetProfileName')]"
+            "value":  "[if(greater(length(parameters('vnetProfileName')), 0),parameters('vnetProfileName') , json('null'))]"
           },
           "networkResourceGroup": {
             "value": "[parameters('vnetResourceGroup')]"
