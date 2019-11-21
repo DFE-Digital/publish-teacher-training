@@ -4,7 +4,10 @@
 require "simplecov"
 require_relative "config/application"
 
+task default: []
+
 Rails.application.load_tasks
+Rake::Task["default"].clear
 
 task lint: ["lint:ruby"]
 task annotate: ["db:annotate"]
