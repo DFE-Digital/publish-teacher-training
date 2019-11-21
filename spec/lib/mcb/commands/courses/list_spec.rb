@@ -1,6 +1,6 @@
 require "mcb_helper"
 
-describe "mcb providers list" do
+describe "mcb courses list" do
   def execute_list(arguments: [], input: [])
     with_stubbed_stdout(stdin: input.join("\n")) do
       $mcb.run(["courses", "list", *arguments])
