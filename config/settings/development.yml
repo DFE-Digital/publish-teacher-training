@@ -4,8 +4,3 @@ mcbg:
   redis_password:
 system_authentication_token: "Ge32"
 log_level: debug
-azure:
-  qa:
-    webapp: dummy-webapp
-    rgroup: dummy-rgroup
-    subscription: dummy-subscription

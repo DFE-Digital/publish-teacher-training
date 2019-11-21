@@ -194,15 +194,22 @@ can be useful for people who aren't as familiar with the app, or with certain
 complex operations that just aren't already packaged up in the app.
 
 In order to use the external environment functionality you must set the
-environments in `config/settings/development.local.yml` like so:  
+environments in ```config/azure_environments.yml ```like so:  
 ```
-azure:
-  <environment name>:
+qa:
     webapp: <webapp>
     rgroup: <rgroup>
     subscription: <subscription>
+staging:
+  webapp: <webapp>
+  rgroup: <rgroup>
+  subscription: <subscription>
+production:
+  webapp: <webapp>
+  rgroup: <rgroup>
+  subscription: <subscription>
 ```
-If you are a member of the Find team you may find a filled out config [here](https://dfedigital.atlassian.net/wiki/spaces/BaT/pages/1182761062/MCB+Configuration?atlOrigin=eyJpIjoiMzdkOGJlNGU0NTNhNDYyMGI4NTI3Mzg2ZTVjZGEyMjUiLCJwIjoiYyJ9).
+If you are a member of the Find team you may find a filled out config [here](https://dfedigital.atlassian.net/wiki/spaces/BaT/pages/1182761062/MCB+Configuration?atlOrigin=eyJpIjoiZDg0N2Q2ZTg0NTRiNDQ1MmEwZWQ3M2VhZjMyYjIxNjEiLCJwIjoiYyJ9n).
 
 The script's functionality is accessed using sub-commands with built-in
 documentation. This is the best way to discover it's functionality and the
