@@ -42,6 +42,26 @@ module API
         @object.recruitment_cycle.year
       end
 
+      attribute :has_bursary? do
+        false
+      end
+
+      attribute :has_scholarship_and_bursary? do
+        false
+      end
+
+      attribute :has_early_career_payments? do
+        false
+      end
+
+      attribute :bursary_amount do
+        nil
+      end
+
+      attribute :scholarship_amount do
+        nil
+      end
+
       belongs_to :provider
       belongs_to :accrediting_provider
 
