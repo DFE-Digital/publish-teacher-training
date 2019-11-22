@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_11_04_160651) do
+ActiveRecord::Schema.define(version: 2019_11_21_134242) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_buffercache"
@@ -214,9 +214,12 @@ ActiveRecord::Schema.define(version: 2019_11_04_160651) do
     t.text "train_with_us"
     t.text "train_with_disability"
     t.jsonb "accrediting_provider_enrichments"
+    t.float "latitude"
+    t.float "longitude"
     t.index ["changed_at"], name: "index_provider_on_changed_at", unique: true
     t.index ["discarded_at"], name: "index_provider_on_discarded_at"
     t.index ["last_published_at"], name: "IX_provider_last_published_at"
+    t.index ["latitude", "longitude"], name: "index_provider_on_latitude_and_longitude"
     t.index ["recruitment_cycle_id", "provider_code"], name: "index_provider_on_recruitment_cycle_id_and_provider_code", unique: true
   end
 
@@ -259,6 +262,9 @@ ActiveRecord::Schema.define(version: 2019_11_04_160651) do
     t.integer "region_code"
     t.datetime "created_at", default: -> { "timezone('utc'::text, now())" }, null: false
     t.datetime "updated_at", default: -> { "timezone('utc'::text, now())" }, null: false
+    t.float "latitude"
+    t.float "longitude"
+    t.index ["latitude", "longitude"], name: "index_site_on_latitude_and_longitude"
     t.index ["provider_id", "code"], name: "IX_site_provider_id_code", unique: true
   end
 
