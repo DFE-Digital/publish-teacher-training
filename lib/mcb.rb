@@ -315,13 +315,25 @@ module MCB
 
     def env_to_azure_map(opts)
       azure_environments_file = File.join("config", "azure_environments.yml")
-      azure_environments = YAML.safe_load(File.read(azure_environments_file))
+      begin
+        azure_environments_file_contents = File.read(azure_environments_file)
+      rescue Errno::ENOENT
+        raise Errno::ENOENT, "Could not find config/azure_environments.yml, consult the MCB section of README.md"
+      end
+
+      azure_environments = YAML.safe_load(azure_environments_file_contents)
+
+      unless azure_environments.key?(opts[:env])
+        raise KeyError, "The environment '#{opts[:env]}' could not be found, have you made sure to add it to your config/azure_environments.yml?"
+      end
+
       azure_environments[opts[:env]]
     end
 
     def load_env_azure_settings(opts)
       if opts.key?(:env)
         env_settings = env_to_azure_map(opts)
+
         opts[:webapp] = env_settings["webapp"] unless opts.key? :webapp
         opts[:rgroup] = env_settings["rgroup"] unless opts.key? :rgroup
         opts[:subscription] = env_settings["subscription"] unless opts.key? :subscription
