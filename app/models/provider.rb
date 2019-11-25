@@ -78,13 +78,18 @@ class Provider < ApplicationRecord
   has_many :courses, -> { kept }
   has_one :ucas_preferences, class_name: "ProviderUCASPreference"
   has_many :contacts
-  has_many :accredited_courses,
+  has_many :accredited_courses, # use current_accredited_courses to filter to courses in the same cycle as this provider
+           -> { where(discarded_at: nil) },
            class_name: "Course",
            foreign_key: :accrediting_provider_code,
            primary_key: :provider_code,
            inverse_of: :accrediting_provider
 
   has_many :accrediting_providers, -> { distinct }, through: :courses
+
+  def current_accredited_courses
+    accredited_courses.select { |c| c.provider.recruitment_cycle == recruitment_cycle }
+  end
 
   scope :changed_since, ->(timestamp) do
     if timestamp.present?
