@@ -1,9 +1,9 @@
 require "mcb_helper"
 
-describe "mcb providers accredited_course_sites" do
+describe "mcb providers accredited_courses" do
   def execute(arguments: [], input: [])
     with_stubbed_stdout(stdin: input.join("\n")) do
-      $mcb.run(["providers", "accredited_course_sites", *arguments])
+      $mcb.run(["providers", "accredited_courses", *arguments])
     end
   end
 
