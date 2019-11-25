@@ -6,11 +6,11 @@ option :f, "csv-file", "output to a file in csv format", argument: :required
 run do |opts, args, _cmd|
   MCB.init_rails(opts)
   code = args[:code]
-  provider = MCB.get_recruitment_cycle(opts).providers.find_by!(provider_code: code)
-  if provider.nil?
-    error "Provider with code '#{code}' not found"
-  else
+  provider = MCB.get_recruitment_cycle(opts).providers.find_by(provider_code: code)
+  if provider.present?
     write_course_data(provider, opts[:"csv-file"])
+  else
+    error "Provider with code '#{code}' not found"
   end
 end
 
