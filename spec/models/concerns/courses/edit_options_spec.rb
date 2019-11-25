@@ -2,7 +2,7 @@ require "rails_helper"
 
 describe Course, type: :model do
   let(:course) { create(:course, level: "primary", subjects: [subjects]) }
-  let(:subjects) { find_or_create(:primary_subject, :primary) }
+  let(:subjects) { find(:primary_subject, :primary) }
 
   describe "modern languages" do
     context "primary level" do
@@ -15,21 +15,21 @@ describe Course, type: :model do
 
     context "secondary level" do
       context "with the modern language subject" do
-        let(:course) { create(:course, level: "secondary", subjects: [find_or_create(:secondary_subject, :modern_languages)]) }
+        let(:course) { create(:course, level: "secondary", subjects: [find(:secondary_subject, :modern_languages)]) }
 
         it "returns modern languages subjects" do
           expect(course.available_modern_languages).to(
             match_array(
               [
-                find_or_create(:modern_languages_subject, :french),
-                find_or_create(:modern_languages_subject, :english_as_a_second_lanaguge_or_other_language),
-                find_or_create(:modern_languages_subject, :german),
-                find_or_create(:modern_languages_subject, :italian),
-                find_or_create(:modern_languages_subject, :japanese),
-                find_or_create(:modern_languages_subject, :mandarin),
-                find_or_create(:modern_languages_subject, :russian),
-                find_or_create(:modern_languages_subject, :spanish),
-                find_or_create(:modern_languages_subject, :modern_languages_other),
+                find(:modern_languages_subject, :french),
+                find(:modern_languages_subject, :english_as_a_second_lanaguge_or_other_language),
+                find(:modern_languages_subject, :german),
+                find(:modern_languages_subject, :italian),
+                find(:modern_languages_subject, :japanese),
+                find(:modern_languages_subject, :mandarin),
+                find(:modern_languages_subject, :russian),
+                find(:modern_languages_subject, :spanish),
+                find(:modern_languages_subject, :modern_languages_other),
               ],
             ),
           )
@@ -48,19 +48,53 @@ describe Course, type: :model do
 
   describe "subjects" do
     let(:course) { create(:course, level: "primary", subjects: []) }
+    let(:secondary_course) { create(:course, level: "secondary", subjects: []) }
 
     it "returns the subjects the user can choose according to their level" do
       expect(course.potential_subjects).to match_array(
         [
-          find_or_create(:primary_subject, :primary),
-          find_or_create(:primary_subject, :primary_with_english),
-          find_or_create(:primary_subject, :primary_with_geography_and_history),
-          find_or_create(:primary_subject, :primary_with_mathematics),
-          find_or_create(:primary_subject, :primary_with_modern_languages),
-          find_or_create(:primary_subject, :primary_with_physical_education),
-          find_or_create(:primary_subject, :primary_with_science),
+          find(:primary_subject, :primary),
+          find(:primary_subject, :primary_with_english),
+          find(:primary_subject, :primary_with_geography_and_history),
+          find(:primary_subject, :primary_with_mathematics),
+          find(:primary_subject, :primary_with_modern_languages),
+          find(:primary_subject, :primary_with_physical_education),
+          find(:primary_subject, :primary_with_science),
         ],
       )
+    end
+
+    it "sorts the potentinal subject by their name" do
+      expect(secondary_course.potential_subjects).to eql(
+        [
+          find(:secondary_subject, :art_and_design),
+          find(:secondary_subject, :biology),
+          find(:secondary_subject, :business_studies),
+          find(:secondary_subject, :chemistry),
+          find(:secondary_subject, :citizenship),
+          find(:secondary_subject, :classics),
+          find(:secondary_subject, :communication_and_media_studies),
+          find(:secondary_subject, :computing),
+          find(:secondary_subject, :dance),
+          find(:secondary_subject, :design_and_technology),
+          find(:secondary_subject, :drama),
+          find(:secondary_subject, :economics),
+          find(:secondary_subject, :english),
+          find(:secondary_subject, :geography),
+          find(:secondary_subject, :health_and_social_care),
+          find(:secondary_subject, :history),
+          find(:secondary_subject, :mathematics),
+          find(:secondary_subject, :modern_languages),
+          find(:secondary_subject, :music),
+          find(:secondary_subject, :philosophy),
+          find(:secondary_subject, :physical_education),
+          find(:secondary_subject, :physics),
+          find(:secondary_subject, :psychology),
+          find(:secondary_subject, :religious_education),
+          find(:secondary_subject, :science),
+          find(:secondary_subject, :social_sciences),
+        ],
+        )
     end
   end
 
@@ -82,7 +116,7 @@ describe Course, type: :model do
 
     context "for a further education course" do
       let(:course) { create(:course, level: "further_education", subjects: [subjects]) }
-      let(:subjects) { find_or_create(:further_education_subject) }
+      let(:subjects) { find(:further_education_subject) }
       it "returns only QTS options for users to choose between" do
         expect(course.qualification_options).to eq(%w[pgce pgde])
         course.qualification_options.each do |q|
@@ -101,7 +135,7 @@ describe Course, type: :model do
 
     context "for secondary" do
       let(:course) { create(:course, level: "secondary", subjects: [subjects]) }
-      let(:subjects) { find_or_create(:secondary_subject, :biology) }
+      let(:subjects) { find(:secondary_subject, :biology) }
       it "returns the correct age ranges for users to co choose between" do
         expect(course.age_range_options).to eq(%w[11_to_16 11_to_18 14_to_19])
       end
