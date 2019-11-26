@@ -15,6 +15,8 @@
 #  email                            :text
 #  id                               :integer          not null, primary key
 #  last_published_at                :datetime
+#  latitude                         :float
+#  longitude                        :float
 #  postcode                         :text
 #  provider_code                    :text
 #  provider_name                    :text
@@ -34,6 +36,7 @@
 #  IX_provider_last_published_at                             (last_published_at)
 #  index_provider_on_changed_at                              (changed_at) UNIQUE
 #  index_provider_on_discarded_at                            (discarded_at)
+#  index_provider_on_latitude_and_longitude                  (latitude,longitude)
 #  index_provider_on_recruitment_cycle_id_and_provider_code  (recruitment_cycle_id,provider_code) UNIQUE
 #
 
