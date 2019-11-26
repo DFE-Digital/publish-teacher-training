@@ -51,10 +51,14 @@ class Site < ApplicationRecord
   geocoded_by :full_address
   # :nocov:
 
-  before_validation :geocode, on: %i[create update]
+  before_validation :geocode, if: :address_changed?
 
   def full_address
     [address1, address2, address3, address4, postcode].compact.join(", ")
+  end
+
+  def address_changed?
+    address1_changed? || address2_changed? || address3_changed? || address4_changed? || postcode_changed?
   end
 
   def recruitment_cycle
