@@ -79,6 +79,7 @@ describe Site, type: :model do
     end
   end
 
+  # Geocoding stubbed with support/helpers.rb
   describe "geocoding" do
     let(:site) {
       create(:site,
@@ -92,7 +93,6 @@ describe Site, type: :model do
     let(:provider) { build(:provider) }
     subject { site }
 
-    # Geocoding stubbed with support/geocoder_stub.rb
     describe "#full_address" do
       it "Concatenates address details" do
         expect(subject.full_address).to eq("Long Lane, Holbury, Southampton, SO45 2PA")

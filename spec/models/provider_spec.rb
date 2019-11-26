@@ -528,6 +528,7 @@ describe Provider, type: :model do
     end
   end
 
+  # Geocoding stubbed with support/helpers.rb
   describe "geocoding" do
     let(:provider) {
       create(:provider,
@@ -538,7 +539,6 @@ describe Provider, type: :model do
              postcode: "SO45 2PA")
     }
 
-    # Geocoding stubbed with support/geocoder_stub.rb
     describe "#full_address" do
       it "Concatenates address details" do
         expect(provider.full_address).to eq("Long Lane, Holbury, Southampton, SO45 2PA")
