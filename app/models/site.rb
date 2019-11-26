@@ -9,7 +9,9 @@
 #  code          :text             not null
 #  created_at    :datetime         not null
 #  id            :integer          not null, primary key
+#  latitude      :float
 #  location_name :text
+#  longitude     :float
 #  postcode      :text
 #  provider_id   :integer          default(0), not null
 #  region_code   :integer
@@ -17,7 +19,8 @@
 #
 # Indexes
 #
-#  IX_site_provider_id_code  (provider_id,code) UNIQUE
+#  IX_site_provider_id_code              (provider_id,code) UNIQUE
+#  index_site_on_latitude_and_longitude  (latitude,longitude)
 #
 
 class Site < ApplicationRecord
