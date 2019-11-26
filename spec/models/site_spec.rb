@@ -82,7 +82,7 @@ describe Site, type: :model do
   # Geocoding stubbed with support/helpers.rb
   describe "geocoding" do
     let(:site) {
-      create(:site,
+      build(:site,
              address1: "Long Lane",
              address2: "Holbury",
              address3: "Southampton",
@@ -101,22 +101,43 @@ describe Site, type: :model do
 
     context "on create" do
       it "saves latitude and longitude" do
-        expect(subject.latitude).to eq(50.8312522)
-        expect(subject.longitude).to eq(-1.3792036)
+        subject.run_callbacks(:commit)
+
+        expect(GeocodeSiteJob).to have_been_enqueued.on_queue("geocoding")
       end
     end
 
     context "on update" do
-      it "saves latitude and longitude" do
-        subject.update!(
-          address1: "Academies Enterprise Trust: Aylward Academy",
-          address2: "Windmill Road",
-          address3: "London",
-          address4: nil,
-          postcode: "N18 1NB",
-        )
-        expect(subject.latitude).to eq(51.4524877)
-        expect(subject.longitude).to eq(-0.1204749)
+      context "Address has not changed" do
+        it "does not enque geocoding" do
+          subject.save
+
+          subject.assign_attributes(
+            code: "ABC"
+          )
+
+          subject.run_callbacks(:commit)
+
+          expect(GeocodeSiteJob).to_not have_been_enqueued.on_queue("geocoding")
+        end
+      end
+
+      context "Address has changed" do
+        it "enques geocoding" do
+          subject.save
+
+          subject.assign_attributes(
+            address1: "Academies Enterprise Trust: Aylward Academy",
+            address2: "Windmill Road",
+            address3: "London",
+            address4: nil,
+            postcode: "N18 1NB",
+            )
+
+          subject.run_callbacks(:commit)
+
+          expect(GeocodeSiteJob).to have_been_enqueued.on_queue("geocoding")
+        end
       end
     end
   end

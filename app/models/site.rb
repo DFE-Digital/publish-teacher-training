@@ -47,11 +47,9 @@ class Site < ApplicationRecord
   validates :code, uniqueness: { scope: :provider_id, case_sensitive: false },
                    inclusion: { in: POSSIBLE_CODES, message: "must be A-Z, 0-9 or -" },
                    presence: true
-  # :nocov:
-  geocoded_by :full_address
-  # :nocov:
 
-  before_validation :geocode, if: :address_changed?
+  geocoded_by :full_address
+  after_commit -> { GeocodeSiteJob.perform_later(id) }, if: :address_changed?
 
   def full_address
     [address1, address2, address3, address4, postcode].compact.join(", ")
