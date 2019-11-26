@@ -48,6 +48,13 @@ class Site < ApplicationRecord
                    inclusion: { in: POSSIBLE_CODES, message: "must be A-Z, 0-9 or -" },
                    presence: true
 
+  geocoded_by :full_address
+  before_validation :geocode, on: %i[create update]
+
+  def full_address
+    [address1, address2, address3, address4, postcode].compact.join(", ")
+  end
+
   def recruitment_cycle
     provider.recruitment_cycle
   end

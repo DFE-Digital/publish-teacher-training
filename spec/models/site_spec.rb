@@ -79,6 +79,49 @@ describe Site, type: :model do
     end
   end
 
+  describe "geocoding" do
+    let(:site) {
+      create(:site,
+             address1: "Long Lane",
+             address2: "Holbury",
+             address3: "Southampton",
+             address4: nil,
+             postcode: "SO45 2PA",
+             provider: provider, code: nil)
+    }
+    let(:provider) { build(:provider) }
+    subject { site }
+
+    # Geocoding stubbed with support/geocoder_stub.rb
+
+    describe "#full_address" do
+      it "Concatanates address details" do
+        expect(subject.full_address).to eq("Long Lane, Holbury, Southampton, SO45 2PA")
+      end
+    end
+
+    context "on create" do
+      it "saves latitude and longitude" do
+        expect(subject.latitude).to eq(50.8312522)
+        expect(subject.longitude).to eq(-1.3792036)
+      end
+    end
+
+    context "on update" do
+      it "saves latitude and longitude" do
+        subject.update!(
+          address1: "Academies Enterprise Trust: Aylward Academy",
+          address2: "Windmill Road",
+          address3: "London",
+          address4: nil,
+          postcode: "N18 1NB",
+        )
+        expect(subject.latitude).to eq(51.4524877)
+        expect(subject.longitude).to eq(-0.1204749)
+      end
+    end
+  end
+
   its(:recruitment_cycle) { should eq find(:recruitment_cycle) }
 
   describe "description" do
