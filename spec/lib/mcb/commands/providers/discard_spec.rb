@@ -5,8 +5,10 @@ describe "mcb providers discard" do
     $mcb.run(["providers", "discard", *arguments])
   end
 
-  let(:provider) { create(:provider, recruitment_cycle: recruitment_cycle) }
-  let(:provider2)  { create(:provider, recruitment_cycle: next_recruitment_cycle, provider_code: provider.provider_code) }
+  let(:provider) { create(:provider, recruitment_cycle: recruitment_cycle, courses: [course]) }
+  let(:provider2)  { create(:provider, recruitment_cycle: next_recruitment_cycle, courses: [course2], provider_code: provider.provider_code) }
+  let(:course) { build(:course) }
+  let(:course2) { build(:course) }
   let(:recruitment_cycle) { find_or_create :recruitment_cycle }
   let(:next_recruitment_cycle) { find_or_create :recruitment_cycle, :next }
 
@@ -21,11 +23,14 @@ describe "mcb providers discard" do
     it "discards the provider" do
       expect(provider.reload.discarded?).to be_truthy
       expect(provider.reload.discarded_at).to be_within(1.second).of Time.now.utc
+      expect(course.reload.discarded?).to be_truthy
+      expect(course.discarded_at).to be_within(1.second).of Time.now.utc
       expect(provider2.reload.discarded?).to be_falsey
+      expect(provider2.courses.first.reload.discarded?).to be_falsey
     end
   end
 
-  context "for the current recruitment cycle" do
+  context "for the next recruitment cycle" do
     before do
       provider
       provider2
@@ -35,7 +40,10 @@ describe "mcb providers discard" do
     it "discards the provider" do
       expect(provider2.reload.discarded?).to be_truthy
       expect(provider2.reload.discarded_at).to be_within(1.second).of Time.now.utc
+      expect(course2.reload.discarded?).to be_truthy
+      expect(course2.reload.discarded_at).to be_within(1.second).of Time.now.utc
       expect(provider.reload.discarded?).to be_falsey
+      expect(provider.courses.first.reload.discarded?).to be_falsey
     end
   end
 
