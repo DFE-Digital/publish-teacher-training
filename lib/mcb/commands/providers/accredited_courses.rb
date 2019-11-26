@@ -24,48 +24,42 @@ def write_course_data(provider, output_filename = nil)
 end
 
 def get_course_data(provider)
-  courses = provider.current_accredited_courses.map do |c|
-    {
-      provider_code: c.provider.provider_code,
-      provider_name: c.provider.provider_name,
-      course_code: c.course_code,
-      course_name: c.name,
-      study_mode: c.study_mode,
-      program_type: c.program_type,
-      qualification: c.qualification,
-      content_status: c.content_status,
-      sites: c.site_statuses.map do |ss|
-        {
-          site_code: ss.site.code,
-          site_name: ss.site.location_name,
-          site_status: ss.status,
-          site_published: ss.published_on_ucas?,
-          site_vacancies: ss.vac_status,
-        }
-      end,
-    }
-  end
-  course_data = courses.select { |c| c[:sites].any? } # they aren't on "Find" or "Apply" if they have no sites
-  course_data = flatten_sites(course_data)
-  course_data.sort_by do |x|
-    [
-      x[:provider_name],
-      x[:course_name],
-      x[:program_type],
-      x[:qualification],
-      x[:site_name],
-    ]
+  out = provider.current_accredited_courses.map { |c| build_course_with_sites(c) }
+  out.flatten!
+  out.sort_by { |c| c.values_at(:provider_name, :course_name, :program_type, :site_name) }
+end
+
+def build_course_with_sites(course)
+  if course.site_statuses.any?
+    course.site_statuses.map do |ss|
+      build_site(ss).merge(build_course(course))
+    end
+  else
+    [build_course(course)]
   end
 end
 
-def flatten_sites(courses)
-  course_data = []
-  courses.each do |c|
-    c[:sites].each do |s|
-      course_data << c.except(:sites).merge(s)
-    end
-  end
-  course_data
+def build_course(course)
+  {
+    provider_code: course.provider.provider_code,
+    provider_name: course.provider.provider_name,
+    course_code: course.course_code,
+    course_name: course.name,
+    study_mode: course.study_mode,
+    program_type: course.program_type,
+    qualification: course.qualification,
+    content_status: course.content_status,
+  }
+end
+
+def build_site(site_status)
+  {
+    site_code: site_status.site.code,
+    site_name: site_status.site.location_name,
+    site_status: site_status.status,
+    site_published: site_status.published_on_ucas?,
+    site_vacancies: site_status.vac_status,
+  }
 end
 
 def write_to_csv_file(file, data)
