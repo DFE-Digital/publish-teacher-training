@@ -258,15 +258,15 @@ describe Provider, type: :model do
   it "defines an enum for accrediting_provider" do
     expect(subject)
       .to define_enum_for("accrediting_provider")
-            .backed_by_column_of_type(:text)
-            .with_values("accredited_body" => "Y", "not_an_accredited_body" => "N")
+      .backed_by_column_of_type(:text)
+      .with_values("accredited_body" => "Y", "not_an_accredited_body" => "N")
   end
 
   it "defines an enum for accrediting_provider" do
     expect(subject)
       .to define_enum_for("scheme_member")
-            .backed_by_column_of_type(:text)
-            .with_values("is_a_UCAS_ITT_member" => "Y", "not_a_UCAS_ITT_member" => "N")
+      .backed_by_column_of_type(:text)
+      .with_values("is_a_UCAS_ITT_member" => "Y", "not_a_UCAS_ITT_member" => "N")
   end
 
   describe "courses" do
@@ -524,7 +524,46 @@ describe Provider, type: :model do
         "Providers::GenerateUniqueCourseCodeService",
       ).with_arguments(
         existing_codes: %w[A123 B456],
-      )
+        )
+    end
+  end
+
+  describe "geocoding" do
+    let(:provider) {
+      create(:provider,
+             address1: "Long Lane",
+             address2: "Holbury",
+             address3: "Southampton",
+             address4: nil,
+             postcode: "SO45 2PA")
+    }
+
+    # Geocoding stubbed with support/geocoder_stub.rb
+    describe "#full_address" do
+      it "Concatenates address details" do
+        expect(provider.full_address).to eq("Long Lane, Holbury, Southampton, SO45 2PA")
+      end
+    end
+
+    context "on create" do
+      it "saves latitude and longitude" do
+        expect(provider.latitude).to eq(50.8312522)
+        expect(provider.longitude).to eq(-1.3792036)
+      end
+    end
+
+    context "on update" do
+      it "saves latitude and longitude" do
+        provider.update!(
+          address1: "Academies Enterprise Trust: Aylward Academy",
+          address2: "Windmill Road",
+          address3: "London",
+          address4: nil,
+          postcode: "N18 1NB",
+        )
+        expect(subject.latitude).to eq(51.4524877)
+        expect(subject.longitude).to eq(-0.1204749)
+      end
     end
   end
 

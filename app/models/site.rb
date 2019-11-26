@@ -47,8 +47,10 @@ class Site < ApplicationRecord
   validates :code, uniqueness: { scope: :provider_id, case_sensitive: false },
                    inclusion: { in: POSSIBLE_CODES, message: "must be A-Z, 0-9 or -" },
                    presence: true
-
+  # :nocov:
   geocoded_by :full_address
+  # :nocov:
+
   before_validation :geocode, on: %i[create update]
 
   def full_address
