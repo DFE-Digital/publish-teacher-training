@@ -476,6 +476,36 @@ describe Provider, type: :model do
         expect(described_class.discarded.size).to eq(1)
       end
     end
+
+    context "a provider with courses" do
+      let(:provider) { create(:provider, courses: [course, course2]) }
+      let(:course) { build(:course) }
+      let(:course2) { build(:course) }
+
+      before do
+        provider.discard
+      end
+
+      it "should discard all of the providers courses" do
+        expect(course.discarded?).to be_truthy
+        expect(course2.discarded?).to be_truthy
+      end
+    end
+  end
+
+  describe "#discard_courses" do
+    let(:provider) { create(:provider, courses: [course, course2]) }
+    let(:course) { build(:course) }
+    let(:course2) { build(:course) }
+
+    before do
+      provider.discard_courses
+    end
+
+    it "should discard all of the providers courses" do
+      expect(course.discarded?).to be_truthy
+      expect(course2.discarded?).to be_truthy
+    end
   end
 
   describe "#next_available_course_code" do

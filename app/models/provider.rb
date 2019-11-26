@@ -113,6 +113,8 @@ class Provider < ApplicationRecord
 
   validate :add_enrichment_errors
 
+  before_discard { discard_courses }
+
   def syncable_courses
     courses.includes(
       :enrichments,
@@ -230,6 +232,10 @@ class Provider < ApplicationRecord
     services[:generate_unique_course_code].execute(
       existing_codes: courses.pluck(:course_code),
     )
+  end
+
+  def discard_courses
+    courses.each(&:discard)
   end
 
 private
