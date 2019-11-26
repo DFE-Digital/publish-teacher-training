@@ -6,3 +6,4 @@ bg_jobs:
     cron: "0 */2 * * *"
     class: "BulkSyncCoursesToFindJob"
     queue: find_sync
+gcp_api_key: please_change_me
