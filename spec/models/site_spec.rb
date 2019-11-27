@@ -81,14 +81,21 @@ describe Site, type: :model do
 
   # Geocoding stubbed with support/helpers.rb
   describe "geocoding" do
+    include ActiveJob::TestHelper
+
+    after do
+      clear_enqueued_jobs
+      clear_performed_jobs
+    end
+
     let(:site) {
       build(:site,
-             address1: "Long Lane",
-             address2: "Holbury",
-             address3: "Southampton",
-             address4: nil,
-             postcode: "SO45 2PA",
-             provider: provider, code: nil)
+            address1: "Long Lane",
+            address2: "Holbury",
+            address3: "Southampton",
+            address4: nil,
+            postcode: "SO45 2PA",
+            provider: provider, code: nil)
     }
     let(:provider) { build(:provider) }
     subject { site }
@@ -100,30 +107,30 @@ describe Site, type: :model do
     end
 
     context "on create" do
-      it "saves latitude and longitude" do
+      it "queues geocoding background job" do
         subject.run_callbacks(:commit)
 
-        expect(GeocodeSiteJob).to have_been_enqueued.on_queue("geocoding")
+        expect(GeocodeJob).to have_been_enqueued.on_queue("geocoding")
       end
     end
 
     context "on update" do
       context "Address has not changed" do
-        it "does not enque geocoding" do
+        it "does not queue geocoding background job" do
           subject.save
 
           subject.assign_attributes(
-            code: "ABC"
+            code: "ABC",
           )
 
           subject.run_callbacks(:commit)
 
-          expect(GeocodeSiteJob).to_not have_been_enqueued.on_queue("geocoding")
+          expect(GeocodeJob).to_not have_been_enqueued.on_queue("geocoding")
         end
       end
 
       context "Address has changed" do
-        it "enques geocoding" do
+        it "queues geocoding job" do
           subject.save
 
           subject.assign_attributes(
@@ -136,7 +143,7 @@ describe Site, type: :model do
 
           subject.run_callbacks(:commit)
 
-          expect(GeocodeSiteJob).to have_been_enqueued.on_queue("geocoding")
+          expect(GeocodeJob).to have_been_enqueued.on_queue("geocoding")
         end
       end
     end

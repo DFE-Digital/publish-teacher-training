@@ -49,7 +49,7 @@ class Site < ApplicationRecord
                    presence: true
 
   geocoded_by :full_address
-  after_commit -> { GeocodeSiteJob.perform_later(id) }, if: :address_changed?
+  after_commit -> { GeocodeJob.perform_later("Site", id) }, if: :address_changed?
 
   def full_address
     [address1, address2, address3, address4, postcode].compact.join(", ")

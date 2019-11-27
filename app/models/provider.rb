@@ -120,6 +120,17 @@ class Provider < ApplicationRecord
 
   before_discard { discard_courses }
 
+  geocoded_by :full_address
+  after_commit -> { GeocodeJob.perform_later("Provider", id) }, if: :address_changed?
+
+  def full_address
+    [address1, address2, address3, address4, postcode].compact.join(", ")
+  end
+
+  def address_changed?
+    address1_changed? || address2_changed? || address3_changed? || address4_changed? || postcode_changed?
+  end
+
   def syncable_courses
     courses.includes(
       :enrichments,
