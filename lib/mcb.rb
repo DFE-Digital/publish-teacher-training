@@ -2,6 +2,7 @@ require "logger"
 require "open3"
 require "config"
 require "securerandom"
+require "csv"
 
 module MCB
   LOGGER = Logger.new(STDERR)
