@@ -23,13 +23,13 @@ describe GeocodeJob, type: :job do
       .to change(ActiveJob::Base.queue_adapter.enqueued_jobs, :size).by(1)
   end
 
-  it 'is put into the geocoding queue' do
-    expect(described_class.new.queue_name).to eq('geocoding')
+  it "is put into the geocoding queue" do
+    expect(described_class.new.queue_name).to eq("geocoding")
   end
 
-  it 'executes perform' do
+  it "executes perform" do
     results = [
-      OpenStruct.new(latitude: 50.345676, longitude: -1.345676)
+      OpenStruct.new(latitude: 50.345676, longitude: -1.345676),
     ]
 
     allow(Geocoder).to receive(:search).and_return(results)

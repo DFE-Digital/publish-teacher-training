@@ -1,4 +1,4 @@
-module Helpers
+module GeocoderHelper
   def stub_geocoder
     Geocoder.configure(lookup: :test)
 
