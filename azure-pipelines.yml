@@ -46,6 +46,7 @@ steps:
     DOCKER_OVERRIDE: $(dockerOverride)
     dockerHubUsername: $(dockerHubUsername)
     dockerHubImageName: $(imageName)
+    CC_TEST_REPORTER_ID: $(ccReporterID)
 - script: |
     $DOCKER_OVERRIDE exec -T web /bin/sh -c "bundle exec rubocop app config db lib spec --format clang"
   displayName: 'Execute linters'
