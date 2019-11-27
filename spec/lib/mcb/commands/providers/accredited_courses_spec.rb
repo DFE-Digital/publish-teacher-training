@@ -16,7 +16,16 @@ describe "mcb providers accredited_courses" do
 
   it "writes course information to terminal" do
     output = execute(arguments: [provider.provider_code])[:stdout]
-    expect(output).to include("provider_code | provider_name") # headers
+    expect(output).to have_text_table_row(
+      "provider_code",
+      "provider_name",
+      "course_code",
+      "course_name",
+      "study_mode",
+      "program_type",
+      "qualification",
+      "content_status",
+    )
     expect(output).to include(findable_course.provider.provider_code)
     expect(output).to include(findable_course.course_code)
   end
