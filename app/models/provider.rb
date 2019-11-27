@@ -246,7 +246,7 @@ class Provider < ApplicationRecord
 
   def next_available_course_code
     services[:generate_unique_course_code].execute(
-      existing_codes: courses.pluck(:course_code),
+      existing_codes: courses.order(:course_code).pluck(:course_code),
     )
   end
 
