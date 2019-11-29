@@ -98,53 +98,70 @@ describe Site, type: :model do
             provider: provider, code: nil)
     }
     let(:provider) { build(:provider) }
-    subject { site }
 
     describe "#full_address" do
       it "Concatenates address details" do
-        expect(subject.full_address).to eq("Long Lane, Holbury, Southampton, SO45 2PA")
+        expect(site.full_address).to eq("Long Lane, Holbury, Southampton, SO45 2PA")
       end
     end
 
-    context "on create" do
-      it "queues geocoding background job" do
-        subject.run_callbacks(:commit)
+    describe "#needs_geolocation?" do
+      subject { site.needs_geolocation? }
 
-        expect(GeocodeJob).to have_been_enqueued.on_queue("geocoding")
-      end
-    end
+      context "latitude is nil" do
+        let(:site) { build_stubbed(:site, latitude: nil) }
 
-    context "on update" do
-      context "Address has not changed" do
-        it "does not queue geocoding background job" do
-          subject.save
-
-          subject.assign_attributes(
-            code: "ABC",
-          )
-
-          subject.run_callbacks(:commit)
-
-          expect(GeocodeJob).to_not have_been_enqueued.on_queue("geocoding")
-        end
+        it { should be(true) }
       end
 
-      context "Address has changed" do
-        it "queues geocoding job" do
-          subject.save
+      context "longitude is nil" do
+        let(:site) { build_stubbed(:site, longitude: nil) }
 
-          subject.assign_attributes(
-            address1: "Academies Enterprise Trust: Aylward Academy",
-            address2: "Windmill Road",
-            address3: "London",
-            address4: nil,
-            postcode: "N18 1NB",
-            )
+        it { should be(true) }
+      end
 
-          subject.run_callbacks(:commit)
+      context "latitude and longitude is not nil" do
+        let(:site) { build_stubbed(:site, latitude: 1.456789, longitude: 1.456789) }
 
-          expect(GeocodeJob).to have_been_enqueued.on_queue("geocoding")
+        it { should be(false) }
+      end
+
+      context "address has not changed" do
+        let(:site) {
+          build_stubbed(:site,
+                        latitude: 1.456789,
+                        longitude: 1.456789,
+                        address1: "Long Lane",
+                        address2: "Holbury",
+                        address3: "Southampton",
+                        address4: nil,
+                        postcode: "SO45 2PA")
+        }
+
+        before do
+          site.assign_attributes(address1: "Long Lane")
         end
+
+        it { should be(false) }
+      end
+
+      context "address not changed" do
+        let(:site) {
+          build_stubbed(:site,
+                        latitude: 1.456789,
+                        longitude: 1.456789,
+                        address1: "Long Lane",
+                        address2: "Holbury",
+                        address3: "Southampton",
+                        address4: nil,
+                        postcode: "SO45 2PA")
+        }
+
+        before do
+          site.assign_attributes(address1: "New address 1")
+        end
+
+        it { should be(true) }
       end
     end
   end

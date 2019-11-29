@@ -8,7 +8,7 @@ describe GeocodeJob, type: :job do
   end
 
   let(:site) {
-    create(:site,
+    build(:site,
            address1: "Long Lane",
            address2: "Holbury",
            address3: "Southampton",
@@ -35,6 +35,7 @@ describe GeocodeJob, type: :job do
     allow(Geocoder).to receive(:search).and_return(results)
     expect(Geocoder).to receive(:search).with(site.full_address)
 
+    site.save!
     perform_enqueued_jobs { job }
 
     updated_site = Site.find(site.id)

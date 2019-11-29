@@ -24,7 +24,7 @@
 #
 
 class SiteSerializer < ActiveModel::Serializer
-  attributes :campus_code, :name, :region_code
+  attributes :campus_code, :name, :latitude, :longitude, :region_code
 
   def campus_code
     object.code
