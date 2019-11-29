@@ -5,10 +5,11 @@ module API
 
       def index
         authorize Organisation
-        # render jsonapi: @provider.reload, include: params[:include]
+        @organisations = Organisation.all.sort_by(&:name)
+        render jsonapi: @organisations, include: params[:include]
       end
 
-      private
+    private
 
       def build_recruitment_cycle
         @recruitment_cycle = RecruitmentCycle.current_recruitment_cycle
