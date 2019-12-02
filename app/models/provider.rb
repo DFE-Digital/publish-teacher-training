@@ -44,6 +44,7 @@ class Provider < ApplicationRecord
   include RegionCode
   include ChangedAt
   include Discard::Model
+  include Geolocation
 
   before_create :set_defaults
 
@@ -120,16 +121,7 @@ class Provider < ApplicationRecord
 
   before_discard { discard_courses }
 
-  geocoded_by :full_address
   after_commit -> { GeocodeJob.perform_later("Provider", id) }, if: :needs_geolocation?
-
-  def needs_geolocation?
-    latitude.nil? || longitude.nil? || address_changed?
-  end
-
-  def full_address
-    [address1, address2, address3, address4, postcode].compact.join(", ")
-  end
 
   def syncable_courses
     courses.includes(
@@ -271,10 +263,6 @@ private
         errors.add :accredited_bodies, message
       end
     end
-  end
-
-  def address_changed?
-    address1_changed? || address2_changed? || address3_changed? || address4_changed? || postcode_changed?
   end
 
   def set_defaults
