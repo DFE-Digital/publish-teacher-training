@@ -39,5 +39,11 @@ RSpec.describe Course, type: :model do
 
       its(:funding_type) { should eq "apprenticeship" }
     end
+
+    describe "Default" do
+      subject { Course.new(provider: create(:provider)) }
+
+      its(:funding_type) { should be_nil }
+    end
   end
 end

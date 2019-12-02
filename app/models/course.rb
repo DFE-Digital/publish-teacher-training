@@ -296,6 +296,8 @@ class Course < ApplicationRecord
   end
 
   def funding_type
+    return nil if program_type.nil?
+
     if school_direct_salaried_training_programme?
       "salary"
     elsif pg_teaching_apprenticeship?
