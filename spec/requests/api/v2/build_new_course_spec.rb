@@ -29,8 +29,9 @@ describe "/api/v2/build_new_course", type: :request do
         Course: API::V2::SerializableCourse,
         Subject: API::V2::SerializableSubject,
         PrimarySubject: API::V2::SerializableSubject,
+        Provider: API::V2::SerializableProvider,
       },
-      include: %i[subjects sites],
+      include: %i[subjects sites provider],
     ).to_json)
   end
 

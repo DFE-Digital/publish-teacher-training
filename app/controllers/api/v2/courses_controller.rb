@@ -32,7 +32,7 @@ module API
         json_data = JSONAPI::Serializable::Renderer.new.render(
           @course,
           class: CourseSerializersService.new.execute,
-          include: %i[subjects sites],
+          include: %i[subjects sites provider],
         )
 
         json_data[:data][:errors] = []
