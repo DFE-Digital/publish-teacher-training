@@ -59,10 +59,6 @@ class Site < ApplicationRecord
     [address1, address2, address3, address4, postcode].compact.join(", ")
   end
 
-  def address_changed?
-    address1_changed? || address2_changed? || address3_changed? || address4_changed? || postcode_changed?
-  end
-
   def recruitment_cycle
     provider.recruitment_cycle
   end
@@ -76,6 +72,10 @@ class Site < ApplicationRecord
   end
 
 private
+
+  def address_changed?
+    address1_changed? || address2_changed? || address3_changed? || address4_changed? || postcode_changed?
+  end
 
   def pick_next_available_code(available_codes: [])
     available_desirable_codes = available_codes & DESIRABLE_CODES

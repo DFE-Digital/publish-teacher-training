@@ -131,10 +131,6 @@ class Provider < ApplicationRecord
     [address1, address2, address3, address4, postcode].compact.join(", ")
   end
 
-  def address_changed?
-    address1_changed? || address2_changed? || address3_changed? || address4_changed? || postcode_changed?
-  end
-
   def syncable_courses
     courses.includes(
       :enrichments,
@@ -275,6 +271,10 @@ private
         errors.add :accredited_bodies, message
       end
     end
+  end
+
+  def address_changed?
+    address1_changed? || address2_changed? || address3_changed? || address4_changed? || postcode_changed?
   end
 
   def set_defaults
