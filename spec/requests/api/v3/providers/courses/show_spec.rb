@@ -268,6 +268,8 @@ describe "GET v3/providers/:provider_code/courses/:course_code" do
               "address4" => courses_site_status.site.address4,
               "postcode" => courses_site_status.site.postcode,
               "region_code" => courses_site_status.site.region_code,
+              "latitude" => courses_site_status.site.latitude,
+              "longitude" => courses_site_status.site.longitude,
               "recruitment_cycle_year" => current_year.to_s,
             },
           },

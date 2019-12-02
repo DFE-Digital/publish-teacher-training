@@ -287,6 +287,8 @@ describe "Courses API v2", type: :request do
                   "address4" => site.address4,
                   "postcode" => site.postcode,
                   "region_code" => site.region_code,
+                  "latitude" => site.latitude,
+                  "longitude" => site.longitude,
                   "recruitment_cycle_year" => current_year.to_s,
                 },
               },

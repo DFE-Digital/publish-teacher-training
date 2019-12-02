@@ -152,6 +152,8 @@ describe "GET v3/providers/:provider_code" do
               "address4" => site.address4,
               "postcode" => site.postcode,
               "region_code" => site.region_code,
+              "latitude" => site.latitude,
+              "longitude" => site.longitude,
               "recruitment_cycle_year" => site.recruitment_cycle.year,
             },
           },
