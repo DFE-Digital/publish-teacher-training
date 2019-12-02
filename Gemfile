@@ -86,6 +86,9 @@ gem "discard"
 # Gov Notify
 gem "govuk_notify_rails"
 
+# Geocoding for Ruby
+gem "geocoder"
+
 # Run jobs in the background. Good enough until we know we need more firepower
 # (i.e. SideKiq)
 gem "sidekiq"

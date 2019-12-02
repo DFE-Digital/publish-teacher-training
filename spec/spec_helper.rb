@@ -54,6 +54,11 @@ RSpec.configure do |config|
     expectations.include_chain_clauses_in_custom_matcher_descriptions = true
   end
 
+  include GeocoderHelper
+  config.before :suite do
+    stub_geocoder
+  end
+
   config.include SerializerSpecHelper, type: :serializer
 
   # set `:type` for serializers directory

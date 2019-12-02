@@ -6,6 +6,8 @@ def get_provider_codes_from_body(body)
 end
 
 describe "Providers API", type: :request do
+  include ActiveJob::TestHelper
+
   describe "GET index" do
     let(:credentials) do
       ActionController::HttpAuthentication::Token
@@ -140,9 +142,17 @@ describe "Providers API", type: :request do
       end
 
       before do
-        provider
-        provider2
+        perform_enqueued_jobs do
+          provider
+          provider2
+        end
+
         get_index
+      end
+
+      after do
+        clear_enqueued_jobs
+        clear_performed_jobs
       end
 
       it "returns http success" do
@@ -168,6 +178,8 @@ describe "Providers API", type: :request do
                   "campus_code" => "-",
                   "name" => "Main site 1",
                   "region_code" => "01",
+                  "latitude" => 51.4524877,
+                  "longitude" => -0.1204749,
                 },
               ],
               "institution_code" => "A123",
@@ -178,6 +190,8 @@ describe "Providers API", type: :request do
               "address3" => nil,
               "address4" => "London",
               "postcode" => "N1 5JN",
+              "latitude" => 51.4524877,
+              "longitude" => -0.1204749,
               "region_code" => "01",
               "scheme_member" => "Y",
               "recruitment_cycle" => current_cycle.year,
@@ -231,6 +245,8 @@ describe "Providers API", type: :request do
                   "campus_code" => "-",
                   "name" => "Main site 2",
                   "region_code" => "11",
+                  "latitude" => 51.4524877,
+                  "longitude" => -0.1204749,
                 },
               ],
               "institution_code" => "B123",
@@ -241,6 +257,8 @@ describe "Providers API", type: :request do
               "address3" => "Bee City",
               "address4" => "Bee Hive",
               "postcode" => "B3 3BB",
+              "latitude" => 51.4524877,
+              "longitude" => -0.1204749,
               "region_code" => "03",
               "scheme_member" => "N",
               "recruitment_cycle" => current_cycle.year,

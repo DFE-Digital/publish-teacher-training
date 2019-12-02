@@ -4,3 +4,4 @@ mcbg:
   redis_password:
 system_authentication_token: "Ge32"
 log_level: debug
+gcp_api_key: please_change_me

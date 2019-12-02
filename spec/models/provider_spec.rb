@@ -258,15 +258,15 @@ describe Provider, type: :model do
   it "defines an enum for accrediting_provider" do
     expect(subject)
       .to define_enum_for("accrediting_provider")
-            .backed_by_column_of_type(:text)
-            .with_values("accredited_body" => "Y", "not_an_accredited_body" => "N")
+      .backed_by_column_of_type(:text)
+      .with_values("accredited_body" => "Y", "not_an_accredited_body" => "N")
   end
 
   it "defines an enum for accrediting_provider" do
     expect(subject)
       .to define_enum_for("scheme_member")
-            .backed_by_column_of_type(:text)
-            .with_values("is_a_UCAS_ITT_member" => "Y", "not_a_UCAS_ITT_member" => "N")
+      .backed_by_column_of_type(:text)
+      .with_values("is_a_UCAS_ITT_member" => "Y", "not_a_UCAS_ITT_member" => "N")
   end
 
   describe "courses" do
@@ -524,7 +524,92 @@ describe Provider, type: :model do
         "Providers::GenerateUniqueCourseCodeService",
       ).with_arguments(
         existing_codes: %w[A123 B456],
-      )
+        )
+    end
+  end
+
+  # Geocoding stubbed with support/helpers.rb
+  describe "geocoding" do
+    include ActiveJob::TestHelper
+
+    after do
+      clear_enqueued_jobs
+      clear_performed_jobs
+    end
+
+    let(:provider) {
+      build(:provider,
+            address1: "Long Lane",
+            address2: "Holbury",
+            address3: "Southampton",
+            address4: nil,
+            postcode: "SO45 2PA")
+    }
+
+    describe "#full_address" do
+      it "Concatenates address details" do
+        expect(provider.full_address).to eq("Long Lane, Holbury, Southampton, SO45 2PA")
+      end
+    end
+
+    describe "#needs_geolocation?" do
+      subject { provider.needs_geolocation? }
+
+      context "latitude is nil" do
+        let(:provider) { build_stubbed(:provider, latitude: nil) }
+
+        it { should be(true) }
+      end
+
+      context "longitude is nil" do
+        let(:provider) { build_stubbed(:provider, longitude: nil) }
+
+        it { should be(true) }
+      end
+
+      context "latitude and longitude is not nil" do
+        let(:provider) { build_stubbed(:provider, latitude: 1.456789, longitude: 1.456789) }
+
+        it { should be(false) }
+      end
+
+      context "address has not changed" do
+        let(:provider) {
+          build_stubbed(:provider,
+                        latitude: 1.456789,
+                        longitude: 1.456789,
+                        address1: "Long Lane",
+                        address2: "Holbury",
+                        address3: "Southampton",
+                        address4: nil,
+                        postcode: "SO45 2PA")
+        }
+
+        before do
+          provider.assign_attributes(address1: "Long Lane")
+        end
+
+        it { should be(false) }
+      end
+
+      context "address has not changed" do
+        let(:provider) {
+          build_stubbed(:provider,
+                        latitude: 1.456789,
+                        longitude: 1.456789,
+                        address1: "Long Lane",
+                        address2: "Holbury",
+                        address3: "Southampton",
+                        address4: nil,
+                        postcode: "SO45 2PA")
+        }
+
+        before do
+          provider.assign_attributes(address1: "New address 1")
+        end
+
+        it { should be(true) }
+      end
     end
   end
 
