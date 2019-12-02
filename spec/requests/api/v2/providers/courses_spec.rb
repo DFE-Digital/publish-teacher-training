@@ -129,7 +129,7 @@ describe "Courses API v2", type: :request do
               "meta" => {
                 "edit_options" => {
                   "entry_requirements" => %w[must_have_qualification_at_application_time expect_to_achieve_before_training_begins equivalence_test],
-                  "qualifications" => %w[qts pgce_with_qts pgde_with_qts],
+                  "qualifications" => %w[pgce_with_qts qts pgde_with_qts],
                   "age_range_in_years" => %w[3_to_7 5_to_11 7_to_11 7_to_14],
                   "start_dates" => [
                     "October #{previous_year}",
@@ -533,7 +533,7 @@ describe "Courses API v2", type: :request do
             "meta" => {
               "edit_options" => {
                 "entry_requirements" => %w[must_have_qualification_at_application_time expect_to_achieve_before_training_begins equivalence_test],
-                "qualifications" => %w[qts pgce_with_qts pgde_with_qts],
+                "qualifications" => %w[pgce_with_qts qts pgde_with_qts],
                 "age_range_in_years" => %w[3_to_7 5_to_11 7_to_11 7_to_14],
                 "start_dates" => [
                   "October #{previous_year}",

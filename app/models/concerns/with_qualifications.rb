@@ -39,7 +39,7 @@ module WithQualifications
     # subjects this course was tagged to.
     #
     # Defined here: https://github.com/DFE-Digital/manage-courses-api/blob/master/src/ManageCourses.Domain/Models/CourseQualification.cs
-    enum qualification: %i[qts pgce_with_qts pgde_with_qts pgce pgde]
+    enum qualification: %i[pgce_with_qts qts pgde_with_qts pgce pgde]
 
     # This field may seem like an unnecessary overhead when there is already a
     # database-backed `qualification` field. However it's misleading, from the
