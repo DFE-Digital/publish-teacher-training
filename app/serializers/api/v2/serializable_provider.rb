@@ -3,7 +3,9 @@ module API
     class SerializableProvider < JSONAPI::Serializable::Resource
       type "providers"
 
-      attributes :provider_code, :provider_name, :accredited_body?, :can_add_more_sites?, :content_status, :accredited_bodies, :train_with_us, :train_with_disability
+      attributes :provider_code, :provider_name, :accredited_body?, :can_add_more_sites?,
+                 :content_status, :accredited_bodies, :train_with_us, :train_with_disability,
+                 :latitude, :longitude
 
       attribute :address1 do
         @object.external_contact_info["address1"]
