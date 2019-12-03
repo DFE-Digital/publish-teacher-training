@@ -10,6 +10,7 @@ describe "/api/v2/build_new_course", type: :request do
            recruitment_cycle: recruitment_cycle,
            provider_type: "Y"
   end
+  let(:provider2) { create(:provider) }
   let(:payload) { { email: user.email } }
   let(:token) do
     JWT.encode payload,
@@ -62,8 +63,106 @@ describe "/api/v2/build_new_course", type: :request do
     end
   end
 
+  context "with an accrediting_provider" do
+    let(:course) { Course.new(provider: provider, accrediting_provider: provider2) }
+    let(:params) do
+      { course: { accrediting_provider_code: provider2.provider_code } }
+    end
+
+    it "returns the accrediting_provider_code" do
+      response = do_get params
+      expect(response).to have_http_status(:ok)
+      json_response = parse_response(response)
+      expect(json_response["data"]["attributes"]["accrediting_provider_code"]).to eq(provider2.provider_code)
+    end
+
+    it "returns the accrediting provider includes" do
+      response = do_get params
+      expect(response).to have_http_status(:ok)
+      json_response = parse_response(response)
+      expected = course_jsonapi
+      expected["data"]["attributes"]["name"] = ""
+      expected["data"]["errors"] = [
+              {
+                "title" => "Invalid maths",
+                "detail" => "Pick an option for Maths",
+                "source" => {
+                  "pointer" => "/data/attributes/maths",
+                },
+              },
+              {
+                "title" => "Invalid english",
+                "detail" => "Pick an option for English",
+                "source" => {
+                  "pointer" => "/data/attributes/english",
+                },
+              },
+              {
+                "title" => "Invalid name",
+                "detail" => "Name can't be blank",
+                "source" => {
+                  "pointer" => "/data/attributes/name",
+                },
+              },
+              {
+                "title" => "Invalid profpost_flag",
+                "detail" => "Profpost flag can't be blank",
+                "source" => {
+                  "pointer" => "/data/attributes/profpost_flag",
+                },
+              },
+              {
+                "title" => "Invalid program_type",
+                "detail" => "Program type can't be blank",
+                "source" => {
+                  "pointer" => "/data/attributes/program_type",
+                },
+              },
+              {
+                "title" => "Invalid qualification",
+                "detail" => "Qualification can't be blank",
+                "source" => {
+                  "pointer" => "/data/attributes/qualification",
+                },
+              },
+              {
+                "title" => "Invalid start_date",
+                "detail" => "Start date can't be blank",
+                "source" => {
+                  "pointer" => "/data/attributes/start_date",
+                },
+              },
+              {
+                "title" => "Invalid study_mode",
+                "detail" => "Study mode can't be blank",
+                "source" => {
+                  "pointer" => "/data/attributes/study_mode",
+                },
+              },
+              {
+                "title" => "Invalid level",
+                "detail" => "Level can't be blank",
+                "source" => {
+                  "pointer" => "/data/attributes/level",
+                },
+              },
+              {
+                "title" => "Invalid age_range_in_years",
+                "detail" => "Age range in years can't be blank",
+                "source" => {
+                  "pointer" => "/data/attributes/age_range_in_years",
+                },
+              },
+        ]
+      expect(json_response).to eq expected
+    end
+  end
+
+
   context "with no parameters" do
-    let(:params) { { course: {} } }
+    let(:params) do
+      { course: {} }
+    end
 
     it "returns a new course with errors" do
       response = do_get params
