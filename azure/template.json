@@ -625,13 +625,13 @@
         },
         "parameters": {
           "containerInstanceName": {
-            "value": "[concat(parameters('containerInstanceName'), copyIndex())]"
+            "value": "[parameters('containerInstanceName')[copyIndex()]]"
           },
           "containerName": {
-            "value": "[concat(parameters('containerName'), copyIndex())]"
+            "value": "[parameters('containerName')[copyIndex()]]"
           },
           "imageName": {
-            "value": "[concat(parameters('backgroundContainerImageReference'), copyIndex())]"
+            "value": "[parameters('backgroundContainerImageReference')[copyIndex()]]"
           },
           "numberCpuCores": {
             "value": "[parameters('containerCPUCores')]"
