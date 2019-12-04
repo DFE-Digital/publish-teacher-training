@@ -42,3 +42,20 @@ services:
     environment:
       - DB_HOSTNAME=db
       - DB_USERNAME=postgres
+  bg-geocode:
+    build:
+      args:
+        - DOCKER_REPOSITORY=${dockerHubUsername:-dfedigital}
+        - MANAGE_COURSES_BACKEND_IMAGE=${dockerHubImageName:-manage-courses-backend}
+      context: bg-geocode
+      cache_from:
+        - ${dockerHubUsername:-dfedigital}/manage-courses-bg-geocode:latest
+    image: ${dockerHubUsername:-dfedigital}/manage-courses-bg-geocode:latest
+    volumes:
+      - .:/app
+    depends_on:
+      - web
+      - db
+    environment:
+      - DB_HOSTNAME=db
+      - DB_USERNAME=postgres

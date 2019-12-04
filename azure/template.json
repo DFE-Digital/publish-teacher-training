@@ -162,13 +162,13 @@
       }
     },
     "containerInstanceName": {
-      "type": "string",
+      "type": "array",
       "metadata": {
         "description": "The name of the Azure Container Instances resource. This will be its identifier in Azure and can be different from the image name."
       }
     },
     "containerName": {
-      "type": "string",
+      "type": "array",
       "metadata": {
         "description": "The name or role of the container to identify individual containers in multi-container setup."
       }
@@ -219,7 +219,7 @@
       }
     },
     "backgroundContainerImageReference": {
-      "type": "string",
+      "type": "array",
       "metadata": {
         "description": "The container image to pull from the server. Should be in image:tag format."
       }
@@ -610,9 +610,13 @@
       }
     },
     {
-      "name": "container-instances",
+      "name": "[concat('container-instances', copyIndex())]",
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2017-05-10",
+      "copy":{
+        "name": "container-instances-loop",
+        "count": "[length(parameters('containerName'))]"
+      },
       "properties": {
         "mode": "Incremental",
         "templateLink": {
@@ -621,13 +625,13 @@
         },
         "parameters": {
           "containerInstanceName": {
-            "value": "[parameters('containerInstanceName')]"
+            "value": "[parameters('containerInstanceName')[copyIndex()]]"
           },
           "containerName": {
-            "value": "[parameters('containerName')]"
+            "value": "[parameters('containerName')[copyIndex()]]"
           },
           "imageName": {
-            "value": "[parameters('backgroundContainerImageReference')]"
+            "value": "[parameters('backgroundContainerImageReference')[copyIndex()]]"
           },
           "numberCpuCores": {
             "value": "[parameters('containerCPUCores')]"
@@ -713,7 +717,7 @@
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2017-05-10",
       "dependsOn": [
-        "container-instances"
+        "container-instances-loop"
       ],
       "properties": {
         "mode": "Incremental",
