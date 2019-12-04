@@ -32,7 +32,7 @@ describe "/api/v2/build_new_course", type: :request do
         PrimarySubject: API::V2::SerializableSubject,
         Provider: API::V2::SerializableProvider,
       },
-      include: %i[subjects sites accrediting_provider],
+      include: %i[subjects sites provider accrediting_provider],
     ).to_json)
   end
 
