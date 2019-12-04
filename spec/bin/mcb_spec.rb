@@ -21,9 +21,13 @@ describe "running the mcb script" do
 
     context "default config" do
       it "raises an error if the config does not exist", stub_init_rails: false do
-        expect {
-          MCB.start_mcb_repl(%W[-E my_nonexistent_environment])
-        }.to raise_error(Errno::ENOENT, "No such file or directory - Could not find config/azure_environments.yml, consult the MCB section of README.md")
+        FakeFS do
+          FileUtils.mkdir_p("/config")
+
+          expect {
+            MCB.start_mcb_repl(%W[-E my_nonexistent_environment])
+          }.to raise_error(Errno::ENOENT, "No such file or directory - Could not find config/azure_environments.yml, consult the MCB section of README.md")
+        end
       end
 
       it "raises an error if an environment cannot be found", stub_init_rails: false do
