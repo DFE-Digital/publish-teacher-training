@@ -5,7 +5,7 @@ module API
       has_many :users
       attributes :name
 
-      attribute :nctl_organisations do
+      attribute :nctl_ids do
         @object.nctl_organisations.map(&:nctl_id)
       end
     end
