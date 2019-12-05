@@ -146,7 +146,7 @@ Rails.application.routes.draw do
         resources :recruitment_cycles, only: %i[index]
         post :sync_courses_with_search_and_compare, on: :member
       end
-
+      
       resources :providers,
                 param: :code,
                 concerns: :provider_routes do
@@ -156,6 +156,7 @@ Rails.application.routes.draw do
       resources :recruitment_cycles,
                 only: %i[index show],
                 param: :year do
+        resources :organisations, only: :index
         resources :providers,
                   only: %i[index show update],
                   param: :code,
