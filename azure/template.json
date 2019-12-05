@@ -702,6 +702,10 @@
               {
                 "name": "SETTINGS__LOGSTASH__PORT",
                 "secureValue": "[parameters('logstashPort')]"
+              },
+              {
+                "name": "SETTINGS__GCP_API_KEY",
+                "secureValue": "[parameters('googleCloudPlatformAPIKey')]"
               }
             ]
           }
