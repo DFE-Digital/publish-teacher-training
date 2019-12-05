@@ -705,7 +705,7 @@
               },
               {
                 "name": "SETTINGS__GCP_API_KEY",
-                "value": "[parameters('googleCloudPlatformAPIKey')]"
+                "secureValue": "[parameters('googleCloudPlatformAPIKey')]"
               }
             ]
           }
