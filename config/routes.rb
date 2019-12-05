@@ -133,6 +133,8 @@ Rails.application.routes.draw do
       get "providers/suggest", to: "providers#suggest"
       get "/recruitment_cycles/:recruitment_cycle_year/providers/suggest", to: "providers#suggest"
 
+      resources :organisations, only: :index
+
       concern :provider_routes do
         post :sync_courses_with_search_and_compare, on: :member
         resources :courses, param: :code do
@@ -156,6 +158,7 @@ Rails.application.routes.draw do
       resources :recruitment_cycles,
                 only: %i[index show],
                 param: :year do
+        resources :organisations, only: :index
         resources :providers,
                   only: %i[index show update],
                   param: :code,

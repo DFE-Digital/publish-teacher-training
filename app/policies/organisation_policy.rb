@@ -9,4 +9,6 @@ class OrganisationPolicy
   def add_user?
     @user.admin?
   end
+
+  alias_method :index?, :add_user?
 end
