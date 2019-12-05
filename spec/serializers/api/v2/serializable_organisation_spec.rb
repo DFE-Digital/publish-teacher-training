@@ -13,5 +13,5 @@ describe API::V2::SerializableOrganisation do
 
   it { should have_type "organisations" }
   it { should have_attribute(:name).with_value(organisation.name.to_s) }
-  it { should have_attribute(:nctl_organisations).with_value([nctl_organisation.nctl_id]) }
+  it { should have_attribute(:nctl_ids).with_value([nctl_organisation.nctl_id]) }
 end

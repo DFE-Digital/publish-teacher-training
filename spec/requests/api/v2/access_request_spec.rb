@@ -177,6 +177,7 @@ describe "Access Request API V2", type: :request do
               "accept_terms_date_utc" => first_access_request.requester.accept_terms_date_utc.utc.strftime("%FT%T.%3NZ"),
               "state" => first_access_request.requester.state,
               "admin" => first_access_request.requester.admin,
+              "sign_in_user_id" => first_access_request.requester.sign_in_user_id,
             },
             "relationships" => {
               "organisations" => {
