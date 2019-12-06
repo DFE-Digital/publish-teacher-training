@@ -103,10 +103,10 @@
         "description": "Connection string for Sentry monitoring for backend app."
       }
     },
-    "sentryDSNBGFindSync": {
-      "type": "string",
+    "sentryDSNContainers": {
+      "type": "array",
       "metadata": {
-        "description": "Connection string for Sentry monitoring for background find sync container."
+        "description": "Connection string for Sentry monitoring for background find sync and other container instances."
       }
     },
     "settingsAuthenticationSecret": {
@@ -677,7 +677,7 @@
               },
               {
                 "name": "SENTRY_DSN",
-                "secureValue": "[parameters('sentryDSNBGFindSync')]"
+                "secureValue": "[parameters('sentryDSNContainers')[copyIndex()]]"
               },
               {
                 "name": "SETTINGS__AUTHENTICATION__SECRET",
