@@ -26,7 +26,7 @@ describe "Organisations API v2", type: :request do
     let(:provider2) { create(:provider, organisations: [organisation2]) }
     let(:provider3) { create(:provider, recruitment_cycle: next_recruitment_cycle, organisations: [organisation]) }
 
-    let(:request_path) { "/api/v2/organisations" }
+    let(:request_path) { "/api/v2/recruitment_cycles/#{current_recruitment_cycle.year}/organisations" }
     let(:request_params) { {} }
 
 
@@ -54,7 +54,7 @@ describe "Organisations API v2", type: :request do
 
       it "raises an error" do
         expect {
-          get "/api/v2/providers/#{provider.provider_code}/courses",
+          get request_path,
               headers: { "HTTP_AUTHORIZATION" => credentials }
         }.to raise_error Pundit::NotAuthorizedError
       end
@@ -78,6 +78,7 @@ describe "Organisations API v2", type: :request do
                   "type" => "organisations",
                   "attributes" => {
                     "name" => organisation.name,
+                    "nctl_ids" => organisation.nctl_organisations.map(&:nctl_id),
                   },
                   "relationships" => {
                     "users" => {
@@ -97,6 +98,7 @@ describe "Organisations API v2", type: :request do
                    "type" => "organisations",
                    "attributes" => {
                      "name" => organisation2.name,
+                     "nctl_ids" => organisation2.nctl_organisations.map(&:nctl_id),
                    },
                  "relationships" => {
                    "users" => {
@@ -122,6 +124,7 @@ describe "Organisations API v2", type: :request do
         let(:request_params) { { include: "providers,users" } }
 
         before do
+          user
           provider2
           provider3
           perform_request
@@ -135,6 +138,7 @@ describe "Organisations API v2", type: :request do
                 "type" => "organisations",
                 "attributes" => {
                   "name" => organisation.name,
+                  "nctl_ids" => organisation.nctl_organisations.map(&:nctl_id),
                 },
                 "relationships" => {
                   "users" => {
@@ -160,6 +164,7 @@ describe "Organisations API v2", type: :request do
                 "type" => "organisations",
                 "attributes" => {
                   "name" => organisation2.name,
+                  "nctl_ids" => organisation2.nctl_organisations.map(&:nctl_id),
                 },
                 "relationships" => {
                   "users" => {
@@ -192,6 +197,7 @@ describe "Organisations API v2", type: :request do
                    "accept_terms_date_utc" => user.accept_terms_date_utc.utc.strftime("%FT%T.%3NZ"),
                    "state" => user.state,
                    "admin" => user.admin,
+                   "sign_in_user_id" => nil,
                  },
                  "relationships" => {
                    "organisations" => {
@@ -213,6 +219,8 @@ describe "Organisations API v2", type: :request do
                    "accredited_bodies" => provider.accredited_bodies,
                    "train_with_us" => provider.train_with_us,
                    "train_with_disability" => provider.train_with_disability,
+                   "latitude" => provider.latitude,
+                   "longitude" => provider.longitude,
                    "address1" => provider.address1,
                    "address2" => provider.address2,
                    "address3" => provider.address3,
@@ -257,6 +265,7 @@ describe "Organisations API v2", type: :request do
                    "accept_terms_date_utc" => user2.accept_terms_date_utc.utc.strftime("%FT%T.%3NZ"),
                    "state" => user2.state,
                    "admin" => user2.admin,
+                   "sign_in_user_id" => user2.sign_in_user_id,
                  },
                  "relationships" => {
                    "organisations" => {
@@ -278,6 +287,8 @@ describe "Organisations API v2", type: :request do
                    "accredited_bodies" => provider2.accredited_bodies,
                    "train_with_us" => provider2.train_with_us,
                    "train_with_disability" => provider2.train_with_disability,
+                   "latitude" => provider2.latitude,
+                   "longitude" => provider2.longitude,
                    "address1" => provider2.address1,
                    "address2" => provider2.address2,
                    "address3" => provider2.address3,
