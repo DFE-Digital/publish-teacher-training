@@ -5,7 +5,7 @@ describe OrganisationPolicy do
   let(:admin) { create(:user, :admin) }
   let(:organisation) { create(:organisation) }
 
-  describe "add_user?" do
+  permissions :add_user?, :index? do
     it "allows a user to be added by an admin" do
       expect(described_class.new(admin, organisation).add_user?).to be_truthy
     end

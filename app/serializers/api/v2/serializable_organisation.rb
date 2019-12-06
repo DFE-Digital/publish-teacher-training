@@ -3,6 +3,7 @@ module API
     class SerializableOrganisation < JSONAPI::Serializable::Resource
       type "organisations"
       has_many :users
+      has_many :providers
       attributes :name
 
       attribute :nctl_ids do
