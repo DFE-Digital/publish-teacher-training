@@ -1,0 +1,37 @@
+summary "Batch geocode addresses"
+option :m, "model", "model to be geocoded", argument: :required, transform: method(:String)
+option :s, "sleep", "time to sleep between each request", argument: :optional, default: 0.5, transform: method(:Float)
+option :b, "batch_size", "batch size", argument: :optional, default: 100, transform: method(:Integer)
+
+run do |opts, args, _cmd| # rubocop:disable Metrics/BlockLength
+  MCB.init_rails(opts)
+
+  if opts[:model].nil?
+    raise "Please pass in the model you want to geocode"
+  end
+
+  unless %w(provider site).include? opts[:model].downcase
+    raise "You can only geocode Sites and Providers"
+  end
+
+  geocode_record = lambda { |obj|
+    obj.geocode
+    obj.save
+    sleep(opts[:sleep])
+  }
+
+  require "geocoder"
+
+  model = opts[:model].classify.safe_constantize
+
+  if args.any?
+    args.each do |id|
+      record = model.find(id)
+      geocode_record.call(record)
+    end
+  else
+    model.not_geocoded.find_each(batch_size: opts[:batch_size]) do |obj|
+      geocode_record.call(obj)
+    end
+  end
+end
