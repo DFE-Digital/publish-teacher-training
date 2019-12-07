@@ -56,6 +56,12 @@ module MCB
       end
     end
 
+    def self.configure_redis(app_config)
+      %w[REDIS_URL SETTINGS__MCBG__REDIS_PASSWORD].each do |env_var|
+        ENV[env_var] = app_config.fetch(env_var)
+      end
+    end
+
     def self.configure_env(app_config)
       ENV.update(
         app_config.select { |e| e.start_with?("SETTINGS__") },
@@ -85,6 +91,7 @@ module MCB
       end
 
       MCB::Azure.configure_database(app_config)
+      MCB::Azure.configure_redis(app_config)
       MCB::Azure.configure_env(app_config)
 
       app_config["RAILS_ENV"]
