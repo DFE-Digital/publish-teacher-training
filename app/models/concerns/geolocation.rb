@@ -4,7 +4,9 @@ module Geolocation
     geocoded_by :full_address
 
     def needs_geolocation?
-      latitude.nil? || longitude.nil? || address_changed?
+      full_address.present? && (
+        latitude.nil? || longitude.nil? || address_changed?
+      )
     end
 
     def full_address

@@ -34,7 +34,7 @@ run do |opts, args, _cmd| # rubocop:disable Metrics/BlockLength
     end
   else
     model.not_geocoded.find_each(batch_size: opts[:batch_size]) do |obj|
-      geocode_record.call(obj)
+      geocode_record.call(obj) if obj.needs_geolocation?
     end
   end
 end
