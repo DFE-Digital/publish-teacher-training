@@ -22,6 +22,8 @@ describe "mcb db" do
         "PG_DATABASE"                            => "pgdb",
         "PG_USERNAME"                            => "azuser",
         "PG_PASSWORD"                            => "azpass",
+        "REDIS_URL"                              => "https://redisurl",
+        "SETTINGS__MCBG__REDIS_PASSWORD"         => "redispass",
         "RAILS_ENV"                              => "qa",
       }
 
