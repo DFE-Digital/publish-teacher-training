@@ -20,6 +20,7 @@ run do |opts, args, _cmd| # rubocop:disable Metrics/BlockLength
   geocode_record = lambda { |obj|
     obj.geocode
     obj.save
+    verbose "Geocoded #{obj.class} Id:#{obj.id} - #{obj}. New lat/long #{obj.latitude},#{obj.latitude} for full_address '#{obj.full_address}'"
     sleep(opts[:sleep])
   }
 
