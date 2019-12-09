@@ -6,7 +6,7 @@ option :b, "batch_size", "batch size", argument: :optional, default: 100, transf
 
 instance_eval(&MCB.remote_connect_options)
 
-run do |opts, args, _cmd| # rubocop:disable Metrics/BlockLength
+run do |opts, args, _cmd|
   MCB.init_rails(opts)
 
   if opts[:model].nil?
