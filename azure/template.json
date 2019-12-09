@@ -628,6 +628,7 @@
       "type": "Microsoft.Resources/deployments",
       "condition": "[and(greater(length(parameters('vnetName')), 0),greater(length(parameters('vnetSubnetName')), 0),greater(length(parameters('vnetAddressSpaceCIDR')), 0),greater(length(parameters('vnetSubnetAddressPrefix')), 0),greater(length(parameters('vnetResourceGroup')), 0))]",
       "apiVersion": "2017-05-10",
+      "resourceGroup" : "[parameters('vnetResourceGroup')]",
       "copy":{
         "name": "network-profile-loop",
         "count": "[length(parameters('containerName'))]"
