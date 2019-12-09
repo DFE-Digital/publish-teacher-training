@@ -1,7 +1,10 @@
+name "geocode"
 summary "Batch geocode addresses"
 option :m, "model", "model to be geocoded", argument: :required, transform: method(:String)
 option :s, "sleep", "time to sleep between each request", argument: :optional, default: 0.5, transform: method(:Float)
 option :b, "batch_size", "batch size", argument: :optional, default: 100, transform: method(:Integer)
+
+instance_eval(&MCB.remote_connect_options)
 
 run do |opts, args, _cmd| # rubocop:disable Metrics/BlockLength
   MCB.init_rails(opts)
@@ -20,9 +23,9 @@ run do |opts, args, _cmd| # rubocop:disable Metrics/BlockLength
     sleep(opts[:sleep])
   }
 
-  require "geocoder"
-
   model = opts[:model].classify.safe_constantize
+
+  require "geocoder"
 
   if args.any?
     args.each do |id|
