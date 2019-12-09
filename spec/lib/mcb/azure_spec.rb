@@ -200,6 +200,7 @@ describe MCB::Azure do
     before do
       allow(MCB::Azure).to receive(:get_config).and_return(app_config)
       allow(MCB::Azure).to receive(:configure_database)
+      allow(MCB::Azure).to receive(:configure_redis)
       allow(MCB::Azure).to receive(:rgroup_for_app).and_return("banana-tree")
     end
 
