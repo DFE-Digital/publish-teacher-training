@@ -640,7 +640,7 @@
             "value": "[parameters('containerMemory')]"
           },
           "networkProfileName": {
-            "value":  "[if(greater(length(parameters('vnetProfileName')[copyIndex()]), 0),parameters('vnetProfileName') , json('null'))]"
+            "value":  "[if(greater(length(parameters('vnetProfileName')[copyIndex()]), 0),parameters('vnetProfileName')[copyIndex()] , json('null'))]"
           },
           "networkResourceGroup": {
             "value": "[parameters('vnetResourceGroup')]"
