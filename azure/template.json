@@ -225,7 +225,7 @@
       }
     },
     "vnetProfileName": {
-      "type": "string",
+      "type": "array",
       "defaultValue": "",
       "metadata": {
         "description": "Virtual network profile name for container instance. This needs to be pre-created see example for help: https://github.com/DFE-Digital/bat-platform-building-blocks/blob/master/templates/container-instance-network-profile.json"
@@ -640,7 +640,7 @@
             "value": "[parameters('containerMemory')]"
           },
           "networkProfileName": {
-            "value":  "[if(greater(length(parameters('vnetProfileName')), 0),parameters('vnetProfileName') , json('null'))]"
+            "value":  "[if(greater(length(parameters('vnetProfileName')[copyIndex()]), 0),parameters('vnetProfileName') , json('null'))]"
           },
           "networkResourceGroup": {
             "value": "[parameters('vnetResourceGroup')]"
@@ -717,7 +717,7 @@
     },
     {
       "name": "aci-postgres-firewall-rule",
-      "condition": "[and(greater(length(parameters('vnetProfileName')), 0),greater(length(parameters('vnetName')), 0),greater(length(parameters('vnetSubnetName')), 0),greater(length(parameters('vnetResourceGroup')), 0))]",
+      "condition": "[and(greater(length(parameters('vnetName')), 0),greater(length(parameters('vnetSubnetName')), 0),greater(length(parameters('vnetResourceGroup')), 0))]",
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2017-05-10",
       "dependsOn": [
