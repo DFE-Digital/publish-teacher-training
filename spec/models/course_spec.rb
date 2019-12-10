@@ -111,6 +111,25 @@ describe Course, type: :model do
     end
 
     describe "valid?" do
+      context "A further education course" do
+        let(:course) { build(:course, level: "further_education") }
+
+        it "Allows a blank options for age range in years" do
+          course.age_range_in_years = nil
+          expect(course.valid?).to eq(true)
+        end
+
+        it "Allows a blank option for english" do
+          course.english = nil
+          expect(course.valid?).to eq(true)
+        end
+
+        it "Allows a blank option for maths" do
+          course.maths = nil
+          expect(course.valid?).to eq(true)
+        end
+      end
+
       context "blank attribute" do
         let(:course) { build(:course, **blank_field) }
 

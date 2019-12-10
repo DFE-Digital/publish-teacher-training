@@ -171,17 +171,17 @@ describe "/api/v2/build_new_course", type: :request do
                 },
               },
               {
-                "title" => "Invalid level",
-                "detail" => "Level can't be blank",
-                "source" => {
-                  "pointer" => "/data/attributes/level",
-                },
-              },
-              {
                 "title" => "Invalid age_range_in_years",
                 "detail" => "Age range in years can't be blank",
                 "source" => {
                   "pointer" => "/data/attributes/age_range_in_years",
+                },
+              },
+              {
+                "title" => "Invalid level",
+                "detail" => "Level can't be blank",
+                "source" => {
+                  "pointer" => "/data/attributes/level",
                 },
               },
         ]
@@ -259,17 +259,17 @@ describe "/api/v2/build_new_course", type: :request do
                 },
               },
               {
-                "title" => "Invalid level",
-                "detail" => "Level can't be blank",
-                "source" => {
-                  "pointer" => "/data/attributes/level",
-                },
-              },
-              {
                 "title" => "Invalid age_range_in_years",
                 "detail" => "Age range in years can't be blank",
                 "source" => {
                   "pointer" => "/data/attributes/age_range_in_years",
+                },
+              },
+              {
+                "title" => "Invalid level",
+                "detail" => "Level can't be blank",
+                "source" => {
+                  "pointer" => "/data/attributes/level",
                 },
               },
         ]
