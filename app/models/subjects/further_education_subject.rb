@@ -13,4 +13,7 @@
 #
 
 class FurtherEducationSubject < Subject
+  def self.find
+    find_by(subject_name: "Further education")
+  end
 end

@@ -119,5 +119,45 @@ describe "Course POST #create API V2", type: :request do
         expect { perform_request(course) }.to change { provider.reload.courses.count }.from(0).to(1)
       end
     end
+
+    context "When the course is a further education course" do
+      let(:course) do
+        build(
+          :course,
+          level: "further_education",
+          qualification: "pgce",
+          provider: provider,
+          sites: [site_one, site_two],
+        )
+      end
+      let(:further_education_subject) { find_or_create(:further_education_subject) }
+
+      before do
+        jsonapi_data = jsonapi_renderer.render(
+          course,
+          class: {
+            Course: API::V2::SerializableCourse,
+            Site: API::V2::SerializableSite,
+          },
+          include: %i[sites],
+        )
+
+        post create_path,
+             headers: { "HTTP_AUTHORIZATION" => credentials },
+             params: {
+               _jsonapi: { data: jsonapi_data[:data] },
+             }
+      end
+
+      it "Creates a course with a program type 'higher_education_programme'" do
+        created_course = provider.reload.courses.last
+        expect(created_course.program_type).to eq("higher_education_programme")
+      end
+
+      it "Creates a course with the further education subject" do
+        created_course = provider.reload.courses.last
+        expect(created_course.subjects).to eq([further_education_subject])
+      end
+    end
   end
 end

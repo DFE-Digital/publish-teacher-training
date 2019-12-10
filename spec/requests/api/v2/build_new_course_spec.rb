@@ -94,6 +94,20 @@ describe "/api/v2/build_new_course", type: :request do
     end
   end
 
+  context "With a further education course" do
+    let(:course) { Course.new(provider: provider, level: :further_education) }
+    let(:params) do
+      { course: { level: :further_education } }
+    end
+
+    it "Returns the course with the funding type 'fee'" do
+      response = do_get params
+      expect(response).to have_http_status(:ok)
+      json_response = parse_response(response)
+      expect(json_response["data"]["attributes"]["funding_type"]).to eq("fee")
+    end
+  end
+
   context "with an accrediting_provider" do
     let(:course) { Course.new(provider: provider, accrediting_provider: provider2) }
     let(:params) do
