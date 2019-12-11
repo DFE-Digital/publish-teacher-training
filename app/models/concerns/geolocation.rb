@@ -14,7 +14,11 @@ module Geolocation
     end
 
     def address_changed?
-      address1_changed? || address2_changed? || address3_changed? || address4_changed? || postcode_changed?
+      saved_change_to_address1? ||
+        saved_change_to_address2? ||
+        saved_change_to_address3? ||
+        saved_change_to_address4? ||
+        saved_change_to_postcode?
     end
   end
 end
