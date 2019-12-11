@@ -8,6 +8,10 @@ instance_eval(&MCB.remote_connect_options)
 
 require "geocoder"
 
+# TODO: Once Site codes have been changed to three digit values
+# update this command to geocode by site code
+# See: providers/geocode.rb
+
 run do |opts, args, _cmd|
   MCB.init_rails(opts)
 
