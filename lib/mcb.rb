@@ -455,15 +455,11 @@ module MCB
     end
 
     def geocode(obj:, sleep:)
-      if obj.needs_geolocation?
-        obj.geocode
-        obj.save
-        verbose "Geocoded #{obj.class}:#{obj.id} - #{obj}. " \
-                "New lat/long #{obj.latitude},#{obj.latitude} for full_address '#{obj.full_address}'"
-        sleep(sleep)
-      else
-        verbose "Geocoding not required for #{obj.class}:#{obj.id} - #{obj}. "
-      end
+      obj.geocode
+      obj.save
+      verbose "Geocoded #{obj.class}:#{obj.id} - #{obj}. " \
+              "New lat/long #{obj.latitude},#{obj.latitude} for full_address '#{obj.full_address}'"
+      sleep(sleep)
     end
 
   private
