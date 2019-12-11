@@ -12,7 +12,10 @@ run do |opts, args, _cmd|
   MCB.init_rails(opts)
 
   if args.any?
-    Provider
+    recruitment_cycle = MCB.get_recruitment_cycle(opts)
+    providers = recruitment_cycle.providers
+
+    providers
       .where(provider_code: args.map(&:upcase))
       .find_each(batch_size: opts[:batch_size]) do |provider|
         MCB.geocode(obj: provider, sleep: opts[:sleep])
