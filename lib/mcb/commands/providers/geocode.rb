@@ -1,6 +1,6 @@
 name "geocode"
 summary "Batch geocode Providers"
-usage "geocode [options] <id>"
+usage "geocode [options] [<code>...]"
 option :s, "sleep", "time to sleep between each request", argument: :optional, default: 0.25, transform: method(:Float)
 option :b, "batch_size", "batch size", argument: :optional, default: 100, transform: method(:Integer)
 
@@ -12,12 +12,15 @@ run do |opts, args, _cmd|
   MCB.init_rails(opts)
 
   if args.any?
-    Provider.where(id: args.to_a).find_each(batch_size: opts[:batch_size]) do |provider|
-      MCB.geocode(obj: provider, sleep: opts[:sleep])
-    end
+    Provider
+      .where(provider_code: args.map(&:upcase))
+      .find_each(batch_size: opts[:batch_size]) do |provider|
+        MCB.geocode(obj: provider, sleep: opts[:sleep])
+      end
   else
-    Provider.not_geocoded.find_each(batch_size: opts[:batch_size]) do |provider|
-      MCB.geocode(obj: provider, sleep: opts[:sleep])
-    end
+    Provider
+      .not_geocoded.find_each(batch_size: opts[:batch_size]) do |provider|
+        MCB.geocode(obj: provider, sleep: opts[:sleep])
+      end
   end
 end

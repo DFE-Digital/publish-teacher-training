@@ -29,10 +29,10 @@ describe "mcb geocode" do
               .and change { provider.reload.latitude }.from(nil).to(51.4524877)
     end
 
-    it "geocodes Providers by id" do
+    it "geocodes Providers by provider code" do
       expect(MCB).to receive(:geocode).with(obj: second_provider, sleep: default_sleep).and_call_original
 
-      expect { execute_cmd(arguments: [second_provider.id]) }
+      expect { execute_cmd(arguments: [second_provider.provider_code]) }
         .to change { second_provider.reload.latitude }.from(nil).to(51.4524877)
               .and change { second_provider.reload.longitude }.from(nil).to(-0.1204749)
 
