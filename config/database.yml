@@ -10,11 +10,11 @@ default: &default
 
 development:
   <<: *default
-  database: <%= ENV['DB_DATABASE'] || 'manage_courses_backend_development' %>
+  database: <%= ENV.fetch('DB_DATABASE', 'manage_courses_backend_development') %>
 
 test:
   <<: *default
-  database: <%= ENV['DB_DATABASE'] || "manage_courses_backend_test#{ENV['TEST_ENV_NUMBER']}" %>
+  database: <%= ENV.fetch('DB_DATABASE') { "manage_courses_backend_test#{ENV['TEST_ENV_NUMBER']}" } %>
 
 staging:
   <<: *default
