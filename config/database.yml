@@ -2,8 +2,8 @@ default: &default
   adapter: postgresql
   encoding: unicode
   pool: 5
-  username: <%= ENV['DB_USERNAME'] || 'manage_courses_backend' %>
-  password: <%= ENV['DB_PASSWORD'] || 'manage_courses_backend' %>
+  username: <%= ENV['DB_USERNAME'] || 'manage_courses' %>
+  password: <%= ENV['DB_PASSWORD'] || 'manage_courses' %>
   host: <%= ENV['DB_HOSTNAME'] || 'localhost' %>
   port: <%= ENV['DB_PORT'] || '5432' %>
 

@@ -370,8 +370,8 @@ module MCB
     def configure_local_database_env
       # values to match database.yml
       ENV["DB_HOSTNAME"] = "localhost"
-      ENV["DB_USERNAME"] = "manage_courses_backend"
-      ENV["DB_PASSWORD"] = "manage_courses_backend"
+      ENV["DB_USERNAME"] = "manage_courses"
+      ENV["DB_PASSWORD"] = "manage_courses"
       ENV["DB_DATABASE"] = "manage_courses_backend_development"
     end
 

@@ -6,7 +6,7 @@ describe "mcb db" do
     allow(MCB).to receive(:exec_command).with(
       "psql",
       "-h", "localhost",
-      "-U", "manage_courses_backend",
+      "-U", "manage_courses",
       "-d", "manage_courses_backend_development"
     )
 

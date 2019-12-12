@@ -6,7 +6,7 @@ describe "mcb az apps pg_dump" do
     Timecop.freeze do
       allow(MCB).to receive(:exec_command).with(
         "pg_dump --encoding utf8 --clean --if-exists " \
-        "-h localhost -U manage_courses_backend " \
+        "-h localhost -U manage_courses " \
         "-d manage_courses_backend_development " \
         "--file 'localhost_manage_courses_backend_development_#{Time.now.utc.strftime('%Y%m%d_%H%M%S')}.sql'",
       )

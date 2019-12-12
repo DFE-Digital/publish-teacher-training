@@ -25,13 +25,13 @@ namespace :db do
   desc "Create the dev user role"
   task :create_dev_user do
     run_sql <<~EOSQL.strip
-      CREATE USER manage_courses_backend WITH SUPERUSER CREATEDB PASSWORD 'manage_courses_backend';
+      CREATE USER manage_courses WITH SUPERUSER CREATEDB PASSWORD 'manage_courses';
     EOSQL
   end
 
   task :drop_dev_user do
     run_sql <<~EOSQL.strip
-      DROP ROLE IF EXISTS manage_courses_backend;
+      DROP ROLE IF EXISTS manage_courses;
     EOSQL
   end
 end
