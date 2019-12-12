@@ -159,7 +159,7 @@ class Course < ApplicationRecord
   validates :science, inclusion: { in: entry_requirement_options_without_nil_choice }, if: :gcse_science_required?
   validates :enrichments, presence: true, on: :publish
   validates :is_send, inclusion: { in: [true, false] }
-  validates :sites, presence: true, on: :publish
+  validates :sites, presence: true, on: %i[publish create]
   validates :level, presence: { message: "^There is a problem with this course. Contact support to fix it (Error: L)" }, on: :publish
   validates :subjects, presence: true, on: :publish
   validate :validate_enrichment_publishable, on: :publish
@@ -168,7 +168,7 @@ class Course < ApplicationRecord
   validate :validate_course_syncable, on: :sync
   validate :validate_qualification, on: :update
   validate :validate_start_date, on: :update, if: -> { provider.present? && start_date.present? }
-  validate :validate_applications_open_from, on: :update, if: -> { provider.present? }
+  validate :validate_applications_open_from, on: %i[update create], if: -> { provider.present? }
   validate :validate_modern_languages
   validate :validate_subject_count
   validate :validate_subject_consistency
@@ -552,9 +552,17 @@ private
   end
 
   def validate_applications_open_from
-    unless valid_date_range.include?(applications_open_from)
-      errors.add(:applications_open_from, "#{applications_open_from} is not valid for the #{provider.recruitment_cycle.year} cycle. " +
-      "A valid date must be between #{recruitment_cycle.application_start_date} and #{recruitment_cycle.application_end_date}")
+    if applications_open_from.blank?
+      errors.add(:applications_open_from, :blank)
+    elsif !valid_date_range.include?(applications_open_from)
+      chosen_date = applications_open_from.strftime("%d/%m/%Y")
+      start_date = recruitment_cycle.application_start_date.strftime("%d/%m/%Y")
+      end_date = recruitment_cycle.application_end_date.strftime("%d/%m/%Y")
+      errors.add(
+        :applications_open_from,
+        "#{chosen_date} is not valid for the #{provider.recruitment_cycle.year} cycle. " +
+        "A valid date must be between #{start_date} and #{end_date}",
+      )
     end
   end
 
@@ -582,7 +590,10 @@ private
   end
 
   def validate_subject_count
-    return if subjects.empty?
+    if subjects.empty?
+      errors.add(:subjects, :course_creation)
+      return
+    end
 
     case level
     when "primary", "further_education"

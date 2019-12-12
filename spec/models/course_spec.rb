@@ -111,6 +111,59 @@ describe Course, type: :model do
     end
 
     describe "valid?" do
+      fcontext "A new course" do
+        let(:provider) { build(:provider) }
+        let(:course) { Course.new(provider: provider) }
+        let(:errors) { course.errors.messages }
+        before { course.valid? }
+
+        it "Requires a subject" do
+          error = errors[:subjects]
+          expect(error).not_to be_empty
+          expect(error.first).to include("You must pick at least one subject")
+        end
+
+        it "Requires an age range" do
+          error = errors[:age_range_in_years]
+          expect(error).not_to be_empty
+          expect(error.first).to include("You need to pick an age range")
+        end
+
+        it "Requires a program type to have been specified" do
+          error = errors[:program_type]
+          expect(error).not_to be_empty
+          expect(error.first).to include("You need to pick an option")
+        end
+
+        it "Requires a study mode" do
+          error = errors[:study_mode]
+          expect(error).not_to be_empty
+          expect(error.first).to include("You need to pick an option")
+        end
+
+        context "Applications open" do
+          it "Empty" do
+            error = errors[:applications_open_from]
+            expect(error).not_to be_empty
+            expect(error.first).to include("You must say when applications open")
+          end
+
+          it "A date outside of the current recruitment cycle" do
+            course.applications_open_from = course.recruitment_cycle.application_start_date - 1
+            course.valid?
+            error = course.errors.messages[:applications_open_from]
+            expect(error).not_to be_empty
+            expect(error.first).to include("is not valid")
+          end
+        end
+
+        it "Requires at least one location" do
+          error = errors[:sites]
+          expect(error).not_to be_empty
+          expect(error.first).to include("You must pick at least one location")
+        end
+      end
+
       context "A further education course" do
         let(:course) { build(:course, level: "further_education") }
 
