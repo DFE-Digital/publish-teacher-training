@@ -252,6 +252,20 @@
         "description": "Virtual network name. This needs to be pre-created. This information is used for network profile resourceid."
       }
     },
+    "vnetAddressSpaceCIDR": {
+      "type": "string",
+      "defaultValue": "",
+      "metadata": {
+        "description": "The address space of the vNet that the container instance will connect to"
+      }
+    },
+    "vnetSubnetAddressPrefix": {
+      "type": "string",
+      "defaultValue": "",
+      "metadata": {
+        "description": "The address prefix for the subnet that the container instance will connect to"
+      }
+    },
     "googleCloudPlatformAPIKey": {
       "type": "securestring",
       "metadata": {
@@ -610,6 +624,40 @@
       }
     },
     {
+      "name": "[concat('network-profile')]",
+      "type": "Microsoft.Resources/deployments",
+      "condition": "[and(greater(length(parameters('vnetProfileName')), 0),greater(length(parameters('vnetName')), 0),greater(length(parameters('vnetSubnetName')), 0),greater(length(parameters('vnetAddressSpaceCIDR')), 0),greater(length(parameters('vnetSubnetAddressPrefix')), 0),greater(length(parameters('vnetResourceGroup')), 0))]",
+      "apiVersion": "2017-05-10",
+      "resourceGroup" : "[parameters('vnetResourceGroup')]",
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(variables('deploymentUrlBase'), 'container-instance-network-profile-subnet-delg.json')]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "networkProfileName": {
+            "value":  "[parameters('vnetProfileName')]"
+          },
+          "vnetName": {
+            "value": "[parameters('vnetName')]"
+          },
+          "vnetAddressSpaceCIDR": {
+            "value": "[parameters('vnetAddressSpaceCIDR')]"
+          },
+          "subnetName": {
+            "value": "[parameters('vnetSubnetName')]"
+          },
+          "subnetAddressPrefix": {
+            "value": "[parameters('vnetSubnetAddressPrefix')]"
+          }
+        }
+      },
+      "dependsOn": [
+        "redis-cache"
+      ]
+    },
+    {
       "name": "[concat('container-instances', copyIndex())]",
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2017-05-10",
@@ -712,12 +760,13 @@
         }
       },
       "dependsOn": [
-        "redis-cache"
+        "redis-cache",
+        "network-profile"
       ]
     },
     {
       "name": "aci-postgres-firewall-rule",
-      "condition": "[and(greater(length(parameters('vnetProfileName')), 0),greater(length(parameters('vnetName')), 0),greater(length(parameters('vnetSubnetName')), 0),greater(length(parameters('vnetResourceGroup')), 0))]",
+      "condition": "[and(greater(length(parameters('vnetName')), 0),greater(length(parameters('vnetSubnetName')), 0),greater(length(parameters('vnetResourceGroup')), 0))]",
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2017-05-10",
       "dependsOn": [
