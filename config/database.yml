@@ -2,34 +2,29 @@ default: &default
   adapter: postgresql
   encoding: unicode
   pool: 5
-  username: <%= ENV['DB_USERNAME'] || 'manage_courses_backend' %>
-  password: <%= ENV['DB_PASSWORD'] || 'manage_courses_backend' %>
-  host: <%= ENV['DB_HOSTNAME'] || 'localhost' %>
-  port: <%= ENV['DB_PORT'] || '5432' %>
+  username: <%= ENV['DB_USERNAME'] %>
+  password: <%= ENV['DB_PASSWORD'] %>
+  host: <%= ENV['DB_HOSTNAME'] %>
+  port: <%= ENV['DB_PORT'] %>
+  database: <%= ENV['DB_DATABASE'] %>
 
 development:
   <<: *default
-  database: <%= ENV['DB_DATABASE'] || 'manage_courses_backend_development' %>
+  database: <%= ENV.fetch('DB_DATABASE', 'manage_courses_backend_development') %>
 
 test:
   <<: *default
-  database: <%= ENV['DB_DATABASE'] || "manage_courses_backend_test#{ENV['TEST_ENV_NUMBER']}" %>
+  database: <%= ENV.fetch('DB_DATABASE') { "manage_courses_backend_test#{ENV['TEST_ENV_NUMBER']}" } %>
 
 staging:
   <<: *default
-  database: <%= ENV['DB_DATABASE'] || 'manage_courses_backend_staging' %>
 
 qa:
   <<: *default
-  database: <%= ENV['DB_DATABASE'] || 'manage_courses_backend_qa' %>
 
 pentest:
   <<: *default
-  database: <%= ENV['DB_DATABASE'] || 'manage_courses_backend_pentest' %>
 
 production:
   <<: *default
-  username: <%= ENV['DB_USERNAME'] || 'postgres' %>
-  password: <%= ENV['DB_PASSWORD'] %>
-  database: <%= ENV['DB_DATABASE'] %>
 
