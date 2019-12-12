@@ -225,7 +225,7 @@
       }
     },
     "vnetProfileName": {
-      "type": "array",
+      "type": "string",
       "defaultValue": "",
       "metadata": {
         "description": "Virtual network profile name for container instance. This needs to be pre-created see example for help: https://github.com/DFE-Digital/bat-platform-building-blocks/blob/master/templates/container-instance-network-profile.json"
@@ -624,15 +624,11 @@
       }
     },
     {
-      "name": "[concat('network-profile', copyIndex())]",
+      "name": "[concat('network-profile')]",
       "type": "Microsoft.Resources/deployments",
-      "condition": "[and(greater(length(parameters('vnetName')), 0),greater(length(parameters('vnetSubnetName')), 0),greater(length(parameters('vnetAddressSpaceCIDR')), 0),greater(length(parameters('vnetSubnetAddressPrefix')), 0),greater(length(parameters('vnetResourceGroup')), 0))]",
+      "condition": "[and(greater(length(parameters('vnetProfileName')), 0),greater(length(parameters('vnetName')), 0),greater(length(parameters('vnetSubnetName')), 0),greater(length(parameters('vnetAddressSpaceCIDR')), 0),greater(length(parameters('vnetSubnetAddressPrefix')), 0),greater(length(parameters('vnetResourceGroup')), 0))]",
       "apiVersion": "2017-05-10",
       "resourceGroup" : "[parameters('vnetResourceGroup')]",
-      "copy":{
-        "name": "network-profile-loop",
-        "count": "[length(parameters('containerName'))]"
-      },
       "properties": {
         "mode": "Incremental",
         "templateLink": {
@@ -641,7 +637,7 @@
         },
         "parameters": {
           "networkProfileName": {
-            "value":  "[parameters('vnetProfileName')[copyIndex()]]"
+            "value":  "[parameters('vnetProfileName')]"
           },
           "vnetName": {
             "value": "[parameters('vnetName')]"
@@ -692,7 +688,7 @@
             "value": "[parameters('containerMemory')]"
           },
           "networkProfileName": {
-            "value":  "[if(greater(length(parameters('vnetProfileName')[copyIndex()]), 0),parameters('vnetProfileName')[copyIndex()] , json('null'))]"
+            "value":  "[if(greater(length(parameters('vnetProfileName')), 0),parameters('vnetProfileName') , json('null'))]"
           },
           "networkResourceGroup": {
             "value": "[parameters('vnetResourceGroup')]"
@@ -765,7 +761,7 @@
       },
       "dependsOn": [
         "redis-cache",
-        "network-profile-loop"
+        "network-profile"
       ]
     },
     {
