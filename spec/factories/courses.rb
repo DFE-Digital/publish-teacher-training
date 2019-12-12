@@ -184,7 +184,7 @@ FactoryBot.define do
     end
 
     trait :deleted do
-      discarded_at { Time.now - 1.days }
+      discarded_at { Time.zone.now - 1.day }
     end
   end
 end

@@ -137,11 +137,11 @@ describe "PATCH /providers/:provider_code" do
     include_examples "does not allow assignment", :year_code,            "year code"
     include_examples "does not allow assignment", :provider_code,        "provider code"
     include_examples "does not allow assignment", :provider_type,        :lead_school
-    include_examples "does not allow assignment", :created_at,           Time.now
-    include_examples "does not allow assignment", :updated_at,           Time.now
+    include_examples "does not allow assignment", :created_at,           Time.zone.now
+    include_examples "does not allow assignment", :updated_at,           Time.zone.now
     include_examples "does not allow assignment", :accrediting_provider, :accredited_body
-    include_examples "does not allow assignment", :last_published_at,    Time.now
-    include_examples "does not allow assignment", :changed_at,           Time.now
+    include_examples "does not allow assignment", :last_published_at,    Time.zone.now
+    include_examples "does not allow assignment", :changed_at,           Time.zone.now
 
     let!(:next_cycle) { find_or_create(:recruitment_cycle, :next) }
     include_examples "does not allow assignment", :recruitment_cycle_id

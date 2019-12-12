@@ -37,7 +37,7 @@
 require "rails_helper"
 
 describe CourseSerializer do
-  let(:course) { create :course, provider: provider, changed_at: Time.now + 60 }
+  let(:course) { create :course, provider: provider, changed_at: Time.zone.now + 60 }
   let(:provider) { build(:provider) }
   subject { serialize(course) }
 
