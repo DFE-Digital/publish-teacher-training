@@ -4,7 +4,7 @@ class GeocodeJob < ApplicationJob
   def perform(klass, id)
     record = klass.classify.safe_constantize.find(id)
     results = Geocoder.search(record.full_address)
-    if results
+    if results.present?
       result = results.first
       record.update!(
         latitude: result.latitude,

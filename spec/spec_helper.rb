@@ -10,6 +10,10 @@ SimpleCov.minimum_coverage 75
 SimpleCov.start "rails" do
   add_filter "/mcb/"
 end
+SimpleCov.start do
+  add_filter "spec"
+end
+
 # If running specs in parallel this ensures SimpleCov results appears
 # upon completion of all specs
 if ENV["TEST_ENV_NUMBER"]

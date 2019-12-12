@@ -454,6 +454,14 @@ module MCB
       argv.empty? || (argv.first == "-E" && argv.length == 2)
     end
 
+    def geocode(obj:, sleep:)
+      obj.geocode
+      obj.save
+      verbose "Geocoded #{obj.class}:#{obj.id} - #{obj}. " \
+              "New lat/long #{obj.latitude},#{obj.latitude} for full_address '#{obj.full_address}'"
+      sleep(sleep)
+    end
+
   private
 
     def remove_option_with_arg(argv, *options)

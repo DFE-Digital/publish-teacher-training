@@ -46,42 +46,32 @@ describe Geolocation do
       it { should be(false) }
     end
 
-    context "address has not changed" do
+    context "address" do
       let(:site) {
-        build_stubbed(:site,
-                      latitude: 1.456789,
-                      longitude: 1.456789,
-                      address1: "Long Lane",
-                      address2: "Holbury",
-                      address3: "Southampton",
-                      address4: nil,
-                      postcode: "SO45 2PA")
+        create(:site,
+               latitude: 1.456789,
+               longitude: 1.456789,
+               address1: "Long Lane",
+               address2: "Holbury",
+               address3: "Southampton",
+               address4: nil,
+               postcode: "SO45 2PA")
       }
+      context "has not changed" do
+        before do
+          site.update(address1: "Long Lane")
+        end
 
-      before do
-        site.assign_attributes(address1: "Long Lane")
+        it { should be(false) }
       end
 
-      it { should be(false) }
-    end
+      context "has changed" do
+        before do
+          site.update(address1: "New address 1")
+        end
 
-    context "address not changed" do
-      let(:site) {
-        build_stubbed(:site,
-                      latitude: 1.456789,
-                      longitude: 1.456789,
-                      address1: "Long Lane",
-                      address2: "Holbury",
-                      address3: "Southampton",
-                      address4: nil,
-                      postcode: "SO45 2PA")
-      }
-
-      before do
-        site.assign_attributes(address1: "New address 1")
+        it { should be(true) }
       end
-
-      it { should be(true) }
     end
   end
 end

@@ -11,6 +11,7 @@ describe "/api/v2/build_new_course", type: :request do
            provider_type: "Y"
   end
   let(:provider2) { create(:provider) }
+
   let(:payload) { { email: user.email } }
   let(:token) do
     JWT.encode payload,
@@ -31,8 +32,9 @@ describe "/api/v2/build_new_course", type: :request do
         Subject: API::V2::SerializableSubject,
         PrimarySubject: API::V2::SerializableSubject,
         Provider: API::V2::SerializableProvider,
+        Site: API::V2::SerializableSite,
       },
-      include: %i[subjects sites provider accrediting_provider],
+      include: [:subjects, :sites, :accrediting_provider, :provider, provider: [:sites]],
     ).to_json)
   end
 
@@ -51,7 +53,7 @@ describe "/api/v2/build_new_course", type: :request do
       response = do_get params
       expect(response).to have_http_status(:ok)
       json_response = parse_response(response)
-      expect(json_response["data"]["relationships"]).to eq(course_jsonapi["data"]["relationships"])
+      expect(json_response["data"]["relationships"]["subjects"]).to eq(course_jsonapi["data"]["relationships"]["subjects"])
     end
 
     it "returns the generated title" do
@@ -60,6 +62,35 @@ describe "/api/v2/build_new_course", type: :request do
       json_response = parse_response(response)
 
       expect(json_response["data"]["attributes"]["name"]).to eq("Primary with mathematics")
+    end
+  end
+
+  context "providers" do
+    let(:site) { build(:site) }
+    let(:provider) do
+      create :provider,
+             organisations: [organisation],
+             recruitment_cycle: recruitment_cycle,
+             provider_type: "Y",
+             sites: [site]
+    end
+    let(:course) { Course.new(provider: provider) }
+    let(:params) do
+      { provider_code: provider.provider_code, course: {} }
+    end
+
+    it "return a providers" do
+      response = do_get params
+      expect(response).to have_http_status(:ok)
+      json_response = parse_response(response)
+      expect(json_response["data"]["relationships"]["provider"]["data"]["id"].to_i).to eq(provider.id)
+    end
+
+    it "returns the provider sites" do
+      response = do_get params
+      expect(response).to have_http_status(:ok)
+      json_response = parse_response(response)
+      expect(json_response["included"].first["relationships"]["sites"]["data"].first["id"].to_i).to eq(site.id)
     end
   end
 
