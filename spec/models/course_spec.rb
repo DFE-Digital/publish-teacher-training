@@ -1280,7 +1280,7 @@ describe Course, type: :model do
 
   describe "#applications_open_from" do
     context "a new course with a given date" do
-      let(:applications_open_from) { Date.today }
+      let(:applications_open_from) { Time.zone.today }
       let(:subject) { create(:course, applications_open_from: applications_open_from) }
 
       its(:applications_open_from) { should eq applications_open_from }

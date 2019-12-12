@@ -25,7 +25,7 @@ describe "mcb courses touch" do
     it "updates the course updated_at for the current recruitment cycle" do
       rolled_over_course
 
-      Timecop.freeze(Date.today + 1) do
+      Timecop.freeze(Time.zone.today + 1) do
         execute_touch(arguments: [rolled_over_provider.provider_code, rolled_over_course.course_code])
 
         # Use to_i compare seconds since epoch and side-step sub-second
@@ -38,7 +38,7 @@ describe "mcb courses touch" do
     it "updates the course changed_at" do
       rolled_over_course
 
-      Timecop.freeze(Date.today + 1) do
+      Timecop.freeze(Time.zone.today + 1) do
         execute_touch(arguments: [rolled_over_provider.provider_code, rolled_over_course.course_code])
 
         expect(rolled_over_course.reload.changed_at.to_i).to eq Time.now.to_i
@@ -60,7 +60,7 @@ describe "mcb courses touch" do
     it "updates the course updated_at" do
       rolled_over_course
 
-      Timecop.freeze(Date.today + 1) do
+      Timecop.freeze(Time.zone.today + 1) do
         execute_touch(arguments: [provider.provider_code, course.course_code, "-r", recruitment_year1.year])
 
         # Use to_i compare seconds since epoch and side-step sub-second
@@ -73,7 +73,7 @@ describe "mcb courses touch" do
     it "updates the courses changed_at" do
       rolled_over_course
 
-      Timecop.freeze(Date.today + 1) do
+      Timecop.freeze(Time.zone.today + 1) do
         execute_touch(arguments: [provider.provider_code, course.course_code, "-r", recruitment_year1.year])
 
         expect(course.reload.changed_at.to_i).to eq Time.now.to_i

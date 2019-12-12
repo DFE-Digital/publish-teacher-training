@@ -76,7 +76,7 @@ class Provider < ApplicationRecord
 
   has_many :sites
 
-  has_many :courses, -> { kept }
+  has_many :courses, -> { kept }, inverse_of: false
   has_one :ucas_preferences, class_name: "ProviderUCASPreference"
   has_many :contacts
   has_many :accredited_courses, # use current_accredited_courses to filter to courses in the same cycle as this provider
