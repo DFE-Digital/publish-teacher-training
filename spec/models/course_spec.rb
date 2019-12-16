@@ -45,7 +45,7 @@ describe Course, type: :model do
       level: "secondary",
       name: "Biology",
       course_code: "3X9F",
-      subjects: [ find_or_create(:secondary_subject, :biology) ]
+      subjects: [find_or_create(:secondary_subject, :biology)],
     )
   end
   let(:subject) { course }
@@ -278,7 +278,7 @@ describe Course, type: :model do
         it "Should give an error for the subjects" do
           expect(subject.errors.full_messages).to match_array([
             "There is a problem with this course. Contact support to fix it (Error: S)",
-            "You must pick at least one subject"
+            "You must pick at least one subject",
           ])
         end
       end
@@ -1256,7 +1256,7 @@ describe Course, type: :model do
         :skip_validate,
         infer_subjects?: false,
         subjects: courses_subjects,
-        site_statuses: [site_status]
+        site_statuses: [site_status],
       )
     end
 

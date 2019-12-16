@@ -143,6 +143,13 @@ describe "/api/v2/build_new_course", type: :request do
                 },
               },
               {
+                "title" => "Invalid subjects",
+                "detail" => "You must pick at least one subject",
+                "source" => {
+                  "pointer" => "/data/attributes/subjects",
+                },
+              },
+              {
                 "title" => "Invalid name",
                 "detail" => "Name can't be blank",
                 "source" => {
@@ -158,14 +165,14 @@ describe "/api/v2/build_new_course", type: :request do
               },
               {
                 "title" => "Invalid program_type",
-                "detail" => "Program type can't be blank",
+                "detail" => "You need to pick an option",
                 "source" => {
                   "pointer" => "/data/attributes/program_type",
                 },
               },
               {
                 "title" => "Invalid qualification",
-                "detail" => "Qualification can't be blank",
+                "detail" => "You need to pick an outcome",
                 "source" => {
                   "pointer" => "/data/attributes/qualification",
                 },
@@ -179,21 +186,21 @@ describe "/api/v2/build_new_course", type: :request do
               },
               {
                 "title" => "Invalid study_mode",
-                "detail" => "Study mode can't be blank",
+                "detail" => "You need to pick an option",
                 "source" => {
                   "pointer" => "/data/attributes/study_mode",
                 },
               },
               {
                 "title" => "Invalid age_range_in_years",
-                "detail" => "Age range in years can't be blank",
+                "detail" => "You need to pick an age range",
                 "source" => {
                   "pointer" => "/data/attributes/age_range_in_years",
                 },
               },
               {
                 "title" => "Invalid level",
-                "detail" => "Level can't be blank",
+                "detail" => "You need to pick a level",
                 "source" => {
                   "pointer" => "/data/attributes/level",
                 },
@@ -231,6 +238,13 @@ describe "/api/v2/build_new_course", type: :request do
                 },
               },
               {
+                "title" => "Invalid subjects",
+                "detail" => "You must pick at least one subject",
+                "source" => {
+                  "pointer" => "/data/attributes/subjects",
+                },
+              },
+              {
                 "title" => "Invalid name",
                 "detail" => "Name can't be blank",
                 "source" => {
@@ -246,14 +260,14 @@ describe "/api/v2/build_new_course", type: :request do
               },
               {
                 "title" => "Invalid program_type",
-                "detail" => "Program type can't be blank",
+                "detail" => "You need to pick an option",
                 "source" => {
                   "pointer" => "/data/attributes/program_type",
                 },
               },
               {
                 "title" => "Invalid qualification",
-                "detail" => "Qualification can't be blank",
+                "detail" => "You need to pick an outcome",
                 "source" => {
                   "pointer" => "/data/attributes/qualification",
                 },
@@ -267,21 +281,21 @@ describe "/api/v2/build_new_course", type: :request do
               },
               {
                 "title" => "Invalid study_mode",
-                "detail" => "Study mode can't be blank",
+                "detail" => "You need to pick an option",
                 "source" => {
                   "pointer" => "/data/attributes/study_mode",
                 },
               },
               {
                 "title" => "Invalid age_range_in_years",
-                "detail" => "Age range in years can't be blank",
+                "detail" => "You need to pick an age range",
                 "source" => {
                   "pointer" => "/data/attributes/age_range_in_years",
                 },
               },
               {
                 "title" => "Invalid level",
-                "detail" => "Level can't be blank",
+                "detail" => "You need to pick a level",
                 "source" => {
                   "pointer" => "/data/attributes/level",
                 },
