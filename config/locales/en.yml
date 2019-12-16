@@ -31,6 +31,10 @@ en:
               blank: "is missing"
         course:
           attributes:
+            level:
+              blank: "^You need to pick a level"
+            qualification:
+              blank: "^You need to pick an outcome"
             maths:
               inclusion: "^Pick an option for Maths"
             english:

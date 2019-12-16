@@ -72,6 +72,7 @@ FactoryBot.define do
     transient do
       age { nil }
       infer_level? { false }
+      infer_subjects? { true }
     end
 
     after(:build) do |course, evaluator|
@@ -79,6 +80,16 @@ FactoryBot.define do
         course.created_at = evaluator.age
         course.updated_at = evaluator.age
         course.changed_at = evaluator.age
+      end
+
+      if evaluator.infer_subjects? && course.subjects.empty?
+        if course.level == "primary"
+          course.subjects << find_or_create(:primary_subject, :primary)
+        elsif course.level == "secondary"
+          course.subjects << find_or_create(:secondary_subject, :science)
+        elsif course.level == "further_education"
+          course.subjects << find_or_create(:further_education_subject)
+        end
       end
 
       if evaluator.infer_level? && course.subjects.present?
@@ -95,8 +106,20 @@ FactoryBot.define do
         end
       end
 
-      if course.subjects.any?
+      if course.subjects.any? && course.name.blank?
         course.name = course.generate_name
+      end
+    end
+
+    before(:create) do |course, evaluator|
+      if evaluator.infer_subjects? && course.subjects.empty?
+        if course.level == "primary"
+          course.subjects << find_or_create(:primary_subject, :primary)
+        elsif course.level == "secondary"
+          course.subjects << find_or_create(:secondary_subject, :science)
+        elsif course.level == "further_education"
+          course.subjects << find_or_create(:further_education_subject)
+        end
       end
     end
 
@@ -109,7 +132,7 @@ FactoryBot.define do
         course.changed_at = evaluator.age
       end
 
-      if course.subjects.any?
+      if course.subjects.any? && course.name.blank?
         course.name = course.generate_name
       end
 
@@ -121,6 +144,12 @@ FactoryBot.define do
     trait :infer_level do
       transient do
         infer_level? { true }
+      end
+    end
+
+    trait :dont_infer_subjects do
+      transient do
+        infer_subjects? { false }
       end
     end
 
@@ -185,6 +214,10 @@ FactoryBot.define do
 
     trait :deleted do
       discarded_at { Time.zone.now - 1.day }
+    end
+
+    trait :skip_validate do
+      to_create {|instance| instance.save(validate: false)}
     end
   end
 end

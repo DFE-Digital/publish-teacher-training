@@ -16,6 +16,7 @@ describe MCB::Editor::CoursesEditor, :needs_audit_user do
   let(:japanese) { find_or_create(:modern_languages_subject, :japanese) }
   let(:primary_with_mathematics) { find_or_create(:primary_subject, :primary_with_mathematics) }
   let(:biology) { find_or_create(:secondary_subject, :biology) }
+  let(:mathematics) { find_or_create(:secondary_subject, :mathematics) }
   let(:modern_languages) { find_or_create(:secondary_subject, :modern_languages) }
   let(:further_education) { find_or_create(:further_education_subject) }
   let(:current_cycle) { find_or_create :recruitment_cycle }
@@ -50,6 +51,7 @@ describe MCB::Editor::CoursesEditor, :needs_audit_user do
     japanese
     primary_with_mathematics
     biology
+    mathematics
     further_education
   end
 
@@ -321,7 +323,7 @@ describe MCB::Editor::CoursesEditor, :needs_audit_user do
         end
 
         it "only shows further education subjects if further education level is selected" do
-          run_new_course_wizard(
+          output = run_new_course_wizard(
             desired_attributes[:title],
             desired_attributes[:qualification],
             desired_attributes[:study_mode],

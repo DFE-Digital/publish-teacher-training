@@ -159,23 +159,22 @@ class Course < ApplicationRecord
   validates :science, inclusion: { in: entry_requirement_options_without_nil_choice }, if: :gcse_science_required?
   validates :enrichments, presence: true, on: :publish
   validates :is_send, inclusion: { in: [true, false] }
-  validates :sites, presence: true, on: %i[publish create]
-  validates :level, presence: { message: "^There is a problem with this course. Contact support to fix it (Error: L)" }, on: :publish
+  validates :sites, presence: true, on: %i[publish new]
   validates :subjects, presence: true, on: :publish
   validate :validate_enrichment_publishable, on: :publish
   validate :validate_site_statuses_publishable, on: :publish
   validate :validate_enrichment
   validate :validate_course_syncable, on: :sync
-  validate :validate_qualification, on: :update
+  validate :validate_qualification, on: %i[update new]
   validate :validate_start_date, on: :update, if: -> { provider.present? && start_date.present? }
-  validate :validate_applications_open_from, on: %i[update create], if: -> { provider.present? }
+  validate :validate_applications_open_from, on: %i[update new], if: -> { provider.present? }
   validate :validate_modern_languages
   validate :validate_subject_count
   validate :validate_subject_consistency
 
   validates :name, :profpost_flag, :program_type, :qualification, :start_date, :study_mode, presence: true
-  validates :age_range_in_years, presence: true, on: :create, unless: :further_education_course?
-  validates :level, presence: true, on: :create
+  validates :age_range_in_years, presence: true, on: %i[new create], unless: :further_education_course?
+  validates :level, presence: true, on: %i[new create publish]
 
   after_validation :remove_unnecessary_enrichments_validation_message
 
@@ -540,7 +539,11 @@ private
   end
 
   def validate_qualification
-    errors.add(:qualification, "^#{qualifications_description} is not valid for a #{level.to_s.humanize.downcase} course") unless qualification_options.include?(qualification)
+    if qualification.blank?
+      errors.add(:qualification, :blank)
+    else
+      errors.add(:qualification, "^#{qualifications_description} is not valid for a #{level.to_s.humanize.downcase} course") unless qualification_options.include?(qualification)
+    end
   end
 
   def set_applications_open_from
