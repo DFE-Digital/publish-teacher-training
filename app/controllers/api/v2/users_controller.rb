@@ -25,7 +25,7 @@ module API
       end
 
       def accept_terms
-        @user.accept_terms_date_utc = Time.now
+        @user.accept_terms_date_utc = Time.zone.now
         @user.save
       end
 

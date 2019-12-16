@@ -40,6 +40,9 @@
 #  index_provider_on_recruitment_cycle_id_and_provider_code  (recruitment_cycle_id,provider_code) UNIQUE
 #
 
+# Unpleasant hack to stop autoload error on CI
+require_relative "../services/providers/generate_course_code_service"
+
 class Provider < ApplicationRecord
   include RegionCode
   include ChangedAt
@@ -76,7 +79,7 @@ class Provider < ApplicationRecord
 
   has_many :sites
 
-  has_many :courses, -> { kept }
+  has_many :courses, -> { kept }, inverse_of: false
   has_one :ucas_preferences, class_name: "ProviderUCASPreference"
   has_many :contacts
   has_many :accredited_courses, # use current_accredited_courses to filter to courses in the same cycle as this provider

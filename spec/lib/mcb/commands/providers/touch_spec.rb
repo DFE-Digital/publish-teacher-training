@@ -20,7 +20,7 @@ describe "mcb providers touch" do
     it "updates the providers updated_at for the current recruitment cycle" do
       rolled_over_provider
 
-      Timecop.freeze(Date.today + 1) do
+      Timecop.freeze(Time.zone.today + 1) do
         execute_touch(arguments: [provider.provider_code])
 
         # Use to_i compare seconds since epoch and side-step sub-second
@@ -33,7 +33,7 @@ describe "mcb providers touch" do
     it "updates the providers changed_at" do
       rolled_over_provider
 
-      Timecop.freeze(Date.today + 1) do
+      Timecop.freeze(Time.zone.today + 1) do
         execute_touch(arguments: [provider.provider_code])
 
         expect(provider.reload.changed_at.to_i).to eq Time.now.to_i
@@ -55,7 +55,7 @@ describe "mcb providers touch" do
     it "updates the providers updated_at" do
       provider
 
-      Timecop.freeze(Date.today + 1) do
+      Timecop.freeze(Time.zone.today + 1) do
         execute_touch(arguments: [rolled_over_provider.provider_code, "-r", next_cycle.year])
 
         # Use to_i compare seconds since epoch and side-step sub-second
@@ -68,7 +68,7 @@ describe "mcb providers touch" do
     it "updates the providers changed_at" do
       provider
 
-      Timecop.freeze(Date.today + 1) do
+      Timecop.freeze(Time.zone.today + 1) do
         execute_touch(arguments: [rolled_over_provider.provider_code, "-r", next_cycle.year])
 
         expect(provider.reload.changed_at.to_i).not_to eq Time.now.to_i

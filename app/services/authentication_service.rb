@@ -134,13 +134,13 @@ private
   end
 
   def update_user_first_name
-    return unless first_name_from_token.present?
+    return if first_name_from_token.blank?
 
     user.update(first_name: first_name_from_token)
   end
 
   def update_user_last_name
-    return unless last_name_from_token.present?
+    return if last_name_from_token.blank?
 
     user.update(last_name: last_name_from_token)
   end

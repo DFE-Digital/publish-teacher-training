@@ -1,6 +1,6 @@
 require "spec_helper"
-require Rails.root.join("lib", "mcb")
-require Rails.root.join("lib", "mcb", "azure")
+require Rails.root.join("lib/mcb")
+require Rails.root.join("lib/mcb/azure")
 
 describe MCB::Azure do
   describe ".get_subs" do

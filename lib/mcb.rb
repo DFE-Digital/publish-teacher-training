@@ -392,7 +392,7 @@ module MCB
     end
 
     def append_to_history(input)
-      if !input.blank? && Readline::HISTORY.to_a.last != input.chomp
+      if input.present? && Readline::HISTORY.to_a.last != input.chomp
         Readline::HISTORY.push(input.chomp)
         File.open(File.expand_path("~/.mcb_history"), "a+") do |f|
           f.puts(input.chomp)

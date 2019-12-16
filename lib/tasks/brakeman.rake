@@ -1,4 +1,4 @@
-task :brakeman do
+task brakeman: :environment do
   sh <<~EOSHELL
     mkdir -p tmp && \
     (brakeman --no-progress -5 --quiet --color --output tmp/brakeman.out --exit-on-warn && \
@@ -8,5 +8,5 @@ task :brakeman do
 end
 
 if %w[development test].include? Rails.env
-  task(:default).prerequisites << task(:brakeman)
+  task(:default).prerequisites << task(brakeman: :environment)
 end

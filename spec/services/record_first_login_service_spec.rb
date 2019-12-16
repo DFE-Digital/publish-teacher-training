@@ -14,7 +14,7 @@ describe RecordFirstLoginService do
   end
 
   context "with previous logins" do
-    let(:current_user_spy) { spy(first_login_date_utc: Time.now) }
+    let(:current_user_spy) { spy(first_login_date_utc: Time.zone.now) }
 
     it "does not update the first login date" do
       service.execute(current_user: current_user_spy)

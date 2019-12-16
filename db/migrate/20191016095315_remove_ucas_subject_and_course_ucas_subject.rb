@@ -1,3 +1,4 @@
+# rubocop:todo Rails/CreateTableWithTimestamps
 class RemoveUCASSubjectAndCourseUCASSubject < ActiveRecord::Migration[6.0]
   def up
     drop_table :course_ucas_subject
@@ -20,3 +21,4 @@ class RemoveUCASSubjectAndCourseUCASSubject < ActiveRecord::Migration[6.0]
     end
   end
 end
+# rubocop:enable Rails/CreateTableWithTimestamps

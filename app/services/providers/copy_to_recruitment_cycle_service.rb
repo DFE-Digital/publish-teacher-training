@@ -38,7 +38,6 @@ module Providers
 
   private
 
-
     def copy_courses_to_new_provider(provider, new_provider)
       courses_count = 0
 

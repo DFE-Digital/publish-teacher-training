@@ -547,7 +547,7 @@ describe Course, type: :model do
           its(:open_for_applications?) { should be false }
         end
         context "applications_open_from is in future" do
-          let(:applications_open_from) { Time.now.utc + 1.days }
+          let(:applications_open_from) { Time.now.utc + 1.day }
           its(:open_for_applications?) { should be false }
         end
       end
@@ -559,7 +559,7 @@ describe Course, type: :model do
             its(:open_for_applications?) { should be true }
           end
           context "applications_open_from is in future" do
-            let(:applications_open_from) { Time.now.utc + 1.days }
+            let(:applications_open_from) { Time.now.utc + 1.day }
             its(:open_for_applications?) { should be false }
           end
         end
@@ -574,7 +574,7 @@ describe Course, type: :model do
             its(:open_for_applications?) { should be true }
           end
           context "applications_open_from is in future" do
-            let(:applications_open_from) { Time.now.utc + 1.days }
+            let(:applications_open_from) { Time.now.utc + 1.day }
             its(:open_for_applications?) { should be false }
           end
         end
@@ -589,7 +589,7 @@ describe Course, type: :model do
             its(:open_for_applications?) { should be false }
           end
           context "applications_open_from is in future" do
-            let(:applications_open_from) { Time.now.utc + 1.days }
+            let(:applications_open_from) { Time.now.utc + 1.day }
             its(:open_for_applications?) { should be false }
           end
         end
@@ -616,7 +616,7 @@ describe Course, type: :model do
           its(:open_for_applications?) { should be false }
         end
         context "applications_open_from is in future" do
-          let(:applications_open_from) { Time.now.utc + 1.days }
+          let(:applications_open_from) { Time.now.utc + 1.day }
           its(:open_for_applications?) { should be false }
         end
       end
@@ -628,7 +628,7 @@ describe Course, type: :model do
             its(:open_for_applications?) { should be true }
           end
           context "applications_open_from is in future" do
-            let(:applications_open_from) { Time.now.utc + 1.days }
+            let(:applications_open_from) { Time.now.utc + 1.day }
             its(:open_for_applications?) { should be false }
           end
         end
@@ -643,7 +643,7 @@ describe Course, type: :model do
             its(:open_for_applications?) { should be true }
           end
           context "applications_open_from is in future" do
-            let(:applications_open_from) { Time.now.utc + 1.days }
+            let(:applications_open_from) { Time.now.utc + 1.day }
             its(:open_for_applications?) { should be false }
           end
         end
@@ -658,7 +658,7 @@ describe Course, type: :model do
             its(:open_for_applications?) { should be false }
           end
           context "applications_open_from is in future" do
-            let(:applications_open_from) { Time.now.utc + 1.days }
+            let(:applications_open_from) { Time.now.utc + 1.day }
             its(:open_for_applications?) { should be false }
           end
         end
@@ -837,7 +837,7 @@ describe Course, type: :model do
 
   describe "content_status" do
     let(:course) { create :course, enrichments: [enrichment1, enrichment2] }
-    let(:enrichment1) {  build(:course_enrichment, :subsequent_draft, created_at: Time.now) }
+    let(:enrichment1) {  build(:course_enrichment, :subsequent_draft, created_at: Time.zone.now) }
     let(:enrichment2) {  build(:course_enrichment, :published, created_at: 1.minute.ago) }
     let(:service_spy) { spy(execute: :published_with_unpublished_changes) }
     let(:content_status) { course.content_status }
@@ -1280,7 +1280,7 @@ describe Course, type: :model do
 
   describe "#applications_open_from" do
     context "a new course with a given date" do
-      let(:applications_open_from) { Date.today }
+      let(:applications_open_from) { Time.zone.today }
       let(:subject) { create(:course, applications_open_from: applications_open_from) }
 
       its(:applications_open_from) { should eq applications_open_from }

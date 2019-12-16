@@ -1,3 +1,4 @@
+# rubocop:todo Rails/CreateTableWithTimestamps
 class CreateCourseSubjectTable < ActiveRecord::Migration[5.2]
   def change
     create_table "course_subject", id: :serial, force: :cascade do |t|
@@ -8,3 +9,4 @@ class CreateCourseSubjectTable < ActiveRecord::Migration[5.2]
     end
   end
 end
+# rubocop:enable Rails/CreateTableWithTimestamps
