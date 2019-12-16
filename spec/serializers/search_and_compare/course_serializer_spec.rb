@@ -96,7 +96,6 @@ describe SearchAndCompare::CourseSerializer do
 
       let(:provider_enrichment) do
         {
-          last_published_at: 1.day.ago,
           address1: "c/o Claverdon Primary School",
           address2: "Breach Lane",
           address3: "Claverdon",

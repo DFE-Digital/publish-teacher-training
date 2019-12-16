@@ -119,9 +119,7 @@ describe "PATCH /providers/:provider_code" do
       it "doesn't permit #{attribute}" do
         update_provider[attribute] = if(attribute == :recruitment_cycle_id)
                                        next_cycle.id
-
                                      else
-
                                        value
                                      end
         perform_request(update_provider)
@@ -140,7 +138,6 @@ describe "PATCH /providers/:provider_code" do
     include_examples "does not allow assignment", :created_at,           Time.zone.now
     include_examples "does not allow assignment", :updated_at,           Time.zone.now
     include_examples "does not allow assignment", :accrediting_provider, :accredited_body
-    include_examples "does not allow assignment", :last_published_at,    Time.zone.now
     include_examples "does not allow assignment", :changed_at,           Time.zone.now
 
     let!(:next_cycle) { find_or_create(:recruitment_cycle, :next) }
