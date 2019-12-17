@@ -13,7 +13,7 @@
 #
 
 class FurtherEducationSubject < Subject
-  def self.find
+  def self.instance
     find_by(subject_name: "Further education")
   end
 end

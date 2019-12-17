@@ -277,7 +277,7 @@ module API
 
       def update_further_education_fields
         @course.funding_type = "fee"
-        @course.subjects << FurtherEducationSubject.find
+        @course.subjects << FurtherEducationSubject.instance
       end
 
       def site_ids
