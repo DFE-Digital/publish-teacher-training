@@ -25,6 +25,7 @@ module API
         update_subjects
         update_sites
         @course.assign_attributes(course_params)
+        update_further_education_fields if @course.level == "further_education"
         @course.name = @course.generate_name
         @course.valid?
 
@@ -129,6 +130,7 @@ module API
         @course.assign_attributes(course_params.merge(course_code: course_code))
         update_subjects
         update_sites
+        update_further_education_fields if @course.level == "further_education"
         @course.name = @course.generate_name
 
         if @course.save
@@ -271,6 +273,11 @@ module API
             :funding_type,
             :level,
           )
+      end
+
+      def update_further_education_fields
+        @course.funding_type = "fee"
+        @course.subjects << FurtherEducationSubject.instance
       end
 
       def site_ids
