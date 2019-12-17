@@ -41,15 +41,23 @@ steps:
     dockerHubImageName: $(imageName)
     CC_TEST_REPORTER_ID: $(ccReporterID)
 - script: |
+    set -x
     $DOCKER_OVERRIDE exec -T web /bin/sh -c 'bundle config --local disable_exec_load true'
     $DOCKER_OVERRIDE exec -T web /bin/sh -c 'bundle exec rake parallel:setup'
-    $DOCKER_OVERRIDE exec -T web /bin/sh -c 'bundle exec rake "parallel:spec[,,--format progress --format RspecJunitFormatter --out rspec-results.xml --no-profile]"'
+    $DOCKER_OVERRIDE exec -T web /bin/sh -c 'bundle exec rake "parallel:spec[,, -O .azure_parallel]"'
+
   displayName: 'Execute tests'
   env:
     DOCKER_OVERRIDE: $(dockerOverride)
     dockerHubUsername: $(dockerHubUsername)
     dockerHubImageName: $(imageName)
     CC_TEST_REPORTER_ID: $(ccReporterID)
+- task: PublishTestResults@2
+  condition: succeededOrFailed()
+  inputs:
+    testRunner: JUnit
+    testResultsFiles: 'rspec-output/*.xml'
+    failedTaskOnFailedTest: true
 - script: |
     $DOCKER_OVERRIDE exec -T web /bin/sh -c "bundle exec rubocop app config db lib spec --format clang"
   displayName: 'Execute linters'
@@ -135,9 +143,3 @@ steps:
   displayName: 'Publish Artifact'
   inputs:
     PathtoPublish: '$(build.artifactstagingdirectory)'
-- task: PublishTestResults@2
-  condition: succeededOrFailed()
-  inputs:
-    testRunner: JUnit
-    testResultsFiles: '*.xml'
-    failedTaskOnFailedTest: true
