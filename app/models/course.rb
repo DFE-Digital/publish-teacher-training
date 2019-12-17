@@ -174,7 +174,7 @@ class Course < ApplicationRecord
   validate :validate_subject_consistency
 
   validates :name, :profpost_flag, :program_type, :qualification, :start_date, :study_mode, presence: true
-  validates :age_range_in_years, presence: true, unless: :further_education_course?
+  validates :age_range_in_years, presence: true, on: :create, unless: :further_education_course?
   validates :level, presence: true, on: :create
 
   after_validation :remove_unnecessary_enrichments_validation_message
