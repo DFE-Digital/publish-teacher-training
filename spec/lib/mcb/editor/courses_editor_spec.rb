@@ -182,7 +182,7 @@ describe MCB::Editor::CoursesEditor, :needs_audit_user do
       end
     end
 
-    xdescribe "runs the course creation wizard" do
+    describe "runs the course creation wizard" do
       def run_new_course_wizard(*input_cmds)
         with_stubbed_stdout(stdin: input_cmds.join("\n")) do
           subject.new_course_wizard
@@ -246,9 +246,9 @@ describe MCB::Editor::CoursesEditor, :needs_audit_user do
             desired_attributes[:level],
             desired_attributes[:course_code],
             "y", # is SEND confirmation
-            "y", # confirm creation
             "[ ] Biology",
             "continue",
+            "y", # confirm creation
             # location selection
             "[ ] #{site_1.location_name}",
             "[ ] #{site_3.location_name}",
@@ -276,9 +276,9 @@ describe MCB::Editor::CoursesEditor, :needs_audit_user do
             desired_attributes[:level],
             desired_attributes[:course_code],
             "y", # is SEND confirmation
-            "y", # confirm creation
             "[ ] Japanese",
             "continue",
+            "y", # confirm creation
             # location selection
             "[ ] #{site_1.location_name}",
             "[ ] #{site_3.location_name}",
@@ -306,9 +306,9 @@ describe MCB::Editor::CoursesEditor, :needs_audit_user do
             "primary",
             desired_attributes[:course_code],
             "y", # is SEND confirmation
-            "y", # confirm creation
             "[ ] Primary with mathematics",
             "continue",
+            "y", # confirm creation
             # location selection
             "[ ] #{site_1.location_name}",
             "[ ] #{site_3.location_name}",
@@ -337,9 +337,9 @@ describe MCB::Editor::CoursesEditor, :needs_audit_user do
             "further_education",
             desired_attributes[:course_code],
             "y", # is SEND confirmation
-            "y", # confirm creation
             "[ ] Further education",
             "continue",
+            "y", # confirm creation
             # location selection
             "[ ] #{site_1.location_name}",
             "[ ] #{site_3.location_name}",
@@ -368,10 +368,9 @@ describe MCB::Editor::CoursesEditor, :needs_audit_user do
           desired_attributes[:level],
           desired_attributes[:course_code],
           "y", # is SEND confirmation
-          "y", # confirm creation
-          # subject selection
-          "[ ] Mathematics",
+          "[ ] Mathematics", # subject selection
           "continue",
+          "y", # confirm creation
           # location selection
           "[ ] #{site_1.location_name}",
           "[ ] #{site_3.location_name}",
@@ -419,10 +418,9 @@ describe MCB::Editor::CoursesEditor, :needs_audit_user do
           desired_attributes[:level],
           desired_attributes[:course_code],
           "y", # is SEND confirmation
-          "y", # confirm creation
-          # subject selection
-          "[ ] Mathematics",
+          "[ ] Mathematics", # subject selection
           "continue",
+          "y", # confirm creation
           # location selection
           "[ ] #{site_1.location_name}",
           "[ ] #{site_3.location_name}",
@@ -453,10 +451,10 @@ describe MCB::Editor::CoursesEditor, :needs_audit_user do
           desired_attributes[:course_code],
           "n", # is SEND
           desired_attributes[:recruitment_cycle],
-          "y", # confirm creation
           # subject selection
           "[ ] Mathematics",
           "continue",
+          "y", # confirm creation
           # location selection
           "[ ] #{site_1.location_name}",
           "[ ] #{site_3.location_name}",
@@ -494,6 +492,8 @@ describe MCB::Editor::CoursesEditor, :needs_audit_user do
           desired_attributes[:course_code],
           "n", # is SEND
           desired_attributes[:recruitment_cycle],
+          "[ ] Mathematics",
+          "continue",
           "n", # confirm creation
         )[:stdout]
 
@@ -517,6 +517,8 @@ describe MCB::Editor::CoursesEditor, :needs_audit_user do
           course_code, # a duplicate course code
           "n", # is SEND
           desired_attributes[:recruitment_cycle],
+          "[ ] Mathematics",
+          "continue",
           "y", # confirm creation
         )[:stdout]
 
