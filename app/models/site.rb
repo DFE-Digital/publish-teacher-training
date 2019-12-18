@@ -24,6 +24,8 @@
 #
 
 class Site < ApplicationRecord
+  MAIN_SITE = "main site".freeze
+
   include PostcodeNormalize
   include RegionCode
   include TouchProvider
@@ -59,7 +61,13 @@ class Site < ApplicationRecord
   end
 
   def full_address
-    [location_name, address1, address2, address3, address4, postcode].compact.join(", ")
+    address = [address1, address2, address3, address4, postcode]
+
+    unless location_name.downcase == MAIN_SITE
+      address.unshift(location_name)
+    end
+
+    address.compact.join(", ")
   end
 
   def address_changed?

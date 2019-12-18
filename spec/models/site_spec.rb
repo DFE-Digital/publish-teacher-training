@@ -106,8 +106,20 @@ describe Site, type: :model do
     }
 
     describe "#full_address" do
-      it "Concatenates address details" do
-        expect(site.full_address).to eq("Southampton High School, Long Lane, Holbury, Southampton, SO45 2PA")
+      context "location name is not 'Main site'" do
+        it "includes location name in full address" do
+          expect(site.full_address).to eq("Southampton High School, Long Lane, Holbury, Southampton, SO45 2PA")
+        end
+      end
+
+      context "location name is 'Main site'" do
+        before do
+          site.location_name = "Main site"
+        end
+
+        it "excludes location name in full address" do
+          expect(site.full_address).to eq("Long Lane, Holbury, Southampton, SO45 2PA")
+        end
       end
     end
 

@@ -583,12 +583,12 @@ describe Provider, type: :model do
     # Geocoding stubbed with support/helpers.rb
     let(:provider) {
       build(:provider,
-      provider_name: "Southampton High School",
-      address1: "Long Lane",
-      address2: "Holbury",
-      address3: "Southampton",
-      address4: nil,
-      postcode: "SO45 2PA")
+            provider_name: "Southampton High School",
+            address1: "Long Lane",
+            address2: "Holbury",
+            address3: "Southampton",
+            address4: nil,
+            postcode: "SO45 2PA")
     }
 
     describe "#full_address" do
