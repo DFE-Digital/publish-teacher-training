@@ -172,6 +172,7 @@ class Course < ApplicationRecord
   validate :validate_has_languages, if: :has_the_modern_languages_secondary_subject_type?
   validate :validate_subject_count
   validate :validate_subject_consistency
+  validate :validate_custom_age_range, on: %i[create new], if: -> { age_range_in_years.present? }
 
   validates :name, :profpost_flag, :program_type, :qualification, :start_date, :study_mode, presence: true
   validates :age_range_in_years, presence: true, on: %i[new create], unless: :further_education_course?
@@ -637,6 +638,17 @@ private
       unless FurtherEducationSubject.exists?(id: subjects_excluding_discontinued.map(&:id))
         errors.add(:subjects, "must be further education")
       end
+    end
+  end
+
+  def validate_custom_age_range
+    age_range_array = age_range_in_years.split("_")
+    if age_range_array.first.to_i.zero?
+      errors.add(:age_range_in_years_from, "#{age_range_in_years} is invalid. A valid from value must be provided.")
+    elsif age_range_array.last.to_i.zero?
+      errors.add(:age_range_in_years_to, "#{age_range_in_years} is invalid. A valid to value must be provided.")
+    elsif age_range_array.last.to_i - age_range_array.first.to_i < 4
+      errors.add(:age_range_in_years, "#{age_range_in_years} is an invalid age range. A valid age range must cover 4 or more years.")
     end
   end
 
