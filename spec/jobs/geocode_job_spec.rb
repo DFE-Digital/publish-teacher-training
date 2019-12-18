@@ -34,7 +34,7 @@ describe GeocodeJob, type: :job do
       ]
 
       allow(Geocoder).to receive(:search).and_return(results)
-      expect(Geocoder).to receive(:search).with(site.full_address)
+      expect(Geocoder).to receive(:search).with(site.full_address, params: { region: "gb" })
 
       site.save!
       perform_enqueued_jobs { job }
@@ -49,7 +49,7 @@ describe GeocodeJob, type: :job do
       results = []
 
       allow(Geocoder).to receive(:search).and_return(results)
-      expect(Geocoder).to receive(:search).with(site.full_address)
+      expect(Geocoder).to receive(:search).with(site.full_address, params: { region: "gb" })
 
       site.save!
       perform_enqueued_jobs { job }
