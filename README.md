@@ -70,7 +70,9 @@ bundle exec guard --no-interactions
 ## Architectural Decision Record
 
 See the [docs/adr](docs/adr) directory for a list of the Architectural Decision
-Record (ADR).
+Record (ADR). We use [adr-tools](https://github.com/npryce/adr-tools) to manage
+our ADRs, see the link for how to install (hint: `brew install adr-tools` or use
+ASDF).
 
 ## Running specs in parallel
 
