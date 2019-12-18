@@ -4,7 +4,7 @@ module API
       type "providers"
 
       attributes :provider_code, :provider_name, :accredited_body?, :can_add_more_sites?,
-                 :content_status, :accredited_bodies, :train_with_us, :train_with_disability,
+                 :accredited_bodies, :train_with_us, :train_with_disability,
                  :latitude, :longitude
 
       attribute :address1 do
@@ -45,10 +45,6 @@ module API
 
       attribute :recruitment_cycle_year do
         @object.recruitment_cycle.year
-      end
-
-      attribute :last_published_at do
-        @object.last_published_at&.iso8601
       end
 
       attribute :admin_contact do

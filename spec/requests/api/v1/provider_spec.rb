@@ -72,7 +72,6 @@ describe "Providers API", type: :request do
                region_code: :london,
                accrediting_provider: "Y",
                scheme_member: "Y",
-               last_published_at: DateTime.now.utc,
                ucas_preferences: ucas_preferences,
                contacts: contacts,
                sites: [site])
@@ -129,7 +128,6 @@ describe "Providers API", type: :request do
                region_code: :south_west,
                accrediting_provider: "N",
                scheme_member: "N",
-               last_published_at: DateTime.now.utc,
                ucas_preferences: ucas_preferences2,
                contacts: contacts2,
                sites: [site2])

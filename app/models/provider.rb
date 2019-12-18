@@ -14,7 +14,6 @@
 #  discarded_at                     :datetime
 #  email                            :text
 #  id                               :integer          not null, primary key
-#  last_published_at                :datetime
 #  latitude                         :float
 #  longitude                        :float
 #  postcode                         :text
@@ -33,7 +32,6 @@
 #
 # Indexes
 #
-#  IX_provider_last_published_at                             (last_published_at)
 #  index_provider_on_changed_at                              (changed_at) UNIQUE
 #  index_provider_on_discarded_at                            (discarded_at)
 #  index_provider_on_latitude_and_longitude                  (latitude,longitude)
@@ -219,11 +217,6 @@ class Provider < ApplicationRecord
     ]
 
     attributes.slice(*attribute_names)
-  end
-
-  # NOTE: This can be removed, it should not be in use any more
-  def content_status
-    :published
   end
 
   # This reflects the fact that organisations should actually be a has_one.
