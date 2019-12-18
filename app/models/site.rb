@@ -27,7 +27,6 @@ class Site < ApplicationRecord
   include PostcodeNormalize
   include RegionCode
   include TouchProvider
-  include Geolocation
 
   POSSIBLE_CODES = (("A".."Z").to_a + ("0".."9").to_a + ["-"]).freeze
   EASILY_CONFUSED_CODES = %w[1 I 0 O -].freeze # these ought to be assigned last
@@ -49,7 +48,28 @@ class Site < ApplicationRecord
                    inclusion: { in: POSSIBLE_CODES, message: "must be A-Z, 0-9 or -" },
                    presence: true
 
+  geocoded_by :full_address
+
   after_commit -> { GeocodeJob.perform_later("Site", id) }, if: :needs_geolocation?
+
+  def needs_geolocation?
+    full_address.present? && (
+    latitude.nil? || longitude.nil? || address_changed?
+    )
+  end
+
+  def full_address
+    [location_name, address1, address2, address3, address4, postcode].compact.join(", ")
+  end
+
+  def address_changed?
+    saved_change_to_location_name? ||
+      saved_change_to_address1? ||
+      saved_change_to_address2? ||
+      saved_change_to_address3? ||
+      saved_change_to_address4? ||
+      saved_change_to_postcode?
+  end
 
   def recruitment_cycle
     provider.recruitment_cycle
