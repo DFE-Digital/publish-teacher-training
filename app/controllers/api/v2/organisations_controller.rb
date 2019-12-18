@@ -6,11 +6,12 @@ module API
         @organisations = Organisation.all
         if params_includes_provider?
           current_recruitment_cycle = RecruitmentCycle.current
-          @organisations = @organisations.includes(:providers)
+          @organisations = @organisations.includes(:providers, :users, :nctl_organisations)
                              .where(provider: { recruitment_cycle_id: current_recruitment_cycle.id })
         end
 
-        render jsonapi: @organisations, include: params[:include]
+        render jsonapi: @organisations, include: params[:include],
+          fields: { providers: %i[provider_code provider_name], users: %i[email sign_in_user_id first_name last_name] }
       end
 
     private

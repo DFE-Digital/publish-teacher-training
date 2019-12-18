@@ -571,4 +571,81 @@ describe Provider, type: :model do
       it { should_not include last_years_course }
     end
   end
+
+  describe "geolocation" do
+    include ActiveJob::TestHelper
+
+    after do
+      clear_enqueued_jobs
+      clear_performed_jobs
+    end
+
+    # Geocoding stubbed with support/helpers.rb
+    let(:provider) {
+      build(:provider,
+            provider_name: "Southampton High School",
+            address1: "Long Lane",
+            address2: "Holbury",
+            address3: "Southampton",
+            address4: nil,
+            postcode: "SO45 2PA")
+    }
+
+    describe "#full_address" do
+      it "Concatenates address details" do
+        expect(provider.full_address).to eq("Southampton High School, Long Lane, Holbury, Southampton, SO45 2PA")
+      end
+    end
+
+    describe "#needs_geolocation?" do
+      subject { provider.needs_geolocation? }
+
+      context "latitude is nil" do
+        let(:provider) { build_stubbed(:provider, latitude: nil) }
+
+        it { should be(true) }
+      end
+
+      context "longitude is nil" do
+        let(:provider) { build_stubbed(:provider, longitude: nil) }
+
+        it { should be(true) }
+      end
+
+      context "latitude and longitude is not nil" do
+        let(:provider) { build_stubbed(:provider, latitude: 1.456789, longitude: 1.456789) }
+
+        it { should be(false) }
+      end
+
+      context "address" do
+        let(:provider) {
+          create(:provider,
+                 latitude: 1.456789,
+                 longitude: 1.456789,
+                 provider_name: "Southampton High School",
+                 address1: "Long Lane",
+                 address2: "Holbury",
+                 address3: "Southampton",
+                 address4: nil,
+                 postcode: "SO45 2PA")
+        }
+        context "has not changed" do
+          before do
+            provider.update(address1: "Long Lane")
+          end
+
+          it { should be(false) }
+        end
+
+        context "has changed" do
+          before do
+            provider.update(address1: "New address 1")
+          end
+
+          it { should be(true) }
+        end
+      end
+    end
+  end
 end
