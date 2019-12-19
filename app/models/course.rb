@@ -652,13 +652,21 @@ private
 
     if !valid_regex_pattern.match(age_range_in_years)
       errors.add(:age_range_in_years, error_message)
-    elsif from_age.to_i < 3 || from_age.to_i > 14
+    elsif from_age_invalid?(from_age)
       errors.add(:age_range_in_years_from, error_message)
-    elsif to_age.to_i < 7 || to_age.to_i > 18
+    elsif to_age_invalid?(to_age)
       errors.add(:age_range_in_years_to, error_message)
     elsif to_age.to_i - from_age.to_i < 4
       errors.add(:age_range_in_years, "#{age_range_in_years} is invalid. Your age range must cover at least 4 years.")
     end
+  end
+
+  def from_age_invalid?(from_age)
+    from_age.to_i < 3 || from_age.to_i > 14
+  end
+
+  def to_age_invalid?(to_age)
+    to_age.to_i < 7 || to_age.to_i > 18
   end
 
   def valid_date_range
