@@ -33,7 +33,7 @@ These appear to be the original tools for managing tools. See
 These are a branch of npryce's adr-tools. See
 [adr/madr](https://github.com/adr/madr). They seem to have added a whole bunch
 of extra stuff that I'm not sure we need, although I do like some of the ideas
-in their ADR template which I want to nick for our own template.
+in their ADR template which I want to re-use in our own template.
 
 #### Pros
 
