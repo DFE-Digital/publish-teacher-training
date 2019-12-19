@@ -27,7 +27,7 @@ module API
         @course.assign_attributes(course_params)
         update_further_education_fields if @course.level == "further_education"
         @course.name = @course.generate_name
-        @course.valid?
+        @course.valid?(:new)
 
         # https://github.com/jsonapi-rb/jsonapi-rails/issues/113
         json_data = JSONAPI::Serializable::Renderer.new.render(
@@ -102,6 +102,7 @@ module API
         has_synced? if should_sync
 
         if @course.errors.empty? && @course.valid?
+          @course.save
           render jsonapi: @course.reload
         else
           render jsonapi_errors: @course.errors, status: :unprocessable_entity
@@ -133,7 +134,7 @@ module API
         update_further_education_fields if @course.level == "further_education"
         @course.name = @course.generate_name
 
-        if @course.save
+        if @course.valid?(:new) && @course.save
           render jsonapi: @course.reload
         else
           render jsonapi_errors: @course.errors, status: :unprocessable_entity
@@ -175,7 +176,6 @@ module API
 
         @course.subjects = Subject.where(id: subject_ids)
         @course.name = @course.generate_name
-        @course.save
       end
 
       def build_provider

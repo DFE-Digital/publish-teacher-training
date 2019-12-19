@@ -143,6 +143,27 @@ describe "/api/v2/build_new_course", type: :request do
                 },
               },
               {
+                "title" => "Invalid sites",
+                "detail" => "You must pick at least one location for this course",
+                "source" => {
+                  "pointer" => "/data/attributes/sites",
+                },
+              },
+              {
+                "title" => "Invalid qualification",
+                "detail" => "You need to pick an outcome",
+                "source" => {
+                  "pointer" => "/data/attributes/qualification",
+                },
+              },
+              {
+                "title" => "Invalid applications_open_from",
+                "detail" => "You must say when applications open from",
+                "source" => {
+                  "pointer" => "/data/attributes/applications_open_from",
+                },
+              },
+              {
                 "title" => "Invalid subjects",
                 "detail" => "You must pick at least one subject",
                 "source" => {
@@ -168,13 +189,6 @@ describe "/api/v2/build_new_course", type: :request do
                 "detail" => "You need to pick an option",
                 "source" => {
                   "pointer" => "/data/attributes/program_type",
-                },
-              },
-              {
-                "title" => "Invalid qualification",
-                "detail" => "You need to pick an outcome",
-                "source" => {
-                  "pointer" => "/data/attributes/qualification",
                 },
               },
               {
@@ -215,14 +229,22 @@ describe "/api/v2/build_new_course", type: :request do
     let(:params) do
       { course: {} }
     end
+    let(:json_response) { parse_response(response) }
 
-    it "returns a new course with errors" do
-      response = do_get params
+    before { do_get params }
+
+    it "Returns an 200 status" do
       expect(response).to have_http_status(:ok)
-      json_response = parse_response(response)
+    end
+
+    it "returns a new course with the correct attribtues" do
       expected = course_jsonapi
       expected["data"]["attributes"]["name"] = ""
-      expected["data"]["errors"] = [
+      expect(json_response["data"]["attributes"]).to eq(course_jsonapi["data"]["attributes"])
+    end
+
+    it "returns a new course with the correct errors" do
+      expected_errors = [
               {
                 "title" => "Invalid maths",
                 "detail" => "Pick an option for Maths",
@@ -300,9 +322,23 @@ describe "/api/v2/build_new_course", type: :request do
                   "pointer" => "/data/attributes/level",
                 },
               },
+              {
+                "title" => "Invalid sites",
+                "detail" => "You must pick at least one location for this course",
+                "source" => {
+                  "pointer" => "/data/attributes/sites",
+                },
+              },
+              {
+                "title" => "Invalid applications_open_from",
+                "detail" => "You must say when applications open from",
+                "source" => {
+                  "pointer" => "/data/attributes/applications_open_from",
+                },
+              },
         ]
 
-      expect(json_response).to eq expected
+      expect(json_response["data"]["errors"]).to match_array(expected_errors)
     end
   end
 
@@ -318,14 +354,17 @@ describe "/api/v2/build_new_course", type: :request do
         qualification: "qts",
         funding_type: "fee",
         subjects_ids: subjects.map(&:id),
+        sites_ids: [sites.map(&:id)],
         level: :primary,
         age_range_in_years: "3_to_7",
+        applications_open_from: provider.recruitment_cycle.application_start_date,
         } }
     end
 
+    let(:sites) { [create(:site, provider: provider)] }
     let(:subjects) { [find_or_create(:primary_subject, :primary_with_mathematics)] }
     let(:course) do
-      Course.new({ provider: provider, subjects: subjects }.merge(params[:course].slice!(:subjects_ids)))
+      Course.new({ provider: provider, subjects: subjects, sites: sites }.merge(params[:course].slice!(:subjects_ids, :sites_ids)))
     end
 
     it "returns a matching course with no errors" do
