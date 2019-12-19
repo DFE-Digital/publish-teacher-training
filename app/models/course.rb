@@ -642,13 +642,18 @@ private
   end
 
   def validate_custom_age_range
-    age_range_array = age_range_in_years.split("_")
-    if age_range_array.first.to_i.zero?
-      errors.add(:age_range_in_years_from, "#{age_range_in_years} is invalid. A valid from value must be provided.")
-    elsif age_range_array.last.to_i.zero?
-      errors.add(:age_range_in_years_to, "#{age_range_in_years} is invalid. A valid to value must be provided.")
+    age_range_array = age_range_in_years.split("_to_")
+    error_message = "#{age_range_in_years} is invalid. You must enter a valid age range."
+    if age_range_in_years.length >= 9
+      errors.add(:age_range_in_years, error_message)
+    elsif age_range_array.length != 2
+      errors.add(:age_range_in_years, error_message)
+    elsif age_range_array.first.to_i.zero? || age_range_array.first.to_i > 14 || age_range_array.first.to_i < 3
+      errors.add(:age_range_in_years_from, error_message)
+    elsif age_range_array.last.to_i.zero? || age_range_array.last.to_i < 7 || age_range_array.last.to_i > 18
+      errors.add(:age_range_in_years_to, error_message)
     elsif age_range_array.last.to_i - age_range_array.first.to_i < 4
-      errors.add(:age_range_in_years, "#{age_range_in_years} is an invalid age range. A valid age range must cover 4 or more years.")
+      errors.add(:age_range_in_years, "#{age_range_in_years} is invalid. Your age range must cover 4 years.")
     end
   end
 

@@ -62,9 +62,31 @@ describe "POST /providers/:provider_code/courses/:course_code" do
   end
 
   context "an invalid age range" do
-    context "with an age range of less than 4 years" do
-      let(:age_range_in_years) { "4_to_6" }
-      let(:error_message) { "is an invalid age range. A valid age range must cover 4 or more years." }
+    let(:error_message) { "is invalid. You must enter a valid age range." }
+
+    context "with an age range of with a gap of less than 4 years" do
+      let(:age_range_in_years) { "5_to_8" }
+      let(:error_message) { "is invalid. Your age range must cover 4 years." }
+
+      it "should return an error stating valid age ranges must be 4 years or greater" do
+        expect(response).to have_http_status(:unprocessable_entity)
+        expect(json_data.count).to eq 1
+        expect(response.body).to include "#{age_range_in_years} " + error_message
+      end
+    end
+
+    context "with a from value that does not fall within the valid age range" do
+      let(:age_range_in_years) { "1_to_15" }
+
+      it "should return an error stating valid age ranges must be 4 years or greater" do
+        expect(response).to have_http_status(:unprocessable_entity)
+        expect(json_data.count).to eq 1
+        expect(response.body).to include "#{age_range_in_years} " + error_message
+      end
+    end
+
+    context "with a to value that does not fall within the valid age range" do
+      let(:age_range_in_years) { "7_to_19" }
 
       it "should return an error stating valid age ranges must be 4 years or greater" do
         expect(response).to have_http_status(:unprocessable_entity)
@@ -75,7 +97,6 @@ describe "POST /providers/:provider_code/courses/:course_code" do
 
     context "with an age range that does not include a valid from age range value" do
       let(:age_range_in_years) { "to_6" }
-      let(:error_message) { "is invalid. A valid from value must be provided." }
 
       it "should return an error stating that there is an invalid from year" do
         expect(response).to have_http_status(:unprocessable_entity)
@@ -86,7 +107,6 @@ describe "POST /providers/:provider_code/courses/:course_code" do
 
     context "with an age range that does not include a valid to age range value" do
       let(:age_range_in_years) { "2_to" }
-      let(:error_message) { "is invalid. A valid to value must be provided." }
 
       it "should return an error stating that there is an invalid from year" do
         expect(response).to have_http_status(:unprocessable_entity)
