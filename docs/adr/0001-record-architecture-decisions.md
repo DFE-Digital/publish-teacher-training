@@ -16,8 +16,12 @@ future, so how about we create an ADR here.
 
 ## Decision
 
-_pending_
+We will keep the ADR in this repo. Additionally, we'll create ADRs in the other
+repos that are part of this project with pointers to look in this repo recorded
+in the ADR.
 
 ## Consequences
 
-_pending_
+Will have a record of the architectural decisions we make for this project and
+the services involved. People looking for an ADR in the repos for these services
+will have to be redirected to here.
