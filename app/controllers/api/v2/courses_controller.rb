@@ -21,12 +21,7 @@ module API
 
       def build_new
         authorize @provider
-        @course = Course.new(provider: @provider)
-        update_subjects
-        update_sites
-        @course.assign_attributes(course_params)
-        update_further_education_fields if @course.level == "further_education"
-        @course.name = @course.generate_name
+        build_new_course
         @course.valid?(:new)
 
         # https://github.com/jsonapi-rb/jsonapi-rails/issues/113
@@ -126,13 +121,9 @@ module API
         authorize @provider, :can_create_course?
         return unless course_params.values.any?
 
+        build_new_course
         course_code = @provider.next_available_course_code
-        @course = Course.new(provider: @provider)
-        @course.assign_attributes(course_params.merge(course_code: course_code))
-        update_subjects
-        update_sites
-        update_further_education_fields if @course.level == "further_education"
-        @course.name = @course.generate_name
+        @course.assign_attributes(course_code: course_code)
 
         if @course.valid?(:new) && @course.save
           render jsonapi: @course.reload
@@ -194,6 +185,15 @@ module API
         @course = @provider.courses.find_by!(course_code: params[:code].upcase)
 
         authorize @course
+      end
+
+      def build_new_course
+        @course = Course.new(provider: @provider)
+        @course.assign_attributes(course_params)
+        update_subjects
+        update_sites
+        update_further_education_fields if @course.level == "further_education"
+        @course.name = @course.generate_name
       end
 
       def enrichment_params
