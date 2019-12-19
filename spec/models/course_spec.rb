@@ -137,6 +137,23 @@ describe Course, type: :model do
           expect(error.first).to include("You must pick at least one subject")
         end
 
+        context "With modern languages as a subject" do
+          let(:course) { Course.new(provider: provider, subjects: [modern_languages]) }
+
+          it "Requires a language to be selected" do
+            error = errors[:subjects]
+            expect(error).not_to be_empty
+            expect(error.first).to include("You must pick at least one language")
+          end
+
+          it "Does not add an error if a language is selected" do
+            course.subjects << french
+            course.valid?(:new)
+            error = course.errors.messages[:subjects]
+            expect(error).to be_empty
+          end
+        end
+
         it "Requires an age range" do
           error = errors[:age_range_in_years]
           expect(error).not_to be_empty
@@ -544,7 +561,7 @@ describe Course, type: :model do
       let(:subject_discontinued) { create :discontinued_subject }
       let(:subject_without_code) { create :primary_subject, :primary, subject_code: nil }
       let(:course) do
-        create :course, subjects: [subject, modern_languages, subject_discontinued]
+        create :course, subjects: [subject, subject_discontinued]
       end
 
       it "returns none-discontinued subjects that have a code present" do
@@ -1010,7 +1027,7 @@ describe Course, type: :model do
 
   context "bursaries and scholarships" do
     let!(:financial_incentive) { create(:financial_incentive, subject: modern_languages, bursary_amount: 255, scholarship: 1415, early_career_payments: 32) }
-    subject { create(:course, level: "secondary", subjects: [modern_languages]) }
+    subject { create(:course, :skip_validate, level: "secondary", subjects: [modern_languages]) }
 
     it { should have_bursary }
     it { should have_scholarship_and_bursary }

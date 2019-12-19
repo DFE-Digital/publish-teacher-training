@@ -15,7 +15,7 @@ describe Course, type: :model do
 
     context "secondary level" do
       context "with the modern language subject" do
-        let(:course) { create(:course, level: "secondary", subjects: [find(:secondary_subject, :modern_languages)]) }
+        let(:course) { create(:course, level: "secondary", subjects: [find(:secondary_subject, :modern_languages), find(:modern_languages_subject, :french)]) }
 
         it "returns modern languages subjects" do
           expect(course.available_modern_languages).to(

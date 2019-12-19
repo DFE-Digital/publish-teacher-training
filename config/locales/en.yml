@@ -52,6 +52,7 @@ en:
             subjects:
               blank: "^There is a problem with this course. Contact support to fix it (Error: S)"
               course_creation: "^You must pick at least one subject"
+              select_a_language: "^You must pick at least one language"
             study_mode:
               blank: "^You need to pick an option"
             applications_open_from:

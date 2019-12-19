@@ -169,6 +169,7 @@ class Course < ApplicationRecord
   validate :validate_start_date, on: :update, if: -> { provider.present? && start_date.present? }
   validate :validate_applications_open_from, on: %i[update new], if: -> { provider.present? }
   validate :validate_modern_languages
+  validate :validate_has_languages, if: :has_the_modern_languages_secondary_subject_type?
   validate :validate_subject_count
   validate :validate_subject_consistency
 
@@ -542,7 +543,7 @@ private
     if qualification.blank?
       errors.add(:qualification, :blank)
     else
-      errors.add(:qualification, "^#{qualifications_description} is not valid for a #{level.to_s.humanize.downcase} course") unless qualification_options.include?(qualification)
+      errors.add(:qualification, "^#{qualifications_description} is not valid for a #{level.to_s.humanize.downcase} course") unless qualification.in?(qualification_options)
     end
   end
 
@@ -590,6 +591,12 @@ private
     raise "SecondarySubject.modern_languages not found" if SecondarySubject.modern_languages == nil
 
     subjects.any? { |subject| subject&.id == SecondarySubject.modern_languages.id }
+  end
+
+  def validate_has_languages
+    unless has_any_modern_language_subject_type?
+      errors.add(:subjects, :select_a_language)
+    end
   end
 
   def validate_subject_count
