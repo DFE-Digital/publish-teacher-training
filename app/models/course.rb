@@ -642,18 +642,22 @@ private
   end
 
   def validate_custom_age_range
-    age_range_array = age_range_in_years.split("_to_")
+    # This regex checks that a 1 or 2 digit number is selected for the 'to' and 'from' values.
+    # It also checks that the age range is correctly formatted with _to_ in between these values
+    valid_regex_pattern = /^(\d{1,2})_to_(\d{1,2})$/
+    #The below grabs the 'from' and 'to' ages and puts them into variables if the regex is valid
+    from_age, to_age = valid_regex_pattern.match(age_range_in_years).captures if valid_regex_pattern.match(age_range_in_years)
+
     error_message = "#{age_range_in_years} is invalid. You must enter a valid age range."
-    if age_range_in_years.length >= 9
+
+    if !valid_regex_pattern.match(age_range_in_years)
       errors.add(:age_range_in_years, error_message)
-    elsif age_range_array.length != 2
-      errors.add(:age_range_in_years, error_message)
-    elsif age_range_array.first.to_i.zero? || age_range_array.first.to_i > 14 || age_range_array.first.to_i < 3
+    elsif from_age.to_i < 3 || from_age.to_i > 14
       errors.add(:age_range_in_years_from, error_message)
-    elsif age_range_array.last.to_i.zero? || age_range_array.last.to_i < 7 || age_range_array.last.to_i > 18
+    elsif to_age.to_i < 7 || to_age.to_i > 18
       errors.add(:age_range_in_years_to, error_message)
-    elsif age_range_array.last.to_i - age_range_array.first.to_i < 4
-      errors.add(:age_range_in_years, "#{age_range_in_years} is invalid. Your age range must cover 4 years.")
+    elsif to_age.to_i - from_age.to_i < 4
+      errors.add(:age_range_in_years, "#{age_range_in_years} is invalid. Your age range must cover at least 4 years.")
     end
   end
 

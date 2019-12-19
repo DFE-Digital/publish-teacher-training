@@ -66,7 +66,7 @@ describe "POST /providers/:provider_code/courses/:course_code" do
 
     context "with an age range of with a gap of less than 4 years" do
       let(:age_range_in_years) { "5_to_8" }
-      let(:error_message) { "is invalid. Your age range must cover 4 years." }
+      let(:error_message) { "is invalid. Your age range must cover at least 4 years." }
 
       it "should return an error stating valid age ranges must be 4 years or greater" do
         expect(response).to have_http_status(:unprocessable_entity)
