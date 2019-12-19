@@ -206,21 +206,26 @@ module MCB
       opts.merge! azure_env_settings_for_opts(**opts)
 
       if requesting_remote_connection?(**opts)
-        opts[:url] ||= MCB::Azure.get_urls(**opts).first
+        opts[:url] ||= service_root_url(**opts)
         opts[:token] ||= MCB::Azure.get_config(**opts)["AUTHENTICATION_TOKEN"]
       end
 
       opts
     end
 
+    # Get the correct URL for the service specified with the given options.
+    def service_root_url(**opts)
+      MCB::Azure.get_urls(**opts)
+        .grep(%r{^https://.*\.(education|service)\.gov\.uk$})
+        .first
+    end
+
     # Return the base url to the API V2 for the given opts.
     #
     # <tt>opts</tt> should be filled-in using <tt>apiv2_opts</tt>
     def apiv2_base_url(opts)
-      url = MCB::Azure.get_urls(**opts)
-        .grep(/^https.*gov\.uk$/)
-        .first
-      "#{url}/api/v2"
+      root_url = service_root_url(opts)
+      "#{root_url}/api/v2"
     end
 
     def display_pages_received(page:, max_pages:, next_url:)

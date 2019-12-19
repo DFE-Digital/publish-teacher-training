@@ -148,6 +148,30 @@ describe "mcb command" do
     end
   end
 
+  describe ".service_root_url" do
+    let(:opts) do
+      {
+        webapp: "weebapp",
+        rgroup: "rezgrp",
+        subscription: "sub6",
+      }
+    end
+
+    it "returns the first https url on service.gov.uk" do
+      allow(MCB::Azure).to(
+        receive(:get_urls).with(opts).and_return(
+          %w[http://svc.azure.net
+             https://svc.azure.net
+             http://svc.service.gov.uk
+             https://svc.service.gov.uk],
+        ),
+      )
+
+      expect(MCB.service_root_url(opts))
+        .to eq "https://svc.service.gov.uk"
+    end
+  end
+
   describe ".apiv2_base_url" do
     let(:opts) do
       {
@@ -157,13 +181,10 @@ describe "mcb command" do
       }
     end
 
-    it "returns the first https url on gov.uk" do
-      allow(MCB::Azure).to(
-        receive(:get_urls).with(opts).and_return(
-          %w[http://svc.azure.net
-             https://svc.azure.net
-             http://svc.service.gov.uk
-             https://svc.service.gov.uk],
+    it "adds the api v2 path to the service root url" do
+      allow(MCB).to(
+        receive(:service_root_url).with(opts).and_return(
+          "https://svc.service.gov.uk",
         ),
       )
 
