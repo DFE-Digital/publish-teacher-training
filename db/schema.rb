@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_12_20_161244) do
+ActiveRecord::Schema.define(version: 2019_12_23_135644) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_buffercache"
@@ -127,6 +127,8 @@ ActiveRecord::Schema.define(version: 2019_12_20_161244) do
   create_table "course_subject", id: :serial, force: :cascade do |t|
     t.integer "course_id"
     t.integer "subject_id"
+    t.datetime "created_at", precision: 6
+    t.datetime "updated_at", precision: 6
     t.index ["course_id", "subject_id"], name: "index_course_subject_on_course_id_and_subject_id", unique: true
     t.index ["course_id"], name: "index_course_subject_on_course_id"
     t.index ["subject_id"], name: "index_course_subject_on_subject_id"
@@ -270,6 +272,8 @@ ActiveRecord::Schema.define(version: 2019_12_20_161244) do
     t.text "type"
     t.text "subject_code"
     t.text "subject_name"
+    t.datetime "created_at", precision: 6
+    t.datetime "updated_at", precision: 6
     t.index ["subject_name"], name: "index_subject_on_subject_name"
   end
 
