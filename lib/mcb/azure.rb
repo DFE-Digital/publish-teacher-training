@@ -1,6 +1,6 @@
 module MCB
   module Azure
-    @config = {}
+    @configs = {}
 
     def self.get_subs
       raw_json = MCB::run_command "az account list"
@@ -25,16 +25,16 @@ module MCB
 
     def self.get_config(webapp:, rgroup: nil, subscription: nil, **_opts)
       config_key = "#{subscription}-#{rgroup}-#{webapp}"
-      unless @config.key? config_key
+      unless @configs.key? config_key
         rgroup ||= rgroup_for_app(webapp)
         cmd = "az webapp config appsettings list -g \"#{rgroup}\" -n \"#{webapp}\""
         cmd += " --subscription \"#{subscription}\"" if subscription
         raw_json = MCB::run_command(cmd)
-        @config[config_key] = JSON.parse(raw_json)
+        @configs[config_key] = JSON.parse(raw_json)
                                  .map { |c| [c["name"], c["value"]] }
                                  .to_h
       end
-      @config[config_key]
+      @configs[config_key]
     end
 
     def self.get_urls(webapp:, rgroup: nil, subscription: nil, **_opts)

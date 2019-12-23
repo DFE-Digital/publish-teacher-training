@@ -116,44 +116,58 @@ describe "mcb command" do
     end
   end
 
+  shared_context "azure env setup" do
+    let(:opts_with_webapp) do
+      opts.merge(
+        webapp: "weebapp",
+        rgroup: "rezgrp",
+        subscription: "sub6",
+      )
+    end
+    let(:url) { "https://webs.local" }
+    let(:config) { "hash of values as returned by 'az webapp config'" }
+
+    before do
+      allow(MCB).to(receive(:azure_env_settings_for_opts)
+                      .with(opts) { |o| o.merge opts_with_webapp })
+      allow(MCB).to(receive(:requesting_remote_connection?).and_return(true))
+      allow(MCB).to(receive(:service_root_url).and_return(url))
+
+      # allow(MCB::Azure).to receive(:get_urls).and_return(urls)
+      allow(MCB::Azure).to receive(:get_config).and_return(config)
+    end
+  end
+
   describe ".system_api_opts" do
-    it "sets the webapp"
-    it "sets the rgroup"
-    it "sets the subscription"
-    it "sets the url"
-    it "sets the token"
+    let(:opts) { { env: "low-cal" } }
+
+    include_context "azure env setup" do
+      let(:config) { { "SETTINGS__SYSTEM_AUTHENTICATION_TOKEN" => "ubl" } }
+    end
+
+    subject { MCB.system_api_opts(opts) }
+
+    it { should include url: "https://webs.local" }
+    it { should include webapp: "weebapp" }
+    it { should include rgroup: "rezgrp" }
+    it { should include subscription: "sub6" }
+    it { should include token: "ubl" }
   end
 
   describe ".apiv1_opts" do
-    context "with the -E flag" do
-      let(:opts) { { env: "low-cal" } }
-      let(:opts_with_webapp) do
-        opts.merge(
-          webapp: "weebapp",
-          rgroup: "rezgrp",
-          subscription: "sub6",
-        )
-      end
-      let(:urls) { %w[http://web.local https://webs.local] }
+    let(:opts) { { env: "low-cal" } }
+
+    include_context "azure env setup" do
       let(:config) { { "AUTHENTICATION_TOKEN" => "jrr" } }
-
-      before do
-        allow(MCB).to(receive(:azure_env_settings_for_opts)
-                        .with(opts) { |o| o.merge opts_with_webapp })
-        allow(MCB).to(receive(:requesting_remote_connection?).and_return(true))
-
-        allow(MCB::Azure).to receive(:get_urls).and_return(urls)
-        allow(MCB::Azure).to receive(:get_config).and_return(config)
-      end
-
-      subject { MCB.apiv1_opts(opts) }
-
-      it { should include url: "http://web.local" }
-      it { should include webapp: "weebapp" }
-      it { should include rgroup: "rezgrp" }
-      it { should include subscription: "sub6" }
-      it { should include token: "jrr" }
     end
+
+    subject { MCB.apiv1_opts(opts) }
+
+    it { should include url: "https://webs.local" }
+    it { should include webapp: "weebapp" }
+    it { should include rgroup: "rezgrp" }
+    it { should include subscription: "sub6" }
+    it { should include token: "jrr" }
   end
 
   describe ".service_root_url" do

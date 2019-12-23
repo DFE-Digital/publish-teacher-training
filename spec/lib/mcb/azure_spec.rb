@@ -108,7 +108,7 @@ describe MCB::Azure do
     end
 
     it "only runs az once, caching the response" do
-      MCB::Azure.instance_eval { @config&.clear }
+      MCB::Azure.instance_eval { @configs&.clear }
 
       MCB::Azure.get_config(webapp: "some-app", rgroup: "some-rgroup")
 
