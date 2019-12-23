@@ -271,6 +271,13 @@
       "metadata": {
         "description": "The API key for Google Cloud Platform."
       }
+    },
+    "customAvailabilityMonitors": {
+      "type": "array",
+      "defaultValue": [],
+      "metadata": {
+          "description": "Array of paths to perform monitoring on. In form TEST_NAME:HOST where HOST is the complete URL minus the http(s):// prefix."
+      }
     }
   },
   "variables": {
@@ -284,7 +291,20 @@
     "databaseResourceNamePrefix": "[toLower(concat(parameters('resourceEnvironmentName'),'-', parameters('databaseServiceName')))]",
     "databaseServerName": "[concat(variables('databaseResourceNamePrefix'), '-psql')]",
     "databaseUsername": "[concat(parameters('databaseUsername'), '@', variables('databaseServerName'))]",
-    "storageAccountName": "[replace(concat(variables('resourceNamePrefix'), 'str'), '-', '')]"
+    "storageAccountName": "[replace(concat(variables('resourceNamePrefix'), 'str'), '-', '')]",
+    "defaultAvailabilityCheckHosts": "[if(greater(length(parameters('customHostName')), 0), createArray(concat('azcheck:', variables('appServiceName'), '.azurewebsites.net/ping'), concat('check:', parameters('customHostName'), '/ping')), createArray(concat('azcheck:', variables('appServiceName'), '.azurewebsites.net/ping')))]",
+    "availabilityCheckHosts": "[if(greater(length(parameters('customAvailabilityMonitors')), 0), concat(variables('defaultAvailabilityCheckHosts'), parameters('customAvailabilityMonitors')), variables('defaultAvailabilityCheckHosts'))]",
+    "copy": [
+      {
+          "name": "availabilityTests",
+          "count": "[length(variables('availabilityCheckHosts'))]",
+          "input": {
+              "nameSuffix": "[split(variables('availabilityCheckHosts')[copyIndex('availabilityTests')], ':')[0]]",
+              "url": "[concat('https://', split(variables('availabilityCheckHosts')[copyIndex('availabilityTests')], ':')[1])]",
+              "guid": "[guid(variables('availabilityCheckHosts')[copyIndex('availabilityTests')])]"
+          }
+      }
+    ]
   },
   "resources": [
     {
@@ -599,6 +619,9 @@
           },
           "attachedService": {
             "value": "[variables('appServiceName')]"
+          },
+          "availabilityTests": {
+              "value": "[variables('availabilityTests')]"
           }
         }
       }
