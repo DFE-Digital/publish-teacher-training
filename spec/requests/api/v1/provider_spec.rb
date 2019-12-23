@@ -26,123 +26,119 @@ describe "Providers API", type: :request do
     let(:get_index) { get "/api/v1/#{current_year}/providers", headers: { "HTTP_AUTHORIZATION" => credentials } }
 
     context "without changed_since parameter" do
-      let(:ucas_preferences) do
-        build(:ucas_preferences,
-              type_of_gt12: :not_coming,
-              send_application_alerts: :all,
-              application_alert_email: "application_alert_recipient@acmescitt.education.uk")
-      end
-      let(:contacts) do
-        [
-          build(:contact, type: "admin",
-                          name: "Admin Contact A123",
-                          email: "admin@acmescitt.education.uk",
-                          telephone: "020 812 345 678"),
-          build(:contact, type: "utt",
-                          name: "Utt Contact A123",
-                          email: "utt@acmescitt.education.uk",
-                          telephone: "020 812 345 678"),
-          build(:contact, type: "web_link",
-                          name: "Web Link Contact A123",
-                          email: "web_link@acmescitt.education.uk",
-                          telephone: "020 812 345 678"),
-          build(:contact, type: "fraud",
-                          name: "Fraud Contact A123",
-                          email: "fraud@acmescitt.education.uk",
-                          telephone: "020 812 345 678"),
-          build(:contact, type: "finance",
-                          name: "Finance Contact A123",
-                          email: "finance@acmescitt.education.uk",
-                          telephone: "020 812 345 678"),
-        ]
-      end
-      let(:provider) do
-        create(:provider,
-               provider_name: "ACME SCITT",
-               provider_code: "A123",
-               provider_type: :scitt,
-               address1: "Shoreditch Park Primary School",
-               address2: "313 Bridport Pl",
-               address3: nil,
-               address4: "London",
-               postcode: "N1 5JN",
-               telephone: "020 812 345 678",
-               email: "info@acmescitt.education.uk",
-               contact_name: "Amy Smith",
-               region_code: :london,
-               accrediting_provider: "Y",
-               scheme_member: "Y",
-               ucas_preferences: ucas_preferences,
-               contacts: contacts,
-               sites: [site])
-      end
-      let(:site) do
-        build(:site,
-              location_name: "Main site 1",
-              code: "-",
-              region_code: :london)
-      end
-      let(:ucas_preferences2) do
-        build(:ucas_preferences,
-              type_of_gt12: :coming_or_not,
-              send_application_alerts: :none,
-              application_alert_email: nil)
-      end
-      let(:contacts2) do
-        [
-          build(:contact, type: "admin",
-                          name: "Admin Contact B123",
-                          email: "admin@acmeuniversity.education.uk",
-                          telephone: "01273 345 678"),
-          build(:contact, type: "utt",
-                          name: "Utt Contact B123",
-                          email: "utt@acmeuniversity.education.uk",
-                          telephone: "01273 345 678"),
-          build(:contact, type: "web_link",
-                          name: "Web Link Contact B123",
-                          email: "web_link@acmeuniversity.education.uk",
-                          telephone: "01273 345 678"),
-          build(:contact, type: "fraud",
-                          name: "Fraud Contact B123",
-                          email: "fraud@acmeuniversity.education.uk",
-                          telephone: "01273 345 678"),
-          build(:contact, type: "finance",
-                          name: "Finance Contact B123",
-                          email: "finance@acmeuniversity.education.uk",
-                          telephone: "01273 345 678"),
-        ]
-      end
-      let(:provider2) do
-        create(:provider,
-               provider_name: "ACME University",
-               provider_code: "B123",
-               provider_type: :university,
-               address1: "Bee School",
-               address2: "Bee Avenue",
-               address3: "Bee City",
-               address4: "Bee Hive",
-               postcode: "B3 3BB",
-               telephone: "01273 345 678",
-               email: "info@acmeuniversity.education.uk",
-               contact_name: "James Brown",
-               region_code: :south_west,
-               accrediting_provider: "N",
-               scheme_member: "N",
-               ucas_preferences: ucas_preferences2,
-               contacts: contacts2,
-               sites: [site2])
-      end
-      let(:site2) do
-        build(:site,
-              location_name: "Main site 2",
-              code: "-",
-              region_code: :scotland)
-      end
+      provider = nil
+      provider2 = nil
 
       before do
-        perform_enqueued_jobs do
-          provider
-          provider2
+        Timecop.freeze(60.minutes.ago) do
+          ucas_preferences = build(:ucas_preferences,
+                                   type_of_gt12: :not_coming,
+                                   send_application_alerts: :all,
+                                   application_alert_email: "application_alert_recipient@acmescitt.education.uk")
+
+          contacts = [
+            build(:contact, type: "admin",
+                  name: "Admin Contact A123",
+                  email: "admin@acmescitt.education.uk",
+                  telephone: "020 812 345 678"),
+            build(:contact, type: "utt",
+                  name: "Utt Contact A123",
+                  email: "utt@acmescitt.education.uk",
+                  telephone: "020 812 345 678"),
+            build(:contact, type: "web_link",
+                  name: "Web Link Contact A123",
+                  email: "web_link@acmescitt.education.uk",
+                  telephone: "020 812 345 678"),
+            build(:contact, type: "fraud",
+                  name: "Fraud Contact A123",
+                  email: "fraud@acmescitt.education.uk",
+                  telephone: "020 812 345 678"),
+            build(:contact, type: "finance",
+                  name: "Finance Contact A123",
+                  email: "finance@acmescitt.education.uk",
+                  telephone: "020 812 345 678"),
+          ]
+
+          site = build(:site,
+                       location_name: "Main site 1",
+                       code: "-",
+                       region_code: :london)
+
+          perform_enqueued_jobs do
+            provider = create(:provider,
+                              provider_name: "ACME SCITT",
+                              provider_code: "A123",
+                              provider_type: :scitt,
+                              address1: "Shoreditch Park Primary School",
+                              address2: "313 Bridport Pl",
+                              address3: nil,
+                              address4: "London",
+                              postcode: "N1 5JN",
+                              telephone: "020 812 345 678",
+                              email: "info@acmescitt.education.uk",
+                              contact_name: "Amy Smith",
+                              region_code: :london,
+                              accrediting_provider: "Y",
+                              scheme_member: "Y",
+                              ucas_preferences: ucas_preferences,
+                              contacts: contacts,
+                              sites: [site])
+          end
+        end
+
+        Timecop.freeze(59.minutes.ago) do
+          ucas_preferences2 = build(:ucas_preferences,
+                                    type_of_gt12: :coming_or_not,
+                                    send_application_alerts: :none,
+                                    application_alert_email: nil)
+          contacts2 = [
+            build(:contact, type: "admin",
+                  name: "Admin Contact B123",
+                  email: "admin@acmeuniversity.education.uk",
+                  telephone: "01273 345 678"),
+            build(:contact, type: "utt",
+                  name: "Utt Contact B123",
+                  email: "utt@acmeuniversity.education.uk",
+                  telephone: "01273 345 678"),
+            build(:contact, type: "web_link",
+                  name: "Web Link Contact B123",
+                  email: "web_link@acmeuniversity.education.uk",
+                  telephone: "01273 345 678"),
+            build(:contact, type: "fraud",
+                  name: "Fraud Contact B123",
+                  email: "fraud@acmeuniversity.education.uk",
+                  telephone: "01273 345 678"),
+            build(:contact, type: "finance",
+                  name: "Finance Contact B123",
+                  email: "finance@acmeuniversity.education.uk",
+                  telephone: "01273 345 678"),
+          ]
+
+          site2 = build(:site,
+                        location_name: "Main site 2",
+                        code: "-",
+                        region_code: :scotland)
+
+          perform_enqueued_jobs do
+            provider2 = create(:provider,
+                               provider_name: "ACME University",
+                               provider_code: "B123",
+                               provider_type: :university,
+                               address1: "Bee School",
+                               address2: "Bee Avenue",
+                               address3: "Bee City",
+                               address4: "Bee Hive",
+                               postcode: "B3 3BB",
+                               telephone: "01273 345 678",
+                               email: "info@acmeuniversity.education.uk",
+                               contact_name: "James Brown",
+                               region_code: :south_west,
+                               accrediting_provider: "N",
+                               scheme_member: "N",
+                               ucas_preferences: ucas_preferences2,
+                               contacts: contacts2,
+                               sites: [site2])
+          end
         end
 
         get_index
@@ -377,10 +373,10 @@ describe "Providers API", type: :request do
 
         context "when the recruitment year is in the params" do
           # We want to keep legacy support for year as a param in order to
-           # maintain backwards compatibility. This will avoid breaking calls
-           # from UCAS should they use this older style. The next links we
-           # generate used to were of this style, and the UCAS systems
-           # were making requests in this style.
+          # maintain backwards compatibility. This will avoid breaking calls
+          # from UCAS should they use this older style. The next links we
+          # generate used to were of this style, and the UCAS systems
+          # were making requests in this style.
           it "includes the correct next link" do
             create(:provider,
                    provider_code: "LAST1",
@@ -403,7 +399,7 @@ describe "Providers API", type: :request do
                 changed_since: timestamp_of_last_provider.utc.strftime("%FT%T.%6NZ"),
                 per_page: 100,
               },
-    )
+            )
             expect(response.headers["Link"]).to match "#{url}; rel=\"next\""
           end
         end
@@ -431,8 +427,8 @@ describe "Providers API", type: :request do
         before do
           @providers = Array.new(25) do |i|
             create(:provider, provider_code: "PROV#{i + 1}",
-              changed_at: (30 - i).minutes.ago,
-              sites: [])
+                   changed_at: (30 - i).minutes.ago,
+                   sites: [])
           end
         end
 
@@ -466,8 +462,8 @@ describe "Providers API", type: :request do
         before do
           @providers = Array.new(25) do |i|
             create(:provider, provider_code: "PROV#{i + 1}",
-              changed_at: timestamp + i / 1000.0,
-              sites: [])
+                   changed_at: timestamp + i / 1000.0,
+                   sites: [])
           end
         end
 
