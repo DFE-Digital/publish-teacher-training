@@ -31,6 +31,12 @@ module API
           include: [:subjects, :sites, :accrediting_provider, :provider, provider: [:sites]],
         )
 
+        if !@current_user.admin?
+          json_data[:data][:meta][:edit_options][:subjects]&.reject! do |subject|
+            subject[:attributes][:subject_name] == "Physical education"
+          end
+        end
+
         json_data[:data][:errors] = []
 
         @course.errors.messages.each do |error_key, _|
