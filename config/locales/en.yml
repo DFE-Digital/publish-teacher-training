@@ -31,6 +31,10 @@ en:
               blank: "is missing"
         course:
           attributes:
+            level:
+              blank: "^You need to pick a level"
+            qualification:
+              blank: "^You need to pick an outcome"
             maths:
               inclusion: "^Pick an option for Maths"
             english:
@@ -41,8 +45,18 @@ en:
               blank: "^Complete your course information before publishing"
             sites:
               blank: "^You must pick at least one location for this course"
+            age_range_in_years:
+              blank: "^You need to pick an age range"
+            program_type:
+              blank: "^You need to pick an option"
             subjects:
               blank: "^There is a problem with this course. Contact support to fix it (Error: S)"
+              course_creation: "^You must pick at least one subject"
+              select_a_language: "^You must pick at least one language"
+            study_mode:
+              blank: "^You need to pick an option"
+            applications_open_from:
+              blank: "^You must say when applications open from"
         course_enrichment:
           attributes:
             salary_details:
