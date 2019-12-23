@@ -57,14 +57,14 @@ module MCB
     end
 
     def self.configure_redis(app_config)
-      %w[REDIS_URL SETTINGS__MCBG__REDIS_PASSWORD].each do |env_var|
+      %w[REDIS_URL PTT_API__MCBG__REDIS_PASSWORD].each do |env_var|
         ENV[env_var] = app_config.fetch(env_var)
       end
     end
 
     def self.configure_env(app_config)
       ENV.update(
-        app_config.select { |e| e.start_with?("SETTINGS__") },
+        app_config.select { |e| e.start_with?("PTT_API__") },
       )
     end
 

@@ -23,8 +23,8 @@ describe "mcb db" do
         "PG_USERNAME"                            => "azuser",
         "PG_PASSWORD"                            => "azpass",
         "REDIS_URL"                              => "https://redisurl",
-        "SETTINGS__MCBG__REDIS_PASSWORD"         => "redispass",
-        "RAILS_ENV"                              => "qa",
+        "PTT_API__MCBG__REDIS_PASSWORD" => "redispass",
+        "RAILS_ENV" => "qa",
       }
 
       azure_qa_settings = { webapp: "s121d01-mcbe-as",

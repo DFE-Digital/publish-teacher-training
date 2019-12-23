@@ -162,7 +162,7 @@ file
 ```
 
 ```bash
-export SETTINGS__FILE__BASED__SETTINGS__ENV1="machine wins"
+export PTT_API__FILE__BASED__PTT_API__ENV1="machine wins"
 ```
 
 ```ruby
