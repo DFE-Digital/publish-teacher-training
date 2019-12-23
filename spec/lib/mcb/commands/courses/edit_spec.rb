@@ -78,6 +78,7 @@ describe "mcb courses edit" do
         end
 
         it "ignores providers associated with the next cycle" do
+          CourseSubject.where(course_id: course.id).first.destroy
           provider.destroy
           course.destroy
 

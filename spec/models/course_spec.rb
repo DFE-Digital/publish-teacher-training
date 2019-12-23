@@ -39,7 +39,15 @@ require "rails_helper"
 
 describe Course, type: :model do
   let(:recruitment_cycle) { course.recruitment_cycle }
-  let(:course) { create(:course, name: "Biology", course_code: "3X9F") }
+  let(:course) do
+    create(
+      :course,
+      level: "secondary",
+      name: "Biology",
+      course_code: "3X9F",
+      subjects: [find_or_create(:secondary_subject, :biology)],
+    )
+  end
   let(:subject) { course }
   let(:french) { find_or_create(:modern_languages_subject, :french) }
   let!(:financial_incentive) { create(:financial_incentive, subject: modern_languages) }
@@ -101,7 +109,7 @@ describe Course, type: :model do
     it {
       should validate_presence_of(:level)
         .on(:publish)
-        .with_message("^There is a problem with this course. Contact support to fix it (Error: L)")
+        .with_message("^You need to pick a level")
     }
 
     it "validates scoped to provider_id and only on create and update" do
@@ -111,6 +119,88 @@ describe Course, type: :model do
     end
 
     describe "valid?" do
+      context "A new course" do
+        let(:provider) { build(:provider) }
+        let(:course) { Course.new(provider: provider) }
+        let(:errors) { course.errors.messages }
+        before { course.valid?(:new) }
+
+        it "Requires a level" do
+          error = errors[:level]
+          expect(error).not_to be_empty
+          expect(error.first).to include("You need to pick a level")
+        end
+
+        it "Requires a subject" do
+          error = errors[:subjects]
+          expect(error).not_to be_empty
+          expect(error.first).to include("You must pick at least one subject")
+        end
+
+        context "With modern languages as a subject" do
+          let(:course) { Course.new(provider: provider, subjects: [modern_languages]) }
+
+          it "Requires a language to be selected" do
+            error = errors[:subjects]
+            expect(error).not_to be_empty
+            expect(error.first).to include("You must pick at least one language")
+          end
+
+          it "Does not add an error if a language is selected" do
+            course.subjects << french
+            course.valid?(:new)
+            error = course.errors.messages[:subjects]
+            expect(error).to be_empty
+          end
+        end
+
+        it "Requires an age range" do
+          error = errors[:age_range_in_years]
+          expect(error).not_to be_empty
+          expect(error.first).to include("You need to pick an age range")
+        end
+
+        it "Requires an outcome" do
+          error = errors[:qualification]
+          expect(error).not_to be_empty
+          expect(error.first).to include("You need to pick an outcome")
+        end
+
+        it "Requires a program type to have been specified" do
+          error = errors[:program_type]
+          expect(error).not_to be_empty
+          expect(error.first).to include("You need to pick an option")
+        end
+
+        it "Requires a study mode" do
+          error = errors[:study_mode]
+          expect(error).not_to be_empty
+          expect(error.first).to include("You need to pick an option")
+        end
+
+        context "Applications open" do
+          it "Empty" do
+            error = errors[:applications_open_from]
+            expect(error).not_to be_empty
+            expect(error.first).to include("You must say when applications open")
+          end
+
+          it "A date outside of the current recruitment cycle" do
+            course.applications_open_from = course.recruitment_cycle.application_start_date - 1
+            course.valid?(:new)
+            error = course.errors.messages[:applications_open_from]
+            expect(error).not_to be_empty
+            expect(error.first).to include("is not valid")
+          end
+        end
+
+        it "Requires at least one location" do
+          error = errors[:sites]
+          expect(error).not_to be_empty
+          expect(error.first).to include("You must pick at least one location")
+        end
+      end
+
       context "A further education course" do
         let(:course) { build(:course, level: "further_education") }
 
@@ -141,7 +231,7 @@ describe Course, type: :model do
         context "age_range_in_years" do
           let(:blank_field) { { age_range_in_years: nil } }
 
-          it { should include "Age range in years can't be blank" }
+          it { should include "You need to pick an age range" }
         end
 
         context "maths" do
@@ -195,14 +285,18 @@ describe Course, type: :model do
 
       context "invalid subjects" do
         let(:initial_draft_enrichment) { build(:course_enrichment, :published) }
-        let(:course) { create(:course, level: :secondary, site_statuses: [create(:site_status, :new)], enrichments: [initial_draft_enrichment]) }
+        # This skips validations to ensure we don't have any legacy data that could be published
+        let(:course) { create(:course, :skip_validate, level: :secondary, infer_subjects?: false, site_statuses: [create(:site_status, :new)], enrichments: [initial_draft_enrichment]) }
 
         before do
           subject.publishable?
         end
 
-        it "should add subjects" do
-          expect(subject.errors.full_messages).to match_array(["There is a problem with this course. Contact support to fix it (Error: S)"])
+        it "Should give an error for the subjects" do
+          expect(subject.errors.full_messages).to match_array([
+            "There is a problem with this course. Contact support to fix it (Error: S)",
+            "You must pick at least one subject",
+          ])
         end
       end
     end
@@ -467,7 +561,7 @@ describe Course, type: :model do
       let(:subject_discontinued) { create :discontinued_subject }
       let(:subject_without_code) { create :primary_subject, :primary, subject_code: nil }
       let(:course) do
-        create :course, subjects: [subject, modern_languages, subject_discontinued]
+        create :course, subjects: [subject, subject_discontinued]
       end
 
       it "returns none-discontinued subjects that have a code present" do
@@ -933,7 +1027,7 @@ describe Course, type: :model do
 
   context "bursaries and scholarships" do
     let!(:financial_incentive) { create(:financial_incentive, subject: modern_languages, bursary_amount: 255, scholarship: 1415, early_career_payments: 32) }
-    subject { create(:course, level: "secondary", subjects: [modern_languages]) }
+    subject { create(:course, :skip_validate, level: "secondary", subjects: [modern_languages]) }
 
     it { should have_bursary }
     it { should have_scholarship_and_bursary }
@@ -1171,7 +1265,17 @@ describe Course, type: :model do
     let(:courses_subjects) { [find_or_create(:secondary_subject, :biology)] }
     let(:site_status) { build(:site_status, :findable) }
 
-    subject { create(:course, :infer_level, subjects: courses_subjects, site_statuses: [site_status]) }
+    # This skips validations to ensure we don't have any legacy data that could be synced
+    subject do
+      create(
+        :course,
+        :infer_level,
+        :skip_validate,
+        infer_subjects?: false,
+        subjects: courses_subjects,
+        site_statuses: [site_status],
+      )
+    end
 
     its(:syncable?) { should be_truthy }
 

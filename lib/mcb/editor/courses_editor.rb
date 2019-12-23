@@ -38,10 +38,14 @@ module MCB
           edit(attribute)
         end
 
+        course.subjects = @cli.multiselect(
+          initial_items: course.subjects.to_a,
+          possible_items: course.assignable_subjects,
+        )
+        course.ensure_modern_languages
         puts "\nAbout to create the following course:"
         print_at_most_two_courses
         if @cli.confirm_creation? && try_saving_course
-          edit_subjects
           edit_sites
           edit(:application_opening_date)
           print_summary
@@ -94,7 +98,6 @@ module MCB
           initial_items: course.subjects.to_a,
           possible_items: course.assignable_subjects,
         )
-        course.ensure_modern_languages
         course.reload
       end
 
