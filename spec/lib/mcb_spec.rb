@@ -116,6 +116,14 @@ describe "mcb command" do
     end
   end
 
+  describe ".system_api_opts" do
+    it "sets the webapp"
+    it "sets the rgroup"
+    it "sets the subscription"
+    it "sets the url"
+    it "sets the token"
+  end
+
   describe ".apiv1_opts" do
     context "with the -E flag" do
       let(:opts) { { env: "low-cal" } }

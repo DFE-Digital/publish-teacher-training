@@ -180,6 +180,32 @@ module MCB
       email
     end
 
+    # Get the correct URL for the service specified with the given options.
+    def service_root_url(**opts)
+      MCB::Azure.get_urls(**opts)
+        .grep(%r{^https://.*\.(education|service)\.gov\.uk$})
+        .first
+    end
+
+    # Return options necessary to connect to system API.
+    #
+    # The opts passed in are examined determine which opts need to be added,
+    # this function essentially just fills in any missing options.
+    #
+    #   opts = system_apiv_opts(opts)
+    def system_api_opts(opts)
+      opts = expose_opts_defaults_for_splat(opts, :url, :'max-pages', :token, :all)
+      opts.merge! azure_env_settings_for_opts(**opts)
+
+      if requesting_remote_connection?(**opts)
+        opts[:url] ||= service_root_url(**opts)
+        config = MCB::Azure.get_config(**opts)
+        opts[:token] ||= config["SETTINGS__SYSTEM_AUTHENTICATION_TOKEN"]
+      end
+
+      opts
+    end
+
     def apiv1_opts(opts)
       # the following lines are necessary to make opts work with double **splats and default values
       # See the change introduced in https://github.com/ddfreyne/cri/pull/99 (cri 2.15.8)
@@ -211,13 +237,6 @@ module MCB
       end
 
       opts
-    end
-
-    # Get the correct URL for the service specified with the given options.
-    def service_root_url(**opts)
-      MCB::Azure.get_urls(**opts)
-        .grep(%r{^https://.*\.(education|service)\.gov\.uk$})
-        .first
     end
 
     # Return the base url to the API V2 for the given opts.

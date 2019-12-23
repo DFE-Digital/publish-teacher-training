@@ -1,20 +1,13 @@
 name "bulk_sync_to_find"
 summary "Bulk sync all course to Find"
 usage "bulk_sync_to_find"
-option :u, "url", "set the base url to connect to",
-       argument: :required
-option nil, :email, "the email to encode",
-       argument: :required,
-       default: -> { MCB.config[:email] }
-option :t, "token", "set the authorization token",
-       argument: :required
 
 run do |opts, _args, _cmd|
-  opts = MCB.apiv2_opts(opts)
+  opts = MCB.system_api_opts(opts)
 
   base_url = get_url_from_opts(opts)
   url = "#{base_url}/api/system/sync"
-  token = get_token_from_opts(opts)
+  token = opts[:token]
 
   require "httparty"
 
@@ -27,12 +20,9 @@ end
 def init_rails(opts)
   # Since this is an API connection, we don't want to connect to the remote
   # Rails instance, so remove <tt>webapp</tt> from the opts to
-  # <tt>init_rails</tt>. Also, <tt>email</tt> will get in the way as
-  # <tt>init_rails</tt> will try to setup auditing, and the user we're
-  # generating a token for may not exist locally.
+  # <tt>init_rails</tt>
   rails_opts = opts.dup
   rails_opts.delete(:webapp)
-  rails_opts.delete(:email)
   MCB.init_rails(**rails_opts)
 end
 
