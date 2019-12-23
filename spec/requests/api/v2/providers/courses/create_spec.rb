@@ -120,6 +120,46 @@ describe "Course POST #create API V2", type: :request do
       end
     end
 
+    context "When the course has no sites" do
+      let(:course) do
+        build(:course, provider: provider, sites: [])
+      end
+
+      before do
+        jsonapi_data = jsonapi_renderer.render(
+          course,
+          class: {
+            Course: API::V2::SerializableCourse,
+            Site: API::V2::SerializableSite,
+            PrimarySubject: API::V2::SerializableSubject,
+          },
+          include: %i[subjects],
+        )
+
+        post create_path,
+             headers: { "HTTP_AUTHORIZATION" => credentials },
+             params: {
+               _jsonapi: { data: jsonapi_data[:data] },
+             }
+      end
+
+      it "Does not create the course" do
+        expect(response.status).to eq(422)
+
+        provider.reload
+        expect(provider.courses.count).to eq(0)
+      end
+
+      it "Returns the validation errors" do
+        response_body = JSON.parse(response.body)
+        expect(response_body["errors"].first).to eq(
+          "title" => "Invalid sites",
+          "detail" => "You must pick at least one location for this course",
+          "source" => {},
+        )
+      end
+    end
+
     context "When the course is a further education course" do
       let(:course) do
         build(
