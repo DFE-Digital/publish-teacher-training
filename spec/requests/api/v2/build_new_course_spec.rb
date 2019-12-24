@@ -31,6 +31,7 @@ describe "/api/v2/build_new_course", type: :request do
         Course: API::V2::SerializableCourse,
         Subject: API::V2::SerializableSubject,
         PrimarySubject: API::V2::SerializableSubject,
+        SecondarySubject: API::V2::SerializableSubject,
         Provider: API::V2::SerializableProvider,
         Site: API::V2::SerializableSite,
       },
@@ -91,6 +92,42 @@ describe "/api/v2/build_new_course", type: :request do
       expect(response).to have_http_status(:ok)
       json_response = parse_response(response)
       expect(json_response["included"].first["relationships"]["sites"]["data"].first["id"].to_i).to eq(site.id)
+    end
+  end
+
+  describe "edit options" do
+    context "subjects for a secondary course" do
+      let(:params) do
+        { course: {
+          level: :secondary,
+          } }
+      end
+
+      let(:pe) { find_or_create(:secondary_subject, :physical_education) }
+
+      context "when the current user is an admin" do
+        let(:user) { create(:user, :admin, organisations: [organisation]) }
+
+        it "should return pe as a potential subject" do
+          response = do_get params
+          expect(response).to have_http_status(:ok)
+          json_response = parse_response(response)
+          expect(json_response["data"]["meta"]["edit_options"]["subjects"].map { |subject|
+            subject["attributes"]["subject_code"]
+          }).to include(pe.subject_code)
+        end
+      end
+
+      context "when the current user is not an admin" do
+        it "should return pe as a potential subject" do
+          response = do_get params
+          expect(response).to have_http_status(:ok)
+          json_response = parse_response(response)
+          expect(json_response["data"]["meta"]["edit_options"]["subjects"].map { |subject|
+            subject["attributes"]["subject_code"]
+          }).not_to include(pe.subject_code)
+        end
+      end
     end
   end
 
