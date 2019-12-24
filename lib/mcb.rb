@@ -192,35 +192,17 @@ module MCB
     # The opts passed in are examined determine which opts need to be added,
     # this function essentially just fills in any missing options.
     #
-    #   opts = system_apiv_opts(opts)
+    #   opts = system_api_opts(opts)
     def system_api_opts(opts)
-      # the following lines are necessary to make opts work with double **splats and default values
-      # See the change introduced in https://github.com/ddfreyne/cri/pull/99 (cri 2.15.8)
-      opts = expose_opts_defaults_for_splat(opts, :url, :'max-pages', :token, :all)
-      opts.merge! azure_env_settings_for_opts(**opts)
-
-      if requesting_remote_connection?(**opts)
-        opts[:url] ||= service_root_url(**opts)
-        config = MCB::Azure.get_config(**opts)
-        opts[:token] ||= config["SETTINGS__SYSTEM_AUTHENTICATION_TOKEN"]
-      end
-
-      opts
+      process_opts_for_remote_connection(
+        opts,
+        token: "SETTINGS__SYSTEM_AUTHENTICATION_TOKEN",
+      )
     end
 
     def apiv1_opts(opts)
-      # the following lines are necessary to make opts work with double **splats and default values
-      # See the change introduced in https://github.com/ddfreyne/cri/pull/99 (cri 2.15.8)
-      opts = expose_opts_defaults_for_splat(opts, :url, :'max-pages', :token, :all)
-
-      opts.merge! azure_env_settings_for_opts(**opts)
-
-      if requesting_remote_connection?(**opts)
-        opts[:url] = service_root_url(**opts)
-        opts[:token] = MCB::Azure.get_config(**opts)["AUTHENTICATION_TOKEN"]
-      end
-
-      opts
+      process_opts_for_remote_connection opts,
+                                         token: "AUTHENTICATION_TOKEN"
     end
 
     # Return options necessary to connect to API V2.
@@ -230,12 +212,27 @@ module MCB
     #
     #   opts = apiv2_opts(opts)
     def apiv2_opts(opts)
-      opts = expose_opts_defaults_for_splat(opts, :url, :'max-pages', :token, :all)
-      opts.merge! azure_env_settings_for_opts(**opts)
+      process_opts_for_remote_connection opts,
+                                         token: "AUTHENTICATION_TOKEN"
+    end
 
-      if requesting_remote_connection?(**opts)
-        opts[:url] ||= service_root_url(**opts)
-        opts[:token] ||= MCB::Azure.get_config(**opts)["AUTHENTICATION_TOKEN"]
+    def process_opts_for_remote_connection(opts, **mappings)
+      opts.merge! azure_env_settings_for_opts(**opts)
+      return opts unless requesting_remote_connection?(**opts)
+
+      # "opts[:url] ||= " doesn't work here because opts[:url] will always
+      # have the default value for the URL cmdline option. However,
+      # opts.key?(:url) returns false if the user hasn't provided --url.
+      # See the change introduced in https://github.com/ddfreyne/cri/pull/99
+      # (cri 2.15.8)
+      unless opts.key? :url
+        opts[:url] = service_root_url(**opts)
+      end
+      config = MCB::Azure.get_config(**opts)
+      mappings.each do |to_opt, from_config|
+        unless opts.key? to_opt
+          opts[to_opt] = config[from_config]
+        end
       end
 
       opts
@@ -488,6 +485,17 @@ module MCB
       sleep(sleep)
     end
 
+    # The following utility method is necessary because without processing the
+    # opts like this, default values won't be retrieved when using the splat
+    # operator. See the change introduced in
+    # https://github.com/ddfreyne/cri/pull/99 (cri 2.15.8)
+    def expose_opts_defaults_for_splat(opts, *keys)
+      keys.each do |key|
+        opts[key] = opts[key]
+      end
+      opts
+    end
+
   private
 
     def remove_option_with_arg(argv, *options)
@@ -517,17 +525,6 @@ module MCB
       end
 
       new_url
-    end
-
-    # The following utility method is necessary because without processing the
-    # opts like this, default values won't be retrieved when using the splat
-    # operator. See the change introduced in
-    # https://github.com/ddfreyne/cri/pull/99 (cri 2.15.8)
-    def expose_opts_defaults_for_splat(opts, *keys)
-      keys.each do |key|
-        opts[key] = opts[key]
-      end
-      opts
     end
   end
 end
