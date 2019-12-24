@@ -7,8 +7,9 @@ describe "POST /providers/:provider_code/courses/:course_code" do
       class: {
         Course: API::V2::SerializableCourse,
         PrimarySubject: API::V2::SerializableSubject,
+        Site: API::V2::SerializableSite,
       },
-      include: %i[subjects],
+      include: %i[subjects sites],
     )
 
     post "/api/v2/recruitment_cycles/#{recruitment_cycle.year}/providers/" \
@@ -20,7 +21,7 @@ describe "POST /providers/:provider_code/courses/:course_code" do
   end
 
   let(:organisation)      { create :organisation }
-  let(:provider)          { create :provider, organisations: [organisation], recruitment_cycle: recruitment_cycle }
+  let(:provider)          { create :provider, organisations: [organisation], recruitment_cycle: recruitment_cycle, sites: [site] }
   let(:recruitment_cycle) { find_or_create :recruitment_cycle }
   let(:user)              { create :user, organisations: [organisation] }
   let(:payload)           { { email: user.email } }
@@ -30,8 +31,10 @@ describe "POST /providers/:provider_code/courses/:course_code" do
     build :course,
           provider: provider,
           age_range_in_years: age_range_in_years,
-          subjects: [subject]
+          subjects: [subject],
+          sites: [site]
   }
+  let(:site) { build(:site) }
   let(:subject) { find_or_create(:primary_subject) }
 
 
@@ -57,7 +60,7 @@ describe "POST /providers/:provider_code/courses/:course_code" do
 
     it "returns an error" do
       expect(json_data.count).to eq 1
-      expect(response.body).to include "Age range in years can't be blank"
+      expect(response.body).to include "You need to pick an age range"
     end
   end
 
@@ -71,7 +74,7 @@ describe "POST /providers/:provider_code/courses/:course_code" do
       it "should return an error stating valid age ranges must be 4 years or greater" do
         expect(response).to have_http_status(:unprocessable_entity)
         expect(json_data.count).to eq 1
-        expect(response.body).to include "#{age_range_in_years} " + error_message
+        expect(response.body).to include "#{age_range_in_years} #{error_message}"
       end
     end
 
@@ -81,7 +84,7 @@ describe "POST /providers/:provider_code/courses/:course_code" do
       it "should return an error stating valid age ranges must be 4 years or greater" do
         expect(response).to have_http_status(:unprocessable_entity)
         expect(json_data.count).to eq 1
-        expect(response.body).to include "#{age_range_in_years} " + error_message
+        expect(response.body).to include "#{age_range_in_years} #{error_message}"
       end
     end
 
@@ -91,7 +94,7 @@ describe "POST /providers/:provider_code/courses/:course_code" do
       it "should return an error stating valid age ranges must be 4 years or greater" do
         expect(response).to have_http_status(:unprocessable_entity)
         expect(json_data.count).to eq 1
-        expect(response.body).to include "#{age_range_in_years} " + error_message
+        expect(response.body).to include "#{age_range_in_years} #{error_message}"
       end
     end
 
@@ -101,7 +104,7 @@ describe "POST /providers/:provider_code/courses/:course_code" do
       it "should return an error stating that there is an invalid from year" do
         expect(response).to have_http_status(:unprocessable_entity)
         expect(json_data.count).to eq 1
-        expect(response.body).to include "#{age_range_in_years} " + error_message
+        expect(response.body).to include "#{age_range_in_years} #{error_message}"
       end
     end
 
@@ -111,7 +114,7 @@ describe "POST /providers/:provider_code/courses/:course_code" do
       it "should return an error stating that there is an invalid from year" do
         expect(response).to have_http_status(:unprocessable_entity)
         expect(json_data.count).to eq 1
-        expect(response.body).to include "#{age_range_in_years} " + error_message
+        expect(response.body).to include "#{age_range_in_years} #{error_message}"
       end
     end
   end
