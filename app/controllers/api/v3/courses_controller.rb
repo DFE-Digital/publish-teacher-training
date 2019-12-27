@@ -13,7 +13,8 @@ module API
         @course = @provider.courses.find_by!(course_code: params[:code].upcase)
 
         if @course.is_published?
-          render jsonapi: @course, fields: fields_param, include: params[:include]
+          # https://github.com/jsonapi-rb/jsonapi-rails/issues/113
+          render jsonapi: @course, fields: fields_param, include: params[:include], class: CourseSerializersService.new.execute
         else
           raise ActiveRecord::RecordNotFound
         end
