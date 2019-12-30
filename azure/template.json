@@ -278,10 +278,14 @@
       "metadata": {
           "description": "Array of paths to perform monitoring on. In form TEST_NAME:HOST where HOST is the complete URL minus the http(s):// prefix."
       }
+    },
+    "resourceTags": {
+      "type": "object",
+      "defaultValue": {}
     }
   },
   "variables": {
-    "deploymentUrlBase": "https://raw.githubusercontent.com/DFE-Digital/bat-platform-building-blocks/master/templates/",
+    "deploymentUrlBase": "https://raw.githubusercontent.com/DFE-Digital/bat-platform-building-blocks/2729-tagging-azure-resources/templates/",
     "deploymentUrlBaseDas": "https://raw.githubusercontent.com/SkillsFundingAgency/das-platform-building-blocks/master/templates/",
     "resourceNamePrefix": "[toLower(concat(parameters('resourceEnvironmentName'),'-', parameters('serviceName')))]",
     "keyvaultCertificateName": "[if(greater(length(parameters('certificateName')),0), parameters('certificateName'), replace(parameters('customHostName'), '.', '-'))]",
@@ -326,6 +330,9 @@
           },
           "appServicePlanInstances": {
             "value": "[parameters('appServicePlanInstances')]"
+          },
+          "resourceTags":{
+            "value": "[parameters('resourceTags')]"
           }
         }
       }
@@ -350,6 +357,10 @@
           },
           "keyVaultResourceGroup": {
             "value": "[parameters('keyVaultResourceGroup')]"
+          }
+          ,
+          "resourceTags":{
+            "value": "[parameters('resourceTags')]"
           }
         }
       }
@@ -474,6 +485,9 @@
           },
           "certificateThumbprint": {
             "value": "[if(greater(length(parameters('customHostname')), 0), reference('app-service-certificate', '2018-11-01').outputs.certificateThumbprint.value, '')]"
+          },
+          "resourceTags":{
+            "value": "[parameters('resourceTags')]"
           }
         }
       },
@@ -498,6 +512,9 @@
           },
           "httpLoggingEnabled": {
             "value": true
+          },
+          "resourceTags":{
+            "value": "[parameters('resourceTags')]"
           }
         }
       },
@@ -518,6 +535,9 @@
         "parameters": {
           "storageAccountName": {
             "value": "[variables('storageAccountName')]"
+          },
+          "resourceTags":{
+            "value": "[parameters('resourceTags')]"
           }
         }
       }
@@ -547,6 +567,9 @@
           },
           "storageAccountName": {
             "value": "[variables('storageAccountName')]"
+          },
+          "resourceTags":{
+            "value": "[parameters('resourceTags')]"
           }
         }
       },
@@ -622,6 +645,9 @@
           },
           "availabilityTests": {
               "value": "[variables('availabilityTests')]"
+          },
+          "resourceTags":{
+            "value": "[parameters('resourceTags')]"
           }
         }
       }
@@ -642,6 +668,9 @@
           },
           "enableNonSslPort": {
             "value": false
+          },
+          "resourceTags":{
+            "value": "[parameters('resourceTags')]"
           }
         }
       }
@@ -673,6 +702,9 @@
           },
           "subnetAddressPrefix": {
             "value": "[parameters('vnetSubnetAddressPrefix')]"
+          },
+          "resourceTags":{
+            "value": "[parameters('resourceTags')]"
           }
         }
       },
@@ -779,6 +811,9 @@
                 "secureValue": "[parameters('googleCloudPlatformAPIKey')]"
               }
             ]
+          },
+          "resourceTags":{
+            "value": "[parameters('resourceTags')]"
           }
         }
       },
