@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_12_23_135644) do
+ActiveRecord::Schema.define(version: 2019_12_30_125612) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_buffercache"
@@ -78,7 +78,6 @@ ActiveRecord::Schema.define(version: 2019_12_23_135644) do
     t.integer "qualification", null: false
     t.datetime "start_date"
     t.text "study_mode"
-    t.integer "accrediting_provider_id"
     t.integer "provider_id", default: 0, null: false
     t.text "modular"
     t.integer "english"
@@ -94,7 +93,6 @@ ActiveRecord::Schema.define(version: 2019_12_23_135644) do
     t.boolean "is_send", default: false
     t.string "level"
     t.index ["accrediting_provider_code"], name: "index_course_on_accrediting_provider_code"
-    t.index ["accrediting_provider_id"], name: "IX_course_accrediting_provider_id"
     t.index ["changed_at"], name: "index_course_on_changed_at", unique: true
     t.index ["discarded_at"], name: "index_course_on_discarded_at"
     t.index ["provider_id", "course_code"], name: "IX_course_provider_id_course_code", unique: true
@@ -294,7 +292,6 @@ ActiveRecord::Schema.define(version: 2019_12_23_135644) do
 
   add_foreign_key "access_request", "\"user\"", column: "requester_id", name: "FK_access_request_user_requester_id", on_delete: :nullify
   add_foreign_key "contact", "provider", name: "fk_contact_provider"
-  add_foreign_key "course", "provider", column: "accrediting_provider_id", name: "FK_course_provider_accrediting_provider_id"
   add_foreign_key "course", "provider", name: "FK_course_provider_provider_id", on_delete: :cascade
   add_foreign_key "course_enrichment", "\"user\"", column: "created_by_user_id", name: "FK_course_enrichment_user_created_by_user_id"
   add_foreign_key "course_enrichment", "\"user\"", column: "updated_by_user_id", name: "FK_course_enrichment_user_updated_by_user_id"
