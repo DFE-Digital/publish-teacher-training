@@ -286,7 +286,6 @@
   },
   "variables": {
     "deploymentUrlBase": "https://raw.githubusercontent.com/DFE-Digital/bat-platform-building-blocks/2729-tagging-azure-resources/templates/",
-    "deploymentUrlBaseDas": "https://raw.githubusercontent.com/SkillsFundingAgency/das-platform-building-blocks/master/templates/",
     "resourceNamePrefix": "[toLower(concat(parameters('resourceEnvironmentName'),'-', parameters('serviceName')))]",
     "keyvaultCertificateName": "[if(greater(length(parameters('certificateName')),0), parameters('certificateName'), replace(parameters('customHostName'), '.', '-'))]",
     "appServiceName": "[concat(variables('resourceNamePrefix'), '-as')]",
@@ -659,7 +658,7 @@
       "properties": {
         "mode": "Incremental",
         "templateLink": {
-          "uri": "[concat(variables('deploymentUrlBaseDas'), 'redis.json')]",
+          "uri": "[concat(variables('deploymentUrlBase'), 'redis.json')]",
           "contentVersion": "1.0.0.0"
         },
         "parameters": {
