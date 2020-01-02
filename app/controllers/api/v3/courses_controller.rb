@@ -3,14 +3,14 @@ module API
     class CoursesController < API::V3::ApplicationController
       before_action :build_recruitment_cycle
       before_action :build_provider
+      before_action :build_courses
 
       def index
-        @courses = @provider.courses
-        render jsonapi: @courses, include: params[:include]
+        render jsonapi: paginate(@courses), fields: fields_param, include: params[:include], class: CourseSerializersService.new.execute
       end
 
       def show
-        @course = @provider.courses.find_by!(course_code: params[:code].upcase)
+        @course = @courses.find_by!(course_code: params[:code].upcase)
 
         if @course.is_published?
           # https://github.com/jsonapi-rb/jsonapi-rails/issues/113
@@ -22,17 +22,27 @@ module API
 
       def fields_param
         params.fetch(:fields, {})
-          .permit(:courses)
+          .permit(:courses, :providers)
           .to_h
           .map { |k, v| [k, v.split(",").map(&:to_sym)] }
       end
 
     private
 
+      def build_courses
+        @courses = if @provider.present?
+                     @provider.courses
+                   else
+                     @recruitment_cycle.courses
+                   end
+      end
+
       def build_provider
-        @provider = @recruitment_cycle.providers.find_by!(
-          provider_code: params[:provider_code].upcase,
-        )
+        if params[:provider_code].present?
+          @provider = @recruitment_cycle.providers.find_by!(
+            provider_code: params[:provider_code].upcase,
+          )
+        end
       end
     end
   end
