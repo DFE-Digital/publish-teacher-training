@@ -15,19 +15,24 @@ variables:
 
 steps:
 - script: |
+    set -x
     GIT_SHORT_SHA=$(echo $(Build.SourceVersion) | cut -c 1-7)
     docker_path=$(dockerHubUsername)/$(imageName)
     docker_bg_find_sync_path=$(dockerHubUsername)/$(imageNameBgFindSync)
     docker_bg_geocode_path=$(dockerHubUsername)/$(imageNameBgGeoCode)
+    set +x # We confuse VSTS if we trace these commands
     echo "##vso[build.updatebuildnumber]$GIT_SHORT_SHA"
     echo "##vso[task.setvariable variable=docker_path;]$docker_path"
     echo "##vso[task.setvariable variable=docker_bg_find_sync_path;]$docker_bg_find_sync_path"
     echo "##vso[task.setvariable variable=docker_bg_geocode_path;]$docker_bg_geocode_path"
   displayName: 'Set version number'
 
-- script: docker pull $(docker_path):latest || true
+- script: |
+    set -x
+    docker pull $(docker_path):latest || true
   displayName: "Pull latest docker image to cache"
 - script: |
+    set -x
     $DOCKER_OVERRIDE build
     $DOCKER_OVERRIDE up --no-build -d
     $DOCKER_OVERRIDE exec -T web /bin/sh -c "./wait-for-command.sh -c 'nc -z db 5432' -s 0 -t 20"
@@ -41,16 +46,25 @@ steps:
     dockerHubImageName: $(imageName)
     CC_TEST_REPORTER_ID: $(ccReporterID)
 - script: |
+    set -x
     $DOCKER_OVERRIDE exec -T web /bin/sh -c 'bundle config --local disable_exec_load true'
     $DOCKER_OVERRIDE exec -T web /bin/sh -c 'bundle exec rake parallel:setup'
-    $DOCKER_OVERRIDE exec -T web /bin/sh -c 'bundle exec rake "parallel:spec[,,--format progress --format RspecJunitFormatter --out rspec-results.xml --no-profile]"'
+    $DOCKER_OVERRIDE exec -T web /bin/sh -c 'bundle exec rake "parallel:spec[,, -O .azure_parallel]"'
+
   displayName: 'Execute tests'
   env:
     DOCKER_OVERRIDE: $(dockerOverride)
     dockerHubUsername: $(dockerHubUsername)
     dockerHubImageName: $(imageName)
     CC_TEST_REPORTER_ID: $(ccReporterID)
+- task: PublishTestResults@2
+  condition: succeededOrFailed()
+  inputs:
+    testRunner: JUnit
+    testResultsFiles: 'rspec-output/*.xml'
+    failedTaskOnFailedTest: true
 - script: |
+    set -x
     $DOCKER_OVERRIDE exec -T web /bin/sh -c "bundle exec rubocop app config db lib spec --format clang"
   displayName: 'Execute linters'
   env:
@@ -58,6 +72,7 @@ steps:
     dockerHubUsername: $(dockerHubUsername)
     dockerHubImageName: $(imageName)
 - script: |
+    set -x
     $DOCKER_OVERRIDE exec -T web /bin/sh -c "bundle exec rake cc:report"
   displayName: 'Execute Code Climate reporter'
   env:
@@ -67,6 +82,7 @@ steps:
     CC_TEST_REPORTER_ID: $(ccReporterID)
     AGENT_JOBSTATUS: $(Agent.JobStatus)
 - script: |
+    set -x
     $DOCKER_OVERRIDE exec -T web /bin/sh -c "bundle exec rake brakeman"
   displayName: 'Execute Brakeman static analysis'
   env:
@@ -135,9 +151,3 @@ steps:
   displayName: 'Publish Artifact'
   inputs:
     PathtoPublish: '$(build.artifactstagingdirectory)'
-- task: PublishTestResults@2
-  condition: succeededOrFailed()
-  inputs:
-    testRunner: JUnit
-    testResultsFiles: '*.xml'
-    failedTaskOnFailedTest: true

@@ -159,23 +159,24 @@ class Course < ApplicationRecord
   validates :science, inclusion: { in: entry_requirement_options_without_nil_choice }, if: :gcse_science_required?
   validates :enrichments, presence: true, on: :publish
   validates :is_send, inclusion: { in: [true, false] }
-  validates :sites, presence: true, on: :publish
-  validates :level, presence: { message: "^There is a problem with this course. Contact support to fix it (Error: L)" }, on: :publish
+  validates :sites, presence: true, on: %i[publish new]
   validates :subjects, presence: true, on: :publish
   validate :validate_enrichment_publishable, on: :publish
   validate :validate_site_statuses_publishable, on: :publish
   validate :validate_enrichment
   validate :validate_course_syncable, on: :sync
-  validate :validate_qualification, on: :update
+  validate :validate_qualification, on: %i[update new]
   validate :validate_start_date, on: :update, if: -> { provider.present? && start_date.present? }
-  validate :validate_applications_open_from, on: :update, if: -> { provider.present? }
+  validate :validate_applications_open_from, on: %i[update new], if: -> { provider.present? }
   validate :validate_modern_languages
+  validate :validate_has_languages, if: :has_the_modern_languages_secondary_subject_type?
   validate :validate_subject_count
   validate :validate_subject_consistency
+  validate :validate_custom_age_range, on: %i[create new], if: -> { age_range_in_years.present? }
 
   validates :name, :profpost_flag, :program_type, :qualification, :start_date, :study_mode, presence: true
-  validates :age_range_in_years, presence: true, on: :create, unless: :further_education_course?
-  validates :level, presence: true, on: :create
+  validates :age_range_in_years, presence: true, on: %i[new create], unless: :further_education_course?
+  validates :level, presence: true, on: %i[new create publish]
 
   after_validation :remove_unnecessary_enrichments_validation_message
 
@@ -540,7 +541,11 @@ private
   end
 
   def validate_qualification
-    errors.add(:qualification, "^#{qualifications_description} is not valid for a #{level.to_s.humanize.downcase} course") unless qualification_options.include?(qualification)
+    if qualification.blank?
+      errors.add(:qualification, :blank)
+    else
+      errors.add(:qualification, "^#{qualifications_description} is not valid for a #{level.to_s.humanize.downcase} course") unless qualification.in?(qualification_options)
+    end
   end
 
   def set_applications_open_from
@@ -552,9 +557,17 @@ private
   end
 
   def validate_applications_open_from
-    unless valid_date_range.include?(applications_open_from)
-      errors.add(:applications_open_from, "#{applications_open_from} is not valid for the #{provider.recruitment_cycle.year} cycle. " +
-      "A valid date must be between #{recruitment_cycle.application_start_date} and #{recruitment_cycle.application_end_date}")
+    if applications_open_from.blank?
+      errors.add(:applications_open_from, :blank)
+    elsif !valid_date_range.include?(applications_open_from)
+      chosen_date = applications_open_from.strftime("%d/%m/%Y")
+      start_date = recruitment_cycle.application_start_date.strftime("%d/%m/%Y")
+      end_date = recruitment_cycle.application_end_date.strftime("%d/%m/%Y")
+      errors.add(
+        :applications_open_from,
+        "#{chosen_date} is not valid for the #{provider.recruitment_cycle.year} cycle. " +
+        "A valid date must be between #{start_date} and #{end_date}",
+      )
     end
   end
 
@@ -581,8 +594,17 @@ private
     subjects.any? { |subject| subject&.id == SecondarySubject.modern_languages.id }
   end
 
+  def validate_has_languages
+    unless has_any_modern_language_subject_type?
+      errors.add(:subjects, :select_a_language)
+    end
+  end
+
   def validate_subject_count
-    return if subjects.empty?
+    if subjects.empty?
+      errors.add(:subjects, :course_creation)
+      return
+    end
 
     case level
     when "primary", "further_education"
@@ -617,6 +639,10 @@ private
         errors.add(:subjects, "must be further education")
       end
     end
+  end
+
+  def validate_custom_age_range
+    Courses::ValidateCustomAgeRangeService.new.execute(age_range_in_years, self)
   end
 
   def valid_date_range

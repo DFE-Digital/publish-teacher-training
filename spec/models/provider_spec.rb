@@ -324,9 +324,8 @@ describe Provider, type: :model do
       let(:suspended_site_status) { create(:site_status, :suspended, site: site) }
       let(:syncable_course) { create(:course, :infer_level, site_statuses: [findable_site_status_1], subjects: [dfe_subject]) }
       let(:suspended_course) { create(:course, :infer_level, site_statuses: [suspended_site_status], subjects: [dfe_subject]) }
-      let(:invalid_subject_course) { create(:course, :infer_level, level: "primary", site_statuses: [findable_site_status_2], subjects: []) }
 
-      subject { create(:provider, courses: [syncable_course, suspended_course, invalid_subject_course], sites: [site]) }
+      subject { create(:provider, courses: [syncable_course, suspended_course], sites: [site]) }
 
       its(:syncable_courses) { should eq [syncable_course] }
     end

@@ -29,7 +29,7 @@ describe Courses::AssignableSubjectService do
     let!(:arabic) { find_or_create(:modern_languages_subject, subject_name: "French").becomes(ModernLanguagesSubject) }
 
     it "returns subjects other than modern language", without_subjects: true do
-      course = create(:course, level: "secondary")
+      course = build(:course, level: "secondary", infer_subjects?: false)
       expect(service.execute(course: course)).to match_array([biology, arabic])
     end
   end

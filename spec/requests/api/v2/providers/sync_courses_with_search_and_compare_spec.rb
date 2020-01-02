@@ -14,7 +14,7 @@ describe "Courses API v2", type: :request do
   let(:suspended_site_status) { build(:site_status, :suspended, site: site) }
   let(:syncable_course) { create(:course, :infer_level, site_statuses: [findable_site_status_1], subjects: [dfe_subject]) }
   let(:suspended_course) { create(:course, :infer_level, site_statuses: [suspended_site_status], subjects: [dfe_subject]) }
-  let(:invalid_subject_course) { create(:course, :infer_level, site_statuses: [findable_site_status_2], subjects: [non_dfe_subject]) }
+  let(:invalid_subject_course) { create(:course, level: :secondary, site_statuses: [findable_site_status_2], subjects: [non_dfe_subject, find_or_create(:modern_languages_subject, :french)]) }
   let(:provider) do
     create(:provider,
            organisations: [organisation],

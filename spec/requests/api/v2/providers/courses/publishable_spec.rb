@@ -76,7 +76,6 @@ describe "Publishable API v2", type: :request do
           expect(json_data.map { |error| error["detail"] }).to match_array([
             "Complete your course information before publishing",
             "You must pick at least one location for this course",
-            "There is a problem with this course. Contact support to fix it (Error: S)",
           ])
         end
       end
@@ -95,9 +94,8 @@ describe "Publishable API v2", type: :request do
           it { should have_http_status(:unprocessable_entity) }
 
           it "has validation error details" do
-            expect(json_data.count).to eq 6
+            expect(json_data.count).to eq 5
             expect(json_data.map { |error| error["detail"] }).to match_array([
-              "There is a problem with this course. Contact support to fix it (Error: S)",
               "Enter details about this course",
               "Enter a course length",
               "Give details about the fee for UK and EU students",
@@ -108,7 +106,6 @@ describe "Publishable API v2", type: :request do
 
           it "has validation error pointers" do
             expect(json_data.map { |error| error["source"]["pointer"] }).to match_array([
-              nil,
               "/data/attributes/about_course",
               "/data/attributes/how_school_placements_work",
               "/data/attributes/course_length",
