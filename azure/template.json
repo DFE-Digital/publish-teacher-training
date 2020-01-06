@@ -279,6 +279,13 @@
           "description": "Array of paths to perform monitoring on. In form TEST_NAME:HOST where HOST is the complete URL minus the http(s):// prefix."
       }
     },
+    "alertRecipientEmails": {
+      "type": "array",
+      "defaultValue": [],
+      "metadata": {
+          "description": "Array of recipients to receive availability email alerts. In form NAME:EMAIL_ADDRESS."
+      }
+    },
     "resourceTags": {
       "type": "object",
       "defaultValue": {},
@@ -309,6 +316,14 @@
               "url": "[concat('https://', split(variables('availabilityCheckHosts')[copyIndex('availabilityTests')], ':')[1])]",
               "guid": "[guid(variables('availabilityCheckHosts')[copyIndex('availabilityTests')])]"
           }
+      },
+      {
+        "name": "alertRecipientEmails",
+        "count": "[if(greater(length(parameters('alertRecipientEmails')), 0), length(parameters('alertRecipientEmails')), 1)]",
+        "input": {
+            "displayName": "[if(greater(length(parameters('alertRecipientEmails')), 0), split(parameters('alertRecipientEmails')[copyIndex('alertRecipientEmails')], ':')[0], 'UNUSED')]",
+            "emailAddress": "[if(greater(length(parameters('alertRecipientEmails')), 0), split(parameters('alertRecipientEmails')[copyIndex('alertRecipientEmails')], ':')[1], 'UNUSED')]"
+        }
       }
     ]
   },
@@ -653,6 +668,105 @@
           }
         }
       }
+    },
+    {
+      "apiVersion": "2017-05-10",
+      "name": "availability-test",
+      "type": "Microsoft.Resources/deployments",
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(variables('deploymentUrlBase'), 'availability-tests.json')]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "appInsightsName": {
+            "value": "[variables('appServiceName')]"
+          },
+          "availabilityTests": {
+            "value": "[variables('availabilityTests')]"
+          },
+          "resourceTags": {
+              "value": "[parameters('resourceTags')]"
+          }
+        }
+      },
+      "dependsOn": [
+        "app-insights"
+      ]
+    },
+    {
+      "apiVersion": "2017-05-10",
+      "name": "action-group",
+      "type": "Microsoft.Resources/deployments",
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(variables('deploymentUrlBase'), 'action-group.json')]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "appInsightsName": {
+            "value": "[variables('appServiceName')]"
+          },
+          "alertRecipientEmails": {
+            "value": "[variables('alertRecipientEmails')]"
+          },
+          "resourceTags": {
+              "value": "[parameters('resourceTags')]"
+          }
+        }
+      },
+      "dependsOn": [
+        "app-insights"
+      ]
+    },
+    {
+      "apiVersion": "2017-05-10",
+      "name": "availability-test-alerts",
+      "condition": "[greater(length(parameters('alertRecipientEmails')), 0)]",
+      "type": "Microsoft.Resources/deployments",
+      "copy": {
+          "name": "customAlerts",
+          "count": "[if(greater(length(variables('availabilityCheckHosts')), 0), length(variables('availabilityCheckHosts')), 1)]"
+      },
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+            "uri": "[concat(variables('deploymentUrlBase'), 'availability-test-alert.json')]",
+            "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "resourceTags": {
+              "value": "[parameters('resourceTags')]"
+          },
+          "appInsightsName": {
+              "value": "[variables('appServiceName')]"
+          },
+          "appInsightsId": {
+              "value": "[reference('app-insights').outputs.AppInsightsResourceId.value]"
+          },
+          "alertName": {
+              "value": "[concat(variables('appServiceName'), '-at-alert-', split(variables('availabilityCheckHosts')[copyIndex('customAlerts')], ':')[0])]"
+          },
+          "actionGroupId": {
+              "value": "[if(greater(length(parameters('alertRecipientEmails')), 0), reference('action-groups', '2019-03-01').outputs.actionGroupResourceId.value, '')]"
+          },
+          "alertDescriptionText": {
+              "value": "[concat('Custom URL availability monitor alert for \"', split(variables('availabilityCheckHosts')[copyIndex('customAlerts')], ':')[0], '\".')]"
+          },
+          "alertSeverity": {
+              "value": 1
+          },
+          "webTestId": {
+              "value": "[resourceId('microsoft.insights/webtests', concat(variables('appServiceName'), '-at-', split(variables('availabilityCheckHosts')[copyIndex('customAlerts')], ':')[0]))]"
+          }
+        }
+      },
+      "dependsOn": [
+          "availability-tests",
+          "action-groups"
+      ]
     },
     {
       "name": "redis-cache",
