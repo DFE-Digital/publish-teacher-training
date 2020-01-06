@@ -720,7 +720,7 @@
     },
     {
       "apiVersion": "2017-05-10",
-      "name": "availability-test-alert",
+      "name": "[concat('availability-test-alert',copyIndex('customAlerts'))]",
       "condition": "[greater(length(parameters('alertRecipientEmails')), 0)]",
       "type": "Microsoft.Resources/deployments",
       "copy": {
