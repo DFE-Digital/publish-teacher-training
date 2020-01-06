@@ -720,12 +720,12 @@
     },
     {
       "apiVersion": "2017-05-10",
-      "name": "availability-test-alerts",
+      "name": "availability-test-alert",
       "condition": "[greater(length(parameters('alertRecipientEmails')), 0)]",
       "type": "Microsoft.Resources/deployments",
       "copy": {
           "name": "customAlerts",
-          "count": "[if(greater(length(variables('availabilityCheckHosts')), 0), length(variables('availabilityCheckHosts')), 1)]"
+          "count": "[length(variables('availabilityCheckHosts'))]"
       },
       "properties": {
         "mode": "Incremental",
