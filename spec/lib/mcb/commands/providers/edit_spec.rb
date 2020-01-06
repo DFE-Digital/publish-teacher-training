@@ -3,7 +3,7 @@ require "mcb_helper"
 describe "mcb providers edit" do
   def execute_edit(arguments: [], input: [])
     with_stubbed_stdout(stdin: input.join("\n")) do
-      $mcb.run(["providers", "edit", *arguments])
+      $mcb.run(["providers", "edit", *arguments,])
     end
   end
 
@@ -12,7 +12,15 @@ describe "mcb providers edit" do
   let(:next_cycle)    { find_or_create :recruitment_cycle, :next }
   let(:current_cycle) { find_or_create :recruitment_cycle }
 
-  let(:provider) { create :provider, provider_name: "Z", updated_at: 1.day.ago, changed_at: 1.day.ago, recruitment_cycle: next_cycle }
+  let(:provider) do
+    create :provider,
+      provider_name: "Z",
+      updated_at: 1.day.ago,
+      changed_at: 1.day.ago,
+      recruitment_cycle: next_cycle,
+      accrediting_provider: accrediting_provider
+  end
+
   let(:rolled_over_provider) do
     new_provider = provider.dup
     new_provider.update(recruitment_cycle: current_cycle)
@@ -21,9 +29,11 @@ describe "mcb providers edit" do
     new_provider.save
     new_provider
   end
+  let(:accrediting_provider) { "N" }
 
   before do
     allow(MCB).to receive(:config).and_return(email: email)
+    rolled_over_provider
   end
 
   context "for an authorised user" do
@@ -50,6 +60,27 @@ describe "mcb providers edit" do
         expect { execute_edit(arguments: [provider.provider_code, "-r", next_cycle.year], input: ["edit provider name", "Y", "exit"]) }
           .to change { provider.reload.provider_name }
           .from("Z").to("Y")
+      end
+    end
+
+    context "with the --accrediting-provider option" do
+      before do
+        execute_edit(arguments: [rolled_over_provider.provider_code, "--accrediting-provider"])
+      end
+
+      it "updates the providers accredited provider to accredited_body" do
+        expect(rolled_over_provider.reload.accrediting_provider).to eq "accredited_body"
+      end
+    end
+
+    context "with the --not-accrediting-provider option" do
+      let(:accrediting_provider) { "Y" }
+      before do
+        execute_edit(arguments: [rolled_over_provider.provider_code, "--not-accrediting-provider"])
+      end
+
+      it "updates the providers accredited provider to accredited_body" do
+        expect(rolled_over_provider.reload.accrediting_provider).to eq "not_an_accredited_body"
       end
     end
   end
