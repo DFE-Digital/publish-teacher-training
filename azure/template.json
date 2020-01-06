@@ -750,7 +750,7 @@
               "value": "[concat(variables('appServiceName'), '-at-alert-', split(variables('availabilityCheckHosts')[copyIndex('customAlerts')], ':')[0])]"
           },
           "actionGroupId": {
-              "value": "[if(greater(length(parameters('alertRecipientEmails')), 0), reference('action-groups', '2019-03-01').outputs.actionGroupResourceId.value, '')]"
+              "value": "[if(greater(length(parameters('alertRecipientEmails')), 0), reference('action-group', '2019-03-01').outputs.actionGroupResourceId.value, '')]"
           },
           "alertDescriptionText": {
               "value": "[concat('Custom URL availability monitor alert for \"', split(variables('availabilityCheckHosts')[copyIndex('customAlerts')], ':')[0], '\".')]"
@@ -765,7 +765,7 @@
       },
       "dependsOn": [
           "availability-test",
-          "action-groups"
+          "action-group"
       ]
     },
     {
