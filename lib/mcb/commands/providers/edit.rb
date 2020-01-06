@@ -12,7 +12,6 @@ run do |opts, args, _cmd|
   MCB.init_rails(opts)
   recruitment_cycle = MCB.get_recruitment_cycle(opts)
   providers = recruitment_cycle.providers
-  binding.pry
 
   if opts[:"accrediting-provider"].present?
     args.each do |provider_code|
@@ -24,6 +23,9 @@ run do |opts, args, _cmd|
       provider = providers.find_by!(provider_code: provider_code.upcase)
       provider.update(accrediting_provider: "N")
     end
+  elsif args.length > 1
+
+    raise RuntimeError.new("You cannot access the provider editor with multiple providers")
   else
     provider_code = args[0].upcase
     MCB::Editor::ProviderEditor.new(

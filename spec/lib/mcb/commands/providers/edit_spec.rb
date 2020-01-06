@@ -3,7 +3,7 @@ require "mcb_helper"
 describe "mcb providers edit" do
   def execute_edit(arguments: [], input: [])
     with_stubbed_stdout(stdin: input.join("\n")) do
-      $mcb.run(["providers", "edit", *arguments,])
+      $mcb.run(["providers", "edit", *arguments])
     end
   end
 
@@ -14,11 +14,11 @@ describe "mcb providers edit" do
 
   let(:provider) do
     create :provider,
-      provider_name: "Z",
-      updated_at: 1.day.ago,
-      changed_at: 1.day.ago,
-      recruitment_cycle: next_cycle,
-      accrediting_provider: accrediting_provider
+           provider_name: "Z",
+           updated_at: 1.day.ago,
+           changed_at: 1.day.ago,
+           recruitment_cycle: next_cycle,
+           accrediting_provider: accrediting_provider
   end
 
   let(:rolled_over_provider) do
@@ -49,6 +49,12 @@ describe "mcb providers edit" do
       describe "trying to edit a course on a nonexistent provider" do
         it "raises an error" do
           expect { execute_edit(arguments: %w[ABC]) }.to raise_error(ActiveRecord::RecordNotFound, /Couldn't find Provider/)
+        end
+      end
+
+      describe "trying to access the provider editor with multiple providers" do
+        it "raises an error" do
+          expect { execute_edit(arguments: %w[ABC DEF]) }.to raise_error("You cannot access the provider editor with multiple providers")
         end
       end
     end
