@@ -2,7 +2,7 @@ summary "Attach a user to an organisation/provider in the DB. Will prompt to cre
 param :id_or_email_or_sign_in_id
 option :p, "provider_code", "provider code",
        argument: :optional, transform: ->(code) { code.upcase }
-usage "grant --admin <user_id/email/sign_in_user_id> -p <provider_code>"
+usage "grant <user_id/email/sign_in_user_id> -p <provider_code>"
 
 run do |opts, args, _cmd|
   MCB.init_rails(opts)
