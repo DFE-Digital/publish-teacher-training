@@ -660,9 +660,6 @@
           "attachedService": {
             "value": "[variables('appServiceName')]"
           },
-          "availabilityTests": {
-              "value": "[variables('availabilityTests')]"
-          },
           "resourceTags":{
             "value": "[parameters('resourceTags')]"
           }
