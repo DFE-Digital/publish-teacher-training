@@ -764,7 +764,7 @@
         }
       },
       "dependsOn": [
-          "availability-tests",
+          "availability-test",
           "action-groups"
       ]
     },
