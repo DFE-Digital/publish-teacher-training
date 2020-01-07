@@ -166,7 +166,7 @@ describe Courses::ValidateUniqueCourseOnProviderService do
         new_course.sites << site_two
       end
 
-      include_examples "a unique course"
+      include_examples "a duplicate course"
     end
 
     context "Different accredited body" do

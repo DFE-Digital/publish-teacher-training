@@ -7,7 +7,6 @@ module Courses
         existing_course_attributes = existing_course.attributes.slice(*attributes_to_compare)
 
         new_course_attritbutes == existing_course_attributes &&
-          new_course.sites == existing_course.sites &&
           new_course.subjects == existing_course.subjects &&
           new_course.accrediting_provider == existing_course.accrediting_provider
       end
