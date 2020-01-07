@@ -40,13 +40,13 @@ describe Courses::ValidateUniqueCourseOnProviderService do
 
   shared_examples "a duplicate course" do
     it "is a duplicate course" do
-      expect(service.execute(new_course)).to be(false)
+      expect(service.execute(new_course: new_course)).to be(false)
     end
   end
 
   shared_examples "a unique course" do
     it "is a unique course" do
-      expect(service.execute(new_course)).to be(true)
+      expect(service.execute(new_course: new_course)).to be(true)
     end
   end
 
