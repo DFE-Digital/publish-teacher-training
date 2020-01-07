@@ -1463,15 +1463,15 @@ describe Course, type: :model do
   end
 
   describe "#self_accredited?" do
-    let(:provider) { build(:provider) }
+    subject { create(:course, provider: provider) }
 
     context "when self accredited" do
-      subject { create(:course, provider: provider) }
+      let(:provider) { build(:provider, :accredited_body) }
       its(:self_accredited?) { should be_truthy }
     end
 
-    context "when self accredited" do
-      subject { create(:course, :with_accrediting_provider, provider: provider) }
+    context "when not self accredited" do
+      let(:provider) { build(:provider) }
       its(:self_accredited?) { should be_falsey }
     end
   end
