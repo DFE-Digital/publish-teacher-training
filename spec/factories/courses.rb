@@ -125,6 +125,11 @@ FactoryBot.define do
       # We've just created a course with this provider's code, so ensure it's
       # up-to-date and has this course loaded.
       course.provider.reload
+
+      # Make sure this Course and and Sites are associated with the same Provider
+      if course.site_statuses.any?
+        course.site_statuses.first.site.provider = course.provider
+      end
     end
 
     trait :infer_level do
@@ -208,6 +213,18 @@ FactoryBot.define do
 
     trait :skip_validate do
       to_create { |instance| instance.save(validate: false) }
+    end
+
+    trait :unpublished_with_primary_maths do
+      transient do
+        identifier { "unpublished_with_primary_mathematics" }
+      end
+
+      name { "#{identifier} course" }
+
+      provider { find_or_create :provider, :published_scitt }
+      site_statuses { [build(:site_status, :new)] }
+      enrichments { [build(:course_enrichment, :initial_draft)] }
     end
   end
 end
