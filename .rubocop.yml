@@ -13,3 +13,7 @@ AllCops:
 
 Rails/HasManyOrHasOneDependent:
   Enabled: false
+
+Style/ClassVars:
+  Exclude:
+    - 'spec/support/test_setup.rb'
