@@ -131,16 +131,9 @@ module API
         course_code = @provider.next_available_course_code
         @course.assign_attributes(course_code: course_code)
 
-        unless @course.is_unique_on_provider?
-          @course.errors.add(:base, :duplicate)
-          return render jsonapi_errors: @course.errors, status: :unprocessable_entity
-        end
+        return duplicate_course_response unless @course.is_unique_on_provider?
 
-        if @course.valid?(:new) && @course.save
-          render jsonapi: @course.reload
-        else
-          render jsonapi_errors: @course.errors, status: :unprocessable_entity
-        end
+        create_new_course
       end
 
     private
@@ -310,6 +303,19 @@ module API
           raise RuntimeError.new(
             "'#{@course}' '#{@course.provider}' sync error: #{@course.errors.details}",
           )
+        end
+      end
+
+      def duplicate_course_response
+        @course.errors.add(:base, :duplicate)
+        render jsonapi_errors: @course.errors, status: :unprocessable_entity
+      end
+
+      def create_new_course
+        if @course.valid?(:new) && @course.save
+          render jsonapi: @course.reload
+        else
+          render jsonapi_errors: @course.errors, status: :unprocessable_entity
         end
       end
     end
