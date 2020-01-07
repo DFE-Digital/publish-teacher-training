@@ -13,7 +13,8 @@ describe Courses::AssignProgramTypeService do
     let(:funding_type) { "salary" }
 
     context "and the course is not self_accredited" do
-      let(:course) { create(:course, :with_accrediting_provider) }
+      let(:provider) { create(:provider, accrediting_provider: "N") }
+      let(:course) { create(:course, :with_accrediting_provider, provider: provider) }
 
       it "should return :school_direct_salaried_training_programme" do
         expect(course.program_type).to eq("school_direct_salaried_training_programme")
@@ -21,6 +22,7 @@ describe Courses::AssignProgramTypeService do
     end
 
     context "when the course is self accredited" do
+      let(:course) { create(:course, :self_accredited) }
       it "an error should be added to the course object" do
         expect(course.errors["program_type"].first).to eq("Salary is not valid for a self accredited course")
       end

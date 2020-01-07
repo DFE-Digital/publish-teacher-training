@@ -394,7 +394,7 @@ class Course < ApplicationRecord
   end
 
   def self_accredited?
-    accrediting_provider.blank?
+    provider.accredited_body?
   end
 
   def to_s

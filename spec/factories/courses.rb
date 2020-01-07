@@ -161,8 +161,12 @@ FactoryBot.define do
       qualification { :pgde }
     end
 
+    trait :self_accredited do
+      association(:provider, factory: %i[provider accredited_body])
+    end
+
     trait :with_accrediting_provider do
-      association(:accrediting_provider, factory: :provider)
+      association(:accrediting_provider, factory: %i[provider accredited_body])
     end
 
     trait :with_higher_education do

@@ -1,8 +1,7 @@
 RSpec.describe Course, type: :model do
   describe "#funding_type" do
     describe "self accredited salary" do
-      let(:provider) { create(:provider) }
-      let(:course) { create(:course, provider: provider) }
+      let(:course) { create(:course, :self_accredited) }
 
       it "adds an error" do
         course.funding_type = "salary"

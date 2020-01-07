@@ -14,7 +14,7 @@ RSpec.describe Course, type: :model do
       end
 
       context "a self accredited course" do
-        let(:subject) { create(:course) }
+        let(:subject) { create(:course, :self_accredited) }
 
         it "should add an error to the course object" do
           expect(subject.errors.count).to eq 1
@@ -45,7 +45,7 @@ RSpec.describe Course, type: :model do
       end
 
       context "a HEIs self accredited courses" do
-        let(:subject) { create(:course) }
+        let(:subject) { create(:course, :self_accredited) }
         its(:program_type) { should eq("higher_education_programme") }
       end
     end
