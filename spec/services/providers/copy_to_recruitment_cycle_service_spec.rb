@@ -3,7 +3,7 @@ require "rails_helper"
 describe Providers::CopyToRecruitmentCycleService do
   describe "#execute" do
     let(:site)   { build :site }
-    let(:course) { build :course }
+    let(:course) { create :course, provider: provider }
     let(:ucas_preferences) { build(:ucas_preferences, type_of_gt12: :coming_or_not) }
     let(:contacts) {
       [
@@ -16,7 +16,6 @@ describe Providers::CopyToRecruitmentCycleService do
     }
     let(:provider) {
       create :provider,
-             courses: [course],
              sites: [site],
              ucas_preferences: ucas_preferences,
              contacts: contacts
@@ -35,6 +34,10 @@ describe Providers::CopyToRecruitmentCycleService do
         copy_course_to_provider_service: mocked_copy_course_service,
         copy_site_to_provider_service: mocked_copy_site_service,
       )
+    end
+
+    before do
+      course
     end
 
     it "makes a copy of the provider in the new recruitment cycle" do

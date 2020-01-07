@@ -13,9 +13,12 @@
 require "rails_helper"
 
 describe RecruitmentCycle, type: :model do
-  subject { find_or_create :recruitment_cycle, year: "2019" }
+  let(:current_cycle) { TestSetup.current_cycle }
+  let(:next_cycle) { TestSetup.next_cycle }
 
-  its(:to_s) { should eq("2019/20") }
+  subject { current_cycle }
+
+  its(:to_s) { should eq("2020/21") }
 
   it "is valid with valid attributes" do
     expect(subject).to be_valid
@@ -44,23 +47,18 @@ describe RecruitmentCycle, type: :model do
   end
 
   describe "current?" do
-    let(:current_cycle) { find_or_create :recruitment_cycle }
-    let(:second_cycle) { find_or_create :recruitment_cycle, :next }
-
     it "should return true when it's the current cycle" do
       expect(current_cycle.current?).to be(true)
     end
 
     it "should return true false it's not the current cycle" do
-      expect(second_cycle.current?).to be(false)
+      expect(next_cycle.current?).to be(false)
     end
   end
 
   context "when there are multiple cycles" do
-    let(:current_cycle) { find_or_create :recruitment_cycle }
-    let!(:second_cycle) { find_or_create :recruitment_cycle, :next }
     let!(:third_cycle) do
-      find_or_create :recruitment_cycle, year: second_cycle.year.to_i + 1
+      find_or_create :recruitment_cycle, year: next_cycle.year.to_i + 1
     end
 
     describe ".current_recruitment_cycle" do
@@ -71,7 +69,7 @@ describe RecruitmentCycle, type: :model do
 
     describe ".next_recruitment_cycle" do
       it "returns the next cycle after the current one" do
-        expect(RecruitmentCycle.next_recruitment_cycle).to eq(second_cycle)
+        expect(RecruitmentCycle.next_recruitment_cycle).to eq(next_cycle)
       end
     end
 
@@ -111,7 +109,7 @@ describe RecruitmentCycle, type: :model do
       context "next_recruitment_cycle" do
         let(:provider) do
           build(:provider, sites: [site],
-                recruitment_cycle: second_cycle)
+                recruitment_cycle: next_cycle)
         end
 
         it "returns the empty" do
@@ -122,21 +120,18 @@ describe RecruitmentCycle, type: :model do
 
     describe "#next" do
       subject { current_cycle }
-      its(:next) { should eq(second_cycle) }
+      its(:next) { should eq(next_cycle) }
 
       it "is nil for the newest cycle" do
         expect(third_cycle.next).to be_nil
       end
 
       it "returns the next cycle along when there is one" do
-        expect(second_cycle.next).to eq(third_cycle)
+        expect(next_cycle.next).to eq(third_cycle)
       end
     end
 
     describe "next?" do
-      let(:current_cycle) { find_or_create :recruitment_cycle }
-      let(:next_cycle) { find_or_create :recruitment_cycle, :next }
-
       it "should return true when it's the next cycle" do
         expect(next_cycle.next?).to be(true)
       end
