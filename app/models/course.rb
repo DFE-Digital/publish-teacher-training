@@ -452,6 +452,10 @@ class Course < ApplicationRecord
     services[:assignable_subjects].execute(course: self)
   end
 
+  def is_unique_on_provider?
+    services[:validate_unique_course].execute(new_course: self)
+  end
+
 private
 
   def withdraw_latest_enrichment
@@ -662,6 +666,9 @@ private
     end
     @services.register(:content_status) do
       Courses::ContentStatusService.new
+    end
+    @services.register(:validate_unique_course) do
+      Courses::ValidateUniqueCourseOnProviderService.new
     end
   end
 end

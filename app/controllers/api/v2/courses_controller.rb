@@ -131,6 +131,11 @@ module API
         course_code = @provider.next_available_course_code
         @course.assign_attributes(course_code: course_code)
 
+        unless @course.is_unique_on_provider?
+          @course.errors.add(:base, :duplicate)
+          return render jsonapi_errors: @course.errors, status: :unprocessable_entity
+        end
+
         if @course.valid?(:new) && @course.save
           render jsonapi: @course.reload
         else
