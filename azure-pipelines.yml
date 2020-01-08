@@ -71,6 +71,7 @@ steps:
     DOCKER_OVERRIDE: $(dockerOverride)
     dockerHubUsername: $(dockerHubUsername)
     dockerHubImageName: $(imageName)
+    CC_TEST_REPORTER_ID: $(ccReporterID)
 - script: |
     set -x
     $DOCKER_OVERRIDE exec -T web /bin/sh -c "bundle exec rake cc:report"

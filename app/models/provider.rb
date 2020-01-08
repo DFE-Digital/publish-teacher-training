@@ -148,7 +148,6 @@ class Provider < ApplicationRecord
     courses.includes(
       :enrichments,
       :subjects,
-      :sites,
       site_statuses: :site,
       provider: %i[sites],
     ).select(&:syncable?)
