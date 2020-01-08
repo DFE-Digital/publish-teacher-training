@@ -12,9 +12,9 @@ You also have to make sure that you're deploying only work that has been product
 See "To Deploy" colum on the  [Find Team board](https://trello.com/b/fXA6ioZN/team-board-find-team)
 The "Product Review" column on the [Find Team board](https://trello.com/b/fXA6ioZN/team-board-find-team) should be empty.
 
-## 2. Tell the team ![](https://cultofthepartyparrot.com/parrots/shipitparrot.gif)
+## 2. Tell the team ![](https://www.webfx.com/tools/emoji-cheat-sheet/graphics/emojis/loudspeaker.png)
 
-Summarise what you're deploying and tell the team in Slack on the `#twd_find` channel. Use `:alert:` `:loudspeaker:` as required.
+Summarise what you're deploying and tell the team in Slack on the `#twd_find` channel. Use ![](https://www.webfx.com/tools/emoji-cheat-sheet/graphics/emojis/rotating_light.png)  `:alert:`  and  ![](https://www.webfx.com/tools/emoji-cheat-sheet/graphics/emojis/loudspeaker.png)`:loudspeaker:` as required.
 
 
 ## 3. Deploy to staging
