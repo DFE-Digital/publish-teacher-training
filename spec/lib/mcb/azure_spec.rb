@@ -1,6 +1,6 @@
 require "spec_helper"
-require Rails.root.join("lib", "mcb")
-require Rails.root.join("lib", "mcb", "azure")
+require Rails.root.join("lib/mcb")
+require Rails.root.join("lib/mcb/azure")
 
 describe MCB::Azure do
   describe ".get_subs" do
@@ -82,15 +82,19 @@ describe MCB::Azure do
         ]
       EOCONFIG
     end
-
-    subject { MCB::Azure.get_config(webapp: "some-app", rgroup: "some-rgroup") }
+    let(:expected_response) do
+      {
+        "SETTING_ONE" => "UNO",
+        "SETTING_TWO" => "DUO",
+      }
+    end
 
     before :each do
       allow(MCB).to receive(:run_command).and_return(config_json)
     end
 
     it "runs az" do
-      subject
+      MCB::Azure.get_config(webapp: "some-app", rgroup: "some-rgroup")
       expect(MCB).to(
         have_received(:run_command).with(
           'az webapp config appsettings list -g "some-rgroup" -n "some-app"',
@@ -98,7 +102,25 @@ describe MCB::Azure do
       )
     end
 
-    it { should eq("SETTING_ONE" => "UNO", "SETTING_TWO" => "DUO") }
+    it "returns the correct values" do
+      config = MCB::Azure.get_config(webapp: "some-app", rgroup: "some-rgroup")
+      expect(config).to eq expected_response
+    end
+
+    it "only runs az once, caching the response" do
+      MCB::Azure.instance_eval { @configs&.clear }
+
+      MCB::Azure.get_config(webapp: "some-app", rgroup: "some-rgroup")
+
+      config = MCB::Azure.get_config(webapp: "some-app", rgroup: "some-rgroup")
+
+      expect(config).to eq expected_response
+      expect(MCB).to(
+        have_received(:run_command).with(
+          'az webapp config appsettings list -g "some-rgroup" -n "some-app"',
+        ).once,
+      )
+    end
   end
 
   describe ".get_urls" do

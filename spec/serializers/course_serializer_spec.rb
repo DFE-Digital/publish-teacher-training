@@ -3,7 +3,6 @@
 # Table name: course
 #
 #  accrediting_provider_code :text
-#  accrediting_provider_id   :integer
 #  age_range_in_years        :string
 #  applications_open_from    :date
 #  changed_at                :datetime         not null
@@ -28,7 +27,6 @@
 #
 # Indexes
 #
-#  IX_course_accrediting_provider_id          (accrediting_provider_id)
 #  IX_course_provider_id_course_code          (provider_id,course_code) UNIQUE
 #  index_course_on_accrediting_provider_code  (accrediting_provider_code)
 #  index_course_on_changed_at                 (changed_at) UNIQUE
@@ -37,7 +35,7 @@
 require "rails_helper"
 
 describe CourseSerializer do
-  let(:course) { create :course, provider: provider, changed_at: Time.now + 60 }
+  let(:course) { create :course, provider: provider, changed_at: Time.zone.now + 60 }
   let(:provider) { build(:provider) }
   subject { serialize(course) }
 

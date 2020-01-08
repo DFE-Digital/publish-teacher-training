@@ -14,7 +14,6 @@
 #  discarded_at                     :datetime
 #  email                            :text
 #  id                               :integer          not null, primary key
-#  last_published_at                :datetime
 #  latitude                         :float
 #  longitude                        :float
 #  postcode                         :text
@@ -33,18 +32,19 @@
 #
 # Indexes
 #
-#  IX_provider_last_published_at                             (last_published_at)
 #  index_provider_on_changed_at                              (changed_at) UNIQUE
 #  index_provider_on_discarded_at                            (discarded_at)
 #  index_provider_on_latitude_and_longitude                  (latitude,longitude)
 #  index_provider_on_recruitment_cycle_id_and_provider_code  (recruitment_cycle_id,provider_code) UNIQUE
 #
 
+# Unpleasant hack to stop autoload error on CI
+require_relative "../services/providers/generate_course_code_service"
+
 class Provider < ApplicationRecord
   include RegionCode
   include ChangedAt
   include Discard::Model
-  include Geolocation
 
   before_create :set_defaults
 
@@ -76,7 +76,7 @@ class Provider < ApplicationRecord
 
   has_many :sites
 
-  has_many :courses, -> { kept }
+  has_many :courses, -> { kept }, inverse_of: false
   has_one :ucas_preferences, class_name: "ProviderUCASPreference"
   has_many :contacts
   has_many :accredited_courses, # use current_accredited_courses to filter to courses in the same cycle as this provider
@@ -119,9 +119,30 @@ class Provider < ApplicationRecord
 
   validate :add_enrichment_errors
 
+  geocoded_by :full_address
+
   before_discard { discard_courses }
 
   after_commit -> { GeocodeJob.perform_later("Provider", id) }, if: :needs_geolocation?
+
+  def needs_geolocation?
+    full_address.present? && (
+      latitude.nil? || longitude.nil? || address_changed?
+    )
+  end
+
+  def full_address
+    [provider_name, address1, address2, address3, address4, postcode].compact.join(", ")
+  end
+
+  def address_changed?
+    saved_change_to_provider_name? ||
+      saved_change_to_address1? ||
+      saved_change_to_address2? ||
+      saved_change_to_address3? ||
+      saved_change_to_address4? ||
+      saved_change_to_postcode?
+  end
 
   def syncable_courses
     courses.includes(
@@ -195,11 +216,6 @@ class Provider < ApplicationRecord
     ]
 
     attributes.slice(*attribute_names)
-  end
-
-  # NOTE: This can be removed, it should not be in use any more
-  def content_status
-    :published
   end
 
   # This reflects the fact that organisations should actually be a has_one.

@@ -85,4 +85,93 @@ describe Site, type: :model do
     subject { build(:site, location_name: "Foo", code: "1") }
     its(:to_s) { should eq "Foo (code: 1)" }
   end
+
+  describe "geolocation" do
+    include ActiveJob::TestHelper
+
+    after do
+      clear_enqueued_jobs
+      clear_performed_jobs
+    end
+
+    # Geocoding stubbed with support/helpers.rb
+    let(:site) {
+      build(:site,
+            location_name: "Southampton High School",
+            address1: "Long Lane",
+            address2: "Holbury",
+            address3: "Southampton",
+            address4: nil,
+            postcode: "SO45 2PA")
+    }
+
+    describe "#full_address" do
+      context "location name is not 'Main site'" do
+        it "includes location name in full address" do
+          expect(site.full_address).to eq("Southampton High School, Long Lane, Holbury, Southampton, SO45 2PA")
+        end
+      end
+
+      context "location name is 'Main site'" do
+        before do
+          site.location_name = "Main site"
+        end
+
+        it "excludes location name in full address" do
+          expect(site.full_address).to eq("Long Lane, Holbury, Southampton, SO45 2PA")
+        end
+      end
+    end
+
+    describe "#needs_geolocation?" do
+      subject { site.needs_geolocation? }
+
+      context "latitude is nil" do
+        let(:site) { build_stubbed(:site, latitude: nil) }
+
+        it { should be(true) }
+      end
+
+      context "longitude is nil" do
+        let(:site) { build_stubbed(:site, longitude: nil) }
+
+        it { should be(true) }
+      end
+
+      context "latitude and longitude is not nil" do
+        let(:site) { build_stubbed(:site, latitude: 1.456789, longitude: 1.456789) }
+
+        it { should be(false) }
+      end
+
+      context "address" do
+        let(:site) {
+          create(:site,
+                 latitude: 1.456789,
+                 longitude: 1.456789,
+                 location_name: "Southampton High School",
+                 address1: "Long Lane",
+                 address2: "Holbury",
+                 address3: "Southampton",
+                 address4: nil,
+                 postcode: "SO45 2PA")
+        }
+        context "has not changed" do
+          before do
+            site.update(address1: "Long Lane")
+          end
+
+          it { should be(false) }
+        end
+
+        context "has changed" do
+          before do
+            site.update(address1: "New address 1")
+          end
+
+          it { should be(true) }
+        end
+      end
+    end
+  end
 end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_11_21_134242) do
+ActiveRecord::Schema.define(version: 2019_12_30_125612) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_buffercache"
@@ -78,7 +78,6 @@ ActiveRecord::Schema.define(version: 2019_11_21_134242) do
     t.integer "qualification", null: false
     t.datetime "start_date"
     t.text "study_mode"
-    t.integer "accrediting_provider_id"
     t.integer "provider_id", default: 0, null: false
     t.text "modular"
     t.integer "english"
@@ -94,7 +93,6 @@ ActiveRecord::Schema.define(version: 2019_11_21_134242) do
     t.boolean "is_send", default: false
     t.string "level"
     t.index ["accrediting_provider_code"], name: "index_course_on_accrediting_provider_code"
-    t.index ["accrediting_provider_id"], name: "IX_course_accrediting_provider_id"
     t.index ["changed_at"], name: "index_course_on_changed_at", unique: true
     t.index ["discarded_at"], name: "index_course_on_discarded_at"
     t.index ["provider_id", "course_code"], name: "IX_course_provider_id_course_code", unique: true
@@ -127,6 +125,8 @@ ActiveRecord::Schema.define(version: 2019_11_21_134242) do
   create_table "course_subject", id: :serial, force: :cascade do |t|
     t.integer "course_id"
     t.integer "subject_id"
+    t.datetime "created_at", precision: 6
+    t.datetime "updated_at", precision: 6
     t.index ["course_id", "subject_id"], name: "index_course_subject_on_course_id_and_subject_id", unique: true
     t.index ["course_id"], name: "index_course_subject_on_course_id"
     t.index ["subject_id"], name: "index_course_subject_on_subject_id"
@@ -207,7 +207,6 @@ ActiveRecord::Schema.define(version: 2019_11_21_134242) do
     t.datetime "created_at", default: -> { "timezone('utc'::text, now())" }, null: false
     t.datetime "updated_at", default: -> { "timezone('utc'::text, now())" }, null: false
     t.text "accrediting_provider"
-    t.datetime "last_published_at"
     t.datetime "changed_at", default: -> { "timezone('utc'::text, now())" }, null: false
     t.integer "recruitment_cycle_id", null: false
     t.datetime "discarded_at"
@@ -218,7 +217,6 @@ ActiveRecord::Schema.define(version: 2019_11_21_134242) do
     t.float "longitude"
     t.index ["changed_at"], name: "index_provider_on_changed_at", unique: true
     t.index ["discarded_at"], name: "index_provider_on_discarded_at"
-    t.index ["last_published_at"], name: "IX_provider_last_published_at"
     t.index ["latitude", "longitude"], name: "index_provider_on_latitude_and_longitude"
     t.index ["recruitment_cycle_id", "provider_code"], name: "index_provider_on_recruitment_cycle_id_and_provider_code", unique: true
   end
@@ -272,6 +270,8 @@ ActiveRecord::Schema.define(version: 2019_11_21_134242) do
     t.text "type"
     t.text "subject_code"
     t.text "subject_name"
+    t.datetime "created_at", precision: 6
+    t.datetime "updated_at", precision: 6
     t.index ["subject_name"], name: "index_subject_on_subject_name"
   end
 
@@ -292,7 +292,6 @@ ActiveRecord::Schema.define(version: 2019_11_21_134242) do
 
   add_foreign_key "access_request", "\"user\"", column: "requester_id", name: "FK_access_request_user_requester_id", on_delete: :nullify
   add_foreign_key "contact", "provider", name: "fk_contact_provider"
-  add_foreign_key "course", "provider", column: "accrediting_provider_id", name: "FK_course_provider_accrediting_provider_id"
   add_foreign_key "course", "provider", name: "FK_course_provider_provider_id", on_delete: :cascade
   add_foreign_key "course_enrichment", "\"user\"", column: "created_by_user_id", name: "FK_course_enrichment_user_created_by_user_id"
   add_foreign_key "course_enrichment", "\"user\"", column: "updated_by_user_id", name: "FK_course_enrichment_user_updated_by_user_id"

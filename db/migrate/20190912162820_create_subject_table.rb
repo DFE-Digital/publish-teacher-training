@@ -1,3 +1,4 @@
+# rubocop:todo Rails/CreateTableWithTimestamps
 class CreateSubjectTable < ActiveRecord::Migration[5.2]
   def change
     create_table :subject do |t|
@@ -11,3 +12,4 @@ class CreateSubjectTable < ActiveRecord::Migration[5.2]
     end
   end
 end
+# rubocop:enable Rails/CreateTableWithTimestamps

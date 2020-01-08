@@ -19,17 +19,15 @@ describe "Organisations API v2", type: :request do
       ActionController::HttpAuthentication::Token.encode_credentials(token)
     end
 
-    let!(:provider) {
+    let!(:provider) do
       create(:provider,
              organisations: [organisation])
-    }
+    end
     let(:provider2) { create(:provider, organisations: [organisation2]) }
     let(:provider3) { create(:provider, recruitment_cycle: next_recruitment_cycle, organisations: [organisation]) }
 
     let(:request_path) { "/api/v2/recruitment_cycles/#{current_recruitment_cycle.year}/organisations" }
     let(:request_params) { {} }
-
-
 
     def perform_request
       get request_path,
@@ -130,7 +128,7 @@ describe "Organisations API v2", type: :request do
           perform_request
         end
 
-        it "returns includes data for users and the providers from the current cycle" do
+        it "returns includes only essential data for users and the providers from the current cycle" do
           expect(json_response).to eq(
             "data" => [
               {
@@ -154,6 +152,7 @@ describe "Organisations API v2", type: :request do
                        {
                          "type" => "providers",
                          "id" => provider.id.to_s,
+
                        },
                      ],
                    },
@@ -194,17 +193,7 @@ describe "Organisations API v2", type: :request do
                    "first_name" => user.first_name,
                    "last_name" => user.last_name,
                    "email" => user.email,
-                   "accept_terms_date_utc" => user.accept_terms_date_utc.utc.strftime("%FT%T.%3NZ"),
-                   "state" => user.state,
-                   "admin" => user.admin,
                    "sign_in_user_id" => nil,
-                 },
-                 "relationships" => {
-                   "organisations" => {
-                     "meta" => {
-                       "included" => false,
-                     },
-                   },
                  },
                },
                {
@@ -213,46 +202,6 @@ describe "Organisations API v2", type: :request do
                  "attributes" => {
                    "provider_code" => provider.provider_code,
                    "provider_name" => provider.provider_name,
-                   "accredited_body?" => provider.accredited_body?,
-                   "can_add_more_sites?" => provider.can_add_more_sites?,
-                   "content_status" => provider.content_status.to_s,
-                   "accredited_bodies" => provider.accredited_bodies,
-                   "train_with_us" => provider.train_with_us,
-                   "train_with_disability" => provider.train_with_disability,
-                   "latitude" => provider.latitude,
-                   "longitude" => provider.longitude,
-                   "address1" => provider.address1,
-                   "address2" => provider.address2,
-                   "address3" => provider.address3,
-                   "address4" => provider.address4,
-                   "postcode" => provider.postcode,
-                   "region_code" => provider.region_code,
-                   "telephone" => provider.telephone,
-                   "email" => provider.email,
-                   "website" => provider.website,
-                   "recruitment_cycle_year" => provider.recruitment_cycle.year,
-                   "last_published_at" => provider.last_published_at,
-                   "admin_contact" => provider.ucas_preferences&.admin_contact,
-                   "utt_contact" => provider.ucas_preferences&.utt_contact,
-                   "web_link_contact" => provider.ucas_preferences&.web_link_contact,
-                   "fraud_contact" => provider.ucas_preferences&.fraud_contact,
-                   "finance_contact" => provider.ucas_preferences&.finance_contact,
-                   "gt12_contact" => provider.ucas_preferences&.gt12_contact,
-                   "application_alert_contact" => provider.ucas_preferences&.application_alert_contact,
-                   "type_of_gt12" => provider.ucas_preferences&.type_of_gt12,
-                   "send_application_alerts" => provider.ucas_preferences&.send_application_alerts,
-                 },
-                 "relationships" => {
-                   "sites" => {
-                     "meta" => {
-                       "included" => false,
-                     },
-                   },
-                   "courses" => {
-                     "meta" => {
-                       "count" => 0,
-                     },
-                   },
                  },
                },
                {
@@ -262,17 +211,7 @@ describe "Organisations API v2", type: :request do
                    "first_name" => user2.first_name,
                    "last_name" => user2.last_name,
                    "email" => user2.email,
-                   "accept_terms_date_utc" => user2.accept_terms_date_utc.utc.strftime("%FT%T.%3NZ"),
-                   "state" => user2.state,
-                   "admin" => user2.admin,
                    "sign_in_user_id" => user2.sign_in_user_id,
-                 },
-                 "relationships" => {
-                   "organisations" => {
-                     "meta" => {
-                       "included" => false,
-                     },
-                   },
                  },
                },
                {
@@ -281,46 +220,6 @@ describe "Organisations API v2", type: :request do
                  "attributes" => {
                    "provider_code" => provider2.provider_code,
                    "provider_name" => provider2.provider_name,
-                   "accredited_body?" => provider2.accredited_body?,
-                   "can_add_more_sites?" => provider2.can_add_more_sites?,
-                   "content_status" => provider2.content_status.to_s,
-                   "accredited_bodies" => provider2.accredited_bodies,
-                   "train_with_us" => provider2.train_with_us,
-                   "train_with_disability" => provider2.train_with_disability,
-                   "latitude" => provider2.latitude,
-                   "longitude" => provider2.longitude,
-                   "address1" => provider2.address1,
-                   "address2" => provider2.address2,
-                   "address3" => provider2.address3,
-                   "address4" => provider2.address4,
-                   "postcode" => provider2.postcode,
-                   "region_code" => provider2.region_code,
-                   "telephone" => provider2.telephone,
-                   "email" => provider2.email,
-                   "website" => provider2.website,
-                   "recruitment_cycle_year" => provider2.recruitment_cycle.year,
-                   "last_published_at" => provider2.last_published_at,
-                   "admin_contact" => provider2.ucas_preferences&.admin_contact,
-                   "utt_contact" => provider2.ucas_preferences&.utt_contact,
-                   "web_link_contact" => provider2.ucas_preferences&.web_link_contact,
-                   "fraud_contact" => provider2.ucas_preferences&.fraud_contact,
-                   "finance_contact" => provider2.ucas_preferences&.finance_contact,
-                   "gt12_contact" => provider2.ucas_preferences&.gt12_contact,
-                   "application_alert_contact" => provider2.ucas_preferences&.application_alert_contact,
-                   "type_of_gt12" => provider2.ucas_preferences&.type_of_gt12,
-                   "send_application_alerts" => provider2.ucas_preferences&.send_application_alerts,
-                 },
-                 "relationships" => {
-                   "sites" => {
-                     "meta" => {
-                       "included" => false,
-                     },
-                   },
-                   "courses" => {
-                     "meta" => {
-                       "count" => 0,
-                     },
-                   },
                  },
                },
              ],

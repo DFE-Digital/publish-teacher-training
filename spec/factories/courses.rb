@@ -3,7 +3,6 @@
 # Table name: course
 #
 #  accrediting_provider_code :text
-#  accrediting_provider_id   :integer
 #  age_range_in_years        :string
 #  applications_open_from    :date
 #  changed_at                :datetime         not null
@@ -28,7 +27,6 @@
 #
 # Indexes
 #
-#  IX_course_accrediting_provider_id          (accrediting_provider_id)
 #  IX_course_provider_id_course_code          (provider_id,course_code) UNIQUE
 #  index_course_on_accrediting_provider_code  (accrediting_provider_code)
 #  index_course_on_changed_at                 (changed_at) UNIQUE
@@ -72,6 +70,7 @@ FactoryBot.define do
     transient do
       age { nil }
       infer_level? { false }
+      infer_subjects? { true }
     end
 
     after(:build) do |course, evaluator|
@@ -79,6 +78,16 @@ FactoryBot.define do
         course.created_at = evaluator.age
         course.updated_at = evaluator.age
         course.changed_at = evaluator.age
+      end
+
+      if evaluator.infer_subjects? && course.subjects.empty?
+        if course.level == "primary"
+          course.subjects << find_or_create(:primary_subject, :primary)
+        elsif course.level == "secondary"
+          course.subjects << find_or_create(:secondary_subject, :science)
+        elsif course.level == "further_education"
+          course.subjects << find_or_create(:further_education_subject)
+        end
       end
 
       if evaluator.infer_level? && course.subjects.present?
@@ -95,7 +104,7 @@ FactoryBot.define do
         end
       end
 
-      if course.subjects.any?
+      if course.subjects.any? && course.name.blank?
         course.name = course.generate_name
       end
     end
@@ -109,7 +118,7 @@ FactoryBot.define do
         course.changed_at = evaluator.age
       end
 
-      if course.subjects.any?
+      if course.subjects.any? && course.name.blank?
         course.name = course.generate_name
       end
 
@@ -121,6 +130,12 @@ FactoryBot.define do
     trait :infer_level do
       transient do
         infer_level? { true }
+      end
+    end
+
+    trait :dont_infer_subjects do
+      transient do
+        infer_subjects? { false }
       end
     end
 
@@ -144,8 +159,12 @@ FactoryBot.define do
       qualification { :pgde }
     end
 
+    trait :self_accredited do
+      association(:provider, factory: %i[provider accredited_body])
+    end
+
     trait :with_accrediting_provider do
-      association(:accrediting_provider, factory: :provider)
+      association(:accrediting_provider, factory: %i[provider accredited_body])
     end
 
     trait :with_higher_education do
@@ -184,7 +203,11 @@ FactoryBot.define do
     end
 
     trait :deleted do
-      discarded_at { Time.now - 1.days }
+      discarded_at { Time.zone.now - 1.day }
+    end
+
+    trait :skip_validate do
+      to_create { |instance| instance.save(validate: false) }
     end
   end
 end

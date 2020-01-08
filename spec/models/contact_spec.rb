@@ -39,7 +39,7 @@ describe Contact, type: :model do
   end
 
   describe "on update" do
-    let(:provider) { create(:provider, contacts: contacts, changed_at: 5.minute.ago) }
+    let(:provider) { create(:provider, contacts: contacts, changed_at: 5.minutes.ago) }
     let(:contacts) { [build(:contact)] }
     let(:contact) { contacts.first }
 

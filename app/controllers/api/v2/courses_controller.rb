@@ -21,12 +21,8 @@ module API
 
       def build_new
         authorize @provider
-        @course = Course.new(provider: @provider)
-        update_subjects
-        update_sites
-        @course.assign_attributes(course_params)
-        @course.name = @course.generate_name
-        @course.valid?
+        build_new_course
+        @course.valid?(:new)
 
         # https://github.com/jsonapi-rb/jsonapi-rails/issues/113
         json_data = JSONAPI::Serializable::Renderer.new.render(
@@ -34,6 +30,12 @@ module API
           class: CourseSerializersService.new.execute,
           include: [:subjects, :sites, :accrediting_provider, :provider, provider: [:sites]],
         )
+
+        if !@current_user.admin?
+          json_data[:data][:meta][:edit_options][:subjects]&.reject! do |subject|
+            subject[:attributes][:subject_name] == "Physical education"
+          end
+        end
 
         json_data[:data][:errors] = []
 
@@ -101,6 +103,7 @@ module API
         has_synced? if should_sync
 
         if @course.errors.empty? && @course.valid?
+          @course.save
           render jsonapi: @course.reload
         else
           render jsonapi_errors: @course.errors, status: :unprocessable_entity
@@ -124,14 +127,11 @@ module API
         authorize @provider, :can_create_course?
         return unless course_params.values.any?
 
+        build_new_course
         course_code = @provider.next_available_course_code
-        @course = Course.new(provider: @provider)
-        @course.assign_attributes(course_params.merge(course_code: course_code))
-        update_subjects
-        update_sites
-        @course.name = @course.generate_name
+        @course.assign_attributes(course_code: course_code)
 
-        if @course.save
+        if @course.valid?(:new) && @course.save
           render jsonapi: @course.reload
         else
           render jsonapi_errors: @course.errors, status: :unprocessable_entity
@@ -173,7 +173,6 @@ module API
 
         @course.subjects = Subject.where(id: subject_ids)
         @course.name = @course.generate_name
-        @course.save
       end
 
       def build_provider
@@ -192,6 +191,15 @@ module API
         @course = @provider.courses.find_by!(course_code: params[:code].upcase)
 
         authorize @course
+      end
+
+      def build_new_course
+        @course = Course.new(provider: @provider)
+        @course.assign_attributes(course_params)
+        update_subjects
+        update_sites
+        update_further_education_fields if @course.level == "further_education"
+        @course.name = @course.generate_name
       end
 
       def enrichment_params
@@ -271,6 +279,11 @@ module API
             :funding_type,
             :level,
           )
+      end
+
+      def update_further_education_fields
+        @course.funding_type = "fee"
+        @course.subjects << FurtherEducationSubject.instance
       end
 
       def site_ids

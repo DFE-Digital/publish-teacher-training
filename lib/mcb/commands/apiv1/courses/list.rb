@@ -10,6 +10,8 @@ run do |opts, _args, _cmd|
   opts = MCB.apiv1_opts(opts)
   last_context = nil
 
+  opts = MCB.expose_opts_defaults_for_splat(opts, :url, :'max-pages', :token, :all)
+
   table = Terminal::Table.new headings: %w[Code Name Provider\ Code Provider\ Name] do |t|
     MCB.each_v1_course(opts).each do |course, context|
       last_context = context

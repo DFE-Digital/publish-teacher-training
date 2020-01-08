@@ -67,6 +67,13 @@ Or through guard (`--no-interactions` allows the use of `pry` inside tests):
 bundle exec guard --no-interactions
 ```
 
+## Architectural Decision Record
+
+See the [docs/adr](docs/adr) directory for a list of the Architectural Decision
+Record (ADR). We use [adr-tools](https://github.com/npryce/adr-tools) to manage
+our ADRs, see the link for how to install (hint: `brew install adr-tools` or use
+ASDF).
+
 ## Running specs in parallel
 
 When running specs in parallel for the first time you will first need to set up

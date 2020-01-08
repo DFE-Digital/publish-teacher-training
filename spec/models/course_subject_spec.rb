@@ -3,8 +3,10 @@
 # Table name: course_subject
 #
 #  course_id  :integer
+#  created_at :datetime
 #  id         :integer          not null, primary key
 #  subject_id :integer
+#  updated_at :datetime
 #
 # Indexes
 #

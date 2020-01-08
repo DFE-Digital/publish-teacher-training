@@ -251,8 +251,6 @@ describe "Providers API v2", type: :request do
             "email" => provider.email,
             "website" => provider.website,
             "recruitment_cycle_year" => provider.recruitment_cycle.year,
-            "content_status" => provider.content_status.to_s,
-            "last_published_at" => provider.last_published_at,
             "accredited_bodies" => [{
               "provider_code" => accrediting_provider.provider_code,
               "provider_name" => accrediting_provider.provider_name,
@@ -335,8 +333,6 @@ describe "Providers API v2", type: :request do
               "email" => provider.email,
               "website" => provider.website,
               "recruitment_cycle_year" => provider.recruitment_cycle.year,
-              "content_status" => provider.content_status.to_s,
-              "last_published_at" => provider.last_published_at,
               "accredited_bodies" => [{
                 "provider_code" => accrediting_provider.provider_code,
                 "provider_name" => accrediting_provider.provider_name,

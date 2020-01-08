@@ -4,4 +4,4 @@ ARG  CODE_VERSION=latest
 
 FROM ${DOCKER_REPOSITORY}/${MANAGE_COURSES_BACKEND_IMAGE}:${CODE_VERSION}
 
-CMD bundle exec rails db:migrate && bundle exec sidekiq -q find_sync
+CMD nc -vz -w 10 $DB_HOSTNAME $DB_PORT && bundle exec rails db:migrate && bundle exec sidekiq -q find_sync

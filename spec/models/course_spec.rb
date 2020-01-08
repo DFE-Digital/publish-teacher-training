@@ -3,7 +3,6 @@
 # Table name: course
 #
 #  accrediting_provider_code :text
-#  accrediting_provider_id   :integer
 #  age_range_in_years        :string
 #  applications_open_from    :date
 #  changed_at                :datetime         not null
@@ -28,7 +27,6 @@
 #
 # Indexes
 #
-#  IX_course_accrediting_provider_id          (accrediting_provider_id)
 #  IX_course_provider_id_course_code          (provider_id,course_code) UNIQUE
 #  index_course_on_accrediting_provider_code  (accrediting_provider_code)
 #  index_course_on_changed_at                 (changed_at) UNIQUE
@@ -39,7 +37,15 @@ require "rails_helper"
 
 describe Course, type: :model do
   let(:recruitment_cycle) { course.recruitment_cycle }
-  let(:course) { create(:course, name: "Biology", course_code: "3X9F") }
+  let(:course) do
+    create(
+      :course,
+      level: "secondary",
+      name: "Biology",
+      course_code: "3X9F",
+      subjects: [find_or_create(:secondary_subject, :biology)],
+    )
+  end
   let(:subject) { course }
   let(:french) { find_or_create(:modern_languages_subject, :french) }
   let!(:financial_incentive) { create(:financial_incentive, subject: modern_languages) }
@@ -101,7 +107,7 @@ describe Course, type: :model do
     it {
       should validate_presence_of(:level)
         .on(:publish)
-        .with_message("^There is a problem with this course. Contact support to fix it (Error: L)")
+        .with_message("^You need to pick a level")
     }
 
     it "validates scoped to provider_id and only on create and update" do
@@ -111,6 +117,107 @@ describe Course, type: :model do
     end
 
     describe "valid?" do
+      context "A new course" do
+        let(:provider) { build(:provider) }
+        let(:course) { Course.new(provider: provider) }
+        let(:errors) { course.errors.messages }
+        before { course.valid?(:new) }
+
+        it "Requires a level" do
+          error = errors[:level]
+          expect(error).not_to be_empty
+          expect(error.first).to include("You need to pick a level")
+        end
+
+        it "Requires a subject" do
+          error = errors[:subjects]
+          expect(error).not_to be_empty
+          expect(error.first).to include("You must pick at least one subject")
+        end
+
+        context "With modern languages as a subject" do
+          let(:course) { Course.new(provider: provider, subjects: [modern_languages]) }
+
+          it "Requires a language to be selected" do
+            error = errors[:subjects]
+            expect(error).not_to be_empty
+            expect(error.first).to include("You must pick at least one language")
+          end
+
+          it "Does not add an error if a language is selected" do
+            course.subjects << french
+            course.valid?(:new)
+            error = course.errors.messages[:subjects]
+            expect(error).to be_empty
+          end
+        end
+
+        it "Requires an age range" do
+          error = errors[:age_range_in_years]
+          expect(error).not_to be_empty
+          expect(error.first).to include("You need to pick an age range")
+        end
+
+        it "Requires an outcome" do
+          error = errors[:qualification]
+          expect(error).not_to be_empty
+          expect(error.first).to include("You need to pick an outcome")
+        end
+
+        it "Requires a program type to have been specified" do
+          error = errors[:program_type]
+          expect(error).not_to be_empty
+          expect(error.first).to include("You need to pick an option")
+        end
+
+        it "Requires a study mode" do
+          error = errors[:study_mode]
+          expect(error).not_to be_empty
+          expect(error.first).to include("You need to pick an option")
+        end
+
+        context "Applications open" do
+          it "Empty" do
+            error = errors[:applications_open_from]
+            expect(error).not_to be_empty
+            expect(error.first).to include("You must say when applications open")
+          end
+
+          it "A date outside of the current recruitment cycle" do
+            course.applications_open_from = course.recruitment_cycle.application_start_date - 1
+            course.valid?(:new)
+            error = course.errors.messages[:applications_open_from]
+            expect(error).not_to be_empty
+            expect(error.first).to include("is not valid")
+          end
+        end
+
+        it "Requires at least one location" do
+          error = errors[:sites]
+          expect(error).not_to be_empty
+          expect(error.first).to include("You must pick at least one location")
+        end
+      end
+
+      context "A further education course" do
+        let(:course) { build(:course, level: "further_education") }
+
+        it "Allows a blank options for age range in years" do
+          course.age_range_in_years = nil
+          expect(course.valid?).to eq(true)
+        end
+
+        it "Allows a blank option for english" do
+          course.english = nil
+          expect(course.valid?).to eq(true)
+        end
+
+        it "Allows a blank option for maths" do
+          course.maths = nil
+          expect(course.valid?).to eq(true)
+        end
+      end
+
       context "blank attribute" do
         let(:course) { build(:course, **blank_field) }
 
@@ -122,7 +229,7 @@ describe Course, type: :model do
         context "age_range_in_years" do
           let(:blank_field) { { age_range_in_years: nil } }
 
-          it { should include "Age range in years can't be blank" }
+          it { should include "You need to pick an age range" }
         end
 
         context "maths" do
@@ -176,14 +283,18 @@ describe Course, type: :model do
 
       context "invalid subjects" do
         let(:initial_draft_enrichment) { build(:course_enrichment, :published) }
-        let(:course) { create(:course, level: :secondary, site_statuses: [create(:site_status, :new)], enrichments: [initial_draft_enrichment]) }
+        # This skips validations to ensure we don't have any legacy data that could be published
+        let(:course) { create(:course, :skip_validate, level: :secondary, infer_subjects?: false, site_statuses: [create(:site_status, :new)], enrichments: [initial_draft_enrichment]) }
 
         before do
           subject.publishable?
         end
 
-        it "should add subjects" do
-          expect(subject.errors.full_messages).to match_array(["There is a problem with this course. Contact support to fix it (Error: S)"])
+        it "Should give an error for the subjects" do
+          expect(subject.errors.full_messages).to match_array([
+            "There is a problem with this course. Contact support to fix it (Error: S)",
+            "You must pick at least one subject",
+          ])
         end
       end
     end
@@ -448,7 +559,7 @@ describe Course, type: :model do
       let(:subject_discontinued) { create :discontinued_subject }
       let(:subject_without_code) { create :primary_subject, :primary, subject_code: nil }
       let(:course) do
-        create :course, subjects: [subject, modern_languages, subject_discontinued]
+        create :course, subjects: [subject, subject_discontinued]
       end
 
       it "returns none-discontinued subjects that have a code present" do
@@ -547,7 +658,7 @@ describe Course, type: :model do
           its(:open_for_applications?) { should be false }
         end
         context "applications_open_from is in future" do
-          let(:applications_open_from) { Time.now.utc + 1.days }
+          let(:applications_open_from) { Time.now.utc + 1.day }
           its(:open_for_applications?) { should be false }
         end
       end
@@ -559,7 +670,7 @@ describe Course, type: :model do
             its(:open_for_applications?) { should be true }
           end
           context "applications_open_from is in future" do
-            let(:applications_open_from) { Time.now.utc + 1.days }
+            let(:applications_open_from) { Time.now.utc + 1.day }
             its(:open_for_applications?) { should be false }
           end
         end
@@ -574,7 +685,7 @@ describe Course, type: :model do
             its(:open_for_applications?) { should be true }
           end
           context "applications_open_from is in future" do
-            let(:applications_open_from) { Time.now.utc + 1.days }
+            let(:applications_open_from) { Time.now.utc + 1.day }
             its(:open_for_applications?) { should be false }
           end
         end
@@ -589,7 +700,7 @@ describe Course, type: :model do
             its(:open_for_applications?) { should be false }
           end
           context "applications_open_from is in future" do
-            let(:applications_open_from) { Time.now.utc + 1.days }
+            let(:applications_open_from) { Time.now.utc + 1.day }
             its(:open_for_applications?) { should be false }
           end
         end
@@ -616,7 +727,7 @@ describe Course, type: :model do
           its(:open_for_applications?) { should be false }
         end
         context "applications_open_from is in future" do
-          let(:applications_open_from) { Time.now.utc + 1.days }
+          let(:applications_open_from) { Time.now.utc + 1.day }
           its(:open_for_applications?) { should be false }
         end
       end
@@ -628,7 +739,7 @@ describe Course, type: :model do
             its(:open_for_applications?) { should be true }
           end
           context "applications_open_from is in future" do
-            let(:applications_open_from) { Time.now.utc + 1.days }
+            let(:applications_open_from) { Time.now.utc + 1.day }
             its(:open_for_applications?) { should be false }
           end
         end
@@ -643,7 +754,7 @@ describe Course, type: :model do
             its(:open_for_applications?) { should be true }
           end
           context "applications_open_from is in future" do
-            let(:applications_open_from) { Time.now.utc + 1.days }
+            let(:applications_open_from) { Time.now.utc + 1.day }
             its(:open_for_applications?) { should be false }
           end
         end
@@ -658,7 +769,7 @@ describe Course, type: :model do
             its(:open_for_applications?) { should be false }
           end
           context "applications_open_from is in future" do
-            let(:applications_open_from) { Time.now.utc + 1.days }
+            let(:applications_open_from) { Time.now.utc + 1.day }
             its(:open_for_applications?) { should be false }
           end
         end
@@ -837,7 +948,7 @@ describe Course, type: :model do
 
   describe "content_status" do
     let(:course) { create :course, enrichments: [enrichment1, enrichment2] }
-    let(:enrichment1) {  build(:course_enrichment, :subsequent_draft, created_at: Time.now) }
+    let(:enrichment1) {  build(:course_enrichment, :subsequent_draft, created_at: Time.zone.now) }
     let(:enrichment2) {  build(:course_enrichment, :published, created_at: 1.minute.ago) }
     let(:service_spy) { spy(execute: :published_with_unpublished_changes) }
     let(:content_status) { course.content_status }
@@ -914,7 +1025,7 @@ describe Course, type: :model do
 
   context "bursaries and scholarships" do
     let!(:financial_incentive) { create(:financial_incentive, subject: modern_languages, bursary_amount: 255, scholarship: 1415, early_career_payments: 32) }
-    subject { create(:course, level: "secondary", subjects: [modern_languages]) }
+    subject { create(:course, :skip_validate, level: "secondary", subjects: [modern_languages]) }
 
     it { should have_bursary }
     it { should have_scholarship_and_bursary }
@@ -1152,7 +1263,17 @@ describe Course, type: :model do
     let(:courses_subjects) { [find_or_create(:secondary_subject, :biology)] }
     let(:site_status) { build(:site_status, :findable) }
 
-    subject { create(:course, :infer_level, subjects: courses_subjects, site_statuses: [site_status]) }
+    # This skips validations to ensure we don't have any legacy data that could be synced
+    subject do
+      create(
+        :course,
+        :infer_level,
+        :skip_validate,
+        infer_subjects?: false,
+        subjects: courses_subjects,
+        site_statuses: [site_status],
+      )
+    end
 
     its(:syncable?) { should be_truthy }
 
@@ -1280,7 +1401,7 @@ describe Course, type: :model do
 
   describe "#applications_open_from" do
     context "a new course with a given date" do
-      let(:applications_open_from) { Date.today }
+      let(:applications_open_from) { Time.zone.today }
       let(:subject) { create(:course, applications_open_from: applications_open_from) }
 
       its(:applications_open_from) { should eq applications_open_from }
@@ -1340,15 +1461,15 @@ describe Course, type: :model do
   end
 
   describe "#self_accredited?" do
-    let(:provider) { build(:provider) }
+    subject { create(:course, provider: provider) }
 
     context "when self accredited" do
-      subject { create(:course, provider: provider) }
+      let(:provider) { build(:provider, :accredited_body) }
       its(:self_accredited?) { should be_truthy }
     end
 
-    context "when self accredited" do
-      subject { create(:course, :with_accrediting_provider, provider: provider) }
+    context "when not self accredited" do
+      let(:provider) { build(:provider) }
       its(:self_accredited?) { should be_falsey }
     end
   end

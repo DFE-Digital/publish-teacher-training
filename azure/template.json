@@ -271,11 +271,31 @@
       "metadata": {
         "description": "The API key for Google Cloud Platform."
       }
+    },
+    "customAvailabilityMonitors": {
+      "type": "array",
+      "defaultValue": [],
+      "metadata": {
+          "description": "Array of paths to perform monitoring on. In form TEST_NAME:HOST where HOST is the complete URL minus the http(s):// prefix."
+      }
+    },
+    "alertRecipientEmails": {
+      "type": "array",
+      "defaultValue": [],
+      "metadata": {
+          "description": "Array of recipients to receive availability email alerts. In form NAME:EMAIL_ADDRESS."
+      }
+    },
+    "resourceTags": {
+      "type": "object",
+      "defaultValue": {},
+      "metadata": {
+          "description": "List of resource tags as a JSON object"
+      }
     }
   },
   "variables": {
     "deploymentUrlBase": "https://raw.githubusercontent.com/DFE-Digital/bat-platform-building-blocks/master/templates/",
-    "deploymentUrlBaseDas": "https://raw.githubusercontent.com/SkillsFundingAgency/das-platform-building-blocks/master/templates/",
     "resourceNamePrefix": "[toLower(concat(parameters('resourceEnvironmentName'),'-', parameters('serviceName')))]",
     "keyvaultCertificateName": "[if(greater(length(parameters('certificateName')),0), parameters('certificateName'), replace(parameters('customHostName'), '.', '-'))]",
     "appServiceName": "[concat(variables('resourceNamePrefix'), '-as')]",
@@ -284,7 +304,28 @@
     "databaseResourceNamePrefix": "[toLower(concat(parameters('resourceEnvironmentName'),'-', parameters('databaseServiceName')))]",
     "databaseServerName": "[concat(variables('databaseResourceNamePrefix'), '-psql')]",
     "databaseUsername": "[concat(parameters('databaseUsername'), '@', variables('databaseServerName'))]",
-    "storageAccountName": "[replace(concat(variables('resourceNamePrefix'), 'str'), '-', '')]"
+    "storageAccountName": "[replace(concat(variables('resourceNamePrefix'), 'str'), '-', '')]",
+    "defaultAvailabilityCheckHosts": "[if(greater(length(parameters('customHostName')), 0), createArray(concat('azcheck:', variables('appServiceName'), '.azurewebsites.net/ping'), concat('check:', parameters('customHostName'), '/ping')), createArray(concat('azcheck:', variables('appServiceName'), '.azurewebsites.net/ping')))]",
+    "availabilityCheckHosts": "[if(greater(length(parameters('customAvailabilityMonitors')), 0), concat(variables('defaultAvailabilityCheckHosts'), parameters('customAvailabilityMonitors')), variables('defaultAvailabilityCheckHosts'))]",
+    "copy": [
+      {
+          "name": "availabilityTests",
+          "count": "[length(variables('availabilityCheckHosts'))]",
+          "input": {
+              "nameSuffix": "[split(variables('availabilityCheckHosts')[copyIndex('availabilityTests')], ':')[0]]",
+              "url": "[concat('https://', split(variables('availabilityCheckHosts')[copyIndex('availabilityTests')], ':')[1])]",
+              "guid": "[guid(variables('availabilityCheckHosts')[copyIndex('availabilityTests')])]"
+          }
+      },
+      {
+        "name": "alertRecipientEmails",
+        "count": "[if(greater(length(parameters('alertRecipientEmails')), 0), length(parameters('alertRecipientEmails')), 1)]",
+        "input": {
+            "displayName": "[if(greater(length(parameters('alertRecipientEmails')), 0), split(parameters('alertRecipientEmails')[copyIndex('alertRecipientEmails')], ':')[0], 'UNUSED')]",
+            "emailAddress": "[if(greater(length(parameters('alertRecipientEmails')), 0), split(parameters('alertRecipientEmails')[copyIndex('alertRecipientEmails')], ':')[1], 'UNUSED')]"
+        }
+      }
+    ]
   },
   "resources": [
     {
@@ -306,6 +347,9 @@
           },
           "appServicePlanInstances": {
             "value": "[parameters('appServicePlanInstances')]"
+          },
+          "resourceTags":{
+            "value": "[parameters('resourceTags')]"
           }
         }
       }
@@ -330,6 +374,10 @@
           },
           "keyVaultResourceGroup": {
             "value": "[parameters('keyVaultResourceGroup')]"
+          }
+          ,
+          "resourceTags":{
+            "value": "[parameters('resourceTags')]"
           }
         }
       }
@@ -454,6 +502,9 @@
           },
           "certificateThumbprint": {
             "value": "[if(greater(length(parameters('customHostname')), 0), reference('app-service-certificate', '2018-11-01').outputs.certificateThumbprint.value, '')]"
+          },
+          "resourceTags":{
+            "value": "[parameters('resourceTags')]"
           }
         }
       },
@@ -478,6 +529,9 @@
           },
           "httpLoggingEnabled": {
             "value": true
+          },
+          "resourceTags":{
+            "value": "[parameters('resourceTags')]"
           }
         }
       },
@@ -498,6 +552,9 @@
         "parameters": {
           "storageAccountName": {
             "value": "[variables('storageAccountName')]"
+          },
+          "resourceTags":{
+            "value": "[parameters('resourceTags')]"
           }
         }
       }
@@ -527,6 +584,9 @@
           },
           "storageAccountName": {
             "value": "[variables('storageAccountName')]"
+          },
+          "resourceTags":{
+            "value": "[parameters('resourceTags')]"
           }
         }
       },
@@ -599,9 +659,111 @@
           },
           "attachedService": {
             "value": "[variables('appServiceName')]"
+          },
+          "resourceTags":{
+            "value": "[parameters('resourceTags')]"
           }
         }
       }
+    },
+    {
+      "apiVersion": "2017-05-10",
+      "name": "availability-test",
+      "type": "Microsoft.Resources/deployments",
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(variables('deploymentUrlBase'), 'availability-tests.json')]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "appInsightsName": {
+            "value": "[variables('appServiceName')]"
+          },
+          "availabilityTests": {
+            "value": "[variables('availabilityTests')]"
+          },
+          "resourceTags": {
+              "value": "[parameters('resourceTags')]"
+          }
+        }
+      },
+      "dependsOn": [
+        "app-insights"
+      ]
+    },
+    {
+      "apiVersion": "2017-05-10",
+      "name": "action-group",
+      "type": "Microsoft.Resources/deployments",
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(variables('deploymentUrlBase'), 'action-group.json')]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "appInsightsName": {
+            "value": "[variables('appServiceName')]"
+          },
+          "alertRecipientEmails": {
+            "value": "[variables('alertRecipientEmails')]"
+          },
+          "resourceTags": {
+              "value": "[parameters('resourceTags')]"
+          }
+        }
+      },
+      "dependsOn": [
+        "app-insights"
+      ]
+    },
+    {
+      "apiVersion": "2017-05-10",
+      "name": "[concat('availability-test-alert',copyIndex('customAlerts'))]",
+      "condition": "[greater(length(parameters('alertRecipientEmails')), 0)]",
+      "type": "Microsoft.Resources/deployments",
+      "copy": {
+          "name": "customAlerts",
+          "count": "[length(variables('availabilityCheckHosts'))]"
+      },
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+            "uri": "[concat(variables('deploymentUrlBase'), 'availability-test-alert.json')]",
+            "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "resourceTags": {
+              "value": "[parameters('resourceTags')]"
+          },
+          "appInsightsName": {
+              "value": "[variables('appServiceName')]"
+          },
+          "appInsightsId": {
+              "value": "[reference('app-insights').outputs.AppInsightsResourceId.value]"
+          },
+          "alertName": {
+              "value": "[concat(variables('appServiceName'), '-at-alert-', split(variables('availabilityCheckHosts')[copyIndex('customAlerts')], ':')[0])]"
+          },
+          "actionGroupId": {
+              "value": "[if(greater(length(parameters('alertRecipientEmails')), 0), reference('action-group', '2019-03-01').outputs.actionGroupResourceId.value, '')]"
+          },
+          "alertDescriptionText": {
+              "value": "[concat('Custom URL availability monitor alert for \"', split(variables('availabilityCheckHosts')[copyIndex('customAlerts')], ':')[0], '\".')]"
+          },
+          "alertSeverity": {
+              "value": 1
+          },
+          "webTestId": {
+              "value": "[resourceId('microsoft.insights/webtests', concat(variables('appServiceName'), '-at-', split(variables('availabilityCheckHosts')[copyIndex('customAlerts')], ':')[0]))]"
+          }
+        }
+      },
+      "dependsOn": [
+          "availability-test",
+          "action-group"
+      ]
     },
     {
       "name": "redis-cache",
@@ -610,7 +772,7 @@
       "properties": {
         "mode": "Incremental",
         "templateLink": {
-          "uri": "[concat(variables('deploymentUrlBaseDas'), 'redis.json')]",
+          "uri": "[concat(variables('deploymentUrlBase'), 'redis.json')]",
           "contentVersion": "1.0.0.0"
         },
         "parameters": {
@@ -619,6 +781,9 @@
           },
           "enableNonSslPort": {
             "value": false
+          },
+          "resourceTags":{
+            "value": "[parameters('resourceTags')]"
           }
         }
       }
@@ -650,6 +815,9 @@
           },
           "subnetAddressPrefix": {
             "value": "[parameters('vnetSubnetAddressPrefix')]"
+          },
+          "resourceTags":{
+            "value": "[parameters('resourceTags')]"
           }
         }
       },
@@ -756,6 +924,9 @@
                 "secureValue": "[parameters('googleCloudPlatformAPIKey')]"
               }
             ]
+          },
+          "resourceTags":{
+            "value": "[parameters('resourceTags')]"
           }
         }
       },

@@ -21,7 +21,7 @@
 
 class CourseEnrichment < ApplicationRecord
   include TouchCourse
-  enum status: %i[draft published rolled_over withdrawn]
+  enum status: { draft: 0, published: 1, rolled_over: 2, withdrawn: 3 }
 
   jsonb_accessor :json_data,
                  about_course: [:string, store_key: "AboutCourse"],
