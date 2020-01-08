@@ -58,7 +58,7 @@ en:
             applications_open_from:
               blank: "^You must say when applications open from"
             base:
-              duplicate: "This course already exists"
+              duplicate: "This course already exists. You should add further locations for this course to the existing profile in Publish"
         course_enrichment:
           attributes:
             salary_details:

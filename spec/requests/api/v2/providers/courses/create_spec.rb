@@ -176,7 +176,7 @@ describe "Course POST #create API V2", type: :request do
         response_body = JSON.parse(response.body)
         expect(response_body["errors"].first).to eq(
           "title" => "Invalid base",
-          "detail" => "This course already exists",
+          "detail" => "This course already exists. You should add further locations for this course to the existing profile in Publish",
           "source" => {},
         )
       end
