@@ -265,8 +265,8 @@ will be anonymized for non production environment.
 ## <a name="releases"></a>Releases
 
 Find (Manage-Courses) build and release process is split into two separate Azure DevOps pipelines.
-- [Build Phase](https://dfe-ssp.visualstudio.com/Become-A-Teacher/_build?definitionId=46): This is the main development CI pipeline which will automatically trigger a build from a commit to any branch within the manage-courses-backend GitHub code repository. 
-- [Release Phase](https://dfe-ssp.visualstudio.com/Become-A-Teacher/_release?_a=releases&view=mine&definitionId=36): When commits are made to the master branch, this pipeline will auto deploy the application to the QA infrastructure environment in Azure. Frontend and backend release pipelines are consolidated and are made up of several stages including integration testing. Release in staging and production can be triggered manualy only - see deployment guide for more details.
+- [Build Pipeline](https://dfe-ssp.visualstudio.com/Become-A-Teacher/_build?definitionId=46): This is the main development CI pipeline which will automatically trigger a build from a commit to any branch within the manage-courses-backend GitHub code repository. 
+- [Release Pipeline](https://dfe-ssp.visualstudio.com/Become-A-Teacher/_release?_a=releases&view=mine&definitionId=36): When commits are made to the master branch, this pipeline will auto deploy the application to the QA infrastructure environment in Azure. Frontend and backend release pipelines are consolidated and are made up of several stages including integration testing. Release in staging and production can be triggered manualy only - see deployment guide for more details.
 
 ### <a name="releases-triggering"></a>Deploying
 
