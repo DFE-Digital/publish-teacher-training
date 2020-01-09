@@ -3,23 +3,8 @@
 #                                                                 Prefix Verb   URI Pattern                                                                                                                      Controller#Action
 #                                                                   ping GET    /ping(.:format)                                                                                                                  health_checks#ping
 #                                                       api_v1_providers GET    /api/v1(/:recruitment_year)/providers(.:format)                                                                                  api/v1/providers#index {:recruitment_year=>/2020|2021/}
-#                                                                        POST   /api/v1(/:recruitment_year)/providers(.:format)                                                                                  api/v1/providers#create {:recruitment_year=>/2020|2021/}
-#                                                        api_v1_provider GET    /api/v1(/:recruitment_year)/providers/:id(.:format)                                                                              api/v1/providers#show {:recruitment_year=>/2020|2021/}
-#                                                                        PATCH  /api/v1(/:recruitment_year)/providers/:id(.:format)                                                                              api/v1/providers#update {:recruitment_year=>/2020|2021/}
-#                                                                        PUT    /api/v1(/:recruitment_year)/providers/:id(.:format)                                                                              api/v1/providers#update {:recruitment_year=>/2020|2021/}
-#                                                                        DELETE /api/v1(/:recruitment_year)/providers/:id(.:format)                                                                              api/v1/providers#destroy {:recruitment_year=>/2020|2021/}
 #                                                        api_v1_subjects GET    /api/v1(/:recruitment_year)/subjects(.:format)                                                                                   api/v1/subjects#index {:recruitment_year=>/2020|2021/}
-#                                                                        POST   /api/v1(/:recruitment_year)/subjects(.:format)                                                                                   api/v1/subjects#create {:recruitment_year=>/2020|2021/}
-#                                                         api_v1_subject GET    /api/v1(/:recruitment_year)/subjects/:id(.:format)                                                                               api/v1/subjects#show {:recruitment_year=>/2020|2021/}
-#                                                                        PATCH  /api/v1(/:recruitment_year)/subjects/:id(.:format)                                                                               api/v1/subjects#update {:recruitment_year=>/2020|2021/}
-#                                                                        PUT    /api/v1(/:recruitment_year)/subjects/:id(.:format)                                                                               api/v1/subjects#update {:recruitment_year=>/2020|2021/}
-#                                                                        DELETE /api/v1(/:recruitment_year)/subjects/:id(.:format)                                                                               api/v1/subjects#destroy {:recruitment_year=>/2020|2021/}
 #                                                         api_v1_courses GET    /api/v1(/:recruitment_year)/courses(.:format)                                                                                    api/v1/courses#index {:recruitment_year=>/2020|2021/}
-#                                                                        POST   /api/v1(/:recruitment_year)/courses(.:format)                                                                                    api/v1/courses#create {:recruitment_year=>/2020|2021/}
-#                                                          api_v1_course GET    /api/v1(/:recruitment_year)/courses/:id(.:format)                                                                                api/v1/courses#show {:recruitment_year=>/2020|2021/}
-#                                                                        PATCH  /api/v1(/:recruitment_year)/courses/:id(.:format)                                                                                api/v1/courses#update {:recruitment_year=>/2020|2021/}
-#                                                                        PUT    /api/v1(/:recruitment_year)/courses/:id(.:format)                                                                                api/v1/courses#update {:recruitment_year=>/2020|2021/}
-#                                                                        DELETE /api/v1(/:recruitment_year)/courses/:id(.:format)                                                                                api/v1/courses#destroy {:recruitment_year=>/2020|2021/}
 #                                                  api_v2_user_providers GET    /api/v2/users/:user_id/providers(.:format)                                                                                       api/v2/providers#index
 #                                                                        POST   /api/v2/users/:user_id/providers(.:format)                                                                                       api/v2/providers#create
 #                                                   api_v2_user_provider GET    /api/v2/users/:user_id/providers/:id(.:format)                                                                                   api/v2/providers#show
@@ -55,6 +40,7 @@
 #                                                                        PUT    /api/v2/providers/:provider_code/sites/:id(.:format)                                                                             api/v2/sites#update
 #                                                                        GET    /api/v2/providers/:provider_code/recruitment_cycles(.:format)                                                                    api/v2/recruitment_cycles#index
 #                                                                        POST   /api/v2/providers/:code/sync_courses_with_search_and_compare(.:format)                                                           api/v2/providers#sync_courses_with_search_and_compare
+#                                     api_v2_provider_training_providers GET    /api/v2/providers/:provider_code/training_providers(.:format)                                                                    api/v2/accredited_provider_training_providers#index
 #                                                       api_v2_providers GET    /api/v2/providers(.:format)                                                                                                      api/v2/providers#index
 #                                                                        POST   /api/v2/providers(.:format)                                                                                                      api/v2/providers#create
 #                                                        api_v2_provider GET    /api/v2/providers/:code(.:format)                                                                                                api/v2/providers#show
@@ -81,6 +67,7 @@
 #                                                                        PUT    /api/v2/recruitment_cycles/:recruitment_cycle_year/providers/:provider_code/sites/:id(.:format)                                  api/v2/sites#update
 #                   api_v2_recruitment_cycle_provider_recruitment_cycles GET    /api/v2/recruitment_cycles/:recruitment_cycle_year/providers/:provider_code/recruitment_cycles(.:format)                         api/v2/recruitment_cycles#index
 #                                                                        POST   /api/v2/recruitment_cycles/:recruitment_cycle_year/providers/:code/sync_courses_with_search_and_compare(.:format)                api/v2/providers#sync_courses_with_search_and_compare
+#                   api_v2_recruitment_cycle_provider_training_providers GET    /api/v2/recruitment_cycles/:recruitment_cycle_year/providers/:provider_code/training_providers(.:format)                         api/v2/accredited_provider_training_providers#index
 #                                     api_v2_recruitment_cycle_providers GET    /api/v2/recruitment_cycles/:recruitment_cycle_year/providers(.:format)                                                           api/v2/providers#index
 #                                      api_v2_recruitment_cycle_provider GET    /api/v2/recruitment_cycles/:recruitment_cycle_year/providers/:code(.:format)                                                     api/v2/providers#show
 #                                                                        PATCH  /api/v2/recruitment_cycles/:recruitment_cycle_year/providers/:code(.:format)                                                     api/v2/providers#update
@@ -118,9 +105,9 @@ Rails.application.routes.draw do
   namespace :api do
     namespace :v1 do
       scope "/(:recruitment_year)", constraints: { recruitment_year: /2020|2021/ } do
-        resources :providers
-        resources :subjects
-        resources :courses
+        resources :providers, only: :index
+        resources :subjects, only: :index
+        resources :courses, only: :index
       end
     end
 
@@ -149,6 +136,7 @@ Rails.application.routes.draw do
         resources :sites, only: %i[index update show create]
         resources :recruitment_cycles, only: %i[index]
         post :sync_courses_with_search_and_compare, on: :member
+        get :training_providers, to: "accredited_provider_training_providers#index"
       end
 
       resources :providers,

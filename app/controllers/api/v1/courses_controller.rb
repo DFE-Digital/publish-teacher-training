@@ -36,6 +36,8 @@ module API
         render json: { status: 400, message: "Invalid changed_since value, the format should be an ISO8601 UTC timestamp, for example: `2019-01-01T12:01:00Z`" }.to_json, status: :bad_request
       end
 
+    private
+
       def build_recruitment_cycle
         @recruitment_cycle = RecruitmentCycle.find_by(
           year: params[:recruitment_year],

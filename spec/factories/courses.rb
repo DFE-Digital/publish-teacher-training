@@ -3,7 +3,6 @@
 # Table name: course
 #
 #  accrediting_provider_code :text
-#  accrediting_provider_id   :integer
 #  age_range_in_years        :string
 #  applications_open_from    :date
 #  changed_at                :datetime         not null
@@ -28,7 +27,6 @@
 #
 # Indexes
 #
-#  IX_course_accrediting_provider_id          (accrediting_provider_id)
 #  IX_course_provider_id_course_code          (provider_id,course_code) UNIQUE
 #  index_course_on_accrediting_provider_code  (accrediting_provider_code)
 #  index_course_on_changed_at                 (changed_at) UNIQUE
@@ -161,8 +159,12 @@ FactoryBot.define do
       qualification { :pgde }
     end
 
+    trait :self_accredited do
+      association(:provider, factory: %i[provider accredited_body])
+    end
+
     trait :with_accrediting_provider do
-      association(:accrediting_provider, factory: :provider)
+      association(:accrediting_provider, factory: %i[provider accredited_body])
     end
 
     trait :with_higher_education do
