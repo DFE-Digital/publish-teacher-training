@@ -52,7 +52,7 @@ Tell your team mates that their work has gone out, and move over all of the card
 ## Rolling back
 
 *Note that this advice does not apply if you are deploying changes to the Azure
-infrastructure. For rollback to the changes made to the infrasructure, the only way to roll
+infrastructure. For rollback to the changes made to the infrastructure, the only way to roll
 back is to run a full redeploy.*
 
 Because we operate blue/green deployments, the previous version of the app is
