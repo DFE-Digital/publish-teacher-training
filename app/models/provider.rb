@@ -86,7 +86,13 @@ class Provider < ApplicationRecord
            primary_key: :provider_code,
            inverse_of: :accrediting_provider
 
+  # the accredited_providers that this provider is a training_provider for
   has_many :accrediting_providers, -> { distinct }, through: :courses
+
+  # the providers that this provider is an accredited_provider for
+  def training_providers
+    Provider.where(id: current_accredited_courses.map(&:provider_id))
+  end
 
   def current_accredited_courses
     accredited_courses.select { |c| c.provider.recruitment_cycle == recruitment_cycle }

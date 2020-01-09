@@ -347,6 +347,19 @@ describe Provider, type: :model do
     end
   end
 
+  describe "training_providers" do
+    let(:accredited_provider) { create(:provider, :accredited_body) }
+    let(:training_provider1) { create(:provider) }
+    let(:training_provider2) { create(:provider) }
+
+    let!(:course1) { create(:course, accrediting_provider: accredited_provider, provider: training_provider1) }
+    let!(:course2) { create(:course, provider: training_provider2) }
+
+    subject { accredited_provider.training_providers }
+
+    it { is_expected.to contain_exactly(training_provider1) }
+  end
+
   describe "#before_create" do
     describe "#set_defaults" do
       let(:provider) { build :provider }

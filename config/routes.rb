@@ -40,6 +40,7 @@
 #                                                                        PUT    /api/v2/providers/:provider_code/sites/:id(.:format)                                                                             api/v2/sites#update
 #                                                                        GET    /api/v2/providers/:provider_code/recruitment_cycles(.:format)                                                                    api/v2/recruitment_cycles#index
 #                                                                        POST   /api/v2/providers/:code/sync_courses_with_search_and_compare(.:format)                                                           api/v2/providers#sync_courses_with_search_and_compare
+#                                     api_v2_provider_training_providers GET    /api/v2/providers/:provider_code/training_providers(.:format)                                                                    api/v2/accredited_provider_training_providers#index
 #                                                       api_v2_providers GET    /api/v2/providers(.:format)                                                                                                      api/v2/providers#index
 #                                                                        POST   /api/v2/providers(.:format)                                                                                                      api/v2/providers#create
 #                                                        api_v2_provider GET    /api/v2/providers/:code(.:format)                                                                                                api/v2/providers#show
@@ -66,6 +67,7 @@
 #                                                                        PUT    /api/v2/recruitment_cycles/:recruitment_cycle_year/providers/:provider_code/sites/:id(.:format)                                  api/v2/sites#update
 #                   api_v2_recruitment_cycle_provider_recruitment_cycles GET    /api/v2/recruitment_cycles/:recruitment_cycle_year/providers/:provider_code/recruitment_cycles(.:format)                         api/v2/recruitment_cycles#index
 #                                                                        POST   /api/v2/recruitment_cycles/:recruitment_cycle_year/providers/:code/sync_courses_with_search_and_compare(.:format)                api/v2/providers#sync_courses_with_search_and_compare
+#                   api_v2_recruitment_cycle_provider_training_providers GET    /api/v2/recruitment_cycles/:recruitment_cycle_year/providers/:provider_code/training_providers(.:format)                         api/v2/accredited_provider_training_providers#index
 #                                     api_v2_recruitment_cycle_providers GET    /api/v2/recruitment_cycles/:recruitment_cycle_year/providers(.:format)                                                           api/v2/providers#index
 #                                      api_v2_recruitment_cycle_provider GET    /api/v2/recruitment_cycles/:recruitment_cycle_year/providers/:code(.:format)                                                     api/v2/providers#show
 #                                                                        PATCH  /api/v2/recruitment_cycles/:recruitment_cycle_year/providers/:code(.:format)                                                     api/v2/providers#update
@@ -134,6 +136,7 @@ Rails.application.routes.draw do
         resources :sites, only: %i[index update show create]
         resources :recruitment_cycles, only: %i[index]
         post :sync_courses_with_search_and_compare, on: :member
+        get :training_providers, to: "accredited_provider_training_providers#index"
       end
 
       resources :providers,
