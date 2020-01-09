@@ -12,4 +12,4 @@ This document describes the process of elevating your permissions using PIM (Pri
 4. In the new blade that opens select "My roles" from the tasks section of the menu bar on the left.
 5. Under the "Activate" section of the menu select "Azure Resources".
 6. Chose the subscription you want to elevate your rights on and click "Activate". This will launch a new panel where you can specify duration and reason which must be completed before you can click Activate.
-7. In the test subscription this is a self-authorisation process and you can use your elevated rights immediately. For the production subscription, a request will be sent to the approving users, currently Dan, Misha and Riz and they will approve your request for elevated rights.
+7. In the test subscription (where our staging stack lives) this is a self-authorisation process and you can use your elevated rights immediately. For the production subscription, a request will be sent to the approving users, currently DanM, Misha and Riz, and they will approve your request for elevated rights.
