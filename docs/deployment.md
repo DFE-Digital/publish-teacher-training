@@ -10,7 +10,7 @@ Make sure to check the diff on GitHub to see if there's anything risky.
 
 You also have to make sure that you're deploying only work that has been product reviewed and approved for deployment. 
 See "To Deploy" colum on the  [Find Team board](https://trello.com/b/fXA6ioZN/team-board-find-team)
-The "Product Review" column on the [Find Team board](https://trello.com/b/fXA6ioZN/team-board-find-team) should be empty.
+The "Product Review" column on the [Find Team board](https://trello.com/b/fXA6ioZN/team-board-find-team) should be empty. Any cards in that column should have their code changes merged to the `master` branch of the relevant repository, and we'll need to be sure they're safe to deploy before proceeding.
 
 ## 2. Tell the team ![](https://www.webfx.com/tools/emoji-cheat-sheet/graphics/emojis/loudspeaker.png)
 
