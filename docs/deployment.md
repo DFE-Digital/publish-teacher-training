@@ -61,7 +61,7 @@ instructions.
 
 1. [Obtain elevated permissions using Azure PIM](pim-guide.md)
 2. Visit the "staging" slot of the application service by searching
-for it in the Azure portal. e.g. for production, type s121p01-Find-as/staging into the search bar at the top of the screen.
+for it in the Azure portal. e.g. for production, type s121p01-find-as/staging into the search bar at the top of the screen.
 3. Start the staging container by clicking "start", identified by a triangular "play" icon at the top of the main pane
 4. Wait for the service to start, checking it by visiting the slot URL, which is displayed at the top right of the main pane
 5. Once the staging app is running, you can swap the slots so that the old (staging) version becomes the live version. To do this, click "swap" at the top of the main pane, identified by a pair of arrows pointing in opposite directions
