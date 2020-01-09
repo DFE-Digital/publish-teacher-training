@@ -25,7 +25,7 @@ Summarise what you're deploying and tell the team in Slack on the `#twd_find` ch
 4. Under Artifacts section, master branch build artifacts should be already selected from the drop down list by default. Should you wish to change this select the version for the artifact sources for `manage-courses-backend`  and `manage-courses-frontend` drop down list.
 5. [Optional] Specify release description.
 6. Click the Create button to create the deployment.
-7. Lastly, approval your deployment by clicking on Appove button. Find development team members have sufficient rights to approve deployments. 
+7. Lastly, approve your deployment by clicking on "Approve" button. Find development team members have sufficient rights to approve deployments. 
 
 ## 4. Test on staging
 
