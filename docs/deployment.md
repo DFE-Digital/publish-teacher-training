@@ -4,7 +4,7 @@ All members of the Find development team are able to deploy into any of the envi
 
 ## 1. Check what you're deploying
 
-Go to the Find Build pipelines [Frontend](https://dfe-ssp.visualstudio.com/Become-A-Teacher/_build?definitionId=29) & [Backend](https://dfe-ssp.visualstudio.com/Become-A-Teacher/_build?definitionId=46)  and identify the commit you want to deploy. It is advisable to make note of the build id at this stage. 
+Go to the Find Build pipelines [Frontend](https://dfe-ssp.visualstudio.com/Become-A-Teacher/_build?definitionId=29) & [Backend](https://dfe-ssp.visualstudio.com/Become-A-Teacher/_build?definitionId=46)  and identify the commit you want to deploy. It is advisable to make note of the build number (Build #) at this stage. 
 
 Make sure to check the diff on GitHub to see if there's anything risky.
 
