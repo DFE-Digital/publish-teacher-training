@@ -191,7 +191,7 @@ GEM
     httparty (0.17.3)
       mime-types (~> 3.0)
       multi_xml (>= 0.5.2)
-    i18n (1.7.0)
+    i18n (1.7.1)
       concurrent-ruby (~> 1.0)
     jaro_winkler (1.5.4)
     json (2.3.0)
@@ -380,7 +380,7 @@ GEM
     sentry-raven (2.13.0)
       faraday (>= 0.7.6, < 1.0)
     shellany (0.0.1)
-    shoulda-matchers (4.1.2)
+    shoulda-matchers (4.2.0)
       activesupport (>= 4.2.0)
     sidekiq (6.0.4)
       connection_pool (>= 2.2.2)
@@ -499,7 +499,7 @@ DEPENDENCIES
   rubocop-govuk
   schema_to_scaffold
   sentry-raven
-  shoulda-matchers (~> 4.1)
+  shoulda-matchers (~> 4.2)
   sidekiq
   sidekiq-cron
   simplecov

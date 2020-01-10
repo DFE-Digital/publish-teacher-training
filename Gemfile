@@ -180,7 +180,7 @@ group :test do
   gem "faker"
   gem "jsonapi-rspec"
   gem "rspec_junit_formatter"
-  gem "shoulda-matchers", "~> 4.1"
+  gem "shoulda-matchers", "~> 4.2"
   gem "simplecov", require: false
   gem "webmock"
 end
