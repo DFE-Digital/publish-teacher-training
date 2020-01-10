@@ -477,9 +477,10 @@ module MCB
       argv.empty? || (argv.first == "-E" && argv.length == 2)
     end
 
-    def geocode(obj:, sleep:)
+    def geocode(obj:, sleep:, force: false)
       obj.geocode
-      obj.save
+      obj.save!(validate: !force)
+
       verbose "Geocoded #{obj.class}:#{obj.id} - #{obj}. " \
               "New lat/long #{obj.latitude},#{obj.latitude} for full_address '#{obj.full_address}'"
       sleep(sleep)
