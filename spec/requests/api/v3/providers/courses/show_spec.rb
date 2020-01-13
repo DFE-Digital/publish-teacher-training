@@ -19,7 +19,7 @@ describe "GET v3/providers/:provider_code/courses/:course_code" do
       JSONAPI::Serializable::Renderer.new.render(
         course,
         class: {
-          Course: API::V2::SerializableCourse,
+          Course: API::V3::SerializableCourse,
         },
       ).to_json,
     )
@@ -139,121 +139,6 @@ describe "GET v3/providers/:provider_code/courses/:course_code" do
             "site_statuses" => { "meta" => { "included" => false } },
             "subjects" => { "meta" => { "included" => false } },
           },
-          "meta" => {
-            "edit_options" => {
-              "entry_requirements" => %w[must_have_qualification_at_application_time expect_to_achieve_before_training_begins equivalence_test],
-              "qualifications" => %w[qts pgce_with_qts pgde_with_qts],
-              "age_range_in_years" => %w[3_to_7 5_to_11 7_to_11 7_to_14],
-              "start_dates" => [
-                "October #{previous_year}",
-                "November #{previous_year}",
-                "December #{previous_year}",
-                "January #{current_year}",
-                "February #{current_year}",
-                "March #{current_year}",
-                "April #{current_year}",
-                "May #{current_year}",
-                "June #{current_year}",
-                "July #{current_year}",
-                "August #{current_year}",
-                "September #{current_year}",
-                "October #{current_year}",
-                "November #{current_year}",
-                "December #{current_year}",
-                "January #{next_year}",
-                "February #{next_year}",
-                "March #{next_year}",
-                "April #{next_year}",
-                "May #{next_year}",
-                "June #{next_year}",
-                "July #{next_year}",
-              ],
-              "study_modes" => %w[full_time part_time full_time_or_part_time],
-              "show_is_send" => false,
-              "show_start_date" => false,
-              "show_applications_open" => false,
-              "subjects" => [
-                 {
-                   "id" => "1",
-                   "type" => "subjects",
-                   "attributes" => {
-                     "subject_name" => "Primary",
-                     "subject_code" => "00",
-                     "bursary_amount" => nil,
-                     "early_career_payments" => nil,
-                     "scholarship" => nil,
-                   },
-                 },
-                 {
-                   "id" => "2",
-                   "type" => "subjects",
-                   "attributes" => {
-                     "subject_name" => "Primary with English",
-                     "subject_code" => "01",
-                     "bursary_amount" => nil,
-                     "early_career_payments" => nil,
-                     "scholarship" => nil,
-                   },
-                 },
-                 {
-                   "id" => "3",
-                   "type" => "subjects",
-                   "attributes" => {
-                     "subject_name" => "Primary with geography and history",
-                     "subject_code" => "02",
-                     "bursary_amount" => nil,
-                     "early_career_payments" => nil,
-                     "scholarship" => nil,
-                   },
-                 },
-                 {
-                   "id" => "4",
-                   "type" => "subjects",
-                   "attributes" => {
-                     "subject_name" => "Primary with mathematics",
-                     "subject_code" => "03",
-                     "bursary_amount" => "6000",
-                     "early_career_payments" => nil,
-                     "scholarship" => nil,
-                   },
-                 },
-                 {
-                   "id" => "5",
-                   "type" => "subjects",
-                   "attributes" => {
-                     "subject_name" => "Primary with modern languages",
-                     "subject_code" => "04",
-                     "bursary_amount" => nil,
-                     "early_career_payments" => nil,
-                     "scholarship" => nil,
-                   },
-                 },
-                 {
-                   "id" => "6",
-                   "type" => "subjects",
-                   "attributes" => {
-                     "subject_name" => "Primary with physical education",
-                     "subject_code" => "06",
-                     "bursary_amount" => nil,
-                     "early_career_payments" => nil,
-                     "scholarship" => nil,
-                   },
-                 },
-                 {
-                   "id" => "7",
-                   "type" => "subjects",
-                   "attributes" => {
-                     "subject_name" => "Primary with science",
-                     "subject_code" => "07",
-                     "bursary_amount" => nil,
-                     "early_career_payments" => nil,
-                     "scholarship" => nil,
-                   },
-                 },
-              ],
-              "modern_languages" => nil,
-            },
-          },
         },
         "included" => [
           {
@@ -285,7 +170,7 @@ describe "GET v3/providers/:provider_code/courses/:course_code" do
     JSONAPI::Serializable::Renderer.new.render(
       course,
       class: {
-        Course: API::V2::SerializableCourse,
+        Course: API::V3::SerializableCourse,
       },
     )
   end
