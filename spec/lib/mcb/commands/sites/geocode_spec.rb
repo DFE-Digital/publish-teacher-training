@@ -58,7 +58,6 @@ describe "mcb geocode" do
       end
 
       it "geocodes the site" do
-
         expect(MCB).to receive(:geocode).with(obj: invalid_site, sleep: default_sleep, force: true).and_call_original
 
         expect { execute_cmd(arguments: ["-f", invalid_site.id]) }
