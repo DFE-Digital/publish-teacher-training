@@ -3,6 +3,7 @@ summary "Batch geocode Sites"
 usage "geocode [options] [<id>...]"
 option :s, "sleep", "time to sleep between each request", argument: :optional, default: 0.25, transform: method(:Float)
 option :b, "batch_size", "batch size", argument: :optional, default: 100, transform: method(:Integer)
+flag :f, "force", "Geocode even if the rest of the site has validation errors"
 
 instance_eval(&MCB.remote_connect_options)
 
@@ -19,13 +20,13 @@ run do |opts, args, _cmd|
     Site
       .where(id: args.to_a)
       .find_each(batch_size: opts[:batch_size]) do |site|
-        MCB.geocode(obj: site, sleep: opts[:sleep])
+        MCB.geocode(obj: site, sleep: opts[:sleep], force: opts[:force])
       end
   else
     Site
       .not_geocoded
       .find_each(batch_size: opts[:batch_size]) do |site|
-        MCB.geocode(obj: site, sleep: opts[:sleep])
+        MCB.geocode(obj: site, sleep: opts[:sleep], force: opts[:force])
       end
   end
 end
