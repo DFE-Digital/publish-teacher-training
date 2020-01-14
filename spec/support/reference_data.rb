@@ -23,6 +23,7 @@ RSpec.configure do |config|
   # the tag "without_subjects: true" to make sure the subjects table is empty
   # for tests that need it.
   config.before(:all) do
+    Subjects::SubjectAreaCreatorService.new.execute
     Subjects::CreatorService.new.execute
     Subjects::FinancialIncentiveCreatorService.new.execute
     Subjects::FinancialIncentiveSetSubjectKnowledgeEnhancementCourseAvailableService.new.execute

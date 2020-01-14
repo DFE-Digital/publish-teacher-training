@@ -97,6 +97,7 @@
 #                                     api_v3_recruitment_cycle_providers GET    /api/v3/recruitment_cycles/:recruitment_cycle_year/providers(.:format)                                                                   api/v3/providers#index
 #                                      api_v3_recruitment_cycle_provider GET    /api/v3/recruitment_cycles/:recruitment_cycle_year/providers/:code(.:format)                                                             api/v3/providers#show
 #                                               api_v3_recruitment_cycle GET    /api/v3/recruitment_cycles/:year(.:format)                                                                                               api/v3/recruitment_cycles#show
+#                                                   api_v3_subject_areas GET    /api/v3/subject_areas(.:format)                                                                                                          api/v3/subject_areas#index
 #                                                        api_system_sync POST   /api/system/sync(.:format)                                                                                                               api/system/force_sync#sync
 #                                                              error_500 GET    /error_500(.:format)                                                                                                                     error#error_500
 #                                                             error_nodb GET    /error_nodb(.:format)                                                                                                                    error#error_nodb
@@ -186,6 +187,8 @@ Rails.application.routes.draw do
           end
         end
       end
+
+      resources :subject_areas, only: :index
     end
 
     namespace :system do

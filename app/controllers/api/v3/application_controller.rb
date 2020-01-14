@@ -14,6 +14,13 @@ module API
           year: params[:recruitment_cycle_year],
         ) || RecruitmentCycle.current_recruitment_cycle
       end
+
+      def fields_param
+        params.fetch(:fields, {})
+          .permit(:subject_areas, :courses, :providers)
+          .to_h
+          .map { |k, v| [k, v.split(",").map(&:to_sym)] }
+      end
     end
   end
 end

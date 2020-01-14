@@ -273,7 +273,16 @@ ActiveRecord::Schema.define(version: 2020_01_15_141035) do
     t.text "subject_name"
     t.datetime "created_at", precision: 6
     t.datetime "updated_at", precision: 6
+    t.bigint "subject_area_id"
+    t.index ["subject_area_id"], name: "index_subject_on_subject_area_id"
     t.index ["subject_name"], name: "index_subject_on_subject_name"
+  end
+
+  create_table "subject_area", id: false, force: :cascade do |t|
+    t.text "typename", null: false
+    t.text "name"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
   end
 
   create_table "user", id: :serial, force: :cascade do |t|

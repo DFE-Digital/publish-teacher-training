@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe "GET v3/providers" do
+describe "GET v3/recruitment_cycle/:recruitment_cycle_year/providers" do
   let(:organisation) { create(:organisation) }
   let(:recruitment_cycle) { find_or_create :recruitment_cycle }
 

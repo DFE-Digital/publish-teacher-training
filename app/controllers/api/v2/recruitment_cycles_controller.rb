@@ -1,6 +1,6 @@
 module API
   module V2
-    class RecruitmentCyclesController < ApplicationController
+    class RecruitmentCyclesController < API::V2::ApplicationController
       before_action :build_recruitment_cycle
 
       def index
