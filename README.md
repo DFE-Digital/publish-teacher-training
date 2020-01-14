@@ -1,9 +1,9 @@
 
-[![Build Status](https://dfe-ssp.visualstudio.com/Become-A-Teacher/_apis/build/status/Find/manage-courses-backend?branchName=master)](https://dfe-ssp.visualstudio.com/Become-A-Teacher/_build/latest?definitionId=46&branchName=master)
-[![Maintainability](https://api.codeclimate.com/v1/badges/a45d9506b9c0e3f0fd8f/maintainability)](https://codeclimate.com/github/DFE-Digital/manage-courses-backend/maintainability)
-[![Test Coverage](https://api.codeclimate.com/v1/badges/a45d9506b9c0e3f0fd8f/test_coverage)](https://codeclimate.com/github/DFE-Digital/manage-courses-backend/test_coverage)
+[![Build Status](https://dfe-ssp.visualstudio.com/Become-A-Teacher/_apis/build/status/Find/teacher-training-api?branchName=master)](https://dfe-ssp.visualstudio.com/Become-A-Teacher/_build/latest?definitionId=46&branchName=master)
+[![Maintainability](https://api.codeclimate.com/v1/badges/a45d9506b9c0e3f0fd8f/maintainability)](https://codeclimate.com/github/DFE-Digital/teacher-training-api/maintainability)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/a45d9506b9c0e3f0fd8f/test_coverage)](https://codeclimate.com/github/DFE-Digital/teacher-training-api/test_coverage)
 
-# Manage Courses Backend
+# Teacher Training API
 
 ## Prerequisites
 
@@ -109,7 +109,7 @@ bundle exec rake
 
 ### V1
 
-[See API Docs](https://github.com/DFE-Digital/manage-courses-backend/blob/master/docs/api.md)
+[See API Docs](https://github.com/DFE-Digital/teacher-training-api/blob/master/docs/api.md)
 
 Quick check that it's working in local development with the token "bats"
 configured in `config/environments/development.rb`:
@@ -265,7 +265,7 @@ will be anonymized for non production environment.
 ## <a name="releases"></a>Releases
 
 Find (Manage-Courses) build and release process is split into two separate Azure DevOps pipelines.
-- [Build Pipeline](https://dfe-ssp.visualstudio.com/Become-A-Teacher/_build?definitionId=46): This is the main development CI pipeline which will automatically trigger a build from a commit to any branch within the manage-courses-backend GitHub code repository. 
+- [Build Pipeline](https://dfe-ssp.visualstudio.com/Become-A-Teacher/_build?definitionId=46): This is the main development CI pipeline which will automatically trigger a build from a commit to any branch within the teacher-training-api GitHub code repository.
 - [Release Pipeline](https://dfe-ssp.visualstudio.com/Become-A-Teacher/_release?_a=releases&view=mine&definitionId=36): When commits are made to the master branch, this pipeline will auto deploy the application to the QA infrastructure environment in Azure. Frontend and backend release pipelines are consolidated and are made up of several stages including integration testing. Release in staging and production can be triggered manualy only - see deployment guide for more details.
 
 ### <a name="releases-triggering"></a>Deploying
