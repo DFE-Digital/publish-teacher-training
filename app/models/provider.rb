@@ -91,11 +91,11 @@ class Provider < ApplicationRecord
 
   # the providers that this provider is an accredited_provider for
   def training_providers
-    Provider.where(id: current_accredited_courses.map(&:provider_id))
+    Provider.where(id: current_accredited_courses.pluck(:provider_id))
   end
 
   def current_accredited_courses
-    accredited_courses.select { |c| c.provider.recruitment_cycle == recruitment_cycle }
+    accredited_courses.includes(:provider).where(provider: { recruitment_cycle: recruitment_cycle })
   end
 
   scope :changed_since, ->(timestamp) do
