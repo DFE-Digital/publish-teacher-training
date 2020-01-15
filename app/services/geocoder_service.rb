@@ -6,7 +6,7 @@ class GeocoderService
       result = results.first
       obj.latitude = result.latitude
       obj.longitude = result.longitude
-      obj.save(validate: !force)
+      obj.save!(validate: !force)
     end
   end
 end
