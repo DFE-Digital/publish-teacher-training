@@ -6,8 +6,6 @@ option :b, "batch_size", "batch size", argument: :optional, default: 100, transf
 
 instance_eval(&MCB.remote_connect_options)
 
-require "geocoder"
-
 run do |opts, args, _cmd|
   MCB.init_rails(opts)
 
