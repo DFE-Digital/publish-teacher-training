@@ -1622,17 +1622,4 @@ describe Course, type: :model do
       )
     end
   end
-
-  describe "#is_unique_on_provider?" do
-    it "Returns the subjects using the correct service" do
-      expect(course).to(
-        delegate_method_to_service(
-          :is_unique_on_provider?,
-          "Courses::ValidateUniqueCourseOnProviderService",
-        ).with_arguments(
-          new_course: course,
-        ),
-      )
-    end
-  end
 end

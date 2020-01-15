@@ -171,6 +171,7 @@ class Course < ApplicationRecord
   validate :validate_subject_count
   validate :validate_subject_consistency
   validate :validate_custom_age_range, on: %i[create new], if: -> { age_range_in_years.present? }
+  validates_with UniqueCourseValidator, on: :new
 
   validates :name, :profpost_flag, :program_type, :qualification, :start_date, :study_mode, presence: true
   validates :age_range_in_years, presence: true, on: %i[new create], unless: :further_education_course?
@@ -452,10 +453,6 @@ class Course < ApplicationRecord
     services[:assignable_subjects].execute(course: self)
   end
 
-  def is_unique_on_provider?
-    services[:validate_unique_course].execute(new_course: self)
-  end
-
 private
 
   def withdraw_latest_enrichment
@@ -666,9 +663,6 @@ private
     end
     @services.register(:content_status) do
       Courses::ContentStatusService.new
-    end
-    @services.register(:validate_unique_course) do
-      Courses::ValidateUniqueCourseOnProviderService.new
     end
   end
 end

@@ -1,4 +1,4 @@
-describe Courses::ValidateUniqueCourseOnProviderService do
+describe UniqueCourseValidator do
   let(:service) { described_class.new }
   let(:provider) { create(:provider, sites: [site_one, site_two]) }
   let(:accredited_body_one) { create(:provider, :accredited_body) }
@@ -40,13 +40,15 @@ describe Courses::ValidateUniqueCourseOnProviderService do
 
   shared_examples "a duplicate course" do
     it "is a duplicate course" do
-      expect(service.execute(new_course: new_course)).to be(false)
+      new_course.valid?(:new)
+      expect(new_course.errors.added?(:base, :duplicate)).to be(true)
     end
   end
 
   shared_examples "a unique course" do
     it "is a unique course" do
-      expect(service.execute(new_course: new_course)).to be(true)
+      new_course.valid?(:new)
+      expect(new_course.errors.added?(:base, :duplicate)).to be(false)
     end
   end
 

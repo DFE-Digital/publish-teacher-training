@@ -131,8 +131,6 @@ module API
         course_code = @provider.next_available_course_code
         @course.assign_attributes(course_code: course_code)
 
-        return duplicate_course_response unless @course.is_unique_on_provider?
-
         create_new_course
       end
 
@@ -304,11 +302,6 @@ module API
             "'#{@course}' '#{@course.provider}' sync error: #{@course.errors.details}",
           )
         end
-      end
-
-      def duplicate_course_response
-        @course.errors.add(:base, :duplicate)
-        render jsonapi_errors: @course.errors, status: :unprocessable_entity
       end
 
       def create_new_course
