@@ -478,12 +478,14 @@ module MCB
     end
 
     def geocode(obj:, sleep:, force: false)
-      obj.geocode
-      verbose "Geocoded #{obj.class}:#{obj.id} - #{obj}. " \
-              "New lat/long #{obj.latitude},#{obj.latitude} for full_address '#{obj.full_address}'"
+      verbose "Geocoding #{obj.class}:#{obj.id} - #{obj}. " \
+              "Current lat/long #{obj.latitude || 'nil'},#{obj.longitude || 'nil'} for full_address '#{obj.full_address}'"
 
-      saved = obj.save(validate: !force)
-      warn "Saving failed for #{obj.class}:#{obj.id} - #{obj}. Error: #{obj.errors}" unless saved
+      GeocoderService.geocode(obj: obj, force: force)
+      obj.reload
+
+      verbose "Geocoded #{obj.class}:#{obj.id} - #{obj}. " \
+              "New lat/long #{obj.latitude || 'nil'},#{obj.longitude || 'nil'} for full_address '#{obj.full_address}'"
 
       sleep(sleep)
     end

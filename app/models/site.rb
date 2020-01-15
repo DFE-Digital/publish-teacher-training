@@ -63,7 +63,7 @@ class Site < ApplicationRecord
   def full_address
     address = [address1, address2, address3, address4, postcode]
 
-    unless location_name.downcase == MAIN_SITE
+    unless location_name && location_name.downcase == MAIN_SITE
       address.unshift(location_name)
     end
 
