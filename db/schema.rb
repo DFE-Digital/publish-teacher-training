@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_12_30_125612) do
+ActiveRecord::Schema.define(version: 2020_01_15_141035) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_buffercache"
@@ -157,6 +157,7 @@ ActiveRecord::Schema.define(version: 2019_12_30_125612) do
     t.string "scholarship"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.boolean "subject_knowledge_enhancement_course_available", default: false, null: false
     t.index ["subject_id"], name: "index_financial_incentive_on_subject_id"
   end
 

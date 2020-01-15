@@ -2,13 +2,14 @@
 #
 # Table name: financial_incentive
 #
-#  bursary_amount        :string
-#  created_at            :datetime         not null
-#  early_career_payments :string
-#  id                    :bigint           not null, primary key
-#  scholarship           :string
-#  subject_id            :bigint           not null
-#  updated_at            :datetime         not null
+#  bursary_amount                                 :string
+#  created_at                                     :datetime         not null
+#  early_career_payments                          :string
+#  id                                             :bigint           not null, primary key
+#  scholarship                                    :string
+#  subject_id                                     :bigint           not null
+#  subject_knowledge_enhancement_course_available :boolean          default(FALSE), not null
+#  updated_at                                     :datetime         not null
 #
 # Indexes
 #

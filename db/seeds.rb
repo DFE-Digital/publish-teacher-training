@@ -19,6 +19,7 @@ next_recruitment_cycle = RecruitmentCycle.create(year: (current_recruitment_year
 
 SubjectCreatorService.new.execute
 SubjectFinancialIncentiveCreatorService.new.execute
+SubjectFinancialIncentiveSetSubjectKnowledgeEnhancementCourseAvailableService.new.execute
 
 superuser = User.create!(
   first_name: "Super",
