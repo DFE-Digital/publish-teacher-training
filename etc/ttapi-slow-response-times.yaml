@@ -1,0 +1,47 @@
+# This defines an ElastAlert alert that triggers when we detect a certain number
+# of slow requests, averaged over a period of time.
+#
+# You will need a to copy in the "Kibana Dashboard URL" for the "Publish
+# Requests" dashboard, and the appropriate "Slack Incoming Webhook" Slack app
+# that is created.
+#
+# For more info see:
+#   https://api.slack.com/incoming-webhooks
+#   https://help.logit.io/en/articles/2398435-how-to-send-alerts-from-logit-to-slack
+#   https://elastalert.readthedocs.io/en/latest/index.html
+name: "TTAPI Slow Response Alert"
+index: logstash-*
+type: metric_aggregation
+
+generate_kibana_link: true
+use_kibana4_dashboard: "[Kibana Dashboard URL]"
+
+doc_type: doc
+metric_agg_key: duration
+metric_agg_type: avg
+max_threshold: 2500
+buffer_time:
+  seconds: 60
+
+exponential_realert:
+  hours: 1
+
+alert_text_type: alert_text_only
+alert_text: |
+  Average response time of `{average_time:.0f}ms` recorded at `{timestamp}` exceeds threshold of `{threshold}ms` over `{measure_time}`.
+
+  <{kibana_link}|View dashboard for {timestamp}>
+
+alert_text_kw:
+  max_threshold: threshold
+  buffer_time: measure_time
+  metric_duration_avg: average_time
+  kibana_link: kibana_link
+  "@timestamp": timestamp
+
+alert:
+- slack
+
+slack_webhook_url:
+ - "[Slack Incoming Webhook]"
+slack_title: "TTAPI Slow Response Time Alert"
