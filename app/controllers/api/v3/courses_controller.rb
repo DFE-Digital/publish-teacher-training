@@ -14,7 +14,7 @@ module API
 
         if @course.is_published?
           # https://github.com/jsonapi-rb/jsonapi-rails/issues/113
-          render jsonapi: @course, fields: fields_param, include: params[:include], class: CourseSerializersService.new.execute
+          render jsonapi: @course, fields: fields_param, include: params[:include], class: CourseSerializersServiceV3.new.execute
         else
           raise ActiveRecord::RecordNotFound
         end
