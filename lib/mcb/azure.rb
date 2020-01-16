@@ -88,7 +88,7 @@ module MCB
                                          rgroup: rgroup,
                                          subscription: subscription)
 
-      unless require_confirmation
+      unless require_confirmation(app_config["RAILS_ENV"])
         print "As a safety measure, please enter the expected RAILS_ENV for #{webapp}: "
         expected_environment = $stdin.readline.chomp
 
@@ -104,9 +104,13 @@ module MCB
 
       app_config["RAILS_ENV"]
     end
-  end
 
-  def require_confirmation
-    %w(qa staging).include?(app_config["RAILS_ENV"])
+    class << self
+    private
+
+      def require_confirmation(rails_env)
+        %w(qa staging).include?(rails_env)
+      end
+    end
   end
 end
