@@ -6,9 +6,7 @@ module API
       def index
         @providers = @recruitment_cycle.providers
 
-        render jsonapi: @providers.in_order,
-               fields: { providers: %i[provider_code provider_name courses
-                                       recruitment_cycle_year] }
+        render jsonapi: @providers.in_order, class: { Provider: API::V3::SerializableProvider }
       end
 
       def show
