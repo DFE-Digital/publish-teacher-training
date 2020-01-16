@@ -1,42 +1,61 @@
+# rubocop:disable Style/ClassVars
 class TestSetup
-  # Class that instantiates standard set of test data for specs.
+  # A helper class for instantiating a standard set of factories for testing
+  #
+  # There are two ways to access the data. Via class methods or class instantiation.
+  #
+  # This class automatically generates a set of test data and can be accessed as follows:
+  #
+  # e.g. TestSetup.unpublished_with_primary_maths
+  #
+  # Use the above method when you do not need to customise the test data.
+  #
+  # If you do need to custom aspects of the test data then define a 'before(:all)' block in your spec
+  # and instantiate the TestSetup class, passing in the attributes you require:
+  #
+  # e.g @setup = TestSetup.new(with_courses: [
+  #   :unpub_pri_math: { created_date: 2.days.ago }
+  # ])
+  #
+  # [DRAFT] The naming schema for courses is:
+  #
+  #   <publish state>_<level>_<subject>_<other_info>
+  #
+  # where:
+  #
+  # * publish_state:
+  #
+  #   * pub = published
+  #   * unpub = unpublished
+  #   * del = deleted
+  #
+  # * level:
+  #
+  #   * pri - primary
+  #   * sec - secondary
+  #
+  # * subject:
+  #   * mat - maths
+  #   * eng - eng
 
   @@recruitment_cycles = {
-    current_cycle: -> { FactoryBot.find_or_create :recruitment_cycle },
-    next_cycle: -> { FactoryBot.find_or_create :recruitment_cycle, :next },
+    current_cycle: -> {  find_or_create :recruitment_cycle },
+    next_cycle: -> {  find_or_create :recruitment_cycle, :next },
   }
 
   @@courses = {
-    unpublished_course_with_primary_maths: ->(attributes = {}) do
-      FactoryBot.find_or_create(:course, :unpublished_with_primary_maths, attributes)
-    end,
-    unpublished_course_with_no_location_or_enrichment: ->(attributes = {}) do
-      FactoryBot.find_or_create(:course, :unpublished_with_primary_maths, {
-        site_statuses: [],
-        enrichments: [],
-      }.merge(attributes))
-    end,
-    unpublished_course_with_draft_enrichment: ->(attributes = {}) do
-      FactoryBot.find_or_create(:course, :unpublished_with_primary_maths, attributes)
-    end,
-    unpublished_fee_type_based_course_with_invalid_enrichment: ->(attributes = {}) do
-      FactoryBot.find_or_create(:course, :fee_type_based, :unpublished_with_primary_maths, {
-        enrichments: [FactoryBot.build(:course_enrichment, :without_content)],
-      }.merge(attributes))
+    unpub_pri_math: ->(attributes = {}) do
+      find_or_create(:course, :unpublished_with_primary_maths, attributes)
     end,
   }
-
-  # Used when not instantiating a TestSetup object in a before block.
-  # This will create a new fixture, using 'find_or_create' for teams and
-  # users and 'create' for cases. This is used to have a standardised set of
-  # recruitment cycles to work with, but without requiring
-  # pre-instantiation.
 
   def self.method_missing(method_name, *args)
     if @@recruitment_cycles&.key?(method_name)
       @@recruitment_cycles[method_name].call
     elsif @@courses&.key?(method_name)
       @@courses[method_name].call
+    elsif %i[build find_or_create].include? method_name
+      FactoryBot.send(method_name, *args)
     else
       super
     end
@@ -55,20 +74,9 @@ class TestSetup
     @courses = @@courses.transform_values(&:call)
 
     if with_courses.respond_to? :keys
-      @courses = @@courses.slice(*with_courses.keys)
-      with_courses.each do |name, attrs|
-        # instantiate course by calling the blocks in @@courses and passing in any
-        # attributes defined in only_courses for this course.
-        @courses[name] = @courses[name].call(attrs)
-      end
+      create_custom_courses_from(with_courses)
     else
-      course_types = with_courses || @@courses.keys
-      @courses = Hash[
-        @@courses.slice(*course_types).map do |name, kourse|
-          # instantiate course by calling the blocks in @@courses
-          [name, kourse.call]
-        end
-      ]
+      create_courses_from(with_courses)
     end
   end
 
@@ -87,4 +95,26 @@ class TestSetup
       @courses&.key?(method_name) ||
       super
   end
+
+private
+
+  def create_courses_from(courses)
+    course_types = courses || @@courses.keys
+    @courses = Hash[
+        @@courses.slice(*course_types).map do |name, kourse|
+          # instantiate course by calling the blocks in @@courses
+          [name, kourse.call]
+        end
+    ]
+  end
+
+  def create_custom_courses_from(courses)
+    @courses = @@courses.slice(*courses.keys)
+    courses.each do |name, attrs|
+      # instantiate course by calling the blocks in @@courses and passing in any
+      # attributes defined in only_courses for this course.
+      @courses[name] = @courses[name].call(attrs)
+    end
+  end
 end
+# rubocop:enable Style/ClassVars
