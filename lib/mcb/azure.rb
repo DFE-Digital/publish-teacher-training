@@ -88,13 +88,14 @@ module MCB
                                          rgroup: rgroup,
                                          subscription: subscription)
 
-      # TODO: only require confirmation on commands that write to the db
-      print "As a safety measure, please enter the expected RAILS_ENV for #{webapp}: "
-      expected_environment = $stdin.readline.chomp
+      unless require_confirmation(app_config["RAILS_ENV"])
+        print "As a safety measure, please enter the expected RAILS_ENV for #{webapp}: "
+        expected_environment = $stdin.readline.chomp
 
-      if app_config["RAILS_ENV"] != expected_environment
-        raise "RAILS_ENV for #{webapp} does not match: " \
-              "#{app_config['RAILS_ENV']} != #{expected_environment}"
+        if app_config["RAILS_ENV"] != expected_environment
+          raise "RAILS_ENV for #{webapp} does not match: " \
+                "#{app_config['RAILS_ENV']} != #{expected_environment}"
+        end
       end
 
       MCB::Azure.configure_database(app_config)
@@ -102,6 +103,14 @@ module MCB
       MCB::Azure.configure_env(app_config)
 
       app_config["RAILS_ENV"]
+    end
+
+    class << self
+    private
+
+      def require_confirmation(rails_env)
+        %w(qa staging).include?(rails_env)
+      end
     end
   end
 end
