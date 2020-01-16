@@ -96,7 +96,7 @@ FactoryBot.define do
         identifier { "published_scitt" }
       end
 
-      provider_name { "#{identifier} provider" }
+      provider_name { "#{identifier} provider name" }
     end
   end
 end

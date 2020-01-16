@@ -40,7 +40,7 @@ FactoryBot.define do
     qualification { :pgce_with_qts }
     with_apprenticeship
 
-    provider
+    provider { find_or_create(:provider) }
 
     study_mode { :full_time }
     maths { :must_have_qualification_at_application_time }
@@ -125,11 +125,6 @@ FactoryBot.define do
       # We've just created a course with this provider's code, so ensure it's
       # up-to-date and has this course loaded.
       course.provider.reload
-
-      # Make sure this Course and and Sites are associated with the same Provider
-      if course.site_statuses.any?
-        course.site_statuses.first.site.provider = course.provider
-      end
     end
 
     trait :infer_level do
@@ -217,14 +212,17 @@ FactoryBot.define do
 
     trait :unpublished_with_primary_maths do
       transient do
-        identifier { "unpublished_with_primary_mathematics" }
+        identifier { "unpublished_with_primary_maths" }
       end
 
-      name { "#{identifier} course" }
+      name { "#{identifier} course name" }
 
       provider { find_or_create :provider, :published_scitt }
-      site_statuses { [build(:site_status, :new)] }
-      enrichments { [build(:course_enrichment, :initial_draft)] }
+      sites { build_list(:site, 1, provider: provider) }
+    end
+
+    trait :draft_enrichment do
+      enrichments { [build(:course_enrichment, :initial_draft, course: nil)] }
     end
   end
 end

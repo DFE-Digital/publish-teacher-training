@@ -17,7 +17,7 @@ FactoryBot.define do
     sequence(:org_id)
 
     trait :with_user do
-      users { [find_or_create(:user)] }
+      users { [create(:user)] }
     end
   end
 end
