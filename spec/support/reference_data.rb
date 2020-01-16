@@ -26,6 +26,11 @@ RSpec.configure do |config|
     SubjectCreatorService.new.execute
     SubjectFinancialIncentiveCreatorService.new.execute
     SubjectFinancialIncentiveSetSubjectKnowledgeEnhancementCourseAvailableService.new.execute
+
+    # Creating or finding course test data
+    if Settings.test_setup
+      TestSetup.new
+    end
   end
 
   config.before(:each, without_subjects: true) do
