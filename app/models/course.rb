@@ -171,6 +171,7 @@ class Course < ApplicationRecord
   validate :validate_subject_count
   validate :validate_subject_consistency
   validate :validate_custom_age_range, on: %i[create new], if: -> { age_range_in_years.present? }
+  validates_with UniqueCourseValidator, on: :new
 
   validates :name, :profpost_flag, :program_type, :qualification, :start_date, :study_mode, presence: true
   validates :age_range_in_years, presence: true, on: %i[new create], unless: :further_education_course?

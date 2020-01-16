@@ -160,6 +160,28 @@ describe "Course POST #create API V2", type: :request do
       end
     end
 
+    context "When attempting to create a duplicate course" do
+      before do
+        perform_request(course)
+        perform_request(course)
+      end
+
+      it "Does not create the course" do
+        expect(response.status).to eq(422)
+
+        expect(provider.reload.courses.count).to eq(1)
+      end
+
+      it "Provides an error message" do
+        response_body = JSON.parse(response.body)
+        expect(response_body["errors"].first).to eq(
+          "title" => "Invalid base",
+          "detail" => "This course already exists. You should add further locations for this course to the existing profile in Publish",
+          "source" => {},
+        )
+      end
+    end
+
     context "When the course is a further education course" do
       let(:provider) { create(:provider, :accredited_body, organisations: [organisation]) }
       let(:course) do
