@@ -15,5 +15,9 @@ FactoryBot.define do
   factory :organisation do
     name { "LONDON SCITT" + rand(1000000).to_s }
     sequence(:org_id)
+
+    trait :with_user do
+      users { [create(:user)] }
+    end
   end
 end

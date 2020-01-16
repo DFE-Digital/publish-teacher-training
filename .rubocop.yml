@@ -13,3 +13,4 @@ AllCops:
 
 Rails/HasManyOrHasOneDependent:
   Enabled: false
+

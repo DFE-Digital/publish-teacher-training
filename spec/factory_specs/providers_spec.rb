@@ -1,10 +1,13 @@
 require "rails_helper"
 
 describe "Provider Factory" do
-  let(:provider) { create(:provider) }
+  subject { create(:provider) }
 
-  it "created provider" do
-    expect(provider).to be_instance_of(Provider)
-    expect(provider).to be_valid
+  it { should be_instance_of(Provider) }
+  it { should be_valid }
+
+  it "creates the correct number of associations" do
+    expect { subject }.to change { Organisation.count }.by(1).
+        and change { User.count }.by(1)
   end
 end

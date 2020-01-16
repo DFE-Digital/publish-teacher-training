@@ -30,4 +30,20 @@ describe "Course factory" do
       expect(CourseEnrichment.where("created_at < ?", 4.days.ago).count).to eq(1)
     end
   end
+
+  context "unpublished_with_primary_maths" do
+    subject { create(:course, :unpublished_with_primary_maths) }
+
+    its(:name) { should eq("unpublished_with_primary_maths course name") }
+
+    it "has the correct number of associations" do
+      expect { subject }.to change { Site.count }.by(1).and change { Provider.count }.by(1)
+    end
+
+    it "has the correct association" do
+      provider_id = subject.provider.id
+
+      expect(subject.sites.first.provider_id == provider_id)
+    end
+  end
 end

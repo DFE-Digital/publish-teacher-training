@@ -53,7 +53,7 @@ FactoryBot.define do
     website { Faker::Internet.url }
     accrediting_provider { "N" }
     region_code { "london" }
-    organisations { build_list :organisation, 1 }
+    organisations { [find_or_create(:organisation, :with_user)] }
     association :recruitment_cycle, strategy: :find_or_create
 
     train_with_us { Faker::Lorem.sentence.to_s }
@@ -89,6 +89,14 @@ FactoryBot.define do
 
     trait :previous_recruitment_cycle do
       recruitment_cycle { find_or_create :recruitment_cycle, :previous }
+    end
+
+    trait :published_scitt do
+      transient do
+        identifier { "published_scitt" }
+      end
+
+      provider_name { "#{identifier} provider name" }
     end
   end
 end

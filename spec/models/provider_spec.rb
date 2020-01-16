@@ -268,14 +268,10 @@ describe Provider, type: :model do
   end
 
   describe "courses" do
-    let(:provider) { create(:provider, courses: [course]) }
-    let(:course) { build(:course) }
+    let(:course) { TestSetup.unpub_pri_math }
+    let!(:provider) { course.provider }
 
     describe "#courses_count" do
-      before do
-        provider
-      end
-
       it "returns course count using courses.size" do
         allow(provider.courses).to receive(:size).and_return(1)
 
@@ -298,10 +294,8 @@ describe Provider, type: :model do
     end
 
     describe ".include_courses_counts" do
+      let(:courses) { [course] }
       let(:first_provider) { Provider.include_courses_counts.first }
-      before do
-        provider
-      end
 
       it "includes course counts" do
         expect(first_provider.courses_count).to eq(1)

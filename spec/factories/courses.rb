@@ -40,7 +40,7 @@ FactoryBot.define do
     qualification { :pgce_with_qts }
     with_apprenticeship
 
-    provider
+    provider { find_or_create(:provider) }
 
     study_mode { :full_time }
     maths { :must_have_qualification_at_application_time }
@@ -208,6 +208,21 @@ FactoryBot.define do
 
     trait :skip_validate do
       to_create { |instance| instance.save(validate: false) }
+    end
+
+    trait :unpublished_with_primary_maths do
+      transient do
+        identifier { "unpublished_with_primary_maths" }
+      end
+
+      name { "#{identifier} course name" }
+
+      provider { find_or_create :provider, :published_scitt }
+      sites { build_list(:site, 1, provider: provider) }
+    end
+
+    trait :draft_enrichment do
+      enrichments { [build(:course_enrichment, :initial_draft, course: nil)] }
     end
   end
 end
