@@ -25,6 +25,7 @@ RSpec.configure do |config|
   config.before(:all) do
     SubjectCreatorService.new.execute
     SubjectFinancialIncentiveCreatorService.new.execute
+    SubjectFinancialIncentiveSetSubjectKnowledgeEnhancementCourseAvailableService.new.execute
   end
 
   config.before(:each, without_subjects: true) do
