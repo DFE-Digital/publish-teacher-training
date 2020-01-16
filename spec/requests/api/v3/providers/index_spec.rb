@@ -40,13 +40,6 @@ describe "GET v3/providers" do
             "provider_name" => provider.provider_name,
             "recruitment_cycle_year" => provider.recruitment_cycle.year,
           },
-          "relationships" => {
-            "courses" => {
-              "meta" => {
-                "count" => provider.courses.count,
-              },
-            },
-          },
         }],
         "jsonapi" => {
           "version" => "1.0",
