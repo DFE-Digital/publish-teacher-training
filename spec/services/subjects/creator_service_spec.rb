@@ -1,4 +1,4 @@
-describe SubjectCreatorService do
+describe Subjects::CreatorService do
   let(:primary_model) { spy }
   let(:secondary_model) { spy }
   let(:further_education_model) { spy }

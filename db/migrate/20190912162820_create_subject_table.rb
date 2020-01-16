@@ -8,7 +8,7 @@ class CreateSubjectTable < ActiveRecord::Migration[5.2]
     end
 
     say_with_time "populating subjects" do
-      SubjectCreatorService.new.execute
+      Subjects::CreatorService.new.execute
     end
   end
 end

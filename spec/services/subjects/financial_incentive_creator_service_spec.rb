@@ -1,4 +1,4 @@
-describe SubjectFinancialIncentiveCreatorService do
+describe Subjects::FinancialIncentiveCreatorService do
   let(:subject_spy) { spy }
   let(:financial_incentive_spy) { spy }
 

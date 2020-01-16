@@ -17,9 +17,9 @@ current_recruitment_year = Settings.current_recruitment_cycle_year
 current_recruitment_cycle = RecruitmentCycle.create(year: current_recruitment_year, application_start_date: Date.new(current_recruitment_year.to_i - 1, 10, 9), application_end_date: Date.new(current_recruitment_year.to_i, 9, 30))
 next_recruitment_cycle = RecruitmentCycle.create(year: (current_recruitment_year.to_i. + 1).to_s, application_start_date: Date.new(current_recruitment_year.to_i, 10, 8), application_end_date: Date.new(current_recruitment_year.to_i + 1, 9, 30))
 
-SubjectCreatorService.new.execute
-SubjectFinancialIncentiveCreatorService.new.execute
-SubjectFinancialIncentiveSetSubjectKnowledgeEnhancementCourseAvailableService.new.execute
+Subjects::CreatorService.new.execute
+Subjects::FinancialIncentiveCreatorService.new.execute
+Subjects::FinancialIncentiveSetSubjectKnowledgeEnhancementCourseAvailableService.new.execute
 
 superuser = User.create!(
   first_name: "Super",
