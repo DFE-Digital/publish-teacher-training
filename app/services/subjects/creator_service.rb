@@ -1,10 +1,10 @@
 module Subjects
   class CreatorService
-    def initialize(primary_subject: PrimarySubject,
-        secondary_subject: SecondarySubject,
-        further_education_subject: FurtherEducationSubject,
-        modern_languages_subject: ModernLanguagesSubject,
-        discontinued_subject: DiscontinuedSubject)
+    def initialize(primary_subject: ::PrimarySubject,
+        secondary_subject: ::SecondarySubject,
+        further_education_subject: ::FurtherEducationSubject,
+        modern_languages_subject: ::ModernLanguagesSubject,
+        discontinued_subject: ::DiscontinuedSubject)
       @primary_subject = primary_subject
       @secondary_subject = secondary_subject
       @further_education_subject = further_education_subject
