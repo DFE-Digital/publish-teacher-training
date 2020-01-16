@@ -1,4 +1,4 @@
-describe SubjectFinancialIncentiveSetSubjectKnowledgeEnhancementCourseAvailableService do
+describe Subjects::FinancialIncentiveSetSubjectKnowledgeEnhancementCourseAvailableService do
   let(:financial_incentive_spy) { spy }
   let(:financial_incentives_records_spy) { spy }
 
