@@ -319,7 +319,7 @@ describe MCB::Editor::CoursesEditor, :needs_audit_user do
           )[:stdout]
 
           expect(Course.find_by(course_code: desired_attributes[:course_code]).subjects)
-            .to match_array(primary_with_mathematics.becomes(PrimarySubject))
+            .to match_array([primary_with_mathematics.becomes(PrimarySubject)])
         end
 
         it "only shows further education subjects if further education level is selected" do
