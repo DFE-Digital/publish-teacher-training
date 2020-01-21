@@ -10,6 +10,7 @@ describe CourseSerializersService do
   let(:provider_serializer_spy) { spy }
   let(:provider_enrichment_serializer_spy) { spy }
   let(:recruitment_cycle_serializer_spy) { spy }
+  let(:v3_subject_area_serializer_spy) { spy }
 
   let(:course) { spy("course", present?: true) }
 
@@ -30,6 +31,14 @@ describe CourseSerializersService do
       Provider: API::V2::SerializableProvider,
       ProviderEnrichment: API::V2::SerializableProviderEnrichment,
       RecruitmentCycle: API::V2::SerializableRecruitmentCycle,
+      v3: {
+        SubjectArea: API::V3::SerializableSubjectArea,
+        Subject: API::V2::SerializableSubject,
+        PrimarySubject: API::V2::SerializableSubject,
+        SecondarySubject: API::V2::SerializableSubject,
+        ModernLanguagesSubject: API::V2::SerializableSubject,
+        FurtherEducationSubject: API::V2::SerializableSubject,
+      },
     }
   end
 
@@ -46,6 +55,14 @@ describe CourseSerializersService do
       Provider: provider_serializer_spy,
       ProviderEnrichment: provider_enrichment_serializer_spy,
       RecruitmentCycle: recruitment_cycle_serializer_spy,
+      v3: {
+        SubjectArea: v3_subject_area_serializer_spy,
+        Subject: subject_serializer_spy,
+        PrimarySubject: primary_subject_serializer_spy,
+        SecondarySubject: secondary_subject_serializer_spy,
+        ModernLanguagesSubject: modern_languages_subject_serializer_spy,
+        FurtherEducationSubject: further_education_subject_serializer_spy,
+      },
     }
   end
 

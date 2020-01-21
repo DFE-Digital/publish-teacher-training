@@ -37,7 +37,6 @@ describe "Courses API", type: :request do
           site = create(:site, code: "-", location_name: "Main Site", provider: provider)
           subject1 = find_or_create(:secondary_subject, :modern_languages)
           subject2 = find_or_create(:modern_languages_subject, :german)
-
           course = create(:course,
                           level: "secondary",
                           course_code: "2HPF",

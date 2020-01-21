@@ -20,13 +20,6 @@ module API
         end
       end
 
-      def fields_param
-        params.fetch(:fields, {})
-          .permit(:courses, :providers)
-          .to_h
-          .map { |k, v| [k, v.split(",").map(&:to_sym)] }
-      end
-
     private
 
       def build_courses

@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe "GET v3/providers/:provider_code/courses/:course_code" do
+describe "GET v3/recruitment_cycle/:recruitment_cycle_year/providers/:provider_code/courses/:course_code" do
   let(:current_cycle) { find_or_create :recruitment_cycle }
   let(:next_cycle)    { find_or_create :recruitment_cycle, :next }
   let(:current_year)  { current_cycle.year.to_i }

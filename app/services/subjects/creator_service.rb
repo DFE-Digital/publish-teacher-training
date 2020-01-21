@@ -77,23 +77,23 @@ module Subjects
       ]
 
       primary.each do |subject|
-        @primary_subject.find_or_create_by(subject_name: subject[:subject_name], subject_code: subject[:subject_code])
+        @primary_subject.find_or_create_by!(subject_name: subject[:subject_name], subject_code: subject[:subject_code])
       end
 
       secondary.each do |subject|
-        @secondary_subject.find_or_create_by(subject_name: subject[:subject_name], subject_code: subject[:subject_code])
+        @secondary_subject.find_or_create_by!(subject_name: subject[:subject_name], subject_code: subject[:subject_code])
       end
 
       modern_languages.each do |subject|
-        @modern_languages_subject.find_or_create_by(subject_name: subject[:subject_name], subject_code: subject[:subject_code])
+        @modern_languages_subject.find_or_create_by!(subject_name: subject[:subject_name], subject_code: subject[:subject_code])
       end
 
       further_education.each do |subject|
-        @further_education_subject.find_or_create_by(subject_name: subject[:subject_name], subject_code: subject[:subject_code])
+        @further_education_subject.find_or_create_by!(subject_name: subject[:subject_name], subject_code: subject[:subject_code])
       end
 
       discontinued.each do |subject|
-        @discontinued_subject.find_or_create_by(subject_name: subject[:subject_name])
+        @discontinued_subject.find_or_create_by!(subject_name: subject[:subject_name])
       end
     end
   end

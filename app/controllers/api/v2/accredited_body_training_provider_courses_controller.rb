@@ -1,6 +1,6 @@
 module API
   module V2
-    class AccreditedBodyTrainingProviderCoursesController < ApplicationController
+    class AccreditedBodyTrainingProviderCoursesController < API::V2::ApplicationController
       before_action :build_recruitment_cycle, :build_accredited_body, :build_training_provider
 
       def index
