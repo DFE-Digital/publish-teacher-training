@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe "GET v3/providers/:provider_code" do
+describe "GET v3/recruitment_cycle/:recruitment_cycle_year/providers/:provider_code" do
   let(:recruitment_cycle) { find_or_create :recruitment_cycle }
   let(:request_path) { "/api/v3/recruitment_cycles/#{recruitment_cycle.year}/providers/#{provider.provider_code}" }
   let(:request_params) { {} }

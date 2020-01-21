@@ -10,7 +10,8 @@ class CourseSerializersService
     site_serializer: API::V2::SerializableSite,
     provider_serializer: API::V2::SerializableProvider,
     provider_enrichment_serializer: API::V2::SerializableProviderEnrichment,
-    recruitment_cycle_serializer: API::V2::SerializableRecruitmentCycle
+    recruitment_cycle_serializer: API::V2::SerializableRecruitmentCycle,
+    v3_subject_area_serializer: API::V3::SerializableSubjectArea
   )
     @course_serializer = course_serializer
     @subject_serializer = subject_serializer
@@ -23,6 +24,8 @@ class CourseSerializersService
     @provider_serializer = provider_serializer
     @provider_enrichment_serializer = provider_enrichment_serializer
     @recruitment_cycle_serializer = recruitment_cycle_serializer
+
+    @v3_subject_area_serializer = v3_subject_area_serializer
   end
 
   def execute
@@ -38,6 +41,15 @@ class CourseSerializersService
       Provider: @provider_serializer,
       ProviderEnrichment: @provider_enrichment_serializer,
       RecruitmentCycle: @recruitment_cycle_serializer,
+      v3: {
+        SubjectArea: @v3_subject_area_serializer,
+        #this is ok until the serializers for subjects need to diverge from V2
+        Subject: @subject_serializer,
+        PrimarySubject: @primary_subject_serializer,
+        SecondarySubject: @secondary_subject_serializer,
+        ModernLanguagesSubject: @modern_languages_subject_serializer,
+        FurtherEducationSubject: @further_education_subject_serializer,
+      },
     }
   end
 end

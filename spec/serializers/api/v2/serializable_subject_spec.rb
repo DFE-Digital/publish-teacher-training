@@ -22,7 +22,7 @@ describe API::V2::SerializableSubject do
   end
 
   context "when a bursary subject" do
-    let(:bursary_subject) { find_or_create :secondary_subject, :mathematics }
+    let(:bursary_subject) { find_or_create(:secondary_subject, :mathematics) }
     let(:resource) { API::V2::SerializableSubject.new object: bursary_subject }
 
     it { should have_attribute(:bursary_amount).with_value(bursary_subject.financial_incentive.bursary_amount) }

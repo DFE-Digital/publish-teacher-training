@@ -37,6 +37,10 @@ FactoryBot.define do
     subject_name { sample_subject.first }
     subject_code { sample_subject.second }
 
+    after(:build) do |subject, _level|
+      find_or_create(:financial_incentive, subject: subject)
+    end
+
     trait :art_and_design do
       subject_name { "Art and design" }
       subject_code { subjects["Art and design"] }
