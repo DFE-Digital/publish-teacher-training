@@ -11,8 +11,8 @@ services:
     build:
       context: .
       cache_from:
-        - ${dockerHubUsername:-dfedigital}/manage-courses-backend-poc:latest
-    image: ${dockerHubUsername:-dfedigital}/manage-courses-backend-poc:latest
+        - ${dockerHubUsername:-dfedigital}/teacher-training-api:latest
+    image: ${dockerHubUsername:-dfedigital}/teacher-training-api:latest
     command: ash -c "rm -f tmp/pids/server.pid && bundle exec rails server -p 3001 -b '0.0.0.0'"
     volumes:
       - .:/app
@@ -29,11 +29,11 @@ services:
     build:
       args:
         - DOCKER_REPOSITORY=${dockerHubUsername:-dfedigital}
-        - MANAGE_COURSES_BACKEND_IMAGE=${dockerHubImageName:-manage-courses-backend}
+        - TEACHER_TRAINING_API=${dockerHubImageName:-teacher-training-api}
       context: bg-find-sync
       cache_from:
-        - ${dockerHubUsername:-dfedigital}/manage-courses-bg-find-sync:latest
-    image: ${dockerHubUsername:-dfedigital}/manage-courses-bg-find-sync:latest
+        - ${dockerHubUsername:-dfedigital}/teacher-training-bg-find-sync:latest
+    image: ${dockerHubUsername:-dfedigital}/teacher-training-bg-find-sync:latest
     volumes:
       - .:/app
     depends_on:
@@ -46,11 +46,11 @@ services:
     build:
       args:
         - DOCKER_REPOSITORY=${dockerHubUsername:-dfedigital}
-        - MANAGE_COURSES_BACKEND_IMAGE=${dockerHubImageName:-manage-courses-backend}
+        - TEACHER_TRAINING_API=${dockerHubImageName:-teacher-training-api}
       context: bg-geocode
       cache_from:
-        - ${dockerHubUsername:-dfedigital}/manage-courses-bg-geocode:latest
-    image: ${dockerHubUsername:-dfedigital}/manage-courses-bg-geocode:latest
+        - ${dockerHubUsername:-dfedigital}/teacher-training-bg-geocode:latest
+    image: ${dockerHubUsername:-dfedigital}/teacher-training-bg-geocode:latest
     volumes:
       - .:/app
     depends_on:

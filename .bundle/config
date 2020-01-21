@@ -2,6 +2,6 @@
 # due to a subtle bug in bundler load paths
 # https://github.com/grosser/parallel_tests/issues/649
 # https://github.com/bundler/bundler/issues/5005#issuecomment-251025953
-# See discussion on https://github.com/DFE-Digital/manage-courses-backend/pull/970
+# See discussion on https://github.com/DFE-Digital/teacher-training-api/pull/970
 ---
 BUNDLE_DISABLE_EXEC_LOAD: "true"

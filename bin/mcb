@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 # -!- mode: ruby -!-
 
-# Wrapper for management functions for manage-courses-backend
+# Wrapper for management functions for teacher-training-api
 #
 # Run with:
 #
@@ -41,7 +41,7 @@ tp.set :capitalize_headers, false
 $mcb = Cri::Command.define do
   name        'mcb'
   usage       'mcb [options]'
-  summary     'wrapper for management of manage-courses-backend app'
+  summary     'wrapper for management of teacher-training-api app'
 
   option :v, 'verbose',
          'display additional info (for commands that support it)' do |value|

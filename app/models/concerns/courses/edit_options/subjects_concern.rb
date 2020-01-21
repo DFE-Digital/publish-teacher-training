@@ -4,9 +4,9 @@ module Courses
       extend ActiveSupport::Concern
       included do
         # When changing anything here be sure to update the edit_options in the
-        # courses factory in manage-courses-frontend:
+        # courses factory in publish-teacher-training:
         #
-        # https://github.com/DFE-Digital/manage-courses-frontend/blob/master/spec/factories/courses.rb
+        # https://github.com/DFE-Digital/publish-teacher-training/blob/master/spec/factories/courses.rb
         def potential_subjects
           self.assignable_master_subjects&.sort_by(&:subject_name)
         end

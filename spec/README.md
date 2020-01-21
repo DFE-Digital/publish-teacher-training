@@ -82,7 +82,7 @@ The way we do it:
 5. When creating a memoized object that is included in the creation of another
    object, use `build` to prevent secondary objects from being created.
 6. Factories can be tested too, e.g.
-   <https://github.com/DFE-Digital/manage-courses-backend/blob/master/spec/factory_specs/course_spec.rb>
+   <https://github.com/DFE-Digital/teacher-training-api/blob/master/spec/factory_specs/course_spec.rb>
 7. Don't continue the `count` trait pattern you might find already in the code
    for creating many related objects, that turned out not to be such a great
    idea. Help eliminate them if you can.

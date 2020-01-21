@@ -6,9 +6,9 @@ module Courses
       extend ActiveSupport::Concern
       included do
         # When changing anything here be sure to update the edit_options in the
-        # courses factory in manage-courses-frontend:
+        # courses factory in publish-teacher-training:
         #
-        # https://github.com/DFE-Digital/manage-courses-frontend/blob/master/spec/factories/courses.rb
+        # https://github.com/DFE-Digital/publish-teacher-training/blob/master/spec/factories/courses.rb
         def start_date_options
           recruitment_year = provider.recruitment_cycle.year.to_i
 
