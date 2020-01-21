@@ -20,7 +20,7 @@ govuk_notify:
 mcbg:
   redis_password: <%= SecureRandom.base64 %>
 system_authentication_token: <%= SecureRandom.base64 %>
-application: manage-courses-backend
+application: teacher-training-api
 logstash:
   type: tcp
   host: # Our hostname here

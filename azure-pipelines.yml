@@ -8,9 +8,9 @@ pool:
   vmImage: 'Ubuntu-16.04'
 
 variables:
-  imageName: 'manage-courses-backend-poc'
-  imageNameBgFindSync: 'manage-courses-bg-find-sync'
-  imageNameBgGeoCode: 'manage-courses-bg-geocode'
+  imageName: 'teacher-training-api'
+  imageNameBgFindSync: 'teacher-training-bg-find-sync'
+  imageNameBgGeoCode: 'teacher-training-bg-geocode'
   dockerOverride: 'docker-compose -f docker-compose.yml'
 
 steps:

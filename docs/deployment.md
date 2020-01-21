@@ -22,7 +22,7 @@ Summarise what you're deploying and tell the team in Slack on the `#twd_find` ch
 1. Load the [Find Postgraduate Teacher Training release pipeline](https://dfe-ssp.visualstudio.com/Become-A-Teacher/_release?_a=releases&view=mine&definitionId=36)  in Azure DevOps.
 2. Click the blue `:rocket:` "Create Release" button  at the top right of the page which will open "Create a new release" sub-menu. 
 3. [Optional] Deselect the stages that you wish to run manually by changing its trigger from automated to manual. Release is made up of several stages i.e. backend, frontend, integration test. 
-4. Under Artifacts section, master branch build artifacts should be already selected from the drop down list by default. Should you wish to change this select the version for the artifact sources for `manage-courses-backend`  and `manage-courses-frontend` drop down list.
+4. Under Artifacts section, master branch build artifacts should be already selected from the drop down list by default. Should you wish to change this select the version for the artifact sources for `teacher-training-api`  and `publish-teacher-training` drop down list.
 5. [Optional] Specify release description.
 6. Click the Create button to create the deployment.
 7. Lastly, approve your deployment by clicking on "Approve" button. Find development team members have sufficient rights to approve deployments. 

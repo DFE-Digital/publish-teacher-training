@@ -1,4 +1,4 @@
-# 1. Record architecture decisions in manage-courses-backend
+# 1. Record architecture decisions in teacher-training-api
 
 Date: 2019-12-18
 
