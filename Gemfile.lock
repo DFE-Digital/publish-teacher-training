@@ -101,7 +101,7 @@ GEM
     crack (0.4.3)
       safe_yaml (~> 1.0.0)
     crass (1.0.5)
-    cri (2.15.9)
+    cri (2.15.10)
     database_cleaner (1.7.0)
     deep_merge (1.2.1)
     diff-lcs (1.3)
