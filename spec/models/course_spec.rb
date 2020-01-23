@@ -384,6 +384,230 @@ describe Course, type: :model do
     end
   end
 
+  describe "scopes" do
+    describe ".with_recruitment_cycle" do
+      subject { described_class.with_recruitment_cycle(provider.recruitment_cycle.year) }
+      let(:test_course) { create(:course, provider: provider) }
+
+      before { test_course }
+
+      context "course is in recruitment cycle" do
+        let(:provider) { create(:provider) }
+
+        it "is returned" do
+          expect(subject).to contain_exactly(test_course)
+        end
+      end
+
+      context "course is not in recruitment cycle" do
+        let(:provider) { create(:provider, :next_recruitment_cycle) }
+
+        it "is not returned" do
+          expect(subject).to contain_exactly(test_course)
+        end
+      end
+    end
+
+    describe ".findable" do
+      subject { described_class.findable }
+      let(:test_course) { create(:course, site_statuses: site_statuses) }
+
+      before { test_course }
+
+      context "course is findable" do
+        let(:site_statuses) do
+          [
+            build(:site_status, :findable),
+          ]
+        end
+
+        it "is returned" do
+          expect(subject).to contain_exactly(test_course)
+        end
+      end
+
+      context "course is not findable" do
+        let(:site_statuses) do
+          [
+            build(:site_status),
+          ]
+        end
+
+        it "is not returned" do
+          expect(subject).to be_empty
+        end
+      end
+    end
+
+    describe ".with_vacancies" do
+      subject { described_class.with_vacancies }
+      let(:test_course) { create(:course, site_statuses: site_statuses) }
+
+      before { test_course }
+
+      context "course has vacancies" do
+        let(:site_statuses) do
+          [
+            build(:site_status, :with_any_vacancy),
+          ]
+        end
+
+        it "is returned" do
+          expect(subject).to contain_exactly(test_course)
+        end
+      end
+
+      context "course has no vacancies" do
+        let(:site_statuses) do
+          [
+            build(:site_status, :with_no_vacancies),
+          ]
+        end
+
+        it "is not returned" do
+          expect(subject).to be_empty
+        end
+      end
+    end
+
+    describe ".with_study_modes" do
+      let(:course_part_time) { create(:course, study_mode: :part_time) }
+      let(:course_full_time) { create(:course, study_mode: :full_time) }
+      let(:course_both) { create(:course, study_mode: :full_time_or_part_time) }
+
+      subject { described_class.with_study_modes(study_modes) }
+
+      before do
+        course_both
+        course_full_time
+        course_part_time
+      end
+
+      context "full_time" do
+        let(:study_modes) { "full_time" }
+
+        it "returns full time courses" do
+          expect(subject).to contain_exactly(course_both, course_full_time)
+        end
+      end
+
+      context "part_time" do
+        let(:study_modes) { "part_time" }
+
+        it "returns part time courses" do
+          expect(subject).to contain_exactly(course_both, course_part_time)
+        end
+      end
+
+      context "full time and part_time" do
+        let(:study_modes) { %w(full_time part_time) }
+
+        it "returns all" do
+          expect(subject).to contain_exactly(course_both, course_part_time, course_full_time)
+        end
+      end
+    end
+
+    describe ".with_salary" do
+      let(:course_higher_education_programme) do
+        create(:course, program_type: :higher_education_programme)
+      end
+
+      let(:course_school_direct_training_programme) do
+        create(:course, program_type: :school_direct_training_programme)
+      end
+
+      let(:course_school_direct_salaried_training_programme) do
+        create(:course, program_type: :school_direct_salaried_training_programme)
+      end
+
+      let(:course_scitt_programme) { create(:course, program_type: :scitt_programme) }
+      let(:course_pg_teaching_apprenticeship) do
+        create(:course, program_type: :pg_teaching_apprenticeship)
+      end
+
+      subject { described_class.with_salary }
+
+      before do
+        course_higher_education_programme
+        course_school_direct_training_programme
+        course_school_direct_salaried_training_programme
+        course_scitt_programme
+        course_pg_teaching_apprenticeship
+      end
+
+      it "only returns salaried training programme" do
+        expect(subject).to contain_exactly(course_school_direct_salaried_training_programme)
+      end
+    end
+
+    describe ".with_qualifications" do
+      let(:course_qts) { create(:course, :resulting_in_qts) }
+      let(:course_pgce_with_qts) { create(:course, :resulting_in_pgce_with_qts) }
+      let(:course_pgde_with_qts) { create(:course, :resulting_in_pgde_with_qts) }
+      let(:course_pgce) { create(:course, :resulting_in_pgce) }
+      let(:course_pgde) { create(:course, :resulting_in_pgde) }
+
+      subject { described_class.with_qualifications(qualifications) }
+
+      before do
+        course_qts
+        course_pgce_with_qts
+        course_pgde_with_qts
+        course_pgce
+        course_pgde
+      end
+
+      context "qts" do
+        let(:qualifications) { "qts" }
+
+        it "returns qts courses" do
+          expect(subject).to contain_exactly(course_qts)
+        end
+      end
+
+      context "pgce_with_qts" do
+        let(:qualifications) { "pgce_with_qts" }
+
+        it "returns pgce_with_qts courses" do
+          expect(subject).to contain_exactly(course_pgce_with_qts)
+        end
+      end
+
+      context "pgde_with_qts" do
+        let(:qualifications) { "pgde_with_qts" }
+
+        it "returns pgde_with_qts courses" do
+          expect(subject).to contain_exactly(course_pgde_with_qts)
+        end
+      end
+
+      context "pgce" do
+        let(:qualifications) { "pgce" }
+
+        it "returns pgce" do
+          expect(subject).to contain_exactly(course_pgce)
+        end
+      end
+
+      context "pgde" do
+        let(:qualifications) { "pgde" }
+
+        it "returns pgce" do
+          expect(subject).to contain_exactly(course_pgde)
+        end
+      end
+
+      context "multiple qualifications" do
+        let(:qualifications) { %w(pgde pgce qts) }
+
+        it "returns all requested" do
+          expect(subject).to contain_exactly(course_pgce, course_pgde, course_qts)
+        end
+      end
+    end
+  end
+
   describe "changed_at" do
     it "is set on create" do
       course = create(:course)
