@@ -384,6 +384,24 @@ describe Course, type: :model do
     end
   end
 
+  describe "scopes" do
+    describe "study_type" do
+      let(:course) {create(:course, study_mode: :full_time_or_part_time )}
+      let(:course_part_time) {create(:course, study_mode: :part_time)}
+      let(:course_full_time) {create(:course, study_mode: :full_time)}
+
+      describe "full_time" do
+        subject { Course.study_type(:full_time) }
+        it { should match_array([course_full_time, course]) }
+      end
+
+      describe "part_time" do
+        subject { Course.study_type(:part_time) }
+        it { should match_array([course_part_time, course]) }
+      end
+    end
+  end
+
   describe "changed_at" do
     it "is set on create" do
       course = create(:course)

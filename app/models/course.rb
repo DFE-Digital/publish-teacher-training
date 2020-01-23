@@ -148,6 +148,9 @@ class Course < ApplicationRecord
       .not(SiteStatus.table_name => { status: SiteStatus.statuses[:new_status] })
   end
 
+  scope :study_type,      -> (study_mode) do
+    where(study_mode: study_mode).or(full_time_or_part_time)
+  end
   def self.entry_requirement_options_without_nil_choice
     ENTRY_REQUIREMENT_OPTIONS.reject { |option| option == :not_set }.keys.map(&:to_s)
   end
