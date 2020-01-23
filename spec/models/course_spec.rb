@@ -385,20 +385,71 @@ describe Course, type: :model do
   end
 
   describe "scopes" do
-    describe "study_type" do
-      let(:course) {create(:course, study_mode: :full_time_or_part_time )}
-      let(:course_part_time) {create(:course, study_mode: :part_time)}
-      let(:course_full_time) {create(:course, study_mode: :full_time)}
+    describe "#only_with_vacancies" do
+      let(:provider) { build(:provider, sites: [site]) }
+      let(:site) { build(:site) }
+      let(:new_site_status) { build(:site_status, :new, site: site) }
+      let(:findable) { build(:site_status, :findable, site: site) }
+      let(:suspended) { build(:site_status, :suspended, site: site) }
+      let(:with_any_vacancy) { build(:site_status, :with_any_vacancy, site: site) }
+      let(:default) { build(:site_status, site: site) }
+      let(:site_status_with_no_vacancies) { build(:site_status, :with_no_vacancies, site: site) }
+      let(:findable_without_vacancies) { build(:site_status, :findable, :with_no_vacancies, site: site) }
+      let(:findable_with_vacancies) { build(:site_status, :findable, :with_any_vacancy, site: site) }
+
+      let!(:course) { create(:course, provider: provider, site_statuses: [findable_with_vacancies]) }
+      let!(:course2) { create(:course, provider: provider, site_statuses: [findable_without_vacancies]) }
+      let!(:course3) { create(:course, provider: provider, site_statuses: [site_status_with_no_vacancies]) }
+      let!(:course4) { create(:course, provider: provider, site_statuses: [default]) }
+      let!(:course5) { create(:course, provider: provider, site_statuses: [with_any_vacancy]) }
+      let!(:course6) { create(:course, provider: provider, site_statuses: [suspended]) }
+      let!(:course7) { create(:course, provider: provider, site_statuses: [findable]) }
+      let!(:course8) { create(:course, provider: provider, site_statuses: [new_site_status]) }
+
+      subject { Course.only_with_vacancies }
+
+      it { should match_array([course, course7]) }
+    end
+
+    describe "#with_study_modes" do
+      let(:course) { create(:course, study_mode: :full_time_or_part_time) }
+      let(:course_part_time) { create(:course, study_mode: :part_time) }
+      let(:course_full_time) { create(:course, study_mode: :full_time) }
 
       describe "full_time" do
-        subject { Course.study_type(:full_time) }
+        subject { Course.with_study_modes(:full_time) }
+
         it { should match_array([course_full_time, course]) }
       end
 
       describe "part_time" do
-        subject { Course.study_type(:part_time) }
+        subject { Course.with_study_modes([:part_time]) }
+
         it { should match_array([course_part_time, course]) }
       end
+
+      describe "full time and part_time" do
+        subject { Course.with_study_modes(%i[part_time full_time]) }
+
+        it { should match_array([course_full_time, course_part_time, course]) }
+      end
+
+      describe "full time and part_time and :full_time_or_part_time" do
+        subject { Course.with_study_modes(%i[part_time full_time full_time_or_part_time]) }
+
+        it { should match_array([course_full_time, course_part_time, course]) }
+      end
+    end
+
+    describe "#only_with_salary" do
+      let(:course_higher_education_programme) { create(:course, program_type: :higher_education_programme) }
+      let(:course_school_direct_training_programme) { create(:course, program_type: :school_direct_training_programme) }
+      let(:course_school_direct_salaried_training_programme) { create(:course, program_type: :school_direct_salaried_training_programme) }
+      let(:course_scitt_programme) { create(:course, program_type: :scitt_programme) }
+      let(:course_pg_teaching_apprenticeship) { create(:course, program_type: :pg_teaching_apprenticeship) }
+
+      subject { Course.only_with_salary }
+      it { should match_array([course_school_direct_salaried_training_programme]) }
     end
   end
 
@@ -426,6 +477,14 @@ describe Course, type: :model do
     its(:findable?) { should be false }
     its(:open_for_applications?) { should be false }
     its(:has_vacancies?) { should be false }
+  end
+
+  describe "scopes" do
+    describe "#only_with_vacancies" do
+      subject { Course.only_with_vacancies }
+
+      it { should be_empty }
+    end
   end
 
   context "with sites" do
