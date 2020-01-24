@@ -451,6 +451,56 @@ describe Course, type: :model do
       subject { Course.only_with_salary }
       it { should match_array([course_school_direct_salaried_training_programme]) }
     end
+
+    describe "#with_qualifications" do
+      let(:course) { create(:course, :resulting_in_qts) }
+      let(:course_pgce_with_qts) { create(:course, :resulting_in_pgce_with_qts) }
+      let(:course_pgde_with_qts) { create(:course, :resulting_in_pgde_with_qts) }
+      let(:course_pgce) { create(:course, :resulting_in_pgce) }
+      let(:course_pgde) { create(:course, :resulting_in_pgde) }
+
+      describe "qts" do
+        subject { Course.with_qualifications(:qts) }
+
+        it { should match_array([course]) }
+      end
+
+      describe "pgce_with_qts" do
+        subject { Course.with_qualifications(:pgce_with_qts) }
+
+        it { should match_array([course_pgce_with_qts]) }
+      end
+
+      describe "pgde_with_qts" do
+        subject { Course.with_qualifications(:pgde_with_qts) }
+
+        it { should match_array([course_pgde_with_qts]) }
+      end
+
+      describe "pgce" do
+        subject { Course.with_qualifications(:pgce) }
+
+        it { should match_array([course_pgce]) }
+      end
+
+      describe "pgde" do
+        subject { Course.with_qualifications(:pgde) }
+
+        it { should match_array([course_pgde]) }
+      end
+
+      describe "pgce_with_qts and pgde_with_qts (PgdePgceWithQts)" do
+        subject { Course.with_qualifications(%i[pgce_with_qts pgde_with_qts]) }
+
+        it { should match_array([course_pgce_with_qts, course_pgde_with_qts]) }
+      end
+
+      describe "pgce and pgde (Other)" do
+        subject { Course.with_qualifications(%i[pgce pgde]) }
+
+        it { should match_array([course_pgce, course_pgde]) }
+      end
+    end
   end
 
   describe "changed_at" do
