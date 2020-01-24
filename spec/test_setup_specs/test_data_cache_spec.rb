@@ -41,8 +41,13 @@ describe "TestDataCache" do
 
     it "raises for unknown Factory types" do
       expect {
-        TestDataCache.get(:foo)
-      }.to raise_error("Unknown model type foo: - You need to add this to TestSetup or use a standard FactoryBot factory.")
+        TestDataCache.get(:foo, :bar, :raz)
+      }.to raise_error(
+        <<~ERR_MSG,
+          Unknown model type 'foo' for traits '[:bar, :raz]'.
+          You need to add 'foo' to TestSetup or use a standard FactoryBot factory.
+        ERR_MSG
+     )
     end
 
     it "returns the same course.id for multiple calls to get" do
@@ -55,6 +60,14 @@ describe "TestDataCache" do
   end
 
   context "cache empty" do
+    before(:all) do
+      TestDataCache.clear
+    end
+
+    after(:all) do
+      TestDataCache.clear
+    end
+
     it "creates a new FactoryBot instance" do
       allow(FactoryBot).to receive(:create)
 
