@@ -175,6 +175,7 @@ Rails.application.routes.draw do
       resources :recruitment_cycles,
                 only: :show,
                 param: :year do
+        resources :courses, controller: "course_searches"
         resources :providers,
                   only: %i[index show],
                   param: :code do
