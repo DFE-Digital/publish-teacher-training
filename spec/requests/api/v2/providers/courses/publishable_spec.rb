@@ -1,7 +1,7 @@
 require "rails_helper"
 
 describe "Publishable API v2", type: :request do
-  let(:course)        { TestSetup.unpub_pri_math }
+  let(:course)        { TestDataCache.get(:course, :primary, :unpublished) }
   let(:provider)      { course.provider }
   let(:organisation)  { provider.organisations.first }
   let(:user)          { provider.users.first }
@@ -39,7 +39,7 @@ describe "Publishable API v2", type: :request do
 
     context "unpublished course with draft enrichment" do
       let(:course) {
-        create(:course, :unpublished_with_primary_maths, :draft_enrichment)
+        create(:course, :primary, :unpublished, :draft_enrichment)
       }
 
       it "returns ok" do
@@ -52,9 +52,7 @@ describe "Publishable API v2", type: :request do
 
       context "no enrichments and location" do
         let(:course) {
-          create(:course, :unpublished_with_primary_maths,
-                 site_statuses: [],
-                 enrichments: [])
+          create(:course, :primary, :unpublished, site_statuses: [], enrichments: [])
         }
 
         it { should have_http_status(:unprocessable_entity) }
@@ -69,7 +67,10 @@ describe "Publishable API v2", type: :request do
       context "fee type based course" do
         context "invalid enrichment with invalid content lack_presence fields" do
           let(:course) {
-            create(:course, :fee_type_based, :unpublished_with_primary_maths,
+            create(:course,
+                   :fee_type_based,
+                   :unpublished,
+                   :primary,
                    enrichments: [build(:course_enrichment, :without_content)])
           }
 
