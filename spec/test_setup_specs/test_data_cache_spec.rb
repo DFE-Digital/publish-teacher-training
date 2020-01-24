@@ -45,11 +45,12 @@ describe "TestDataCache" do
       }.to raise_error("Unknown model type foo: - You need to add this to TestSetup or use a standard FactoryBot factory.")
     end
 
-    it "returns the same course for multiple calls to get" do
+    it "returns the same course.id for multiple calls to get" do
       cache1 = TestDataCache.get(:course, :primary, :unpublished)
       cache2 = TestDataCache.get(:course, :primary, :unpublished)
       # check same record is returned every time
-      expect(cache1).to be(cache2)
+      expect(cache1.id).not_to be(nil)
+      expect(cache1.id).to be(cache2.id)
     end
   end
 
