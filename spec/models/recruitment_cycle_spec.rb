@@ -13,8 +13,8 @@
 require "rails_helper"
 
 describe RecruitmentCycle, type: :model do
-  let(:current_cycle) { TestSetup.current_cycle }
-  let(:next_cycle) { TestSetup.next_cycle }
+  let(:current_cycle) { find_or_create(:recruitment_cycle) }
+  let(:next_cycle) { find_or_create(:recruitment_cycle, :next) }
 
   subject { current_cycle }
 
