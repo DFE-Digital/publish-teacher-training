@@ -17,11 +17,11 @@ class TestDataCache
     def get(name, *traits)
       case name
       when :course
-        if @@courses == nil
-          # cache not populated, fall back to factory (while we migrate all our tests)
-          FactoryBot.create(name, *traits)
-        else
+        if @@cache_populated
           @@courses[traits.sort] || raise_trait_error(:course, traits)
+        else
+          # fall back to factory (while we migrate all our tests)
+          FactoryBot.create(name, *traits)
         end
       else
         raise "Unknown model type #{name}: - You need to add this to TestSetup or use a standard FactoryBot factory."
@@ -30,14 +30,17 @@ class TestDataCache
 
     def create_and_cache_test_records
       @@courses = @@course_factories.transform_values(&:call)
+      @@cache_populated = true
     end
 
     def clear
       @@courses = nil
+      @@cache_populated = false
     end
 
   private
 
+    @@cache_populated = false
     @@courses = nil
     @@course_factories = {
         %i[primary unpublished] => -> do
