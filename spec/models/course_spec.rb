@@ -529,14 +529,6 @@ describe Course, type: :model do
     its(:has_vacancies?) { should be false }
   end
 
-  describe "scopes" do
-    describe "#only_with_vacancies" do
-      subject { Course.only_with_vacancies }
-
-      it { should be_empty }
-    end
-  end
-
   context "with sites" do
     let(:provider) { build(:provider) }
     let(:first_site) { build(:site, provider: provider) }
