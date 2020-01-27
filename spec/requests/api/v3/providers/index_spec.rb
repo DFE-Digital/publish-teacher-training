@@ -165,4 +165,37 @@ describe "GET v3/recruitment_cycle/:recruitment_cycle_year/providers" do
       end
     end
   end
+
+  context "Sparse fields" do
+    context "Only returning specified fields" do
+      let(:request_path) { "/api/v3/recruitment_cycles/#{recruitment_cycle.year}/providers?fields[providers]=provider_name,recruitment_cycle_year" }
+
+      it "Only returns the specified field" do
+        perform_request
+
+        expect(json_response["data"].first).to have_attribute("provider_name")
+        expect(json_response["data"].first).to have_attribute("recruitment_cycle_year")
+        expect(json_response["data"].first).not_to have_attribute("provider_code")
+      end
+    end
+
+    context "Default fields" do
+      let(:request_path) { "/api/v3/recruitment_cycles/#{recruitment_cycle.year}/providers" }
+      let(:data) { json_response["data"].first }
+
+      before { perform_request }
+
+      it "Returns the provider name" do
+        expect(data).to have_attribute("provider_name")
+      end
+
+      it "Returns the provider code" do
+        expect(data).to have_attribute("provider_code")
+      end
+
+      it "Returns the recruitment cycle year" do
+        expect(data).to have_attribute("recruitment_cycle_year")
+      end
+    end
+  end
 end
