@@ -4,9 +4,13 @@ module API
       before_action :build_recruitment_cycle
 
       def index
-        @providers = @recruitment_cycle.providers
+        @providers = if params[:search].present?
+                       @recruitment_cycle.providers.search_by_code_or_name(params[:search])
+                     else
+                       @recruitment_cycle.providers
+                     end
 
-        render jsonapi: @providers.in_order, class: { Provider: API::V3::SerializableProvider }
+        render jsonapi: @providers.in_order, class: { Provider: API::V3::SerializableProvider }, fields: @fields
       end
 
       def show

@@ -6,9 +6,12 @@ describe "GET v3/recruitment_cycle/:recruitment_cycle_year/providers" do
 
   let!(:provider) {
     create(:provider,
+           provider_code: "1AT",
+           provider_name: "First provider",
            organisations: [organisation],
            contacts: [contact])
   }
+
   let(:contact) { build(:contact) }
 
   let(:json_response) { JSON.parse(response.body) }
@@ -110,6 +113,55 @@ describe "GET v3/recruitment_cycle/:recruitment_cycle_year/providers" do
         expect(json_response["data"].first)
           .to have_attribute("recruitment_cycle_year")
                 .with_value(next_recruitment_cycle.year)
+      end
+    end
+  end
+
+  context "Searching for a provider" do
+    let(:base_provider_path) { "/api/v3/recruitment_cycles/#{recruitment_cycle.year}/providers" }
+    let(:provider_two) do
+      create(:provider,
+             provider_code: "2AT",
+             provider_name: "Second provider",
+             organisations: [organisation],
+             contacts: [contact])
+    end
+
+    before do
+      provider_two
+    end
+
+    context "Seaching for a provider by its full name" do
+      let(:request_path) { "#{base_provider_path}?search=Second provider" }
+
+      it "Only returns data for the provider" do
+        perform_request
+
+        expect(json_response["data"].count).to eq(1)
+        expect(json_response["data"].first).to have_attribute("provider_code").with_value("2AT")
+      end
+    end
+
+    context "Seaching for a provider by part of its name" do
+      let(:request_path) { "#{base_provider_path}?search=provider" }
+
+      it "Returns data for the matching providers" do
+        perform_request
+
+        expect(json_response["data"].count).to eq(2)
+        expect(json_response["data"].first).to have_attribute("provider_code").with_value("1AT")
+        expect(json_response["data"].last).to have_attribute("provider_code").with_value("2AT")
+      end
+    end
+
+    context "Seaching for a provider by its provider code" do
+      let(:request_path) { "#{base_provider_path}?search=2AT" }
+
+      it "Only returns data for the provider" do
+        perform_request
+
+        expect(json_response["data"].count).to eq(1)
+        expect(json_response["data"].first).to have_attribute("provider_code").with_value("2AT")
       end
     end
   end
