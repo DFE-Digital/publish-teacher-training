@@ -3,6 +3,8 @@ Faker::Config.locale = "en-GB"
 
 CourseSubject.destroy_all
 Course.destroy_all
+FinancialIncentive.destroy_all
+SubjectArea.destroy_all
 Subject.destroy_all
 Site.destroy_all
 SiteStatus.destroy_all
@@ -17,6 +19,7 @@ current_recruitment_year = Settings.current_recruitment_cycle_year
 current_recruitment_cycle = RecruitmentCycle.create(year: current_recruitment_year, application_start_date: Date.new(current_recruitment_year.to_i - 1, 10, 9), application_end_date: Date.new(current_recruitment_year.to_i, 9, 30))
 next_recruitment_cycle = RecruitmentCycle.create(year: (current_recruitment_year.to_i. + 1).to_s, application_start_date: Date.new(current_recruitment_year.to_i, 10, 8), application_end_date: Date.new(current_recruitment_year.to_i + 1, 9, 30))
 
+Subjects::SubjectAreaCreatorService.new.execute
 Subjects::CreatorService.new.execute
 Subjects::FinancialIncentiveCreatorService.new.execute
 Subjects::FinancialIncentiveSetSubjectKnowledgeEnhancementCourseAvailableService.new.execute
