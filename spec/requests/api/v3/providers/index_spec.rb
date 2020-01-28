@@ -142,6 +142,17 @@ describe "GET v3/recruitment_cycle/:recruitment_cycle_year/providers" do
       end
     end
 
+    context "Seaching for a provider by its lower case full name" do
+      let(:request_path) { "#{base_provider_path}?search=second provider" }
+
+      it "Only returns data for the provider" do
+        perform_request
+
+        expect(json_response["data"].count).to eq(1)
+        expect(json_response["data"].first).to have_attribute("provider_code").with_value("2AT")
+      end
+    end
+
     context "Seaching for a provider by part of its name" do
       let(:request_path) { "#{base_provider_path}?search=provider" }
 
@@ -156,6 +167,17 @@ describe "GET v3/recruitment_cycle/:recruitment_cycle_year/providers" do
 
     context "Seaching for a provider by its provider code" do
       let(:request_path) { "#{base_provider_path}?search=2AT" }
+
+      it "Only returns data for the provider" do
+        perform_request
+
+        expect(json_response["data"].count).to eq(1)
+        expect(json_response["data"].first).to have_attribute("provider_code").with_value("2AT")
+      end
+    end
+
+    context "Seaching for a provider by a lower case provider code" do
+      let(:request_path) { "#{base_provider_path}?search=2at" }
 
       it "Only returns data for the provider" do
         perform_request
