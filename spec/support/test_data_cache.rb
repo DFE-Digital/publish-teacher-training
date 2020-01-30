@@ -14,22 +14,25 @@ class TestDataCache
   # It does not matter what order the traits are when passed as arguments.
 
   class << self
+    @@cache_populated = false
+    @@courses = nil
+
     def get(name, *traits)
       case name
       when :course
         if @@cache_populated
           @@courses[traits.sort] || raise_trait_error(:course, traits)
         else
-          # fall back to factory (while we migrate all our tests)
-          FactoryBot.create(name, *traits)
+          # fall back to uncached factory (while we migrate all our tests)
+          create_uncached_factory(name, traits)
         end
       else
-        raise "Unknown model type #{name}: - You need to add this to TestSetup or use a standard FactoryBot factory."
+        raise_model_error(name, traits)
       end
     end
 
     def create_and_cache_test_records
-      @@courses = @@course_factories.transform_values(&:call)
+      @@courses = course_factories.transform_values(&:call)
       @@cache_populated = true
     end
 
@@ -40,13 +43,30 @@ class TestDataCache
 
   private
 
-    @@cache_populated = false
-    @@courses = nil
-    @@course_factories = {
-        %i[primary unpublished] => -> do
-          FactoryBot.find_or_create(:course, :primary, :unpublished)
-        end,
-    }
+    def course_factories
+      {
+          %i[primary unpublished] => -> do
+            FactoryBot.create(:course, :primary, :unpublished)
+          end,
+      }
+    end
+
+    def create_uncached_factory(name, traits)
+      if course_factories.key?(traits.sort)
+        course_factories[traits.sort].call
+      else
+        raise_model_error(name, traits)
+      end
+    end
+
+    def raise_model_error(name, traits)
+      raise(
+        <<~ERR_MSG,
+          Unknown model type '#{name}' for traits '#{traits}'.
+          You need to add '#{name}' to TestSetup or use a standard FactoryBot factory.
+        ERR_MSG
+      )
+    end
 
     def raise_trait_error(factory_type, traits)
       raise(
