@@ -5,6 +5,9 @@ describe "Course factory" do
 
   it { should be_instance_of(Course) }
   it { should be_valid }
+  it "has the correct number of associations" do
+    expect { subject }.to change { Provider.count }.by(1)
+  end
 
   context "course resulting_in_pgde" do
     subject { create(:course, :resulting_in_pgde) }
@@ -31,10 +34,10 @@ describe "Course factory" do
     end
   end
 
-  context "unpublished_with_primary_maths" do
-    subject { create(:course, :unpublished_with_primary_maths) }
+  context "unpublished" do
+    subject { create(:course, :unpublished) }
 
-    its(:name) { should eq("unpublished_with_primary_maths course name") }
+    its(:name) { should eq("unpublished course name") }
 
     it "has the correct number of associations" do
       expect { subject }.to change { Site.count }.by(1).and change { Provider.count }.by(1)

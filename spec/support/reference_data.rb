@@ -27,9 +27,14 @@ RSpec.configure do |config|
     Subjects::CreatorService.new.execute
     Subjects::FinancialIncentiveCreatorService.new.execute
     Subjects::FinancialIncentiveSetSubjectKnowledgeEnhancementCourseAvailableService.new.execute
-    # Creating or finding course test data
-    if Settings.test_setup
-      TestSetup.new
+    if ENV["TEST_DATA_CACHE"]
+      TestDataCache.create_and_cache_test_records
+    end
+  end
+
+  config.after(:all) do
+    if ENV["TEST_DATA_CACHE"]
+      TestDataCache.clear
     end
   end
 

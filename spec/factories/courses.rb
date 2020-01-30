@@ -210,9 +210,9 @@ FactoryBot.define do
       to_create { |instance| instance.save(validate: false) }
     end
 
-    trait :unpublished_with_primary_maths do
+    trait :unpublished do
       transient do
-        identifier { "unpublished_with_primary_maths" }
+        identifier { "unpublished" }
       end
 
       name { "#{identifier} course name" }

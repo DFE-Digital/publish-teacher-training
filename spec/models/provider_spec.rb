@@ -268,7 +268,7 @@ describe Provider, type: :model do
   end
 
   describe "courses" do
-    let(:course) { TestSetup.unpub_pri_math }
+    let(:course) { create(:course, :primary, :unpublished) }
     let!(:provider) { course.provider }
 
     describe "#courses_count" do
