@@ -11,8 +11,11 @@
 #
 # Indexes
 #
-#  IX_course_site_course_id  (course_id)
-#  IX_course_site_site_id    (site_id)
+#  IX_course_site_course_id         (course_id)
+#  IX_course_site_site_id           (site_id)
+#  index_course_site_on_publish     (publish)
+#  index_course_site_on_status      (status)
+#  index_course_site_on_vac_status  (vac_status)
 #
 
 require "rails_helper"
