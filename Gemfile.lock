@@ -78,7 +78,7 @@ GEM
     api-pagination (4.8.2)
     application_insights (0.5.6)
     ast (2.4.0)
-    attr_extras (6.2.2)
+    attr_extras (6.2.3)
     audited (4.9.0)
       activerecord (>= 4.2, < 6.1)
     awesome_print (1.8.0)
@@ -406,7 +406,7 @@ GEM
       actionpack (>= 4.0)
       activesupport (>= 4.0)
       sprockets (>= 3.0.0)
-    super_diff (0.4.0)
+    super_diff (0.4.1)
       attr_extras
       diff-lcs
       patience_diff
