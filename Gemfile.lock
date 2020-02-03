@@ -258,7 +258,7 @@ GEM
     notifications-ruby-client (5.1.1)
       jwt (>= 1.5, < 3)
     parallel (1.19.1)
-    parallel_tests (2.30.1)
+    parallel_tests (2.31.0)
       parallel
     parser (2.6.5.0)
       ast (~> 2.4.0)
