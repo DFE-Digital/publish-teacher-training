@@ -91,6 +91,14 @@
         "description": "The password used to connect to the database."
       }
     },
+    "databaseStorageAutoGrow": {
+      "type": "string",
+      "allowedValues": [ "enabled", "disabled" ],
+      "defaultValue": "disabled",
+      "metadata": {
+        "description": "Used to configure autogrow for database storage. If enabled database storage will automatically be increased by 5GB when the free storage is below the greater of 1GB or 10% of the provisioned storage."
+      }
+    },
     "secretKeyBase": {
       "type": "string",
       "metadata": {
@@ -587,6 +595,9 @@
           },
           "resourceTags":{
             "value": "[parameters('resourceTags')]"
+          },
+          "storageAutoGrow": {
+            "value": "[parameters('databaseStorageAutoGrow')]"
           }
         }
       },
