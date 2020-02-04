@@ -153,6 +153,10 @@ class Course < ApplicationRecord
       .not(SiteStatus.table_name => { status: SiteStatus.statuses[:new_status] })
   end
 
+  scope :published, -> do
+    where(id: CourseEnrichment.published.select(:course_id))
+  end
+
   scope :with_recruitment_cycle, ->(year) { joins(provider: :recruitment_cycle).where(recruitment_cycle: { year: year }) }
   scope :findable, -> { where(id: SiteStatus.findable.select(:course_id)) }
   scope :with_vacancies, -> { where(id: SiteStatus.with_vacancies.select(:course_id)) }

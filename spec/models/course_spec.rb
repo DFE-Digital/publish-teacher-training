@@ -392,6 +392,73 @@ describe Course, type: :model do
   end
 
   describe "scopes" do
+    describe ".published" do
+      subject { described_class.published }
+      let(:test_course) { create(:course, enrichments: enrichments) }
+
+      before do
+        test_course
+      end
+
+      context "when initial draft course" do
+        let(:enrichments) { [build(:course_enrichment, :initial_draft)] }
+
+        it "is not returned" do
+          expect(subject).to be_empty
+        end
+      end
+
+      context "when draft course" do
+        let(:enrichments) { [build(:course_enrichment)] }
+
+        it "is not returned" do
+          expect(subject).to be_empty
+        end
+      end
+
+      context "when rolled over course" do
+        let(:enrichments) { [build(:course_enrichment, :rolled_over)] }
+
+        it "is not returned" do
+          expect(subject).to be_empty
+        end
+      end
+
+      context "when published" do
+        let(:enrichments) { [build(:course_enrichment, :published)] }
+
+        it "is returned" do
+          expect(subject).to contain_exactly(test_course)
+        end
+      end
+
+      context "when there are multiple enrichments" do
+        context "published is present" do
+          let(:enrichments) { [build(:course_enrichment, :published)] }
+
+          before do
+            test_course.enrichments << build(:course_enrichment, :withdrawn)
+          end
+
+          it "is returned" do
+            expect(subject).to contain_exactly(test_course)
+          end
+        end
+
+        context "and published not present" do
+          let(:enrichments) { [build(:course_enrichment, :withdrawn)] }
+
+          before do
+            test_course.enrichments << build(:course_enrichment, :initial_draft)
+          end
+
+          it "is not returned" do
+            expect(subject).to be_empty
+          end
+        end
+      end
+    end
+
     describe ".with_recruitment_cycle" do
       subject { described_class.with_recruitment_cycle(provider.recruitment_cycle.year) }
       let(:test_course) { create(:course, provider: provider) }
