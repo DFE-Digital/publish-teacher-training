@@ -13,6 +13,7 @@ class CourseSearch
   def call
     scope = Course
       .findable
+      .published
       .with_recruitment_cycle(recruitment_cycle_year)
 
     scope = scope.with_salary if funding_filter_salary?

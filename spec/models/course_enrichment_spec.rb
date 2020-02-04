@@ -88,7 +88,6 @@ describe CourseEnrichment, type: :model do
   end
 
   describe "about_course attribute" do
-
     let(:about_course_text) { "this course is great" }
 
     subject { build :course_enrichment, about_course: about_course_text }
