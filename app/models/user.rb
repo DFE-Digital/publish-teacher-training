@@ -40,6 +40,8 @@ class User < ApplicationRecord
 
   validates :email, presence: true, format: { with: /\A.*@.*\z/, message: "must contain @" }
   validate :email_is_lowercase
+  validates :first_name, presence: true
+  validates :last_name, presence: true
 
   validates :email, if: :admin?, format: {
     with: /\A.*@(digital\.){0,1}education\.gov\.uk\z/,
