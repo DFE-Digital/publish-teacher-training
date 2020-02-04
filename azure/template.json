@@ -922,6 +922,10 @@
               {
                 "name": "SETTINGS__GCP_API_KEY",
                 "secureValue": "[parameters('googleCloudPlatformAPIKey')]"
+              },
+              {
+                "name": "BUILD_IMAGE",
+                "value": "[parameters('backgroundContainerImageReference')[copyIndex()]]"
               }
             ]
           },
