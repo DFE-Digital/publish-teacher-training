@@ -35,6 +35,12 @@ describe User, type: :model do
     it { is_expected.to validate_presence_of(:email).with_message("must contain @") }
     it { should_not allow_value("CAPS_IN_EMAIL@ACME.ORG").for(:email) }
     it { should_not allow_value("email_without_at").for(:email) }
+    it { should_not allow_value(nil).for(:first_name) }
+    it { should_not allow_value(nil).for(:last_name) }
+    it { should_not allow_value("").for(:first_name) }
+    it { should_not allow_value("").for(:last_name) }
+    it { should_not allow_value("  ").for(:first_name) }
+    it { should_not allow_value("  ").for(:last_name) }
 
     context "for an admin-user" do
       subject { create(:user, :admin) }
