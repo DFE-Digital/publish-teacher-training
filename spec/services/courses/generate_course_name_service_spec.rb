@@ -9,7 +9,10 @@ describe Courses::GenerateCourseNameService do
   let(:modern_languages) { find_or_create(:secondary_subject, :modern_languages) }
   let(:generated_title) { service.execute(course: course) }
 
-  before { modern_languages }
+  before do
+    SecondarySubject.clear_modern_languages_cache
+    modern_languages
+  end
 
   shared_examples "with SEND" do
     context "With SEND" do
