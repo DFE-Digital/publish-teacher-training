@@ -61,17 +61,24 @@ describe Course, type: :model do
 
   describe "associations" do
     it { should belong_to(:provider) }
-    it {
+    it do
       should belong_to(:accrediting_provider)
                   .with_foreign_key(:accrediting_provider_code)
                   .with_primary_key(:provider_code)
                   .optional
-    }
+    end
     it { should have_many(:subjects).through(:course_subjects) }
     it { should have_many(:site_statuses) }
     it { should have_many(:sites) }
     it { should have_many(:enrichments) }
     it { should have_many(:financial_incentives) }
+  end
+
+  describe "#modern_languages_subjects" do
+    it "gets modern language subjects" do
+      course = create(:course, level: "secondary", subjects: [modern_languages, french])
+      expect(course.modern_languages_subjects).to match_array([french])
+    end
   end
 
   describe "#ensure_modern_languages" do
@@ -139,7 +146,7 @@ describe Course, type: :model do
           let(:course) { Course.new(provider: provider, subjects: [modern_languages]) }
 
           it "Requires a language to be selected" do
-            error = errors[:subjects]
+            error = errors[:modern_languages_subjects]
             expect(error).not_to be_empty
             expect(error.first).to include("You must pick at least one language")
           end
@@ -147,7 +154,7 @@ describe Course, type: :model do
           it "Does not add an error if a language is selected" do
             course.subjects << french
             course.valid?(:new)
-            error = course.errors.messages[:subjects]
+            error = course.errors.messages[:modern_languages_subjects]
             expect(error).to be_empty
           end
         end

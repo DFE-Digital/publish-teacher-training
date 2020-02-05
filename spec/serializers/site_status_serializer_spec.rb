@@ -20,7 +20,7 @@
 
 require "rails_helper"
 
-RSpec.describe SiteStatusSerializer do
+describe SiteStatusSerializer do
   subject { serialize(site_status) }
 
   context "when the site status has some vacancies" do

@@ -104,6 +104,11 @@ class Course < ApplicationRecord
            -> { distinct.merge(SiteStatus.where(status: %i[new_status running])) },
            through: :site_statuses
 
+  has_many :modern_languages_subjects,
+           through: :course_subjects,
+           source: :subject,
+           class_name: "ModernLanguagesSubject"
+
   has_many :enrichments,
            class_name: "CourseEnrichment" do
     def find_or_initialize_draft
@@ -607,7 +612,7 @@ private
 
   def validate_has_languages
     unless has_any_modern_language_subject_type?
-      errors.add(:subjects, :select_a_language)
+      errors.add(:modern_languages_subjects, :select_a_language)
     end
   end
 
