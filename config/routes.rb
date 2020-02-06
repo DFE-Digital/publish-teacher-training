@@ -190,7 +190,7 @@ Rails.application.routes.draw do
           end
         end
       end
-      get "providers/suggest", to: "providers#suggest"
+      get "provider-suggestions", to: "provider_suggestions#index"
 
       resources :subject_areas, only: :index
     end
