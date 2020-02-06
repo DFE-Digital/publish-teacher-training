@@ -32,7 +32,24 @@ module API
                                        accredited_bodies accredited_body?] }
       end
 
+      def suggest
+        return render(status: :bad_request) if params[:query].nil? || params[:query].length < 3
+        return render(status: :bad_request) unless begins_with_alphanumeric(params[:query])
+
+        found_providers = @recruitment_cycle.providers
+                              .search_by_code_or_name(params[:query])
+                              .limit(5)
+
+        render(
+            jsonapi: found_providers,
+            class: { Provider: SerializableProviderSuggestion },
+            )
+      end
+
     private
+      def begins_with_alphanumeric(string)
+        string.match?(/^[[:alnum:]].*$/)
+      end
 
       def build_fields_for_index
         @fields = default_fields_for_index
