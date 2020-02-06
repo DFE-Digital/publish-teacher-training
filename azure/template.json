@@ -783,7 +783,7 @@
       "properties": {
         "mode": "Incremental",
         "templateLink": {
-          "uri": "[concat(variables('deploymentUrlBase'), 'redis.json')]",
+          "uri": "https://raw.githubusercontent.com/DFE-Digital/bat-platform-building-blocks/a5e576ce4bded47db318ec9939d357ff724b2741/templates/redis.json",
           "contentVersion": "1.0.0.0"
         },
         "parameters": {
@@ -795,6 +795,9 @@
           },
           "resourceTags":{
             "value": "[parameters('resourceTags')]"
+          },
+          "minimumTlsVersion":{
+            "value": "1.2"
           }
         }
       }
