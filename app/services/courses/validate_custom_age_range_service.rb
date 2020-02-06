@@ -26,11 +26,11 @@ module Courses
     end
 
     def from_age_invalid?(from_age)
-      from_age < 3 || from_age > 14
+      from_age < 3 || from_age > 15
     end
 
     def to_age_invalid?(to_age)
-      to_age < 7 || to_age > 18
+      to_age < 7 || to_age > 19
     end
   end
 end
