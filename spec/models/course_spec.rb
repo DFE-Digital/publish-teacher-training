@@ -542,11 +542,11 @@ describe Course, type: :model do
     end
 
     describe ".with_qualifications" do
-      let(:course_qts) { create(:course, :resulting_in_qts) }
-      let(:course_pgce_with_qts) { create(:course, :resulting_in_pgce_with_qts) }
-      let(:course_pgde_with_qts) { create(:course, :resulting_in_pgde_with_qts) }
-      let(:course_pgce) { create(:course, :resulting_in_pgce) }
-      let(:course_pgde) { create(:course, :resulting_in_pgde) }
+      let(:course_qts) { TestDataCache.get(:course, :resulting_in_qts) }
+      let(:course_pgce_with_qts) { TestDataCache.get(:course, :resulting_in_pgce_with_qts) }
+      let(:course_pgde_with_qts) { TestDataCache.get(:course, :resulting_in_pgde_with_qts) }
+      let(:course_pgce) { TestDataCache.get(:course, :resulting_in_pgce) }
+      let(:course_pgde) { TestDataCache.get(:course, :resulting_in_pgde) }
 
       subject { described_class.with_qualifications(qualifications) }
 
