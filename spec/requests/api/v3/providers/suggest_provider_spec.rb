@@ -67,7 +67,7 @@ describe "GET /provider-suggestions" do
 
     get "/api/v3/provider-suggestions?query=provider"
 
-    expect(JSON.parse(response.body)["data"].length).to eq(5)
+    expect(JSON.parse(response.body)["data"].length).to eq(10)
   end
 
   it "returns bad request if query is empty" do

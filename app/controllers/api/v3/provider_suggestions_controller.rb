@@ -9,7 +9,7 @@ module API
 
         found_providers = @recruitment_cycle.providers
                               .search_by_code_or_name(params[:query])
-                              .limit(5)
+                              .limit(10)
 
         render(
           jsonapi: found_providers,
