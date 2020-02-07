@@ -31,7 +31,7 @@ module API
           include: [:subjects, :sites, :accrediting_provider, :provider, provider: [:sites]],
         )
 
-        if !@current_user.admin?
+        unless @current_user.admin?
           json_data[:data][:meta][:edit_options][:subjects]&.reject! do |subject|
             subject[:attributes][:subject_name] == "Physical education"
           end

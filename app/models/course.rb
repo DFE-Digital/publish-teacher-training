@@ -104,6 +104,11 @@ class Course < ApplicationRecord
            -> { distinct.merge(SiteStatus.where(status: %i[new_status running])) },
            through: :site_statuses
 
+  has_many :modern_languages_subjects,
+           through: :course_subjects,
+           source: :subject,
+           class_name: "ModernLanguagesSubject"
+
   has_many :enrichments,
            class_name: "CourseEnrichment" do
     def find_or_initialize_draft
@@ -146,6 +151,18 @@ class Course < ApplicationRecord
     includes(site_statuses: %i[site course])
       .where
       .not(SiteStatus.table_name => { status: SiteStatus.statuses[:new_status] })
+  end
+
+  scope :with_recruitment_cycle, ->(year) { joins(provider: :recruitment_cycle).where(recruitment_cycle: { year: year }) }
+  scope :findable, -> { where(id: SiteStatus.findable.select(:course_id)) }
+  scope :with_vacancies, -> { where(id: SiteStatus.with_vacancies.select(:course_id)) }
+  scope :with_salary, -> { where(program_type: :school_direct_salaried_training_programme) }
+  scope :with_study_modes, ->(study_modes) do
+    where(study_mode: Array(study_modes) << "full_time_or_part_time")
+  end
+
+  scope :with_qualifications, ->(qualifications) do
+    where(qualification: qualifications)
   end
 
   def self.entry_requirement_options_without_nil_choice
@@ -595,7 +612,7 @@ private
 
   def validate_has_languages
     unless has_any_modern_language_subject_type?
-      errors.add(:subjects, :select_a_language)
+      errors.add(:modern_languages_subjects, :select_a_language)
     end
   end
 

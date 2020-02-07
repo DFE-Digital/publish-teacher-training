@@ -44,7 +44,7 @@ describe "GET v3 /subject-areas" do
         "id" => "ModernLanguagesSubject",
         "type" => "subject_areas",
         "attributes" => {
-          "name" => "Secondary: Modern Languages",
+          "name" => "Secondary: Modern languages",
           "typename" => "ModernLanguagesSubject",
         },
         "relationships" => {
@@ -59,7 +59,7 @@ describe "GET v3 /subject-areas" do
         "id" => "FurtherEducationSubject",
         "type" => "subject_areas",
         "attributes" => {
-          "name" => "Further Education",
+          "name" => "Further education",
           "typename" => "FurtherEducationSubject",
         },
         "relationships" => {
