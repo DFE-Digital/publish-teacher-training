@@ -795,6 +795,9 @@
           },
           "resourceTags":{
             "value": "[parameters('resourceTags')]"
+          },
+          "minimumTlsVersion":{
+            "value": "1.2"
           }
         }
       }
