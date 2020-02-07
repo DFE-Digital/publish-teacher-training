@@ -3,11 +3,7 @@ require "rails_helper"
 describe "GET /suggest" do
   let(:jsonapi_renderer) { JSONAPI::Serializable::Renderer.new }
   let(:organisation) { create(:organisation) }
-  let(:provider1) { create(:provider, provider_name: "PROVIDER 1", organisations: [organisation]) }
-  let(:provider2) { create(:provider, provider_name: "PROVIDER 2", organisations: [organisation]) }
   let(:next_recruitment_cycle) { find_or_create(:recruitment_cycle, :next) }
-  let(:provider3) { create(:provider, provider_name: provider2.provider_name, organisations: [organisation], recruitment_cycle: next_recruitment_cycle) }
-  let(:provider4) { create(:provider, organisations: [organisation], recruitment_cycle: next_recruitment_cycle) }
   let(:user) { create :user, organisations: [organisation] }
   let(:payload) { { email: user.email } }
   let(:token) { build_jwt :apiv2, payload: payload }
@@ -15,37 +11,39 @@ describe "GET /suggest" do
     ActionController::HttpAuthentication::Token.encode_credentials(token)
   end
 
-  before do
-    provider1
-    provider2
-    provider3
-    provider4
-  end
-
   it "searches for a particular provider for the user in the current recruitment cycle" do
-    get "/api/v2/providers/suggest?query=#{provider2.provider_name}",
+    provider = create(:provider, provider_name: "PROVIDER 1", organisations: [organisation])
+    create(:provider, provider_name: "PROVIDER 2", organisations: [organisation])
+
+    get "/api/v2/providers/suggest?query=#{provider.provider_name}",
         headers: { "HTTP_AUTHORIZATION" => credentials }
 
     expect(JSON.parse(response.body)["data"]).to match_array([
       {
-        "id" => provider2.id.to_s,
+        "id" => provider.id.to_s,
         "type" => "provider",
         "attributes" => {
-          "provider_code" => provider2.provider_code,
-          "provider_name" => provider2.provider_name,
+          "provider_code" => provider.provider_code,
+          "provider_name" => provider.provider_name,
         },
       },
     ])
   end
 
   it "searches for a provider that is not in the current recruitment cycle" do
-    get "/api/v2/providers/suggest?query=#{provider4.provider_name}",
+    next_recruitment_cycle = find_or_create(:recruitment_cycle, :next)
+    provider = create(:provider, organisations: [organisation], recruitment_cycle: next_recruitment_cycle)
+
+    get "/api/v2/providers/suggest?query=#{provider.provider_name}",
         headers: { "HTTP_AUTHORIZATION" => credentials }
 
     expect(JSON.parse(response.body)["data"]).to match_array([])
   end
 
   it "searches for a partial provider in the current recruitment cycle" do
+    provider1 = create(:provider, provider_name: "PROVIDER 1", organisations: [organisation])
+    provider2 = create(:provider, provider_name: "PROVIDER 2", organisations: [organisation])
+
     get "/api/v2/providers/suggest?query=#{provider2.provider_name[0..3]}",
         headers: { "HTTP_AUTHORIZATION" => credentials }
 
@@ -70,7 +68,7 @@ describe "GET /suggest" do
   end
 
   it "limits responses to a maximum of 5 items" do
-    36.times do
+    11.times do
       create(:provider, provider_name: "provider X", organisations: [organisation], recruitment_cycle: next_recruitment_cycle)
     end
 
@@ -88,7 +86,9 @@ describe "GET /suggest" do
   end
 
   it "returns bad request if query is too short" do
-    get "/api/v2/providers/suggest?query=#{provider2.provider_name[0, 2]}",
+    provider = create(:provider, provider_name: "PROVIDER", organisations: [organisation])
+
+    get "/api/v2/providers/suggest?query=#{provider.provider_name[0, 2]}",
         headers: { "HTTP_AUTHORIZATION" => credentials }
 
     expect(response.status).to eq(400)
