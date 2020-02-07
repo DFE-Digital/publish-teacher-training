@@ -13,7 +13,7 @@ module API
 
         render(
           jsonapi: found_providers,
-          class: { Provider: SerializableProviderSuggestion },
+          class: { Provider: SerializableProvider },
         )
       end
 
