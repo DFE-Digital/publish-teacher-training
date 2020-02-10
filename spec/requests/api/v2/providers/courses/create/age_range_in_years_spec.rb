@@ -89,7 +89,7 @@ describe "POST /providers/:provider_code/courses/:course_code" do
     end
 
     context "with a to value that does not fall within the valid age range" do
-      let(:age_range_in_years) { "7_to_19" }
+      let(:age_range_in_years) { "7_to_20" }
 
       it "should return an error stating valid age ranges must be 4 years or greater" do
         expect(response).to have_http_status(:unprocessable_entity)
