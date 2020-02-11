@@ -5,7 +5,14 @@ describe Courses::GenerateCourseNameService do
   let(:subjects) { [] }
   let(:is_send) { false }
   let(:level) { "primary" }
-  let(:course) { Course.new(level: level, subjects: subjects, is_send: is_send) }
+  let(:course) do
+    c = Course.new(level: level, subjects: subjects, is_send: is_send)
+    subjects.each_with_index do |subject, index|
+      c.course_subjects.select { |cs| cs.subject_id == subject.id }.first.priority = index
+    end
+
+    c
+  end
   let(:modern_languages) { find_or_create(:secondary_subject, :modern_languages) }
   let(:generated_title) { service.execute(course: course) }
 
@@ -53,7 +60,7 @@ describe Courses::GenerateCourseNameService do
     end
 
     context "With multiple subjects" do
-      let(:subjects) { [Subject.new(subject_name: "English"), Subject.new(subject_name: "Physics")] }
+      let(:subjects) { [find_or_create(:secondary_subject, :english), find_or_create(:secondary_subject, :physics)] }
 
       it "Returns a name containing both subjects" do
         expect(generated_title).to eq("English with Physics")
