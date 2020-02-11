@@ -1,7 +1,7 @@
 class CourseSearchService
-  def initialize(filter:, recruitment_cycle_year: Settings.current_recruitment_cycle_year)
+  def initialize(filter:, course_scope: Course)
     @filter = filter || {}
-    @recruitment_cycle_year = recruitment_cycle_year
+    @course_scope = course_scope
   end
 
   class << self
@@ -11,9 +11,7 @@ class CourseSearchService
   end
 
   def call
-    scope = Course
-      .findable
-      .with_recruitment_cycle(recruitment_cycle_year)
+    scope = course_scope.findable
 
     scope = scope.with_salary if funding_filter_salary?
     scope = scope.with_qualifications(qualifications) if qualifications.any?
@@ -26,7 +24,7 @@ class CourseSearchService
 
 private
 
-  attr_reader :filter, :recruitment_cycle_year
+  attr_reader :filter, :course_scope
 
   def funding_filter_salary?
     filter[:funding] == "salary"
