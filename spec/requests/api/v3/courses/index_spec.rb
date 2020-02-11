@@ -1,12 +1,69 @@
 require "rails_helper"
 
+describe "GET v3/recruitment_cycles/:year/courses" do
+  let(:request_path) { "/api/v3/recruitment_cycles/2020/courses" }
+  let(:current_course) do
+    create(:course, site_statuses: [build(:site_status, :findable)], enrichments: [build(:course_enrichment, :published)])
+  end
+
+  let(:next_provider) { create(:provider, :next_recruitment_cycle) }
+  let(:next_course) do
+    create(:course, provider: next_provider, site_statuses: [build(:site_status, :findable)], enrichments: [build(:course_enrichment, :published)])
+  end
+
+  before do
+    current_course
+    next_course
+  end
+
+  it "returns a paginated list of courses in the recruitment cycle" do
+    get request_path
+
+    json_response = JSON.parse(response.body)
+    course_hashes = json_response["data"]
+    expect(course_hashes.count).to eq(1)
+    expect(course_hashes.first["id"]).to eq(current_course.id.to_s)
+
+    headers = response.headers
+
+    expect(headers["Per-Page"]).to be_present
+    expect(headers["Total"]).to be_present
+  end
+end
+
 describe "GET v3/courses" do
-  let(:current_cycle) { create(:recruitment_cycle) }
   let(:findable_status) { build(:site_status, :findable) }
   let(:published_enrichment) { build(:course_enrichment, :published) }
 
-  before do
-    current_cycle
+  context "without filter params" do
+    let(:request_path) { "/api/v3/courses" }
+    let(:current_course) do
+      create(:course, site_statuses: [build(:site_status, :findable)], enrichments: [build(:course_enrichment, :published)])
+    end
+
+    let(:next_provider) { create(:provider, :next_recruitment_cycle) }
+    let(:next_course) do
+      create(:course, provider: next_provider, site_statuses: [build(:site_status, :findable)], enrichments: [build(:course_enrichment, :published)])
+    end
+
+    before do
+      current_course
+      next_course
+    end
+
+    it "returns a paginated list of current cycle courses" do
+      get request_path
+
+      json_response = JSON.parse(response.body)
+      course_hashes = json_response["data"]
+      expect(course_hashes.count).to eq(1)
+      expect(course_hashes.first["id"]).to eq(current_course.id.to_s)
+
+      headers = response.headers
+
+      expect(headers["Per-Page"]).to be_present
+      expect(headers["Total"]).to be_present
+    end
   end
 
   describe "funding filter" do
