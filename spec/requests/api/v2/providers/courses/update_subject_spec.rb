@@ -56,10 +56,10 @@ describe "PATCH /providers/:provider_code/courses/:course_code" do
     end
   end
 
-  context "course has subjects" do
+  fcontext "course has subjects" do
     let(:course) { create(:course, level: :secondary, provider: provider, subjects: []) }
-    let(:subject1) { find_or_create(:secondary_subject, :english) }
-    let(:subject2) { find_or_create(:secondary_subject, :mathematics) }
+    let(:subject1) { find_or_create(:secondary_subject, :mathematics) }
+    let(:subject2) { find_or_create(:secondary_subject, :english) }
     let(:updated_subjects) do
       {
         subjects: {
@@ -76,8 +76,17 @@ describe "PATCH /providers/:provider_code/courses/:course_code" do
     end
 
     it "adds a subject" do
-      expect(course.reload.subjects.first.id).to eq(subject1.id)
-      expect(course.reload.subjects.second.id).to eq(subject2.id)
+      course.reload
+
+      binding.pry
+      expect(course.subjects.first.id).to eq(subject1.id)
+      expect(course.subjects.second.id).to eq(subject2.id)
+
+      first_course_subject = course.course_subjects.find_by(subject_id: subject1.id)
+      second_course_subject = course.course_subjects.find_by(subject_id: subject2.id)
+
+      expect(first_course_subject.priority).to eq(0)
+      expect(second_course_subject.priority).to eq(1)
     end
 
     it "updates the name of the course" do

@@ -97,7 +97,7 @@ class Course < ApplicationRecord
              optional: true
 
   has_many :course_subjects
-  has_many :subjects, through: :course_subjects
+  has_many :subjects, -> { order "course_subject.priority" }, through: :course_subjects
   has_many :financial_incentives, through: :subjects
   has_many :site_statuses
   has_many :sites,
