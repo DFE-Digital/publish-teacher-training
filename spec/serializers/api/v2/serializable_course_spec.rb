@@ -60,7 +60,7 @@ describe API::V2::SerializableCourse do
     end
   end
 
-  context "with a subject" do
+  fcontext "with a subject" do
     let(:course) { create(:course, subjects: [find_or_create(:primary_subject, :primary_with_mathematics)]) }
     let(:accrediting_provider) { course.accrediting_provider }
     let(:course_json) do
@@ -78,6 +78,33 @@ describe API::V2::SerializableCourse do
     end
 
     it { should have_relationship(:accrediting_provider) }
+  end
+
+  fcontext "with multiple subjects" do
+    it "orders them by their priority" do
+      maths = find_or_create(:secondary_subject, :mathematics)
+      english = find_or_create(:secondary_subject, :english)
+      subjects = [maths, english]
+
+      course = create(:course, level: "secondary", subjects: subjects)
+      course.course_subjects.select { |cs| cs.subject_id == maths.id }.first.priority = 0
+      course.course_subjects.select { |cs| cs.subject_id == english.id }.first.priority = 1
+
+      course_json =  jsonapi_renderer.render(
+        course,
+        class: {
+          Course: API::V2::SerializableCourse,
+          Subject: API::V2::SerializableSubject,
+          SecondarySubject: API::V2::SerializableSubject,
+        },
+        include: [
+          :subjects,
+        ],
+      )
+
+      subject_ids = course_json.dig(:data, :relationships, :subjects, :data).map { |s| s[:id] }.map(&:to_i)
+      expect([maths.id, english.id]).to eq(subject_ids)
+    end
   end
 
   context "with an accrediting_provider" do

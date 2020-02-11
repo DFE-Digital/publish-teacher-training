@@ -78,7 +78,6 @@ describe "PATCH /providers/:provider_code/courses/:course_code" do
     it "adds a subject" do
       course.reload
 
-      binding.pry
       expect(course.subjects.first.id).to eq(subject1.id)
       expect(course.subjects.second.id).to eq(subject2.id)
 
