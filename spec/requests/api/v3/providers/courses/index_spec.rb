@@ -256,6 +256,25 @@ describe "GET v3/recruitment_cycle/:recruitment_cycle_year/providers/:provider_c
       it { should have_http_status(:not_found) }
     end
 
+    context "when there is more than one provider" do
+      let(:request_path) { "/api/v3/recruitment_cycles/#{current_cycle.year}/providers/#{provider.provider_code}/courses" }
+      let(:another_provider) { create(:provider) }
+      let(:another_course) { create(:course, provider: another_provider, site_statuses: [build(:site_status, :findable)]) }
+
+      before do
+        another_provider
+        another_course
+        perform_request
+      end
+
+      it "doesn't return the other providers course" do
+        json_response = JSON.parse response.body
+        courses = json_response["data"]
+        expect(courses.length).to eq(1)
+        expect(courses.first["id"].to_s).not_to eq(another_course.id.to_s)
+      end
+    end
+
     context "with two recruitment cycles" do
       let(:next_cycle) { create :recruitment_cycle, :next }
       let(:next_provider) {
