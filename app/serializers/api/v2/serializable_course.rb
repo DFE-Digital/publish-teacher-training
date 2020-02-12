@@ -47,11 +47,7 @@ module API
 
       has_many :site_statuses
       has_many :sites
-      has_many :subjects do
-        data do
-          @object.course_subjects.sort_by(&:priority).map(&:subject)
-        end
-      end
+      has_many :subjects
 
       enrichment_attribute :about_course
       enrichment_attribute :course_length

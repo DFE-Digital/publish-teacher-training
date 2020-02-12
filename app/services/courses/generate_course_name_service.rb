@@ -1,7 +1,7 @@
 module Courses
   class GenerateCourseNameService
     def execute(course:)
-      subjects = course.course_subjects.sort_by(&:priority).map(&:subject)
+      subjects = course.subjects
 
       title = if course.further_education_course?
                 further_education_title

@@ -65,7 +65,7 @@ describe "/api/v2/build_new_course", type: :request do
       expect(json_response["data"]["attributes"]["name"]).to eq("Primary with mathematics")
     end
 
-    fcontext "With two subjects" do
+    context "With two subjects" do
       let(:subject1) { find_or_create(:secondary_subject, :mathematics) }
       let(:subject2) { find_or_create(:secondary_subject, :english) }
       let(:subjects) { [subject1, subject2] }
@@ -77,6 +77,7 @@ describe "/api/v2/build_new_course", type: :request do
         json_subjects = json_response["data"]["relationships"]["subjects"]["data"].map { |s| s["id"] }.map(&:to_i)
 
         expect([subject1.id, subject2.id]).to eq(json_subjects)
+        expect(json_response["data"]["attributes"]["name"]).to eq("Mathematics with English")
       end
     end
   end

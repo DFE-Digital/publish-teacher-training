@@ -96,8 +96,20 @@ class Course < ApplicationRecord
              inverse_of: :accredited_courses,
              optional: true
 
-  has_many :course_subjects
-  has_many :subjects, -> { order "course_subject.priority" }, through: :course_subjects
+  has_many :course_subjects, -> { order :priority }, inverse_of: "course", before_add: :set_course_subject_position
+
+  def set_course_subject_position(course_subject)
+    return unless course_subjects&.pluck(:priority).all?(&:present?)
+    return if course_subject.priority.present?
+
+    course_subject.priority = if course_subjects.any?
+                                course_subjects.last.priority + 1
+                              else
+                                0
+                              end
+  end
+
+  has_many :subjects, through: :course_subjects
   has_many :financial_incentives, through: :subjects
   has_many :site_statuses
   has_many :sites,
