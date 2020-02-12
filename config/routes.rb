@@ -91,10 +91,10 @@
 #                                                                        PUT    /api/v2/access_requests/:id(.:format)                                                                                                    api/v2/access_requests#update
 #                                                                        DELETE /api/v2/access_requests/:id(.:format)                                                                                                    api/v2/access_requests#destroy
 #                                                api_v2_build_new_course GET    /api/v2/build_new_course(.:format)                                                                                                       api/v2/courses#build_new
-#                                                         api_v3_courses GET    /api/v3/courses(.:format)                                                                                                                api/v3/course_searches#index
+#                                                         api_v3_courses GET    /api/v3/courses(.:format)                                                                                                                api/v3/courses#index
+#                                       api_v3_recruitment_cycle_courses GET    /api/v3/recruitment_cycles/:recruitment_cycle_year/courses(.:format)                                                                     api/v3/courses#index
 #                              api_v3_recruitment_cycle_provider_courses GET    /api/v3/recruitment_cycles/:recruitment_cycle_year/providers/:provider_code/courses(.:format)                                            api/v3/courses#index
 #                               api_v3_recruitment_cycle_provider_course GET    /api/v3/recruitment_cycles/:recruitment_cycle_year/providers/:provider_code/courses/:code(.:format)                                      api/v3/courses#show
-#                                       api_v3_recruitment_cycle_courses GET    /api/v3/recruitment_cycles/:recruitment_cycle_year/providers/courses(.:format)                                                           api/v3/courses#index
 #                                     api_v3_recruitment_cycle_providers GET    /api/v3/recruitment_cycles/:recruitment_cycle_year/providers(.:format)                                                                   api/v3/providers#index
 #                                      api_v3_recruitment_cycle_provider GET    /api/v3/recruitment_cycles/:recruitment_cycle_year/providers/:code(.:format)                                                             api/v3/providers#show
 #                                               api_v3_recruitment_cycle GET    /api/v3/recruitment_cycles/:year(.:format)                                                                                               api/v3/recruitment_cycles#show
@@ -174,20 +174,11 @@ Rails.application.routes.draw do
     end
 
     namespace :v3 do
-      resources :courses, controller: "course_searches", only: :index
-      resources :recruitment_cycles,
-                only: :show,
-                param: :year do
-        resources :providers,
-                  only: %i[index show],
-                  param: :code do
-          resources :courses,
-                    only: %i[index show],
-                    param: :code
-
-          collection do
-            resources :courses, only: %i[index]
-          end
+      resources :courses, only: :index
+      resources :recruitment_cycles, only: :show, param: :year do
+        resources :courses, only: :index
+        resources :providers, only: %i[index show], param: :code do
+          resources :courses, only: %i[index show], param: :code
         end
       end
       get "provider-suggestions", to: "provider_suggestions#index"
