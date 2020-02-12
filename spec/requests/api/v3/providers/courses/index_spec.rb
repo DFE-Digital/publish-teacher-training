@@ -157,6 +157,7 @@ describe "GET v3/recruitment_cycle/:recruitment_cycle_year/providers/:provider_c
                         "bursary_amount" => nil,
                         "early_career_payments" => nil,
                         "scholarship" => nil,
+                        "subject_knowledge_enhancement_course_available" => nil,
                       },
                      },
                     {
@@ -168,6 +169,7 @@ describe "GET v3/recruitment_cycle/:recruitment_cycle_year/providers/:provider_c
                        "bursary_amount" => nil,
                        "early_career_payments" => nil,
                        "scholarship" => nil,
+                       "subject_knowledge_enhancement_course_available" => nil,
                      },
                     },
                     {
@@ -179,6 +181,7 @@ describe "GET v3/recruitment_cycle/:recruitment_cycle_year/providers/:provider_c
                        "bursary_amount" => nil,
                        "early_career_payments" => nil,
                        "scholarship" => nil,
+                       "subject_knowledge_enhancement_course_available" => nil,
                      },
                     },
                     {
@@ -190,6 +193,7 @@ describe "GET v3/recruitment_cycle/:recruitment_cycle_year/providers/:provider_c
                        "bursary_amount" => "6000",
                        "early_career_payments" => nil,
                        "scholarship" => nil,
+                       "subject_knowledge_enhancement_course_available" => true,
                      },
                     },
                     {
@@ -201,6 +205,7 @@ describe "GET v3/recruitment_cycle/:recruitment_cycle_year/providers/:provider_c
                        "bursary_amount" => nil,
                        "early_career_payments" => nil,
                        "scholarship" => nil,
+                       "subject_knowledge_enhancement_course_available" => nil,
                      },
                     },
                     {
@@ -212,6 +217,7 @@ describe "GET v3/recruitment_cycle/:recruitment_cycle_year/providers/:provider_c
                        "bursary_amount" => nil,
                        "early_career_payments" => nil,
                        "scholarship" => nil,
+                       "subject_knowledge_enhancement_course_available" => nil,
                      },
                     },
                     {
@@ -223,6 +229,7 @@ describe "GET v3/recruitment_cycle/:recruitment_cycle_year/providers/:provider_c
                        "bursary_amount" => nil,
                        "early_career_payments" => nil,
                        "scholarship" => nil,
+                       "subject_knowledge_enhancement_course_available" => nil,
   },
                    },
                   ],
@@ -345,6 +352,7 @@ describe "GET v3/recruitment_cycle/:recruitment_cycle_year/providers/:provider_c
                         "bursary_amount" => nil,
                         "early_career_payments" => nil,
                         "scholarship" => nil,
+                        "subject_knowledge_enhancement_course_available" => nil,
                       },
                      },
                     {
@@ -356,6 +364,7 @@ describe "GET v3/recruitment_cycle/:recruitment_cycle_year/providers/:provider_c
                        "bursary_amount" => nil,
                        "early_career_payments" => nil,
                        "scholarship" => nil,
+                       "subject_knowledge_enhancement_course_available" => nil,
                      },
                     },
                     {
@@ -367,6 +376,7 @@ describe "GET v3/recruitment_cycle/:recruitment_cycle_year/providers/:provider_c
                        "bursary_amount" => nil,
                        "early_career_payments" => nil,
                        "scholarship" => nil,
+                       "subject_knowledge_enhancement_course_available" => nil,
                      },
                     },
                     {
@@ -378,6 +388,7 @@ describe "GET v3/recruitment_cycle/:recruitment_cycle_year/providers/:provider_c
                        "bursary_amount" => "6000",
                        "early_career_payments" => nil,
                        "scholarship" => nil,
+                       "subject_knowledge_enhancement_course_available" => true,
                      },
                     },
                     {
@@ -389,6 +400,7 @@ describe "GET v3/recruitment_cycle/:recruitment_cycle_year/providers/:provider_c
                        "bursary_amount" => nil,
                        "early_career_payments" => nil,
                        "scholarship" => nil,
+                       "subject_knowledge_enhancement_course_available" => nil,
                      },
                     },
                     {
@@ -400,6 +412,7 @@ describe "GET v3/recruitment_cycle/:recruitment_cycle_year/providers/:provider_c
                        "bursary_amount" => nil,
                        "early_career_payments" => nil,
                        "scholarship" => nil,
+                       "subject_knowledge_enhancement_course_available" => nil,
                      },
                     },
                     {
@@ -411,6 +424,7 @@ describe "GET v3/recruitment_cycle/:recruitment_cycle_year/providers/:provider_c
                        "bursary_amount" => nil,
                        "early_career_payments" => nil,
                        "scholarship" => nil,
+                       "subject_knowledge_enhancement_course_available" => nil,
   },
                    },
                   ],

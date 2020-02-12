@@ -169,6 +169,7 @@ describe "Courses API v2", type: :request do
                          "bursary_amount" => nil,
                          "early_career_payments" => nil,
                          "scholarship" => nil,
+                         "subject_knowledge_enhancement_course_available" => nil,
                        },
                      },
                      {
@@ -180,6 +181,7 @@ describe "Courses API v2", type: :request do
                          "bursary_amount" => nil,
                          "early_career_payments" => nil,
                          "scholarship" => nil,
+                         "subject_knowledge_enhancement_course_available" => nil,
                        },
                      },
                      {
@@ -191,6 +193,7 @@ describe "Courses API v2", type: :request do
                          "bursary_amount" => nil,
                          "early_career_payments" => nil,
                          "scholarship" => nil,
+                         "subject_knowledge_enhancement_course_available" => nil,
                        },
                      },
                      {
@@ -202,6 +205,7 @@ describe "Courses API v2", type: :request do
                          "bursary_amount" => "6000",
                          "early_career_payments" => nil,
                          "scholarship" => nil,
+                         "subject_knowledge_enhancement_course_available" => true,
                        },
                      },
                      {
@@ -213,6 +217,7 @@ describe "Courses API v2", type: :request do
                          "bursary_amount" => nil,
                          "early_career_payments" => nil,
                          "scholarship" => nil,
+                         "subject_knowledge_enhancement_course_available" => nil,
                        },
                      },
                      {
@@ -224,6 +229,7 @@ describe "Courses API v2", type: :request do
                          "bursary_amount" => nil,
                          "early_career_payments" => nil,
                          "scholarship" => nil,
+                         "subject_knowledge_enhancement_course_available" => nil,
                        },
                      },
                      {
@@ -235,6 +241,7 @@ describe "Courses API v2", type: :request do
                          "bursary_amount" => nil,
                          "early_career_payments" => nil,
                          "scholarship" => nil,
+                         "subject_knowledge_enhancement_course_available" => nil,
                        },
                      },
                   ],
@@ -273,6 +280,7 @@ describe "Courses API v2", type: :request do
                   "bursary_amount" => "6000",
                   "early_career_payments" => nil,
                   "scholarship" => nil,
+                  "subject_knowledge_enhancement_course_available" => true,
                 },
               },
               {
@@ -340,6 +348,7 @@ describe "Courses API v2", type: :request do
                  "bursary_amount" => "26000",
                  "early_career_payments" => "2000",
                  "scholarship" => "28000",
+                 "subject_knowledge_enhancement_course_available" => true,
                 },
               },
               {
@@ -351,6 +360,7 @@ describe "Courses API v2", type: :request do
                  "bursary_amount" => nil,
                  "early_career_payments" => nil,
                  "scholarship" => nil,
+                 "subject_knowledge_enhancement_course_available" => nil,
                 },
               },
               {
@@ -362,6 +372,7 @@ describe "Courses API v2", type: :request do
                  "bursary_amount" => "26000",
                  "early_career_payments" => "2000",
                  "scholarship" => "28000",
+                 "subject_knowledge_enhancement_course_available" => true,
                 },
               },
               {
@@ -373,6 +384,7 @@ describe "Courses API v2", type: :request do
                  "bursary_amount" => "26000",
                  "early_career_payments" => "2000",
                  "scholarship" => nil,
+                 "subject_knowledge_enhancement_course_available" => true,
                 },
               },
               {
@@ -384,6 +396,7 @@ describe "Courses API v2", type: :request do
                  "bursary_amount" => "26000",
                  "early_career_payments" => "2000",
                  "scholarship" => nil,
+                 "subject_knowledge_enhancement_course_available" => true,
                 },
               },
               {
@@ -395,6 +408,7 @@ describe "Courses API v2", type: :request do
                  "bursary_amount" => "26000",
                  "early_career_payments" => "2000",
                  "scholarship" => nil,
+                 "subject_knowledge_enhancement_course_available" => true,
                 },
               },
               {
@@ -406,6 +420,7 @@ describe "Courses API v2", type: :request do
                  "bursary_amount" => "26000",
                  "early_career_payments" => "2000",
                  "scholarship" => nil,
+                 "subject_knowledge_enhancement_course_available" => true,
                 },
               },
               {
@@ -417,6 +432,7 @@ describe "Courses API v2", type: :request do
                  "bursary_amount" => "26000",
                  "early_career_payments" => "2000",
                  "scholarship" => "28000",
+                 "subject_knowledge_enhancement_course_available" => true,
                 },
               },
               {
@@ -428,6 +444,7 @@ describe "Courses API v2", type: :request do
                  "bursary_amount" => "26000",
                  "early_career_payments" => "2000",
                  "scholarship" => nil,
+                 "subject_knowledge_enhancement_course_available" => true,
                 },
               },
             ],
@@ -573,6 +590,7 @@ describe "Courses API v2", type: :request do
                       "bursary_amount" => nil,
                       "early_career_payments" => nil,
                       "scholarship" => nil,
+                      "subject_knowledge_enhancement_course_available" => nil,
                     },
                   },
                   {
@@ -584,6 +602,7 @@ describe "Courses API v2", type: :request do
                       "bursary_amount" => nil,
                       "early_career_payments" => nil,
                       "scholarship" => nil,
+                      "subject_knowledge_enhancement_course_available" => nil,
                     },
                   },
                   {
@@ -595,6 +614,7 @@ describe "Courses API v2", type: :request do
                       "bursary_amount" => nil,
                       "early_career_payments" => nil,
                       "scholarship" => nil,
+                      "subject_knowledge_enhancement_course_available" => nil,
                     },
                   },
                   {
@@ -606,6 +626,7 @@ describe "Courses API v2", type: :request do
                       "bursary_amount" => "6000",
                       "early_career_payments" => nil,
                       "scholarship" => nil,
+                      "subject_knowledge_enhancement_course_available" => true,
                     },
                   },
                   {
@@ -617,6 +638,7 @@ describe "Courses API v2", type: :request do
                       "bursary_amount" => nil,
                       "early_career_payments" => nil,
                       "scholarship" => nil,
+                      "subject_knowledge_enhancement_course_available" => nil,
                     },
                   },
                   {
@@ -628,6 +650,7 @@ describe "Courses API v2", type: :request do
                       "bursary_amount" => nil,
                       "early_career_payments" => nil,
                       "scholarship" => nil,
+                      "subject_knowledge_enhancement_course_available" => nil,
                     },
                   },
                   {
@@ -639,6 +662,7 @@ describe "Courses API v2", type: :request do
                       "bursary_amount" => nil,
                       "early_career_payments" => nil,
                       "scholarship" => nil,
+                      "subject_knowledge_enhancement_course_available" => nil,
                     },
                   },
                 ],
