@@ -89,7 +89,7 @@ describe "PATCH /providers/:provider_code/courses/:course_code" do
     end
 
     it "updates the name of the course" do
-      expect(course.reload.name).to eq("English with Mathematics")
+      expect(course.reload.name).to eq("Mathematics with English")
     end
   end
 end
