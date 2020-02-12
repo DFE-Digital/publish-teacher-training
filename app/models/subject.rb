@@ -22,6 +22,14 @@ class Subject < ApplicationRecord
   belongs_to :subject_area, foreign_key: :type, inverse_of: :subjects
   has_one :financial_incentive
 
+  # See Course association "modern_languages_subject" ... that should be using
+  # a scope as below.
+  #
+  # scope :primary_subjects, -> { where(type: "PrimarySubject") }
+  # scope :secondary_subjects, -> { where(type: "SecondarySubject") }
+  # scope :modern_languages, -> { where(type: "ModernLanguagesSubject") }
+  # scope :further_education, -> { where(type: "FurtherEducationSubject") }
+
   def to_sym
     subject_name.parameterize.underscore.to_sym
   end
@@ -30,7 +38,19 @@ class Subject < ApplicationRecord
     subject_name
   end
 
+  # def primary_subject?
+  #   type == "PrimarySubject"
+  # end
+
   def secondary_subject?
     type == "SecondarySubject"
   end
+
+  # def modern_languages_subject?
+  #   type == "ModernLanguagesSubject"
+  # end
+
+  # def further_education_subject?
+  #   type == "FutherEducationSubject"
+  # end
 end

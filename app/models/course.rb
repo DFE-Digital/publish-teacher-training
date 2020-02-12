@@ -127,6 +127,10 @@ class Course < ApplicationRecord
   end
 
   has_many :subjects, through: :course_subjects
+  # has_many :secondary_subjects,
+  #          -> { secondary_subjects },
+  #          through: :course_subjects
+
   has_many :financial_incentives, through: :subjects
   has_many :site_statuses
   has_many :sites,
