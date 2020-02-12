@@ -5,6 +5,7 @@
 #  course_id  :integer
 #  created_at :datetime
 #  id         :integer          not null, primary key
+#  position   :integer
 #  subject_id :integer
 #  updated_at :datetime
 #
