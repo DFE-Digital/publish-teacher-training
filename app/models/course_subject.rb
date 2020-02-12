@@ -22,4 +22,8 @@ class CourseSubject < ApplicationRecord
   belongs_to :subject
 
   audited associated_with: :course
+
+  def secondary_subject?
+    subject.type == 'SecondarySubject'
+  end
 end

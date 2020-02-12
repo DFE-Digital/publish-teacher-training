@@ -96,14 +96,31 @@ class Course < ApplicationRecord
              inverse_of: :accredited_courses,
              optional: true
 
-  has_many :course_subjects, -> { order :priority }, inverse_of: "course", before_add: :set_course_subject_position
+  has_many :course_subjects,
+           -> { order :priority },
+           inverse_of: "course",
+           before_add: :set_course_subject_position
 
   def set_course_subject_position(course_subject)
-    return unless course_subjects&.pluck(:priority).all?(&:present?)
     return if course_subject.priority.present?
 
-    course_subject.priority = if course_subjects.any?
-                                course_subjects.last.priority + 1
+    # We only want to set order for a course_subject for secondary courses.
+    # This is because other subjects don't require ordering and it'd complicate
+    # how we treat those other subjects.
+    return unless course_subject.subject.secondary_subject?
+
+    # If a course's (secondary) subjects aren't already ordered then skip
+    # adding a priority to the new subject. This will be handled in the
+    # backfilling stage. Once we're backfilled we're unlikely to need this, or
+    # even better we should add a validation to CourseSubject to ensure
+    # priority is present.
+    secondary_course_subjects = course_subjects.select do |cs|
+      cs.subject.secondary_subject?
+    end
+    return if secondary_course_subjects.pluck(:priority).any?(&:blank?)
+
+    course_subject.priority = if secondary_course_subjects.any?
+                                secondary_course_subjects.last.priority + 1
                               else
                                 0
                               end

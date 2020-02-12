@@ -29,4 +29,8 @@ class Subject < ApplicationRecord
   def to_s
     subject_name
   end
+
+  def secondary_subject?
+    type == "SecondarySubject"
+  end
 end

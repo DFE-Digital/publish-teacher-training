@@ -72,6 +72,43 @@ describe Course, type: :model do
     it { should have_many(:sites) }
     it { should have_many(:enrichments) }
     it { should have_many(:financial_incentives) }
+
+    fdescribe "course_subjects" do
+      let(:mathematics) { find_or_create(:secondary_subject, :mathematics) }
+
+      context "new secondary subject without a priority" do
+        it "adds the priority" do
+          course.course_subjects << CourseSubject.new(subject: mathematics)
+
+          expect(course.course_subjects.last.subject).to eq mathematics
+          expect(course.course_subjects.last.priority).to eq 1
+        end
+      end
+
+      context "new secondary subject with a priority" do
+        it "doesn't change the existing priority" do
+          course.course_subjects << CourseSubject.new(subject: mathematics,
+                                                      priority: 2)
+
+          expect(course.course_subjects.last.subject).to eq mathematics
+          expect(course.course_subjects.last.priority).to eq 2
+        end
+      end
+
+      context "new primary subject" do
+        let(:course) { build(:course, infer_subjects?: false) }
+        let(:primary_with_mathematics) do
+          create(:primary_subject, :primary_with_mathematics)
+        end
+
+        it "doesn't add a priority" do
+          course.course_subjects << CourseSubject.new(subject: primary_with_mathematics)
+
+          expect(course.course_subjects.last.subject).to eq primary_with_mathematics
+          expect(course.course_subjects.last.priority).to be_nil
+        end
+      end
+    end
   end
 
   describe "#modern_languages_subjects" do
