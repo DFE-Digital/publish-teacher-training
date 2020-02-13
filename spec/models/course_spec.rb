@@ -72,6 +72,97 @@ describe Course, type: :model do
     it { should have_many(:sites) }
     it { should have_many(:enrichments) }
     it { should have_many(:financial_incentives) }
+
+    describe "course_subjects" do
+      context "Adding subjects to a new course" do
+        let(:primary_with_mathematics) { find_or_create(:primary_subject, :primary_with_mathematics) }
+        let(:further_education) { find_or_create(:further_education_subject) }
+        let(:english) { find_or_create(:secondary_subject, :english) }
+        let(:maths) { find_or_create(:secondary_subject, :mathematics) }
+
+        context "Primary course" do
+          let(:course) { build(:course, level: "primary", subjects: []) }
+
+          it "Does not assign a position" do
+            course.subjects = [primary_with_mathematics]
+
+            expect(course.course_subjects.first.position).to be_nil
+          end
+        end
+
+        context "Further Education" do
+          let(:course) { build(:course, level: "further_education", subjects: []) }
+
+          it "Does not assign a position" do
+            course.subjects = [further_education]
+
+            expect(course.course_subjects.first.position).to be_nil
+          end
+        end
+
+        context "Secondary course" do
+          let(:course) { build(:course, level: "secondary", subjects: []) }
+
+          it "Assigns position 0 to a single secondary subject" do
+            course.subjects = [english]
+            expect(course.course_subjects.first.position).to eq(0)
+          end
+
+          it "Assigns position 0,1 to two secondary subjects in the order they are given" do
+            course.subjects = [maths, english]
+            course_subjects = course.course_subjects
+
+            expect(course_subjects[0].position).to eq(0)
+            expect(course_subjects[1].position).to eq(1)
+          end
+
+          it "Doesnt assign a position to languages" do
+            course.subjects = [modern_languages, french]
+
+            expect(course.course_subjects[0].position).to eq(0)
+            expect(course.course_subjects[1].position).to be_nil
+          end
+        end
+      end
+
+      context "Adding subjects to an existing course" do
+        let(:english) { find_or_create(:secondary_subject, :english) }
+        let(:maths) { find_or_create(:secondary_subject, :mathematics) }
+
+        context "When the existing course has no priorities" do
+          it "Does not assign a priority to the new subject" do
+            course = build(:course, level: "secondary", subjects: [maths])
+            course.course_subjects.first.position = nil
+
+            course.subjects << english
+            expect(course.course_subjects.map(&:position)).to eq([nil, nil])
+          end
+        end
+
+        context "When the existing course has a modern language subject with languages" do
+          it "Assigns the priority to the new secondary subject" do
+            course = build(:course, level: "secondary", subjects: [modern_languages, french])
+            course.subjects << english
+
+            expect(course.course_subjects.last.position).to eq(1)
+          end
+        end
+      end
+
+      it "Orders course subjects by their position" do
+        english = find_or_create(:secondary_subject, :english)
+        maths = find_or_create(:secondary_subject, :mathematics)
+
+        course = build(:course, level: "secondary", subjects: [maths, english])
+        course.save!
+        course.reload
+
+        subjects = course.subjects
+
+        expect(subjects.first).to eq(maths)
+        expect(subjects.second).to eq(english)
+      end
+    end
   end
 
   describe "#by_provider_name_ascending" do
