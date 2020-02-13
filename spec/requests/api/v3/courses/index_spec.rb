@@ -35,6 +35,60 @@ describe "GET v3/courses" do
   let(:findable_status) { build(:site_status, :findable) }
   let(:published_enrichment) { build(:course_enrichment, :published) }
 
+  context "ordering" do
+    let(:provider_a) { create(:provider, provider_name: "Provider A") }
+    let(:course_a) do
+      create(:course,
+             name: "Course A",
+             provider: provider_a,
+             site_statuses: [build(:site_status, :findable)],
+             enrichments: [build(:course_enrichment, :published)])
+    end
+
+    let(:provider_b) { create(:provider, provider_name: "Provider B") }
+    let(:course_b) do
+      create(
+        :course,
+        name: "Course A",
+        provider: provider_b,
+        site_statuses: [build(:site_status, :findable)],
+        enrichments: [build(:course_enrichment, :published)],
+      )
+    end
+
+    before do
+      course_a
+      course_b
+    end
+
+    context "in ascending order" do
+      let(:request_path) { "/api/v3/courses?include=provider&sort=provider.provider_name" }
+
+      it "returns an ordered list" do
+        get request_path
+
+        json_response = JSON.parse(response.body)
+        course_hashes = json_response["data"]
+        expect(course_hashes.first["id"]).to eq(course_a.id.to_s)
+        expect(course_hashes.second["id"]).to eq(course_b.id.to_s)
+        #Course.includes(:provider).order("provider.provider_name")
+      end
+    end
+
+    context "in descending order" do
+      let(:request_path) { "/api/v3/courses?include=provider&sort=-provider.provider_name" }
+
+      it "returns an ordered list" do
+        get request_path
+
+        json_response = JSON.parse(response.body)
+        course_hashes = json_response["data"]
+        expect(course_hashes.first["id"]).to eq(course_b.id.to_s)
+        expect(course_hashes.second["id"]).to eq(course_a.id.to_s)
+      end
+    end
+  end
+
   context "without filter params" do
     let(:request_path) { "/api/v3/courses" }
     let(:current_course) do
