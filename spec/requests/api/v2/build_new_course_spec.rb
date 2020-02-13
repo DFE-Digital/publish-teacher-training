@@ -66,6 +66,31 @@ describe "/api/v2/build_new_course", type: :request do
     end
   end
 
+  context "With multiple secondary subjects" do
+    let(:params) do
+      { course: {
+        name: "Foo Bar Course",
+        maths: "must_have_qualification_at_application_time",
+        english: "must_have_qualification_at_application_time",
+        subjects_ids: subjects.map(&:id),
+      } }
+    end
+    let(:subjects) { [find_or_create(:secondary_subject, :mathematics), find_or_create(:secondary_subject, :english)] }
+
+    it "Returns the subjects in the order they were given" do
+      response = do_get params
+      json_response = parse_response(response)
+      response_subject_ids = json_response["data"]["relationships"]["subjects"]["data"].map { |s| s["id"].to_i }
+      expect(response_subject_ids).to eq(subjects.map(&:id))
+    end
+
+    it "Generates the title in the correct order" do
+      response = do_get params
+      json_response = parse_response(response)
+      expect(json_response["data"]["attributes"]["name"]).to eq("Mathematics with English")
+    end
+  end
+
   context "providers" do
     let(:site) { build(:site) }
     let(:provider) do

@@ -53,10 +53,10 @@ describe Courses::GenerateCourseNameService do
     end
 
     context "With multiple subjects" do
-      let(:subjects) { [Subject.new(subject_name: "English"), Subject.new(subject_name: "Physics")] }
+      let(:subjects) { [find_or_create(:secondary_subject, :physics), find_or_create(:secondary_subject, :english)] }
 
-      it "Returns a name containing both subjects" do
-        expect(generated_title).to eq("English with Physics")
+      it "Returns a name containing both subjects in the order they were given" do
+        expect(generated_title).to eq("Physics with English")
       end
 
       include_examples "with SEND"
