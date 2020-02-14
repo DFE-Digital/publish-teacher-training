@@ -6,13 +6,7 @@ module API
       before_action :build_courses
 
       def index
-        course_search = CourseSearchService.call(filter: params[:filter], course_scope: @courses)
-
-        if should_sort_by_provider_ascending?
-          course_search = sort_by_provider_ascending(course_search: course_search)
-        elsif should_sort_by_provider_descending?
-          course_search = sort_by_provider_descending(course_search: course_search)
-        end
+        course_search = CourseSearchService.call(filter: params[:filter], sort: params[:sort], course_scope: @courses)
 
         render jsonapi: paginate(course_search), fields: fields_param, include: params[:include], class: CourseSerializersService.new.execute
       end
@@ -29,22 +23,6 @@ module API
       end
 
     private
-
-      def sort_by_provider_ascending(course_search:)
-        course_search.order("provider.provider_name asc")
-      end
-
-      def sort_by_provider_descending(course_search:)
-        course_search.order("provider.provider_name desc")
-      end
-
-      def should_sort_by_provider_ascending?
-        params["sort"] == "provider.provider_name"
-      end
-
-      def should_sort_by_provider_descending?
-        params["sort"] == "-provider.provider_name"
-      end
 
       def build_courses
         @courses = if @provider.present?

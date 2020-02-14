@@ -35,7 +35,7 @@ describe "GET v3/courses" do
   let(:findable_status) { build(:site_status, :findable) }
   let(:published_enrichment) { build(:course_enrichment, :published) }
 
-  context "ordering" do
+  describe "ordering" do
     let(:provider_a) { create(:provider, provider_name: "Provider A") }
     let(:course_a) do
       create(:course,
@@ -71,7 +71,6 @@ describe "GET v3/courses" do
         course_hashes = json_response["data"]
         expect(course_hashes.first["id"]).to eq(course_a.id.to_s)
         expect(course_hashes.second["id"]).to eq(course_b.id.to_s)
-        #Course.includes(:provider).order("provider.provider_name")
       end
     end
 
@@ -89,7 +88,7 @@ describe "GET v3/courses" do
     end
   end
 
-  context "without filter params" do
+  describe "without filter params" do
     let(:request_path) { "/api/v3/courses" }
     let(:current_course) do
       create(:course, site_statuses: [build(:site_status, :findable)], enrichments: [build(:course_enrichment, :published)])
