@@ -76,7 +76,14 @@ describe "GET v3/recruitment_cycle/:recruitment_cycle_year/providers/:provider_c
   end
 
   context "with sites included" do
-    let(:enrichments) { [build(:course_enrichment, :published)] }
+    let(:enrichments) {
+      [
+      build(:course_enrichment, :initial_draft),
+      build(:course_enrichment, :published, fee_details: "Some details about the fees"),
+      build(:course_enrichment, :subsequent_draft),
+      build(:course_enrichment, :published, fee_details: "Some new details about the fees"),
+    ]
+    }
     let(:enrichment) { course.enrichments.last }
     before do
       get "/api/v3/recruitment_cycles/#{current_year}" \
@@ -110,7 +117,7 @@ describe "GET v3/recruitment_cycle/:recruitment_cycle_year/providers/:provider_c
               course.applications_open_from.to_s,
             "about_course" => enrichment.about_course,
             "course_length" => enrichment.course_length,
-            "fee_details" => enrichment.fee_details,
+            "fee_details" => "Some new details about the fees",
             "fee_international" => enrichment.fee_international,
             "fee_uk_eu" => enrichment.fee_uk_eu,
             "financial_support" => enrichment.financial_support,
