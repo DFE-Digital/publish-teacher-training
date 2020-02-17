@@ -25,6 +25,7 @@ services:
     environment:
       - DB_HOSTNAME=db
       - DB_USERNAME=postgres
+      - DB_PASSWORD=developmentpassword
       - CC_TEST_REPORTER_ID=${CC_TEST_REPORTER_ID}
       - AGENT_JOBSTATUS=${AGENT_JOBSTATUS}
   bg-find-sync:
@@ -44,6 +45,7 @@ services:
     environment:
       - DB_HOSTNAME=db
       - DB_USERNAME=postgres
+      - DB_PASSWORD=developmentpassword
   bg-geocode:
     build:
       args:
@@ -61,3 +63,4 @@ services:
     environment:
       - DB_HOSTNAME=db
       - DB_USERNAME=postgres
+      - DB_PASSWORD=developmentpassword
