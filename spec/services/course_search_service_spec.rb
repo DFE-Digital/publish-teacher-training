@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe CourseSearchService do
+describe CourseSearchService do
   describe ".call" do
     describe "when no scope is passed" do
       subject { described_class.call(filter: filter) }
@@ -14,11 +14,42 @@ RSpec.describe CourseSearchService do
 
     let(:scope) { class_double(Course) }
     let(:findable_scope) { class_double(Course) }
+    let(:filter) { nil }
+    let(:sort) { nil }
 
-    subject { described_class.call(filter: filter, course_scope: scope) }
+    subject { described_class.call(filter: filter, sort: sort, course_scope: scope) }
 
     before do
       allow(scope).to receive(:findable).and_return(findable_scope)
+    end
+
+    describe "sort by" do
+      let(:expected_scope) { double }
+
+      context "ascending provider name" do
+        let(:sort) { "provider.provider_name" }
+
+        it "orders in ascending order of provider name" do
+          expect(findable_scope).to receive(:by_provider_name_ascending).and_return(expected_scope)
+          expect(subject).to eq(expected_scope)
+        end
+      end
+
+      context "descending provider name" do
+        let(:sort) { "-provider.provider_name" }
+
+        it "orders in ascending order of provider name" do
+          expect(findable_scope).to receive(:by_provider_name_descending).and_return(expected_scope)
+          expect(subject).to eq(expected_scope)
+        end
+      end
+
+      context "unspecified" do
+        it "does not order" do
+          expect(findable_scope).not_to receive(:order)
+          expect(subject).not_to eq(expected_scope)
+        end
+      end
     end
 
     describe "filter is nil" do

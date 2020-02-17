@@ -6,7 +6,8 @@ module API
       before_action :build_courses
 
       def index
-        course_search = CourseSearchService.call(filter: params[:filter], course_scope: @courses)
+        course_search = CourseSearchService.call(filter: params[:filter], sort: params[:sort], course_scope: @courses)
+
         render jsonapi: paginate(course_search), fields: fields_param, include: params[:include], class: CourseSerializersService.new.execute
       end
 

@@ -139,6 +139,9 @@ class Course < ApplicationRecord
     end
   end
 
+  scope :by_provider_name_ascending, -> { includes(:provider).order("provider.provider_name asc") }
+  scope :by_provider_name_descending, -> { includes(:provider).order("provider.provider_name desc") }
+
   scope :changed_since, ->(timestamp) do
     if timestamp.present?
       where("course.changed_at > ?", timestamp)

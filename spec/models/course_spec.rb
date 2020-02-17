@@ -74,6 +74,54 @@ describe Course, type: :model do
     it { should have_many(:financial_incentives) }
   end
 
+  describe "#by_provider_name_ascending" do
+    let(:provider_a) { create(:provider, provider_name: "Provider A") }
+    let(:course_a) do
+      create(:course,
+             name: "Course A",
+             provider: provider_a)
+    end
+
+    let(:provider_b) { create(:provider, provider_name: "Provider B") }
+    let(:course_b) do
+      create(
+        :course,
+        name: "Course A",
+        provider: provider_b,
+      )
+    end
+
+    it "sorts in ascending order of provider name" do
+      course_a
+      course_b
+      expect(described_class.by_provider_name_ascending).to eq([course_a, course_b])
+    end
+  end
+
+  describe "#by_provider_name_descending" do
+    let(:provider_a) { create(:provider, provider_name: "Provider A") }
+    let(:course_a) do
+      create(:course,
+             name: "Course A",
+             provider: provider_a)
+    end
+
+    let(:provider_b) { create(:provider, provider_name: "Provider B") }
+    let(:course_b) do
+      create(
+        :course,
+        name: "Course A",
+        provider: provider_b,
+      )
+    end
+
+    it "sorts in descending order of provider name" do
+      course_a
+      course_b
+      expect(described_class.by_provider_name_descending).to eq([course_b, course_a])
+    end
+  end
+
   describe "#modern_languages_subjects" do
     it "gets modern language subjects" do
       course = create(:course, level: "secondary", subjects: [modern_languages, french])
