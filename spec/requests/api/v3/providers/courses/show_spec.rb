@@ -76,15 +76,14 @@ describe "GET v3/recruitment_cycle/:recruitment_cycle_year/providers/:provider_c
   end
 
   context "with sites included" do
-    let(:enrichments) {
+    let(:enrichments) do
       [
-      build(:course_enrichment, :initial_draft),
-      build(:course_enrichment, :published, fee_details: "Some details about the fees"),
-      build(:course_enrichment, :subsequent_draft),
-      build(:course_enrichment, :published, fee_details: "Some new details about the fees"),
-    ]
-    }
-    let(:enrichment) { course.enrichments.last }
+        build(:course_enrichment, :published, fee_details: "Some details about the fees"),
+        build(:course_enrichment, :published, fee_details: "Some new details about the fees"),
+        build(:course_enrichment, :subsequent_draft),
+      ]
+    end
+    let(:enrichment) { course.enrichments.second }
     before do
       get "/api/v3/recruitment_cycles/#{current_year}" \
           "/providers/#{provider.provider_code.downcase}" \
@@ -108,7 +107,7 @@ describe "GET v3/recruitment_cycle/:recruitment_cycle_year/providers/:provider_c
             "study_mode" => "full_time",
             "qualification" => "pgce_with_qts",
             "description" => "PGCE with QTS full time teaching apprenticeship",
-            "content_status" => "published",
+            "content_status" => "published_with_unpublished_changes",
             "ucas_status" => "running",
             "funding_type" => "apprenticeship",
             "is_send?" => false,
