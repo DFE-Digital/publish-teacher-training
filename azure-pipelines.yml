@@ -35,6 +35,7 @@ steps:
     set -x
     $DOCKER_OVERRIDE build
     $DOCKER_OVERRIDE up --no-build -d
+    $DOCKER_OVERRIDE logs -t --no-color
     $DOCKER_OVERRIDE exec -T web /bin/sh -c "./wait-for-command.sh -c 'nc -z db 5432' -s 0 -t 20"
     $DOCKER_OVERRIDE exec -T web /bin/sh -c "bundle exec rails db:setup"
     $DOCKER_OVERRIDE exec -T web /bin/sh -c "apk --no-cache add curl"
