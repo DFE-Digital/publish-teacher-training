@@ -26,7 +26,7 @@ describe GeocoderService do
     end
 
     it "geocodes UK (gb) addresses only" do
-      expect(Geocoder).to receive(:search).with(valid_site.full_address, params: { region: "gb" })
+      expect(Geokit::Geocoders::MultiGeocoder).to receive(:geocode).with(valid_site.full_address, params: { region: "gb" })
 
       GeocoderService.geocode(obj: valid_site)
     end

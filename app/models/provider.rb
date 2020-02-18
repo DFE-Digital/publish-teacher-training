@@ -51,6 +51,12 @@ class Provider < ApplicationRecord
   has_associated_audits
   audited except: :changed_at
 
+  acts_as_mappable :default_units => :miles,
+                   :default_formula => :sphere,
+                   :distance_field_name => :distance,
+                   :lat_column_name => :latitude,
+                   :lng_column_name => :longitude
+
   enum provider_type: {
     scitt: "B",
     lead_school: "Y",
@@ -125,7 +131,7 @@ class Provider < ApplicationRecord
 
   validate :add_enrichment_errors
 
-  geocoded_by :full_address
+  #geocoded_by :full_address
 
   before_discard { discard_courses }
 

@@ -87,7 +87,7 @@ gem "discard"
 gem "govuk_notify_rails"
 
 # Geocoding for Ruby
-gem "geocoder"
+#gem "geocoder"
 
 # Run jobs in the background. Good enough until we know we need more firepower
 # (i.e. SideKiq)
@@ -105,6 +105,9 @@ gem "request_store"
 
 # IoC Container
 gem "dry-container"
+
+# Geokit-rails
+gem "geokit-rails"
 
 group :development, :test do
   # add info about db structure to models and other files
