@@ -168,14 +168,19 @@ module API
       def update_subjects
         return if subject_ids.nil?
 
-        @course.subjects = []
-        @course.subjects = subject_ids.map { |id| Subject.find(id) }
+        if request_has_duplicate_subject_ids?
+          @course.errors.add(:subjects, :duplicate)
+        else
+          @course.subjects = []
 
-        subject_ids.each_with_index do |id, index|
-          @course.course_subjects.select { |cs| cs.subject_id == id.to_i }.first.position = index
+          @course.subjects = Subject.find(subject_ids)
+
+          subject_ids.each_with_index do |id, index|
+            @course.course_subjects.select { |cs| cs.subject_id == id.to_i }.first.position = index
+          end
+
+          @course.name = @course.generate_name
         end
-
-        @course.name = @course.generate_name
       end
 
       def build_provider
@@ -317,6 +322,10 @@ module API
         else
           render jsonapi_errors: @course.errors, status: :unprocessable_entity
         end
+      end
+
+      def request_has_duplicate_subject_ids?
+        subject_ids.uniq.count != subject_ids.count
       end
     end
   end

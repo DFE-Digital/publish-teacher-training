@@ -85,6 +85,31 @@ describe "PATCH /providers/:provider_code/courses/:course_code" do
     end
   end
 
+  context "Attempting to assign duplicate subjects" do
+    let(:course) { create(:course, level: :secondary, provider: provider, subjects: [subject1]) }
+    let(:subject1) { find_or_create(:secondary_subject, :english) }
+    let(:updated_subjects) do
+      {
+        subjects: {
+          data: [
+            { type: "subject", id: subject1.id.to_s },
+            { type: "subject", id: subject1.id.to_s },
+          ],
+        },
+      }
+    end
+
+    it "Returns http error" do
+      expect(response.status).to eq(422)
+    end
+
+    it "Returns an error" do
+      json_response = JSON.parse(response.body)
+
+      expect(json_response["errors"][0]["detail"]).to eq("You've already selected this subject - you can only select a subject once")
+    end
+  end
+
   context "Changing the order of the subjects on the course" do
     let(:course) { create(:course, level: :secondary, provider: provider, subjects: [subject1, subject2]) }
     let(:subject1) { find_or_create(:secondary_subject, :english) }
@@ -102,6 +127,7 @@ describe "PATCH /providers/:provider_code/courses/:course_code" do
 
     it "Changes the order correctly" do
       course.reload
+
       expect(course.subjects).to eq([subject2, subject1])
     end
 
