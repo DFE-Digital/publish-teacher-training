@@ -104,6 +104,7 @@ module API
 
         if @course.errors.empty? && @course.valid?
           @course.save
+          @course.course_subjects.each(&:save)
           render jsonapi: @course.reload
         else
           render jsonapi_errors: @course.errors, status: :unprocessable_entity
@@ -167,7 +168,13 @@ module API
       def update_subjects
         return if subject_ids.nil?
 
-        @course.subjects = Subject.where(id: subject_ids)
+        @course.subjects = []
+        @course.subjects = subject_ids.map { |id| Subject.find(id) }
+
+        subject_ids.each_with_index do |id, index|
+          @course.course_subjects.select { |cs| cs.subject_id == id.to_i }.first.position = index
+        end
+
         @course.name = @course.generate_name
       end
 

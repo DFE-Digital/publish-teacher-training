@@ -96,7 +96,25 @@ class Course < ApplicationRecord
              inverse_of: :accredited_courses,
              optional: true
 
-  has_many :course_subjects
+  has_many :course_subjects,
+           -> { order :position },
+           inverse_of: :course,
+           before_add: :set_subject_position
+
+  def set_subject_position(course_subject)
+    return unless course_subject.subject.secondary_subject?
+
+    secondary_course_subjects = course_subjects.select { |cs| cs.subject.secondary_subject? }
+
+    return unless secondary_course_subjects.all? { |cs| cs.position.present? }
+
+    course_subject.position = if secondary_course_subjects.any?
+                                secondary_course_subjects.last.position + 1
+                              else
+                                0
+                              end
+  end
+
   has_many :subjects, through: :course_subjects
   has_many :financial_incentives, through: :subjects
   has_many :site_statuses

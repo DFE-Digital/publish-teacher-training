@@ -22,6 +22,10 @@ class Subject < ApplicationRecord
   belongs_to :subject_area, foreign_key: :type, inverse_of: :subjects
   has_one :financial_incentive
 
+  def secondary_subject?
+    type == "SecondarySubject"
+  end
+
   def to_sym
     subject_name.parameterize.underscore.to_sym
   end
