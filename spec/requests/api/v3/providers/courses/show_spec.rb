@@ -76,8 +76,14 @@ describe "GET v3/recruitment_cycle/:recruitment_cycle_year/providers/:provider_c
   end
 
   context "with sites included" do
-    let(:enrichments) { [build(:course_enrichment, :published)] }
-    let(:enrichment) { course.enrichments.last }
+    let(:enrichments) do
+      [
+        build(:course_enrichment, :published, fee_details: "Some details about the fees"),
+        build(:course_enrichment, :published, fee_details: "Some new details about the fees"),
+        build(:course_enrichment, :subsequent_draft),
+      ]
+    end
+    let(:enrichment) { course.enrichments.second }
     before do
       get "/api/v3/recruitment_cycles/#{current_year}" \
           "/providers/#{provider.provider_code.downcase}" \
@@ -101,7 +107,7 @@ describe "GET v3/recruitment_cycle/:recruitment_cycle_year/providers/:provider_c
             "study_mode" => "full_time",
             "qualification" => "pgce_with_qts",
             "description" => "PGCE with QTS full time teaching apprenticeship",
-            "content_status" => "published",
+            "content_status" => "published_with_unpublished_changes",
             "ucas_status" => "running",
             "funding_type" => "apprenticeship",
             "is_send?" => false,
@@ -110,7 +116,7 @@ describe "GET v3/recruitment_cycle/:recruitment_cycle_year/providers/:provider_c
               course.applications_open_from.to_s,
             "about_course" => enrichment.about_course,
             "course_length" => enrichment.course_length,
-            "fee_details" => enrichment.fee_details,
+            "fee_details" => "Some new details about the fees",
             "fee_international" => enrichment.fee_international,
             "fee_uk_eu" => enrichment.fee_uk_eu,
             "financial_support" => enrichment.financial_support,
