@@ -165,51 +165,85 @@ describe Course, type: :model do
     end
   end
 
-  describe "#by_provider_name_ascending" do
-    let(:provider_a) { create(:provider, provider_name: "Provider A") }
-    let(:course_a) do
-      create(:course,
-             name: "Course A",
-             provider: provider_a)
+  context "ordering" do
+    context "canonical" do
+      let(:provider_a) { create(:provider, provider_name: "Provider A") }
+      let(:course_a) do
+        create(:course,
+               name: "Course A",
+               provider: provider_a)
+      end
+
+      let(:course_b) do
+        create(
+          :course,
+          name: "Course B",
+          provider: provider_a,
+        )
+      end
+
+      let(:provider_b) { create(:provider, provider_name: "Provider B") }
+      let(:course_c) do
+        create(
+          :course,
+          name: "Course C",
+          provider: provider_b,
+        )
+      end
+
+      let(:course_d) do
+        create(
+          :course,
+          name: "Course D",
+          provider: provider_b,
+        )
+      end
+
+      before do
+        course_a
+        course_b
+        course_c
+        course_d
+      end
+
+      describe "#ascending_canonical_order" do
+        it "sorts in ascending order of provider name" do
+          expect(described_class.ascending_canonical_order).to eq([course_a, course_b, course_c, course_d])
+        end
+      end
+
+      describe "#descending_canonical_order" do
+        it "sorts in descending order of provider name" do
+          expect(described_class.descending_canonical_order).to eq([course_d, course_c, course_b, course_a])
+        end
+      end
     end
 
-    let(:provider_b) { create(:provider, provider_name: "Provider B") }
-    let(:course_b) do
-      create(
-        :course,
-        name: "Course A",
-        provider: provider_b,
-      )
-    end
+    context "by name" do
+      let(:course_a) do
+        create(:course, name: "Course A")
+      end
 
-    it "sorts in ascending order of provider name" do
-      course_a
-      course_b
-      expect(described_class.by_provider_name_ascending).to eq([course_a, course_b])
-    end
-  end
+      let(:course_b) do
+        create(:course, name: "Course B")
+      end
 
-  describe "#by_provider_name_descending" do
-    let(:provider_a) { create(:provider, provider_name: "Provider A") }
-    let(:course_a) do
-      create(:course,
-             name: "Course A",
-             provider: provider_a)
-    end
+      before do
+        course_a
+        course_b
+      end
 
-    let(:provider_b) { create(:provider, provider_name: "Provider B") }
-    let(:course_b) do
-      create(
-        :course,
-        name: "Course A",
-        provider: provider_b,
-      )
-    end
+      describe "#by_name_ascending" do
+        it "sorts in ascending order of provider name" do
+          expect(described_class.by_name_ascending).to eq([course_a, course_b])
+        end
+      end
 
-    it "sorts in descending order of provider name" do
-      course_a
-      course_b
-      expect(described_class.by_provider_name_descending).to eq([course_b, course_a])
+      describe "#by_name_descending" do
+        it "sorts in descending order of provider name" do
+          expect(described_class.by_name_descending).to eq([course_b, course_a])
+        end
+      end
     end
   end
 

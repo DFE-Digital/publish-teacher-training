@@ -157,8 +157,21 @@ class Course < ApplicationRecord
     end
   end
 
-  scope :by_provider_name_ascending, -> { includes(:provider).order("provider.provider_name asc") }
-  scope :by_provider_name_descending, -> { includes(:provider).order("provider.provider_name desc") }
+  scope :by_name_ascending, -> do
+    order(name: :asc)
+  end
+
+  scope :by_name_descending, -> do
+    order(name: :desc)
+  end
+
+  scope :ascending_canonical_order, -> do
+    joins(:provider).merge(Provider.by_name_ascending).order("name asc")
+  end
+
+  scope :descending_canonical_order, -> do
+    joins(:provider).merge(Provider.by_name_descending).order("name desc")
+  end
 
   scope :changed_since, ->(timestamp) do
     if timestamp.present?

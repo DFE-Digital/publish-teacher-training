@@ -95,6 +95,26 @@ describe Provider, type: :model do
     end
   end
 
+  context "order" do
+    let(:provider_a) { create(:provider, provider_name: "Provider A") }
+    let(:provider_b) { create(:provider, provider_name: "Provider B") }
+    describe "#by_name_ascending" do
+      it "orders the providers by name in ascending order" do
+        provider_a
+        provider_b
+        expect(Provider.by_name_ascending).to eq([provider_a, provider_b])
+      end
+    end
+
+    describe "#by_name_descending" do
+      it "orders the providers by name in descending order" do
+        provider_a
+        provider_b
+        expect(Provider.by_name_descending).to eq([provider_b, provider_a])
+      end
+    end
+  end
+
   describe "#changed_since" do
     context "with a provider that has been changed after the given timestamp" do
       let(:provider) { create(:provider, changed_at: 5.minutes.ago) }
@@ -147,15 +167,6 @@ describe Provider, type: :model do
           "website"     => provider.website,
         ),
       )
-    end
-  end
-
-  describe ".in_order" do
-    let!(:second_alphabetical_provider) { create(:provider, provider_name: "Zork") }
-    let!(:first_alphabetical_provider) { create(:provider, provider_name: "Acme") }
-
-    it "returns sorted providers" do
-      expect(Provider.in_order).to match_array([first_alphabetical_provider, second_alphabetical_provider])
     end
   end
 

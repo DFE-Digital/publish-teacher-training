@@ -106,10 +106,12 @@ class Provider < ApplicationRecord
     end.order(:changed_at, :id)
   end
 
-  scope :in_order, -> { order(:provider_name) }
   scope :search_by_code_or_name, ->(search_term) {
     where("provider_name ILIKE ? OR provider_code ILIKE ?", "%#{search_term}%", "%#{search_term}%")
   }
+
+  scope :by_name_ascending, -> { order(provider_name: :asc) }
+  scope :by_name_descending, -> { order(provider_name: :desc) }
 
   serialize :accrediting_provider_enrichments, AccreditingProviderEnrichment::ArraySerializer
 

@@ -26,20 +26,20 @@ describe CourseSearchService do
     describe "sort by" do
       let(:expected_scope) { double }
 
-      context "ascending provider name" do
-        let(:sort) { "provider.provider_name" }
+      context "ascending provider name and course name" do
+        let(:sort) { "name,provider.provider_name" }
 
-        it "orders in ascending order of provider name" do
-          expect(findable_scope).to receive(:by_provider_name_ascending).and_return(expected_scope)
+        it "orders in ascending order" do
+          expect(findable_scope).to receive(:ascending_canonical_order).and_return(expected_scope)
           expect(subject).to eq(expected_scope)
         end
       end
 
-      context "descending provider name" do
-        let(:sort) { "-provider.provider_name" }
+      context "descending provider name and course name" do
+        let(:sort) { "-provider.provider_name,-name" }
 
-        it "orders in ascending order of provider name" do
-          expect(findable_scope).to receive(:by_provider_name_descending).and_return(expected_scope)
+        it "orders in descending order" do
+          expect(findable_scope).to receive(:descending_canonical_order).and_return(expected_scope)
           expect(subject).to eq(expected_scope)
         end
       end
