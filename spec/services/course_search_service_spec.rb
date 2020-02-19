@@ -179,6 +179,37 @@ describe CourseSearchService do
       end
     end
 
+    describe "filter[subjects]" do
+      context "a single subject code" do
+        let(:filter) { { subjects: "A1" } }
+        let(:expected_scope) { double }
+
+        it "adds the subject scope" do
+          expect(findable_scope).to receive(:with_subjects).with(%w(A1)).and_return(expected_scope)
+          expect(subject).to eq(expected_scope)
+        end
+      end
+
+      context "multiple subject codes" do
+        let(:filter) { { subjects: "A1,B2" } }
+        let(:expected_scope) { double }
+
+        it "adds the subject scope" do
+          expect(findable_scope).to receive(:with_subjects).with(%w(A1 B2)).and_return(expected_scope)
+          expect(subject).to eq(expected_scope)
+        end
+      end
+
+      context "when absent" do
+        let(:filter) { {} }
+
+        it "doesn't add the scope" do
+          expect(findable_scope).not_to receive(:with_subjects)
+          expect(subject).to eq(findable_scope)
+        end
+      end
+    end
+
     describe "multiple filters" do
       let(:filter) { { study_type: "part_time", funding: "salary" } }
       let(:salary_scope) { double }
