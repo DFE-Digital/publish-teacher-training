@@ -257,6 +257,67 @@ describe "GET v3/courses" do
     end
   end
 
+  context "subjects filter" do
+    let(:course_with_A1_subject) do
+      create(:course,
+             enrichments: [published_enrichment],
+             site_statuses: [findable_status],
+             subjects: [create(:primary_subject, subject_code: "A1")])
+    end
+
+    context "with courses that match a single subject" do
+      let(:request_path) { "/api/v3/courses?filter[subjects]=A1" }
+
+      before do
+        course_with_A1_subject
+      end
+
+      it "is returned" do
+        get request_path
+        json_response = JSON.parse(response.body)
+        course_hashes = json_response["data"]
+        expect(course_hashes.count).to eq(1)
+      end
+    end
+
+    context "with courses that match multiple subjects" do
+      let(:request_path) { "/api/v3/courses?filter[subjects]=A1,B1" }
+      let(:course_with_B1_subject) do
+        create(:course,
+               enrichments: [published_enrichment],
+               site_statuses: [build(:site_status, :findable)],
+               subjects: [create(:primary_subject, subject_code: "B1")])
+      end
+
+      before do
+        course_with_A1_subject
+        course_with_B1_subject
+      end
+
+      it "is returned" do
+        get request_path
+        json_response = JSON.parse(response.body)
+        course_hashes = json_response["data"]
+        expect(course_hashes.count).to eq(2)
+      end
+    end
+
+    context "with courses that match no subjects" do
+      let(:request_path) { "/api/v3/courses?filter[subjects]=C1" }
+
+      before do
+        course_with_A1_subject
+      end
+
+      it "is not returned" do
+        get request_path
+        json_response = JSON.parse(response.body)
+        course_hashes = json_response["data"]
+        expect(course_hashes.count).to eq(0)
+      end
+    end
+  end
+
   describe "recruitment_cycle scoping" do
     context "course not in the provided recruitment cycle" do
       let(:provider) { create(:provider, :next_recruitment_cycle) }

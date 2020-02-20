@@ -185,6 +185,9 @@ class Course < ApplicationRecord
   scope :with_study_modes, ->(study_modes) do
     where(study_mode: Array(study_modes) << "full_time_or_part_time")
   end
+  scope :with_subjects, ->(subject_codes) do
+    joins(:subjects).merge(Subject.with_subject_codes(subject_codes))
+  end
 
   scope :with_qualifications, ->(qualifications) do
     where(qualification: qualifications)

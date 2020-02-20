@@ -22,6 +22,10 @@ class Subject < ApplicationRecord
   belongs_to :subject_area, foreign_key: :type, inverse_of: :subjects
   has_one :financial_incentive
 
+  scope :with_subject_codes, ->(subject_codes) do
+    where(subject_code: subject_codes)
+  end
+
   def secondary_subject?
     type == "SecondarySubject"
   end

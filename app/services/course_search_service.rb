@@ -21,6 +21,7 @@ class CourseSearchService
     scope = scope.with_qualifications(qualifications) if qualifications.any?
     scope = scope.with_vacancies if has_vacancies?
     scope = scope.with_study_modes(study_types) if study_types.any?
+    scope = scope.with_subjects(subject_codes) if subject_codes.any?
     scope
   end
 
@@ -56,5 +57,11 @@ private
     return [] if filter[:study_type].blank?
 
     filter[:study_type].split(",")
+  end
+
+  def subject_codes
+    return [] if filter[:subjects].blank?
+
+    filter[:subjects].split(",")
   end
 end
