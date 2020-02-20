@@ -257,7 +257,7 @@ describe "GET v3/courses" do
     end
   end
 
-  context "subjects filter" do
+  describe "subjects filter" do
     let(:course_with_A1_subject) do
       create(:course,
              enrichments: [published_enrichment],
@@ -307,6 +307,44 @@ describe "GET v3/courses" do
 
       before do
         course_with_A1_subject
+      end
+
+      it "is not returned" do
+        get request_path
+        json_response = JSON.parse(response.body)
+        course_hashes = json_response["data"]
+        expect(course_hashes.count).to eq(0)
+      end
+    end
+  end
+
+  describe "provider filter" do
+    context "with a provider specified" do
+      let(:request_path) { "/api/v3/courses?filter[provider.provider_name]=#{filtered_provider_course.provider.provider_name}" }
+      let(:provider_filtered_by) { create(:provider) }
+      let(:filtered_provider_course) { create(:course, provider: provider_filtered_by, site_statuses: [findable_status], enrichments: [published_enrichment]) }
+
+      before do
+        provider_filtered_by
+        filtered_provider_course
+      end
+
+      it "is returned" do
+        get request_path
+        json_response = JSON.parse(response.body)
+        course_hashes = json_response["data"]
+        expect(course_hashes.count).to eq(1)
+      end
+    end
+
+    context "with a different provider specified" do
+      let(:request_path) { "/api/v3/courses?filter[provider.provider_name]=a+different+provider" }
+      let(:provider_excluded) { create(:provider) }
+      let(:excluded_provider_course) { create(:course, provider: provider_excluded, site_statuses: [build(:site_status, :findable)], enrichments: [published_enrichment]) }
+
+      before do
+        provider_excluded
+        excluded_provider_course
       end
 
       it "is not returned" do
