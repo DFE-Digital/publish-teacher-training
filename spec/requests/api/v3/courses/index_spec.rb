@@ -62,7 +62,7 @@ describe "GET v3/courses" do
     end
 
     context "in ascending order" do
-      let(:request_path) { "/api/v3/courses?include=provider&sort=provider.provider_name" }
+      let(:request_path) { "/api/v3/courses?include=provider&sort=name,provider.provider_name" }
 
       it "returns an ordered list" do
         get request_path
@@ -75,7 +75,7 @@ describe "GET v3/courses" do
     end
 
     context "in descending order" do
-      let(:request_path) { "/api/v3/courses?include=provider&sort=-provider.provider_name" }
+      let(:request_path) { "/api/v3/courses?include=provider&sort=-name,-provider.provider_name" }
 
       it "returns an ordered list" do
         get request_path

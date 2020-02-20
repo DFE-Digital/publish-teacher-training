@@ -2,7 +2,7 @@ class CourseSearchService
   def initialize(filter:, sort: nil, course_scope: Course)
     @filter = filter || {}
     @course_scope = course_scope
-    @sort = sort
+    @sort = Set.new(sort&.split(","))
   end
 
   class << self
@@ -14,8 +14,8 @@ class CourseSearchService
   def call
     scope = course_scope.findable
 
-    scope = scope.by_provider_name_ascending if sort_by_provider_ascending?
-    scope = scope.by_provider_name_descending if sort_by_provider_descending?
+    scope = scope.ascending_canonical_order if sort_by_provider_ascending?
+    scope = scope.descending_canonical_order if sort_by_provider_descending?
 
     scope = scope.with_salary if funding_filter_salary?
     scope = scope.with_qualifications(qualifications) if qualifications.any?
@@ -30,11 +30,11 @@ class CourseSearchService
 private
 
   def sort_by_provider_ascending?
-    @sort == "provider.provider_name"
+    @sort == Set["name", "provider.provider_name"]
   end
 
   def sort_by_provider_descending?
-    @sort == "-provider.provider_name"
+    @sort == Set["-name", "-provider.provider_name"]
   end
 
   attr_reader :filter, :course_scope

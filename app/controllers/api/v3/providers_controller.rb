@@ -12,7 +12,7 @@ module API
                        @recruitment_cycle.providers
                      end
 
-        render jsonapi: @providers.in_order, class: { Provider: API::V3::SerializableProvider }, fields: @fields
+        render jsonapi: @providers.by_name_ascending, class: { Provider: API::V3::SerializableProvider }, fields: @fields
       end
 
       def show

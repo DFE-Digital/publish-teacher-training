@@ -16,7 +16,7 @@ module API
                       .includes(:recruitment_cycle)
         providers = providers.where(id: @user.providers) if @user.present?
 
-        render jsonapi: providers.in_order,
+        render jsonapi: providers.by_name_ascending,
                fields: { providers: %i[provider_code provider_name courses
                                        recruitment_cycle_year] }
       end
