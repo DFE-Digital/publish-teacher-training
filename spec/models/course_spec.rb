@@ -853,6 +853,30 @@ describe Course, type: :model do
         end
       end
     end
+
+    describe ".with_provider_name" do
+      let(:provider) { create(:provider, provider_name: "ACME") }
+      let(:provider2) { create(:provider, provider_name: "DAVE") }
+      let(:course) { create(:course, provider: provider) }
+      let(:provider_name) { "ACME" }
+
+      before do
+        provider
+        provider2
+        course
+        provider_name
+      end
+
+      context "with an existing provider name" do
+        subject { described_class.with_provider_name(provider_name) }
+        it { is_expected.to contain_exactly(course) }
+      end
+
+      context "with a provider name with no courses" do
+        subject { described_class.with_provider_name("DAVE") }
+        it { is_expected.to be_empty }
+      end
+    end
   end
 
   describe "changed_at" do
