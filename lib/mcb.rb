@@ -393,9 +393,9 @@ module MCB
     def configure_local_database_env
       # values to match database.yml
       ENV["DB_HOSTNAME"] = "localhost"
-      ENV["DB_USERNAME"] = "manage_courses_backend"
-      ENV["DB_PASSWORD"] = "manage_courses_backend"
-      ENV["DB_DATABASE"] = "manage_courses_backend_development"
+      ENV["DB_USERNAME"] = "teacher_training"
+      ENV["DB_PASSWORD"] = "teacher_training"
+      ENV["DB_DATABASE"] = "teacher_training_development"
     end
 
     def pageable_output(output)
