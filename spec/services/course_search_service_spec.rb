@@ -210,6 +210,36 @@ describe CourseSearchService do
       end
     end
 
+    describe "filter[send_courses]" do
+      context "when true" do
+        let(:filter) { { send_courses: true } }
+        let(:expected_scope) { double }
+
+        it "adds the with_send scope" do
+          expect(findable_scope).to receive(:with_send).and_return(expected_scope)
+          expect(subject).to eq(expected_scope)
+        end
+      end
+
+      context "when false" do
+        let(:filter) { { send_courses: false } }
+
+        it "adds the with_send scope" do
+          expect(findable_scope).not_to receive(:with_send)
+          expect(subject).to eq(findable_scope)
+        end
+      end
+
+      context "when absent" do
+        let(:filter) { {} }
+
+        it "doesn't add the with_send scope" do
+          expect(findable_scope).not_to receive(:with_send)
+          expect(subject).to eq(findable_scope)
+        end
+      end
+    end
+
     describe "multiple filters" do
       let(:filter) { { study_type: "part_time", funding: "salary" } }
       let(:salary_scope) { double }
