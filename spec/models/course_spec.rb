@@ -254,22 +254,6 @@ describe Course, type: :model do
     end
   end
 
-  describe "#ensure_modern_languages" do
-    it "adds modern languages if a languages subject is selected" do
-      course = build(:course, level: "secondary", subjects: [french])
-      course.ensure_modern_languages
-      expect(course.subjects).to match_array([modern_languages, french])
-      expect(course).to be_valid
-    end
-
-    it "does not duplicate add modern language if it has already been added" do
-      course = build(:course, level: "secondary", subjects: [modern_languages, french])
-      course.ensure_modern_languages
-      expect(course.subjects).to match_array([modern_languages, french])
-      expect(course).to be_valid
-    end
-  end
-
   describe "validations" do
     it { should validate_presence_of(:name) }
     it { should validate_presence_of(:profpost_flag) }

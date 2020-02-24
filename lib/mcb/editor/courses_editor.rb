@@ -32,28 +32,6 @@ module MCB
         end
       end
 
-      def new_course_wizard
-        %i[title qualifications study_mode accredited_body start_date route maths
-           english science age_range_in_years level course_code is_send].each do |attribute|
-          edit(attribute)
-        end
-
-        course.subjects = @cli.multiselect(
-          initial_items: course.subjects.to_a,
-          possible_items: course.assignable_subjects,
-        )
-        course.ensure_modern_languages
-        puts "\nAbout to create the following course:"
-        print_at_most_two_courses
-        if @cli.confirm_creation? && try_saving_course
-          edit_sites
-          edit(:application_opening_date)
-          print_summary
-        else
-          puts "Aborting"
-        end
-      end
-
     protected
 
       def setup_cli
@@ -133,43 +111,17 @@ module MCB
       end
 
       def print_existing(attribute_name)
-        # don't print the existing attributes when creating a new course, since
-        # this will be null in the majority of cases
-        if @courses.select(&:persisted?).all?
-          puts "Existing values for course #{attribute_name}:"
-          table = Tabulo::Table.new @courses do |t|
-            t.add_column(:course_code, header: "course\ncode", width: 4)
-            t.add_column(attribute_name) unless attribute_name == :course_code
-          end
-          puts table.pack(max_table_width: nil), table.horizontal_rule
+        puts "Existing values for course #{attribute_name}:"
+        table = Tabulo::Table.new @courses do |t|
+          t.add_column(:course_code, header: "course\ncode", width: 4)
+          t.add_column(attribute_name) unless attribute_name == :course_code
         end
-      end
-
-      def print_summary
-        puts "\nHere's the final course that's been created:"
-        print_at_most_two_courses
-        @cli.enter_to_continue
-      end
-
-      def try_saving_course
-        if course.valid?
-          puts "Saving the course"
-          course.save!
-          true
-        else
-          puts "Course isn't valid:"
-          course.errors.full_messages.each { |error| puts " - #{error}" }
-          false
-        end
+        puts table.pack(max_table_width: nil), table.horizontal_rule
       end
 
       def update(attrs)
         @courses.each do |course|
-          if course.new_record?
-            attrs.each { |key, value| course.send("#{key}=".to_sym, value) }
-          else
-            course.update(attrs)
-          end
+          course.update(attrs)
         end
       end
 
