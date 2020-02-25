@@ -7,3 +7,4 @@ bg_jobs:
     class: "BulkSyncCoursesToFindJob"
     queue: find_sync
 gcp_api_key: please_change_me
+publish_url: https://www.publish-teacher-training-courses.service.gov.uk
