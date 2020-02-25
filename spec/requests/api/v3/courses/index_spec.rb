@@ -356,6 +356,40 @@ describe "GET v3/courses" do
     end
   end
 
+  describe "SEND courses filter" do
+    let(:request_path) { "/api/v3/courses?filter[send_courses]=true" }
+
+    context "with a SEND course" do
+      let(:send_course) { create(:course, is_send: true, site_statuses: [findable_status], enrichments: [published_enrichment]) }
+
+      before do
+        send_course
+      end
+
+      it "is returned" do
+        get request_path
+        json_response = JSON.parse(response.body)
+        course_hashes = json_response["data"]
+        expect(course_hashes.count).to eq(1)
+      end
+    end
+
+    context "with a course without SEND specialism" do
+      let(:course) { create(:course, site_statuses: [findable_status], enrichments: [published_enrichment]) }
+
+      before do
+        course
+      end
+
+      it "is not returned" do
+        get request_path
+        json_response = JSON.parse(response.body)
+        course_hashes = json_response["data"]
+        expect(course_hashes.count).to eq(0)
+      end
+    end
+  end
+
   describe "recruitment_cycle scoping" do
     context "course not in the provided recruitment cycle" do
       let(:provider) { create(:provider, :next_recruitment_cycle) }

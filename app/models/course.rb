@@ -210,6 +210,10 @@ class Course < ApplicationRecord
     joins(:provider).merge(Provider.where(provider_name: provider_name))
   end
 
+  scope :with_send, -> do
+    where(is_send: true)
+  end
+
   def self.entry_requirement_options_without_nil_choice
     ENTRY_REQUIREMENT_OPTIONS.reject { |option| option == :not_set }.keys.map(&:to_s)
   end
