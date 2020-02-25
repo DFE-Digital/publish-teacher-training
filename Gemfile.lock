@@ -163,7 +163,10 @@ GEM
     fugit (1.3.3)
       et-orbi (~> 1.1, >= 1.1.8)
       raabro (~> 1.1)
-    geocoder (1.6.1)
+    geokit (1.13.1)
+    geokit-rails (2.3.1)
+      geokit (~> 1.5)
+      rails (>= 3.0)
     globalid (0.4.2)
       activesupport (>= 4.2.0)
     govuk_notify_rails (2.1.2)
@@ -460,7 +463,7 @@ DEPENDENCIES
   fakefs
   faker
   faraday
-  geocoder
+  geokit-rails
   govuk_notify_rails
   guard
   guard-rspec

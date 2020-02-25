@@ -86,9 +86,6 @@ gem "discard"
 # Gov Notify
 gem "govuk_notify_rails"
 
-# Geocoding for Ruby
-gem "geocoder"
-
 # Run jobs in the background. Good enough until we know we need more firepower
 # (i.e. SideKiq)
 gem "sidekiq"
@@ -105,6 +102,9 @@ gem "request_store"
 
 # IoC Container
 gem "dry-container"
+
+# For geocoding and geographic logic (e.g: filtering sites by ranges)
+gem 'geokit-rails'
 
 group :development, :test do
   # add info about db structure to models and other files

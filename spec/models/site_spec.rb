@@ -95,7 +95,7 @@ describe Site, type: :model do
     end
 
     # Geocoding stubbed with support/helpers.rb
-    let(:site) {
+    let(:site) do
       build(:site,
             location_name: "Southampton High School",
             address1: "Long Lane",
@@ -103,7 +103,7 @@ describe Site, type: :model do
             address3: "Southampton",
             address4: nil,
             postcode: "SO45 2PA")
-    }
+    end
 
     describe "#full_address" do
       context "location name is not 'Main site'" do
@@ -145,7 +145,7 @@ describe Site, type: :model do
       end
 
       context "address" do
-        let(:site) {
+        let(:site) do
           create(:site,
                  latitude: 1.456789,
                  longitude: 1.456789,
@@ -155,7 +155,7 @@ describe Site, type: :model do
                  address3: "Southampton",
                  address4: nil,
                  postcode: "SO45 2PA")
-        }
+        end
         context "has not changed" do
           before do
             site.update(address1: "Long Lane")

@@ -24,6 +24,7 @@ class CourseSearchService
     scope = scope.with_subjects(subject_codes) if subject_codes.any?
     scope = scope.with_provider_name(provider_name) if provider_name.present?
     scope = scope.with_send if send_courses_filter?
+    scope = scope.within(filter[:radius], origin: [filter[:latitude], filter[:longitude]]) if locations_filter?
     scope
   end
 
@@ -31,15 +32,21 @@ class CourseSearchService
 
 private
 
+  def locations_filter?
+    filter.has_key?(:latitude) &&
+    filter.has_key?(:longitude) &&
+    filter.has_key?(:radius)
+  end
+
   def sort_by_provider_ascending?
-    @sort == Set["name", "provider.provider_name"]
+    sort == Set["name", "provider.provider_name"]
   end
 
   def sort_by_provider_descending?
-    @sort == Set["-name", "-provider.provider_name"]
+    sort == Set["-name", "-provider.provider_name"]
   end
 
-  attr_reader :filter, :course_scope
+  attr_reader :sort, :filter, :course_scope
 
   def funding_filter_salary?
     filter[:funding] == "salary"

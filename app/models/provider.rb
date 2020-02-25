@@ -127,7 +127,7 @@ class Provider < ApplicationRecord
 
   validate :add_enrichment_errors
 
-  geocoded_by :full_address
+  #geocoded_by :full_address
 
   before_discard { discard_courses }
 

@@ -50,7 +50,7 @@ class Site < ApplicationRecord
                    inclusion: { in: POSSIBLE_CODES, message: "must be A-Z, 0-9 or -" },
                    presence: true
 
-  geocoded_by :full_address
+  acts_as_mappable lat_column_name: :latitude, lng_column_name: :longitude
 
   after_commit -> { GeocodeJob.perform_later("Site", id) }, if: :needs_geolocation?
 

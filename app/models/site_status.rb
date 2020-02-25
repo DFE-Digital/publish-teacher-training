@@ -75,6 +75,7 @@ class SiteStatus < ApplicationRecord
   belongs_to :site
   belongs_to :course
 
+  acts_as_mappable through: :site
   scope :findable, -> { status_running.published_on_ucas }
 
   def findable?

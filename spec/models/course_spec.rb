@@ -565,6 +565,39 @@ describe Course, type: :model do
   end
 
   describe "scopes" do
+    describe ".within" do
+      let(:published_enrichment) { build(:course_enrichment, :published) }
+      let(:enrichments) { [published_enrichment] }
+      let(:course1) do
+        create(
+          :course,
+          enrichments: enrichments,
+          site_statuses: [
+            build(:site_status, :findable, site: build(:site, longitude: 0, latitude: 0)),
+          ],
+        )
+      end
+
+      let(:course2) do
+        create(
+          :course,
+          enrichments: enrichments,
+          site_statuses: [
+            build(:site_status, :findable, site: build(:site, longitude: 32, latitude: 32)),
+          ],
+        )
+      end
+
+      it "returns courses in range" do
+        course1
+        course2
+        courses_within_range = Course.within(16, origin: [0, 0])
+
+        expect(courses_within_range.count).to eq(1)
+        expect(Course.within(16, origin: [0, 0])).to match_array([course1])
+      end
+    end
+
     describe ".published" do
       subject { described_class.published }
       let(:test_course) { create(:course, enrichments: enrichments) }

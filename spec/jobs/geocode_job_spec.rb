@@ -7,14 +7,14 @@ describe GeocodeJob, type: :job do
     clear_performed_jobs
   end
 
-  let(:site) {
+  let(:site) do
     build(:site,
           address1: "Long Lane",
           address2: "Holbury",
           address3: "Southampton",
           address4: nil,
           postcode: "SO45 2PA")
-  }
+  end
 
   subject(:job) { described_class.perform_later("Site", site.id) }
 
