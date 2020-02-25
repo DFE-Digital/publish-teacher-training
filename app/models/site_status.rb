@@ -100,7 +100,7 @@ class SiteStatus < ApplicationRecord
   end
 
   def has_vacancies?
-    SiteStatus.findable.with_vacancies.any?
+    with_vacancies?
   end
 
 private

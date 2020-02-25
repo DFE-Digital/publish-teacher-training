@@ -27,7 +27,7 @@ describe "Courses API v2", type: :request do
            study_mode: :full_time,
            subjects: subjects,
            is_send: true,
-           site_statuses: [courses_site_status],
+           site_statuses: courses_site_statuses,
            enrichments: [enrichment],
            maths: :must_have_qualification_at_application_time,
            english: :must_have_qualification_at_application_time,
@@ -36,17 +36,24 @@ describe "Courses API v2", type: :request do
            applications_open_from: applications_open_from)
   end
 
-  let(:courses_site_status) {
-    build(:site_status,
-          :findable,
-          :with_any_vacancy,
-          site: create(:site, provider: provider))
+  let(:courses_site_statuses) {
+    [
+      build(:site_status,
+            :findable,
+            :with_any_vacancy,
+            site: create(:site, provider: provider)),
+      build(:site_status,
+            :with_no_vacancies,
+            site: create(:site, provider: provider)),
+    ]
   }
   let(:enrichment)     { build :course_enrichment, :published }
   let(:provider)       { create :provider, organisations: [organisation] }
 
-  let(:site_status)    { findable_open_course.site_statuses.first }
-  let(:site)           { site_status.site }
+  let(:site_status1)   { findable_open_course.site_statuses.first }
+  let(:site_status2)   { findable_open_course.site_statuses.last }
+  let(:site1)          { site_status1.site }
+  let(:site2)          { site_status2.site }
 
   subject { response }
 
@@ -123,7 +130,12 @@ describe "Courses API v2", type: :request do
                 "accrediting_provider" => { "meta" => { "included" => false } },
                 "provider" => { "meta" => { "included" => false } },
                 "sites" => { "meta" => { "included" => false } },
-                "site_statuses" => { "data" => [{ "type" => "site_statuses", "id" => site_status.id.to_s }] },
+                "site_statuses" => {
+                  "data" => [
+                    { "type" => "site_statuses", "id" => site_status1.id.to_s },
+                    { "type" => "site_statuses", "id" => site_status2.id.to_s },
+                  ],
+                },
                 "subjects" => { "data" => [{ "type" => "subjects", "id" => course_subject_mathematics.id.to_s }] },
               },
               "meta" => {
@@ -254,19 +266,37 @@ describe "Courses API v2", type: :request do
             },
             "included" => [
               {
-                "id" => site_status.id.to_s,
+                "id" => site_status1.id.to_s,
                 "type" => "site_statuses",
                 "attributes" => {
-                  "vac_status" => site_status.vac_status,
-                  "publish" => site_status.publish,
-                  "status" => site_status.status,
+                  "vac_status" => site_status1.vac_status,
+                  "publish" => site_status1.publish,
+                  "status" => site_status1.status,
                   "has_vacancies?" => true,
                 },
                 "relationships" => {
                   "site" => {
                     "data" => {
                       "type" => "sites",
-                      "id" => site.id.to_s,
+                      "id" => site1.id.to_s,
+                    },
+                  },
+                },
+              },
+              {
+                "id" => site_status2.id.to_s,
+                "type" => "site_statuses",
+                "attributes" => {
+                  "vac_status" => site_status2.vac_status,
+                  "publish" => site_status2.publish,
+                  "status" => site_status2.status,
+                  "has_vacancies?" => false,
+                },
+                "relationships" => {
+                  "site" => {
+                    "data" => {
+                      "type" => "sites",
+                      "id" => site2.id.to_s,
                     },
                   },
                 },
@@ -284,19 +314,36 @@ describe "Courses API v2", type: :request do
                 },
               },
               {
-                "id" => site.id.to_s,
+                "id" => site1.id.to_s,
                 "type" => "sites",
                 "attributes" => {
-                  "code" => site.code,
-                  "location_name" => site.location_name,
-                  "address1" => site.address1,
-                  "address2" => site.address2,
-                  "address3" => site.address3,
-                  "address4" => site.address4,
-                  "postcode" => site.postcode,
-                  "region_code" => site.region_code,
-                  "latitude" => site.latitude,
-                  "longitude" => site.longitude,
+                  "code" => site1.code,
+                  "location_name" => site1.location_name,
+                  "address1" => site1.address1,
+                  "address2" => site1.address2,
+                  "address3" => site1.address3,
+                  "address4" => site1.address4,
+                  "postcode" => site1.postcode,
+                  "region_code" => site1.region_code,
+                  "latitude" => site1.latitude,
+                  "longitude" => site1.longitude,
+                  "recruitment_cycle_year" => current_year.to_s,
+                },
+              },
+              {
+                "id" => site2.id.to_s,
+                "type" => "sites",
+                "attributes" => {
+                  "code" => site2.code,
+                  "location_name" => site2.location_name,
+                  "address1" => site2.address1,
+                  "address2" => site2.address2,
+                  "address3" => site2.address3,
+                  "address4" => site2.address4,
+                  "postcode" => site2.postcode,
+                  "region_code" => site2.region_code,
+                  "latitude" => site2.latitude,
+                  "longitude" => site2.longitude,
                   "recruitment_cycle_year" => current_year.to_s,
                 },
               },
