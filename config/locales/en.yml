@@ -52,6 +52,7 @@ en:
             subjects:
               blank: "^There is a problem with this course. Contact support to fix it (Error: S)"
               course_creation: "^You must pick at least one subject"
+              duplicate: "^You've already selected this subject - you can only select a subject once"
             modern_languages_subjects:
               select_a_language: "^You must pick at least one language"
             study_mode:
