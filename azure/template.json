@@ -169,6 +169,13 @@
         "description": "The GOV.UK Notify template id for the find welcome email"
       }
     },
+    "govukNotifyCourseUpdateEmailTemplateId": {
+      "type": "string",
+      "defaultValue": "",
+      "metadata": {
+        "description": "The GOV.UK Notify template id for the course update email"
+      }
+    },
     "containerInstanceName": {
       "type": "array",
       "metadata": {
