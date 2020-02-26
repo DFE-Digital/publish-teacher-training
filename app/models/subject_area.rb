@@ -9,7 +9,7 @@
 #
 # Indexes
 #
-#  index_subject_area_on_typename  (typename)
+#  index_subject_area_on_typename  (typename) UNIQUE
 #
 
 class SubjectArea < ApplicationRecord

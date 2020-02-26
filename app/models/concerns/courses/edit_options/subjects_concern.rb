@@ -11,11 +11,12 @@ module Courses
           self.assignable_master_subjects&.sort_by(&:subject_name)
         end
 
-        def available_modern_languages
-          return unless has_the_modern_languages_secondary_subject_type?
-          return unless level == "secondary"
-
+        def modern_languages
           ModernLanguagesSubject.all
+        end
+
+        def modern_languages_subject
+          SecondarySubject.modern_languages
         end
       end
     end
