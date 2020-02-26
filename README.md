@@ -115,7 +115,7 @@ Quick check that it's working in local development with the token "bats"
 configured in `config/environments/development.rb`:
 
 ```bash
-curl http://localhost:3001/api/v1/2019/subjects.json -H "Authorization: Bearer bats"
+curl http://localhost:3001/api/v1/2020/subjects.json -H "Authorization: Bearer bats"
 ```
 
 ### V2
