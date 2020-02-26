@@ -1,7 +1,8 @@
 # == Route Map
 #
 #                                                                 Prefix Verb   URI Pattern                                                                                                                              Controller#Action
-#                                                                   ping GET    /ping(.:format)                                                                                                                          health_checks#ping
+#                                                                   ping GET    /ping(.:format)                                                                                                                          heartbeat#ping
+#                                                            healthcheck GET    /healthcheck(.:format)                                                                                                                   heartbeat#healthcheck
 #                                                       api_v1_providers GET    /api/v1(/:recruitment_year)/providers(.:format)                                                                                          api/v1/providers#index {:recruitment_year=>/2020|2021/}
 #                                                        api_v1_subjects GET    /api/v1(/:recruitment_year)/subjects(.:format)                                                                                           api/v1/subjects#index {:recruitment_year=>/2020|2021/}
 #                                                         api_v1_courses GET    /api/v1(/:recruitment_year)/courses(.:format)                                                                                            api/v1/courses#index {:recruitment_year=>/2020|2021/}

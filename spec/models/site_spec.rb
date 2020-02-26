@@ -13,7 +13,7 @@
 #  location_name :text
 #  longitude     :float
 #  postcode      :text
-#  provider_id   :integer          default(0), not null
+#  provider_id   :integer          default("0"), not null
 #  region_code   :integer
 #  updated_at    :datetime         not null
 #

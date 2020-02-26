@@ -8,7 +8,7 @@
 #  id                                             :bigint           not null, primary key
 #  scholarship                                    :string
 #  subject_id                                     :bigint           not null
-#  subject_knowledge_enhancement_course_available :boolean          default(FALSE), not null
+#  subject_knowledge_enhancement_course_available :boolean          default("false"), not null
 #  updated_at                                     :datetime         not null
 #
 # Indexes
