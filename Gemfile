@@ -106,6 +106,9 @@ gem "request_store"
 # IoC Container
 gem "dry-container"
 
+# Sitemap generator
+gem "sitemap_generator"
+
 group :development, :test do
   # add info about db structure to models and other files
   gem "annotate"
