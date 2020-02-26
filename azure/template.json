@@ -476,6 +476,10 @@
                 "value": "[parameters('govukNotifyWelcomeEmailTemplateId')]"
               },
               {
+                "name": "SETTINGS__GOVUK_NOTIFY__COURSE_UPDATE_EMAIL_TEMPLATE_ID",
+                "value": "[parameters('govukNotifyCourseUpdateEmailTemplateId')]"
+              },
+              {
                 "name": "SETTINGS__SYSTEM_AUTHENTICATION_TOKEN",
                 "value": "[parameters('mcbeSystemAuthenticationToken')]"
               },
