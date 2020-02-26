@@ -3,7 +3,7 @@
 # Table name: user
 #
 #  accept_terms_date_utc  :datetime
-#  admin                  :boolean          default(FALSE)
+#  admin                  :boolean          default("false")
 #  email                  :text
 #  first_login_date_utc   :datetime
 #  first_name             :text

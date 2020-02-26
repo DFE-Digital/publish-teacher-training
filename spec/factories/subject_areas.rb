@@ -7,6 +7,10 @@
 #  typename   :text             not null, primary key
 #  updated_at :datetime         not null
 #
+# Indexes
+#
+#  index_subject_area_on_typename  (typename)
+#
 
 FactoryBot.define do
   factory :subject_area do
