@@ -1,6 +1,6 @@
 module GeocoderHelper
   class GeocoderStub
-    def geocode(address, **params)
+    def geocode(address, **_params)
       case address
       when "Long Lane, Holbury, Southampton, SO45 2PA"
         Geokit::GeoLoc.new(

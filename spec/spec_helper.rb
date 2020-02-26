@@ -60,7 +60,7 @@ RSpec.configure do |config|
 
   include GeocoderHelper
   config.before :each do
-        stub_const("Geokit::Geocoders::MultiGeocoder", GeocoderStub.new)
+    stub_const("Geokit::Geocoders::GoogleGeocoder", GeocoderStub.new)
   end
 
   config.include SerializerSpecHelper, type: :serializer
