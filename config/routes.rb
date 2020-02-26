@@ -106,7 +106,8 @@
 
 # rubocop:disable Metrics/BlockLength
 Rails.application.routes.draw do
-  get :ping, controller: :health_checks
+  get :ping, controller: :heartbeat
+  get :healthcheck, controller: :heartbeat
 
   namespace :api do
     namespace :v1 do
