@@ -151,6 +151,13 @@
       ],
       "defaultValue": "1"
     },
+    "appServicePlanTier": {
+      "type": "string",
+      "defaultValue": "Standard",
+      "metadata": {
+          "description": "The App Service Plan tier."
+      }
+    },
     "appServicePlanInstances": {
       "type": "int",
       "defaultValue": 1
@@ -359,6 +366,9 @@
           },
           "appServicePlanSize": {
             "value": "[parameters('appServicePlanSize')]"
+          },
+          "appServicePlanTier": {
+              "value": "[parameters('appServicePlanTier')]"
           },
           "appServicePlanInstances": {
             "value": "[parameters('appServicePlanInstances')]"
