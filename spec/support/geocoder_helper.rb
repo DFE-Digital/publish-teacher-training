@@ -12,7 +12,7 @@ module GeocoderHelper
           state_code: "England",
           country: "United Kingdom",
           country_code: "gb",
-        )
+        ).tap { |loc| loc.district = "Hampshire" }
       else
         Geokit::GeoLoc.new(
           lat: 51.4524877,
@@ -23,7 +23,7 @@ module GeocoderHelper
           state_code: "England",
           country: "United Kingdom",
           country_code: "UK",
-        )
+        ).tap { |loc| loc.district = "Greater London" }
       end
     end
   end
