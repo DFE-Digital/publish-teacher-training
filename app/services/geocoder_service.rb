@@ -1,9 +1,8 @@
 class GeocoderService
   def self.geocode(obj:, force: false)
-    results = Geocoder.search(obj.full_address, params: { region: "gb" })
+    result = Geokit::Geocoders::GoogleGeocoder.geocode(obj.full_address, bias: "gb")
 
-    if results.present?
-      result = results.first
+    if result.present?
       obj.latitude = result.latitude
       obj.longitude = result.longitude
       obj.save!(validate: !force)

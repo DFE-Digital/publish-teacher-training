@@ -157,6 +157,10 @@ class Course < ApplicationRecord
     end
   end
 
+  scope :within, ->(range, origin:) do
+    joins(:sites).merge(Site.within(range, origin: origin))
+  end
+
   scope :by_name_ascending, -> do
     order(name: :asc)
   end

@@ -48,6 +48,48 @@ describe "GET v3/courses" do
   let(:findable_status) { build(:site_status, :findable) }
   let(:published_enrichment) { build(:course_enrichment, :published) }
 
+  describe "location filter" do
+    context "filters out courses with sites that are too far" do
+      let(:provider_a) { create(:provider, provider_name: "Provider A") }
+      let(:course_a) do
+        create(:course,
+               name: "Course A",
+               provider: provider_a,
+               site_statuses: [build(:site_status, :findable, site: build(:site, latitude: 0, longitude: 0))],
+               enrichments: [build(:course_enrichment, :published)])
+      end
+
+      let(:provider_b) { create(:provider, provider_name: "Provider B") }
+      let(:course_b) do
+        create(
+          :course,
+          name: "Course A",
+          provider: provider_b,
+          site_statuses: [build(:site_status, :findable, site: build(:site, latitude: 16, longitude: 32))],
+          enrichments: [build(:course_enrichment, :published)],
+        )
+      end
+
+      before do
+        course_a
+        course_b
+      end
+
+      context "with a radius of 5" do
+        let(:request_path) { "/api/v3/courses?include=provider&sort=name,provider.provider_name&filter[latitude]=0&filter[longitude]=0&filter[radius]=5" }
+
+        it "returns only courses in range" do
+          get request_path
+
+          json_response = JSON.parse(response.body)
+          course_hashes = json_response["data"]
+          expect(course_hashes.count).to eq(1)
+          expect(course_hashes.first["id"]).to eq(course_a.id.to_s)
+        end
+      end
+    end
+  end
+
   describe "ordering" do
     let(:provider_a) { create(:provider, provider_name: "Provider A") }
     let(:course_a) do

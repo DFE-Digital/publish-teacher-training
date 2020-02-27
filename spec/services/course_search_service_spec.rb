@@ -60,6 +60,32 @@ describe CourseSearchService do
       end
     end
 
+    describe "range" do
+      context "when a range is specified" do
+        let(:longitude) { 0 }
+        let(:latitude) { 1 }
+        let(:radius) { 5 }
+        let(:filter) { { longitude: longitude, latitude: latitude, radius: radius } }
+        let(:expected_scope) { double }
+
+        it "adds the within scope" do
+          expect(findable_scope).to receive(:within).with(radius, origin: [latitude, longitude]).and_return(expected_scope)
+          expect(subject).to eq(expected_scope)
+        end
+      end
+
+      context "when a range is not specified" do
+        let(:longitude) { 0 }
+        let(:latitude) { 1 }
+        let(:filter) { { longitude: longitude, latitude: latitude } }
+        let(:expected_scope) { double }
+
+        it "does not add the within scope" do
+          expect(findable_scope).not_to receive(:within)
+        end
+      end
+    end
+
     describe "filter[funding]" do
       context "when value is salary" do
         let(:filter) { { funding: "salary" } }

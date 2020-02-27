@@ -127,7 +127,9 @@ class Provider < ApplicationRecord
 
   validate :add_enrichment_errors
 
-  geocoded_by :full_address
+  acts_as_mappable lat_column_name: :latitude, lng_column_name: :longitude
+
+  scope :not_geocoded, -> { where(latitude: nil, longitude: nil) }
 
   before_discard { discard_courses }
 
