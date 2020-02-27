@@ -237,6 +237,9 @@ describe "GET v3/recruitment_cycle/:recruitment_cycle_year/providers/:provider_c
                 },
               },
             }],
+            "meta" => {
+              "count" => 1,
+            },
             "links"  => {
               "last" => "/api/v3/recruitment_cycles/2020/providers/#{provider.provider_code}/courses?page%5Bpage%5D=1",
             },

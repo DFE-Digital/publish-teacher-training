@@ -16,18 +16,31 @@ describe "GET v3/recruitment_cycles/:year/courses" do
     next_course
   end
 
-  it "returns a paginated list of courses in the recruitment cycle" do
-    get request_path
+  describe "pagination" do
+    it "returns a paginated list of courses in the recruitment cycle" do
+      get request_path
 
-    json_response = JSON.parse(response.body)
-    course_hashes = json_response["data"]
-    expect(course_hashes.count).to eq(1)
-    expect(course_hashes.first["id"]).to eq(current_course.id.to_s)
+      json_response = JSON.parse(response.body)
+      course_hashes = json_response["data"]
+      expect(course_hashes.count).to eq(1)
+      expect(course_hashes.first["id"]).to eq(current_course.id.to_s)
 
-    headers = response.headers
+      headers = response.headers
 
-    expect(headers["Per-Page"]).to be_present
-    expect(headers["Total"]).to be_present
+      expect(headers["Per-Page"]).to be_present
+      expect(headers["Total"]).to be_present
+    end
+  end
+
+  describe "course count" do
+    it "returns the course count in a meta object" do
+      get request_path
+
+      json_response = JSON.parse(response.body)
+      meta = json_response["meta"]
+
+      expect(meta["count"]).to be(1)
+    end
   end
 end
 
