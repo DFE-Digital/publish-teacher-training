@@ -29,6 +29,7 @@ describe User, type: :model do
     it { should have_many(:organisation_users) }
     it { should have_many(:organisations).through(:organisation_users) }
     it { should have_many(:providers).through(:organisations) }
+    it { should have_many(:user_notifications) }
   end
 
   describe "validations" do

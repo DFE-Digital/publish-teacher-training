@@ -76,6 +76,11 @@ class Provider < ApplicationRecord
 
   has_many :sites
 
+  has_many :user_notifications,
+           foreign_key: :provider_code,
+           primary_key: :provider_code,
+           inverse_of: :provider
+
   has_many :courses, -> { kept }, inverse_of: false
   has_one :ucas_preferences, class_name: "ProviderUCASPreference"
   has_many :contacts

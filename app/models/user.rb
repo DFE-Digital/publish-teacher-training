@@ -28,7 +28,10 @@ class User < ApplicationRecord
   # dependent destroy because https://stackoverflow.com/questions/34073757/removing-relations-is-not-being-audited-by-audited-gem/34078860#34078860
   has_many :organisations, through: :organisation_users, dependent: :destroy
 
+  has_many :user_notifications
+
   has_many :providers, through: :organisations
+
   has_many :access_requests,
            foreign_key: :requester_id,
            primary_key: :id,

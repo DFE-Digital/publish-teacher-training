@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_02_21_151215) do
+ActiveRecord::Schema.define(version: 2020_02_27_105316) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_buffercache"
@@ -303,6 +303,15 @@ ActiveRecord::Schema.define(version: 2020_02_21_151215) do
     t.index ["email"], name: "IX_user_email", unique: true
   end
 
+  create_table "user_notification", force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.string "provider_code", null: false
+    t.boolean "course_update", default: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["provider_code"], name: "index_user_notification_on_provider_code"
+  end
+
   add_foreign_key "access_request", "\"user\"", column: "requester_id", name: "FK_access_request_user_requester_id", on_delete: :nullify
   add_foreign_key "contact", "provider", name: "fk_contact_provider"
   add_foreign_key "course", "provider", name: "FK_course_provider_provider_id", on_delete: :cascade
@@ -323,4 +332,5 @@ ActiveRecord::Schema.define(version: 2020_02_21_151215) do
   add_foreign_key "provider_ucas_preference", "provider", name: "fk_provider_ucas_preference__provider"
   add_foreign_key "session", "\"user\"", column: "user_id", name: "FK_session_user_user_id", on_delete: :cascade
   add_foreign_key "site", "provider", name: "FK_site_provider_provider_id", on_delete: :cascade
+  add_foreign_key "user_notification", "\"user\"", column: "user_id"
 end

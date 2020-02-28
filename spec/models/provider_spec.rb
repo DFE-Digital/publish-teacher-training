@@ -65,6 +65,7 @@ describe Provider, type: :model do
     it { should have_many(:users).through(:organisations) }
     it { should have_one(:ucas_preferences).class_name("ProviderUCASPreference") }
     it { should have_many(:contacts) }
+    it { should have_many(:user_notifications) }
   end
 
   describe "organisation" do
