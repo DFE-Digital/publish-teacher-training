@@ -234,7 +234,7 @@ describe "Providers API", type: :request do
                 {
                   "campus_code" => "-",
                   "name" => "Main site 2",
-                  "region_code" => "11",
+                  "region_code" => "01",
                 },
               ],
               "institution_code" => "B123",
@@ -245,7 +245,7 @@ describe "Providers API", type: :request do
               "address3" => "Bee City",
               "address4" => "Bee Hive",
               "postcode" => "B3 3BB",
-              "region_code" => "03",
+              "region_code" => "01",
               "scheme_member" => "N",
               "recruitment_cycle" => current_cycle.year,
               "type_of_gt12" => "Coming or Not",
