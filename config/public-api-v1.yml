@@ -1,0 +1,61 @@
+---
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: Apply API
+  contact:
+    name: DfE
+    email: becomingateacher@digital.education.gov.uk
+  description: API for DfE's postgraduate teacher training course service
+servers:
+  - description: Production
+    url: https://api2.publish-teacher-training-courses.service.gov.uk/api/public/v1
+paths:
+  /courses:
+    get:
+      operationId: public_api_v1_courses
+      parameters:
+        - name: filter
+          in: query
+          schema:
+            type: object
+          style: deepObject
+        - name: sort
+          in: query
+          schema:
+            type: object
+          style: deepObject
+      responses:
+        '200':
+          description: The list of courses in the current recruitment cycle
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SingleCourseResponse"
+components:
+  schemas:
+    SingleCourseResponse:
+      type: object
+      required:
+        - data
+      properties:
+        data:
+          type: object
+          required:
+            - id
+            - type
+            - attributes
+          properties:
+            id:
+              type: integer
+            type:
+              type: string
+            attributes:
+              $ref: "#/components/schemas/Course"
+    Course:
+      type: object
+      required:
+        - code
+      properties:
+        code:
+          type: string

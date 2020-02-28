@@ -1,8 +1,16 @@
 # == Route Map
 #
 #                                                                 Prefix Verb   URI Pattern                                                                                                                              Controller#Action
+#                                                                   root GET    /                                                                                                                                        api_docs/pages#home
 #                                                                   ping GET    /ping(.:format)                                                                                                                          heartbeat#ping
 #                                                            healthcheck GET    /healthcheck(.:format)                                                                                                                   heartbeat#healthcheck
+#                                                          api_docs_home GET    /api-docs(.:format)                                                                                                                      api_docs/pages#home
+#                                                     api_docs_reference GET    /api-docs/reference(.:format)                                                                                                            api_docs/reference#reference
+#                                             api_docs_reference_version GET    /api-docs/reference/:version(.:format)                                                                                                   api_docs/reference#reference {:version=>/v\d+/}
+#                                                 api_docs_release_notes GET    /api-docs/release-notes(.:format)                                                                                                        api_docs/pages#release_notes
+#                                                          api_docs_help GET    /api-docs/help(.:format)                                                                                                                 api_docs/pages#help
+#                                                         api_docs_specs GET    /api-docs/specs(.:format)                                                                                                                api_docs/pages#specs
+#                                                               api_docs GET    /api-docs/specs/teacher-training-public-api-v1.yml(.:format)                                                                             api_docs/openapi#specs
 #                                                       api_v1_providers GET    /api/v1(/:recruitment_year)/providers(.:format)                                                                                          api/v1/providers#index {:recruitment_year=>/2020|2021/}
 #                                                        api_v1_subjects GET    /api/v1(/:recruitment_year)/subjects(.:format)                                                                                           api/v1/subjects#index {:recruitment_year=>/2020|2021/}
 #                                                         api_v1_courses GET    /api/v1(/:recruitment_year)/courses(.:format)                                                                                            api/v1/courses#index {:recruitment_year=>/2020|2021/}
@@ -107,8 +115,22 @@
 
 # rubocop:disable Metrics/BlockLength
 Rails.application.routes.draw do
+  root to: "api_docs/pages#home"
+
   get :ping, controller: :heartbeat
   get :healthcheck, controller: :heartbeat
+
+  namespace :api_docs, path: "/api-docs" do
+    get "/" => "pages#home", as: :home
+    get "/reference" => "reference#reference"
+    get "/reference/:version" => "reference#reference",
+        version: /v\d+/,
+        as: :reference_version
+    get "/release-notes" => "pages#release_notes"
+    get "/help" => "pages#help", as: :help
+    get "/specs" => "pages#specs"
+    get "/specs/teacher-training-public-api-v1.yml" => "openapi#specs"
+  end
 
   namespace :api do
     namespace :v1 do

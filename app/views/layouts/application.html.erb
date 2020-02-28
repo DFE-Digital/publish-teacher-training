@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en" class="govuk-template ">
+  <head>
+    <title><%= content_for(:page_title) %> - Publish teacher training courses - GOV.UK</title>
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+    <%= tag :meta, name: "viewport", content: "width=device-width, initial-scale=1" %>
+    <%= tag :meta, name: "theme-color", content: "#0b0c0c" %>
+    <%= tag :meta, name: "ROBOTS", content: "NOINDEX, NOFOLLOW" %>
+    <link rel="stylesheet" href="/css/application.css"></link>
+  </head>
+
+  <body class="govuk-template__body <%= content_for(:body_classes) %>">
+    <script>
+      document.body.className = ((document.body.className) ? document.body.className + ' js-enabled' : 'js-enabled');
+    </script>
+
+    <a href="#main-content" class="govuk-skip-link">Skip to main content</a>
+
+    <%= render partial: 'layouts/header' %>
+
+    <div class="govuk-width-container">
+      <%= yield(:before_content) %>
+
+      <main class="govuk-main-wrapper" id="main-content" role="main">
+        <%= yield %>
+      </main>
+    </div>
+
+    <%= render partial: 'layouts/footer' %>
+
+    <%= yield(:before_body_close) %>
+  </body>
+</html>
