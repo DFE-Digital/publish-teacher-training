@@ -512,4 +512,41 @@ describe "GET v3/courses" do
       expect(headers["Total"]).to be_present
     end
   end
+
+  describe "when requesting course_code, provider_code, changed_at fields for sitemap" do
+    around do |example|
+      max_per_page = Kaminari.config.max_per_page
+
+      Kaminari.configure do |config|
+        config.max_per_page = 1
+      end
+
+      example.run
+
+      Kaminari.configure do |config|
+        config.max_per_page = max_per_page
+      end
+    end
+
+    let(:request_path) { "/api/v3/courses?fields[courses]=course_code,provider_code,changed_at" }
+
+    before do
+      create(:course, site_statuses: [build(:site_status, :findable)], enrichments: [build(:course_enrichment, :published)])
+      create(:course, site_statuses: [build(:site_status, :findable)], enrichments: [build(:course_enrichment, :published)])
+    end
+
+    it "returns all courses bypassing pagination" do
+      get request_path
+      json_response = JSON.parse(response.body)
+
+      expect(json_response["data"].size).to eql(2)
+    end
+
+    it "only returns specified fields" do
+      get request_path
+      json_response = JSON.parse(response.body)
+
+      expect(json_response["data"][0]["attributes"].keys).to eql(%w[course_code changed_at provider_code])
+    end
+  end
 end

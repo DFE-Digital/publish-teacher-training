@@ -92,7 +92,11 @@ describe "GET v3/recruitment_cycle/:recruitment_cycle_year/providers/:provider_c
     end
 
     it "has a data section with the correct attributes" do
-      json_response = JSON.parse response.body
+      json_response = JSON.parse(response.body)
+
+      changed_at = Time.zone.parse(json_response["data"]["attributes"].delete("changed_at"))
+      expect(changed_at).to be_within(60).of(Time.zone.now)
+
       expect(json_response).to eq(
         "data" => {
           "id" => course.id.to_s,

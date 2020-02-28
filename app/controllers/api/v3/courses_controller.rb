@@ -6,9 +6,21 @@ module API
       before_action :build_courses
 
       def index
-        course_search = CourseSearchService.call(filter: params[:filter], sort: params[:sort], course_scope: @courses)
+        course_search = CourseSearchService.call(filter: params[:filter],
+                                                 sort: params[:sort],
+                                                 course_scope: @courses)
 
-        render jsonapi: paginate(course_search), fields: fields_param, include: params[:include], meta: { count: course_search.count }, class: CourseSerializersService.new.execute
+        results = if disable_pagination?
+                    course_search
+                  else
+                    paginate(course_search)
+                  end
+
+        render jsonapi: results,
+          fields: fields_param,
+          include: params[:include],
+          meta: { count: results.count },
+          class: CourseSerializersServiceV3.new.execute
       end
 
       def show
@@ -24,11 +36,21 @@ module API
 
     private
 
+      def disable_pagination?
+        if params[:fields] && params[:fields][:courses]
+          (params[:fields][:courses].split(",") & fields_required_to_disable_pagination).size == 3
+        end
+      end
+
+      def fields_required_to_disable_pagination
+        %w[course_code provider_code changed_at]
+      end
+
       def build_courses
         @courses = if @provider.present?
-                     @provider.courses
+                     @provider.courses.includes(:provider)
                    else
-                     @recruitment_cycle.courses
+                     @recruitment_cycle.courses.includes(:provider)
                    end
       end
 

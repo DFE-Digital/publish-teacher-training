@@ -62,7 +62,10 @@ describe "GET v3/recruitment_cycle/:recruitment_cycle_year/providers/:provider_c
         it "has a data section with the correct attributes" do
           perform_request
 
-          json_response = JSON.parse response.body
+          json_response = JSON.parse(response.body)
+          changed_at = Time.zone.parse(json_response["data"][0]["attributes"].delete("changed_at"))
+          expect(changed_at).to be_within(60).of(Time.zone.now)
+
           expect(json_response).to eq(
             "data" => [{
               "id" => provider.courses[0].id.to_s,
@@ -113,128 +116,6 @@ describe "GET v3/recruitment_cycle/:recruitment_cycle_year/providers/:provider_c
                 "site_statuses" => { "meta" => { "included" => false } },
                 "sites" => { "meta" => { "included" => false } },
                 "subjects" => { "meta" => { "included" => false } },
-              },
-              "meta" => {
-                "edit_options" => {
-                  "entry_requirements" => %w[must_have_qualification_at_application_time expect_to_achieve_before_training_begins equivalence_test],
-                  "qualifications" => %w[qts pgce_with_qts pgde_with_qts],
-                  "age_range_in_years" => %w[3_to_7 5_to_11 7_to_11 7_to_14],
-                  "start_dates" => [
-                    "October #{previous_year}",
-                    "November #{previous_year}",
-                    "December #{previous_year}",
-                    "January #{current_year}",
-                    "February #{current_year}",
-                    "March #{current_year}",
-                    "April #{current_year}",
-                    "May #{current_year}",
-                    "June #{current_year}",
-                    "July #{current_year}",
-                    "August #{current_year}",
-                    "September #{current_year}",
-                    "October #{current_year}",
-                    "November #{current_year}",
-                    "December #{current_year}",
-                    "January #{next_year}",
-                    "February #{next_year}",
-                    "March #{next_year}",
-                    "April #{next_year}",
-                    "May #{next_year}",
-                    "June #{next_year}",
-                    "July #{next_year}",
-                  ],
-                  "study_modes" => %w[full_time part_time full_time_or_part_time],
-                  "show_is_send" => false,
-                  "show_start_date" => false,
-                  "show_applications_open" => false,
-                  "subjects" => [
-                    {
-                      "id" => "1",
-                      "type" => "subjects",
-                      "attributes" => {
-                        "subject_name" => "Primary",
-                        "subject_code" => "00",
-                        "bursary_amount" => nil,
-                        "early_career_payments" => nil,
-                        "scholarship" => nil,
-                        "subject_knowledge_enhancement_course_available" => nil,
-                      },
-                     },
-                    {
-                     "id" => "2",
-                     "type" => "subjects",
-                     "attributes" => {
-                       "subject_name" => "Primary with English",
-                       "subject_code" => "01",
-                       "bursary_amount" => nil,
-                       "early_career_payments" => nil,
-                       "scholarship" => nil,
-                       "subject_knowledge_enhancement_course_available" => nil,
-                     },
-                    },
-                    {
-                     "id" => "3",
-                     "type" => "subjects",
-                     "attributes" => {
-                       "subject_name" => "Primary with geography and history",
-                       "subject_code" => "02",
-                       "bursary_amount" => nil,
-                       "early_career_payments" => nil,
-                       "scholarship" => nil,
-                       "subject_knowledge_enhancement_course_available" => nil,
-                     },
-                    },
-                    {
-                     "id" => "4",
-                     "type" => "subjects",
-                     "attributes" => {
-                       "subject_name" => "Primary with mathematics",
-                       "subject_code" => "03",
-                       "bursary_amount" => "6000",
-                       "early_career_payments" => nil,
-                       "scholarship" => nil,
-                       "subject_knowledge_enhancement_course_available" => true,
-                     },
-                    },
-                    {
-                     "id" => "5",
-                     "type" => "subjects",
-                     "attributes" => {
-                       "subject_name" => "Primary with modern languages",
-                       "subject_code" => "04",
-                       "bursary_amount" => nil,
-                       "early_career_payments" => nil,
-                       "scholarship" => nil,
-                       "subject_knowledge_enhancement_course_available" => nil,
-                     },
-                    },
-                    {
-                     "id" => "6",
-                     "type" => "subjects",
-                     "attributes" => {
-                       "subject_name" => "Primary with physical education",
-                       "subject_code" => "06",
-                       "bursary_amount" => nil,
-                       "early_career_payments" => nil,
-                       "scholarship" => nil,
-                       "subject_knowledge_enhancement_course_available" => nil,
-                     },
-                    },
-                    {
-                     "id" => "7",
-                     "type" => "subjects",
-                     "attributes" => {
-                       "subject_name" => "Primary with science",
-                       "subject_code" => "07",
-                       "bursary_amount" => nil,
-                       "early_career_payments" => nil,
-                       "scholarship" => nil,
-                       "subject_knowledge_enhancement_course_available" => nil,
-  },
-                   },
-                  ],
-                  "modern_languages" => nil,
-                },
               },
             }],
             "meta" => {
