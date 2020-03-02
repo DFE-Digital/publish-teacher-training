@@ -5,12 +5,12 @@ inherit_gem:
 
 AllCops:
   Exclude:
-    - 'bin/rails'
-    - 'bin/rake'
-    - 'bin/setup'
-    - 'bin/update'
-    - 'db/schema.rb'
+    - "bin/rails"
+    - "bin/rake"
+    - "bin/setup"
+    - "bin/update"
+    - "db/schema.rb"
+    - "config/initializers/county_to_region_code.rb"
 
 Rails/HasManyOrHasOneDependent:
   Enabled: false
-
