@@ -31,27 +31,19 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/SingleCourseResponse"
+                $ref: "#/components/schemas/CourseSingleResponse"
 components:
   schemas:
-    SingleCourseResponse:
+    CourseSingleResponse:
       type: object
       required:
         - data
       properties:
         data:
-          type: object
-          required:
-            - id
-            - type
-            - attributes
-          properties:
-            id:
-              type: integer
-            type:
-              type: string
-            attributes:
-              $ref: "#/components/schemas/Course"
+          $ref: "#/components/schemas/CourseData"
+        # included:
+        jsonapi:
+          $ref: "#/components/schemas/JSONAPI"
     Course:
       type: object
       required:
@@ -59,3 +51,58 @@ components:
       properties:
         code:
           type: string
+    CourseData:
+      type: object
+      required:
+        - id
+        - type
+        - attributes
+      properties:
+        id:
+          type: integer
+        type:
+          type: string
+        attributes:
+          $ref: "#/components/schemas/Course"
+        relationships:
+          $ref: "#/components/schemas/CourseRelationships"
+    CourseRelationships:
+      type: object
+      properties:
+        accredited_body:
+          $ref: "#/components/schemas/Relationship"
+        provider:
+          $ref: "#/components/schemas/Relationship"
+        subjects:
+          $ref: "#/components/schemas/RelationshipList"
+    JSONAPI:
+      type: object
+      required:
+        - version
+      properties:
+        version:
+          type: string
+    Relationship:
+      type: object
+      properties:
+        data:
+          $ref: "#/components/schemas/RelationshipData"
+        meta:
+          type: object
+    RelationshipData:
+      type: object
+      required:
+        - type
+        - id
+      properties:
+        type:
+          type: string
+        id:
+          type: string
+    RelationshipList:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/RelationshipData"
