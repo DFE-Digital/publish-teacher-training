@@ -2152,8 +2152,6 @@ describe Course, type: :model do
   end
 
   describe "Update notification emails" do
-    let(:mailer_spy) { spy }
-
     let(:provider) { create(:provider) }
     let(:accrediting_provider) { create(:provider, :accredited_body) }
     let(:organisation) { create(:organisation, providers: [provider]) }
@@ -2174,6 +2172,9 @@ describe Course, type: :model do
         english: :equivalence_test,
       )
     end
+
+    let(:mail_spy) { spy }
+    let(:mailer_spy) { spy(course_update_email: mail_spy) }
 
     before do
       stub_const("CourseUpdateEmailMailer", mailer_spy)
@@ -2210,16 +2211,22 @@ describe Course, type: :model do
         end
 
         shared_examples "Sending update notifications" do
-          it "Sends the notification to the correct user" do
+          before do
             course.assign_attributes(course_update)
             course.ensure_site_statuses_match_study_mode
             course.save!
+          end
 
+          it "Sends the notification to the correct user" do
             expect(mailer_spy).to have_received(:course_update_email) do |course, attribute_changed, user|
               expect(course).to eq(course)
               expect(attribute_changed).to eq(expected_attribute_change)
               expect(user).to eq(user_one)
             end
+          end
+
+          it "Delivers the email" do
+            expect(mail_spy).to have_received(:deliver_now)
           end
         end
 
