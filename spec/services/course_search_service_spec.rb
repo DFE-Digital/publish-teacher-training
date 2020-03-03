@@ -44,6 +44,18 @@ describe CourseSearchService do
         end
       end
 
+      context "by distance" do
+        let(:sort) { "distance" }
+        let(:filter) do
+          { latitude: 54.9713392, longitude: -1.6112336 }
+        end
+
+        it "orders in descending order" do
+          expect(findable_scope).to receive(:by_distance).with(origin: [54.9713392, -1.6112336]).and_return(expected_scope)
+          expect(subject).to eq(expected_scope)
+        end
+      end
+
       context "unspecified" do
         it "does not order" do
           expect(findable_scope).not_to receive(:order)

@@ -48,6 +48,7 @@ class Course < ApplicationRecord
 
   has_associated_audits
   audited
+
   validates :course_code,
             uniqueness: { scope: :provider_id },
             on: %i[create update]
@@ -159,6 +160,10 @@ class Course < ApplicationRecord
 
   scope :within, ->(range, origin:) do
     joins(:sites).merge(Site.within(range, origin: origin))
+  end
+
+  scope :by_distance, ->(origin:) do
+    joins(:sites).merge(Site.by_distance(origin: origin))
   end
 
   scope :by_name_ascending, -> do
