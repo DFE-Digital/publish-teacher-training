@@ -96,7 +96,7 @@ describe "GET v3/courses" do
       create(:course,
              name: "Course A",
              provider: provider_a,
-             site_statuses: [build(:site_status, :findable)],
+             site_statuses: [build(:site_status, :findable, site: far_site)],
              enrichments: [build(:course_enrichment, :published)])
     end
 
@@ -106,10 +106,12 @@ describe "GET v3/courses" do
         :course,
         name: "Course A",
         provider: provider_b,
-        site_statuses: [build(:site_status, :findable)],
+        site_statuses: [build(:site_status, :findable, site: near_site)],
         enrichments: [build(:course_enrichment, :published)],
       )
     end
+    let(:near_site) { build(:site, latitude: 0, longitude: 0) }
+    let(:far_site) { build(:site, latitude: 1, longitude: 1) }
 
     before do
       course_a
@@ -133,6 +135,19 @@ describe "GET v3/courses" do
       let(:request_path) { "/api/v3/courses?include=provider&sort=-name,-provider.provider_name" }
 
       it "returns an ordered list" do
+        get request_path
+
+        json_response = JSON.parse(response.body)
+        course_hashes = json_response["data"]
+        expect(course_hashes.first["id"]).to eq(course_b.id.to_s)
+        expect(course_hashes.second["id"]).to eq(course_a.id.to_s)
+      end
+    end
+
+    context "by distance" do
+      let(:request_path) { "/api/v3/courses?include=provider&sort=distance&latitude=0&longitude=0" }
+
+      it "returns course with closet site first" do
         get request_path
 
         json_response = JSON.parse(response.body)

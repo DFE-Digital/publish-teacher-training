@@ -104,7 +104,7 @@ gem "request_store"
 gem "dry-container"
 
 # For geocoding and geographic logic (e.g: filtering sites by ranges)
-gem 'geokit-rails'
+gem "geokit-rails"
 
 group :development, :test do
   # add info about db structure to models and other files

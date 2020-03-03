@@ -16,6 +16,7 @@ class CourseSearchService
 
     scope = scope.ascending_canonical_order if sort_by_provider_ascending?
     scope = scope.descending_canonical_order if sort_by_provider_descending?
+    scope = scope.by_distance(origin: origin) if sort_by_distance?
 
     scope = scope.with_salary if funding_filter_salary?
     scope = scope.with_qualifications(qualifications) if qualifications.any?
@@ -24,7 +25,7 @@ class CourseSearchService
     scope = scope.with_subjects(subject_codes) if subject_codes.any?
     scope = scope.with_provider_name(provider_name) if provider_name.present?
     scope = scope.with_send if send_courses_filter?
-    scope = scope.within(filter[:radius], origin: [filter[:latitude], filter[:longitude]]) if locations_filter?
+    scope = scope.within(filter[:radius], origin: origin) if locations_filter?
     scope
   end
 
@@ -44,6 +45,14 @@ private
 
   def sort_by_provider_descending?
     sort == Set["-name", "-provider.provider_name"]
+  end
+
+  def sort_by_distance?
+    sort == Set["distance"]
+  end
+
+  def origin
+    [filter[:latitude], filter[:longitude]]
   end
 
   attr_reader :sort, :filter, :course_scope
