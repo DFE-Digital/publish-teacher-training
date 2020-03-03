@@ -42,15 +42,264 @@ components:
         data:
           $ref: "#/components/schemas/CourseData"
         # included:
+        #   $ref: "#/components/schemas/Included"
         jsonapi:
           $ref: "#/components/schemas/JSONAPI"
-    Course:
+    CourseAttributes:
       type: object
       required:
         - code
       properties:
+        about_accredited_body:
+          type: string
+          format: markdown
+          description: Description of the accredited body for this course.
+          example: ""
+        about_course:
+          type: string
+          description: Description of the course formatted as Markdown.
+          # TODO: expand on this example
+          example: |
+            This course prepares you to teach English in the 11-14 age group.
+        accredited_body_code:
+          type: string
+          description: |
+            Unique provider-code for the accredited body of this course. Only
+            present if the course is accredited by a provider other than the one
+            running this course.
+          maxLength: 3
+          example: 2FR
+        age_range_in_years:
+          type: string
+          description: |
+            Description of the age-range of the pupils that this course's
+            subject targets.
+          example: 11_to_14
+        applications_open_from:
+          type: string
+          format: date
+          description: "Date from which applications can be submitted."
+          example: "2019-10-08"
+        bursary_amount:
+          type: integer
+          description: "Bursary amount for this course."
+          example: 9000
+        bursary_requirements:
+          type: string
+          description: "Description of requirements to be elligible for a bursary."
+          example: "a degree of 2:2 or above in any subject"
+        changed_at:
+          type: string
+          format: date-time
+          description: |
+            Date-time timestamp of when this course or any of it's related data changed.
+          example: "2019-06-13T10:44:31Z"
         code:
           type: string
+          description: |
+            Code that uniquely identifies this course within it's providers list of courses.
+          example: 3GTY
+          maxLength: 4
+        course_length:
+          type: string
+          description: |
+            Text describing how long the course runs.
+          example: "OneYear"
+        created_at:
+          type: string
+          format: date-time
+          description: "Timestamp of when this course was created."
+          example: "2019-06-13T10:44:31Z"
+        fee_details:
+          type: string
+          format: markdown
+          description: "Further details about the fees for this course, if applicable."
+          example: fee_details
+        fee_international:
+          type: integer
+          description: "Fee for international students (optional)."
+          example: 13000
+        fee_uk_eu:
+          type: integer
+          description: "Fee for UK and EU students."
+          example: 9200
+        financial_support:
+          type: string
+          format: markdown
+          description: "Details about financial support offered, if any."
+          example: financial_support
+        findable:
+          type: boolean
+          description: |
+            Is this course currently visible on the Find Postgraduate Teacher Training service.
+        funding_type:
+          type: string
+          description: |
+            The type of funding that maybe provided to candidates, if any.
+          enum:
+            - ""
+            - salary
+            - apprenticeship
+            - fee
+        gcse_subjects_required:
+          type: string
+          enum:
+            - ["maths", "english"]
+            - ["maths", "english", "science"]
+          description: "GSCE standard equivalent required for this level of course."
+        has_bursary:
+          type: boolean
+          description: "Are any bursaries available for this course?"
+        has_early_career_payments:
+          type: boolean
+          description: "Are early career payments available for this course?"
+        has_scholarship:
+          type: boolean
+          description: "Are scholarships available for this course?"
+        has_vacancies?:
+          type: boolean
+          description: "Do any of the locations for this course have vacancies?"
+        how_school_placements_work:
+          type: string
+          format: markdown
+          description: |
+            Additional information about the schools applicants will be teaching in.
+          example: how_school_placements_work
+        interview_process:
+          type: string
+          format: markdown
+          description: |
+            Additional information about how the interview process will work for applicants.
+          example: interview_process
+        is_send:
+          type: boolean
+          description: "Does this course have a SEND specialism?"
+        last_published_at:
+          type: string
+          format: date-time
+          description: |
+            Timestamp of when changes to this course's additional information
+            sections was published last.
+          example: "2019-06-13T10:44:31Z"
+        level:
+          type: string
+          description: "The level of pupils this course is designed for."
+          enum:
+            - further_education
+            - primary
+            - secondary
+        name:
+          type: string
+          description: "Name of the course."
+          example: "Art and Design"
+        open_for_applications:
+          type: boolean
+          description: "Is the course currently open for applications?"
+        other_requirements:
+          type: string
+          format: markdown
+          description: |
+            Any non-academic qualifications or documents the applicant may need.
+          example: other_requirements
+        personal_qualities:
+          type: string
+          description: |
+            Any skills, motivation and experience the provider is looking in applicants.
+          example: personal_qualities
+        program_type:
+          type: string
+          description: program_type
+          enum:
+            - higher_education_programme
+            - scitt_programme
+            - school_direct_training_programme
+            - school_direct_salaried_training_programme
+            - pg_teaching_apprenticeship
+        provider_code:
+          type: string
+          description: "Unique code for the provider of this course."
+          maxLength: 3
+          example: 6CL
+        qualifications:
+          type: string
+          description: |
+            The qualifications as an outcome of the course.
+          enum:
+            - [ qts ]
+            - [ pgce ]
+            - [ pgde ]
+            - [ qts, pgce ]
+            - [ qts, pgde ]
+        recruitment_cycle_year:
+          type: string
+          description: The recruitment cycle that this course is available in.
+          example: 2020
+        required_qualifications:
+          type: string
+          format: markdown
+          description: |
+            The minimum academic qualifications needed for this course.
+          example: required_qualifications
+        required_qualifications_english:
+          type: string
+          description: "English GCSE requirements for applicants."
+          enum:
+            - ""
+            - must_have_qualification_at_application_time
+            - expect_to_achieve_before_training_begins
+            - equivalence_test
+            - not_required
+        required_qualifications_maths:
+          type: string
+          description: "Maths GCSE requirements for applicants."
+          enum:
+            - ""
+            - must_have_qualification_at_application_time
+            - expect_to_achieve_before_training_begins
+            - equivalence_test
+            - not_required
+        required_qualifications_science:
+          type: string
+          description: "Science GCSE requirements for applicants."
+          enum:
+            - ""
+            - must_have_qualification_at_application_time
+            - expect_to_achieve_before_training_begins
+            - equivalence_test
+            - not_required
+        running:
+          type: string
+          description: Is the course
+          example: running
+        salary_details:
+          type: string
+          description: salary\_details
+          example: salary_details
+        scholarship_amount:
+          type: string
+          description: scholarship\_amount
+          example: scholarship_amount
+        start_date:
+          type: string
+          description: start\_date
+          example: start_date
+        state:
+          type: string
+          description: state
+          example: state
+        study_mode:
+          type: string
+          description: study\_mode
+          example: study_mode
+        summary:
+          type: string
+          description: "Generated summary of the course."
+          example: "PGCE with QTS full time"
+        updated_at:
+          type: string
+          format: date-time
+          description: updated\_at
+          example: "2019-06-13T10:44:31Z"
     CourseData:
       type: object
       required:
@@ -63,7 +312,7 @@ components:
         type:
           type: string
         attributes:
-          $ref: "#/components/schemas/Course"
+          $ref: "#/components/schemas/CourseAttributes"
         relationships:
           $ref: "#/components/schemas/CourseRelationships"
     CourseRelationships:
@@ -75,6 +324,8 @@ components:
           $ref: "#/components/schemas/Relationship"
         subjects:
           $ref: "#/components/schemas/RelationshipList"
+    # Included:
+    #   type: list
     JSONAPI:
       type: object
       required:
