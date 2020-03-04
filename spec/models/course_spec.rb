@@ -2150,4 +2150,171 @@ describe Course, type: :model do
       )
     end
   end
+
+  describe "Update notification emails" do
+    let(:provider) { create(:provider) }
+    let(:accrediting_provider) { create(:provider, :accredited_body) }
+    let(:organisation) { create(:organisation, providers: [provider]) }
+    let(:site_status) { create(:site_status, :findable) }
+    let(:user_one) { create(:user, organisations: [organisation]) }
+    let(:user_two) { create(:user, organisations: [organisation]) }
+
+    let(:course) do
+      create(
+        :course,
+        provider: provider,
+        accrediting_provider_code: accrediting_provider.provider_code,
+        age_range_in_years: "11_to_15",
+        qualification: "pgce_with_qts",
+        study_mode: "full_time",
+        site_statuses: [site_status],
+        maths: :equivalence_test,
+        english: :equivalence_test,
+      )
+    end
+
+    let(:mail_spy) { spy }
+    let(:mailer_spy) { spy(course_update_email: mail_spy) }
+
+    before do
+      stub_const("CourseUpdateEmailMailer", mailer_spy)
+    end
+
+    context "A self-accredited course" do
+      let(:course) { create(:course, :self_accredited, provider: accrediting_provider) }
+
+      before do
+        UserNotification.new(user: user_one, provider_code: accrediting_provider.provider_code, course_update: true).save!
+        UserNotification.new(user: user_two, provider_code: accrediting_provider.provider_code, course_update: false).save!
+      end
+
+      it "Does not send a notification" do
+        course.update!(age_range_in_years: "10_to_14")
+
+        expect(mailer_spy).not_to have_received(:course_update_email)
+      end
+    end
+
+    context "A non self-accredited course" do
+      context "With no users with notifications enabled" do
+        it "does nothing" do
+          course.update!(age_range_in_years: "10_to_14")
+
+          expect(mailer_spy).not_to have_received(:course_update_email)
+        end
+      end
+
+      context "With a user with notifications enabled" do
+        before do
+          UserNotification.new(user: user_one, provider_code: accrediting_provider.provider_code, course_update: true).save!
+          UserNotification.new(user: user_two, provider_code: accrediting_provider.provider_code, course_update: false).save!
+        end
+
+        shared_examples "Sending update notifications" do
+          before do
+            course.assign_attributes(course_update)
+            course.ensure_site_statuses_match_study_mode
+            course.save!
+          end
+
+          it "Sends the notification to the correct user" do
+            expect(mailer_spy).to have_received(:course_update_email) do |course, attribute_changed, user|
+              expect(course).to eq(course)
+              expect(attribute_changed).to eq(expected_attribute_change)
+              expect(user).to eq(user_one)
+            end
+          end
+
+          it "Delivers the email" do
+            expect(mail_spy).to have_received(:deliver_now)
+          end
+        end
+
+        context "When the course does not appear on find" do
+          let(:site_status) { create(:site_status, :unpublished) }
+
+          it "Does not send a notification" do
+            course.update(age_range_in_years: "10_to_14")
+            course.save!
+
+            expect(mailer_spy).not_to have_received(:course_update_email)
+          end
+        end
+
+        context "When the course appears on find" do
+          context "Age range in years" do
+            let(:course_update) { { age_range_in_years: "10_to_14" } }
+            let(:expected_attribute_change) { "age range" }
+
+            include_examples "Sending update notifications"
+          end
+
+          context "Qualfication" do
+            let(:course_update) { { qualification: "pgde_with_qts" } }
+            let(:expected_attribute_change) { "outcome" }
+
+            include_examples "Sending update notifications"
+          end
+
+          context "Study mode" do
+            let(:course_update) { { study_mode: "part_time" } }
+            let(:expected_attribute_change) { "full or part time" }
+
+            include_examples "Sending update notifications"
+          end
+
+          context "Entry requirements: Maths" do
+            let(:course_update) { { maths: "not_required" } }
+            let(:expected_attribute_change) { "entry requirements" }
+
+            include_examples "Sending update notifications"
+          end
+
+          context "Entry requirements: English" do
+            let(:course_update) { { english: "not_required" } }
+            let(:expected_attribute_change) { "entry requirements" }
+
+            include_examples "Sending update notifications"
+          end
+
+          context "Entry requirements: Science" do
+            let(:course_update) { { science: "not_required" } }
+            let(:expected_attribute_change) { "entry requirements" }
+
+            include_examples "Sending update notifications"
+          end
+        end
+      end
+
+      context "With multiple users with notifications enabled" do
+        before do
+          UserNotification.new(user: user_one, provider_code: accrediting_provider.provider_code, course_update: true).save!
+          UserNotification.new(user: user_two, provider_code: accrediting_provider.provider_code, course_update: true).save!
+        end
+
+        it "Sends an email for each user" do
+          course.update!(age_range_in_years: "10_to_14")
+
+          expect(mailer_spy).to have_received(:course_update_email).twice
+        end
+      end
+
+      context "With multiple users for different providers" do
+        let(:provider_two) { create(:provider) }
+
+        before do
+          UserNotification.new(user: user_one, provider_code: accrediting_provider.provider_code, course_update: true).save!
+          UserNotification.new(user: user_two, provider_code: provider_two.provider_code, course_update: true).save!
+        end
+
+        it "only sends the email for the courses accrediting provider" do
+          course.update!(age_range_in_years: "10_to_14")
+
+          expect(mailer_spy).to have_received(:course_update_email) do |_course, _attribute, user|
+            expect(user).to eq(user_one)
+          end
+        end
+      end
+    end
+  end
 end
