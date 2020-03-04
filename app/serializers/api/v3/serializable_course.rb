@@ -19,7 +19,7 @@ module API
                  :content_status, :ucas_status, :funding_type,
                  :level, :is_send?, :english, :maths, :science, :gcse_subjects_required,
                  :age_range_in_years, :accrediting_provider,
-                 :accrediting_provider_code, :level
+                 :accrediting_provider_code, :level, :changed_at
 
       attribute :start_date do
         @object.start_date.strftime("%B %Y") if @object.start_date
