@@ -4,8 +4,8 @@ Faker::Config.locale = "en-GB"
 CourseSubject.destroy_all
 Course.destroy_all
 FinancialIncentive.destroy_all
-SubjectArea.destroy_all
 Subject.destroy_all
+SubjectArea.destroy_all
 Site.destroy_all
 SiteStatus.destroy_all
 Provider.destroy_all
