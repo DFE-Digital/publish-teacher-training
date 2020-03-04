@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_03_03_163136) do
+ActiveRecord::Schema.define(version: 2020_03_04_133014) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_buffercache"
@@ -285,7 +285,7 @@ ActiveRecord::Schema.define(version: 2020_03_03_163136) do
     t.text "name"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["typename"], name: "index_subject_area_on_typename"
+    t.index ["typename"], name: "index_subject_area_on_typename", unique: true
   end
 
   create_table "user", id: :serial, force: :cascade do |t|
@@ -332,5 +332,6 @@ ActiveRecord::Schema.define(version: 2020_03_03_163136) do
   add_foreign_key "provider_ucas_preference", "provider", name: "fk_provider_ucas_preference__provider"
   add_foreign_key "session", "\"user\"", column: "user_id", name: "FK_session_user_user_id", on_delete: :cascade
   add_foreign_key "site", "provider", name: "FK_site_provider_provider_id", on_delete: :cascade
+  add_foreign_key "subject", "subject_area", column: "type", primary_key: "typename", name: "fk_subject__subject_area"
   add_foreign_key "user_notification", "\"user\"", column: "user_id"
 end
