@@ -122,7 +122,7 @@ module API
       def update_ucas_contacts
         return if ucas_contact_params.blank?
 
-        ucas_contact_params.keys.each do |type|
+        ucas_contact_params.each_key do |type|
           contact = @provider.contacts.find_or_initialize_by(type: type.gsub(/_contact$/, ""))
           contact.assign_attributes(ucas_contact_params[type])
           contact.save

@@ -3,7 +3,7 @@ class UniqueCourseSubject < ActiveRecord::Migration[6.0]
     puts "De-duping course_subject. Count before: #{CourseSubject.count}"
     # https://stackoverflow.com/questions/14124212/remove-duplicate-records-based-on-multiple-columns/14124391#14124391
     grouped = CourseSubject.all.group_by { |cs| [cs.course_id, cs.subject_id] }
-    grouped.values.each do |dupes|
+    grouped.each_value do |dupes|
       dupes.shift
       dupes.each(&:destroy)
     end
