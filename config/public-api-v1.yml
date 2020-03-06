@@ -2,7 +2,7 @@
 openapi: 3.0.0
 info:
   version: 1.0.0
-  title: Apply API
+  title: Postgraduate Teacher Training Courses API
   contact:
     name: DfE
     email: becomingateacher@digital.education.gov.uk
@@ -57,10 +57,31 @@ components:
           example: ""
         about_course:
           type: string
-          description: Description of the course formatted as Markdown.
-          # TODO: expand on this example
+          description: Short factual summary of the course formatted as Markdown.
           example: |
-            This course prepares you to teach English in the 11-14 age group.
+            The Art and Design PGCE is a challenging and forward-looking
+            programme which prepares students to teach across the 11-16 age
+            range, encouraging them to relate art, craft and design education to
+            contemporary art practice. It has a strong reputation for promoting
+            innovation in education theory, practice and policy. This programme
+            aims to inform and inspire, to challenge orthodoxies and encourage a
+            freshness of vision. It provides support and guidance for learning
+            and teaching in art and design, identifying strategies to motivate
+            and engage pupils in making, discussing and evaluating visual and
+            material culture. The IOE provides excellent studio space and
+            facilities for Art and Design, including a computing suite where
+            students can learn how technology is used in art and design
+            education. The programme also has strong links with galleries,
+            museums and other sites for learning, which are recognised as an
+            important resource for engaging students in cultural and social
+            issues.Through seminars and studio-based activities, students will
+            study the concepts, processes and skills of art, craft and design,
+            sharing their knowledge and understanding with other student
+            teachers and consider how it relates to the secondary curriculum.
+            Towards the end of the PGCE, students will build on their own
+            practice by initiating a curriculum development project, culminating
+            in the display of their own work in a final exhibition that
+            represents their personal philosophy for art and design education.
         accredited_body_code:
           type: string
           description: |
@@ -72,8 +93,7 @@ components:
         age_range_in_years:
           type: string
           description: |
-            Description of the age-range of the pupils that this course's
-            subject targets.
+            Description of the age-range of the pupils that a course is specified for.
           example: 11_to_14
         applications_open_from:
           type: string
@@ -86,7 +106,7 @@ components:
           example: 9000
         bursary_requirements:
           type: string
-          description: "Description of requirements to be elligible for a bursary."
+          description: "Description of requirements to be eligible for a bursary."
           example: "a degree of 2:2 or above in any subject"
         changed_at:
           type: string
@@ -132,10 +152,12 @@ components:
           type: boolean
           description: |
             Is this course currently visible on the Find Postgraduate Teacher Training service.
+          example: true
         funding_type:
           type: string
           description: |
             The type of funding that maybe provided to candidates, if any.
+          example: apprenticeship
           enum:
             - ""
             - salary
@@ -143,22 +165,27 @@ components:
             - fee
         gcse_subjects_required:
           type: string
+          example: [ maths, english ]
           enum:
-            - ["maths", "english"]
-            - ["maths", "english", "science"]
+            - [maths, english]
+            - [maths, english, science]
           description: "GSCE standard equivalent required for this level of course."
         has_bursary:
           type: boolean
           description: "Are any bursaries available for this course?"
+          example: true
         has_early_career_payments:
           type: boolean
           description: "Are early career payments available for this course?"
+          example: true
         has_scholarship:
           type: boolean
           description: "Are scholarships available for this course?"
-        has_vacancies?:
+          example: true
+        has_vacancies:
           type: boolean
           description: "Do any of the locations for this course have vacancies?"
+          example: true
         how_school_placements_work:
           type: string
           format: markdown
@@ -174,6 +201,7 @@ components:
         is_send:
           type: boolean
           description: "Does this course have a SEND specialism?"
+          example: true
         last_published_at:
           type: string
           format: date-time
@@ -184,6 +212,7 @@ components:
         level:
           type: string
           description: "The level of pupils this course is designed for."
+          example: secondary
           enum:
             - further_education
             - primary
@@ -195,6 +224,7 @@ components:
         open_for_applications:
           type: boolean
           description: "Is the course currently open for applications?"
+          example: true
         other_requirements:
           type: string
           format: markdown
@@ -209,6 +239,7 @@ components:
         program_type:
           type: string
           description: program_type
+          example: scitt_programme
           enum:
             - higher_education_programme
             - scitt_programme
@@ -224,6 +255,7 @@ components:
           type: string
           description: |
             The qualifications as an outcome of the course.
+          example: [ qts ]
           enum:
             - [ qts ]
             - [ pgce ]
@@ -243,6 +275,7 @@ components:
         required_qualifications_english:
           type: string
           description: "English GCSE requirements for applicants."
+          example: equivalence_test
           enum:
             - ""
             - must_have_qualification_at_application_time
@@ -252,6 +285,7 @@ components:
         required_qualifications_maths:
           type: string
           description: "Maths GCSE requirements for applicants."
+          example: equivalence_test
           enum:
             - ""
             - must_have_qualification_at_application_time
@@ -261,6 +295,7 @@ components:
         required_qualifications_science:
           type: string
           description: "Science GCSE requirements for applicants."
+          example: equivalence_test
           enum:
             - ""
             - must_have_qualification_at_application_time
@@ -268,38 +303,49 @@ components:
             - equivalence_test
             - not_required
         running:
-          type: string
-          description: Is the course
-          example: running
+          type: boolean
+          description: "Is the course currently running."
+          example: true
         salary_details:
           type: string
-          description: salary\_details
-          example: salary_details
+          description: "Salary details about this course."
+          example: |
+            To be eligible for a place on the salaried course you must have the
+            support of a school who is willing to make contributions towards
+            your salary.
         scholarship_amount:
-          type: string
-          description: scholarship\_amount
-          example: scholarship_amount
+          type: integer
+          description: "The scholarship amount a candidate may be elligible for this course."
+          example: 17000
         start_date:
           type: string
-          description: start\_date
-          example: start_date
+          format: date
+          description: "Date that the course starts."
+          example: "2020-09-01"
         state:
           type: string
-          description: state
-          example: state
+          description: |
+            The state of the course in the postgraduate teacher training system.
+          example: published
+          enum:
+            - empty
+            - rolled_over
+            - draft
+            - published
+            - published_with_unpublished_changes
+            - withdrawn
         study_mode:
           type: string
-          description: study\_mode
-          example: study_mode
+          description: "Whether the course is full-time, part-time or both."
+          example: both
+          enum:
+            - both
+            - full_time
+            - part_time
         summary:
           type: string
           description: "Generated summary of the course."
           example: "PGCE with QTS full time"
-        updated_at:
-          type: string
-          format: date-time
-          description: updated\_at
-          example: "2019-06-13T10:44:31Z"
     CourseData:
       type: object
       required:
