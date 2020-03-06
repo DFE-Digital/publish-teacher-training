@@ -5,44 +5,30 @@ describe Course, type: :model do
   let(:subjects) { find(:primary_subject, :primary) }
 
   describe "modern languages" do
-    context "primary level" do
-      let(:course) { create(:course, level: "primary", subjects: []) }
+    let(:course) { create(:course) }
 
-      it "returns no modern languages subjects" do
-        expect(course.available_modern_languages).to eq(nil)
-      end
+    it "returns modern languages subjects" do
+      expect(course.modern_languages).to(
+        match_array(
+          [
+            find(:modern_languages_subject, :french),
+            find(:modern_languages_subject, :english_as_a_second_lanaguge_or_other_language),
+            find(:modern_languages_subject, :german),
+            find(:modern_languages_subject, :italian),
+            find(:modern_languages_subject, :japanese),
+            find(:modern_languages_subject, :mandarin),
+            find(:modern_languages_subject, :russian),
+            find(:modern_languages_subject, :spanish),
+            find(:modern_languages_subject, :modern_languages_other),
+          ],
+        ),
+      )
     end
+  end
 
-    context "secondary level" do
-      context "with the modern language subject" do
-        let(:course) { create(:course, level: "secondary", subjects: [find(:secondary_subject, :modern_languages), find(:modern_languages_subject, :french)]) }
-
-        it "returns modern languages subjects" do
-          expect(course.available_modern_languages).to(
-            match_array(
-              [
-                find(:modern_languages_subject, :french),
-                find(:modern_languages_subject, :english_as_a_second_lanaguge_or_other_language),
-                find(:modern_languages_subject, :german),
-                find(:modern_languages_subject, :italian),
-                find(:modern_languages_subject, :japanese),
-                find(:modern_languages_subject, :mandarin),
-                find(:modern_languages_subject, :russian),
-                find(:modern_languages_subject, :spanish),
-                find(:modern_languages_subject, :modern_languages_other),
-              ],
-            ),
-          )
-        end
-      end
-
-      context "without the modern language subject" do
-        let(:course) { create(:course, level: "secondary", subjects: []) }
-
-        it "returns no modern languages subjects" do
-          expect(course.available_modern_languages).to eq(nil)
-        end
-      end
+  describe "#modern_languages_subject" do
+    it "returns modern language subject" do
+      expect(course.modern_languages_subject).to eql(find(:secondary_subject, :modern_languages))
     end
   end
 
