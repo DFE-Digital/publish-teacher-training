@@ -223,6 +223,10 @@ class Course < ApplicationRecord
     where(is_send: true)
   end
 
+  scope :with_locatable_site, -> do
+    where(id: SiteStatus.with_locatable_site.select(:course_id))
+  end
+
   def self.entry_requirement_options_without_nil_choice
     ENTRY_REQUIREMENT_OPTIONS.reject { |option| option == :not_set }.keys.map(&:to_s)
   end

@@ -894,6 +894,33 @@ describe Course, type: :model do
         it { is_expected.to be_empty }
       end
     end
+
+    describe "with_locatable_site" do
+      subject { described_class.with_locatable_site }
+
+      let!(:course) { create(:course) }
+
+      before do
+        allow(SiteStatus).to receive(:with_locatable_site).and_return(locatable_scope = double)
+        allow(locatable_scope).to receive(:select).with(:course_id).and_return(locatable_site_course_ids)
+      end
+
+      context "when the course has a locatable site" do
+        let(:locatable_site_course_ids) { [course.id] }
+
+        it "is returned" do
+          expect(subject).to contain_exactly(course)
+        end
+      end
+
+      context "when the course does not have a locatable site" do
+        let(:locatable_site_course_ids) { [] }
+
+        it "is not returned" do
+          expect(subject).not_to contain_exactly(course)
+        end
+      end
+    end
   end
 
   describe "changed_at" do
