@@ -56,6 +56,8 @@ class Site < ApplicationRecord
 
   after_commit -> { GeocodeJob.perform_later("Site", id) }, if: :needs_geolocation?
 
+  scope :with_locatable_address, -> { where.not(address1: "").or(Site.unscoped.where.not(postcode: "")) }
+
   def needs_geolocation?
     full_address.present? && (
     latitude.nil? || longitude.nil? || address_changed?

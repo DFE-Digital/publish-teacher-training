@@ -173,5 +173,51 @@ describe Site, type: :model do
         end
       end
     end
+
+    describe ".with_locatable_address" do
+      subject { described_class.with_locatable_address }
+      let!(:site) do
+        build(:site, address1: address1, postcode: postcode).tap do |site|
+          site.save(validate: false)
+        end
+      end
+
+      context "when a site has a postcode" do
+        let(:postcode) { "L1 9AA" }
+
+        context "and the site has an address line 1" do
+          let(:address1) { "1 Address Street" }
+
+          it "is returned" do
+            expect(subject).to contain_exactly(site)
+          end
+        end
+
+        context "and the site has no address line 1" do
+          let(:address1) { "" }
+          it "is returned" do
+            expect(subject).to contain_exactly(site)
+          end
+        end
+      end
+
+      context "when a site has no postcode" do
+        let(:postcode) { "" }
+
+        context "and the  site has an address line 1" do
+          let(:address1) { "1 Address Street" }
+          it "is returned" do
+            expect(subject).to contain_exactly(site)
+          end
+        end
+
+        context "and the site has no address line 1" do
+          let(:address1) { "" }
+          it "is not returned" do
+            expect(subject).not_to contain_exactly(site)
+          end
+        end
+      end
+    end
   end
 end
