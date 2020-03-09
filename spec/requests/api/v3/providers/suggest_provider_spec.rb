@@ -2,8 +2,10 @@ require "rails_helper"
 
 describe "GET /provider-suggestions" do
   let(:jsonapi_renderer) { JSONAPI::Serializable::Renderer.new }
-  let(:provider) { create(:provider, provider_name: "PROVIDER 1") }
-  let(:provider2) { create(:provider, provider_name: "PROVIDER 2") }
+  let(:courses) { [build(:course, site_statuses: [build(:site_status, :findable)])] }
+  let(:courses2) { [build(:course, site_statuses: [build(:site_status, :findable)])] }
+  let(:provider) { create(:provider, provider_name: "PROVIDER 1", courses: courses) }
+  let(:provider2) { create(:provider, provider_name: "PROVIDER 2", courses: courses2) }
 
   context "current recruitment cycle" do
     before do
@@ -68,7 +70,8 @@ describe "GET /provider-suggestions" do
 
   it "limits responses to a maximum of 10 items" do
     11.times do
-      create(:provider, provider_name: "provider X")
+      courses = [build(:course, site_statuses: [build(:site_status, :findable)])]
+      create(:provider, provider_name: "provider X", courses: courses)
     end
 
     get "/api/v3/provider-suggestions?query=provider"
