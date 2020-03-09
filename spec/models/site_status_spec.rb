@@ -185,4 +185,26 @@ RSpec.describe SiteStatus, type: :model do
       end
     end
   end
+
+  describe ".with_locatable_site" do
+    subject { described_class.with_locatable_site }
+    let(:site_status) { create(:site_status) }
+
+    before do
+      allow(Site).to receive(:with_locatable_address).and_return(locatable_scope = double)
+      allow(locatable_scope).to receive(:select).with(:id).and_return(locatable_site_ids)
+    end
+
+    context "when the site status has a locatable site" do
+      let(:locatable_site_ids) { [site_status.site_id] }
+
+      it { is_expected.to contain_exactly(site_status) }
+    end
+
+    context "when the site status does not have a locatable site" do
+      let(:locatable_site_ids) { [] }
+
+      it { is_expected.not_to contain_exactly(site_status) }
+    end
+  end
 end

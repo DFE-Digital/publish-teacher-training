@@ -87,6 +87,8 @@ class SiteStatus < ApplicationRecord
     !no_vacancies?
   end
 
+  scope :with_locatable_site, -> { where(site_id: Site.with_locatable_address.select(:id)) }
+
   def self.default_vac_status_given(study_mode:)
     case study_mode
     when "full_time"
