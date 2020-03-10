@@ -11,7 +11,7 @@ module API
         render jsonapi: paginate(course_search),
           fields: fields_param,
           include: params[:include],
-          meta: { count: course_search.count },
+          meta: { count: course_search.count("course.id") },
           class: CourseSerializersServiceV3.new.execute
       end
 

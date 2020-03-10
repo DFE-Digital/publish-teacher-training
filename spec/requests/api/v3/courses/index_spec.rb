@@ -104,7 +104,7 @@ describe "GET v3/courses" do
     let(:course_b) do
       create(
         :course,
-        name: "Course A",
+        name: "Course B",
         provider: provider_b,
         site_statuses: [build(:site_status, :findable, site: near_site)],
         enrichments: [build(:course_enrichment, :published)],
@@ -154,6 +154,57 @@ describe "GET v3/courses" do
         course_hashes = json_response["data"]
         expect(course_hashes.first["id"]).to eq(course_b.id.to_s)
         expect(course_hashes.second["id"]).to eq(course_a.id.to_s)
+      end
+
+      context "when a course has 2 available sites" do
+        let(:another_site) { build(:site, latitude: 0.5, longitude: 0.5) }
+
+        before do
+          course_b.site_statuses << create(:site_status, :findable, site: another_site)
+        end
+
+        around do |example|
+          default_per_page = Kaminari.config.default_per_page
+
+          Kaminari.configure do |config|
+            config.default_per_page = 1
+          end
+
+          example.run
+
+          Kaminari.configure do |config|
+            config.default_per_page = default_per_page
+          end
+        end
+
+        let(:page_1) { "/api/v3/courses?sort=distance&latitude=0&longitude=0&page[page]=1" }
+        let(:page_2) { "/api/v3/courses?sort=distance&latitude=0&longitude=0&page[page]=2" }
+        let(:page_3) { "/api/v3/courses?sort=distance&latitude=0&longitude=0&page[page]=3" }
+
+        # jsonapi removes duplicates on the same page
+        # therefore this test needs to span multiple pages
+        # in order for the test to be valid
+
+        it "does not return duplicates" do
+          course_ids = []
+
+          get page_1
+
+          json_response = JSON.parse(response.body)
+          course_ids << json_response.dig("data", 0, "id")
+
+          get page_2
+
+          json_response = JSON.parse(response.body)
+          course_ids << json_response.dig("data", 0, "id")
+
+          get page_3
+
+          json_response = JSON.parse(response.body)
+          course_ids << json_response.dig("data", 0, "id")
+
+          expect(course_ids.compact).to eql([course_b.id.to_s, course_a.id.to_s])
+        end
       end
     end
   end

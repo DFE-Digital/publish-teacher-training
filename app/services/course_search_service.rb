@@ -14,9 +14,17 @@ class CourseSearchService
   def call
     scope = course_scope.findable
 
-    scope = scope.ascending_canonical_order if sort_by_provider_ascending?
-    scope = scope.descending_canonical_order if sort_by_provider_descending?
-    scope = scope.by_distance(origin: origin) if sort_by_distance?
+    if sort_by_provider_ascending?
+      scope = scope.ascending_canonical_order
+      scope = scope.select("provider.provider_name", "name")
+    elsif sort_by_provider_descending?
+      scope = scope.descending_canonical_order
+      scope = scope.select("provider.provider_name", "name")
+    elsif sort_by_distance?
+      scope = scope.joins(sites_with_distance_from_origin)
+      scope = scope.select("course.*, distance")
+      scope = scope.order(:distance)
+    end
 
     scope = scope.with_salary if funding_filter_salary?
     scope = scope.with_qualifications(qualifications) if qualifications.any?
@@ -26,12 +34,44 @@ class CourseSearchService
     scope = scope.with_provider_name(provider_name) if provider_name.present?
     scope = scope.with_send if send_courses_filter?
     scope = scope.within(filter[:radius], origin: origin) if locations_filter?
-    scope
+
+    scope.distinct
   end
 
   private_class_method :new
 
 private
+
+  def sites_with_distance_from_origin
+    site_status = SiteStatus.arel_table
+    sites = Site.arel_table
+
+    # Create virtual table with sites and site statuses
+    sites_with_status = site_status.join(sites).on(site_status[:site_id].eq(sites[:id]))
+
+    # only want new and running sites
+    new_and_running_sites = sites_with_status.where(site_status[:status].in(%w[new_status running]))
+
+    # select course_id and nearest site with shortest distance from origin
+    # as courses may have multiple sites
+    # this will remove duplicates by aggregating on course_id
+    courses_with_nearest_site = new_and_running_sites.project(:course_id, Arel.sql("MIN#{Site.distance_sql(OpenStruct.new(lat: origin[0], lng: origin[1]))} as distance")).group(:course_id)
+
+    # form a temporary table with results
+    distance_table = Arel::Nodes::TableAlias.new(
+      Arel.sql(
+        format("(%s)", courses_with_nearest_site.to_sql),
+      ), "distances"
+    )
+
+    # grab courses table and join with the above result set
+    # so distances from origin are now available
+    # we can then sort by distance from the given origin
+    courses_table = Course.arel_table
+    courses_table.join(distance_table).on(
+      courses_table[:id].eq(distance_table[:course_id]),
+    ).join_sources
+  end
 
   def locations_filter?
     filter.has_key?(:latitude) &&
