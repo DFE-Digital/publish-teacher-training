@@ -13,6 +13,7 @@ describe CourseSearchService do
     end
 
     let(:scope) { class_double(Course) }
+    let(:locatable_site_scope) { class_double(Course) }
     let(:findable_scope) { class_double(Course) }
     let(:filter) { nil }
     let(:sort) { nil }
@@ -20,7 +21,8 @@ describe CourseSearchService do
     subject { described_class.call(filter: filter, sort: sort, course_scope: scope) }
 
     before do
-      allow(scope).to receive(:findable).and_return(findable_scope)
+      allow(scope).to receive(:with_locatable_site).and_return(locatable_site_scope)
+      allow(locatable_site_scope).to receive(:findable).and_return(findable_scope)
     end
 
     describe "sort by" do

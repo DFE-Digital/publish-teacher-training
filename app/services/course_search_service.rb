@@ -12,7 +12,8 @@ class CourseSearchService
   end
 
   def call
-    scope = course_scope.findable
+    scope = course_scope.with_locatable_site
+    scope = scope.findable
 
     scope = scope.ascending_canonical_order if sort_by_provider_ascending?
     scope = scope.descending_canonical_order if sort_by_provider_descending?

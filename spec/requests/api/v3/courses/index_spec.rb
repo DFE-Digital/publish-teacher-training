@@ -565,4 +565,37 @@ describe "GET v3/courses" do
       end
     end
   end
+
+  describe "courses with non-locatable sites" do
+    # This functionality has been added to handle address data
+    # that is currently missing from the DB. New sites are validated for
+    # address but a historical import allowed some sites to be added without valid
+    # addresses. The intention is to fix this data.
+    let(:request_path) { "/api/v3/courses" }
+    let!(:course) do
+      create(:course, site_statuses: [build(:site_status, :findable, site: site)], enrichments: [build(:course_enrichment, :published)])
+    end
+
+    context "a course with an invalid site" do
+      let(:site) do
+        build(:site, address1: "", postcode: "").tap do |site|
+          site.save(validate: false)
+        end
+      end
+
+      it "is not returned" do
+        get request_path
+        expect(JSON.parse(response.body)["data"]).to be_empty
+      end
+    end
+
+    context "a course with a valid site" do
+      let(:site) { build(:site) }
+
+      it "is returned" do
+        get request_path
+        expect(JSON.parse(response.body)["data"].first["id"]).to eq(course.id.to_s)
+      end
+    end
+  end
 end
