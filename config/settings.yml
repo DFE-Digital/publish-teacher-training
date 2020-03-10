@@ -18,6 +18,7 @@ govuk_notify:
   api_key: please_change_me
   welcome_email_template_id: please_change_me
   course_update_email_template_id: please_change_me
+  course_create_email_template_id: please_change_me
 publish_url: http://localhost:3000
 find_url: http://localhost:3002
 mcbg:

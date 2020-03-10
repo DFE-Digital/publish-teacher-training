@@ -183,6 +183,13 @@
         "description": "The GOV.UK Notify template id for the course update email"
       }
     },
+    "govukNotifyCourseCreateEmailTemplateId": {
+      "type": "string",
+      "defaultValue": "",
+      "metadata": {
+        "description": "The GOV.UK Notify template id for the course create email"
+      }
+    },
     "containerInstanceName": {
       "type": "array",
       "metadata": {
@@ -499,6 +506,10 @@
               {
                 "name": "SETTINGS__GOVUK_NOTIFY__COURSE_UPDATE_EMAIL_TEMPLATE_ID",
                 "value": "[parameters('govukNotifyCourseUpdateEmailTemplateId')]"
+              },
+              {
+                "name": "SETTINGS__GOVUK_NOTIFY__COURSE_CREATE_EMAIL_TEMPLATE_ID",
+                "value": "[parameters('govukNotifyCourseCreateEmailTemplateId')]"
               },
               {
                 "name": "SETTINGS__SYSTEM_AUTHENTICATION_TOKEN",
