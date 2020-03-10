@@ -34,17 +34,6 @@ paths:
                 $ref: "#/components/schemas/CourseSingleResponse"
 components:
   schemas:
-    CourseSingleResponse:
-      type: object
-      required:
-        - data
-      properties:
-        data:
-          $ref: "#/components/schemas/CourseData"
-        # included:
-        #   $ref: "#/components/schemas/Included"
-        jsonapi:
-          $ref: "#/components/schemas/JSONAPI"
     CourseAttributes:
       type: object
       required:
@@ -346,7 +335,12 @@ components:
           type: string
           description: "Generated summary of the course."
           example: "PGCE with QTS full time"
-    CourseData:
+    CourseRelationships:
+      type: object
+      properties:
+        subjects:
+          $ref: "#/components/schemas/RelationshipList"
+    CourseResource:
       type: object
       required:
         - id
@@ -361,17 +355,21 @@ components:
           $ref: "#/components/schemas/CourseAttributes"
         relationships:
           $ref: "#/components/schemas/CourseRelationships"
-    CourseRelationships:
+    CourseSingleResponse:
       type: object
+      required:
+        - data
       properties:
-        accredited_body:
-          $ref: "#/components/schemas/Relationship"
-        provider:
-          $ref: "#/components/schemas/Relationship"
-        subjects:
-          $ref: "#/components/schemas/RelationshipList"
-    # Included:
-    #   type: list
+        data:
+          $ref: "#/components/schemas/CourseResource"
+        included:
+          $ref: "#/components/schemas/Included"
+        jsonapi:
+          $ref: "#/components/schemas/JSONAPI"
+    Included:
+      type: array
+      items:
+        $ref: '#/components/schemas/Resource'
     JSONAPI:
       type: object
       required:
@@ -379,14 +377,28 @@ components:
       properties:
         version:
           type: string
+          example: "1.0"
     Relationship:
       type: object
       properties:
         data:
-          $ref: "#/components/schemas/RelationshipData"
+          $ref: "#/components/schemas/ResourceIdentifier"
         meta:
           type: object
-    RelationshipData:
+    RelationshipList:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/ResourceIdentifier"
+    Resource:
+      oneOf:
+        - $ref: '#/components/schemas/CourseResource'
+        - $ref: '#/components/schemas/SubjectResource'
+      discriminator:
+        propertyName: type
+    ResourceIdentifier:
       type: object
       required:
         - type
@@ -396,10 +408,27 @@ components:
           type: string
         id:
           type: string
-    RelationshipList:
+    SubjectAttributes:
       type: object
+      required:
+        - code
       properties:
-        data:
-          type: array
-          items:
-            $ref: "#/components/schemas/RelationshipData"
+        name:
+          type: string
+          description: "Subject name."
+        code:
+          type: string
+          description: "Unique subject code."
+    SubjectResource:
+      type: object
+      required:
+        - id
+        - type
+        - attributes
+      properties:
+        id:
+          type: integer
+        type:
+          type: string
+        attributes:
+          $ref: "#/components/schemas/SubjectAttributes"
