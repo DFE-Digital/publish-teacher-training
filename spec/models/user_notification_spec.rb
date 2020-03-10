@@ -2,6 +2,7 @@
 #
 # Table name: user_notification
 #
+#  course_create :boolean          default("false")
 #  course_update :boolean          default("false")
 #  created_at    :datetime         not null
 #  id            :bigint           not null, primary key
