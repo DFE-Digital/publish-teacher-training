@@ -606,25 +606,50 @@ describe Provider, type: :model do
         create(:course, :with_accrediting_provider, site_statuses: [build(:site_status)])
       end
 
-      before do
-        findable_course
-        findable_course_with_accrediting_provider
-        non_findable_course
-        non_findable_course_with_accrediting_provider
-      end
-
       subject {
         described_class.with_findable_courses
       }
 
       it "should return only findable courses' provider and/or accrediting provider" do
-        expect(subject).to include(findable_course.provider,
-                                   findable_course_with_accrediting_provider.provider,
-                                   findable_course_with_accrediting_provider.accrediting_provider)
+        expect(subject).to contain_exactly(findable_course.provider,
+                                           findable_course_with_accrediting_provider.provider,
+                                           findable_course_with_accrediting_provider.accrediting_provider)
+      end
 
-        expect(subject).to_not include(non_findable_course.provider,
-                                       non_findable_course_with_accrediting_provider.provider,
-                                       non_findable_course_with_accrediting_provider.accrediting_provider)
+      context "when the provider is the accredited body for a course" do
+        before do
+          findable_course_with_accrediting_provider
+          non_findable_course_with_accrediting_provider
+        end
+
+        it "is returned" do
+          expect(subject).to contain_exactly(
+            findable_course_with_accrediting_provider.provider,
+            findable_course_with_accrediting_provider.accrediting_provider,
+          )
+        end
+      end
+
+      context "when the course is delivered by the provider" do
+        before do
+          findable_course
+          non_findable_course
+        end
+        it "is returned" do
+          expect(subject).to contain_exactly(findable_course.provider)
+        end
+      end
+
+      context "when the course is not findable" do
+        before do
+          non_findable_course
+          non_findable_course_with_accrediting_provider
+        end
+        it "is not returned" do
+          expect(subject).to_not include(non_findable_course.provider,
+                                         non_findable_course_with_accrediting_provider.provider,
+                                         non_findable_course_with_accrediting_provider.accrediting_provider)
+        end
       end
     end
   end
