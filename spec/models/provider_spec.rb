@@ -588,6 +588,72 @@ describe Provider, type: :model do
     end
   end
 
+  describe "scopes" do
+    describe ".with_findable_courses" do
+      let(:findable_course) do
+        create(:course, site_statuses: [build(:site_status, :findable)])
+      end
+
+      let(:findable_course_with_accrediting_provider) do
+        create(:course, :with_accrediting_provider, site_statuses: [build(:site_status, :findable)])
+      end
+
+      let(:non_findable_course) do
+        create(:course, site_statuses: [build(:site_status)])
+      end
+
+      let(:non_findable_course_with_accrediting_provider) do
+        create(:course, :with_accrediting_provider, site_statuses: [build(:site_status)])
+      end
+
+      subject {
+        described_class.with_findable_courses
+      }
+
+      it "should return only findable courses' provider and/or accrediting provider" do
+        expect(subject).to contain_exactly(findable_course.provider,
+                                           findable_course_with_accrediting_provider.provider,
+                                           findable_course_with_accrediting_provider.accrediting_provider)
+      end
+
+      context "when the provider is the accredited body for a course" do
+        before do
+          findable_course_with_accrediting_provider
+          non_findable_course_with_accrediting_provider
+        end
+
+        it "is returned" do
+          expect(subject).to contain_exactly(
+            findable_course_with_accrediting_provider.provider,
+            findable_course_with_accrediting_provider.accrediting_provider,
+          )
+        end
+      end
+
+      context "when the course is delivered by the provider" do
+        before do
+          findable_course
+          non_findable_course
+        end
+        it "is returned" do
+          expect(subject).to contain_exactly(findable_course.provider)
+        end
+      end
+
+      context "when the course is not findable" do
+        before do
+          non_findable_course
+          non_findable_course_with_accrediting_provider
+        end
+        it "is not returned" do
+          expect(subject).to_not include(non_findable_course.provider,
+                                         non_findable_course_with_accrediting_provider.provider,
+                                         non_findable_course_with_accrediting_provider.accrediting_provider)
+        end
+      end
+    end
+  end
+
   describe "geolocation" do
     include ActiveJob::TestHelper
 

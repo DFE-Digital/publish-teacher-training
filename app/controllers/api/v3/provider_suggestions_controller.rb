@@ -8,6 +8,7 @@ module API
         return render(status: :bad_request) unless begins_with_alphanumeric(params[:query])
 
         found_providers = @recruitment_cycle.providers
+                              .with_findable_courses
                               .search_by_code_or_name(params[:query])
                               .limit(10)
 

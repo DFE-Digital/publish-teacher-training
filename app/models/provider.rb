@@ -118,6 +118,11 @@ class Provider < ApplicationRecord
   scope :by_name_ascending, -> { order(provider_name: :asc) }
   scope :by_name_descending, -> { order(provider_name: :desc) }
 
+  scope :with_findable_courses, -> do
+    where(id: Course.findable.select(:provider_id))
+      .or(self.where(provider_code: Course.findable.select(:accrediting_provider_code)))
+  end
+
   serialize :accrediting_provider_enrichments, AccreditingProviderEnrichment::ArraySerializer
 
   validates :train_with_us, words_count: { maximum: 250, message: "^Reduce the word count for training with you" }
