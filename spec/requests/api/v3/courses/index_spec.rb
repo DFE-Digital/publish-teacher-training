@@ -63,7 +63,7 @@ describe "GET v3/courses" do
       let(:course_b) do
         create(
           :course,
-          name: "Course A",
+          name: "Course B",
           provider: provider_b,
           site_statuses: [build(:site_status, :findable, site: build(:site, latitude: 16, longitude: 32))],
           enrichments: [build(:course_enrichment, :published)],
@@ -110,8 +110,8 @@ describe "GET v3/courses" do
         enrichments: [build(:course_enrichment, :published)],
       )
     end
-    let(:near_site) { build(:site, latitude: 0, longitude: 0) }
-    let(:far_site) { build(:site, latitude: 1, longitude: 1) }
+    let(:near_site) { build(:site, latitude: 1, longitude: 1) }
+    let(:far_site) { build(:site, latitude: 2, longitude: 2) }
 
     before do
       course_a
@@ -147,7 +147,7 @@ describe "GET v3/courses" do
     context "by distance" do
       let(:request_path) { "/api/v3/courses?include=provider&sort=distance&latitude=0&longitude=0" }
 
-      it "returns course with closet site first" do
+      it "returns course with closest site first" do
         get request_path
 
         json_response = JSON.parse(response.body)
@@ -204,6 +204,27 @@ describe "GET v3/courses" do
           course_ids << json_response.dig("data", 0, "id")
 
           expect(course_ids.compact).to eql([course_b.id.to_s, course_a.id.to_s])
+        end
+      end
+
+      context "when a course has a site with no address" do
+        let(:nearest_site_with_no_address) do
+          build(:site, address1: "", postcode: "", latitude: 0.5, longitude: 0.5).tap do |site|
+            site.save(validate: false)
+          end
+        end
+
+        before do
+          course_a.site_statuses << build(:site_status, :findable, site: nearest_site_with_no_address)
+        end
+
+        it "ignores the invalid site in the distance ordering" do
+          get request_path
+
+          json_response = JSON.parse(response.body)
+          course_hashes = json_response["data"]
+          expect(course_hashes.first["id"]).to eq(course_b.id.to_s)
+          expect(course_hashes.second["id"]).to eq(course_a.id.to_s)
         end
       end
     end
