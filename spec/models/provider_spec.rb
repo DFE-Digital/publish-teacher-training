@@ -588,6 +588,47 @@ describe Provider, type: :model do
     end
   end
 
+  describe "scopes" do
+    describe ".with_findable_courses" do
+      let(:findable_course) do
+        create(:course, site_statuses: [build(:site_status, :findable)])
+      end
+
+      let(:findable_course_with_accrediting_provider) do
+        create(:course, :with_accrediting_provider, site_statuses: [build(:site_status, :findable)])
+      end
+
+      let(:non_findable_course) do
+        create(:course, site_statuses: [build(:site_status)])
+      end
+
+      let(:non_findable_course_with_accrediting_provider) do
+        create(:course, :with_accrediting_provider, site_statuses: [build(:site_status)])
+      end
+
+      before do
+        findable_course
+        findable_course_with_accrediting_provider
+        non_findable_course
+        non_findable_course_with_accrediting_provider
+      end
+
+      subject {
+        described_class.with_findable_courses
+      }
+
+      it "should return only findable courses' provider and/or accrediting provider" do
+        expect(subject).to include(findable_course.provider,
+                                   findable_course_with_accrediting_provider.provider,
+                                   findable_course_with_accrediting_provider.accrediting_provider)
+
+        expect(subject).to_not include(non_findable_course.provider,
+                                       non_findable_course_with_accrediting_provider.provider,
+                                       non_findable_course_with_accrediting_provider.accrediting_provider)
+      end
+    end
+  end
+
   describe "geolocation" do
     include ActiveJob::TestHelper
 
