@@ -24,6 +24,6 @@ private
   end
 
   def format_update_datetime(datetime)
-    datetime.strftime("%-k.%M on %-e %B %Y")
+    datetime.strftime("%-k:%M%P on %-e %B %Y")
   end
 end
