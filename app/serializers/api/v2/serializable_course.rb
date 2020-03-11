@@ -70,6 +70,8 @@ module API
           serializer_service.execute(object: edit_options[:modern_languages])[:serialized][:data]
         edit_options[:subjects] =
           serializer_service.execute(object: edit_options[:subjects])[:serialized][:data]
+        edit_options[:modern_languages_subject] =
+          serializer_service.execute(object: edit_options[:modern_languages_subject])[:serialized][:data]
 
         {
           edit_options: edit_options,
