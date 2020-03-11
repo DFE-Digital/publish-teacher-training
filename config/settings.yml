@@ -19,6 +19,7 @@ govuk_notify:
   welcome_email_template_id: please_change_me
   course_update_email_template_id: please_change_me
 publish_url: http://localhost:3000
+find_url: http://localhost:3002
 mcbg:
   redis_password: <%= SecureRandom.base64 %>
 system_authentication_token: <%= SecureRandom.base64 %>

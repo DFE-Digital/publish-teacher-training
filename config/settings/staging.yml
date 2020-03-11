@@ -8,3 +8,4 @@ bg_jobs:
     queue: find_sync
 gcp_api_key: please_change_me
 publish_url: https://www.staging.publish-teacher-training-courses.service.gov.uk
+find_url: https://www2.staging.find-postgraduate-teacher-training.education.gov.uk

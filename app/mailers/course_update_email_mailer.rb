@@ -17,7 +17,7 @@ class CourseUpdateEmailMailer < GovukNotifyRails::Mailer
 private
 
   def create_course_url(course)
-    "#{Settings.publish_url}" \
+    "#{Settings.find_url}" \
       "/organisations/#{course.provider.provider_code}" \
       "/#{course.provider.recruitment_cycle.year}" \
       "/courses/#{course.course_code}"
