@@ -36,7 +36,7 @@ describe CourseUpdateEmailMailer, type: :mailer do
     end
 
     it "includes the datetime for the detail update in the personalisation" do
-      expect(mail.govuk_notify_personalisation[:attribute_change_datetime]).to eq("4.05 on 3 February 2001")
+      expect(mail.govuk_notify_personalisation[:attribute_change_datetime]).to eq("4:05am on 3 February 2001")
     end
 
     it "includes the URL for the course in the personalisation" do
