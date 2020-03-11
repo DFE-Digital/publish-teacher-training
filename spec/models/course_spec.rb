@@ -2135,6 +2135,119 @@ describe Course, type: :model do
     end
   end
 
+  describe "create course notification emails" do
+    let(:provider) { create(:provider) }
+    let(:accrediting_provider) { create(:provider, :accredited_body) }
+    let(:organisation) { create(:organisation, providers: [provider]) }
+    let(:site_status) { create(:site_status, :findable) }
+    let(:user_one) { create(:user, organisations: [organisation]) }
+    let(:user_two) { create(:user, organisations: [organisation]) }
+
+    let(:course) do
+      create(
+        :course,
+        provider: provider,
+        accrediting_provider_code: accrediting_provider.provider_code,
+        age_range_in_years: "11_to_15",
+        qualification: "pgce_with_qts",
+        study_mode: "full_time",
+        site_statuses: [site_status],
+        maths: :equivalence_test,
+        english: :equivalence_test,
+      )
+    end
+
+    let(:mail_spy) { spy }
+    let(:mailer_spy) { spy(course_create_email: mail_spy) }
+
+    before do
+      stub_const("CourseCreateEmailMailer", mailer_spy)
+    end
+
+    context "a self-accredited course" do
+      let(:course) { create(:course, :self_accredited, provider: accrediting_provider) }
+
+      before do
+        UserNotification.new(user: user_one, provider_code: accrediting_provider.provider_code, course_create: true).save!
+        UserNotification.new(user: user_two, provider_code: accrediting_provider.provider_code, course_create: false).save!
+      end
+
+      it "does not send a notification" do
+        course
+
+        expect(mailer_spy).not_to have_received(:course_create_email)
+      end
+    end
+
+    context "a non self-accredited course" do
+      context "with no users with notifications enabled" do
+        it "does nothing" do
+          course
+
+          expect(mailer_spy).not_to have_received(:course_create_email)
+        end
+      end
+
+      context "with a user with notifications enabled" do
+        before do
+          UserNotification.new(user: user_one, provider_code: accrediting_provider.provider_code, course_create: true).save!
+          UserNotification.new(user: user_two, provider_code: accrediting_provider.provider_code, course_create: false).save!
+          course
+        end
+
+        it "sends the notification to the correct user" do
+          expect(mailer_spy).to have_received(:course_create_email) do |course, user|
+            expect(course).to eq(course)
+            expect(user).to eq(user_one)
+          end
+        end
+
+        it "delivers the email" do
+          expect(mail_spy).to have_received(:deliver_now)
+        end
+
+        context "when the course does not appear on find" do
+          let(:site_status) { create(:site_status, :unpublished) }
+
+          it "does not send a notification" do
+            course
+
+            expect(mailer_spy).not_to have_received(:course_create_email)
+          end
+        end
+      end
+      context "with multiple users with notifications enabled" do
+        before do
+          UserNotification.new(user: user_one, provider_code: accrediting_provider.provider_code, course_create: true).save!
+          UserNotification.new(user: user_two, provider_code: accrediting_provider.provider_code, course_create: true).save!
+        end
+
+        it "sends an email for each user" do
+          course
+
+          expect(mailer_spy).to have_received(:course_create_email).twice
+        end
+      end
+
+      context "with multiple users for different providers" do
+        let(:provider_two) { create(:provider) }
+
+        before do
+          UserNotification.new(user: user_one, provider_code: accrediting_provider.provider_code, course_create: true).save!
+          UserNotification.new(user: user_two, provider_code: provider_two.provider_code, course_create: true).save!
+        end
+
+        it "only sends the email for the courses accrediting provider" do
+          course
+
+          expect(mailer_spy).to have_received(:course_create_email) do |_course, user|
+            expect(user).to eq(user_one)
+          end
+        end
+      end
+    end
+  end
+
   describe "Update notification emails" do
     let(:provider) { create(:provider) }
     let(:accrediting_provider) { create(:provider, :accredited_body) }
