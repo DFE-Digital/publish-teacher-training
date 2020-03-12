@@ -227,6 +227,25 @@ describe "GET v3/courses" do
           expect(course_hashes.second["id"]).to eq(course_a.id.to_s)
         end
       end
+
+      context "when a course has a site that has not been geocoded" do
+        let(:ungeocoded_site) do
+          build(:site, latitude: nil, longitude: nil)
+        end
+
+        before do
+          course_a.site_statuses << build(:site_status, :findable, site: ungeocoded_site)
+        end
+
+        it "ignores the ungeocoded site in the distance ordering" do
+          get request_path
+
+          json_response = JSON.parse(response.body)
+          course_hashes = json_response["data"]
+          expect(course_hashes.first["id"]).to eq(course_b.id.to_s)
+          expect(course_hashes.second["id"]).to eq(course_a.id.to_s)
+        end
+      end
     end
   end
 

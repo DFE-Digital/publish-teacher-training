@@ -52,16 +52,19 @@ private
     # only want new and running sites
     new_and_running_sites = sites_with_status.where(site_status[:status].in(%w[new_status running]))
 
+    # we only want sites that have been geocoded
+    geocoded_new_and_running_sites = new_and_running_sites.where(sites[:latitude].not_eq(nil).and(sites[:longitude].not_eq(nil)))
+
     # only sites that have a locatable address
     # there are some sites with no address1 or postcode that cannot be
     # accurately geocoded. We don't want to return these as the closest site.
     # This should be removed once the data is fixed
-    new_and_running_sites = new_and_running_sites.where(sites[:address1].not_eq("").or(sites[:postcode].not_eq("")))
+    locatable_new_and_running_sites = geocoded_new_and_running_sites.where(sites[:address1].not_eq("").or(sites[:postcode].not_eq("")))
 
     # select course_id and nearest site with shortest distance from origin
     # as courses may have multiple sites
     # this will remove duplicates by aggregating on course_id
-    courses_with_nearest_site = new_and_running_sites.project(:course_id, Arel.sql("MIN#{Site.distance_sql(OpenStruct.new(lat: origin[0], lng: origin[1]))} as distance")).group(:course_id)
+    courses_with_nearest_site = locatable_new_and_running_sites.project(:course_id, Arel.sql("MIN#{Site.distance_sql(OpenStruct.new(lat: origin[0], lng: origin[1]))} as distance")).group(:course_id)
 
     # form a temporary table with results
     distance_table = Arel::Nodes::TableAlias.new(
