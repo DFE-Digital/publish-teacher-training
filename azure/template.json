@@ -222,6 +222,10 @@
         "description": "The name of the Azure Redis Cache to create."
       }
     },
+    "redisCacheSKU": {
+      "type": "string",
+      "defaultValue": "Basic"
+    },
     "logstashHost": {
       "type": "string",
       "metadata": {
@@ -819,6 +823,9 @@
           },
           "minimumTlsVersion":{
             "value": "1.2"
+          },
+          "redisCacheSKU":{
+            "value": "[parameters('redisCacheSKU')]"
           }
         }
       }
