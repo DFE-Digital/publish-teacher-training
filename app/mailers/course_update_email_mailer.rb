@@ -16,8 +16,8 @@ class CourseUpdateEmailMailer < GovukNotifyRails::Mailer
       attribute_changed: I18n.t("course.update_email.#{attribute_name}"),
       attribute_change_datetime: format_update_datetime(course.updated_at),
       course_url: create_course_url(course),
-      original_value: original_value,
-      updated_value: updated_value,
+      original_value: formatter.call(name: attribute_name, value: original_value),
+      updated_value: formatter.call(name: attribute_name, value: updated_value),
     )
 
     mail(to: recipient.email)
@@ -33,5 +33,9 @@ private
 
   def format_update_datetime(datetime)
     datetime.strftime("%-k:%M%P on %-e %B %Y")
+  end
+
+  def formatter
+    CourseAttributeFormatterService
   end
 end

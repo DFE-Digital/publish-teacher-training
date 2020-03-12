@@ -16,6 +16,16 @@ describe CourseUpdateEmailMailer, type: :mailer do
   before do
     course
     mail
+
+    allow(CourseAttributeFormatterService)
+      .to receive(:call)
+      .with(name: "qualification", value: "original")
+      .and_return("ORIGINAL")
+
+    allow(CourseAttributeFormatterService)
+      .to receive(:call)
+      .with(name: "qualification", value: "updated")
+      .and_return("UPDATED")
   end
 
   context "sending an email to a user" do
@@ -48,11 +58,11 @@ describe CourseUpdateEmailMailer, type: :mailer do
     end
 
     it "includes the original value" do
-      expect(mail.govuk_notify_personalisation[:original_value]).to eq("original")
+      expect(mail.govuk_notify_personalisation[:original_value]).to eq("ORIGINAL")
     end
 
     it "includes the updated value" do
-      expect(mail.govuk_notify_personalisation[:updated_value]).to eq("updated")
+      expect(mail.govuk_notify_personalisation[:updated_value]).to eq("UPDATED")
     end
 
     it "includes the URL for the course in the personalisation" do
