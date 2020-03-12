@@ -22,4 +22,12 @@ class UserNotification < ApplicationRecord
              foreign_key: :provider_code,
              primary_key: :provider_code,
              inverse_of: :user_notifications
+
+  scope :course_create_notification_requests, ->(provider_code) do
+    where(provider_code: provider_code, course_create: true)
+  end
+
+  scope :course_update_notification_requests, ->(provider_code) do
+    where(provider_code: provider_code, course_update: true)
+  end
 end
