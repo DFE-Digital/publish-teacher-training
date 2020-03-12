@@ -275,9 +275,11 @@ class Course < ApplicationRecord
 
     users.each do |user|
       CourseUpdateEmailMailer.course_update_email(
-        self,
-        I18n.t("course.update_email.#{updated_attribute}"),
-        user,
+        course: self,
+        attribute_name: I18n.t("course.update_email.#{updated_attribute}"),
+        original_value: saved_changes[updated_attribute].first,
+        updated_value: saved_changes[updated_attribute].second,
+        recipient: user,
       ).deliver_now
     end
   end

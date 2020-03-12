@@ -2202,11 +2202,14 @@ describe Course, type: :model do
           end
 
           it "Sends the notification to the correct user" do
-            expect(mailer_spy).to have_received(:course_update_email) do |course, attribute_changed, user|
-              expect(course).to eq(course)
-              expect(attribute_changed).to eq(expected_attribute_change)
-              expect(user).to eq(user_one)
-            end
+            expect(mailer_spy).to have_received(:course_update_email)
+              .with(
+                course: course,
+                attribute_name: expected_attribute_change,
+                original_value: expected_original_value,
+                updated_value: expected_updated_value,
+                recipient: user_one,
+            )
           end
 
           it "Delivers the email" do
@@ -2227,43 +2230,55 @@ describe Course, type: :model do
 
         context "When the course appears on find" do
           context "Age range in years" do
-            let(:course_update) { { age_range_in_years: "10_to_14" } }
+            let(:course_update) { { age_range_in_years: expected_updated_value } }
             let(:expected_attribute_change) { "age range" }
+            let(:expected_original_value) { "11_to_15" }
+            let(:expected_updated_value) { "10_to_14" }
 
             include_examples "Sending update notifications"
           end
 
-          context "Qualfication" do
-            let(:course_update) { { qualification: "pgde_with_qts" } }
+          context "Qualification" do
+            let(:course_update) { { qualification: expected_updated_value } }
             let(:expected_attribute_change) { "outcome" }
+            let(:expected_original_value) { "pgce_with_qts" }
+            let(:expected_updated_value) { "pgde_with_qts" }
 
             include_examples "Sending update notifications"
           end
 
           context "Study mode" do
-            let(:course_update) { { study_mode: "part_time" } }
+            let(:course_update) { { study_mode: expected_updated_value } }
             let(:expected_attribute_change) { "full or part time" }
+            let(:expected_original_value) { "full_time" }
+            let(:expected_updated_value) { "part_time" }
 
             include_examples "Sending update notifications"
           end
 
           context "Entry requirements: Maths" do
-            let(:course_update) { { maths: "not_required" } }
+            let(:course_update) { { maths: expected_updated_value } }
             let(:expected_attribute_change) { "entry requirements" }
+            let(:expected_original_value) { "equivalence_test" }
+            let(:expected_updated_value) { "not_required" }
 
             include_examples "Sending update notifications"
           end
 
           context "Entry requirements: English" do
-            let(:course_update) { { english: "not_required" } }
+            let(:course_update) { { english: expected_updated_value } }
             let(:expected_attribute_change) { "entry requirements" }
+            let(:expected_original_value) { "equivalence_test" }
+            let(:expected_updated_value) { "not_required" }
 
             include_examples "Sending update notifications"
           end
 
           context "Entry requirements: Science" do
-            let(:course_update) { { science: "not_required" } }
+            let(:course_update) { { science: expected_updated_value } }
             let(:expected_attribute_change) { "entry requirements" }
+            let(:expected_original_value) { "must_have_qualification_at_application_time" }
+            let(:expected_updated_value) { "not_required" }
 
             include_examples "Sending update notifications"
           end
@@ -2294,9 +2309,7 @@ describe Course, type: :model do
         it "only sends the email for the courses accrediting provider" do
           course.update!(age_range_in_years: "10_to_14")
 
-          expect(mailer_spy).to have_received(:course_update_email) do |_course, _attribute, user|
-            expect(user).to eq(user_one)
-          end
+          expect(mailer_spy).to have_received(:course_update_email).with(hash_including(recipient: user_one))
         end
       end
     end
