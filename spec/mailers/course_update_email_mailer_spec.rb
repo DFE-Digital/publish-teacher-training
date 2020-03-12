@@ -40,7 +40,7 @@ describe CourseUpdateEmailMailer, type: :mailer do
     end
 
     it "includes the URL for the course in the personalisation" do
-      url = "#{Settings.publish_url}" \
+      url = "#{Settings.find_url}" \
         "/organisations/#{course.provider.provider_code}" \
         "/#{course.provider.recruitment_cycle.year}" \
         "/courses/#{course.course_code}"
