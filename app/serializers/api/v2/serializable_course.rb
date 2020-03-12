@@ -1,6 +1,8 @@
 module API
   module V2
     class SerializableCourse < JSONAPI::Serializable::Resource
+      include TimeFormat
+
       class << self
         def enrichment_attribute(name, enrichment_name = name)
           attribute name do
@@ -19,7 +21,7 @@ module API
                  :accrediting_provider_code, :level
 
       attribute :start_date do
-        @object.start_date.strftime("%B %Y") if @object.start_date
+        written_month_year(@object.start_date) if @object.start_date
       end
 
       attribute :applications_open_from do

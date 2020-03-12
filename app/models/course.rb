@@ -39,6 +39,7 @@ class Course < ApplicationRecord
   include ChangedAt
   include Courses::EditOptions
   include StudyModeVacancyMapper
+  include TimeFormat
 
   after_initialize :set_defaults
 
@@ -648,16 +649,16 @@ private
   end
 
   def validate_start_date
-    errors.add :start_date, "#{start_date.strftime('%B %Y')} is not in the #{recruitment_cycle.year} cycle" unless start_date_options.include?(start_date.strftime("%B %Y"))
+    errors.add :start_date, "#{start_date.strftime('%B %Y')} is not in the #{recruitment_cycle.year} cycle" unless start_date_options.include?(written_month_year(start_date))
   end
 
   def validate_applications_open_from
     if applications_open_from.blank?
       errors.add(:applications_open_from, :blank)
     elsif !valid_date_range.include?(applications_open_from)
-      chosen_date = applications_open_from.strftime("%d/%m/%Y")
-      start_date = recruitment_cycle.application_start_date.strftime("%d/%m/%Y")
-      end_date = recruitment_cycle.application_end_date.strftime("%d/%m/%Y")
+      chosen_date = short_date(applications_open_from)
+      start_date = short_date(recruitment_cycle.application_start_date)
+      end_date = short_date(recruitment_cycle.application_end_date)
       errors.add(
         :applications_open_from,
         "#{chosen_date} is not valid for the #{provider.recruitment_cycle.year} cycle. " +
