@@ -40,7 +40,7 @@ describe CourseUpdateEmailMailer, type: :mailer do
     end
 
     it "includes the updated detail in the personalisation" do
-      expect(mail.govuk_notify_personalisation[:attribute_changed]).to eq("name")
+      expect(mail.govuk_notify_personalisation[:attribute_changed]).to eq("outcome")
     end
 
     it "includes the datetime for the detail update in the personalisation" do

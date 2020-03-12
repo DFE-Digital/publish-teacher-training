@@ -2231,7 +2231,7 @@ describe Course, type: :model do
         context "When the course appears on find" do
           context "Age range in years" do
             let(:course_update) { { age_range_in_years: expected_updated_value } }
-            let(:expected_attribute_change) { "age range" }
+            let(:expected_attribute_change) { "age_range_in_years" }
             let(:expected_original_value) { "11_to_15" }
             let(:expected_updated_value) { "10_to_14" }
 
@@ -2240,7 +2240,7 @@ describe Course, type: :model do
 
           context "Qualification" do
             let(:course_update) { { qualification: expected_updated_value } }
-            let(:expected_attribute_change) { "outcome" }
+            let(:expected_attribute_change) { "qualification" }
             let(:expected_original_value) { "pgce_with_qts" }
             let(:expected_updated_value) { "pgde_with_qts" }
 
@@ -2249,7 +2249,7 @@ describe Course, type: :model do
 
           context "Study mode" do
             let(:course_update) { { study_mode: expected_updated_value } }
-            let(:expected_attribute_change) { "full or part time" }
+            let(:expected_attribute_change) { "study_mode" }
             let(:expected_original_value) { "full_time" }
             let(:expected_updated_value) { "part_time" }
 
@@ -2258,7 +2258,7 @@ describe Course, type: :model do
 
           context "Entry requirements: Maths" do
             let(:course_update) { { maths: expected_updated_value } }
-            let(:expected_attribute_change) { "entry requirements" }
+            let(:expected_attribute_change) { "maths" }
             let(:expected_original_value) { "equivalence_test" }
             let(:expected_updated_value) { "not_required" }
 
@@ -2267,7 +2267,7 @@ describe Course, type: :model do
 
           context "Entry requirements: English" do
             let(:course_update) { { english: expected_updated_value } }
-            let(:expected_attribute_change) { "entry requirements" }
+            let(:expected_attribute_change) { "english" }
             let(:expected_original_value) { "equivalence_test" }
             let(:expected_updated_value) { "not_required" }
 
@@ -2276,7 +2276,7 @@ describe Course, type: :model do
 
           context "Entry requirements: Science" do
             let(:course_update) { { science: expected_updated_value } }
-            let(:expected_attribute_change) { "entry requirements" }
+            let(:expected_attribute_change) { "science" }
             let(:expected_original_value) { "must_have_qualification_at_application_time" }
             let(:expected_updated_value) { "not_required" }
 

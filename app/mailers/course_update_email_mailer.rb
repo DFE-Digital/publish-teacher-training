@@ -13,7 +13,7 @@ class CourseUpdateEmailMailer < GovukNotifyRails::Mailer
       provider_name: course.provider.provider_name,
       course_name: course.name,
       course_code: course.course_code,
-      attribute_changed: attribute_name,
+      attribute_changed: I18n.t("course.update_email.#{attribute_name}"),
       attribute_change_datetime: format_update_datetime(course.updated_at),
       course_url: create_course_url(course),
       original_value: original_value,
