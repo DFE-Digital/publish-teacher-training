@@ -79,13 +79,13 @@ describe "GET /provider-suggestions" do
     expect(JSON.parse(response.body)["data"].length).to eq(10)
   end
 
-  it "returns bad request if query is empty" do
+  it "returns status: bad request (400) if query is empty" do
     get "/api/v3/provider-suggestions"
 
     expect(response.status).to eq(400)
   end
 
-  it "returns bad request if query is too short" do
+  it "returns status: bad request (400) if query is too short" do
     provider
 
     get "/api/v3/provider-suggestions?query=#{provider.provider_name[0, 2]}"
@@ -93,9 +93,9 @@ describe "GET /provider-suggestions" do
     expect(response.status).to eq(400)
   end
 
-  it "returns bad request if start of query is not alphanumeric" do
+  it "returns status: success (200) if start of query is not alphanumeric" do
     get "/api/v3/provider-suggestions?query=%22%22%22%22"
 
-    expect(response.status).to eq(400)
+    expect(response.status).to eq(200)
   end
 end
