@@ -257,8 +257,6 @@ class Course < ApplicationRecord
 
   after_update :send_notification_to_accredited_body, if: :notify_accredited_body?
 
-  after_create :send_create_notification_to_accredited_body, if: :notify_accredited_body?
-
   def update_notification_attributes
     %w[age_range_in_years qualification study_mode maths english science]
   end
@@ -268,17 +266,6 @@ class Course < ApplicationRecord
     return false unless findable?
 
     (saved_changes.keys & update_notification_attributes).any?
-  end
-
-  def send_create_notification_to_accredited_body
-    users = User.joins(:user_notifications).merge(UserNotification.course_create_notification_requests(accrediting_provider_code))
-
-    users.each do |user|
-      CourseCreateEmailMailer.course_create_email(
-        self,
-        user,
-      ).deliver_now
-    end
   end
 
   def send_notification_to_accredited_body
