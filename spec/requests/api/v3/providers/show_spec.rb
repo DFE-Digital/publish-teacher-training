@@ -89,6 +89,12 @@ describe "GET v3/recruitment_cycle/:recruitment_cycle_year/providers/:provider_c
     get request_path, params: request_params
   end
 
+  context "including courses.subjects" do
+    let(:request_params) { { include: "courses.subjects" } }
+
+    it { should have_http_status(:success) }
+  end
+
   context "including sites" do
     let(:request_params) { { include: "sites" } }
 
