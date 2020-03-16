@@ -41,9 +41,8 @@ describe CourseUpdateEmailMailer, type: :mailer do
 
     it "includes the URL for the course in the personalisation" do
       url = "#{Settings.find_url}" \
-        "/organisations/#{course.provider.provider_code}" \
-        "/#{course.provider.recruitment_cycle.year}" \
-        "/courses/#{course.course_code}"
+        "/course/#{course.provider.provider_code}" \
+        "/#{course.course_code}"
       expect(mail.govuk_notify_personalisation[:course_url]).to eq(url)
     end
   end
