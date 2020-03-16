@@ -18,9 +18,8 @@ private
 
   def create_course_url(course)
     "#{Settings.find_url}" \
-      "/organisations/#{course.provider.provider_code}" \
-      "/#{course.provider.recruitment_cycle.year}" \
-      "/courses/#{course.course_code}"
+      "/course/#{course.provider.provider_code}" \
+      "/#{course.course_code}"
   end
 
   def format_update_datetime(datetime)
