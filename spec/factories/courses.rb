@@ -40,7 +40,7 @@ FactoryBot.define do
     qualification { :pgce_with_qts }
     with_apprenticeship
 
-    provider { find_or_create(:provider) }
+    association :provider
 
     study_mode { :full_time }
     maths { :must_have_qualification_at_application_time }
