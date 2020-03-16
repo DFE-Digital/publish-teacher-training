@@ -23,7 +23,7 @@ describe SendCourseUpdateJob, type: :job do
         attribute_name: attribute_name,
         original_value: original_value,
         updated_value: updated_value,
-        recipient: recipient
+        recipient: recipient,
       )
 
       expect(CourseUpdateEmailMailer).to have_received(:course_update_email).with(
@@ -31,7 +31,7 @@ describe SendCourseUpdateJob, type: :job do
         attribute_name: attribute_name,
         original_value: original_value,
         updated_value: updated_value,
-        recipient: recipient
+        recipient: recipient,
       )
     end
   end
@@ -45,7 +45,7 @@ describe SendCourseUpdateJob, type: :job do
         attribute_name: attribute_name,
         original_value: original_value,
         updated_value: updated_value,
-        recipient: recipient
+        recipient: recipient,
       )
 
       expect(enqueued_jobs.last[:job]).to eq described_class

@@ -49,17 +49,8 @@ describe "/api/v2/sessions", type: :request do
       let(:user) { create(:user, last_login_date_utc: 10.days.ago) }
       let(:returned_json_response) { JSON.parse response.body }
 
-      let(:govuk_notify_request) do
-        stub_request(:post, "https://api.notifications.service.gov.uk/v2/notifications/email").
-           with(
-             body: { email_address: user.email, template_id: Settings.govuk_notify.welcome_email_template_id, personalisation: { first_name: user.first_name } }.to_json,
-            ).
-            to_return(status: 200, body: "{}", headers: {})
-      end
-
-
       before do
-        govuk_notify_request
+        allow(SendWelcomeJob).to receive(:perform_later)
         Timecop.freeze
         post "/api/v2/sessions",
              headers: { "HTTP_AUTHORIZATION" => credentials },
@@ -106,19 +97,9 @@ describe "/api/v2/sessions", type: :request do
         end
       end
 
-      context "When the user has not received a welcome email" do
-        let(:user) { create(:user, welcome_email_date_utc: nil) }
-
-        it "Sends a welcome email to the user" do
-          expect(govuk_notify_request).to have_been_made
-        end
-      end
-
-      context "When the user has received a welcome email" do
-        let(:user) { create(:user) }
-
-        it "Does not send a welcome email to the user" do
-          expect(govuk_notify_request).not_to have_been_made
+      context "welcome email" do
+        it "Enqueues the sending the welcome email" do
+          expect(SendWelcomeJob).to have_received(:perform_later).with(current_user: user)
         end
       end
     end

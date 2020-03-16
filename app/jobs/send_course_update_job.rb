@@ -7,7 +7,7 @@ class SendCourseUpdateJob < ApplicationJob
       attribute_name: attribute_name,
       original_value: original_value,
       updated_value: updated_value,
-      recipient: recipient
+      recipient: recipient,
     ).deliver_now
   end
 end

@@ -40,8 +40,7 @@ module API
       end
 
       def send_welcome_email
-        welcome_email_service = SendWelcomeEmailService.new(mailer: WelcomeEmailMailer)
-        welcome_email_service.execute(current_user: @current_user)
+        SendWelcomeJob.perform_later(current_user: @current_user)
       end
     end
   end
