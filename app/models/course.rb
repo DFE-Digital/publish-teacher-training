@@ -273,13 +273,13 @@ class Course < ApplicationRecord
     updated_attribute = (saved_changes.keys & update_notification_attributes).first
 
     users.each do |user|
-      CourseUpdateEmailMailer.course_update_email(
+      SendCourseUpdateJob.perform_later(
         course: self,
         attribute_name: updated_attribute,
         original_value: saved_changes[updated_attribute].first,
         updated_value: saved_changes[updated_attribute].second,
         recipient: user,
-      ).deliver_now
+      )
     end
   end
 

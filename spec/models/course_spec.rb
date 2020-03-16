@@ -2157,11 +2157,8 @@ describe Course, type: :model do
       )
     end
 
-    let(:mail_spy) { spy }
-    let(:mailer_spy) { spy(course_update_email: mail_spy) }
-
     before do
-      stub_const("CourseUpdateEmailMailer", mailer_spy)
+      allow(SendCourseUpdateJob).to receive(:perform_later)
     end
 
     context "A self-accredited course" do
@@ -2187,7 +2184,7 @@ describe Course, type: :model do
       it "Does not send a notification" do
         course.update!(age_range_in_years: "10_to_14")
 
-        expect(mailer_spy).not_to have_received(:course_update_email)
+        expect(SendCourseUpdateJob).not_to have_received(:perform_later)
       end
     end
 
@@ -2196,7 +2193,7 @@ describe Course, type: :model do
         it "does nothing" do
           course.update!(age_range_in_years: "10_to_14")
 
-          expect(mailer_spy).not_to have_received(:course_update_email)
+          expect(SendCourseUpdateJob).not_to have_received(:perform_later)
         end
       end
 
@@ -2228,19 +2225,15 @@ describe Course, type: :model do
             course.save!
           end
 
-          it "Sends the notification to the correct user" do
-            expect(mailer_spy).to have_received(:course_update_email)
-              .with(
-                course: course,
-                attribute_name: expected_attribute_change,
-                original_value: expected_original_value,
-                updated_value: expected_updated_value,
-                recipient: user_one,
-            )
-          end
-
-          it "Delivers the email" do
-            expect(mail_spy).to have_received(:deliver_now)
+          it "Enqueues sending the course update email" do
+            expect(SendCourseUpdateJob).to have_received(:perform_later)
+               .with(
+                 course: course,
+                 attribute_name: expected_attribute_change,
+                 original_value: expected_original_value,
+                 updated_value: expected_updated_value,
+                 recipient: user_one,
+               )
           end
         end
 
@@ -2251,7 +2244,7 @@ describe Course, type: :model do
             course.update(age_range_in_years: "10_to_14")
             course.save!
 
-            expect(mailer_spy).not_to have_received(:course_update_email)
+            expect(SendCourseUpdateJob).not_to have_received(:perform_later)
           end
         end
 
@@ -2339,7 +2332,7 @@ describe Course, type: :model do
         it "Sends an email for each user" do
           course.update!(age_range_in_years: "10_to_14")
 
-          expect(mailer_spy).to have_received(:course_update_email).twice
+          expect(SendCourseUpdateJob).to have_received(:perform_later).twice
         end
       end
 
@@ -2372,7 +2365,7 @@ describe Course, type: :model do
         it "only sends the email for the courses accrediting provider" do
           course.update!(age_range_in_years: "10_to_14")
 
-          expect(mailer_spy).to have_received(:course_update_email).with(hash_including(recipient: user_one))
+          expect(SendCourseUpdateJob).to have_received(:perform_later).with(hash_including(recipient: user_one))
         end
       end
     end
