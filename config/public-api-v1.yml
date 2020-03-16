@@ -79,11 +79,16 @@ components:
             running this course.
           maxLength: 3
           example: 2FR
-        age_range_in_years:
-          type: string
+        age_minimum:
+          type: integer
           description: |
-            Description of the age-range of the pupils that a course is specified for.
-          example: 11_to_14
+            The minimum age of pupils this course is specified for.
+          example: 11
+        age_maximum:
+          type: integer
+          description: |
+            The maximum age of pupils this course is specified for.
+          example: 14
         applications_open_from:
           type: string
           format: date
