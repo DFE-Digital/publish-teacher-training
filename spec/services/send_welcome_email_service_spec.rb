@@ -1,6 +1,5 @@
 describe SendWelcomeEmailService do
   let(:mailer_spy) { spy }
-  let(:service) { SendWelcomeEmailService.new(mailer: mailer_spy) }
 
   before { Timecop.freeze }
   after { Timecop.return }
@@ -15,22 +14,25 @@ describe SendWelcomeEmailService do
       )
     end
 
-    before { service.execute(current_user: current_user_spy) }
+    before do
+      allow(WelcomeEmailMailer).to receive_message_chain(:send_welcome_email, :deliver_now)
+      described_class.call(current_user: current_user_spy)
+    end
 
     it "sets their welcome email date to now" do
       expect(current_user_spy).to have_received(:update).with(hash_including(welcome_email_date_utc: Time.now.utc))
     end
 
     it "sends the welcome email" do
-      expect(mailer_spy).to have_received(:send_welcome_email)
+      expect(WelcomeEmailMailer).to have_received(:send_welcome_email)
     end
 
     it "sends the email to the user" do
-      expect(mailer_spy).to have_received(:send_welcome_email).with(hash_including(email: "meowington@cat.net"))
+      expect(WelcomeEmailMailer).to have_received(:send_welcome_email).with(hash_including(email: "meowington@cat.net"))
     end
 
     it "sends the users first name in the email" do
-      expect(mailer_spy).to have_received(:send_welcome_email).with(hash_including(first_name: "Meowington"))
+      expect(WelcomeEmailMailer).to have_received(:send_welcome_email).with(hash_including(first_name: "Meowington"))
     end
   end
 
@@ -43,7 +45,11 @@ describe SendWelcomeEmailService do
       )
     end
 
-    before { service.execute(current_user: current_user_spy) }
+    before do
+      allow(WelcomeEmailMailer).to receive_message_chain(:send_welcome_email, :deliver_now)
+      described_class.call(current_user: current_user_spy)
+    end
+
 
     it "does not update their first login date" do
       expect(current_user_spy).not_to have_received(:update).with(hash_including(first_login_date_utc: Time.now.utc))
@@ -69,20 +75,24 @@ describe SendWelcomeEmailService do
         )
       end
 
+      before do
+        allow(WelcomeEmailMailer).to receive_message_chain(:send_welcome_email, :deliver_now)
+      end
+
       it "sets their welcome email date to now" do
         expect(current_user_spy).to have_received(:update).with(hash_including(welcome_email_date_utc: Time.now.utc))
       end
 
       it "sends the welcome email" do
-        expect(mailer_spy).to have_received(:send_welcome_email)
+        expect(WelcomeEmailMailer).to have_received(:send_welcome_email)
       end
 
       it "sends the email to the user" do
-        expect(mailer_spy).to have_received(:send_welcome_email).with(hash_including(email: "meowington@cat.net"))
+        expect(WelcomeEmailMailer).to have_received(:send_welcome_email).with(hash_including(email: "meowington@cat.net"))
       end
 
       it "sends the users first name in the email" do
-        expect(mailer_spy).to have_received(:send_welcome_email).with(hash_including(first_name: "Meowington"))
+        expect(WelcomeEmailMailer).to have_received(:send_welcome_email).with(hash_including(first_name: "Meowington"))
       end
     end
   end
