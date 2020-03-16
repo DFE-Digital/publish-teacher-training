@@ -1,7 +1,7 @@
 require "rails_helper"
 
-describe Courses::PublishCourseService do
-  describe "execute" do
+describe Courses::PublishService do
+  describe ".call" do
     describe "create course notification emails" do
       let(:provider) { create(:provider) }
       let(:accrediting_provider) { create(:provider, :accredited_body) }
@@ -23,6 +23,8 @@ describe Courses::PublishCourseService do
           english: :equivalence_test,
         )
       end
+
+      let(:subject) { Courses::PublishService }
 
       let(:mail_spy) { spy }
       let(:mailer_spy) { spy(course_create_email: mail_spy) }
@@ -56,7 +58,7 @@ describe Courses::PublishCourseService do
         end
 
         it "does not send a notification" do
-          subject.execute(course: course)
+          subject.call(course: course)
 
           expect(mailer_spy).not_to have_received(:course_create_email)
         end
@@ -65,7 +67,7 @@ describe Courses::PublishCourseService do
       context "a non self-accredited course" do
         context "with no users with notifications enabled" do
           it "does nothing" do
-            subject.execute(course: course)
+            subject.call(course: course)
 
             expect(mailer_spy).not_to have_received(:course_create_email)
           end
@@ -92,7 +94,7 @@ describe Courses::PublishCourseService do
           before do
             user_notification_one
             user_notification_two
-            subject.execute(course: course)
+            subject.call(course: course)
           end
 
           it "sends the notification to the correct user" do
@@ -114,6 +116,7 @@ describe Courses::PublishCourseService do
             end
           end
         end
+
         context "with multiple users with notifications enabled" do
           let(:user_notification_one) do
             create(
@@ -138,7 +141,7 @@ describe Courses::PublishCourseService do
           end
 
           it "sends an email for each user" do
-            subject.execute(course: course)
+            subject.call(course: course)
 
             expect(mailer_spy).to have_received(:course_create_email).twice
           end
@@ -169,7 +172,7 @@ describe Courses::PublishCourseService do
           end
 
           it "only sends the email for the courses accrediting provider" do
-            subject.execute(course: course)
+            subject.call(course: course)
 
             expect(mailer_spy).to have_received(:course_create_email) do |_course, user|
               expect(user).to eq(user_one)

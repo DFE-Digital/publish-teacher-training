@@ -75,7 +75,7 @@ module API
           @course.publish_sites
           @course.publish_enrichment(@current_user)
           @course.reload
-          Courses::PublishCourseService.new.execute(course: @course)
+          Courses::PublishService.call(course: @course)
           has_synced?
 
           head :ok

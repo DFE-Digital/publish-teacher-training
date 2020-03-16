@@ -1,6 +1,12 @@
 module Courses
-  class PublishCourseService
-    def execute(course:)
+  class PublishService
+    class << self
+      def call(course:)
+        new.call(course: course)
+      end
+    end
+
+    def call(course:)
       return false unless notify_accredited_body?(course)
 
       users = User.joins(:user_notifications).merge(UserNotification.course_create_notification_requests(course.accrediting_provider_code))
