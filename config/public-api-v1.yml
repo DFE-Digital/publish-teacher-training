@@ -133,7 +133,7 @@ components:
           type: integer
           description: "Fee for international students (optional)."
           example: 13000
-        fee_uk_eu:
+        fee_domestic:
           type: integer
           description: "Fee for UK and EU students."
           example: 9200
