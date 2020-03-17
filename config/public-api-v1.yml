@@ -38,6 +38,9 @@ components:
       type: object
       required:
         - code
+        - provider_code
+        - age_maximum
+        - age_minimum
       properties:
         about_accredited_body:
           type: string
@@ -46,7 +49,8 @@ components:
           example: ""
         about_course:
           type: string
-          description: Short factual summary of the course formatted as Markdown.
+          format: markdown
+          description: Short factual summary of the course.
           example: |
             The Art and Design PGCE is a challenging and forward-looking
             programme which prepares students to teach across the 11-16 age
@@ -78,6 +82,8 @@ components:
             present if the course is accredited by a provider other than the one
             running this course.
           maxLength: 3
+          minLength: 3
+          nullable: true
           example: 2FR
         age_minimum:
           type: integer
@@ -112,8 +118,9 @@ components:
           type: string
           description: |
             Code that uniquely identifies this course within it's providers list of courses.
-          example: 3GTY
           maxLength: 4
+          minLength: 4
+          example: 3GTY
         course_length:
           type: string
           description: |
@@ -153,7 +160,6 @@ components:
             The type of funding that maybe provided to candidates, if any.
           example: apprenticeship
           enum:
-            - ""
             - salary
             - apprenticeship
             - fee
@@ -161,6 +167,7 @@ components:
           type: string
           example: [ maths, english ]
           enum:
+            - []
             - [maths, english]
             - [maths, english, science]
           description: "GSCE standard equivalent required for this level of course."
@@ -227,6 +234,7 @@ components:
           example: other_requirements
         personal_qualities:
           type: string
+          format: markdown
           description: |
             Any skills, motivation and experience the provider is looking in applicants.
           example: personal_qualities
@@ -244,6 +252,7 @@ components:
           type: string
           description: "Unique code for the provider of this course."
           maxLength: 3
+          minLength: 3
           example: 6CL
         qualifications:
           type: string
@@ -398,7 +407,7 @@ components:
           items:
             $ref: "#/components/schemas/ResourceIdentifier"
     Resource:
-      oneOf:
+      anyOf:
         - $ref: '#/components/schemas/CourseResource'
         - $ref: '#/components/schemas/RecruitmentCycleResource'
         - $ref: '#/components/schemas/SubjectResource'
