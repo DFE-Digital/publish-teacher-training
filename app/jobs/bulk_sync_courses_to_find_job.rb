@@ -5,6 +5,9 @@ class BulkSyncCoursesToFindJob < ApplicationJob
   end
 
   def perform
+    RequestStore.store[:job_id] = provider_job_id
+    RequestStore.store[:job_queue] = queue_name
+
     syncable_courses = RecruitmentCycle.syncable_courses
 
     if syncable_courses.present?
