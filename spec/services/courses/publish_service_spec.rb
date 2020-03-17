@@ -26,11 +26,8 @@ describe Courses::PublishService do
 
       let(:subject) { Courses::PublishService }
 
-      let(:mail_spy) { spy }
-      let(:mailer_spy) { spy(course_create_email: mail_spy) }
-
       before do
-        stub_const("CourseCreateEmailMailer", mailer_spy)
+        allow(SendCourseCreateJob).to receive(:perform_later)
       end
 
       context "a self-accredited course" do
@@ -60,7 +57,7 @@ describe Courses::PublishService do
         it "does not send a notification" do
           subject.call(course: course)
 
-          expect(mailer_spy).not_to have_received(:course_create_email)
+          expect(SendCourseCreateJob).not_to have_received(:perform_later)
         end
       end
 
@@ -69,7 +66,7 @@ describe Courses::PublishService do
           it "does nothing" do
             subject.call(course: course)
 
-            expect(mailer_spy).not_to have_received(:course_create_email)
+            expect(SendCourseCreateJob).not_to have_received(:perform_later)
           end
         end
 
@@ -98,21 +95,17 @@ describe Courses::PublishService do
           end
 
           it "sends the notification to the correct user" do
-            expect(mailer_spy).to have_received(:course_create_email) do |course, user|
+            expect(SendCourseCreateJob).to have_received(:perform_later) do |course, user|
               expect(course).to eq(course)
               expect(user).to eq(user_one)
             end
-          end
-
-          it "delivers the email" do
-            expect(mail_spy).to have_received(:deliver_now)
           end
 
           context "when the course does not appear on find" do
             let(:site_status) { create(:site_status, :unpublished) }
 
             it "does not send a notification" do
-              expect(mailer_spy).not_to have_received(:course_create_email)
+              expect(SendCourseCreateJob).not_to have_received(:perform_later)
             end
           end
         end
@@ -143,7 +136,7 @@ describe Courses::PublishService do
           it "sends an email for each user" do
             subject.call(course: course)
 
-            expect(mailer_spy).to have_received(:course_create_email).twice
+            expect(SendCourseCreateJob).to have_received(:perform_later).twice
           end
         end
 
@@ -174,7 +167,7 @@ describe Courses::PublishService do
           it "only sends the email for the courses accrediting provider" do
             subject.call(course: course)
 
-            expect(mailer_spy).to have_received(:course_create_email) do |_course, user|
+            expect(SendCourseCreateJob).to have_received(:perform_later) do |_course, user|
               expect(user).to eq(user_one)
             end
           end
