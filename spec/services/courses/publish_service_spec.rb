@@ -105,7 +105,7 @@ describe Courses::PublishService do
           end
 
           it "delivers the email" do
-            expect(mail_spy).to have_received(:deliver_now)
+            expect(mail_spy).to have_received(:deliver_later)
           end
 
           context "when the course does not appear on find" do

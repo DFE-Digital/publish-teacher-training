@@ -2165,7 +2165,8 @@ describe Course, type: :model do
           end
 
           it "Delivers the email" do
-            expect(mail_spy).to have_received(:deliver_now)
+            expect(mail_spy).to have_received(:deliver_later).
+              with(queue: "mailer")
           end
         end
 
