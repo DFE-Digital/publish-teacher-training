@@ -217,7 +217,14 @@ class Course < ApplicationRecord
   end
 
   scope :with_provider_name, ->(provider_name) do
-    joins(:provider).merge(Provider.where(provider_name: provider_name))
+    where(
+      provider_id: Provider.where(provider_name: provider_name),
+    ).or(
+      self.where(
+        accrediting_provider_code: Provider.where(provider_name: provider_name)
+                                       .select(:provider_code),
+      ),
+    )
   end
 
   scope :with_send, -> do
