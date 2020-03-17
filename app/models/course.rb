@@ -269,8 +269,7 @@ class Course < ApplicationRecord
   end
 
   def send_notification_to_accredited_body
-    users = UserNotification.where(provider_code: accrediting_provider_code, course_update: true).map(&:user)
-
+    users = User.joins(:user_notifications).merge(UserNotification.course_update_notification_requests(accrediting_provider_code))
     updated_attribute = (saved_changes.keys & update_notification_attributes).first
 
     users.each do |user|

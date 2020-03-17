@@ -2166,10 +2166,22 @@ describe Course, type: :model do
 
     context "A self-accredited course" do
       let(:course) { create(:course, :self_accredited, provider: accrediting_provider) }
+      let(:user_notification_one) do
+        create(
+          :user_notification,
+          user_id: user_one.id,
+          provider_code: accrediting_provider.provider_code,
+          course_update: true,
+        )
+      end
 
-      before do
-        UserNotification.new(user: user_one, provider_code: accrediting_provider.provider_code, course_update: true).save!
-        UserNotification.new(user: user_two, provider_code: accrediting_provider.provider_code, course_update: false).save!
+      let(:user_notification_two) do
+        create(
+          :user_notification,
+          user_id: user_one.id,
+          provider_code: accrediting_provider.provider_code,
+          course_update: false,
+        )
       end
 
       it "Does not send a notification" do
@@ -2189,13 +2201,28 @@ describe Course, type: :model do
       end
 
       context "With a user with notifications enabled" do
-        before do
-          UserNotification.new(user: user_one, provider_code: accrediting_provider.provider_code, course_update: true).save!
-          UserNotification.new(user: user_two, provider_code: accrediting_provider.provider_code, course_update: false).save!
+        let(:user_notification_one) do
+          create(
+            :user_notification,
+            user_id: user_one.id,
+            provider_code: accrediting_provider.provider_code,
+            course_update: true,
+          )
+        end
+
+        let(:user_notification_two) do
+          create(
+            :user_notification,
+            user_id: user_one.id,
+            provider_code: accrediting_provider.provider_code,
+            course_update: false,
+          )
         end
 
         shared_examples "Sending update notifications" do
           before do
+            user_notification_one
+            user_notification_two
             course.assign_attributes(course_update)
             course.ensure_site_statuses_match_study_mode
             course.save!
@@ -2286,9 +2313,27 @@ describe Course, type: :model do
       end
 
       context "With multiple users with notifications enabled" do
+        let(:user_notification_one) do
+          create(
+            :user_notification,
+            user_id: user_one.id,
+            provider_code: accrediting_provider.provider_code,
+            course_update: true,
+          )
+        end
+
+        let(:user_notification_two) do
+          create(
+            :user_notification,
+            user_id: user_one.id,
+            provider_code: accrediting_provider.provider_code,
+            course_update: true,
+          )
+        end
+
         before do
-          UserNotification.new(user: user_one, provider_code: accrediting_provider.provider_code, course_update: true).save!
-          UserNotification.new(user: user_two, provider_code: accrediting_provider.provider_code, course_update: true).save!
+          user_notification_one
+          user_notification_two
         end
 
         it "Sends an email for each user" do
@@ -2301,9 +2346,27 @@ describe Course, type: :model do
       context "With multiple users for different providers" do
         let(:provider_two) { create(:provider) }
 
+        let(:user_notification_one) do
+          create(
+            :user_notification,
+            user_id: user_one.id,
+            provider_code: accrediting_provider.provider_code,
+            course_update: true,
+          )
+        end
+
+        let(:user_notification_two) do
+          create(
+            :user_notification,
+            user_id: user_one.id,
+            provider_code: accrediting_provider.provider_code,
+            course_update: false,
+          )
+        end
+
         before do
-          UserNotification.new(user: user_one, provider_code: accrediting_provider.provider_code, course_update: true).save!
-          UserNotification.new(user: user_two, provider_code: provider_two.provider_code, course_update: true).save!
+          user_notification_one
+          user_notification_two
         end
 
         it "only sends the email for the courses accrediting provider" do

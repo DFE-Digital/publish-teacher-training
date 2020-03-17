@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_03_04_133014) do
+ActiveRecord::Schema.define(version: 2020_03_12_143851) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_buffercache"
@@ -309,6 +309,7 @@ ActiveRecord::Schema.define(version: 2020_03_04_133014) do
     t.boolean "course_update", default: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.boolean "course_create", default: false
     t.index ["provider_code"], name: "index_user_notification_on_provider_code"
   end
 
