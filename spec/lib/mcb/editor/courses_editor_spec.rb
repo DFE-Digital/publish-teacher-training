@@ -94,32 +94,6 @@ describe MCB::Editor::CoursesEditor, :needs_audit_user do
         end
       end
 
-      context "when syncing to Find" do
-        let!(:another_course) { create(:course, provider: provider) }
-        let(:course_codes) { [course_code, another_course.course_code] }
-        let!(:search_api_request) do
-          stub_request(:put, "#{Settings.search_api.base_url}/api/courses/")
-            .with { |req| req.body == body.to_json }
-            .to_return(
-              status: 200,
-            )
-        end
-
-        let(:body) do
-          ActiveModel::Serializer::CollectionSerializer.new(
-            [course, another_course],
-            serializer: SearchAndCompare::CourseSerializer,
-            adapter: :attributes,
-          )
-        end
-
-        it "syncs courses to Find" do
-          run_editor("sync course(s) to Find", "exit")
-
-          expect(search_api_request).to have_been_made
-        end
-      end
-
       it "does nothing upon an immediate exit" do
         expect { run_editor("exit") }.to_not change { course.reload.name }.
           from("Original name")

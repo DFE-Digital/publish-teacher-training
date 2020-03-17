@@ -164,15 +164,6 @@ class Provider < ApplicationRecord
       saved_change_to_postcode?
   end
 
-  def syncable_courses
-    courses.includes(
-      :enrichments,
-      :subjects,
-      site_statuses: :site,
-      provider: %i[sites],
-    ).select(&:syncable?)
-  end
-
   # Currently Provider#contact_info isn't used but will likely be needed when
   # we need to expose the candidate-facing contact info.
   #

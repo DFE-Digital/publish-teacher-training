@@ -64,19 +64,12 @@ module API
         render jsonapi: @course, include: params[:include], class: CourseSerializersService.new.execute
       end
 
-      def sync_with_search_and_compare
-        has_synced?
-
-        head :ok
-      end
-
       def publish
         if @course.publishable?
           @course.publish_sites
           @course.publish_enrichment(@current_user)
           @course.reload
           Courses::PublishService.call(course: @course)
-          has_synced?
 
           head :ok
         else
@@ -99,9 +92,6 @@ module API
         update_subjects
 
         @course.ensure_site_statuses_match_study_mode if @course.study_mode_previously_changed?
-
-        should_sync = site_ids.present? && @course.should_sync?
-        has_synced? if should_sync
 
         if @course.errors.empty? && @course.valid?
           @course.save
@@ -305,16 +295,6 @@ module API
 
       def subject_ids
         params.fetch(:course, {})[:subjects_ids]
-      end
-
-      def has_synced?
-        if @course.syncable?
-          SyncCoursesToFindJob.perform_later(@course)
-        else
-          raise RuntimeError.new(
-            "'#{@course}' '#{@course.provider}' sync error: #{@course.errors.details}",
-          )
-        end
       end
 
       def create_new_course

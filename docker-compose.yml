@@ -28,27 +28,6 @@ services:
       - DB_PASSWORD=developmentpassword
       - CC_TEST_REPORTER_ID=${CC_TEST_REPORTER_ID}
       - AGENT_JOBSTATUS=${AGENT_JOBSTATUS}
-
-  bg-find-sync:
-    build:
-      args:
-        - DOCKER_REPOSITORY=${dockerHubUsername:-dfedigital}
-        - TEACHER_TRAINING_API=${dockerHubImageName:-teacher-training-api}
-      context: bg-find-sync
-      cache_from:
-        - ${dockerHubUsername:-dfedigital}/teacher-training-bg-find-sync:latest
-    image: ${dockerHubUsername:-dfedigital}/teacher-training-bg-find-sync:latest
-    volumes:
-      - .:/app
-    depends_on:
-      - web
-      - db
-    environment:
-      - DB_HOSTNAME=db
-      - DB_USERNAME=postgres
-      - DB_PASSWORD=developmentpassword
-      - SETTINGS__APPLICATION=teacher-training-api-bg-find-sync
-
   bg-geocode:
     build:
       args:

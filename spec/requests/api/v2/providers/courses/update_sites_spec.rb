@@ -46,14 +46,6 @@ describe "PATCH /providers/:provider_code/courses/:course_code with sites" do
     }
   end
 
-  let!(:sync_courses_request_stub) do
-    stub_request(:put, %r{#{Settings.search_api.base_url}/api/courses/})
-      .to_return(
-        status: 200,
-        body: '{ "result": true }',
-      )
-  end
-
   def perform_request
     patch "/api/v2/providers/#{course.provider.provider_code}" \
             "/courses/#{course.course_code}",
@@ -87,10 +79,6 @@ describe "PATCH /providers/:provider_code/courses/:course_code with sites" do
       it "removes an unwanted site" do
         expect(course.reload.sites.exists?(unwanted_site.id)).to be(false)
       end
-
-      it "does not sync the course" do
-        expect(sync_courses_request_stub).not_to have_been_requested
-      end
     end
 
     context "course is running" do
@@ -101,11 +89,6 @@ describe "PATCH /providers/:provider_code/courses/:course_code with sites" do
         perform_enqueued_jobs do
           perform_request
         end
-      end
-
-      it "syncs the course" do
-        expect(course.is_published?).to be(true)
-        expect(sync_courses_request_stub).to have_been_requested
       end
 
       it "suspends an unwanted site" do
@@ -135,10 +118,6 @@ describe "PATCH /providers/:provider_code/courses/:course_code with sites" do
 
       it "returns validation error" do
         expect(response.body).to include("You must choose at least one location")
-      end
-
-      it "doesn't sync the course" do
-        expect(sync_courses_request_stub).to_not have_been_requested
       end
     end
   end

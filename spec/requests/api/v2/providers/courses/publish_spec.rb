@@ -18,12 +18,6 @@ describe "Publish API v2", type: :request do
         "/courses/#{course.course_code}/publish"
     end
 
-    before do
-      stub_request(:put, "#{Settings.search_api.base_url}/api/courses/")
-        .to_return(
-          status: status,
-        )
-    end
     let(:enrichment) { build(:course_enrichment, :initial_draft) }
     let(:site_status) { build(:site_status, :new) }
     let(:dfe_subject) { find_or_create(:primary_subject, :primary) }
@@ -85,8 +79,6 @@ describe "Publish API v2", type: :request do
             expect(subject).to have_http_status(:success)
           end
 
-          assert_requested :put, "#{Settings.search_api.base_url}/api/courses/"
-
           expect(course.reload.site_statuses.first).to be_status_running
           expect(course.site_statuses.first).to be_published_on_ucas
           expect(course.enrichments.first).to be_published
@@ -105,8 +97,6 @@ describe "Publish API v2", type: :request do
             expect(subject).to have_http_status(:success)
           end
 
-          assert_requested :put, "#{Settings.search_api.base_url}/api/courses/"
-
           expect(course.reload.site_statuses.first).to be_status_running
           expect(course.site_statuses.first).to be_published_on_ucas
           expect(course.enrichments.first).to be_published
@@ -114,25 +104,6 @@ describe "Publish API v2", type: :request do
           expect(course.enrichments.first.updated_at).to be_within(1.second).of Time.now.utc
           expect(course.enrichments.first.last_published_timestamp_utc).to be_within(1.second).of Time.now.utc
           expect(course.changed_at).to be_within(1.second).of Time.now.utc
-        end
-      end
-
-      # In production this job would be performed asynchronous, but in tests
-      # it's synchronous. Which is handy for testing what happens when
-      # search-and-compare returns an error, otherwise the error would be
-      # thrown in the delayed_job process.
-      context "performing the job synchronously and search-and-compare failing the request " do
-        let(:status) { 404 }
-
-        it "raises an error" do
-          expect {
-            perform_enqueued_jobs do
-              subject
-            end
-          }.to(raise_error(
-                 RuntimeError,
-                 "Error 404 received syncing courses: #{course}",
-               ))
         end
       end
 

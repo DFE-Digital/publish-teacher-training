@@ -23,10 +23,6 @@ describe Course, type: :model do
         expect(course.is_published?).to eq(false)
       end
 
-      it "should not be syncable" do
-        expect(course.syncable?).to eq(false)
-      end
-
       it "should have updated the courses site statuses to be suspended and have no vacancies" do
         expect(site_status1.vac_status).to eq("no_vacancies")
         expect(site_status1.status).to eq("suspended")

@@ -1074,29 +1074,6 @@ describe Course, type: :model do
       end
     end
 
-    describe "#syncable_subjects" do
-      let(:subject) { create :primary_subject, :primary }
-      let(:subject_discontinued) { create :discontinued_subject }
-      let(:subject_without_code) { create :primary_subject, :primary, subject_code: nil }
-      let(:course) do
-        create :course, subjects: [subject, subject_discontinued]
-      end
-
-      it "returns none-discontinued subjects that have a code present" do
-        expect(course.syncable_subjects).to eq [subject]
-      end
-
-      context "with a subjects that has been loaded" do
-        it "does not use where to reload subjects" do
-          allow(course.subjects).to receive(:where)
-
-          expect(course.syncable_subjects).to eq [subject]
-
-          expect(course.subjects).not_to have_received(:where)
-        end
-      end
-    end
-
     describe "#findable?" do
       context "when #findable_site_statuses returns site statuses" do
         it "returns true" do
@@ -1776,66 +1753,6 @@ describe Course, type: :model do
         its(:last_published_timestamp_utc) { should be_within(1.second).of subsequent_draft_enrichment.last_published_timestamp_utc }
         its(:status) { should eq "draft" }
       end
-    end
-  end
-
-  describe "#syncable?" do
-    let(:courses_subjects) { [find_or_create(:secondary_subject, :biology)] }
-    let(:site_status) { build(:site_status, :findable) }
-
-    # This skips validations to ensure we don't have any legacy data that could be synced
-    subject do
-      create(
-        :course,
-        :infer_level,
-        :skip_validate,
-        infer_subjects?: false,
-        subjects: courses_subjects,
-        site_statuses: [site_status],
-      )
-    end
-
-    its(:syncable?) { should be_truthy }
-
-    context "invalid courses" do
-      context "course which has only discontinued subject subject type" do
-        let(:courses_subjects) { [find_or_create(:discontinued_subject, :humanities)] }
-        its(:syncable?) { should be_falsey }
-      end
-
-      context "course which has only modern lanaguage secondary subject type" do
-        let(:courses_subjects) { [find_or_create(:secondary_subject, :modern_languages)] }
-        its(:syncable?) { should be_falsey }
-      end
-
-      context "course which has a dfe subject, but no findable site statuses" do
-        let(:site_status) { build(:site_status, :suspended) }
-        its(:syncable?) { should be_falsey }
-      end
-
-      context "course which has a findable site status, but no dfe_subject" do
-        let(:courses_subjects) { [] }
-        its(:syncable?) { should be_falsey }
-      end
-    end
-  end
-
-  describe "#should_sync?" do
-    let(:course_enrichment) { build :course_enrichment, :published }
-    let(:site_status) { build(:site_status, :findable) }
-    let(:provider) { build(:provider) }
-    subject { create(:course, provider: provider, site_statuses: [site_status], enrichments: [course_enrichment]) }
-
-    its(:should_sync?) { should be_truthy }
-
-    context "course not yet published" do
-      let(:course_enrichment) { build :course_enrichment }
-      its(:should_sync?) { should be_falsey }
-    end
-
-    context "course in next cycle" do
-      let(:provider) { build :provider, :next_recruitment_cycle }
-      its(:should_sync?) { should be_falsey }
     end
   end
 

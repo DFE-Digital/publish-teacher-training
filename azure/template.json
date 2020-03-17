@@ -114,25 +114,13 @@
     "sentryDSNContainers": {
       "type": "array",
       "metadata": {
-        "description": "Connection string for Sentry monitoring for background find sync and other container instances."
+        "description": "Connection string for Sentry monitoring for background geocoding and other container instances."
       }
     },
     "settingsAuthenticationSecret": {
       "type": "string",
       "metadata": {
         "description": "Auth secret for manage back-end."
-      }
-    },
-    "settingsManageApiSecret": {
-      "type": "string",
-      "metadata": {
-        "description": "The secret shared between manage courses backend and manage courses API to authorize requests."
-      }
-    },
-    "settingsSearchApiSecret": {
-      "type": "string",
-      "metadata": {
-        "description": "The secret shared between manage courses backend and search and compare API to authorize requests."
       }
     },
     "databaseServiceName": {
@@ -486,14 +474,6 @@
               {
                 "name": "SETTINGS__AUTHENTICATION__SECRET",
                 "value": "[parameters('settingsAuthenticationSecret')]"
-              },
-              {
-                "name": "SETTINGS__MANAGE_API__SECRET",
-                "value": "[parameters('settingsManageApiSecret')]"
-              },
-              {
-                "name": "SETTINGS__SEARCH_API__SECRET",
-                "value": "[parameters('settingsSearchApiSecret')]"
               },
               {
                 "name": "SETTINGS__GOVUK_NOTIFY__API_KEY",
@@ -951,10 +931,6 @@
               {
                 "name": "SETTINGS__AUTHENTICATION__SECRET",
                 "secureValue": "[parameters('settingsAuthenticationSecret')]"
-              },
-              {
-                "name": "SETTINGS__SEARCH_API__SECRET",
-                "secureValue": "[parameters('settingsSearchApiSecret')]"
               },
               {
                 "name": "SETTINGS__MCBG__REDIS_PASSWORD",
