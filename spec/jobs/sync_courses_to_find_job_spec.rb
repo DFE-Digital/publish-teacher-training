@@ -1,7 +1,14 @@
 require "rails_helper"
 
 describe SyncCoursesToFindJob, type: :job do
+  include ActiveJob::TestHelper
+
   let(:course) { create :course }
+
+  before do
+    clear_enqueued_jobs
+    clear_performed_jobs
+  end
 
   before do
     allow_any_instance_of(SearchAndCompareAPIService::Request)
