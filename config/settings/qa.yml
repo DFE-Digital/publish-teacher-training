@@ -8,4 +8,4 @@ bg_jobs:
     queue: find_sync
 gcp_api_key: please_change_me
 publish_url: https://www.qa.publish-teacher-training-courses.service.gov.uk
-find_url: https://www2.qa.find-postgraduate-teacher-training.education.gov.uk
+find_url: https://www.qa.find-postgraduate-teacher-training.service.gov.uk
