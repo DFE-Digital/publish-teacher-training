@@ -876,6 +876,9 @@ describe Course, type: :model do
       let(:provider2) { create(:provider, provider_name: "DAVE") }
       let(:course) { create(:course, provider: provider) }
       let(:provider_name) { "ACME" }
+      let(:accredited_provider_name) { "University of Awesome" }
+      let(:accredited_provider) { build(:provider, :accredited_body, provider_name: accredited_provider_name) }
+      let(:accredited_course) { create(:course, accrediting_provider: accredited_provider) }
 
       before do
         provider
@@ -892,6 +895,11 @@ describe Course, type: :model do
       context "with a provider name with no courses" do
         subject { described_class.with_provider_name("DAVE") }
         it { is_expected.to be_empty }
+      end
+
+      context "with an accredited provider name" do
+        subject { described_class.with_provider_name(accredited_provider_name) }
+        it { is_expected.to contain_exactly(accredited_course) }
       end
     end
   end
