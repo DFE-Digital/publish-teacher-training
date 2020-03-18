@@ -3,8 +3,10 @@ teacher training course information API.
 
 ## API Status
 
-In the process of being implemented. Parts may work, but it will not match the
-documentation here.
+The API spec is unstable and subject to change. It is being published
+to get feedback from external parties.
+
+The API is also not yet implementated.
 
 ## What this API is for
 
