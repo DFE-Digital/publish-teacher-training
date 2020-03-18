@@ -3,8 +3,10 @@ teacher training course information API.
 
 ## API Status
 
-In the process of being implemented. Parts may work, but it will not match the
-documentation here.
+The API spec is unstable and subject to change. It is being published
+to get feedback from external parties.
+
+The API is also not yet implementated.
 
 ## What this API is for
 
@@ -12,13 +14,10 @@ Retrieving information about postgraduate teacher training courses.
 
 ## Codes and reference data
 
-DfE Apply will avoid prioprietary codes wherever possible, preferring existing
-data formats such as ISO-certified standards or HESA codes.
-
-Codes appear in three contexts:
-
-- All dates in the API specification are intended to be [ISO
-  8601](https://www.iso.org/iso-8601-date-and-time-format.html) compliant
+We avoid proprietary codes wherever possible, preferring existing data formats
+such as ISO-certified standards or HESA codes. All dates in the API
+specification are intended to be [ISO
+8601](https://www.iso.org/iso-8601-date-and-time-format.html) compliant
 
 ## How do I connect to this API?
 
