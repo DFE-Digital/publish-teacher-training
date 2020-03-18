@@ -47,3 +47,23 @@ services:
       - DB_USERNAME=postgres
       - DB_PASSWORD=developmentpassword
       - SETTINGS__APPLICATION=teacher-training-api-bg-geocode
+
+  bg-mailer:
+    build:
+      args:
+        - DOCKER_REPOSITORY=${dockerHubUsername:-dfedigital}
+        - TEACHER_TRAINING_API=${dockerHubImageName:-teacher-training-api}
+      context: bg-mailer
+      cache_from:
+        - ${dockerHubUsername:-dfedigital}/teacher-training-bg-mailer:latest
+    image: ${dockerHubUsername:-dfedigital}/teacher-training-bg-mailer:latest
+    volumes:
+      - .:/app
+    depends_on:
+      - web
+      - db
+    environment:
+      - DB_HOSTNAME=db
+      - DB_USERNAME=postgres
+      - DB_PASSWORD=developmentpassword
+      - SETTINGS__APPLICATION=teacher-training-api-bg-mailer
