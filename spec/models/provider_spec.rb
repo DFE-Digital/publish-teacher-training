@@ -321,20 +321,6 @@ describe Provider, type: :model do
         end
       end
     end
-
-    describe "#syncable_courses" do
-      let(:site) { create(:site) }
-      let(:dfe_subject) { find_or_create(:primary_subject, :primary) }
-      let(:findable_site_status_1) { create(:site_status, :findable, site: site) }
-      let(:findable_site_status_2) { create(:site_status, :findable, site: site) }
-      let(:suspended_site_status) { create(:site_status, :suspended, site: site) }
-      let(:syncable_course) { create(:course, :infer_level, site_statuses: [findable_site_status_1], subjects: [dfe_subject]) }
-      let(:suspended_course) { create(:course, :infer_level, site_statuses: [suspended_site_status], subjects: [dfe_subject]) }
-
-      subject { create(:provider, courses: [syncable_course, suspended_course], sites: [site]) }
-
-      its(:syncable_courses) { should eq [syncable_course] }
-    end
   end
 
   describe "accrediting_providers" do

@@ -48,18 +48,13 @@ module MCB
         choices = [
           "edit title",
           "edit course code",
-          "sync course(s) to Find",
         ]
         @cli.ask_multiple_choice(prompt: "What would you like to edit?", choices: choices)
       end
 
       def perform_action(choice)
-        if choice.start_with?("edit")
-          attribute = choice.gsub("edit ", "").gsub(" ", "_").downcase.to_sym
-          edit(attribute)
-        elsif choice =~ /sync .* to Find/
-          sync_courses_to_find
-        end
+        attribute = choice.gsub("edit ", "").gsub(" ", "_").downcase.to_sym
+        edit(attribute)
       end
 
       def edit(logical_attribute)
@@ -127,11 +122,6 @@ module MCB
 
       def can_update?(course)
         CoursePolicy.new(@requester, course).update?
-      end
-
-      def sync_courses_to_find
-        request = SyncCoursesToFindJob.new
-        request.perform(*@courses)
       end
 
       def find_courses(provider, course_codes)

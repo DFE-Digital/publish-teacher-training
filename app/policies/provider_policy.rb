@@ -43,7 +43,6 @@ class ProviderPolicy
   alias_method :can_list_sites?, :show?
   alias_method :can_create_course?, :show?
   alias_method :update?, :show?
-  alias_method :sync_courses_with_search_and_compare?, :show?
   alias_method :build_new?, :show?
   alias_method :can_list_training_providers?, :show?
 end

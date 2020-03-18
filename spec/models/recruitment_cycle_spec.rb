@@ -73,51 +73,6 @@ describe RecruitmentCycle, type: :model do
       end
     end
 
-    describe ".syncable_courses" do
-      let(:site) { build(:site) }
-      let(:provider) do
-        build(:provider, sites: [site],
-              recruitment_cycle: current_cycle)
-      end
-      let(:site_status) do
-        build(:site_status, :findable, site: provider.sites.first)
-      end
-      let(:course_enrichment) { build(:course_enrichment, :published) }
-      let(:subjects) { [find_or_create(:further_education_subject)] }
-      let(:course) do
-        create(
-          :course,
-          :infer_level,
-          provider: provider,
-          site_statuses: [site_status],
-          enrichments: [course_enrichment],
-          subjects: subjects,
-        )
-      end
-      let(:syncable_courses) { [course] }
-
-      before do
-        syncable_courses
-      end
-
-      context "current_cycle" do
-        it "returns the syncable_courses" do
-          expect(RecruitmentCycle.syncable_courses).to eq(syncable_courses)
-        end
-      end
-
-      context "next_recruitment_cycle" do
-        let(:provider) do
-          build(:provider, sites: [site],
-                recruitment_cycle: next_cycle)
-        end
-
-        it "returns the empty" do
-          expect(RecruitmentCycle.syncable_courses).to eq([])
-        end
-      end
-    end
-
     describe "#next" do
       subject { current_cycle }
       its(:next) { should eq(next_cycle) }

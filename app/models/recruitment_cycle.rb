@@ -30,11 +30,6 @@ class RecruitmentCycle < ApplicationRecord
       current_recruitment_cycle.next
     end
     alias_method :next, :next_recruitment_cycle
-
-    def syncable_courses
-      current_recruitment_cycle.providers
-        .flat_map(&:syncable_courses)
-    end
   end
 
   def next

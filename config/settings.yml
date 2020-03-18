@@ -3,16 +3,6 @@ authentication:
   # Set this in the env! The below ensures that we are un-authenticatable if we
   # forget to do this in production.
   secret: <%= SecureRandom.base64 %>
-manage_api:
-  # URL of the C# API app (manage-courses-api)
-  base_url: http://localhost:6001
-  # Auth token used between backend and manage-courses-api to authorize requests.
-  secret: banana
-search_api:
-  # URL of the C# API app (search-and-compare-api)
-  base_url: http://localhost:5001
-  # Auth token used between backend and search-and-compare-api to authorize requests.
-  secret: banana
 current_recruitment_cycle_year: 2020
 govuk_notify:
   api_key: please_change_me
