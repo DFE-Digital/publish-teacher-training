@@ -319,6 +319,13 @@
       "metadata": {
           "description": "List of resource tags as a JSON object"
       }
+    },
+    "railsServeStaticFiles": {
+      "type": "string",
+      "defaultValue": "1",
+      "metadata": {
+        "description": "Configure Rails to serve out static files from the public folder."
+      }
     }
   },
   "variables": {
@@ -524,6 +531,10 @@
               {
                 "name": "SETTINGS__GCP_API_KEY",
                 "value": "[parameters('googleCloudPlatformAPIKey')]"
+              },
+              {
+                "name": "RAILS_SERVE_STATIC_FILES",
+                "value": "[parameters('railsServeStaticFiles')]"
               }
             ]
           },
