@@ -190,6 +190,12 @@
         "description": "The name or role of the container to identify individual containers in multi-container setup."
       }
     },
+    "bgNameTag": {
+      "type": "array",
+      "metadata": {
+        "description": "List of app names used to tag the container logs."
+      }
+    },
     "mcbeSystemAuthenticationToken": {
       "type": "string",
       "defaultValue": "",
@@ -951,6 +957,10 @@
               {
                 "name": "SETTINGS__GCP_API_KEY",
                 "secureValue": "[parameters('googleCloudPlatformAPIKey')]"
+              },
+              {
+                "name": "SETTINGS__APPLICATION",
+                "secureValue": "[parameters('bgNameTag')[copyIndex()]]"
               },
               {
                 "name": "BUILD_IMAGE",
