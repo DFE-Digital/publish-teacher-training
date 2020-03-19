@@ -285,7 +285,7 @@ class Course < ApplicationRecord
         original_value: saved_changes[updated_attribute].first,
         updated_value: saved_changes[updated_attribute].second,
         recipient: user,
-      ).deliver_now
+      ).deliver_later(queue: "mailer")
     end
   end
 

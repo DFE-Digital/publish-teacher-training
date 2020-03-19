@@ -44,5 +44,7 @@ module ManageCoursesBackend
     # https://github.com/rails/rails/commit/ddb6d788d6a611fd1ba6cf92ad6d1342079517a8
     config.action_dispatch.return_only_media_type_on_content_type = false
     config.autoload_paths += %W(#{config.root}/app/models/subjects)
+
+    config.action_mailer.delivery_job = "ActionMailer::MailDeliveryJob"
   end
 end

@@ -14,7 +14,7 @@ module Courses
         CourseCreateEmailMailer.course_create_email(
           course,
           user,
-        ).deliver_now
+        ).deliver_later(queue: "mailer")
       end
     end
 
