@@ -1,11 +1,3 @@
-search_api:
-  base_url: https://api.find-postgraduate-teacher-training.service.gov.uk
-  secret: please_change_me
-bg_jobs:
-  find_bulk_sync:
-    cron: "0 */2 * * *"
-    class: "BulkSyncCoursesToFindJob"
-    queue: find_sync
 gcp_api_key: please_change_me
 publish_url: https://www.publish-teacher-training-courses.service.gov.uk
 find_url: https://www2.find-postgraduate-teacher-training.service.gov.uk

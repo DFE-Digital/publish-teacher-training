@@ -16,16 +16,6 @@ describe ProviderPolicy do
 
   subject { described_class }
 
-  permissions :show?, :update?, :sync_courses_with_search_and_compare?, :can_list_courses? do
-    let(:user) { create(:user) }
-    let(:user_outside_org) { create(:user) }
-    let(:provider) { create(:provider) }
-    let!(:organisation) { create(:organisation, providers: [provider], users: [user]) }
-
-    it { should permit(user, provider) }
-    it { should_not permit(user_outside_org, provider) }
-  end
-
   permissions :index?, :suggest? do
     it { should permit user }
   end

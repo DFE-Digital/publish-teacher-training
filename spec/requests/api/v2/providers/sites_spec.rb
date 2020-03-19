@@ -219,12 +219,6 @@ describe "Sites API v2", type: :request do
     end
     let(:site_params) { params.dig :_jsonapi, :data, :attributes }
 
-    before do
-      allow(ManageCoursesAPIService::Request).to(
-        receive(:sync_courses_with_search_and_compare).and_return(true),
-      )
-    end
-
     context "when unauthenticated" do
       let(:payload) { { email: "foo@bar" } }
 
@@ -336,13 +330,6 @@ describe "Sites API v2", type: :request do
         subject { response }
 
         it { should have_http_status(:success) }
-
-        it "publishes courses on manage-courses-api" do
-          expect(ManageCoursesAPIService::Request).to(
-            have_received(:sync_courses_with_search_and_compare)
-            .with(user.email, provider.provider_code),
-          )
-        end
 
         it "returns a JSON repsentation of the updated site" do
           expect(json_data).to have_id(site1.id.to_s)

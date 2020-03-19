@@ -77,16 +77,6 @@ describe "PATCH /providers/:provider_code" do
     ]
   end
 
-  let(:search_api_status) { 200 }
-  let(:sync_body) { WebMock::Matchers::AnyArgMatcher.new(nil) }
-  let!(:sync_stub) do
-    stub_request(:put, %r{#{Settings.search_api.base_url}/api/courses/})
-      .with(body: sync_body)
-      .to_return(
-        status: search_api_status,
-      )
-  end
-
   describe "with permitted attributes on provider object" do
     it "returns ok" do
       perform_request update_provider
@@ -124,7 +114,6 @@ describe "PATCH /providers/:provider_code" do
                                      end
         perform_request(update_provider)
         expect(provider.reload.send(attribute)).not_to eq(value)
-        expect(sync_stub).to have_been_requested
       end
     end
 
@@ -161,10 +150,6 @@ describe "PATCH /providers/:provider_code" do
 
       context "with sites" do
         its(:sites) { should_not include(site) }
-      end
-
-      it "syncs a provider's courses" do
-        expect(sync_stub).to have_been_requested
       end
     end
   end

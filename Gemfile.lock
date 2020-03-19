@@ -272,7 +272,7 @@ GEM
       ast (~> 2.4.0)
     patience_diff (1.1.0)
       trollop (~> 1.16)
-    pg (1.2.2)
+    pg (1.2.3)
     pkg-config (1.4.1)
     pry (0.12.2)
       coderay (~> 1.1.0)
@@ -374,7 +374,7 @@ GEM
       rexml
       ruby-progressbar (~> 1.7)
       unicode-display_width (>= 1.4.0, < 1.7)
-    rubocop-govuk (3.3.0)
+    rubocop-govuk (3.3.1)
       rubocop (= 0.80.1)
       rubocop-rails (~> 2)
       rubocop-rspec (~> 1.28)

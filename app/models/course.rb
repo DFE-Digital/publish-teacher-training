@@ -245,7 +245,6 @@ class Course < ApplicationRecord
   validate :validate_enrichment_publishable, on: :publish
   validate :validate_site_statuses_publishable, on: :publish
   validate :validate_enrichment
-  validate :validate_course_syncable, on: :sync
   validate :validate_qualification, on: %i[update new]
   validate :validate_start_date, on: :update, if: -> { provider.present? && start_date.present? }
   validate :validate_applications_open_from, on: %i[update new], if: -> { provider.present? }
@@ -319,16 +318,6 @@ class Course < ApplicationRecord
 
   def publishable?
     valid? :publish
-  end
-
-  # Is course in syncable condition
-  def syncable?
-    valid? :sync
-  end
-
-  # Should we attempt to sync this course with Find
-  def should_sync?
-    recruitment_cycle.current? && is_published?
   end
 
   def update_valid?
@@ -632,16 +621,6 @@ private
 
   def remove_unnecessary_enrichments_validation_message
     self.errors.delete :enrichments if self.errors[:enrichments] == ["is invalid"]
-  end
-
-  def validate_course_syncable
-    if findable?.blank?
-      errors.add :site_statuses, "No findable sites."
-    end
-
-    if syncable_subjects.none?
-      errors.add :subjects, "No subjects."
-    end
   end
 
   def validate_qualification

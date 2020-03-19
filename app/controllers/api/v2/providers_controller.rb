@@ -36,26 +36,10 @@ module API
         update_ucas_preferences
 
         if @provider.valid?
-          courses_synced?(@provider.syncable_courses) if @recruitment_cycle.current? && @provider.syncable_courses.present?
-
           render jsonapi: @provider.reload, include: params[:include]
         else
           render jsonapi_errors: @provider.errors, status: :unprocessable_entity, include: params[:include]
         end
-      end
-
-      def sync_courses_with_search_and_compare
-        authorize @provider
-
-        if !@recruitment_cycle.current?
-          raise RuntimeError.new(
-            "#{@provider} is not from the current recruitment cycle",
-          )
-        end
-
-        courses_synced?(@provider.syncable_courses)
-
-        head :ok
       end
 
       def suggest
@@ -255,10 +239,6 @@ module API
             :application_alert_contact,
             :send_application_alerts,
           )
-      end
-
-      def courses_synced?(syncable_courses)
-        SyncCoursesToFindJob.perform_later(*syncable_courses)
       end
     end
   end
