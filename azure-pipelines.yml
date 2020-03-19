@@ -128,7 +128,7 @@ steps:
     imageName: "$(docker_bg_geocode_path):$(Build.BuildNumber)"
 
 - task: Docker@1
-  displayName: Tag bg_geocode image with current build number $(Build.BuildNumber)
+  displayName: Tag bg_mailer image with current build number $(Build.BuildNumber)
   inputs:
     command: Tag image
     imageName: "$(docker_bg_mailer_path):latest"
