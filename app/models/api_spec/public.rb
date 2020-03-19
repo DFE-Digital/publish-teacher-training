@@ -10,7 +10,7 @@ module APISpec
       end
 
       def openapi_file_path
-        "config/public-api-v%{version}.yml"
+        "swagger/v%{version}/swagger.json"
       end
     end
   end

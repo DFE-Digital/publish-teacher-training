@@ -173,7 +173,13 @@ machine wins
 
 Any `Machine based env variables settings` that is not prefixed with `SETTINGS`.* are not considered for general consumption.
 
+### Documentation
 
+Use the following command to generate OpenAPI specification:
+
+```sh
+bundle exec rake rswag:specs:swaggerize
+```
 
 ## CI variables
 

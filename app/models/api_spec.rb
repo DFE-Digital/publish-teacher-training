@@ -26,6 +26,6 @@ module APISpec
   end
 
   def to_yaml
-    @to_yaml ||= File.read(@openapi_spec_file)
+    @to_yaml ||= JSON.parse(File.read(@openapi_spec_file)).to_yaml
   end
 end

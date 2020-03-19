@@ -113,6 +113,9 @@ gem "openapi3_parser", "0.8.0"
 gem "redcarpet"
 gem "rouge"
 
+gem "open_api-rswag-api"
+gem "open_api-rswag-ui"
+
 group :development, :test do
   # add info about db structure to models and other files
   gem "annotate"
@@ -155,6 +158,8 @@ group :development, :test do
 
   # Allow us to freeze time in tests
   gem "timecop"
+
+  gem "open_api-rswag-specs"
 end
 
 group :development do
