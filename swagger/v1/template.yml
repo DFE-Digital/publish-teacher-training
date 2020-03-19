@@ -353,7 +353,7 @@ components:
         - data
       properties:
         data:
-          type: array,
+          type: array
           items:
             $ref: "#/components/schemas/CourseResource"
         included:
