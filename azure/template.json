@@ -976,6 +976,22 @@
               {
                 "name": "BUILD_IMAGE",
                 "value": "[parameters('backgroundContainerImageReference')[copyIndex()]]"
+              },
+              {
+                "name": "SETTINGS__GOVUK_NOTIFY__API_KEY",
+                "value": "[parameters('govukNotifyApiKey')]"
+              },
+              {
+                "name": "SETTINGS__GOVUK_NOTIFY__WELCOME_EMAIL_TEMPLATE_ID",
+                "value": "[parameters('govukNotifyWelcomeEmailTemplateId')]"
+              },
+              {
+                "name": "SETTINGS__GOVUK_NOTIFY__COURSE_UPDATE_EMAIL_TEMPLATE_ID",
+                "value": "[parameters('govukNotifyCourseUpdateEmailTemplateId')]"
+              },
+              {
+                "name": "SETTINGS__GOVUK_NOTIFY__COURSE_CREATE_EMAIL_TEMPLATE_ID",
+                "value": "[parameters('govukNotifyCourseCreateEmailTemplateId')]"
               }
             ]
           },
