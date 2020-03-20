@@ -1,6 +1,8 @@
 # == Route Map
 #
 #                                               Prefix Verb   URI Pattern                                                                                                                              Controller#Action
+#                                    open_api_rswag_ui        /api-docs                                                                                                                                OpenApi::Rswag::Ui::Engine
+#                                   open_api_rswag_api        /api-docs                                                                                                                                OpenApi::Rswag::Api::Engine
 #                                                 root GET    /                                                                                                                                        api_docs/pages#home
 #                                                 ping GET    /ping(.:format)                                                                                                                          heartbeat#ping
 #                                          healthcheck GET    /healthcheck(.:format)                                                                                                                   heartbeat#healthcheck
@@ -105,9 +107,16 @@
 #                                 api_v3_subject_areas GET    /api/v3/subject_areas(.:format)                                                                                                          api/v3/subject_areas#index
 #                                            error_500 GET    /error_500(.:format)                                                                                                                     error#error_500
 #                                           error_nodb GET    /error_nodb(.:format)                                                                                                                    error#error_nodb
+#
+# Routes for OpenApi::Rswag::Ui::Engine:
+#
+#
+# Routes for OpenApi::Rswag::Api::Engine:
 
 # rubocop:disable Metrics/BlockLength
 Rails.application.routes.draw do
+  mount OpenApi::Rswag::Ui::Engine => "/api-docs"
+  mount OpenApi::Rswag::Api::Engine => "/api-docs"
   root to: "api_docs/pages#home"
 
   get :ping, controller: :heartbeat
