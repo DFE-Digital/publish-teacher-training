@@ -2,7 +2,7 @@
 openapi: 3.0.0
 info:
   version: 1.0.0
-  title: Postgraduate Teacher Training Courses API
+  title: Teacher Training Courses API
   contact:
     name: DfE
     email: becomingateacher@digital.education.gov.uk
