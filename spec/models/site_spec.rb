@@ -121,6 +121,21 @@ describe Site, type: :model do
           expect(site.full_address).to eq("Long Lane, Holbury, Southampton, SO45 2PA")
         end
       end
+
+      context "address is missing" do
+        before do
+          site.location_name = ""
+          site.address1 = ""
+          site.address2 = ""
+          site.address3 = ""
+          site.address4 = ""
+          site.postcode = ""
+        end
+
+        it "returns an empty string" do
+          expect(site.full_address).to eq("")
+        end
+      end
     end
 
     describe "#needs_geolocation?" do

@@ -152,7 +152,11 @@ class Provider < ApplicationRecord
   end
 
   def full_address
-    [provider_name, address1, address2, address3, address4, postcode].compact.join(", ")
+    address = [provider_name, address1, address2, address3, address4, postcode]
+
+    return "" if address.all?(&:blank?)
+
+    address.compact.join(", ")
   end
 
   def address_changed?

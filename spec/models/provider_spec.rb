@@ -663,6 +663,21 @@ describe Provider, type: :model do
       it "Concatenates address details" do
         expect(provider.full_address).to eq("Southampton High School, Long Lane, Holbury, Southampton, SO45 2PA")
       end
+
+      context "address is missing" do
+        before do
+          provider.provider_name = ""
+          provider.address1 = ""
+          provider.address2 = ""
+          provider.address3 = ""
+          provider.address4 = ""
+          provider.postcode = ""
+        end
+
+        it "returns an empty string" do
+          expect(provider.full_address).to eq("")
+        end
+      end
     end
 
     describe "#needs_geolocation?" do

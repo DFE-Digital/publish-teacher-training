@@ -69,6 +69,8 @@ class Site < ApplicationRecord
       address.unshift(location_name)
     end
 
+    return "" if address.all?(&:blank?)
+
     address.compact.join(", ")
   end
 
