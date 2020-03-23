@@ -135,7 +135,7 @@ Authorization: Bearer <encoded JWT token>
 or with curl:
 
 ```bash
-curl http://localhost:3001/api/v2/providers.json -H "Authorization: Bearer <encoded JWT token>"
+curl http://localhost:3001/api/v2/recruitment_cycles.json -H "Authorization: Bearer <encoded JWT token>"
 ```
 
 Encoding the payload can be done with an MCB command:
