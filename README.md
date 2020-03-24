@@ -128,7 +128,7 @@ in the database being supplied as the bearer token.
 An example HTTP request would look like:
 
 ```
-GET /api/v2/providers.json
+GET /api/v2/recruitment_cycles.json
 Authorization: Bearer <encoded JWT token>
 ```
 
