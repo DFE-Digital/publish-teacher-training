@@ -1,3 +1,13 @@
+FROM ruby:2.6.5-alpine AS middleman
+
+RUN apk add --update --no-cache npm git build-base
+
+ADD . .
+
+RUN cd docs && bundle install --jobs=4 && bundle exec middleman build --build-dir=../public && cd -
+
+###
+
 FROM ruby:2.6.5-alpine
 
 RUN apk add --update --no-cache tzdata && \
@@ -14,12 +24,13 @@ WORKDIR $APP_HOME
 ADD Gemfile $APP_HOME/Gemfile
 ADD Gemfile.lock $APP_HOME/Gemfile.lock
 
-
 RUN apk add --update --no-cache --virtual build-dependances \
- build-base  && \
+ build-base && \
  bundle install --jobs=4 && \
  apk del build-dependances
 
 ADD . $APP_HOME/
+
+COPY --from=middleman /public/ $APP_HOME/public/
 
 CMD bundle exec rails db:migrate && bundle exec rails server -b 0.0.0.0
