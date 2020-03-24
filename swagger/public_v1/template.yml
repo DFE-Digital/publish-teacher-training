@@ -72,11 +72,6 @@ components:
           description: "Search radius in miles from given latitude and longitude"
           type: number
           example: 20
-    CourseRelationships:
-      type: object
-      properties:
-        subjects:
-          $ref: "#/components/schemas/RelationshipList"
     CourseResource:
       type: object
       required:

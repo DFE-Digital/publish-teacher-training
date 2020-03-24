@@ -1,0 +1,15 @@
+---
+  type: object
+  properties:
+    accredited_body:
+      $ref: "#/components/schemas/Relationship"
+    locations:
+      $ref: "#/components/schemas/RelationshipList"
+    modern_languages:
+      $ref: "#/components/schemas/RelationshipList"
+    provider_locations:
+      $ref: "#/components/schemas/RelationshipList"
+    provider:
+      $ref: "#/components/schemas/Relationship"
+    subjects:
+      $ref: "#/components/schemas/RelationshipList"
