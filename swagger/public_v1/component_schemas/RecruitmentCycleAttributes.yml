@@ -1,0 +1,18 @@
+---
+type: object
+required:
+  - code
+properties:
+  year:
+    type: integer
+    description: "The year that this recruitment cycle applies to."
+  application_start_date:
+    type: string
+    format: date
+    description: >-
+      The default date applications start being taken for this recruitment cycle.
+  application_end_date:
+    type: string
+    format: date
+    description: >-
+      The default date applications stop being taken for this recruitment cycle.
