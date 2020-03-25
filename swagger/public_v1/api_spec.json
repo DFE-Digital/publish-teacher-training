@@ -96,14 +96,6 @@
           }
         }
       },
-      "CourseRelationships": {
-        "type": "object",
-        "properties": {
-          "subjects": {
-            "$ref": "#/components/schemas/RelationshipList"
-          }
-        }
-      },
       "CourseResource": {
         "type": "object",
         "required": [
@@ -116,7 +108,8 @@
             "type": "integer"
           },
           "type": {
-            "type": "string"
+            "type": "string",
+            "example": "courses"
           },
           "attributes": {
             "$ref": "#/components/schemas/CourseAttributes"
@@ -244,6 +237,69 @@
           }
         }
       },
+      "ProviderResource": {
+        "type": "object",
+        "required": [
+          "id",
+          "type",
+          "attributes"
+        ],
+        "properties": {
+          "id": {
+            "type": "integer",
+            "example": 1
+          },
+          "type": {
+            "type": "string",
+            "example": "providers"
+          },
+          "attributes": {
+            "$ref": "#/components/schemas/ProviderAttributes"
+          },
+          "relationships": {
+            "$ref": "#/components/schemas/ProviderRelationships"
+          }
+        }
+      },
+      "ProviderListResponse": {
+        "type": "object",
+        "required": [
+          "data",
+          "jsonapi"
+        ],
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ProviderResource"
+            }
+          },
+          "included": {
+            "$ref": "#/components/schemas/Included"
+          },
+          "jsonapi": {
+            "$ref": "#/components/schemas/JSONAPI"
+          }
+        }
+      },
+      "ProviderSingleResponse": {
+        "type": "object",
+        "required": [
+          "data",
+          "jsonapi"
+        ],
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/ProviderResource"
+          },
+          "included": {
+            "$ref": "#/components/schemas/Included"
+          },
+          "jsonapi": {
+            "$ref": "#/components/schemas/JSONAPI"
+          }
+        }
+      },
       "Relationship": {
         "type": "object",
         "properties": {
@@ -331,7 +387,8 @@
             "type": "integer"
           },
           "type": {
-            "type": "string"
+            "type": "string",
+            "example": "subjects"
           },
           "attributes": {
             "$ref": "#/components/schemas/SubjectAttributes"
@@ -829,6 +886,17 @@
           }
         }
       },
+      "ProviderRelationships": {
+        "type": "object",
+        "properties": {
+          "locations": {
+            "$ref": "#/components/schemas/RelationshipList"
+          },
+          "recruitment_cycle": {
+            "$ref": "#/components/schemas/Relationship"
+          }
+        }
+      },
       "RecruitmentCycleAttributes": {
         "type": "object",
         "required": [
@@ -848,6 +916,29 @@
             "type": "string",
             "format": "date",
             "description": "The default date applications stop being taken for this recruitment cycle."
+          }
+        }
+      },
+      "CourseRelationships": {
+        "type": "object",
+        "properties": {
+          "accredited_body": {
+            "$ref": "#/components/schemas/Relationship"
+          },
+          "locations": {
+            "$ref": "#/components/schemas/RelationshipList"
+          },
+          "modern_languages": {
+            "$ref": "#/components/schemas/RelationshipList"
+          },
+          "provider_locations": {
+            "$ref": "#/components/schemas/RelationshipList"
+          },
+          "provider": {
+            "$ref": "#/components/schemas/Relationship"
+          },
+          "subjects": {
+            "$ref": "#/components/schemas/RelationshipList"
           }
         }
       }
@@ -925,6 +1016,88 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/LocationsList"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/public/v4/providers": {
+      "get": {
+        "summary": "Returns providers for the current recruitment cycle",
+        "operationId": "public_api_v1_providers_list",
+        "tags": [
+          "provider"
+        ],
+        "parameters": [
+          {
+            "name": "filter",
+            "in": "query",
+            "style": "deepObject",
+            "required": false,
+            "schema": {
+              "type": "object"
+            }
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "style": "deepObject",
+            "required": false,
+            "schema": {
+              "type": "object"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The list of providers in the current recruitment cycle",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProviderListResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/public/v4/providers/:provider_code": {
+      "get": {
+        "summary": "Returns provider resource in the current recruitment cycle",
+        "operationId": "public_api_v1_provider_show",
+        "tags": [
+          "provider"
+        ],
+        "parameters": [
+          {
+            "name": "filter",
+            "in": "query",
+            "style": "deepObject",
+            "required": false,
+            "schema": {
+              "type": "object"
+            }
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "style": "deepObject",
+            "required": false,
+            "schema": {
+              "type": "object"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The provider resource in the current recruitment cycle",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProviderSingleResponse"
                 }
               }
             }

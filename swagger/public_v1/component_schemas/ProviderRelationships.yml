@@ -1,0 +1,7 @@
+---
+type: object
+properties:
+  locations:
+    $ref: "#/components/schemas/RelationshipList"
+  recruitment_cycle:
+    $ref: "#/components/schemas/Relationship"

@@ -83,6 +83,7 @@ components:
           type: integer
         type:
           type: string
+          example: "courses"
         attributes:
           $ref: "#/components/schemas/CourseAttributes"
         relationships:
@@ -170,6 +171,49 @@ components:
             $ref: "#/components/schemas/LocationResource"
         jsonapi:
           $ref: "#/components/schemas/JSONAPI"
+    ProviderResource:
+      type: object
+      required:
+        - id
+        - type
+        - attributes
+      properties:
+        id:
+          type: integer
+          example: 1
+        type:
+          type: string
+          example: "providers"
+        attributes:
+          $ref: "#/components/schemas/ProviderAttributes"
+        relationships:
+          $ref: "#/components/schemas/ProviderRelationships"
+    ProviderListResponse:
+      type: object
+      required:
+        - data
+        - jsonapi
+      properties:
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/ProviderResource"
+        included:
+          $ref: "#/components/schemas/Included"
+        jsonapi:
+          $ref: "#/components/schemas/JSONAPI"
+    ProviderSingleResponse:
+      type: object
+      required:
+        - data
+        - jsonapi
+      properties:
+        data:
+          $ref: "#/components/schemas/ProviderResource"
+        included:
+          $ref: "#/components/schemas/Included"
+        jsonapi:
+          $ref: "#/components/schemas/JSONAPI"
     Relationship:
       type: object
       properties:
@@ -226,5 +270,6 @@ components:
           type: integer
         type:
           type: string
+          example: subjects
         attributes:
           $ref: "#/components/schemas/SubjectAttributes"
