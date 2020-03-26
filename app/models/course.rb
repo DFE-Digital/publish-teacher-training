@@ -261,32 +261,8 @@ class Course < ApplicationRecord
 
   after_validation :remove_unnecessary_enrichments_validation_message
 
-  after_update :send_notification_to_accredited_body, if: :notify_accredited_body?
-
   def update_notification_attributes
     %w[age_range_in_years qualification study_mode maths english science]
-  end
-
-  def notify_accredited_body?
-    return false if self_accredited?
-    return false unless findable?
-
-    (saved_changes.keys & update_notification_attributes).any?
-  end
-
-  def send_notification_to_accredited_body
-    users = User.joins(:user_notifications).merge(UserNotification.course_update_notification_requests(accrediting_provider_code))
-    updated_attribute = (saved_changes.keys & update_notification_attributes).first
-
-    users.each do |user|
-      CourseUpdateEmailMailer.course_update_email(
-        course: self,
-        attribute_name: updated_attribute,
-        original_value: saved_changes[updated_attribute].first,
-        updated_value: saved_changes[updated_attribute].second,
-        recipient: user,
-      ).deliver_later(queue: "mailer")
-    end
   end
 
   def self.get_by_codes(year, provider_code, course_code)
