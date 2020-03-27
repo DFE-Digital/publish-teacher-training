@@ -19,8 +19,14 @@ describe API::V2::SerializableAccessRequest do
   it { should have_type("access_request") }
 
   it {
-    should have_attributes(:email_address, :first_name, :last_name, :organisation,
-                           :request_date_utc, :requester_id, :status, :requester_email)
+    should have_jsonapi_attributes(:email_address,
+                                   :first_name,
+                                   :last_name,
+                                   :organisation,
+                                   :request_date_utc,
+                                   :requester_id,
+                                   :status,
+                                   :requester_email)
   }
 
   context "with a requester" do
