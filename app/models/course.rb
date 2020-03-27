@@ -216,6 +216,10 @@ class Course < ApplicationRecord
     where(qualification: qualifications)
   end
 
+  scope :with_accredited_bodies, ->(accredited_body_codes) do
+    where(accrediting_provider_code: accredited_body_codes)
+  end
+
   scope :with_provider_name, ->(provider_name) do
     where(
       provider_id: Provider.where(provider_name: provider_name),

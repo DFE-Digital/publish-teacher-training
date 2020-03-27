@@ -902,6 +902,21 @@ describe Course, type: :model do
         it { is_expected.to contain_exactly(accredited_course) }
       end
     end
+
+    describe ".with_accredited_bodies" do
+      context "course with an accredited body" do
+        let!(:provider) { create(:provider) }
+        let!(:course) { create(:course, provider: provider) }
+        let!(:accredited_provider) { create(:provider, :accredited_body) }
+        let!(:accredited_course) { create(:course, accrediting_provider: accredited_provider) }
+
+        subject { described_class.with_accredited_bodies(accredited_provider.provider_code) }
+
+        it "returns courses for which the provider is the accredited body" do
+          expect(subject).to contain_exactly(accredited_course)
+        end
+      end
+    end
   end
 
   describe "changed_at" do

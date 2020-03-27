@@ -5,6 +5,7 @@ module API
     class CoursesController < API::V2::ApplicationController
       before_action :build_recruitment_cycle
       before_action :build_provider
+      before_action :build_filter, only: :index
       before_action :build_course, except: %i[index new create build_new]
 
       deserializable_resource :course,
@@ -53,10 +54,15 @@ module API
       end
 
       def index
-        authorize @provider, :can_list_courses?
         authorize Course
-
-        render jsonapi: @provider.courses, include: params[:include], class: CourseSerializersService.new.execute
+        if @provider.present?
+          authorize @provider, :can_list_courses?
+          scope = @provider.courses
+        else
+          scope = policy_scope(Course)
+          scope = scope.with_accredited_bodies(accredited_bodies) if accredited_bodies.present?
+        end
+        render jsonapi: scope, include: params[:include], class: CourseSerializersService.new.execute
       end
 
       def show
@@ -178,9 +184,16 @@ module API
       end
 
       def build_provider
+        return if params[:provider_code].blank?
+
         @provider = @recruitment_cycle.providers.find_by!(
           provider_code: params[:provider_code].upcase,
         )
+      end
+
+      def build_filter
+        @filter = {}
+        @filter = params[:filter] if params[:filter].present?
       end
 
       def build_recruitment_cycle
@@ -310,6 +323,12 @@ module API
 
       def request_has_duplicate_subject_ids?
         subject_ids.uniq.count != subject_ids.count
+      end
+
+      def accredited_bodies
+        return [] if @filter[:accrediting_provider_code].blank?
+
+        @filter[:accrediting_provider_code]
       end
     end
   end

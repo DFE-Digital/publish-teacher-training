@@ -71,6 +71,7 @@
 #                    api_v2_recruitment_cycle_provider GET    /api/v2/recruitment_cycles/:recruitment_cycle_year/providers/:code(.:format)                                                             api/v2/providers#show
 #                                                      PATCH  /api/v2/recruitment_cycles/:recruitment_cycle_year/providers/:code(.:format)                                                             api/v2/providers#update
 #                                                      PUT    /api/v2/recruitment_cycles/:recruitment_cycle_year/providers/:code(.:format)                                                             api/v2/providers#update
+#                     api_v2_recruitment_cycle_courses GET    /api/v2/recruitment_cycles/:recruitment_cycle_year/courses(.:format)                                                                     api/v2/courses#index
 #                            api_v2_recruitment_cycles GET    /api/v2/recruitment_cycles(.:format)                                                                                                     api/v2/recruitment_cycles#index
 #                             api_v2_recruitment_cycle GET    /api/v2/recruitment_cycles/:year(.:format)                                                                                               api/v2/recruitment_cycles#show
 #                                      api_v2_sessions GET    /api/v2/sessions(.:format)                                                                                                               api/v2/sessions#show
@@ -163,6 +164,8 @@ Rails.application.routes.draw do
                   param: :code,
                   concerns: :provider_routes do
         end
+
+        get "/courses", to: "courses#index"
       end
 
       resource :sessions
