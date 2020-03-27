@@ -106,13 +106,6 @@ gem "dry-container"
 # For geocoding and geographic logic (e.g: filtering sites by ranges)
 gem "geokit-rails"
 
-# OpenAPI v3 parser
-gem "openapi3_parser", "0.8.0"
-
-# Markdown rendering
-gem "redcarpet"
-gem "rouge"
-
 gem "open_api-rswag-api"
 gem "open_api-rswag-ui"
 

@@ -97,6 +97,9 @@ describe "GET v3/recruitment_cycle/:recruitment_cycle_year/providers/:provider_c
       changed_at = json_response["data"]["attributes"].delete("changed_at")
       expect(Time.zone.parse(changed_at)).to be_within(10).of(Time.zone.now)
 
+      last_published_at = json_response["data"]["attributes"].delete("last_published_at")
+      expect(Time.zone.parse(last_published_at)).to be_within(10).of(enrichment.last_published_timestamp_utc)
+
       expect(json_response).to eq(
         "data" => {
           "id" => course.id.to_s,
@@ -130,7 +133,6 @@ describe "GET v3/recruitment_cycle/:recruitment_cycle_year/providers/:provider_c
             "personal_qualities" => enrichment.personal_qualities,
             "required_qualifications" => enrichment.required_qualifications,
             "salary_details" => enrichment.salary_details,
-            "last_published_at" => enrichment.last_published_timestamp_utc.iso8601,
             "about_accrediting_body" => nil,
             "english" => "must_have_qualification_at_application_time",
             "maths" => "must_have_qualification_at_application_time",

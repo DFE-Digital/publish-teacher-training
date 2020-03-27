@@ -13,6 +13,6 @@ RSpec.configure do |config|
   # document below. You can override this behavior by adding a swagger_doc tag to the
   # the root example_group in your specs, e.g. describe '...', swagger_doc: 'v2/swagger.json'
   config.swagger_docs = {
-    "v1/swagger.json" => ActiveSupport::HashWithIndifferentAccess.new(YAML.load_file(Rails.root.join("swagger/v1/template.yml"))),
+    "public_v1/api_spec.json" => ActiveSupport::HashWithIndifferentAccess.new(YAML.load_file(Rails.root.join("swagger/public_v1/template.yml"))),
   }
 end

@@ -1,0 +1,6 @@
+# If you do not have OpenSSL installed, change
+# the following line to use "http://"
+source "https://rubygems.org"
+
+# Include the tech docs gem
+gem "govuk_tech_docs", git: "https://github.com/DFE-Digital/tech-docs-gem", branch: "any-of-api-renderer"

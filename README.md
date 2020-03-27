@@ -181,6 +181,14 @@ Use the following command to generate OpenAPI specification:
 bundle exec rake rswag:specs:swaggerize
 ```
 
+We use [Tech Docs](https://github.com/alphagov/tech-docs-gem) to build documentation. To update documentation, the relevant files can be found in `/docs`. The docker build will then take these files to generate the static site.
+
+To develop and preview the tech docs you can start and run with [Middleman](https://github.com/middleman/middleman)
+
+```sh
+cd docs && bundle install && bundle exec middleman
+```
+
 ## CI variables
 
 You'll need to define the `AZURE_CR_PASSWORD` in Travis in order to successfully build and publish. This can be done using this command:
