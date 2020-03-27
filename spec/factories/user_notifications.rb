@@ -2,8 +2,8 @@
 #
 # Table name: user_notification
 #
-#  course_create :boolean          default("false")
-#  course_update :boolean          default("false")
+#  course_create :boolean          default(FALSE)
+#  course_update :boolean          default(FALSE)
 #  created_at    :datetime         not null
 #  id            :bigint           not null, primary key
 #  provider_code :string           not null
