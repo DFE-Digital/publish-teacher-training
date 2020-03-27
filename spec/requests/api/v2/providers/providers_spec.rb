@@ -44,11 +44,10 @@ describe "Providers API v2", type: :request do
     describe "JSON generated for a providers" do
       let(:request_path) { "/api/v2/providers" }
 
-      it { should have_http_status(:success) }
-
       it "has a data section with the correct attributes" do
         perform_request
 
+        expect(response).to have_http_status(:success)
         expect(json_response).to eq(
           "data" => [{
             "id" => provider.id.to_s,

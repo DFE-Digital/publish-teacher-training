@@ -120,11 +120,10 @@ describe "Providers API v2", type: :request do
     context "including sites" do
       let(:request_params) { { include: "sites" } }
 
-      it { should have_http_status(:success) }
-
       it "has a data section with the correct attributes" do
         perform_request
 
+        expect(response).to have_http_status(:success)
         expect(json_response).to eq(
           "data" => {
             "id" => provider.id.to_s,
@@ -226,11 +225,10 @@ describe "Providers API v2", type: :request do
     end
 
     describe "JSON generated for a provider" do
-      it { should have_http_status(:success) }
-
       it "has a data section with the correct attributes" do
         perform_request
 
+        expect(response).to have_http_status(:success)
         expect(json_response).to eq(expected_response)
       end
     end
@@ -238,11 +236,10 @@ describe "Providers API v2", type: :request do
     describe "with lowercase provider code" do
       let(:request_path) { "/api/v2/providers/#{provider.provider_code.downcase}" }
 
-      it { should have_http_status(:success) }
-
       it "has a data section with the correct attributes" do
         perform_request
 
+        expect(response).to have_http_status(:success)
         expect(json_response).to eq(expected_response)
       end
     end
