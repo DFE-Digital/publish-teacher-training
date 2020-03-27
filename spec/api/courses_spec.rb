@@ -8,13 +8,18 @@ describe "API" do
       produces "application/json"
       parameter name: :filter,
         in: :query,
-        type: :object,
-        style: "deepObject",
+        schema: { "$ref" => "#/components/schemas/Filter" },
+        style: :deepObject,
+        explode: true,
+        description: "Refine courses to return",
         required: false
       parameter name: :sort,
         in: :query,
-        type: :object,
-        style: "deepObject",
+        schema: { "$ref" => "#/components/schemas/Sort" },
+        style: :form,
+        explode: false,
+        example: "provider.provider_name,name",
+        description: "Field(s) to sort the courses by",
         required: false
 
       response "200", "The list of courses in the current recruitment cycle" do

@@ -17,6 +17,61 @@ servers:
         default: v1
 components:
   schemas:
+    Sort:
+      type: array
+      example: 'provider.provider_name,name'
+      items:
+        type: string
+        example: 'name'
+    Filter:
+      type: object
+      example: ''
+      properties:
+        has_vacancies:
+          description: "Return courses that only have vacancies?"
+          type: string
+          example: "true"
+        funding:
+          description: "Return courses that are salary funded"
+          type: string
+          example: "salary"
+        qualification:
+          description: "Search courses based on the award given on course completion"
+          type: array
+          example: "qts,pgce,pgde"
+          items:
+            type: string
+            example: "qts"
+        study_type:
+          description: "Search full time or part time courses or both"
+          type: array
+          example: 'full_time,part_time'
+          items:
+            type: string
+            example: 'full_time'
+        subjects:
+          description: 'Returns courses that include at least one of the given subjects'
+          type: array
+          example: '00,01,W1'
+          items:
+            type: string
+            example: 'W1'
+        send_courses:
+          description: "Only return courses that have a SEND specialism"
+          type: string
+          example: "true"
+        latitude:
+          description: "Latitude of origin when performing a search by radius"
+          type: number
+          example: 54.9753348
+        longitude:
+          description: "Longitude of origin when performing a search by radius"
+          type: number
+          example: -1.6100477
+        radius:
+          description: "Search radius in miles from given latitude and longitude"
+          type: number
+          example: 20
     CourseAttributes:
       type: object
       required:
@@ -29,38 +84,22 @@ components:
           type: string
           format: markdown
           description: Description of the accredited body for this course.
-          example: ""
+          example: >-
+            UCL Institute of Education is the world’s leading centre for
+            research and teaching in education and related social sciences.
         about_course:
           type: string
           format: markdown
           description: Short factual summary of the course.
-          example: |
-            The Art and Design PGCE is a challenging and forward-looking
-            programme which prepares students to teach across the 11-16 age
-            range, encouraging them to relate art, craft and design education to
-            contemporary art practice. It has a strong reputation for promoting
-            innovation in education theory, practice and policy. This programme
-            aims to inform and inspire, to challenge orthodoxies and encourage a
-            freshness of vision. It provides support and guidance for learning
-            and teaching in art and design, identifying strategies to motivate
-            and engage pupils in making, discussing and evaluating visual and
-            material culture. The IOE provides excellent studio space and
-            facilities for Art and Design, including a computing suite where
-            students can learn how technology is used in art and design
-            education. The programme also has strong links with galleries,
-            museums and other sites for learning, which are recognised as an
-            important resource for engaging students in cultural and social
-            issues.Through seminars and studio-based activities, students will
-            study the concepts, processes and skills of art, craft and design,
-            sharing their knowledge and understanding with other student
-            teachers and consider how it relates to the secondary curriculum.
-            Towards the end of the PGCE, students will build on their own
-            practice by initiating a curriculum development project, culminating
-            in the display of their own work in a final exhibition that
-            represents their personal philosophy for art and design education.
+          example: >-
+            The Secondary PGCE consists of three core modules: two
+            Master's-level modules, which are assessed through written
+            assignments, and the Professional Practice module, which is
+            assessed by the observation of practical teaching in placement
+            schools.
         accredited_body_code:
           type: string
-          description: |
+          description: >-
             Unique provider-code for the accredited body of this course. Only
             present if the course is accredited by a provider other than the one
             running this course.
@@ -70,12 +109,12 @@ components:
           example: 2FR
         age_minimum:
           type: integer
-          description: |
+          description: >-
             The minimum age of pupils this course is specified for.
           example: 11
         age_maximum:
           type: integer
-          description: |
+          description: >-
             The maximum age of pupils this course is specified for.
           example: 14
         applications_open_from:
@@ -94,19 +133,19 @@ components:
         changed_at:
           type: string
           format: date-time
-          description: |
-            Date-time timestamp of when this course or any of it's related data changed.
+          description: >-
+            Date-time timestamp of when this course or any of its related data changed.
           example: "2019-06-13T10:44:31Z"
         code:
           type: string
-          description: |
-            Code that uniquely identifies this course within it's providers list of courses.
+          description: >-
+            Code that uniquely identifies this course within its training provider's list of courses.
           maxLength: 4
           minLength: 4
           example: 3GTY
         course_length:
           type: string
-          description: |
+          description: >-
             Text describing how long the course runs.
           example: "OneYear"
         created_at:
@@ -131,16 +170,19 @@ components:
           type: string
           format: markdown
           description: "Details about financial support offered, if any."
-          example: financial_support
+          example: >-
+            You'll get a bursary of £9,000 if you have a degree of 2:2 or
+            above in any subject. You may also be eligible for a loan while
+            you study.
         findable:
           type: boolean
-          description: |
+          description: >-
             Is this course currently visible on the Find Postgraduate Teacher Training service.
           example: true
         funding_type:
           type: string
-          description: |
-            The type of funding that maybe provided to candidates, if any.
+          description: >-
+            The type of funding that may be provided to candidates, if any.
           example: apprenticeship
           enum:
             - salary
@@ -153,7 +195,8 @@ components:
             - []
             - [maths, english]
             - [maths, english, science]
-          description: "GSCE standard equivalent required for this level of course."
+          description: >-
+            GSCEs, or equivalent, required for this level of course.
         has_bursary:
           type: boolean
           description: "Are any bursaries available for this course?"
@@ -173,15 +216,22 @@ components:
         how_school_placements_work:
           type: string
           format: markdown
-          description: |
+          description: >-
             Additional information about the schools applicants will be teaching in.
-          example: how_school_placements_work
+          example: >-
+            You will spend two-thirds of your time (120 days) in schools,
+            working with art and design mentors who support you through your
+            two school placements.
         interview_process:
           type: string
           format: markdown
-          description: |
+          description: >-
             Additional information about how the interview process will work for applicants.
-          example: interview_process
+          example: >-
+            At your interview day you will take part in a combination of group
+            and individual interviews with members of the programme team, and
+            you may also be asked to undertake written or presentation tasks,
+            depending on your subject.
         is_send:
           type: boolean
           description: "Does this course have a SEND specialism?"
@@ -189,13 +239,14 @@ components:
         last_published_at:
           type: string
           format: date-time
-          description: |
+          description: >-
             Timestamp of when changes to this course's additional information
-            sections was published last.
+            sections were last published.
           example: "2019-06-13T10:44:31Z"
         level:
           type: string
-          description: "The level of pupils this course is designed for."
+          description: >-
+            The educational level this course is designed for.
           example: secondary
           enum:
             - further_education
@@ -212,18 +263,25 @@ components:
         other_requirements:
           type: string
           format: markdown
-          description: |
+          description: >-
             Any non-academic qualifications or documents the applicant may need.
-          example: other_requirements
+          example: >-
+            You'll need to provide confirmation you have the health and
+            physical capacity to commence training, and a Disclosure and
+            Barring Service (DBS) certificate.
         personal_qualities:
           type: string
           format: markdown
-          description: |
-            Any skills, motivation and experience the provider is looking in applicants.
-          example: personal_qualities
+          description: >-
+            Any skills, motivation and experience the provider is looking for in applicants.
+          example: >-
+            We are looking for applicants who have the potential to become
+            outstanding teachers, and who are able to work independently on
+            their studies while training in a school context.
         program_type:
           type: string
-          description: program_type
+          description: >-
+            The teacher training route that this course follows.
           example: scitt_programme
           enum:
             - higher_education_programme
@@ -239,7 +297,7 @@ components:
           example: 6CL
         qualifications:
           type: string
-          description: |
+          description: >-
             The qualifications as an outcome of the course.
           example: [ qts ]
           enum:
@@ -255,9 +313,12 @@ components:
         required_qualifications:
           type: string
           format: markdown
-          description: |
+          description: >-
             The minimum academic qualifications needed for this course.
-          example: required_qualifications
+          example: >-
+            A first or second-class UK Bachelor's degree in an appropriate
+            subject, or an overseas qualification of an equivalent standard
+            from a recognised higher education institution.
         required_qualifications_english:
           type: string
           description: "English GCSE requirements for applicants."
@@ -295,13 +356,14 @@ components:
         salary_details:
           type: string
           description: "Salary details about this course."
-          example: |
-            To be eligible for a place on the salaried course you must have the
-            support of a school who is willing to make contributions towards
-            your salary.
+          example: >-
+            Successful applicants will be employed as unqualified teachers on
+            at least Point 1 of the Unqualified Teachers' Pay Scale for the
+            duration of the programme.
         scholarship_amount:
           type: integer
-          description: "The scholarship amount a candidate may be elligible for this course."
+          description: >-
+            The scholarship amount a candidate may be eligible for for this course.
           example: 17000
         start_date:
           type: string
@@ -310,8 +372,8 @@ components:
           example: "2020-09-01"
         state:
           type: string
-          description: |
-            The state of the course in the postgraduate teacher training system.
+          description: >-
+            The state of the course in the Publish teacher training courses system.
           example: published
           enum:
             - empty
@@ -478,12 +540,12 @@ components:
         application_start_date:
           type: string
           format: date
-          description: |
+          description: >-
             The default date applications start being taken for this recruitment cycle.
         application_end_date:
           type: string
           format: date
-          description: |
+          description: >-
             The default date applications stop being taken for this recruitment cycle.
     RecruitmentCycleResource:
       type: object
