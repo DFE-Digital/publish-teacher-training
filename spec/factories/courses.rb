@@ -11,14 +11,14 @@
 #  discarded_at              :datetime
 #  english                   :integer
 #  id                        :integer          not null, primary key
-#  is_send                   :boolean          default("false")
+#  is_send                   :boolean          default(FALSE)
 #  level                     :string
 #  maths                     :integer
 #  modular                   :text
 #  name                      :text
 #  profpost_flag             :text
 #  program_type              :text
-#  provider_id               :integer          default("0"), not null
+#  provider_id               :integer          default(0), not null
 #  qualification             :integer          not null
 #  science                   :integer
 #  start_date                :datetime
