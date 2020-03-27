@@ -102,7 +102,7 @@ describe "Site Helpers API V2" do
 
           expect(json_data).to have_id(site_status.id.to_s)
           expect(json_data).to have_type("site_statuses")
-          expect(json_data).to have_attributes(
+          expect(json_data).to have_jsonapi_attributes(
             :publish,
             :status,
             :vac_status,

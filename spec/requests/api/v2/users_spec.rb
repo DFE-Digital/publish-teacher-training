@@ -140,7 +140,7 @@ describe "/api/v2/users", type: :request do
 
           expect(json_data).to have_id(user.id.to_s)
           expect(json_data).to have_type("users")
-          expect(json_data).to have_attributes(
+          expect(json_data).to have_jsonapi_attributes(
             :email,
             :first_name,
             :last_name,

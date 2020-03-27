@@ -78,7 +78,7 @@ describe "Access Request API V2", type: :request do
         expect(access_request_1_json).to have_relationship(:requester)
         expect(access_request_2_json).to have_relationship(:requester)
 
-        expect(access_request_1_json).to have_attributes(
+        expect(access_request_1_json).to have_jsonapi_attributes(
           :email_address,
           :first_name,
           :last_name,
@@ -89,7 +89,7 @@ describe "Access Request API V2", type: :request do
           :request_date_utc,
           :status,
         )
-        expect(access_request_2_json).to have_attributes(
+        expect(access_request_2_json).to have_jsonapi_attributes(
           :email_address,
           :first_name,
           :last_name,

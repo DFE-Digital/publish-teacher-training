@@ -334,7 +334,7 @@ describe "Sites API v2", type: :request do
         it "returns a JSON repsentation of the updated site" do
           expect(json_data).to have_id(site1.id.to_s)
           expect(json_data).to have_type("sites")
-          expect(json_data).to have_attributes(
+          expect(json_data).to have_jsonapi_attributes(
             :code,
             :location_name,
             :address1,
