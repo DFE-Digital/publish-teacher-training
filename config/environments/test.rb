@@ -53,6 +53,4 @@ Rails.application.configure do
   end
 
   config.active_job.queue_adapter = :test
-
-  config.action_mailer.delivery_method = :test
 end

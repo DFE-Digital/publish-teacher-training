@@ -28,9 +28,9 @@ describe "PATCH /providers/:provider_code/courses/:course_code" do
   let(:recruitment_cycle) { find_or_create :recruitment_cycle }
   let(:organisation) { create :organisation }
   let(:provider)     do
-    create :provider,
+    create(:provider,
            organisations: [organisation],
-           recruitment_cycle: recruitment_cycle
+           recruitment_cycle: recruitment_cycle)
   end
   let(:user)         { create :user, organisations: [organisation] }
   let(:payload)      { { email: user.email } }
@@ -589,9 +589,9 @@ describe "PATCH /providers/:provider_code/courses/:course_code" do
           perform_request update_course
         end
 
-        subject {
+        subject do
           course.reload
-        }
+        end
 
         its(:content_status) { should eq :published_with_unpublished_changes }
 
@@ -638,5 +638,106 @@ describe "PATCH /providers/:provider_code/courses/:course_code" do
     include_examples "only one attribute has changed", :personal_qualities, "changed personal_qualities"
     include_examples "only one attribute has changed", :required_qualifications, "changed required_qualifications"
     include_examples "only one attribute has changed", :salary_details, "changed salary_details"
+  end
+
+  describe "notifications" do
+    let(:mail_spy) { spy }
+    let(:mailer_spy) { spy(course_update_email: mail_spy) }
+    let(:findable) { build(:site_status, :findable) }
+    let(:new) { build(:site_status, :new) }
+
+    let(:permitted_params) do
+      [:age_range_in_years]
+    end
+
+    before do
+      stub_const("CourseUpdateEmailMailer", mailer_spy)
+      user_notifications
+      perform_request(update_course)
+    end
+
+    let(:user_notifications) do
+      create(:user_notification, user: user, provider: provider, course_update: true)
+    end
+
+    let(:update_course) do
+      course.dup.tap do |c|
+        c.age_range_in_years = "7_to_14"
+      end
+    end
+
+    context "with a non-self-accrediting body" do
+      let(:provider) do
+        create(:provider,
+               organisations: [organisation],
+               recruitment_cycle: recruitment_cycle)
+      end
+
+      context "with a findable course" do
+        let(:course) do
+          create(
+            :course,
+            age_range_in_years: "3_to_7",
+            site_statuses: [findable],
+            provider: provider,
+          )
+        end
+
+        it "delivers a notification when an attribute is modified" do
+          expect(mailer_spy).to have_received(:course_update_email).with(
+            course: course,
+            attribute_name: "age_range_in_years",
+            original_value: "3_to_7",
+            updated_value: "7_to_14",
+            recipient: user,
+          )
+        end
+
+        context "when no changes are made" do
+          let(:update_course) { course }
+
+          it "delivers a notification when an attribute is modified" do
+            expect(mailer_spy).not_to have_received(:course_update_email)
+          end
+        end
+      end
+
+      context "with a course that isn't findable" do
+        let(:course) do
+          create(
+            :course,
+            age_range_in_years: "3_to_7",
+            site_statuses: [new],
+            provider: provider,
+          )
+        end
+
+        it "delivers a notification when an attribute is modified" do
+          expect(mailer_spy).not_to have_received(:course_update_email)
+        end
+      end
+    end
+
+    context "with a self accrediting body" do
+      let(:provider) do
+        create(:provider,
+               :accredited_body,
+               organisations: [organisation],
+               recruitment_cycle: recruitment_cycle)
+      end
+
+      let(:course) do
+        create(
+          :course,
+          age_range_in_years: "3_to_7",
+          site_statuses: [findable],
+          provider: provider,
+        )
+      end
+
+      it "should not send a notification" do
+        expect(mailer_spy).not_to have_received(:course_update_email)
+      end
+    end
   end
 end

@@ -40,6 +40,11 @@ class User < ApplicationRecord
   scope :admins, -> { where(admin: true) }
   scope :non_admins, -> { where.not(admin: true) }
   scope :active, -> { where.not(accept_terms_date_utc: nil) }
+  scope :notifiable_users, ->(provider_code) do
+    joins(:user_notifications).merge(
+      UserNotification.course_update_notification_requests(provider_code),
+    )
+  end
 
   validates :email, presence: true, format: { with: /\A.*@.*\z/, message: "must contain @" }
   validate :email_is_lowercase

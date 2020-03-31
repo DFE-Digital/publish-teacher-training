@@ -96,6 +96,7 @@ module API
         if @course.errors.empty? && @course.valid?
           @course.save
           @course.course_subjects.each(&:save)
+
           render jsonapi: @course.reload
         else
           render jsonapi_errors: @course.errors, status: :unprocessable_entity
@@ -143,6 +144,8 @@ module API
 
         @course.assign_attributes(course_params)
         @course.save
+
+        Courses::UpdateNotificationService.new.call(course: @course)
       end
 
       def update_sites

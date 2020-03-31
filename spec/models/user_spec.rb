@@ -25,6 +25,25 @@ require "rails_helper"
 describe User, type: :model do
   subject { create(:user, first_name: "Jane", last_name: "Smith", email: "jsmith@scitt.org") }
 
+  context "#notifiable_users" do
+    let(:user2) { create(:user, first_name: "Richard", last_name: "Brent", email: "rbrent@scitt.org") }
+    let(:user3) { create(:user, first_name: "John", last_name: "Pollard", email: "jpoll@scitt.org") }
+
+    let(:provider) { create(:provider) }
+    let(:course) { create(:course, provider: provider) }
+    let(:user_notification) do
+      create(:user_notification, user: subject, provider: provider, course_update: true)
+      create(:user_notification, user: user2, provider: provider, course_update: true)
+      create(:user_notification, user: user3, provider: provider, course_update: false)
+    end
+
+    it "returns users with notifications for a course" do
+      user_notification
+
+      expect(User.notifiable_users(provider.provider_code)).to match_array([subject, user2])
+    end
+  end
+
   describe "associations" do
     it { should have_many(:organisation_users) }
     it { should have_many(:organisations).through(:organisation_users) }
