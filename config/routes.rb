@@ -89,6 +89,8 @@
 #                                                      PUT    /api/v2/access_requests/:id(.:format)                                                                                                    api/v2/access_requests#update
 #                                                      DELETE /api/v2/access_requests/:id(.:format)                                                                                                    api/v2/access_requests#destroy
 #                              api_v2_build_new_course GET    /api/v2/build_new_course(.:format)                                                                                                       api/v2/courses#build_new
+#                                 api_v3_subject_areas GET    /api/v3/subject_areas(.:format)                                                                                                          api/v3/subject_areas#index
+#                                      api_v3_subjects GET    /api/v3/subjects(.:format)                                                                                                               api/v3/subjects#index
 #                                       api_v3_courses GET    /api/v3/courses(.:format)                                                                                                                api/v3/courses#index
 #                     api_v3_recruitment_cycle_courses GET    /api/v3/recruitment_cycles/:recruitment_cycle_year/courses(.:format)                                                                     api/v3/courses#index
 #            api_v3_recruitment_cycle_provider_courses GET    /api/v3/recruitment_cycles/:recruitment_cycle_year/providers/:provider_code/courses(.:format)                                            api/v3/courses#index
@@ -97,7 +99,6 @@
 #                    api_v3_recruitment_cycle_provider GET    /api/v3/recruitment_cycles/:recruitment_cycle_year/providers/:code(.:format)                                                             api/v3/providers#show
 #                             api_v3_recruitment_cycle GET    /api/v3/recruitment_cycles/:year(.:format)                                                                                               api/v3/recruitment_cycles#show
 #                          api_v3_provider_suggestions GET    /api/v3/provider-suggestions(.:format)                                                                                                   api/v3/provider_suggestions#index
-#                                 api_v3_subject_areas GET    /api/v3/subject_areas(.:format)                                                                                                          api/v3/subject_areas#index
 #                                            error_500 GET    /error_500(.:format)                                                                                                                     error#error_500
 #                                           error_nodb GET    /error_nodb(.:format)                                                                                                                    error#error_nodb
 #
@@ -179,6 +180,9 @@ Rails.application.routes.draw do
     end
 
     namespace :v3 do
+      resources :subject_areas, only: :index
+      resources :subjects, only: :index
+
       resources :courses, only: :index
       resources :recruitment_cycles, only: :show, param: :year do
         resources :courses, only: :index
@@ -187,8 +191,6 @@ Rails.application.routes.draw do
         end
       end
       get "provider-suggestions", to: "provider_suggestions#index"
-
-      resources :subject_areas, only: :index
     end
   end
 

@@ -27,4 +27,8 @@ describe Subject, type: :model do
     financial_incentive = create(:financial_incentive, subject: subject)
     expect(subject.financial_incentive).to eq(financial_incentive)
   end
+
+  it "returns all active subjects" do
+    expect(described_class.active.pluck(:type)).not_to include("DiscontinuedSubject")
+  end
 end

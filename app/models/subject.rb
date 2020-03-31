@@ -24,6 +24,8 @@ class Subject < ApplicationRecord
     where(subject_code: subject_codes)
   end
 
+  scope :active, -> { where.not(type: "DiscontinuedSubject") }
+
   def secondary_subject?
     type == "SecondarySubject"
   end
