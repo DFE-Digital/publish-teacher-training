@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe "GET v3 /subject-areas" do
+describe "GET v3 /subject_areas" do
   let(:request_path) { "/api/v3/subject_areas" }
   let(:json_response) { JSON.parse(response.body) }
 
