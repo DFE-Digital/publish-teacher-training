@@ -843,5 +843,56 @@ describe "GET v3 /subjects" do
         "version" => "1.0",
       })
     end
+
+    context "when sorting by name" do
+      let(:request_path) { "/api/v3/subjects?fields[subjects]=subject_name&sort=subject_name" }
+      it "sorts the subject names in ascending order" do
+        expect(json_response["data"].map { |subject| subject["attributes"]["subject_name"] }).to eq([
+          "Art and design",
+          "Biology",
+          "Business studies",
+          "Chemistry",
+          "Citizenship",
+          "Classics",
+          "Communication and media studies",
+          "Computing",
+          "Dance",
+          "Design and technology",
+          "Drama",
+          "Economics",
+          "English",
+          "English as a second or other language",
+          "French",
+          "Further education",
+          "Geography",
+          "German",
+          "Health and social care",
+          "History",
+          "Italian",
+          "Japanese",
+          "Mandarin",
+          "Mathematics",
+          "Modern Languages",
+          "Modern languages (other)",
+          "Music",
+          "Philosophy",
+          "Physical education",
+          "Physics",
+          "Primary",
+          "Primary with English",
+          "Primary with geography and history",
+          "Primary with mathematics",
+          "Primary with modern languages",
+          "Primary with physical education",
+          "Primary with science",
+          "Psychology",
+          "Religious education",
+          "Russian",
+          "Science",
+          "Social sciences",
+          "Spanish",
+        ])
+      end
+    end
   end
 end
