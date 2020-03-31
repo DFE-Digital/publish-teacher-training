@@ -171,6 +171,18 @@ components:
             $ref: "#/components/schemas/LocationResource"
         jsonapi:
           $ref: "#/components/schemas/JSONAPI"
+    LocationStatusResource:
+      type: object
+      description: Wrapper object for LocationStatusAttributes
+      properties:
+        id:
+          type: string
+          example: "22329867"
+        type:
+          type: string
+          example: site_statuses
+        attributes:
+          $ref: "#/components/schemas/LocationStatusAttributes"
     ProviderResource:
       type: object
       required:
@@ -234,6 +246,7 @@ components:
         - $ref: '#/components/schemas/RecruitmentCycleResource'
         - $ref: '#/components/schemas/SubjectResource'
         - $ref: '#/components/schemas/LocationResource'
+        - $ref: '#/components/schemas/LocationStatusResource'
       discriminator:
         propertyName: type
     ResourceIdentifier:
