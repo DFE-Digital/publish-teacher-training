@@ -188,4 +188,5 @@ group :test do
   gem "shoulda-matchers", "~> 4.3"
   gem "simplecov", require: false
   gem "webmock"
+  gem "rspec-benchmark"
 end
