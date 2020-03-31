@@ -184,9 +184,9 @@ group :test do
   gem "fakefs", require: "fakefs/safe"
   gem "faker"
   gem "jsonapi-rspec"
+  gem "rspec-benchmark"
   gem "rspec_junit_formatter"
   gem "shoulda-matchers", "~> 4.3"
   gem "simplecov", require: false
   gem "webmock"
-  gem "rspec-benchmark"
 end
