@@ -7,4 +7,7 @@ Raven.configure do |config|
     ["ActiveRecord::RecordNotFound"]
 
   config.sanitize_fields = Rails.application.config.filter_parameters.map(&:to_s)
+
+  commit_sha = File.read(Rails.root.join("COMMIT_SHA")).strip
+  config.release = commit_sha
 end
