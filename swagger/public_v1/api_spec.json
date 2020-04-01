@@ -441,6 +441,86 @@
           }
         }
       },
+      "LocationAttributes": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "example": "W"
+          },
+          "name": {
+            "type": "string",
+            "description": "The name of the location",
+            "example": "Henry Maynard Primary School"
+          },
+          "street_address_1": {
+            "type": "string",
+            "description": "Building or street line one",
+            "example": "The Rose Building"
+          },
+          "street_address_2": {
+            "type": "string",
+            "description": "Building or street line two",
+            "example": "Maynard Road"
+          },
+          "city": {
+            "type": "string",
+            "description": "Town or city",
+            "example": "London"
+          },
+          "county": {
+            "type": "string",
+            "description": "County",
+            "example": "London"
+          },
+          "postcode": {
+            "type": "string",
+            "description": "The postcode of the location",
+            "example": "E17 9JE"
+          },
+          "region_code": {
+            "type": "string",
+            "example": "london"
+          },
+          "recruitment_cycle_year": {
+            "type": "string",
+            "example": "2020"
+          }
+        }
+      },
+      "LocationResource": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "11214485"
+          },
+          "type": {
+            "type": "string",
+            "example": "sites"
+          },
+          "attributes": {
+            "$ref": "#/components/schemas/LocationAttributes"
+          }
+        }
+      },
+      "LocationsList": {
+        "type": "object",
+        "required": [
+          "data"
+        ],
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/LocationResource"
+            }
+          },
+          "jsonapi": {
+            "$ref": "#/components/schemas/JSONAPI"
+          }
+        }
+      },
       "Relationship": {
         "type": "object",
         "properties": {
@@ -473,6 +553,9 @@
           },
           {
             "$ref": "#/components/schemas/SubjectResource"
+          },
+          {
+            "$ref": "#/components/schemas/LocationResource"
           }
         ],
         "discriminator": {
@@ -607,6 +690,38 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/CourseSingleResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/public/v1/courses/{course_code}/locations": {
+      "get": {
+        "summary": "Returns locations for the given course",
+        "operationId": "public_api_v1_course_locations",
+        "tags": [
+          "location"
+        ],
+        "parameters": [
+          {
+            "name": "course_code",
+            "in": "path",
+            "description": "The code of the course",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The list of locations for the given course",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LocationsList"
                 }
               }
             }

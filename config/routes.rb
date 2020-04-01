@@ -99,6 +99,7 @@
 #                    api_v3_recruitment_cycle_provider GET    /api/v3/recruitment_cycles/:recruitment_cycle_year/providers/:code(.:format)                                                             api/v3/providers#show
 #                             api_v3_recruitment_cycle GET    /api/v3/recruitment_cycles/:year(.:format)                                                                                               api/v3/recruitment_cycles#show
 #                          api_v3_provider_suggestions GET    /api/v3/provider-suggestions(.:format)                                                                                                   api/v3/provider_suggestions#index
+#                       api_public_v1_course_locations GET    /api/public/v1/courses/:course_id/locations(.:format)                                                                                    api/public/v1/locations#index
 #                                            error_500 GET    /error_500(.:format)                                                                                                                     error#error_500
 #                                           error_nodb GET    /error_nodb(.:format)                                                                                                                    error#error_nodb
 #
@@ -191,6 +192,14 @@ Rails.application.routes.draw do
         end
       end
       get "provider-suggestions", to: "provider_suggestions#index"
+    end
+
+    namespace :public do
+      namespace :v1 do
+        resources :courses, only: [] do
+          resources :locations, only: [:index]
+        end
+      end
     end
   end
 
