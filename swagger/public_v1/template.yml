@@ -101,8 +101,8 @@ components:
           type: string
           description: >-
             Unique provider-code for the accredited body of this course. Only
-            present if the course is accredited by a provider other than the one
-            running this course.
+            present if the provider delivering the course is not the accredited
+            body.
           maxLength: 3
           minLength: 3
           nullable: true
@@ -124,7 +124,7 @@ components:
           example: "2019-10-08"
         bursary_amount:
           type: integer
-          description: "Bursary amount for this course."
+          description: "Bursary amount in GBP for this course."
           example: 9000
         bursary_requirements:
           type: string
@@ -157,14 +157,14 @@ components:
           type: string
           format: markdown
           description: "Further details about the fees for this course, if applicable."
-          example: fee_details
+          example: "For those wishing to top up their qualification to the full PGCE, a further £1800 will be payable."
         fee_international:
           type: integer
-          description: "Fee for international students (optional)."
+          description: "Fee in GBP for international students (optional)."
           example: 13000
         fee_domestic:
           type: integer
-          description: "Fee for UK and EU students."
+          description: "Fee in GBP for UK and EU students."
           example: 9200
         financial_support:
           type: string

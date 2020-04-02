@@ -119,7 +119,7 @@
           },
           "accredited_body_code": {
             "type": "string",
-            "description": "Unique provider-code for the accredited body of this course. Only present if the course is accredited by a provider other than the one running this course.",
+            "description": "Unique provider-code for the accredited body of this course. Only present if the provider delivering the course is not the accredited body.",
             "maxLength": 3,
             "minLength": 3,
             "nullable": true,
@@ -143,7 +143,7 @@
           },
           "bursary_amount": {
             "type": "integer",
-            "description": "Bursary amount for this course.",
+            "description": "Bursary amount in GBP for this course.",
             "example": 9000
           },
           "bursary_requirements": {
@@ -183,12 +183,12 @@
           },
           "fee_international": {
             "type": "integer",
-            "description": "Fee for international students (optional).",
+            "description": "Fee in GBP for international students (optional).",
             "example": 13000
           },
           "fee_domestic": {
             "type": "integer",
-            "description": "Fee for UK and EU students.",
+            "description": "Fee in GBP for UK and EU students.",
             "example": 9200
           },
           "financial_support": {
