@@ -13,7 +13,19 @@
           <td><%= property[0] %></td>
           <td><%= property[1].type %></td>
           <td><%= property[1].required.present? %></td>
-          <td><%= markdown(property[1].description) %></td>
+          <td>
+            <%= markdown(property[1].description) %>
+
+            <% if enum = property[1].enum %>
+              <p>Possible values:</p>
+
+              <ul>
+                <% enum.each do |possible_value| %>
+                  <li><%= possible_value %></li>
+                <% end %>
+              </ul>
+            <% end %>
+          </td>
           <td>
             <%=
               schema = property[1]
