@@ -1,6 +1,12 @@
 require "rails_helper"
 
 RSpec.configure do |config|
+  config.before :suite do
+    # Patch to ensure both rspec works and valid OpenAPI spec is generated
+    # see https://github.com/jdanielian/open-api-rswag#global-metadata
+    OpenApi::Rswag::Specs.config.swagger_docs["public_v1/api_spec.json"]["basePath"] = "/api/public/v1/"
+  end
+
   # Specify a root folder where Swagger JSON files are generated
   # NOTE: If you're using the rswag-api to serve API descriptions, you'll need
   # to ensure that it's configured to serve Swagger from the same folder

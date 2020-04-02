@@ -1,8 +1,7 @@
 require "swagger_helper"
 
 describe "API" do
-  # http://localhost:3001/api/v3/courses
-  path "/api/v3/courses" do
+  path "/courses" do
     get "Returns courses for the current recruitment cycle" do
       operationId :public_api_v1_courses
       tags "course"
