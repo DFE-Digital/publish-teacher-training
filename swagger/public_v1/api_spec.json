@@ -11,8 +11,16 @@
   },
   "servers": [
     {
+      "url": "https://api2.publish-teacher-training-courses.service.gov.uk/api/public/{version}",
       "description": "Production",
-      "url": "https://api2.publish-teacher-training-courses.service.gov.uk/api/public/v1"
+      "variables": {
+        "version": {
+          "enum": [
+            "v1"
+          ],
+          "default": "v1"
+        }
+      }
     }
   ],
   "components": {
@@ -656,7 +664,7 @@
     }
   },
   "paths": {
-    "/api/v3/courses": {
+    "/courses": {
       "get": {
         "summary": "Returns courses for the current recruitment cycle",
         "operationId": "public_api_v1_courses",
@@ -697,7 +705,7 @@
         }
       }
     },
-    "/api/public/v1/courses/{course_code}/locations": {
+    "/courses/{course_code}/locations": {
       "get": {
         "summary": "Returns locations for the given course",
         "operationId": "public_api_v1_course_locations",

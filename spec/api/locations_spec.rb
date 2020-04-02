@@ -1,7 +1,7 @@
 require "swagger_helper"
 
 describe "API" do
-  path "/api/public/v1/courses/{course_code}/locations" do
+  path "/courses/{course_code}/locations" do
     get "Returns locations for the given course" do
       operationId :public_api_v1_course_locations
       tags "location"

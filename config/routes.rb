@@ -100,6 +100,7 @@
 #                             api_v3_recruitment_cycle GET    /api/v3/recruitment_cycles/:year(.:format)                                                                                               api/v3/recruitment_cycles#show
 #                          api_v3_provider_suggestions GET    /api/v3/provider-suggestions(.:format)                                                                                                   api/v3/provider_suggestions#index
 #                       api_public_v1_course_locations GET    /api/public/v1/courses/:course_id/locations(.:format)                                                                                    api/public/v1/locations#index
+#                                api_public_v1_courses GET    /api/public/v1/courses(.:format)                                                                                                         api/public/v1/courses#index
 #                                            error_500 GET    /error_500(.:format)                                                                                                                     error#error_500
 #                                           error_nodb GET    /error_nodb(.:format)                                                                                                                    error#error_nodb
 #
@@ -196,7 +197,7 @@ Rails.application.routes.draw do
 
     namespace :public do
       namespace :v1 do
-        resources :courses, only: [] do
+        resources :courses, only: [:index] do
           resources :locations, only: [:index]
         end
       end
