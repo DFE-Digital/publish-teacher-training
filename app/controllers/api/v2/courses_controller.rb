@@ -60,6 +60,7 @@ module API
           scope = @provider.courses
         else
           scope = policy_scope(Course).kept
+          scope = scope.with_recruitment_cycle(@recruitment_cycle.year)
           scope = scope.with_accredited_bodies(accredited_bodies) if accredited_bodies.present?
         end
         render jsonapi: scope, include: params[:include], class: CourseSerializersService.new.execute

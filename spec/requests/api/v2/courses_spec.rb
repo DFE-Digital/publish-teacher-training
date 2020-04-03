@@ -20,6 +20,9 @@ describe "Courses API v2", type: :request do
   let(:course3) { create(:course) }
   let(:course4) { create(:course, provider: provider1, accrediting_provider: accredited_body) }
 
+  let(:provider3) { create :provider, :previous_recruitment_cycle, organisations: [organisation] }
+  let(:previous_cycle_course) { create(:course, provider: provider3) }
+
   describe "GET index" do
     subject { perform_request(request_path) }
 
@@ -28,6 +31,7 @@ describe "Courses API v2", type: :request do
       course2
       course3
       course4
+      previous_cycle_course
       get path,
           headers: { "HTTP_AUTHORIZATION" => credentials }
       response
@@ -44,7 +48,7 @@ describe "Courses API v2", type: :request do
 
         expect(response).to have_http_status(:success)
         expect(json_response["data"].count).to eq(3)
-        expect(json_response["data"].pluck("id")).not_to include(course3.id.to_s)
+        expect(json_response["data"].pluck("id")).not_to include(course3.id.to_s, previous_cycle_course.id.to_s)
         expect(json_response["included"].first["type"]).to eq("subjects")
       end
 
