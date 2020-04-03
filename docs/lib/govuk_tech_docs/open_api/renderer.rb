@@ -205,6 +205,10 @@ module GovukTechDocs
         properties_hash
       end
 
+      def schema_is_referenced?(schema)
+        schema.node_context.source_location.pointer.segments[0..1] == %w{components schemas}
+      end
+
     private
 
       def get_all_of_array(schema)

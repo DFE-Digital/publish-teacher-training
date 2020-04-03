@@ -13,15 +13,24 @@
           <td><%= parameter.in %></td>
           <td><%= parameter.schema.type %></td>
           <td><%= parameter.required? %></td>
-          <td><%= markdown(parameter.description) %>
-          <% if parameter.schema.enum %>
-            <p>Available items:</p>
-            <ul>
-              <% parameter.schema.enum.each do |item| %>
-                <li><%= item %></li>
-              <% end %>
-            </ul>
-          <% end %>
+          <td>
+            <%= markdown(parameter.description) %>
+
+            <% if parameter.schema && schema_is_referenced?(parameter.schema) %>
+              <p>
+                This consumes a <%= get_schema_link(parameter.schema) %> object.
+              </p>
+            <% end %>
+
+            <% if parameter.schema.enum %>
+              <p>Available items:</p>
+
+              <ul>
+                <% parameter.schema.enum.each do |item| %>
+                  <li><%= item %></li>
+                <% end %>
+              </ul>
+            <% end %>
           </td>
         </tr>
       <% end %>
