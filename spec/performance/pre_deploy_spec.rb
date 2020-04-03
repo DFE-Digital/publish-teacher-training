@@ -1,5 +1,6 @@
 require "net/http"
 require "rspec-benchmark"
+require "webmock"
 
 TEST_SAMPLE_COUNT = 5
 
