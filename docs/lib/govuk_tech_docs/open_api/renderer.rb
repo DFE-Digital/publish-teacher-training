@@ -1,5 +1,6 @@
 require "erb"
 require "json"
+require "rouge"
 
 module GovukTechDocs
   module OpenApi

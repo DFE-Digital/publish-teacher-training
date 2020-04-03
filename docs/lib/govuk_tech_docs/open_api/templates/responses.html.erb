@@ -55,7 +55,14 @@
         end %>
 
         <% if !request_body.blank? %>
-          <pre><code><%= request_body %></code></pre>
+          <%
+            source = request_body
+            formatter = Rouge::Formatters::HTML.new
+            lexer = Rouge::Lexers::JSON.new
+            output = formatter.format(lexer.lex(source))
+          %>
+
+          <pre class="highlight"><code><%= output %></code></pre>
         <% end %>
       </div>
     </details>
