@@ -9,10 +9,6 @@ describe "Courses API v2", type: :request do
     ActionController::HttpAuthentication::Token.encode_credentials(token)
   end
   let(:current_cycle) { find_or_create :recruitment_cycle }
-  let(:next_cycle)    { find_or_create :recruitment_cycle, :next }
-  let(:current_year)  { current_cycle.year.to_i }
-  let(:previous_year) { current_year - 1 }
-  let(:next_year)     { current_year + 1 }
   let(:subjects) { [course_subject_mathematics] }
 
   let(:provider1)       { create :provider, organisations: [organisation] }
