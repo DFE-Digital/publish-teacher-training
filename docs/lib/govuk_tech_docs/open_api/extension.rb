@@ -33,15 +33,6 @@ module GovukTechDocs
         @render = Renderer.new(@app, @document)
       end
 
-      def uri?(string)
-        uri = URI.parse(string)
-        %w(http https).include?(uri.scheme)
-      rescue URI::BadURIError
-        false
-      rescue URI::InvalidURIError
-        false
-      end
-
       def api(text)
         if @api_parser == true
 
@@ -83,6 +74,15 @@ module GovukTechDocs
       end
 
     private
+
+      def uri?(string)
+        uri = URI.parse(string)
+        %w(http https).include?(uri.scheme)
+      rescue URI::BadURIError
+        false
+      rescue URI::InvalidURIError
+        false
+      end
 
       def api_path
         @config["open_api_path"].to_s
