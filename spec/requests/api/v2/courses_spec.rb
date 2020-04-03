@@ -47,6 +47,18 @@ describe "Courses API v2", type: :request do
         expect(json_response["data"].pluck("id")).not_to include(course3.id.to_s)
         expect(json_response["included"].first["type"]).to eq("subjects")
       end
+
+      context "when a course is discarded" do
+        before do
+          course1.discard!
+        end
+
+        it "doesn't return it" do
+          json_response = JSON.parse subject.body
+
+          expect(json_response["data"].pluck("id")).to match_array([course2.id.to_s, course4.id.to_s])
+        end
+      end
     end
 
     context "request with accrediting_provider filter" do
