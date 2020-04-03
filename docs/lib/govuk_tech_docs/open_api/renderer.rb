@@ -5,6 +5,8 @@ require "rouge"
 module GovukTechDocs
   module OpenApi
     class Renderer
+      attr_reader :app, :document
+
       def initialize(app, document)
         @app = app
         @document = document
@@ -18,7 +20,7 @@ module GovukTechDocs
         @template_responses = get_renderer("responses.html.erb")
       end
 
-      def api_full(info, servers)
+      def api_full
         paths = ""
         paths_data = @document.paths
         paths_data.each do |path_data|
@@ -211,6 +213,14 @@ module GovukTechDocs
       end
 
     private
+
+      def info
+        document.info
+      end
+
+      def servers
+        document.servers
+      end
 
       def get_all_of_array(schema)
         properties = Array.new

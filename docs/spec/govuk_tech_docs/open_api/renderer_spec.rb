@@ -3,25 +3,23 @@ require "openapi3_parser"
 require "govuk_tech_docs/open_api/renderer"
 
 RSpec.describe GovukTechDocs::OpenApi::Renderer do
-  describe ".api_full" do
-    before(:each) do
-      @spec = {
-        "openapi": "3.0.0",
-        "info": {
-          "title": "title",
-          "version": "0.0.1",
-        },
-        "paths": {
-          "/widgets": {
-            "get": {
-              "responses": {
-                "200": {
-                  "description": "description goes here",
-                  "content": {
-                    "application/json": {
-                      "schema": {
-                        "$ref": "#/components/schemas/widgets",
-                      },
+  let(:spec) do
+    {
+      "openapi": "3.0.0",
+      "info": {
+        "title": "title",
+        "version": "0.0.1",
+      },
+      "paths": {
+        "/widgets": {
+          "get": {
+            "responses": {
+              "200": {
+                "description": "description goes here",
+                "content": {
+                  "application/json": {
+                    "schema": {
+                      "$ref": "#/components/schemas/widgets",
                     },
                   },
                 },
@@ -29,46 +27,48 @@ RSpec.describe GovukTechDocs::OpenApi::Renderer do
             },
           },
         },
-        "components": {
-          "schemas": {
-            "widgets": {
-              "properties": {
-                "data": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/widget",
-                  },
+      },
+      "components": {
+        "schemas": {
+          "widgets": {
+            "properties": {
+              "data": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/widget",
                 },
               },
             },
-            "widget": {
-              "anyOf": [
-               { "$ref": "#/components/schemas/widgetInteger" },
-               { "$ref": "#/components/schemas/widgetString" },
-              ],
+          },
+          "widget": {
+            "anyOf": [
+             { "$ref": "#/components/schemas/widgetInteger" },
+             { "$ref": "#/components/schemas/widgetString" },
+            ],
+          },
+          "widgetInteger": {
+            "type": "object",
+            "properties": {
+              "id": { "type": "integer", example: 12345 },
             },
-            "widgetInteger": {
-              "type": "object",
-              "properties": {
-                "id": { "type": "integer", example: 12345 },
-              },
-            },
-            "widgetString": {
-              "type": "object",
-              "properties": {
-                "id": { "type": "string", example: "abcde" },
-              },
+          },
+          "widgetString": {
+            "type": "object",
+            "properties": {
+              "id": { "type": "string", example: "abcde" },
             },
           },
         },
-      }
-    end
+      },
+    }
+  end
 
+  let(:document) { Openapi3Parser.load(spec) }
+
+  describe ".api_full" do
     it "renders no servers" do
-      document = Openapi3Parser.load(@spec)
-
       render = described_class.new(nil, document)
-      rendered = render.api_full(document.info, document.servers)
+      rendered = render.api_full
 
       rendered = Capybara::Node::Simple.new(rendered)
       expect(rendered).not_to have_css("h2#servers")
@@ -76,13 +76,13 @@ RSpec.describe GovukTechDocs::OpenApi::Renderer do
     end
 
     it "renders a server with no description" do
-      @spec["servers"] = [
+      spec["servers"] = [
         { "url": "https://example.com" },
       ]
-      document = Openapi3Parser.load(@spec)
+      document = Openapi3Parser.load(spec)
 
       render = described_class.new(nil, document)
-      rendered = render.api_full(document.info, document.servers)
+      rendered = render.api_full
 
       rendered = Capybara::Node::Simple.new(rendered)
       expect(rendered).to have_css("h2#servers")
@@ -91,14 +91,14 @@ RSpec.describe GovukTechDocs::OpenApi::Renderer do
     end
 
     it "renders a list of servers" do
-      @spec["servers"] = [
+      spec["servers"] = [
         { "url": "https://example.com", "description": "Production" },
         { "url": "https://dev.example.com", "description": "Development" },
       ]
-      document = Openapi3Parser.load(@spec)
+      document = Openapi3Parser.load(spec)
 
       render = described_class.new(nil, document)
-      rendered = render.api_full(document.info, document.servers)
+      rendered = render.api_full
 
       rendered = Capybara::Node::Simple.new(rendered)
       expect(rendered).to have_css("h2#servers")
@@ -109,7 +109,7 @@ RSpec.describe GovukTechDocs::OpenApi::Renderer do
     end
 
     describe "#json_output" do
-      let(:document) { Openapi3Parser.load(@spec) }
+      let(:document) { Openapi3Parser.load(spec) }
 
       subject { described_class.new(nil, document) }
 

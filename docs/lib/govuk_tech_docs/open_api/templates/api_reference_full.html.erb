@@ -2,7 +2,7 @@
   <%= Rouge::Themes::Github.render(scope: '.highlight') %>
 </style>
 
-<h1 id="<%=  info.title.parameterize %>"><%= info.title %> v<%= info.version %></h1>
+<h1 id="<%= info.title.parameterize %>"><%= info.title %> v<%= info.version %></h1>
 
 <%= markdown(info.description) %>
 

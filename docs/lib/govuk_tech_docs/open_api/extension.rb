@@ -53,6 +53,7 @@ module GovukTechDocs
           regexp = keywords.map { |k, _| Regexp.escape(k) }.join("|")
 
           md = text.match(/^<p>(#{regexp})/)
+
           if md
             key = md.captures[0]
             type = keywords[key]
@@ -64,7 +65,7 @@ module GovukTechDocs
             text = text.strip
 
             if text == "api&gt;"
-              @render.api_full(api_info, api_servers)
+              @render.api_full
             elsif type == "default"
               output = @render.path(text)
               # Render any schemas referenced in the above path
@@ -73,7 +74,6 @@ module GovukTechDocs
             else
               @render.schema(text)
             end
-
           else
             return text
           end
@@ -86,14 +86,6 @@ module GovukTechDocs
 
       def api_path
         @config["open_api_path"].to_s
-      end
-
-      def api_info
-        @document.info
-      end
-
-      def api_servers
-        @document.servers
       end
     end
   end
