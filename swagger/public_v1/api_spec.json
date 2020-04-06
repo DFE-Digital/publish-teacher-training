@@ -25,568 +25,6 @@
   ],
   "components": {
     "schemas": {
-      "Sort": {
-        "type": "array",
-        "example": "provider.provider_name,name",
-        "items": {
-          "type": "string",
-          "example": "name"
-        }
-      },
-      "Filter": {
-        "type": "object",
-        "example": "",
-        "properties": {
-          "has_vacancies": {
-            "description": "Return courses that only have vacancies?",
-            "type": "string",
-            "example": "true"
-          },
-          "funding": {
-            "description": "Return courses that are salary funded",
-            "type": "string",
-            "example": "salary"
-          },
-          "qualification": {
-            "description": "Search courses based on the award given on course completion",
-            "type": "array",
-            "example": "qts,pgce,pgde",
-            "items": {
-              "type": "string",
-              "example": "qts"
-            }
-          },
-          "study_type": {
-            "description": "Search full time or part time courses or both",
-            "type": "array",
-            "example": "full_time,part_time",
-            "items": {
-              "type": "string",
-              "example": "full_time"
-            }
-          },
-          "subjects": {
-            "description": "Returns courses that include at least one of the given subjects",
-            "type": "array",
-            "example": "00,01,W1",
-            "items": {
-              "type": "string",
-              "example": "W1"
-            }
-          },
-          "send_courses": {
-            "description": "Only return courses that have a SEND specialism",
-            "type": "string",
-            "example": "true"
-          },
-          "latitude": {
-            "description": "Latitude of origin when performing a search by radius",
-            "type": "number",
-            "example": 54.9753348
-          },
-          "longitude": {
-            "description": "Longitude of origin when performing a search by radius",
-            "type": "number",
-            "example": -1.6100477
-          },
-          "radius": {
-            "description": "Search radius in miles from given latitude and longitude",
-            "type": "number",
-            "example": 20
-          }
-        }
-      },
-      "CourseResource": {
-        "type": "object",
-        "required": [
-          "id",
-          "type",
-          "attributes"
-        ],
-        "properties": {
-          "id": {
-            "type": "integer"
-          },
-          "type": {
-            "type": "string",
-            "example": "courses"
-          },
-          "attributes": {
-            "$ref": "#/components/schemas/CourseAttributes"
-          },
-          "relationships": {
-            "$ref": "#/components/schemas/CourseRelationships"
-          }
-        }
-      },
-      "CourseSingleResponse": {
-        "type": "object",
-        "required": [
-          "data"
-        ],
-        "properties": {
-          "data": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/CourseResource"
-            }
-          },
-          "included": {
-            "$ref": "#/components/schemas/Included"
-          },
-          "jsonapi": {
-            "$ref": "#/components/schemas/JSONAPI"
-          }
-        }
-      },
-      "Included": {
-        "type": "array",
-        "items": {
-          "$ref": "#/components/schemas/Resource"
-        }
-      },
-      "JSONAPI": {
-        "type": "object",
-        "required": [
-          "version"
-        ],
-        "properties": {
-          "version": {
-            "type": "string",
-            "example": "1.0"
-          }
-        }
-      },
-      "LocationAttributes": {
-        "type": "object",
-        "properties": {
-          "code": {
-            "type": "string",
-            "example": "W"
-          },
-          "name": {
-            "type": "string",
-            "description": "The name of the location",
-            "example": "Henry Maynard Primary School"
-          },
-          "street_address_1": {
-            "type": "string",
-            "description": "Building or street line one",
-            "example": "The Rose Building"
-          },
-          "street_address_2": {
-            "type": "string",
-            "description": "Building or street line two",
-            "example": "Maynard Road"
-          },
-          "city": {
-            "type": "string",
-            "description": "Town or city",
-            "example": "London"
-          },
-          "county": {
-            "type": "string",
-            "description": "County",
-            "example": "London"
-          },
-          "postcode": {
-            "type": "string",
-            "description": "The postcode of the location",
-            "example": "E17 9JE"
-          },
-          "region_code": {
-            "type": "string",
-            "example": "london"
-          },
-          "recruitment_cycle_year": {
-            "type": "string",
-            "example": "2020"
-          }
-        }
-      },
-      "LocationResource": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string",
-            "example": "11214485"
-          },
-          "type": {
-            "type": "string",
-            "example": "sites"
-          },
-          "attributes": {
-            "$ref": "#/components/schemas/LocationAttributes"
-          }
-        }
-      },
-      "LocationsList": {
-        "type": "object",
-        "required": [
-          "data"
-        ],
-        "properties": {
-          "data": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/LocationResource"
-            }
-          },
-          "jsonapi": {
-            "$ref": "#/components/schemas/JSONAPI"
-          }
-        }
-      },
-      "LocationStatusResource": {
-        "type": "object",
-        "description": "Wrapper object for LocationStatusAttributes",
-        "properties": {
-          "id": {
-            "type": "string",
-            "example": "22329867"
-          },
-          "type": {
-            "type": "string",
-            "example": "site_statuses"
-          },
-          "attributes": {
-            "$ref": "#/components/schemas/LocationStatusAttributes"
-          }
-        }
-      },
-      "ProviderResource": {
-        "type": "object",
-        "required": [
-          "id",
-          "type",
-          "attributes"
-        ],
-        "properties": {
-          "id": {
-            "type": "integer",
-            "example": 1
-          },
-          "type": {
-            "type": "string",
-            "example": "providers"
-          },
-          "attributes": {
-            "$ref": "#/components/schemas/ProviderAttributes"
-          },
-          "relationships": {
-            "$ref": "#/components/schemas/ProviderRelationships"
-          }
-        }
-      },
-      "ProviderListResponse": {
-        "type": "object",
-        "required": [
-          "data",
-          "jsonapi"
-        ],
-        "properties": {
-          "data": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/ProviderResource"
-            }
-          },
-          "included": {
-            "$ref": "#/components/schemas/Included"
-          },
-          "jsonapi": {
-            "$ref": "#/components/schemas/JSONAPI"
-          }
-        }
-      },
-      "ProviderSingleResponse": {
-        "type": "object",
-        "required": [
-          "data",
-          "jsonapi"
-        ],
-        "properties": {
-          "data": {
-            "$ref": "#/components/schemas/ProviderResource"
-          },
-          "included": {
-            "$ref": "#/components/schemas/Included"
-          },
-          "jsonapi": {
-            "$ref": "#/components/schemas/JSONAPI"
-          }
-        }
-      },
-      "Relationship": {
-        "type": "object",
-        "properties": {
-          "data": {
-            "$ref": "#/components/schemas/ResourceIdentifier"
-          },
-          "meta": {
-            "type": "object"
-          }
-        }
-      },
-      "RelationshipList": {
-        "type": "object",
-        "properties": {
-          "data": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/ResourceIdentifier"
-            }
-          }
-        }
-      },
-      "Resource": {
-        "anyOf": [
-          {
-            "$ref": "#/components/schemas/CourseResource"
-          },
-          {
-            "$ref": "#/components/schemas/RecruitmentCycleResource"
-          },
-          {
-            "$ref": "#/components/schemas/SubjectResource"
-          },
-          {
-            "$ref": "#/components/schemas/LocationResource"
-          },
-          {
-            "$ref": "#/components/schemas/LocationStatusResource"
-          }
-        ],
-        "discriminator": {
-          "propertyName": "type"
-        }
-      },
-      "ResourceIdentifier": {
-        "type": "object",
-        "required": [
-          "type",
-          "id"
-        ],
-        "properties": {
-          "type": {
-            "type": "string"
-          },
-          "id": {
-            "type": "string"
-          }
-        }
-      },
-      "RecruitmentCycleResource": {
-        "type": "object",
-        "required": [
-          "id",
-          "type",
-          "attributes"
-        ],
-        "properties": {
-          "id": {
-            "type": "integer"
-          },
-          "type": {
-            "type": "string"
-          },
-          "attributes": {
-            "$ref": "#/components/schemas/RecruitmentCycleAttributes"
-          }
-        }
-      },
-      "SubjectResource": {
-        "type": "object",
-        "required": [
-          "id",
-          "type",
-          "attributes"
-        ],
-        "properties": {
-          "id": {
-            "type": "integer"
-          },
-          "type": {
-            "type": "string",
-            "example": "subjects"
-          },
-          "attributes": {
-            "$ref": "#/components/schemas/SubjectAttributes"
-          }
-        }
-      },
-      "ProviderRelationships": {
-        "type": "object",
-        "properties": {
-          "locations": {
-            "$ref": "#/components/schemas/RelationshipList"
-          },
-          "recruitment_cycle": {
-            "$ref": "#/components/schemas/Relationship"
-          }
-        }
-      },
-      "LocationStatusAttributes": {
-        "type": "object",
-        "description": "Fields relating to the state of a location",
-        "properties": {
-          "status": {
-            "type": "string",
-            "enum": [
-              "discontinued",
-              "running",
-              "new_status",
-              "suspended"
-            ],
-            "example": "running"
-          },
-          "publish": {
-            "type": "string",
-            "enum": [
-              "published",
-              "unpublished"
-            ],
-            "example": "published"
-          },
-          "has_vacancies": {
-            "type": "boolean",
-            "description": "Are there any vacancies for this course",
-            "example": true
-          },
-          "vacancy_status": {
-            "type": "string",
-            "description": "What type of vacancies are available",
-            "enum": [
-              "full_time_vacancies",
-              "part_time_vacancies",
-              "both_full_time_and_part_time_vacancies"
-            ],
-            "example": "full_time_vacancies"
-          },
-          "relationships": {
-            "$ref": "#/components/schemas/LocationStatusRelationships"
-          }
-        }
-      },
-      "ProviderAttributes": {
-        "type": "object",
-        "required": [
-          "code",
-          "name"
-        ],
-        "properties": {
-          "accredited_body?": {
-            "type": "boolean",
-            "description": "Is this provider an accredited body for other provider's courses.",
-            "example": "true"
-          },
-          "city": {
-            "type": "string",
-            "description": "Town or city",
-            "example": "London"
-          },
-          "county": {
-            "type": "string",
-            "description": "County",
-            "example": "London"
-          },
-          "changed_at": {
-            "type": "string",
-            "format": "date-time",
-            "description": "Date-time timestamp of when this provider or any of its related data changed.",
-            "example": "2019-06-13T10:44:31Z"
-          },
-          "code": {
-            "type": "string",
-            "description": "Code that uniquely identifies this provider within a recruitment cycle.",
-            "maxLength": 3,
-            "minLength": 3,
-            "example": "X99"
-          },
-          "created_at": {
-            "type": "string",
-            "format": "date-time",
-            "description": "Timestamp of when this provider was created.",
-            "example": "2019-06-13T10:44:31Z"
-          },
-          "postcode": {
-            "type": "string",
-            "format": "uk-postcode",
-            "description": "The provider's postcode",
-            "maxLength": 8,
-            "example": "SK2 6AA"
-          },
-          "name": {
-            "type": "string",
-            "description": "The name of training provider.",
-            "example": "Long School"
-          },
-          "provider_type": {
-            "type": "string",
-            "description": "The type of provider.",
-            "example": "scitt",
-            "enum": [
-              "scitt",
-              "lead_school",
-              "university",
-              "unknown",
-              "invalid_value"
-            ]
-          },
-          "recruitment_cycle_year": {
-            "type": "integer",
-            "description": "The recruitment year this provider record is for.",
-            "example": 2020
-          },
-          "region_code": {
-            "type": "string",
-            "description": "The NUTS 1 region code for the provider's address.",
-            "example": "south_west",
-            "enum": [
-              "no_region",
-              "london",
-              "south_east",
-              "south_west",
-              "wales",
-              "west_midlands",
-              "east_midlands",
-              "eastern",
-              "north_west",
-              "yorkshire_and_the_humber",
-              "north_east",
-              "scotland"
-            ]
-          },
-          "street_address_1": {
-            "type": "string",
-            "description": "Building or street line one",
-            "example": "Long College"
-          },
-          "street_address_2": {
-            "type": "string",
-            "description": "Building or street line two",
-            "example": "1st floor, 86 Long Rd"
-          },
-          "train_with_disability": {
-            "type": "string",
-            "format": "markdown",
-            "description": "How candidates with disabilities and other needs will be supported.",
-            "example": "We are committed to supporting trainees with disabilities and other needs, so please let us and the accrediting provider know if you would like us to make any adjustments to support you."
-          },
-          "train_with_us": {
-            "type": "string",
-            "format": "markdown",
-            "description": "Information about the training provider.",
-            "example": "We offer both primary and secondary training in a wide range of subjects and work with a collection of schools in the local area. We offer diverse teaching placements, ensuring trainees have experience in different types of school environments."
-          },
-          "website": {
-            "type": "string",
-            "format": "url",
-            "description": "A link to the initial teacher training or course pages of your website",
-            "example": "http://www.teamworkstsa.org/home-page-s-c-i-t-t-teacher-training/"
-          }
-        }
-      },
       "CourseAttributes": {
         "type": "object",
         "required": [
@@ -943,6 +381,258 @@
           }
         }
       },
+      "CourseRelationships": {
+        "type": "object",
+        "properties": {
+          "accredited_body": {
+            "$ref": "#/components/schemas/Relationship"
+          },
+          "locations": {
+            "$ref": "#/components/schemas/RelationshipList"
+          },
+          "modern_languages": {
+            "$ref": "#/components/schemas/RelationshipList"
+          },
+          "provider_locations": {
+            "$ref": "#/components/schemas/RelationshipList"
+          },
+          "provider": {
+            "$ref": "#/components/schemas/Relationship"
+          },
+          "subjects": {
+            "$ref": "#/components/schemas/RelationshipList"
+          }
+        }
+      },
+      "CourseResource": {
+        "type": "object",
+        "required": [
+          "id",
+          "type",
+          "attributes"
+        ],
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "type": {
+            "type": "string",
+            "example": "courses"
+          },
+          "attributes": {
+            "$ref": "#/components/schemas/CourseAttributes"
+          },
+          "relationships": {
+            "$ref": "#/components/schemas/CourseRelationships"
+          }
+        }
+      },
+      "CourseSingleResponse": {
+        "type": "object",
+        "required": [
+          "data"
+        ],
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CourseResource"
+            }
+          },
+          "included": {
+            "$ref": "#/components/schemas/Included"
+          },
+          "jsonapi": {
+            "$ref": "#/components/schemas/JSONAPI"
+          }
+        }
+      },
+      "Filter": {
+        "type": "object",
+        "example": "",
+        "properties": {
+          "has_vacancies": {
+            "description": "Return courses that only have vacancies?",
+            "type": "string",
+            "example": "true"
+          },
+          "funding": {
+            "description": "Return courses that are salary funded",
+            "type": "string",
+            "example": "salary"
+          },
+          "qualification": {
+            "description": "Search courses based on the award given on course completion",
+            "type": "array",
+            "example": "qts,pgce,pgde",
+            "items": {
+              "type": "string",
+              "example": "qts"
+            }
+          },
+          "study_type": {
+            "description": "Search full time or part time courses or both",
+            "type": "array",
+            "example": "full_time,part_time",
+            "items": {
+              "type": "string",
+              "example": "full_time"
+            }
+          },
+          "subjects": {
+            "description": "Returns courses that include at least one of the given subjects",
+            "type": "array",
+            "example": "00,01,W1",
+            "items": {
+              "type": "string",
+              "example": "W1"
+            }
+          },
+          "send_courses": {
+            "description": "Only return courses that have a SEND specialism",
+            "type": "string",
+            "example": "true"
+          },
+          "latitude": {
+            "description": "Latitude of origin when performing a search by radius",
+            "type": "number",
+            "example": 54.9753348
+          },
+          "longitude": {
+            "description": "Longitude of origin when performing a search by radius",
+            "type": "number",
+            "example": -1.6100477
+          },
+          "radius": {
+            "description": "Search radius in miles from given latitude and longitude",
+            "type": "number",
+            "example": 20
+          }
+        }
+      },
+      "Included": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/Resource"
+        }
+      },
+      "JSONAPI": {
+        "type": "object",
+        "required": [
+          "version"
+        ],
+        "properties": {
+          "version": {
+            "type": "string",
+            "example": "1.0"
+          }
+        }
+      },
+      "LocationAttributes": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "example": "W"
+          },
+          "name": {
+            "type": "string",
+            "description": "The name of the location",
+            "example": "Henry Maynard Primary School"
+          },
+          "street_address_1": {
+            "type": "string",
+            "description": "Building or street line one",
+            "example": "The Rose Building"
+          },
+          "street_address_2": {
+            "type": "string",
+            "description": "Building or street line two",
+            "example": "Maynard Road"
+          },
+          "city": {
+            "type": "string",
+            "description": "Town or city",
+            "example": "London"
+          },
+          "county": {
+            "type": "string",
+            "description": "County",
+            "example": "London"
+          },
+          "postcode": {
+            "type": "string",
+            "description": "The postcode of the location",
+            "example": "E17 9JE"
+          },
+          "region_code": {
+            "type": "string",
+            "example": "london"
+          },
+          "recruitment_cycle_year": {
+            "type": "string",
+            "example": "2020"
+          }
+        }
+      },
+      "LocationResource": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "11214485"
+          },
+          "type": {
+            "type": "string",
+            "example": "sites"
+          },
+          "attributes": {
+            "$ref": "#/components/schemas/LocationAttributes"
+          }
+        }
+      },
+      "LocationStatusAttributes": {
+        "type": "object",
+        "description": "Fields relating to the state of a location",
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": [
+              "discontinued",
+              "running",
+              "new_status",
+              "suspended"
+            ],
+            "example": "running"
+          },
+          "publish": {
+            "type": "string",
+            "enum": [
+              "published",
+              "unpublished"
+            ],
+            "example": "published"
+          },
+          "has_vacancies": {
+            "type": "boolean",
+            "description": "Are there any vacancies for this course",
+            "example": true
+          },
+          "vacancy_status": {
+            "type": "string",
+            "description": "What type of vacancies are available",
+            "enum": [
+              "full_time_vacancies",
+              "part_time_vacancies",
+              "both_full_time_and_part_time_vacancies"
+            ],
+            "example": "full_time_vacancies"
+          },
+          "relationships": {
+            "$ref": "#/components/schemas/LocationStatusRelationships"
+          }
+        }
+      },
       "LocationStatusRelationships": {
         "type": "object",
         "description": "Associated data",
@@ -967,19 +657,230 @@
           }
         }
       },
-      "SubjectAttributes": {
+      "LocationStatusResource": {
+        "type": "object",
+        "description": "Wrapper object for LocationStatusAttributes",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "22329867"
+          },
+          "type": {
+            "type": "string",
+            "example": "site_statuses"
+          },
+          "attributes": {
+            "$ref": "#/components/schemas/LocationStatusAttributes"
+          }
+        }
+      },
+      "LocationsList": {
         "type": "object",
         "required": [
-          "code"
+          "data"
         ],
         "properties": {
-          "name": {
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/LocationResource"
+            }
+          },
+          "jsonapi": {
+            "$ref": "#/components/schemas/JSONAPI"
+          }
+        }
+      },
+      "ProviderAttributes": {
+        "type": "object",
+        "required": [
+          "code",
+          "name"
+        ],
+        "properties": {
+          "accredited_body?": {
+            "type": "boolean",
+            "description": "Is this provider an accredited body for other provider's courses.",
+            "example": "true"
+          },
+          "city": {
             "type": "string",
-            "description": "Subject name."
+            "description": "Town or city",
+            "example": "London"
+          },
+          "county": {
+            "type": "string",
+            "description": "County",
+            "example": "London"
+          },
+          "changed_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Date-time timestamp of when this provider or any of its related data changed.",
+            "example": "2019-06-13T10:44:31Z"
           },
           "code": {
             "type": "string",
-            "description": "Unique subject code."
+            "description": "Code that uniquely identifies this provider within a recruitment cycle.",
+            "maxLength": 3,
+            "minLength": 3,
+            "example": "X99"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Timestamp of when this provider was created.",
+            "example": "2019-06-13T10:44:31Z"
+          },
+          "postcode": {
+            "type": "string",
+            "format": "uk-postcode",
+            "description": "The provider's postcode",
+            "maxLength": 8,
+            "example": "SK2 6AA"
+          },
+          "name": {
+            "type": "string",
+            "description": "The name of training provider.",
+            "example": "Long School"
+          },
+          "provider_type": {
+            "type": "string",
+            "description": "The type of provider.",
+            "example": "scitt",
+            "enum": [
+              "scitt",
+              "lead_school",
+              "university",
+              "unknown",
+              "invalid_value"
+            ]
+          },
+          "recruitment_cycle_year": {
+            "type": "integer",
+            "description": "The recruitment year this provider record is for.",
+            "example": 2020
+          },
+          "region_code": {
+            "type": "string",
+            "description": "The NUTS 1 region code for the provider's address.",
+            "example": "south_west",
+            "enum": [
+              "no_region",
+              "london",
+              "south_east",
+              "south_west",
+              "wales",
+              "west_midlands",
+              "east_midlands",
+              "eastern",
+              "north_west",
+              "yorkshire_and_the_humber",
+              "north_east",
+              "scotland"
+            ]
+          },
+          "street_address_1": {
+            "type": "string",
+            "description": "Building or street line one",
+            "example": "Long College"
+          },
+          "street_address_2": {
+            "type": "string",
+            "description": "Building or street line two",
+            "example": "1st floor, 86 Long Rd"
+          },
+          "train_with_disability": {
+            "type": "string",
+            "format": "markdown",
+            "description": "How candidates with disabilities and other needs will be supported.",
+            "example": "We are committed to supporting trainees with disabilities and other needs, so please let us and the accrediting provider know if you would like us to make any adjustments to support you."
+          },
+          "train_with_us": {
+            "type": "string",
+            "format": "markdown",
+            "description": "Information about the training provider.",
+            "example": "We offer both primary and secondary training in a wide range of subjects and work with a collection of schools in the local area. We offer diverse teaching placements, ensuring trainees have experience in different types of school environments."
+          },
+          "website": {
+            "type": "string",
+            "format": "url",
+            "description": "A link to the initial teacher training or course pages of your website",
+            "example": "http://www.teamworkstsa.org/home-page-s-c-i-t-t-teacher-training/"
+          }
+        }
+      },
+      "ProviderListResponse": {
+        "type": "object",
+        "required": [
+          "data",
+          "jsonapi"
+        ],
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ProviderResource"
+            }
+          },
+          "included": {
+            "$ref": "#/components/schemas/Included"
+          },
+          "jsonapi": {
+            "$ref": "#/components/schemas/JSONAPI"
+          }
+        }
+      },
+      "ProviderRelationships": {
+        "type": "object",
+        "properties": {
+          "locations": {
+            "$ref": "#/components/schemas/RelationshipList"
+          },
+          "recruitment_cycle": {
+            "$ref": "#/components/schemas/Relationship"
+          }
+        }
+      },
+      "ProviderResource": {
+        "type": "object",
+        "required": [
+          "id",
+          "type",
+          "attributes"
+        ],
+        "properties": {
+          "id": {
+            "type": "integer",
+            "example": 1
+          },
+          "type": {
+            "type": "string",
+            "example": "providers"
+          },
+          "attributes": {
+            "$ref": "#/components/schemas/ProviderAttributes"
+          },
+          "relationships": {
+            "$ref": "#/components/schemas/ProviderRelationships"
+          }
+        }
+      },
+      "ProviderSingleResponse": {
+        "type": "object",
+        "required": [
+          "data",
+          "jsonapi"
+        ],
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/ProviderResource"
+          },
+          "included": {
+            "$ref": "#/components/schemas/Included"
+          },
+          "jsonapi": {
+            "$ref": "#/components/schemas/JSONAPI"
           }
         }
       },
@@ -1005,26 +906,125 @@
           }
         }
       },
-      "CourseRelationships": {
+      "RecruitmentCycleResource": {
+        "type": "object",
+        "required": [
+          "id",
+          "type",
+          "attributes"
+        ],
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "type": {
+            "type": "string"
+          },
+          "attributes": {
+            "$ref": "#/components/schemas/RecruitmentCycleAttributes"
+          }
+        }
+      },
+      "Relationship": {
         "type": "object",
         "properties": {
-          "accredited_body": {
-            "$ref": "#/components/schemas/Relationship"
+          "data": {
+            "$ref": "#/components/schemas/ResourceIdentifier"
           },
-          "locations": {
-            "$ref": "#/components/schemas/RelationshipList"
+          "meta": {
+            "type": "object"
+          }
+        }
+      },
+      "RelationshipList": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ResourceIdentifier"
+            }
+          }
+        }
+      },
+      "Resource": {
+        "anyOf": [
+          {
+            "$ref": "#/components/schemas/CourseResource"
           },
-          "modern_languages": {
-            "$ref": "#/components/schemas/RelationshipList"
+          {
+            "$ref": "#/components/schemas/RecruitmentCycleResource"
           },
-          "provider_locations": {
-            "$ref": "#/components/schemas/RelationshipList"
+          {
+            "$ref": "#/components/schemas/SubjectResource"
           },
-          "provider": {
-            "$ref": "#/components/schemas/Relationship"
+          {
+            "$ref": "#/components/schemas/LocationResource"
           },
-          "subjects": {
-            "$ref": "#/components/schemas/RelationshipList"
+          {
+            "$ref": "#/components/schemas/LocationStatusResource"
+          }
+        ],
+        "discriminator": {
+          "propertyName": "type"
+        }
+      },
+      "ResourceIdentifier": {
+        "type": "object",
+        "required": [
+          "type",
+          "id"
+        ],
+        "properties": {
+          "type": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string"
+          }
+        }
+      },
+      "Sort": {
+        "type": "array",
+        "example": "provider.provider_name,name",
+        "items": {
+          "type": "string",
+          "example": "name"
+        }
+      },
+      "SubjectAttributes": {
+        "type": "object",
+        "required": [
+          "code"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Subject name."
+          },
+          "code": {
+            "type": "string",
+            "description": "Unique subject code."
+          }
+        }
+      },
+      "SubjectResource": {
+        "type": "object",
+        "required": [
+          "id",
+          "type",
+          "attributes"
+        ],
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "type": {
+            "type": "string",
+            "example": "subjects"
+          },
+          "attributes": {
+            "$ref": "#/components/schemas/SubjectAttributes"
           }
         }
       }

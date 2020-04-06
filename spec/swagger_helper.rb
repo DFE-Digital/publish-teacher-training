@@ -27,6 +27,7 @@ RSpec.configure do |config|
     end
   ]
   swagger_v1_template["components"]["schemas"].merge!(additional_component_schemas)
+  swagger_v1_template["components"]["schemas"] = swagger_v1_template["components"]["schemas"].sort.to_h
   config.swagger_docs = {
     "public_v1/api_spec.json" => swagger_v1_template.with_indifferent_access,
   }
