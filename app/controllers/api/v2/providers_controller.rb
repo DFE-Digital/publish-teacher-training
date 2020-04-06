@@ -11,12 +11,14 @@ module API
 
       def index
         authorize Provider
-        providers = policy_scope(@recruitment_cycle.providers)
+
+        base_query = @recruitment_cycle.providers.page( params[:page][:page] || 1).per( 10 )
+
+        providers = policy_scope(base_query)
                       .include_courses_counts
                       .includes(:recruitment_cycle)
         providers = providers.where(id: @user.providers) if @user.present?
-
-        render jsonapi: providers.by_name_ascending,
+        render jsonapi: paginate(providers.by_name_ascending),
                fields: { providers: %i[provider_code provider_name courses
                                        recruitment_cycle_year] }
       end
