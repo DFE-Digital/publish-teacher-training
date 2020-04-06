@@ -19,7 +19,7 @@ provider_code = ENV.fetch("PROVIDER_CODE", "U80")
 course_code = ENV.fetch("COURSE_CODE", "2P3K")
 
 tests = {
-  "/api/v3/recruitment_cycles/#{recruitment_cycle}/providers/#{provider_code}" => 300,
+  "/api/v3/recruitment_cycles/#{recruitment_cycle}/providers/#{provider_code}" => 375,
   "/api/v3/recruitment_cycles/2020/providers/#{provider_code}/courses/#{course_code}" => 300,
   "/api/v3/courses" => 4750,
 }
