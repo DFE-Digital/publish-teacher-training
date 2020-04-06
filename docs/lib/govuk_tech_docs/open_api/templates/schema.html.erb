@@ -28,9 +28,9 @@
               if property[1].type == 'array'
                 schema = property[1]['items']
               end
-              # Only print a link if it's a referenced object.
+              # Only print a link if it's a referenced schema.
               if schema.node_context.referenced_by.to_s.include? '#/components/schemas' and !schema.node_context.source_location.to_s.include? '/properties/'
-                "This returns a #{get_schema_link(schema)} object."
+                "This returns a #{get_schema_link(schema)} schema."
               end
             %>
 

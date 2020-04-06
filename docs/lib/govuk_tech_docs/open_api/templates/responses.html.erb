@@ -6,7 +6,6 @@
       <tr>
         <th>Status</th>
         <th>Description</th>
-        <th>Schema</th>
       </tr>
     </thead>
 
@@ -17,11 +16,11 @@
 
           <td>
             <%= markdown(response.description) %>
-          </td>
 
-          <td>
             <% if response.content['application/json'] %>
-              <%= get_schema_link(response.content['application/json'].schema) %>
+              <p>
+                This response returns a <%= get_schema_link(response.content['application/json'].schema) %> schema.
+              </p>
             <% end %>
           </td>
         </tr>
@@ -42,7 +41,7 @@
       <div class="govuk-details__text">
         <% if response.content['application/json'] %>
           <p>
-            This response returns a <%= get_schema_link(response.content['application/json'].schema) %>
+            This response returns a <%= get_schema_link(response.content['application/json'].schema) %> schema.
           </p>
         <% end %>
 
