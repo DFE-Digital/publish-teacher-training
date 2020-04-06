@@ -1,0 +1,16 @@
+---
+type: object
+description: "Associated data"
+properties:
+  site:
+    type: object
+    properties:
+      data:
+        type: object
+        properties:
+          id:
+            type: string
+            example: "11214483"
+          type:
+            type: string
+            example: sites
