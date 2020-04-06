@@ -9,10 +9,6 @@ describe "Courses API v2", type: :request do
     ActionController::HttpAuthentication::Token.encode_credentials(token)
   end
   let(:current_cycle) { find_or_create :recruitment_cycle }
-  let(:next_cycle)    { find_or_create :recruitment_cycle, :next }
-  let(:current_year)  { current_cycle.year.to_i }
-  let(:previous_year) { current_year - 1 }
-  let(:next_year)     { current_year + 1 }
   let(:subjects) { [course_subject_mathematics] }
 
   let(:provider1)       { create :provider, organisations: [organisation] }
@@ -24,6 +20,9 @@ describe "Courses API v2", type: :request do
   let(:course3) { create(:course) }
   let(:course4) { create(:course, provider: provider1, accrediting_provider: accredited_body) }
 
+  let(:provider3) { create :provider, :previous_recruitment_cycle, organisations: [organisation] }
+  let(:previous_cycle_course) { create(:course, provider: provider3) }
+
   describe "GET index" do
     subject { perform_request(request_path) }
 
@@ -32,6 +31,7 @@ describe "Courses API v2", type: :request do
       course2
       course3
       course4
+      previous_cycle_course
       get path,
           headers: { "HTTP_AUTHORIZATION" => credentials }
       response
@@ -48,8 +48,20 @@ describe "Courses API v2", type: :request do
 
         expect(response).to have_http_status(:success)
         expect(json_response["data"].count).to eq(3)
-        expect(json_response["data"].pluck("id")).not_to include(course3.id.to_s)
+        expect(json_response["data"].pluck("id")).not_to include(course3.id.to_s, previous_cycle_course.id.to_s)
         expect(json_response["included"].first["type"]).to eq("subjects")
+      end
+
+      context "when a course is discarded" do
+        before do
+          course1.discard!
+        end
+
+        it "doesn't return it" do
+          json_response = JSON.parse subject.body
+
+          expect(json_response["data"].pluck("id")).to match_array([course2.id.to_s, course4.id.to_s])
+        end
       end
     end
 
