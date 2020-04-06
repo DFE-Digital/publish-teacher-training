@@ -1,0 +1,11 @@
+---
+type: object
+required:
+  - code
+properties:
+  name:
+    type: string
+    description: "Subject name."
+  code:
+    type: string
+    description: "Unique subject code."

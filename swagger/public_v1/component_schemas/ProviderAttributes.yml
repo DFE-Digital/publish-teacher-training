@@ -1,0 +1,109 @@
+---
+type: object
+required:
+  - code
+  - name
+properties:
+  accredited_body?:
+    type: boolean
+    description: "Is this provider an accredited body for other provider's courses."
+    example: "true"
+  city:
+    type: string
+    description: "Town or city"
+    example: "London"
+  county:
+    type: string
+    description: "County"
+    example: "London"
+  changed_at:
+    type: string
+    format: date-time
+    description: >-
+      Date-time timestamp of when this provider or any of its related data changed.
+    example: "2019-06-13T10:44:31Z"
+  code:
+    type: string
+    description: >-
+      Code that uniquely identifies this provider within a recruitment cycle.
+    maxLength: 3
+    minLength: 3
+    example: X99
+  created_at:
+    type: string
+    format: date-time
+    description: "Timestamp of when this provider was created."
+    example: "2019-06-13T10:44:31Z"
+  postcode:
+    type: string
+    format: uk-postcode
+    description: "The provider's postcode"
+    maxLength: 8
+    example: SK2 6AA
+  name:
+    type: string
+    description: "The name of training provider."
+    example: "Long School"
+  provider_type:
+    type: string
+    description: "The type of provider."
+    example: "scitt"
+    enum:
+      - scitt
+      - lead_school
+      - university
+      - unknown
+      - invalid_value
+  recruitment_cycle_year:
+    type: integer
+    description: "The recruitment year this provider record is for."
+    example: 2020
+  region_code:
+    type: string
+    description: "The NUTS 1 region code for the provider's address."
+    example: "south_west"
+    enum:
+      - no_region
+      - london
+      - south_east
+      - south_west
+      - wales
+      - west_midlands
+      - east_midlands
+      - eastern
+      - north_west
+      - yorkshire_and_the_humber
+      - north_east
+      - scotland
+  street_address_1:
+    type: string
+    description: "Building or street line one"
+    example: "Long College"
+  street_address_2:
+    type: string
+    description: "Building or street line two"
+    example: "1st floor, 86 Long Rd"
+  train_with_disability:
+    type: string
+    format: markdown
+    description: >-
+      How candidates with disabilities and other needs will be supported.
+    example: >-
+      We are committed to supporting trainees with disabilities and other needs,
+      so please let us and the accrediting provider know if you would like us to
+      make any adjustments to support you.
+  train_with_us:
+    type: string
+    format: markdown
+    description: >-
+      Information about the training provider.
+    example: >-
+      We offer both primary and secondary training in a wide range of subjects
+      and work with a collection of schools in the local area. We offer diverse
+      teaching placements, ensuring trainees have experience in different types
+      of school environments.
+  website:
+    type: string
+    format: url
+    description: "A link to the initial teacher training or course pages of your website"
+    example: "http://www.teamworkstsa.org/home-page-s-c-i-t-t-teacher-training/"

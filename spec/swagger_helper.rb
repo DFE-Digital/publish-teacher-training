@@ -18,7 +18,16 @@ RSpec.configure do |config|
   # By default, the operations defined in spec files are added to the first
   # document below. You can override this behavior by adding a swagger_doc tag to the
   # the root example_group in your specs, e.g. describe '...', swagger_doc: 'v2/swagger.json'
+  swagger_v1_template = YAML.load_file(Rails.root.join("swagger/public_v1/template.yml"))
+  swagger_v1_template["components"]["schemas"] ||= {}
+  additional_component_schemas = Hash[
+    Dir[Rails.root.join("swagger/public_v1/component_schemas/*.yml")].map do |path|
+      component_name = File.basename(path, ".yml")
+      [component_name, YAML.load_file(path)]
+    end
+  ]
+  swagger_v1_template["components"]["schemas"].merge!(additional_component_schemas)
   config.swagger_docs = {
-    "public_v1/api_spec.json" => ActiveSupport::HashWithIndifferentAccess.new(YAML.load_file(Rails.root.join("swagger/public_v1/template.yml"))),
+    "public_v1/api_spec.json" => swagger_v1_template.with_indifferent_access,
   }
 end
