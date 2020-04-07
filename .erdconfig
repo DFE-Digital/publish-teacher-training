@@ -1,0 +1,9 @@
+# See options here https://github.com/voormedia/rails-erd
+
+attributes:
+  - content
+  - foreign_key
+  - inheritance
+filename: docs/datadase-diagram
+filetype: jpg
+title: Teacher Training API Database Diagram
