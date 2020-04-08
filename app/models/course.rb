@@ -239,19 +239,21 @@ class Course < ApplicationRecord
     program_types = []
 
     if funding_types.include?("salary")
-      program_types.push :school_direct_salaried_training_programme
+      program_types << :school_direct_salaried_training_programme
     end
 
     if funding_types.include?("apprenticeship")
-      program_types.push :pg_teaching_apprenticeship
+      program_types << :pg_teaching_apprenticeship
     end
 
     if funding_types.include?("fee")
-      program_types.push(
-        :higher_education_programme,
-        :scitt_programme,
-        :school_direct_training_programme,
-      )
+      %i[
+        higher_education_programme
+        scitt_programme
+        school_direct_training_programme
+      ].each do |program_type|
+        program_types << program_type
+      end
     end
 
     where(program_type: program_types)
