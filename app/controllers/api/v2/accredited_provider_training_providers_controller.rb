@@ -6,7 +6,17 @@ module API
 
       def index
         authorize @provider, :can_list_training_providers?
-        providers = @provider.training_providers
+        providers = if params[:filter]
+                      course_scope = Course.where(provider: training_providers)
+
+                      eligible_training_provider_ids = CourseSearchService
+                                                         .call(filter: params[:filter], course_scope: course_scope)
+                                                         .pluck(:provider_id)
+
+                      training_providers.where(id: eligible_training_provider_ids)
+                    else
+                      training_providers
+                    end
 
         render jsonapi: providers, include: params[:include]
       end
@@ -23,6 +33,10 @@ module API
         @provider = @recruitment_cycle.providers.find_by!(
           provider_code: params[:provider_code].upcase,
         )
+      end
+
+      def training_providers
+        @provider.training_providers
       end
     end
   end

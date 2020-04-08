@@ -250,7 +250,7 @@ class Course < ApplicationRecord
       program_types.push(
         :higher_education_programme,
         :scitt_programme,
-        :school_direct_training_programme
+        :school_direct_training_programme,
       )
     end
 
