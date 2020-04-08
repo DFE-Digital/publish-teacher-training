@@ -1,0 +1,69 @@
+<% if responses.any? %>
+  <h4 id="<%= id %>">Responses</h4>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Status</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% responses.each do |key,response| %>
+        <tr>
+          <td><%= key %></td>
+
+          <td>
+            <%= markdown(response.description) %>
+
+            <% if response.content['application/json'] %>
+              <p>
+                This response returns a <%= get_schema_link(response.content['application/json'].schema) %> schema.
+              </p>
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+
+  <h4 id="<%= id %>">Response examples</h4>
+
+  <% responses.each do |key,response| %>
+    <details class="govuk-details" data-module="govuk-details">
+      <summary class="govuk-details__summary">
+        <span class="govuk-details__summary-text">
+          <%= key %> - <%= response.description %>
+        </span>
+      </summary>
+
+      <div class="govuk-details__text">
+        <% if response.content['application/json'] %>
+          <p>
+            This response returns a <%= get_schema_link(response.content['application/json'].schema) %> schema.
+          </p>
+        <% end %>
+
+        <% if response.content['application/json']
+          if response.content['application/json']["example"]
+            request_body = json_prettyprint(response.content['application/json']["example"])
+          else
+            request_body = json_output(response.content['application/json'].schema)
+          end
+        end %>
+
+        <% if !request_body.blank? %>
+          <%
+            source = request_body
+            formatter = Rouge::Formatters::HTML.new
+            lexer = Rouge::Lexers::JSON.new
+            output = formatter.format(lexer.lex(source))
+          %>
+
+          <pre class="highlight"><code><%= output %></code></pre>
+        <% end %>
+      </div>
+    </details>
+  <% end %>
+<% end %>

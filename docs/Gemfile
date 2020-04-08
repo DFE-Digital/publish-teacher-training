@@ -4,3 +4,8 @@ source "https://rubygems.org"
 
 # Include the tech docs gem
 gem "govuk_tech_docs", git: "https://github.com/DFE-Digital/tech-docs-gem", branch: "any-of-api-renderer"
+
+group :test do
+  gem "rspec"
+  gem "capybara"
+end
