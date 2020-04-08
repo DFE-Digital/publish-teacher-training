@@ -34,6 +34,7 @@ class CourseSearchService
     scope = scope.with_provider_name(provider_name) if provider_name.present?
     scope = scope.with_send if send_courses_filter?
     scope = scope.within(filter[:radius], origin: origin) if locations_filter?
+    scope = scope.with_funding_types(funding_types) if funding_types.any?
 
     scope.distinct
   end
@@ -124,6 +125,12 @@ private
     return [] if filter[:study_type].blank?
 
     filter[:study_type].split(",")
+  end
+
+  def funding_types
+    return [] if filter[:funding_type].blank?
+
+    filter[:funding_type].split(",")
   end
 
   def subject_codes

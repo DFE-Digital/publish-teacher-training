@@ -237,6 +237,62 @@ describe CourseSearchService do
       end
     end
 
+    describe "filter[funding_type]" do
+      context "when fee" do
+        let(:filter) { { funding_type: "fee" } }
+        let(:expected_scope) { double }
+
+        it "adds the with_funding_types scope" do
+          expect(findable_scope).to receive(:with_funding_types).with(%w(fee)).and_return(distinct_scope)
+          expect(distinct_scope).to receive(:distinct).and_return(expected_scope)
+          expect(subject).to eq(expected_scope)
+        end
+      end
+
+      context "when salary" do
+        let(:filter) { { funding_type: "salary" } }
+        let(:expected_scope) { double }
+
+        it "adds the with_funding_types scope" do
+          expect(findable_scope).to receive(:with_funding_types).with(%w(salary)).and_return(distinct_scope)
+          expect(distinct_scope).to receive(:distinct).and_return(expected_scope)
+          expect(subject).to eq(expected_scope)
+        end
+      end
+
+      context "when apprenticeship" do
+        let(:filter) { { funding_type: "apprenticeship" } }
+        let(:expected_scope) { double }
+
+        it "adds the with_funding_types scope" do
+          expect(findable_scope).to receive(:with_funding_types).with(%w(apprenticeship)).and_return(distinct_scope)
+          expect(distinct_scope).to receive(:distinct).and_return(expected_scope)
+          expect(subject).to eq(expected_scope)
+        end
+      end
+
+      context "when all" do
+        let(:filter) { { funding_type: "fee,salary,apprenticeship" } }
+        let(:expected_scope) { double }
+
+        it "adds the with_funding_types scope" do
+          expect(findable_scope).to receive(:with_funding_types).with(%w(fee salary apprenticeship)).and_return(distinct_scope)
+          expect(distinct_scope).to receive(:distinct).and_return(expected_scope)
+          expect(subject).to eq(expected_scope)
+        end
+      end
+
+      context "when absent" do
+        let(:filter) { {} }
+
+        it "doesn't add the scope" do
+          expect(findable_scope).not_to receive(:with_funding_types)
+          expect(findable_scope).to receive(:distinct).and_return(expected_scope)
+          expect(subject).to eq(expected_scope)
+        end
+      end
+    end
+
     describe "filter[subjects]" do
       context "a single subject code" do
         let(:filter) { { subjects: "A1" } }

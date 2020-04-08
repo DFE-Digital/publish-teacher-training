@@ -772,6 +772,60 @@ describe Course, type: :model do
       end
     end
 
+    describe ".with_funding_types" do
+      let(:fee_course_higher_education) { create(:course, :with_higher_education) }
+      let(:fee_course_scitt) { create(:course, :with_scitt) }
+      let(:fee_course_school_direct) { create(:course, :with_school_direct) }
+      let(:salary_course) { create(:course, :with_salary) }
+      let(:apprenticeship_course) { create(:course, :with_apprenticeship) }
+
+      subject { described_class.with_funding_types(funding_types) }
+
+      context "fee courses" do
+        let(:funding_types) { %w[fee] }
+
+        before do
+          fee_course_higher_education
+          fee_course_scitt
+          fee_course_school_direct
+          salary_course
+          apprenticeship_course
+        end
+
+        it "returns fee courses" do
+          expect(subject).to contain_exactly(fee_course_higher_education, fee_course_school_direct, fee_course_scitt)
+        end
+      end
+
+      context "salary" do
+        let(:funding_types) { %w[salary] }
+
+        before do
+          salary_course
+          apprenticeship_course
+          fee_course_higher_education
+        end
+
+        it "returns fee courses" do
+          expect(subject).to contain_exactly(salary_course)
+        end
+      end
+
+      context "apprenticeship" do
+        let(:funding_types) { %w[apprenticeship] }
+
+        before do
+          apprenticeship_course
+          salary_course
+          fee_course_scitt
+        end
+
+        it "returns fee courses" do
+          expect(subject).to contain_exactly(apprenticeship_course)
+        end
+      end
+    end
+
     describe ".with_salary" do
       let(:course_higher_education_programme) do
         create(:course, program_type: :higher_education_programme)

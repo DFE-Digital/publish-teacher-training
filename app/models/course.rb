@@ -235,6 +235,28 @@ class Course < ApplicationRecord
     where(is_send: true)
   end
 
+  scope :with_funding_types, ->(funding_types) do
+    program_types = []
+
+    if funding_types.include?("salary")
+      program_types.push :school_direct_salaried_training_programme
+    end
+
+    if funding_types.include?("apprenticeship")
+      program_types.push :pg_teaching_apprenticeship
+    end
+
+    if funding_types.include?("fee")
+      program_types.push(
+        :higher_education_programme,
+        :scitt_programme,
+        :school_direct_training_programme
+      )
+    end
+
+    where(program_type: program_types)
+  end
+
   def self.entry_requirement_options_without_nil_choice
     ENTRY_REQUIREMENT_OPTIONS.reject { |option| option == :not_set }.keys.map(&:to_s)
   end
