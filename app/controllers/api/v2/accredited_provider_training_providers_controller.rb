@@ -7,7 +7,10 @@ module API
       def index
         authorize @provider, :can_list_training_providers?
         providers = if params[:filter]
-                      course_scope = Course.where(provider: training_providers)
+                      course_scope = Course.where(
+                        provider: training_providers,
+                        accrediting_provider_code: @provider.provider_code,
+                      )
 
                       eligible_training_provider_ids = CourseSearchService
                                                          .call(filter: params[:filter], course_scope: course_scope)
