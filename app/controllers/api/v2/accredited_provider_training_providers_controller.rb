@@ -16,7 +16,7 @@ module API
                                                          .call(filter: params[:filter], course_scope: course_scope)
                                                          .pluck(:provider_id)
 
-                      training_providers.where(id: eligible_training_provider_ids)
+                      training_providers.where(id: eligible_training_provider_ids).order(:provider_name)
                     else
                       training_providers
                     end

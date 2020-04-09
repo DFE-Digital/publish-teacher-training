@@ -27,7 +27,7 @@ describe "AccreditedBody API v2", type: :request do
              accrediting_provider: accredited_provider)
     end
 
-    let(:training_provider_1) { create(:provider) }
+    let(:training_provider_1) { create(:provider, provider_name: "ABC Provider") }
 
     let(:accredited_provider) {
       create(:provider,
@@ -40,6 +40,12 @@ describe "AccreditedBody API v2", type: :request do
     let(:request_path) {
       "/api/v2/recruitment_cycles/#{recruitment_cycle.year}/providers/#{accredited_provider.provider_code}/training_providers#{filters}"
     }
+
+    def provider_names_in_response(provider_hashes)
+      provider_hashes.map { |provider|
+        provider["attributes"]["provider_name"]
+      }
+    end
 
     def perform_request
       get request_path, headers: { "HTTP_AUTHORIZATION" => credentials }
@@ -71,7 +77,7 @@ describe "AccreditedBody API v2", type: :request do
       end
 
       context "with training providers offering courses that match multiple funding types" do
-        let(:training_provider_2) { create(:provider) }
+        let(:training_provider_2) { create(:provider, provider_name: "BCD Provider") }
 
         let(:salary_funded_course) do
           create(:course,
@@ -94,6 +100,7 @@ describe "AccreditedBody API v2", type: :request do
           json_response = JSON.parse(response.body)
           provider_hashes = json_response["data"]
           expect(provider_hashes.count).to eq(2)
+          expect(provider_names_in_response(provider_hashes)).to eq(["ABC Provider", "BCD Provider"])
         end
       end
 
@@ -142,7 +149,7 @@ describe "AccreditedBody API v2", type: :request do
       end
 
       context "with training providers offering courses that match multiple subject" do
-        let(:training_provider_2) { create(:provider) }
+        let(:training_provider_2) { create(:provider, provider_name: "BCD Provider") }
 
         let(:biology_course) do
           create(:course,
@@ -165,6 +172,7 @@ describe "AccreditedBody API v2", type: :request do
           json_response = JSON.parse(response.body)
           provider_hashes = json_response["data"]
           expect(provider_hashes.count).to eq(2)
+          expect(provider_names_in_response(provider_hashes)).to eq(["ABC Provider", "BCD Provider"])
         end
       end
 
