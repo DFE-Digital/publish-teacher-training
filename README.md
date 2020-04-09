@@ -67,6 +67,16 @@ Or through guard (`--no-interactions` allows the use of `pry` inside tests):
 bundle exec guard --no-interactions
 ```
 
+## Development Dependencies
+
+GraphViz is required as a dependency of the [rails-erd](https://github.com/voormedia/rails-erd/) gem that is used to generate the entity relationship diagram during migrations.
+
+On OSX: 
+
+```bash
+brew install graphviz
+```
+
 ## Architectural Decision Record
 
 See the [docs/adr](docs/adr) directory for a list of the Architectural Decision
