@@ -287,7 +287,7 @@ GEM
       trollop (~> 1.16)
     pg (1.2.3)
     pkg-config (1.4.1)
-    pry (0.13.0)
+    pry (0.13.1)
       coderay (~> 1.1)
       method_source (~> 1.0)
     pry-byebug (3.9.0)
