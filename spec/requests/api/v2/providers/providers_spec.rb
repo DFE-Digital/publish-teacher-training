@@ -41,7 +41,7 @@ describe "Providers API v2", type: :request do
       it { should have_http_status(:unauthorized) }
     end
 
-    describe "JSON generated for a providers" do
+    describe "JSON generated for providers" do
       let(:request_path) { "/api/v2/providers" }
 
       it "has a data section with the correct attributes" do
@@ -65,6 +65,12 @@ describe "Providers API v2", type: :request do
               },
             },
           }],
+          "links" => {
+            "last" => "/api/v2/providers?page%5Bpage%5D=1",
+          },
+          "meta" => {
+            "count" => 1,
+          },
           "jsonapi" => {
             "version" => "1.0",
           },
@@ -95,6 +101,12 @@ describe "Providers API v2", type: :request do
               },
             },
           }],
+          "links" => {
+            "last" => "/api/v2/users/#{user.id}/providers?page%5Bpage%5D=1",
+          },
+          "meta" => {
+            "count" => 1,
+          },
           "jsonapi" => {
             "version" => "1.0",
           },
@@ -111,6 +123,12 @@ describe "Providers API v2", type: :request do
 
         expect(json_response).to eq(
           "data" => [],
+          "links" => {
+            "last" => "/api/v2/users/#{different_user.id}/providers?page%5Bpage%5D=1",
+          },
+          "meta" => {
+            "count" => 0,
+          },
           "jsonapi" => {
             "version" => "1.0",
           },

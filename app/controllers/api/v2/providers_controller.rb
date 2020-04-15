@@ -11,13 +11,19 @@ module API
 
       def index
         authorize Provider
+
         providers = policy_scope(@recruitment_cycle.providers)
                       .include_courses_counts
                       .includes(:recruitment_cycle)
+                      .by_name_ascending
+
         providers = providers.where(id: @user.providers) if @user.present?
 
-        render jsonapi: providers.by_name_ascending,
-               fields: { providers: %i[provider_code provider_name courses
+        render jsonapi: paginate(providers, per_page: 10),
+               meta: { count: providers.count(:provider_code) },
+               fields: { providers: %i[provider_code
+                                       provider_name
+                                       courses
                                        recruitment_cycle_year] }
       end
 
