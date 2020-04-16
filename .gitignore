@@ -23,3 +23,6 @@ config/azure_environments.yml
 
 /.vscode/*
 /.devcontainer/*
+
+# Ignore sanitised production data dump
+*.sql.gz
