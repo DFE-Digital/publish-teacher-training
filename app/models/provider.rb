@@ -144,6 +144,8 @@ class Provider < ApplicationRecord
 
   before_discard { discard_courses }
 
+  before_save :set_provider_name_search
+
   after_commit -> { GeocodeJob.perform_later("Provider", id) }, if: :needs_geolocation?
 
   def needs_geolocation?
@@ -310,5 +312,9 @@ private
         generate_course_code_service: Providers::GenerateCourseCodeService.new,
       )
     end
+  end
+
+  def set_provider_name_search
+    self.provider_name_search = QueryNormalizerService.call(query: self.provider_name)
   end
 end
