@@ -19,7 +19,7 @@
 #  postcode                         :text
 #  provider_code                    :text
 #  provider_name                    :text
-#  provider_name_search             :string
+#  provider_name_search             :string           not null
 #  provider_type                    :text
 #  recruitment_cycle_id             :integer          not null
 #  region_code                      :integer

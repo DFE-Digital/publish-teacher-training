@@ -19,7 +19,7 @@
 #  postcode                         :text
 #  provider_code                    :text
 #  provider_name                    :text
-#  provider_name_search             :string
+#  provider_name_search             :string           not null
 #  provider_type                    :text
 #  recruitment_cycle_id             :integer          not null
 #  region_code                      :integer
@@ -113,7 +113,9 @@ class Provider < ApplicationRecord
   end
 
   scope :search_by_code_or_name, ->(search_term) {
-    where("provider_name ILIKE ? OR provider_code ILIKE ?", "%#{search_term}%", "%#{search_term}%")
+    modified_search_term = "%#{search_term.downcase.gsub(/[^0-9a-z]/i, '')}%"
+
+    where("provider_name_search ILIKE ? OR provider_code ILIKE ?", modified_search_term, modified_search_term)
   }
 
   scope :by_name_ascending, -> { order(provider_name: :asc) }
@@ -315,6 +317,6 @@ private
   end
 
   def set_provider_name_search
-    self.provider_name_search = self.provider_name.downcase.gsub(/[^0-9a-z]/i, "")
+    self.provider_name_search = self.provider_name.downcase.gsub(/[^0-9a-z]/i, "") if self.provider_name
   end
 end

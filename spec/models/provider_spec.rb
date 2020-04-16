@@ -19,7 +19,7 @@
 #  postcode                         :text
 #  provider_code                    :text
 #  provider_name                    :text
-#  provider_name_search             :string
+#  provider_name_search             :string           not null
 #  provider_type                    :text
 #  recruitment_cycle_id             :integer          not null
 #  region_code                      :integer
@@ -78,6 +78,7 @@ describe Provider, type: :model do
   describe "changed_at" do
     it "is set on create" do
       provider = Provider.create(
+        provider_name: "Provider 1",
         recruitment_cycle: find_or_create(:recruitment_cycle),
         email: "email@test.com",
         telephone: "0123456789",
@@ -392,15 +393,15 @@ describe Provider, type: :model do
   end
 
   describe "before_save" do
-    let(:provider) { create :provider, provider_name: "Location 1 (Removed spaces and special characters)"}
+    let(:provider) { create :provider, provider_name: "Location 1 (Removed spaces and special characters)" }
 
     it "sets provider_name_search with only alphanumeric characters on create" do
-      expect(provider.provider_name_search).to eq("Location1Removedspacesandspecialcharacters")
+      expect(provider.provider_name_search).to eq("location1removedspacesandspecialcharacters")
     end
 
     it "updates provider_name_search with only alphanumeric characters on update" do
       provider.update(provider_name: "Location 2 (Removed spaces and $%^&* characters)")
-      expect(provider.provider_name_search).to eq("Location2Removedspacesandcharacters")
+      expect(provider.provider_name_search).to eq("location2removedspacesandcharacters")
     end
   end
 
