@@ -391,6 +391,19 @@ describe Provider, type: :model do
     end
   end
 
+  describe "before_save" do
+    let(:provider) { create :provider, provider_name: "Location 1 (Removed spaces and special characters)"}
+
+    it "sets provider_name_search with only alphanumeric characters on create" do
+      expect(provider.provider_name_search).to eq("Location1Removedspacesandspecialcharacters")
+    end
+
+    it "updates provider_name_search with only alphanumeric characters on update" do
+      provider.update(provider_name: "Location 2 (Removed spaces and $%^&* characters)")
+      expect(provider.provider_name_search).to eq("Location2Removedspacesandcharacters")
+    end
+  end
+
   describe "#generated_ucas_contact" do
     let(:provider) { create :provider, contacts: [contact1, contact2, contact3, contact4, contact5] }
     let(:contact1)  { build(:contact, :admin_type) }
