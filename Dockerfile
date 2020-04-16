@@ -2,9 +2,13 @@ FROM ruby:2.6.5-alpine AS middleman
 
 RUN apk add --update --no-cache npm git build-base
 
+ADD ./docs ./docs
+
+RUN cd docs && bundle install --jobs=4 && cd -
+
 ADD . .
 
-RUN cd docs && bundle install --jobs=4 && bundle exec middleman build --build-dir=../public && cd -
+RUN cd docs && bundle exec middleman build --build-dir=../public && cd -
 
 ###
 
