@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_04_15_150049) do
+ActiveRecord::Schema.define(version: 2020_04_16_115628) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_buffercache"
@@ -220,7 +220,7 @@ ActiveRecord::Schema.define(version: 2020_04_15_150049) do
     t.jsonb "accrediting_provider_enrichments"
     t.float "latitude"
     t.float "longitude"
-    t.string "provider_name_search"
+    t.string "provider_name_search", null: false
     t.index ["changed_at"], name: "index_provider_on_changed_at", unique: true
     t.index ["discarded_at"], name: "index_provider_on_discarded_at"
     t.index ["latitude", "longitude"], name: "index_provider_on_latitude_and_longitude"
