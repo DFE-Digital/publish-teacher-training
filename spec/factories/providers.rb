@@ -42,8 +42,12 @@ FactoryBot.define do
   factory :provider do
     provider_name { "ACME SCITT" + rand(1000000).to_s }
 
-    sequence(:provider_code) do |n|
-      "A#{(Provider.where("provider_code like 'A%'").pluck(:provider_code).map { |e| e.slice(1..-1) }.select { |e| e.match(/^\d+$/) }.map(&:to_i).max || 0) + n}"
+    sequence(:provider_code) { |n| "A#{n}" }
+
+    trait :with_anonymised_data do
+      sequence(:provider_code) do |n|
+        "A#{(Provider.where("provider_code like 'A%'").pluck(:provider_code).map { |e| e.slice(1..-1) }.select { |e| e.match(/^\d+$/) }.map(&:to_i).max || 0) + n}"
+      end
     end
 
     address1 { Faker::Address.street_address }

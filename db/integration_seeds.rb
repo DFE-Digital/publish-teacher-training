@@ -7,6 +7,7 @@ module IntegrationSeeds
       organisation_id = "000"
       organisation = FactoryBot.find_or_create(
         :organisation,
+        :with_anonymised_data,
         name: "Test Organisation",
         org_id: organisation_id,
       )
@@ -33,6 +34,7 @@ module IntegrationSeeds
       if provider.blank?
         provider = FactoryBot.find_or_create(
           :provider,
+          :with_anonymised_data,
           :accredited_body,
           recruitment_cycle: current_recruitment_cycle,
           organisations: [organisation],
