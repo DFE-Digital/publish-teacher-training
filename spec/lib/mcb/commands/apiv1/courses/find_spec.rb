@@ -9,7 +9,6 @@ describe '"mcb apiv1 courses find"' do
 
     course2 = create(:course, :infer_level, subjects: [subject], site_statuses: [site_status])
 
-
     url = "http://localhost:3001/api/v1/#{RecruitmentCycle.current_recruitment_cycle.year}/courses"
     next_url = url + "&" + {
         changed_since: course2.created_at.utc.strftime("%FT%T.%6NZ"),

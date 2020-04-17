@@ -128,105 +128,80 @@ describe "Organisations API v2", type: :request do
           perform_request
         end
 
-        it "returns includes only essential data for users and the providers from the current cycle" do
-          expect(json_response).to eq(
-            "data" => [
-              {
-                "id" => organisation.id.to_s,
-                "type" => "organisations",
-                "attributes" => {
-                  "name" => organisation.name,
-                  "nctl_ids" => organisation.nctl_organisations.map(&:nctl_id),
-                },
-                "relationships" => {
-                  "users" => {
-                     "data" => [
-                       {
-                         "type" => "users",
-                         "id" => user.id.to_s,
-                       },
-                     ],
-                  },
-                   "providers" => {
-                     "data" => [
-                       {
-                         "type" => "providers",
-                         "id" => provider.id.to_s,
+        # PROTIP: if you get errors in the json matcher below that take long
+        #         to generate (10s of seconds) and end up with a useless error
+        #         about error? taking an argument, disable 'require
+        #         "super_diff/rspec"' in spec_helper.rb
 
-                       },
-                     ],
-                   },
-                },
-              },
-              {
-                "id" => organisation2.id.to_s,
-                "type" => "organisations",
-                "attributes" => {
-                  "name" => organisation2.name,
-                  "nctl_ids" => organisation2.nctl_organisations.map(&:nctl_id),
-                },
-                "relationships" => {
-                  "users" => {
-                     "data" => [
-                       {
-                         "type" => "users",
-                         "id" => user2.id.to_s,
-                       },
-                     ],
-                  },
-                   "providers" => {
-                     "data" => [
-                       {
-                         "type" => "providers",
-                         "id" => provider2.id.to_s,
-                       },
-                     ],
-                   },
-                },
-              },
-            ],
-             "included" => [
-               {
-                 "id" => user.id.to_s,
-                 "type" => "users",
-                 "attributes" => {
-                   "first_name" => user.first_name,
-                   "last_name" => user.last_name,
-                   "email" => user.email,
-                   "sign_in_user_id" => nil,
-                 },
-               },
-               {
-                 "id" => provider.id.to_s,
-                 "type" => "providers",
-                 "attributes" => {
-                   "provider_code" => provider.provider_code,
-                   "provider_name" => provider.provider_name,
-                 },
-               },
-               {
-                 "id" => user2.id.to_s,
-                 "type" => "users",
-                 "attributes" => {
-                   "first_name" => user2.first_name,
-                   "last_name" => user2.last_name,
-                   "email" => user2.email,
-                   "sign_in_user_id" => user2.sign_in_user_id,
-                 },
-               },
-               {
-                 "id" => provider2.id.to_s,
-                 "type" => "providers",
-                 "attributes" => {
-                   "provider_code" => provider2.provider_code,
-                   "provider_name" => provider2.provider_name,
-                 },
-               },
-             ],
-            "jsonapi" => {
-              "version" => "1.0",
-            },
-         )
+        it "returns the organisation resource" do
+          expect(json_response["data"]).to include(have_id(organisation.id.to_s))
+          expect(json_response["data"]).to include(have_type("organisations"))
+
+          expect(json_response["data"]).to(
+            include(have_attribute(:name).with_value(organisation.name)),
+          )
+          expect(json_response["data"]).to(
+            include(have_attribute(:nctl_ids)
+                      .with_value(organisation.nctl_organisations.map(&:nctl_id))),
+          )
+        end
+
+        it "returns the user relationships" do
+          json_response["data"].each do |resource_data|
+            expect(resource_data).to have_relationships("users")
+          end
+
+          returned_users = json_response["data"].map do |organisation_data|
+            organisation_data["relationships"]["users"]["data"].first
+          end
+
+          expect(returned_users).to include have_id(user.id.to_s)
+                                              .and(have_type("users"))
+          expect(returned_users).to include have_id(user2.id.to_s)
+                                              .and(have_type("users"))
+        end
+
+        it "returns the provider relationships" do
+          json_response["data"].each do |resource_data|
+            expect(resource_data).to have_relationships("providers")
+          end
+
+          returned_providers = json_response["data"].map do |organisation_data|
+            organisation_data["relationships"]["providers"]["data"].first
+          end
+
+          expect(returned_providers).to include have_id(provider.id.to_s)
+                                                  .and(have_type("providers"))
+          expect(returned_providers).to include have_id(provider2.id.to_s)
+                                                  .and(have_type("providers"))
+        end
+
+        it "includes the user resources" do
+          expect(json_response["included"]).to(
+            include(
+              have_type("users")
+                .and(have_id(user.id.to_s))
+                .and(have_attribute("email").with_value(user.email)),
+              have_type("users")
+                .and(have_id(user2.id.to_s))
+                .and(have_attribute("email").with_value(user2.email)),
+            ),
+          )
+        end
+
+        it "includes the provider resources" do
+          expect(json_response["included"]).to(
+            include(
+              have_type("providers")
+                .and(have_id(provider.id.to_s))
+                .and(have_attribute("provider_code")
+                       .with_value(provider.provider_code)),
+              have_type("providers")
+                .and(have_id(provider2.id.to_s))
+                .and(have_attribute("provider_code")
+                       .with_value(provider2.provider_code)),
+            ),
+          )
         end
       end
     end
