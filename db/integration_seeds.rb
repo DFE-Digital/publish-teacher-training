@@ -84,6 +84,7 @@ module IntegrationSeeds
           :course,
           :secondary,
           course_code: course_code,
+          provider: provider,
           name: "Integrated Testing Course #{course_code}",
           age_range_in_years: "7_to_11",
           level: :secondary,
