@@ -971,6 +971,21 @@ describe Course, type: :model do
         end
       end
     end
+
+    context "::findable && ::with_vacancies" do
+      let(:course_in_scope) { create(:course) }
+      let(:course_not_in_scope) { create(:course) }
+
+      before do
+        create(:site_status, :published, :running, :full_time_vacancies, course: course_in_scope)
+        create(:site_status, :unpublished, :running, :full_time_vacancies, course: course_not_in_scope)
+        create(:site_status, :published, :running, :with_no_vacancies, course: course_not_in_scope)
+      end
+
+      it "scopes are combined with AND and not OR" do
+        expect(described_class.findable.with_vacancies.to_a).to eql([course_in_scope])
+      end
+    end
   end
 
   describe "changed_at" do
