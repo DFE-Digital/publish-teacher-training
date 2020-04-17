@@ -109,9 +109,3 @@ module IntegrationSeeds
     end
   end
 end
-
-if $0.end_with? "rails"
-  Organisation.transaction do
-    IntegrationSeeds.call
-  end
-end
