@@ -1,6 +1,12 @@
 module API
   module V2
     class AllocationsController < API::V2::ApplicationController
+      def index
+        authorize Allocation
+
+        render jsonapi: policy_scope(Allocation.where(accredited_body_id: accredited_body.id)), status: :ok
+      end
+
       def create
         authorize @allocation = Allocation.new(allocation_params.merge(accredited_body_id: accredited_body.id))
 
