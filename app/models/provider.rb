@@ -113,9 +113,7 @@ class Provider < ApplicationRecord
   end
 
   scope :search_by_code_or_name, ->(search_term) {
-    modified_search_term = "%#{search_term.downcase.gsub(/[^0-9a-z]/i, '')}%"
-
-    where("provider_name_search ILIKE ? OR provider_code ILIKE ?", modified_search_term, modified_search_term)
+    where("provider_name_search ILIKE ? OR provider_code ILIKE ?", "%#{search_term}%", "%#{search_term}%")
   }
 
   scope :by_name_ascending, -> { order(provider_name: :asc) }

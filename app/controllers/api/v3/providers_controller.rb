@@ -7,7 +7,8 @@ module API
         build_fields_for_index
 
         @providers = if params[:search].present?
-                       @recruitment_cycle.providers.search_by_code_or_name(params[:search])
+                       normalise_query = CGI.unescape(params[:search]).downcase.gsub(/[^0-9a-z]/i, "")
+                       @recruitment_cycle.providers.search_by_code_or_name(normalise_query)
                      else
                        @recruitment_cycle.providers
                      end
