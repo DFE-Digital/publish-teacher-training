@@ -156,6 +156,7 @@ Rails.application.routes.draw do
                 param: :code,
                 concerns: :provider_routes do
         resources :recruitment_cycles, only: :index
+        resources :allocations, only: %i[create]
       end
 
       resources :recruitment_cycles,
