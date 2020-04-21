@@ -3,7 +3,7 @@
 source "https://rubygems.org"
 
 # Include the tech docs gem
-gem "govuk_tech_docs", git: "https://github.com/DFE-Digital/tech-docs-gem", branch: "any-of-api-renderer"
+gem "govuk_tech_docs", git: "https://github.com/DFE-Digital/tech-docs-gem"
 
 group :test do
   gem "rspec"
