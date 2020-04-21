@@ -202,8 +202,8 @@ class Course < ApplicationRecord
   end
 
   scope :with_recruitment_cycle, ->(year) { joins(provider: :recruitment_cycle).where(recruitment_cycle: { year: year }) }
-  scope :findable, -> { where(id: SiteStatus.findable.select(:course_id)) }
-  scope :with_vacancies, -> { where(id: SiteStatus.with_vacancies.select(:course_id)) }
+  scope :findable, -> { joins(:site_statuses).merge(SiteStatus.findable) }
+  scope :with_vacancies, -> { joins(:site_statuses).merge(SiteStatus.with_vacancies) }
   scope :with_salary, -> { where(program_type: :school_direct_salaried_training_programme) }
   scope :with_study_modes, ->(study_modes) do
     where(study_mode: Array(study_modes) << "full_time_or_part_time")
