@@ -1048,7 +1048,7 @@ describe Course, type: :model do
           expect(course).not_to be_persisted
         end
 
-        xcontext "Which is then saved" do
+        context "Which is then saved" do
           it "Should only have two site statuses" do
             course.save
             expect(course.site_statuses.count).to eq(2)
@@ -1622,20 +1622,22 @@ describe Course, type: :model do
      #this code will be removed and fixed properly in the next pr
     let(:existing_site) { create(:site, provider: provider, code: "B") }
     let(:new_site_status) { subject.site_statuses.find_by!(site: new_site) }
+
     subject { create(:course, site_statuses: [existing_site_status]) }
 
     context "for running courses" do
       let(:existing_site_status) { create(:site_status, :running, :published, site: existing_site) }
 
       it "suspends the site when an existing site is removed" do
-        expect { subject.remove_site!(site: existing_site) }.
+        expect { subject.sites = [] }.
           to change { existing_site_status.reload.status }.from("running").to("suspended")
       end
 
       it "adds a new site status and sets it to running when a new site is added" do
-        expect { subject.add_site!(site: new_site) }.to change { subject.reload.site_statuses.size }.
-          from(1).to(2)
-        expect(new_site_status.status).to eq("running")
+        expect { subject.sites = [new_site] }.to change { subject.reload.site_statuses.size }.from(1).to(2)
+
+        expect(existing_site_status.reload.status).to eq("suspended")
+        expect(new_site_status.reload.status).to eq("running")
       end
     end
 
@@ -1643,19 +1645,19 @@ describe Course, type: :model do
       let(:existing_site_status) { create(:site_status, :new, site: existing_site) }
 
       it "sets the site to new when a new site is added" do
-        expect { subject.add_site!(site: new_site) }.to change { subject.reload.site_statuses.size }.
-          from(1).to(2)
-        expect(new_site_status.status).to eq("new_status")
+        expect { subject.sites = [existing_site, new_site] }.to change { subject.reload.site_statuses.size }.from(1).to(2)
+
+        expect(existing_site_status.reload.status).to eq("new_status")
+        expect(new_site_status.reload.status).to eq("new_status")
       end
 
       it "keeps the site status as new when an existing site is added" do
-        expect { subject.add_site!(site: existing_site) }.
+        expect { subject.sites = [existing_site] }.
           to_not change { existing_site_status.reload.status }.from("new_status")
       end
 
       it "removes the site status when an existing site is removed" do
-        expect { subject.remove_site!(site: existing_site) }.to change { subject.reload.site_statuses.size }.
-          from(1).to(0)
+        expect { subject.sites = [] }.to change { subject.reload.site_statuses.size }.from(1).to(0)
       end
     end
 
@@ -1663,13 +1665,12 @@ describe Course, type: :model do
       let(:existing_site_status) { create(:site_status, :suspended, site: existing_site) }
 
       it "sets the site to running when a new site is added" do
-        expect { subject.add_site!(site: new_site) }.to change { subject.reload.site_statuses.size }.
-          from(1).to(2)
+        expect { subject.sites = [new_site] }.to change { subject.reload.site_statuses.size }.from(1).to(2)
         expect(new_site_status.status).to eq("running")
       end
 
       it "sets the site to running when an existing site is added" do
-        expect { subject.add_site!(site: existing_site) }.
+        expect { subject.sites = [existing_site] }.
           to change { existing_site_status.reload.status }.from("suspended").to("running")
       end
     end
@@ -1678,29 +1679,8 @@ describe Course, type: :model do
       subject { create(:course, site_statuses: []) }
 
       it "sets the site to new when a new site is added" do
-        expect { subject.add_site!(site: new_site) }.to change { subject.reload.site_statuses.size }.
-          from(0).to(1)
+        expect { subject.sites = [new_site] }.to change { subject.reload.site_statuses.size }.from(0).to(1)
         expect(new_site_status.status).to eq("new_status")
-      end
-    end
-
-    context "for mixed courses with new and running locations" do
-      let(:existing_site_status) { create(:site_status, :running, :published, site: existing_site) }
-      #this code will be removed and fixed properly in the next pr
-      let(:another_existing_site) { create(:site, code: "C", provider: provider) }
-      let(:existing_new_site_status) { create(:site_status, :new, site: another_existing_site) }
-
-      subject { create(:course, site_statuses: [existing_site_status, existing_new_site_status]) }
-
-      it "adds a new site status and sets it to running when a new site is added" do
-        expect { subject.add_site!(site: new_site) }.to change { subject.reload.site_statuses.size }.
-          from(2).to(3)
-        expect(new_site_status.status).to eq("running")
-      end
-
-      it "suspends the site when an existing site is removed" do
-        expect { subject.remove_site!(site: existing_site) }.
-          to change { existing_site_status.reload.status }.from("running").to("suspended")
       end
     end
   end

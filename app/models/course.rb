@@ -448,28 +448,16 @@ class Course < ApplicationRecord
     end
   end
 
-  def add_site!(site:)
-    is_course_new = ucas_status == :new # persist this before we change anything
-    site_status = site_statuses.find_or_initialize_by(site: site)
-    site_status.start! unless is_course_new
-    site_status.save! if persisted?
-  end
-
-  def remove_site!(site:)
-    site_status = site_statuses.find_by!(site: site)
-    ucas_status == :new ? site_status.destroy! : site_status.suspend!
-  end
-
   def sites=(desired_sites)
     existing_sites = sites
 
-    to_add = desired_sites - existing_sites
-    to_add.each { |site| add_site!(site: site) }
-
-    to_remove = existing_sites - desired_sites
-    to_remove.each { |site| remove_site!(site: site) }
-
     if persisted?
+      to_add = desired_sites - existing_sites
+      to_add.each { |site| add_site!(site: site) }
+
+      to_remove = existing_sites - desired_sites
+      to_remove.each { |site| remove_site!(site: site) }
+
       sites.reload
     else
       super(desired_sites)
@@ -552,6 +540,18 @@ class Course < ApplicationRecord
   end
 
 private
+
+  def add_site!(site:)
+    is_course_new = ucas_status == :new
+    site_status = site_statuses.find_or_initialize_by(site: site)
+    site_status.start! unless is_course_new
+    site_status.save!
+  end
+
+  def remove_site!(site:)
+    site_status = site_statuses.find_by!(site: site)
+    ucas_status == :new ? site_status.destroy! : site_status.suspend!
+  end
 
   def withdraw_latest_enrichment
     newest_enrichment = enrichments.latest_first.first
