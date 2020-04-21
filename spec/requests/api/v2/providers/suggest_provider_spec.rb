@@ -12,11 +12,13 @@ describe "GET /suggest" do
   end
   let(:provider) { create(:provider, provider_name: "PROVIDER 1", organisations: [organisation]) }
   let(:provider2)  { create(:provider, provider_name: "PROVIDER 2", organisations: [organisation]) }
+  let(:provider3)  { create(:provider, provider_name: "PROVIDER’s Name 3", organisations: [organisation]) }
 
   context "current recruitment cycle" do
     before do
       provider
       provider2
+      provider3
     end
 
     it "searches for a particular provider" do
@@ -58,7 +60,51 @@ describe "GET /suggest" do
                                      "provider_name" => provider2.provider_name,
                                  },
                              },
+                             {
+                               "id" => provider3.id.to_s,
+                               "type" => "provider",
+                               "attributes" => {
+                                 "provider_code" => provider3.provider_code,
+                                 "provider_name" => provider3.provider_name,
+                               },
+                             },
                          ])
+    end
+
+    context "encode/decode provider suggestion query" do
+      it "returns a result for provider which may contain other non-alphanumeric character" do
+        get "/api/v2/providers/suggest?query=#{CGI.escape('PROVIDER’s Name 3')}",
+            headers: { "HTTP_AUTHORIZATION" => credentials }
+
+        expect(JSON.parse(response.body)["data"]).
+          to match_array([
+                           {
+                             "id" => provider3.id.to_s,
+                             "type" => "provider",
+                             "attributes" => {
+                               "provider_code" => provider3.provider_code,
+                               "provider_name" => provider3.provider_name,
+                             },
+                           },
+                         ])
+      end
+
+      it "returns a provider if non-alphanumeric characters are not supplief" do
+        get "/api/v2/providers/suggest?query=PROVIDERs Name 3",
+            headers: { "HTTP_AUTHORIZATION" => credentials }
+
+        expect(JSON.parse(response.body)["data"]).
+          to match_array([
+                           {
+                             "id" => provider3.id.to_s,
+                             "type" => "provider",
+                             "attributes" => {
+                               "provider_code" => provider3.provider_code,
+                               "provider_name" => provider3.provider_name,
+                             },
+                           },
+                         ])
+      end
     end
   end
 
@@ -84,6 +130,7 @@ describe "GET /suggest" do
 
     expect(JSON.parse(response.body)["data"].length).to eq(5)
   end
+
 
   it "returns bad request if query is empty" do
     get "/api/v2/providers/suggest",

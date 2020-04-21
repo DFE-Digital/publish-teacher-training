@@ -4,13 +4,17 @@ describe "GET /provider-suggestions" do
   let(:jsonapi_renderer) { JSONAPI::Serializable::Renderer.new }
   let(:courses) { [build(:course, site_statuses: [build(:site_status, :findable)])] }
   let(:courses2) { [build(:course, site_statuses: [build(:site_status, :findable)])] }
+  let(:courses3) { [build(:course, site_statuses: [build(:site_status, :findable)])] }
   let(:provider) { create(:provider, provider_name: "PROVIDER 1", courses: courses) }
   let(:provider2) { create(:provider, provider_name: "PROVIDER 2", courses: courses2) }
+  let(:provider3)  { create(:provider, provider_name: "PROVIDER’s Name 3",  courses: courses3) }
+
 
   context "current recruitment cycle" do
     before do
       provider
       provider2
+      provider3
     end
 
     it "searches for a particular provider" do
@@ -53,7 +57,52 @@ describe "GET /provider-suggestions" do
                                      "recruitment_cycle_year" => "2020",
                                  },
                              },
+                             {
+                               "id" => provider3.id.to_s,
+                               "type" => "providers",
+                               "attributes" => {
+                                 "provider_code" => provider3.provider_code,
+                                 "provider_name" => provider3.provider_name,
+                                 "recruitment_cycle_year" => "2020",
+                               },
+                             },
                          ])
+    end
+
+    context "encode/decode provider suggestion query" do
+      it "returns a result for provider which may contain other non-alphanumeric character" do
+        get "/api/v3/provider-suggestions?query=#{CGI.escape('PROVIDER’s Name 3')}"
+
+        expect(JSON.parse(response.body)["data"]).
+          to match_array([
+                           {
+                             "id" => provider3.id.to_s,
+                             "type" => "providers",
+                             "attributes" => {
+                               "provider_code" => provider3.provider_code,
+                               "provider_name" => provider3.provider_name,
+                               "recruitment_cycle_year" => "2020",
+                             },
+                           },
+                         ])
+      end
+
+      it "returns a provider if non-alphanumeric characters are not supplief" do
+        get "/api/v3/provider-suggestions?query=PROVIDERs Name 3"
+
+        expect(JSON.parse(response.body)["data"]).
+          to match_array([
+                           {
+                             "id" => provider3.id.to_s,
+                             "type" => "providers",
+                             "attributes" => {
+                               "provider_code" => provider3.provider_code,
+                               "provider_name" => provider3.provider_name,
+                               "recruitment_cycle_year" => "2020",
+                             },
+                           },
+                         ])
+      end
     end
   end
 
