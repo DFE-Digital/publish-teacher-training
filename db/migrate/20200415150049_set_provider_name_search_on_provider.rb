@@ -4,7 +4,7 @@ class SetProviderNameSearchOnProvider < ActiveRecord::Migration[6.0]
       # Remove any non-alphanumeric characters and convert the provider_name to lower case
       # before storing it in provider_name_search
       execute <<-SQL
-        UPDATE provider SET provider_name_search = regexp_replace(LOWER(provider_name), '[^0-9a-z]+', '' , 'g'));
+        UPDATE provider SET provider_name_search = regexp_replace(LOWER(provider_name), '[^0-9a-z]+', '' , 'g');
         COMMIT;
       SQL
     end
