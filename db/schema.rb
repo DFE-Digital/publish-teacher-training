@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_03_12_143851) do
+ActiveRecord::Schema.define(version: 2020_04_09_054023) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_buffercache"
@@ -34,6 +34,16 @@ ActiveRecord::Schema.define(version: 2020_03_12_143851) do
     t.datetime "discarded_at"
     t.index ["discarded_at"], name: "index_access_request_on_discarded_at"
     t.index ["requester_id"], name: "IX_access_request_requester_id"
+  end
+
+  create_table "allocation", force: :cascade do |t|
+    t.bigint "provider_id"
+    t.bigint "accredited_body_id"
+    t.integer "number_of_places"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["accredited_body_id"], name: "index_allocation_on_accredited_body_id"
+    t.index ["provider_id"], name: "index_allocation_on_provider_id"
   end
 
   create_table "audit", force: :cascade do |t|
@@ -314,6 +324,8 @@ ActiveRecord::Schema.define(version: 2020_03_12_143851) do
   end
 
   add_foreign_key "access_request", "\"user\"", column: "requester_id", name: "FK_access_request_user_requester_id", on_delete: :nullify
+  add_foreign_key "allocation", "provider"
+  add_foreign_key "allocation", "provider", column: "accredited_body_id"
   add_foreign_key "contact", "provider", name: "fk_contact_provider"
   add_foreign_key "course", "provider", name: "FK_course_provider_provider_id", on_delete: :cascade
   add_foreign_key "course_enrichment", "\"user\"", column: "created_by_user_id", name: "FK_course_enrichment_user_created_by_user_id"
