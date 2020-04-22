@@ -4,6 +4,7 @@ describe AllocationPolicy do
   subject { described_class }
 
   let(:user) { create(:user) }
+  let(:admin) { create(:user, :admin) }
   let(:organisation) { create(:organisation, users: [user]) }
   let(:accredited_body) { create(:provider, :accredited_body) }
   let(:training_provider) { create(:provider) }
@@ -28,6 +29,10 @@ describe AllocationPolicy do
 
     context "a user doesn't belong to the accredited body or the provider" do
       it { is_expected.not_to permit(user, allocation) }
+    end
+
+    context "a user that is an admin" do
+      it { is_expected.to permit(admin, allocation) }
     end
   end
 end

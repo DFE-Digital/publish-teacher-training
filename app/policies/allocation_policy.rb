@@ -7,7 +7,7 @@ class AllocationPolicy
   end
 
   def create?
-    user_belongs_to_the_accredited_body?
+    user_belongs_to_the_accredited_body? || user.admin?
   end
 
 private
