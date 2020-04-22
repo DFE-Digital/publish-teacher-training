@@ -53,10 +53,8 @@ module API
         return render(status: :bad_request) if params[:query].nil? || params[:query].length < 3
         return render(status: :bad_request) unless begins_with_alphanumeric(params[:query])
 
-        normalise_query = CGI.unescape(params[:query]).downcase.gsub(/[^0-9a-z]/i, "")
-
         found_providers = policy_scope(@recruitment_cycle.providers)
-          .search_by_code_or_name(normalise_query)
+          .search_by_code_or_name(QueryNormalizerService.call(query: params[:query]))
           .limit(5)
 
         render(

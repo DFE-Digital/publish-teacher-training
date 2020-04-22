@@ -315,6 +315,6 @@ private
   end
 
   def set_provider_name_search
-    self.provider_name_search = self.provider_name.downcase.gsub(/[^0-9a-z]/i, "") if self.provider_name
+    self.provider_name_search = QueryNormalizerService.call(query: self.provider_name)
   end
 end
