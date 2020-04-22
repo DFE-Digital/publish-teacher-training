@@ -1,6 +1,9 @@
 module API
   module V2
     class AllocationsController < API::V2::ApplicationController
+      deserializable_resource :allocation,
+                              class: API::V2::DeserializableAllocation
+
       def create
         authorize @allocation = Allocation.new(allocation_params.merge(accredited_body_id: accredited_body.id))
 

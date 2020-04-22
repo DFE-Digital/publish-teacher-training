@@ -54,14 +54,37 @@ RSpec.describe "/api/v2/providers/<accredited_body_code>/allocations", type: :re
   end
 
   def when_valid_parameters_are_posted_with_unspecified_number_of_places
+    params = {
+      "_jsonapi" => {
+        "data" => {
+          "type" => "allocations",
+          "attributes" => {
+            "provider_id" => @training_provider.id.to_s,
+          },
+        },
+      },
+    }
+
     post "/api/v2/providers/#{@accredited_body.provider_code}/allocations",
-         params: { allocation: { provider_id: @training_provider.id } },
+         params: params,
          headers: { "HTTP_AUTHORIZATION" => @credentials }
   end
 
   def when_valid_parameters_are_posted_with_zero_number_of_places
+    params = {
+      "_jsonapi" => {
+        "data" => {
+          "type" => "allocations",
+          "attributes" => {
+            "provider_id" => @training_provider.id.to_s,
+            number_of_places: "0",
+          },
+        },
+      },
+    }
+
     post "/api/v2/providers/#{@accredited_body.provider_code}/allocations",
-         params: { allocation: { provider_id: @training_provider.id, number_of_places: 0 } },
+         params: params,
          headers: { "HTTP_AUTHORIZATION" => @credentials }
   end
 
