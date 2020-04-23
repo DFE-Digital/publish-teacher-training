@@ -7,7 +7,7 @@ module API
         build_fields_for_index
 
         @providers = if params[:search].present?
-                       @recruitment_cycle.providers.search_by_code_or_name(params[:search])
+                       @recruitment_cycle.providers.search_by_code_or_name(QueryNormalizerService.call(query: params[:search]))
                      else
                        @recruitment_cycle.providers
                      end

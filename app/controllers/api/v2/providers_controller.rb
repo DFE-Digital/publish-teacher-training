@@ -55,7 +55,7 @@ module API
         return render(status: :bad_request) unless begins_with_alphanumeric(params[:query])
 
         found_providers = policy_scope(@recruitment_cycle.providers)
-          .search_by_code_or_name(params[:query])
+          .search_by_code_or_name(QueryNormalizerService.call(query: params[:query]))
           .limit(5)
 
         render(
