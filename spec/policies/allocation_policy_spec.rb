@@ -10,6 +10,17 @@ describe AllocationPolicy do
   let(:training_provider) { create(:provider) }
   let(:allocation) { build(:allocation, accredited_body: accredited_body, provider: training_provider) }
 
+  permissions :index? do
+    context "user is present" do
+      it { is_expected.to permit(user, Allocation) }
+    end
+
+    context "user is not present" do
+      let(:user) { nil }
+      it { is_expected.not_to permit(user, Allocation) }
+    end
+  end
+
   permissions :create? do
     context "a user that belongs to the allocation accredited body" do
       before do
@@ -32,7 +43,31 @@ describe AllocationPolicy do
     end
 
     context "a user that is an admin" do
-      it { is_expected.to permit(admin, allocation) }
+      let(:user) { create(:user, :admin) }
+
+      it { is_expected.to permit(user, allocation) }
+    end
+  end
+
+  describe AllocationPolicy::Scope do
+    let(:allocation) { create(:allocation, accredited_body: accredited_body, provider: training_provider) }
+
+    subject { described_class.new(user, Allocation).resolve }
+
+    context "a user that belongs to the allocation accredited body" do
+      before { organisation.providers << accredited_body }
+
+      it { is_expected.to contain_exactly(allocation) }
+    end
+
+    context "a user that doesn't belong to the allocation accredited body" do
+      it { is_expected.not_to contain_exactly(allocation) }
+    end
+
+    context "an admin" do
+      let(:user) { create(:user, :admin) }
+
+      it { is_expected.to contain_exactly(allocation) }
     end
   end
 end
