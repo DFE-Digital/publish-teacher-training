@@ -11,6 +11,12 @@ module API
                status: :ok
       end
 
+      def show
+        authorize @allocation = Allocation.find(params[:id])
+
+        render jsonapi: @allocation, status: :ok
+      end
+
       def create
         authorize @allocation = Allocation.new(allocation_params.merge(accredited_body_id: accredited_body.id))
 
