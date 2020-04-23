@@ -4,6 +4,7 @@
 #
 #  accept_terms_date_utc  :datetime
 #  admin                  :boolean          default(FALSE)
+#  discarded_at           :datetime
 #  email                  :text
 #  first_login_date_utc   :datetime
 #  first_name             :text
@@ -17,7 +18,8 @@
 #
 # Indexes
 #
-#  IX_user_email  (email) UNIQUE
+#  IX_user_email               (email) UNIQUE
+#  index_user_on_discarded_at  (discarded_at)
 #
 
 require "rails_helper"
@@ -167,6 +169,38 @@ describe User, type: :model do
 
       it "removes the right organisation"do
         expect(subject.reload.organisations).to eq([other_organisation])
+      end
+    end
+  end
+
+  describe "#discard" do
+    subject { create(:user) }
+
+    context "before discarding" do
+      its(:discarded?) { should be false }
+
+      it "is in kept" do
+        expect(User.kept).to eq([subject])
+      end
+
+      it "is not in discarded" do
+        expect(User.discarded).to be_empty
+      end
+    end
+
+    context "after discarding" do
+      before do
+        subject.discard
+      end
+
+      its(:discarded?) { should be true }
+
+      it "is not in kept" do
+        expect(User.kept).to be_empty
+      end
+
+      it "is in discarded" do
+        expect(User.discarded).to eq([subject])
       end
     end
   end
