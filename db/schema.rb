@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_04_16_115628) do
+ActiveRecord::Schema.define(version: 2020_04_23_121844) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_buffercache"
@@ -205,7 +205,7 @@ ActiveRecord::Schema.define(version: 2020_04_16_115628) do
 
   create_table "provider", id: :serial, force: :cascade do |t|
     t.text "address4"
-    t.text "provider_name"
+    t.text "provider_name", null: false
     t.text "scheme_member"
     t.text "contact_name"
     t.text "year_code"

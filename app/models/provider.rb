@@ -126,6 +126,7 @@ class Provider < ApplicationRecord
 
   serialize :accrediting_provider_enrichments, AccreditingProviderEnrichment::ArraySerializer
 
+  validates_presence_of :provider_name
   validates :train_with_us, words_count: { maximum: 250, message: "^Reduce the word count for training with you" }
   validates :train_with_disability, words_count: { maximum: 250, message: "^Reduce the word count for training with disabilities and other needs" }
 

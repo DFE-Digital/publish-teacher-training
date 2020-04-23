@@ -56,6 +56,14 @@ describe Provider, type: :model do
 
   its(:to_s) { should eq("ACME SCITT (A01) [#{provider.recruitment_cycle}]") }
 
+  describe "provider_name" do
+    it "is not valid without a provider name" do
+      provider = Provider.new(provider_name: nil)
+      provider.valid?
+      expect(provider.errors[:provider_name]).not_to be_empty
+    end
+  end
+
   describe "auditing" do
     it { should be_audited.except(:changed_at) }
     it { should have_associated_audits }
@@ -78,6 +86,7 @@ describe Provider, type: :model do
   describe "changed_at" do
     it "is set on create" do
       provider = Provider.create(
+        provider_name: "Provider 1",
         recruitment_cycle: find_or_create(:recruitment_cycle),
         email: "email@test.com",
         telephone: "0123456789",
