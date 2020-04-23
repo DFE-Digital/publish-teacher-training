@@ -113,7 +113,7 @@ class Provider < ApplicationRecord
   end
 
   scope :search_by_code_or_name, ->(search_term) {
-    where("provider_name ILIKE ? OR provider_code ILIKE ?", "%#{search_term}%", "%#{search_term}%")
+    where("provider_name_search ILIKE ? OR provider_code ILIKE ?", "%#{search_term}%", "%#{search_term}%")
   }
 
   scope :by_name_ascending, -> { order(provider_name: :asc) }
