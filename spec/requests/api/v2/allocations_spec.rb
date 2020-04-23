@@ -3,12 +3,24 @@ require "rails_helper"
 RSpec.describe "/api/v2/providers/<accredited_body_code>/allocations", type: :request do
   describe "POST" do
     context "with valid parameters" do
-      it "returns 201" do
-        given_an_accredited_body_exists
-        given_the_accredited_body_has_a_training_provider
-        given_i_am_an_authenticated_user_from_the_accredited_body
-        when_valid_parameters_are_posted_to_the_allocations_endpoint
-        then_a_new_allocation_is_returned
+      context "when no number_of_places specified" do
+        it "returns 201" do
+          given_an_accredited_body_exists
+          given_the_accredited_body_has_a_training_provider
+          given_i_am_an_authenticated_user_from_the_accredited_body
+          when_valid_parameters_are_posted_with_unspecified_number_of_places
+          then_a_new_allocation_is_returned_with_backfilled_number_of_places
+        end
+      end
+
+      context "when zero number_of_places specified" do
+        it "returns 201" do
+          given_an_accredited_body_exists
+          given_the_accredited_body_has_a_training_provider
+          given_i_am_an_authenticated_user_from_the_accredited_body
+          when_valid_parameters_are_posted_with_zero_number_of_places
+          then_a_new_allocation_is_returned_with_zero_number_of_places
+        end
       end
     end
 
@@ -41,8 +53,39 @@ RSpec.describe "/api/v2/providers/<accredited_body_code>/allocations", type: :re
     @credentials = ActionController::HttpAuthentication::Token.encode_credentials(token)
   end
 
-  def when_valid_parameters_are_posted_to_the_allocations_endpoint
-    post "/api/v2/providers/#{@accredited_body.provider_code}/allocations", params: { allocation: { provider_id: @training_provider.id } }, headers: { "HTTP_AUTHORIZATION" => @credentials }
+  def when_valid_parameters_are_posted_with_unspecified_number_of_places
+    params = {
+      "_jsonapi" => {
+        "data" => {
+          "type" => "allocations",
+          "attributes" => {
+            "provider_id" => @training_provider.id.to_s,
+          },
+        },
+      },
+    }
+
+    post "/api/v2/providers/#{@accredited_body.provider_code}/allocations",
+         params: params,
+         headers: { "HTTP_AUTHORIZATION" => @credentials }
+  end
+
+  def when_valid_parameters_are_posted_with_zero_number_of_places
+    params = {
+      "_jsonapi" => {
+        "data" => {
+          "type" => "allocations",
+          "attributes" => {
+            "provider_id" => @training_provider.id.to_s,
+            number_of_places: "0",
+          },
+        },
+      },
+    }
+
+    post "/api/v2/providers/#{@accredited_body.provider_code}/allocations",
+         params: params,
+         headers: { "HTTP_AUTHORIZATION" => @credentials }
   end
 
   def when_invalid_parameters_are_posted_to_the_allocations_endpoint
@@ -50,10 +93,18 @@ RSpec.describe "/api/v2/providers/<accredited_body_code>/allocations", type: :re
     post "/api/v2/providers/#{@accredited_body.provider_code}/allocations", params: { allocation: { provider_id: invalid_provider_id } }, headers: { "HTTP_AUTHORIZATION" => @credentials }
   end
 
-  def then_a_new_allocation_is_returned
+  def then_a_new_allocation_is_returned_with_backfilled_number_of_places
     expect(response).to have_http_status(:created)
     parsed_response = JSON.parse(response.body)
     expect(parsed_response["data"]["type"]).to eq("allocations")
+    expect(parsed_response["data"]["attributes"]["number_of_places"]).to eq(42)
+  end
+
+  def then_a_new_allocation_is_returned_with_zero_number_of_places
+    expect(response).to have_http_status(:created)
+    parsed_response = JSON.parse(response.body)
+    expect(parsed_response["data"]["type"]).to eq("allocations")
+    expect(parsed_response["data"]["attributes"]["number_of_places"]).to eq(0)
   end
 
   def then_the_allocation_errors_are_returned
