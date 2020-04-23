@@ -403,13 +403,10 @@ describe Provider, type: :model do
   describe "before_save" do
     subject { create :provider, provider_name: "Location 1 (Removed spaces and special characters)" }
 
-    it "sets provider_name_search with only alphanumeric characters on create" do
-      expect(subject.provider_name_search).to eq("location1removedspacesandspecialcharacters")
-    end
-
-    it "updates provider_name_search with only alphanumeric characters on update" do
-      subject.update(provider_name: "Location 2 (Removed spaces and $%^&* characters)")
-      expect(subject.provider_name_search).to eq("location2removedspacesandcharacters")
+    it "sets provider_name_search" do
+      expect(QueryNormalizerService).to receive(:call).with(query: subject.provider_name).and_return("normalized-name")
+      subject.save
+      expect(subject.provider_name_search).to eq("normalized-name")
     end
   end
 
