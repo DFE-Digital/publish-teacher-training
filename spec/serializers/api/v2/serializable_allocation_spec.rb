@@ -36,4 +36,12 @@ describe API::V2::SerializableAllocation do
   it "has a number_of_places attribute" do
     expect(subject.dig(:data, :attributes, :number_of_places)).to eq(10)
   end
+
+  it "has a provider_id attribute" do
+    expect(subject.dig(:data, :attributes, :provider_id)).to eq(allocation.provider.id)
+  end
+
+  it "has an accredited_body_id attribute" do
+    expect(subject.dig(:data, :attributes, :accredited_body_id)).to eq(allocation.accredited_body.id)
+  end
 end
