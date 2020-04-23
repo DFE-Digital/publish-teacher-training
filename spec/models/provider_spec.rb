@@ -18,8 +18,8 @@
 #  longitude                        :float
 #  postcode                         :text
 #  provider_code                    :text
-#  provider_name                    :text
-#  provider_name_search             :string
+#  provider_name                    :text             not null
+#  provider_name_search             :string           not null
 #  provider_type                    :text
 #  recruitment_cycle_id             :integer          not null
 #  region_code                      :integer
@@ -401,7 +401,7 @@ describe Provider, type: :model do
   end
 
   describe "before_save" do
-    subject { create :provider, provider_name: "Location 1 (Removed spaces and special characters)"}
+    subject { create :provider, provider_name: "Location 1 (Removed spaces and special characters)" }
 
     it "sets provider_name_search with only alphanumeric characters on create" do
       expect(subject.provider_name_search).to eq("location1removedspacesandspecialcharacters")
