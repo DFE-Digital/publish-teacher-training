@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_04_09_054023) do
+ActiveRecord::Schema.define(version: 2020_04_23_174758) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_buffercache"
@@ -310,6 +310,8 @@ ActiveRecord::Schema.define(version: 2020_04_09_054023) do
     t.datetime "accept_terms_date_utc"
     t.string "state", null: false
     t.boolean "admin", default: false
+    t.datetime "discarded_at"
+    t.index ["discarded_at"], name: "index_user_on_discarded_at"
     t.index ["email"], name: "IX_user_email", unique: true
   end
 

@@ -4,6 +4,7 @@
 #
 #  accept_terms_date_utc  :datetime
 #  admin                  :boolean          default(FALSE)
+#  discarded_at           :datetime
 #  email                  :text
 #  first_login_date_utc   :datetime
 #  first_name             :text
@@ -17,10 +18,12 @@
 #
 # Indexes
 #
-#  IX_user_email  (email) UNIQUE
+#  IX_user_email               (email) UNIQUE
+#  index_user_on_discarded_at  (discarded_at)
 #
 
 class User < ApplicationRecord
+  include Discard::Model
   include AASM
 
   has_many :organisation_users
