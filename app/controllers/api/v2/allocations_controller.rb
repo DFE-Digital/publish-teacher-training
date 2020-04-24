@@ -6,7 +6,9 @@ module API
       def index
         authorize Allocation
 
-        render jsonapi: policy_scope(Allocation.where(accredited_body_id: accredited_body.id)), status: :ok
+        render jsonapi: policy_scope(Allocation.where(accredited_body_id: accredited_body.id)),
+               include: params[:include],
+               status: :ok
       end
 
       def create

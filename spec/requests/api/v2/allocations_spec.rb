@@ -127,7 +127,8 @@ RSpec.describe "/api/v2/providers/<accredited_body_code>/allocations", type: :re
   end
 
   def when_i_get_the_allocations_index_endpoint
-    get "/api/v2/providers/#{@accredited_body.provider_code}/allocations", headers: { "HTTP_AUTHORIZATION" => @credentials }
+    get "/api/v2/providers/#{@accredited_body.provider_code}/allocations?include=provider%2Caccredited_body",
+        headers: { "HTTP_AUTHORIZATION" => @credentials }
   end
 
   def then_a_new_allocation_is_returned_with_zero_number_of_places
@@ -145,8 +146,16 @@ RSpec.describe "/api/v2/providers/<accredited_body_code>/allocations", type: :re
 
   def then_the_allocations_from_the_current_recruitment_cycle_are_returned
     expect(response).to have_http_status(:ok)
+
     parsed_response = JSON.parse(response.body)
+
     expect(parsed_response["data"].count).to eq(1)
     expect(parsed_response["data"].first["id"]).to eq(@current_allocation.id.to_s)
+
+    accredited_body_relationship = parsed_response["data"].first["relationships"]["accredited_body"]
+    provider_relationship = parsed_response["data"].first["relationships"]["provider"]
+
+    expect(accredited_body_relationship.count).to eq(1)
+    expect(provider_relationship.count).to eq(1)
   end
 end
