@@ -109,6 +109,8 @@ gem "geokit-rails"
 gem "open_api-rswag-api"
 gem "open_api-rswag-ui"
 
+gem "pg_search"
+
 group :development, :test do
   # add info about db structure to models and other files
   gem "annotate"

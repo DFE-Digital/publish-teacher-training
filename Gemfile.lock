@@ -286,6 +286,9 @@ GEM
     patience_diff (1.1.0)
       trollop (~> 1.16)
     pg (1.2.3)
+    pg_search (2.3.2)
+      activerecord (>= 5.2)
+      activesupport (>= 5.2)
     pkg-config (1.4.1)
     pry (0.13.1)
       coderay (~> 1.1)
@@ -515,6 +518,7 @@ DEPENDENCIES
   open_api-rswag-ui
   parallel_tests
   pg
+  pg_search
   pkg-config (~> 1.4.1)
   pry
   pry-byebug

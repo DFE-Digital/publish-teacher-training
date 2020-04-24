@@ -45,6 +45,7 @@ class Provider < ApplicationRecord
   include RegionCode
   include ChangedAt
   include Discard::Model
+  include PgSearch::Model
 
   before_create :set_defaults
 
@@ -111,10 +112,6 @@ class Provider < ApplicationRecord
     end.order(:changed_at, :id)
   end
 
-  scope :search_by_code_or_name, ->(search_term) {
-    where("provider_name ILIKE ? OR provider_code ILIKE ?", "%#{search_term}%", "%#{search_term}%")
-  }
-
   scope :by_name_ascending, -> { order(provider_name: :asc) }
   scope :by_name_descending, -> { order(provider_name: :desc) }
 
@@ -144,6 +141,8 @@ class Provider < ApplicationRecord
   before_discard { discard_courses }
 
   after_commit -> { GeocodeJob.perform_later("Provider", id) }, if: :needs_geolocation?
+
+  pg_search_scope :search_by_code_or_name, against: %i(provider_code provider_name), using: { tsearch: { prefix: true } }
 
   def needs_geolocation?
     full_address.present? && (
