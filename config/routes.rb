@@ -50,6 +50,9 @@
 #                                                      PATCH  /api/v2/providers/:code(.:format)                                                                                                        api/v2/providers#update
 #                                                      PUT    /api/v2/providers/:code(.:format)                                                                                                        api/v2/providers#update
 #                                                      DELETE /api/v2/providers/:code(.:format)                                                                                                        api/v2/providers#destroy
+#                                    api_v2_allocation GET    /api/v2/allocations/:id(.:format)                                                                                                        api/v2/allocations#show
+#                                                      PATCH  /api/v2/allocations/:id(.:format)                                                                                                        api/v2/allocations#update
+#                                                      PUT    /api/v2/allocations/:id(.:format)                                                                                                        api/v2/allocations#update
 #               api_v2_recruitment_cycle_organisations GET    /api/v2/recruitment_cycles/:recruitment_cycle_year/organisations(.:format)                                                               api/v2/organisations#index
 #     publish_api_v2_recruitment_cycle_provider_course POST   /api/v2/recruitment_cycles/:recruitment_cycle_year/providers/:provider_code/courses/:code/publish(.:format)                              api/v2/courses#publish
 # publishable_api_v2_recruitment_cycle_provider_course POST   /api/v2/recruitment_cycles/:recruitment_cycle_year/providers/:provider_code/courses/:code/publishable(.:format)                          api/v2/courses#publishable
@@ -161,7 +164,7 @@ Rails.application.routes.draw do
         resources :allocations, only: %i[create index]
       end
 
-      resources :allocations, only: :show
+      resources :allocations, only: %i(show update)
 
       resources :recruitment_cycles,
                 only: %i[index show],

@@ -3,6 +3,7 @@ module API
     class AllocationsController < API::V2::ApplicationController
       deserializable_resource :allocation,
                               class: API::V2::DeserializableAllocation
+
       def index
         authorize Allocation
 
@@ -30,6 +31,16 @@ module API
         end
       end
 
+      def update
+        authorize @allocation = Allocation.find(params[:id])
+
+        if @allocation.update(allocation_update_params)
+          render jsonapi: @allocation, status: :ok
+        else
+          render jsonapi_errors: @allocation.errors, status: :unprocessable_entity
+        end
+      end
+
     private
 
       def accredited_body
@@ -44,6 +55,13 @@ module API
         params.require(:allocation)
           .permit(
             :provider_id,
+            :number_of_places,
+          )
+      end
+
+      def allocation_update_params
+        params.require(:allocation)
+          .permit(
             :number_of_places,
           )
       end
