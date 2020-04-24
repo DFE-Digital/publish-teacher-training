@@ -171,16 +171,6 @@ describe Provider, type: :model do
     end
   end
 
-  describe ".search_by_code_or_name" do
-    let(:provider1) { create(:provider, provider_name: "Zork") }
-    let(:provider2) { create(:provider, provider_name: "Acme") }
-
-    subject { Provider.search_by_code_or_name("zork") }
-
-    it { should include(provider1) }
-    it { should_not include(provider2) }
-  end
-
   describe "#update_changed_at" do
     let(:provider) { create(:provider, changed_at: 1.hour.ago) }
 
@@ -729,6 +719,48 @@ describe Provider, type: :model do
           it { should be(true) }
         end
       end
+    end
+  end
+
+  describe "#search_by_code_or_name" do
+    let!(:matching_provider) { create(:provider, provider_code: "ABC", provider_name: "Dave's Searches") }
+    let!(:non_matching_provider) { create(:provider) }
+
+    subject { described_class.search_by_code_or_name(search_term) }
+
+    context "with an exactly matching code" do
+      let(:search_term) { "ABC" }
+      it { is_expected.to contain_exactly(matching_provider) }
+    end
+
+    context "with an exactly matching name" do
+      let(:search_term) { "Dave's Searches" }
+      it { is_expected.to contain_exactly(matching_provider) }
+    end
+
+    context "with unicode in the name" do
+      let(:search_term) { "Dave’s Searches" }
+      it { is_expected.to contain_exactly(matching_provider) }
+    end
+
+    context "with extra spaces in the name" do
+      let(:search_term) { "Dave's  Searches" }
+      it { is_expected.to contain_exactly(matching_provider) }
+    end
+
+    context "with non matching case code" do
+      let(:search_term) { "abc" }
+      it { is_expected.to contain_exactly(matching_provider) }
+    end
+
+    context "with non matching case name" do
+      let(:search_term) { "dave's searches" }
+      it { is_expected.to contain_exactly(matching_provider) }
+    end
+
+    context "with partial search term" do
+      let(:search_term) { "dave" }
+      it { is_expected.to contain_exactly(matching_provider) }
     end
   end
 end
