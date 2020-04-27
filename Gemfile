@@ -158,7 +158,7 @@ group :development, :test do
 
   gem "open_api-rswag-specs"
 
-  gem "factory_bot_rails", "~> 5.1"
+  gem "factory_bot_rails", "~> 5.2"
   gem "fakefs", require: "fakefs/safe"
   gem "faker"
 end
