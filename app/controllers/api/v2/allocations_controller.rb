@@ -3,12 +3,19 @@ module API
     class AllocationsController < API::V2::ApplicationController
       deserializable_resource :allocation,
                               class: API::V2::DeserializableAllocation
+
       def index
         authorize Allocation
 
         render jsonapi: policy_scope(Allocation.where(accredited_body_id: accredited_body.id)),
                include: params[:include],
                status: :ok
+      end
+
+      def show
+        authorize @allocation = Allocation.find(params[:id])
+
+        render jsonapi: @allocation, status: :ok
       end
 
       def create
@@ -19,6 +26,16 @@ module API
 
         if @allocation.save
           render jsonapi: @allocation, status: :created
+        else
+          render jsonapi_errors: @allocation.errors, status: :unprocessable_entity
+        end
+      end
+
+      def update
+        authorize @allocation = Allocation.find(params[:id])
+
+        if @allocation.update(allocation_update_params)
+          render jsonapi: @allocation, status: :ok
         else
           render jsonapi_errors: @allocation.errors, status: :unprocessable_entity
         end
@@ -38,6 +55,13 @@ module API
         params.require(:allocation)
           .permit(
             :provider_id,
+            :number_of_places,
+          )
+      end
+
+      def allocation_update_params
+        params.require(:allocation)
+          .permit(
             :number_of_places,
           )
       end

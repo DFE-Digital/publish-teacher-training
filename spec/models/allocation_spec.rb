@@ -35,5 +35,11 @@ RSpec.describe Allocation do
       subject.valid?
       expect(subject.errors["accredited_body"]).to include("must be an accredited body")
     end
+
+    it "required number_of_places to be a number" do
+      subject.number_of_places = "dave"
+      subject.valid?
+      expect(subject.errors["number_of_places"]).to include("is not a number")
+    end
   end
 end
