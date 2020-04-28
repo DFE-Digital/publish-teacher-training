@@ -36,4 +36,8 @@ describe API::V2::SerializableAllocation do
   it "has a number_of_places attribute" do
     expect(subject.dig(:data, :attributes, :number_of_places)).to eq(10)
   end
+
+  it "has a request_type attribute" do
+    expect(subject.dig(:data, :attributes, :request_type)).to eq("initial")
+  end
 end
