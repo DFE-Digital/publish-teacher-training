@@ -133,6 +133,7 @@ Rails.application.routes.draw do
 
     namespace :v2 do
       resources :users, only: %i[update show] do
+        resources :notifications, only: %i[create]
         resources :providers
 
         patch :accept_transition_screen, on: :member

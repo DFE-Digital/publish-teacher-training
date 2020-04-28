@@ -32,19 +32,13 @@ class User < ApplicationRecord
   has_many :organisations, through: :organisation_users, dependent: :destroy
 
   has_many :user_notifications,
-<<<<<<< HEAD
-    class_name: "UserNotification" do
-      def find_or_initialize(provider_code)
-        existing_notification = where(provider_code: provider_code).first
-=======
            class_name: "UserNotification" do
     def find_or_initialize(provider_code)
       existing_notification = find_by(provider_code: provider_code)
->>>>>>> 5e7d6ac7... user wip
 
-        existing_notification || new(provider_code: provider_code)
-      end
+      existing_notification || new(provider_code: provider_code)
     end
+  end
 
   has_many :providers, through: :organisations
 

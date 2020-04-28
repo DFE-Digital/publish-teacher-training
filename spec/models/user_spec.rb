@@ -208,12 +208,13 @@ describe User, type: :model do
   describe "#user_notifications" do
     let(:provider) { create(:provider) }
 
-    let(:user_notification) { create(:user_notification,
-      user: subject,
-      provider: provider,
-      course_update: true,
-      course_create: true
-      ) }
+    let(:user_notification) {
+      create(:user_notification,
+             user: subject,
+                 provider: provider,
+                 course_update: true,
+                 course_create: true)
+    }
 
     describe "#find_or_initialize" do
       it "finds an existing user notification" do
