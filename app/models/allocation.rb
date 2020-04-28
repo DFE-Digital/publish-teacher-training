@@ -20,6 +20,7 @@ class Allocation < ApplicationRecord
 
   validates :provider, :accredited_body, presence: true
   validate :accredited_body_is_an_accredited_body
+  validates :number_of_places, numericality: true
 
 private
 
