@@ -847,7 +847,7 @@
       "properties": {
         "mode": "Incremental",
         "templateLink": {
-          "uri": "[concat(variables('deploymentUrlBase'), 'container-instance-network-profile-subnet-delg.json')]",
+          "uri": "[concat(variables('deploymentUrlBase'), 'container-instance-network-profile.json')]",
           "contentVersion": "1.0.0.0"
         },
         "parameters": {
@@ -857,14 +857,8 @@
           "vnetName": {
             "value": "[parameters('vnetName')]"
           },
-          "vnetAddressSpaceCIDR": {
-            "value": "[parameters('vnetAddressSpaceCIDR')]"
-          },
           "subnetName": {
             "value": "[parameters('vnetSubnetName')]"
-          },
-          "subnetAddressPrefix": {
-            "value": "[parameters('vnetSubnetAddressPrefix')]"
           },
           "resourceTags":{
             "value": "[parameters('resourceTags')]"
