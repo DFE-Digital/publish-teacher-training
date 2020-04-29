@@ -5,6 +5,8 @@ class ProviderPolicy
     attr_reader :user, :scope
 
     def initialize(user, scope)
+      raise Pundit::NotAuthorizedError unless user.kept?
+
       @user = user
       @scope = scope
     end
@@ -19,6 +21,8 @@ class ProviderPolicy
   end
 
   def initialize(user, provider)
+    raise Pundit::NotAuthorizedError unless user.kept?
+
     @user = user
     @provider = provider
   end
