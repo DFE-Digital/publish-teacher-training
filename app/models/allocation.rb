@@ -24,7 +24,21 @@ class Allocation < ApplicationRecord
   validate :accredited_body_is_an_accredited_body
   validates :number_of_places, numericality: true
 
-  enum request_type: %i(initial repeat declined)
+  enum request_type: { initial: 0, repeat: 1, declined: 2 }
+
+  # TODO move this out to Create and Update services so as we can handle
+  # the difference between update and create more easily once it is fully
+  # implemented.
+  before_create do
+    default_number_of_places = 0
+
+    if self.number_of_places == default_number_of_places
+      self.number_of_places = 0 if declined?
+      # TODO temporary until we implement fetching the previous
+      # Allocation#number_of_places for repeat
+      self.number_of_places = 42 if repeat?
+    end
+  end
 
 private
 
