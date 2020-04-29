@@ -88,14 +88,38 @@ RSpec.describe "/api/v2/allocations/<id>", type: :request do
   def when_i_make_a_put_request_to_the_endpoint_with_valid_parameters
     unknown_id = 10001
     updated_number_of_places = 50
+
+    @update_params = {
+      "_jsonapi" => {
+        "data" => {
+          "type" => "allocations",
+          "attributes" => {
+            "number_of_places" => updated_number_of_places,
+            "request_type" => "declined",
+          },
+        },
+      },
+    }
+
     put "/api/v2/allocations/#{@allocation&.id || unknown_id}",
-        params: @update_params = { allocation: { number_of_places: updated_number_of_places } },
+        params: @update_params,
         headers: { "HTTP_AUTHORIZATION" => @credentials }
   end
 
   def when_i_make_a_put_request_to_the_endpoint_with_invalid_parameters
+    @update_params = {
+      "_jsonapi" => {
+        "data" => {
+          "type" => "allocations",
+          "attributes" => {
+            "number_of_places" => "dave",
+          },
+        },
+      },
+    }
+
     put "/api/v2/allocations/#{@allocation.id}",
-        params: @update_params = { allocation: { number_of_places: "dave" } },
+        params: @update_params,
         headers: { "HTTP_AUTHORIZATION" => @credentials }
   end
 
@@ -116,7 +140,8 @@ RSpec.describe "/api/v2/allocations/<id>", type: :request do
     expect(response).to have_http_status(:ok)
     parsed_response = JSON.parse(response.body)
     expect(parsed_response["data"]["id"]).to eq(@allocation.id.to_s)
-    expect(parsed_response["data"]["number_of_places"]).to eq(@update_params[:number_of_places])
+    expect(parsed_response["data"]["number_of_places"]).to eq(@update_params.dig("_json_api", "data", "attributes", "number_of_places"))
+    expect(parsed_response["data"]["request_type"]).to eq(@update_params.dig("_json_api", "data", "attributes", "request_type"))
   end
 
   def then_i_receive_404_not_found

@@ -22,6 +22,16 @@ RSpec.describe "/api/v2/providers/<accredited_body_code>/allocations", type: :re
           then_a_new_allocation_is_returned_with_zero_number_of_places
         end
       end
+
+      context "when the request_type is specified" do
+        it "returns 201" do
+          given_an_accredited_body_exists
+          given_the_accredited_body_has_a_training_provider
+          given_i_am_an_authenticated_user_from_the_accredited_body
+          when_valid_parameters_are_posted_with_request_type
+          then_a_new_allocation_is_returned_with_the_request_type
+        end
+      end
     end
 
     context "with invalid parameters" do
@@ -89,7 +99,25 @@ RSpec.describe "/api/v2/providers/<accredited_body_code>/allocations", type: :re
           "type" => "allocations",
           "attributes" => {
             "provider_id" => @training_provider.id.to_s,
-            number_of_places: "0",
+            number_of_places: 0,
+          },
+        },
+      },
+    }
+
+    post "/api/v2/providers/#{@accredited_body.provider_code}/allocations",
+         params: params,
+         headers: { "HTTP_AUTHORIZATION" => @credentials }
+  end
+
+  def when_valid_parameters_are_posted_with_request_type
+    params = {
+      "_jsonapi" => {
+        "data" => {
+          "type" => "allocations",
+          "attributes" => {
+            "provider_id" => @training_provider.id.to_s,
+            "request_type" => "declined",
           },
         },
       },
@@ -124,6 +152,7 @@ RSpec.describe "/api/v2/providers/<accredited_body_code>/allocations", type: :re
     parsed_response = JSON.parse(response.body)
     expect(parsed_response["data"]["type"]).to eq("allocations")
     expect(parsed_response["data"]["attributes"]["number_of_places"]).to eq(42)
+    expect(parsed_response["data"]["attributes"]["request_type"]).to eq("repeat")
   end
 
   def when_i_get_the_allocations_index_endpoint
@@ -135,6 +164,7 @@ RSpec.describe "/api/v2/providers/<accredited_body_code>/allocations", type: :re
     parsed_response = JSON.parse(response.body)
     expect(parsed_response["data"]["type"]).to eq("allocations")
     expect(parsed_response["data"]["attributes"]["number_of_places"]).to eq(0)
+    expect(parsed_response["data"]["attributes"]["request_type"]).to eq("declined")
   end
 
   def then_the_allocation_errors_are_returned
@@ -148,5 +178,13 @@ RSpec.describe "/api/v2/providers/<accredited_body_code>/allocations", type: :re
     parsed_response = JSON.parse(response.body)
     expect(parsed_response["data"].count).to eq(1)
     expect(parsed_response["data"].first["id"]).to eq(@current_allocation.id.to_s)
+  end
+
+  def then_a_new_allocation_is_returned_with_the_request_type
+    expect(response).to have_http_status(:created)
+    parsed_response = JSON.parse(response.body)
+    expect(parsed_response["data"]["type"]).to eq("allocations")
+    expect(parsed_response["data"]["attributes"]["number_of_places"]).to eq(0)
+    expect(parsed_response["data"]["attributes"]["request_type"]).to eq("declined")
   end
 end
