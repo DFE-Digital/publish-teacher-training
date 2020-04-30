@@ -1,7 +1,7 @@
 require "rails_helper"
 
 describe "Organisations API v2", type: :request do
-  describe "GET /organistaions" do
+  describe "GET /organisations" do
     let(:current_recruitment_cycle) { find_or_create(:recruitment_cycle) }
     let(:next_recruitment_cycle) { find_or_create(:recruitment_cycle, :next) }
     let(:user) { create(:user, :admin, organisations: [organisation]) }
@@ -68,53 +68,12 @@ describe "Organisations API v2", type: :request do
           perform_request
         end
 
-        it "has a JSON data section with the correct attributes" do
-          expect(json_response).to eq(
-            "data" =>
-                [{
-                  "id" => organisation.id.to_s,
-                  "type" => "organisations",
-                  "attributes" => {
-                    "name" => organisation.name,
-                    "nctl_ids" => organisation.nctl_organisations.map(&:nctl_id),
-                  },
-                  "relationships" => {
-                    "users" => {
-                      "meta" => {
-                        "included" => false,
-                        },
-                      },
-                    "providers" => {
-                      "meta" => {
-                        "included" => false,
-                       },
-                     },
-                    },
-                  },
-                 {
-                   "id" => organisation2.id.to_s,
-                   "type" => "organisations",
-                   "attributes" => {
-                     "name" => organisation2.name,
-                     "nctl_ids" => organisation2.nctl_organisations.map(&:nctl_id),
-                   },
-                 "relationships" => {
-                   "users" => {
-                     "meta" => {
-                       "included" => false,
-                       },
-                     },
-                     "providers" => {
-                       "meta" => {
-                         "included" => false,
-                       },
-                     },
-                   },
-                 }],
-                "jsonapi" => {
-                  "version" => "1.0",
-                },
-              )
+        it "returns the organisations" do
+          organisations = json_response["data"]
+
+          expect(organisations.count).to eq(2)
+          expect(organisations.first["id"]).to eq(organisation.id.to_s)
+          expect(organisations.second["id"]).to eq(organisation2.id.to_s)
         end
       end
 

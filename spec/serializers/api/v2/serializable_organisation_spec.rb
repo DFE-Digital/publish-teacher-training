@@ -11,7 +11,15 @@ describe API::V2::SerializableOrganisation do
 
   subject { JSON.parse(resource.as_jsonapi.to_json) }
 
-  it { should have_type "organisations" }
-  it { should have_attribute(:name).with_value(organisation.name.to_s) }
-  it { should have_attribute(:nctl_ids).with_value([nctl_organisation.nctl_id]) }
+  it { is_expected.to have_type "organisations" }
+  it { is_expected.to have_attribute(:name).with_value(organisation.name.to_s) }
+  it { is_expected.to have_attribute(:nctl_ids).with_value([nctl_organisation.nctl_id]) }
+
+  it "has users" do
+    expect(subject.dig("relationships", "users")).to be_present
+  end
+
+  it "has providers" do
+    expect(subject.dig("relationships", "providers")).to be_present
+  end
 end
