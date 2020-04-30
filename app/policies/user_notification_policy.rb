@@ -24,6 +24,10 @@ class UserNotificationPolicy
     @user_notification = user_notification
   end
 
+  def index?
+    user.present?
+  end
+
   def create?
     user_is_admin_or_belongs_to_accredited_body?
   end

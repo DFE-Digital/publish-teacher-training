@@ -9,6 +9,17 @@ describe UserNotificationPolicy do
   let(:accredited_body) { create(:provider, :accredited_body) }
   let(:notification) { build(:user_notification, user: user, provider: accredited_body) }
 
+  permissions :index? do
+    context "user is present" do
+      it { is_expected.to permit(user, UserNotification) }
+    end
+
+    context "user is not present" do
+      let(:user) { nil }
+      it { is_expected.not_to permit(user, UserNotification) }
+    end
+  end
+
   permissions :create? do
     context "a user that belongs to the notification accredited body" do
       before do
