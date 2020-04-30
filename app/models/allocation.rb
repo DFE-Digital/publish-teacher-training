@@ -7,12 +7,14 @@
 #  id                 :bigint           not null, primary key
 #  number_of_places   :integer
 #  provider_id        :bigint
+#  request_type       :integer          default("initial")
 #  updated_at         :datetime         not null
 #
 # Indexes
 #
 #  index_allocation_on_accredited_body_id  (accredited_body_id)
 #  index_allocation_on_provider_id         (provider_id)
+#  index_allocation_on_request_type        (request_type)
 #
 class Allocation < ApplicationRecord
   belongs_to :provider
@@ -21,6 +23,26 @@ class Allocation < ApplicationRecord
   validates :provider, :accredited_body, presence: true
   validate :accredited_body_is_an_accredited_body
   validates :number_of_places, numericality: true
+
+  enum request_type: { initial: 0, repeat: 1, declined: 2 }
+
+  # TODO move this out to Create and Update services so as we can handle
+  # the difference between update and create more easily once it is fully
+  # implemented.
+  before_validation(on: :create) do
+    temporary_repeat_number_of_places = 42
+    other_request_type_number = 0
+
+    if self.number_of_places.nil?
+      # TODO temporary until we implement fetching the previous
+      # Allocation#number_of_places for repeat
+      self.number_of_places = if repeat?
+                                temporary_repeat_number_of_places
+                              else
+                                other_request_type_number
+                              end
+    end
+  end
 
 private
 

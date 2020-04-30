@@ -21,8 +21,8 @@ module API
       def create
         authorize @allocation = Allocation.new(allocation_params.merge(accredited_body_id: accredited_body.id))
 
-        # hardcoded till back filling of data is implemented
-        @allocation.number_of_places ||= 42
+        # TODO remove once Publish is sending the correct thing and validation is set up properly
+        @allocation.request_type = get_request_type(allocation_params)
 
         if @allocation.save
           render jsonapi: @allocation, status: :created
@@ -33,6 +33,9 @@ module API
 
       def update
         authorize @allocation = Allocation.find(params[:id])
+
+        # TODO remove once Publish is sending the correct thing and validation is set up properly
+        allocation_update_params[:request_type] = get_request_type(allocation_params)
 
         if @allocation.update(allocation_update_params)
           render jsonapi: @allocation, status: :ok
@@ -56,6 +59,7 @@ module API
           .permit(
             :provider_id,
             :number_of_places,
+            :request_type,
           )
       end
 
@@ -63,7 +67,22 @@ module API
         params.require(:allocation)
           .permit(
             :number_of_places,
+            :request_type,
           )
+      end
+
+      # TODO remove when publish is doing the right thing
+      def get_request_type(permitted_params)
+        return permitted_params[:request_type] if permitted_params[:request_type].present?
+
+        case permitted_params[:number_of_places]
+        when "0"
+          "declined"
+        when nil
+          "repeat"
+        else
+          "initial"
+        end
       end
     end
   end

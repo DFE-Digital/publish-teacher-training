@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_04_23_174758) do
+ActiveRecord::Schema.define(version: 2020_04_28_135127) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_buffercache"
@@ -42,8 +42,10 @@ ActiveRecord::Schema.define(version: 2020_04_23_174758) do
     t.integer "number_of_places"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.integer "request_type", default: 0
     t.index ["accredited_body_id"], name: "index_allocation_on_accredited_body_id"
     t.index ["provider_id"], name: "index_allocation_on_provider_id"
+    t.index ["request_type"], name: "index_allocation_on_request_type"
   end
 
   create_table "audit", force: :cascade do |t|
