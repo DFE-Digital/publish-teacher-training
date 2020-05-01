@@ -6,6 +6,8 @@ class CourseCreateEmailMailer < GovukNotifyRails::Mailer
       provider_name: course.provider.provider_name,
       course_name: course.name,
       course_code: course.course_code,
+      course_description: course.description,
+      course_funding_type: course.funding_type,
       create_course_datetime: format_create_datetime(course.created_at),
       course_url: create_course_url(course),
     )
@@ -22,6 +24,6 @@ private
   end
 
   def format_create_datetime(datetime)
-    datetime.strftime("%-k:%M%P on %-e %B %Y")
+    datetime.strftime("%-l:%M%P on %-e %B %Y")
   end
 end
