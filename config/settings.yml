@@ -9,6 +9,7 @@ govuk_notify:
   welcome_email_template_id: please_change_me
   course_update_email_template_id: please_change_me
   course_create_email_template_id: please_change_me
+  magic_link_email_template_id: please_change_me
 publish_url: http://localhost:3000
 find_url: http://localhost:3002
 mcbg:
@@ -21,3 +22,5 @@ logstash:
   port: # Our port here
   ssl_enable: true
 log_level: info
+magic_link:
+  max_token_age: <%= 1.hour %>
