@@ -1,4 +1,6 @@
 class CourseCreateEmailMailer < GovukNotifyRails::Mailer
+  include TimeFormat
+
   def course_create_email(course, user)
     set_template(Settings.govuk_notify.course_create_email_template_id)
 
@@ -8,7 +10,7 @@ class CourseCreateEmailMailer < GovukNotifyRails::Mailer
       course_code: course.course_code,
       course_description: course.description,
       course_funding_type: course.funding_type,
-      create_course_datetime: format_create_datetime(course.created_at),
+      create_course_datetime: gov_uk_format(course.created_at),
       course_url: create_course_url(course),
     )
 
@@ -21,9 +23,5 @@ private
     "#{Settings.find_url}" \
       "/course/#{course.provider.provider_code}" \
       "/#{course.course_code}"
-  end
-
-  def format_create_datetime(datetime)
-    datetime.strftime("%-l:%M%P on %-e %B %Y")
   end
 end
