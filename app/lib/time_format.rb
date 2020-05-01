@@ -15,4 +15,8 @@ module TimeFormat
   def short_date(time)
     time.strftime("%d/%m/%Y")
   end
+
+  def gov_uk_format(time)
+    time.strftime("%-l:%M%P on %-e %B %Y")
+  end
 end

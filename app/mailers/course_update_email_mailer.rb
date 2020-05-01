@@ -1,4 +1,6 @@
 class CourseUpdateEmailMailer < GovukNotifyRails::Mailer
+  include TimeFormat
+
   def course_update_email(
     course:,
     attribute_name:,
@@ -12,8 +14,10 @@ class CourseUpdateEmailMailer < GovukNotifyRails::Mailer
       provider_name: course.provider.provider_name,
       course_name: course.name,
       course_code: course.course_code,
+      course_description: course.description,
+      course_funding_type: course.funding_type,
       attribute_changed: I18n.t("course.update_email.#{attribute_name}"),
-      attribute_change_datetime: format_update_datetime(course.updated_at),
+      attribute_change_datetime: gov_uk_format(course.updated_at),
       course_url: create_course_url(course),
       original_value: formatter.call(name: attribute_name, value: original_value),
       updated_value: formatter.call(name: attribute_name, value: updated_value),
@@ -28,10 +32,6 @@ private
     "#{Settings.find_url}" \
       "/course/#{course.provider.provider_code}" \
       "/#{course.course_code}"
-  end
-
-  def format_update_datetime(datetime)
-    datetime.strftime("%-k:%M%P on %-e %B %Y")
   end
 
   def formatter
