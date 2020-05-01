@@ -22,8 +22,8 @@ describe "AccreditedBody API v2", type: :request do
       create(:course, provider: delivering_provider2, accrediting_provider: accredited_provider)
     end
 
-    let(:delivering_provider1) { create(:provider) }
-    let(:delivering_provider2) { create(:provider) }
+    let(:delivering_provider1) { create(:provider, provider_name: "a") }
+    let(:delivering_provider2) { create(:provider, provider_name: "b") }
     let(:accredited_provider) {
       create(:provider,
              organisations: [organisation],
