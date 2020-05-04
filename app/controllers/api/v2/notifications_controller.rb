@@ -4,7 +4,7 @@ module API
       deserializable_resource :user_notification,
                               class: API::V2::DeserializableNotification
       def create
-        @current_user.providers.where(accrediting_provider: :accredited_body).map do |provider|
+        @current_user.providers.accredited_body.map do |provider|
           authorize @notification = @current_user.user_notifications.find_or_initialize(provider.provider_code)
           @notification.course_create = user_notification_params[:course_create]
           @notification.course_update = user_notification_params[:course_update]
