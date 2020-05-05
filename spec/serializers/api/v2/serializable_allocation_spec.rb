@@ -40,4 +40,8 @@ describe API::V2::SerializableAllocation do
   it "has a request_type attribute" do
     expect(subject.dig(:data, :attributes, :request_type)).to eq("initial")
   end
+
+  it "has a provider_id attribute" do
+    expect(subject.dig(:data, :attributes, :provider_id)).to eq(provider.id)
+  end
 end
