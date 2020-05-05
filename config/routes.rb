@@ -8,7 +8,8 @@
 #                                     api_v1_providers GET    /api/v1(/:recruitment_year)/providers(.:format)                                                                                          api/v1/providers#index {:recruitment_year=>/2020|2021/}
 #                                      api_v1_subjects GET    /api/v1(/:recruitment_year)/subjects(.:format)                                                                                           api/v1/subjects#index {:recruitment_year=>/2020|2021/}
 #                                       api_v1_courses GET    /api/v1(/:recruitment_year)/courses(.:format)                                                                                            api/v1/courses#index {:recruitment_year=>/2020|2021/}
-#                            api_v2_user_notifications POST   /api/v2/users/:user_id/notifications(.:format)                                                                                           api/v2/notifications#create
+#                            api_v2_user_notifications GET    /api/v2/users/:user_id/notifications(.:format)                                                                                           api/v2/notifications#index
+#                                                      POST   /api/v2/users/:user_id/notifications(.:format)                                                                                           api/v2/notifications#create
 #                                api_v2_user_providers GET    /api/v2/users/:user_id/providers(.:format)                                                                                               api/v2/providers#index
 #                                                      POST   /api/v2/users/:user_id/providers(.:format)                                                                                               api/v2/providers#create
 #                                 api_v2_user_provider GET    /api/v2/users/:user_id/providers/:id(.:format)                                                                                           api/v2/providers#show
@@ -134,7 +135,7 @@ Rails.application.routes.draw do
 
     namespace :v2 do
       resources :users, only: %i[update show] do
-        resources :notifications, only: %i[create]
+        resources :notifications, only: %i[create index]
         resources :providers
 
         patch :accept_transition_screen, on: :member

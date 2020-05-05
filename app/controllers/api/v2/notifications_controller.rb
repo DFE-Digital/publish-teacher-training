@@ -3,6 +3,15 @@ module API
     class NotificationsController < API::V2::ApplicationController
       deserializable_resource :user_notification,
                               class: API::V2::DeserializableNotification
+
+      def index
+        authorize @notifications = @current_user.user_notifications
+
+        render jsonapi: @notifications,
+               include: JSONAPI::IncludeDirective.new(params[:include]).to_hash,
+               status: :ok
+      end
+
       def create
         @current_user.providers.accredited_body.map do |provider|
           authorize @notification = @current_user.user_notifications.find_or_initialize(provider.provider_code)
