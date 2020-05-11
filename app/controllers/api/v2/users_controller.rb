@@ -1,7 +1,7 @@
 module API
   module V2
     class UsersController < API::V2::ApplicationController
-      before_action :build_user
+      before_action :build_user, except: :generate_and_send_magic_link
       deserializable_resource :user, only: :update
       skip_before_action :check_terms_accepted, only: :accept_terms
 
@@ -33,6 +33,12 @@ module API
         if @user.state == "transitioned"
           @user.accept_rollover_screen!
         end
+      end
+
+      def generate_and_send_magic_link
+        skip_authorization
+
+        GenerateAndSendMagicLinkService.call(user: current_user)
       end
 
     private

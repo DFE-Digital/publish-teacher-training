@@ -178,6 +178,13 @@
         "description": "The GOV.UK Notify template id for the course create email"
       }
     },
+    "govukNotifyMagicLinkEmailTemplateId": {
+      "type": "string",
+      "defaultValue": "",
+      "metadata": {
+        "description": "The GOV.UK Notify template id for the magic signin link"
+      }
+    },
     "containerInstanceName": {
       "type": "array",
       "metadata": {

@@ -19,6 +19,7 @@
 #                 accept_transition_screen_api_v2_user PATCH  /api/v2/users/:id/accept_transition_screen(.:format)                                                                                     api/v2/users#accept_transition_screen
 #                   accept_rollover_screen_api_v2_user PATCH  /api/v2/users/:id/accept_rollover_screen(.:format)                                                                                       api/v2/users#accept_rollover_screen
 #                             accept_terms_api_v2_user PATCH  /api/v2/users/:id/accept_terms(.:format)                                                                                                 api/v2/users#accept_terms
+#            generate_and_send_magic_link_api_v2_users PATCH  /api/v2/users/generate_and_send_magic_link(.:format)                                                                                     api/v2/users#generate_and_send_magic_link
 #                                          api_v2_user GET    /api/v2/users/:id(.:format)                                                                                                              api/v2/users#show
 #                                                      PATCH  /api/v2/users/:id(.:format)                                                                                                              api/v2/users#update
 #                                                      PUT    /api/v2/users/:id(.:format)                                                                                                              api/v2/users#update
@@ -81,6 +82,7 @@
 #                     api_v2_recruitment_cycle_courses GET    /api/v2/recruitment_cycles/:recruitment_cycle_year/courses(.:format)                                                                     api/v2/courses#index
 #                            api_v2_recruitment_cycles GET    /api/v2/recruitment_cycles(.:format)                                                                                                     api/v2/recruitment_cycles#index
 #                             api_v2_recruitment_cycle GET    /api/v2/recruitment_cycles/:year(.:format)                                                                                               api/v2/recruitment_cycles#show
+#                      create_by_magic_api_v2_sessions PATCH  /api/v2/sessions/create_by_magic(.:format)                                                                                               api/v2/sessions#create_by_magic
 #                                      api_v2_sessions GET    /api/v2/sessions(.:format)                                                                                                               api/v2/sessions#show
 #                                                      PATCH  /api/v2/sessions(.:format)                                                                                                               api/v2/sessions#update
 #                                                      PUT    /api/v2/sessions(.:format)                                                                                                               api/v2/sessions#update
@@ -141,7 +143,10 @@ Rails.application.routes.draw do
         patch :accept_transition_screen, on: :member
         patch :accept_rollover_screen, on: :member
         patch :accept_terms, on: :member
+
+        patch :generate_and_send_magic_link, on: :collection
       end
+
       get "providers/suggest", to: "providers#suggest"
       get "/recruitment_cycles/:recruitment_cycle_year/providers/suggest", to: "providers#suggest"
 
@@ -182,7 +187,10 @@ Rails.application.routes.draw do
         get "/courses", to: "courses#index"
       end
 
-      resource :sessions
+      resource :sessions do
+        patch :create_by_magic
+      end
+
       resources :site_statuses, only: :update
 
       resources :access_requests, except: :edit do
