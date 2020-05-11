@@ -634,18 +634,6 @@ describe "Courses API v2", type: :request do
       it { should have_http_status(:unauthorized) }
     end
 
-    context "when unauthorised" do
-      let(:unauthorised_user) { create(:user) }
-      let(:payload) { { email: unauthorised_user.email } }
-
-      it "raises an error" do
-        expect {
-          get "/api/v2/providers/#{provider.provider_code}/courses",
-              headers: { "HTTP_AUTHORIZATION" => credentials }
-        }.to raise_error Pundit::NotAuthorizedError
-      end
-    end
-
     def perform_request
       findable_open_course
       get request_path,
@@ -700,7 +688,7 @@ describe "Courses API v2", type: :request do
               "about_accrediting_body" => nil,
               "english" => "must_have_qualification_at_application_time",
               "maths" => "must_have_qualification_at_application_time",
-                "science" => "must_have_qualification_at_application_time",
+              "science" => "must_have_qualification_at_application_time",
               "provider_code" => provider.provider_code,
               "recruitment_cycle_year" => current_year.to_s,
               "gcse_subjects_required" => %w[maths english science],
