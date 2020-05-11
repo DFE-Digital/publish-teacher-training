@@ -54,9 +54,13 @@ private
   def sites_with_distance_from_origin
     site_status = SiteStatus.arel_table
     sites = Site.arel_table
+    providers = Provider.arel_table
 
     # Create virtual table with sites and site statuses
     sites_with_status = site_status.join(sites).on(site_status[:site_id].eq(sites[:id]))
+
+    # Get provider information too
+    sites_with_status = sites_with_status.join(providers).on(sites[:provider_id].eq(providers[:id]))
 
     # only want new and running sites
     new_and_running_sites = sites_with_status.where(site_status[:status].in(%w[new_status running]))
@@ -70,10 +74,17 @@ private
     # This should be removed once the data is fixed
     locatable_new_and_running_sites = geocoded_new_and_running_sites.where(sites[:address1].not_eq("").or(sites[:postcode].not_eq("")))
 
-    # select course_id and nearest site with shortest distance from origin
-    # as courses may have multiple sites
-    # this will remove duplicates by aggregating on course_id
-    courses_with_nearest_site = locatable_new_and_running_sites.project(:course_id, Arel.sql("MIN#{Site.distance_sql(OpenStruct.new(lat: origin[0], lng: origin[1]))} as distance")).group(:course_id)
+    # University sites
+    university_sites = locatable_new_and_running_sites.dup.where(providers[:provider_type].eq("O"))
+
+    # Non-university sites
+    non_university_sites = locatable_new_and_running_sites.dup.where(providers[:provider_type].not_eq("O"))
+
+    non_university_courses_with_nearest_site = non_university_sites.project(:course_id, Arel.sql("MIN#{Site.distance_sql(OpenStruct.new(lat: origin[0], lng: origin[1]))} as distance")).group(:course_id)
+
+    university_courses_with_nearest_site = university_sites.project(:course_id, Arel.sql("MIN(#{Site.distance_sql(OpenStruct.new(lat: origin[0], lng: origin[1]))} - 5) as distance")).group(:course_id)
+
+    courses_with_nearest_site = non_university_courses_with_nearest_site.union(university_courses_with_nearest_site)
 
     # form a temporary table with results
     distance_table = Arel::Nodes::TableAlias.new(
