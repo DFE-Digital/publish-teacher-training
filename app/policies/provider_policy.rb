@@ -39,7 +39,6 @@ class ProviderPolicy
     user.present?
   end
 
-  alias_method :can_list_courses?, :show?
   alias_method :can_list_sites?, :show?
   alias_method :can_create_course?, :show?
   alias_method :update?, :show?

@@ -10,7 +10,7 @@ module API
       before_action :build_site, except: %i[index create]
 
       def index
-        authorize @provider, :can_list_courses?
+        authorize @provider, :can_list_sites?
         authorize Site
 
         render jsonapi: @provider.sites
