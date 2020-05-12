@@ -19,15 +19,14 @@ module API
       end
 
       def create
-        authorize @allocation = Allocation.new(allocation_params.merge(accredited_body_id: accredited_body.id))
+        service = Allocations::Create.new(allocation_params.merge(accredited_body_id: accredited_body.id, request_type: get_request_type(allocation_params)))
 
-        # TODO remove once Publish is sending the correct thing and validation is set up properly
-        @allocation.request_type = get_request_type(allocation_params)
+        authorize service.object
 
-        if @allocation.save
-          render jsonapi: @allocation, status: :created
+        if service.execute
+          render jsonapi: service.object, status: :created
         else
-          render jsonapi_errors: @allocation.errors, status: :unprocessable_entity
+          render jsonapi_errors: service.object.errors, status: :unprocessable_entity
         end
       end
 

@@ -26,24 +26,6 @@ class Allocation < ApplicationRecord
 
   enum request_type: { initial: 0, repeat: 1, declined: 2 }
 
-  # TODO move this out to Create and Update services so as we can handle
-  # the difference between update and create more easily once it is fully
-  # implemented.
-  before_validation(on: :create) do
-    temporary_repeat_number_of_places = 42
-    other_request_type_number = 0
-
-    if self.number_of_places.nil?
-      # TODO temporary until we implement fetching the previous
-      # Allocation#number_of_places for repeat
-      self.number_of_places = if repeat?
-                                temporary_repeat_number_of_places
-                              else
-                                other_request_type_number
-                              end
-    end
-  end
-
 private
 
   def accredited_body_is_an_accredited_body
