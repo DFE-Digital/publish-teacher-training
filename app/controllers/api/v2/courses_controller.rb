@@ -55,14 +55,12 @@ module API
 
       def index
         authorize Course
-        if @provider.present?
-          authorize @provider, :can_list_courses?
-          scope = @provider.courses
-        else
-          scope = policy_scope(Course).kept
-          scope = scope.with_recruitment_cycle(@recruitment_cycle.year)
-          scope = scope.with_accredited_bodies(accredited_bodies) if accredited_bodies.present?
-        end
+
+        scope = policy_scope(Course).kept
+        scope = scope.where(provider_id: @provider.id) if @provider.present?
+        scope = scope.with_recruitment_cycle(@recruitment_cycle.year)
+        scope = scope.with_accredited_bodies(accredited_bodies) if accredited_bodies.present?
+
         render jsonapi: scope, include: params[:include], class: CourseSerializersService.new.execute
       end
 
