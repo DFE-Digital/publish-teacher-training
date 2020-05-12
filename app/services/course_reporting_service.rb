@@ -29,12 +29,24 @@ class CourseReportingService
       study_mode: { **group_by_count(:study_mode) },
       qualification: { **group_by_count(:qualification) },
       is_send: { **group_by_count(:is_send) },
+
+      subject: { **group_by_subject_count },
     }
   end
 
   private_class_method :new
 
 private
+
+  def group_by_subject_count
+    open = CourseSubject.where(course_id: @open_courses).group(:subject_id).count
+    closed = CourseSubject.where(course_id: @closed_courses).group(:subject_id).count
+
+    {
+      open: Subject.active.map { |sub| x = {}; x[sub.subject_name] = open[sub.id] || 0; x }.reduce({}, :merge),
+      closed: Subject.active.map { |sub| x = {}; x[sub.subject_name] = closed[sub.id] || 0; x }.reduce({}, :merge),
+    }
+  end
 
   def group_by_count(column)
     open = @open_courses.group(column).count

@@ -7,6 +7,8 @@ describe CourseReportingService do
   let(:closed_courses_study_mode_scope) { class_double(Course) }
   let(:closed_courses_qualification_scope) { class_double(Course) }
   let(:closed_courses_is_send_scope) { class_double(Course) }
+  let(:closed_course_subjects) { class_double(CourseSubject) }
+  let(:closed_course_subjects_grouped) { class_double(CourseSubject) }
 
   let(:courses_scope) { class_double(Course) }
   let(:findable_courses_scope) { class_double(Course) }
@@ -17,6 +19,8 @@ describe CourseReportingService do
   let(:open_courses_study_mode_scope) { class_double(Course) }
   let(:open_courses_qualification_scope) { class_double(Course) }
   let(:open_courses_is_send_scope) { class_double(Course) }
+  let(:open_course_subjects) { class_double(CourseSubject) }
+  let(:open_course_subjects_grouped) { class_double(CourseSubject) }
 
   let(:distinct_courses_scope) { class_double(Course) }
 
@@ -72,6 +76,10 @@ describe CourseReportingService do
         open: { yes: 1, no: 2 },
         closed:  { yes: 0, no: 0 },
       },
+      subject: {
+        open: Subject.active.each_with_index.map { |sub, i| x = {}; x[sub.subject_name] = (i + 1) * 3; x }.reduce({}, :merge),
+        closed: Subject.active.each_with_index.map { |sub, _i| x = {}; x[sub.subject_name] = 0; x }.reduce({}, :merge),
+      },
     }
   end
 
@@ -122,6 +130,13 @@ describe CourseReportingService do
         expect(open_courses_is_send_scope).to receive_message_chain(:count)
           .and_return({ true => 1, false => 2 })
 
+        expect(CourseSubject).to receive_message_chain(:where).with(course_id: open_courses_scope).and_return(open_course_subjects)
+
+        expect(open_course_subjects).to receive_message_chain(:group).with(:subject_id).and_return(open_course_subjects_grouped)
+        expect(open_course_subjects_grouped).to receive_message_chain(:count).and_return(
+          Subject.active.each_with_index.map { |sub, i| x = {}; x[sub.id] = (i + 1) * 3; x }.reduce({}, :merge),
+          )
+
         expect(closed_courses_scope).to receive_message_chain(:count).and_return(closed_courses_count)
 
         expect(closed_courses_scope).to receive_message_chain(:group).with(:provider_type).and_return(closed_courses_provider_type_scope)
@@ -138,6 +153,11 @@ describe CourseReportingService do
 
         expect(closed_courses_scope).to receive_message_chain(:group).with(:is_send).and_return(closed_courses_is_send_scope)
         expect(closed_courses_is_send_scope).to receive_message_chain(:count).and_return({})
+
+        expect(CourseSubject).to receive_message_chain(:where).with(course_id: closed_courses_scope).and_return(closed_course_subjects)
+        expect(closed_course_subjects).to receive_message_chain(:group).with(:subject_id).and_return(closed_course_subjects_grouped)
+
+        expect(closed_course_subjects_grouped).to receive_message_chain(:count).and_return({})
 
         expect(subject).to eq(expected)
       end
