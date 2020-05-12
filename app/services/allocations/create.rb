@@ -7,6 +7,7 @@ module Allocations
 
       set_number_of_places
       set_codes
+      set_recruitment_cycle
 
       object
     end
@@ -45,6 +46,10 @@ module Allocations
       return unless object.provider
 
       object.provider.provider_code
+    end
+
+    def set_recruitment_cycle
+      object.recruitment_cycle_id ||= RecruitmentCycle.current_recruitment_cycle.id
     end
   end
 end
