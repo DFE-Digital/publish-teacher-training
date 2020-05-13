@@ -148,6 +148,11 @@ RSpec.describe "/api/v2/providers/<accredited_body_code>/allocations", type: :re
   end
 
   def then_a_new_allocation_is_returned_with_backfilled_number_of_places
+    allocation = Allocation.last
+    expect(allocation.accredited_body_code).to eql(@accredited_body.provider_code)
+    expect(allocation.provider_code).to eql(@training_provider.provider_code)
+    expect(allocation.recruitment_cycle_id).to eql(RecruitmentCycle.current_recruitment_cycle.id)
+
     expect(response).to have_http_status(:created)
     parsed_response = JSON.parse(response.body)
     expect(parsed_response["data"]["type"]).to eq("allocations")

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_05_01_133532) do
+ActiveRecord::Schema.define(version: 2020_05_12_101039) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_buffercache"
@@ -43,6 +43,9 @@ ActiveRecord::Schema.define(version: 2020_05_01_133532) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.integer "request_type", default: 0
+    t.text "accredited_body_code"
+    t.text "provider_code"
+    t.integer "recruitment_cycle_id"
     t.index ["accredited_body_id"], name: "index_allocation_on_accredited_body_id"
     t.index ["provider_id"], name: "index_allocation_on_provider_id"
     t.index ["request_type"], name: "index_allocation_on_request_type"
