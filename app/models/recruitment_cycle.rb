@@ -32,6 +32,10 @@ class RecruitmentCycle < ApplicationRecord
     alias_method :next, :next_recruitment_cycle
   end
 
+  def previous
+    RecruitmentCycle.find_by(year: year.to_i - 1)
+  end
+
   def next
     RecruitmentCycle.find_by(year: year.to_i + 1)
   end
