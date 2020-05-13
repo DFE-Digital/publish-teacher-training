@@ -3,6 +3,7 @@ require "rails_helper"
 describe "GET /reporting" do
   let(:expected) do
     {
+      courses: {
       total: {
         all: 0,
         non_findable: 0,
@@ -51,6 +52,7 @@ describe "GET /reporting" do
       subject: {
         open: Subject.active.each_with_index.map { |sub, _i| x = {}; x[sub.subject_name] = 0; x }.reduce({}, :merge),
         closed: Subject.active.each_with_index.map { |sub, _i| x = {}; x[sub.subject_name] = 0; x }.reduce({}, :merge),
+      },
       },
     }.with_indifferent_access
   end
