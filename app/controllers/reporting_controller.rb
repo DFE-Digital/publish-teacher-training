@@ -3,6 +3,7 @@ class ReportingController < ActionController::API
 
   def reporting
     stats = {
+      providers: ProviderReportingService.call(providers_scope: @recruitment_cycle.providers),
       courses: CourseReportingService.call(courses_scope: @recruitment_cycle.courses),
     }
 
