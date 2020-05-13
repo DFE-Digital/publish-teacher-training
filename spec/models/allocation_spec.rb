@@ -48,12 +48,6 @@ RSpec.describe Allocation do
   describe "number_of_places" do
     subject { create(:allocation, number_of_places: nil, request_type: request_type).number_of_places }
 
-    context "when request_type is declined" do
-      let(:request_type) { "declined" }
-
-      it { is_expected.to eq(0) }
-    end
-
     context "when request type is initial (default)" do
       context "and number of places is not set" do
         subject { create(:allocation).number_of_places }
@@ -72,14 +66,6 @@ RSpec.describe Allocation do
           expect(subject).to eq(original_number_of_places)
         end
       end
-    end
-
-    context "when request type is repeat" do
-      let(:request_type) { "repeat" }
-      let(:temporary_repeat_number) { 42 }
-
-      # TODO this needs to be updated when we infer the number from the previous allocation
-      it { is_expected.to eq(temporary_repeat_number) }
     end
   end
 end
