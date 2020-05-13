@@ -3,6 +3,7 @@
 #                                               Prefix Verb   URI Pattern                                                                                                                              Controller#Action
 #                                                 ping GET    /ping(.:format)                                                                                                                          heartbeat#ping
 #                                          healthcheck GET    /healthcheck(.:format)                                                                                                                   heartbeat#healthcheck
+#                                            reporting GET    /reporting(.:format)                                                                                                                     reporting#reporting
 #                                    open_api_rswag_ui        /api-docs                                                                                                                                OpenApi::Rswag::Ui::Engine
 #                                   open_api_rswag_api        /api-docs                                                                                                                                OpenApi::Rswag::Api::Engine
 #                                     api_v1_providers GET    /api/v1(/:recruitment_year)/providers(.:format)                                                                                          api/v1/providers#index {:recruitment_year=>/2020|2021/}
@@ -122,6 +123,7 @@
 Rails.application.routes.draw do
   get :ping, controller: :heartbeat
   get :healthcheck, controller: :heartbeat
+  get :reporting, controller: :reporting
 
   mount OpenApi::Rswag::Ui::Engine => "/api-docs"
   mount OpenApi::Rswag::Api::Engine => "/api-docs"
