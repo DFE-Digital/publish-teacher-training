@@ -5,9 +5,9 @@ module Allocations
     def initialize(params)
       @object = Allocation.new(params)
 
-      set_number_of_places
       set_codes
       set_recruitment_cycle
+      set_number_of_places
 
       object
     end
@@ -18,15 +18,12 @@ module Allocations
 
   private
 
-    # TODO: temporary until we implement fetching the previous
-    # Allocation#number_of_places for repeat
     def set_number_of_places
-      temporary_repeat_number_of_places = 42
       other_request_type_number = 0
 
       if object.number_of_places.nil?
         object.number_of_places = if object.repeat?
-                                    temporary_repeat_number_of_places
+                                    object.previous&.number_of_places || 0
                                   else
                                     other_request_type_number
                                   end
