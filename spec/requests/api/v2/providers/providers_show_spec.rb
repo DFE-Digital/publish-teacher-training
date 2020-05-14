@@ -4,7 +4,6 @@ describe "Providers API v2", type: :request do
   describe "GET /providers#show" do
     let(:request_path) { "/api/v2/providers/#{provider.provider_code}" }
     let(:request_params) { {} }
-
     let(:user) { create(:user, organisations: [organisation]) }
     let(:organisation) { create(:organisation) }
     let(:payload) { { email: user.email } }
@@ -91,6 +90,11 @@ describe "Providers API v2", type: :request do
                 "included" => false,
               },
             },
+            "users" => {
+              "meta" => {
+                "included" => false,
+              },
+            },
             "courses" => {
               "meta" => {
                 "count" => provider.courses.count,
@@ -115,6 +119,23 @@ describe "Providers API v2", type: :request do
       get request_path,
           headers: { "HTTP_AUTHORIZATION" => credentials },
           params: request_params
+    end
+
+    context "including users" do
+      let(:request_params) { { include: "users" } }
+
+      it "has a included user section with the correct attributes" do
+        perform_request
+
+        expect(response).to have_http_status(:success)
+        included_user = json_response.dig("included").first
+
+        expect(included_user.dig("id")).to eq(user.id.to_s)
+        expect(included_user.dig("type")).to eq("users")
+        expect(included_user.dig("attributes").dig("first_name")).to eq(user.first_name)
+        expect(included_user.dig("attributes").dig("last_name")).to eq(user.last_name)
+        expect(included_user.dig("attributes").dig("email")).to eq(user.email)
+      end
     end
 
     context "including sites" do

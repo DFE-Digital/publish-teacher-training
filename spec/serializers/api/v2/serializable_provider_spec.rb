@@ -4,13 +4,24 @@ describe API::V2::SerializableProvider do
   let(:ucas_preferences) { build(:provider_ucas_preference, type_of_gt12: :coming_or_not) }
   let(:accrediting_provider) { create(:provider, :accredited_body) }
   let(:course) { create(:course, accrediting_provider: accrediting_provider) }
-  let(:provider) { create :provider, ucas_preferences: ucas_preferences, courses: [course], contacts: [contact1, contact2, contact3, contact4, contact5] }
+  let(:user) { create(:user) }
+  let(:organisation) { create(:organisation, users: [user]) }
+  let(:site) { create(:site) }
+  let(:provider) {
+    create :provider,
+           ucas_preferences: ucas_preferences,
+           courses: [course],
+           contacts: [contact1, contact2, contact3, contact4, contact5],
+           sites: [site],
+           organisations: [organisation]
+  }
   let(:resource) { described_class.new object: provider }
   let(:contact1)  { build(:contact, :admin_type) }
   let(:contact2)  { build(:contact, :utt_type) }
   let(:contact3)  { build(:contact, :web_link_type) }
   let(:contact4)  { build(:contact, :fraud_type) }
   let(:contact5)  { build(:contact, :finance_type) }
+  let(:jsonapi_renderer) { JSONAPI::Serializable::Renderer.new }
 
 
   it "sets type to providers" do
@@ -81,4 +92,30 @@ describe API::V2::SerializableProvider do
       "telephone" => contact5.telephone,
     )
   }
+
+  describe "includes" do
+    subject do
+      jsonapi_renderer.render(
+        provider,
+        class: {
+          User:   API::V2::SerializableUser,
+          Provider:   API::V2::SerializableProvider,
+          Site: API::V2::SerializableSite,
+        },
+        include: %i(
+          users sites
+        ),
+      )
+    end
+
+    it "includes the users relationship" do
+      expect(subject.dig(:data, :relationships, :users, :data).count).to eq(1)
+      expect(subject.dig(:data, :relationships, :users, :data).first).to eq({ type: :users, id: user.id.to_s })
+    end
+
+    it "includes the sites relationship" do
+      expect(subject.dig(:data, :relationships, :sites, :data).count).to eq(1)
+      expect(subject.dig(:data, :relationships, :sites, :data).first).to eq({ type: :sites, id: site.id.to_s })
+    end
+  end
 end
