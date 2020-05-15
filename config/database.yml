@@ -25,6 +25,8 @@ qa:
 pentest:
   <<: *default
 
-production:
+research:
   <<: *default
 
+production:
+  <<: *default
