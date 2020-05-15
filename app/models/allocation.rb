@@ -2,13 +2,16 @@
 #
 # Table name: allocation
 #
-#  accredited_body_id :bigint
-#  created_at         :datetime         not null
-#  id                 :bigint           not null, primary key
-#  number_of_places   :integer
-#  provider_id        :bigint
-#  request_type       :integer          default("initial")
-#  updated_at         :datetime         not null
+#  accredited_body_code :text
+#  accredited_body_id   :bigint
+#  created_at           :datetime         not null
+#  id                   :bigint           not null, primary key
+#  number_of_places     :integer
+#  provider_code        :text
+#  provider_id          :bigint
+#  recruitment_cycle_id :integer
+#  request_type         :integer          default("initial")
+#  updated_at           :datetime         not null
 #
 # Indexes
 #
