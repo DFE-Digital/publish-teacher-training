@@ -6,7 +6,7 @@ require "webmock/rspec"
 require "audited-rspec"
 require "simplecov"
 
-SimpleCov.minimum_coverage 75
+SimpleCov.minimum_coverage 5
 SimpleCov.start "rails" do
   add_filter "/mcb/"
 end

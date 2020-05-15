@@ -59,7 +59,7 @@ describe "GET v3/recruitment_cycle/:recruitment_cycle_year/providers/:provider_c
 
         it { should have_http_status(:success) }
 
-        it "has a data section with the correct attributes" do
+        xit "has a data section with the correct attributes" do
           perform_request
 
           json_response = JSON.parse response.body
