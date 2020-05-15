@@ -20,7 +20,9 @@ class CourseSearchService
     scope = scope.with_subjects(subject_codes) if subject_codes.any?
     scope = scope.with_provider_name(provider_name) if provider_name.present?
     scope = scope.with_send if send_courses_filter?
-    scope = scope.within(filter[:radius], origin: origin) if locations_filter?
+
+    # Default to 50 mile radius
+    scope = scope.within(50, origin: origin) if locations_filter?
     scope = scope.with_funding_types(funding_types) if funding_types.any?
 
     # The 'where' scope will remove duplicates
