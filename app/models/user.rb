@@ -24,6 +24,9 @@ class User < ApplicationRecord
       UserNotification.course_update_notification_requests(provider_code),
     )
   end
+  scope :last_login_since, ->(timestamp) do
+    where("last_login_date_utc > ?", timestamp)
+  end
 
   validates :email, presence: true, format: { with: /\A.*@.*\z/, message: "must contain @" }
   validate :email_is_lowercase

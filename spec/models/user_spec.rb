@@ -204,4 +204,15 @@ describe User, type: :model do
       end
     end
   end
+
+  describe ".last_login_since" do
+    context "30 days ago" do
+      let!(:over_30_user) { create(:user, last_login_date_utc: 30.days.ago) }
+      let!(:under_30_user) { create(:user, last_login_date_utc: 29.days.ago) }
+
+      it "includes users logged in less than 30 days ago" do
+        expect(described_class.last_login_since(30.days.ago)).to eq([under_30_user])
+      end
+    end
+  end
 end
