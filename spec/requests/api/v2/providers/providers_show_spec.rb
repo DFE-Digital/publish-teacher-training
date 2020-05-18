@@ -4,7 +4,6 @@ describe "Providers API v2", type: :request do
   describe "GET /providers#show" do
     let(:request_path) { "/api/v2/providers/#{provider.provider_code}" }
     let(:request_params) { {} }
-
     let(:user) { create(:user, organisations: [organisation]) }
     let(:organisation) { create(:organisation) }
     let(:payload) { { email: user.email } }
@@ -91,6 +90,11 @@ describe "Providers API v2", type: :request do
                 "included" => false,
               },
             },
+            "users" => {
+              "meta" => {
+                "included" => false,
+              },
+            },
             "courses" => {
               "meta" => {
                 "count" => provider.courses.count,
@@ -117,94 +121,45 @@ describe "Providers API v2", type: :request do
           params: request_params
     end
 
-    context "including sites" do
-      let(:request_params) { { include: "sites" } }
+    context "including users" do
+      let(:request_params) { { include: "users" } }
 
-      it "has a data section with the correct attributes" do
+      it "has a included user section with the correct attributes" do
         perform_request
 
         expect(response).to have_http_status(:success)
-        expect(json_response).to eq(
-          "data" => {
-            "id" => provider.id.to_s,
-            "type" => "providers",
-            "attributes" => {
-              "provider_code" => provider.provider_code,
-              "provider_name" => provider.provider_name,
-              "accredited_body?" => false,
-              "can_add_more_sites?" => true,
-              "train_with_us" => provider.train_with_us,
-              "train_with_disability" => provider.train_with_disability,
-              "address1" => provider.address1,
-              "address2" => provider.address2,
-              "address3" => provider.address3,
-              "address4" => provider.address4,
-              "postcode" => provider.postcode,
-              "region_code" => provider.region_code,
-              "latitude" => provider.latitude,
-              "longitude" => provider.longitude,
-              "telephone" => provider.telephone,
-              "email" => provider.email,
-              "website" => provider.website,
-              "recruitment_cycle_year" => provider.recruitment_cycle.year,
-              "accredited_bodies" => [{
-                "provider_code" => accrediting_provider.provider_code,
-                "provider_name" => accrediting_provider.provider_name,
-                "description" => description,
-              }],
-              "admin_contact" => {
-                "name" => contact.name,
-                "email" => contact.email,
-                "telephone" => contact.telephone,
-              },
-              "utt_contact" => nil,
-              "web_link_contact" => nil,
-              "fraud_contact" => nil,
-              "finance_contact" => nil,
-              "gt12_contact" => provider.ucas_preferences.gt12_response_destination.to_s,
-              "application_alert_contact" => provider.ucas_preferences.application_alert_email,
-              "type_of_gt12" => provider.ucas_preferences.type_of_gt12.to_s,
-              "send_application_alerts" =>  provider.ucas_preferences.send_application_alerts,
-            },
-            "relationships" => {
-              "sites" => {
-                "data" => [
-                  {
-                    "type" => "sites",
-                    "id" => site.id.to_s,
-                  },
-                ],
-              },
-              "courses" => {
-                "meta" => {
-                  "count" => provider.courses.count,
-                },
-              },
-            },
-          },
-          "included" => [
-            {
-              "id" => site.id.to_s,
-              "type" => "sites",
-              "attributes" => {
-                "code" => site.code,
-                "location_name" => site.location_name,
-                "address1" => site.address1,
-                "address2" => site.address2,
-                "address3" => site.address3,
-                "address4" => site.address4,
-                "postcode" => site.postcode,
-                "region_code" => site.region_code,
-                "latitude" => site.latitude,
-                "longitude" => site.longitude,
-                "recruitment_cycle_year" => site.recruitment_cycle.year,
-              },
-            },
-          ],
-          "jsonapi" => {
-            "version" => "1.0",
-          },
-        )
+        included_user = json_response.dig("included").first
+
+        expect(included_user.dig("id")).to eq(user.id.to_s)
+        expect(included_user.dig("type")).to eq("users")
+        expect(included_user.dig("attributes").dig("first_name")).to eq(user.first_name)
+        expect(included_user.dig("attributes").dig("last_name")).to eq(user.last_name)
+        expect(included_user.dig("attributes").dig("email")).to eq(user.email)
+      end
+    end
+
+    context "including sites" do
+      let(:request_params) { { include: "sites" } }
+
+      it "has a included site section with the correct attributes" do
+        perform_request
+
+        expect(response).to have_http_status(:success)
+        included_site = json_response.dig("included").first
+
+        expect(included_site.dig("id")).to eq(site.id.to_s)
+        expect(included_site.dig("type")).to eq("sites")
+        expect(included_site.dig("attributes").dig("code")).to eq(site.code)
+        expect(included_site.dig("attributes").dig("location_name")).to eq(site.location_name)
+        expect(included_site.dig("attributes").dig("address1")).to eq(site.address1)
+        expect(included_site.dig("attributes").dig("address2")).to eq(site.address2)
+        expect(included_site.dig("attributes").dig("address3")).to eq(site.address3)
+        expect(included_site.dig("attributes").dig("address4")).to eq(site.address4)
+        expect(included_site.dig("attributes").dig("postcode")).to eq(site.postcode)
+        expect(included_site.dig("attributes").dig("region_code")).to eq(site.region_code)
+        expect(included_site.dig("attributes").dig("latitude")).to eq(site.latitude)
+        expect(included_site.dig("attributes").dig("longitude")).to eq(site.longitude)
+        expect(included_site.dig("attributes").dig("recruitment_cycle_year")).to eq(site.recruitment_cycle.year)
       end
     end
 
