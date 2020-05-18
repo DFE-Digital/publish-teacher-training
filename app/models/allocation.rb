@@ -2,13 +2,16 @@
 #
 # Table name: allocation
 #
-#  accredited_body_id :bigint
-#  created_at         :datetime         not null
-#  id                 :bigint           not null, primary key
-#  number_of_places   :integer
-#  provider_id        :bigint
-#  request_type       :integer          default("initial")
-#  updated_at         :datetime         not null
+#  accredited_body_code :text
+#  accredited_body_id   :bigint
+#  created_at           :datetime         not null
+#  id                   :bigint           not null, primary key
+#  number_of_places     :integer
+#  provider_code        :text
+#  provider_id          :bigint
+#  recruitment_cycle_id :integer
+#  request_type         :integer          default("initial")
+#  updated_at           :datetime         not null
 #
 # Indexes
 #
@@ -19,12 +22,22 @@
 class Allocation < ApplicationRecord
   belongs_to :provider
   belongs_to :accredited_body, class_name: "Provider"
+  belongs_to :recruitment_cycle
 
   validates :provider, :accredited_body, presence: true
-  validate :accredited_body_is_an_accredited_body
   validates :number_of_places, numericality: true
 
+  validate :accredited_body_is_an_accredited_body
+
   enum request_type: { initial: 0, repeat: 1, declined: 2 }
+
+  def previous
+    Allocation.find_by(
+      provider_code: provider_code,
+      accredited_body_code: accredited_body_code,
+      recruitment_cycle: recruitment_cycle.previous,
+    )
+  end
 
 private
 
