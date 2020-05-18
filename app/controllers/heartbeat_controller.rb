@@ -13,11 +13,12 @@ class HeartbeatController < ActionController::API
       sidekiq_queue: sidekiq_queue_healthy?,
     }
 
-    status = :ok
-    status = :bad_gateway unless checks.values.all?
-    render status: status, json: {
-      checks: checks,
-    }
+    status = checks.values.all? ? :ok : :service_unavailable
+
+    render status: status,
+           json: {
+             checks: checks,
+           }
   end
 
 private

@@ -26,9 +26,9 @@ describe "heartbeat requests" do
         allow(Sidekiq::DeadSet).to receive(:new).and_return(dead_set)
       end
 
-      it "returns status bad gateway" do
+      it "returns status service unavailable" do
         get "/healthcheck"
-        expect(response.status).to eq(502)
+        expect(response.status).to eq(503)
       end
 
       it "returns the expected response report" do
