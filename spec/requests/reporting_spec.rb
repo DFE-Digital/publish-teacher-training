@@ -121,6 +121,36 @@ describe "GET /reporting" do
           closed: Subject.active.each_with_index.map { |sub, _i| x = {}; x[sub.subject_name] = 0; x }.reduce({}, :merge),
         },
       },
+      publish: {
+        users: {
+          total: {
+            all: 0,
+            active_users: 0,
+            non_active_users: 0,
+            active_users_last_30_days: 0,
+          },
+        },
+        providers: {
+          total: {
+            all: 0,
+            providers_with_non_active_users: 0,
+            providers_with_active_users: 0,
+          },
+          with_1_active_users: 0,
+          with_2_active_users: 0,
+          with_3_active_users: 0,
+          with_4_active_users: 0,
+          with_more_than_5_active_users: 0,
+        },
+        courses: {
+          total_updated_last_30_days: 0,
+          updated_non_findable_last_30_days: 0,
+          updated_findable_last_30_days: 0,
+          updated_open_courses_last_30_days: 0,
+          updated_closed_courses_last_30_days: 0,
+          created_last_30_days: 0,
+        },
+      },
     }.with_indifferent_access
   end
 
