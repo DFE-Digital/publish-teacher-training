@@ -160,6 +160,10 @@ class Course < ApplicationRecord
     where("course.changed_at > ?", timestamp)
   end
 
+  scope :created_at_since, ->(timestamp) do
+    where("course.created_at > ?", timestamp)
+  end
+
   scope :not_new, -> do
     includes(site_statuses: %i[site course])
       .where
