@@ -1,24 +1,3 @@
-# == Schema Information
-#
-# Table name: course_enrichment
-#
-#  course_id                    :integer          not null
-#  created_at                   :datetime         not null
-#  created_by_user_id           :integer
-#  id                           :integer          not null, primary key
-#  json_data                    :jsonb
-#  last_published_timestamp_utc :datetime
-#  status                       :integer          not null
-#  updated_at                   :datetime         not null
-#  updated_by_user_id           :integer
-#
-# Indexes
-#
-#  IX_course_enrichment_created_by_user_id  (created_by_user_id)
-#  IX_course_enrichment_updated_by_user_id  (updated_by_user_id)
-#  index_course_enrichment_on_course_id     (course_id)
-#
-
 class CourseEnrichment < ApplicationRecord
   include TouchCourse
   enum status: { draft: 0, published: 1, rolled_over: 2, withdrawn: 3 }

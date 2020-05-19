@@ -1,23 +1,3 @@
-# == Schema Information
-#
-# Table name: course_site
-#
-#  course_id  :integer
-#  id         :integer          not null, primary key
-#  publish    :text
-#  site_id    :integer
-#  status     :text
-#  vac_status :text
-#
-# Indexes
-#
-#  IX_course_site_course_id         (course_id)
-#  IX_course_site_site_id           (site_id)
-#  index_course_site_on_publish     (publish)
-#  index_course_site_on_status      (status)
-#  index_course_site_on_vac_status  (vac_status)
-#
-
 class SiteStatusSerializer < ActiveModel::Serializer
   attributes :campus_code, :name, :vac_status, :publish, :status, :course_open_date
 

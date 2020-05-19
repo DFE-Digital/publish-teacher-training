@@ -1,15 +1,3 @@
-# == Schema Information
-#
-# Table name: recruitment_cycle
-#
-#  id                     :bigint           not null, primary key
-#  year                   :string
-#  application_start_date :date             not null
-#  application_end_date   :date             not null
-#  created_at             :datetime         not null
-#  updated_at             :datetime         not null
-#
-
 require "rails_helper"
 
 describe RecruitmentCycle, type: :model do

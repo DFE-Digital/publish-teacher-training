@@ -1,17 +1,3 @@
-# == Schema Information
-#
-# Table name: subject_area
-#
-#  created_at :datetime         not null
-#  name       :text
-#  typename   :text             not null, primary key
-#  updated_at :datetime         not null
-#
-# Indexes
-#
-#  index_subject_area_on_typename  (typename) UNIQUE
-#
-
 FactoryBot.define do
   factory :subject_area do
     trait :primary do

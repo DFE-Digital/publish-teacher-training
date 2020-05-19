@@ -112,9 +112,6 @@ gem "open_api-rswag-ui"
 gem "pg_search"
 
 group :development, :test do
-  # add info about db structure to models and other files
-  gem "annotate"
-
   # Prettyprint in console
   gem "awesome_print"
 

@@ -1,29 +1,3 @@
-# == Schema Information
-#
-# Table name: user
-#
-#  accept_terms_date_utc    :datetime
-#  admin                    :boolean          default(FALSE)
-#  discarded_at             :datetime
-#  email                    :text
-#  first_login_date_utc     :datetime
-#  first_name               :text
-#  id                       :integer          not null, primary key
-#  invite_date_utc          :datetime
-#  last_login_date_utc      :datetime
-#  last_name                :text
-#  magic_link_token         :string
-#  magic_link_token_sent_at :datetime
-#  sign_in_user_id          :text
-#  state                    :string           not null
-#  welcome_email_date_utc   :datetime
-#
-# Indexes
-#
-#  IX_user_email               (email) UNIQUE
-#  index_user_on_discarded_at  (discarded_at)
-#
-
 require "rails_helper"
 
 describe User, type: :model do
