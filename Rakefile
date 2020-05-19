@@ -10,6 +10,5 @@ Rails.application.load_tasks
 Rake::Task["default"].clear
 
 task lint: ["lint:ruby"]
-task annotate: ["db:annotate"]
 task parallel: ["parallel:spec"]
 task default: %i[parallel annotate lint brakeman]

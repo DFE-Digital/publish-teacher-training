@@ -1,38 +1,3 @@
-# == Schema Information
-#
-# Table name: course
-#
-#  accrediting_provider_code :text
-#  age_range_in_years        :string
-#  applications_open_from    :date
-#  changed_at                :datetime         not null
-#  course_code               :text
-#  created_at                :datetime         not null
-#  discarded_at              :datetime
-#  english                   :integer
-#  id                        :integer          not null, primary key
-#  is_send                   :boolean          default(FALSE)
-#  level                     :string
-#  maths                     :integer
-#  modular                   :text
-#  name                      :text
-#  profpost_flag             :text
-#  program_type              :text
-#  provider_id               :integer          default(0), not null
-#  qualification             :integer          not null
-#  science                   :integer
-#  start_date                :datetime
-#  study_mode                :text
-#  updated_at                :datetime         not null
-#
-# Indexes
-#
-#  IX_course_provider_id_course_code          (provider_id,course_code) UNIQUE
-#  index_course_on_accrediting_provider_code  (accrediting_provider_code)
-#  index_course_on_changed_at                 (changed_at) UNIQUE
-#  index_course_on_discarded_at               (discarded_at)
-#
-
 class Course < ApplicationRecord
   include Discard::Model
   include WithQualifications

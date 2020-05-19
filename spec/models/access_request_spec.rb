@@ -1,25 +1,3 @@
-# == Schema Information
-#
-# Table name: access_request
-#
-#  discarded_at     :datetime
-#  email_address    :text
-#  first_name       :text
-#  id               :integer          not null, primary key
-#  last_name        :text
-#  organisation     :text
-#  reason           :text
-#  request_date_utc :datetime         not null
-#  requester_email  :text
-#  requester_id     :integer
-#  status           :integer          not null
-#
-# Indexes
-#
-#  IX_access_request_requester_id        (requester_id)
-#  index_access_request_on_discarded_at  (discarded_at)
-#
-
 require "rails_helper"
 
 describe AccessRequest, type: :model do
