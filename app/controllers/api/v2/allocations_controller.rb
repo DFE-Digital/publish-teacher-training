@@ -33,10 +33,9 @@ module API
       def update
         authorize @allocation = Allocation.find(params[:id])
 
-        # TODO remove once Publish is sending the correct thing and validation is set up properly
-        allocation_update_params[:request_type] = get_request_type(allocation_params)
+        service = Allocations::Update.new(@allocation, allocation_params)
 
-        if @allocation.update(allocation_update_params)
+        if service.execute
           render jsonapi: @allocation, status: :ok
         else
           render jsonapi_errors: @allocation.errors, status: :unprocessable_entity
