@@ -8,28 +8,28 @@ describe PublishReportingService do
           all: 666,
           active_users: 600,
           non_active_users: 66,
-          active_users_last_30_days: 60,
         },
+        recent_active_users: 60,
       },
       providers: {
         total: {
           all: 1000,
           providers_with_non_active_users: 990,
-          providers_with_active_users: 10,
+          providers_with_recent_active_users: 10,
         },
-        with_1_active_users: 1,
-        with_2_active_users: 2,
-        with_3_active_users: 0,
-        with_4_active_users: 4,
-        with_more_than_5_active_users: 6,
+        with_1_recent_active_users: 1,
+        with_2_recent_active_users: 2,
+        with_3_recent_active_users: 0,
+        with_4_recent_active_users: 4,
+        with_more_than_5_recent_active_users: 6,
       },
       courses: {
-        total_updated_last_30_days: 100,
-        updated_non_findable_last_30_days: 40,
-        updated_findable_last_30_days: 60,
-        updated_open_courses_last_30_days: 35,
-        updated_closed_courses_last_30_days: 25,
-        created_last_30_days: 10,
+        total_updated_recently: 100,
+        updated_non_findable_recently: 40,
+        updated_findable_recently: 60,
+        updated_open_courses_recently: 35,
+        updated_closed_courses_recently: 25,
+        created_recently: 10,
       },
     }
   end
@@ -38,16 +38,14 @@ describe PublishReportingService do
     instance_double(RecruitmentCycle)
   end
   let(:courses_scope) { class_double(Course) }
-  let(:providers_scope) { double(Provider) }
+  let(:providers_scope) { class_double(Provider) }
   let(:providers_active_user_scope) { class_double(Provider) }
-  let(:grouped_providers_active_user_scope) { class_double(Provider) }
-  let(:ordered_grouped_providers_active_user_scope) { class_double(Provider) }
 
   let(:grouped_providers_with_x_active_users_scope) { class_double(Provider) }
 
-  let(:providers_active_user_distinct_count) { 10 }
+  let(:providers_with_recent_active_users_distinct_count) { 10 }
 
-  let(:counted_ordered_grouped_providers_active_user) {
+  let(:recent_active_user_count_by_provider) {
     {
       1 => 1,
       2 => 2,
@@ -72,12 +70,11 @@ describe PublishReportingService do
 
   let(:courses_created_at_since_count) { 10 }
 
-
+  let(:recent_active_users) { class_double(User) }
   let(:courses_changed_at_since_scope) { class_double(Course) }
   let(:courses_findable_scope) { class_double(Course) }
   let(:open_courses_scope) { class_double(Course) }
   let(:closed_courses_scope) { class_double(Course) }
-
 
   describe ".call" do
     describe "when scope is passed" do
@@ -90,15 +87,13 @@ describe PublishReportingService do
       it "applies the scopes" do
         expect(User).to receive_message_chain(:count).and_return(666)
         expect(User).to receive_message_chain(:active, :count).and_return(600)
-        expect(User).to receive_message_chain(:active, :last_login_since, :count).and_return(60)
+        expect(User).to receive_message_chain(:active, :last_login_since).and_return(recent_active_users)
 
-        expect(providers_scope).to receive_message_chain(:with_users).and_return(providers_active_user_scope)
-        expect(providers_active_user_scope).to receive_message_chain(:distinct, :count) .and_return(providers_active_user_distinct_count)
+        expect(recent_active_users).to receive_message_chain(:count).and_return(60)
+        expect(recent_active_users).to receive_message_chain(:joins, :merge, :group, :count).and_return(recent_active_user_count_by_provider)
 
-        expect(providers_active_user_scope).to receive_message_chain(:group).with(:id) .and_return(grouped_providers_active_user_scope)
-        expect(grouped_providers_active_user_scope).to receive_message_chain(:order).with(count_id: :desc) .and_return(ordered_grouped_providers_active_user_scope)
-
-        expect(ordered_grouped_providers_active_user_scope).to receive_message_chain(:count).with(:id) .and_return(counted_ordered_grouped_providers_active_user)
+        expect(providers_scope).to receive_message_chain(:joins, :merge).with(recent_active_users).and_return(providers_active_user_scope)
+        expect(providers_active_user_scope).to receive_message_chain(:distinct, :count) .and_return(providers_with_recent_active_users_distinct_count)
 
         expect(providers_scope).to receive_message_chain(:count).and_return(providers_count)
 

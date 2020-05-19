@@ -11,48 +11,10 @@ class PublishReportingService
   end
 
   def call
-    days_ago = 30.days.ago
-    active_users = User.active
-    active_users_last_30_days = active_users.last_login_since(days_ago)
-
-    providers_with_active_users = @providers.with_users(active_users_last_30_days)
-
-    providers_with_active_users_distinct_count = providers_with_active_users.distinct.count
-    grouped_providers_with_x_active_users = providers_with_active_users.group(:id)
-      .order(count_id: :desc)
-      .count(:id)
-      .group_by(&:second)
-
-    user_count = User.count
-
-    active_users_count = active_users.count
-    active_users_last_30_days_count = active_users_last_30_days.count
-    provider_count = @providers.count
-
     {
-      users: {
-        total: {
-          all: user_count,
-          active_users: active_users_count,
-          non_active_users: user_count - active_users_count,
-          active_users_last_30_days: active_users_last_30_days_count,
-        },
-      },
-      providers: {
-        total: {
-          all: provider_count,
-          providers_with_non_active_users: (provider_count - providers_with_active_users_distinct_count),
-          providers_with_active_users: providers_with_active_users_distinct_count,
-        },
-
-        with_1_active_users: grouped_providers_with_x_active_users[1]&.count || 0,
-        with_2_active_users: grouped_providers_with_x_active_users[2]&.count || 0,
-        with_3_active_users: grouped_providers_with_x_active_users[3]&.count || 0,
-        with_4_active_users: grouped_providers_with_x_active_users[4]&.count || 0,
-        with_more_than_5_active_users: (grouped_providers_with_x_active_users.keys - [4, 3, 2, 1]).sum { |k| grouped_providers_with_x_active_users[k].count },
-      },
-
-      courses: course_activites(days_ago),
+      users: user_breakdown,
+      providers: provider_breakdown,
+      courses: course_breakdown,
     }
   end
 
@@ -60,16 +22,84 @@ class PublishReportingService
 
 private
 
-  def user_total
+  def days_ago
+    @days_ago ||= 30.days.ago
+  end
+
+  def active_users
+    @active_users ||= User.active
+  end
+
+  def recent_active_users
+    @recent_active_users ||= active_users.last_login_since(days_ago)
+  end
+
+  def providers_with_recent_active_users_distinct_count
+    @providers_with_recent_active_users_distinct_count ||= @providers
+      .joins(:users)
+      .merge(recent_active_users)
+      .distinct
+      .count
+  end
+
+  def recent_active_user_count_by_provider
+    @recent_active_user_count_by_provider ||= recent_active_users
+      .joins(:providers)          # Results include a user entry for _each_ matching provider
+      .merge(@providers)          # Limit our scope to the current recruitment Cycle
+      .group("provider_id")
+      .count                      # Count the users for each provider
+  end
+
+  def grouped_providers_with_x_active_users
+    @grouped_providers_with_x_active_users ||= recent_active_user_count_by_provider
+      .group_by(&:second)             # Group the results by the number of users they have
+      .transform_values(&:count)      # Count the results
+  end
+
+  def user_count
+    @user_count ||= User.count
+  end
+
+  def active_users_count
+    @active_users_count ||= active_users.count
+  end
+
+  def recent_active_users_count
+    @recent_active_users_count ||= recent_active_users.count
+  end
+
+  def provider_count
+    @provider_count ||= @providers.count
+  end
+
+  def user_breakdown
     {
-      all: user_count,
-      active_users: active_users_count,
-      non_active_users: user_count - active_users_count,
-      active_users_last_30_days: active_users_last_30_days_count,
+      total: {
+        all: user_count,
+        active_users: active_users_count,
+        non_active_users: user_count - active_users_count,
+      },
+      recent_active_users: recent_active_users_count,
     }
   end
 
-  def course_activites(days_ago)
+  def provider_breakdown
+    {
+      total: {
+        all: provider_count,
+        providers_with_non_active_users: (provider_count - providers_with_recent_active_users_distinct_count),
+        providers_with_recent_active_users: providers_with_recent_active_users_distinct_count,
+      },
+
+      with_1_recent_active_users: grouped_providers_with_x_active_users[1] || 0,
+      with_2_recent_active_users: grouped_providers_with_x_active_users[2] || 0,
+      with_3_recent_active_users: grouped_providers_with_x_active_users[3] || 0,
+      with_4_recent_active_users: grouped_providers_with_x_active_users[4] || 0,
+      with_more_than_5_recent_active_users: grouped_providers_with_x_active_users.keys.excluding(4, 3, 2, 1).sum { |k| grouped_providers_with_x_active_users[k] || 0 },
+    }
+  end
+
+  def course_breakdown
     courses_changed_at_since = @courses.changed_at_since(days_ago)
 
     findable_courses = courses_changed_at_since.findable.distinct
@@ -80,14 +110,14 @@ private
     findable_courses_count = findable_courses.count
 
     {
-      total_updated_last_30_days: courses_changed_at_since_count,
-      updated_non_findable_last_30_days: courses_changed_at_since_count - findable_courses_count,
+      total_updated_recently: courses_changed_at_since_count,
+      updated_non_findable_recently: courses_changed_at_since_count - findable_courses_count,
 
-      updated_findable_last_30_days: findable_courses_count,
-      updated_open_courses_last_30_days: open_courses.count,
-      updated_closed_courses_last_30_days: closed_courses.count,
+      updated_findable_recently: findable_courses_count,
+      updated_open_courses_recently: open_courses.count,
+      updated_closed_courses_recently: closed_courses.count,
 
-      created_last_30_days: @courses.created_at_since(days_ago).count,
+      created_recently: @courses.created_at_since(days_ago).count,
     }
   end
 end
