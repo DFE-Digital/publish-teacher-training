@@ -19,8 +19,4 @@ private
   def user_matches?
     user.id == user_notification_preferences.id
   end
-
-  def update?
-    true
-  end
 end
