@@ -80,10 +80,6 @@ class Provider < ApplicationRecord
       .or(self.where(provider_code: Course.findable.select(:accrediting_provider_code)))
   end
 
-  scope :with_users, ->(users) do
-    joins(:users).merge(users)
-  end
-
   serialize :accrediting_provider_enrichments, AccreditingProviderEnrichment::ArraySerializer
 
   validates :train_with_us, words_count: { maximum: 250, message: "^Reduce the word count for training with you" }
