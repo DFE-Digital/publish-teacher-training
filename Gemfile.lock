@@ -72,9 +72,6 @@ GEM
       zeitwerk (~> 2.2, >= 2.2.2)
     addressable (2.7.0)
       public_suffix (>= 2.0.2, < 5.0)
-    annotate (3.1.1)
-      activerecord (>= 3.2, < 7.0)
-      rake (>= 10.4, < 14.0)
     api-pagination (4.8.2)
     application_insights (0.5.6)
     ast (2.4.0)
@@ -299,7 +296,7 @@ GEM
     pry-rails (0.3.9)
       pry (>= 0.10.4)
     public_suffix (4.0.3)
-    puma (4.3.4)
+    puma (4.3.5)
       nio4r (~> 2.0)
     pundit (2.1.0)
       activesupport (>= 3.0.0)
@@ -479,7 +476,6 @@ PLATFORMS
 DEPENDENCIES
   aasm
   active_model_serializers
-  annotate
   api-pagination
   application_insights
   audited (~> 4.9)
