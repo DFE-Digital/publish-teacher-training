@@ -37,11 +37,11 @@ describe PublishReportingService do
   let(:recruitment_cycle_scope) do
     instance_double(RecruitmentCycle)
   end
-  let(:courses_scope) { class_double(Course) }
-  let(:providers_scope) { class_double(Provider) }
-  let(:providers_active_user_scope) { class_double(Provider) }
+  let(:courses_scope) { instance_double(Course.all.class) }
+  let(:providers_scope) { instance_double(Provider.all.class) }
+  let(:providers_active_user_scope) { instance_double(Provider.all.class) }
 
-  let(:grouped_providers_with_x_active_users_scope) { class_double(Provider) }
+  let(:grouped_providers_with_x_active_users_scope) { instance_double(Provider.all.class) }
 
   let(:providers_with_recent_active_users_distinct_count) { 10 }
 
@@ -71,10 +71,10 @@ describe PublishReportingService do
   let(:courses_created_at_since_count) { 10 }
 
   let(:recent_active_users) { class_double(User) }
-  let(:courses_changed_at_since_scope) { class_double(Course) }
-  let(:courses_findable_scope) { class_double(Course) }
-  let(:open_courses_scope) { class_double(Course) }
-  let(:closed_courses_scope) { class_double(Course) }
+  let(:courses_changed_at_since_scope) { instance_double(Course.all.class) }
+  let(:courses_findable_scope) { instance_double(Course.all.class) }
+  let(:open_courses_scope) { instance_double(Course.all.class) }
+  let(:closed_courses_scope) { instance_double(Course.all.class) }
 
   describe ".call" do
     describe "when scope is passed" do
