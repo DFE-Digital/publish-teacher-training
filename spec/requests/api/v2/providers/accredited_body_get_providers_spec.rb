@@ -52,6 +52,57 @@ describe "AccreditedBody API v2", type: :request do
         expect(json_response).to eq(
           "data" => [
             {
+              "id" => accredited_provider.id.to_s,
+              "type" => "providers",
+              "attributes" => {
+                "provider_code" => accredited_provider.provider_code,
+                "provider_name" => accredited_provider.provider_name,
+                "accredited_body?" => false,
+                "can_add_more_sites?" => true,
+                "accredited_bodies" => [],
+                "train_with_us" => accredited_provider.train_with_us,
+                "train_with_disability" => accredited_provider.train_with_disability,
+                "latitude" => nil,
+                "longitude" => nil,
+                "address1" => accredited_provider.address1,
+                "address2" => accredited_provider.address2,
+                "address3" => accredited_provider.address3,
+                "address4" => accredited_provider.address4,
+                "postcode" => accredited_provider.postcode,
+                "region_code" => "london",
+                "telephone" => accredited_provider.telephone,
+                "email" => accredited_provider.email,
+                "website" => accredited_provider.website,
+                "recruitment_cycle_year" => "2020",
+                "admin_contact" => nil,
+                "utt_contact" => nil,
+                "web_link_contact" => nil,
+                "fraud_contact" => nil,
+                "finance_contact" => nil,
+                "gt12_contact" => nil,
+                "application_alert_contact" => nil,
+                "type_of_gt12" => nil,
+                "send_application_alerts" => nil,
+              },
+              "relationships" => {
+                "sites" => {
+                  "meta" => {
+                    "included" => false,
+                  },
+                },
+                "users" => {
+                  "meta" => {
+                    "included" => false,
+                  },
+                },
+                "courses" => {
+                  "meta" => {
+                    "count" => 0,
+                  },
+                },
+              },
+            },
+            {
               "id" => delivering_provider1.id.to_s,
               "type" => "providers",
               "attributes" => {
@@ -195,7 +246,7 @@ describe "AccreditedBody API v2", type: :request do
         it "only returns data for the next recruitment cycle" do
           perform_request
 
-          expect(json_response["data"].count).to eq 1
+          expect(json_response["data"].count).to eq 2
           expect(json_response["data"].first)
             .to have_attribute("recruitment_cycle_year")
             .with_value(next_recruitment_cycle.year)

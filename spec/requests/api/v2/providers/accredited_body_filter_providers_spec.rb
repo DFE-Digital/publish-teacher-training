@@ -27,6 +27,15 @@ describe "AccreditedBody API v2", type: :request do
              accrediting_provider: accredited_provider)
     end
 
+    let(:accredited_provider_course) do
+      create(:course,
+             level: :secondary,
+             provider: accredited_provider,
+             subjects: [physical_education],
+             site_statuses: [build(:site_status, :findable, site: build(:site))],
+             accrediting_provider: nil) # important the course is not accredited
+    end
+
     let(:training_provider_1) { create(:provider, provider_name: "ABC Provider") }
 
     let(:accredited_provider) {
@@ -49,6 +58,21 @@ describe "AccreditedBody API v2", type: :request do
 
     def perform_request
       get request_path, headers: { "HTTP_AUTHORIZATION" => credentials }
+    end
+
+    context "when accredited_provider has a self-accredited course" do
+      before do
+        accredited_provider_course
+      end
+
+      let(:filters) { "" }
+
+      it "returns the accredited provider in the results" do
+        get request_path, headers: { "HTTP_AUTHORIZATION" => credentials }
+        json_response = JSON.parse(response.body)
+        provider_hashes = json_response["data"]
+        expect(provider_hashes.map { |h| h["id"].to_i }).to include(accredited_provider.id)
+      end
     end
 
     describe "funding type filter" do
