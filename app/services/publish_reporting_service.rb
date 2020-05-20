@@ -56,6 +56,10 @@ private
       .transform_values(&:count)      # Count the results
   end
 
+  def with_more_than_5_recent_active_users
+    grouped_providers_with_x_active_users.keys.excluding(4, 3, 2, 1).sum { |k| grouped_providers_with_x_active_users[k] || 0 }
+  end
+
   def user_count
     @user_count ||= User.count
   end
@@ -95,23 +99,23 @@ private
       with_2_recent_active_users: grouped_providers_with_x_active_users[2] || 0,
       with_3_recent_active_users: grouped_providers_with_x_active_users[3] || 0,
       with_4_recent_active_users: grouped_providers_with_x_active_users[4] || 0,
-      with_more_than_5_recent_active_users: grouped_providers_with_x_active_users.keys.excluding(4, 3, 2, 1).sum { |k| grouped_providers_with_x_active_users[k] || 0 },
+      with_more_than_5_recent_active_users: with_more_than_5_recent_active_users,
     }
   end
 
   def course_breakdown
-    courses_changed_at_since = @courses.changed_at_since(days_ago)
+    courses_changed_recently = @courses.changed_at_since(days_ago)
 
-    findable_courses = courses_changed_at_since.findable.distinct
+    findable_courses = courses_changed_recently.findable.distinct
     open_courses = findable_courses.with_vacancies
     closed_courses = findable_courses.where.not(id: open_courses)
 
-    courses_changed_at_since_count = courses_changed_at_since.count
+    courses_changed_recently_count = courses_changed_recently.count
     findable_courses_count = findable_courses.count
 
     {
-      total_updated_recently: courses_changed_at_since_count,
-      updated_non_findable_recently: courses_changed_at_since_count - findable_courses_count,
+      total_updated_recently: courses_changed_recently_count,
+      updated_non_findable_recently: courses_changed_recently_count - findable_courses_count,
 
       updated_findable_recently: findable_courses_count,
       updated_open_courses_recently: open_courses.count,
