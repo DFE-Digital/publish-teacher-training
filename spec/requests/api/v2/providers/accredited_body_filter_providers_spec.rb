@@ -67,7 +67,7 @@ describe "AccreditedBody API v2", type: :request do
 
       let(:filters) { "" }
 
-      it "is returned" do
+      it "returns the accredited provider in the results" do
         get request_path, headers: { "HTTP_AUTHORIZATION" => credentials }
         json_response = JSON.parse(response.body)
         provider_hashes = json_response["data"]
