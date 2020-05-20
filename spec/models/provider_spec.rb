@@ -74,6 +74,14 @@ describe Provider, type: :model do
         expect(Provider.by_name_descending).to eq([provider_b, provider_a])
       end
     end
+
+    describe "#by_provider_name" do
+      it "orders the providers by name in descending order" do
+        provider_a
+        provider_b
+        expect(Provider.by_provider_name(provider_b.provider_name)).to eq([provider_b, provider_a])
+      end
+    end
   end
 
   describe "#changed_since" do

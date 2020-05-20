@@ -515,6 +515,47 @@ describe "GET v3/courses" do
         expect(course_hashes.count).to eq(0)
       end
     end
+
+    context "with an accredited body which delivers its own courses" do
+      let(:request_path) { "/api/v3/courses?filter[provider.provider_name]=#{provider_filtered_by.provider_name}" }
+      let(:provider_filtered_by) { create(:provider, :accredited_body, provider_name: "The University of Warwick") }
+      let(:another_training_provider) { create(:provider, provider_name: "Anglia College") }
+      let(:site2) { build(:site) }
+      let(:site1) { build(:site) }
+      let(:filtered_provider_course) {
+        create(:course,
+               name: "Course A",
+                     provider: provider_filtered_by,
+                     accrediting_provider: provider_filtered_by,
+                     site_statuses: [create(:site_status, :findable, site: site1)],
+                     enrichments: [published_enrichment])
+      }
+      let(:another_provider_course) {
+        create(:course,
+               name: "Course B",
+                     provider: another_training_provider,
+                     accrediting_provider: provider_filtered_by,
+                     site_statuses: [create(:site_status, :findable, site: site2)],
+                     enrichments: [published_enrichment])
+      }
+
+      before do
+        provider_filtered_by
+        filtered_provider_course
+        another_training_provider
+        another_provider_course
+      end
+
+      it "its courses are returned first" do
+        get request_path
+
+        json_response = JSON.parse(response.body)
+        course_hashes = json_response["data"]
+
+        expect(course_hashes.first.dig("attributes").dig("name")).to eq(filtered_provider_course.name)
+        expect(course_hashes.second.dig("attributes").dig("name")).to eq(another_provider_course.name)
+      end
+    end
   end
 
   describe "SEND courses filter" do

@@ -182,6 +182,12 @@ describe Course, type: :model do
           expect(described_class.descending_canonical_order).to eq([course_d, course_c, course_b, course_a])
         end
       end
+
+      describe "#accredited_body_order" do
+        it "sorts in descending order of provider name" do
+          expect(described_class.accredited_body_order(course_c.provider.provider_name)).to eq([course_c, course_d, course_a, course_b])
+        end
+      end
     end
 
     context "by name" do

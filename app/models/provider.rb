@@ -75,6 +75,14 @@ class Provider < ApplicationRecord
   scope :by_name_ascending, -> { order(provider_name: :asc) }
   scope :by_name_descending, -> { order(provider_name: :desc) }
 
+  scope :by_provider_name, ->(provider_name) do
+    order(
+      Arel.sql(
+        "CASE WHEN provider.provider_name = #{connection.quote(provider_name)} THEN '1' END",
+      ),
+    )
+  end
+
   scope :with_findable_courses, -> do
     where(id: Course.findable.select(:provider_id))
       .or(self.where(provider_code: Course.findable.select(:accrediting_provider_code)))
