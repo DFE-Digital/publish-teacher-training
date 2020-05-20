@@ -60,7 +60,7 @@ describe "AccreditedBody API v2", type: :request do
       get request_path, headers: { "HTTP_AUTHORIZATION" => credentials }
     end
 
-    context "when accredited_provider has a course" do
+    context "when accredited_provider has a self-accredited course" do
       before do
         accredited_provider_course
       end
