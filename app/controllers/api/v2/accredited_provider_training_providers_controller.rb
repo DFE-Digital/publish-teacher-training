@@ -13,7 +13,7 @@ module API
         end
 
         def call
-          scope = training_providers.order(:provider_name)
+          scope = all_providers.order(:provider_name)
 
           if params[:filter]
             scope = scope.where(id: eligible_training_provider_ids)
@@ -25,13 +25,19 @@ module API
       private
 
         def course_scope
-          Course.where(provider: training_providers)
-                .where(accrediting_provider_code: provider.provider_code)
+          provider_courses = Course.where(provider: [provider.id])
+          training_provider_courses = Course.where(provider: training_providers).where(accrediting_provider_code: provider.provider_code)
+
+          provider_courses.or(training_provider_courses)
         end
 
         def eligible_training_provider_ids
           CourseSearchService.call(filter: params[:filter], course_scope: course_scope)
                              .pluck(:provider_id)
+        end
+
+        def all_providers
+          provider.training_providers.or(Provider.where(id: provider.id))
         end
 
         def training_providers
