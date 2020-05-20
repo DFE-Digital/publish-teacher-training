@@ -11,4 +11,4 @@ Rake::Task["default"].clear
 
 task lint: ["lint:ruby"]
 task parallel: ["parallel:spec"]
-task default: %i[parallel annotate lint brakeman]
+task default: %i[parallel lint brakeman]
