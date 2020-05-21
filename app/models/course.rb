@@ -150,10 +150,18 @@ class Course < ApplicationRecord
 
   scope :changed_since, ->(timestamp) do
     if timestamp.present?
-      where("course.changed_at > ?", timestamp)
+      changed_at_since(timestamp)
     else
       where.not(changed_at: nil)
     end.order(:changed_at, :id)
+  end
+
+  scope :changed_at_since, ->(timestamp) do
+    where("course.changed_at > ?", timestamp)
+  end
+
+  scope :created_at_since, ->(timestamp) do
+    where("course.created_at > ?", timestamp)
   end
 
   scope :not_new, -> do
