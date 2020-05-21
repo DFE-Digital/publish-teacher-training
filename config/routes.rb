@@ -20,7 +20,6 @@ Rails.application.routes.draw do
       resources :user_notification_preferences, only: %i[show update]
 
       resources :users, only: %i[update show] do
-        resources :notifications, only: %i[create index]
         resources :providers
 
         patch :accept_transition_screen, on: :member
