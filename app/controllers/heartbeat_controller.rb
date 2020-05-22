@@ -9,8 +9,7 @@ class HeartbeatController < ActionController::API
     checks = {
       database: database_alive?,
       redis: redis_alive?,
-      sidekiq: sidekiq_alive?,
-      sidekiq_queue: sidekiq_queue_healthy?,
+      sidekiq_processes: sidekiq_processes_checks,
     }
 
     status = checks.values.all? ? :ok : :service_unavailable
@@ -36,17 +35,15 @@ private
     false
   end
 
-  def sidekiq_alive?
-    ps = Sidekiq::ProcessSet.new
-    !ps.size.zero?
-  rescue StandardError
-    false
-  end
+  def sidekiq_processes_checks
+    stats = Sidekiq::Stats.new
+    processes = Sidekiq::ProcessSet.new
 
-  def sidekiq_queue_healthy?
-    dead = Sidekiq::DeadSet.new
-    retries = Sidekiq::RetrySet.new
-    dead.size.zero? && retries.size.zero?
+    # Iterate over each Sidekiq queue and ensure that there is a process
+    # running for it.
+    stats.queues.all? do |queue|
+      processes.any? { |process| queue.in? process["queues"] }
+    end
   rescue StandardError
     false
   end
