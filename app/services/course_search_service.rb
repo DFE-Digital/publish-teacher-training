@@ -13,19 +13,6 @@ class CourseSearchService
 
   def call
     scope = course_scope.findable
-
-    if sort_by_provider_ascending?
-      scope = scope.ascending_canonical_order
-      scope = scope.select("provider.provider_name", "name")
-    elsif sort_by_provider_descending?
-      scope = scope.descending_canonical_order
-      scope = scope.select("provider.provider_name", "name")
-    elsif sort_by_distance?
-      scope = scope.joins(sites_with_distance_from_origin)
-      scope = scope.select("course.*, distance")
-      scope = scope.order(:distance)
-    end
-
     scope = scope.with_salary if funding_filter_salary?
     scope = scope.with_qualifications(qualifications) if qualifications.any?
     scope = scope.with_vacancies if has_vacancies?
@@ -36,7 +23,28 @@ class CourseSearchService
     scope = scope.within(filter[:radius], origin: origin) if locations_filter?
     scope = scope.with_funding_types(funding_types) if funding_types.any?
 
-    scope.distinct
+    # The 'where' scope will remove duplicates
+    # An outer query is required in the event the provider name is present.
+    # This prevents 'PG::InvalidColumnReference: ERROR: for SELECT DISTINCT, ORDER BY expressions must appear in select list'
+    outer_scope = Course.where(id: scope.select(:id))
+
+    if provider_name.present?
+      outer_scope = outer_scope
+                      .accredited_body_order(provider_name)
+                      .ascending_canonical_order
+    elsif sort_by_provider_ascending?
+      outer_scope = outer_scope.ascending_canonical_order
+      outer_scope = outer_scope.select("provider.provider_name", "course.*")
+    elsif sort_by_provider_descending?
+      outer_scope = outer_scope.descending_canonical_order
+      outer_scope = outer_scope.select("provider.provider_name", "course.*")
+    elsif sort_by_distance?
+      outer_scope = outer_scope.joins(sites_with_distance_from_origin)
+      outer_scope = outer_scope.select("course.*, distance")
+      outer_scope = outer_scope.order(:distance)
+    end
+
+    outer_scope
   end
 
   private_class_method :new

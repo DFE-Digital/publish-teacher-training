@@ -148,6 +148,10 @@ class Course < ApplicationRecord
     joins(:provider).merge(Provider.by_name_descending).order("name desc")
   end
 
+  scope :accredited_body_order, ->(provider_name) do
+    joins(:provider).merge(Provider.by_provider_name(provider_name))
+  end
+
   scope :changed_since, ->(timestamp) do
     if timestamp.present?
       changed_at_since(timestamp)
