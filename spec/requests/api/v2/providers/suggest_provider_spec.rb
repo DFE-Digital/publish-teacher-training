@@ -95,7 +95,7 @@ describe "GET /suggest" do
   it "returns bad request if query is too short" do
     provider
 
-    get "/api/v2/providers/suggest?query=#{provider.provider_name[0, 2]}",
+    get "/api/v2/providers/suggest?query=#{provider.provider_name[0, 1]}",
         headers: { "HTTP_AUTHORIZATION" => credentials }
 
     expect(response.status).to eq(400)
