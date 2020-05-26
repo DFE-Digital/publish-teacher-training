@@ -21,7 +21,7 @@ describe StatisticService do
   end
 
   describe "#save" do
-    let(:recruitment_cycle) { create(:recruitment_cycle) }
+    let(:recruitment_cycle) { find_or_create(:recruitment_cycle) }
 
     subject { described_class.save }
 
