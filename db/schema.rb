@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_05_22_114747) do
+ActiveRecord::Schema.define(version: 2020_05_26_083247) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_buffercache"
@@ -286,6 +286,12 @@ ActiveRecord::Schema.define(version: 2020_05_22_114747) do
     t.float "longitude"
     t.index ["latitude", "longitude"], name: "index_site_on_latitude_and_longitude"
     t.index ["provider_id", "code"], name: "IX_site_provider_id_code", unique: true
+  end
+
+  create_table "statistic", force: :cascade do |t|
+    t.jsonb "json_data", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
   end
 
   create_table "subject", force: :cascade do |t|
