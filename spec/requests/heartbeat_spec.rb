@@ -13,10 +13,11 @@ describe "heartbeat requests" do
     let(:stats)      { instance_double(Sidekiq::Stats) }
     let(:process)    { instance_double(Sidekiq::Process) }
     let(:queue_name) { "quest" }
+    let(:queues)     { { queue_name => 0 } }
 
     before do
       allow(Sidekiq::Stats).to receive(:new).and_return(stats)
-      allow(stats).to receive(:queues).and_return([queue_name])
+      allow(stats).to receive(:queues).and_return(queues)
 
       allow(Sidekiq::ProcessSet).to receive(:new).and_return([process])
       allow(process).to receive(:[]).with("queues").and_return([queue_name])

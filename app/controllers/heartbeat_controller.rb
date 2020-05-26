@@ -41,7 +41,7 @@ private
 
     # Iterate over each Sidekiq queue and ensure that there is a process
     # running for it.
-    stats.queues.all? do |queue|
+    stats.queues.keys.all? do |queue|
       processes.any? { |process| queue.in? process["queues"] }
     end
   rescue StandardError

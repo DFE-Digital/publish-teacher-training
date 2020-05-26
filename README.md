@@ -294,4 +294,8 @@ Find (Publish Teacher Training & Teacher Training API) build and release process
 
 ### <a name="releases-triggering"></a>Deploying
 
-👉 [See the deployment guide](/docs/deployment.md)
+👉 [See the deployment guide](./docs/deployment.md)
+
+## Other Documentation
+
+* [Healthcheck and Ping Endpoints](./docs/healthcheck_and_ping_endpoints.md)
