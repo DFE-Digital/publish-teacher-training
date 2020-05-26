@@ -84,7 +84,7 @@ private
 
     non_university_courses_with_nearest_site = non_university_sites.project(:course_id, Arel.sql("MIN#{Site.distance_sql(OpenStruct.new(lat: origin[0], lng: origin[1]))} as distance")).group(:course_id)
 
-    university_courses_with_nearest_site = university_sites.project(:course_id, Arel.sql("MIN(#{Site.distance_sql(OpenStruct.new(lat: origin[0], lng: origin[1]))} - 5) as distance")).group(:course_id)
+    university_courses_with_nearest_site = university_sites.project(:course_id, Arel.sql("MIN(#{Site.distance_sql(OpenStruct.new(lat: origin[0], lng: origin[1]))} - 10) as distance")).group(:course_id)
 
     courses_with_nearest_site = non_university_courses_with_nearest_site.union(university_courses_with_nearest_site)
 
