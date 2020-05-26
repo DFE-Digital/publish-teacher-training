@@ -6,4 +6,8 @@ class StatisticService
       publish: PublishReportingService.call(recruitment_cycle_scope: recruitment_cycle),
     }
   end
+
+  def self.save(recruitment_cycle: RecruitmentCycle.current_recruitment_cycle)
+    Statistic.create!(json_data: reporting(recruitment_cycle: recruitment_cycle))
+  end
 end
