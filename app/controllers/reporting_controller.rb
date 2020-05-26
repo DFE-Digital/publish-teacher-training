@@ -2,13 +2,7 @@ class ReportingController < ActionController::API
   before_action :build_recruitment_cycle
 
   def reporting
-    stats = {
-      providers: ProviderReportingService.call(providers_scope: @recruitment_cycle.providers),
-      courses: CourseReportingService.call(courses_scope: @recruitment_cycle.courses),
-      publish: PublishReportingService.call(recruitment_cycle_scope: @recruitment_cycle),
-    }
-
-    render status: :ok, json: stats
+    render status: :ok, json: StatisticService.reporting(recruitment_cycle: @recruitment_cycle)
   end
 
 private
