@@ -2,7 +2,7 @@ class ReportingController < ActionController::API
   before_action :build_recruitment_cycle
 
   def reporting
-    render status: :ok, json: StatisticService.reporting(recruitment_cycle: @recruitment_cycle)
+    render json: StatisticService.reporting(recruitment_cycle: @recruitment_cycle)
   end
 
 private
