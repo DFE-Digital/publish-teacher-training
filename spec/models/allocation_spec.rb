@@ -50,4 +50,28 @@ RSpec.describe Allocation do
       end
     end
   end
+
+  describe "#safe_delete" do
+    subject { create(:allocation) }
+
+    context "when the recruitment cycle does not match" do
+      let(:previous_recruitment_cycle) { create(:recruitment_cycle, :previous) }
+
+      it "returns an error" do
+        subject.safe_delete(previous_recruitment_cycle)
+
+        expect(subject.errors[:safe_delete]).to eq(["recruitment cycle does not match"])
+      end
+    end
+
+    context "when the recruitment cycle matches" do
+      let(:current_recruitment_cycle) { find_or_create(:recruitment_cycle) }
+
+      it "deletes the allocation" do
+        expect(subject).to receive(:delete)
+
+        subject.safe_delete(current_recruitment_cycle)
+      end
+    end
+  end
 end

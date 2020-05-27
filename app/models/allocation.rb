@@ -18,6 +18,14 @@ class Allocation < ApplicationRecord
     )
   end
 
+  def safe_delete(recruitment_cycle)
+    if recruitment_cycle == self.recruitment_cycle
+      self.delete
+    else
+      errors.add(:safe_delete, "recruitment cycle does not match")
+    end
+  end
+
 private
 
   def accredited_body_is_an_accredited_body

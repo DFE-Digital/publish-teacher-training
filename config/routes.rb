@@ -55,7 +55,7 @@ Rails.application.routes.draw do
         resources :allocations, only: %i[create index]
       end
 
-      resources :allocations, only: %i(show update)
+      resources :allocations, only: %i(show update destroy)
 
       resources :recruitment_cycles,
                 only: %i[index show],
