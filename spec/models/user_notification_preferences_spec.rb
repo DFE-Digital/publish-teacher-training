@@ -139,6 +139,19 @@ describe UserNotificationPreferences do
           expect(user_notifications.count).to eq(2)
         end
       end
+
+      context "when the user has an association from a previous recruitment cycle" do
+        let(:previous_accredited_body) { create(:provider, :accredited_body, :previous_recruitment_cycle) }
+
+        before do
+          organisation.providers << previous_accredited_body
+        end
+
+        it "doesn't create a user notification preference for that accredited body" do
+          expect(UserNotification.where(provider_code: previous_accredited_body.provider_code))
+            .to be_empty
+        end
+      end
     end
 
     context "user has existing notifications" do

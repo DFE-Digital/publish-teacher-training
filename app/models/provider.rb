@@ -88,6 +88,8 @@ class Provider < ApplicationRecord
       .or(self.where(provider_code: Course.findable.select(:accrediting_provider_code)))
   end
 
+  scope :in_current_cycle, -> { where(recruitment_cycle: RecruitmentCycle.current_recruitment_cycle) }
+
   serialize :accrediting_provider_enrichments, AccreditingProviderEnrichment::ArraySerializer
 
   validates :train_with_us, words_count: { maximum: 250, message: "^Reduce the word count for training with you" }

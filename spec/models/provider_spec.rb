@@ -596,6 +596,22 @@ describe Provider, type: :model do
         end
       end
     end
+
+    describe "in_current_cycle" do
+      let(:current_provider) { create(:provider) }
+      let(:non_current_provider) { create(:provider, :previous_recruitment_cycle) }
+
+      before do
+        current_provider
+        non_current_provider
+      end
+
+      subject { described_class.in_current_cycle }
+
+      it "includes providers in the current recruitment cycle" do
+        expect(subject).to contain_exactly(current_provider)
+      end
+    end
   end
 
   describe "geolocation" do
