@@ -116,7 +116,7 @@ properties:
       - fee
   gcse_subjects_required:
     type: string
-    example: [ maths, english ]
+    example: [maths, english]
     enum:
       - []
       - [maths, english]
@@ -225,13 +225,13 @@ properties:
     type: string
     description: >-
       The qualifications as an outcome of the course.
-    example: [ qts ]
+    example: [qts]
     enum:
-      - [ qts ]
-      - [ pgce ]
-      - [ pgde ]
-      - [ qts, pgce ]
-      - [ qts, pgde ]
+      - [qts]
+      - [pgce]
+      - [pgde]
+      - [qts, pgce]
+      - [qts, pgde]
   recruitment_cycle_year:
     type: string
     description: The recruitment cycle that this course is available in.

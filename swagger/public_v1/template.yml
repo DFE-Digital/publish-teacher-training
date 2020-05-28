@@ -19,13 +19,13 @@ components:
   schemas:
     Sort:
       type: array
-      example: 'provider.provider_name,name'
+      example: "provider.provider_name,name"
       items:
         type: string
-        example: 'name'
+        example: "name"
     Filter:
       type: object
-      example: ''
+      example: ""
       properties:
         has_vacancies:
           description: "Return courses that only have vacancies?"
@@ -45,17 +45,17 @@ components:
         study_type:
           description: "Search full time or part time courses or both."
           type: array
-          example: 'full_time,part_time'
+          example: "full_time,part_time"
           items:
             type: string
-            example: 'full_time'
+            example: "full_time"
         subjects:
           description: "Returns courses that include at least one of the given subjects."
           type: array
-          example: '00,01,W1'
+          example: "00,01,W1"
           items:
             type: string
-            example: 'W1'
+            example: "W1"
         send_courses:
           description: "Only return courses that have a SEND specialism."
           type: string
@@ -104,7 +104,7 @@ components:
     Included:
       type: array
       items:
-        $ref: '#/components/schemas/Resource'
+        $ref: "#/components/schemas/Resource"
     JSONAPI:
       type: object
       required:
@@ -242,11 +242,11 @@ components:
             $ref: "#/components/schemas/ResourceIdentifier"
     Resource:
       anyOf:
-        - $ref: '#/components/schemas/CourseResource'
-        - $ref: '#/components/schemas/RecruitmentCycleResource'
-        - $ref: '#/components/schemas/SubjectResource'
-        - $ref: '#/components/schemas/LocationResource'
-        - $ref: '#/components/schemas/LocationStatusResource'
+        - $ref: "#/components/schemas/CourseResource"
+        - $ref: "#/components/schemas/RecruitmentCycleResource"
+        - $ref: "#/components/schemas/SubjectResource"
+        - $ref: "#/components/schemas/LocationResource"
+        - $ref: "#/components/schemas/LocationStatusResource"
       discriminator:
         propertyName: type
     ResourceIdentifier:

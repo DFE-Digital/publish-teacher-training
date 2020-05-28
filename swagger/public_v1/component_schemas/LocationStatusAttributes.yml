@@ -24,9 +24,9 @@ properties:
     type: string
     description: "What type of vacancies are available."
     enum:
-     - full_time_vacancies
-     - part_time_vacancies
-     - both_full_time_and_part_time_vacancies
+      - full_time_vacancies
+      - part_time_vacancies
+      - both_full_time_and_part_time_vacancies
     example: full_time_vacancies
   relationships:
     $ref: "#/components/schemas/LocationStatusRelationships"
