@@ -2,6 +2,7 @@
 Rails.application.routes.draw do
   get :ping, controller: :heartbeat
   get :healthcheck, controller: :heartbeat
+  get :sha, controller: :heartbeat
   get :reporting, controller: :reporting
 
   mount OpenApi::Rswag::Ui::Engine => "/api-docs"

@@ -110,4 +110,16 @@ describe "heartbeat requests" do
       end
     end
   end
+
+  describe "GET /sha" do
+    it "returns the sha from the file COMMIT_SHA" do
+      allow(File).to receive(:read)
+                       .with(Rails.root.join("COMMIT_SHA"))
+                       .and_return("deadbeef\n")
+
+      get "/sha"
+
+      expect(response.body).to eq '{"sha":"deadbeef"}'
+    end
+  end
 end
