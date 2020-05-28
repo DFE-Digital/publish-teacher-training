@@ -23,12 +23,12 @@ class UserNotificationPreferences
       rollback_on_error do
         UserNotification.where(user_id: id).destroy_all
 
-        user.providers.accredited_body.distinct.map do |provider|
+        user_accredited_body_codes.each do |provider_code|
           UserNotification.create(
             user_id: id,
             course_create: enable_notifications,
             course_update: enable_notifications,
-            provider_code: provider.provider_code,
+            provider_code: provider_code,
           )
         end
       end
@@ -42,6 +42,10 @@ class UserNotificationPreferences
   alias_method :enabled?, :enabled
 
 private
+
+  def user_accredited_body_codes
+    user.providers.accredited_body.in_current_cycle.distinct.pluck(:provider_code)
+  end
 
   def user_notifications
     @user_notifications ||= UserNotification.where(user_id: id)
