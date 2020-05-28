@@ -77,11 +77,11 @@ properties:
       - scotland
   street_address_1:
     type: string
-    description: "Building or street line one"
+    description: "Building or street line one."
     example: "Long College"
   street_address_2:
     type: string
-    description: "Building or street line two"
+    description: "Building or street line two."
     example: "1st floor, 86 Long Rd"
   train_with_disability:
     type: string
@@ -105,5 +105,5 @@ properties:
   website:
     type: string
     format: url
-    description: "A link to the initial teacher training or course pages of your website"
+    description: "A link to the initial teacher training or course pages of your website."
     example: "http://www.teamworkstsa.org/home-page-s-c-i-t-t-teacher-training/"

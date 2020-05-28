@@ -7,7 +7,7 @@
       "name": "DfE",
       "email": "becomingateacher@digital.education.gov.uk"
     },
-    "description": "API for DfE's postgraduate teacher training course service"
+    "description": "API for DfE's postgraduate teacher training course service."
   },
   "servers": [
     {
@@ -457,12 +457,12 @@
             "example": "true"
           },
           "funding": {
-            "description": "Return courses that are salary funded",
+            "description": "Return courses that are salary funded.",
             "type": "string",
             "example": "salary"
           },
           "qualification": {
-            "description": "Search courses based on the award given on course completion",
+            "description": "Search courses based on the award given on course completion.",
             "type": "array",
             "example": "qts,pgce,pgde",
             "items": {
@@ -471,7 +471,7 @@
             }
           },
           "study_type": {
-            "description": "Search full time or part time courses or both",
+            "description": "Search full time or part time courses or both.",
             "type": "array",
             "example": "full_time,part_time",
             "items": {
@@ -480,7 +480,7 @@
             }
           },
           "subjects": {
-            "description": "Returns courses that include at least one of the given subjects",
+            "description": "Returns courses that include at least one of the given subjects.",
             "type": "array",
             "example": "00,01,W1",
             "items": {
@@ -489,22 +489,22 @@
             }
           },
           "send_courses": {
-            "description": "Only return courses that have a SEND specialism",
+            "description": "Only return courses that have a SEND specialism.",
             "type": "string",
             "example": "true"
           },
           "latitude": {
-            "description": "Latitude of origin when performing a search by radius",
+            "description": "Latitude of origin when performing a search by radius.",
             "type": "number",
             "example": 54.9753348
           },
           "longitude": {
-            "description": "Longitude of origin when performing a search by radius",
+            "description": "Longitude of origin when performing a search by radius.",
             "type": "number",
             "example": -1.6100477
           },
           "radius": {
-            "description": "Search radius in miles from given latitude and longitude",
+            "description": "Search radius in miles from given latitude and longitude.",
             "type": "number",
             "example": 20
           }
@@ -537,32 +537,32 @@
           },
           "name": {
             "type": "string",
-            "description": "The name of the location",
+            "description": "The name of the location.",
             "example": "Henry Maynard Primary School"
           },
           "street_address_1": {
             "type": "string",
-            "description": "Building or street line one",
+            "description": "Building or street line one.",
             "example": "The Rose Building"
           },
           "street_address_2": {
             "type": "string",
-            "description": "Building or street line two",
+            "description": "Building or street line two.",
             "example": "Maynard Road"
           },
           "city": {
             "type": "string",
-            "description": "Town or city",
+            "description": "Town or city.",
             "example": "London"
           },
           "county": {
             "type": "string",
-            "description": "County",
+            "description": "County.",
             "example": "London"
           },
           "postcode": {
             "type": "string",
-            "description": "The postcode of the location",
+            "description": "The postcode of the location.",
             "example": "E17 9JE"
           },
           "region_code": {
@@ -593,7 +593,7 @@
       },
       "LocationStatusAttributes": {
         "type": "object",
-        "description": "Fields relating to the state of a location",
+        "description": "Fields relating to the state of a location.",
         "properties": {
           "status": {
             "type": "string",
@@ -615,12 +615,12 @@
           },
           "has_vacancies": {
             "type": "boolean",
-            "description": "Are there any vacancies for this course",
+            "description": "Are there any vacancies for this course.",
             "example": true
           },
           "vacancy_status": {
             "type": "string",
-            "description": "What type of vacancies are available",
+            "description": "What type of vacancies are available.",
             "enum": [
               "full_time_vacancies",
               "part_time_vacancies",
@@ -659,7 +659,7 @@
       },
       "LocationStatusResource": {
         "type": "object",
-        "description": "Wrapper object for LocationStatusAttributes",
+        "description": "Wrapper object for LocationStatusAttributes.",
         "properties": {
           "id": {
             "type": "string",
@@ -705,12 +705,12 @@
           },
           "city": {
             "type": "string",
-            "description": "Town or city",
+            "description": "Town or city.",
             "example": "London"
           },
           "county": {
             "type": "string",
-            "description": "County",
+            "description": "County.",
             "example": "London"
           },
           "changed_at": {
@@ -735,7 +735,7 @@
           "postcode": {
             "type": "string",
             "format": "uk-postcode",
-            "description": "The provider's postcode",
+            "description": "The provider's postcode.",
             "maxLength": 8,
             "example": "SK2 6AA"
           },
@@ -782,12 +782,12 @@
           },
           "street_address_1": {
             "type": "string",
-            "description": "Building or street line one",
+            "description": "Building or street line one.",
             "example": "Long College"
           },
           "street_address_2": {
             "type": "string",
-            "description": "Building or street line two",
+            "description": "Building or street line two.",
             "example": "1st floor, 86 Long Rd"
           },
           "train_with_disability": {
@@ -805,7 +805,7 @@
           "website": {
             "type": "string",
             "format": "url",
-            "description": "A link to the initial teacher training or course pages of your website",
+            "description": "A link to the initial teacher training or course pages of your website.",
             "example": "http://www.teamworkstsa.org/home-page-s-c-i-t-t-teacher-training/"
           }
         }
@@ -1047,7 +1047,7 @@
             },
             "style": "deepObject",
             "explode": true,
-            "description": "Refine courses to return",
+            "description": "Refine courses to return.",
             "required": false
           },
           {
@@ -1059,13 +1059,13 @@
             "style": "form",
             "explode": false,
             "example": "provider.provider_name,name",
-            "description": "Field(s) to sort the courses by",
+            "description": "Field(s) to sort the courses by.",
             "required": false
           }
         ],
         "responses": {
           "200": {
-            "description": "The list of courses in the current recruitment cycle",
+            "description": "The list of courses in the current recruitment cycle.",
             "content": {
               "application/json": {
                 "schema": {
@@ -1088,7 +1088,7 @@
           {
             "name": "course_code",
             "in": "path",
-            "description": "The code of the course",
+            "description": "The code of the course.",
             "required": true,
             "schema": {
               "type": "string"
@@ -1097,7 +1097,7 @@
         ],
         "responses": {
           "200": {
-            "description": "The list of locations for the given course",
+            "description": "The list of locations for the given course.",
             "content": {
               "application/json": {
                 "schema": {

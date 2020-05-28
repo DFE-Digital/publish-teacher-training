@@ -1,6 +1,6 @@
 ---
 type: object
-description: "Associated data"
+description: "Associated data."
 properties:
   site:
     type: object
