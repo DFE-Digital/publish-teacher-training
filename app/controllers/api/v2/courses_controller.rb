@@ -98,6 +98,8 @@ module API
 
         @course.ensure_site_statuses_match_study_mode if @course.study_mode_previously_changed?
 
+        Courses::UpdateNotificationService.new.call(course: @course)
+
         if @course.errors.empty? && @course.valid?
           @course.save
           @course.course_subjects.each(&:save)
@@ -149,8 +151,6 @@ module API
 
         @course.assign_attributes(course_params)
         @course.save
-
-        Courses::UpdateNotificationService.new.call(course: @course)
       end
 
       def update_sites
