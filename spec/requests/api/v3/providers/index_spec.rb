@@ -131,7 +131,7 @@ describe "GET v3/recruitment_cycle/:recruitment_cycle_year/providers" do
       provider_two
     end
 
-    context "Seaching for a provider by its full name" do
+    context "Searching for a provider by its full name" do
       let(:request_path) { "#{base_provider_path}?search=Second provider" }
 
       it "Only returns data for the provider" do
@@ -142,7 +142,7 @@ describe "GET v3/recruitment_cycle/:recruitment_cycle_year/providers" do
       end
     end
 
-    context "Seaching for a provider by its lower case full name" do
+    context "Searching for a provider by its lower case full name" do
       let(:request_path) { "#{base_provider_path}?search=second provider" }
 
       it "Only returns data for the provider" do
@@ -153,7 +153,7 @@ describe "GET v3/recruitment_cycle/:recruitment_cycle_year/providers" do
       end
     end
 
-    context "Seaching for a provider by part of its name" do
+    context "Searching for a provider by part of its name" do
       let(:request_path) { "#{base_provider_path}?search=provider" }
 
       it "Returns data for the matching providers" do
@@ -165,7 +165,7 @@ describe "GET v3/recruitment_cycle/:recruitment_cycle_year/providers" do
       end
     end
 
-    context "Seaching for a provider by its provider code" do
+    context "Searching for a provider by its provider code" do
       let(:request_path) { "#{base_provider_path}?search=2AT" }
 
       it "Only returns data for the provider" do
@@ -176,7 +176,7 @@ describe "GET v3/recruitment_cycle/:recruitment_cycle_year/providers" do
       end
     end
 
-    context "Seaching for a provider by a lower case provider code" do
+    context "Searching for a provider by a lower case provider code" do
       let(:request_path) { "#{base_provider_path}?search=2at" }
 
       it "Only returns data for the provider" do
@@ -184,6 +184,28 @@ describe "GET v3/recruitment_cycle/:recruitment_cycle_year/providers" do
 
         expect(json_response["data"].count).to eq(1)
         expect(json_response["data"].first).to have_attribute("provider_code").with_value("2AT")
+      end
+    end
+
+    context "Searching for a provider with an invalid query" do
+      context "query is empty" do
+        let(:request_path) { "#{base_provider_path}?search=" }
+
+        it "returns all providers" do
+          perform_request
+
+          expect(json_response["data"].count).to eq(2)
+        end
+      end
+
+      context "query is less than 2 characters" do
+        let(:request_path) { "#{base_provider_path}?search=a" }
+
+        it "returns Bad Request" do
+          perform_request
+
+          expect(response.status).to eq(400)
+        end
       end
     end
   end

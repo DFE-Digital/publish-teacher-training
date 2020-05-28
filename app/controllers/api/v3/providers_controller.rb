@@ -7,6 +7,8 @@ module API
         build_fields_for_index
 
         @providers = if params[:search].present?
+                       return render(status: :bad_request) if params[:search].length < 2
+
                        @recruitment_cycle.providers.search_by_code_or_name(params[:search])
                      else
                        @recruitment_cycle.providers
