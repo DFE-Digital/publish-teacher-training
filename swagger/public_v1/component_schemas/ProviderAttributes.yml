@@ -42,7 +42,7 @@ properties:
     example: SK2 6AA
   name:
     type: string
-    description: "The name of training provider."
+    description: "The name of the training provider."
     example: "Long School"
   provider_type:
     type: string
