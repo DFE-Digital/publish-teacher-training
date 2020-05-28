@@ -1,4 +1,4 @@
-version: '3.2'
+version: '3.4'
 volumes:
   dbdata:
 services:
@@ -9,12 +9,20 @@ services:
      - dbdata:/var/lib/postgresql/data
     environment:
     - POSTGRES_PASSWORD=developmentpassword
+  middleman:
+    build:
+      context: .
+      target: middleman
+      cache_from:
+        - ${dockerHubUsername:-dfedigital}/teacher-training-api-middleman:master
+    image: ${dockerHubUsername:-dfedigital}/teacher-training-api-middleman:${GIT_BRANCH:-latest}
   web:
     build:
       context: .
       cache_from:
-        - ${dockerHubUsername:-dfedigital}/teacher-training-api:latest
-    image: ${dockerHubUsername:-dfedigital}/teacher-training-api:latest
+        - ${dockerHubUsername:-dfedigital}/teacher-training-api:${GIT_BRANCH:-latest}
+        - ${dockerHubUsername:-dfedigital}/teacher-training-api-middleman:${GIT_BRANCH:-latest}
+    image: ${dockerHubUsername:-dfedigital}/teacher-training-api:${GIT_BRANCH:-latest}
     command: ash -c "rm -f tmp/pids/server.pid && bundle exec rails server -p 3001 -b '0.0.0.0'"
     volumes:
       - .:/app
@@ -22,6 +30,7 @@ services:
       - "3001:3001"
     depends_on:
       - db
+      - middleman
     environment:
       - DB_HOSTNAME=db
       - DB_USERNAME=postgres
@@ -35,8 +44,8 @@ services:
         - TEACHER_TRAINING_API=${dockerHubImageName:-teacher-training-api}
       context: bg-geocode
       cache_from:
-        - ${dockerHubUsername:-dfedigital}/teacher-training-bg-geocode:latest
-    image: ${dockerHubUsername:-dfedigital}/teacher-training-bg-geocode:latest
+        - ${dockerHubUsername:-dfedigital}/teacher-training-bg-geocode:${GIT_BRANCH:-latest}
+    image: ${dockerHubUsername:-dfedigital}/teacher-training-bg-geocode:${GIT_BRANCH:-latest}
     volumes:
       - .:/app
     depends_on:
@@ -55,8 +64,8 @@ services:
         - TEACHER_TRAINING_API=${dockerHubImageName:-teacher-training-api}
       context: bg-mailer
       cache_from:
-        - ${dockerHubUsername:-dfedigital}/teacher-training-bg-mailer:latest
-    image: ${dockerHubUsername:-dfedigital}/teacher-training-bg-mailer:latest
+        - ${dockerHubUsername:-dfedigital}/teacher-training-bg-mailer:${GIT_BRANCH:-latest}
+    image: ${dockerHubUsername:-dfedigital}/teacher-training-bg-mailer:${GIT_BRANCH:-latest}
     volumes:
       - .:/app
     depends_on:
