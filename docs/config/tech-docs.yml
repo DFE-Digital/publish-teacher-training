@@ -35,4 +35,4 @@ prevent_indexing: false
 show_contribution_banner: false
 github_repo: DFE-Digital/teacher-training-api
 
-open_api_path: ../swagger/public_v1/api_spec.json
+open_api_path: ../swagger/public_v1/api_spec.yml
