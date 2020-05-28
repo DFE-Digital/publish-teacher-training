@@ -1,6 +1,6 @@
 ---
 type: object
-description: Fields relating to the state of a location
+description: "Fields relating to the state of a location."
 properties:
   status:
     type: string
@@ -18,15 +18,15 @@ properties:
     example: "published"
   has_vacancies:
     type: boolean
-    description: "Are there any vacancies for this course"
+    description: "Are there any vacancies for this course."
     example: true
   vacancy_status:
     type: string
-    description: "What type of vacancies are available"
+    description: "What type of vacancies are available."
     enum:
-     - full_time_vacancies
-     - part_time_vacancies
-     - both_full_time_and_part_time_vacancies
+      - full_time_vacancies
+      - part_time_vacancies
+      - both_full_time_and_part_time_vacancies
     example: full_time_vacancies
   relationships:
     $ref: "#/components/schemas/LocationStatusRelationships"

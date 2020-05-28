@@ -6,10 +6,10 @@ info:
   contact:
     name: DfE
     email: becomingateacher@digital.education.gov.uk
-  description: API for DfE's postgraduate teacher training course service
+  description: "API for DfE's postgraduate teacher training course service."
 servers:
   - url: https://api2.publish-teacher-training-courses.service.gov.uk/api/public/{version}
-    description: Production
+    description: "Production url."
     variables:
       version:
         enum:
@@ -19,57 +19,57 @@ components:
   schemas:
     Sort:
       type: array
-      example: 'provider.provider_name,name'
+      example: "provider.provider_name,name"
       items:
         type: string
-        example: 'name'
+        example: "name"
     Filter:
       type: object
-      example: ''
+      example: ""
       properties:
         has_vacancies:
           description: "Return courses that only have vacancies?"
           type: string
           example: "true"
         funding:
-          description: "Return courses that are salary funded"
+          description: "Return courses that are salary funded."
           type: string
           example: "salary"
         qualification:
-          description: "Search courses based on the award given on course completion"
+          description: "Search courses based on the award given on course completion."
           type: array
           example: "qts,pgce,pgde"
           items:
             type: string
             example: "qts"
         study_type:
-          description: "Search full time or part time courses or both"
+          description: "Search full time or part time courses or both."
           type: array
-          example: 'full_time,part_time'
+          example: "full_time,part_time"
           items:
             type: string
-            example: 'full_time'
+            example: "full_time"
         subjects:
-          description: 'Returns courses that include at least one of the given subjects'
+          description: "Returns courses that include at least one of the given subjects."
           type: array
-          example: '00,01,W1'
+          example: "00,01,W1"
           items:
             type: string
-            example: 'W1'
+            example: "W1"
         send_courses:
-          description: "Only return courses that have a SEND specialism"
+          description: "Only return courses that have a SEND specialism."
           type: string
           example: "true"
         latitude:
-          description: "Latitude of origin when performing a search by radius"
+          description: "Latitude of origin when performing a search by radius."
           type: number
           example: 54.9753348
         longitude:
-          description: "Longitude of origin when performing a search by radius"
+          description: "Longitude of origin when performing a search by radius."
           type: number
           example: -1.6100477
         radius:
-          description: "Search radius in miles from given latitude and longitude"
+          description: "Search radius in miles from given latitude and longitude."
           type: number
           example: 20
     CourseResource:
@@ -104,7 +104,7 @@ components:
     Included:
       type: array
       items:
-        $ref: '#/components/schemas/Resource'
+        $ref: "#/components/schemas/Resource"
     JSONAPI:
       type: object
       required:
@@ -121,27 +121,27 @@ components:
           example: "W"
         name:
           type: string
-          description: "The name of the location"
+          description: "The name of the location."
           example: "Henry Maynard Primary School"
         street_address_1:
           type: string
-          description: "Building or street line one"
+          description: "Building or street line one."
           example: "The Rose Building"
         street_address_2:
           type: string
-          description: "Building or street line two"
+          description: "Building or street line two."
           example: "Maynard Road"
         city:
           type: string
-          description: "Town or city"
+          description: "Town or city."
           example: "London"
         county:
           type: string
-          description: "County"
+          description: "County."
           example: "London"
         postcode:
           type: string
-          description: "The postcode of the location"
+          description: "The postcode of the location."
           example: "E17 9JE"
         region_code:
           type: string
@@ -173,7 +173,7 @@ components:
           $ref: "#/components/schemas/JSONAPI"
     LocationStatusResource:
       type: object
-      description: Wrapper object for LocationStatusAttributes
+      description: "Wrapper object for LocationStatusAttributes."
       properties:
         id:
           type: string
@@ -242,11 +242,11 @@ components:
             $ref: "#/components/schemas/ResourceIdentifier"
     Resource:
       anyOf:
-        - $ref: '#/components/schemas/CourseResource'
-        - $ref: '#/components/schemas/RecruitmentCycleResource'
-        - $ref: '#/components/schemas/SubjectResource'
-        - $ref: '#/components/schemas/LocationResource'
-        - $ref: '#/components/schemas/LocationStatusResource'
+        - $ref: "#/components/schemas/CourseResource"
+        - $ref: "#/components/schemas/RecruitmentCycleResource"
+        - $ref: "#/components/schemas/SubjectResource"
+        - $ref: "#/components/schemas/LocationResource"
+        - $ref: "#/components/schemas/LocationStatusResource"
       discriminator:
         propertyName: type
     ResourceIdentifier:
