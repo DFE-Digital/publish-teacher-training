@@ -645,6 +645,7 @@ describe "PATCH /providers/:provider_code/courses/:course_code" do
     let(:mailer_spy) { spy(course_update_email: mail_spy) }
     let(:findable) { build(:site_status, :findable) }
     let(:new) { build(:site_status, :new) }
+    let(:accredited_body) { create(:provider, :accredited_body) }
 
     let(:permitted_params) do
       [:age_range_in_years]
@@ -657,7 +658,7 @@ describe "PATCH /providers/:provider_code/courses/:course_code" do
     end
 
     let(:user_notifications) do
-      create(:user_notification, user: user, provider: provider, course_update: true)
+      create(:user_notification, user: user, provider: accredited_body, course_update: true)
     end
 
     let(:update_course) do
@@ -680,6 +681,7 @@ describe "PATCH /providers/:provider_code/courses/:course_code" do
             age_range_in_years: "3_to_7",
             site_statuses: [findable],
             provider: provider,
+            accrediting_provider: accredited_body,
           )
         end
 

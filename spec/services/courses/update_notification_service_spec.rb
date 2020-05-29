@@ -17,7 +17,7 @@ describe Courses::UpdateNotificationService do
     create(
       :course,
       age_range_in_years: "3_to_7",
-      provider: provider,
+      accrediting_provider: provider,
     )
   end
   let(:findable) { build(:site_status, :findable) }
@@ -35,7 +35,7 @@ describe Courses::UpdateNotificationService do
         :course,
         age_range_in_years: "3_to_7",
         site_statuses: [findable],
-        provider: provider,
+        accrediting_provider: provider,
       )
     end
 
@@ -75,6 +75,14 @@ describe Courses::UpdateNotificationService do
                :accredited_body,
                organisations: [organisation],
                recruitment_cycle: recruitment_cycle)
+      end
+
+      let(:course) do
+        create(
+          :course,
+          age_range_in_years: "3_to_7",
+          provider: provider,
+        )
       end
 
       it "does not send a notification" do
