@@ -20,6 +20,12 @@ class HeartbeatController < ActionController::API
            }
   end
 
+  def sha
+    commit_sha_path = Rails.root.join(Settings.commit_sha_file)
+    sha = File.read(commit_sha_path).strip
+    render json: { sha: sha }
+  end
+
 private
 
   def database_alive?

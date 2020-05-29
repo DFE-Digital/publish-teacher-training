@@ -24,3 +24,4 @@ logstash:
 log_level: info
 magic_link:
   max_token_age: <%= 1.hour %>
+commit_sha_file: COMMIT_SHA
