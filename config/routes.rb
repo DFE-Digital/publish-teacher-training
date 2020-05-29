@@ -5,7 +5,14 @@ Rails.application.routes.draw do
   get :sha, controller: :heartbeat
   get :reporting, controller: :reporting
 
+  # NOTE: this has questionable existance.
+  # Why do we need ui?
+  # When we have that https://github.com/alphagov/tech-docs-gem
   mount OpenApi::Rswag::Ui::Engine => "/api-docs"
+  # NOTE: this has questionable existance.
+  # Why do we need api?
+  # When it seems to be a static file server...
+  # That only works after `bundle exec rake rswag:specs:swaggerize`
   mount OpenApi::Rswag::Api::Engine => "/api-docs"
 
   namespace :api do
@@ -97,6 +104,7 @@ Rails.application.routes.draw do
       get "provider-suggestions", to: "provider_suggestions#index"
     end
 
+    # NOTE: this is placeholder code?
     namespace :public do
       namespace :v1 do
         resources :courses, only: [:index] do
