@@ -22,7 +22,9 @@ module Courses
     end
 
     def users_to_notify(course)
-      User.notifiable_users(course.provider.provider_code)
+      User.joins(:user_notifications).merge(
+        UserNotification.course_update_notification_requests(course.accrediting_provider_code),
+      )
     end
 
     def course_needs_to_notify?(course)

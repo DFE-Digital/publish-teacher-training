@@ -19,11 +19,6 @@ class User < ApplicationRecord
   scope :admins, -> { where(admin: true) }
   scope :non_admins, -> { where.not(admin: true) }
   scope :active, -> { where.not(accept_terms_date_utc: nil) }
-  scope :notifiable_users, ->(provider_code) do
-    joins(:user_notifications).merge(
-      UserNotification.course_update_notification_requests(provider_code),
-    )
-  end
   scope :last_login_since, ->(timestamp) do
     where("last_login_date_utc > ?", timestamp)
   end
