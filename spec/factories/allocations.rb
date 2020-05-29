@@ -4,6 +4,10 @@ FactoryBot.define do
     association :provider
     number_of_places { 0 }
     recruitment_cycle { RecruitmentCycle.current }
+
+    provider_code { provider.provider_code }
+    accredited_body_code { accredited_body.provider_code }
+
     trait :repeat do
       request_type { "repeat" }
     end
