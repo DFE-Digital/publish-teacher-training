@@ -30,7 +30,7 @@ describe Courses::PublishService do
       let(:mailer_spy) { spy(course_create_email: mail_spy) }
 
       before do
-        stub_const("CourseCreateEmailMailer", mailer_spy)
+        stub_const("CoursePublishEmailMailer", mailer_spy)
       end
 
       context "a self-accredited course" do

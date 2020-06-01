@@ -11,7 +11,7 @@ module Courses
 
       users = User.joins(:user_notifications).merge(UserNotification.course_publish_notification_requests(course.accrediting_provider_code))
       users.each do |user|
-        CourseCreateEmailMailer.course_create_email(
+        CoursePublishEmailMailer.course_publish_email(
           course,
           user,
         ).deliver_later(queue: "mailer")

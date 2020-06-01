@@ -1,7 +1,7 @@
-class CourseCreateEmailMailer < GovukNotifyRails::Mailer
+class CoursePublishEmailMailer < GovukNotifyRails::Mailer
   include TimeFormat
 
-  def course_create_email(course, user)
+  def course_publish_email(course, user)
     set_template(Settings.govuk_notify.course_create_email_template_id)
 
     set_personalisation(
