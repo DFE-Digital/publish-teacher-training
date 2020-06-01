@@ -63,6 +63,15 @@ RSpec.describe Courses::CopyToProviderService do
     expect(mocked_enrichments_copy_to_course_service).to_not have_received(:execute)
   end
 
+  it "saves without doing validations" do
+    course_dup = instance_spy(Course, recruitment_cycle: recruitment_cycle)
+    allow(course).to receive(:dup).and_return(course_dup)
+
+    service.execute(course: course, new_provider: new_provider)
+
+    expect(course_dup).to have_received(:save!).with(validate: false)
+  end
+
   context "when a published enrichment exists" do
     let!(:old_published_enrichment) do
       create :course_enrichment, :published, last_published_timestamp_utc: 10.days.ago, course: course

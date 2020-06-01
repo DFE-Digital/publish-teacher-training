@@ -17,7 +17,7 @@ module Courses
         new_course.applications_open_from = course.applications_open_from + year_differential.year
         new_course.start_date = course.start_date + year_differential.year
         new_course.subjects = course.subjects
-        new_course.save!
+        new_course.save!(validate: false)
 
         copy_latest_enrichment_to_course(course, new_course)
 
