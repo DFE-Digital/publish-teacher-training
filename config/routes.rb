@@ -55,7 +55,7 @@ Rails.application.routes.draw do
         resources :allocations, only: %i[create index]
       end
 
-      resources :allocations, only: %i(show update destroy)
+      resources :allocations, only: %i[show update destroy]
 
       resources :recruitment_cycles,
                 only: %i[index show],
@@ -65,6 +65,9 @@ Rails.application.routes.draw do
                   only: %i[index show update],
                   param: :code,
                   concerns: :provider_routes do
+          member do
+            get :show_any
+          end
         end
 
         get "/courses", to: "courses#index"

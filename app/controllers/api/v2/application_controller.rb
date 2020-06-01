@@ -23,7 +23,7 @@ module API
     private
 
       def check_terms_accepted
-        return if @current_user&.accept_terms_date_utc.present?
+        return if current_user&.accept_terms_date_utc.present?
 
         error_body = {
           errors: [

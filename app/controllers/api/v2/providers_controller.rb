@@ -33,6 +33,14 @@ module API
         render jsonapi: @provider, include: params[:include]
       end
 
+      # This endpoint ignores the policy and allows anyone to see the provider
+      # This used by allocations, as any training provider can be used
+      def show_any
+        authorize @provider, :show_any?
+
+        render jsonapi: @provider, include: params[:include]
+      end
+
       def update
         authorize @provider, :update?
 
