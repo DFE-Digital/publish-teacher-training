@@ -8,8 +8,8 @@ class UserNotificationPreferences
   end
 
   def enabled
-    # course_create and course_update currently always have the same value
-    user_notifications.select(&:course_create).any?
+    # course_publish and course_update currently always have the same value
+    user_notifications.select(&:course_publish).any?
   end
 
   def updated_at
@@ -26,7 +26,7 @@ class UserNotificationPreferences
         user_accredited_body_codes.each do |provider_code|
           UserNotification.create(
             user_id: id,
-            course_create: enable_notifications,
+            course_publish: enable_notifications,
             course_update: enable_notifications,
             provider_code: provider_code,
           )

@@ -42,7 +42,7 @@ describe "user notification preferences service" do
   end
 
   def given_i_have_enabled_notifications
-    create(:user_notification, user: @user, course_create: true, course_update: true)
+    create(:user_notification, user: @user, course_publish: true, course_update: true)
   end
 
   def then_i_receive_not_authorized

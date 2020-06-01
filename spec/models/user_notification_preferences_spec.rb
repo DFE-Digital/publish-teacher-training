@@ -8,7 +8,7 @@ describe UserNotificationPreferences do
       create(
         :user_notification,
         user: user,
-        course_create: preference,
+        course_publish: preference,
         course_update: preference,
       )
     end
@@ -81,7 +81,7 @@ describe UserNotificationPreferences do
       create(
         :user_notification,
         user: user,
-        course_create: false,
+        course_publish: false,
         course_update: false,
         provider_code: accredited_body1.provider_code,
       )
@@ -91,7 +91,7 @@ describe UserNotificationPreferences do
       create(
         :user_notification,
         user: user,
-        course_create: false,
+        course_publish: false,
         course_update: false,
         provider_code: accredited_body2.provider_code,
       )
@@ -101,7 +101,7 @@ describe UserNotificationPreferences do
       create(
         :user_notification,
         user: other_user,
-        course_create: false,
+        course_publish: false,
         course_update: false,
         provider_code: accredited_body1.provider_code,
       )
@@ -120,7 +120,7 @@ describe UserNotificationPreferences do
         expect(user_notification_preferences.enabled?).to eq(true)
         user_notifications = UserNotification.where(user_id: user.id)
         expect(user_notifications.count).to eq(2)
-        expect(user_notifications.map(&:course_create)).to eq([true, true])
+        expect(user_notifications.map(&:course_publish)).to eq([true, true])
         expect(user_notifications.map(&:course_update)).to eq([true, true])
         expect(user_notifications.map(&:provider_code)).to contain_exactly(accredited_body1.provider_code, accredited_body2.provider_code)
       end
@@ -171,7 +171,7 @@ describe UserNotificationPreferences do
         expect(user_notification_preferences.enabled?).to eq(true)
         user_notifications = UserNotification.where(user_id: user.id)
         expect(user_notifications.count).to eq(2)
-        expect(user_notifications.map(&:course_create)).to eq([true, true])
+        expect(user_notifications.map(&:course_publish)).to eq([true, true])
         expect(user_notifications.map(&:course_update)).to eq([true, true])
         expect(user_notifications.map(&:provider_code))
           .to contain_exactly(accredited_body1.provider_code, accredited_body2.provider_code)
@@ -190,7 +190,7 @@ describe UserNotificationPreferences do
         described_class.new(user_id: user.id).update(enable_notifications: true)
 
         other_users_notification_preferences = UserNotification.where(user_id: other_user.id)
-        expect(other_users_notification_preferences.map(&:course_create)).to eq([false])
+        expect(other_users_notification_preferences.map(&:course_publish)).to eq([false])
       end
 
       describe "if an error is raised" do
@@ -203,7 +203,7 @@ describe UserNotificationPreferences do
 
           user_notifications = UserNotification.where(user_id: user.id)
           expect(user_notifications.count).to eq(2)
-          expect(user_notifications.map(&:course_create)).to eq([false, false])
+          expect(user_notifications.map(&:course_publish)).to eq([false, false])
           expect(user_notifications.map(&:course_update)).to eq([false, false])
         end
 

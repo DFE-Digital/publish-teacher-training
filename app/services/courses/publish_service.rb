@@ -9,7 +9,7 @@ module Courses
     def call(course:)
       return false unless notify_accredited_body?(course)
 
-      users = User.joins(:user_notifications).merge(UserNotification.course_create_notification_requests(course.accrediting_provider_code))
+      users = User.joins(:user_notifications).merge(UserNotification.course_publish_notification_requests(course.accrediting_provider_code))
       users.each do |user|
         CourseCreateEmailMailer.course_create_email(
           course,
