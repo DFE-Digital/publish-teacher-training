@@ -74,7 +74,7 @@ module API
           @course.publish_sites
           @course.publish_enrichment(@current_user)
           @course.reload
-          Courses::PublishService.call(course: @course)
+          NotificationService::CoursePublished.call(course: @course)
 
           head :ok
         else

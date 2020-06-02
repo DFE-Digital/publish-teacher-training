@@ -1,15 +1,16 @@
-module Courses
-  class PublishService
-    class << self
-      def call(course:)
-        new.call(course: course)
-      end
+module NotificationService
+  class CoursePublished
+    include ServicePattern
+
+    def initialize(course:)
+      @course = course
     end
 
-    def call(course:)
-      return false unless notify_accredited_body?(course)
+    def call
+      return false unless notify_accredited_body?
 
       users = User.joins(:user_notifications).merge(UserNotification.course_publish_notification_requests(course.accrediting_provider_code))
+
       users.each do |user|
         CoursePublishEmailMailer.course_publish_email(
           course,
@@ -20,7 +21,9 @@ module Courses
 
   private
 
-    def notify_accredited_body?(course)
+    attr_reader :course
+
+    def notify_accredited_body?
       return false if course.self_accredited?
       return false unless course.findable?
 
