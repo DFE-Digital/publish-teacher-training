@@ -150,23 +150,22 @@ describe "GET /reporting" do
           updated_closed_courses_recently: 0,
           created_recently: 0,
         },
-
-        allocation: {
-          previous: {
-            total: {
-              allocations: 0,
-              distinct_accredited_bodies: 0,
-              distinct_providers: 0,
-              number_of_places:  0,
-            },
+      },
+      allocations: {
+        previous: {
+          total: {
+            allocations: 0,
+            distinct_accredited_bodies: 0,
+            distinct_providers: 0,
+            number_of_places:  0,
           },
-          current: {
-            total: {
-              allocations: 0,
-              distinct_accredited_bodies: 0,
-              distinct_providers: 0,
-              number_of_places:  0,
-            },
+        },
+        current: {
+          total: {
+            allocations: 0,
+            distinct_accredited_bodies: 0,
+            distinct_providers: 0,
+            number_of_places:  0,
           },
         },
       },
