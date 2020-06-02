@@ -24,7 +24,7 @@ module Allocations
                                   0
                                 when "repeat"
                                   object.previous&.number_of_places || 0
-                                when "initial"
+                                else
                                   params[:number_of_places]
                                 end
     end

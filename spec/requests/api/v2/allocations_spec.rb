@@ -58,6 +58,39 @@ RSpec.describe "/api/v2/allocations/<id>", type: :request do
     end
   end
 
+  describe "DELETE" do
+    context "with an existing allocation" do
+      it "returns 200" do
+        given_an_accredited_body_exists
+        given_the_accredited_body_has_a_training_provider
+        given_an_allocation_has_been_created_by_the_accredited_body_for_the_training_provider
+        given_i_am_an_authenticated_user_from_the_accredited_body
+        when_i_make_a_delete_request_to_the_endpoint
+        then_the_allocation_is_deleted
+      end
+    end
+
+    context "with an allocation that doesn't exist" do
+      it "returns 404" do
+        given_an_accredited_body_exists
+        given_the_accredited_body_has_a_training_provider
+        given_i_am_an_authenticated_user_from_the_accredited_body
+        when_i_make_a_delete_request_to_the_endpoint_with_an_invalid_id
+        then_i_receive_404_not_found
+      end
+    end
+
+    context "with a user from a different accredited body" do
+      it "user unauthorized" do
+        given_an_accredited_body_exists
+        given_the_accredited_body_has_a_training_provider
+        given_an_allocation_has_been_created_by_the_accredited_body_for_the_training_provider
+        given_i_am_an_authenticated_user_from_another_accredited_body
+        then_an_unauthorized_error_is_raised
+      end
+    end
+  end
+
   def given_an_accredited_body_exists
     @accredited_body = create(:provider, :accredited_body)
   end
@@ -70,6 +103,16 @@ RSpec.describe "/api/v2/allocations/<id>", type: :request do
   def given_i_am_an_authenticated_user_from_the_accredited_body
     @user = create(:user)
     @user.organisations << @accredited_body.organisation
+    payload = { email: @user.email }
+    token = JWT.encode payload, Settings.authentication.secret, Settings.authentication.algorithm
+
+    @credentials = ActionController::HttpAuthentication::Token.encode_credentials(token)
+  end
+
+  def given_i_am_an_authenticated_user_from_another_accredited_body
+    @user = create(:user)
+    @another_accredited_body = create(:provider, :accredited_body)
+    @user.organisations << @another_accredited_body.organisation
     payload = { email: @user.email }
     token = JWT.encode payload, Settings.authentication.secret, Settings.authentication.algorithm
 
@@ -136,6 +179,17 @@ RSpec.describe "/api/v2/allocations/<id>", type: :request do
     expect(parsed_response["data"]["id"]).to eq(@accredited_body.id.to_s)
   end
 
+  def when_i_make_a_delete_request_to_the_endpoint
+    delete "/api/v2/allocations/#{@allocation.id}",
+           headers: { "HTTP_AUTHORIZATION" => @credentials }
+  end
+
+  def when_i_make_a_delete_request_to_the_endpoint_with_an_invalid_id
+    bad_id = 5000
+    delete "/api/v2/allocations/#{bad_id}",
+           headers: { "HTTP_AUTHORIZATION" => @credentials }
+  end
+
   def then_the_updated_allocation_is_returned
     expect(response).to have_http_status(:ok)
     parsed_response = JSON.parse(response.body)
@@ -165,5 +219,16 @@ RSpec.describe "/api/v2/allocations/<id>", type: :request do
 
   def then_i_receive_422_unprocessable
     expect(response).to have_http_status(:unprocessable_entity)
+  end
+
+  def then_the_allocation_is_deleted
+    expect(response).to have_http_status(:ok)
+  end
+
+  def then_an_unauthorized_error_is_raised
+    expect {
+      delete "/api/v2/allocations/#{@allocation.id}",
+             headers: { "HTTP_AUTHORIZATION" => @credentials }
+    }.to raise_error Pundit::NotAuthorizedError
   end
 end

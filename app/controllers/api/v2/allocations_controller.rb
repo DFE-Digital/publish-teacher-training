@@ -15,7 +15,9 @@ module API
       def show
         authorize @allocation = Allocation.find(params[:id])
 
-        render jsonapi: @allocation, status: :ok
+        render jsonapi: @allocation,
+          include: params[:include],
+          status: :ok
       end
 
       def create
@@ -42,13 +44,26 @@ module API
         end
       end
 
+      def destroy
+        authorize @allocation = Allocation.find(params[:id])
+
+        if @allocation.safe_delete(current_recruitment_cycle)
+          head :ok
+        else
+          render jsonapi_errors: @allocation.errors, status: :unprocessable_entity
+        end
+      end
+
     private
+
+      def current_recruitment_cycle
+        @current_recruitment_cycle ||= RecruitmentCycle.current_recruitment_cycle
+      end
 
       def accredited_body
         @accredited_body ||= begin
                                accredited_body_code = params[:provider_code]
-                               recruitment_cycle = RecruitmentCycle.current_recruitment_cycle
-                               recruitment_cycle.providers.find_by!(provider_code: accredited_body_code)
+                               current_recruitment_cycle.providers.find_by!(provider_code: accredited_body_code)
                              end
       end
 
