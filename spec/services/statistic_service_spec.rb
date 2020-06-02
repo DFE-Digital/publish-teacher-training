@@ -18,6 +18,11 @@ describe StatisticService do
       expect(PublishReportingService).to receive(:call).with(recruitment_cycle_scope: recruitment_cycle)
       subject
     end
+
+    it "calls the allocation reporting service" do
+      expect(AllocationReportingService).to receive(:call).with(recruitment_cycle_scope: recruitment_cycle)
+      subject
+    end
   end
 
   describe "#save" do
@@ -41,6 +46,11 @@ describe StatisticService do
 
     it "calls the publish reporting service" do
       expect(PublishReportingService).to receive(:call).with(recruitment_cycle_scope: recruitment_cycle)
+      subject
+    end
+
+    it "calls the allocation reporting service" do
+      expect(AllocationReportingService).to receive(:call).with(recruitment_cycle_scope: recruitment_cycle)
       subject
     end
   end
