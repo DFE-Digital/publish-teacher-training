@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe "/api/v2/providers/<accredited_body_code>/allocations", type: :request do
-  describe "POST" do
+  describe "POST #create" do
     context "with valid parameters" do
       context "when no number_of_places specified" do
         it "returns 201" do
@@ -46,7 +46,7 @@ RSpec.describe "/api/v2/providers/<accredited_body_code>/allocations", type: :re
     end
   end
 
-  describe "GET" do
+  describe "GET #index" do
     it "returns the allocations for the accredited body from the current recruitment cycle" do
       given_an_accredited_body_exists
       given_the_accredited_body_has_a_training_provider
@@ -56,6 +56,18 @@ RSpec.describe "/api/v2/providers/<accredited_body_code>/allocations", type: :re
       when_i_get_the_allocations_index_endpoint
       then_the_allocations_from_the_current_recruitment_cycle_are_returned
     end
+
+    context "with filter" do
+      it "returns filtered allocations" do
+        given_an_accredited_body_exists
+        given_the_accredited_body_has_multiple_training_providers
+        given_the_accredited_body_has_allocations_for_the_current_recruitment_cycle
+        given_the_accredited_body_has_allocations_from_the_previous_recruitment_cycle
+        given_i_am_an_authenticated_user_from_the_accredited_body
+        when_i_get_the_filtered_allocations_index_endpoint
+        then_the_filtered_allocations_from_the_current_recruitment_cycle_are_returned
+      end
+    end
   end
 
   def given_an_accredited_body_exists
@@ -63,8 +75,17 @@ RSpec.describe "/api/v2/providers/<accredited_body_code>/allocations", type: :re
   end
 
   def given_the_accredited_body_has_a_training_provider
-    @training_provider = create(:provider)
-    @course = create(:course, provider: @training_provider, accrediting_provider_code: @accredited_body.provider_code)
+    @training_providers = [create(:provider)]
+    create(:course, provider: @training_providers.first, accrediting_provider_code: @accredited_body.provider_code)
+  end
+
+  def given_the_accredited_body_has_multiple_training_providers
+    @training_providers = 2.times.map do
+      training_provider = create(:provider)
+      create(:course, provider: training_provider, accrediting_provider_code: @accredited_body.provider_code)
+
+      training_provider
+    end
   end
 
   def given_i_am_an_authenticated_user_from_the_accredited_body
@@ -82,7 +103,7 @@ RSpec.describe "/api/v2/providers/<accredited_body_code>/allocations", type: :re
         "data" => {
           "type" => "allocations",
           "attributes" => {
-            "provider_id" => @training_provider.id.to_s,
+            "provider_id" => @training_providers.first.id.to_s,
           },
         },
       },
@@ -99,7 +120,7 @@ RSpec.describe "/api/v2/providers/<accredited_body_code>/allocations", type: :re
         "data" => {
           "type" => "allocations",
           "attributes" => {
-            "provider_id" => @training_provider.id.to_s,
+            "provider_id" => @training_providers.first.id.to_s,
             number_of_places: 0,
           },
         },
@@ -117,7 +138,7 @@ RSpec.describe "/api/v2/providers/<accredited_body_code>/allocations", type: :re
         "data" => {
           "type" => "allocations",
           "attributes" => {
-            "provider_id" => @training_provider.id.to_s,
+            "provider_id" => @training_providers.first.id.to_s,
             "request_type" => "declined",
           },
         },
@@ -130,18 +151,20 @@ RSpec.describe "/api/v2/providers/<accredited_body_code>/allocations", type: :re
   end
 
   def given_the_accredited_body_has_allocations_for_the_current_recruitment_cycle
-    @current_allocation = create(
-      :allocation,
-      accredited_body_id: @accredited_body.id,
-      provider_id: @training_provider.id,
-      number_of_places: 10,
-      recruitment_cycle: RecruitmentCycle.current,
-    )
+    @current_allocations = @training_providers.map do |training_provider|
+      create(
+        :allocation,
+        accredited_body: @accredited_body,
+        provider: training_provider,
+        number_of_places: 10,
+        recruitment_cycle: RecruitmentCycle.current,
+      )
+    end
   end
 
   def given_the_accredited_body_has_allocations_from_the_previous_recruitment_cycle
     previous_accredited_body = create(:provider, :previous_recruitment_cycle, :accredited_body, provider_code: @accredited_body.provider_code)
-    previous_training_provider = create(:provider, :previous_recruitment_cycle, provider_code: @training_provider.provider_code)
+    previous_training_provider = create(:provider, :previous_recruitment_cycle, provider_code: @training_providers.first.provider_code)
     @previous_allocation = create(
       :allocation,
       accredited_body_id: previous_accredited_body.id,
@@ -154,7 +177,7 @@ RSpec.describe "/api/v2/providers/<accredited_body_code>/allocations", type: :re
   end
 
   def when_valid_parameters_are_posted_to_the_allocations_endpoint
-    post "/api/v2/providers/#{@accredited_body.provider_code}/allocations", params: { allocation: { provider_id: @training_provider.id } }, headers: { "HTTP_AUTHORIZATION" => @credentials }
+    post "/api/v2/providers/#{@accredited_body.provider_code}/allocations", params: { allocation: { provider_id: @training_providers.first.id } }, headers: { "HTTP_AUTHORIZATION" => @credentials }
   end
 
   def when_invalid_parameters_are_posted_to_the_allocations_endpoint
@@ -173,11 +196,11 @@ RSpec.describe "/api/v2/providers/<accredited_body_code>/allocations", type: :re
   def given_there_is_a_previous_allocation
     create(
       :allocation,
-      provider_id: @training_provider.id,
+      provider_id: @training_providers.first.id,
       accredited_body_id: @accredited_body.id,
       number_of_places: previous_number_of_places,
       recruitment_cycle: previous_recruitment_cycle,
-      provider_code: @training_provider.provider_code,
+      provider_code: @training_providers.first.provider_code,
       accredited_body_code: @accredited_body.provider_code,
     )
   end
@@ -185,7 +208,7 @@ RSpec.describe "/api/v2/providers/<accredited_body_code>/allocations", type: :re
   def then_a_new_allocation_is_returned_with_backfilled_number_of_places
     allocation = Allocation.last
     expect(allocation.accredited_body_code).to eql(@accredited_body.provider_code)
-    expect(allocation.provider_code).to eql(@training_provider.provider_code)
+    expect(allocation.provider_code).to eql(@training_providers.first.provider_code)
     expect(allocation.recruitment_cycle_id).to eql(RecruitmentCycle.current_recruitment_cycle.id)
 
     expect(response).to have_http_status(:created)
@@ -197,6 +220,11 @@ RSpec.describe "/api/v2/providers/<accredited_body_code>/allocations", type: :re
 
   def when_i_get_the_allocations_index_endpoint
     get "/api/v2/providers/#{@accredited_body.provider_code}/allocations", headers: { "HTTP_AUTHORIZATION" => @credentials }
+  end
+
+  def when_i_get_the_filtered_allocations_index_endpoint
+    provider_to_filter = @training_providers.first
+    get "/api/v2/providers/#{@accredited_body.provider_code}/allocations?filter[training_provider_code]=#{provider_to_filter.provider_code}", headers: { "HTTP_AUTHORIZATION" => @credentials }
   end
 
   def then_a_new_allocation_is_returned_with_zero_number_of_places
@@ -216,8 +244,15 @@ RSpec.describe "/api/v2/providers/<accredited_body_code>/allocations", type: :re
   def then_the_allocations_from_the_current_recruitment_cycle_are_returned
     expect(response).to have_http_status(:ok)
     parsed_response = JSON.parse(response.body)
+    expect(parsed_response["data"].count).to eq(@training_providers.size)
+    expect(parsed_response["data"].first["id"]).to eq(@current_allocations.first.id.to_s)
+  end
+
+  def then_the_filtered_allocations_from_the_current_recruitment_cycle_are_returned
+    expect(response).to have_http_status(:ok)
+    parsed_response = JSON.parse(response.body)
     expect(parsed_response["data"].count).to eq(1)
-    expect(parsed_response["data"].first["id"]).to eq(@current_allocation.id.to_s)
+    expect(parsed_response["data"].first["id"]).to eq(@current_allocations.first.id.to_s)
   end
 
   def then_a_new_allocation_is_returned_with_the_request_type
