@@ -73,25 +73,5 @@ describe UserNotification, type: :model do
 
       it { should contain_exactly(user_notification_update) }
     end
-
-    describe ".find_or_initialize" do
-      context "Initialization" do
-        unknown_provider_code = "ABC"
-        subject { described_class.find_or_initialize(unknown_provider_code) }
-
-        it { is_expected.to_not eq(user_notification_create) }
-        it { is_expected.to be_an_instance_of(UserNotification) }
-      end
-
-      context "Finding" do
-        before do
-          user_notification_create
-        end
-
-        subject { described_class.find_or_initialize(provider.provider_code) }
-
-        it { is_expected.to eq(user_notification_create) }
-      end
-    end
   end
 end
