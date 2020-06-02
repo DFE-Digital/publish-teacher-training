@@ -31,6 +31,7 @@ Rails.application.routes.draw do
       end
 
       get "providers/suggest", to: "providers#suggest"
+      get "providers/suggest_any", to: "providers#suggest_any"
       get "/recruitment_cycles/:recruitment_cycle_year/providers/suggest", to: "providers#suggest"
 
       resources :organisations, only: :index

@@ -23,4 +23,18 @@ RSpec.describe API::V2::ProvidersController do
       end
     end
   end
+
+  describe "#suggest_any" do
+    context "when any provider uses endpoint" do
+      let(:user) { provider.users.first }
+      let!(:provider) { create(:provider) }
+      let(:course) { create(:course) }
+      let!(:other_provider) { course.provider }
+
+      it "returns the specified provider" do
+        get :suggest_any, params: { query: other_provider.provider_code }
+        expect(JSON.parse(response.body).dig("data").map { |p| p["id"] }).to eql([other_provider.id.to_s])
+      end
+    end
+  end
 end
