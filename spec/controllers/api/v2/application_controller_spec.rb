@@ -89,6 +89,7 @@ describe API::V2::ApplicationController, type: :controller do
     it "sets the request_id in the payload to the request uuid" do
       payload = {}
       request_uuid = SecureRandom.uuid
+      controller.response = response
 
       allow(RequestStore).to receive(:store).and_return(request_id: request_uuid)
 
