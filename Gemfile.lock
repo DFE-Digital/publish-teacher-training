@@ -428,6 +428,10 @@ GEM
       docile (~> 1.1)
       simplecov-html (~> 0.11)
     simplecov-html (0.12.1)
+    skylight (4.3.0)
+      skylight-core (= 4.3.0)
+    skylight-core (4.3.0)
+      activesupport (>= 4.2.0)
     spring (2.1.0)
     spring-commands-rspec (1.0.4)
       spring (>= 0.9.1)
@@ -540,6 +544,7 @@ DEPENDENCIES
   sidekiq
   sidekiq-cron
   simplecov
+  skylight
   spring
   spring-commands-rspec
   spring-watcher-listen (~> 2.0.0)

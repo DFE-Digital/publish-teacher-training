@@ -111,6 +111,9 @@ gem "open_api-rswag-ui"
 
 gem "pg_search"
 
+# End-user application performance monitoring
+gem "skylight"
+
 group :development, :test do
   # Prettyprint in console
   gem "awesome_print"
