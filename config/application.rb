@@ -46,5 +46,7 @@ module ManageCoursesBackend
     config.autoload_paths += %W(#{config.root}/app/models/subjects)
 
     config.action_mailer.delivery_job = "ActionMailer::MailDeliveryJob"
+
+    config.skylight.environments = Settings.skylight.enable ? [Rails.env] : []
   end
 end
