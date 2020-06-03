@@ -2,6 +2,7 @@
 [![Build Status](https://dfe-ssp.visualstudio.com/Become-A-Teacher/_apis/build/status/Find/teacher-training-api?branchName=master)](https://dfe-ssp.visualstudio.com/Become-A-Teacher/_build/latest?definitionId=46&branchName=master)
 [![Maintainability](https://api.codeclimate.com/v1/badges/a45d9506b9c0e3f0fd8f/maintainability)](https://codeclimate.com/github/DFE-Digital/teacher-training-api/maintainability)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/a45d9506b9c0e3f0fd8f/test_coverage)](https://codeclimate.com/github/DFE-Digital/teacher-training-api/test_coverage)
+[![View performance data on Skylight](https://badges.skylight.io/status/NXAwzyZjkp2m.svg?token=JaYZey50Y8gfC00RvzkcrDz5OP-SwiBSTtbhkMw1KIs)](https://www.skylight.io/app/applications/NXAwzyZjkp2m)
 
 # Teacher Training API
 
@@ -281,10 +282,6 @@ Users not matching
 `%@digital.education.gov.uk` and `%@education.gov.uk`
 will be anonymized for non production environment.
 
-## Using services
-
-[See the services README](./app/services/README.md)
-
 
 ## <a name="releases"></a>Releases
 
@@ -292,10 +289,9 @@ Find (Publish Teacher Training & Teacher Training API) build and release process
 - [Build Pipeline](https://dfe-ssp.visualstudio.com/Become-A-Teacher/_build?definitionId=46): This is the main development CI pipeline which will automatically trigger a build from a commit to any branch within the teacher-training-api GitHub code repository.
 - [Release Pipeline](https://dfe-ssp.visualstudio.com/Become-A-Teacher/_release?_a=releases&view=mine&definitionId=36): When commits are made to the master branch, this pipeline will auto deploy the application to the QA infrastructure environment in Azure. Frontend and backend release pipelines are consolidated and are made up of several stages including integration testing. Release in staging and production can be triggered manualy only - see deployment guide for more details.
 
-### <a name="releases-triggering"></a>Deploying
+## <a name="other_documentation"></a>Other Documentation
 
-👉 [See the deployment guide](./docs/deployment.md)
-
-## Other Documentation
-
+* [Deployment guide](./docs/deployment.md)
+* [Services pattern documentation](./app/services/README.md)
 * [Healthcheck and Ping Endpoints](./docs/healthcheck_and_ping_endpoints.md)
+* [Alerting and monitoring](./docs/alerting_and_monitoring.md)
