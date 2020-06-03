@@ -5,6 +5,7 @@ class RecruitmentCycle < ApplicationRecord
   # a site to a new recruitment_cycle
   has_many :courses, through: :providers
   has_many :sites, through: :providers
+  has_many :allocations
 
   validates :year, presence: true
 

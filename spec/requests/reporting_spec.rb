@@ -114,7 +114,7 @@ describe "GET /reporting" do
         },
         is_send: {
           open: { yes: 0, no: 0 },
-          closed:  { yes: 0, no: 0 },
+          closed: { yes: 0, no: 0 },
         },
         subject: {
           open: Subject.active.each_with_index.map { |sub, _i| x = {}; x[sub.subject_name] = 0; x }.reduce({}, :merge),
@@ -151,10 +151,33 @@ describe "GET /reporting" do
           created_recently: 0,
         },
       },
+      allocations: {
+        previous: {
+          total: {
+            allocations: 0,
+            distinct_accredited_bodies: 0,
+            distinct_providers: 0,
+            number_of_places:  0,
+          },
+        },
+        current: {
+          total: {
+            allocations: 0,
+            distinct_accredited_bodies: 0,
+            distinct_providers: 0,
+            number_of_places:  0,
+          },
+        },
+      },
     }.with_indifferent_access
   end
 
+  let(:previous_recruitment_cycle) {
+    find_or_create(:recruitment_cycle, :previous)
+  }
+
   it "returns status success" do
+    previous_recruitment_cycle
     get "/reporting"
     expect(response.status).to eq(200)
     expect(JSON.parse(response.body)).to eq(expected)
