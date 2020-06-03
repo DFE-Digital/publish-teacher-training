@@ -150,7 +150,7 @@ module API
         @course.assign_attributes(course_params)
         @course.save
 
-        Courses::UpdateNotificationService.new.call(course: @course)
+        NotificationService::CourseUpdated.call(course: @course)
       end
 
       def update_sites
