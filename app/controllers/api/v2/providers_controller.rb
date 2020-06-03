@@ -3,7 +3,7 @@ module API
     class ProvidersController < API::V2::ApplicationController
       before_action :get_user, if: -> { params[:user_id].present? }
       before_action :build_recruitment_cycle
-      before_action :build_provider, except: %i[index suggest]
+      before_action :build_provider, except: %i[index suggest suggest_any]
 
       deserializable_resource :provider,
                               only: :update,
@@ -33,6 +33,14 @@ module API
         render jsonapi: @provider, include: params[:include]
       end
 
+      # This endpoint ignores the policy and allows anyone to see the provider
+      # This used by allocations, as any training provider can be used
+      def show_any
+        authorize @provider, :show_any?
+
+        render jsonapi: @provider, include: params[:include]
+      end
+
       def update
         authorize @provider, :update?
 
@@ -55,6 +63,23 @@ module API
         return render(status: :bad_request) unless begins_with_alphanumeric(params[:query])
 
         found_providers = policy_scope(@recruitment_cycle.providers)
+          .search_by_code_or_name(params[:query])
+          .limit(5)
+
+        render(
+          jsonapi: found_providers,
+          class: { Provider: SerializableProviderSuggestion },
+        )
+      end
+
+      # Suggest any provider from the current recruitment cycle
+      def suggest_any
+        authorize Provider
+
+        return render(status: :bad_request) if params[:query].nil? || params[:query].length < 2
+        return render(status: :bad_request) unless begins_with_alphanumeric(params[:query])
+
+        found_providers = @recruitment_cycle.providers
           .search_by_code_or_name(params[:query])
           .limit(5)
 

@@ -31,11 +31,19 @@ class ProviderPolicy
     user.admin? || user.providers.include?(provider)
   end
 
+  def show_any?
+    user.present?
+  end
+
   def create?
     user.admin?
   end
 
   def suggest?
+    user.present?
+  end
+
+  def suggest_any?
     user.present?
   end
 
