@@ -50,7 +50,21 @@ module API
 
         providers = TrainingProviderSearch.new(provider: @provider, params: params).call
 
-        render jsonapi: providers, include: params[:include]
+        course_counts = {}
+
+        providers.map do |provider|
+          courses_count = provider
+                            .courses
+                            .where(accrediting_provider_code: @provider.provider_code,)
+                            .count
+          course_counts[provider.provider_code] = courses_count
+        end
+
+        render jsonapi: providers,
+               include: params[:include],
+               meta: {
+                 course_counts: course_counts
+               }
       end
 
     private
