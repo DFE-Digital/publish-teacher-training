@@ -5,7 +5,7 @@ module Providers
     def initialize(copy_course_to_provider_service:, copy_site_to_provider_service:, logger: nil)
       @copy_course_to_provider_service = copy_course_to_provider_service
       @copy_site_to_provider_service = copy_site_to_provider_service
-      @logger = logger
+      @logger = logger || Logger.new("/dev/null")
     end
 
     def execute(provider:, new_recruitment_cycle:)
