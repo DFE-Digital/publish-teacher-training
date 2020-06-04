@@ -1,6 +1,6 @@
 module UserAssociationsService
   class Create
-    attr_reader :organisation, :user
+    attr_reader :organisation, :user, :all_organisations
 
     class << self
       def call(**args)
@@ -8,13 +8,14 @@ module UserAssociationsService
       end
     end
 
-    def initialize(organisation:, user:)
+    def initialize(user:, organisation: nil, all_organisations: false)
       @organisation = organisation
       @user = user
+      @all_organisations = all_organisations
     end
 
     def call
-      add_user_to_organistation
+      add_user_to_organistations
       update_user_notification_preferences
     end
 
@@ -22,8 +23,20 @@ module UserAssociationsService
 
   private
 
-    def add_user_to_organistation
+    def add_user_to_organistations
+      if all_organisations
+        add_user_to_all_organistations
+      else
+        add_user_to_a_single_organistation
+      end
+    end
+
+    def add_user_to_a_single_organistation
       organisation.add_user(user)
+    end
+
+    def add_user_to_all_organistations
+      user.organisations = Organisation.all
     end
 
     def update_user_notification_preferences

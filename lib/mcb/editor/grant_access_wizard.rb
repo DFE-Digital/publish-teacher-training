@@ -92,7 +92,7 @@ module MCB
       end
 
       def add_user_to_all_organisations
-        @user_to_grant.organisations = Organisation.all
+        UserAssociationsService::Create.call(user: @user_to_grant, all_organisations: true)
 
         puts "\n"
         puts "#{@user_to_grant} given access to all orgs"
