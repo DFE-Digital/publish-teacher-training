@@ -6,6 +6,10 @@ RSpec.describe Allocation do
       subject.valid?
     end
 
+    describe "auditing" do
+      it { should be_audited.associated_with(:provider) }
+    end
+
     it "requires accredited_body" do
       expect(subject.errors["accredited_body"]).to include("can't be blank")
     end
