@@ -47,7 +47,7 @@ module Providers
       provider.courses.each do |course|
         new_course = @copy_course_to_provider_service.execute(course: course, new_provider: new_provider)
         courses_count += 1 if new_course.present?
-      rescue
+      rescue Exception # rubocop: disable Lint/RescueException
         logger.fatal "error trying to copy course #{course.course_code}" if logger
         raise
       end
