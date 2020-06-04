@@ -45,7 +45,7 @@ module MCB
             return
           end
 
-          @user.remove_access_to @organisations
+          UserAssociationsService::Delete.call(user: @user, organisations: @organisations)
         else
           puts "#{@user.email} already has no access to #{@provider}"
         end
