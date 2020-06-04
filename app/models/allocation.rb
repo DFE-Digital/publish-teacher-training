@@ -3,6 +3,8 @@ class Allocation < ApplicationRecord
   belongs_to :accredited_body, class_name: "Provider"
   belongs_to :recruitment_cycle
 
+  audited associated_with: :provider
+
   validates :provider, :accredited_body, presence: true
   validates :number_of_places, numericality: true
 
