@@ -88,11 +88,11 @@ module MCB
         puts "\n"
         puts "You're about to give #{@user_to_grant} access to organisation #{@organisation.name}. They will manage:"
         puts MCB::Render::ActiveRecord.providers_table @organisation.providers, name: "Additional Providers"
-        @organisation.add_user(@user_to_grant) if @cli.agree("Agree?  ")
+        UserAssociationsService::Create.call(organisation: @organisation, user: @user_to_grant) if @cli.agree("Agree?  ")
       end
 
       def add_user_to_all_organisations
-        @user_to_grant.organisations = Organisation.all
+        UserAssociationsService::Create.call(user: @user_to_grant, all_organisations: true)
 
         puts "\n"
         puts "#{@user_to_grant} given access to all orgs"
