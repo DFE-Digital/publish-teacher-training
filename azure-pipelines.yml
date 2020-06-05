@@ -13,11 +13,13 @@ variables:
   imageNameBgMailer: 'teacher-training-bg-mailer'
   dockerOverride: 'docker-compose -f docker-compose.yml'
 
+
 steps:
 - script: |
     set -x
     GIT_SHORT_SHA=$(echo $(Build.SourceVersion) | cut -c 1-7)
     docker_path=$(dockerHubUsername)/$(imageName)
+    docker_middleman_path=$(dockerHubUsername)/$(imageName)-middleman
     docker_bg_geocode_path=$(dockerHubUsername)/$(imageNameBgGeoCode)
     docker_bg_mailer_path=$(dockerHubUsername)/$(imageNameBgMailer)
     set +x # We confuse VSTS if we trace these commands
@@ -30,22 +32,40 @@ steps:
 
 - script: |
     set -x
-    docker pull $(docker_path):latest || true
-  displayName: "Pull latest docker image to cache"
+    docker pull $(docker_path):$GIT_BRANCH || true
+    docker pull $(docker_path)-middleman:master || true
+  displayName: "Pull any existing images for this branch to cache"
+  # When this branch is first created, there won't be any images to cache, even though master
+  # would probably be an acceptable cache. We could improve build times by pulling master, and
+  # tagging it with the branch, locally.
+  env:
+    GIT_BRANCH: $(Build.SourceBranchName)
 - script: |
     set -x
+    $DOCKER_OVERRIDE build middleman
     $DOCKER_OVERRIDE build
-    $DOCKER_OVERRIDE up --no-build -d
-    $DOCKER_OVERRIDE exec -T web /bin/sh -c "./wait-for-command.sh -c 'nc -z db 5432' -s 0 -t 20"
-    $DOCKER_OVERRIDE exec -T web /bin/sh -c "bundle exec rails db:setup"
-    $DOCKER_OVERRIDE exec -T web /bin/sh -c "apk --no-cache add curl"
-    $DOCKER_OVERRIDE exec -T web /bin/sh -c "bundle exec rake cc:setup"
-  displayName: 'Build & setup'
+  displayName: Build Docker Images
   env:
     DOCKER_OVERRIDE: $(dockerOverride)
     dockerHubUsername: $(dockerHubUsername)
     dockerHubImageName: $(imageName)
     CC_TEST_REPORTER_ID: $(ccReporterID)
+    GIT_BRANCH: $(Build.SourceBranchName)
+
+- script: |
+    set -x
+    $DOCKER_OVERRIDE up --no-build -d
+    $DOCKER_OVERRIDE exec -T web /bin/sh -c "./wait-for-command.sh -c 'nc -z db 5432' -s 0 -t 20"
+    $DOCKER_OVERRIDE exec -T web /bin/sh -c "bundle exec rails db:setup"
+    $DOCKER_OVERRIDE exec -T web /bin/sh -c "apk --no-cache add curl"
+    $DOCKER_OVERRIDE exec -T web /bin/sh -c "bundle exec rake cc:setup"
+  displayName: Setup for Tests
+  env:
+    DOCKER_OVERRIDE: $(dockerOverride)
+    dockerHubUsername: $(dockerHubUsername)
+    dockerHubImageName: $(imageName)
+    CC_TEST_REPORTER_ID: $(ccReporterID)
+    GIT_BRANCH: $(Build.SourceBranchName)
 - script: |
     set -x
     $DOCKER_OVERRIDE exec -T web /bin/sh -c 'bundle config --local disable_exec_load true'
@@ -58,6 +78,7 @@ steps:
     dockerHubUsername: $(dockerHubUsername)
     dockerHubImageName: $(imageName)
     CC_TEST_REPORTER_ID: $(ccReporterID)
+    GIT_BRANCH: $(Build.SourceBranchName)
 - task: PublishTestResults@2
   condition: succeededOrFailed()
   inputs:
@@ -73,6 +94,7 @@ steps:
     dockerHubUsername: $(dockerHubUsername)
     dockerHubImageName: $(imageName)
     CC_TEST_REPORTER_ID: $(ccReporterID)
+    GIT_BRANCH: $(Build.SourceBranchName)
 - script: |
     set -x
     $DOCKER_OVERRIDE exec -T web /bin/sh -c "bundle exec rake cc:report"
@@ -83,6 +105,7 @@ steps:
     dockerHubImageName: $(imageName)
     CC_TEST_REPORTER_ID: $(ccReporterID)
     AGENT_JOBSTATUS: $(Agent.JobStatus)
+    GIT_BRANCH: $(Build.SourceBranchName)
 - script: |
     set -x
     $DOCKER_OVERRIDE exec -T web /bin/sh -c "bundle exec rake brakeman"
@@ -92,38 +115,50 @@ steps:
     dockerHubUsername: $(dockerHubUsername)
     dockerHubImageName: $(imageName)
     AGENT_JOBSTATUS: $(Agent.JobStatus)
-- task: Docker@1
-  displayName: Tag image with current build number $(Build.BuildNumber)
-  inputs:
-    command: Tag image
-    imageName: "$(docker_path):latest"
-    arguments: "$(docker_path):$(Build.BuildNumber)"
+    GIT_BRANCH: $(Build.SourceBranchName)
+
 - task: Docker@1
   displayName: Docker Hub login
   inputs:
     command: "login"
     containerregistrytype: Container Registry
     dockerRegistryEndpoint: DfE Docker Hub
+
 - task: Docker@1
-  displayName: Push tagged image
+  displayName: Push image $(dockerHubUsername)/$(imageName):$(Build.SourceBranchName)
   inputs:
     command: Push an image
-    imageName: "$(docker_path):$(Build.BuildNumber)"
+    imageName: "$(docker_path):$(Build.SourceBranchName)"
+
 - task: Docker@1
-  displayName: Push tagged image (latest) if master
+  displayName: Push image $(dockerHubUsername)/$(imageName)-middleman:$(Build.SourceBranchName)
   condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
   inputs:
     command: Push an image
-    imageName: "$(docker_path):latest"
+    imageName: "$(docker_path)-middleman:$(Build.SourceBranchName)"
+
+- task: Docker@1
+  displayName: Tag image with current build number $(Build.BuildNumber)
+  inputs:
+    command: Tag image
+    imageName: "$(docker_path):$(Build.SourceBranchName)"
+    arguments: "$(docker_path):$(Build.BuildNumber)"
+
+- task: Docker@1
+  displayName: Push api image for build number $(Build.BuildNumber)
+  inputs:
+    command: Push an image
+    imageName: "$(docker_path):$(Build.BuildNumber)"
+
 - task: Docker@1
   displayName: Tag bg_geocode image with current build number $(Build.BuildNumber)
   inputs:
     command: Tag image
-    imageName: "$(docker_bg_geocode_path):latest"
+    imageName: "$(docker_bg_geocode_path):$(Build.SourceBranchName)"
     arguments: "$(docker_bg_geocode_path):$(Build.BuildNumber)"
 
 - task: Docker@1
-  displayName: Push tagged image
+  displayName: Push bg_geocode image with current build number $(Build.BuildNumber)
   inputs:
     command: Push an image
     imageName: "$(docker_bg_geocode_path):$(Build.BuildNumber)"
@@ -132,11 +167,11 @@ steps:
   displayName: Tag bg_mailer image with current build number $(Build.BuildNumber)
   inputs:
     command: Tag image
-    imageName: "$(docker_bg_mailer_path):latest"
+    imageName: "$(docker_bg_mailer_path):$(Build.SourceBranchName)"
     arguments: "$(docker_bg_mailer_path):$(Build.BuildNumber)"
 
 - task: Docker@1
-  displayName: Push tagged image
+  displayName: Push bg_mailer image with current build number $(Build.BuildNumber)
   inputs:
     command: Push an image
     imageName: "$(docker_bg_mailer_path):$(Build.BuildNumber)"
@@ -149,6 +184,7 @@ steps:
      terraform/**
     TargetFolder: '$(build.artifactstagingdirectory)'
     OverWrite: true
+
 - task: PublishBuildArtifacts@1
   displayName: 'Publish Artifact'
   inputs:
