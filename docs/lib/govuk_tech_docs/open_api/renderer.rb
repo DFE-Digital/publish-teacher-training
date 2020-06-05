@@ -64,6 +64,10 @@ module GovukTechDocs
           end
 
           if schema_data[0] == text
+            if schema_data[1] && schema_data[1].type == "array"
+              properties.push ["Item", schema_data[1].items]
+            end
+
             title = schema_data[0]
             schema = schema_data[1]
             return @template_schema.result(binding)
