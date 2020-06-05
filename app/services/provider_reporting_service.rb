@@ -1,9 +1,11 @@
 class ProviderReportingService
   def initialize(providers_scope: Provider)
     @providers = providers_scope.distinct
-    @findable_providers = @providers.with_findable_courses
-    @open_providers = @findable_providers.where(id: Course.with_vacancies.select(:provider_id))
-    @closed_providers = @findable_providers.where.not(id: @open_providers)
+
+    @training_provider = @providers.where(id: Course.findable.select(:provider_id))
+    @open_providers = @providers.where(id: Course.findable.with_vacancies.select(:provider_id))
+
+    @closed_providers = @training_provider.where.not(id: @open_providers)
   end
 
   class << self
@@ -16,16 +18,18 @@ class ProviderReportingService
     {
       total: {
         all: @providers.count,
-        non_findable: @providers.count - @findable_providers.count,
-        all_findable: @findable_providers.count,
+        non_training_providers: @providers.count - @training_provider.count,
+        training_providers: @training_provider.count,
       },
-      findable_total: {
-        open: @open_providers.count,
-        closed: @closed_providers.count,
+      training_providers: {
+        findable_total: {
+          open: @open_providers.count,
+          closed: @closed_providers.count,
+        },
+        accredited_body: { **group_by_count(:accrediting_provider) },
+        provider_type: { **group_by_count(:provider_type) },
+        region_code: { **group_by_count(:region_code) },
       },
-      accredited_body: { **group_by_count(:accrediting_provider) },
-      provider_type: { **group_by_count(:provider_type) },
-      region_code: { **group_by_count(:region_code) },
     }
   end
 
