@@ -9,6 +9,7 @@ class Allocation < ApplicationRecord
   validates :number_of_places, numericality: true
 
   validate :accredited_body_is_an_accredited_body
+  validate :non_zero_initial_request
 
   enum request_type: { initial: 0, repeat: 1, declined: 2 }
 
@@ -32,5 +33,9 @@ private
 
   def accredited_body_is_an_accredited_body
     errors.add(:accredited_body, "must be an accredited body") unless accredited_body&.accredited_body?
+  end
+
+  def non_zero_initial_request
+    errors.add(:number_of_places, "must not be zero") if request_type == "initial" && number_of_places.zero?
   end
 end

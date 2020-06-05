@@ -3,6 +3,7 @@ require "rails_helper"
 RSpec.describe Allocation do
   describe "validations" do
     before do
+      subject.number_of_places = 1
       subject.valid?
     end
 
@@ -24,23 +25,38 @@ RSpec.describe Allocation do
       expect(subject.errors["accredited_body"]).to include("must be an accredited body")
     end
 
-    it "required number_of_places to be a number" do
+    it "requires number_of_places to be a number" do
       subject.number_of_places = "dave"
       subject.valid?
       expect(subject.errors["number_of_places"]).to include("is not a number")
     end
+
+    context "when request type is initial (default)" do
+      it "requires number_of_places not to be zero" do
+        subject.number_of_places = 0
+        subject.valid?
+        expect(subject.errors["number_of_places"]).to include("must not be zero")
+      end
+    end
+
+    context "when request type is repeat" do
+      it "doesn't require number_of_places not to be zero" do
+        subject.request_type = "repeat"
+        subject.number_of_places = 0
+        subject.valid?
+        expect(subject.errors["number_of_places"]).not_to include("must not be zero")
+      end
+    end
   end
 
   describe "number_of_places" do
-    subject { create(:allocation, number_of_places: nil, request_type: request_type).number_of_places }
-
     context "when request type is initial (default)" do
       context "and number of places is not set" do
-        subject { create(:allocation).number_of_places }
+        subject { create(:allocation) }
 
-        # TODO this should be invalid. Error handling of invalid
-        # request_type - number_of_places combinations to be added
-        it { is_expected.to eq(0) }
+        it "returns an error" do
+          expect { subject }.to raise_error(ActiveRecord::RecordInvalid)
+        end
       end
 
       context "and number of places is set" do
@@ -56,7 +72,7 @@ RSpec.describe Allocation do
   end
 
   describe "#safe_delete" do
-    subject { create(:allocation) }
+    subject { create(:allocation, number_of_places: 1) }
 
     context "when the recruitment cycle does not match" do
       let(:previous_recruitment_cycle) { create(:recruitment_cycle, :previous) }
