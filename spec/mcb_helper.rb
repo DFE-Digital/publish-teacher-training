@@ -1,3 +1,5 @@
+require "spec_helper"
+
 load "bin/mcb"
 
 def audit_user_tag(example)

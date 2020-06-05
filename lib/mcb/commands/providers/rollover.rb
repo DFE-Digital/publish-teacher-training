@@ -27,6 +27,7 @@ run do |opts, args, _cmd| # rubocop:disable Metrics/BlockLength
           copy_provider_to_recruitment_cycle = Providers::CopyToRecruitmentCycleService.new(
             copy_course_to_provider_service: copy_courses_to_provider_service,
             copy_site_to_provider_service: Sites::CopyToProviderService.new,
+            logger: Logger.new(STDOUT),
           )
 
           counts = copy_provider_to_recruitment_cycle.execute(

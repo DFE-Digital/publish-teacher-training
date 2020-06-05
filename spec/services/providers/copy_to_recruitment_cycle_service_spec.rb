@@ -59,6 +59,25 @@ describe Providers::CopyToRecruitmentCycleService do
       expect(recruitment_cycle.reload.providers).to eq [provider]
     end
 
+    context "an error occurs when copying the course" do
+      it "logs a useful message to the provided logger" do
+        log_output = StringIO.new
+        logger = Logger.new(log_output)
+        service = described_class.new(
+          copy_course_to_provider_service: mocked_copy_course_service,
+          copy_site_to_provider_service: mocked_copy_site_service,
+          logger: logger,
+        )
+        allow(mocked_copy_course_service).to receive(:execute).and_raise("Nope")
+
+        expect {
+          service.execute(provider: provider, new_recruitment_cycle: new_recruitment_cycle)
+        }.to raise_error("Nope")
+
+        expect(log_output.string).to include "error trying to copy course #{course.course_code}"
+      end
+    end
+
     context "the provider already exists in the new recruitment cycle" do
       let(:new_provider) {
         build :provider, provider_code: provider.provider_code
