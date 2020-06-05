@@ -74,7 +74,7 @@ module API
           @course.publish_sites
           @course.publish_enrichment(@current_user)
           @course.reload
-          Courses::PublishService.call(course: @course)
+          NotificationService::CoursePublished.call(course: @course)
 
           head :ok
         else
@@ -150,7 +150,7 @@ module API
         @course.assign_attributes(course_params)
         @course.save
 
-        Courses::UpdateNotificationService.new.call(course: @course)
+        NotificationService::CourseUpdated.call(course: @course)
       end
 
       def update_sites

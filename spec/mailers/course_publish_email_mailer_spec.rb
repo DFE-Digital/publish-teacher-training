@@ -1,9 +1,9 @@
 require "rails_helper"
 
-describe CourseCreateEmailMailer, type: :mailer do
+describe CoursePublishEmailMailer, type: :mailer do
   let(:course) { create(:course, :with_accrediting_provider, created_at: DateTime.new(2001, 2, 3, 4, 5, 6)) }
   let(:user) { create(:user) }
-  let(:mail) { described_class.course_create_email(course, user) }
+  let(:mail) { described_class.course_publish_email(course, user) }
 
   before do
     course
@@ -12,7 +12,7 @@ describe CourseCreateEmailMailer, type: :mailer do
 
   context "sending an email to a user" do
     it "sends an email with the correct template" do
-      expect(mail.govuk_notify_template).to eq(Settings.govuk_notify.course_create_email_template_id)
+      expect(mail.govuk_notify_template).to eq(Settings.govuk_notify.course_publish_email_template_id)
     end
 
     it "sends an email to the correct email address" do

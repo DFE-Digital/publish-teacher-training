@@ -171,11 +171,11 @@
         "description": "The GOV.UK Notify template id for the course update email"
       }
     },
-    "govukNotifyCourseCreateEmailTemplateId": {
+    "govukNotifyCoursePublishEmailTemplateId": {
       "type": "string",
       "defaultValue": "",
       "metadata": {
-        "description": "The GOV.UK Notify template id for the course create email"
+        "description": "The GOV.UK Notify template id for the course publish email"
       }
     },
     "govukNotifyMagicLinkEmailTemplateId": {
@@ -508,8 +508,8 @@
                 "value": "[parameters('govukNotifyCourseUpdateEmailTemplateId')]"
               },
               {
-                "name": "SETTINGS__GOVUK_NOTIFY__COURSE_CREATE_EMAIL_TEMPLATE_ID",
-                "value": "[parameters('govukNotifyCourseCreateEmailTemplateId')]"
+                "name": "SETTINGS__GOVUK_NOTIFY__COURSE_PUBLISH_EMAIL_TEMPLATE_ID",
+                "value": "[parameters('govukNotifyCoursePublishEmailTemplateId')]"
               },
               {
                 "name": "SETTINGS__SYSTEM_AUTHENTICATION_TOKEN",
@@ -991,8 +991,8 @@
                 "value": "[parameters('govukNotifyCourseUpdateEmailTemplateId')]"
               },
               {
-                "name": "SETTINGS__GOVUK_NOTIFY__COURSE_CREATE_EMAIL_TEMPLATE_ID",
-                "value": "[parameters('govukNotifyCourseCreateEmailTemplateId')]"
+                "name": "SETTINGS__GOVUK_NOTIFY__COURSE_PUBLISH_EMAIL_TEMPLATE_ID",
+                "value": "[parameters('govukNotifyCoursePublishEmailTemplateId')]"
               }
             ]
           },

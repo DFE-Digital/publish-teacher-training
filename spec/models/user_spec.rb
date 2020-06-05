@@ -162,30 +162,6 @@ describe User, type: :model do
     end
   end
 
-  describe "#user_notifications" do
-    let(:provider) { create(:provider) }
-
-    let(:user_notification) {
-      create(:user_notification,
-             user: subject,
-                 provider: provider,
-                 course_update: true,
-                 course_create: true)
-    }
-
-    describe "#find_or_initialize" do
-      it "finds an existing user notification" do
-        user_notification
-
-        expect(subject.user_notifications.find_or_initialize(provider.provider_code)).to eq(user_notification)
-      end
-
-      it "creates a new user notification when it can't find one" do
-        expect(subject.user_notifications.find_or_initialize(provider.provider_code).persisted?).to eq(false)
-      end
-    end
-  end
-
   describe ".last_login_since" do
     context "30 days ago" do
       let!(:over_30_user) { create(:user, last_login_date_utc: 30.days.ago) }

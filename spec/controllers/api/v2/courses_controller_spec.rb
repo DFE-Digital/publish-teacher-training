@@ -26,8 +26,8 @@ describe API::V2::CoursesController, type: :controller do
       controller.instance_variable_set(:@current_user, existing_user)
     end
 
-    it "executes publish course service" do
-      allow(Courses::PublishService).to receive(:call).with(course: course)
+    it "sends the notification" do
+      allow(NotificationService::CoursePublished).to receive(:call).with(course: course)
       post :publish, params: {
         recruitment_cycle_year: RecruitmentCycle.current_recruitment_cycle.year,
         provider_code: course.provider.provider_code,
