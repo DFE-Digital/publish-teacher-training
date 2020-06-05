@@ -18,6 +18,7 @@ module GovukTechDocs
         @template_operation = get_renderer("operation.html.erb")
         @template_parameters = get_renderer("parameters.html.erb")
         @template_responses = get_renderer("responses.html.erb")
+        @template_any_of = get_renderer("any_of.html.erb")
       end
 
       def api_full
@@ -49,10 +50,20 @@ module GovukTechDocs
         schemas = ""
         schemas_data = @document.components.schemas
         schemas_data.each do |schema_data|
-          all_of = schema_data[1]["allOf"]
           properties = []
+
+          all_of = schema_data[1]["allOf"]
           if !all_of.blank?
             all_of.each do |schema_nested|
+              schema_nested.properties.each do |property|
+                properties.push property
+              end
+            end
+          end
+
+          any_of = schema_data[1]["anyOf"]
+          if !any_of.blank?
+            any_of.each do |schema_nested|
               schema_nested.properties.each do |property|
                 properties.push property
               end
@@ -70,6 +81,11 @@ module GovukTechDocs
 
             title = schema_data[0]
             schema = schema_data[1]
+
+            if schema_data[1]["anyOf"]
+              return @template_any_of.result(binding)
+            end
+
             return @template_schema.result(binding)
           end
         end
