@@ -1,0 +1,11 @@
+<h3 id="<%= id = 'schema-' + title; id.parameterize %>"><%= title %></h3>
+
+<p>
+  This schema can be any one of the following schemas:
+</p>
+
+<ul>
+  <% schema_data[1]["anyOf"].node_data.each do |schema| %>
+    <li><%= get_schema_link(schema) %></li>
+  <% end %>
+</ul>

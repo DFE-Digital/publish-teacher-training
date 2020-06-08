@@ -18,6 +18,7 @@ module GovukTechDocs
         @template_operation = get_renderer("operation.html.erb")
         @template_parameters = get_renderer("parameters.html.erb")
         @template_responses = get_renderer("responses.html.erb")
+        @template_any_of = get_renderer("any_of.html.erb")
       end
 
       def api_full
@@ -30,7 +31,6 @@ module GovukTechDocs
           paths += path(text)
         end
         schemas = ""
-        schemas_data = @document.components.schemas
         schemas_data.each do |schema_data|
           text = schema_data[0]
           schemas += schema(text)
@@ -46,29 +46,18 @@ module GovukTechDocs
       end
 
       def schema(text)
-        schemas = ""
-        schemas_data = @document.components.schemas
-        schemas_data.each do |schema_data|
-          all_of = schema_data[1]["allOf"]
-          properties = []
-          if !all_of.blank?
-            all_of.each do |schema_nested|
-              schema_nested.properties.each do |property|
-                properties.push property
-              end
-            end
-          end
+        properties = properties_for_schema(text)
 
-          schema_data[1].properties.each do |property|
-            properties.push property
-          end
+        schema_data = schemas_data.find { |s| s[0] == text }
 
-          if schema_data[0] == text
-            title = schema_data[0]
-            schema = schema_data[1]
-            return @template_schema.result(binding)
-          end
+        title = schema_data[0]
+        schema = schema_data[1]
+
+        if schema_data[1]["anyOf"]
+          return @template_any_of.result(binding)
         end
+
+        @template_schema.result(binding)
       end
 
       def schemas_from_path(text)
@@ -303,6 +292,44 @@ module GovukTechDocs
           output = "<a href='\##{id}'>#{schema_name}</a>"
           output
         end
+      end
+
+      def schemas_data
+        @schemas_data ||= @document.components.schemas
+      end
+
+      def properties_for_schema(schema_name)
+        schema_data = schemas_data.find { |s| s[0] == schema_name }
+
+        properties = []
+
+        all_of = schema_data[1]["allOf"]
+        if !all_of.blank?
+          all_of.each do |schema_nested|
+            schema_nested.properties.each do |property|
+              properties.push property
+            end
+          end
+        end
+
+        any_of = schema_data[1]["anyOf"]
+        if !any_of.blank?
+          any_of.each do |schema_nested|
+            schema_nested.properties.each do |property|
+              properties.push property
+            end
+          end
+        end
+
+        schema_data[1].properties.each do |property|
+          properties.push property
+        end
+
+        if schema_data[1] && schema_data[1].type == "array"
+          properties.push ["Item", schema_data[1].items]
+        end
+
+        properties
       end
     end
   end
