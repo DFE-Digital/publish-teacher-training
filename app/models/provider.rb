@@ -182,11 +182,11 @@ class Provider < ApplicationRecord
   end
 
   def courses_count
-    self.respond_to?("included_courses_count") ? included_courses_count : courses.size
+    self.has_attribute?("included_courses_count") ? included_courses_count : courses.size
   end
 
   def accredited_courses_count
-    self.respond_to?("included_accredited_courses_count") ? included_accredited_courses_count : 0
+    self.has_attribute?("included_accredited_courses_count") ? included_accredited_courses_count : 0
   end
 
   def update_changed_at(timestamp: Time.now.utc)
