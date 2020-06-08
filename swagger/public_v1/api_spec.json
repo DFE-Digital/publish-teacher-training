@@ -381,6 +381,26 @@
           }
         }
       },
+      "CourseListResponse": {
+        "type": "object",
+        "required": [
+          "data"
+        ],
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CourseResource"
+            }
+          },
+          "included": {
+            "$ref": "#/components/schemas/Included"
+          },
+          "jsonapi": {
+            "$ref": "#/components/schemas/JSONAPI"
+          }
+        }
+      },
       "CourseRelationships": {
         "type": "object",
         "properties": {
@@ -430,14 +450,12 @@
       "CourseSingleResponse": {
         "type": "object",
         "required": [
-          "data"
+          "data",
+          "jsonapi"
         ],
         "properties": {
           "data": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/CourseResource"
-            }
+            "$ref": "#/components/schemas/CourseResource"
           },
           "included": {
             "$ref": "#/components/schemas/Included"
@@ -1031,14 +1049,32 @@
     }
   },
   "paths": {
-    "/courses": {
+    "/recruitment_cycles/{year}/providers/{provider_code}/courses": {
       "get": {
-        "summary": "Returns courses for the current recruitment cycle",
-        "operationId": "public_api_v1_courses",
+        "summary": "Returns the courses for the specified provider.",
+        "operationId": "public_api_v1_provider_courses",
         "tags": [
           "course"
         ],
         "parameters": [
+          {
+            "name": "year",
+            "in": "path",
+            "required": true,
+            "description": "The starting year of the recruitment cycle.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "provider_code",
+            "in": "path",
+            "required": true,
+            "description": "The unique code of the provider.",
+            "schema": {
+              "type": "string"
+            }
+          },
           {
             "name": "filter",
             "in": "query",
@@ -1047,8 +1083,8 @@
             },
             "style": "deepObject",
             "explode": true,
-            "description": "Refine courses to return",
-            "required": false
+            "required": false,
+            "description": "Refine courses to return."
           },
           {
             "name": "sort",
@@ -1058,14 +1094,64 @@
             },
             "style": "form",
             "explode": false,
+            "required": false,
             "example": "provider.provider_name,name",
-            "description": "Field(s) to sort the courses by",
-            "required": false
+            "description": "Field(s) to sort the courses by."
           }
         ],
         "responses": {
           "200": {
-            "description": "The list of courses in the current recruitment cycle",
+            "description": "The list of courses.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CourseListResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/recruitment_cycles/{year}/providers/{provider_code}/courses/{course_code}": {
+      "get": {
+        "summary": "Returns the specified course for the specified provider.",
+        "operationId": "public_api_v1_provider_course",
+        "tags": [
+          "course"
+        ],
+        "parameters": [
+          {
+            "name": "year",
+            "in": "path",
+            "required": true,
+            "description": "The starting year of the recruitment cycle.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "provider_code",
+            "in": "path",
+            "required": true,
+            "description": "The unique code of the provider.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "course_code",
+            "in": "path",
+            "required": true,
+            "description": "The code of the course.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The collection of courses offered by the specified provider.",
             "content": {
               "application/json": {
                 "schema": {
@@ -1077,18 +1163,36 @@
         }
       }
     },
-    "/courses/{course_code}/locations": {
+    "/recruitment_cycles/{year}/providers/{provider_code}/courses/{course_code}/locations": {
       "get": {
-        "summary": "Returns locations for the given course",
-        "operationId": "public_api_v1_course_locations",
+        "summary": "Returns the locations for the specified course.",
+        "operationId": "public_api_v1_provider_course_locations",
         "tags": [
           "location"
         ],
         "parameters": [
           {
+            "name": "year",
+            "in": "path",
+            "required": true,
+            "description": "The starting year of the recruitment cycle.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "provider_code",
+            "in": "path",
+            "required": true,
+            "description": "The unique code of the provider.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
             "name": "course_code",
             "in": "path",
-            "description": "The code of the course",
+            "description": "The code of the course.",
             "required": true,
             "schema": {
               "type": "string"
@@ -1097,11 +1201,107 @@
         ],
         "responses": {
           "200": {
-            "description": "The list of locations for the given course",
+            "description": "The collection of locations for the specified course.",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/LocationsList"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/recruitment_cycles/{year}/providers": {
+      "get": {
+        "summary": "Returns providers for the specified recruitment cycle.",
+        "operationId": "public_api_v1_provider_index",
+        "tags": [
+          "provider"
+        ],
+        "parameters": [
+          {
+            "name": "year",
+            "in": "path",
+            "required": true,
+            "description": "The starting year of the recruitment cycle.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "filter",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/Filter"
+            },
+            "style": "deepObject",
+            "explode": true,
+            "required": false,
+            "description": "Refine courses to return."
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/Sort"
+            },
+            "style": "form",
+            "explode": false,
+            "required": false,
+            "example": "provider.provider_name,name",
+            "description": "Field(s) to sort the courses by."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Collection of providers.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProviderListResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/recruitment_cycles/{year}/providers/{provider_code}": {
+      "get": {
+        "summary": "Returns the specified provider.",
+        "operationId": "public_api_v1_provider_show",
+        "tags": [
+          "provider"
+        ],
+        "parameters": [
+          {
+            "name": "year",
+            "in": "path",
+            "required": true,
+            "description": "The starting year of the recruitment cycle.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "provider_code",
+            "in": "path",
+            "required": true,
+            "description": "The unique code of the provider.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The provider.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProviderSingleResponse"
                 }
               }
             }

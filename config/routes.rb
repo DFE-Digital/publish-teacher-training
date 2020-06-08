@@ -103,8 +103,12 @@ Rails.application.routes.draw do
 
     namespace :public do
       namespace :v1 do
-        resources :courses, only: [:index] do
-          resources :locations, only: [:index]
+        resources :recruitment_cycles, param: :year, only: [:show] do
+          resources :providers, only: %i[index show] do
+            resources :courses, only: %i[index show] do
+              resources :locations, only: [:index]
+            end
+          end
         end
       end
     end

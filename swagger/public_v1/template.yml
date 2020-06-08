@@ -88,7 +88,7 @@ components:
           $ref: "#/components/schemas/CourseAttributes"
         relationships:
           $ref: "#/components/schemas/CourseRelationships"
-    CourseSingleResponse:
+    CourseListResponse:
       type: object
       required:
         - data
@@ -97,6 +97,18 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/CourseResource"
+        included:
+          $ref: "#/components/schemas/Included"
+        jsonapi:
+          $ref: "#/components/schemas/JSONAPI"
+    CourseSingleResponse:
+      type: object
+      required:
+        - data
+        - jsonapi
+      properties:
+        data:
+          $ref: "#/components/schemas/CourseResource"
         included:
           $ref: "#/components/schemas/Included"
         jsonapi:
