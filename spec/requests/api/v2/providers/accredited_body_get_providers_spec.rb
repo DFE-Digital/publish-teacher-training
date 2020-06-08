@@ -217,6 +217,13 @@ describe "AccreditedBody API v2", type: :request do
               },
             },
           ],
+          "meta" => {
+            "accredited_courses_counts" => {
+              delivering_provider1.provider_code.to_s => 1,
+              accredited_provider.provider_code.to_s => 0,
+              delivering_provider2.provider_code.to_s => 1,
+            },
+          },
           "jsonapi" => {
             "version" => "1.0",
           },

@@ -167,8 +167,26 @@ class Provider < ApplicationRecord
     ).select("provider.*, COALESCE(a.courses_count, 0) AS included_courses_count")
   end
 
+  def self.include_accredited_courses_counts(provider_code)
+    joins(
+      %{
+        LEFT OUTER JOIN (
+          SELECT b.provider_id, COUNT(*) courses_count
+          FROM course b
+          WHERE b.discarded_at IS NULL
+          AND b.accrediting_provider_code = #{ActiveRecord::Base.connection.quote(provider_code)}
+          GROUP BY b.provider_id
+        ) a ON a.provider_id = provider.id
+      },
+      ).select("provider.*, COALESCE(a.courses_count, 0) AS included_accredited_courses_count")
+  end
+
   def courses_count
-    self.respond_to?("included_courses_count") ? included_courses_count : courses.size
+    self.has_attribute?("included_courses_count") ? included_courses_count : courses.size
+  end
+
+  def accredited_courses_count
+    self.has_attribute?("included_accredited_courses_count") ? included_accredited_courses_count : 0
   end
 
   def update_changed_at(timestamp: Time.now.utc)

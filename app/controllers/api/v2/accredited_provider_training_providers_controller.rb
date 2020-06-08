@@ -48,9 +48,21 @@ module API
       def index
         authorize @provider, :can_list_training_providers?
 
-        providers = TrainingProviderSearch.new(provider: @provider, params: params).call
+        providers = TrainingProviderSearch.new(provider: @provider, params: params)
+                                          .call
+                                          .include_accredited_courses_counts(@provider.provider_code)
 
-        render jsonapi: providers, include: params[:include]
+        accredited_courses_counts = {}
+
+        providers.each do |p|
+          accredited_courses_counts[p.provider_code] = p.accredited_courses_count
+        end
+
+        render jsonapi: providers,
+               include: params[:include],
+               meta: {
+                 accredited_courses_counts: accredited_courses_counts,
+               }
       end
 
     private

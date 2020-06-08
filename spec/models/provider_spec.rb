@@ -261,14 +261,18 @@ describe Provider, type: :model do
           expect(provider_with_included.courses).to_not have_received(:size)
         end
       end
-    end
 
-    describe ".include_courses_counts" do
-      let(:courses) { [course] }
-      let(:first_provider) { Provider.include_courses_counts.first }
+      context "with .include_accredited_courses_counts" do
+        let(:provider_with_included) { Provider.include_accredited_courses_counts(provider.provider_code).first }
 
-      it "includes course counts" do
-        expect(first_provider.courses_count).to eq(1)
+        it "return course count using included_accredited_courses_count" do
+          allow(provider_with_included).to receive(:included_accredited_courses_count).and_return(1)
+          allow(provider_with_included.courses).to receive(:size)
+
+          expect(provider_with_included.accredited_courses_count).to eq(1)
+          expect(provider_with_included).to have_received(:included_accredited_courses_count)
+          expect(provider_with_included.courses).to_not have_received(:size)
+        end
       end
     end
 
