@@ -8,7 +8,12 @@ describe AllocationPolicy do
   let(:organisation) { create(:organisation, users: [user]) }
   let(:accredited_body) { create(:provider, :accredited_body) }
   let(:training_provider) { create(:provider) }
-  let(:allocation) { build(:allocation, accredited_body: accredited_body, provider: training_provider) }
+  let(:allocation) do
+    build(:allocation,
+          accredited_body: accredited_body,
+          provider: training_provider,
+          number_of_places: 1)
+  end
 
   permissions :index? do
     context "user is present" do
@@ -50,7 +55,12 @@ describe AllocationPolicy do
   end
 
   describe AllocationPolicy::Scope do
-    let(:allocation) { create(:allocation, accredited_body: accredited_body, provider: training_provider) }
+    let(:allocation) do
+      create(:allocation,
+             accredited_body: accredited_body,
+             provider: training_provider,
+             number_of_places: 1)
+    end
 
     subject { described_class.new(user, Allocation).resolve }
 
