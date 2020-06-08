@@ -65,10 +65,10 @@ describe "Courses API v2", type: :request do
       end
     end
 
-    context "request with accrediting_provider filter" do
+    context "request with accredited_body_code filter" do
       let(:request_path) do
         api_v2_recruitment_cycle_courses_path(current_cycle.year) +
-          "?include=subjects&filter[accrediting_provider_code]=#{accredited_body.provider_code}"
+          "?include=subjects&filter[accredited_body_code]=#{accredited_body.provider_code}"
       end
 
       it "returns user related courses filtered by accredited body" do
@@ -80,8 +80,8 @@ describe "Courses API v2", type: :request do
       context "for multiple codes" do
         let(:request_path) do
           api_v2_recruitment_cycle_courses_path(current_cycle.year) +
-            "?filter[accrediting_provider_code][]=#{accredited_body.provider_code}" +
-            "&filter[accrediting_provider_code][]=#{accredited_body2.provider_code}"
+            "?filter[accredited_body_code][]=#{accredited_body.provider_code}" +
+            "&filter[accredited_body_code][]=#{accredited_body2.provider_code}"
         end
 
         let(:accredited_body2) { create :provider, :accredited_body }

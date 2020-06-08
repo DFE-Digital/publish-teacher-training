@@ -109,7 +109,7 @@ describe "GET v3/recruitment_cycle/:recruitment_cycle_year/providers/:provider_c
                 "gcse_subjects_required" => %w[maths english science],
                 "age_range_in_years" => provider.courses[0].age_range_in_years,
                 "accrediting_provider" => nil,
-                "accrediting_provider_code" => nil,
+                "accredited_body_code" => nil,
               },
               "relationships" => {
                 "accrediting_provider" => { "meta" => { "included" => false } },

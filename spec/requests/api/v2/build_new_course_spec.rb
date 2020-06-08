@@ -173,14 +173,14 @@ describe "/api/v2/build_new_course", type: :request do
   context "with an accrediting_provider" do
     let(:course) { Course.new(provider: provider, accrediting_provider: provider2) }
     let(:params) do
-      { course: { accrediting_provider_code: provider2.provider_code } }
+      { course: { accredited_body_code: provider2.provider_code } }
     end
 
-    it "returns the accrediting_provider_code" do
+    it "returns the accredited_body_code" do
       response = do_get params
       expect(response).to have_http_status(:ok)
       json_response = parse_response(response)
-      expect(json_response["data"]["attributes"]["accrediting_provider_code"]).to eq(provider2.provider_code)
+      expect(json_response["data"]["attributes"]["accredited_body_code"]).to eq(provider2.provider_code)
     end
 
     it "returns the accrediting provider includes" do

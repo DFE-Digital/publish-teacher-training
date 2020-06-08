@@ -28,7 +28,7 @@ describe Course, type: :model do
     it { should belong_to(:provider) }
     it do
       should belong_to(:accrediting_provider)
-                  .with_foreign_key(:accrediting_provider_code)
+                  .with_foreign_key(:accredited_body_code)
                   .with_primary_key(:provider_code)
                   .optional
     end

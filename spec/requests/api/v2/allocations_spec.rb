@@ -97,7 +97,7 @@ RSpec.describe "/api/v2/allocations/<id>", type: :request do
 
   def given_the_accredited_body_has_a_training_provider
     @training_provider = create(:provider)
-    @course = create(:course, provider: @training_provider, accrediting_provider_code: @accredited_body.provider_code)
+    @course = create(:course, provider: @training_provider, accredited_body_code: @accredited_body.provider_code)
   end
 
   def given_i_am_an_authenticated_user_from_the_accredited_body

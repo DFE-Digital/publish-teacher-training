@@ -232,7 +232,7 @@ module API
                   :applications_open_from,
                   :study_mode,
                   :is_send,
-                  :accrediting_provider_code,
+                  :accredited_body_code,
                   :funding_type,
                   :name,
                   :course_code,
@@ -289,7 +289,7 @@ module API
             :applications_open_from,
             :study_mode,
             :is_send,
-            :accrediting_provider_code,
+            :accredited_body_code,
             :funding_type,
             :level,
           )
@@ -325,9 +325,9 @@ module API
       end
 
       def accredited_bodies
-        return [] if @filter[:accrediting_provider_code].blank?
+        return [] if @filter[:accredited_body_code].blank?
 
-        @filter[:accrediting_provider_code]
+        @filter[:accredited_body_code]
       end
     end
   end

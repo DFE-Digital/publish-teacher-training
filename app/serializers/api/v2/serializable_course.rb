@@ -18,7 +18,7 @@ module API
                  :content_status, :ucas_status, :funding_type,
                  :level, :is_send?, :english, :maths, :science, :gcse_subjects_required,
                  :age_range_in_years, :accrediting_provider,
-                 :accrediting_provider_code, :level
+                 :accredited_body_code, :level
 
       attribute :start_date do
         written_month_year(@object.start_date) if @object.start_date

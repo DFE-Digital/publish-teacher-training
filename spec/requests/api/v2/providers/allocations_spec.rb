@@ -76,13 +76,13 @@ RSpec.describe "/api/v2/providers/<accredited_body_code>/allocations", type: :re
 
   def given_the_accredited_body_has_a_training_provider
     @training_providers = [create(:provider)]
-    create(:course, provider: @training_providers.first, accrediting_provider_code: @accredited_body.provider_code)
+    create(:course, provider: @training_providers.first, accredited_body_code: @accredited_body.provider_code)
   end
 
   def given_the_accredited_body_has_multiple_training_providers
     @training_providers = 2.times.map do
       training_provider = create(:provider)
-      create(:course, provider: training_provider, accrediting_provider_code: @accredited_body.provider_code)
+      create(:course, provider: training_provider, accredited_body_code: @accredited_body.provider_code)
 
       training_provider
     end
