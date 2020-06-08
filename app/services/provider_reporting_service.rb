@@ -2,10 +2,10 @@ class ProviderReportingService
   def initialize(providers_scope: Provider)
     @providers = providers_scope.distinct
 
-    @training_provider = @providers.where(id: Course.findable.select(:provider_id))
+    @training_providers = @providers.where(id: Course.findable.select(:provider_id))
     @open_providers = @providers.where(id: Course.findable.with_vacancies.select(:provider_id))
 
-    @closed_providers = @training_provider.where.not(id: @open_providers)
+    @closed_providers = @training_providers.where.not(id: @open_providers)
   end
 
   class << self
@@ -18,8 +18,8 @@ class ProviderReportingService
     {
       total: {
         all: @providers.count,
-        non_training_providers: @providers.count - @training_provider.count,
-        training_providers: @training_provider.count,
+        non_training_providers: @providers.count - @training_providers.count,
+        training_providers: @training_providers.count,
       },
       training_providers: {
         findable_total: {
