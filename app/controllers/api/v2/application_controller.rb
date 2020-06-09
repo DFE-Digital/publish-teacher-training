@@ -7,6 +7,7 @@ module API
 
       before_action :store_request_id
       before_action :check_terms_accepted
+      before_action :check_user_is_kept
 
       def authenticate
         authenticate_or_request_with_http_token do |token|
@@ -21,6 +22,24 @@ module API
       end
 
     private
+
+      def check_user_is_kept
+        return if current_user&.kept?
+
+        error_body = {
+          errors: [
+            {
+              status: 403,
+              title: "Forbidden",
+              detail: "The user has been removed.",
+            },
+          ],
+          meta: {
+            error_type: :user_has_been_removed,
+          },
+        }
+        render json: error_body, status: :forbidden
+      end
 
       def check_terms_accepted
         return if current_user&.accept_terms_date_utc.present?
