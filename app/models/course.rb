@@ -58,7 +58,7 @@ class Course < ApplicationRecord
   belongs_to :accrediting_provider,
              ->(c) { where(recruitment_cycle: c.recruitment_cycle) },
              class_name: "Provider",
-             foreign_key: :accrediting_provider_code,
+             foreign_key: :accredited_body_code,
              primary_key: :provider_code,
              inverse_of: :accredited_courses,
              optional: true
@@ -194,7 +194,7 @@ class Course < ApplicationRecord
   end
 
   scope :with_accredited_bodies, ->(accredited_body_codes) do
-    where(accrediting_provider_code: accredited_body_codes)
+    where(accredited_body_code: accredited_body_codes)
   end
 
   scope :with_provider_name, ->(provider_name) do
@@ -202,7 +202,7 @@ class Course < ApplicationRecord
       provider_id: Provider.where(provider_name: provider_name),
     ).or(
       self.where(
-        accrediting_provider_code: Provider.where(provider_name: provider_name)
+        accredited_body_code: Provider.where(provider_name: provider_name)
                                        .select(:provider_code),
       ),
     )

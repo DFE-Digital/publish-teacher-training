@@ -26,7 +26,7 @@ module API
 
         def course_scope
           provider_courses = Course.where(provider: [provider.id])
-          training_provider_courses = Course.where(provider: training_providers).where(accrediting_provider_code: provider.provider_code)
+          training_provider_courses = Course.where(provider: training_providers).where(accredited_body_code: provider.provider_code)
 
           provider_courses.or(training_provider_courses)
         end

@@ -48,7 +48,7 @@ class Provider < ApplicationRecord
   has_many :accredited_courses, # use current_accredited_courses to filter to courses in the same cycle as this provider
            -> { where(discarded_at: nil) },
            class_name: "Course",
-           foreign_key: :accrediting_provider_code,
+           foreign_key: :accredited_body_code,
            primary_key: :provider_code,
            inverse_of: :accrediting_provider
 
@@ -85,7 +85,7 @@ class Provider < ApplicationRecord
 
   scope :with_findable_courses, -> do
     where(id: Course.findable.select(:provider_id))
-      .or(self.where(provider_code: Course.findable.select(:accrediting_provider_code)))
+      .or(self.where(provider_code: Course.findable.select(:accredited_body_code)))
   end
 
   scope :in_current_cycle, -> { where(recruitment_cycle: RecruitmentCycle.current_recruitment_cycle) }
@@ -174,7 +174,7 @@ class Provider < ApplicationRecord
           SELECT b.provider_id, COUNT(*) courses_count
           FROM course b
           WHERE b.discarded_at IS NULL
-          AND b.accrediting_provider_code = #{ActiveRecord::Base.connection.quote(provider_code)}
+          AND b.accredited_body_code = #{ActiveRecord::Base.connection.quote(provider_code)}
           GROUP BY b.provider_id
         ) a ON a.provider_id = provider.id
       },

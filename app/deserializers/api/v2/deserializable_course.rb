@@ -27,7 +27,7 @@ module API
         applications_open_from
         study_mode
         is_send
-        accrediting_provider_code
+        accredited_body_code
         funding_type
         level
       ].freeze

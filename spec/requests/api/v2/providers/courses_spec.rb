@@ -124,7 +124,7 @@ describe "Courses API v2", type: :request do
                 "gcse_subjects_required" => %w[maths english science],
                 "age_range_in_years" => provider.courses[0].age_range_in_years,
                 "accrediting_provider" => nil,
-                "accrediting_provider_code" => nil,
+                "accredited_body_code" => nil,
               },
               "relationships" => {
                 "accrediting_provider" => { "meta" => { "included" => false } },
@@ -694,7 +694,7 @@ describe "Courses API v2", type: :request do
               "gcse_subjects_required" => %w[maths english science],
               "age_range_in_years" => provider.courses[0].age_range_in_years,
               "accrediting_provider" => nil,
-              "accrediting_provider_code" => nil,
+              "accredited_body_code" => nil,
             },
             "relationships" => {
               "accrediting_provider" => { "meta" => { "included" => false } },

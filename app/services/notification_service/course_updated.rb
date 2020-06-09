@@ -33,7 +33,7 @@ module NotificationService
 
     def users_to_notify
       User.joins(:user_notifications).merge(
-        UserNotification.course_update_notification_requests(course.accrediting_provider_code),
+        UserNotification.course_update_notification_requests(course.accredited_body_code),
       )
     end
 

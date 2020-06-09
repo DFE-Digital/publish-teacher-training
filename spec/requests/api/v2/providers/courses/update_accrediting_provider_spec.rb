@@ -3,7 +3,7 @@ require "rails_helper"
 describe "PATCH /providers/:provider_code/courses/:course_code" do
   let(:jsonapi_renderer) { JSONAPI::Serializable::Renderer.new }
 
-  def perform_request(updated_accrediting_provider_code)
+  def perform_request(updated_accredited_body_code)
     jsonapi_data = jsonapi_renderer.render(
       course,
       class: {
@@ -11,7 +11,7 @@ describe "PATCH /providers/:provider_code/courses/:course_code" do
       },
     )
 
-    jsonapi_data[:data][:attributes] = updated_accrediting_provider_code
+    jsonapi_data[:data][:attributes] = updated_accredited_body_code
 
     patch "/api/v2/providers/#{course.provider.provider_code}" \
             "/courses/#{course.course_code}",
@@ -33,49 +33,49 @@ describe "PATCH /providers/:provider_code/courses/:course_code" do
   end
 
   before do
-    perform_request(accrediting_provider_code)
+    perform_request(accredited_body_code: accredited_body_code)
   end
 
-  context "course has an updated accrediting_provider_code attribute" do
-    let(:accrediting_provider_code) { { accrediting_provider_code: "1AA" } }
+  context "course has an updated accredited_body_code attribute" do
+    let(:accredited_body_code) { "1AA" }
 
     it "returns http success" do
       expect(response).to have_http_status(:success)
     end
 
-    it "updates the `accrediting_provider_code` attribute to the correct value" do
-      expect(course.reload.accrediting_provider_code).to eq(accrediting_provider_code[:accrediting_provider_code])
+    it "updates the `accredited_body_code` attribute to the correct value" do
+      expect(course.reload.accredited_body_code).to eq(accredited_body_code)
     end
   end
 
-  context "course has the same accrediting_provider_code value" do
+  context "course has the same accredited_body_code value" do
     context "with values passed into the params" do
-      let(:accrediting_provider_code) { { accrediting_provider_code: "1AA" } }
+      let(:accredited_body_code) { "1AA" }
 
       it "returns http success" do
         expect(response).to have_http_status(:success)
       end
 
-      it "does not change `accrediting_provider_code` attribute" do
-        expect(course.reload.accrediting_provider_code).to eq(accrediting_provider_code[:accrediting_provider_code])
+      it "does not change `accredited_body_code` attribute" do
+        expect(course.reload.accredited_body_code).to eq(accredited_body_code)
       end
     end
   end
 
   context "with no values passed into the params" do
-    let(:accrediting_provider_code) { {} }
+    let(:accredited_body_code) {}
 
     before do
-      @accrediting_provider_code = course.accrediting_provider_code
-      perform_request(accrediting_provider_code)
+      @accredited_body_code = course.accredited_body_code
+      perform_request(accredited_body_code: accredited_body_code)
     end
 
     it "returns http success" do
       expect(response).to have_http_status(:success)
     end
 
-    it "does not change `accrediting_provider_code` attribute" do
-      expect(course.reload.accrediting_provider_code).to eq(@accrediting_provider_code)
+    it "does not change `accredited_body_code` attribute" do
+      expect(course.reload.accredited_body_code).to eq(@accredited_body_code)
     end
   end
 end

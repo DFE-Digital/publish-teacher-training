@@ -5,7 +5,7 @@ module NotificationService
     describe ".call" do
       let(:accredited_body) { create(:provider, :accredited_body) }
       let(:other_accredited_body) { create(:provider, :accredited_body) }
-      let(:course) { create(:course, accrediting_provider_code: accredited_body.provider_code) }
+      let(:course) { create(:course, accredited_body_code: accredited_body.provider_code) }
 
       let(:subscribed_user) { create(:user) }
       let(:non_subscribed_user) { create(:user) }
