@@ -97,7 +97,7 @@ steps:
     GIT_BRANCH: $(Build.SourceBranchName)
 - script: |
     set -x
-    $DOCKER_OVERRIDE exec -T web /bin/sh -c "bundle exec rake cc:report"
+    $DOCKER_OVERRIDE exec -T -e GIT_BRANCH=$GIT_BRANCH web rails cc:report
   displayName: 'Execute Code Climate reporter'
   env:
     DOCKER_OVERRIDE: $(dockerOverride)

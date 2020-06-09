@@ -37,6 +37,7 @@ services:
       - DB_PASSWORD=developmentpassword
       - CC_TEST_REPORTER_ID=${CC_TEST_REPORTER_ID}
       - AGENT_JOBSTATUS=${AGENT_JOBSTATUS}
+      - GIT_BRANCH=${GIT_BRANCH}
   bg-geocode:
     build:
       args:
