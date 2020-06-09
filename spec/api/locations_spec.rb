@@ -20,6 +20,15 @@ describe "API" do
                 in: :path,
                 type: :string,
                 description: "The code of the course."
+      parameter name: :page,
+                in: :query,
+                schema: { "$ref" => "#/components/schemas/Pagination" },
+                type: :object,
+                style: :form,
+                explode: false,
+                required: false,
+                example: "page[page]=2&page[per_page]=10",
+                description: "Pagination options to navigate through the collection."
 
       response "200", "The collection of locations for the specified course." do
         let(:year) { "2020" }
