@@ -28,5 +28,8 @@ pentest:
 research:
   <<: *default
 
+rollover:
+  <<: *default
+
 production:
   <<: *default
