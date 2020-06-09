@@ -1,7 +1,6 @@
 ---
 description: "This schema returns associations that belong to a location status."
 type: object
-description: "Associated data."
 properties:
   site:
     type: object

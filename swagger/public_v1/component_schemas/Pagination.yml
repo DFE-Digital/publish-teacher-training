@@ -1,7 +1,6 @@
 ---
-description: "This schema used to paginate through collections."
+description: "This schema used to paginate through a collection."
 type: object
-required:
 properties:
   page:
     type: integer
