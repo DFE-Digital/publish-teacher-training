@@ -1,18 +1,16 @@
 module API
   module Public
     module V1
-      class CoursesController < API::Public::V1::ApplicationController
+      class ProvidersController < API::Public::V1::ApplicationController
         def index
           render json: {
             data: [
               {
                 id: 123,
-                type: "Course",
+                type: "Provider",
                 attributes: {
-                  code: "3GTY",
-                  provider_code: "6CL",
-                  age_minimum: 11,
-                  age_maximum: 14,
+                  code: "ABC",
+                  name: "Some provider",
                 },
               },
             ],
@@ -26,12 +24,10 @@ module API
           render json: {
             data: {
               id: 123,
-              type: "Course",
+              type: "Provider",
               attributes: {
-                code: "3GTY",
-                provider_code: "6CL",
-                age_minimum: 11,
-                age_maximum: 14,
+                code: "ABC",
+                name: "Some provider",
               },
             },
             jsonapi: {
