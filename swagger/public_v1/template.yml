@@ -20,12 +20,14 @@ components:
     Sort:
       type: array
       example: "provider.provider_name,name"
+      description: "This schema is used to sort collections."
       items:
         type: string
         example: "name"
     Filter:
       type: object
       example: ""
+      description: "This schema is used to search within collections to return more specific results."
       properties:
         has_vacancies:
           description: "Return courses that only have vacancies?"
@@ -73,6 +75,7 @@ components:
           type: number
           example: 20
     CourseResource:
+      description: "This schema provides metadata about a course."
       type: object
       required:
         - id
@@ -89,6 +92,7 @@ components:
         relationships:
           $ref: "#/components/schemas/CourseRelationships"
     CourseListResponse:
+      description: "This schema is used to return a collection of courses."
       type: object
       required:
         - data
@@ -102,6 +106,7 @@ components:
         jsonapi:
           $ref: "#/components/schemas/JSONAPI"
     CourseSingleResponse:
+      description: "This schema is used to return a single course."
       type: object
       required:
         - data
@@ -114,10 +119,12 @@ components:
         jsonapi:
           $ref: "#/components/schemas/JSONAPI"
     Included:
+      description: "This schema is used to return requested associated objects if there are any."
       type: array
       items:
         $ref: "#/components/schemas/Resource"
     JSONAPI:
+      description: "This returns the version of JSON API in use."
       type: object
       required:
         - version
@@ -126,6 +133,7 @@ components:
           type: string
           example: "1.0"
     LocationAttributes:
+      description: "This schema is used to describe a location."
       type: object
       properties:
         code:
@@ -162,6 +170,7 @@ components:
           type: string
           example: "2020"
     LocationResource:
+      description: "This schema provides metadata about a location."
       type: object
       properties:
         id:
@@ -172,7 +181,8 @@ components:
           example: "sites"
         attributes:
           $ref: "#/components/schemas/LocationAttributes"
-    LocationsList:
+    LocationListResponse:
+      description: "This schema is used to return a collection of locations."
       type: object
       required:
         - data
@@ -184,6 +194,7 @@ components:
         jsonapi:
           $ref: "#/components/schemas/JSONAPI"
     LocationStatusResource:
+      description: "This schema provides metadata about a location status."
       type: object
       description: "Wrapper object for LocationStatusAttributes."
       properties:
@@ -196,6 +207,7 @@ components:
         attributes:
           $ref: "#/components/schemas/LocationStatusAttributes"
     ProviderResource:
+      description: "This schema provides metadata about a provider."
       type: object
       required:
         - id
@@ -213,6 +225,7 @@ components:
         relationships:
           $ref: "#/components/schemas/ProviderRelationships"
     ProviderListResponse:
+      description: "This schema is used to return a collection of providers."
       type: object
       required:
         - data
@@ -227,6 +240,7 @@ components:
         jsonapi:
           $ref: "#/components/schemas/JSONAPI"
     ProviderSingleResponse:
+      description: "This schema is used to return a single provider."
       type: object
       required:
         - data
@@ -239,6 +253,7 @@ components:
         jsonapi:
           $ref: "#/components/schemas/JSONAPI"
     Relationship:
+      description: "This schema describes a single associated object."
       type: object
       properties:
         data:
@@ -246,6 +261,7 @@ components:
         meta:
           type: object
     RelationshipList:
+      description: "This schema describes a collection of associated objects."
       type: object
       properties:
         data:
@@ -262,6 +278,7 @@ components:
       discriminator:
         propertyName: type
     ResourceIdentifier:
+      description: "As included associated data can be polymorphic, this schema is used to describe what type of resource is being presented."
       type: object
       required:
         - type
@@ -272,6 +289,7 @@ components:
         id:
           type: string
     RecruitmentCycleResource:
+      description: "This schema provides metadata about a recruitment cycle."
       type: object
       required:
         - id
@@ -285,6 +303,7 @@ components:
         attributes:
           $ref: "#/components/schemas/RecruitmentCycleAttributes"
     SubjectResource:
+      description: "This schema provides metadata about a subject."
       type: object
       required:
         - id

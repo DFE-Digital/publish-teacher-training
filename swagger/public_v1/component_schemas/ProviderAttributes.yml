@@ -1,10 +1,11 @@
 ---
+description: "This schema is used to describe a provider."
 type: object
 required:
   - code
   - name
 properties:
-  accredited_body?:
+  accredited_body:
     type: boolean
     description: "Is this provider an accredited body for other provider's courses."
     example: "true"

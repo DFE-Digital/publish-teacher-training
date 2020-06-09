@@ -1,4 +1,5 @@
 ---
+description: "This schema is used to describe a recruitment cycle."
 type: object
 required:
   - code

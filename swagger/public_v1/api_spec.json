@@ -26,6 +26,7 @@
   "components": {
     "schemas": {
       "CourseAttributes": {
+        "description": "This schema presents the information about a course.",
         "type": "object",
         "required": [
           "code",
@@ -382,6 +383,7 @@
         }
       },
       "CourseListResponse": {
+        "description": "This schema is used to return a collection of courses.",
         "type": "object",
         "required": [
           "data"
@@ -402,6 +404,7 @@
         }
       },
       "CourseRelationships": {
+        "description": "This schema is used to describe associations that can be returned with a course.",
         "type": "object",
         "properties": {
           "accredited_body": {
@@ -425,6 +428,7 @@
         }
       },
       "CourseResource": {
+        "description": "This schema provides metadata about a course.",
         "type": "object",
         "required": [
           "id",
@@ -448,6 +452,7 @@
         }
       },
       "CourseSingleResponse": {
+        "description": "This schema is used to return a single course.",
         "type": "object",
         "required": [
           "data",
@@ -468,6 +473,7 @@
       "Filter": {
         "type": "object",
         "example": "",
+        "description": "This schema is used to search within collections to return more specific results.",
         "properties": {
           "has_vacancies": {
             "description": "Return courses that only have vacancies?",
@@ -529,12 +535,14 @@
         }
       },
       "Included": {
+        "description": "This schema is used to return requested associated objects if there are any.",
         "type": "array",
         "items": {
           "$ref": "#/components/schemas/Resource"
         }
       },
       "JSONAPI": {
+        "description": "This returns the version of JSON API in use.",
         "type": "object",
         "required": [
           "version"
@@ -547,6 +555,7 @@
         }
       },
       "LocationAttributes": {
+        "description": "This schema is used to describe a location.",
         "type": "object",
         "properties": {
           "code": {
@@ -593,7 +602,26 @@
           }
         }
       },
+      "LocationListResponse": {
+        "description": "This schema is used to return a collection of locations.",
+        "type": "object",
+        "required": [
+          "data"
+        ],
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/LocationResource"
+            }
+          },
+          "jsonapi": {
+            "$ref": "#/components/schemas/JSONAPI"
+          }
+        }
+      },
       "LocationResource": {
+        "description": "This schema provides metadata about a location.",
         "type": "object",
         "properties": {
           "id": {
@@ -610,8 +638,8 @@
         }
       },
       "LocationStatusAttributes": {
-        "type": "object",
         "description": "Fields relating to the state of a location.",
+        "type": "object",
         "properties": {
           "status": {
             "type": "string",
@@ -652,8 +680,8 @@
         }
       },
       "LocationStatusRelationships": {
-        "type": "object",
         "description": "Associated data.",
+        "type": "object",
         "properties": {
           "site": {
             "type": "object",
@@ -676,8 +704,8 @@
         }
       },
       "LocationStatusResource": {
-        "type": "object",
         "description": "Wrapper object for LocationStatusAttributes.",
+        "type": "object",
         "properties": {
           "id": {
             "type": "string",
@@ -692,31 +720,15 @@
           }
         }
       },
-      "LocationsList": {
-        "type": "object",
-        "required": [
-          "data"
-        ],
-        "properties": {
-          "data": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/LocationResource"
-            }
-          },
-          "jsonapi": {
-            "$ref": "#/components/schemas/JSONAPI"
-          }
-        }
-      },
       "ProviderAttributes": {
+        "description": "This schema is used to describe a provider.",
         "type": "object",
         "required": [
           "code",
           "name"
         ],
         "properties": {
-          "accredited_body?": {
+          "accredited_body": {
             "type": "boolean",
             "description": "Is this provider an accredited body for other provider's courses.",
             "example": "true"
@@ -829,6 +841,7 @@
         }
       },
       "ProviderListResponse": {
+        "description": "This schema is used to return a collection of providers.",
         "type": "object",
         "required": [
           "data",
@@ -850,6 +863,7 @@
         }
       },
       "ProviderRelationships": {
+        "description": "This schema is used to describe associations that can be returned with a provider.",
         "type": "object",
         "properties": {
           "locations": {
@@ -861,6 +875,7 @@
         }
       },
       "ProviderResource": {
+        "description": "This schema provides metadata about a provider.",
         "type": "object",
         "required": [
           "id",
@@ -885,6 +900,7 @@
         }
       },
       "ProviderSingleResponse": {
+        "description": "This schema is used to return a single provider.",
         "type": "object",
         "required": [
           "data",
@@ -903,6 +919,7 @@
         }
       },
       "RecruitmentCycleAttributes": {
+        "description": "This schema is used to describe a recruitment cycle.",
         "type": "object",
         "required": [
           "code"
@@ -925,6 +942,7 @@
         }
       },
       "RecruitmentCycleResource": {
+        "description": "This schema provides metadata about a recruitment cycle.",
         "type": "object",
         "required": [
           "id",
@@ -944,6 +962,7 @@
         }
       },
       "Relationship": {
+        "description": "This schema describes a single associated object.",
         "type": "object",
         "properties": {
           "data": {
@@ -955,6 +974,7 @@
         }
       },
       "RelationshipList": {
+        "description": "This schema describes a collection of associated objects.",
         "type": "object",
         "properties": {
           "data": {
@@ -988,6 +1008,7 @@
         }
       },
       "ResourceIdentifier": {
+        "description": "As included associated data can be polymorphic, this schema is used to describe what type of resource is being presented.",
         "type": "object",
         "required": [
           "type",
@@ -1005,12 +1026,14 @@
       "Sort": {
         "type": "array",
         "example": "provider.provider_name,name",
+        "description": "This schema is used to sort collections.",
         "items": {
           "type": "string",
           "example": "name"
         }
       },
       "SubjectAttributes": {
+        "description": "This schema is used to describe a subject.",
         "type": "object",
         "required": [
           "code"
@@ -1027,6 +1050,7 @@
         }
       },
       "SubjectResource": {
+        "description": "This schema provides metadata about a subject.",
         "type": "object",
         "required": [
           "id",
@@ -1101,7 +1125,7 @@
         ],
         "responses": {
           "200": {
-            "description": "The list of courses.",
+            "description": "The collection of courses.",
             "content": {
               "application/json": {
                 "schema": {
@@ -1205,7 +1229,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/LocationsList"
+                  "$ref": "#/components/schemas/LocationListResponse"
                 }
               }
             }

@@ -26,7 +26,7 @@ describe "API" do
         let(:provider_code) { "ABC" }
         let(:course_code) { 123 }
 
-        schema "$ref": "#/components/schemas/LocationsList"
+        schema "$ref": "#/components/schemas/LocationListResponse"
 
         run_test!
       end
