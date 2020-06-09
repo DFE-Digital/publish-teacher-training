@@ -10,16 +10,19 @@ describe "API" do
                 in: :path,
                 type: :string,
                 required: true,
-                description: "The starting year of the recruitment cycle."
+                description: "The starting year of the recruitment cycle.",
+                example: "2020"
       parameter name: :provider_code,
                 in: :path,
                 type: :string,
                 required: true,
-                description: "The unique code of the provider."
+                description: "The unique code of the provider.",
+                example: "T92"
       parameter name: :course_code,
                 in: :path,
                 type: :string,
-                description: "The code of the course."
+                description: "The code of the course.",
+                example: "X130"
       parameter name: :page,
                 in: :query,
                 schema: { "$ref" => "#/components/schemas/Pagination" },

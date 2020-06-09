@@ -1103,6 +1103,7 @@
             "in": "path",
             "required": true,
             "description": "The starting year of the recruitment cycle.",
+            "example": "2020",
             "schema": {
               "type": "string"
             }
@@ -1112,6 +1113,7 @@
             "in": "path",
             "required": true,
             "description": "The unique code of the provider.",
+            "example": "T92",
             "schema": {
               "type": "string"
             }
@@ -1125,7 +1127,8 @@
             "style": "deepObject",
             "explode": true,
             "required": false,
-            "description": "Refine courses to return."
+            "description": "Refine courses to return.",
+            "example": "filter[has_vacancies]=true&filter[subjects]=00,01"
           },
           {
             "name": "sort",
@@ -1179,6 +1182,7 @@
             "in": "path",
             "required": true,
             "description": "The starting year of the recruitment cycle.",
+            "example": "2020",
             "schema": {
               "type": "string"
             }
@@ -1188,6 +1192,7 @@
             "in": "path",
             "required": true,
             "description": "The unique code of the provider.",
+            "example": "T92",
             "schema": {
               "type": "string"
             }
@@ -1197,6 +1202,7 @@
             "in": "path",
             "required": true,
             "description": "The code of the course.",
+            "example": "X130",
             "schema": {
               "type": "string"
             }
@@ -1229,6 +1235,7 @@
             "in": "path",
             "required": true,
             "description": "The starting year of the recruitment cycle.",
+            "example": "2020",
             "schema": {
               "type": "string"
             }
@@ -1238,6 +1245,7 @@
             "in": "path",
             "required": true,
             "description": "The unique code of the provider.",
+            "example": "T92",
             "schema": {
               "type": "string"
             }
@@ -1246,6 +1254,7 @@
             "name": "course_code",
             "in": "path",
             "description": "The code of the course.",
+            "example": "X130",
             "required": true,
             "schema": {
               "type": "string"
@@ -1291,6 +1300,7 @@
             "in": "path",
             "required": true,
             "description": "The starting year of the recruitment cycle.",
+            "example": "2020",
             "schema": {
               "type": "string"
             }
@@ -1358,6 +1368,7 @@
             "in": "path",
             "required": true,
             "description": "The starting year of the recruitment cycle.",
+            "example": "2020",
             "schema": {
               "type": "string"
             }
@@ -1367,6 +1378,7 @@
             "in": "path",
             "required": true,
             "description": "The unique code of the provider.",
+            "example": "T92",
             "schema": {
               "type": "string"
             }

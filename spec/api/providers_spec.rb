@@ -10,7 +10,8 @@ describe "API" do
                 in: :path,
                 type: :string,
                 required: true,
-                description: "The starting year of the recruitment cycle."
+                description: "The starting year of the recruitment cycle.",
+                example: "2020"
       parameter name: :filter,
                 in: :query,
                 schema: { "$ref" => "#/components/schemas/Filter" },
@@ -57,12 +58,14 @@ describe "API" do
                 in: :path,
                 type: :string,
                 required: true,
-                description: "The starting year of the recruitment cycle."
+                description: "The starting year of the recruitment cycle.",
+                example: "2020"
       parameter name: :provider_code,
                 in: :path,
                 type: :string,
                 required: true,
-                description: "The unique code of the provider."
+                description: "The unique code of the provider.",
+                example: "T92"
 
       response "200", "The provider." do
         let(:year) { "2020" }
