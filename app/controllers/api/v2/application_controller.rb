@@ -6,8 +6,8 @@ module API
       rescue_from ActiveRecord::RecordNotFound, with: :jsonapi_404
 
       before_action :store_request_id
-      before_action :check_terms_accepted
       before_action :check_user_is_kept
+      before_action :check_terms_accepted
 
       def authenticate
         authenticate_or_request_with_http_token do |token|
