@@ -19,6 +19,21 @@ shared_examples "Unauthenticated, unauthorised, or not accepted T&Cs" do
     end
   end
 
+  context "when user has been discarded" do
+    let(:user)         { create(:user) }
+    let(:organisation) { create(:organisation, users: [user]) }
+
+    before do
+      user.discard
+    end
+    it { should have_http_status(:forbidden) }
+
+    it "Returns the correct error type" do
+      body = JSON.parse(subject.body)
+      expect(body["meta"]).to eq("error_type" => "user_has_been_removed")
+    end
+  end
+
   context "when unauthorised" do
     let(:unauthorised_user) { create(:user) }
     let(:payload)           { { email: unauthorised_user.email } }
