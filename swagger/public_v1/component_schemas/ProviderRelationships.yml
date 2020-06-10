@@ -1,4 +1,5 @@
 ---
+description: "This schema is used to describe associations that can be returned with a provider."
 type: object
 properties:
   locations:

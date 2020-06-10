@@ -1,4 +1,5 @@
 ---
+description: "This schema presents the information about a course."
 type: object
 required:
   - code

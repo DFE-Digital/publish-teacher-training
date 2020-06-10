@@ -26,6 +26,7 @@
   "components": {
     "schemas": {
       "CourseAttributes": {
+        "description": "This schema presents the information about a course.",
         "type": "object",
         "required": [
           "code",
@@ -382,6 +383,7 @@
         }
       },
       "CourseListResponse": {
+        "description": "This schema is used to return a collection of courses.",
         "type": "object",
         "required": [
           "data"
@@ -402,6 +404,7 @@
         }
       },
       "CourseRelationships": {
+        "description": "This schema is used to describe associations that can be returned with a course.",
         "type": "object",
         "properties": {
           "accredited_body": {
@@ -425,6 +428,7 @@
         }
       },
       "CourseResource": {
+        "description": "This schema provides metadata about a course.",
         "type": "object",
         "required": [
           "id",
@@ -448,6 +452,7 @@
         }
       },
       "CourseSingleResponse": {
+        "description": "This schema is used to return a single course.",
         "type": "object",
         "required": [
           "data",
@@ -468,21 +473,34 @@
       "Filter": {
         "type": "object",
         "example": "",
+        "description": "This schema is used to search within collections to return more specific results.",
         "properties": {
           "has_vacancies": {
             "description": "Return courses that only have vacancies?",
-            "type": "string",
-            "example": "true"
+            "type": "boolean",
+            "example": true
           },
           "funding": {
             "description": "Return courses that are salary funded.",
             "type": "string",
-            "example": "salary"
+            "example": "salary",
+            "enum": [
+              "salary",
+              "apprenticeship",
+              "fee"
+            ]
           },
           "qualification": {
             "description": "Search courses based on the award given on course completion.",
             "type": "array",
             "example": "qts,pgce,pgde",
+            "enum": [
+              "qts",
+              "pgce_with_qts",
+              "pgde",
+              "pgce",
+              "pgde_with_qts"
+            ],
             "items": {
               "type": "string",
               "example": "qts"
@@ -492,6 +510,11 @@
             "description": "Search full time or part time courses or both.",
             "type": "array",
             "example": "full_time,part_time",
+            "enum": [
+              "full_time",
+              "part_time",
+              "full_time_or_part_time"
+            ],
             "items": {
               "type": "string",
               "example": "full_time"
@@ -501,6 +524,50 @@
             "description": "Returns courses that include at least one of the given subjects.",
             "type": "array",
             "example": "00,01,W1",
+            "enum": [
+              "00",
+              "01",
+              "02",
+              "03",
+              "04",
+              "06",
+              "07",
+              "W1",
+              "F0",
+              "C1",
+              "08",
+              "F1",
+              "09",
+              "Q8",
+              "P3",
+              "11",
+              "12",
+              "DT",
+              "13",
+              "L1",
+              "Q3",
+              "F8",
+              "L5",
+              "V1",
+              "G1",
+              "W3",
+              "P1",
+              "C6",
+              "F3",
+              "C8",
+              "V6",
+              "14",
+              "15",
+              "16",
+              "17",
+              "18",
+              "19",
+              "20",
+              "21",
+              "22",
+              "41",
+              "24"
+            ],
             "items": {
               "type": "string",
               "example": "W1"
@@ -508,8 +575,8 @@
           },
           "send_courses": {
             "description": "Only return courses that have a SEND specialism.",
-            "type": "string",
-            "example": "true"
+            "type": "boolean",
+            "example": true
           },
           "latitude": {
             "description": "Latitude of origin when performing a search by radius.",
@@ -529,12 +596,14 @@
         }
       },
       "Included": {
+        "description": "This schema is used to return requested associated objects if there are any.",
         "type": "array",
         "items": {
           "$ref": "#/components/schemas/Resource"
         }
       },
       "JSONAPI": {
+        "description": "This returns the version of JSON API in use.",
         "type": "object",
         "required": [
           "version"
@@ -547,6 +616,7 @@
         }
       },
       "LocationAttributes": {
+        "description": "This schema is used to describe a location.",
         "type": "object",
         "properties": {
           "code": {
@@ -593,7 +663,26 @@
           }
         }
       },
+      "LocationListResponse": {
+        "description": "This schema is used to return a collection of locations.",
+        "type": "object",
+        "required": [
+          "data"
+        ],
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/LocationResource"
+            }
+          },
+          "jsonapi": {
+            "$ref": "#/components/schemas/JSONAPI"
+          }
+        }
+      },
       "LocationResource": {
+        "description": "This schema provides metadata about a location.",
         "type": "object",
         "properties": {
           "id": {
@@ -610,8 +699,8 @@
         }
       },
       "LocationStatusAttributes": {
+        "description": "This schema is used to describe the state of a location. For example a course running a particular location may have no vacancies remaining.",
         "type": "object",
-        "description": "Fields relating to the state of a location.",
         "properties": {
           "status": {
             "type": "string",
@@ -652,8 +741,8 @@
         }
       },
       "LocationStatusRelationships": {
+        "description": "This schema returns associations that belong to a location status.",
         "type": "object",
-        "description": "Associated data.",
         "properties": {
           "site": {
             "type": "object",
@@ -676,8 +765,8 @@
         }
       },
       "LocationStatusResource": {
+        "description": "This schema provides metadata about a location status.",
         "type": "object",
-        "description": "Wrapper object for LocationStatusAttributes.",
         "properties": {
           "id": {
             "type": "string",
@@ -692,31 +781,31 @@
           }
         }
       },
-      "LocationsList": {
+      "Pagination": {
+        "description": "This schema used to paginate through a collection.",
         "type": "object",
-        "required": [
-          "data"
-        ],
         "properties": {
-          "data": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/LocationResource"
-            }
+          "page": {
+            "type": "integer",
+            "description": "The page number to paginate to in the collection. If no value is specified it defaults to the first page.",
+            "example": 3
           },
-          "jsonapi": {
-            "$ref": "#/components/schemas/JSONAPI"
+          "per_page": {
+            "type": "integer",
+            "description": "The number items to display on a page. Defaults to 100. Maximum is 100, if the value is greater that the maximum allowed it will fallback to 100.",
+            "example": 10
           }
         }
       },
       "ProviderAttributes": {
+        "description": "This schema is used to describe a provider.",
         "type": "object",
         "required": [
           "code",
           "name"
         ],
         "properties": {
-          "accredited_body?": {
+          "accredited_body": {
             "type": "boolean",
             "description": "Is this provider an accredited body for other provider's courses.",
             "example": "true"
@@ -829,6 +918,7 @@
         }
       },
       "ProviderListResponse": {
+        "description": "This schema is used to return a collection of providers.",
         "type": "object",
         "required": [
           "data",
@@ -850,6 +940,7 @@
         }
       },
       "ProviderRelationships": {
+        "description": "This schema is used to describe associations that can be returned with a provider.",
         "type": "object",
         "properties": {
           "locations": {
@@ -861,6 +952,7 @@
         }
       },
       "ProviderResource": {
+        "description": "This schema provides metadata about a provider.",
         "type": "object",
         "required": [
           "id",
@@ -885,6 +977,7 @@
         }
       },
       "ProviderSingleResponse": {
+        "description": "This schema is used to return a single provider.",
         "type": "object",
         "required": [
           "data",
@@ -903,6 +996,7 @@
         }
       },
       "RecruitmentCycleAttributes": {
+        "description": "This schema is used to describe a recruitment cycle.",
         "type": "object",
         "required": [
           "code"
@@ -925,6 +1019,7 @@
         }
       },
       "RecruitmentCycleResource": {
+        "description": "This schema provides metadata about a recruitment cycle.",
         "type": "object",
         "required": [
           "id",
@@ -944,6 +1039,7 @@
         }
       },
       "Relationship": {
+        "description": "This schema describes a single associated object.",
         "type": "object",
         "properties": {
           "data": {
@@ -955,6 +1051,7 @@
         }
       },
       "RelationshipList": {
+        "description": "This schema describes a collection of associated objects.",
         "type": "object",
         "properties": {
           "data": {
@@ -988,6 +1085,7 @@
         }
       },
       "ResourceIdentifier": {
+        "description": "As included associated data can be polymorphic, this schema is used to describe what type of resource is being presented.",
         "type": "object",
         "required": [
           "type",
@@ -1005,12 +1103,15 @@
       "Sort": {
         "type": "array",
         "example": "provider.provider_name,name",
+        "description": "This schema is used to sort a collection.",
         "items": {
           "type": "string",
-          "example": "name"
+          "example": "name",
+          "description": "A comma delimited string of fields to sort the collection by."
         }
       },
       "SubjectAttributes": {
+        "description": "This schema is used to describe a subject.",
         "type": "object",
         "required": [
           "code"
@@ -1027,6 +1128,7 @@
         }
       },
       "SubjectResource": {
+        "description": "This schema provides metadata about a subject.",
         "type": "object",
         "required": [
           "id",
@@ -1062,6 +1164,7 @@
             "in": "path",
             "required": true,
             "description": "The starting year of the recruitment cycle.",
+            "example": "2020",
             "schema": {
               "type": "string"
             }
@@ -1071,6 +1174,7 @@
             "in": "path",
             "required": true,
             "description": "The unique code of the provider.",
+            "example": "T92",
             "schema": {
               "type": "string"
             }
@@ -1084,7 +1188,8 @@
             "style": "deepObject",
             "explode": true,
             "required": false,
-            "description": "Refine courses to return."
+            "description": "Refine courses to return.",
+            "example": "filter[has_vacancies]=true&filter[subjects]=00,01"
           },
           {
             "name": "sort",
@@ -1097,11 +1202,23 @@
             "required": false,
             "example": "provider.provider_name,name",
             "description": "Field(s) to sort the courses by."
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/Pagination"
+            },
+            "style": "form",
+            "explode": false,
+            "required": false,
+            "example": "page[page]=2&page[per_page]=10",
+            "description": "Pagination options to navigate through the collection."
           }
         ],
         "responses": {
           "200": {
-            "description": "The list of courses.",
+            "description": "The collection of courses.",
             "content": {
               "application/json": {
                 "schema": {
@@ -1126,6 +1243,7 @@
             "in": "path",
             "required": true,
             "description": "The starting year of the recruitment cycle.",
+            "example": "2020",
             "schema": {
               "type": "string"
             }
@@ -1135,6 +1253,7 @@
             "in": "path",
             "required": true,
             "description": "The unique code of the provider.",
+            "example": "T92",
             "schema": {
               "type": "string"
             }
@@ -1144,6 +1263,7 @@
             "in": "path",
             "required": true,
             "description": "The code of the course.",
+            "example": "X130",
             "schema": {
               "type": "string"
             }
@@ -1176,6 +1296,7 @@
             "in": "path",
             "required": true,
             "description": "The starting year of the recruitment cycle.",
+            "example": "2020",
             "schema": {
               "type": "string"
             }
@@ -1185,6 +1306,7 @@
             "in": "path",
             "required": true,
             "description": "The unique code of the provider.",
+            "example": "T92",
             "schema": {
               "type": "string"
             }
@@ -1193,10 +1315,23 @@
             "name": "course_code",
             "in": "path",
             "description": "The code of the course.",
+            "example": "X130",
             "required": true,
             "schema": {
               "type": "string"
             }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/Pagination"
+            },
+            "style": "form",
+            "explode": false,
+            "required": false,
+            "example": "page[page]=2&page[per_page]=10",
+            "description": "Pagination options to navigate through the collection."
           }
         ],
         "responses": {
@@ -1205,7 +1340,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/LocationsList"
+                  "$ref": "#/components/schemas/LocationListResponse"
                 }
               }
             }
@@ -1226,6 +1361,7 @@
             "in": "path",
             "required": true,
             "description": "The starting year of the recruitment cycle.",
+            "example": "2020",
             "schema": {
               "type": "string"
             }
@@ -1252,6 +1388,18 @@
             "required": false,
             "example": "provider.provider_name,name",
             "description": "Field(s) to sort the courses by."
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/Pagination"
+            },
+            "style": "form",
+            "explode": false,
+            "required": false,
+            "example": "page[page]=2&page[per_page]=10",
+            "description": "Pagination options to navigate through the collection."
           }
         ],
         "responses": {
@@ -1281,6 +1429,7 @@
             "in": "path",
             "required": true,
             "description": "The starting year of the recruitment cycle.",
+            "example": "2020",
             "schema": {
               "type": "string"
             }
@@ -1290,6 +1439,7 @@
             "in": "path",
             "required": true,
             "description": "The unique code of the provider.",
+            "example": "T92",
             "schema": {
               "type": "string"
             }

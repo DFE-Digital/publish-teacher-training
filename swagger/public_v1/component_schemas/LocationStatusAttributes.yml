@@ -1,6 +1,6 @@
 ---
+description: "This schema is used to describe the state of a location. For example a course running a particular location may have no vacancies remaining."
 type: object
-description: "Fields relating to the state of a location."
 properties:
   status:
     type: string
