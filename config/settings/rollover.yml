@@ -1,0 +1,8 @@
+gcp_api_key: please_change_me
+publish_url: https://s121d04-rollover-publish-as.azurewebsites.net
+find_url: https://s121d04-rollover-find-as.azurewebsites.net
+bg_jobs:
+  save_statistic:
+    cron: "0 0 * * *" # daily at midnight
+    class: "SaveStatisticJob"
+    queue: save_statistic

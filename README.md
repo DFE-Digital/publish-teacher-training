@@ -229,9 +229,9 @@ In order to use the external environment functionality you must set the
 environments in ```config/azure_environments.yml ```like so:  
 ```
 qa:
-    webapp: <webapp>
-    rgroup: <rgroup>
-    subscription: <subscription>
+  webapp: <webapp>
+  rgroup: <rgroup>
+  subscription: <subscription>
 staging:
   webapp: <webapp>
   rgroup: <rgroup>
