@@ -12,17 +12,15 @@ module Courses
 
     def call
       accredited_body_users.each do |user|
-        if user.user_notifications.where(provider: provider).any?
-          # notification preference exists, do nothing
-        else
-          other_notification = user.user_notifications.first
+        next if user.user_notifications.where(provider: provider).any?
 
-          if other_notification
-            user.user_notifications.create!(provider: provider,
-                                            course_update: other_notification.course_update,
-                                            course_publish: other_notification.course_publish)
-          end
-        end
+        other_notification = user.user_notifications.first
+
+        next unless other_notification
+
+        user.user_notifications.create!(provider: provider,
+                                        course_update: other_notification.course_update,
+                                        course_publish: other_notification.course_publish)
       end
     end
 
