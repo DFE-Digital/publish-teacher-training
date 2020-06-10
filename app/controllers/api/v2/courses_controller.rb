@@ -315,6 +315,8 @@ module API
       def create_new_course
         if @course.valid?(:new) && @course.save
           render jsonapi: @course.reload
+          service = Courses::AppendNotificationsService.new(course: @course)
+          service.call
         else
           render jsonapi_errors: @course.errors, status: :unprocessable_entity
         end

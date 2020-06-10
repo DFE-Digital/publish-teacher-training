@@ -12,7 +12,7 @@ module Courses
 
     def call
       accredited_body_users.each do |user|
-        if user.user_notifications.where(provider: provider)
+        if user.user_notifications.where(provider: provider).any?
           # notification preference exists, do nothing
         else
           other_notification = user.user_notifications.first
