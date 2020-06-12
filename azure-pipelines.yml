@@ -87,7 +87,7 @@ steps:
     failedTaskOnFailedTest: true
 - script: |
     set -x
-    $DOCKER_OVERRIDE exec -T web /bin/sh -c "bundle exec rubocop app config db lib spec --format clang"
+    $DOCKER_OVERRIDE exec -T web /bin/sh -c "bundle exec rubocop app config db lib spec --format clang --parallel"
   displayName: 'Execute linters'
   env:
     DOCKER_OVERRIDE: $(dockerOverride)
