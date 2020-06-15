@@ -24,7 +24,7 @@ tests = {
   "/api/v3/courses" => 4750,
 }
 
-describe "API performance" do
+describe "API performance", type: :performance do
   before do
     WebMock.allow_net_connect!
   end
