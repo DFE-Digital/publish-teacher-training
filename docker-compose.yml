@@ -9,6 +9,7 @@ services:
      - dbdata:/var/lib/postgresql/data
     environment:
     - POSTGRES_PASSWORD=developmentpassword
+
   middleman:
     build:
       context: .
@@ -16,6 +17,7 @@ services:
       cache_from:
         - ${dockerHubUsername:-dfedigital}/teacher-training-api-middleman:master
     image: ${dockerHubUsername:-dfedigital}/teacher-training-api-middleman:${GIT_BRANCH:-latest}
+
   web:
     build:
       context: .
@@ -38,6 +40,7 @@ services:
       - CC_TEST_REPORTER_ID=${CC_TEST_REPORTER_ID}
       - AGENT_JOBSTATUS=${AGENT_JOBSTATUS}
       - GIT_BRANCH=${GIT_BRANCH}
+
   bg-geocode:
     build:
       args:
@@ -77,3 +80,21 @@ services:
       - DB_USERNAME=postgres
       - DB_PASSWORD=developmentpassword
       - SETTINGS__APPLICATION=teacher-training-api-bg-mailer
+
+  bg-jobs:
+    build:
+      args:
+        - DOCKER_REPOSITORY=${dockerHubUsername:-dfedigital}
+        - TEACHER_TRAINING_API=${dockerHubImageName:-teacher-training-api}
+      context: bg-jobs
+    image: ${dockerHubUsername:-dfedigital}/teacher-training-bg-jobs:${GIT_BRANCH:-latest}
+    volumes:
+      - .:/app
+    depends_on:
+      - web
+      - db
+    environment:
+      - DB_HOSTNAME=db
+      - DB_USERNAME=postgres
+      - DB_PASSWORD=developmentpassword
+      - SETTINGS__APPLICATION=teacher-training-api-bg-jobs
