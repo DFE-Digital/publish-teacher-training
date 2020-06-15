@@ -15,7 +15,7 @@ module UserAssociationsService
     end
 
     def call
-      add_user_to_organistations
+      add_user_to_organisations
       update_user_notification_preferences
     end
 
@@ -23,19 +23,19 @@ module UserAssociationsService
 
   private
 
-    def add_user_to_organistations
+    def add_user_to_organisations
       if all_organisations
-        add_user_to_all_organistations
+        add_user_to_all_organisations
       else
-        add_user_to_a_single_organistation
+        add_user_to_a_single_organisation
       end
     end
 
-    def add_user_to_a_single_organistation
+    def add_user_to_a_single_organisation
       organisation.add_user(user)
     end
 
-    def add_user_to_all_organistations
+    def add_user_to_all_organisations
       user.organisations = Organisation.all
     end
 
