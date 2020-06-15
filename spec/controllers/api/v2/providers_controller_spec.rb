@@ -31,9 +31,26 @@ RSpec.describe API::V2::ProvidersController do
       let(:course) { create(:course) }
       let!(:other_provider) { course.provider }
 
-      it "returns the specified provider" do
+      it "returns unassociated providers" do
         get :suggest_any, params: { query: other_provider.provider_code }
         expect(JSON.parse(response.body).dig("data").map { |p| p["id"] }).to eql([other_provider.id.to_s])
+      end
+    end
+
+    context "with a filter" do
+      let(:user) { provider.users.first }
+      let!(:provider) { create(:provider) }
+      let!(:in_scope_provider) { create(:provider, :accredited_body, provider_name: "in provider") }
+      let!(:out_scope_provider) { create(:provider, provider_name: "out provider") }
+
+      it "applies filter to results" do
+        get :suggest_any, params: { query: "provider", filter: { only_accredited_body: "true" } }
+        expect(JSON.parse(response.body).dig("data").map { |p| p["id"].to_i }).to eql([in_scope_provider.id])
+      end
+
+      it "applies filter to results" do
+        get :suggest_any, params: { query: "provider", filter: { only_accredited_body: "false" } }
+        expect(JSON.parse(response.body).dig("data").map { |p| p["id"].to_i }).to eql([in_scope_provider.id, out_scope_provider.id])
       end
     end
   end
