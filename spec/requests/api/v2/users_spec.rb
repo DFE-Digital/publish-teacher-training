@@ -50,10 +50,25 @@ describe "/api/v2/users", type: :request do
     it "has a data section with the correct attributes" do
       json_response = JSON.parse(response.body)
       data_attributes = json_response["data"]["attributes"]
+
       expect(data_attributes["email"]).to eq(user.email)
       expect(data_attributes["first_name"]).to eq(user.first_name)
       expect(data_attributes["last_name"]).to eq(user.last_name)
       expect(data_attributes["state"]).to eq(user.state)
+      expect(data_attributes["associated_with_accredited_body"]).to eq(false)
+    end
+
+    context "when user is associated with an accredited body" do
+      let(:organisation) { create(:organisation, providers: [accredited_body]) }
+      let(:user) { create(:user, organisations: [organisation]) }
+      let(:accredited_body) { create(:provider, :accredited_body) }
+
+      it "has a data section with the correct attribute" do
+        json_response = JSON.parse(response.body)
+        data_attributes = json_response["data"]["attributes"]
+
+        expect(data_attributes["associated_with_accredited_body"]).to eq(true)
+      end
     end
   end
 
@@ -104,27 +119,35 @@ describe "/api/v2/users", type: :request do
       subject { perform_request }
 
       it "updates email on the user" do
-        expect { subject }.to(change { user.reload.email }
-          .from(user.email)
-          .to(email))
+        expect { subject }.to(
+          change { user.reload.email }
+            .from(user.email)
+            .to(email),
+        )
       end
 
       it "updates accept_terms_date_utc on the user" do
-        expect { subject }.to(change { user.reload.accept_terms_date_utc }
-          .from(user.accept_terms_date_utc.change(usec: 0))
-          .to(accept_terms_date_utc.change(usec: 0)))
+        expect { subject }.to(
+          change { user.reload.accept_terms_date_utc }
+            .from(user.accept_terms_date_utc.change(usec: 0))
+            .to(accept_terms_date_utc.change(usec: 0)),
+        )
       end
 
       it "updates first_name on the user" do
-        expect { subject }.to(change { user.reload.first_name }
-          .from(user.first_name)
-          .to(first_name))
+        expect { subject }.to(
+          change { user.reload.first_name }
+            .from(user.first_name)
+            .to(first_name),
+        )
       end
 
       it "updates last_name on the user" do
-        expect { subject }.to(change { user.reload.last_name }
-          .from(user.last_name)
-          .to(last_name))
+        expect { subject }.to(
+          change { user.reload.last_name }
+            .from(user.last_name)
+            .to(last_name),
+        )
       end
 
       context "response output" do
@@ -146,7 +169,7 @@ describe "/api/v2/users", type: :request do
             :first_name,
             :last_name,
             :accept_terms_date_utc,
-          )
+            )
         end
 
         context "with validation errors" do

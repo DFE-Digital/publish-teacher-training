@@ -118,6 +118,25 @@ describe User, type: :model do
       end
     end
 
+    describe "#associated_with_accredited_body?" do
+      context "user is associated with accredited body" do
+        let(:organisation) { create(:organisation, providers: [accredited_body]) }
+        let(:current_recruitment_cycle) { find_or_create(:recruitment_cycle) }
+        let(:accredited_body) { create(:provider, :accredited_body, recruitment_cycle: current_recruitment_cycle) }
+        subject { create(:user, organisations: [organisation]) }
+
+        it "returns true" do
+          expect(subject.associated_with_accredited_body?).to be true
+        end
+      end
+
+      context "user is not associated with an accredited body" do
+        it "returns false" do
+          expect(subject.associated_with_accredited_body?).to be false
+        end
+      end
+    end
+
     describe "multiple organisations" do
       before do
         subject.organisations = [organisation, other_organisation, yet_other_organisation]

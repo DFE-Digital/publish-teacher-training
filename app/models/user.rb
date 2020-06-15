@@ -39,6 +39,7 @@ class User < ApplicationRecord
     state :new, initial: true
     state :transitioned
     state :rolled_over
+    state :seen_accredited_body_features
 
     event :accept_transition_screen do
       transitions from: :new, to: :transitioned
@@ -56,6 +57,14 @@ class User < ApplicationRecord
   # accepts array or single organisation
   def remove_access_to(organisations_to_remove)
     self.organisations = self.organisations - Array(organisations_to_remove)
+  end
+
+  def associated_with_accredited_body?
+    providers
+      .in_current_cycle
+      .accredited_body
+      .count
+      .positive?
   end
 
 private
