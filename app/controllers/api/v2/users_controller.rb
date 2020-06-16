@@ -60,6 +60,7 @@ module API
             :sign_in_user_id,
             :welcome_email_date_utc,
             :invite_date_utc,
+            :state,
             :accept_terms_date_utc,
           )
       end

@@ -13,6 +13,7 @@ describe API::V2::SerializableUser do
   it { should have_type "users" }
   it { should have_attribute(:state).with_value(user.state.to_s) }
   it { should have_attribute(:sign_in_user_id).with_value(user.sign_in_user_id.to_s) }
+  it { should have_attribute(:associated_with_accredited_body).with_value(false) }
 
   context "when a non admin user" do
     it { should have_attribute(:admin).with_value(false) }
