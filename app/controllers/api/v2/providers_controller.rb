@@ -79,17 +79,23 @@ module API
         return render(status: :bad_request) if params[:query].nil? || params[:query].length < 2
         return render(status: :bad_request) unless begins_with_alphanumeric(params[:query])
 
-        found_providers = @recruitment_cycle.providers
-          .search_by_code_or_name(params[:query])
-          .limit(5)
+        scope = @recruitment_cycle.providers
+                                  .search_by_code_or_name(params[:query])
+                                  .limit(5)
+
+        scope = scope.accredited_body if only_accredited_body_filter?
 
         render(
-          jsonapi: found_providers,
+          jsonapi: scope,
           class: { Provider: SerializableProviderSuggestion },
         )
       end
 
     private
+
+      def only_accredited_body_filter?
+        params.dig(:filter, :only_accredited_body) == "true"
+      end
 
       def begins_with_alphanumeric(string)
         string.match?(/^[[:alnum:]].*$/)
