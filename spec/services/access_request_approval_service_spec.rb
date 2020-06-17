@@ -1,3 +1,5 @@
+require "rails_helper"
+
 describe AccessRequestApprovalService do
   describe ".call" do
     let!(:access_request) { create(:access_request) }

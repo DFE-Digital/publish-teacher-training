@@ -1,3 +1,5 @@
+require "rails_helper"
+
 describe "Seed" do
   before do
     SecondarySubject.clear_modern_languages_cache
