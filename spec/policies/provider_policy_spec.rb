@@ -30,4 +30,18 @@ describe ProviderPolicy do
     it { should_not permit(user_outside_org, provider) }
     it { should permit(admin, provider) }
   end
+
+  permissions :can_show_training_provider? do
+    let(:admin) { build(:user, :admin) }
+    let(:allowed_user) { provider.users.first }
+    let(:not_allowed_user) { create(:user) }
+
+    let(:provider) { course.accrediting_provider }
+    let(:training_provider) { course.provider }
+    let(:course) { create(:course, :with_accrediting_provider) }
+
+    it { should permit(admin, training_provider) }
+    it { should permit(allowed_user, training_provider) }
+    it { should_not permit(not_allowed_user, training_provider) }
+  end
 end

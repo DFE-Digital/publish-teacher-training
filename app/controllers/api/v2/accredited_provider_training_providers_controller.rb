@@ -65,6 +65,14 @@ module API
                }
       end
 
+      def show
+        training_provider = @provider.training_providers.find_by(provider_code: params[:training_provider_code])
+
+        authorize training_provider, :can_show_training_provider?
+
+        render jsonapi: training_provider
+      end
+
     private
 
       def build_recruitment_cycle
