@@ -39,7 +39,7 @@ class User < ApplicationRecord
     state :new, initial: true
     state :transitioned
     state :rolled_over
-    state :seen_accredited_body_features
+    state :notifications_configured
 
     event :accept_transition_screen do
       transitions from: :new, to: :transitioned
@@ -65,6 +65,10 @@ class User < ApplicationRecord
       .accredited_body
       .count
       .positive?
+  end
+
+  def notifications_configured?
+    user_notifications.count.positive?
   end
 
 private

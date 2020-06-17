@@ -56,6 +56,7 @@ describe "/api/v2/users", type: :request do
       expect(data_attributes["last_name"]).to eq(user.last_name)
       expect(data_attributes["state"]).to eq(user.state)
       expect(data_attributes["associated_with_accredited_body"]).to eq(false)
+      expect(data_attributes["notifications_configured"]).to eq(false)
     end
 
     context "when user is associated with an accredited body" do
@@ -68,6 +69,17 @@ describe "/api/v2/users", type: :request do
         data_attributes = json_response["data"]["attributes"]
 
         expect(data_attributes["associated_with_accredited_body"]).to eq(true)
+      end
+    end
+
+    context "when user has notifications configured" do
+      let(:user) { create(:user, user_notifications: [create(:user_notification)]) }
+
+      it "has a data section with the correct attribute" do
+        json_response = JSON.parse(response.body)
+        data_attributes = json_response["data"]["attributes"]
+
+        expect(data_attributes["notifications_configured"]).to eq(true)
       end
     end
   end
