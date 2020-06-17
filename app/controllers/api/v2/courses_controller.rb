@@ -116,6 +116,7 @@ module API
         authorize @course
         if @course.is_published?
           @course.withdraw
+          NotificationService::CourseWithdrawn.call(course: @course)
         else
           raise RuntimeError.new("This course has not been published and should be deleted not withdrawn")
         end
