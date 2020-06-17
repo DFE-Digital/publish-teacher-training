@@ -1,6 +1,5 @@
 class User < ApplicationRecord
   include Discard::Model
-  include AASM
 
   has_many :organisation_users
 
@@ -34,21 +33,6 @@ class User < ApplicationRecord
   }
 
   audited
-
-  aasm column: "state" do
-    state :new, initial: true
-    state :transitioned
-    state :rolled_over
-    state :notifications_configured
-
-    event :accept_transition_screen do
-      transitions from: :new, to: :transitioned
-    end
-
-    event :accept_rollover_screen do
-      transitions from: :transitioned, to: :rolled_over
-    end
-  end
 
   def to_s
     "#{first_name} #{last_name} <#{email}>"

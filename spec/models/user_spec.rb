@@ -34,29 +34,6 @@ describe User, type: :model do
     it { should be_audited }
   end
 
-  describe "states" do
-    context "new user" do
-      it { should be_new }
-    end
-  end
-
-  describe "transition state event" do
-    before do
-      subject.accept_transition_screen!
-    end
-
-    it { should be_transitioned }
-  end
-
-  describe "rollover state event" do
-    before do
-      subject.accept_transition_screen!
-      subject.accept_rollover_screen!
-    end
-
-    it { should be_rolled_over }
-  end
-
   describe "#to_s" do
     its(:to_s) { should eq("Jane Smith <jsmith@scitt.org>") }
   end

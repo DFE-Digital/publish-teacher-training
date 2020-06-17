@@ -22,11 +22,7 @@ Rails.application.routes.draw do
 
       resources :users, only: %i[update show] do
         resources :providers
-
-        patch :accept_transition_screen, on: :member
-        patch :accept_rollover_screen, on: :member
         patch :accept_terms, on: :member
-
         patch :generate_and_send_magic_link, on: :collection
       end
 
