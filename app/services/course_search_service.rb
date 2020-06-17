@@ -40,8 +40,14 @@ class CourseSearchService
       outer_scope = outer_scope.select("provider.provider_name", "course.*")
     elsif sort_by_distance?
       outer_scope = outer_scope.joins(courses_with_distance_from_origin)
-      outer_scope = outer_scope.select("course.*, distance")
-      outer_scope = outer_scope.order(:distance)
+      boosted_distance_column = "
+      (CASE
+        WHEN provider.provider_type = 'O' THEN (distance - 10)
+        ELSE distance
+      END) as boosted_distance"
+      select_criteria = "course.*, distance, #{boosted_distance_column}"
+      outer_scope = outer_scope.joins(:provider).select(select_criteria)
+      outer_scope = outer_scope.order(:boosted_distance)
     end
 
     outer_scope
