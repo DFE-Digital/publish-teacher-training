@@ -39,7 +39,7 @@ class CourseSearchService
       outer_scope = outer_scope.descending_canonical_order
       outer_scope = outer_scope.select("provider.provider_name", "course.*")
     elsif sort_by_distance?
-      outer_scope = outer_scope.joins(sites_with_distance_from_origin)
+      outer_scope = outer_scope.joins(courses_with_distance_from_origin)
       outer_scope = outer_scope.select("course.*, distance")
       outer_scope = outer_scope.order(:distance)
     end
@@ -51,44 +51,56 @@ class CourseSearchService
 
 private
 
-  def sites_with_distance_from_origin
+  def locatable_sites
     site_status = SiteStatus.arel_table
     sites = Site.arel_table
 
-    # Create virtual table with sites and site statuses
-    sites_with_status = site_status.join(sites).on(site_status[:site_id].eq(sites[:id]))
-
-    # only want new and running sites
-    running_and_published_sites = sites_with_status.where(site_status[:status].eq(SiteStatus.statuses[:running]).and(site_status[:publish].eq(SiteStatus.publishes[:published])))
+    # Only running and published site statuses
+    running_and_published_criteria = site_status[:status].eq(SiteStatus.statuses[:running]).and(site_status[:publish].eq(SiteStatus.publishes[:published]))
 
     # we only want sites that have been geocoded
-    geocoded_running_and_published_sites = running_and_published_sites.where(sites[:latitude].not_eq(nil).and(sites[:longitude].not_eq(nil)))
+    has_been_geocoded_criteria = sites[:latitude].not_eq(nil).and(sites[:longitude].not_eq(nil))
 
     # only sites that have a locatable address
     # there are some sites with no address1 or postcode that cannot be
     # accurately geocoded. We don't want to return these as the closest site.
     # This should be removed once the data is fixed
-    locatable_running_and_published_sites = geocoded_running_and_published_sites.where(sites[:address1].not_eq("").or(sites[:postcode].not_eq("")))
+    locatable_address_criteria = sites[:address1].not_eq("").or(sites[:postcode].not_eq(""))
 
+    # Create virtual table with sites and site statuses
+    locatable_sites = site_status.join(sites).on(site_status[:site_id].eq(sites[:id]))
+
+    locatable_sites = locatable_sites.where(running_and_published_criteria)
+    locatable_sites = locatable_sites.where(has_been_geocoded_criteria)
+    locatable_sites = locatable_sites.where(locatable_address_criteria)
+
+    locatable_sites
+  end
+
+  def course_id_with_lowest_locatable_distance
     # select course_id and nearest site with shortest distance from origin
     # as courses may have multiple sites
     # this will remove duplicates by aggregating on course_id
-    courses_with_nearest_site = locatable_running_and_published_sites.project(:course_id, Arel.sql("MIN#{Site.distance_sql(OpenStruct.new(lat: origin[0], lng: origin[1]))} as distance")).group(:course_id)
+    locatable_sites.project(:course_id, Arel.sql("MIN#{Site.distance_sql(OpenStruct.new(lat: origin[0], lng: origin[1]))} as distance")).group(:course_id)
+  end
 
+  def distance_table
     # form a temporary table with results
     distance_table = Arel::Nodes::TableAlias.new(
       Arel.sql(
-        format("(%s)", courses_with_nearest_site.to_sql),
+        format("(%s)", course_id_with_lowest_locatable_distance.to_sql),
       ), "distances"
     )
 
+    distance_table
+  end
+
+  def courses_with_distance_from_origin
     # grab courses table and join with the above result set
     # so distances from origin are now available
     # we can then sort by distance from the given origin
     courses_table = Course.arel_table
-    courses_table.join(distance_table).on(
-      courses_table[:id].eq(distance_table[:course_id]),
-    ).join_sources
+    courses_table.join(distance_table).on(courses_table[:id].eq(distance_table[:course_id])).join_sources
   end
 
   def locations_filter?
