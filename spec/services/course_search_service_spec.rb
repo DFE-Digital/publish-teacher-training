@@ -68,12 +68,14 @@ describe CourseSearchService do
           expect(Course).to receive(:where).and_return(findable_scope)
           expect(findable_scope).to receive(:joins).and_return(joins_provider_scope)
           expect(joins_provider_scope).to receive(:joins).with(:provider).and_return(select_scope)
-          boosted_distance_column = "
-      (CASE
-        WHEN provider.provider_type = 'O' THEN (distance - 10)
-        ELSE distance
-      END) as boosted_distance"
-          select_criteria = "course.*, distance, #{boosted_distance_column}"
+          distance_with_university_area_adjustment = <<~EOSQL.gsub(/^[\s\t]*/, "").gsub(/[\s\t]*\n/, " ").strip
+            (CASE
+              WHEN provider.provider_type = 'O'
+                THEN (distance - 10)
+              ELSE distance
+            END) as boosted_distance
+          EOSQL
+          select_criteria = "course.*, distance, #{distance_with_university_area_adjustment}"
 
           expect(select_scope).to receive(:select).with(select_criteria)
             .and_return(order_scope)

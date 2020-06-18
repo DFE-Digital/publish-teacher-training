@@ -40,13 +40,8 @@ class CourseSearchService
       outer_scope = outer_scope.select("provider.provider_name", "course.*")
     elsif sort_by_distance?
       outer_scope = outer_scope.joins(courses_with_distance_from_origin)
-      boosted_distance_column = "
-      (CASE
-        WHEN provider.provider_type = 'O' THEN (distance - 10)
-        ELSE distance
-      END) as boosted_distance"
-      select_criteria = "course.*, distance, #{boosted_distance_column}"
-      outer_scope = outer_scope.joins(:provider).select(select_criteria)
+      outer_scope = outer_scope.joins(:provider)
+      outer_scope = outer_scope.select("course.*, distance, #{distance_with_university_area_adjustment}")
       outer_scope = outer_scope.order(:boosted_distance)
     end
 
@@ -56,6 +51,18 @@ class CourseSearchService
   private_class_method :new
 
 private
+
+  def distance_with_university_area_adjustment
+    university_provider_type = Provider.provider_types[:university]
+    university_location_area_radius = 10
+    <<~EOSQL.gsub(/^[\s\t]*/, "").gsub(/[\s\t]*\n/, " ").strip
+      (CASE
+        WHEN provider.provider_type = '#{university_provider_type}'
+          THEN (distance - #{university_location_area_radius})
+        ELSE distance
+      END) as boosted_distance
+    EOSQL
+  end
 
   def locatable_sites
     site_status = SiteStatus.arel_table
@@ -78,9 +85,7 @@ private
 
     locatable_sites = locatable_sites.where(running_and_published_criteria)
     locatable_sites = locatable_sites.where(has_been_geocoded_criteria)
-    locatable_sites = locatable_sites.where(locatable_address_criteria)
-
-    locatable_sites
+    locatable_sites.where(locatable_address_criteria)
   end
 
   def course_id_with_lowest_locatable_distance
@@ -92,13 +97,11 @@ private
 
   def distance_table
     # form a temporary table with results
-    distance_table = Arel::Nodes::TableAlias.new(
+    Arel::Nodes::TableAlias.new(
       Arel.sql(
         format("(%s)", course_id_with_lowest_locatable_distance.to_sql),
       ), "distances"
     )
-
-    distance_table
   end
 
   def courses_with_distance_from_origin
