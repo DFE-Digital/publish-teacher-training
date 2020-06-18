@@ -45,6 +45,7 @@ Rails.application.routes.draw do
         end
         resources :sites, only: %i[index update show create]
         resources :recruitment_cycles, only: %i[index]
+        get "training_providers/:training_provider_code", to: "accredited_provider_training_providers#show"
         get :training_providers, to: "accredited_provider_training_providers#index"
         get "/training_providers/:training_provider_code/courses", to: "accredited_body_training_provider_courses#index"
       end

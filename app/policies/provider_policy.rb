@@ -47,6 +47,15 @@ class ProviderPolicy
     user.present?
   end
 
+  def can_show_training_provider?
+    return true if user.admin?
+
+    accredited_bodies_codes = provider.accredited_bodies.map { |ab| ab[:provider_code] }
+    user_provider_codes = user.providers.pluck(:provider_code)
+
+    !(accredited_bodies_codes & user_provider_codes).compact.empty?
+  end
+
   alias_method :can_list_sites?, :show?
   alias_method :can_create_course?, :show?
   alias_method :update?, :show?
