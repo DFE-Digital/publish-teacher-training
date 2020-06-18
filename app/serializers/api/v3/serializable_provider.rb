@@ -3,7 +3,7 @@ module API
     class SerializableProvider < JSONAPI::Serializable::Resource
       type "providers"
 
-      attributes :provider_code, :provider_name
+      attributes :provider_code, :provider_name, :provider_type
 
       attribute :recruitment_cycle_year do
         @object.recruitment_cycle.year

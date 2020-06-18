@@ -47,6 +47,10 @@ module API
         @object.recruitment_cycle.year
       end
 
+      attribute :provider_type do
+        @object.provider.provider_type
+      end
+
       belongs_to :provider
       belongs_to :accrediting_provider
 
