@@ -1,4 +1,6 @@
 class Allocation < ApplicationRecord
+  ALLOCATION_CYCLE_YEAR = Settings.allocation_cycle_year.to_s.freeze
+
   belongs_to :provider
   belongs_to :accredited_body, class_name: "Provider"
   belongs_to :recruitment_cycle
@@ -19,14 +21,6 @@ class Allocation < ApplicationRecord
       accredited_body_code: accredited_body_code,
       recruitment_cycle: recruitment_cycle.previous,
     )
-  end
-
-  def safe_delete(recruitment_cycle)
-    if recruitment_cycle == self.recruitment_cycle
-      self.delete
-    else
-      errors.add(:safe_delete, "recruitment cycle does not match")
-    end
   end
 
 private
