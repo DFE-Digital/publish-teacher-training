@@ -22,13 +22,14 @@ describe "AccreditedBody API v2", type: :request do
       create(:course, provider: delivering_provider2, accrediting_provider: accredited_provider)
     end
 
-    let(:delivering_provider1) { create(:provider, provider_name: "a") }
-    let(:delivering_provider2) { create(:provider, provider_name: "b") }
-    let(:accredited_provider) {
+    let(:delivering_provider1) { create(:provider, provider_name: "b") }
+    let(:delivering_provider2) { create(:provider, provider_name: "c") }
+    let(:accredited_provider) do
       create(:provider,
+             provider_name: "a",
              organisations: [organisation],
              recruitment_cycle: recruitment_cycle)
-    }
+    end
 
     let(:json_response) { JSON.parse(response.body) }
     let(:request_path) { "/api/v2/recruitment_cycles/#{recruitment_cycle.year}/providers/#{accredited_provider.provider_code}/training_providers" }
