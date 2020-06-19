@@ -43,7 +43,7 @@ module MCB
           return nil
         end
 
-        @user_to_grant = User.new(email: @id_or_email_or_sign_in_id, state: "new")
+        @user_to_grant = User.new(email: @id_or_email_or_sign_in_id)
         puts "#{@id_or_email_or_sign_in_id} appears to be a new user"
         @user_to_grant.first_name = @cli.ask("First name?  ").strip
         @user_to_grant.last_name = @cli.ask("Last name?  ").strip

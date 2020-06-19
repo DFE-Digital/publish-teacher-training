@@ -33,11 +33,6 @@ describe AccessRequestApprovalService do
         expect(target_user.invite_date_utc).to be_within(1.second).of Time.now.utc
       end
 
-      it "should set the state" do
-        subject
-        expect(target_user.state).to eq("new")
-      end
-
       it "should give the user access to the requestor's orgs" do
         subject
         expect(target_user.organisations).to(

@@ -280,7 +280,6 @@ create_standard_provider_and_courses_for_cycle(next_recruitment_cycle, superuser
     email: Faker::Internet.unique.email,
     first_name: Faker::Name.first_name,
     last_name: Faker::Name.last_name,
-    state: "new",
   )
 
   user.organisations << organisation
