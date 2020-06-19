@@ -1004,6 +1004,10 @@
               {
                 "name": "SETTINGS__GOVUK_NOTIFY__COURSE_PUBLISH_EMAIL_TEMPLATE_ID",
                 "value": "[parameters('govukNotifyCoursePublishEmailTemplateId')]"
+              },
+              {
+                "name": "SETTINGS__GOVUK_NOTIFY__COURSE_WITHDRAW_EMAIL_TEMPLATE_ID",
+                "value": "[parameters('govukNotifyCourseWithdrawEmailTemplateId')]"
               }
             ]
           },
