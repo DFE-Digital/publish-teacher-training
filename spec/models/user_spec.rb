@@ -137,6 +137,24 @@ describe User, type: :model do
       end
     end
 
+    describe "#notifications_configured?" do
+      context "user has notifications configured" do
+        before do
+          subject.user_notifications << create(:user_notification)
+        end
+
+        it "returns true" do
+          expect(subject.notifications_configured?).to be true
+        end
+      end
+
+      context "user does not have notifications configured" do
+        it "returns false" do
+          expect(subject.notifications_configured?).to be false
+        end
+      end
+    end
+
     describe "multiple organisations" do
       before do
         subject.organisations = [organisation, other_organisation, yet_other_organisation]

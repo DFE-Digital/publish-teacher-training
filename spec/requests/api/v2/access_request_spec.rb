@@ -179,6 +179,7 @@ describe "Access Request API V2", type: :request do
               "admin" => first_access_request.requester.admin,
               "sign_in_user_id" => first_access_request.requester.sign_in_user_id,
               "associated_with_accredited_body" => first_access_request.requester.associated_with_accredited_body?,
+              "notifications_configured" => first_access_request.requester.notifications_configured?,
             },
             "relationships" => {
               "organisations" => {
