@@ -182,7 +182,7 @@ describe Provider, type: :model do
     it "sets the provider type" do
       expect { subject.provider_type = "scitt" }
         .to change { subject.provider_type }
-        .from(nil).to("scitt")
+        .from("lead_school").to("scitt")
     end
 
     it "sets 'accrediting_provider' correctly for SCITTs" do

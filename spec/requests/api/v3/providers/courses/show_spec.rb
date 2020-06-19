@@ -120,7 +120,7 @@ describe "GET v3/recruitment_cycle/:recruitment_cycle_year/providers/:provider_c
             "is_send?" => false,
             "level" => "primary",
             "applications_open_from" => course.applications_open_from.to_s,
-            "provider_type" => nil,
+            "provider_type" => provider.provider_type,
             "about_course" => enrichment.about_course,
             "course_length" => enrichment.course_length,
             "fee_details" => "Some new details about the fees",

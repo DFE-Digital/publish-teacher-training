@@ -66,9 +66,9 @@ describe "Providers API", type: :request do
 
           perform_enqueued_jobs do
             provider = create(:provider,
+                              :scitt,
                               provider_name: "ACME SCITT",
                               provider_code: "A123",
-                              provider_type: :scitt,
                               address1: "Shoreditch Park Primary School",
                               address2: "313 Bridport Pl",
                               address3: nil,
@@ -78,7 +78,6 @@ describe "Providers API", type: :request do
                               email: "info@acmescitt.education.uk",
                               contact_name: "Amy Smith",
                               region_code: :london,
-                              accrediting_provider: "Y",
                               scheme_member: "Y",
                               ucas_preferences: ucas_preferences,
                               contacts: contacts,
@@ -121,9 +120,9 @@ describe "Providers API", type: :request do
 
           perform_enqueued_jobs do
             provider2 = create(:provider,
+                               :university,
                                provider_name: "ACME University",
                                provider_code: "B123",
-                               provider_type: :university,
                                address1: "Bee School",
                                address2: "Bee Avenue",
                                address3: "Bee City",
@@ -133,7 +132,6 @@ describe "Providers API", type: :request do
                                email: "info@acmeuniversity.education.uk",
                                contact_name: "James Brown",
                                region_code: :south_west,
-                               accrediting_provider: "N",
                                scheme_member: "N",
                                ucas_preferences: ucas_preferences2,
                                contacts: contacts2,

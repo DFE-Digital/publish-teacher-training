@@ -87,7 +87,7 @@ describe "GET v3/recruitment_cycle/:recruitment_cycle_year/providers/:provider_c
                 "is_send?" => true,
                 "level" => "primary",
                 "applications_open_from" => provider.courses[0].applications_open_from.strftime("%Y-%m-%d"),
-                "provider_type" => nil,
+                "provider_type" => provider.provider_type,
                 "about_course" => enrichment.about_course,
                 "course_length" => enrichment.course_length,
                 "fee_details" => enrichment.fee_details,

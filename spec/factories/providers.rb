@@ -19,6 +19,7 @@ FactoryBot.define do
     email { Faker::Internet.email }
     telephone { Faker::PhoneNumber.phone_number }
     website { Faker::Internet.url }
+    provider_type { :lead_school }
     accrediting_provider { "N" }
     region_code { "london" }
     organisations { [create(:organisation, :with_user)] }
@@ -28,7 +29,19 @@ FactoryBot.define do
     train_with_disability { Faker::Lorem.sentence.to_s }
     accrediting_provider_enrichments { nil }
 
+
+    trait :university do
+      provider_type { :university }
+      accrediting_provider { "Y" }
+    end
+
+    trait :scitt do
+      provider_type { :scitt }
+      accrediting_provider { "Y" }
+    end
+
     trait :accredited_body do
+      provider_type { %i[university scitt].sample }
       accrediting_provider { "Y" }
     end
 
