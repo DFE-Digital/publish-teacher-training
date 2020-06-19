@@ -49,9 +49,9 @@ module API
       end
 
       def destroy
-        authorize @allocation = Allocation.find(params[:id])
+        authorize @allocation = current_recruitment_cycle.allocations.find(params[:id])
 
-        if @allocation.safe_delete(current_recruitment_cycle)
+        if @allocation.destroy
           head :ok
         else
           render jsonapi_errors: @allocation.errors, status: :unprocessable_entity
@@ -61,7 +61,7 @@ module API
     private
 
       def current_recruitment_cycle
-        @current_recruitment_cycle ||= RecruitmentCycle.current_recruitment_cycle
+        @current_recruitment_cycle ||= RecruitmentCycle.find_by(year: Allocation::ALLOCATION_CYCLE_YEAR)
       end
 
       def accredited_body

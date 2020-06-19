@@ -4,6 +4,7 @@ authentication:
   # forget to do this in production.
   secret: <%= SecureRandom.base64 %>
 current_recruitment_cycle_year: 2020
+allocation_cycle_year: 2020
 govuk_notify:
   api_key: please_change_me
   welcome_email_template_id: please_change_me

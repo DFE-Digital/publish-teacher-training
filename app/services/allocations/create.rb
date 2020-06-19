@@ -46,7 +46,7 @@ module Allocations
     end
 
     def set_recruitment_cycle
-      object.recruitment_cycle_id ||= RecruitmentCycle.current_recruitment_cycle.id
+      object.recruitment_cycle_id ||= RecruitmentCycle.find_by(year: Allocation::ALLOCATION_CYCLE_YEAR).id
     end
   end
 end
