@@ -12,6 +12,13 @@ class Provider < ApplicationRecord
   has_associated_audits
   audited except: :changed_at
 
+  # NOTE: `provider_type` &  `accrediting_provider`
+  # The `unknown` & `invalid_value` provider types can be removed
+  # Once the underlying the data discreptives has been amended.
+  # Validation can be added to enforce compliance.
+  # The `scitt` & `university` provider types can be used to denote
+  # that they are an `accredited_body` for accrediting providers
+  # therefore `lead_school` is a `not_an_accredited_body`.
   enum provider_type: {
     scitt: "B",
     lead_school: "Y",
