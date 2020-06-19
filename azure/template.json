@@ -185,6 +185,13 @@
         "description": "The GOV.UK Notify template id for the course withdraw email"
       }
     },
+    "govukNotifyCourseVacanciesFilledEmailTemplateId": {
+      "type": "string",
+      "defaultValue": "",
+      "metadata": {
+        "description": "The GOV.UK Notify template id for the course vacancies filled email"
+      }
+    },
     "govukNotifyMagicLinkEmailTemplateId": {
       "type": "string",
       "defaultValue": "",
@@ -513,6 +520,10 @@
               {
                 "name": "SETTINGS__GOVUK_NOTIFY__COURSE_UPDATE_EMAIL_TEMPLATE_ID",
                 "value": "[parameters('govukNotifyCourseUpdateEmailTemplateId')]"
+              },
+              {
+                "name": "SETTINGS__GOVUK_NOTIFY__COURSE_VACANCIES_FILLED_EMAIL_TEMPLATE_ID",
+                "value": "[parameters('govukNotifyCourseVacacniesFilledEmailTemplateId')]"
               },
               {
                 "name": "SETTINGS__GOVUK_NOTIFY__COURSE_PUBLISH_EMAIL_TEMPLATE_ID",
@@ -1008,6 +1019,10 @@
               {
                 "name": "SETTINGS__GOVUK_NOTIFY__COURSE_WITHDRAW_EMAIL_TEMPLATE_ID",
                 "value": "[parameters('govukNotifyCourseWithdrawEmailTemplateId')]"
+              },
+              {
+                "name": "SETTINGS__GOVUK_NOTIFY__COURSE_VACANCIES_FILLED_EMAIL_TEMPLATE_ID",
+                "value": "[parameters('govukNotifyCourseVacacniesFilledEmailTemplateId')]"
               }
             ]
           },

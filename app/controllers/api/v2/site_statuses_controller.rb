@@ -7,6 +7,10 @@ module API
         site_status = authorize SiteStatus.find(params[:id])
         site_status.update site_status_params
 
+        if site_status.no_vacancies?
+          NotificationService::CourseVacanciesFilled.call(course: site_status.course)
+        end
+
         render jsonapi: site_status
       end
 
