@@ -516,6 +516,10 @@ class Course < ApplicationRecord
     services[:assignable_subjects].execute(course: self)
   end
 
+  def in_current_cycle?
+    recruitment_cycle.current?
+  end
+
 private
 
   def add_site!(site:)

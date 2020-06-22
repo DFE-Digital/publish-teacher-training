@@ -8,6 +8,7 @@ module NotificationService
 
     def call
       return false unless notify_accredited_body?
+      return false unless course.in_current_cycle?
 
       # Reusing existing scoping as we're doing all or nothing notifications atm
       # for course_publish_notification_requests
