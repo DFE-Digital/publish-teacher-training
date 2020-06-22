@@ -68,7 +68,7 @@ describe CourseSearchService do
           expect(Course).to receive(:where).and_return(findable_scope)
           expect(findable_scope).to receive(:joins).and_return(joins_provider_scope)
           expect(joins_provider_scope).to receive(:joins).with(:provider).and_return(select_scope)
-          distance_with_university_area_adjustment = <<~EOSQL.gsub(/^[\s\t]*/, "").gsub(/[\s\t]*\n/, " ").strip
+          distance_with_university_area_adjustment = <<~EOSQL.gsub(/\s+/m, " ").strip
             (CASE
               WHEN provider.provider_type = 'O'
                 THEN (distance - 10)

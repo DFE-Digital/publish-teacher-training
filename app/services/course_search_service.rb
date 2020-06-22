@@ -55,7 +55,7 @@ private
   def distance_with_university_area_adjustment
     university_provider_type = Provider.provider_types[:university]
     university_location_area_radius = 10
-    <<~EOSQL.gsub(/^[\s\t]*/, "").gsub(/[\s\t]*\n/, " ").strip
+    <<~EOSQL.gsub(/\s+/m, " ").strip
       (CASE
         WHEN provider.provider_type = '#{university_provider_type}'
           THEN (distance - #{university_location_area_radius})
