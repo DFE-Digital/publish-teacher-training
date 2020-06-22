@@ -84,6 +84,10 @@ class SiteStatus < ApplicationRecord
     with_vacancies?
   end
 
+  def vacancies_filled?
+    will_save_change_to_attribute?(:vac_status, to: "no_vacancies") && running?
+  end
+
 private
 
   def set_defaults

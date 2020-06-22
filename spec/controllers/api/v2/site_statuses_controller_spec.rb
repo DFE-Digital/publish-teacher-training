@@ -1,7 +1,7 @@
 require "rails_helper"
 
 describe API::V2::SiteStatusesController, type: :controller do
-  let(:site_status) { build(:site_status, :new) }
+  let(:site_status) { build(:site_status, :running) }
   let(:dfe_subject) { find_or_create(:primary_subject, :primary) }
   let(:course) {
     create(:course,
