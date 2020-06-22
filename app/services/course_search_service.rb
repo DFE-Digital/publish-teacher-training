@@ -81,11 +81,10 @@ private
     locatable_address_criteria = sites[:address1].not_eq("").or(sites[:postcode].not_eq(""))
 
     # Create virtual table with sites and site statuses
-    locatable_sites = site_status.join(sites).on(site_status[:site_id].eq(sites[:id]))
-
-    locatable_sites = locatable_sites.where(running_and_published_criteria)
-    locatable_sites = locatable_sites.where(has_been_geocoded_criteria)
-    locatable_sites.where(locatable_address_criteria)
+    site_status.join(sites).on(site_status[:site_id].eq(sites[:id]))
+     .where(running_and_published_criteria)
+     .where(has_been_geocoded_criteria)
+     .where(locatable_address_criteria)
   end
 
   def course_id_with_lowest_locatable_distance
