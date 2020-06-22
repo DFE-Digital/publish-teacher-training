@@ -34,12 +34,5 @@ describe CourseWithdrawEmailMailer, type: :mailer do
     it "includes the datetime for the withdrawl in the personalisation" do
       expect(mail.govuk_notify_personalisation[:withdraw_course_datetime]).to eq("4:05am on 3 February 2001")
     end
-
-    it "includes the URL for the course in the personalisation" do
-      url = "#{Settings.find_url}" \
-        "/course/#{course.provider.provider_code}" \
-        "/#{course.course_code}"
-      expect(mail.govuk_notify_personalisation[:course_url]).to eq(url)
-    end
   end
 end
