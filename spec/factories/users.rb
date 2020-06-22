@@ -7,6 +7,7 @@ FactoryBot.define do
     welcome_email_date_utc { Faker::Time.backward(days: 1).utc }
     accept_terms_date_utc { Faker::Time.backward(days: 1).utc }
     sign_in_user_id { SecureRandom.uuid }
+    state { "rolled_over" }
 
     trait :admin do
       admin { true }

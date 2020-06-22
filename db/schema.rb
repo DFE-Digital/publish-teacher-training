@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_06_08_104459) do
+ActiveRecord::Schema.define(version: 2020_06_19_100300) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_buffercache"
@@ -321,7 +321,7 @@ ActiveRecord::Schema.define(version: 2020_06_08_104459) do
     t.datetime "welcome_email_date_utc"
     t.datetime "invite_date_utc"
     t.datetime "accept_terms_date_utc"
-    t.string "state", null: false
+    t.string "state"
     t.boolean "admin", default: false
     t.datetime "discarded_at"
     t.string "magic_link_token"

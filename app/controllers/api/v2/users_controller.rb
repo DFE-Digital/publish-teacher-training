@@ -18,21 +18,9 @@ module API
         end
       end
 
-      def accept_transition_screen
-        if @user.state == "new"
-          @user.accept_transition_screen!
-        end
-      end
-
       def accept_terms
         @user.accept_terms_date_utc = Time.zone.now
         @user.save
-      end
-
-      def accept_rollover_screen
-        if @user.state == "transitioned"
-          @user.accept_rollover_screen!
-        end
       end
 
       def generate_and_send_magic_link
