@@ -451,7 +451,7 @@ GEM
       attr_extras
       diff-lcs
       patience_diff
-    table_print (1.5.6)
+    table_print (1.5.7)
     tabulo (2.3.3)
       tty-screen (= 0.7.1)
       unicode-display_width (= 1.6.1)
