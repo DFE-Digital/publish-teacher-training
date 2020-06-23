@@ -5,7 +5,14 @@ module API
 
       def update
         site_status = authorize SiteStatus.find(params[:id])
-        site_status.update site_status_params
+
+        site_status.assign_attributes(site_status_params)
+
+        if site_status.vacancies_filled?
+          NotificationService::CourseVacanciesFilled.call(course: site_status.course)
+        end
+
+        site_status.save!
 
         render jsonapi: site_status
       end
@@ -15,7 +22,7 @@ module API
       def site_status_params
         params
           .require(:site_status)
-          .except(:id, :type, :site_id, :site_type, :has_vacancies?)
+          .except(:id, :type, :site_id, :site_type, :has_vacancies?, :recruitment_cycle_year)
           .permit(
             :publish,
             :status,
