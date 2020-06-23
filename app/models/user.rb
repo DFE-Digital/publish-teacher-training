@@ -51,10 +51,6 @@ class User < ApplicationRecord
       .positive?
   end
 
-  def notifications_configured?
-    user_notifications.count.positive?
-  end
-
 private
 
   def email_is_lowercase

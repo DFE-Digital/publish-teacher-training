@@ -9,10 +9,6 @@ module API
       attribute :associated_with_accredited_body do
         @object.associated_with_accredited_body?
       end
-
-      attribute :notifications_configured do
-        @object.notifications_configured?
-      end
     end
   end
 end
