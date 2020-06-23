@@ -523,7 +523,7 @@
               },
               {
                 "name": "SETTINGS__GOVUK_NOTIFY__COURSE_VACANCIES_FILLED_EMAIL_TEMPLATE_ID",
-                "value": "[parameters('govukNotifyCourseVacacniesFilledEmailTemplateId')]"
+                "value": "[parameters('govukNotifyCourseVacanciesFilledEmailTemplateId')]"
               },
               {
                 "name": "SETTINGS__GOVUK_NOTIFY__COURSE_PUBLISH_EMAIL_TEMPLATE_ID",
@@ -1022,7 +1022,7 @@
               },
               {
                 "name": "SETTINGS__GOVUK_NOTIFY__COURSE_VACANCIES_FILLED_EMAIL_TEMPLATE_ID",
-                "value": "[parameters('govukNotifyCourseVacacniesFilledEmailTemplateId')]"
+                "value": "[parameters('govukNotifyCourseVacanciesFilledEmailTemplateId')]"
               }
             ]
           },
