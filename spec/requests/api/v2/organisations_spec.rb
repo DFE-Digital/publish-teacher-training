@@ -6,8 +6,8 @@ describe "Organisations API v2", type: :request do
     let(:next_recruitment_cycle) { find_or_create(:recruitment_cycle, :next) }
     let(:user) { create(:user, :admin, organisations: [organisation]) }
     let(:user2) { create(:user) }
-    let(:organisation) { create(:organisation) }
-    let(:organisation2) { create(:organisation, users: [user2]) }
+    let(:organisation) { create(:organisation, name: "Zeberdee") }
+    let(:organisation2) { create(:organisation, name: "Aubrey", users: [user2]) }
     let(:recruitment_cycle) { find_or_create :recruitment_cycle }
     let(:payload) { { email: user.email } }
     let(:token) do
@@ -40,7 +40,7 @@ describe "Organisations API v2", type: :request do
       response
     end
 
-    context "when unauthenitcated" do
+    context "when unauthenticated" do
       let(:payload) { { email: "foo@bar" } }
 
       it { should have_http_status(:unauthorized) }
@@ -68,12 +68,12 @@ describe "Organisations API v2", type: :request do
           perform_request
         end
 
-        it "returns the organisations" do
+        it "returns the organisations ordered by name" do
           organisations = json_response["data"]
 
           expect(organisations.count).to eq(2)
-          expect(organisations.first["id"]).to eq(organisation.id.to_s)
-          expect(organisations.second["id"]).to eq(organisation2.id.to_s)
+          expect(organisations.first["id"]).to eq(organisation2.id.to_s)
+          expect(organisations.second["id"]).to eq(organisation.id.to_s)
         end
       end
 
@@ -118,6 +118,16 @@ describe "Organisations API v2", type: :request do
                                               .and(have_type("users"))
           expect(returned_users).to include have_id(user2.id.to_s)
                                               .and(have_type("users"))
+          expect(json_response["included"]).to(
+            include(
+              have_type("users")
+                .and(have_id(user.id.to_s))
+                .and(have_attribute("email").with_value(user.email)),
+              have_type("users")
+                .and(have_id(user2.id.to_s))
+                .and(have_attribute("email").with_value(user2.email)),
+            ),
+          )
         end
 
         it "returns the provider relationships" do
@@ -133,22 +143,7 @@ describe "Organisations API v2", type: :request do
                                                   .and(have_type("providers"))
           expect(returned_providers).to include have_id(provider2.id.to_s)
                                                   .and(have_type("providers"))
-        end
 
-        it "includes the user resources" do
-          expect(json_response["included"]).to(
-            include(
-              have_type("users")
-                .and(have_id(user.id.to_s))
-                .and(have_attribute("email").with_value(user.email)),
-              have_type("users")
-                .and(have_id(user2.id.to_s))
-                .and(have_attribute("email").with_value(user2.email)),
-            ),
-          )
-        end
-
-        it "includes the provider resources" do
           expect(json_response["included"]).to(
             include(
               have_type("providers")
