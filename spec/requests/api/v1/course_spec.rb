@@ -18,9 +18,9 @@ describe "Courses API", type: :request do
 
     let(:provider) do
       create(:provider,
+             :scitt,
              provider_name: "ACME SCITT",
              provider_code: "2LD",
-             provider_type: :scitt,
              scheme_member: "Y")
     end
     let(:current_cycle) { find_or_create :recruitment_cycle }

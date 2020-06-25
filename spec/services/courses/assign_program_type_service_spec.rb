@@ -49,9 +49,11 @@ describe Courses::AssignProgramTypeService do
       end
     end
 
-    context "the course is not self accredited" do
+    context "the course is self accredited" do
+      let(:provider) { build(:provider, trait) }
+
       context "and they are a scitt" do
-        let(:provider_type) { :scitt }
+        let(:trait) { :scitt }
         let(:course) { create(:course, provider: provider) }
 
         it "should return :scitt_programme" do
@@ -60,7 +62,7 @@ describe Courses::AssignProgramTypeService do
       end
 
       context "and they are a HEI" do
-        let(:provider_type) { :university }
+        let(:trait) { :university }
         let(:course) { create(:course, provider: provider) }
 
         it "should return :higher_education_programme" do
