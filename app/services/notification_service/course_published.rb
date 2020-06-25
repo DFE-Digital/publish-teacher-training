@@ -8,6 +8,7 @@ module NotificationService
 
     def call
       return false unless notify_accredited_body?
+      return false unless course.in_current_cycle?
 
       users = User.joins(:user_notifications).merge(UserNotification.course_publish_notification_requests(course.accredited_body_code))
 

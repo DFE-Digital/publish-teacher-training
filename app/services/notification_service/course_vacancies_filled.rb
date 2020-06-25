@@ -18,7 +18,7 @@ module NotificationService
           course,
           user,
           DateTime.now,
-          ).deliver_later(queue: "mailer")
+        ).deliver_later(queue: "mailer")
       end
     end
 
@@ -28,6 +28,7 @@ module NotificationService
 
     def notify_accredited_body?
       return false if course.self_accredited?
+      return false unless course.in_current_cycle?
 
       true
     end
