@@ -42,7 +42,12 @@ class CourseSearchService
       outer_scope = outer_scope.joins(courses_with_distance_from_origin)
       outer_scope = outer_scope.joins(:provider)
       outer_scope = outer_scope.select("course.*, distance, #{distance_with_university_area_adjustment}")
-      outer_scope = outer_scope.order(:boosted_distance)
+
+      outer_scope = if expand_university?
+                      outer_scope.order(:boosted_distance)
+                    else
+                      outer_scope.order(:distance)
+                    end
     end
 
     outer_scope
@@ -51,6 +56,10 @@ class CourseSearchService
   private_class_method :new
 
 private
+
+  def expand_university?
+    filter[:expand_university].to_s.downcase == "true"
+  end
 
   def distance_with_university_area_adjustment
     university_provider_type = Provider.provider_types[:university]
