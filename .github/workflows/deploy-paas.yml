@@ -16,7 +16,7 @@ env:
   TF_VAR_SETTINGS__GOOGLE__MAPS_API_KEY: ${{ secrets.TF_VAR_SETTINGS__GOOGLE__MAPS_API_KEY }}
   BACKEND_STORAGE_ACCOUNT_NAME: s121d01tfstatestr
   BACKEND_ACCESS_KEY: ${{ secrets.BACKEND_ACCESS_KEY }}
-  BACKEND_KEY: paas-find.tfstate
+  BACKEND_KEY: paas-ttapi.tfstate
   TERRAFORM_VAR_FILE: terraform_qa.tfvars
   PAAS_TF_DIR: $HOME/work/teacher-training-api/teacher-training-api/terraform/paas
   CF_PROVIDER_DIR: $HOME/.terraform.d/plugins/linux_amd64/terraform-provider-cloudfoundry
