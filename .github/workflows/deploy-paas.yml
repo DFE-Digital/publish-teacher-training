@@ -18,7 +18,7 @@ env:
   BACKEND_ACCESS_KEY: ${{ secrets.BACKEND_ACCESS_KEY }}
   BACKEND_KEY: paas-find.tfstate
   TERRAFORM_VAR_FILE: terraform_qa.tfvars
-  PAAS_TF_DIR: $HOME/work/find-teacher-training/find-teacher-training/terraform/paas
+  PAAS_TF_DIR: $HOME/work/teacher-training-api/teacher-training-api/terraform/paas
   CF_PROVIDER_DIR: $HOME/.terraform.d/plugins/linux_amd64/terraform-provider-cloudfoundry
 
 jobs:
