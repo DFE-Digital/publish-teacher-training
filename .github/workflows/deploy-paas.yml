@@ -5,7 +5,7 @@ on:
   push:
     branches:
       # - master1
-        - 3477-deploy-ttapi-app-onto-govuk-paas-using-github-actions
+        - 3477-deploy-ttapi-govuk-paas-github-actions
 
 env:
   TF_VAR_api_url: https://api.london.cloud.service.gov.uk
