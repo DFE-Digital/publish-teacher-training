@@ -1,7 +1,6 @@
 name: Deploy ttapi app to PAAS
 
 on:
-  pull_request
   push:
     branches:
       # - master1
