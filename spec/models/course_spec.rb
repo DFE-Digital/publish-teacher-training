@@ -334,6 +334,19 @@ describe Course, type: :model do
         end
       end
 
+      context "on publish" do
+        let(:course) { create(:course, :without_validation, age_range_in_years: nil) }
+        let(:errors) { course.errors.messages }
+
+        before { course.valid?(:publish) }
+
+        it "requires age_range_in_years" do
+          error = errors[:age_range_in_years]
+          expect(error).not_to be_empty
+          expect(error.first).to include("You need to pick an age range")
+        end
+      end
+
       context "A further education course" do
         let(:course) { build(:course, level: "further_education") }
 
