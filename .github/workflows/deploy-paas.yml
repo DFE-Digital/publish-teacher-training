@@ -3,7 +3,7 @@ name: Deploy find app to PAAS
 on:
   push:
     branches:
-      # - master
+      # - master1
         - 3477-deploy-ttapi-app-onto-govuk-paas-using-github-actions
 
 env:
