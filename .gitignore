@@ -26,3 +26,13 @@ config/azure_environments.yml
 
 # Ignore sanitised production data dump
 *.sql.gz
+
+# Terraform
+*.tfstate
+*.tfstate.backup
+.terraform/environment
+terraform.tfplan
+terraform.tfstate
+terraform.tfstate.d/
+./*.tfstate
+lock.json
