@@ -1,0 +1,49 @@
+name: Deploy ttapi app to PAAS
+
+on:
+  push:
+    branches:
+      # - master1
+        - 3477-deploy-ttapi-app-onto-govuk-paas-using-github-actions
+
+env:
+  TF_VAR_api_url: https://api.london.cloud.service.gov.uk
+  TF_VAR_user: ${{ secrets.TF_VAR_user }}
+  TF_VAR_password: ${{ secrets.TF_VAR_password }}
+  TF_VAR_SECRET_KEY_BASE: ${{ secrets.TF_VAR_SECRET_KEY_BASE }}
+  TF_VAR_SENTRY_DSN: ${{ secrets.TF_VAR_SENTRY_DSN }}
+  TF_VAR_SETTINGS__GOOGLE__GCP_API_KEY: ${{ secrets.TF_VAR_SETTINGS__GOOGLE__GCP_API_KEY }}
+  TF_VAR_SETTINGS__GOOGLE__MAPS_API_KEY: ${{ secrets.TF_VAR_SETTINGS__GOOGLE__MAPS_API_KEY }}
+  BACKEND_STORAGE_ACCOUNT_NAME: s121d01tfstatestr
+  BACKEND_ACCESS_KEY: ${{ secrets.BACKEND_ACCESS_KEY }}
+  BACKEND_KEY: paas-find.tfstate
+  TERRAFORM_VAR_FILE: terraform_qa.tfvars
+  PAAS_TF_DIR: $HOME/work/find-teacher-training/find-teacher-training/terraform/paas
+  CF_PROVIDER_DIR: $HOME/.terraform.d/plugins/linux_amd64/terraform-provider-cloudfoundry
+
+jobs:
+  terraform:
+    name: Deploy find app onto PAAS QA
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout the repository to the GitHub Actions runner
+      uses: actions/checkout@v2
+
+    - name: Install Terraform CloudFoundry Provider
+      run: |
+          mkdir -p $HOME/.terraform.d/plugins/linux_amd64
+          wget -O ${{ env.CF_PROVIDER_DIR }} https://github.com/cloudfoundry-community/terraform-provider-cf/releases/latest/download/terraform-provider-cloudfoundry_linux_amd64
+          chmod +x ${{ env.CF_PROVIDER_DIR }}
+    - name: Terraform init
+      run: |
+          terraform init \
+           -backend-config=storage_account_name=${{ env.BACKEND_STORAGE_ACCOUNT_NAME }} \
+           -backend-config=access_key=${{ env.BACKEND_ACCESS_KEY }} \
+           -backend-config=key=${{ env.BACKEND_KEY }} \
+            ${{ env.PAAS_TF_DIR }}
+    - name: Terraform apply
+      run: |
+          terraform apply -var-file=${{ env.PAAS_TF_DIR }}/${{ env.TERRAFORM_VAR_FILE }} -auto-approve \
+            ${{ env.PAAS_TF_DIR }}
+            
