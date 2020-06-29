@@ -1,4 +1,4 @@
-name: Deploy find app to PAAS
+name: Deploy ttapi app to PAAS
 
 on:
   push:
