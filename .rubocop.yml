@@ -15,6 +15,17 @@ AllCops:
 Rails/HasManyOrHasOneDependent:
   Enabled: false
 
+Rails/UnknownEnv:
+  Environments:
+    - development
+    - test
+    - production
+    - qa
+    - staging
+    - rollover
+    - research
+    - qa_paas
+
 Style/HashEachMethods:
   Enabled: true
 Style/HashTransformKeys:
