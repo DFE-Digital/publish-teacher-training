@@ -59,4 +59,11 @@ resource cloudfoundry_app ttapi-geocode-ci {
   service_binding {
     service_instance = cloudfoundry_service_instance.redis.id
   }
+  environment = {
+    RAILS_ENV                                        = var.app_env.RAILS_ENV
+    WEBSITE_SLOT_POLL_WORKER_FOR_CHANGE_NOTIFICATION = "0"
+    SETTINGS__LOGSTASH__HOST                         = var.SETTINGS__LOGSTASH__HOST
+    SETTINGS__LOGSTASH__PORT                         = var.app_env.SETTINGS__LOGSTASH__PORT
+    RAILS_SERVE_STATIC_FILES                         = var.app_env.RAILS_SERVE_STATIC_FILES
+  }
 }
