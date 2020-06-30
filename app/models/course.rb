@@ -261,7 +261,7 @@ class Course < ApplicationRecord
   validates_with UniqueCourseValidator, on: :new
 
   validates :name, :profpost_flag, :program_type, :qualification, :start_date, :study_mode, presence: true
-  validates :age_range_in_years, presence: true, on: %i[new create], unless: :further_education_course?
+  validates :age_range_in_years, presence: true, on: %i[new create publish], unless: :further_education_course?
   validates :level, presence: true, on: %i[new create publish]
 
   after_validation :remove_unnecessary_enrichments_validation_message

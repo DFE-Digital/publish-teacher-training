@@ -22,6 +22,10 @@ FactoryBot.define do
       )
     }
 
+    trait :without_validation do
+      to_create { |instance| instance.save(validate: false) }
+    end
+
     trait :primary do
       level { :primary }
       age_range_in_years { "3_to_7" }
