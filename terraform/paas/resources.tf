@@ -17,7 +17,7 @@ resource cloudfoundry_app teacher-training-api {
   }
 
   environment = {
-    APPINSIGHTS_INSTRUMENTATIONKEY                   = var.APPINSIGHTS_INSTRUMENTATIONKEY
+#     APPINSIGHTS_INSTRUMENTATIONKEY                   = var.APPINSIGHTS_INSTRUMENTATIONKEY
     RAILS_ENV                                        = var.app_env.RAILS_ENV
     WEBSITE_SLOT_POLL_WORKER_FOR_CHANGE_NOTIFICATION = "0"
     SETTINGS__LOGSTASH__HOST                         = var.SETTINGS__LOGSTASH__HOST
