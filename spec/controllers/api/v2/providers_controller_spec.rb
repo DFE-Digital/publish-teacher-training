@@ -54,4 +54,42 @@ RSpec.describe API::V2::ProvidersController do
       end
     end
   end
+
+  describe "#update" do
+    context "when user is not an admin" do
+      let(:user) { provider.users.first }
+      let(:provider) { course.provider }
+      let(:course) { create(:course) }
+
+      it "cannot update provider_name" do
+        expect {
+          put :update,
+              params: {
+                code: provider.provider_code,
+                provider: {
+                  provider_name: "new provider name",
+                },
+              }
+        }.to raise_error(ActionController::UnpermittedParameters)
+      end
+    end
+
+    context "when user is an admin" do
+      let(:user) { create(:user, :admin) }
+      let(:provider) { course.provider }
+      let(:course) { create(:course) }
+
+      it "can update provider_name" do
+        put :update,
+            params: {
+              code: provider.provider_code,
+              provider: {
+                provider_name: "new provider name",
+              },
+            }
+
+        expect(provider.reload.provider_name).to eql("new provider name")
+      end
+    end
+  end
 end
