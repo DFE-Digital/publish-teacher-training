@@ -113,6 +113,33 @@ describe Site, type: :model do
       end
     end
 
+    describe "#skip_geocoding" do
+      before do
+        site.provider = create(:provider, latitude: "foo", longitude: "bar")
+        allow(GeocodeJob).to receive(:perform_later)
+      end
+
+      context "skip_geocoding is 'true'" do
+        it "does not geocode" do
+          site.skip_geocoding = true
+
+          site.save
+
+          expect(GeocodeJob).to_not have_received(:perform_later)
+        end
+      end
+
+      context "skip_geocoding is 'false'" do
+        it "does not geocode" do
+          site.skip_geocoding = false
+
+          site.save
+
+          expect(GeocodeJob).to have_received(:perform_later)
+        end
+      end
+    end
+
     describe "#needs_geolocation?" do
       subject { site.needs_geolocation? }
 

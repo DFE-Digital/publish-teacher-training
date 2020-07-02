@@ -22,6 +22,7 @@ module Providers
           rolled_over_provider.ucas_preferences = provider.ucas_preferences.dup
           rolled_over_provider.contacts << provider.contacts.map(&:dup)
           rolled_over_provider.recruitment_cycle = new_recruitment_cycle
+          rolled_over_provider.skip_geocoding = true
 
           rolled_over_provider.save!
         end

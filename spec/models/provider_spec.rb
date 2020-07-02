@@ -720,6 +720,32 @@ describe Provider, type: :model do
         end
       end
     end
+
+    describe "#skip_geocoding" do
+      before do
+        allow(GeocodeJob).to receive(:perform_later)
+      end
+
+      context "skip_geocoding is 'true'" do
+        it "does not geocode" do
+          provider.skip_geocoding = true
+
+          provider.save
+
+          expect(GeocodeJob).to_not have_received(:perform_later)
+        end
+      end
+
+      context "skip_geocoding is 'false'" do
+        it "does not geocode" do
+          provider.skip_geocoding = false
+
+          provider.save
+
+          expect(GeocodeJob).to have_received(:perform_later)
+        end
+      end
+    end
   end
 
   describe "#search_by_code_or_name" do
