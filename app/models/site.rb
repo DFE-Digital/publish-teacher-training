@@ -29,7 +29,12 @@ class Site < ApplicationRecord
 
   scope :not_geocoded, -> { where(latitude: nil, longitude: nil) }
 
-  after_commit -> { GeocodeJob.perform_later("Site", id) }, if: :needs_geolocation?
+  attr_accessor :skip_geocoding
+  after_commit :geocode_site, unless: :skip_geocoding
+
+  def geocode_site
+    GeocodeJob.perform_later("Site", id) if needs_geolocation?
+  end
 
   def needs_geolocation?
     full_address.present? && (

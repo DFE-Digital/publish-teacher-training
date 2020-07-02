@@ -97,6 +97,8 @@ class Provider < ApplicationRecord
 
   scope :in_current_cycle, -> { where(recruitment_cycle: RecruitmentCycle.current_recruitment_cycle) }
 
+  scope :not_geocoded, -> { where(latitude: nil, longitude: nil).or where(region_code: nil) }
+
   serialize :accrediting_provider_enrichments, AccreditingProviderEnrichment::ArraySerializer
 
   validates :train_with_us, words_count: { maximum: 250, message: "^Reduce the word count for training with you" }
@@ -113,13 +115,16 @@ class Provider < ApplicationRecord
 
   acts_as_mappable lat_column_name: :latitude, lng_column_name: :longitude
 
-  scope :not_geocoded, -> { where(latitude: nil, longitude: nil).or where(region_code: nil) }
-
   before_discard { discard_courses }
 
-  after_commit -> { GeocodeJob.perform_later("Provider", id) }, if: :needs_geolocation?
-
   pg_search_scope :search_by_code_or_name, against: %i(provider_code provider_name), using: { tsearch: { prefix: true } }
+
+  attr_accessor :skip_geocoding
+  after_commit :geocode_provider, unless: :skip_geocoding
+
+  def geocode_provider
+    GeocodeJob.perform_later("Provider", id) if needs_geolocation?
+  end
 
   def needs_geolocation?
     full_address.present? && (
