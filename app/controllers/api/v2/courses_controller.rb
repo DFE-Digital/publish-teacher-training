@@ -283,22 +283,8 @@ module API
                   :sites_types,
                   :course_code,
                   :subjects_ids,
-                  :subjects_types,
-                  :name)
-          .permit(
-            :english,
-            :maths,
-            :science,
-            :qualification,
-            :age_range_in_years,
-            :start_date,
-            :applications_open_from,
-            :study_mode,
-            :is_send,
-            :accredited_body_code,
-            :funding_type,
-            :level,
-          )
+                  :subjects_types)
+          .permit(policy(Course.new).permitted_attributes)
       end
 
       def update_further_education_fields

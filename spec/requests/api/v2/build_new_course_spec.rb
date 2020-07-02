@@ -42,7 +42,6 @@ describe "/api/v2/build_new_course", type: :request do
   context "with subjects" do
     let(:params) do
       { course: {
-        name: "Foo Bar Course",
         maths: "must_have_qualification_at_application_time",
         english: "must_have_qualification_at_application_time",
         subjects_ids: subjects.map(&:id),
@@ -69,7 +68,6 @@ describe "/api/v2/build_new_course", type: :request do
   context "With multiple secondary subjects" do
     let(:params) do
       { course: {
-        name: "Foo Bar Course",
         maths: "must_have_qualification_at_application_time",
         english: "must_have_qualification_at_application_time",
         subjects_ids: subjects.map(&:id),
@@ -410,7 +408,6 @@ describe "/api/v2/build_new_course", type: :request do
         maths: "must_have_qualification_at_application_time",
         english: "must_have_qualification_at_application_time",
         science: "must_have_qualification_at_application_time",
-        name: "Primary",
         study_mode: "full_time",
         start_date: DateTime.new(provider.recruitment_cycle.year.to_i, 9, 1),
         qualification: "qts",
