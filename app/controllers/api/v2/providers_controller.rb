@@ -166,6 +166,7 @@ module API
           .except(
             :train_with_us,
             :train_with_disability,
+            :provider_name,
             :email,
             :telephone,
             :website,
@@ -202,20 +203,7 @@ module API
             :gt12_contact,
             :application_alert_contact,
             :send_application_alerts,
-          )
-          .permit(
-            :train_with_us,
-            :train_with_disability,
-            :email,
-            :telephone,
-            :website,
-            :address1,
-            :address2,
-            :address3,
-            :address4,
-            :postcode,
-            :region_code,
-          )
+          ).permit(policy(@provider).permitted_provider_attributes)
       end
 
       def ucas_contact_params
@@ -224,6 +212,7 @@ module API
           .except(
             :train_with_us,
             :train_with_disability,
+            :provider_name,
             :email,
             :telephone,
             :website,
@@ -260,6 +249,7 @@ module API
             :finance_contact,
             :train_with_us,
             :train_with_disability,
+            :provider_name,
             :email,
             :telephone,
             :website,

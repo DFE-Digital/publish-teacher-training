@@ -4,6 +4,7 @@ module API
       PROVIDER_ATTRIBUTES = %i[
         train_with_us
         train_with_disability
+        provider_name
         email
         telephone
         website
