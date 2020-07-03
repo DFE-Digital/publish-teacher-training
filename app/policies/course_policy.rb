@@ -33,6 +33,10 @@ class CoursePolicy
     user.admin? || user.providers.include?(course.provider)
   end
 
+  def send_vacancies_filled_notification?
+    user.present?
+  end
+
   alias_method :update?, :show?
   alias_method :destroy?, :show?
   alias_method :publish?, :update?
