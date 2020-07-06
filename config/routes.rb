@@ -37,6 +37,7 @@ Rails.application.routes.draw do
           post :publish, on: :member
           post :publishable, on: :member
           post :withdraw, on: :member
+          post :send_vacancies_filled_notification, on: :member
           get :new, on: :new
         end
         resources :sites, only: %i[index update show create]

@@ -8,10 +8,6 @@ module API
 
         site_status.assign_attributes(site_status_params)
 
-        if site_status.vacancies_filled?
-          NotificationService::CourseVacanciesFilled.call(course: site_status.course)
-        end
-
         site_status.save!
 
         render jsonapi: site_status

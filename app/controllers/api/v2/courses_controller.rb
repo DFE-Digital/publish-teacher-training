@@ -133,6 +133,11 @@ module API
         create_new_course
       end
 
+      def send_vacancies_filled_notification
+        authorize @course
+        NotificationService::CourseVacanciesFilled.call(course: @course)
+      end
+
     private
 
       def update_enrichment
