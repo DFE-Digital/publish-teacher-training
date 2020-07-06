@@ -534,6 +534,10 @@
                 "value": "[parameters('govukNotifyCourseWithdrawEmailTemplateId')]"
               },
               {
+                "name": "SETTINGS__GOVUK_NOTIFY__MAGIC_LINK_EMAIL_TEMPLATE_ID",
+                "value": "[parameters('govukNotifyMagicLinkEmailTemplateId')]"
+              },
+              {
                 "name": "SETTINGS__SYSTEM_AUTHENTICATION_TOKEN",
                 "value": "[parameters('mcbeSystemAuthenticationToken')]"
               },
