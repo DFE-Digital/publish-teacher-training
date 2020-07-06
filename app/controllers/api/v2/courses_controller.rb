@@ -43,7 +43,7 @@ module API
         @course.errors.messages.each do |error_key, _|
           @course.errors.full_messages_for(error_key).each do |error_message|
             json_data[:data][:errors] << {
-              "title" => "Invalid #{error_key}",
+              "title" => "Invalid #{Course.human_attribute_name(error_key).downcase}",
               "detail" => error_message,
               "source" => { "pointer" => "/data/attributes/#{error_key}" },
             }

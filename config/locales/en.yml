@@ -16,6 +16,8 @@ en:
         pgde: "PGDE"
   activerecord:
     attributes:
+      course:
+        name: Title
       course_enrichment:
         fee_uk_eu: "Course fees for UK and EU students"
         fee_international: "Course fees for international students"
