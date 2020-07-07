@@ -62,4 +62,38 @@ describe API::V2::CoursesController, type: :controller do
       }
     end
   end
+
+  describe "#update" do
+    let(:enrichment) { build(:course_enrichment, :published) }
+
+    context "as non-admin" do
+      let(:existing_user) { course.provider.users.first }
+
+      it "cannot update admin fields" do
+        expect {
+          put :update, params: {
+            recruitment_cycle_year: RecruitmentCycle.current_recruitment_cycle.year,
+            provider_code: course.provider.provider_code,
+            code: course.course_code,
+            course: { name: "new course name" },
+          }
+        }.to raise_error(ActionController::UnpermittedParameters)
+
+        expect(course.reload.name).to_not eql("new course name")
+      end
+    end
+
+    context "as admin" do
+      it "can update admin fields" do
+        put :update, params: {
+          recruitment_cycle_year: RecruitmentCycle.current_recruitment_cycle.year,
+          provider_code: course.provider.provider_code,
+          code: course.course_code,
+          course: { name: "new course name" },
+        }
+
+        expect(course.reload.name).to eql("new course name")
+      end
+    end
+  end
 end

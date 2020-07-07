@@ -1,11 +1,13 @@
-describe "POST /providers/:provider_code/courses/:course_code" do
+require "rails_helper"
+
+RSpec.describe "POST /providers/:provider_code/courses/:course_code" do
   let(:jsonapi_renderer) { JSONAPI::Serializable::Renderer.new }
 
   before do
     jsonapi_data = jsonapi_renderer.render(
       course,
       class: {
-        Course: API::V2::SerializableCourse,
+        Course: API::V2::SerializableCourseWithoutName,
         PrimarySubject: API::V2::SerializableSubject,
         Site: API::V2::SerializableSite,
       },
@@ -36,7 +38,6 @@ describe "POST /providers/:provider_code/courses/:course_code" do
   }
   let(:site) { build(:site) }
   let(:subject) { find_or_create(:primary_subject) }
-
 
   let(:age_range_in_years) { "3_to_7" }
 

@@ -42,7 +42,6 @@ describe "/api/v2/build_new_course", type: :request do
   context "with subjects" do
     let(:params) do
       { course: {
-        name: "Foo Bar Course",
         maths: "must_have_qualification_at_application_time",
         english: "must_have_qualification_at_application_time",
         subjects_ids: subjects.map(&:id),
@@ -69,7 +68,6 @@ describe "/api/v2/build_new_course", type: :request do
   context "With multiple secondary subjects" do
     let(:params) do
       { course: {
-        name: "Foo Bar Course",
         maths: "must_have_qualification_at_application_time",
         english: "must_have_qualification_at_application_time",
         subjects_ids: subjects.map(&:id),
@@ -219,7 +217,7 @@ describe "/api/v2/build_new_course", type: :request do
                 },
               },
               {
-                "title" => "Invalid applications_open_from",
+                "title" => "Invalid applications open from",
                 "detail" => "You must say when applications open from",
                 "source" => {
                   "pointer" => "/data/attributes/applications_open_from",
@@ -233,42 +231,42 @@ describe "/api/v2/build_new_course", type: :request do
                 },
               },
               {
-                "title" => "Invalid name",
-                "detail" => "Name can't be blank",
+                "title" => "Invalid title",
+                "detail" => "Title can't be blank",
                 "source" => {
                   "pointer" => "/data/attributes/name",
                 },
               },
               {
-                "title" => "Invalid profpost_flag",
+                "title" => "Invalid profpost flag",
                 "detail" => "Profpost flag can't be blank",
                 "source" => {
                   "pointer" => "/data/attributes/profpost_flag",
                 },
               },
               {
-                "title" => "Invalid program_type",
+                "title" => "Invalid program type",
                 "detail" => "You need to pick an option",
                 "source" => {
                   "pointer" => "/data/attributes/program_type",
                 },
               },
               {
-                "title" => "Invalid start_date",
+                "title" => "Invalid start date",
                 "detail" => "Start date can't be blank",
                 "source" => {
                   "pointer" => "/data/attributes/start_date",
                 },
               },
               {
-                "title" => "Invalid study_mode",
+                "title" => "Invalid study mode",
                 "detail" => "You need to pick an option",
                 "source" => {
                   "pointer" => "/data/attributes/study_mode",
                 },
               },
               {
-                "title" => "Invalid age_range_in_years",
+                "title" => "Invalid age range in years",
                 "detail" => "You need to pick an age range",
                 "source" => {
                   "pointer" => "/data/attributes/age_range_in_years",
@@ -329,21 +327,21 @@ describe "/api/v2/build_new_course", type: :request do
                 },
               },
               {
-                "title" => "Invalid name",
-                "detail" => "Name can't be blank",
+                "title" => "Invalid title",
+                "detail" => "Title can't be blank",
                 "source" => {
                   "pointer" => "/data/attributes/name",
                 },
               },
               {
-                "title" => "Invalid profpost_flag",
+                "title" => "Invalid profpost flag",
                 "detail" => "Profpost flag can't be blank",
                 "source" => {
                   "pointer" => "/data/attributes/profpost_flag",
                 },
               },
               {
-                "title" => "Invalid program_type",
+                "title" => "Invalid program type",
                 "detail" => "You need to pick an option",
                 "source" => {
                   "pointer" => "/data/attributes/program_type",
@@ -357,21 +355,21 @@ describe "/api/v2/build_new_course", type: :request do
                 },
               },
               {
-                "title" => "Invalid start_date",
+                "title" => "Invalid start date",
                 "detail" => "Start date can't be blank",
                 "source" => {
                   "pointer" => "/data/attributes/start_date",
                 },
               },
               {
-                "title" => "Invalid study_mode",
+                "title" => "Invalid study mode",
                 "detail" => "You need to pick an option",
                 "source" => {
                   "pointer" => "/data/attributes/study_mode",
                 },
               },
               {
-                "title" => "Invalid age_range_in_years",
+                "title" => "Invalid age range in years",
                 "detail" => "You need to pick an age range",
                 "source" => {
                   "pointer" => "/data/attributes/age_range_in_years",
@@ -392,7 +390,7 @@ describe "/api/v2/build_new_course", type: :request do
                 },
               },
               {
-                "title" => "Invalid applications_open_from",
+                "title" => "Invalid applications open from",
                 "detail" => "You must say when applications open from",
                 "source" => {
                   "pointer" => "/data/attributes/applications_open_from",
@@ -410,7 +408,6 @@ describe "/api/v2/build_new_course", type: :request do
         maths: "must_have_qualification_at_application_time",
         english: "must_have_qualification_at_application_time",
         science: "must_have_qualification_at_application_time",
-        name: "Primary",
         study_mode: "full_time",
         start_date: DateTime.new(provider.recruitment_cycle.year.to_i, 9, 1),
         qualification: "qts",

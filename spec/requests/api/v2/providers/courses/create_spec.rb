@@ -32,7 +32,7 @@ describe "Course POST #create API V2", type: :request do
     jsonapi_data = jsonapi_renderer.render(
       course,
       class: {
-        Course: API::V2::SerializableCourse,
+        Course: API::V2::SerializableCourseWithoutName,
         PrimarySubject: API::V2::SerializableSubject,
         Site: API::V2::SerializableSite,
       },
@@ -129,7 +129,7 @@ describe "Course POST #create API V2", type: :request do
         jsonapi_data = jsonapi_renderer.render(
           course,
           class: {
-            Course: API::V2::SerializableCourse,
+            Course: API::V2::SerializableCourseWithoutName,
             Site: API::V2::SerializableSite,
             PrimarySubject: API::V2::SerializableSubject,
           },
@@ -199,7 +199,7 @@ describe "Course POST #create API V2", type: :request do
         jsonapi_data = jsonapi_renderer.render(
           course,
           class: {
-            Course: API::V2::SerializableCourse,
+            Course: API::V2::SerializableCourseWithoutName,
             Site: API::V2::SerializableSite,
           },
           include: %i[sites],
