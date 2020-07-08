@@ -70,40 +70,40 @@ FactoryBot.define do
     trait :rolled_over do
       status { :rolled_over }
     end
-  end
 
-  trait :initial_draft do
-    last_published_timestamp_utc { nil }
-  end
+    trait :initial_draft do
+      last_published_timestamp_utc { nil }
+    end
 
-  trait :published do
-    status { :published }
-    last_published_timestamp_utc { 5.days.ago }
-  end
+    trait :published do
+      status { :published }
+      last_published_timestamp_utc { 5.days.ago }
+    end
 
-  trait :withdrawn do
-    status { :withdrawn }
-    last_published_timestamp_utc { 5.days.ago }
-  end
+    trait :withdrawn do
+      status { :withdrawn }
+      last_published_timestamp_utc { 5.days.ago }
+    end
 
-  trait :subsequent_draft do
-    status { :draft }
-    last_published_timestamp_utc { 5.days.ago }
-  end
+    trait :subsequent_draft do
+      status { :draft }
+      last_published_timestamp_utc { 5.days.ago }
+    end
 
-  trait :without_content do
-    fee_uk_eu { nil }
-    about_course { nil }
-    required_qualifications { nil }
-    how_school_placements_work { nil }
-    salary_details { nil }
-    course_length { nil }
-  end
+    trait :without_content do
+      fee_uk_eu { nil }
+      about_course { nil }
+      required_qualifications { nil }
+      how_school_placements_work { nil }
+      salary_details { nil }
+      course_length { nil }
+    end
 
-  trait :with_fee_based_course do
-    course { create(:course, :fee_type_based) }
-  end
-  trait :with_salary_based_course do
-    course { create(:course, :salary_type_based) }
+    trait :with_fee_based_course do
+      course { create(:course, :fee_type_based) }
+    end
+    trait :with_salary_based_course do
+      course { create(:course, :salary_type_based) }
+    end
   end
 end
