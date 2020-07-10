@@ -20,6 +20,7 @@ describe CourseSearchService do
     let(:distinct_scope) { class_double(Course) }
     let(:course_ids_scope) { class_double(Course) }
     let(:order_scope) { class_double(Course) }
+    let(:joins_provider_scope) { class_double(Course) }
     let(:inner_query_scope) { class_double(Course) }
     let(:filter) { nil }
     let(:sort) { nil }
@@ -58,17 +59,80 @@ describe CourseSearchService do
 
       context "by distance" do
         let(:sort) { "distance" }
-        let(:filter) do
-          { latitude: 54.9713392, longitude: -1.6112336 }
-        end
 
-        it "orders in descending order" do
-          expect(findable_scope).to receive(:select).and_return(inner_query_scope)
-          expect(Course).to receive(:where).and_return(findable_scope)
-          expect(findable_scope).to receive(:joins).and_return(select_scope)
-          expect(select_scope).to receive(:select).and_return(order_scope)
-          expect(order_scope).to receive(:order).and_return(expected_scope)
-          expect(subject).to eq(expected_scope)
+        describe "expand university" do
+          context "when false" do
+            let(:filter) do
+              { latitude: 54.9713392, longitude: -1.6112336, expand_university: "false" }
+            end
+            it "orders in descending order by distance" do
+              expect(findable_scope).to receive(:select).and_return(inner_query_scope)
+              expect(Course).to receive(:where).and_return(findable_scope)
+              expect(findable_scope).to receive(:joins).and_return(joins_provider_scope)
+              expect(joins_provider_scope).to receive(:joins).with(:provider).and_return(select_scope)
+              distance_with_university_area_adjustment = <<~EOSQL.gsub(/\s+/m, " ").strip
+                (CASE
+                  WHEN provider.provider_type = 'O'
+                    THEN (distance - 10)
+                  ELSE distance
+                END) as boosted_distance
+              EOSQL
+              select_criteria = "course.*, distance, #{distance_with_university_area_adjustment}"
+
+              expect(select_scope).to receive(:select).with(select_criteria)
+                .and_return(order_scope)
+              expect(order_scope).to receive(:order).with(:distance).and_return(expected_scope)
+              expect(subject).to eq(expected_scope)
+            end
+          end
+          context "when absent" do
+            let(:filter) do
+              { latitude: 54.9713392, longitude: -1.6112336 }
+            end
+            it "orders in descending order by distance" do
+              expect(findable_scope).to receive(:select).and_return(inner_query_scope)
+              expect(Course).to receive(:where).and_return(findable_scope)
+              expect(findable_scope).to receive(:joins).and_return(joins_provider_scope)
+              expect(joins_provider_scope).to receive(:joins).with(:provider).and_return(select_scope)
+              distance_with_university_area_adjustment = <<~EOSQL.gsub(/\s+/m, " ").strip
+                (CASE
+                  WHEN provider.provider_type = 'O'
+                    THEN (distance - 10)
+                  ELSE distance
+                END) as boosted_distance
+              EOSQL
+              select_criteria = "course.*, distance, #{distance_with_university_area_adjustment}"
+
+              expect(select_scope).to receive(:select).with(select_criteria)
+                .and_return(order_scope)
+              expect(order_scope).to receive(:order).with(:distance).and_return(expected_scope)
+              expect(subject).to eq(expected_scope)
+            end
+          end
+          context "when true" do
+            let(:filter) do
+              { latitude: 54.9713392, longitude: -1.6112336, expand_university: "true" }
+            end
+            it "orders in descending order by boosted distance" do
+              expect(findable_scope).to receive(:select).and_return(inner_query_scope)
+              expect(Course).to receive(:where).and_return(findable_scope)
+              expect(findable_scope).to receive(:joins).and_return(joins_provider_scope)
+              expect(joins_provider_scope).to receive(:joins).with(:provider).and_return(select_scope)
+              distance_with_university_area_adjustment = <<~EOSQL.gsub(/\s+/m, " ").strip
+                (CASE
+                  WHEN provider.provider_type = 'O'
+                    THEN (distance - 10)
+                  ELSE distance
+                END) as boosted_distance
+              EOSQL
+              select_criteria = "course.*, distance, #{distance_with_university_area_adjustment}"
+
+              expect(select_scope).to receive(:select).with(select_criteria)
+                .and_return(order_scope)
+              expect(order_scope).to receive(:order).with(:boosted_distance).and_return(expected_scope)
+              expect(subject).to eq(expected_scope)
+            end
+          end
         end
       end
 
@@ -421,6 +485,111 @@ describe CourseSearchService do
         expect(course_ids_scope).to receive(:select).and_return(inner_query_scope)
         expect(Course).to receive(:where).and_return(expected_scope)
         expect(subject).to eq(expected_scope)
+      end
+    end
+  end
+
+  describe "expand_university" do
+    context "university course vs non university course" do
+      null_island = { latitude: 0, longitude: 0 }
+
+      over_5_miles_from_null_island = { latitude: 0.1, longitude: 0 }
+
+      subject do
+        described_class.call(filter: filter, sort: "distance", course_scope: scope)
+      end
+
+      let(:university_course) do
+        create(:course, provider: university_provider,
+          site_statuses: [build(:site_status, :findable, site: site)],
+          enrichments: [build(:course_enrichment, :published)])
+      end
+
+      let(:non_university_course) do
+        create(:course, provider: non_university_provider,
+          site_statuses: [build(:site_status, :findable, site: site2)],
+          enrichments: [build(:course_enrichment, :published)])
+      end
+
+      let(:courses) do
+        [university_course, non_university_course]
+      end
+
+      let(:site) do
+        build(:site, **over_5_miles_from_null_island)
+      end
+
+      let(:site2) do
+        build(:site, **null_island)
+      end
+
+      let(:university_provider) do
+        build(:provider, provider_type: :university, sites: [site])
+      end
+
+      let(:non_university_provider) do
+        build(:provider, provider_type: :scitt, sites: [site2])
+      end
+
+      before do
+        courses
+      end
+
+      let(:scope) do
+        Course.all
+      end
+
+      context "when false" do
+        let(:filter) do
+          null_island.merge(expand_university: "false")
+        end
+
+        it "returns correctly" do
+          expect(subject.count(:id)).to eq(2)
+
+          expect(subject.first.boosted_distance).to eq(0)
+          expect(subject.first.distance).to eq(0)
+          expect(subject.first).to eq(non_university_course)
+
+          expect(subject.second.boosted_distance - subject.second.distance).to eq(-10)
+          expect(subject.second).to eq(university_course)
+        end
+      end
+
+      context "when absent" do
+        let(:filter) do
+          null_island
+        end
+
+        it "returns correctly" do
+          expect(subject.count(:id)).to eq(2)
+
+          expect(subject.first.boosted_distance).to eq(0)
+          expect(subject.first.distance).to eq(0)
+          expect(subject.first).to eq(non_university_course)
+
+          expect(subject.second.boosted_distance - subject.second.distance).to eq(-10)
+          expect(subject.second).to eq(university_course)
+        end
+      end
+
+      context "when true" do
+        describe "university course has less 10 miles" do
+          let(:filter) do
+            null_island.merge(expand_university: "true")
+          end
+
+          it "returns correctly" do
+            expect(subject.count(:id)).to eq(2)
+
+            expect(subject.first.boosted_distance - subject.first.distance).to eq(-10)
+            expect(subject.first).to eq(university_course)
+
+            expect(subject.second.boosted_distance).to eq(0)
+            expect(subject.second.distance).to eq(0)
+            expect(subject.second).to eq(non_university_course)
+          end
+        end
       end
     end
   end
