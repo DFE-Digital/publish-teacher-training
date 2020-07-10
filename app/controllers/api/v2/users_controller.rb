@@ -20,7 +20,12 @@ module API
 
       def accept_terms
         @user.accept_terms_date_utc = Time.zone.now
-        @user.save
+
+        if @user.save
+          render jsonapi: @user
+        else
+          render jsonapi_errors: @user.errors, status: :unprocessable_entity
+        end
       end
 
       def generate_and_send_magic_link
