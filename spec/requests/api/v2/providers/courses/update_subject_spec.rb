@@ -7,7 +7,7 @@ describe "PATCH /providers/:provider_code/courses/:course_code" do
     jsonapi_data = jsonapi_renderer.render(
       course,
       class: {
-        Course: API::V2::SerializableCourse,
+        Course: API::V2::SerializableCourseWithoutName,
       },
     )
 

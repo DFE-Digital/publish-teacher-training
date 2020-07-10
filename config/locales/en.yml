@@ -3,7 +3,7 @@ en:
     update_email:
       age_range_in_years: "age range"
       qualification: "outcome"
-      study_mode: "full or part time"
+      study_mode: "study mode"
       science: "entry requirements"
       maths: "entry requirements"
       english: "entry requirements"
@@ -16,6 +16,8 @@ en:
         pgde: "PGDE"
   activerecord:
     attributes:
+      course:
+        name: Title
       course_enrichment:
         fee_uk_eu: "Course fees for UK and EU students"
         fee_international: "Course fees for international students"

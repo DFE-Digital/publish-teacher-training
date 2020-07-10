@@ -43,7 +43,7 @@ module API
         @course.errors.messages.each do |error_key, _|
           @course.errors.full_messages_for(error_key).each do |error_message|
             json_data[:data][:errors] << {
-              "title" => "Invalid #{error_key}",
+              "title" => "Invalid #{Course.human_attribute_name(error_key).downcase}",
               "detail" => error_message,
               "source" => { "pointer" => "/data/attributes/#{error_key}" },
             }
@@ -131,6 +131,11 @@ module API
         @course.assign_attributes(course_code: course_code)
 
         create_new_course
+      end
+
+      def send_vacancies_filled_notification
+        authorize @course
+        NotificationService::CourseVacanciesFilled.call(course: @course)
       end
 
     private
@@ -278,22 +283,8 @@ module API
                   :sites_types,
                   :course_code,
                   :subjects_ids,
-                  :subjects_types,
-                  :name)
-          .permit(
-            :english,
-            :maths,
-            :science,
-            :qualification,
-            :age_range_in_years,
-            :start_date,
-            :applications_open_from,
-            :study_mode,
-            :is_send,
-            :accredited_body_code,
-            :funding_type,
-            :level,
-          )
+                  :subjects_types)
+          .permit(policy(Course.new).permitted_attributes)
       end
 
       def update_further_education_fields

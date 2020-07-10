@@ -26,6 +26,26 @@ describe CoursePolicy do
     end
   end
 
+  describe "#permitted_attributes" do
+    subject { described_class.new(user, build(:course)) }
+
+    context "when non admin user" do
+      it "returns user attributes" do
+        expect(subject.permitted_attributes).to include(:english)
+        expect(subject.permitted_attributes).to_not include(:name)
+      end
+    end
+
+    context "when admin user" do
+      let(:user) { build(:user, :admin) }
+
+      it "returns user and admin attributes" do
+        expect(subject.permitted_attributes).to include(:english)
+        expect(subject.permitted_attributes).to include(:name)
+      end
+    end
+  end
+
   describe CoursePolicy::Scope do
     let(:accredited_body) { create(:provider, :accredited_body, organisations: [organisation]) }
     let(:training_provider) { create(:provider) }
