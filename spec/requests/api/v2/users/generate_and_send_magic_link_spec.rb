@@ -57,4 +57,12 @@ describe "PATCH /api/v2/users/generate_and_send_magic_link", type: :request do
       expect(system_user.magic_link_token).not_to be_nil
     end
   end
+
+  context "when user has not accepted terms and conditions" do
+    let(:user) { create(:user, :inactive) }
+    it "returns status 204 No Content" do
+      perform_request
+      expect(response).to have_http_status(:no_content)
+    end
+  end
 end
