@@ -76,7 +76,6 @@ module API
       def suggest_any
         authorize Provider
 
-        return render(status: :bad_request) if params[:query].nil? || params[:query].length < 2
         return render(status: :bad_request) unless begins_with_alphanumeric(params[:query])
 
         scope = @recruitment_cycle.providers
