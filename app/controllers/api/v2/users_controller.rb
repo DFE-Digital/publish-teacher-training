@@ -3,7 +3,7 @@ module API
     class UsersController < API::V2::ApplicationController
       before_action :build_user, except: :generate_and_send_magic_link
       deserializable_resource :user, only: :update
-      skip_before_action :check_terms_accepted, only: :accept_terms
+      skip_before_action :check_terms_accepted, only: [:accept_terms, :generate_and_send_magic_link]
 
       def show
         render jsonapi: @user,
