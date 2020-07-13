@@ -13,6 +13,7 @@ govuk_notify:
   magic_link_email_template_id: please_change_me
   course_withdraw_email_template_id: please_change_me
   course_vacancies_filled_email_template_id: please_change_me
+  email_unrecognised_template_id: please_change_me
 publish_url: http://localhost:3000
 find_url: http://localhost:3002
 mcbg:
