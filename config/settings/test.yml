@@ -5,6 +5,7 @@ govuk_notify:
   course_publish_email_template_id: please_change_me
   course_withdraw_email_template_id: please_change_me
   course_vacancies_filled_email_template_id: please_change_me
+  email_unrecognised_template_id: please_change_me
 system_authentication_token: "Ge32"
 gcp_api_key: please_change_me
 publish_url: https://www.publish-teacher-training-courses.service.gov.uk
