@@ -131,22 +131,28 @@ describe "Publish API v2", type: :request do
 
       context "no enrichments, sites and subjects" do
         let(:course) { create(:course, provider: provider, enrichments: [], site_statuses: []) }
+
         it { should have_http_status(:unprocessable_entity) }
+
         it "has validation errors" do
           expect(json_data.map { |error| error["detail"] }).to match_array([
-            "Complete your course information before publishing",
             "You must pick at least one location for this course",
+            "Enter details about this course",
+            "Enter details about school placements",
+            "Enter a course length",
+            "Give details about the salary for this course",
+            "Enter details about the qualifications needed",
           ])
         end
       end
 
       context "fee type based course" do
-        let(:course) {
+        let(:course) do
           create(:course, :fee_type_based,
                  provider: provider,
                  enrichments: [invalid_enrichment],
                  site_statuses: [site_status])
-        }
+        end
 
         context "invalid enrichment with invalid content lack_presence fields" do
           let(:invalid_enrichment) { create(:course_enrichment, :without_content) }

@@ -243,7 +243,6 @@ class Course < ApplicationRecord
   validates :maths,   inclusion: { in: entry_requirement_options_without_nil_choice }, unless: :further_education_course?
   validates :english, inclusion: { in: entry_requirement_options_without_nil_choice }, unless: :further_education_course?
   validates :science, inclusion: { in: entry_requirement_options_without_nil_choice }, if: :gcse_science_required?
-  validates :enrichments, presence: true, on: :publish
   validates :is_send, inclusion: { in: [true, false] }
   validates :sites, presence: true, on: %i[publish new]
   validates :subjects, presence: true, on: :publish
@@ -580,16 +579,27 @@ private
     end
   end
 
-  def validate_enrichment(validation_scope = nil)
+  def validate_enrichment
     latest_enrichment = enrichments.select(&:draft?).last
     return if latest_enrichment.blank?
 
-    latest_enrichment.valid? validation_scope
+    latest_enrichment.valid?
     add_enrichment_errors(latest_enrichment)
   end
 
   def validate_enrichment_publishable
-    validate_enrichment :publish
+    if enrichments.blank?
+      temp_enrichment = CourseEnrichment.new(course: self, status: "draft")
+      temp_enrichment.valid?(:publish)
+      add_enrichment_errors(temp_enrichment)
+    else
+      latest_enrichment = enrichments.select(&:draft?).last
+
+      if latest_enrichment
+        latest_enrichment.valid?(:publish)
+        add_enrichment_errors(latest_enrichment)
+      end
+    end
   end
 
   def validate_site_statuses_publishable

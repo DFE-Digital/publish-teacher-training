@@ -232,13 +232,10 @@ describe Course, type: :model do
     it { should validate_presence_of(:qualification) }
     it { should validate_presence_of(:start_date) }
     it { should validate_presence_of(:study_mode) }
-
-
     it { should validate_presence_of(:sites).on(:publish) }
     it { should validate_presence_of(:subjects).on(:publish) }
-    it { should validate_presence_of(:enrichments).on(:publish) }
-
     it { should validate_presence_of(:level).on(:create) }
+
     it {
       should validate_presence_of(:level)
         .on(:publish)
