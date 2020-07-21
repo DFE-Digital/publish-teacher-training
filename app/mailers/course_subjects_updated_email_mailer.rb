@@ -4,11 +4,10 @@ class CourseSubjectsUpdatedEmailMailer < GovukNotifyRails::Mailer
   def course_subjects_updated_email(
     course:,
     previous_subject_names:,
-    updated_subject_names:,
     previous_course_name:,
-    updated_course_name:,
     recipient:
   )
+
     set_template(Settings.govuk_notify.course_subjects_updated_email_template_id)
 
     set_personalisation(
@@ -17,9 +16,9 @@ class CourseSubjectsUpdatedEmailMailer < GovukNotifyRails::Mailer
       subject_change_datetime: gov_uk_format(course.updated_at),
       course_url: create_course_url(course),
       previous_subjects: format(previous_subject_names),
-      updated_subjects: format(updated_subject_names),
+      updated_subjects: format(course.subjects.map(&:subject_name)),
       previous_course_name: previous_course_name,
-      updated_course_name: updated_course_name,
+      updated_course_name: course.name,
     )
 
     mail(to: recipient.email)

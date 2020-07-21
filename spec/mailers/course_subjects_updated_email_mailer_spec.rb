@@ -2,18 +2,16 @@ require "rails_helper"
 
 describe CourseSubjectsUpdatedEmailMailer, type: :mailer do
   let(:previous_subject) { build(:primary_subject, :primary_with_english) }
+  let(:updated_course_name) { "Primary with Mathematics" }
+  let(:updated_subject) { build(:primary_subject, :primary_with_mathematics) }
   let(:course) { build(:course, :with_accrediting_provider, name: updated_course_name, updated_at: DateTime.new(2001, 2, 3, 4, 5, 6), subjects: [updated_subject]) }
   let(:user) { build(:user) }
-  let(:updated_subject) { build(:primary_subject, :primary_with_mathematics) }
   let(:previous_course_name) { "primary with English" }
-  let(:updated_course_name) { "Primary with Mathematics" }
   let(:mail) do
     described_class.course_subjects_updated_email(
       course: course,
       previous_subject_names: [previous_subject.subject_name],
-      updated_subject_names: [updated_subject.subject_name],
       previous_course_name: previous_course_name,
-      updated_course_name: updated_course_name,
       recipient: user,
       )
   end
@@ -63,20 +61,18 @@ describe CourseSubjectsUpdatedEmailMailer, type: :mailer do
     end
 
     context "course has been updated with two subjects" do
-      let(:course) { build(:course, :with_accrediting_provider, name: updated_course_name, updated_at: DateTime.new(2001, 2, 3, 4, 5, 6), subjects: [updated_subject]) }
-      let(:user) { build(:user) }
       let(:first_updated_subject) { build(:secondary_subject, :mathematics) }
       let(:second_updated_subject) { build(:secondary_subject, :biology) }
+      let(:updated_course_name) { "Mathematics with Biology" }
+      let(:course) { build(:course, :with_accrediting_provider, name: updated_course_name, updated_at: DateTime.new(2001, 2, 3, 4, 5, 6), subjects: [first_updated_subject, second_updated_subject]) }
+      let(:user) { build(:user) }
       let(:previous_subject) { build(:secondary_subject, :mathematics) }
       let(:previous_course_name) { "Mathematics" }
-      let(:updated_course_name) { "Mathematics with Biology" }
       let(:mail) do
         described_class.course_subjects_updated_email(
           course: course,
           previous_subject_names: [previous_subject.subject_name],
-          updated_subject_names: [first_updated_subject.subject_name, second_updated_subject.subject_name],
           previous_course_name: previous_course_name,
-          updated_course_name: updated_course_name,
           recipient: user,
           )
       end

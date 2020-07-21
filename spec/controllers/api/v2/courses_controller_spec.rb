@@ -58,9 +58,7 @@ describe API::V2::CoursesController, type: :controller do
               .with(
                 course: an_instance_of(Course),
                 previous_subject_names: ["Primary with English"],
-                updated_subject_names: ["Primary with mathematics"],
                 previous_course_name: previous_course_name,
-                updated_course_name: updated_course_name,
               )
       post :update, params: {
         recruitment_cycle_year: RecruitmentCycle.current_recruitment_cycle.year,

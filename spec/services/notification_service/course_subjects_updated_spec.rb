@@ -53,19 +53,22 @@ module NotificationService
         allow(course).to receive(:findable?).and_return(findable)
       end
 
-      context "with a course that is in the current cycle" do
-        before { setup_notifications }
+      def call_service
+        described_class.call(
+          course: course,
+          previous_subject_names: previous_subject_names,
+          previous_course_name: previous_course_name,
+          )
+      end
 
+      before { setup_notifications }
+
+      context "with a course that is in the current cycle" do
         it "sends notifications" do
           expect(CourseSubjectsUpdatedEmailMailer).to receive(:course_subjects_updated_email)
           expect(course.recruitment_cycle).to eql(RecruitmentCycle.current)
-          described_class.call(
-            course: course,
-            previous_subject_names: previous_subject_names,
-            updated_subject_names: updated_subject_names,
-            previous_course_name: previous_course_name,
-            updated_course_name: updated_course_name
-          )
+
+          call_service
         end
       end
 
@@ -73,24 +76,15 @@ module NotificationService
         let(:provider) { create(:provider, :next_recruitment_cycle) }
         let(:course) { create(:course, accredited_body_code: accredited_body.provider_code, provider: provider) }
 
-        before { setup_notifications }
-
         it "does not send a notification" do
           expect(CourseSubjectsUpdatedEmailMailer).to_not receive(:course_subjects_updated_email)
           expect(course.recruitment_cycle).to_not eql(RecruitmentCycle.current)
-          described_class.call(
-            course: course,
-            previous_subject_names: previous_subject_names,
-            updated_subject_names: updated_subject_names,
-            previous_course_name: previous_course_name,
-            updated_course_name: updated_course_name,
-          )
+
+          call_service
         end
       end
 
       context "non self-accredited course" do
-        before { setup_notifications }
-
         context "that is findable" do
           it "mails subscribed users" do
             expect(CourseSubjectsUpdatedEmailMailer)
@@ -98,19 +92,11 @@ module NotificationService
               .with(
               course: course,
               previous_subject_names: previous_subject_names,
-              updated_subject_names: updated_subject_names,
               previous_course_name: previous_course_name,
-              updated_course_name: updated_course_name,
               recipient: subscribed_user,).and_return(mailer = double)
             expect(mailer).to receive(:deliver_later).with(queue: "mailer")
 
-            described_class.call(
-              course: course,
-              previous_subject_names: previous_subject_names,
-              updated_subject_names: updated_subject_names,
-              previous_course_name: previous_course_name,
-              updated_course_name: updated_course_name,
-            )
+            call_service
           end
 
           it "does not email non subscribed users" do
@@ -118,13 +104,8 @@ module NotificationService
               .with(course, non_subscribed_user)
             expect(CourseSubjectsUpdatedEmailMailer).not_to receive(:course_subjects_updated_email)
               .with(course, user_subscribed_to_other_provider)
-            described_class.call(
-              course: course,
-              previous_subject_names: previous_subject_names,
-              updated_subject_names: updated_subject_names,
-              previous_course_name: previous_course_name,
-              updated_course_name: updated_course_name
-            )
+
+            call_service
           end
         end
 
@@ -134,13 +115,8 @@ module NotificationService
           it "does not mail subscribed users" do
             expect(CourseSubjectsUpdatedEmailMailer)
               .not_to receive(:course_subjects_updated_email)
-            described_class.call(
-              course: course,
-              previous_subject_names: previous_subject_names,
-              updated_subject_names: updated_subject_names,
-              previous_course_name: previous_course_name,
-              updated_course_name: updated_course_name,
-            )
+
+            call_service
           end
         end
       end
@@ -154,13 +130,7 @@ module NotificationService
           expect(CourseSubjectsUpdatedEmailMailer)
             .not_to receive(:course_subjects_updated_email)
 
-          described_class.call(
-            course: course,
-            previous_subject_names: previous_subject_names,
-            updated_subject_names: updated_subject_names,
-            previous_course_name: previous_course_name,
-            updated_course_name: updated_course_name,
-          )
+          call_service
         end
       end
     end
