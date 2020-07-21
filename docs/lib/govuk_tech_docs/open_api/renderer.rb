@@ -298,6 +298,14 @@ module GovukTechDocs
         @schemas_data ||= @document.components.schemas
       end
 
+      def format_possible_value(possible_value)
+        if possible_value == ""
+          "<em>empty string</em>"
+        else
+          possible_value
+        end
+      end
+
       def properties_for_schema(schema_name)
         schema_data = schemas_data.find { |s| s[0] == schema_name }
 
