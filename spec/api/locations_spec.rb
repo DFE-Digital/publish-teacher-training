@@ -27,10 +27,10 @@ describe "API" do
                 in: :query,
                 schema: { "$ref" => "#/components/schemas/Pagination" },
                 type: :object,
-                style: :form,
-                explode: false,
+                style: :deepObject,
+                explode: true,
                 required: false,
-                example: "page[page]=2&page[per_page]=10",
+                example: { page: 2, per_page: 10 },
                 description: "Pagination options to navigate through the collection."
 
       response "200", "The collection of locations for the specified course." do

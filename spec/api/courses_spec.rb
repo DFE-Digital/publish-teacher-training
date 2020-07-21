@@ -26,7 +26,7 @@ describe "API" do
                 explode: true,
                 required: false,
                 description: "Refine courses to return.",
-                example: "filter[has_vacancies]=true&filter[subjects]=00,01"
+                example: { has_vacancies: true, subjects: "00,01" }
       parameter name: :sort,
                 in: :query,
                 schema: { "$ref" => "#/components/schemas/Sort" },
@@ -40,10 +40,10 @@ describe "API" do
                 in: :query,
                 schema: { "$ref" => "#/components/schemas/Pagination" },
                 type: :object,
-                style: :form,
-                explode: false,
+                style: :deepObject,
+                explode: true,
                 required: false,
-                example: "page[page]=2&page[per_page]=10",
+                example: { page: 2, per_page: 10 },
                 description: "Pagination options to navigate through the collection."
 
       response "200", "The collection of courses." do
