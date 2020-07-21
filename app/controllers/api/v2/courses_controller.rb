@@ -111,6 +111,12 @@ module API
 
           @course.course_subjects.each(&:save)
 
+          NotificationService::CourseSubjectsUpdated.call(
+            course: @course,
+            previous_subject_names: @previous_subject_names,
+            previous_course_name: @previous_course_name,
+          ) if subject_ids
+
           render jsonapi: @course.reload
         else
           render jsonapi_errors: @course.errors, status: :unprocessable_entity
@@ -188,28 +194,17 @@ module API
         if request_has_duplicate_subject_ids?
           @course.errors.add(:subjects, :duplicate)
         else
-          previous_subject_names = subject_names_for(@course)
-          previous_course_name = @course.name
-          @course.subjects = []
+          @previous_subject_names = subject_names_for(@course)
+          @previous_course_name = @course.name
 
+          @course.subjects = []
           @course.subjects = Subject.find(subject_ids)
 
           subject_ids.each_with_index do |id, index|
             @course.course_subjects.select { |cs| cs.subject_id == id.to_i }.first.position = index
           end
 
-          updated_subject_names = subject_names_for(@course)
-          updated_course_name = @course.generate_name
-
-          @course.name = updated_course_name
-
-          NotificationService::CourseSubjectsUpdated.call(
-            course: @course,
-            previous_subject_names: previous_subject_names,
-            updated_subject_names: updated_subject_names,
-            previous_course_name: previous_course_name,
-            updated_course_name: updated_course_name,
-          )
+          @course.name = @course.generate_name
         end
       end
 
