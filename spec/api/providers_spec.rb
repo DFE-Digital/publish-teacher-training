@@ -12,14 +12,6 @@ describe "API" do
                 required: true,
                 description: "The starting year of the recruitment cycle.",
                 example: "2020"
-      parameter name: :filter,
-                in: :query,
-                schema: { "$ref" => "#/components/schemas/Filter" },
-                type: :object,
-                style: :deepObject,
-                explode: true,
-                required: false,
-                description: "Refine courses to return."
       parameter name: :sort,
                 in: :query,
                 schema: { "$ref" => "#/components/schemas/Sort" },
@@ -33,10 +25,10 @@ describe "API" do
                 in: :query,
                 schema: { "$ref" => "#/components/schemas/Pagination" },
                 type: :object,
-                style: :form,
-                explode: false,
+                style: :deepObject,
+                explode: true,
                 required: false,
-                example: "page[page]=2&page[per_page]=10",
+                example: { page: 2, per_page: 10 },
                 description: "Pagination options to navigate through the collection."
 
       response "200", "Collection of providers." do
