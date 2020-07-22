@@ -27,11 +27,7 @@ class CourseSubjectsUpdatedEmailMailer < GovukNotifyRails::Mailer
 private
 
   def format(subject_names)
-    if subject_names.length == 1
-      subject_names.first
-    else
-      subject_names.join(", ")
-    end
+    subject_names.join(", ")
   end
 
   def create_course_url(course)

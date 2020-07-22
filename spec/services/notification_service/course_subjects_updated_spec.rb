@@ -6,8 +6,8 @@ module NotificationService
       let(:accredited_body) { create(:provider, :accredited_body) }
       let(:other_accredited_body) { create(:provider, :accredited_body) }
       let(:course) { create(:course, accredited_body_code: accredited_body.provider_code) }
-      let(:previous_subject_names) {['primary with english']}
-      let(:updated_subject_names) {['primary with mathematics']}
+      let(:previous_subject_names) { ["primary with english"] }
+      let(:updated_subject_names) { ["primary with mathematics"] }
       let(:previous_course_name) { previous_subject_names.first }
       let(:updated_course_name) { updated_subject_names.first }
 
@@ -90,10 +90,11 @@ module NotificationService
             expect(CourseSubjectsUpdatedEmailMailer)
               .to receive(:course_subjects_updated_email)
               .with(
-              course: course,
-              previous_subject_names: previous_subject_names,
-              previous_course_name: previous_course_name,
-              recipient: subscribed_user,).and_return(mailer = double)
+                course: course,
+                previous_subject_names: previous_subject_names,
+                previous_course_name: previous_course_name,
+                recipient: subscribed_user,
+).and_return(mailer = double)
             expect(mailer).to receive(:deliver_later).with(queue: "mailer")
 
             call_service

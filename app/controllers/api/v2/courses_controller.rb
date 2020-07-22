@@ -111,11 +111,13 @@ module API
 
           @course.course_subjects.each(&:save)
 
-          NotificationService::CourseSubjectsUpdated.call(
-            course: @course,
-            previous_subject_names: @previous_subject_names,
-            previous_course_name: @previous_course_name,
-          ) if subject_ids
+          if subject_ids
+            NotificationService::CourseSubjectsUpdated.call(
+              course: @course,
+              previous_subject_names: @previous_subject_names,
+              previous_course_name: @previous_course_name,
+            )
+          end
 
           render jsonapi: @course.reload
         else

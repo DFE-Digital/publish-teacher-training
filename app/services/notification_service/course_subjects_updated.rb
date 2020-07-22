@@ -31,7 +31,7 @@ module NotificationService
     attr_reader :course, :previous_subject_names, :previous_course_name
 
     def users
-      @user ||= User.joins(:user_notifications).merge(UserNotification.course_update_notification_requests(course.accredited_body_code))
+      @users ||= User.joins(:user_notifications).merge(UserNotification.course_update_notification_requests(course.accredited_body_code))
     end
 
     def notify_accredited_body?
