@@ -1,6 +1,7 @@
 en:
   course:
     update_email:
+      name: "title"
       age_range_in_years: "age range"
       qualification: "outcome"
       study_mode: "study mode"

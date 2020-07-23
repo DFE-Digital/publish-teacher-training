@@ -266,7 +266,7 @@ class Course < ApplicationRecord
   after_validation :remove_unnecessary_enrichments_validation_message
 
   def update_notification_attributes
-    %w[age_range_in_years qualification study_mode maths english science]
+    %w[name age_range_in_years qualification study_mode maths english science]
   end
 
   def self.get_by_codes(year, provider_code, course_code)

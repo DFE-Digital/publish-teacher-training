@@ -140,4 +140,34 @@ describe CourseUpdateEmailMailer, type: :mailer do
       end
     end
   end
+
+  context "course name is updated" do
+    let(:previous_name) { course.name }
+    let(:mail) do
+      course.name = "new course"
+      described_class.course_update_email(
+        course: course,
+        attribute_name: "name",
+        original_value: previous_name,
+        updated_value: "new course",
+        recipient: user,
+        )
+    end
+
+    before do
+      allow(CourseAttributeFormatterService)
+        .to receive(:call)
+              .with(name: "name", value: previous_name)
+              .and_return("ORIGINAL")
+
+      allow(CourseAttributeFormatterService)
+        .to receive(:call)
+              .with(name: "name", value: "new course")
+              .and_return("UPDATED")
+    end
+
+    it "includes the original course name in the personalisation" do
+      expect(mail.govuk_notify_personalisation[:course_name]).to eq(previous_name)
+    end
+  end
 end

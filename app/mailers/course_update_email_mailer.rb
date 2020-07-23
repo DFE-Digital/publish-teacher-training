@@ -12,7 +12,7 @@ class CourseUpdateEmailMailer < GovukNotifyRails::Mailer
 
     set_personalisation(
       provider_name: course.provider.provider_name,
-      course_name: course.name,
+      course_name: set_course_name(course, attribute_name, original_value),
       course_code: course.course_code,
       course_description: course.description,
       course_funding_type: course.funding_type,
@@ -36,5 +36,11 @@ private
 
   def formatter
     CourseAttributeFormatterService
+  end
+
+  def set_course_name(course, attribute_name, original)
+    return original if attribute_name == "name"
+
+    course.name
   end
 end
