@@ -120,22 +120,22 @@ describe CourseUpdateEmailMailer, type: :mailer do
             updated_value: scenario[:updated_value],
             recipient: user,
             )
+        end
 
-          before do
-            allow(CourseAttributeFormatterService)
-              .to receive(:call)
-                    .with(name: "study_mode", value: scenario[:original_value])
-                    .and_return("ORIGINAL")
+        before do
+          allow(CourseAttributeFormatterService)
+            .to receive(:call)
+                  .with(name: "study_mode", value: scenario[:original_value])
+                  .and_return("ORIGINAL")
 
-            allow(CourseAttributeFormatterService)
-              .to receive(:call)
-                    .with(name: "study_mode", value: scenario[:updated_value])
-                    .and_return("UPDATED")
-          end
+          allow(CourseAttributeFormatterService)
+            .to receive(:call)
+                  .with(name: "study_mode", value: scenario[:updated_value])
+                  .and_return("UPDATED")
+        end
 
-          it "includes the updated detail in the personalisation" do
-            expect(mail.govuk_notify_personalisation[:attribute_changed]).to eq("study mode")
-          end
+        it "includes the updated detail in the personalisation" do
+          expect(mail.govuk_notify_personalisation[:attribute_changed]).to eq("study mode")
         end
       end
     end
