@@ -16,6 +16,16 @@ describe "GET v3/recruitment_cycles/:year/courses" do
     next_course
   end
 
+  describe "request_id" do
+    it "stores request_id from header" do
+      headers = { "X-Request-Id" => "hello" }
+      hash = double
+      expect(RequestStore).to receive(:store).and_return(hash)
+      expect(hash).to receive(:[]=).with(:request_id, "hello")
+      get request_path, headers: headers
+    end
+  end
+
   describe "pagination" do
     it "returns a paginated list of courses in the recruitment cycle" do
       get request_path
