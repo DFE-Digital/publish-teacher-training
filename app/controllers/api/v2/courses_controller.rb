@@ -150,9 +150,12 @@ module API
         create_new_course
       end
 
-      def send_vacancies_filled_notification
+      def send_vacancies_updated_notification
         authorize @course
-        NotificationService::CourseVacanciesFilled.call(course: @course)
+        NotificationService::CourseVacanciesUpdated.call(
+          course: @course,
+          vacancies_filled: params.dig(:_jsonapi, :vacancies_filled),
+        )
       end
 
     private
