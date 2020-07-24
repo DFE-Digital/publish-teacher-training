@@ -95,5 +95,28 @@ describe API::V2::CoursesController, type: :controller do
         expect(course.reload.name).to eql("new course name")
       end
     end
+
+    context "updating sites" do
+      let(:site1) { create(:site, location_name: "location 1") }
+      let(:site2) { create(:site, location_name: "location 2") }
+      let(:site_status) { create(:site_status, :running, site: site1) }
+      let(:provider) { create(:provider, sites: [site1, site2]) }
+      let(:course) { create(:course, provider: provider, site_statuses: [site_status]) }
+
+      it "sends the course update sites notification" do
+        expect(NotificationService::CourseSitesUpdated).to receive(:call).with(
+          course: course,
+          previous_site_names: [site1.location_name],
+          updated_site_names: [site2.location_name],
+        )
+
+        put :update, params: {
+          recruitment_cycle_year: RecruitmentCycle.current_recruitment_cycle.year,
+          provider_code: course.provider.provider_code,
+          code: course.course_code,
+          course: { sites_ids: [site2.id] },
+        }
+      end
+    end
   end
 end
