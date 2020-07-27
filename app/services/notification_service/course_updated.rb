@@ -12,7 +12,7 @@ module NotificationService
       updated_attribute = notifiable_changes.first
       original_value, updated_value = course.saved_changes[updated_attribute]
 
-      users_to_notify.each do |user|
+      users.each do |user|
         CourseUpdateEmailMailer.course_update_email(
           course: course,
           attribute_name: updated_attribute,
@@ -31,10 +31,8 @@ module NotificationService
       course.saved_changes.keys & course.update_notification_attributes
     end
 
-    def users_to_notify
-      User.joins(:user_notifications).merge(
-        UserNotification.course_update_notification_requests(course.accredited_body_code),
-      )
+    def users
+      User.course_update_subscribers(course.accredited_body_code)
     end
 
     def course_needs_to_notify?
