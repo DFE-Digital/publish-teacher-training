@@ -100,6 +100,15 @@ module API
 
         if @course.errors.empty? && @course.valid?
           @course.save
+
+          unless site_ids.nil?
+            NotificationService::CourseSitesUpdated.call(
+              course: @course,
+              previous_site_names: @previous_site_names,
+              updated_site_names: @updated_site_names,
+            )
+          end
+
           @course.course_subjects.each(&:save)
 
           render jsonapi: @course.reload
@@ -162,12 +171,15 @@ module API
       def update_sites
         return if site_ids.nil?
 
+        @previous_site_names = @course.sites.map(&:location_name)
+
         @course.sites = @provider.sites.where(id: site_ids) if site_ids.any?
         # This validation is done at the controller level instead of the model.
         # This is because sites = [] is something that we can validate against,
         # but we can't actually revert easily from what I can tell because of the
         # remove_site! side effects that occur when it's called.
         @course.errors[:sites] << "^You must choose at least one location" if site_ids.empty?
+        @updated_site_names = @course.sites.map(&:location_name) unless site_ids.empty?
       end
 
       def update_subjects
