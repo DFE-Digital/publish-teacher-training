@@ -3,6 +3,7 @@ module API
     class ApplicationController < ActionController::API
       rescue_from ActiveRecord::RecordNotFound, with: :jsonapi_404
 
+      before_action :store_request_id
       before_action :check_disable_pagination
 
       def jsonapi_404
@@ -38,6 +39,10 @@ module API
           .permit(:subject_areas, :subjects, :courses, :providers)
           .to_h
           .map { |k, v| [k, v.split(",").map(&:to_sym)] }
+      end
+
+      def store_request_id
+        RequestStore.store[:request_id] = request.uuid
       end
     end
   end
