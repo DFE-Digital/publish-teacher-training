@@ -277,8 +277,8 @@ GEM
     open_api-rswag-ui (0.1.0)
       actionpack (>= 3.1, < 7.0)
       railties (>= 3.1, < 7.0)
-    parallel (1.19.1)
-    parallel_tests (3.0.0)
+    parallel (1.19.2)
+    parallel_tests (3.1.0)
       parallel
     parser (2.7.0.4)
       ast (~> 2.4.0)
