@@ -9,17 +9,18 @@ module NotificationService
     def call
       return unless course_needs_to_notify?
 
-      updated_attribute = notifiable_changes.first
-      original_value, updated_value = course.saved_changes[updated_attribute]
+      notifiable_changes.each do |updated_attribute|
+        original_value, updated_value = course.saved_changes[updated_attribute]
 
-      users.each do |user|
-        CourseUpdateEmailMailer.course_update_email(
-          course: course,
-          attribute_name: updated_attribute,
-          original_value: original_value,
-          updated_value: updated_value,
-          recipient: user,
-        ).deliver_later(queue: "mailer")
+        users.each do |user|
+          CourseUpdateEmailMailer.course_update_email(
+            course: course,
+            attribute_name: updated_attribute,
+            original_value: original_value,
+            updated_value: updated_value,
+            recipient: user,
+          ).deliver_later(queue: "mailer")
+        end
       end
     end
 
