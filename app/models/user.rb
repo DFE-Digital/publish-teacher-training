@@ -21,6 +21,12 @@ class User < ApplicationRecord
   scope :last_login_since, ->(timestamp) do
     where("last_login_date_utc > ?", timestamp)
   end
+  scope :course_update_subscribers, ->(accredited_body_code) do
+    joins(:user_notifications).merge(UserNotification.course_update_notification_requests(accredited_body_code))
+  end
+  scope :course_publish_subscribers, ->(accredited_body_code) do
+    joins(:user_notifications).merge(UserNotification.course_publish_notification_requests(accredited_body_code))
+  end
 
   validates :email, presence: true, format: { with: /\A.*@.*\z/, message: "must contain @" }
   validate :email_is_lowercase

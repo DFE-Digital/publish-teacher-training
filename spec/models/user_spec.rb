@@ -186,4 +186,85 @@ describe User, type: :model do
       end
     end
   end
+
+  describe "notification subscribers" do
+    let(:accredited_body) { create(:provider, :accredited_body) }
+    let(:other_accredited_body) { create(:provider, :accredited_body) }
+    let(:course) { create(:course, accredited_body_code: accredited_body.provider_code) }
+    let(:subscribed_user) { create(:user) }
+    let(:non_subscribed_user) { create(:user) }
+    let(:user_subscribed_to_other_provider) { create(:user) }
+
+    before do
+      subscribed_notification
+      non_subscribed_notification
+      other_provider_notification
+    end
+
+    describe ".course_update_subscribers" do
+      let(:subscribed_notification) do
+        create(
+          :user_notification,
+          user: subscribed_user,
+          course_update: true,
+          provider_code: accredited_body.provider_code,
+          )
+      end
+
+      let(:non_subscribed_notification) do
+        create(
+          :user_notification,
+          user: non_subscribed_user,
+          course_update: false,
+          provider_code: accredited_body.provider_code,
+          )
+      end
+
+      let(:other_provider_notification) do
+        create(
+          :user_notification,
+          user: user_subscribed_to_other_provider,
+          course_publish: true,
+          provider_code: other_accredited_body.provider_code,
+          )
+      end
+
+      it "returns users who are subscribed to course update notifications for a given accredited body" do
+        expect(User.course_update_subscribers(course.accredited_body_code)).to eq([subscribed_user])
+      end
+    end
+
+    describe ".course_publish_subscribers" do
+      let(:subscribed_notification) do
+        create(
+          :user_notification,
+          user: subscribed_user,
+          course_publish: true,
+          provider_code: accredited_body.provider_code,
+          )
+      end
+
+      let(:non_subscribed_notification) do
+        create(
+          :user_notification,
+          user: non_subscribed_user,
+          course_publish: false,
+          provider_code: accredited_body.provider_code,
+          )
+      end
+
+      let(:other_provider_notification) do
+        create(
+          :user_notification,
+          user: user_subscribed_to_other_provider,
+          course_update: true,
+          provider_code: other_accredited_body.provider_code,
+          )
+      end
+
+      it "includes user who are subscribed to course publish notifications for a given accredited body" do
+        expect(User.course_publish_subscribers(course.accredited_body_code)).to eq([subscribed_user])
+      end
+    end
+  end
 end

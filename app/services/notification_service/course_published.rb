@@ -10,8 +10,6 @@ module NotificationService
       return false unless notify_accredited_body?
       return false unless course.in_current_cycle?
 
-      users = User.joins(:user_notifications).merge(UserNotification.course_publish_notification_requests(course.accredited_body_code))
-
       users.each do |user|
         CoursePublishEmailMailer.course_publish_email(
           course,
@@ -23,6 +21,10 @@ module NotificationService
   private
 
     attr_reader :course
+
+    def users
+      User.course_publish_subscribers(course.accredited_body_code)
+    end
 
     def notify_accredited_body?
       return false if course.self_accredited?
