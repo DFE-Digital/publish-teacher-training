@@ -33,7 +33,7 @@ Authorization: Bearer your_api_key
 ## Example
 
 ```shell
-curl "https://api2.publish-teacher-training-courses.service.gov.uk/api/v1/2019/subjects" -H "Authorization: Bearer your_api_key"
+curl "https://api.publish-teacher-training-courses.service.gov.uk/api/v1/2019/subjects" -H "Authorization: Bearer your_api_key"
 ```
 
 Replace `your_api_key` with your issued API key.
@@ -56,7 +56,7 @@ The expected usage is as follows:
 ## Populating an empty system
 
 1. Call the endpoint with no query parameters,
-   e.g. `GET https://api2.publish-teacher-training-courses.service.gov.uk/api/v1/<recruitment_cycle>/providers`
+   e.g. `GET https://api.publish-teacher-training-courses.service.gov.uk/api/v1/<recruitment_cycle>/providers`
 2. The API will return the first page of records, and will include a response
    header indicating the url needed to request the next page of records.
 3. Make another GET using the provided next page url.
@@ -85,7 +85,7 @@ The header will be of the form with the contents of `<...>` replaced with the
 correct url:
 
 ```
-Link: <https://api2.publish-teacher-training-courses.service.gov.uk/api/v1/2019/providers?...>; rel="next"
+Link: <https://api.publish-teacher-training-courses.service.gov.uk/api/v1/2019/providers?...>; rel="next"
 ```
 
 **The query parameters are considered an internal concern of the API** and
@@ -157,13 +157,13 @@ This endpoint retrieves a paginated list of courses.
 First page of the complete data set:
 
 ```shell
-curl -v "https://api2.publish-teacher-training-courses.service.gov.uk/api/v1/2019/courses" -H "Authorization: Bearer your_api_key"
+curl -v "https://api.publish-teacher-training-courses.service.gov.uk/api/v1/2019/courses" -H "Authorization: Bearer your_api_key"
 ```
 
 Subsequent pages / incremental fetch, using the "next" url in the "Link" header from the previous request:
 
 ```shell
-curl -v "https://api2.publish-teacher-training-courses.service.gov.uk/api/v1/2019/courses?changed_since=xxx" -H "Authorization: Bearer your_api_key"
+curl -v "https://api.publish-teacher-training-courses.service.gov.uk/api/v1/2019/courses?changed_since=xxx" -H "Authorization: Bearer your_api_key"
 ```
 
 ### What constitutes a course change
@@ -334,7 +334,7 @@ This endpoint retrieves all subjects.
 ### Example HTTP Request
 
 ```shell
-curl "https://api2.publish-teacher-training-courses.service.gov.uk/api/v1/2019/subjects" -H "Authorization: Bearer your_api_key"
+curl "https://api.publish-teacher-training-courses.service.gov.uk/api/v1/2019/subjects" -H "Authorization: Bearer your_api_key"
 ```
 
 ### List of known subjects
@@ -421,7 +421,7 @@ This endpoint retrieves all institutions.
 ### Example HTTP Request
 
 ```shell
-curl "https://api2.publish-teacher-training-courses.service.gov.uk/api/v1/2019/providers" -H "Authorization: Bearer your_api_key"
+curl "https://api.publish-teacher-training-courses.service.gov.uk/api/v1/2019/providers" -H "Authorization: Bearer your_api_key"
 ```
 
 ### What constitutes a provider change

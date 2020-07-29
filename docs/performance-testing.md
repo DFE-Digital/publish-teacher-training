@@ -21,7 +21,7 @@ bundle exec rspec spec/performance/pre_deploy_spec.rb
 To specify an environment set the `CUSTOM_HOST_NAME` environment variable.
 
 ```
-CUSTOM_HOST_NAME=https://api2.publish-teacher-training-courses.service.gov.uk bundle exec rspec spec/performance/pre_deploy_spec.rb
+CUSTOM_HOST_NAME=https://api.publish-teacher-training-courses.service.gov.uk bundle exec rspec spec/performance/pre_deploy_spec.rb
 ```
 
 ## Configuration ENV vars
