@@ -3,7 +3,13 @@ module API
     module V1
       class ProvidersController < API::Public::V1::ApplicationController
         def index
-          render jsonapi: recruitment_cycle.providers.by_name_ascending, class: { Provider: API::Public::V1::SerializableProvider }, fields: { providers: provider_fields }
+          providers = recruitment_cycle.providers
+          providers = if sort_by_provider_ascending?
+                        providers.by_name_ascending
+                      else
+                        providers.by_name_descending
+                      end
+          render jsonapi: providers, class: { Provider: API::Public::V1::SerializableProvider }, fields: { providers: provider_fields }
         end
 
         def show
@@ -23,6 +29,18 @@ module API
         end
 
       private
+
+        def sort_by_provider_ascending?
+          sort_field.include?("name") || !sort_by_provider_descending?
+        end
+
+        def sort_by_provider_descending?
+          sort_field.include?("-name")
+        end
+
+        def sort_field
+          @sort_field ||= Set.new(params.dig(:sort)&.split(","))
+        end
 
         def recruitment_cycle
           RecruitmentCycle.find_by(
