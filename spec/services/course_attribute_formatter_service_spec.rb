@@ -1,4 +1,4 @@
-require_relative "../../app/services/course_attribute_formatter_service"
+require "rails_helper"
 
 RSpec.describe CourseAttributeFormatterService do
   subject { CourseAttributeFormatterService.call(name: name, value: value) }
@@ -88,28 +88,28 @@ RSpec.describe CourseAttributeFormatterService do
   shared_examples_for "entry requirements" do
     context "must_have_qualification_at_application_time" do
       let(:value) { "must_have_qualification_at_application_time" }
-      let(:expected_value) { "must have qualification at application time" }
+      let(:expected_value) { "Must have the GCSE" }
 
       it { is_expected.to eq(expected_value) }
     end
 
     context "equivalence_test" do
       let(:value) { "equivalence_test" }
-      let(:expected_value) { "equivalence test" }
+      let(:expected_value) { "Equivalency test" }
 
       it { is_expected.to eq(expected_value) }
     end
 
     context "expect_to_achieve_before_training_begins" do
       let(:value) { "expect_to_achieve_before_training_begins" }
-      let(:expected_value) { "expect to achieve before training begins" }
+      let(:expected_value) { "Taking the GCSE" }
 
       it { is_expected.to eq(expected_value) }
     end
 
     context "not_required" do
       let(:value) { "not_required" }
-      let(:expected_value) { "not required" }
+      let(:expected_value) { "Not required" }
 
       it { is_expected.to eq(expected_value) }
     end

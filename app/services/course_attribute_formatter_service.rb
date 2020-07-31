@@ -54,7 +54,7 @@ private
   end
 
   def entry_requirements_value
-    strip_underscores
+    I18n.t("course.values.entry_requirements.#{value}")
   end
 
   def strip_underscores

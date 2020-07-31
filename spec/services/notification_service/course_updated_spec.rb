@@ -18,6 +18,8 @@ module NotificationService
         :course,
         age_range_in_years: "3_to_7",
         accrediting_provider: accredited_body,
+        english: "expect_to_achieve_before_training_begins",
+        maths: "expect_to_achieve_before_training_begins",
       )
     end
 
@@ -76,6 +78,26 @@ module NotificationService
           end
 
           course.age_range_in_years = "7_to_14"
+          course.save
+          service_call
+        end
+
+        it "sends notifications for each changed attribute" do
+          %w[english maths].each do |attribute_name|
+            expect(CourseUpdateEmailMailer)
+              .to receive(:course_update_email)
+              .with(
+                course: course,
+                attribute_name: attribute_name,
+                original_value: "expect_to_achieve_before_training_begins",
+                updated_value: "must_have_qualification_at_application_time",
+                recipient: subscribed_user1,
+              ).and_return(mailer = double)
+            expect(mailer).to receive(:deliver_later).with(queue: "mailer")
+          end
+
+          course.english = "must_have_qualification_at_application_time"
+          course.maths = "must_have_qualification_at_application_time"
           course.save
           service_call
         end

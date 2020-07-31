@@ -5,9 +5,9 @@ en:
       age_range_in_years: "age range"
       qualification: "outcome"
       study_mode: "study mode"
-      science: "entry requirements"
-      maths: "entry requirements"
-      english: "entry requirements"
+      science: "Science GCSE requirement"
+      maths: "Maths GCSE requirement"
+      english: "English GCSE requirement"
     values:
       qualification:
         qts: "QTS"
@@ -15,6 +15,11 @@ en:
         pgce: "PGCE"
         pgde_with_qts: "PGDE with QTS"
         pgde: "PGDE"
+      entry_requirements:
+        must_have_qualification_at_application_time: "Must have the GCSE"
+        expect_to_achieve_before_training_begins: "Taking the GCSE"
+        equivalence_test: "Equivalency test"
+        not_required: "Not required"
   activerecord:
     attributes:
       course:
