@@ -7,14 +7,14 @@ describe "GET public/v1/recruitment_cycle/:recruitment_cycle_year/providers" do
   let!(:provider) {
     create(:provider,
            provider_code: "1AT",
-           provider_name: "First provider",
+           provider_name: "First",
            organisations: [organisation],
            contacts: [contact])
   }
 
   let(:contact) { build(:contact) }
 
-  let(:json_response) { JSON.parse(response.body) }
+  let(:json_response) { JSON.parse(subject.body) }
   let(:data) { json_response["data"] }
 
   def perform_request
@@ -33,8 +33,6 @@ describe "GET public/v1/recruitment_cycle/:recruitment_cycle_year/providers" do
     it { should have_http_status(:success) }
 
     it "has a data section with the correct attributes" do
-      perform_request
-
       expect(json_response).to eq(
         "data" => [{
           "id" => provider.id.to_s,
@@ -65,17 +63,22 @@ describe "GET public/v1/recruitment_cycle/:recruitment_cycle_year/providers" do
     end
   end
 
-  context "with unalphabetical ordering in the database" do
-    let(:second_alphabetical_provider) do
-      create(:provider, provider_name: "Zork", organisations: [organisation])
-    end
+  describe "sorting" do
+    let!(:provider2) {
+      create(:provider,
+             provider_code: "0AT",
+             provider_name: "Before",
+             organisations: [organisation],
+             contacts: [contact])
+    }
 
-    before do
-      second_alphabetical_provider
-
-      # This moves it last in the order that it gets fetched by default.
-      provider.update(provider_name: "Acme")
-    end
+    let!(:provider3) {
+      create(:provider,
+             provider_code: "2AT",
+             provider_name: "Second",
+             organisations: [organisation],
+             contacts: [contact])
+    }
 
     let(:provider_names_in_response) {
       data.map { |provider|
@@ -83,15 +86,62 @@ describe "GET public/v1/recruitment_cycle/:recruitment_cycle_year/providers" do
       }
     }
 
-    it "returns them in alphabetical order" do
-      perform_request
-      expect(provider_names_in_response).to eq(%w(Acme Zork))
+    context "default ordering" do
+      it "returns them in a-z order" do
+        expect(provider_names_in_response).to eq(%w(Before First Second))
+      end
+
+      describe "passing in sort param" do
+        let(:request_path) {
+          "/api/public/v1/recruitment_cycles/#{recruitment_cycle.year}/providers?sort=#{sort_field}"
+        }
+        context "name" do
+          let(:sort_field) {
+            "name"
+          }
+
+
+          it "returns them in a-z order" do
+            expect(provider_names_in_response).to eq(%w(Before First Second))
+          end
+        end
+
+        context "-name" do
+          let(:sort_field) {
+            "-name"
+          }
+
+          it "returns them in z-a order" do
+            expect(provider_names_in_response).to eq(%w(Second First Before))
+          end
+        end
+
+        context "name,-name" do
+          let(:sort_field) {
+            "name,-name"
+          }
+
+          it "returns them in a-z order" do
+            expect(provider_names_in_response).to eq(%w(Before First Second))
+          end
+        end
+
+        context "-name,name" do
+          let(:sort_field) {
+            "-name,name"
+          }
+
+          it "returns them in a-z order" do
+            expect(provider_names_in_response).to eq(%w(Before First Second))
+          end
+        end
+      end
     end
   end
 
   context "with two recruitment cycles" do
     let(:next_recruitment_cycle) { create :recruitment_cycle, :next }
-    let(:next_provider) {
+    let!(:next_provider) {
       create :provider,
              organisations: [organisation],
              provider_code: provider.provider_code,
@@ -100,10 +150,6 @@ describe "GET public/v1/recruitment_cycle/:recruitment_cycle_year/providers" do
 
     describe "making a request without specifying a recruitment cycle" do
       it "only returns data for the current recruitment cycle" do
-        next_provider
-
-        perform_request
-
         expect(data.count).to eq 1
         expect(data.first)
           .to have_attribute("recruitment_cycle_year")
@@ -117,10 +163,6 @@ describe "GET public/v1/recruitment_cycle/:recruitment_cycle_year/providers" do
       }
 
       it "only returns data for the next recruitment cycle" do
-        next_provider
-
-        perform_request
-
         expect(data.count).to eq 1
         expect(data.first)
           .to have_attribute("recruitment_cycle_year")
@@ -130,8 +172,6 @@ describe "GET public/v1/recruitment_cycle/:recruitment_cycle_year/providers" do
   end
 
   context "Sparse fields" do
-    before { perform_request }
-
     context "Only returning specified fields" do
       let(:request_path) { "/api/public/v1/recruitment_cycles/#{recruitment_cycle.year}/providers?fields[providers]=name,recruitment_cycle_year" }
 
