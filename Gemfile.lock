@@ -211,7 +211,7 @@ GEM
       jsonapi-deserializable (~> 0.2.0)
       jsonapi-serializable (~> 0.3.0)
     jsonapi-renderer (0.2.2)
-    jsonapi-rspec (0.0.7)
+    jsonapi-rspec (0.0.8)
       rspec-core
       rspec-expectations
     jsonapi-serializable (0.3.1)
