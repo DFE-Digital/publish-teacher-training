@@ -58,6 +58,10 @@ private
   end
 
   def strip_underscores
-    value.tr("_", " ")
+    if value
+      value.tr("_", " ")
+    else
+      "unknown"
+    end
   end
 end
