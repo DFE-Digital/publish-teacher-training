@@ -3,6 +3,44 @@ require "rails_helper"
 RSpec.describe CourseAttributeFormatterService do
   subject { CourseAttributeFormatterService.call(name: name, value: value) }
 
+  shared_examples_for "value is nil" do
+    context "with an unknown value" do
+      let(:value) { nil }
+
+      it { is_expected.to eq("unknown") }
+    end
+  end
+
+  shared_examples_for "entry requirements" do
+    context "must_have_qualification_at_application_time" do
+      let(:value) { "must_have_qualification_at_application_time" }
+      let(:expected_value) { "Must have the GCSE" }
+
+      it { is_expected.to eq(expected_value) }
+    end
+
+    context "equivalence_test" do
+      let(:value) { "equivalence_test" }
+      let(:expected_value) { "Equivalency test" }
+
+      it { is_expected.to eq(expected_value) }
+    end
+
+    context "expect_to_achieve_before_training_begins" do
+      let(:value) { "expect_to_achieve_before_training_begins" }
+      let(:expected_value) { "Taking the GCSE" }
+
+      it { is_expected.to eq(expected_value) }
+    end
+
+    context "not_required" do
+      let(:value) { "not_required" }
+      let(:expected_value) { "Not required" }
+
+      it { is_expected.to eq(expected_value) }
+    end
+  end
+
   context "with an attribute that doesn't require formatting" do
     let(:name) { "name" }
     let(:value) { "course name" }
@@ -19,6 +57,8 @@ RSpec.describe CourseAttributeFormatterService do
     it "removes underscores" do
       expect(subject).to eq("10 to 14")
     end
+
+    it_behaves_like "value is nil"
   end
 
   context "with a qualification" do
@@ -63,6 +103,8 @@ RSpec.describe CourseAttributeFormatterService do
   context "with a study mode" do
     let(:name) { "study_mode" }
 
+    it_behaves_like "value is nil"
+
     context "full_time" do
       let(:value) { "full_time" }
       let(:expected_value) { "full time" }
@@ -80,36 +122,6 @@ RSpec.describe CourseAttributeFormatterService do
     context "part_time" do
       let(:value) { "part_time" }
       let(:expected_value) { "part time" }
-
-      it { is_expected.to eq(expected_value) }
-    end
-  end
-
-  shared_examples_for "entry requirements" do
-    context "must_have_qualification_at_application_time" do
-      let(:value) { "must_have_qualification_at_application_time" }
-      let(:expected_value) { "Must have the GCSE" }
-
-      it { is_expected.to eq(expected_value) }
-    end
-
-    context "equivalence_test" do
-      let(:value) { "equivalence_test" }
-      let(:expected_value) { "Equivalency test" }
-
-      it { is_expected.to eq(expected_value) }
-    end
-
-    context "expect_to_achieve_before_training_begins" do
-      let(:value) { "expect_to_achieve_before_training_begins" }
-      let(:expected_value) { "Taking the GCSE" }
-
-      it { is_expected.to eq(expected_value) }
-    end
-
-    context "not_required" do
-      let(:value) { "not_required" }
-      let(:expected_value) { "Not required" }
 
       it { is_expected.to eq(expected_value) }
     end
