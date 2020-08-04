@@ -14,8 +14,13 @@ module NotificationService
     end
 
     let(:course) { create(:course, accrediting_provider: accredited_body) }
+    let(:vacancy_statuses) do
+      [
+        { id: 123456, status: "no_vacancies" },
+      ]
+    end
 
-    let(:service_call) { described_class.call(course: course, vacancies_filled: true) }
+    let(:service_call) { described_class.call(course: course, vacancy_statuses: vacancy_statuses) }
 
     def setup_notifications
       allow(CourseVacanciesUpdatedEmailMailer).to receive(:course_vacancies_updated_email).and_return(double(deliver_later: true))
@@ -28,7 +33,8 @@ module NotificationService
       it "sends notifications" do
         expect(CourseVacanciesUpdatedEmailMailer).to receive(:course_vacancies_updated_email)
         expect(course.recruitment_cycle).to eql(RecruitmentCycle.current)
-        described_class.call(course: course, vacancies_filled: true)
+
+        service_call
       end
     end
 
@@ -41,7 +47,8 @@ module NotificationService
       it "does not send notifications" do
         expect(CourseVacanciesUpdatedEmailMailer).to_not receive(:course_vacancies_updated_email)
         expect(course.recruitment_cycle).to_not eql(RecruitmentCycle.current)
-        described_class.call(course: course, vacancies_filled: true)
+
+        service_call
       end
     end
 
@@ -76,7 +83,100 @@ module NotificationService
 
       it "does not send a notification" do
         expect(CourseVacanciesUpdatedEmailMailer).not_to receive(:course_vacancies_updated_email)
+
         service_call
+      end
+    end
+
+    context "course with multiple locations" do
+      before do
+        setup_notifications
+        allow(course).to receive(:self_accredited?).and_return(false)
+      end
+
+      context "all locations have no vacancies" do
+        let(:vacancy_statuses) do
+          [
+            { id: 123456, status: "no_vacancies" },
+            { id: 789789, status: "no_vacancies" },
+          ]
+        end
+
+        it "sends a notification" do
+          [subscribed_user1, subscribed_user2].each do |user|
+            expect(CourseVacanciesUpdatedEmailMailer)
+              .to receive(:course_vacancies_updated_email)
+                    .with({
+                            course: course,
+                            user: user,
+                            datetime: DateTime.now,
+                            vacancies_filled: true,
+                          })
+          end
+
+          service_call
+        end
+      end
+
+      context "all locations have vacancies" do
+        let(:vacancy_statuses) do
+          [
+            { id: 123456, status: "full_time_vacancies" },
+            { id: 789789, status: "part_time_vacancies" },
+          ]
+        end
+
+        it "sends a notification" do
+          [subscribed_user1, subscribed_user2].each do |user|
+            expect(CourseVacanciesUpdatedEmailMailer)
+              .to receive(:course_vacancies_updated_email)
+                    .with({
+                            course: course,
+                            user: user,
+                            datetime: DateTime.now,
+                            vacancies_filled: false,
+                          })
+          end
+
+          service_call
+        end
+      end
+
+      context "some locations have vacancies" do
+        let(:first_site_status_id) { 123456 }
+        let(:second_site_status_id) { 789789 }
+        let(:first_site_status) { create(:site_status, id: first_site_status_id) }
+        let(:second_site_status) { create(:site_status, id: second_site_status_id) }
+        let(:vacancy_statuses) do
+          [
+            { id: first_site_status_id, status: "no_vacancies" },
+            { id: second_site_status_id, status: "part_time_vacancies" },
+          ]
+        end
+        let(:course) { create(:course, accrediting_provider: accredited_body, site_statuses: [first_site_status, second_site_status]) }
+
+        before do
+          first_site_status
+          second_site_status
+        end
+
+        it "sends a notification" do
+          [subscribed_user1, subscribed_user2].each do |user|
+            expect(CourseVacanciesUpdatedEmailMailer)
+              .to receive(:course_vacancies_partially_updated_email)
+                    .with({
+                            course: course,
+                            user: user,
+                            datetime: DateTime.now,
+                            vacancies_closed: [first_site_status.site.location_name],
+                            vacancies_opened: [second_site_status.site.location_name],
+                          })
+                    .and_return(double(deliver_later: true))
+          end
+
+
+          service_call
+        end
       end
     end
   end
