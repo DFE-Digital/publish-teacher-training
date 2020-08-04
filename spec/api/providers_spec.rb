@@ -19,8 +19,8 @@ describe "API" do
                 style: :form,
                 explode: false,
                 required: false,
-                example: "provider.provider_name,name",
-                description: "Field(s) to sort the courses by."
+                example: "name",
+                description: "Field(s) to sort the providers by."
       parameter name: :page,
                 in: :query,
                 schema: { "$ref" => "#/components/schemas/Pagination" },
