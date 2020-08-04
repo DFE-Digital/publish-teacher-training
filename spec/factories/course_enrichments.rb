@@ -41,11 +41,11 @@ FactoryBot.define do
     financial_support do
       [
         "Please get in contact with the school for any further details.",
-        "The course is Non-Salaried only. ",
+        "The course is Non-Salaried only.",
         "Find out more about the financial support available within our [financial information section](http://localhost:5000/about/financial_support)",
         "Bursaries and scholarships are available to trainees",
         "You may be eligible for a government bursary if you are applying to teach one of our secondary subjects",
-        "DfE bursaries are available for select trainees ",
+        "DfE bursaries are available for select trainees",
         "You can find information about tuition fee loans and other financial help on the Gov.uk website - (https://www.gov.uk/student-finance)",
       ].sample
     end

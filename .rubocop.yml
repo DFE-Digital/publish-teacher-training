@@ -14,6 +14,9 @@ AllCops:
 
 Rails/HasManyOrHasOneDependent:
   Enabled: false
+Rails/InverseOf:
+  Exclude:
+    - app/models/course.rb
 
 Style/HashEachMethods:
   Enabled: true
@@ -21,3 +24,4 @@ Style/HashTransformKeys:
   Enabled: true
 Style/HashTransformValues:
   Enabled: true
+

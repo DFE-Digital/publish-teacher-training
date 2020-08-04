@@ -38,7 +38,8 @@ FactoryBot.define do
     subject_code { sample_subject.second }
 
     after(:build) do |subject, _level|
-      find_or_create(:financial_incentive, subject: subject)
+      financial_incentive = find_or_create(:financial_incentive, subject: subject)
+      subject.update(financial_incentive: financial_incentive)
     end
 
     trait :art_and_design do
