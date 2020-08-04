@@ -15,6 +15,7 @@ govuk_notify:
   course_vacancies_filled_email_template_id: please_change_me
   course_sites_update_email_template_id: d5c8da46-9aa6-4c0a-8fad-ee782e89dbd3
   course_subjects_updated_email_template_id: b65aef1a-5847-44e6-90e0-88e0ea7898ec
+  course_vacancies_updated_email_template_id: 3ae884e9-8495-44cf-9928-907b89a9f356
 publish_url: http://localhost:3000
 find_url: http://localhost:3002
 mcbg:

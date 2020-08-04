@@ -1,7 +1,7 @@
 require "rails_helper"
 
 module NotificationService
-  describe CourseVacanciesFilled do
+  describe CourseVacanciesUpdated do
     let(:subscribed_user1) { create(:user) }
     let(:subscribed_user2) { create(:user) }
     let(:non_subscribed_user) { create(:user) }
@@ -15,10 +15,10 @@ module NotificationService
 
     let(:course) { create(:course, accrediting_provider: accredited_body) }
 
-    let(:service_call) { described_class.call(course: course) }
+    let(:service_call) { described_class.call(course: course, vacancies_filled: true) }
 
     def setup_notifications
-      allow(CourseVacanciesFilledEmailMailer).to receive(:course_vacancies_filled_email).and_return(double(deliver_later: true))
+      allow(CourseVacanciesUpdatedEmailMailer).to receive(:course_vacancies_updated_email).and_return(double(deliver_later: true))
       user_notifications
     end
 
@@ -26,9 +26,9 @@ module NotificationService
       before { setup_notifications }
 
       it "sends notifications" do
-        expect(CourseVacanciesFilledEmailMailer).to receive(:course_vacancies_filled_email)
+        expect(CourseVacanciesUpdatedEmailMailer).to receive(:course_vacancies_updated_email)
         expect(course.recruitment_cycle).to eql(RecruitmentCycle.current)
-        described_class.call(course: course)
+        described_class.call(course: course, vacancies_filled: true)
       end
     end
 
@@ -38,10 +38,10 @@ module NotificationService
 
       before { setup_notifications }
 
-      it "does not notifications" do
-        expect(CourseVacanciesFilledEmailMailer).to_not receive(:course_vacancies_filled_email)
+      it "does not send notifications" do
+        expect(CourseVacanciesUpdatedEmailMailer).to_not receive(:course_vacancies_updated_email)
         expect(course.recruitment_cycle).to_not eql(RecruitmentCycle.current)
-        described_class.call(course: course)
+        described_class.call(course: course, vacancies_filled: true)
       end
     end
 
@@ -51,14 +51,15 @@ module NotificationService
         allow(course).to receive(:self_accredited?).and_return(false)
       end
 
-      it "sends notifications to users who have elected to recieve notifications" do
+      it "sends notifications to users who have elected to receive notifications" do
         [subscribed_user1, subscribed_user2].each do |user|
-          expect(CourseVacanciesFilledEmailMailer)
-            .to receive(:course_vacancies_filled_email)
+          expect(CourseVacanciesUpdatedEmailMailer)
+            .to receive(:course_vacancies_updated_email)
                   .with(
-                    course,
-                    user,
-                    DateTime.now,
+                    course: course,
+                    user: user,
+                    datetime: DateTime.now,
+                    vacancies_filled: true,
                   ).and_return(mailer = double)
           expect(mailer).to receive(:deliver_later).with(queue: "mailer")
         end
@@ -74,7 +75,7 @@ module NotificationService
       end
 
       it "does not send a notification" do
-        expect(CourseVacanciesFilledEmailMailer).not_to receive(:course_vacancies_filled_email)
+        expect(CourseVacanciesUpdatedEmailMailer).not_to receive(:course_vacancies_updated_email)
         service_call
       end
     end

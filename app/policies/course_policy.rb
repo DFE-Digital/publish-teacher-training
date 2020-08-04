@@ -33,7 +33,7 @@ class CoursePolicy
     user.admin? || user.providers.include?(course.provider)
   end
 
-  def send_vacancies_filled_notification?
+  def send_vacancies_updated_notification?
     user.present?
   end
 

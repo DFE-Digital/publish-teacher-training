@@ -1,9 +1,10 @@
 module NotificationService
-  class CourseVacanciesFilled
+  class CourseVacanciesUpdated
     include ServicePattern
 
-    def initialize(course:)
+    def initialize(course:, vacancies_filled:)
       @course = course
+      @vacancies_filled = vacancies_filled
     end
 
     def call
@@ -12,17 +13,18 @@ module NotificationService
       # Reusing existing scoping as we're doing all or nothing notifications atm
       # for course_publish_notification_requests
       users.each do |user|
-        CourseVacanciesFilledEmailMailer.course_vacancies_filled_email(
-          course,
-          user,
-          DateTime.now,
+        CourseVacanciesUpdatedEmailMailer.course_vacancies_updated_email(
+          course: course,
+          user: user,
+          datetime: DateTime.now,
+          vacancies_filled: vacancies_filled,
         ).deliver_later(queue: "mailer")
       end
     end
 
   private
 
-    attr_reader :course
+    attr_reader :course, :vacancies_filled
 
     def users
       User.course_publish_subscribers(course.accredited_body_code)

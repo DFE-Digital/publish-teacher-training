@@ -1,15 +1,17 @@
-class CourseVacanciesFilledEmailMailer < GovukNotifyRails::Mailer
+class CourseVacanciesUpdatedEmailMailer < GovukNotifyRails::Mailer
   include TimeFormat
 
-  def course_vacancies_filled_email(course, user, datetime)
-    set_template(Settings.govuk_notify.course_vacancies_filled_email_template_id)
+  def course_vacancies_updated_email(course:, user:, datetime:, vacancies_filled:)
+    set_template(Settings.govuk_notify.course_vacancies_updated_email_template_id)
 
     set_personalisation(
       provider_name: course.provider.provider_name,
       course_name: course.name,
       course_code: course.course_code,
-      vacancies_filled_datetime: gov_uk_format(datetime),
+      vacancies_updated_datetime: gov_uk_format(datetime),
       course_url: create_course_url(course),
+      vacancies_filled: vacancies_filled ? "yes" : "no",
+      vacancies_opened: vacancies_filled ? "no" : "yes",
     )
 
     mail(to: user.email)

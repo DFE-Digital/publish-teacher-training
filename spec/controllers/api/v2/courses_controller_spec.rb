@@ -82,15 +82,18 @@ describe API::V2::CoursesController, type: :controller do
     end
   end
 
-  describe "#send_vacancies_filled_notification" do
+  describe "#send_vacancies_update_notification" do
     let(:enrichment) { build(:course_enrichment, :published) }
 
-    it "sends the course vacancies full notification" do
-      expect(NotificationService::CourseVacanciesFilled).to receive(:call).with(course: course)
-      post :send_vacancies_filled_notification, params: {
+    it "sends the course vacancies updated notification" do
+      expect(NotificationService::CourseVacanciesUpdated).to receive(:call).with(course: course, vacancies_filled: "true")
+      post :send_vacancies_updated_notification, params: {
         recruitment_cycle_year: RecruitmentCycle.current_recruitment_cycle.year,
         provider_code: course.provider.provider_code,
         code: course.course_code,
+        _jsonapi: {
+          vacancies_filled: true,
+        },
       }
     end
   end
