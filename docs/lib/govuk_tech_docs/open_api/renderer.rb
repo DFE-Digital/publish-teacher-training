@@ -41,7 +41,7 @@ module GovukTechDocs
       def path(text)
         path = @document.paths[text]
         id = text.parameterize
-        operations = operations(path, id)
+        operations = operations(text: text, path: path, path_id: id)
         @template_path.result(binding)
       end
 
@@ -122,11 +122,12 @@ module GovukTechDocs
         schemas
       end
 
-      def operations(path, path_id)
+      def operations(text:, path:, path_id:)
         output = ""
         operations = get_operations(path)
         operations.compact.each do |key, operation|
           id = "#{path_id}-#{key.parameterize}"
+          text = text
           parameters = parameters(operation, id)
           responses = responses(operation, id)
           output += @template_operation.result(binding)

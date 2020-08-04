@@ -1,5 +1,5 @@
 <% if responses.any? %>
-  <h4 id="<%= id %>">Responses</h4>
+  <h3 id="<%= id %>">Responses</h3>
 
   <table>
     <thead>
@@ -28,7 +28,7 @@
     </tbody>
   </table>
 
-  <h4 id="<%= id %>-examples">Response examples</h4>
+  <h3 id="<%= id %>-examples">Response examples</h3>
 
   <% responses.each do |key,response| %>
     <details class="govuk-details" data-module="govuk-details">
@@ -66,4 +66,6 @@
       </div>
     </details>
   <% end %>
+  <hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible">
+
 <% end %>

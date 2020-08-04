@@ -1,4 +1,13 @@
-<h3 id="<%= id %>"><%= key %></h3>
+<% if text %>
+  <h2 id="<%= id %>">
+    <span class="govuk-caption-l">
+      <%= key.upcase %>
+    </span>
+    <span class="govuk-heading-l">
+      <%= text %>
+    </span>
+  </h2>
+<% end %>
 
 <% if operation.summary %>
   <p><em><%= operation.summary %></em></p>
