@@ -387,7 +387,7 @@ components:
       required:
         - id
         - type
-        - attributes      
+        - attributes
       properties:
         id:
           type: integer

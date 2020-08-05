@@ -1519,7 +1519,7 @@
             "explode": false,
             "required": false,
             "example": "name",
-            "description": "Field(s) to sort the providers by."
+            "description": "Field(s) to sort the provider by."
           },
           {
             "name": "page",
