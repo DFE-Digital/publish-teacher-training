@@ -63,6 +63,17 @@ describe "GET public/v1/recruitment_cycle/:recruitment_cycle_year/providers/:pro
     end
   end
 
+  describe "with unknown provider code" do
+    let(:provider_code) { "unknown" }
+
+    let(:data) { nil }
+    it { should have_http_status(:not_found) }
+
+    it "has a data section with the correct attributes" do
+      expect(json_response).to eq(expected_response)
+    end
+  end
+
   describe "with lowercase provider code" do
     let(:provider_code) { provider.provider_code.downcase }
 
