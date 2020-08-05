@@ -272,7 +272,7 @@ components:
         - attributes
       properties:
         id:
-          type: integer
+          type: string
           example: 1
         type:
           type: string
