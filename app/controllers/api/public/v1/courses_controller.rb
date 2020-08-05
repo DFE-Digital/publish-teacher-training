@@ -25,7 +25,7 @@ module API
         def show
           render json: {
             data: {
-              id: 123,
+              id: "123",
               type: "Course",
               attributes: {
                 code: "3GTY",

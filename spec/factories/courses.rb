@@ -22,6 +22,22 @@ FactoryBot.define do
       )
     }
 
+    trait :send do
+      is_send { true }
+    end
+
+    trait :full_time do
+      study_mode { :full_time }
+    end
+
+    trait :part_time do
+      study_mode { :part_time }
+    end
+
+    trait :full_time_or_part_time do
+      study_mode { :full_time_or_part_time }
+    end
+
     trait :without_validation do
       to_create { |instance| instance.save(validate: false) }
     end
@@ -34,6 +50,10 @@ FactoryBot.define do
     trait :secondary do
       age_range_in_years { "11_to_18" }
       level { :secondary }
+    end
+
+    trait :further_education do
+      level { :further_education }
     end
 
     transient do

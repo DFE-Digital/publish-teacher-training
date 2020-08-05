@@ -12,6 +12,8 @@ module API
 
         type "courses"
 
+        belongs_to :provider
+
         attributes :accredited_body_code,
                    :age_maximum,
                    :age_minimum,

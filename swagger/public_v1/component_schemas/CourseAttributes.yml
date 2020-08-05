@@ -9,6 +9,7 @@ required:
 properties:
   about_accredited_body:
     type: string
+    nullable: true
     format: markdown
     description: Description of the accredited body for this course.
     example: >-
@@ -16,6 +17,7 @@ properties:
       research and teaching in education and related social sciences.
   about_course:
     type: string
+    nullable: true
     format: markdown
     description: Short factual summary of the course.
     example: >-
@@ -51,10 +53,11 @@ properties:
     example: "2019-10-08"
   bursary_amount:
     type: integer
+    nullable: true
     description: "Bursary amount in GBP for this course."
     example: 9000
   bursary_requirements:
-    type: string
+    type: array
     description: "Description of requirements to be eligible for a bursary."
     example: "a degree of 2:2 or above in any subject"
   changed_at:
@@ -72,6 +75,7 @@ properties:
     example: 3GTY
   course_length:
     type: string
+    nullable: true
     description: >-
       Text describing how long the course runs.
     example: "OneYear"
@@ -82,19 +86,23 @@ properties:
     example: "2019-06-13T10:44:31Z"
   fee_details:
     type: string
+    nullable: true
     format: markdown
     description: "Further details about the fees for this course, if applicable."
     example: "For those wishing to top up their qualification to the full PGCE, a further £1800 will be payable."
   fee_international:
     type: integer
+    nullable: true
     description: "Fee in GBP for international students (optional)."
     example: 13000
   fee_domestic:
     type: integer
+    nullable: true
     description: "Fee in GBP for UK and EU students."
     example: 9200
   financial_support:
     type: string
+    nullable: true
     format: markdown
     description: "Details about financial support offered, if any."
     example: >-
@@ -116,7 +124,7 @@ properties:
       - apprenticeship
       - fee
   gcse_subjects_required:
-    type: string
+    type: array
     example: [maths, english]
     enum:
       - []
@@ -142,6 +150,7 @@ properties:
     example: true
   how_school_placements_work:
     type: string
+    nullable: true
     format: markdown
     description: >-
       Additional information about the schools applicants will be teaching in.
@@ -151,6 +160,7 @@ properties:
       two school placements.
   interview_process:
     type: string
+    nullable: true
     format: markdown
     description: >-
       Additional information about how the interview process will work for applicants.
@@ -165,6 +175,7 @@ properties:
     example: true
   last_published_at:
     type: string
+    nullable: true
     format: date-time
     description: >-
       Timestamp of when changes to this course's additional information
@@ -189,6 +200,7 @@ properties:
     example: true
   other_requirements:
     type: string
+    nullable: true
     format: markdown
     description: >-
       Any non-academic qualifications or documents the applicant may need.
@@ -198,6 +210,7 @@ properties:
       Barring Service (DBS) certificate.
   personal_qualities:
     type: string
+    nullable: true
     format: markdown
     description: >-
       Any skills, motivation and experience the provider is looking for in applicants.
@@ -220,10 +233,10 @@ properties:
     type: string
     description: "Unique code for the provider of this course."
     maxLength: 3
-    minLength: 3
+    minLength: 2
     example: 6CL
   qualifications:
-    type: string
+    type: array
     description: >-
       The qualifications as an outcome of the course.
     example: [qts]
@@ -239,6 +252,7 @@ properties:
     example: 2020
   required_qualifications:
     type: string
+    nullable: true
     format: markdown
     description: >-
       The minimum academic qualifications needed for this course.
@@ -282,6 +296,7 @@ properties:
     example: true
   salary_details:
     type: string
+    nullable: true
     description: "Salary details about this course."
     example: >-
       Successful applicants will be employed as unqualified teachers on
@@ -289,6 +304,7 @@ properties:
       duration of the programme.
   scholarship_amount:
     type: integer
+    nullable: true
     description: >-
       The scholarship amount a candidate may be eligible for for this course.
     example: 17000
