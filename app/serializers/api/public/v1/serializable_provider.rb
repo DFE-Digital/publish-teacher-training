@@ -40,7 +40,7 @@ module API
         end
 
         attribute :recruitment_cycle_year do
-          @object.recruitment_cycle.year
+          @object.recruitment_cycle.year.to_i
         end
 
         attribute :street_address_1 do

@@ -26,7 +26,7 @@ describe API::Public::V1::SerializableProvider do
   it { should have_attribute(:county).with_value(provider.address4) }
   it { should have_attribute(:created_at).with_value(provider.created_at.iso8601) }
   it { should have_attribute(:name).with_value(provider.provider_name) }
-  it { should have_attribute(:recruitment_cycle_year).with_value(provider.recruitment_cycle.year) }
+  it { should have_attribute(:recruitment_cycle_year).with_value(provider.recruitment_cycle.year.to_i) }
   it { should have_attribute(:street_address_1).with_value(provider.address1) }
   it { should have_attribute(:street_address_2).with_value(provider.address2) }
 end
