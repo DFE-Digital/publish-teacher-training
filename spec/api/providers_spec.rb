@@ -60,8 +60,9 @@ describe "API" do
                 example: "T92"
 
       response "200", "The provider." do
-        let(:year) { "2020" }
-        let(:provider_code) { "ABC" }
+        let!(:provider) { create(:provider) }
+        let(:year) { provider.recruitment_cycle.year }
+        let(:provider_code) { provider.provider_code }
 
         schema "$ref": "#/components/schemas/ProviderSingleResponse"
 

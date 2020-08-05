@@ -13,19 +13,16 @@ module API
         end
 
         def show
-          render json: {
-            data: {
-              id: 123,
-              type: "Provider",
-              attributes: {
-                code: "ABC",
-                name: "Some provider",
-              },
-            },
-            jsonapi: {
-              version: "1.0",
-            },
-          }
+          code = params.fetch(:code, params[:provider_code])
+          provider = recruitment_cycle.providers
+                                        .find_by!(
+                                          provider_code: code.upcase,
+                                        )
+
+          render jsonapi: provider,
+                 class: { Provider: API::Public::V1::SerializableProvider },
+                 include: params[:include],
+                 fields: { providers: provider_fields }
         end
 
       private
