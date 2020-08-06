@@ -296,6 +296,18 @@ components:
           $ref: "#/components/schemas/Included"
         jsonapi:
           $ref: "#/components/schemas/JSONAPI"
+    NotFoundResponse:
+      description: "This schema is used to return a not found response."
+      type: object
+      required:
+        - data
+        - jsonapi
+      properties:
+        data:
+          nullable: true
+          example: null
+        jsonapi:
+          $ref: "#/components/schemas/JSONAPI"
     ProviderSingleResponse:
       description: "This schema is used to return a single provider."
       type: object

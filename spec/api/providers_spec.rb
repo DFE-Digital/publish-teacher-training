@@ -68,6 +68,15 @@ describe "API" do
 
         run_test!
       end
+
+      response "404", "The non existant provider." do
+        let(:year) { "2020" }
+        let(:provider_code) { "999" }
+
+        schema "$ref": "#/components/schemas/NotFoundResponse"
+
+        run_test!
+      end
     end
   end
 end

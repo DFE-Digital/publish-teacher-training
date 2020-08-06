@@ -781,6 +781,23 @@
           }
         }
       },
+      "NotFoundResponse": {
+        "description": "This schema is used to return a not found response.",
+        "type": "object",
+        "required": [
+          "data",
+          "jsonapi"
+        ],
+        "properties": {
+          "data": {
+            "nullable": true,
+            "example": null
+          },
+          "jsonapi": {
+            "$ref": "#/components/schemas/JSONAPI"
+          }
+        }
+      },
       "Pagination": {
         "description": "This schema used to paginate through a collection.",
         "type": "object",
@@ -961,7 +978,7 @@
         ],
         "properties": {
           "id": {
-            "type": "integer",
+            "type": "string",
             "example": 1
           },
           "type": {
@@ -1385,7 +1402,7 @@
             "explode": false,
             "required": false,
             "example": "name",
-            "description": "Field(s) to sort the provider by."
+            "description": "Field(s) to sort the providers by."
           },
           {
             "name": "page",
@@ -1453,6 +1470,16 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ProviderSingleResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "The non existant provider.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotFoundResponse"
                 }
               }
             }
