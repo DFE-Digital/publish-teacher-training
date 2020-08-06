@@ -108,6 +108,8 @@ Rails.application.routes.draw do
             end
           end
         end
+
+        get "provider_suggestions", to: "provider_suggestions#index"
       end
     end
   end

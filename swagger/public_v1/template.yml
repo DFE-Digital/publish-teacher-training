@@ -309,6 +309,28 @@ components:
           $ref: "#/components/schemas/Included"
         jsonapi:
           $ref: "#/components/schemas/JSONAPI"
+    ProviderSuggestion:
+      description: "This schema provides metadata about a provider."
+      type: object
+      properties:
+        name:
+          type: string
+          example: "066"
+        code:
+          type: string
+          example: "Oxford Brookes University"
+    ProviderSuggestionListResponse:
+      description: "This schema is used to return a collection of provider suggestions."
+      type: object
+      required:
+        - data
+      properties:
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/ProviderSuggestion"
+        jsonapi:
+          $ref: "#/components/schemas/JSONAPI"
     Relationship:
       description: "This schema describes a single associated object."
       type: object
