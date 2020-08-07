@@ -23,7 +23,7 @@ services:
       context: .
       cache_from:
         - ${dockerHubUsername:-dfedigital}/teacher-training-api:${GIT_BRANCH:-latest}
-        - ${dockerHubUsername:-dfedigital}/teacher-training-api-middleman:${GIT_BRANCH:-latest}
+        - ${dockerHubUsername:-dfedigital}/teacher-training-api-middleman:master
     image: ${dockerHubUsername:-dfedigital}/teacher-training-api:${GIT_BRANCH:-latest}
     command: ash -c "rm -f tmp/pids/server.pid && bundle exec rails server -p 3001 -b '0.0.0.0'"
     volumes:
@@ -90,6 +90,8 @@ services:
         - TEACHER_TRAINING_API=${dockerHubImageName:-teacher-training-api}
         - CODE_VERSION=${GIT_BRANCH:-latest}
       context: bg-jobs
+      cache_from:
+        - ${dockerHubUsername:-dfedigital}/teacher-training-bg-jobs:${GIT_BRANCH:-latest}
     image: ${dockerHubUsername:-dfedigital}/teacher-training-bg-jobs:${GIT_BRANCH:-latest}
     volumes:
       - .:/app
