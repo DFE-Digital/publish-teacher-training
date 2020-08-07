@@ -1170,7 +1170,7 @@
           },
           "typename": {
             "type": "string",
-            "description": "A unique identifier for the subject area.",
+            "description": "A type name for the subject area.",
             "example": "PrimarySubject"
           }
         }
@@ -1179,7 +1179,8 @@
         "description": "This schema is used to return a collection of subject areas.",
         "type": "object",
         "required": [
-          "data"
+          "data",
+          "jsonapi"
         ],
         "properties": {
           "data": {
@@ -1282,6 +1283,185 @@
     }
   },
   "paths": {
+    "/recruitment_cycles/{year}/courses": {
+      "get": {
+        "summary": "Returns the courses for the specified year.",
+        "operationId": "public_api_v1_courses",
+        "tags": [
+          "courses"
+        ],
+        "parameters": [
+          {
+            "name": "year",
+            "in": "path",
+            "required": true,
+            "description": "The starting year of the recruitment cycle.",
+            "example": "2020",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "filter",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/Filter"
+            },
+            "style": "deepObject",
+            "explode": true,
+            "required": false,
+            "description": "Refine courses to return.",
+            "example": {
+              "has_vacancies": true,
+              "subjects": "00,01"
+            }
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/Sort"
+            },
+            "style": "form",
+            "explode": false,
+            "required": false,
+            "example": "provider.provider_name,name",
+            "description": "Field(s) to sort the courses by."
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/Pagination"
+            },
+            "style": "deepObject",
+            "explode": true,
+            "required": false,
+            "example": {
+              "page": 2,
+              "per_page": 10
+            },
+            "description": "Pagination options to navigate through the collection."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The collection of courses for the specified year.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CourseListResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/recruitment_cycles/{year}/providers/{provider_code}/courses/{course_code}/locations": {
+      "get": {
+        "summary": "Returns the locations for the specified course.",
+        "operationId": "public_api_v1_provider_course_locations",
+        "tags": [
+          "location"
+        ],
+        "parameters": [
+          {
+            "name": "year",
+            "in": "path",
+            "required": true,
+            "description": "The starting year of the recruitment cycle.",
+            "example": "2020",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "provider_code",
+            "in": "path",
+            "required": true,
+            "description": "The unique code of the provider.",
+            "example": "T92",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "course_code",
+            "in": "path",
+            "description": "The code of the course.",
+            "example": "X130",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/Pagination"
+            },
+            "style": "deepObject",
+            "explode": true,
+            "required": false,
+            "example": {
+              "page": 2,
+              "per_page": 10
+            },
+            "description": "Pagination options to navigate through the collection."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The collection of locations for the specified course.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LocationListResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/provider_suggestions": {
+      "get": {
+        "summary": "Returns a list of providers suggestions matching the query term.",
+        "operationId": "public_api_v1_provider_suggestions",
+        "tags": [
+          "provider_suggestions"
+        ],
+        "parameters": [
+          {
+            "name": "query",
+            "in": "query",
+            "required": true,
+            "description": "The provider's marketing name or code",
+            "example": "oxf",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A list of provider suggestions matching the query term",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProviderSuggestionListResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "A bad request"
+          }
+        }
+      }
+    },
     "/recruitment_cycles/{year}/providers/{provider_code}/courses": {
       "get": {
         "summary": "Returns the courses for the specified provider.",
@@ -1416,110 +1596,6 @@
                 }
               }
             }
-          }
-        }
-      }
-    },
-    "/recruitment_cycles/{year}/providers/{provider_code}/courses/{course_code}/locations": {
-      "get": {
-        "summary": "Returns the locations for the specified course.",
-        "operationId": "public_api_v1_provider_course_locations",
-        "tags": [
-          "location"
-        ],
-        "parameters": [
-          {
-            "name": "year",
-            "in": "path",
-            "required": true,
-            "description": "The starting year of the recruitment cycle.",
-            "example": "2020",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "provider_code",
-            "in": "path",
-            "required": true,
-            "description": "The unique code of the provider.",
-            "example": "T92",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "course_code",
-            "in": "path",
-            "description": "The code of the course.",
-            "example": "X130",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "page",
-            "in": "query",
-            "schema": {
-              "$ref": "#/components/schemas/Pagination"
-            },
-            "style": "deepObject",
-            "explode": true,
-            "required": false,
-            "example": {
-              "page": 2,
-              "per_page": 10
-            },
-            "description": "Pagination options to navigate through the collection."
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "The collection of locations for the specified course.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/LocationListResponse"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/provider_suggestions": {
-      "get": {
-        "summary": "Returns a list of providers suggestions matching the query term.",
-        "operationId": "public_api_v1_provider_suggestions",
-        "tags": [
-          "provider_suggestions"
-        ],
-        "parameters": [
-          {
-            "name": "query",
-            "in": "query",
-            "required": true,
-            "description": "The provider's marketing name or code",
-            "example": "oxf",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "A list of provider suggestions matching the query term",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProviderSuggestionListResponse"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "A bad request"
           }
         }
       }
