@@ -995,6 +995,38 @@
           }
         }
       },
+      "ProviderSuggestion": {
+        "description": "This schema provides metadata about a provider.",
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "066"
+          },
+          "code": {
+            "type": "string",
+            "example": "Oxford Brookes University"
+          }
+        }
+      },
+      "ProviderSuggestionListResponse": {
+        "description": "This schema is used to return a collection of provider suggestions.",
+        "type": "object",
+        "required": [
+          "data"
+        ],
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ProviderSuggestion"
+            }
+          },
+          "jsonapi": {
+            "$ref": "#/components/schemas/JSONAPI"
+          }
+        }
+      },
       "RecruitmentCycleAttributes": {
         "description": "This schema is used to describe a recruitment cycle.",
         "type": "object",
@@ -1353,6 +1385,42 @@
                 }
               }
             }
+          }
+        }
+      }
+    },
+    "/provider_suggestions": {
+      "get": {
+        "summary": "Returns a list of providers suggestions matching the query term.",
+        "operationId": "public_api_v1_provider_suggestions",
+        "tags": [
+          "provider_suggestions"
+        ],
+        "parameters": [
+          {
+            "name": "query",
+            "in": "query",
+            "required": true,
+            "description": "The provider's marketing name or code",
+            "example": "oxf",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A list of provider suggestions matching the query term",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProviderSuggestionListResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "A bad request"
           }
         }
       }
