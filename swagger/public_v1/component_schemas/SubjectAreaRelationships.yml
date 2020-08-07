@@ -1,0 +1,6 @@
+---
+description: "This schema is used to describe associations that can be returned with a subject area."
+type: object
+properties:
+  subjects:
+    $ref: "#/components/schemas/RelationshipList"

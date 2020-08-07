@@ -396,3 +396,32 @@ components:
           example: subjects
         attributes:
           $ref: "#/components/schemas/SubjectAttributes"
+    SubjectAreaResource:
+      description: "This schema provides metadata about a subject area."
+      type: object
+      properties:
+        id:
+          type: string
+          example: "PrimarySubject"
+        type:
+          type: string
+          example: "subject_areas"
+        attributes:
+          $ref: "#/components/schemas/SubjectAreaAttributes"
+        relationships:
+          $ref: "#/components/schemas/SubjectAreaRelationships"
+    SubjectAreaListResponse:
+      description: "This schema is used to return a collection of subject areas."
+      type: object
+      required:
+        - data
+        - jsonapi
+      properties:
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/SubjectAreaResource"
+        included:
+          $ref: "#/components/schemas/Included"
+        jsonapi:
+          $ref: "#/components/schemas/JSONAPI"

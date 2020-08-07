@@ -1,0 +1,12 @@
+---
+description: "This schema is used to describe a subject area."
+type: object
+properties:
+  name:
+    type: string
+    description: "The name of the subject area."
+    example: "Primary"
+  typename:
+    type: string
+    description: "A type name for the subject area."
+    example: "PrimarySubject"
