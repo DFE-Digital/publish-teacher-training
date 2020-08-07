@@ -2104,4 +2104,87 @@ describe Course, type: :model do
       )
     end
   end
+
+  describe "#age_minimum" do
+    context "when age_range_in_years set" do
+      it "returns lower age_range_in_years bound" do
+        expect(subject.age_minimum).to eql(3)
+      end
+    end
+
+    context "when age_range_in_years not set" do
+      subject { Course.new }
+
+      it "returns nil" do
+        expect(subject.age_minimum).to be_nil
+      end
+    end
+  end
+
+  describe "#age_maximum" do
+    context "when age_range_in_years set" do
+      it "returns upper age_range_in_years bound" do
+        expect(subject.age_maximum).to eql(7)
+      end
+    end
+
+    context "when age_range_in_years not set" do
+      subject { Course.new }
+
+      it "returns nil" do
+        expect(subject.age_maximum).to be_nil
+      end
+    end
+  end
+
+  describe "#bursary_requirements" do
+    context "when there is no bursary" do
+      subject do
+        create(
+          :course,
+          level: "primary",
+          name: "Primary with english",
+          course_code: "AAAA",
+          subjects: [find_or_create(:primary_subject, :primary_with_english)],
+        )
+      end
+
+      it "returns no requirements" do
+        expect(subject.bursary_requirements).to be_empty
+      end
+    end
+
+    context "when there is a bursary" do
+      subject do
+        create(
+          :course,
+          level: "secondary",
+          name: "Art and design",
+          course_code: "AAAA",
+          subjects: [find_or_create(:secondary_subject, :art_and_design)],
+        )
+      end
+
+      it "returns default requirements" do
+        expect(subject.bursary_requirements).to eql(["a degree of 2:2 or above in any subject"])
+      end
+    end
+
+    context "when primary with maths" do
+      subject { Course.new(subjects: [PrimarySubject.find_by(subject_code: "03")]) }
+      subject do
+        create(
+          :course,
+          level: "primary",
+          name: "Primary with mathematics",
+          course_code: "AAAA",
+          subjects: [find_or_create(:primary_subject, :primary_with_mathematics)],
+        )
+      end
+
+      it "includes additional requirements" do
+        expect(subject.bursary_requirements).to eql(["a degree of 2:2 or above in any subject", "at least grade B in maths A-level (or an equivalent)"])
+      end
+    end
+  end
 end

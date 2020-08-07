@@ -9,6 +9,9 @@ en:
       maths: "Maths GCSE requirement"
       english: "English GCSE requirement"
     values:
+      bursary_requirements:
+        second_degree: "a degree of 2:2 or above in any subject"
+        maths: "at least grade B in maths A-level (or an equivalent)"
       qualification:
         qts: "QTS"
         pgce_with_qts: "PGCE with QTS"

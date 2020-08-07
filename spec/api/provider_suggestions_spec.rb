@@ -1,0 +1,31 @@
+require "swagger_helper"
+
+describe "API" do
+  path "/provider_suggestions" do
+    get "Returns a list of providers suggestions matching the query term." do
+      operationId :public_api_v1_provider_suggestions
+      tags "provider_suggestions"
+      produces "application/json"
+      parameter name: :query,
+                in: :query,
+                type: :string,
+                required: true,
+                description: "The provider's marketing name or code",
+                example: "oxf"
+
+      response "200", "A list of provider suggestions matching the query term" do
+        let(:query) { "oxf" }
+
+        schema "$ref": "#/components/schemas/ProviderSuggestionListResponse"
+
+        run_test!
+      end
+
+      response "400", "A bad request" do
+        let(:query) { nil }
+
+        run_test!
+      end
+    end
+  end
+end
