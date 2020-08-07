@@ -8,5 +8,5 @@ properties:
     example: "Primary"
   typename:
     type: string
-    description: "A unique identifier for the subject area."
+    description: "A type name for the subject area."
     example: "PrimarySubject"
