@@ -42,7 +42,7 @@ describe "GET public/v1/recruitment_cycle/:recruitment_cycle_year/providers" do
           "attributes" => {
             "code" => provider.provider_code,
             "name" => provider.provider_name,
-            "recruitment_cycle_year" => provider.recruitment_cycle.year,
+            "recruitment_cycle_year" => provider.recruitment_cycle.year.to_i,
             "postcode" => provider.postcode,
             "provider_type" => provider.provider_type,
             "region_code" => provider.region_code,
@@ -148,7 +148,7 @@ describe "GET public/v1/recruitment_cycle/:recruitment_cycle_year/providers" do
         expect(data.count).to eq 1
         expect(data.first)
           .to have_attribute("recruitment_cycle_year")
-                .with_value(recruitment_cycle.year)
+                .with_value(recruitment_cycle.year.to_i)
       end
     end
 
@@ -161,7 +161,7 @@ describe "GET public/v1/recruitment_cycle/:recruitment_cycle_year/providers" do
         expect(data.count).to eq 1
         expect(data.first)
           .to have_attribute("recruitment_cycle_year")
-                .with_value(next_recruitment_cycle.year)
+                .with_value(next_recruitment_cycle.year.to_i)
       end
     end
   end

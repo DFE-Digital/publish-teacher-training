@@ -60,10 +60,20 @@ describe "API" do
                 example: "T92"
 
       response "200", "The provider." do
-        let(:year) { "2020" }
-        let(:provider_code) { "ABC" }
+        let!(:provider) { create(:provider) }
+        let(:year) { provider.recruitment_cycle.year }
+        let(:provider_code) { provider.provider_code }
 
         schema "$ref": "#/components/schemas/ProviderSingleResponse"
+
+        run_test!
+      end
+
+      response "404", "The non existant provider." do
+        let(:year) { "2020" }
+        let(:provider_code) { "999" }
+
+        schema "$ref": "#/components/schemas/NotFoundResponse"
 
         run_test!
       end

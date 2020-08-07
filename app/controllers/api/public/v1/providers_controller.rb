@@ -9,26 +9,27 @@ module API
                       else
                         providers.by_name_descending
                       end
-          render jsonapi: providers, class: { Provider: API::Public::V1::SerializableProvider }, fields: { providers: provider_fields }
+          render jsonapi: providers, class: { Provider: API::Public::V1::SerializableProvider }, fields: fields
         end
 
         def show
-          render json: {
-            data: {
-              id: 123,
-              type: "Provider",
-              attributes: {
-                code: "ABC",
-                name: "Some provider",
-              },
-            },
-            jsonapi: {
-              version: "1.0",
-            },
-          }
+          code = params.fetch(:code, params[:provider_code])
+          provider = recruitment_cycle.providers
+                                        .find_by!(
+                                          provider_code: code.upcase,
+                                        )
+
+          render jsonapi: provider,
+                 class: { Provider: API::Public::V1::SerializableProvider },
+                 include: params[:include],
+                 fields: fields
         end
 
       private
+
+        def fields
+          { providers: provider_fields } if provider_fields.present?
+        end
 
         def sort_by_provider_ascending?
           sort_field.include?("name") || !sort_by_provider_descending?
@@ -49,24 +50,7 @@ module API
         end
 
         def provider_fields
-          params.dig(:fields, :providers)&.split(",") || %i[
-             accredited_body
-             changed_at
-             city
-             code
-             county
-             created_at
-             name
-             postcode
-             provider_type
-             recruitment_cycle_year
-             region_code
-             street_address_1
-             street_address_2
-             train_with_disability
-             train_with_us
-             website
-            ]
+          params.dig(:fields, :providers)&.split(",")
         end
       end
     end
