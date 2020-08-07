@@ -124,6 +124,9 @@ class Course < ApplicationRecord
     end
   end
 
+  has_one :latest_published_enrichment, -> { published.order("created_at DESC, id DESC").limit(1) },
+          class_name: "CourseEnrichment"
+
   scope :within, ->(range, origin:) do
     joins(:sites).merge(Site.within(range, origin: origin))
   end
@@ -285,7 +288,6 @@ class Course < ApplicationRecord
 
   def accrediting_provider_description
     return nil if accrediting_provider.blank?
-
     return nil if provider.accrediting_provider_enrichments.blank?
 
     accrediting_provider_enrichment = provider.accrediting_provider_enrichments
@@ -448,6 +450,10 @@ class Course < ApplicationRecord
     financial_incentives.any?(&:scholarship?) && financial_incentives.any?(&:bursary_amount?)
   end
 
+  def has_scholarship?
+    financial_incentives.any?(&:scholarship?)
+  end
+
   def has_early_career_payments?
     financial_incentives.any?(&:early_career_payments?)
   end
@@ -517,6 +523,31 @@ class Course < ApplicationRecord
 
   def in_current_cycle?
     recruitment_cycle.current?
+  end
+
+  def age_minimum
+    return if age_range_in_years.blank?
+
+    age_range_in_years.split("_").first.to_i
+  end
+
+  def age_maximum
+    return if age_range_in_years.blank?
+
+    age_range_in_years.split("_").last.to_i
+  end
+
+  def bursary_requirements
+    return [] unless has_bursary?
+
+    requirements = [I18n.t("course.values.bursary_requirements.second_degree")]
+    mathematics_requirement = I18n.t("course.values.bursary_requirements.maths")
+
+    if subjects.include?(PrimarySubject.find_by(subject_name: "Primary with mathematics"))
+      requirements.push(mathematics_requirement)
+    end
+
+    requirements
   end
 
 private
