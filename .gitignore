@@ -30,3 +30,14 @@ config/azure_environments.yml
 # Exclude api doc application node modules
 docs/node_modules
 docs/package-lock.json
+
+# Terraform
+*.tfstate
+*.tfstate.backup
+.terraform/environment
+terraform.tfplan
+terraform.tfstate
+terraform.tfstate.d/
+./*.tfstate
+lock.json
+*secret*.tfvars
