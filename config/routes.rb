@@ -104,7 +104,7 @@ Rails.application.routes.draw do
         resources :recruitment_cycles, param: :year, only: [:show] do
           resources :courses, only: %i[index]
 
-          resources :providers, only: %i[index show] do
+          resources :providers, only: %i[index show], param: :code do
             resources :courses, only: %i[index show], module: :providers do
               resources :locations, only: [:index]
             end
