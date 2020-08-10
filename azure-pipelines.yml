@@ -73,7 +73,7 @@ steps:
     set -x
     $DOCKER_OVERRIDE exec -T web /bin/sh -c 'bundle config --local disable_exec_load true'
     $DOCKER_OVERRIDE exec -T web /bin/sh -c 'bundle exec rake parallel:setup'
-    $DOCKER_OVERRIDE exec -T web /bin/sh -c 'bundle exec rake "parallel:spec[,, -O .azure_parallel]"'
+    $DOCKER_OVERRIDE exec -T web /bin/sh -c 'bundle exec rake parallel:spec'
 
   displayName: 'Execute tests'
   env:
