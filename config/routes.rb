@@ -105,7 +105,9 @@ Rails.application.routes.draw do
           resources :courses, only: %i[index]
 
           resources :providers, only: %i[index show], param: :code do
-            resources :courses, only: %i[index show], module: :providers do
+            resources :courses, only: %i[index show],
+                                module: :providers,
+                                param: :code do
               resources :locations, only: [:index]
             end
           end

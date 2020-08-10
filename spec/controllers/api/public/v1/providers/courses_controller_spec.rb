@@ -284,4 +284,45 @@ RSpec.describe API::Public::V1::Providers::CoursesController do
       end
     end
   end
+
+  describe "#show" do
+    context "when course exists" do
+      let!(:course) { create(:course, provider: provider) }
+
+      it "returns the course" do
+        get :show, params: {
+          recruitment_cycle_year: provider.recruitment_cycle.year,
+          provider_code: provider.provider_code,
+          code: course.course_code
+        }
+
+        expect(response).to be_successful
+        expect(JSON.parse(response.body)["data"]["id"]).to eql(course.id.to_s)
+      end
+    end
+
+    context "when course does not exist" do
+      it "returns 404" do
+        get :show, params: {
+          recruitment_cycle_year: provider.recruitment_cycle.year,
+          provider_code: provider.provider_code,
+          code: "ABCD"
+        }
+
+        expect(response.status).to eql(404)
+      end
+    end
+
+    context "when provider does not exist" do
+      it "returns 404" do
+        get :show, params: {
+          recruitment_cycle_year: "2020",
+          provider_code: "ABC",
+          code: "ABCD"
+        }
+
+        expect(response.status).to eql(404)
+      end
+    end
+  end
 end
