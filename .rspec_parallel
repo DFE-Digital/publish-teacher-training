@@ -1,3 +1,5 @@
 --require rails_helper
 --format progress
 --format ParallelTests::RSpec::RuntimeLogger --out tmp/parallel_runtime_rspec.log
+--no-profile --format RspecJunitFormatter --out rspec-output/rspec-output<%= ENV['TEST_ENV_NUMBER'] %>.xml
+
