@@ -59,7 +59,9 @@ properties:
   bursary_requirements:
     type: array
     description: "Description of requirements to be eligible for a bursary."
-    example: "a degree of 2:2 or above in any subject"
+    items:
+      type: string
+      example: "a degree of 2:2 or above in any subject"
   changed_at:
     type: string
     format: date-time
@@ -132,6 +134,9 @@ properties:
       - [maths, english, science]
     description: >-
       GSCEs, or equivalent, required for this level of course.
+    items:
+      type: string
+      example: "maths"
   has_bursary:
     type: boolean
     description: "Are any bursaries available for this course?"
@@ -246,6 +251,9 @@ properties:
       - [pgde]
       - [qts, pgce]
       - [qts, pgde]
+    items:
+      type: string
+      example: "qts"
   recruitment_cycle_year:
     type: string
     description: The recruitment cycle that this course is available in.

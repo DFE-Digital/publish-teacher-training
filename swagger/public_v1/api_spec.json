@@ -82,7 +82,10 @@
           "bursary_requirements": {
             "type": "array",
             "description": "Description of requirements to be eligible for a bursary.",
-            "example": "a degree of 2:2 or above in any subject"
+            "items": {
+              "type": "string",
+              "example": "a degree of 2:2 or above in any subject"
+            }
           },
           "changed_at": {
             "type": "string",
@@ -170,7 +173,11 @@
                 "science"
               ]
             ],
-            "description": "GSCEs, or equivalent, required for this level of course."
+            "description": "GSCEs, or equivalent, required for this level of course.",
+            "items": {
+              "type": "string",
+              "example": "maths"
+            }
           },
           "has_bursary": {
             "type": "boolean",
@@ -295,7 +302,11 @@
                 "qts",
                 "pgde"
               ]
-            ]
+            ],
+            "items": {
+              "type": "string",
+              "example": "qts"
+            }
           },
           "recruitment_cycle_year": {
             "type": "string",
