@@ -4,7 +4,7 @@ describe "API" do
   path "/recruitment_cycles/{year}/providers/{provider_code}/courses/{course_code}/locations" do
     get "Returns the locations for the specified course." do
       operationId :public_api_v1_provider_course_locations
-      tags "location"
+      tags "locations"
       produces "application/json"
       parameter name: :year,
                 in: :path,
@@ -23,22 +23,34 @@ describe "API" do
                 type: :string,
                 description: "The code of the course.",
                 example: "X130"
-      parameter name: :page,
+      parameter name: :include,
                 in: :query,
-                schema: { "$ref" => "#/components/schemas/Pagination" },
-                type: :object,
-                style: :deepObject,
-                explode: true,
+                type: :string,
                 required: false,
-                example: { page: 2, per_page: 10 },
-                description: "Pagination options to navigate through the collection."
+                description: "The associated data for this resource.",
+                schema: {
+                  enum: %w[recruitment_cycle provider course],
+                },
+                example: "recruitment_cycle,provider"
 
       response "200", "The collection of locations for the specified course." do
+        let(:course) { create(:course) }
+        let(:provider) { course.provider }
         let(:year) { "2020" }
-        let(:provider_code) { "ABC" }
-        let(:course_code) { 123 }
+        let(:provider_code) { provider.provider_code }
+        let(:course_code) { course.course_code }
+        let(:include) { "provider" }
 
         schema "$ref": "#/components/schemas/LocationListResponse"
+
+        before do
+          course.sites << build_list(
+            :site,
+            2,
+            latitude: Faker::Address.latitude,
+            longitude: Faker::Address.longitude,
+          )
+        end
 
         run_test!
       end
