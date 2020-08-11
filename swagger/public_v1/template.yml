@@ -187,36 +187,45 @@ components:
       properties:
         code:
           type: string
-          example: "W"
-        name:
+          example: "-"
+        location_name:
           type: string
           description: "The name of the location."
-          example: "Henry Maynard Primary School"
+          example: "Main Site"
         street_address_1:
           type: string
-          description: "Building or street line one."
-          example: "The Rose Building"
+          description: "Building or street address line one."
+          example: "Barnsley Road"
         street_address_2:
           type: string
-          description: "Building or street line two."
-          example: "Maynard Road"
+          description: "Building or street address line two."
+          example: "Wath-upon-Dearne"
         city:
           type: string
           description: "Town or city."
-          example: "London"
+          example: "Rotherham"
         county:
           type: string
           description: "County."
-          example: "London"
+          example: "South Yorkshire"
         postcode:
           type: string
           description: "The postcode of the location."
-          example: "E17 9JE"
+          example: "S63 6PY"
         region_code:
           type: string
-          example: "london"
+          example: "yorkshire_and_the_humber"
+        latitude:
+          type: number
+          description: "The latitude of the location."
+          example: 53.5082828
+        longitude:
+          type: number
+          description: "The longitude of the location."
+          example: -1.3603394
         recruitment_cycle_year:
           type: string
+          description: "The year of the recruitment cycle."
           example: "2020"
     LocationResource:
       description: "This schema provides metadata about a location."

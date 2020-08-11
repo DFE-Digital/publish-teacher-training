@@ -636,44 +636,55 @@
         "properties": {
           "code": {
             "type": "string",
-            "example": "W"
+            "example": "-"
           },
-          "name": {
+          "location_name": {
             "type": "string",
             "description": "The name of the location.",
-            "example": "Henry Maynard Primary School"
+            "example": "Main Site"
           },
           "street_address_1": {
             "type": "string",
-            "description": "Building or street line one.",
-            "example": "The Rose Building"
+            "description": "Building or street address line one.",
+            "example": "Barnsley Road"
           },
           "street_address_2": {
             "type": "string",
-            "description": "Building or street line two.",
-            "example": "Maynard Road"
+            "description": "Building or street address line one.",
+            "example": "Wath-upon-Dearne"
           },
           "city": {
             "type": "string",
             "description": "Town or city.",
-            "example": "London"
+            "example": "Rotherham"
           },
           "county": {
             "type": "string",
             "description": "County.",
-            "example": "London"
+            "example": "South Yorkshire"
           },
           "postcode": {
             "type": "string",
             "description": "The postcode of the location.",
-            "example": "E17 9JE"
+            "example": "S63 6PY"
           },
           "region_code": {
             "type": "string",
-            "example": "london"
+            "example": "yorkshire_and_the_humber"
+          },
+          "latitude": {
+            "type": "number",
+            "description": "The latitude of the location.",
+            "example": 53.5082828
+          },
+          "longitude": {
+            "type": "number",
+            "description": "The longitude of the location.",
+            "example": -1.3603394
           },
           "recruitment_cycle_year": {
             "type": "string",
+            "description": "The year of the recruitment cycle.",
             "example": "2020"
           }
         }
@@ -1244,9 +1255,6 @@
       "SubjectAttributes": {
         "description": "This schema is used to describe a subject.",
         "type": "object",
-        "required": [
-          "code"
-        ],
         "properties": {
           "name": {
             "type": "string",
@@ -1258,15 +1266,18 @@
           },
           "bursary_amount": {
             "type": "integer",
-            "description": "non-repayable sum of money that universities can award to students to incentivise and support their studies"
+            "description": "Non-repayable sum of money that universities can award to students to incentivise and support their studies",
+            "example": 9000
           },
           "early_career_payments": {
             "type": "integer",
-            "description": "eligible subjects teachers can apply for early-career payments of up to £9,000 after tax."
+            "description": "Eligible subjects teachers can apply for early-career payments of up to £9,000 after tax.",
+            "example": 8388
           },
           "scholarship": {
             "type": "integer",
-            "description": "a grant or payment made to support a student’s education, awarded on the basis of academic or other achievement."
+            "description": "A grant or payment made to support a student’s education, awarded on the basis of academic or other achievement.",
+            "example": 3500
           },
           "subject_knowledge_enhancement_course_available": {
             "type": "boolean",
@@ -1300,7 +1311,7 @@
   "paths": {
     "/recruitment_cycles/{year}/courses": {
       "get": {
-        "summary": "Returns the courses for the specified year.",
+        "summary": "Returns the courses for the specified recruitment cycle.",
         "operationId": "public_api_v1_courses",
         "tags": [
           "courses"
@@ -1361,7 +1372,7 @@
         ],
         "responses": {
           "200": {
-            "description": "The collection of courses for the specified year.",
+            "description": "The collection of courses.",
             "content": {
               "application/json": {
                 "schema": {
@@ -1378,7 +1389,7 @@
         "summary": "Returns the locations for the specified course.",
         "operationId": "public_api_v1_provider_course_locations",
         "tags": [
-          "location"
+          "locations"
         ],
         "parameters": [
           {
@@ -1410,21 +1421,6 @@
             "schema": {
               "type": "string"
             }
-          },
-          {
-            "name": "page",
-            "in": "query",
-            "schema": {
-              "$ref": "#/components/schemas/Pagination"
-            },
-            "style": "deepObject",
-            "explode": true,
-            "required": false,
-            "example": {
-              "page": 2,
-              "per_page": 10
-            },
-            "description": "Pagination options to navigate through the collection."
           }
         ],
         "responses": {
@@ -1751,9 +1747,11 @@
     },
     "/subjects": {
       "get": {
-        "summary": "Returns subjects",
+        "summary": "Returns a list of subjects",
         "operationId": "public_api_v1_subjects",
-        "tags": ["subjects"],
+        "tags": [
+          "Subjects"
+        ],
         "parameters": [
           {
             "name": "sort",
@@ -1764,17 +1762,17 @@
             "style": "form",
             "explode": false,
             "required": false,
-            "example": "subject_name",
+            "example": "name",
             "description": "Sort subjects by name"
           }
         ],
         "responses": {
           "200": {
-            "description": "The collection of Subjects.",
+            "description": "The list of subjects",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/SubjectResource"
+                  "$ref": "#/components/schemas/SubjectAttributes"
                 }
               }
             }
