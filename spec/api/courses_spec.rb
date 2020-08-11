@@ -40,7 +40,7 @@ describe "API" do
                 example: { page: 2, per_page: 10 },
                 description: "Pagination options to navigate through the collection."
 
-      response "200", "The collection of courses for the specified year." do
+      response "200", "The collection of courses." do
         let(:year) { "2020" }
 
         schema "$ref": "#/components/schemas/CourseListResponse"
