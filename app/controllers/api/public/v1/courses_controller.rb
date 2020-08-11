@@ -6,34 +6,16 @@ module API
           render json: {
             data: [
               {
-                id: 123,
+                id: 124,
                 type: "Course",
                 attributes: {
                   code: "3GTY",
-                  provider_code: "6CL",
-                  age_minimum: 11,
+                  provider_code: "066",
+                  age_minimum: 10,
                   age_maximum: 14,
                 },
               },
             ],
-            jsonapi: {
-              version: "1.0",
-            },
-          }
-        end
-
-        def show
-          render json: {
-            data: {
-              id: 123,
-              type: "Course",
-              attributes: {
-                code: "3GTY",
-                provider_code: "6CL",
-                age_minimum: 11,
-                age_maximum: 14,
-              },
-            },
             jsonapi: {
               version: "1.0",
             },
