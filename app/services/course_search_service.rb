@@ -12,7 +12,7 @@ class CourseSearchService
   end
 
   def call
-    scope = course_scope.findable
+    scope = course_scope
     scope = scope.with_salary if funding_filter_salary?
     scope = scope.with_qualifications(qualifications) if qualifications.any?
     scope = scope.with_vacancies if has_vacancies?

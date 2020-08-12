@@ -1,35 +1,32 @@
 require "rails_helper"
 
-describe CourseSearchService do
+RSpec.describe CourseSearchService do
   describe ".call" do
     describe "when no scope is passed" do
       subject { described_class.call(filter: filter) }
       let(:filter) { {} }
 
       it "defaults to Course" do
-        expect(Course).to receive_message_chain(:findable).and_return(select_scope)
-        expect(select_scope).to receive(:select).and_return(inner_query_scope)
+        expect(Course).to receive(:select).and_return(inner_query_scope)
         expect(Course).to receive(:where).and_return(expected_scope)
         expect(subject).to eq(expected_scope)
       end
     end
 
     let(:scope) { class_double(Course) }
-    let(:findable_scope) { class_double(Course) }
     let(:select_scope) { class_double(Course) }
     let(:distinct_scope) { class_double(Course) }
     let(:course_ids_scope) { class_double(Course) }
     let(:order_scope) { class_double(Course) }
     let(:joins_provider_scope) { class_double(Course) }
     let(:inner_query_scope) { class_double(Course) }
+    let(:outer_query_scope) { class_double(Course) }
     let(:filter) { nil }
     let(:sort) { nil }
     let(:expected_scope) { double }
 
-    subject { described_class.call(filter: filter, sort: sort, course_scope: scope) }
-
-    before do
-      allow(scope).to receive(:findable).and_return(findable_scope)
+    subject do
+      described_class.call(filter: filter, sort: sort, course_scope: scope)
     end
 
     describe "sort by" do
@@ -37,9 +34,9 @@ describe CourseSearchService do
         let(:sort) { "name,provider.provider_name" }
 
         it "orders in ascending order" do
-          expect(findable_scope).to receive(:select).and_return(inner_query_scope)
-          expect(Course).to receive(:where).and_return(order_scope)
-          expect(order_scope).to receive(:ascending_canonical_order).and_return(select_scope)
+          expect(scope).to receive(:select).and_return(inner_query_scope)
+          expect(Course).to receive(:where).with(id: inner_query_scope).and_return(outer_query_scope)
+          expect(outer_query_scope).to receive(:ascending_canonical_order).and_return(select_scope)
           expect(select_scope).to receive(:select).and_return(expected_scope)
           expect(subject).to eq(expected_scope)
         end
@@ -49,7 +46,7 @@ describe CourseSearchService do
         let(:sort) { "-provider.provider_name,-name" }
 
         it "orders in descending order" do
-          expect(findable_scope).to receive(:select).and_return(inner_query_scope)
+          expect(scope).to receive(:select).and_return(inner_query_scope)
           expect(Course).to receive(:where).and_return(order_scope)
           expect(order_scope).to receive(:descending_canonical_order).and_return(select_scope)
           expect(select_scope).to receive(:select).and_return(expected_scope)
@@ -65,10 +62,11 @@ describe CourseSearchService do
             let(:filter) do
               { latitude: 54.9713392, longitude: -1.6112336, expand_university: "false" }
             end
+
             it "orders in descending order by distance" do
-              expect(findable_scope).to receive(:select).and_return(inner_query_scope)
-              expect(Course).to receive(:where).and_return(findable_scope)
-              expect(findable_scope).to receive(:joins).and_return(joins_provider_scope)
+              expect(scope).to receive(:select).and_return(inner_query_scope)
+              expect(Course).to receive(:where).with(id: inner_query_scope).and_return(outer_query_scope)
+              expect(outer_query_scope).to receive(:joins).and_return(joins_provider_scope)
               expect(joins_provider_scope).to receive(:joins).with(:provider).and_return(select_scope)
               distance_with_university_area_adjustment = <<~EOSQL.gsub(/\s+/m, " ").strip
                 (CASE
@@ -85,14 +83,16 @@ describe CourseSearchService do
               expect(subject).to eq(expected_scope)
             end
           end
+
           context "when absent" do
             let(:filter) do
               { latitude: 54.9713392, longitude: -1.6112336 }
             end
+
             it "orders in descending order by distance" do
-              expect(findable_scope).to receive(:select).and_return(inner_query_scope)
-              expect(Course).to receive(:where).and_return(findable_scope)
-              expect(findable_scope).to receive(:joins).and_return(joins_provider_scope)
+              expect(scope).to receive(:select).and_return(inner_query_scope)
+              expect(Course).to receive(:where).with(id: inner_query_scope).and_return(outer_query_scope)
+              expect(outer_query_scope).to receive(:joins).and_return(joins_provider_scope)
               expect(joins_provider_scope).to receive(:joins).with(:provider).and_return(select_scope)
               distance_with_university_area_adjustment = <<~EOSQL.gsub(/\s+/m, " ").strip
                 (CASE
@@ -109,14 +109,16 @@ describe CourseSearchService do
               expect(subject).to eq(expected_scope)
             end
           end
+
           context "when true" do
             let(:filter) do
               { latitude: 54.9713392, longitude: -1.6112336, expand_university: "true" }
             end
+
             it "orders in descending order by boosted distance" do
-              expect(findable_scope).to receive(:select).and_return(inner_query_scope)
-              expect(Course).to receive(:where).and_return(findable_scope)
-              expect(findable_scope).to receive(:joins).and_return(joins_provider_scope)
+              expect(scope).to receive(:select).and_return(inner_query_scope)
+              expect(Course).to receive(:where).with(id: inner_query_scope).and_return(outer_query_scope)
+              expect(outer_query_scope).to receive(:joins).and_return(joins_provider_scope)
               expect(joins_provider_scope).to receive(:joins).with(:provider).and_return(select_scope)
               distance_with_university_area_adjustment = <<~EOSQL.gsub(/\s+/m, " ").strip
                 (CASE
@@ -138,8 +140,8 @@ describe CourseSearchService do
 
       context "unspecified" do
         it "does not order" do
-          expect(findable_scope).not_to receive(:order)
-          expect(findable_scope).to receive(:select).and_return(inner_query_scope)
+          expect(scope).not_to receive(:order)
+          expect(scope).to receive(:select).and_return(inner_query_scope)
           expect(Course).to receive(:where)
           expect(subject).not_to eq(expected_scope)
         end
@@ -150,7 +152,7 @@ describe CourseSearchService do
       let(:filter) { nil }
 
       it "returns all" do
-        expect(findable_scope).to receive(:select).and_return(inner_query_scope)
+        expect(scope).to receive(:select).and_return(inner_query_scope)
         expect(Course).to receive(:where).and_return(expected_scope)
         expect(subject).to eq(expected_scope)
       end
@@ -164,7 +166,7 @@ describe CourseSearchService do
         let(:filter) { { longitude: longitude, latitude: latitude, radius: radius } }
 
         it "adds the within scope" do
-          expect(findable_scope).to receive(:within).with(radius, origin: [latitude, longitude]).and_return(course_ids_scope)
+          expect(scope).to receive(:within).with(radius, origin: [latitude, longitude]).and_return(course_ids_scope)
           expect(course_ids_scope).to receive(:select).and_return(inner_query_scope)
           expect(Course).to receive(:where).and_return(expected_scope)
           expect(subject).to eq(expected_scope)
@@ -177,7 +179,7 @@ describe CourseSearchService do
         let(:filter) { { longitude: longitude, latitude: latitude } }
 
         it "does not add the within scope" do
-          expect(findable_scope).not_to receive(:within)
+          expect(scope).not_to receive(:within)
         end
       end
     end
@@ -190,7 +192,7 @@ describe CourseSearchService do
         let(:order_scope) { double }
 
         it "adds some scope" do
-          expect(findable_scope).to receive(:with_provider_name).and_return(course_ids_scope)
+          expect(scope).to receive(:with_provider_name).and_return(course_ids_scope)
           expect(course_ids_scope).to receive(:select).with(:id).and_return(inner_query_scope)
           expect(Course).to receive(:where).and_return(accredited_body_scope)
           expect(accredited_body_scope).to receive(:accredited_body_order).and_return(order_scope)
@@ -206,7 +208,7 @@ describe CourseSearchService do
         let(:expected_scope) { double }
 
         it "adds the with_salary scope" do
-          expect(findable_scope).to receive(:with_salary).and_return(course_ids_scope)
+          expect(scope).to receive(:with_salary).and_return(course_ids_scope)
           expect(course_ids_scope).to receive(:select).and_return(inner_query_scope)
           expect(Course).to receive(:where).and_return(expected_scope)
           expect(subject).to eq(expected_scope)
@@ -217,8 +219,8 @@ describe CourseSearchService do
         let(:filter) { { funding: "all" } }
 
         it "doesn't add the with_salary scope" do
-          expect(findable_scope).not_to receive(:with_salary)
-          expect(findable_scope).to receive(:select).and_return(inner_query_scope)
+          expect(scope).not_to receive(:with_salary)
+          expect(scope).to receive(:select).and_return(inner_query_scope)
           expect(Course).to receive(:where).and_return(expected_scope)
           expect(subject).to eq(expected_scope)
         end
@@ -231,7 +233,7 @@ describe CourseSearchService do
         let(:expected_scope) { double }
 
         it "adds the with_qualifications scope" do
-          expect(findable_scope)
+          expect(scope)
             .to receive(:with_qualifications)
             .with(%w(pgde pgce_with_qts pgde_with_qts qts pgce))
             .and_return(course_ids_scope)
@@ -247,8 +249,8 @@ describe CourseSearchService do
         let(:filter) { {} }
 
         it "adds the with_qualifications scope" do
-          expect(findable_scope).not_to receive(:with_qualifications)
-          expect(findable_scope).to receive(:select).and_return(inner_query_scope)
+          expect(scope).not_to receive(:with_qualifications)
+          expect(scope).to receive(:select).and_return(inner_query_scope)
           expect(Course).to receive(:where).and_return(expected_scope)
           expect(subject).to eq(expected_scope)
         end
@@ -261,7 +263,7 @@ describe CourseSearchService do
         let(:expected_scope) { double }
 
         it "adds the with_vacancies scope" do
-          expect(findable_scope).to receive(:with_vacancies).and_return(course_ids_scope)
+          expect(scope).to receive(:with_vacancies).and_return(course_ids_scope)
           expect(course_ids_scope).to receive(:select).and_return(inner_query_scope)
           expect(Course).to receive(:where).and_return(expected_scope)
           expect(subject).to eq(expected_scope)
@@ -272,8 +274,8 @@ describe CourseSearchService do
         let(:filter) { { has_vacancies: false } }
 
         it "adds the with_vacancies scope" do
-          expect(findable_scope).not_to receive(:with_vacancies)
-          expect(findable_scope).to receive(:select).and_return(inner_query_scope)
+          expect(scope).not_to receive(:with_vacancies)
+          expect(scope).to receive(:select).and_return(inner_query_scope)
           expect(Course).to receive(:where).and_return(expected_scope)
           expect(subject).to eq(expected_scope)
         end
@@ -283,8 +285,8 @@ describe CourseSearchService do
         let(:filter) { {} }
 
         it "doesn't add the with_vacancies scope" do
-          expect(findable_scope).not_to receive(:with_vacancies)
-          expect(findable_scope).to receive(:select).and_return(inner_query_scope)
+          expect(scope).not_to receive(:with_vacancies)
+          expect(scope).to receive(:select).and_return(inner_query_scope)
           expect(Course).to receive(:where).and_return(expected_scope)
           expect(subject).to eq(expected_scope)
         end
@@ -297,7 +299,7 @@ describe CourseSearchService do
         let(:expected_scope) { double }
 
         it "adds the with_study_modes scope" do
-          expect(findable_scope).to receive(:with_study_modes).with(%w(full_time)).and_return(course_ids_scope)
+          expect(scope).to receive(:with_study_modes).with(%w(full_time)).and_return(course_ids_scope)
           expect(course_ids_scope).to receive(:select).and_return(inner_query_scope)
           expect(Course).to receive(:where).and_return(expected_scope)
           expect(subject).to eq(expected_scope)
@@ -309,7 +311,7 @@ describe CourseSearchService do
         let(:expected_scope) { double }
 
         it "adds the with_study_modes scope" do
-          expect(findable_scope).to receive(:with_study_modes).with(%w(part_time)).and_return(course_ids_scope)
+          expect(scope).to receive(:with_study_modes).with(%w(part_time)).and_return(course_ids_scope)
           expect(course_ids_scope).to receive(:select).and_return(inner_query_scope)
           expect(Course).to receive(:where).and_return(expected_scope)
           expect(subject).to eq(expected_scope)
@@ -321,7 +323,7 @@ describe CourseSearchService do
         let(:expected_scope) { double }
 
         it "adds the with_study_modes scope with an array of both arguments" do
-          expect(findable_scope).to receive(:with_study_modes).with(%w(part_time full_time)).and_return(course_ids_scope)
+          expect(scope).to receive(:with_study_modes).with(%w(part_time full_time)).and_return(course_ids_scope)
           expect(course_ids_scope).to receive(:select).and_return(inner_query_scope)
           expect(Course).to receive(:where).and_return(expected_scope)
           expect(subject).to eq(expected_scope)
@@ -332,8 +334,8 @@ describe CourseSearchService do
         let(:filter) { {} }
 
         it "doesn't add the scope" do
-          expect(findable_scope).not_to receive(:with_study_modes)
-          expect(findable_scope).to receive(:select).and_return(inner_query_scope)
+          expect(scope).not_to receive(:with_study_modes)
+          expect(scope).to receive(:select).and_return(inner_query_scope)
           expect(Course).to receive(:where).and_return(expected_scope)
           expect(subject).to eq(expected_scope)
         end
@@ -346,7 +348,7 @@ describe CourseSearchService do
         let(:expected_scope) { double }
 
         it "adds the with_funding_types scope" do
-          expect(findable_scope).to receive(:with_funding_types).with(%w(fee)).and_return(course_ids_scope)
+          expect(scope).to receive(:with_funding_types).with(%w(fee)).and_return(course_ids_scope)
           expect(course_ids_scope).to receive(:select).and_return(inner_query_scope)
           expect(Course).to receive(:where).and_return(expected_scope)
           expect(subject).to eq(expected_scope)
@@ -358,7 +360,7 @@ describe CourseSearchService do
         let(:expected_scope) { double }
 
         it "adds the with_funding_types scope" do
-          expect(findable_scope).to receive(:with_funding_types).with(%w(salary)).and_return(course_ids_scope)
+          expect(scope).to receive(:with_funding_types).with(%w(salary)).and_return(course_ids_scope)
           expect(course_ids_scope).to receive(:select).and_return(inner_query_scope)
           expect(Course).to receive(:where).and_return(expected_scope)
           expect(subject).to eq(expected_scope)
@@ -370,7 +372,7 @@ describe CourseSearchService do
         let(:expected_scope) { double }
 
         it "adds the with_funding_types scope" do
-          expect(findable_scope).to receive(:with_funding_types).with(%w(apprenticeship)).and_return(course_ids_scope)
+          expect(scope).to receive(:with_funding_types).with(%w(apprenticeship)).and_return(course_ids_scope)
           expect(course_ids_scope).to receive(:select).and_return(inner_query_scope)
           expect(Course).to receive(:where).and_return(expected_scope)
           expect(subject).to eq(expected_scope)
@@ -382,7 +384,7 @@ describe CourseSearchService do
         let(:expected_scope) { double }
 
         it "adds the with_funding_types scope" do
-          expect(findable_scope).to receive(:with_funding_types).with(%w(fee salary apprenticeship)).and_return(course_ids_scope)
+          expect(scope).to receive(:with_funding_types).with(%w(fee salary apprenticeship)).and_return(course_ids_scope)
           expect(course_ids_scope).to receive(:select).and_return(inner_query_scope)
           expect(Course).to receive(:where).and_return(expected_scope)
           expect(subject).to eq(expected_scope)
@@ -393,8 +395,8 @@ describe CourseSearchService do
         let(:filter) { {} }
 
         it "doesn't add the scope" do
-          expect(findable_scope).not_to receive(:with_funding_types)
-          expect(findable_scope).to receive(:select).and_return(inner_query_scope)
+          expect(scope).not_to receive(:with_funding_types)
+          expect(scope).to receive(:select).and_return(inner_query_scope)
           expect(Course).to receive(:where).and_return(expected_scope)
           expect(subject).to eq(expected_scope)
         end
@@ -407,7 +409,7 @@ describe CourseSearchService do
         let(:expected_scope) { double }
 
         it "adds the subject scope" do
-          expect(findable_scope).to receive(:with_subjects).with(%w(A1)).and_return(course_ids_scope)
+          expect(scope).to receive(:with_subjects).with(%w(A1)).and_return(course_ids_scope)
           expect(course_ids_scope).to receive(:select).and_return(inner_query_scope)
           expect(Course).to receive(:where).and_return(expected_scope)
           expect(subject).to eq(expected_scope)
@@ -419,7 +421,7 @@ describe CourseSearchService do
         let(:expected_scope) { double }
 
         it "adds the subject scope" do
-          expect(findable_scope).to receive(:with_subjects).with(%w(A1 B2)).and_return(course_ids_scope)
+          expect(scope).to receive(:with_subjects).with(%w(A1 B2)).and_return(course_ids_scope)
           expect(course_ids_scope).to receive(:select).and_return(inner_query_scope)
           expect(Course).to receive(:where).and_return(expected_scope)
           expect(subject).to eq(expected_scope)
@@ -430,8 +432,8 @@ describe CourseSearchService do
         let(:filter) { {} }
 
         it "doesn't add the scope" do
-          expect(findable_scope).not_to receive(:with_subjects)
-          expect(findable_scope).to receive(:select).and_return(inner_query_scope)
+          expect(scope).not_to receive(:with_subjects)
+          expect(scope).to receive(:select).and_return(inner_query_scope)
           expect(Course).to receive(:where).and_return(expected_scope)
           expect(subject).to eq(expected_scope)
         end
@@ -444,7 +446,7 @@ describe CourseSearchService do
         let(:expected_scope) { double }
 
         it "adds the with_send scope" do
-          expect(findable_scope).to receive(:with_send).and_return(course_ids_scope)
+          expect(scope).to receive(:with_send).and_return(course_ids_scope)
           expect(course_ids_scope).to receive(:select).and_return(inner_query_scope)
           expect(Course).to receive(:where).and_return(expected_scope)
           expect(subject).to eq(expected_scope)
@@ -455,8 +457,8 @@ describe CourseSearchService do
         let(:filter) { { send_courses: false } }
 
         it "adds the with_send scope" do
-          expect(findable_scope).not_to receive(:with_send)
-          expect(findable_scope).to receive(:select).and_return(inner_query_scope)
+          expect(scope).not_to receive(:with_send)
+          expect(scope).to receive(:select).and_return(inner_query_scope)
           expect(Course).to receive(:where).and_return(expected_scope)
           expect(subject).to eq(expected_scope)
         end
@@ -466,8 +468,8 @@ describe CourseSearchService do
         let(:filter) { {} }
 
         it "doesn't add the with_send scope" do
-          expect(findable_scope).not_to receive(:with_send)
-          expect(findable_scope).to receive(:select).and_return(inner_query_scope)
+          expect(scope).not_to receive(:with_send)
+          expect(scope).to receive(:select).and_return(inner_query_scope)
           expect(Course).to receive(:where).and_return(expected_scope)
           expect(subject).to eq(expected_scope)
         end
@@ -480,7 +482,7 @@ describe CourseSearchService do
       let(:expected_scope) { double }
 
       it "combines scopes" do
-        expect(findable_scope).to receive(:with_salary).and_return(salary_scope)
+        expect(scope).to receive(:with_salary).and_return(salary_scope)
         expect(salary_scope).to receive(:with_study_modes).with(%w(part_time)).and_return(course_ids_scope)
         expect(course_ids_scope).to receive(:select).and_return(inner_query_scope)
         expect(Course).to receive(:where).and_return(expected_scope)
@@ -496,7 +498,9 @@ describe CourseSearchService do
       over_5_miles_from_null_island = { latitude: 0.1, longitude: 0 }
 
       subject do
-        described_class.call(filter: filter, sort: "distance", course_scope: scope)
+        described_class.call(filter: filter,
+                             sort: "distance",
+                             course_scope: scope)
       end
 
       let(:university_course) do

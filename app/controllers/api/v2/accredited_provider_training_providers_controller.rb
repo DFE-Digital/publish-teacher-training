@@ -28,7 +28,7 @@ module API
           provider_courses = Course.where(provider: [provider.id])
           training_provider_courses = Course.where(provider: training_providers).where(accredited_body_code: provider.provider_code)
 
-          provider_courses.or(training_provider_courses)
+          provider_courses.or(training_provider_courses).findable
         end
 
         def eligible_training_provider_ids
