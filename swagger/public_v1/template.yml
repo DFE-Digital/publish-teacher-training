@@ -35,16 +35,16 @@ components:
           type: boolean
           example: true
         funding:
-          description: "Return courses that are salary funded."
+          description: "Return courses depending on how it is funded. This is a comma delimited string. If multiple funding options are provided then any course matching any one of the options provided will be retuned, i.e. the OR operator is used."
           type: string
-          example: "salary"
+          example: "salary,fee"
           enum:
             - salary
             - apprenticeship
             - fee
         qualification:
-          description: "Search courses based on the award given on course completion."
-          type: array
+          description: "Search courses based on the award given on course completion. This is a comma delimited string. If multiple qualifications are given then any course matching any one of the qualifications provided will be returned, i.e. the OR operator is used."
+          type: string
           example: "qts,pgce,pgde"
           enum:
             - qts
@@ -52,23 +52,17 @@ components:
             - pgde
             - pgce
             - pgde_with_qts
-          items:
-            type: string
-            example: "qts"
         study_type:
-          description: "Search full time or part time courses or both."
-          type: array
+          description: "Search full time or part time courses or both. This is a comma delimited string. If both full_time and part_time is specified we return courses that are either full time or part time."
+          type: string
           example: "full_time,part_time"
           enum:
             - full_time
             - part_time
             - full_time_or_part_time
-          items:
-            type: string
-            example: "full_time"
         subjects:
-          description: "Returns courses that include at least one of the given subjects."
-          type: array
+          description: "Returns courses that include at least one of the given subjects. This is a comma delimied string. If multiple subjects are given a course that has any one of the subjects specified will be returned, i.e. the OR operator is used."
+          type: string
           example: "00,01,W1"
           enum:
             - "00"
@@ -113,9 +107,6 @@ components:
             - "22"
             - "41"
             - "24"
-          items:
-            type: string
-            example: "W1"
         send_courses:
           description: "Only return courses that have a SEND specialism."
           type: boolean
@@ -141,7 +132,7 @@ components:
         - attributes
       properties:
         id:
-          type: integer
+          type: string
         type:
           type: string
           example: "courses"

@@ -4,29 +4,14 @@ module API
       module Providers
         class CoursesController < API::Public::V1::ApplicationController
           def index
-            render json: {
-              data: [
-                {
-                  id: 123,
-                  type: "Course",
-                  attributes: {
-                    code: "3GTY",
-                    provider_code: "6CL",
-                    age_minimum: 11,
-                    age_maximum: 14,
-                  },
-                },
-              ],
-              jsonapi: {
-                version: "1.0",
-              },
-            }
+            render jsonapi: paginate(courses),
+              class: API::Public::V1::SerializerService.new.call
           end
 
           def show
             render json: {
               data: {
-                id: 123,
+                id: "123",
                 type: "Course",
                 attributes: {
                   code: "3GTY",
@@ -39,6 +24,20 @@ module API
                 version: "1.0",
               },
             }
+          end
+
+        private
+
+          def courses
+            @courses ||= provider.courses
+          end
+
+          def provider
+            @provider ||= recruitment_cycle.providers.find_by(provider_code: params[:provider_code])
+          end
+
+          def recruitment_cycle
+            @recruitment_cycle ||= RecruitmentCycle.find_by(year: params[:recruitment_cycle_year])
           end
         end
       end

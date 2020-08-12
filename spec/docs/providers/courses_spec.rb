@@ -47,8 +47,14 @@ describe "API" do
                 description: "Pagination options to navigate through the collection."
 
       response "200", "The collection of courses." do
-        let(:year) { "2020" }
-        let(:provider_code) { "ABC" }
+        let(:provider) { create(:provider) }
+        let(:year) { provider.recruitment_cycle.year }
+        let(:provider_code) { provider.provider_code }
+
+        before do
+          create(:course, provider: provider, course_code: "C100")
+          create(:course, provider: provider, course_code: "C101")
+        end
 
         schema "$ref": "#/components/schemas/CourseListResponse"
 
