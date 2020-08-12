@@ -510,34 +510,6 @@
                 "value": "[parameters('settingsAuthenticationSecret')]"
               },
               {
-                "name": "SETTINGS__GOVUK_NOTIFY__API_KEY",
-                "value": "[parameters('govukNotifyApiKey')]"
-              },
-              {
-                "name": "SETTINGS__GOVUK_NOTIFY__WELCOME_EMAIL_TEMPLATE_ID",
-                "value": "[parameters('govukNotifyWelcomeEmailTemplateId')]"
-              },
-              {
-                "name": "SETTINGS__GOVUK_NOTIFY__COURSE_UPDATE_EMAIL_TEMPLATE_ID",
-                "value": "[parameters('govukNotifyCourseUpdateEmailTemplateId')]"
-              },
-              {
-                "name": "SETTINGS__GOVUK_NOTIFY__COURSE_VACANCIES_FILLED_EMAIL_TEMPLATE_ID",
-                "value": "[parameters('govukNotifyCourseVacanciesFilledEmailTemplateId')]"
-              },
-              {
-                "name": "SETTINGS__GOVUK_NOTIFY__COURSE_PUBLISH_EMAIL_TEMPLATE_ID",
-                "value": "[parameters('govukNotifyCoursePublishEmailTemplateId')]"
-              },
-              {
-                "name": "SETTINGS__GOVUK_NOTIFY__COURSE_WITHDRAW_EMAIL_TEMPLATE_ID",
-                "value": "[parameters('govukNotifyCourseWithdrawEmailTemplateId')]"
-              },
-              {
-                "name": "SETTINGS__GOVUK_NOTIFY__MAGIC_LINK_EMAIL_TEMPLATE_ID",
-                "value": "[parameters('govukNotifyMagicLinkEmailTemplateId')]"
-              },
-              {
                 "name": "SETTINGS__SYSTEM_AUTHENTICATION_TOKEN",
                 "value": "[parameters('mcbeSystemAuthenticationToken')]"
               },
@@ -1007,30 +979,6 @@
               {
                 "name": "SETTINGS__GOVUK_NOTIFY__API_KEY",
                 "value": "[parameters('govukNotifyApiKey')]"
-              },
-              {
-                "name": "SETTINGS__GOVUK_NOTIFY__WELCOME_EMAIL_TEMPLATE_ID",
-                "value": "[parameters('govukNotifyWelcomeEmailTemplateId')]"
-              },
-              {
-                "name": "SETTINGS__GOVUK_NOTIFY__COURSE_UPDATE_EMAIL_TEMPLATE_ID",
-                "value": "[parameters('govukNotifyCourseUpdateEmailTemplateId')]"
-              },
-              {
-                "name": "SETTINGS__GOVUK_NOTIFY__COURSE_PUBLISH_EMAIL_TEMPLATE_ID",
-                "value": "[parameters('govukNotifyCoursePublishEmailTemplateId')]"
-              },
-              {
-                "name": "SETTINGS__GOVUK_NOTIFY__COURSE_WITHDRAW_EMAIL_TEMPLATE_ID",
-                "value": "[parameters('govukNotifyCourseWithdrawEmailTemplateId')]"
-              },
-              {
-                "name": "SETTINGS__GOVUK_NOTIFY__COURSE_VACANCIES_FILLED_EMAIL_TEMPLATE_ID",
-                "value": "[parameters('govukNotifyCourseVacanciesFilledEmailTemplateId')]"
-              },
-              {
-                "name": "SETTINGS__GOVUK_NOTIFY__MAGIC_LINK_EMAIL_TEMPLATE_ID",
-                "value": "[parameters('govukNotifyMagicLinkEmailTemplateId')]"
               }
             ]
           },
