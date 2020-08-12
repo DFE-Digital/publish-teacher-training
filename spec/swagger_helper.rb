@@ -7,6 +7,10 @@ RSpec.configure do |config|
     OpenApi::Rswag::Specs.config.swagger_docs["public_v1/api_spec.json"]["basePath"] = "/api/public/v1/"
   end
 
+  config.define_derived_metadata(file_path: %r{spec/docs}) do |metadata|
+    metadata[:type] ||= :request
+  end
+
   # Specify a root folder where Swagger JSON files are generated
   # NOTE: If you're using the rswag-api to serve API descriptions, you'll need
   # to ensure that it's configured to serve Swagger from the same folder
