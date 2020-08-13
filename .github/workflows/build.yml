@@ -1,0 +1,159 @@
+name: Build, test and push Docker images
+
+on:
+  push:
+    branches:
+      - master
+
+env:
+  DOCKER_COMPOSE: docker-compose -f docker-compose.yml
+  DOCKER_IMAGE: dfedigital/teacher-training-api
+  DOCKER_IMAGE_MAILER: dfedigital/teacher-training-bg-mailer
+  DOCKER_IMAGE_GEOCODE: dfedigital/teacher-training-bg-geocode
+  DOCKER_IMAGE_JOBS: dfedigital/teacher-training-bg-jobs
+  CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
+  # Below settings are for compatibility with the azure pipeline. Currently
+  # used by docker-compose.yml until we change the variable names.
+  dockerHubUsername: dfedigital
+  dockerHubImageName: teacher-training-api
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Get values for current commit
+      run: |
+        GIT_SHA_SHORT=$(echo ${{github.sha}} | cut -c 1-7)
+        GIT_REF=${{github.ref}}
+        GIT_BRANCH=${GIT_REF##*/}
+        echo "::set-env name=GIT_SHA_SHORT::$GIT_SHA_SHORT"
+        echo "::set-env name=GIT_BRANCH::$GIT_BRANCH"
+        echo "::set-env name=SHA_TAG::paas-$GIT_SHA_SHORT"
+        echo "::set-env name=BRANCH_TAG::paas-$GIT_BRANCH"
+
+    - name: Login to docker hub
+      run: echo "${{secrets.DOCKERHUB_PERSONAL_ACCESS_TOKEN}}" | docker login -u ${{secrets.DOCKERHUB_USERNAME}} --password-stdin
+
+    - name: "docker pull ${{env.DOCKER_IMAGE}}:${{env.BRANCH_TAG}}"
+      run: docker pull $DOCKER_IMAGE:BRANCH_TAG || true
+
+    - name: "docker pull ${{env.DOCKER_IMAGE}}-middleman:master"
+      run: docker pull $DOCKER_IMAGE-middleman:master || true
+
+    - name: "docker-compose build middleman"
+      run: $DOCKER_COMPOSE build middleman
+      env:
+        GIT_BRANCH: ${{env.BRANCH_TAG}}
+
+    - name: "docker-compose build"
+      run: $DOCKER_COMPOSE build web
+      env:
+        GIT_BRANCH: ${{env.BRANCH_TAG}}
+
+    - name: Setup tests
+      run: |
+        $DOCKER_COMPOSE up --no-build -d
+        $DOCKER_COMPOSE exec -T web /bin/sh -c "./wait-for-command.sh -c 'nc -z db 5432' -s 0 -t 20"
+        $DOCKER_COMPOSE exec -T web /bin/sh -c "bundle exec rails db:setup"
+        $DOCKER_COMPOSE exec -T web /bin/sh -c "apk --no-cache add curl"
+        $DOCKER_COMPOSE exec -T web /bin/sh -c "bundle exec rake cc:setup"
+      env:
+        GIT_BRANCH: ${{env.BRANCH_TAG}}
+
+    - name: Run tests
+      run: |
+        $DOCKER_COMPOSE exec -T web /bin/sh -c 'bundle config --local disable_exec_load true'
+        $DOCKER_COMPOSE exec -T web /bin/sh -c 'bundle exec rake parallel:setup'
+        $DOCKER_COMPOSE exec -T web /bin/sh -c 'bundle exec rake "parallel:spec[,, -O .azure_parallel]"'
+      env:
+        GIT_BRANCH: ${{env.BRANCH_TAG}}
+
+    - name: Tag docker images
+      run: |
+        docker tag $DOCKER_IMAGE:$BRANCH_TAG $DOCKER_IMAGE:$SHA_TAG
+
+    - name: Push docker images to Docker Hub
+      run: |
+        docker push $DOCKER_IMAGE:$SHA_TAG
+        docker push $DOCKER_IMAGE:$BRANCH_TAG
+        [[ "$BRANCH_TAG" == "master" ]] && docker push $DOCKER_IMAGE-middleman:$BRANCH_TAG
+
+    - name: Install Terraform CloudFoundry Provider
+      run: |
+          mkdir -p $HOME/.terraform.d/plugins/linux_amd64
+          wget -O ${{ env.CF_PROVIDER }} https://github.com/cloudfoundry-community/terraform-provider-cf/releases/latest/download/terraform-provider-cloudfoundry_linux_amd64
+          chmod +x ${{ env.CF_PROVIDER }}
+      env:
+        CF_PROVIDER: $HOME/.terraform.d/plugins/linux_amd64/terraform-provider-cloudfoundry
+
+    - name: Terraform init
+      run: |
+          terraform init \
+           -backend-config=storage_account_name=${{ env.BACKEND_STORAGE_ACCOUNT_NAME }} \
+           -backend-config=access_key=${{ env.BACKEND_ACCESS_KEY }} \
+           -backend-config=key=${{ env.BACKEND_KEY }} \
+            ${{ env.PAAS_TF_DIR }}
+      env:
+        BACKEND_STORAGE_ACCOUNT_NAME: s121d01tfstatestr
+        BACKEND_ACCESS_KEY: ${{ secrets.BACKEND_ACCESS_KEY }}
+        BACKEND_KEY: paas-ttapi.tfstate
+        PAAS_TF_DIR: $HOME/work/teacher-training-api/teacher-training-api/terraform/paas
+
+    - name: Terraform plan
+      run: |
+          terraform plan -auto-approve \
+            -var-file=${{ env.PAAS_TF_DIR }}/${{ env.TERRAFORM_VAR_FILE }} \
+            ${{ env.PAAS_TF_DIR }}
+      env:
+        BACKEND_STORAGE_ACCOUNT_NAME: s121d01tfstatestr
+        BACKEND_ACCESS_KEY: ${{ secrets.BACKEND_ACCESS_KEY }}
+        BACKEND_KEY: paas-ttapi.tfstate
+        PAAS_TF_DIR: $HOME/work/teacher-training-api/teacher-training-api/terraform/paas
+        TERRAFORM_VAR_FILE: terraform_qa.tfvars
+        TF_VAR_ttapi_image_tag: ${{env.SHA_TAG}}
+        TF_VAR_api_url: https://api.london.cloud.service.gov.uk
+        TF_VAR_docker_image: ${{ env.DOCKER_IMAGE }}:${{ env.SHA_TAG }}
+        TF_VAR_user: ${{ secrets.TF_VAR_user }}
+        TF_VAR_password: ${{ secrets.TF_VAR_password }}
+        TF_VAR_SECRET_KEY_BASE: ${{ secrets.TF_VAR_SECRET_KEY_BASE }}
+        TF_VAR_SENTRY_DSN: ${{ secrets.TF_VAR_SENTRY_DSN }}
+        # Let's confirm if these variables are required
+        #TF_VAR_SETTINGS__GOOGLE__GCP_API_KEY: ${{ secrets.TF_VAR_SETTINGS__GOOGLE__GCP_API_KEY }}
+        #TF_VAR_SETTINGS__GOOGLE__MAPS_API_KEY: ${{ secrets.TF_VAR_SETTINGS__GOOGLE__MAPS_API_KEY }}
+        #TF_VAR_AUTHENTICATION_TOKEN: ${{ secrets.TF_VAR_AUTHENTICATION_TOKEN }}
+        #TF_VAR_SETTINGS__AUTHENTICATION__SECRET: ${{ secrets.SETTINGS__AUTHENTICATION__SECRET }}
+        TF_VAR_SETTINGS__GOVUK_NOTIFY__API_KEY: ${{ secrets.SETTINGS__GOVUK_NOTIFY__API_KEY }}
+        TF_VAR_SETTINGS__LOGSTASH__HOST: ${{ secrets.SETTINGS__LOGSTASH__HOST }}
+        #TF_VAR_SETTINGS__SYSTEM_AUTHENTICATION_TOKEN: ${{ secrets.SETTINGS__SYSTEM_AUTHENTICATION_TOKEN }}
+        # TF_VAR_APPINSIGHTS_INSTRUMENTATIONKEY: ${{ secrets.TF_VAR_APPINSIGHTS_INSTRUMENTATIONKEY }}
+
+    - name: Terraform apply
+      run: |
+          terraform apply -auto-approve \
+            -var-file=${{ env.PAAS_TF_DIR }}/${{ env.TERRAFORM_VAR_FILE }} \
+            ${{ env.PAAS_TF_DIR }}
+      env:
+        BACKEND_STORAGE_ACCOUNT_NAME: s121d01tfstatestr
+        BACKEND_ACCESS_KEY: ${{ secrets.BACKEND_ACCESS_KEY }}
+        BACKEND_KEY: paas-ttapi.tfstate
+        PAAS_TF_DIR: $HOME/work/teacher-training-api/teacher-training-api/terraform/paas
+        TERRAFORM_VAR_FILE: terraform_qa.tfvars
+        TF_VAR_ttapi_image_tag: ${{env.SHA_TAG}}
+        TF_VAR_api_url: https://api.london.cloud.service.gov.uk
+        TF_VAR_docker_image: ${{ env.DOCKER_IMAGE }}:${{ env.SHA_TAG }}
+        TF_VAR_user: ${{ secrets.TF_VAR_user }}
+        TF_VAR_password: ${{ secrets.TF_VAR_password }}
+        TF_VAR_SECRET_KEY_BASE: ${{ secrets.TF_VAR_SECRET_KEY_BASE }}
+        TF_VAR_SENTRY_DSN: ${{ secrets.TF_VAR_SENTRY_DSN }}
+        # Let's confirm if these variables are required
+        #TF_VAR_SETTINGS__GOOGLE__GCP_API_KEY: ${{ secrets.TF_VAR_SETTINGS__GOOGLE__GCP_API_KEY }}
+        #TF_VAR_SETTINGS__GOOGLE__MAPS_API_KEY: ${{ secrets.TF_VAR_SETTINGS__GOOGLE__MAPS_API_KEY }}
+        #TF_VAR_AUTHENTICATION_TOKEN: ${{ secrets.TF_VAR_AUTHENTICATION_TOKEN }}
+        #TF_VAR_SETTINGS__AUTHENTICATION__SECRET: ${{ secrets.SETTINGS__AUTHENTICATION__SECRET }}
+        TF_VAR_SETTINGS__GOVUK_NOTIFY__API_KEY: ${{ secrets.SETTINGS__GOVUK_NOTIFY__API_KEY }}
+        TF_VAR_SETTINGS__LOGSTASH__HOST: ${{ secrets.SETTINGS__LOGSTASH__HOST }}
+        #TF_VAR_SETTINGS__SYSTEM_AUTHENTICATION_TOKEN: ${{ secrets.SETTINGS__SYSTEM_AUTHENTICATION_TOKEN }}
+        # TF_VAR_APPINSIGHTS_INSTRUMENTATIONKEY: ${{ secrets.TF_VAR_APPINSIGHTS_INSTRUMENTATIONKEY }}

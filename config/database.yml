@@ -27,7 +27,6 @@ qa_paas:
   adapter: postgresql
   encoding: unicode
   pool: 5
-  database: <%= ENV['DB_DATABASE'] %>
 
 pentest:
   <<: *default
