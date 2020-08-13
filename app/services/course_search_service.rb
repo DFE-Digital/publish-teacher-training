@@ -1,7 +1,7 @@
 class CourseSearchService
-  def initialize(filter:, sort: nil, course_scope: Course)
+  def initialize(filter:, course_scope:, sort: nil)
     @filter = filter || {}
-    @course_scope = course_scope
+    @course_scope = course_scope || RecruitmentCycle.current.courses
     @sort = Set.new(sort&.split(","))
   end
 
@@ -26,12 +26,14 @@ class CourseSearchService
     # The 'where' scope will remove duplicates
     # An outer query is required in the event the provider name is present.
     # This prevents 'PG::InvalidColumnReference: ERROR: for SELECT DISTINCT, ORDER BY expressions must appear in select list'
-    outer_scope = Course.where(id: scope.select(:id))
+    # outer_scope = Course.where(id: scope.select(:id))
+    outer_scope = scope
 
     if provider_name.present?
       outer_scope = outer_scope
                       .accredited_body_order(provider_name)
                       .ascending_canonical_order
+                      .select("provider.provider_name", "course.*")
     elsif sort_by_provider_ascending?
       outer_scope = outer_scope.ascending_canonical_order
       outer_scope = outer_scope.select("provider.provider_name", "course.*")
@@ -50,7 +52,7 @@ class CourseSearchService
                     end
     end
 
-    outer_scope
+    outer_scope.distinct
   end
 
   private_class_method :new
