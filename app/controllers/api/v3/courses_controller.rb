@@ -40,9 +40,9 @@ module API
 
       def build_courses
         @courses = if @provider.present?
-                     @provider.courses.includes(:provider)
+                     @provider.courses.includes(:provider).findable
                    else
-                     @recruitment_cycle.courses.includes(:provider)
+                     @recruitment_cycle.courses.includes(:provider).findable
                    end
       end
 
