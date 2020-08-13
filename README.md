@@ -25,7 +25,6 @@
 If you are going to login with a user who hasn't recieved the welcome email - you will need to set the following settings to their correct values in `config/settings/development.local.yml`:
 
 - `govuk_notify.api_key`
-- `govuk_notify.welcome_email_template_id`
 
 ### Native
 
