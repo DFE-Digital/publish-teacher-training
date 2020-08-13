@@ -37,12 +37,14 @@
         "properties": {
           "about_accredited_body": {
             "type": "string",
+            "nullable": true,
             "format": "markdown",
             "description": "Description of the accredited body for this course.",
             "example": "UCL Institute of Education is the world’s leading centre for research and teaching in education and related social sciences."
           },
           "about_course": {
             "type": "string",
+            "nullable": true,
             "format": "markdown",
             "description": "Short factual summary of the course.",
             "example": "The Secondary PGCE consists of three core modules: two Master's-level modules, which are assessed through written assignments, and the Professional Practice module, which is assessed by the observation of practical teaching in placement schools."
@@ -73,13 +75,17 @@
           },
           "bursary_amount": {
             "type": "integer",
+            "nullable": true,
             "description": "Bursary amount in GBP for this course.",
             "example": 9000
           },
           "bursary_requirements": {
-            "type": "string",
+            "type": "array",
             "description": "Description of requirements to be eligible for a bursary.",
-            "example": "a degree of 2:2 or above in any subject"
+            "items": {
+              "type": "string",
+              "example": "a degree of 2:2 or above in any subject"
+            }
           },
           "changed_at": {
             "type": "string",
@@ -96,6 +102,7 @@
           },
           "course_length": {
             "type": "string",
+            "nullable": true,
             "description": "Text describing how long the course runs.",
             "example": "OneYear"
           },
@@ -107,22 +114,26 @@
           },
           "fee_details": {
             "type": "string",
+            "nullable": true,
             "format": "markdown",
             "description": "Further details about the fees for this course, if applicable.",
             "example": "For those wishing to top up their qualification to the full PGCE, a further £1800 will be payable."
           },
           "fee_international": {
             "type": "integer",
+            "nullable": true,
             "description": "Fee in GBP for international students (optional).",
             "example": 13000
           },
           "fee_domestic": {
             "type": "integer",
+            "nullable": true,
             "description": "Fee in GBP for UK and EU students.",
             "example": 9200
           },
           "financial_support": {
             "type": "string",
+            "nullable": true,
             "format": "markdown",
             "description": "Details about financial support offered, if any.",
             "example": "You'll get a bursary of £9,000 if you have a degree of 2:2 or above in any subject. You may also be eligible for a loan while you study."
@@ -143,7 +154,7 @@
             ]
           },
           "gcse_subjects_required": {
-            "type": "string",
+            "type": "array",
             "example": [
               "maths",
               "english"
@@ -162,7 +173,11 @@
                 "science"
               ]
             ],
-            "description": "GSCEs, or equivalent, required for this level of course."
+            "description": "GSCEs, or equivalent, required for this level of course.",
+            "items": {
+              "type": "string",
+              "example": "maths"
+            }
           },
           "has_bursary": {
             "type": "boolean",
@@ -186,12 +201,14 @@
           },
           "how_school_placements_work": {
             "type": "string",
+            "nullable": true,
             "format": "markdown",
             "description": "Additional information about the schools applicants will be teaching in.",
             "example": "You will spend two-thirds of your time (120 days) in schools, working with art and design mentors who support you through your two school placements."
           },
           "interview_process": {
             "type": "string",
+            "nullable": true,
             "format": "markdown",
             "description": "Additional information about how the interview process will work for applicants.",
             "example": "At your interview day you will take part in a combination of group and individual interviews with members of the programme team, and you may also be asked to undertake written or presentation tasks, depending on your subject."
@@ -203,6 +220,7 @@
           },
           "last_published_at": {
             "type": "string",
+            "nullable": true,
             "format": "date-time",
             "description": "Timestamp of when changes to this course's additional information sections were last published.",
             "example": "2019-06-13T10:44:31Z"
@@ -229,12 +247,14 @@
           },
           "other_requirements": {
             "type": "string",
+            "nullable": true,
             "format": "markdown",
             "description": "Any non-academic qualifications or documents the applicant may need.",
             "example": "You'll need to provide confirmation you have the health and physical capacity to commence training, and a Disclosure and Barring Service (DBS) certificate."
           },
           "personal_qualities": {
             "type": "string",
+            "nullable": true,
             "format": "markdown",
             "description": "Any skills, motivation and experience the provider is looking for in applicants.",
             "example": "We are looking for applicants who have the potential to become outstanding teachers, and who are able to work independently on their studies while training in a school context."
@@ -259,7 +279,7 @@
             "example": "6CL"
           },
           "qualifications": {
-            "type": "string",
+            "type": "array",
             "description": "The qualifications as an outcome of the course.",
             "example": [
               "qts"
@@ -282,7 +302,11 @@
                 "qts",
                 "pgde"
               ]
-            ]
+            ],
+            "items": {
+              "type": "string",
+              "example": "qts"
+            }
           },
           "recruitment_cycle_year": {
             "type": "string",
@@ -291,6 +315,7 @@
           },
           "required_qualifications": {
             "type": "string",
+            "nullable": true,
             "format": "markdown",
             "description": "The minimum academic qualifications needed for this course.",
             "example": "A first or second-class UK Bachelor's degree in an appropriate subject, or an overseas qualification of an equivalent standard from a recognised higher education institution."
@@ -338,11 +363,13 @@
           },
           "salary_details": {
             "type": "string",
+            "nullable": true,
             "description": "Salary details about this course.",
             "example": "Successful applicants will be employed as unqualified teachers on at least Point 1 of the Unqualified Teachers' Pay Scale for the duration of the programme."
           },
           "scholarship_amount": {
             "type": "integer",
+            "nullable": true,
             "description": "The scholarship amount a candidate may be eligible for for this course.",
             "example": 17000
           },
@@ -437,7 +464,7 @@
         ],
         "properties": {
           "id": {
-            "type": "integer"
+            "type": "string"
           },
           "type": {
             "type": "string",
@@ -481,9 +508,9 @@
             "example": true
           },
           "funding": {
-            "description": "Return courses that are salary funded.",
+            "description": "Return courses depending on how it is funded. This is a comma delimited string. If multiple funding options are provided then any course matching any one of the options provided will be retuned, i.e. the OR operator is used.",
             "type": "string",
-            "example": "salary",
+            "example": "salary,fee",
             "enum": [
               "salary",
               "apprenticeship",
@@ -491,8 +518,8 @@
             ]
           },
           "qualification": {
-            "description": "Search courses based on the award given on course completion.",
-            "type": "array",
+            "description": "Search courses based on the award given on course completion. This is a comma delimited string. If multiple qualifications are given then any course matching any one of the qualifications provided will be returned, i.e. the OR operator is used.",
+            "type": "string",
             "example": "qts,pgce,pgde",
             "enum": [
               "qts",
@@ -500,29 +527,21 @@
               "pgde",
               "pgce",
               "pgde_with_qts"
-            ],
-            "items": {
-              "type": "string",
-              "example": "qts"
-            }
+            ]
           },
           "study_type": {
-            "description": "Search full time or part time courses or both.",
-            "type": "array",
+            "description": "Search full time or part time courses or both. This is a comma delimited string. If both full_time and part_time is specified we return courses that are either full time or part time.",
+            "type": "string",
             "example": "full_time,part_time",
             "enum": [
               "full_time",
               "part_time",
               "full_time_or_part_time"
-            ],
-            "items": {
-              "type": "string",
-              "example": "full_time"
-            }
+            ]
           },
           "subjects": {
-            "description": "Returns courses that include at least one of the given subjects.",
-            "type": "array",
+            "description": "Returns courses that include at least one of the given subjects. This is a comma delimied string. If multiple subjects are given a course that has any one of the subjects specified will be returned, i.e. the OR operator is used.",
+            "type": "string",
             "example": "00,01,W1",
             "enum": [
               "00",
@@ -567,11 +586,7 @@
               "22",
               "41",
               "24"
-            ],
-            "items": {
-              "type": "string",
-              "example": "W1"
-            }
+            ]
           },
           "send_courses": {
             "description": "Only return courses that have a SEND specialism.",

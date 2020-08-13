@@ -6,7 +6,7 @@ module API
           render json: {
             data: [
               {
-                id: 124,
+                id: "124",
                 type: "Course",
                 attributes: {
                   code: "3GTY",
