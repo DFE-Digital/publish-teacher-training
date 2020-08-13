@@ -5,6 +5,7 @@ module API
         class CoursesController < API::Public::V1::ApplicationController
           def index
             render jsonapi: paginate(courses),
+              include: include_param,
               class: API::Public::V1::SerializerService.new.call
           end
 
@@ -38,6 +39,10 @@ module API
 
           def recruitment_cycle
             @recruitment_cycle ||= RecruitmentCycle.find_by(year: params[:recruitment_cycle_year])
+          end
+
+          def include_param
+            params.fetch(:include, "")
           end
         end
       end
