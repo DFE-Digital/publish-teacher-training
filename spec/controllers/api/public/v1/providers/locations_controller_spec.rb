@@ -6,29 +6,57 @@ RSpec.describe API::Public::V1::Providers::LocationsController do
 
   describe "#index" do
     context "when a course does not have any locations" do
-      it "returns empty array of data" do
+      before do
         get :index, params: {
           recruitment_cycle_year: provider.recruitment_cycle.year,
           provider_code: provider.provider_code,
           course_code: course.course_code,
         }
-        expect(JSON.parse(response.body)["data"]).to eql([])
+      end
+
+      it "returns empty array of data" do
+        expect(json_response["data"]).to eql([])
       end
     end
 
     context "when a course has locations" do
       before do
-        course.sites << build_list(:site, 2)
-      end
+        course.sites << build_list(:site, 2, provider: provider)
 
-      it "returns the correct number of locations" do
         get :index, params: {
           recruitment_cycle_year: "2020",
           provider_code: provider.provider_code,
           course_code: course.course_code,
         }
+      end
 
-        expect(JSON.parse(response.body)["data"].size).to eql(2)
+      it "returns the correct number of locations" do
+        expect(json_response["data"].size).to eql(2)
+      end
+
+      context "with includes" do
+        before do
+          get :index, params: {
+            recruitment_cycle_year: "2020",
+            provider_code: provider.provider_code,
+            course_code: course.course_code,
+            include: "recruitment_cycle,provider,course",
+          }
+        end
+
+        it "returns the requested associated data in the response" do
+          recruitment_cycle_id = json_response["included"][0]["id"].to_i
+          provider_id = json_response["included"][1]["id"].to_i
+          course_id = json_response["included"][2]["id"].to_i
+
+          expect(json_response["data"][0]["relationships"].keys).to eq(
+            API::Public::V1::Providers::LocationsController::PERMITTED_INCLUSIONS,
+          )
+
+          expect(recruitment_cycle_id).to eq(provider.recruitment_cycle.id)
+          expect(provider_id).to eq(provider.id)
+          expect(course_id).to eq(course.id)
+        end
       end
     end
   end

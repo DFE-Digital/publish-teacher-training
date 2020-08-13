@@ -4,6 +4,13 @@ module API
       class SerializableLocation < JSONAPI::Serializable::Resource
         type "locations"
 
+        belongs_to :recruitment_cycle
+        belongs_to :provider
+
+        belongs_to :course do
+          data { @course }
+        end
+
         attributes :code,
                    :latitude,
                    :location_name,

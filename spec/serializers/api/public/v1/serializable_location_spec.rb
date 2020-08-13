@@ -12,6 +12,8 @@ describe API::Public::V1::SerializableLocation do
 
   it { should have_type "locations" }
 
+  it { should have_relationships(:course, :provider, :recruitment_cycle) }
+
   it { should have_attribute(:street_address_1).with_value(location.address1) }
   it { should have_attribute(:street_address_2).with_value(location.address2) }
   it { should have_attribute(:city).with_value(location.address3) }
