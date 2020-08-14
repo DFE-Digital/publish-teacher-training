@@ -236,9 +236,11 @@ components:
           example: "11214485"
         type:
           type: string
-          example: "sites"
+          example: "locations"
         attributes:
           $ref: "#/components/schemas/LocationAttributes"
+        relationships:
+          $ref: "#/components/schemas/LocationRelationships"
     LocationListResponse:
       description: "This schema is used to return a collection of locations."
       type: object
@@ -249,6 +251,8 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/LocationResource"
+        included:
+          $ref: "#/components/schemas/Included"
         jsonapi:
           $ref: "#/components/schemas/JSONAPI"
     LocationStatusResource:
@@ -362,10 +366,11 @@ components:
     Resource:
       anyOf:
         - $ref: "#/components/schemas/CourseResource"
-        - $ref: "#/components/schemas/RecruitmentCycleResource"
-        - $ref: "#/components/schemas/SubjectResource"
         - $ref: "#/components/schemas/LocationResource"
         - $ref: "#/components/schemas/LocationStatusResource"
+        - $ref: "#/components/schemas/ProviderResource"
+        - $ref: "#/components/schemas/RecruitmentCycleResource"
+        - $ref: "#/components/schemas/SubjectResource"
       discriminator:
         propertyName: type
     ResourceIdentifier:

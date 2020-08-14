@@ -650,7 +650,7 @@
           },
           "street_address_2": {
             "type": "string",
-            "description": "Building or street address line one.",
+            "description": "Building or street address line two.",
             "example": "Wath-upon-Dearne"
           },
           "city": {
@@ -702,8 +702,26 @@
               "$ref": "#/components/schemas/LocationResource"
             }
           },
+          "included": {
+            "$ref": "#/components/schemas/Included"
+          },
           "jsonapi": {
             "$ref": "#/components/schemas/JSONAPI"
+          }
+        }
+      },
+      "LocationRelationships": {
+        "description": "This schema is used to describe associations that can be returned with locations.",
+        "type": "object",
+        "properties": {
+          "recruitment_cycle": {
+            "$ref": "#/components/schemas/Relationship"
+          },
+          "provider": {
+            "$ref": "#/components/schemas/Relationship"
+          },
+          "course": {
+            "$ref": "#/components/schemas/Relationship"
           }
         }
       },
@@ -717,10 +735,13 @@
           },
           "type": {
             "type": "string",
-            "example": "sites"
+            "example": "locations"
           },
           "attributes": {
             "$ref": "#/components/schemas/LocationAttributes"
+          },
+          "relationships": {
+            "$ref": "#/components/schemas/LocationRelationships"
           }
         }
       },
@@ -1143,16 +1164,19 @@
             "$ref": "#/components/schemas/CourseResource"
           },
           {
-            "$ref": "#/components/schemas/RecruitmentCycleResource"
-          },
-          {
-            "$ref": "#/components/schemas/SubjectResource"
-          },
-          {
             "$ref": "#/components/schemas/LocationResource"
           },
           {
             "$ref": "#/components/schemas/LocationStatusResource"
+          },
+          {
+            "$ref": "#/components/schemas/ProviderResource"
+          },
+          {
+            "$ref": "#/components/schemas/RecruitmentCycleResource"
+          },
+          {
+            "$ref": "#/components/schemas/SubjectResource"
           }
         ],
         "discriminator": {
@@ -1421,6 +1445,20 @@
             "schema": {
               "type": "string"
             }
+          },
+          {
+            "name": "include",
+            "in": "query",
+            "required": false,
+            "description": "The associated data for this resource.",
+            "schema": {
+              "enum": [
+                "recruitment_cycle",
+                "provider",
+                "course"
+              ]
+            },
+            "example": "recruitment_cycle,provider"
           }
         ],
         "responses": {

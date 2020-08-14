@@ -23,6 +23,15 @@ describe "API" do
                 type: :string,
                 description: "The code of the course.",
                 example: "X130"
+      parameter name: :include,
+                in: :query,
+                type: :string,
+                required: false,
+                description: "The associated data for this resource.",
+                schema: {
+                  enum: %w[recruitment_cycle provider course],
+                },
+                example: "recruitment_cycle,provider"
 
       response "200", "The collection of locations for the specified course." do
         let(:course) { create(:course) }
