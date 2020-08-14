@@ -152,9 +152,14 @@ module API
 
       def send_vacancies_updated_notification
         authorize @course
+        vacancy_statuses_params = params
+                                    .require(:_jsonapi)
+                                    .require(:vacancy_statuses)
+                                    .map { |vs| vs.permit(:id, :status) }
+
         NotificationService::CourseVacanciesUpdated.call(
           course: @course,
-          vacancies_filled: params.dig(:_jsonapi, :vacancies_filled),
+          vacancy_statuses: vacancy_statuses_params,
         )
       end
 
