@@ -10,21 +10,9 @@ module API
           end
 
           def show
-            render json: {
-              data: {
-                id: "123",
-                type: "Course",
-                attributes: {
-                  code: "3GTY",
-                  provider_code: "6CL",
-                  age_minimum: 11,
-                  age_maximum: 14,
-                },
-              },
-              jsonapi: {
-                version: "1.0",
-              },
-            }
+            render jsonapi: course,
+              include: include_param,
+              class: API::Public::V1::SerializerService.new.call
           end
 
         private
@@ -33,8 +21,12 @@ module API
             @courses ||= provider.courses
           end
 
+          def course
+            @course ||= provider.courses.find_by!(course_code: params[:code])
+          end
+
           def provider
-            @provider ||= recruitment_cycle.providers.find_by(provider_code: params[:provider_code])
+            @provider ||= recruitment_cycle.providers.find_by!(provider_code: params[:provider_code])
           end
 
           def recruitment_cycle
