@@ -12,6 +12,13 @@ module API
 
         type "courses"
 
+        belongs_to :accredited_body do
+          data { @object.accrediting_provider }
+        end
+
+        belongs_to :provider
+        belongs_to :recruitment_cycle
+
         attributes :accredited_body_code,
                    :age_maximum,
                    :age_minimum,

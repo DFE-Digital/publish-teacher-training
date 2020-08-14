@@ -60,5 +60,42 @@ RSpec.describe API::Public::V1::Providers::CoursesController do
         expect(JSON.parse(response.body)["data"].size).to eql(2)
       end
     end
+
+    describe "include" do
+      let!(:course) { create(:course, :with_accrediting_provider, provider: provider) }
+
+      context "when includes specified" do
+        before do
+          get :index, params: {
+            recruitment_cycle_year: provider.recruitment_cycle.year,
+            provider_code: provider.provider_code,
+            include: "provider,accredited_body",
+          }
+        end
+
+        it "returns the provider and accrediting body connected to the course" do
+          expect(JSON.parse(response.body)["data"][0]["relationships"].keys).to include("provider")
+          expect(JSON.parse(response.body)["data"][0]["relationships"].keys).to include("accredited_body")
+          expect(JSON.parse(response.body)["included"][0]["id"]).to eql(course.accrediting_provider.id.to_s)
+          expect(JSON.parse(response.body)["included"][0]["type"]).to eql("providers")
+          expect(JSON.parse(response.body)["included"][1]["id"]).to eql(provider.id.to_s)
+          expect(JSON.parse(response.body)["included"][1]["type"]).to eql("providers")
+        end
+      end
+
+      context "when includes are not part of the serailizer" do
+        before do
+          get :index, params: {
+            recruitment_cycle_year: provider.recruitment_cycle.year,
+            provider_code: provider.provider_code,
+            include: "subjects",
+          }
+        end
+
+        it "doesn't include subjects" do
+          expect(JSON.parse(response.body)["data"][0]["relationships"].keys).to_not include("subjects")
+        end
+      end
+    end
   end
 end
