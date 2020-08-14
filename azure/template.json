@@ -35,6 +35,12 @@
         "description": "The custom hostname to add to the app service."
       }
     },
+    "customDomains": {
+      "type": "array",
+      "metadata": {
+        "description": "Custom domains specified in an array format:-[\"api.staging.publish-teacher-training-courses.service.gov.uk\", \"api2.staging.publish-teacher-training-courses.service.gov.uk\"]"
+      }
+    },
     "certificateName": {
       "type": "string",
       "defaultValue": "",
@@ -399,6 +405,53 @@
       }
     },
     {
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2017-05-10",
+      "name": "custom-domains",
+      "dependsOn": [
+        "app-service-certificate"
+      ],
+      "properties": {
+          "mode": "Incremental",
+          "expressionEvaluationOptions": {
+              "scope": "inner"
+          },
+          "template": {
+              "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+              "contentVersion": "1.0.0.0",
+              "parameters": {
+                  "customDomains": {
+                      "type": "array"
+                  },
+                  "certificateThumprint": {
+                       "type": "string"
+                  }
+              },
+              "resources": [],
+              "outputs": {
+                  "customDomains": {
+                      "copy": {
+                          "count": "[length(parameters('customDomains'))]",
+                          "input": {
+                              "domainName": "[parameters('customDomains')[copyIndex()]]",
+                              "certificateThumbprint": "[parameters('certificateThumprint')]"
+                          }
+                      },
+                      "type": "Array"
+                  }
+              }
+          },
+          "parameters": {
+              "customDomains": {
+                  "value": "[parameters('customDomains')]"
+              },
+              "certificateThumprint": {
+                "value": "[reference('app-service-certificate', '2018-11-01').outputs.certificateThumbprint.value]"
+               }   
+          }
+      }
+    },
+    {
       "name": "app-service",
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2017-05-10",
@@ -501,11 +554,8 @@
               }
             ]
           },
-          "customHostName": {
-            "value": "[parameters('customHostName')]"
-          },
-          "certificateThumbprint": {
-            "value": "[if(greater(length(parameters('customHostname')), 0), reference('app-service-certificate', '2018-11-01').outputs.certificateThumbprint.value, '')]"
+          "customDomains": {
+            "value": "[reference('custom-domains').outputs.customDomains.value]"
           },
           "resourceTags":{
             "value": "[parameters('resourceTags')]"
@@ -514,7 +564,8 @@
       },
       "dependsOn": [
         "app-service-plan",
-        "redis-cache"
+        "redis-cache",
+        "custom-domains"
       ]
     },
     {
