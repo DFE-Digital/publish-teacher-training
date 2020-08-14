@@ -12,7 +12,6 @@ govuk_notify:
   course_publish_email_template_id: c4944115-6e73-4b30-9bc2-bf784c0e9aaa
   magic_link_email_template_id: 26a4c7f2-3caa-4770-8b2e-d7baf6342dd1
   course_withdraw_email_template_id: f7fee829-f0e7-40d1-9bd7-299f673e8c24
-  course_vacancies_filled_email_template_id: 0a6058b7-62d1-41e7-a5a9-f4a13ef86cbe
   course_sites_update_email_template_id: d5c8da46-9aa6-4c0a-8fad-ee782e89dbd3
   course_subjects_updated_email_template_id: b65aef1a-5847-44e6-90e0-88e0ea7898ec
   course_vacancies_updated_email_template_id: 3ae884e9-8495-44cf-9928-907b89a9f356
