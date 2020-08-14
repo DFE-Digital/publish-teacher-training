@@ -23,7 +23,7 @@ module NotificationService
     let(:service_call) { described_class.call(course: course, vacancy_statuses: vacancy_statuses) }
 
     def setup_notifications
-      allow(CourseVacanciesUpdatedEmailMailer).to receive(:course_vacancies_updated_email).and_return(double(deliver_later: true))
+      allow(CourseVacancies::UpdatedMailer).to receive(:fully_updated).and_return(double(deliver_later: true))
       user_notifications
     end
 
@@ -31,7 +31,7 @@ module NotificationService
       before { setup_notifications }
 
       it "sends notifications" do
-        expect(CourseVacanciesUpdatedEmailMailer).to receive(:course_vacancies_updated_email)
+        expect(CourseVacancies::UpdatedMailer).to receive(:fully_updated)
         expect(course.recruitment_cycle).to eql(RecruitmentCycle.current)
 
         service_call
@@ -45,7 +45,7 @@ module NotificationService
       before { setup_notifications }
 
       it "does not send notifications" do
-        expect(CourseVacanciesUpdatedEmailMailer).to_not receive(:course_vacancies_updated_email)
+        expect(CourseVacancies::UpdatedMailer).to_not receive(:fully_updated)
         expect(course.recruitment_cycle).to_not eql(RecruitmentCycle.current)
 
         service_call
@@ -60,8 +60,8 @@ module NotificationService
 
       it "sends notifications to users who have elected to receive notifications" do
         [subscribed_user1, subscribed_user2].each do |user|
-          expect(CourseVacanciesUpdatedEmailMailer)
-            .to receive(:course_vacancies_updated_email)
+          expect(CourseVacancies::UpdatedMailer)
+            .to receive(:fully_updated)
                   .with(
                     course: course,
                     user: user,
@@ -82,7 +82,7 @@ module NotificationService
       end
 
       it "does not send a notification" do
-        expect(CourseVacanciesUpdatedEmailMailer).not_to receive(:course_vacancies_updated_email)
+        expect(CourseVacancies::UpdatedMailer).not_to receive(:fully_updated)
 
         service_call
       end
@@ -104,8 +104,8 @@ module NotificationService
 
         it "sends a notification" do
           [subscribed_user1, subscribed_user2].each do |user|
-            expect(CourseVacanciesUpdatedEmailMailer)
-              .to receive(:course_vacancies_updated_email)
+            expect(CourseVacancies::UpdatedMailer)
+              .to receive(:fully_updated)
                     .with({
                             course: course,
                             user: user,
@@ -128,8 +128,8 @@ module NotificationService
 
         it "sends a notification" do
           [subscribed_user1, subscribed_user2].each do |user|
-            expect(CourseVacanciesUpdatedEmailMailer)
-              .to receive(:course_vacancies_updated_email)
+            expect(CourseVacancies::UpdatedMailer)
+              .to receive(:fully_updated)
                     .with({
                             course: course,
                             user: user,
@@ -162,8 +162,8 @@ module NotificationService
 
         it "sends a notification" do
           [subscribed_user1, subscribed_user2].each do |user|
-            expect(CourseVacanciesUpdatedEmailMailer)
-              .to receive(:course_vacancies_partially_updated_email)
+            expect(CourseVacancies::UpdatedMailer)
+              .to receive(:partially_updated)
                     .with({
                             course: course,
                             user: user,
