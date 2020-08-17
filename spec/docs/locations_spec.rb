@@ -39,6 +39,7 @@ describe "API" do
         let(:year) { "2020" }
         let(:provider_code) { provider.provider_code }
         let(:course_code) { course.course_code }
+        let(:include) { "provider" }
 
         schema "$ref": "#/components/schemas/LocationListResponse"
 
