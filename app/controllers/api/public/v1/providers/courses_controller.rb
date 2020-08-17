@@ -18,7 +18,8 @@ module API
         private
 
           def courses
-            @courses ||= provider.courses
+            @courses ||= CourseSearchService.call(filter: params[:filter],
+                                                  course_scope: provider.courses)
           end
 
           def course

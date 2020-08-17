@@ -1,0 +1,97 @@
+type: object
+example: ""
+description: "This schema is used to search within collections to return more specific results."
+properties:
+  has_vacancies:
+    description: "Return courses that only have vacancies?"
+    type: boolean
+    example: true
+  funding_type:
+    description: "Return courses depending on how it is funded. This is a comma delimited string. If multiple funding options are provided then any course matching any one of the options provided will be retuned, i.e. the OR operator is used."
+    type: string
+    example: "salary,fee"
+    enum:
+      - salary
+      - apprenticeship
+      - fee
+  qualification:
+    description: "Search courses based on the award given on course completion. This is a comma delimited string. If multiple qualifications are given then any course matching any one of the qualifications provided will be returned, i.e. the OR operator is used."
+    type: string
+    example: "qts,pgce,pgde"
+    enum:
+      - qts
+      - pgce_with_qts
+      - pgde
+      - pgce
+      - pgde_with_qts
+  study_type:
+    description: "Search full time or part time courses or both. This is a comma delimited string. If both full_time and part_time is specified we return courses that are either full time or part time."
+    type: string
+    example: "full_time,part_time"
+    enum:
+      - full_time
+      - part_time
+      - full_time_or_part_time
+  subjects:
+    description: "Returns courses that include at least one of the given subjects. This is a comma delimied string. If multiple subjects are given a course that has any one of the subjects specified will be returned, i.e. the OR operator is used."
+    type: string
+    example: "00,01,W1"
+    enum:
+      - "00"
+      - "01"
+      - "02"
+      - "03"
+      - "04"
+      - "06"
+      - "07"
+      - "W1"
+      - "F0"
+      - "C1"
+      - "08"
+      - "F1"
+      - "09"
+      - "Q8"
+      - "P3"
+      - "11"
+      - "12"
+      - "DT"
+      - "13"
+      - "L1"
+      - "Q3"
+      - "F8"
+      - "L5"
+      - "V1"
+      - "G1"
+      - "W3"
+      - "P1"
+      - "C6"
+      - "F3"
+      - "C8"
+      - "V6"
+      - "14"
+      - "15"
+      - "16"
+      - "17"
+      - "18"
+      - "19"
+      - "20"
+      - "21"
+      - "22"
+      - "41"
+      - "24"
+  send_courses:
+    description: "Only return courses that have a SEND specialism."
+    type: boolean
+    example: true
+  latitude:
+    description: "Latitude of origin when performing a search by radius."
+    type: number
+    example: 54.9753348
+  longitude:
+    description: "Longitude of origin when performing a search by radius."
+    type: number
+    example: -1.6100477
+  radius:
+    description: "Search radius in miles from given latitude and longitude."
+    type: number
+    example: 20
