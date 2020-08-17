@@ -8,6 +8,6 @@ namespace :cc do
   desc "Report test coverage to CodeClimate"
   task report: :environment do
     PREVIOUS_TEST_RESULT = ENV.fetch("AGENT_JOBSTATUS") == "Succeeded" ? 0 : 1
-    system("./cc-test-reporter after-build --exit-code #{PREVIOUS_TEST_RESULT}")
+    system("./cc-test-reporter after-build --exit-code #{PREVIOUS_TEST_RESULT}") || exit($?.exitstatus)
   end
 end
