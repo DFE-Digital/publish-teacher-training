@@ -157,48 +157,6 @@
         "description": "The API Key for GOV.UK Notify"
       }
     },
-    "govukNotifyWelcomeEmailTemplateId": {
-      "type": "string",
-      "defaultValue": "",
-      "metadata": {
-        "description": "The GOV.UK Notify template id for the find welcome email"
-      }
-    },
-    "govukNotifyCourseUpdateEmailTemplateId": {
-      "type": "string",
-      "defaultValue": "",
-      "metadata": {
-        "description": "The GOV.UK Notify template id for the course update email"
-      }
-    },
-    "govukNotifyCoursePublishEmailTemplateId": {
-      "type": "string",
-      "defaultValue": "",
-      "metadata": {
-        "description": "The GOV.UK Notify template id for the course publish email"
-      }
-    },
-    "govukNotifyCourseWithdrawEmailTemplateId": {
-      "type": "string",
-      "defaultValue": "",
-      "metadata": {
-        "description": "The GOV.UK Notify template id for the course withdraw email"
-      }
-    },
-    "govukNotifyCourseVacanciesFilledEmailTemplateId": {
-      "type": "string",
-      "defaultValue": "",
-      "metadata": {
-        "description": "The GOV.UK Notify template id for the course vacancies filled email"
-      }
-    },
-    "govukNotifyMagicLinkEmailTemplateId": {
-      "type": "string",
-      "defaultValue": "",
-      "metadata": {
-        "description": "The GOV.UK Notify template id for the magic signin link"
-      }
-    },
     "containerInstanceName": {
       "type": "array",
       "metadata": {
