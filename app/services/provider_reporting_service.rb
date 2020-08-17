@@ -3,7 +3,7 @@ class ProviderReportingService
     @providers = providers_scope.distinct
 
     @training_providers = @providers.where(id: Course.findable.select(:provider_id))
-    @open_providers = @providers.where(id: Course.findable.with_vacancies.select(:provider_id))
+    @open_providers = @providers.where(id: Course.with_vacancies.select(:provider_id))
 
     @closed_providers = @training_providers.where.not(id: @open_providers)
   end
