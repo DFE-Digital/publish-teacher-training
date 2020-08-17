@@ -3,8 +3,6 @@ module API
     module V1
       module Providers
         class LocationsController < API::Public::V1::ApplicationController
-          PERMITTED_INCLUSIONS = %w[recruitment_cycle provider course].freeze
-
           def index
             render jsonapi: locations,
                    include: include_param,
@@ -31,9 +29,7 @@ module API
           end
 
           def include_param
-            (params.fetch(:include, "")
-              .split(",") & PERMITTED_INCLUSIONS)
-              .join(",")
+            params.fetch(:include, "")
           end
         end
       end

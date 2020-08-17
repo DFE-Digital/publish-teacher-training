@@ -50,7 +50,7 @@ RSpec.describe API::Public::V1::Providers::LocationsController do
           course_id = json_response["included"][2]["id"].to_i
 
           expect(json_response["data"][0]["relationships"].keys).to eq(
-            API::Public::V1::Providers::LocationsController::PERMITTED_INCLUSIONS,
+            %w[recruitment_cycle provider course],
           )
 
           expect(recruitment_cycle_id).to eq(provider.recruitment_cycle.id)
