@@ -3,23 +3,21 @@ module API
     module V1
       class CoursesController < API::Public::V1::ApplicationController
         def index
-          render json: {
-            data: [
-              {
-                id: "124",
-                type: "Course",
-                attributes: {
-                  code: "3GTY",
-                  provider_code: "066",
-                  age_minimum: 10,
-                  age_maximum: 14,
-                },
-              },
-            ],
-            jsonapi: {
-              version: "1.0",
-            },
-          }
+          render jsonapi: paginate(courses), include: include_param, class: API::Public::V1::SerializerService.call
+        end
+
+      private
+
+        def courses
+          @courses ||= recruitment_cycle&.courses
+        end
+
+        def recruitment_cycle
+          @recruitment_cycle ||= RecruitmentCycle.find_by(year: params[:recruitment_cycle_year])
+        end
+
+        def include_param
+          params.fetch(:include, "")
         end
       end
     end
