@@ -98,4 +98,80 @@ RSpec.describe API::Public::V1::Providers::CoursesController do
       end
     end
   end
+
+  describe "#show" do
+    context "when course exists" do
+      let!(:course) { create(:course, provider: provider) }
+
+      before do
+        get :show, params: {
+          recruitment_cycle_year: provider.recruitment_cycle.year,
+          provider_code: provider.provider_code,
+          code: course.course_code,
+        }
+      end
+
+      it "returns the course" do
+        expect(response).to be_successful
+        expect(JSON.parse(response.body)["data"]["id"]).to eql(course.id.to_s)
+      end
+    end
+
+    context "with include" do
+      let!(:course) do
+        create(:course, :with_accrediting_provider, provider: provider)
+      end
+
+      let(:accredited_body) { course.accrediting_provider }
+
+      before do
+        get :show, params: {
+          recruitment_cycle_year: provider.recruitment_cycle.year,
+          provider_code: provider.provider_code,
+          code: course.course_code,
+          include: "provider,accredited_body,recruitment_cycle",
+        }
+      end
+
+      it "returns the course with includes" do
+        expect(response).to be_successful
+
+        expect(JSON.parse(response.body)["data"]["id"]).to eql(course.id.to_s)
+
+        expect(JSON.parse(response.body)["included"][0]["id"]).to eql(accredited_body.id.to_s)
+        expect(JSON.parse(response.body)["included"][0]["type"]).to eql("providers")
+
+        expect(JSON.parse(response.body)["included"][1]["id"]).to eql(provider.id.to_s)
+        expect(JSON.parse(response.body)["included"][1]["type"]).to eql("providers")
+      end
+    end
+
+    context "when course does not exist" do
+      before do
+        get :show, params: {
+          recruitment_cycle_year: provider.recruitment_cycle.year,
+          provider_code: provider.provider_code,
+          code: "ABCD",
+        }
+      end
+
+      it "returns 404" do
+        expect(response.status).to eql(404)
+      end
+    end
+
+    context "when provider does not exist" do
+      before do
+        get :show, params: {
+          recruitment_cycle_year: "2020",
+          provider_code: "ABC",
+          code: "ABCD",
+        }
+      end
+
+      it "returns 404" do
+        expect(response.status).to eql(404)
+      end
+    end
+  end
 end

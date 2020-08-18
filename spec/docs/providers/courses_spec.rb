@@ -88,9 +88,12 @@ describe "API" do
                 example: "X130"
 
       response "200", "The collection of courses offered by the specified provider." do
-        let(:year) { "2020" }
-        let(:provider_code) { "ABC" }
-        let(:course_code) { "DEF" }
+        let(:provider) { create(:provider) }
+        let(:course) { create(:course, course_code: "A123", provider: provider) }
+
+        let(:year) { provider.recruitment_cycle.year }
+        let(:provider_code) { provider.provider_code }
+        let(:course_code) { course.course_code }
 
         schema "$ref": "#/components/schemas/CourseSingleResponse"
 
