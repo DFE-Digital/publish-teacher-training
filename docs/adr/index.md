@@ -5,3 +5,4 @@
 * [3. Integration tests](0003-integration-tests.md)
 * [4. Before action variables](0004-before-action-variables.md)
 * [5. Service entry points](0005-service-entry-points.md)
+* [6. Controller structure](0005-controller-structure.md)
