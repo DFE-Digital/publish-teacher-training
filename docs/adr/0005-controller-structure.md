@@ -118,7 +118,7 @@ We have decided to go with option 2 based on the number of benefits we will gain
 - Improved maintainability of the project's source code over a long term period
 - Potentially helps with keeping controller actions RESTful by leveraging modules to communicate behaviour
 
-Given the number of options Rails provides for structuring routes, the use of multiple controlelrs for a given resource is not an uncommon pattern in the wild. See the links below for further reading and examples.
+Given the number of options Rails provides for structuring routes, the use of multiple controllers for a given resource is not an uncommon pattern in the wild. See the links below for further reading and examples.
 
 ## References
 
