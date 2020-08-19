@@ -9,11 +9,11 @@ module API
       private
 
         def courses
-          @courses ||= recruitment_cycle&.courses
+          @courses ||= recruitment_cycle.courses
         end
 
         def recruitment_cycle
-          @recruitment_cycle ||= RecruitmentCycle.find_by(year: params[:recruitment_cycle_year])
+          @recruitment_cycle ||= RecruitmentCycle.find_by!(year: params[:recruitment_cycle_year])
         end
 
         def include_param
