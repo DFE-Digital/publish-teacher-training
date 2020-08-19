@@ -1,0 +1,10 @@
+---
+description: "This schema is used to describe associations that can be returned with locations."
+type: object
+properties:
+  recruitment_cycle:
+    $ref: "#/components/schemas/Relationship"
+  provider:
+    $ref: "#/components/schemas/Relationship"
+  course:
+    $ref: "#/components/schemas/Relationship"
