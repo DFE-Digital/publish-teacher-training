@@ -120,7 +120,11 @@ RSpec.describe "/api/v2/allocations/<id>", type: :request do
   end
 
   def given_an_allocation_has_been_created_by_the_accredited_body_for_the_training_provider
-    @allocation = create(:allocation, accredited_body_id: @accredited_body.id, provider_id: @training_provider.id, number_of_places: 10)
+    @allocation = create(:allocation,
+                         accredited_body_id: @accredited_body.id,
+                         provider_id: @training_provider.id,
+                         number_of_places: 10,
+                         confirmed_number_of_places: 11)
   end
 
   def when_i_make_a_get_request_to_the_endpoint
@@ -171,6 +175,7 @@ RSpec.describe "/api/v2/allocations/<id>", type: :request do
     parsed_response = JSON.parse(response.body)
     expect(parsed_response["data"]["type"]).to eq("allocations")
     expect(parsed_response["data"]["attributes"]["number_of_places"]).to eq(10)
+    expect(parsed_response["data"]["attributes"]["confirmed_number_of_places"]).to eq(11)
   end
 
   def when_i_get_the_allocations_index_endpoint
