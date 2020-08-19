@@ -1,4 +1,4 @@
-# 5. Controller Structure
+# 6. Controller Structure
 
 Date: 2020-08-18
 
@@ -15,8 +15,8 @@ We cannot design endpoints in a flat structure due to existing requirements arou
 
 Instead, we have to design endpoints in a nested structure scoped to their parent resources, ie:
 
-- `/recruitment_cycles/:recruitment_cycle_id/providers/:provider_code`
-- `/recruitment_cycles/:recruitment_cycle_id/providers/:provider_code/courses/:course_code`.
+- `/recruitment_cycles/:recruitment_cycle_year/providers/:provider_code`
+- `/recruitment_cycles/:recruitment_cycle_year/providers/:provider_code/courses/:course_code`.
 
 If we rely on having single controllers to deal with resources which may be nested under other resources, we'll end up mixing concerns/responsibilities of different contraints into one class which will make it difficult to maintain over the long term and less flexible to change. It also violates the single responsibility principle as we end up bloating the class.
 
@@ -75,6 +75,8 @@ As an example, given the following routes:
       resources :recruitment_cycles, param: :year, only: [:show] do
         resources :courses, only: %i[index]
         resources :providers, only: %i[index show], param: :code do
+
+          # Scope will setup the controller hierarchy to match the directory structure below.
           scope module: :providers do
             resources :courses, only: %i[index show], param: :code
           end
