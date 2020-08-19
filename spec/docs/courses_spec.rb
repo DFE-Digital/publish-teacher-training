@@ -54,7 +54,7 @@ describe "API" do
         let(:include) { "provider" }
 
         before do
-          create(:course)
+          create(:course, course_code: "C100")
         end
 
         schema "$ref": "#/components/schemas/CourseListResponse"
