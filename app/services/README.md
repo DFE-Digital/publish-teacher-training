@@ -5,8 +5,8 @@ a single place that instantiates all the services related to a model
 
 ## Conventions
 
-- Use the `execute` method as the interface on the service
-- Use named arguments to call `execute` to explicitly state what the arguments going in are
+- Use the `call` method as the interface on the service
+- Use named arguments to call `call` to explicitly state what the arguments going in are
 - Services with logic related to a single instance of a model specifically are executed on the model
 - Services related to multiple models or collections of a model are executed outside of the model (e.g. 
 services for rollover)
@@ -30,7 +30,7 @@ end
 
 ```ruby
 def do_the_thing
-  services[:service_name].execute(foo: "bar")
+  services[:service_name].call(foo: "bar")
 ```
 
 ### Testing the service is delegated
