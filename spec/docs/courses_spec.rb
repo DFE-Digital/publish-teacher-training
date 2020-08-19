@@ -53,6 +53,10 @@ describe "API" do
         let(:year) { "2020" }
         let(:include) { "provider" }
 
+        before do
+          create(:course)
+        end
+
         schema "$ref": "#/components/schemas/CourseListResponse"
 
         run_test!
