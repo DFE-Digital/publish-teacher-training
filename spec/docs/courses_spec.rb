@@ -49,6 +49,12 @@ describe "API" do
                 },
                 example: "recruitment_cycle,provider"
 
+      curl_example description: "Get all courses",
+                   command: "curl -X GET https://api.publish-teacher-training-courses.service.gov.uk/api/public/v1/recruitment_cycles/2020/courses"
+
+      curl_example description: "Get the second page of courses",
+                   command: "curl -X GET https://api.publish-teacher-training-courses.service.gov.uk/api/public/v1/recruitment_cycles/2020/courses?page[page]=2"
+
       response "200", "The collection of courses." do
         let(:year) { "2020" }
         let(:include) { "provider" }

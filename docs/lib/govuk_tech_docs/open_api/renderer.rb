@@ -19,6 +19,7 @@ module GovukTechDocs
         @template_parameters = get_renderer("parameters.html.erb")
         @template_responses = get_renderer("responses.html.erb")
         @template_any_of = get_renderer("any_of.html.erb")
+        @template_curl_examples = get_renderer("curl_examples.html.erb")
       end
 
       def api_full
@@ -130,6 +131,7 @@ module GovukTechDocs
           text = text
           parameters = parameters(operation, id)
           responses = responses(operation, id)
+          curl_examples = curl_examples(operation, id)
           output += @template_operation.result(binding)
         end
         output
@@ -142,11 +144,16 @@ module GovukTechDocs
         output
       end
 
+      def curl_examples(operation, operation_id)
+        curl_examples = operation.node_data["x-curl-examples"] || []
+        id = "#{operation_id}-curl-examples"
+        @template_curl_examples.result(binding)
+      end
+
       def responses(operation, operation_id)
         responses = operation.responses
         id = "#{operation_id}-responses"
-        output = @template_responses.result(binding)
-        output
+        @template_responses.result(binding)
       end
 
       def markdown(text)

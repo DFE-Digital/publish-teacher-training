@@ -33,6 +33,9 @@ describe "API" do
                 },
                 example: "recruitment_cycle,provider"
 
+      curl_example description: "Get the locations of a course",
+                   command: "curl -X GET https://api.publish-teacher-training-courses.service.gov.uk/api/public/v1/recruitment_cycles/2020/providers/B20/courses/2N22/locations"
+
       response "200", "The collection of locations for the specified course." do
         let(:course) { create(:course) }
         let(:provider) { course.provider }

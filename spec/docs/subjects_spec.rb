@@ -16,6 +16,9 @@ describe "API" do
                 example: "name",
                 description: "Sort subjects by name"
 
+      curl_example description: "Get all subjects",
+                   command: "curl -X GET https://api.publish-teacher-training-courses.service.gov.uk/api/public/v1/subjects"
+
       response "200", "The list of subjects" do
         let(:sort) { "name" }
 

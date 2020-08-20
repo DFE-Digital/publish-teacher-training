@@ -31,6 +31,12 @@ describe "API" do
                 example: { page: 2, per_page: 10 },
                 description: "Pagination options to navigate through the collection."
 
+      curl_example description: "Get all providers",
+                   command: "curl -X GET https://api.publish-teacher-training-courses.service.gov.uk/api/public/v1/recruitment_cycles/2020/providers"
+
+      curl_example description: "Get second page of providers",
+                   command: "curl -X GET https://api.publish-teacher-training-courses.service.gov.uk/api/public/v1/recruitment_cycles/2020/providers?page[page]=2"
+
       response "200", "Collection of providers." do
         let(:year) { "2020" }
 
@@ -58,6 +64,9 @@ describe "API" do
                 required: true,
                 description: "The unique code of the provider.",
                 example: "T92"
+
+      curl_example description: "Get a specific provider",
+                   command: "curl -X GET https://api.publish-teacher-training-courses.service.gov.uk/api/public/v1/recruitment_cycles/2020/providers/B20"
 
       response "200", "The provider." do
         let!(:provider) { create(:provider) }
