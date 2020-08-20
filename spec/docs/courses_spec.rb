@@ -39,9 +39,23 @@ describe "API" do
                 required: false,
                 example: { page: 2, per_page: 10 },
                 description: "Pagination options to navigate through the collection."
+      parameter name: :include,
+                in: :query,
+                type: :string,
+                required: false,
+                description: "The associated data for this resource.",
+                schema: {
+                  enum: %w[accredited_body provider recruitment_cycle],
+                },
+                example: "recruitment_cycle,provider"
 
       response "200", "The collection of courses." do
         let(:year) { "2020" }
+        let(:include) { "provider" }
+
+        before do
+          create(:course, course_code: "C100")
+        end
 
         schema "$ref": "#/components/schemas/CourseListResponse"
 

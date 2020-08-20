@@ -636,45 +636,51 @@
         "properties": {
           "code": {
             "type": "string",
-            "example": "W"
+            "example": "-"
           },
           "name": {
             "type": "string",
             "description": "The name of the location.",
-            "example": "Henry Maynard Primary School"
+            "example": "Main Site"
           },
           "street_address_1": {
             "type": "string",
-            "description": "Building or street line one.",
-            "example": "The Rose Building"
+            "description": "Building or street address line one.",
+            "example": "Barnsley Road"
           },
           "street_address_2": {
             "type": "string",
-            "description": "Building or street line two.",
-            "example": "Maynard Road"
+            "description": "Building or street address line two.",
+            "example": "Wath-upon-Dearne"
           },
           "city": {
             "type": "string",
             "description": "Town or city.",
-            "example": "London"
+            "example": "Rotherham"
           },
           "county": {
             "type": "string",
             "description": "County.",
-            "example": "London"
+            "example": "South Yorkshire"
           },
           "postcode": {
             "type": "string",
             "description": "The postcode of the location.",
-            "example": "E17 9JE"
+            "example": "S63 6PY"
           },
           "region_code": {
             "type": "string",
-            "example": "london"
+            "example": "yorkshire_and_the_humber"
           },
-          "recruitment_cycle_year": {
-            "type": "string",
-            "example": "2020"
+          "latitude": {
+            "type": "number",
+            "description": "The latitude of the location.",
+            "example": 53.5082828
+          },
+          "longitude": {
+            "type": "number",
+            "description": "The longitude of the location.",
+            "example": -1.3603394
           }
         }
       },
@@ -691,8 +697,26 @@
               "$ref": "#/components/schemas/LocationResource"
             }
           },
+          "included": {
+            "$ref": "#/components/schemas/Included"
+          },
           "jsonapi": {
             "$ref": "#/components/schemas/JSONAPI"
+          }
+        }
+      },
+      "LocationRelationships": {
+        "description": "This schema is used to describe associations that can be returned with locations.",
+        "type": "object",
+        "properties": {
+          "recruitment_cycle": {
+            "$ref": "#/components/schemas/Relationship"
+          },
+          "provider": {
+            "$ref": "#/components/schemas/Relationship"
+          },
+          "course": {
+            "$ref": "#/components/schemas/Relationship"
           }
         }
       },
@@ -706,10 +730,13 @@
           },
           "type": {
             "type": "string",
-            "example": "sites"
+            "example": "locations"
           },
           "attributes": {
             "$ref": "#/components/schemas/LocationAttributes"
+          },
+          "relationships": {
+            "$ref": "#/components/schemas/LocationRelationships"
           }
         }
       },
@@ -1132,16 +1159,19 @@
             "$ref": "#/components/schemas/CourseResource"
           },
           {
-            "$ref": "#/components/schemas/RecruitmentCycleResource"
-          },
-          {
-            "$ref": "#/components/schemas/SubjectResource"
-          },
-          {
             "$ref": "#/components/schemas/LocationResource"
           },
           {
             "$ref": "#/components/schemas/LocationStatusResource"
+          },
+          {
+            "$ref": "#/components/schemas/ProviderResource"
+          },
+          {
+            "$ref": "#/components/schemas/RecruitmentCycleResource"
+          },
+          {
+            "$ref": "#/components/schemas/SubjectResource"
           }
         ],
         "discriminator": {
@@ -1244,9 +1274,6 @@
       "SubjectAttributes": {
         "description": "This schema is used to describe a subject.",
         "type": "object",
-        "required": [
-          "code"
-        ],
         "properties": {
           "name": {
             "type": "string",
@@ -1258,15 +1285,18 @@
           },
           "bursary_amount": {
             "type": "integer",
-            "description": "non-repayable sum of money that universities can award to students to incentivise and support their studies"
+            "description": "Non-repayable sum of money that universities can award to students to incentivise and support their studies",
+            "example": 9000
           },
           "early_career_payments": {
             "type": "integer",
-            "description": "eligible subjects teachers can apply for early-career payments of up to £9,000 after tax."
+            "description": "Eligible subjects teachers can apply for early-career payments of up to £9,000 after tax.",
+            "example": 8388
           },
           "scholarship": {
             "type": "integer",
-            "description": "a grant or payment made to support a student’s education, awarded on the basis of academic or other achievement."
+            "description": "A grant or payment made to support a student’s education, awarded on the basis of academic or other achievement.",
+            "example": 3500
           },
           "subject_knowledge_enhancement_course_available": {
             "type": "boolean",
@@ -1300,7 +1330,7 @@
   "paths": {
     "/recruitment_cycles/{year}/courses": {
       "get": {
-        "summary": "Returns the courses for the specified year.",
+        "summary": "Returns the courses for the specified recruitment cycle.",
         "operationId": "public_api_v1_courses",
         "tags": [
           "courses"
@@ -1357,83 +1387,29 @@
               "per_page": 10
             },
             "description": "Pagination options to navigate through the collection."
+          },
+          {
+            "name": "include",
+            "in": "query",
+            "required": false,
+            "description": "The associated data for this resource.",
+            "schema": {
+              "enum": [
+                "accredited_body",
+                "provider",
+                "recruitment_cycle"
+              ]
+            },
+            "example": "recruitment_cycle,provider"
           }
         ],
         "responses": {
           "200": {
-            "description": "The collection of courses for the specified year.",
+            "description": "The collection of courses.",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/CourseListResponse"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/recruitment_cycles/{year}/providers/{provider_code}/courses/{course_code}/locations": {
-      "get": {
-        "summary": "Returns the locations for the specified course.",
-        "operationId": "public_api_v1_provider_course_locations",
-        "tags": [
-          "location"
-        ],
-        "parameters": [
-          {
-            "name": "year",
-            "in": "path",
-            "required": true,
-            "description": "The starting year of the recruitment cycle.",
-            "example": "2020",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "provider_code",
-            "in": "path",
-            "required": true,
-            "description": "The unique code of the provider.",
-            "example": "T92",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "course_code",
-            "in": "path",
-            "description": "The code of the course.",
-            "example": "X130",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "page",
-            "in": "query",
-            "schema": {
-              "$ref": "#/components/schemas/Pagination"
-            },
-            "style": "deepObject",
-            "explode": true,
-            "required": false,
-            "example": {
-              "page": 2,
-              "per_page": 10
-            },
-            "description": "Pagination options to navigate through the collection."
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "The collection of locations for the specified course.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/LocationListResponse"
                 }
               }
             }
@@ -1473,6 +1449,73 @@
           },
           "400": {
             "description": "A bad request"
+          }
+        }
+      }
+    },
+    "/recruitment_cycles/{year}/providers/{provider_code}/courses/{course_code}/locations": {
+      "get": {
+        "summary": "Returns the locations for the specified course.",
+        "operationId": "public_api_v1_provider_course_locations",
+        "tags": [
+          "locations"
+        ],
+        "parameters": [
+          {
+            "name": "year",
+            "in": "path",
+            "required": true,
+            "description": "The starting year of the recruitment cycle.",
+            "example": "2020",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "provider_code",
+            "in": "path",
+            "required": true,
+            "description": "The unique code of the provider.",
+            "example": "T92",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "course_code",
+            "in": "path",
+            "description": "The code of the course.",
+            "example": "X130",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "include",
+            "in": "query",
+            "required": false,
+            "description": "The associated data for this resource.",
+            "schema": {
+              "enum": [
+                "recruitment_cycle",
+                "provider",
+                "course"
+              ]
+            },
+            "example": "recruitment_cycle,provider"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The collection of locations for the specified course.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LocationListResponse"
+                }
+              }
+            }
           }
         }
       }
@@ -1608,6 +1651,62 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/CourseSingleResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/recruitment_cycles/{year}/providers/{provider_code}/locations": {
+      "get": {
+        "summary": "Returns the locations for the specified provider.",
+        "operationId": "public_api_v1_provider_locations",
+        "tags": [
+          "locations"
+        ],
+        "parameters": [
+          {
+            "name": "year",
+            "in": "path",
+            "required": true,
+            "description": "The starting year of the recruitment cycle.",
+            "example": "2020",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "provider_code",
+            "in": "path",
+            "required": true,
+            "description": "The unique code of the provider.",
+            "example": "T92",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "include",
+            "in": "query",
+            "required": false,
+            "description": "The associated data for this resource.",
+            "schema": {
+              "enum": [
+                "recruitment_cycle",
+                "provider"
+              ]
+            },
+            "example": "recruitment_cycle,provider"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The collection of locations for the specified provider.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LocationListResponse"
                 }
               }
             }
@@ -1751,9 +1850,11 @@
     },
     "/subjects": {
       "get": {
-        "summary": "Returns subjects",
+        "summary": "Returns a list of subjects",
         "operationId": "public_api_v1_subjects",
-        "tags": ["subjects"],
+        "tags": [
+          "Subjects"
+        ],
         "parameters": [
           {
             "name": "sort",
@@ -1764,17 +1865,17 @@
             "style": "form",
             "explode": false,
             "required": false,
-            "example": "subject_name",
+            "example": "name",
             "description": "Sort subjects by name"
           }
         ],
         "responses": {
           "200": {
-            "description": "The collection of Subjects.",
+            "description": "The list of subjects",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/SubjectResource"
+                  "$ref": "#/components/schemas/SubjectAttributes"
                 }
               }
             }

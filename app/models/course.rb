@@ -496,7 +496,7 @@ class Course < ApplicationRecord
   end
 
   def ensure_site_statuses_match_study_mode
-    site_statuses.select(&:with_vacancies?).each do |site_status|
+    site_statuses.not_no_vacancies.each do |site_status|
       update_vac_status(study_mode, site_status)
     end
   end
