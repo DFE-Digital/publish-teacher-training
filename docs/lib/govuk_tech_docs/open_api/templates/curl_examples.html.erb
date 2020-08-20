@@ -1,0 +1,28 @@
+<% if curl_examples.any? %>
+  <h3 id="<%= id %>">Request examples</h3>
+
+  <div class="govuk-!-margin-bottom-5">
+    <% curl_examples.each do |example| %>
+      <% example = example.with_indifferent_access %>
+
+      <details class="govuk-details govuk-!-margin-bottom-1" data-module="govuk-details">
+        <summary class="govuk-details__summary">
+          <span class="govuk-details__summary-text">
+            <%= example[:description] %>
+          </span>
+        </summary>
+
+        <div class="govuk-details__text">
+          <%
+            source = example[:command]
+            formatter = Rouge::Formatters::HTML.new
+            lexer = Rouge::Lexers::Shell.new
+            output = formatter.format(lexer.lex(source))
+          %>
+
+          <pre class="highlight"><code><%= output %></code></pre>
+        </div>
+      </details>
+    <% end %>
+  </div>
+<% end %>

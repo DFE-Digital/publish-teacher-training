@@ -36,3 +36,20 @@ RSpec.configure do |config|
     "public_v1/api_spec.json" => swagger_v1_template.with_indifferent_access,
   }
 end
+
+if defined?(OpenApi)
+  module OpenApi
+    module Rswag
+      module Specs
+        module ExampleGroupHelpersExtensions
+          def curl_example(hash)
+            metadata[:operation]["x-curl-examples"] ||= []
+            metadata[:operation]["x-curl-examples"] << hash
+          end
+        end
+      end
+    end
+  end
+
+  OpenApi::Rswag::Specs::ExampleGroupHelpers.include(OpenApi::Rswag::Specs::ExampleGroupHelpersExtensions)
+end
