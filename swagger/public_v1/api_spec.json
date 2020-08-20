@@ -922,11 +922,6 @@
               "invalid_value"
             ]
           },
-          "recruitment_cycle_year": {
-            "type": "integer",
-            "description": "The recruitment year this provider record is for.",
-            "example": 2020
-          },
           "region_code": {
             "type": "string",
             "description": "The NUTS 1 region code for the provider's address.",
