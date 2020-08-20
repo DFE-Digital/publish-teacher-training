@@ -74,23 +74,28 @@ RSpec.describe SiteStatus, type: :model do
   describe "has vacancies?" do
     describe "if has part-time vacancies" do
       let(:course) { build(:course, study_mode: :part_time) }
-      subject { create(:site_status, :part_time_vacancies, course: course) }
+      subject { create(:site_status, :findable, :part_time_vacancies, course: course) }
       it { should have_vacancies }
     end
 
     describe "if has full-time vacancies" do
-      subject { create(:site_status, :full_time_vacancies) }
+      subject { create(:site_status, :findable, :full_time_vacancies) }
       it { should have_vacancies }
     end
 
     describe "if has both full-time and part-time vacancies" do
       let(:course) { build(:course, study_mode: :full_time_or_part_time) }
-      subject { create(:site_status, :both_full_time_and_part_time_vacancies, course: course) }
+      subject { create(:site_status, :findable, :both_full_time_and_part_time_vacancies, course: course) }
       it { should have_vacancies }
     end
 
     describe "if has no vacancies" do
       subject { create(:site_status, :with_no_vacancies) }
+      it { should_not have_vacancies }
+    end
+
+    describe "if has no findable vacancies" do
+      subject { create(:site_status, :full_time_vacancies) }
       it { should_not have_vacancies }
     end
   end

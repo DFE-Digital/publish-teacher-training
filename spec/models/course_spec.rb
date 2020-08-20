@@ -693,7 +693,7 @@ describe Course, type: :model do
       context "course has vacancies" do
         let(:site_statuses) do
           [
-            build(:site_status, :with_any_vacancy),
+            build(:site_status, :with_any_vacancy, :findable),
           ]
         end
 
@@ -705,7 +705,19 @@ describe Course, type: :model do
       context "course has no vacancies" do
         let(:site_statuses) do
           [
-            build(:site_status, :with_no_vacancies),
+            build(:site_status, :with_no_vacancies, :findable),
+          ]
+        end
+
+        it "is not returned" do
+          expect(subject).to be_empty
+        end
+      end
+
+      context "course is not findable" do
+        let(:site_statuses) do
+          [
+            build(:site_status, :with_any_vacancy),
           ]
         end
 
