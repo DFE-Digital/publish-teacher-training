@@ -507,7 +507,7 @@
             "type": "boolean",
             "example": true
           },
-          "funding": {
+          "funding_type": {
             "description": "Return courses depending on how it is funded. This is a comma delimited string. If multiple funding options are provided then any course matching any one of the options provided will be retuned, i.e. the OR operator is used.",
             "type": "string",
             "example": "salary,fee",
