@@ -20,14 +20,18 @@ RSpec.describe API::Public::V1::CoursesController do
     context "when there are courses" do
       before do
         provider.courses << build_list(:course, 2, provider: provider)
-
-        get :index, params: {
-          recruitment_cycle_year: "2020",
-        }
       end
 
-      it "returns correct number of courses" do
-        expect(json_response["data"].size).to eql(2)
+      context "default response" do
+        before do
+          get :index, params: {
+            recruitment_cycle_year: "2020",
+          }
+        end
+
+        it "returns correct number of courses" do
+          expect(json_response["data"].size).to eql(2)
+        end
       end
 
       context "with pagination" do
@@ -68,6 +72,46 @@ RSpec.describe API::Public::V1::CoursesController do
 
           expect(recruitment_cycle_id).to eq(provider.recruitment_cycle.id)
           expect(provider_id).to eq(provider.id)
+        end
+      end
+
+      context "with sorting" do
+        let(:sort_attribute) { "name,provider.provider_name" }
+
+        before do
+          allow(CourseSearchService).to receive(:call).and_return([])
+
+          get :index, params: {
+            recruitment_cycle_year: "2020",
+            sort: sort_attribute,
+          }
+        end
+
+        it "delegates to the CourseSearchService" do
+          expect(CourseSearchService).to have_received(:call).with(
+            hash_including(sort: sort_attribute),
+          )
+        end
+      end
+
+      context "with filtering" do
+        before do
+          provider.courses << build(:course, provider: provider)
+
+          allow(CourseSearchService).to receive(:call).and_return([])
+
+          get :index, params: {
+            recruitment_cycle_year: "2020",
+            filter: {
+              funding_type: "salary",
+            },
+          }
+        end
+
+        it "delegates to the CourseSearchService" do
+          expect(CourseSearchService).to have_received(:call).with(
+            hash_including(filter: ActionController::Parameters.new(funding_type: "salary")),
+          )
         end
       end
     end
