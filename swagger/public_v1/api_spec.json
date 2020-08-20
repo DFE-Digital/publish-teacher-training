@@ -1387,6 +1387,20 @@
               "per_page": 10
             },
             "description": "Pagination options to navigate through the collection."
+          },
+          {
+            "name": "include",
+            "in": "query",
+            "required": false,
+            "description": "The associated data for this resource.",
+            "schema": {
+              "enum": [
+                "accredited_body",
+                "provider",
+                "recruitment_cycle"
+              ]
+            },
+            "example": "recruitment_cycle,provider"
           }
         ],
         "responses": {
