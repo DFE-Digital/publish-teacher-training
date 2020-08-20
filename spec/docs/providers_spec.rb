@@ -30,6 +30,15 @@ describe "API" do
                 required: false,
                 example: { page: 2, per_page: 10 },
                 description: "Pagination options to navigate through the collection."
+      parameter name: :include,
+                in: :query,
+                type: :string,
+                required: false,
+                description: "The associated data for this resource.",
+                schema: {
+                  enum: %w[recruitment_cycle],
+                },
+                example: "recruitment_cycle"
 
       curl_example description: "Get all providers",
                    command: "curl -X GET https://api.publish-teacher-training-courses.service.gov.uk/api/public/v1/recruitment_cycles/2020/providers"
@@ -39,6 +48,7 @@ describe "API" do
 
       response "200", "Collection of providers." do
         let(:year) { "2020" }
+        let(:include) { "recruitment_cycle" }
 
         schema "$ref": "#/components/schemas/ProviderListResponse"
 

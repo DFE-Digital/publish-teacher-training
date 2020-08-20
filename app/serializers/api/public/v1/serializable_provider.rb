@@ -4,6 +4,8 @@ module API
       class SerializableProvider < JSONAPI::Serializable::Resource
         type "providers"
 
+        belongs_to :recruitment_cycle
+
         attributes :postcode,
                    :provider_type,
                    :region_code,

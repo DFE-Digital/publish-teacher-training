@@ -9,7 +9,7 @@ module API
                       else
                         providers.by_name_descending
                       end
-          render jsonapi: providers, class: { Provider: API::Public::V1::SerializableProvider }, fields: fields
+          render jsonapi: paginate(providers), include: params[:include], class: API::Public::V1::SerializerService.call, fields: fields
         end
 
         def show
@@ -20,12 +20,18 @@ module API
                                         )
 
           render jsonapi: provider,
-                 class: { Provider: API::Public::V1::SerializableProvider },
+                 class: API::Public::V1::SerializerService.call,
                  include: params[:include],
                  fields: fields
         end
 
       private
+
+        def recruitment_cycle
+          @recruitment_cycle = RecruitmentCycle.find_by(
+            year: params[:recruitment_cycle_year],
+          ) || RecruitmentCycle.current_recruitment_cycle
+        end
 
         def fields
           { providers: provider_fields } if provider_fields.present?
@@ -41,12 +47,6 @@ module API
 
         def sort_field
           @sort_field ||= Set.new(params.dig(:sort)&.split(","))
-        end
-
-        def recruitment_cycle
-          RecruitmentCycle.find_by(
-            year: params[:recruitment_cycle_year],
-          ) || RecruitmentCycle.current_recruitment_cycle
         end
 
         def provider_fields
