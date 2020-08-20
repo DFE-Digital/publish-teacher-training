@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_06_19_100300) do
+ActiveRecord::Schema.define(version: 2020_08_19_084304) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_buffercache"
@@ -46,6 +46,7 @@ ActiveRecord::Schema.define(version: 2020_06_19_100300) do
     t.text "accredited_body_code"
     t.text "provider_code"
     t.integer "recruitment_cycle_id"
+    t.integer "confirmed_number_of_places"
     t.index ["accredited_body_id"], name: "index_allocation_on_accredited_body_id"
     t.index ["provider_id", "accredited_body_id", "provider_code", "accredited_body_code", "recruitment_cycle_id"], name: "index_allocations_on_uniqueness_of_codes_and_ids", unique: true
     t.index ["provider_id"], name: "index_allocation_on_provider_id"

@@ -2,10 +2,10 @@ require "rails_helper"
 
 describe API::V2::SerializableAllocation do
   let(:jsonapi_renderer) { JSONAPI::Serializable::Renderer.new }
-  let(:allocation) { create(:allocation, number_of_places: 10) }
   let(:resource) { described_class.new(object: allocation) }
   let(:accredited_body) { allocation.accredited_body }
   let(:provider) { allocation.provider }
+  let(:allocation) { build(:allocation, number_of_places: 10) }
 
   subject do
     jsonapi_renderer.render(
@@ -35,6 +35,22 @@ describe API::V2::SerializableAllocation do
 
   it "has a number_of_places attribute" do
     expect(subject.dig(:data, :attributes, :number_of_places)).to eq(10)
+  end
+
+  it "has a confirmed_number_of_places attribute" do
+    expect(subject.dig(:data, :attributes, :confirmed_number_of_places)).to be_nil
+  end
+
+  context "when number of places is confirmed" do
+    let(:allocation) do
+      build(:allocation,
+            number_of_places: 10,
+            confirmed_number_of_places: 123)
+    end
+
+    it "confirmed_number_of_places returns correct value" do
+      expect(subject.dig(:data, :attributes, :confirmed_number_of_places)).to eql(123)
+    end
   end
 
   it "has a request_type attribute" do
