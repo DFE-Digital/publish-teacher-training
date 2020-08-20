@@ -1403,6 +1403,16 @@
             "example": "recruitment_cycle,provider"
           }
         ],
+        "x-curl-examples": [
+          {
+            "description": "Get all courses",
+            "command": "curl -X GET https://api.publish-teacher-training-courses.service.gov.uk/api/public/v1/recruitment_cycles/2020/courses"
+          },
+          {
+            "description": "Get the second page of courses",
+            "command": "curl -X GET https://api.publish-teacher-training-courses.service.gov.uk/api/public/v1/recruitment_cycles/2020/courses?page[page]=2"
+          }
+        ],
         "responses": {
           "200": {
             "description": "The collection of courses.",
@@ -1434,6 +1444,12 @@
             "schema": {
               "type": "string"
             }
+          }
+        ],
+        "x-curl-examples": [
+          {
+            "description": "Suggest providers with the specified query",
+            "command": "curl -X GET https://api.publish-teacher-training-courses.service.gov.uk/api/public/v1/provider_suggestions?query=oxf"
           }
         ],
         "responses": {
@@ -1504,6 +1520,12 @@
               ]
             },
             "example": "recruitment_cycle,provider"
+          }
+        ],
+        "x-curl-examples": [
+          {
+            "description": "Get the locations of a course",
+            "command": "curl -X GET https://api.publish-teacher-training-courses.service.gov.uk/api/public/v1/recruitment_cycles/2020/providers/B20/courses/2N22/locations"
           }
         ],
         "responses": {
@@ -1591,6 +1613,16 @@
             "description": "Pagination options to navigate through the collection."
           }
         ],
+        "x-curl-examples": [
+          {
+            "description": "Get all courses for a provider",
+            "command": "curl -X GET https://api.publish-teacher-training-courses.service.gov.uk/api/public/v1/recruitment_cycles/2020/providers/B20/courses"
+          },
+          {
+            "description": "Get the second page of courses for a provider",
+            "command": "curl -X GET https://api.publish-teacher-training-courses.service.gov.uk/api/public/v1/recruitment_cycles/2020/provideers/B20/courses?page[page]=2"
+          }
+        ],
         "responses": {
           "200": {
             "description": "The collection of courses.",
@@ -1642,6 +1674,12 @@
             "schema": {
               "type": "string"
             }
+          }
+        ],
+        "x-curl-examples": [
+          {
+            "description": "Get a course for a provider",
+            "command": "curl -X GET https://api.publish-teacher-training-courses.service.gov.uk/api/public/v1/recruitment_cycles/2020/providers/B20/courses/2N22"
           }
         ],
         "responses": {
@@ -1760,6 +1798,16 @@
             "description": "Pagination options to navigate through the collection."
           }
         ],
+        "x-curl-examples": [
+          {
+            "description": "Get all providers",
+            "command": "curl -X GET https://api.publish-teacher-training-courses.service.gov.uk/api/public/v1/recruitment_cycles/2020/providers"
+          },
+          {
+            "description": "Get second page of providers",
+            "command": "curl -X GET https://api.publish-teacher-training-courses.service.gov.uk/api/public/v1/recruitment_cycles/2020/providers?page[page]=2"
+          }
+        ],
         "responses": {
           "200": {
             "description": "Collection of providers.",
@@ -1803,6 +1851,12 @@
             }
           }
         ],
+        "x-curl-examples": [
+          {
+            "description": "Get a specific provider",
+            "command": "curl -X GET https://api.publish-teacher-training-courses.service.gov.uk/api/public/v1/recruitment_cycles/2020/providers/B20"
+          }
+        ],
         "responses": {
           "200": {
             "description": "The provider.",
@@ -1833,6 +1887,12 @@
         "operationId": "public_api_v1_subject_areas",
         "tags": [
           "subject_areas"
+        ],
+        "x-curl-examples": [
+          {
+            "description": "Get all subject areas",
+            "command": "curl -X GET https://api.publish-teacher-training-courses.service.gov.uk/api/public/v1/subject_areas"
+          }
         ],
         "responses": {
           "200": {
@@ -1867,6 +1927,12 @@
             "required": false,
             "example": "name",
             "description": "Sort subjects by name"
+          }
+        ],
+        "x-curl-examples": [
+          {
+            "description": "Get all subjects",
+            "command": "curl -X GET https://api.publish-teacher-training-courses.service.gov.uk/api/public/v1/subjects"
           }
         ],
         "responses": {
