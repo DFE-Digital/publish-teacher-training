@@ -7,6 +7,9 @@ describe "API" do
       tags "subject_areas"
       produces "application/json"
 
+      curl_example description: "Get all subject areas",
+                   command: "curl -X GET https://api.publish-teacher-training-courses.service.gov.uk/api/public/v1/subject_areas"
+
       response "200", "The collection of subject areas." do
         schema "$ref": "#/components/schemas/SubjectAreaListResponse"
 
