@@ -9,7 +9,11 @@ module API
       private
 
         def courses
-          @courses ||= recruitment_cycle.courses
+          @courses ||= CourseSearchService.call(
+            filter: params[:filter],
+            sort: params[:sort],
+            course_scope: recruitment_cycle.courses,
+          )
         end
 
         def recruitment_cycle
