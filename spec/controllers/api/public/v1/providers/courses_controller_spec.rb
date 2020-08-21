@@ -35,36 +35,28 @@ RSpec.describe API::Public::V1::Providers::CoursesController do
     end
 
     describe "pagination" do
-      let(:courses) do
-        array = []
-
-        7.times { |n| array << build(:course, id: n + 1) }
-
-        array
-      end
+      let(:provider) { create(:provider) }
+      let!(:courses) { create_list(:course, 3, provider: provider) }
+      let(:year) { courses[0].provider.recruitment_cycle.year }
 
       before do
-        allow(controller).to receive(:courses).and_return(courses)
-
         get :index, params: {
-          recruitment_cycle_year: "2020",
-          provider_code: "ABC",
-          page: {
-            page: 2,
-            per_page: 5,
-          },
+          recruitment_cycle_year: year,
+          provider_code: provider.provider_code,
+          page: 2,
+          per_page: 2,
         }
       end
 
       it "can pagingate to page 2" do
-        expect(JSON.parse(response.body)["data"].size).to eql(2)
+        expect(JSON.parse(response.body)["data"].size).to eql(1)
       end
     end
 
     describe "filtering" do
       it "calls CoursesController with passed filter" do
         expected_filter = ActionController::Parameters.new(funding_type: "salary")
-        expect(CourseSearchService).to receive(:call).with(hash_including(filter: expected_filter)).and_return([])
+        expect(CourseSearchService).to receive(:call).with(hash_including(filter: expected_filter)).and_return(Course.all)
 
         get :index, params: {
           recruitment_cycle_year: provider.recruitment_cycle.year,

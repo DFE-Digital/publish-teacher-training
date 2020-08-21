@@ -28,8 +28,12 @@ module API
 
     private
 
-      def allowed_to_disable_pagination?
-        fields_for_sitemap?
+      def max_per_page
+        if fields_for_sitemap?
+          20_000
+        else
+          super
+        end
       end
 
       def fields_for_sitemap?

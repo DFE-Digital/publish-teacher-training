@@ -1,10 +1,11 @@
 module API
   module V3
     class ApplicationController < ActionController::API
+      include Pagy::Backend
+
       rescue_from ActiveRecord::RecordNotFound, with: :jsonapi_404
 
       before_action :store_request_id
-      before_action :check_disable_pagination
 
       def jsonapi_404
         render jsonapi: nil, status: :not_found
@@ -12,20 +13,29 @@ module API
 
     private
 
-      def check_disable_pagination
-        return unless params[:page]
+      def paginate(scope)
+        _pagy, paginated_records = pagy(scope, items: per_page, page: page)
 
-        if params[:page][:per_page].to_i > Kaminari.config.default_per_page
-          return if allowed_to_disable_pagination?
-
-          params[:page][:per_page] = Kaminari.config.default_per_page
-        end
+        paginated_records
       end
 
-      # Override if you want to allow an endpoint to disable pagaination
-      # e.g. by checking params
-      def allowed_to_disable_pagination?
-        false
+      def per_page
+        params[:page] ||= {}
+
+        [(params.dig(:page, :per_page) || default_per_page).to_i, max_per_page].min
+      end
+
+      def default_per_page
+        100
+      end
+
+      def max_per_page
+        100
+      end
+
+      def page
+        params[:page] ||= {}
+        (params.dig(:page, :page) || 1).to_i
       end
 
       def build_recruitment_cycle

@@ -65,9 +65,6 @@ describe "Providers API v2", type: :request do
               },
             },
           }],
-          "links" => {
-            "last" => "/api/v2/providers?page%5Bpage%5D=1",
-          },
           "meta" => {
             "count" => 1,
           },
@@ -101,9 +98,6 @@ describe "Providers API v2", type: :request do
               },
             },
           }],
-          "links" => {
-            "last" => "/api/v2/users/#{user.id}/providers?page%5Bpage%5D=1",
-          },
           "meta" => {
             "count" => 1,
           },
@@ -123,9 +117,6 @@ describe "Providers API v2", type: :request do
 
         expect(json_response).to eq(
           "data" => [],
-          "links" => {
-            "last" => "/api/v2/users/#{different_user.id}/providers?page%5Bpage%5D=1",
-          },
           "meta" => {
             "count" => 0,
           },

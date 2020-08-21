@@ -34,11 +34,6 @@ describe "GET v3/recruitment_cycles/:year/courses" do
       course_hashes = json_response["data"]
       expect(course_hashes.count).to eq(1)
       expect(course_hashes.first["id"]).to eq(current_course.id.to_s)
-
-      headers = response.headers
-
-      expect(headers["Per-Page"]).to be_present
-      expect(headers["Total"]).to be_present
     end
   end
 
@@ -173,20 +168,6 @@ describe "GET v3/courses" do
           course_b.site_statuses << create(:site_status, :findable, site: another_site)
         end
 
-        around do |example|
-          default_per_page = Kaminari.config.default_per_page
-
-          Kaminari.configure do |config|
-            config.default_per_page = 1
-          end
-
-          example.run
-
-          Kaminari.configure do |config|
-            config.default_per_page = default_per_page
-          end
-        end
-
         let(:page_1) { "/api/v3/courses?sort=distance&latitude=0&longitude=0&page[page]=1" }
         let(:page_2) { "/api/v3/courses?sort=distance&latitude=0&longitude=0&page[page]=2" }
         let(:page_3) { "/api/v3/courses?sort=distance&latitude=0&longitude=0&page[page]=3" }
@@ -198,6 +179,8 @@ describe "GET v3/courses" do
         it "does not return duplicates" do
           course_ids = []
 
+          allow_any_instance_of(API::V3::CoursesController).to receive(:max_per_page).and_return(1)
+
           get page_1
 
           json_response = JSON.parse(response.body)
@@ -208,10 +191,9 @@ describe "GET v3/courses" do
           json_response = JSON.parse(response.body)
           course_ids << json_response.dig("data", 0, "id")
 
-          get page_3
-
-          json_response = JSON.parse(response.body)
-          course_ids << json_response.dig("data", 0, "id")
+          expect {
+            get page_3
+          }.to raise_error(Pagy::OverflowError)
 
           expect(course_ids.compact).to eql([course_b.id.to_s, course_a.id.to_s])
         end
@@ -282,11 +264,6 @@ describe "GET v3/courses" do
       course_hashes = json_response["data"]
       expect(course_hashes.count).to eq(1)
       expect(course_hashes.first["id"]).to eq(current_course.id.to_s)
-
-      headers = response.headers
-
-      expect(headers["Per-Page"]).to be_present
-      expect(headers["Total"]).to be_present
     end
   end
 
@@ -661,32 +638,10 @@ describe "GET v3/courses" do
   describe "pagination" do
     let(:request_path) { "/api/v3/courses" }
 
-    it "paginates the results" do
-      get request_path
-      headers = response.headers
-
-      expect(headers["Per-Page"]).to be_present
-      expect(headers["Total"]).to be_present
-    end
-
     context "can be disabled for sitemap" do
       before do
         create(:course, site_statuses: [build(:site_status, :findable)], enrichments: [build(:course_enrichment, :published)])
         create(:course, site_statuses: [build(:site_status, :findable)], enrichments: [build(:course_enrichment, :published)])
-      end
-
-      around do |example|
-        default_per_page = Kaminari.config.default_per_page
-
-        Kaminari.configure do |config|
-          config.default_per_page = 1
-        end
-
-        example.run
-
-        Kaminari.configure do |config|
-          config.default_per_page = default_per_page
-        end
       end
 
       let(:request_path) { "/api/v3/courses?page[per_page]=1000&fields[courses]=course_code,provider_code,changed_at" }
