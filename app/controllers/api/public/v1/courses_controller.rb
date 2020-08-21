@@ -3,7 +3,9 @@ module API
     module V1
       class CoursesController < API::Public::V1::ApplicationController
         def index
-          render jsonapi: paginate(courses), include: include_param, class: API::Public::V1::SerializerService.call
+          render jsonapi: paginate(courses),
+                 include: include_param,
+                 class: API::Public::V1::SerializerService.call
         end
 
       private

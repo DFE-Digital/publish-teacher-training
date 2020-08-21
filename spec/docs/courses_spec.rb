@@ -55,6 +55,9 @@ describe "API" do
       curl_example description: "Get the second page of courses",
                    command: "curl -X GET https://api.publish-teacher-training-courses.service.gov.uk/api/public/v1/recruitment_cycles/2020/courses?page[page]=2"
 
+      curl_example description: "Sort courses by distance from given latitude and longitude",
+                   command: 'curl -X GET "https://api.publish-teacher-training-courses.service.gov.uk/api/public/v1/recruitment_cycles/2020/courses?page\[per_page\]=10&filter\[latitude\]=51.8975918&filter\[longitude\]=-0.4910925&filter\[radius\]=10&sort=distance"'
+
       response "200", "The collection of courses." do
         let(:year) { "2020" }
         let(:include) { "provider" }
