@@ -142,7 +142,7 @@ describe "/api/v2/build_new_course", type: :request do
       end
 
       context "when the current user is not an admin" do
-        it "should return pe as a potential subject" do
+        it "should not return pe as a potential subject" do
           response = do_get params
           expect(response).to have_http_status(:ok)
           json_response = parse_response(response)
