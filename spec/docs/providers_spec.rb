@@ -79,7 +79,7 @@ describe "API" do
                    command: "curl -X GET https://api.publish-teacher-training-courses.service.gov.uk/api/public/v1/recruitment_cycles/2020/providers/B20"
 
       response "200", "The provider." do
-        let!(:provider) { create(:provider) }
+        let(:provider) { create(:provider, provider_code: "1AT") }
         let(:year) { provider.recruitment_cycle.year }
         let(:provider_code) { provider.provider_code }
 

@@ -82,14 +82,6 @@ module API
           @object.open_for_applications?
         end
 
-        attribute :provider_code do
-          @object.provider.provider_code
-        end
-
-        attribute :recruitment_cycle_year do
-          @object.recruitment_cycle.year
-        end
-
         attribute :required_qualifications_english do
           @object.english
         end

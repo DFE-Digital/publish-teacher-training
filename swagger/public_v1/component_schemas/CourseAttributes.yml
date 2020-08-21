@@ -3,7 +3,6 @@ description: "This schema presents the information about a course."
 type: object
 required:
   - code
-  - provider_code
   - age_maximum
   - age_minimum
 properties:
@@ -234,12 +233,6 @@ properties:
       - school_direct_training_programme
       - school_direct_salaried_training_programme
       - pg_teaching_apprenticeship
-  provider_code:
-    type: string
-    description: "Unique code for the provider of this course."
-    maxLength: 3
-    minLength: 3
-    example: 6CL
   qualifications:
     type: array
     description: >-
@@ -254,10 +247,6 @@ properties:
     items:
       type: string
       example: "qts"
-  recruitment_cycle_year:
-    type: string
-    description: The recruitment cycle that this course is available in.
-    example: 2020
   required_qualifications:
     type: string
     nullable: true
