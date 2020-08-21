@@ -4,6 +4,8 @@ module API
       class SerializableProvider < JSONAPI::Serializable::Resource
         type "providers"
 
+        belongs_to :recruitment_cycle
+
         attributes :postcode,
                    :provider_type,
                    :region_code,
@@ -37,10 +39,6 @@ module API
 
         attribute :name do
           @object.provider_name
-        end
-
-        attribute :recruitment_cycle_year do
-          @object.recruitment_cycle.year.to_i
         end
 
         attribute :street_address_1 do

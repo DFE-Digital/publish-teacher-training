@@ -922,11 +922,6 @@
               "invalid_value"
             ]
           },
-          "recruitment_cycle_year": {
-            "type": "integer",
-            "description": "The recruitment year this provider record is for.",
-            "example": 2020
-          },
           "region_code": {
             "type": "string",
             "description": "The NUTS 1 region code for the provider's address.",
@@ -1796,6 +1791,18 @@
               "per_page": 10
             },
             "description": "Pagination options to navigate through the collection."
+          },
+          {
+            "name": "include",
+            "in": "query",
+            "required": false,
+            "description": "The associated data for this resource.",
+            "schema": {
+              "enum": [
+                "recruitment_cycle"
+              ]
+            },
+            "example": "recruitment_cycle"
           }
         ],
         "x-curl-examples": [
