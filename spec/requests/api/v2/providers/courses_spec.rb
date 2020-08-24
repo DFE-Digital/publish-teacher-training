@@ -71,6 +71,30 @@ describe "Courses API v2", type: :request do
       response
     end
 
+    describe "edit options" do
+      let(:pe) { find_or_create(:secondary_subject, :physical_education) }
+      let(:course) { create(:course, :secondary, provider: provider) }
+
+      context "when the current user is not an admin" do
+        it "should not return pe as a potential subject" do
+          json_response = JSON.parse subject.body
+          expect(json_response["data"]["meta"]["edit_options"]["subjects"].map { |subject|
+            subject["attributes"]["subject_code"]
+          }).not_to include(pe.subject_code)
+        end
+      end
+
+      context "when the current user is an admin" do
+        let(:user) { create(:user, :admin) }
+        it "should return pe as a potential subject" do
+          json_response = JSON.parse subject.body
+          expect(json_response["data"]["meta"]["edit_options"]["subjects"].map { |subject|
+            subject["attributes"]["subject_code"]
+          }).to include(pe.subject_code)
+        end
+      end
+    end
+
     context "with a findable_open_course" do
       let(:course) { findable_open_course }
 
@@ -381,9 +405,6 @@ describe "Courses API v2", type: :request do
                  },
                 },
               },
-            },
-            "jsonapi" => {
-              "version" => "1.0",
             },
             "included" => [
               {

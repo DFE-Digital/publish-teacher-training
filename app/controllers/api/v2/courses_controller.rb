@@ -65,8 +65,19 @@ module API
       end
 
       def show
-        # https://github.com/jsonapi-rb/jsonapi-rails/issues/113
-        render jsonapi: @course, include: params[:include], class: CourseSerializersService.new.execute
+        json_data = JSONAPI::Serializable::Renderer.new.render(
+          @course,
+          class: CourseSerializersService.new.execute,
+          include: params[:include],
+        )
+
+        unless @current_user.admin?
+          json_data[:data][:meta][:edit_options][:subjects]&.reject! do |subject|
+            subject[:attributes][:subject_name] == "Physical education"
+          end
+        end
+
+        render json: json_data
       end
 
       def publish
