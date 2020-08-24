@@ -19,7 +19,9 @@ module API
         end
 
         def recruitment_cycle
-          @recruitment_cycle ||= RecruitmentCycle.find_by!(year: params[:recruitment_cycle_year])
+          @recruitment_cycle = RecruitmentCycle.find_by(
+            year: params[:recruitment_cycle_year],
+          ) || RecruitmentCycle.current_recruitment_cycle
         end
 
         def include_param

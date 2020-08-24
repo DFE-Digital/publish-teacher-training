@@ -22,10 +22,28 @@ RSpec.describe API::Public::V1::CoursesController do
         provider.courses << build_list(:course, 2, provider: provider)
       end
 
+      context "with no recruitment cycle provided" do
+        let(:next_cycle) { create :recruitment_cycle, :next }
+
+        before do
+          next_cycle
+
+          get :index, params: {
+            include: "recruitment_cycle",
+          }
+        end
+
+        it "returns courses for the current cycle" do
+          parsed_recruitment_cycle_id = json_response["data"][0].dig("relationships", "recruitment_cycle", "data", "id").to_i
+          expect(parsed_recruitment_cycle_id).to eq(recruitment_cycle.id)
+          expect(json_response["data"].size).to eql(2)
+        end
+      end
+
       context "default response" do
         before do
           get :index, params: {
-            recruitment_cycle_year: "2020",
+            recruitment_cycle_year: recruitment_cycle.year,
           }
         end
 
@@ -39,7 +57,7 @@ RSpec.describe API::Public::V1::CoursesController do
           provider.courses << build_list(:course, 5, provider: provider)
 
           get :index, params: {
-            recruitment_cycle_year: "2020",
+            recruitment_cycle_year: recruitment_cycle.year,
             page: 2,
             per_page: 5,
           }
@@ -53,7 +71,7 @@ RSpec.describe API::Public::V1::CoursesController do
       context "with includes" do
         before do
           get :index, params: {
-            recruitment_cycle_year: "2020",
+            recruitment_cycle_year: recruitment_cycle.year,
             include: "recruitment_cycle,provider",
           }
         end
@@ -80,7 +98,7 @@ RSpec.describe API::Public::V1::CoursesController do
           allow(CourseSearchService).to receive(:call).and_return(Course.all)
 
           get :index, params: {
-            recruitment_cycle_year: "2020",
+            recruitment_cycle_year: recruitment_cycle.year,
             sort: sort_attribute,
           }
         end
@@ -99,7 +117,7 @@ RSpec.describe API::Public::V1::CoursesController do
           allow(CourseSearchService).to receive(:call).and_return(Course.all)
 
           get :index, params: {
-            recruitment_cycle_year: "2020",
+            recruitment_cycle_year: recruitment_cycle.year,
             filter: {
               funding_type: "salary",
             },
