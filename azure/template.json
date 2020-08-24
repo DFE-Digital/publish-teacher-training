@@ -311,6 +311,13 @@
       "metadata": {
         "description": "Configure Rails to serve out static files from the public folder."
       }
+    },
+    "settingsSkylightAuthentication": {
+      "type": "string",
+      "defaultValue": "",
+      "metadata": {
+        "description": "Skylight auth Key."
+      }
     }
   },
   "variables": {
@@ -551,6 +558,10 @@
               {
                 "name": "RAILS_SERVE_STATIC_FILES",
                 "value": "[parameters('railsServeStaticFiles')]"
+              },
+              {
+                "name": "SETTINGS__SKYLIGHT__AUTHENTICATION",
+                "value": "[parameters('settingsSkylightAuthentication')]"
               }
             ]
           },
