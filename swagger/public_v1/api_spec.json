@@ -271,13 +271,6 @@
               "pg_teaching_apprenticeship"
             ]
           },
-          "provider_code": {
-            "type": "string",
-            "description": "Unique code for the provider of this course.",
-            "maxLength": 3,
-            "minLength": 3,
-            "example": "6CL"
-          },
           "qualifications": {
             "type": "array",
             "description": "The qualifications as an outcome of the course.",
@@ -307,11 +300,6 @@
               "type": "string",
               "example": "qts"
             }
-          },
-          "recruitment_cycle_year": {
-            "type": "string",
-            "description": "The recruitment cycle that this course is available in.",
-            "example": 2020
           },
           "required_qualifications": {
             "type": "string",

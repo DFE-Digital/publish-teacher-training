@@ -62,9 +62,7 @@ RSpec.describe API::Public::V1::SerializableCourse do
   it { is_expected.to have_attribute(:other_requirements).with_value(course.latest_published_enrichment.other_requirements) }
   it { is_expected.to have_attribute(:personal_qualities).with_value(course.latest_published_enrichment.personal_qualities) }
   it { is_expected.to have_attribute(:program_type).with_value(course.program_type) }
-  it { is_expected.to have_attribute(:provider_code).with_value(course.provider.provider_code) }
   it { is_expected.to have_attribute(:qualifications).with_value(%w{qts pgce}) }
-  it { is_expected.to have_attribute(:recruitment_cycle_year).with_value("2020") }
   it { is_expected.to have_attribute(:required_qualifications).with_value(course.latest_published_enrichment.required_qualifications) }
   it { is_expected.to have_attribute(:required_qualifications_english).with_value("must_have_qualification_at_application_time") }
   it { is_expected.to have_attribute(:required_qualifications_maths).with_value("must_have_qualification_at_application_time") }
