@@ -1,6 +1,8 @@
 module API
   module V2
     class ApplicationController < ::ApplicationController
+      include Pagy::Backend
+
       attr_reader :current_user
 
       rescue_from ActiveRecord::RecordNotFound, with: :jsonapi_404
@@ -22,6 +24,31 @@ module API
       end
 
     private
+
+      def paginate(scope, per_page:)
+        _pagy, paginated_records = pagy(scope, items: per_page, page: page)
+
+        paginated_records
+      end
+
+      def per_page
+        params[:page] ||= {}
+
+        [(params.dig(:page, :per_page) || default_per_page).to_i, max_per_page].min
+      end
+
+      def default_per_page
+        100
+      end
+
+      def max_per_page
+        100
+      end
+
+      def page
+        params[:page] ||= {}
+        (params.dig(:page, :page) || 1).to_i
+      end
 
       def check_user_is_kept
         return if current_user&.kept?

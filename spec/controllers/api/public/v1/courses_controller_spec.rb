@@ -40,10 +40,8 @@ RSpec.describe API::Public::V1::CoursesController do
 
           get :index, params: {
             recruitment_cycle_year: "2020",
-            page: {
-              page: 2,
-              per_page: 5,
-            },
+            page: 2,
+            per_page: 5,
           }
         end
 
@@ -79,7 +77,7 @@ RSpec.describe API::Public::V1::CoursesController do
         let(:sort_attribute) { "name,provider.provider_name" }
 
         before do
-          allow(CourseSearchService).to receive(:call).and_return([])
+          allow(CourseSearchService).to receive(:call).and_return(Course.all)
 
           get :index, params: {
             recruitment_cycle_year: "2020",
@@ -98,7 +96,7 @@ RSpec.describe API::Public::V1::CoursesController do
         before do
           provider.courses << build(:course, provider: provider)
 
-          allow(CourseSearchService).to receive(:call).and_return([])
+          allow(CourseSearchService).to receive(:call).and_return(Course.all)
 
           get :index, params: {
             recruitment_cycle_year: "2020",

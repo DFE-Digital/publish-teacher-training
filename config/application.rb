@@ -39,6 +39,7 @@ module ManageCoursesBackend
       "Pundit::NotAuthorizedError" => :forbidden,
       "PG::ConnectionBad" => :service_unavailable,
       "AASM::InvalidTransition" => :bad_request,
+      "Pagy::OverflowError" => :bad_request,
     }
 
     # https://github.com/rails/rails/commit/ddb6d788d6a611fd1ba6cf92ad6d1342079517a8

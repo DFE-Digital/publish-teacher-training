@@ -72,7 +72,6 @@ GEM
       zeitwerk (~> 2.2, >= 2.2.2)
     addressable (2.7.0)
       public_suffix (>= 2.0.2, < 5.0)
-    api-pagination (4.8.2)
     application_insights (0.5.6)
     ast (2.4.0)
     attr_extras (6.2.4)
@@ -221,18 +220,6 @@ GEM
       activesupport (>= 5.0)
       pg (>= 0.18.1)
     jwt (2.2.2)
-    kaminari (1.2.1)
-      activesupport (>= 4.1.0)
-      kaminari-actionview (= 1.2.1)
-      kaminari-activerecord (= 1.2.1)
-      kaminari-core (= 1.2.1)
-    kaminari-actionview (1.2.1)
-      actionview
-      kaminari-core (= 1.2.1)
-    kaminari-activerecord (1.2.1)
-      activerecord
-      kaminari-core (= 1.2.1)
-    kaminari-core (1.2.1)
     listen (3.2.1)
       rb-fsevent (~> 0.10, >= 0.10.3)
       rb-inotify (~> 0.9, >= 0.9.10)
@@ -277,6 +264,7 @@ GEM
     open_api-rswag-ui (0.1.0)
       actionpack (>= 3.1, < 7.0)
       railties (>= 3.1, < 7.0)
+    pagy (3.8.3)
     parallel (1.19.2)
     parallel_tests (3.1.0)
       parallel
@@ -480,7 +468,6 @@ PLATFORMS
 DEPENDENCIES
   aasm
   active_model_serializers
-  api-pagination
   application_insights
   audited (~> 4.9)
   awesome_print
@@ -510,12 +497,12 @@ DEPENDENCIES
   jsonapi-rspec
   jsonb_accessor
   jwt
-  kaminari
   listen (>= 3.0.5, < 3.3)
   logstash-logger (~> 0.26.1)
   open_api-rswag-api
   open_api-rswag-specs
   open_api-rswag-ui
+  pagy (~> 3.5)
   parallel_tests
   pg
   pg_search

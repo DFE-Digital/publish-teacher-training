@@ -12,19 +12,9 @@ RSpec.describe API::V3::ApplicationController do
     def page_url(_)
       "/"
     end
-  end
 
-  around :each do |example|
-    default_per_page = Kaminari.config.default_per_page
-
-    Kaminari.configure do |config|
-      config.default_per_page = 1
-    end
-
-    example.run
-
-    Kaminari.configure do |config|
-      config.default_per_page = default_per_page
+    def max_per_page
+      1
     end
   end
 
@@ -44,11 +34,11 @@ RSpec.describe API::V3::ApplicationController do
       expect(JSON.parse(response.body)["data"].size).to eql(1)
     end
 
-    context "when allowed_to_disable_pagination? returns true" do
-      it "can be disabled with per_page param and implemented method" do
+    context "when custom max_per_page" do
+      it "is respected" do
         controller.instance_eval do
-          def allowed_to_disable_pagination?
-            true
+          def max_per_page
+            100_000
           end
         end
 

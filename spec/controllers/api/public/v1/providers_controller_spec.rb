@@ -75,10 +75,8 @@ RSpec.describe API::Public::V1::ProvidersController do
 
           get :index, params: {
             recruitment_cycle_year: recruitment_cycle.year,
-            page: {
-              page: 2,
-              per_page: 5,
-            },
+            page: 2,
+            per_page: 5,
           }
         end
 

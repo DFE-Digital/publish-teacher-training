@@ -5,7 +5,7 @@ module API
         @subjects = Subject.where.not(type: "DiscontinuedSubject")
           .where.not(subject_code: nil)
 
-        paginate json: @subjects
+        render json: @subjects
       end
     end
   end

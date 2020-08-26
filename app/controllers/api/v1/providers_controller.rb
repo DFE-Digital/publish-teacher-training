@@ -6,7 +6,6 @@ module API
       before_action :build_recruitment_cycle
 
       def index
-        per_page = params[:per_page] || 100
         changed_since = params[:changed_since]
         ActiveRecord::Base.transaction do
           ActiveRecord::Base.connection.execute("LOCK provider, site IN SHARE UPDATE EXCLUSIVE MODE")
@@ -30,6 +29,10 @@ module API
       end
 
     private
+
+      def per_page
+        (params[:per_page] || 100).to_i
+      end
 
       def build_recruitment_cycle
         @recruitment_cycle = RecruitmentCycle.find_by(
