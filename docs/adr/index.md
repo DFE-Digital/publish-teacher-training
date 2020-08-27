@@ -6,3 +6,4 @@
 * [4. Before action variables](0004-before-action-variables.md)
 * [5. Service entry points](0005-service-entry-points.md)
 * [6. Controller structure](0006-controller-structure.md)
+* [7. JavaScript Linting and code style](0007-javascript-linting.md)
