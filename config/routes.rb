@@ -114,9 +114,11 @@ Rails.application.routes.draw do
           end
         end
 
-        get "provider_suggestions", to: "provider_suggestions#index"
         resources :subjects, only: %i[index]
         resources :subject_areas, only: :index
+
+        get "provider_suggestions", to: "provider_suggestions#index"
+        get "/courses", to: "courses#index"
       end
     end
   end
