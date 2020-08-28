@@ -399,7 +399,7 @@ GEM
       activesupport (>= 3.2.1)
     semantic_logger (4.6.1)
       concurrent-ruby (~> 1.0)
-    sentry-raven (3.0.2)
+    sentry-raven (3.0.3)
       faraday (>= 1.0)
     shellany (0.0.1)
     shoulda-matchers (4.4.1)
