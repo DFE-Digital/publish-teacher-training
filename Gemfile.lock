@@ -450,7 +450,7 @@ GEM
     tty-screen (0.7.1)
     tzinfo (1.2.7)
       thread_safe (~> 0.1)
-    uk_postcode (2.1.5)
+    uk_postcode (2.1.6)
     unicode-display_width (1.6.1)
     uniform_notifier (1.13.0)
     webmock (3.8.3)
