@@ -1,9 +1,9 @@
 alerts =  {
 ttapi = {
     website_name = "prod-teacher-training-api"
-    website_url   = "https://api2.publish-teacher-training-courses.service.gov.uk/healthcheck"
+    website_url   = "https://api.publish-teacher-training-courses.service.gov.uk/ping"
     test_type     = "HTTP"
-    check_rate    = 300
+    check_rate    = 60
     contact_group = [151103]
     trigger_rate  = 0
     custom_header = "{\"Content-Type\": \"application/x-www-form-urlencoded\"}"
