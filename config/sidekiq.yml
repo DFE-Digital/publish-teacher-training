@@ -1,0 +1,6 @@
+---
+:queues:
+  - default
+  - geocoding
+  - save_statistic
+  - mailer
