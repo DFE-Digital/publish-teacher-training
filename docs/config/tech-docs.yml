@@ -10,6 +10,7 @@ phase: Beta
 # Links to show on right-hand-side of header
 header_links:
   About: /
+  Feedback: https://forms.gle/syqb5Fa9RSbo2WC1A
   Support: /support.html
 
 # Enables search functionality. This indexes pages only and is not recommended for single-page sites.
