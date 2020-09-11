@@ -2,10 +2,15 @@ module API
   module V2
     class ApplicationController < ::ApplicationController
       include Pagy::Backend
+      include ResponseErrorHandler
 
       attr_reader :current_user
 
       rescue_from ActiveRecord::RecordNotFound, with: :jsonapi_404
+
+      rescue_from Pagy::OverflowError do |_exception|
+        render_json_error(code: 400, message: I18n.t("exceptions.pagy.overflow"), status: :bad_request)
+      end
 
       before_action :store_request_id
       before_action :check_user_is_kept
@@ -97,7 +102,7 @@ module API
 
         if current_user.present?
           payload[:user] = {
-            id:         current_user.id,
+            id: current_user.id,
             sign_in_id: current_user.sign_in_user_id,
           }
         end

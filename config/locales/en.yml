@@ -140,3 +140,6 @@ en:
               blank: "^Enter their organisation"
             reason:
               blank: "^Why do they need access?"
+  exceptions:
+    pagy:
+      overflow: The requested page param was out of range and invalid for this request.

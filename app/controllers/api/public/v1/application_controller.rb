@@ -3,8 +3,13 @@ module API
     module V1
       class ApplicationController < ActionController::API
         include Pagy::Backend
+        include ResponseErrorHandler
 
         rescue_from ActiveRecord::RecordNotFound, with: :jsonapi_404
+
+        rescue_from Pagy::OverflowError do |_exception|
+          render_json_error(code: 400, message: I18n.t("exceptions.pagy.overflow"), status: :bad_request)
+        end
 
         def jsonapi_404
           render jsonapi: nil, status: :not_found
