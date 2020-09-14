@@ -85,7 +85,7 @@ RSpec.describe API::Public::V1::CoursesController do
           end
 
           it "returns a friendly error message" do
-            expect(json_response["error"]).to eql(I18n.t("exceptions.pagy.overflow"))
+            expect(json_response["errors"][0]["detail"]).to eql(I18n.t("pagy.overflow"))
           end
         end
       end

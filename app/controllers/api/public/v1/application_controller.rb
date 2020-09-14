@@ -8,7 +8,7 @@ module API
         rescue_from ActiveRecord::RecordNotFound, with: :jsonapi_404
 
         rescue_from Pagy::OverflowError do |_exception|
-          render_json_error(code: 400, message: I18n.t("exceptions.pagy.overflow"), status: :bad_request)
+          render_json_error(status: 400, message: I18n.t("pagy.overflow"))
         end
 
         def jsonapi_404

@@ -3,7 +3,19 @@ module ResponseErrorHandler
 
 private
 
-  def render_json_error(code: nil, message:, status: :internal_server_error)
-    render json: { code: code, error: message }.compact, status: status
+  def render_json_error(status: 500, message: nil)
+    render json: error_hash(status, message), status: status
+  end
+
+  def error_hash(status, message = nil)
+    {
+      errors: [
+        {
+          status: status,
+          title: I18n.t("errors.#{status}.title"),
+          detail: I18n.t("errors.#{status}.detail", message: message),
+        },
+      ],
+    }
   end
 end
