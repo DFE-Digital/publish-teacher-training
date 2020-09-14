@@ -193,7 +193,8 @@ describe "GET v3/courses" do
 
           get page_3
 
-          expect(response).to have_http_status(:bad_request)
+          json_response = JSON.parse(response.body)
+          course_ids << json_response.dig("data", 0, "id")
 
           expect(course_ids.compact).to eql([course_b.id.to_s, course_a.id.to_s])
         end
