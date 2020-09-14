@@ -31,33 +31,37 @@ describe Courses::ValidateCustomAgeRangeService do
 
     context "with a from value that does not fall within the valid age range" do
       let(:age_range_in_years) { "1_to_15" }
+      let(:age_range_in_years_formatted) { "1 to 15" }
 
       it "should return an error" do
-        expect(course.errors.messages[:age_range_in_years]).to include "#{age_range_in_years} #{error_message}"
+        expect(course.errors.messages[:age_range_in_years]).to include "#{age_range_in_years_formatted} #{error_message}"
       end
     end
 
     context "with a to value that does not fall within the valid age range" do
       let(:age_range_in_years) { "7_to_20" }
+      let(:age_range_in_years_formatted) { "7 to 20" }
 
       it "should return an error stating valid age ranges must be 4 years or greater" do
-        expect(course.errors.messages[:age_range_in_years]).to include "#{age_range_in_years} #{error_message}"
+        expect(course.errors.messages[:age_range_in_years]).to include "#{age_range_in_years_formatted} #{error_message}"
       end
     end
 
     context "with an age range that does not include a valid from age range value" do
       let(:age_range_in_years) { "to_6" }
+      let(:age_range_in_years_formatted) { "to 6" }
 
       it "should return an error stating that there is an invalid from year" do
-        expect(course.errors.messages[:age_range_in_years]).to include "#{age_range_in_years} #{error_message}"
+        expect(course.errors.messages[:age_range_in_years]).to include "#{age_range_in_years_formatted} #{error_message}"
       end
     end
 
     context "with an age range that does not include a valid to age range value" do
       let(:age_range_in_years) { "2_to" }
+      let(:age_range_in_years_formatted) { "2 to" }
 
       it "should return an error stating that there is an invalid from year" do
-        expect(course.errors.messages[:age_range_in_years]).to include "#{age_range_in_years} #{error_message}"
+        expect(course.errors.messages[:age_range_in_years]).to include "#{age_range_in_years_formatted} #{error_message}"
       end
     end
   end
