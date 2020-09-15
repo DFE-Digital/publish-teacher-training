@@ -2,10 +2,10 @@ version: '3.4'
 volumes:
   dbdata:
 services:
- 
+
   redis:
     image: redis
-    
+
   db:
     image: postgres:9.6-alpine
     # To preserve data between runs of docker-compose, we mount a folder from the host machine.
@@ -47,10 +47,10 @@ services:
       - GIT_BRANCH=${GIT_BRANCH}
       - REDIS_URL=redis://redis:6379
 
-  bg:
+  bgJobs:
     image: ${dockerHubUsername:-dfedigital}/teacher-training-api:${GIT_BRANCH:-latest}
     command: bundle exec sidekiq -c 5 -C config/sidekiq.yml
-    volumes: 
+    volumes:
       - .:/app
     depends_on:
       - web
