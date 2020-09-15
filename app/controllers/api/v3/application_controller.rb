@@ -2,6 +2,7 @@ module API
   module V3
     class ApplicationController < ActionController::API
       include Pagy::Backend
+      include ErrorHandlers::Pagy
 
       rescue_from ActiveRecord::RecordNotFound, with: :jsonapi_404
 

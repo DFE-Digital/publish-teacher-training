@@ -2,6 +2,7 @@ module API
   module V2
     class ApplicationController < ::ApplicationController
       include Pagy::Backend
+      include ErrorHandlers::Pagy
 
       attr_reader :current_user
 
@@ -97,7 +98,7 @@ module API
 
         if current_user.present?
           payload[:user] = {
-            id:         current_user.id,
+            id: current_user.id,
             sign_in_id: current_user.sign_in_user_id,
           }
         end

@@ -140,3 +140,15 @@ en:
               blank: "^Enter their organisation"
             reason:
               blank: "^Why do they need access?"
+  errors:
+    "400":
+      title: BAD REQUEST
+      detail: "%{message}"
+    "404":
+      title: NOT_FOUND
+      detail: "The requested resource does not exist"
+    "500":
+      title: SERVER_ERROR
+      detail: "Something has gone wrong, please try again in a few minutes"
+  pagy:
+    overflow: The requested page param was out of range and invalid for this request.

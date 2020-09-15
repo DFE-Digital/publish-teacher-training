@@ -191,9 +191,10 @@ describe "GET v3/courses" do
           json_response = JSON.parse(response.body)
           course_ids << json_response.dig("data", 0, "id")
 
-          expect {
-            get page_3
-          }.to raise_error(Pagy::OverflowError)
+          get page_3
+
+          json_response = JSON.parse(response.body)
+          course_ids << json_response.dig("data", 0, "id")
 
           expect(course_ids.compact).to eql([course_b.id.to_s, course_a.id.to_s])
         end

@@ -55,16 +55,38 @@ RSpec.describe API::Public::V1::CoursesController do
       context "with pagination" do
         before do
           provider.courses << build_list(:course, 5, provider: provider)
-
-          get :index, params: {
-            recruitment_cycle_year: recruitment_cycle.year,
-            page: 2,
-            per_page: 5,
-          }
         end
 
-        it "can pagingate to page 2" do
-          expect(json_response["data"].size).to eql(2)
+        context "when requested page is valid" do
+          before do
+            get :index, params: {
+              recruitment_cycle_year: recruitment_cycle.year,
+              page: 2,
+              per_page: 5,
+            }
+          end
+
+          it "can pagingate to page 2" do
+            expect(json_response["data"].size).to eql(2)
+          end
+        end
+
+        context "when requested page is out of range" do
+          before do
+            get :index, params: {
+              recruitment_cycle_year: recruitment_cycle.year,
+              page: 5,
+              per_page: 5,
+            }
+          end
+
+          it "returns a bad request response" do
+            expect(response).to have_http_status(:bad_request)
+          end
+
+          it "returns a friendly error message" do
+            expect(json_response["errors"][0]["detail"]).to eql(I18n.t("pagy.overflow"))
+          end
         end
       end
 
