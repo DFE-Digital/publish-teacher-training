@@ -1,7 +1,7 @@
 module Courses
   class ValidateCustomAgeRangeService
     def execute(age_range_in_years, course)
-      error_message = "#{age_range_in_years} is invalid. You must enter a valid age range."
+      error_message = "#{age_range_in_years.to_s.tr('_', ' ')} is invalid. You must enter a valid age range."
       valid_age_range_regex = Regexp.new(/^(?<from>\d{1,2})_to_(?<to>\d{1,2})$/)
 
       if valid_age_range_regex.match(age_range_in_years)
