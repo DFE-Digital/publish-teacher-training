@@ -95,6 +95,11 @@ describe "Providers API v2", type: :request do
                 "included" => false,
               },
             },
+            "contacts" => {
+              "meta" => {
+                "included" => false,
+              },
+            },
             "courses" => {
               "meta" => {
                 "count" => provider.courses.count,
