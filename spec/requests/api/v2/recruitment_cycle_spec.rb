@@ -100,14 +100,14 @@ describe "/api/v2/recruitment_cycle", type: :request do
     }
 
     describe "the JSON response" do
-      it "displays che correct jsonapi response" do
+      it "displays the correct jsonapi response" do
         provider
         next_provider
         provider2
 
         perform_request
 
-        json_response["data"].sort_by! { |cycle| cycle["id"] }
+        json_response["data"].sort_by! { |cycle| cycle["attributes"]["year"] }
 
         expect(json_response)
           .to(eq(
