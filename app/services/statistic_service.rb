@@ -5,6 +5,7 @@ class StatisticService
       courses: CourseReportingService.call(courses_scope: recruitment_cycle.courses),
       publish: PublishReportingService.call(recruitment_cycle_scope: recruitment_cycle),
       allocations: AllocationReportingService.call(recruitment_cycle_scope: recruitment_cycle),
+      rollover: RolloverReportingService.call,
     }
   end
 

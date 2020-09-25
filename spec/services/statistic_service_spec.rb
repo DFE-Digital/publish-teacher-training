@@ -1,3 +1,5 @@
+require "rails_helper"
+
 describe StatisticService do
   let(:recruitment_cycle) { find_or_create(:recruitment_cycle) }
   let!(:previous_recruitment_cycle) { find_or_create(:recruitment_cycle, :previous) }
@@ -22,6 +24,11 @@ describe StatisticService do
 
     it "calls the allocation reporting service" do
       expect(AllocationReportingService).to receive(:call).with(recruitment_cycle_scope: recruitment_cycle)
+      subject
+    end
+
+    it "calls the rollover reporting service" do
+      expect(RolloverReportingService).to receive(:call)
       subject
     end
   end
@@ -52,6 +59,11 @@ describe StatisticService do
 
     it "calls the allocation reporting service" do
       expect(AllocationReportingService).to receive(:call).with(recruitment_cycle_scope: recruitment_cycle)
+      subject
+    end
+
+    it "calls the rollover reporting service" do
+      expect(RolloverReportingService).to receive(:call)
       subject
     end
   end

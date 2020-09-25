@@ -171,6 +171,15 @@ describe "GET /reporting" do
           },
         },
       },
+      rollover: {
+        total: {
+          published_courses: 0,
+          new_courses_published: 0,
+          deleted_courses: 0,
+          existing_courses_in_draft: 0,
+          existing_courses_in_review: 0,
+        },
+      },
     }.with_indifferent_access
   end
 
@@ -178,8 +187,13 @@ describe "GET /reporting" do
     find_or_create(:recruitment_cycle, :previous)
   }
 
+  let(:next_recruitment_cycle) {
+    find_or_create(:recruitment_cycle, :next)
+  }
+
   it "returns status success" do
     previous_recruitment_cycle
+    next_recruitment_cycle
     get "/reporting"
     expect(response.status).to eq(200)
     expect(JSON.parse(response.body)).to eq(expected)
