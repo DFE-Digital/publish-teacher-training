@@ -3,12 +3,26 @@ require "rails_helper"
 RSpec.describe "/api/v2/providers/<accredited_body_code>/contacts", type: :request do
   describe "PUT #update" do
     context "with valid parameters" do
-      it "returns 201" do
+      it "returns a 201" do
+        params = { name: "new name" }
+
         given_an_accredited_body_exists
         given_the_accredited_body_has_contacts
         given_i_am_an_authenticated_user_from_the_accredited_body
-        when_valid_parameters_are_posted
+        when_parameters_are_posted(params)
         then_the_updated_contact_is_returned
+      end
+    end
+
+    context "with invalid parameters" do
+      it "returns a 422" do
+        params = { name: nil }
+
+        given_an_accredited_body_exists
+        given_the_accredited_body_has_contacts
+        given_i_am_an_authenticated_user_from_the_accredited_body
+        when_parameters_are_posted(params)
+        then_the_response_returns_errors
       end
     end
   end
@@ -30,15 +44,13 @@ RSpec.describe "/api/v2/providers/<accredited_body_code>/contacts", type: :reque
     @credentials = ActionController::HttpAuthentication::Token.encode_credentials(token)
   end
 
-  def when_valid_parameters_are_posted
+  def when_parameters_are_posted(params)
     params = {
       "_jsonapi" =>
       {
         "data" => {
           "type" => "contacts",
-          "attributes" => {
-            "name" => "new name",
-          },
+          "attributes" => params.as_json,
         },
       },
     }
@@ -53,5 +65,12 @@ RSpec.describe "/api/v2/providers/<accredited_body_code>/contacts", type: :reque
 
     expect(response).to have_http_status(:ok)
     expect(parsed_response["data"]["attributes"]["name"]).to eq("new name")
+  end
+
+  def then_the_response_returns_errors
+    parsed_response = JSON.parse(response.body)
+
+    expect(response).to have_http_status(:unprocessable_entity)
+    expect(parsed_response["errors"]).to be_present
   end
 end
