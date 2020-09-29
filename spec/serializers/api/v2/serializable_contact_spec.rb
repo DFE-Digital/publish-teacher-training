@@ -10,10 +10,10 @@ describe API::V2::SerializableContact do
 
   subject { JSON.parse(resource.as_jsonapi.to_json) }
 
-  it { should have_type "contacts" }
+  it { is_expected.to have_type("contacts") }
 
-  it { should have_attribute(:name).with_value(contact.name) }
-  it { should have_attribute(:email).with_value(contact.email) }
-  it { should have_attribute(:telephone).with_value(contact.telephone) }
-  it { should have_attribute(:type).with_value(contact.type) }
+  it { is_expected.to have_attribute(:name).with_value(contact.name) }
+  it { is_expected.to have_attribute(:email).with_value(contact.email) }
+  it { is_expected.to have_attribute(:telephone).with_value(contact.telephone) }
+  it { is_expected.to have_attribute(:type).with_value(contact.type) }
 end
