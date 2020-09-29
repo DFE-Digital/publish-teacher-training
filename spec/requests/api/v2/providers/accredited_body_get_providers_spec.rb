@@ -96,6 +96,11 @@ describe "AccreditedBody API v2", type: :request do
                     "included" => false,
                   },
                 },
+                "contacts" => {
+                  "meta" => {
+                    "included" => false,
+                  },
+                },
                 "courses" => {
                   "meta" => {
                     "count" => 0,
@@ -153,6 +158,11 @@ describe "AccreditedBody API v2", type: :request do
                     "included" => false,
                   },
                 },
+                "contacts" => {
+                  "meta" => {
+                    "included" => false,
+                  },
+                },
                 "courses" => {
                   "meta" => {
                     "count" => 1,
@@ -206,6 +216,11 @@ describe "AccreditedBody API v2", type: :request do
                   },
                 },
                 "users" => {
+                  "meta" => {
+                    "included" => false,
+                  },
+                },
+                "contacts" => {
                   "meta" => {
                     "included" => false,
                   },

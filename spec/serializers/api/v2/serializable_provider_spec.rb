@@ -7,14 +7,14 @@ describe API::V2::SerializableProvider do
   let(:user) { create(:user) }
   let(:organisation) { create(:organisation, users: [user]) }
   let(:site) { create(:site) }
-  let(:provider) {
+  let(:provider) do
     create :provider,
            ucas_preferences: ucas_preferences,
            courses: [course],
            contacts: [contact1, contact2, contact3, contact4, contact5],
            sites: [site],
            organisations: [organisation]
-  }
+  end
   let(:resource) { described_class.new object: provider }
   let(:contact1)  { build(:contact, :admin_type) }
   let(:contact2)  { build(:contact, :utt_type) }
@@ -22,7 +22,6 @@ describe API::V2::SerializableProvider do
   let(:contact4)  { build(:contact, :fraud_type) }
   let(:contact5)  { build(:contact, :finance_type) }
   let(:jsonapi_renderer) { JSONAPI::Serializable::Renderer.new }
-
 
   it "sets type to providers" do
     expect(resource.jsonapi_type).to eq :providers
@@ -98,13 +97,14 @@ describe API::V2::SerializableProvider do
       jsonapi_renderer.render(
         provider,
         class: {
-          User:   API::V2::SerializableUser,
-          Provider:   API::V2::SerializableProvider,
+          User: API::V2::SerializableUser,
+          Provider: API::V2::SerializableProvider,
           Site: API::V2::SerializableSite,
+          Contact: API::V2::SerializableContact,
         },
-        include: %i(
-          users sites
-        ),
+        include: %i[
+          users sites contacts
+        ],
       )
     end
 
@@ -116,6 +116,11 @@ describe API::V2::SerializableProvider do
     it "includes the sites relationship" do
       expect(subject.dig(:data, :relationships, :sites, :data).count).to eq(1)
       expect(subject.dig(:data, :relationships, :sites, :data).first).to eq({ type: :sites, id: site.id.to_s })
+    end
+
+    it "includes the contacts relationship" do
+      expect(subject.dig(:data, :relationships, :contacts, :data).count).to eq(5)
+      expect(subject.dig(:data, :relationships, :contacts, :data).first).to eq({ type: :contacts, id: contact1.id.to_s })
     end
   end
 end

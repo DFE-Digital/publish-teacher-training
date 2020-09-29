@@ -85,6 +85,7 @@ module API
 
       has_many :sites
       has_many :users
+      has_many :contacts
 
       has_many :courses do
         meta do
