@@ -84,6 +84,7 @@ ActiveRecord::Schema.define(version: 2020_10_05_132433) do
     t.text "telephone"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "permission_given", default: false
     t.index ["provider_id", "type"], name: "index_contact_on_provider_id_and_type", unique: true
     t.index ["provider_id"], name: "index_contact_on_provider_id"
   end

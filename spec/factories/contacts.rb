@@ -5,6 +5,7 @@ FactoryBot.define do
     name { Faker::Name.name }
     email { Faker::Internet.email }
     telephone { Faker::PhoneNumber.phone_number }
+    permission_given { true }
   end
 
   trait :admin_type do
