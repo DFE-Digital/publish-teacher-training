@@ -1,6 +1,27 @@
 require "rails_helper"
 
-RSpec.describe "/api/v2/providers/<accredited_body_code>/contacts", type: :request do
+RSpec.describe "/api/v2/contacts", type: :request do
+  describe "GET #show" do
+    context "with valid contact id" do
+      it "returns a 200" do
+        given_an_accredited_body_exists
+        given_the_accredited_body_has_contacts
+        given_i_am_an_authenticated_user_from_the_accredited_body
+        when_i_make_a_get_request_to_the_endpoint
+        then_the_contact_is_returned
+      end
+    end
+
+    context "with invalid contact id" do
+      it "returns a 404" do
+        given_an_accredited_body_exists
+        given_i_am_an_authenticated_user_from_the_accredited_body
+        when_i_make_a_get_request_to_the_endpoint
+        then_i_receive_404_not_found
+      end
+    end
+  end
+
   describe "PUT #update" do
     context "with valid parameters" do
       it "returns a 201" do
@@ -72,5 +93,22 @@ RSpec.describe "/api/v2/providers/<accredited_body_code>/contacts", type: :reque
 
     expect(response).to have_http_status(:unprocessable_entity)
     expect(parsed_response["errors"]).to be_present
+  end
+
+  def when_i_make_a_get_request_to_the_endpoint
+    unknown_id = 10_001
+    get "/api/v2/contacts/#{@contact&.id || unknown_id}", headers: { "HTTP_AUTHORIZATION" => @credentials }
+  end
+
+  def then_the_contact_is_returned
+    parsed_response = JSON.parse(response.body)
+
+    expect(response).to have_http_status(:ok)
+    expect(parsed_response["data"]["id"].to_i).to eq(@contact.id)
+    expect(parsed_response["data"]["type"]).to eq("contacts")
+  end
+
+  def then_i_receive_404_not_found
+    expect(response).to have_http_status(:not_found)
   end
 end
