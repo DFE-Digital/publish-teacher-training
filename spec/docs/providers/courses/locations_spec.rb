@@ -11,7 +11,7 @@ describe "API" do
                 type: :string,
                 required: true,
                 description: "The starting year of the recruitment cycle.",
-                example: "2020"
+                example: Settings.current_recruitment_cycle_year
       parameter name: :provider_code,
                 in: :path,
                 type: :string,
@@ -39,7 +39,7 @@ describe "API" do
       response "200", "The collection of locations for the specified course." do
         let(:course) { create(:course) }
         let(:provider) { course.provider }
-        let(:year) { "2020" }
+        let(:year) { provider.recruitment_cycle.year }
         let(:provider_code) { provider.provider_code }
         let(:course_code) { course.course_code }
         let(:include) { "provider" }
