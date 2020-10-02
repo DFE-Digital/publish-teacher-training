@@ -10,7 +10,7 @@ Rails.application.routes.draw do
 
   namespace :api do
     namespace :v1 do
-      scope "/(:recruitment_year)", constraints: { recruitment_year: /2020|2021/ } do
+      scope "/(:recruitment_year)", constraints: { recruitment_year: /2021|2022/ } do
         resources :providers, only: :index
         resources :subjects, only: :index
         resources :courses, only: :index
