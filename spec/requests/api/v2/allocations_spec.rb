@@ -1,6 +1,17 @@
 require "rails_helper"
 
 RSpec.describe "/api/v2/allocations/<id>", type: :request do
+  before do
+    # Note: the concept of recruitment cycle here is ethereal.
+    # it is tied to a recruitment cycle that is associated to
+    # Settings.allocation_cycle_year
+    allocation_recruitment_cycle
+  end
+
+  def allocation_recruitment_cycle
+    find_or_create(:recruitment_cycle, year: Settings.allocation_cycle_year)
+  end
+
   describe "GET" do
     context "when the allocation exists" do
       it "returns 200" do
@@ -92,11 +103,11 @@ RSpec.describe "/api/v2/allocations/<id>", type: :request do
   end
 
   def given_an_accredited_body_exists
-    @accredited_body = create(:provider, :accredited_body)
+    @accredited_body = create(:provider, :accredited_body, recruitment_cycle: allocation_recruitment_cycle)
   end
 
   def given_the_accredited_body_has_a_training_provider
-    @training_provider = create(:provider)
+    @training_provider = create(:provider, recruitment_cycle: allocation_recruitment_cycle)
     @course = create(:course, provider: @training_provider, accredited_body_code: @accredited_body.provider_code)
   end
 
@@ -111,7 +122,7 @@ RSpec.describe "/api/v2/allocations/<id>", type: :request do
 
   def given_i_am_an_authenticated_user_from_another_accredited_body
     @user = create(:user)
-    @another_accredited_body = create(:provider, :accredited_body)
+    @another_accredited_body = create(:provider, :accredited_body, recruitment_cycle: allocation_recruitment_cycle)
     @user.organisations << @another_accredited_body.organisation
     payload = { email: @user.email }
     token = JWT.encode payload, Settings.authentication.secret, Settings.authentication.algorithm
@@ -124,7 +135,8 @@ RSpec.describe "/api/v2/allocations/<id>", type: :request do
                          accredited_body_id: @accredited_body.id,
                          provider_id: @training_provider.id,
                          number_of_places: 10,
-                         confirmed_number_of_places: 11)
+                         confirmed_number_of_places: 11,
+                         recruitment_cycle: allocation_recruitment_cycle)
   end
 
   def when_i_make_a_get_request_to_the_endpoint

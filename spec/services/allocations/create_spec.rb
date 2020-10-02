@@ -3,8 +3,20 @@ require "rails_helper"
 RSpec.describe Allocations::Create do
   let(:provider) { create(:provider) }
   let(:accredited_body) { create(:provider, :accredited_body) }
-  let(:previous_recruitment_cycle) do
-    create(:recruitment_cycle, year: RecruitmentCycle.current.year.to_i - 1)
+
+  # Note: the concept of recruitment cycle here is ethereal.
+  # it is tied to a recruitment cycle that is associated to
+  # Settings.allocation_cycle_year
+
+  let(:allocation_recruitment_cycle) do
+    create(:recruitment_cycle, year: Settings.allocation_cycle_year)
+  end
+  let(:previous_allocation_recruitment_cycle) do
+    create(:recruitment_cycle, year: allocation_recruitment_cycle.year.to_i - 1)
+  end
+
+  before do
+    allocation_recruitment_cycle
   end
 
   describe "#execute" do
@@ -36,7 +48,7 @@ RSpec.describe Allocations::Create do
           provider_id: provider.id,
           accredited_body_id: accredited_body.id,
           number_of_places: previous_number_of_places,
-          recruitment_cycle: previous_recruitment_cycle,
+          recruitment_cycle: previous_allocation_recruitment_cycle,
           provider_code: provider.provider_code,
           accredited_body_code: accredited_body.provider_code,
         )
