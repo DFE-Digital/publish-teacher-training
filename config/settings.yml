@@ -3,7 +3,7 @@ authentication:
   # Set this in the env! The below ensures that we are un-authenticatable if we
   # forget to do this in production.
   secret: <%= SecureRandom.base64 %>
-current_recruitment_cycle_year: 2020
+current_recruitment_cycle_year: 2021
 allocation_cycle_year: 2020
 govuk_notify:
   api_key: please_change_me
