@@ -77,7 +77,7 @@ RSpec.describe API::Public::V1::SerializableCourse do
     it { is_expected.to have_attribute(:scholarship_amount).with_value("17000") }
   end
 
-  it { is_expected.to have_attribute(:start_date).with_value("September 2020") }
+  it { is_expected.to have_attribute(:start_date).with_value("September #{course.provider.recruitment_cycle.year}") }
   it { is_expected.to have_attribute(:state).with_value("published") }
   it { is_expected.to have_attribute(:study_mode).with_value("full_time") }
   it { is_expected.to have_attribute(:summary).with_value("PGCE with QTS full time teaching apprenticeship") }
