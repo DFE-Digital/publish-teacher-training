@@ -74,7 +74,7 @@ describe "AccreditedBody API v2", type: :request do
                 "telephone" => accredited_provider.telephone,
                 "email" => accredited_provider.email,
                 "website" => accredited_provider.website,
-                "recruitment_cycle_year" => "2020",
+                "recruitment_cycle_year" => accredited_provider.recruitment_cycle.year,
                 "admin_contact" => nil,
                 "utt_contact" => nil,
                 "web_link_contact" => nil,
