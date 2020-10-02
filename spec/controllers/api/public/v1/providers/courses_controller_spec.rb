@@ -24,7 +24,7 @@ RSpec.describe API::Public::V1::Providers::CoursesController do
         create(:course, provider: provider)
 
         get :index, params: {
-          recruitment_cycle_year: "2020",
+          recruitment_cycle_year: provider.recruitment_cycle.year,
           provider_code: provider.provider_code,
         }
       end
@@ -170,7 +170,7 @@ RSpec.describe API::Public::V1::Providers::CoursesController do
     context "when provider does not exist" do
       before do
         get :show, params: {
-          recruitment_cycle_year: "2020",
+          recruitment_cycle_year: provider.recruitment_cycle.year,
           provider_code: "ABC",
           code: "ABCD",
         }
