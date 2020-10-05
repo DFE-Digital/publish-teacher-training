@@ -8,7 +8,7 @@ describe ContactPolicy do
 
   subject { described_class }
 
-  permissions :update? do
+  permissions :show?, :update? do
     context "a user that belongs to the provider" do
       before do
         organisation.providers << provider

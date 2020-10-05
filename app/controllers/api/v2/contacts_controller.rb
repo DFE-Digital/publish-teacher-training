@@ -3,6 +3,12 @@ module API
     class ContactsController < API::V2::ApplicationController
       deserializable_resource :contact, class: API::V2::DeserializableContact
 
+      def show
+        authorize contact
+
+        render jsonapi: contact, include: params[:include], status: :ok
+      end
+
       def update
         authorize contact
 

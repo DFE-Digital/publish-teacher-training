@@ -6,6 +6,10 @@ class ContactPolicy
     @contact = contact
   end
 
+  def show?
+    user_is_admin_or_belongs_to_provider?
+  end
+
   def update?
     user_is_admin_or_belongs_to_provider?
   end
