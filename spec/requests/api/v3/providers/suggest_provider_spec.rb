@@ -25,7 +25,7 @@ describe "GET /provider-suggestions" do
                                      "provider_code" => provider.provider_code,
                                      "provider_name" => provider.provider_name,
                                      "provider_type" => provider.provider_type,
-                                     "recruitment_cycle_year" => "2020",
+                                     "recruitment_cycle_year" => provider.recruitment_cycle.year,
                                  },
                              },
                          ])
@@ -43,7 +43,7 @@ describe "GET /provider-suggestions" do
                                      "provider_code" => provider.provider_code,
                                      "provider_name" => provider.provider_name,
                                      "provider_type" => provider.provider_type,
-                                     "recruitment_cycle_year" => "2020",
+                                     "recruitment_cycle_year" => provider.recruitment_cycle.year,
                                  },
                              },
                              {
@@ -53,7 +53,7 @@ describe "GET /provider-suggestions" do
                                      "provider_code" => provider2.provider_code,
                                      "provider_name" => provider2.provider_name,
                                      "provider_type" => provider2.provider_type,
-                                     "recruitment_cycle_year" => "2020",
+                                     "recruitment_cycle_year" => provider2.recruitment_cycle.year,
                                  },
                              },
                          ])

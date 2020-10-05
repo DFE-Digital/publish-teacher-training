@@ -22,7 +22,7 @@ RSpec.describe API::Public::V1::Providers::LocationsController do
         provider.sites << build_list(:site, 2, provider: provider)
 
         get :index, params: {
-          recruitment_cycle_year: "2020",
+          recruitment_cycle_year: provider.recruitment_cycle.year,
           provider_code: provider.provider_code,
         }
       end
@@ -34,7 +34,7 @@ RSpec.describe API::Public::V1::Providers::LocationsController do
       context "with includes" do
         before do
           get :index, params: {
-            recruitment_cycle_year: "2020",
+            recruitment_cycle_year: provider.recruitment_cycle.year,
             provider_code: provider.provider_code,
             include: "recruitment_cycle,provider",
           }

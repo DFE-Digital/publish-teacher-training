@@ -17,13 +17,13 @@ describe "Courses API v2", type: :request do
   let(:next_year)     { current_year + 1 }
   let(:subjects) { [course_subject_mathematics] }
 
-
   let(:findable_open_course) do
     create(:course, :resulting_in_pgce_with_qts, :with_apprenticeship,
            level: "primary",
            name: "Mathematics",
            provider: provider,
            study_mode: :full_time,
+           start_date: current_cycle.application_start_date,
            subjects: subjects,
            is_send: true,
            site_statuses: courses_site_statuses,
@@ -31,7 +31,8 @@ describe "Courses API v2", type: :request do
            maths: :must_have_qualification_at_application_time,
            english: :must_have_qualification_at_application_time,
            science: :must_have_qualification_at_application_time,
-           age_range_in_years: "3_to_7")
+           age_range_in_years: "3_to_7",
+           applications_open_from: current_cycle.application_start_date)
   end
 
   let(:courses_site_statuses) {
