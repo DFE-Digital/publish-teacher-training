@@ -10,17 +10,25 @@ class RolloverReportingService
   end
 
   def call
-    return {} if @rollover_scope.next.blank?
-
-    {
-      total: {
+    if @rollover_scope.next.blank?
+      { total: {
+          published_courses: 0,
+          new_courses_published: 0,
+          deleted_courses: 0,
+          existing_courses_in_draft: 0,
+          existing_courses_in_review: 0,
+        } }
+    else
+      {
+        total: {
           published_courses: published_courses_count,
           new_courses_published: new_courses_published_count,
           deleted_courses: deleted_courses_count,
           existing_courses_in_draft: existing_courses_in_draft_count,
           existing_courses_in_review: existing_courses_in_review,
-      },
-    }
+        },
+      }
+    end
   end
 
   private_class_method :new

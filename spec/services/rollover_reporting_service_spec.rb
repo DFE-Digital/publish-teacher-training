@@ -75,7 +75,15 @@ describe RolloverReportingService do
 
     context "if there is no next recruitment cycle" do
       it "returns an empty object" do
-        expect(result).to eq({})
+        expect(result).to eq({
+                                total: {
+                                  published_courses: 0,
+                                  new_courses_published: 0,
+                                  deleted_courses: 0,
+                                  existing_courses_in_draft: 0,
+                                  existing_courses_in_review: 0,
+                                },
+                              })
       end
     end
   end
