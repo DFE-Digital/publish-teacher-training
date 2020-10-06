@@ -7,4 +7,4 @@ bg_jobs:
     class: "SaveStatisticJob"
     queue: save_statistic
 skylight:
-  enable: false
+  enable: true
