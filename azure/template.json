@@ -312,6 +312,13 @@
       "metadata": {
         "description": "Skylight auth Key."
       }
+    },
+    "settingsSkylightEnable": {
+      "type": "bool",
+      "defaultValue": "true",
+      "metadata": {
+        "description": "Enable Skylight?"
+      }
     }
   },
   "variables": {
@@ -557,6 +564,10 @@
               {
                 "name": "SETTINGS__SKYLIGHT__AUTHENTICATION",
                 "value": "[parameters('settingsSkylightAuthentication')]"
+              },
+              {
+                "name": "SETTINGS__SKYLIGHT__ENABLE",
+                "value": "[parameters('settingsSkylightEnable')]"
               }
             ]
           },
