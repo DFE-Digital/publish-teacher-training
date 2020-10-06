@@ -10,9 +10,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_10_05_132433) do
+ActiveRecord::Schema.define(version: 2020_10_06_120551) do
 
   # These are extensions that must be enabled in order to support this database
+  enable_extension "btree_gin"
+  enable_extension "btree_gist"
   enable_extension "pg_buffercache"
   enable_extension "pg_stat_statements"
   enable_extension "plpgsql"
@@ -84,6 +86,7 @@ ActiveRecord::Schema.define(version: 2020_10_05_132433) do
     t.text "telephone"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "permission_given", default: false
     t.index ["provider_id", "type"], name: "index_contact_on_provider_id_and_type", unique: true
     t.index ["provider_id"], name: "index_contact_on_provider_id"
   end
@@ -241,6 +244,8 @@ ActiveRecord::Schema.define(version: 2020_10_05_132433) do
     t.index ["changed_at"], name: "index_provider_on_changed_at", unique: true
     t.index ["discarded_at"], name: "index_provider_on_discarded_at"
     t.index ["latitude", "longitude"], name: "index_provider_on_latitude_and_longitude"
+    t.index ["provider_code"], name: "index_provider_on_provider_code", using: :gin
+    t.index ["provider_name"], name: "index_provider_on_provider_name", using: :gin
     t.index ["recruitment_cycle_id", "provider_code"], name: "index_provider_on_recruitment_cycle_id_and_provider_code", unique: true
   end
 
