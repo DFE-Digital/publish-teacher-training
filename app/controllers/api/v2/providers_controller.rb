@@ -229,11 +229,11 @@ module API
             :send_application_alerts,
           )
           .permit(
-            admin_contact: %w[name email telephone],
-            utt_contact: %w[name email telephone],
-            web_link_contact: %w[name email telephone],
-            fraud_contact: %w[name email telephone],
-            finance_contact: %w[name email telephone],
+            admin_contact: %w[name email telephone permission_given],
+            utt_contact: %w[name email telephone permission_given],
+            web_link_contact: %w[name email telephone permission_given],
+            fraud_contact: %w[name email telephone permission_given],
+            finance_contact: %w[name email telephone permission_given],
           )
       end
 

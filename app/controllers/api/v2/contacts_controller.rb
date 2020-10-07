@@ -31,6 +31,7 @@ module API
             :name,
             :email,
             :telephone,
+            :permission_given,
           )
       end
     end

@@ -25,7 +25,7 @@ describe "PATCH recruitment_cycles/year/providers/:provider_code/courses/:course
   end
 
   def slice_contact(contact)
-    contact.slice("name", "email", "telephone")
+    contact.slice("name", "email", "telephone", "permission_given")
   end
 
   def find_contact(type)

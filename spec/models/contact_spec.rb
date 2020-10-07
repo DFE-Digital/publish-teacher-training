@@ -77,5 +77,19 @@ describe Contact, type: :model do
         expect(contact.valid?).to be true
       end
     end
+
+    describe "permission_given" do
+      subject { build(:contact, permission_given: permission_given_value) }
+
+      context "true" do
+        let(:permission_given_value) { true }
+        it { is_expected.to be_valid }
+      end
+
+      context "false" do
+        let(:permission_given_value) { false }
+        it { is_expected.not_to be_valid }
+      end
+    end
   end
 end
