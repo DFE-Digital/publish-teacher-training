@@ -312,6 +312,13 @@
       "metadata": {
         "description": "Skylight auth Key."
       }
+    },
+    "dbServerCpuCores":{
+      "type": "int",
+      "defaultValue": "2",
+      "metadata": {
+      "description": "Configure Number of database server CPU"
+      }
     }
   },
   "variables": {
@@ -631,6 +638,9 @@
           "contentVersion": "1.0.0.0"
         },
         "parameters": {
+          "dbServerCpuCores": {
+            "value": "[parameters('dbServerCpuCores')]"
+          },
           "postgresServerName": {
             "value": "[variables('databaseServerName')]"
           },
