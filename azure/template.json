@@ -315,7 +315,7 @@
     },
     "dbServerCpuCores":{
       "type": "int",
-      "defaultValue": "2",
+      "defaultValue": 2,
       "metadata": {
       "description": "Configure Number of database server CPU"
       }
