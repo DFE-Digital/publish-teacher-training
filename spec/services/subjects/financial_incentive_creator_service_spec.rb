@@ -6,6 +6,7 @@ describe Subjects::FinancialIncentiveCreatorService do
     described_class.new(
       subject: subject_spy,
       financial_incentive: financial_incentive_spy,
+      year: 2020,
     )
   end
 
