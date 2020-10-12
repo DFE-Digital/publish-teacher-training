@@ -2171,9 +2171,9 @@ describe Course, type: :model do
         create(
           :course,
           level: "secondary",
-          name: "Art and design",
+          name: "Classics",
           course_code: "AAAA",
-          subjects: [find_or_create(:secondary_subject, :art_and_design)],
+          subjects: [find_or_create(:secondary_subject, :classics)],
         )
       end
 
@@ -2182,7 +2182,8 @@ describe Course, type: :model do
       end
     end
 
-    context "when primary with maths" do
+    # NOTE: There is currently no finanical incentives for `primary with maths`.
+    xcontext "when primary with maths" do
       subject { Course.new(subjects: [PrimarySubject.find_by(subject_code: "03")]) }
       subject do
         create(
