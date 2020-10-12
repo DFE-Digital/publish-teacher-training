@@ -273,7 +273,7 @@ GEM
     patience_diff (1.1.0)
       trollop (~> 1.16)
     pg (1.2.3)
-    pg_search (2.3.3)
+    pg_search (2.3.4)
       activerecord (>= 5.2)
       activesupport (>= 5.2)
     pkg-config (1.4.4)
