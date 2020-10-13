@@ -272,7 +272,7 @@ describe "GET v3/courses" do
     let(:request_path) { "/api/v3/courses?filter[funding]=salary" }
 
     context "with a salaried course" do
-      let(:course_with_salary) { create(:course, :with_salary, site_statuses: [findable_status], enrichments: [published_enrichment]) }
+      let(:course_with_salary) { create(:course, :salary_type_based, site_statuses: [findable_status], enrichments: [published_enrichment]) }
 
       before do
         course_with_salary
@@ -287,7 +287,7 @@ describe "GET v3/courses" do
     end
 
     context "with a non-salaried course" do
-      let(:non_salary_course) { create(:course, site_statuses: [findable_status], enrichments: [published_enrichment]) }
+      let(:non_salary_course) { create(:course, :non_salary_type_based, site_statuses: [findable_status], enrichments: [published_enrichment]) }
 
       before do
         non_salary_course
