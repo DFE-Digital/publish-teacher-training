@@ -9,6 +9,9 @@ module Subjects
     def subject_and_financial_incentives
       subject_and_financial_incentives = {
         2021 => {
+          %w[Biology] => {
+            bursary_amount: "7000",
+          },
           %w[Chemistry Computing Mathematics Physics] => {
             scholarship: "26000",
             bursary_amount: "24000",
