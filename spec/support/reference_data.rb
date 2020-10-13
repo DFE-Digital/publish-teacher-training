@@ -25,8 +25,8 @@ RSpec.configure do |config|
   config.before(:all) do
     Subjects::SubjectAreaCreatorService.new.execute
     Subjects::CreatorService.new.execute
-    Subjects::FinancialIncentiveCreatorService.new(year: 2020).execute
-    Subjects::FinancialIncentiveSetSubjectKnowledgeEnhancementCourseAvailableService.new(year: 2020).execute
+    Subjects::FinancialIncentiveCreatorService.new(year: 2021).execute
+    Subjects::FinancialIncentiveSetSubjectKnowledgeEnhancementCourseAvailableService.new(year: 2021).execute
     if ENV["TEST_DATA_CACHE"]
       TestDataCache.create_and_cache_test_records
     end

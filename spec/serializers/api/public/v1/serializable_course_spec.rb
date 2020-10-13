@@ -33,7 +33,8 @@ RSpec.describe API::Public::V1::SerializableCourse do
   context "when financial_incentives are present" do
     let(:course) { create(:course, :with_accrediting_provider, enrichments: [enrichment], level: "secondary", subjects: [create(:secondary_subject, :physics)]) }
 
-    it { is_expected.to have_attribute(:bursary_amount).with_value("6000") }
+    it { is_expected.to have_attribute(:scholarship_amount).with_value("26000") }
+    it { is_expected.to have_attribute(:bursary_amount).with_value("24000") }
   end
 
   it { is_expected.to have_attribute(:bursary_requirements).with_value(course.bursary_requirements) }
@@ -71,10 +72,10 @@ RSpec.describe API::Public::V1::SerializableCourse do
   it { is_expected.to have_attribute(:salary_details).with_value(course.latest_published_enrichment.salary_details) }
   it { is_expected.to have_attribute(:scholarship_amount).with_value(nil) }
 
-  context "when scholarship amount is present" do
-    let(:course) { create(:course, :with_accrediting_provider, :secondary, enrichments: [enrichment], subjects: [find_or_create(:secondary_subject, :geography)]) }
+  context "when bursary amount is present" do
+    let(:course) { create(:course, :with_accrediting_provider, :secondary, enrichments: [enrichment], subjects: [find_or_create(:secondary_subject, :classics)]) }
 
-    it { is_expected.to have_attribute(:scholarship_amount).with_value("17000") }
+    it { is_expected.to have_attribute(:bursary_amount).with_value("10000") }
   end
 
   it { is_expected.to have_attribute(:start_date).with_value("September #{course.provider.recruitment_cycle.year}") }

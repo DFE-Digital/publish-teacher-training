@@ -22,7 +22,9 @@ describe API::V2::SerializableSubject do
     it { should have_attribute(:subject_knowledge_enhancement_course_available).with_value(nil) }
   end
 
-  context "when a bursary subject with subject knowledge enhancement course available" do
+  # NOTE: There is no longer any bursary subject with subject knowledge
+  #       enhancement course available
+  xcontext "when a bursary subject with subject knowledge enhancement course available" do
     let(:bursary_subject) { find_or_create(:secondary_subject, :mathematics) }
     let(:resource) { API::V2::SerializableSubject.new object: bursary_subject }
 

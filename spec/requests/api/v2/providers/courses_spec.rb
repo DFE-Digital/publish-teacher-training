@@ -237,10 +237,10 @@ describe "Courses API v2", type: :request do
                        "attributes" => {
                          "subject_name" => "Primary with mathematics",
                          "subject_code" => "03",
-                         "bursary_amount" => "6000",
+                         "bursary_amount" => nil,
                          "early_career_payments" => nil,
                          "scholarship" => nil,
-                         "subject_knowledge_enhancement_course_available" => true,
+                         "subject_knowledge_enhancement_course_available" => nil,
                        },
                      },
                      {
@@ -287,10 +287,10 @@ describe "Courses API v2", type: :request do
                    "attributes" => {
                      "subject_name" => "French",
                      "subject_code" => "15",
-                     "bursary_amount" => "26000",
-                     "early_career_payments" => "2000",
-                     "scholarship" => "28000",
-                     "subject_knowledge_enhancement_course_available" => true,
+                     "bursary_amount" => "10000",
+                     "early_career_payments" => nil,
+                     "scholarship" => nil,
+                     "subject_knowledge_enhancement_course_available" => false,
                    },
                  },
                  {
@@ -311,10 +311,10 @@ describe "Courses API v2", type: :request do
                    "attributes" => {
                      "subject_name" => "German",
                      "subject_code" => "17",
-                     "bursary_amount" => "26000",
-                     "early_career_payments" => "2000",
-                     "scholarship" => "28000",
-                     "subject_knowledge_enhancement_course_available" => true,
+                     "bursary_amount" => "10000",
+                     "early_career_payments" => nil,
+                     "scholarship" => nil,
+                     "subject_knowledge_enhancement_course_available" => false,
                    },
                  },
                  {
@@ -323,10 +323,10 @@ describe "Courses API v2", type: :request do
                    "attributes" => {
                      "subject_name" => "Italian",
                      "subject_code" => "18",
-                     "bursary_amount" => "26000",
-                     "early_career_payments" => "2000",
+                     "bursary_amount" => "10000",
+                     "early_career_payments" => nil,
                      "scholarship" => nil,
-                     "subject_knowledge_enhancement_course_available" => true,
+                     "subject_knowledge_enhancement_course_available" => false,
                    },
                  },
                  {
@@ -335,10 +335,10 @@ describe "Courses API v2", type: :request do
                    "attributes" => {
                      "subject_name" => "Japanese",
                      "subject_code" => "19",
-                     "bursary_amount" => "26000",
-                     "early_career_payments" => "2000",
+                     "bursary_amount" => "10000",
+                     "early_career_payments" => nil,
                      "scholarship" => nil,
-                     "subject_knowledge_enhancement_course_available" => true,
+                     "subject_knowledge_enhancement_course_available" => false,
                    },
                  },
                  {
@@ -347,10 +347,10 @@ describe "Courses API v2", type: :request do
                    "attributes" => {
                      "subject_name" => "Mandarin",
                      "subject_code" => "20",
-                     "bursary_amount" => "26000",
-                     "early_career_payments" => "2000",
+                     "bursary_amount" => "10000",
+                     "early_career_payments" => nil,
                      "scholarship" => nil,
-                     "subject_knowledge_enhancement_course_available" => true,
+                     "subject_knowledge_enhancement_course_available" => false,
                    },
                  },
                  {
@@ -359,10 +359,10 @@ describe "Courses API v2", type: :request do
                    "attributes" => {
                      "subject_name" => "Russian",
                      "subject_code" => "21",
-                     "bursary_amount" => "26000",
-                     "early_career_payments" => "2000",
+                     "bursary_amount" => "10000",
+                     "early_career_payments" => nil,
                      "scholarship" => nil,
-                     "subject_knowledge_enhancement_course_available" => true,
+                     "subject_knowledge_enhancement_course_available" => false,
                    },
                  },
                  {
@@ -371,10 +371,10 @@ describe "Courses API v2", type: :request do
                    "attributes" => {
                      "subject_name" => "Spanish",
                      "subject_code" => "22",
-                     "bursary_amount" => "26000",
-                     "early_career_payments" => "2000",
-                     "scholarship" => "28000",
-                     "subject_knowledge_enhancement_course_available" => true,
+                     "bursary_amount" => "10000",
+                     "early_career_payments" => nil,
+                     "scholarship" => nil,
+                     "subject_knowledge_enhancement_course_available" => false,
                    },
                  },
                  {
@@ -383,10 +383,10 @@ describe "Courses API v2", type: :request do
                    "attributes" => {
                      "subject_name" => "Modern languages (other)",
                      "subject_code" => "24",
-                     "bursary_amount" => "26000",
-                     "early_career_payments" => "2000",
+                     "bursary_amount" => "10000",
+                     "early_career_payments" => nil,
                      "scholarship" => nil,
-                     "subject_knowledge_enhancement_course_available" => true,
+                     "subject_knowledge_enhancement_course_available" => false,
                    },
                  },
                ],
@@ -448,10 +448,10 @@ describe "Courses API v2", type: :request do
                 "attributes" => {
                   "subject_name" => course_subject_mathematics.subject_name,
                   "subject_code" => course_subject_mathematics.subject_code,
-                  "bursary_amount" => "6000",
+                  "bursary_amount" => nil,
                   "early_career_payments" => nil,
                   "scholarship" => nil,
-                  "subject_knowledge_enhancement_course_available" => true,
+                  "subject_knowledge_enhancement_course_available" => nil,
                 },
               },
               {
@@ -533,10 +533,10 @@ describe "Courses API v2", type: :request do
                 "attributes" => {
                  "subject_name" => "French",
                  "subject_code" => "15",
-                 "bursary_amount" => "26000",
-                 "early_career_payments" => "2000",
-                 "scholarship" => "28000",
-                 "subject_knowledge_enhancement_course_available" => true,
+                 "bursary_amount" => "10000",
+                 "early_career_payments" => nil,
+                 "scholarship" => nil,
+                 "subject_knowledge_enhancement_course_available" => false,
                 },
               },
               {
@@ -557,10 +557,10 @@ describe "Courses API v2", type: :request do
                 "attributes" => {
                  "subject_name" => "German",
                  "subject_code" => "17",
-                 "bursary_amount" => "26000",
-                 "early_career_payments" => "2000",
-                 "scholarship" => "28000",
-                 "subject_knowledge_enhancement_course_available" => true,
+                 "bursary_amount" => "10000",
+                 "early_career_payments" => nil,
+                 "scholarship" => nil,
+                 "subject_knowledge_enhancement_course_available" => false,
                 },
               },
               {
@@ -569,10 +569,10 @@ describe "Courses API v2", type: :request do
                 "attributes" => {
                  "subject_name" => "Italian",
                  "subject_code" => "18",
-                 "bursary_amount" => "26000",
-                 "early_career_payments" => "2000",
+                 "bursary_amount" => "10000",
+                 "early_career_payments" => nil,
                  "scholarship" => nil,
-                 "subject_knowledge_enhancement_course_available" => true,
+                 "subject_knowledge_enhancement_course_available" => false,
                 },
               },
               {
@@ -581,10 +581,10 @@ describe "Courses API v2", type: :request do
                 "attributes" => {
                  "subject_name" => "Japanese",
                  "subject_code" => "19",
-                 "bursary_amount" => "26000",
-                 "early_career_payments" => "2000",
+                 "bursary_amount" => "10000",
+                 "early_career_payments" => nil,
                  "scholarship" => nil,
-                 "subject_knowledge_enhancement_course_available" => true,
+                 "subject_knowledge_enhancement_course_available" => false,
                 },
               },
               {
@@ -593,10 +593,10 @@ describe "Courses API v2", type: :request do
                 "attributes" => {
                  "subject_name" => "Mandarin",
                  "subject_code" => "20",
-                 "bursary_amount" => "26000",
-                 "early_career_payments" => "2000",
+                 "bursary_amount" => "10000",
+                 "early_career_payments" => nil,
                  "scholarship" => nil,
-                 "subject_knowledge_enhancement_course_available" => true,
+                 "subject_knowledge_enhancement_course_available" => false,
                 },
               },
               {
@@ -605,10 +605,10 @@ describe "Courses API v2", type: :request do
                 "attributes" => {
                  "subject_name" => "Russian",
                  "subject_code" => "21",
-                 "bursary_amount" => "26000",
-                 "early_career_payments" => "2000",
+                 "bursary_amount" => "10000",
+                 "early_career_payments" => nil,
                  "scholarship" => nil,
-                 "subject_knowledge_enhancement_course_available" => true,
+                 "subject_knowledge_enhancement_course_available" => false,
                 },
               },
               {
@@ -617,10 +617,10 @@ describe "Courses API v2", type: :request do
                 "attributes" => {
                  "subject_name" => "Spanish",
                  "subject_code" => "22",
-                 "bursary_amount" => "26000",
-                 "early_career_payments" => "2000",
-                 "scholarship" => "28000",
-                 "subject_knowledge_enhancement_course_available" => true,
+                 "bursary_amount" => "10000",
+                 "early_career_payments" => nil,
+                 "scholarship" => nil,
+                 "subject_knowledge_enhancement_course_available" => false,
                 },
               },
               {
@@ -629,10 +629,10 @@ describe "Courses API v2", type: :request do
                 "attributes" => {
                  "subject_name" => "Modern languages (other)",
                  "subject_code" => "24",
-                 "bursary_amount" => "26000",
-                 "early_career_payments" => "2000",
+                 "bursary_amount" => "10000",
+                 "early_career_payments" => nil,
                  "scholarship" => nil,
-                 "subject_knowledge_enhancement_course_available" => true,
+                 "subject_knowledge_enhancement_course_available" => false,
                 },
               },
             ],
@@ -799,10 +799,10 @@ describe "Courses API v2", type: :request do
                     "attributes" => {
                       "subject_name" => "Primary with mathematics",
                       "subject_code" => "03",
-                      "bursary_amount" => "6000",
+                      "bursary_amount" => nil,
                       "early_career_payments" => nil,
                       "scholarship" => nil,
-                      "subject_knowledge_enhancement_course_available" => true,
+                      "subject_knowledge_enhancement_course_available" => nil,
                     },
                   },
                   {
@@ -849,10 +849,10 @@ describe "Courses API v2", type: :request do
                       "attributes" => {
                         "subject_name" => "French",
                         "subject_code" => "15",
-                        "bursary_amount" => "26000",
-                        "early_career_payments" => "2000",
-                        "scholarship" => "28000",
-                        "subject_knowledge_enhancement_course_available" => true,
+                        "bursary_amount" => "10000",
+                        "early_career_payments" => nil,
+                        "scholarship" => nil,
+                        "subject_knowledge_enhancement_course_available" => false,
                       },
                     },
                     {
@@ -873,10 +873,10 @@ describe "Courses API v2", type: :request do
                       "attributes" => {
                         "subject_name" => "German",
                         "subject_code" => "17",
-                        "bursary_amount" => "26000",
-                        "early_career_payments" => "2000",
-                        "scholarship" => "28000",
-                        "subject_knowledge_enhancement_course_available" => true,
+                        "bursary_amount" => "10000",
+                        "early_career_payments" => nil,
+                        "scholarship" => nil,
+                        "subject_knowledge_enhancement_course_available" => false,
                       },
                     },
                     {
@@ -885,10 +885,10 @@ describe "Courses API v2", type: :request do
                       "attributes" => {
                         "subject_name" => "Italian",
                         "subject_code" => "18",
-                        "bursary_amount" => "26000",
-                        "early_career_payments" => "2000",
+                        "bursary_amount" => "10000",
+                        "early_career_payments" => nil,
                         "scholarship" => nil,
-                        "subject_knowledge_enhancement_course_available" => true,
+                        "subject_knowledge_enhancement_course_available" => false,
                       },
                     },
                     {
@@ -897,10 +897,10 @@ describe "Courses API v2", type: :request do
                       "attributes" => {
                         "subject_name" => "Japanese",
                         "subject_code" => "19",
-                        "bursary_amount" => "26000",
-                        "early_career_payments" => "2000",
+                        "bursary_amount" => "10000",
+                        "early_career_payments" => nil,
                         "scholarship" => nil,
-                        "subject_knowledge_enhancement_course_available" => true,
+                        "subject_knowledge_enhancement_course_available" => false,
                       },
                     },
                     {
@@ -909,10 +909,10 @@ describe "Courses API v2", type: :request do
                       "attributes" => {
                         "subject_name" => "Mandarin",
                         "subject_code" => "20",
-                        "bursary_amount" => "26000",
-                        "early_career_payments" => "2000",
+                        "bursary_amount" => "10000",
+                        "early_career_payments" => nil,
                         "scholarship" => nil,
-                        "subject_knowledge_enhancement_course_available" => true,
+                        "subject_knowledge_enhancement_course_available" => false,
                       },
                     },
                     {
@@ -921,10 +921,10 @@ describe "Courses API v2", type: :request do
                       "attributes" => {
                         "subject_name" => "Russian",
                         "subject_code" => "21",
-                        "bursary_amount" => "26000",
-                        "early_career_payments" => "2000",
+                        "bursary_amount" => "10000",
+                        "early_career_payments" => nil,
                         "scholarship" => nil,
-                        "subject_knowledge_enhancement_course_available" => true,
+                        "subject_knowledge_enhancement_course_available" => false,
                       },
                     },
                     {
@@ -933,10 +933,10 @@ describe "Courses API v2", type: :request do
                       "attributes" => {
                         "subject_name" => "Spanish",
                         "subject_code" => "22",
-                        "bursary_amount" => "26000",
-                        "early_career_payments" => "2000",
-                        "scholarship" => "28000",
-                        "subject_knowledge_enhancement_course_available" => true,
+                        "bursary_amount" => "10000",
+                        "early_career_payments" => nil,
+                        "scholarship" => nil,
+                        "subject_knowledge_enhancement_course_available" => false,
                       },
                     },
                     {
@@ -945,10 +945,10 @@ describe "Courses API v2", type: :request do
                       "attributes" => {
                         "subject_name" => "Modern languages (other)",
                         "subject_code" => "24",
-                        "bursary_amount" => "26000",
-                        "early_career_payments" => "2000",
+                        "bursary_amount" => "10000",
+                        "early_career_payments" => nil,
                         "scholarship" => nil,
-                        "subject_knowledge_enhancement_course_available" => true,
+                        "subject_knowledge_enhancement_course_available" => false,
                       },
                     },
                   ],
