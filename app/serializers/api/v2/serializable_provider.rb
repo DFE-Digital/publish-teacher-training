@@ -47,26 +47,6 @@ module API
         @object.recruitment_cycle.year
       end
 
-      attribute :admin_contact do
-        @object.generated_ucas_contact("admin")
-      end
-
-      attribute :utt_contact do
-        @object.generated_ucas_contact("utt")
-      end
-
-      attribute :web_link_contact do
-        @object.generated_ucas_contact("web_link")
-      end
-
-      attribute :fraud_contact do
-        @object.generated_ucas_contact("fraud")
-      end
-
-      attribute :finance_contact do
-        @object.generated_ucas_contact("finance")
-      end
-
       attribute :gt12_contact do
         @object.ucas_preferences&.gt12_response_destination
       end

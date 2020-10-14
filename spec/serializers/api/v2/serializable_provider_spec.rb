@@ -17,11 +17,6 @@ describe API::V2::SerializableProvider do
            organisations: [organisation]
   end
   let(:resource) { described_class.new object: provider }
-  let(:contact1)  { build(:contact, :admin_type) }
-  let(:contact2)  { build(:contact, :utt_type) }
-  let(:contact3)  { build(:contact, :web_link_type) }
-  let(:contact4)  { build(:contact, :fraud_type) }
-  let(:contact5)  { build(:contact, :finance_type) }
   let(:jsonapi_renderer) { JSONAPI::Serializable::Renderer.new }
 
   it "sets type to providers" do
@@ -52,46 +47,6 @@ describe API::V2::SerializableProvider do
       },
     ])
   end
-
-  it {
-    should have_attribute(:admin_contact).with_value(
-      "name" => contact1.name,
-      "email" => contact1.email,
-      "telephone" => contact1.telephone,
-    )
-  }
-
-  it {
-    should have_attribute(:utt_contact).with_value(
-      "name" => contact2.name,
-      "email" => contact2.email,
-      "telephone" => contact2.telephone,
-    )
-  }
-
-  it {
-    should have_attribute(:web_link_contact).with_value(
-      "name" => contact3.name,
-      "email" => contact3.email,
-      "telephone" => contact3.telephone,
-    )
-  }
-
-  it {
-    should have_attribute(:fraud_contact).with_value(
-      "name" => contact4.name,
-      "email" => contact4.email,
-      "telephone" => contact4.telephone,
-    )
-  }
-
-  it {
-    should have_attribute(:finance_contact).with_value(
-      "name" => contact5.name,
-      "email" => contact5.email,
-      "telephone" => contact5.telephone,
-    )
-  }
 
   describe "includes" do
     subject do
