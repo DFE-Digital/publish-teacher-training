@@ -31,7 +31,8 @@ RSpec.describe API::Public::V1::SerializableCourse do
   it { is_expected.to have_attribute(:bursary_amount).with_value(nil) }
 
   context "when financial_incentives are present" do
-    let(:course) { create(:course, :with_accrediting_provider, enrichments: [enrichment], level: "secondary", subjects: [create(:secondary_subject, :physics)]) }
+    let(:course) { create(:course, :with_accrediting_provider, enrichments: [enrichment], level: "secondary", subjects: [find_or_create(:secondary_subject, :physics)]) }
+
 
     it { is_expected.to have_attribute(:scholarship_amount).with_value("26000") }
     it { is_expected.to have_attribute(:bursary_amount).with_value("24000") }

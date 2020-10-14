@@ -124,10 +124,10 @@ describe "GET v3 /subjects" do
         "attributes" => {
           "subject_name" => "Biology",
           "subject_code" => "C1",
-          "bursary_amount" => nil,
+          "bursary_amount" => "7000",
           "early_career_payments" => nil,
           "scholarship" => nil,
-          "subject_knowledge_enhancement_course_available" => nil,
+          "subject_knowledge_enhancement_course_available" => false,
         },
       },
       {
