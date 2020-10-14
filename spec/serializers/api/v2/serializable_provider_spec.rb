@@ -7,11 +7,12 @@ describe API::V2::SerializableProvider do
   let(:user) { create(:user) }
   let(:organisation) { create(:organisation, users: [user]) }
   let(:site) { create(:site) }
+  let(:contact) { create(:contact) }
   let(:provider) do
     create :provider,
            ucas_preferences: ucas_preferences,
            courses: [course],
-           contacts: [contact1, contact2, contact3, contact4, contact5],
+           contacts: [contact],
            sites: [site],
            organisations: [organisation]
   end
@@ -119,8 +120,8 @@ describe API::V2::SerializableProvider do
     end
 
     it "includes the contacts relationship" do
-      expect(subject.dig(:data, :relationships, :contacts, :data).count).to eq(5)
-      expect(subject.dig(:data, :relationships, :contacts, :data).first).to eq({ type: :contacts, id: contact1.id.to_s })
+      expect(subject.dig(:data, :relationships, :contacts, :data).count).to eq(1)
+      expect(subject.dig(:data, :relationships, :contacts, :data).first).to eq({ type: :contacts, id: contact.id.to_s })
     end
   end
 end

@@ -367,8 +367,7 @@ class Course < ApplicationRecord
   end
 
   def content_status
-    newest_enrichment = enrichments.latest_first.first
-    services[:content_status].execute(enrichment: newest_enrichment, recruitment_cycle: recruitment_cycle)
+    services[:content_status].execute(enrichment: latest_enrichment, recruitment_cycle: recruitment_cycle)
   end
 
   def ucas_status
@@ -411,8 +410,7 @@ class Course < ApplicationRecord
   end
 
   def last_published_at
-    newest_enrichment = enrichments.latest_first.first
-    newest_enrichment&.last_published_timestamp_utc
+    latest_enrichment&.last_published_timestamp_utc
   end
 
   def publish_sites
@@ -565,8 +563,11 @@ private
   end
 
   def withdraw_latest_enrichment
-    newest_enrichment = enrichments.latest_first.first
-    newest_enrichment.withdraw
+    latest_enrichment.withdraw
+  end
+
+  def latest_enrichment
+    enrichments.max_by(&:created_at)
   end
 
   def assignable_after_publish(course_params)

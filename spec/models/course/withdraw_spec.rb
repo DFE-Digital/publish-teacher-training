@@ -1,3 +1,5 @@
+require "rails_helper"
+
 describe Course, type: :model do
   describe "withdraw" do
     let(:course) { create(:course, provider: provider, site_statuses: [site_status1, site_status2, site_status3], enrichments: [enrichment]) }
