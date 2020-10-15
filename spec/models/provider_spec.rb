@@ -132,25 +132,6 @@ describe Provider, type: :model do
     end
   end
 
-  describe "#external_contact_info" do
-    it "returns the info from the provider record" do
-      provider = create(:provider)
-      expect(provider.external_contact_info).to(
-        eq(
-          "address1"    => provider.address1,
-          "address2"    => provider.address2,
-          "address3"    => provider.address3,
-          "address4"    => provider.address4,
-          "postcode"    => provider.postcode,
-          "region_code" => provider.region_code,
-          "telephone"   => provider.telephone,
-          "email"       => provider.email,
-          "website"     => provider.website,
-        ),
-      )
-    end
-  end
-
   describe "#update_changed_at" do
     let(:provider) { create(:provider, changed_at: 1.hour.ago) }
 

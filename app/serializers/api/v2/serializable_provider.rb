@@ -5,43 +5,8 @@ module API
 
       attributes :provider_code, :provider_name, :accredited_body?, :can_add_more_sites?,
                  :accredited_bodies, :train_with_us, :train_with_disability,
-                 :latitude, :longitude
-
-      attribute :address1 do
-        @object.external_contact_info["address1"]
-      end
-
-      attribute :address2 do
-        @object.external_contact_info["address2"]
-      end
-
-      attribute :address3 do
-        @object.external_contact_info["address3"]
-      end
-
-      attribute :address4 do
-        @object.external_contact_info["address4"]
-      end
-
-      attribute :postcode do
-        @object.external_contact_info["postcode"]
-      end
-
-      attribute :region_code do
-        @object.external_contact_info["region_code"]
-      end
-
-      attribute :telephone do
-        @object.external_contact_info["telephone"]
-      end
-
-      attribute :email do
-        @object.external_contact_info["email"]
-      end
-
-      attribute :website do
-        @object.external_contact_info["website"]
-      end
+                 :latitude, :longitude, :address1, :address2, :address3, :address4,
+                 :postcode, :region_code, :telephone, :email, :website
 
       attribute :recruitment_cycle_year do
         @object.recruitment_cycle.year

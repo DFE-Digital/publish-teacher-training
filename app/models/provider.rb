@@ -216,22 +216,6 @@ class Provider < ApplicationRecord
     sites.size < Site::POSSIBLE_CODES.size
   end
 
-  def external_contact_info
-    attribute_names = %w[
-      address1
-      address2
-      address3
-      address4
-      postcode
-      region_code
-      telephone
-      email
-      website
-    ]
-
-    attributes.slice(*attribute_names)
-  end
-
   # This reflects the fact that organisations should actually be a has_one.
   def organisation
     organisations.first
