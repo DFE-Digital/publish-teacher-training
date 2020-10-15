@@ -848,7 +848,7 @@ describe Course, type: :model do
       end
 
       it "only returns salaried training programme" do
-        expect(subject).to contain_exactly(course_school_direct_salaried_training_programme)
+        expect(subject).to contain_exactly(course_school_direct_salaried_training_programme, course_pg_teaching_apprenticeship)
       end
     end
 

@@ -167,6 +167,10 @@ FactoryBot.define do
       program_type { %i[pg_teaching_apprenticeship school_direct_salaried_training_programme].sample }
     end
 
+    trait :non_salary_type_based do
+      program_type { %i[scitt_programme higher_education_programme school_direct_training_programme].sample }
+    end
+
     trait :applications_open_from_not_set do
       applications_open_from { nil }
     end
