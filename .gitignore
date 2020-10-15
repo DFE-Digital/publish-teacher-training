@@ -11,6 +11,7 @@
 !/tmp/.keep
 
 .byebug_history
+.ruby-version
 coverage/
 
 config/settings.local.yml
