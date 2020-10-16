@@ -79,7 +79,7 @@ jobs:
       run: |
         docker push $DOCKER_IMAGE:$SHA_TAG
         docker push $DOCKER_IMAGE:$BRANCH_TAG
-        [[ "$BRANCH_TAG" == "master" ]] && docker push $DOCKER_IMAGE-middleman:$BRANCH_TAG
+        [[ "$BRANCH_TAG" == "paas-master" ]] && docker push $DOCKER_IMAGE-middleman:$BRANCH_TAG
 
     - name: Install Terraform CloudFoundry Provider
       run: |
