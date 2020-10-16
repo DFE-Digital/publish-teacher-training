@@ -319,7 +319,15 @@
       "metadata": {
       "description": "Configure Number of database server CPU"
       }
-    }
+    },
+  "actionGroupName": {
+      "type": "string",
+      "defaultValue": "",
+      "minLength": 1,
+      "metadata": {
+          "description": "Name of ActionGroup to send notification"
+      }
+  }
   },
   "variables": {
     "deploymentUrlBase": "https://raw.githubusercontent.com/DFE-Digital/bat-platform-building-blocks/master/templates/",
@@ -1038,6 +1046,36 @@
             "value": [
               "[resourceId(parameters('vnetResourceGroup'),'Microsoft.Network/virtualNetworks/subnets', parameters('vnetName'), parameters('vnetSubnetName'))]"
             ]
+          }
+        }
+      }
+    },
+    {
+      "name": "app-service-metric-rule-alart",
+      "condition": "[greater(length(variables('appServicePlanName')), 0)]",
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2017-05-10",
+      "dependsOn": [
+        "app-service-plan"
+      ],
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(variables('deploymentUrlBase'), 'metric-alert.json')]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "subscription": {
+            "value": "[subscription().subscriptionId]"
+          },
+          "actionGroupName": {
+            "value": "[parameters('actionGroupName')]"
+          },
+          "resourceInstance": {
+            "value": "[variables('appServicePlanName')]"
+          },
+          "resourceGroup": {
+            "value": "[resourceGroup().name]"
           }
         }
       }
