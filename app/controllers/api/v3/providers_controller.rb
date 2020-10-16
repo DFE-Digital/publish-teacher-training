@@ -4,15 +4,13 @@ module API
       before_action :build_recruitment_cycle
 
       def index
+        if params[:search].present?
+          return render(status: :bad_request) if params[:search].length < 2
+        end
+
         build_fields_for_index
-
-        @providers = if params[:search].present?
-                       return render(status: :bad_request) if params[:search].length < 2
-
-                       @recruitment_cycle.providers.search_by_code_or_name(params[:search])
-                     else
-                       @recruitment_cycle.providers
-                     end
+        @providers = @recruitment_cycle.providers.includes(:recruitment_cycle)
+        @providers = @providers.search_by_code_or_name(params[:search]) if params[:search].present?
 
         render jsonapi: @providers.by_name_ascending, class: { Provider: API::V3::SerializableProvider }, fields: @fields
       end
