@@ -245,10 +245,6 @@ class Provider < ApplicationRecord
     end
   end
 
-  def generated_ucas_contact(type)
-    contacts.find_by!(type: type).slice("name", "email", "telephone") if contacts.map(&:type).include?(type)
-  end
-
   def next_available_course_code
     services[:generate_unique_course_code].execute(
       existing_codes: courses.order(:course_code).pluck(:course_code),
