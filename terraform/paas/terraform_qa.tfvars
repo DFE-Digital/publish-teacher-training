@@ -12,3 +12,4 @@ app_env = {
   WEBSITE_SLOT_POLL_WORKER_FOR_CHANGE_NOTIFICATION                = "0"
   SETTINGS__LOGSTASH__PORT                                        = 22135
 }
+
