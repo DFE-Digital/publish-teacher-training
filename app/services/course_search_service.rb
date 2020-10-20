@@ -1,5 +1,9 @@
 class CourseSearchService
-  def initialize(filter:, sort: nil, course_scope: Course)
+  def initialize(
+    filter:,
+    sort: nil,
+    course_scope: Course
+  )
     @filter = filter || {}
     @course_scope = course_scope
     @sort = Set.new(sort&.split(","))
@@ -26,7 +30,12 @@ class CourseSearchService
     # The 'where' scope will remove duplicates
     # An outer query is required in the event the provider name is present.
     # This prevents 'PG::InvalidColumnReference: ERROR: for SELECT DISTINCT, ORDER BY expressions must appear in select list'
-    outer_scope = Course.where(id: scope.select(:id))
+    outer_scope = Course.includes(
+      :enrichments,
+      subjects: [:financial_incentive],
+      site_statuses: [:site],
+      provider: %i[recruitment_cycle ucas_preferences],
+    ).where(id: scope.select(:id))
 
     if provider_name.present?
       outer_scope = outer_scope
