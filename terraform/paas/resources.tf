@@ -3,6 +3,7 @@ resource cloudfoundry_app teacher-training-api {
   space        = data.cloudfoundry_space.space.id
   docker_image = var.docker_image
   strategy     = "blue-green-v2"
+  timeout      = var.timeout
 
   service_binding {
     service_instance = cloudfoundry_service_instance.postgres.id
@@ -29,7 +30,7 @@ resource "cloudfoundry_service_instance" "postgres" {
   name         = var.paas_postgres_name
   space        = data.cloudfoundry_space.space.id
   service_plan = data.cloudfoundry_service.postgres.service_plans["small-11"]
-  json_params  = "{\"enable_extensions\": [\"pg_buffercache\",\"pg_stat_statements\", \"plpgsql\"]}"
+  json_params  = "{\"enable_extensions\": [\"pg_buffercache\",\"pg_stat_statements\", \"plpgsql\", \"btree_gin\", \"btree_gist\"]}"
 }
 
 resource "cloudfoundry_service_instance" "redis" {

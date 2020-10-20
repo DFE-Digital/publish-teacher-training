@@ -35,6 +35,11 @@ variable SETTINGS__LOGSTASH__HOST {
   type = string
 }
 
+variable timeout {
+  type = number
+  default = 360
+}
+
 variable SETTINGS__GOVUK_NOTIFY__API_KEY {
   type = string
 }
