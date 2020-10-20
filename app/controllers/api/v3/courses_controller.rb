@@ -43,11 +43,14 @@ module API
       end
 
       def build_courses
-        @courses = if @provider.present?
-                     @provider.courses.includes(:provider).findable
-                   else
-                     @recruitment_cycle.courses.includes(:provider).findable
-                   end
+        courses_base = @provider.present? ? @provider.courses : @recruitment_cycle.courses
+
+        @courses = courses_base.includes(
+          :enrichments,
+          subjects: [:financial_incentive],
+          site_statuses: [:site],
+          provider: %i[recruitment_cycle ucas_preferences],
+        ).findable
       end
 
       def build_provider
