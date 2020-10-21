@@ -264,7 +264,7 @@ GEM
     open_api-rswag-ui (0.1.0)
       actionpack (>= 3.1, < 7.0)
       railties (>= 3.1, < 7.0)
-    pagy (3.8.3)
+    pagy (3.9.0)
     parallel (1.19.2)
     parallel_tests (3.3.0)
       parallel
@@ -502,7 +502,7 @@ DEPENDENCIES
   open_api-rswag-api
   open_api-rswag-specs
   open_api-rswag-ui
-  pagy (~> 3.5)
+  pagy (~> 3.9)
   parallel_tests
   pg
   pg_search
