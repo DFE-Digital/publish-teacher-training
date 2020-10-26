@@ -94,8 +94,8 @@ module NotificationService
                 previous_subject_names: previous_subject_names,
                 previous_course_name: previous_course_name,
                 recipient: subscribed_user,
-).and_return(mailer = double)
-            expect(mailer).to receive(:deliver_later).with(queue: "mailer")
+            ).and_return(mailer = double)
+            expect(mailer).to receive(:deliver_later)
 
             call_service
           end

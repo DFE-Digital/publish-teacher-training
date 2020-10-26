@@ -19,7 +19,7 @@ module NotificationService
             original_value: original_value,
             updated_value: updated_value,
             recipient: user,
-          ).deliver_later(queue: "mailer")
+          ).deliver_later
         end
       end
     end

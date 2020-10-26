@@ -74,7 +74,7 @@ module NotificationService
                 updated_value: "7_to_14",
                 recipient: user,
               ).and_return(mailer = double)
-            expect(mailer).to receive(:deliver_later).with(queue: "mailer")
+            expect(mailer).to receive(:deliver_later)
           end
 
           course.age_range_in_years = "7_to_14"
@@ -93,7 +93,7 @@ module NotificationService
                 updated_value: "must_have_qualification_at_application_time",
                 recipient: subscribed_user1,
               ).and_return(mailer = double)
-            expect(mailer).to receive(:deliver_later).with(queue: "mailer")
+            expect(mailer).to receive(:deliver_later)
           end
 
           course.english = "must_have_qualification_at_application_time"

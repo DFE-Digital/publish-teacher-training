@@ -44,7 +44,7 @@ describe SendWelcomeEmailService do
     end
 
     before do
-      allow(WelcomeEmailMailer).to receive_message_chain(:send_welcome_email, deliver_later: { queue: "mailer" })
+      allow(WelcomeEmailMailer).to receive_message_chain(:send_welcome_email, :deliver_later)
       described_class.call(current_user: current_user_spy)
     end
 

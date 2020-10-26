@@ -22,6 +22,6 @@ private
   def send_magic_link(user)
     MagicLinkEmailMailer
       .magic_link_email(user)
-      .deliver_later(queue: "mailer")
+      .deliver_later
   end
 end

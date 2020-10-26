@@ -60,7 +60,7 @@ module NotificationService
               user,
               DateTime.now,
             ).and_return(mailer = double)
-          expect(mailer).to receive(:deliver_later).with(queue: "mailer")
+          expect(mailer).to receive(:deliver_later)
         end
 
         service_call

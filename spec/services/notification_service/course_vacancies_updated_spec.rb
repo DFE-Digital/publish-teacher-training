@@ -68,7 +68,7 @@ module NotificationService
                     datetime: DateTime.now,
                     vacancies_filled: true,
                   ).and_return(mailer = double)
-          expect(mailer).to receive(:deliver_later).with(queue: "mailer")
+          expect(mailer).to receive(:deliver_later)
         end
 
         service_call

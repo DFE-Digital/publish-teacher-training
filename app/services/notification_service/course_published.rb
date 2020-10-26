@@ -14,7 +14,7 @@ module NotificationService
         CoursePublishEmailMailer.course_publish_email(
           course,
           user,
-        ).deliver_later(queue: "mailer")
+        ).deliver_later
       end
     end
 
