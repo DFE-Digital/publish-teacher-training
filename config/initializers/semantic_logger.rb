@@ -26,12 +26,6 @@ class LogStashFormatter < SemanticLogger::Formatters::Raw
     end
   end
 
-  # The value here appears to break logging to logstash / elasticsearch
-  def format_duration
-    hash[:duration] = hash[:duration_ms]
-    hash[:duration_ms] = nil
-  end
-
   def format_job_data
     hash[:job_id] = RequestStore.store[:job_id] if RequestStore.store[:job_id].present?
     hash[:job_queue] = RequestStore.store[:job_queue] if RequestStore.store[:job_queue].present?
@@ -40,7 +34,6 @@ class LogStashFormatter < SemanticLogger::Formatters::Raw
   def call(log, logger)
     super(log, logger)
     format_job_data
-    format_duration
     format_exception
     format_json_message_context
     format_backtrace
