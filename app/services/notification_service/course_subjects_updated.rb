@@ -22,7 +22,7 @@ module NotificationService
           previous_subject_names: previous_subject_names,
           previous_course_name: previous_course_name,
           recipient: user,
-        ).deliver_later(queue: "mailer")
+        ).deliver_later
       end
     end
 

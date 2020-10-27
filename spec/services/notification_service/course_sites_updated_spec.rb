@@ -95,7 +95,7 @@ module NotificationService
                       previous_site_names: previous_site_names,
                       updated_site_names: updated_site_names,
                     ).and_return(mailer = double)
-            expect(mailer).to receive(:deliver_later).with(queue: "mailer")
+            expect(mailer).to receive(:deliver_later)
             described_class.call(
               course: course,
               previous_site_names: previous_site_names,

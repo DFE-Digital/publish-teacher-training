@@ -17,7 +17,7 @@ module NotificationService
           previous_site_names: previous_site_names,
           updated_site_names: updated_site_names,
           recipient: user,
-          ).deliver_later(queue: "mailer")
+          ).deliver_later
       end
     end
 

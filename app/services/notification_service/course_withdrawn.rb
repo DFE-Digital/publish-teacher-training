@@ -15,7 +15,7 @@ module NotificationService
           course,
           user,
           DateTime.now,
-        ).deliver_later(queue: "mailer")
+        ).deliver_later
       end
     end
 

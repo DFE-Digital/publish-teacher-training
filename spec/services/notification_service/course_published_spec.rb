@@ -80,7 +80,7 @@ module NotificationService
             expect(CoursePublishEmailMailer)
               .to receive(:course_publish_email)
               .with(course, subscribed_user).and_return(mailer = double)
-            expect(mailer).to receive(:deliver_later).with(queue: "mailer")
+            expect(mailer).to receive(:deliver_later)
             described_class.call(course: course)
           end
 
