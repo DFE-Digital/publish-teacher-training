@@ -187,7 +187,6 @@ end
 group :test do
   gem "database_cleaner"
   gem "jsonapi-rspec"
-  gem "rspec-benchmark"
   gem "rspec_junit_formatter"
   gem "shoulda-matchers", "~> 4.4"
   gem "simplecov", "< 0.18", require: false
