@@ -320,14 +320,35 @@
       "description": "Configure Number of database server CPU"
       }
     },
-  "actionGroupName": {
-      "type": "string",
-      "defaultValue": "",
-      "minLength": 1,
-      "metadata": {
-          "description": "Name of ActionGroup to send notification"
-      }
-  }
+    "actionGroupName": {
+        "type": "string",
+        "defaultValue": "",
+        "minLength": 1,
+        "metadata": {
+            "description": "Name of ActionGroup to send notification"
+        }
+    },
+    "dockerRegistryUrl": {
+        "type": "string",
+        "defaultValue": "https://index.docker.io",
+        "metadata": {
+          "description": "URL of the docker registry, eg: https://index.docker.io"
+        }
+    },
+    "dockerRegistryUsername": {
+        "type": "string",
+        "defaultValue": "",
+        "metadata": {
+            "description": "Username to login to the docker registry"
+        }
+    },
+    "dockerRegistryPassword": {
+        "type": "securestring",
+        "defaultValue": "",
+        "metadata": {
+            "description": "Password to login to the docker registry"
+        }
+    }
   },
   "variables": {
     "deploymentUrlBase": "https://raw.githubusercontent.com/DFE-Digital/bat-platform-building-blocks/master/templates/",
@@ -361,7 +382,8 @@
             "emailAddress": "[if(greater(length(parameters('alertRecipientEmails')), 0), split(parameters('alertRecipientEmails')[copyIndex('alertRecipientEmails')], ':')[1], 'UNUSED')]"
         }
       }
-    ]
+    ],
+    "dockerRegistryUrlForContainerInstance": "[if(equals(parameters('dockerRegistryUrl'), 'https://index.docker.io'), 'docker.io', parameters('dockerRegistryUrl'))]"
   },
   "resources": [
     {
@@ -572,6 +594,18 @@
               {
                 "name": "SETTINGS__SKYLIGHT__AUTHENTICATION",
                 "value": "[parameters('settingsSkylightAuthentication')]"
+              },
+              {
+                "name": "DOCKER_REGISTRY_SERVER_URL",
+                "value": "[parameters('dockerRegistryUrl')]"
+              },
+              {
+                  "name": "DOCKER_REGISTRY_SERVER_USERNAME",
+                  "value": "[parameters('dockerRegistryUsername')]"
+              },
+              {
+                  "name": "DOCKER_REGISTRY_SERVER_PASSWORD",
+                  "value": "[parameters('dockerRegistryPassword')]"
               }
             ]
           },
@@ -1016,6 +1050,15 @@
           },
           "resourceTags":{
             "value": "[parameters('resourceTags')]"
+          },
+          "dockerRegistryUrl": {
+              "value": "[variables('dockerRegistryUrlForContainerInstance')]"
+          },
+          "dockerRegistryUsername": {
+              "value": "[parameters('dockerRegistryUsername')]"
+          },
+          "dockerRegistryPassword": {
+              "value": "[parameters('dockerRegistryPassword')]"
           }
         }
       },
