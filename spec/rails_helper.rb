@@ -97,6 +97,4 @@ RSpec.configure do |config|
   config.include ActiveJob::TestHelper, type: :request
 
   ActiveJob::Base.queue_adapter = :test
-
-  config.filter_run_excluding type: :performance
 end
