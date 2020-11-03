@@ -78,10 +78,7 @@ GEM
     audited (4.9.0)
       activerecord (>= 4.2, < 6.1)
     awesome_print (1.8.0)
-    benchmark-malloc (0.2.0)
-    benchmark-perf (0.6.0)
-    benchmark-trend (0.4.0)
-    bootsnap (1.4.9)
+    bootsnap (1.5.0)
       msgpack (~> 1.0)
     brakeman (4.10.0)
     builder (3.2.4)
@@ -347,11 +344,6 @@ GEM
       rspec-core (~> 3.9.0)
       rspec-expectations (~> 3.9.0)
       rspec-mocks (~> 3.9.0)
-    rspec-benchmark (0.6.0)
-      benchmark-malloc (~> 0.2)
-      benchmark-perf (~> 0.6)
-      benchmark-trend (~> 0.4)
-      rspec (>= 3.0)
     rspec-core (3.9.3)
       rspec-support (~> 3.9.3)
     rspec-expectations (3.9.2)
@@ -519,7 +511,6 @@ DEPENDENCIES
   rainbow
   rb-readline
   request_store
-  rspec-benchmark
   rspec-its
   rspec-rails
   rspec_junit_formatter
