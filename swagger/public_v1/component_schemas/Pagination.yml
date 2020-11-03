@@ -8,5 +8,5 @@ properties:
     example: 3
   per_page:
     type: integer
-    description: The number items to display on a page. Defaults to 100. Maximum is 100, if the value is greater that the maximum allowed it will fallback to 100.
+    description: The number items to display on a page. Defaults to 100. Maximum is 500, if the value is greater that the maximum allowed it will fallback to 500.
     example: 10

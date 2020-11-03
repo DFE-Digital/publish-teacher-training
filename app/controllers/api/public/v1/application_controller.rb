@@ -28,7 +28,7 @@ module API
         end
 
         def max_per_page
-          100
+          500
         end
 
         def page
