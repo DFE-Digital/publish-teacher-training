@@ -10,7 +10,7 @@ class MarkWithdrawnCoursesAsWithdrawn < ActiveRecord::Migration[6.0]
       end
 
       courses_with_all_suspended_no_vacancy_sites.each do |course|
-        course.enrichments.latest_first.first.withdraw
+        course.enrichments.most_recent.first.withdraw
       end
     end
   end
