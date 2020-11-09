@@ -143,11 +143,11 @@ class Course < ApplicationRecord
   end
 
   scope :ascending_canonical_order, -> do
-    joins(:provider).merge(Provider.by_name_ascending).order("name asc")
+    joins(:provider).merge(Provider.by_name_ascending).order("name asc, course_code asc")
   end
 
   scope :descending_canonical_order, -> do
-    joins(:provider).merge(Provider.by_name_descending).order("name desc")
+    joins(:provider).merge(Provider.by_name_descending).order("name desc, course_code desc")
   end
 
   scope :accredited_body_order, ->(provider_name) do
