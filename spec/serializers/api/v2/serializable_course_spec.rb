@@ -2,12 +2,11 @@ require "rails_helper"
 
 describe API::V2::SerializableCourse do
   let(:jsonapi_renderer) { JSONAPI::Serializable::Renderer.new }
-  let(:enrichment)       { build :course_enrichment }
   let(:date_today) { Time.zone.today }
   let(:time_now) { Time.now.utc }
-  let(:course) do
-    create(:course, enrichments: [enrichment], start_date: time_now, applications_open_from: date_today, level: :primary)
-  end
+  let(:course) { create(:course, start_date: time_now, applications_open_from: date_today, level: :primary) }
+  let(:parsed_json) { JSON.parse(course_json) }
+
   let(:course_json) do
     jsonapi_renderer.render(
       course,
@@ -16,7 +15,6 @@ describe API::V2::SerializableCourse do
       },
     ).to_json
   end
-  let(:parsed_json) { JSON.parse(course_json) }
 
   subject { parsed_json["data"] }
 
@@ -188,20 +186,26 @@ describe API::V2::SerializableCourse do
   end
 
   describe "attributes retrieved from enrichments" do
-    subject { parsed_json["data"]["attributes"] }
+    context "there's more than one enrichment" do
+      let!(:latest_enrichment) { create_list(:course_enrichment, 2, course: course).last }
 
-    its(%w[about_course])               { should eq enrichment.about_course }
-    its(%w[course_length])              { should eq enrichment.course_length }
-    its(%w[fee_details])                { should eq enrichment.fee_details }
-    its(%w[fee_international])          { should eq enrichment.fee_international }
-    its(%w[fee_uk_eu])                  { should eq enrichment.fee_uk_eu }
-    its(%w[financial_support])          { should eq enrichment.financial_support }
-    its(%w[how_school_placements_work]) { should eq enrichment.how_school_placements_work }
-    its(%w[interview_process])          { should eq enrichment.interview_process }
-    its(%w[other_requirements])         { should eq enrichment.other_requirements }
-    its(%w[personal_qualities])         { should eq enrichment.personal_qualities }
-    its(%w[required_qualifications])    { should eq enrichment.required_qualifications }
-    its(%w[salary_details])             { should eq enrichment.salary_details }
+      it "has the latest enrichment data" do
+        expect(subject["attributes"]).to include(
+          "about_course" => latest_enrichment.about_course,
+          "course_length" => latest_enrichment.course_length,
+          "fee_details" => latest_enrichment.fee_details,
+          "fee_international" => latest_enrichment.fee_international,
+          "fee_uk_eu" => latest_enrichment.fee_uk_eu,
+          "financial_support" => latest_enrichment.financial_support,
+          "how_school_placements_work" => latest_enrichment.how_school_placements_work,
+          "interview_process" => latest_enrichment.interview_process,
+          "other_requirements" => latest_enrichment.other_requirements,
+          "personal_qualities" => latest_enrichment.personal_qualities,
+          "required_qualifications" => latest_enrichment.required_qualifications,
+          "salary_details" => latest_enrichment.salary_details,
+        )
+      end
+    end
   end
 
   context "a new course" do

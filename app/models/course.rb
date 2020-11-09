@@ -94,8 +94,7 @@ class Course < ApplicationRecord
            source: :subject,
            class_name: "ModernLanguagesSubject"
 
-  has_many :enrichments,
-           class_name: "CourseEnrichment" do
+  has_many :enrichments, class_name: "CourseEnrichment" do
     def find_or_initialize_draft
       # This is a ruby search as opposed to an AR search, because calling `draft`
       # will return a new instance of a CourseEnrichment object which is different
@@ -107,7 +106,7 @@ class Course < ApplicationRecord
     end
 
     def new_draft_attributes
-      latest_published_enrichment = latest_first.published.first
+      latest_published_enrichment = most_recent.published.first
 
       if latest_published_enrichment.present?
         latest_published_enrichment_attributes = latest_published_enrichment

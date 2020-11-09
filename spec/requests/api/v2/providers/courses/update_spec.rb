@@ -9,43 +9,25 @@ describe "PATCH /providers/:provider_code/courses/:course_code" do
   end
 
   def perform_request(course)
-    jsonapi_data = jsonapi_renderer.render(
-      course,
-      class: {
-        Course: API::V2::SerializableCourse,
-      },
-    )
-
-    jsonapi_data.dig(:data, :attributes).slice!(*permitted_params)
-
-    patch request_path,
-          headers: { "HTTP_AUTHORIZATION" => credentials },
-          params: {
-            _jsonapi: jsonapi_data,
-          }
+    jsonapi_data = jsonapi_renderer.render(course, class: { Course: API::V2::SerializableCourse })
+    jsonapi_data.dig(:data, :attributes).merge!(enrichment_attributes).slice!(*permitted_params)
+    patch request_path, headers: { "HTTP_AUTHORIZATION" => credentials }, params: { _jsonapi: jsonapi_data }
   end
 
   let(:recruitment_cycle) { find_or_create :recruitment_cycle }
   let(:organisation) { create :organisation }
-  let(:provider)     do
-    create(:provider,
-           organisations: [organisation],
-           recruitment_cycle: recruitment_cycle)
-  end
-  let(:user)         { create :user, organisations: [organisation] }
-  let(:payload)      { { email: user.email } }
-  let(:token)        { build_jwt :apiv2, payload: payload }
-  let(:course)       { create :course, provider: provider }
-  let(:update_enrichment) { build :course_enrichment, **updated_attributes }
-  # we need an unsaved course to add the enrichment to (so that it isn't
-  # persisted)
-  let(:update_course) { course.dup.tap { |c| c.enrichments << update_enrichment } }
+  let(:provider) { create(:provider, organisations: [organisation], recruitment_cycle: recruitment_cycle) }
+  let(:user) { create :user, organisations: [organisation] }
+  let(:payload) { { email: user.email } }
+  let(:token) { build_jwt :apiv2, payload: payload }
+  let(:course) { create :course, provider: provider }
+  let(:update_enrichment) { build :course_enrichment, **enrichment_attributes }
 
   let(:credentials) do
     ActionController::HttpAuthentication::Token.encode_credentials(token)
   end
 
-  let(:updated_attributes) do
+  let(:enrichment_attributes) do
     {
       about_course: "new about course",
       course_length: "new course length",
@@ -61,6 +43,7 @@ describe "PATCH /providers/:provider_code/courses/:course_code" do
       salary_details: "new salary details",
     }
   end
+
   let(:permitted_params) do
     %i[
       about_course
@@ -105,11 +88,7 @@ describe "PATCH /providers/:provider_code/courses/:course_code" do
 
     it "doesn't allow updating of provider" do
       another_provider = create(:provider)
-      update_course    = build(
-        :course,
-        provider_id: another_provider.id,
-        provider:    provider,
-      )
+      update_course = build(:course, provider_id: another_provider.id, provider: provider)
       update_course.id = course.id
 
       perform_request(course)
@@ -119,11 +98,7 @@ describe "PATCH /providers/:provider_code/courses/:course_code" do
 
     it "doesn't allow updating of accrediting provider" do
       another_provider = create(:provider)
-      update_course    = build(
-        :course,
-        accrediting_provider: another_provider,
-        provider:             provider,
-      )
+      update_course = build(:course, accrediting_provider: another_provider, provider: provider)
       update_course.id = course.id
 
       perform_request(course)
@@ -135,24 +110,25 @@ describe "PATCH /providers/:provider_code/courses/:course_code" do
   context "course has no enrichments" do
     it "creates a draft enrichment for the course" do
       expect {
-        perform_request update_course
+        perform_request(course)
       }.to(change {
-             course.reload.enrichments.count
-           }.from(0).to(1))
+        course.reload.enrichments.count
+      }.from(0).to(1))
 
       draft_enrichment = course.enrichments.draft.first
-      expect(draft_enrichment.attributes.slice(*updated_attributes.keys.map(&:to_s)))
-        .to include(updated_attributes.stringify_keys)
+
+      expect(draft_enrichment.attributes.slice(*enrichment_attributes.keys.map(&:to_s)))
+        .to include(enrichment_attributes.stringify_keys)
     end
 
     it "change content status" do
       expect {
-        perform_request update_course
+        perform_request(course)
       }.to(change { course.reload.content_status }.from(:empty).to(:draft))
     end
 
     context "with no attributes to update" do
-      let(:updated_attributes) do
+      let(:enrichment_attributes) do
         {
           about_course: nil,
           course_length: nil,
@@ -171,7 +147,7 @@ describe "PATCH /providers/:provider_code/courses/:course_code" do
 
       it "doesn't create a draft enrichment" do
         expect {
-          perform_request update_course
+          perform_request(course)
         }.to_not(change { course.reload.enrichments.count })
       end
     end
@@ -181,55 +157,55 @@ describe "PATCH /providers/:provider_code/courses/:course_code" do
 
       it "doesn't create a draft enrichment" do
         expect {
-          perform_request update_course
+          perform_request(course)
         }.to_not(change { course.reload.enrichments.count })
       end
 
       it "doesn't change content status" do
         expect {
-          perform_request update_course
+          perform_request(course)
         }.to_not(change { course.reload.content_status })
       end
     end
 
     it "returns ok" do
-      perform_request update_course
+      perform_request(course)
 
       expect(response).to be_ok
     end
 
     it "returns the updated course" do
-      perform_request update_course
+      perform_request(course)
       json_response = JSON.parse(response.body)["data"]
 
       expect(json_response).to have_id(course.id.to_s)
       expect(json_response).to have_type("courses")
       expect(json_response).to have_attribute(:about_course)
-        .with_value("new about course")
+                                 .with_value("new about course")
       expect(json_response).to have_attribute(:course_length)
-        .with_value("new course length")
+                                 .with_value("new course length")
       expect(json_response).to have_attribute(:fee_details)
-        .with_value("new fee details")
+                                 .with_value("new fee details")
       expect(json_response).to have_attribute(:fee_international)
-        .with_value(0)
+                                 .with_value(0)
       expect(json_response).to have_attribute(:fee_uk_eu)
-        .with_value(0)
+                                 .with_value(0)
       expect(json_response).to have_attribute(:financial_support)
-        .with_value("new financial support")
+                                 .with_value("new financial support")
       expect(json_response).to have_attribute(:how_school_placements_work)
-        .with_value("new how school placements work")
+                                 .with_value("new how school placements work")
       expect(json_response).to have_attribute(:interview_process)
-        .with_value("new interview process")
+                                 .with_value("new interview process")
       expect(json_response).to have_attribute(:other_requirements)
-        .with_value("new other requirements")
+                                 .with_value("new other requirements")
       expect(json_response).to have_attribute(:personal_qualities)
-        .with_value("new personal qualities")
+                                 .with_value("new personal qualities")
       expect(json_response).to have_attribute(:required_qualifications)
-        .with_value("new required qualifications")
+                                 .with_value("new required qualifications")
       expect(json_response).to have_attribute(:salary_details)
-        .with_value("new salary details")
+                                 .with_value("new salary details")
       expect(json_response).to have_attribute(:content_status)
-        .with_value("draft")
+                                 .with_value("draft")
     end
   end
 
@@ -238,24 +214,24 @@ describe "PATCH /providers/:provider_code/courses/:course_code" do
 
     it "creates a draft enrichment for the course" do
       expect {
-        perform_request update_course
+        perform_request(course)
       }.to(change {
-             course.reload.enrichments.count
-           }.from(0).to(1))
+        course.reload.enrichments.count
+      }.from(0).to(1))
 
       draft_enrichment = course.enrichments.draft.first
-      expect(draft_enrichment.attributes.slice(*updated_attributes.keys.map(&:to_s)))
-        .to include(updated_attributes.stringify_keys)
+      expect(draft_enrichment.attributes.slice(*enrichment_attributes.keys.map(&:to_s)))
+        .to include(enrichment_attributes.stringify_keys)
     end
 
     it "change content status" do
       expect {
-        perform_request update_course
+        perform_request(course)
       }.to(change { course.reload.content_status }.from(:rolled_over).to(:draft))
     end
 
     context "with no attributes to update" do
-      let(:updated_attributes) do
+      let(:enrichment_attributes) do
         {
           about_course: nil,
           course_length: nil,
@@ -274,7 +250,7 @@ describe "PATCH /providers/:provider_code/courses/:course_code" do
 
       it "doesn't create a draft enrichment" do
         expect {
-          perform_request update_course
+          perform_request(course)
         }.to_not(change { course.reload.enrichments.count })
       end
     end
@@ -284,55 +260,42 @@ describe "PATCH /providers/:provider_code/courses/:course_code" do
 
       it "doesn't create a draft enrichment" do
         expect {
-          perform_request update_course
+          perform_request(course)
         }.to_not(change { course.reload.enrichments.count })
       end
 
       it "doesn't change content status" do
         expect {
-          perform_request update_course
+          perform_request(course)
         }.to_not(change { course.reload.content_status })
       end
     end
 
     it "returns ok" do
-      perform_request update_course
+      perform_request(course)
 
       expect(response).to be_ok
     end
 
     it "returns the updated course" do
-      perform_request update_course
+      perform_request(course)
       json_response = JSON.parse(response.body)["data"]
 
       expect(json_response).to have_id(course.id.to_s)
       expect(json_response).to have_type("courses")
-      expect(json_response).to have_attribute(:about_course)
-        .with_value("new about course")
-      expect(json_response).to have_attribute(:course_length)
-        .with_value("new course length")
-      expect(json_response).to have_attribute(:fee_details)
-        .with_value("new fee details")
-      expect(json_response).to have_attribute(:fee_international)
-        .with_value(0)
-      expect(json_response).to have_attribute(:fee_uk_eu)
-        .with_value(0)
-      expect(json_response).to have_attribute(:financial_support)
-        .with_value("new financial support")
-      expect(json_response).to have_attribute(:how_school_placements_work)
-        .with_value("new how school placements work")
-      expect(json_response).to have_attribute(:interview_process)
-        .with_value("new interview process")
-      expect(json_response).to have_attribute(:other_requirements)
-        .with_value("new other requirements")
-      expect(json_response).to have_attribute(:personal_qualities)
-        .with_value("new personal qualities")
-      expect(json_response).to have_attribute(:required_qualifications)
-        .with_value("new required qualifications")
-      expect(json_response).to have_attribute(:salary_details)
-        .with_value("new salary details")
-      expect(json_response).to have_attribute(:content_status)
-        .with_value("draft")
+      expect(json_response).to have_attribute(:about_course).with_value("new about course")
+      expect(json_response).to have_attribute(:course_length).with_value("new course length")
+      expect(json_response).to have_attribute(:fee_details).with_value("new fee details")
+      expect(json_response).to have_attribute(:fee_international).with_value(0)
+      expect(json_response).to have_attribute(:fee_uk_eu).with_value(0)
+      expect(json_response).to have_attribute(:financial_support).with_value("new financial support")
+      expect(json_response).to have_attribute(:how_school_placements_work).with_value("new how school placements work")
+      expect(json_response).to have_attribute(:interview_process).with_value("new interview process")
+      expect(json_response).to have_attribute(:other_requirements).with_value("new other requirements")
+      expect(json_response).to have_attribute(:personal_qualities).with_value("new personal qualities")
+      expect(json_response).to have_attribute(:required_qualifications).with_value("new required qualifications")
+      expect(json_response).to have_attribute(:salary_details).with_value("new salary details")
+      expect(json_response).to have_attribute(:content_status).with_value("draft")
     end
   end
 
@@ -344,24 +307,25 @@ describe "PATCH /providers/:provider_code/courses/:course_code" do
 
     it "updates the course's draft enrichment" do
       expect {
-        perform_request update_course
+        perform_request(course)
       }.not_to(
         change { course.enrichments.reload.count },
       )
 
       draft_enrichment = course.enrichments.draft.first
-      expect(draft_enrichment.attributes.slice(*updated_attributes.keys.map(&:to_s)))
-        .to include(updated_attributes.stringify_keys)
+
+      expect(draft_enrichment.attributes.slice(*enrichment_attributes.keys.map(&:to_s)))
+        .to include(enrichment_attributes.stringify_keys)
     end
 
     it "doesn't change content status" do
       expect {
-        perform_request update_course
+        perform_request(course)
       }.to_not(change { course.reload.content_status })
     end
 
     context "with invalid data" do
-      let(:updated_attributes) do
+      let(:enrichment_attributes) do
         {
           about_course: Faker::Lorem.sentence(word_count: 1000),
           fee_details: Faker::Lorem.sentence(word_count: 1000),
@@ -380,7 +344,7 @@ describe "PATCH /providers/:provider_code/courses/:course_code" do
       subject { JSON.parse(response.body)["errors"].map { |e| e["title"] } }
 
       it "returns validation errors" do
-        perform_request update_course
+        perform_request(course)
 
         expect("Invalid about_course".in?(subject)).to eq(true)
         expect("Invalid interview_process".in?(subject)).to eq(true)
@@ -392,7 +356,7 @@ describe "PATCH /providers/:provider_code/courses/:course_code" do
     end
 
     context "with nil data" do
-      let(:updated_attributes) do
+      let(:enrichment_attributes) do
         {
           about_course: "",
           fee_details: "",
@@ -409,14 +373,14 @@ describe "PATCH /providers/:provider_code/courses/:course_code" do
       end
 
       it "returns ok" do
-        perform_request update_course
+        perform_request(course)
 
         expect(response).to be_ok
       end
 
       it "doesn't change content status" do
         expect {
-          perform_request update_course
+          perform_request(course)
         }.to_not(change { course.reload.content_status })
       end
     end
@@ -429,40 +393,40 @@ describe "PATCH /providers/:provider_code/courses/:course_code" do
     end
 
     it "creates a draft enrichment for the course" do
-      expect { perform_request update_course }
+      expect { perform_request(course) }
         .to(
           change { course.enrichments.reload.draft.count }
             .from(0).to(1),
         )
 
       draft_enrichment = course.enrichments.draft.first
-      expect(draft_enrichment.attributes.slice(*updated_attributes.keys.map(&:to_s)))
-        .to include(updated_attributes.stringify_keys)
+      expect(draft_enrichment.attributes.slice(*enrichment_attributes.keys.map(&:to_s)))
+        .to include(enrichment_attributes.stringify_keys)
     end
 
     it do
-      expect { perform_request update_course }
-      .to(
-        change { course.enrichments.reload.count }
-          .from(1).to(2),
-      )
+      expect { perform_request(course) }
+        .to(
+          change { course.enrichments.reload.count }
+            .from(1).to(2),
+        )
     end
 
     it "change content status" do
       expect {
-        perform_request update_course
+        perform_request(course)
       }.to(change { course.reload.content_status }.from(:published).to(:published_with_unpublished_changes))
     end
 
     context "with invalid data" do
-      let(:updated_attributes) do
+      let(:enrichment_attributes) do
         { about_course: Faker::Lorem.sentence(word_count: 1000) }
       end
 
       subject { JSON.parse(response.body)["errors"].map { |e| e["title"] } }
 
       it "returns validation errors" do
-        perform_request update_course
+        perform_request(course)
 
         expect("Invalid enrichments".in?(subject)).to eq(false)
         expect("Invalid about_course".in?(subject)).to eq(true)
@@ -478,19 +442,19 @@ describe "PATCH /providers/:provider_code/courses/:course_code" do
 
     it "updates the course's draft enrichment" do
       expect {
-        perform_request update_course
+        perform_request(course)
       }.not_to(
         change { course.enrichments.reload.count },
       )
 
       draft_enrichment = course.enrichments.draft.first
-      expect(draft_enrichment.attributes.slice(*updated_attributes.keys.map(&:to_s)))
-        .to include(updated_attributes.stringify_keys)
+      expect(draft_enrichment.attributes.slice(*enrichment_attributes.keys.map(&:to_s)))
+        .to include(enrichment_attributes.stringify_keys)
     end
 
     it "changes the content status to draft" do
       expect {
-        perform_request update_course
+        perform_request(course)
       }.to(
         change { course.reload.content_status }
           .from(:rolled_over).to(:draft),
@@ -498,7 +462,7 @@ describe "PATCH /providers/:provider_code/courses/:course_code" do
     end
 
     context "with invalid data" do
-      let(:updated_attributes) do
+      let(:enrichment_attributes) do
         {
           about_course: Faker::Lorem.sentence(word_count: 1000),
           fee_details: Faker::Lorem.sentence(word_count: 1000),
@@ -517,7 +481,7 @@ describe "PATCH /providers/:provider_code/courses/:course_code" do
       subject { JSON.parse(response.body)["errors"].map { |e| e["title"] } }
 
       it "returns validation errors" do
-        perform_request update_course
+        perform_request(course)
 
         expect("Invalid about_course".in?(subject)).to eq(true)
         expect("Invalid interview_process".in?(subject)).to eq(true)
@@ -529,13 +493,13 @@ describe "PATCH /providers/:provider_code/courses/:course_code" do
 
       it "doesn't change content status" do
         expect {
-          perform_request update_course
+          perform_request(course)
         }.to_not(change { course.reload.content_status })
       end
     end
 
     context "with nil data" do
-      let(:updated_attributes) do
+      let(:enrichment_attributes) do
         {
           about_course: "",
           fee_details: "",
@@ -552,14 +516,14 @@ describe "PATCH /providers/:provider_code/courses/:course_code" do
       end
 
       it "returns ok" do
-        perform_request update_course
+        perform_request(course)
 
         expect(response).to be_ok
       end
 
       it "changes the content status to draft" do
         expect {
-          perform_request update_course
+          perform_request(course)
         }.to(
           change { course.reload.content_status }
             .from(:rolled_over).to(:draft),
@@ -571,7 +535,7 @@ describe "PATCH /providers/:provider_code/courses/:course_code" do
   describe "from published to draft" do
     shared_examples "only one attribute has changed" do |attribute_key, attribute_value, jsonapi_serialized_name|
       describe "a subsequent draft enrichment is added" do
-        let(:updated_attributes) do
+        let(:enrichment_attributes) do
           attribute = {}
           attribute[attribute_key] = attribute_value
           attribute
@@ -586,7 +550,7 @@ describe "PATCH /providers/:provider_code/courses/:course_code" do
         }
 
         before do
-          perform_request update_course
+          perform_request(course)
         end
 
         subject do

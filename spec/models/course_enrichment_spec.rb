@@ -54,15 +54,12 @@ describe CourseEnrichment, type: :model do
     end
   end
 
-  describe ".latest_first" do
-    let!(:old_enrichment) do
-      create(:course_enrichment, :published, created_at: Date.yesterday)
-    end
+  describe ".most_recent" do
+    let!(:old_enrichment) { create(:course_enrichment, :published, created_at: Date.yesterday) }
     let!(:new_enrichment) { create(:course_enrichment, :published) }
 
-    it "returns the new enrichment first" do
-      expect(CourseEnrichment.latest_first.first).to eq new_enrichment
-      expect(CourseEnrichment.latest_first.last).to eq old_enrichment
+    it "orders by created_at descending" do
+      expect(CourseEnrichment.most_recent).to eq([new_enrichment, old_enrichment])
     end
   end
 

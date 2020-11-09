@@ -19,7 +19,7 @@ class CourseEnrichment < ApplicationRecord
 
   belongs_to :course
 
-  scope :latest_first, -> { order(created_at: :desc, id: :desc) }
+  scope :most_recent, -> { order(created_at: :desc, id: :desc) }
   scope :draft, -> { where(status: "draft").or(rolled_over) }
 
   def draft?

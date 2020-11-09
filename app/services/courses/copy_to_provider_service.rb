@@ -37,7 +37,7 @@ module Courses
     end
 
     def copy_latest_enrichment_to_course(course, new_course)
-      last_enrichment = course.enrichments.latest_first.first
+      last_enrichment = course.enrichments.most_recent.first
       return if last_enrichment.blank?
 
       @enrichments_copy_to_course.execute(enrichment: last_enrichment, new_course: new_course)

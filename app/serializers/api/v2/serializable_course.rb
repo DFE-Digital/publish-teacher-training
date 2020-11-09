@@ -6,7 +6,7 @@ module API
       class << self
         def enrichment_attribute(name, enrichment_name = name)
           attribute name do
-            @object.enrichments.last&.__send__(enrichment_name)
+            @object.enrichments.most_recent&.first&.public_send(enrichment_name)
           end
         end
       end
