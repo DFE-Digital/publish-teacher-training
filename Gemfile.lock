@@ -217,7 +217,7 @@ GEM
       activesupport (>= 5.0)
       pg (>= 0.18.1)
     jwt (2.2.2)
-    listen (3.2.1)
+    listen (3.3.0)
       rb-fsevent (~> 0.10, >= 0.10.3)
       rb-inotify (~> 0.9, >= 0.9.10)
     logstash-event (1.2.02)
@@ -489,7 +489,7 @@ DEPENDENCIES
   jsonapi-rspec
   jsonb_accessor
   jwt
-  listen (>= 3.0.5, < 3.3)
+  listen (>= 3.0.5, < 3.4)
   logstash-logger (~> 0.26.1)
   open_api-rswag-api
   open_api-rswag-specs
