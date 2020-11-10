@@ -131,11 +131,19 @@ describe Course, type: :model do
   end
 
   context "ordering" do
-    context "canonical" do
+    describe "canonical" do
       let(:provider_a) { create(:provider, provider_name: "Provider A") }
       let(:course_a) do
         create(:course,
                name: "Course A",
+               course_code: "AAA",
+               provider: provider_a)
+      end
+
+      let(:another_course_a) do
+        create(:course,
+               name: "Course A",
+               course_code: "BBB",
                provider: provider_a)
       end
 
@@ -165,28 +173,59 @@ describe Course, type: :model do
       end
 
       before do
+        course_d
+        course_c
         course_a
         course_b
-        course_c
-        course_d
       end
 
       describe "#ascending_canonical_order" do
-        it "sorts in ascending order of provider name" do
-          expect(described_class.ascending_canonical_order).to eq([course_a, course_b, course_c, course_d])
+        subject { described_class.ascending_canonical_order }
+
+        it "sorts in ascending order of provider name and course name" do
+          expect(subject).to eq([course_a, course_b, course_c, course_d])
+        end
+
+        context "when there are multiple courses with the same name" do
+          before { another_course_a }
+
+          it "sorts by course_code" do
+            expect(subject).to eq([course_a, another_course_a, course_b, course_c, course_d])
+          end
         end
       end
 
       describe "#descending_canonical_order" do
+        subject { described_class.descending_canonical_order }
+
         it "sorts in descending order of provider name" do
-          expect(described_class.descending_canonical_order).to eq([course_d, course_c, course_b, course_a])
+          expect(subject).to eq([course_d, course_c, course_b, course_a])
+        end
+
+        context "when there are multiple courses with the same name" do
+          before { another_course_a }
+
+          it "sorts by course_code" do
+            expect(subject).to eq([course_d, course_c, course_b, another_course_a, course_a])
+          end
         end
       end
+    end
 
-      describe "#accredited_body_order" do
-        it "sorts in descending order of provider name" do
-          expect(described_class.accredited_body_order(course_c.provider.provider_name)).to eq([course_c, course_d, course_a, course_b])
-        end
+    describe "accredited_body_order" do
+      let(:provider) { create(:provider) }
+      let(:delivered_course) { create(:course, provider: provider) }
+      let(:accredited_course) { create(:course, accrediting_provider: provider) }
+
+      before do
+        accredited_course
+        delivered_course
+      end
+
+      let(:subject) { described_class.accredited_body_order(provider.provider_name) }
+
+      it "returns courses accredited after courses delivered" do
+        expect(subject).to eq([delivered_course, accredited_course])
       end
     end
 
