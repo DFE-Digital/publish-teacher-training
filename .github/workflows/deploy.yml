@@ -32,6 +32,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
+      - name: Setup Terraform v0.13.5
+        uses: hashicorp/setup-terraform@v1.2.1
+        with:
+          terraform_version: 0.13.5
+
       - name: Set Environment variable
         run: |
           case $DEPLOY_ENV in
@@ -46,66 +51,23 @@ jobs:
           DOCKER_IMAGE: ${{ format('dfedigital/teacher-training-api:paas-{0}', github.event.inputs.sha) }}
           DEPLOY_ENV: ${{ github.event.inputs.environment }}
 
-      - name: Install Terraform CloudFoundry Provider
+      - name: Terraform init, plan & apply
+        working-directory: terraform
         run: |
-          mkdir -p $HOME/.terraform.d/plugins/linux_amd64
-          cd $HOME/.terraform.d/plugins/linux_amd64
-          wget -q -O zipfile https://github.com/cloudfoundry-community/terraform-provider-cloudfoundry/releases/download/v0.12.6/terraform-provider-cloudfoundry_0.12.6_linux_amd64.zip && unzip zipfile && rm zipfile
+            terraform init -backend-config workspace_variables/${{ env.DEPLOY_ENV }}_backend.tfvars
+            terraform plan -var-file workspace_variables/${{ env.DEPLOY_ENV }}.tfvars -out tfplan
+            terraform apply -auto-approve -input=false "tfplan"
         env:
-          CF_PROVIDER: $HOME/.terraform.d/plugins/linux_amd64/terraform-provider-cloudfoundry
-
-      - name: Terraform init
-        run: |
-            terraform init \
-             -backend-config=storage_account_name=${{ env.BACKEND_STORAGE_ACCOUNT_NAME }} \
-             -backend-config=access_key=${{ env.BACKEND_ACCESS_KEY }} \
-             -backend-config=key=${{ env.BACKEND_KEY }} \
-              ${{ env.PAAS_TF_DIR }}
-        env:
-          BACKEND_STORAGE_ACCOUNT_NAME: s121d01tfstatestr
-          BACKEND_ACCESS_KEY: ${{ secrets.BACKEND_ACCESS_KEY }}
-          BACKEND_KEY: paas-ttapi.tfstate
-          PAAS_TF_DIR: $HOME/work/teacher-training-api/teacher-training-api/terraform/paas
-
-      - name: Terraform plan
-        run: |
-            terraform plan -var-file=${{ env.PAAS_TF_DIR }}/${{ env.TERRAFORM_VAR_FILE }} \
-              ${{ env.PAAS_TF_DIR }}
-        env:
-          BACKEND_STORAGE_ACCOUNT_NAME: s121d01tfstatestr
-          BACKEND_ACCESS_KEY: ${{ secrets.BACKEND_ACCESS_KEY }}
-          BACKEND_KEY: paas-ttapi.tfstate
-          PAAS_TF_DIR: $HOME/work/teacher-training-api/teacher-training-api/terraform/paas
-          TERRAFORM_VAR_FILE: terraform_qa.tfvars
-          TF_VAR_ttapi_image_tag: ${{env.SHA_TAG}}
-          TF_VAR_api_url: https://api.london.cloud.service.gov.uk
-          TF_VAR_docker_image: ${{ env.DOCKER_IMAGE }}:${{ env.SHA_TAG }}
-          TF_VAR_user: ${{ secrets.TF_VAR_user }}
-          TF_VAR_password: ${{ secrets.TF_VAR_password }}
+          ARM_ACCESS_KEY: ${{ secrets[format('ARM_ACCESS_KEY_{0}', env.DEPLOY_ENV)] }}
+          TF_VAR_paas_docker_image: ${{ env.DOCKER_IMAGE }}
+          TF_VAR_cf_user: ${{ secrets.TF_VAR_user }}
+          TF_VAR_cf_user_password: ${{ secrets.TF_VAR_password }}
           TF_VAR_SECRET_KEY_BASE: ${{ secrets.TF_VAR_SECRET_KEY_BASE }}
           TF_VAR_SENTRY_DSN: ${{ secrets.TF_VAR_SENTRY_DSN }}
-          TF_VAR_SETTINGS__GOVUK_NOTIFY__API_KEY: ${{ secrets.SETTINGS__GOVUK_NOTIFY__API_KEY }}
-          TF_VAR_SETTINGS__LOGSTASH__HOST: ${{ secrets.SETTINGS__LOGSTASH__HOST }}
-
-      - name: Terraform apply
-        run: |
-            terraform apply -var-file=${{ env.PAAS_TF_DIR }}/${{ env.TERRAFORM_VAR_FILE }} \
-             -auto-approve ${{ env.PAAS_TF_DIR }}
-        env:
-          BACKEND_STORAGE_ACCOUNT_NAME: s121d01tfstatestr
-          BACKEND_ACCESS_KEY: ${{ secrets.BACKEND_ACCESS_KEY }}
-          BACKEND_KEY: paas-ttapi.tfstate
-          PAAS_TF_DIR: $HOME/work/teacher-training-api/teacher-training-api/terraform/paas
-          TERRAFORM_VAR_FILE: terraform_qa.tfvars
-          TF_VAR_ttapi_image_tag: ${{env.SHA_TAG}}
-          TF_VAR_api_url: https://api.london.cloud.service.gov.uk
-          TF_VAR_docker_image: ${{ env.DOCKER_IMAGE }}:${{ env.SHA_TAG }}
-          TF_VAR_user: ${{ secrets.TF_VAR_user }}
-          TF_VAR_password: ${{ secrets.TF_VAR_password }}
-          TF_VAR_SECRET_KEY_BASE: ${{ secrets.TF_VAR_SECRET_KEY_BASE }}
-          TF_VAR_SENTRY_DSN: ${{ secrets.TF_VAR_SENTRY_DSN }}
-          TF_VAR_SETTINGS__GOVUK_NOTIFY__API_KEY: ${{ secrets.SETTINGS__GOVUK_NOTIFY__API_KEY }}
-          TF_VAR_SETTINGS__LOGSTASH__HOST: ${{ secrets.SETTINGS__LOGSTASH__HOST }}
+          TF_VAR_GOVUK_NOTIFY_API_KEY: ${{ secrets.SETTINGS__GOVUK_NOTIFY__API_KEY }}
+          TF_VAR_LOGSTASH_HOST: ${{ secrets.SETTINGS__LOGSTASH__HOST }}
+          TF_VAR_statuscake_username: ${{ secrets.STATUSCAKE_USERNAME }}
+          TF_VAR_statuscake_password: ${{ secrets.STATUSCAKE_API_KEY }}
 
       - name: Update ${{ github.event.inputs.environment }} status
         if: ${{ always() }}
