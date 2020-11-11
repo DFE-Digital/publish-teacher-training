@@ -1,0 +1,119 @@
+name: Deploy
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'The environment to deploy to eg: qa, staging or production'
+        required: true
+      sha:
+        description: Commit sha to be deployed
+        required: true
+
+jobs:
+  deploy: 
+    name: deploy ${{ github.event.inputs.environment }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: softprops/turnstyle@v1
+        name: Wait for other inprogress deployment runs
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Start ${{ github.event.inputs.environment }} Deployment
+        uses: bobheadxi/deployments@v0.4.2
+        id: deployment
+        with:
+          step: start
+          token: ${{ secrets.GITHUB_TOKEN }}
+          env: ${{ github.event.inputs.environment }}
+          ref: ${{ github.event.inputs.sha }}
+
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Set Environment variable
+        run: |
+          case $DEPLOY_ENV in
+            qa) next_env=staging ;;
+            staging) next_env=production ;;
+          esac
+
+          echo "DOCKER_IMAGE=$DOCKER_IMAGE" >> $GITHUB_ENV
+          echo "DEPLOY_ENV=$DEPLOY_ENV" >> $GITHUB_ENV
+          echo "NEXT_ENV=$next_env" >> $GITHUB_ENV
+        env:
+          DOCKER_IMAGE: ${{ format('dfedigital/teacher-training-api:paas-{0}', github.event.inputs.sha) }}
+          DEPLOY_ENV: ${{ github.event.inputs.environment }}
+
+      - name: Install Terraform CloudFoundry Provider
+        run: |
+          mkdir -p $HOME/.terraform.d/plugins/linux_amd64
+          cd $HOME/.terraform.d/plugins/linux_amd64
+          wget -q -O zipfile https://github.com/cloudfoundry-community/terraform-provider-cloudfoundry/releases/download/v0.12.6/terraform-provider-cloudfoundry_0.12.6_linux_amd64.zip && unzip zipfile && rm zipfile
+        env:
+          CF_PROVIDER: $HOME/.terraform.d/plugins/linux_amd64/terraform-provider-cloudfoundry
+
+      - name: Terraform init
+        run: |
+            terraform init \
+             -backend-config=storage_account_name=${{ env.BACKEND_STORAGE_ACCOUNT_NAME }} \
+             -backend-config=access_key=${{ env.BACKEND_ACCESS_KEY }} \
+             -backend-config=key=${{ env.BACKEND_KEY }} \
+              ${{ env.PAAS_TF_DIR }}
+        env:
+          BACKEND_STORAGE_ACCOUNT_NAME: s121d01tfstatestr
+          BACKEND_ACCESS_KEY: ${{ secrets.BACKEND_ACCESS_KEY }}
+          BACKEND_KEY: paas-ttapi.tfstate
+          PAAS_TF_DIR: $HOME/work/teacher-training-api/teacher-training-api/terraform/paas
+
+      - name: Terraform plan
+        run: |
+            terraform plan -var-file=${{ env.PAAS_TF_DIR }}/${{ env.TERRAFORM_VAR_FILE }} \
+              ${{ env.PAAS_TF_DIR }}
+        env:
+          BACKEND_STORAGE_ACCOUNT_NAME: s121d01tfstatestr
+          BACKEND_ACCESS_KEY: ${{ secrets.BACKEND_ACCESS_KEY }}
+          BACKEND_KEY: paas-ttapi.tfstate
+          PAAS_TF_DIR: $HOME/work/teacher-training-api/teacher-training-api/terraform/paas
+          TERRAFORM_VAR_FILE: terraform_qa.tfvars
+          TF_VAR_ttapi_image_tag: ${{env.SHA_TAG}}
+          TF_VAR_api_url: https://api.london.cloud.service.gov.uk
+          TF_VAR_docker_image: ${{ env.DOCKER_IMAGE }}:${{ env.SHA_TAG }}
+          TF_VAR_user: ${{ secrets.TF_VAR_user }}
+          TF_VAR_password: ${{ secrets.TF_VAR_password }}
+          TF_VAR_SECRET_KEY_BASE: ${{ secrets.TF_VAR_SECRET_KEY_BASE }}
+          TF_VAR_SENTRY_DSN: ${{ secrets.TF_VAR_SENTRY_DSN }}
+          TF_VAR_SETTINGS__GOVUK_NOTIFY__API_KEY: ${{ secrets.SETTINGS__GOVUK_NOTIFY__API_KEY }}
+          TF_VAR_SETTINGS__LOGSTASH__HOST: ${{ secrets.SETTINGS__LOGSTASH__HOST }}
+
+      - name: Terraform apply
+        run: |
+            terraform apply -var-file=${{ env.PAAS_TF_DIR }}/${{ env.TERRAFORM_VAR_FILE }} \
+             -auto-approve ${{ env.PAAS_TF_DIR }}
+        env:
+          BACKEND_STORAGE_ACCOUNT_NAME: s121d01tfstatestr
+          BACKEND_ACCESS_KEY: ${{ secrets.BACKEND_ACCESS_KEY }}
+          BACKEND_KEY: paas-ttapi.tfstate
+          PAAS_TF_DIR: $HOME/work/teacher-training-api/teacher-training-api/terraform/paas
+          TERRAFORM_VAR_FILE: terraform_qa.tfvars
+          TF_VAR_ttapi_image_tag: ${{env.SHA_TAG}}
+          TF_VAR_api_url: https://api.london.cloud.service.gov.uk
+          TF_VAR_docker_image: ${{ env.DOCKER_IMAGE }}:${{ env.SHA_TAG }}
+          TF_VAR_user: ${{ secrets.TF_VAR_user }}
+          TF_VAR_password: ${{ secrets.TF_VAR_password }}
+          TF_VAR_SECRET_KEY_BASE: ${{ secrets.TF_VAR_SECRET_KEY_BASE }}
+          TF_VAR_SENTRY_DSN: ${{ secrets.TF_VAR_SENTRY_DSN }}
+          TF_VAR_SETTINGS__GOVUK_NOTIFY__API_KEY: ${{ secrets.SETTINGS__GOVUK_NOTIFY__API_KEY }}
+          TF_VAR_SETTINGS__LOGSTASH__HOST: ${{ secrets.SETTINGS__LOGSTASH__HOST }}
+
+      - name: Update ${{ github.event.inputs.environment }} status
+        if: ${{ always() }}
+        uses: bobheadxi/deployments@v0.4.2
+        with:
+          step: finish
+          token: ${{ secrets.GITHUB_TOKEN }}
+          env: ${{ github.event.inputs.environment }}
+          status: ${{ job.status }}
+          deployment_id: ${{ steps.deployment.outputs.deployment_id }}
+          ref: ${{ github.event.inputs.sha }}
