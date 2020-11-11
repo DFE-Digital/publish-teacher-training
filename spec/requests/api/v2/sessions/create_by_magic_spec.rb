@@ -2,20 +2,12 @@ require "rails_helper"
 
 describe "POST /sessions/create_by_magic" do
   let(:user)    { create(:user, :with_magic_link_token) }
+  let(:email) { user.email }
   let(:payload) { { email: email } }
-  let(:email)   { user.email }
+  let(:credentials) { encode_to_credentials(payload) }
+
   let(:magic_link_token) { user.magic_link_token }
   let(:params) { { magic_link_token: magic_link_token } }
-
-  let(:token) do
-    JWT.encode payload,
-               Settings.authentication.secret,
-               Settings.authentication.algorithm
-  end
-
-  let(:credentials) do
-    ActionController::HttpAuthentication::Token.encode_credentials(token)
-  end
 
   def perform_request
     patch(

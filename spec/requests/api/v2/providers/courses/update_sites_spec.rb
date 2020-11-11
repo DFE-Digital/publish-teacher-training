@@ -5,10 +5,7 @@ describe "PATCH /providers/:provider_code/courses/:course_code with sites" do
   let(:provider)     { create :provider, organisations: [organisation] }
   let(:user)         { create :user, organisations: [organisation] }
   let(:payload)      { { email: user.email } }
-  let(:token)        { build_jwt :apiv2, payload: payload }
-  let(:credentials) do
-    ActionController::HttpAuthentication::Token.encode_credentials(token)
-  end
+  let(:credentials) { encode_to_credentials(payload) }
 
   let(:course) { create(:course, :infer_level, provider: provider, site_statuses: [site_status], subjects: [primary_subject], enrichments: [course_enrichment]) }
   let(:course_enrichment) { build :course_enrichment }

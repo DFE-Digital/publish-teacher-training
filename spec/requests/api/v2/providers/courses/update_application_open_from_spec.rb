@@ -23,7 +23,7 @@ describe "PATCH /providers/:provider_code/courses/:course_code" do
   let(:provider)          { build :provider, organisations: [organisation] }
   let(:user)              { create :user, organisations: [organisation] }
   let(:payload)           { { email: user.email } }
-  let(:token)             { build_jwt :apiv2, payload: payload }
+  let(:credentials)       { encode_to_credentials(payload) }
 
   let(:course)            {
     create :course,
@@ -32,11 +32,6 @@ describe "PATCH /providers/:provider_code/courses/:course_code" do
   }
 
   let(:applications_open_from) { DateTime.new(provider.recruitment_cycle.year.to_i, 1, 15).utc }
-
-  let(:credentials) do
-    ActionController::HttpAuthentication::Token.encode_credentials(token)
-  end
-
   let(:permitted_params) do
     %i[updated_applications_open_from]
   end

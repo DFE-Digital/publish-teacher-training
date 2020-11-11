@@ -76,19 +76,20 @@ describe "mcb command" do
   describe ".generate_apiv2_token" do
     let(:email)    { "foo@local" }
     let(:secret)   { "bar" }
-
+    let(:payload) { { "email" => email } }
     context "using HS256 encoding" do
       let(:encoding) { "HS256" }
 
-      it "generates a valid JWT token" do
-        token = MCB.generate_apiv2_token(
+      it "generates a usable valid JWT encoded token" do
+        encoded_token = MCB.generate_apiv2_token(
           email: email,
           encoding: encoding,
           secret: secret,
         )
-        expect(token).to eq JWT.encode({ email: email },
-                                       secret,
-                                       encoding)
+
+        expect(JWT::DecodeService.call(encoded_token: encoded_token,
+    secret: secret,
+    algorithm: encoding)).to eq payload
       end
 
       it "gives a friendly error when secret is nil" do

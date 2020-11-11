@@ -4,14 +4,7 @@ describe "Site Helpers API V2" do
   let(:user) { create(:user).tap { |u| organisation.users << u } }
   let(:organisation) { site_status.course.provider.organisations.first }
   let(:payload) { { email: user.email } }
-  let(:token) do
-    JWT.encode payload,
-               Settings.authentication.secret,
-               Settings.authentication.algorithm
-  end
-  let(:credentials) do
-    ActionController::HttpAuthentication::Token.encode_credentials(token)
-  end
+  let(:credentials) { encode_to_credentials(payload) }
   let(:site_status) { create :site_status }
   let(:params)      { {} }
 

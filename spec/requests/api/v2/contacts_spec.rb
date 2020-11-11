@@ -60,9 +60,7 @@ RSpec.describe "/api/v2/contacts", type: :request do
     @user = create(:user)
     @user.organisations << @accredited_body.organisation
     payload = { email: @user.email }
-    token = JWT.encode payload, Settings.authentication.secret, Settings.authentication.algorithm
-
-    @credentials = ActionController::HttpAuthentication::Token.encode_credentials(token)
+    @credentials = encode_to_credentials(payload)
   end
 
   def when_parameters_are_posted(params)

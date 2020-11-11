@@ -3,16 +3,7 @@ require "rails_helper"
 describe "PATCH /api/v2/users/:id/accept_terms", type: :request do
   let(:user)    { create(:user, :inactive, state: "new") }
   let(:payload) { { email: user.email } }
-
-  let(:token) do
-    JWT.encode payload,
-               Settings.authentication.secret,
-               Settings.authentication.algorithm
-  end
-
-  let(:credentials) do
-    ActionController::HttpAuthentication::Token.encode_credentials(token)
-  end
+  let(:credentials) { encode_to_credentials(payload) }
 
   context "when unauthenticated" do
     let(:payload) { { email: "foo@bar" } }

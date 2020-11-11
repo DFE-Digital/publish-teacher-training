@@ -68,7 +68,15 @@ RSpec.configure do |config|
 
   config.include SerializerSpecHelper, type: :serializer
 
+  %i[controller request].each do |type|
+    config.include JWTHelper, type: type
+  end
+
   # set `:type` for serializers directory
+  config.define_derived_metadata(file_path: Regexp.new("/spec/serializers")) do |metadata|
+    metadata[:type] = :serializer
+  end
+
   config.define_derived_metadata(file_path: Regexp.new("/spec/serializers")) do |metadata|
     metadata[:type] = :serializer
   end

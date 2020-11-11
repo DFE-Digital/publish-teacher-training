@@ -4,10 +4,7 @@ describe "Course POST #create API V2", type: :request do
   let(:user)         { create(:user) }
   let(:organisation) { create(:organisation, users: [user]) }
   let(:payload)      { { email: user.email } }
-  let(:token)        { build_jwt(:apiv2, payload: payload) }
-  let(:credentials) do
-    ActionController::HttpAuthentication::Token.encode_credentials(token)
-  end
+  let(:credentials) { encode_to_credentials(payload) }
 
   let(:provider) { create(:provider, organisations: [organisation]) }
   let(:site_one) { create(:site, provider: provider) }

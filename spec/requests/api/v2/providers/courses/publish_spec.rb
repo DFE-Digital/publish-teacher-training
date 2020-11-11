@@ -4,11 +4,8 @@ describe "Publish API v2", type: :request do
   let(:user)         { create(:user) }
   let(:organisation) { create(:organisation, users: [user]) }
   let(:provider)       { create :provider, organisations: [organisation] }
-  let(:payload)      { { email: user.email } }
-  let(:token)        { build_jwt :apiv2, payload: payload }
-  let(:credentials) do
-    ActionController::HttpAuthentication::Token.encode_credentials(token)
-  end
+  let(:payload) { { email: user.email } }
+  let(:credentials) { encode_to_credentials(payload) }
 
   describe "POST publish" do
     let(:status) { 200 }

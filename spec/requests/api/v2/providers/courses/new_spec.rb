@@ -10,10 +10,8 @@ describe "GET /providers/:provider_code/courses/new" do
   end
   let(:user)    { create :user, organisations: [organisation] }
   let(:payload) { { email: user.email } }
-  let(:token)   { build_jwt :apiv2, payload: payload }
-  let(:credentials) do
-    ActionController::HttpAuthentication::Token.encode_credentials(token)
-  end
+  let(:credentials) { encode_to_credentials(payload) }
+
   let(:jsonapi_renderer) { JSONAPI::Serializable::Renderer.new }
 
   describe "#new" do

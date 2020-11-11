@@ -13,14 +13,7 @@ describe "/api/v2/build_new_course", type: :request do
   let(:provider2) { create(:provider) }
 
   let(:payload) { { email: user.email } }
-  let(:token) do
-    JWT.encode payload,
-               Settings.authentication.secret,
-               Settings.authentication.algorithm
-  end
-  let(:credentials) do
-    ActionController::HttpAuthentication::Token.encode_credentials(token)
-  end
+  let(:credentials) { encode_to_credentials(payload) }
   let(:jsonapi_renderer) { JSONAPI::Serializable::Renderer.new }
   let(:subjects) { [] }
   let(:course) { Course.new(provider: provider, subjects: subjects) }

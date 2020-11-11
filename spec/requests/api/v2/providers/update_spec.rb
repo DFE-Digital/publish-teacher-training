@@ -39,12 +39,10 @@ describe "PATCH /providers/:provider_code" do
   end
   let(:user)         { create :user, organisations: [organisation] }
   let(:payload)      { { email: user.email } }
-  let(:token)        { build_jwt :apiv2, payload: payload }
-  let(:enrichment)   { build(:provider_enrichment) }
+  let(:credentials) { encode_to_credentials(payload) }
+
+  let(:enrichment) { build(:provider_enrichment) }
   let(:update_provider) { provider.dup.tap { |p| updated_attributes.each { |attribute_name, attribute_value| p[attribute_name] = attribute_value } } }
-  let(:credentials) do
-    ActionController::HttpAuthentication::Token.encode_credentials(token)
-  end
 
   let(:updated_attributes) do
     {

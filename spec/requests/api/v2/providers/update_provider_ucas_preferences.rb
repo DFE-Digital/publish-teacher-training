@@ -11,10 +11,8 @@ describe "PATCH recruitment_cycles/year/providers/:provider_code/courses/:course
   let(:organisation) { create :organisation }
   let(:user)         { create :user, organisations: [organisation] }
   let(:payload)      { { email: user.email } }
-  let(:token)        { build_jwt :apiv2, payload: payload }
-  let(:credentials) do
-    ActionController::HttpAuthentication::Token.encode_credentials(token)
-  end
+  let(:credentials) { encode_to_credentials(payload) }
+
   let(:ucas_preferences) { build(:provider_ucas_preference, type_of_gt12: :no_response, send_application_alerts: :all) }
 
   let(:updated_provider_ucas_preferences) do

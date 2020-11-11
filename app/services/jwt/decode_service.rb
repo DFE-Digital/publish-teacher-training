@@ -1,24 +1,26 @@
 module JWT
   class DecodeService
-    attr_reader :encoded_token
-
     class << self
       def call(*args)
         new(*args).call
       end
     end
 
-    def initialize(encoded_token:)
+    def initialize(encoded_token:,
+      secret: Settings.authentication.secret,
+      algorithm: Settings.authentication.algorithm)
       @encoded_token = encoded_token
+      @secret = secret
+      @algorithm = algorithm
     end
 
     def call
       decoded_token = JWT.decode(
         encoded_token,
-        Settings.authentication.secret,
+        secret,
         true,
         {
-            algorithm: Settings.authentication.algorithm,
+            algorithm: algorithm,
             verify_iss: true,
             verify_aud: true,
             verify_sub: true,
@@ -34,6 +36,8 @@ module JWT
     end
 
   private
+
+    attr_reader :encoded_token, :secret, :algorithm
 
     def claims
       @claims ||= {

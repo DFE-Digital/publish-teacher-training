@@ -9,10 +9,11 @@ describe "mcb apiv2 token generate" do
       end
       result = result[:stdout]
 
-      payload = { email: "user@local" }
-      expect(result.chomp).to eq(
-        JWT.encode(payload, "sekret", "HS256"),
-      )
+      payload = { "email" => "user@local" }
+
+      decoded_token = JWT::DecodeService.call(encoded_token: result, secret: "sekret", algorithm: "HS256")
+
+      expect(decoded_token).to eq(payload)
     end
   end
 end

@@ -112,7 +112,7 @@ module MCB
       raise "Secret not provided"
     end
 
-    JWT.encode(payload, secret, encoding)
+    JWT::EncodeService.call(payload: payload, secret: secret, algorithm: encoding)
   end
 
   def self.each_v1_course(opts)

@@ -7,6 +7,8 @@ describe "Access Request API V2", type: :request do
   let(:requested_user) { create(:user) }
   let(:organisation) { create(:organisation) }
   let(:payload) { { email: admin_user.email } }
+  let(:credentials) { encode_to_credentials(payload) }
+
   let(:access_request) {
     create(:access_request,
            email_address: requested_user.email,
@@ -14,14 +16,6 @@ describe "Access Request API V2", type: :request do
            requester_id: requesting_user.id,
            organisation: organisation.name)
   }
-  let(:token) do
-    JWT.encode payload,
-               Settings.authentication.secret,
-               Settings.authentication.algorithm
-  end
-  let(:credentials) do
-    ActionController::HttpAuthentication::Token.encode_credentials(token)
-  end
 
   subject { response }
 
