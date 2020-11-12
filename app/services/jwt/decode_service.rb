@@ -1,17 +1,73 @@
 module JWT
   class DecodeService
+    class EncodeService
+      class << self
+        def call(*args)
+          new(*args).call
+        end
+      end
+
+      def initialize(payload:,
+        secret: nil,
+        algorithm: nil,
+        audience: nil,
+        issuer: nil,
+        subject: nil)
+        @payload = payload
+
+        @secret = secret || Settings.authentication.secret
+        @algorithm = algorithm || Settings.authentication.algorithm
+        @audience = audience || Settings.authentication.audience
+        @issuer = issuer || Settings.authentication.issuer
+        @subject = subject || Settings.authentication.subject
+      end
+
+      def call
+        JWT.encode(
+          data,
+          secret,
+          algorithm,
+        )
+      end
+
+    private
+
+      attr_reader :payload, :secret, :algorithm, :audience, :issuer, :subject
+
+      def data
+        {
+          data: payload,
+          **claims,
+        }
+      end
+
+      def claims
+        now = Time.zone.now
+        {
+          aud: audience,
+          exp: (now + 5.minutes).to_i,
+          iat: now.to_i,
+          iss: issuer,
+          sub: subject,
+        }
+      end
+    end
     class << self
       def call(*args)
         new(*args).call
       end
+
+      def encode(*args)
+        EncodeService.call(*args)
+      end
     end
 
     def initialize(encoded_token:,
-      secret: Settings.authentication.secret,
-      algorithm: Settings.authentication.algorithm)
+      secret: nil,
+      algorithm: nil)
       @encoded_token = encoded_token
-      @secret = secret
-      @algorithm = algorithm
+      @secret = secret || Settings.authentication.secret
+      @algorithm = algorithm || Settings.authentication.algorithm
     end
 
     def call
@@ -34,6 +90,9 @@ module JWT
 
       payload.with_indifferent_access[:data]
     end
+
+
+    private_constant :EncodeService
 
   private
 

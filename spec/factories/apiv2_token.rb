@@ -5,7 +5,7 @@ class JWTStrategy
   def association; end
 
   def result(evaluation)
-    JWT::EncodeService.call(payload: evaluation.object.payload)
+    JWT::DecodeService.encode(payload: evaluation.object.payload)
   end
 end
 
