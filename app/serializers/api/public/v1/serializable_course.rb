@@ -32,7 +32,8 @@ module API
                    :program_type,
                    :qualifications,
                    :scholarship_amount,
-                   :study_mode
+                   :study_mode,
+                   :uuid
 
         attribute :about_accredited_body do
           @object.accrediting_provider_description

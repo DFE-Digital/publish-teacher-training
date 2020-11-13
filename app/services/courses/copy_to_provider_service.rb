@@ -12,6 +12,7 @@ module Courses
 
       Course.transaction do
         new_course = course.dup
+        new_course.uuid = nil
         new_course.provider = new_provider
         year_differential = new_course.recruitment_cycle.year.to_i - course.recruitment_cycle.year.to_i
         new_course.applications_open_from = course.applications_open_from + year_differential.year

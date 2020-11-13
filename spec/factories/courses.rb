@@ -1,5 +1,6 @@
 FactoryBot.define do
   factory :course do
+    sequence(:uuid) { |_i| SecureRandom.uuid }
     sequence(:course_code) { |n| "C#{n}#{(0..9).to_a.sample(2).join}" }
     name { Faker::Lorem.word }
     qualification { :pgce_with_qts }
