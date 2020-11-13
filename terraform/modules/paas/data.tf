@@ -7,7 +7,7 @@ data cloudfoundry_org org {
 }
 
 data cloudfoundry_space space {
-  name = var.app.space
+  name = var.cf_space
   org  = data.cloudfoundry_org.org.id
 }
 

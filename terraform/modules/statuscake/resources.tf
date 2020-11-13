@@ -1,6 +1,6 @@
 resource statuscake_test alert {
-  for_each =  var.alerts
-    
+  for_each = var.alerts
+
   website_name  = each.value.website_name
   website_url   = each.value.website_url
   test_type     = each.value.test_type
