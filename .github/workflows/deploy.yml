@@ -37,7 +37,8 @@ jobs:
         with:
           terraform_version: 0.13.5
 
-      - name: Set Environment variable
+      - name: Set NEXT_DEPLOY_ENV variable
+        if: ${{ github.event.inputs.environment == 'qa' }}
         run: |
           case $DEPLOY_ENV in
             qa) next_env=staging ;;
@@ -66,10 +67,18 @@ jobs:
         env:
           ARM_ACCESS_KEY:             ${{ secrets[format('ARM_ACCESS_KEY_{0}', env.DEPLOY_ENV)] }}
           TF_VAR_paas_docker_image:   ${{ env.DOCKER_IMAGE }}
-          TF_VAR_cf_user:             ${{ secrets.TF_VAR_user }}
-          TF_VAR_cf_user_password:    ${{ secrets.TF_VAR_password }}
+          TF_VAR_cf_user:             ${{ secrets[format('CF_USERNAME_{0}', env.DEPLOY_ENV)] }}
+          TF_VAR_cf_user_password:    ${{ secrets[format('CF_PASSWORD_{0}', env.DEPLOY_ENV)] }}
           TF_VAR_statuscake_username: ${{ secrets.STATUSCAKE_USERNAME }}
           TF_VAR_statuscake_password: ${{ secrets.STATUSCAKE_API_KEY }}
+
+      - name: Trigger ${{ env.NEXT_ENV }} Deployment
+        if: ${{ success() && env.NEXT_ENV != '' && github.ref == 'refs/heads/master' }}
+        uses: benc-uk/workflow-dispatch@v1.1
+        with:
+          workflow: Deploy
+          token: ${{ secrets.ACTIONS_API_ACCESS_TOKEN }}
+          inputs: '{"environment": "${{ env.NEXT_ENV }}", "sha": "${{ github.event.inputs.sha }}"}'
 
       - name: Update ${{ github.event.inputs.environment }} status
         if: ${{ always() }}
