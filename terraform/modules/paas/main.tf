@@ -22,15 +22,16 @@ resource cloudfoundry_app web_app {
 }
 
 resource cloudfoundry_app worker_app {
-  name              = local.worker_app_name
-  space             = data.cloudfoundry_space.space.id
-  health_check_type = "process"
-  instances         = var.worker_app_instances
-  memory            = var.worker_app_memory
-  docker_image      = var.docker_image
-  command           = local.worker_app_start_command
-  timeout           = 180
-  environment       = var.app_environment_variables
+  name                 = local.worker_app_name
+  space                = data.cloudfoundry_space.space.id
+  health_check_type    = "process"
+  instances            = var.worker_app_instances
+  memory               = var.worker_app_memory
+  docker_image         = var.docker_image
+  command              = local.worker_app_start_command
+  timeout              = 180
+  health_check_timeout = 180
+  environment          = var.app_environment_variables
 
   service_binding {
     service_instance = cloudfoundry_service_instance.postgres.id
