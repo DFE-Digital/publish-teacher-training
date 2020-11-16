@@ -5,6 +5,7 @@ tmp
 coverage
 .git
 .github
+terraform
 
 # work is my local project-specific non-committed workspace --Misha
 work
