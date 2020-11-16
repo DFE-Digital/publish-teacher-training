@@ -38,7 +38,7 @@ jobs:
           terraform_version: 0.13.5
 
       - name: Set NEXT_DEPLOY_ENV variable
-        if: ${{ github.event.inputs.environment == 'qa' }}
+        if: ${{ github.event.inputs.environment != 'production' }}
         run: |
           case $DEPLOY_ENV in
             qa) next_env=staging ;;
