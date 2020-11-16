@@ -1,0 +1,52 @@
+name: Database Restore
+
+on:
+  schedule: # 04:00 UTC Mon-Friday
+    - cron: '0 4 * * 1-5'
+
+jobs:
+  db_restore:
+    name: Restore Database in ${{ matrix.environment }}
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        environment: [qa, staging]
+    steps:
+    - name: Install cf client
+      run: |
+        curl -sL "${CF_CLI_URL}${CF_CLI_VERSION}" | sudo tar -zx -C /usr/local/bin && sudo mv /usr/local/bin/cf7 /usr/local/bin/cf
+        cf install-plugin conduit -f
+      env:
+        CF_CLI_VERSION: 7.1.0
+        CF_CLI_URL: https://packages.cloudfoundry.org/stable?release=linux64-binary&version=
+
+    - name: Install postgres client
+      run: |
+        wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
+        echo "deb http://apt.postgresql.org/pub/repos/apt/ $(lsb_release -cs)"-pgdg main | sudo tee  /etc/apt/sources.list.d/pgdg.list
+        sudo apt-get update && sudo apt-get install -y postgresql-client-11
+        psql --version && pg_dump --version
+        
+    - name: Backup Azure DB
+      run: pg_dump -E utf8 -c -v -w -d ${{ secrets.AZURE_DATABASE_NAME}} -f db_backup.sql
+      env:
+        PGHOST:     ${{ secrets[format('AZURE_DATABASE_HOST_{0}', matrix.environment)] }}
+        PGUSER:     ${{ secrets[format('AZURE_DATABASE_USER_{0}', matrix.environment)] }}
+        PGPASSWORD: ${{ secrets[format('AZURE_DATABASE_PASSWORD_{0}', matrix.environment)] }}
+
+    - name: Setup cf space
+      run: |
+        cf api ${CF_API_URL}
+        cf auth
+        cf target -o ${CF_ORG_NAME} -s ${CF_SPACE_NAME}
+      env:
+        CF_USERNAME:   ${{ secrets[format('CF_USERNAME_{0}', matrix.environment)] }}
+        CF_PASSWORD:   ${{ secrets[format('CF_PASSWORD_{0}', matrix.environment)] }}
+        CF_API_URL:    ${{ secrets.CF_API_URL }}
+        CF_ORG_NAME:   ${{ secrets.CF_ORG_NAME }}
+        CF_SPACE_NAME: bat-${{ matrix.environment }}
+
+    - name: Restore database
+      run: cf conduit ${POSTGRES_SERVICE_INSTANCE} -- psql < db_backup.sql
+      env:
+        POSTGRES_SERVICE_INSTANCE: teacher-training-api-postgres-${{ matrix.environment }}
