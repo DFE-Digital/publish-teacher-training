@@ -24,13 +24,7 @@ variable paas_app_environment {}
 
 variable paas_app_config { type = map }
 
-variable SECRET_KEY_BASE {}
-
-variable SENTRY_DSN {}
-
-variable LOGSTASH_HOST {}
-
-variable GOVUK_NOTIFY_API_KEY {}
+variable paas_app_secrets_file { default = "workspace_variables/app_secrets.yml" }
 
 variable statuscake_alerts { type = map }
 
@@ -39,12 +33,7 @@ variable statuscake_username {}
 variable statuscake_password {}
 
 locals {
-  cf_api_url = "https://api.london.cloud.service.gov.uk"
-  paas_app_secrets = {
-    SETTINGS__LOGSTASH__HOST        = var.LOGSTASH_HOST
-    SECRET_KEY_BASE                 = var.SECRET_KEY_BASE
-    SENTRY_DSN                      = var.SENTRY_DSN
-    SETTINGS__GOVUK_NOTIFY__API_KEY = var.GOVUK_NOTIFY_API_KEY
-  }
+  cf_api_url                     = "https://api.london.cloud.service.gov.uk"
+  paas_app_secrets               = yamldecode(file(var.paas_app_secrets_file))
   paas_app_environment_variables = merge(local.paas_app_secrets, var.paas_app_config)
 }
