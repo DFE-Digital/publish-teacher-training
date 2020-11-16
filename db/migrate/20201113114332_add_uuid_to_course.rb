@@ -8,6 +8,6 @@ class AddUuidToCourse < ActiveRecord::Migration[6.0]
   end
 
   def down
-    # There is no going back
+    raise ActiveRecord::IrreversibleMigration
   end
 end
