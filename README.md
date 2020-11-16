@@ -151,8 +151,8 @@ curl http://localhost:3001/api/v2/recruitment_cycles.json -H "Authorization: Bea
 Encoding the payload can be done with an MCB command:
 
 ```
-$ bin/mcb apiv2 token generate -S secret user@example.com
-eyJhbGciOiJIUzI1NiJ9.IntcImVtYWlsXCI6XCJ1c2VyQGV4YW1wbGUuY29tXCJ9Ig.f9kNofCO0u35B01AUht1cJ472YSDjaol_iKScYuVux4
+$ bin/mcb apiv2 token generate -S sekret --audience audience --issuer issuer --subject subject user@example.com
+eyJhbGciOiJIUzI1NiJ9.eyJkYXRhIjp7ImVtYWlsIjoidXNlckBsb2NhbF0ifSwiYXVkIjoiYXVkaWVuY2UiLCJleHAiOjE2MDU1NTg1OTQsImlhdCI6MTYwNTU1ODI5NCwiaXNzIjoiaXNzdWVyIiwic3ViIjoic3ViamVjdCJ9.81jNfeJGBLpgB64TD60oMc3UOkQtSjnQRRPUwEiQCXo
 ```
 
 Where `-S secret` is the secret. In development, the secret should be set to

@@ -69,7 +69,7 @@ RSpec.configure do |config|
   config.include SerializerSpecHelper, type: :serializer
 
   %i[controller request].each do |type|
-    config.include JWTHelper, type: type
+    config.include TokenHelper, type: type
   end
 
   # set `:type` for serializers directory

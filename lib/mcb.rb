@@ -103,7 +103,8 @@ module MCB
     end
   end
 
-  def self.generate_apiv2_token(email:, encoding:, secret: nil)
+  def self.generate_apiv2_token(email:, encoding:, secret: nil,
+    audience:, issuer:, subject:)
     require "jwt"
 
     payload = { email: email }
@@ -112,7 +113,8 @@ module MCB
       raise "Secret not provided"
     end
 
-    JWT::DecodeService.encode(payload: payload, secret: secret, algorithm: encoding)
+    MCB::Token::EncodeService.call(payload: payload, secret: secret,
+      algorithm: encoding, audience: audience, issuer: issuer, subject: subject)
   end
 
   def self.each_v1_course(opts)

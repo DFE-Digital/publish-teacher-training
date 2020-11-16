@@ -79,17 +79,28 @@ describe "mcb command" do
     let(:payload) { { "email" => email } }
     context "using HS256 encoding" do
       let(:encoding) { "HS256" }
+      let(:audience) { "audience" }
+      let(:issuer) { "issuer" }
+      let(:subject) { "subject" }
 
       it "generates a usable valid JWT encoded token" do
         encoded_token = MCB.generate_apiv2_token(
           email: email,
           encoding: encoding,
           secret: secret,
+          audience: audience,
+          issuer: issuer,
+          subject: subject,
         )
 
-        expect(JWT::DecodeService.call(encoded_token: encoded_token,
-    secret: secret,
-    algorithm: encoding)).to eq payload
+        decoded_token = Token::DecodeService.call(encoded_token: encoded_token,
+          secret: secret,
+          algorithm: encoding,
+          audience: audience,
+          issuer: issuer,
+          subject: subject)
+
+        expect(decoded_token).to eq payload
       end
 
       it "gives a friendly error when secret is nil" do
@@ -98,6 +109,9 @@ describe "mcb command" do
             email: email,
             encoding: encoding,
             secret: nil,
+            audience: audience,
+            issuer: issuer,
+            subject: subject,
           )
         }.to raise_error(
           "Secret not provided",
