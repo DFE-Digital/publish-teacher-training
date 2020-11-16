@@ -10,7 +10,6 @@ paas_redis_service_plan    = "tiny-5_x"
 paas_app_config = {
   RAILS_ENV                = "staging"
   RAILS_SERVE_STATIC_FILES = true
-  SETTINGS__LOGSTASH__PORT = 22135
 }
 
 #StatusCake

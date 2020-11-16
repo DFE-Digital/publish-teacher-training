@@ -51,6 +51,12 @@ jobs:
           DOCKER_IMAGE: ${{ format('dfedigital/teacher-training-api:paas-{0}', github.event.inputs.sha) }}
           DEPLOY_ENV: ${{ github.event.inputs.environment }}
 
+      - name: Download app secrets file
+        working-directory: terraform/workspace_variables
+        run: echo $APP_SECRETS | base64 -d >> app_secrets.yml
+        env:
+          APP_SECRETS: ${{ secrets[format('APP_SECRETS_{0}', env.DEPLOY_ENV)] }}      
+
       - name: Terraform init, plan & apply
         working-directory: terraform
         run: |
@@ -58,14 +64,10 @@ jobs:
             terraform plan -var-file workspace_variables/${{ env.DEPLOY_ENV }}.tfvars -out tfplan
             terraform apply -auto-approve -input=false "tfplan"
         env:
-          ARM_ACCESS_KEY: ${{ secrets[format('ARM_ACCESS_KEY_{0}', env.DEPLOY_ENV)] }}
-          TF_VAR_paas_docker_image: ${{ env.DOCKER_IMAGE }}
-          TF_VAR_cf_user: ${{ secrets.TF_VAR_user }}
-          TF_VAR_cf_user_password: ${{ secrets.TF_VAR_password }}
-          TF_VAR_SECRET_KEY_BASE: ${{ secrets.TF_VAR_SECRET_KEY_BASE }}
-          TF_VAR_SENTRY_DSN: ${{ secrets.TF_VAR_SENTRY_DSN }}
-          TF_VAR_GOVUK_NOTIFY_API_KEY: ${{ secrets.SETTINGS__GOVUK_NOTIFY__API_KEY }}
-          TF_VAR_LOGSTASH_HOST: ${{ secrets.SETTINGS__LOGSTASH__HOST }}
+          ARM_ACCESS_KEY:             ${{ secrets[format('ARM_ACCESS_KEY_{0}', env.DEPLOY_ENV)] }}
+          TF_VAR_paas_docker_image:   ${{ env.DOCKER_IMAGE }}
+          TF_VAR_cf_user:             ${{ secrets.TF_VAR_user }}
+          TF_VAR_cf_user_password:    ${{ secrets.TF_VAR_password }}
           TF_VAR_statuscake_username: ${{ secrets.STATUSCAKE_USERNAME }}
           TF_VAR_statuscake_password: ${{ secrets.STATUSCAKE_API_KEY }}
 
