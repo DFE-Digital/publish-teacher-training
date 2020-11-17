@@ -6,8 +6,7 @@ describe "Publishable API v2", type: :request do
   let(:organisation)  { provider.organisations.first }
   let(:user)          { provider.users.first }
   let(:payload)       { { email: user.email } }
-  let(:token)         { build_jwt :apiv2, payload: payload }
-  let(:credentials)   { ActionController::HttpAuthentication::Token.encode_credentials(token) }
+  let(:credentials) { encode_to_credentials(payload) }
 
   describe "POST publishable" do
     let(:publishable_path) do

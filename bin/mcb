@@ -36,6 +36,8 @@ require 'mcb/render'
 require 'mcb/render/active_record'
 require 'mcb/render/apiv1'
 
+require 'mcb/services/token/encode_service'
+
 tp.set :capitalize_headers, false
 
 $mcb = Cri::Command.define do

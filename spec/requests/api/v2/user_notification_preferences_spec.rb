@@ -52,9 +52,7 @@ describe "user notification preferences service" do
   def given_i_am_an_authenticated_user
     @user = create(:user)
     payload = { email: @user.email }
-    token = JWT.encode payload, Settings.authentication.secret, Settings.authentication.algorithm
-
-    @credentials = ActionController::HttpAuthentication::Token.encode_credentials(token)
+    @credentials = encode_to_credentials(payload)
   end
 
   def when_i_get_the_user_notification_preferences_endpoint_with_my_user_id

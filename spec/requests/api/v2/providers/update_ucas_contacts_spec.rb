@@ -42,10 +42,8 @@ describe "PATCH recruitment_cycles/year/providers/:provider_code/courses/:course
   end
   let(:user)         { create :user, organisations: [organisation] }
   let(:payload)      { { email: user.email } }
-  let(:token)        { build_jwt :apiv2, payload: payload }
-  let(:credentials) do
-    ActionController::HttpAuthentication::Token.encode_credentials(token)
-  end
+  let(:credentials) { encode_to_credentials(payload) }
+
   let(:admin_contact) { build(:contact, :admin_type) }
   let(:utt_contact) { build(:contact, :utt_type) }
   let(:web_link_contact) { build(:contact, :web_link_type) }

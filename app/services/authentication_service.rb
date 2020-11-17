@@ -22,14 +22,12 @@ private
   attr_reader :logger
 
   def decoded_token
-    @decoded_token ||= JWT.decode(
-      encoded_token,
-      Settings.authentication.secret,
-      Settings.authentication.algorithm,
-    )
-    (decoded_token_payload, _algorithm) = @decoded_token
-
-    decoded_token_payload
+    @decoded_token ||= Token::DecodeService.call(encoded_token: encoded_token,
+      secret: Settings.authentication.secret,
+      algorithm: Settings.authentication.algorithm,
+      audience: Settings.authentication.audience,
+      issuer: Settings.authentication.issuer,
+      subject: Settings.authentication.subject)
   end
 
   def email_from_token

@@ -6,10 +6,8 @@ describe "GET /suggest" do
   let(:next_recruitment_cycle) { find_or_create(:recruitment_cycle, :next) }
   let(:user) { create :user, organisations: [organisation] }
   let(:payload) { { email: user.email } }
-  let(:token) { build_jwt :apiv2, payload: payload }
-  let(:credentials) do
-    ActionController::HttpAuthentication::Token.encode_credentials(token)
-  end
+  let(:credentials) { encode_to_credentials(payload) }
+
   let(:provider) { create(:provider, provider_name: "PROVIDER 1", organisations: [organisation]) }
   let(:provider2)  { create(:provider, provider_name: "PROVIDER 2", organisations: [organisation]) }
 

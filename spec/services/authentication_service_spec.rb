@@ -1,3 +1,5 @@
+require "rails_helper"
+
 describe AuthenticationService do
   describe "#execute" do
     let(:user) { create(:user) }
@@ -14,17 +16,12 @@ describe AuthenticationService do
         last_name: last_name,
       }
     end
+    let(:token) { build_jwt(:apiv2, payload: payload) }
+
     let(:service) { described_class.new(logger: logger_spy) }
 
-    subject { service.execute(encode_token(payload)) }
+    subject { service.execute(token) }
 
-    def encode_token(payload)
-      JWT.encode(
-        payload,
-        Settings.authentication.secret,
-        Settings.authentication.algorithm,
-      )
-    end
 
     context "with a valid DfE-SignIn ID and email" do
       let(:first_name) { "#{user.first_name}_new" }

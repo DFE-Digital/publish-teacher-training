@@ -7,6 +7,7 @@ describe "Providers API v2", type: :request do
     let(:user) { create(:user, organisations: [organisation]) }
     let(:organisation) { create(:organisation) }
     let(:payload) { { email: user.email } }
+    let(:credentials) { encode_to_credentials(payload) }
 
     let(:site) { build(:site) }
     let(:description) { "An accredited body description" }
@@ -30,16 +31,6 @@ describe "Providers API v2", type: :request do
     end
     let(:contact) { build(:contact) }
     let(:ucas_preferences) { build(:provider_ucas_preference) }
-
-    let(:token) do
-      JWT.encode payload,
-                 Settings.authentication.secret,
-                 Settings.authentication.algorithm
-    end
-
-    let(:credentials) do
-      ActionController::HttpAuthentication::Token.encode_credentials(token)
-    end
 
     let(:expected_response) {
       {

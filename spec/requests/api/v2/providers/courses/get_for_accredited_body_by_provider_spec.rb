@@ -5,10 +5,7 @@ RSpec.describe "GET /api/v2/recruitment_cycles/:year/providers/\
   let(:organisation) { create(:organisation) }
   let(:user)         { create(:user, organisations: [organisation]) }
   let(:payload)      { { email: user.email } }
-  let(:token)        { build_jwt(:apiv2, payload: payload) }
-  let!(:credentials) do
-    ActionController::HttpAuthentication::Token.encode_credentials(token)
-  end
+  let(:credentials)  { encode_to_credentials(payload) }
 
   let(:recruitment_cycle) { find_or_create(:recruitment_cycle) }
   let(:accredited_body) { create(:provider, :accredited_body, organisations: [organisation]) }

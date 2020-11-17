@@ -24,7 +24,7 @@ describe "PATCH /providers/:provider_code/courses/:course_code" do
   let(:provider)          { create :provider, organisations: [organisation] }
   let(:user)              { create :user, organisations: [organisation] }
   let(:payload)           { { email: user.email } }
-  let(:token)             { build_jwt :apiv2, payload: payload }
+  let(:credentials)       { encode_to_credentials(payload) }
 
   let(:course)            {
     create :course,
@@ -33,11 +33,6 @@ describe "PATCH /providers/:provider_code/courses/:course_code" do
            program_type: program_type
   }
   let(:program_type) { :school_direct_training_programme }
-
-  let(:credentials) do
-    ActionController::HttpAuthentication::Token.encode_credentials(token)
-  end
-
   let(:permitted_params) do
     %i[funding_type]
   end

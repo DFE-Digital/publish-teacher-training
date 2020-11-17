@@ -27,7 +27,7 @@ RSpec.describe "POST /providers/:provider_code/courses/:course_code" do
   let(:recruitment_cycle) { find_or_create :recruitment_cycle }
   let(:user)              { create :user, organisations: [organisation] }
   let(:payload)           { { email: user.email } }
-  let(:token)             { build_jwt :apiv2, payload: payload }
+  let(:credentials)       { encode_to_credentials(payload) }
 
   let(:course)            {
     build :course,
@@ -40,10 +40,6 @@ RSpec.describe "POST /providers/:provider_code/courses/:course_code" do
   let(:subject) { find_or_create(:primary_subject) }
 
   let(:age_range_in_years) { "3_to_7" }
-
-  let(:credentials) do
-    ActionController::HttpAuthentication::Token.encode_credentials(token)
-  end
   let(:json_data) { JSON.parse(response.body)["errors"] }
 
   context "with a valid age range" do

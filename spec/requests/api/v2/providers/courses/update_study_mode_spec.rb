@@ -24,7 +24,7 @@ describe "PATCH /providers/:provider_code/courses/:course_code" do
   let(:provider)          { create :provider, organisations: [organisation], sites: [site] }
   let(:user)              { create :user, organisations: [organisation] }
   let(:payload)           { { email: user.email } }
-  let(:token)             { build_jwt :apiv2, payload: payload }
+  let(:credentials)       { encode_to_credentials(payload) }
 
   let(:course)            {
     create :course,
@@ -38,10 +38,6 @@ describe "PATCH /providers/:provider_code/courses/:course_code" do
   let(:site_status4) { build(:site_status, :findable, :with_no_vacancies, site: site) }
   let(:site) { build(:site) }
   let(:study_mode) { :full_time_or_part_time }
-
-  let(:credentials) do
-    ActionController::HttpAuthentication::Token.encode_credentials(token)
-  end
 
   let(:permitted_params) do
     %i[study_mode]

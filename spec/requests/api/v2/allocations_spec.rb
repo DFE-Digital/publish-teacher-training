@@ -115,9 +115,7 @@ RSpec.describe "/api/v2/allocations/<id>", type: :request do
     @user = create(:user)
     @user.organisations << @accredited_body.organisation
     payload = { email: @user.email }
-    token = JWT.encode payload, Settings.authentication.secret, Settings.authentication.algorithm
-
-    @credentials = ActionController::HttpAuthentication::Token.encode_credentials(token)
+    @credentials = encode_to_credentials(payload)
   end
 
   def given_i_am_an_authenticated_user_from_another_accredited_body
@@ -125,9 +123,7 @@ RSpec.describe "/api/v2/allocations/<id>", type: :request do
     @another_accredited_body = create(:provider, :accredited_body, recruitment_cycle: allocation_recruitment_cycle)
     @user.organisations << @another_accredited_body.organisation
     payload = { email: @user.email }
-    token = JWT.encode payload, Settings.authentication.secret, Settings.authentication.algorithm
-
-    @credentials = ActionController::HttpAuthentication::Token.encode_credentials(token)
+    @credentials =  encode_to_credentials(payload)
   end
 
   def given_an_allocation_has_been_created_by_the_accredited_body_for_the_training_provider

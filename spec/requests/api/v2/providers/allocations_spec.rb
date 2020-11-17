@@ -108,9 +108,7 @@ RSpec.describe "/api/v2/providers/<accredited_body_code>/allocations", type: :re
     @user = create(:user)
     @user.organisations << @accredited_body.organisation
     payload = { email: @user.email }
-    token = JWT.encode payload, Settings.authentication.secret, Settings.authentication.algorithm
-
-    @credentials = ActionController::HttpAuthentication::Token.encode_credentials(token)
+    @credentials = encode_to_credentials(payload)
   end
 
   def when_valid_parameters_are_posted_with_unspecified_number_of_places

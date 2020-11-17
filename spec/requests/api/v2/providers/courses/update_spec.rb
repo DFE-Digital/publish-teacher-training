@@ -19,14 +19,10 @@ describe "PATCH /providers/:provider_code/courses/:course_code" do
   let(:provider) { create(:provider, organisations: [organisation], recruitment_cycle: recruitment_cycle) }
   let(:user) { create :user, organisations: [organisation] }
   let(:payload) { { email: user.email } }
-  let(:token) { build_jwt :apiv2, payload: payload }
+  let(:credentials) { encode_to_credentials(payload) }
+
   let(:course) { create :course, provider: provider }
   let(:update_enrichment) { build :course_enrichment, **enrichment_attributes }
-
-  let(:credentials) do
-    ActionController::HttpAuthentication::Token.encode_credentials(token)
-  end
-
   let(:enrichment_attributes) do
     {
       about_course: "new about course",

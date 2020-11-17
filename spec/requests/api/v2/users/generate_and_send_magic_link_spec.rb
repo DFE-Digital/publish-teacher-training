@@ -3,16 +3,7 @@ require "rails_helper"
 describe "PATCH /api/v2/users/generate_and_send_magic_link", type: :request do
   let(:user)    { create(:user) }
   let(:payload) { { email: user.email } }
-
-  let(:token) do
-    JWT.encode payload,
-               Settings.authentication.secret,
-               Settings.authentication.algorithm
-  end
-
-  let(:credentials) do
-    ActionController::HttpAuthentication::Token.encode_credentials(token)
-  end
+  let(:credentials) { encode_to_credentials(payload) }
 
   def perform_request
     patch(

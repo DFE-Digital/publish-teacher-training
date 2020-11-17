@@ -5,14 +5,7 @@ describe "API v2", type: :request do
     let(:user) { create(:user, organisations: [organisation]) }
     let(:organisation) { create(:organisation) }
     let(:payload) { { email: user.email } }
-    let(:token) do
-      JWT.encode payload,
-                 Settings.authentication.secret,
-                 Settings.authentication.algorithm
-    end
-    let(:credentials) do
-      ActionController::HttpAuthentication::Token.encode_credentials(token)
-    end
+    let(:credentials) { encode_to_credentials(payload) }
 
     subject { response }
 
