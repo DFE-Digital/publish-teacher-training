@@ -1,7 +1,7 @@
 name: Database Restore
 
 on:
-  schedule: # 04:00 UTC Mon-Friday
+  schedule: # 04:00 UTC Mon-Fri
     - cron: '0 4 * * 1-5'
 
 jobs:
@@ -50,3 +50,11 @@ jobs:
       run: cf conduit ${POSTGRES_SERVICE_INSTANCE} -- psql < db_backup.sql
       env:
         POSTGRES_SERVICE_INSTANCE: teacher-training-api-postgres-${{ matrix.environment }}
+
+    - name: Upload a Build Artifact
+      uses: actions/upload-artifact@v2.2.1
+      if: ${{ always() }}
+      with:
+        name: db_backup_${{ matrix.environment }}
+        path: db_backup.sql
+        retention-days: 30
