@@ -4,6 +4,8 @@ variable web_app_instances {}
 
 variable web_app_memory {}
 
+variable web_app_host_name {}
+
 variable worker_app_instances {}
 
 variable worker_app_memory {}
@@ -29,4 +31,5 @@ locals {
   postgres_params = {
     enable_extensions = ["pg_buffercache", "pg_stat_statements", "btree_gin", "btree_gist"]
   }
+  web_app_routes = [cloudfoundry_route.web_app_service_gov_uk_route, cloudfoundry_route.web_app_cloudapps_digital_route]
 }

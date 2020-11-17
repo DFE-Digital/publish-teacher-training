@@ -36,6 +36,7 @@ module paas {
   cf_space                  = var.cf_space
   app_environment           = var.paas_app_environment
   docker_image              = var.paas_docker_image
+  web_app_host_name         = var.paas_web_app_host_name
   web_app_memory            = var.paas_web_app_memory
   web_app_instances         = var.paas_web_app_instances
   worker_app_instances      = var.paas_worker_app_instances

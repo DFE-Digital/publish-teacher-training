@@ -22,6 +22,8 @@ variable paas_redis_service_plan {}
 
 variable paas_app_environment {}
 
+variable paas_web_app_host_name {}
+
 variable paas_app_config { type = map }
 
 variable paas_app_secrets_file { default = "workspace_variables/app_secrets.yml" }
