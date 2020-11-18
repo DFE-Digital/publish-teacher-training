@@ -1,5 +1,9 @@
-data cloudfoundry_domain local {
+data cloudfoundry_domain london_cloudapps_digital {
   name = "london.cloudapps.digital"
+}
+
+data cloudfoundry_domain api_publish_service_gov_uk {
+  name = "api.publish-teacher-training-courses.service.gov.uk"
 }
 
 data cloudfoundry_org org {
