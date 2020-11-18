@@ -10,14 +10,16 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_10_13_130023) do
+ActiveRecord::Schema.define(version: 2020_11_13_114332) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
   enable_extension "btree_gist"
   enable_extension "pg_buffercache"
   enable_extension "pg_stat_statements"
+  enable_extension "pgcrypto"
   enable_extension "plpgsql"
+  enable_extension "uuid-ossp"
 
   create_table "__EFMigrationsHistory", primary_key: "MigrationId", id: :string, limit: 150, force: :cascade do |t|
     t.string "ProductVersion", limit: 32, null: false
@@ -113,10 +115,12 @@ ActiveRecord::Schema.define(version: 2020_10_13_130023) do
     t.date "applications_open_from"
     t.boolean "is_send", default: false
     t.string "level"
+    t.uuid "uuid", default: -> { "uuid_generate_v4()" }, null: false
     t.index ["accredited_body_code"], name: "index_course_on_accredited_body_code"
     t.index ["changed_at"], name: "index_course_on_changed_at", unique: true
     t.index ["discarded_at"], name: "index_course_on_discarded_at"
     t.index ["provider_id", "course_code"], name: "IX_course_provider_id_course_code", unique: true
+    t.index ["uuid"], name: "index_courses_unique_uuid", unique: true
   end
 
   create_table "course_enrichment", id: :serial, force: :cascade do |t|

@@ -143,6 +143,7 @@ describe "GET v3/recruitment_cycle/:recruitment_cycle_year/providers/:provider_c
             "age_range_in_years" => course.age_range_in_years,
             "accrediting_provider" => nil,
             "accredited_body_code" => nil,
+            "uuid" => course.uuid,
           },
           "relationships" => {
             "accrediting_provider" => { "meta" => { "included" => false } },
