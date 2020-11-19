@@ -1,0 +1,32 @@
+name: Smoke Tests
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'The environment to run tests against (qa, staging or production)'
+        required: true
+
+jobs:
+  smoke_tests:
+    name: smoke-tests-${{ github.event.inputs.environment }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: softprops/turnstyle@v1
+        name: Wait for other runs
+        env:
+          GITHUB_TOKEN: ${{ secrets.ACTIONS_API_ACCESS_TOKEN }}
+
+      - name: Smoke Tests ${{ github.event.inputs.environment }}
+        run: echo "Nothing to run yet 🚀"
+
+      - name: 'Nofiy #twd_publish_register_tech on failure'
+        if: failure()
+        uses: rtCamp/action-slack-notify@master
+        env:
+          SLACK_CHANNEL: twd_publish_register_tech
+          SLACK_COLOR: '#ef5343'
+          SLACK_ICON_EMOJI: ':github-logo:'
+          SLACK_USERNAME: Teacher Training API
+          SLACK_TITLE: Smoke tests failure
+          SLACK_MESSAGE: ':alert: Smoke tests failure on ${{ github.event.inputs.environment }} :sadparrot:'
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
