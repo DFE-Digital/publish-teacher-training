@@ -61,8 +61,10 @@ RSpec.describe API::Public::V1::CoursesController do
           before do
             get :index, params: {
               recruitment_cycle_year: recruitment_cycle.year,
-              page: 2,
-              per_page: 5,
+              page: {
+                page: 2,
+                per_page: 5,
+              },
             }
           end
 
@@ -75,8 +77,10 @@ RSpec.describe API::Public::V1::CoursesController do
           before do
             get :index, params: {
               recruitment_cycle_year: recruitment_cycle.year,
-              page: 5,
-              per_page: 5,
+              page: {
+                page: 5,
+                per_page: 5,
+              },
             }
           end
 

@@ -20,7 +20,7 @@ module API
         end
 
         def per_page
-          [(params[:per_page] || default_per_page).to_i, max_per_page].min
+          [(per_page_parameter || default_per_page).to_i, max_per_page].min
         end
 
         def default_per_page
@@ -32,7 +32,23 @@ module API
         end
 
         def page
-          (params[:page] || 1).to_i
+          (page_parameter || 1).to_i
+        end
+
+        def page_parameter
+          return params[:page][:page] if page_is_nested?
+
+          params[:page]
+        end
+
+        def per_page_parameter
+          return params[:page][:per_page] if page_is_nested?
+
+          params[:per_page]
+        end
+
+        def page_is_nested?
+          params[:page].is_a?(ActionController::Parameters)
         end
       end
     end
