@@ -1,7 +1,7 @@
 #PaaS
 cf_space                   = "bat-prod"
 paas_app_environment       = "prod"
-paas_web_app_host_name     = "www"
+paas_web_app_host_name     = null
 paas_web_app_instances     = 2
 paas_web_app_memory        = 512
 paas_worker_app_instances  = 2
