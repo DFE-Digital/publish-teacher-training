@@ -21,13 +21,13 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Start ${{ github.event.inputs.environment }} Deployment
-        uses: bobheadxi/deployments@v0.4.2
+        uses: bobheadxi/deployments@master
         id: deployment
         with:
           step: start
           token: ${{ secrets.GITHUB_TOKEN }}
-          env: ${{ github.event.inputs.environment }}
-          ref: ${{ github.event.inputs.sha }}
+          env:   ${{ github.event.inputs.environment }}
+          ref:   ${{ github.event.inputs.sha }}
 
       - name: Checkout
         uses: actions/checkout@v2
@@ -71,21 +71,38 @@ jobs:
           TF_VAR_statuscake_username: ${{ secrets.STATUSCAKE_USERNAME }}
           TF_VAR_statuscake_password: ${{ secrets.STATUSCAKE_API_KEY }}
 
+      - name: Trigger ${{ env.DEPLOY_ENV }} Smoke Tests
+        uses: benc-uk/workflow-dispatch@v1
+        with:
+          workflow: Smoke Tests
+          token:    ${{ secrets.ACTIONS_API_ACCESS_TOKEN }}
+          inputs:   '{"environment": "${{ env.DEPLOY_ENV }}"}'
+
+      - name: Wait for smoke tests
+        id: wait_for_smoke_tests
+        uses: fountainhead/action-wait-for-check@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          ref:   ${{ github.ref }}
+          checkName: smoke-tests-${{ env.DEPLOY_ENV }} 
+          timeoutSeconds:  300
+          intervalSeconds: 15
+
       - name: Trigger ${{ env.NEXT_ENV }} Deployment
-        if: ${{ success() && env.NEXT_ENV != '' && github.ref == 'refs/heads/master' }}
-        uses: benc-uk/workflow-dispatch@v1.1
+        if: ${{ steps.wait_for_smoke_tests.outputs.conclusion == 'success' && env.NEXT_ENV != '' && github.ref == 'refs/heads/master' }}
+        uses: benc-uk/workflow-dispatch@v1
         with:
           workflow: Deploy
-          token: ${{ secrets.ACTIONS_API_ACCESS_TOKEN }}
-          inputs: '{"environment": "${{ env.NEXT_ENV }}", "sha": "${{ github.event.inputs.sha }}"}'
+          token:    ${{ secrets.ACTIONS_API_ACCESS_TOKEN }}
+          inputs:  '{"environment": "${{ env.NEXT_ENV }}", "sha": "${{ github.event.inputs.sha }}"}'
 
       - name: Update ${{ github.event.inputs.environment }} status
         if: ${{ always() }}
-        uses: bobheadxi/deployments@v0.4.2
+        uses: bobheadxi/deployments@master
         with:
-          step: finish
-          token: ${{ secrets.GITHUB_TOKEN }}
-          env: ${{ github.event.inputs.environment }}
+          step:   finish
+          token:  ${{ secrets.GITHUB_TOKEN }}
+          env:    ${{ github.event.inputs.environment }}
+          ref:    ${{ github.event.inputs.sha }}
           status: ${{ job.status }}
           deployment_id: ${{ steps.deployment.outputs.deployment_id }}
-          ref: ${{ github.event.inputs.sha }}
