@@ -8,6 +8,5 @@ Raven.configure do |config|
 
   config.sanitize_fields = Rails.application.config.filter_parameters.map(&:to_s)
 
-  commit_sha = File.read(Rails.root.join("COMMIT_SHA")).strip
-  config.release = commit_sha
+  config.release = ENV["COMMIT_SHA"]
 end

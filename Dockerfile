@@ -17,6 +17,8 @@ RUN bundle exec middleman build --build-dir=../public
 
 FROM ruby:2.7.2-alpine
 
+ARG COMMIT_SHA
+
 RUN apk add --update --no-cache tzdata && \
     cp /usr/share/zoneinfo/Europe/London /etc/localtime && \
     echo "Europe/London" > /etc/timezone
@@ -25,6 +27,7 @@ RUN apk add --update --no-cache --virtual runtime-dependances \
  postgresql-dev git ncurses
 
 ENV APP_HOME /app
+
 RUN mkdir $APP_HOME
 WORKDIR $APP_HOME
 
@@ -39,5 +42,7 @@ RUN apk add --update --no-cache --virtual build-dependances \
 ADD . $APP_HOME/
 
 COPY --from=middleman /public/ $APP_HOME/public/
+
+ENV COMMIT_SHA=${COMMIT_SHA}
 
 CMD bundle exec rails db:migrate:ignore_concurrent_migration_exceptions && bundle exec rails server -b 0.0.0.0
