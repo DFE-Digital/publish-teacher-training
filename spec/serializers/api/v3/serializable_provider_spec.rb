@@ -14,4 +14,6 @@ describe API::V3::SerializableProvider do
   it { should have_attribute(:provider_code).with_value(provider.provider_code) }
   it { should have_attribute(:provider_name).with_value(provider.provider_name) }
   it { should have_attribute(:recruitment_cycle_year).with_value(provider.recruitment_cycle.year) }
+  it { should have_attribute(:latitude).with_value(provider.latitude) }
+  it { should have_attribute(:longitude).with_value(provider.longitude) }
 end
