@@ -144,6 +144,7 @@ describe "GET v3/recruitment_cycle/:recruitment_cycle_year/providers/:provider_c
             "accrediting_provider" => nil,
             "accredited_body_code" => nil,
             "uuid" => course.uuid,
+            "program_type" => course.program_type,
           },
           "relationships" => {
             "accrediting_provider" => { "meta" => { "included" => false } },
