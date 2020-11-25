@@ -150,7 +150,7 @@ GEM
       factory_bot (~> 6.1.0)
       railties (>= 5.0.0)
     fakefs (1.2.2)
-    faker (2.14.0)
+    faker (2.15.1)
       i18n (>= 1.6, < 2)
     faraday (1.1.0)
       multipart-post (>= 1.2, < 3)
