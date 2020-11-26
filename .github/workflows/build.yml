@@ -84,10 +84,10 @@ jobs:
         GIT_BRANCH: ${{env.BRANCH_TAG}}
         CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
 
-    - name: Trigger QA Deployment
+    - name: Trigger Deployment
       if: ${{ success() }}
       uses: benc-uk/workflow-dispatch@v1
       with:
         workflow: Deploy
         token: ${{ secrets.ACTIONS_API_ACCESS_TOKEN  }}
-        inputs: '{"environment": "qa", "sha": "${{ env.GIT_SHA_SHORT }}"}'
+        inputs: '{"qa": "true", "staging": "true", "production": "true", "sha": "${{ env.GIT_SHA_SHORT }}"}'

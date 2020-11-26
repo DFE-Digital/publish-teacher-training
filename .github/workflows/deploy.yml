@@ -3,30 +3,52 @@ name: Deploy
 on:
   workflow_dispatch:
     inputs:
-      environment:
-        description: 'The environment to deploy to eg: qa, staging or production'
+      qa:
+        description: Deploy to qa?
+        default: 'true'
+        required: true
+      staging:
+        description: Deploy to staging?
+        default: 'false'
+        required: true
+      production:
+        description: Deploy to production?
+        default: 'false'
         required: true
       sha:
         description: Commit sha to be deployed
         required: true
 
 jobs:
-  deploy: 
-    name: deploy ${{ github.event.inputs.environment }}
+  prepare-matrix:
+    name: Prepare Environment Matrix
     runs-on: ubuntu-latest
+    outputs:
+      environments: ${{ steps.select-environments.outputs.environments }}
+    steps:
+      - id:   select-environments
+        uses: DFE-Digital/bat-infrastructure/actions/prepare-environment-matrix@main
+
+  deploy: 
+    name: ${{ matrix.environment }} Deployment
+    runs-on: ubuntu-latest
+    needs: [prepare-matrix]
+    strategy:
+      max-parallel: 1
+      matrix: ${{ fromJson(needs.prepare-matrix.outputs.environments) }}
     steps:
       - uses: softprops/turnstyle@v1
         name: Wait for other inprogress deployment runs
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Start ${{ github.event.inputs.environment }} Deployment
+      - name: Start ${{ matrix.environment }} Deployment
         uses: bobheadxi/deployments@master
         id: deployment
         with:
           step: start
           token: ${{ secrets.GITHUB_TOKEN }}
-          env:   ${{ github.event.inputs.environment }}
+          env:   ${{ matrix.environment }}
           ref:   ${{ github.event.inputs.sha }}
 
       - name: Checkout
@@ -37,19 +59,13 @@ jobs:
         with:
           terraform_version: 0.13.5
 
-      - name: Set NEXT_DEPLOY_ENV variable
+      - name: Set Environment variables
         run: |
-          case $DEPLOY_ENV in
-            qa) next_env=staging ;;
-            staging) next_env=production ;;
-          esac
-
           echo "DOCKER_IMAGE=$DOCKER_IMAGE" >> $GITHUB_ENV
           echo "DEPLOY_ENV=$DEPLOY_ENV" >> $GITHUB_ENV
-          echo "NEXT_ENV=$next_env" >> $GITHUB_ENV
         env:
           DOCKER_IMAGE: ${{ format('dfedigital/teacher-training-api:paas-{0}', github.event.inputs.sha) }}
-          DEPLOY_ENV: ${{ github.event.inputs.environment }}
+          DEPLOY_ENV: ${{ matrix.environment }}
 
       - name: Download app secrets file
         working-directory: terraform/workspace_variables
@@ -88,21 +104,13 @@ jobs:
           timeoutSeconds:  300
           intervalSeconds: 15
 
-      - name: Trigger ${{ env.NEXT_ENV }} Deployment
-        if: ${{ steps.wait_for_smoke_tests.outputs.conclusion == 'success' && env.NEXT_ENV != '' && github.ref == 'refs/heads/master' }}
-        uses: benc-uk/workflow-dispatch@v1
-        with:
-          workflow: Deploy
-          token:    ${{ secrets.ACTIONS_API_ACCESS_TOKEN }}
-          inputs:  '{"environment": "${{ env.NEXT_ENV }}", "sha": "${{ github.event.inputs.sha }}"}'
-
-      - name: Update ${{ github.event.inputs.environment }} status
+      - name: Update ${{ matrix.environment }} status
         if: ${{ always() }}
         uses: bobheadxi/deployments@master
         with:
           step:   finish
           token:  ${{ secrets.GITHUB_TOKEN }}
-          env:    ${{ github.event.inputs.environment }}
+          env:    ${{ matrix.environment }}
           ref:    ${{ github.event.inputs.sha }}
           status: ${{ job.status }}
           deployment_id: ${{ steps.deployment.outputs.deployment_id }}
