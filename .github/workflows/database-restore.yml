@@ -1,0 +1,95 @@
+name: Database Backup and Restore
+
+on:
+  schedule: # 03:00 UTC Mon-Fri
+    - cron: '0 3 * * 1-5'
+
+jobs:
+  backup:
+    name: Sanitise Production Database Backup
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:11.10
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: postgres
+        ports:
+        - 5432:5432
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+
+    steps:
+      - name: Checkout DBScripts Repository
+        run: git clone ${{ secrets.AZURE_REPOSITORY }} .
+
+      - uses: DFE-Digital/bat-infrastructure/actions/setup-cf-cli@main
+        name: Setup cf cli
+        with:
+         CF_USERNAME: ${{ secrets.CF_USERNAME_PRODUCTION }}
+         CF_PASSWORD: ${{ secrets.CF_PASSWORD_PRODUCTION }}
+         CF_SPACE_NAME: bat-prod
+         INSTALL_CONDUIT: true
+
+      - name: Backup Teacher Training API Prod Database
+        run: cf conduit teacher-training-api-postgres-prod -- pg_dump --encoding utf8 --clean --no-owner --if-exists -f prod_backup.sql
+      
+      - name: Sanitise the Database backup
+        run: |
+          echo "::group::Restore backup to intermediate database"
+          createdb ${DATABASE_NAME} && psql -f prod_backup.sql -d ${DATABASE_NAME}
+          echo "::endgroup::"
+
+          echo "::group::Clear user data"
+          psql -d ${DATABASE_NAME} -f dbBackupScripts/sanitize_db.sql
+          echo "::endgroup::"
+
+          echo "::group::Integration setup"
+          psql -d ${DATABASE_NAME} -f dbBackupScripts/integration_setup.sql
+          echo "::endgroup::"
+          
+          echo "::debug::Remove prod_backup.sql"
+          rm prod_backup.sql
+          
+          echo "::group::Backup Sanitised Database"
+          pg_dump --encoding utf8 --clean --no-owner --if-exists -d ${DATABASE_NAME} -f backup_sanitised.sql
+          echo "::endgroup::"
+        env:
+          DATABASE_NAME: teacher_training_api
+          PGUSER:  postgres
+          PGPASSWORD: postgres
+          PGHOST: localhost
+          PGPORT: 5432
+
+      - name: Upload Sanitised Backup
+        uses: actions/upload-artifact@v2
+        with:
+          name: backup_sanitised
+          path: backup_sanitised.sql
+          retention-days: 7
+
+  restore:
+   needs: [backup]
+   runs-on: ubuntu-latest
+   strategy:
+     fail-fast: false
+     matrix:
+       environment: [qa, staging]
+   steps:
+      - uses: DFE-Digital/bat-infrastructure/actions/setup-cf-cli@main
+        name: Setup cf cli
+        with:
+         CF_USERNAME: ${{ secrets[format('CF_USERNAME_{0}', matrix.environment)] }}
+         CF_PASSWORD: ${{ secrets[format('CF_PASSWORD_{0}', matrix.environment)] }}
+         CF_SPACE_NAME: bat-${{ matrix.environment }}
+         INSTALL_CONDUIT: true
+
+      - name: Download Sanitised Backup
+        uses: actions/download-artifact@v2
+        with:
+          name: backup_sanitised
+
+      - name: Restore backup to ${{ matrix.environment }}
+        run: cf conduit ${POSTGRES_SERVICE_INSTANCE} -- psql < backup_sanitised.sql
+        env:
+          POSTGRES_SERVICE_INSTANCE: teacher-training-api-postgres-${{ matrix.environment }}
