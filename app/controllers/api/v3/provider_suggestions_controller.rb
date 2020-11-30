@@ -14,6 +14,8 @@ module API
         render(
           jsonapi: found_providers,
           class: { Provider: SerializableProvider },
+          fields: { providers: %i[provider_code provider_name provider_type
+                                  latitude longitude recruitment_cycle_year] },
         )
       end
 

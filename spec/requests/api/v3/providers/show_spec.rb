@@ -42,6 +42,7 @@ describe "GET v3/recruitment_cycle/:recruitment_cycle_year/providers/:provider_c
         "attributes" => {
           "provider_code" => provider.provider_code,
           "provider_name" => provider.provider_name,
+          "provider_type" => provider.provider_type,
           "accredited_body?" => false,
           "train_with_us" => provider.train_with_us,
           "train_with_disability" => provider.train_with_disability,
@@ -114,6 +115,7 @@ describe "GET v3/recruitment_cycle/:recruitment_cycle_year/providers/:provider_c
           "attributes" => {
             "provider_code" => provider.provider_code,
             "provider_name" => provider.provider_name,
+            "provider_type" => provider.provider_type,
             "accredited_body?" => false,
             "train_with_us" => provider.train_with_us,
             "train_with_disability" => provider.train_with_disability,
