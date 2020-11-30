@@ -27,7 +27,9 @@ describe "GET v3/recruitment_cycle/:recruitment_cycle_year/providers/:provider_c
            accrediting_provider_enrichments: accrediting_provider_enrichments,
            courses: courses,
            contacts: [contact],
-           ucas_preferences: ucas_preferences)
+           ucas_preferences: ucas_preferences,
+           latitude: 0.1,
+           longitude: 0.2)
   end
   let(:contact) { build(:contact) }
   let(:ucas_preferences) { build(:provider_ucas_preference) }
@@ -58,6 +60,8 @@ describe "GET v3/recruitment_cycle/:recruitment_cycle_year/providers/:provider_c
             "provider_name" => accrediting_provider.provider_name,
             "description" => description,
           }],
+          "latitude" => provider.latitude,
+          "longitude" => provider.longitude,
         },
         "relationships" => {
           "sites" => {
@@ -128,6 +132,8 @@ describe "GET v3/recruitment_cycle/:recruitment_cycle_year/providers/:provider_c
               "provider_name" => accrediting_provider.provider_name,
               "description" => description,
             }],
+            "latitude" => provider.latitude,
+            "longitude" => provider.longitude,
           },
           "relationships" => {
             "sites" => {

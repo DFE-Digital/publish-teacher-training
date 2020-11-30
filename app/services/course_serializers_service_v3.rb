@@ -8,7 +8,7 @@ class CourseSerializersServiceV3
     further_education_subject_serializer: API::V2::SerializableSubject,
     site_status_serializer: API::V2::SerializableSiteStatus,
     site_serializer: API::V2::SerializableSite,
-    provider_serializer: API::V2::SerializableProvider,
+    provider_serializer: API::V3::SerializableProvider,
     provider_enrichment_serializer: API::V2::SerializableProviderEnrichment,
     recruitment_cycle_serializer: API::V2::SerializableRecruitmentCycle
   )
