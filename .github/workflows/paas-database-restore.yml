@@ -12,13 +12,13 @@ jobs:
       matrix:
         environment: [qa, staging]
     steps:
-    - name: Install cf client
-      run: |
-        curl -sL "${CF_CLI_URL}${CF_CLI_VERSION}" | sudo tar -zx -C /usr/local/bin && sudo mv /usr/local/bin/cf7 /usr/local/bin/cf
-        cf install-plugin conduit -f
-      env:
-        CF_CLI_VERSION: 7.1.0
-        CF_CLI_URL: https://packages.cloudfoundry.org/stable?release=linux64-binary&version=
+    - name: Setup cf cli 
+      uses: DFE-Digital/bat-infrastructure/actions/setup-cf-cli@main
+      with:
+        CF_USERNAME:   ${{ secrets[format('CF_USERNAME_{0}', matrix.environment)] }}
+        CF_PASSWORD:   ${{ secrets[format('CF_PASSWORD_{0}', matrix.environment)] }}
+        CF_SPACE_NAME: bat-${{ matrix.environment }}
+        INSTALL_CONDUIT: true
 
     - name: Install postgres client
       run: |
@@ -33,18 +33,6 @@ jobs:
         PGHOST:     ${{ secrets[format('AZURE_DATABASE_HOST_{0}', matrix.environment)] }}
         PGUSER:     ${{ secrets[format('AZURE_DATABASE_USER_{0}', matrix.environment)] }}
         PGPASSWORD: ${{ secrets[format('AZURE_DATABASE_PASSWORD_{0}', matrix.environment)] }}
-
-    - name: Setup cf space
-      run: |
-        cf api ${CF_API_URL}
-        cf auth
-        cf target -o ${CF_ORG_NAME} -s ${CF_SPACE_NAME}
-      env:
-        CF_USERNAME:   ${{ secrets[format('CF_USERNAME_{0}', matrix.environment)] }}
-        CF_PASSWORD:   ${{ secrets[format('CF_PASSWORD_{0}', matrix.environment)] }}
-        CF_API_URL:    ${{ secrets.CF_API_URL }}
-        CF_ORG_NAME:   ${{ secrets.CF_ORG_NAME }}
-        CF_SPACE_NAME: bat-${{ matrix.environment }}
 
     - name: Restore database
       run: cf conduit ${POSTGRES_SERVICE_INSTANCE} -- psql < db_backup.sql
