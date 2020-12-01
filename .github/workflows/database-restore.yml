@@ -20,8 +20,10 @@ jobs:
         options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
 
     steps:
-      - name: Checkout DBScripts Repository
-        run: git clone ${{ secrets.AZURE_REPOSITORY }} .
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
 
       - uses: DFE-Digital/bat-infrastructure/actions/setup-cf-cli@main
         name: Setup cf cli
@@ -41,11 +43,11 @@ jobs:
           echo "::endgroup::"
 
           echo "::group::Clear user data"
-          psql -d ${DATABASE_NAME} -f dbBackupScripts/sanitize_db.sql
+          psql -d ${DATABASE_NAME} -f db/scripts/sanitise.sql
           echo "::endgroup::"
 
           echo "::group::Integration setup"
-          psql -d ${DATABASE_NAME} -f dbBackupScripts/integration_setup.sql
+          psql -d ${DATABASE_NAME} -f db/scripts/integration_setup.sql
           echo "::endgroup::"
           
           echo "::debug::Remove prod_backup.sql"
