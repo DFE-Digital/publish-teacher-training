@@ -28,4 +28,6 @@ describe API::Public::V1::SerializableProvider do
   it { should have_attribute(:name).with_value(provider.provider_name) }
   it { should have_attribute(:street_address_1).with_value(provider.address1) }
   it { should have_attribute(:street_address_2).with_value(provider.address2) }
+  it { should have_attribute(:latitude).with_value(provider.latitude) }
+  it { should have_attribute(:longitude).with_value(provider.longitude) }
 end

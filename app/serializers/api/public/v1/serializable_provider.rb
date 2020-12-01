@@ -11,7 +11,9 @@ module API
                    :region_code,
                    :train_with_disability,
                    :train_with_us,
-                   :website
+                   :website,
+                   :latitude,
+                   :longitude
 
         attribute :accredited_body do
           @object.accredited_body?
