@@ -893,6 +893,17 @@
             "maxLength": 8,
             "example": "SK2 6AA"
           },
+          "latitude": {
+            "type": "float",
+            "description": "The latitude of the provider's address",
+            "example": "51.498161"
+          },
+          "longitude": {
+            "type": "float",
+            "description": "The longitude of the provider's address",
+            "example": "-0.129900"
+          },
+
           "name": {
             "type": "string",
             "description": "The name of the training provider.",
