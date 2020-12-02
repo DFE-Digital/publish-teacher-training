@@ -10,6 +10,12 @@ module API
           data { @course }
         end
 
+        belongs_to :location_status, unless: -> { @course.nil? } do
+          data do
+            @course.site_statuses.find_by(site_id: @object.id)
+          end
+        end
+
         belongs_to :provider
         belongs_to :recruitment_cycle
 
