@@ -9,7 +9,6 @@ module API
         attributes :publish,
                    :status
 
-
         attribute :vacancy_status do
           @object.vac_status
         end

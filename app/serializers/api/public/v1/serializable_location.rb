@@ -10,9 +10,12 @@ module API
           data { @course }
         end
 
-        belongs_to :location_status, unless: -> { @course.nil? } do
+        belongs_to :location_status, unless: -> { @location_statuses.nil? } do
           data do
-            @course.site_statuses.find_by(site_id: @object.id)
+            # NOTE: This is using arrays otherwise it results in incurring N + 1
+            @location_statuses.find do |location_status|
+              location_status.site_id == @object.id
+            end
           end
         end
 

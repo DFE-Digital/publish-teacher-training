@@ -7,7 +7,7 @@ module API
             def index
               render jsonapi: locations,
                      include: include_param,
-                     expose: { course: course },
+                     expose: { course: course, location_statuses: location_statuses },
                      class: API::Public::V1::SerializerService.call
             end
 
@@ -17,8 +17,12 @@ module API
               @locations ||= course&.sites
             end
 
+            def location_statuses
+              @location_statuses ||= course&.site_statuses
+            end
+
             def course
-              @course ||= provider.courses.find_by(course_code: params[:course_code])
+              @course ||= provider.courses.includes(site_statuses: [:site]).find_by(course_code: params[:course_code])
             end
 
             def provider
