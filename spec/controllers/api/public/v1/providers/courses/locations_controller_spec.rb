@@ -40,7 +40,7 @@ RSpec.describe API::Public::V1::Providers::Courses::LocationsController do
             recruitment_cycle_year: provider.recruitment_cycle.year,
             provider_code: provider.provider_code,
             course_code: course.course_code,
-            include: "recruitment_cycle,provider,course",
+            include: "recruitment_cycle,provider,course,location_status",
           }
         end
 
@@ -50,14 +50,16 @@ RSpec.describe API::Public::V1::Providers::Courses::LocationsController do
           recruitment_cycle_id = relationships.dig("recruitment_cycle", "data", "id").to_i
           provider_id = relationships.dig("provider", "data", "id").to_i
           course_id = relationships.dig("course", "data", "id").to_i
+          location_status_id = relationships.dig("location_status", "data", "id").to_i
 
           expect(json_response["data"][0]["relationships"].keys.sort).to eq(
-            %w[course provider recruitment_cycle],
+            %w[course location_status provider recruitment_cycle],
           )
 
           expect(recruitment_cycle_id).to eq(provider.recruitment_cycle.id)
           expect(provider_id).to eq(provider.id)
           expect(course_id).to eq(course.id)
+          expect(location_status_id).to eq(course.site_statuses.first.id)
         end
       end
     end

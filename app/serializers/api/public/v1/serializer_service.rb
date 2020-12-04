@@ -12,6 +12,7 @@ module API
             Provider: API::Public::V1::SerializableProvider,
             RecruitmentCycle: API::Public::V1::SerializableRecruitmentCycle,
             Site: API::Public::V1::SerializableLocation,
+            SiteStatus: API::Public::V1::SerializableLocationStatus,
           }
         end
       end

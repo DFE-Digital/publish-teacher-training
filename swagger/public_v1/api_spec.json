@@ -1503,10 +1503,11 @@
               "enum": [
                 "recruitment_cycle",
                 "provider",
-                "course"
+                "course",
+                "location_status"
               ]
             },
-            "example": "recruitment_cycle,provider"
+            "example": "recruitment_cycle,provider,course,location_status"
           }
         ],
         "x-curl-examples": [

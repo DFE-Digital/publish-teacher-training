@@ -29,9 +29,9 @@ describe "API" do
                 required: false,
                 description: "The associated data for this resource.",
                 schema: {
-                  enum: %w[recruitment_cycle provider course],
+                  enum: %w[recruitment_cycle provider course location_status],
                 },
-                example: "recruitment_cycle,provider"
+                example: "recruitment_cycle,provider,course,location_status"
 
       curl_example description: "Get the locations of a course",
                    command: "curl -X GET https://api.publish-teacher-training-courses.service.gov.uk/api/public/v1/recruitment_cycles/2020/providers/B20/courses/2N22/locations"
