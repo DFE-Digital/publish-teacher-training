@@ -11,7 +11,7 @@
 
 ### Native
 
-- Ruby 2.6.5
+- Ruby 2.7.2
 - postgresql-9.6 postgresql-contrib-9.6
 
 ### Docker
@@ -29,10 +29,11 @@ If you are going to login with a user who hasn't recieved the welcome email - yo
 
 ### Native
 
-0. If you haven't already, follow this [tutorial](https://gorails.com/setup) to setup your Rails environment, make sure to install PostgreSQL 9.6 as the database
-1. Run `bundle install` to install the gem dependencies.
-2. Run `bundle exec rails db:setup` to create a development and testing database.
-3. Run `bundle exec rails server` to launch the app on http://localhost:3001.
+0. If you haven't already, follow this [tutorial](https://gorails.com/setup) to setup your Rails environment, make sure to install PostgreSQL 9.6 as the database.
+1. Run `asdf install` to install the correct Ruby version. If you don’t have `asdf` on your system, follow the [Installation guide](https://asdf-vm.com/#/core-manage-asdf?id=install) and ensure the [asdf-ruby plugin](https://github.com/asdf-vm/asdf-ruby) is installed.
+2. Run `bundle install` to install the gem dependencies.
+3. Run `bundle exec rails db:setup` to create a development and testing database.
+4. Run `bundle exec rails server` to launch the app on http://localhost:3001.
 
 ### Docker
 
