@@ -23,11 +23,17 @@ jobs:
   prepare-matrix:
     name: Prepare Environment Matrix
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     outputs:
       environments: ${{ steps.select-environments.outputs.environments }}
     steps:
       - id:   select-environments
         uses: DFE-Digital/bat-infrastructure/actions/prepare-environment-matrix@main
+
+      - uses: softprops/turnstyle@v1
+        name: Wait for other inprogress deployment runs
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   deploy: 
     name: ${{ matrix.environment }} Deployment
@@ -37,11 +43,6 @@ jobs:
       max-parallel: 1
       matrix: ${{ fromJson(needs.prepare-matrix.outputs.environments) }}
     steps:
-      - uses: softprops/turnstyle@v1
-        name: Wait for other inprogress deployment runs
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
       - name: Start ${{ matrix.environment }} Deployment
         uses: bobheadxi/deployments@master
         id: deployment
