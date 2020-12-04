@@ -220,7 +220,9 @@ RSpec.describe API::Public::V1::ProvidersController do
                 created_at
                 name
                 street_address_1
-                street_address_2]
+                street_address_2
+                latitude
+                longitude]
           end
 
           before do
@@ -285,6 +287,8 @@ RSpec.describe API::Public::V1::ProvidersController do
             "created_at" => provider.created_at.iso8601,
             "street_address_1" => provider.address1,
             "street_address_2" => provider.address2,
+            "latitude" => provider.latitude,
+            "longitude" => provider.longitude,
           },
         }
       end
