@@ -289,6 +289,8 @@ GEM
       activesupport (>= 3.0.0)
     raabro (1.1.6)
     rack (2.2.3)
+    rack-attack (6.3.1)
+      rack (>= 1.0, < 3)
     rack-test (1.1.0)
       rack (>= 1.0, < 3)
     rails (6.0.3.4)
@@ -504,6 +506,7 @@ DEPENDENCIES
   pry-rails
   puma (~> 5.1)
   pundit
+  rack-attack
   rails (= 6.0.3.4)
   rails-controller-testing
   rails-erd

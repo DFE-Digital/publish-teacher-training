@@ -37,3 +37,5 @@ magic_link:
 skylight:
   enable: false
   authentication: please_change_me
+throttled: 
+  enabled: false

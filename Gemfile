@@ -112,6 +112,9 @@ gem "pg_search"
 # End-user application performance monitoring
 gem "skylight"
 
+# Rack middleware for blocking & throttling abusive requests
+gem "rack-attack"
+
 group :development, :test do
   # Prettyprint in console
   gem "awesome_print"
