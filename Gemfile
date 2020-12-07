@@ -189,6 +189,6 @@ group :test do
   gem "jsonapi-rspec"
   gem "rspec_junit_formatter"
   gem "shoulda-matchers", "~> 4.4"
-  gem "simplecov", "< 0.18", require: false
+  gem "simplecov", "< 0.21", require: false
   gem "webmock"
 end
