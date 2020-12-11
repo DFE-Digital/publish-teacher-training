@@ -12,6 +12,11 @@ jobs:
       DOCKER_IMAGE: dfedigital/teacher-training-api
 
     steps:
+    - uses: softprops/turnstyle@v1
+      name: Wait for other inprogress runs
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
     - uses: actions/checkout@v2
 
     - name: Get values for current commit
