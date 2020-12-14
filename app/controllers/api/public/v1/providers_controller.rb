@@ -3,13 +3,8 @@ module API
     module V1
       class ProvidersController < API::Public::V1::ApplicationController
         def index
-          providers = recruitment_cycle.providers
-          providers = if sort_by_provider_ascending?
-                        providers.by_name_ascending
-                      else
-                        providers.by_name_descending
-                      end
-          render jsonapi: paginate(providers), include: params[:include], class: API::Public::V1::SerializerService.call, fields: fields
+          render jsonapi: paginated_records,
+          include: params[:include], class: API::Public::V1::SerializerService.call, fields: fields
         end
 
         def show
@@ -26,6 +21,14 @@ module API
         end
 
       private
+
+        def pagy_scope
+          @pagy_scope ||= if sort_by_provider_ascending?
+                            recruitment_cycle.providers.by_name_ascending
+                          else
+                            recruitment_cycle.providers.by_name_descending
+                          end
+        end
 
         def recruitment_cycle
           @recruitment_cycle = RecruitmentCycle.find_by(

@@ -11,12 +11,32 @@ module API
           render jsonapi: nil, status: :not_found
         end
 
+        def jsonapi_pagination(collection)
+          collection.present? && pagy_scope.present? ? pagination_links : {}
+        end
+
       private
 
-        def paginate(scope)
-          _pagy, paginated_records = pagy(scope, items: per_page, page: page)
+      # child must define pagy_scope method for paginations related items
+        def pagy_scope; end
 
-          paginated_records
+        def pagy_results
+          @pagy_results ||= pagy(pagy_scope, items: per_page, page: page)
+        end
+
+        def paginated_records
+          @paginated_records ||= pagy_results.second
+        end
+
+        def pagination_links
+          meta = pagy_metadata(pagy_results.first, urls: true)
+
+          {
+            first: meta[:first_url],
+            last: meta[:last_url],
+            prev: meta[:prev].nil? ? nil : meta[:prev_url],
+            next: meta[:next].nil? ? nil : meta[:next_url],
+          }
         end
 
         def per_page
