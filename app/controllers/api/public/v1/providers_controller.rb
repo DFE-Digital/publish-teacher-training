@@ -2,10 +2,8 @@ module API
   module Public
     module V1
       class ProvidersController < API::Public::V1::ApplicationController
-        include PagyPagination
-
         def index
-          render jsonapi: paginated_records,
+          render jsonapi: paginate(providers),
           include: params[:include], class: API::Public::V1::SerializerService.call, fields: fields
         end
 
@@ -24,12 +22,12 @@ module API
 
       private
 
-        def pagy_scope
-          @pagy_scope ||= if sort_by_provider_ascending?
-                            recruitment_cycle.providers.by_name_ascending
-                          else
-                            recruitment_cycle.providers.by_name_descending
-                          end
+        def providers
+          @providers ||= if sort_by_provider_ascending?
+                           recruitment_cycle.providers.by_name_ascending
+                         else
+                           recruitment_cycle.providers.by_name_descending
+                         end
         end
 
         def recruitment_cycle

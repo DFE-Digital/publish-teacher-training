@@ -1,22 +1,19 @@
 module PagyPagination
   extend ActiveSupport::Concern
 
-  def jsonapi_pagination(collection)
-    collection.present? && pagy_scope.present? ? pagination_links : {}
+  def jsonapi_links
+    pagy_results.present? ? pagination_links : {}
+  end
+
+  def paginate(scope)
+    @pagy_results ||= pagy(scope, items: per_page, page: page)
+
+    pagy_results.second
   end
 
 private
 
-  # child must define pagy_scope method for paginations related items
-  def pagy_scope; end
-
-  def pagy_results
-    @pagy_results ||= pagy(pagy_scope, items: per_page, page: page)
-  end
-
-  def paginated_records
-    @paginated_records ||= pagy_results.second
-  end
+  attr_accessor :pagy_results
 
   def pagination_links
     meta = pagy_metadata(pagy_results.first, urls: true)

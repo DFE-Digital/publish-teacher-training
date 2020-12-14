@@ -3,10 +3,8 @@ module API
     module V1
       module Providers
         class CoursesController < API::Public::V1::ApplicationController
-          include PagyPagination
-
           def index
-            render jsonapi: paginated_records,
+            render jsonapi: paginate(courses),
               include: include_param,
               class: API::Public::V1::SerializerService.new.call
           end
@@ -19,8 +17,8 @@ module API
 
         private
 
-          def pagy_scope
-            @pagy_scope ||= CourseSearchService.call(filter: params[:filter],
+          def courses
+            @courses ||= CourseSearchService.call(filter: params[:filter],
                                                   course_scope: provider.courses)
           end
 
