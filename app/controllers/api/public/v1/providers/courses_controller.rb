@@ -3,6 +3,8 @@ module API
     module V1
       module Providers
         class CoursesController < API::Public::V1::ApplicationController
+          include PagyPagination
+
           def index
             render jsonapi: paginated_records,
               include: include_param,

@@ -2,6 +2,8 @@ module API
   module Public
     module V1
       class ProvidersController < API::Public::V1::ApplicationController
+        include PagyPagination
+
         def index
           render jsonapi: paginated_records,
           include: params[:include], class: API::Public::V1::SerializerService.call, fields: fields
