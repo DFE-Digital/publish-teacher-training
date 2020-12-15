@@ -6,13 +6,13 @@ module API
           def index
             render jsonapi: paginate(courses),
               include: include_param,
-              class: API::Public::V1::SerializerService.new.call
+              class: API::Public::V1::SerializerService.call
           end
 
           def show
             render jsonapi: course,
               include: include_param,
-              class: API::Public::V1::SerializerService.new.call
+              class: API::Public::V1::SerializerService.call
           end
 
         private
