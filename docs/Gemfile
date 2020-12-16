@@ -2,6 +2,8 @@
 # the following line to use "http://"
 source "https://rubygems.org"
 
+ruby "2.7.2"
+
 # Include the tech docs gem
 gem "govuk_tech_docs", git: "https://github.com/DFE-Digital/tech-docs-gem"
 

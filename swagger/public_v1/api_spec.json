@@ -1052,11 +1052,28 @@
         "description": "This schema provides metadata about a provider.",
         "type": "object",
         "properties": {
-          "name": {
+          "id": {
             "type": "string",
-            "example": "066"
+            "example": "15947"
           },
+          "type": {
+            "type": "string",
+            "example": "provider_suggestions"
+          },
+          "attributes": {
+            "$ref": "#/components/schemas/ProviderSuggestionAttributes"
+          }
+        }
+      },
+      "ProviderSuggestionAttributes": {
+        "description": "This schema is used to describe a provider.",
+        "type": "object",
+        "properties": {
           "code": {
+            "type": "string",
+            "example": "O66"
+          },
+          "name": {
             "type": "string",
             "example": "Oxford Brookes University"
           }

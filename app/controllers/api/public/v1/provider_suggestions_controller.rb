@@ -5,25 +5,23 @@ module API
         def index
           return render(status: :bad_request) if params[:query].nil? || params[:query].length < 3
 
-          render json: {
-            data: [
-              {
-                id: "O66",
-                type: "Oxford Brookes University",
-              },
-              {
-                id: "1DE",
-                type: "Oxfordshire Teacher Training",
-              },
-              {
-                id: "O33",
-                type: "Oxford University",
-              },
-            ],
-            jsonapi: {
-              version: "1.0",
-            },
-          }
+          found_providers = recruitment_cycle.providers
+                              .with_findable_courses
+                              .search_by_code_or_name(params[:query])
+                              .limit(10)
+
+          render(
+            jsonapi: found_providers,
+            class: { Provider: SerializableProviderSuggestion },
+            )
+        end
+
+      private
+
+        def recruitment_cycle
+          @recruitment_cycle = RecruitmentCycle.find_by(
+            year: params[:recruitment_cycle_year],
+          ) || RecruitmentCycle.current_recruitment_cycle
         end
       end
     end
