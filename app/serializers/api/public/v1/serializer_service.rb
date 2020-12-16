@@ -2,9 +2,7 @@ module API
   module Public
     module V1
       class SerializerService
-        def self.call
-          new.call
-        end
+        include ServicePattern
 
         def call
           {
@@ -13,6 +11,11 @@ module API
             RecruitmentCycle: API::Public::V1::SerializableRecruitmentCycle,
             Site: API::Public::V1::SerializableLocation,
             SiteStatus: API::Public::V1::SerializableLocationStatus,
+            Subject: API::Public::V1::SerializableSubject,
+            PrimarySubject: API::Public::V1::SerializableSubject,
+            SecondarySubject: API::Public::V1::SerializableSubject,
+            ModernLanguagesSubject: API::Public::V1::SerializableSubject,
+            FurtherEducationSubject: API::Public::V1::SerializableSubject,
           }
         end
       end

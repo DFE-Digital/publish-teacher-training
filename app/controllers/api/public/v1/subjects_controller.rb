@@ -3,37 +3,23 @@ module API
     module V1
       class SubjectsController < API::Public::V1::ApplicationController
         def index
-          render json: {
-            data: [
-              {
-                "id": "1",
-                "type": "Subject",
-                "attributes": {
-                  "name": "Primary",
-                  "code": "00",
-                  "bursary_amount": 9000,
-                  "early_career_payments": 2000,
-                  "scholarship": 1000,
-                  "subject_knowledge_enhancement_course_available": true,
-                },
-              },
-              {
-                "id": "13",
-                "type": "Subject",
-                "attributes": {
-                  "name": "Citizenship",
-                  "code": "09",
-                  "bursary_amount": nil,
-                  "early_career_payments": nil,
-                  "scholarship": nil,
-                  "subject_knowledge_enhancement_course_available": nil,
-                },
-              },
-            ],
-            jsonapi: {
-              version: "1.0",
-            },
-          }
+          subjects = Subject.active.includes(:financial_incentive)
+
+          if params["sort"] == "name"
+            subjects = subjects.order(:subject_name)
+          end
+          render jsonapi: subjects,
+                 class: API::Public::V1::SerializerService.call,
+                 include: params[:include],
+                 fields: fields
+        end
+
+        def fields
+          { subjects: subject_fields } if subject_fields.present?
+        end
+
+        def subject_fields
+          params.dig(:fields, :subjects)&.split(",")
         end
       end
     end
