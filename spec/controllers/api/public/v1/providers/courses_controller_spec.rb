@@ -34,22 +34,94 @@ RSpec.describe API::Public::V1::Providers::CoursesController do
       end
     end
 
-    describe "pagination" do
-      let(:provider) { create(:provider) }
+    context "with pagination" do
+      before do
+        provider.courses << build_list(:course, 5, provider: provider)
+      end
+
       let!(:courses) { create_list(:course, 3, provider: provider) }
-      let(:year) { courses[0].provider.recruitment_cycle.year }
 
       before do
         get :index, params: {
-          recruitment_cycle_year: year,
+          recruitment_cycle_year: recruitment_cycle.year,
           provider_code: provider.provider_code,
-          page: 2,
-          per_page: 2,
+          **pagination,
         }
       end
 
-      it "can pagingate to page 2" do
-        expect(JSON.parse(response.body)["data"].size).to eql(1)
+      let(:pagination) do
+        {
+          page: page,
+          per_page: 3,
+        }
+      end
+
+      context "when requested page is valid" do
+        let(:first_page) { 1 }
+        let(:last_page) { 3 }
+
+        let(:url_prefix) do
+          "http://test.host/api/public/v1/recruitment_cycles/#{recruitment_cycle.year}/providers/#{provider.provider_code}/courses?page="
+        end
+
+        context "page 1" do
+          let(:page) { first_page }
+
+          it "returns links" do
+            links = json_response["links"]
+
+            expect(links["first"]).to eq "#{url_prefix}#{first_page}&per_page=3"
+            expect(links["last"]).to eq "#{url_prefix}#{last_page}&per_page=3"
+            expect(links["prev"]).to be_nil
+            expect(links["next"]).to eq "#{url_prefix}#{page + 1}&per_page=3"
+          end
+        end
+
+        context "page 2" do
+          let(:page) { 2 }
+
+          it "returns links" do
+            links = json_response["links"]
+
+            expect(links["first"]).to eq "#{url_prefix}#{first_page}&per_page=3"
+            expect(links["last"]).to eq "#{url_prefix}#{last_page}&per_page=3"
+            expect(links["prev"]).to eq "#{url_prefix}#{page - 1}&per_page=3"
+            expect(links["next"]).to eq "#{url_prefix}#{page + 1}&per_page=3"
+          end
+        end
+
+        context "page 3" do
+          let(:page) { last_page }
+
+          it "returns links" do
+            links = json_response["links"]
+
+            expect(links["first"]).to eq "#{url_prefix}#{first_page}&per_page=3"
+            expect(links["last"]).to eq "#{url_prefix}#{last_page}&per_page=3"
+            expect(links["prev"]).to eq "#{url_prefix}#{page - 1}&per_page=3"
+            expect(links["next"]).to be_nil
+          end
+        end
+      end
+
+      describe "overflow" do
+        context "page 4" do
+          let(:page) { 4 }
+
+          it "returns no links" do
+            links = json_response["links"]
+
+            expect(links).to be_nil
+          end
+
+          it "returns a bad request response" do
+            expect(response).to have_http_status(:bad_request)
+          end
+
+          it "returns a friendly error message" do
+            expect(json_response["errors"][0]["detail"]).to eql(I18n.t("pagy.overflow"))
+          end
+        end
       end
     end
 
