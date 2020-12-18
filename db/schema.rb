@@ -17,7 +17,6 @@ ActiveRecord::Schema.define(version: 2020_11_13_114332) do
   enable_extension "btree_gist"
   enable_extension "pg_buffercache"
   enable_extension "pg_stat_statements"
-  enable_extension "pgcrypto"
   enable_extension "plpgsql"
   enable_extension "uuid-ossp"
 
