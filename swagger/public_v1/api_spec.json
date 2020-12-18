@@ -1916,6 +1916,20 @@
         "tags": [
           "subject_areas"
         ],
+        "parameters": [
+          {
+            "name": "include",
+            "in": "query",
+            "required": false,
+            "description": "The associated data for this resource.",
+            "schema": {
+              "enum": [
+                "subjects"
+              ]
+            },
+            "example": "subjects"
+          }
+        ],
         "x-curl-examples": [
           {
             "description": "Get all subject areas",

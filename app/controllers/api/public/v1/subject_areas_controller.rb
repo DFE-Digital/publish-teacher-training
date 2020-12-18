@@ -3,29 +3,11 @@ module API
     module V1
       class SubjectAreasController < API::Public::V1::ApplicationController
         def index
-          render json: {
-            data: [
-              {
-                id: "PrimarySubject",
-                type: "subject_areas",
-                attributes: {
-                  name: "Primary",
-                  typename: "PrimarySubject",
-                },
-              },
-              {
-                id: "SecondarySubject",
-                type: "subject_areas",
-                attributes: {
-                  name: "Secondary",
-                  typename: "SecondarySubject",
-                },
-              },
-            ],
-            jsonapi: {
-              version: "1.0",
-            },
-          }
+          render(
+            jsonapi: SubjectArea.active.includes(subjects: [:financial_incentive]),
+            include: params[:include],
+            class: API::Public::V1::SerializerService.call,
+          )
         end
       end
     end
