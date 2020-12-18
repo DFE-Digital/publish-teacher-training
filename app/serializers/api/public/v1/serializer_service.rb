@@ -12,6 +12,7 @@ module API
             Site: API::Public::V1::SerializableLocation,
             SiteStatus: API::Public::V1::SerializableLocationStatus,
             Subject: API::Public::V1::SerializableSubject,
+            SubjectArea: API::Public::V1::SerializableSubjectArea,
             PrimarySubject: API::Public::V1::SerializableSubject,
             SecondarySubject: API::Public::V1::SerializableSubject,
             ModernLanguagesSubject: API::Public::V1::SerializableSubject,
