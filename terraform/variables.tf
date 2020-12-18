@@ -28,11 +28,14 @@ variable paas_app_config { type = map }
 
 variable paas_app_secrets_file { default = "workspace_variables/app_secrets.yml" }
 
-variable statuscake_alerts { type = map }
+variable statuscake_alerts {
+  type    = map
+  default = {}
+}
 
-variable statuscake_username {}
+variable statuscake_username { default = "not-empty" }
 
-variable statuscake_password {}
+variable statuscake_password { default = "not-empty" }
 
 locals {
   cf_api_url                     = "https://api.london.cloud.service.gov.uk"
