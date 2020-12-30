@@ -1,0 +1,2 @@
+class GIASEstablishment < ApplicationRecord
+end

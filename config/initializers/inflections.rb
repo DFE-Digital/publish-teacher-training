@@ -23,4 +23,5 @@ ActiveSupport::Inflector.inflections do |inflect|
   inflect.acronym "MFL" # Modern foreign languages
   inflect.acronym "DFE" # Department for Education
   inflect.acronym "NCTL" # National College for Teaching and Leadership
+  inflect.acronym "GIAS" # Get Information About Schools
 end
