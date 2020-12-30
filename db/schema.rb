@@ -189,6 +189,12 @@ ActiveRecord::Schema.define(version: 2021_03_17_141543) do
     t.index ["subject_id"], name: "index_financial_incentive_on_subject_id"
   end
 
+  create_table "gias_establishment", force: :cascade do |t|
+    t.text "urn"
+    t.text "name"
+    t.text "postcode"
+  end
+
   create_table "nctl_organisation", id: :serial, force: :cascade do |t|
     t.text "name"
     t.text "nctl_id", null: false

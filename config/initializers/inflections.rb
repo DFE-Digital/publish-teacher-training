@@ -24,4 +24,5 @@ ActiveSupport::Inflector.inflections do |inflect|
   inflect.acronym "DFE" # Department for Education
   inflect.acronym "NCTL" # National College for Teaching and Leadership
   inflect.acronym "DfE"  # Department for Education
+  inflect.acronym "GIAS" # Get Information About Schools
 end
