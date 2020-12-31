@@ -6,6 +6,9 @@ ruby "2.7.2"
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem "rails", "6.1.3"
 
+# Transpile app-like JavaScript. Read more: https://github.com/rails/webpacker
+gem "webpacker", "~> 5.0"
+
 # Use PostgreSQL as the database for Active Record
 gem "pg"
 
@@ -162,6 +165,9 @@ group :development do
   gem "brakeman"
 
   gem "listen", ">= 3.0.5", "< 3.5"
+
+  # error handling
+  gem 'web-console', '>= 4.1.0'
 
   # Output scaffold commands based on schema
   gem "schema_to_scaffold"
