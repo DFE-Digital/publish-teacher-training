@@ -1,2 +1,4 @@
 ruby 2.7.2
 bundler 2.1.4
+yarn 1.12.3
+nodejs 12.18.3

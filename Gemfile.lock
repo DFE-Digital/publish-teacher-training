@@ -82,6 +82,7 @@ GEM
     audited (4.10.0)
       activerecord (>= 4.2, < 6.2)
     awesome_print (1.9.2)
+    bindex (0.8.1)
     bootsnap (1.7.2)
       msgpack (~> 1.0)
     brakeman (5.0.0)
@@ -299,6 +300,8 @@ GEM
     raabro (1.1.6)
     racc (1.5.2)
     rack (2.2.3)
+    rack-proxy (0.6.5)
+      rack
     rack-test (1.1.0)
       rack (>= 1.0, < 3)
     rails (6.1.3)
@@ -401,6 +404,7 @@ GEM
       activesupport (>= 3.2.1)
     semantic_logger (4.7.4)
       concurrent-ruby (~> 1.0)
+    semantic_range (2.3.1)
     sentry-raven (3.1.1)
       faraday (>= 1.0)
     shellany (0.0.1)
@@ -453,10 +457,20 @@ GEM
     uk_postcode (2.1.6)
     unicode-display_width (1.6.1)
     uniform_notifier (1.14.1)
+    web-console (4.1.0)
+      actionview (>= 6.0.0)
+      activemodel (>= 6.0.0)
+      bindex (>= 0.4.0)
+      railties (>= 6.0.0)
     webmock (3.12.1)
       addressable (>= 2.3.6)
       crack (>= 0.3.2)
       hashdiff (>= 0.4.0, < 2.0.0)
+    webpacker (5.2.1)
+      activesupport (>= 5.2)
+      rack-proxy (>= 0.6.1)
+      railties (>= 5.2)
+      semantic_range (>= 2.3.0)
     websocket-driver (0.7.3)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.5)
@@ -541,7 +555,9 @@ DEPENDENCIES
   timecop
   tzinfo-data
   uk_postcode
+  web-console (>= 4.1.0)
   webmock
+  webpacker (~> 5.0)
 
 RUBY VERSION
    ruby 2.7.2p137
