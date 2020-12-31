@@ -1,0 +1,7 @@
+<ul>
+<% @establishments.each do |establishment| %>
+    <li>[<%= establishment.urn %>] <%= establishment.name %></li>
+<% end %>
+</ul>
+
+<%== pagy_nav(@pagy) %>

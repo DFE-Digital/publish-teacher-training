@@ -15,6 +15,12 @@ Rails.application.routes.draw do
   get "/auth/dfe/callback", to: "sessions#callback"
   get "/auth/dfe/signout", to: "sessions#destroy"
 
+  namespace :gias do
+    get "/", to: redirect("/gias/establishments")
+
+    resources :establishments, param: :urn, only: :index
+  end
+
   namespace :api do
     namespace :v1 do
       scope "/(:recruitment_year)", constraints: { recruitment_year: /2021|2022/ } do
