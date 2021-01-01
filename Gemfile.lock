@@ -97,7 +97,7 @@ GEM
     connection_pool (2.2.3)
     crack (0.4.4)
     crass (1.0.6)
-    cri (2.15.10)
+    cri (2.15.11)
     database_cleaner (1.8.5)
     deep_merge (1.2.1)
     diff-lcs (1.4.4)
