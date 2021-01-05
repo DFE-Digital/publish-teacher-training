@@ -1,0 +1,53 @@
+%govuk-list--description {
+  @include govuk-clearfix;
+  margin-top: 0;
+}
+
+%govuk-list--description > dt {
+  @include govuk-font($size: 19, $weight: normal);
+  vertical-align: top;
+
+  @include mq ($from: desktop) {
+    clear: left;
+    float: left;
+    margin-bottom: govuk-spacing(1);
+    width: 30%;
+  }
+}
+
+%govuk-list--description > dd {
+  @include govuk-font($size: 19, $weight: normal);
+  margin: 0 0 govuk-spacing(2) 0;
+  vertical-align: top;
+
+  @include mq ($from: desktop) {
+    float: left;
+    margin-bottom: govuk-spacing(1);
+    width: 70%;
+  }
+
+  .govuk-details,
+  .govuk-details__summary {
+    margin-bottom: 0;
+  }
+
+  .govuk-details__text {
+    margin-bottom: govuk-spacing(2);
+  }
+}
+
+.govuk-list--description {
+  @extend %govuk-list--description;
+
+  &__label:after {
+    content: ":";
+    display: inline-block;
+  }
+
+  &__hint {
+    @include govuk-font($size: 16, $weight: normal);
+    color: $govuk-secondary-text-colour;
+    display: block;
+    margin-bottom: govuk-space(1);
+  }
+}
