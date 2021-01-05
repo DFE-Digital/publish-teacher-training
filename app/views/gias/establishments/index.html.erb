@@ -1,6 +1,10 @@
 <ul>
 <% @establishments.each do |establishment| %>
-    <li>[<%= establishment.urn %>] <%= establishment.name %></li>
+    <li>[<%= establishment.urn %>]
+        <%= link_to establishment.name,
+                    gias_establishment_path(
+                        urn: establishment.urn
+                    ) %></li>
 <% end %>
 </ul>
 

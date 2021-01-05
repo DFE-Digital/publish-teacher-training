@@ -1,0 +1,36 @@
+<h1><%= @provider.provider_name %></h1>
+
+<dl>
+    <dt>Code:</dt>
+    <dd><%= @provider.provider_code %></dd>
+
+    <dt>Postcode:</dt>
+    <dd>
+        <%= link_to @provider.postcode,
+         gias_postcode_path(postcode: @provider.postcode) %>
+    </dd>
+</dl>
+
+<% if @matches[:establishments].key? :postcode %>
+<h2>GIAS Establishment Postcode Matches</h2>
+
+<ul>
+<% @matches[:establishments][:postcode].each do |establishment| %>
+    <li>
+        <h3><%= link_to establishment.name, gias_establishment_path(establishment.urn) %></h3>
+    </li>
+<% end %>
+</ul>
+<% end %>
+
+<% if @matches[:establishments].key? :name %>
+<h2>GIAS Establishment Name Matches</h2>
+
+<ul>
+<% @matches[:establishments][:name].each do |establishment| %>
+    <li>
+        <h3><%= link_to establishment.name, gias_establishment_path(establishment.urn) %></h3>
+    </li>
+<% end %>
+</ul>
+<% end %>

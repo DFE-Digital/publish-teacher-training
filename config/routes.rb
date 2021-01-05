@@ -18,7 +18,10 @@ Rails.application.routes.draw do
   namespace :gias do
     get "/", to: redirect("/gias/establishments")
 
-    resources :establishments, param: :urn, only: :index
+    resources :establishments, param: :urn, only: [:index, :show]
+    resources :postcodes, param: :postcode, only: :show
+    resources :providers, only: [:index, :show]
+    resources :sites, only: :show
   end
 
   namespace :api do
