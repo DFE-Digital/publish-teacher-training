@@ -1,0 +1,41 @@
+<h1>Postcode: <%= @postcode %></h1>
+
+<h2>Matching Establishments</h2>
+
+<ul>
+<% @establishments.each do |establishment| %>
+    <li>
+        [<%= establishment.urn %>]
+        <%= link_to establishment.name,
+                    gias_establishment_path(urn: establishment.urn) %>
+    </li>
+<% end %>
+</ul>
+
+<h2>Maching Providers</h2>
+
+<ul>
+<% @providers.each do |provider| %>
+    <li>
+        [<%= provider.provider_code %>]
+        <%= link_to provider.provider_name,
+                    gias_provider_path(id: provider.id) %>
+    </li>
+<% end %>
+</ul>
+
+<h2>Maching Sites</h2>
+
+<ul>
+<% @sites.each do |site| %>
+    <li>
+        [<%= site.code %>]
+        <%= link_to site.location_name,
+                    gias_site_path(id: site.id) %>
+        (provider: [<%= site.provider.provider_code %>]
+        <%= link_to site.provider.provider_name,
+                    gias_provider_path(id: site.provider.id) %>
+        )
+    </li>
+<% end %>
+</ul>

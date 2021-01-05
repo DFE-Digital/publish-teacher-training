@@ -1,0 +1,9 @@
+<ul>
+<% @providers.each do |provider| %>
+    <li>[<%= provider.provider_code %>]
+        <%= link_to provider.provider_name,
+                    gias_provider_path(provider.id) %></li>
+<% end %>
+</ul>
+
+<%== pagy_nav(@pagy) %>

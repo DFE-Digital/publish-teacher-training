@@ -1,0 +1,32 @@
+<h1><%= @establishment.name %></h1>
+
+<dl>
+    <dt>URN:</dt>
+    <dd><%= @establishment.urn %></dd>
+
+    <dt>Postcode:</dt>
+    <dd>
+        <%= link_to @establishment.postcode,
+         gias_postcode_path(postcode: @establishment.postcode) %>
+    </dd>
+</dl>
+
+<h2>Site Postcode Matches</h2>
+
+<ul>
+<% @matches[:sites][:postcode].each do |site| %>
+    <li>
+        <h3><%= link_to site.location_name, gias_site_path(site.id) %></h3>
+
+        <dl>
+            <dt>Provider</dt>
+            <dd>
+                <%= link_to site.provider.provider_name,
+                            gias_provider_path(site.provider.id) %>
+                [<%= link_to site.provider.postcode,
+                             gias_postcode_path(postcode: site.provider.postcode) %>]
+            </dd>
+        </dl>
+    </li>
+<% end %>
+</ul>

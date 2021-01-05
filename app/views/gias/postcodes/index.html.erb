@@ -1,0 +1,8 @@
+<ul>
+<% @postcode.each do |postcode| %>
+    <li><%= govuk_link_to postcode,
+                          gias_postcode_path(postcode)%></li>
+<% end %>
+</ul>
+
+<%== pagy_nav(@pagy) %>
