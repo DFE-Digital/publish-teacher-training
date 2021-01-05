@@ -81,7 +81,12 @@ GEM
     audited (4.10.0)
       activerecord (>= 4.2, < 6.2)
     awesome_print (1.9.2)
-    bindex (0.8.1)
+    better_errors (2.9.1)
+      coderay (>= 1.0.0)
+      erubi (>= 1.0.0)
+      rack (>= 0.9.0)
+    binding_of_caller (1.0.0)
+      debug_inspector (>= 0.0.1)
     bootsnap (1.7.3)
       msgpack (~> 1.0)
     brakeman (5.0.0)
@@ -109,6 +114,7 @@ GEM
       activerecord (>= 5.a)
       database_cleaner-core (~> 2.0.0)
     database_cleaner-core (2.0.1)
+    debug_inspector (1.0.0)
     deep_merge (1.2.1)
     diff-lcs (1.4.4)
     discard (1.2.0)
@@ -175,6 +181,13 @@ GEM
       rails (>= 3.0)
     globalid (0.4.2)
       activesupport (>= 4.2.0)
+    govuk-components (1.1.4)
+      rails (>= 6.0)
+      view_component (~> 2.20)
+    govuk_design_system_formbuilder (2.2.0)
+      actionview (>= 5.2)
+      activemodel (>= 5.2)
+      activesupport (>= 5.2)
     govuk_notify_rails (2.1.2)
       notifications-ruby-client (~> 5.1)
       rails (>= 4.1.0)
@@ -455,11 +468,8 @@ GEM
     uk_postcode (2.1.6)
     unicode-display_width (1.6.1)
     uniform_notifier (1.14.1)
-    web-console (4.1.0)
-      actionview (>= 6.0.0)
-      activemodel (>= 6.0.0)
-      bindex (>= 0.4.0)
-      railties (>= 6.0.0)
+    view_component (2.28.0)
+      activesupport (>= 5.0.0, < 7.0)
     webmock (3.12.1)
       addressable (>= 2.3.6)
       crack (>= 0.3.2)
@@ -482,6 +492,8 @@ DEPENDENCIES
   active_model_serializers
   audited (~> 4.10)
   awesome_print
+  better_errors
+  binding_of_caller
   bootsnap (>= 1.1.0)
   brakeman
   bullet
@@ -497,6 +509,8 @@ DEPENDENCIES
   faker
   faraday
   geokit-rails
+  govuk-components
+  govuk_design_system_formbuilder
   govuk_notify_rails
   guard
   guard-rspec
@@ -551,7 +565,6 @@ DEPENDENCIES
   timecop
   tzinfo-data
   uk_postcode
-  web-console (>= 4.1.0)
   webmock
   webpacker (~> 5.0)
 
