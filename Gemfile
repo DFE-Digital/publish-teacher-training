@@ -115,6 +115,10 @@ gem "pg_search"
 # End-user application performance monitoring
 gem "skylight"
 
+# govuk styling
+gem "govuk-components"
+gem "govuk_design_system_formbuilder"
+
 group :development, :test do
   # Prettyprint in console
   gem "awesome_print"
@@ -171,6 +175,8 @@ group :development do
   gem "listen", ">= 3.0.5", "< 3.5"
 
   # error handling
+  gem "better_errors"
+  gem "binding_of_caller"
   gem "web-console", ">= 4.1.0"
 
   # Output scaffold commands based on schema
