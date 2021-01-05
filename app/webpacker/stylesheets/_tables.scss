@@ -1,0 +1,13 @@
+.allocation-report__organisation {
+  width: 40%;
+}
+
+.allocation-report__status {
+  width: 30%;
+}
+
+.govuk-summary-list__actions-list-item.allocation-report__actions-list-item {
+  @include govuk-media-query(mobile, desktop) {
+    border-right: 0;
+  }
+}

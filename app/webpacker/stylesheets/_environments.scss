@@ -1,0 +1,23 @@
+.app-tag--development {
+  background: govuk-colour("dark-grey");
+}
+
+.app-tag--qa {
+  background: govuk-colour("orange");
+}
+
+.app-tag--staging {
+  background: govuk-colour("red");
+}
+
+.app-header__container--development {
+  border-bottom-color: govuk-colour("dark-grey");
+}
+
+.app-header__container--qa {
+  border-bottom-color: govuk-colour("orange");
+}
+
+.app-header__container--staging {
+  border-bottom-color: govuk-colour("red");
+}

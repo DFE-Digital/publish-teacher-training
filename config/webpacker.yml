@@ -1,22 +1,23 @@
 # Note: You must restart bin/webpack-dev-server for changes to take effect
 
 default: &default
-  source_path: app/javascript
+  source_path: app/webpacker
   source_entry_path: packs
   public_root_path: public
   public_output_path: packs
   cache_path: tmp/cache/webpacker
-  webpack_compile_output: true
+  check_yarn_integrity: false
+  webpack_compile_output: false
 
   # Additional paths webpack should lookup modules
   # ['app/assets', 'engine/foo/app/assets']
-  additional_paths: []
+  additional_paths: ["node_modules/govuk-frontend/govuk"]
 
   # Reload manifest.json on all requests so we reload latest compiled packs
   cache_manifest: false
 
   # Extract and emit a css file
-  extract_css: false
+  extract_css: true
 
   static_assets_extensions:
     - .jpg
@@ -51,9 +52,11 @@ development:
   <<: *default
   compile: true
 
+  # Verifies that versions and hashed value of the package contents in the project's package.json
+  check_yarn_integrity: true
+
   # Reference: https://webpack.js.org/configuration/dev-server/
   dev_server:
-    https: false
     host: localhost
     port: 3035
     public: localhost:3035
@@ -65,28 +68,36 @@ development:
     disable_host_check: true
     use_local_ip: false
     quiet: false
-    pretty: false
     headers:
-      'Access-Control-Allow-Origin': '*'
+      "Access-Control-Allow-Origin": "*"
     watch_options:
-      ignored: '**/node_modules/**'
-
+      ignored: "**/node_modules/**"
 
 test:
   <<: *default
-  compile: true
+  # Azure pre-compiles packs prior to running the tests.
+  # Also avoids race conditions in parallel_tests.
+  compile: false
 
-  # Compile test packs to a separate directory
   public_output_path: packs-test
 
-production:
+production: &production
   <<: *default
 
   # Production depends on precompilation of packs prior to booting for performance.
   compile: false
 
-  # Extract and emit a css file
-  extract_css: true
-
   # Cache manifest.json for performance
   cache_manifest: true
+
+staging:
+  <<: *production
+
+qa:
+  <<: *production
+
+research:
+  <<: *production
+
+rollover:
+  <<: *production
