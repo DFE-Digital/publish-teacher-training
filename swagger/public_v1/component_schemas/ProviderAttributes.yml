@@ -49,6 +49,14 @@ properties:
     type: float
     description: "The longitude of the provider's address"
     example: "-0.129900"
+  telephone:
+    type: string
+    description: "The provider's telephone number."
+    example: "01834 80657"
+  email:
+    type: string
+    description: "The provider's email address."
+    example: "school@example.com"
   name:
     type: string
     description: "The name of the training provider."

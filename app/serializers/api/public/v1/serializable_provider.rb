@@ -13,7 +13,9 @@ module API
                    :train_with_us,
                    :website,
                    :latitude,
-                   :longitude
+                   :longitude,
+                   :telephone,
+                   :email
 
         attribute :accredited_body do
           @object.accredited_body?
@@ -49,6 +51,12 @@ module API
 
         attribute :street_address_2 do
           @object.address2
+        end
+
+        has_many :courses do
+          meta do
+            { count: @object.courses_count }
+          end
         end
       end
     end

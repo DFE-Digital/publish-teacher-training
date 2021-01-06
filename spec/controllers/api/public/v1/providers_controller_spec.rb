@@ -169,7 +169,7 @@ RSpec.describe API::Public::V1::ProvidersController do
           recruitment_cycle_id = relationships.dig("recruitment_cycle", "data", "id").to_i
 
           expect(json_response["data"][0]["relationships"].keys.sort).to eq(
-            %w[recruitment_cycle],
+            %w[courses recruitment_cycle],
           )
 
           expect(recruitment_cycle_id).to eq(provider.recruitment_cycle.id)
@@ -293,7 +293,9 @@ RSpec.describe API::Public::V1::ProvidersController do
                 street_address_1
                 street_address_2
                 latitude
-                longitude]
+                longitude
+                telephone
+                email]
           end
 
           before do
@@ -360,6 +362,8 @@ RSpec.describe API::Public::V1::ProvidersController do
             "street_address_2" => provider.address2,
             "latitude" => provider.latitude,
             "longitude" => provider.longitude,
+            "telephone" => provider.telephone,
+            "email" => provider.email,
           },
         }
       end
