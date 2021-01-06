@@ -3,6 +3,14 @@ module GIAS
     def index
       recruitment_cycle = RecruitmentCycle.current
       @pagy, @providers = pagy(recruitment_cycle.providers.all)
+
+      @match_data = {}
+
+      @providers.each do |provider|
+        @match_data[provider.id] = GIASMatchers::ProviderService.call(
+          provider: provider
+        ) || []
+      end
     end
 
     def show

@@ -1,36 +1,66 @@
 <h1><%= @provider.provider_name %></h1>
 
-<dl>
-    <dt>Code:</dt>
-    <dd><%= @provider.provider_code %></dd>
+<dl class="govuk-summary-list">
+    <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">Code</dt>
+        <dd class="govuk-summary-list__value"><%= @provider.provider_code %></dd>
+    </div>
 
-    <dt>Postcode:</dt>
-    <dd>
-        <%= link_to @provider.postcode,
-         gias_postcode_path(postcode: @provider.postcode) %>
-    </dd>
+    <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">Postcode</dt>
+        <dd class="govuk-summary-list__value">
+            <%= link_to @provider.postcode,
+                        gias_postcode_path(postcode: @provider.postcode) %>
+        </dd>
+    </div>
 </dl>
 
-<% if @matches[:establishments].key? :postcode %>
 <h2>GIAS Establishment Postcode Matches</h2>
 
-<ul>
+<ul class="govuk-list">
 <% @matches[:establishments][:postcode].each do |establishment| %>
     <li>
-        <h3><%= link_to establishment.name, gias_establishment_path(establishment.urn) %></h3>
+        <%= link_to establishment.name, gias_establishment_path(establishment.urn) %>
     </li>
 <% end %>
 </ul>
-<% end %>
 
-<% if @matches[:establishments].key? :name %>
 <h2>GIAS Establishment Name Matches</h2>
 
-<ul>
+<ul class="govuk-list">
 <% @matches[:establishments][:name].each do |establishment| %>
     <li>
-        <h3><%= link_to establishment.name, gias_establishment_path(establishment.urn) %></h3>
+        <%= link_to establishment.name, gias_establishment_path(establishment.urn) %>
     </li>
 <% end %>
 </ul>
-<% end %>
+
+<h2>Sites Matching GIAS Establishment</h2>
+
+<table class="govuk-table">
+    <thead class="govuk-table__head">
+        <tr class="govuk-table__row">
+            <th class="govuk-table__header" scope="col">Site Name</th>
+            <th class="govuk-table__header" scope="col">Establishment</th>
+        </tr>
+    </thead>
+
+    <tbody class="govuk-table__body">
+    <% @matches[:establishments][:site_postcode].each do |site, establishments| %>
+        <tr class="govuk-table__row">
+            <td class="govuk-table__cell">
+                <%= govuk_link_to site.location_name, gias_site_path(site) %>
+            </td>
+            <td class="govuk-table__cell">
+                <ul class="govuk-list">
+                <% establishments.each do |establishment| %>
+                    <li>
+                        <%= govuk_link_to establishment.name, gias_establishment_path(establishment.urn) %>
+                    </li>
+                <% end %>
+                </ul>
+            </td>
+        </tr>
+    <% end %>
+    </tbody>
+</table>

@@ -1,0 +1,27 @@
+@function frontend-font-url($filename) {
+  @return url("~assets/fonts/" + $filename);
+}
+
+@function frontend-image-url($filename) {
+  @return url("~assets/images/" + $filename);
+}
+
+$govuk-font-url-function: frontend-font-url;
+$govuk-image-url-function: frontend-image-url;
+$success-green: #00823b;
+
+@import "~govuk-frontend/govuk/all";
+
+@import "admin-only";
+@import "banner";
+@import "environments";
+@import "header";
+@import "notice-summary";
+@import "patterns/pagination";
+@import "success-summary";
+@import "warning-summary";
+
+.gias-matcher__heading {
+  margin-top: 0;
+  margin-bottom: 1ex;
+}

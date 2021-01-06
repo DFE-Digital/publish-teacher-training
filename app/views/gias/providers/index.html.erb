@@ -1,9 +1,63 @@
-<ul>
-<% @providers.each do |provider| %>
-    <li>[<%= provider.provider_code %>]
-        <%= link_to provider.provider_name,
-                    gias_provider_path(provider.id) %></li>
+<table class="govuk-table govuk-!-margin-bottom-8">
+  <thead class="govuk-table__head">
+      <tr class="govuk-table__row">
+          <th class="govuk-table__header" scope="col">
+              Code
+          </th>
+          <th class="govuk-table__header" scope="col">
+              Provider
+          </th>
+          <th class="govuk-table__header allocation-report__status" scope="col">
+              Matching Establishments
+          </th>
+      </tr>
+  </thead>
+
+  <tbody class="govuk-table__body">
+      <% @providers.each do |provider| %>
+      <tr class="govuk-table__row">
+          <td class="govuk-table__cell">
+              <%= provider.provider_code %>
+          </td>
+          <td class="govuk-table__cell">
+              <%= link_to provider.provider_name, gias_provider_path(provider.id) %>
+          </td>
+          <td class="govuk-table__cell">
+
+              <% if @match_data[provider.id][:establishments][:postcode].any? || @match_data[provider.id][:establishments][:site_postcode].any? %>
+              <h4 class="govuk-!-margin-top-0 govuk-!-margin-bottom-2">By Postcode</h4>
+
+              <ul class="govuk-list">
+                  <% @match_data[provider.id][:establishments][:postcode].each do |establishment| %>
+                      <li>
+                          <%= govuk_link_to establishment.name,
+                           gias_establishment_path(establishment.urn) %>
+                      </li>
+                  <% end %>
+              </ul>
+              <% end %>
+
+              <% if @match_data[provider.id][:establishments][:site_postcode].any? %>
+                  <em><%= govuk_link_to "#{@match_data[provider.id][:establishments][:site_postcode].count} establishment(s) match sites",
+                       gias_provider_path(provider) %></em>
+              <% end %>
+
+              <% if @match_data[provider.id][:establishments][:name].any? %>
+              <h4 class="govuk-!-margin-bottom-2">By Name</h4>
+
+              <ul class="govuk-list">
+                  <% @match_data[provider.id][:establishments][:name].each do |establishment| %>
+                      <li>
+                          <%= govuk_link_to establishment.name,
+                              gias_establishment_path(establishment.urn) %>
+                      </li>
+                  <% end %>
+              </ul>
+              <% end %>
+          </td>
+      </tr>
 <% end %>
-</ul>
+      </tbody>
+</table>
 
 <%== pagy_nav(@pagy) %>
