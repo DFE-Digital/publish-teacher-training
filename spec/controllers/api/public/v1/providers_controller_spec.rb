@@ -169,7 +169,7 @@ RSpec.describe API::Public::V1::ProvidersController do
           recruitment_cycle_id = relationships.dig("recruitment_cycle", "data", "id").to_i
 
           expect(json_response["data"][0]["relationships"].keys.sort).to eq(
-            %w[courses recruitment_cycle],
+            %w[recruitment_cycle],
           )
 
           expect(recruitment_cycle_id).to eq(provider.recruitment_cycle.id)
