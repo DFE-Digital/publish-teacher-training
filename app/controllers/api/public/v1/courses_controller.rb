@@ -5,6 +5,7 @@ module API
         def index
           render jsonapi: paginate(courses),
                  include: include_param,
+                 meta: { count: courses.count("course.id") },
                  class: API::Public::V1::SerializerService.call
         end
 

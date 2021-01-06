@@ -202,6 +202,19 @@ RSpec.describe API::Public::V1::CoursesController do
           )
         end
       end
+
+      context "courses count" do
+        it "returns the course count in a meta object" do
+          get :index, params: {
+            recruitment_cycle_year: recruitment_cycle.year,
+          }
+
+          json_response = JSON.parse(response.body)
+          meta = json_response["meta"]
+
+          expect(meta["count"]).to be(2)
+        end
+      end
     end
   end
 end
