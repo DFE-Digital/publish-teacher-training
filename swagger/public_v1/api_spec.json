@@ -669,6 +669,16 @@
             "type": "number",
             "description": "The longitude of the location.",
             "example": -1.3603394
+          },
+          "telephone": {
+            "type": "string",
+            "description": "The provider's telephone number.",
+            "example": "01834 80657"
+          },
+          "email": {
+            "type": "string",
+            "description": "The provider's email address.",
+            "example": "school@example.com"
           }
         }
       },

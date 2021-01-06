@@ -13,7 +13,9 @@ module API
                    :train_with_us,
                    :website,
                    :latitude,
-                   :longitude
+                   :longitude,
+                   :telephone,
+                   :email
 
         attribute :accredited_body do
           @object.accredited_body?

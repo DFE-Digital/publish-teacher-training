@@ -293,7 +293,9 @@ RSpec.describe API::Public::V1::ProvidersController do
                 street_address_1
                 street_address_2
                 latitude
-                longitude]
+                longitude
+                telephone
+                email]
           end
 
           before do
@@ -360,6 +362,8 @@ RSpec.describe API::Public::V1::ProvidersController do
             "street_address_2" => provider.address2,
             "latitude" => provider.latitude,
             "longitude" => provider.longitude,
+            "telephone" => provider.telephone,
+            "email" => provider.email
           },
         }
       end
