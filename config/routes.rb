@@ -9,7 +9,8 @@ Rails.application.routes.draw do
   mount OpenApi::Rswag::Api::Engine => "/api-docs"
 
   namespace :gias do
-    get "/", to: redirect("/gias/establishments")
+    get "/", to: "/gias#dashboard"
+    get "/import_establishments", to: "/gias#import_establishments"
 
     resources :establishments, param: :urn, only: [:index, :show]
     resources :postcodes, param: :postcode, only: :show

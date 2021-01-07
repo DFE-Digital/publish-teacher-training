@@ -1,11 +1,14 @@
 require.context("govuk-frontend/govuk/assets");
 
+import Rails from "@rails/ujs";
 import {initAutocomplete} from "../scripts/autocomplete";
 import "../stylesheets/application.scss";
 import "accessible-autocomplete/dist/accessible-autocomplete.min.css";
 import { initAll } from "govuk-frontend";
 import FormCheckLeave from "scripts/form-check-leave";
 import initLocationsMap from "scripts/locations-map";
+
+Rails.start();
 
 initAll();
 

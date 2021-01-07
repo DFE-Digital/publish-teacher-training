@@ -1,5 +1,5 @@
-module GIASMatchers
-  class ProviderService
+module GIAS
+  class ProviderMatcherService
     include ServicePattern
 
     def initialize(provider: nil)

@@ -1,0 +1,20 @@
+<h1>GIAS Data</h1>
+
+<dl class="govuk-summary-list">
+    <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">Total Providers</dt>
+        <dd class="govuk-summary-list__value"><%= @providers.count %></dd>
+    </div>
+
+    <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">Providers that match Establishments using Postcode</dt>
+        <dd class="govuk-summary-list__value"><%= @providers_with_matching_establishments_by_postcode.count %></dd>
+    </div>
+</dl>
+
+<%= link_to("Import Establishments",
+            gias_import_establishments_path,
+            class: "govuk-button",
+            data: {
+                confirm: "Perform establishments import?\n\nThis will replace all existing GIAS Establishments data.",
+            }) %>

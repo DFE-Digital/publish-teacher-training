@@ -196,6 +196,11 @@ ActiveRecord::Schema.define(version: 2021_02_01_103254) do
     t.text "postcode"
   end
 
+  create_table "gias_establishment_provider_postcode_matches", force: :cascade do |t|
+    t.integer "establishment_id"
+    t.integer "provider_id"
+  end
+
   create_table "nctl_organisation", id: :serial, force: :cascade do |t|
     t.text "name"
     t.text "nctl_id", null: false

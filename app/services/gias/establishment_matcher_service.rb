@@ -1,5 +1,5 @@
-module GIASMatchers
-  class EstablishmentService
+module GIAS
+  class EstablishmentMatcherService
     include ServicePattern
 
     def initialize(establishment: nil, provider: nil)

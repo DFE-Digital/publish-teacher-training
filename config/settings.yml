@@ -45,3 +45,7 @@ skylight:
   authentication: please_change_me
 mapit_api_key: please_change_me
 mapit_url: https://mapit.mysociety.org
+gias:
+  establishments_csv_base: "https://ea-edubase-api-prod.azurewebsites.net/edubase/downloads/public/"
+  all_establishments_csv_file: "edubasealldata%Y%m%d.csv"
+  establishment_links_csv_file: "links_edubasealldata%Y%m%d.csv"

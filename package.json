@@ -1,7 +1,6 @@
 {
   "name": "teacher-training-api",
   "private": true,
-
   "engines": {
     "node": "12.x"
   },
@@ -10,6 +9,7 @@
   },
   "dependencies": {
     "@rails/webpacker": "^5.2.1",
+    "@rails/ujs": "^6.0.0",
     "accessible-autocomplete": "^2.0.3",
     "govuk-frontend": "^3.9.1",
     "set-value": "^3.0.2"

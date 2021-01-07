@@ -62,6 +62,11 @@ class Provider < ApplicationRecord
   # the accredited_providers that this provider is a training_provider for
   has_many :accrediting_providers, -> { distinct }, through: :courses
 
+  has_and_belongs_to_many :establishments,
+                          join_table: :gias_establishment_provider_postcode_matches,
+                          class_name: "GIASEstablishment",
+                          association_foreign_key: "establishment_id"
+
   # the providers that this provider is an accredited_provider for
   def training_providers
     Provider.where(id: current_accredited_courses.pluck(:provider_id))
