@@ -11,7 +11,7 @@ class SessionsController < ApplicationController
     if current_user
       DfESignInUsers::Update.call(user: current_user, dfe_sign_in_user: dfe_sign_in_user)
 
-      redirect_to "/"
+      redirect_to gias_dashboard_path
     else
       DfESignInSession.end_session!(session)
 
@@ -24,7 +24,7 @@ class SessionsController < ApplicationController
       DfESignInSession.end_session!(session)
       redirect_to dfe_sign_in_user.logout_url
     else
-      redirect_to "/"
+      redirect_to gias_dashboard_path
     end
   end
 end

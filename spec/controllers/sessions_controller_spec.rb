@@ -60,9 +60,9 @@ describe SessionsController, type: :controller do
         expect(session["sign_in_session"]["last_name"]).to eq(user.last_name)
       end
 
-      it "redirects to the root page" do
+      it "redirects to the gias dashboard page" do
         request_callback
-        expect(response).to redirect_to("/")
+        expect(response).to redirect_to(gias_dashboard_path)
       end
     end
 

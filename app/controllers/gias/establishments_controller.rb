@@ -7,7 +7,7 @@ module GIAS
     def show
       @establishment = GIASEstablishment.find_by(urn: params[:urn])
 
-      @matches = GIASMatchers::EstablishmentService.call(
+      @matches = GIAS::EstablishmentMatcherService.call(
         establishment: @establishment,
       )
     end

@@ -7,7 +7,7 @@ module GIAS
       @match_data = {}
 
       @providers.each do |provider|
-        @match_data[provider.id] = GIASMatchers::ProviderService.call(
+        @match_data[provider.id] = GIAS::ProviderMatcherService.call(
           provider: provider
         ) || []
       end
@@ -16,7 +16,7 @@ module GIAS
     def show
       @provider = Provider.find(params[:id])
 
-      @matches = GIASMatchers::ProviderService.call(
+      @matches = GIAS::ProviderMatcherService.call(
         provider: @provider
       )
     end
