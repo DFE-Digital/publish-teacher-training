@@ -105,6 +105,10 @@ jobs:
           timeoutSeconds:  300
           intervalSeconds: 15
 
+      - name: Stop when smoke tests fail
+        if: steps.wait_for_smoke_tests.outputs.conclusion == 'failure'
+        run: exit 1
+
       - name: Update ${{ matrix.environment }} status
         if: ${{ always() }}
         uses: bobheadxi/deployments@master
