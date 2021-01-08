@@ -70,7 +70,7 @@ gem "faraday"
 gem "uk_postcode"
 
 # For change history on provider, courses, sites, etc
-gem "audited", "~> 4.9"
+gem "audited", "~> 4.10"
 
 # State machine to track users through their onboarding journey
 gem "aasm"
