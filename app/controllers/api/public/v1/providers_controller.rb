@@ -3,6 +3,8 @@ module API
     module V1
       class ProvidersController < API::Public::V1::ApplicationController
         def index
+          return render(status: :bad_request) if invalid_search?
+
           render jsonapi: paginate(providers),
           include: params[:include], class: API::Public::V1::SerializerService.call, fields: fields
         end
@@ -23,7 +25,9 @@ module API
       private
 
         def providers
-          @providers ||= if sort_by_provider_ascending?
+          @providers ||= if search_for_provider?
+                           recruitment_cycle.providers.search_by_code_or_name(params[:search])
+                         elsif sort_by_provider_ascending?
                            recruitment_cycle.providers.by_name_ascending
                          else
                            recruitment_cycle.providers.by_name_descending
@@ -50,6 +54,14 @@ module API
 
         def sort_field
           @sort_field ||= Set.new(params.dig(:sort)&.split(","))
+        end
+
+        def search_for_provider?
+          params[:search].present?
+        end
+
+        def invalid_search?
+          search_for_provider? && params[:search].length < 2
         end
 
         def provider_fields
