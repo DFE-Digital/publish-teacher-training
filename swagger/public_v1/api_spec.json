@@ -394,6 +394,11 @@
             "type": "string",
             "description": "Generated summary of the course.",
             "example": "PGCE with QTS full time"
+          },
+          "description": {
+            "type": "string",
+            "description": "A combined string of qualification, study mode & programme type.",
+            "example": "PGCE with QTS full time teaching apprenticeship."
           }
         }
       },
