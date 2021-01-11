@@ -12,7 +12,7 @@ endpoint is activated.
 
 ## Healthcheck
 
-Use the `/healchtheck` to check whether that the app's dependencies are working.
+Use the `/healthcheck` to check whether that the app's dependencies are working.
 This returns a JSON structure that lists the checks it performs and their
 results. For example:
 

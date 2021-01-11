@@ -17,7 +17,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.ACTIONS_API_ACCESS_TOKEN }}
 
       - name: Smoke Tests ${{ github.event.inputs.environment }}
-        run: echo "Nothing to run yet 🚀"
+        run: RAILS_ENV=${{ github.event.inputs.environment }} bundle exec rspec --tag smoke
 
       - name: 'Nofiy #twd_publish_register_tech on failure'
         if: failure()
