@@ -45,6 +45,8 @@ Dir["./spec/support/**/*.rb"].sort.each { |file| require file }
 RSpec::Matchers.define_negated_matcher :not_change, :change
 
 RSpec.configure do |config|
+  config.filter_run_excluding smoke: true
+
   # Reduce noise in console when running specs in parallel
   config.silence_filter_announcements = true if ENV["TEST_ENV_NUMBER"]
   # rspec-expectations config goes here. You can use an alternate
