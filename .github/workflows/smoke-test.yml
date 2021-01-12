@@ -11,15 +11,29 @@ jobs:
     name: smoke-tests-${{ github.event.inputs.environment }}
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up Ruby 2.7.2
+        uses: actions/setup-ruby@v1
+        with:
+          ruby-version: 2.7.2
+
+      - name: install bundler and gems
+        run: |
+          gem install bundler
+          echo 'gem "httparty"' >> Gemfile
+          echo 'gem "rspec"' >> Gemfile
+          bundle
+
       - uses: softprops/turnstyle@v1
         name: Wait for other runs
         env:
           GITHUB_TOKEN: ${{ secrets.ACTIONS_API_ACCESS_TOKEN }}
 
       - name: Smoke Tests ${{ github.event.inputs.environment }}
-        run: echo "Nothing to run yet 🚀"
+        run: RAILS_ENV=${{ github.event.inputs.environment }} ./bin/bundle exec rspec spec/smoke --format documentation
 
-      - name: 'Nofiy #twd_publish_register_tech on failure'
+      - name: 'Notify #twd_publish_register_tech on failure'
         if: failure()
         uses: rtCamp/action-slack-notify@master
         env:
