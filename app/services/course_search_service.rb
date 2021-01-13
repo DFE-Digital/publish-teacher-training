@@ -20,6 +20,7 @@ class CourseSearchService
     scope = scope.with_salary if funding_filter_salary?
     scope = scope.with_qualifications(qualifications) if qualifications.any?
     scope = scope.with_vacancies if has_vacancies?
+    scope = scope.findable if findable?
     scope = scope.with_study_modes(study_types) if study_types.any?
     scope = scope.with_subjects(subject_codes) if subject_codes.any?
     scope = scope.with_provider_name(provider_name) if provider_name.present?
@@ -167,6 +168,10 @@ private
 
   def has_vacancies?
     filter[:has_vacancies].to_s.downcase == "true"
+  end
+
+  def findable?
+    filter[:findable].to_s.downcase == "true"
   end
 
   def study_types
