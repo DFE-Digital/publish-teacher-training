@@ -513,6 +513,9 @@
           "runtimeStack": {
             "value": "[variables('appServiceRuntimeStack')]"
           },
+          "healthCheckPath":{
+            "value": "/ping"
+          },
           "appServiceAppSettings": {
             "value": [
               {
@@ -606,6 +609,10 @@
               {
                   "name": "DOCKER_REGISTRY_SERVER_PASSWORD",
                   "value": "[parameters('dockerRegistryPassword')]"
+              },
+              {
+                "name": "WEBSITE_HEALTHCHECK_MAXPINGFAILURES",
+                "value": "5"
               }
             ]
           },
