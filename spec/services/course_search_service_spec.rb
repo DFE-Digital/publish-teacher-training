@@ -286,7 +286,7 @@ RSpec.describe CourseSearchService do
       context "when false" do
         let(:filter) { { has_vacancies: false } }
 
-        it "adds the with_vacancies scope" do
+        it "doesn't add the with_vacancies scope" do
           expect(scope).not_to receive(:with_vacancies)
           expect(scope).to receive(:select).and_return(inner_query_scope)
           expect(course_with_includes).to receive(:where).and_return(expected_scope)
@@ -299,6 +299,42 @@ RSpec.describe CourseSearchService do
 
         it "doesn't add the with_vacancies scope" do
           expect(scope).not_to receive(:with_vacancies)
+          expect(scope).to receive(:select).and_return(inner_query_scope)
+          expect(course_with_includes).to receive(:where).and_return(expected_scope)
+          expect(subject).to eq(expected_scope)
+        end
+      end
+    end
+
+    describe "filter[findable]" do
+      context "when true" do
+        let(:filter) { { findable: true } }
+        let(:expected_scope) { double }
+
+        it "adds the findable scope" do
+          expect(scope).to receive(:findable).and_return(course_ids_scope)
+          expect(course_ids_scope).to receive(:select).and_return(inner_query_scope)
+          expect(course_with_includes).to receive(:where).and_return(expected_scope)
+          expect(subject).to eq(expected_scope)
+        end
+      end
+
+      context "when false" do
+        let(:filter) { { findable: false } }
+
+        it "doesn't add the findable scope" do
+          expect(scope).not_to receive(:findable)
+          expect(scope).to receive(:select).and_return(inner_query_scope)
+          expect(course_with_includes).to receive(:where).and_return(expected_scope)
+          expect(subject).to eq(expected_scope)
+        end
+      end
+
+      context "when absent" do
+        let(:filter) { {} }
+
+        it "doesn't add the findable scope" do
+          expect(scope).not_to receive(:findable)
           expect(scope).to receive(:select).and_return(inner_query_scope)
           expect(course_with_includes).to receive(:where).and_return(expected_scope)
           expect(subject).to eq(expected_scope)
