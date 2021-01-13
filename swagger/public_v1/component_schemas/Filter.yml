@@ -6,6 +6,10 @@ properties:
     description: "Return courses that only have vacancies?"
     type: boolean
     example: true
+  findable:
+    description: "Return courses that are currently available on the Find Postgraduate Teacher Training service"
+    type: boolean
+    example: true
   funding_type:
     description: "Return courses depending on how it is funded. This is a comma delimited string. If multiple funding options are provided then any course matching any one of the options provided will be retuned, i.e. the OR operator is used."
     type: string
