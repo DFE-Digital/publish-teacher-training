@@ -30,7 +30,6 @@
         "type": "object",
         "required": [
           "code",
-          "provider_code",
           "age_maximum",
           "age_minimum"
         ],
@@ -495,6 +494,11 @@
             "type": "boolean",
             "example": true
           },
+          "findable": {
+            "description": "Return courses that are currently available on the Find Postgraduate Teacher Training service",
+            "type": "boolean",
+            "example": true
+          },
           "funding_type": {
             "description": "Return courses depending on how it is funded. This is a comma delimited string. If multiple funding options are provided then any course matching any one of the options provided will be retuned, i.e. the OR operator is used.",
             "type": "string",
@@ -669,16 +673,6 @@
             "type": "number",
             "description": "The longitude of the location.",
             "example": -1.3603394
-          },
-          "telephone": {
-            "type": "string",
-            "description": "The provider's telephone number.",
-            "example": "01834 80657"
-          },
-          "email": {
-            "type": "string",
-            "description": "The provider's email address.",
-            "example": "school@example.com"
           }
         }
       },
@@ -849,7 +843,7 @@
           },
           "per_page": {
             "type": "integer",
-            "description": "The number items to display on a page. Defaults to 100. Maximum is 100, if the value is greater that the maximum allowed it will fallback to 100.",
+            "description": "The number items to display on a page. Defaults to 100. Maximum is 500, if the value is greater that the maximum allowed it will fallback to 500.",
             "example": 10
           }
         }
@@ -913,7 +907,16 @@
             "description": "The longitude of the provider's address",
             "example": "-0.129900"
           },
-
+          "telephone": {
+            "type": "string",
+            "description": "The provider's telephone number.",
+            "example": "01834 80657"
+          },
+          "email": {
+            "type": "string",
+            "description": "The provider's email address.",
+            "example": "school@example.com"
+          },
           "name": {
             "type": "string",
             "description": "The name of the training provider.",
@@ -1062,30 +1065,13 @@
         "description": "This schema provides metadata about a provider.",
         "type": "object",
         "properties": {
-          "id": {
-            "type": "string",
-            "example": "15947"
-          },
-          "type": {
-            "type": "string",
-            "example": "provider_suggestions"
-          },
-          "attributes": {
-            "$ref": "#/components/schemas/ProviderSuggestionAttributes"
-          }
-        }
-      },
-      "ProviderSuggestionAttributes": {
-        "description": "This schema is used to describe a provider.",
-        "type": "object",
-        "properties": {
-          "code": {
-            "type": "string",
-            "example": "O66"
-          },
           "name": {
             "type": "string",
             "example": "Oxford Brookes University"
+          },
+          "code": {
+            "type": "string",
+            "example": "O66"
           }
         }
       },
@@ -1507,7 +1493,7 @@
             "in": "path",
             "required": true,
             "description": "The starting year of the recruitment cycle.",
-            "example": "2020",
+            "example": 2021,
             "schema": {
               "type": "string"
             }
@@ -1735,7 +1721,7 @@
             "in": "path",
             "required": true,
             "description": "The starting year of the recruitment cycle.",
-            "example": "2020",
+            "example": 2021,
             "schema": {
               "type": "string"
             }
