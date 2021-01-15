@@ -18,7 +18,7 @@ describe "API" do
                    command: "curl -X GET https://api.publish-teacher-training-courses.service.gov.uk/api/public/v1/subject_areas"
 
       response "200", "The collection of subject areas." do
-        let(:include) { "subjects" }
+        let(:include) { nil }
 
         schema "$ref": "#/components/schemas/SubjectAreaListResponse"
 

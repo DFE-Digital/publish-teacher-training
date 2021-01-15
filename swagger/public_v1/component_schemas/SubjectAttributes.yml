@@ -5,21 +5,24 @@ properties:
   name:
     type: string
     description: "Subject name."
+    example: "Primary with science"
   code:
     type: string
     description: "Unique subject code."
+    example: "07"
   bursary_amount:
-    type: integer
+    type: string
     description: "Non-repayable sum of money that universities can award to students to incentivise and support their studies"
-    example: 9000
+    example: "9000"
   early_career_payments:
-    type: integer
+    type: string
     description: "Eligible subjects teachers can apply for early-career payments of up to £9,000 after tax."
-    example: 8388
+    example: "8388"
   scholarship:
-    type: integer
+    type: string
     description: "A grant or payment made to support a student’s education, awarded on the basis of academic or other achievement."
-    example: 3500
+    example: "3500"
   subject_knowledge_enhancement_course_available:
     type: boolean
     description: "SKE courses are available in various subjects. Schools or universities will identify your need for an SKE as part of their selection process, usually at interview. If they feel you need to enhance your knowledge, but have potential to be a great teacher, they’ll offer you a teacher training place on the condition that you complete an SKE course."
+    example: true

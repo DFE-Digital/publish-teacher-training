@@ -53,7 +53,12 @@ components:
           items:
             $ref: "#/components/schemas/CourseResource"
         included:
-          $ref: "#/components/schemas/Included"
+          description: "This returns the requested associated data."
+          type: array
+          items:
+            anyOf:
+              - $ref: "#/components/schemas/RecruitmentCycleResource"
+              - $ref: "#/components/schemas/ProviderResource"
         jsonapi:
           $ref: "#/components/schemas/JSONAPI"
     CourseSingleResponse:
@@ -66,7 +71,12 @@ components:
         data:
           $ref: "#/components/schemas/CourseResource"
         included:
-          $ref: "#/components/schemas/Included"
+          description: "This returns the requested associated data."
+          type: array
+          items:
+            anyOf:
+              - $ref: "#/components/schemas/RecruitmentCycleResource"
+              - $ref: "#/components/schemas/ProviderResource"
         jsonapi:
           $ref: "#/components/schemas/JSONAPI"
     Included:
@@ -139,8 +149,8 @@ components:
           $ref: "#/components/schemas/LocationAttributes"
         relationships:
           $ref: "#/components/schemas/LocationRelationships"
-    LocationListResponse:
-      description: "This schema is used to return a collection of locations."
+    ProviderLocationListResponse:
+      description: "This schema is used to return a collection of locations for a specified provider."
       type: object
       required:
         - data
@@ -150,7 +160,35 @@ components:
           items:
             $ref: "#/components/schemas/LocationResource"
         included:
-          $ref: "#/components/schemas/Included"
+          description: "This returns the requested associated data."
+          type: array
+          items:
+            anyOf:
+              - $ref: "#/components/schemas/RecruitmentCycleResource"
+              - $ref: "#/components/schemas/ProviderResource"
+              - $ref: "#/components/schemas/LocationStatusResource"
+              - $ref: "#/components/schemas/CourseResource"
+        jsonapi:
+          $ref: "#/components/schemas/JSONAPI"
+    CourseLocationListResponse:
+      description: "This schema is used to return a collection of locations for a specified course."
+      type: object
+      required:
+        - data
+      properties:
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/LocationResource"
+        included:
+          description: "This returns the requested associated data."
+          type: array
+          items:
+            anyOf:
+              - $ref: "#/components/schemas/RecruitmentCycleResource"
+              - $ref: "#/components/schemas/ProviderResource"
+              - $ref: "#/components/schemas/LocationStatusResource"
+              - $ref: "#/components/schemas/CourseResource"
         jsonapi:
           $ref: "#/components/schemas/JSONAPI"
     LocationStatusResource:
@@ -195,7 +233,9 @@ components:
           items:
             $ref: "#/components/schemas/ProviderResource"
         included:
-          $ref: "#/components/schemas/Included"
+          type: array
+          items:
+            $ref: "#/components/schemas/RecruitmentCycleResource"
         jsonapi:
           $ref: "#/components/schemas/JSONAPI"
     NotFoundResponse:
@@ -220,7 +260,9 @@ components:
         data:
           $ref: "#/components/schemas/ProviderResource"
         included:
-          $ref: "#/components/schemas/Included"
+          type: array
+          items:
+            $ref: "#/components/schemas/RecruitmentCycleResource"          
         jsonapi:
           $ref: "#/components/schemas/JSONAPI"
     ProviderSuggestion:
@@ -291,9 +333,11 @@ components:
         - attributes
       properties:
         id:
-          type: integer
+          type: string
+          example: "3"
         type:
           type: string
+          example: "recruitment_cycles"
         attributes:
           $ref: "#/components/schemas/RecruitmentCycleAttributes"
     SubjectResource:
@@ -305,7 +349,8 @@ components:
         - attributes
       properties:
         id:
-          type: integer
+          type: string
+          example: "3"
         type:
           type: string
           example: subjects
@@ -337,6 +382,8 @@ components:
           items:
             $ref: "#/components/schemas/SubjectAreaResource"
         included:
-          $ref: "#/components/schemas/Included"
+          type: array
+          items:
+            $ref: "#/components/schemas/SubjectResource"
         jsonapi:
           $ref: "#/components/schemas/JSONAPI"

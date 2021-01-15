@@ -74,6 +74,15 @@ describe "API" do
                 required: true,
                 description: "The unique code of the provider.",
                 example: "T92"
+      parameter name: :include,
+                in: :query,
+                type: :string,
+                required: false,
+                description: "The associated data for this resource.",
+                schema: {
+                  enum: %w[recruitment_cycle],
+                },
+                example: "recruitment_cycle"
 
       curl_example description: "Get a specific provider",
                    command: "curl -X GET https://api.publish-teacher-training-courses.service.gov.uk/api/public/v1/recruitment_cycles/2020/providers/B20"
@@ -82,6 +91,7 @@ describe "API" do
         let(:provider) { create(:provider, provider_code: "1AT") }
         let(:year) { provider.recruitment_cycle.year }
         let(:provider_code) { provider.provider_code }
+        let(:include) { nil }
 
         schema "$ref": "#/components/schemas/ProviderSingleResponse"
 
@@ -91,6 +101,7 @@ describe "API" do
       response "404", "The non existant provider." do
         let(:year) { "2020" }
         let(:provider_code) { "999" }
+        let(:include) { nil }
 
         schema "$ref": "#/components/schemas/NotFoundResponse"
 
