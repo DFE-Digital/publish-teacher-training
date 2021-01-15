@@ -45,6 +45,15 @@ describe "API" do
                 required: false,
                 example: { page: 2, per_page: 10 },
                 description: "Pagination options to navigate through the collection."
+      parameter name: :include,
+                in: :query,
+                type: :string,
+                required: false,
+                description: "The associated data for this resource.",
+                schema: {
+                  enum: %w[accredited_body provider recruitment_cycle],
+                },
+                example: "recruitment_cycle,provider"
 
       curl_example description: "Get all courses for a provider",
                    command: "curl -X GET https://api.publish-teacher-training-courses.service.gov.uk/api/public/v1/recruitment_cycles/2020/providers/B20/courses"
@@ -56,6 +65,7 @@ describe "API" do
         let(:provider) { create(:provider) }
         let(:year) { provider.recruitment_cycle.year }
         let(:provider_code) { provider.provider_code }
+        let(:include) { "provider" }
 
         before do
           create(:course, provider: provider, course_code: "C100")
@@ -92,6 +102,15 @@ describe "API" do
                 required: true,
                 description: "The code of the course.",
                 example: "X130"
+      parameter name: :include,
+                in: :query,
+                type: :string,
+                required: false,
+                description: "The associated data for this resource.",
+                schema: {
+                  enum: %w[accredited_body provider recruitment_cycle],
+                },
+                example: "recruitment_cycle,provider"
 
       curl_example description: "Get a course for a provider",
                    command: "curl -X GET https://api.publish-teacher-training-courses.service.gov.uk/api/public/v1/recruitment_cycles/2020/providers/B20/courses/2N22"
@@ -103,6 +122,7 @@ describe "API" do
         let(:year) { provider.recruitment_cycle.year }
         let(:provider_code) { provider.provider_code }
         let(:course_code) { course.course_code }
+        let(:include) { "provider" }
 
         schema "$ref": "#/components/schemas/CourseSingleResponse"
 

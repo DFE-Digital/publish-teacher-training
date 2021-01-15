@@ -8,3 +8,5 @@ properties:
     $ref: "#/components/schemas/Relationship"
   course:
     $ref: "#/components/schemas/Relationship"
+  location_status:
+    $ref: "#/components/schemas/Relationship"

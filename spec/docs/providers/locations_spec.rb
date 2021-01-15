@@ -24,9 +24,9 @@ describe "API" do
                 required: false,
                 description: "The associated data for this resource.",
                 schema: {
-                  enum: %w[recruitment_cycle provider],
+                  enum: %w[recruitment_cycle provider course location_status],
                 },
-                example: "recruitment_cycle,provider"
+                example: "recruitment_cycle,provider,course,location_status"
 
       response "200", "The collection of locations for the specified provider." do
         let(:provider) { create(:provider) }
@@ -34,7 +34,7 @@ describe "API" do
         let(:provider_code) { provider.provider_code }
         let(:include) { "provider" }
 
-        schema "$ref": "#/components/schemas/LocationListResponse"
+        schema "$ref": "#/components/schemas/ProviderLocationListResponse"
 
         before do
           provider.sites << build_list(

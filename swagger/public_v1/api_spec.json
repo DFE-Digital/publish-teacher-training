@@ -410,7 +410,56 @@
             }
           },
           "included": {
-            "$ref": "#/components/schemas/Included"
+            "description": "This returns the requested associated data.",
+            "type": "array",
+            "items": {
+              "anyOf": [
+                {
+                  "$ref": "#/components/schemas/RecruitmentCycleResource"
+                },
+                {
+                  "$ref": "#/components/schemas/ProviderResource"
+                }
+              ]
+            }
+          },
+          "jsonapi": {
+            "$ref": "#/components/schemas/JSONAPI"
+          }
+        }
+      },
+      "CourseLocationListResponse": {
+        "description": "This schema is used to return a collection of locations for a specified course.",
+        "type": "object",
+        "required": [
+          "data"
+        ],
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/LocationResource"
+            }
+          },
+          "included": {
+            "description": "This returns the requested associated data.",
+            "type": "array",
+            "items": {
+              "anyOf": [
+                {
+                  "$ref": "#/components/schemas/RecruitmentCycleResource"
+                },
+                {
+                  "$ref": "#/components/schemas/ProviderResource"
+                },
+                {
+                  "$ref": "#/components/schemas/LocationStatusResource"
+                },
+                {
+                  "$ref": "#/components/schemas/CourseResource"
+                }
+              ]
+            }
           },
           "jsonapi": {
             "$ref": "#/components/schemas/JSONAPI"
@@ -421,23 +470,14 @@
         "description": "This schema is used to describe associations that can be returned with a course.",
         "type": "object",
         "properties": {
+          "recruitment_cycle": {
+            "$ref": "#/components/schemas/Relationship"
+          },
           "accredited_body": {
             "$ref": "#/components/schemas/Relationship"
           },
-          "locations": {
-            "$ref": "#/components/schemas/RelationshipList"
-          },
-          "modern_languages": {
-            "$ref": "#/components/schemas/RelationshipList"
-          },
-          "provider_locations": {
-            "$ref": "#/components/schemas/RelationshipList"
-          },
           "provider": {
             "$ref": "#/components/schemas/Relationship"
-          },
-          "subjects": {
-            "$ref": "#/components/schemas/RelationshipList"
           }
         }
       },
@@ -477,7 +517,18 @@
             "$ref": "#/components/schemas/CourseResource"
           },
           "included": {
-            "$ref": "#/components/schemas/Included"
+            "description": "This returns the requested associated data.",
+            "type": "array",
+            "items": {
+              "anyOf": [
+                {
+                  "$ref": "#/components/schemas/RecruitmentCycleResource"
+                },
+                {
+                  "$ref": "#/components/schemas/ProviderResource"
+                }
+              ]
+            }
           },
           "jsonapi": {
             "$ref": "#/components/schemas/JSONAPI"
@@ -676,27 +727,6 @@
           }
         }
       },
-      "LocationListResponse": {
-        "description": "This schema is used to return a collection of locations.",
-        "type": "object",
-        "required": [
-          "data"
-        ],
-        "properties": {
-          "data": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/LocationResource"
-            }
-          },
-          "included": {
-            "$ref": "#/components/schemas/Included"
-          },
-          "jsonapi": {
-            "$ref": "#/components/schemas/JSONAPI"
-          }
-        }
-      },
       "LocationRelationships": {
         "description": "This schema is used to describe associations that can be returned with locations.",
         "type": "object",
@@ -708,6 +738,9 @@
             "$ref": "#/components/schemas/Relationship"
           },
           "course": {
+            "$ref": "#/components/schemas/Relationship"
+          },
+          "location_status": {
             "$ref": "#/components/schemas/Relationship"
           }
         }
@@ -998,7 +1031,48 @@
             }
           },
           "included": {
-            "$ref": "#/components/schemas/Included"
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RecruitmentCycleResource"
+            }
+          },
+          "jsonapi": {
+            "$ref": "#/components/schemas/JSONAPI"
+          }
+        }
+      },
+      "ProviderLocationListResponse": {
+        "description": "This schema is used to return a collection of locations for a specified provider.",
+        "type": "object",
+        "required": [
+          "data"
+        ],
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/LocationResource"
+            }
+          },
+          "included": {
+            "description": "This returns the requested associated data.",
+            "type": "array",
+            "items": {
+              "anyOf": [
+                {
+                  "$ref": "#/components/schemas/RecruitmentCycleResource"
+                },
+                {
+                  "$ref": "#/components/schemas/ProviderResource"
+                },
+                {
+                  "$ref": "#/components/schemas/LocationStatusResource"
+                },
+                {
+                  "$ref": "#/components/schemas/CourseResource"
+                }
+              ]
+            }
           },
           "jsonapi": {
             "$ref": "#/components/schemas/JSONAPI"
@@ -1009,9 +1083,6 @@
         "description": "This schema is used to describe associations that can be returned with a provider.",
         "type": "object",
         "properties": {
-          "locations": {
-            "$ref": "#/components/schemas/RelationshipList"
-          },
           "recruitment_cycle": {
             "$ref": "#/components/schemas/Relationship"
           }
@@ -1054,7 +1125,10 @@
             "$ref": "#/components/schemas/ProviderResource"
           },
           "included": {
-            "$ref": "#/components/schemas/Included"
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RecruitmentCycleResource"
+            }
           },
           "jsonapi": {
             "$ref": "#/components/schemas/JSONAPI"
@@ -1102,17 +1176,20 @@
         "properties": {
           "year": {
             "type": "integer",
-            "description": "The year that this recruitment cycle applies to."
+            "description": "The year that this recruitment cycle applies to.",
+            "example": 2021
           },
           "application_start_date": {
             "type": "string",
             "format": "date",
-            "description": "The default date applications start being taken for this recruitment cycle."
+            "description": "The default date applications start being taken for this recruitment cycle.",
+            "example": "2020-10-13"
           },
           "application_end_date": {
             "type": "string",
             "format": "date",
-            "description": "The default date applications stop being taken for this recruitment cycle."
+            "description": "The default date applications stop being taken for this recruitment cycle.",
+            "example": "2021-10-03"
           }
         }
       },
@@ -1126,10 +1203,12 @@
         ],
         "properties": {
           "id": {
-            "type": "integer"
+            "type": "string",
+            "example": "3"
           },
           "type": {
-            "type": "string"
+            "type": "string",
+            "example": "recruitment_cycles"
           },
           "attributes": {
             "$ref": "#/components/schemas/RecruitmentCycleAttributes"
@@ -1242,7 +1321,10 @@
             }
           },
           "included": {
-            "$ref": "#/components/schemas/Included"
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SubjectResource"
+            }
           },
           "jsonapi": {
             "$ref": "#/components/schemas/JSONAPI"
@@ -1284,30 +1366,33 @@
         "properties": {
           "name": {
             "type": "string",
-            "description": "Subject name."
+            "description": "Subject name.",
+            "example": "Primary with science"
           },
           "code": {
             "type": "string",
-            "description": "Unique subject code."
+            "description": "Unique subject code.",
+            "example": "07"
           },
           "bursary_amount": {
-            "type": "integer",
+            "type": "string",
             "description": "Non-repayable sum of money that universities can award to students to incentivise and support their studies",
-            "example": 9000
+            "example": "9000"
           },
           "early_career_payments": {
-            "type": "integer",
+            "type": "string",
             "description": "Eligible subjects teachers can apply for early-career payments of up to £9,000 after tax.",
-            "example": 8388
+            "example": "8388"
           },
           "scholarship": {
-            "type": "integer",
+            "type": "string",
             "description": "A grant or payment made to support a student’s education, awarded on the basis of academic or other achievement.",
-            "example": 3500
+            "example": "3500"
           },
           "subject_knowledge_enhancement_course_available": {
             "type": "boolean",
-            "description": "SKE courses are available in various subjects. Schools or universities will identify your need for an SKE as part of their selection process, usually at interview. If they feel you need to enhance your knowledge, but have potential to be a great teacher, they’ll offer you a teacher training place on the condition that you complete an SKE course."
+            "description": "SKE courses are available in various subjects. Schools or universities will identify your need for an SKE as part of their selection process, usually at interview. If they feel you need to enhance your knowledge, but have potential to be a great teacher, they’ll offer you a teacher training place on the condition that you complete an SKE course.",
+            "example": true
           }
         }
       },
@@ -1321,7 +1406,8 @@
         ],
         "properties": {
           "id": {
-            "type": "integer"
+            "type": "string",
+            "example": "3"
           },
           "type": {
             "type": "string",
@@ -1473,9 +1559,6 @@
                 }
               }
             }
-          },
-          "400": {
-            "description": "A bad request"
           }
         }
       }
@@ -1546,7 +1629,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/LocationListResponse"
+                  "$ref": "#/components/schemas/CourseLocationListResponse"
                 }
               }
             }
@@ -1623,6 +1706,20 @@
               "per_page": 10
             },
             "description": "Pagination options to navigate through the collection."
+          },
+          {
+            "name": "include",
+            "in": "query",
+            "required": false,
+            "description": "The associated data for this resource.",
+            "schema": {
+              "enum": [
+                "accredited_body",
+                "provider",
+                "recruitment_cycle"
+              ]
+            },
+            "example": "recruitment_cycle,provider"
           }
         ],
         "x-curl-examples": [
@@ -1686,6 +1783,20 @@
             "schema": {
               "type": "string"
             }
+          },
+          {
+            "name": "include",
+            "in": "query",
+            "required": false,
+            "description": "The associated data for this resource.",
+            "schema": {
+              "enum": [
+                "accredited_body",
+                "provider",
+                "recruitment_cycle"
+              ]
+            },
+            "example": "recruitment_cycle,provider"
           }
         ],
         "x-curl-examples": [
@@ -1744,10 +1855,12 @@
             "schema": {
               "enum": [
                 "recruitment_cycle",
-                "provider"
+                "provider",
+                "course",
+                "location_status"
               ]
             },
-            "example": "recruitment_cycle,provider"
+            "example": "recruitment_cycle,provider,course,location_status"
           }
         ],
         "responses": {
@@ -1756,7 +1869,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/LocationListResponse"
+                  "$ref": "#/components/schemas/ProviderLocationListResponse"
                 }
               }
             }
@@ -1873,6 +1986,18 @@
             "schema": {
               "type": "string"
             }
+          },
+          {
+            "name": "include",
+            "in": "query",
+            "required": false,
+            "description": "The associated data for this resource.",
+            "schema": {
+              "enum": [
+                "recruitment_cycle"
+              ]
+            },
+            "example": "recruitment_cycle"
           }
         ],
         "x-curl-examples": [
