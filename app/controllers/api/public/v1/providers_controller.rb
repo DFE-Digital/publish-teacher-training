@@ -22,12 +22,23 @@ module API
 
       private
 
+        def changed_since
+          @changed_since ||= params.dig(:filter, :changed_since)
+        end
+
         def providers
-          @providers ||= if sort_by_provider_ascending?
-                           recruitment_cycle.providers.by_name_ascending
-                         else
-                           recruitment_cycle.providers.by_name_descending
-                         end
+          @providers = recruitment_cycle.providers
+          @providers = if sort_by_provider_ascending?
+                         @providers.by_name_ascending
+                       else
+                         @providers.by_name_descending
+                       end
+
+          if changed_since.present?
+            @providers = @providers.changed_since(changed_since)
+          end
+
+          @providers
         end
 
         def recruitment_cycle

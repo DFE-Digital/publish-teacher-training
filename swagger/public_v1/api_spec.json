@@ -1016,6 +1016,18 @@
           }
         }
       },
+      "ProviderFilter": {
+        "type": "object",
+        "example": "",
+        "description": "This schema is used to search within collections to return more specific results.",
+        "properties": {
+          "changed_since": {
+            "description": "Return providers that only have changed since date (ISO 8601 date format)",
+            "type": "string",
+            "example": "2020-11-13T11:21:55Z"
+          }
+        }
+      },
       "ProviderListResponse": {
         "description": "This schema is used to return a collection of providers.",
         "type": "object",
@@ -1906,6 +1918,20 @@
             "required": false,
             "example": "name",
             "description": "Field(s) to sort the providers by."
+          },
+          {
+            "name": "filter",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/ProviderFilter"
+            },
+            "style": "deepObject",
+            "explode": true,
+            "required": false,
+            "description": "Refine provider to return.",
+            "example": {
+              "changed_since": "2020-11-13T11:21:55Z"
+            }
           },
           {
             "name": "page",
