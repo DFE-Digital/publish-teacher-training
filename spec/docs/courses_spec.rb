@@ -14,7 +14,7 @@ describe "API" do
                 example: "2020"
       parameter name: :filter,
                 in: :query,
-                schema: { "$ref" => "#/components/schemas/Filter" },
+                schema: { "$ref" => "#/components/schemas/CourseFilter" },
                 type: :object,
                 style: :deepObject,
                 explode: true,
