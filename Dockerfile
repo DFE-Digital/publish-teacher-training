@@ -1,4 +1,4 @@
-FROM ruby:2.7.2-alpine AS middleman
+FROM ruby:2.7.2-alpine3.12 AS middleman
 
 RUN apk add --update --no-cache npm git build-base
 
@@ -15,7 +15,7 @@ RUN bundle exec middleman build --build-dir=../public
 
 ###
 
-FROM ruby:2.7.2-alpine
+FROM ruby:2.7.2-alpine3.12
 
 ARG COMMIT_SHA
 
