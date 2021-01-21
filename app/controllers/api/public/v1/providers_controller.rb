@@ -22,8 +22,8 @@ module API
 
       private
 
-        def changed_since
-          @changed_since ||= params.dig(:filter, :changed_since)
+        def updated_since
+          @updated_since ||= params.dig(:filter, :updated_since)
         end
 
         def providers
@@ -34,8 +34,8 @@ module API
                          @providers.by_name_descending
                        end
 
-          if changed_since.present?
-            @providers = @providers.changed_since(changed_since)
+          if updated_since.present?
+            @providers = @providers.changed_since(updated_since)
           end
 
           @providers

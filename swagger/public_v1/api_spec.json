@@ -1021,8 +1021,8 @@
         "example": "",
         "description": "This schema is used to search within collections to return more specific results.",
         "properties": {
-          "changed_since": {
-            "description": "Return providers that only have changed since date (ISO 8601 date format)",
+          "updated_since": {
+            "description": "Return providers that only have updated since date (ISO 8601 date format)",
             "type": "string",
             "example": "2020-11-13T11:21:55Z"
           }
@@ -1928,9 +1928,9 @@
             "style": "deepObject",
             "explode": true,
             "required": false,
-            "description": "Refine provider to return.",
+            "description": "Refine providers to return.",
             "example": {
-              "changed_since": "2020-11-13T11:21:55Z"
+              "updated_since": "2020-11-13T11:21:55Z"
             }
           },
           {

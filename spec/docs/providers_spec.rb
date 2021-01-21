@@ -28,8 +28,8 @@ describe "API" do
                 style: :deepObject,
                 explode: true,
                 required: false,
-                description: "Refine provider to return.",
-                example: { changed_since: "2020-11-13T11:21:55Z" }
+                description: "Refine providers to return.",
+                example: { updated_since: "2020-11-13T11:21:55Z" }
       parameter name: :page,
                 in: :query,
                 schema: { "$ref" => "#/components/schemas/Pagination" },
