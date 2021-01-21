@@ -309,6 +309,45 @@ RSpec.describe API::Public::V1::ProvidersController do
           end
         end
       end
+
+      context "with filter" do
+        let(:provider2) do
+          Timecop.freeze(Time.zone.today + 1) do
+            create(:provider,
+                   provider_code: "2AT",
+                   provider_name: "Second",
+                   organisations: [organisation],
+                   contacts: [contact])
+          end
+        end
+
+        let(:provider_names_in_response) do
+          json_response["data"].map do |provider|
+            provider["attributes"]["name"]
+          end
+        end
+
+        before do
+          provider2
+        end
+
+        context "passing in changed_since param" do
+          before do
+            get :index, params: {
+              recruitment_cycle_year: recruitment_cycle.year,
+              filter: filter,
+            }
+          end
+
+          context "changed_since" do
+            let(:filter) { { changed_since: (provider2.changed_at - 1.second).iso8601 } }
+
+            it "returns provider 2" do
+              expect(provider_names_in_response).to eq([provider2.provider_name])
+            end
+          end
+        end
+      end
     end
   end
 
