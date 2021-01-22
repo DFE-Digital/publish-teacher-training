@@ -215,6 +215,18 @@ RSpec.describe CourseSearchService do
       end
     end
 
+    describe "filter[updated_since]" do
+      let(:filter) { { updated_since: Time.zone.now.iso8601 } }
+      let(:expected_scope) { double }
+
+      it "adds the changed_since scope" do
+        expect(scope).to receive(:changed_since).and_return(course_ids_scope)
+        expect(course_ids_scope).to receive(:select).and_return(inner_query_scope)
+        expect(course_with_includes).to receive(:where).and_return(expected_scope)
+        expect(subject).to eq(expected_scope)
+      end
+    end
+
     describe "filter[funding]" do
       context "when value is salary" do
         let(:filter) { { funding: "salary" } }

@@ -27,6 +27,7 @@ class CourseSearchService
     scope = scope.with_send if send_courses_filter?
     scope = scope.within(filter[:radius], origin: origin) if locations_filter?
     scope = scope.with_funding_types(funding_types) if funding_types.any?
+    scope = scope.changed_since(filter[:updated_since]) if updated_since_filter?
 
     # The 'where' scope will remove duplicates
     # An outer query is required in the event the provider name is present.
@@ -200,5 +201,9 @@ private
 
   def send_courses_filter?
     filter[:send_courses].to_s.downcase == "true"
+  end
+
+  def updated_since_filter?
+    filter[:updated_since].present?
   end
 end

@@ -99,3 +99,7 @@ properties:
     description: "Search radius in miles from given latitude and longitude."
     type: number
     example: 20
+  updated_since:
+    description: "Return courses have been updated since the date (ISO 8601 date format)"
+    type: string
+    example: "2020-11-13T11:21:55Z"
