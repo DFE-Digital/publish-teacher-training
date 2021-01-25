@@ -20,7 +20,7 @@ describe "API" do
                 example: "T92"
       parameter name: :filter,
                 in: :query,
-                schema: { "$ref" => "#/components/schemas/Filter" },
+                schema: { "$ref" => "#/components/schemas/CourseFilter" },
                 type: :object,
                 style: :deepObject,
                 explode: true,

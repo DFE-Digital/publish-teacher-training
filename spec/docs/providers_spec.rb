@@ -21,6 +21,15 @@ describe "API" do
                 required: false,
                 example: "name",
                 description: "Field(s) to sort the providers by."
+      parameter name: :filter,
+                in: :query,
+                schema: { "$ref" => "#/components/schemas/ProviderFilter" },
+                type: :object,
+                style: :deepObject,
+                explode: true,
+                required: false,
+                description: "Refine providers to return.",
+                example: { updated_since: "2020-11-13T11:21:55Z" }
       parameter name: :page,
                 in: :query,
                 schema: { "$ref" => "#/components/schemas/Pagination" },
