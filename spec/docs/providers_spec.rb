@@ -103,7 +103,7 @@ describe "API" do
         let(:provider_code) { "999" }
         let(:include) { nil }
 
-        schema "$ref": "#/components/schemas/NotFoundResponse"
+        schema "$ref": "#/components/schemas/StandardErrorResponse"
 
         run_test!
       end

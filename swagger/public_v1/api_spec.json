@@ -848,23 +848,6 @@
           }
         }
       },
-      "NotFoundResponse": {
-        "description": "This schema is used to return a not found response.",
-        "type": "object",
-        "required": [
-          "data",
-          "jsonapi"
-        ],
-        "properties": {
-          "data": {
-            "nullable": true,
-            "example": null
-          },
-          "jsonapi": {
-            "$ref": "#/components/schemas/JSONAPI"
-          }
-        }
-      },
       "Pagination": {
         "description": "This schema used to paginate through a collection.",
         "type": "object",
@@ -1290,6 +1273,42 @@
           "description": "A comma delimited string of fields to sort the collection by."
         }
       },
+      "StandardErrorAttributes": {
+        "description": "This schema is used to describe a generic application error.",
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "integer",
+            "description": "Returns the http status code associated with the error.",
+            "example": "400"
+          },
+          "title": {
+            "type": "string",
+            "description": "A generic title for the type of error.",
+            "example": "BAD REQUEST"
+          },
+          "detail": {
+            "type": "string",
+            "description": "A more detailed description of what could have caused the error.",
+            "example": "The request could not be fulfilled due to some incorrect syntax of the request."
+          }
+        }
+      },
+      "StandardErrorResponse": {
+        "description": "This schema is used to return a collection of generic application errors",
+        "type": "object",
+        "required": [
+          "errors"
+        ],
+        "properties": {
+          "errors": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/StandardErrorAttributes"
+            }
+          }
+        }
+      },
       "SubjectAreaAttributes": {
         "description": "This schema is used to describe a subject area.",
         "type": "object",
@@ -1556,6 +1575,16 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ProviderSuggestionListResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "A bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StandardErrorResponse"
                 }
               }
             }
@@ -2022,7 +2051,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/NotFoundResponse"
+                  "$ref": "#/components/schemas/StandardErrorResponse"
                 }
               }
             }

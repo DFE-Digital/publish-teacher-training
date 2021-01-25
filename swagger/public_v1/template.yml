@@ -238,18 +238,6 @@ components:
             $ref: "#/components/schemas/RecruitmentCycleResource"
         jsonapi:
           $ref: "#/components/schemas/JSONAPI"
-    NotFoundResponse:
-      description: "This schema is used to return a not found response."
-      type: object
-      required:
-        - data
-        - jsonapi
-      properties:
-        data:
-          nullable: true
-          example: null
-        jsonapi:
-          $ref: "#/components/schemas/JSONAPI"
     ProviderSingleResponse:
       description: "This schema is used to return a single provider."
       type: object
@@ -387,3 +375,30 @@ components:
             $ref: "#/components/schemas/SubjectResource"
         jsonapi:
           $ref: "#/components/schemas/JSONAPI"
+    StandardErrorResponse:
+      description: "This schema is used to return a collection of generic application errors"
+      type: object
+      required:
+        - errors
+      properties:
+        errors:
+          type: array
+          items:
+            $ref: "#/components/schemas/StandardErrorAttributes"
+    StandardErrorAttributes:
+      description: "This schema is used to describe a generic application error."
+      type: object
+      properties:
+        status:
+          type: integer
+          description: "Returns the http status code associated with the error."
+          example: "400"
+        title:
+          type: string
+          description: "A generic title for the type of error."
+          example: "BAD REQUEST"
+        detail:
+          type: string
+          description: "A more detailed description of what could have caused the error."
+          example: "The request could not be fulfilled due to some incorrect syntax of the request."
+    
