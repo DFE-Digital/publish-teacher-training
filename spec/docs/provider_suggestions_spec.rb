@@ -23,6 +23,14 @@ describe "API" do
 
         run_test!
       end
+
+      response "400", "A bad request" do
+        let(:query) { nil }
+
+        schema "$ref": "#/components/schemas/StandardErrorResponse"
+
+        run_test!
+      end
     end
   end
 end

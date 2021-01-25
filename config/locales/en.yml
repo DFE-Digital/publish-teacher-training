@@ -23,6 +23,9 @@ en:
         expect_to_achieve_before_training_begins: "Taking the GCSE"
         equivalence_test: "Equivalency test"
         not_required: "Not required"
+  provider_suggestion:
+    errors:
+      bad_request: Unknown provider code or name, please check the query string.
   activerecord:
     attributes:
       course:
@@ -146,7 +149,7 @@ en:
       detail: "%{message}"
     "404":
       title: NOT_FOUND
-      detail: "The requested resource does not exist"
+      detail: "The requested resource could not be found"
     "500":
       title: SERVER_ERROR
       detail: "Something has gone wrong, please try again in a few minutes"
