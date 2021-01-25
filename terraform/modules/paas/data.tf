@@ -7,7 +7,7 @@ data cloudfoundry_domain api_publish_service_gov_uk {
 }
 
 data cloudfoundry_org org {
-  name = "dfe-teacher-services"
+  name = "dfe"
 }
 
 data cloudfoundry_space space {
