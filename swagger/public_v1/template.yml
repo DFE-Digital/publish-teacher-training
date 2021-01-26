@@ -35,6 +35,7 @@ components:
       properties:
         id:
           type: string
+          example: "12944685"
         type:
           type: string
           example: "courses"
@@ -213,7 +214,7 @@ components:
       properties:
         id:
           type: string
-          example: 1
+          example: "14554"
         type:
           type: string
           example: "providers"
@@ -257,12 +258,14 @@ components:
       description: "This schema provides metadata about a provider."
       type: object
       properties:
-        name:
+        id:
           type: string
-          example: "Oxford Brookes University"
-        code:
+          example: "15947"
+        type:
           type: string
-          example: "O66"
+          example: "provider_suggestions"
+        attributes:
+          $ref: "#/components/schemas/ProviderSuggestionAttributes"
     ProviderSuggestionListResponse:
       description: "This schema is used to return a collection of provider suggestions."
       type: object
@@ -310,8 +313,10 @@ components:
       properties:
         type:
           type: string
+          example: "recruitment_cycles"
         id:
           type: string
+          example: "3"
     RecruitmentCycleResource:
       description: "This schema provides metadata about a recruitment cycle."
       type: object
@@ -341,9 +346,22 @@ components:
           example: "3"
         type:
           type: string
-          example: subjects
+          example: "subjects"
         attributes:
           $ref: "#/components/schemas/SubjectAttributes"
+    SubjectListResponse:
+      description: "This schema is used to return a collection of subjects."
+      type: object
+      required:
+        - data
+        - jsonapi
+      properties:
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/SubjectResource"
+        jsonapi:
+          $ref: "#/components/schemas/JSONAPI"
     SubjectAreaResource:
       description: "This schema provides metadata about a subject area."
       type: object
@@ -392,7 +410,7 @@ components:
         status:
           type: integer
           description: "Returns the http status code associated with the error."
-          example: "400"
+          example: 400
         title:
           type: string
           description: "A generic title for the type of error."

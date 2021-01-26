@@ -609,7 +609,8 @@
         ],
         "properties": {
           "id": {
-            "type": "string"
+            "type": "string",
+            "example": "12944685"
           },
           "type": {
             "type": "string",
@@ -1094,7 +1095,7 @@
         "properties": {
           "id": {
             "type": "string",
-            "example": 1
+            "example": "14554"
           },
           "type": {
             "type": "string",
@@ -1132,6 +1133,23 @@
       },
       "ProviderSuggestion": {
         "description": "This schema provides metadata about a provider.",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "15947"
+          },
+          "type": {
+            "type": "string",
+            "example": "provider_suggestions"
+          },
+          "attributes": {
+            "$ref": "#/components/schemas/ProviderSuggestionAttributes"
+          }
+        }
+      },
+      "ProviderSuggestionAttributes": {
+        "description": "This schema is used to describe a provider's lookup information.",
         "type": "object",
         "properties": {
           "name": {
@@ -1268,10 +1286,12 @@
         ],
         "properties": {
           "type": {
-            "type": "string"
+            "type": "string",
+            "example": "recruitment_cycles"
           },
           "id": {
-            "type": "string"
+            "type": "string",
+            "example": "3"
           }
         }
       },
@@ -1292,7 +1312,7 @@
           "status": {
             "type": "integer",
             "description": "Returns the http status code associated with the error.",
-            "example": "400"
+            "example": 400
           },
           "title": {
             "type": "string",
@@ -1424,6 +1444,25 @@
             "type": "boolean",
             "description": "SKE courses are available in various subjects. Schools or universities will identify your need for an SKE as part of their selection process, usually at interview. If they feel you need to enhance your knowledge, but have potential to be a great teacher, they’ll offer you a teacher training place on the condition that you complete an SKE course.",
             "example": true
+          }
+        }
+      },
+      "SubjectListResponse": {
+        "description": "This schema is used to return a collection of subjects.",
+        "type": "object",
+        "required": [
+          "data",
+          "jsonapi"
+        ],
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SubjectResource"
+            }
+          },
+          "jsonapi": {
+            "$ref": "#/components/schemas/JSONAPI"
           }
         }
       },
@@ -2159,7 +2198,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/SubjectAttributes"
+                  "$ref": "#/components/schemas/SubjectListResponse"
                 }
               }
             }
