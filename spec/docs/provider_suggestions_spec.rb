@@ -27,7 +27,7 @@ describe "API" do
       response "400", "A bad request" do
         let(:query) { nil }
 
-        schema "$ref": "#/components/schemas/StandardErrorResponse"
+        schema "$ref": "#/components/schemas/400ErrorResponse"
 
         run_test!
       end

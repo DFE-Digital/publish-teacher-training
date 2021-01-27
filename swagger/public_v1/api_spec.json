@@ -25,6 +25,92 @@
   ],
   "components": {
     "schemas": {
+      "400ErrorResponse": {
+        "description": "This schema is used to return a 400 application error",
+        "type": "object",
+        "required": [
+          "errors"
+        ],
+        "properties": {
+          "errors": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "integer",
+                  "description": "Returns the http status code associated with the error.",
+                  "example": 400
+                },
+                "title": {
+                  "type": "string",
+                  "description": "A generic title for the type of error.",
+                  "example": "BAD REQUEST"
+                },
+                "detail": {
+                  "type": "string",
+                  "description": "A more detailed description of what could have caused the error.",
+                  "example": "The request could not be fulfilled due to some incorrect syntax of the request."
+                }
+              }
+            }
+          }
+        }
+      },
+      "404ErrorResponse": {
+        "description": "This schema is used to return a 404 application error",
+        "type": "object",
+        "required": [
+          "errors"
+        ],
+        "properties": {
+          "errors": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "integer",
+                  "description": "Returns the http status code associated with the error.",
+                  "example": 404
+                },
+                "title": {
+                  "type": "string",
+                  "description": "A generic title for the type of error.",
+                  "example": "NOT_FOUND"
+                },
+                "detail": {
+                  "type": "string",
+                  "description": "A more detailed description of what could have caused the error.",
+                  "example": "The requested resource could not be found."
+                }
+              }
+            }
+          }
+        }
+      },
+      "AccreditedBodyRelationship": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "object",
+            "required": [
+              "type",
+              "id"
+            ],
+            "properties": {
+              "type": {
+                "type": "string",
+                "example": "providers"
+              },
+              "id": {
+                "type": "string",
+                "example": "16346"
+              }
+            }
+          }
+        }
+      },
       "CourseAttributes": {
         "description": "This schema presents the information about a course.",
         "type": "object",
@@ -584,18 +670,40 @@
           }
         }
       },
-      "CourseRelationships": {
+      "CourseRelationship": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "object",
+            "required": [
+              "type",
+              "id"
+            ],
+            "properties": {
+              "type": {
+                "type": "string",
+                "example": "courses"
+              },
+              "id": {
+                "type": "string",
+                "example": "12924236"
+              }
+            }
+          }
+        }
+      },
+      "CourseRelationshipList": {
         "description": "This schema is used to describe associations that can be returned with a course.",
         "type": "object",
         "properties": {
           "recruitment_cycle": {
-            "$ref": "#/components/schemas/Relationship"
+            "$ref": "#/components/schemas/RecruitmentCycleRelationship"
           },
           "accredited_body": {
-            "$ref": "#/components/schemas/Relationship"
+            "$ref": "#/components/schemas/AccreditedBodyRelationship"
           },
           "provider": {
-            "$ref": "#/components/schemas/Relationship"
+            "$ref": "#/components/schemas/ProviderRelationship"
           }
         }
       },
@@ -620,7 +728,7 @@
             "$ref": "#/components/schemas/CourseAttributes"
           },
           "relationships": {
-            "$ref": "#/components/schemas/CourseRelationships"
+            "$ref": "#/components/schemas/CourseRelationshipList"
           }
         }
       },
@@ -728,21 +836,21 @@
           }
         }
       },
-      "LocationRelationships": {
+      "LocationRelationshipList": {
         "description": "This schema is used to describe associations that can be returned with locations.",
         "type": "object",
         "properties": {
           "recruitment_cycle": {
-            "$ref": "#/components/schemas/Relationship"
+            "$ref": "#/components/schemas/RecruitmentCycleRelationship"
           },
           "provider": {
-            "$ref": "#/components/schemas/Relationship"
+            "$ref": "#/components/schemas/ProviderRelationship"
           },
           "course": {
-            "$ref": "#/components/schemas/Relationship"
+            "$ref": "#/components/schemas/CourseRelationship"
           },
           "location_status": {
-            "$ref": "#/components/schemas/Relationship"
+            "$ref": "#/components/schemas/LocationStatusRelationship"
           }
         }
       },
@@ -762,7 +870,7 @@
             "$ref": "#/components/schemas/LocationAttributes"
           },
           "relationships": {
-            "$ref": "#/components/schemas/LocationRelationships"
+            "$ref": "#/components/schemas/LocationRelationshipList"
           }
         }
       },
@@ -802,31 +910,26 @@
               "both_full_time_and_part_time_vacancies"
             ],
             "example": "full_time_vacancies"
-          },
-          "relationships": {
-            "$ref": "#/components/schemas/LocationStatusRelationships"
           }
         }
       },
-      "LocationStatusRelationships": {
-        "description": "This schema returns associations that belong to a location status.",
+      "LocationStatusRelationship": {
         "type": "object",
         "properties": {
-          "site": {
+          "data": {
             "type": "object",
+            "required": [
+              "type",
+              "id"
+            ],
             "properties": {
-              "data": {
-                "type": "object",
-                "properties": {
-                  "id": {
-                    "type": "string",
-                    "example": "11214483"
-                  },
-                  "type": {
-                    "type": "string",
-                    "example": "sites"
-                  }
-                }
+              "type": {
+                "type": "string",
+                "example": "location_statuses"
+              },
+              "id": {
+                "type": "string",
+                "example": "22322679"
               }
             }
           }
@@ -846,6 +949,9 @@
           },
           "attributes": {
             "$ref": "#/components/schemas/LocationStatusAttributes"
+          },
+          "relationships": {
+            "$ref": "#/components/schemas/SiteRelationship"
           }
         }
       },
@@ -1075,12 +1181,34 @@
           }
         }
       },
-      "ProviderRelationships": {
+      "ProviderRelationship": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "object",
+            "required": [
+              "type",
+              "id"
+            ],
+            "properties": {
+              "type": {
+                "type": "string",
+                "example": "providers"
+              },
+              "id": {
+                "type": "string",
+                "example": "16288"
+              }
+            }
+          }
+        }
+      },
+      "ProviderRelationshipList": {
         "description": "This schema is used to describe associations that can be returned with a provider.",
         "type": "object",
         "properties": {
           "recruitment_cycle": {
-            "$ref": "#/components/schemas/Relationship"
+            "$ref": "#/components/schemas/RecruitmentCycleRelationship"
           }
         }
       },
@@ -1105,7 +1233,7 @@
             "$ref": "#/components/schemas/ProviderAttributes"
           },
           "relationships": {
-            "$ref": "#/components/schemas/ProviderRelationships"
+            "$ref": "#/components/schemas/ProviderRelationshipList"
           }
         }
       },
@@ -1206,6 +1334,28 @@
           }
         }
       },
+      "RecruitmentCycleRelationship": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "object",
+            "required": [
+              "type",
+              "id"
+            ],
+            "properties": {
+              "type": {
+                "type": "string",
+                "example": "recruitment_cycles"
+              },
+              "id": {
+                "type": "string",
+                "example": "3"
+              }
+            }
+          }
+        }
+      },
       "RecruitmentCycleResource": {
         "description": "This schema provides metadata about a recruitment cycle.",
         "type": "object",
@@ -1292,6 +1442,31 @@
           "id": {
             "type": "string",
             "example": "3"
+          }
+        }
+      },
+      "SiteRelationship": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "type",
+                "id"
+              ],
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "example": "sites"
+                },
+                "id": {
+                  "type": "string",
+                  "example": "11214483"
+                }
+              }
+            }
           }
         }
       },
@@ -1382,12 +1557,12 @@
           }
         }
       },
-      "SubjectAreaRelationships": {
+      "SubjectAreaRelationshipList": {
         "description": "This schema is used to describe associations that can be returned with a subject area.",
         "type": "object",
         "properties": {
           "subjects": {
-            "$ref": "#/components/schemas/RelationshipList"
+            "$ref": "#/components/schemas/SubjectRelationship"
           }
         }
       },
@@ -1407,7 +1582,7 @@
             "$ref": "#/components/schemas/SubjectAreaAttributes"
           },
           "relationships": {
-            "$ref": "#/components/schemas/SubjectAreaRelationships"
+            "$ref": "#/components/schemas/SubjectAreaRelationshipList"
           }
         }
       },
@@ -1423,27 +1598,32 @@
           "code": {
             "type": "string",
             "description": "Unique subject code.",
-            "example": "07"
+            "example": "07",
+            "nullable": true
           },
           "bursary_amount": {
             "type": "string",
             "description": "Non-repayable sum of money that universities can award to students to incentivise and support their studies",
-            "example": "9000"
+            "example": "9000",
+            "nullable": true
           },
           "early_career_payments": {
             "type": "string",
             "description": "Eligible subjects teachers can apply for early-career payments of up to £9,000 after tax.",
-            "example": "8388"
+            "example": "8388",
+            "nullable": true
           },
           "scholarship": {
             "type": "string",
             "description": "A grant or payment made to support a student’s education, awarded on the basis of academic or other achievement.",
-            "example": "3500"
+            "example": "3500",
+            "nullable": true
           },
           "subject_knowledge_enhancement_course_available": {
             "type": "boolean",
             "description": "SKE courses are available in various subjects. Schools or universities will identify your need for an SKE as part of their selection process, usually at interview. If they feel you need to enhance your knowledge, but have potential to be a great teacher, they’ll offer you a teacher training place on the condition that you complete an SKE course.",
-            "example": true
+            "example": true,
+            "nullable": true
           }
         }
       },
@@ -1463,6 +1643,31 @@
           },
           "jsonapi": {
             "$ref": "#/components/schemas/JSONAPI"
+          }
+        }
+      },
+      "SubjectRelationship": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "type",
+                "id"
+              ],
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "example": "subjects"
+                },
+                "id": {
+                  "type": "string",
+                  "example": "1"
+                }
+              }
+            }
           }
         }
       },
@@ -1635,7 +1840,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/StandardErrorResponse"
+                  "$ref": "#/components/schemas/400ErrorResponse"
                 }
               }
             }
@@ -2116,7 +2321,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/StandardErrorResponse"
+                  "$ref": "#/components/schemas/404ErrorResponse"
                 }
               }
             }

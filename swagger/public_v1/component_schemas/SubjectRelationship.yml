@@ -1,0 +1,16 @@
+type: object
+properties:
+  data:
+    type: array
+    items:
+      type: object
+      required:
+        - type
+        - id
+      properties:
+        type:
+          type: string
+          example: "subjects"
+        id:
+          type: string
+          example: "1"

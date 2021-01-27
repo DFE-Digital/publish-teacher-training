@@ -28,5 +28,3 @@ properties:
       - part_time_vacancies
       - both_full_time_and_part_time_vacancies
     example: full_time_vacancies
-  relationships:
-    $ref: "#/components/schemas/LocationStatusRelationships"

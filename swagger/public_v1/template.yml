@@ -42,7 +42,7 @@ components:
         attributes:
           $ref: "#/components/schemas/CourseAttributes"
         relationships:
-          $ref: "#/components/schemas/CourseRelationships"
+          $ref: "#/components/schemas/CourseRelationshipList"
     CourseListResponse:
       description: "This schema is used to return a collection of courses."
       type: object
@@ -149,7 +149,7 @@ components:
         attributes:
           $ref: "#/components/schemas/LocationAttributes"
         relationships:
-          $ref: "#/components/schemas/LocationRelationships"
+          $ref: "#/components/schemas/LocationRelationshipList"
     ProviderLocationListResponse:
       description: "This schema is used to return a collection of locations for a specified provider."
       type: object
@@ -204,6 +204,8 @@ components:
           example: site_statuses
         attributes:
           $ref: "#/components/schemas/LocationStatusAttributes"
+        relationships:
+          $ref: "#/components/schemas/SiteRelationship"
     ProviderResource:
       description: "This schema provides metadata about a provider."
       type: object
@@ -221,7 +223,7 @@ components:
         attributes:
           $ref: "#/components/schemas/ProviderAttributes"
         relationships:
-          $ref: "#/components/schemas/ProviderRelationships"
+          $ref: "#/components/schemas/ProviderRelationshipList"
     ProviderListResponse:
       description: "This schema is used to return a collection of providers."
       type: object
@@ -375,7 +377,7 @@ components:
         attributes:
           $ref: "#/components/schemas/SubjectAreaAttributes"
         relationships:
-          $ref: "#/components/schemas/SubjectAreaRelationships"
+          $ref: "#/components/schemas/SubjectAreaRelationshipList"
     SubjectAreaListResponse:
       description: "This schema is used to return a collection of subject areas."
       type: object
