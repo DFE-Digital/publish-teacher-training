@@ -35,13 +35,14 @@ components:
       properties:
         id:
           type: string
+          example: "12944685"
         type:
           type: string
           example: "courses"
         attributes:
           $ref: "#/components/schemas/CourseAttributes"
         relationships:
-          $ref: "#/components/schemas/CourseRelationships"
+          $ref: "#/components/schemas/CourseRelationshipList"
     CourseListResponse:
       description: "This schema is used to return a collection of courses."
       type: object
@@ -148,7 +149,7 @@ components:
         attributes:
           $ref: "#/components/schemas/LocationAttributes"
         relationships:
-          $ref: "#/components/schemas/LocationRelationships"
+          $ref: "#/components/schemas/LocationRelationshipList"
     ProviderLocationListResponse:
       description: "This schema is used to return a collection of locations for a specified provider."
       type: object
@@ -203,6 +204,8 @@ components:
           example: site_statuses
         attributes:
           $ref: "#/components/schemas/LocationStatusAttributes"
+        relationships:
+          $ref: "#/components/schemas/SiteRelationship"
     ProviderResource:
       description: "This schema provides metadata about a provider."
       type: object
@@ -213,14 +216,14 @@ components:
       properties:
         id:
           type: string
-          example: 1
+          example: "14554"
         type:
           type: string
           example: "providers"
         attributes:
           $ref: "#/components/schemas/ProviderAttributes"
         relationships:
-          $ref: "#/components/schemas/ProviderRelationships"
+          $ref: "#/components/schemas/ProviderRelationshipList"
     ProviderListResponse:
       description: "This schema is used to return a collection of providers."
       type: object
@@ -257,12 +260,14 @@ components:
       description: "This schema provides metadata about a provider."
       type: object
       properties:
-        name:
+        id:
           type: string
-          example: "Oxford Brookes University"
-        code:
+          example: "15947"
+        type:
           type: string
-          example: "O66"
+          example: "provider_suggestions"
+        attributes:
+          $ref: "#/components/schemas/ProviderSuggestionAttributes"
     ProviderSuggestionListResponse:
       description: "This schema is used to return a collection of provider suggestions."
       type: object
@@ -310,8 +315,10 @@ components:
       properties:
         type:
           type: string
+          example: "recruitment_cycles"
         id:
           type: string
+          example: "3"
     RecruitmentCycleResource:
       description: "This schema provides metadata about a recruitment cycle."
       type: object
@@ -341,9 +348,22 @@ components:
           example: "3"
         type:
           type: string
-          example: subjects
+          example: "subjects"
         attributes:
           $ref: "#/components/schemas/SubjectAttributes"
+    SubjectListResponse:
+      description: "This schema is used to return a collection of subjects."
+      type: object
+      required:
+        - data
+        - jsonapi
+      properties:
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/SubjectResource"
+        jsonapi:
+          $ref: "#/components/schemas/JSONAPI"
     SubjectAreaResource:
       description: "This schema provides metadata about a subject area."
       type: object
@@ -357,7 +377,7 @@ components:
         attributes:
           $ref: "#/components/schemas/SubjectAreaAttributes"
         relationships:
-          $ref: "#/components/schemas/SubjectAreaRelationships"
+          $ref: "#/components/schemas/SubjectAreaRelationshipList"
     SubjectAreaListResponse:
       description: "This schema is used to return a collection of subject areas."
       type: object
@@ -392,7 +412,7 @@ components:
         status:
           type: integer
           description: "Returns the http status code associated with the error."
-          example: "400"
+          example: 400
         title:
           type: string
           description: "A generic title for the type of error."

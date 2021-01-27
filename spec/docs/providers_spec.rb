@@ -112,7 +112,7 @@ describe "API" do
         let(:provider_code) { "999" }
         let(:include) { nil }
 
-        schema "$ref": "#/components/schemas/StandardErrorResponse"
+        schema "$ref": "#/components/schemas/404ErrorResponse"
 
         run_test!
       end

@@ -1,0 +1,22 @@
+description: "This schema is used to return a 404 application error"
+type: object
+required:
+  - errors
+properties:
+  errors:
+    type: array
+    items:
+      type: object
+      properties:
+        status:
+          type: integer
+          description: "Returns the http status code associated with the error."
+          example: 404
+        title:
+          type: string
+          description: "A generic title for the type of error."
+          example: "NOT_FOUND"
+        detail:
+          type: string
+          description: "A more detailed description of what could have caused the error."
+          example: "The requested resource could not be found."

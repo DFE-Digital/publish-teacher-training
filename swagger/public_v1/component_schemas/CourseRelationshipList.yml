@@ -3,8 +3,8 @@ description: "This schema is used to describe associations that can be returned 
 type: object
 properties:
   recruitment_cycle:
-    $ref: "#/components/schemas/Relationship"
+    $ref: "#/components/schemas/RecruitmentCycleRelationship"
   accredited_body:
-    $ref: "#/components/schemas/Relationship"
+    $ref: "#/components/schemas/AccreditedBodyRelationship"
   provider:
-    $ref: "#/components/schemas/Relationship"
+    $ref: "#/components/schemas/ProviderRelationship"

@@ -1,0 +1,9 @@
+description: "This schema is used to describe a provider's lookup information."
+type: object
+properties:
+  name:
+    type: string
+    example: "Oxford Brookes University"
+  code:
+    type: string
+    example: "O66"
