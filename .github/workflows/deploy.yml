@@ -15,6 +15,10 @@ on:
         description: Deploy to production?
         default: 'false'
         required: true
+      sandbox:
+        description: Deploy to sandbox?
+        default: 'false'
+        required: true
       sha:
         description: Commit sha to be deployed
         required: true

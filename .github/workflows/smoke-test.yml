@@ -3,7 +3,7 @@ on:
   workflow_dispatch:
     inputs:
       environment:
-        description: 'The environment to run tests against (qa, staging or production)'
+        description: 'The environment to run tests against (qa, staging, production or sandbox)'
         required: true
 
 jobs:
