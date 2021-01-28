@@ -439,7 +439,7 @@ GEM
     tabulo (2.3.3)
       tty-screen (= 0.7.1)
       unicode-display_width (= 1.6.1)
-    terminal-table (2.0.0)
+    terminal-table (3.0.0)
       unicode-display_width (~> 1.1, >= 1.1.1)
     thor (1.1.0)
     thread_safe (0.3.6)
