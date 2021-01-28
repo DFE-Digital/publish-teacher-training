@@ -52,6 +52,11 @@ staging: ## Set DEPLOY_ENV to staging
 	$(eval DEPLOY_ENV=staging)
 	$(eval AZ_SUBSCRIPTION=s121-findpostgraduateteachertraining-test)
 
+.PHONY: sandbox
+sandbox: ## Set DEPLOY_ENV to sandbox
+	$(eval DEPLOY_ENV=sandbox)
+	$(eval AZ_SUBSCRIPTION=s121-findpostgraduateteachertraining-sandbox)
+
 .PHONY: production
 production: ## Set DEPLOY_ENV to production
 	$(eval DEPLOY_ENV=production)
@@ -63,6 +68,7 @@ deploy-init:
 	$(if $(IMAGE_TAG), , $(error Missing environment variable "IMAGE_TAG"))
 	$(eval export TF_VAR_paas_docker_image=dfedigital/teacher-training-api:paas-$(IMAGE_TAG))
 	$(eval export TF_VAR_paas_app_secrets_file=./terraform/workspace_variables/app_secrets.yml)
+	az account set -s ${AZ_SUBSCRIPTION} && az account show
 	terraform init -reconfigure -backend-config=terraform/workspace_variables/$(DEPLOY_ENV)_backend.tfvars $(backend_key) terraform
 	echo "🚀 DEPLOY_ENV is $(DEPLOY_ENV)"
 

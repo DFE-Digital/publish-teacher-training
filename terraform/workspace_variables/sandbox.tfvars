@@ -1,23 +1,23 @@
 #PaaS
 cf_space                   = "bat-prod"
-paas_app_environment       = "prod"
-paas_web_app_host_name     = null
+paas_app_environment       = "sandbox"
+paas_web_app_host_name     = "sandbox"
 paas_web_app_instances     = 2
 paas_web_app_memory        = 512
 paas_worker_app_instances  = 2
 paas_worker_app_memory     = 512
 paas_postgres_service_plan = "small-11"
-paas_redis_service_plan    = "tiny-5_x"
+paas_redis_service_plan    = "micro-5_x"
 paas_app_config = {
-  RAILS_ENV                = "production"
+  RAILS_ENV                = "sandbox"
   RAILS_SERVE_STATIC_FILES = true
 }
 
 #StatusCake
 statuscake_alerts = {
-  ttapi = {
-    website_name   = "teacher-training-api-prod"
-    website_url    = "https://api.publish-teacher-training-courses.service.gov.uk/ping"
+  ttapi-sandbox = {
+    website_name   = "teacher-training-api-sandbox"
+    website_url    = "https://sandbox.api.publish-teacher-training-courses.service.gov.uk/ping"
     test_type      = "HTTP"
     check_rate     = 60
     contact_group  = [151103]
