@@ -4,7 +4,7 @@ require "spec_helper_smoke"
 
 describe "V1 Public API Smoke Tests", :aggregate_failures, smoke: true do
   let(:recruitment_year) { Settings.current_recruitment_cycle_year }
-  let(:base_url) { Settings.publish_url.sub("www", "api") }
+  let(:base_url) { Settings.publish_api_url }
 
   subject(:response) { HTTParty.get(url) }
 
