@@ -1,0 +1,23 @@
+default: &default
+  ASSETS_PRECOMPILE: true
+  RAILS_SERVE_STATIC_FILES: true
+
+qa:
+  <<: *default
+  RAILS_ENV: qa
+  RACK_ENV: qa
+
+staging:
+  <<: *default
+  RAILS_ENV: staging
+  RACK_ENV: staging
+
+prod:
+  <<: *default
+  RAILS_ENV: production
+  RACK_ENV: production
+
+sandbox:
+  <<: *default
+  RAILS_ENV: sandbox
+  RACK_ENV: sandbox

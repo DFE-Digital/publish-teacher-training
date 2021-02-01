@@ -20,7 +20,7 @@ variable paas_app_environment {}
 
 variable paas_web_app_host_name {}
 
-variable paas_app_config { type = map }
+variable paas_app_config_file { default = "./workspace_variables/app_config.yml" }
 
 variable key_vault_name {}
 
@@ -39,9 +39,10 @@ variable statuscake_alerts {
 
 locals {
   cf_api_url                     = "https://api.london.cloud.service.gov.uk"
-  paas_app_secrets               = yamldecode(data.azurerm_key_vault_secret.app_secrets.value)
+  app_config                     = yamldecode(file(var.paas_app_config_file))[var.paas_app_environment]
+  app_secrets                    = yamldecode(data.azurerm_key_vault_secret.app_secrets.value)
   infra_secrets                  = yamldecode(data.azurerm_key_vault_secret.infra_secrets.value)
-  paas_app_environment_variables = merge(local.paas_app_secrets, var.paas_app_config)
+  paas_app_environment_variables = merge(local.app_secrets, local.app_config)
   docker_credentials = {
     username = local.infra_secrets.DOCKERHUB_USERNAME
     password = local.infra_secrets.DOCKERHUB_PASSWORD
