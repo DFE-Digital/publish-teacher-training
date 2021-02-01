@@ -87,10 +87,7 @@ jobs:
         env:
           ARM_ACCESS_KEY:             ${{ secrets[format('ARM_ACCESS_KEY_{0}', env.DEPLOY_ENV)] }}
           TF_VAR_paas_docker_image:   ${{ env.DOCKER_IMAGE }}
-          TF_VAR_cf_user:             ${{ secrets[format('CF_USERNAME_{0}', env.DEPLOY_ENV)] }}
-          TF_VAR_cf_user_password:    ${{ secrets[format('CF_PASSWORD_{0}', env.DEPLOY_ENV)] }}
-          TF_VAR_statuscake_username: ${{ secrets.STATUSCAKE_USERNAME }}
-          TF_VAR_statuscake_password: ${{ secrets.STATUSCAKE_API_KEY }}
+          TF_VAR_azure_credentials:   ${{ secrets[format('AZURE_CREDENTIALS_{0}', env.DEPLOY_ENV)] }}
 
       - name: Trigger ${{ env.DEPLOY_ENV }} Smoke Tests
         uses: benc-uk/workflow-dispatch@v1

@@ -16,6 +16,8 @@ variable redis_service_plan {}
 
 variable docker_image {}
 
+variable docker_credentials {}
+
 variable app_environment {}
 
 variable app_environment_variables { type = map }
