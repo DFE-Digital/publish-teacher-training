@@ -72,12 +72,6 @@ jobs:
           DOCKER_IMAGE: ${{ format('dfedigital/teacher-training-api:paas-{0}', github.event.inputs.sha) }}
           DEPLOY_ENV: ${{ matrix.environment }}
 
-      - name: Download app secrets file
-        working-directory: terraform/workspace_variables
-        run: echo $APP_SECRETS | base64 -d >> app_secrets.yml
-        env:
-          APP_SECRETS: ${{ secrets[format('APP_SECRETS_{0}', env.DEPLOY_ENV)] }}      
-
       - name: Terraform init, plan & apply
         working-directory: terraform
         run: |
@@ -87,10 +81,7 @@ jobs:
         env:
           ARM_ACCESS_KEY:             ${{ secrets[format('ARM_ACCESS_KEY_{0}', env.DEPLOY_ENV)] }}
           TF_VAR_paas_docker_image:   ${{ env.DOCKER_IMAGE }}
-          TF_VAR_cf_user:             ${{ secrets[format('CF_USERNAME_{0}', env.DEPLOY_ENV)] }}
-          TF_VAR_cf_user_password:    ${{ secrets[format('CF_PASSWORD_{0}', env.DEPLOY_ENV)] }}
-          TF_VAR_statuscake_username: ${{ secrets.STATUSCAKE_USERNAME }}
-          TF_VAR_statuscake_password: ${{ secrets.STATUSCAKE_API_KEY }}
+          TF_VAR_azure_credentials:   ${{ secrets[format('AZURE_CREDENTIALS_{0}', env.DEPLOY_ENV)] }}
 
       - name: Trigger ${{ env.DEPLOY_ENV }} Smoke Tests
         uses: benc-uk/workflow-dispatch@v1

@@ -9,6 +9,7 @@ resource cloudfoundry_app web_app {
   strategy                   = "blue-green-v2"
   timeout                    = 180
   environment                = var.app_environment_variables
+  docker_credentials         = var.docker_credentials
 
   service_binding {
     service_instance = cloudfoundry_service_instance.postgres.id
@@ -35,6 +36,7 @@ resource cloudfoundry_app worker_app {
   timeout              = 180
   health_check_timeout = 180
   environment          = var.app_environment_variables
+  docker_credentials   = var.docker_credentials
 
   service_binding {
     service_instance = cloudfoundry_service_instance.postgres.id

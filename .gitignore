@@ -43,6 +43,3 @@ terraform.tfstate.d/
 lock.json
 *secret*.tfvars
 .terraform/
-!terraform/workspace_variables/app_config.yml
-terraform/workspace_variables/*.yml
-terraform/workspace_variables/*.base64
