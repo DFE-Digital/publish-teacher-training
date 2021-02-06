@@ -39,3 +39,6 @@ rollover:
 
 production:
   <<: *default
+
+sandbox:
+  <<: *default
