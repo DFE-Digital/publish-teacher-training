@@ -27,4 +27,13 @@ Style/HashTransformValues:
 Naming/MemoizedInstanceVariableName:
   EnforcedStyleForLeadingUnderscores: optional
 
-
+Rails/UnknownEnv:
+  Environments:
+    - production
+    - development
+    - test
+    - pentest
+    - rollover
+    - sandbox
+    - qa_pass
+    - research
