@@ -22,6 +22,7 @@ describe "Providers API v2", type: :request do
     let(:courses) { [course] }
     let!(:provider) do
       create(:provider,
+             :accredited_body,
              sites: [site],
              organisations: [organisation],
              accrediting_provider_enrichments: accrediting_provider_enrichments,
@@ -40,7 +41,8 @@ describe "Providers API v2", type: :request do
           "attributes" => {
             "provider_code" => provider.provider_code,
             "provider_name" => provider.provider_name,
-            "accredited_body?" => false,
+            "provider_type" => provider.provider_type,
+            "accredited_body?" => true,
             "can_add_more_sites?" => true,
             "train_with_us" => provider.train_with_us,
             "train_with_disability" => provider.train_with_disability,
