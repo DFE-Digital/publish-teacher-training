@@ -37,3 +37,4 @@ magic_link:
 skylight:
   enable: false
   authentication: please_change_me
+mapit_api_key: please_change_me
