@@ -6,7 +6,7 @@ resource cloudfoundry_app web_app {
   instances                  = var.web_app_instances
   memory                     = var.web_app_memory
   docker_image               = var.docker_image
-  strategy                   = "blue-green-v2"
+  strategy                   = local.deployment_strategy
   timeout                    = 180
   environment                = var.app_environment_variables
   docker_credentials         = var.docker_credentials
@@ -32,6 +32,7 @@ resource cloudfoundry_app worker_app {
   instances            = var.worker_app_instances
   memory               = var.worker_app_memory
   docker_image         = var.docker_image
+  strategy             = local.deployment_strategy
   command              = local.worker_app_start_command
   timeout              = 180
   health_check_timeout = 180

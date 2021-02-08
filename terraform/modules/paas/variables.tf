@@ -27,6 +27,7 @@ locals {
   worker_app_name       = "teacher-training-api-worker-${var.app_environment}"
   postgres_service_name = "teacher-training-api-postgres-${var.app_environment}"
   redis_service_name    = "teacher-training-api-redis-${var.app_environment}"
+  deployment_strategy   = "blue-green-v2"
 
   worker_app_start_command = "bundle exec sidekiq -c 5 -C config/sidekiq.yml"
 
