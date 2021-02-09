@@ -12,10 +12,9 @@ run do |opts, _args, _cmd|
   Site
   .joins(:provider)
   .where("provider.recruitment_cycle_id = ?", RecruitmentCycle.current_recruitment_cycle.id)
-  .where
-  .not(travel_to_work_area: nil)
+  .where(travel_to_work_area: nil)
   .find_each(batch_size: opts[:batch_size]) do |site|
-    verbose "adding travel to work area for '#{site.provider_code}' course '#{site.course_code} course '#{site.code}'"
+    verbose "adding travel to work area for '#{site.provider.provider_code}' site code '#{site.code}'"
     TravelToWorkAreaAndLondonBoroughService.add_travel_to_work_area_and_london_borough(site: site)
     sleep(opts[:sleep])
   end
