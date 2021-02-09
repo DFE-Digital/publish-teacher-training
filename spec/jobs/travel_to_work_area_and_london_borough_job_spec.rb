@@ -18,7 +18,7 @@ describe TravelToWorkAreaAndLondonBoroughJob, type: :job do
           longitude: -0.129900)
   end
 
-  subject(:job) { described_class.perform_later("Site", site.id) }
+  subject(:job) { described_class.perform_later(site.id) }
 
   it "queues the job" do
     expect { job }
@@ -30,7 +30,7 @@ describe TravelToWorkAreaAndLondonBoroughJob, type: :job do
   end
 
   context "executing the job" do
-    it "calls the GeocoderService" do
+    it "calls the TravelToWorkAreaAndLondonBoroughService" do
       expect(TravelToWorkAreaAndLondonBoroughService).to receive(:add_travel_to_work_area_and_london_borough).with(site: site)
 
       site.save!
