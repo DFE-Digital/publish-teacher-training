@@ -68,6 +68,12 @@ RSpec.configure do |config|
     stub_const("Geokit::Geocoders::GoogleGeocoder", GeocoderStub.new)
   end
 
+  config.before(:each) do
+    # TODO: i should stub the response for this, but ideally i'd like to ship this soon
+    # since it's holding up other work
+    stub_request(:get, /mapit.mysociety.org/).to_return(status: 200, body: "", headers: {})
+  end
+
   config.include SerializerSpecHelper, type: :serializer
 
   %i[controller request].each do |type|

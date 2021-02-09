@@ -12,5 +12,7 @@ class TravelToWorkAreaAndLondonBoroughService
       london_borough = json.dig(json.keys.second, "name")
       site.update!(london_borough: london_borough)
     end
+  rescue StandardError
+    false
   end
 end

@@ -77,10 +77,10 @@ describe TravelToWorkAreaAndLondonBoroughService do
 
     context "invalid site" do
       before { stub_request(:get, invalid_mapit_endpoint).to_return(body: invalid_response) }
+      before { stub_request(:get, invalid_mapit_endpoint).to_return(body: invalid_response) }
 
       it "throws an error" do
-        expect { described_class.add_travel_to_work_area_and_london_borough(site: invalid_site) }.
-          to raise_error(JSON::ParserError)
+        expect(described_class.add_travel_to_work_area_and_london_borough(site: invalid_site)).to eq false
       end
     end
   end
