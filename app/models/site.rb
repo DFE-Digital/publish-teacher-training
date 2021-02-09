@@ -31,6 +31,7 @@ class Site < ApplicationRecord
 
   attr_accessor :skip_geocoding
   after_commit :geocode_site, unless: :skip_geocoding
+  after_commit :add_travel_to_work_area_and_london_borough
 
   def geocode_site
     GeocodeJob.perform_later("Site", id) if needs_geolocation?
@@ -39,6 +40,16 @@ class Site < ApplicationRecord
   def needs_geolocation?
     full_address.present? && (
     latitude.nil? || longitude.nil? || address_changed?
+    )
+  end
+
+  def add_travel_to_work_area_and_london_borough
+    TravelToWorkAreaAndLondonBoroughJob.perform_later("Site", id) if needs_travel_to_work_area_and_london_borough_updated?
+  end
+
+  def needs_travel_to_work_area_and_london_borough_updated?
+    full_address.present? && (
+    travel_to_work_area.nil? || address_changed?
     )
   end
 
