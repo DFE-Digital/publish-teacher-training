@@ -13,6 +13,8 @@ run do |opts, _args, _cmd|
   .joins(:provider)
   .where("provider.recruitment_cycle_id = ?", RecruitmentCycle.current_recruitment_cycle.id)
   .where(travel_to_work_area: nil)
+  .where
+  .not(latitude: nil, longitude: nil)
   .find_each(batch_size: opts[:batch_size]) do |site|
     verbose "adding travel to work area for '#{site.provider.provider_code}' site code '#{site.code}'"
     TravelToWorkAreaAndLondonBoroughService.add_travel_to_work_area_and_london_borough(site: site)
