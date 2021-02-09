@@ -20,6 +20,7 @@ describe "AccreditedBody API v2", type: :request do
     let(:accredited_provider) do
       create(:provider,
              provider_name: "a",
+             provider_type: "lead_school",
              organisations: [organisation],
              recruitment_cycle: recruitment_cycle)
     end
@@ -51,6 +52,7 @@ describe "AccreditedBody API v2", type: :request do
               "attributes" => {
                 "provider_code" => accredited_provider.provider_code,
                 "provider_name" => accredited_provider.provider_name,
+                "provider_type" => accredited_provider.provider_type,
                 "accredited_body?" => false,
                 "can_add_more_sites?" => true,
                 "accredited_bodies" => [],
@@ -102,6 +104,7 @@ describe "AccreditedBody API v2", type: :request do
               "attributes" => {
                 "provider_code" => delivering_provider1.provider_code,
                 "provider_name" => delivering_provider1.provider_name,
+                "provider_type" => accredited_provider.provider_type,
                 "accredited_body?" => delivering_provider1.accredited_body?,
                 "can_add_more_sites?" => delivering_provider1.can_add_more_sites?,
                 "accredited_bodies" => [
@@ -159,6 +162,7 @@ describe "AccreditedBody API v2", type: :request do
               "attributes" => {
                 "provider_code" => delivering_provider2.provider_code,
                 "provider_name" => delivering_provider2.provider_name,
+                "provider_type" => accredited_provider.provider_type,
                 "accredited_body?" => delivering_provider2.accredited_body?,
                 "can_add_more_sites?" => delivering_provider2.can_add_more_sites?,
                 "accredited_bodies" => [
