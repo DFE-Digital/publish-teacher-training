@@ -18,5 +18,7 @@ describe API::V2::SerializableSite do
   it { should have_attribute(:address4).with_value(site.address4) }
   it { should have_attribute(:postcode).with_value(site.postcode) }
   it { should have_attribute(:region_code).with_value(site.region_code) }
+  it { should have_attribute(:travel_to_work_area).with_value(site.travel_to_work_area) }
+  it { should have_attribute(:london_borough).with_value(site.london_borough) }
   it { should have_attribute(:recruitment_cycle_year).with_value(site.recruitment_cycle.year) }
 end

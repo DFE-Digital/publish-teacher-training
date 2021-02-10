@@ -5,7 +5,8 @@ module API
 
       attributes :code, :location_name, :address1, :address2,
                  :address3, :address4, :postcode, :region_code,
-                 :latitude, :longitude
+                 :latitude, :longitude, :travel_to_work_area,
+                 :london_borough
 
       attribute :recruitment_cycle_year do
         @object.recruitment_cycle.year
