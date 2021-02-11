@@ -8,6 +8,7 @@ module GIAS
 
     def call
       import_establishments(establishments_csv_contents)
+      update_postcode_matches
     end
 
     def import_establishments(csv_data)
@@ -73,7 +74,8 @@ module GIAS
                  SELECT p.id AS provider_id, e.id AS establishment_id
                         FROM provider AS p
                         JOIN gias_establishment AS e
-                             ON p.postcode != '' AND UPPER(TRIM(e.postcode))=UPPER(TRIM(p.postcode));
+                             ON UPPER(TRIM(e.postcode))=UPPER(TRIM(p.postcode))
+                        WHERE p.postcode != ''
         EOSQL
       end
     end
