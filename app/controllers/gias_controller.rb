@@ -5,8 +5,10 @@ class GIASController < GIAS::ApplicationController
     @establishments = GIASEstablishment.all
     @providers_that_match_by_postcode = @providers.joins(:establishments_matched_by_postcode).distinct
     @providers_with_sites_that_match_by_postcode =
-      @providers.joins(:sites).joins(:establishments_matched_by_postcode).distinct
+      @providers.joins(sites: [:establishments_matched_by_postcode]).distinct
     @providers_that_match_by_name = @providers.joins(:establishments_matched_by_name).distinct
+    @providers_with_sites_that_match_by_name =
+      @providers.joins(sites: [:establishments_matched_by_name]).distinct
   end
 
   def import_establishments

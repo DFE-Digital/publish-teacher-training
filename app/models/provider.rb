@@ -76,6 +76,10 @@ class Provider < ApplicationRecord
     sites.joins(:establishments_matched_by_postcode)
   end
 
+  def sites_with_establishments_matched_by_name
+    sites.joins(:establishments_matched_by_name)
+  end
+
   # the providers that this provider is an accredited_provider for
   def training_providers
     Provider.where(id: current_accredited_courses.pluck(:provider_id))
