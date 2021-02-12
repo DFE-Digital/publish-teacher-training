@@ -3,14 +3,6 @@ module GIAS
     def index
       recruitment_cycle = RecruitmentCycle.current
       @pagy, @providers = pagy(recruitment_cycle.providers.all)
-
-      @match_data = {}
-
-      @providers.each do |provider|
-        @match_data[provider.id] = GIAS::ProviderMatcherService.call(
-          provider: provider
-        ) || []
-      end
     end
 
     def index_of_providers_that_match_by_postcode
@@ -20,14 +12,6 @@ module GIAS
                           .joins(:establishments_matched_by_postcode)
                           .distinct
       @pagy, @providers = pagy(providers_scope)
-
-      @match_data = {}
-
-      @providers.each do |provider|
-        @match_data[provider.id] = GIAS::ProviderMatcherService.call(
-          provider: provider
-        ) || []
-      end
 
       render :index
     end
@@ -41,13 +25,16 @@ module GIAS
                           .distinct
       @pagy, @providers = pagy(providers_scope)
 
-      @match_data = {}
+      render :index
+    end
 
-      @providers.each do |provider|
-        @match_data[provider.id] = GIAS::ProviderMatcherService.call(
-          provider: provider
-        ) || []
-      end
+    def index_of_providers_that_match_by_name
+      recruitment_cycle = RecruitmentCycle.current
+      providers_scope = recruitment_cycle
+                          .providers
+                          .joins(:establishments_matched_by_name)
+                          .distinct
+      @pagy, @providers = pagy(providers_scope)
 
       render :index
     end

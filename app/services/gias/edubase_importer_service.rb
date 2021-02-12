@@ -10,6 +10,7 @@ module GIAS
       import_establishments(establishments_csv_contents)
       update_provider_postcode_matches
       update_site_postcode_matches
+      update_provider_name_matches
     end
 
     def import_establishments(csv_data)
@@ -32,8 +33,6 @@ module GIAS
           )
         end
       end
-
-      # establishment_links_csv = download_establishments_links_csv
     end
 
     def establishments_filename
@@ -98,10 +97,20 @@ module GIAS
       end
     end
 
-    # def download_establishment_links_csv
-    #   url = Date.today.strftime(Settings.gias.all_establishment_links_csv_base)
-    #   response = Faraday.get(url)
-    #   response.body
-    # end
+    def update_provider_name_matches
+      GIASEstablishment.transaction do
+        GIASEstablishment.connection.execute(<<~EOSQL)
+          TRUNCATE gias_establishment_provider_name_matches;
+        EOSQL
+
+        GIASEstablishment.connection.execute(<<~EOSQL)
+          INSERT INTO gias_establishment_provider_name_matches (provider_id, establishment_id)
+                 SELECT p.id AS provider_id, e.id AS establishment_id
+                        FROM provider AS p
+                        JOIN gias_establishment AS e
+                             ON LOWER(e.name)=LOWER(TRIM(p.provider_name))
+        EOSQL
+      end
+    end
   end
 end
