@@ -3,12 +3,12 @@ class GIASController < GIAS::ApplicationController
     @current_recruitment_cycle = RecruitmentCycle.current
     @providers = @current_recruitment_cycle.providers
     @establishments = GIASEstablishment.all
-    @providers_that_match_by_postcode = @providers.joins(:establishments_matched_by_postcode).distinct
-    @providers_with_sites_that_match_by_postcode =
-      @providers.joins(sites: [:establishments_matched_by_postcode]).distinct
-    @providers_that_match_by_name = @providers.joins(:establishments_matched_by_name).distinct
-    @providers_with_sites_that_match_by_name =
-      @providers.joins(sites: [:establishments_matched_by_name]).distinct
+    @providers_that_match_by_postcode = @providers.that_match_establishments_by_postcode
+    @providers_with_sites_that_match_by_postcode = @providers.with_sites_that_match_establishments_by_postcode
+    @providers_that_match_by_name = @providers.that_match_establishments_by_name
+    @providers_with_sites_that_match_by_name = @providers.with_sites_that_match_establishments_by_name
+    @providers_with_any_name_match = @providers.with_establishments_that_match_any_name
+    @providers_with_any_postcode_match = @providers.with_establishments_that_match_any_postcode
   end
 
   def import_establishments

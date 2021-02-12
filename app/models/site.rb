@@ -4,6 +4,7 @@ class Site < ApplicationRecord
   include PostcodeNormalize
   include RegionCode
   include TouchProvider
+  include GIAS::SiteAssociationsConcern
 
   POSSIBLE_CODES = (("A".."Z").to_a + ("0".."9").to_a + ["-"]).freeze
   EASILY_CONFUSED_CODES = %w[1 I 0 O -].freeze # these ought to be assigned last
@@ -14,16 +15,6 @@ class Site < ApplicationRecord
   audited associated_with: :provider
 
   belongs_to :provider
-
-  has_and_belongs_to_many :establishments_matched_by_postcode,
-                          join_table: :gias_establishment_site_postcode_matches,
-                          class_name: "GIASEstablishment",
-                          association_foreign_key: "establishment_id"
-
-  has_and_belongs_to_many :establishments_matched_by_name,
-                          join_table: :gias_establishment_site_name_matches,
-                          class_name: "GIASEstablishment",
-                          association_foreign_key: "establishment_id"
 
   validates :location_name, uniqueness: { scope: :provider_id }
   validates :location_name,

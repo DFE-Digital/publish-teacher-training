@@ -1,26 +1,39 @@
 <h1>GIAS Data</h1>
 summary
 <dl class="govuk-summary-list">
+
+    <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key govuk-!-width-two-thirds">
+            <%= link_to "Total GIAS Establishments", gias_establishments_path %>
+        </dt>
+        <dd class="govuk-summary-list__value govuk-!-width-one-third">
+            <%= @establishments.count %>
+        </dd>
+    </div>
+
     <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key govuk-!-width-two-thirds">
             <%= link_to "Total Providers", gias_providers_path %>
         </dt>
-        <dd class="govuk-summary-list__value">
+        <dd class="govuk-summary-list__value govuk-!-width-one-third">
             <%= @providers.count %>
         </dd>
     </div>
 
     <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">
-            <%= link_to "Total GIAS Establishments", gias_establishments_path %>
+            <%= link_to "Providers with Any Postcode Matches",
+                        gias_providers_with_any_postcode_match_path %>
         </dt>
         <dd class="govuk-summary-list__value">
-            <%= @establishments.count %>
+            <%= @providers_with_any_postcode_match.count %>
         </dd>
     </div>
 
     <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">
+            &nbsp;
+            &nbsp;
             <%= link_to "Providers that match Establishments using Postcode",
                         gias_providers_that_match_by_postcode_path %>
         </dt>
@@ -31,6 +44,8 @@ summary
 
     <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">
+            &nbsp;
+            &nbsp;
             <%= link_to "Providers with Sites that match Establishments using Postcode",
                         gias_providers_with_sites_that_match_by_postcode_path %>
         </dt>
@@ -41,6 +56,18 @@ summary
 
     <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">
+            <%= link_to "Providers with Any Name Matches",
+                        gias_providers_with_any_name_match_path %>
+        </dt>
+        <dd class="govuk-summary-list__value">
+            <%= @providers_with_any_name_match.count %>
+        </dd>
+    </div>
+
+    <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+            &nbsp;
+            &nbsp;
             <%= link_to "Providers that match Establishments by Name",
                         gias_providers_that_match_by_name_path %>
         </dt>
@@ -51,6 +78,8 @@ summary
 
     <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">
+            &nbsp;
+            &nbsp;
             <%= link_to "Providers with Sites that match Establishments using Name",
                         gias_providers_with_sites_that_match_by_name_path %>
         </dt>

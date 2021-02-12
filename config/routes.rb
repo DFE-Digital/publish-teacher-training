@@ -22,10 +22,12 @@ Rails.application.routes.draw do
     resources :establishments, param: :urn, only: [:index, :show]
 
     resources :postcodes, param: :postcode, only: :show
-    get "providers_that_match_by_postcode", to: "providers#index_of_providers_that_match_by_postcode"
-    get "providers_with_sites_that_match_by_postcode", to: "providers#index_of_providers_with_sites_that_match_by_postcode"
+    get "providers_with_any_name_match", to: "providers#index_of_providers_with_any_name_match"
     get "providers_that_match_by_name", to: "providers#index_of_providers_that_match_by_name"
     get "providers_with_sites_that_match_by_name", to: "providers#index_of_providers_with_sites_that_match_by_name"
+    get "providers_with_any_postcode_match", to: "providers#index_of_providers_with_any_postcode_match"
+    get "providers_that_match_by_postcode", to: "providers#index_of_providers_that_match_by_postcode"
+    get "providers_with_sites_that_match_by_postcode", to: "providers#index_of_providers_with_sites_that_match_by_postcode"
     resources :providers, only: [:index, :show]
     resources :sites, only: :show
   end
