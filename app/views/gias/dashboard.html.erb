@@ -48,6 +48,16 @@ summary
             <%= @providers_that_match_by_name.count %>
         </dd>
     </div>
+
+    <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+            <%= link_to "Providers with Sites that match Establishments using Name",
+                        gias_providers_with_sites_that_match_by_name_path %>
+        </dt>
+        <dd class="govuk-summary-list__value">
+            <%= @providers_with_sites_that_match_by_name.count %>
+        </dd>
+    </div>
 </dl>
 
 

@@ -11,6 +11,7 @@ module GIAS
       update_provider_postcode_matches
       update_site_postcode_matches
       update_provider_name_matches
+      update_site_name_matches
     end
 
     def import_establishments(csv_data)
@@ -108,7 +109,23 @@ module GIAS
                  SELECT p.id AS provider_id, e.id AS establishment_id
                         FROM provider AS p
                         JOIN gias_establishment AS e
-                             ON LOWER(e.name)=LOWER(TRIM(p.provider_name))
+                             ON LOWER(TRIM(e.name))=LOWER(TRIM(p.provider_name))
+        EOSQL
+      end
+    end
+
+    def update_site_name_matches
+      GIASEstablishment.transaction do
+        GIASEstablishment.connection.execute(<<~EOSQL)
+          TRUNCATE gias_establishment_site_name_matches;
+        EOSQL
+
+        GIASEstablishment.connection.execute(<<~EOSQL)
+          INSERT INTO gias_establishment_site_name_matches (site_id, establishment_id)
+                 SELECT s.id AS site_id, e.id AS establishment_id
+                        FROM site AS s
+                        JOIN gias_establishment AS e
+                             ON LOWER(TRIM(e.name))=LOWER(TRIM(s.location_name))
         EOSQL
       end
     end

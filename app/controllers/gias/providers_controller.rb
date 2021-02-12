@@ -20,8 +20,7 @@ module GIAS
       recruitment_cycle = RecruitmentCycle.current
       providers_scope = recruitment_cycle
                           .providers
-                          .joins(:sites)
-                          .joins(:establishments_matched_by_postcode)
+                          .joins(sites: [:establishments_matched_by_postcode])
                           .distinct
       @pagy, @providers = pagy(providers_scope)
 
@@ -33,6 +32,17 @@ module GIAS
       providers_scope = recruitment_cycle
                           .providers
                           .joins(:establishments_matched_by_name)
+                          .distinct
+      @pagy, @providers = pagy(providers_scope)
+
+      render :index
+    end
+
+    def index_of_providers_with_sites_that_match_by_name
+      recruitment_cycle = RecruitmentCycle.current
+      providers_scope = recruitment_cycle
+                          .providers
+                          .joins(sites: [:establishments_matched_by_name])
                           .distinct
       @pagy, @providers = pagy(providers_scope)
 

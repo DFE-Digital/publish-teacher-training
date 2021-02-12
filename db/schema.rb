@@ -206,6 +206,11 @@ ActiveRecord::Schema.define(version: 2021_02_01_103254) do
     t.integer "provider_id"
   end
 
+  create_table "gias_establishment_site_name_matches", force: :cascade do |t|
+    t.integer "establishment_id"
+    t.integer "site_id"
+  end
+
   create_table "gias_establishment_site_postcode_matches", force: :cascade do |t|
     t.integer "establishment_id"
     t.integer "site_id"
