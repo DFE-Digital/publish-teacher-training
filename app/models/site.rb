@@ -15,6 +15,11 @@ class Site < ApplicationRecord
 
   belongs_to :provider
 
+  has_and_belongs_to_many :establishments_matched_by_postcode,
+                          join_table: :gias_establishment_site_postcode_matches,
+                          class_name: "GIASEstablishment",
+                          association_foreign_key: "establishment_id"
+
   validates :location_name, uniqueness: { scope: :provider_id }
   validates :location_name,
             :address1,

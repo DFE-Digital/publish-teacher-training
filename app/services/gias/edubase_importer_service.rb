@@ -8,7 +8,8 @@ module GIAS
 
     def call
       import_establishments(establishments_csv_contents)
-      update_postcode_matches
+      update_provider_postcode_matches
+      update_site_postcode_matches
     end
 
     def import_establishments(csv_data)
@@ -63,7 +64,7 @@ module GIAS
       response.body
     end
 
-    def update_postcode_matches
+    def update_provider_postcode_matches
       GIASEstablishment.transaction do
         GIASEstablishment.connection.execute(<<~EOSQL)
           TRUNCATE gias_establishment_provider_postcode_matches;
@@ -76,6 +77,23 @@ module GIAS
                         JOIN gias_establishment AS e
                              ON UPPER(TRIM(e.postcode))=UPPER(TRIM(p.postcode))
                         WHERE p.postcode != ''
+        EOSQL
+      end
+    end
+
+    def update_site_postcode_matches
+      GIASEstablishment.transaction do
+        GIASEstablishment.connection.execute(<<~EOSQL)
+          TRUNCATE gias_establishment_site_postcode_matches;
+        EOSQL
+
+        GIASEstablishment.connection.execute(<<~EOSQL)
+          INSERT INTO gias_establishment_site_postcode_matches (site_id, establishment_id)
+                 SELECT s.id AS site_id, e.id AS establishment_id
+                        FROM site AS s
+                        JOIN gias_establishment AS e
+                             ON UPPER(TRIM(e.postcode))=UPPER(TRIM(s.postcode))
+                        WHERE s.postcode != ''
         EOSQL
       end
     end

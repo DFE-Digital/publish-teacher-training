@@ -24,22 +24,22 @@
           </td>
           <td class="govuk-table__cell">
 
-              <% if @match_data[provider.id][:establishments][:postcode].any? || @match_data[provider.id][:establishments][:site_postcode].any? %>
+              <% if provider.establishments_matched_by_postcode.any? || provider.sites_with_establishments_matched_by_postcode.any? %>
               <h4 class="govuk-!-margin-top-0 govuk-!-margin-bottom-2">By Postcode</h4>
 
               <ul class="govuk-list">
-                  <% @match_data[provider.id][:establishments][:postcode].each do |establishment| %>
+                  <% provider.establishments_matched_by_postcode.each do |establishment| %>
                       <li>
                           <%= govuk_link_to establishment.name,
-                           gias_establishment_path(establishment.urn) %>
+                                            gias_establishment_path(establishment.urn) %>
                       </li>
                   <% end %>
               </ul>
               <% end %>
 
-              <% if @match_data[provider.id][:establishments][:site_postcode].any? %>
-                  <em><%= govuk_link_to "#{@match_data[provider.id][:establishments][:site_postcode].count} establishment(s) match sites",
-                       gias_provider_path(provider) %></em>
+              <% if provider.sites_with_establishments_matched_by_postcode.any? %>
+                  <em><%= govuk_link_to "#{provider.sites_with_establishments_matched_by_postcode.count} establishment(s) match sites",
+                                        gias_provider_path(provider) %></em>
               <% end %>
 
               <% if @match_data[provider.id][:establishments][:name].any? %>
