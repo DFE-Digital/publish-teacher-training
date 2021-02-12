@@ -42,14 +42,14 @@
                                         gias_provider_path(provider) %></em>
               <% end %>
 
-              <% if @match_data[provider.id][:establishments][:name].any? %>
+              <% if provider.establishments_matched_by_name.any? %>
               <h4 class="govuk-!-margin-bottom-2">By Name</h4>
 
               <ul class="govuk-list">
-                  <% @match_data[provider.id][:establishments][:name].each do |establishment| %>
+                  <% provider.establishments_matched_by_name.each do |establishment| %>
                       <li>
                           <%= govuk_link_to establishment.name,
-                              gias_establishment_path(establishment.urn) %>
+                                            gias_establishment_path(establishment.urn) %>
                       </li>
                   <% end %>
               </ul>

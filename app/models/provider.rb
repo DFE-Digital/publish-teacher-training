@@ -67,6 +67,11 @@ class Provider < ApplicationRecord
                           class_name: "GIASEstablishment",
                           association_foreign_key: "establishment_id"
 
+  has_and_belongs_to_many :establishments_matched_by_name,
+                          join_table: :gias_establishment_provider_name_matches,
+                          class_name: "GIASEstablishment",
+                          association_foreign_key: "establishment_id"
+
   def sites_with_establishments_matched_by_postcode
     sites.joins(:establishments_matched_by_postcode)
   end
