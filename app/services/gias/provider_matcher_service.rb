@@ -11,9 +11,9 @@ module GIAS
 
       matches = {
         establishments: {
-          postcode: establishment_postcode_matches.to_a,
+          # postcode: establishment_postcode_matches.to_a,
           name: establishment_name_matches.to_a,
-          site_postcode: establishment_site_postcode_matches,
+          # site_postcode: establishment_site_postcode_matches,
         }
       }
     end

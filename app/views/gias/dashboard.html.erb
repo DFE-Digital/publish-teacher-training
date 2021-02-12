@@ -1,34 +1,44 @@
 <h1>GIAS Data</h1>
+summary
+<dl class="govuk-summary-list">
+    <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key govuk-!-width-two-thirds">
+            <%= link_to "Total Providers", gias_providers_path %>
+        </dt>
+        <dd class="govuk-summary-list__value">
+            <%= @providers.count %>
+        </dd>
+    </div>
 
-<table class="govuk-table govuk-!-margin-bottom-8">
-    <tbody class="govuk-table__body">
-    <tr class="govuk-table__row">
-        <th class="govuk-table__header govuk-!-width-one-third">Total Providers</th>
-        <td class="govuk-table__cell govuk-!-width-one-third"><%= @providers.count %></td>
-        <td class="govuk-table__cell govuk-!-width-one-third">
-            <%= link_to("View Providers", gias_providers_path) %>
-        </td>
-    </tr>
+    <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+            <%= link_to "Total GIAS Establishments", gias_establishments_path %>
+        </dt>
+        <dd class="govuk-summary-list__value">
+            <%= @providers.count %>
+        </dd>
+    </div>
 
-    <tr class="govuk-table__row">
-        <th class="govuk-table__header govuk-!-width-one-third">Total GIAS Establishments</th>
-        <td class="govuk-table__cell govuk-!-width-one-third"><%= GIASEstablishment.count %></td>
-        <td class="govuk-table__cell govuk-!-width-one-third">
-            <%= link_to("View GIAS Establishments", gias_establishments_path) %>
-        </td>
-    </tr>
+    <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+            <%= link_to "Providers that match Establishments using Postcode",
+                        gias_providers_that_match_by_postcode_path %>
+        </dt>
+        <dd class="govuk-summary-list__value">
+            <%= @providers_that_match_by_postcode.count %>
+        </dd>
+    </div>
 
-    <tr class="govuk-table__row">
-        <th class="govuk-table__header govuk-!-width-one-third">
-            Providers that match establishments using postcode</th>
-        </th>
-        <td class="govuk-table__cell govuk-!-width-one-third">
-            <%= @providers_with_matching_establishments_by_postcode.count %>
-        </td>
-        <td class="govuk-table__cell govuk-!-width-one-third"></td>
-    </tr>
-    </tbody>
-</table>
+    <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+            <%= link_to "Providers with Sites that match Establishments using Postcode",
+                        gias_providers_with_sites_that_match_by_postcode_path %>
+        </dt>
+        <dd class="govuk-summary-list__value">
+            <%= @providers_with_sites_that_match_by_postcode.count %>
+        </dd>
+    </div>
+</dl>
 
 
 <%= link_to("Import GIAS Establishments",
