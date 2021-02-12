@@ -1,3 +1,5 @@
+require "csv"
+
 namespace :sandbox do
   desc <<~DESC
     Accepts a csv file path of users to be given access to the sandbox environment.
@@ -40,6 +42,77 @@ namespace :sandbox do
       else
         puts "Adding #{email} to #{provider_name}"
         provider.organisation.users << user
+      end
+    end
+  end
+
+  desc <<~DESC
+    Accepts a csv file path of providers to be added to the sandbox environment.
+    The file is expected to be in the following format:
+
+    name,code,type,accredited_body
+    Provider one,ABC,scitt,true
+    Provider two,DEF,lead_school,false
+
+    provider_type options -> "lead_school", "scitt", "unknown", "university"
+    provider_code must be a unique string
+
+    Providers will be created if they don't exist (based on the name not having an exact match).
+  DESC
+  task :create_providers, [:csv_file_path] => [:environment] do |_task, args|
+    raise "Can only be run in sandbox or development" unless Rails.env.sandbox? || Rails.env.development?
+
+    current_recruitment_cycle = RecruitmentCycle.current
+
+    CSV.foreach(args[:csv_file_path], headers: :first_row, return_headers: false) do |row|
+      provider_name = row[0]
+      provider_code = row[1]
+      provider_type = row[2]
+      accredited_body = ActiveModel::Type::Boolean.new.cast(row[3])
+
+      provider_exists = current_recruitment_cycle.providers.exists?(provider_name: provider_name)
+      if provider_exists
+        puts "Provider: #{provider_name} already exists and has been skipped"
+        next
+      end
+
+      provider_code_exists = current_recruitment_cycle.providers.exists?(provider_code: provider_code)
+      if provider_code_exists
+        puts "Provider: #{provider_code} already exists and has been skipped"
+        next
+      end
+
+      provider = current_recruitment_cycle.providers.build(
+        provider_name: provider_name,
+        provider_code: provider_code,
+        provider_type: provider_type,
+        accrediting_provider: accredited_body ? "accredited_body" : "not_an_accredited_body",
+        address1: "1 Test Street",
+        address3: "Town",
+        address4: "County",
+        postcode: "M1 1JG",
+        region_code: "north_west",
+      )
+
+      organisation = Organisation.new(name: provider_name)
+      organisation.providers << provider
+      if organisation.save
+        site_created = provider.sites.create(
+          location_name: "Site 1",
+          address1: provider.address1,
+          address2: provider.address2,
+          address3: provider.address3,
+          address4: provider.address4,
+          postcode: provider.postcode,
+          region_code: provider.region_code,
+        )
+        puts "Unable to create site for #{provider_name}" unless site_created
+      end
+
+      if organisation.valid? && provider.valid?
+        puts "Provider: #{provider_name} successfully created"
+      else
+        puts "Provider: #{provider_name} not created, record invalid #{provider.errors}"
       end
     end
   end
