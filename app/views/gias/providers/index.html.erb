@@ -1,4 +1,30 @@
-<table class="govuk-table govuk-!-margin-bottom-8">
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-one-quarter">
+        <%= form_with(model: @filter_object,
+                      url: gias_providers_path,
+                      scope: :filters,
+                      method: :get,
+                      builder: GOVUKDesignSystemFormBuilder::FormBuilder) do |form| %>
+
+            <%= form.govuk_check_boxes_fieldset :name, legend: { text: "Name Matching" } do %>
+                <%= form.govuk_check_box "name", 'provider', label: { text: "Provider" } %>
+                <%= form.govuk_check_box "name", 'sites', label: { text: "Sites" } %>
+                <%= form.govuk_check_box "name", 'provider_or_sites', label: { text: "Provider or Sites" } %>
+            <% end %>
+
+            <%= form.govuk_check_boxes_fieldset :postcode, legend: { text: "Postcode Matching" } do %>
+                <%= form.govuk_check_box "postcode", 'provider', label: { text: "Provider" } %>
+                <%= form.govuk_check_box "postcode", 'sites', label: { text: "Sites" } %>
+                <%= form.govuk_check_box "postcode", 'provider_or_sites', label: { text: "Provider or Sites" } %>
+            <% end %>
+
+            <%= form.govuk_submit "Submit" %>
+        <% end %>
+    </div>
+
+
+    <div class="govuk-grid-column-three-quarters">
+        <table class="govuk-table govuk-!-margin-bottom-8">
   <thead class="govuk-table__head">
       <tr class="govuk-table__row">
           <th class="govuk-table__header" scope="col">
@@ -67,5 +93,6 @@
 <% end %>
       </tbody>
 </table>
-
+    </div>
+</div>
 <%== pagy_nav(@pagy) %>

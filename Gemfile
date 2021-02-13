@@ -177,7 +177,7 @@ group :development do
   # error handling
   gem "better_errors"
   gem "binding_of_caller"
-  # gem "web-console", '>= 4.1.0'
+  gem "web-console" # , '>= 4.1.0'
 
   # Output scaffold commands based on schema
   gem "schema_to_scaffold"
