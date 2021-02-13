@@ -22,42 +22,9 @@ summary
 
     <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">
-            <%= link_to "Providers with Any Postcode Matches",
-                        gias_providers_with_any_postcode_match_path %>
-        </dt>
-        <dd class="govuk-summary-list__value">
-            <%= @providers_with_any_postcode_match.count %>
-        </dd>
-    </div>
-
-    <div class="govuk-summary-list__row">
-        <dt class="govuk-summary-list__key">
-            &nbsp;
-            &nbsp;
-            <%= link_to "Providers that match Establishments using Postcode",
-                        gias_providers_that_match_by_postcode_path %>
-        </dt>
-        <dd class="govuk-summary-list__value">
-            <%= @providers_that_match_by_postcode.count %>
-        </dd>
-    </div>
-
-    <div class="govuk-summary-list__row">
-        <dt class="govuk-summary-list__key">
-            &nbsp;
-            &nbsp;
-            <%= link_to "Providers with Sites that match Establishments using Postcode",
-                        gias_providers_with_sites_that_match_by_postcode_path %>
-        </dt>
-        <dd class="govuk-summary-list__value">
-            <%= @providers_with_sites_that_match_by_postcode.count %>
-        </dd>
-    </div>
-
-    <div class="govuk-summary-list__row">
-        <dt class="govuk-summary-list__key">
-            <%= link_to "Providers with Any Name Matches",
-                        gias_providers_with_any_name_match_path %>
+            &nbsp; &nbsp;
+            <%= link_to("that matches an establishment by name",
+                        gias_providers_path(filters: { name: ["provider_or_sites"] })) %>
         </dt>
         <dd class="govuk-summary-list__value">
             <%= @providers_with_any_name_match.count %>
@@ -66,10 +33,10 @@ summary
 
     <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">
-            &nbsp;
-            &nbsp;
-            <%= link_to "Providers that match Establishments by Name",
-                        gias_providers_that_match_by_name_path %>
+            &nbsp; &nbsp;
+            &nbsp; &nbsp;
+            <%= link_to("that match an establishment with only their name",
+                        gias_providers_path(filters: { name: ["provider"] })) %>
         </dt>
         <dd class="govuk-summary-list__value">
             <%= @providers_that_match_by_name.count %>
@@ -78,13 +45,48 @@ summary
 
     <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">
-            &nbsp;
-            &nbsp;
-            <%= link_to "Providers with Sites that match Establishments using Name",
-                        gias_providers_with_sites_that_match_by_name_path %>
+            &nbsp; &nbsp;
+            &nbsp; &nbsp;
+            <%= link_to("that match an establishment with one their site's name",
+                        gias_providers_path(filters: { name: ["sites"] })) %>
         </dt>
         <dd class="govuk-summary-list__value">
             <%= @providers_with_sites_that_match_by_name.count %>
+        </dd>
+    </div>
+
+    <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+            &nbsp; &nbsp;
+            <%= link_to("that matches an establishment by postcode",
+                        gias_providers_path(filters: { postcode: ["provider_or_sites"] })) %>
+        </dt>
+        <dd class="govuk-summary-list__value">
+            <%= @providers_with_any_postcode_match.count %>
+        </dd>
+    </div>
+
+    <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+            &nbsp; &nbsp;
+            &nbsp; &nbsp;
+            <%= link_to("that match an establishment with only their postcode",
+                        gias_providers_path(filters: { postcode: ["provider"] })) %>
+        </dt>
+        <dd class="govuk-summary-list__value">
+            <%= @providers_that_match_by_postcode.count %>
+        </dd>
+    </div>
+
+    <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+            &nbsp; &nbsp;
+            &nbsp; &nbsp;
+            <%= link_to("that match an establishment with one their site's postcode",
+                        gias_providers_path(filters: { postcode: ["sites"] })) %>
+        </dt>
+        <dd class="govuk-summary-list__value">
+            <%= @providers_with_sites_that_match_by_postcode.count %>
         </dd>
     </div>
 </dl>
