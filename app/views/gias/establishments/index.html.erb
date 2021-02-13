@@ -1,11 +1,35 @@
-<ul>
-<% @establishments.each do |establishment| %>
-    <li>[<%= establishment.urn %>]
-        <%= link_to establishment.name,
-                    gias_establishment_path(
-                        urn: establishment.urn
-                    ) %></li>
-<% end %>
-</ul>
+<%= govuk_link_to "Back to Dashboard", gias_dashboard_path %>
+
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-three-quarters">
+        <table class="govuk-table govuk-!-margin-bottom-8">
+  <thead class="govuk-table__head">
+      <tr class="govuk-table__row">
+          <th class="govuk-table__header" scope="col">
+              URN
+          </th>
+          <th class="govuk-table__header" scope="col">
+              Establishment
+          </th>
+      </tr>
+  </thead>
+
+  <tbody class="govuk-table__body">
+      <% @establishments.each do |establishment| %>
+      <tr class="govuk-table__row">
+          <td class="govuk-table__cell">
+              <%= establishment.urn %>
+          </td>
+
+          <td class="govuk-table__cell">
+              <%= link_to establishment.name, gias_establishment_path(establishment.id) %>
+          </td>
+
+      </tr>
+      <% end %>
+  </tbody>
+        </table>
+    </div>
+</div>
 
 <%== pagy_nav(@pagy) %>
