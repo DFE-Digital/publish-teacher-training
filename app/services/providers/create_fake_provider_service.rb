@@ -3,6 +3,8 @@ module Providers
     attr_reader :errors
 
     def initialize(recruitment_cycle:, provider_name:, provider_code:, provider_type:, is_accredited_body:)
+      raise "Can only be run in sandbox or development" unless Rails.env.sandbox? || Rails.env.development? || Rails.env.test?
+
       @recruitment_cycle = recruitment_cycle
       @provider_name = provider_name
       @provider_code = provider_code
