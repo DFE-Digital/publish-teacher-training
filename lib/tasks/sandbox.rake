@@ -56,30 +56,21 @@ namespace :sandbox do
 
     provider_type options -> "lead_school", "scitt", "unknown", "university"
     provider_code must be a unique string
+    provider_name must be a unique string
 
-    Providers will be created if they don't exist (based on the name not having an exact match).
+    Providers will be created if they don't exist, along with a single
+    Organisation and Site per-provider.
   DESC
   task :create_providers, [:csv_file_path] => [:environment] do |_task, args|
     raise "Can only be run in sandbox or development" unless Rails.env.sandbox? || Rails.env.development?
-    CSV.foreach(args[:csv_file_path], headers: :first_row, return_headers: false) do |row|
-      provider_name = row[0]
-      provider_code = row[1]
-      provider_type = row[2]
-      is_accredited_body = ActiveModel::Type::Boolean.new.cast(row[3])
 
-      service = Providers::CreateProviderService.new(
-        recruitment_cycle: RecruitmentCycle.current,
-        provider_name: provider_name,
-        provider_code: provider_code,
-        provider_type: provider_type,
-        is_accredited_body: is_accredited_body,
-      )
+    import = CSVImports::FakeProvidersImport.new(args[:csv_file_path])
+    import.execute
 
-      if service.execute
-        puts "Created provider #{provider_name}"
-      else
-        puts service.errors.join(" ")
-      end
+    if import.results.any?
+      puts import.results.join("\n")
+    else
+      puts "Nothing was imported"
     end
   end
 end
