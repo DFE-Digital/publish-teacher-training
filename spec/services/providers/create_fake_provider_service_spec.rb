@@ -46,4 +46,24 @@ RSpec.describe Providers::CreateFakeProviderService do
       expect(service.errors).to eq ["Provider Fake Provider (123) already exists."]
     end
   end
+
+  context "is_accredited_body is true" do
+    let(:is_accredited_body) { true }
+
+    it "the created provider is an accredited_body" do
+      service.execute
+
+      expect(Provider.last.accredited_body?).to be(true)
+    end
+  end
+
+  context "is_accredited_body is false" do
+    let(:is_accredited_body) { false }
+
+    it "the created provider is an accredited_body" do
+      service.execute
+
+      expect(Provider.last.accredited_body?).to be(false)
+    end
+  end
 end
