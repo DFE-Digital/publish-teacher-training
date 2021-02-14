@@ -32,20 +32,17 @@ module Providers
 
       organisation = Organisation.new(name: @provider_name)
       organisation.providers << provider
-      if organisation.save
-        site_created = provider.sites.create(
-          location_name: "Site 1",
-          address1: provider.address1,
-          address2: provider.address2,
-          address3: provider.address3,
-          address4: provider.address4,
-          postcode: provider.postcode,
-          region_code: provider.region_code,
-        )
-        errors << "Unable to create Site for #{provider_name}." unless site_created
-      else
-        errors << "Unable to create Organisation for #{provider_name}: #{organisation.errors.to_sentence}."
-      end
+      organisation.save!
+
+      provider.sites.create!(
+        location_name: "Site 1",
+        address1: provider.address1,
+        address2: provider.address2,
+        address3: provider.address3,
+        address4: provider.address4,
+        postcode: provider.postcode,
+        region_code: provider.region_code,
+      )
 
       if provider.invalid?
         errors << "Unable to create Provider #{provider_name}: #{provider.errors.to_sentence}."
