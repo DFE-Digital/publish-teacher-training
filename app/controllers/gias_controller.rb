@@ -1,6 +1,7 @@
 class GIASController < GIAS::ApplicationController
   def dashboard
     @current_recruitment_cycle = RecruitmentCycle.current
+
     @establishments = GIASEstablishment
     @establishments_that_match_any_name = @establishments.that_match_providers_or_sites_by_name
     @establishments_that_match_provider_name = @establishments.that_match_providers_by_name

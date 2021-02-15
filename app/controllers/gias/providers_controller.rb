@@ -4,7 +4,7 @@ module GIAS
 
     def index
       recruitment_cycle = RecruitmentCycle.current
-      providers = recruitment_cycle.providers.all
+      providers = recruitment_cycle.providers
 
       providers = providers.that_match_establishments_by_postcode            if @filters.postcode.include? 'provider'
       providers = providers.with_sites_that_match_establishments_by_postcode if @filters.postcode.include? 'sites'
