@@ -10,7 +10,7 @@ Rails.application.routes.draw do
 
   namespace :gias do
     get "/", to: "/gias#dashboard", as: :dashboard
-    get "/import_establishments", to: "/gias#import_establishments"
+    post "/import_establishments", to: "/gias#import_establishments"
 
     resources :establishments, param: :urn, only: [:index, :show]
 
