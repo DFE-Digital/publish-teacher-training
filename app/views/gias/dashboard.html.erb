@@ -27,7 +27,7 @@ summary
             &nbsp; &nbsp;
             &nbsp; &nbsp;
             <%= link_to("that match a provider name",
-                        gias_providers_path(filters: { name: ["provider"] })) %>
+                        gias_establishments_path(filters: { name: ["provider"] })) %>
         </dt>
         <dd class="govuk-summary-list__value">
             <%= @establishments_that_match_provider_name.count %>
@@ -39,7 +39,7 @@ summary
             &nbsp; &nbsp;
             &nbsp; &nbsp;
             <%= link_to("that match a provider site's name",
-                        gias_providers_path(filters: { name: ["sites"] })) %>
+                        gias_establishments_path(filters: { name: ["sites"] })) %>
         </dt>
         <dd class="govuk-summary-list__value">
             <%= @establishments_that_match_site_name.count %>
@@ -50,7 +50,7 @@ summary
         <dt class="govuk-summary-list__key">
             &nbsp; &nbsp;
             <%= link_to("that matches a provider or it's sites postcode",
-                        gias_providers_path(filters: { postcode: ["provider_or_sites"] })) %>
+                        gias_establishments_path(filters: { postcode: ["provider_or_sites"] })) %>
         </dt>
         <dd class="govuk-summary-list__value">
             <%= @establishments_that_match_any_postcode.count %>
@@ -62,7 +62,7 @@ summary
             &nbsp; &nbsp;
             &nbsp; &nbsp;
             <%= link_to("that match a provider postcode",
-                        gias_providers_path(filters: { postcode: ["provider"] })) %>
+                        gias_establishments_path(filters: { postcode: ["provider"] })) %>
         </dt>
         <dd class="govuk-summary-list__value">
             <%= @establishments_that_match_provider_postcode.count %>
@@ -74,7 +74,7 @@ summary
             &nbsp; &nbsp;
             &nbsp; &nbsp;
             <%= link_to("that match a provider site's postcode",
-                        gias_providers_path(filters: { postcode: ["sites"] })) %>
+                        gias_establishments_path(filters: { postcode: ["sites"] })) %>
         </dt>
         <dd class="govuk-summary-list__value">
             <%= @establishments_that_match_site_postcode.count %>
@@ -162,9 +162,7 @@ summary
 </dl>
 
 
-<%= link_to("Import GIAS Establishments",
-            gias_import_establishments_path,
-            class: "govuk-button",
-            data: {
-                confirm: "Perform establishments import?\n\nThis will replace all existing GIAS Establishments data.",
-            }) %>
+<%= form_with(url: gias_import_establishments_path,
+              builder: GOVUKDesignSystemFormBuilder::FormBuilder) do |f| %>
+    <%= f.govuk_submit("Import GIAS Establishments") %>
+<% end %>

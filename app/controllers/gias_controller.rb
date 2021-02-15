@@ -21,6 +21,6 @@ class GIASController < GIAS::ApplicationController
   def import_establishments
     GIAS::EdubaseImporterService.call
 
-    redirect_to gias_path
+    redirect_to gias_dashboard_path
   end
 end
