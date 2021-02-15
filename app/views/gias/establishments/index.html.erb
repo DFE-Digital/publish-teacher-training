@@ -1,89 +1,112 @@
 <%= govuk_link_to "Back to Dashboard", gias_dashboard_path %>
 
 <div class="govuk-grid-row">
+    <div class="govuk-grid-column-one-quarter">
+        <%= form_with(model: @filter_object,
+                      url: gias_establishments_path,
+                      scope: :filters,
+                      method: :get,
+                      builder: GOVUKDesignSystemFormBuilder::FormBuilder) do |form| %>
+
+            <%= form.govuk_check_boxes_fieldset :name, legend: { text: "Name Matching" } do %>
+                <%= form.govuk_check_box "name", 'provider', label: { text: "Provider" } %>
+                <%= form.govuk_check_box "name", 'sites', label: { text: "Sites" } %>
+                <%= form.govuk_check_box "name", 'provider_or_sites', label: { text: "Provider or Sites" } %>
+            <% end %>
+
+            <%= form.govuk_check_boxes_fieldset :postcode, legend: { text: "Postcode Matching" } do %>
+                <%= form.govuk_check_box "postcode", 'provider', label: { text: "Provider" } %>
+                <%= form.govuk_check_box "postcode", 'sites', label: { text: "Sites" } %>
+                <%= form.govuk_check_box "postcode", 'provider_or_sites', label: { text: "Provider or Sites" } %>
+            <% end %>
+
+            <%= form.govuk_submit "Submit" %>
+        <% end %>
+    </div>
+
     <div class="govuk-grid-column-three-quarters">
         <table class="govuk-table govuk-!-margin-bottom-8">
-  <thead class="govuk-table__head">
-      <tr class="govuk-table__row">
-          <th class="govuk-table__header" scope="col">
-              URN
-          </th>
-          <th class="govuk-table__header" scope="col">
-              Establishment
-          </th>
-          <th class="govuk-table__header" scope="col">
-              Matching Providers or Sites by Name
-          </th>
-          <th class="govuk-table__header" scope="col">
-              Matching Providers or Sites by Postcode
-          </th>
-      </tr>
-  </thead>
+            <thead class="govuk-table__head">
+                <tr class="govuk-table__row">
+                    <th class="govuk-table__header" scope="col">
+                        URN
+                    </th>
+                    <th class="govuk-table__header" scope="col">
+                        Establishment
+                    </th>
+                    <th class="govuk-table__header" scope="col">
+                        Matching Providers or Sites by Name
+                    </th>
+                    <th class="govuk-table__header" scope="col">
+                        Matching Providers or Sites by Postcode
+                    </th>
+                </tr>
+            </thead>
 
-  <tbody class="govuk-table__body">
-      <% @establishments.each do |establishment| %>
-      <tr class="govuk-table__row">
-          <td class="govuk-table__cell">
-              <%= establishment.urn %>
-          </td>
+            <tbody class="govuk-table__body">
+                <% @establishments.each do |establishment| %>
+                    <tr class="govuk-table__row">
+                        <td class="govuk-table__cell">
+                            <%= establishment.urn %>
+                        </td>
 
-          <td class="govuk-table__cell">
-              <%= link_to establishment.name, gias_establishment_path(establishment.id) %>
-          </td>
+                        <td class="govuk-table__cell">
+                            <%= link_to establishment.name, gias_establishment_path(establishment.id) %>
+                        </td>
 
-          <td class="govuk-table__cell">
-              <% if establishment.providers_matched_by_name.any? || establishment.sites_matched_by_name.any? %>
-              <h4>Matched Providers</h4>
-              <ul class="govuk-list">
-                  <% establishment.providers_matched_by_name.each do |provider| %>
-                      <li>
-                          <%= govuk_link_to(provider.provider_name, gias_provider_path(provider)) %>
-                      </li>
-                  <% end %>
-              </ul>
-              <% end %>
+                        <td class="govuk-table__cell">
+                            <% if establishment.providers_matched_by_name.any? || establishment.sites_matched_by_name.any? %>
+                                <h4>Matched Providers</h4>
+                                <ul class="govuk-list">
+                                    <% establishment.providers_matched_by_name.each do |provider| %>
+                                        <li>
+                                            <%= govuk_link_to(provider.provider_name, gias_provider_path(provider)) %>
+                                        </li>
+                                    <% end %>
+                                </ul>
+                            <% end %>
 
-              <% if establishment.sites_matched_by_name.any? %>
-              <h4>Matched Provider Sites</h4>
-              <ul class="govuk-list">
-                  <% establishment.sites_matched_by_name.each do |site| %>
-                      <li>
-                          <%= govuk_link_to("#{site.provider.provider_name}: #{site.location_name}",
-                                            gias_provider_path(site.provider)) %>
-                      </li>
-                  <% end %>
-              </ul>
-              <% end %>
-          </td>
+                            <% if establishment.sites_matched_by_name.any? %>
+                                <h4>Matched Provider Sites</h4>
+                                <ul class="govuk-list">
+                                    <% establishment.sites_matched_by_name.each do |site| %>
+                                        <li>
+                                            <%= govuk_link_to("#{site.provider.provider_name}: #{site.location_name}",
+                                                              gias_provider_path(site.provider)) %>
+                                        </li>
+                                    <% end %>
+                                </ul>
+                            <% end %>
+                        </td>
 
-          <td class="govuk-table__cell">
-              <% if establishment.providers_matched_by_postcode.any? || establishment.sites_matched_by_postcode.any? %>
-              <h4>Matched Providers</h4>
-              <ul class="govuk-list">
-                  <% establishment.providers_matched_by_postcode.each do |provider| %>
-                      <li>
-                          <%= govuk_link_to(provider.provider_name, gias_provider_path(provider)) %>
-                      </li>
-                  <% end %>
-              </ul>
-              <% end %>
+                        <td class="govuk-table__cell">
+                            <% if establishment.providers_matched_by_postcode.any? || establishment.sites_matched_by_postcode.any? %>
+                                <h4>Matched Providers</h4>
+                                <ul class="govuk-list">
+                                    <% establishment.providers_matched_by_postcode.each do |provider| %>
+                                        <li>
+                                            <%= govuk_link_to(provider.provider_name, gias_provider_path(provider)) %>
+                                        </li>
+                                    <% end %>
+                                </ul>
+                            <% end %>
 
-              <% if establishment.sites_matched_by_postcode.any? %>
-              <h4>Matched Provider Sites</h4>
-              <ul class="govuk-list">
-                  <% establishment.sites_matched_by_postcode.each do |site| %>
-                      <li>
-                          <%= govuk_link_to("#{site.provider.provider_name}: #{site.location_name}",
-                                            gias_provider_path(site.provider)) %>
-                      </li>
-                  <% end %>
-              </ul>
-              <% end %>
-          </td>
+                            <% if establishment.sites_matched_by_postcode.any? %>
+                                <h4>Matched Provider Sites</h4>
+                                <ul class="govuk-list">
+                                    <% establishment.sites_matched_by_postcode.each do |site| %>
+                                        <li>
+                                            <%= govuk_link_to("#{site.provider.provider_name}: #{site.location_name}",
+                                                              gias_provider_path(site.provider)) %>
+                                        </li>
+                                    <% end %>
+                                </ul>
+                            <% end %>
+                        </td>
 
-      </tr>
-      <% end %>
-  </tbody>
+                    </tr>
+                <% end %>
+            </tbody>
         </table>
     </div>
 </div>
