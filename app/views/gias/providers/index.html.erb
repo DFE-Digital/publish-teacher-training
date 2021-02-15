@@ -44,9 +44,9 @@
                             <div style="padding-left: 4ex">
                             <% matches_grouped_by_establishment_for_provider(provider).each do |establishment, matches| %>
                                 <h4>Establishment: <%= govuk_link_to("#{establishment.name} - #{establishment.urn}",
-                                                                     gias_establishment_path(establishment)) %></h4>
+                                                                     gias_establishment_path(establishment.urn)) %></h4>
 
-                                <ul>
+                                <ul class="govuk-list govuk-list--bullet">
                                     <% matches.each do |match| %>
                                     <li><%= match %></li>
                                     <% end %>

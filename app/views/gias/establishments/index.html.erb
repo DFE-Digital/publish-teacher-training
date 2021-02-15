@@ -46,7 +46,7 @@
                                 <h4>Provider: <%= govuk_link_to("#{provider.provider_name} - #{provider.provider_code}",
                                                                 gias_provider_path(provider)) %></h4>
 
-                                <ul>
+                                <ul class="govuk-list govuk-list--bullet">
                                     <% matches.each do |match| %>
                                     <li><%= match %></li>
                                     <% end %>
