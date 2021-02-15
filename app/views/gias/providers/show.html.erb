@@ -1,4 +1,5 @@
-<h1><%= @provider.provider_name %></h1>
+<div class="govuk-grid-row">
+<h1 class="govuk-heading-xl"><%= @provider.provider_name %></h1>
 
 <dl class="govuk-summary-list">
     <div class="govuk-summary-list__row">
@@ -15,58 +16,40 @@
     </div>
 </dl>
 
-<% if @provider.establishments_matched_by_postcode.any? %>
-<h2>Establishments That Match By Postcode</h2>
-
-<ul class="govuk-list">
-<% @provider.establishments_matched_by_postcode.each do |establishment| %>
-    <li>
-        <%= link_to establishment.name, gias_establishment_path(establishment.urn) %>
-    </li>
-<% end %>
-</ul>
-<% end %>
-
-<% if @provider.establishments_matched_by_name.any? %>
-<h2>Establishments That Match By Name</h2>
-
-<ul class="govuk-list">
-<% @provider.establishments_matched_by_name.each do |establishment| %>
-    <li>
-        <%= link_to establishment.name, gias_establishment_path(establishment.urn) %>
-    </li>
-<% end %>
-</ul>
-<% end %>
-
-<% if @provider.sites_with_establishments_matched_by_postcode %>
-<h2>Sites That Match Establishments By Postcode</h2>
+<h2 class="govuk-heading-l">Sites</h2>
 
 <table class="govuk-table">
-    <thead class="govuk-table__head">
-        <tr class="govuk-table__row">
-            <th class="govuk-table__header" scope="col">Site Name</th>
-            <th class="govuk-table__header" scope="col">Establishment</th>
-        </tr>
-    </thead>
+  <thead class="govuk-table__head">
+    <tr class="govuk-table__row">
+      <th scope="col" class="govuk-table__header app-custom-class">Name</th>
+      <th scope="col" class="govuk-table__header app-custom-class">Code</th>
+      <th scope="col" class="govuk-table__header app-custom-class">Postcode</th>
+    </tr>
+  </thead>
 
-    <tbody class="govuk-table__body">
-      <% @provider.sites_with_establishments_matched_by_postcode.each do |site| %>
-        <tr class="govuk-table__row">
-            <td class="govuk-table__cell">
-                <%= govuk_link_to site.location_name, gias_site_path(site) %>
-            </td>
-            <td class="govuk-table__cell">
-                <ul class="govuk-list">
-                <% site.establishments_matched_by_postcode.each do |establishment| %>
-                    <li>
-                        <%= govuk_link_to establishment.name, gias_establishment_path(establishment.urn) %>
-                    </li>
-                <% end %>
-                </ul>
-            </td>
-        </tr>
-    <% end %>
-    </tbody>
+  <tbody class="govuk-table__body">
+  <% @provider.sites.each do |site| %>
+    <tr class="govuk-table__row">
+      <th scope="row" class="govuk-table__header"><%= site.location_name %></th>
+      <td class="govuk-table__cell"><%= site.code %></td>
+      <td class="govuk-table__cell"><%= site.postcode %></td>
+    </tr>
+  <% end %>
+  </tbody>
 </table>
+
+<h2 class="govuk-heading-l">Matching Establishments</h2>
+
+<% matches_grouped_by_establishment_for_provider(@provider).each do |establishment, matches| %>
+  <h3 class="govuk-heading-m">
+      <%= govuk_link_to("#{establishment.name} - #{establishment.urn}", gias_establishment_path(establishment.urn)) %>
+  </h3>
+
+  <ul class="govuk-list govuk-list--bullet">
+  <% matches.each do |match| %>
+      <li><%= match %></li>
+  <% end %>
+  </ul>
 <% end %>
+
+</div>

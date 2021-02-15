@@ -21,11 +21,7 @@ module GIAS
     end
 
     def show
-      @establishment = GIASEstablishment.find_by(urn: params[:urn])
-
-      @matches = GIAS::EstablishmentMatcherService.call(
-        establishment: @establishment,
-      )
+      @establishment = GIASEstablishment.find_by!(urn: params[:urn])
     end
 
     private

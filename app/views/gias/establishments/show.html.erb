@@ -1,32 +1,33 @@
-<h1><%= @establishment.name %></h1>
+<div class="govuk-grid-row">
+<h1 class="govuk-heading-xl"><%= @establishment.name %></h1>
 
-<dl>
-    <dt>URN:</dt>
-    <dd><%= @establishment.urn %></dd>
+<dl class="govuk-summary-list">
+    <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">URN:</dt>
+        <dd class="govuk-summary-list__value"><%= @establishment.urn %></dd>
+    </div>
 
-    <dt>Postcode:</dt>
-    <dd>
-        <%= link_to @establishment.postcode,
-         gias_postcode_path(postcode: @establishment.postcode) %>
-    </dd>
+    <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">Postcode:</dt>
+        <dd class="govuk-summary-list__value">
+            <%= link_to @establishment.postcode,
+             gias_postcode_path(postcode: @establishment.postcode) %>
+        </dd>
+    </div>
 </dl>
 
-<h2>Site Postcode Matches</h2>
+<h2 class="govuk-heading-l">Matching Providers</h2>
 
-<ul>
-<% @matches[:sites][:postcode].each do |site| %>
-    <li>
-        <h3><%= link_to site.location_name, gias_site_path(site.id) %></h3>
+<% matches_grouped_by_provider_for_establishment(@establishment).each do |provider, matches| %>
+  <h3 class="govuk-heading-m">
+    <%= govuk_link_to("#{provider.provider_name} - #{provider.provider_code}", gias_provider_path(provider)) %>
+  </h3>
 
-        <dl>
-            <dt>Provider</dt>
-            <dd>
-                <%= link_to site.provider.provider_name,
-                            gias_provider_path(site.provider.id) %>
-                [<%= link_to site.provider.postcode,
-                             gias_postcode_path(postcode: site.provider.postcode) %>]
-            </dd>
-        </dl>
-    </li>
+  <ul class="govuk-list govuk-list--bullet">
+  <% matches.each do |match| %>
+    <li><%= match %></li>
+  <% end %>
+  </ul>
 <% end %>
-</ul>
+
+</div>
