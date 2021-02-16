@@ -40,8 +40,8 @@ module GIAS::ProviderAssociationsConcern
 
     scope :with_establishments_that_match_any_name,
           -> do
-      where(id: (that_match_establishments_by_name.pluck(:id) +
-                 with_sites_that_match_establishments_by_name.pluck(:id)))
+      where(id: (that_match_establishments_by_name.reorder(:id).pluck(:id) +
+                 with_sites_that_match_establishments_by_name.reorder(:id).pluck(:id)))
     end
 
     def sites_with_establishments_matched_by_postcode

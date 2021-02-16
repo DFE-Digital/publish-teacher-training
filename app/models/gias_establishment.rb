@@ -1,4 +1,6 @@
 class GIASEstablishment < ApplicationRecord
+  include PgSearch::Model
+
   has_and_belongs_to_many :providers,
                           join_table: :gias_establishment_provider_postcode_matches,
                           foreign_key: "establishment_id",
@@ -45,6 +47,8 @@ class GIASEstablishment < ApplicationRecord
   end
 
   scope :that_match_providers_or_sites_by_name, -> do
-    where(id: (that_match_providers_by_name.pluck(:id) + that_match_sites_by_name.pluck(:id)))
+    where(id: (that_match_providers_by_name.reorder(:id).pluck(:id) + that_match_sites_by_name.reorder(:id).pluck(:id)))
   end
+
+  pg_search_scope :search_by_name_or_urn, against: %i(urn name), using: { tsearch: { prefix: true } }
 end
