@@ -6,6 +6,8 @@ module GIAS
       recruitment_cycle = RecruitmentCycle.current
       providers = recruitment_cycle.providers
 
+      providers = providers.search_by_code_or_name(@filters.search) unless @filters.search.blank?
+
       providers = providers.that_match_establishments_by_postcode            if @filters.postcode.include? 'provider'
       providers = providers.with_sites_that_match_establishments_by_postcode if @filters.postcode.include? 'sites'
       providers = providers.with_establishments_that_match_any_postcode      if @filters.postcode.include? 'provider_or_sites'
@@ -13,12 +15,7 @@ module GIAS
       providers = providers.with_sites_that_match_establishments_by_name     if @filters.name.include? 'sites'
       providers = providers.with_establishments_that_match_any_name          if @filters.name.include? 'provider_or_sites'
 
-      @filter_object = OpenStruct.new(
-        name: @filters.name.reject(&:blank?),
-        postcode: @filters.postcode.reject(&:blank?),
-      )
-
-      @pagy, @providers = pagy(providers)
+      @pagy, @providers = pagy(providers.reorder(:id))
     end
 
     def show
@@ -33,8 +30,15 @@ module GIAS
 
     def build_filters
       @filters = OpenStruct.new(
-        name:     params.key?(:filters) ? params[:filters].fetch(:name,     []) : [],
-        postcode: params.key?(:filters) ? params[:filters].fetch(:postcode, []) : []
+        name:     params.dig(:filters, :name)| [],
+        postcode: params.dig(:filters, :postcode) || [],
+        search:   params.dig(:filters, :search),
+      )
+
+      @filter_object = OpenStruct.new(
+        name: @filters.name.reject(&:blank?),
+        postcode: @filters.postcode.reject(&:blank?),
+        search: @filters.search,
       )
     end
   end

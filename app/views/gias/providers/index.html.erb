@@ -2,62 +2,37 @@
 
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-one-quarter">
-        <%= form_with(model: @filter_object,
-                      url: gias_providers_path,
-                      scope: :filters,
-                      method: :get,
-                      builder: GOVUKDesignSystemFormBuilder::FormBuilder) do |form| %>
-
-            <%= form.govuk_check_boxes_fieldset :name, legend: { text: "Name Matching" } do %>
-                <%= form.govuk_check_box "name", 'provider', label: { text: "Provider" } %>
-                <%= form.govuk_check_box "name", 'sites', label: { text: "Sites" } %>
-                <%= form.govuk_check_box "name", 'provider_or_sites', label: { text: "Provider or Sites" } %>
-            <% end %>
-
-            <%= form.govuk_check_boxes_fieldset :postcode, legend: { text: "Postcode Matching" } do %>
-                <%= form.govuk_check_box "postcode", 'provider', label: { text: "Provider" } %>
-                <%= form.govuk_check_box "postcode", 'sites', label: { text: "Sites" } %>
-                <%= form.govuk_check_box "postcode", 'provider_or_sites', label: { text: "Provider or Sites" } %>
-            <% end %>
-
-            <%= form.govuk_submit "Submit" %>
-        <% end %>
+        <%= render partial: "filters", locals: { form_url: gias_providers_path } %>
     </div>
 
     <div class="govuk-grid-column-three-quarters">
-        <table class="govuk-table govuk-!-margin-bottom-8">
-            <thead class="govuk-table__head">
-                <tr class="govuk-table__row">
-                    <th class="govuk-table__header" scope="col">
-                        Providers
-                    </th>
-                </tr>
-            </thead>
+        <h2 class="govuk-heading-l">Establishments</h2>
 
-            <tbody class="govuk-table__body">
-                <% @providers.each do |provider| %>
-                    <tr class="govuk-table__row">
-                        <td class="govuk-table__cell">
-                            <h3><%= govuk_link_to("#{provider.provider_name} - #{provider.provider_code}",
-                                                  gias_provider_path(provider)) %></h3>
+        <ul class="govuk-list govuk-list--spaced">
+            <% @providers.each do |provider| %>
+            <li>
+                <h3 class="govuk-heading-m">
+                    <%= govuk_link_to("#{provider.provider_name} - #{provider.provider_code}", gias_provider_path(provider)) %>
+                </h3>
 
-                            <div style="padding-left: 4ex">
-                            <% matches_grouped_by_establishment_for_provider(provider).each do |establishment, matches| %>
-                                <h4>Establishment: <%= govuk_link_to("#{establishment.name} - #{establishment.urn}",
-                                                                     gias_establishment_path(establishment.urn)) %></h4>
+                <div style="padding-left: 4ex">
+                    <% matches_grouped_by_establishment_for_provider(provider).each do |establishment, matches| %>
+                    <h4 class="govuk-heading-s">
+                        Establishment: <%= govuk_link_to("#{establishment.name} - #{establishment.urn}", gias_establishment_path(establishment.urn)) %>
+                    </h4>
 
-                                <ul class="govuk-list govuk-list--bullet">
-                                    <% matches.each do |match| %>
-                                    <li><%= match %></li>
-                                    <% end %>
-                                </ul>
-                                <% end %>
-                            </div>
-                        </td>
-                    </tr>
-                <% end %>
-            </tbody>
-        </table>
+                    <ul class="govuk-list govuk-list--bullet">
+                        <% matches.each do |match| %>
+                        <li><%= match %></li>
+                        <% end %>
+                    </ul>
+                    <% end %>
+                </div>
+            </li>
+            <hr class="govuk-section-break--m">
+            <% end %>
+        </ul>
     </div>
 </div>
+
 <%== pagy_nav(@pagy) %>
