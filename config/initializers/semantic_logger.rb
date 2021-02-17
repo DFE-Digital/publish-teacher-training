@@ -54,6 +54,6 @@ if Settings.logstash.host && Settings.logstash.port
 
   log_stash = LogStashLogger.new(Settings.logstash.to_h.merge(customize_event: fix_payload))
   SemanticLogger.add_appender(logger: log_stash, level: :info, formatter: LogStashFormatter.new)
-elsif Rails.env.production?
-  warn("logstash not configured, falling back to standard Rails logging")
+else
+  SemanticLogger.add_appender(io: STDOUT, level: :info, formatter: :json)
 end

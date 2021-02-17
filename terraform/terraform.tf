@@ -47,6 +47,7 @@ module paas {
   app_environment           = var.paas_app_environment
   docker_image              = var.paas_docker_image
   docker_credentials        = local.docker_credentials
+  logstash_url              = local.infra_secrets.LOGSTASH_URL
   web_app_host_name         = var.paas_web_app_host_name
   web_app_memory            = var.paas_web_app_memory
   web_app_instances         = var.paas_web_app_instances
