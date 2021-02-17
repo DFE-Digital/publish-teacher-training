@@ -11,7 +11,7 @@ class TravelToWorkAreaAndLondonBoroughService
                      end
 
     site.update_column("travel_to_work_area", ttw_area)
-    site.update_column("london_borough", london_borough)
+    site.update_column("london_borough", london_borough.gsub(/ Borough Council| City Council| Corporation/, ""))
     site.save!(validate: false)
   rescue StandardError
     false
