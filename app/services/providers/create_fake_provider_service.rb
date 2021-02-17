@@ -2,6 +2,14 @@ module Providers
   class CreateFakeProviderService
     attr_reader :errors
 
+    DEFAULT_PROVIDER_ATTRIBUTES = {
+        address1: "1 Test Street",
+        address3: "Town",
+        address4: "County",
+        postcode: "M1 1JG",
+        region_code: "north_west",
+    }.freeze
+
     def initialize(recruitment_cycle:, provider_name:, provider_code:, provider_type:, is_accredited_body:)
       raise "Can only be run in sandbox or development" unless Rails.env.sandbox? || Rails.env.development? || Rails.env.test?
 
@@ -15,22 +23,14 @@ module Providers
     end
 
     def execute
-      if provider_already_exists?
-        errors << "Provider #{@provider_name} (#{@provider_code}) already exists."
-        return false
-      end
+      return false if provider_already_exists?
 
-      provider = @recruitment_cycle.providers.build(
+      provider = @recruitment_cycle.providers.build({
         provider_name: @provider_name,
         provider_code: @provider_code,
         provider_type: @provider_type,
         accrediting_provider: @is_accredited_body ? "accredited_body" : "not_an_accredited_body",
-        address1: "1 Test Street",
-        address3: "Town",
-        address4: "County",
-        postcode: "M1 1JG",
-        region_code: "north_west",
-      )
+      }.merge(DEFAULT_PROVIDER_ATTRIBUTES))
 
       organisation = Organisation.new(name: @provider_name)
       organisation.providers << provider
@@ -50,18 +50,20 @@ module Providers
         errors << "Unable to create Provider #{provider_name}: #{provider.errors.to_sentence}."
       end
 
-      if errors.any?
-        false
-      else
-        true
-      end
+      errors.empty?
     end
 
   private
 
     def provider_already_exists?
-      @recruitment_cycle.providers.exists?(provider_name: @provider_name) || \
-        @recruitment_cycle.providers.exists?(provider_code: @provider_code)
+      if @recruitment_cycle.providers.exists?(provider_name: @provider_name) || \
+          @recruitment_cycle.providers.exists?(provider_code: @provider_code)
+        errors << "Provider #{@provider_name} (#{@provider_code}) already exists."
+
+        true
+      else
+        false
+      end
     end
   end
 end
