@@ -80,3 +80,17 @@ deploy: deploy-init
 
 destroy: deploy-init
 	terraform destroy -var-file=terraform/workspace_variables/$(DEPLOY_ENV).tfvars terraform
+
+install-fetch-config:
+	[ ! -f bin/fetch_config.rb ] \
+		&& curl -s https://raw.githubusercontent.com/DFE-Digital/bat-platform-building-blocks/master/scripts/fetch_config/fetch_config.rb -o bin/fetch_config.rb \
+		&& chmod +x bin/fetch_config.rb \
+		|| true
+
+edit-app-secrets: install-fetch-config
+	. terraform/workspace_variables/$(DEPLOY_ENV).sh && bin/fetch_config.rb -s azure-key-vault-secret:$${TF_VAR_key_vault_name}/$${TF_VAR_key_vault_app_secret_name} \
+		-e -d azure-key-vault-secret:$${TF_VAR_key_vault_name}/$${TF_VAR_key_vault_app_secret_name} -f yaml
+
+print-app-secrets: install-fetch-config
+	. terraform/workspace_variables/$(DEPLOY_ENV).sh && bin/fetch_config.rb -s azure-key-vault-secret:$${TF_VAR_key_vault_name}/$${TF_VAR_key_vault_app_secret_name} \
+		-f yaml
