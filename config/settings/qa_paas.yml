@@ -1,7 +1,6 @@
 gcp_api_key: please_change_me
 publish_url: https://qa-publish-teacher-training-courses.london.cloudapps.digital
 find_url: https://qa-find-postgraduate-teacher-training.london.cloudapps.digital
-mapit_url: https://mapit.mysociety.org
 bg_jobs:
   save_statistic:
     cron: "0 0 * * *" # daily at midnight
