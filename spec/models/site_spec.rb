@@ -1,6 +1,8 @@
 require "rails_helper"
 
 describe Site, type: :model do
+  include ActiveJob::TestHelper
+
   subject { create(:site) }
 
   describe "auditing" do
@@ -62,8 +64,6 @@ describe Site, type: :model do
   end
 
   describe "geolocation" do
-    include ActiveJob::TestHelper
-
     after do
       clear_enqueued_jobs
       clear_performed_jobs
@@ -188,6 +188,53 @@ describe Site, type: :model do
 
           it { should be(true) }
         end
+      end
+    end
+  end
+
+  describe "travel to work area and London Borough" do
+    let(:site) do
+      build(:site,
+            latitude: 1.456789,
+            longitude: 1.456789,
+            location_name: "Southampton High School",
+            address1: "Long Lane",
+            address2: "Holbury",
+            address3: "Southampton",
+            address4: nil,
+            postcode: "SO45 2PA")
+    end
+
+    after do
+      clear_enqueued_jobs
+      clear_performed_jobs
+    end
+
+    describe "#add_travel_to_work_area_and_london_borough?" do
+      it "does not trigger add_travel_to_work_area_and_london_borough on after_commit if lat or long have not been updated" do
+        expect(site).not_to receive(:add_travel_to_work_area_and_london_borough)
+        site.latitude = nil
+        site.longitude = nil
+        site.save
+      end
+
+      it "triggers add_travel_to_work_area_and_london_borough on after_commit if lat or long have been updated" do
+        expect(site).to receive(:add_travel_to_work_area_and_london_borough)
+        site.latitude = 1.5
+        site.longitude = 1.4
+        site.save
+      end
+    end
+
+
+    describe "#add_travel_to_work_area_and_london_borough" do
+      before do
+        allow(TravelToWorkAreaAndLondonBoroughJob).to receive(:perform_later)
+        site.update(latitude: 1.2, longitude: 1.3)
+      end
+
+      it "should call the TravelToWorkAreaAndLondonBoroughJob" do
+        expect(TravelToWorkAreaAndLondonBoroughJob).to have_received(:perform_later).with(site.id)
       end
     end
   end

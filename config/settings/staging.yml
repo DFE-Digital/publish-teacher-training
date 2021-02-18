@@ -5,5 +5,5 @@ find_url: https://staging.find-postgraduate-teacher-training.service.gov.uk
 bg_jobs:
   save_statistic:
     cron: "0 0 * * *" # daily at midnight
-    class: "SaveStatisticJob" 
+    class: "SaveStatisticJob"
     queue: save_statistic
