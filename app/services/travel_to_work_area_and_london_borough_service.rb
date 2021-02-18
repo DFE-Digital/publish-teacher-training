@@ -7,12 +7,13 @@ class TravelToWorkAreaAndLondonBoroughService
     ttw_area = json.dig(json.keys.first, "name")
 
     london_borough = if ttw_area == "London"
-                       json.dig(json.keys.second, "name")
+                       json
+                       .dig(json.keys.second, "name")
+                       .gsub(/ Borough Council| City Council| Corporation/, "")
                      end
 
     site.update_column("travel_to_work_area", ttw_area)
-    site.update_column("london_borough", london_borough.gsub(/ Borough Council| City Council| Corporation/, ""))
-    site.save!(validate: false)
+    site.update_column("london_borough", london_borough)
   rescue StandardError
     false
   end
