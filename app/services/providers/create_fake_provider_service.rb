@@ -47,11 +47,7 @@ module Providers
         region_code: provider.region_code,
       )
 
-      if provider.invalid?
-        errors << "Unable to create Provider #{provider_name}: #{provider.errors.to_sentence}."
-      end
-
-      errors.empty?
+      true
     end
 
   private
