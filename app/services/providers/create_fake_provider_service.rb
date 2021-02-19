@@ -57,10 +57,8 @@ module Providers
   private
 
     def provider_already_exists?
-      if @recruitment_cycle.providers.exists?(provider_name: @provider_name) || \
-          @recruitment_cycle.providers.exists?(provider_code: @provider_code)
+      if @recruitment_cycle.providers.exists?(provider_code: @provider_code)
         errors << "Provider #{@provider_name} (#{@provider_code}) already exists."
-
         true
       else
         false

@@ -23,20 +23,9 @@ RSpec.describe Providers::CreateFakeProviderService do
         change { Site.count }.by(1)
   end
 
-  context "the provider code already exists" do
+  context "a provider with that code already exists" do
     before do
       create(:provider, provider_code: "123", recruitment_cycle: recruitment_cycle)
-    end
-
-    it "does not complete" do
-      expect(service.execute).not_to be(true)
-      expect(service.errors).to eq ["Provider Fake Provider (123) already exists."]
-    end
-  end
-
-  context "the provider name already exists" do
-    before do
-      create(:provider, provider_name: "Fake Provider", recruitment_cycle: recruitment_cycle)
     end
 
     it "does not complete" do

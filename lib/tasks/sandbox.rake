@@ -56,7 +56,6 @@ namespace :sandbox do
 
     provider_type options -> "lead_school", "scitt", "unknown", "university"
     provider_code must be a unique string
-    provider_name must be a unique string
 
     Providers will be created if they don't exist, along with a single
     Organisation and Site per-provider.
