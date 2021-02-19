@@ -33,7 +33,7 @@ RSpec.describe CSVImports::FakeProvidersImport do
 
   context "two providers to import" do
     let(:csv_content) do
-      "name,code,type,accredited_body\n\"Provider A\",ABC,scitt,false\n\"Provider B\",DEF,lead_school,true"
+      "name,code,type,accredited_body\n\"Provider A\",ABC,scitt,false\n\"Provider B\",DEF,lead_school,false"
     end
 
     it "creates two providers" do

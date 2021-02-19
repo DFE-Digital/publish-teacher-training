@@ -1,8 +1,6 @@
 require "rails_helper"
 
 RSpec.describe Providers::CreateFakeProviderService do
-  let(:provider_name) { "Fake Provider" }
-  let(:provider_code) { "ABC" }
   let(:provider_type) { "scitt" }
   let(:recruitment_cycle) { find_or_create :recruitment_cycle }
   let(:is_accredited_body) { false }
@@ -11,7 +9,7 @@ RSpec.describe Providers::CreateFakeProviderService do
     described_class.new(
       provider_name: "Fake Provider",
       provider_code: "123",
-      provider_type: "scitt",
+      provider_type: provider_type,
       recruitment_cycle: recruitment_cycle,
       is_accredited_body: is_accredited_body,
     )
@@ -44,6 +42,16 @@ RSpec.describe Providers::CreateFakeProviderService do
     it "does not complete" do
       expect(service.execute).not_to be(true)
       expect(service.errors).to eq ["Provider Fake Provider (123) already exists."]
+    end
+  end
+
+  context "the requested provider is both a lead_school and an accredited_body" do
+    let(:provider_type) { "lead_school" }
+    let(:is_accredited_body) { true }
+
+    it "does not complete" do
+      expect(service.execute).not_to be(true)
+      expect(service.errors).to eq ["Provider Fake Provider (123) cannot be both a lead school and an accredited body."]
     end
   end
 
