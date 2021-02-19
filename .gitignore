@@ -19,6 +19,9 @@ config/settings/*.local.yml
 config/environments/*.local.yml
 config/azure_environments.yml
 
+#ignore fetch_config.rb and use latest version from bat-platform-building-blocks
+bin/fetch_config.rb
+
 *.patch
 *.swp
 
