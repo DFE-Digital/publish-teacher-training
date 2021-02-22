@@ -17,6 +17,7 @@
 
 ActiveSupport::Inflector.inflections do |inflect|
   inflect.acronym "API"
+  inflect.acronym "CSV"
   inflect.acronym "PGDE"
   inflect.acronym "UCAS"
   inflect.acronym "MFL" # Modern foreign languages
