@@ -1,7 +1,7 @@
 GIT
-  remote: https://github.com/nanamkim/custom-err-msg.git
-  revision: d72fb180d9dfd19f18622c978747dcc0aa5374e0
-  ref: d72fb18
+  remote: https://github.com/DFE-Digital/custom-err-msg.git
+  revision: 46a24a40c093e078650e44dd71b9b63ffb79b43f
+  ref: 46a24a4
   specs:
     custom_error_message (1.2.1)
 

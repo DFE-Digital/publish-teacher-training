@@ -76,7 +76,7 @@ gem "audited", "~> 4.10"
 gem "aasm"
 
 # Allows writing of error full_messages for validations that don't start with the attribute name
-gem "custom_error_message", git: "https://github.com/nanamkim/custom-err-msg.git", ref: "d72fb18"
+gem "custom_error_message", git: "https://github.com/DFE-Digital/custom-err-msg.git", ref: "46a24a4"
 
 # Soft delete
 gem "discard"
