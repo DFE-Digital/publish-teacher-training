@@ -52,7 +52,7 @@ class CourseSearchService
     elsif sort_by_distance?
       outer_scope = outer_scope.joins(courses_with_distance_from_origin)
       outer_scope = outer_scope.joins(:provider)
-      outer_scope = outer_scope.select("course.*, distance, #{distance_with_university_area_adjustment}")
+      outer_scope = outer_scope.select("course.*, distance, #{Course.sanitize_sql(distance_with_university_area_adjustment)}")
 
       outer_scope = if expand_university?
                       outer_scope.order(:boosted_distance)
@@ -111,8 +111,8 @@ private
     # select course_id and nearest site with shortest distance from origin
     # as courses may have multiple sites
     # this will remove duplicates by aggregating on course_id
-    origin_lat_long = OpenStruct.new(lat: origin[0], lng: origin[1])
-    lowest_locatable_distance = Arel.sql("MIN#{Site.distance_sql(origin_lat_long)} as distance")
+    origin_lat_long = OpenStruct.new(lat: origin[0].to_f, lng: origin[1].to_f)
+    lowest_locatable_distance = Arel.sql("MIN#{Site.sanitize_sql(Site.distance_sql(origin_lat_long))} as distance")
     locatable_sites.project(:course_id, lowest_locatable_distance).group(:course_id)
   end
 
