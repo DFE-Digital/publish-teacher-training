@@ -4,7 +4,7 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 ruby "2.7.2"
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem "rails", "6.0.3.4"
+gem "rails", "6.1.3"
 
 # Use PostgreSQL as the database for Active Record
 gem "pg"
@@ -76,7 +76,7 @@ gem "audited", "~> 4.10"
 gem "aasm"
 
 # Allows writing of error full_messages for validations that don't start with the attribute name
-gem "custom_error_message", git: "https://github.com/nanamkim/custom-err-msg.git", ref: "d72fb18"
+gem "custom_error_message", git: "https://github.com/DFE-Digital/custom-err-msg.git", ref: "46a24a4"
 
 # Soft delete
 gem "discard"
