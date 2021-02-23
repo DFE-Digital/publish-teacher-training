@@ -1,0 +1,35 @@
+name: Restore Prod Database from Azure To PaaS
+
+on: [workflow_dispatch]
+
+jobs:
+  db_restore:
+    name: Restore Database in bat-prod
+    runs-on: ubuntu-latest
+    steps:
+    - name: Setup cf cli 
+      uses: DFE-Digital/bat-infrastructure/actions/setup-cf-cli@main
+      with:
+        CF_USERNAME:   ${{ secrets.CF_USERNAME_PRODUCTION }}
+        CF_PASSWORD:   ${{ secrets.CF_PASSWORD_PRODUCTION }}
+        CF_SPACE_NAME: bat-prod
+        INSTALL_CONDUIT: true
+
+    - name: Install postgres client
+      run: |
+        wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
+        echo "deb http://apt.postgresql.org/pub/repos/apt/ $(lsb_release -cs)"-pgdg main | sudo tee  /etc/apt/sources.list.d/pgdg.list
+        sudo apt-get update && sudo apt-get install -y postgresql-client-11
+        psql --version && pg_dump --version
+        
+    - name: Backup Azure DB
+      run: pg_dump -E utf8 -c -v -w -O -d ${{ secrets.AZURE_DATABASE_NAME}} -f db_backup.sql
+      env:
+        PGHOST:     ${{ secrets.AZURE_DATABASE_HOST_PRODUCTION }}
+        PGUSER:     ${{ secrets.AZURE_DATABASE_USER_PRODUCTION }}
+        PGPASSWORD: ${{ secrets.AZURE_DATABASE_PASSWORD_PRODUCTION }}
+
+    - name: Restore database
+      run: cf conduit ${POSTGRES_SERVICE_INSTANCE} -- psql < db_backup.sql
+      env:
+        POSTGRES_SERVICE_INSTANCE: teacher-training-api-postgres-prod
