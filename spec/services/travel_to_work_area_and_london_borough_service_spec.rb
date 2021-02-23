@@ -4,12 +4,12 @@ describe TravelToWorkAreaAndLondonBoroughService do
   describe "#add_travel_to_work_area_and_london_borough" do
     let(:valid_site) {
       create(:site,
-             location_name: "School of DfE",
-             address1: "28 Great Smith Street",
-             address2: "Londo",
+             location_name: "Cambridge School of DfE",
+             address1: "28 Interesting Street",
+             address2: "Cambridge",
              address3: "",
              address4: "UK",
-             postcode: "SW1P 3BT",
+             postcode: "CB5 3BT",
              latitude: 51.498160,
              longitude: -0.129900)
     }
@@ -18,18 +18,21 @@ describe TravelToWorkAreaAndLondonBoroughService do
       build(:site, latitude: "this is not a latitude")
     end
 
-    let(:valid_site_mapit_endpoint) do
-      URI("#{Settings.mapit_url}/point/4326/#{valid_site.longitude},#{valid_site.latitude}?type=TTW,LBO&api_key=#{Settings.mapit_api_key}")
+    let(:travel_to_work_areas_query) do
+      URI("#{Settings.mapit_url}/point/4326/#{valid_site.longitude},#{valid_site.latitude}?type=TTW&api_key=#{Settings.mapit_api_key}")
+    end
+
+    let(:london_boroughs_query) do
+      URI("#{Settings.mapit_url}/point/4326/#{valid_site.longitude},#{valid_site.latitude}?type=LBO&api_key=#{Settings.mapit_api_key}")
     end
 
     let(:invalid_mapit_endpoint) do
       URI("#{Settings.mapit_url}/point/4326/#{invalid_site.longitude},#{invalid_site.latitude}?type=TTW,LBO&api_key=#{Settings.mapit_api_key}")
     end
 
-    let(:travel_to_work_area) { "Cambridge" }
     let(:london_borough) { nil }
 
-    let(:valid_response) do
+    let(:travel_to_work_areas_successful_response) do
       {
         "163653": {
           "parent_area": nil,
@@ -46,6 +49,11 @@ describe TravelToWorkAreaAndLondonBoroughService do
           "country_name": "England",
           "type": "TTW",
         },
+      }.to_json
+    end
+
+    let(:london_boroughs_successful_response) do
+      {
         "2504": {
           "parent_area": nil,
           "generation_high": 41,
@@ -74,10 +82,15 @@ describe TravelToWorkAreaAndLondonBoroughService do
       </html>"
     end
 
-    before { stub_request(:get, valid_site_mapit_endpoint).to_return(body: valid_response) }
+    before do
+      stub_request(:get, travel_to_work_areas_query).to_return(body: travel_to_work_areas_successful_response)
+      stub_request(:get, london_boroughs_query).to_return(body: london_boroughs_successful_response)
+    end
 
     context "a valid site" do
       context "when the travel to work area is not London" do
+        let(:travel_to_work_area) { "Cambridge" }
+
         it "updates the travel to work area and london_borough remains nil" do
           expect { described_class.add_travel_to_work_area_and_london_borough(site: valid_site) }.
             to change { valid_site.reload.travel_to_work_area }.from(nil).to("Cambridge").
@@ -121,6 +134,8 @@ describe TravelToWorkAreaAndLondonBoroughService do
     end
 
     context "invalid site" do
+      let(:travel_to_work_area) { "Cambridge" }
+
       before { stub_request(:get, invalid_mapit_endpoint).to_return(body: invalid_response) }
 
       it "returns false" do
