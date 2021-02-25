@@ -1,3 +1,5 @@
+require "rails_helper.rb"
+
 describe WordsCountValidator do
   maximum = 10
 

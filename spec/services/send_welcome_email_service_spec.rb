@@ -1,3 +1,5 @@
+require "rails_helper"
+
 describe SendWelcomeEmailService do
   before { Timecop.freeze }
   after { Timecop.return }

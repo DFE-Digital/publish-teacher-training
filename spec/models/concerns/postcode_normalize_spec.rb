@@ -1,3 +1,5 @@
+require "rails_helper"
+
 describe PostcodeNormalize do
   # TODO: Create a test object to use this on instead.
   let(:object) { Site.new }

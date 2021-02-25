@@ -1,3 +1,5 @@
+require "rails_helper"
+
 describe EmailValidator do
   let(:model) do
     cls = Class.new do

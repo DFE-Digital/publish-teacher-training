@@ -1,3 +1,5 @@
+require "rails_helper"
+
 describe PostcodeValidator do
   # TODO: Use a dummy model here, instead of site.
   let(:site) { build(:site) }

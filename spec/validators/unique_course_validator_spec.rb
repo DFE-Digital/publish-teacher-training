@@ -1,3 +1,5 @@
+require "rails_helper.rb"
+
 describe UniqueCourseValidator do
   let(:service) { described_class.new }
   let(:provider) { create(:provider, sites: [site_one, site_two]) }

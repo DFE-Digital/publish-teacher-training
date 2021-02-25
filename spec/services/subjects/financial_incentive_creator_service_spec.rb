@@ -1,3 +1,5 @@
+require "rails_helper"
+
 describe Subjects::FinancialIncentiveCreatorService do
   let(:subject_spy) { spy }
   let(:financial_incentive_spy) { spy }

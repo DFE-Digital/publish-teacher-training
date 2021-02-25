@@ -1,3 +1,5 @@
+require "rails_helper"
+
 describe API::V2::DeserializableCourse do
   let(:course) { build(:course) }
   let(:course_jsonapi) do

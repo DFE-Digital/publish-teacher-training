@@ -1,3 +1,5 @@
+require "rails_helper"
+
 describe ServiceContainer do
   it "Allows you to register services" do
     service_spy = spy

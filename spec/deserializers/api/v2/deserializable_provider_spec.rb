@@ -1,3 +1,5 @@
+require "rails_helper"
+
 describe API::V2::DeserializableProvider do
   let(:provider) { build(:provider) }
   let(:provider_jsonapi) do

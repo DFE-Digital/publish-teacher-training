@@ -1,3 +1,5 @@
+require "rails_helper"
+
 describe GeocoderService do
   describe "#geocode" do
     let(:valid_site) {

@@ -1,3 +1,5 @@
+require "rails_helper"
+
 describe Course, type: :model do
   describe "#update_valid" do
     let(:current_cycle) { find_or_create :recruitment_cycle }

@@ -1,3 +1,5 @@
+require "rails_helper"
+
 describe Courses::AssignableSubjectService do
   let(:service) do
     described_class.new(

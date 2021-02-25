@@ -1,3 +1,5 @@
+require "rails_helper"
+
 describe RecordFirstLoginService do
   let(:service) { described_class.new }
 

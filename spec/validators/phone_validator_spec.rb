@@ -1,3 +1,5 @@
+require "rails_helper"
+
 describe PhoneValidator do
   let(:model) do
     cls = Class.new do

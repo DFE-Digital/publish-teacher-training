@@ -1,4 +1,4 @@
-require "rspec"
+require "rails_helper"
 
 describe "TestDataCache" do
   context "cache pre-filled" do
