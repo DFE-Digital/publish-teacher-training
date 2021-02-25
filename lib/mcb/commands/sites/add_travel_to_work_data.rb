@@ -15,8 +15,9 @@ run do |opts, _args, _cmd|
     .where
     .not(latitude: nil, longitude: nil)
     .find_each(batch_size: opts[:batch_size]) { |site|
-      verbose "adding travel to work area for '#{site.provider.provider_code}' site code '#{site.code}'"
-      TravelToWorkAreaAndLondonBoroughService.call(site: site)
+      verbose "adding travel to work area for site id '#{site.id}' site code '#{site.code}'"
+      success = TravelToWorkAreaAndLondonBoroughService.call(site: site)
+      verbose "Success? #{success}"
       sleep(opts[:sleep])
     }
 end
