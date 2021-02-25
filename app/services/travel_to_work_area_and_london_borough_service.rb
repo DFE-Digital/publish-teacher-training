@@ -12,13 +12,13 @@ class TravelToWorkAreaAndLondonBoroughService
       london_borough = get(:london_borough)
 
       if london_borough
-        site.update_column("travel_to_work_area", "London")
-        site.update_column("london_borough", london_borough)
+        site.travel_to_work_area = "London"
+        site.london_borough = london_borough
         site.save!(validate: false)
       end
     elsif ttw_area
-      site.update_column("travel_to_work_area", ttw_area)
-      site.update_column("london_borough", nil)
+      site.travel_to_work_area = ttw_area
+      site.london_borough = nil
       site.save!(validate: false)
     else
       false
@@ -41,7 +41,7 @@ private
     if response.code == "200"
       json = JSON.parse(response.body)
       name_attr = json.dig(json.keys.first, "name")
-      name_attr = name_attr.gsub(/ Borough Council| City Council| Corporation/, "") if attribute == :london_borough
+      name_attr = name_attr&.gsub(/ Borough Council| City Council| Corporation/, "") if attribute == :london_borough
       name_attr
     end
   end
