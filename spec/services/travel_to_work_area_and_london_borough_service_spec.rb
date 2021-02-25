@@ -27,7 +27,7 @@ describe TravelToWorkAreaAndLondonBoroughService do
     end
 
     let(:invalid_mapit_endpoint) do
-      URI("#{Settings.mapit_url}/point/4326/#{invalid_site.longitude},#{invalid_site.latitude}?type=TTW,LBO&api_key=#{Settings.mapit_api_key}")
+      URI("#{Settings.mapit_url}/point/4326/#{invalid_site.longitude},#{invalid_site.latitude}?type=TTW&api_key=#{Settings.mapit_api_key}")
     end
 
     let(:london_borough) { nil }
@@ -82,17 +82,17 @@ describe TravelToWorkAreaAndLondonBoroughService do
       </html>"
     end
 
-    before do
-      stub_request(:get, travel_to_work_areas_query).to_return(body: travel_to_work_areas_successful_response)
-      stub_request(:get, london_boroughs_query).to_return(body: london_boroughs_successful_response)
-    end
-
     context "a valid site" do
+      before do
+        stub_request(:get, travel_to_work_areas_query).to_return(body: travel_to_work_areas_successful_response)
+        stub_request(:get, london_boroughs_query).to_return(body: london_boroughs_successful_response)
+      end
+
       context "when the travel to work area is not London" do
         let(:travel_to_work_area) { "Cambridge" }
 
         it "updates the travel to work area and london_borough remains nil" do
-          expect { described_class.add_travel_to_work_area_and_london_borough(site: valid_site) }.
+          expect { described_class.call(site: valid_site) }.
             to change { valid_site.reload.travel_to_work_area }.from(nil).to("Cambridge").
               and(not_change { valid_site.london_borough })
         end
@@ -105,7 +105,7 @@ describe TravelToWorkAreaAndLondonBoroughService do
           let(:london_borough) { "Westminster City Council" }
 
           it "updates the london Borough to Westminster" do
-            expect { described_class.add_travel_to_work_area_and_london_borough(site: valid_site) }.
+            expect { described_class.call(site: valid_site) }.
               to change { valid_site.reload.travel_to_work_area }.from(nil).to("London").
                 and change { valid_site.london_borough }.from(nil).to("Westminster")
           end
@@ -115,7 +115,7 @@ describe TravelToWorkAreaAndLondonBoroughService do
           let(:london_borough) { "City of London Corporation" }
 
           it "updates the london Borough to City of London" do
-            expect { described_class.add_travel_to_work_area_and_london_borough(site: valid_site) }.
+            expect { described_class.call(site: valid_site) }.
               to change { valid_site.reload.travel_to_work_area }.from(nil).to("London").
                 and change { valid_site.london_borough }.from(nil).to("City of London")
           end
@@ -125,7 +125,7 @@ describe TravelToWorkAreaAndLondonBoroughService do
           let(:london_borough) { "Greenwich Borough Council" }
 
           it "updates removes 'London Borough' from the string" do
-            expect { described_class.add_travel_to_work_area_and_london_borough(site: valid_site) }.
+            expect { described_class.call(site: valid_site) }.
               to change { valid_site.reload.travel_to_work_area }.from(nil).to("London").
                 and change { valid_site.london_borough }.from(nil).to("Greenwich")
           end
@@ -136,10 +136,12 @@ describe TravelToWorkAreaAndLondonBoroughService do
     context "invalid site" do
       let(:travel_to_work_area) { "Cambridge" }
 
-      before { stub_request(:get, invalid_mapit_endpoint).to_return(body: invalid_response) }
+      before do
+        stub_request(:get, invalid_mapit_endpoint).to_return(status: 404, body: invalid_response)
+      end
 
       it "returns false" do
-        expect(described_class.add_travel_to_work_area_and_london_borough(site: invalid_site)).to eq false
+        expect(described_class.call(site: invalid_site)).to eq false
       end
     end
   end

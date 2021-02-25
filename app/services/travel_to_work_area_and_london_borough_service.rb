@@ -1,27 +1,28 @@
 class TravelToWorkAreaAndLondonBoroughService
-  def self.add_travel_to_work_area_and_london_borough(site:)
-    new(site).add_travel_to_work_area_and_london_borough
-  rescue StandardError
-    false
-  end
+  include ServicePattern
 
-  def initialize(site)
+  def initialize(site:)
     @site = site
   end
 
-  def add_travel_to_work_area_and_london_borough
+  def call
     ttw_area = get(:travel_to_work_area)
 
     if ttw_area == "London"
       london_borough = get(:london_borough)
-      site.update_column("travel_to_work_area", "London")
-      site.update_column("london_borough", london_borough)
-    else
+
+      if london_borough
+        site.update_column("travel_to_work_area", "London")
+        site.update_column("london_borough", london_borough)
+        site.save!(validate: false)
+      end
+    elsif ttw_area
       site.update_column("travel_to_work_area", ttw_area)
       site.update_column("london_borough", nil)
+      site.save!(validate: false)
+    else
+      false
     end
-
-    site.save!(validate: false)
   end
 
 private
@@ -35,17 +36,14 @@ private
             london_borough_url
           end
 
-    response = Net::HTTP.get(url)
-    json = JSON.parse(response)
-    name_attr = json.dig(json.keys.first, "name")
-    name_attr = name_attr.gsub(/ Borough Council| City Council| Corporation/, "") if attribute == :london_borough
-    name_attr
-  end
+    response = Net::HTTP.get_response(url)
 
-  def ttw_area
-    response = Net::HTTP.get(travel_to_work_url)
-    json = JSON.parse(response)
-    json.dig(json.keys.first, "name")
+    if response.code == "200"
+      json = JSON.parse(response.body)
+      name_attr = json.dig(json.keys.first, "name")
+      name_attr = name_attr.gsub(/ Borough Council| City Council| Corporation/, "") if attribute == :london_borough
+      name_attr
+    end
   end
 
   def travel_to_work_url
