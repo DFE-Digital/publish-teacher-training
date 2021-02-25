@@ -1,3 +1,5 @@
+require "rails_helper"
+
 describe Course, type: :model do
   describe "#publishable?" do
     let(:course) { create(:course) }

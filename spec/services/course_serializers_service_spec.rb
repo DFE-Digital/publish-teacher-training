@@ -1,3 +1,5 @@
+require "rails_helper"
+
 describe CourseSerializersService do
   let(:course_serializer_spy) { spy }
   let(:subject_serializer_spy) { spy }

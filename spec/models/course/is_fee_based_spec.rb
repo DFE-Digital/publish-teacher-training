@@ -1,3 +1,5 @@
+require "rails_helper"
+
 RSpec.describe Course, type: :model do
   describe "#is_fee_based?" do
     context "salary based course" do

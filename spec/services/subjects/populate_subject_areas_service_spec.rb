@@ -1,3 +1,5 @@
+require "rails_helper"
+
 describe Subjects::SubjectAreaCreatorService do
   let(:subject_area_spy) { spy }
   let(:service) { described_class.new(subject_area: subject_area_spy) }

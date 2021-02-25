@@ -3,7 +3,7 @@ class EmailValidator < ActiveModel::EachValidator
 
   def validate_each(record, attribute, value)
     if value.blank? || !value.match?(/@/)
-      record.errors[attribute] << EMAIL_VALIDATION_ERROR_MESSAGE
+      record.errors.add(attribute, message: EMAIL_VALIDATION_ERROR_MESSAGE)
     end
   end
 end

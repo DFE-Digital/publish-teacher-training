@@ -3,7 +3,10 @@ class WordsCountValidator < ActiveModel::EachValidator
     return if string.blank?
 
     if word_count(string) > options[:maximum]
-      record.errors[attribute] << (options[:message] || "^Reduce the word count for #{attribute.to_s.humanize(capitalize: false)}")
+      record.errors.add(
+        attribute,
+        message: options[:message] || "^Reduce the word count for #{attribute.to_s.humanize(capitalize: false)}",
+      )
     end
   end
 

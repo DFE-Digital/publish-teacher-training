@@ -1,3 +1,5 @@
+require "rails_helper"
+
 RSpec.describe Course, type: :model do
   describe "#publish_sites" do
     let(:published_new_site)            { create(:site_status, :published, :new) }

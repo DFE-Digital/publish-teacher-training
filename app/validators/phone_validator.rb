@@ -3,7 +3,7 @@ class PhoneValidator < ActiveModel::EachValidator
 
   def validate_each(record, attribute, value)
     if value.blank? || is_invalid_phone_number_format?(value)
-      record.errors[attribute] << PHONE_VALIDATION_ERROR_MESSAGE
+      record.errors.add(attribute, message: PHONE_VALIDATION_ERROR_MESSAGE)
     end
   end
 

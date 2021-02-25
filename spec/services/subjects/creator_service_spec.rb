@@ -1,3 +1,5 @@
+require "rails_helper"
+
 describe Subjects::CreatorService do
   let(:primary_model) { spy }
   let(:secondary_model) { spy }

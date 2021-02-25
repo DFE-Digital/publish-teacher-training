@@ -1,3 +1,5 @@
+require "rails_helper"
+
 describe API::V2::DeserializableSite do
   let(:site) { build(:site) }
   let(:site_jsonapi) do

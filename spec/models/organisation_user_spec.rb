@@ -1,4 +1,4 @@
-require "rspec"
+require "rails_helper"
 
 describe OrganisationUser, type: :model do
   subject { described_class.new }

@@ -1,3 +1,5 @@
+require "rails_helper"
+
 describe SerializeCourseService do
   let(:serializers_stub) { { ClassToRender: double } }
   let(:serializers_service_spy) { spy(execute: serializers_stub) }
