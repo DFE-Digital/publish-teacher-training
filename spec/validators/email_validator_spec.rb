@@ -1,16 +1,16 @@
 require "rails_helper"
 
 describe EmailValidator do
+  class EmailValidatorTest
+    include ActiveRecord::Validations
+
+    attr_accessor :email
+
+    validates :email, email: true
+  end
+
   let(:model) do
-    cls = Class.new do
-      include ActiveRecord::Validations
-
-      attr_accessor :email
-
-      validates :email, email: true
-    end
-
-    cls.new
+    EmailValidatorTest.new
   end
 
   describe "With nil email address" do
@@ -24,7 +24,7 @@ describe EmailValidator do
     end
 
     it "Returns the correct error message" do
-      expect(model.errors[:email]).to include("^Enter an email address in the correct format, like name@example.com")
+      expect(model.errors[:email]).to(include("^Enter an email address in the correct format, like name@example.com"))
     end
   end
 
