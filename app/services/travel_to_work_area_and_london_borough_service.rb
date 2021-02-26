@@ -10,6 +10,7 @@ class TravelToWorkAreaAndLondonBoroughService
 
     if ttw_area == "London"
       london_borough = get(:london_borough)
+      return false unless london_borough
 
       if london_borough
         site.travel_to_work_area = "London"
@@ -38,11 +39,17 @@ private
 
     response = Net::HTTP.get_response(url)
 
-    if response.code == "200"
+    if response.is_a?(Net::HTTPSuccess)
       json = JSON.parse(response.body)
       name_attr = json.dig(json.keys.first, "name")
       name_attr = name_attr&.gsub(/ Borough Council| City Council| Corporation/, "") if attribute == :london_borough
       name_attr
+    elsif response.is_a?(Net::HTTPForbidden) || response.is_a?(Net::HTTPServerError)
+      e = StandardError.new(
+        "Mapit API has returned status code #{response.code} for Site id #{site.id} whilst trying to obtain #{attribute}"
+      )
+      Raven.capture(e)
+      false
     end
   end
 

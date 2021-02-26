@@ -120,7 +120,7 @@ describe TravelToWorkAreaAndLondonBoroughService do
 
     context "a site with unknown coordinates" do
       let(:site) do
-        build_stubbed(:site, latitude: "unknown latitude", longitude: "unknown longitude")
+        build(:site, latitude: "unknown latitude", longitude: "unknown longitude")
       end
 
       before do
@@ -129,6 +129,26 @@ describe TravelToWorkAreaAndLondonBoroughService do
 
       it "returns false" do
         expect(described_class.call(site: site)).to eq false
+      end
+    end
+
+    [403, 500].each do |status_code|
+      context "Mapit API returns a #{status_code} status code" do
+        let(:site) do
+          build_stubbed(:site)
+        end
+
+        before do
+          stub_request(:get, travel_to_work_areas_query).to_return(status: status_code)
+        end
+
+        it "generates an error that is captured by Sentry" do
+          expect(Raven).to receive(:capture).with(
+            instance_of(StandardError),
+          )
+
+          described_class.call(site: site)
+        end
       end
     end
   end
