@@ -9,18 +9,9 @@ class TravelToWorkAreaAndLondonBoroughService
     ttw_area = get(:travel_to_work_area)
 
     if ttw_area == "London"
-      london_borough = get(:london_borough)
-      return false unless london_borough
-
-      if london_borough
-        site.travel_to_work_area = "London"
-        site.london_borough = london_borough
-        site.save!(validate: false)
-      end
+      update_london_borough
     elsif ttw_area
-      site.travel_to_work_area = ttw_area
-      site.london_borough = nil
-      site.save!(validate: false)
+      update_ttw_area(ttw_area)
     else
       false
     end
@@ -30,14 +21,25 @@ private
 
   attr_reader :site
 
-  def get(attribute)
-    url = if attribute == :travel_to_work_area
-            travel_to_work_url
-          else
-            london_borough_url
-          end
+  def update_london_borough
+    london_borough = get(:london_borough)
+    return false unless london_borough
 
-    response = Net::HTTP.get_response(url)
+    if london_borough
+      site.travel_to_work_area = "London"
+      site.london_borough = london_borough
+      site.save!(validate: false)
+    end
+  end
+
+  def update_ttw_area(ttw_area)
+    site.travel_to_work_area = ttw_area
+    site.london_borough = nil
+    site.save!(validate: false)
+  end
+
+  def get(attribute)
+    response = Net::HTTP.get_response(url_for(attribute))
 
     if response.is_a?(Net::HTTPSuccess)
       json = JSON.parse(response.body)
@@ -45,23 +47,35 @@ private
       name_attr = name_attr&.gsub(/ Borough Council| City Council| Corporation/, "") if attribute == :london_borough
       name_attr
     elsif response.is_a?(Net::HTTPForbidden) || response.is_a?(Net::HTTPServerError)
-      e = StandardError.new(
-        "Mapit API has returned status code #{response.code} for Site id #{site.id} whilst trying to obtain #{attribute}"
-      )
-      Raven.capture(e)
+      generate_sentry_error(response.code, attribute)
       false
     end
   end
 
-  def travel_to_work_url
-    url("TTW")
+  def generate_sentry_error(response_code, attribute)
+    e = StandardError.new(
+      "Mapit API has returned status code #{response_code} for Site id #{site.id} whilst trying to obtain #{attribute}",
+    )
+    Raven.capture(e)
   end
 
-  def london_borough_url
-    url("LBO")
+  def url_for(attribute)
+    if attribute == :travel_to_work_area
+      travel_to_work_query
+    else
+      london_borough_query
+    end
   end
 
-  def url(type)
+  def travel_to_work_query
+    mapit_query("TTW")
+  end
+
+  def london_borough_query
+    mapit_query("LBO")
+  end
+
+  def mapit_query(type)
     URI("#{Settings.mapit_url}/point/4326/#{site.longitude},#{site.latitude}?type=#{type}&api_key=#{Settings.mapit_api_key}")
   end
 end
