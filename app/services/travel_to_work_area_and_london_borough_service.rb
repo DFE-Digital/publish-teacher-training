@@ -46,17 +46,15 @@ private
       name_attr = json.dig(json.keys.first, "name")
       name_attr = name_attr&.gsub(/ Borough Council| City Council| Corporation/, "") if attribute == :london_borough
       name_attr
-    elsif response.is_a?(Net::HTTPForbidden) || response.is_a?(Net::HTTPServerError)
+    else
       generate_sentry_error(response.code, attribute)
       false
     end
   end
 
   def generate_sentry_error(response_code, attribute)
-    e = StandardError.new(
-      "Mapit API has returned status code #{response_code} for Site id #{site.id} whilst trying to obtain #{attribute}",
-    )
-    Raven.capture(e)
+    message = "Mapit API has returned status code #{response_code} for Site id #{site.id} whilst trying to obtain #{attribute}"
+    Raven.capture_message(message)
   end
 
   def url_for(attribute)
