@@ -23,4 +23,13 @@ statuscake_alerts = {
     trigger_rate   = 0
     node_locations = ["UKINT", "UK1", "MAN1", "MAN5", "DUB2"]
   }
+  ttapi_paas = {
+    website_name   = "teacher-training-api-cloudapps-prod"
+    website_url    = "https://teacher-training-api-prod.london.cloudapps.digital/ping"
+    test_type      = "HTTP"
+    check_rate     = 60
+    contact_group  = [151103]
+    trigger_rate   = 0
+    node_locations = ["UKINT", "UK1", "MAN1", "MAN5", "DUB2"]
+  }  
 }
