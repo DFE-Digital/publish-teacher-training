@@ -1,6 +1,6 @@
 module API
   module V2
-    class ApplicationController < ::ApplicationController
+    class ApplicationController < ::APIController
       include Pagy::Backend
       include ErrorHandlers::Pagy
 
