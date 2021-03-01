@@ -6,6 +6,6 @@ class TravelToWorkAreaAndLondonBoroughJob < ApplicationJob
     RequestStore.store[:job_queue] = queue_name
 
     site = Site.find_by(id: id)
-    TravelToWorkAreaAndLondonBoroughService.add_travel_to_work_area_and_london_borough(site: site) if site
+    TravelToWorkAreaAndLondonBoroughService.call(site: site) if site
   end
 end
