@@ -34,12 +34,38 @@ jobs:
          INSTALL_CONDUIT: true
 
       - name: Backup Teacher Training API Prod Database
-        run: cf conduit teacher-training-api-postgres-prod -- pg_dump --encoding utf8 --clean --no-owner --if-exists -f prod_backup.sql
-      
+        run: |
+          now=$(date +"%F-%H-%M-%S")
+          PROD_BACKUP=prod_backup-$now.sql
+          cf conduit teacher-training-api-postgres-prod -- pg_dump --encoding utf8 --clean --no-owner --if-exists -f $PROD_BACKUP
+          echo "PROD_BACKUP=$PROD_BACKUP" >> $GITHUB_ENV
+
+
+      - name: Login to Azure
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS_PRODUCTION }}
+
+      - name: Get storageAccount connection string from keyvault
+        uses: Azure/get-keyvault-secrets@v1
+        with:
+          keyvault: s121p01-shared-kv-01
+          secrets: TTAPI-STORAGE-ACCOUNT-CONNECTION-STRING-PRODUCTION
+        id: GetSecretAction
+
+      - name: Upload sqldbdump to storageAccount
+        uses: bacongobbler/azure-blob-storage-upload@v1.1.1
+        with:
+          source_dir: ./
+          container_name: sqldbdump
+          connection_string: ${{ steps.GetSecretAction.outputs.TTAPI-STORAGE-ACCOUNT-CONNECTION-STRING-PRODUCTION }}
+          extra_args: '--pattern *.sql'
+          sync: false
+
       - name: Sanitise the Database backup
         run: |
           echo "::group::Restore backup to intermediate database"
-          createdb ${DATABASE_NAME} && psql -f prod_backup.sql -d ${DATABASE_NAME}
+          createdb ${DATABASE_NAME} && psql -f ${{ env.PROD_BACKUP }} -d ${DATABASE_NAME}
           echo "::endgroup::"
 
           echo "::group::Clear user data"
@@ -49,10 +75,10 @@ jobs:
           echo "::group::Integration setup"
           psql -d ${DATABASE_NAME} -f db/scripts/integration_setup.sql
           echo "::endgroup::"
-          
-          echo "::debug::Remove prod_backup.sql"
-          rm prod_backup.sql
-          
+
+          echo "::debug::Remove ${{ env.PROD_BACKUP }}"
+          rm ${{ env.PROD_BACKUP }}
+
           echo "::group::Backup Sanitised Database"
           pg_dump --encoding utf8 --clean --no-owner --if-exists -d ${DATABASE_NAME} -f backup_sanitised.sql
           echo "::endgroup::"
