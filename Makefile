@@ -27,7 +27,7 @@ help:
 	echo "        make review APP_NAME=<APP_NAME> deploy-plan IMAGE_TAG=GIT_REF PASSCODE=<CF_SSO_CODE>"
 	echo "  Delete a review app"
 	echo ""
-	echo "        make review APP_NAME=<APP_NAME> destory IMAGE_TAG=GIT_REF PASSCODE=<CF_SSO_CODE>"	
+	echo "        make review APP_NAME=<APP_NAME> destory IMAGE_TAG=GIT_REF PASSCODE=<CF_SSO_CODE>"
 	echo "Examples:"
 	echo "  Deploy an pre-built image to qa"
 	echo ""
@@ -46,22 +46,30 @@ review:
 qa: ## Set DEPLOY_ENV to qa
 	$(eval DEPLOY_ENV=qa)
 	$(eval AZ_SUBSCRIPTION=s121-findpostgraduateteachertraining-development)
+	$(eval space=bat-qa)
+	$(eval paas_env=qa)
 
 .PHONY: staging
 staging: ## Set DEPLOY_ENV to staging
 	$(eval DEPLOY_ENV=staging)
 	$(eval AZ_SUBSCRIPTION=s121-findpostgraduateteachertraining-test)
+	$(eval space=bat-staging)
+	$(eval paas_env=staging)
 
 .PHONY: sandbox
 sandbox: ## Set DEPLOY_ENV to sandbox
 	$(eval DEPLOY_ENV=sandbox)
 	$(eval AZ_SUBSCRIPTION=s121-findpostgraduateteachertraining-sandbox)
+	$(eval space=bat-prod)
+	$(eval paas_env=sandbox)
 
 .PHONY: production
 production: ## Set DEPLOY_ENV to production
 	$(eval DEPLOY_ENV=production)
 	$(eval AZ_SUBSCRIPTION=s121-findpostgraduateteachertraining-production)
 	$(if $(CONFIRM_PRODUCTION), , $(error Production can only run with CONFIRM_PRODUCTION))
+	$(eval space=bat-prod)
+	$(eval paas_env=prod)
 
 deploy-init:
 	$(eval export TF_DATA_DIR=./terraform/.terraform)
@@ -94,3 +102,7 @@ edit-app-secrets: install-fetch-config
 print-app-secrets: install-fetch-config
 	. terraform/workspace_variables/$(DEPLOY_ENV).sh && bin/fetch_config.rb -s azure-key-vault-secret:$${TF_VAR_key_vault_name}/$${TF_VAR_key_vault_app_secret_name} \
 		-f yaml
+
+console:
+	cf target -s ${space}
+	cf ssh teacher-training-api-${paas_env} -t -c "cd /app && /usr/local/bin/bundle exec rails c"
