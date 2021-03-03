@@ -105,6 +105,6 @@ jobs:
         SLACK_COLOR: '#ef5343'
         SLACK_ICON_EMOJI: ':github-logo:'
         SLACK_USERNAME: Teacher Training API
-        SLACK_TITLE: '<!channel> Build failure'
-        SLACK_MESSAGE: ':alert: Teacher Training API Build failure :sadparrot:'
+        SLACK_TITLE: Build failure
+        SLACK_MESSAGE: ':alert: <!channel> Teacher Training API Build failure :sadparrot:'
         SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
