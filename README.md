@@ -58,6 +58,29 @@ docker-compose exec web /bin/sh -c "bundle exec rails db:setup"
 Then open http://localhost:3001 to see the app.
 
 
+### Run The Server in SSL Mode
+
+By default the server does not run in SSL mode. If you want to run the local
+server in SSL mode, you can do so by setting the environment variable
+`SETTINGS__USE_SSL`, for example, use this command to run the server:
+
+```bash
+SETTINGS__USE_SSL=1 rails s
+```
+
+
+### Trust the TLS certificate
+
+Depending on your browser you may need to add the automatically generated SSL
+certificate to your OS keychain to make the browser trust the local site.
+
+On macOS:
+
+```bash
+sudo security add-trusted-cert -d -r trustRoot -k /Library/Keychains/System.keychain config/localhost/https/localhost.crt
+```
+
+
 ## Running specs
 ```
 bundle exec rspec
