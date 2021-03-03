@@ -111,6 +111,10 @@ module API
           @object.description
         end
 
+        attribute :subject_codes do
+          @object.subjects.pluck(:subject_code).compact
+        end
+
         enrichment_attribute :about_course
         enrichment_attribute :course_length
         enrichment_attribute :fee_details
