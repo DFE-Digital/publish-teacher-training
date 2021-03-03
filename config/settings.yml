@@ -4,6 +4,21 @@ environment:
 service_support:
   contact_email_address: becomingateacher@digital.education.gov.uk
 
+# URL of this app for the callback after sigining in
+base_url: https://localhost:3001
+
+dfe_signin:
+  # Our service name
+  identifier: bats2
+  # URL that the users are redirected to for signing in
+  issuer: https://test-oidc.signin.education.gov.uk/
+  # URL of the users profile
+  profile: https://test-profile.signin.education.gov.uk
+  # This value must be set otherwise sign in will fail
+  secret: replace-with-secret
+  # The URL support users are directed to in order to find a user by email
+  user_search_url: https://test-support.signin.education.gov.uk/users
+
 use_ssl: false
 
 authentication:

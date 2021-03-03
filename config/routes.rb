@@ -8,6 +8,12 @@ Rails.application.routes.draw do
   mount OpenApi::Rswag::Ui::Engine => "/api-docs"
   mount OpenApi::Rswag::Api::Engine => "/api-docs"
 
+  get "/sign-in", to: "sign_in#index"
+  get "/sign-out", to: "sessions#sign_out"
+
+  get "/auth/dfe/callback", to: "sessions#create"
+  get "/auth/dfe/signout", to: "sessions#destroy"
+
   namespace :gias do
     get "/", to: "/gias#dashboard", as: :dashboard
     post "/import_establishments", to: "/gias#import_establishments"

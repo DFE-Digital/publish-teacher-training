@@ -20,19 +20,14 @@
       <button type="button" role="button" class="govuk-header__menu-button govuk-js-header-toggle" aria-controls="navigation" aria-label="Show or hide Top Level Navigation" data-module="govuk-button">Menu</button>
       <nav>
         <ul id="navigation" class="govuk-header__navigation govuk-header__navigation--end" aria-label="Top Level Navigation">
-          <%# if current_user.present? && current_user['associated_with_accredited_body'] %>
-            <!-- <li class="govuk-header__navigation-item <%#= "govuk-header__navigation-item--active" if current_page?(notifications_path) %>">
-                 <%#= govuk_link_to "Notifications", notifications_path, class: "govuk-header__link" %>
-                 </li> -->
-          <%# end %>
-            <!-- <li class="govuk-header__navigation-item">
-                 <%# if current_user.present? %>
-                 <%#= link_to "Sign out", signout_path, class: "govuk-header__link" %>
-                 <%#= link_to "(#{current_user['info']['first_name']} #{current_user['info']['last_name']})", "#{Settings.dfe_signin.profile}", class: "govuk-header__link" %>
-                 <%# else %>
-                 <%#= link_to "Sign in", signin_path, class: "govuk-header__link" %>
-                 <%# end %>
-                 </li> -->
+            <li class="govuk-header__navigation-item">
+              <% if @current_user.present? %>
+                <%= link_to "Sign out", sign_out_path, class: "govuk-header__link" %>
+                <%= link_to "(#{@current_user.first_name} #{@current_user.last_name})", "#{Settings.dfe_signin.profile}", class: "govuk-header__link" %>
+              <% else %>
+                <%= link_to "Sign in", "/auth/dfe", class: "govuk-header__link", method: :post %>
+              <% end %>
+            </li>
         </ul>
       </nav>
     </div>
