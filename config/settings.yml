@@ -4,6 +4,8 @@ environment:
 service_support:
   contact_email_address: becomingateacher@digital.education.gov.uk
 
+use_ssl: false
+
 authentication:
   algorithm: HS256
   # Set this in the env! The below ensures that we are un-authenticatable if we

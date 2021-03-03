@@ -19,6 +19,10 @@ config/settings/*.local.yml
 config/environments/*.local.yml
 config/azure_environments.yml
 
+# files used for SSL connection
+config/localhost/https/localhost.key
+config/localhost/https/localhost.crt
+
 #ignore fetch_config.rb and use latest version from bat-platform-building-blocks
 bin/fetch_config.rb
 

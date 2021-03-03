@@ -10,11 +10,13 @@ threads min_threads_count, max_threads_count
 
 # Specifies the `port` that Puma will listen on to receive requests; default is 3001.
 #
-port        ENV.fetch("PORT") { 3001 }
+# Disabled to run SSL on port 3001
+# port        ENV.fetch("PORT") { 3001 }
 
 # Specifies the `environment` that Puma will run in.
 #
-environment ENV.fetch("RAILS_ENV") { "development" }
+env = ENV.fetch("RAILS_ENV", "development")
+environment env
 
 # Specifies the `pidfile` that Puma will use.
 pidfile ENV.fetch("PIDFILE") { "tmp/pids/server.pid" }
@@ -36,3 +38,37 @@ pidfile ENV.fetch("PIDFILE") { "tmp/pids/server.pid" }
 
 # Allow puma to be restarted by `rails restart` command.
 plugin :tmp_restart
+
+listen_port = ENV.fetch("PORT", 3001)
+
+if env == "development" && Settings.use_ssl
+  config_dir = Pathname.pwd.join('config', 'localhost', 'https')
+  config_dir.mkpath unless config_dir.exist?
+  cert = config_dir.join('localhost.crt')
+  key = config_dir.join('localhost.key')
+
+  unless File.exist?(cert) && File.exist?(key)
+    def generate_root_cert(root_key)
+      root_ca = OpenSSL::X509::Certificate.new
+      root_ca.version = 2 # cf. RFC 5280 - to make it a "v3" certificate
+      root_ca.serial = rand(100_000) # randomized for local development to prevent SEC_ERROR_REUSED_ISSUER_AND_SERIAL errors in firefox after a git-clean
+      root_ca.subject = OpenSSL::X509::Name.parse "/C=GB/L=London/O=DfE/CN=localhost"
+      root_ca.issuer = root_ca.subject # root CA's are "self-signed"
+      root_ca.public_key = root_key.public_key
+      root_ca.not_before = Time.zone.now
+      root_ca.not_after = root_ca.not_before + 2 * 365 * 24 * 60 * 60 # 2 years validity
+      root_ca.sign(root_key, OpenSSL::Digest::SHA256.new)
+      root_ca
+    end
+
+    root_key = OpenSSL::PKey::RSA.new(2048)
+    File.write(key, root_key, mode: "wb")
+
+    root_cert = generate_root_cert(root_key)
+    File.write(cert, root_cert, mode: "wb")
+  end
+
+  ssl_bind "0.0.0.0", listen_port, cert: cert, key: key, verify_mode: "none"
+else
+  port listen_port
+end
