@@ -30,7 +30,7 @@ module GIAS
 
     def build_filters
       @filters = OpenStruct.new(
-        name:     params.dig(:filters, :name)| [],
+        name:     params.dig(:filters, :name) || [],
         postcode: params.dig(:filters, :postcode) || [],
         search:   params.dig(:filters, :search),
       )
