@@ -334,3 +334,9 @@ properties:
     type: string
     description: "Generated summary of the course."
     example: "PGCE with QTS full time"
+  subject_codes:
+    type: array
+    description: "The course’s subject codes, corresponding to subjects available on the `/subjects` endpoint"
+    items:
+      type: string
+      example: "00"
