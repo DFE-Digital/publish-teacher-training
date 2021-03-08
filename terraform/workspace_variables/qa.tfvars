@@ -2,7 +2,7 @@
 cf_space                   = "bat-qa"
 paas_app_environment       = "qa"
 paas_web_app_host_name     = "qa"
-paas_web_app_instances     = 1
+paas_web_app_instances     = 2
 paas_web_app_memory        = 512
 paas_worker_app_instances  = 1
 paas_worker_app_memory     = 512
