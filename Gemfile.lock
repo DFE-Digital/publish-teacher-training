@@ -81,7 +81,7 @@ GEM
     attr_extras (6.2.4)
     audited (4.10.0)
       activerecord (>= 4.2, < 6.2)
-    awesome_print (1.8.0)
+    awesome_print (1.9.2)
     bootsnap (1.7.2)
       msgpack (~> 1.0)
     brakeman (5.0.0)
