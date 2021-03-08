@@ -18,6 +18,8 @@ class SessionsController < ApplicationController
       redirect_to gias_dashboard_path
     else
       DfESignInSession.end_session!(session)
+
+      # TODO: this needs to actually go some where
       redirect_to sign_in_user_not_found_path
     end
   end

@@ -25,6 +25,7 @@
                 <%= link_to "Sign out", sign_out_path, class: "govuk-header__link" %>
                 <%= link_to "(#{@current_user.first_name} #{@current_user.last_name})", "#{Settings.dfe_signin.profile}", class: "govuk-header__link" %>
               <% else %>
+              <%# TODO: this needs to actually work %>
                 <%= link_to "Sign in", "/auth/dfe", class: "govuk-header__link", method: :post %>
               <% end %>
             </li>
