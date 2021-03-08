@@ -6,14 +6,14 @@ module GIAS
       recruitment_cycle = RecruitmentCycle.current
       providers = recruitment_cycle.providers
 
-      providers = providers.search_by_code_or_name(@filters.search) unless @filters.search.blank?
+      providers = providers.search_by_code_or_name(@filters.search) if @filters.search.present?
 
-      providers = providers.that_match_establishments_by_postcode            if @filters.postcode.include? 'provider'
-      providers = providers.with_sites_that_match_establishments_by_postcode if @filters.postcode.include? 'sites'
-      providers = providers.with_establishments_that_match_any_postcode      if @filters.postcode.include? 'provider_or_sites'
-      providers = providers.that_match_establishments_by_name                if @filters.name.include? 'provider'
-      providers = providers.with_sites_that_match_establishments_by_name     if @filters.name.include? 'sites'
-      providers = providers.with_establishments_that_match_any_name          if @filters.name.include? 'provider_or_sites'
+      providers = providers.that_match_establishments_by_postcode            if @filters.postcode.include? "provider"
+      providers = providers.with_sites_that_match_establishments_by_postcode if @filters.postcode.include? "sites"
+      providers = providers.with_establishments_that_match_any_postcode      if @filters.postcode.include? "provider_or_sites"
+      providers = providers.that_match_establishments_by_name                if @filters.name.include? "provider"
+      providers = providers.with_sites_that_match_establishments_by_name     if @filters.name.include? "sites"
+      providers = providers.with_establishments_that_match_any_name          if @filters.name.include? "provider_or_sites"
 
       @pagy, @providers = pagy(providers.reorder(:id))
     end
@@ -22,11 +22,11 @@ module GIAS
       @provider = Provider.find(params[:id])
 
       @matches = GIAS::ProviderMatcherService.call(
-        provider: @provider
+        provider: @provider,
       )
     end
 
-    private
+  private
 
     def build_filters
       @filters = OpenStruct.new(

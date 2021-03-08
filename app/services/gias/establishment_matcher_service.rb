@@ -15,7 +15,7 @@ module GIAS
         },
         providers: {
           postcode: provider_postcode_matches.to_a,
-        }
+        },
       }
     end
 

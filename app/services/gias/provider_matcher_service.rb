@@ -14,7 +14,7 @@ module GIAS
           # postcode: establishment_postcode_matches.to_a,
           name: establishment_name_matches.to_a,
           # site_postcode: establishment_site_postcode_matches,
-        }
+        },
       }
     end
 
@@ -38,7 +38,7 @@ module GIAS
            site.postcode.strip.upcase,
          ).to_a]
       end
-        .reject { |s,e| e&.none? }
+        .reject { |_s, e| e&.none? }
         .to_h
     end
   end
