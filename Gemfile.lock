@@ -272,7 +272,7 @@ GEM
       railties (>= 3.1, < 7.0)
     pagy (3.11.0)
     parallel (1.20.1)
-    parallel_tests (3.5.0)
+    parallel_tests (3.5.2)
       parallel
     parser (2.7.2.0)
       ast (~> 2.4.1)
