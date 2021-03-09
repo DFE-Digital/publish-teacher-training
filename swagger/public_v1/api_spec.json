@@ -213,7 +213,7 @@
           "fee_domestic": {
             "type": "integer",
             "nullable": true,
-            "description": "Fee in GBP for UK and EU students.",
+            "description": "Fee in GBP for UK students.",
             "example": 9200
           },
           "financial_support": {
