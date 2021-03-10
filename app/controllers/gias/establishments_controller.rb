@@ -21,6 +21,18 @@ module GIAS
       @establishment = GIASEstablishment.find_by!(urn: params[:urn])
     end
 
+    def graph
+      establishment = GIASEstablishment.find_by!(urn: params[:urn])
+      graph_filename = File.join(Dir.tmpdir, establishment.name.underscore)
+
+      # unless File.exist?(graph_filename)
+        @graph = GenerateGraphService.call(start: establishment)
+        @graph.output(png: graph_filename)
+      # end
+
+      send_data File.read(graph_filename), type: "image/png", disposition: "inline"
+    end
+
   private
 
     def build_filters

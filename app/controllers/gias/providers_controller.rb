@@ -26,6 +26,18 @@ module GIAS
       )
     end
 
+    def graph
+      provider = Provider.find(params[:id])
+      graph_filename = File.join(Dir.tmpdir, provider.provider_name.underscore)
+
+      # unless File.exist?(graph_filename)
+        @graph = GenerateGraphService.call(start: provider)
+        @graph.output(png: graph_filename)
+      # end
+
+      send_data File.read(graph_filename), type: "image/png", disposition: "inline"
+    end
+
   private
 
     def build_filters

@@ -124,6 +124,9 @@ gem "omniauth", "~> 1.9"
 gem "omniauth-rails_csrf_protection"
 gem "omniauth_openid_connect", "~> 0.3"
 
+# For rendering associations between providers and sites and GIAS establishments
+gem 'ruby-graphviz'
+
 group :development, :test do
   # Prettyprint in console
   gem "awesome_print"
