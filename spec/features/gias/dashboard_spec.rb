@@ -4,6 +4,6 @@ RSpec.feature "viewing dashboard" do
   scenario "user not authenticated" do
     visit "/gias"
 
-    expect(page.status_code).to eq 302
+    expect(page.current_path).to eq "/sign-in"
   end
 end

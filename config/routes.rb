@@ -9,6 +9,7 @@ Rails.application.routes.draw do
   mount OpenApi::Rswag::Api::Engine => "/api-docs"
 
   get "/sign-in", to: "sign_in#index"
+  get "/user-not-found", to: "sign_in#new"
   get "/sign-out", to: "sessions#sign_out"
 
   get "/auth/dfe/callback", to: "sessions#create"
