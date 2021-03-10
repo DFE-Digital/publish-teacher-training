@@ -19,10 +19,14 @@ Rails.application.routes.draw do
     get "/", to: "/gias#dashboard", as: :dashboard
     post "/import_establishments", to: "/gias#import_establishments"
 
-    resources :establishments, param: :urn, only: %i[index show]
+    resources :establishments, param: :urn, only: %i[index show] do
+      get :graph, on: :member, param: :urn
+    end
 
     resources :postcodes, param: :postcode, only: :show
-    resources :providers, only: %i[index show]
+    resources :providers, only: %i[index show] do
+      get :graph, on: :member
+    end
     resources :sites, only: :show
   end
 
