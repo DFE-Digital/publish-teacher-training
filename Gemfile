@@ -21,7 +21,7 @@ gem "bootsnap", ">= 1.1.0", require: false
 # Custom attributes for endpoints
 gem "active_model_serializers"
 
-gem "pagy", "~> 3.11"
+gem "pagy", "~> 3.12"
 
 # Use Rack CORS for handling Cross-Origin Resource Sharing (CORS), making cross-origin AJAX possible
 # gem 'rack-cors'
