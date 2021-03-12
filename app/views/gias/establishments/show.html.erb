@@ -35,5 +35,6 @@
 <div class="govuk-grid-row">
     <h2 class="govuk-heading-l">Graph Diagram</h2>
 
-    <%= image_tag graph_gias_establishment_path(@establishment.urn) %>
+    <%= image_tag(graph_gias_establishment_path(@establishment.urn), usemap: "#Establishment Graph") %>
+    <%= @graph_cmapx.html_safe %>
 </div>
