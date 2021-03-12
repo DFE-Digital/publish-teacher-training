@@ -21,21 +21,21 @@ module GIAS
     def show
       @provider = Provider.find(params[:id])
 
-      @matches = GIAS::ProviderMatcherService.call(
-        provider: @provider,
-      )
+      graph = GIAS::ProviderGraphGeneratorService.call(provider: @provider)
+      graph.output(cmapx: cmapx_filename)
+      @graph_cmapx = File.read(cmapx_filename)
+
     end
 
     def graph
-      provider = Provider.find(params[:id])
-      graph_filename = File.join(Dir.tmpdir, provider.provider_name.underscore)
+      @provider = Provider.find(params[:id])
 
-      # unless File.exist?(graph_filename)
-        @graph = GenerateGraphService.call(start: provider)
-        @graph.output(png: graph_filename)
+      # unless File.exist?(png_filename)
+        @graph = GIAS::ProviderGraphGeneratorService.call(provider: @provider)
+        @graph.output(png: png_filename)
       # end
 
-      send_data File.read(graph_filename), type: "image/png", disposition: "inline"
+      send_data File.read(png_filename), type: "image/png", disposition: "inline"
     end
 
   private
@@ -53,5 +53,18 @@ module GIAS
         search: @filters.search,
       )
     end
+
+    def graph_filename
+      @graph_filename ||= File.join(Dir.tmpdir, @provider.provider_name.underscore)
+    end
+
+    def png_filename
+      "#{graph_filename}.png"
+    end
+
+    def cmapx_filename
+      "#{graph_filename}.html"
+    end
+
   end
 end

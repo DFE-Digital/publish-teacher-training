@@ -19,18 +19,20 @@ module GIAS
 
     def show
       @establishment = GIASEstablishment.find_by!(urn: params[:urn])
+      graph = GIAS::EstablishmentGraphGeneratorService.call(establishment: @establishment)
+      graph.output(cmapx: cmapx_filename)
+      @graph_cmapx = File.read(cmapx_filename)
     end
 
     def graph
-      establishment = GIASEstablishment.find_by!(urn: params[:urn])
-      graph_filename = File.join(Dir.tmpdir, establishment.name.underscore)
+      @establishment = GIASEstablishment.find_by!(urn: params[:urn])
 
-      # unless File.exist?(graph_filename)
-        @graph = GenerateGraphService.call(start: establishment)
-        @graph.output(png: graph_filename)
+      # unless File.exist?(png_filename)
+        graph = GIAS::EstablishmentGraphGeneratorService.call(establishment: @establishment)
+        graph.output(png: png_filename)
       # end
 
-      send_data File.read(graph_filename), type: "image/png", disposition: "inline"
+      send_data File.read(png_filename), type: "image/png", disposition: "inline"
     end
 
   private
@@ -47,6 +49,18 @@ module GIAS
         postcode: @filters.postcode.reject(&:blank?),
         search: @filters.search,
       )
+    end
+
+    def graph_filename
+      File.join(Dir.tmpdir, @establishment.name.underscore)
+    end
+
+    def png_filename
+      "#{graph_filename}.png"
+    end
+
+    def cmapx_filename
+      "#{graph_filename}.html"
     end
   end
 end
