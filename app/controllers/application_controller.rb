@@ -20,6 +20,8 @@ private
   end
 
   def authenticate
+    return if Rails.env.development?
+
     if !authenticated?
       redirect_to sign_in_path
     elsif !current_user.admin?
