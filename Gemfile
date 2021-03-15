@@ -171,7 +171,7 @@ group :development do
   gem "listen", ">= 3.0.5", "< 3.5"
 
   # error handling
-  gem 'web-console', '>= 4.1.0'
+  gem "web-console", ">= 4.1.0"
 
   # Output scaffold commands based on schema
   gem "schema_to_scaffold"
