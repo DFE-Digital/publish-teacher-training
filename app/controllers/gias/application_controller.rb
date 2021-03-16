@@ -1,4 +1,4 @@
-class GIAS::ApplicationController < ActionController::Base
+class GIAS::ApplicationController < ::ApplicationController
   include Pagy::Backend
 
   layout "application"
