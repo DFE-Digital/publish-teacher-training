@@ -9,3 +9,6 @@ bg_jobs:
     queue: save_statistic
 skylight:
   enable: true
+environment:
+  label: "qa"
+  selector_name: "qa"
