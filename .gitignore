@@ -46,3 +46,6 @@ terraform.tfstate.d/
 lock.json
 *secret*.tfvars
 .terraform/
+
+node_modules
+public/packs
