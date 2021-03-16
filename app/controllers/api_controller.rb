@@ -1,4 +1,5 @@
-class ApplicationController < ActionController::Base
+class APIController < ActionController::API
+  include ActionController::HttpAuthentication::Token::ControllerMethods
   include Pundit
 
   # child must define authenticate method

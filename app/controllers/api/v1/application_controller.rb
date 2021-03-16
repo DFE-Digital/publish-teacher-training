@@ -1,6 +1,6 @@
 module API
   module V1
-    class ApplicationController < ::ApplicationController
+    class ApplicationController < ::APIController
       before_action -> { skip_authorization }
       before_action :check_recruitment_cycle_is_current_or_next_year
 
