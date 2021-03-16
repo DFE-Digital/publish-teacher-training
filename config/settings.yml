@@ -64,3 +64,6 @@ gias:
   establishments_csv_base: "https://ea-edubase-api-prod.azurewebsites.net/edubase/downloads/public/"
   all_establishments_csv_file: "edubasealldata%Y%m%d.csv"
   establishment_links_csv_file: "links_edubasealldata%Y%m%d.csv"
+
+features:
+  gias_dashboard: false

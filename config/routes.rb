@@ -15,19 +15,21 @@ Rails.application.routes.draw do
   get "/auth/dfe/callback", to: "sessions#callback"
   get "/auth/dfe/signout", to: "sessions#destroy"
 
-  namespace :gias do
-    get "/", to: "/gias#dashboard", as: :dashboard
-    post "/import_establishments", to: "/gias#import_establishments"
+  if FeatureService.enabled?(:gias_dashboard)
+    namespace :gias do
+      get "/", to: "/gias#dashboard", as: :dashboard
+      post "/import_establishments", to: "/gias#import_establishments"
 
-    resources :establishments, param: :urn, only: %i[index show] do
-      get :graph, on: :member, param: :urn
-    end
+      resources :establishments, param: :urn, only: %i[index show] do
+        get :graph, on: :member, param: :urn
+      end
 
-    resources :postcodes, param: :postcode, only: :show
-    resources :providers, only: %i[index show] do
-      get :graph, on: :member
+      resources :postcodes, param: :postcode, only: :show
+      resources :providers, only: %i[index show] do
+        get :graph, on: :member
+      end
+      resources :sites, only: :show
     end
-    resources :sites, only: :show
   end
 
   namespace :api do
