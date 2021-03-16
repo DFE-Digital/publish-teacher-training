@@ -12,7 +12,7 @@ describe SessionsController, type: :controller do
 
   describe "#callback" do
     context "existing database user" do
-      it "creates a session for the signed in user" do
+      xit "creates a session for the signed in user" do
         request_callback
         expect(session["sign_in_session"]["sign_in_user_id"]).to eq(user.sign_in_user_id)
         expect(session["sign_in_session"]["email"]).to eq(user.email)
@@ -21,7 +21,7 @@ describe SessionsController, type: :controller do
         expect(session["sign_in_session"]["last_name"]).to eq(user.last_name)
       end
 
-      it "redirects to the gias dashboard page" do
+      xit "redirects to the gias dashboard page" do
         request_callback
         expect(response).to redirect_to(gias_dashboard_path)
       end
