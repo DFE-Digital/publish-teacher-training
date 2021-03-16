@@ -37,10 +37,10 @@ plugin :tmp_restart
 listen_port = ENV.fetch("PORT", 3001)
 
 if env == "development" && Settings.use_ssl
-  config_dir = Pathname.pwd.join('config', 'localhost', 'https')
+  config_dir = Pathname.pwd.join("config", "localhost", "https")
   config_dir.mkpath unless config_dir.exist?
-  cert = config_dir.join('localhost.crt')
-  key = config_dir.join('localhost.key')
+  cert = config_dir.join("localhost.crt")
+  key = config_dir.join("localhost.key")
 
   unless File.exist?(cert) && File.exist?(key)
     def generate_root_cert(root_key)

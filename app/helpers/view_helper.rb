@@ -14,7 +14,8 @@ module ViewHelper
   def bat_contact_email_address_with_wrap
     # https://developer.mozilla.org/en-US/docs/Web/HTML/Element/wbr
     # The <wbr> element will not be copied when copying and pasting the email address
-    bat_contact_email_address.gsub("@", "<wbr>@").html_safe
+
+    bat_contact_email_address.gsub("@", "<wbr>@").html_safe # rubocop: disable Rails/OutputSafety
   end
 
   def bat_contact_mail_to(name = nil, subject: nil, link_class: "govuk-link", data: nil)
