@@ -19,10 +19,10 @@ Rails.application.routes.draw do
     get "/", to: "/gias#dashboard", as: :dashboard
     post "/import_establishments", to: "/gias#import_establishments"
 
-    resources :establishments, param: :urn, only: [:index, :show]
+    resources :establishments, param: :urn, only: %i[index show]
 
     resources :postcodes, param: :postcode, only: :show
-    resources :providers, only: [:index, :show]
+    resources :providers, only: %i[index show]
     resources :sites, only: :show
   end
 

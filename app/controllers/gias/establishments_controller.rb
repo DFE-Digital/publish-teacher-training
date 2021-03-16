@@ -5,14 +5,14 @@ module GIAS
     def index
       establishments = GIASEstablishment.all
 
-      establishments = establishments.search_by_name_or_urn(@filters.search) unless @filters.search.blank?
+      establishments = establishments.search_by_name_or_urn(@filters.search) if @filters.search.present?
 
-      establishments = establishments.that_match_providers_by_name              if @filters.name.include? 'provider'
-      establishments = establishments.that_match_sites_by_name                  if @filters.name.include? 'sites'
-      establishments = establishments.that_match_providers_or_sites_by_name     if @filters.name.include? 'provider_or_sites'
-      establishments = establishments.that_match_providers_by_postcode          if @filters.postcode.include? 'provider'
-      establishments = establishments.that_match_sites_by_postcode              if @filters.postcode.include? 'sites'
-      establishments = establishments.that_match_providers_or_sites_by_postcode if @filters.postcode.include? 'provider_or_sites'
+      establishments = establishments.that_match_providers_by_name              if @filters.name.include? "provider"
+      establishments = establishments.that_match_sites_by_name                  if @filters.name.include? "sites"
+      establishments = establishments.that_match_providers_or_sites_by_name     if @filters.name.include? "provider_or_sites"
+      establishments = establishments.that_match_providers_by_postcode          if @filters.postcode.include? "provider"
+      establishments = establishments.that_match_sites_by_postcode              if @filters.postcode.include? "sites"
+      establishments = establishments.that_match_providers_or_sites_by_postcode if @filters.postcode.include? "provider_or_sites"
 
       @pagy, @establishments = pagy(establishments.reorder(:id))
     end
@@ -21,7 +21,7 @@ module GIAS
       @establishment = GIASEstablishment.find_by!(urn: params[:urn])
     end
 
-    private
+  private
 
     def build_filters
       @filters = OpenStruct.new(

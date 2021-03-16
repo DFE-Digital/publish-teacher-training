@@ -55,7 +55,7 @@ module GIASHelper
     establishments
   end
 
-  private
+private
 
   def provider_key(provider)
     "#{provider.provider_name} - #{provider.provider_code}"

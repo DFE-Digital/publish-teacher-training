@@ -14,35 +14,35 @@ module GIAS::ProviderAssociationsConcern
 
     scope :that_match_establishments_by_postcode,
           -> do
-      joins(:establishments_matched_by_postcode).distinct
-    end
+            joins(:establishments_matched_by_postcode).distinct
+          end
 
     scope :with_sites_that_match_establishments_by_postcode,
           -> do
-      joins(sites: [:establishments_matched_by_postcode]).distinct
-    end
+            joins(sites: [:establishments_matched_by_postcode]).distinct
+          end
 
     scope :with_establishments_that_match_any_postcode,
           -> do
-      where(id: (that_match_establishments_by_postcode.pluck(:id) +
-                 with_sites_that_match_establishments_by_postcode.pluck(:id)))
-    end
+            where(id: (that_match_establishments_by_postcode.pluck(:id) +
+                       with_sites_that_match_establishments_by_postcode.pluck(:id)))
+          end
 
     scope :that_match_establishments_by_name,
           -> do
-      joins(:establishments_matched_by_name).distinct
-    end
+            joins(:establishments_matched_by_name).distinct
+          end
 
     scope :with_sites_that_match_establishments_by_name,
           -> do
-      joins(sites: [:establishments_matched_by_name]).distinct
-    end
+            joins(sites: [:establishments_matched_by_name]).distinct
+          end
 
     scope :with_establishments_that_match_any_name,
           -> do
-      where(id: (that_match_establishments_by_name.reorder(:id).pluck(:id) +
-                 with_sites_that_match_establishments_by_name.reorder(:id).pluck(:id)))
-    end
+            where(id: (that_match_establishments_by_name.reorder(:id).pluck(:id) +
+                       with_sites_that_match_establishments_by_name.reorder(:id).pluck(:id)))
+          end
 
     def sites_with_establishments_matched_by_postcode
       sites.joins(:establishments_matched_by_postcode)
@@ -51,6 +51,5 @@ module GIAS::ProviderAssociationsConcern
     def sites_with_establishments_matched_by_name
       sites.joins(:establishments_matched_by_name)
     end
-
   end
 end

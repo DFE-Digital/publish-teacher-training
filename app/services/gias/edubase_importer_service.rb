@@ -48,7 +48,7 @@ module GIAS
 
     def establishments_csv_contents
       @establishments_csv ||=
-        if File.exists? local_establishments_path
+        if File.exist? local_establishments_path
           File.binread(local_establishments_path)
         else
           csv = download_establishments_csv
