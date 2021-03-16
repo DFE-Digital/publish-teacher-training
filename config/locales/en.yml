@@ -144,6 +144,8 @@ en:
             reason:
               blank: "^Why do they need access?"
   errors:
+    messages:
+      email: "^Enter an email address in the correct format, like name@example.com"
     "400":
       title: BAD REQUEST
       detail: "%{message}"
