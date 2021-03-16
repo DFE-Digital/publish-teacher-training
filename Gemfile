@@ -115,6 +115,11 @@ gem "skylight"
 gem "govuk-components"
 gem "govuk_design_system_formbuilder"
 
+# DfE Sign-In
+gem "omniauth", "~> 1.9"
+gem "omniauth_openid_connect", "~> 0.3"
+gem "omniauth-rails_csrf_protection"
+
 group :development, :test do
   # Prettyprint in console
   gem "awesome_print"
@@ -199,4 +204,7 @@ group :test do
   gem "shoulda-matchers", "~> 4.5"
   gem "simplecov", "< 0.22", require: false
   gem "webmock"
+
+  # Adds support for Capybara system testing and selenium driver
+  gem "capybara", ">= 2.15"
 end
