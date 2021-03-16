@@ -1,0 +1,31 @@
+<div class="grid-row">
+  <div class="column-two-thirds">
+    <% flash.each do |key, value| %>
+        <% if key == "error" %>
+          <div class="govuk-<%= key %>-summary" role="alert" aria-labelledby="<%= key %>-summary-heading" tabindex="-1" data-module="govuk-error-summary" data-ga-event-form="<%= key %>">
+            <h2 class="govuk-error-summary__title" id="error-summary-title" data-qa="error__heading">
+              You’ll need to correct some information.
+            </h2>
+            <div class="govuk-error-summary__body">
+              <ul class="govuk-list govuk-error-summary__list">
+                <li>
+                  <a href="#<%= value["id"] %>" data-qa="error__text">
+                    <%= value["message"] %>
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        <% elsif key == "success_with_body" %>
+          <div class="govuk-success-summary" role="alert" aria-labelledby="success-summary-heading" tabindex="-1" data-module="govuk-error-summary" data-ga-event-form="<%= key %>">
+            <h3 class="govuk-success-summary__title" id="success-summary-heading" data-qa="flash__success__title"><%= value["title"] %></h3>
+            <p class="govuk-body" id="success-summary-body"data-qa="flash__success__body"><%= value["body"] %></p>
+          </div>
+        <% else %>
+          <div class="govuk-<%= key %>-summary" role="alert" aria-labelledby="<%= key %>-summary-heading" tabindex="-1" data-module="govuk-error-summary" data-ga-event-form="<%= key %>">
+            <h3 class="govuk-<%= key %>-summary__title" id="<%= key %>-summary-heading"><%= value %></h3>
+          </div>
+        <% end %>
+    <% end %>
+  </div>
+</div>
