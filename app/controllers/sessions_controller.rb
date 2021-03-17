@@ -5,10 +5,6 @@ class SessionsController < ApplicationController
     redirect_to "/auth/dfe/signout"
   end
 
-  def failure
-    render "errors/unauthorized", status: :unauthorized
-  end
-
   def create
     DfESignInSession.begin_session!(session, request.env["omniauth.auth"])
 

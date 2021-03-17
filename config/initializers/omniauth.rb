@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-# require_relative "../../app/services/feature_service"
-
 OmniAuth.config.logger = Rails.logger
 
 dfe_sign_in_issuer_uri = URI.parse(Settings.dfe_signin.issuer)
