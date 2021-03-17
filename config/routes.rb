@@ -12,7 +12,7 @@ Rails.application.routes.draw do
   get "/user-not-found", to: "sign_in#new"
   get "/sign-out", to: "sessions#sign_out"
 
-  get "/auth/dfe/callback", to: "sessions#create"
+  get "/auth/dfe/callback", to: "sessions#callback"
   get "/auth/dfe/signout", to: "sessions#destroy"
 
   namespace :api do

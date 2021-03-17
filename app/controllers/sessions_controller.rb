@@ -5,7 +5,7 @@ class SessionsController < ApplicationController
     redirect_to "/auth/dfe/signout"
   end
 
-  def create
+  def callback
     DfESignInSession.begin_session!(session, request.env["omniauth.auth"])
 
     if current_user

@@ -5,12 +5,51 @@ require "rails_helper"
 describe SessionsController, type: :controller do
   include DfESignInUserHelper
   let(:user) { create(:user) }
-  let(:request_callback) do
-    request.env["omniauth.auth"] = user_exists_in_dfe_sign_in(user: user)
-    post :create
+
+  describe "#destroy" do
+    let(:request_destroy) do
+      session["sign_in_session"] = {
+        "last_active_at" => Time.zone.now,
+        "email" => user.email,
+        "id_token" => "id_token",
+      }
+
+      post :destroy
+    end
+
+    context "existing database user" do
+      it "redirects to the root page" do
+        request_destroy
+        expect(response.location).to start_with("#{Settings.dfe_signin.issuer}/session/end")
+        expect(response).to be_redirect
+      end
+    end
+
+    context "non existing database user" do
+      let(:user) { build(:user) }
+      it "redirects to the root page" do
+        request_destroy
+        expect(response).to redirect_to("/")
+      end
+    end
+  end
+
+  describe "#sign_out" do
+    let(:request_sign_out) do
+      post :sign_out
+    end
+    it "redirects to the auth/dfe/signout" do
+      request_sign_out
+      expect(response).to redirect_to("/auth/dfe/signout")
+    end
   end
 
   describe "#callback" do
+    let(:request_callback) do
+      request.env["omniauth.auth"] = user_exists_in_dfe_sign_in(user: user)
+      post :callback
+    end
+
     context "existing database user" do
       it "creates a session for the signed in user" do
         request_callback
