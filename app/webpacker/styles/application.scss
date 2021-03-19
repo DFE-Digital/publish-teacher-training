@@ -8,16 +8,5 @@
 
 $govuk-font-url-function: frontend-font-url;
 $govuk-image-url-function: frontend-image-url;
-$success-green: #00823b;
 
 @import "~govuk-frontend/govuk/all";
-
-@import "admin-only";
-@import "banner";
-@import "environments";
-@import "header";
-@import "notice-summary";
-@import "patterns/pagination";
-@import "patterns/tabs";
-@import "success-summary";
-@import "warning-summary";
