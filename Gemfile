@@ -21,6 +21,9 @@ gem "puma", "~> 5.2"
 # Reduces boot times through caching; required in config/boot.rb
 gem "bootsnap", ">= 1.1.0", require: false
 
+# Canonical meta tag
+gem "canonical-rails"
+
 # Custom attributes for endpoints
 gem "active_model_serializers"
 
