@@ -14,6 +14,8 @@ require "action_view/railtie"
 # require "action_cable/engine"
 # require "sprockets/railtie"
 # require "rails/test_unit/railtie"
+require "view_component/engine"
+require "govuk/components"
 
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
@@ -49,5 +51,9 @@ module ManageCoursesBackend
     config.action_mailer.delivery_job = "ActionMailer::MailDeliveryJob"
 
     config.skylight.environments = Settings.skylight.enable ? [Rails.env] : []
+
+    config.view_component.preview_paths = [Rails.root.join("spec/components")]
+    config.view_component.preview_route = "/view_components"
+    config.view_component.show_previews = !Rails.env.production?
   end
 end
