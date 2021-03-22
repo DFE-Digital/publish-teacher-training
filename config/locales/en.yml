@@ -3,6 +3,11 @@ en:
   header:
     items:
       sign_out: "Sign out"
+  components:
+    page_titles:
+      sign_in:
+        index: Sign in
+        new: User not found
   course:
     update_email:
       name: "title"
