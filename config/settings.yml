@@ -1,7 +1,6 @@
 environment:
   name: "beta"
-service_support:
-  contact_email_address: becomingateacher@digital.education.gov.uk
+support_email: becomingateacher@digital.education.gov.uk
 
 # URL of this app for the callback after sigining in
 base_url: https://localhost:3001
