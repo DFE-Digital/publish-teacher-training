@@ -631,7 +631,7 @@ DEPENDENCIES
   tzinfo-data
   uk_postcode
   webmock
-  webpacker (~> 5.0)
+  webpacker
 
 RUBY VERSION
    ruby 2.7.2p137

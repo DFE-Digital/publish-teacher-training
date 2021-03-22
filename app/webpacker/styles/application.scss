@@ -1,12 +1,3 @@
-@function frontend-font-url($filename) {
-  @return url("~assets/fonts/" + $filename);
-}
-
-@function frontend-image-url($filename) {
-  @return url("~assets/images/" + $filename);
-}
-
-$govuk-font-url-function: frontend-font-url;
-$govuk-image-url-function: frontend-image-url;
-
+@import "./govuk_style_setup";
 @import "~govuk-frontend/govuk/all";
+@import "~@ministryofjustice/frontend/moj/all";

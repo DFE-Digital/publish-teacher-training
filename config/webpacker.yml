@@ -10,7 +10,6 @@ default: &default
   webpack_compile_output: false
 
   # Additional paths webpack should lookup modules
-  # ['app/assets', 'engine/foo/app/assets']
   additional_paths:
     [
       "app/components",
