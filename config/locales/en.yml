@@ -1,5 +1,8 @@
 en:
   service_name: "Teacher Training API Admin"
+  header:
+    items:
+      sign_out: "Sign out"
   course:
     update_email:
       name: "title"
