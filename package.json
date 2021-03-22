@@ -9,6 +9,7 @@
     "test": "jest"
   },
   "dependencies": {
+    "@ministryofjustice/frontend": "^0.2.1",
     "@rails/webpacker": "^5.2.1",
     "accessible-autocomplete": "^2.0.3",
     "govuk-frontend": "^3.9.1",
