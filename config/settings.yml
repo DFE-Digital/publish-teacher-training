@@ -1,6 +1,5 @@
 environment:
-  label: "Beta"
-  selector_name: "beta"
+  name: "beta"
 service_support:
   contact_email_address: becomingateacher@digital.education.gov.uk
 

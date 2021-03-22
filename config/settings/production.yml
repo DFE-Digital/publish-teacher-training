@@ -9,3 +9,5 @@ bg_jobs:
     queue: save_statistic
 skylight:
   enable: true
+environment:
+  name: "beta"

@@ -10,5 +10,4 @@ bg_jobs:
 skylight:
   enable: true
 environment:
-  label: "qa"
-  selector_name: "qa"
+  name: "qa"

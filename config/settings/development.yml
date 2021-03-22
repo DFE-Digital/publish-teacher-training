@@ -7,4 +7,4 @@ log_level: debug
 gcp_api_key: please_change_me
 environment:
   label: "development"
-  selector_name: "development"
+  name: "development"
