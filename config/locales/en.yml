@@ -1,4 +1,5 @@
 en:
+  service_name: "Teacher Training API Admin"
   course:
     update_email:
       name: "title"
