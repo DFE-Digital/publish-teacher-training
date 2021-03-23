@@ -82,7 +82,7 @@ GEM
     audited (4.10.0)
       activerecord (>= 4.2, < 6.2)
     awesome_print (1.9.2)
-    bootsnap (1.7.2)
+    bootsnap (1.7.3)
       msgpack (~> 1.0)
     brakeman (5.0.0)
     builder (3.2.4)
