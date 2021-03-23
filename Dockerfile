@@ -36,8 +36,14 @@ ADD Gemfile.lock $APP_HOME/Gemfile.lock
 
 RUN apk add --update --no-cache --virtual build-dependances \
  build-base && \
+ apk add --update --no-cache libpq yarn && \
  bundle install --jobs=4 && \
+ rm -rf /usr/local/bundle/cache && \
  apk del build-dependances
+
+COPY package.json yarn.lock ./
+RUN  yarn install --frozen-lockfile && \
+     yarn cache clean
 
 ADD . $APP_HOME/
 
