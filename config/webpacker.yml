@@ -81,8 +81,6 @@ test:
   <<: *default
   compile: true
 
-  public_output_path: packs-test
-
 production: &production
   <<: *default
 
