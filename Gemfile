@@ -33,10 +33,6 @@ gem "jsonapi-rb"
 # Access jsonb attributes like normal ActiveRecord model attributes
 gem "jsonb_accessor"
 
-# App Insights for Azure
-gem "application_insights"
-gem "pkg-config", "~> 1.4.5"
-
 # Sending exceptions to sentry
 gem "sentry-raven"
 
