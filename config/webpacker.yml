@@ -16,7 +16,7 @@ default: &default
       "node_modules/govuk-frontend/govuk",
       "node_modules/@ministryofjustice/frontend",
     ]
-    
+
   # Reload manifest.json on all requests so we reload latest compiled packs
   cache_manifest: false
 
@@ -79,8 +79,6 @@ development:
 
 test:
   <<: *default
-  # Azure pre-compiles packs prior to running the tests.
-  # Also avoids race conditions in parallel_tests.
   compile: true
 
   public_output_path: packs-test
@@ -104,4 +102,7 @@ research:
   <<: *production
 
 rollover:
+  <<: *production
+
+sandbox:
   <<: *production
