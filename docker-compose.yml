@@ -46,6 +46,7 @@ services:
       - AGENT_JOBSTATUS=${AGENT_JOBSTATUS}
       - GIT_BRANCH=${GIT_BRANCH}
       - REDIS_URL=redis://redis:6379
+      - RAILS_ENV=production
 
   bgJobs:
     image: ${dockerHubUsername:-dfedigital}/teacher-training-api:${GIT_BRANCH:-latest}
