@@ -51,7 +51,9 @@ COPY --from=middleman /public/ $APP_HOME/public/
 
 ENV COMMIT_SHA=${COMMIT_SHA}
 
-RUN bundle exec rake assets:precompile #&& \
+RUN ls /app/public/ && \ 
+    bundle exec rake assets:precompile && \
+    ls /app/public/packs/media/images
     # rm -rf node_modules tmp
 
 CMD bundle exec rails db:migrate:ignore_concurrent_migration_exceptions && bundle exec rails server -b 0.0.0.0
