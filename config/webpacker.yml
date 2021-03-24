@@ -79,7 +79,8 @@ development:
 
 test:
   <<: *default
-  compile: true
+  compile: false
+  cache_manifest: true
 
 production: &production
   <<: *default
