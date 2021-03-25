@@ -1,4 +1,6 @@
 module GIASHelper
+  include Pagy::Frontend
+
   def matches_grouped_by_provider_for_establishment(establishment)
     providers = {}
 
