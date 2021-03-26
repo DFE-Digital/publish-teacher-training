@@ -5,7 +5,7 @@ on:
     branches:
       - master
   pull_request:
-    branches: 
+    branches:
       - master
 
 jobs:
@@ -67,7 +67,7 @@ jobs:
           ${{ env.DOCKER_IMAGE}}-middleman:master
           ${{ env.DOCKER_IMAGE}}-middleman:${{ env.BRANCH_TAG }}
         build-args: |
-          BUILDKIT_INLINE_CACHE=1 
+          BUILDKIT_INLINE_CACHE=1
           COMMIT_SHA=paas-${{ github.sha }}
 
     - name: Setup tests
@@ -98,7 +98,7 @@ jobs:
       with:
         workflow: Deploy
         token: ${{ secrets.ACTIONS_API_ACCESS_TOKEN  }}
-        inputs: '{"qa": "true", "staging": "true", "production": "true", "sandbox": "true", "sha": "${{ env.GIT_SHA_SHORT }}"}'
+        inputs: '{"staging": "true", "production": "true", "sandbox": "true", "sha": "${{ env.GIT_SHA_SHORT }}"}'
 
     - name: Alert Build Failures
       if: ${{ failure() && github.ref == 'refs/heads/master' }}
