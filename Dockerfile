@@ -24,7 +24,7 @@ RUN apk add --update --no-cache tzdata && \
     echo "Europe/London" > /etc/timezone
 
 RUN apk add --update --no-cache --virtual runtime-dependances \
- postgresql-dev git ncurses
+ postgresql-dev git ncurses shared-mime-info
 
 ENV APP_HOME /app
 
