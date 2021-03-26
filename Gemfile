@@ -111,6 +111,15 @@ gem "pg_search"
 # End-user application performance monitoring
 gem "skylight"
 
+# govuk styling
+gem "govuk-components"
+gem "govuk_design_system_formbuilder"
+
+# DfE Sign-In
+gem "omniauth", "~> 1.9"
+gem "omniauth-rails_csrf_protection"
+gem "omniauth_openid_connect", "~> 0.3"
+
 group :development, :test do
   # Prettyprint in console
   gem "awesome_print"

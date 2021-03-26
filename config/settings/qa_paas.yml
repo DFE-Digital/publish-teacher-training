@@ -6,3 +6,5 @@ bg_jobs:
     cron: "0 0 * * *" # daily at midnight
     class: "SaveStatisticJob"
     queue: save_statistic
+environment:
+  name: "qa"

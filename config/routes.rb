@@ -8,6 +8,13 @@ Rails.application.routes.draw do
   mount OpenApi::Rswag::Ui::Engine => "/api-docs"
   mount OpenApi::Rswag::Api::Engine => "/api-docs"
 
+  get "/sign-in", to: "sign_in#index"
+  get "/user-not-found", to: "sign_in#new"
+  get "/sign-out", to: "sessions#sign_out"
+
+  get "/auth/dfe/callback", to: "sessions#callback"
+  get "/auth/dfe/signout", to: "sessions#destroy"
+
   namespace :api do
     namespace :v1 do
       scope "/(:recruitment_year)", constraints: { recruitment_year: /2021|2022/ } do

@@ -2,6 +2,10 @@ gcp_api_key: please_change_me
 publish_api_url: https://qa.api.publish-teacher-training-courses.service.gov.uk
 publish_url: https://qa.publish-teacher-training-courses.service.gov.uk
 find_url: https://qa.find-postgraduate-teacher-training.service.gov.uk
+
+# URL of this app for the callback after sigining in
+base_url: https://qa.api.publish-teacher-training-courses.service.gov.uk
+
 bg_jobs:
   save_statistic:
     cron: "0 0 * * *" # daily at midnight
@@ -9,3 +13,5 @@ bg_jobs:
     queue: save_statistic
 skylight:
   enable: true
+environment:
+  name: "qa"
