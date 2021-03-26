@@ -30,8 +30,6 @@ services:
         - ${dockerHubUsername:-dfedigital}/teacher-training-api-middleman:master
     image: ${dockerHubUsername:-dfedigital}/teacher-training-api:${GIT_BRANCH:-latest}
     command: ash -c "rm -f tmp/pids/server.pid && bundle exec rails server -p 3001 -b '0.0.0.0'"
-    volumes:
-      - .:/app
     ports:
       - "3001:3001"
     depends_on:
@@ -46,12 +44,11 @@ services:
       - AGENT_JOBSTATUS=${AGENT_JOBSTATUS}
       - GIT_BRANCH=${GIT_BRANCH}
       - REDIS_URL=redis://redis:6379
+      - RAILS_ENV=test
 
   bgJobs:
     image: ${dockerHubUsername:-dfedigital}/teacher-training-api:${GIT_BRANCH:-latest}
     command: bundle exec sidekiq -c 5 -C config/sidekiq.yml
-    volumes:
-      - .:/app
     depends_on:
       - web
       - db

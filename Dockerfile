@@ -36,13 +36,23 @@ ADD Gemfile.lock $APP_HOME/Gemfile.lock
 
 RUN apk add --update --no-cache --virtual build-dependances \
  build-base && \
+ apk add --update --no-cache libpq yarn && \
  bundle install --jobs=4 && \
+ rm -rf /usr/local/bundle/cache && \
  apk del build-dependances
+
+COPY package.json yarn.lock ./
+RUN  yarn install --frozen-lockfile && \
+     yarn cache clean
 
 ADD . $APP_HOME/
 
 COPY --from=middleman /public/ $APP_HOME/public/
 
 ENV COMMIT_SHA=${COMMIT_SHA}
+
+RUN ls /app/public/ && \ 
+    bundle exec rake assets:precompile && \
+    rm -rf node_modules tmp
 
 CMD bundle exec rails db:migrate:ignore_concurrent_migration_exceptions && bundle exec rails server -b 0.0.0.0
