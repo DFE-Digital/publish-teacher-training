@@ -3,10 +3,12 @@
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-one-quarter">
         <%= render partial: "filters", locals: { form_url: gias_providers_path } %>
+
+        <%= govuk_link_to("Export as CSV", @csv_url) %>
     </div>
 
     <div class="govuk-grid-column-three-quarters">
-        <h2 class="govuk-heading-l">Providers</h2>
+        <h2 class="govuk-heading-l">Providers (<%= @provider_total_count %> matching)</h2>
 
         <ul class="govuk-list govuk-list--spaced">
             <% @providers.each do |provider| %>

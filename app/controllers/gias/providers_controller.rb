@@ -21,7 +21,44 @@ module GIAS
       providers = providers.with_sites_that_match_establishments_by_name     if @filters.name.include? "sites"
       providers = providers.with_establishments_that_match_any_name          if @filters.name.include? "provider_or_sites"
 
-      @pagy, @providers = pagy(providers.reorder(:id))
+      respond_to do |format|
+        format.html do
+          @provider_total_count = providers.count
+          @csv_url_object = URI.parse(request.url)
+          @csv_url_object.path = @csv_url_object.path + ".csv"
+          @csv_url = @csv_url_object.to_s
+          @pagy, @providers = pagy(providers.reorder(:id))
+
+          render
+        end
+
+        format.csv do
+          csv = CSV.generate(force_quotes: true) do |csv|
+            csv << %w{provider_code
+                      provider_name
+                      provider_postcode
+                      establishment_urn
+                      establishment_name
+                      establishment_postcode}
+            providers.each do |provider|
+              (provider.establishments_matched_by_name & provider.establishments_matched_by_postcode).each do |establishment|
+                csv << [
+                  provider.provider_code,
+                  provider.provider_name,
+                  provider.postcode,
+                  establishment.urn,
+                  establishment.name,
+                  establishment.postcode,
+                ]
+              end
+            end
+          end
+
+
+          send_data csv
+        end
+      end
+
     end
 
     def show
