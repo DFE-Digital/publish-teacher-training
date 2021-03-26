@@ -1,0 +1,3 @@
+.moj-primary-navigation__link[aria-current]:focus:before {
+  height: 7px; // Make bar thicker so we don’t rely on colour alone to indicate focus
+}

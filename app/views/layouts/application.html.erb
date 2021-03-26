@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en" class="govuk-template ">
+  <head>
+    <title><%= yield :page_title %></title>
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+    <%= canonical_tag %>
+    <%= tag :meta, name: "viewport", content: "width=device-width, initial-scale=1" %>
+    <%= tag :meta, property: "og:image", content: asset_pack_path("media/images/govuk-opengraph-image.png") %>
+    <%= tag :meta, name: "theme-color", content: "#0b0c0c" %>
+    <%= tag :meta, name: "ROBOTS", content: "NOINDEX, NOFOLLOW" %>
+    <%= favicon_link_tag asset_pack_path("media/images/favicon.ico") %>
+    <%= favicon_link_tag asset_pack_path("media/images/govuk-mask-icon.svg"), rel: "mask-icon", type: "image/svg", color: "#0b0c0c" %>
+    <%= favicon_link_tag asset_pack_path("media/images/govuk-apple-touch-icon.png"), rel: "apple-touch-icon", type: "image/png" %>
+    <%= favicon_link_tag asset_pack_path("media/images/govuk-apple-touch-icon-152x152.png"), rel: "apple-touch-icon", type: "image/png", size: "152x152" %>
+    <%= favicon_link_tag asset_pack_path("media/images/govuk-apple-touch-icon-167x167.png"), rel: "apple-touch-icon", type: "image/png", size: "167x167" %>
+    <%= favicon_link_tag asset_pack_path("media/images/govuk-apple-touch-icon-180x180.png"), rel: "apple-touch-icon", type: "image/png", size: "180x180" %>
+    <%= stylesheet_pack_tag "application", media: "all" %>
+    <%= javascript_pack_tag "application", defer: true %>
+  </head>
+
+  <body class="govuk-template__body <%= yield :body_class %>">
+    <noscript>
+      <iframe title="Google Tag Manager" src="https://www.googletagmanager.com/ns.html?id=GTM-PD8MFNL" height="0" width="0" style="display:none;visibility:hidden"></iframe>
+    </noscript>
+    <script>
+      document.body.className = ((document.body.className) ? document.body.className + ' js-enabled' : 'js-enabled');
+    </script>
+
+    <%= govuk_skip_link %>
+
+    <%= render Header::View.new(
+      service_name: I18n.t("service_name"),
+      items: header_items(@current_user),
+    ) %>
+
+    <%= render NavigationBar::View.new(
+      items: [
+      ],
+      current_path: request.path,
+      current_user: @current_user,
+    ) %>
+
+    <div class="app-phase-banner app-phase-banner__env--<%= Settings.environment.name %>">
+      <div class="govuk-width-container">
+        <div class="govuk-phase-banner">
+          <p class="govuk-phase-banner__content">
+            <strong class="govuk-tag govuk-phase-banner__content__tag">
+              <%= Settings.environment.name.titlecase %>
+            </strong>
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="govuk-width-container">
+
+    <main class="govuk-main-wrapper " id="main-content" role="main">
+      <div class="govuk-width-container">
+        <%= yield %>
+      </div>
+    </main>
+
+    <%= tag.footer(class: "govuk-footer", role: "contentinfo") do %>
+      <div class="govuk-width-container">
+        <div class="govuk-footer__meta">
+          <div class="govuk-footer__meta-item govuk-footer__meta-item--grow">
+            <div class="govuk-footer__meta-custom">
+              
+            </div>
+           
+          </div>
+          <div class="govuk-footer__meta-item">
+            <%= govuk_link_to raw(%(&copy Crown copyright)), "https://www.nationalarchives.gov.uk/information-management/re-using-public-sector-information/uk-government-licensing-framework/crown-copyright/", class: "govuk-footer__link govuk-footer__copyright-logo" %>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </body>
+</html>

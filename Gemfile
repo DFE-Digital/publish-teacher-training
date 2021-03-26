@@ -203,4 +203,7 @@ group :test do
   gem "shoulda-matchers", "~> 4.5"
   gem "simplecov", "< 0.22", require: false
   gem "webmock"
+
+  # Adds support for Capybara system testing and selenium driver
+  gem "capybara", ">= 2.15"
 end
