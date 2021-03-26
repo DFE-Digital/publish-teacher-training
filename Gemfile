@@ -6,6 +6,9 @@ ruby "2.7.2"
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem "rails", "6.1.3.1"
 
+# Transpile app-like JavaScript. Read more: https://github.com/rails/webpacker
+gem "webpacker", "~> 5.2"
+
 # Use PostgreSQL as the database for Active Record
 gem "pg"
 
@@ -18,13 +21,13 @@ gem "puma", "~> 5.2"
 # Reduces boot times through caching; required in config/boot.rb
 gem "bootsnap", ">= 1.1.0", require: false
 
+# Canonical meta tag
+gem "canonical-rails"
+
 # Custom attributes for endpoints
 gem "active_model_serializers"
 
 gem "pagy", "~> 3.12"
-
-# Use Rack CORS for handling Cross-Origin Resource Sharing (CORS), making cross-origin AJAX possible
-# gem 'rack-cors'
 
 # JSON:API Ruby Client
 gem "jsonapi-rails"
@@ -162,6 +165,10 @@ group :development do
   gem "brakeman"
 
   gem "listen", ">= 3.0.5", "< 3.6"
+
+  # error handling
+  gem "better_errors"
+  gem "binding_of_caller"
 
   # Output scaffold commands based on schema
   gem "schema_to_scaffold"

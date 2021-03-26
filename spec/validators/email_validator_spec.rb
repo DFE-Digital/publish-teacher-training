@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe EmailValidator do
+describe "EmailValidator" do
   class EmailValidatorTest
     include ActiveRecord::Validations
 

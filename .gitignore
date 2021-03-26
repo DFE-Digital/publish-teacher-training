@@ -47,5 +47,11 @@ lock.json
 *secret*.tfvars
 .terraform/
 
-node_modules
-public/packs/
+# Ignore master key for decrypting credentials and more.
+/config/master.key
+
+/public/packs
+/node_modules
+/yarn-error.log
+yarn-debug.log*
+.yarn-integrity

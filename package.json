@@ -1,0 +1,30 @@
+{
+  "name": "teacher-training-api",
+  "private": true,
+
+  "engines": {
+    "node": "12.x"
+  },
+  "scripts": {
+    "test": "jest"
+  },
+  "dependencies": {
+    "@ministryofjustice/frontend": "^0.2.1",
+    "@rails/webpacker": "^5.2.1",
+    "accessible-autocomplete": "^2.0.3",
+    "babel-polyfill": "^6.26.0",
+    "core-js": "^3.9.1",
+    "govuk-frontend": "^3.9.1",
+    "jquery": "^3.6.0",
+    "set-value": "^3.0.2"
+  },
+  "devDependencies": {
+    "jest": "^26.5.3",
+    "webpack-dev-server": "^3.11.0"
+  },
+  "jest": {
+    "roots": [
+      "app"
+    ]
+  }
+}

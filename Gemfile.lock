@@ -81,6 +81,12 @@ GEM
     audited (4.10.0)
       activerecord (>= 4.2, < 6.2)
     awesome_print (1.9.2)
+    better_errors (2.9.1)
+      coderay (>= 1.0.0)
+      erubi (>= 1.0.0)
+      rack (>= 0.9.0)
+    binding_of_caller (1.0.0)
+      debug_inspector (>= 0.0.1)
     bootsnap (1.7.3)
       msgpack (~> 1.0)
     brakeman (5.0.0)
@@ -89,6 +95,8 @@ GEM
       activesupport (>= 3.0.0)
       uniform_notifier (~> 1.11)
     byebug (11.1.3)
+    canonical-rails (0.2.11)
+      rails (>= 4.1, < 6.2)
     case_transform (0.2)
       activesupport
     choice (0.2.0)
@@ -108,6 +116,7 @@ GEM
       activerecord (>= 5.a)
       database_cleaner-core (~> 2.0.0)
     database_cleaner-core (2.0.1)
+    debug_inspector (1.1.0)
     deep_merge (1.2.1)
     diff-lcs (1.4.4)
     discard (1.2.0)
@@ -295,6 +304,8 @@ GEM
     raabro (1.1.6)
     racc (1.5.2)
     rack (2.2.3)
+    rack-proxy (0.6.5)
+      rack
     rack-test (1.1.0)
       rack (>= 1.0, < 3)
     rails (6.1.3.1)
@@ -397,6 +408,7 @@ GEM
       activesupport (>= 3.2.1)
     semantic_logger (4.7.4)
       concurrent-ruby (~> 1.0)
+    semantic_range (3.0.0)
     sentry-raven (3.1.2)
       faraday (>= 1.0)
     shellany (0.0.1)
@@ -453,6 +465,11 @@ GEM
       addressable (>= 2.3.6)
       crack (>= 0.3.2)
       hashdiff (>= 0.4.0, < 2.0.0)
+    webpacker (5.2.1)
+      activesupport (>= 5.2)
+      rack-proxy (>= 0.6.1)
+      railties (>= 5.2)
+      semantic_range (>= 2.3.0)
     websocket-driver (0.7.3)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.5)
@@ -466,10 +483,13 @@ DEPENDENCIES
   active_model_serializers
   audited (~> 4.10)
   awesome_print
+  better_errors
+  binding_of_caller
   bootsnap (>= 1.1.0)
   brakeman
   bullet
   byebug
+  canonical-rails
   config
   cri
   custom_error_message!
@@ -536,6 +556,7 @@ DEPENDENCIES
   tzinfo-data
   uk_postcode
   webmock
+  webpacker (~> 5.2)
 
 RUBY VERSION
    ruby 2.7.2p137
