@@ -1,16 +1,20 @@
 <%= form_with(model: @filter_object,
-    url: form_url,
-    scope: :filters,
-    method: :get,
-    builder: GOVUKDesignSystemFormBuilder::FormBuilder) do |form| %>
+              url: form_url,
+              scope: :filters,
+              method: :get,
+              builder: GOVUKDesignSystemFormBuilder::FormBuilder) do |form| %>
 
-  <%= form.govuk_text_field(:search, label: { text: "Search", class: "govuk-label--m" }) %>
+    <%= form.govuk_text_field(:search, label: { text: "Search", class: "govuk-label--m" }) %>
 
-  <%= form.govuk_check_boxes_fieldset :name, legend: { text: "Name Matching" } do %>
-    <%= form.govuk_check_box "name", 'provider', label: { text: "Provider" } %>
-    <%= form.govuk_check_box "name", 'sites', label: { text: "Sites" } %>
-    <%= form.govuk_check_box "name", 'provider_or_sites', label: { text: "Provider or Sites" } %>
-  <% end %>
+    <%= form.govuk_check_boxes_fieldset :name_and_postcode, legend: { text: "Name and Postcode Matching" } do %>
+      <%= form.govuk_check_box "name_and_postcode", 'provider', label: { text: "Provider" } %>
+    <% end %>
+
+    <%= form.govuk_check_boxes_fieldset :name, legend: { text: "Name Matching" } do %>
+      <%= form.govuk_check_box "name", 'provider', label: { text: "Provider" } %>
+      <%= form.govuk_check_box "name", 'sites', label: { text: "Sites" } %>
+      <%= form.govuk_check_box "name", 'provider_or_sites', label: { text: "Provider or Sites" } %>
+    <% end %>
 
   <%= form.govuk_check_boxes_fieldset :postcode, legend: { text: "Postcode Matching" } do %>
     <%= form.govuk_check_box "postcode", 'provider', label: { text: "Provider" } %>
