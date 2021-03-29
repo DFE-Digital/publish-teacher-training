@@ -20,7 +20,7 @@
                 <div style="padding-left: 4ex">
                     <% matches_grouped_by_establishment_for_provider(provider).each do |establishment, matches| %>
                     <h4 class="govuk-heading-s">
-                        Establishment: <%= govuk_link_to("#{establishment.name} - #{establishment.urn}", gias_establishment_path(establishment.urn)) %>
+                        Establishment: <%= govuk_link_to("#{establishment.name} [UKPRN:#{establishment.ukprn || '-'}] [URN:#{establishment.urn || '-'}]", gias_establishment_path(establishment.urn)) %>
                     </h4>
 
                     <ul class="govuk-list govuk-list--bullet">

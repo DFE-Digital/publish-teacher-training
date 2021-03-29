@@ -1,11 +1,6 @@
 class GIASEstablishment < ApplicationRecord
   include PgSearch::Model
 
-  has_and_belongs_to_many :providers,
-                          join_table: :gias_establishment_provider_postcode_matches,
-                          foreign_key: "establishment_id",
-                          inverse_of: :establishments
-
   has_and_belongs_to_many :providers_matched_by_postcode,
                           join_table: :gias_establishment_provider_postcode_matches,
                           class_name: "Provider",

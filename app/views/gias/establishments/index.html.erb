@@ -12,8 +12,10 @@
             <% @establishments.each do |establishment| %>
             <li>
                 <h3 class="govuk-heading--m">
-                    <%= govuk_link_to "#{establishment.name} - #{establishment.urn}", gias_establishment_path(establishment.urn) %>
+                    <%= govuk_link_to "#{establishment.name}", gias_establishment_path(establishment.urn) %>
                 </h3>
+                <div class="govuk-caption--m"><%= "UKPRN: #{establishment.ukprn || '-'}" %></div>
+                <div class="govuk-caption--m"><%= "URN:#{establishment.urn || '-'}" %></div>
 
                 <div style="padding-left: 4ex">
                     <% matches_grouped_by_provider_for_establishment(establishment).each do |provider, matches| %>

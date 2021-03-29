@@ -28,9 +28,10 @@ module GIAS
           next if record["EstablishmentStatus (name)"] == "Open"
 
           {
-            urn: record["URN"],
+            urn: record["URN"].present? ? record["URN"] : nil,
+            ukprn: record["UKPRN"].present? ? record["UKPRN"] : nil,
             name: record["EstablishmentName"],
-            postcode: record["Postcode"],
+            postcode: record["Postcode"].present? ? record["Postcode"] : nil,
           }
         end.compact
 

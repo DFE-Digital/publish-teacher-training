@@ -37,6 +37,7 @@ module GIAS
             csv << %w{provider_code
                       provider_name
                       provider_postcode
+                      establishment_ukprn
                       establishment_urn
                       establishment_name
                       establishment_postcode}
@@ -46,6 +47,7 @@ module GIAS
                   provider.provider_code,
                   provider.provider_name,
                   provider.postcode,
+                  establishment.ukprn,
                   establishment.urn,
                   establishment.name,
                   establishment.postcode,

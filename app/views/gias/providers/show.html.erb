@@ -42,7 +42,7 @@
 
 <% matches_grouped_by_establishment_for_provider(@provider).each do |establishment, matches| %>
   <h3 class="govuk-heading-m">
-      <%= govuk_link_to("#{establishment.name} - #{establishment.urn}", gias_establishment_path(establishment.urn)) %>
+      <%= govuk_link_to("#{establishment.name} [UKPRN:#{establishment.ukprn || '-'}] [URN:#{establishment.urn || '-'}]", gias_establishment_path(establishment.urn)) %>
   </h3>
 
   <ul class="govuk-list govuk-list--bullet">

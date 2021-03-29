@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_03_17_141543) do
+ActiveRecord::Schema.define(version: 2021_03_26_135311) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
@@ -194,6 +194,7 @@ ActiveRecord::Schema.define(version: 2021_03_17_141543) do
     t.text "urn"
     t.text "name"
     t.text "postcode"
+    t.text "ukprn"
   end
 
   create_table "gias_establishment_provider_name_matches", force: :cascade do |t|
