@@ -44,6 +44,20 @@ module GIAS::ProviderAssociationsConcern
                        with_sites_that_match_establishments_by_name.reorder(:id).pluck(:id)))
           end
 
+    scope :that_match_establishments_by_name_and_postcode,
+          -> do
+            joins(:establishments_matched_by_postcode)
+              .joins(:establishments_matched_by_name)
+              .where('"gias_establishment_provider_postcode_matches"."establishment_id" = "gias_establishment_provider_name_matches"."establishment_id"')
+          end
+
+    scope :with_sites_that_match_establishments_by_name_and_postcode,
+          -> do
+            joins(sites: [:establishments_matched_by_postcode])
+              .joins(sites: [:establishments_matched_by_name])
+              .where('"gias_establishment_site_postcode_matches"."establishment_id" = "gias_establishment_site_name_matches"."establishment_id"')
+          end
+
     def sites_with_establishments_matched_by_postcode
       sites.joins(:establishments_matched_by_postcode)
     end

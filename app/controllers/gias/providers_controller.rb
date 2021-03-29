@@ -6,20 +6,29 @@ module GIAS
       recruitment_cycle = RecruitmentCycle.current
       providers = recruitment_cycle.providers
 
-      providers = providers.search_by_code_or_name(@filters.search) if @filters.search.present?
-
-      if @filters.name_and_postcode&.include? "provider"
-        providers = providers
-                      .joins(:establishments_matched_by_postcode)
-                      .joins(:establishments_matched_by_name)
-                      .where('"gias_establishment_provider_postcode_matches"."establishment_id" = "gias_establishment_provider_name_matches"."establishment_id"')
+      if @filters.provider == "name"
+        providers = providers.that_match_establishments_by_name.distinct
+      elsif @filters.provider == "postcode"
+        providers = providers.that_match_establishments_by_postcode.distinct
+      elsif @filters.provider == "name_and_postcode"
+        providers = providers.that_match_establishments_by_name_and_postcode.distinct
+      elsif @filters.provider == "name_or_postcode"
+        providers = providers.where(id: providers.that_match_establishments_by_name.pluck(:id) \
+                                        + providers.that_match_establishments_by_postcode.pluck(:id)).distinct
       end
-      providers = providers.that_match_establishments_by_postcode            if @filters.postcode.include? "provider"
-      providers = providers.with_sites_that_match_establishments_by_postcode if @filters.postcode.include? "sites"
-      providers = providers.with_establishments_that_match_any_postcode      if @filters.postcode.include? "provider_or_sites"
-      providers = providers.that_match_establishments_by_name                if @filters.name.include? "provider"
-      providers = providers.with_sites_that_match_establishments_by_name     if @filters.name.include? "sites"
-      providers = providers.with_establishments_that_match_any_name          if @filters.name.include? "provider_or_sites"
+
+      if @filters.site == "name"
+        providers = providers.with_sites_that_match_establishments_by_name.distinct
+      elsif @filters.site == "postcode"
+        providers = providers.with_sites_that_match_establishments_by_postcode.distinct
+      elsif @filters.site == "name_and_postcode"
+        providers = providers.with_sites_that_match_establishments_by_name_and_postcode.distinct
+      elsif @filters.site == "name_or_postcode"
+        providers = providers.where(id: providers.with_sites_that_match_establishments_by_name.pluck(:id) \
+                                        + providers.with_sites_that_match_establishments_by_postcode.pluck(:id)).distinct
+      end
+
+      providers = providers.search_by_code_or_name(@filters.search).distinct(false) if @filters.search.present?
 
       respond_to do |format|
         format.html do
@@ -33,31 +42,15 @@ module GIAS
         end
 
         format.csv do
-          csv = CSV.generate(force_quotes: true) do |csv|
-            csv << %w{provider_code
-                      provider_name
-                      provider_postcode
-                      establishment_ukprn
-                      establishment_urn
-                      establishment_name
-                      establishment_postcode}
-            providers.each do |provider|
-              (provider.establishments_matched_by_name & provider.establishments_matched_by_postcode).each do |establishment|
-                csv << [
-                  provider.provider_code,
-                  provider.provider_name,
-                  provider.postcode,
-                  establishment.ukprn,
-                  establishment.urn,
-                  establishment.name,
-                  establishment.postcode,
-                ]
-              end
-            end
+
+          if @filters.site != "all"
+            csv = generate_provider_sites_establishment_csv(providers)
+            send_data csv, filename: "provider_sites_establishment_matches.csv"
+          else
+            csv = generate_provider_establishment_csv(providers)
+            send_data csv, filename: "provider_establishment_matches.csv"
           end
 
-
-          send_data csv
         end
       end
 
@@ -87,17 +80,15 @@ module GIAS
 
     def build_filters
       @filters = OpenStruct.new(
-        name_and_postcode: params.dig(:filters, :name_and_postcode) || [],
-        name:              params.dig(:filters, :name) || [],
-        postcode:          params.dig(:filters, :postcode) || [],
-        search:            params.dig(:filters, :search),
+        provider: params.dig(:filters, :provider) || "",
+        site:     params.dig(:filters, :site) || "",
+        search:   params.dig(:filters, :search),
       )
 
       @filter_object = OpenStruct.new(
-        name_and_postcode: @filters.name_and_postcode.reject(&:blank?),
-        name: @filters.name.reject(&:blank?),
-        postcode: @filters.postcode.reject(&:blank?),
-        search: @filters.search,
+        provider: @filters.provider,
+        site:     @filters.site,
+        search:   @filters.search,
       )
     end
 
@@ -113,5 +104,63 @@ module GIAS
       "#{graph_filename}.html"
     end
 
+    def generate_provider_establishment_csv(providers)
+      CSV.generate(force_quotes: true) do |csv|
+        csv << %w{provider_code
+                  provider_name
+                  provider_postcode
+                  establishment_ukprn
+                  establishment_urn
+                  establishment_name
+                  establishment_postcode}
+        providers.each do |provider|
+          (provider.establishments_matched_by_name & provider.establishments_matched_by_postcode).each do |establishment|
+            csv << [
+              provider.provider_code,
+              provider.provider_name,
+              provider.postcode,
+              establishment.ukprn,
+              establishment.urn,
+              establishment.name,
+              establishment.postcode,
+            ]
+          end
+        end
+      end
+    end
+
+    def generate_provider_sites_establishment_csv(providers)
+      CSV.generate(force_quotes: true) do |csv|
+        csv << %w{provider_code
+                  provider_name
+                  provider_postcode
+                  site_code
+                  site_name
+                  site_postcode
+                  establishment_ukprn
+                  establishment_urn
+                  establishment_name
+                  establishment_postcode}
+        providers.each do |provider|
+          provider.sites.that_match_establishments_by_name_and_postcode.each do |site|
+            (site.establishments_matched_by_name & site.establishments_matched_by_postcode).each do |establishment|
+
+              csv << [
+                provider.provider_code,
+                provider.provider_name,
+                provider.postcode,
+                site.code,
+                site.location_name,
+                site.postcode,
+                establishment.ukprn,
+                establishment.urn,
+                establishment.name,
+                establishment.postcode,
+              ]
+            end
+          end
+        end
+      end
+    end
   end
 end

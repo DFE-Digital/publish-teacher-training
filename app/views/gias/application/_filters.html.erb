@@ -6,21 +6,21 @@
 
     <%= form.govuk_text_field(:search, label: { text: "Search", class: "govuk-label--m" }) %>
 
-    <%= form.govuk_check_boxes_fieldset :name_and_postcode, legend: { text: "Name and Postcode Matching" } do %>
-      <%= form.govuk_check_box "name_and_postcode", 'provider', label: { text: "Provider" } %>
+    <%= form.govuk_radio_buttons_fieldset :provider, legend: { text: "Providers matched to establishments by:" } do %>
+        <%= form.govuk_radio_button "provider", "all", label: { text: "All providers" } %>
+        <%= form.govuk_radio_button "provider", "name", label: { text: "Name" } %>
+        <%= form.govuk_radio_button "provider", "postcode", label: { text: "Postcode" } %>
+        <%= form.govuk_radio_button "provider", 'name_and_postcode', label: { text: "Name and postcode" } %>
+        <%= form.govuk_radio_button "provider", 'name_or_postcode', label: { text: "Name or postcode" } %>
     <% end %>
 
-    <%= form.govuk_check_boxes_fieldset :name, legend: { text: "Name Matching" } do %>
-      <%= form.govuk_check_box "name", 'provider', label: { text: "Provider" } %>
-      <%= form.govuk_check_box "name", 'sites', label: { text: "Sites" } %>
-      <%= form.govuk_check_box "name", 'provider_or_sites', label: { text: "Provider or Sites" } %>
+    <%= form.govuk_radio_buttons_fieldset :site, legend: { text: "Provider sites matched to establishment by:" } do %>
+        <%= form.govuk_radio_button "site", "all", label: { text: "All sites" } %>
+        <%= form.govuk_radio_button "site", "name", label: { text: "Name" } %>
+        <%= form.govuk_radio_button "site", "postcode", label: { text: "Postcode" } %>
+        <%= form.govuk_radio_button "site", "name_and_postcode", label: { text: "Name and postcode" } %>
+        <%= form.govuk_radio_button "site", "name_or_postcode", label: { text: "Name or postcode" } %>
     <% end %>
 
-  <%= form.govuk_check_boxes_fieldset :postcode, legend: { text: "Postcode Matching" } do %>
-    <%= form.govuk_check_box "postcode", 'provider', label: { text: "Provider" } %>
-    <%= form.govuk_check_box "postcode", 'sites', label: { text: "Sites" } %>
-    <%= form.govuk_check_box "postcode", 'provider_or_sites', label: { text: "Provider or Sites" } %>
-  <% end %>
-
-  <%= form.govuk_submit "Submit" %>
+    <%= form.govuk_submit "Submit" %>
 <% end %>

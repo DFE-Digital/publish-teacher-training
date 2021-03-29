@@ -25,7 +25,7 @@ module GIAS
         GIASEstablishment.delete_all
 
         gias_establishments = establishments_csv.each.map do |record|
-          next if record["EstablishmentStatus (name)"] == "Open"
+          next if record["EstablishmentStatus (name)"] != "Open"
 
           {
             urn: record["URN"].present? ? record["URN"] : nil,
