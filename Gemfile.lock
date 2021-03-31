@@ -76,11 +76,20 @@ GEM
       zeitwerk (~> 2.3)
     addressable (2.7.0)
       public_suffix (>= 2.0.2, < 5.0)
+    aes_key_wrap (1.1.0)
     ast (2.4.1)
     attr_extras (6.2.4)
+    attr_required (1.0.1)
     audited (4.10.0)
       activerecord (>= 4.2, < 6.2)
     awesome_print (1.9.2)
+    better_errors (2.9.1)
+      coderay (>= 1.0.0)
+      erubi (>= 1.0.0)
+      rack (>= 0.9.0)
+    bindata (2.4.8)
+    binding_of_caller (1.0.0)
+      debug_inspector (>= 0.0.1)
     bootsnap (1.7.3)
       msgpack (~> 1.0)
     brakeman (5.0.0)
@@ -89,6 +98,16 @@ GEM
       activesupport (>= 3.0.0)
       uniform_notifier (~> 1.11)
     byebug (11.1.3)
+    canonical-rails (0.2.11)
+      rails (>= 4.1, < 6.2)
+    capybara (3.35.3)
+      addressable
+      mini_mime (>= 0.1.3)
+      nokogiri (~> 1.8)
+      rack (>= 1.6.0)
+      rack-test (>= 0.6.3)
+      regexp_parser (>= 1.5, < 3.0)
+      xpath (~> 3.2)
     case_transform (0.2)
       activesupport
     choice (0.2.0)
@@ -108,6 +127,7 @@ GEM
       activerecord (>= 5.a)
       database_cleaner-core (~> 2.0.0)
     database_cleaner-core (2.0.1)
+    debug_inspector (1.1.0)
     deep_merge (1.2.1)
     diff-lcs (1.4.4)
     discard (1.2.0)
@@ -174,6 +194,14 @@ GEM
       rails (>= 3.0)
     globalid (0.4.2)
       activesupport (>= 4.2.0)
+    govuk-components (1.1.6)
+      activemodel (>= 6.0)
+      railties (>= 6.0)
+      view_component (~> 2.20)
+    govuk_design_system_formbuilder (2.2.0)
+      actionview (>= 5.2)
+      activemodel (>= 5.2)
+      activesupport (>= 5.2)
     govuk_notify_rails (2.1.2)
       notifications-ruby-client (~> 5.1)
       rails (>= 4.1.0)
@@ -200,9 +228,14 @@ GEM
     httparty (0.18.1)
       mime-types (~> 3.0)
       multi_xml (>= 0.5.2)
+    httpclient (2.8.3)
     i18n (1.8.9)
       concurrent-ruby (~> 1.0)
     jaro_winkler (1.5.4)
+    json-jwt (1.13.0)
+      activesupport (>= 4.2)
+      aes_key_wrap
+      bindata
     json-schema (2.8.1)
       addressable (>= 2.4)
     jsonapi-deserializable (0.2.0)
@@ -257,6 +290,16 @@ GEM
       shellany (~> 0.0)
     notifications-ruby-client (5.1.1)
       jwt (>= 1.5, < 3)
+    omniauth (1.9.1)
+      hashie (>= 3.4.6)
+      rack (>= 1.6.2, < 3)
+    omniauth-rails_csrf_protection (0.1.2)
+      actionpack (>= 4.2)
+      omniauth (>= 1.3.1)
+    omniauth_openid_connect (0.3.5)
+      addressable (~> 2.5)
+      omniauth (~> 1.9)
+      openid_connect (~> 1.1)
     open_api-rswag-api (0.1.0)
       railties (>= 3.1, < 7.0)
     open_api-rswag-specs (0.1.0)
@@ -267,6 +310,16 @@ GEM
     open_api-rswag-ui (0.1.0)
       actionpack (>= 3.1, < 7.0)
       railties (>= 3.1, < 7.0)
+    openid_connect (1.2.0)
+      activemodel
+      attr_required (>= 1.0.0)
+      json-jwt (>= 1.5.0)
+      rack-oauth2 (>= 1.6.1)
+      swd (>= 1.0.0)
+      tzinfo
+      validate_email
+      validate_url
+      webfinger (>= 1.0.1)
     pagy (3.12.0)
     parallel (1.20.1)
     parallel_tests (3.5.2)
@@ -295,6 +348,14 @@ GEM
     raabro (1.1.6)
     racc (1.5.2)
     rack (2.2.3)
+    rack-oauth2 (1.16.0)
+      activesupport
+      attr_required
+      httpclient
+      json-jwt (>= 1.11.0)
+      rack (>= 2.1.0)
+    rack-proxy (0.6.5)
+      rack
     rack-test (1.1.0)
       rack (>= 1.0, < 3)
     rails (6.1.3.1)
@@ -343,6 +404,7 @@ GEM
       ffi (~> 1.0)
     rb-readline (0.5.5)
     redis (4.2.5)
+    regexp_parser (2.1.1)
     request_store (1.5.0)
       rack (>= 1.4)
     rexml (3.2.4)
@@ -397,6 +459,7 @@ GEM
       activesupport (>= 3.2.1)
     semantic_logger (4.7.4)
       concurrent-ruby (~> 1.0)
+    semantic_range (3.0.0)
     sentry-raven (3.1.2)
       faraday (>= 1.0)
     shellany (0.0.1)
@@ -434,6 +497,10 @@ GEM
       attr_extras (>= 6.2.4)
       diff-lcs
       patience_diff
+    swd (1.2.0)
+      activesupport (>= 3)
+      attr_required (>= 0.0.5)
+      httpclient (>= 2.4)
     table_print (1.5.7)
     tabulo (2.3.3)
       tty-screen (= 0.7.1)
@@ -449,13 +516,31 @@ GEM
     uk_postcode (2.1.6)
     unicode-display_width (1.6.1)
     uniform_notifier (1.14.1)
+    validate_email (0.1.6)
+      activemodel (>= 3.0)
+      mail (>= 2.2.5)
+    validate_url (1.0.13)
+      activemodel (>= 3.0.0)
+      public_suffix
+    view_component (2.28.0)
+      activesupport (>= 5.0.0, < 7.0)
+    webfinger (1.1.0)
+      activesupport
+      httpclient (>= 2.4)
     webmock (3.12.2)
       addressable (>= 2.3.6)
       crack (>= 0.3.2)
       hashdiff (>= 0.4.0, < 2.0.0)
+    webpacker (5.2.1)
+      activesupport (>= 5.2)
+      rack-proxy (>= 0.6.1)
+      railties (>= 5.2)
+      semantic_range (>= 2.3.0)
     websocket-driver (0.7.3)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.5)
+    xpath (3.2.0)
+      nokogiri (~> 1.8)
     zeitwerk (2.4.2)
 
 PLATFORMS
@@ -466,10 +551,14 @@ DEPENDENCIES
   active_model_serializers
   audited (~> 4.10)
   awesome_print
+  better_errors
+  binding_of_caller
   bootsnap (>= 1.1.0)
   brakeman
   bullet
   byebug
+  canonical-rails
+  capybara (>= 2.15)
   config
   cri
   custom_error_message!
@@ -481,6 +570,8 @@ DEPENDENCIES
   faker
   faraday
   geokit-rails
+  govuk-components
+  govuk_design_system_formbuilder
   govuk_notify_rails
   guard
   guard-rspec
@@ -494,6 +585,9 @@ DEPENDENCIES
   jwt
   listen (>= 3.0.5, < 3.6)
   logstash-logger (~> 0.26.1)
+  omniauth (~> 1.9)
+  omniauth-rails_csrf_protection
+  omniauth_openid_connect (~> 0.3)
   open_api-rswag-api
   open_api-rswag-specs
   open_api-rswag-ui
@@ -536,6 +630,7 @@ DEPENDENCIES
   tzinfo-data
   uk_postcode
   webmock
+  webpacker (~> 5.2)
 
 RUBY VERSION
    ruby 2.7.2p137

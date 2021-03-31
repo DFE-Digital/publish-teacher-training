@@ -1,4 +1,13 @@
 en:
+  service_name: "Teacher Training API Admin"
+  header:
+    items:
+      sign_out: "Sign out"
+  components:
+    page_titles:
+      sign_in:
+        index: Sign in
+        new: User not found
   course:
     update_email:
       name: "title"
@@ -144,6 +153,8 @@ en:
             reason:
               blank: "^Why do they need access?"
   errors:
+    messages:
+      email: "^Enter an email address in the correct format, like name@example.com"
     "400":
       title: BAD REQUEST
       detail: "%{message}"
