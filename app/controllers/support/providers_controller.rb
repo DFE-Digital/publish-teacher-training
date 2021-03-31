@@ -1,7 +1,7 @@
 module Support
   class ProvidersController < ApplicationController
     def index
-      @providers = Provider.order(:provider_name).limit(30)
+      @pagy, @providers = pagy(Provider.order(:provider_name).includes(:courses, :users))
     end
 
     def show

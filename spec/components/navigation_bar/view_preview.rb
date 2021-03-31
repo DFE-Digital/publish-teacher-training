@@ -15,7 +15,7 @@ module NavigationBar
     def items
       [
         { name: "Home", url: "root_path" },
-        { name: "Trainee records", url: "trainees_path", current: false },
+        { name: "Providers", url: "#", current: false },
       ]
     end
 

@@ -16,8 +16,7 @@ class NavigationBar::View < GovukComponent::Base
   end
 
   def user_signed_in?
-    # @current_user.present?
-    true
+    @current_user.present?
   end
 
 private

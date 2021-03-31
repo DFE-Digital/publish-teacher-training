@@ -9,6 +9,7 @@
   <thead class="govuk-table__head">
     <tr class="govuk-table__row">
       <th scope="col" class="govuk-table__header govuk-!-width-one-half">Provider name</th>
+      <th scope="col" class="govuk-table__header govuk-!-width-one-half">Provider code</th>
     </tr>
   </thead>
 
@@ -20,7 +21,15 @@
             <%= govuk_link_to provider.provider_name, support_provider_path(provider) %>
           </span>
         </td>
+
+        <td class="govuk-table__cell">
+          <span class="govuk-!-display-block govuk-!-margin-bottom-1">
+            <%= provider.provider_code %>
+          </span>
+        </td>
       </tr>
     <% end %>
   </tbody>
 </table>
+
+<%= pagy_nav(@pagy).html_safe %>
