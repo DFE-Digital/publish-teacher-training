@@ -11,7 +11,7 @@ class SessionsController < ApplicationController
     if current_user
       UserSessions::Update.call(user: current_user, user_session: user_session)
 
-      redirect_to "/"
+      redirect_to "/support"
     else
       UserSession.end_session!(session)
 

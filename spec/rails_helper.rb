@@ -95,6 +95,10 @@ RSpec.configure do |config|
     config.after(:each)  { Bullet.end_request }
   end
 
+  config.before(:each, type: :system) do
+    driven_by(:rack_test)
+  end
+
   config.include ActiveJob::TestHelper, type: :request
 
   ActiveJob::Base.queue_adapter = :test
