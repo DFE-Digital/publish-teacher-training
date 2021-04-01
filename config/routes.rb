@@ -18,7 +18,9 @@ Rails.application.routes.draw do
   namespace :support do
     get "/" => redirect("/support/providers")
 
-    resources :providers, only: %i[index show]
+    resources :providers, only: %i[index show] do
+      resources :users, only: %i[index]
+    end
   end
 
   namespace :api do

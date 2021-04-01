@@ -6,6 +6,7 @@ module Support
 
     def show
       @provider = Provider.find(params[:id])
+      render layout: "provider_record"
     end
   end
 end
