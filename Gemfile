@@ -202,6 +202,10 @@ group :test do
   gem "rspec_junit_formatter"
   gem "shoulda-matchers", "~> 4.5"
   gem "simplecov", "< 0.22", require: false
+
+  # Page objects
+  gem "site_prism", "~> 3.7"
+
   gem "webmock"
 
   # Adds support for Capybara system testing and selenium driver
