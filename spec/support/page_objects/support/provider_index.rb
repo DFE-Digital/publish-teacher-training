@@ -3,7 +3,7 @@
 module PageObjects
   module Support
     class ProviderIndex < PageObjects::Base
-      set_url "providers"
+      set_url "/support/providers"
 
       def providers
         page.find_all(".qa-provider_row")
