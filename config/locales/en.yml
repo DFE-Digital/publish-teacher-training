@@ -8,6 +8,9 @@ en:
       sign_in:
         index: Sign in
         new: User not found
+      support:
+        providers:
+          index: Providers
   course:
     update_email:
       name: "title"
