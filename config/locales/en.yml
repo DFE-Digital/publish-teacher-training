@@ -11,6 +11,8 @@ en:
       support:
         providers:
           index: Providers
+    filter:
+      text_search: Name or code
   course:
     update_email:
       name: "title"
