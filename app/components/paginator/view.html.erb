@@ -1,0 +1,7 @@
+<nav class="moj-pagination" role="navigation" aria-label="pagination">
+  <%= paginate scope, paginate_configuration %>
+
+  <p class="moj-pagination__results govuk-body">
+    Showing <strong><%= page_start %></strong> to <strong><%= page_end %></strong> of <strong><%= total %></strong> results
+  </p>
+</nav>

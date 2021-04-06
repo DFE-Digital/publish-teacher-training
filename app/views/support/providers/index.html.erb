@@ -33,4 +33,4 @@
   </tbody>
 </table>
 
-<%= pagy_nav(@pagy).html_safe %>
+<%= render Paginator::View.new(scope: @providers) %>
