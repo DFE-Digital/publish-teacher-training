@@ -88,9 +88,6 @@ gem "govuk_notify_rails"
 gem "sidekiq"
 gem "sidekiq-cron"
 
-# Offshore logging
-gem "logstash-logger", "~> 0.26.1"
-
 # Semantic Logger makes logs pretty
 gem "rails_semantic_logger"
 

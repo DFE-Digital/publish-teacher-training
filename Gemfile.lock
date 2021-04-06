@@ -261,9 +261,6 @@ GEM
     listen (3.5.1)
       rb-fsevent (~> 0.10, >= 0.10.3)
       rb-inotify (~> 0.9, >= 0.9.10)
-    logstash-event (1.2.02)
-    logstash-logger (0.26.1)
-      logstash-event (~> 1.2)
     loofah (2.9.0)
       crass (~> 1.0.2)
       nokogiri (>= 1.5.9)
@@ -590,7 +587,6 @@ DEPENDENCIES
   jsonb_accessor
   jwt
   listen (>= 3.0.5, < 3.6)
-  logstash-logger (~> 0.26.1)
   omniauth (~> 1.9)
   omniauth-rails_csrf_protection
   omniauth_openid_connect (~> 0.3)

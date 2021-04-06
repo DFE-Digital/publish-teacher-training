@@ -47,11 +47,6 @@ mcbg:
   redis_password: <%= SecureRandom.base64 %>
 system_authentication_token: <%= SecureRandom.base64 %>
 application: teacher-training-api
-logstash:
-  type: tcp
-  host: # Our hostname here
-  port: # Our port here
-  ssl_enable: true
 log_level: info
 magic_link:
   max_token_age: <%= 1.hour %>
