@@ -5,6 +5,7 @@ resource cloudfoundry_app web_app {
   health_check_http_endpoint = "/ping"
   instances                  = var.web_app_instances
   memory                     = var.web_app_memory
+  disk_quota                 = 1500
   docker_image               = var.docker_image
   strategy                   = local.deployment_strategy
   timeout                    = 180
