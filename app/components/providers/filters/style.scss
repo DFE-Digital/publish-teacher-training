@@ -1,0 +1,103 @@
+@import "../../base.scss";
+@import "~@ministryofjustice/frontend/moj/settings/assets";
+@import "~@ministryofjustice/frontend/moj/settings/measurements";
+@import "~@ministryofjustice/frontend/moj/helpers/all";
+@import "~@ministryofjustice/frontend/moj/objects/width-container";
+@import "~@ministryofjustice/frontend/moj/objects/filter-layout";
+@import "~@ministryofjustice/frontend/moj/objects/scrollable-pane";
+@import "~@ministryofjustice/frontend/moj/components/filter/filter";
+
+.app-filter {
+  box-shadow: none;
+
+  @include govuk-media-query($from: tablet) {
+    margin-bottom: govuk-spacing(3);
+  }
+}
+
+// Apply GOV.UK focus styles - only needed with js.
+.js-enabled .app-filter:focus {
+  outline: $govuk-focus-width solid $govuk-focus-colour;
+}
+
+.moj-filter-layout__content {
+  overflow-x: hidden;
+}
+
+.moj-action-bar__filter {
+  @include govuk-media-query($from: desktop) {
+    display: none;
+  }
+}
+
+.filter-toggle-button {
+  float: right;
+  margin-bottom: govuk-spacing(1);
+  @include govuk-media-query($from: desktop) {
+    display: none;
+  }
+}
+
+.moj-action-bar__filter:after {
+  background: none;
+}
+
+@media (min-width: 48.0625em) {
+  .moj-filter-layout__filter {
+    max-width: 300px;
+    margin-bottom: 10px;
+  }
+}
+
+.js-enabled .moj-filter-layout__filter {
+  @include govuk-media-query($until: tablet) {
+    // only display a scrollbar if it there is overflow to scroll
+    overflow: auto;
+    // At this width the filter has `position: fixed`. We should set a max width that will safely include the filter and a scrollbar if present 
+    max-width: calc(100vw - calc(100vw - 100%));
+  }
+}
+
+.moj-filter__header {
+  background: govuk-colour("white");
+  box-shadow: none;
+  border: 1px solid $govuk-border-colour;
+  border-bottom: 0;
+  padding-top: govuk-spacing(3);
+  padding-bottom: govuk-spacing(3);
+}
+
+.moj-filter__selected {
+  box-shadow: none;
+  border: 1px solid $govuk-border-colour;
+  border-top: 0;
+  border-bottom: 0;
+  padding-top: govuk-spacing(5);
+  padding-bottom: govuk-spacing(5);
+}
+
+.moj-filter__options {
+  box-shadow: none;
+}
+
+.moj-filter__tag:focus, .moj-filterfe__tag:focus:hover {
+  outline: none;
+  box-shadow: 0 4px #0b0c0c;
+}
+
+// Fix for focus issue - see https://github.com/DFE-Digital/apply-for-teacher-training/pull/2640
+// We're catching the focus on a second element rather than having the filter component itself flash with focus when checkbox labels are clicked.
+.moj-filter__content:focus {
+  outline: none;
+}
+
+.moj-filter-layout__filter-wrapper {
+  max-width: 300px;
+  margin-right: 40px;
+  min-width: 260px;
+  width: 100%;
+  @include govuk-media-query($from: desktop) {
+    float: left;
+  }
+}
+
