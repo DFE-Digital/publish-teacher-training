@@ -1,7 +1,7 @@
 module Support
   class ProvidersController < ApplicationController
     def index
-      @providers = RecuritmentCycle.current.providers.order(:provider_name).includes(:courses, :users).page(params[:page] || 1)
+      @providers = RecruitmentCycle.current.providers.order(:provider_name).includes(:courses, :users).page(params[:page] || 1)
     end
 
     def show
