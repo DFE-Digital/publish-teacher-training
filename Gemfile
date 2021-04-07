@@ -27,6 +27,10 @@ gem "canonical-rails"
 # Custom attributes for endpoints
 gem "active_model_serializers"
 
+# Pagination for frontend
+gem "kaminari"
+
+# Pagination for API
 gem "pagy", "~> 3.12"
 
 # JSON:API Ruby Client

@@ -1,7 +1,7 @@
 module Support
   class ProvidersController < ApplicationController
     def index
-      @pagy, @providers = pagy(Provider.order(:provider_name).includes(:courses, :users))
+      @providers = RecruitmentCycle.current.providers.order(:provider_name).includes(:courses, :users).page(params[:page] || 1)
     end
 
     def show
