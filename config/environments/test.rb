@@ -53,7 +53,7 @@ Rails.application.configure do
   end
 
   config.active_job.queue_adapter = :test
-  
+
   # Logging
   config.log_level = :error
 end
