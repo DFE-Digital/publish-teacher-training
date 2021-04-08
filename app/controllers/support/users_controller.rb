@@ -1,14 +1,13 @@
 module Support
   class UsersController < ApplicationController
+
     def index
-      @users = provider.users.order(:last_name)
-      render layout: "provider_record"
+      @users = User.order(:last_name).page(params[:page] || 1)
     end
 
-  private
-
-    def provider
-      @provider ||= Provider.find(params[:provider_id])
+    def show
+      @user = User.find(params[:id])
     end
+
   end
 end
