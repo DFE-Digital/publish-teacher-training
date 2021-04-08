@@ -23,6 +23,12 @@ Rails.application.routes.draw do
       resources :courses, only: %i[index]
     end
     resources :users, only: %i[index]
+
+    resources :data_exports, path: 'data-exports', only: [:index] do
+      member do
+        post :download
+      end
+    end
   end
 
   namespace :api do

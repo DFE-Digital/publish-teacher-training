@@ -4,5 +4,9 @@
 
 <%= render "support/menu" %>
 
+<div class="govuk-button-group">
+  <%= link_to "Download users (CSV)", support_data_exports_path(anchor: "users"), class: "govuk-button govuk-button--secondary" %>
+</div>
+
 <%= render "users", users: @users %>
 <%= render Paginator::View.new(scope: @users ) %>

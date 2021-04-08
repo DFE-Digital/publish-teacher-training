@@ -1,0 +1,18 @@
+<%= render PageTitle::View.new(title: "support.data_exports.index") %>
+
+<h1 class="govuk-heading-l">Data Exports</h1>
+
+<%= render "support/menu" %>
+
+<% @data_exports.each do |data_export| %>
+  <section class="app-section app-section--with-top-border" id="<%= data_export.id %>">
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-two-thirds">
+        <h2 class="govuk-heading-m"><%= data_export.name %></h2>
+        <p class="govuk-body"><%= data_export.description %></p>
+
+        <%= govuk_button_to "Download CSV", download_support_data_export_path(data_export.id), class: 'govuk-button--secondary' %>
+      </div>
+    </div>
+  </section>
+<% end %>
