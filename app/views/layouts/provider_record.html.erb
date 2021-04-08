@@ -1,6 +1,13 @@
 <%= extends_layout :application do %>
-  <h1 class="govuk-heading-l"><%= @provider.provider_name %></h1>
-
+  <div class="app-provider-name">
+    <h1 class="govuk-heading-l">
+      <%= @provider.provider_name %>
+       <div class="app-provider-edit-link">
+        <%= govuk_link_to(t(:change), edit_support_provider_path(@provider)) %>
+       </div>
+    </h1>
+  </div>
+   
   <%= render TabNavigation::View.new(items: [
     { name: "Details", url: support_provider_path(@provider) },
     { name: "Users", url: users_support_provider_path(@provider) },

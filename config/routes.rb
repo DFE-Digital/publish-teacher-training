@@ -18,7 +18,7 @@ Rails.application.routes.draw do
   namespace :support do
     get "/" => redirect("/support/providers")
 
-    resources :providers, only: %i[index show] do
+    resources :providers, only: %i[index show edit update] do
       get :users, on: :member
       resources :courses, only: %i[index]
     end
