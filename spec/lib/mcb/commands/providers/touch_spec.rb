@@ -11,7 +11,7 @@ describe "mcb providers touch" do
   let(:provider) { create :provider, updated_at: 1.day.ago, changed_at: 1.day.ago }
   let(:rolled_over_provider) do
     new_provider = provider.dup
-    new_provider.update(recruitment_cycle: next_cycle)
+    new_provider.update(recruitment_cycle: next_cycle, provider_name: SecureRandom.hex(10))
     new_provider.save
     new_provider
   end
@@ -32,7 +32,7 @@ describe "mcb providers touch" do
 
     it "updates the providers changed_at" do
       rolled_over_provider
-
+       
       Timecop.freeze(Time.zone.today + 1) do
         execute_touch(arguments: [provider.provider_code])
 
