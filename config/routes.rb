@@ -20,6 +20,7 @@ Rails.application.routes.draw do
 
     resources :providers, only: %i[index show] do
       resources :users, only: %i[index]
+      resources :courses, only: %i[index]
     end
   end
 

@@ -11,6 +11,8 @@ en:
       support:
         providers:
           index: Providers
+          courses:
+            index: Courses
     filter:
       text_search: Name or code
   course:

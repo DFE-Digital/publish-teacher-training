@@ -6,6 +6,7 @@ module PageObjects
       set_url "/support/providers/{id}"
 
       element :users_tab, ".app-tab-navigation__link", text: "Users"
+      element :courses_tab, ".app-tab-navigation__link", text: "Courses"
     end
   end
 end
