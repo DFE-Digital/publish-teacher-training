@@ -10,8 +10,8 @@ module Support
           ].map(&:new)
         end
 
-        def find(id)
-          all.detect{|d| d.id == id }
+        def find(type)
+          all.detect { |d| d.type == type }
         end
       end
     end

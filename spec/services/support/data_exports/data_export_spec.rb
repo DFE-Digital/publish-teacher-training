@@ -14,7 +14,7 @@ RSpec.describe Support::DataExports::DataExport do
     it "finds users type" do
       type = subject.find("users")
       expect(type.class).to eql(Support::DataExports::UsersExport)
-      expect(type.id).to eql("users")
+      expect(type.type).to eql("users")
     end
   end
 end
