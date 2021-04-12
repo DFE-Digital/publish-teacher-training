@@ -93,6 +93,7 @@ describe "Sites API v2", type: :request do
               "longitude" => site1.longitude,
               "travel_to_work_area" => site1.travel_to_work_area,
               "london_borough" => site1.london_borough,
+              "urn" => site1.urn,
               "recruitment_cycle_year" => current_cycle.year,
             },
           },
@@ -112,6 +113,7 @@ describe "Sites API v2", type: :request do
               "longitude" => site2.longitude,
               "travel_to_work_area" => site2.travel_to_work_area,
               "london_borough" => site2.london_borough,
+              "urn" => site2.urn,
               "recruitment_cycle_year" => current_cycle.year,
             },
           },
@@ -250,6 +252,7 @@ describe "Sites API v2", type: :request do
       let(:address4)      { "New state" }
       let(:postcode)      { "SW1A 1AA" }
       let(:region_code)   { "west_midlands" }
+      let(:urn) { "123456" }
 
       subject { perform_site_update }
 
@@ -262,6 +265,7 @@ describe "Sites API v2", type: :request do
           address4: address4,
           postcode: postcode,
           region_code: region_code,
+          urn: urn,
         )
       end
 
@@ -321,6 +325,12 @@ describe "Sites API v2", type: :request do
           .to(region_code)
       end
 
+      it "updates the urn of the site" do
+        expect { subject }.to change { site1.reload.urn }
+          .from(site1.urn)
+          .to(urn)
+      end
+
       context "response output" do
         let(:json_data) { JSON.parse(response.body)["data"] }
 
@@ -344,6 +354,7 @@ describe "Sites API v2", type: :request do
             :address4,
             :postcode,
             :region_code,
+            :urn,
           )
         end
 

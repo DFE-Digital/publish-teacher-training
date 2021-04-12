@@ -53,6 +53,7 @@ module API
             :address4,
             :postcode,
             :region_code,
+            :urn,
           )
       end
 

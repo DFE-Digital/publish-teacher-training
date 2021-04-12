@@ -185,6 +185,7 @@ module API
             :gt12_contact,
             :application_alert_contact,
             :send_application_alerts,
+            :ukprn,
           )
           .permit(accredited_bodies: %i[provider_code provider_name description])
       end
@@ -227,6 +228,7 @@ module API
             :gt12_contact,
             :application_alert_contact,
             :send_application_alerts,
+            :ukprn,
           )
           .permit(
             admin_contact: %w[name email telephone permission_given],
@@ -259,6 +261,7 @@ module API
             :address4,
             :postcode,
             :region_code,
+            :ukprn,
           )
           .permit(
             :type_of_gt12,

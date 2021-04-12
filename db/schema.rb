@@ -10,12 +10,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_03_17_141543) do
+ActiveRecord::Schema.define(version: 2021_04_09_124256) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
   enable_extension "btree_gist"
-  enable_extension "citext"
   enable_extension "pg_buffercache"
   enable_extension "pg_stat_statements"
   enable_extension "plpgsql"
@@ -245,6 +244,7 @@ ActiveRecord::Schema.define(version: 2021_03_17_141543) do
     t.jsonb "accrediting_provider_enrichments"
     t.float "latitude"
     t.float "longitude"
+    t.string "ukprn"
     t.index ["changed_at"], name: "index_provider_on_changed_at", unique: true
     t.index ["discarded_at"], name: "index_provider_on_discarded_at"
     t.index ["latitude", "longitude"], name: "index_provider_on_latitude_and_longitude"
@@ -296,6 +296,7 @@ ActiveRecord::Schema.define(version: 2021_03_17_141543) do
     t.float "longitude"
     t.string "travel_to_work_area"
     t.string "london_borough"
+    t.string "urn"
     t.index ["latitude", "longitude"], name: "index_site_on_latitude_and_longitude"
     t.index ["provider_id", "code"], name: "IX_site_provider_id_code", unique: true
   end

@@ -85,6 +85,7 @@ private
       address4
       postcode
       region_code
+      ukprn
     ]
   end
 
