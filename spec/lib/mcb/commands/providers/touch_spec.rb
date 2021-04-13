@@ -32,7 +32,7 @@ describe "mcb providers touch" do
 
     it "updates the providers changed_at" do
       rolled_over_provider
-       
+
       Timecop.freeze(Time.zone.today + 1) do
         execute_touch(arguments: [provider.provider_code])
 

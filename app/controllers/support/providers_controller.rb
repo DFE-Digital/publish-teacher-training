@@ -1,11 +1,14 @@
 module Support
   class ProvidersController < ApplicationController
+    include TimeFormat
+
     def index
       @providers = filtered_providers.page(params[:page] || 1)
     end
 
     def show
       provider
+      last_updated_provider
       render layout: "provider_record"
     end
 
@@ -42,6 +45,10 @@ module Support
 
     def filter_params
       params.permit(:text_search, :page, :commit)
+    end
+
+    def last_updated_provider
+      @last_updated = gov_uk_format(provider.updated_at)
     end
 
     def provider

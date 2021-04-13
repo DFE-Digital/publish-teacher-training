@@ -1,12 +1,3 @@
 @import "./govuk_style_setup";
 @import "~govuk-frontend/govuk/all";
 @import "~@ministryofjustice/frontend/moj/all";
-
-.app-provider-name {
-   display: inline;  
-   .app-provider-edit-link {
-    @include govuk-font($size: 19);
-     display: inline;
-     padding: govuk-spacing(2)
-   }
-}
