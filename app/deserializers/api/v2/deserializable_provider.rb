@@ -24,6 +24,7 @@ module API
         gt12_contact
         send_application_alerts
         application_alert_contact
+        ukprn
       ].freeze
 
       attributes(*PROVIDER_ATTRIBUTES)

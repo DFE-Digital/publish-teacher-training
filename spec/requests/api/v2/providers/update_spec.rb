@@ -57,6 +57,7 @@ describe "PATCH /providers/:provider_code" do
       telephone: "01234 567890",
       train_with_us: "train with us",
       train_with_disability: "train with disability",
+      ukprn: "12345678",
     }
   end
   let(:permitted_params) do
@@ -72,6 +73,7 @@ describe "PATCH /providers/:provider_code" do
       telephone
       train_with_us
       train_with_disability
+      ukprn
     ]
   end
 
@@ -100,6 +102,7 @@ describe "PATCH /providers/:provider_code" do
       expect(json_response).to have_attribute(:telephone).with_value("01234 567890")
       expect(json_response).to have_attribute(:train_with_us).with_value("train with us")
       expect(json_response).to have_attribute(:train_with_disability).with_value("train with disability")
+      expect(json_response).to have_attribute(:ukprn).with_value("12345678")
     end
   end
   describe "with unpermitted attributes on provider object" do
@@ -166,6 +169,7 @@ describe "PATCH /providers/:provider_code" do
         telephone: nil,
         train_with_us: nil,
         train_with_disability: nil,
+        ukprn: nil,
       }
     end
 
@@ -191,6 +195,7 @@ describe "PATCH /providers/:provider_code" do
       {
         train_with_us: Faker::Lorem.sentence(word_count: 251),
         train_with_disability: Faker::Lorem.sentence(word_count: 251),
+        ukprn: Faker::Number.number(digits: 8),
       }
     end
 

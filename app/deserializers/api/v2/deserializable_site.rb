@@ -8,7 +8,8 @@ module API
                  :code,
                  :location_name,
                  :postcode,
-                 :region_code
+                 :region_code,
+                 :urn
     end
   end
 end
