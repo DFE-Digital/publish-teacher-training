@@ -1,4 +1,6 @@
 class CourseSearchService
+  include ServicePattern
+
   def initialize(
     filter:,
     sort: nil,
@@ -9,12 +11,6 @@ class CourseSearchService
     @sort = Set.new(sort&.split(","))
   end
 
-  class << self
-    def call(**args)
-      new(args).call
-    end
-  end
-
   def call
     scope = course_scope
     scope = scope.with_salary if funding_filter_salary?
@@ -22,6 +18,8 @@ class CourseSearchService
     scope = scope.with_vacancies if has_vacancies?
     scope = scope.findable if findable?
     scope = scope.with_study_modes(study_types) if study_types.any?
+
+
     scope = scope.with_subjects(subject_codes) if subject_codes.any?
     scope = scope.with_provider_name(provider_name) if provider_name.present?
     scope = scope.with_send if send_courses_filter?
@@ -29,15 +27,13 @@ class CourseSearchService
     scope = scope.with_funding_types(funding_types) if funding_types.any?
     scope = scope.changed_since(filter[:updated_since]) if updated_since_filter?
 
-    # The 'where' scope will remove duplicates
-    # An outer query is required in the event the provider name is present.
-    # This prevents 'PG::InvalidColumnReference: ERROR: for SELECT DISTINCT, ORDER BY expressions must appear in select list'
-    outer_scope = Course.includes(
+
+    outer_scope = scope.includes(
       :enrichments,
       subjects: [:financial_incentive],
       site_statuses: [:site],
-      provider: %i[recruitment_cycle ucas_preferences],
-    ).where(id: scope.select(:id))
+      provider: %i[recruitment_cycle ucas_preferences])
+
 
     if provider_name.present?
       outer_scope = outer_scope
@@ -64,9 +60,9 @@ class CourseSearchService
     outer_scope
   end
 
-  private_class_method :new
-
 private
+
+  attr_reader :sort, :filter, :course_scope
 
   def expand_university?
     filter[:expand_university].to_s.downcase == "true"
@@ -154,8 +150,6 @@ private
   def origin
     [filter[:latitude], filter[:longitude]]
   end
-
-  attr_reader :sort, :filter, :course_scope
 
   def funding_filter_salary?
     filter[:funding] == "salary"
