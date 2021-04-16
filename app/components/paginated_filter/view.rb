@@ -4,7 +4,7 @@ module PaginatedFilter
   class View < ViewComponent::Base
     attr_reader :filters, :collection
 
-    with_content_areas :filter_actions
+    renders_one :filter_actions
 
     def initialize(filters:, collection:)
       @filters = filters
