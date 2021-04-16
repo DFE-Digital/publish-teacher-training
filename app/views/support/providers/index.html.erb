@@ -2,9 +2,7 @@
 
 <h1 class="govuk-heading-l">Providers</h1>
 
-<%= render TabNavigation::View.new(items: [
-  { name: "Providers", url: support_providers_path },
-]) %>
+<%= render "support/menu" %>
 
 <%= render PaginatedFilter::View.new(filters: @filters, collection: @providers) do %>
   <table class="govuk-table">

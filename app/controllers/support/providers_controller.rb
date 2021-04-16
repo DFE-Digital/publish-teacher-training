@@ -9,6 +9,12 @@ module Support
       render layout: "provider_record"
     end
 
+    def users
+      @provider = Provider.find(params[:id])
+      @users = @provider.users.order(:last_name).page(params[:page] || 1)
+      render layout: "provider_record"
+    end
+
   private
 
     def filtered_providers

@@ -1,25 +1,12 @@
-<table class="govuk-table">
-  <thead class="govuk-table__head">
-    <tr class="govuk-table__row">
-      <th scope="col" class="govuk-table__header govuk-!-width-one-quarter">First name</th>
-      <th scope="col" class="govuk-table__header govuk-!-width-one-quarter">Last name</th>
-      <th scope="col" class="govuk-table__header govuk-!-width-two-quarters">Email</th>
-    </tr>
-  </thead>
+<%= render PageTitle::View.new(title: "support.users.index") %>
 
-  <tbody class="govuk-table__body">
-    <% @users.each do |user| %>
-      <tr class="govuk-table__row user-row">
-        <td class="govuk-table__cell">
-            <span class="govuk-!-display-block govuk-!-margin-bottom-1"><%= user.first_name %></span>
-        </td>
-        <td class="govuk-table__cell">
-          <span class="govuk-!-display-block govuk-!-margin-bottom-1"><%= user.last_name %></span>
-        </td>
-        <td class="govuk-table__cell">
-          <span class="govuk-!-display-block govuk-!-margin-bottom-1"><%= user.email %></span>
-        </td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
+<h1 class="govuk-heading-l">Users</h1>
+
+<%= render "support/menu" %>
+
+<div class="govuk-button-group">
+  <%= link_to "Download users (CSV)", support_data_exports_path(anchor: "users"), class: "govuk-button govuk-button--secondary" %>
+</div>
+
+<%= render "users", users: @users %>
+<%= render Paginator::View.new(scope: @users ) %>

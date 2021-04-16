@@ -19,8 +19,15 @@ Rails.application.routes.draw do
     get "/" => redirect("/support/providers")
 
     resources :providers, only: %i[index show] do
-      resources :users, only: %i[index]
+      get :users, on: :member
       resources :courses, only: %i[index]
+    end
+    resources :users, only: %i[index]
+
+    resources :data_exports, path: "data-exports", only: [:index] do
+      member do
+        post :download
+      end
     end
   end
 

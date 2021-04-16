@@ -13,6 +13,10 @@ en:
           index: Providers
           courses:
             index: Courses
+        users:
+          index: Users
+        data_exports:
+          index: Data exports
     filter:
       text_search: Name or code
   course:
@@ -42,6 +46,12 @@ en:
   provider_suggestion:
     errors:
       bad_request: Unknown provider code or name, please check the query string.
+  support:
+    data_exports:
+      index:
+        users:
+          name: Only users affiliated with a provider
+          description: "The list of all users affiliated with a provider from current recruitment cycle with columns: provider_code, provider_name, provider_type, first_name, last_name, email_address"
   activerecord:
     attributes:
       course:
