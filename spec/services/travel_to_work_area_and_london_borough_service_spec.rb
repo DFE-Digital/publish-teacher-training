@@ -141,8 +141,8 @@ describe TravelToWorkAreaAndLondonBoroughService do
         stub_request(:get, travel_to_work_areas_query).to_return(status: 404)
       end
 
-      it "generates an error that is captured by Sentry" do
-        expect(Raven).to receive(:capture_message).with(
+      it "generates a message that is captured by Sentry" do
+        expect(Sentry).to receive(:capture_message).with(
           "Mapit API has returned status code 404 for Site id #{site.id} whilst trying to obtain travel_to_work_area",
         )
 
