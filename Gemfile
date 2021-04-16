@@ -111,9 +111,6 @@ gem "open_api-rswag-ui"
 
 gem "pg_search"
 
-# End-user application performance monitoring
-gem "skylight"
-
 # govuk styling
 gem "govuk-components"
 gem "govuk_design_system_formbuilder"
