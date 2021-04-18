@@ -1,0 +1,20 @@
+<%= render GovukComponent::SummaryList.new do |component|
+  component.slot(
+    :row,
+    key: "Name",
+    value: @provider.provider_name,
+    action: govuk_link_to(t(:change), edit_support_provider_path(@provider))
+  ) 
+
+  component.slot(
+    :row,
+    key: "Code",
+    value: @provider.provider_code
+  )
+
+  component.slot(
+    :row,
+    key: "Last updated",
+    value: gov_uk_format(@provider.updated_at)
+  )
+end %>

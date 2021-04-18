@@ -1,6 +1,6 @@
 <%= extends_layout :application do %>
   <h1 class="govuk-heading-l"><%= @provider.provider_name %></h1>
-
+  
   <%= render TabNavigation::View.new(items: [
     { name: "Details", url: support_provider_path(@provider) },
     { name: "Users", url: users_support_provider_path(@provider) },

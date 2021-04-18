@@ -10,6 +10,10 @@ module FeatureHelpers
       @provider_show_page ||= PageObjects::Support::ProviderShow.new
     end
 
+    def provider_edit_page
+      @provider_edit_page ||= PageObjects::Support::ProviderEdit.new
+    end
+
     def provider_users_index_page
       @provider_users_index_page ||= PageObjects::Support::ProviderUsersIndex.new
     end

@@ -17,7 +17,7 @@ module Support
         result
       end
 
-      private
+    private
 
       def user_data(user, provider)
         {
