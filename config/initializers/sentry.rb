@@ -11,5 +11,5 @@ Sentry.init do |config|
   config.release = ENV["COMMIT_SHA"]
 
   # https://docs.sentry.io/platforms/ruby/configuration/sampling/#configuring-the-transaction-sample-rate
-  config.traces_sample_rate = Rails.env.production? ? 0.5 : 0.0
+  config.traces_sample_rate = 0.5
 end
