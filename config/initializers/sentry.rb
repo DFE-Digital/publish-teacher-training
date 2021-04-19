@@ -11,5 +11,19 @@ Sentry.init do |config|
   config.release = ENV["COMMIT_SHA"]
 
   # https://docs.sentry.io/platforms/ruby/configuration/sampling/#configuring-the-transaction-sample-rate
-  config.traces_sample_rate = 0.5
+  config.traces_sampler = lambda do |sampling_context|
+    transaction = sampling_context[:transaction_context]
+
+    if transaction[:name].start_with? "/ping"
+      # Ping event isn't worth tracking.
+      false
+    elsif transaction[:name].match? %r{/api/public/v1/recruitment_cycles/\d+/providers/\w+/courses/\w+/locations}
+      # 85% of our traffic appears to be to the locations controller (about
+      # 30tpm!). Probably worth investigating in it's own right, but for now
+      # we need to throttle these down.
+      0.01
+    else
+      0.5
+    end
+  end
 end
