@@ -106,7 +106,7 @@ class Provider < ApplicationRecord
 
   validates :email, email: true, if: :email_changed?
 
-  validates :provider_name, uniqueness: true, length: { maximum: 100 }, on: :update, if: RecruitmentCycle.current_recruitment_cycle
+  validates :provider_name, length: { maximum: 100 }, on: :update, if: RecruitmentCycle.current_recruitment_cycle
 
   validates :telephone, phone: { message: "^Enter a valid telephone number" }, if: :telephone_changed?
 
