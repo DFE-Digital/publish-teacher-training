@@ -11,7 +11,7 @@ class AuthenticationService
       @user = user_by_sign_in_user_id || user_by_email
       update_user_information
     rescue DuplicateUserError => e
-      Raven.capture(e)
+      Sentry.capture_exception(e)
     end
 
     user

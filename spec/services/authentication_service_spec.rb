@@ -70,7 +70,7 @@ describe AuthenticationService do
         end
 
         it "generates an exception which is captured by Sentry" do
-          expect(Raven).to receive(:capture).with(
+          expect(Sentry).to receive(:capture_exception).with(
             instance_of(AuthenticationService::DuplicateUserError),
           )
 

@@ -2,27 +2,19 @@
 
 ## External Integrations
 
-### Skylight
+### Sentry
 
-skylight.io provides a rich set of performance monitoring tools, available form
-on the apps [dashboard page](https://www.skylight.io/app/applications/NXAwzyZjkp2m).
-Normally we enable skylight only in production.
+[sentry.io](https://docs.sentry.io/platforms/ruby/) now includes performance monitoring tools, available
+on the apps [Performance tab](https://sentry.io/organizations/dfe-bat/performance/?project=1377944).
+Normally we enable performance monitoring only in production, by setting `traces_sample_rate` in the sentry initializer.
 
 #### Configuring in deployed environments
 
 In a deployed environment, the environment variable
-`SETTINGS__SKYLIGHT__AUTHENTICATION` should be set to the auth token available
-from the application setting in skylight.io.
+`SENTRY_DSN` should be set to the value of the Sentry DSN, available under
+Settings -> Application Name -> Client Keys (DSN)
 
 #### Configuring for local development
 
 In local development, if you need to test performance monitoring you can enable
-Skylight and set the auth token in a local settings file
-`config/settings.local.yml`, with the token itself availble on the
-[Skylight application setting page](https://www.skylight.io/app/settings/xRkb2HFQcwe7/app_settings)
-
-```yaml
-skylight:
-  authentication: "auth_token_goes_here"
-  enable: true
-```
+Sentry by providing a `SENTRY_DSN` environment variable. In the Sentry dashboard, one can filter the performance metrics by environment (i.e: development).

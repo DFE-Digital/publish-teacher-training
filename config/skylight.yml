@@ -1,7 +1,0 @@
----
-# The authentication token for the application.
-authentication: <%= Settings.skylight.authentication %>
-ignored_endpoints:
-  - HeartbeatController#ping
-  - HeartbeatController#healthcheck
-  - HeartbeatController#sha
