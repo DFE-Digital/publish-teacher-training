@@ -54,7 +54,7 @@ private
 
   def generate_sentry_error(response_code, attribute)
     message = "Mapit API has returned status code #{response_code} for Site id #{site.id} whilst trying to obtain #{attribute}"
-    Raven.capture_message(message)
+    Sentry.capture_message(message)
   end
 
   def url_for(attribute)

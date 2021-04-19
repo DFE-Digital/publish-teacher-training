@@ -208,7 +208,7 @@ describe UserNotificationPreferences do
         end
 
         it "reports the error" do
-          expect(Raven).to receive(:capture).with(instance_of(StandardError))
+          expect(Sentry).to receive(:capture_exception).with(instance_of(StandardError))
           described_class.new(user_id: user.id).update(enable_notifications: true)
         end
       end
