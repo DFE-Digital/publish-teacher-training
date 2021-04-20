@@ -11,7 +11,7 @@ phase: Beta
 header_links:
   About: /
   Feedback: https://forms.gle/syqb5Fa9RSbo2WC1A
-  Support: /support.html
+  System Admin: /support/providers
 
 # Enables search functionality. This indexes pages only and is not recommended for single-page sites.
 enable_search: true
