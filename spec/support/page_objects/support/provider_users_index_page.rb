@@ -5,9 +5,7 @@ module PageObjects
     class ProviderUsersIndex < PageObjects::Base
       set_url "/support/providers/{provider_id}/users"
 
-      def users
-        page.find_all(".user-row")
-      end
+      sections :users, PageObjects::Sections::User, ".user-row"
     end
   end
 end

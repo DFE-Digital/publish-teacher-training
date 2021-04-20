@@ -29,7 +29,6 @@ FactoryBot.define do
     train_with_disability { Faker::Lorem.sentence.to_s }
     accrediting_provider_enrichments { nil }
 
-
     trait :university do
       provider_type { :university }
       accrediting_provider { "Y" }

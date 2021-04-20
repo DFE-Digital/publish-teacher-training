@@ -17,6 +17,7 @@ en:
             index: Courses
         users:
           index: Users
+          show: User overview
         data_exports:
           index: Data exports
     filter:

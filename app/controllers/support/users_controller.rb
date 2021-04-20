@@ -5,7 +5,17 @@ module Support
     end
 
     def show
-      @user = User.find(params[:id])
+      @providers = providers.order(:provider_name).page(params[:page] || 1)
+    end
+
+  private
+
+    def user
+      @user ||= User.find(params[:id])
+    end
+
+    def providers
+      RecruitmentCycle.current.providers.where(id: user.providers)
     end
   end
 end

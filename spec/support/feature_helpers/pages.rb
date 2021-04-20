@@ -22,6 +22,10 @@ module FeatureHelpers
       @provider_courses_index_page ||= PageObjects::Support::ProviderCoursesIndex.new
     end
 
+    def users_show_page
+      @users_show_page ||= PageObjects::Support::UserShow.new
+    end
+
     def users_index_page
       @users_index_page ||= PageObjects::Support::UsersIndex.new
     end

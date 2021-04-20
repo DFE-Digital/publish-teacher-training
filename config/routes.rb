@@ -22,7 +22,7 @@ Rails.application.routes.draw do
       get :users, on: :member
       resources :courses, only: %i[index]
     end
-    resources :users, only: %i[index]
+    resources :users, only: %i[index show]
 
     resources :data_exports, path: "data-exports", only: [:index] do
       member do
