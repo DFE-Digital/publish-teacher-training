@@ -60,6 +60,7 @@ lock.json
 /config/master.key
 
 /public/packs
+/public/packs-test
 /node_modules
 /yarn-error.log
 yarn-debug.log*
