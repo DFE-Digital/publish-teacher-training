@@ -28,6 +28,28 @@ describe Provider, type: :model do
     it { should have_many(:user_notifications) }
   end
 
+  describe "urn validations" do
+    context "when provider_type is not lead_school" do
+      let(:provider) { build(:provider, provider_type: "B") }
+      let(:provider_with_no_urn) { build(:provider, provider_type: "B", urn: nil) }
+
+      it "does not validate presence of urn" do
+        expect(provider_with_no_urn).to be_valid
+        expect(provider).to be_valid
+      end
+    end
+
+    context "when provider_type is lead_schools" do
+      let(:invalid_provider) { build(:provider, provider_type: "Y", urn: nil) }
+      let(:valid) { build(:provider, provider_type: "Y", urn: "12345") }
+
+      it "validates a urn of length 5 - 6" do
+        expect(invalid_provider).to_not be_valid
+        expect(provider).to be_valid
+      end
+    end
+  end
+
   describe "organisation" do
     it "returns the only organisation a provider has" do
       expect(subject.organisation).to eq subject.organisations.first

@@ -30,6 +30,7 @@ module Providers
         provider_name: @provider_name,
         provider_code: @provider_code,
         provider_type: @provider_type,
+        urn: "12345",
         accrediting_provider: @is_accredited_body ? "accredited_body" : "not_an_accredited_body",
       }.merge(DEFAULT_PROVIDER_ATTRIBUTES))
 

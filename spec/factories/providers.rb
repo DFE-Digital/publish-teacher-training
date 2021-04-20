@@ -21,6 +21,7 @@ FactoryBot.define do
     website { Faker::Internet.url }
     provider_type { :lead_school }
     accrediting_provider { "N" }
+    urn { "12345" }
     region_code { "london" }
     organisations { [create(:organisation, :with_user)] }
     association :recruitment_cycle, strategy: :find_or_create

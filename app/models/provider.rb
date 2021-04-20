@@ -108,6 +108,9 @@ class Provider < ApplicationRecord
 
   validates :provider_name, length: { maximum: 100 }, on: :update, if: RecruitmentCycle.current_recruitment_cycle
 
+  validates :urn, length: { in: 5..6 }, unless: -> { urn.blank? }
+  validates :urn, presence: true, if: -> { provider_type == "lead_school" }
+
   validates :telephone, phone: { message: "^Enter a valid telephone number" }, if: :telephone_changed?
 
   validates :train_with_us, presence: true, on: :update, if: :train_with_us_changed?
