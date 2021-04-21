@@ -28,6 +28,18 @@ describe Provider, type: :model do
     it { should have_many(:user_notifications) }
   end
 
+  describe "urn validations" do
+    context "when provider_type is lead_schools" do
+      let(:invalid_provider) { build(:provider, urn: "1") }
+      let(:valid) { build(:provider, urn: "12345") }
+
+      it "validates a urn of length 5 - 6" do
+        expect(invalid_provider).to_not be_valid
+        expect(provider).to be_valid
+      end
+    end
+  end
+
   describe "organisation" do
     it "returns the only organisation a provider has" do
       expect(subject.organisation).to eq subject.organisations.first
