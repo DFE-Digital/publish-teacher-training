@@ -17,6 +17,24 @@ describe Site, type: :model do
   it { is_expected.to validate_presence_of(:code) }
   it { is_expected.to validate_inclusion_of(:code).in_array(Site::POSSIBLE_CODES).with_message("must be A-Z, 0-9 or -") }
 
+  it "validates that URN cannot be letters" do
+    subject.urn = "XXXXXX"
+    subject.valid?
+    expect(subject.errors[:urn]).to include("^URN must be 5 or 6 numbers")
+  end
+
+  it "validates URN minimum length" do
+    subject.urn = "1234"
+    subject.valid?
+    expect(subject.errors[:urn]).to include("^URN must be 5 or 6 numbers")
+  end
+
+  it "validates URN maximum length" do
+    subject.urn = "1234567"
+    subject.valid?
+    expect(subject.errors[:urn]).to include("^URN must be 5 or 6 numbers")
+  end
+
   describe "associations" do
     it { should belong_to(:provider) }
   end

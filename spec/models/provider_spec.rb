@@ -38,6 +38,14 @@ describe Provider, type: :model do
         expect(provider).to be_valid
       end
     end
+
+    context "when provider_type is lead_schools" do
+      let(:invalid_provider) { build(:provider, urn: "XXXXXX") }
+
+      it "validates that a urn contains digits only" do
+        expect(invalid_provider).to_not be_valid
+      end
+    end
   end
 
   describe "organisation" do
