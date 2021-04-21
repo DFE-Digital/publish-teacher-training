@@ -86,6 +86,7 @@ private
       postcode
       region_code
       ukprn
+      urn
     ]
   end
 

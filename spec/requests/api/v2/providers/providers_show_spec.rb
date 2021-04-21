@@ -58,6 +58,7 @@ describe "Providers API v2", type: :request do
             "email" => provider.email,
             "website" => provider.website,
             "ukprn" => provider.ukprn,
+            "urn" => provider.urn,
             "recruitment_cycle_year" => provider.recruitment_cycle.year,
             "accredited_bodies" => [{
               "provider_code" => accrediting_provider.provider_code,
