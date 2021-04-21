@@ -110,6 +110,8 @@ class Provider < ApplicationRecord
 
   validates :telephone, phone: { message: "^Enter a valid telephone number" }, if: :telephone_changed?
 
+  validates :ukprn, length: { is: 8, wrong_length: "^UKPRN must be 8 characters" }, allow_blank: true
+
   validates :train_with_us, presence: true, on: :update, if: :train_with_us_changed?
   validates :train_with_disability, presence: true, on: :update, if: :train_with_disability_changed?
 
