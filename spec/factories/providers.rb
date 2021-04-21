@@ -21,7 +21,6 @@ FactoryBot.define do
     website { Faker::Internet.url }
     provider_type { :lead_school }
     accrediting_provider { "N" }
-    urn { Faker::Number.number(digits: 5).to_s }
     region_code { "london" }
     organisations { [create(:organisation, :with_user)] }
     association :recruitment_cycle, strategy: :find_or_create
@@ -33,6 +32,10 @@ FactoryBot.define do
     trait :university do
       provider_type { :university }
       accrediting_provider { "Y" }
+    end
+
+    trait :urn do
+      urn { Faker::Number.number(digits: [5, 6].sample) }
     end
 
     trait :scitt do
