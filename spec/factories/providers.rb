@@ -20,6 +20,7 @@ FactoryBot.define do
     telephone { Faker::PhoneNumber.phone_number }
     website { Faker::Internet.url }
     provider_type { :lead_school }
+    urn { Faker::Number.number(digits: [5, 6].sample) }
     accrediting_provider { "N" }
     region_code { "london" }
     organisations { [create(:organisation, :with_user)] }
@@ -32,20 +33,19 @@ FactoryBot.define do
     trait :university do
       provider_type { :university }
       accrediting_provider { "Y" }
-    end
-
-    trait :urn do
-      urn { Faker::Number.number(digits: [5, 6].sample) }
+      urn { nil }
     end
 
     trait :scitt do
       provider_type { :scitt }
       accrediting_provider { "Y" }
+      urn { nil }
     end
 
     trait :accredited_body do
       provider_type { %i[university scitt].sample }
       accrediting_provider { "Y" }
+      urn { nil }
     end
 
     transient do

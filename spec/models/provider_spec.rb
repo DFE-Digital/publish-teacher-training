@@ -30,8 +30,8 @@ describe Provider, type: :model do
 
   describe "urn validations" do
     context "when provider_type is lead_schools" do
-      let(:invalid_provider) { build(:provider, provider_type: "Y", urn: "1") }
-      let(:valid) { build(:provider, provider_type: "Y", urn: "12345") }
+      let(:invalid_provider) { build(:provider, urn: "1") }
+      let(:valid) { build(:provider, urn: "12345") }
 
       it "validates a urn of length 5 - 6" do
         expect(invalid_provider).to_not be_valid
