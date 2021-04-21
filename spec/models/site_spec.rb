@@ -10,6 +10,7 @@ describe Site, type: :model do
   end
 
   it { is_expected.to validate_presence_of(:location_name) }
+  it { is_expected.to validate_length_of(:urn).is_at_least(5).is_at_most(6).with_message("^URN must be 5 or 6 characters") }
   it { is_expected.to validate_presence_of(:address1) }
   it { is_expected.to validate_presence_of(:postcode) }
   it { is_expected.to validate_uniqueness_of(:location_name).scoped_to(:provider_id) }

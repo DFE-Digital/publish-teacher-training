@@ -25,6 +25,8 @@ class Site < ApplicationRecord
                    inclusion: { in: POSSIBLE_CODES, message: "must be A-Z, 0-9 or -" },
                    presence: true
 
+  validates :urn, length: { in: 5..6, message: "^URN must be 5 or 6 characters" }, allow_blank: true
+
   acts_as_mappable lat_column_name: :latitude, lng_column_name: :longitude
 
   scope :not_geocoded, -> { where(latitude: nil, longitude: nil) }
