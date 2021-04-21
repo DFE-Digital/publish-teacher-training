@@ -1,6 +1,8 @@
 class CourseSearchService
   include ServicePattern
 
+  UNIVERSITY_LOCATION_AREA_RADIUS = 10
+
   def initialize(
     filter:,
     sort: nil,
@@ -28,36 +30,39 @@ class CourseSearchService
     scope = scope.changed_since(filter[:updated_since]) if updated_since_filter?
 
 
-    outer_scope = scope.includes(
+    scope = scope.includes(
       :enrichments,
       subjects: [:financial_incentive],
       site_statuses: [:site],
-      provider: %i[recruitment_cycle ucas_preferences])
+      provider: %i[recruitment_cycle ucas_preferences],
+)
 
 
     if provider_name.present?
-      outer_scope = outer_scope
-                      .accredited_body_order(provider_name)
+      scope = scope
+                      .select("course.*, provider.provider_name, #{Course.sanitize_sql(ordered_provider_name)}")
+                      .joins(:provider)
+                      .order(:ordered_provider_name)
                       .ascending_canonical_order
     elsif sort_by_provider_ascending?
-      outer_scope = outer_scope.ascending_canonical_order
-      outer_scope = outer_scope.select("provider.provider_name", "course.*")
+      scope = scope.ascending_canonical_order
+      scope = scope.select("provider.provider_name", "course.*")
     elsif sort_by_provider_descending?
-      outer_scope = outer_scope.descending_canonical_order
-      outer_scope = outer_scope.select("provider.provider_name", "course.*")
+      scope = scope.descending_canonical_order
+      scope = scope.select("provider.provider_name", "course.*")
     elsif sort_by_distance?
-      outer_scope = outer_scope.joins(courses_with_distance_from_origin)
-      outer_scope = outer_scope.joins(:provider)
-      outer_scope = outer_scope.select("course.*, distance, #{Course.sanitize_sql(distance_with_university_area_adjustment)}")
+      scope = scope.joins(courses_with_distance_from_origin)
+      scope = scope.joins(:provider)
+      scope = scope.select("course.*, distance, #{Course.sanitize_sql(distance_with_university_area_adjustment)}")
 
-      outer_scope = if expand_university?
-                      outer_scope.order(:boosted_distance)
-                    else
-                      outer_scope.order(:distance)
-                    end
+      scope = if expand_university?
+                scope.order(:boosted_distance)
+              else
+                scope.order(:distance)
+              end
     end
 
-    outer_scope
+    scope.distinct
   end
 
 private
@@ -70,13 +75,21 @@ private
 
   def distance_with_university_area_adjustment
     university_provider_type = Provider.provider_types[:university]
-    university_location_area_radius = 10
     <<~EOSQL.gsub(/\s+/m, " ").strip
       (CASE
         WHEN provider.provider_type = '#{university_provider_type}'
-          THEN (distance - #{university_location_area_radius})
+          THEN (distance - #{UNIVERSITY_LOCATION_AREA_RADIUS})
         ELSE distance
       END) as boosted_distance
+    EOSQL
+  end
+
+  def ordered_provider_name
+    <<~EOSQL.gsub(/\s+/m, " ").strip
+      (CASE
+        WHEN provider.provider_name = #{ActiveRecord::Base.connection.quote(provider_name)}
+        THEN '1'
+      END) AS ordered_provider_name
     EOSQL
   end
 

@@ -1,7 +1,6 @@
 require "rails_helper"
 
 RSpec.describe CourseSearchService do
-
   describe ".call" do
     let(:course_with_includes) { class_double(Course) }
     let(:scope) { class_double(Course) }
@@ -16,10 +15,9 @@ RSpec.describe CourseSearchService do
 
     let(:includes_arguments) {
       [:enrichments,
-        subjects: [:financial_incentive],
-        site_statuses: [:site],
-        provider: %i[recruitment_cycle ucas_preferences],
-      ]
+       subjects: [:financial_incentive],
+       site_statuses: [:site],
+       provider: %i[recruitment_cycle ucas_preferences]]
     }
 
     describe "when no scope is passed" do
@@ -28,7 +26,8 @@ RSpec.describe CourseSearchService do
 
       it "defaults to Course" do
         expect(Course).to receive(:includes).with(*includes_arguments).and_return(course_with_includes)
-        expect(subject).to eq(course_with_includes)
+        expect(course_with_includes).to receive(:distinct).and_return(distinct_scope)
+        expect(subject).to eq(distinct_scope)
       end
     end
 
@@ -44,7 +43,8 @@ RSpec.describe CourseSearchService do
           expect(scope).to receive(:includes).with(*includes_arguments).and_return(course_with_includes)
           expect(course_with_includes).to receive(:ascending_canonical_order).and_return(select_scope)
           expect(select_scope).to receive(:select).and_return(expected_scope)
-          expect(subject).to eq(expected_scope)
+          expect(expected_scope).to receive(:distinct).and_return(distinct_scope)
+          expect(subject).to eq(distinct_scope)
         end
       end
 
@@ -55,7 +55,8 @@ RSpec.describe CourseSearchService do
           expect(scope).to receive(:includes).with(*includes_arguments).and_return(course_with_includes)
           expect(course_with_includes).to receive(:descending_canonical_order).and_return(select_scope)
           expect(select_scope).to receive(:select).and_return(expected_scope)
-          expect(subject).to eq(expected_scope)
+          expect(expected_scope).to receive(:distinct).and_return(distinct_scope)
+          expect(subject).to eq(distinct_scope)
         end
       end
 
@@ -84,7 +85,8 @@ RSpec.describe CourseSearchService do
               expect(select_scope).to receive(:select).with(select_criteria)
                 .and_return(order_scope)
               expect(order_scope).to receive(:order).with(:distance).and_return(expected_scope)
-              expect(subject).to eq(expected_scope)
+              expect(expected_scope).to receive(:distinct).and_return(distinct_scope)
+              expect(subject).to eq(distinct_scope)
             end
           end
 
@@ -109,7 +111,8 @@ RSpec.describe CourseSearchService do
               expect(select_scope).to receive(:select).with(select_criteria)
                 .and_return(order_scope)
               expect(order_scope).to receive(:order).with(:distance).and_return(expected_scope)
-              expect(subject).to eq(expected_scope)
+              expect(expected_scope).to receive(:distinct).and_return(distinct_scope)
+              expect(subject).to eq(distinct_scope)
             end
           end
 
@@ -134,7 +137,8 @@ RSpec.describe CourseSearchService do
               expect(select_scope).to receive(:select).with(select_criteria)
                 .and_return(order_scope)
               expect(order_scope).to receive(:order).with(:boosted_distance).and_return(expected_scope)
-              expect(subject).to eq(expected_scope)
+              expect(expected_scope).to receive(:distinct).and_return(distinct_scope)
+              expect(subject).to eq(distinct_scope)
             end
           end
         end
@@ -144,7 +148,8 @@ RSpec.describe CourseSearchService do
         it "does not order" do
           expect(scope).not_to receive(:order)
           expect(scope).to receive(:includes).with(*includes_arguments).and_return(course_with_includes)
-          expect(subject).to eq(course_with_includes)
+          expect(course_with_includes).to receive(:distinct).and_return(distinct_scope)
+          expect(subject).to eq(distinct_scope)
         end
       end
     end
@@ -154,7 +159,8 @@ RSpec.describe CourseSearchService do
 
       it "returns all" do
         expect(scope).to receive(:includes).with(*includes_arguments).and_return(course_with_includes)
-        expect(subject).to eq(course_with_includes)
+        expect(course_with_includes).to receive(:distinct).and_return(distinct_scope)
+        expect(subject).to eq(distinct_scope)
       end
     end
 
@@ -168,7 +174,8 @@ RSpec.describe CourseSearchService do
         it "adds the within scope" do
           expect(scope).to receive(:within).with(radius, origin: [latitude, longitude]).and_return(course_ids_scope)
           expect(course_ids_scope).to receive(:includes).with(*includes_arguments).and_return(course_with_includes)
-          expect(subject).to eq(course_with_includes)
+          expect(course_with_includes).to receive(:distinct).and_return(distinct_scope)
+          expect(subject).to eq(distinct_scope)
         end
       end
 
@@ -187,14 +194,17 @@ RSpec.describe CourseSearchService do
       context "when provider name is present" do
         let(:filter) { { "provider.provider_name": "University of Warwick" } }
         let(:expected_scope) { double }
-        let(:order_scope) { double }
+        let(:provider_order_scope) { double }
 
         it "adds some scope" do
           expect(scope).to receive(:with_provider_name).and_return(course_ids_scope)
           expect(course_ids_scope).to receive(:includes).with(*includes_arguments).and_return(course_with_includes)
-          expect(course_with_includes).to receive(:accredited_body_order).and_return(order_scope)
-          expect(order_scope).to receive(:ascending_canonical_order).and_return(expected_scope)
-          expect(subject).to eq(expected_scope)
+          expect(course_with_includes).to receive(:select).and_return(joins_provider_scope)
+          expect(joins_provider_scope).to receive(:joins).with(:provider).and_return(order_scope)
+          expect(order_scope).to receive(:order).and_return(provider_order_scope)
+          expect(provider_order_scope).to receive(:ascending_canonical_order).and_return(expected_scope)
+          expect(expected_scope).to receive(:distinct).and_return(distinct_scope)
+          expect(subject).to eq(distinct_scope)
         end
       end
     end
@@ -205,7 +215,8 @@ RSpec.describe CourseSearchService do
       it "adds the changed_since scope" do
         expect(scope).to receive(:changed_since).and_return(course_ids_scope)
         expect(course_ids_scope).to receive(:includes).with(*includes_arguments).and_return(course_with_includes)
-        expect(subject).to eq(course_with_includes)
+        expect(course_with_includes).to receive(:distinct).and_return(distinct_scope)
+        expect(subject).to eq(distinct_scope)
       end
     end
 
@@ -216,7 +227,8 @@ RSpec.describe CourseSearchService do
         it "adds the with_salary scope" do
           expect(scope).to receive(:with_salary).and_return(course_ids_scope)
           expect(course_ids_scope).to receive(:includes).with(*includes_arguments).and_return(course_with_includes)
-          expect(subject).to eq(course_with_includes)
+          expect(course_with_includes).to receive(:distinct).and_return(distinct_scope)
+          expect(subject).to eq(distinct_scope)
         end
       end
 
@@ -226,7 +238,8 @@ RSpec.describe CourseSearchService do
         it "doesn't add the with_salary scope" do
           expect(scope).not_to receive(:with_salary)
           expect(scope).to receive(:includes).with(*includes_arguments).and_return(course_with_includes)
-          expect(subject).to eq(course_with_includes)
+          expect(course_with_includes).to receive(:distinct).and_return(distinct_scope)
+          expect(subject).to eq(distinct_scope)
         end
       end
     end
@@ -243,7 +256,8 @@ RSpec.describe CourseSearchService do
 
 
           expect(course_ids_scope).to receive(:includes).with(*includes_arguments).and_return(course_with_includes)
-          expect(subject).to eq(course_with_includes)
+          expect(course_with_includes).to receive(:distinct).and_return(distinct_scope)
+          expect(subject).to eq(distinct_scope)
         end
       end
 
@@ -253,7 +267,8 @@ RSpec.describe CourseSearchService do
         it "adds the with_qualifications scope" do
           expect(scope).not_to receive(:with_qualifications)
           expect(scope).to receive(:includes).with(*includes_arguments).and_return(course_with_includes)
-          expect(subject).to eq(course_with_includes)
+          expect(course_with_includes).to receive(:distinct).and_return(distinct_scope)
+          expect(subject).to eq(distinct_scope)
         end
       end
     end
@@ -265,7 +280,8 @@ RSpec.describe CourseSearchService do
         it "adds the with_vacancies scope" do
           expect(scope).to receive(:with_vacancies).and_return(course_ids_scope)
           expect(course_ids_scope).to receive(:includes).with(*includes_arguments).and_return(course_with_includes)
-          expect(subject).to eq(course_with_includes)
+          expect(course_with_includes).to receive(:distinct).and_return(distinct_scope)
+          expect(subject).to eq(distinct_scope)
         end
       end
 
@@ -275,7 +291,8 @@ RSpec.describe CourseSearchService do
         it "doesn't add the with_vacancies scope" do
           expect(scope).not_to receive(:with_vacancies)
           expect(scope).to receive(:includes).with(*includes_arguments).and_return(course_with_includes)
-          expect(subject).to eq(course_with_includes)
+          expect(course_with_includes).to receive(:distinct).and_return(distinct_scope)
+          expect(subject).to eq(distinct_scope)
         end
       end
 
@@ -285,7 +302,8 @@ RSpec.describe CourseSearchService do
         it "doesn't add the with_vacancies scope" do
           expect(scope).not_to receive(:with_vacancies)
           expect(scope).to receive(:includes).with(*includes_arguments).and_return(course_with_includes)
-          expect(subject).to eq(course_with_includes)
+          expect(course_with_includes).to receive(:distinct).and_return(distinct_scope)
+          expect(subject).to eq(distinct_scope)
         end
       end
     end
@@ -297,7 +315,8 @@ RSpec.describe CourseSearchService do
         it "adds the findable scope" do
           expect(scope).to receive(:findable).and_return(course_ids_scope)
           expect(course_ids_scope).to receive(:includes).with(*includes_arguments).and_return(course_with_includes)
-          expect(subject).to eq(course_with_includes)
+          expect(course_with_includes).to receive(:distinct).and_return(distinct_scope)
+          expect(subject).to eq(distinct_scope)
         end
       end
 
@@ -307,7 +326,8 @@ RSpec.describe CourseSearchService do
         it "doesn't add the findable scope" do
           expect(scope).not_to receive(:findable)
           expect(scope).to receive(:includes).with(*includes_arguments).and_return(course_with_includes)
-          expect(subject).to eq(course_with_includes)
+          expect(course_with_includes).to receive(:distinct).and_return(distinct_scope)
+          expect(subject).to eq(distinct_scope)
         end
       end
 
@@ -317,7 +337,8 @@ RSpec.describe CourseSearchService do
         it "doesn't add the findable scope" do
           expect(scope).not_to receive(:findable)
           expect(scope).to receive(:includes).with(*includes_arguments).and_return(course_with_includes)
-          expect(subject).to eq(course_with_includes)
+          expect(course_with_includes).to receive(:distinct).and_return(distinct_scope)
+          expect(subject).to eq(distinct_scope)
         end
       end
     end
@@ -329,7 +350,8 @@ RSpec.describe CourseSearchService do
         it "adds the with_study_modes scope" do
           expect(scope).to receive(:with_study_modes).with(%w(full_time)).and_return(course_ids_scope)
           expect(course_ids_scope).to receive(:includes).with(*includes_arguments).and_return(course_with_includes)
-          expect(subject).to eq(course_with_includes)
+          expect(course_with_includes).to receive(:distinct).and_return(distinct_scope)
+          expect(subject).to eq(distinct_scope)
         end
       end
 
@@ -339,7 +361,8 @@ RSpec.describe CourseSearchService do
         it "adds the with_study_modes scope" do
           expect(scope).to receive(:with_study_modes).with(%w(part_time)).and_return(course_ids_scope)
           expect(course_ids_scope).to receive(:includes).with(*includes_arguments).and_return(course_with_includes)
-          expect(subject).to eq(course_with_includes)
+          expect(course_with_includes).to receive(:distinct).and_return(distinct_scope)
+          expect(subject).to eq(distinct_scope)
         end
       end
 
@@ -349,7 +372,8 @@ RSpec.describe CourseSearchService do
         it "adds the with_study_modes scope with an array of both arguments" do
           expect(scope).to receive(:with_study_modes).with(%w(part_time full_time)).and_return(course_ids_scope)
           expect(course_ids_scope).to receive(:includes).with(*includes_arguments).and_return(course_with_includes)
-          expect(subject).to eq(course_with_includes)
+          expect(course_with_includes).to receive(:distinct).and_return(distinct_scope)
+          expect(subject).to eq(distinct_scope)
         end
       end
 
@@ -359,7 +383,8 @@ RSpec.describe CourseSearchService do
         it "doesn't add the scope" do
           expect(scope).not_to receive(:with_study_modes)
           expect(scope).to receive(:includes).with(*includes_arguments).and_return(course_with_includes)
-          expect(subject).to eq(course_with_includes)
+          expect(course_with_includes).to receive(:distinct).and_return(distinct_scope)
+          expect(subject).to eq(distinct_scope)
         end
       end
     end
@@ -371,7 +396,8 @@ RSpec.describe CourseSearchService do
         it "adds the with_funding_types scope" do
           expect(scope).to receive(:with_funding_types).with(%w(fee)).and_return(course_ids_scope)
           expect(course_ids_scope).to receive(:includes).with(*includes_arguments).and_return(course_with_includes)
-          expect(subject).to eq(course_with_includes)
+          expect(course_with_includes).to receive(:distinct).and_return(distinct_scope)
+          expect(subject).to eq(distinct_scope)
         end
       end
 
@@ -381,7 +407,8 @@ RSpec.describe CourseSearchService do
         it "adds the with_funding_types scope" do
           expect(scope).to receive(:with_funding_types).with(%w(salary)).and_return(course_ids_scope)
           expect(course_ids_scope).to receive(:includes).with(*includes_arguments).and_return(course_with_includes)
-          expect(subject).to eq(course_with_includes)
+          expect(course_with_includes).to receive(:distinct).and_return(distinct_scope)
+          expect(subject).to eq(distinct_scope)
         end
       end
 
@@ -391,7 +418,8 @@ RSpec.describe CourseSearchService do
         it "adds the with_funding_types scope" do
           expect(scope).to receive(:with_funding_types).with(%w(apprenticeship)).and_return(course_ids_scope)
           expect(course_ids_scope).to receive(:includes).with(*includes_arguments).and_return(course_with_includes)
-          expect(subject).to eq(course_with_includes)
+          expect(course_with_includes).to receive(:distinct).and_return(distinct_scope)
+          expect(subject).to eq(distinct_scope)
         end
       end
 
@@ -401,7 +429,8 @@ RSpec.describe CourseSearchService do
         it "adds the with_funding_types scope" do
           expect(scope).to receive(:with_funding_types).with(%w(fee salary apprenticeship)).and_return(course_ids_scope)
           expect(course_ids_scope).to receive(:includes).with(*includes_arguments).and_return(course_with_includes)
-          expect(subject).to eq(course_with_includes)
+          expect(course_with_includes).to receive(:distinct).and_return(distinct_scope)
+          expect(subject).to eq(distinct_scope)
         end
       end
 
@@ -411,7 +440,8 @@ RSpec.describe CourseSearchService do
         it "doesn't add the scope" do
           expect(scope).not_to receive(:with_funding_types)
           expect(scope).to receive(:includes).with(*includes_arguments).and_return(course_with_includes)
-          expect(subject).to eq(course_with_includes)
+          expect(course_with_includes).to receive(:distinct).and_return(distinct_scope)
+          expect(subject).to eq(distinct_scope)
         end
       end
     end
@@ -423,7 +453,8 @@ RSpec.describe CourseSearchService do
         it "adds the subject scope" do
           expect(scope).to receive(:with_subjects).with(%w(A1)).and_return(course_ids_scope)
           expect(course_ids_scope).to receive(:includes).with(*includes_arguments).and_return(course_with_includes)
-          expect(subject).to eq(course_with_includes)
+          expect(course_with_includes).to receive(:distinct).and_return(distinct_scope)
+          expect(subject).to eq(distinct_scope)
         end
       end
 
@@ -433,7 +464,8 @@ RSpec.describe CourseSearchService do
         it "adds the subject scope" do
           expect(scope).to receive(:with_subjects).with(%w(A1 B2)).and_return(course_ids_scope)
           expect(course_ids_scope).to receive(:includes).with(*includes_arguments).and_return(course_with_includes)
-          expect(subject).to eq(course_with_includes)
+          expect(course_with_includes).to receive(:distinct).and_return(distinct_scope)
+          expect(subject).to eq(distinct_scope)
         end
       end
 
@@ -443,7 +475,8 @@ RSpec.describe CourseSearchService do
         it "doesn't add the scope" do
           expect(scope).not_to receive(:with_subjects)
           expect(scope).to receive(:includes).with(*includes_arguments).and_return(course_with_includes)
-          expect(subject).to eq(course_with_includes)
+          expect(course_with_includes).to receive(:distinct).and_return(distinct_scope)
+          expect(subject).to eq(distinct_scope)
         end
       end
     end
@@ -455,7 +488,8 @@ RSpec.describe CourseSearchService do
         it "adds the with_send scope" do
           expect(scope).to receive(:with_send).and_return(course_ids_scope)
           expect(course_ids_scope).to receive(:includes).with(*includes_arguments).and_return(course_with_includes)
-          expect(subject).to eq(course_with_includes)
+          expect(course_with_includes).to receive(:distinct).and_return(distinct_scope)
+          expect(subject).to eq(distinct_scope)
         end
       end
 
@@ -465,7 +499,8 @@ RSpec.describe CourseSearchService do
         it "adds the with_send scope" do
           expect(scope).not_to receive(:with_send)
           expect(scope).to receive(:includes).with(*includes_arguments).and_return(course_with_includes)
-          expect(subject).to eq(course_with_includes)
+          expect(course_with_includes).to receive(:distinct).and_return(distinct_scope)
+          expect(subject).to eq(distinct_scope)
         end
       end
 
@@ -475,7 +510,8 @@ RSpec.describe CourseSearchService do
         it "doesn't add the with_send scope" do
           expect(scope).not_to receive(:with_send)
           expect(scope).to receive(:includes).with(*includes_arguments).and_return(course_with_includes)
-          expect(subject).to eq(course_with_includes)
+          expect(course_with_includes).to receive(:distinct).and_return(distinct_scope)
+          expect(subject).to eq(distinct_scope)
         end
       end
     end
@@ -488,7 +524,8 @@ RSpec.describe CourseSearchService do
         expect(scope).to receive(:with_salary).and_return(salary_scope)
         expect(salary_scope).to receive(:with_study_modes).with(%w(part_time)).and_return(course_ids_scope)
         expect(course_ids_scope).to receive(:includes).with(*includes_arguments).and_return(course_with_includes)
-        expect(subject).to eq(course_with_includes)
+        expect(course_with_includes).to receive(:distinct).and_return(distinct_scope)
+        expect(subject).to eq(distinct_scope)
       end
     end
   end

@@ -212,23 +212,6 @@ describe Course, type: :model do
       end
     end
 
-    describe "accredited_body_order" do
-      let(:provider) { create(:provider) }
-      let(:delivered_course) { create(:course, provider: provider) }
-      let(:accredited_course) { create(:course, accrediting_provider: provider) }
-
-      before do
-        accredited_course
-        delivered_course
-      end
-
-      let(:subject) { described_class.accredited_body_order(provider.provider_name) }
-
-      it "returns courses accredited after courses delivered" do
-        expect(subject).to eq([delivered_course, accredited_course])
-      end
-    end
-
     context "by name" do
       let(:course_a) do
         create(:course, name: "Course A")

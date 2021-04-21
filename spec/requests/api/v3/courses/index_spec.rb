@@ -534,7 +534,7 @@ describe "GET v3/courses" do
         another_provider_course
       end
 
-      it "its courses are returned first" do
+      it "returns own courses first" do
         get request_path
 
         json_response = JSON.parse(response.body)
