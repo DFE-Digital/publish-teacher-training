@@ -58,6 +58,7 @@ describe "PATCH /providers/:provider_code" do
       train_with_us: "train with us",
       train_with_disability: "train with disability",
       ukprn: "12345678",
+      urn: "12345",
     }
   end
   let(:permitted_params) do
@@ -74,6 +75,7 @@ describe "PATCH /providers/:provider_code" do
       train_with_us
       train_with_disability
       ukprn
+      urn
     ]
   end
 
@@ -103,6 +105,7 @@ describe "PATCH /providers/:provider_code" do
       expect(json_response).to have_attribute(:train_with_us).with_value("train with us")
       expect(json_response).to have_attribute(:train_with_disability).with_value("train with disability")
       expect(json_response).to have_attribute(:ukprn).with_value("12345678")
+      expect(json_response).to have_attribute(:urn).with_value("12345")
     end
   end
   describe "with unpermitted attributes on provider object" do
@@ -130,6 +133,7 @@ describe "PATCH /providers/:provider_code" do
     include_examples "does not allow assignment", :accrediting_provider, :accredited_body
     include_examples "does not allow assignment", :changed_at,           Time.zone.now
     include_examples "does not allow assignment", :ukprn, "1234567"
+    include_examples "does not allow assignment", :urn, "1234"
 
     let!(:next_cycle) { find_or_create(:recruitment_cycle, :next) }
     include_examples "does not allow assignment", :recruitment_cycle_id
@@ -171,6 +175,7 @@ describe "PATCH /providers/:provider_code" do
         train_with_us: nil,
         train_with_disability: nil,
         ukprn: nil,
+        urn: nil,
       }
     end
 

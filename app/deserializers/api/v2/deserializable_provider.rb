@@ -25,6 +25,7 @@ module API
         send_application_alerts
         application_alert_contact
         ukprn
+        urn
       ].freeze
 
       attributes(*PROVIDER_ATTRIBUTES)

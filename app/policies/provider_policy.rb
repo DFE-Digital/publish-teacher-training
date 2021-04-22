@@ -73,7 +73,7 @@ class ProviderPolicy
 private
 
   def user_provider_attributes
-    %i[
+    base_attributes = %i[
       train_with_us
       train_with_disability
       email
@@ -87,6 +87,7 @@ private
       region_code
       ukprn
     ]
+    provider.lead_school? ? base_attributes << :urn : base_attributes
   end
 
   def admin_provider_attributes
