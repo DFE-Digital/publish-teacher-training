@@ -20,8 +20,6 @@ class CourseSearchService
     scope = scope.with_vacancies if has_vacancies?
     scope = scope.findable if findable?
     scope = scope.with_study_modes(study_types) if study_types.any?
-
-
     scope = scope.with_subjects(subject_codes) if subject_codes.any?
     scope = scope.with_provider_name(provider_name) if provider_name.present?
     scope = scope.with_send if send_courses_filter?
