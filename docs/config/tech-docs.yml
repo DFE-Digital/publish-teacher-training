@@ -4,14 +4,14 @@ host: api.publish-teacher-training-courses.service.gov.uk
 # Header-related options
 show_govuk_logo: true
 service_name: Teacher Training Courses
-service_link: https://www.find-postgraduate-teacher-training.service.gov.uk/
+service_link: https://api.publish-teacher-training-courses.service.gov.uk/
 phase: Beta
 
 # Links to show on right-hand-side of header
 header_links:
   About: /
   Feedback: https://forms.gle/syqb5Fa9RSbo2WC1A
-  Support: /support.html
+  System Admin: /support/providers
 
 # Enables search functionality. This indexes pages only and is not recommended for single-page sites.
 enable_search: true

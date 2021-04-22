@@ -29,7 +29,7 @@ describe SessionsController, type: :controller do
       let(:user) { build(:user) }
       it "redirects to the root page" do
         request_destroy
-        expect(response).to redirect_to(support_path)
+        expect(response).to redirect_to(support_providers_path)
       end
     end
   end
@@ -62,7 +62,7 @@ describe SessionsController, type: :controller do
 
       it "redirects to the root page" do
         request_callback
-        expect(response).to redirect_to(support_path)
+        expect(response).to redirect_to(support_providers_path)
       end
     end
 
