@@ -106,7 +106,7 @@ class Provider < ApplicationRecord
 
   validates :email, email: true, if: :email_changed?
 
-  validates :provider_name, length: { maximum: 100 }, on: :update, if: RecruitmentCycle.current_recruitment_cycle
+  validates :provider_name, length: { maximum: 100 }, on: :update
 
   validates :urn, length: { in: 5..6 }, if: :lead_school?, allow_nil: true
 
