@@ -142,7 +142,8 @@ en:
               blank: "^Enter a course length"
         provider:
           attributes:
-            provider_name:     
+            provider_name:
+              taken: "You must enter a unique provider name"
               too_long: "Your provider name is too long, it must be fewer than 100 characters"
             email:
               blank: "^Enter email address"
