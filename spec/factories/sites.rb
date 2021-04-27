@@ -7,7 +7,7 @@ FactoryBot.define do
     address4 { Faker::Address.state }
     postcode { Faker::Address.postcode }
     region_code { "london" }
-    urn { Faker::Number.number(digits: 6) }
+    urn { Faker::Number.number(digits: [5, 6].sample) }
 
     # When we retrieve a random code (as Site#pick_next_available_code does),
     # there is the possibility we'll end up with this code duplicated when
