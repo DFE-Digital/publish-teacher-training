@@ -42,4 +42,6 @@ Sentry is an error monitoring tool, which has expanded to include performance mo
 
 ## Decision
 
-[There was an attempt](https://github.com/DFE-Digital/teacher-training-api/pull/1860) to use sentry, but we managed to fill up our quota in less than a day. As such, we have decided to continue using skylight for performance monitoring.
+[There was an attempt](https://github.com/DFE-Digital/teacher-training-api/pull/1860) to use sentry, but we managed to fill up our quota in less than a day, and while Sentry does offer tracing a subset of requests, this would only allow us to trace less than 1% of our requests.
+
+As such, we have decided to continue using skylight for performance monitoring.
