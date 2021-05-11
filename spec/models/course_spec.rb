@@ -30,7 +30,7 @@ describe Course, type: :model do
     it "sets changed_at to the current time" do
       Timecop.freeze do
         course.touch
-        expect(course.provider.changed_at).to eq Time.now.utc
+        expect(course.provider.changed_at).to be_within(1.second).of Time.now.utc
       end
     end
 
