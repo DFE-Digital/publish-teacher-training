@@ -128,22 +128,22 @@ describe "Courses API", type: :request do
 
       it "includes correct next link in response headers" do
         timestamp_of_first_course = 10.minutes.ago
-        Timecop.freeze(timestamp_of_first_course) do
-          first_course = create(:course,
-                                :infer_level,
-                                course_code: "LAST1",
-                                provider: provider)
+        first_course = create(:course,
+                              :infer_level,
+                              course_code: "LAST1",
+                              provider: provider)
 
+        Timecop.travel(timestamp_of_first_course) do
           create(:site_status, :published, course: first_course)
         end
 
         timestamp_of_last_course = 2.minutes.ago
 
+        last_course_in_results = create(:course,
+                                        :infer_level,
+                                        course_code: "LAST2",
+                                        provider: provider)
         Timecop.freeze(timestamp_of_last_course) do
-          last_course_in_results = create(:course,
-                                          :infer_level,
-                                          course_code: "LAST2",
-                                          provider: provider)
           create(:site_status, :published, course: last_course_in_results)
         end
 
@@ -243,11 +243,11 @@ describe "Courses API", type: :request do
             end
 
             timestamp_of_last_course = 2.minutes.ago
+            last_course_in_results = create(:course,
+                                            course_code: "LAST2",
+                                            age: timestamp_of_last_course,
+                                            provider: provider)
             Timecop.freeze(timestamp_of_last_course) do
-              last_course_in_results = create(:course,
-                                              course_code: "LAST2",
-                                              age: timestamp_of_last_course,
-                                              provider: provider)
               create(:site_status, :published, course: last_course_in_results)
             end
 
@@ -286,11 +286,11 @@ describe "Courses API", type: :request do
             end
 
             timestamp_of_last_course = 2.minutes.ago
+            last_course_in_results = create(:course,
+                                            course_code: "LAST2",
+                                            age: timestamp_of_last_course,
+                                            provider: provider)
             Timecop.freeze(timestamp_of_last_course) do
-              last_course_in_results = create(:course,
-                                              course_code: "LAST2",
-                                              age: timestamp_of_last_course,
-                                              provider: provider)
               create(:site_status, :published, course: last_course_in_results)
             end
             get "/api/v1/courses?recruitment_year=#{next_year}",

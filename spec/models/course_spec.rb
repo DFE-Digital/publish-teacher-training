@@ -24,6 +24,24 @@ describe Course, type: :model do
     it { should have_associated_audits }
   end
 
+  describe "#touch_provider" do
+    let(:course) { create(:course) }
+
+    it "sets changed_at to the current time" do
+      Timecop.freeze do
+        course.touch
+        expect(course.provider.changed_at).to eq Time.now.utc
+      end
+    end
+
+    it "leaves updated_at unchanged" do
+      timestamp = 1.hour.ago
+      course.provider.update updated_at: timestamp
+      course.touch
+      expect(course.provider.updated_at).to eq timestamp
+    end
+  end
+
   describe "associations" do
     it { should belong_to(:provider) }
     it do
