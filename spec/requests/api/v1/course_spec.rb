@@ -125,42 +125,6 @@ describe "Courses API", type: :request do
                               },
                             ])
       end
-
-      it "includes correct next link in response headers" do
-        timestamp_of_first_course = 10.minutes.ago
-        first_course = create(:course,
-                              :infer_level,
-                              course_code: "LAST1",
-                              provider: provider)
-
-        Timecop.travel(timestamp_of_first_course) do
-          create(:site_status, :published, course: first_course)
-        end
-
-        timestamp_of_last_course = 2.minutes.ago
-
-        last_course_in_results = create(:course,
-                                        :infer_level,
-                                        course_code: "LAST2",
-                                        provider: provider)
-        Timecop.freeze(timestamp_of_last_course) do
-          create(:site_status, :published, course: last_course_in_results)
-        end
-
-        get "/api/v1/#{current_year}/courses",
-            headers: { "HTTP_AUTHORIZATION" => credentials }
-
-        expect(response.headers).to have_key "Link"
-        url = url_for(
-          recruitment_year: current_year,
-          params: {
-            changed_since: timestamp_of_last_course.utc.strftime("%FT%T.%6NZ"),
-            per_page: 100,
-          },
-        )
-
-        expect(response.headers["Link"]).to match "#{url}; rel=\"next\""
-      end
     end
 
     describe "JSON body response" do
@@ -230,84 +194,12 @@ describe "Courses API", type: :request do
       end
 
       describe "response headers" do
-        context "when the recruitment year is in the path" do
-          it "includes the correct next link" do
-            course_time = 10.minutes.ago
-            first_course = create(:course,
-                                  course_code: "LAST1",
-                                  age: course_time,
-                                  provider: provider)
-
-            Timecop.freeze(course_time) do
-              create(:site_status, :published, course: first_course)
-            end
-
-            timestamp_of_last_course = 2.minutes.ago
-            last_course_in_results = create(:course,
-                                            course_code: "LAST2",
-                                            age: timestamp_of_last_course,
-                                            provider: provider)
-            Timecop.freeze(timestamp_of_last_course) do
-              create(:site_status, :published, course: last_course_in_results)
-            end
-
-            get "/api/v1/#{current_year}/courses",
-                headers: { "HTTP_AUTHORIZATION" => credentials },
-                params: { changed_since: 30.minutes.ago.utc.iso8601 }
-
-
-            expect(response.headers).to have_key "Link"
-            url = url_for(
-              recruitment_year: current_year,
-              params: {
-                changed_since: timestamp_of_last_course.utc.strftime("%FT%T.%6NZ"),
-                per_page: 100,
-              },
-            )
-            expect(response.headers["Link"]).to match "#{url}; rel=\"next\""
-          end
-        end
-
         context "when the recruitment year is in the params" do
           # We want to keep legacy support for year as a param in order to
            # maintain backwards compatibility. This will avoid breaking calls
            # from UCAS should they use this older style. The next links we
            # generate used to were of this style, and the UCAS systems
            # were making requests in this style.
-          it "includes the correct next link" do
-            course_time = 10.minutes.ago
-            first_course = create(:course,
-                                  course_code: "LAST1",
-                                  age: course_time,
-                                  provider: provider)
-
-            Timecop.freeze(course_time) do
-              create(:site_status, :published, course: first_course)
-            end
-
-            timestamp_of_last_course = 2.minutes.ago
-            last_course_in_results = create(:course,
-                                            course_code: "LAST2",
-                                            age: timestamp_of_last_course,
-                                            provider: provider)
-            Timecop.freeze(timestamp_of_last_course) do
-              create(:site_status, :published, course: last_course_in_results)
-            end
-            get "/api/v1/courses?recruitment_year=#{next_year}",
-                headers: { "HTTP_AUTHORIZATION" => credentials },
-                params: { changed_since: 30.minutes.ago.utc.iso8601 }
-
-
-            expect(response.headers).to have_key "Link"
-            url = url_for(
-              recruitment_year: next_year,
-              params: {
-                changed_since: timestamp_of_last_course.utc.strftime("%FT%T.%6NZ"),
-                per_page: 100,
-              },
-            )
-            expect(response.headers["Link"]).to match "#{url}; rel=\"next\""
-          end
 
           it "returns bad_request for previous year" do
             get "/api/v1/courses?recruitment_year=#{previous_year}",
