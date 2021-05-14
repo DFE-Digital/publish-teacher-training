@@ -22,9 +22,12 @@ describe "mcb courses touch" do
   let(:rolled_over_course) { create(:course, provider: rolled_over_provider) }
 
   context "when the recruitment year is unspecified" do
-    it "updates the course updated_at for the current recruitment cycle" do
+    before do
       rolled_over_course
+      course
+    end
 
+    it "updates the course updated_at for the current recruitment cycle" do
       Timecop.freeze(Time.zone.today + 1) do
         execute_touch(arguments: [rolled_over_provider.provider_code, rolled_over_course.course_code])
 
@@ -36,8 +39,6 @@ describe "mcb courses touch" do
     end
 
     it "updates the course changed_at" do
-      rolled_over_course
-
       Timecop.freeze(Time.zone.today + 1) do
         execute_touch(arguments: [rolled_over_provider.provider_code, rolled_over_course.course_code])
 

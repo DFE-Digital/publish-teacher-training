@@ -2,6 +2,7 @@ class Course < ApplicationRecord
   include Discard::Model
   include WithQualifications
   include ChangedAt
+  include TouchProvider
   include Courses::EditOptions
   include StudyModeVacancyMapper
   include TimeFormat
