@@ -30,13 +30,6 @@ jobs:
         echo "SHA_TAG=paas-$GIT_SHA_SHORT" >> $GITHUB_ENV
         echo "BRANCH_TAG=paas-$GIT_BRANCH" >> $GITHUB_ENV
 
-    - name: Login to DockerHub
-      if: github.actor != 'dependabot[bot]'
-      uses: docker/login-action@v1
-      with:
-        username: ${{ secrets.DOCKERHUB_USERNAME }}
-        password: ${{ secrets.DOCKERHUB_PERSONAL_ACCESS_TOKEN }}
-
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v1
 
@@ -44,8 +37,8 @@ jobs:
       uses: docker/build-push-action@v2.1.0
       with:
         tags: ${{ env.DOCKER_IMAGE}}-middleman:${{ env.BRANCH_TAG }}
-        push: ${{ github.actor != 'dependabot[bot]' }}
-        load: ${{ github.actor == 'dependabot[bot]' }}
+        push: false
+        load: true
         target: middleman
         cache-from: |
           ${{ env.DOCKER_IMAGE}}-middleman:master
@@ -58,8 +51,8 @@ jobs:
         tags: |
           ${{ env.DOCKER_IMAGE}}:${{ env.BRANCH_TAG }}
           ${{ env.DOCKER_IMAGE}}:${{ env.SHA_TAG }}
-        push: ${{ github.actor != 'dependabot[bot]' }}
-        load: ${{ github.actor == 'dependabot[bot]' }}
+        push: false
+        load: true
         cache-from: |
           ${{ env.DOCKER_IMAGE}}:${{ env.BRANCH_TAG }}
           ${{ env.DOCKER_IMAGE}}-middleman:master
@@ -88,7 +81,7 @@ jobs:
         docker-compose exec -T web /bin/sh -c 'bundle exec rake "parallel:spec[,, -O .azure_parallel]"'
       env:
         GIT_BRANCH: ${{env.BRANCH_TAG}}
-        CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
+        CC_TEST_REPORTER_ID: ${{ secrets.EMPTY }}
 
     - name: Trigger Deployment
       if: ${{ success() && github.ref == 'refs/heads/master' }}
