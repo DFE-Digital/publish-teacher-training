@@ -34,7 +34,7 @@ jobs:
       - id:   select-environments
         uses: DFE-Digital/bat-infrastructure/actions/prepare-environment-matrix@main
 
-      - uses: softprops/turnstyle@v1
+      - uses: DFE-Digital/github-actions/turnstyle@master
         name: Wait for other inprogress deployment runs
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
