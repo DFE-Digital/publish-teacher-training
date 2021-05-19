@@ -30,7 +30,7 @@ variable key_vault_app_secret_name {}
 
 variable key_vault_infra_secret_name {}
 
-variable azure_credentials {}
+variable azure_credentials { default = null }
 
 variable statuscake_alerts {
   type    = map
@@ -47,5 +47,5 @@ locals {
     username = local.infra_secrets.DOCKERHUB_USERNAME
     password = local.infra_secrets.DOCKERHUB_PASSWORD
   }
-  azure_credentials = jsondecode(var.azure_credentials)
+  azure_credentials = try(jsondecode(var.azure_credentials), null)
 }
