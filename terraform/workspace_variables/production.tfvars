@@ -31,5 +31,5 @@ statuscake_alerts = {
     contact_group  = [151103]
     trigger_rate   = 0
     node_locations = ["UKINT", "UK1", "MAN1", "MAN5", "DUB2"]
-  }  
+  }
 }

@@ -71,6 +71,13 @@ production: ## Set DEPLOY_ENV to production
 	$(eval space=bat-prod)
 	$(eval paas_env=prod)
 
+.PHONY: rollover
+rollover: ## Set DEPLOY_ENV to rollover
+	$(eval DEPLOY_ENV=rollover)
+	$(eval AZ_SUBSCRIPTION=s121-findpostgraduateteachertraining-test)
+	$(eval space=bat-staging)
+	$(eval paas_env=rollover)
+
 deploy-init:
 	$(eval export TF_DATA_DIR=./terraform/.terraform)
 	$(if $(IMAGE_TAG), , $(error Missing environment variable "IMAGE_TAG"))
