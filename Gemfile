@@ -7,7 +7,7 @@ ruby "2.7.2"
 gem "rails", "6.1.3.2"
 
 # Transpile app-like JavaScript. Read more: https://github.com/rails/webpacker
-gem "webpacker", "~> 5.3"
+gem "webpacker", "~> 5.4"
 
 # Use PostgreSQL as the database for Active Record
 gem "pg"
