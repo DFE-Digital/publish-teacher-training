@@ -40,16 +40,24 @@ updates/refactoring work.
 
 ## On Rollover launch date
 
-1. Create a new `RecruitmentCycle` with the correct `application_start_date` and
-  `application_end_date` by running `rake rollover:new_recruitment_cycle`.
-2. Rollover providers by running `rake rollover:providers`.
-3. Complete the steps on Publish
+1. Create a new `RecruitmentCycle` with the correct `year`,
+  `application_start_date` and `application_end_date` by running:
+
+    **`rake "rollover:new_recruitment_cycle[YYYY YYYY-MM-DD YYYY-MM-DD]"`**
+
+    (argument order: `year`, `application_start_date`, `application_end_date`)
+
+2. Rollover providers by running:
+
+    **`rake rollover:providers`**
+
+3. Complete the steps on Publish. You'll need to have run the above rake tasks
+  before making any setting changes on Publish.
 
 ## During Rollover
 
 1. Create an **End Rollover PR** including the following code changes:
     - Increment setting `current_recruitment_cycle_year`
-    - Increment setting `allocation_cycle_year`
     - Increment the route constraint in `scope "/(:recruitment_year)"`
 
 ## On Rollover end date
