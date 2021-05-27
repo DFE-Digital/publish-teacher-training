@@ -37,6 +37,9 @@ describe API::V2::SerializableProvider do
   it { should have_attribute(:send_application_alerts).with_value(provider.ucas_preferences.send_application_alerts) }
   it { should have_attribute(:train_with_us).with_value(provider.train_with_us) }
   it { should have_attribute(:train_with_disability).with_value(provider.train_with_disability) }
+  it { should have_attribute(:can_sponsor_student_visa).with_value(provider.can_sponsor_student_visa) }
+  it { should have_attribute(:can_sponsor_skilled_worker_visa).with_value(provider.can_sponsor_skilled_worker_visa) }
+
 
   it do
     should have_attribute(:accredited_bodies).with_value([

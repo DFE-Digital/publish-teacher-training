@@ -6,7 +6,8 @@ module API
       attributes :provider_code, :provider_name, :provider_type, :accredited_body?, :can_add_more_sites?,
                  :accredited_bodies, :train_with_us, :train_with_disability,
                  :latitude, :longitude, :address1, :address2, :address3, :address4,
-                 :postcode, :region_code, :telephone, :email, :website, :ukprn, :urn
+                 :postcode, :region_code, :telephone, :email, :website, :ukprn, :urn,
+                 :can_sponsor_skilled_worker_visa, :can_sponsor_student_visa
 
       attribute :recruitment_cycle_year do
         @object.recruitment_cycle.year
