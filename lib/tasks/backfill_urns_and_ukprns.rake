@@ -16,4 +16,3 @@ task backfill_provider_sites_with_urn: :environment do
     site.update(urn: row["establishment_urn"]) if site
   end
 end
-
