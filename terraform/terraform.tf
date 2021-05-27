@@ -44,7 +44,7 @@ module paas {
   source = "./modules/paas"
 
   cf_space                  = var.cf_space
-  app_environment           = var.paas_app_environment != "review" ? var.paas_app_environment : "pr-${var.paas_web_app_host_name}"
+  app_environment           = var.paas_app_environment
   docker_image              = var.paas_docker_image
   docker_credentials        = local.docker_credentials
   logstash_url              = local.infra_secrets.LOGSTASH_URL
