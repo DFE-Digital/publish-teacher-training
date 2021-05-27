@@ -1,0 +1,54 @@
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds-from-desktop">
+    <%= form_with model: [:support, @provider], local: true do |f| %>
+
+      <%= f.govuk_error_summary %>
+
+      <fieldset class="govuk-fieldset">
+        <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+          <h1 class="govuk-fieldset__heading">Add a new provider</h1>
+        </legend>
+
+
+        <%= f.govuk_text_field :provider_name, label: { text: "Provider name", size: "s" } %>
+        <%= f.govuk_text_field :provider_code, label: { text: "Provider code", size: "s" } %>
+        <%= f.govuk_collection_select :recruitment_cycle_id,
+                  RecruitmentCycle.all,
+                  :id,
+                  :year,
+                  label: { text: "Recruitment cycle", size: "s" } %>
+
+        <%= f.govuk_email_field :email, label: { text: "Provider email", size: "s" } %>
+        <%= f.govuk_phone_field :telephone, label: { text: "Provider phone", size: "s" } %>
+      </fieldset>
+
+      <fieldset class="govuk-fieldset">
+        <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+          <h2 class="govuk-fieldset__heading">Organisation</h2>
+        </legend>
+        <%= f.fields_for :organisations do |organisation| %>
+          <%= organisation.govuk_text_field :name, label: { text: "Organisation name", size: "s" } %>
+        <% end %>
+      </fieldset>
+
+      <fieldset class="govuk-fieldset">
+        <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+          <h2 class="govuk-fieldset__heading">Site</h2>
+        </legend>
+        <%= f.fields_for :sites do |site| %>
+          <%= site.govuk_text_field :code, label: { text: "Site code", size: "s" } %>
+          <%= site.govuk_text_field :location_name, label: { text: "Site location name", size: "s" } %>
+          <%= site.govuk_text_field :address1, label: { text: "Site address1", size: "s" } %>
+          <%= site.govuk_text_field :address2, label: { text: "Site address2", size: "s" } %>
+          <%= site.govuk_text_field :address3, label: { text: "Site address3", size: "s" } %>
+          <%= site.govuk_text_field :address4, label: { text: "Site address4", size: "s" } %>
+          <%= site.govuk_text_field :postcode, label: { text: "Site postcode", size: "s" } %>
+        <% end %>
+      </fieldset>
+
+      <%= f.govuk_submit %>
+    <% end %>
+
+    <%= govuk_link_to(t("cancel"), support_providers_path) %>
+  </div>
+</div>

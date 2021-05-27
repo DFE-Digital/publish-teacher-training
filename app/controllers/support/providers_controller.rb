@@ -4,6 +4,21 @@ module Support
       @providers = filtered_providers.page(params[:page] || 1)
     end
 
+    def new
+      @provider = Provider.new(recruitment_cycle: RecruitmentCycle.current_recruitment_cycle)
+      @provider.sites.build
+      @provider.organisations.build
+    end
+
+    def create
+      @provider = Provider.new(create_provider_params)
+      if @provider.save
+        redirect_to support_provider_path(provider), flash: { success: "Provider was successfully created" }
+      else
+        render :new
+      end
+    end
+
     def show
       provider
       render layout: "provider_record"
@@ -14,7 +29,7 @@ module Support
     end
 
     def update
-      if provider.update(provider_params)
+      if provider.update(update_provider_params)
         redirect_to support_provider_path(provider)
       else
         render :edit
@@ -48,8 +63,24 @@ module Support
       @provider ||= Provider.find(params[:id])
     end
 
-    def provider_params
+    def update_provider_params
       params.require(:provider).permit(:provider_name)
+    end
+
+    def create_provider_params
+      params.require(:provider).permit(:provider_name,
+                                       :provider_code,
+                                       :recruitment_cycle_id,
+                                       :email,
+                                       :telephone, sites_attributes: %i[id
+                                                                        code
+                                                                        location_name
+                                                                        address1
+                                                                        address2
+                                                                        address3
+                                                                        address4
+                                                                        postcode],
+        organisations_attributes: %i[id name])
     end
   end
 end
