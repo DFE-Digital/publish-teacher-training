@@ -7,7 +7,7 @@ paas_web_app_instances     = 1
 paas_web_app_memory        = 512
 paas_worker_app_instances  = 1
 paas_worker_app_memory     = 512
-paas_postgres_service_plan = "tiny-unencrypted-11"
+paas_postgres_service_plan = "small-11"
 paas_redis_service_plan    = "micro-5_x"
 
 # KeyVault
