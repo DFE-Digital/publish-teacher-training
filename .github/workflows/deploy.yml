@@ -39,6 +39,7 @@ jobs:
       environments: ${{ steps.select-environments.outputs.environments || steps.set-pr-environment.outputs.environments }}
     steps:
       - id:   select-environments
+        if:   github.event.inputs.pr == ''
         uses: DFE-Digital/bat-infrastructure/actions/prepare-environment-matrix@main
 
       - id:  set-pr-environment
