@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_04_20_134402) do
+ActiveRecord::Schema.define(version: 2021_05_27_145331) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
@@ -246,6 +246,8 @@ ActiveRecord::Schema.define(version: 2021_04_20_134402) do
     t.float "longitude"
     t.string "ukprn"
     t.string "urn"
+    t.boolean "can_sponsor_skilled_worker_visa"
+    t.boolean "can_sponsor_student_visa"
     t.index ["changed_at"], name: "index_provider_on_changed_at", unique: true
     t.index ["discarded_at"], name: "index_provider_on_discarded_at"
     t.index ["latitude", "longitude"], name: "index_provider_on_latitude_and_longitude"
