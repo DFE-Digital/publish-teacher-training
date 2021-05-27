@@ -9,6 +9,7 @@ resource cloudfoundry_app web_app {
   docker_image               = var.docker_image
   strategy                   = local.deployment_strategy
   timeout                    = 180
+  stopped                    = var.web_app_stopped
   environment                = var.app_environment_variables
   docker_credentials         = var.docker_credentials
 
@@ -40,6 +41,7 @@ resource cloudfoundry_app worker_app {
   command              = local.worker_app_start_command
   timeout              = 180
   health_check_timeout = 180
+  stopped              = var.worker_app_stopped
   environment          = var.app_environment_variables
   docker_credentials   = var.docker_credentials
 

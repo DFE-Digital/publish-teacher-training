@@ -10,6 +10,10 @@ variable worker_app_instances {}
 
 variable worker_app_memory {}
 
+variable web_app_stopped { default = false }
+
+variable worker_app_stopped { default = false }
+
 variable postgres_service_plan {}
 
 variable redis_service_plan {}

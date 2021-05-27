@@ -53,6 +53,8 @@ module paas {
   web_app_instances         = var.paas_web_app_instances
   worker_app_instances      = var.paas_worker_app_instances
   worker_app_memory         = var.paas_worker_app_memory
+  web_app_stopped           = var.paas_web_app_stopped
+  worker_app_stopped        = var.paas_worker_app_stopped
   postgres_service_plan     = var.paas_postgres_service_plan
   redis_service_plan        = var.paas_redis_service_plan
   app_environment_variables = local.paas_app_environment_variables
