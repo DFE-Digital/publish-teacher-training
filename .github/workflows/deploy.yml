@@ -68,7 +68,6 @@ jobs:
           step: start
           token: ${{ secrets.GITHUB_TOKEN }}
           env:   ${{ matrix.environment }}
-          ref:   ${{ github.event.inputs.sha }}
 
       - name: Checkout
         uses: actions/checkout@v2
@@ -153,9 +152,9 @@ jobs:
           step:   finish
           token:  ${{ secrets.GITHUB_TOKEN }}
           env:    ${{ matrix.environment }}
-          ref:    ${{ github.event.inputs.sha }}
           status: ${{ job.status }}
           deployment_id: ${{ steps.deployment.outputs.deployment_id }}
+          env_url: ${{ format('https://teacher-training-api-{0}.london.cloudapps.digital', matrix.environment) }}
 
       - name: Alert on Failure
         if: ${{ failure() && github.ref == 'refs/heads/master' }}
