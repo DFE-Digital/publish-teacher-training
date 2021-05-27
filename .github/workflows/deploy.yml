@@ -45,7 +45,7 @@ jobs:
         if:  github.event.inputs.pr != ''
         run: echo "::set-output name=environments::$PR"
         env:
-          PR: '{"environment": ["${{ ${{ github.event.inputs.pr }}"]}'
+          PR: '{"environment": ["${{ github.event.inputs.pr }}"]}'
 
       - uses: DFE-Digital/github-actions/turnstyle@master
         name: Wait for other inprogress deployment runs
