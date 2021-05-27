@@ -62,11 +62,11 @@ jobs:
     steps:
       - name: Start ${{ matrix.environment }} Deployment
         uses: bobheadxi/deployments@v0.4.3
-        id: deployment
+        id:   deployment
         with:
           step: start
           token: ${{ secrets.GITHUB_TOKEN }}
-          env:   ${{ matrix.pull_request_number || matrix.environment }}
+          env:   ${{ matrix.environment }}
           ref:   ${{ github.event.inputs.sha }}
 
       - name: Checkout
@@ -86,11 +86,12 @@ jobs:
           echo "TF_VAR_key_vault_name=$TF_VAR_key_vault_name" >> $GITHUB_ENV
           echo "TF_VAR_key_vault_app_secret_name=$TF_VAR_key_vault_app_secret_name" >> $GITHUB_ENV
           echo "TF_VAR_key_vault_infra_secret_name=$TF_VAR_key_vault_infra_secret_name" >> $GITHUB_ENV
-          if [ "${{ matrix.environment }}" = "review" ]; then 
+          if [ -z "${{ matrix.environment }}" ]; then 
             PR_NUMBER=${{ github.event.inputs.pr }}
             echo "PR_NUMBER=$PR_NUMBER" >> $GITHUB_ENV; 
+            echo "DEPLOY_ENV=review" >> $GITHUB_ENV
             echo "BACKEND_KEY=-backend-config=key=pr-$PR_NUMBER.tfstate" >> $GITHUB_ENV; 
-            echo "TF_VAR_paas_web_app_host_name=pr-$PR_NUMBER" >> $GITHUB_ENV; 
+            echo "TF_VAR_paas_web_app_host_name=$PR_NUMBER" >> $GITHUB_ENV; 
           fi;
         env:
           DOCKER_IMAGE: ${{ format('dfedigital/teacher-training-api:paas-{0}', github.event.inputs.sha) }}
@@ -120,7 +121,7 @@ jobs:
           TF_VAR_azure_credentials:   ${{ secrets[format('AZURE_CREDENTIALS_{0}', env.DEPLOY_ENV)] }}
 
       - name: Trigger ${{ env.DEPLOY_ENV }} Smoke Tests
-        if: matrix.environment != 'review'
+        if:   env.DEPLOY_ENV != 'review'
         uses: benc-uk/workflow-dispatch@v1
         with:
           workflow: Smoke Tests
@@ -128,8 +129,8 @@ jobs:
           inputs:   '{"environment": "${{ env.DEPLOY_ENV }}"}'
 
       - name: Wait for smoke tests
-        id: wait_for_smoke_tests
-        if: matrix.environment != 'review'
+        id:   wait_for_smoke_tests
+        if:   env.DEPLOY_ENV != 'review'
         uses: fountainhead/action-wait-for-check@v1.0.0
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -139,16 +140,16 @@ jobs:
           intervalSeconds: 15
 
       - name: Stop when smoke tests fail
-        if: ${{ matrix.environment != 'review' && steps.wait_for_smoke_tests.outputs.conclusion == 'failure' }}
+        if:  ${{ env.DEPLOY_ENV != 'review' && steps.wait_for_smoke_tests.outputs.conclusion == 'failure' }}
         run: exit 1
 
       - name: Update ${{ matrix.environment }} status
-        if: ${{ always() }}
+        if:   ${{ always() }}
         uses: bobheadxi/deployments@v0.4.3
         with:
           step:   finish
           token:  ${{ secrets.GITHUB_TOKEN }}
-          env:    ${{ matrix.pull_request_number || matrix.environment }}
+          env:    ${{ matrix.environment }}
           ref:    ${{ github.event.inputs.sha }}
           status: ${{ job.status }}
           deployment_id: ${{ steps.deployment.outputs.deployment_id }}
