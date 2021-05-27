@@ -88,8 +88,11 @@ jobs:
             echo "DEPLOY_ENV=review" >> $GITHUB_ENV
             echo "BACKEND_KEY=-backend-config=key=pr-$PR_NUMBER.tfstate" >> $GITHUB_ENV; 
             echo "TF_VAR_paas_web_app_host_name=$PR_NUMBER" >> $GITHUB_ENV; 
+            . terraform/workspace_variables/review.sh
+          else
+            . terraform/workspace_variables/$DEPLOY_ENV.sh
           fi;
-          . terraform/workspace_variables/$DEPLOY_ENV.sh
+
           echo "TF_VAR_key_vault_name=$TF_VAR_key_vault_name" >> $GITHUB_ENV
           echo "TF_VAR_key_vault_app_secret_name=$TF_VAR_key_vault_app_secret_name" >> $GITHUB_ENV
           echo "TF_VAR_key_vault_infra_secret_name=$TF_VAR_key_vault_infra_secret_name" >> $GITHUB_ENV          
