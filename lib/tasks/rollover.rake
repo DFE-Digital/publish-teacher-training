@@ -7,6 +7,6 @@ namespace :rollover do
 
   desc "Create a new recruitment cycle"
   task :create_recruitment_cycle, %i[year application_start_date application_end_date] => :environment do |_task, args|
-    RecruitmentCycleCreationService.call(year: args[:year], application_start_date: args[:application_start_date], application_end_date: args[:application_end_date])
+    RecruitmentCycleCreationService.call(year: args[:year], application_start_date: args[:application_start_date], application_end_date: args[:application_end_date], summary: true)
   end
 end
