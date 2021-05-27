@@ -187,7 +187,7 @@ describe "/api/v2/users", type: :request do
 
             it "checks the email is present" do
               expect(response.body).to include("Invalid email")
-              expect(response.body).to include("Email can't be blank")
+              expect(response.body).to include("Enter the user's email address")
             end
           end
         end
