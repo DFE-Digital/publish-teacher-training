@@ -82,7 +82,7 @@ jobs:
         run: |
           echo "DOCKER_IMAGE=$DOCKER_IMAGE" >> $GITHUB_ENV
           echo "DEPLOY_ENV=$DEPLOY_ENV" >> $GITHUB_ENV
-          if [ -z "${{ matrix.environment }}" ]; then 
+          if [ ! -z "${{ github.event.inputs.pr }}" ]; then 
             PR_NUMBER=${{ github.event.inputs.pr }}
             echo "PR_NUMBER=$PR_NUMBER" >> $GITHUB_ENV; 
             echo "DEPLOY_ENV=review" >> $GITHUB_ENV
