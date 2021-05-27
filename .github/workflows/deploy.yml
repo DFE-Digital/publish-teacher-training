@@ -45,7 +45,7 @@ jobs:
         if:  github.event.inputs.pr != ''
         run: echo "::set-output name=environments::$PR"
         env:
-          PR: '{"environment": ["${{ github.event.inputs.pr }}"]}'
+          PR: '{"environment": ["review"], "include": [{"environment": "review","pull_request_number": "${{ github.event.inputs.pr }}"}]}'
 
       - uses: DFE-Digital/github-actions/turnstyle@master
         name: Wait for other inprogress deployment runs
@@ -66,7 +66,7 @@ jobs:
         with:
           step: start
           token: ${{ secrets.GITHUB_TOKEN }}
-          env:   ${{ matrix.environment }}
+          env:   ${{ matrix.pull_request_number || matrix.environment }}
           ref:   ${{ github.event.inputs.sha }}
 
       - name: Checkout
@@ -86,6 +86,7 @@ jobs:
           echo "TF_VAR_key_vault_name=$TF_VAR_key_vault_name" >> $GITHUB_ENV
           echo "TF_VAR_key_vault_app_secret_name=$TF_VAR_key_vault_app_secret_name" >> $GITHUB_ENV
           echo "TF_VAR_key_vault_infra_secret_name=$TF_VAR_key_vault_infra_secret_name" >> $GITHUB_ENV
+          if [ "${{ matrix.environment }}" = "review" ]; then echo "BACKEND_KEY=-backend-config=key=pr-${{ matrix.pull_request_number }}.terraform.tfstate" >> $GITHUB_ENV; fi;
         env:
           DOCKER_IMAGE: ${{ format('dfedigital/teacher-training-api:paas-{0}', github.event.inputs.sha) }}
           DEPLOY_ENV: ${{ matrix.environment }}
@@ -105,7 +106,7 @@ jobs:
       - name: Terraform init, plan & apply
         working-directory: terraform
         run: |
-            terraform init -backend-config workspace_variables/${{ env.DEPLOY_ENV }}_backend.tfvars
+            terraform init -backend-config workspace_variables/${{ env.DEPLOY_ENV }}_backend.tfvars $BACKEND_KEY
             terraform plan -var-file workspace_variables/${{ env.DEPLOY_ENV }}.tfvars -out tfplan
             terraform apply -auto-approve -input=false "tfplan"
         env:
@@ -114,6 +115,7 @@ jobs:
           TF_VAR_azure_credentials:   ${{ secrets[format('AZURE_CREDENTIALS_{0}', env.DEPLOY_ENV)] }}
 
       - name: Trigger ${{ env.DEPLOY_ENV }} Smoke Tests
+        if: matrix.environment != 'review'
         uses: benc-uk/workflow-dispatch@v1
         with:
           workflow: Smoke Tests
@@ -122,6 +124,7 @@ jobs:
 
       - name: Wait for smoke tests
         id: wait_for_smoke_tests
+        if: matrix.environment != 'review'
         uses: fountainhead/action-wait-for-check@v1.0.0
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -131,7 +134,7 @@ jobs:
           intervalSeconds: 15
 
       - name: Stop when smoke tests fail
-        if: steps.wait_for_smoke_tests.outputs.conclusion == 'failure'
+        if: ${{ matrix.environment != 'review' && steps.wait_for_smoke_tests.outputs.conclusion == 'failure' }}
         run: exit 1
 
       - name: Update ${{ matrix.environment }} status
@@ -140,7 +143,7 @@ jobs:
         with:
           step:   finish
           token:  ${{ secrets.GITHUB_TOKEN }}
-          env:    ${{ matrix.environment }}
+          env:    ${{ matrix.pull_request_number || matrix.environment }}
           ref:    ${{ github.event.inputs.sha }}
           status: ${{ job.status }}
           deployment_id: ${{ steps.deployment.outputs.deployment_id }}
