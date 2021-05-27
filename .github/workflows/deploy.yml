@@ -45,7 +45,7 @@ jobs:
         if:  github.event.inputs.pr != ''
         run: echo "::set-output name=environments::$PR"
         env:
-          PR: '{"environment": ["review"], "include": [{"environment": "review","pull_request_number": "${{ github.event.inputs.pr }}"}]}'
+          PR: '{"environment": ["${{ ${{ github.event.inputs.pr }}"]}'
 
       - uses: DFE-Digital/github-actions/turnstyle@master
         name: Wait for other inprogress deployment runs
@@ -87,8 +87,10 @@ jobs:
           echo "TF_VAR_key_vault_app_secret_name=$TF_VAR_key_vault_app_secret_name" >> $GITHUB_ENV
           echo "TF_VAR_key_vault_infra_secret_name=$TF_VAR_key_vault_infra_secret_name" >> $GITHUB_ENV
           if [ "${{ matrix.environment }}" = "review" ]; then 
-            echo "BACKEND_KEY=-backend-config=key=pr-${{ matrix.pull_request_number }}.tfstate" >> $GITHUB_ENV; 
-            echo "TF_VAR_paas_web_app_host_name=pr-${{ matrix.pull_request_number }}" >> $GITHUB_ENV; 
+            PR_NUMBER=${{ github.event.inputs.pr }}
+            echo "PR_NUMBER=$PR_NUMBER" >> $GITHUB_ENV; 
+            echo "BACKEND_KEY=-backend-config=key=pr-$PR_NUMBER.tfstate" >> $GITHUB_ENV; 
+            echo "TF_VAR_paas_web_app_host_name=pr-$PR_NUMBER" >> $GITHUB_ENV; 
           fi;
         env:
           DOCKER_IMAGE: ${{ format('dfedigital/teacher-training-api:paas-{0}', github.event.inputs.sha) }}
