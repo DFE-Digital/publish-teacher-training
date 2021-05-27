@@ -26,3 +26,8 @@ rollover:
   <<: *default
   RAILS_ENV: rollover
   RACK_ENV: rollover
+
+review:
+  <<: *default
+  RAILS_ENV: review
+  RACK_ENV: review

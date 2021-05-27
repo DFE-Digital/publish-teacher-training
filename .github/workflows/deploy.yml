@@ -86,7 +86,10 @@ jobs:
           echo "TF_VAR_key_vault_name=$TF_VAR_key_vault_name" >> $GITHUB_ENV
           echo "TF_VAR_key_vault_app_secret_name=$TF_VAR_key_vault_app_secret_name" >> $GITHUB_ENV
           echo "TF_VAR_key_vault_infra_secret_name=$TF_VAR_key_vault_infra_secret_name" >> $GITHUB_ENV
-          if [ "${{ matrix.environment }}" = "review" ]; then echo "BACKEND_KEY=-backend-config=key=pr-${{ matrix.pull_request_number }}.terraform.tfstate" >> $GITHUB_ENV; fi;
+          if [ "${{ matrix.environment }}" = "review" ]; then 
+            echo "BACKEND_KEY=-backend-config=key=pr-${{ matrix.pull_request_number }}.tfstate" >> $GITHUB_ENV; 
+            echo "TF_VAR_paas_web_app_host_name=pr-${{ matrix.pull_request_number }}" >> $GITHUB_ENV; 
+          fi;
         env:
           DOCKER_IMAGE: ${{ format('dfedigital/teacher-training-api:paas-{0}', github.event.inputs.sha) }}
           DEPLOY_ENV: ${{ matrix.environment }}
