@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_04_20_134402) do
+ActiveRecord::Schema.define(version: 2021_05_25_152034) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
@@ -187,6 +187,17 @@ ActiveRecord::Schema.define(version: 2021_04_20_134402) do
     t.datetime "updated_at", precision: 6, null: false
     t.boolean "subject_knowledge_enhancement_course_available", default: false, null: false
     t.index ["subject_id"], name: "index_financial_incentive_on_subject_id"
+  end
+
+  create_table "interrupt_page_acknowledgement", force: :cascade do |t|
+    t.string "page", null: false
+    t.bigint "recruitment_cycle_id", null: false
+    t.bigint "user_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["page", "recruitment_cycle_id", "user_id"], name: "interrupt_page_all_column_idx", unique: true
+    t.index ["recruitment_cycle_id"], name: "index_interrupt_page_acknowledgement_on_recruitment_cycle_id"
+    t.index ["user_id"], name: "index_interrupt_page_acknowledgement_on_user_id"
   end
 
   create_table "nctl_organisation", id: :serial, force: :cascade do |t|

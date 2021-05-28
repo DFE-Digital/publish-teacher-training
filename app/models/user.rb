@@ -15,6 +15,8 @@ class User < ApplicationRecord
            primary_key: :id,
            inverse_of: "requester"
 
+  has_many :interrupt_page_acknowledgements
+
   scope :admins, -> { where(admin: true) }
   scope :non_admins, -> { where.not(admin: true) }
   scope :active, -> { where.not(accept_terms_date_utc: nil) }

@@ -47,6 +47,9 @@ Rails.application.routes.draw do
         resources :providers
         patch :accept_terms, on: :member
         patch :generate_and_send_magic_link, on: :collection
+        scope "/recruitment_cycles/:recruitment_cycle_year" do
+          resources :interrupt_page_acknowledgements, only: %i[index create]
+        end
       end
 
       get "providers/suggest", to: "providers#suggest"
