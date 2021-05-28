@@ -61,10 +61,14 @@ describe "Interrupt page acknowledgements API v2", type: :request do
     end
 
     context "the acknowledgement doesn't exist" do
-      it "creates it" do
+      it "creates an acknowlegement for that page/user/recruitment cycle" do
         expect { subject }.to change {
           user.interrupt_page_acknowledgements.count
         }.from(0).to(1)
+        acknowledgement = user.interrupt_page_acknowledgements.take
+        expect(acknowledgement.recruitment_cycle).to eq cycle
+        expect(acknowledgement.page).to eq "rollover"
+        expect(acknowledgement.user).to eq user
         expect(subject.status).to eq 200
       end
     end
