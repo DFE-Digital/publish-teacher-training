@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - master
-      - qa
   pull_request:
     branches:
       - master
@@ -68,6 +67,15 @@ jobs:
           BUILDKIT_INLINE_CACHE=1
           COMMIT_SHA=paas-${{ github.sha }}
 
+    - name: Trigger Review App Deployment
+      if: ${{ success() && github.event_name == 'pull_request' }}
+      uses: benc-uk/workflow-dispatch@v1
+      with:
+        workflow: Deploy
+        ref: ${{ github.head_ref }}
+        token: ${{ secrets.ACTIONS_API_ACCESS_TOKEN  }}
+        inputs: '{"pr": "${{ github.event.pull_request.number }}", "sha": "${{ env.GIT_SHA_SHORT }}"}'
+
     - name: Setup tests
       run: |
         docker pull ${DOCKER_IMAGE}:${BRANCH_TAG}
@@ -97,14 +105,6 @@ jobs:
         workflow: Deploy
         token: ${{ secrets.ACTIONS_API_ACCESS_TOKEN  }}
         inputs: '{"staging": "true", "production": "true", "sandbox": "true", "rollover": "true", "sha": "${{ env.GIT_SHA_SHORT }}"}'
-
-    - name: Trigger Deployment to QA
-      if: ${{ success() && github.ref == 'refs/heads/qa' }}
-      uses: benc-uk/workflow-dispatch@v1
-      with:
-        workflow: Deploy
-        token: ${{ secrets.ACTIONS_API_ACCESS_TOKEN  }}
-        inputs: '{"qa": "true", "sha": "${{ env.GIT_SHA_SHORT }}"}'
 
     - name: Alert Build Failures
       if: ${{ failure() && github.ref == 'refs/heads/master' }}
