@@ -3,8 +3,11 @@ on:
   workflow_dispatch:
     inputs:
       environment:
-        description: 'The environment to run tests against (qa, staging, production or sandbox)'
+        description: 'The environment to run tests against (qa, staging, production, sandbox or review)'
         required: true
+      pr:
+        description: 'The PR number if the environment is review'
+        required: false
 
 jobs:
   smoke_tests:
@@ -30,11 +33,18 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.ACTIONS_API_ACCESS_TOKEN }}
 
+      - name: Set Environment variables
+        run: |
+          if [ ! -z "${{ github.event.inputs.pr }}" ]; then 
+            PR_NUMBER=${{ github.event.inputs.pr }}
+            echo "SETTINGS__PUBLISH_API_URL=https://teacher-training-api-pr-$PR_NUMBER.london.cloudapps.digital" >> $GITHUB_ENV;
+          fi;
+
       - name: Smoke Tests ${{ github.event.inputs.environment }}
         run: RAILS_ENV=${{ github.event.inputs.environment }} ./bin/bundle exec rspec spec/smoke --format documentation
 
       - name: 'Notify #twd_publish_register_tech on failure'
-        if: failure()
+        if: ${{ failure() && github.event.inputs.environment != 'review' }}
         uses: rtCamp/action-slack-notify@master
         env:
           SLACK_CHANNEL: twd_publish_register_tech
