@@ -11,7 +11,7 @@ describe User, type: :model do
   end
 
   describe "validations" do
-    it { is_expected.to validate_presence_of(:email).with_message("The user's email address must contain @") }
+    it { is_expected.to validate_presence_of(:email).with_message("must contain @") }
     it { should_not allow_value("CAPS_IN_EMAIL@ACME.ORG").for(:email) }
     it { should_not allow_value("email_without_at").for(:email) }
     it { should_not allow_value(nil).for(:first_name) }

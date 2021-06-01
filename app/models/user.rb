@@ -30,7 +30,7 @@ class User < ApplicationRecord
 
   validates :first_name, presence: true
   validates :last_name, presence: true
-  validates :email, presence: true, format: { with: /\A.*@.*\z/, message: "The user's email address must contain @" }
+  validates :email, presence: true, format: { with: /\A.*@.*\z/, message: "must contain @" }
   validate :email_is_lowercase
 
   validates :email, if: :admin?, format: {
@@ -65,7 +65,7 @@ private
 
   def email_is_lowercase
     if email.present? && email.downcase != email
-      errors.add(:email, "The user's email address must be lowercase")
+      errors.add(:email, "must be lowercase")
     end
   end
 end
