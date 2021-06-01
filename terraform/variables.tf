@@ -20,6 +20,10 @@ variable paas_app_environment {}
 
 variable paas_web_app_host_name {}
 
+variable paas_web_app_stopped { default = false }
+
+variable paas_worker_app_stopped { default = false }
+
 variable paas_app_config_file { default = "./workspace_variables/app_config.yml" }
 
 variable key_vault_name {}
