@@ -19,12 +19,10 @@ feature "Creating a provider" do
     and_the_provider_is_created
   end
 
-  context "invalid details" do
-    scenario "I cannot edit a provider's name" do
-      when_i_fill_in_an_invalid_provider_name
-      and_i_click_the_submit_button
-      then_i_see_the_error_summary
-    end
+  scenario "I cannot edit a provider's name" do
+    when_i_fill_in_an_invalid_provider_name
+    and_i_click_the_submit_button
+    then_i_see_the_error_summary
   end
 
 private
