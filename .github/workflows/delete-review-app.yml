@@ -70,8 +70,10 @@ jobs:
            --connection-string $AZURE_STORAGE_CONNECTION_STRING \
            --prefix ${{ env.TF_STATE_FILE }} --query "[].name" -o tsv)
 
-          az storage blob delete -c review-paas-tfstate --name $pr_state_file \
+          if [ ! -z "$pr_state_file" ]; then;
+            az storage blob delete -c review-paas-tfstate --name $pr_state_file \
             --connection-string $AZURE_STORAGE_CONNECTION_STRING
+          fi;
         env:
           AZURE_STORAGE_CONNECTION_STRING: ${{ secrets.AZURE_STORAGE_CONNECTION_STRING_REVIEW }}
 

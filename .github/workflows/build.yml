@@ -68,7 +68,7 @@ jobs:
           COMMIT_SHA=paas-${{ github.sha }}
 
     - name: Trigger Review App Deployment
-      if: ${{ success() && github.event_name == 'pull_request' }}
+      if: ${{ success() && github.event_name == 'pull_request' && github.actor != 'dependabot[bot]' }}
       uses: benc-uk/workflow-dispatch@v1
       with:
         workflow: Deploy
