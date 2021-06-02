@@ -33,6 +33,7 @@ jobs:
           echo "PR_NUMBER=$PR_NUMBER" >> $GITHUB_ENV
           echo "DEPLOY_ENV=review" >> $GITHUB_ENV
           echo "TF_VAR_paas_web_app_host_name=$PR_NUMBER" >> $GITHUB_ENV
+          echo "TF_STATE_FILE=pr-$PR_NUMBER.tfstate" >> $GITHUB_ENV
 
           . terraform/workspace_variables/review.sh
           echo "TF_VAR_key_vault_name=$TF_VAR_key_vault_name" >> $GITHUB_ENV
@@ -56,7 +57,7 @@ jobs:
       - name: Terraform init, plan & apply
         working-directory: terraform
         run: |
-            terraform init -backend-config workspace_variables/review_backend.tfvars -backend-config=key=pr-${{ env.PR_NUMBER }}.tfstate
+            terraform init -backend-config workspace_variables/review_backend.tfvars -backend-config=key=${{ env.TF_STATE_FILE }}
             terraform destroy -var-file workspace_variables/review.tfvars -auto-approve
         env:
           ARM_ACCESS_KEY:             ${{ secrets.ARM_ACCESS_KEY_REVIEW }}
@@ -67,7 +68,7 @@ jobs:
         run: |
           pr_state_file=$(az storage blob list -c review-paas-tfstate \
            --connection-string $AZURE_STORAGE_CONNECTION_STRING \
-           --prefix pr-1950.tfstate --query "[].name" -o tsv)
+           --prefix ${{ env.TF_STATE_FILE }} --query "[].name" -o tsv)
 
           az storage blob delete -c review-paas-tfstate --name $pr_state_file \
             --connection-string $AZURE_STORAGE_CONNECTION_STRING
