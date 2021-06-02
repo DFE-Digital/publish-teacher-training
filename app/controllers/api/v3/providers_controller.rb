@@ -31,7 +31,9 @@ module API
                                        address3 address4 postcode region_code
                                        email website telephone train_with_us
                                        train_with_disability sites
-                                       accredited_bodies accredited_body?] }
+                                       accredited_bodies accredited_body?
+                                       can_sponsor_student_visa
+                                       can_sponsor_skilled_worker_visa] }
       end
 
     private
