@@ -10,6 +10,10 @@ variable worker_app_instances {}
 
 variable worker_app_memory {}
 
+variable web_app_stopped { default = false }
+
+variable worker_app_stopped { default = false }
+
 variable postgres_service_plan {}
 
 variable redis_service_plan {}
@@ -25,17 +29,22 @@ variable app_environment {}
 variable app_environment_variables { type = map }
 
 locals {
-  web_app_name          = "teacher-training-api-${var.app_environment}"
-  worker_app_name       = "teacher-training-api-worker-${var.app_environment}"
-  postgres_service_name = "teacher-training-api-postgres-${var.app_environment}"
-  redis_service_name    = "teacher-training-api-redis-${var.app_environment}"
-  logging_service_name  = "teacher-training-api-logit-${var.app_environment}"
+  app_name_suffix       = var.app_environment != "review" ? var.app_environment : "pr-${var.web_app_host_name}"
+  web_app_name          = "teacher-training-api-${local.app_name_suffix}"
+  worker_app_name       = "teacher-training-api-worker-${local.app_name_suffix}"
+  postgres_service_name = "teacher-training-api-postgres-${local.app_name_suffix}"
+  redis_service_name    = "teacher-training-api-redis-${local.app_name_suffix}"
+  logging_service_name  = "teacher-training-api-logit-${local.app_name_suffix}"
   deployment_strategy   = "blue-green-v2"
 
   worker_app_start_command = "bundle exec sidekiq -c 5 -C config/sidekiq.yml"
 
-  postgres_params = {
+  postgres_extensions = {
     enable_extensions = ["pg_buffercache", "pg_stat_statements", "btree_gin", "btree_gist"]
   }
+  review_app_postgres_params = {
+    restore_from_latest_snapshot_of = data.cloudfoundry_service_instance.postgres-qa.id
+  }
+  postgres_params = merge(local.postgres_extensions, var.app_environment == "review" ? local.review_app_postgres_params : {})
   web_app_routes = [cloudfoundry_route.web_app_service_gov_uk_route, cloudfoundry_route.web_app_cloudapps_digital_route]
 }

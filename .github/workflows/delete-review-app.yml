@@ -1,0 +1,72 @@
+name: Delete Review App
+
+on:
+  pull_request:
+    types: [closed]
+    branches: [master]
+
+jobs:
+  delete-review-app:
+    name: Delete Review App ${{ github.event.pull_request.number }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Wait for Deploy App Workflow for review
+        uses: fountainhead/action-wait-for-check@v1.0.0
+        with:
+         token: ${{ secrets.GITHUB_TOKEN }}
+         checkName: ${{ github.event.pull_request.number }} Deployment
+         ref: ${{ github.event.pull_request.head.sha }}
+         timeoutSeconds: 120
+
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Setup Terraform v0.13.5
+        uses: hashicorp/setup-terraform@v1.2.1
+        with:
+          terraform_version: 0.13.5
+
+      - name: Set Environment variables
+        run: |
+          PR_NUMBER=${{ github.event.pull_request.number }}
+          echo "DOCKER_IMAGE=$DOCKER_IMAGE" >> $GITHUB_ENV
+          echo "PR_NUMBER=$PR_NUMBER" >> $GITHUB_ENV
+          echo "DEPLOY_ENV=review" >> $GITHUB_ENV
+          echo "TF_VAR_paas_web_app_host_name=$PR_NUMBER" >> $GITHUB_ENV
+
+          . terraform/workspace_variables/review.sh
+          echo "TF_VAR_key_vault_name=$TF_VAR_key_vault_name" >> $GITHUB_ENV
+          echo "TF_VAR_key_vault_app_secret_name=$TF_VAR_key_vault_app_secret_name" >> $GITHUB_ENV
+          echo "TF_VAR_key_vault_infra_secret_name=$TF_VAR_key_vault_infra_secret_name" >> $GITHUB_ENV          
+        env:
+          DOCKER_IMAGE: ${{ format('dfedigital/teacher-training-api:paas-{0}', github.sha) }}
+
+      - uses: azure/login@v1
+        with:
+          creds: ${{ secrets[format('AZURE_CREDENTIALS_{0}', env.DEPLOY_ENV)] }}
+
+      - name: Validate Azure Key Vault secrets
+        uses: DFE-Digital/github-actions/validate-key-vault-secrets@master
+        with:
+          KEY_VAULT: ${{ env.TF_VAR_key_vault_name }}
+          SECRETS: |
+            ${{ env.TF_VAR_key_vault_app_secret_name }}
+            ${{ env.TF_VAR_key_vault_infra_secret_name }}
+
+      - name: Terraform init, plan & apply
+        working-directory: terraform
+        run: |
+            terraform init -backend-config workspace_variables/review_backend.tfvars -backend-config=key=pr-${{ env.PR_NUMBER }}.tfstate
+            terraform destroy -auto-approve
+        env:
+          ARM_ACCESS_KEY:             ${{ secrets.ARM_ACCESS_KEY_REVIEW }}
+          TF_VAR_paas_docker_image:   ${{ env.DOCKER_IMAGE }}
+          TF_VAR_azure_credentials:   ${{ secrets.AZURE_CREDENTIALS_REVIEW }}
+
+      - name: Update ${{ matrix.environment }} status
+        if:   ${{ always() }}
+        uses: bobheadxi/deployments@v0.4.3
+        with:
+          step:   deactivate-env
+          token:  ${{ secrets.GITHUB_TOKEN }}
+          env:    ${{ env.PR_NUMBER }}

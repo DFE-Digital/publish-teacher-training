@@ -9,6 +9,7 @@ resource cloudfoundry_app web_app {
   docker_image               = var.docker_image
   strategy                   = local.deployment_strategy
   timeout                    = 180
+  stopped                    = var.web_app_stopped
   environment                = var.app_environment_variables
   docker_credentials         = var.docker_credentials
 
@@ -40,6 +41,7 @@ resource cloudfoundry_app worker_app {
   command              = local.worker_app_start_command
   timeout              = 180
   health_check_timeout = 180
+  stopped              = var.worker_app_stopped
   environment          = var.app_environment_variables
   docker_credentials   = var.docker_credentials
 
@@ -71,12 +73,18 @@ resource cloudfoundry_service_instance postgres {
   space        = data.cloudfoundry_space.space.id
   service_plan = data.cloudfoundry_service.postgres.service_plans[var.postgres_service_plan]
   json_params  = jsonencode(local.postgres_params)
+  timeouts {
+    create = "30m"
+  }
 }
 
 resource cloudfoundry_service_instance redis {
   name         = local.redis_service_name
   space        = data.cloudfoundry_space.space.id
   service_plan = data.cloudfoundry_service.redis.service_plans[var.redis_service_plan]
+  timeouts {
+    create = "30m"
+  }
 }
 
 resource cloudfoundry_user_provided_service logging {
