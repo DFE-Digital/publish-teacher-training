@@ -29,13 +29,14 @@ variable app_environment {}
 variable app_environment_variables { type = map }
 
 locals {
-  app_name_suffix       = var.app_environment != "review" ? var.app_environment : "pr-${var.web_app_host_name}"
-  web_app_name          = "teacher-training-api-${local.app_name_suffix}"
-  worker_app_name       = "teacher-training-api-worker-${local.app_name_suffix}"
-  postgres_service_name = "teacher-training-api-postgres-${local.app_name_suffix}"
-  redis_service_name    = "teacher-training-api-redis-${local.app_name_suffix}"
-  logging_service_name  = "teacher-training-api-logit-${local.app_name_suffix}"
-  deployment_strategy   = "blue-green-v2"
+  app_name_suffix              = var.app_environment != "review" ? var.app_environment : "pr-${var.web_app_host_name}"
+  web_app_name                 = "teacher-training-api-${local.app_name_suffix}"
+  worker_app_name              = "teacher-training-api-worker-${local.app_name_suffix}"
+  postgres_service_name        = "teacher-training-api-postgres-${local.app_name_suffix}"
+  redis_service_name           = "teacher-training-api-redis-${local.app_name_suffix}"
+  logging_service_name         = "teacher-training-api-logit-${local.app_name_suffix}"
+  deployment_strategy          = "blue-green-v2"
+  qa_postgres_service_instance = "eef01a89-0659-4eae-8220-8a142fa4502e"
 
   worker_app_start_command = "bundle exec sidekiq -c 5 -C config/sidekiq.yml"
 
@@ -43,8 +44,8 @@ locals {
     enable_extensions = ["pg_buffercache", "pg_stat_statements", "btree_gin", "btree_gist"]
   }
   review_app_postgres_params = {
-    restore_from_latest_snapshot_of = data.cloudfoundry_service_instance.postgres-qa.id
+    restore_from_latest_snapshot_of = local.qa_postgres_service_instance
   }
   postgres_params = merge(local.postgres_extensions, var.app_environment == "review" ? local.review_app_postgres_params : {})
-  web_app_routes = [cloudfoundry_route.web_app_service_gov_uk_route, cloudfoundry_route.web_app_cloudapps_digital_route]
+  web_app_routes  = [cloudfoundry_route.web_app_service_gov_uk_route, cloudfoundry_route.web_app_cloudapps_digital_route]
 }

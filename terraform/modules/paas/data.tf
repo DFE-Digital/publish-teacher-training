@@ -22,13 +22,3 @@ data cloudfoundry_service postgres {
 data cloudfoundry_service redis {
   name = "redis"
 }
-
-data cloudfoundry_space qa_space {
-  name = "bat-qa"
-  org  = data.cloudfoundry_org.org.id
-}
-
-data cloudfoundry_service_instance postgres-qa {
-    name_or_id = "teacher-training-api-postgres-qa"
-    space      = data.cloudfoundry_space.qa_space.id
-}
