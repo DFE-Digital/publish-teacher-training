@@ -59,6 +59,8 @@ describe "Providers API v2", type: :request do
             "website" => provider.website,
             "ukprn" => provider.ukprn,
             "urn" => provider.urn,
+            "can_sponsor_skilled_worker_visa" => provider.can_sponsor_skilled_worker_visa,
+            "can_sponsor_student_visa" => provider.can_sponsor_student_visa,
             "recruitment_cycle_year" => provider.recruitment_cycle.year,
             "accredited_bodies" => [{
               "provider_code" => accrediting_provider.provider_code,
