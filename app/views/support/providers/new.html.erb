@@ -12,11 +12,6 @@
 
         <%= f.govuk_text_field :provider_name, label: { text: "Provider name", size: "s" } %>
         <%= f.govuk_text_field :provider_code, label: { text: "Provider code", size: "s" } %>
-        <%= f.govuk_collection_select :recruitment_cycle_id,
-                  RecruitmentCycle.all,
-                  :id,
-                  :year,
-                  label: { text: "Recruitment cycle", size: "s" } %>
 
         <%= f.govuk_email_field :email, label: { text: "Provider email", size: "s" } %>
         <%= f.govuk_phone_field :telephone, label: { text: "Provider phone", size: "s" } %>

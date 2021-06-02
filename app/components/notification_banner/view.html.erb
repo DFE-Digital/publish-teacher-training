@@ -1,0 +1,12 @@
+<%= tag.div(class: [classes, type_class], role: role_attribute, aria: { labelledBy: title_id }, data: data_attributes) do %>
+  <div class="govuk-notification-banner__header">
+    <h2 class="govuk-notification-banner__title" id="<%= title_id %>">
+      <%= title %>
+    </h2>
+  </div>
+  <div class="govuk-notification-banner__content">
+    <p class="govuk-notification-banner__heading">
+      <%= text %>
+    </p>
+  </div>
+<% end %>
