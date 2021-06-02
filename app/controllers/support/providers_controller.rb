@@ -5,7 +5,7 @@ module Support
     end
 
     def new
-      @provider = Provider.new(recruitment_cycle: RecruitmentCycle.current_recruitment_cycle)
+      @provider = Provider.new
       @provider.sites.build
       @provider.organisations.build
     end
@@ -72,15 +72,14 @@ module Support
                                        :provider_code,
                                        :recruitment_cycle_id,
                                        :email,
-                                       :telephone, sites_attributes: %i[id
-                                                                        code
+                                       :telephone, sites_attributes: %i[code
                                                                         location_name
                                                                         address1
                                                                         address2
                                                                         address3
                                                                         address4
                                                                         postcode],
-        organisations_attributes: %i[id name])
+        organisations_attributes: %i[name]).merge(recruitment_cycle: RecruitmentCycle.current_recruitment_cycle)
     end
   end
 end
