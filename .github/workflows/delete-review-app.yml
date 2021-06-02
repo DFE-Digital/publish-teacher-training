@@ -63,6 +63,17 @@ jobs:
           TF_VAR_paas_docker_image:   ${{ env.DOCKER_IMAGE }}
           TF_VAR_azure_credentials:   ${{ secrets.AZURE_CREDENTIALS_REVIEW }}
 
+      - name: Delete tf state file
+        run: |
+          pr_state_file=$(az storage blob list -c review-paas-tfstate \
+           --connection-string $AZURE_STORAGE_CONNECTION_STRING \
+           --prefix pr-1950.tfstate --query "[].name" -o tsv)
+
+          az storage blob delete -c review-paas-tfstate --name $pr_state_file \
+            --connection-string $AZURE_STORAGE_CONNECTION_STRING
+        env:
+          AZURE_STORAGE_CONNECTION_STRING: ${{ secrets.AZURE_STORAGE_CONNECTION_STRING_REVIEW }}
+
       - name: Update ${{ matrix.environment }} status
         if:   ${{ always() }}
         uses: bobheadxi/deployments@v0.4.3
