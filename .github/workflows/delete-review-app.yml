@@ -57,7 +57,7 @@ jobs:
         working-directory: terraform
         run: |
             terraform init -backend-config workspace_variables/review_backend.tfvars -backend-config=key=pr-${{ env.PR_NUMBER }}.tfstate
-            terraform destroy -auto-approve
+            terraform destroy -var-file workspace_variables/review.tfvars -auto-approve
         env:
           ARM_ACCESS_KEY:             ${{ secrets.ARM_ACCESS_KEY_REVIEW }}
           TF_VAR_paas_docker_image:   ${{ env.DOCKER_IMAGE }}
