@@ -35,12 +35,18 @@ jobs:
           echo "TF_VAR_paas_web_app_host_name=$PR_NUMBER" >> $GITHUB_ENV
           echo "TF_STATE_FILE=pr-$PR_NUMBER.tfstate" >> $GITHUB_ENV
 
+          pr_state_file=$(az storage blob list -c review-paas-tfstate \
+           --connection-string $AZURE_STORAGE_CONNECTION_STRING \
+           --prefix pr-$PR_NUMBER.tfstate --query "[].name" -o tsv)
+          if [ ! -z "$pr_state_file" ]; then; echo "TF_STATE_EXISTS=true" >> $GITHUB_ENV; fi;
+
           . terraform/workspace_variables/review.sh
           echo "TF_VAR_key_vault_name=$TF_VAR_key_vault_name" >> $GITHUB_ENV
           echo "TF_VAR_key_vault_app_secret_name=$TF_VAR_key_vault_app_secret_name" >> $GITHUB_ENV
           echo "TF_VAR_key_vault_infra_secret_name=$TF_VAR_key_vault_infra_secret_name" >> $GITHUB_ENV          
         env:
           DOCKER_IMAGE: ${{ format('dfedigital/teacher-training-api:paas-{0}', github.sha) }}
+          AZURE_STORAGE_CONNECTION_STRING: ${{ secrets.AZURE_STORAGE_CONNECTION_STRING_REVIEW }}
 
       - uses: azure/login@v1
         with:
@@ -54,7 +60,8 @@ jobs:
             ${{ env.TF_VAR_key_vault_app_secret_name }}
             ${{ env.TF_VAR_key_vault_infra_secret_name }}
 
-      - name: Terraform init, plan & apply
+      - name: Terraform Destroy
+        if: env.TF_STATE_EXISTS == 'true'
         working-directory: terraform
         run: |
             terraform init -backend-config workspace_variables/review_backend.tfvars -backend-config=key=${{ env.TF_STATE_FILE }}
@@ -65,15 +72,10 @@ jobs:
           TF_VAR_azure_credentials:   ${{ secrets.AZURE_CREDENTIALS_REVIEW }}
 
       - name: Delete tf state file
+        if: env.TF_STATE_EXISTS == 'true'
         run: |
-          pr_state_file=$(az storage blob list -c review-paas-tfstate \
-           --connection-string $AZURE_STORAGE_CONNECTION_STRING \
-           --prefix ${{ env.TF_STATE_FILE }} --query "[].name" -o tsv)
-
-          if [ ! -z "$pr_state_file" ]; then;
-            az storage blob delete -c review-paas-tfstate --name $pr_state_file \
+            az storage blob delete -c review-paas-tfstate --name ${{ env.TF_STATE_FILE }} \
             --connection-string $AZURE_STORAGE_CONNECTION_STRING
-          fi;
         env:
           AZURE_STORAGE_CONNECTION_STRING: ${{ secrets.AZURE_STORAGE_CONNECTION_STRING_REVIEW }}
 
