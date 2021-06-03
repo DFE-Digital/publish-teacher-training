@@ -38,7 +38,7 @@ jobs:
           pr_state_file=$(az storage blob list -c review-paas-tfstate \
            --connection-string $AZURE_STORAGE_CONNECTION_STRING \
            --prefix pr-$PR_NUMBER.tfstate --query "[].name" -o tsv)
-          if [ ! -z "$pr_state_file" ]; then; echo "TF_STATE_EXISTS=true" >> $GITHUB_ENV; fi;
+          if [ ! -z "$pr_state_file" ]; then echo "TF_STATE_EXISTS=true" >> $GITHUB_ENV; fi;
 
           . terraform/workspace_variables/review.sh
           echo "TF_VAR_key_vault_name=$TF_VAR_key_vault_name" >> $GITHUB_ENV
