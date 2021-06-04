@@ -72,7 +72,9 @@ module Support
                                        :provider_code,
                                        :recruitment_cycle_id,
                                        :email,
+                                       :ukprn,
                                        :telephone, sites_attributes: %i[code
+                                                                        urn
                                                                         location_name
                                                                         address1
                                                                         address2

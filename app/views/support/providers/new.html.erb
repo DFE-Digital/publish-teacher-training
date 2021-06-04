@@ -9,12 +9,11 @@
           <h1 class="govuk-fieldset__heading">Add a new provider</h1>
         </legend>
 
-
-        <%= f.govuk_text_field :provider_name, label: { text: "Provider name", size: "s" } %>
-        <%= f.govuk_text_field :provider_code, label: { text: "Provider code", size: "s" } %>
-
-        <%= f.govuk_email_field :email, label: { text: "Provider email", size: "s" } %>
-        <%= f.govuk_phone_field :telephone, label: { text: "Provider phone", size: "s" } %>
+        <%= f.govuk_text_field :provider_name, label: { text: "Name", size: "s" } %>
+        <%= f.govuk_text_field :provider_code, label: { text: "Code", size: "s" } %>
+        <%= f.govuk_text_field :ukprn, label: { text: "UKPRN", size: "s" } %>
+        <%= f.govuk_email_field :email, label: { text: "Email address", size: "s" } %>
+        <%= f.govuk_phone_field :telephone, label: { text: "Telephone number", size: "s" } %>
       </fieldset>
 
       <fieldset class="govuk-fieldset">
@@ -32,12 +31,13 @@
         </legend>
         <%= f.fields_for :sites do |site| %>
           <%= site.govuk_text_field :code, label: { text: "Site code", size: "s" } %>
-          <%= site.govuk_text_field :location_name, label: { text: "Site location name", size: "s" } %>
-          <%= site.govuk_text_field :address1, label: { text: "Site address1", size: "s" } %>
-          <%= site.govuk_text_field :address2, label: { text: "Site address2", size: "s" } %>
-          <%= site.govuk_text_field :address3, label: { text: "Site address3", size: "s" } %>
-          <%= site.govuk_text_field :address4, label: { text: "Site address4", size: "s" } %>
-          <%= site.govuk_text_field :postcode, label: { text: "Site postcode", size: "s" } %>
+          <%= site.govuk_text_field :urn, label: { text: "URN", size: "s" } %>
+          <%= site.govuk_text_field :location_name, label: { text: "Name", size: "s" } %>
+          <%= site.govuk_text_field :address1, label: { text: "Building address one", size: "s" } %>
+          <%= site.govuk_text_field :address2, label: { text: "Building address two", size: "s" } %>
+          <%= site.govuk_text_field :address3, label: { text: "Town or city", size: "s" } %>
+          <%= site.govuk_text_field :address4, label: { text: "County", size: "s" } %>
+          <%= site.govuk_text_field :postcode, label: { text: "Postcode", size: "s" } %>
         <% end %>
       </fieldset>
 
