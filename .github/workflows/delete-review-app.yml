@@ -8,6 +8,7 @@ on:
 jobs:
   delete-review-app:
     name: Delete Review App ${{ github.event.pull_request.number }}
+    if: github.actor != 'dependabot[bot]'
     runs-on: ubuntu-latest
     steps:
       - name: Wait for Deploy App Workflow for review
@@ -49,10 +50,12 @@ jobs:
           AZURE_STORAGE_CONNECTION_STRING: ${{ secrets.AZURE_STORAGE_CONNECTION_STRING_REVIEW }}
 
       - uses: azure/login@v1
+        if: env.TF_STATE_EXISTS == 'true'
         with:
           creds: ${{ secrets[format('AZURE_CREDENTIALS_{0}', env.DEPLOY_ENV)] }}
 
       - name: Validate Azure Key Vault secrets
+        if: env.TF_STATE_EXISTS == 'true'
         uses: DFE-Digital/github-actions/validate-key-vault-secrets@master
         with:
           KEY_VAULT: ${{ env.TF_VAR_key_vault_name }}
@@ -80,7 +83,7 @@ jobs:
           AZURE_STORAGE_CONNECTION_STRING: ${{ secrets.AZURE_STORAGE_CONNECTION_STRING_REVIEW }}
 
       - name: Update ${{ matrix.environment }} status
-        if:   ${{ always() }}
+        if:   ${{ always() && env.TF_STATE_EXISTS == 'true' }}
         uses: bobheadxi/deployments@v0.4.3
         with:
           step:   deactivate-env
