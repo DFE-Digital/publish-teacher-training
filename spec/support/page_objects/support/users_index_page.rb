@@ -5,6 +5,8 @@ module PageObjects
     class UsersIndex < PageObjects::Base
       set_url "/support/users"
 
+      element :add_a_user, "a", text: "Add a user"
+
       def users
         page.find_all(".user-row")
       end

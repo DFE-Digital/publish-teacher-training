@@ -30,10 +30,10 @@ class User < ApplicationRecord
     joins(:user_notifications).merge(UserNotification.course_publish_notification_requests(accredited_body_code))
   end
 
-  validates :email, presence: true, format: { with: /\A.*@.*\z/, message: "must contain @" }
-  validate :email_is_lowercase
   validates :first_name, presence: true
   validates :last_name, presence: true
+  validates :email, presence: true, format: { with: /\A.*@.*\z/, message: "must contain @" }
+  validate :email_is_lowercase
 
   validates :email, if: :admin?, format: {
     with: /\A.*@(digital\.){0,1}education\.gov\.uk\z/,

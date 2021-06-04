@@ -34,6 +34,10 @@ module FeatureHelpers
       @users_index_page ||= PageObjects::Support::UsersIndex.new
     end
 
+    def user_new_page
+      @user_new_page ||= PageObjects::Support::UserNew.new
+    end
+
     def sign_in_page
       @sign_in_page ||= PageObjects::SignIn.new
     end
