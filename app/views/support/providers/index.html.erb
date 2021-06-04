@@ -4,6 +4,11 @@
 
 <%= render "support/menu" %>
 
+<%= govuk_link_to("Add provider",
+      new_support_provider_path,
+      class: "govuk-button govuk-!-margin-bottom-6") %>
+
 <%= render PaginatedFilter::View.new(filters: @filters, collection: @providers) do %>
+
   <%= render "list", providers: @providers %>
 <% end %>

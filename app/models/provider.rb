@@ -125,6 +125,9 @@ class Provider < ApplicationRecord
 
   pg_search_scope :search_by_code_or_name, against: %i(provider_code provider_name), using: { tsearch: { prefix: true } }
 
+  accepts_nested_attributes_for :sites
+  accepts_nested_attributes_for :organisations
+
   attr_accessor :skip_geocoding
   after_commit :geocode_provider, unless: :skip_geocoding
 
