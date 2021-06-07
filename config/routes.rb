@@ -91,6 +91,7 @@ Rails.application.routes.draw do
                   only: %i[index show update],
                   param: :code,
                   concerns: :provider_routes do
+          resources :allocations, only: %i[index]
           member do
             get :show_any
           end
