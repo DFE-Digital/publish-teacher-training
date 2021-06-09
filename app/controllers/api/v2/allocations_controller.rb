@@ -49,7 +49,7 @@ module API
       end
 
       def destroy
-        authorize @allocation = current_recruitment_cycle.allocations.find(params[:id])
+        authorize @allocation = recruitment_cycle.allocations.find(params[:id])
 
         if @allocation.destroy
           head :ok
@@ -60,14 +60,16 @@ module API
 
     private
 
-      def current_recruitment_cycle
-        @current_recruitment_cycle ||= RecruitmentCycle.find_by(year: Allocation::ALLOCATION_CYCLE_YEAR)
+      def recruitment_cycle
+        @recruitment_cycle ||= RecruitmentCycle.find_by(
+          year: params[:recruitment_cycle_year],
+        ) || RecruitmentCycle.find_by(year: Allocation::ALLOCATION_CYCLE_YEAR)
       end
 
       def accredited_body
         @accredited_body ||= begin
                                accredited_body_code = params[:provider_code]
-                               current_recruitment_cycle.providers.find_by!(provider_code: accredited_body_code)
+                               recruitment_cycle.providers.find_by!(provider_code: accredited_body_code)
                              end
       end
 
