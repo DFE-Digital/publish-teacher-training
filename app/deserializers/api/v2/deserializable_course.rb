@@ -30,6 +30,9 @@ module API
         accredited_body_code
         funding_type
         level
+        degree_grade
+        additional_degree_subject_requirements
+        degree_subject_requirements
       ].freeze
 
       attributes(*COURSE_ATTRIBUTES)

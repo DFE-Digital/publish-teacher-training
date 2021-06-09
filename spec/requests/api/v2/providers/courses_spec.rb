@@ -145,6 +145,9 @@ describe "Courses API v2", type: :request do
                 "age_range_in_years" => provider.courses[0].age_range_in_years,
                 "accrediting_provider" => nil,
                 "accredited_body_code" => nil,
+                "degree_grade" =>  provider.courses[0].degree_grade,
+                "additional_degree_subject_requirements" => provider.courses[0].additional_degree_subject_requirements,
+                "degree_subject_requirements" => provider.courses[0].degree_subject_requirements,
               },
               "relationships" => {
                 "accrediting_provider" => { "meta" => { "included" => false } },
@@ -718,6 +721,9 @@ describe "Courses API v2", type: :request do
               "age_range_in_years" => provider.courses[0].age_range_in_years,
               "accrediting_provider" => nil,
               "accredited_body_code" => nil,
+              "degree_grade" =>  provider.courses[0].degree_grade,
+              "additional_degree_subject_requirements" => provider.courses[0].additional_degree_subject_requirements,
+              "degree_subject_requirements" => provider.courses[0].degree_subject_requirements,
             },
             "relationships" => {
               "accrediting_provider" => { "meta" => { "included" => false } },
