@@ -134,7 +134,7 @@ module API
       end
 
       def update_provider
-        return unless provider_params.values.any?
+        return if provider_params.values.all?(&:nil?)
 
         @provider.assign_attributes(provider_params)
         @provider.save
