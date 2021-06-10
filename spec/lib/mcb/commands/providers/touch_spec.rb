@@ -11,8 +11,8 @@ describe "mcb providers touch" do
   let(:provider) { create :provider, updated_at: 1.day.ago, changed_at: 1.day.ago }
   let(:rolled_over_provider) do
     new_provider = provider.dup
-    new_provider.update(recruitment_cycle: next_cycle, provider_name: SecureRandom.hex(10))
-    new_provider.save
+    new_provider.update!(recruitment_cycle: next_cycle, provider_name: SecureRandom.hex(10))
+    new_provider.save!
     new_provider
   end
 
@@ -25,8 +25,8 @@ describe "mcb providers touch" do
 
         # Use to_i compare seconds since epoch and side-step sub-second
         # differences that show up even with Timecop on certain platforms.
-        expect(provider.reload.updated_at.to_i).to eq Time.now.to_i
-        expect(rolled_over_provider.reload.updated_at.to_i).not_to eq Time.now.to_i
+        expect(provider.reload.updated_at.to_i).to eq Time.zone.now.to_i
+        expect(rolled_over_provider.reload.updated_at.to_i).not_to eq Time.zone.now.to_i
       end
     end
 
@@ -36,8 +36,8 @@ describe "mcb providers touch" do
       Timecop.freeze(Time.zone.today + 1) do
         execute_touch(arguments: [provider.provider_code])
 
-        expect(provider.reload.changed_at.to_i).to eq Time.now.to_i
-        expect(rolled_over_provider.reload.changed_at.to_i).not_to eq Time.now.to_i
+        expect(provider.reload.changed_at.to_i).to eq Time.zone.now.to_i
+        expect(rolled_over_provider.reload.changed_at.to_i).not_to eq Time.zone.now.to_i
       end
     end
 
@@ -60,8 +60,8 @@ describe "mcb providers touch" do
 
         # Use to_i compare seconds since epoch and side-step sub-second
         # differences that show up even with Timecop on certain platforms.
-        expect(provider.reload.updated_at.to_i).not_to eq Time.now.to_i
-        expect(rolled_over_provider.reload.changed_at.to_i).to eq Time.now.to_i
+        expect(provider.reload.updated_at.to_i).not_to eq Time.zone.now.to_i
+        expect(rolled_over_provider.reload.changed_at.to_i).to eq Time.zone.now.to_i
       end
     end
 
@@ -71,8 +71,8 @@ describe "mcb providers touch" do
       Timecop.freeze(Time.zone.today + 1) do
         execute_touch(arguments: [rolled_over_provider.provider_code, "-r", next_cycle.year])
 
-        expect(provider.reload.changed_at.to_i).not_to eq Time.now.to_i
-        expect(rolled_over_provider.reload.changed_at.to_i).to eq Time.now.to_i
+        expect(provider.reload.changed_at.to_i).not_to eq Time.zone.now.to_i
+        expect(rolled_over_provider.reload.changed_at.to_i).to eq Time.zone.now.to_i
       end
     end
 

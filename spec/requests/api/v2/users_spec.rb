@@ -106,7 +106,7 @@ describe "/api/v2/users", type: :request do
         }
       end
       let(:user_params)           { params.dig :_jsonapi, :data, :attributes }
-      let(:accept_terms_date_utc) { DateTime.now.utc }
+      let(:accept_terms_date_utc) { Time.zone.now.utc }
       let(:email)                 { "dave.smith@gmail.com" }
       let(:first_name)            { "Dave" }
       let(:last_name)             { "Smith" }

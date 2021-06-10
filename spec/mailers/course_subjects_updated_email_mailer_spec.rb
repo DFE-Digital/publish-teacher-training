@@ -4,7 +4,7 @@ describe CourseSubjectsUpdatedEmailMailer, type: :mailer do
   let(:previous_subject) { build(:primary_subject, :primary_with_english) }
   let(:updated_course_name) { "Primary with Mathematics" }
   let(:updated_subject) { build(:primary_subject, :primary_with_mathematics) }
-  let(:course) { build(:course, :with_accrediting_provider, name: updated_course_name, updated_at: DateTime.new(2001, 2, 3, 4, 5, 6), subjects: [updated_subject]) }
+  let(:course) { build(:course, :with_accrediting_provider, name: updated_course_name, updated_at: Time.zone.local(2001, 2, 3, 4, 5, 6), subjects: [updated_subject]) }
   let(:user) { build(:user) }
   let(:previous_course_name) { "primary with English" }
   let(:mail) do
@@ -64,7 +64,7 @@ describe CourseSubjectsUpdatedEmailMailer, type: :mailer do
       let(:first_updated_subject) { build(:secondary_subject, :mathematics) }
       let(:second_updated_subject) { build(:secondary_subject, :biology) }
       let(:updated_course_name) { "Mathematics with Biology" }
-      let(:course) { build(:course, :with_accrediting_provider, name: updated_course_name, updated_at: DateTime.new(2001, 2, 3, 4, 5, 6), subjects: [first_updated_subject, second_updated_subject]) }
+      let(:course) { build(:course, :with_accrediting_provider, name: updated_course_name, updated_at: Time.zone.local(2001, 2, 3, 4, 5, 6), subjects: [first_updated_subject, second_updated_subject]) }
       let(:user) { build(:user) }
       let(:previous_subject) { build(:secondary_subject, :mathematics) }
       let(:previous_course_name) { "Mathematics" }

@@ -21,7 +21,7 @@ module MCB
     def load
       if File.exist? @config_file
         new_config = YAML.safe_load(File.read(@config_file))
-        update(new_config || {})
+        update!(new_config || {})
       end
     end
   end

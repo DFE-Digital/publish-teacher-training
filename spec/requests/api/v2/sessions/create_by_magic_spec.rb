@@ -30,20 +30,20 @@ describe "POST /sessions/create_by_magic" do
       perform_request
 
       user.reload
-      expect(user.last_login_date_utc).to be_within(4.seconds).of Time.now.utc
+      expect(user.last_login_date_utc).to be_within(4.seconds).of Time.zone.now.utc
     end
 
     it "records the first login" do
-      user.update(first_login_date_utc: nil)
+      user.update!(first_login_date_utc: nil)
 
       perform_request
 
       user.reload
-      expect(user.first_login_date_utc).to be_within(4.seconds).of Time.now.utc
+      expect(user.first_login_date_utc).to be_within(4.seconds).of Time.zone.now.utc
     end
 
     it "sends a welcome email" do
-      user.update(welcome_email_date_utc: nil)
+      user.update!(welcome_email_date_utc: nil)
       expect {
         perform_request
       }.to(

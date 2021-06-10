@@ -2,7 +2,7 @@ require "rails_helper"
 
 describe API::V2::SerializableUserNotificationPreferences do
   let(:jsonapi_renderer) { JSONAPI::Serializable::Renderer.new }
-  let(:updated_at) { Time.current }
+  let(:updated_at) { Time.zone.now }
   let(:user_notification_preferences) do
     instance_double(UserNotificationPreferences, id: 1, enabled: true, updated_at: updated_at)
   end

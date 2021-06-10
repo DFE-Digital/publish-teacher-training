@@ -23,7 +23,7 @@ run do |opts, _args, _cmd|
   user = ENV["DB_USERNAME"]
   host = ENV["DB_HOSTNAME"]
   if opts[:host]
-    host = opts[:host] + ".postgres.database.azure.com"
+    host = "#{opts[:host]}.postgres.database.azure.com"
     # The part of the username after the @ is the actual host you are actually connecting to.
     # The host in hostname is completely irrelevant beyond getting to azure. #HASHTAG_AZURE
     # So we need to replace that in the retrieved settings so we end up on the right postgres server.

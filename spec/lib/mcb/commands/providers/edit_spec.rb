@@ -23,10 +23,10 @@ describe "mcb providers edit" do
 
   let(:rolled_over_provider) do
     new_provider = provider.dup
-    new_provider.update(recruitment_cycle: current_cycle)
-    new_provider.update(organisations: provider.organisations)
-    new_provider.update(provider_name: "A")
-    new_provider.save
+    new_provider.update!(recruitment_cycle: current_cycle)
+    new_provider.update!(organisations: provider.organisations)
+    new_provider.update!(provider_name: "A")
+    new_provider.save!
     new_provider
   end
   let(:accrediting_provider) { "N" }

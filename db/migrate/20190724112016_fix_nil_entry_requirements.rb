@@ -8,7 +8,7 @@ class FixNilEntryRequirements < ActiveRecord::Migration[5.2]
         course.maths = "equivalence_test" if course.maths.nil?
         course.english = "equivalence_test" if course.english.nil?
         course.science = "equivalence_test" if course.science.nil?
-        course.save
+        course.save!
       end
     end
   end

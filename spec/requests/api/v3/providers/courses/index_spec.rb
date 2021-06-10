@@ -10,13 +10,13 @@ describe "GET v3/recruitment_cycle/:recruitment_cycle_year/providers/:provider_c
   let(:next_year)     { current_year + 1 }
   let(:subjects) { [course_subject_mathematics] }
 
-  let(:applications_open_from) { Time.now.utc }
+  let(:applications_open_from) { Time.zone.now.utc }
   let(:findable_open_course) do
     create(:course, :resulting_in_pgce_with_qts, :with_apprenticeship,
            level: "primary",
            name: "Mathematics",
            provider: provider,
-           start_date: Time.now.utc,
+           start_date: Time.zone.now.utc,
            study_mode: :full_time,
            subjects: subjects,
            is_send: true,

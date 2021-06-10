@@ -62,7 +62,7 @@ module MCB
         print_existing(database_attribute)
         user_response_from_cli = @cli.send("ask_#{logical_attribute}".to_sym)
         unless user_response_from_cli.nil?
-          update(database_attribute => user_response_from_cli)
+          update!(database_attribute => user_response_from_cli)
         end
       end
 
@@ -127,7 +127,7 @@ module MCB
       def find_courses(provider, course_codes)
         courses = provider.courses.where(course_code: course_codes)
         missing_course_codes = course_codes - courses.pluck(:course_code)
-        raise ArgumentError, "Couldn't find course " + missing_course_codes.join(", ") unless missing_course_codes.empty?
+        raise ArgumentError, "Couldn't find course #{missing_course_codes.join(', ')}" unless missing_course_codes.empty?
 
         courses
       end

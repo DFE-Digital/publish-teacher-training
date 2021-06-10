@@ -61,7 +61,7 @@ describe "GET v3/recruitment_cycle/:recruitment_cycle_year/providers" do
       second_alphabetical_provider
 
       # This moves it last in the order that it gets fetched by default.
-      provider.update(provider_name: "Acme")
+      provider.update!(provider_name: "Acme")
     end
 
     let(:provider_names_in_response) do

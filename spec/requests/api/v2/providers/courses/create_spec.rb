@@ -21,7 +21,7 @@ describe "Course POST #create API V2", type: :request do
   end
   let(:jsonapi_renderer) { JSONAPI::Serializable::Renderer.new }
   let(:create_path) do
-    "/api/v2/recruitment_cycles/#{recruitment_cycle.year}" +
+    "/api/v2/recruitment_cycles/#{recruitment_cycle.year}" \
       "/providers/#{course.provider.provider_code}/courses"
   end
 

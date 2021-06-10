@@ -9,9 +9,9 @@ module API
       def create
         skip_authorization
 
-        @current_user.update(
+        @current_user.update!(
           create_params.merge(
-            last_login_date_utc: Time.now.utc,
+            last_login_date_utc: Time.zone.now.utc,
           ),
         )
 
@@ -34,8 +34,8 @@ module API
           return render status: :bad_request
         end
 
-        @current_user.update(
-          last_login_date_utc: Time.now.utc,
+        @current_user.update!(
+          last_login_date_utc: Time.zone.now.utc,
           magic_link_token: nil,
           magic_link_token_sent_at: nil,
         )

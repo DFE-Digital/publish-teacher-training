@@ -29,8 +29,8 @@ describe Contact, type: :model do
     end
 
     it "should touch the provider" do
-      contacts.first.save
-      expect(provider.reload.changed_at).to be_within(1.second).of Time.now.utc
+      contacts.first.save!
+      expect(provider.reload.changed_at).to be_within(1.second).of Time.zone.now.utc
     end
 
     it { should validate_presence_of(:name) }

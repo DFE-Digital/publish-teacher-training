@@ -38,7 +38,7 @@ describe Sites::CopyToProviderService do
       it "does not make a copy of the site" do
         # Something strange is going on with sites ... setting the code as we
         # do for next_site doesn't seem to work so we have to assign it here.
-        next_site.update code: site.code
+        next_site.update! code: site.code
 
         expect { service.execute(site: site, new_provider: next_provider) }
           .not_to(change { next_provider.reload.sites.count })

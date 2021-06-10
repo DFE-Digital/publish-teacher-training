@@ -14,7 +14,7 @@ module NotificationService
         CourseWithdrawEmailMailer.course_withdraw_email(
           course,
           user,
-          DateTime.now,
+          Time.zone.now,
         ).deliver_later
       end
     end

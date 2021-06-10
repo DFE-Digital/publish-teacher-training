@@ -62,7 +62,7 @@ describe ProviderSerializer do
 
   context "when UCAS preferences are missing" do
     before do
-      provider.ucas_preferences.destroy
+      provider.ucas_preferences.destroy!
       provider.reload
     end
     # no need to test for the application alret recipient as it will not have

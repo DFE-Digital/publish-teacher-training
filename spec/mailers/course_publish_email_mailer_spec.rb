@@ -1,7 +1,7 @@
 require "rails_helper"
 
 describe CoursePublishEmailMailer, type: :mailer do
-  let(:course) { create(:course, :with_accrediting_provider, created_at: DateTime.new(2001, 2, 3, 4, 5, 6)) }
+  let(:course) { create(:course, :with_accrediting_provider, created_at: Time.zone.local(2001, 2, 3, 4, 5, 6)) }
   let(:user) { create(:user) }
   let(:mail) { described_class.course_publish_email(course, user) }
 

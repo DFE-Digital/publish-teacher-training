@@ -26,7 +26,7 @@ describe "Sites API v2", type: :request do
 
   describe "GET show" do
     let(:show_path) do
-      "/api/v2/providers/#{provider.provider_code}" +
+      "/api/v2/providers/#{provider.provider_code}" \
         "/sites/#{site1.id}"
     end
 

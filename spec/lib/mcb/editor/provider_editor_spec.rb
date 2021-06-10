@@ -179,7 +179,7 @@ describe MCB::Editor::ProviderEditor, :needs_audit_user do
       end
 
       context "when adding a new provider into a completely new organisation" do
-        let(:frozen_time) { Time.parse("10:00 20/01/2019").utc }
+        let(:frozen_time) { Time.zone.parse("10:00 20/01/2019").utc }
         let(:created_provider) { RecruitmentCycle.current_recruitment_cycle.providers.find_by!(provider_code: desired_attributes[:code]) }
 
         before do

@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :organisation do
-    name { "LONDON SCITT" + rand(1_000_000).to_s }
+    name { "LONDON SCITT#{rand(1_000_000)}" }
     sequence(:org_id)
 
     trait :with_anonymised_data do

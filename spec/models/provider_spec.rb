@@ -68,7 +68,7 @@ describe Provider, type: :model do
 
   describe "changed_at" do
     it "is set on create" do
-      provider = Provider.create(
+      provider = Provider.create!(
         recruitment_cycle: find_or_create(:recruitment_cycle),
         email: "email@test.com",
         telephone: "0123456789",
@@ -83,7 +83,7 @@ describe Provider, type: :model do
         provider = create(:provider, updated_at: 1.hour.ago)
         provider.touch
         expect(provider.changed_at).to eq provider.updated_at
-        expect(provider.changed_at).to eq Time.now.utc
+        expect(provider.changed_at).to eq Time.zone.now.utc
       end
     end
   end
@@ -158,7 +158,7 @@ describe Provider, type: :model do
     it "sets changed_at to the current time" do
       Timecop.freeze do
         provider.update_changed_at
-        expect(provider.changed_at).to eq Time.now.utc
+        expect(provider.changed_at).to eq Time.zone.now.utc
       end
     end
 
@@ -170,7 +170,7 @@ describe Provider, type: :model do
 
     it "leaves updated_at unchanged" do
       timestamp = 1.hour.ago
-      provider.update updated_at: timestamp
+      provider.update! updated_at: timestamp
 
       provider.update_changed_at
       expect(provider.updated_at).to eq timestamp
@@ -674,7 +674,7 @@ describe Provider, type: :model do
         it "does not geocode" do
           provider.skip_geocoding = true
 
-          provider.save
+          provider.save!
 
           expect(GeocodeJob).to_not have_received(:perform_later)
         end
@@ -684,7 +684,7 @@ describe Provider, type: :model do
         it "does not geocode" do
           provider.skip_geocoding = false
 
-          provider.save
+          provider.save!
 
           expect(GeocodeJob).to have_received(:perform_later)
         end

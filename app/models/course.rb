@@ -336,7 +336,7 @@ class Course < ApplicationRecord
   end
 
   def open_for_applications?
-    applications_open_from.present? && applications_open_from <= Time.now.utc && findable?
+    applications_open_from.present? && applications_open_from <= Time.zone.now.utc && findable?
   end
 
   def has_vacancies?
@@ -347,7 +347,7 @@ class Course < ApplicationRecord
     end
   end
 
-  def update_changed_at(timestamp: Time.now.utc)
+  def update_changed_at(timestamp: Time.zone.now.utc)
     # Changed_at represents changes to related records as well as course
     # itself, so we don't want to alter the semantics of updated_at which
     # represents changes to just the course record.
@@ -611,7 +611,7 @@ private
       # `full_messages_for` here will remove any `^`s defined in the validator or en.yml.
       # We still need it for later, so re-add it.
       # jsonapi_errors will throw if it's given an array, so we call `.first`.
-      message = "^" + enrichment.errors.full_messages_for(field).first.to_s
+      message = "^#{enrichment.errors.full_messages_for(field).first}"
       errors.add field.to_sym, message
     end
   end
@@ -680,7 +680,7 @@ private
       end_date = short_date(recruitment_cycle.application_end_date)
       errors.add(
         :applications_open_from,
-        "#{chosen_date} is not valid for the #{provider.recruitment_cycle.year} cycle. " +
+        "#{chosen_date} is not valid for the #{provider.recruitment_cycle.year} cycle. " \
         "A valid date must be between #{start_date} and #{end_date}",
       )
     end

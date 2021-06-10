@@ -28,7 +28,7 @@ module NotificationService
         CourseVacancies::UpdatedMailer.fully_updated(
           course: course,
           user: user,
-          datetime: DateTime.now,
+          datetime: Time.zone.now,
           vacancies_filled: vacancies_filled,
         ).deliver_later
       end
@@ -39,7 +39,7 @@ module NotificationService
         CourseVacancies::UpdatedMailer.partially_updated(
           course: course,
           user: user,
-          datetime: DateTime.now,
+          datetime: Time.zone.now,
           vacancies_opened: vacancies_opened,
           vacancies_closed: vacancies_closed,
         ).deliver_later

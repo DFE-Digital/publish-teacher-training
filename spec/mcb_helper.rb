@@ -48,7 +48,7 @@ RSpec.configure do |config|
   config.around(:each, mcb_cli: true) do |example|
     module ::Open3
       def self.pipeline_w(_cmds)
-        yield STDOUT
+        yield $stdout
       end
     end
 

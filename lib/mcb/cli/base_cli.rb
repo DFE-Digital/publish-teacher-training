@@ -25,7 +25,7 @@ module MCB
 
       def ask_multiple_choice(prompt:, choices:, default: nil)
         @cli.choose do |menu|
-          menu.prompt = prompt + "  "
+          menu.prompt = "#{prompt}  "
           menu.choice("exit") { nil }
           menu.choices(*choices)
           menu.default = default if default.present?

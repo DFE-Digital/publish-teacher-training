@@ -133,7 +133,7 @@ describe UserNotificationPreferences do
         end
 
         it "doesn't create duplicate user notification preferences" do
-          described_class.new(user_id: user.id).update(enable_notifications: true)
+          described_class.new(user_id: user.id).update!(enable_notifications: true)
 
           user_notifications = UserNotification.where(user_id: user.id)
           expect(user_notifications.count).to eq(2)
@@ -182,12 +182,12 @@ describe UserNotificationPreferences do
         pre_enabled = user_notification_preferences.enabled?
         expect(pre_enabled).to eq(false)
 
-        user_notification_preferences.update(enable_notifications: true)
+        user_notification_preferences.update!(enable_notifications: true)
         expect(user_notification_preferences.enabled?).to eq(true)
       end
 
       it "doesn't update other users notifications" do
-        described_class.new(user_id: user.id).update(enable_notifications: true)
+        described_class.new(user_id: user.id).update!(enable_notifications: true)
 
         other_users_notification_preferences = UserNotification.where(user_id: other_user.id)
         expect(other_users_notification_preferences.map(&:course_publish)).to eq([false])
@@ -199,7 +199,7 @@ describe UserNotificationPreferences do
         end
 
         it "does not commit the changes to the DB" do
-          described_class.new(user_id: user.id).update(enable_notifications: true)
+          described_class.new(user_id: user.id).update!(enable_notifications: true)
 
           user_notifications = UserNotification.where(user_id: user.id)
           expect(user_notifications.count).to eq(2)
@@ -209,7 +209,7 @@ describe UserNotificationPreferences do
 
         it "reports the error" do
           expect(Sentry).to receive(:capture_exception).with(instance_of(StandardError))
-          described_class.new(user_id: user.id).update(enable_notifications: true)
+          described_class.new(user_id: user.id).update!(enable_notifications: true)
         end
       end
     end
@@ -226,7 +226,7 @@ describe UserNotificationPreferences do
         end
 
         it "removes the unassociated accredited body UserNotification" do
-          described_class.new(user_id: user.id).update(enable_notifications: true)
+          described_class.new(user_id: user.id).update!(enable_notifications: true)
           user_notifications = UserNotification.where(user_id: user.id)
 
           expect(user_notifications.count).to eq(1)
@@ -248,7 +248,7 @@ describe UserNotificationPreferences do
         end
 
         it "creates a UserNotification for the new accredited body notification" do
-          described_class.new(user_id: user.id).update(enable_notifications: true)
+          described_class.new(user_id: user.id).update!(enable_notifications: true)
           user_notifications = UserNotification.where(user_id: user.id)
 
           expect(user_notifications.count).to eq(3)

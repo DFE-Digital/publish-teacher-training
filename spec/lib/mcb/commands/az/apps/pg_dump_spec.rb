@@ -8,7 +8,7 @@ describe "mcb az apps pg_dump" do
         "pg_dump --encoding utf8 --clean --if-exists " \
         "-h localhost -U manage_courses_backend " \
         "-d manage_courses_backend_development " \
-        "--file 'localhost_manage_courses_backend_development_#{Time.now.utc.strftime('%Y%m%d_%H%M%S')}.sql'",
+        "--file 'localhost_manage_courses_backend_development_#{Time.zone.now.utc.strftime('%Y%m%d_%H%M%S')}.sql'",
       )
 
       with_stubbed_stdout do

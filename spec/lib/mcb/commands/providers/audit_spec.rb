@@ -7,8 +7,8 @@ describe "mcb providers audit" do
   let(:provider) { create :provider, updated_at: 1.day.ago, changed_at: 1.day.ago, recruitment_cycle: current_cycle }
   let(:rolled_over_provider) do
     new_provider = provider.dup
-    new_provider.update(recruitment_cycle: next_cycle)
-    new_provider.save
+    new_provider.update!(recruitment_cycle: next_cycle)
+    new_provider.save!
     new_provider
   end
 

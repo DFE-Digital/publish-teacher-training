@@ -28,11 +28,11 @@ FactoryBot.define do
 
     trait :with_magic_link_token do
       magic_link_token { SecureRandom.uuid }
-      magic_link_token_sent_at { Time.now.utc }
+      magic_link_token_sent_at { Time.zone.now.utc }
     end
 
     trait :discarded do
-      discarded_at { Time.now.utc }
+      discarded_at { Time.zone.now.utc }
     end
   end
 end

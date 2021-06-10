@@ -11,7 +11,7 @@ describe "Publish API v2", type: :request do
     let(:status) { 200 }
     let(:course) { findable_open_course }
     let(:publish_path) do
-      "/api/v2/recruitment_cycles/#{provider.recruitment_cycle.year}/providers/#{provider.provider_code}" +
+      "/api/v2/recruitment_cycles/#{provider.recruitment_cycle.year}/providers/#{provider.provider_code}" \
         "/courses/#{course.course_code}/publish"
     end
 
@@ -80,9 +80,9 @@ describe "Publish API v2", type: :request do
           expect(course.site_statuses.first).to be_published_on_ucas
           expect(course.enrichments.first).to be_published
           expect(course.enrichments.first.updated_by_user_id).to eq user.id
-          expect(course.enrichments.first.updated_at).to be_within(1.second).of Time.now.utc
-          expect(course.enrichments.first.last_published_timestamp_utc).to be_within(1.second).of Time.now.utc
-          expect(course.changed_at).to be_within(1.second).of Time.now.utc
+          expect(course.enrichments.first.updated_at).to be_within(1.second).of Time.zone.now.utc
+          expect(course.enrichments.first.last_published_timestamp_utc).to be_within(1.second).of Time.zone.now.utc
+          expect(course.changed_at).to be_within(1.second).of Time.zone.now.utc
         end
       end
 
@@ -98,9 +98,9 @@ describe "Publish API v2", type: :request do
           expect(course.site_statuses.first).to be_published_on_ucas
           expect(course.enrichments.first).to be_published
           expect(course.enrichments.first.updated_by_user_id).to eq user.id
-          expect(course.enrichments.first.updated_at).to be_within(1.second).of Time.now.utc
-          expect(course.enrichments.first.last_published_timestamp_utc).to be_within(1.second).of Time.now.utc
-          expect(course.changed_at).to be_within(1.second).of Time.now.utc
+          expect(course.enrichments.first.updated_at).to be_within(1.second).of Time.zone.now.utc
+          expect(course.enrichments.first.last_published_timestamp_utc).to be_within(1.second).of Time.zone.now.utc
+          expect(course.changed_at).to be_within(1.second).of Time.zone.now.utc
         end
       end
 
@@ -116,9 +116,9 @@ describe "Publish API v2", type: :request do
           expect(course.site_statuses.first).to be_published_on_ucas
           expect(course.enrichments.first).to be_published
           expect(course.enrichments.first.updated_by_user_id).to eq user.id
-          expect(course.enrichments.first.updated_at).to be_within(1.second).of Time.now.utc
-          expect(course.enrichments.first.last_published_timestamp_utc).to be_within(1.second).of Time.now.utc
-          expect(course.changed_at).to be_within(1.second).of Time.now.utc
+          expect(course.enrichments.first.updated_at).to be_within(1.second).of Time.zone.now.utc
+          expect(course.enrichments.first.last_published_timestamp_utc).to be_within(1.second).of Time.zone.now.utc
+          expect(course.changed_at).to be_within(1.second).of Time.zone.now.utc
         end
       end
     end

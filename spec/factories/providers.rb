@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :provider do
-    provider_name { "ACME SCITT" + rand(1_000_000).to_s }
+    provider_name { "ACME SCITT#{rand(1_000_000)}" }
 
     sequence(:provider_code) { |n| "A#{'%02d' % n}" }
 
@@ -61,7 +61,7 @@ FactoryBot.define do
       # timestamp_attributes_for_update but FactoryBot doesn't actually
       # recognise it.
       if evaluator.changed_at.present?
-        provider.update changed_at: evaluator.changed_at
+        provider.update! changed_at: evaluator.changed_at
       end
     end
 
@@ -70,7 +70,7 @@ FactoryBot.define do
     end
 
     trait :discarded do
-      discarded_at { Time.now.utc }
+      discarded_at { Time.zone.now.utc }
     end
 
     trait :previous_recruitment_cycle do

@@ -7,51 +7,51 @@
 #
 #  bundle exec mcb
 
-require 'ap'
-require 'cri'
-require 'rainbow'
-require 'pry'
-require 'table_print'
-require 'terminal-table'
-require 'tabulo'
+require "ap"
+require "cri"
+require "rainbow"
+require "pry"
+require "table_print"
+require "terminal-table"
+require "tabulo"
 
-lib_dir = File.expand_path 'lib'
+lib_dir = File.expand_path "lib"
 
 $LOAD_PATH << lib_dir
-require 'mcb'
-require 'mcb/azure'
-require 'mcb/config'
+require "mcb"
+require "mcb/azure"
+require "mcb/config"
 
-require 'mcb/cli/base_cli'
-require 'mcb/cli/course_cli'
-require 'mcb/cli/provider_cli'
+require "mcb/cli/base_cli"
+require "mcb/cli/course_cli"
+require "mcb/cli/provider_cli"
 
-require 'mcb/editor/base'
-require 'mcb/editor/courses_editor'
-require 'mcb/editor/provider_editor'
-require 'mcb/editor/grant_access_wizard'
-require 'mcb/editor/revoke_access_wizard'
+require "mcb/editor/base"
+require "mcb/editor/courses_editor"
+require "mcb/editor/provider_editor"
+require "mcb/editor/grant_access_wizard"
+require "mcb/editor/revoke_access_wizard"
 
-require 'mcb/render'
-require 'mcb/render/active_record'
-require 'mcb/render/apiv1'
+require "mcb/render"
+require "mcb/render/active_record"
+require "mcb/render/apiv1"
 
-require 'mcb/services/token/encode_service'
+require "mcb/services/token/encode_service"
 
 tp.set :capitalize_headers, false
 
 $mcb = Cri::Command.define do
-  name        'mcb'
-  usage       'mcb [options]'
-  summary     'wrapper for management of teacher-training-api app'
+  name        "mcb"
+  usage       "mcb [options]"
+  summary     "wrapper for management of teacher-training-api app"
 
-  option :v, 'verbose',
-         'display additional info (for commands that support it)' do |value|
+  option :v, "verbose",
+         "display additional info (for commands that support it)" do |value|
     MCB::LOGGER.level = Logger::INFO
     $verbosity = :verbose if value
   end
 
-  flag :h, :help, 'show help for this command' do |_value, cmd|
+  flag :h, :help, "show help for this command" do |_value, cmd|
     puts cmd.help
 
     prefix = "    #{cmd.name == 'mcb' ? 'bin/mcb' : cmd.name} "
@@ -61,7 +61,7 @@ $mcb = Cri::Command.define do
     exit 0 unless $mcb_repl_mode
   end
 
-  option :c, :config, 'use provided config file',
+  option :c, :config, "use provided config file",
          argument: :required do |config_file|
     MCB.config_file = config_file
   end
@@ -82,12 +82,12 @@ def puts_command_index(cmd, prefix, depth)
 
   # recurse
   cmd.commands.sort_by(&:name).each do |c|
-    puts_command_index(c, prefix + c.name + " ", depth + 1)
+    puts_command_index(c, "#{prefix}#{c.name} ", depth + 1)
   end
 end
 
 def pretty_cmd(cmd, prefix)
-  aligned_cmd_name = prefix.ljust(35, ' ')
+  aligned_cmd_name = prefix.ljust(35, " ")
   coloured_name = Rainbow(aligned_cmd_name).green
   puts "#{coloured_name} #{cmd.summary}"
 end
@@ -102,7 +102,7 @@ def error(msg)
   puts msg
 end
 
-if File.basename(__FILE__) == File.basename($0)
+if File.basename(__FILE__) == File.basename($PROGRAM_NAME)
   if MCB.launch_repl?(ARGV)
     MCB.start_mcb_repl(ARGV)
   else

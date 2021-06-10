@@ -211,7 +211,7 @@ class Provider < ApplicationRecord
     has_attribute?("included_accredited_courses_count") ? included_accredited_courses_count : 0
   end
 
-  def update_changed_at(timestamp: Time.now.utc)
+  def update_changed_at(timestamp: Time.zone.now.utc)
     # Changed_at represents changes to related records as well as provider
     # itself, so we don't want to alter the semantics of updated_at which
     # represents changes to just the provider record.

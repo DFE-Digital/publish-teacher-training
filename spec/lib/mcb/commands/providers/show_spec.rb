@@ -13,8 +13,8 @@ describe "mcb providers list" do
   let(:provider) { create :provider, recruitment_cycle: next_cycle }
   let(:rolled_over_provider) do
     new_provider = provider.dup
-    new_provider.update(recruitment_cycle: current_cycle)
-    new_provider.save
+    new_provider.update!(recruitment_cycle: current_cycle)
+    new_provider.save!
     new_provider
   end
 

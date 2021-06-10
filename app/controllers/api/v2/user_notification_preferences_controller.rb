@@ -13,7 +13,7 @@ module API
       def update
         authorize user_notification_preferences = UserNotificationPreferences.new(user_id: params[:id])
 
-        user_notification_preferences.update(enable_notifications: update_params[:enabled])
+        user_notification_preferences.update!(enable_notifications: update_params[:enabled])
 
         render jsonapi: user_notification_preferences
       end

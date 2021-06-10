@@ -5,12 +5,12 @@ require "securerandom"
 require "csv"
 
 module MCB
-  LOGGER = Logger.new(STDERR)
+  LOGGER = Logger.new($stderr)
   LOGGER.level = Logger::WARN
 
   LOGGER.formatter = proc do |severity, _datetime, _progname, msg|
     if severity == Logger::INFO
-      msg + "\n"
+      "#{msg}\n"
     else
       "#{severity}: #{msg}\n"
     end
@@ -30,7 +30,7 @@ module MCB
         ENV["RAILS_ENV"] = webapp_rails_env
       end
 
-      app_root = File.expand_path(File.join(File.dirname($0), ".."))
+      app_root = File.expand_path(File.join(File.dirname($PROGRAM_NAME), ".."))
       exec_path = File.join(app_root, "bin", "rails")
 
       # prevent caching of environment variables by spring
@@ -47,7 +47,7 @@ module MCB
     # --webapp only needs to be processed on the first time through
     new_argv = remove_option_with_arg(ARGV, "--webapp", "-A")
 
-    rails_runner(["runner", $0, *new_argv], **opts)
+    rails_runner(["runner", $PROGRAM_NAME, *new_argv], **opts)
   end
 
   def self.rails_console(**opts)
@@ -173,7 +173,7 @@ module MCB
       unless email
         error "No email set in config. You can set it like this:"
         error ""
-        error "  $ #{$0} config set email <your-email-address>"
+        error "  $ #{$PROGRAM_NAME} config set email <your-email-address>"
         error ""
         raise "email not configured"
       end
@@ -257,8 +257,7 @@ module MCB
         next_changed_since = extract_changed_at(next_url)
 
         puts(
-          "To continue retrieving results use the changed-since: " +
-          CGI.unescape(next_changed_since),
+          "To continue retrieving results use the changed-since: #{CGI.unescape(next_changed_since)}",
         )
       else
         puts "All #{pages} pages from API retrieved."
@@ -523,14 +522,14 @@ module MCB
       new_url = url.dup
       if opts.key? :'changed-since'
         changed_since = begin
-          DateTime.strptime(
+          Time.strptime(
             CGI.unescape(opts[:'changed-since']),
             "%FT%T.%NZ",
           )
         rescue StandardError
           nil
         end
-        changed_since ||= DateTime.parse(opts[:'changed-since'])
+        changed_since ||= Time.zone.parse(opts[:'changed-since'])
         changed_since_param = CGI.escape(changed_since.strftime("%FT%T.%6NZ"))
         new_url.query = "changed_since=#{changed_since_param}"
       end

@@ -57,7 +57,7 @@ describe "/api/v2/sessions", type: :request do
       it "saves the last login time" do
         # OS vs TimeCop vs db, most likely db (nanoseconds are omitted), hence
         # 'be_within(1.second).of Time.now.utc' vs 'eq Time.now.utc'
-        expect(user.reload.last_login_date_utc).to be_within(1.second).of Time.now.utc
+        expect(user.reload.last_login_date_utc).to be_within(1.second).of Time.zone.now.utc
       end
 
       describe "the returned json" do

@@ -5,7 +5,7 @@ module Sites
         study_mode: new_course.study_mode,
       )
 
-      new_course.site_statuses.create(
+      new_course.site_statuses.create!(
         site: new_site,
         vac_status: new_vac_status,
         status: :new_status,

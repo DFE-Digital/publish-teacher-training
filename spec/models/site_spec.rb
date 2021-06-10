@@ -45,13 +45,13 @@ describe Site, type: :model do
     it "sets changed_at to the current time" do
       Timecop.freeze do
         site.touch
-        expect(site.provider.changed_at).to eq Time.now.utc
+        expect(site.provider.changed_at).to eq Time.zone.now.utc
       end
     end
 
     it "leaves updated_at unchanged" do
       timestamp = 1.hour.ago
-      site.provider.update updated_at: timestamp
+      site.provider.update! updated_at: timestamp
       site.touch
       expect(site.provider.updated_at).to eq timestamp
     end
@@ -141,7 +141,7 @@ describe Site, type: :model do
         it "does not geocode" do
           site.skip_geocoding = true
 
-          site.save
+          site.save!
 
           expect(GeocodeJob).to_not have_received(:perform_later)
         end
@@ -151,7 +151,7 @@ describe Site, type: :model do
         it "does not geocode" do
           site.skip_geocoding = false
 
-          site.save
+          site.save!
 
           expect(GeocodeJob).to have_received(:perform_later)
         end
@@ -233,21 +233,21 @@ describe Site, type: :model do
         expect(site).not_to receive(:add_travel_to_work_area_and_london_borough)
         site.latitude = nil
         site.longitude = nil
-        site.save
+        site.save!
       end
 
       it "triggers add_travel_to_work_area_and_london_borough on after_commit if lat or long have been updated" do
         expect(site).to receive(:add_travel_to_work_area_and_london_borough)
         site.latitude = 1.5
         site.longitude = 1.4
-        site.save
+        site.save!
       end
     end
 
     describe "#add_travel_to_work_area_and_london_borough" do
       before do
         allow(TravelToWorkAreaAndLondonBoroughJob).to receive(:perform_later)
-        site.update(latitude: 1.2, longitude: 1.3)
+        site.update!(latitude: 1.2, longitude: 1.3)
       end
 
       it "should call the TravelToWorkAreaAndLondonBoroughJob" do

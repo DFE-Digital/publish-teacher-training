@@ -108,7 +108,7 @@ module API
         @course.ensure_site_statuses_match_study_mode if @course.study_mode_previously_changed?
 
         if @course.errors.empty? && @course.valid?
-          @course.save
+          @course.save!
 
           unless site_ids.nil?
             NotificationService::CourseSitesUpdated.call(
@@ -180,7 +180,7 @@ module API
         enrichment = @course.enrichments.find_or_initialize_draft
         enrichment.assign_attributes(enrichment_params)
         enrichment.status = :draft if enrichment.rolled_over?
-        enrichment.save
+        enrichment.save!
       end
 
       def update_course
@@ -188,7 +188,7 @@ module API
         return unless @course.course_params_assignable(course_params)
 
         @course.assign_attributes(course_params)
-        @course.save
+        @course.save!
 
         NotificationService::CourseUpdated.call(course: @course)
       end

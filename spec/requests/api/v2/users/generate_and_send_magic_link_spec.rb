@@ -38,7 +38,7 @@ describe "PATCH /api/v2/users/generate_and_send_magic_link", type: :request do
 
       system_user = User.find_by(email: user.email)
       expect(system_user.magic_link_token).not_to be_nil
-      expect(system_user.magic_link_token_sent_at).to be_within(10.seconds).of Time.now.utc
+      expect(system_user.magic_link_token_sent_at).to be_within(10.seconds).of Time.zone.now.utc
     end
 
     it "sends an email with the magic link" do

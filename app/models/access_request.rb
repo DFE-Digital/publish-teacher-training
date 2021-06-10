@@ -19,7 +19,7 @@ class AccessRequest < ApplicationRecord
 
   def add_additonal_attributes(requester_email)
     update(requester: User.find_by(email: requester_email),
-           request_date_utc: Time.now.utc,
+           request_date_utc: Time.zone.now.utc,
            status: :requested)
   end
 

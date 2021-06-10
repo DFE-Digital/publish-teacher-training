@@ -16,8 +16,8 @@ describe "mcb courses audit" do
   let(:provider) { create :provider, updated_at: 1.day.ago, changed_at: 1.day.ago, recruitment_cycle: recruitment_year1 }
   let(:rolled_over_provider) do
     new_provider = provider.dup
-    new_provider.update(recruitment_cycle: recruitment_year2)
-    new_provider.save
+    new_provider.update!(recruitment_cycle: recruitment_year2)
+    new_provider.save!
     new_provider
   end
 
@@ -30,8 +30,8 @@ describe "mcb courses audit" do
 
   context "when the recruitment year is unspecified" do
     it "shows the list of changes for a given course" do
-      rolled_over_course.update(name: "Y")
-      course.update(name: "B")
+      rolled_over_course.update!(name: "Y")
+      course.update!(name: "B")
 
       output = execute_audit(
         arguments: [
@@ -58,8 +58,8 @@ describe "mcb courses audit" do
 
   context "when the recruitment year is specified" do
     it "shows the list of changes for a given course" do
-      rolled_over_course.update(name: "Y")
-      course.update(name: "B")
+      rolled_over_course.update!(name: "Y")
+      course.update!(name: "B")
 
       output = execute_audit(
         arguments: [

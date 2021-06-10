@@ -23,7 +23,7 @@ describe Course, type: :model do
         context "with an invalid date" do
           let(:course) do
             create(:course,
-                   applications_open_from: DateTime.new(current_year, 10, 1))
+                   applications_open_from: Time.zone.local(current_year, 10, 1))
           end
           its(:update_valid?) { should be false }
         end
@@ -45,7 +45,7 @@ describe Course, type: :model do
           let(:course) do
             create(:course,
                    provider: provider,
-                   applications_open_from: DateTime.new(current_year - 1, 10, 1))
+                   applications_open_from: Time.zone.local(current_year - 1, 10, 1))
           end
           its(:update_valid?) { should be false }
         end
@@ -53,7 +53,7 @@ describe Course, type: :model do
     end
 
     context "start_date" do
-      let(:course) { create(:course, start_date: DateTime.new(current_year, 9, 1)) }
+      let(:course) { create(:course, start_date: Time.zone.local(current_year, 9, 1)) }
 
       subject { course }
 
@@ -63,7 +63,7 @@ describe Course, type: :model do
         end
 
         context "with an invalid start date" do
-          let(:course) { create(:course, start_date: DateTime.new(next_year, 9, 1)) }
+          let(:course) { create(:course, start_date: Time.zone.local(next_year, 9, 1)) }
           its(:update_valid?) { should be false }
         end
       end
@@ -76,7 +76,7 @@ describe Course, type: :model do
           let(:course) do
             create(:course,
                    provider: provider,
-                   start_date: DateTime.new(next_year, 9, 1))
+                   start_date: Time.zone.local(next_year, 9, 1))
           end
           its(:update_valid?) { should be true }
         end
@@ -85,7 +85,7 @@ describe Course, type: :model do
           let(:course) do
             create(:course,
                    provider: provider,
-                   start_date: DateTime.new(next_year - 1, 9, 1))
+                   start_date: Time.zone.local(next_year - 1, 9, 1))
           end
           its(:update_valid?) { should be false }
         end

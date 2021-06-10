@@ -31,7 +31,7 @@ describe "PATCH /providers/:provider_code/courses/:course_code" do
            applications_open_from: applications_open_from
   end
 
-  let(:applications_open_from) { DateTime.new(provider.recruitment_cycle.year.to_i, 1, 15).utc }
+  let(:applications_open_from) { Time.zone.local(provider.recruitment_cycle.year.to_i, 1, 15).utc }
   let(:permitted_params) do
     %i[updated_applications_open_from]
   end
@@ -41,7 +41,7 @@ describe "PATCH /providers/:provider_code/courses/:course_code" do
   end
 
   context "course has an updated applications_open_from" do
-    let(:updated_applications_open_from) { { applications_open_from: DateTime.new(provider.recruitment_cycle.year.to_i, 1, 1).utc } }
+    let(:updated_applications_open_from) { { applications_open_from: Time.zone.local(provider.recruitment_cycle.year.to_i, 1, 1).utc } }
 
     it "returns http success" do
       expect(response).to have_http_status(:success)
@@ -76,7 +76,7 @@ describe "PATCH /providers/:provider_code/courses/:course_code" do
         chosen_date = updated_applications_open_from[:applications_open_from].strftime("%d/%m/%Y")
         start_date = provider.recruitment_cycle.application_start_date.strftime("%d/%m/%Y")
         end_date = provider.recruitment_cycle.application_end_date.strftime("%d/%m/%Y")
-        expect(response.body).to include("#{chosen_date} is not valid for the #{provider.recruitment_cycle.year} cycle. " +
+        expect(response.body).to include("#{chosen_date} is not valid for the #{provider.recruitment_cycle.year} cycle. " \
                                          "A valid date must be between #{start_date} and #{end_date}")
       end
     end
@@ -87,7 +87,7 @@ describe "PATCH /providers/:provider_code/courses/:course_code" do
       let(:course) { create :course, provider: provider, applications_open_from: applications_open_from }
       let(:provider) { build :provider, organisations: [organisation], recruitment_cycle: recruitment_cycle }
       let(:recruitment_cycle) { create(:recruitment_cycle, :next) }
-      let(:applications_open_from) { DateTime.new(provider.recruitment_cycle.year.to_i, 1, 15).utc }
+      let(:applications_open_from) { Time.zone.local(provider.recruitment_cycle.year.to_i, 1, 15).utc }
       let(:json_data) { JSON.parse(response.body)["errors"] }
 
       let(:updated_applications_open_from) { { applications_open_from: course.applications_open_from + 1.year } }
@@ -98,7 +98,7 @@ describe "PATCH /providers/:provider_code/courses/:course_code" do
         chosen_date = updated_applications_open_from[:applications_open_from].strftime("%d/%m/%Y")
         start_date = provider.recruitment_cycle.application_start_date.strftime("%d/%m/%Y")
         end_date = provider.recruitment_cycle.application_end_date.strftime("%d/%m/%Y")
-        expect(response.body).to include("#{chosen_date} is not valid for the #{provider.recruitment_cycle.year} cycle. " +
+        expect(response.body).to include("#{chosen_date} is not valid for the #{provider.recruitment_cycle.year} cycle. " \
                                          "A valid date must be between #{start_date} and #{end_date}")
       end
     end

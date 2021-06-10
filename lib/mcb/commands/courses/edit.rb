@@ -6,7 +6,7 @@ run do |opts, args, _cmd|
   MCB.init_rails(opts)
 
   provider_code = args[0].upcase
-  course_codes = args.to_a[1..-1].map(&:upcase)
+  course_codes = args.to_a[1..].map(&:upcase)
 
   MCB::Editor::CoursesEditor.new(
     requester: User.find_by!(email: MCB.config[:email]),

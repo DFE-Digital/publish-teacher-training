@@ -78,9 +78,9 @@ describe "mcb courses edit" do
         end
 
         it "ignores providers associated with the next cycle" do
-          CourseSubject.where(course_id: course.id).first.destroy
-          provider.destroy
-          course.destroy
+          CourseSubject.where(course_id: course.id).first.destroy!
+          provider.destroy!
+          course.destroy!
 
           expect { execute_edit(arguments: [provider_code, course_code], input: ["edit title", "Mathematics", "exit"]) }
             .to raise_error(ActiveRecord::RecordNotFound, /Couldn't find Provider/)

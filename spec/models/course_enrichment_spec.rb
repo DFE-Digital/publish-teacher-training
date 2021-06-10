@@ -35,8 +35,8 @@ describe CourseEnrichment, type: :model do
       end
 
       it { should be_published }
-      its(:updated_at) { should be_within(1.second).of Time.now.utc }
-      its(:last_published_timestamp_utc) { should be_within(1.second).of Time.now.utc }
+      its(:updated_at) { should be_within(1.second).of Time.zone.now.utc }
+      its(:last_published_timestamp_utc) { should be_within(1.second).of Time.zone.now.utc }
       its(:updated_by_user_id) { should eq user.id }
     end
 
@@ -48,8 +48,8 @@ describe CourseEnrichment, type: :model do
       end
 
       it { should be_published }
-      its(:updated_at) { should be_within(1.second).of Time.now.utc }
-      its(:last_published_timestamp_utc) { should be_within(1.second).of Time.now.utc }
+      its(:updated_at) { should be_within(1.second).of Time.zone.now.utc }
+      its(:last_published_timestamp_utc) { should be_within(1.second).of Time.zone.now.utc }
       its(:updated_by_user_id) { should eq user.id }
     end
   end

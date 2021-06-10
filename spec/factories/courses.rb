@@ -15,11 +15,11 @@ FactoryBot.define do
     level { :primary }
     age_range_in_years { "3_to_7" }
     resulting_in_pgce_with_qts
-    start_date { DateTime.new(provider.recruitment_cycle.year.to_i, 9, 1) }
+    start_date { Time.zone.local(provider.recruitment_cycle.year.to_i, 9, 1) }
     applications_open_from do
       Faker::Time.between(
-        from: DateTime.new(provider.recruitment_cycle.year.to_i - 1, 10, 1),
-        to: DateTime.new(provider.recruitment_cycle.year.to_i, 9, 29),
+        from: Time.zone.local(provider.recruitment_cycle.year.to_i - 1, 10, 1),
+        to: Time.zone.local(provider.recruitment_cycle.year.to_i, 9, 29),
       )
     end
 
@@ -51,11 +51,12 @@ FactoryBot.define do
       end
 
       if evaluator.infer_subjects? && course.subjects.empty?
-        if course.level == "primary"
+        case course.level
+        when "primary"
           course.subjects << find_or_create(:primary_subject, :primary)
-        elsif course.level == "secondary"
+        when "secondary"
           course.subjects << find_or_create(:secondary_subject, :science)
-        elsif course.level == "further_education"
+        when "further_education"
           course.subjects << find_or_create(:further_education_subject)
         end
       end

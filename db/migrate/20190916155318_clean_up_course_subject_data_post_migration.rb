@@ -16,7 +16,7 @@ class CleanUpCourseSubjectDataPostMigration < ActiveRecord::Migration[5.2]
       pe = Subject.find_by!(subject_name: "Physical education")
 
       c = courses.find_by!(course_code: "3CZ2")
-      c.update(level: "secondary", subjects: [pe, geography])
+      c.update!(level: "secondary", subjects: [pe, geography])
 
       modern_languages = Subject.find_by!(subject_name: "Modern Languages")
 
@@ -40,7 +40,7 @@ class CleanUpCourseSubjectDataPostMigration < ActiveRecord::Migration[5.2]
       balanced_science_courses = courses.where(subject: { subject_name: "Balanced Science" })
       balanced_science_courses.each do |course|
         if course.subjects.count == 4
-          course.update(subjects: [science])
+          course.update!(subjects: [science])
         else
           course.subjects -= [balanced_science]
           course.subjects += [science]

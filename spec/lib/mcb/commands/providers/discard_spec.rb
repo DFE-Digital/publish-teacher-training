@@ -21,9 +21,9 @@ describe "mcb providers discard" do
 
     it "discards the provider" do
       expect(provider.reload.discarded?).to be_truthy
-      expect(provider.reload.discarded_at).to be_within(1.second).of Time.now.utc
+      expect(provider.reload.discarded_at).to be_within(1.second).of Time.zone.now.utc
       expect(course.reload.discarded?).to be_truthy
-      expect(course.discarded_at).to be_within(1.second).of Time.now.utc
+      expect(course.discarded_at).to be_within(1.second).of Time.zone.now.utc
       expect(provider2.reload.discarded?).to be_falsey
       expect(provider2.courses.first.reload.discarded?).to be_falsey
     end
@@ -38,9 +38,9 @@ describe "mcb providers discard" do
 
     it "discards the provider" do
       expect(provider2.reload.discarded?).to be_truthy
-      expect(provider2.reload.discarded_at).to be_within(1.second).of Time.now.utc
+      expect(provider2.reload.discarded_at).to be_within(1.second).of Time.zone.now.utc
       expect(course2.reload.discarded?).to be_truthy
-      expect(course2.reload.discarded_at).to be_within(1.second).of Time.now.utc
+      expect(course2.reload.discarded_at).to be_within(1.second).of Time.zone.now.utc
       expect(provider.reload.discarded?).to be_falsey
       expect(provider.courses.first.reload.discarded?).to be_falsey
     end
@@ -55,7 +55,7 @@ describe "mcb providers discard" do
 
     it "default to the currecnt cycle and discards the provider" do
       expect(provider.reload.discarded?).to be_truthy
-      expect(provider.reload.discarded_at).to be_within(1.second).of Time.now.utc
+      expect(provider.reload.discarded_at).to be_within(1.second).of Time.zone.now.utc
       expect(provider2.reload.discarded?).to be_falsey
     end
   end

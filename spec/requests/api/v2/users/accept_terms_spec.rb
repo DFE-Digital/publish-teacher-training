@@ -42,7 +42,7 @@ describe "PATCH /api/v2/users/:id/accept_terms", type: :request do
 
     it "sets the accept_terms_date_utc on the user object" do
       perform_request user
-      expect(user.reload.accept_terms_date_utc).to be_within(1.second).of Time.now.utc
+      expect(user.reload.accept_terms_date_utc).to be_within(1.second).of Time.zone.now.utc
     end
 
     describe "for wrong user" do

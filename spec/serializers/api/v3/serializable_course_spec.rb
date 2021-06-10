@@ -5,7 +5,7 @@ describe API::V3::SerializableCourse do
   let(:draft_enrichment) { build :course_enrichment }
   let(:published_enrichment) { build :course_enrichment, :published }
   let(:date_today) { Time.zone.today }
-  let(:time_now) { Time.now.utc }
+  let(:time_now) { Time.zone.now.utc }
   let(:course) do
     create(:course, enrichments: [draft_enrichment, published_enrichment], start_date: time_now, applications_open_from: date_today, level: :primary)
   end

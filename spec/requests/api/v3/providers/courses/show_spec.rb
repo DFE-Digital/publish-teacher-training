@@ -35,7 +35,7 @@ describe "GET v3/recruitment_cycle/:recruitment_cycle_year/providers/:provider_c
            provider: provider,
            enrichments: enrichments,
            site_statuses: [courses_site_status],
-           applications_open_from: Time.now.utc
+           applications_open_from: Time.zone.now.utc
   end
 
   context "with a published course" do

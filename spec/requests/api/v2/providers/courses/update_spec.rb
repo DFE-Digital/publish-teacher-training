@@ -3,8 +3,8 @@ require "rails_helper"
 describe "PATCH /providers/:provider_code/courses/:course_code" do
   let(:jsonapi_renderer) { JSONAPI::Serializable::Renderer.new }
   let(:request_path) do
-    "/api/v2/recruitment_cycles/#{recruitment_cycle.year}" +
-      "/providers/#{course.provider.provider_code}" +
+    "/api/v2/recruitment_cycles/#{recruitment_cycle.year}" \
+      "/providers/#{course.provider.provider_code}" \
       "/courses/#{course.course_code}"
   end
 
@@ -72,7 +72,7 @@ describe "PATCH /providers/:provider_code/courses/:course_code" do
     include_examples "does not allow assignment", :profpost_flag, "BO"
     include_examples "does not allow assignment", :program_type, "SC"
     include_examples "does not allow assignment", :qualification, 2
-    include_examples "does not allow assignment", :start_date, DateTime.new(Settings.current_recruitment_cycle_year, 10, 10)
+    include_examples "does not allow assignment", :start_date, Time.zone.local(Settings.current_recruitment_cycle_year, 10, 10)
     include_examples "does not allow assignment", :study_mode, "P"
     include_examples "does not allow assignment", :modular, "Modular"
     include_examples "does not allow assignment", :english, 2

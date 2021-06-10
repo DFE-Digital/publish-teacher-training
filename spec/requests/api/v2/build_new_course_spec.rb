@@ -401,7 +401,7 @@ describe "/api/v2/build_new_course", type: :request do
         english: "must_have_qualification_at_application_time",
         science: "must_have_qualification_at_application_time",
         study_mode: "full_time",
-        start_date: DateTime.new(provider.recruitment_cycle.year.to_i, 9, 1),
+        start_date: Time.zone.local(provider.recruitment_cycle.year.to_i, 9, 1),
         qualification: "qts",
         funding_type: "fee",
         subjects_ids: subjects.map(&:id),

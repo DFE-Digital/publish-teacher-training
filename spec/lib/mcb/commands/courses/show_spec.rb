@@ -13,8 +13,8 @@ describe "mcb courses show" do
   let(:provider) { create :provider, updated_at: 1.day.ago, changed_at: 1.day.ago, recruitment_cycle: recruitment_year1 }
   let(:rolled_over_provider) do
     new_provider = provider.dup
-    new_provider.update(recruitment_cycle: recruitment_year2)
-    new_provider.save
+    new_provider.update!(recruitment_cycle: recruitment_year2)
+    new_provider.save!
     new_provider
   end
 

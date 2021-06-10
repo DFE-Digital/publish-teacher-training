@@ -8,7 +8,7 @@ describe RecordFirstLoginService do
 
     it "updates the first login date" do
       Timecop.freeze do
-        update_time = Time.now.utc
+        update_time = Time.zone.now.utc
         service.execute(current_user: current_user_spy)
         expect(current_user_spy).to have_received(:update).with(first_login_date_utc: update_time)
       end

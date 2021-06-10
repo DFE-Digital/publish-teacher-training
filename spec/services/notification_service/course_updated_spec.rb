@@ -78,7 +78,7 @@ module NotificationService
           end
 
           course.age_range_in_years = "7_to_14"
-          course.save
+          course.save!
           service_call
         end
 
@@ -98,7 +98,7 @@ module NotificationService
 
           course.english = "must_have_qualification_at_application_time"
           course.maths = "must_have_qualification_at_application_time"
-          course.save
+          course.save!
           service_call
         end
       end

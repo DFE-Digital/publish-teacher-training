@@ -14,12 +14,12 @@ run do |opts, args, _cmd|
   if opts[:"accrediting-provider"].present?
     args.each do |provider_code|
       provider = providers.find_by!(provider_code: provider_code.upcase)
-      provider.update(accrediting_provider: "Y")
+      provider.update!(accrediting_provider: "Y")
     end
   elsif opts[:"not-accrediting-provider"].present?
     args.each do |provider_code|
       provider = providers.find_by!(provider_code: provider_code.upcase)
-      provider.update(accrediting_provider: "N")
+      provider.update!(accrediting_provider: "N")
     end
   elsif args.length > 1
 

@@ -42,7 +42,7 @@ module MCB
       end
 
       def claims
-        now = Time.now.to_i
+        now = Time.zone.now.to_i
         {
           aud: audience,
           exp: (now + (5 * 60)),

@@ -18,7 +18,7 @@ RSpec.describe Course, type: :model do
     context "on an old course with a site" do
       let(:course) { create(:course, site_statuses: [published_new_site], age: 5.days.ago) }
       it "updates course.changed_at" do
-        expect(course.changed_at).to be_within(1.second).of Time.now.utc
+        expect(course.changed_at).to be_within(1.second).of Time.zone.now.utc
       end
     end
 

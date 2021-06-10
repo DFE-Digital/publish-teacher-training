@@ -10,7 +10,7 @@ describe "Publishable API v2", type: :request do
 
   describe "POST publishable" do
     let(:publishable_path) do
-      "/api/v2/providers/#{provider.provider_code}" +
+      "/api/v2/providers/#{provider.provider_code}" \
         "/courses/#{course.course_code}/publishable"
     end
 

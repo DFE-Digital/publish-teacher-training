@@ -20,7 +20,7 @@ describe SendWelcomeEmailService do
     end
 
     it "sets their welcome email date to now" do
-      expect(current_user_spy).to have_received(:update).with(hash_including(welcome_email_date_utc: Time.now.utc))
+      expect(current_user_spy).to have_received(:update).with(hash_including(welcome_email_date_utc: Time.zone.now.utc))
     end
 
     it "sends the welcome email" do
@@ -40,8 +40,8 @@ describe SendWelcomeEmailService do
     let(:current_user_spy) do
       spy(
         first_name: "Meowington",
-        first_login_date_utc: Time.local(2018, 1, 1).utc,
-        welcome_email_date_utc: Time.local(2018, 1, 1).utc,
+        first_login_date_utc: Time.zone.local(2018, 1, 1).utc,
+        welcome_email_date_utc: Time.zone.local(2018, 1, 1).utc,
       )
     end
 
@@ -51,12 +51,12 @@ describe SendWelcomeEmailService do
     end
 
     it "does not update their first login date" do
-      expect(current_user_spy).not_to have_received(:update).with(hash_including(first_login_date_utc: Time.now.utc))
+      expect(current_user_spy).not_to have_received(:update).with(hash_including(first_login_date_utc: Time.zone.now.utc))
     end
 
     context "And has received a welcome email" do
       it "does not update their welcome email date" do
-        expect(current_user_spy).not_to have_received(:update).with(hash_including(welcome_email_date_utc: Time.now.utc))
+        expect(current_user_spy).not_to have_received(:update).with(hash_including(welcome_email_date_utc: Time.zone.now.utc))
       end
 
       it "does not send the welcome email" do
@@ -69,7 +69,7 @@ describe SendWelcomeEmailService do
         spy(
           email: "meowington@cat.net",
           first_name: "Meowington",
-          first_login_date_utc: Time.local(2018, 1, 1).utc,
+          first_login_date_utc: Time.zone.local(2018, 1, 1).utc,
           welcome_email_date_utc: nil,
         )
       end
@@ -79,7 +79,7 @@ describe SendWelcomeEmailService do
       end
 
       it "sets their welcome email date to now" do
-        expect(current_user_spy).to have_received(:update).with(hash_including(welcome_email_date_utc: Time.now.utc))
+        expect(current_user_spy).to have_received(:update).with(hash_including(welcome_email_date_utc: Time.zone.now.utc))
       end
 
       it "sends the welcome email" do

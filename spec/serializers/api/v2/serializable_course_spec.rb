@@ -3,7 +3,7 @@ require "rails_helper"
 describe API::V2::SerializableCourse do
   let(:jsonapi_renderer) { JSONAPI::Serializable::Renderer.new }
   let(:date_today) { Time.zone.today }
-  let(:time_now) { Time.now.utc }
+  let(:time_now) { Time.zone.now.utc }
   let(:course) { create(:course, start_date: time_now, applications_open_from: date_today, level: :primary) }
   let(:parsed_json) { JSON.parse(course_json) }
 

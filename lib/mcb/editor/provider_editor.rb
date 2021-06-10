@@ -169,16 +169,17 @@ module MCB
       end
 
       def perform_action(choice)
-        if choice == "edit provider name"
+        case choice
+        when "edit provider name"
           edit_provider_name
-        elsif choice == "edit courses"
+        when "edit courses"
           select_courses_to_edit_and_launch_editor
         end
       end
 
       def edit_provider_name
         puts "Current name: #{provider.provider_name}"
-        provider.update(provider_name: @cli.ask_name)
+        provider.update!(provider_name: @cli.ask_name)
       end
 
       def select_courses_to_edit_and_launch_editor

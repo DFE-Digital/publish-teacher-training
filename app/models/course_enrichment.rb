@@ -87,14 +87,14 @@ class CourseEnrichment < ApplicationRecord
 
   def publish(current_user)
     update(status: "published",
-           last_published_timestamp_utc: Time.now.utc,
+           last_published_timestamp_utc: Time.zone.now.utc,
            updated_by_user_id: current_user.id)
   end
 
   def unpublish(initial_draft: true)
     data = { status: :draft }
     data[:last_published_timestamp_utc] = nil if initial_draft
-    update(data)
+    update!(data)
   end
 
   def withdraw

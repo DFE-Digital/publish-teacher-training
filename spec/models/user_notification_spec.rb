@@ -8,13 +8,13 @@ describe UserNotification, type: :model do
 
     it "requires course_publish" do
       subject.course_publish = nil
-      subject.save
+      subject.save!
       expect(subject.errors["course_publish"]).to include("is not included in the list")
     end
 
     it "requires course_update" do
       subject.course_update = nil
-      subject.save
+      subject.save!
       expect(subject.errors["course_update"]).to include("is not included in the list")
     end
   end

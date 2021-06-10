@@ -13,12 +13,12 @@ describe "mcb courses touch" do
   let(:provider) { create :provider, updated_at: 1.day.ago, changed_at: 1.day.ago, recruitment_cycle: recruitment_year1 }
   let(:rolled_over_provider) do
     new_provider = provider.dup
-    new_provider.update(recruitment_cycle: recruitment_year2)
-    new_provider.save
+    new_provider.update!(recruitment_cycle: recruitment_year2)
+    new_provider.save!
     new_provider
   end
 
-  let(:course) { create :course, updated_at: 1.day.ago, changed_at: 1.day.ago, provider: provider, applications_open_from: DateTime.new(provider.recruitment_cycle.year.to_i, 1, 1) }
+  let(:course) { create :course, updated_at: 1.day.ago, changed_at: 1.day.ago, provider: provider, applications_open_from: Time.zone.local(provider.recruitment_cycle.year.to_i, 1, 1) }
   let(:rolled_over_course) { create(:course, provider: rolled_over_provider) }
 
   context "when the recruitment year is unspecified" do
@@ -33,8 +33,8 @@ describe "mcb courses touch" do
 
         # Use to_i compare seconds since epoch and side-step sub-second
         # differences that show up even with Timecop on certain platforms.
-        expect(rolled_over_course.reload.updated_at.to_i).to eq Time.now.to_i
-        expect(course.reload.updated_at.to_i).not_to eq Time.now.to_i
+        expect(rolled_over_course.reload.updated_at.to_i).to eq Time.zone.now.to_i
+        expect(course.reload.updated_at.to_i).not_to eq Time.zone.now.to_i
       end
     end
 
@@ -42,8 +42,8 @@ describe "mcb courses touch" do
       Timecop.freeze(Time.zone.today + 1) do
         execute_touch(arguments: [rolled_over_provider.provider_code, rolled_over_course.course_code])
 
-        expect(rolled_over_course.reload.changed_at.to_i).to eq Time.now.to_i
-        expect(course.reload.changed_at.to_i).not_to eq Time.now.to_i
+        expect(rolled_over_course.reload.changed_at.to_i).to eq Time.zone.now.to_i
+        expect(course.reload.changed_at.to_i).not_to eq Time.zone.now.to_i
       end
     end
 
@@ -66,8 +66,8 @@ describe "mcb courses touch" do
 
         # Use to_i compare seconds since epoch and side-step sub-second
         # differences that show up even with Timecop on certain platforms.
-        expect(course.reload.updated_at.to_i).to eq Time.now.to_i
-        expect(rolled_over_course.reload.changed_at.to_i).not_to eq Time.now.to_i
+        expect(course.reload.updated_at.to_i).to eq Time.zone.now.to_i
+        expect(rolled_over_course.reload.changed_at.to_i).not_to eq Time.zone.now.to_i
       end
     end
 
@@ -77,8 +77,8 @@ describe "mcb courses touch" do
       Timecop.freeze(Time.zone.today + 1) do
         execute_touch(arguments: [provider.provider_code, course.course_code, "-r", recruitment_year1.year])
 
-        expect(course.reload.changed_at.to_i).to eq Time.now.to_i
-        expect(rolled_over_course.reload.changed_at.to_i).not_to eq Time.now.to_i
+        expect(course.reload.changed_at.to_i).to eq Time.zone.now.to_i
+        expect(rolled_over_course.reload.changed_at.to_i).not_to eq Time.zone.now.to_i
       end
     end
 

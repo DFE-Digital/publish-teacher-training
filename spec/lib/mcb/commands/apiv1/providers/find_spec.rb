@@ -36,13 +36,13 @@ describe '"mcb apiv1 providers find"' do
       .to_return(status: 200,
                  body: json.to_json,
                  headers: {
-                   link: next_url + '; rel="next"',
+                   link: "#{next_url}; rel=\"next\"",
                  })
     stub_request(:get, next_url)
       .to_return(status: 200,
                  body: [].to_json,
                  headers: {
-                   link: next_url + '; rel="next"',
+                   link: "#{next_url}; rel=\"next\"",
                  })
 
     output = with_stubbed_stdout do

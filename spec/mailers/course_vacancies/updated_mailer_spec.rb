@@ -16,7 +16,7 @@ module CourseVacancies
         described_class.fully_updated(
           course: course,
           user: user,
-          datetime: DateTime.new(2001, 2, 3, 4, 5, 6),
+          datetime: Time.zone.local(2001, 2, 3, 4, 5, 6),
           vacancies_filled: vacancies_filled,
         )
       end
@@ -82,7 +82,7 @@ module CourseVacancies
         described_class.partially_updated(
           course: course,
           user: user,
-          datetime: DateTime.new(2001, 2, 3, 4, 5, 6),
+          datetime: Time.zone.local(2001, 2, 3, 4, 5, 6),
           vacancies_opened: ["Main site", "London site"],
           vacancies_closed: ["Birmingham site", "Bristol site"],
         )

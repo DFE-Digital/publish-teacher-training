@@ -51,7 +51,7 @@ describe AccessRequest, type: :model do
   end
 
   describe "#by_request_date" do
-    let!(:access_request1) { create(:access_request, request_date_utc: Time.now.utc) }
+    let!(:access_request1) { create(:access_request, request_date_utc: Time.zone.now.utc) }
     let!(:access_request2) { create(:access_request, request_date_utc: 2.minutes.ago.utc) }
 
     it "returns the new enrichment first" do
@@ -84,7 +84,7 @@ describe AccessRequest, type: :model do
     subject { access_request }
 
     its(:requester)         { should eq user }
-    its(:request_date_utc)  { should be_within(1.second).of Time.now.utc }
+    its(:request_date_utc)  { should be_within(1.second).of Time.zone.now.utc }
     its(:status)            { should eq "requested" }
   end
 

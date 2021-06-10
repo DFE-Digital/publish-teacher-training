@@ -84,18 +84,18 @@ describe Course, type: :model do
 
       let(:enrichment) { subject.enrichments.first }
 
-      its(:changed_at) { should be_within(1.second).of Time.now.utc }
+      its(:changed_at) { should be_within(1.second).of Time.zone.now.utc }
 
       it "publishes the draft" do
         expect(enrichment).to be_published
       end
 
       it "updates enrichment updated_at to the current time" do
-        expect(enrichment.updated_at).to be_within(1.second).of Time.now.utc
+        expect(enrichment.updated_at).to be_within(1.second).of Time.zone.now.utc
       end
 
       it "updates last_published to the current time" do
-        expect(enrichment.last_published_timestamp_utc).to be_within(1.second).of Time.now.utc
+        expect(enrichment.last_published_timestamp_utc).to be_within(1.second).of Time.zone.now.utc
       end
 
       it "updates updated_by to the current user" do

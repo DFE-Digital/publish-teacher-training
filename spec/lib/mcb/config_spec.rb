@@ -37,7 +37,7 @@ describe MCB::Config do
 
       config = MCB::Config.new(config_file: config_file.path)
       config[:door] = "knob"
-      config.save
+      config.save!
 
       saved_config = YAML.safe_load(File.read(config_file.path))
       expect(saved_config["door"]).to eq "knob"

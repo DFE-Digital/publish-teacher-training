@@ -13,7 +13,7 @@ describe "mcb users audit" do
 
   it "shows the list of changes for a given user" do
     Audited.store[:audited_user] = admin_user
-    user.update(email: "b@b")
+    user.update!(email: "b@b")
 
     output = with_stubbed_stdout do
       cmd.run([user.id.to_s])
@@ -30,7 +30,7 @@ describe "mcb users audit" do
 
   it "allows specifying user by email" do
     Audited.store[:audited_user] = admin_user
-    user.update(email: "b@b")
+    user.update!(email: "b@b")
 
     output = with_stubbed_stdout do
       cmd.run([user.email])
@@ -47,7 +47,7 @@ describe "mcb users audit" do
 
   it "allows specifying user by sign-in id" do
     Audited.store[:audited_user] = admin_user
-    user.update(email: "b@b")
+    user.update!(email: "b@b")
 
     output = with_stubbed_stdout do
       cmd.run([user.sign_in_user_id])

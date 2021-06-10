@@ -65,7 +65,7 @@ module NotificationService
                   .with(
                     course: course,
                     user: user,
-                    datetime: DateTime.now,
+                    datetime: Time.zone.now,
                     vacancies_filled: true,
                   ).and_return(mailer = double)
           expect(mailer).to receive(:deliver_later)
@@ -109,7 +109,7 @@ module NotificationService
                     .with({
                       course: course,
                       user: user,
-                      datetime: DateTime.now,
+                      datetime: Time.zone.now,
                       vacancies_filled: true,
                     })
           end
@@ -133,7 +133,7 @@ module NotificationService
                     .with({
                       course: course,
                       user: user,
-                      datetime: DateTime.now,
+                      datetime: Time.zone.now,
                       vacancies_filled: false,
                     })
           end
@@ -167,7 +167,7 @@ module NotificationService
                     .with({
                       course: course,
                       user: user,
-                      datetime: DateTime.now,
+                      datetime: Time.zone.now,
                       vacancies_closed: [first_site_status.site.location_name],
                       vacancies_opened: [second_site_status.site.location_name],
                     })

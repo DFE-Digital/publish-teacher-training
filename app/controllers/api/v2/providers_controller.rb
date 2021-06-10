@@ -130,14 +130,14 @@ module API
             }
           end
 
-        @provider.save
+        @provider.save!
       end
 
       def update_provider
         return if provider_params.values.all?(&:nil?)
 
         @provider.assign_attributes(provider_params)
-        @provider.save
+        @provider.save!
       end
 
       def update_ucas_contacts
@@ -146,7 +146,7 @@ module API
         ucas_contact_params.each_key do |type|
           contact = @provider.contacts.find_or_initialize_by(type: type.gsub(/_contact$/, ""))
           contact.assign_attributes(ucas_contact_params[type])
-          contact.save
+          contact.save!
         end
       end
 
@@ -157,7 +157,7 @@ module API
           @provider.ucas_preferences = ProviderUCASPreference.new
         end
         @provider.ucas_preferences.assign_attributes(ucas_preferences_params)
-        @provider.ucas_preferences.save
+        @provider.ucas_preferences.save!
       end
 
       def accredited_bodies_params
