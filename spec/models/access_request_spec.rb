@@ -63,14 +63,14 @@ describe AccessRequest, type: :model do
   describe "#add_additonal_attributes" do
     let(:user) { create(:user, organisations: [organisation]) }
     let(:organisation) { build(:organisation) }
-    let(:access_request) {
+    let(:access_request) do
       build(:access_request,
             organisation: user.organisations.first.name,
-                requester_email: user.email,
-                requester: nil,
-                request_date_utc: nil,
-                status: nil)
-    }
+            requester_email: user.email,
+            requester: nil,
+            request_date_utc: nil,
+            status: nil)
+    end
 
     before do
       Timecop.freeze

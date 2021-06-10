@@ -120,7 +120,7 @@ private
     # form a temporary table with results
     Arel::Nodes::TableAlias.new(
       Arel.sql(
-        format("(%s)", course_id_with_lowest_locatable_distance.to_sql),
+        sprintf("(%s)", course_id_with_lowest_locatable_distance.to_sql),
       ), "distances"
     )
   end

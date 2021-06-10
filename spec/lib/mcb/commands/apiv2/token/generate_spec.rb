@@ -14,8 +14,18 @@ describe "mcb apiv2 token generate" do
 
     it "returns a plain-text JSON string" do
       result = with_stubbed_stdout do
-        $mcb.run(%w[apiv2 token generate -S sekret --audience audience
-                    --issuer issuer --subject subject user@local])
+        $mcb.run(%w[apiv2
+                    token
+                    generate
+                    -S
+                    sekret
+                    --audience
+                    audience
+                    --issuer
+                    issuer
+                    --subject
+                    subject
+                    user@local])
       end
 
       encoded_token = result[:stdout]
@@ -27,15 +37,15 @@ describe "mcb apiv2 token generate" do
         secret,
         true,
         {
-            algorithm: algorithm,
-            verify_iss: true,
-            verify_aud: true,
-            verify_sub: true,
-            verify_iat: true,
-            exp_leeway: 6.seconds.to_i,
-            aud: audience,
-            iss: issuer,
-            sub: subject,
+          algorithm: algorithm,
+          verify_iss: true,
+          verify_aud: true,
+          verify_sub: true,
+          verify_iat: true,
+          exp_leeway: 6.seconds.to_i,
+          aud: audience,
+          iss: issuer,
+          sub: subject,
         },
       )
 

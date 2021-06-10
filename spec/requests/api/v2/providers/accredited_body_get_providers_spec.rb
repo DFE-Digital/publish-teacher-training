@@ -247,18 +247,18 @@ describe "AccreditedBody API v2", type: :request do
       let!(:course3) { create(:course, provider: delivering_provider3, accrediting_provider: next_accredited_provider) }
       let(:delivering_provider3) { create(:provider, recruitment_cycle: next_recruitment_cycle) }
 
-      let(:next_accredited_provider) {
+      let(:next_accredited_provider) do
         create :provider,
                organisations: [organisation],
                provider_code: accredited_provider.provider_code,
                recruitment_cycle: next_recruitment_cycle,
                year_code: next_recruitment_cycle.year
-      }
+      end
 
       describe "making a request for the next recruitment cycle" do
-        let(:request_path) {
+        let(:request_path) do
           "/api/v2/recruitment_cycles/#{next_recruitment_cycle.year}/providers/#{accredited_provider.provider_code}/training_providers"
-        }
+        end
 
         it "only returns data for the next recruitment cycle" do
           perform_request

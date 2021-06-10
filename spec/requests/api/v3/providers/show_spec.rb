@@ -32,7 +32,7 @@ describe "GET v3/recruitment_cycle/:recruitment_cycle_year/providers/:provider_c
   let(:contact) { build(:contact) }
   let(:ucas_preferences) { build(:provider_ucas_preference) }
 
-  let(:expected_response) {
+  let(:expected_response) do
     {
       "data" => {
         "id" => provider.id.to_s,
@@ -78,7 +78,7 @@ describe "GET v3/recruitment_cycle/:recruitment_cycle_year/providers/:provider_c
         "version" => "1.0",
       },
     }
-  }
+  end
 
   let(:json_response) { JSON.parse(response.body) }
 
@@ -164,8 +164,8 @@ describe "GET v3/recruitment_cycle/:recruitment_cycle_year/providers/:provider_c
               "region_code" => site.region_code,
               "latitude" => site.latitude,
               "longitude" => site.longitude,
-              "travel_to_work_area" =>  site.travel_to_work_area,
-              "urn" =>  site.urn,
+              "travel_to_work_area" => site.travel_to_work_area,
+              "urn" => site.urn,
               "london_borough" => site.london_borough,
               "recruitment_cycle_year" => site.recruitment_cycle.year,
             },
@@ -202,12 +202,12 @@ describe "GET v3/recruitment_cycle/:recruitment_cycle_year/providers/:provider_c
 
   context "with two recruitment cycles" do
     let(:next_recruitment_cycle) { create :recruitment_cycle, :next }
-    let(:next_provider) {
+    let(:next_provider) do
       create :provider,
              organisations: [organisation],
              provider_code: provider.provider_code,
              recruitment_cycle: next_recruitment_cycle
-    }
+    end
 
     describe "making a request without specifying a recruitment cycle" do
       it "only returns data for the current recruitment cycle" do
@@ -225,10 +225,10 @@ describe "GET v3/recruitment_cycle/:recruitment_cycle_year/providers/:provider_c
     end
 
     describe "making a request for the next recruitment cycle" do
-      let(:request_path) {
+      let(:request_path) do
         "/api/v3/recruitment_cycles/#{next_recruitment_cycle.year}" \
         "/providers/#{next_provider.provider_code}"
-      }
+      end
 
       it "only returns data for the next recruitment cycle" do
         next_provider

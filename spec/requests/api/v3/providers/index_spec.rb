@@ -4,13 +4,13 @@ describe "GET v3/recruitment_cycle/:recruitment_cycle_year/providers" do
   let(:organisation) { create(:organisation) }
   let(:recruitment_cycle) { find_or_create :recruitment_cycle }
 
-  let!(:provider) {
+  let!(:provider) do
     create(:provider,
            provider_code: "1AT",
            provider_name: "First provider",
            organisations: [organisation],
            contacts: [contact])
-  }
+  end
 
   let(:contact) { build(:contact) }
 
@@ -64,25 +64,25 @@ describe "GET v3/recruitment_cycle/:recruitment_cycle_year/providers" do
       provider.update(provider_name: "Acme")
     end
 
-    let(:provider_names_in_response) {
-      JSON.parse(subject.body)["data"].map { |provider|
+    let(:provider_names_in_response) do
+      JSON.parse(subject.body)["data"].map do |provider|
         provider["attributes"]["provider_name"]
-      }
-    }
+      end
+    end
 
     it "returns them in alphabetical order" do
-      expect(provider_names_in_response).to eq(%w(Acme Zork))
+      expect(provider_names_in_response).to eq(%w[Acme Zork])
     end
   end
 
   context "with two recruitment cycles" do
     let(:next_recruitment_cycle) { create :recruitment_cycle, :next }
-    let(:next_provider) {
+    let(:next_provider) do
       create :provider,
              organisations: [organisation],
              provider_code: provider.provider_code,
              recruitment_cycle: next_recruitment_cycle
-    }
+    end
 
     describe "making a request without specifying a recruitment cycle" do
       let(:request_path) { "/api/v3/recruitment_cycles/#{recruitment_cycle.year}/providers" }
@@ -100,9 +100,9 @@ describe "GET v3/recruitment_cycle/:recruitment_cycle_year/providers" do
     end
 
     describe "making a request for the next recruitment cycle" do
-      let(:request_path) {
+      let(:request_path) do
         "/api/v3/recruitment_cycles/#{next_recruitment_cycle.year}/providers"
-      }
+      end
 
       it "only returns data for the next recruitment cycle" do
         next_provider

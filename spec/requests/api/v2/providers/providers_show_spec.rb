@@ -33,7 +33,7 @@ describe "Providers API v2", type: :request do
     let(:contact) { build(:contact) }
     let(:ucas_preferences) { build(:provider_ucas_preference) }
 
-    let(:expected_response) {
+    let(:expected_response) do
       {
         "data" => {
           "id" => provider.id.to_s,
@@ -70,7 +70,7 @@ describe "Providers API v2", type: :request do
             "gt12_contact" => provider.ucas_preferences.gt12_response_destination.to_s,
             "application_alert_contact" => provider.ucas_preferences.application_alert_email,
             "type_of_gt12" => provider.ucas_preferences.type_of_gt12.to_s,
-            "send_application_alerts" =>  provider.ucas_preferences.send_application_alerts,
+            "send_application_alerts" => provider.ucas_preferences.send_application_alerts,
           },
           "relationships" => {
             "sites" => {
@@ -99,7 +99,7 @@ describe "Providers API v2", type: :request do
           "version" => "1.0",
         },
       }
-    }
+    end
 
     let(:json_response) { JSON.parse(response.body) }
 
@@ -157,11 +157,11 @@ describe "Providers API v2", type: :request do
     end
 
     context "with the maximum number of sites" do
-      let(:sites) {
-        [*"A".."Z", "0", "-", *"1".."9"].map { |code|
+      let(:sites) do
+        [*"A".."Z", "0", "-", *"1".."9"].map do |code|
           build(:site, code: code)
-        }
-      }
+        end
+      end
       let(:provider) { create(:provider, sites: sites, organisations: [organisation]) }
 
       it "has can_add_more_sites? set to false" do
@@ -194,12 +194,12 @@ describe "Providers API v2", type: :request do
 
     context "with two recruitment cycles" do
       let(:next_recruitment_cycle) { create :recruitment_cycle, :next }
-      let(:next_provider) {
+      let(:next_provider) do
         create :provider,
                organisations: [organisation],
                provider_code: provider.provider_code,
                recruitment_cycle: next_recruitment_cycle
-      }
+      end
 
       describe "making a request without specifying a recruitment cycle" do
         it "only returns data for the current recruitment cycle" do
@@ -217,10 +217,10 @@ describe "Providers API v2", type: :request do
       end
 
       describe "making a request for the next recruitment cycle" do
-        let(:request_path) {
+        let(:request_path) do
           "/api/v2/recruitment_cycles/#{next_recruitment_cycle.year}" \
           "/providers/#{next_provider.provider_code}"
-        }
+        end
 
         it "only returns data for the next recruitment cycle" do
           next_provider

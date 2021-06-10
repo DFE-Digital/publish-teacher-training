@@ -34,11 +34,11 @@ describe Token::DecodeService do
 
   subject do
     described_class.call(encoded_token: encoded_token,
-      secret: Settings.authentication.secret,
-      algorithm: Settings.authentication.algorithm,
-      audience: Settings.authentication.audience,
-      issuer: Settings.authentication.issuer,
-      subject: Settings.authentication.subject)
+                         secret: Settings.authentication.secret,
+                         algorithm: Settings.authentication.algorithm,
+                         audience: Settings.authentication.audience,
+                         issuer: Settings.authentication.issuer,
+                         subject: Settings.authentication.subject)
   end
 
   describe "#call" do

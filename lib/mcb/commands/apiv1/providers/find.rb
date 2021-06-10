@@ -12,7 +12,6 @@ option :P, "max-pages", "maximum number of pages to request",
        argument: :required,
        transform: method(:Integer)
 
-
 run do |opts, args, _cmd|
   MCB.init_rails(opts)
 
@@ -28,9 +27,9 @@ run do |opts, args, _cmd|
   if provider.nil?
     error "Provider with code '#{args[:code]}' not found"
 
-    MCB::display_pages_received(page: last_context[:page],
-                                max_pages: opts[:'max-pages'],
-                                next_url: last_context[:next_url])
+    MCB.display_pages_received(page: last_context[:page],
+                               max_pages: opts[:'max-pages'],
+                               next_url: last_context[:next_url])
     next
   end
 

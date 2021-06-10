@@ -11,9 +11,9 @@ describe '"mcb apiv1 providers find"' do
   it "displays the info for the given provider" do
     url = "http://localhost:3001/api/v1/#{RecruitmentCycle.current_recruitment_cycle.year}/providers"
     next_url = url + "&" + {
-        changed_since: provider2.created_at.utc.strftime("%FT%T.%16NZ"),
-        per_page: 100,
-      }.to_query
+      changed_since: provider2.created_at.utc.strftime("%FT%T.%16NZ"),
+      per_page: 100,
+    }.to_query
     json = ActiveModel::Serializer::CollectionSerializer.new(
       [
         provider1,
@@ -31,8 +31,8 @@ describe '"mcb apiv1 providers find"' do
 
     stub_request(:get, url)
       .with(headers: {
-              "Authorization" => "Bearer bats",
-            })
+        "Authorization" => "Bearer bats",
+      })
       .to_return(status: 200,
                  body: json.to_json,
                  headers: {

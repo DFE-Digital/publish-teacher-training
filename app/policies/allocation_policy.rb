@@ -19,7 +19,7 @@ class AllocationPolicy
     end
   end
 
-  def initialize(user, allocation);
+  def initialize(user, allocation)
     @allocation = allocation
     @user = user
   end

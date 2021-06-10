@@ -3,12 +3,12 @@ module MCB
     @configs = {}
 
     def self.get_subs
-      raw_json = MCB::run_command "az account list"
+      raw_json = MCB.run_command "az account list"
       JSON.parse(raw_json)
     end
 
     def self.get_apps
-      raw_json = MCB::run_command "az webapp list"
+      raw_json = MCB.run_command "az webapp list"
       JSON.parse(raw_json)
     end
 
@@ -29,7 +29,7 @@ module MCB
         rgroup ||= rgroup_for_app(webapp)
         cmd = "az webapp config appsettings list -g \"#{rgroup}\" -n \"#{webapp}\""
         cmd += " --subscription \"#{subscription}\"" if subscription
-        raw_json = MCB::run_command(cmd)
+        raw_json = MCB.run_command(cmd)
         @configs[config_key] = JSON.parse(raw_json)
                                  .map { |c| [c["name"], c["value"]] }
                                  .to_h
@@ -41,7 +41,7 @@ module MCB
       rgroup ||= rgroup_for_app(webapp)
       cmd = "az webapp config hostname list -g \"#{rgroup}\" --webapp-name \"#{webapp}\""
       cmd += " --subscription \"#{subscription}\"" if subscription
-      raw_json = MCB::run_command(cmd)
+      raw_json = MCB.run_command(cmd)
       hostname_config = JSON.parse(raw_json)
       hostname_config.map do |conf|
         if conf["sslState"] == "SniEnabled"
@@ -109,7 +109,7 @@ module MCB
     private
 
       def require_confirmation(rails_env)
-        %w(qa staging).include?(rails_env)
+        %w[qa staging].include?(rails_env)
       end
     end
   end

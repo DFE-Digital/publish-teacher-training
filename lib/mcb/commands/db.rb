@@ -44,5 +44,5 @@ run do |opts, _args, _cmd|
     psql_args << sql_command
   end
 
-  MCB::exec_command("psql", *psql_args)
+  MCB.exec_command("psql", *psql_args)
 end

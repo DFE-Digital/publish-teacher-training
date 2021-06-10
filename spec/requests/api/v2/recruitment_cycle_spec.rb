@@ -78,19 +78,19 @@ describe "/api/v2/recruitment_cycle", type: :request do
     let(:recruitment_cycle)      { find_or_create :recruitment_cycle }
     let(:next_recruitment_cycle) { find_or_create :recruitment_cycle, :next }
     let(:provider) { create :provider, organisations: [organisation] }
-    let(:next_provider) {
+    let(:next_provider) do
       create :provider,
              :next_recruitment_cycle,
              organisations: [organisation],
              provider_code: provider.provider_code
-    }
+    end
     let(:provider2) { create :provider }
 
-    let(:request_path) {
+    let(:request_path) do
       "/api/v2/recruitment_cycles/#{recruitment_cycle.year}" \
       "/providers/#{provider.provider_code}" \
       "/recruitment_cycles"
-    }
+    end
 
     describe "the JSON response" do
       it "displays the correct jsonapi response" do
@@ -155,7 +155,7 @@ describe "/api/v2/recruitment_cycle", type: :request do
     let(:request_params) { {} }
     let(:request_path) { "/api/v2/recruitment_cycles/#{recruitment_cycle.year}" }
 
-    let(:expected_response) {
+    let(:expected_response) do
       {
         "data" => {
           "id" => recruitment_cycle.id.to_s,
@@ -163,7 +163,7 @@ describe "/api/v2/recruitment_cycle", type: :request do
           "attributes" => {
             "year" => recruitment_cycle.year,
             "application_start_date" => recruitment_cycle.application_start_date.to_s,
-            "application_end_date" =>   recruitment_cycle.application_end_date.to_date.to_s,
+            "application_end_date" => recruitment_cycle.application_end_date.to_date.to_s,
           },
           "relationships" => {
             "providers" => {
@@ -177,7 +177,7 @@ describe "/api/v2/recruitment_cycle", type: :request do
           "version" => "1.0",
         },
       }
-    }
+    end
 
     describe "the JSON response" do
       it "should be the correct jsonapi response" do

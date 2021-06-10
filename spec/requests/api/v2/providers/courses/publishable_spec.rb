@@ -92,13 +92,13 @@ describe "Publishable API v2", type: :request do
           end
 
           it "has validation error pointers" do
-            expect(json_data.map { |error| error["source"]["pointer"] }).to match_array(%w(
+            expect(json_data.map { |error| error["source"]["pointer"] }).to match_array(%w[
               /data/attributes/about_course
               /data/attributes/how_school_placements_work
               /data/attributes/course_length
               /data/attributes/fee_uk_eu
               /data/attributes/required_qualifications
-            ))
+            ])
           end
         end
       end

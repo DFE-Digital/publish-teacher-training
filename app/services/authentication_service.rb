@@ -23,11 +23,11 @@ private
 
   def decoded_token
     @decoded_token ||= Token::DecodeService.call(encoded_token: encoded_token,
-      secret: Settings.authentication.secret,
-      algorithm: Settings.authentication.algorithm,
-      audience: Settings.authentication.audience,
-      issuer: Settings.authentication.issuer,
-      subject: Settings.authentication.subject)
+                                                 secret: Settings.authentication.secret,
+                                                 algorithm: Settings.authentication.algorithm,
+                                                 audience: Settings.authentication.audience,
+                                                 issuer: Settings.authentication.issuer,
+                                                 subject: Settings.authentication.subject)
   end
 
   def email_from_token
@@ -63,11 +63,11 @@ private
 
     @user_by_email ||= User.find_by("lower(email) = ?", email_from_token)
     if @user_by_email
-      logger.info {
+      logger.info do
         "User found by email address " + {
           user: log_safe_user(@user_by_email),
         }.to_s
-      }
+      end
     end
     @user_by_email
   end
@@ -80,12 +80,12 @@ private
 
     user = User.find_by(sign_in_user_id: sign_in_user_id_from_token)
     if user
-      logger.info {
+      logger.info do
         "User found from sign_in_user_id in token " + {
-                     sign_in_user_id: sign_in_user_id_from_token,
-                     user: log_safe_user(user),
-                   }.to_s
-      }
+          sign_in_user_id: sign_in_user_id_from_token,
+          user: log_safe_user(user),
+        }.to_s
+      end
     end
     user
   end
@@ -110,9 +110,9 @@ private
     if email_in_use_by_another_user?
       raise DuplicateUserError.new(
         "Duplicate user detected",
-        user_id:                       user.id,
-        user_sign_in_user_id:          user.sign_in_user_id,
-        existing_user_id:              user_by_email.id,
+        user_id: user.id,
+        user_sign_in_user_id: user.sign_in_user_id,
+        existing_user_id: user_by_email.id,
         existing_user_sign_in_user_id: user_by_email.sign_in_user_id,
       )
     else

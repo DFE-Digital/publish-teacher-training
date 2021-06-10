@@ -7,8 +7,8 @@ def page_url(page:)
 end
 
 JSONAPI::Rails.configure do |config|
-# Set a default serializable class mapping.
-  config.jsonapi_class = Hash.new { |h, k|
+  # Set a default serializable class mapping.
+  config.jsonapi_class = Hash.new do |h, k|
     names = k.to_s.split("::")
     klass = names.pop
 
@@ -18,7 +18,7 @@ JSONAPI::Rails.configure do |config|
     ].lazy
       .map(&:safe_constantize)
       .detect(&:present?)
-  }
+  end
 
   # # Set a default serializable class mapping for errors.
   # config.jsonapi_errors_class = Hash.new { |h, k|
@@ -42,7 +42,7 @@ JSONAPI::Rails.configure do |config|
   # }
   #
   # # Set a default pagination scheme.
-  config.jsonapi_pagination = ->(collection) do
+  config.jsonapi_pagination = lambda { |collection|
     {}.tap do |links|
       if collection.respond_to?(:next_page) && collection.next_page.present?
         links[:next] = page_url(page: collection.next_page)
@@ -56,7 +56,7 @@ JSONAPI::Rails.configure do |config|
         links[:last] = page_url(page: [collection.total_pages - 1, 1].max)
       end
     end
-  end
+  }
   #
   # # Set a logger.
   # config.logger = Logger.new(STDOUT)

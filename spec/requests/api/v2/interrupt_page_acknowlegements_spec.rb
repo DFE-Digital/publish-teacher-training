@@ -1,4 +1,3 @@
-
 require "rails_helper"
 
 describe "Interrupt page acknowledgements API v2", type: :request do
@@ -13,9 +12,9 @@ describe "Interrupt page acknowledgements API v2", type: :request do
       create(:interrupt_page_acknowledgement, user: user, recruitment_cycle: cycle, page: :rollover_recruitment)
     end
 
-    let(:path) {
+    let(:path) do
       "/api/v2/recruitment_cycles/#{cycle.year}/users/#{user.id}/interrupt_page_acknowledgements"
-    }
+    end
 
     subject do
       get path,
@@ -34,9 +33,9 @@ describe "Interrupt page acknowledgements API v2", type: :request do
 
     context "trying to access another user's acknowledgements" do
       let(:other_user) { create(:user) }
-      let(:path) {
+      let(:path) do
         "/api/v2/recruitment_cycles/#{cycle.year}/users/#{other_user.id}/interrupt_page_acknowledgements"
-      }
+      end
 
       it "gives an error" do
         expect { subject }.to raise_error(Pundit::NotAuthorizedError)
@@ -45,18 +44,18 @@ describe "Interrupt page acknowledgements API v2", type: :request do
   end
 
   describe "create" do
-    let(:path) {
+    let(:path) do
       "/api/v2/recruitment_cycles/#{cycle.year}/users/#{user.id}/interrupt_page_acknowledgements"
-    }
+    end
 
     subject do
       post path,
-          headers: { "HTTP_AUTHORIZATION" => credentials },
-          params: {
-            interrupt_page_acknowledgement: {
-              page: "rollover"
-            }
-          }
+           headers: { "HTTP_AUTHORIZATION" => credentials },
+           params: {
+             interrupt_page_acknowledgement: {
+               page: "rollover",
+             },
+           }
       response
     end
 
@@ -88,9 +87,9 @@ describe "Interrupt page acknowledgements API v2", type: :request do
 
     context "trying to create an acknowledgement for a different user" do
       let(:other_user) { create(:user) }
-      let(:path) {
+      let(:path) do
         "/api/v2/recruitment_cycles/#{cycle.year}/users/#{other_user.id}/interrupt_page_acknowledgements"
-      }
+      end
 
       it "gives an error" do
         expect { subject }.to raise_error(Pundit::NotAuthorizedError)

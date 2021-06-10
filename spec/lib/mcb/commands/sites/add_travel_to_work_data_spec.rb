@@ -20,7 +20,7 @@ describe "mcb add_travel_to_work_data" do
         "parent_area": nil,
         "generation_high": 41,
         "all_names": {},
-        "id": 163653,
+        "id": 163_653,
         "codes": {
           "gss": "E30000234",
         },

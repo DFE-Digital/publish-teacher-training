@@ -5,7 +5,7 @@ describe Providers::CopyToRecruitmentCycleService do
     let(:site)   { build :site }
     let(:course) { create :course, provider: provider }
     let(:ucas_preferences) { build(:ucas_preferences, type_of_gt12: :coming_or_not) }
-    let(:contacts) {
+    let(:contacts) do
       [
         build(:contact, :admin_type),
         build(:contact, :utt_type),
@@ -13,13 +13,13 @@ describe Providers::CopyToRecruitmentCycleService do
         build(:contact, :finance_type),
         build(:contact, :fraud_type),
       ]
-    }
-    let(:provider) {
+    end
+    let(:provider) do
       create :provider,
              sites: [site],
              ucas_preferences: ucas_preferences,
              contacts: contacts
-    }
+    end
     let(:recruitment_cycle) { find_or_create :recruitment_cycle }
     let(:new_recruitment_cycle) { create :recruitment_cycle, :next }
     let(:new_provider) do
@@ -79,13 +79,13 @@ describe Providers::CopyToRecruitmentCycleService do
     end
 
     context "the provider already exists in the new recruitment cycle" do
-      let(:new_provider) {
+      let(:new_provider) do
         build :provider, provider_code: provider.provider_code
-      }
-      let(:new_recruitment_cycle) {
+      end
+      let(:new_recruitment_cycle) do
         create :recruitment_cycle, :next,
                providers: [new_provider]
-      }
+      end
 
       it "does not make a copy of the provider" do
         expect { service.execute(provider: provider, new_recruitment_cycle: new_recruitment_cycle) }

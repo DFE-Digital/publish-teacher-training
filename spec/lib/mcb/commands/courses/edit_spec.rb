@@ -11,12 +11,12 @@ describe "mcb courses edit" do
   let(:course_code) { "3FC4" }
   let(:email) { "user@education.gov.uk" }
   let(:provider) { create(:provider, provider_code: provider_code) }
-  let!(:course) {
+  let!(:course) do
     create(:course,
            provider: provider,
            course_code: course_code,
            name: "Original name")
-  }
+  end
 
   before do
     allow(MCB).to receive(:config).and_return(email: email)
@@ -27,8 +27,8 @@ describe "mcb courses edit" do
 
     describe "edits the course name for a single course" do
       it "updates the course" do
-        expect { execute_edit(arguments: [provider_code, course_code], input: ["edit title", "Mathematics", "exit"]) }.to change { course.reload.name }.
-          from("Original name").to("Mathematics")
+        expect { execute_edit(arguments: [provider_code, course_code], input: ["edit title", "Mathematics", "exit"]) }.to change { course.reload.name }
+          .from("Original name").to("Mathematics")
       end
     end
 
@@ -39,40 +39,40 @@ describe "mcb courses edit" do
     end
 
     describe "not specifying any course codes" do
-      let!(:another_course) {
+      let!(:another_course) do
         create(:course,
                provider: provider,
                course_code: "A123",
                name: "Another name")
-      }
+      end
 
       it "edits all the courses on the provider" do
-        expect { execute_edit(arguments: [provider_code], input: ["edit title", "Mathematics", "exit"]) }.
-          to change { provider.reload.courses.order(:name).pluck(:name) }.
-          from(["Another name", "Original name"]).to(%w[Mathematics Mathematics])
+        expect { execute_edit(arguments: [provider_code], input: ["edit title", "Mathematics", "exit"]) }
+          .to change { provider.reload.courses.order(:name).pluck(:name) }
+          .from(["Another name", "Original name"]).to(%w[Mathematics Mathematics])
       end
     end
 
     context "when the same course exists across multiple recruitment cycles" do
       let!(:next_recruitment_cycle) { find_or_create(:recruitment_cycle, :next) }
-      let(:provider_in_the_next_recruitment_cycle) {
+      let(:provider_in_the_next_recruitment_cycle) do
         create(:provider,
                provider_code: provider_code,
                recruitment_cycle: next_recruitment_cycle,
                organisations: provider.organisations)
-      }
-      let!(:course_in_the_next_recruitment_cycle) {
+      end
+      let!(:course_in_the_next_recruitment_cycle) do
         create(:course,
                provider: provider_in_the_next_recruitment_cycle,
                course_code: course_code,
                name: "Original name")
-      }
+      end
 
       context "when recruitment cycle is unspecified" do
         it "picks the provider and course from the current recruitment year" do
-          expect { execute_edit(arguments: [provider_code, course_code], input: ["edit title", "Mathematics", "exit"]) }.
-            to change { course.reload.name }.
-            from("Original name").to("Mathematics")
+          expect { execute_edit(arguments: [provider_code, course_code], input: ["edit title", "Mathematics", "exit"]) }
+            .to change { course.reload.name }
+            .from("Original name").to("Mathematics")
 
           expect(course_in_the_next_recruitment_cycle.reload.name).to eq("Original name")
         end
@@ -82,8 +82,8 @@ describe "mcb courses edit" do
           provider.destroy
           course.destroy
 
-          expect { execute_edit(arguments: [provider_code, course_code], input: ["edit title", "Mathematics", "exit"]) }.
-            to raise_error(ActiveRecord::RecordNotFound, /Couldn't find Provider/)
+          expect { execute_edit(arguments: [provider_code, course_code], input: ["edit title", "Mathematics", "exit"]) }
+            .to raise_error(ActiveRecord::RecordNotFound, /Couldn't find Provider/)
 
           expect(course_in_the_next_recruitment_cycle.reload.name).to eq("Original name")
         end
@@ -91,9 +91,9 @@ describe "mcb courses edit" do
 
       context "when recruitment cycle is specified" do
         it "picks the provider and course for the specified recruitment year" do
-          expect { execute_edit(arguments: [provider_code, course_code, "-r", next_recruitment_cycle.year], input: ["edit title", "Chemistry", "exit"]) }.
-            to change { course_in_the_next_recruitment_cycle.reload.name }.
-            from("Original name").to("Chemistry")
+          expect { execute_edit(arguments: [provider_code, course_code, "-r", next_recruitment_cycle.year], input: ["edit title", "Chemistry", "exit"]) }
+            .to change { course_in_the_next_recruitment_cycle.reload.name }
+            .from("Original name").to("Chemistry")
 
           expect(course.reload.name).to eq("Original name")
         end

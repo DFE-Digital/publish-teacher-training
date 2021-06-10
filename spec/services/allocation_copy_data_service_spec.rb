@@ -10,17 +10,16 @@ describe AllocationCopyDataService do
   let!(:provider2a) { create(:provider, recruitment_cycle: previous_cycle) }
   let!(:provider2b) { create(:provider, recruitment_cycle: current_cycle, provider_code: provider2a.provider_code) }
 
-  let!(:allocation1) {
+  let!(:allocation1) do
     create(:allocation,
            recruitment_cycle: previous_cycle, provider: provider1a, accredited_body: provider1a,
-             number_of_places: 5, confirmed_number_of_places: 5)
-  }
-  let!(:allocation2) {
+           number_of_places: 5, confirmed_number_of_places: 5)
+  end
+  let!(:allocation2) do
     create(:allocation,
            recruitment_cycle: previous_cycle, provider: provider2a, accredited_body: provider1a,
-             number_of_places: 10, confirmed_number_of_places: 10)
-  }
-
+           number_of_places: 10, confirmed_number_of_places: 10)
+  end
 
   it "copies over previous allocations to current allocation year" do
     expect(Provider.count).to eql(4)

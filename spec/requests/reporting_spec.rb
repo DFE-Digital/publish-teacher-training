@@ -92,14 +92,18 @@ describe "GET /reporting" do
         },
         program_type: {
           open: {
-            higher_education_programme: 0, school_direct_training_programme: 0,
-            school_direct_salaried_training_programme: 0, scitt_programme: 0,
-            pg_teaching_apprenticeship: 0
+            higher_education_programme: 0,
+            school_direct_training_programme: 0,
+            school_direct_salaried_training_programme: 0,
+            scitt_programme: 0,
+            pg_teaching_apprenticeship: 0,
           },
           closed: {
-            higher_education_programme: 0, school_direct_training_programme: 0,
-            school_direct_salaried_training_programme: 0, scitt_programme: 0,
-            pg_teaching_apprenticeship: 0
+            higher_education_programme: 0,
+            school_direct_training_programme: 0,
+            school_direct_salaried_training_programme: 0,
+            scitt_programme: 0,
+            pg_teaching_apprenticeship: 0,
           },
         },
         study_mode: {
@@ -159,7 +163,7 @@ describe "GET /reporting" do
             allocations: 0,
             distinct_accredited_bodies: 0,
             distinct_providers: 0,
-            number_of_places:  0,
+            number_of_places: 0,
           },
         },
         current: {
@@ -167,7 +171,7 @@ describe "GET /reporting" do
             allocations: 0,
             distinct_accredited_bodies: 0,
             distinct_providers: 0,
-            number_of_places:  0,
+            number_of_places: 0,
           },
         },
       },
@@ -183,13 +187,13 @@ describe "GET /reporting" do
     }.with_indifferent_access
   end
 
-  let(:previous_recruitment_cycle) {
+  let(:previous_recruitment_cycle) do
     find_or_create(:recruitment_cycle, :previous)
-  }
+  end
 
-  let(:next_recruitment_cycle) {
+  let(:next_recruitment_cycle) do
     find_or_create(:recruitment_cycle, :next)
-  }
+  end
 
   it "returns status success" do
     previous_recruitment_cycle

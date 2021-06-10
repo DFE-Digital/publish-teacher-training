@@ -6,12 +6,12 @@ describe Sites::CopyToProviderService do
     let(:provider) { create :provider, sites: [site] }
     let(:recruitment_cycle) { find_or_create :recruitment_cycle }
     let(:next_recruitment_cycle) { create :recruitment_cycle, :next }
-    let(:next_provider) {
+    let(:next_provider) do
       create :provider,
              sites: [],
              provider_code: provider.provider_code,
              recruitment_cycle: next_recruitment_cycle
-    }
+    end
 
     let(:service) { described_class.new }
 
@@ -29,11 +29,11 @@ describe Sites::CopyToProviderService do
     end
 
     context "the site already exists in the new provider" do
-      let!(:next_site) {
+      let!(:next_site) do
         create :site,
                code: site.code,
                provider: next_provider
-      }
+      end
 
       it "does not make a copy of the site" do
         # Something strange is going on with sites ... setting the code as we

@@ -18,7 +18,7 @@ module CourseVacancies
           user: user,
           datetime: DateTime.new(2001, 2, 3, 4, 5, 6),
           vacancies_filled: vacancies_filled,
-          )
+        )
       end
       context "sending an email to a user" do
         it "sends an email with the correct template" do
@@ -85,7 +85,7 @@ module CourseVacancies
           datetime: DateTime.new(2001, 2, 3, 4, 5, 6),
           vacancies_opened: ["Main site", "London site"],
           vacancies_closed: ["Birmingham site", "Bristol site"],
-          )
+        )
       end
 
       context "sending an email to a user" do

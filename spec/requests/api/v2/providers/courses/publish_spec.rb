@@ -18,13 +18,13 @@ describe "Publish API v2", type: :request do
     let(:enrichment) { build(:course_enrichment, :initial_draft) }
     let(:site_status) { build(:site_status, :new) }
     let(:dfe_subject) { find_or_create(:primary_subject, :primary) }
-    let(:course) {
+    let(:course) do
       create(:course,
              provider: provider,
              site_statuses: [site_status],
              enrichments: [enrichment],
              subjects: [dfe_subject])
-    }
+    end
 
     subject do
       post publish_path,
@@ -179,12 +179,12 @@ describe "Publish API v2", type: :request do
       end
 
       context "salary type based course" do
-        let(:course) {
+        let(:course) do
           create(:course, :salary_type_based,
                  provider: provider,
                  enrichments: [invalid_enrichment],
                  site_statuses: [site_status])
-        }
+        end
 
         context "invalid enrichment with invalid content lack_presence fields" do
           let(:invalid_enrichment) { create(:course_enrichment, :without_content) }
@@ -204,13 +204,13 @@ describe "Publish API v2", type: :request do
       end
 
       context "an inconsistent course and site status" do
-        let(:course) {
+        let(:course) do
           create(:course,
                  provider: provider,
                  study_mode: "full_time",
                  enrichments: [enrichment],
                  site_statuses: [build(:site_status, :new, :full_time_vacancies)])
-        }
+        end
 
         before do
           course.update_attribute(:study_mode, "part_time")
@@ -220,7 +220,7 @@ describe "Publish API v2", type: :request do
           expect { subject }.to(raise_error(
                                   RuntimeError,
                                   "Site status invalid on course #{provider.provider_code}/#{course.course_code}: Vac status (full_time_vacancies) must be consistent with course study mode part_time",
-               ))
+                                ))
         end
       end
     end

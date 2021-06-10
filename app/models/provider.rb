@@ -71,29 +71,29 @@ class Provider < ApplicationRecord
     accredited_courses.includes(:provider).where(provider: { recruitment_cycle: recruitment_cycle })
   end
 
-  scope :changed_since, ->(timestamp) do
+  scope :changed_since, lambda { |timestamp|
     if timestamp.present?
       where("provider.changed_at > ?", timestamp)
     else
       where("changed_at is not null")
     end.order(:changed_at, :id)
-  end
+  }
 
   scope :by_name_ascending, -> { order(provider_name: :asc) }
   scope :by_name_descending, -> { order(provider_name: :desc) }
 
-  scope :by_provider_name, ->(provider_name) do
+  scope :by_provider_name, lambda { |provider_name|
     order(
       Arel.sql(
         "CASE WHEN provider.provider_name = #{connection.quote(provider_name)} THEN '1' END",
       ),
     )
-  end
+  }
 
-  scope :with_findable_courses, -> do
+  scope :with_findable_courses, lambda {
     where(id: Course.findable.select(:provider_id))
-      .or(self.where(provider_code: Course.findable.select(:accredited_body_code)))
-  end
+      .or(where(provider_code: Course.findable.select(:accredited_body_code)))
+  }
 
   scope :in_current_cycle, -> { where(recruitment_cycle: RecruitmentCycle.current_recruitment_cycle) }
 
@@ -123,12 +123,13 @@ class Provider < ApplicationRecord
 
   before_discard { discard_courses }
 
-  pg_search_scope :search_by_code_or_name, against: %i(provider_code provider_name), using: { tsearch: { prefix: true } }
+  pg_search_scope :search_by_code_or_name, against: %i[provider_code provider_name], using: { tsearch: { prefix: true } }
 
   accepts_nested_attributes_for :sites
   accepts_nested_attributes_for :organisations
 
   attr_accessor :skip_geocoding
+
   after_commit :geocode_provider, unless: :skip_geocoding
 
   def geocode_provider
@@ -199,15 +200,15 @@ class Provider < ApplicationRecord
           GROUP BY b.provider_id
         ) a ON a.provider_id = provider.id
       },
-      ).select("provider.*, COALESCE(a.courses_count, 0) AS included_accredited_courses_count")
+    ).select("provider.*, COALESCE(a.courses_count, 0) AS included_accredited_courses_count")
   end
 
   def courses_count
-    self.has_attribute?("included_courses_count") ? included_courses_count : courses.size
+    has_attribute?("included_courses_count") ? included_courses_count : courses.size
   end
 
   def accredited_courses_count
-    self.has_attribute?("included_accredited_courses_count") ? included_accredited_courses_count : 0
+    has_attribute?("included_accredited_courses_count") ? included_accredited_courses_count : 0
   end
 
   def update_changed_at(timestamp: Time.now.utc)

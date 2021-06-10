@@ -21,9 +21,9 @@ describe "Course factory" do
 
     let(:enrichments) { [first_enrichment, second_enrichment, third_enrichment] }
 
-    subject {
+    subject do
       create(:course, enrichments: enrichments)
-    }
+    end
 
     it "has enrichments" do
       expect(subject.enrichments.size).to eq(3)

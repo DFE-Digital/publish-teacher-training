@@ -22,7 +22,6 @@ describe AuthenticationService do
 
     subject { service.execute(token) }
 
-
     context "with a valid DfE-SignIn ID and email" do
       let(:first_name) { "#{user.first_name}_new" }
       let(:last_name) { "#{user.last_name}_new" }

@@ -12,7 +12,7 @@ describe Provider, type: :model do
   end
 
   before do
-    # Note: provider needs to be reloaded due to
+    # NOTE: provider needs to be reloaded due to
     #       provider.accrediting_providers
     #       provider.accredited_bodies
     provider.reload
@@ -21,9 +21,9 @@ describe Provider, type: :model do
   describe "#accredited_bodies" do
     let(:description) { "Ye olde establishmente" }
 
-    subject {
+    subject do
       provider.accredited_bodies
-    }
+    end
 
     context "with no accrediting provider (via courses)" do
       it { should be_empty }
@@ -31,10 +31,10 @@ describe Provider, type: :model do
       context "with an old accredited body enrichment" do
         let(:accrediting_provider_enrichments) do
           [{
-             "Description" => description,
-             # XX4 might have previously been an accrediting provider for this provider, and the data is still in the database
-             "UcasProviderCode" => "XX4",
-           }]
+            "Description" => description,
+            # XX4 might have previously been an accrediting provider for this provider, and the data is still in the database
+            "UcasProviderCode" => "XX4",
+          }]
         end
 
         it { should be_empty }
@@ -58,9 +58,9 @@ describe Provider, type: :model do
       context "with an accredited body enrichment" do
         let(:accrediting_provider_enrichments) do
           [{
-             "Description" => description,
-             "UcasProviderCode" => accrediting_provider.provider_code,
-           }]
+            "Description" => description,
+            "UcasProviderCode" => accrediting_provider.provider_code,
+          }]
         end
 
         its(:length) { should be(1) }
@@ -77,9 +77,9 @@ describe Provider, type: :model do
       context "with a corrupt accredited body enrichment" do
         let(:accrediting_provider_enrichments) do
           [{
-             "Description" => description,
-             # UcasProviderCode missing. We found data like this in our database so need to handle it.
-           }]
+            "Description" => description,
+            # UcasProviderCode missing. We found data like this in our database so need to handle it.
+          }]
         end
 
         its(:length) { should be(1) }

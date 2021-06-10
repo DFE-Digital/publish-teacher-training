@@ -11,9 +11,9 @@ describe '"mcb apiv1 courses find"' do
 
     url = "http://localhost:3001/api/v1/#{RecruitmentCycle.current_recruitment_cycle.year}/courses"
     next_url = url + "&" + {
-        changed_since: course2.created_at.utc.strftime("%FT%T.%6NZ"),
-        per_page: 100,
-      }.to_query
+      changed_since: course2.created_at.utc.strftime("%FT%T.%6NZ"),
+      per_page: 100,
+    }.to_query
     json = ActiveModel::Serializer::CollectionSerializer.new(
       [
         course1,
@@ -24,8 +24,8 @@ describe '"mcb apiv1 courses find"' do
 
     stub_request(:get, url)
       .with(headers: {
-              "Authorization" => "Bearer bats",
-            })
+        "Authorization" => "Bearer bats",
+      })
       .to_return(status: 200,
                  body: json.to_json,
                  headers: {

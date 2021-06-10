@@ -7,7 +7,7 @@ describe TravelToWorkAreaAndLondonBoroughService do
     end
 
     context "a site with known coordinates" do
-      let(:site) {
+      let(:site) do
         create(:site,
                location_name: "Cambridge School of DfE",
                address1: "28 Interesting Street",
@@ -17,7 +17,7 @@ describe TravelToWorkAreaAndLondonBoroughService do
                postcode: "CB5 3BT",
                latitude: 51.498160,
                longitude: -0.129900)
-      }
+      end
 
       let(:london_boroughs_query) do
         URI("#{Settings.mapit_url}/point/4326/#{site.longitude},#{site.latitude}?type=LBO&api_key=#{Settings.mapit_api_key}")
@@ -31,7 +31,7 @@ describe TravelToWorkAreaAndLondonBoroughService do
             "parent_area": nil,
             "generation_high": 41,
             "all_names": {},
-            "id": 163653,
+            "id": 163_653,
             "codes": {
               "gss": "E30000234",
             },
@@ -77,9 +77,9 @@ describe TravelToWorkAreaAndLondonBoroughService do
         let(:travel_to_work_area) { "Cambridge" }
 
         it "updates the travel to work area and london_borough remains nil" do
-          expect { described_class.call(site: site) }.
-            to change { site.reload.travel_to_work_area }.from(nil).to("Cambridge").
-              and(not_change { site.london_borough })
+          expect { described_class.call(site: site) }
+            .to change { site.reload.travel_to_work_area }.from(nil).to("Cambridge")
+              .and(not_change { site.london_borough })
         end
       end
 
@@ -90,9 +90,9 @@ describe TravelToWorkAreaAndLondonBoroughService do
           let(:london_borough) { "Westminster City Council" }
 
           it "updates the london Borough to Westminster" do
-            expect { described_class.call(site: site) }.
-              to change { site.reload.travel_to_work_area }.from(nil).to("London").
-                and change { site.london_borough }.from(nil).to("Westminster")
+            expect { described_class.call(site: site) }
+              .to change { site.reload.travel_to_work_area }.from(nil).to("London")
+                .and change { site.london_borough }.from(nil).to("Westminster")
           end
         end
 
@@ -100,9 +100,9 @@ describe TravelToWorkAreaAndLondonBoroughService do
           let(:london_borough) { "City of London Corporation" }
 
           it "updates the london Borough to City of London" do
-            expect { described_class.call(site: site) }.
-              to change { site.reload.travel_to_work_area }.from(nil).to("London").
-                and change { site.london_borough }.from(nil).to("City of London")
+            expect { described_class.call(site: site) }
+              .to change { site.reload.travel_to_work_area }.from(nil).to("London")
+                .and change { site.london_borough }.from(nil).to("City of London")
           end
         end
 
@@ -110,9 +110,9 @@ describe TravelToWorkAreaAndLondonBoroughService do
           let(:london_borough) { "Greenwich Borough Council" }
 
           it "updates removes 'London Borough' from the string" do
-            expect { described_class.call(site: site) }.
-              to change { site.reload.travel_to_work_area }.from(nil).to("London").
-                and change { site.london_borough }.from(nil).to("Greenwich")
+            expect { described_class.call(site: site) }
+              .to change { site.reload.travel_to_work_area }.from(nil).to("London")
+                .and change { site.london_borough }.from(nil).to("Greenwich")
           end
         end
       end

@@ -25,7 +25,7 @@ describe "running the mcb script" do
           FileUtils.mkdir_p("/config")
 
           expect {
-            MCB.start_mcb_repl(%W[-E my_nonexistent_environment])
+            MCB.start_mcb_repl(%w[-E my_nonexistent_environment])
           }.to raise_error(Errno::ENOENT, "No such file or directory - Could not find config/azure_environments.yml, consult the MCB section of README.md")
         end
       end
@@ -36,7 +36,7 @@ describe "running the mcb script" do
           File.write "config/azure_environments.yml", "azure:"
 
           expect {
-            MCB.start_mcb_repl(%W[-E my_nonexistent_environment])
+            MCB.start_mcb_repl(%w[-E my_nonexistent_environment])
           }.to raise_error(KeyError, "The environment 'my_nonexistent_environment' could not be found, have you made sure to add it to your config/azure_environments.yml?")
         end
       end

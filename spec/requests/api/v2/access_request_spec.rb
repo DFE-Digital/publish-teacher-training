@@ -9,13 +9,13 @@ describe "Access Request API V2", type: :request do
   let(:payload) { { email: admin_user.email } }
   let(:credentials) { encode_to_credentials(payload) }
 
-  let(:access_request) {
+  let(:access_request) do
     create(:access_request,
            email_address: requested_user.email,
            requester_email: requesting_user.email,
            requester_id: requesting_user.id,
            organisation: organisation.name)
-  }
+  end
 
   subject { response }
 
@@ -43,7 +43,6 @@ describe "Access Request API V2", type: :request do
         get "/api/v2/access_requests",
             headers: { "HTTP_AUTHORIZATION" => credentials }
       end
-
 
       it "should raise an error" do
         expect { unauthorised_user_route }.to raise_error Pundit::NotAuthorizedError
@@ -186,7 +185,7 @@ describe "Access Request API V2", type: :request do
           "jsonapi" => {
             "version" => "1.0",
           },
-         )
+        )
       end
     end
 
@@ -235,7 +234,7 @@ describe "Access Request API V2", type: :request do
       end
 
       it "updates the requests status to completed" do
-        expect(access_request.reload.status). to eq "completed"
+        expect(access_request.reload.status).to eq "completed"
       end
 
       it "has a successful response" do
@@ -249,7 +248,7 @@ describe "Access Request API V2", type: :request do
       end
 
       context "when email address does not belong to a user" do
-        let(:new_user_access_request) {
+        let(:new_user_access_request) do
           create(:access_request,
                  first_name: "test",
                  last_name: "user",
@@ -257,7 +256,7 @@ describe "Access Request API V2", type: :request do
                  requester_email: requesting_user.email,
                  requester_id: requesting_user.id,
                  organisation: organisation.name)
-        }
+        end
         before do
           post "/api/v2/access_requests/#{new_user_access_request.id}/approve",
                headers: { "HTTP_AUTHORIZATION" => credentials }
@@ -273,7 +272,7 @@ describe "Access Request API V2", type: :request do
   end
 
   describe "POST #create" do
-    let(:params) {
+    let(:params) do
       {
         access_request: {
           email_address: "bob@example.org",
@@ -284,7 +283,7 @@ describe "Access Request API V2", type: :request do
           requester_email: requesting_user.email,
         },
       }
-    }
+    end
 
     let(:do_post) do
       post "/api/v2/access_requests",
@@ -356,7 +355,7 @@ describe "Access Request API V2", type: :request do
       end
 
       describe "failed validation" do
-        let(:params) {
+        let(:params) do
           {
             _jsonapi: {
               data: {
@@ -371,7 +370,7 @@ describe "Access Request API V2", type: :request do
               },
             },
           }
-        }
+        end
 
         let(:json_data) { JSON.parse(response.body)["errors"] }
 

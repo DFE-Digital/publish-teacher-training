@@ -50,14 +50,18 @@ describe CourseReportingService do
       },
       program_type: {
         open: {
-          higher_education_programme: 1, school_direct_training_programme: 2,
-          school_direct_salaried_training_programme: 3, scitt_programme: 4,
-          pg_teaching_apprenticeship: 5
+          higher_education_programme: 1,
+          school_direct_training_programme: 2,
+          school_direct_salaried_training_programme: 3,
+          scitt_programme: 4,
+          pg_teaching_apprenticeship: 5,
         },
         closed: {
-          higher_education_programme: 0, school_direct_training_programme: 0,
-          school_direct_salaried_training_programme: 0, scitt_programme: 0,
-          pg_teaching_apprenticeship: 0
+          higher_education_programme: 0,
+          school_direct_training_programme: 0,
+          school_direct_salaried_training_programme: 0,
+          scitt_programme: 0,
+          pg_teaching_apprenticeship: 0,
         },
       },
       study_mode: {
@@ -74,7 +78,7 @@ describe CourseReportingService do
       },
       is_send: {
         open: { yes: 1, no: 2 },
-        closed:  { yes: 0, no: 0 },
+        closed: { yes: 0, no: 0 },
       },
       subject: {
         open: Subject.active.each_with_index.map { |sub, i| x = {}; x[sub.subject_name] = (i + 1) * 3; x }.reduce({}, :merge),
@@ -109,9 +113,11 @@ describe CourseReportingService do
         expect(open_courses_scope).to receive_message_chain(:group).with(:program_type).and_return(open_courses_program_type_scope)
         expect(open_courses_program_type_scope).to receive_message_chain(:count)
           .and_return(
-            { "higher_education_programme" => 1, "school_direct_training_programme" => 2,
-            "school_direct_salaried_training_programme" => 3, "scitt_programme" => 4,
-            "pg_teaching_apprenticeship" => 5 },
+            { "higher_education_programme" => 1,
+              "school_direct_training_programme" => 2,
+              "school_direct_salaried_training_programme" => 3,
+              "scitt_programme" => 4,
+              "pg_teaching_apprenticeship" => 5 },
           )
 
         expect(open_courses_scope).to receive_message_chain(:group).with(:study_mode).and_return(open_courses_study_mode_scope)
@@ -135,7 +141,7 @@ describe CourseReportingService do
         expect(open_course_subjects).to receive_message_chain(:group).with(:subject_id).and_return(open_course_subjects_grouped)
         expect(open_course_subjects_grouped).to receive_message_chain(:count).and_return(
           Subject.active.each_with_index.map { |sub, i| x = {}; x[sub.id] = (i + 1) * 3; x }.reduce({}, :merge),
-          )
+        )
 
         expect(closed_courses_scope).to receive_message_chain(:count).and_return(closed_courses_count)
 

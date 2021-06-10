@@ -50,7 +50,6 @@ describe SendWelcomeEmailService do
       described_class.call(current_user: current_user_spy)
     end
 
-
     it "does not update their first login date" do
       expect(current_user_spy).not_to have_received(:update).with(hash_including(first_login_date_utc: Time.now.utc))
     end

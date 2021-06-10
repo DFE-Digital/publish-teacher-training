@@ -7,7 +7,6 @@ module API
       attributes :email_address, :first_name, :last_name, :organisation,
                  :reason, :requester_id, :status, :requester_email
 
-
       attribute :request_date_utc do
         Time.now.utc.iso8601
       end

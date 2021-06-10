@@ -1,4 +1,4 @@
-# Note: These migrations need to run in the below order
+# NOTE: These migrations need to run in the below order
 # 1) CreateRecruitmentCycle
 #     Add schema change the foreign id as `null`
 # 2) CreateRecruitmentCycles

@@ -23,7 +23,7 @@ run do |opts, _args, _cmd|
 
   puts table
 
-  MCB::display_pages_received(page: last_context[:page],
-                              max_pages: opts[:'max-pages'],
-                              next_url: last_context[:next_url])
+  MCB.display_pages_received(page: last_context[:page],
+                             max_pages: opts[:'max-pages'],
+                             next_url: last_context[:next_url])
 end

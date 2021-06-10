@@ -26,11 +26,11 @@ describe "PATCH /providers/:provider_code/courses/:course_code" do
   let(:payload)           { { email: user.email } }
   let(:credentials)       { encode_to_credentials(payload) }
 
-  let(:course)            {
+  let(:course)            do
     create :course,
            provider: provider,
            age_range_in_years: age_range_in_years
-  }
+  end
   let(:age_range_in_years) { "3_to_7" }
   let(:permitted_params) do
     %i[updated_age_range_in_years]

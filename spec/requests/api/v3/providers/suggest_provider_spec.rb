@@ -16,59 +16,59 @@ describe "GET /provider-suggestions" do
     it "searches for a particular provider" do
       get "/api/v3/provider-suggestions?query=#{provider.provider_name}"
 
-      expect(JSON.parse(response.body)["data"]).
-          to match_array([
-                             {
-                                 "id" => provider.id.to_s,
-                                 "type" => "providers",
-                                 "attributes" => {
-                                     "provider_code" => provider.provider_code,
-                                     "provider_name" => provider.provider_name,
-                                     "provider_type" => provider.provider_type,
-                                     "latitude" => provider.latitude,
-                                     "longitude" => provider.longitude,
-                                     "can_sponsor_student_visa" => provider.can_sponsor_student_visa,
-                                     "can_sponsor_skilled_worker_visa" => provider.can_sponsor_skilled_worker_visa,
-                                     "recruitment_cycle_year" => provider.recruitment_cycle.year,
-                                 },
-                             },
-                         ])
+      expect(JSON.parse(response.body)["data"])
+          .to match_array([
+            {
+              "id" => provider.id.to_s,
+              "type" => "providers",
+              "attributes" => {
+                "provider_code" => provider.provider_code,
+                "provider_name" => provider.provider_name,
+                "provider_type" => provider.provider_type,
+                "latitude" => provider.latitude,
+                "longitude" => provider.longitude,
+                "can_sponsor_student_visa" => provider.can_sponsor_student_visa,
+                "can_sponsor_skilled_worker_visa" => provider.can_sponsor_skilled_worker_visa,
+                "recruitment_cycle_year" => provider.recruitment_cycle.year,
+              },
+            },
+          ])
     end
 
     it "searches for a partial provider" do
       get "/api/v3/provider-suggestions?query=#{provider2.provider_name[0..3]}"
 
-      expect(JSON.parse(response.body)["data"]).
-          to match_array([
-                             {
-                                 "id" => provider.id.to_s,
-                                 "type" => "providers",
-                                 "attributes" => {
-                                     "provider_code" => provider.provider_code,
-                                     "provider_name" => provider.provider_name,
-                                     "provider_type" => provider.provider_type,
-                                     "latitude" => provider.latitude,
-                                     "longitude" => provider.longitude,
-                                     "can_sponsor_student_visa" => provider.can_sponsor_student_visa,
-                                     "can_sponsor_skilled_worker_visa" => provider.can_sponsor_skilled_worker_visa,
-                                     "recruitment_cycle_year" => provider.recruitment_cycle.year,
-                                 },
-                             },
-                             {
-                                 "id" => provider2.id.to_s,
-                                 "type" => "providers",
-                                 "attributes" => {
-                                     "provider_code" => provider2.provider_code,
-                                     "provider_name" => provider2.provider_name,
-                                     "provider_type" => provider2.provider_type,
-                                     "latitude" => provider2.latitude,
-                                     "longitude" => provider2.longitude,
-                                     "can_sponsor_student_visa" => provider2.can_sponsor_student_visa,
-                                     "can_sponsor_skilled_worker_visa" => provider2.can_sponsor_skilled_worker_visa,
-                                     "recruitment_cycle_year" => provider2.recruitment_cycle.year,
-                                 },
-                             },
-                         ])
+      expect(JSON.parse(response.body)["data"])
+          .to match_array([
+            {
+              "id" => provider.id.to_s,
+              "type" => "providers",
+              "attributes" => {
+                "provider_code" => provider.provider_code,
+                "provider_name" => provider.provider_name,
+                "provider_type" => provider.provider_type,
+                "latitude" => provider.latitude,
+                "longitude" => provider.longitude,
+                "can_sponsor_student_visa" => provider.can_sponsor_student_visa,
+                "can_sponsor_skilled_worker_visa" => provider.can_sponsor_skilled_worker_visa,
+                "recruitment_cycle_year" => provider.recruitment_cycle.year,
+              },
+            },
+            {
+              "id" => provider2.id.to_s,
+              "type" => "providers",
+              "attributes" => {
+                "provider_code" => provider2.provider_code,
+                "provider_name" => provider2.provider_name,
+                "provider_type" => provider2.provider_type,
+                "latitude" => provider2.latitude,
+                "longitude" => provider2.longitude,
+                "can_sponsor_student_visa" => provider2.can_sponsor_student_visa,
+                "can_sponsor_skilled_worker_visa" => provider2.can_sponsor_skilled_worker_visa,
+                "recruitment_cycle_year" => provider2.recruitment_cycle.year,
+              },
+            },
+          ])
     end
   end
 

@@ -60,7 +60,7 @@ module MCB
         providers_table(
           [accrediting_provider],
           name: "Accredited body",
-          add_columns: [[:accrediting_provider, header: "accrediting"]],
+          add_columns: [[:accrediting_provider, { header: "accrediting" }]],
         ),
         "\n",
         recruitment_cycle_table(recruitment_cycle),
@@ -140,8 +140,8 @@ module MCB
     end
 
     def organisations_table(organisations,
-                        name: "Organisations",
-                        add_columns: [])
+                            name: "Organisations",
+                            add_columns: [])
       return if organisations.nil?
 
       [
@@ -153,7 +153,7 @@ module MCB
     def organisations_table_columns
       [
         :id,
-        [:name, header: "name"],
+        [:name, { header: "name" }],
       ]
     end
 
@@ -176,21 +176,21 @@ module MCB
       if extended
         [
           :id,
-          [:provider_name, header: "name"],
-          [:provider_code, header: "code"],
+          [:provider_name, { header: "name" }],
+          [:provider_code, { header: "code" }],
           [:organisation_id, ->(p) { p.organisation_ids.first }],
           [:organisation, ->(p) { p.organisations.first&.name }],
-          [:provider_type, header: "type"],
+          [:provider_type, { header: "type" }],
           [:courses, ->(p) { p.courses.count }],
           :postcode,
         ]
       else
         [
           :id,
-          [:provider_name, header: "name"],
-          [:provider_code, header: "code"],
+          [:provider_name, { header: "name" }],
+          [:provider_code, { header: "code" }],
           [:organisation_id, ->(p) { p.organisation_ids.first }],
-          [:provider_type, header: "type"],
+          [:provider_type, { header: "type" }],
         ]
       end
     end
@@ -205,7 +205,13 @@ module MCB
     end
 
     def sites_table_columns
-      %i[code location_name address1 address2 address3 address4 postcode
+      %i[code
+         location_name
+         address1
+         address2
+         address3
+         address4
+         postcode
          region_code]
     end
 

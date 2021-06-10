@@ -103,8 +103,7 @@ module MCB
     end
   end
 
-  def self.generate_apiv2_token(email:, encoding:, secret: nil,
-    audience:, issuer:, subject:)
+  def self.generate_apiv2_token(email:, encoding:, audience:, issuer:, subject:, secret: nil)
     require "jwt"
 
     payload = { email: email }
@@ -114,7 +113,7 @@ module MCB
     end
 
     MCB::Token::EncodeService.call(payload: payload, secret: secret,
-      algorithm: encoding, audience: audience, issuer: issuer, subject: subject)
+                                   algorithm: encoding, audience: audience, issuer: issuer, subject: subject)
   end
 
   def self.each_v1_course(opts)
@@ -132,13 +131,13 @@ module MCB
   end
 
   def self.get_recruitment_year(opts)
-    raise RuntimeError, "Rails has not been initialised" unless defined? Rails
+    raise "Rails has not been initialised" unless defined? Rails
 
     opts[:'recruitment-year'] || RecruitmentCycle.current_recruitment_cycle.year
   end
 
   def self.get_recruitment_cycle(opts)
-    raise RuntimeError, "Rails has not been initialised" unless defined? Rails
+    raise "Rails has not been initialised" unless defined? Rails
 
     if opts.key? :'recruitment-year'
       RecruitmentCycle.find_by(year: opts[:'recruitment-year'])
@@ -176,7 +175,7 @@ module MCB
         error ""
         error "  $ #{$0} config set email <your-email-address>"
         error ""
-        raise RuntimeError, "email not configured"
+        raise "email not configured"
       end
 
       email
@@ -297,7 +296,8 @@ module MCB
 
             # Send each provider to the consumer of this enumerator
             records.each do |record|
-              y << [record, {
+              y << [record,
+                    {
                       page: page_count,
                       url: endpoint_url,
                       next_url: next_url,
@@ -313,7 +313,7 @@ module MCB
     end
 
     def remote_connect_options
-      Proc.new do
+      proc do
         option :r, "recruitment-year",
                "Set the recruitment year, defaults to the current recruitment year",
                argument: :required
@@ -522,10 +522,14 @@ module MCB
     def add_url_params_from_opts(opts, url)
       new_url = url.dup
       if opts.key? :'changed-since'
-        changed_since = DateTime.strptime(
-          CGI.unescape(opts[:'changed-since']),
-          "%FT%T.%NZ",
-        ) rescue nil
+        changed_since = begin
+          DateTime.strptime(
+            CGI.unescape(opts[:'changed-since']),
+            "%FT%T.%NZ",
+          )
+        rescue StandardError
+          nil
+        end
         changed_since ||= DateTime.parse(opts[:'changed-since'])
         changed_since_param = CGI.escape(changed_since.strftime("%FT%T.%6NZ"))
         new_url.query = "changed_since=#{changed_since_param}"

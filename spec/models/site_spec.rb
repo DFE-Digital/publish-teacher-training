@@ -244,7 +244,6 @@ describe Site, type: :model do
       end
     end
 
-
     describe "#add_travel_to_work_area_and_london_borough" do
       before do
         allow(TravelToWorkAreaAndLondonBoroughJob).to receive(:perform_later)

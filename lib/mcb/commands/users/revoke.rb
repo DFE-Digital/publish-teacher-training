@@ -10,7 +10,7 @@ run do |opts, args, _cmd|
   provider = Provider.find_by(provider_code: opts[:provider_code])
   user = MCB.find_user_by_identifier args[:id_or_email_or_sign_in_id]
 
-  if user == nil
+  if user.nil?
     puts "#{args[:id_or_email_or_sign_in_id]} does not exist."
   else
     MCB::Editor::RevokeAccessWizard.new(provider, user).run

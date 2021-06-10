@@ -15,10 +15,10 @@ describe AllocationReportingService do
   let(:current) do
     {
       total: {
-         allocations: 999,
-         distinct_accredited_bodies: 123,
-         distinct_providers: 333,
-         number_of_places: 9999,
+        allocations: 999,
+        distinct_accredited_bodies: 123,
+        distinct_providers: 333,
+        number_of_places: 9999,
       },
     }
   end

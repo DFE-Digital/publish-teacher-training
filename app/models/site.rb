@@ -32,6 +32,7 @@ class Site < ApplicationRecord
   scope :not_geocoded, -> { where(latitude: nil, longitude: nil) }
 
   attr_accessor :skip_geocoding
+
   after_commit :geocode_site, unless: :skip_geocoding
   after_commit :add_travel_to_work_area_and_london_borough, if: :needs_travel_to_work_area_and_london_borough_updated?
 
@@ -42,7 +43,7 @@ class Site < ApplicationRecord
   def needs_geolocation?
     full_address.present? && (
     latitude.nil? || longitude.nil? || address_changed?
-    )
+  )
   end
 
   def add_travel_to_work_area_and_london_borough
@@ -70,9 +71,7 @@ class Site < ApplicationRecord
       saved_change_to_postcode?
   end
 
-  def recruitment_cycle
-    provider.recruitment_cycle
-  end
+  delegate :recruitment_cycle, to: :provider
 
   def assign_code
     self.code ||= pick_next_available_code(available_codes: provider&.unassigned_site_codes)

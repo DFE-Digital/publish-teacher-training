@@ -18,11 +18,11 @@ module MCB
       end
 
       def ask_english
-        ask_gcse_subject(:english, Course::entry_requirement_options_without_nil_choice)
+        ask_gcse_subject(:english, Course.entry_requirement_options_without_nil_choice)
       end
 
       def ask_maths
-        ask_gcse_subject(:maths, Course::entry_requirement_options_without_nil_choice)
+        ask_gcse_subject(:maths, Course.entry_requirement_options_without_nil_choice)
       end
 
       def ask_science

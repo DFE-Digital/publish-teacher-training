@@ -21,42 +21,42 @@ describe "GET /suggest" do
       get "/api/v2/providers/suggest?query=#{provider.provider_name}",
           headers: { "HTTP_AUTHORIZATION" => credentials }
 
-      expect(JSON.parse(response.body)["data"]).
-          to match_array([
-                             {
-                                 "id" => provider.id.to_s,
-                                 "type" => "provider",
-                                 "attributes" => {
-                                     "provider_code" => provider.provider_code,
-                                     "provider_name" => provider.provider_name,
-                                 },
-                             },
-                         ])
+      expect(JSON.parse(response.body)["data"])
+          .to match_array([
+            {
+              "id" => provider.id.to_s,
+              "type" => "provider",
+              "attributes" => {
+                "provider_code" => provider.provider_code,
+                "provider_name" => provider.provider_name,
+              },
+            },
+          ])
     end
 
     it "searches for a partial provider" do
       get "/api/v2/providers/suggest?query=#{provider2.provider_name[0..3]}",
           headers: { "HTTP_AUTHORIZATION" => credentials }
 
-      expect(JSON.parse(response.body)["data"]).
-          to match_array([
-                             {
-                                 "id" => provider.id.to_s,
-                                 "type" => "provider",
-                                 "attributes" => {
-                                     "provider_code" => provider.provider_code,
-                                     "provider_name" => provider.provider_name,
-                                 },
-                             },
-                             {
-                                 "id" => provider2.id.to_s,
-                                 "type" => "provider",
-                                 "attributes" => {
-                                     "provider_code" => provider2.provider_code,
-                                     "provider_name" => provider2.provider_name,
-                                 },
-                             },
-                         ])
+      expect(JSON.parse(response.body)["data"])
+          .to match_array([
+            {
+              "id" => provider.id.to_s,
+              "type" => "provider",
+              "attributes" => {
+                "provider_code" => provider.provider_code,
+                "provider_name" => provider.provider_name,
+              },
+            },
+            {
+              "id" => provider2.id.to_s,
+              "type" => "provider",
+              "attributes" => {
+                "provider_code" => provider2.provider_code,
+                "provider_name" => provider2.provider_name,
+              },
+            },
+          ])
     end
   end
 

@@ -50,7 +50,7 @@ private
   end
 
   def entry_requirements?
-    %w(maths english science).include?(name)
+    %w[maths english science].include?(name)
   end
 
   def entry_requirements_value

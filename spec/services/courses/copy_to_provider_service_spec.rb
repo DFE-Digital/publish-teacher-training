@@ -4,22 +4,22 @@ RSpec.describe Courses::CopyToProviderService do
   let(:accrediting_provider) { create :provider, :accredited_body }
   let(:provider) { create :provider, courses: [course] }
   let(:maths) { create :secondary_subject, :mathematics }
-  let(:course) {
+  let(:course) do
     build :course,
           accrediting_provider: accrediting_provider,
           subjects: [maths],
           level: "secondary"
-  }
+  end
   let(:recruitment_cycle) { find_or_create :recruitment_cycle }
   let(:new_recruitment_cycle) { create :recruitment_cycle, :next }
-  let(:new_provider) {
+  let(:new_provider) do
     create :provider,
            provider_code: provider.provider_code,
            recruitment_cycle: new_recruitment_cycle
-  }
-  let(:new_course) {
+  end
+  let(:new_course) do
     new_provider.reload.courses.find_by(course_code: course.course_code)
-  }
+  end
 
   let(:mocked_sites_copy_to_course_service) { double(execute: nil) }
   let(:mocked_enrichments_copy_to_course_service) { double(execute: nil) }
@@ -107,11 +107,11 @@ RSpec.describe Courses::CopyToProviderService do
   end
 
   context "the course already exists in the new provider" do
-    let!(:new_course) {
+    let!(:new_course) do
       create :course,
              course_code: course.course_code,
              provider: new_provider
-    }
+    end
 
     it "returns nil" do
       expect(service.execute(course: course, new_provider: new_provider)).to be_nil
@@ -158,12 +158,12 @@ RSpec.describe Courses::CopyToProviderService do
   context "the original course has sites" do
     let(:site) { create :site, provider: provider }
     let!(:new_site) { create :site, provider: new_provider, code: site.code }
-    let!(:site_status) {
+    let!(:site_status) do
       create :site_status,
              :with_no_vacancies,
              course: course,
              site: site
-    }
+    end
 
     before do
       described_class.new(

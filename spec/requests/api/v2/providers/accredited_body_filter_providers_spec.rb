@@ -31,22 +31,22 @@ describe "AccreditedBody API v2", type: :request do
 
     let(:training_provider_1) { create(:provider, provider_name: "ABC Provider") }
 
-    let(:accredited_provider) {
+    let(:accredited_provider) do
       create(:provider,
              organisations: [organisation],
              recruitment_cycle: recruitment_cycle)
-    }
+    end
 
     let(:json_response) { JSON.parse(response.body) }
 
-    let(:request_path) {
+    let(:request_path) do
       "/api/v2/recruitment_cycles/#{recruitment_cycle.year}/providers/#{accredited_provider.provider_code}/training_providers#{filters}"
-    }
+    end
 
     def provider_names_in_response(provider_hashes)
-      provider_hashes.map { |provider|
+      provider_hashes.map do |provider|
         provider["attributes"]["provider_name"]
-      }
+      end
     end
 
     def perform_request
@@ -214,11 +214,11 @@ describe "AccreditedBody API v2", type: :request do
         let(:filters) { "?filter[subject]=#{physical_education.subject_code}&filter[funding_type]=fee" }
         let(:training_provider_2) { create(:provider) }
 
-        let(:accredited_provider_2) {
+        let(:accredited_provider_2) do
           create(:provider,
                  organisations: [create(:organisation)],
                  recruitment_cycle: recruitment_cycle)
-        }
+        end
 
         let(:fee_paying_pe_course_1) do
           create(:course,

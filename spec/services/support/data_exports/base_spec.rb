@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.describe Support::DataExports::Base do
   context ".to_csv" do
-    let(:data) {
+    let(:data) do
       [
         {
           col1: "item1_test1",
@@ -19,7 +19,7 @@ RSpec.describe Support::DataExports::Base do
           col5: "item2_test5",
         },
       ]
-    }
+    end
 
     it "generates CSV from data" do
       res = subject.to_csv(data_for_export: data)

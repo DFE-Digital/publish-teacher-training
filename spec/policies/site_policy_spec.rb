@@ -14,11 +14,11 @@ describe SitePolicy do
   permissions :show? do
     let(:organisation) { create(:organisation, users: [user]) }
     let(:site) { create(:site) }
-    let!(:provider) {
+    let!(:provider) do
       create(:provider,
              sites: [site],
              organisations: [organisation])
-    }
+    end
 
     it { should permit(user, site) }
 

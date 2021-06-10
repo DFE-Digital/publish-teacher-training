@@ -510,22 +510,22 @@ describe "GET v3/courses" do
       let(:another_training_provider) { create(:provider, provider_name: "Anglia College") }
       let(:site2) { build(:site) }
       let(:site1) { build(:site) }
-      let(:filtered_provider_course) {
+      let(:filtered_provider_course) do
         create(:course,
                name: "Course A",
-                     provider: provider_filtered_by,
-                     accrediting_provider: provider_filtered_by,
-                     site_statuses: [create(:site_status, :findable, site: site1)],
-                     enrichments: [published_enrichment])
-      }
-      let(:another_provider_course) {
+               provider: provider_filtered_by,
+               accrediting_provider: provider_filtered_by,
+               site_statuses: [create(:site_status, :findable, site: site1)],
+               enrichments: [published_enrichment])
+      end
+      let(:another_provider_course) do
         create(:course,
                name: "Course B",
-                     provider: another_training_provider,
-                     accrediting_provider: provider_filtered_by,
-                     site_statuses: [create(:site_status, :findable, site: site2)],
-                     enrichments: [published_enrichment])
-      }
+               provider: another_training_provider,
+               accrediting_provider: provider_filtered_by,
+               site_statuses: [create(:site_status, :findable, site: site2)],
+               enrichments: [published_enrichment])
+      end
 
       before do
         provider_filtered_by
@@ -659,7 +659,7 @@ describe "GET v3/courses" do
         get request_path
 
         keys = JSON.parse(response.body)["data"][0]["attributes"].keys
-        expect(keys).to eql(%w{course_code changed_at provider_code})
+        expect(keys).to eql(%w[course_code changed_at provider_code])
       end
     end
   end

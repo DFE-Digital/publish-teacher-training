@@ -9,9 +9,9 @@ describe '"mcb apiv1 providers list"' do
   it "lists providers for the default recruitment year" do
     url = "http://localhost:3001/api/v1/#{RecruitmentCycle.current_recruitment_cycle.year}/providers"
     next_url = url + "&" + {
-        changed_since: provider2.created_at.utc.strftime("%FT%T.%6NZ"),
-        per_page: 100,
-      }.to_query
+      changed_since: provider2.created_at.utc.strftime("%FT%T.%6NZ"),
+      per_page: 100,
+    }.to_query
     json = ActiveModel::Serializer::CollectionSerializer.new(
       [
         provider1,
@@ -22,8 +22,8 @@ describe '"mcb apiv1 providers list"' do
 
     stub_request(:get, url)
       .with(headers: {
-              "Authorization" => "Bearer bats",
-            })
+        "Authorization" => "Bearer bats",
+      })
       .to_return(status: 200,
                  body: json.to_json,
                  headers: {
@@ -37,7 +37,7 @@ describe '"mcb apiv1 providers list"' do
                  })
 
     output = with_stubbed_stdout do
-      $mcb.run(%W[apiv1
+      $mcb.run(%w[apiv1
                   providers
                   list])
     end
@@ -52,9 +52,9 @@ describe '"mcb apiv1 providers list"' do
   it "lists providers for a given recruitment year" do
     url = "http://localhost:3001/api/v1/#{next_cycle.year}/providers"
     next_url = url + "&" + {
-        changed_since: provider2.created_at.utc.strftime("%FT%T.%6NZ"),
-        per_page: 100,
-      }.to_query
+      changed_since: provider2.created_at.utc.strftime("%FT%T.%6NZ"),
+      per_page: 100,
+    }.to_query
     json = ActiveModel::Serializer::CollectionSerializer.new(
       [
         provider2,
@@ -64,8 +64,8 @@ describe '"mcb apiv1 providers list"' do
 
     stub_request(:get, url)
       .with(headers: {
-              "Authorization" => "Bearer bats",
-            })
+        "Authorization" => "Bearer bats",
+      })
       .to_return(status: 200,
                  body: json.to_json,
                  headers: {
@@ -81,7 +81,9 @@ describe '"mcb apiv1 providers list"' do
     output = with_stubbed_stdout do
       $mcb.run(%W[apiv1
                   providers
-                  list -r #{next_cycle.year}])
+                  list
+                  -r
+                  #{next_cycle.year}])
     end
     output = output[:stdout]
 

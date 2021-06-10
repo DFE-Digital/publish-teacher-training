@@ -36,7 +36,7 @@ module MCB
 
       def find_or_init_user
         @user_to_grant = MCB.find_user_by_identifier @id_or_email_or_sign_in_id
-        return @user_to_grant if @user_to_grant != nil
+        return @user_to_grant unless @user_to_grant.nil?
 
         unless @id_or_email_or_sign_in_id.include? "@"
           puts "#{@id_or_email_or_sign_in_id} not found. Specify an email address if you wish to create a user"

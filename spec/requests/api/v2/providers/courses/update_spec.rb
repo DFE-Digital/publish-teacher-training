@@ -537,13 +537,13 @@ describe "PATCH /providers/:provider_code/courses/:course_code" do
           attribute
         end
 
-        let(:permitted_params) {
+        let(:permitted_params) do
           if jsonapi_serialized_name.blank?
             [attribute_key]
           else
             [jsonapi_serialized_name]
           end
-        }
+        end
 
         before do
           perform_request(course)

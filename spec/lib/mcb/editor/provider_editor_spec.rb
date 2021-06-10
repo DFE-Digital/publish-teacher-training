@@ -9,11 +9,11 @@ describe MCB::Editor::ProviderEditor, :needs_audit_user do
 
   let(:provider_code) { "X12" }
   let(:email) { "user@education.gov.uk" }
-  let(:provider) {
+  let(:provider) do
     create(:provider,
            provider_code: provider_code,
            provider_name: "Original name")
-  }
+  end
 
   subject { described_class.new(provider: provider, requester: requester) }
 
@@ -113,8 +113,8 @@ describe MCB::Editor::ProviderEditor, :needs_audit_user do
       end
 
       it "does nothing upon an immediate exit" do
-        expect { run_editor("exit") }.to_not change { provider.reload.provider_name }.
-          from("Original name")
+        expect { run_editor("exit") }.to_not change { provider.reload.provider_name }
+          .from("Original name")
       end
     end
 
@@ -126,7 +126,7 @@ describe MCB::Editor::ProviderEditor, :needs_audit_user do
       end
       let(:provider) { RecruitmentCycle.current_recruitment_cycle.providers.build }
 
-      let(:desired_attributes) {
+      let(:desired_attributes) do
         {
           name: "ACME SCITT",
           code: "X01",
@@ -142,9 +142,9 @@ describe MCB::Editor::ProviderEditor, :needs_audit_user do
           telephone: "0123456",
           organisation_name: "ACME SCITT",
         }
-      }
+      end
 
-      let(:valid_answers) {
+      let(:valid_answers) do
         [
           desired_attributes[:name],
           desired_attributes[:code],
@@ -159,9 +159,9 @@ describe MCB::Editor::ProviderEditor, :needs_audit_user do
           desired_attributes[:postcode],
           desired_attributes[:region_code],
         ]
-      }
+      end
 
-      let(:expected_provider_attributes) {
+      let(:expected_provider_attributes) do
         {
           "provider_name" => desired_attributes[:name],
           "provider_code" => desired_attributes[:code],
@@ -176,7 +176,7 @@ describe MCB::Editor::ProviderEditor, :needs_audit_user do
           "region_code" => desired_attributes[:region_code],
           "accrediting_provider" => "accredited_body",
         }
-      }
+      end
 
       context "when adding a new provider into a completely new organisation" do
         let(:frozen_time) { Time.parse("10:00 20/01/2019").utc }

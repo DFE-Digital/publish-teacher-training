@@ -10,10 +10,10 @@ FactoryBot.define do
     INST_CODE { provider.provider_code }
     INST_ID   { organisation.org_id }
     VERSION   { 1 }
-    INP_ID    { Random.rand 10000 }
-    PRF_ID    { Random.rand 10000 }
-    PRT_ID    { Random.rand 10000 }
-    PRV_ID    { Random.rand 10000 }
+    INP_ID    { Random.rand 10_000 }
+    PRF_ID    { Random.rand 10_000 }
+    PRT_ID    { Random.rand 10_000 }
+    PRV_ID    { Random.rand 10_000 }
 
     initialize_with { attributes }
 

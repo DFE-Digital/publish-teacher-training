@@ -25,11 +25,11 @@ describe "PATCH /providers/:provider_code/courses/:course_code" do
   let(:payload)           { { email: user.email } }
   let(:credentials)       { encode_to_credentials(payload) }
 
-  let(:course)            {
+  let(:course)            do
     create :course,
            provider: provider,
            applications_open_from: applications_open_from
-  }
+  end
 
   let(:applications_open_from) { DateTime.new(provider.recruitment_cycle.year.to_i, 1, 15).utc }
   let(:permitted_params) do
@@ -64,7 +64,6 @@ describe "PATCH /providers/:provider_code/courses/:course_code" do
       expect(course.reload.applications_open_from).to eq(course_applications_open_from)
     end
   end
-
 
   context "for a course in the current cycle" do
     context "with an invalid applications_open_from" do

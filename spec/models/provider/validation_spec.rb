@@ -30,7 +30,7 @@ describe Provider, type: :model do
           expect(provider.errors[:email]).to include("^Enter an email address in the correct format, like name@example.com")
         end
 
-        it "Does not validate the email if it is not present"do
+        it "Does not validate the email if it is not present" do
           provider.website = "cats4lyf.cat"
 
           expect(provider.valid?(:update)).to be true
@@ -56,7 +56,7 @@ describe Provider, type: :model do
           expect(provider.errors[:telephone]).to include("^Enter a valid telephone number")
         end
 
-        it "Does not validate the telephone if it is not present"do
+        it "Does not validate the telephone if it is not present" do
           provider.website = "cats4lyf.cat"
 
           expect(provider.valid?(:update)).to be true
@@ -108,7 +108,7 @@ describe Provider, type: :model do
       describe "#accrediting_provider_providers" do
         let(:word_count) { 100 }
 
-        let(:accrediting_provider_enrichments) {
+        let(:accrediting_provider_enrichments) do
           result = []
           10.times do |index|
             result <<
@@ -118,16 +118,16 @@ describe Provider, type: :model do
               }
           end
           result
-        }
+        end
 
         let(:provider) do
           create :provider
         end
 
-        subject {
+        subject do
           provider.accrediting_provider_enrichments = accrediting_provider_enrichments
           provider
-        }
+        end
         context "word count within limit" do
           it { should be_valid }
         end
@@ -147,22 +147,22 @@ describe Provider, type: :model do
       describe "#accrediting_provider_providers" do
         let(:word_count) { 100 }
 
-        let(:accrediting_providers) {
+        let(:accrediting_providers) do
           result = []
           10.times do
             result << create(:provider)
           end
           result
-        }
+        end
 
-        let(:accrediting_provider_enrichments) {
+        let(:accrediting_provider_enrichments) do
           accrediting_providers.map do |ap|
             {
               "Description" => Faker::Lorem.sentence(word_count: word_count),
               "UcasProviderCode" => ap.provider_code.to_s,
             }
           end
-        }
+        end
 
         let(:courses) do
           accrediting_providers.map do |ap|
@@ -174,10 +174,10 @@ describe Provider, type: :model do
           create :provider, courses: courses
         end
 
-        subject {
+        subject do
           provider.accrediting_provider_enrichments = accrediting_provider_enrichments
           provider
-        }
+        end
 
         context "word count within limit" do
           it { should be_valid }

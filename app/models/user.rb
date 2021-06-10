@@ -20,15 +20,15 @@ class User < ApplicationRecord
   scope :admins, -> { where(admin: true) }
   scope :non_admins, -> { where.not(admin: true) }
   scope :active, -> { where.not(accept_terms_date_utc: nil) }
-  scope :last_login_since, ->(timestamp) do
+  scope :last_login_since, lambda { |timestamp|
     where("last_login_date_utc > ?", timestamp)
-  end
-  scope :course_update_subscribers, ->(accredited_body_code) do
+  }
+  scope :course_update_subscribers, lambda { |accredited_body_code|
     joins(:user_notifications).merge(UserNotification.course_update_notification_requests(accredited_body_code))
-  end
-  scope :course_publish_subscribers, ->(accredited_body_code) do
+  }
+  scope :course_publish_subscribers, lambda { |accredited_body_code|
     joins(:user_notifications).merge(UserNotification.course_publish_notification_requests(accredited_body_code))
-  end
+  }
 
   validates :first_name, presence: true
   validates :last_name, presence: true
@@ -48,7 +48,7 @@ class User < ApplicationRecord
 
   # accepts array or single organisation
   def remove_access_to(organisations_to_remove)
-    self.organisations = self.organisations - Array(organisations_to_remove)
+    self.organisations = organisations - Array(organisations_to_remove)
   end
 
   def associated_with_accredited_body?

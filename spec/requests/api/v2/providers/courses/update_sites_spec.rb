@@ -19,12 +19,12 @@ describe "PATCH /providers/:provider_code/courses/:course_code with sites" do
     course.sites = [site_status.site, existing_site, unwanted_site]
   end
 
-  let(:sites_payload) {
+  let(:sites_payload) do
     [
       { "type" => "sites", "id" => existing_site.id.to_s },
       { "type" => "sites", "id" => site_to_add.id.to_s },
     ]
-  }
+  end
 
   let(:jsonapi_data) do
     {

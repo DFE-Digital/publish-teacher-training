@@ -8,11 +8,11 @@ describe "Providers API v2", type: :request do
     let(:payload) { { email: user.email } }
     let(:credentials) { encode_to_credentials(payload) }
 
-    let!(:provider) {
+    let!(:provider) do
       create(:provider,
              organisations: [organisation],
              contacts: [contact])
-    }
+    end
     let(:contact) { build(:contact) }
 
     let(:json_response) { JSON.parse(response.body) }
@@ -133,25 +133,25 @@ describe "Providers API v2", type: :request do
         provider.update(provider_name: "Acme")
       end
 
-      let(:provider_names_in_response) {
-        JSON.parse(subject.body)["data"].map { |provider|
+      let(:provider_names_in_response) do
+        JSON.parse(subject.body)["data"].map do |provider|
           provider["attributes"]["provider_name"]
-        }
-      }
+        end
+      end
 
       it "returns them in alphabetical order" do
-        expect(provider_names_in_response).to eq(%w(Acme Zork))
+        expect(provider_names_in_response).to eq(%w[Acme Zork])
       end
     end
 
     context "with two recruitment cycles" do
       let(:next_recruitment_cycle) { create :recruitment_cycle, :next }
-      let(:next_provider) {
+      let(:next_provider) do
         create :provider,
                organisations: [organisation],
                provider_code: provider.provider_code,
                recruitment_cycle: next_recruitment_cycle
-      }
+      end
 
       describe "making a request without specifying a recruitment cycle" do
         let(:request_path) { "/api/v2/providers" }
@@ -169,9 +169,9 @@ describe "Providers API v2", type: :request do
       end
 
       describe "making a request for the next recruitment cycle" do
-        let(:request_path) {
+        let(:request_path) do
           "/api/v2/recruitment_cycles/#{next_recruitment_cycle.year}/providers"
-        }
+        end
 
         it "only returns data for the next recruitment cycle" do
           next_provider

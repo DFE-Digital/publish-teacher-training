@@ -40,7 +40,7 @@ describe API::V2::SerializableCourse do
       jsonapi_renderer.render(
         course,
         class: {
-          Course:   API::V2::SerializableCourse,
+          Course: API::V2::SerializableCourse,
           Provider: API::V2::SerializableProvider,
         },
         include: [
@@ -85,7 +85,7 @@ describe API::V2::SerializableCourse do
       jsonapi_renderer.render(
         course,
         class: {
-          Course:   API::V2::SerializableCourse,
+          Course: API::V2::SerializableCourse,
           Provider: API::V2::SerializableProvider,
         },
         include: [
@@ -104,7 +104,7 @@ describe API::V2::SerializableCourse do
       jsonapi_renderer.render(
         course,
         class: {
-          Course:   API::V2::SerializableCourse,
+          Course: API::V2::SerializableCourse,
           Provider: API::V2::SerializableProvider,
         },
         include: [
@@ -123,7 +123,7 @@ describe API::V2::SerializableCourse do
       jsonapi_renderer.render(
         course,
         class: {
-          Course:   API::V2::SerializableCourse,
+          Course: API::V2::SerializableCourse,
           Provider: API::V2::SerializableProvider,
         },
         include: [

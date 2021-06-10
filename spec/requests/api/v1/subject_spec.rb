@@ -29,27 +29,27 @@ describe "Subjecs API", type: :request do
 
       json = JSON.parse(response.body)
       expect(json).to eq([
-          {
-            "subject_name" => "English",
-            "subject_code" => "Q3",
-            "type" => "SecondarySubject",
-          },
-          {
-            "subject_name" => "French",
-            "subject_code" => "15",
-            "type" => "ModernLanguagesSubject",
-          },
-          {
-            "subject_name" => "Primary",
-            "subject_code" => "00",
-            "type" => "PrimarySubject",
-          },
-          {
-            "subject_name" => "Further education",
-            "subject_code" => "41",
-            "type" => "FurtherEducationSubject",
-          },
-        ])
+        {
+          "subject_name" => "English",
+          "subject_code" => "Q3",
+          "type" => "SecondarySubject",
+        },
+        {
+          "subject_name" => "French",
+          "subject_code" => "15",
+          "type" => "ModernLanguagesSubject",
+        },
+        {
+          "subject_name" => "Primary",
+          "subject_code" => "00",
+          "type" => "PrimarySubject",
+        },
+        {
+          "subject_name" => "Further education",
+          "subject_code" => "41",
+          "type" => "FurtherEducationSubject",
+        },
+      ])
     end
   end
 end

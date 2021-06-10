@@ -3,11 +3,11 @@ module Token
     include ServicePattern
 
     def initialize(encoded_token:,
-      secret:,
-      algorithm:,
-      audience:,
-      issuer:,
-      subject:)
+                   secret:,
+                   algorithm:,
+                   audience:,
+                   issuer:,
+                   subject:)
 
       @encoded_token = encoded_token
 
@@ -24,13 +24,13 @@ module Token
         secret,
         true,
         {
-            algorithm: algorithm,
-            verify_iss: true,
-            verify_aud: true,
-            verify_sub: true,
-            verify_iat: true,
-            exp_leeway: 6.seconds.to_i,
-            **claims,
+          algorithm: algorithm,
+          verify_iss: true,
+          verify_aud: true,
+          verify_sub: true,
+          verify_iat: true,
+          exp_leeway: 6.seconds.to_i,
+          **claims,
         },
       )
 
@@ -38,7 +38,6 @@ module Token
 
       payload.with_indifferent_access[:data]
     end
-
 
   private
 

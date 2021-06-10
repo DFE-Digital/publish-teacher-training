@@ -1,6 +1,6 @@
 module Rack
   class RequestOutput
-    def initialize app
+    def initialize(app)
       @app = app
     end
 

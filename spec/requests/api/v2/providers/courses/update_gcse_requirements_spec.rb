@@ -26,11 +26,11 @@ describe "PATCH /providers/:provider_code/courses/:course_code" do
   let(:payload)           { { email: user.email } }
   let(:credentials)       { encode_to_credentials(payload) }
 
-  let(:course)            {
+  let(:course)            do
     create :course,
            provider: provider,
            subjects: [find_or_create(:primary_subject, :primary)]
-  }
+  end
   let(:permitted_params) do
     %i[english maths science]
   end
@@ -140,12 +140,12 @@ describe "PATCH /providers/:provider_code/courses/:course_code" do
     let(:json_data) { JSON.parse(response.body)["errors"] }
     let(:gcse_requirements) { { english: "not_set", maths: "not_set", science: "not_set" } }
 
-    let(:course) {
+    let(:course) do
       create :course,
              provider: provider,
              level: "secondary",
              subjects: [secondary_subject]
-    }
+    end
 
     it "returns an error" do
       expect(response).to have_http_status(:unprocessable_entity)

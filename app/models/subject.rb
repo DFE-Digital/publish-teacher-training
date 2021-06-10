@@ -4,9 +4,9 @@ class Subject < ApplicationRecord
   belongs_to :subject_area, foreign_key: :type, inverse_of: :subjects
   has_one :financial_incentive
 
-  scope :with_subject_codes, ->(subject_codes) do
+  scope :with_subject_codes, lambda { |subject_codes|
     where(subject_code: subject_codes)
-  end
+  }
 
   scope :active, -> { where.not(type: "DiscontinuedSubject") }
 

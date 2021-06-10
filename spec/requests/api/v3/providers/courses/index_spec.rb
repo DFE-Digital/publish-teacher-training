@@ -162,17 +162,17 @@ describe "GET v3/recruitment_cycle/:recruitment_cycle_year/providers/:provider_c
 
     context "with two recruitment cycles" do
       let(:next_cycle) { create :recruitment_cycle, :next }
-      let(:next_provider) {
+      let(:next_provider) do
         create :provider,
                provider_code: provider.provider_code,
                recruitment_cycle: next_cycle
-      }
-      let(:next_course) {
+      end
+      let(:next_course) do
         create :course,
                provider: next_provider,
                course_code: findable_open_course.course_code,
                site_statuses: [build(:site_status, :findable)]
-      }
+      end
 
       describe "making a request without specifying a recruitment cycle" do
         let(:request_path) { "/api/v3/recruitment_cycles/#{current_year.year}/providers/#{provider.provider_code}/courses" }
@@ -191,10 +191,10 @@ describe "GET v3/recruitment_cycle/:recruitment_cycle_year/providers/:provider_c
       end
 
       describe "making a request for the next recruitment cycle" do
-        let(:request_path) {
+        let(:request_path) do
           "/api/v3/recruitment_cycles/#{next_cycle.year}" \
           "/providers/#{next_provider.provider_code}/courses"
-        }
+        end
 
         it "only returns data for the next recruitment cycle" do
           findable_open_course

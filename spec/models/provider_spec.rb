@@ -444,7 +444,7 @@ describe Provider, type: :model do
         "Providers::GenerateUniqueCourseCodeService",
       ).with_arguments(
         existing_codes: %w[A123 B456],
-        )
+      )
     end
   end
 
@@ -454,8 +454,8 @@ describe Provider, type: :model do
     let(:provider) { create :provider, :accredited_body }
     let!(:findable_course) do
       create :course, name: "findable-course",
-             accrediting_provider: provider,
-             site_statuses: [build(:site_status, :findable)]
+                      accrediting_provider: provider,
+                      site_statuses: [build(:site_status, :findable)]
     end
     let!(:discarded_course) do
       create :course, :deleted,
@@ -510,9 +510,9 @@ describe Provider, type: :model do
         create(:course, :with_accrediting_provider, site_statuses: [build(:site_status)])
       end
 
-      subject {
+      subject do
         described_class.with_findable_courses
-      }
+      end
 
       it "should return only findable courses' provider and/or accrediting provider" do
         expect(subject).to contain_exactly(findable_course.provider,
@@ -583,7 +583,7 @@ describe Provider, type: :model do
     end
 
     # Geocoding stubbed with support/helpers.rb
-    let(:provider) {
+    let(:provider) do
       build(:provider,
             provider_name: "Southampton High School",
             address1: "Long Lane",
@@ -591,7 +591,7 @@ describe Provider, type: :model do
             address3: "Southampton",
             address4: nil,
             postcode: "SO45 2PA")
-    }
+    end
 
     describe "#full_address" do
       it "Concatenates address details" do
@@ -636,7 +636,7 @@ describe Provider, type: :model do
       end
 
       context "address" do
-        let(:provider) {
+        let(:provider) do
           create(:provider,
                  latitude: 1.456789,
                  longitude: 1.456789,
@@ -646,7 +646,7 @@ describe Provider, type: :model do
                  address3: "Southampton",
                  address4: nil,
                  postcode: "SO45 2PA")
-        }
+        end
         context "has not changed" do
           before do
             provider.update(address1: "Long Lane")

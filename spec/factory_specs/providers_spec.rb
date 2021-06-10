@@ -7,7 +7,7 @@ describe "Provider Factory" do
   it { should be_valid }
 
   it "creates the correct number of associations" do
-    expect { subject }.to change { Organisation.count }.by(1).
-        and change { User.count }.by(1)
+    expect { subject }.to change { Organisation.count }.by(1)
+        .and change { User.count }.by(1)
   end
 end

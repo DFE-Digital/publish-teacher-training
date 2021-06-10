@@ -26,11 +26,11 @@ describe "PATCH /providers/:provider_code/courses/:course_code" do
   let(:payload)           { { email: user.email } }
   let(:credentials)       { encode_to_credentials(payload) }
 
-  let(:course)            {
+  let(:course)            do
     create :course,
            provider: provider,
            start_date: start_date
-  }
+  end
 
   let(:start_date) { DateTime.new(provider.recruitment_cycle.year.to_i, 9, 1).utc }
   let(:permitted_params) do

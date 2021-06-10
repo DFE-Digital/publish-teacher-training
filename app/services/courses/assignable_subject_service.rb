@@ -6,7 +6,7 @@ module Courses
       modern_language_subject: ModernLanguagesSubject,
       further_education_subject: FurtherEducationSubject,
       modern_languages_parent_subject: SecondarySubject.modern_languages
-  )
+    )
       @primary_subject = primary_subject
       @secondary_subject = secondary_subject
       @modern_language_subject = modern_language_subject

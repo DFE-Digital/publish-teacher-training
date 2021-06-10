@@ -1,10 +1,8 @@
 require "mcb_helper"
 
 describe MCB::Cli::BaseCli do
-  def run_with_input_commands(*input_cmds)
-    with_stubbed_stdout(stdin: input_cmds.join("\n")) do
-      yield
-    end
+  def run_with_input_commands(*input_cmds, &block)
+    with_stubbed_stdout(stdin: input_cmds.join("\n"), &block)
   end
 
   subject { described_class.new }
@@ -53,27 +51,27 @@ describe MCB::Cli::BaseCli do
 
       it "returns the actual updated values once run" do
         result = nil
-        run_with_input_commands("[x] option A", "[ ] option B", "continue") {
+        run_with_input_commands("[x] option A", "[ ] option B", "continue") do
           result = run_multiselect
-        }
+        end
 
         expect(result.sort).to eq(["option B", "option C"])
       end
 
       it "supports an optional 'select all' option" do
         result = nil
-        run_with_input_commands("select all", "continue") {
+        run_with_input_commands("select all", "continue") do
           result = run_multiselect(select_all_option: true)
-        }
+        end
 
         expect(result.sort).to eq(["option A", "option B", "option C"])
       end
 
       it "supports an optional hidden alias for each option" do
         result = nil
-        run_with_input_commands("A", "B", "continue") { # unselect A, select B
+        run_with_input_commands("A", "B", "continue") do # unselect A, select B
           result = run_multiselect(hidden_label: ->(option) { option.split[1] })
-        }
+        end
 
         expect(result.sort).to eq(["option B", "option C"])
       end

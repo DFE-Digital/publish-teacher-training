@@ -9,10 +9,10 @@ module API
         course_search = CourseSearchService.call(filter: params[:filter], sort: params[:sort], course_scope: @courses)
 
         render jsonapi: paginate(course_search),
-          fields: fields_param,
-          include: params[:include],
-          meta: { count: course_search.count("course.id") },
-          class: CourseSerializersServiceV3.new.execute
+               fields: fields_param,
+               include: params[:include],
+               meta: { count: course_search.count("course.id") },
+               class: CourseSerializersServiceV3.new.execute
       end
 
       def show

@@ -21,5 +21,5 @@ run do |opts, _args, _cmd|
       "-h #{ENV['DB_HOSTNAME']} -U #{ENV['DB_USERNAME']} -d #{ENV['DB_DATABASE']} " \
       "--file '#{target_file}'"
 
-  MCB::exec_command(cmd)
+  MCB.exec_command(cmd)
 end

@@ -11,13 +11,13 @@ describe API::V2::SerializableAllocation do
     jsonapi_renderer.render(
       allocation,
       class: {
-        Allocation:   API::V2::SerializableAllocation,
-        Provider:   API::V2::SerializableProvider,
+        Allocation: API::V2::SerializableAllocation,
+        Provider: API::V2::SerializableProvider,
       },
-      include: %i(
+      include: %i[
         accredited_body
         provider
-      ),
+      ],
     )
   end
 

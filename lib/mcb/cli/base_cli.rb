@@ -8,7 +8,7 @@ module MCB
       def multiselect(initial_items:, possible_items:, select_all_option: false, hidden_label: nil)
         selected_items = initial_items
         finished = false
-        until finished do
+        until finished
           @cli.choose do |menu|
             menu.choice("continue") { finished = true }
             menu.choice("select all") { selected_items = possible_items.to_a.dup } if select_all_option

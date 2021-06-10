@@ -46,7 +46,7 @@ describe "POST /sessions/create_by_magic" do
       user.update(welcome_email_date_utc: nil)
       expect {
         perform_request
-      } .to(
+      }.to(
         have_enqueued_email(WelcomeEmailMailer, :send_welcome_email)
             .with { user.reload; { first_name: user.first_name, email: user.email } }
             .on_queue(:mailers),

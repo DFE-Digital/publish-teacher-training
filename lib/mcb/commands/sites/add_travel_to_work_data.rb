@@ -17,10 +17,10 @@ run do |opts, _args, _cmd|
     .sites
     .where
     .not(latitude: nil, longitude: nil)
-    .find_each(batch_size: opts[:batch_size]) { |site|
+    .find_each(batch_size: opts[:batch_size]) do |site|
       verbose "adding travel to work area for site id '#{site.id}' site code '#{site.code}'"
       success = TravelToWorkAreaAndLondonBoroughService.call(site: site)
       verbose "Success? #{success}"
       sleep(opts[:sleep])
-    }
+    end
 end

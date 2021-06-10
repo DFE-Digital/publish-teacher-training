@@ -17,10 +17,10 @@ describe "Sites API v2", type: :request do
   let(:site2) { create :site, location_name: "Main site 2", provider: provider }
   let!(:sites) { [site1, site2] }
 
-  let(:provider) {
+  let(:provider) do
     build(:provider,
           organisations: [organisation])
-  }
+  end
 
   subject { response }
 
@@ -132,21 +132,21 @@ describe "Sites API v2", type: :request do
     end
 
     context "with two recruitment cycles" do
-      let(:next_provider) {
+      let(:next_provider) do
         create :provider,
                organisations: [organisation],
                provider_code: provider.provider_code,
                recruitment_cycle: next_cycle,
                sites: [next_site1, next_site2]
-      }
-      let(:next_site1) {
+      end
+      let(:next_site1) do
         build :site,
               location_name: "Next Main site 1"
-      }
-      let(:next_site2) {
+      end
+      let(:next_site2) do
         build :site,
               location_name: "Next Main site 2"
-      }
+      end
       let(:next_sites) { [next_site1, next_site2] }
 
       describe "when not specifying the recruitment cycle" do
@@ -172,10 +172,10 @@ describe "Sites API v2", type: :request do
       end
 
       describe "when specifying the next recruitment cycle" do
-        let(:request_path) {
+        let(:request_path) do
           "/api/v2/recruitment_cycles/#{next_cycle.year}" \
            "/providers/#{provider.provider_code}/sites"
-        }
+        end
 
         subject do
           next_provider
@@ -471,9 +471,9 @@ describe "Sites API v2", type: :request do
       let(:postcode)      { "SW1A 1AA" }
       let(:region_code)   { "west_midlands" }
 
-      let(:site) {
+      let(:site) do
         provider.reload.sites.last
-      }
+      end
 
       describe "permitted parameters" do
         before do

@@ -1,5 +1,3 @@
-# coding: utf-8
-
 summary "Show course info from the db"
 usage "show <provider_code> <course_code>"
 param :provider_code, transform: ->(code) { code.upcase }

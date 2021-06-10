@@ -16,7 +16,7 @@ module NotificationService
     let(:course) { create(:course, accrediting_provider: accredited_body) }
     let(:vacancy_statuses) do
       [
-        { id: 123456, status: "no_vacancies" },
+        { id: 123_456, status: "no_vacancies" },
       ]
     end
 
@@ -97,8 +97,8 @@ module NotificationService
       context "all locations have no vacancies" do
         let(:vacancy_statuses) do
           [
-            { id: 123456, status: "no_vacancies" },
-            { id: 789789, status: "no_vacancies" },
+            { id: 123_456, status: "no_vacancies" },
+            { id: 789_789, status: "no_vacancies" },
           ]
         end
 
@@ -107,11 +107,11 @@ module NotificationService
             expect(CourseVacancies::UpdatedMailer)
               .to receive(:fully_updated)
                     .with({
-                            course: course,
-                            user: user,
-                            datetime: DateTime.now,
-                            vacancies_filled: true,
-                          })
+                      course: course,
+                      user: user,
+                      datetime: DateTime.now,
+                      vacancies_filled: true,
+                    })
           end
 
           service_call
@@ -121,8 +121,8 @@ module NotificationService
       context "all locations have vacancies" do
         let(:vacancy_statuses) do
           [
-            { id: 123456, status: "full_time_vacancies" },
-            { id: 789789, status: "part_time_vacancies" },
+            { id: 123_456, status: "full_time_vacancies" },
+            { id: 789_789, status: "part_time_vacancies" },
           ]
         end
 
@@ -131,11 +131,11 @@ module NotificationService
             expect(CourseVacancies::UpdatedMailer)
               .to receive(:fully_updated)
                     .with({
-                            course: course,
-                            user: user,
-                            datetime: DateTime.now,
-                            vacancies_filled: false,
-                          })
+                      course: course,
+                      user: user,
+                      datetime: DateTime.now,
+                      vacancies_filled: false,
+                    })
           end
 
           service_call
@@ -143,8 +143,8 @@ module NotificationService
       end
 
       context "some locations have vacancies" do
-        let(:first_site_status_id) { 123456 }
-        let(:second_site_status_id) { 789789 }
+        let(:first_site_status_id) { 123_456 }
+        let(:second_site_status_id) { 789_789 }
         let(:first_site_status) { create(:site_status, id: first_site_status_id) }
         let(:second_site_status) { create(:site_status, id: second_site_status_id) }
         let(:vacancy_statuses) do
@@ -165,15 +165,14 @@ module NotificationService
             expect(CourseVacancies::UpdatedMailer)
               .to receive(:partially_updated)
                     .with({
-                            course: course,
-                            user: user,
-                            datetime: DateTime.now,
-                            vacancies_closed: [first_site_status.site.location_name],
-                            vacancies_opened: [second_site_status.site.location_name],
-                          })
+                      course: course,
+                      user: user,
+                      datetime: DateTime.now,
+                      vacancies_closed: [first_site_status.site.location_name],
+                      vacancies_opened: [second_site_status.site.location_name],
+                    })
                     .and_return(double(deliver_later: true))
           end
-
 
           service_call
         end

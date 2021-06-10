@@ -26,12 +26,12 @@ describe "PATCH /providers/:provider_code/courses/:course_code" do
   let(:payload)           { { email: user.email } }
   let(:credentials)       { encode_to_credentials(payload) }
 
-  let(:course)            {
+  let(:course)            do
     create :course,
            provider: provider,
            subjects: [subject],
            qualification: qualification
-  }
+  end
   let(:qualification) { :pgce_with_qts }
   let(:subject) { find_or_create(:primary_subject, :primary) }
   let(:permitted_params) do
@@ -87,13 +87,13 @@ describe "PATCH /providers/:provider_code/courses/:course_code" do
 
   context "when course level is further education" do
     context "with an invalid qualification" do
-      let(:course) {
+      let(:course) do
         create(:course,
                provider: provider,
                subjects: [subject],
                qualification: qualification,
                level: "further_education")
-      }
+      end
       let(:json_data) { JSON.parse(response.body)["errors"] }
       let(:updated_qualification) { { qualification: "pgce_with_qts" } }
       let(:subject) { find_or_create(:further_education_subject) }

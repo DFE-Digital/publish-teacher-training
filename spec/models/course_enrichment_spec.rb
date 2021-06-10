@@ -281,11 +281,11 @@ describe CourseEnrichment, type: :model do
     let(:provider) { create(:provider) }
     let(:course) { create(:course, provider: provider) }
     let(:last_published_timestamp_utc) { Date.new(2017, 1, 1) }
-    subject {
+    subject do
       create(:course_enrichment, :published,
              last_published_timestamp_utc: last_published_timestamp_utc,
              course: course)
-    }
+    end
 
     describe "to initial draft" do
       it "sets the course to draft" do

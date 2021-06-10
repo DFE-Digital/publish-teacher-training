@@ -26,12 +26,12 @@ describe "PATCH /providers/:provider_code/courses/:course_code" do
   let(:payload)           { { email: user.email } }
   let(:credentials)       { encode_to_credentials(payload) }
 
-  let(:course)            {
+  let(:course)            do
     create :course,
            :with_accrediting_provider,
            provider: provider,
            program_type: program_type
-  }
+  end
   let(:program_type) { :school_direct_training_programme }
   let(:permitted_params) do
     %i[funding_type]

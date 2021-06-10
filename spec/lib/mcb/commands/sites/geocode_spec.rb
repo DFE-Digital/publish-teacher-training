@@ -14,7 +14,6 @@ describe "mcb geocode" do
   let(:site_one) { create(:site, provider: provider) }
   let(:site_two) { create(:site, provider: provider) }
 
-
   before do
     allow(MCB).to receive(:init_rails)
   end

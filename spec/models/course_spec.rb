@@ -814,7 +814,7 @@ describe Course, type: :model do
       end
 
       context "full time and part_time" do
-        let(:study_modes) { %w(full_time part_time) }
+        let(:study_modes) { %w[full_time part_time] }
 
         it "returns all" do
           expect(subject).to contain_exactly(course_both, course_part_time, course_full_time)
@@ -967,7 +967,7 @@ describe Course, type: :model do
       end
 
       context "multiple qualifications" do
-        let(:qualifications) { %w(pgde pgce qts) }
+        let(:qualifications) { %w[pgde pgce qts] }
 
         it "returns all requested" do
           expect(subject).to contain_exactly(course_pgce, course_pgde, course_qts)
@@ -1247,9 +1247,9 @@ describe Course, type: :model do
     end
 
     describe "#has_vacancies? (when site_statuses not loaded)" do
-      let(:subject) {
+      let(:subject) do
         create(:course, site_statuses: site_statuses).reload
-      }
+      end
       context "for a single site status that has vacancies" do
         let(:site_statuses) { [findable, with_any_vacancy] }
         its(:has_vacancies?) { should be true }
@@ -1308,8 +1308,12 @@ describe Course, type: :model do
 
         context "with at least a single findable site statuses" do
           let(:site_statuses) do
-            [default, findable, new_site_status,
-             site_status_with_no_vacancies, suspended, with_any_vacancy]
+            [default,
+             findable,
+             new_site_status,
+             site_status_with_no_vacancies,
+             suspended,
+             with_any_vacancy]
           end
 
           context "applications_open_from is in present or past" do
@@ -1323,8 +1327,11 @@ describe Course, type: :model do
 
         context "with no findable site statuses" do
           let(:site_statuses) do
-            [default, new_site_status, site_status_with_no_vacancies,
-             suspended, with_any_vacancy]
+            [default,
+             new_site_status,
+             site_status_with_no_vacancies,
+             suspended,
+             with_any_vacancy]
           end
 
           context "applications_open_from is in present or past" do
@@ -1349,9 +1356,9 @@ describe Course, type: :model do
                applications_open_from: applications_open_from)
       end
 
-      let(:subject) {
+      let(:subject) do
         course.reload
-      }
+      end
 
       context "no site statuses" do
         context "applications_open_from is in present or past" do
@@ -1377,8 +1384,12 @@ describe Course, type: :model do
 
         context "with at least a single findable site statuses" do
           let(:site_statuses) do
-            [default, findable, new_site_status,
-             site_status_with_no_vacancies, suspended, with_any_vacancy]
+            [default,
+             findable,
+             new_site_status,
+             site_status_with_no_vacancies,
+             suspended,
+             with_any_vacancy]
           end
 
           context "applications_open_from is in present or past" do
@@ -1392,8 +1403,11 @@ describe Course, type: :model do
 
         context "with no findable site statuses" do
           let(:site_statuses) do
-            [default, new_site_status, site_status_with_no_vacancies,
-             suspended, with_any_vacancy]
+            [default,
+             new_site_status,
+             site_status_with_no_vacancies,
+             suspended,
+             with_any_vacancy]
           end
 
           context "applications_open_from is in present or past" do
@@ -1524,12 +1538,12 @@ describe Course, type: :model do
 
   describe "#description" do
     context "for a both full time and part time course" do
-      subject {
+      subject do
         create(:course,
                study_mode: :full_time_or_part_time,
                program_type: :scitt_programme,
                qualification: :qts)
-      }
+      end
 
       its(:description) { should eq("QTS, full time or part time") }
     end
@@ -1555,23 +1569,23 @@ describe Course, type: :model do
     end
 
     context "for a salaried course" do
-      subject {
+      subject do
         create(:course,
                study_mode: :full_time,
                program_type: :school_direct_salaried_training_programme,
                qualification: :pgce_with_qts)
-      }
+      end
 
       its(:description) { should eq("PGCE with QTS full time with salary") }
     end
 
     context "for a teaching apprenticeship" do
-      subject {
+      subject do
         create(:course,
                study_mode: :part_time,
                program_type: :pg_teaching_apprenticeship,
                qualification: :pgde_with_qts)
-      }
+      end
 
       its(:description) { should eq("PGDE with QTS part time teaching apprenticeship") }
     end
@@ -1682,9 +1696,9 @@ describe Course, type: :model do
 
   describe "adding and removing sites on a course" do
     let(:provider) { build(:provider) }
-      #this code will be removed and fixed properly in the next pr
+    # this code will be removed and fixed properly in the next pr
     let(:new_site) { create(:site, provider: provider, code: "A") }
-     #this code will be removed and fixed properly in the next pr
+    # this code will be removed and fixed properly in the next pr
     let(:existing_site) { create(:site, provider: provider, code: "B") }
     let(:new_site_status) { subject.site_statuses.find_by!(site: new_site) }
 
@@ -1694,8 +1708,8 @@ describe Course, type: :model do
       let(:existing_site_status) { create(:site_status, :running, :published, site: existing_site) }
 
       it "suspends the site when an existing site is removed" do
-        expect { subject.sites = [] }.
-          to change { existing_site_status.reload.status }.from("running").to("suspended")
+        expect { subject.sites = [] }
+          .to change { existing_site_status.reload.status }.from("running").to("suspended")
       end
 
       it "adds a new site status and sets it to running when a new site is added" do
@@ -1717,8 +1731,8 @@ describe Course, type: :model do
       end
 
       it "keeps the site status as new when an existing site is added" do
-        expect { subject.sites = [existing_site] }.
-          to_not change { existing_site_status.reload.status }.from("new_status")
+        expect { subject.sites = [existing_site] }
+          .to_not change { existing_site_status.reload.status }.from("new_status")
       end
 
       it "removes the site status when an existing site is removed" do
@@ -1735,8 +1749,8 @@ describe Course, type: :model do
       end
 
       it "sets the site to running when an existing site is added" do
-        expect { subject.sites = [existing_site] }.
-          to change { existing_site_status.reload.status }.from("suspended").to("running")
+        expect { subject.sites = [existing_site] }
+          .to change { existing_site_status.reload.status }.from("suspended").to("running")
       end
     end
 

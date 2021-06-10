@@ -53,7 +53,7 @@ describe "PATCH /providers/:provider_code" do
 
   before do
     provider.reload
-    # Note: provider needs to be reloaded due to
+    # NOTE: provider needs to be reloaded due to
     #       provider.accrediting_providers
     #       provider.accredited_bodies
   end
@@ -79,9 +79,9 @@ describe "PATCH /providers/:provider_code" do
     end
 
     context "failed validation" do
-      let(:new_description) {
+      let(:new_description) do
         Faker::Lorem.sentence(word_count: 101)
-      }
+      end
       it "creates a accredited body enrichment" do
         expect {
           patch_request(enrichment_payload)
@@ -132,9 +132,9 @@ describe "PATCH /providers/:provider_code" do
     end
 
     context "failed validation" do
-      let(:new_description) {
+      let(:new_description) do
         Faker::Lorem.sentence(word_count: 101)
-      }
+      end
 
       it "did not updates an existing accredited body enrichment" do
         expect {
@@ -165,11 +165,11 @@ describe "PATCH /providers/:provider_code" do
   end
 
   context "provider with multiple accrediting providers" do
-    let(:additional_acrediting_courses) {
+    let(:additional_acrediting_courses) do
       result = []
       10.times { result << create(:course, accrediting_provider: create(:provider)) }
       result
-    }
+    end
 
     let(:courses) { [course] + additional_acrediting_courses }
 

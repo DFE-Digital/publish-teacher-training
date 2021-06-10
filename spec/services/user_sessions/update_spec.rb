@@ -13,9 +13,9 @@ module UserSessions
         let(:user_session) do
           template = build(:user)
           UserSession.new(email: template.email,
-                               sign_in_user_id: template.sign_in_user_id,
-                               first_name: template.first_name,
-                               last_name: template.last_name)
+                          sign_in_user_id: template.sign_in_user_id,
+                          first_name: template.first_name,
+                          last_name: template.last_name)
         end
 
         before do
@@ -40,9 +40,9 @@ module UserSessions
 
         let(:user_session) do
           UserSession.new(email: nil,
-                               sign_in_user_id: nil,
-                               first_name: nil,
-                               last_name: nil)
+                          sign_in_user_id: nil,
+                          first_name: nil,
+                          last_name: nil)
         end
 
         before do

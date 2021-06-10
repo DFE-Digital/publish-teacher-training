@@ -130,8 +130,7 @@ describe "/api/v2/sessions", type: :request do
 
       # invalid type
       # pp params[:session]
-      #<ActionController::Parameters {"type"=>"invalid", "first_name"=>"update invalid first_name", "last_name"=>"updated invalid last_name"} permitted: false>
-
+      # <ActionController::Parameters {"type"=>"invalid", "first_name"=>"update invalid first_name", "last_name"=>"updated invalid last_name"} permitted: false>
 
       # concerns are "first_name" & "last_name" and not "type" == "session"
       it "raises an error" do
@@ -144,11 +143,15 @@ describe "/api/v2/sessions", type: :request do
 
       it "does not update user record" do
         expect {
-          post(
-            "/api/v2/sessions",
-            headers: { "HTTP_AUTHORIZATION" => credentials },
-            params: params,
-          ) rescue nil
+          begin
+            post(
+              "/api/v2/sessions",
+              headers: { "HTTP_AUTHORIZATION" => credentials },
+              params: params,
+            )
+          rescue StandardError
+            nil
+          end
         }.not_to(change { user.reload })
       end
     end
@@ -178,10 +181,14 @@ describe "/api/v2/sessions", type: :request do
     # from jsonapi-rails seems to enforce expectation
     it "does not update user record" do
       expect {
-        post(
-          "/api/v2/sessions",
-          headers: { "HTTP_AUTHORIZATION" => credentials },
-        ) rescue nil
+        begin
+          post(
+            "/api/v2/sessions",
+            headers: { "HTTP_AUTHORIZATION" => credentials },
+          )
+        rescue StandardError
+          nil
+        end
       }.not_to(change { user.reload })
     end
   end

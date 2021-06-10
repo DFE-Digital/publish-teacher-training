@@ -9,7 +9,7 @@ describe TimeFormat do
 
   describe "#precise_time" do
     it "returns the time in the precise format" do
-      expect(test_class.precise_time(Time.utc(1993, 9, 1, 3, 14, 15, 926535))).to eq("1993-09-01T03:14:15.926535Z")
+      expect(test_class.precise_time(Time.utc(1993, 9, 1, 3, 14, 15, 926_535))).to eq("1993-09-01T03:14:15.926535Z")
     end
   end
 

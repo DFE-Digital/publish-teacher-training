@@ -6,8 +6,6 @@ option nil, :'not-accrediting-provider',
        "Update the accrediting provider attribute to not_an_accredited_body.",
        default: false
 
-
-
 run do |opts, args, _cmd|
   MCB.init_rails(opts)
   recruitment_cycle = MCB.get_recruitment_cycle(opts)
@@ -25,7 +23,7 @@ run do |opts, args, _cmd|
     end
   elsif args.length > 1
 
-    raise RuntimeError.new("You cannot access the provider editor with multiple providers")
+    raise "You cannot access the provider editor with multiple providers"
   else
     provider_code = args[0].upcase
     MCB::Editor::ProviderEditor.new(

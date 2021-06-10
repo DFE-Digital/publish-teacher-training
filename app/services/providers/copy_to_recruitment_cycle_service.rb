@@ -15,7 +15,7 @@ module Providers
 
       ActiveRecord::Base.transaction do
         rolled_over_provider = new_recruitment_cycle.providers.find_by(provider_code: provider.provider_code)
-        if rolled_over_provider == nil
+        if rolled_over_provider.nil?
           providers_count = 1
           rolled_over_provider = provider.dup
           rolled_over_provider.organisations << provider.organisations

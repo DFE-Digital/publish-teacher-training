@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.describe "/api/v2/allocations/<id>", type: :request do
   before do
-    # Note: the concept of recruitment cycle here is ethereal.
+    # NOTE: the concept of recruitment cycle here is ethereal.
     # it is tied to a recruitment cycle that is associated to
     # Settings.allocation_cycle_year
     allocation_recruitment_cycle
@@ -136,12 +136,12 @@ RSpec.describe "/api/v2/allocations/<id>", type: :request do
   end
 
   def when_i_make_a_get_request_to_the_endpoint
-    unknown_id = 10001
+    unknown_id = 10_001
     get "/api/v2/allocations/#{@allocation&.id || unknown_id}", headers: { "HTTP_AUTHORIZATION" => @credentials }
   end
 
   def when_i_make_a_put_request_to_the_endpoint_with_valid_parameters
-    unknown_id = 10001
+    unknown_id = 10_001
     updated_number_of_places = 50
 
     @update_params = {

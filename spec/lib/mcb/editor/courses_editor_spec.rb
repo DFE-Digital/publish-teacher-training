@@ -26,7 +26,7 @@ describe MCB::Editor::CoursesEditor, :needs_audit_user do
   let(:subjects) { [] }
   let(:level) { "primary" }
   let(:age_range_in_years) { "3_to_7" }
-  let(:course) {
+  let(:course) do
     create(:course,
            provider: provider,
            accrediting_provider: accredited_body,
@@ -44,7 +44,7 @@ describe MCB::Editor::CoursesEditor, :needs_audit_user do
            subjects: subjects,
            applications_open_from: Date.new(last_year, 10, 9),
            is_send: is_send)
-  }
+  end
 
   before do
     course
@@ -63,8 +63,8 @@ describe MCB::Editor::CoursesEditor, :needs_audit_user do
 
     describe "runs the editor" do
       it "updates the course title" do
-        expect { run_editor("edit title", "Mathematics", "exit") }.to change { course.reload.name }.
-          from("Original name").to("Mathematics")
+        expect { run_editor("edit title", "Mathematics", "exit") }.to change { course.reload.name }
+          .from("Original name").to("Mathematics")
       end
 
       it "creates a Course audit with the correct requester when Editing" do
@@ -76,72 +76,72 @@ describe MCB::Editor::CoursesEditor, :needs_audit_user do
 
       describe "(course code)" do
         it "updates the course code when that is valid" do
-          expect { run_editor("edit course code", "CXXZ", "exit") }.
-            to change { course.reload.course_code }.
-            from(course_code).to("CXXZ")
+          expect { run_editor("edit course code", "CXXZ", "exit") }
+            .to change { course.reload.course_code }
+            .from(course_code).to("CXXZ")
         end
 
         it "upper-cases the course code before assigning it" do
-          expect { run_editor("edit course code", "cxxz", "exit") }.
-            to change { course.reload.course_code }.
-            from(course_code).to("CXXZ")
+          expect { run_editor("edit course code", "cxxz", "exit") }
+            .to change { course.reload.course_code }
+            .from(course_code).to("CXXZ")
         end
 
         it "does not apply an empty course code" do
-          expect { run_editor("edit course code", "", "CXXY", "exit") }.
-            to change { course.reload.course_code }.
-            from(course_code).to("CXXY")
+          expect { run_editor("edit course code", "", "CXXY", "exit") }
+            .to change { course.reload.course_code }
+            .from(course_code).to("CXXY")
         end
       end
 
       it "does nothing upon an immediate exit" do
-        expect { run_editor("exit") }.to_not change { course.reload.name }.
-          from("Original name")
+        expect { run_editor("exit") }.to_not change { course.reload.name }
+          .from("Original name")
       end
     end
 
     describe "does not specify any course codes" do
-      let!(:another_course) {
+      let!(:another_course) do
         create(:course,
                provider: provider,
                course_code: "A123",
                name: "Another name")
-      }
+      end
       let(:course_codes) { [] }
 
       it "edits all courses on the provider" do
-        expect { run_editor("edit title", "Mathematics", "exit") }.
-          to change { provider.reload.courses.order(:name).pluck(:name) }.
-          from(["Another name", "Original name"]).to(%w[Mathematics Mathematics])
+        expect { run_editor("edit title", "Mathematics", "exit") }
+          .to change { provider.reload.courses.order(:name).pluck(:name) }
+          .from(["Another name", "Original name"]).to(%w[Mathematics Mathematics])
       end
     end
 
     context "when there are several courses with the same course code" do
       let(:another_provider) { create(:provider) }
-      let!(:another_course_with_the_same_course_code) {
+      let!(:another_course_with_the_same_course_code) do
         create(:course,
                provider: another_provider,
                course_code: course.course_code,
                name: "Another name")
-      }
+      end
 
       it "edits the course from the specified provider" do
-        expect { run_editor("edit title", "Mathematics", "exit") }.
-          to change { course.reload.name }.
-          from("Original name").to("Mathematics")
+        expect { run_editor("edit title", "Mathematics", "exit") }
+          .to change { course.reload.name }
+          .from("Original name").to("Mathematics")
       end
     end
 
     context "when trying to edit a course code that doesn't exist on this provider but exists on another one" do
       let(:course_code) { "ABCD" }
       let(:another_provider) { create(:provider) }
-      let!(:another_course_with_another_provider) {
+      let!(:another_course_with_another_provider) do
         create(:course,
                provider: another_provider,
                course_code: "XYZ1",
                name: "Another name")
-      }
-      subject { described_class.new(provider: provider, course_codes: %w{XYZ1}, requester: requester) }
+      end
+      subject { described_class.new(provider: provider, course_codes: %w[XYZ1], requester: requester) }
 
       it "raises an error" do
         expect { subject }.to raise_error(ArgumentError, /Couldn't find course XYZ1/)

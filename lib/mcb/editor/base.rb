@@ -21,10 +21,8 @@ module MCB
         raise NotImplementedError, "Needs to be implemented in Child Class"
       end
 
-      def audit
-        Audited.audit_class.as_user(@requester) do
-          yield
-        end
+      def audit(&block)
+        Audited.audit_class.as_user(@requester, &block)
       end
     end
   end

@@ -13,8 +13,8 @@ describe Course, type: :model do
 
     let(:another_course) do
       create(:course, enrichments: [
-               build(:course_enrichment, :published, created_at: 5.days.ago),
-             ])
+        build(:course_enrichment, :published, created_at: 5.days.ago),
+      ])
     end
 
     its(:size) { should eq(3) }
@@ -71,11 +71,11 @@ describe Course, type: :model do
     end
 
     context "on a course with only a draft enrichment" do
-      let(:enrichments) {
+      let(:enrichments) do
         [build(:course_enrichment, :initial_draft,
                created_at: 1.day.ago,
-                     updated_at: 20.minutes.ago)]
-      }
+               updated_at: 20.minutes.ago)]
+      end
       subject do
         create(:course,
                changed_at: 10.minutes.ago,

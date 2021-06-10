@@ -14,10 +14,9 @@ User.destroy_all
 AccessRequest.destroy_all
 RecruitmentCycle.destroy_all
 
-
 current_recruitment_year = Settings.current_recruitment_cycle_year
 current_recruitment_cycle = RecruitmentCycle.create(year: current_recruitment_year, application_start_date: Date.new(current_recruitment_year.to_i - 1, 10, 9), application_end_date: Date.new(current_recruitment_year.to_i, 9, 30))
-next_recruitment_cycle = RecruitmentCycle.create(year: (current_recruitment_year.to_i. + 1).to_s, application_start_date: Date.new(current_recruitment_year.to_i, 10, 8), application_end_date: Date.new(current_recruitment_year.to_i + 1, 9, 30))
+next_recruitment_cycle = RecruitmentCycle.create(year: (current_recruitment_year.to_i.+ 1).to_s, application_start_date: Date.new(current_recruitment_year.to_i, 10, 8), application_end_date: Date.new(current_recruitment_year.to_i + 1, 9, 30))
 
 Subjects::SubjectAreaCreatorService.new.execute
 Subjects::CreatorService.new.execute
@@ -103,7 +102,6 @@ def create_standard_provider_and_courses_for_cycle(recruitment_cycle, superuser)
     study_mode: "B",
     age_range_in_years: "7_to_14",
   )
-
 
   SiteStatus.create!(
     site: Site.last,

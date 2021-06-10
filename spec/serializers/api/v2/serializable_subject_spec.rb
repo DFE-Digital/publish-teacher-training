@@ -14,7 +14,6 @@ describe API::V2::SerializableSubject do
   it { should have_attribute(:subject_name).with_value(non_bursary_subject.subject_name) }
   it { should have_attribute(:subject_code).with_value(non_bursary_subject.subject_code) }
 
-
   context "when a non-bursary subject" do
     it { should have_attribute(:bursary_amount).with_value(nil) }
     it { should have_attribute(:early_career_payments).with_value(nil) }

@@ -11,7 +11,7 @@ module APISpec
     end
 
     def version(version)
-      self.new(openapi_file_path % { version: version })
+      new(sprintf(openapi_file_path, version: version))
     end
   end
 

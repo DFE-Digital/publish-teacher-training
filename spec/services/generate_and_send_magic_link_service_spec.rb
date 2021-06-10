@@ -16,7 +16,7 @@ describe GenerateAndSendMagicLinkService do
   it "sends the magic link email" do
     expect {
       described_class.call(user: user)
-    } .to(
+    }.to(
       have_enqueued_email(MagicLinkEmailMailer, :magic_link_email)
         .with { user.reload } # Use block to reload user after queue processing
         .on_queue(:mailers),

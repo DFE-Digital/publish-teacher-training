@@ -94,11 +94,11 @@ describe "mcb command" do
         )
 
         decoded_token = Token::DecodeService.call(encoded_token: encoded_token,
-          secret: secret,
-          algorithm: encoding,
-          audience: audience,
-          issuer: issuer,
-          subject: subject)
+                                                  secret: secret,
+                                                  algorithm: encoding,
+                                                  audience: audience,
+                                                  issuer: issuer,
+                                                  subject: subject)
 
         expect(decoded_token).to eq payload
       end

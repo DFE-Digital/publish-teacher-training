@@ -18,9 +18,9 @@ class AccessRequest < ApplicationRecord
   end
 
   def add_additonal_attributes(requester_email)
-    self.update(requester: User.find_by(email: requester_email),
-                request_date_utc: Time.now.utc,
-                status: :requested)
+    update(requester: User.find_by(email: requester_email),
+           request_date_utc: Time.now.utc,
+           status: :requested)
   end
 
   alias_method :approve, :completed!

@@ -16,12 +16,12 @@ FactoryBot.define do
     age_range_in_years { "3_to_7" }
     resulting_in_pgce_with_qts
     start_date { DateTime.new(provider.recruitment_cycle.year.to_i, 9, 1) }
-    applications_open_from {
+    applications_open_from do
       Faker::Time.between(
         from: DateTime.new(provider.recruitment_cycle.year.to_i - 1, 10, 1),
         to: DateTime.new(provider.recruitment_cycle.year.to_i, 9, 29),
       )
-    }
+    end
 
     trait :without_validation do
       to_create { |instance| instance.save(validate: false) }
@@ -65,11 +65,11 @@ FactoryBot.define do
           .reject { |s| s.type == "DiscontinuedSubject" }
           .reject { |s| s.type == "MordernLanguagesSubject" }
 
-        if subjects.all? do |subject| subject.type == "PrimarySubject" end
+        if subjects.all? { |subject| subject.type == "PrimarySubject" }
           course.level = "primary"
-        elsif subjects.all? do |subject| subject.type == "SecondarySubject" end
+        elsif subjects.all? { |subject| subject.type == "SecondarySubject" }
           course.level = "secondary"
-        elsif subjects.all? do |subject| subject.type == "FurtherEducationSubject" end
+        elsif subjects.all? { |subject| subject.type == "FurtherEducationSubject" }
           course.level = "further_education"
         end
       end
@@ -158,10 +158,11 @@ FactoryBot.define do
     end
 
     trait :fee_type_based do
-      program_type {
-        %i[higher_education_programme school_direct_training_programme
+      program_type do
+        %i[higher_education_programme
+           school_direct_training_programme
            scitt_programme].sample
-      }
+      end
     end
 
     trait :salary_type_based do

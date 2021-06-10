@@ -134,95 +134,95 @@ class Course < ApplicationRecord
   has_one :latest_published_enrichment, -> { published.order("created_at DESC, id DESC").limit(1) },
           class_name: "CourseEnrichment"
 
-  scope :within, ->(range, origin:) do
+  scope :within, lambda { |range, origin:|
     joins(:sites).merge(Site.within(range, origin: origin))
-  end
+  }
 
-  scope :by_distance, ->(origin:) do
+  scope :by_distance, lambda { |origin:|
     joins(:sites).merge(Site.by_distance(origin: origin))
-  end
+  }
 
-  scope :by_name_ascending, -> do
+  scope :by_name_ascending, lambda {
     order(name: :asc)
-  end
+  }
 
-  scope :by_name_descending, -> do
+  scope :by_name_descending, lambda {
     order(name: :desc)
-  end
+  }
 
-  scope :ascending_canonical_order, -> do
+  scope :ascending_canonical_order, lambda {
     joins(:provider).merge(Provider.by_name_ascending).order("name asc, course_code asc")
-  end
+  }
 
-  scope :descending_canonical_order, -> do
+  scope :descending_canonical_order, lambda {
     joins(:provider).merge(Provider.by_name_descending).order("name desc, course_code desc")
-  end
+  }
 
-  scope :accredited_body_order, ->(provider_name) do
+  scope :accredited_body_order, lambda { |provider_name|
     joins(:provider).merge(Provider.by_provider_name(provider_name))
-  end
+  }
 
-  scope :changed_since, ->(timestamp) do
+  scope :changed_since, lambda { |timestamp|
     if timestamp.present?
       changed_at_since(timestamp)
     else
       where.not(changed_at: nil)
     end.order(:changed_at, :id)
-  end
+  }
 
-  scope :changed_at_since, ->(timestamp) do
+  scope :changed_at_since, lambda { |timestamp|
     where("course.changed_at > ?", timestamp)
-  end
+  }
 
-  scope :created_at_since, ->(timestamp) do
+  scope :created_at_since, lambda { |timestamp|
     where("course.created_at > ?", timestamp)
-  end
+  }
 
-  scope :not_new, -> do
+  scope :not_new, lambda {
     includes(site_statuses: %i[site course])
       .where
       .not(SiteStatus.table_name => { status: SiteStatus.statuses[:new_status] })
-  end
+  }
 
-  scope :published, -> do
+  scope :published, lambda {
     where(id: CourseEnrichment.published.select(:course_id))
-  end
+  }
 
   scope :with_recruitment_cycle, ->(year) { joins(provider: :recruitment_cycle).where(recruitment_cycle: { year: year }) }
   scope :findable, -> { joins(:site_statuses).merge(SiteStatus.findable) }
   scope :with_vacancies, -> { joins(:site_statuses).merge(SiteStatus.with_vacancies) }
   scope :with_salary, -> { where(program_type: %i[school_direct_salaried_training_programme pg_teaching_apprenticeship]) }
-  scope :with_study_modes, ->(study_modes) do
+  scope :with_study_modes, lambda { |study_modes|
     where(study_mode: Array(study_modes) << "full_time_or_part_time")
-  end
-  scope :with_subjects, ->(subject_codes) do
+  }
+  scope :with_subjects, lambda { |subject_codes|
     joins(:subjects).merge(Subject.with_subject_codes(subject_codes))
-  end
+  }
 
-  scope :with_qualifications, ->(qualifications) do
+  scope :with_qualifications, lambda { |qualifications|
     where(qualification: qualifications)
-  end
+  }
 
-  scope :with_accredited_bodies, ->(accredited_body_codes) do
+  scope :with_accredited_bodies, lambda { |accredited_body_codes|
     where(accredited_body_code: accredited_body_codes)
-  end
+  }
 
-  scope :with_provider_name, ->(provider_name) do
+  scope :with_provider_name, lambda { |provider_name|
     where(
       provider_id: Provider.where(provider_name: provider_name),
     ).or(
-      self.where(
+      where(
         accredited_body_code: Provider.where(provider_name: provider_name)
                                        .select(:provider_code),
       ),
     )
-  end
+  }
 
-  scope :with_send, -> do
+  scope :with_send, lambda {
     where(is_send: true)
-  end
+  }
 
-  scope :with_funding_types, ->(funding_types) do
+  scope :with_funding_types, lambda { |funding_types|
     program_types = []
 
     if funding_types.include?("salary")
@@ -244,7 +244,7 @@ class Course < ApplicationRecord
     end
 
     where(program_type: program_types)
-  end
+  }
 
   def self.entry_requirement_options_without_nil_choice
     ENTRY_REQUIREMENT_OPTIONS.reject { |option| option == :not_set }.keys.map(&:to_s)
@@ -285,9 +285,7 @@ class Course < ApplicationRecord
       .courses.find_by(course_code: course_code)
   end
 
-  def recruitment_cycle
-    provider.recruitment_cycle
-  end
+  delegate :recruitment_cycle, to: :provider
 
   def generate_name
     services[:generate_course_name].execute(course: self)
@@ -492,7 +490,7 @@ class Course < ApplicationRecord
   end
 
   def is_published?
-    %i{published published_with_unpublished_changes}.include? content_status
+    %i[published published_with_unpublished_changes].include? content_status
   end
 
   def funding_type=(funding_type)
@@ -602,7 +600,7 @@ private
   end
 
   def qualification_assignable(course_params)
-    assignable = course_params[:qualification].nil? || Course::qualifications.include?(course_params[:qualification].to_sym)
+    assignable = course_params[:qualification].nil? || Course.qualifications.include?(course_params[:qualification].to_sym)
     errors.add(:qualification, "is invalid") unless assignable
 
     assignable
@@ -644,7 +642,7 @@ private
   def validate_site_statuses_publishable
     site_statuses.each do |site_status|
       unless site_status.valid?
-        raise RuntimeError.new("Site status invalid on course #{provider.provider_code}/#{course_code}: #{site_status.errors.full_messages.first}")
+        raise "Site status invalid on course #{provider.provider_code}/#{course_code}: #{site_status.errors.full_messages.first}"
       end
     end
   end
@@ -654,7 +652,7 @@ private
   end
 
   def remove_unnecessary_enrichments_validation_message
-    self.errors.delete :enrichments if self.errors[:enrichments] == ["is invalid"]
+    errors.delete :enrichments if errors[:enrichments] == ["is invalid"]
   end
 
   def validate_qualification
@@ -705,8 +703,8 @@ private
   end
 
   def has_the_modern_languages_secondary_subject_type?
-    raise "SecondarySubject not found" if SecondarySubject == nil
-    raise "SecondarySubject.modern_languages not found" if SecondarySubject.modern_languages == nil
+    raise "SecondarySubject not found" if SecondarySubject.nil?
+    raise "SecondarySubject.modern_languages not found" if SecondarySubject.modern_languages.nil?
 
     subjects.any? { |subject| subject&.id == SecondarySubject.modern_languages.id }
   end

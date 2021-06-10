@@ -45,7 +45,7 @@ describe PublishReportingService do
 
   let(:providers_with_recent_active_users_distinct_count) { 10 }
 
-  let(:recent_active_user_count_by_provider) {
+  let(:recent_active_user_count_by_provider) do
     {
       1 => 1,
       2 => 2,
@@ -61,7 +61,7 @@ describe PublishReportingService do
       12 => 6,
       13 => 6,
     }
-  }
+  end
   let(:providers_count) { 1000 }
   let(:courses_changed_at_since_count) { 100 }
   let(:courses_findable_count) { 60 }
@@ -93,7 +93,7 @@ describe PublishReportingService do
         expect(recent_active_users).to receive_message_chain(:joins, :merge, :group, :count).and_return(recent_active_user_count_by_provider)
 
         expect(providers_scope).to receive_message_chain(:joins, :merge).with(recent_active_users).and_return(providers_active_user_scope)
-        expect(providers_active_user_scope).to receive_message_chain(:distinct, :count) .and_return(providers_with_recent_active_users_distinct_count)
+        expect(providers_active_user_scope).to receive_message_chain(:distinct, :count).and_return(providers_with_recent_active_users_distinct_count)
 
         expect(providers_scope).to receive_message_chain(:count).and_return(providers_count)
 

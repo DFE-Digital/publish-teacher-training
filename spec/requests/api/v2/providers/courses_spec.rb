@@ -32,7 +32,7 @@ describe "Courses API v2", type: :request do
            applications_open_from: current_cycle.application_start_date)
   end
 
-  let(:courses_site_statuses) {
+  let(:courses_site_statuses) do
     [
       build(:site_status,
             :findable,
@@ -42,7 +42,7 @@ describe "Courses API v2", type: :request do
             :with_no_vacancies,
             site: create(:site, provider: provider)),
     ]
-  }
+  end
   let(:enrichment)     { build :course_enrichment, :published }
   let(:provider)       { create :provider, organisations: [organisation] }
 
@@ -74,9 +74,9 @@ describe "Courses API v2", type: :request do
       context "when the current user is not an admin" do
         it "should not return pe as a potential subject" do
           json_response = JSON.parse subject.body
-          expect(json_response["data"]["meta"]["edit_options"]["subjects"].map { |subject|
+          expect(json_response["data"]["meta"]["edit_options"]["subjects"].map do |subject|
             subject["attributes"]["subject_code"]
-          }).not_to include(pe.subject_code)
+          end).not_to include(pe.subject_code)
         end
       end
 
@@ -84,9 +84,9 @@ describe "Courses API v2", type: :request do
         let(:user) { create(:user, :admin) }
         it "should return pe as a potential subject" do
           json_response = JSON.parse subject.body
-          expect(json_response["data"]["meta"]["edit_options"]["subjects"].map { |subject|
+          expect(json_response["data"]["meta"]["edit_options"]["subjects"].map do |subject|
             subject["attributes"]["subject_code"]
-          }).to include(pe.subject_code)
+          end).to include(pe.subject_code)
         end
       end
     end
@@ -192,213 +192,213 @@ describe "Courses API v2", type: :request do
                   "show_start_date" => false,
                   "show_applications_open" => false,
                   "subjects" => [
-                     {
-                       "id" => "1",
-                       "type" => "subjects",
-                       "attributes" => {
-                         "subject_name" => "Primary",
-                         "subject_code" => "00",
-                         "bursary_amount" => nil,
-                         "early_career_payments" => nil,
-                         "scholarship" => nil,
-                         "subject_knowledge_enhancement_course_available" => nil,
-                       },
-                     },
-                     {
-                       "id" => "2",
-                       "type" => "subjects",
-                       "attributes" => {
-                         "subject_name" => "Primary with English",
-                         "subject_code" => "01",
-                         "bursary_amount" => nil,
-                         "early_career_payments" => nil,
-                         "scholarship" => nil,
-                         "subject_knowledge_enhancement_course_available" => nil,
-                       },
-                     },
-                     {
-                       "id" => "3",
-                       "type" => "subjects",
-                       "attributes" => {
-                         "subject_name" => "Primary with geography and history",
-                         "subject_code" => "02",
-                         "bursary_amount" => nil,
-                         "early_career_payments" => nil,
-                         "scholarship" => nil,
-                         "subject_knowledge_enhancement_course_available" => nil,
-                       },
-                     },
-                     {
-                       "id" => "4",
-                       "type" => "subjects",
-                       "attributes" => {
-                         "subject_name" => "Primary with mathematics",
-                         "subject_code" => "03",
-                         "bursary_amount" => nil,
-                         "early_career_payments" => nil,
-                         "scholarship" => nil,
-                         "subject_knowledge_enhancement_course_available" => nil,
-                       },
-                     },
-                     {
-                       "id" => "5",
-                       "type" => "subjects",
-                       "attributes" => {
-                         "subject_name" => "Primary with modern languages",
-                         "subject_code" => "04",
-                         "bursary_amount" => nil,
-                         "early_career_payments" => nil,
-                         "scholarship" => nil,
-                         "subject_knowledge_enhancement_course_available" => nil,
-                       },
-                     },
-                     {
-                       "id" => "6",
-                       "type" => "subjects",
-                       "attributes" => {
-                         "subject_name" => "Primary with physical education",
-                         "subject_code" => "06",
-                         "bursary_amount" => nil,
-                         "early_career_payments" => nil,
-                         "scholarship" => nil,
-                         "subject_knowledge_enhancement_course_available" => nil,
-                       },
-                     },
-                     {
-                       "id" => "7",
-                       "type" => "subjects",
-                       "attributes" => {
-                         "subject_name" => "Primary with science",
-                         "subject_code" => "07",
-                         "bursary_amount" => nil,
-                         "early_career_payments" => nil,
-                         "scholarship" => nil,
-                         "subject_knowledge_enhancement_course_available" => nil,
-                       },
-                     },
+                    {
+                      "id" => "1",
+                      "type" => "subjects",
+                      "attributes" => {
+                        "subject_name" => "Primary",
+                        "subject_code" => "00",
+                        "bursary_amount" => nil,
+                        "early_career_payments" => nil,
+                        "scholarship" => nil,
+                        "subject_knowledge_enhancement_course_available" => nil,
+                      },
+                    },
+                    {
+                      "id" => "2",
+                      "type" => "subjects",
+                      "attributes" => {
+                        "subject_name" => "Primary with English",
+                        "subject_code" => "01",
+                        "bursary_amount" => nil,
+                        "early_career_payments" => nil,
+                        "scholarship" => nil,
+                        "subject_knowledge_enhancement_course_available" => nil,
+                      },
+                    },
+                    {
+                      "id" => "3",
+                      "type" => "subjects",
+                      "attributes" => {
+                        "subject_name" => "Primary with geography and history",
+                        "subject_code" => "02",
+                        "bursary_amount" => nil,
+                        "early_career_payments" => nil,
+                        "scholarship" => nil,
+                        "subject_knowledge_enhancement_course_available" => nil,
+                      },
+                    },
+                    {
+                      "id" => "4",
+                      "type" => "subjects",
+                      "attributes" => {
+                        "subject_name" => "Primary with mathematics",
+                        "subject_code" => "03",
+                        "bursary_amount" => nil,
+                        "early_career_payments" => nil,
+                        "scholarship" => nil,
+                        "subject_knowledge_enhancement_course_available" => nil,
+                      },
+                    },
+                    {
+                      "id" => "5",
+                      "type" => "subjects",
+                      "attributes" => {
+                        "subject_name" => "Primary with modern languages",
+                        "subject_code" => "04",
+                        "bursary_amount" => nil,
+                        "early_career_payments" => nil,
+                        "scholarship" => nil,
+                        "subject_knowledge_enhancement_course_available" => nil,
+                      },
+                    },
+                    {
+                      "id" => "6",
+                      "type" => "subjects",
+                      "attributes" => {
+                        "subject_name" => "Primary with physical education",
+                        "subject_code" => "06",
+                        "bursary_amount" => nil,
+                        "early_career_payments" => nil,
+                        "scholarship" => nil,
+                        "subject_knowledge_enhancement_course_available" => nil,
+                      },
+                    },
+                    {
+                      "id" => "7",
+                      "type" => "subjects",
+                      "attributes" => {
+                        "subject_name" => "Primary with science",
+                        "subject_code" => "07",
+                        "bursary_amount" => nil,
+                        "early_career_payments" => nil,
+                        "scholarship" => nil,
+                        "subject_knowledge_enhancement_course_available" => nil,
+                      },
+                    },
                   ],
                   "modern_languages" => [
-                 {
-                   "id" => "34",
-                   "type" => "subjects",
-                   "attributes" => {
-                     "subject_name" => "French",
-                     "subject_code" => "15",
-                     "bursary_amount" => "10000",
-                     "early_career_payments" => nil,
-                     "scholarship" => nil,
-                     "subject_knowledge_enhancement_course_available" => false,
-                   },
-                 },
-                 {
-                   "id" => "35",
-                   "type" => "subjects",
-                   "attributes" => {
-                     "subject_name" => "English as a second or other language",
-                     "subject_code" => "16",
-                     "bursary_amount" => nil,
-                     "early_career_payments" => nil,
-                     "scholarship" => nil,
-                     "subject_knowledge_enhancement_course_available" => nil,
-                   },
-                 },
-                 {
-                   "id" => "36",
-                   "type" => "subjects",
-                   "attributes" => {
-                     "subject_name" => "German",
-                     "subject_code" => "17",
-                     "bursary_amount" => "10000",
-                     "early_career_payments" => nil,
-                     "scholarship" => nil,
-                     "subject_knowledge_enhancement_course_available" => false,
-                   },
-                 },
-                 {
-                   "id" => "37",
-                   "type" => "subjects",
-                   "attributes" => {
-                     "subject_name" => "Italian",
-                     "subject_code" => "18",
-                     "bursary_amount" => "10000",
-                     "early_career_payments" => nil,
-                     "scholarship" => nil,
-                     "subject_knowledge_enhancement_course_available" => false,
-                   },
-                 },
-                 {
-                   "id" => "38",
-                   "type" => "subjects",
-                   "attributes" => {
-                     "subject_name" => "Japanese",
-                     "subject_code" => "19",
-                     "bursary_amount" => "10000",
-                     "early_career_payments" => nil,
-                     "scholarship" => nil,
-                     "subject_knowledge_enhancement_course_available" => false,
-                   },
-                 },
-                 {
-                   "id" => "39",
-                   "type" => "subjects",
-                   "attributes" => {
-                     "subject_name" => "Mandarin",
-                     "subject_code" => "20",
-                     "bursary_amount" => "10000",
-                     "early_career_payments" => nil,
-                     "scholarship" => nil,
-                     "subject_knowledge_enhancement_course_available" => false,
-                   },
-                 },
-                 {
-                   "id" => "40",
-                   "type" => "subjects",
-                   "attributes" => {
-                     "subject_name" => "Russian",
-                     "subject_code" => "21",
-                     "bursary_amount" => "10000",
-                     "early_career_payments" => nil,
-                     "scholarship" => nil,
-                     "subject_knowledge_enhancement_course_available" => false,
-                   },
-                 },
-                 {
-                   "id" => "41",
-                   "type" => "subjects",
-                   "attributes" => {
-                     "subject_name" => "Spanish",
-                     "subject_code" => "22",
-                     "bursary_amount" => "10000",
-                     "early_career_payments" => nil,
-                     "scholarship" => nil,
-                     "subject_knowledge_enhancement_course_available" => false,
-                   },
-                 },
-                 {
-                   "id" => "42",
-                   "type" => "subjects",
-                   "attributes" => {
-                     "subject_name" => "Modern languages (other)",
-                     "subject_code" => "24",
-                     "bursary_amount" => "10000",
-                     "early_career_payments" => nil,
-                     "scholarship" => nil,
-                     "subject_knowledge_enhancement_course_available" => false,
-                   },
-                 },
-               ],
+                    {
+                      "id" => "34",
+                      "type" => "subjects",
+                      "attributes" => {
+                        "subject_name" => "French",
+                        "subject_code" => "15",
+                        "bursary_amount" => "10000",
+                        "early_career_payments" => nil,
+                        "scholarship" => nil,
+                        "subject_knowledge_enhancement_course_available" => false,
+                      },
+                    },
+                    {
+                      "id" => "35",
+                      "type" => "subjects",
+                      "attributes" => {
+                        "subject_name" => "English as a second or other language",
+                        "subject_code" => "16",
+                        "bursary_amount" => nil,
+                        "early_career_payments" => nil,
+                        "scholarship" => nil,
+                        "subject_knowledge_enhancement_course_available" => nil,
+                      },
+                    },
+                    {
+                      "id" => "36",
+                      "type" => "subjects",
+                      "attributes" => {
+                        "subject_name" => "German",
+                        "subject_code" => "17",
+                        "bursary_amount" => "10000",
+                        "early_career_payments" => nil,
+                        "scholarship" => nil,
+                        "subject_knowledge_enhancement_course_available" => false,
+                      },
+                    },
+                    {
+                      "id" => "37",
+                      "type" => "subjects",
+                      "attributes" => {
+                        "subject_name" => "Italian",
+                        "subject_code" => "18",
+                        "bursary_amount" => "10000",
+                        "early_career_payments" => nil,
+                        "scholarship" => nil,
+                        "subject_knowledge_enhancement_course_available" => false,
+                      },
+                    },
+                    {
+                      "id" => "38",
+                      "type" => "subjects",
+                      "attributes" => {
+                        "subject_name" => "Japanese",
+                        "subject_code" => "19",
+                        "bursary_amount" => "10000",
+                        "early_career_payments" => nil,
+                        "scholarship" => nil,
+                        "subject_knowledge_enhancement_course_available" => false,
+                      },
+                    },
+                    {
+                      "id" => "39",
+                      "type" => "subjects",
+                      "attributes" => {
+                        "subject_name" => "Mandarin",
+                        "subject_code" => "20",
+                        "bursary_amount" => "10000",
+                        "early_career_payments" => nil,
+                        "scholarship" => nil,
+                        "subject_knowledge_enhancement_course_available" => false,
+                      },
+                    },
+                    {
+                      "id" => "40",
+                      "type" => "subjects",
+                      "attributes" => {
+                        "subject_name" => "Russian",
+                        "subject_code" => "21",
+                        "bursary_amount" => "10000",
+                        "early_career_payments" => nil,
+                        "scholarship" => nil,
+                        "subject_knowledge_enhancement_course_available" => false,
+                      },
+                    },
+                    {
+                      "id" => "41",
+                      "type" => "subjects",
+                      "attributes" => {
+                        "subject_name" => "Spanish",
+                        "subject_code" => "22",
+                        "bursary_amount" => "10000",
+                        "early_career_payments" => nil,
+                        "scholarship" => nil,
+                        "subject_knowledge_enhancement_course_available" => false,
+                      },
+                    },
+                    {
+                      "id" => "42",
+                      "type" => "subjects",
+                      "attributes" => {
+                        "subject_name" => "Modern languages (other)",
+                        "subject_code" => "24",
+                        "bursary_amount" => "10000",
+                        "early_career_payments" => nil,
+                        "scholarship" => nil,
+                        "subject_knowledge_enhancement_course_available" => false,
+                      },
+                    },
+                  ],
                   "modern_languages_subject" => {
-                   "id" => "33",
-                   "type" => "subjects",
-                   "attributes" => {
-                     "subject_name" => "Modern Languages",
-                     "subject_code" => nil,
-                     "bursary_amount" => nil,
-                     "early_career_payments" => nil,
-                     "scholarship" => nil,
-                     "subject_knowledge_enhancement_course_available" => nil,
-                   },
-                 },
+                    "id" => "33",
+                    "type" => "subjects",
+                    "attributes" => {
+                      "subject_name" => "Modern Languages",
+                      "subject_code" => nil,
+                      "bursary_amount" => nil,
+                      "early_career_payments" => nil,
+                      "scholarship" => nil,
+                      "subject_knowledge_enhancement_course_available" => nil,
+                    },
+                  },
                 },
               },
             },
@@ -534,108 +534,108 @@ describe "Courses API v2", type: :request do
                 "id" => "34",
                 "type" => "subjects",
                 "attributes" => {
-                 "subject_name" => "French",
-                 "subject_code" => "15",
-                 "bursary_amount" => "10000",
-                 "early_career_payments" => nil,
-                 "scholarship" => nil,
-                 "subject_knowledge_enhancement_course_available" => false,
+                  "subject_name" => "French",
+                  "subject_code" => "15",
+                  "bursary_amount" => "10000",
+                  "early_career_payments" => nil,
+                  "scholarship" => nil,
+                  "subject_knowledge_enhancement_course_available" => false,
                 },
               },
               {
                 "id" => "35",
                 "type" => "subjects",
                 "attributes" => {
-                 "subject_name" => "English as a second or other language",
-                 "subject_code" => "16",
-                 "bursary_amount" => nil,
-                 "early_career_payments" => nil,
-                 "scholarship" => nil,
-                 "subject_knowledge_enhancement_course_available" => nil,
+                  "subject_name" => "English as a second or other language",
+                  "subject_code" => "16",
+                  "bursary_amount" => nil,
+                  "early_career_payments" => nil,
+                  "scholarship" => nil,
+                  "subject_knowledge_enhancement_course_available" => nil,
                 },
               },
               {
                 "id" => "36",
                 "type" => "subjects",
                 "attributes" => {
-                 "subject_name" => "German",
-                 "subject_code" => "17",
-                 "bursary_amount" => "10000",
-                 "early_career_payments" => nil,
-                 "scholarship" => nil,
-                 "subject_knowledge_enhancement_course_available" => false,
+                  "subject_name" => "German",
+                  "subject_code" => "17",
+                  "bursary_amount" => "10000",
+                  "early_career_payments" => nil,
+                  "scholarship" => nil,
+                  "subject_knowledge_enhancement_course_available" => false,
                 },
               },
               {
                 "id" => "37",
                 "type" => "subjects",
                 "attributes" => {
-                 "subject_name" => "Italian",
-                 "subject_code" => "18",
-                 "bursary_amount" => "10000",
-                 "early_career_payments" => nil,
-                 "scholarship" => nil,
-                 "subject_knowledge_enhancement_course_available" => false,
+                  "subject_name" => "Italian",
+                  "subject_code" => "18",
+                  "bursary_amount" => "10000",
+                  "early_career_payments" => nil,
+                  "scholarship" => nil,
+                  "subject_knowledge_enhancement_course_available" => false,
                 },
               },
               {
                 "id" => "38",
                 "type" => "subjects",
                 "attributes" => {
-                 "subject_name" => "Japanese",
-                 "subject_code" => "19",
-                 "bursary_amount" => "10000",
-                 "early_career_payments" => nil,
-                 "scholarship" => nil,
-                 "subject_knowledge_enhancement_course_available" => false,
+                  "subject_name" => "Japanese",
+                  "subject_code" => "19",
+                  "bursary_amount" => "10000",
+                  "early_career_payments" => nil,
+                  "scholarship" => nil,
+                  "subject_knowledge_enhancement_course_available" => false,
                 },
               },
               {
                 "id" => "39",
                 "type" => "subjects",
                 "attributes" => {
-                 "subject_name" => "Mandarin",
-                 "subject_code" => "20",
-                 "bursary_amount" => "10000",
-                 "early_career_payments" => nil,
-                 "scholarship" => nil,
-                 "subject_knowledge_enhancement_course_available" => false,
+                  "subject_name" => "Mandarin",
+                  "subject_code" => "20",
+                  "bursary_amount" => "10000",
+                  "early_career_payments" => nil,
+                  "scholarship" => nil,
+                  "subject_knowledge_enhancement_course_available" => false,
                 },
               },
               {
                 "id" => "40",
                 "type" => "subjects",
                 "attributes" => {
-                 "subject_name" => "Russian",
-                 "subject_code" => "21",
-                 "bursary_amount" => "10000",
-                 "early_career_payments" => nil,
-                 "scholarship" => nil,
-                 "subject_knowledge_enhancement_course_available" => false,
+                  "subject_name" => "Russian",
+                  "subject_code" => "21",
+                  "bursary_amount" => "10000",
+                  "early_career_payments" => nil,
+                  "scholarship" => nil,
+                  "subject_knowledge_enhancement_course_available" => false,
                 },
               },
               {
                 "id" => "41",
                 "type" => "subjects",
                 "attributes" => {
-                 "subject_name" => "Spanish",
-                 "subject_code" => "22",
-                 "bursary_amount" => "10000",
-                 "early_career_payments" => nil,
-                 "scholarship" => nil,
-                 "subject_knowledge_enhancement_course_available" => false,
+                  "subject_name" => "Spanish",
+                  "subject_code" => "22",
+                  "bursary_amount" => "10000",
+                  "early_career_payments" => nil,
+                  "scholarship" => nil,
+                  "subject_knowledge_enhancement_course_available" => false,
                 },
               },
               {
                 "id" => "42",
                 "type" => "subjects",
                 "attributes" => {
-                 "subject_name" => "Modern languages (other)",
-                 "subject_code" => "24",
-                 "bursary_amount" => "10000",
-                 "early_career_payments" => nil,
-                 "scholarship" => nil,
-                 "subject_knowledge_enhancement_course_available" => false,
+                  "subject_name" => "Modern languages (other)",
+                  "subject_code" => "24",
+                  "bursary_amount" => "10000",
+                  "early_career_payments" => nil,
+                  "scholarship" => nil,
+                  "subject_knowledge_enhancement_course_available" => false,
                 },
               },
             ],
@@ -846,127 +846,127 @@ describe "Courses API v2", type: :request do
                   },
                 ],
                 "modern_languages" => [
-                    {
-                      "id" => "34",
-                      "type" => "subjects",
-                      "attributes" => {
-                        "subject_name" => "French",
-                        "subject_code" => "15",
-                        "bursary_amount" => "10000",
-                        "early_career_payments" => nil,
-                        "scholarship" => nil,
-                        "subject_knowledge_enhancement_course_available" => false,
-                      },
+                  {
+                    "id" => "34",
+                    "type" => "subjects",
+                    "attributes" => {
+                      "subject_name" => "French",
+                      "subject_code" => "15",
+                      "bursary_amount" => "10000",
+                      "early_career_payments" => nil,
+                      "scholarship" => nil,
+                      "subject_knowledge_enhancement_course_available" => false,
                     },
-                    {
-                      "id" => "35",
-                      "type" => "subjects",
-                      "attributes" => {
-                        "subject_name" => "English as a second or other language",
-                        "subject_code" => "16",
-                        "bursary_amount" => nil,
-                        "early_career_payments" => nil,
-                        "scholarship" => nil,
-                        "subject_knowledge_enhancement_course_available" => nil,
-                      },
+                  },
+                  {
+                    "id" => "35",
+                    "type" => "subjects",
+                    "attributes" => {
+                      "subject_name" => "English as a second or other language",
+                      "subject_code" => "16",
+                      "bursary_amount" => nil,
+                      "early_career_payments" => nil,
+                      "scholarship" => nil,
+                      "subject_knowledge_enhancement_course_available" => nil,
                     },
-                    {
-                      "id" => "36",
-                      "type" => "subjects",
-                      "attributes" => {
-                        "subject_name" => "German",
-                        "subject_code" => "17",
-                        "bursary_amount" => "10000",
-                        "early_career_payments" => nil,
-                        "scholarship" => nil,
-                        "subject_knowledge_enhancement_course_available" => false,
-                      },
+                  },
+                  {
+                    "id" => "36",
+                    "type" => "subjects",
+                    "attributes" => {
+                      "subject_name" => "German",
+                      "subject_code" => "17",
+                      "bursary_amount" => "10000",
+                      "early_career_payments" => nil,
+                      "scholarship" => nil,
+                      "subject_knowledge_enhancement_course_available" => false,
                     },
-                    {
-                      "id" => "37",
-                      "type" => "subjects",
-                      "attributes" => {
-                        "subject_name" => "Italian",
-                        "subject_code" => "18",
-                        "bursary_amount" => "10000",
-                        "early_career_payments" => nil,
-                        "scholarship" => nil,
-                        "subject_knowledge_enhancement_course_available" => false,
-                      },
+                  },
+                  {
+                    "id" => "37",
+                    "type" => "subjects",
+                    "attributes" => {
+                      "subject_name" => "Italian",
+                      "subject_code" => "18",
+                      "bursary_amount" => "10000",
+                      "early_career_payments" => nil,
+                      "scholarship" => nil,
+                      "subject_knowledge_enhancement_course_available" => false,
                     },
-                    {
-                      "id" => "38",
-                      "type" => "subjects",
-                      "attributes" => {
-                        "subject_name" => "Japanese",
-                        "subject_code" => "19",
-                        "bursary_amount" => "10000",
-                        "early_career_payments" => nil,
-                        "scholarship" => nil,
-                        "subject_knowledge_enhancement_course_available" => false,
-                      },
+                  },
+                  {
+                    "id" => "38",
+                    "type" => "subjects",
+                    "attributes" => {
+                      "subject_name" => "Japanese",
+                      "subject_code" => "19",
+                      "bursary_amount" => "10000",
+                      "early_career_payments" => nil,
+                      "scholarship" => nil,
+                      "subject_knowledge_enhancement_course_available" => false,
                     },
-                    {
-                      "id" => "39",
-                      "type" => "subjects",
-                      "attributes" => {
-                        "subject_name" => "Mandarin",
-                        "subject_code" => "20",
-                        "bursary_amount" => "10000",
-                        "early_career_payments" => nil,
-                        "scholarship" => nil,
-                        "subject_knowledge_enhancement_course_available" => false,
-                      },
+                  },
+                  {
+                    "id" => "39",
+                    "type" => "subjects",
+                    "attributes" => {
+                      "subject_name" => "Mandarin",
+                      "subject_code" => "20",
+                      "bursary_amount" => "10000",
+                      "early_career_payments" => nil,
+                      "scholarship" => nil,
+                      "subject_knowledge_enhancement_course_available" => false,
                     },
-                    {
-                      "id" => "40",
-                      "type" => "subjects",
-                      "attributes" => {
-                        "subject_name" => "Russian",
-                        "subject_code" => "21",
-                        "bursary_amount" => "10000",
-                        "early_career_payments" => nil,
-                        "scholarship" => nil,
-                        "subject_knowledge_enhancement_course_available" => false,
-                      },
+                  },
+                  {
+                    "id" => "40",
+                    "type" => "subjects",
+                    "attributes" => {
+                      "subject_name" => "Russian",
+                      "subject_code" => "21",
+                      "bursary_amount" => "10000",
+                      "early_career_payments" => nil,
+                      "scholarship" => nil,
+                      "subject_knowledge_enhancement_course_available" => false,
                     },
-                    {
-                      "id" => "41",
-                      "type" => "subjects",
-                      "attributes" => {
-                        "subject_name" => "Spanish",
-                        "subject_code" => "22",
-                        "bursary_amount" => "10000",
-                        "early_career_payments" => nil,
-                        "scholarship" => nil,
-                        "subject_knowledge_enhancement_course_available" => false,
-                      },
+                  },
+                  {
+                    "id" => "41",
+                    "type" => "subjects",
+                    "attributes" => {
+                      "subject_name" => "Spanish",
+                      "subject_code" => "22",
+                      "bursary_amount" => "10000",
+                      "early_career_payments" => nil,
+                      "scholarship" => nil,
+                      "subject_knowledge_enhancement_course_available" => false,
                     },
-                    {
-                      "id" => "42",
-                      "type" => "subjects",
-                      "attributes" => {
-                        "subject_name" => "Modern languages (other)",
-                        "subject_code" => "24",
-                        "bursary_amount" => "10000",
-                        "early_career_payments" => nil,
-                        "scholarship" => nil,
-                        "subject_knowledge_enhancement_course_available" => false,
-                      },
+                  },
+                  {
+                    "id" => "42",
+                    "type" => "subjects",
+                    "attributes" => {
+                      "subject_name" => "Modern languages (other)",
+                      "subject_code" => "24",
+                      "bursary_amount" => "10000",
+                      "early_career_payments" => nil,
+                      "scholarship" => nil,
+                      "subject_knowledge_enhancement_course_available" => false,
                     },
-                  ],
-                 "modern_languages_subject" => {
-                   "id" => "33",
-                   "type" => "subjects",
-                   "attributes" => {
-                     "subject_name" => "Modern Languages",
-                     "subject_code" => nil,
-                     "bursary_amount" => nil,
-                     "early_career_payments" => nil,
-                     "scholarship" => nil,
-                     "subject_knowledge_enhancement_course_available" => nil,
-                   },
-                 },
+                  },
+                ],
+                "modern_languages_subject" => {
+                  "id" => "33",
+                  "type" => "subjects",
+                  "attributes" => {
+                    "subject_name" => "Modern Languages",
+                    "subject_code" => nil,
+                    "bursary_amount" => nil,
+                    "early_career_payments" => nil,
+                    "scholarship" => nil,
+                    "subject_knowledge_enhancement_course_available" => nil,
+                  },
+                },
               },
             },
           }],
@@ -988,17 +988,17 @@ describe "Courses API v2", type: :request do
 
     context "with two recruitment cycles" do
       let(:next_cycle) { create :recruitment_cycle, :next }
-      let(:next_provider) {
+      let(:next_provider) do
         create :provider,
                organisations: [organisation],
                provider_code: provider.provider_code,
                recruitment_cycle: next_cycle
-      }
-      let(:next_course) {
+      end
+      let(:next_course) do
         create :course,
                provider: next_provider,
                course_code: findable_open_course.course_code
-      }
+      end
 
       describe "making a request without specifying a recruitment cycle" do
         let(:request_path) { "/api/v2/providers/#{provider.provider_code}/courses" }
@@ -1017,10 +1017,10 @@ describe "Courses API v2", type: :request do
       end
 
       describe "making a request for the next recruitment cycle" do
-        let(:request_path) {
+        let(:request_path) do
           "/api/v2/recruitment_cycles/#{next_cycle.year}" \
           "/providers/#{next_provider.provider_code}/courses"
-        }
+        end
 
         it "only returns data for the next recruitment cycle" do
           findable_open_course

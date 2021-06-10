@@ -4,20 +4,18 @@ class RolloverReportingService
   end
 
   class << self
-    def call
-      new.call
-    end
+    delegate :call, to: :new
   end
 
   def call
     if @rollover_scope.next.blank?
       { total: {
-          published_courses: 0,
-          new_courses_published: 0,
-          deleted_courses: 0,
-          existing_courses_in_draft: 0,
-          existing_courses_in_review: 0,
-        } }
+        published_courses: 0,
+        new_courses_published: 0,
+        deleted_courses: 0,
+        existing_courses_in_draft: 0,
+        existing_courses_in_review: 0,
+      } }
     else
       {
         total: {

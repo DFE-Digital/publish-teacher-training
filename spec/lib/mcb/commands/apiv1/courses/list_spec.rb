@@ -11,9 +11,9 @@ describe '"mcb apiv1 courses list"' do
   it "lists courses for the default recruitment year" do
     url = "http://localhost:3001/api/v1/#{RecruitmentCycle.current_recruitment_cycle.year}/courses"
     next_url = url + "&" + {
-        changed_since: course2.created_at.utc.strftime("%FT%T.%6NZ"),
-        per_page: 100,
-      }.to_query
+      changed_since: course2.created_at.utc.strftime("%FT%T.%6NZ"),
+      per_page: 100,
+    }.to_query
     json = ActiveModel::Serializer::CollectionSerializer.new(
       [
         course1,
@@ -24,8 +24,8 @@ describe '"mcb apiv1 courses list"' do
 
     stub_request(:get, url)
       .with(headers: {
-              "Authorization" => "Bearer bats",
-            })
+        "Authorization" => "Bearer bats",
+      })
       .to_return(status: 200,
                  body: json.to_json,
                  headers: {
@@ -39,7 +39,7 @@ describe '"mcb apiv1 courses list"' do
                  })
 
     output = with_stubbed_stdout do
-      $mcb.run(%W[apiv1
+      $mcb.run(%w[apiv1
                   courses
                   list])
     end
@@ -56,9 +56,9 @@ describe '"mcb apiv1 courses list"' do
   it "lists courses for a given recruitment year" do
     url = "http://localhost:3001/api/v1/#{next_cycle.year}/courses"
     next_url = url + "&" + {
-        changed_since: course2.created_at.utc.strftime("%FT%T.%6NZ"),
-        per_page: 100,
-      }.to_query
+      changed_since: course2.created_at.utc.strftime("%FT%T.%6NZ"),
+      per_page: 100,
+    }.to_query
     json = ActiveModel::Serializer::CollectionSerializer.new(
       [
         course2,
@@ -68,8 +68,8 @@ describe '"mcb apiv1 courses list"' do
 
     stub_request(:get, url)
       .with(headers: {
-              "Authorization" => "Bearer bats",
-            })
+        "Authorization" => "Bearer bats",
+      })
       .to_return(status: 200,
                  body: json.to_json,
                  headers: {
@@ -85,7 +85,9 @@ describe '"mcb apiv1 courses list"' do
     output = with_stubbed_stdout do
       $mcb.run(%W[apiv1
                   courses
-                  list -r #{next_cycle.year}])
+                  list
+                  -r
+                  #{next_cycle.year}])
     end
     output = output[:stdout]
 

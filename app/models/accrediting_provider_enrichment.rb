@@ -14,9 +14,8 @@ class AccreditingProviderEnrichment
   end
 
   def attributes
-    %i[UcasProviderCode Description].inject({}) do |hash, attr|
-      hash[attr] = send(attr)
-      hash
+    %i[UcasProviderCode Description].index_with do |attr|
+      send(attr)
     end
   end
 

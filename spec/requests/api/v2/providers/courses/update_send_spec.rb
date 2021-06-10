@@ -26,12 +26,12 @@ describe "PATCH /providers/:provider_code/courses/:course_code" do
   let(:payload)           { { email: user.email } }
   let(:credentials)       { encode_to_credentials(payload) }
 
-  let(:course)            {
+  let(:course)            do
     create :course,
            provider: provider,
            subjects: [find_or_create(:primary_subject, :primary)],
            is_send: false
-  }
+  end
   let(:permitted_params) do
     %i[updated_is_send]
   end
