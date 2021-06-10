@@ -40,6 +40,13 @@ class Course < ApplicationRecord
     further_education: "Further education",
   }, _suffix: :course
 
+  enum degree_grade: {
+    two_one: 0,
+    two_two: 1,
+    third_class: 2,
+    not_required: 9,
+  }
+
   ENTRY_REQUIREMENT_OPTIONS = {
     must_have_qualification_at_application_time: 1,
     expect_to_achieve_before_training_begins: 2,

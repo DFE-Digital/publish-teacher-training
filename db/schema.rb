@@ -10,11 +10,12 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_05_27_145331) do
+ActiveRecord::Schema.define(version: 2021_06_09_081246) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
   enable_extension "btree_gist"
+  enable_extension "citext"
   enable_extension "pg_buffercache"
   enable_extension "pg_stat_statements"
   enable_extension "plpgsql"
@@ -115,6 +116,9 @@ ActiveRecord::Schema.define(version: 2021_05_27_145331) do
     t.boolean "is_send", default: false
     t.string "level"
     t.uuid "uuid", default: -> { "uuid_generate_v4()" }, null: false
+    t.integer "degree_grade"
+    t.boolean "additional_degree_subject_requirements"
+    t.string "degree_subject_requirements"
     t.index ["accredited_body_code"], name: "index_course_on_accredited_body_code"
     t.index ["changed_at"], name: "index_course_on_changed_at", unique: true
     t.index ["discarded_at"], name: "index_course_on_discarded_at"
