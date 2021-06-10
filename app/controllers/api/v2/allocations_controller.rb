@@ -7,7 +7,8 @@ module API
       def index
         authorize Allocation
 
-        scope = Allocation.where(accredited_body_id: accredited_body.id)
+        scope = Allocation.where(accredited_body_code: accredited_body.provider_code,
+                                 recruitment_cycle: [@recruitment_cycle.previous, @recruitment_cycle])
 
         if params[:filter] && params[:filter][:training_provider_code]
           scope = scope.where(provider_code: params[:filter][:training_provider_code])
@@ -61,9 +62,7 @@ module API
     private
 
       def recruitment_cycle
-        @recruitment_cycle ||= RecruitmentCycle.find_by(
-          year: params[:recruitment_cycle_year],
-        ) || RecruitmentCycle.find_by(year: Allocation::ALLOCATION_CYCLE_YEAR)
+        @recruitment_cycle ||= RecruitmentCycle.find_by(year: Allocation::ALLOCATION_CYCLE_YEAR)
       end
 
       def accredited_body
@@ -90,7 +89,7 @@ module API
           )
       end
 
-      # TODO remove when publish is doing the right thing
+      # TODO: remove when publish is doing the right thing
       def get_request_type(permitted_params)
         return permitted_params[:request_type] if permitted_params[:request_type].present?
 
