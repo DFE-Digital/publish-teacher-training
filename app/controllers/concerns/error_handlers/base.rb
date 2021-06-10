@@ -3,8 +3,10 @@ module ErrorHandlers
     extend ActiveSupport::Concern
 
     included do
-      if Rails.env.production?
-        rescue_from(StandardError) { render_json_error(status: 500) }
+      rescue_from(StandardError) do |e|
+        raise e unless Settings.render_json_errors
+        Sentry.capture_exception(e)
+        render_json_error(status: 500)
       end
 
       rescue_from(ActiveRecord::RecordNotFound) { render_json_error(status: 404) }
