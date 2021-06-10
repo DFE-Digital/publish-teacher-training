@@ -21,3 +21,4 @@ skylight:
   enable: true
 environment:
   name: "beta"
+render_json_errors: true

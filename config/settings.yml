@@ -55,3 +55,4 @@ skylight:
   authentication: please_change_me
 mapit_api_key: please_change_me
 mapit_url: https://mapit.mysociety.org
+render_json_errors: false
