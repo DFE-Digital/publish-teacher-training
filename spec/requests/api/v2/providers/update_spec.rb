@@ -35,7 +35,9 @@ describe "PATCH /providers/:provider_code" do
     create :provider,
            organisations: [organisation],
            recruitment_cycle: recruitment_cycle,
-           courses: [course1]
+           courses: [course1],
+           can_sponsor_student_visa: false,
+           can_sponsor_skilled_worker_visa: false
   end
   let(:user)         { create :user, organisations: [organisation] }
   let(:payload)      { { email: user.email } }
@@ -59,6 +61,8 @@ describe "PATCH /providers/:provider_code" do
       train_with_disability: "train with disability",
       ukprn: "12345678",
       urn: "12345",
+      can_sponsor_student_visa: true,
+      can_sponsor_skilled_worker_visa: false,
     }
   end
   let(:permitted_params) do
@@ -76,6 +80,8 @@ describe "PATCH /providers/:provider_code" do
       train_with_disability
       ukprn
       urn
+      can_sponsor_student_visa
+      can_sponsor_skilled_worker_visa
     ]
   end
 
@@ -106,6 +112,8 @@ describe "PATCH /providers/:provider_code" do
       expect(json_response).to have_attribute(:train_with_disability).with_value("train with disability")
       expect(json_response).to have_attribute(:ukprn).with_value("12345678")
       expect(json_response).to have_attribute(:urn).with_value("12345")
+      expect(json_response).to have_attribute(:can_sponsor_student_visa).with_value(true)
+      expect(json_response).to have_attribute(:can_sponsor_skilled_worker_visa).with_value(false)
     end
   end
   describe "with unpermitted attributes on provider object" do

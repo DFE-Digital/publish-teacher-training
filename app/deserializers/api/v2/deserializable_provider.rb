@@ -26,6 +26,8 @@ module API
         application_alert_contact
         ukprn
         urn
+        can_sponsor_skilled_worker_visa
+        can_sponsor_student_visa
       ].freeze
 
       attributes(*PROVIDER_ATTRIBUTES)

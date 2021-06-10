@@ -134,7 +134,7 @@ module API
       end
 
       def update_provider
-        return unless provider_params.values.any?
+        return if provider_params.values.all?(&:nil?)
 
         @provider.assign_attributes(provider_params)
         @provider.save
@@ -187,6 +187,8 @@ module API
             :send_application_alerts,
             :ukprn,
             :urn,
+            :can_sponsor_skilled_worker_visa,
+            :can_sponsor_student_visa,
           )
           .permit(accredited_bodies: %i[provider_code provider_name description])
       end
@@ -231,6 +233,8 @@ module API
             :send_application_alerts,
             :ukprn,
             :urn,
+            :can_sponsor_skilled_worker_visa,
+            :can_sponsor_student_visa,
           )
           .permit(
             admin_contact: %w[name email telephone permission_given],
@@ -265,6 +269,8 @@ module API
             :region_code,
             :ukprn,
             :urn,
+            :can_sponsor_skilled_worker_visa,
+            :can_sponsor_student_visa,
           )
           .permit(
             :type_of_gt12,

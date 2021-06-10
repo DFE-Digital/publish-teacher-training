@@ -58,8 +58,8 @@ RSpec.describe API::V2::ProvidersController do
   describe "#update" do
     context "when user is not an admin" do
       let(:user) { provider.users.first }
-      let(:provider) { course.provider }
-      let(:course) { create(:course) }
+      let(:provider) { create(:provider, can_sponsor_student_visa: true, can_sponsor_skilled_worker_visa: false) }
+      let(:course) { create(:course, provider: provider) }
 
       it "cannot update provider_name" do
         expect {
@@ -71,6 +71,20 @@ RSpec.describe API::V2::ProvidersController do
                 },
               }
         }.to raise_error(ActionController::UnpermittedParameters)
+      end
+
+      it "can update the visa sponsorship attributes" do
+        put :update,
+            params: {
+              code: provider.provider_code,
+              provider: {
+                can_sponsor_student_visa: false,
+                can_sponsor_skilled_worker_visa: true,
+              },
+            }
+
+        expect(provider.reload.can_sponsor_student_visa).to be(false)
+        expect(provider.reload.can_sponsor_skilled_worker_visa).to be(true)
       end
     end
 
