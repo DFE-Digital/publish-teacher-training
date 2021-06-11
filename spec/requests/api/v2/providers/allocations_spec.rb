@@ -74,14 +74,24 @@ RSpec.describe "/api/v2/providers/<accredited_body_code>/allocations", type: :re
     end
 
     context "with filter" do
-      it "returns filtered allocations" do
+      it "returns filtered by training provider code allocations" do
         given_an_accredited_body_exists
         given_the_accredited_body_has_multiple_training_providers
         given_the_accredited_body_has_allocations_for_the_allocation_recruitment_cycle
         given_the_accredited_body_has_allocations_from_the_previous_allocation_recruitment_cycle
         given_i_am_an_authenticated_user_from_the_accredited_body
-        when_i_get_the_filtered_allocations_index_endpoint
-        then_the_filtered_allocations_from_the_allocation_recruitment_cycle_are_returned
+        when_i_get_the_filtered_by_training_provider_code_allocations_index_endpoint
+        then_the_filtered_by_training_code_allocations_from_the_allocation_recruitment_cycle_are_returned
+      end
+
+      it "returns filtered by recruitment cycle years allocations" do
+        given_an_accredited_body_exists
+        given_the_accredited_body_has_multiple_training_providers
+        given_the_accredited_body_has_allocations_for_the_allocation_recruitment_cycle
+        given_the_accredited_body_has_allocations_from_the_previous_allocation_recruitment_cycle
+        given_i_am_an_authenticated_user_from_the_accredited_body
+        when_i_get_the_filtered_by_recruitment_cycle_years_allocations_index_endpoint
+        then_the_filtered_by_recruitment_cycle_years_from_the_allocation_recruitment_cycle_are_returned
       end
     end
   end
@@ -232,11 +242,17 @@ RSpec.describe "/api/v2/providers/<accredited_body_code>/allocations", type: :re
     get "/api/v2/providers/#{@accredited_body.provider_code}/allocations", headers: { "HTTP_AUTHORIZATION" => @credentials }
   end
 
-  def when_i_get_the_filtered_allocations_index_endpoint
+  def when_i_get_the_filtered_by_training_provider_code_allocations_index_endpoint
     provider_to_filter = @training_providers.first
     get "/api/v2/providers/#{@accredited_body.provider_code}/allocations?filter[training_provider_code]=#{provider_to_filter.provider_code}", headers: { "HTTP_AUTHORIZATION" => @credentials }
   end
 
+  def when_i_get_the_filtered_by_recruitment_cycle_years_allocations_index_endpoint
+    provider_to_filter = @training_providers.first
+    get "/api/v2/providers/#{@accredited_body.provider_code}/allocations?filter[recruitment_cycle][years]=[#{allocation_recruitment_cycle.year}, #{previous_allocation_recruitment_cycle.year}]", headers: { "HTTP_AUTHORIZATION" => @credentials }
+  end
+
+  
   def then_a_new_allocation_is_returned_with_zero_number_of_places
     expect(response).to have_http_status(:created)
     parsed_response = JSON.parse(response.body)
@@ -258,11 +274,19 @@ RSpec.describe "/api/v2/providers/<accredited_body_code>/allocations", type: :re
     expect(parsed_response["data"].first["id"]).to eq(@current_allocations.first.id.to_s)
   end
 
-  def then_the_filtered_allocations_from_the_allocation_recruitment_cycle_are_returned
+  def then_the_filtered_by_training_code_allocations_from_the_allocation_recruitment_cycle_are_returned
     expect(response).to have_http_status(:ok)
     parsed_response = JSON.parse(response.body)
     expect(parsed_response["data"].count).to eq(1)
     expect(parsed_response["data"].first["id"]).to eq(@current_allocations.first.id.to_s)
+  end
+
+  def then_the_filtered_by_recruitment_cycle_years_from_the_allocation_recruitment_cycle_are_returned
+    expect(response).to have_http_status(:ok)
+    parsed_response = JSON.parse(response.body)
+    expect(parsed_response["data"].count).to eq(2)
+    expect(parsed_response["data"].first["id"]).to eq(@current_allocations.first.id.to_s)
+    expect(parsed_response["data"].second["id"]).to eq(@current_allocations.second.id.to_s)
   end
 
   def then_a_new_allocation_is_returned_with_the_request_type

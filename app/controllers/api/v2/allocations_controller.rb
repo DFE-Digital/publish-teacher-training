@@ -7,12 +7,9 @@ module API
       def index
         authorize Allocation
 
-        scope = Allocation.where(accredited_body_code: accredited_body.provider_code,
-                                 recruitment_cycle: [@recruitment_cycle.previous, @recruitment_cycle])
-
-        if params[:filter] && params[:filter][:training_provider_code]
-          scope = scope.where(provider_code: params[:filter][:training_provider_code])
-        end
+        scope = Allocation.includes(:recruitment_cycle)
+                          .where(accredited_body_code: accredited_body.provider_code)
+                          .where(allocation_filter_params)
 
         render jsonapi: policy_scope(scope),
                include: params[:include],
@@ -60,6 +57,21 @@ module API
       end
 
     private
+
+      def allocation_filter_params
+        recruitment_cycle_years = filter_params.dig(:recruitment_cycle, :year)
+
+        recruitment_cycle_years = [recruitment_cycle.year] if recruitment_cycle_years.blank?
+
+        {
+          provider_code: filter_params.dig(:training_provider_code),
+          recruitment_cycle: { year: recruitment_cycle_years },
+        }.compact
+      end
+
+      def filter_params
+        @filter_params ||= params.fetch(:filter, {})
+      end
 
       def recruitment_cycle
         @recruitment_cycle ||= RecruitmentCycle.find_by(year: Allocation::ALLOCATION_CYCLE_YEAR)
