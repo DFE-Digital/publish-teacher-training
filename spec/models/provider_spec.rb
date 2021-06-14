@@ -733,4 +733,36 @@ describe Provider, type: :model do
       it { is_expected.to contain_exactly(matching_provider) }
     end
   end
+
+  describe '#visa_sponsorship_publishable?' do
+    it "returns true when year is 2022 and provider has declared sponsorship" do
+      provider = build(
+        :provider,
+        can_sponsor_student_visa: true,
+        can_sponsor_skilled_worker_visa: false,
+        recruitment_cycle: build(:recruitment_cycle, year: 2022),
+      )
+      expect(provider.visa_sponsorship_publishable?).to be(true)
+    end
+
+    it "returns true when year is 2021 and provider as not declared sponsorship" do
+      provider = build(
+        :provider,
+        can_sponsor_student_visa: nil,
+        can_sponsor_skilled_worker_visa: false,
+        recruitment_cycle: build(:recruitment_cycle, year: 2021),
+      )
+      expect(provider.visa_sponsorship_publishable?).to be(true)
+    end
+
+    it "returns false when year is 2022 and provider as not declared sponsorship" do
+      provider = build(
+        :provider,
+        can_sponsor_student_visa: nil,
+        can_sponsor_skilled_worker_visa: false,
+        recruitment_cycle: build(:recruitment_cycle, year: 2022),
+      )
+      expect(provider.visa_sponsorship_publishable?).to be(false)
+    end
+  end
 end

@@ -264,6 +264,13 @@ class Provider < ApplicationRecord
     courses.each(&:discard)
   end
 
+  VISA_SPONSORSHIP_REQUIRED_FROM = 2022
+  def visa_sponsorship_publishable?
+    return true if recruitment_cycle.year.to_i < VISA_SPONSORSHIP_REQUIRED_FROM
+
+    %i[can_sponsor_student_visa can_sponsor_skilled_worker_visa].none? { |attr| send(attr).nil? }
+  end
+
 private
 
   def accrediting_provider_enrichment(provider_code)

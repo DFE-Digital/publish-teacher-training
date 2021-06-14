@@ -35,6 +35,19 @@ describe API::V2::CoursesController, type: :controller do
         code: course.course_code,
       }
     end
+
+    it "returns a validation error when visa sponsorship information is unpublishable" do
+      course.provider.update(can_sponsor_student_visa: nil)
+      course.provider.recruitment_cycle.update(year: '2022')
+      expect(NotificationService::CoursePublished).not_to receive(:call).with(course: course)
+      post :publish, params: {
+        recruitment_cycle_year: Provider::VISA_SPONSORSHIP_REQUIRED_FROM,
+        provider_code: course.provider.provider_code,
+        code: course.course_code,
+      }
+      expect(response).to have_http_status(:unprocessable_entity)
+      expect(response.body).to match(/Provider You must say whether your provider can sponsor visas/)
+    end
   end
 
   describe "#update_subjects" do

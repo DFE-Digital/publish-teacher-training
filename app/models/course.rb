@@ -258,6 +258,7 @@ class Course < ApplicationRecord
   validates :subjects, presence: true, on: :publish
   validate :validate_enrichment_publishable, on: :publish
   validate :validate_site_statuses_publishable, on: :publish
+  validate :validate_provider_visa_sponsorship_publishable, on: :publish
   validate :validate_enrichment
   validate :validate_qualification, on: %i[update new]
   validate :validate_start_date, on: :update, if: -> { provider.present? && start_date.present? }
@@ -646,6 +647,12 @@ private
       unless site_status.valid?
         raise RuntimeError.new("Site status invalid on course #{provider.provider_code}/#{course_code}: #{site_status.errors.full_messages.first}")
       end
+    end
+  end
+
+  def validate_provider_visa_sponsorship_publishable
+    unless provider.visa_sponsorship_publishable?
+      errors.add(:provider, :visa_sponsorship_not_publishable)
     end
   end
 
