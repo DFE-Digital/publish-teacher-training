@@ -33,7 +33,7 @@ describe "PATCH /providers/:provider_code/courses/:course_code" do
   }
   let(:age_range_in_years) { "3_to_7" }
   let(:permitted_params) do
-    %i[updated_age_range_in_years]
+    %i[age_range_in_years]
   end
 
   before do
@@ -41,7 +41,7 @@ describe "PATCH /providers/:provider_code/courses/:course_code" do
   end
 
   context "course has an updated age range in years" do
-    let(:updated_age_range_in_years) { { age_range_in_years: "3_to_7" } }
+    let(:updated_age_range_in_years) { { age_range_in_years: "8_to_12" } }
 
     it "returns http success" do
       expect(response).to have_http_status(:success)
