@@ -292,7 +292,14 @@ module API
                   :level,
                   :degree_grade,
                   :additional_degree_subject_requirements,
-                  :degree_subject_requirements)
+                  :degree_subject_requirements,
+                  :accept_pending_gcse,
+                  :accept_gcse_equivalency,
+                  :accept_english_gcse_equivalency,
+                  :accept_maths_gcse_equivalency,
+                  :accept_science_gcse_equivalency,
+                  :additional_gcse_equivalencies
+                )
           .permit(
             :about_course,
             :course_length,
@@ -305,7 +312,7 @@ module API
             :other_requirements,
             :personal_qualities,
             :salary_details,
-            :required_qualifications,
+            :required_qualifications
           )
       end
 
@@ -331,7 +338,8 @@ module API
                   :sites_types,
                   :course_code,
                   :subjects_ids,
-                  :subjects_types)
+                  :subjects_types
+                )
           .permit(policy(Course.new).permitted_attributes)
       end
 

@@ -20,7 +20,9 @@ module API
                  :age_range_in_years, :accrediting_provider,
                  :accredited_body_code, :level, :degree_grade,
                  :additional_degree_subject_requirements,
-                 :degree_subject_requirements
+                 :degree_subject_requirements, :accept_pending_gcse, :accept_gcse_equivalency,
+                 :accept_english_gcse_equivalency, :accept_maths_gcse_equivalency,
+                 :accept_science_gcse_equivalency, :additional_gcse_equivalencies
 
       attribute :start_date do
         written_month_year(@object.start_date) if @object.start_date
