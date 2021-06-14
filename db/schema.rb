@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_06_09_081246) do
+ActiveRecord::Schema.define(version: 2021_06_14_130500) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
@@ -119,6 +119,12 @@ ActiveRecord::Schema.define(version: 2021_06_09_081246) do
     t.integer "degree_grade"
     t.boolean "additional_degree_subject_requirements"
     t.string "degree_subject_requirements"
+    t.boolean "accept_pending_gcse", default: false
+    t.boolean "accept_gcse_equivalency", default: false
+    t.boolean "accept_english_gcse_equivalency", default: false
+    t.boolean "accept_maths_gcse_equivalency", default: false
+    t.boolean "accept_science_gcse_equivalency", default: false
+    t.string "additional_gcse_equivalencies"
     t.index ["accredited_body_code"], name: "index_course_on_accredited_body_code"
     t.index ["changed_at"], name: "index_course_on_changed_at", unique: true
     t.index ["discarded_at"], name: "index_course_on_discarded_at"
