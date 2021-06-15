@@ -39,6 +39,7 @@ describe AuthenticationService do
 
       it "Safely logs that the user was found by sign_in_user_id" do
         subject
+
         expect(logger_spy).to have_received(:info) do |*_args, &block|
           message = block.call
           expect(message).to start_with("User found from sign_in_user_id in token")
@@ -58,13 +59,18 @@ describe AuthenticationService do
 
       it "Should log that the users email was updated" do
         subject
-        expect(logger_spy).to have_received(:debug).with(/Updating user email for/)
+
+        expect(logger_spy).to have_received(:debug) do |*_args, &block|
+          message = block.call
+          expect(message).to start_with("Updating user email for")
+        end
       end
 
       context "when the email is already in use" do
         let!(:existing_user) { create(:user, email: email) }
 
         it { should eq user }
+
         it "does not update the user's email" do
           expect { subject }.not_to(change { user.reload.email })
         end
@@ -138,7 +144,11 @@ describe AuthenticationService do
 
       it "Logs that there was no email in the token" do
         subject
-        expect(logger_spy).to have_received(:debug).with("No email in token")
+
+        expect(logger_spy).to have_received(:debug) do |*_args, &block|
+          message = block.call
+          expect(message).to start_with("No email in token")
+        end
       end
     end
 
@@ -153,7 +163,11 @@ describe AuthenticationService do
 
       it "Logs that there was no signin user id in the token" do
         subject
-        expect(logger_spy).to have_received(:debug).with("No sign_in_user_id in token")
+
+        expect(logger_spy).to have_received(:debug) do |*_args, &block|
+          message = block.call
+          expect(message).to start_with("No sign_in_user_id in token")
+        end
       end
     end
 
