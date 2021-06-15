@@ -9,7 +9,7 @@ class AuthenticationService
     @encoded_token = encoded_token
     begin
       @user = user_by_sign_in_user_id || user_by_email
-      update_user_information
+      update_user_information if user
     rescue DuplicateUserError => e
       Sentry.capture_exception(e)
     end
@@ -47,12 +47,10 @@ private
   end
 
   def update_user_information
-    return unless user
-
-    update_user_email
-    update_user_sign_in_id
     update_user_first_name
     update_user_last_name
+    update_user_sign_in_id
+    update_user_email
   end
 
   def user_by_email
@@ -132,7 +130,10 @@ private
   end
 
   def update_user_first_name
-    return if first_name_from_token.blank?
+    if first_name_from_token.blank?
+      logger.debug { "No first name in token (user: #{log_safe_user(user)})"  }
+      return
+    end
 
     user.update(first_name: first_name_from_token)
   end
