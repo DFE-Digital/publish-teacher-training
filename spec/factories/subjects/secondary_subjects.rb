@@ -1,7 +1,7 @@
 FactoryBot.define do
   subjects = {
-      # Modern Lanuages has been removed as it would cause validation errors if it
-      # isn't paired with a valid modern language subject use a trait if you want to create it
+    # Modern Lanuages has been removed as it would cause validation errors if it
+    # isn't paired with a valid modern language subject use a trait if you want to create it
     "Art and design" => "W1",
     "Science" => "F0",
     "Biology" => "C1",

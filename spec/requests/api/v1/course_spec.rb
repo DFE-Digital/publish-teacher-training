@@ -195,10 +195,10 @@ describe "Courses API", type: :request do
       describe "response headers" do
         context "when the recruitment year is in the params" do
           # We want to keep legacy support for year as a param in order to
-           # maintain backwards compatibility. This will avoid breaking calls
-           # from UCAS should they use this older style. The next links we
-           # generate used to were of this style, and the UCAS systems
-           # were making requests in this style.
+          # maintain backwards compatibility. This will avoid breaking calls
+          # from UCAS should they use this older style. The next links we
+          # generate used to were of this style, and the UCAS systems
+          # were making requests in this style.
 
           it "returns bad_request for previous year" do
             get "/api/v1/courses?recruitment_year=#{previous_year}",

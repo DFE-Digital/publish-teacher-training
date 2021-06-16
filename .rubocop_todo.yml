@@ -15,18 +15,7 @@ Bundler/OrderedGems:
     - "Gemfile"
     - "docs/Gemfile"
 
-# Offense count: 8
-# Cop supports --auto-correct.
-Layout/CommentIndentation:
-  Exclude:
-    - "app/serializers/provider_serializer.rb"
-    - "config/initializers/jsonapi.rb"
-    - "lib/mcb/editor/revoke_access_wizard.rb"
-    - "spec/factories/subjects/secondary_subjects.rb"
-    - "spec/models/course_spec.rb"
-    - "spec/requests/api/v1/course_spec.rb"
-
-# Offense count: 1
+# # Offense count: 1
 # Cop supports --auto-correct.
 # Configuration parameters: EnforcedStyle.
 # SupportedStyles: normal, indented_internal_methods
