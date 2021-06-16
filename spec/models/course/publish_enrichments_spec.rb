@@ -74,7 +74,7 @@ describe Course, type: :model do
       let(:enrichments) {
         [build(:course_enrichment, :initial_draft,
                created_at: 1.day.ago,
-                     updated_at: 20.minutes.ago)]
+               updated_at: 20.minutes.ago)]
       }
       subject do
         create(:course,

@@ -24,13 +24,13 @@ module Token
         secret,
         true,
         {
-            algorithm: algorithm,
-            verify_iss: true,
-            verify_aud: true,
-            verify_sub: true,
-            verify_iat: true,
-            exp_leeway: 6.seconds.to_i,
-            **claims,
+          algorithm: algorithm,
+          verify_iss: true,
+          verify_aud: true,
+          verify_sub: true,
+          verify_iat: true,
+          exp_leeway: 6.seconds.to_i,
+          **claims,
         },
       )
 

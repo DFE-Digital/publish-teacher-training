@@ -116,7 +116,7 @@ describe "/api/v2/build_new_course", type: :request do
       let(:params) do
         { course: {
           level: :secondary,
-          } }
+        } }
       end
 
       let(:pe) { find_or_create(:secondary_subject, :physical_education) }
@@ -409,7 +409,7 @@ describe "/api/v2/build_new_course", type: :request do
         level: :primary,
         age_range_in_years: "3_to_7",
         applications_open_from: provider.recruitment_cycle.application_start_date,
-        } }
+      } }
     end
 
     let(:sites) { [create(:site, provider: provider)] }

@@ -1,6 +1,6 @@
 FactoryBot.define do
   subjects = {
-    "Humanities"       => nil,
+    "Humanities" => nil,
     "Balanced Science" => nil,
   }
 

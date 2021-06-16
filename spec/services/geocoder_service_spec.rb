@@ -5,12 +5,12 @@ describe GeocoderService do
     let(:valid_site) {
       create(:site,
              location_name: "Fun Academy",
-                 address1: "Long Lane",
-                 address2: "Holbury",
-                 address3: "Southampton",
-                 address4: "UK",
-                 postcode: "SO45 2PA",
-                 region_code: nil)
+             address1: "Long Lane",
+             address2: "Holbury",
+             address3: "Southampton",
+             address4: "UK",
+             postcode: "SO45 2PA",
+             region_code: nil)
     }
 
     let(:invalid_site) do

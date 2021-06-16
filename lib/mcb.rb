@@ -298,10 +298,10 @@ module MCB
             # Send each provider to the consumer of this enumerator
             records.each do |record|
               y << [record, {
-                      page: page_count,
-                      url: endpoint_url,
-                      next_url: next_url,
-                    }]
+                page: page_count,
+                url: endpoint_url,
+                next_url: next_url,
+              }]
             end
 
             endpoint_url = next_url

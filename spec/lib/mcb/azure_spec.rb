@@ -161,9 +161,9 @@ describe MCB::Azure do
     let(:app_config) do
       {
         "MANAGE_COURSES_POSTGRESQL_SERVICE_HOST" => "host",
-        "PG_DATABASE"                            => "pgdb",
-        "PG_USERNAME"                            => "user",
-        "PG_PASSWORD"                            => "pass",
+        "PG_DATABASE" => "pgdb",
+        "PG_USERNAME" => "user",
+        "PG_PASSWORD" => "pass",
       }
     end
 
@@ -171,9 +171,9 @@ describe MCB::Azure do
       allow(ENV).to receive(:[]=)
       allow(MCB::Azure).to(
         receive(:get_apps).and_return([{
-                                        "name" => "noapp",
-                                         "resourceGroup" => "rgrrroup",
-                                      }]),
+          "name" => "noapp",
+          "resourceGroup" => "rgrrroup",
+        }]),
       )
 
       allow(MCB::Azure).to(receive(:get_config).and_return(app_config))

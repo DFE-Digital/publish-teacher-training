@@ -163,7 +163,7 @@ describe "/api/v2/recruitment_cycle", type: :request do
           "attributes" => {
             "year" => recruitment_cycle.year,
             "application_start_date" => recruitment_cycle.application_start_date.to_s,
-            "application_end_date" =>   recruitment_cycle.application_end_date.to_date.to_s,
+            "application_end_date" => recruitment_cycle.application_end_date.to_date.to_s,
           },
           "relationships" => {
             "providers" => {

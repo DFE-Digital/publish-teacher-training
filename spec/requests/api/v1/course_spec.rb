@@ -218,9 +218,9 @@ describe "Courses API", type: :request do
             params: { changed_since: provided_timestamp }
 
         url = url_for(recruitment_year: current_year, params: {
-                        changed_since: provided_timestamp,
-                        per_page: 100,
-                      })
+          changed_since: provided_timestamp,
+          per_page: 100,
+        })
         expect(response.headers["Link"]).to match "#{url}; rel=\"next\""
       end
 
@@ -232,9 +232,9 @@ describe "Courses API", type: :request do
             params: { changed_since: provided_timestamp }
 
         url = url_for(recruitment_year: next_year, params: {
-                        changed_since: provided_timestamp,
-                        per_page: 100,
-                      })
+          changed_since: provided_timestamp,
+          per_page: 100,
+        })
         expect(response.headers["Link"]).to match "#{url}; rel=\"next\""
       end
 
@@ -248,9 +248,9 @@ describe "Courses API", type: :request do
         before do
           @courses = Array.new(25) do |i|
             create(:course, course_code: "CRSE#{i + 1}",
-                 changed_at: (30 - i).minutes.ago,
-                 provider: provider,
-                 site_statuses: [create(:site_status, :published)])
+                            changed_at: (30 - i).minutes.ago,
+                            provider: provider,
+                            site_statuses: [create(:site_status, :published)])
           end
         end
 
@@ -279,9 +279,9 @@ describe "Courses API", type: :request do
         before do
           @courses = Array.new(25) do |i|
             create(:course, course_code: "CRSE#{i + 1}",
-                 changed_at: timestamp + i / 1000.0,
-                 provider: provider,
-                 site_statuses: [create(:site_status, :published)])
+                            changed_at: timestamp + i / 1000.0,
+                            provider: provider,
+                            site_statuses: [create(:site_status, :published)])
           end
         end
 

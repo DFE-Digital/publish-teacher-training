@@ -24,12 +24,12 @@ describe "GET /suggest" do
       expect(JSON.parse(response.body)["data"])
           .to match_array([
             {
-                "id" => provider.id.to_s,
-                "type" => "provider",
-                "attributes" => {
-                    "provider_code" => provider.provider_code,
-                    "provider_name" => provider.provider_name,
-                },
+              "id" => provider.id.to_s,
+              "type" => "provider",
+              "attributes" => {
+                "provider_code" => provider.provider_code,
+                "provider_name" => provider.provider_name,
+              },
             },
           ])
     end
@@ -41,20 +41,20 @@ describe "GET /suggest" do
       expect(JSON.parse(response.body)["data"])
           .to match_array([
             {
-                "id" => provider.id.to_s,
-                "type" => "provider",
-                "attributes" => {
-                    "provider_code" => provider.provider_code,
-                    "provider_name" => provider.provider_name,
-                },
+              "id" => provider.id.to_s,
+              "type" => "provider",
+              "attributes" => {
+                "provider_code" => provider.provider_code,
+                "provider_name" => provider.provider_name,
+              },
             },
             {
-                "id" => provider2.id.to_s,
-                "type" => "provider",
-                "attributes" => {
-                    "provider_code" => provider2.provider_code,
-                    "provider_name" => provider2.provider_name,
-                },
+              "id" => provider2.id.to_s,
+              "type" => "provider",
+              "attributes" => {
+                "provider_code" => provider2.provider_code,
+                "provider_name" => provider2.provider_name,
+              },
             },
           ])
     end

@@ -566,14 +566,14 @@ RSpec.describe CourseSearchService do
 
       let(:university_course) do
         create(:course, provider: university_provider,
-          site_statuses: [build(:site_status, :findable, site: site)],
-          enrichments: [build(:course_enrichment, :published)])
+                        site_statuses: [build(:site_status, :findable, site: site)],
+                        enrichments: [build(:course_enrichment, :published)])
       end
 
       let(:non_university_course) do
         create(:course, provider: non_university_provider,
-          site_statuses: [build(:site_status, :findable, site: site2)],
-          enrichments: [build(:course_enrichment, :published)])
+                        site_statuses: [build(:site_status, :findable, site: site2)],
+                        enrichments: [build(:course_enrichment, :published)])
       end
 
       let(:courses) do

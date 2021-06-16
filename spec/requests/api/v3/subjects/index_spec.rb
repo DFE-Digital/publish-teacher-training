@@ -538,12 +538,12 @@ describe "GET v3 /subjects" do
     it "returns the correct data" do
       expect(json_response).to eq("data" => [
         {
-           "id" => "1",
-           "type" => "subjects",
-           "attributes" => {
-             "subject_name" => "Primary",
-           },
-         },
+          "id" => "1",
+          "type" => "subjects",
+          "attributes" => {
+            "subject_name" => "Primary",
+          },
+        },
         {
           "id" => "2",
           "type" => "subjects",
@@ -840,8 +840,8 @@ describe "GET v3 /subjects" do
         },
       ],
                                   "jsonapi" => {
-                                  "version" => "1.0",
-                                })
+                                    "version" => "1.0",
+                                  })
     end
 
     context "when sorting by name" do

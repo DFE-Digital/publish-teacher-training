@@ -74,7 +74,7 @@ describe CourseReportingService do
       },
       is_send: {
         open: { yes: 1, no: 2 },
-        closed:  { yes: 0, no: 0 },
+        closed: { yes: 0, no: 0 },
       },
       subject: {
         open: Subject.active.each_with_index.map { |sub, i| x = {}; x[sub.subject_name] = (i + 1) * 3; x }.reduce({}, :merge),

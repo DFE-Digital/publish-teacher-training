@@ -7,12 +7,12 @@ module MCB
         def course(course)
           super(
             course.attributes,
-            provider:             course.provider,
+            provider: course.provider,
             accrediting_provider: course.accrediting_provider,
-            subjects:             course.subjects,
-            site_statuses:        course.site_statuses,
-            enrichments:          course.enrichments,
-            recruitment_cycle:    course.recruitment_cycle,
+            subjects: course.subjects,
+            site_statuses: course.site_statuses,
+            enrichments: course.enrichments,
+            recruitment_cycle: course.recruitment_cycle,
           )
         end
 
@@ -26,7 +26,7 @@ module MCB
         def provider(provider)
           super(
             provider.attributes,
-            contacts:      provider.contacts,
+            contacts: provider.contacts,
             organisations: provider.organisations,
           )
         end

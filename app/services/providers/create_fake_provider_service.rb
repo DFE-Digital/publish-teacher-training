@@ -3,11 +3,11 @@ module Providers
     attr_reader :errors
 
     DEFAULT_PROVIDER_ATTRIBUTES = {
-        address1: "1 Test Street",
-        address3: "Town",
-        address4: "County",
-        postcode: "M1 1JG",
-        region_code: "north_west",
+      address1: "1 Test Street",
+      address3: "Town",
+      address4: "County",
+      postcode: "M1 1JG",
+      region_code: "north_west",
     }.freeze
 
     def initialize(recruitment_cycle:, provider_name:, provider_code:, provider_type:, is_accredited_body:)

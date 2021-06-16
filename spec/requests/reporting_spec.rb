@@ -159,7 +159,7 @@ describe "GET /reporting" do
             allocations: 0,
             distinct_accredited_bodies: 0,
             distinct_providers: 0,
-            number_of_places:  0,
+            number_of_places: 0,
           },
         },
         current: {
@@ -167,7 +167,7 @@ describe "GET /reporting" do
             allocations: 0,
             distinct_accredited_bodies: 0,
             distinct_providers: 0,
-            number_of_places:  0,
+            number_of_places: 0,
           },
         },
       },

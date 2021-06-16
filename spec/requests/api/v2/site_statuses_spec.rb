@@ -58,9 +58,9 @@ describe "Site Helpers API V2" do
 
       before do
         site_status_params.merge!(
-          publish:                    publish,
-          status:                     status,
-          vac_status:                 vac_status,
+          publish: publish,
+          status: status,
+          vac_status: vac_status,
         )
       end
 

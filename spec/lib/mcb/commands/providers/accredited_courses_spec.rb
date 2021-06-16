@@ -10,8 +10,8 @@ describe "mcb providers accredited_courses" do
   let(:provider) { create :provider, :accredited_body }
   let!(:findable_course) do
     create :course, name: "findable-course",
-           accrediting_provider: provider,
-           site_statuses: [build(:site_status, :findable)]
+                    accrediting_provider: provider,
+                    site_statuses: [build(:site_status, :findable)]
   end
 
   it "writes course information to terminal" do

@@ -454,8 +454,8 @@ describe Provider, type: :model do
     let(:provider) { create :provider, :accredited_body }
     let!(:findable_course) do
       create :course, name: "findable-course",
-             accrediting_provider: provider,
-             site_statuses: [build(:site_status, :findable)]
+                      accrediting_provider: provider,
+                      site_statuses: [build(:site_status, :findable)]
     end
     let!(:discarded_course) do
       create :course, :deleted,

@@ -513,18 +513,18 @@ describe "GET v3/courses" do
       let(:filtered_provider_course) {
         create(:course,
                name: "Course A",
-                     provider: provider_filtered_by,
-                     accrediting_provider: provider_filtered_by,
-                     site_statuses: [create(:site_status, :findable, site: site1)],
-                     enrichments: [published_enrichment])
+               provider: provider_filtered_by,
+               accrediting_provider: provider_filtered_by,
+               site_statuses: [create(:site_status, :findable, site: site1)],
+               enrichments: [published_enrichment])
       }
       let(:another_provider_course) {
         create(:course,
                name: "Course B",
-                     provider: another_training_provider,
-                     accrediting_provider: provider_filtered_by,
-                     site_statuses: [create(:site_status, :findable, site: site2)],
-                     enrichments: [published_enrichment])
+               provider: another_training_provider,
+               accrediting_provider: provider_filtered_by,
+               site_statuses: [create(:site_status, :findable, site: site2)],
+               enrichments: [published_enrichment])
       }
 
       before do

@@ -85,9 +85,9 @@ describe CourseUpdateEmailMailer, type: :mailer do
   context "study mode is updated" do
     study_mode_update_scenarios = [
       {
-         original_value: "full time",
-         updated_value: "part time",
-       },
+        original_value: "full time",
+        updated_value: "part time",
+      },
       {
         original_value: "part time",
         updated_value: "full time",
