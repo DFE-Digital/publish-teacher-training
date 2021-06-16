@@ -15,12 +15,6 @@ Bundler/OrderedGems:
     - "Gemfile"
     - "docs/Gemfile"
 
-
-# Offense count: 43
-# Cop supports --auto-correct.
-Layout/ClosingParenthesisIndentation:
-  Enabled: false
-
 # Offense count: 8
 # Cop supports --auto-correct.
 Layout/CommentIndentation:

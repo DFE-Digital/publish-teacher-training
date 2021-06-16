@@ -444,7 +444,7 @@ describe Provider, type: :model do
         "Providers::GenerateUniqueCourseCodeService",
       ).with_arguments(
         existing_codes: %w[A123 B456],
-        )
+      )
     end
   end
 

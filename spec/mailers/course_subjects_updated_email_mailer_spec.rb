@@ -13,7 +13,7 @@ describe CourseSubjectsUpdatedEmailMailer, type: :mailer do
       previous_subject_names: [previous_subject.subject_name],
       previous_course_name: previous_course_name,
       recipient: user,
-      )
+    )
   end
 
   describe "sending an email to a user" do
@@ -74,7 +74,7 @@ describe CourseSubjectsUpdatedEmailMailer, type: :mailer do
           previous_subject_names: [previous_subject.subject_name],
           previous_course_name: previous_course_name,
           recipient: user,
-          )
+        )
       end
 
       it "includes the updated subjects" do

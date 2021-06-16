@@ -13,7 +13,7 @@ module CourseVacancies
         course_url: create_course_url(course),
         vacancies_filled: vacancies_filled ? "yes" : "no",
         vacancies_opened: vacancies_filled ? "no" : "yes",
-        )
+      )
 
       mail(to: user.email)
     end
@@ -29,7 +29,7 @@ module CourseVacancies
         course_url: create_course_url(course),
         vacancies_opened: vacancies_opened ? vacancies_opened.join(", ") : "none",
         vacancies_closed: vacancies_closed ? vacancies_closed.join(", ") : "none",
-        )
+      )
 
       mail(to: user.email)
     end

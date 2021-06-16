@@ -65,7 +65,7 @@ def perform_request(updated_provider_ucas_preferences)
     class: {
       Provider: API::V2::SerializableProvider,
     },
-    )
+  )
 
   jsonapi_data[:data][:attributes] = updated_provider_ucas_preferences
 

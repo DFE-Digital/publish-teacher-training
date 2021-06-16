@@ -186,7 +186,7 @@ describe "Access Request API V2", type: :request do
           "jsonapi" => {
             "version" => "1.0",
           },
-         )
+        )
       end
     end
 

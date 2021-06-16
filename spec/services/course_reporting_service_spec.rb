@@ -135,7 +135,7 @@ describe CourseReportingService do
         expect(open_course_subjects).to receive_message_chain(:group).with(:subject_id).and_return(open_course_subjects_grouped)
         expect(open_course_subjects_grouped).to receive_message_chain(:count).and_return(
           Subject.active.each_with_index.map { |sub, i| x = {}; x[sub.id] = (i + 1) * 3; x }.reduce({}, :merge),
-          )
+        )
 
         expect(closed_courses_scope).to receive_message_chain(:count).and_return(closed_courses_count)
 

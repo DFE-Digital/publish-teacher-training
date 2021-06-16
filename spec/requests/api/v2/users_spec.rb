@@ -174,7 +174,7 @@ describe "/api/v2/users", type: :request do
             :first_name,
             :last_name,
             :accept_terms_date_utc,
-            )
+          )
         end
 
         context "with validation errors" do

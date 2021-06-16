@@ -12,7 +12,7 @@ describe CourseUpdateEmailMailer, type: :mailer do
         original_value: "original",
         updated_value: "updated",
         recipient: user,
-        )
+      )
     end
 
     before do
@@ -119,7 +119,7 @@ describe CourseUpdateEmailMailer, type: :mailer do
             original_value: scenario[:original_value],
             updated_value: scenario[:updated_value],
             recipient: user,
-            )
+          )
         end
 
         before do
@@ -151,7 +151,7 @@ describe CourseUpdateEmailMailer, type: :mailer do
         original_value: previous_name,
         updated_value: "new course",
         recipient: user,
-        )
+      )
     end
 
     before do

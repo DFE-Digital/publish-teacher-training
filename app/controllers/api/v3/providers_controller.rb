@@ -21,7 +21,7 @@ module API
           .includes(:sites, :courses, courses: [:enrichments, :sites, site_statuses: [:site], provider: [:recruitment_cycle], subjects: [:financial_incentive]])
           .find_by!(
             provider_code: code.upcase,
-        )
+          )
 
         render jsonapi: @provider,
                class: CourseSerializersServiceV3.new.execute,

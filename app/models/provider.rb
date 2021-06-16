@@ -199,7 +199,7 @@ class Provider < ApplicationRecord
           GROUP BY b.provider_id
         ) a ON a.provider_id = provider.id
       },
-      ).select("provider.*, COALESCE(a.courses_count, 0) AS included_accredited_courses_count")
+    ).select("provider.*, COALESCE(a.courses_count, 0) AS included_accredited_courses_count")
   end
 
   def courses_count

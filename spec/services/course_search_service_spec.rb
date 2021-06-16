@@ -22,7 +22,7 @@ RSpec.describe CourseSearchService do
           subjects: [:financial_incentive],
           site_statuses: [:site],
           provider: %i[recruitment_cycle ucas_preferences],
-      ).and_return(course_with_includes)
+        ).and_return(course_with_includes)
 
       allow(course_with_includes).to receive(:where).and_return(outer_query_scope)
     end

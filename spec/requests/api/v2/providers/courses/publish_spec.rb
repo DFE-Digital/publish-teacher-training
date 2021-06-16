@@ -220,7 +220,7 @@ describe "Publish API v2", type: :request do
           expect { subject }.to(raise_error(
                                   RuntimeError,
                                   "Site status invalid on course #{provider.provider_code}/#{course.course_code}: Vac status (full_time_vacancies) must be consistent with course study mode part_time",
-               ))
+                                ))
         end
       end
     end

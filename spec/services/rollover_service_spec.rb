@@ -27,13 +27,13 @@ describe RolloverService do
   subject(:next_cycle_provider) do
     next_recruitment_cycle.providers.find_by(
       provider_code: current_cycle_provider.provider_code,
-      )
+    )
   end
 
   let(:new_course) do
     next_cycle_provider.courses.find_by(
       course_code: course.course_code,
-      )
+    )
   end
 
   it "copies the provider" do

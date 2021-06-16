@@ -208,7 +208,7 @@ describe User, type: :model do
           user: subscribed_user,
           course_update: true,
           provider_code: accredited_body.provider_code,
-          )
+        )
       end
 
       let(:non_subscribed_notification) do
@@ -217,7 +217,7 @@ describe User, type: :model do
           user: non_subscribed_user,
           course_update: false,
           provider_code: accredited_body.provider_code,
-          )
+        )
       end
 
       let(:other_provider_notification) do
@@ -226,7 +226,7 @@ describe User, type: :model do
           user: user_subscribed_to_other_provider,
           course_publish: true,
           provider_code: other_accredited_body.provider_code,
-          )
+        )
       end
 
       it "returns users who are subscribed to course update notifications for a given accredited body" do
@@ -241,7 +241,7 @@ describe User, type: :model do
           user: subscribed_user,
           course_publish: true,
           provider_code: accredited_body.provider_code,
-          )
+        )
       end
 
       let(:non_subscribed_notification) do
@@ -250,7 +250,7 @@ describe User, type: :model do
           user: non_subscribed_user,
           course_publish: false,
           provider_code: accredited_body.provider_code,
-          )
+        )
       end
 
       let(:other_provider_notification) do
@@ -259,7 +259,7 @@ describe User, type: :model do
           user: user_subscribed_to_other_provider,
           course_update: true,
           provider_code: other_accredited_body.provider_code,
-          )
+        )
       end
 
       it "includes user who are subscribed to course publish notifications for a given accredited body" do

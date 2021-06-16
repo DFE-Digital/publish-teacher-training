@@ -30,7 +30,7 @@ module NotificationService
           user: user,
           datetime: DateTime.now,
           vacancies_filled: vacancies_filled,
-          ).deliver_later
+        ).deliver_later
       end
     end
 

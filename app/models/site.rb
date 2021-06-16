@@ -42,7 +42,7 @@ class Site < ApplicationRecord
   def needs_geolocation?
     full_address.present? && (
     latitude.nil? || longitude.nil? || address_changed?
-    )
+  )
   end
 
   def add_travel_to_work_area_and_london_borough

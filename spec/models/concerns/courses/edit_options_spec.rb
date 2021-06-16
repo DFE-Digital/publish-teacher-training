@@ -80,7 +80,7 @@ describe Course, type: :model do
           find(:secondary_subject, :science),
           find(:secondary_subject, :social_sciences),
         ],
-        )
+      )
     end
   end
 
@@ -155,7 +155,7 @@ describe Course, type: :model do
          "May #{recruitment_year + 1}",
          "June #{recruitment_year + 1}",
          "July #{recruitment_year + 1}"],
-     )
+      )
     end
   end
 
