@@ -1,7 +1,7 @@
 module WithQualifications
   extend ActiveSupport::Concern
 
-  included do # rubocop: disable Metrics/BlockLength
+  included do
     # The training programme outcome that originated in the UCAS NetUpdate system.
     #
     # See [UCAS Teacher Training Set-up Guide](https://www.ucas.com/file/115581/download?token=mv-G6P53),

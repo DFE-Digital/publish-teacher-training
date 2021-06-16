@@ -1,5 +1,3 @@
-# rubocop:disable Metrics/BlockLength
-
 module Courses
   module EditOptions
     module StartDateConcern
@@ -43,4 +41,3 @@ module Courses
     end
   end
 end
-# rubocop:enable Metrics/BlockLength

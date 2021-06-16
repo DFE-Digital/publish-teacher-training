@@ -1,4 +1,3 @@
-# rubocop:disable Metrics/BlockLength
 Rails.application.routes.draw do
   get :ping, controller: :heartbeat
   get :healthcheck, controller: :heartbeat
@@ -154,4 +153,3 @@ Rails.application.routes.draw do
   get "error_500", to: "error#error_500"
   get "error_nodb", to: "error#error_nodb"
 end
-# rubocop:enable Metrics/BlockLength

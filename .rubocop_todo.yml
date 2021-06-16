@@ -56,16 +56,6 @@ Lint/MissingSuper:
     - "app/components/tab_navigation/view.rb"
     - "lib/mcb/config.rb"
 
-# Offense count: 5
-# Cop supports --auto-correct.
-Lint/RedundantCopDisableDirective:
-  Exclude:
-    - "app/models/concerns/courses/edit_options/start_date_concern.rb"
-    - "app/models/concerns/with_qualifications.rb"
-    - "config/routes.rb"
-    - "db/migrate/20190916155318_clean_up_course_subject_data_post_migration.rb"
-    - "lib/tasks/migrate_swallowing_concurrent_migration_exceptions.rake"
-
 # Offense count: 1
 Lint/SelfAssignment:
   Exclude:
