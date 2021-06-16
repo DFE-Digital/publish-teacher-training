@@ -42,7 +42,7 @@ describe Token::DecodeService do
   end
 
   describe "#call" do
-    before :each do
+    before do
       allow(Time).to receive(:zone)
         .and_return(OpenStruct.new(now: now))
     end

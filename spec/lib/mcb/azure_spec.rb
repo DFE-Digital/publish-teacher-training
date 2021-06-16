@@ -23,7 +23,7 @@ describe MCB::Azure do
 
     subject { MCB::Azure.get_subs }
 
-    before :each do
+    before do
       allow(MCB).to receive(:run_command).and_return(subs_json)
     end
 
@@ -55,7 +55,7 @@ describe MCB::Azure do
 
     subject { MCB::Azure.get_apps }
 
-    before :each do
+    before do
       allow(MCB).to receive(:run_command).and_return(apps_json)
     end
 
@@ -89,7 +89,7 @@ describe MCB::Azure do
       }
     end
 
-    before :each do
+    before do
       allow(MCB).to receive(:run_command).and_return(config_json)
     end
 
@@ -141,7 +141,7 @@ describe MCB::Azure do
 
     subject { MCB::Azure.get_urls(webapp: "some-app", rgroup: "some-rgroup", subscription: "sup") }
 
-    before :each do
+    before do
       allow(MCB).to receive(:run_command).and_return(config_json)
     end
 
@@ -167,7 +167,7 @@ describe MCB::Azure do
       }
     end
 
-    before :each do
+    before do
       allow(ENV).to receive(:[]=)
       allow(MCB::Azure).to(
         receive(:get_apps).and_return([{

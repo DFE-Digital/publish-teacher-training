@@ -58,7 +58,7 @@ RSpec.configure do |config|
   end
 
   # start the transaction strategy as examples are run
-  config.around(:each) do |example|
+  config.around do |example|
     DatabaseCleaner.cleaning do
       example.run
     end
@@ -91,8 +91,8 @@ RSpec.configure do |config|
 
   # Report N+1 queries
   if Bullet.enable?
-    config.before(:each) { Bullet.start_request }
-    config.after(:each)  { Bullet.end_request }
+    config.before { Bullet.start_request }
+    config.after  { Bullet.end_request }
   end
 
   config.before(:each, type: :system) do
