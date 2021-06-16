@@ -44,7 +44,6 @@ describe "Access Request API V2", type: :request do
             headers: { "HTTP_AUTHORIZATION" => credentials }
       end
 
-
       it "should raise an error" do
         expect { unauthorised_user_route }.to raise_error Pundit::NotAuthorizedError
       end

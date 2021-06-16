@@ -79,7 +79,6 @@ RSpec.describe "POST /providers/:provider_code/courses/:course_code" do
       let(:age_range_in_years) { "1_to_15" }
       let(:age_range_in_years_formatted) { "1 to 15" }
 
-
       it "should return an error stating valid age ranges must be 4 years or greater" do
         expect(response).to have_http_status(:unprocessable_entity)
         expect(json_data.count).to eq 1

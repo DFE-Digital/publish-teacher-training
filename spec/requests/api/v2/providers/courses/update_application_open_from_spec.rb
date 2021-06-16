@@ -65,7 +65,6 @@ describe "PATCH /providers/:provider_code/courses/:course_code" do
     end
   end
 
-
   context "for a course in the current cycle" do
     context "with an invalid applications_open_from" do
       let(:updated_applications_open_from) { { applications_open_from: course.applications_open_from + 1.year } }

@@ -12,7 +12,6 @@ describe "mcb providers discard" do
   let(:recruitment_cycle) { find_or_create :recruitment_cycle }
   let(:next_recruitment_cycle) { find_or_create :recruitment_cycle, :next }
 
-
   context "for the current recruitment cycle" do
     before do
       provider

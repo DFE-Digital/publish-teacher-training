@@ -39,7 +39,6 @@ module Token
       payload.with_indifferent_access[:data]
     end
 
-
   private
 
     attr_reader :encoded_token, :secret, :algorithm, :audience, :issuer, :subject

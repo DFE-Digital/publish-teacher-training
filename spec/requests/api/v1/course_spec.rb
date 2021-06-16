@@ -28,7 +28,6 @@ describe "Courses API", type: :request do
     let(:previous_year) { current_year - 1 }
     let(:next_year)     { current_year + 1 }
 
-
     context "without changed_since parameter" do
       let(:age_range_in_years) { "3_to_7" }
 
@@ -211,7 +210,6 @@ describe "Courses API", type: :request do
         end
       end
 
-
       it "includes correct next link when there is an empty set" do
         provided_timestamp = 5.seconds.ago.utc.iso8601
 
@@ -228,7 +226,6 @@ describe "Courses API", type: :request do
 
       it "includes correct next link when there is an empty set" do
         provided_timestamp = 5.seconds.ago.utc.iso8601
-
 
         get "/api/v1/#{next_year}/courses",
             headers: { "HTTP_AUTHORIZATION" => credentials },
@@ -287,7 +284,6 @@ describe "Courses API", type: :request do
                  site_statuses: [create(:site_status, :published)])
           end
         end
-
 
         it "pages properly" do
           get_next_courses "/api/v1/courses",

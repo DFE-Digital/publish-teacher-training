@@ -26,7 +26,6 @@ RSpec.configure do |config|
     metadata[:mcb_cli] = true
   end
 
-
   # Certain methods can change stuff permanently in tests, causing intermittent
   # false positives or false negatives, or other issues. Any spec that tests
   # the mcb CLI should, to be safe, have the 'mcb_cli: true' metadata to ensure

@@ -389,7 +389,6 @@ describe "Providers API", type: :request do
                 headers: { "HTTP_AUTHORIZATION" => credentials },
                 params: { changed_since: 30.minutes.ago.utc.iso8601 }
 
-
             expect(response.headers).to have_key "Link"
             url = url_for(
               recruitment_year: next_year,

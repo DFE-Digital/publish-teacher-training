@@ -21,7 +21,6 @@ describe AllocationCopyDataService do
              number_of_places: 10, confirmed_number_of_places: 10)
   }
 
-
   it "copies over previous allocations to current allocation year" do
     expect(Provider.count).to eql(4)
     expect(Allocation.count).to eql(2)

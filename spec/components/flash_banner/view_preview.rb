@@ -16,7 +16,6 @@ module FlashBanner
 
   private
 
-
     def flash(type)
       flash = ActionDispatch::Flash::FlashHash.new
       flash[type] = "Provider #{type}"

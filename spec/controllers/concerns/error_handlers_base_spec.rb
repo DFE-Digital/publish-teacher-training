@@ -9,7 +9,6 @@ describe ErrorHandlers::Base, type: :controller do
     end
   end
 
-
   before do
     allow(Settings).to receive(:render_json_errors).and_return(render_json_errors)
 

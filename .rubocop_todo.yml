@@ -33,11 +33,6 @@ Layout/EmptyLineAfterGuardClause:
     - "app/controllers/concerns/error_handlers/base.rb"
     - "lib/tasks/allocations.rake"
 
-# Offense count: 41
-# Cop supports --auto-correct.
-Layout/EmptyLines:
-  Enabled: false
-
 # Offense count: 28
 # Cop supports --auto-correct.
 # Configuration parameters: EnforcedStyle, IndentationWidth.

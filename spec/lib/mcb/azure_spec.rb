@@ -218,7 +218,6 @@ describe MCB::Azure do
       end
     end
 
-
     before do
       allow(MCB::Azure).to receive(:get_config).and_return(app_config)
       allow(MCB::Azure).to receive(:configure_database)

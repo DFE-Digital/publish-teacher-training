@@ -12,7 +12,6 @@ option :P, "max-pages", "maximum number of pages to request",
        argument: :required,
        transform: method(:Integer)
 
-
 run do |opts, args, _cmd|
   MCB.init_rails(opts)
 

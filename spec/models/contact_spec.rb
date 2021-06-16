@@ -33,7 +33,6 @@ describe Contact, type: :model do
       expect(provider.reload.changed_at).to be_within(1.second).of Time.now.utc
     end
 
-
     it { should validate_presence_of(:name) }
 
     describe "telephone" do

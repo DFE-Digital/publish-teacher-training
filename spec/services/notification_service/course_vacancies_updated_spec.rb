@@ -174,7 +174,6 @@ module NotificationService
                     .and_return(double(deliver_later: true))
           end
 
-
           service_call
         end
       end

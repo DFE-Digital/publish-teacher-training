@@ -19,7 +19,6 @@ describe "mcb users revoke", :needs_audit_user do
     allow(MCB).to receive(:config).and_return(email: requester.email)
   end
 
-
   describe "one provider" do
     def revoke(id_or_email_or_sign_in_id, provider_code, commands)
       with_stubbed_stdout(stdin: commands) do

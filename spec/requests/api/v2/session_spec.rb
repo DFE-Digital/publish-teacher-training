@@ -132,7 +132,6 @@ describe "/api/v2/sessions", type: :request do
       # pp params[:session]
       #<ActionController::Parameters {"type"=>"invalid", "first_name"=>"update invalid first_name", "last_name"=>"updated invalid last_name"} permitted: false>
 
-
       # concerns are "first_name" & "last_name" and not "type" == "session"
       it "raises an error" do
         expect {

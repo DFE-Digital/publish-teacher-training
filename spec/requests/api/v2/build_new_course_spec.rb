@@ -277,7 +277,6 @@ describe "/api/v2/build_new_course", type: :request do
     end
   end
 
-
   context "with no parameters" do
     let(:params) do
       { course: {} }
@@ -427,7 +426,6 @@ describe "/api/v2/build_new_course", type: :request do
       expected = course_jsonapi
       expected["data"]["attributes"]["name"] = "Primary with mathematics"
       expected["data"]["errors"] = []
-
 
       expect(json_response).to eq expected
     end

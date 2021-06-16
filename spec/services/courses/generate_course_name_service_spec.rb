@@ -151,7 +151,6 @@ describe Courses::GenerateCourseNameService do
         end
       end
 
-
       context "English as a second language -> English" do
         context "With a single language" do
           let(:subjects) do

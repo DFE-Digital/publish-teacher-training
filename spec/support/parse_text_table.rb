@@ -53,7 +53,6 @@ def is_a_row_delimeter?(row)
   row.join("").match?(contains_only_dashes)
 end
 
-
 RSpec::Matchers.define :have_cell_containing do |text|
   match do |table_output|
     cells = get_row_and_column_cells_in_output(table_output)
