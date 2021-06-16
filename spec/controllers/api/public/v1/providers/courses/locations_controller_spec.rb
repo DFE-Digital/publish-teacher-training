@@ -31,7 +31,7 @@ RSpec.describe API::Public::V1::Providers::Courses::LocationsController do
       end
 
       it "returns the correct number of locations" do
-        expect(json_response["data"].size).to eql(2)
+        expect(json_response["data"].size).to be(2)
       end
 
       context "with includes" do

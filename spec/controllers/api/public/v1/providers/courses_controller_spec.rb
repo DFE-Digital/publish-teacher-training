@@ -30,7 +30,7 @@ RSpec.describe API::Public::V1::Providers::CoursesController do
       end
 
       it "returns correct number of courses" do
-        expect(JSON.parse(response.body)["data"].size).to eql(2)
+        expect(JSON.parse(response.body)["data"].size).to be(2)
       end
     end
 
@@ -235,7 +235,7 @@ RSpec.describe API::Public::V1::Providers::CoursesController do
       end
 
       it "returns 404" do
-        expect(response.status).to eql(404)
+        expect(response.status).to be(404)
       end
     end
 
@@ -249,7 +249,7 @@ RSpec.describe API::Public::V1::Providers::CoursesController do
       end
 
       it "returns 404" do
-        expect(response.status).to eql(404)
+        expect(response.status).to be(404)
       end
     end
   end

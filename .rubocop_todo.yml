@@ -123,22 +123,6 @@ RSpec/AnyInstance:
     - "spec/requests/api/v3/courses/index_spec.rb"
     - "spec/support/with_stubbed_stdout.rb"
 
-# Offense count: 20
-# Cop supports --auto-correct.
-RSpec/BeEql:
-  Exclude:
-    - "spec/controllers/api/public/v1/courses_controller_spec.rb"
-    - "spec/controllers/api/public/v1/providers/courses/locations_controller_spec.rb"
-    - "spec/controllers/api/public/v1/providers/courses_controller_spec.rb"
-    - "spec/controllers/api/public/v1/providers/locations_controller_spec.rb"
-    - "spec/controllers/api/public/v1/providers_controller_spec.rb"
-    - "spec/controllers/api/v3/application_controller_spec.rb"
-    - "spec/models/course_spec.rb"
-    - "spec/serializers/api/v2/serializable_allocation_spec.rb"
-    - "spec/services/allocation_copy_data_service_spec.rb"
-    - "spec/services/allocation_importer_service_spec.rb"
-    - "spec/services/support/data_exports/data_export_spec.rb"
-
 # Offense count: 4
 RSpec/BeforeAfterAll:
   Exclude:

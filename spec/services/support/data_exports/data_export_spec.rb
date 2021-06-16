@@ -5,7 +5,7 @@ RSpec.describe Support::DataExports::DataExport do
 
   context "#all" do
     it "returns all export types" do
-      expect(subject.all.count).to eql(1)
+      expect(subject.all.count).to be(1)
       expect(subject.all.first.class).to eql(Support::DataExports::UsersExport)
     end
   end

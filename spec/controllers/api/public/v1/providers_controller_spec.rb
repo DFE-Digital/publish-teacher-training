@@ -42,7 +42,7 @@ RSpec.describe API::Public::V1::ProvidersController do
 
           it "returns correct number of providers for the current cycle" do
             parsed_provider_id = json_response["data"][0]["id"].to_i
-            expect(json_response["data"].size).to eql(1)
+            expect(json_response["data"].size).to be(1)
             expect(parsed_provider_id).to eq(provider.id)
           end
         end

@@ -2177,7 +2177,7 @@ describe Course, type: :model do
   describe "#age_minimum" do
     context "when age_range_in_years set" do
       it "returns lower age_range_in_years bound" do
-        expect(subject.age_minimum).to eql(3)
+        expect(subject.age_minimum).to be(3)
       end
     end
 
@@ -2193,7 +2193,7 @@ describe Course, type: :model do
   describe "#age_maximum" do
     context "when age_range_in_years set" do
       it "returns upper age_range_in_years bound" do
-        expect(subject.age_maximum).to eql(7)
+        expect(subject.age_maximum).to be(7)
       end
     end
 

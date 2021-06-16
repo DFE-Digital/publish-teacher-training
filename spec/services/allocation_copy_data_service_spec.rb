@@ -22,8 +22,8 @@ describe AllocationCopyDataService do
   }
 
   it "copies over previous allocations to current allocation year" do
-    expect(Provider.count).to eql(4)
-    expect(Allocation.count).to eql(2)
+    expect(Provider.count).to be(4)
+    expect(Allocation.count).to be(2)
 
     a1 = Allocation.where(provider_code: provider1a.provider_code).first
     expect(a1.provider.id).to eql(provider1a.id)
@@ -39,8 +39,8 @@ describe AllocationCopyDataService do
     expect(current_cycle.previous.year).to eql("2020")
 
     AllocationCopyDataService.call(allocation_cycle_year: current_cycle.year)
-    expect(Allocation.count).to eql(4)
-    expect(Allocation.where(recruitment_cycle_id: current_cycle.id).count).to eql(2)
+    expect(Allocation.count).to be(4)
+    expect(Allocation.where(recruitment_cycle_id: current_cycle.id).count).to be(2)
 
     b1 = Allocation.where(provider_code: provider1a.provider_code, recruitment_cycle_id: current_cycle.id).first
     expect(b1.provider_id).to eql(provider1b.id)

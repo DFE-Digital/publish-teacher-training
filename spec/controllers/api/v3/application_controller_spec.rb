@@ -26,12 +26,12 @@ RSpec.describe API::V3::ApplicationController do
 
     it "is enabled by default" do
       get :index
-      expect(JSON.parse(response.body)["data"].size).to eql(1)
+      expect(JSON.parse(response.body)["data"].size).to be(1)
     end
 
     it "can not be disabled only with per_page param" do
       get :index, params: { page: { per_page: 100_000 } }
-      expect(JSON.parse(response.body)["data"].size).to eql(1)
+      expect(JSON.parse(response.body)["data"].size).to be(1)
     end
 
     context "when custom max_per_page" do
@@ -43,7 +43,7 @@ RSpec.describe API::V3::ApplicationController do
         end
 
         get :index, params: { page: { per_page: 100_000 } }
-        expect(JSON.parse(response.body)["data"].size).to eql(2)
+        expect(JSON.parse(response.body)["data"].size).to be(2)
       end
     end
   end
