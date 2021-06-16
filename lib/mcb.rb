@@ -114,7 +114,7 @@ module MCB
     end
 
     MCB::Token::EncodeService.call(payload: payload, secret: secret,
-      algorithm: encoding, audience: audience, issuer: issuer, subject: subject)
+                                   algorithm: encoding, audience: audience, issuer: issuer, subject: subject)
   end
 
   def self.each_v1_course(opts)

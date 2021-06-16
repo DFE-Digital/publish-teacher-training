@@ -527,9 +527,9 @@ describe "GET v3 /subjects" do
         },
       },
     ],
-    "jsonapi" => {
-      "version" => "1.0",
-    })
+                                "jsonapi" => {
+                                  "version" => "1.0",
+                                })
   end
 
   context "when specifying particular fields" do
@@ -839,9 +839,9 @@ describe "GET v3 /subjects" do
             },
           },
         ],
-        "jsonapi" => {
-        "version" => "1.0",
-      })
+                                  "jsonapi" => {
+                                  "version" => "1.0",
+                                })
     end
 
     context "when sorting by name" do

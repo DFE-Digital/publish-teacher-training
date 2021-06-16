@@ -110,8 +110,8 @@ describe CourseReportingService do
         expect(open_courses_program_type_scope).to receive_message_chain(:count)
           .and_return(
             { "higher_education_programme" => 1, "school_direct_training_programme" => 2,
-            "school_direct_salaried_training_programme" => 3, "scitt_programme" => 4,
-            "pg_teaching_apprenticeship" => 5 },
+              "school_direct_salaried_training_programme" => 3, "scitt_programme" => 4,
+              "pg_teaching_apprenticeship" => 5 },
           )
 
         expect(open_courses_scope).to receive_message_chain(:group).with(:study_mode).and_return(open_courses_study_mode_scope)

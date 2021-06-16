@@ -19,5 +19,5 @@ class Contact < ApplicationRecord
     fraud: "fraud",
     finance: "finance",
   },
-  _suffix: "contact"
+       _suffix: "contact"
 end

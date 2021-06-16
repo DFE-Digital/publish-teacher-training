@@ -11,8 +11,8 @@ module API
          .where(recruitment_cycle: recruitment_cycle)
 
         render jsonapi: paginate(interrupt_acknowledgements, per_page: 10),
-          meta: { count: interrupt_acknowledgements.count },
-          fields: { interrupt_acknowledgements: %i[type] }
+               meta: { count: interrupt_acknowledgements.count },
+               fields: { interrupt_acknowledgements: %i[type] }
       end
 
       def create

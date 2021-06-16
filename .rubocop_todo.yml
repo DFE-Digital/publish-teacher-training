@@ -15,27 +15,6 @@ Bundler/OrderedGems:
     - "Gemfile"
     - "docs/Gemfile"
 
-# Offense count: 38
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle, IndentationWidth.
-# SupportedStyles: with_first_argument, with_fixed_indentation
-Layout/ArgumentAlignment:
-  Exclude:
-    - "app/controllers/api/public/v1/providers/courses_controller.rb"
-    - "app/controllers/api/public/v1/providers_controller.rb"
-    - "app/controllers/api/v2/interrupt_page_acknowledgements_controller.rb"
-    - "app/controllers/api/v3/courses_controller.rb"
-    - "app/models/contact.rb"
-    - "app/models/course_enrichment.rb"
-    - "lib/mcb.rb"
-    - "spec/lib/mcb_spec.rb"
-    - "spec/requests/api/v2/interrupt_page_acknowlegements_spec.rb"
-    - "spec/requests/api/v3/subject_areas/index_spec.rb"
-    - "spec/requests/api/v3/subjects/index_spec.rb"
-    - "spec/services/course_reporting_service_spec.rb"
-    - "spec/services/token/decode_service_spec.rb"
-    - "spec/services/user_sessions/update_spec.rb"
-
 # Offense count: 1
 # Cop supports --auto-correct.
 # Configuration parameters: EnforcedStyleAlignWith, Severity.
