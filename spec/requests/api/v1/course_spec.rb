@@ -79,50 +79,50 @@ describe "Courses API", type: :request do
             headers: { "HTTP_AUTHORIZATION" => credentials }
         json = JSON.parse(response.body)
         expect(json). to eq([
-                              {
-                                "course_code" => "2HPF",
-                                "start_month" => "#{current_year}-09-01T00:00:00Z",
-                                "start_month_string" => "September",
-                                "name" => Course.first.name,
-                                "study_mode" => "F",
-                                "copy_form_required" => "Y",
-                                "profpost_flag" => "PG",
-                                "program_type" => "SC",
-                                "age_range" => "S",
-                                "modular" => "",
-                                "english" => 3,
-                                "maths" => 3,
-                                "science" => 3,
-                                "recruitment_cycle" => current_year.to_s,
-                                "campus_statuses" => [
-                                  {
-                                    "campus_code" => "-",
-                                    "name" => "Main Site",
-                                    "vac_status" => "F",
-                                    "publish" => "Y",
-                                    "status" => "R",
-                                    "course_open_date" => "#{previous_year}-10-09",
-                                  },
-                                ],
-                                "subjects" => [
-                                  {
-                                    "subject_code" => "17",
-                                    "subject_name" => "German",
-                                    "type" => "ModernLanguagesSubject",
-                                  },
-                                ],
-                                "provider" => {
-                                  "institution_code" => "2LD",
-                                  "institution_name" => "ACME SCITT",
-                                  "institution_type" => "B",
-                                  "accrediting_provider" => "Y",
-                                  "scheme_member" => "Y",
-                                },
-                                "accrediting_provider" => nil,
-                                "created_at" => provider.courses.first.created_at.iso8601,
-                                "changed_at" => provider.courses.first.changed_at.iso8601,
-                              },
-                            ])
+          {
+            "course_code" => "2HPF",
+            "start_month" => "#{current_year}-09-01T00:00:00Z",
+            "start_month_string" => "September",
+            "name" => Course.first.name,
+            "study_mode" => "F",
+            "copy_form_required" => "Y",
+            "profpost_flag" => "PG",
+            "program_type" => "SC",
+            "age_range" => "S",
+            "modular" => "",
+            "english" => 3,
+            "maths" => 3,
+            "science" => 3,
+            "recruitment_cycle" => current_year.to_s,
+            "campus_statuses" => [
+              {
+                "campus_code" => "-",
+                "name" => "Main Site",
+                "vac_status" => "F",
+                "publish" => "Y",
+                "status" => "R",
+                "course_open_date" => "#{previous_year}-10-09",
+              },
+            ],
+            "subjects" => [
+              {
+                "subject_code" => "17",
+                "subject_name" => "German",
+                "type" => "ModernLanguagesSubject",
+              },
+            ],
+            "provider" => {
+              "institution_code" => "2LD",
+              "institution_name" => "ACME SCITT",
+              "institution_type" => "B",
+              "accrediting_provider" => "Y",
+              "scheme_member" => "Y",
+            },
+            "accrediting_provider" => nil,
+            "created_at" => provider.courses.first.created_at.iso8601,
+            "changed_at" => provider.courses.first.changed_at.iso8601,
+          },
+        ])
       end
     end
 

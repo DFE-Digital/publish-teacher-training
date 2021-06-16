@@ -42,8 +42,8 @@ RSpec.describe GovukTechDocs::OpenApi::Renderer do
           },
           "widget": {
             "anyOf": [
-             { "$ref": "#/components/schemas/widgetInteger" },
-             { "$ref": "#/components/schemas/widgetString" },
+              { "$ref": "#/components/schemas/widgetInteger" },
+              { "$ref": "#/components/schemas/widgetString" },
             ],
           },
           "widgetInteger": {

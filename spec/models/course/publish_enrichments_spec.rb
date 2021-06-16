@@ -13,8 +13,8 @@ describe Course, type: :model do
 
     let(:another_course) do
       create(:course, enrichments: [
-               build(:course_enrichment, :published, created_at: 5.days.ago),
-             ])
+        build(:course_enrichment, :published, created_at: 5.days.ago),
+      ])
     end
 
     its(:size) { should eq(3) }
