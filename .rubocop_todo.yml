@@ -129,14 +129,6 @@ RSpec/BeforeAfterAll:
     - "spec/test_setup_specs/test_data_cache_spec.rb"
     - "spec/support/reference_data.rb"
 
-# Offense count: 5
-# Cop supports --auto-correct.
-RSpec/ContextMethod:
-  Exclude:
-    - "spec/services/support/data_exports/base_spec.rb"
-    - "spec/services/support/data_exports/data_export_spec.rb"
-    - "spec/services/support/data_exports/users_export_spec.rb"
-
 # Offense count: 8
 RSpec/EmptyExampleGroup:
   Exclude:
