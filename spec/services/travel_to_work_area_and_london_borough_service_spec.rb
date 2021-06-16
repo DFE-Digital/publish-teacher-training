@@ -77,9 +77,9 @@ describe TravelToWorkAreaAndLondonBoroughService do
         let(:travel_to_work_area) { "Cambridge" }
 
         it "updates the travel to work area and london_borough remains nil" do
-          expect { described_class.call(site: site) }.
-            to change { site.reload.travel_to_work_area }.from(nil).to("Cambridge").
-              and(not_change { site.london_borough })
+          expect { described_class.call(site: site) }
+            .to change { site.reload.travel_to_work_area }.from(nil).to("Cambridge")
+              .and(not_change { site.london_borough })
         end
       end
 
@@ -90,9 +90,9 @@ describe TravelToWorkAreaAndLondonBoroughService do
           let(:london_borough) { "Westminster City Council" }
 
           it "updates the london Borough to Westminster" do
-            expect { described_class.call(site: site) }.
-              to change { site.reload.travel_to_work_area }.from(nil).to("London").
-                and change { site.london_borough }.from(nil).to("Westminster")
+            expect { described_class.call(site: site) }
+              .to change { site.reload.travel_to_work_area }.from(nil).to("London")
+                .and change { site.london_borough }.from(nil).to("Westminster")
           end
         end
 
@@ -100,9 +100,9 @@ describe TravelToWorkAreaAndLondonBoroughService do
           let(:london_borough) { "City of London Corporation" }
 
           it "updates the london Borough to City of London" do
-            expect { described_class.call(site: site) }.
-              to change { site.reload.travel_to_work_area }.from(nil).to("London").
-                and change { site.london_borough }.from(nil).to("City of London")
+            expect { described_class.call(site: site) }
+              .to change { site.reload.travel_to_work_area }.from(nil).to("London")
+                .and change { site.london_borough }.from(nil).to("City of London")
           end
         end
 
@@ -110,9 +110,9 @@ describe TravelToWorkAreaAndLondonBoroughService do
           let(:london_borough) { "Greenwich Borough Council" }
 
           it "updates removes 'London Borough' from the string" do
-            expect { described_class.call(site: site) }.
-              to change { site.reload.travel_to_work_area }.from(nil).to("London").
-                and change { site.london_borough }.from(nil).to("Greenwich")
+            expect { described_class.call(site: site) }
+              .to change { site.reload.travel_to_work_area }.from(nil).to("London")
+                .and change { site.london_borough }.from(nil).to("Greenwich")
           end
         end
       end

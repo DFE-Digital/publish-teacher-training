@@ -1694,8 +1694,8 @@ describe Course, type: :model do
       let(:existing_site_status) { create(:site_status, :running, :published, site: existing_site) }
 
       it "suspends the site when an existing site is removed" do
-        expect { subject.sites = [] }.
-          to change { existing_site_status.reload.status }.from("running").to("suspended")
+        expect { subject.sites = [] }
+          .to change { existing_site_status.reload.status }.from("running").to("suspended")
       end
 
       it "adds a new site status and sets it to running when a new site is added" do
@@ -1717,8 +1717,8 @@ describe Course, type: :model do
       end
 
       it "keeps the site status as new when an existing site is added" do
-        expect { subject.sites = [existing_site] }.
-          to_not change { existing_site_status.reload.status }.from("new_status")
+        expect { subject.sites = [existing_site] }
+          .to_not change { existing_site_status.reload.status }.from("new_status")
       end
 
       it "removes the site status when an existing site is removed" do
@@ -1735,8 +1735,8 @@ describe Course, type: :model do
       end
 
       it "sets the site to running when an existing site is added" do
-        expect { subject.sites = [existing_site] }.
-          to change { existing_site_status.reload.status }.from("suspended").to("running")
+        expect { subject.sites = [existing_site] }
+          .to change { existing_site_status.reload.status }.from("suspended").to("running")
       end
     end
 

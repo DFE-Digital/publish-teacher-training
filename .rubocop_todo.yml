@@ -26,24 +26,6 @@ Layout/CommentIndentation:
     - "spec/models/course_spec.rb"
     - "spec/requests/api/v1/course_spec.rb"
 
-# Offense count: 50
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle.
-# SupportedStyles: leading, trailing
-Layout/DotPosition:
-  Exclude:
-    - "app/services/send_welcome_email_service.rb"
-    - "lib/mcb/editor/courses_editor.rb"
-    - "spec/factory_specs/providers_spec.rb"
-    - "spec/lib/mcb/commands/courses/edit_spec.rb"
-    - "spec/lib/mcb/editor/courses_editor_spec.rb"
-    - "spec/lib/mcb/editor/provider_editor_spec.rb"
-    - "spec/models/course_spec.rb"
-    - "spec/requests/api/v2/providers/suggest_provider_spec.rb"
-    - "spec/requests/api/v3/providers/suggest_provider_spec.rb"
-    - "spec/services/geocoder_service_spec.rb"
-    - "spec/services/travel_to_work_area_and_london_borough_service_spec.rb"
-
 # Offense count: 2
 # Cop supports --auto-correct.
 Layout/EmptyLineAfterGuardClause:

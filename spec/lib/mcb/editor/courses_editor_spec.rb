@@ -63,8 +63,8 @@ describe MCB::Editor::CoursesEditor, :needs_audit_user do
 
     describe "runs the editor" do
       it "updates the course title" do
-        expect { run_editor("edit title", "Mathematics", "exit") }.to change { course.reload.name }.
-          from("Original name").to("Mathematics")
+        expect { run_editor("edit title", "Mathematics", "exit") }.to change { course.reload.name }
+          .from("Original name").to("Mathematics")
       end
 
       it "creates a Course audit with the correct requester when Editing" do
@@ -76,27 +76,27 @@ describe MCB::Editor::CoursesEditor, :needs_audit_user do
 
       describe "(course code)" do
         it "updates the course code when that is valid" do
-          expect { run_editor("edit course code", "CXXZ", "exit") }.
-            to change { course.reload.course_code }.
-            from(course_code).to("CXXZ")
+          expect { run_editor("edit course code", "CXXZ", "exit") }
+            .to change { course.reload.course_code }
+            .from(course_code).to("CXXZ")
         end
 
         it "upper-cases the course code before assigning it" do
-          expect { run_editor("edit course code", "cxxz", "exit") }.
-            to change { course.reload.course_code }.
-            from(course_code).to("CXXZ")
+          expect { run_editor("edit course code", "cxxz", "exit") }
+            .to change { course.reload.course_code }
+            .from(course_code).to("CXXZ")
         end
 
         it "does not apply an empty course code" do
-          expect { run_editor("edit course code", "", "CXXY", "exit") }.
-            to change { course.reload.course_code }.
-            from(course_code).to("CXXY")
+          expect { run_editor("edit course code", "", "CXXY", "exit") }
+            .to change { course.reload.course_code }
+            .from(course_code).to("CXXY")
         end
       end
 
       it "does nothing upon an immediate exit" do
-        expect { run_editor("exit") }.to_not change { course.reload.name }.
-          from("Original name")
+        expect { run_editor("exit") }.to_not change { course.reload.name }
+          .from("Original name")
       end
     end
 
@@ -110,9 +110,9 @@ describe MCB::Editor::CoursesEditor, :needs_audit_user do
       let(:course_codes) { [] }
 
       it "edits all courses on the provider" do
-        expect { run_editor("edit title", "Mathematics", "exit") }.
-          to change { provider.reload.courses.order(:name).pluck(:name) }.
-          from(["Another name", "Original name"]).to(%w[Mathematics Mathematics])
+        expect { run_editor("edit title", "Mathematics", "exit") }
+          .to change { provider.reload.courses.order(:name).pluck(:name) }
+          .from(["Another name", "Original name"]).to(%w[Mathematics Mathematics])
       end
     end
 
@@ -126,9 +126,9 @@ describe MCB::Editor::CoursesEditor, :needs_audit_user do
       }
 
       it "edits the course from the specified provider" do
-        expect { run_editor("edit title", "Mathematics", "exit") }.
-          to change { course.reload.name }.
-          from("Original name").to("Mathematics")
+        expect { run_editor("edit title", "Mathematics", "exit") }
+          .to change { course.reload.name }
+          .from("Original name").to("Mathematics")
       end
     end
 

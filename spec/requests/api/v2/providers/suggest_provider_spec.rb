@@ -21,8 +21,8 @@ describe "GET /suggest" do
       get "/api/v2/providers/suggest?query=#{provider.provider_name}",
           headers: { "HTTP_AUTHORIZATION" => credentials }
 
-      expect(JSON.parse(response.body)["data"]).
-          to match_array([
+      expect(JSON.parse(response.body)["data"])
+          .to match_array([
                              {
                                  "id" => provider.id.to_s,
                                  "type" => "provider",
@@ -38,8 +38,8 @@ describe "GET /suggest" do
       get "/api/v2/providers/suggest?query=#{provider2.provider_name[0..3]}",
           headers: { "HTTP_AUTHORIZATION" => credentials }
 
-      expect(JSON.parse(response.body)["data"]).
-          to match_array([
+      expect(JSON.parse(response.body)["data"])
+          .to match_array([
                              {
                                  "id" => provider.id.to_s,
                                  "type" => "provider",

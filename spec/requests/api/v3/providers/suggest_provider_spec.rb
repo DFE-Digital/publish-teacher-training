@@ -16,8 +16,8 @@ describe "GET /provider-suggestions" do
     it "searches for a particular provider" do
       get "/api/v3/provider-suggestions?query=#{provider.provider_name}"
 
-      expect(JSON.parse(response.body)["data"]).
-          to match_array([
+      expect(JSON.parse(response.body)["data"])
+          .to match_array([
                              {
                                  "id" => provider.id.to_s,
                                  "type" => "providers",
@@ -38,8 +38,8 @@ describe "GET /provider-suggestions" do
     it "searches for a partial provider" do
       get "/api/v3/provider-suggestions?query=#{provider2.provider_name[0..3]}"
 
-      expect(JSON.parse(response.body)["data"]).
-          to match_array([
+      expect(JSON.parse(response.body)["data"])
+          .to match_array([
                              {
                                  "id" => provider.id.to_s,
                                  "type" => "providers",
