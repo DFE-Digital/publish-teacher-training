@@ -204,7 +204,7 @@ module API
         # This validation is done at the controller level instead of the model.
         # This is because sites = [] is something that we can validate against,
         # but we can't actually revert easily from what I can tell because of the
-        # remove_site! side effects that occur when it's called.
+        #  remove_site! side effects that occur when it's called.
         @course.errors.add(:sites, message: "^You must choose at least one location") if site_ids.empty?
         @updated_site_names = @course.sites.map(&:location_name) unless site_ids.empty?
       end

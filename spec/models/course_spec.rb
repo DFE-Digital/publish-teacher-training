@@ -1682,9 +1682,9 @@ describe Course, type: :model do
 
   describe "adding and removing sites on a course" do
     let(:provider) { build(:provider) }
-    #this code will be removed and fixed properly in the next pr
+    # this code will be removed and fixed properly in the next pr
     let(:new_site) { create(:site, provider: provider, code: "A") }
-    #this code will be removed and fixed properly in the next pr
+    # this code will be removed and fixed properly in the next pr
     let(:existing_site) { create(:site, provider: provider, code: "B") }
     let(:new_site_status) { subject.site_statuses.find_by!(site: new_site) }
 

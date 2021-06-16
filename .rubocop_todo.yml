@@ -15,19 +15,6 @@ Bundler/OrderedGems:
     - "Gemfile"
     - "docs/Gemfile"
 
-# Offense count: 8
-# Cop supports --auto-correct.
-# Configuration parameters: AllowDoxygenCommentStyle, AllowGemfileRubyComment.
-Layout/LeadingCommentSpace:
-  Exclude:
-    - "app/controllers/api/v2/courses_controller.rb"
-    - "app/services/course_serializers_service.rb"
-    - "config/initializers/rswag_api.rb"
-    - "node_modules/node-sass/src/libsass/extconf.rb"
-    - "spec/models/course_spec.rb"
-    - "spec/requests/api/v2/session_spec.rb"
-    - "spec/support/parse_text_table.rb"
-
 # Offense count: 1
 # Cop supports --auto-correct.
 Layout/LeadingEmptyLines:

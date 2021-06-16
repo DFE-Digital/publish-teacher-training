@@ -1,4 +1,4 @@
-#Issues to be mindful of when using this function
+# Issues to be mindful of when using this function
 # It is coupled to the border styling
 # All whitespace is discarded
 # Rows containing entirely dashes and/or plusses will be interpretted as the
