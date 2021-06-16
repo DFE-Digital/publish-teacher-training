@@ -19,14 +19,14 @@ describe API::V2::SerializableAccessRequest do
   it { is_expected.to have_type("access_request") }
 
   it {
-    is_expected.to have_jsonapi_attributes(:email_address,
-                                           :first_name,
-                                           :last_name,
-                                           :organisation,
-                                           :request_date_utc,
-                                           :requester_id,
-                                           :status,
-                                           :requester_email)
+    expect(subject).to have_jsonapi_attributes(:email_address,
+                                               :first_name,
+                                               :last_name,
+                                               :organisation,
+                                               :request_date_utc,
+                                               :requester_id,
+                                               :status,
+                                               :requester_email)
   }
 
   context "with a requester" do

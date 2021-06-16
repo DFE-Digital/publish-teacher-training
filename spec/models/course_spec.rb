@@ -46,7 +46,7 @@ describe Course, type: :model do
     it { is_expected.to belong_to(:provider) }
 
     it do
-      is_expected.to belong_to(:accrediting_provider)
+      expect(subject).to belong_to(:accrediting_provider)
                   .with_foreign_key(:accredited_body_code)
                   .with_primary_key(:provider_code)
                   .optional
@@ -296,7 +296,7 @@ describe Course, type: :model do
     it { is_expected.to validate_presence_of(:level).on(:create) }
 
     it {
-      is_expected.to validate_presence_of(:level)
+      expect(subject).to validate_presence_of(:level)
         .on(:publish)
         .with_message("^You need to pick a level")
     }

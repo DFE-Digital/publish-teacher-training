@@ -152,17 +152,6 @@ RSpec/ExpectOutput:
 RSpec/FilePath:
   Enabled: false
 
-# Offense count: 5
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle.
-# SupportedStyles: single_line_only, single_statement_only, disallow
-RSpec/ImplicitSubject:
-  Exclude:
-    - "spec/models/course_spec.rb"
-    - "spec/policies/site_policy_spec.rb"
-    - "spec/serializers/api/v2/serializable_access_request_spec.rb"
-    - "spec/serializers/api/v2/serializable_provider_spec.rb"
-
 # Offense count: 4
 RSpec/IteratedExpectation:
   Exclude:

@@ -41,7 +41,7 @@ describe API::V2::SerializableProvider do
   it { is_expected.to have_attribute(:can_sponsor_skilled_worker_visa).with_value(provider.can_sponsor_skilled_worker_visa) }
 
   it do
-    is_expected.to have_attribute(:accredited_bodies).with_value([
+    expect(subject).to have_attribute(:accredited_bodies).with_value([
       {
         "provider_name" => accrediting_provider.provider_name,
         "provider_code" => accrediting_provider.provider_code,

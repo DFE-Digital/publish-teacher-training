@@ -7,7 +7,7 @@ describe SitePolicy do
 
   permissions :index? do
     it "allows the :index action for any authenticated user" do
-      is_expected.to permit(user)
+      expect(subject).to permit(user)
     end
   end
 
