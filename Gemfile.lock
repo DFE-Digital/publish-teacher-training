@@ -463,19 +463,11 @@ GEM
       unicode-display_width (>= 1.4.0, < 3.0)
     rubocop-ast (1.6.0)
       parser (>= 3.0.1.1)
-    rubocop-govuk (4.0.0)
-      rubocop (~> 1.15.0)
-      rubocop-ast (~> 1.6.0)
-      rubocop-rails (~> 2.10.0)
-      rubocop-rake (= 0.5.1)
-      rubocop-rspec (~> 2.3.0)
     rubocop-rails (2.10.1)
       activesupport (>= 4.2.0)
       rack (>= 1.1)
       rubocop (>= 1.7.0, < 2.0)
-    rubocop-rake (0.5.1)
-      rubocop
-    rubocop-rspec (2.3.0)
+    rubocop-rspec (2.4.0)
       rubocop (~> 1.0)
       rubocop-ast (>= 1.1.0)
     ruby-graphviz (1.2.5)
@@ -652,7 +644,8 @@ DEPENDENCIES
   rspec-rails
   rspec_junit_formatter
   rubocop
-  rubocop-govuk
+  rubocop-rails
+  rubocop-rspec
   schema_to_scaffold
   sentry-rails
   sentry-ruby
