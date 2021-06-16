@@ -15,13 +15,6 @@ Bundler/OrderedGems:
     - "Gemfile"
     - "docs/Gemfile"
 
-# Offense count: 1
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyleAlignWith, Severity.
-# SupportedStylesAlignWith: start_of_line, begin
-Layout/BeginEndAlignment:
-  Exclude:
-    - "app/controllers/api/v2/allocations_controller.rb"
 
 # Offense count: 43
 # Cop supports --auto-correct.

@@ -68,9 +68,9 @@ module API
 
       def accredited_body
         @accredited_body ||= begin
-                               accredited_body_code = params[:provider_code]
-                               recruitment_cycle.providers.find_by!(provider_code: accredited_body_code)
-                             end
+          accredited_body_code = params[:provider_code]
+          recruitment_cycle.providers.find_by!(provider_code: accredited_body_code)
+        end
       end
 
       def allocation_params
