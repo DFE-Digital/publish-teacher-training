@@ -23,12 +23,6 @@ Lint/ConstantDefinitionInBlock:
     - "spec/validators/phone_validator_spec.rb"
     - "spec/validators/reference_number_format_validator_spec.rb"
 
-# Offense count: 1
-# Cop supports --auto-correct.
-Lint/DeprecatedOpenSSLConstant:
-  Exclude:
-    - "config/puma.rb"
-
 # Offense count: 3
 # Configuration parameters: IgnoreLiteralBranches, IgnoreConstantBranches.
 Lint/DuplicateBranch:
