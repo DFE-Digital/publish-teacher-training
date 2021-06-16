@@ -104,7 +104,7 @@ module MCB
   end
 
   def self.generate_apiv2_token(email:, encoding:, secret: nil,
-    audience:, issuer:, subject:)
+                                audience:, issuer:, subject:)
     require "jwt"
 
     payload = { email: email }

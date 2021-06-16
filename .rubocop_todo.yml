@@ -6,19 +6,6 @@
 # Note that changes in the inspected code, or installation of new
 # versions of RuboCop, may require this file to be generated again.
 
-# Offense count: 21
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle, IndentationWidth.
-# SupportedStyles: with_first_parameter, with_fixed_indentation
-Layout/ParameterAlignment:
-  Exclude:
-    - "app/services/subject_creator_service.rb"
-    - "app/services/subjects/creator_service.rb"
-    - "app/services/token/decode_service.rb"
-    - "lib/mcb.rb"
-    - "lib/mcb/render.rb"
-    - "lib/mcb/services/token/encode_service.rb"
-
 # Offense count: 6
 # Cop supports --auto-correct.
 Layout/SpaceAroundKeyword:

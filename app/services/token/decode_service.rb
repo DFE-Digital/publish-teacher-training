@@ -3,11 +3,11 @@ module Token
     include ServicePattern
 
     def initialize(encoded_token:,
-      secret:,
-      algorithm:,
-      audience:,
-      issuer:,
-      subject:)
+                   secret:,
+                   algorithm:,
+                   audience:,
+                   issuer:,
+                   subject:)
 
       @encoded_token = encoded_token
 
