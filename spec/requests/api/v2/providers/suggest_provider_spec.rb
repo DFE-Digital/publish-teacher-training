@@ -73,9 +73,7 @@ describe "GET /suggest" do
   end
 
   it "limits responses to a maximum of 5 items" do
-    11.times do
-      create(:provider, provider_name: "provider X", organisations: [organisation], recruitment_cycle: next_recruitment_cycle)
-    end
+    create_list(:provider, 11, provider_name: "provider X", organisations: [organisation], recruitment_cycle: next_recruitment_cycle)
 
     get "/api/v2/recruitment_cycles/#{next_recruitment_cycle.year}/providers/suggest?query=provider",
         headers: { "HTTP_AUTHORIZATION" => credentials }
