@@ -12,19 +12,19 @@ describe Enrichments::CopyToCourseService do
 
   subject { new_course.enrichments }
 
-  its(:length) { should eq 1 }
+  its(:length) { is_expected.to eq 1 }
 
   describe "the new course" do
     subject { new_course }
 
-    its(:content_status) { should eq :rolled_over }
+    its(:content_status) { is_expected.to eq :rolled_over }
   end
 
   describe "the copied enrichment" do
     subject { new_course.enrichments.first }
 
-    its(:about_course) { should eq published_enrichment.about_course }
-    its(:last_published_timestamp_utc) { should be_nil }
-    it { should be_rolled_over }
+    its(:about_course) { is_expected.to eq published_enrichment.about_course }
+    its(:last_published_timestamp_utc) { is_expected.to be_nil }
+    it { is_expected.to be_rolled_over }
   end
 end

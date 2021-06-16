@@ -5,5 +5,5 @@ RSpec.describe CourseProviderSerializer do
 
   subject { serialize(provider, serializer_class: described_class) }
 
-  it { should include(accrediting_provider: provider.accrediting_provider_before_type_cast) }
+  it { is_expected.to include(accrediting_provider: provider.accrediting_provider_before_type_cast) }
 end

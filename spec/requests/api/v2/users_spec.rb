@@ -15,7 +15,7 @@ describe "/api/v2/users", type: :request do
 
     subject { response }
 
-    it { should have_http_status(:unauthorized) }
+    it { is_expected.to have_http_status(:unauthorized) }
   end
 
   context "when unauthorized" do
@@ -38,7 +38,7 @@ describe "/api/v2/users", type: :request do
 
     subject { response }
 
-    it { should have_http_status(:success) }
+    it { is_expected.to have_http_status(:success) }
 
     it "has a data section with the correct attributes" do
       json_response = JSON.parse(response.body)
@@ -162,7 +162,7 @@ describe "/api/v2/users", type: :request do
 
         subject { response }
 
-        it { should have_http_status(:success) }
+        it { is_expected.to have_http_status(:success) }
 
         it "returns a JSON repsentation of the updated user" do
           subject
@@ -183,7 +183,7 @@ describe "/api/v2/users", type: :request do
           context "with missing attributes" do
             let(:email) { "" }
 
-            it { should have_http_status(:unprocessable_entity) }
+            it { is_expected.to have_http_status(:unprocessable_entity) }
 
             it "checks the email is present" do
               expect(response.body).to include("Invalid email")

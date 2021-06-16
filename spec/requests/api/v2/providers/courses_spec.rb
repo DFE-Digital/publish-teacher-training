@@ -98,7 +98,7 @@ describe "Courses API v2", type: :request do
       include_examples "Unauthenticated, unauthorised, or not accepted T&Cs"
 
       describe "JSON generated for courses" do
-        it { should have_http_status(:success) }
+        it { is_expected.to have_http_status(:success) }
 
         it "has a data section with the correct attributes" do
           json_response = JSON.parse subject.body
@@ -504,7 +504,7 @@ describe "Courses API v2", type: :request do
     context "when course and provider is not related" do
       let(:course) { create(:course) }
 
-      it { should have_http_status(:not_found) }
+      it { is_expected.to have_http_status(:not_found) }
     end
 
     context "when a course is discarded" do
@@ -515,7 +515,7 @@ describe "Courses API v2", type: :request do
         course
       end
 
-      it { should have_http_status(:not_found) }
+      it { is_expected.to have_http_status(:not_found) }
     end
 
     context "when the course is a modern languages secondary course" do
@@ -658,7 +658,7 @@ describe "Courses API v2", type: :request do
             headers: { "HTTP_AUTHORIZATION" => credentials }
       end
 
-      it { should have_http_status(:unauthorized) }
+      it { is_expected.to have_http_status(:unauthorized) }
     end
 
     def perform_request
@@ -673,7 +673,7 @@ describe "Courses API v2", type: :request do
 
       subject { perform_request }
 
-      it { should have_http_status(:success) }
+      it { is_expected.to have_http_status(:success) }
 
       it "has a data section with the correct attributes" do
         perform_request
@@ -990,7 +990,7 @@ describe "Courses API v2", type: :request do
             headers: { "HTTP_AUTHORIZATION" => credentials })
       end
 
-      it { should have_http_status(:not_found) }
+      it { is_expected.to have_http_status(:not_found) }
     end
 
     context "with two recruitment cycles" do
@@ -1067,11 +1067,11 @@ describe "Courses API v2", type: :request do
     context "when course and provider is not related" do
       let(:course) { create(:course) }
 
-      it { should have_http_status(:not_found) }
+      it { is_expected.to have_http_status(:not_found) }
     end
 
     describe "when authorized" do
-      it { should have_http_status(:success) }
+      it { is_expected.to have_http_status(:success) }
     end
   end
 
@@ -1103,7 +1103,7 @@ describe "Courses API v2", type: :request do
     context "when the course has been published" do
       let(:enrichment) { build(:course_enrichment, :published) }
 
-      it { should have_http_status(:success) }
+      it { is_expected.to have_http_status(:success) }
 
       it "has updated the courses site statuses to be suspended and have no vacancies" do
         post_withdraw

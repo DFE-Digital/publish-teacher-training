@@ -26,7 +26,7 @@ describe API::V2::ApplicationController, type: :controller do
     context "with an email in the payload that does not match a user" do
       let(:payload) { { email: Faker::Internet.email } }
 
-      it { should eq "HTTP Token: Access denied.\n" }
+      it { is_expected.to eq "HTTP Token: Access denied.\n" }
 
       it "requests authentication via the http header" do
         subject

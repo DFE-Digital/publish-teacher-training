@@ -4,46 +4,46 @@ describe User, type: :model do
   subject { create(:user, first_name: "Jane", last_name: "Smith", email: "jsmith@scitt.org") }
 
   describe "associations" do
-    it { should have_many(:organisation_users) }
-    it { should have_many(:organisations).through(:organisation_users) }
-    it { should have_many(:providers).through(:organisations) }
-    it { should have_many(:user_notifications) }
+    it { is_expected.to have_many(:organisation_users) }
+    it { is_expected.to have_many(:organisations).through(:organisation_users) }
+    it { is_expected.to have_many(:providers).through(:organisations) }
+    it { is_expected.to have_many(:user_notifications) }
   end
 
   describe "validations" do
     it { is_expected.to validate_presence_of(:email).with_message("must contain @") }
-    it { should_not allow_value("CAPS_IN_EMAIL@ACME.ORG").for(:email) }
-    it { should_not allow_value("email_without_at").for(:email) }
-    it { should_not allow_value(nil).for(:first_name) }
-    it { should_not allow_value(nil).for(:last_name) }
-    it { should_not allow_value("").for(:first_name) }
-    it { should_not allow_value("").for(:last_name) }
-    it { should_not allow_value("  ").for(:first_name) }
-    it { should_not allow_value("  ").for(:last_name) }
+    it { is_expected.to_not allow_value("CAPS_IN_EMAIL@ACME.ORG").for(:email) }
+    it { is_expected.to_not allow_value("email_without_at").for(:email) }
+    it { is_expected.to_not allow_value(nil).for(:first_name) }
+    it { is_expected.to_not allow_value(nil).for(:last_name) }
+    it { is_expected.to_not allow_value("").for(:first_name) }
+    it { is_expected.to_not allow_value("").for(:last_name) }
+    it { is_expected.to_not allow_value("  ").for(:first_name) }
+    it { is_expected.to_not allow_value("  ").for(:last_name) }
 
     context "for an admin-user" do
       subject { create(:user, :admin) }
 
-      it { should_not allow_value("general.public@example.org").for(:email) }
-      it { should_not allow_value("some.provider@devon.gov.uk").for(:email) }
-      it { should allow_value("bobs.your.uncle@digital.education.gov.uk").for(:email) }
-      it { should allow_value("right.malarky@education.gov.uk").for(:email) }
+      it { is_expected.to_not allow_value("general.public@example.org").for(:email) }
+      it { is_expected.to_not allow_value("some.provider@devon.gov.uk").for(:email) }
+      it { is_expected.to allow_value("bobs.your.uncle@digital.education.gov.uk").for(:email) }
+      it { is_expected.to allow_value("right.malarky@education.gov.uk").for(:email) }
     end
   end
 
   describe "auditing" do
-    it { should be_audited }
+    it { is_expected.to be_audited }
   end
 
   describe "#to_s" do
-    its(:to_s) { should eq("Jane Smith <jsmith@scitt.org>") }
+    its(:to_s) { is_expected.to eq("Jane Smith <jsmith@scitt.org>") }
   end
 
   describe "#admin?" do
     context "user is an admin" do
       subject! { create(:user, :admin) }
 
-      its(:admin?) { should be_truthy }
+      its(:admin?) { is_expected.to be_truthy }
 
       it "shows up in User.admins" do
         expect(User.admins).to eq([subject])
@@ -58,7 +58,7 @@ describe User, type: :model do
       subject { create(:user) }
 
       context "when other domain" do
-        its(:admin?) { should be_falsey }
+        its(:admin?) { is_expected.to be_falsey }
 
         it "is a non-admin user" do
           expect(User.non_admins).to eq([subject])
@@ -150,7 +150,7 @@ describe User, type: :model do
     subject { create(:user) }
 
     context "before discarding" do
-      its(:discarded?) { should be false }
+      its(:discarded?) { is_expected.to be false }
 
       it "is in kept" do
         expect(User.kept).to eq([subject])
@@ -166,7 +166,7 @@ describe User, type: :model do
         subject.discard
       end
 
-      its(:discarded?) { should be true }
+      its(:discarded?) { is_expected.to be true }
 
       it "is not in kept" do
         expect(User.kept).to be_empty

@@ -15,7 +15,7 @@ describe "/api/v2/sessions", type: :request do
 
     subject { response }
 
-    it { should have_http_status(:unauthorized) }
+    it { is_expected.to have_http_status(:unauthorized) }
   end
 
   describe "creating a session" do

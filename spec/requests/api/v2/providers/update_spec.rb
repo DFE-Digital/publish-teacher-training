@@ -162,11 +162,11 @@ describe "PATCH /providers/:provider_code" do
       subject { provider.reload }
 
       context "with a course" do
-        its(:courses) { should_not include(course2) }
+        its(:courses) { is_expected.to_not include(course2) }
       end
 
       context "with sites" do
-        its(:sites) { should_not include(site) }
+        its(:sites) { is_expected.to_not include(site) }
       end
     end
   end

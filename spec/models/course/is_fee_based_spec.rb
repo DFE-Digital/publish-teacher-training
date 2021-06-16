@@ -5,13 +5,13 @@ RSpec.describe Course, type: :model do
     context "salary based course" do
       subject { create(:course, :salary_type_based) }
 
-      its(:is_fee_based?) { should be_falsey }
+      its(:is_fee_based?) { is_expected.to be_falsey }
     end
 
     context "fee based course" do
       subject { create(:course, :fee_type_based) }
 
-      its(:is_fee_based?) { should be_truthy }
+      its(:is_fee_based?) { is_expected.to be_truthy }
     end
   end
 end

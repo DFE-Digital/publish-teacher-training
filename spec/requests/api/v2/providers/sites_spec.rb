@@ -53,7 +53,7 @@ describe "Sites API v2", type: :request do
         perform_request
       end
 
-      it { should have_http_status(:unauthorized) }
+      it { is_expected.to have_http_status(:unauthorized) }
     end
 
     context "when unauthorised" do
@@ -72,7 +72,7 @@ describe "Sites API v2", type: :request do
         perform_request
       end
 
-      it { should have_http_status(:success) }
+      it { is_expected.to have_http_status(:success) }
 
       it "has a data section with the correct attributes" do
         json_response = JSON.parse response.body
@@ -128,7 +128,7 @@ describe "Sites API v2", type: :request do
             headers: { "HTTP_AUTHORIZATION" => credentials })
       end
 
-      it { should have_http_status(:not_found) }
+      it { is_expected.to have_http_status(:not_found) }
     end
 
     context "with two recruitment cycles" do
@@ -231,7 +231,7 @@ describe "Sites API v2", type: :request do
         perform_site_update
       end
 
-      it { should have_http_status(:unauthorized) }
+      it { is_expected.to have_http_status(:unauthorized) }
     end
 
     context "when unauthorised" do
@@ -340,7 +340,7 @@ describe "Sites API v2", type: :request do
 
         subject { response }
 
-        it { should have_http_status(:success) }
+        it { is_expected.to have_http_status(:success) }
 
         it "returns a JSON repsentation of the updated site" do
           expect(json_data).to have_id(site1.id.to_s)
@@ -367,7 +367,7 @@ describe "Sites API v2", type: :request do
             let(:postcode)      { "" }
             let(:region_code)   { "" }
 
-            it { should have_http_status(:unprocessable_entity) }
+            it { is_expected.to have_http_status(:unprocessable_entity) }
 
             it "has the right amount of errors" do
               expect(json_data.count).to eq 4
@@ -413,7 +413,7 @@ describe "Sites API v2", type: :request do
               let(:site3) { build :site, location_name: site1.location_name }
               let(:location_name) { site3.location_name }
 
-              it { should have_http_status(:success) }
+              it { is_expected.to have_http_status(:success) }
 
               it "does not have a validation error" do
                 expect(response.body).not_to include("errors")
@@ -458,7 +458,7 @@ describe "Sites API v2", type: :request do
         perform_site_create
       end
 
-      it { should have_http_status(:unauthorized) }
+      it { is_expected.to have_http_status(:unauthorized) }
     end
 
     context "when authenticated and authorised" do
@@ -553,7 +553,7 @@ describe "Sites API v2", type: :request do
           let(:postcode)      { "" }
           let(:region_code)   { "" }
 
-          it { should have_http_status(:unprocessable_entity) }
+          it { is_expected.to have_http_status(:unprocessable_entity) }
 
           it "has the right amount of errors" do
             expect(json_data.count).to eq 4

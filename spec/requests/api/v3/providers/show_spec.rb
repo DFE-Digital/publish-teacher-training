@@ -94,13 +94,13 @@ describe "GET v3/recruitment_cycle/:recruitment_cycle_year/providers/:provider_c
   context "including courses.subjects" do
     let(:request_params) { { include: "courses.subjects" } }
 
-    it { should have_http_status(:success) }
+    it { is_expected.to have_http_status(:success) }
   end
 
   context "including sites" do
     let(:request_params) { { include: "sites" } }
 
-    it { should have_http_status(:success) }
+    it { is_expected.to have_http_status(:success) }
 
     it "has a data section with the correct attributes" do
       perform_request
@@ -179,7 +179,7 @@ describe "GET v3/recruitment_cycle/:recruitment_cycle_year/providers/:provider_c
   end
 
   describe "JSON generated for a provider" do
-    it { should have_http_status(:success) }
+    it { is_expected.to have_http_status(:success) }
 
     it "has a data section with the correct attributes" do
       perform_request
@@ -191,7 +191,7 @@ describe "GET v3/recruitment_cycle/:recruitment_cycle_year/providers/:provider_c
   describe "with lowercase provider code" do
     let(:request_path) { "/api/v3/recruitment_cycles/#{recruitment_cycle.year}/providers/#{provider.provider_code.downcase}" }
 
-    it { should have_http_status(:success) }
+    it { is_expected.to have_http_status(:success) }
 
     it "has a data section with the correct attributes" do
       perform_request

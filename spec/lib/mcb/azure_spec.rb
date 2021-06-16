@@ -32,7 +32,7 @@ describe MCB::Azure do
       expect(MCB).to have_received(:run_command).with("az account list")
     end
 
-    it { should eq JSON.parse(subs_json) }
+    it { is_expected.to eq JSON.parse(subs_json) }
   end
 
   describe ".get_apps" do
@@ -64,7 +64,7 @@ describe MCB::Azure do
       expect(MCB).to have_received(:run_command).with("az webapp list")
     end
 
-    it { should eq JSON.parse(apps_json) }
+    it { is_expected.to eq JSON.parse(apps_json) }
   end
 
   describe ".get_config" do
@@ -154,7 +154,7 @@ describe MCB::Azure do
       )
     end
 
-    it { should eq(["http://no_ssl.local", "https://with_ssl.local"]) }
+    it { is_expected.to eq(["http://no_ssl.local", "https://with_ssl.local"]) }
   end
 
   describe ".configure_database" do

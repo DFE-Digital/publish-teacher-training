@@ -18,25 +18,24 @@ describe API::V2::SerializableCourse do
 
   subject { parsed_json["data"] }
 
-  it { should have_type("courses") }
-  it { should have_attribute(:start_date).with_value(time_now.strftime("%B %Y")) }
-  it { should have_attribute :content_status }
-  it { should have_attribute :ucas_status }
-  it { should have_attribute :funding_type }
-  it { should have_attribute(:applications_open_from).with_value(date_today.to_s) }
-  it { should have_attribute :is_send? }
-  it { should have_attribute(:level).with_value("primary") }
-  it { should have_attribute :english }
-  it { should have_attribute :maths }
-  it { should have_attribute :science }
-  it { should have_attribute :gcse_subjects_required }
-  it { should have_attribute :provider_code }
-  it { should have_attribute :age_range_in_years }
-  it { should have_attribute(:recruitment_cycle_year).with_value(course.recruitment_cycle.year) }
-  it { should have_attribute(:degree_grade).with_value(course.degree_grade) }
-  it { should have_attribute(:additional_degree_subject_requirements).with_value(course.additional_degree_subject_requirements) }
-  it { should have_attribute(:degree_subject_requirements).with_value(course.degree_subject_requirements) }
-
+  it { is_expected.to have_type("courses") }
+  it { is_expected.to have_attribute(:start_date).with_value(time_now.strftime("%B %Y")) }
+  it { is_expected.to have_attribute :content_status }
+  it { is_expected.to have_attribute :ucas_status }
+  it { is_expected.to have_attribute :funding_type }
+  it { is_expected.to have_attribute(:applications_open_from).with_value(date_today.to_s) }
+  it { is_expected.to have_attribute :is_send? }
+  it { is_expected.to have_attribute(:level).with_value("primary") }
+  it { is_expected.to have_attribute :english }
+  it { is_expected.to have_attribute :maths }
+  it { is_expected.to have_attribute :science }
+  it { is_expected.to have_attribute :gcse_subjects_required }
+  it { is_expected.to have_attribute :provider_code }
+  it { is_expected.to have_attribute :age_range_in_years }
+  it { is_expected.to have_attribute(:recruitment_cycle_year).with_value(course.recruitment_cycle.year) }
+  it { is_expected.to have_attribute(:degree_grade).with_value(course.degree_grade) }
+  it { is_expected.to have_attribute(:additional_degree_subject_requirements).with_value(course.additional_degree_subject_requirements) }
+  it { is_expected.to have_attribute(:degree_subject_requirements).with_value(course.degree_subject_requirements) }
 
   context "with a provider" do
     let(:provider) { course.provider }
@@ -53,7 +52,7 @@ describe API::V2::SerializableCourse do
       ).to_json
     end
 
-    it { should have_relationship(:provider) }
+    it { is_expected.to have_relationship(:provider) }
 
     it "includes the provider" do
       expect(parsed_json["included"])
@@ -79,7 +78,7 @@ describe API::V2::SerializableCourse do
       ).to_json
     end
 
-    it { should have_relationship(:accrediting_provider) }
+    it { is_expected.to have_relationship(:accrediting_provider) }
   end
 
   context "with an accrediting_provider" do
@@ -98,7 +97,7 @@ describe API::V2::SerializableCourse do
       ).to_json
     end
 
-    it { should have_relationship(:accrediting_provider) }
+    it { is_expected.to have_relationship(:accrediting_provider) }
   end
 
   context "with a site_status" do
@@ -117,7 +116,7 @@ describe API::V2::SerializableCourse do
       ).to_json
     end
 
-    it { should have_relationship(:site_statuses) }
+    it { is_expected.to have_relationship(:site_statuses) }
   end
 
   context "with a site" do
@@ -136,7 +135,7 @@ describe API::V2::SerializableCourse do
       ).to_json
     end
 
-    it { should have_relationship(:sites) }
+    it { is_expected.to have_relationship(:sites) }
   end
 
   context "funding_type" do
@@ -222,6 +221,6 @@ describe API::V2::SerializableCourse do
 
     subject { parsed_json["data"] }
 
-    it { should have_attribute(:start_date).with_value(nil) }
+    it { is_expected.to have_attribute(:start_date).with_value(nil) }
   end
 end

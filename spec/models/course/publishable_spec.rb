@@ -8,7 +8,7 @@ describe Course, type: :model do
 
     subject { course }
 
-    its(:publishable?) { should be_falsey }
+    its(:publishable?) { is_expected.to be_falsey }
 
     context "with enrichment" do
       let(:enrichment) { build(:course_enrichment, :subsequent_draft, created_at: 1.day.ago) }
@@ -17,7 +17,7 @@ describe Course, type: :model do
         create(:course, subjects: [primary_with_mathematics], enrichments: [enrichment], site_statuses: [site_status])
       }
 
-      its(:publishable?) { should be_truthy }
+      its(:publishable?) { is_expected.to be_truthy }
     end
 
     context "with no enrichment" do
@@ -25,7 +25,7 @@ describe Course, type: :model do
         create(:course, site_statuses: [site_status])
       }
 
-      its(:publishable?) { should be_falsey }
+      its(:publishable?) { is_expected.to be_falsey }
 
       describe "course errors" do
         subject do
@@ -33,7 +33,7 @@ describe Course, type: :model do
           course.errors
         end
 
-        it { should_not be_empty }
+        it { is_expected.to_not be_empty }
       end
     end
 
@@ -43,7 +43,7 @@ describe Course, type: :model do
         create(:course, site_statuses: [], enrichments: [enrichment])
       }
 
-      its(:publishable?) { should be_falsey }
+      its(:publishable?) { is_expected.to be_falsey }
 
       describe "course errors" do
         subject do
@@ -51,7 +51,7 @@ describe Course, type: :model do
           course.errors
         end
 
-        it { should_not be_empty }
+        it { is_expected.to_not be_empty }
       end
     end
   end

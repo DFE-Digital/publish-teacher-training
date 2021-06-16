@@ -21,13 +21,13 @@ describe RecruitmentCyclePolicy do
   permissions :index? do
     let(:user) { create(:user) }
 
-    it { should permit(user, RecruitmentCycle) }
+    it { is_expected.to permit(user, RecruitmentCycle) }
   end
 
   permissions :show? do
     let(:user) { create(:user) }
 
-    it { should permit(user, current_recruitment_cycle) }
-    it { should permit(user, next_recruitment_cycle) }
+    it { is_expected.to permit(user, current_recruitment_cycle) }
+    it { is_expected.to permit(user, next_recruitment_cycle) }
   end
 end

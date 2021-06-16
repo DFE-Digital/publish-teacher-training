@@ -45,7 +45,7 @@ describe "Publish API v2", type: :request do
     context "when course and provider is not related" do
       let(:course) { create(:course) }
 
-      it { should have_http_status(:not_found) }
+      it { is_expected.to have_http_status(:not_found) }
     end
 
     context "an unpublished course with a draft enrichment" do
@@ -129,7 +129,7 @@ describe "Publish API v2", type: :request do
       context "no enrichments, sites and subjects" do
         let(:course) { create(:course, provider: provider, enrichments: [], site_statuses: []) }
 
-        it { should have_http_status(:unprocessable_entity) }
+        it { is_expected.to have_http_status(:unprocessable_entity) }
 
         it "has validation errors" do
           expect(json_data.map { |error| error["detail"] }).to match_array([
@@ -154,7 +154,7 @@ describe "Publish API v2", type: :request do
         context "invalid enrichment with invalid content lack_presence fields" do
           let(:invalid_enrichment) { create(:course_enrichment, :without_content) }
 
-          it { should have_http_status(:unprocessable_entity) }
+          it { is_expected.to have_http_status(:unprocessable_entity) }
 
           it "has validation error details" do
             expect(json_data.map { |error| error["detail"] }).to match_array([
@@ -189,7 +189,7 @@ describe "Publish API v2", type: :request do
         context "invalid enrichment with invalid content lack_presence fields" do
           let(:invalid_enrichment) { create(:course_enrichment, :without_content) }
 
-          it { should have_http_status(:unprocessable_entity) }
+          it { is_expected.to have_http_status(:unprocessable_entity) }
 
           it "has validation errors" do
             expect(json_data.map { |error| error["detail"] }).to match_array([

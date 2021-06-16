@@ -553,7 +553,7 @@ describe "PATCH /providers/:provider_code/courses/:course_code" do
           course.reload
         end
 
-        its(:content_status) { should eq :published_with_unpublished_changes }
+        its(:content_status) { is_expected.to eq :published_with_unpublished_changes }
 
         it "set #{attribute_key}" do
           expect(subject.enrichments.draft.first[attribute_key]).to eq(attribute_value)

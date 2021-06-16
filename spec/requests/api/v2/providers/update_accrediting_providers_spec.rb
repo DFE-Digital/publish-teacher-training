@@ -95,7 +95,7 @@ describe "PATCH /providers/:provider_code" do
         response
       end
 
-      it { should have_http_status(:unprocessable_entity) }
+      it { is_expected.to have_http_status(:unprocessable_entity) }
 
       it "has validation error details" do
         expect(json_data.count).to eq 1
@@ -155,7 +155,7 @@ describe "PATCH /providers/:provider_code" do
         response
       end
 
-      it { should have_http_status(:unprocessable_entity) }
+      it { is_expected.to have_http_status(:unprocessable_entity) }
 
       it "has validation error details" do
         expect(json_data.count).to eq 1

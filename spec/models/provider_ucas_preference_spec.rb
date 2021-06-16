@@ -1,7 +1,7 @@
 require "rails_helper"
 
 describe ProviderUCASPreference, type: :model do
-  it { should belong_to(:provider) }
+  it { is_expected.to belong_to(:provider) }
 
   describe "type_of_gt12" do
     it "is an enum" do

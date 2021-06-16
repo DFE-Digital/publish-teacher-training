@@ -18,7 +18,7 @@ describe ProviderPolicy do
   subject { described_class }
 
   permissions :index?, :suggest? do
-    it { should permit user }
+    it { is_expected.to permit user }
   end
 
   permissions :create? do
@@ -26,9 +26,9 @@ describe ProviderPolicy do
     let(:provider) { build(:provider) }
     let!(:organisation) { build(:organisation, providers: [provider], users: [user]) }
 
-    it { should_not permit(user, provider) }
-    it { should_not permit(user_outside_org, provider) }
-    it { should permit(admin, provider) }
+    it { is_expected.to_not permit(user, provider) }
+    it { is_expected.to_not permit(user_outside_org, provider) }
+    it { is_expected.to permit(admin, provider) }
   end
 
   permissions :can_show_training_provider? do
@@ -39,9 +39,9 @@ describe ProviderPolicy do
     let(:training_provider) { course.provider }
     let(:course) { create(:course, :with_accrediting_provider) }
 
-    it { should permit(admin, training_provider) }
-    it { should permit(allowed_user, training_provider) }
-    it { should_not permit(not_allowed_user, training_provider) }
+    it { is_expected.to permit(admin, training_provider) }
+    it { is_expected.to permit(allowed_user, training_provider) }
+    it { is_expected.to_not permit(not_allowed_user, training_provider) }
   end
 
   describe "#permitted_provider_attributes" do

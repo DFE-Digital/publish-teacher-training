@@ -8,7 +8,7 @@ RSpec.describe Allocation do
     end
 
     describe "auditing" do
-      it { should be_audited.associated_with(:provider) }
+      it { is_expected.to be_audited.associated_with(:provider) }
     end
 
     it "requires accredited_body" do

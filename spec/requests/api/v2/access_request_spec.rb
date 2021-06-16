@@ -33,7 +33,7 @@ describe "Access Request API V2", type: :request do
 
       let(:payload) { { email: "foo@bar" } }
 
-      it { should have_http_status(:unauthorized) }
+      it { is_expected.to have_http_status(:unauthorized) }
     end
 
     context "when unauthorized" do
@@ -111,7 +111,7 @@ describe "Access Request API V2", type: :request do
 
       let(:payload) { { email: "foo@bar" } }
 
-      it { should have_http_status(:unauthorized) }
+      it { is_expected.to have_http_status(:unauthorized) }
     end
 
     context "when unauthorized" do
@@ -200,7 +200,7 @@ describe "Access Request API V2", type: :request do
         access_requests_show_route
       end
 
-      it { should have_http_status(:not_found) }
+      it { is_expected.to have_http_status(:not_found) }
     end
   end
 
@@ -217,7 +217,7 @@ describe "Access Request API V2", type: :request do
 
       let(:payload) { { email: "foo@bar" } }
 
-      it { should have_http_status(:unauthorized) }
+      it { is_expected.to have_http_status(:unauthorized) }
     end
 
     context "when unauthorized" do
@@ -300,7 +300,7 @@ describe "Access Request API V2", type: :request do
 
       let(:payload) { { email: "foo@bar" } }
 
-      it { should have_http_status(:unauthorized) }
+      it { is_expected.to have_http_status(:unauthorized) }
     end
 
     context "authorises non-admin users" do
@@ -311,7 +311,7 @@ describe "Access Request API V2", type: :request do
         do_post
       end
 
-      it { should have_http_status(:ok) }
+      it { is_expected.to have_http_status(:ok) }
     end
 
     context "when authorised" do
@@ -335,11 +335,11 @@ describe "Access Request API V2", type: :request do
         describe "JSON returns the correct attributes" do
           subject { JSON.parse(response.body)["data"]["attributes"] }
 
-          its(%w[email_address]) { should eq("bob@example.org") }
-          its(%w[first_name]) { should eq("bob") }
-          its(%w[last_name]) { should eq("monkhouse") }
-          its(%w[organisation]) { should eq("bbc") }
-          its(%w[reason]) { should eq("star qualities") }
+          its(%w[email_address]) { is_expected.to eq("bob@example.org") }
+          its(%w[first_name]) { is_expected.to eq("bob") }
+          its(%w[last_name]) { is_expected.to eq("monkhouse") }
+          its(%w[organisation]) { is_expected.to eq("bbc") }
+          its(%w[reason]) { is_expected.to eq("star qualities") }
         end
 
         context "with a user that does not already exist" do
@@ -377,7 +377,7 @@ describe "Access Request API V2", type: :request do
 
         let(:json_data) { JSON.parse(response.body)["errors"] }
 
-        it { should have_http_status(:unprocessable_entity) }
+        it { is_expected.to have_http_status(:unprocessable_entity) }
 
         it "has validation error details" do
           expect(json_data.count).to eq 5

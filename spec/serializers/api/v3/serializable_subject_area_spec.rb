@@ -10,7 +10,7 @@ describe API::V3::SerializableSubjectArea do
 
   subject { JSON.parse(resource.as_jsonapi.to_json) }
 
-  it { should have_type "subject_areas" }
-  it { should have_attribute(:typename).with_value(subject_area.typename) }
-  it { should have_attribute(:name).with_value(subject_area.name) }
+  it { is_expected.to have_type "subject_areas" }
+  it { is_expected.to have_attribute(:typename).with_value(subject_area.typename) }
+  it { is_expected.to have_attribute(:name).with_value(subject_area.name) }
 end

@@ -4,9 +4,9 @@ describe Organisation, type: :model do
   subject { create(:organisation) }
 
   describe "associations" do
-    it { should have_many(:organisation_users) }
-    it { should have_many(:users).through(:organisation_users) }
-    it { should have_and_belong_to_many(:providers) }
+    it { is_expected.to have_many(:organisation_users) }
+    it { is_expected.to have_many(:users).through(:organisation_users) }
+    it { is_expected.to have_and_belong_to_many(:providers) }
   end
 
   describe "validations" do
@@ -15,25 +15,25 @@ describe Organisation, type: :model do
     context "when name is empty string" do
       let(:name) { "  " }
 
-      it { should_not be_valid }
+      it { is_expected.to_not be_valid }
     end
 
     context "when name is nil" do
       let(:name) { nil }
 
-      it { should_not be_valid }
+      it { is_expected.to_not be_valid }
     end
 
     context "when name is a school" do
       let(:name) { "High School" }
 
-      it { should be_valid }
+      it { is_expected.to be_valid }
     end
   end
 
   describe "auditing" do
-    it { should be_audited }
-    it { should have_associated_audits }
+    it { is_expected.to be_audited }
+    it { is_expected.to have_associated_audits }
 
     it "a destroyed user" do
       user = create(:user)

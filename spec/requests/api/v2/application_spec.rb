@@ -14,7 +14,7 @@ describe "API v2", type: :request do
         get "/api/v2/providers/foo", headers: { "HTTP_AUTHORIZATION" => credentials }
       end
 
-      it { should have_http_status(:not_found) }
+      it { is_expected.to have_http_status(:not_found) }
 
       it "has a data section with the correct attributes" do
         json_response = JSON.parse(response.body)

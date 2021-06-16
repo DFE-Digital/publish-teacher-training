@@ -13,19 +13,19 @@ describe Provider, type: :model do
 
   subject { provider }
 
-  its(:to_s) { should eq("ACME SCITT (A01) [#{provider.recruitment_cycle}]") }
+  its(:to_s) { is_expected.to eq("ACME SCITT (A01) [#{provider.recruitment_cycle}]") }
 
   describe "auditing" do
-    it { should be_audited.except(:changed_at) }
-    it { should have_associated_audits }
+    it { is_expected.to be_audited.except(:changed_at) }
+    it { is_expected.to have_associated_audits }
   end
 
   describe "associations" do
-    it { should have_many(:sites) }
-    it { should have_many(:users).through(:organisations) }
-    it { should have_one(:ucas_preferences).class_name("ProviderUCASPreference") }
-    it { should have_many(:contacts) }
-    it { should have_many(:user_notifications) }
+    it { is_expected.to have_many(:sites) }
+    it { is_expected.to have_many(:users).through(:organisations) }
+    it { is_expected.to have_one(:ucas_preferences).class_name("ProviderUCASPreference") }
+    it { is_expected.to have_many(:contacts) }
+    it { is_expected.to have_many(:user_notifications) }
   end
 
   describe "urn validations" do
@@ -123,7 +123,7 @@ describe Provider, type: :model do
 
       subject { Provider.changed_since(10.minutes.ago) }
 
-      it { should include provider }
+      it { is_expected.to include provider }
     end
 
     context "with a provider that has been changed less than a second after the given timestamp" do
@@ -132,7 +132,7 @@ describe Provider, type: :model do
 
       subject { Provider.changed_since(timestamp) }
 
-      it { should include provider }
+      it { is_expected.to include provider }
     end
 
     context "with a provider that has been changed exactly at the given timestamp" do
@@ -141,7 +141,7 @@ describe Provider, type: :model do
 
       subject { Provider.changed_since(publish_time) }
 
-      it { should_not include provider }
+      it { is_expected.to_not include provider }
     end
 
     context "with a provider that has been changed before the given timestamp" do
@@ -149,7 +149,7 @@ describe Provider, type: :model do
 
       subject { Provider.changed_since(10.minutes.ago) }
 
-      it { should_not include provider }
+      it { is_expected.to_not include provider }
     end
   end
 
@@ -206,7 +206,7 @@ describe Provider, type: :model do
     end
   end
 
-  its(:recruitment_cycle) { should eq find(:recruitment_cycle) }
+  its(:recruitment_cycle) { is_expected.to eq find(:recruitment_cycle) }
 
   describe "#unassigned_site_codes" do
     subject { create(:provider) }
@@ -217,14 +217,14 @@ describe Provider, type: :model do
 
     let(:expected_unassigned_codes) { ("E".."Z").to_a + %w[0] + ("4".."9").to_a }
 
-    its(:unassigned_site_codes) { should eq(expected_unassigned_codes) }
+    its(:unassigned_site_codes) { is_expected.to eq(expected_unassigned_codes) }
   end
 
   describe "#can_add_more_sites?" do
     context "when provider has less sites than max allowed" do
       subject { create(:provider) }
 
-      its(:can_add_more_sites?) { should be_truthy }
+      its(:can_add_more_sites?) { is_expected.to be_truthy }
     end
 
     context "when provider has the max sites allowed" do
@@ -235,7 +235,7 @@ describe Provider, type: :model do
 
       subject { create(:provider, sites: sites) }
 
-      its(:can_add_more_sites?) { should be_falsey }
+      its(:can_add_more_sites?) { is_expected.to be_falsey }
     end
   end
 
@@ -372,7 +372,7 @@ describe Provider, type: :model do
     subject { create(:provider) }
 
     context "before discarding" do
-      its(:discarded?) { should be false }
+      its(:discarded?) { is_expected.to be false }
 
       it "is in kept" do
         provider
@@ -389,7 +389,7 @@ describe Provider, type: :model do
         subject.discard
       end
 
-      its(:discarded?) { should be true }
+      its(:discarded?) { is_expected.to be true }
 
       it "is not in kept" do
         expect(described_class.kept.size).to eq(0)
@@ -472,9 +472,9 @@ describe Provider, type: :model do
              site_statuses: [build(:site_status, :discontinued)]
     end
 
-    it { should include findable_course }
-    it { should include discontinued_course }
-    it { should_not include discarded_course }
+    it { is_expected.to include findable_course }
+    it { is_expected.to include discontinued_course }
+    it { is_expected.to_not include discarded_course }
 
     describe "#current_accredited_courses" do
       subject { provider.current_accredited_courses }
@@ -491,7 +491,7 @@ describe Provider, type: :model do
                site_statuses: [build(:site_status, :discontinued)]
       end
 
-      it { should_not include last_years_course }
+      it { is_expected.to_not include last_years_course }
     end
   end
 
@@ -625,19 +625,19 @@ describe Provider, type: :model do
       context "latitude is nil" do
         let(:provider) { build_stubbed(:provider, latitude: nil) }
 
-        it { should be(true) }
+        it { is_expected.to be(true) }
       end
 
       context "longitude is nil" do
         let(:provider) { build_stubbed(:provider, longitude: nil) }
 
-        it { should be(true) }
+        it { is_expected.to be(true) }
       end
 
       context "latitude and longitude is not nil" do
         let(:provider) { build_stubbed(:provider, latitude: 1.456789, longitude: 1.456789) }
 
-        it { should be(false) }
+        it { is_expected.to be(false) }
       end
 
       context "address" do
@@ -658,7 +658,7 @@ describe Provider, type: :model do
             provider.update(address1: "Long Lane")
           end
 
-          it { should be(false) }
+          it { is_expected.to be(false) }
         end
 
         context "has changed" do
@@ -666,7 +666,7 @@ describe Provider, type: :model do
             provider.update(address1: "New address 1")
           end
 
-          it { should be(true) }
+          it { is_expected.to be(true) }
         end
       end
     end

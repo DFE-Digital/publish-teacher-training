@@ -6,7 +6,7 @@ describe Site, type: :model do
   subject { create(:site) }
 
   describe "auditing" do
-    it { should be_audited.associated_with(:provider) }
+    it { is_expected.to be_audited.associated_with(:provider) }
   end
 
   it { is_expected.to validate_presence_of(:location_name) }
@@ -36,7 +36,7 @@ describe Site, type: :model do
   end
 
   describe "associations" do
-    it { should belong_to(:provider) }
+    it { is_expected.to belong_to(:provider) }
   end
 
   describe "#touch_provider" do
@@ -75,12 +75,12 @@ describe Site, type: :model do
     end
   end
 
-  its(:recruitment_cycle) { should eq find(:recruitment_cycle) }
+  its(:recruitment_cycle) { is_expected.to eq find(:recruitment_cycle) }
 
   describe "description" do
     subject { build(:site, location_name: "Foo", code: "1") }
 
-    its(:to_s) { should eq "Foo (code: 1)" }
+    its(:to_s) { is_expected.to eq "Foo (code: 1)" }
   end
 
   describe "geolocation" do
@@ -166,19 +166,19 @@ describe Site, type: :model do
       context "latitude is nil" do
         let(:site) { build_stubbed(:site, latitude: nil) }
 
-        it { should be(true) }
+        it { is_expected.to be(true) }
       end
 
       context "longitude is nil" do
         let(:site) { build_stubbed(:site, longitude: nil) }
 
-        it { should be(true) }
+        it { is_expected.to be(true) }
       end
 
       context "latitude and longitude is not nil" do
         let(:site) { build_stubbed(:site, latitude: 1.456789, longitude: 1.456789) }
 
-        it { should be(false) }
+        it { is_expected.to be(false) }
       end
 
       context "address" do
@@ -199,7 +199,7 @@ describe Site, type: :model do
             site.update(address1: "Long Lane")
           end
 
-          it { should be(false) }
+          it { is_expected.to be(false) }
         end
 
         context "has changed" do
@@ -207,7 +207,7 @@ describe Site, type: :model do
             site.update(address1: "New address 1")
           end
 
-          it { should be(true) }
+          it { is_expected.to be(true) }
         end
       end
     end

@@ -163,11 +163,11 @@ describe "mcb command" do
 
     subject { MCB.system_api_opts(opts) }
 
-    it { should include url: "https://webs.local" }
-    it { should include webapp: "weebapp" }
-    it { should include rgroup: "rezgrp" }
-    it { should include subscription: "sub6" }
-    it { should include token: "ubl" }
+    it { is_expected.to include url: "https://webs.local" }
+    it { is_expected.to include webapp: "weebapp" }
+    it { is_expected.to include rgroup: "rezgrp" }
+    it { is_expected.to include subscription: "sub6" }
+    it { is_expected.to include token: "ubl" }
   end
 
   describe ".apiv1_opts" do
@@ -179,11 +179,11 @@ describe "mcb command" do
 
     subject { MCB.apiv1_opts(opts) }
 
-    it { should include url: "https://webs.local" }
-    it { should include webapp: "weebapp" }
-    it { should include rgroup: "rezgrp" }
-    it { should include subscription: "sub6" }
-    it { should include token: "jrr" }
+    it { is_expected.to include url: "https://webs.local" }
+    it { is_expected.to include webapp: "weebapp" }
+    it { is_expected.to include rgroup: "rezgrp" }
+    it { is_expected.to include subscription: "sub6" }
+    it { is_expected.to include token: "jrr" }
   end
 
   describe ".service_root_url" do

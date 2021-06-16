@@ -22,7 +22,7 @@ describe "PATCH /api/v2/users/generate_and_send_magic_link", type: :request do
 
     subject { response }
 
-    xit { should have_http_status(:ok) }
+    xit { is_expected.to have_http_status(:ok) }
 
     xit "should send an email to the user saying they don't have an account"
   end

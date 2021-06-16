@@ -57,7 +57,7 @@ describe "GET v3/recruitment_cycle/:recruitment_cycle_year/providers/:provider_c
 
         subject { perform_request }
 
-        it { should have_http_status(:success) }
+        it { is_expected.to have_http_status(:success) }
 
         it "has a data section with the correct attributes" do
           perform_request
@@ -138,7 +138,7 @@ describe "GET v3/recruitment_cycle/:recruitment_cycle_year/providers/:provider_c
         get("/api/v3/recruitment_cycles/#{current_year.year}/providers/non-existent-provider/courses")
       end
 
-      it { should have_http_status(:not_found) }
+      it { is_expected.to have_http_status(:not_found) }
     end
 
     context "when there is more than one provider" do

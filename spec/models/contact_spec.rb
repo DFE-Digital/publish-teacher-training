@@ -1,7 +1,7 @@
 require "rails_helper"
 
 describe Contact, type: :model do
-  it { should belong_to(:provider) }
+  it { is_expected.to belong_to(:provider) }
 
   describe "type" do
     it "is an enum" do
@@ -33,7 +33,7 @@ describe Contact, type: :model do
       expect(provider.reload.changed_at).to be_within(1.second).of Time.now.utc
     end
 
-    it { should validate_presence_of(:name) }
+    it { is_expected.to validate_presence_of(:name) }
 
     describe "telephone" do
       it "validates telephone is present" do

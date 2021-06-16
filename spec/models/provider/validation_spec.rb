@@ -68,8 +68,8 @@ describe Provider, type: :model do
       context "setting field to nil" do
         subject { provider }
 
-        it { should validate_presence_of(:train_with_us).on(:update) }
-        it { should validate_presence_of(:train_with_disability).on(:update) }
+        it { is_expected.to validate_presence_of(:train_with_us).on(:update) }
+        it { is_expected.to validate_presence_of(:train_with_disability).on(:update) }
       end
     end
 
@@ -80,13 +80,13 @@ describe Provider, type: :model do
       subject { build :provider, train_with_us: train_with_us }
 
       context "word count within limit" do
-        it { should be_valid }
+        it { is_expected.to be_valid }
       end
 
       context "word count exceed limit" do
         let(:word_count) { 250 + 1 }
 
-        it { should_not be_valid }
+        it { is_expected.to_not be_valid }
       end
     end
 
@@ -97,13 +97,13 @@ describe Provider, type: :model do
       subject { build :provider, train_with_disability: train_with_disability }
 
       context "word count within limit" do
-        it { should be_valid }
+        it { is_expected.to be_valid }
       end
 
       context "word count exceed limit" do
         let(:word_count) { 250 + 1 }
 
-        it { should_not be_valid }
+        it { is_expected.to_not be_valid }
       end
     end
 
@@ -133,7 +133,7 @@ describe Provider, type: :model do
         }
 
         context "word count within limit" do
-          it { should be_valid }
+          it { is_expected.to be_valid }
         end
 
         context "word count exceed limit" do
@@ -143,7 +143,7 @@ describe Provider, type: :model do
           # with an acrediting provider was removed
           # but the accrediting provider enrichment was left behind
 
-          it { should be_valid }
+          it { is_expected.to be_valid }
         end
       end
     end
@@ -185,13 +185,13 @@ describe Provider, type: :model do
         }
 
         context "word count within limit" do
-          it { should be_valid }
+          it { is_expected.to be_valid }
         end
 
         context "word count exceed limit" do
           let(:word_count) { 100 + 1 }
 
-          it { should_not be_valid }
+          it { is_expected.to_not be_valid }
         end
       end
     end

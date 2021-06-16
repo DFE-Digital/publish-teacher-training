@@ -10,5 +10,5 @@ describe API::V2::SerializableSiteStatus do
 
   subject { JSON.parse(resource.as_jsonapi.to_json) }
 
-  it { should have_type "site_statuses" }
+  it { is_expected.to have_type "site_statuses" }
 end

@@ -17,7 +17,7 @@ describe Course, type: :model do
       ])
     end
 
-    its(:size) { should eq(3) }
+    its(:size) { is_expected.to eq(3) }
 
     it "doesn't overlap with enrichments from another course" do
       expect(subject & another_course.enrichments).to be_empty
@@ -32,19 +32,19 @@ describe Course, type: :model do
     context "for a course without any enrichments" do
       let(:enrichments) { [] }
 
-      its(:content_status) { should eq(:empty) }
+      its(:content_status) { is_expected.to eq(:empty) }
     end
 
     context "for a course an initial draft enrichments" do
       let(:enrichments) { [build(:course_enrichment, :initial_draft)] }
 
-      its(:content_status) { should eq(:draft) }
+      its(:content_status) { is_expected.to eq(:draft) }
     end
 
     context "for a course with a single published enrichment" do
       let(:enrichments) { [build(:course_enrichment, :published)] }
 
-      its(:content_status) { should eq(:published) }
+      its(:content_status) { is_expected.to eq(:published) }
     end
 
     context "for a course with multiple published enrichments" do
@@ -55,13 +55,13 @@ describe Course, type: :model do
         ]
       end
 
-      its(:content_status) { should eq(:published) }
+      its(:content_status) { is_expected.to eq(:published) }
     end
 
     context "for a course with published enrichments and a draft one" do
       let(:enrichments) { [build(:course_enrichment, :published), build(:course_enrichment, :subsequent_draft)] }
 
-      its(:content_status) { should eq(:published_with_unpublished_changes) }
+      its(:content_status) { is_expected.to eq(:published_with_unpublished_changes) }
     end
   end
 
@@ -87,7 +87,7 @@ describe Course, type: :model do
 
       let(:enrichment) { subject.enrichments.first }
 
-      its(:changed_at) { should be_within(1.second).of Time.now.utc }
+      its(:changed_at) { is_expected.to be_within(1.second).of Time.now.utc }
 
       it "publishes the draft" do
         expect(enrichment).to be_published

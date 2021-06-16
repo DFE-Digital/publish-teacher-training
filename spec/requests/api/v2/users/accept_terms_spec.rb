@@ -14,7 +14,7 @@ describe "PATCH /api/v2/users/:id/accept_terms", type: :request do
 
     subject { response }
 
-    it { should have_http_status(:unauthorized) }
+    it { is_expected.to have_http_status(:unauthorized) }
   end
 
   context "when unauthorized" do
