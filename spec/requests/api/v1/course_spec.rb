@@ -149,6 +149,7 @@ describe "Courses API", type: :request do
           expect(returned_course_codes).to include course.course_code
         end
       end
+
       context "with a future recruitment cycle specified in the route" do
         it "only returns courses from the requested cycle" do
           get "/api/v1/#{next_year}/courses",
@@ -275,6 +276,7 @@ describe "Courses API", type: :request do
 
       context "with many courses updated in the same second" do
         let!(:next_cycle) { create(:recruitment_cycle, year: next_year) }
+
         timestamp = 1.second.ago
         before do
           @courses = Array.new(25) do |i|

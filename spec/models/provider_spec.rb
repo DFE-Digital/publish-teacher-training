@@ -91,6 +91,7 @@ describe Provider, type: :model do
   context "order" do
     let(:provider_a) { create(:provider, provider_name: "Provider A") }
     let(:provider_b) { create(:provider, provider_name: "Provider B") }
+
     describe "#by_name_ascending" do
       it "orders the providers by name in ascending order" do
         provider_a
@@ -209,6 +210,7 @@ describe Provider, type: :model do
 
   describe "#unassigned_site_codes" do
     subject { create(:provider) }
+
     before do
       %w[A B C D 1 2 3 -].each { |code| subject.sites << build(:site, code: code) }
     end
@@ -221,6 +223,7 @@ describe Provider, type: :model do
   describe "#can_add_more_sites?" do
     context "when provider has less sites than max allowed" do
       subject { create(:provider) }
+
       its(:can_add_more_sites?) { should be_truthy }
     end
 
@@ -539,6 +542,7 @@ describe Provider, type: :model do
           findable_course
           non_findable_course
         end
+
         it "is returned" do
           expect(subject).to contain_exactly(findable_course.provider)
         end
@@ -549,6 +553,7 @@ describe Provider, type: :model do
           non_findable_course
           non_findable_course_with_accrediting_provider
         end
+
         it "is not returned" do
           expect(subject).to_not include(non_findable_course.provider,
                                          non_findable_course_with_accrediting_provider.provider,
@@ -647,6 +652,7 @@ describe Provider, type: :model do
                  address4: nil,
                  postcode: "SO45 2PA")
         }
+
         context "has not changed" do
           before do
             provider.update(address1: "Long Lane")
@@ -700,36 +706,43 @@ describe Provider, type: :model do
 
     context "with an exactly matching code" do
       let(:search_term) { "ABC" }
+
       it { is_expected.to contain_exactly(matching_provider) }
     end
 
     context "with an exactly matching name" do
       let(:search_term) { "Dave's Searches" }
+
       it { is_expected.to contain_exactly(matching_provider) }
     end
 
     context "with unicode in the name" do
       let(:search_term) { "Dave’s Searches" }
+
       it { is_expected.to contain_exactly(matching_provider) }
     end
 
     context "with extra spaces in the name" do
       let(:search_term) { "Dave's  Searches" }
+
       it { is_expected.to contain_exactly(matching_provider) }
     end
 
     context "with non matching case code" do
       let(:search_term) { "abc" }
+
       it { is_expected.to contain_exactly(matching_provider) }
     end
 
     context "with non matching case name" do
       let(:search_term) { "dave's searches" }
+
       it { is_expected.to contain_exactly(matching_provider) }
     end
 
     context "with partial search term" do
       let(:search_term) { "dave" }
+
       it { is_expected.to contain_exactly(matching_provider) }
     end
   end

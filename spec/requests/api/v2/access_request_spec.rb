@@ -209,6 +209,7 @@ describe "Access Request API V2", type: :request do
       post "/api/v2/access_requests/#{access_request.id}/approve",
            headers: { "HTTP_AUTHORIZATION" => credentials }
     end
+
     context "when unauthenticated" do
       before do
         approve_route_request
@@ -257,6 +258,7 @@ describe "Access Request API V2", type: :request do
                  requester_id: requesting_user.id,
                  organisation: organisation.name)
         }
+
         before do
           post "/api/v2/access_requests/#{new_user_access_request.id}/approve",
                headers: { "HTTP_AUTHORIZATION" => credentials }
@@ -290,6 +292,7 @@ describe "Access Request API V2", type: :request do
            headers: { "HTTP_AUTHORIZATION" => credentials },
            params: params.as_json
     end
+
     context "when unauthenticated" do
       before do
         do_post

@@ -20,6 +20,7 @@ module CourseVacancies
           vacancies_filled: vacancies_filled,
         )
       end
+
       context "sending an email to a user" do
         it "sends an email with the correct template" do
           expect(mail.govuk_notify_template).to eq(Settings.govuk_notify.course_vacancies_updated_email_template_id)
@@ -65,6 +66,7 @@ module CourseVacancies
 
           context "vacancies filled is false" do
             let(:vacancies_filled) { false }
+
             it "includes whether vacancies are filled in the personalisation" do
               expect(mail.govuk_notify_personalisation[:vacancies_filled]).to eq("no")
             end

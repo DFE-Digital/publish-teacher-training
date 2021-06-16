@@ -309,6 +309,7 @@ describe "Providers API", type: :request do
             expect(returned_provider_codes).to include provider.provider_code
           end
         end
+
         context "with a future recruitment cycle specified in the route" do
           let(:get_index) { get "/api/v1/#{next_year}/providers", headers: { "HTTP_AUTHORIZATION" => credentials } }
 

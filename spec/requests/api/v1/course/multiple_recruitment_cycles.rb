@@ -40,6 +40,7 @@ describe "Courses API", type: :request do
             expect(returned_course_codes).to include course.course_code
           end
         end
+
         context "with a future recruitment cycle specified in the route" do
           let(:get_index) { get "/api/v1/#{next_year}/courses", headers: { "HTTP_AUTHORIZATION" => credentials } }
 

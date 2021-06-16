@@ -141,6 +141,7 @@ describe MCB::Editor::CoursesEditor, :needs_audit_user do
                course_code: "XYZ1",
                name: "Another name")
       }
+
       subject { described_class.new(provider: provider, course_codes: %w{XYZ1}, requester: requester) }
 
       it "raises an error" do

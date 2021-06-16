@@ -93,6 +93,7 @@ describe MCB::Editor::ProviderEditor, :needs_audit_user do
 
         context "(run against an Azure environment)" do
           let(:environment) { "qa" }
+
           subject { described_class.new(provider: provider, requester: requester, environment: environment) }
 
           it 'invokes course editing in the environment that the "providers edit" command was invoked' do

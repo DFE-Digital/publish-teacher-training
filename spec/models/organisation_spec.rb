@@ -48,6 +48,7 @@ describe Organisation, type: :model do
 
   describe "#add_user" do
     let(:user) { create(:user) }
+
     it "adds a user" do
       subject.add_user(user)
       expect(subject.users).to contain_exactly(user)

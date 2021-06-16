@@ -68,6 +68,7 @@ describe TravelToWorkAreaAndLondonBoroughService do
           },
         }.to_json
       end
+
       before do
         stub_request(:get, travel_to_work_areas_query).to_return(body: travel_to_work_areas_successful_response)
         stub_request(:get, london_boroughs_query).to_return(body: london_boroughs_successful_response)

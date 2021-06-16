@@ -67,6 +67,7 @@ describe Provider, type: :model do
     describe "on update" do
       context "setting field to nil" do
         subject { provider }
+
         it { should validate_presence_of(:train_with_us).on(:update) }
         it { should validate_presence_of(:train_with_disability).on(:update) }
       end
@@ -84,6 +85,7 @@ describe Provider, type: :model do
 
       context "word count exceed limit" do
         let(:word_count) { 250 + 1 }
+
         it { should_not be_valid }
       end
     end
@@ -100,6 +102,7 @@ describe Provider, type: :model do
 
       context "word count exceed limit" do
         let(:word_count) { 250 + 1 }
+
         it { should_not be_valid }
       end
     end
@@ -128,6 +131,7 @@ describe Provider, type: :model do
           provider.accrediting_provider_enrichments = accrediting_provider_enrichments
           provider
         }
+
         context "word count within limit" do
           it { should be_valid }
         end
@@ -138,6 +142,7 @@ describe Provider, type: :model do
           # ie a previous course
           # with an acrediting provider was removed
           # but the accrediting provider enrichment was left behind
+
           it { should be_valid }
         end
       end

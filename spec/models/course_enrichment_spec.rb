@@ -10,16 +10,19 @@ describe CourseEnrichment, type: :model do
   describe "#has_been_published_before?" do
     context "when the enrichment is an initial draft" do
       subject { create(:course_enrichment, :initial_draft) }
+
       it { should_not have_been_published_before }
     end
 
     context "when the enrichment is published" do
       subject { create(:course_enrichment, :published) }
+
       it { should have_been_published_before }
     end
 
     context "when the enrichment is a subsequent draft" do
       subject { create(:course_enrichment, :subsequent_draft) }
+
       it { should have_been_published_before }
     end
   end
@@ -185,6 +188,7 @@ describe CourseEnrichment, type: :model do
     let(:salary_details_text) { "this course is great" }
 
     subject(:salaried_course) { build :course, :with_salary }
+
     subject { build :course_enrichment, salary_details: salary_details_text, course: salaried_course }
 
     context "with over 250 words" do
@@ -206,6 +210,7 @@ describe CourseEnrichment, type: :model do
 
   describe "validation for publish" do
     let(:course_enrichment) { build(:course_enrichment, :with_fee_based_course) }
+
     subject { course_enrichment }
 
     context "fee based course" do
@@ -281,6 +286,7 @@ describe CourseEnrichment, type: :model do
     let(:provider) { create(:provider) }
     let(:course) { create(:course, provider: provider) }
     let(:last_published_timestamp_utc) { Date.new(2017, 1, 1) }
+
     subject {
       create(:course_enrichment, :published,
              last_published_timestamp_utc: last_published_timestamp_utc,

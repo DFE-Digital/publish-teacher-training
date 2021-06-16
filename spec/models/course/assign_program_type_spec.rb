@@ -28,6 +28,7 @@ RSpec.describe Course, type: :model do
     describe "when funding type is apprenticeship" do
       let(:subject) { create(:course, :with_scitt) }
       let(:funding_type) { "apprenticeship" }
+
       its(:program_type) { should eq("pg_teaching_apprenticeship") }
     end
 
@@ -36,6 +37,7 @@ RSpec.describe Course, type: :model do
 
       context "an externally accredited course" do
         let(:subject) { create(:course, :with_accrediting_provider) }
+
         its(:program_type) { should eq("school_direct_training_programme") }
       end
 
@@ -51,6 +53,7 @@ RSpec.describe Course, type: :model do
       context "a HEIs self accredited courses" do
         let(:provider) { build(:provider, :university) }
         let(:subject) { create(:course, provider: provider) }
+
         its(:program_type) { should eq("higher_education_programme") }
       end
     end

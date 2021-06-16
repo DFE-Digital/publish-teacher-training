@@ -45,6 +45,7 @@ describe Courses::GenerateCourseNameService do
 
     context "With a single subject" do
       let(:subjects) { [Subject.new(subject_name: "Physical education")] }
+
       it "Returns the subject name" do
         expect(generated_title).to eq("Physical education")
       end

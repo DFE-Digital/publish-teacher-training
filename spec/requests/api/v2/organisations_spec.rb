@@ -53,6 +53,7 @@ describe "Organisations API v2", type: :request do
 
     context "when authorised" do
       let(:json_response) { JSON.parse(response.body) }
+
       it { should have_http_status(:success) }
 
       context "with no params included" do

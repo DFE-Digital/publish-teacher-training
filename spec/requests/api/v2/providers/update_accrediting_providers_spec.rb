@@ -87,7 +87,9 @@ describe "PATCH /providers/:provider_code" do
           patch_request(enrichment_payload)
         }.to_not(change { provider.reload.accrediting_provider_enrichments.present? })
       end
+
       let(:json_data) { JSON.parse(subject.body)["errors"] }
+
       subject do
         patch_request(enrichment_payload)
         response
@@ -145,7 +147,9 @@ describe "PATCH /providers/:provider_code" do
         expect(accrediting_provider_enrichment.Description).to eq(old_description)
         expect(accrediting_provider_enrichment.UcasProviderCode).to eq(accrediting_provider.provider_code)
       end
+
       let(:json_data) { JSON.parse(subject.body)["errors"] }
+
       subject do
         patch_request(enrichment_payload)
         response

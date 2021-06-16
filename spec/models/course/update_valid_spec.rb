@@ -25,6 +25,7 @@ describe Course, type: :model do
             create(:course,
                    applications_open_from: DateTime.new(current_year, 10, 1))
           end
+
           its(:update_valid?) { should be false }
         end
       end
@@ -38,6 +39,7 @@ describe Course, type: :model do
                    provider: provider,
                    applications_open_from: next_cycle.application_start_date)
           end
+
           its(:update_valid?) { should be true }
         end
 
@@ -47,6 +49,7 @@ describe Course, type: :model do
                    provider: provider,
                    applications_open_from: DateTime.new(current_year - 1, 10, 1))
           end
+
           its(:update_valid?) { should be false }
         end
       end
@@ -64,6 +67,7 @@ describe Course, type: :model do
 
         context "with an invalid start date" do
           let(:course) { create(:course, start_date: DateTime.new(next_year, 9, 1)) }
+
           its(:update_valid?) { should be false }
         end
       end
@@ -78,6 +82,7 @@ describe Course, type: :model do
                    provider: provider,
                    start_date: DateTime.new(next_year, 9, 1))
           end
+
           its(:update_valid?) { should be true }
         end
 
@@ -87,6 +92,7 @@ describe Course, type: :model do
                    provider: provider,
                    start_date: DateTime.new(next_year - 1, 9, 1))
           end
+
           its(:update_valid?) { should be false }
         end
       end

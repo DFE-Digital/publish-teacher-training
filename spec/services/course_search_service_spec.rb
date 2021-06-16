@@ -29,6 +29,7 @@ RSpec.describe CourseSearchService do
 
     describe "when no scope is passed" do
       subject { described_class.call(filter: filter) }
+
       let(:filter) { {} }
 
       it "defaults to Course" do

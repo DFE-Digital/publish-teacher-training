@@ -116,6 +116,7 @@ describe "PATCH /providers/:provider_code" do
       expect(json_response).to have_attribute(:can_sponsor_skilled_worker_visa).with_value(false)
     end
   end
+
   describe "with unpermitted attributes on provider object" do
     shared_examples "does not allow assignment" do |attribute, value|
       it "doesn't permit #{attribute}" do
@@ -145,6 +146,7 @@ describe "PATCH /providers/:provider_code" do
     include_examples "does not allow assignment", :urn, "1234"
 
     let!(:next_cycle) { find_or_create(:recruitment_cycle, :next) }
+
     include_examples "does not allow assignment", :recruitment_cycle_id
 
     context "attributes from other models" do

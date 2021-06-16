@@ -26,10 +26,12 @@ describe Course, type: :model do
 
   describe "#content_status" do
     let(:course) { create(:course, enrichments: enrichments) }
+
     subject { course }
 
     context "for a course without any enrichments" do
       let(:enrichments) { [] }
+
       its(:content_status) { should eq(:empty) }
     end
 
@@ -41,6 +43,7 @@ describe Course, type: :model do
 
     context "for a course with a single published enrichment" do
       let(:enrichments) { [build(:course_enrichment, :published)] }
+
       its(:content_status) { should eq(:published) }
     end
 

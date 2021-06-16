@@ -27,6 +27,7 @@ describe SessionsController, type: :controller do
 
     context "non existing database user" do
       let(:user) { build(:user) }
+
       it "redirects to the root page" do
         request_destroy
         expect(response).to redirect_to(support_providers_path)
@@ -38,6 +39,7 @@ describe SessionsController, type: :controller do
     let(:request_sign_out) do
       post :sign_out
     end
+
     it "redirects to the auth/dfe/signout" do
       request_sign_out
       expect(response).to redirect_to("/auth/dfe/signout")
@@ -68,6 +70,7 @@ describe SessionsController, type: :controller do
 
     context "non existing database user" do
       let(:user) { build(:user) }
+
       it "do not creates a session for the user" do
         request_callback
         expect(session["user"]).to be_nil

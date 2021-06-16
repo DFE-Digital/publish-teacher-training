@@ -44,12 +44,14 @@ describe Course, type: :model do
 
   describe "associations" do
     it { should belong_to(:provider) }
+
     it do
       should belong_to(:accrediting_provider)
                   .with_foreign_key(:accredited_body_code)
                   .with_primary_key(:provider_code)
                   .optional
     end
+
     it { should have_many(:subjects).through(:course_subjects) }
     it { should have_many(:site_statuses) }
     it { should have_many(:sites) }
@@ -310,6 +312,7 @@ describe Course, type: :model do
         let(:provider) { build(:provider) }
         let(:course) { Course.new(provider: provider) }
         let(:errors) { course.errors.messages }
+
         before { course.valid?(:new) }
 
         it "Requires a level" do
@@ -622,6 +625,7 @@ describe Course, type: :model do
 
     describe ".published" do
       subject { described_class.published }
+
       let(:test_course) { create(:course, enrichments: enrichments) }
 
       before do
@@ -689,6 +693,7 @@ describe Course, type: :model do
 
     describe ".with_recruitment_cycle" do
       subject { described_class.with_recruitment_cycle(provider.recruitment_cycle.year) }
+
       let(:test_course) { create(:course, provider: provider) }
 
       before { test_course }
@@ -712,6 +717,7 @@ describe Course, type: :model do
 
     describe ".findable" do
       subject { described_class.findable }
+
       let(:test_course) { create(:course, site_statuses: site_statuses) }
 
       before { test_course }
@@ -743,6 +749,7 @@ describe Course, type: :model do
 
     describe ".with_vacancies" do
       subject { described_class.with_vacancies }
+
       let(:test_course) { create(:course, site_statuses: site_statuses) }
 
       before { test_course }
@@ -993,16 +1000,19 @@ describe Course, type: :model do
 
       context "with an existing provider name" do
         subject { described_class.with_provider_name(provider_name) }
+
         it { is_expected.to contain_exactly(course) }
       end
 
       context "with a provider name with no courses" do
         subject { described_class.with_provider_name("DAVE") }
+
         it { is_expected.to be_empty }
       end
 
       context "with an accredited provider name" do
         subject { described_class.with_provider_name(accredited_provider_name) }
+
         it { is_expected.to contain_exactly(accredited_course) }
       end
     end
@@ -1165,16 +1175,19 @@ describe Course, type: :model do
 
         context "with a findable site" do
           let(:site_statuses) { [findable] }
+
           its(:findable_site_statuses) { should_not be_empty }
         end
 
         context "with no findable sites" do
           let(:site_statuses) { [suspended] }
+
           its(:findable_site_statuses) { should be_empty }
         end
 
         context "with at least one findable sites" do
           let(:site_statuses) { [findable, suspended] }
+
           its(:findable_site_statuses) { should_not be_empty }
         end
       end
@@ -1193,16 +1206,19 @@ describe Course, type: :model do
 
         context "with a findable site" do
           let(:site_statuses) { [findable] }
+
           its(:findable_site_statuses) { should_not be_empty }
         end
 
         context "with no findable sites" do
           let(:site_statuses) { [suspended] }
+
           its(:findable_site_statuses) { should be_empty }
         end
 
         context "with at least one findable sites" do
           let(:site_statuses) { [findable, suspended] }
+
           its(:findable_site_statuses) { should_not be_empty }
         end
       end
@@ -1227,21 +1243,25 @@ describe Course, type: :model do
     describe "#has_vacancies?" do
       context "for a single site status that has vacancies" do
         let(:site_statuses) { [findable, with_any_vacancy] }
+
         its(:has_vacancies?) { should be true }
       end
 
       context "for a site status with vacancies and others without" do
         let(:site_statuses) { [findable_with_vacancies, findable_without_vacancies] }
+
         its(:has_vacancies?) { should be true }
       end
 
       context "when none of the sites have vacancies" do
         let(:site_statuses) { [findable_without_vacancies, findable_without_vacancies] }
+
         its(:has_vacancies?) { should be false }
       end
 
       context "when only discontinued and suspended site statuses have vacancies" do
         let(:site_statuses) { [findable_without_vacancies, published_suspended_with_any_vacancy, published_discontinued_with_any_vacancy] }
+
         its(:has_vacancies?) { should be false }
       end
     end
@@ -1250,23 +1270,28 @@ describe Course, type: :model do
       let(:subject) {
         create(:course, site_statuses: site_statuses).reload
       }
+
       context "for a single site status that has vacancies" do
         let(:site_statuses) { [findable, with_any_vacancy] }
+
         its(:has_vacancies?) { should be true }
       end
 
       context "for a site status with vacancies and others without" do
         let(:site_statuses) { [findable_with_vacancies, findable_without_vacancies] }
+
         its(:has_vacancies?) { should be true }
       end
 
       context "when none of the sites have vacancies" do
         let(:site_statuses) { [findable_without_vacancies, findable_without_vacancies] }
+
         its(:has_vacancies?) { should be false }
       end
 
       context "when only discontinued and suspended site statuses have vacancies" do
         let(:site_statuses) { [findable_without_vacancies, published_suspended_with_any_vacancy, published_discontinued_with_any_vacancy] }
+
         its(:has_vacancies?) { should be false }
       end
     end
@@ -1288,8 +1313,10 @@ describe Course, type: :model do
         context "applications_open_from is in present or past" do
           its(:open_for_applications?) { should be false }
         end
+
         context "applications_open_from is in future" do
           let(:applications_open_from) { Time.now.utc + 1.day }
+
           its(:open_for_applications?) { should be false }
         end
       end
@@ -1297,11 +1324,14 @@ describe Course, type: :model do
       context "with site statuses" do
         context "with only a single findable site statuses" do
           let(:site_statuses) { [findable] }
+
           context "applications_open_from is in present or past" do
             its(:open_for_applications?) { should be true }
           end
+
           context "applications_open_from is in future" do
             let(:applications_open_from) { Time.now.utc + 1.day }
+
             its(:open_for_applications?) { should be false }
           end
         end
@@ -1315,8 +1345,10 @@ describe Course, type: :model do
           context "applications_open_from is in present or past" do
             its(:open_for_applications?) { should be true }
           end
+
           context "applications_open_from is in future" do
             let(:applications_open_from) { Time.now.utc + 1.day }
+
             its(:open_for_applications?) { should be false }
           end
         end
@@ -1330,8 +1362,10 @@ describe Course, type: :model do
           context "applications_open_from is in present or past" do
             its(:open_for_applications?) { should be false }
           end
+
           context "applications_open_from is in future" do
             let(:applications_open_from) { Time.now.utc + 1.day }
+
             its(:open_for_applications?) { should be false }
           end
         end
@@ -1357,8 +1391,10 @@ describe Course, type: :model do
         context "applications_open_from is in present or past" do
           its(:open_for_applications?) { should be false }
         end
+
         context "applications_open_from is in future" do
           let(:applications_open_from) { Time.now.utc + 1.day }
+
           its(:open_for_applications?) { should be false }
         end
       end
@@ -1366,11 +1402,14 @@ describe Course, type: :model do
       context "with site statuses" do
         context "with only a single findable site statuses" do
           let(:site_statuses) { [findable] }
+
           context "applications_open_from is in present or past" do
             its(:open_for_applications?) { should be true }
           end
+
           context "applications_open_from is in future" do
             let(:applications_open_from) { Time.now.utc + 1.day }
+
             its(:open_for_applications?) { should be false }
           end
         end
@@ -1384,8 +1423,10 @@ describe Course, type: :model do
           context "applications_open_from is in present or past" do
             its(:open_for_applications?) { should be true }
           end
+
           context "applications_open_from is in future" do
             let(:applications_open_from) { Time.now.utc + 1.day }
+
             its(:open_for_applications?) { should be false }
           end
         end
@@ -1399,8 +1440,10 @@ describe Course, type: :model do
           context "applications_open_from is in present or past" do
             its(:open_for_applications?) { should be false }
           end
+
           context "applications_open_from is in future" do
             let(:applications_open_from) { Time.now.utc + 1.day }
+
             its(:open_for_applications?) { should be false }
           end
         end
@@ -1517,6 +1560,7 @@ describe Course, type: :model do
     specs.each do |study_mode, expected_description|
       context study_mode.to_s do
         subject { create(:course, study_mode: study_mode) }
+
         its(:study_mode_description) { should eq(expected_description) }
       end
     end
@@ -1550,6 +1594,7 @@ describe Course, type: :model do
     specs.each do |expected_description, course_attributes|
       context "for #{expected_description} course" do
         subject { create(:course, course_attributes) }
+
         its(:description) { should eq(expected_description) }
       end
     end
@@ -1626,10 +1671,12 @@ describe Course, type: :model do
 
   describe "#is_send?" do
     subject { create(:course) }
+
     its(:is_send?) { should be_falsey }
 
     context "with a SEND subject" do
       subject { create(:course, is_send: true) }
+
       its(:is_send?) { should be_truthy }
     end
   end
@@ -1637,18 +1684,21 @@ describe Course, type: :model do
   context "gcse_subjects_required" do
     context "with primary level" do
       subject { create(:course, level: "primary") }
+
       its(:level) { should eq("primary") }
       its(:gcse_subjects_required) { should eq(%w[maths english science]) }
     end
 
     context "with secondary level" do
       subject { create(:course, level: "secondary") }
+
       its(:level) { should eq("secondary") }
       its(:gcse_subjects_required) { should eq(%w[maths english]) }
     end
 
     context "with secondary level" do
       subject { create(:course, level: "further_education") }
+
       its(:level) { should eq("further_education") }
       its(:gcse_subjects_required) { should eq([]) }
     end
@@ -1656,6 +1706,7 @@ describe Course, type: :model do
 
   context "bursaries and scholarships" do
     let!(:financial_incentive) { create(:financial_incentive, subject: modern_languages, bursary_amount: 255, scholarship: 1415, early_career_payments: 32) }
+
     subject { create(:course, :skip_validate, level: "secondary", subjects: [modern_languages]) }
 
     it { should have_bursary }
@@ -1753,6 +1804,7 @@ describe Course, type: :model do
   describe "#accrediting_provider_description" do
     let(:accrediting_provider) { nil }
     let(:course) { create(:course, accrediting_provider: accrediting_provider) }
+
     subject { course.accrediting_provider_description }
 
     context "for courses without accrediting provider" do
@@ -2016,11 +2068,13 @@ describe Course, type: :model do
 
     context "when self accredited" do
       let(:provider) { build(:provider, :accredited_body) }
+
       its(:self_accredited?) { should be_truthy }
     end
 
     context "when not self accredited" do
       let(:provider) { build(:provider) }
+
       its(:self_accredited?) { should be_falsey }
     end
   end
@@ -2242,6 +2296,7 @@ describe Course, type: :model do
     # NOTE: There is currently no finanical incentives for `primary with maths`.
     xcontext "when primary with maths" do
       subject { Course.new(subjects: [PrimarySubject.find_by(subject_code: "03")]) }
+
       subject do
         create(
           :course,

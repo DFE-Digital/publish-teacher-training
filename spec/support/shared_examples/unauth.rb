@@ -26,6 +26,7 @@ shared_examples "Unauthenticated, unauthorised, or not accepted T&Cs" do
     before do
       user.discard
     end
+
     it { should have_http_status(:forbidden) }
 
     it "Returns the correct error type" do

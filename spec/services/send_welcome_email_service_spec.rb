@@ -2,6 +2,7 @@ require "rails_helper"
 
 describe SendWelcomeEmailService do
   before { Timecop.freeze }
+
   after { Timecop.return }
 
   context "When the user has not logged in before" do

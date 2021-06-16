@@ -77,6 +77,7 @@ describe "mcb command" do
     let(:email)    { "foo@local" }
     let(:secret)   { "bar" }
     let(:payload) { { "email" => email } }
+
     context "using HS256 encoding" do
       let(:encoding) { "HS256" }
       let(:audience) { "audience" }

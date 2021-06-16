@@ -21,6 +21,7 @@ describe API::V2::SerializableUser do
 
   context "when an admin user" do
     let(:user)     { create :user, :admin }
+
     it { should have_attribute(:admin).with_value(true) }
   end
 end

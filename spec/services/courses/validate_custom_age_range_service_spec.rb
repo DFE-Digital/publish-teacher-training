@@ -11,6 +11,7 @@ describe Courses::ValidateCustomAgeRangeService do
 
   context "with a valid age range" do
     let(:age_range_in_years) { "4_to_8" }
+
     it "age_range_in_years attribute to the correct value" do
       expect(course.errors.count).to eq(0)
     end

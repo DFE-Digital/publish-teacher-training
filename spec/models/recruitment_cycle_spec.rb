@@ -31,6 +31,7 @@ describe RecruitmentCycle, type: :model do
         end
       end
     end
+
     it { should have_many(:sites).through(:providers) }
   end
 
@@ -73,6 +74,7 @@ describe RecruitmentCycle, type: :model do
 
     describe "#next" do
       subject { current_cycle }
+
       its(:next) { should eq(next_cycle) }
 
       it "is nil for the newest cycle" do

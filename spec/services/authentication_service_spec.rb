@@ -52,6 +52,7 @@ describe AuthenticationService do
       let(:email) { Faker::Internet.email }
 
       it { should eq user }
+
       it "update's the user's email" do
         expect { subject }.to(change { user.reload.email }.to(email))
       end
@@ -88,6 +89,7 @@ describe AuthenticationService do
       let(:sign_in_user_id) { SecureRandom.uuid }
 
       it { should eq user }
+
       it "update's the user's SignIn ID" do
         expect { subject }.to(change { user.reload.sign_in_user_id }.to(sign_in_user_id))
       end
@@ -108,6 +110,7 @@ describe AuthenticationService do
       let(:sign_in_user_id) { SecureRandom.uuid }
 
       it { should eq user }
+
       it "update's the user's SignIn ID" do
         expect { subject }.to(change { user.reload.sign_in_user_id }.to(sign_in_user_id))
       end

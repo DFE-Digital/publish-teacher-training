@@ -82,6 +82,7 @@ describe "Courses API v2", type: :request do
 
       context "when the current user is an admin" do
         let(:user) { create(:user, :admin) }
+
         it "should return pe as a potential subject" do
           json_response = JSON.parse subject.body
           expect(json_response["data"]["meta"]["edit_options"]["subjects"].map { |subject|

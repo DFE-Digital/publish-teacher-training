@@ -60,6 +60,7 @@ describe Site, type: :model do
   describe "after running validation" do
     let(:site) { build(:site, provider: provider, code: nil) }
     let(:provider) { build(:provider) }
+
     subject { site }
 
     it "is assigned a valid code by default" do
@@ -78,6 +79,7 @@ describe Site, type: :model do
 
   describe "description" do
     subject { build(:site, location_name: "Foo", code: "1") }
+
     its(:to_s) { should eq "Foo (code: 1)" }
   end
 
@@ -191,6 +193,7 @@ describe Site, type: :model do
                  address4: nil,
                  postcode: "SO45 2PA")
         end
+
         context "has not changed" do
           before do
             site.update(address1: "Long Lane")

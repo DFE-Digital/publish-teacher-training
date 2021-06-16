@@ -55,6 +55,7 @@ describe API::V2::SerializableAccessRequest do
 
   describe "has the correct attributes" do
     before { Timecop.freeze }
+
     after  { Timecop.return }
 
     it { should have_attribute(:email_address).with_value(access_request.email_address) }

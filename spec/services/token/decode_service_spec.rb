@@ -55,6 +55,7 @@ describe Token::DecodeService do
       shared_examples "mismatch" do |option, exception, value = option|
         context "#{option} settings" do
           let("encode_service_#{option}".to_sym) { value.to_s }
+
           it "raises an exception" do
             expect { subject }.to raise_exception exception
           end

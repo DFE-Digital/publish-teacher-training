@@ -31,6 +31,7 @@ RSpec.describe Support::DataExports::UsersExport do
     let(:organisation) { create(:organisation, users: [], providers: [provider]) }
     let(:user1) { create(:user, organisations: [organisation]) }
     let(:user2) { create(:user, organisations: [organisation]) }
+
     before do
       user1
       user2

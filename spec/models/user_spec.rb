@@ -23,6 +23,7 @@ describe User, type: :model do
 
     context "for an admin-user" do
       subject { create(:user, :admin) }
+
       it { should_not allow_value("general.public@example.org").for(:email) }
       it { should_not allow_value("some.provider@devon.gov.uk").for(:email) }
       it { should allow_value("bobs.your.uncle@digital.education.gov.uk").for(:email) }
@@ -100,6 +101,7 @@ describe User, type: :model do
         let(:organisation) { create(:organisation, providers: [accredited_body]) }
         let(:current_recruitment_cycle) { find_or_create(:recruitment_cycle) }
         let(:accredited_body) { create(:provider, :accredited_body, recruitment_cycle: current_recruitment_cycle) }
+
         subject { create(:user, organisations: [organisation]) }
 
         it "returns true" do

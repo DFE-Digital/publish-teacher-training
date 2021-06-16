@@ -846,6 +846,7 @@ describe "GET v3 /subjects" do
 
     context "when sorting by name" do
       let(:request_path) { "/api/v3/subjects?fields[subjects]=subject_name&sort=subject_name" }
+
       it "sorts the subject names in ascending order" do
         expect(json_response["data"].map { |subject| subject["attributes"]["subject_name"] }).to eq([
           "Art and design",

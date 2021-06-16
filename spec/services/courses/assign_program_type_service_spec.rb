@@ -23,6 +23,7 @@ describe Courses::AssignProgramTypeService do
 
     context "when the course is self accredited" do
       let(:course) { create(:course, :self_accredited) }
+
       it "an error should be added to the course object" do
         expect(course.errors["program_type"].first).to eq("Salary is not valid for a self accredited course")
       end

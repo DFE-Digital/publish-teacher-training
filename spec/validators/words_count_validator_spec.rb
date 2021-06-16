@@ -25,16 +25,19 @@ describe WordsCountValidator do
 
   context "with max valid number of words" do
     let(:some_words_field) { (%w[word] * maximum).join(" ") }
+
     it { should be true }
   end
 
   context "with no words" do
     let(:some_words_field) { "" }
+
     it { should be true }
   end
 
   context "with nil words" do
     let(:some_words_field) { nil }
+
     it { should be true }
   end
 
@@ -42,6 +45,7 @@ describe WordsCountValidator do
     let(:some_words_field) { (%w[word] * maximum).join(" ") + " popped" }
 
     it { should be false }
+
     it "adds an error" do
       expect(model.errors[:some_words]).to match_array expected_errors
     end
@@ -51,6 +55,7 @@ describe WordsCountValidator do
     let(:some_words_field) { (%w[word] * maximum).join("\n") + " popped" }
 
     it { should be false }
+
     it "adds an error" do
       expect(model.errors[:some_words]).to match_array expected_errors
     end
@@ -60,6 +65,7 @@ describe WordsCountValidator do
     let(:some_words_field) { (%w[word] * maximum).join(" ") + " *" }
 
     it { should be false }
+
     it "adds an error" do
       expect(model.errors[:some_words]).to match_array expected_errors
     end

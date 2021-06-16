@@ -103,6 +103,7 @@ describe Course, type: :model do
     context "for a further education course" do
       let(:course) { create(:course, level: "further_education", subjects: [subjects]) }
       let(:subjects) { find(:further_education_subject) }
+
       it "returns only QTS options for users to choose between" do
         expect(course.qualification_options).to eq(%w[pgce pgde])
         course.qualification_options.each do |q|
@@ -122,6 +123,7 @@ describe Course, type: :model do
     context "for secondary" do
       let(:course) { create(:course, level: "secondary", subjects: [subjects]) }
       let(:subjects) { find(:secondary_subject, :biology) }
+
       it "returns the correct age ranges for users to co choose between" do
         expect(course.age_range_options).to eq(%w[11_to_16 11_to_18 14_to_19])
       end

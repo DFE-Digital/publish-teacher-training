@@ -82,6 +82,7 @@ describe PublishReportingService do
         allow(recruitment_cycle_scope).to receive(:courses).and_return(courses_scope)
         allow(recruitment_cycle_scope).to receive(:providers).and_return(providers_scope)
       end
+
       subject { described_class.call(recruitment_cycle_scope: recruitment_cycle_scope) }
 
       it "applies the scopes" do

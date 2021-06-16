@@ -22,6 +22,7 @@ describe CoursePolicy do
 
     context "with a user outside the organisation" do
       let(:other_user) { create(:user) }
+
       it { should_not permit(other_user, course) }
     end
   end
@@ -75,6 +76,7 @@ describe CoursePolicy do
 
     context "an admin" do
       let(:user) { create(:user, :admin) }
+
       it { is_expected.to contain_exactly(course, other_course) }
     end
   end
