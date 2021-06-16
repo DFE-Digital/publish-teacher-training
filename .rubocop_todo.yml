@@ -129,22 +129,6 @@ RSpec/BeforeAfterAll:
     - "spec/test_setup_specs/test_data_cache_spec.rb"
     - "spec/support/reference_data.rb"
 
-# Offense count: 23
-# Cop supports --auto-correct.
-# Configuration parameters: EnabledMethods.
-RSpec/Capybara/FeatureMethods:
-  Exclude:
-    - "spec/features/support/providers/creating_a_provider_spec.rb"
-    - "spec/features/support/providers/editing_a_provider_spec.rb"
-    - "spec/features/support/providers/provider_courses_list_spec.rb"
-    - "spec/features/support/providers/provider_users_list_spec.rb"
-    - "spec/features/support/providers/providers_list_spec.rb"
-    - "spec/features/support/providers/viewing_a_user_spec.rb"
-    - "spec/features/support/users/creating_a_new_user_spec.rb"
-    - "spec/features/support/users/providers_list_spec.rb"
-    - "spec/features/support/users/users_list_spec.rb"
-    - "spec/features/view_components_spec.rb"
-
 # Offense count: 5
 # Cop supports --auto-correct.
 RSpec/ContextMethod:
