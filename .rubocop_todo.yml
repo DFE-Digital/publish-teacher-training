@@ -15,21 +15,6 @@ Bundler/OrderedGems:
     - "Gemfile"
     - "docs/Gemfile"
 
-# # Offense count: 1
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle.
-# SupportedStyles: normal, indented_internal_methods
-Layout/IndentationConsistency:
-  Exclude:
-    - "app/controllers/api/v2/interrupt_page_acknowledgements_controller.rb"
-
-# Offense count: 1
-# Cop supports --auto-correct.
-# Configuration parameters: Width, IgnoredPatterns.
-Layout/IndentationWidth:
-  Exclude:
-    - "app/controllers/api/v2/interrupt_page_acknowledgements_controller.rb"
-
 # Offense count: 8
 # Cop supports --auto-correct.
 # Configuration parameters: AllowDoxygenCommentStyle, AllowGemfileRubyComment.
