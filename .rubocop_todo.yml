@@ -26,13 +26,6 @@ Layout/CommentIndentation:
     - "spec/models/course_spec.rb"
     - "spec/requests/api/v1/course_spec.rb"
 
-# Offense count: 2
-# Cop supports --auto-correct.
-Layout/EmptyLineAfterGuardClause:
-  Exclude:
-    - "app/controllers/concerns/error_handlers/base.rb"
-    - "lib/tasks/allocations.rake"
-
 # Offense count: 86
 # Cop supports --auto-correct.
 # Configuration parameters: EnforcedStyle, IndentationWidth.
