@@ -61,17 +61,6 @@ Lint/SelfAssignment:
   Exclude:
     - "docs/lib/govuk_tech_docs/open_api/renderer.rb"
 
-# Offense count: 112
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle.
-# SupportedStyles: strict, consistent
-Lint/SymbolConversion:
-  Exclude:
-    - "docs/spec/govuk_tech_docs/open_api/renderer_spec.rb"
-    - "spec/lib/mcb/commands/sites/add_travel_to_work_data_spec.rb"
-    - "spec/services/travel_to_work_area_and_london_borough_service_spec.rb"
-    - "spec/support/mapit_helper.rb"
-
 # Offense count: 4
 Naming/AccessorMethodName:
   Exclude:

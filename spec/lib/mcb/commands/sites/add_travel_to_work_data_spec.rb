@@ -17,19 +17,19 @@ describe "mcb add_travel_to_work_data" do
   let(:first_travel_to_work_area_response) do
     {
       "163653": {
-        "parent_area": nil,
-        "generation_high": 41,
-        "all_names": {},
-        "id": 163653,
-        "codes": {
-          "gss": "E30000234",
+        parent_area: nil,
+        generation_high: 41,
+        all_names: {},
+        id: 163653,
+        codes: {
+          gss: "E30000234",
         },
-        "name": "London",
-        "country": "E",
-        "type_name": "Travel to Work Areas",
-        "generation_low": 38,
-        "country_name": "England",
-        "type": "TTW",
+        name: "London",
+        country: "E",
+        type_name: "Travel to Work Areas",
+        generation_low: 38,
+        country_name: "England",
+        type: "TTW",
       },
     }.to_json
   end
@@ -37,23 +37,23 @@ describe "mcb add_travel_to_work_data" do
   let(:first_travel_to_work_london_borough_response) do
     {
       "2504": {
-        "parent_area": nil,
-        "generation_high": 41,
-        "all_names": {},
-        "id": 2504,
-        "codes": {
-          "unit_id": "11164",
-          "ons": "00BK",
-          "gss": "E09000033",
+        parent_area: nil,
+        generation_high: 41,
+        all_names: {},
+        id: 2504,
+        codes: {
+          unit_id: "11164",
+          ons: "00BK",
+          gss: "E09000033",
           "local-authority-eng": "WSM",
           "local-authority-canonical": "WSM",
         },
-        "name": "Westminster City Council",
-        "country": "E",
-        "type_name": "London borough",
-        "generation_low": 1,
-        "country_name": "England",
-        "type": "LBO",
+        name: "Westminster City Council",
+        country: "E",
+        type_name: "London borough",
+        generation_low: 1,
+        country_name: "England",
+        type: "LBO",
       },
     }.to_json
   end
