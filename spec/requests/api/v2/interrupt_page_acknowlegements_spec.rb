@@ -1,4 +1,3 @@
-
 require "rails_helper"
 
 describe "Interrupt page acknowledgements API v2", type: :request do
