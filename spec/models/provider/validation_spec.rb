@@ -30,7 +30,7 @@ describe Provider, type: :model do
           expect(provider.errors[:email]).to include("^Enter an email address in the correct format, like name@example.com")
         end
 
-        it "Does not validate the email if it is not present"do
+        it "Does not validate the email if it is not present" do
           provider.website = "cats4lyf.cat"
 
           expect(provider.valid?(:update)).to be true
@@ -56,7 +56,7 @@ describe Provider, type: :model do
           expect(provider.errors[:telephone]).to include("^Enter a valid telephone number")
         end
 
-        it "Does not validate the telephone if it is not present"do
+        it "Does not validate the telephone if it is not present" do
           provider.website = "cats4lyf.cat"
 
           expect(provider.valid?(:update)).to be true

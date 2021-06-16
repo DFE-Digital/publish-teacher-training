@@ -119,7 +119,7 @@ describe "PATCH /providers/:provider_code" do
   describe "with unpermitted attributes on provider object" do
     shared_examples "does not allow assignment" do |attribute, value|
       it "doesn't permit #{attribute}" do
-        update_provider[attribute] = if(attribute == :recruitment_cycle_id)
+        update_provider[attribute] = if attribute == :recruitment_cycle_id
                                        next_cycle.id
                                      else
                                        value

@@ -70,7 +70,7 @@ describe Contact, type: :model do
         expect(contact.errors[:email]).to include("^Enter an email address in the correct format, like name@example.com")
       end
 
-      it "Does not validate the email if it is present"do
+      it "Does not validate the email if it is present" do
         contact.email = "foo@bar.com"
 
         expect(contact.valid?).to be true

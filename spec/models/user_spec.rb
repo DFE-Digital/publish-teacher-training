@@ -90,7 +90,7 @@ describe User, type: :model do
         subject.remove_access_to(organisation)
       end
 
-      it "removes the right organisation"do
+      it "removes the right organisation" do
         expect(subject.reload.organisations).to eq([other_organisation])
       end
     end
@@ -138,7 +138,7 @@ describe User, type: :model do
         subject.remove_access_to [organisation, yet_other_organisation]
       end
 
-      it "removes the right organisation"do
+      it "removes the right organisation" do
         expect(subject.reload.organisations).to eq([other_organisation])
       end
     end

@@ -6,15 +6,6 @@
 # Note that changes in the inspected code, or installation of new
 # versions of RuboCop, may require this file to be generated again.
 
-# Offense count: 6
-# Cop supports --auto-correct.
-Layout/SpaceAroundKeyword:
-  Exclude:
-    - "spec/models/contact_spec.rb"
-    - "spec/models/provider/validation_spec.rb"
-    - "spec/models/user_spec.rb"
-    - "spec/requests/api/v2/providers/update_spec.rb"
-
 # Offense count: 1
 # Configuration parameters: IgnoredMethods.
 Lint/AmbiguousBlockAssociation:
