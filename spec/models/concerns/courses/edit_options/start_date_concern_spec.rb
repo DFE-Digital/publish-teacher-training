@@ -19,7 +19,7 @@ describe Courses::EditOptions::StartDateConcern do
   context "start_date_options" do
     let(:year) { provider.recruitment_cycle.year.to_i }
 
-    it "should return the correct options for the recruitment_cycle" do
+    it "returns the correct options for the recruitment_cycle" do
       expect(example_model.start_date_options).to eq(
         ["October #{year - 1}",
          "November #{year - 1}",

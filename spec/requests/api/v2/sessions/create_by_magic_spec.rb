@@ -69,7 +69,7 @@ describe "POST /sessions/create_by_magic" do
   context "token is invalid" do
     let(:magic_link_token) { "deadbeef" }
 
-    it "should return forbidden" do
+    it "returns forbidden" do
       perform_request
 
       expect(response).to have_http_status(:forbidden)
@@ -88,7 +88,7 @@ describe "POST /sessions/create_by_magic" do
   context "email is invalid" do
     let(:email) { "somebody@localhost" }
 
-    it "should return unauthorized" do
+    it "returns unauthorized" do
       perform_request
 
       expect(response).to have_http_status(:unauthorized)

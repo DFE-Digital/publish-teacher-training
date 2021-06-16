@@ -409,7 +409,7 @@ describe Provider, type: :model do
         provider.discard
       end
 
-      it "should discard all of the providers courses" do
+      it "discards all of the providers courses" do
         expect(course.discarded?).to be_truthy
         expect(course2.discarded?).to be_truthy
       end
@@ -425,7 +425,7 @@ describe Provider, type: :model do
       provider.discard_courses
     end
 
-    it "should discard all of the providers courses" do
+    it "discards all of the providers courses" do
       expect(course.discarded?).to be_truthy
       expect(course2.discarded?).to be_truthy
     end
@@ -517,7 +517,7 @@ describe Provider, type: :model do
         described_class.with_findable_courses
       }
 
-      it "should return only findable courses' provider and/or accrediting provider" do
+      it "returns only findable courses' provider and/or accrediting provider" do
         expect(subject).to contain_exactly(findable_course.provider,
                                            findable_course_with_accrediting_provider.provider,
                                            findable_course_with_accrediting_provider.accrediting_provider)

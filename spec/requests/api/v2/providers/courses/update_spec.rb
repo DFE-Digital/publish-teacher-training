@@ -697,7 +697,7 @@ describe "PATCH /providers/:provider_code/courses/:course_code" do
         )
       end
 
-      it "should not send a notification" do
+      it "does not send a notification" do
         expect(mailer_spy).not_to have_received(:course_update_email)
       end
     end

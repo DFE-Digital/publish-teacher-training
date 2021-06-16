@@ -57,7 +57,7 @@ describe AuthenticationService do
         expect { subject }.to(change { user.reload.email }.to(email))
       end
 
-      it "Should log that the users email was updated" do
+      it "logs that the users email was updated" do
         subject
 
         expect(logger_spy).to have_received(:debug) do |*_args, &block|

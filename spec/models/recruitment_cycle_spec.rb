@@ -36,11 +36,11 @@ describe RecruitmentCycle, type: :model do
   end
 
   describe "current?" do
-    it "should return true when it's the current cycle" do
+    it "returns true when it's the current cycle" do
       expect(current_cycle.current?).to be(true)
     end
 
-    it "should return true false it's not the current cycle" do
+    it "returns true false it's not the current cycle" do
       expect(next_cycle.current?).to be(false)
     end
   end
@@ -87,11 +87,11 @@ describe RecruitmentCycle, type: :model do
     end
 
     describe "next?" do
-      it "should return true when it's the next cycle" do
+      it "returns true when it's the next cycle" do
         expect(next_cycle.next?).to be(true)
       end
 
-      it "should return true false it's not the next cycle" do
+      it "returns true false it's not the next cycle" do
         expect(current_cycle.next?).to be(false)
       end
     end

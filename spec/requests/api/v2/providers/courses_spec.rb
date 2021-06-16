@@ -72,7 +72,7 @@ describe "Courses API v2", type: :request do
       let(:course) { create(:course, :secondary, provider: provider) }
 
       context "when the current user is not an admin" do
-        it "should not return pe as a potential subject" do
+        it "does not return pe as a potential subject" do
           json_response = JSON.parse subject.body
           expect(json_response["data"]["meta"]["edit_options"]["subjects"].map { |subject|
             subject["attributes"]["subject_code"]
@@ -83,7 +83,7 @@ describe "Courses API v2", type: :request do
       context "when the current user is an admin" do
         let(:user) { create(:user, :admin) }
 
-        it "should return pe as a potential subject" do
+        it "returns pe as a potential subject" do
           json_response = JSON.parse subject.body
           expect(json_response["data"]["meta"]["edit_options"]["subjects"].map { |subject|
             subject["attributes"]["subject_code"]
@@ -1105,7 +1105,7 @@ describe "Courses API v2", type: :request do
 
       it { should have_http_status(:success) }
 
-      it "should have updated the courses site statuses to be suspended and have no vacancies" do
+      it "has updated the courses site statuses to be suspended and have no vacancies" do
         post_withdraw
 
         expect(site_status1.reload.vac_status).to eq("no_vacancies")
@@ -1116,7 +1116,7 @@ describe "Courses API v2", type: :request do
         expect(site_status3.reload.status).to eq("suspended")
       end
 
-      it "should no longer be findable" do
+      it "noes longer be findable" do
         post_withdraw
 
         expect(course.reload.findable?).to be_falsey
@@ -1126,7 +1126,7 @@ describe "Courses API v2", type: :request do
     context "when the course has not been published" do
       let(:enrichment) { build(:course_enrichment) }
 
-      it "should raise an error" do
+      it "raises an error" do
         expect { post_withdraw }.to raise_error("This course has not been published and should be deleted not withdrawn")
       end
     end

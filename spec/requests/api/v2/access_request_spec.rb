@@ -44,7 +44,7 @@ describe "Access Request API V2", type: :request do
             headers: { "HTTP_AUTHORIZATION" => credentials }
       end
 
-      it "should raise an error" do
+      it "raises an error" do
         expect { unauthorised_user_route }.to raise_error Pundit::NotAuthorizedError
       end
     end
@@ -118,7 +118,7 @@ describe "Access Request API V2", type: :request do
       let(:unauthorised_user) { create(:user) }
       let(:payload) { { email: unauthorised_user.email } }
 
-      it "should raise an error" do
+      it "raises an error" do
         expect { access_requests_show_route }.to raise_error Pundit::NotAuthorizedError
       end
     end
@@ -224,7 +224,7 @@ describe "Access Request API V2", type: :request do
       let(:unauthorised_user) { create(:user) }
       let(:payload) { { email: unauthorised_user.email } }
 
-      it "should raise an error" do
+      it "raises an error" do
         expect { approve_route_request }.to raise_error Pundit::NotAuthorizedError
       end
     end
@@ -343,7 +343,7 @@ describe "Access Request API V2", type: :request do
         end
 
         context "with a user that does not already exist" do
-          it "should create the access_request record" do
+          it "creates the access_request record" do
             expect(response).to have_http_status(:success)
             access_request = AccessRequest.find_by(email_address: "bob@example.org")
             expect(access_request).not_to be_nil
@@ -411,7 +411,7 @@ describe "Access Request API V2", type: :request do
              headers: { "HTTP_AUTHORIZATION" => credentials }
     end
 
-    it "should add a discarded_at timestamp" do
+    it "adds a discarded_at timestamp" do
       expect(first_access_request.discarded_at).to be_within(1.second).of(Time.now.utc)
     end
   end

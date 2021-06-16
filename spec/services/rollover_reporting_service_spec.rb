@@ -68,7 +68,7 @@ describe RolloverReportingService do
         published_course
       end
 
-      it "it returns the correct courses in review" do
+      it "returns the correct courses in review" do
         expect(result[:total][:existing_courses_in_review]).to eq 1
       end
     end

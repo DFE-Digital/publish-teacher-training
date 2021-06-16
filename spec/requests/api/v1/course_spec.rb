@@ -395,7 +395,7 @@ describe "Courses API", type: :request do
               headers: { "HTTP_AUTHORIZATION" => credentials }
         end
 
-        it "should equal 'P'" do
+        it "equals 'P'" do
           json = JSON.parse(response.body).first
           expect(json["age_range"]).to eq("P")
         end
@@ -413,7 +413,7 @@ describe "Courses API", type: :request do
               headers: { "HTTP_AUTHORIZATION" => credentials }
         end
 
-        it "should equal 'M'" do
+        it "equals 'M'" do
           json = JSON.parse(response.body).first
           expect(json["age_range"]).to eq("M")
         end
@@ -431,7 +431,7 @@ describe "Courses API", type: :request do
               headers: { "HTTP_AUTHORIZATION" => credentials }
         end
 
-        it "should equal 'S'" do
+        it "equals 'S'" do
           json = JSON.parse(response.body).first
           expect(json["age_range"]).to eq("S")
         end

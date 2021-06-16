@@ -141,12 +141,6 @@ RSpec/EmptyExampleGroup:
     - "spec/docs/subject_areas_spec.rb"
     - "spec/docs/subjects_spec.rb"
 
-# Offense count: 83
-# Cop supports --auto-correct.
-# Configuration parameters: CustomTransform, IgnoredWords.
-RSpec/ExampleWording:
-  Enabled: false
-
 # Offense count: 2
 RSpec/ExpectOutput:
   Exclude:

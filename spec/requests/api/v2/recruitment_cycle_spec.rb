@@ -180,7 +180,7 @@ describe "/api/v2/recruitment_cycle", type: :request do
     }
 
     describe "the JSON response" do
-      it "should be the correct jsonapi response" do
+      it "is the correct jsonapi response" do
         perform_request
 
         expect(json_response).to eq expected_response

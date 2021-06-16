@@ -253,7 +253,7 @@ describe Site, type: :model do
         site.update(latitude: 1.2, longitude: 1.3)
       end
 
-      it "should call the TravelToWorkAreaAndLondonBoroughJob" do
+      it "calls the TravelToWorkAreaAndLondonBoroughJob" do
         expect(TravelToWorkAreaAndLondonBoroughJob).to have_received(:perform_later).with(site.id)
       end
     end

@@ -466,7 +466,7 @@ describe Course, type: :model do
           subject.valid?
         end
 
-        it "should add enrichment errors" do
+        it "adds enrichment errors" do
           expect(subject.errors.full_messages).to_not be_empty
         end
       end
@@ -481,7 +481,7 @@ describe Course, type: :model do
           subject.publishable?
         end
 
-        it "should add enrichment errors" do
+        it "adds enrichment errors" do
           expect(subject.errors.full_messages).to_not be_empty
         end
       end
@@ -495,7 +495,7 @@ describe Course, type: :model do
           subject.publishable?
         end
 
-        it "Should give an error for the subjects" do
+        it "gives an error for the subjects" do
           expect(subject.errors.full_messages).to match_array([
             "There is a problem with this course. Contact support to fix it (Error: S)",
             "You must pick at least one subject",
@@ -1085,7 +1085,7 @@ describe Course, type: :model do
     subject { create(:course, provider: provider, site_statuses: [first_site_status, second_site_status]) }
 
     describe "#sites" do
-      it "should only return new and running sites" do
+      it "onlies return new and running sites" do
         expect(subject.sites.to_a).to eq([first_site])
       end
     end
@@ -1105,7 +1105,7 @@ describe Course, type: :model do
           expect(second_site_status.reload.status).to eq("suspended")
         end
 
-        it "should destroy the old site status" do
+        it "destroys the old site status" do
           expect(SiteStatus.where(id: new_site_status.id)).to be_empty
         end
       end
@@ -1124,22 +1124,22 @@ describe Course, type: :model do
         end
 
         context "Which is then saved" do
-          it "Should only have two site statuses" do
+          it "onlies have two site statuses" do
             course.save
             expect(course.site_statuses.count).to eq(2)
           end
         end
       end
 
-      it "should assign new sites" do
+      it "assigns new sites" do
         expect(subject.sites.to_a).to eq([second_site, new_site])
       end
 
-      it "should set the sites to running" do
+      it "sets the sites to running" do
         expect(second_site_status.reload.status).to eq("running")
       end
 
-      it "should set old site_status to suspended" do
+      it "sets old site_status to suspended" do
         expect(first_site_status.reload.status).to eq("suspended")
       end
     end
@@ -1923,7 +1923,7 @@ describe Course, type: :model do
   end
 
   describe "self.get_by_codes" do
-    it "should return the found course" do
+    it "returns the found course" do
       expect(Course.get_by_codes(
                course.recruitment_cycle.year,
                course.provider.provider_code,

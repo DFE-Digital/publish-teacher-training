@@ -133,7 +133,7 @@ describe Course, type: :model do
   describe "start_date_options" do
     let(:recruitment_year) { course.provider.recruitment_cycle.year.to_i }
 
-    it "should return the correct options for the recruitment_cycle" do
+    it "returns the correct options for the recruitment_cycle" do
       expect(course.start_date_options).to eq(
         ["October #{recruitment_year - 1}",
          "November #{recruitment_year - 1}",
@@ -165,7 +165,7 @@ describe Course, type: :model do
     let(:recruitment_year) { course.provider.recruitment_cycle.year.to_i }
 
     context "when unpublished" do
-      it "should return the correct options for the recruitment_cycle" do
+      it "returns the correct options for the recruitment_cycle" do
         expect(course.show_start_date?).to eq(true)
       end
     end
@@ -174,7 +174,7 @@ describe Course, type: :model do
       let(:enrichment) { create(:course_enrichment, :published) }
       let(:course) { create(:course, enrichments: [enrichment]) }
 
-      it "should return no options" do
+      it "returns no options" do
         expect(course.show_start_date?).to eq(false)
       end
     end
@@ -184,7 +184,7 @@ describe Course, type: :model do
     let(:recruitment_year) { course.provider.recruitment_cycle.year.to_i }
 
     context "when unpublished" do
-      it "should indicate that the option is a checkbox" do
+      it "indicates that the option is a checkbox" do
         expect(course.show_is_send?).to eq(true)
       end
     end
@@ -193,7 +193,7 @@ describe Course, type: :model do
       let(:enrichment) { create(:course_enrichment, :published) }
       let(:course) { create(:course, enrichments: [enrichment]) }
 
-      it "should indicate that the option is hidden" do
+      it "indicates that the option is hidden" do
         expect(course.show_is_send?).to eq(false)
       end
     end
@@ -203,7 +203,7 @@ describe Course, type: :model do
     let(:recruitment_year) { course.provider.recruitment_cycle.year.to_i }
 
     context "when unpublished" do
-      it "should indicate that the option is a checkbox" do
+      it "indicates that the option is a checkbox" do
         expect(course.show_applications_open?).to eq(true)
       end
     end
@@ -212,7 +212,7 @@ describe Course, type: :model do
       let(:enrichment) { create(:course_enrichment, :published) }
       let(:course) { create(:course, enrichments: [enrichment]) }
 
-      it "should indicate that the option is hidden" do
+      it "indicates that the option is hidden" do
         expect(course.show_applications_open?).to eq(false)
       end
     end
