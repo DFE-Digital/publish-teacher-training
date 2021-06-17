@@ -433,7 +433,7 @@ describe "GET v3/courses" do
       let(:request_path) { "/api/v3/courses?filter[subjects]=A1,B1" }
       let(:course_with_B1_subject) do
         create(:course,
-               enrichments: [published_enrichment],
+               enrichments: [build(:course_enrichment, :published)],
                site_statuses: [build(:site_status, :findable)],
                subjects: [create(:primary_subject, subject_code: "B1")])
       end
@@ -516,7 +516,7 @@ describe "GET v3/courses" do
                provider: provider_filtered_by,
                accrediting_provider: provider_filtered_by,
                site_statuses: [create(:site_status, :findable, site: site1)],
-               enrichments: [published_enrichment])
+               enrichments: [build(:course_enrichment, :published)])
       }
       let(:another_provider_course) {
         create(:course,
@@ -524,7 +524,7 @@ describe "GET v3/courses" do
                provider: another_training_provider,
                accrediting_provider: provider_filtered_by,
                site_statuses: [create(:site_status, :findable, site: site2)],
-               enrichments: [published_enrichment])
+               enrichments: [build(:course_enrichment, :published)])
       }
 
       before do

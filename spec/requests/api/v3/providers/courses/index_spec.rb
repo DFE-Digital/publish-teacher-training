@@ -2,6 +2,7 @@ require "rails_helper"
 
 describe "GET v3/recruitment_cycle/:recruitment_cycle_year/providers/:provider_code/courses" do
   let(:course_subject_mathematics) { find_or_create(:primary_subject, :primary_with_mathematics) }
+  let(:course_subject_english) { find_or_create(:primary_subject, :primary_with_english) }
 
   let(:current_cycle) { find_or_create :recruitment_cycle }
   let(:next_cycle)    { find_or_create :recruitment_cycle, :next }
@@ -20,7 +21,7 @@ describe "GET v3/recruitment_cycle/:recruitment_cycle_year/providers/:provider_c
            study_mode: :full_time,
            subjects: subjects,
            is_send: true,
-           site_statuses: [courses_site_status],
+           site_statuses: [courses_site_status_maths],
            enrichments: [enrichment],
            maths: :must_have_qualification_at_application_time,
            english: :must_have_qualification_at_application_time,
@@ -28,25 +29,48 @@ describe "GET v3/recruitment_cycle/:recruitment_cycle_year/providers/:provider_c
            age_range_in_years: "3_to_7",
            applications_open_from: applications_open_from)
   end
+  let(:unpublished_open_course) do
+    create(:course,
+           level: "primary",
+           name: "English",
+           provider: provider,
+           start_date: Time.now.utc,
+           study_mode: :full_time,
+           subjects: [course_subject_english],
+           is_send: true,
+           site_statuses: [courses_site_status_english],
+           enrichments: [withdrawn_enrichment],
+           maths: :must_have_qualification_at_application_time,
+           english: :must_have_qualification_at_application_time,
+           science: :must_have_qualification_at_application_time,
+           age_range_in_years: "3_to_7",
+           applications_open_from: applications_open_from)
+  end
 
-  let(:courses_site_status) do
+  let(:courses_site_status_maths) do
+    build(:site_status,
+          :findable,
+          :with_any_vacancy,
+          site: create(:site, provider: provider))
+  end
+  let(:courses_site_status_english) do
     build(:site_status,
           :findable,
           :with_any_vacancy,
           site: create(:site, provider: provider))
   end
 
-  let(:enrichment)     { build :course_enrichment, :published }
-  let(:provider)       { create :provider }
+  let(:enrichment)           { build :course_enrichment, :published }
+  let(:withdrawn_enrichment) { build :course_enrichment, :withdrawn }
+  let(:provider)             { create :provider }
 
-  let(:site_status)    { findable_open_course.site_statuses.first }
-  let(:site)           { site_status.site }
+  let(:site_status)          { findable_open_course.site_statuses.first }
+  let(:site)                 { site_status.site }
 
   subject { response }
 
   describe "GET index" do
     def perform_request
-      findable_open_course
       get request_path
       response
     end
@@ -60,6 +84,7 @@ describe "GET v3/recruitment_cycle/:recruitment_cycle_year/providers/:provider_c
         it { is_expected.to have_http_status(:success) }
 
         it "has a data section with the correct attributes" do
+          findable_open_course
           perform_request
 
           json_response = JSON.parse response.body
@@ -147,6 +172,7 @@ describe "GET v3/recruitment_cycle/:recruitment_cycle_year/providers/:provider_c
       let(:another_course) { create(:course, provider: another_provider, site_statuses: [build(:site_status, :findable)]) }
 
       before do
+        findable_open_course
         another_provider
         another_course
         perform_request
@@ -171,6 +197,7 @@ describe "GET v3/recruitment_cycle/:recruitment_cycle_year/providers/:provider_c
         create :course,
                provider: next_provider,
                course_code: findable_open_course.course_code,
+               enrichments: [build(:course_enrichment, :published)],
                site_statuses: [build(:site_status, :findable)]
       }
 
@@ -188,6 +215,18 @@ describe "GET v3/recruitment_cycle/:recruitment_cycle_year/providers/:provider_c
           expect(json_response["data"].first)
             .to have_attribute("recruitment_cycle_year").with_value(current_year.to_s)
         end
+
+        it "only returns data for published courses" do
+          unpublished_open_course
+          findable_open_course
+
+          perform_request
+
+          json_response = JSON.parse response.body
+          expect(json_response["data"].count).to eq 1
+          expect(json_response["data"].first)
+            .to have_attribute("name").with_value('Mathematics')
+        end
       end
 
       describe "making a request for the next recruitment cycle" do
@@ -197,7 +236,6 @@ describe "GET v3/recruitment_cycle/:recruitment_cycle_year/providers/:provider_c
         }
 
         it "only returns data for the next recruitment cycle" do
-          findable_open_course
           next_course
 
           perform_request
