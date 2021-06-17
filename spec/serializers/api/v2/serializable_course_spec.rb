@@ -33,6 +33,10 @@ describe API::V2::SerializableCourse do
   it { should have_attribute :provider_code }
   it { should have_attribute :age_range_in_years }
   it { should have_attribute(:recruitment_cycle_year).with_value(course.recruitment_cycle.year) }
+  it { should have_attribute(:degree_grade).with_value(course.degree_grade) }
+  it { should have_attribute(:additional_degree_subject_requirements).with_value(course.additional_degree_subject_requirements) }
+  it { should have_attribute(:degree_subject_requirements).with_value(course.degree_subject_requirements) }
+
 
   context "with a provider" do
     let(:provider) { course.provider }

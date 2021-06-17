@@ -68,6 +68,9 @@ private
       accredited_body_code
       funding_type
       level
+      degree_grade
+      additional_degree_subject_requirements
+      degree_subject_requirements
     ]
   end
 

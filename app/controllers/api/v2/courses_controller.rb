@@ -289,7 +289,11 @@ module API
                   :course_code,
                   :subjects_ids,
                   :subjects_types,
-                  :level)
+                  :level,
+                  :degree_grade,
+                  :additional_degree_subject_requirements,
+                  :degree_subject_requirements,
+                )
           .permit(
             :about_course,
             :course_length,

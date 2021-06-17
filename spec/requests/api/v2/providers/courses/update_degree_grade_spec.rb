@@ -3,7 +3,7 @@ require "rails_helper"
 describe "PATCH /providers/:provider_code/courses/:course_code" do
   let(:jsonapi_renderer) { JSONAPI::Serializable::Renderer.new }
 
-  def perform_request(updated_age_range_in_years)
+  def perform_request(updated_degree_grade)
     jsonapi_data = jsonapi_renderer.render(
       course,
       class: {
@@ -11,7 +11,7 @@ describe "PATCH /providers/:provider_code/courses/:course_code" do
       },
     )
 
-    jsonapi_data[:data][:attributes] = updated_age_range_in_years
+    jsonapi_data[:data][:attributes] = updated_degree_grade
 
     patch "/api/v2/providers/#{course.provider.provider_code}" \
             "/courses/#{course.course_code}",
@@ -29,57 +29,59 @@ describe "PATCH /providers/:provider_code/courses/:course_code" do
   let(:course)            {
     create :course,
            provider: provider,
-           age_range_in_years: age_range_in_years
+           degree_grade: "two_one"
   }
-  let(:age_range_in_years) { "3_to_7" }
   let(:permitted_params) do
-    %i[age_range_in_years]
+    %i[degree_grade]
   end
 
-  before do
-    perform_request(updated_age_range_in_years)
-  end
-
-  context "course has an updated age range in years" do
-    let(:updated_age_range_in_years) { { age_range_in_years: "8_to_12" } }
+  context "course has an updated_degree_grade" do
+    let(:updated_degree_grade) { { degree_grade: "two_two" } }
 
     it "returns http success" do
+      perform_request(updated_degree_grade)
       expect(response).to have_http_status(:success)
     end
 
-    it "updates the age_range_in_years attribute to the correct value" do
-      expect(course.reload.age_range_in_years).to eq(updated_age_range_in_years[:age_range_in_years])
+    it "updates the updated_degree_grade attribute to the correct value" do
+      expect {
+        perform_request(updated_degree_grade)
+      }.to change { course.reload.degree_grade }
+             .from("two_one").to("two_two")
     end
   end
 
-  context "course has the same age_range_in_years" do
+  context "course has the same updated_degree_grade" do
     context "with values passed into the params" do
-      let(:updated_age_range_in_years) { { age_range_in_years: "3_to_7" } }
+      let(:updated_degree_grade) { { degree_grade: "two_one" } }
 
       it "returns http success" do
+        perform_request(updated_degree_grade)
         expect(response).to have_http_status(:success)
       end
 
-      it "does not change age_range_in_years attribute" do
-        expect(course.reload.age_range_in_years).to eq(updated_age_range_in_years[:age_range_in_years])
+      it "does not change updated_degree_grade attribute" do
+        expect {
+          perform_request(updated_degree_grade)
+        }.to_not change { course.reload.degree_grade }
+             .from("two_one")
       end
     end
   end
 
   context "with no values passed into the params" do
-    let(:updated_age_range_in_years) { {} }
-
-    before do
-      @age_range_in_years = course.age_range_in_years
-      perform_request(updated_age_range_in_years)
-    end
+    let(:updated_degree_grade) { {} }
 
     it "returns http success" do
+      perform_request(updated_degree_grade)
       expect(response).to have_http_status(:success)
     end
 
-    it "does not change age_range_in_years attribute" do
-      expect(course.reload.age_range_in_years).to eq(@age_range_in_years)
+    it "does not change updated_degree_grade attribute" do
+      expect {
+        perform_request(updated_degree_grade)
+      }.to_not change { course.reload.degree_grade }
+           .from("two_one")
     end
   end
 end

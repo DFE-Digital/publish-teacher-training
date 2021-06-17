@@ -22,6 +22,9 @@ FactoryBot.define do
         to: DateTime.new(provider.recruitment_cycle.year.to_i, 9, 29),
       )
     }
+    degree_grade { :two_one }
+    additional_degree_subject_requirements { true }
+    degree_subject_requirements { Faker::Lorem.sentence.to_s }
 
     trait :without_validation do
       to_create { |instance| instance.save(validate: false) }
