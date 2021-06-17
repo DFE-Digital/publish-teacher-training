@@ -35,19 +35,19 @@ describe "PATCH /providers/:provider_code/courses/:course_code" do
     %i[degree_subject_requirements]
   end
 
-  before do
-    perform_request(updated_degree_subject_requirements)
-  end
-
   context "course has an updated_degree_subject_requirements" do
     let(:updated_degree_subject_requirements) { { degree_subject_requirements: "Must have a Physics A level." } }
 
     it "returns http success" do
+      perform_request(updated_degree_subject_requirements)
       expect(response).to have_http_status(:success)
     end
 
     it "updates the updated_degree_subject_requirements attribute to the correct value" do
-      expect(course.reload.degree_subject_requirements).to eq(updated_degree_subject_requirements[:degree_subject_requirements])
+      expect {
+        perform_request(updated_degree_subject_requirements)
+      }.to change { course.reload.degree_subject_requirements }
+            .from("Must have a Maths A level.").to("Must have a Physics A level.")
     end
   end
 
@@ -56,11 +56,15 @@ describe "PATCH /providers/:provider_code/courses/:course_code" do
       let(:updated_degree_subject_requirements) { { degree_subject_requirements: "Must have a Maths A level." } }
 
       it "returns http success" do
+        perform_request(updated_degree_subject_requirements)
         expect(response).to have_http_status(:success)
       end
 
       it "does not change updated_degree_subject_requirements attribute" do
-        expect(course.reload.degree_subject_requirements).to eq(updated_degree_subject_requirements[:degree_subject_requirements])
+        expect {
+          perform_request(updated_degree_subject_requirements)
+        }.to_not change { course.reload.degree_subject_requirements }
+             .from("Must have a Maths A level.")
       end
     end
   end
@@ -68,17 +72,16 @@ describe "PATCH /providers/:provider_code/courses/:course_code" do
   context "with no values passed into the params" do
     let(:updated_degree_subject_requirements) { {} }
 
-    before do
-      @degree_subject_requirements = course.degree_subject_requirements
-      perform_request(updated_degree_subject_requirements)
-    end
-
     it "returns http success" do
+      perform_request(updated_degree_subject_requirements)
       expect(response).to have_http_status(:success)
     end
 
     it "does not change updated_degree_subject_requirements attribute" do
-      expect(course.reload.degree_subject_requirements).to eq(@degree_subject_requirements)
+      expect {
+        perform_request(updated_degree_subject_requirements)
+      }.to_not change { course.reload.degree_subject_requirements }
+           .from("Must have a Maths A level.")
     end
   end
 end

@@ -26,28 +26,28 @@ describe "PATCH /providers/:provider_code/courses/:course_code" do
   let(:payload)           { { email: user.email } }
   let(:credentials)       { encode_to_credentials(payload) }
 
-  let(:course)            {
+  let(:course)            do
     create :course,
            provider: provider,
            additional_degree_subject_requirements: true
-  }
+  end
   let(:permitted_params) do
     %i[additional_degree_subject_requirements]
   end
 
-  before do
-    perform_request(updated_additional_degree_subject_requirements)
-  end
-
   context "course has an updated_additional_degree_subject_requirements" do
-    let(:updated_additional_degree_subject_requirements) { { additional_degree_subject_requirements: false} }
+    let(:updated_additional_degree_subject_requirements) { { additional_degree_subject_requirements: false } }
 
     it "returns http success" do
+      perform_request(updated_additional_degree_subject_requirements)
       expect(response).to have_http_status(:success)
     end
 
     it "updates the updated_additional_degree_subject_requirements attribute to the correct value" do
-      expect(course.reload.additional_degree_subject_requirements).to eq(updated_additional_degree_subject_requirements[:additional_degree_subject_requirements])
+      expect {
+        perform_request(updated_additional_degree_subject_requirements)
+      }.to change { course.reload.additional_degree_subject_requirements }
+             .from(true).to(false)
     end
   end
 
@@ -56,11 +56,15 @@ describe "PATCH /providers/:provider_code/courses/:course_code" do
       let(:updated_additional_degree_subject_requirements) { { additional_degree_subject_requirements: true } }
 
       it "returns http success" do
+        perform_request(updated_additional_degree_subject_requirements)
         expect(response).to have_http_status(:success)
       end
 
       it "does not change updated_additional_degree_subject_requirements attribute" do
-        expect(course.reload.additional_degree_subject_requirements).to eq(updated_additional_degree_subject_requirements[:additional_degree_subject_requirements])
+        expect {
+          perform_request(updated_additional_degree_subject_requirements)
+        }.to_not change { course.reload.additional_degree_subject_requirements }
+             .from(true)
       end
     end
   end
@@ -68,17 +72,16 @@ describe "PATCH /providers/:provider_code/courses/:course_code" do
   context "with no values passed into the params" do
     let(:updated_additional_degree_subject_requirements) { {} }
 
-    before do
-      @additional_degree_subject_requirements = course.additional_degree_subject_requirements
-      perform_request(updated_additional_degree_subject_requirements)
-    end
-
     it "returns http success" do
+      perform_request(updated_additional_degree_subject_requirements)
       expect(response).to have_http_status(:success)
     end
 
     it "does not change updated_additional_degree_subject_requirements attribute" do
-      expect(course.reload.additional_degree_subject_requirements).to eq(@additional_degree_subject_requirements)
+      expect {
+        perform_request(updated_additional_degree_subject_requirements)
+      }.to_not change { course.reload.additional_degree_subject_requirements }
+           .from(true)
     end
   end
 end

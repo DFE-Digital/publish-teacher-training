@@ -35,19 +35,19 @@ describe "PATCH /providers/:provider_code/courses/:course_code" do
     %i[degree_grade]
   end
 
-  before do
-    perform_request(updated_degree_grade)
-  end
-
   context "course has an updated_degree_grade" do
     let(:updated_degree_grade) { { degree_grade: "two_two" } }
 
     it "returns http success" do
+      perform_request(updated_degree_grade)
       expect(response).to have_http_status(:success)
     end
 
     it "updates the updated_degree_grade attribute to the correct value" do
-      expect(course.reload.degree_grade).to eq(updated_degree_grade[:degree_grade])
+      expect {
+        perform_request(updated_degree_grade)
+      }.to change { course.reload.degree_grade }
+             .from("two_one").to("two_two")
     end
   end
 
@@ -56,11 +56,15 @@ describe "PATCH /providers/:provider_code/courses/:course_code" do
       let(:updated_degree_grade) { { degree_grade: "two_one" } }
 
       it "returns http success" do
+        perform_request(updated_degree_grade)
         expect(response).to have_http_status(:success)
       end
 
       it "does not change updated_degree_grade attribute" do
-        expect(course.reload.degree_grade).to eq(updated_degree_grade[:degree_grade])
+        expect {
+          perform_request(updated_degree_grade)
+        }.to_not change { course.reload.degree_grade }
+             .from("two_one")
       end
     end
   end
@@ -68,17 +72,16 @@ describe "PATCH /providers/:provider_code/courses/:course_code" do
   context "with no values passed into the params" do
     let(:updated_degree_grade) { {} }
 
-    before do
-      @degree_grade = course.degree_grade
-      perform_request(updated_degree_grade)
-    end
-
     it "returns http success" do
+      perform_request(updated_degree_grade)
       expect(response).to have_http_status(:success)
     end
 
     it "does not change updated_degree_grade attribute" do
-      expect(course.reload.degree_grade).to eq(@degree_grade)
+      expect {
+        perform_request(updated_degree_grade)
+      }.to_not change { course.reload.degree_grade }
+           .from("two_one")
     end
   end
 end
