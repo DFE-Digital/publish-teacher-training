@@ -29,7 +29,7 @@ describe "GET v3/recruitment_cycle/:recruitment_cycle_year/providers" do
   describe "JSON generated for a providers" do
     let(:request_path) { "/api/v3/recruitment_cycles/#{recruitment_cycle.year}/providers" }
 
-    it { should have_http_status(:success) }
+    it { is_expected.to have_http_status(:success) }
 
     it "has a data section with the correct attributes" do
       perform_request

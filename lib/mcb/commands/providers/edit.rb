@@ -6,8 +6,6 @@ option nil, :'not-accrediting-provider',
        "Update the accrediting provider attribute to not_an_accredited_body.",
        default: false
 
-
-
 run do |opts, args, _cmd|
   MCB.init_rails(opts)
   recruitment_cycle = MCB.get_recruitment_cycle(opts)

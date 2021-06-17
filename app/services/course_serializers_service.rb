@@ -43,7 +43,7 @@ class CourseSerializersService
       RecruitmentCycle: @recruitment_cycle_serializer,
       v3: {
         SubjectArea: @v3_subject_area_serializer,
-        #this is ok until the serializers for subjects need to diverge from V2
+        # this is ok until the serializers for subjects need to diverge from V2
         Subject: @subject_serializer,
         PrimarySubject: @primary_subject_serializer,
         SecondarySubject: @secondary_subject_serializer,

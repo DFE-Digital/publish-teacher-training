@@ -5,20 +5,20 @@ require "govuk_tech_docs/open_api/renderer"
 RSpec.describe GovukTechDocs::OpenApi::Renderer do
   let(:spec) do
     {
-      "openapi": "3.0.0",
-      "info": {
-        "title": "title",
-        "version": "0.0.1",
+      openapi: "3.0.0",
+      info: {
+        title: "title",
+        version: "0.0.1",
       },
-      "paths": {
+      paths: {
         "/widgets": {
-          "get": {
-            "responses": {
+          get: {
+            responses: {
               "200": {
-                "description": "description goes here",
-                "content": {
+                description: "description goes here",
+                content: {
                   "application/json": {
-                    "schema": {
+                    schema: {
                       "$ref": "#/components/schemas/widgets",
                     },
                   },
@@ -28,34 +28,34 @@ RSpec.describe GovukTechDocs::OpenApi::Renderer do
           },
         },
       },
-      "components": {
-        "schemas": {
-          "widgets": {
-            "properties": {
-              "data": {
-                "type": "array",
-                "items": {
+      components: {
+        schemas: {
+          widgets: {
+            properties: {
+              data: {
+                type: "array",
+                items: {
                   "$ref": "#/components/schemas/widget",
                 },
               },
             },
           },
-          "widget": {
-            "anyOf": [
-             { "$ref": "#/components/schemas/widgetInteger" },
-             { "$ref": "#/components/schemas/widgetString" },
+          widget: {
+            anyOf: [
+              { "$ref": "#/components/schemas/widgetInteger" },
+              { "$ref": "#/components/schemas/widgetString" },
             ],
           },
-          "widgetInteger": {
-            "type": "object",
-            "properties": {
-              "id": { "type": "integer", example: 12345 },
+          widgetInteger: {
+            type: "object",
+            properties: {
+              id: { type: "integer", example: 12345 },
             },
           },
-          "widgetString": {
-            "type": "object",
-            "properties": {
-              "id": { "type": "string", example: "abcde" },
+          widgetString: {
+            type: "object",
+            properties: {
+              id: { type: "string", example: "abcde" },
             },
           },
         },
@@ -77,7 +77,7 @@ RSpec.describe GovukTechDocs::OpenApi::Renderer do
 
     it "renders a server with no description" do
       spec["servers"] = [
-        { "url": "https://example.com" },
+        { url: "https://example.com" },
       ]
       document = Openapi3Parser.load(spec)
 
@@ -92,8 +92,8 @@ RSpec.describe GovukTechDocs::OpenApi::Renderer do
 
     it "renders a list of servers" do
       spec["servers"] = [
-        { "url": "https://example.com", "description": "Production" },
-        { "url": "https://dev.example.com", "description": "Development" },
+        { url: "https://example.com", description: "Production" },
+        { url: "https://dev.example.com", description: "Development" },
       ]
       document = Openapi3Parser.load(spec)
 

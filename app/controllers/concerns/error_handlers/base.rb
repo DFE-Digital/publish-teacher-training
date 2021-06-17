@@ -5,6 +5,7 @@ module ErrorHandlers
     included do
       rescue_from(StandardError) do |e|
         raise e unless Settings.render_json_errors
+
         Sentry.capture_exception(e)
         render_json_error(status: 500)
       end

@@ -11,6 +11,7 @@ describe "mcb providers create" do
   let(:organisation) { create(:organisation) }
   let(:provider_code) { "X01" }
   let!(:next_recruitment_cycle) { find_or_create(:recruitment_cycle, :next) }
+
   before do
     allow(MCB).to receive(:config).and_return(email: email)
   end

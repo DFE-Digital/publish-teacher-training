@@ -70,7 +70,7 @@ describe "Providers API v2", type: :request do
             "gt12_contact" => provider.ucas_preferences.gt12_response_destination.to_s,
             "application_alert_contact" => provider.ucas_preferences.application_alert_email,
             "type_of_gt12" => provider.ucas_preferences.type_of_gt12.to_s,
-            "send_application_alerts" =>  provider.ucas_preferences.send_application_alerts,
+            "send_application_alerts" => provider.ucas_preferences.send_application_alerts,
           },
           "relationships" => {
             "sites" => {

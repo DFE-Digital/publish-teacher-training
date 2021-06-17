@@ -1,39 +1,20 @@
-inherit_gem:
-  rubocop-govuk:
-    - config/default.yml
-    - config/rails.yml # add this line for Rails projects
+require:
+  - rubocop-rails
+  - rubocop-rspec
+
+inherit_from:
+  - ./config/rubocop/layout.yml
+  - ./config/rubocop/lint.yml
+  - ./config/rubocop/metrics.yml
+  - ./config/rubocop/naming.yml
+  - ./config/rubocop/rails.yml
+  - ./config/rubocop/rspec.yml
+  - ./config/rubocop/style.yml
+  - .rubocop_todo.yml
 
 AllCops:
+  NewCops: enable
   Exclude:
-    - "bin/rails"
-    - "bin/rake"
-    - "bin/setup"
-    - "bin/update"
+    - "bin/*"
     - "db/schema.rb"
-    - "config/initializers/county_to_region_code.rb"
-
-Rails/HasManyOrHasOneDependent:
-  Enabled: false
-Rails/InverseOf:
-  Exclude:
-    - app/models/course.rb
-
-Style/HashEachMethods:
-  Enabled: true
-Style/HashTransformKeys:
-  Enabled: true
-Style/HashTransformValues:
-  Enabled: true
-Naming/MemoizedInstanceVariableName:
-  EnforcedStyleForLeadingUnderscores: optional
-
-Rails/UnknownEnv:
-  Environments:
-    - production
-    - development
-    - test
-    - pentest
-    - rollover
-    - sandbox
-    - qa_pass
-    - research
+    - "node_modules/**/*"

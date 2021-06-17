@@ -26,7 +26,7 @@ describe "Site Helpers API V2" do
         perform_request
       end
 
-      it { should have_http_status(:unauthorized) }
+      it { is_expected.to have_http_status(:unauthorized) }
     end
 
     context "when unauthorised" do
@@ -58,9 +58,9 @@ describe "Site Helpers API V2" do
 
       before do
         site_status_params.merge!(
-          publish:                    publish,
-          status:                     status,
-          vac_status:                 vac_status,
+          publish: publish,
+          status: status,
+          vac_status: vac_status,
         )
       end
 
@@ -88,7 +88,7 @@ describe "Site Helpers API V2" do
 
         subject { response }
 
-        it { should have_http_status(:success) }
+        it { is_expected.to have_http_status(:success) }
 
         it "returns a JSON repsentation of the updated site site status" do
           subject

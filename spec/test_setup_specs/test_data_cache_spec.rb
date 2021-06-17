@@ -36,7 +36,7 @@ describe "TestDataCache" do
           Either add it to test_setup.rb or if it's used frequently, just create
           a FactoryBot factory instance.
         ERR_MSG
-     )
+      )
     end
 
     it "raises for unknown Factory types" do
@@ -47,7 +47,7 @@ describe "TestDataCache" do
           Unknown model type 'foo' for traits '[:bar, :raz]'.
           You need to add 'foo' to TestSetup or use a standard FactoryBot factory.
         ERR_MSG
-     )
+      )
     end
 
     it "returns the same course.id for multiple calls to get" do

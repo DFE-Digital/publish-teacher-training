@@ -68,7 +68,7 @@ describe RolloverReportingService do
         published_course
       end
 
-      it "it returns the correct courses in review" do
+      it "returns the correct courses in review" do
         expect(result[:total][:existing_courses_in_review]).to eq 1
       end
     end
@@ -76,14 +76,14 @@ describe RolloverReportingService do
     context "if there is no next recruitment cycle" do
       it "returns an empty object" do
         expect(result).to eq({
-                                total: {
-                                  published_courses: 0,
-                                  new_courses_published: 0,
-                                  deleted_courses: 0,
-                                  existing_courses_in_draft: 0,
-                                  existing_courses_in_review: 0,
-                                },
-                              })
+          total: {
+            published_courses: 0,
+            new_courses_published: 0,
+            deleted_courses: 0,
+            existing_courses_in_draft: 0,
+            existing_courses_in_review: 0,
+          },
+        })
       end
     end
   end

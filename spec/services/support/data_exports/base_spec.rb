@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe Support::DataExports::Base do
-  context ".to_csv" do
+  describe ".to_csv" do
     let(:data) {
       [
         {

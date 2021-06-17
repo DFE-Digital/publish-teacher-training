@@ -25,24 +25,23 @@ describe API::V2::SerializableProvider do
 
   subject { JSON.parse(resource.as_jsonapi.to_json) }
 
-  it { should have_type "providers" }
-  it { should have_attribute(:provider_code).with_value(provider.provider_code) }
-  it { should have_attribute(:provider_name).with_value(provider.provider_name) }
-  it { should have_attribute(:accredited_body?).with_value(false) }
-  it { should have_attribute(:can_add_more_sites?).with_value(true) }
-  it { should have_attribute(:recruitment_cycle_year).with_value(provider.recruitment_cycle.year) }
-  it { should have_attribute(:gt12_contact).with_value(provider.ucas_preferences.gt12_response_destination) }
-  it { should have_attribute(:application_alert_contact).with_value(provider.ucas_preferences.application_alert_email) }
-  it { should have_attribute(:type_of_gt12).with_value(provider.ucas_preferences.type_of_gt12) }
-  it { should have_attribute(:send_application_alerts).with_value(provider.ucas_preferences.send_application_alerts) }
-  it { should have_attribute(:train_with_us).with_value(provider.train_with_us) }
-  it { should have_attribute(:train_with_disability).with_value(provider.train_with_disability) }
-  it { should have_attribute(:can_sponsor_student_visa).with_value(provider.can_sponsor_student_visa) }
-  it { should have_attribute(:can_sponsor_skilled_worker_visa).with_value(provider.can_sponsor_skilled_worker_visa) }
-
+  it { is_expected.to have_type "providers" }
+  it { is_expected.to have_attribute(:provider_code).with_value(provider.provider_code) }
+  it { is_expected.to have_attribute(:provider_name).with_value(provider.provider_name) }
+  it { is_expected.to have_attribute(:accredited_body?).with_value(false) }
+  it { is_expected.to have_attribute(:can_add_more_sites?).with_value(true) }
+  it { is_expected.to have_attribute(:recruitment_cycle_year).with_value(provider.recruitment_cycle.year) }
+  it { is_expected.to have_attribute(:gt12_contact).with_value(provider.ucas_preferences.gt12_response_destination) }
+  it { is_expected.to have_attribute(:application_alert_contact).with_value(provider.ucas_preferences.application_alert_email) }
+  it { is_expected.to have_attribute(:type_of_gt12).with_value(provider.ucas_preferences.type_of_gt12) }
+  it { is_expected.to have_attribute(:send_application_alerts).with_value(provider.ucas_preferences.send_application_alerts) }
+  it { is_expected.to have_attribute(:train_with_us).with_value(provider.train_with_us) }
+  it { is_expected.to have_attribute(:train_with_disability).with_value(provider.train_with_disability) }
+  it { is_expected.to have_attribute(:can_sponsor_student_visa).with_value(provider.can_sponsor_student_visa) }
+  it { is_expected.to have_attribute(:can_sponsor_skilled_worker_visa).with_value(provider.can_sponsor_skilled_worker_visa) }
 
   it do
-    should have_attribute(:accredited_bodies).with_value([
+    expect(subject).to have_attribute(:accredited_bodies).with_value([
       {
         "provider_name" => accrediting_provider.provider_name,
         "provider_code" => accrediting_provider.provider_code,

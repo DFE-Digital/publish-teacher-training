@@ -8,11 +8,11 @@ module MCB
       end
 
       def initialize(payload:,
-        secret: nil,
-        algorithm: nil,
-        audience: nil,
-        issuer: nil,
-        subject: nil)
+                     secret: nil,
+                     algorithm: nil,
+                     audience: nil,
+                     issuer: nil,
+                     subject: nil)
         @payload = payload
 
         @secret = secret

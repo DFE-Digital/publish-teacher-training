@@ -80,7 +80,7 @@ describe Course, type: :model do
           find(:secondary_subject, :science),
           find(:secondary_subject, :social_sciences),
         ],
-        )
+      )
     end
   end
 
@@ -103,6 +103,7 @@ describe Course, type: :model do
     context "for a further education course" do
       let(:course) { create(:course, level: "further_education", subjects: [subjects]) }
       let(:subjects) { find(:further_education_subject) }
+
       it "returns only QTS options for users to choose between" do
         expect(course.qualification_options).to eq(%w[pgce pgde])
         course.qualification_options.each do |q|
@@ -122,6 +123,7 @@ describe Course, type: :model do
     context "for secondary" do
       let(:course) { create(:course, level: "secondary", subjects: [subjects]) }
       let(:subjects) { find(:secondary_subject, :biology) }
+
       it "returns the correct age ranges for users to co choose between" do
         expect(course.age_range_options).to eq(%w[11_to_16 11_to_18 14_to_19])
       end
@@ -131,7 +133,7 @@ describe Course, type: :model do
   describe "start_date_options" do
     let(:recruitment_year) { course.provider.recruitment_cycle.year.to_i }
 
-    it "should return the correct options for the recruitment_cycle" do
+    it "returns the correct options for the recruitment_cycle" do
       expect(course.start_date_options).to eq(
         ["October #{recruitment_year - 1}",
          "November #{recruitment_year - 1}",
@@ -155,7 +157,7 @@ describe Course, type: :model do
          "May #{recruitment_year + 1}",
          "June #{recruitment_year + 1}",
          "July #{recruitment_year + 1}"],
-     )
+      )
     end
   end
 
@@ -163,7 +165,7 @@ describe Course, type: :model do
     let(:recruitment_year) { course.provider.recruitment_cycle.year.to_i }
 
     context "when unpublished" do
-      it "should return the correct options for the recruitment_cycle" do
+      it "returns the correct options for the recruitment_cycle" do
         expect(course.show_start_date?).to eq(true)
       end
     end
@@ -172,7 +174,7 @@ describe Course, type: :model do
       let(:enrichment) { create(:course_enrichment, :published) }
       let(:course) { create(:course, enrichments: [enrichment]) }
 
-      it "should return no options" do
+      it "returns no options" do
         expect(course.show_start_date?).to eq(false)
       end
     end
@@ -182,7 +184,7 @@ describe Course, type: :model do
     let(:recruitment_year) { course.provider.recruitment_cycle.year.to_i }
 
     context "when unpublished" do
-      it "should indicate that the option is a checkbox" do
+      it "indicates that the option is a checkbox" do
         expect(course.show_is_send?).to eq(true)
       end
     end
@@ -191,7 +193,7 @@ describe Course, type: :model do
       let(:enrichment) { create(:course_enrichment, :published) }
       let(:course) { create(:course, enrichments: [enrichment]) }
 
-      it "should indicate that the option is hidden" do
+      it "indicates that the option is hidden" do
         expect(course.show_is_send?).to eq(false)
       end
     end
@@ -201,7 +203,7 @@ describe Course, type: :model do
     let(:recruitment_year) { course.provider.recruitment_cycle.year.to_i }
 
     context "when unpublished" do
-      it "should indicate that the option is a checkbox" do
+      it "indicates that the option is a checkbox" do
         expect(course.show_applications_open?).to eq(true)
       end
     end
@@ -210,7 +212,7 @@ describe Course, type: :model do
       let(:enrichment) { create(:course_enrichment, :published) }
       let(:course) { create(:course, enrichments: [enrichment]) }
 
-      it "should indicate that the option is hidden" do
+      it "indicates that the option is hidden" do
         expect(course.show_applications_open?).to eq(false)
       end
     end

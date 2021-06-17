@@ -1,4 +1,3 @@
-
 require "rails_helper"
 
 describe "Interrupt page acknowledgements API v2", type: :request do
@@ -51,12 +50,12 @@ describe "Interrupt page acknowledgements API v2", type: :request do
 
     subject do
       post path,
-          headers: { "HTTP_AUTHORIZATION" => credentials },
-          params: {
-            interrupt_page_acknowledgement: {
-              page: "rollover"
-            }
-          }
+           headers: { "HTTP_AUTHORIZATION" => credentials },
+           params: {
+             interrupt_page_acknowledgement: {
+               page: "rollover"
+             }
+           }
       response
     end
 

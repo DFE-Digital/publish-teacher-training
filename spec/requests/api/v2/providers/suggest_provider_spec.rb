@@ -21,42 +21,42 @@ describe "GET /suggest" do
       get "/api/v2/providers/suggest?query=#{provider.provider_name}",
           headers: { "HTTP_AUTHORIZATION" => credentials }
 
-      expect(JSON.parse(response.body)["data"]).
-          to match_array([
-                             {
-                                 "id" => provider.id.to_s,
-                                 "type" => "provider",
-                                 "attributes" => {
-                                     "provider_code" => provider.provider_code,
-                                     "provider_name" => provider.provider_name,
-                                 },
-                             },
-                         ])
+      expect(JSON.parse(response.body)["data"])
+          .to match_array([
+            {
+              "id" => provider.id.to_s,
+              "type" => "provider",
+              "attributes" => {
+                "provider_code" => provider.provider_code,
+                "provider_name" => provider.provider_name,
+              },
+            },
+          ])
     end
 
     it "searches for a partial provider" do
       get "/api/v2/providers/suggest?query=#{provider2.provider_name[0..3]}",
           headers: { "HTTP_AUTHORIZATION" => credentials }
 
-      expect(JSON.parse(response.body)["data"]).
-          to match_array([
-                             {
-                                 "id" => provider.id.to_s,
-                                 "type" => "provider",
-                                 "attributes" => {
-                                     "provider_code" => provider.provider_code,
-                                     "provider_name" => provider.provider_name,
-                                 },
-                             },
-                             {
-                                 "id" => provider2.id.to_s,
-                                 "type" => "provider",
-                                 "attributes" => {
-                                     "provider_code" => provider2.provider_code,
-                                     "provider_name" => provider2.provider_name,
-                                 },
-                             },
-                         ])
+      expect(JSON.parse(response.body)["data"])
+          .to match_array([
+            {
+              "id" => provider.id.to_s,
+              "type" => "provider",
+              "attributes" => {
+                "provider_code" => provider.provider_code,
+                "provider_name" => provider.provider_name,
+              },
+            },
+            {
+              "id" => provider2.id.to_s,
+              "type" => "provider",
+              "attributes" => {
+                "provider_code" => provider2.provider_code,
+                "provider_name" => provider2.provider_name,
+              },
+            },
+          ])
     end
   end
 
@@ -73,9 +73,7 @@ describe "GET /suggest" do
   end
 
   it "limits responses to a maximum of 5 items" do
-    11.times do
-      create(:provider, provider_name: "provider X", organisations: [organisation], recruitment_cycle: next_recruitment_cycle)
-    end
+    create_list(:provider, 11, provider_name: "provider X", organisations: [organisation], recruitment_cycle: next_recruitment_cycle)
 
     get "/api/v2/recruitment_cycles/#{next_recruitment_cycle.year}/providers/suggest?query=provider",
         headers: { "HTTP_AUTHORIZATION" => credentials }

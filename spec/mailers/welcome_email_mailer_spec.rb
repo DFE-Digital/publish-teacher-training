@@ -3,6 +3,7 @@ require "rails_helper"
 describe WelcomeEmailMailer, type: :mailer do
   context "Sending an email to a user" do
     let(:mail) { described_class.send_welcome_email(first_name: "meow", email: "cat@meow.cat") }
+
     before { mail }
 
     it "Sends an email with the correct template" do

@@ -4,23 +4,26 @@ describe CourseEnrichment, type: :model do
   subject { build :course_enrichment }
 
   describe "associations" do
-    it { should belong_to(:course) }
+    it { is_expected.to belong_to(:course) }
   end
 
   describe "#has_been_published_before?" do
     context "when the enrichment is an initial draft" do
       subject { create(:course_enrichment, :initial_draft) }
-      it { should_not have_been_published_before }
+
+      it { is_expected.to_not have_been_published_before }
     end
 
     context "when the enrichment is published" do
       subject { create(:course_enrichment, :published) }
-      it { should have_been_published_before }
+
+      it { is_expected.to have_been_published_before }
     end
 
     context "when the enrichment is a subsequent draft" do
       subject { create(:course_enrichment, :subsequent_draft) }
-      it { should have_been_published_before }
+
+      it { is_expected.to have_been_published_before }
     end
   end
 
@@ -34,10 +37,10 @@ describe CourseEnrichment, type: :model do
         subject.publish(user)
       end
 
-      it { should be_published }
-      its(:updated_at) { should be_within(1.second).of Time.now.utc }
-      its(:last_published_timestamp_utc) { should be_within(1.second).of Time.now.utc }
-      its(:updated_by_user_id) { should eq user.id }
+      it { is_expected.to be_published }
+      its(:updated_at) { is_expected.to be_within(1.second).of Time.now.utc }
+      its(:last_published_timestamp_utc) { is_expected.to be_within(1.second).of Time.now.utc }
+      its(:updated_by_user_id) { is_expected.to eq user.id }
     end
 
     context "when the enrichment is a subsequent draft" do
@@ -47,10 +50,10 @@ describe CourseEnrichment, type: :model do
         subject.publish(user)
       end
 
-      it { should be_published }
-      its(:updated_at) { should be_within(1.second).of Time.now.utc }
-      its(:last_published_timestamp_utc) { should be_within(1.second).of Time.now.utc }
-      its(:updated_by_user_id) { should eq user.id }
+      it { is_expected.to be_published }
+      its(:updated_at) { is_expected.to be_within(1.second).of Time.now.utc }
+      its(:last_published_timestamp_utc) { is_expected.to be_within(1.second).of Time.now.utc }
+      its(:updated_by_user_id) { is_expected.to eq user.id }
     end
   end
 
@@ -71,16 +74,16 @@ describe CourseEnrichment, type: :model do
     context "with over 400 words" do
       let(:about_course_text) { Faker::Lorem.sentence(word_count: 400 + 1) }
 
-      it { should_not be_valid }
+      it { is_expected.to_not be_valid }
     end
 
     context "when nil" do
       let(:about_course_text) { nil }
 
-      it { should be_valid }
+      it { is_expected.to be_valid }
 
       describe "on publish" do
-        it { should_not be_valid :publish }
+        it { is_expected.to_not be_valid :publish }
       end
     end
   end
@@ -93,10 +96,10 @@ describe CourseEnrichment, type: :model do
     context "when nil" do
       let(:course_length_text) { nil }
 
-      it { should be_valid }
+      it { is_expected.to be_valid }
 
       describe "on publish" do
-        it { should_not be_valid :publish }
+        it { is_expected.to_not be_valid :publish }
       end
     end
   end
@@ -109,16 +112,16 @@ describe CourseEnrichment, type: :model do
     context "with over 400 words" do
       let(:how_school_placements_work_text) { Faker::Lorem.sentence(word_count: 400 + 1) }
 
-      it { should_not be_valid }
+      it { is_expected.to_not be_valid }
     end
 
     context "when nil" do
       let(:how_school_placements_work_text) { nil }
 
-      it { should be_valid }
+      it { is_expected.to be_valid }
 
       describe "on publish" do
-        it { should_not be_valid :publish }
+        it { is_expected.to_not be_valid :publish }
       end
     end
   end
@@ -131,7 +134,7 @@ describe CourseEnrichment, type: :model do
     context "with over 250 words" do
       let(:interview_process_text) { Faker::Lorem.sentence(word_count: 250 + 1) }
 
-      it { should_not be_valid }
+      it { is_expected.to_not be_valid }
     end
   end
 
@@ -143,16 +146,16 @@ describe CourseEnrichment, type: :model do
     context "with over 100 words" do
       let(:required_qualifications_text) { Faker::Lorem.sentence(word_count: 100 + 1) }
 
-      it { should_not be_valid }
+      it { is_expected.to_not be_valid }
     end
 
     context "when nil" do
       let(:required_qualifications_text) { nil }
 
-      it { should be_valid }
+      it { is_expected.to be_valid }
 
       describe "on publish" do
-        it { should_not be_valid :publish }
+        it { is_expected.to_not be_valid :publish }
       end
     end
   end
@@ -165,7 +168,7 @@ describe CourseEnrichment, type: :model do
     context "with over 100 words" do
       let(:personal_qualities_text) { Faker::Lorem.sentence(word_count: 100 + 1) }
 
-      it { should_not be_valid }
+      it { is_expected.to_not be_valid }
     end
   end
 
@@ -177,7 +180,7 @@ describe CourseEnrichment, type: :model do
     context "with over 100 words" do
       let(:other_requirements_text) { Faker::Lorem.sentence(word_count: 100 + 1) }
 
-      it { should_not be_valid }
+      it { is_expected.to_not be_valid }
     end
   end
 
@@ -185,35 +188,37 @@ describe CourseEnrichment, type: :model do
     let(:salary_details_text) { "this course is great" }
 
     subject(:salaried_course) { build :course, :with_salary }
+
     subject { build :course_enrichment, salary_details: salary_details_text, course: salaried_course }
 
     context "with over 250 words" do
       let(:salary_details_text) { Faker::Lorem.sentence(word_count: 250 + 1) }
 
-      it { should_not be_valid }
+      it { is_expected.to_not be_valid }
     end
 
     context "when nil" do
       let(:salary_details_text) { nil }
 
-      it { should be_valid }
+      it { is_expected.to be_valid }
 
       describe "on publish" do
-        it { should_not be_valid :publish }
+        it { is_expected.to_not be_valid :publish }
       end
     end
   end
 
   describe "validation for publish" do
     let(:course_enrichment) { build(:course_enrichment, :with_fee_based_course) }
+
     subject { course_enrichment }
 
     context "fee based course" do
-      it { should validate_presence_of(:fee_uk_eu).on(:publish) }
-      it { should validate_presence_of(:required_qualifications).on(:publish) }
-      it { should validate_presence_of(:fee_uk_eu).on(:publish) }
-      it { should validate_numericality_of(:fee_uk_eu).on(:publish) }
-      it { should validate_numericality_of(:fee_international).on(:publish) }
+      it { is_expected.to validate_presence_of(:fee_uk_eu).on(:publish) }
+      it { is_expected.to validate_presence_of(:required_qualifications).on(:publish) }
+      it { is_expected.to validate_presence_of(:fee_uk_eu).on(:publish) }
+      it { is_expected.to validate_numericality_of(:fee_uk_eu).on(:publish) }
+      it { is_expected.to validate_numericality_of(:fee_international).on(:publish) }
 
       it "validates maximum word count for interview_process" do
         course_enrichment.interview_process = Faker::Lorem.sentence(word_count: 250 + 1)
@@ -237,18 +242,18 @@ describe CourseEnrichment, type: :model do
           expect(course_enrichment.errors[:salary_details]).to be_empty
         end
 
-        it { should_not validate_presence_of(:salary_details).on(:publish) }
+        it { is_expected.to_not validate_presence_of(:salary_details).on(:publish) }
       end
     end
 
     context "salary based course" do
       let(:course_enrichment) { build(:course_enrichment, :with_salary_based_course) }
 
-      it { should validate_presence_of(:salary_details).on(:publish) }
-      it { should validate_presence_of(:required_qualifications).on(:publish) }
-      it { should_not validate_presence_of(:fee_uk_eu).on(:publish) }
-      it { should_not validate_numericality_of(:fee_uk_eu).on(:publish) }
-      it { should_not validate_numericality_of(:fee_international).on(:publish) }
+      it { is_expected.to validate_presence_of(:salary_details).on(:publish) }
+      it { is_expected.to validate_presence_of(:required_qualifications).on(:publish) }
+      it { is_expected.to_not validate_presence_of(:fee_uk_eu).on(:publish) }
+      it { is_expected.to_not validate_numericality_of(:fee_uk_eu).on(:publish) }
+      it { is_expected.to_not validate_numericality_of(:fee_international).on(:publish) }
 
       it "validates maximum word count for required_qualifications" do
         course_enrichment.required_qualifications = Faker::Lorem.sentence(word_count: 100 + 1)
@@ -272,7 +277,7 @@ describe CourseEnrichment, type: :model do
           expect(course_enrichment.errors[:fee_details]).to be_empty
         end
 
-        it { should_not validate_presence_of(:fee_uk_eu).on(:publish) }
+        it { is_expected.to_not validate_presence_of(:fee_uk_eu).on(:publish) }
       end
     end
   end
@@ -281,6 +286,7 @@ describe CourseEnrichment, type: :model do
     let(:provider) { create(:provider) }
     let(:course) { create(:course, provider: provider) }
     let(:last_published_timestamp_utc) { Date.new(2017, 1, 1) }
+
     subject {
       create(:course_enrichment, :published,
              last_published_timestamp_utc: last_published_timestamp_utc,

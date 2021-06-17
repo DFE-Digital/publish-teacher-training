@@ -36,7 +36,7 @@ RSpec.describe API::Public::V1::CoursesController do
         it "returns courses for the current cycle" do
           parsed_recruitment_cycle_id = json_response["data"][0].dig("relationships", "recruitment_cycle", "data", "id").to_i
           expect(parsed_recruitment_cycle_id).to eq(recruitment_cycle.id)
-          expect(json_response["data"].size).to eql(2)
+          expect(json_response["data"].size).to be(2)
         end
       end
 
@@ -48,7 +48,7 @@ RSpec.describe API::Public::V1::CoursesController do
         end
 
         it "returns correct number of courses" do
-          expect(json_response["data"].size).to eql(2)
+          expect(json_response["data"].size).to be(2)
         end
       end
 

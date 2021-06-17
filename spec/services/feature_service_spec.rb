@@ -107,7 +107,7 @@ describe FeatureService do
     end
 
     context "feature settings are empty" do
-      around(:each) do |example|
+      around do |example|
         old_features = Settings.features
         Settings.features = nil
         example.run

@@ -6,30 +6,30 @@ describe ProviderSerializer do
 
   subject { serialize(provider) }
 
-  it { should include(institution_code: provider.provider_code) }
-  it { should include(institution_name: provider.provider_name) }
-  it { should include(address1: provider.address1) }
-  it { should include(address2: provider.address2) }
-  it { should include(address3: provider.address3) }
-  it { should include(address4: provider.address4) }
-  it { should include(postcode: provider.postcode) }
-  it { should include(region_code: "%02d" % provider.region_code_before_type_cast) }
-  it { should include(institution_type: provider.provider_type_before_type_cast) }
-  it { should include(accrediting_provider: provider.accrediting_provider_before_type_cast) }
-  it { should include(recruitment_cycle: provider.recruitment_cycle.year) }
-  it { should include(created_at: provider.created_at.iso8601) }
-  it { should include(changed_at: provider.changed_at.iso8601) }
+  it { is_expected.to include(institution_code: provider.provider_code) }
+  it { is_expected.to include(institution_name: provider.provider_name) }
+  it { is_expected.to include(address1: provider.address1) }
+  it { is_expected.to include(address2: provider.address2) }
+  it { is_expected.to include(address3: provider.address3) }
+  it { is_expected.to include(address4: provider.address4) }
+  it { is_expected.to include(postcode: provider.postcode) }
+  it { is_expected.to include(region_code: "%02d" % provider.region_code_before_type_cast) }
+  it { is_expected.to include(institution_type: provider.provider_type_before_type_cast) }
+  it { is_expected.to include(accrediting_provider: provider.accrediting_provider_before_type_cast) }
+  it { is_expected.to include(recruitment_cycle: provider.recruitment_cycle.year) }
+  it { is_expected.to include(created_at: provider.created_at.iso8601) }
+  it { is_expected.to include(changed_at: provider.changed_at.iso8601) }
 
   describe "type_of_gt12" do
     subject { serialize(provider)["type_of_gt12"] }
 
-    it { should eq provider.ucas_preferences.type_of_gt12_before_type_cast }
+    it { is_expected.to eq provider.ucas_preferences.type_of_gt12_before_type_cast }
   end
 
   describe "utt_application_alerts" do
     subject { serialize(provider)["utt_application_alerts"] }
 
-    it { should eq provider.ucas_preferences.send_application_alerts_before_type_cast }
+    it { is_expected.to eq provider.ucas_preferences.send_application_alerts_before_type_cast }
   end
 
   describe "application alert recipient" do
@@ -42,9 +42,9 @@ describe ProviderSerializer do
 
       subject { application_alert_recipient }
 
-      its([:name]) { should eq provider.contact_name }
-      its([:email]) { should eq provider.ucas_preferences.application_alert_email }
-      its([:telephone]) { should eq provider.telephone }
+      its([:name]) { is_expected.to eq provider.contact_name }
+      its([:email]) { is_expected.to eq provider.ucas_preferences.application_alert_email }
+      its([:telephone]) { is_expected.to eq provider.telephone }
     end
 
     context "if nil" do
@@ -56,7 +56,7 @@ describe ProviderSerializer do
 
       subject { contacts }
 
-      it { should_not include "application_alert_recipient" }
+      it { is_expected.to_not include "application_alert_recipient" }
     end
   end
 
@@ -81,18 +81,18 @@ describe ProviderSerializer do
 
       subject { serialize(provider)["contacts"].first }
 
-      its([:name]) { should eq contact.name }
-      its([:email]) { should eq contact.email }
-      its([:telephone]) { should eq contact.telephone }
+      its([:name]) { is_expected.to eq contact.name }
+      its([:email]) { is_expected.to eq contact.email }
+      its([:telephone]) { is_expected.to eq contact.telephone }
     end
 
     describe "admin contact" do
       context "exists on provider record and not in contacts table" do
         subject { serialize(provider)["contacts"].find { |c| c[:type] == "admin" } }
 
-        its([:name]) { should eq provider.contact_name }
-        its([:email]) { should eq provider.email }
-        its([:telephone]) { should eq provider.telephone }
+        its([:name]) { is_expected.to eq provider.contact_name }
+        its([:email]) { is_expected.to eq provider.email }
+        its([:telephone]) { is_expected.to eq provider.telephone }
       end
 
       context "exists in contacts table" do
@@ -101,9 +101,9 @@ describe ProviderSerializer do
 
         subject { serialize(provider)["contacts"].find { |c| c[:type] == "admin" } }
 
-        its([:name]) { should eq contact.name }
-        its([:email]) { should eq contact.email }
-        its([:telephone]) { should eq contact.telephone }
+        its([:name]) { is_expected.to eq contact.name }
+        its([:email]) { is_expected.to eq contact.email }
+        its([:telephone]) { is_expected.to eq contact.telephone }
       end
     end
   end

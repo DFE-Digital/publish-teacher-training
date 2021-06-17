@@ -34,15 +34,15 @@ describe Token::DecodeService do
 
   subject do
     described_class.call(encoded_token: encoded_token,
-      secret: Settings.authentication.secret,
-      algorithm: Settings.authentication.algorithm,
-      audience: Settings.authentication.audience,
-      issuer: Settings.authentication.issuer,
-      subject: Settings.authentication.subject)
+                         secret: Settings.authentication.secret,
+                         algorithm: Settings.authentication.algorithm,
+                         audience: Settings.authentication.audience,
+                         issuer: Settings.authentication.issuer,
+                         subject: Settings.authentication.subject)
   end
 
   describe "#call" do
-    before :each do
+    before do
       allow(Time).to receive(:zone)
         .and_return(OpenStruct.new(now: now))
     end
@@ -55,6 +55,7 @@ describe Token::DecodeService do
       shared_examples "mismatch" do |option, exception, value = option|
         context "#{option} settings" do
           let("encode_service_#{option}".to_sym) { value.to_s }
+
           it "raises an exception" do
             expect { subject }.to raise_exception exception
           end

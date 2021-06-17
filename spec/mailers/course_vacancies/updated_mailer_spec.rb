@@ -18,8 +18,9 @@ module CourseVacancies
           user: user,
           datetime: DateTime.new(2001, 2, 3, 4, 5, 6),
           vacancies_filled: vacancies_filled,
-          )
+        )
       end
+
       context "sending an email to a user" do
         it "sends an email with the correct template" do
           expect(mail.govuk_notify_template).to eq(Settings.govuk_notify.course_vacancies_updated_email_template_id)
@@ -65,6 +66,7 @@ module CourseVacancies
 
           context "vacancies filled is false" do
             let(:vacancies_filled) { false }
+
             it "includes whether vacancies are filled in the personalisation" do
               expect(mail.govuk_notify_personalisation[:vacancies_filled]).to eq("no")
             end
@@ -85,7 +87,7 @@ module CourseVacancies
           datetime: DateTime.new(2001, 2, 3, 4, 5, 6),
           vacancies_opened: ["Main site", "London site"],
           vacancies_closed: ["Birmingham site", "Bristol site"],
-          )
+        )
       end
 
       context "sending an email to a user" do

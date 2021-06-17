@@ -53,7 +53,7 @@ describe "Course POST #create API V2", type: :request do
   context "when unauthenticated" do
     let(:payload) { { email: "foo@bar" } }
 
-    it { should have_http_status(:unauthorized) }
+    it { is_expected.to have_http_status(:unauthorized) }
   end
 
   context "when unauthorised" do

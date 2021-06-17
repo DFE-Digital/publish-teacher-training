@@ -34,7 +34,7 @@ RSpec.describe AllocationImporterService do
 
         expect(allocation.provider_id).to eql(training_provider.id)
         expect(allocation.accredited_body_id).to eql(accredited_body_provider.id)
-        expect(allocation.number_of_places).to eql(3)
+        expect(allocation.number_of_places).to be(3)
         expect(allocation.provider_code).to eql(training_provider.provider_code)
         expect(allocation.accredited_body_code).to eql(accredited_body_provider.provider_code)
       end

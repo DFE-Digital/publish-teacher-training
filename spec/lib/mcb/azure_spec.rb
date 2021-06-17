@@ -23,7 +23,7 @@ describe MCB::Azure do
 
     subject { MCB::Azure.get_subs }
 
-    before :each do
+    before do
       allow(MCB).to receive(:run_command).and_return(subs_json)
     end
 
@@ -32,7 +32,7 @@ describe MCB::Azure do
       expect(MCB).to have_received(:run_command).with("az account list")
     end
 
-    it { should eq JSON.parse(subs_json) }
+    it { is_expected.to eq JSON.parse(subs_json) }
   end
 
   describe ".get_apps" do
@@ -55,7 +55,7 @@ describe MCB::Azure do
 
     subject { MCB::Azure.get_apps }
 
-    before :each do
+    before do
       allow(MCB).to receive(:run_command).and_return(apps_json)
     end
 
@@ -64,7 +64,7 @@ describe MCB::Azure do
       expect(MCB).to have_received(:run_command).with("az webapp list")
     end
 
-    it { should eq JSON.parse(apps_json) }
+    it { is_expected.to eq JSON.parse(apps_json) }
   end
 
   describe ".get_config" do
@@ -89,7 +89,7 @@ describe MCB::Azure do
       }
     end
 
-    before :each do
+    before do
       allow(MCB).to receive(:run_command).and_return(config_json)
     end
 
@@ -141,7 +141,7 @@ describe MCB::Azure do
 
     subject { MCB::Azure.get_urls(webapp: "some-app", rgroup: "some-rgroup", subscription: "sup") }
 
-    before :each do
+    before do
       allow(MCB).to receive(:run_command).and_return(config_json)
     end
 
@@ -154,26 +154,26 @@ describe MCB::Azure do
       )
     end
 
-    it { should eq(["http://no_ssl.local", "https://with_ssl.local"]) }
+    it { is_expected.to eq(["http://no_ssl.local", "https://with_ssl.local"]) }
   end
 
   describe ".configure_database" do
     let(:app_config) do
       {
         "MANAGE_COURSES_POSTGRESQL_SERVICE_HOST" => "host",
-        "PG_DATABASE"                            => "pgdb",
-        "PG_USERNAME"                            => "user",
-        "PG_PASSWORD"                            => "pass",
+        "PG_DATABASE" => "pgdb",
+        "PG_USERNAME" => "user",
+        "PG_PASSWORD" => "pass",
       }
     end
 
-    before :each do
+    before do
       allow(ENV).to receive(:[]=)
       allow(MCB::Azure).to(
         receive(:get_apps).and_return([{
-                                        "name" => "noapp",
-                                         "resourceGroup" => "rgrrroup",
-                                      }]),
+          "name" => "noapp",
+          "resourceGroup" => "rgrrroup",
+        }]),
       )
 
       allow(MCB::Azure).to(receive(:get_config).and_return(app_config))
@@ -217,7 +217,6 @@ describe MCB::Azure do
         MCB::Azure.configure_for_webapp(webapp: "banana")
       end
     end
-
 
     before do
       allow(MCB::Azure).to receive(:get_config).and_return(app_config)

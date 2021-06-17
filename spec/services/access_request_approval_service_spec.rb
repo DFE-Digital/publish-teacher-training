@@ -9,38 +9,38 @@ describe AccessRequestApprovalService do
     context "for a new user" do
       let(:target_user) { User.find_by(email: access_request.email_address) }
 
-      it "should create the new user" do
+      it "creates the new user" do
         expect { subject }.to change { User.count }.by(1)
       end
 
-      it "should set the email address" do
+      it "sets the email address" do
         subject
         expect(User.where(email: access_request.email_address)).to exist
       end
 
-      it "should set the first_name" do
+      it "sets the first_name" do
         subject
         expect(target_user.first_name).to eq(access_request.first_name)
       end
 
-      it "should set the last_name" do
+      it "sets the last_name" do
         subject
         expect(target_user.last_name).to eq(access_request.last_name)
       end
 
-      it "should set the invite date" do
+      it "sets the invite date" do
         subject
         expect(target_user.invite_date_utc).to be_within(1.second).of Time.now.utc
       end
 
-      it "should give the user access to the requestor's orgs" do
+      it "gives the user access to the requestor's orgs" do
         subject
         expect(target_user.organisations).to(
           match_array(access_request.requester.organisations),
         )
       end
 
-      it "should be marked completed" do
+      it "is marked completed" do
         expect { subject }.to change { access_request.status }
           .from("requested")
           .to("completed")
@@ -78,7 +78,7 @@ describe AccessRequestApprovalService do
         let!(:old_organisation) { target_user.organisations.first }
         let(:requester) { access_request.requester }
 
-        it "should keep the existing organisation and gain access to new ones" do
+        it "keeps the existing organisation and gain access to new ones" do
           subject
           target_user.organisations.reload
 
@@ -103,7 +103,7 @@ describe AccessRequestApprovalService do
           expect { subject }.not_to(change { target_user.organisations.reload })
         end
 
-        it "shouldn't duplicate the records" do
+        it "does not duplicate the records" do
           subject
           target_user.organisations.reload
 
@@ -119,7 +119,7 @@ describe AccessRequestApprovalService do
         end
         let!(:access_request) { create(:access_request, email_address: "Ab@c.com") }
 
-        it "shouldn't duplicate the user" do
+        it "does not duplicate the user" do
           subject
           target_user.organisations.reload
 

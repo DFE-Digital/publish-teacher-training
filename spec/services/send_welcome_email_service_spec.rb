@@ -2,6 +2,7 @@ require "rails_helper"
 
 describe SendWelcomeEmailService do
   before { Timecop.freeze }
+
   after { Timecop.return }
 
   context "When the user has not logged in before" do
@@ -49,7 +50,6 @@ describe SendWelcomeEmailService do
       allow(WelcomeEmailMailer).to receive_message_chain(:send_welcome_email, :deliver_later)
       described_class.call(current_user: current_user_spy)
     end
-
 
     it "does not update their first login date" do
       expect(current_user_spy).not_to have_received(:update).with(hash_including(first_login_date_utc: Time.now.utc))

@@ -19,12 +19,12 @@ describe "mcb db" do
     before do
       app_config = {
         "MANAGE_COURSES_POSTGRESQL_SERVICE_HOST" => "azhost",
-        "PG_DATABASE"                            => "pgdb",
-        "PG_USERNAME"                            => "azuser",
-        "PG_PASSWORD"                            => "azpass",
-        "REDIS_URL"                              => "https://redisurl",
-        "SETTINGS__MCBG__REDIS_PASSWORD"         => "redispass",
-        "RAILS_ENV"                              => "qa",
+        "PG_DATABASE" => "pgdb",
+        "PG_USERNAME" => "azuser",
+        "PG_PASSWORD" => "azpass",
+        "REDIS_URL" => "https://redisurl",
+        "SETTINGS__MCBG__REDIS_PASSWORD" => "redispass",
+        "RAILS_ENV" => "qa",
       }
 
       azure_qa_settings = { webapp: "s121d01-mcbe-as",

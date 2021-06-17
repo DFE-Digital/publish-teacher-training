@@ -22,6 +22,7 @@ describe AllocationPolicy do
 
     context "user is not present" do
       let(:user) { nil }
+
       it { is_expected.not_to permit(user, Allocation) }
     end
   end

@@ -2,7 +2,7 @@ require "spec_helper"
 require "mcb_helper"
 
 describe "mcb az apps config" do
-  before :each do
+  before do
     allow(MCB).to receive(:run_command)
                     .with('az webapp config appsettings list -g "aregrp" -n "dapp"')
                     .and_return(<<~EOCONFIG)

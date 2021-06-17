@@ -84,6 +84,7 @@ describe "GET v3/recruitment_cycle/:recruitment_cycle_year/providers/:provider_c
       ]
     end
     let(:enrichment) { course.enrichments.second }
+
     before do
       get "/api/v3/recruitment_cycles/#{current_year}" \
           "/providers/#{provider.provider_code.downcase}" \

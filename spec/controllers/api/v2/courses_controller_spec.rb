@@ -14,8 +14,8 @@ describe API::V2::CoursesController, type: :controller do
   let(:existing_user) do
     create(
       :user, admin: true,
-      email: email,
-      sign_in_user_id: sign_in_user_id
+             email: email,
+             sign_in_user_id: sign_in_user_id
     )
   end
 

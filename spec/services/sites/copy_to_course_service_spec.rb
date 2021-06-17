@@ -26,7 +26,7 @@ describe Sites::CopyToCourseService do
   describe "the new site's status" do
     subject { course.site_statuses.first }
 
-    it { should be_full_time_vacancies }
-    it { should be_status_new_status }
+    it { is_expected.to be_full_time_vacancies }
+    it { is_expected.to be_status_new_status }
   end
 end

@@ -10,12 +10,12 @@ describe API::V3::SerializableProvider do
 
   subject { JSON.parse(resource.as_jsonapi.to_json) }
 
-  it { should have_type "providers" }
-  it { should have_attribute(:provider_code).with_value(provider.provider_code) }
-  it { should have_attribute(:provider_name).with_value(provider.provider_name) }
-  it { should have_attribute(:recruitment_cycle_year).with_value(provider.recruitment_cycle.year) }
-  it { should have_attribute(:latitude).with_value(provider.latitude) }
-  it { should have_attribute(:longitude).with_value(provider.longitude) }
-  it { should have_attribute(:can_sponsor_student_visa).with_value(provider.can_sponsor_student_visa) }
-  it { should have_attribute(:can_sponsor_skilled_worker_visa).with_value(provider.can_sponsor_skilled_worker_visa) }
+  it { is_expected.to have_type "providers" }
+  it { is_expected.to have_attribute(:provider_code).with_value(provider.provider_code) }
+  it { is_expected.to have_attribute(:provider_name).with_value(provider.provider_name) }
+  it { is_expected.to have_attribute(:recruitment_cycle_year).with_value(provider.recruitment_cycle.year) }
+  it { is_expected.to have_attribute(:latitude).with_value(provider.latitude) }
+  it { is_expected.to have_attribute(:longitude).with_value(provider.longitude) }
+  it { is_expected.to have_attribute(:can_sponsor_student_visa).with_value(provider.can_sponsor_student_visa) }
+  it { is_expected.to have_attribute(:can_sponsor_skilled_worker_visa).with_value(provider.can_sponsor_skilled_worker_visa) }
 end

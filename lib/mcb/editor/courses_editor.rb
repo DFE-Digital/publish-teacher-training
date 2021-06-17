@@ -88,8 +88,8 @@ module MCB
       end
 
       def load_courses(provider, course_codes)
-        (course_codes.present? ? find_courses(provider, course_codes) : provider.courses).
-          order(:course_code)
+        (course_codes.present? ? find_courses(provider, course_codes) : provider.courses)
+          .order(:course_code)
       end
 
       def course

@@ -16,13 +16,14 @@ describe Courses::AssignProgramTypeService do
       let(:provider) { create(:provider, accrediting_provider: "N") }
       let(:course) { create(:course, :with_accrediting_provider, provider: provider) }
 
-      it "should return :school_direct_salaried_training_programme" do
+      it "returns :school_direct_salaried_training_programme" do
         expect(course.program_type).to eq("school_direct_salaried_training_programme")
       end
     end
 
     context "when the course is self accredited" do
       let(:course) { create(:course, :self_accredited) }
+
       it "an error should be added to the course object" do
         expect(course.errors["program_type"].first).to eq("Salary is not valid for a self accredited course")
       end
@@ -32,7 +33,7 @@ describe Courses::AssignProgramTypeService do
   context "when the funding_type is apprenticeship" do
     let(:funding_type) { "apprenticeship" }
 
-    it "should return :pg_teaching_apprenticeship" do
+    it "returns :pg_teaching_apprenticeship" do
       expect(course.program_type).to eq("pg_teaching_apprenticeship")
     end
   end
@@ -44,7 +45,7 @@ describe Courses::AssignProgramTypeService do
     context "and the course is not self accredited" do
       let(:course) { create(:course, :with_accrediting_provider) }
 
-      it "should return :school_direct_training_programme" do
+      it "returns :school_direct_training_programme" do
         expect(course.program_type).to eq("school_direct_training_programme")
       end
     end
@@ -56,7 +57,7 @@ describe Courses::AssignProgramTypeService do
         let(:trait) { :scitt }
         let(:course) { create(:course, provider: provider) }
 
-        it "should return :scitt_programme" do
+        it "returns :scitt_programme" do
           expect(course.program_type).to eq("scitt_programme")
         end
       end
@@ -65,7 +66,7 @@ describe Courses::AssignProgramTypeService do
         let(:trait) { :university }
         let(:course) { create(:course, provider: provider) }
 
-        it "should return :higher_education_programme" do
+        it "returns :higher_education_programme" do
           expect(course.program_type).to eq("higher_education_programme")
         end
       end

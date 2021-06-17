@@ -13,6 +13,7 @@ describe SerializeCourseService do
   end
 
   let(:object_to_serialize) { spy }
+
   it "calls the serializer service" do
     service.execute(object: object_to_serialize)
     expect(serializers_service_spy).to have_received(:execute).with(no_args)

@@ -33,7 +33,7 @@ describe "Publishable API v2", type: :request do
     context "when course and provider is not related" do
       let(:provider) { create(:provider) }
 
-      it { should have_http_status(:not_found) }
+      it { is_expected.to have_http_status(:not_found) }
     end
 
     context "unpublished course with draft enrichment" do
@@ -54,7 +54,7 @@ describe "Publishable API v2", type: :request do
           create(:course, :primary, :unpublished, site_statuses: [], enrichments: [])
         end
 
-        it { should have_http_status(:unprocessable_entity) }
+        it { is_expected.to have_http_status(:unprocessable_entity) }
 
         it "has validation errors" do
           expect(json_data.map { |error| error["detail"] }).to match_array([
@@ -78,7 +78,7 @@ describe "Publishable API v2", type: :request do
                    enrichments: [build(:course_enrichment, :without_content)])
           end
 
-          it { should have_http_status(:unprocessable_entity) }
+          it { is_expected.to have_http_status(:unprocessable_entity) }
 
           it "has validation error details" do
             expect(json_data.count).to eq 5

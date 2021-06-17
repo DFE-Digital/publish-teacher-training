@@ -104,7 +104,7 @@ module MCB
   end
 
   def self.generate_apiv2_token(email:, encoding:, secret: nil,
-    audience:, issuer:, subject:)
+                                audience:, issuer:, subject:)
     require "jwt"
 
     payload = { email: email }
@@ -114,7 +114,7 @@ module MCB
     end
 
     MCB::Token::EncodeService.call(payload: payload, secret: secret,
-      algorithm: encoding, audience: audience, issuer: issuer, subject: subject)
+                                   algorithm: encoding, audience: audience, issuer: issuer, subject: subject)
   end
 
   def self.each_v1_course(opts)
@@ -298,10 +298,10 @@ module MCB
             # Send each provider to the consumer of this enumerator
             records.each do |record|
               y << [record, {
-                      page: page_count,
-                      url: endpoint_url,
-                      next_url: next_url,
-                    }]
+                page: page_count,
+                url: endpoint_url,
+                next_url: next_url,
+              }]
             end
 
             endpoint_url = next_url

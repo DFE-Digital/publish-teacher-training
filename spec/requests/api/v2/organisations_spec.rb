@@ -36,7 +36,7 @@ describe "Organisations API v2", type: :request do
     context "when unauthenticated" do
       let(:payload) { { email: "foo@bar" } }
 
-      it { should have_http_status(:unauthorized) }
+      it { is_expected.to have_http_status(:unauthorized) }
     end
 
     context "when unauthorised" do
@@ -53,7 +53,8 @@ describe "Organisations API v2", type: :request do
 
     context "when authorised" do
       let(:json_response) { JSON.parse(response.body) }
-      it { should have_http_status(:success) }
+
+      it { is_expected.to have_http_status(:success) }
 
       context "with no params included" do
         before do

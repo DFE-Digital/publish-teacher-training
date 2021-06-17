@@ -9,9 +9,9 @@ describe Courses::ValidateCustomAgeRangeService do
     execute_service
   end
 
-
   context "with a valid age range" do
     let(:age_range_in_years) { "4_to_8" }
+
     it "age_range_in_years attribute to the correct value" do
       expect(course.errors.count).to eq(0)
     end
@@ -24,7 +24,7 @@ describe Courses::ValidateCustomAgeRangeService do
       let(:age_range_in_years) { "5_to_8" }
       let(:error_message) { "is invalid. Your age range must cover at least 4 years." }
 
-      it "should return an error stating valid age ranges must be 4 years or greater" do
+      it "returns an error stating valid age ranges must be 4 years or greater" do
         expect(course.errors.messages[:age_range_in_years]).to include "#{age_range_in_years} #{error_message}"
       end
     end
@@ -33,7 +33,7 @@ describe Courses::ValidateCustomAgeRangeService do
       let(:age_range_in_years) { "1_to_15" }
       let(:age_range_in_years_formatted) { "1 to 15" }
 
-      it "should return an error" do
+      it "returns an error" do
         expect(course.errors.messages[:age_range_in_years]).to include "#{age_range_in_years_formatted} #{error_message}"
       end
     end
@@ -42,7 +42,7 @@ describe Courses::ValidateCustomAgeRangeService do
       let(:age_range_in_years) { "7_to_20" }
       let(:age_range_in_years_formatted) { "7 to 20" }
 
-      it "should return an error stating valid age ranges must be 4 years or greater" do
+      it "returns an error stating valid age ranges must be 4 years or greater" do
         expect(course.errors.messages[:age_range_in_years]).to include "#{age_range_in_years_formatted} #{error_message}"
       end
     end
@@ -51,7 +51,7 @@ describe Courses::ValidateCustomAgeRangeService do
       let(:age_range_in_years) { "to_6" }
       let(:age_range_in_years_formatted) { "to 6" }
 
-      it "should return an error stating that there is an invalid from year" do
+      it "returns an error stating that there is an invalid from year" do
         expect(course.errors.messages[:age_range_in_years]).to include "#{age_range_in_years_formatted} #{error_message}"
       end
     end
@@ -60,7 +60,7 @@ describe Courses::ValidateCustomAgeRangeService do
       let(:age_range_in_years) { "2_to" }
       let(:age_range_in_years_formatted) { "2 to" }
 
-      it "should return an error stating that there is an invalid from year" do
+      it "returns an error stating that there is an invalid from year" do
         expect(course.errors.messages[:age_range_in_years]).to include "#{age_range_in_years_formatted} #{error_message}"
       end
     end

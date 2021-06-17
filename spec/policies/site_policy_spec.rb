@@ -7,7 +7,7 @@ describe SitePolicy do
 
   permissions :index? do
     it "allows the :index action for any authenticated user" do
-      should permit(user)
+      expect(subject).to permit(user)
     end
   end
 
@@ -20,11 +20,12 @@ describe SitePolicy do
              organisations: [organisation])
     }
 
-    it { should permit(user, site) }
+    it { is_expected.to permit(user, site) }
 
     context "with a user outside the organisation" do
       let(:other_user) { create(:user) }
-      it { should_not permit(other_user, site) }
+
+      it { is_expected.to_not permit(other_user, site) }
     end
   end
 end

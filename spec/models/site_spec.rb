@@ -6,7 +6,7 @@ describe Site, type: :model do
   subject { create(:site) }
 
   describe "auditing" do
-    it { should be_audited.associated_with(:provider) }
+    it { is_expected.to be_audited.associated_with(:provider) }
   end
 
   it { is_expected.to validate_presence_of(:location_name) }
@@ -36,7 +36,7 @@ describe Site, type: :model do
   end
 
   describe "associations" do
-    it { should belong_to(:provider) }
+    it { is_expected.to belong_to(:provider) }
   end
 
   describe "#touch_provider" do
@@ -60,6 +60,7 @@ describe Site, type: :model do
   describe "after running validation" do
     let(:site) { build(:site, provider: provider, code: nil) }
     let(:provider) { build(:provider) }
+
     subject { site }
 
     it "is assigned a valid code by default" do
@@ -74,11 +75,12 @@ describe Site, type: :model do
     end
   end
 
-  its(:recruitment_cycle) { should eq find(:recruitment_cycle) }
+  its(:recruitment_cycle) { is_expected.to eq find(:recruitment_cycle) }
 
   describe "description" do
     subject { build(:site, location_name: "Foo", code: "1") }
-    its(:to_s) { should eq "Foo (code: 1)" }
+
+    its(:to_s) { is_expected.to eq "Foo (code: 1)" }
   end
 
   describe "geolocation" do
@@ -164,19 +166,19 @@ describe Site, type: :model do
       context "latitude is nil" do
         let(:site) { build_stubbed(:site, latitude: nil) }
 
-        it { should be(true) }
+        it { is_expected.to be(true) }
       end
 
       context "longitude is nil" do
         let(:site) { build_stubbed(:site, longitude: nil) }
 
-        it { should be(true) }
+        it { is_expected.to be(true) }
       end
 
       context "latitude and longitude is not nil" do
         let(:site) { build_stubbed(:site, latitude: 1.456789, longitude: 1.456789) }
 
-        it { should be(false) }
+        it { is_expected.to be(false) }
       end
 
       context "address" do
@@ -191,12 +193,13 @@ describe Site, type: :model do
                  address4: nil,
                  postcode: "SO45 2PA")
         end
+
         context "has not changed" do
           before do
             site.update(address1: "Long Lane")
           end
 
-          it { should be(false) }
+          it { is_expected.to be(false) }
         end
 
         context "has changed" do
@@ -204,7 +207,7 @@ describe Site, type: :model do
             site.update(address1: "New address 1")
           end
 
-          it { should be(true) }
+          it { is_expected.to be(true) }
         end
       end
     end
@@ -244,14 +247,13 @@ describe Site, type: :model do
       end
     end
 
-
     describe "#add_travel_to_work_area_and_london_borough" do
       before do
         allow(TravelToWorkAreaAndLondonBoroughJob).to receive(:perform_later)
         site.update(latitude: 1.2, longitude: 1.3)
       end
 
-      it "should call the TravelToWorkAreaAndLondonBoroughJob" do
+      it "calls the TravelToWorkAreaAndLondonBoroughJob" do
         expect(TravelToWorkAreaAndLondonBoroughJob).to have_received(:perform_later).with(site.id)
       end
     end

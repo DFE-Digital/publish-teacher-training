@@ -9,13 +9,13 @@ describe AccessRequestPolicy do
     context "non-admin user" do
       let(:user) { build(:user) }
 
-      it { should_not permit(user) }
+      it { is_expected.to_not permit(user) }
     end
 
     context "admin user" do
       let(:user) { build(:user, :admin) }
 
-      it { should permit(user) }
+      it { is_expected.to permit(user) }
     end
   end
 
@@ -23,7 +23,7 @@ describe AccessRequestPolicy do
     context "non-admin user" do
       let(:user) { build(:user) }
 
-      it { should permit(user) }
+      it { is_expected.to permit(user) }
     end
   end
 end

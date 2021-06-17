@@ -17,6 +17,7 @@ RSpec.describe Course, type: :model do
 
     context "on an old course with a site" do
       let(:course) { create(:course, site_statuses: [published_new_site], age: 5.days.ago) }
+
       it "updates course.changed_at" do
         expect(course.changed_at).to be_within(1.second).of Time.now.utc
       end
@@ -25,15 +26,15 @@ RSpec.describe Course, type: :model do
     context "on a course with many sites" do
       let(:course) {
         create(:course, site_statuses: [
-                 published_new_site,
-                 published_running_site,
-                 published_discontinued_site,
-                 published_suspended_site,
-                 unpublished_new_site,
-                 unpublished_running_site,
-                 unpublished_discontinued_site,
-                 unpublished_suspended_site,
-               ])
+          published_new_site,
+          published_running_site,
+          published_discontinued_site,
+          published_suspended_site,
+          unpublished_new_site,
+          unpublished_running_site,
+          unpublished_discontinued_site,
+          unpublished_suspended_site,
+        ])
       }
 
       it "sets all the sites to the right published/status states" do

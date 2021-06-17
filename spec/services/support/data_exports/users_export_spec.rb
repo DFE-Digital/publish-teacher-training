@@ -7,7 +7,7 @@ RSpec.describe Support::DataExports::UsersExport do
     end
   end
 
-  context ".user_data" do
+  describe ".user_data" do
     let(:user) { build(:user) }
     let(:provider) { build(:provider) }
 
@@ -26,11 +26,12 @@ RSpec.describe Support::DataExports::UsersExport do
     end
   end
 
-  context ".data" do
+  describe ".data" do
     let(:provider) { create(:provider, organisations: []) }
     let(:organisation) { create(:organisation, users: [], providers: [provider]) }
     let(:user1) { create(:user, organisations: [organisation]) }
     let(:user2) { create(:user, organisations: [organisation]) }
+
     before do
       user1
       user2

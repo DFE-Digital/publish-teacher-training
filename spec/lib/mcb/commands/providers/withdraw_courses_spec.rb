@@ -24,7 +24,6 @@ describe "mcb providers withdraw_courses" do
   let(:site_status3) { build(:site_status, :published, :full_time_vacancies, site: site2) }
   let(:site_status4) { build(:site_status, :published, :full_time_vacancies, site: site2) }
 
-
   it "withdraws the providers courses for the current cycle" do
     provider
     provider2

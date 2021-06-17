@@ -5,8 +5,8 @@ describe ContactSerializer do
 
   subject { serialize(contact) }
 
-  its([:type]) { should eq contact.type }
-  its([:name]) { should eq contact.name }
-  its([:email]) { should eq contact.email }
-  its([:telephone]) { should eq contact.telephone }
+  its([:type]) { is_expected.to eq contact.type }
+  its([:name]) { is_expected.to eq contact.name }
+  its([:email]) { is_expected.to eq contact.email }
+  its([:telephone]) { is_expected.to eq contact.telephone }
 end

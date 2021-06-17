@@ -22,13 +22,14 @@ RSpec.describe CourseSearchService do
           subjects: [:financial_incentive],
           site_statuses: [:site],
           provider: %i[recruitment_cycle ucas_preferences],
-      ).and_return(course_with_includes)
+        ).and_return(course_with_includes)
 
       allow(course_with_includes).to receive(:where).and_return(outer_query_scope)
     end
 
     describe "when no scope is passed" do
       subject { described_class.call(filter: filter) }
+
       let(:filter) { {} }
 
       it "defaults to Course" do
@@ -566,14 +567,14 @@ RSpec.describe CourseSearchService do
 
       let(:university_course) do
         create(:course, provider: university_provider,
-          site_statuses: [build(:site_status, :findable, site: site)],
-          enrichments: [build(:course_enrichment, :published)])
+                        site_statuses: [build(:site_status, :findable, site: site)],
+                        enrichments: [build(:course_enrichment, :published)])
       end
 
       let(:non_university_course) do
         create(:course, provider: non_university_provider,
-          site_statuses: [build(:site_status, :findable, site: site2)],
-          enrichments: [build(:course_enrichment, :published)])
+                        site_statuses: [build(:site_status, :findable, site: site2)],
+                        enrichments: [build(:course_enrichment, :published)])
       end
 
       let(:courses) do

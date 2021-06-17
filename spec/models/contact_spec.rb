@@ -1,7 +1,7 @@
 require "rails_helper"
 
 describe Contact, type: :model do
-  it { should belong_to(:provider) }
+  it { is_expected.to belong_to(:provider) }
 
   describe "type" do
     it "is an enum" do
@@ -28,13 +28,12 @@ describe Contact, type: :model do
       provider
     end
 
-    it "should touch the provider" do
+    it "touches the provider" do
       contacts.first.save
       expect(provider.reload.changed_at).to be_within(1.second).of Time.now.utc
     end
 
-
-    it { should validate_presence_of(:name) }
+    it { is_expected.to validate_presence_of(:name) }
 
     describe "telephone" do
       it "validates telephone is present" do
@@ -71,7 +70,7 @@ describe Contact, type: :model do
         expect(contact.errors[:email]).to include("^Enter an email address in the correct format, like name@example.com")
       end
 
-      it "Does not validate the email if it is present"do
+      it "Does not validate the email if it is present" do
         contact.email = "foo@bar.com"
 
         expect(contact.valid?).to be true
@@ -83,11 +82,13 @@ describe Contact, type: :model do
 
       context "true" do
         let(:permission_given_value) { true }
+
         it { is_expected.to be_valid }
       end
 
       context "false" do
         let(:permission_given_value) { false }
+
         it { is_expected.not_to be_valid }
       end
     end

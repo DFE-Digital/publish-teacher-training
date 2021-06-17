@@ -33,7 +33,7 @@ describe "Access Request API V2", type: :request do
 
       let(:payload) { { email: "foo@bar" } }
 
-      it { should have_http_status(:unauthorized) }
+      it { is_expected.to have_http_status(:unauthorized) }
     end
 
     context "when unauthorized" do
@@ -44,8 +44,7 @@ describe "Access Request API V2", type: :request do
             headers: { "HTTP_AUTHORIZATION" => credentials }
       end
 
-
-      it "should raise an error" do
+      it "raises an error" do
         expect { unauthorised_user_route }.to raise_error Pundit::NotAuthorizedError
       end
     end
@@ -112,14 +111,14 @@ describe "Access Request API V2", type: :request do
 
       let(:payload) { { email: "foo@bar" } }
 
-      it { should have_http_status(:unauthorized) }
+      it { is_expected.to have_http_status(:unauthorized) }
     end
 
     context "when unauthorized" do
       let(:unauthorised_user) { create(:user) }
       let(:payload) { { email: unauthorised_user.email } }
 
-      it "should raise an error" do
+      it "raises an error" do
         expect { access_requests_show_route }.to raise_error Pundit::NotAuthorizedError
       end
     end
@@ -186,7 +185,7 @@ describe "Access Request API V2", type: :request do
           "jsonapi" => {
             "version" => "1.0",
           },
-         )
+        )
       end
     end
 
@@ -201,7 +200,7 @@ describe "Access Request API V2", type: :request do
         access_requests_show_route
       end
 
-      it { should have_http_status(:not_found) }
+      it { is_expected.to have_http_status(:not_found) }
     end
   end
 
@@ -210,6 +209,7 @@ describe "Access Request API V2", type: :request do
       post "/api/v2/access_requests/#{access_request.id}/approve",
            headers: { "HTTP_AUTHORIZATION" => credentials }
     end
+
     context "when unauthenticated" do
       before do
         approve_route_request
@@ -217,14 +217,14 @@ describe "Access Request API V2", type: :request do
 
       let(:payload) { { email: "foo@bar" } }
 
-      it { should have_http_status(:unauthorized) }
+      it { is_expected.to have_http_status(:unauthorized) }
     end
 
     context "when unauthorized" do
       let(:unauthorised_user) { create(:user) }
       let(:payload) { { email: unauthorised_user.email } }
 
-      it "should raise an error" do
+      it "raises an error" do
         expect { approve_route_request }.to raise_error Pundit::NotAuthorizedError
       end
     end
@@ -258,6 +258,7 @@ describe "Access Request API V2", type: :request do
                  requester_id: requesting_user.id,
                  organisation: organisation.name)
         }
+
         before do
           post "/api/v2/access_requests/#{new_user_access_request.id}/approve",
                headers: { "HTTP_AUTHORIZATION" => credentials }
@@ -291,6 +292,7 @@ describe "Access Request API V2", type: :request do
            headers: { "HTTP_AUTHORIZATION" => credentials },
            params: params.as_json
     end
+
     context "when unauthenticated" do
       before do
         do_post
@@ -298,7 +300,7 @@ describe "Access Request API V2", type: :request do
 
       let(:payload) { { email: "foo@bar" } }
 
-      it { should have_http_status(:unauthorized) }
+      it { is_expected.to have_http_status(:unauthorized) }
     end
 
     context "authorises non-admin users" do
@@ -309,7 +311,7 @@ describe "Access Request API V2", type: :request do
         do_post
       end
 
-      it { should have_http_status(:ok) }
+      it { is_expected.to have_http_status(:ok) }
     end
 
     context "when authorised" do
@@ -333,15 +335,15 @@ describe "Access Request API V2", type: :request do
         describe "JSON returns the correct attributes" do
           subject { JSON.parse(response.body)["data"]["attributes"] }
 
-          its(%w[email_address]) { should eq("bob@example.org") }
-          its(%w[first_name]) { should eq("bob") }
-          its(%w[last_name]) { should eq("monkhouse") }
-          its(%w[organisation]) { should eq("bbc") }
-          its(%w[reason]) { should eq("star qualities") }
+          its(%w[email_address]) { is_expected.to eq("bob@example.org") }
+          its(%w[first_name]) { is_expected.to eq("bob") }
+          its(%w[last_name]) { is_expected.to eq("monkhouse") }
+          its(%w[organisation]) { is_expected.to eq("bbc") }
+          its(%w[reason]) { is_expected.to eq("star qualities") }
         end
 
         context "with a user that does not already exist" do
-          it "should create the access_request record" do
+          it "creates the access_request record" do
             expect(response).to have_http_status(:success)
             access_request = AccessRequest.find_by(email_address: "bob@example.org")
             expect(access_request).not_to be_nil
@@ -375,7 +377,7 @@ describe "Access Request API V2", type: :request do
 
         let(:json_data) { JSON.parse(response.body)["errors"] }
 
-        it { should have_http_status(:unprocessable_entity) }
+        it { is_expected.to have_http_status(:unprocessable_entity) }
 
         it "has validation error details" do
           expect(json_data.count).to eq 5
@@ -409,7 +411,7 @@ describe "Access Request API V2", type: :request do
              headers: { "HTTP_AUTHORIZATION" => credentials }
     end
 
-    it "should add a discarded_at timestamp" do
+    it "adds a discarded_at timestamp" do
       expect(first_access_request.discarded_at).to be_within(1.second).of(Time.now.utc)
     end
   end

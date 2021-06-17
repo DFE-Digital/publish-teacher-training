@@ -28,7 +28,6 @@ describe "Courses API", type: :request do
     let(:previous_year) { current_year - 1 }
     let(:next_year)     { current_year + 1 }
 
-
     context "without changed_since parameter" do
       let(:age_range_in_years) { "3_to_7" }
 
@@ -80,50 +79,50 @@ describe "Courses API", type: :request do
             headers: { "HTTP_AUTHORIZATION" => credentials }
         json = JSON.parse(response.body)
         expect(json). to eq([
-                              {
-                                "course_code" => "2HPF",
-                                "start_month" => "#{current_year}-09-01T00:00:00Z",
-                                "start_month_string" => "September",
-                                "name" => Course.first.name,
-                                "study_mode" => "F",
-                                "copy_form_required" => "Y",
-                                "profpost_flag" => "PG",
-                                "program_type" => "SC",
-                                "age_range" => "S",
-                                "modular" => "",
-                                "english" => 3,
-                                "maths" => 3,
-                                "science" => 3,
-                                "recruitment_cycle" => current_year.to_s,
-                                "campus_statuses" => [
-                                  {
-                                    "campus_code" => "-",
-                                    "name" => "Main Site",
-                                    "vac_status" => "F",
-                                    "publish" => "Y",
-                                    "status" => "R",
-                                    "course_open_date" => "#{previous_year}-10-09",
-                                  },
-                                ],
-                                "subjects" => [
-                                  {
-                                    "subject_code" => "17",
-                                    "subject_name" => "German",
-                                    "type" => "ModernLanguagesSubject",
-                                  },
-                                ],
-                                "provider" => {
-                                  "institution_code" => "2LD",
-                                  "institution_name" => "ACME SCITT",
-                                  "institution_type" => "B",
-                                  "accrediting_provider" => "Y",
-                                  "scheme_member" => "Y",
-                                },
-                                "accrediting_provider" => nil,
-                                "created_at" => provider.courses.first.created_at.iso8601,
-                                "changed_at" => provider.courses.first.changed_at.iso8601,
-                              },
-                            ])
+          {
+            "course_code" => "2HPF",
+            "start_month" => "#{current_year}-09-01T00:00:00Z",
+            "start_month_string" => "September",
+            "name" => Course.first.name,
+            "study_mode" => "F",
+            "copy_form_required" => "Y",
+            "profpost_flag" => "PG",
+            "program_type" => "SC",
+            "age_range" => "S",
+            "modular" => "",
+            "english" => 3,
+            "maths" => 3,
+            "science" => 3,
+            "recruitment_cycle" => current_year.to_s,
+            "campus_statuses" => [
+              {
+                "campus_code" => "-",
+                "name" => "Main Site",
+                "vac_status" => "F",
+                "publish" => "Y",
+                "status" => "R",
+                "course_open_date" => "#{previous_year}-10-09",
+              },
+            ],
+            "subjects" => [
+              {
+                "subject_code" => "17",
+                "subject_name" => "German",
+                "type" => "ModernLanguagesSubject",
+              },
+            ],
+            "provider" => {
+              "institution_code" => "2LD",
+              "institution_name" => "ACME SCITT",
+              "institution_type" => "B",
+              "accrediting_provider" => "Y",
+              "scheme_member" => "Y",
+            },
+            "accrediting_provider" => nil,
+            "created_at" => provider.courses.first.created_at.iso8601,
+            "changed_at" => provider.courses.first.changed_at.iso8601,
+          },
+        ])
       end
     end
 
@@ -150,6 +149,7 @@ describe "Courses API", type: :request do
           expect(returned_course_codes).to include course.course_code
         end
       end
+
       context "with a future recruitment cycle specified in the route" do
         it "only returns courses from the requested cycle" do
           get "/api/v1/#{next_year}/courses",
@@ -196,10 +196,10 @@ describe "Courses API", type: :request do
       describe "response headers" do
         context "when the recruitment year is in the params" do
           # We want to keep legacy support for year as a param in order to
-           # maintain backwards compatibility. This will avoid breaking calls
-           # from UCAS should they use this older style. The next links we
-           # generate used to were of this style, and the UCAS systems
-           # were making requests in this style.
+          # maintain backwards compatibility. This will avoid breaking calls
+          # from UCAS should they use this older style. The next links we
+          # generate used to were of this style, and the UCAS systems
+          # were making requests in this style.
 
           it "returns bad_request for previous year" do
             get "/api/v1/courses?recruitment_year=#{previous_year}",
@@ -211,7 +211,6 @@ describe "Courses API", type: :request do
         end
       end
 
-
       it "includes correct next link when there is an empty set" do
         provided_timestamp = 5.seconds.ago.utc.iso8601
 
@@ -220,24 +219,23 @@ describe "Courses API", type: :request do
             params: { changed_since: provided_timestamp }
 
         url = url_for(recruitment_year: current_year, params: {
-                        changed_since: provided_timestamp,
-                        per_page: 100,
-                      })
+          changed_since: provided_timestamp,
+          per_page: 100,
+        })
         expect(response.headers["Link"]).to match "#{url}; rel=\"next\""
       end
 
       it "includes correct next link when there is an empty set" do
         provided_timestamp = 5.seconds.ago.utc.iso8601
 
-
         get "/api/v1/#{next_year}/courses",
             headers: { "HTTP_AUTHORIZATION" => credentials },
             params: { changed_since: provided_timestamp }
 
         url = url_for(recruitment_year: next_year, params: {
-                        changed_since: provided_timestamp,
-                        per_page: 100,
-                      })
+          changed_since: provided_timestamp,
+          per_page: 100,
+        })
         expect(response.headers["Link"]).to match "#{url}; rel=\"next\""
       end
 
@@ -251,9 +249,9 @@ describe "Courses API", type: :request do
         before do
           @courses = Array.new(25) do |i|
             create(:course, course_code: "CRSE#{i + 1}",
-                 changed_at: (30 - i).minutes.ago,
-                 provider: provider,
-                 site_statuses: [create(:site_status, :published)])
+                            changed_at: (30 - i).minutes.ago,
+                            provider: provider,
+                            site_statuses: [create(:site_status, :published)])
           end
         end
 
@@ -278,16 +276,16 @@ describe "Courses API", type: :request do
 
       context "with many courses updated in the same second" do
         let!(:next_cycle) { create(:recruitment_cycle, year: next_year) }
+
         timestamp = 1.second.ago
         before do
           @courses = Array.new(25) do |i|
             create(:course, course_code: "CRSE#{i + 1}",
-                 changed_at: timestamp + i / 1000.0,
-                 provider: provider,
-                 site_statuses: [create(:site_status, :published)])
+                            changed_at: timestamp + i / 1000.0,
+                            provider: provider,
+                            site_statuses: [create(:site_status, :published)])
           end
         end
-
 
         it "pages properly" do
           get_next_courses "/api/v1/courses",
@@ -397,7 +395,7 @@ describe "Courses API", type: :request do
               headers: { "HTTP_AUTHORIZATION" => credentials }
         end
 
-        it "should equal 'P'" do
+        it "equals 'P'" do
           json = JSON.parse(response.body).first
           expect(json["age_range"]).to eq("P")
         end
@@ -415,7 +413,7 @@ describe "Courses API", type: :request do
               headers: { "HTTP_AUTHORIZATION" => credentials }
         end
 
-        it "should equal 'M'" do
+        it "equals 'M'" do
           json = JSON.parse(response.body).first
           expect(json["age_range"]).to eq("M")
         end
@@ -433,7 +431,7 @@ describe "Courses API", type: :request do
               headers: { "HTTP_AUTHORIZATION" => credentials }
         end
 
-        it "should equal 'S'" do
+        it "equals 'S'" do
           json = JSON.parse(response.body).first
           expect(json["age_range"]).to eq("S")
         end

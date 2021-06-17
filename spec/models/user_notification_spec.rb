@@ -26,8 +26,8 @@ describe UserNotification, type: :model do
 
     subject { described_class.new(user_id: user.id, provider_code: provider.provider_code) }
 
-    it { should belong_to(:provider) }
-    it { should belong_to(:user) }
+    it { is_expected.to belong_to(:provider) }
+    it { is_expected.to belong_to(:user) }
   end
 
   describe "scopes" do
@@ -60,7 +60,7 @@ describe UserNotification, type: :model do
 
       subject { described_class.course_publish_notification_requests(provider.provider_code) }
 
-      it { should contain_exactly(user_notification_create) }
+      it { is_expected.to contain_exactly(user_notification_create) }
     end
 
     describe ".course_update_notification_requests" do
@@ -71,7 +71,7 @@ describe UserNotification, type: :model do
 
       subject { described_class.course_update_notification_requests(provider.provider_code) }
 
-      it { should contain_exactly(user_notification_update) }
+      it { is_expected.to contain_exactly(user_notification_update) }
     end
   end
 end

@@ -1,4 +1,4 @@
-#Issues to be mindful of when using this function
+# Issues to be mindful of when using this function
 # It is coupled to the border styling
 # All whitespace is discarded
 # Rows containing entirely dashes and/or plusses will be interpretted as the
@@ -52,7 +52,6 @@ def is_a_row_delimeter?(row)
   contains_only_dashes = /^\-+$/
   row.join("").match?(contains_only_dashes)
 end
-
 
 RSpec::Matchers.define :have_cell_containing do |text|
   match do |table_output|

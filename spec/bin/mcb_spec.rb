@@ -90,6 +90,7 @@ describe "running the mcb script" do
 
     context "history" do
       let(:up_key) { "\e[A" }
+
       it "loads commands from saved history file" do
         output = with_stubbed_stdout(stdin: up_key) do
           FakeFS do

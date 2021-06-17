@@ -38,25 +38,25 @@ describe "Providers API", type: :request do
 
           contacts = [
             build(:contact, type: "admin",
-                  name: "Admin Contact A123",
-                  email: "admin@acmescitt.education.uk",
-                  telephone: "020 812 345 678"),
+                            name: "Admin Contact A123",
+                            email: "admin@acmescitt.education.uk",
+                            telephone: "020 812 345 678"),
             build(:contact, type: "utt",
-                  name: "Utt Contact A123",
-                  email: "utt@acmescitt.education.uk",
-                  telephone: "020 812 345 678"),
+                            name: "Utt Contact A123",
+                            email: "utt@acmescitt.education.uk",
+                            telephone: "020 812 345 678"),
             build(:contact, type: "web_link",
-                  name: "Web Link Contact A123",
-                  email: "web_link@acmescitt.education.uk",
-                  telephone: "020 812 345 678"),
+                            name: "Web Link Contact A123",
+                            email: "web_link@acmescitt.education.uk",
+                            telephone: "020 812 345 678"),
             build(:contact, type: "fraud",
-                  name: "Fraud Contact A123",
-                  email: "fraud@acmescitt.education.uk",
-                  telephone: "020 812 345 678"),
+                            name: "Fraud Contact A123",
+                            email: "fraud@acmescitt.education.uk",
+                            telephone: "020 812 345 678"),
             build(:contact, type: "finance",
-                  name: "Finance Contact A123",
-                  email: "finance@acmescitt.education.uk",
-                  telephone: "020 812 345 678"),
+                            name: "Finance Contact A123",
+                            email: "finance@acmescitt.education.uk",
+                            telephone: "020 812 345 678"),
           ]
 
           site = build(:site,
@@ -92,25 +92,25 @@ describe "Providers API", type: :request do
                                     application_alert_email: nil)
           contacts2 = [
             build(:contact, type: "admin",
-                  name: "Admin Contact B123",
-                  email: "admin@acmeuniversity.education.uk",
-                  telephone: "01273 345 678"),
+                            name: "Admin Contact B123",
+                            email: "admin@acmeuniversity.education.uk",
+                            telephone: "01273 345 678"),
             build(:contact, type: "utt",
-                  name: "Utt Contact B123",
-                  email: "utt@acmeuniversity.education.uk",
-                  telephone: "01273 345 678"),
+                            name: "Utt Contact B123",
+                            email: "utt@acmeuniversity.education.uk",
+                            telephone: "01273 345 678"),
             build(:contact, type: "web_link",
-                  name: "Web Link Contact B123",
-                  email: "web_link@acmeuniversity.education.uk",
-                  telephone: "01273 345 678"),
+                            name: "Web Link Contact B123",
+                            email: "web_link@acmeuniversity.education.uk",
+                            telephone: "01273 345 678"),
             build(:contact, type: "fraud",
-                  name: "Fraud Contact B123",
-                  email: "fraud@acmeuniversity.education.uk",
-                  telephone: "01273 345 678"),
+                            name: "Fraud Contact B123",
+                            email: "fraud@acmeuniversity.education.uk",
+                            telephone: "01273 345 678"),
             build(:contact, type: "finance",
-                  name: "Finance Contact B123",
-                  email: "finance@acmeuniversity.education.uk",
-                  telephone: "01273 345 678"),
+                            name: "Finance Contact B123",
+                            email: "finance@acmeuniversity.education.uk",
+                            telephone: "01273 345 678"),
           ]
 
           site2 = build(:site,
@@ -309,6 +309,7 @@ describe "Providers API", type: :request do
             expect(returned_provider_codes).to include provider.provider_code
           end
         end
+
         context "with a future recruitment cycle specified in the route" do
           let(:get_index) { get "/api/v1/#{next_year}/providers", headers: { "HTTP_AUTHORIZATION" => credentials } }
 
@@ -389,7 +390,6 @@ describe "Providers API", type: :request do
                 headers: { "HTTP_AUTHORIZATION" => credentials },
                 params: { changed_since: 30.minutes.ago.utc.iso8601 }
 
-
             expect(response.headers).to have_key "Link"
             url = url_for(
               recruitment_year: next_year,
@@ -425,8 +425,8 @@ describe "Providers API", type: :request do
         before do
           @providers = Array.new(25) do |i|
             create(:provider, provider_code: "PROV#{i + 1}",
-                   changed_at: (30 - i).minutes.ago,
-                   sites: [])
+                              changed_at: (30 - i).minutes.ago,
+                              sites: [])
           end
         end
 
@@ -460,8 +460,8 @@ describe "Providers API", type: :request do
         before do
           @providers = Array.new(25) do |i|
             create(:provider, provider_code: "PROV#{i + 1}",
-                   changed_at: timestamp + i / 1000.0,
-                   sites: [])
+                              changed_at: timestamp + i / 1000.0,
+                              sites: [])
           end
         end
 

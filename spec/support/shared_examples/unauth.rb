@@ -4,14 +4,14 @@ shared_examples "Unauthenticated, unauthorised, or not accepted T&Cs" do
   context "when unauthenticated" do
     let(:payload) { { email: "foo@bar" } }
 
-    it { should have_http_status(:unauthorized) }
+    it { is_expected.to have_http_status(:unauthorized) }
   end
 
   context "when user has not accepted terms" do
     let(:user)         { create(:user, :inactive) }
     let(:organisation) { create(:organisation, users: [user]) }
 
-    it { should have_http_status(:forbidden) }
+    it { is_expected.to have_http_status(:forbidden) }
 
     it "Returns the correct error type" do
       body = JSON.parse(subject.body)
@@ -26,7 +26,8 @@ shared_examples "Unauthenticated, unauthorised, or not accepted T&Cs" do
     before do
       user.discard
     end
-    it { should have_http_status(:forbidden) }
+
+    it { is_expected.to have_http_status(:forbidden) }
 
     it "Returns the correct error type" do
       body = JSON.parse(subject.body)

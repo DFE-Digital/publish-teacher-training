@@ -1,14 +1,14 @@
 FactoryBot.define do
   subjects = {
-     "French"                                => "15",
-     "English as a second or other language" => "16",
-     "German"                                => "17",
-     "Italian"                               => "18",
-     "Japanese"                              => "19",
-     "Mandarin"                              => "20",
-     "Russian"                               => "21",
-     "Spanish"                               => "22",
-     "Modern languages (other)"              => "24",
+    "French" => "15",
+    "English as a second or other language" => "16",
+    "German" => "17",
+    "Italian" => "18",
+    "Japanese" => "19",
+    "Mandarin" => "20",
+    "Russian" => "21",
+    "Spanish" => "22",
+    "Modern languages (other)" => "24",
   }
 
   factory :modern_languages_subject do

@@ -28,7 +28,7 @@ module MCB
 
       def fetch_organisations
         @organisations = if @provider
-          # we use first because a provider should only ever be associated with one organisation
+                           # we use first because a provider should only ever be associated with one organisation
                            [@provider.organisations.first]
                          else
                            @user.organisations

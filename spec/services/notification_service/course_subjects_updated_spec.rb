@@ -58,7 +58,7 @@ module NotificationService
           course: course,
           previous_subject_names: previous_subject_names,
           previous_course_name: previous_course_name,
-          )
+        )
       end
 
       before { setup_notifications }
@@ -94,7 +94,7 @@ module NotificationService
                 previous_subject_names: previous_subject_names,
                 previous_course_name: previous_course_name,
                 recipient: subscribed_user,
-            ).and_return(mailer = double)
+              ).and_return(mailer = double)
             expect(mailer).to receive(:deliver_later)
 
             call_service

@@ -6,7 +6,7 @@ describe RecruitmentCycle, type: :model do
 
   subject { current_cycle }
 
-  its(:to_s) { should eq("2021/22") }
+  its(:to_s) { is_expected.to eq("2021/22") }
 
   it "is valid with valid attributes" do
     expect(subject).to be_valid
@@ -16,7 +16,7 @@ describe RecruitmentCycle, type: :model do
 
   describe "associations" do
     describe "providers" do
-      it { should have_many(:courses).through(:providers) }
+      it { is_expected.to have_many(:courses).through(:providers) }
 
       context "with discarded providers" do
         let(:provider)           { create :provider, recruitment_cycle: subject }
@@ -31,15 +31,16 @@ describe RecruitmentCycle, type: :model do
         end
       end
     end
-    it { should have_many(:sites).through(:providers) }
+
+    it { is_expected.to have_many(:sites).through(:providers) }
   end
 
   describe "current?" do
-    it "should return true when it's the current cycle" do
+    it "returns true when it's the current cycle" do
       expect(current_cycle.current?).to be(true)
     end
 
-    it "should return true false it's not the current cycle" do
+    it "returns true false it's not the current cycle" do
       expect(next_cycle.current?).to be(false)
     end
   end
@@ -73,7 +74,8 @@ describe RecruitmentCycle, type: :model do
 
     describe "#next" do
       subject { current_cycle }
-      its(:next) { should eq(next_cycle) }
+
+      its(:next) { is_expected.to eq(next_cycle) }
 
       it "is nil for the newest cycle" do
         expect(third_cycle.next).to be_nil
@@ -85,11 +87,11 @@ describe RecruitmentCycle, type: :model do
     end
 
     describe "next?" do
-      it "should return true when it's the next cycle" do
+      it "returns true when it's the next cycle" do
         expect(next_cycle.next?).to be(true)
       end
 
-      it "should return true false it's not the next cycle" do
+      it "returns true false it's not the next cycle" do
         expect(current_cycle.next?).to be(false)
       end
     end

@@ -11,8 +11,8 @@ describe API::V2::SerializableAllocation do
     jsonapi_renderer.render(
       allocation,
       class: {
-        Allocation:   API::V2::SerializableAllocation,
-        Provider:   API::V2::SerializableProvider,
+        Allocation: API::V2::SerializableAllocation,
+        Provider: API::V2::SerializableProvider,
       },
       include: %i(
         accredited_body
@@ -49,7 +49,7 @@ describe API::V2::SerializableAllocation do
     end
 
     it "confirmed_number_of_places returns correct value" do
-      expect(subject.dig(:data, :attributes, :confirmed_number_of_places)).to eql(123)
+      expect(subject.dig(:data, :attributes, :confirmed_number_of_places)).to be(123)
     end
   end
 

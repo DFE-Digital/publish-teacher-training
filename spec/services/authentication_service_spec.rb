@@ -22,12 +22,11 @@ describe AuthenticationService do
 
     subject { service.execute(token) }
 
-
     context "with a valid DfE-SignIn ID and email" do
       let(:first_name) { "#{user.first_name}_new" }
       let(:last_name) { "#{user.last_name}_new" }
 
-      it { should eq user }
+      it { is_expected.to eq user }
 
       it "Sets the users first name" do
         expect { subject }.to(change { user.reload.first_name }.to(first_name))
@@ -52,12 +51,13 @@ describe AuthenticationService do
     context "with a valid DfE-SignIn ID but invalid email" do
       let(:email) { Faker::Internet.email }
 
-      it { should eq user }
+      it { is_expected.to eq user }
+
       it "update's the user's email" do
         expect { subject }.to(change { user.reload.email }.to(email))
       end
 
-      it "Should log that the users email was updated" do
+      it "logs that the users email was updated" do
         subject
 
         expect(logger_spy).to have_received(:debug) do |*_args, &block|
@@ -69,7 +69,7 @@ describe AuthenticationService do
       context "when the email is already in use" do
         let!(:existing_user) { create(:user, email: email) }
 
-        it { should eq user }
+        it { is_expected.to eq user }
 
         it "does not update the user's email" do
           expect { subject }.not_to(change { user.reload.email })
@@ -88,7 +88,8 @@ describe AuthenticationService do
     context "with a valid email but invalid DfE-SignIn ID" do
       let(:sign_in_user_id) { SecureRandom.uuid }
 
-      it { should eq user }
+      it { is_expected.to eq user }
+
       it "update's the user's SignIn ID" do
         expect { subject }.to(change { user.reload.sign_in_user_id }.to(sign_in_user_id))
       end
@@ -108,7 +109,8 @@ describe AuthenticationService do
       let(:user) { create(:user, sign_in_user_id: nil) }
       let(:sign_in_user_id) { SecureRandom.uuid }
 
-      it { should eq user }
+      it { is_expected.to eq user }
+
       it "update's the user's SignIn ID" do
         expect { subject }.to(change { user.reload.sign_in_user_id }.to(sign_in_user_id))
       end
@@ -117,7 +119,7 @@ describe AuthenticationService do
     context "with a valid email but an invalid DfE-SignIn ID" do
       let(:sign_in_user_id) { SecureRandom.uuid }
 
-      it { should eq user }
+      it { is_expected.to eq user }
     end
 
     context "with an email that has different case from the database" do
@@ -127,7 +129,7 @@ describe AuthenticationService do
         user.update(email: user.email.capitalize)
       end
 
-      it { should eq user }
+      it { is_expected.to eq user }
     end
 
     context "when the email is an empty string" do

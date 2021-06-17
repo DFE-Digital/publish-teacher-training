@@ -13,7 +13,7 @@ RSpec.configure do |config|
   #
   # Disable with the tag: no_default_recycle: true
   # Retrieve with: find_or_create(:recruitment_cycle)
-  config.before(:each) do |example|
+  config.before do |example|
     unless example.metadata[:no_default_recycle] == true
       find_or_create :recruitment_cycle
     end

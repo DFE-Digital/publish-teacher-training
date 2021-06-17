@@ -527,9 +527,9 @@ describe "GET v3 /subjects" do
         },
       },
     ],
-    "jsonapi" => {
-      "version" => "1.0",
-    })
+                                "jsonapi" => {
+                                  "version" => "1.0",
+                                })
   end
 
   context "when specifying particular fields" do
@@ -537,315 +537,316 @@ describe "GET v3 /subjects" do
 
     it "returns the correct data" do
       expect(json_response).to eq("data" => [
-          {
-             "id" => "1",
-             "type" => "subjects",
-             "attributes" => {
-               "subject_name" => "Primary",
-             },
-           },
-          {
-            "id" => "2",
-            "type" => "subjects",
-            "attributes" => {
-              "subject_name" => "Primary with English",
-            },
+        {
+          "id" => "1",
+          "type" => "subjects",
+          "attributes" => {
+            "subject_name" => "Primary",
           },
-          {
-            "id" => "3",
-            "type" => "subjects",
-            "attributes" => {
-              "subject_name" => "Primary with geography and history",
-            },
+        },
+        {
+          "id" => "2",
+          "type" => "subjects",
+          "attributes" => {
+            "subject_name" => "Primary with English",
           },
-          {
-            "id" => "4",
-            "type" => "subjects",
-            "attributes" => {
-              "subject_name" => "Primary with mathematics",
-            },
+        },
+        {
+          "id" => "3",
+          "type" => "subjects",
+          "attributes" => {
+            "subject_name" => "Primary with geography and history",
           },
-          {
-            "id" => "5",
-            "type" => "subjects",
-            "attributes" => {
-              "subject_name" => "Primary with modern languages",
-            },
+        },
+        {
+          "id" => "4",
+          "type" => "subjects",
+          "attributes" => {
+            "subject_name" => "Primary with mathematics",
           },
-          {
-            "id" => "6",
-            "type" => "subjects",
-            "attributes" => {
-              "subject_name" => "Primary with physical education",
-            },
+        },
+        {
+          "id" => "5",
+          "type" => "subjects",
+          "attributes" => {
+            "subject_name" => "Primary with modern languages",
           },
-          {
-            "id" => "7",
-            "type" => "subjects",
-            "attributes" => {
-              "subject_name" => "Primary with science",
-            },
+        },
+        {
+          "id" => "6",
+          "type" => "subjects",
+          "attributes" => {
+            "subject_name" => "Primary with physical education",
           },
-          {
-            "id" => "8",
-            "type" => "subjects",
-            "attributes" => {
-              "subject_name" => "Art and design",
-            },
+        },
+        {
+          "id" => "7",
+          "type" => "subjects",
+          "attributes" => {
+            "subject_name" => "Primary with science",
           },
-          {
-            "id" => "9",
-            "type" => "subjects",
-            "attributes" => {
-              "subject_name" => "Science",
-            },
+        },
+        {
+          "id" => "8",
+          "type" => "subjects",
+          "attributes" => {
+            "subject_name" => "Art and design",
           },
-          {
-            "id" => "10",
-            "type" => "subjects",
-            "attributes" => {
-              "subject_name" => "Biology",
-            },
+        },
+        {
+          "id" => "9",
+          "type" => "subjects",
+          "attributes" => {
+            "subject_name" => "Science",
           },
-          {
-            "id" => "11",
-            "type" => "subjects",
-            "attributes" => {
-              "subject_name" => "Business studies",
-            },
+        },
+        {
+          "id" => "10",
+          "type" => "subjects",
+          "attributes" => {
+            "subject_name" => "Biology",
           },
-          {
-            "id" => "12",
-            "type" => "subjects",
-            "attributes" => {
-              "subject_name" => "Chemistry",
-            },
+        },
+        {
+          "id" => "11",
+          "type" => "subjects",
+          "attributes" => {
+            "subject_name" => "Business studies",
           },
-          {
-            "id" => "13",
-            "type" => "subjects",
-            "attributes" => {
-              "subject_name" => "Citizenship",
-            },
+        },
+        {
+          "id" => "12",
+          "type" => "subjects",
+          "attributes" => {
+            "subject_name" => "Chemistry",
           },
-          {
-            "id" => "14",
-            "type" => "subjects",
-            "attributes" => {
-              "subject_name" => "Classics",
-            },
+        },
+        {
+          "id" => "13",
+          "type" => "subjects",
+          "attributes" => {
+            "subject_name" => "Citizenship",
           },
-          {
-            "id" => "15",
-            "type" => "subjects",
-            "attributes" => {
-              "subject_name" => "Communication and media studies",
-            },
+        },
+        {
+          "id" => "14",
+          "type" => "subjects",
+          "attributes" => {
+            "subject_name" => "Classics",
           },
-          {
-            "id" => "16",
-            "type" => "subjects",
-            "attributes" => {
-              "subject_name" => "Computing",
-            },
+        },
+        {
+          "id" => "15",
+          "type" => "subjects",
+          "attributes" => {
+            "subject_name" => "Communication and media studies",
           },
-          {
-            "id" => "17",
-            "type" => "subjects",
-            "attributes" => {
-              "subject_name" => "Dance",
-            },
+        },
+        {
+          "id" => "16",
+          "type" => "subjects",
+          "attributes" => {
+            "subject_name" => "Computing",
           },
-          {
-            "id" => "18",
-            "type" => "subjects",
-            "attributes" => {
-              "subject_name" => "Design and technology",
-            },
+        },
+        {
+          "id" => "17",
+          "type" => "subjects",
+          "attributes" => {
+            "subject_name" => "Dance",
           },
-          {
-            "id" => "19",
-            "type" => "subjects",
-            "attributes" => {
-              "subject_name" => "Drama",
-            },
+        },
+        {
+          "id" => "18",
+          "type" => "subjects",
+          "attributes" => {
+            "subject_name" => "Design and technology",
           },
-          {
-            "id" => "20",
-            "type" => "subjects",
-            "attributes" => {
-              "subject_name" => "Economics",
-            },
+        },
+        {
+          "id" => "19",
+          "type" => "subjects",
+          "attributes" => {
+            "subject_name" => "Drama",
           },
-          {
-            "id" => "21",
-            "type" => "subjects",
-            "attributes" => {
-              "subject_name" => "English",
-            },
+        },
+        {
+          "id" => "20",
+          "type" => "subjects",
+          "attributes" => {
+            "subject_name" => "Economics",
           },
-          {
-            "id" => "22",
-            "type" => "subjects",
-            "attributes" => {
-              "subject_name" => "Geography",
-            },
+        },
+        {
+          "id" => "21",
+          "type" => "subjects",
+          "attributes" => {
+            "subject_name" => "English",
           },
-          {
-            "id" => "23",
-            "type" => "subjects",
-            "attributes" => {
-              "subject_name" => "Health and social care",
-            },
+        },
+        {
+          "id" => "22",
+          "type" => "subjects",
+          "attributes" => {
+            "subject_name" => "Geography",
           },
-          {
-            "id" => "24",
-            "type" => "subjects",
-            "attributes" => {
-              "subject_name" => "History",
-            },
+        },
+        {
+          "id" => "23",
+          "type" => "subjects",
+          "attributes" => {
+            "subject_name" => "Health and social care",
           },
-          {
-            "id" => "25",
-            "type" => "subjects",
-            "attributes" => {
-              "subject_name" => "Mathematics",
-            },
+        },
+        {
+          "id" => "24",
+          "type" => "subjects",
+          "attributes" => {
+            "subject_name" => "History",
           },
-          {
-            "id" => "26",
-            "type" => "subjects",
-            "attributes" => {
-              "subject_name" => "Music",
-            },
+        },
+        {
+          "id" => "25",
+          "type" => "subjects",
+          "attributes" => {
+            "subject_name" => "Mathematics",
           },
-          {
-            "id" => "27",
-            "type" => "subjects",
-            "attributes" => {
-              "subject_name" => "Philosophy",
-            },
+        },
+        {
+          "id" => "26",
+          "type" => "subjects",
+          "attributes" => {
+            "subject_name" => "Music",
           },
-          {
-            "id" => "28",
-            "type" => "subjects",
-            "attributes" => {
-              "subject_name" => "Physical education",
-            },
+        },
+        {
+          "id" => "27",
+          "type" => "subjects",
+          "attributes" => {
+            "subject_name" => "Philosophy",
           },
-          {
-            "id" => "29",
-            "type" => "subjects",
-            "attributes" => {
-              "subject_name" => "Physics",
-            },
+        },
+        {
+          "id" => "28",
+          "type" => "subjects",
+          "attributes" => {
+            "subject_name" => "Physical education",
           },
-          {
-            "id" => "30",
-            "type" => "subjects",
-            "attributes" => {
-              "subject_name" => "Psychology",
-            },
+        },
+        {
+          "id" => "29",
+          "type" => "subjects",
+          "attributes" => {
+            "subject_name" => "Physics",
           },
-          {
-            "id" => "31",
-            "type" => "subjects",
-            "attributes" => {
-              "subject_name" => "Religious education",
-            },
+        },
+        {
+          "id" => "30",
+          "type" => "subjects",
+          "attributes" => {
+            "subject_name" => "Psychology",
           },
-          {
-            "id" => "32",
-            "type" => "subjects",
-            "attributes" => {
-              "subject_name" => "Social sciences",
-            },
+        },
+        {
+          "id" => "31",
+          "type" => "subjects",
+          "attributes" => {
+            "subject_name" => "Religious education",
           },
-          {
-            "id" => "33",
-            "type" => "subjects",
-            "attributes" => {
-              "subject_name" => "Modern Languages",
-            },
+        },
+        {
+          "id" => "32",
+          "type" => "subjects",
+          "attributes" => {
+            "subject_name" => "Social sciences",
           },
-          {
-            "id" => "34",
-            "type" => "subjects",
-            "attributes" => {
-              "subject_name" => "French",
-            },
+        },
+        {
+          "id" => "33",
+          "type" => "subjects",
+          "attributes" => {
+            "subject_name" => "Modern Languages",
           },
-          {
-            "id" => "35",
-            "type" => "subjects",
-            "attributes" => {
-              "subject_name" => "English as a second or other language",
-            },
+        },
+        {
+          "id" => "34",
+          "type" => "subjects",
+          "attributes" => {
+            "subject_name" => "French",
           },
-          {
-            "id" => "36",
-            "type" => "subjects",
-            "attributes" => {
-              "subject_name" => "German",
-            },
+        },
+        {
+          "id" => "35",
+          "type" => "subjects",
+          "attributes" => {
+            "subject_name" => "English as a second or other language",
           },
-          {
-            "id" => "37",
-            "type" => "subjects",
-            "attributes" => {
-              "subject_name" => "Italian",
-            },
+        },
+        {
+          "id" => "36",
+          "type" => "subjects",
+          "attributes" => {
+            "subject_name" => "German",
           },
-          {
-            "id" => "38",
-            "type" => "subjects",
-            "attributes" => {
-              "subject_name" => "Japanese",
-            },
+        },
+        {
+          "id" => "37",
+          "type" => "subjects",
+          "attributes" => {
+            "subject_name" => "Italian",
           },
-          {
-            "id" => "39",
-            "type" => "subjects",
-            "attributes" => {
-              "subject_name" => "Mandarin",
-            },
+        },
+        {
+          "id" => "38",
+          "type" => "subjects",
+          "attributes" => {
+            "subject_name" => "Japanese",
           },
-          {
-            "id" => "40",
-            "type" => "subjects",
-            "attributes" => {
-              "subject_name" => "Russian",
-            },
+        },
+        {
+          "id" => "39",
+          "type" => "subjects",
+          "attributes" => {
+            "subject_name" => "Mandarin",
           },
-          {
-            "id" => "41",
-            "type" => "subjects",
-            "attributes" => {
-              "subject_name" => "Spanish",
-            },
+        },
+        {
+          "id" => "40",
+          "type" => "subjects",
+          "attributes" => {
+            "subject_name" => "Russian",
           },
-          {
-            "id" => "42",
-            "type" => "subjects",
-            "attributes" => {
-              "subject_name" => "Modern languages (other)",
-            },
+        },
+        {
+          "id" => "41",
+          "type" => "subjects",
+          "attributes" => {
+            "subject_name" => "Spanish",
           },
-          {
-            "id" => "43",
-            "type" => "subjects",
-            "attributes" => {
-              "subject_name" => "Further education",
-            },
+        },
+        {
+          "id" => "42",
+          "type" => "subjects",
+          "attributes" => {
+            "subject_name" => "Modern languages (other)",
           },
-        ],
-        "jsonapi" => {
-        "version" => "1.0",
-      })
+        },
+        {
+          "id" => "43",
+          "type" => "subjects",
+          "attributes" => {
+            "subject_name" => "Further education",
+          },
+        },
+      ],
+                                  "jsonapi" => {
+                                    "version" => "1.0",
+                                  })
     end
 
     context "when sorting by name" do
       let(:request_path) { "/api/v3/subjects?fields[subjects]=subject_name&sort=subject_name" }
+
       it "sorts the subject names in ascending order" do
         expect(json_response["data"].map { |subject| subject["attributes"]["subject_name"] }).to eq([
           "Art and design",

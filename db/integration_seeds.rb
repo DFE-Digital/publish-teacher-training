@@ -58,7 +58,7 @@ module IntegrationSeeds
 
           train_with_us: "Train With Us #{provider_code}",
           train_with_disability: "Train With Disability #{provider_code}",
-         )
+        )
       end
 
       location_code = "-"

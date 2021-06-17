@@ -15,8 +15,8 @@ describe WithQualifications, type: :model do
         context "course with qualification=#{qualification}" do
           subject { build(:course, qualification: qualification) }
 
-          its(:qualifications) { should eq(expected[:values]) }
-          its(:qualifications_description) { should eq(expected[:description]) }
+          its(:qualifications) { is_expected.to eq(expected[:values]) }
+          its(:qualifications_description) { is_expected.to eq(expected[:description]) }
         end
       end
     end
@@ -26,7 +26,7 @@ describe WithQualifications, type: :model do
     context "no qualification present" do
       subject { build(:course, qualification: nil) }
 
-      its(:qualifications_description) { should eq "" }
+      its(:qualifications_description) { is_expected.to eq "" }
     end
   end
 
@@ -36,16 +36,16 @@ describe WithQualifications, type: :model do
     context "when the qualification is QTS only" do
       before { subject.qualification = :qts }
 
-      its(:qualification) { should eq("qts") }
-      its(:profpost_flag) { should eq("recommendation_for_qts") }
+      its(:qualification) { is_expected.to eq("qts") }
+      its(:profpost_flag) { is_expected.to eq("recommendation_for_qts") }
     end
 
     (Course.qualifications.keys - %w[qts]).each do |qualification|
       context "when the qualification is #{qualification}" do
         before { subject.qualification = qualification }
 
-        its(:qualification) { should eq(qualification) }
-        its(:profpost_flag) { should eq("postgraduate") }
+        its(:qualification) { is_expected.to eq(qualification) }
+        its(:profpost_flag) { is_expected.to eq("postgraduate") }
       end
     end
   end

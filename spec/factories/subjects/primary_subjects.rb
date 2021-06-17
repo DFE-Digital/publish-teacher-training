@@ -1,12 +1,12 @@
 FactoryBot.define do
   subjects = {
-    "Primary"                            => "00",
-    "Primary with English"               => "01",
+    "Primary" => "00",
+    "Primary with English" => "01",
     "Primary with geography and history" => "02",
-    "Primary with mathematics"           => "03",
-    "Primary with modern languages"      => "04",
-    "Primary with physical education"    => "06",
-    "Primary with science"               => "07",
+    "Primary with mathematics" => "03",
+    "Primary with modern languages" => "04",
+    "Primary with physical education" => "06",
+    "Primary with science" => "07",
   }
 
   factory :primary_subject do

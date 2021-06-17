@@ -8,6 +8,6 @@ ruby "2.7.2"
 gem "govuk_tech_docs", git: "https://github.com/DFE-Digital/tech-docs-gem"
 
 group :test do
-  gem "rspec"
   gem "capybara"
+  gem "rspec"
 end

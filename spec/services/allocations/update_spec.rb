@@ -5,6 +5,7 @@ RSpec.describe Allocations::Update do
     context "when request type is changed from repeat to declined" do
       let(:repeat_allocation) { create(:allocation, :repeat, number_of_places: 2) }
       let(:params) { { request_type: "declined" } }
+
       subject do
         described_class.new(repeat_allocation, params).execute
       end

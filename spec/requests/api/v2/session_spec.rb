@@ -15,7 +15,7 @@ describe "/api/v2/sessions", type: :request do
 
     subject { response }
 
-    it { should have_http_status(:unauthorized) }
+    it { is_expected.to have_http_status(:unauthorized) }
   end
 
   describe "creating a session" do
@@ -130,8 +130,7 @@ describe "/api/v2/sessions", type: :request do
 
       # invalid type
       # pp params[:session]
-      #<ActionController::Parameters {"type"=>"invalid", "first_name"=>"update invalid first_name", "last_name"=>"updated invalid last_name"} permitted: false>
-
+      # <ActionController::Parameters {"type"=>"invalid", "first_name"=>"update invalid first_name", "last_name"=>"updated invalid last_name"} permitted: false>
 
       # concerns are "first_name" & "last_name" and not "type" == "session"
       it "raises an error" do

@@ -58,7 +58,7 @@ describe "PATCH /providers/:provider_code/courses/:course_code" do
       expect(course.reload.study_mode).to eq(updated_study_mode[:study_mode].to_s)
     end
 
-    it "should update all site_statuses vac_status to full_time_vacancies except no_vacancies" do
+    it "updates all site_statuses vac_status to full_time_vacancies except no_vacancies" do
       expect(site_status1.reload.vac_status).to eq("full_time_vacancies")
       expect(site_status2.reload.vac_status).to eq("full_time_vacancies")
       expect(site_status3.reload.vac_status).to eq("full_time_vacancies")
@@ -77,7 +77,7 @@ describe "PATCH /providers/:provider_code/courses/:course_code" do
       expect(course.reload.study_mode).to eq(updated_study_mode[:study_mode].to_s)
     end
 
-    it "should update all site_statuses vac_status to part_time_vacancies except no_vacancies" do
+    it "updates all site_statuses vac_status to part_time_vacancies except no_vacancies" do
       expect(site_status1.reload.vac_status).to eq("part_time_vacancies")
       expect(site_status2.reload.vac_status).to eq("part_time_vacancies")
       expect(site_status3.reload.vac_status).to eq("part_time_vacancies")

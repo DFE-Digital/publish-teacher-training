@@ -13,18 +13,17 @@ describe AllocationCopyDataService do
   let!(:allocation1) {
     create(:allocation,
            recruitment_cycle: previous_cycle, provider: provider1a, accredited_body: provider1a,
-             number_of_places: 5, confirmed_number_of_places: 5)
+           number_of_places: 5, confirmed_number_of_places: 5)
   }
   let!(:allocation2) {
     create(:allocation,
            recruitment_cycle: previous_cycle, provider: provider2a, accredited_body: provider1a,
-             number_of_places: 10, confirmed_number_of_places: 10)
+           number_of_places: 10, confirmed_number_of_places: 10)
   }
 
-
   it "copies over previous allocations to current allocation year" do
-    expect(Provider.count).to eql(4)
-    expect(Allocation.count).to eql(2)
+    expect(Provider.count).to be(4)
+    expect(Allocation.count).to be(2)
 
     a1 = Allocation.where(provider_code: provider1a.provider_code).first
     expect(a1.provider.id).to eql(provider1a.id)
@@ -40,8 +39,8 @@ describe AllocationCopyDataService do
     expect(current_cycle.previous.year).to eql("2020")
 
     AllocationCopyDataService.call(allocation_cycle_year: current_cycle.year)
-    expect(Allocation.count).to eql(4)
-    expect(Allocation.where(recruitment_cycle_id: current_cycle.id).count).to eql(2)
+    expect(Allocation.count).to be(4)
+    expect(Allocation.where(recruitment_cycle_id: current_cycle.id).count).to be(2)
 
     b1 = Allocation.where(provider_code: provider1a.provider_code, recruitment_cycle_id: current_cycle.id).first
     expect(b1.provider_id).to eql(provider1b.id)

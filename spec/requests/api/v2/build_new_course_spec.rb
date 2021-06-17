@@ -116,7 +116,7 @@ describe "/api/v2/build_new_course", type: :request do
       let(:params) do
         { course: {
           level: :secondary,
-          } }
+        } }
       end
 
       let(:pe) { find_or_create(:secondary_subject, :physical_education) }
@@ -124,7 +124,7 @@ describe "/api/v2/build_new_course", type: :request do
       context "when the current user is an admin" do
         let(:user) { create(:user, :admin, organisations: [organisation]) }
 
-        it "should return pe as a potential subject" do
+        it "returns pe as a potential subject" do
           response = do_get params
           expect(response).to have_http_status(:ok)
           json_response = parse_response(response)
@@ -135,7 +135,7 @@ describe "/api/v2/build_new_course", type: :request do
       end
 
       context "when the current user is not an admin" do
-        it "should not return pe as a potential subject" do
+        it "does not return pe as a potential subject" do
           response = do_get params
           expect(response).to have_http_status(:ok)
           json_response = parse_response(response)
@@ -181,102 +181,101 @@ describe "/api/v2/build_new_course", type: :request do
       expected = course_jsonapi
       expected["data"]["attributes"]["name"] = ""
       expected["data"]["errors"] = [
-              {
-                "title" => "Invalid maths",
-                "detail" => "Pick an option for Maths",
-                "source" => {
-                  "pointer" => "/data/attributes/maths",
-                },
-              },
-              {
-                "title" => "Invalid english",
-                "detail" => "Pick an option for English",
-                "source" => {
-                  "pointer" => "/data/attributes/english",
-                },
-              },
-              {
-                "title" => "Invalid sites",
-                "detail" => "You must pick at least one location for this course",
-                "source" => {
-                  "pointer" => "/data/attributes/sites",
-                },
-              },
-              {
-                "title" => "Invalid qualification",
-                "detail" => "You need to pick an outcome",
-                "source" => {
-                  "pointer" => "/data/attributes/qualification",
-                },
-              },
-              {
-                "title" => "Invalid applications open from",
-                "detail" => "You must say when applications open from",
-                "source" => {
-                  "pointer" => "/data/attributes/applications_open_from",
-                },
-              },
-              {
-                "title" => "Invalid subjects",
-                "detail" => "You must pick at least one subject",
-                "source" => {
-                  "pointer" => "/data/attributes/subjects",
-                },
-              },
-              {
-                "title" => "Invalid title",
-                "detail" => "Title can't be blank",
-                "source" => {
-                  "pointer" => "/data/attributes/name",
-                },
-              },
-              {
-                "title" => "Invalid profpost flag",
-                "detail" => "Profpost flag can't be blank",
-                "source" => {
-                  "pointer" => "/data/attributes/profpost_flag",
-                },
-              },
-              {
-                "title" => "Invalid program type",
-                "detail" => "You need to pick an option",
-                "source" => {
-                  "pointer" => "/data/attributes/program_type",
-                },
-              },
-              {
-                "title" => "Invalid start date",
-                "detail" => "Start date can't be blank",
-                "source" => {
-                  "pointer" => "/data/attributes/start_date",
-                },
-              },
-              {
-                "title" => "Invalid study mode",
-                "detail" => "You need to pick an option",
-                "source" => {
-                  "pointer" => "/data/attributes/study_mode",
-                },
-              },
-              {
-                "title" => "Invalid age range in years",
-                "detail" => "You need to pick an age range",
-                "source" => {
-                  "pointer" => "/data/attributes/age_range_in_years",
-                },
-              },
-              {
-                "title" => "Invalid level",
-                "detail" => "You need to pick a level",
-                "source" => {
-                  "pointer" => "/data/attributes/level",
-                },
-              },
-        ]
+        {
+          "title" => "Invalid maths",
+          "detail" => "Pick an option for Maths",
+          "source" => {
+            "pointer" => "/data/attributes/maths",
+          },
+        },
+        {
+          "title" => "Invalid english",
+          "detail" => "Pick an option for English",
+          "source" => {
+            "pointer" => "/data/attributes/english",
+          },
+        },
+        {
+          "title" => "Invalid sites",
+          "detail" => "You must pick at least one location for this course",
+          "source" => {
+            "pointer" => "/data/attributes/sites",
+          },
+        },
+        {
+          "title" => "Invalid qualification",
+          "detail" => "You need to pick an outcome",
+          "source" => {
+            "pointer" => "/data/attributes/qualification",
+          },
+        },
+        {
+          "title" => "Invalid applications open from",
+          "detail" => "You must say when applications open from",
+          "source" => {
+            "pointer" => "/data/attributes/applications_open_from",
+          },
+        },
+        {
+          "title" => "Invalid subjects",
+          "detail" => "You must pick at least one subject",
+          "source" => {
+            "pointer" => "/data/attributes/subjects",
+          },
+        },
+        {
+          "title" => "Invalid title",
+          "detail" => "Title can't be blank",
+          "source" => {
+            "pointer" => "/data/attributes/name",
+          },
+        },
+        {
+          "title" => "Invalid profpost flag",
+          "detail" => "Profpost flag can't be blank",
+          "source" => {
+            "pointer" => "/data/attributes/profpost_flag",
+          },
+        },
+        {
+          "title" => "Invalid program type",
+          "detail" => "You need to pick an option",
+          "source" => {
+            "pointer" => "/data/attributes/program_type",
+          },
+        },
+        {
+          "title" => "Invalid start date",
+          "detail" => "Start date can't be blank",
+          "source" => {
+            "pointer" => "/data/attributes/start_date",
+          },
+        },
+        {
+          "title" => "Invalid study mode",
+          "detail" => "You need to pick an option",
+          "source" => {
+            "pointer" => "/data/attributes/study_mode",
+          },
+        },
+        {
+          "title" => "Invalid age range in years",
+          "detail" => "You need to pick an age range",
+          "source" => {
+            "pointer" => "/data/attributes/age_range_in_years",
+          },
+        },
+        {
+          "title" => "Invalid level",
+          "detail" => "You need to pick a level",
+          "source" => {
+            "pointer" => "/data/attributes/level",
+          },
+        },
+      ]
       expect(json_response).to eq expected
     end
   end
-
 
   context "with no parameters" do
     let(:params) do
@@ -298,98 +297,98 @@ describe "/api/v2/build_new_course", type: :request do
 
     it "returns a new course with the correct errors" do
       expected_errors = [
-              {
-                "title" => "Invalid maths",
-                "detail" => "Pick an option for Maths",
-                "source" => {
-                  "pointer" => "/data/attributes/maths",
-                },
-              },
-              {
-                "title" => "Invalid english",
-                "detail" => "Pick an option for English",
-                "source" => {
-                  "pointer" => "/data/attributes/english",
-                },
-              },
-              {
-                "title" => "Invalid subjects",
-                "detail" => "You must pick at least one subject",
-                "source" => {
-                  "pointer" => "/data/attributes/subjects",
-                },
-              },
-              {
-                "title" => "Invalid title",
-                "detail" => "Title can't be blank",
-                "source" => {
-                  "pointer" => "/data/attributes/name",
-                },
-              },
-              {
-                "title" => "Invalid profpost flag",
-                "detail" => "Profpost flag can't be blank",
-                "source" => {
-                  "pointer" => "/data/attributes/profpost_flag",
-                },
-              },
-              {
-                "title" => "Invalid program type",
-                "detail" => "You need to pick an option",
-                "source" => {
-                  "pointer" => "/data/attributes/program_type",
-                },
-              },
-              {
-                "title" => "Invalid qualification",
-                "detail" => "You need to pick an outcome",
-                "source" => {
-                  "pointer" => "/data/attributes/qualification",
-                },
-              },
-              {
-                "title" => "Invalid start date",
-                "detail" => "Start date can't be blank",
-                "source" => {
-                  "pointer" => "/data/attributes/start_date",
-                },
-              },
-              {
-                "title" => "Invalid study mode",
-                "detail" => "You need to pick an option",
-                "source" => {
-                  "pointer" => "/data/attributes/study_mode",
-                },
-              },
-              {
-                "title" => "Invalid age range in years",
-                "detail" => "You need to pick an age range",
-                "source" => {
-                  "pointer" => "/data/attributes/age_range_in_years",
-                },
-              },
-              {
-                "title" => "Invalid level",
-                "detail" => "You need to pick a level",
-                "source" => {
-                  "pointer" => "/data/attributes/level",
-                },
-              },
-              {
-                "title" => "Invalid sites",
-                "detail" => "You must pick at least one location for this course",
-                "source" => {
-                  "pointer" => "/data/attributes/sites",
-                },
-              },
-              {
-                "title" => "Invalid applications open from",
-                "detail" => "You must say when applications open from",
-                "source" => {
-                  "pointer" => "/data/attributes/applications_open_from",
-                },
-              },
-        ]
+        {
+          "title" => "Invalid maths",
+          "detail" => "Pick an option for Maths",
+          "source" => {
+            "pointer" => "/data/attributes/maths",
+          },
+        },
+        {
+          "title" => "Invalid english",
+          "detail" => "Pick an option for English",
+          "source" => {
+            "pointer" => "/data/attributes/english",
+          },
+        },
+        {
+          "title" => "Invalid subjects",
+          "detail" => "You must pick at least one subject",
+          "source" => {
+            "pointer" => "/data/attributes/subjects",
+          },
+        },
+        {
+          "title" => "Invalid title",
+          "detail" => "Title can't be blank",
+          "source" => {
+            "pointer" => "/data/attributes/name",
+          },
+        },
+        {
+          "title" => "Invalid profpost flag",
+          "detail" => "Profpost flag can't be blank",
+          "source" => {
+            "pointer" => "/data/attributes/profpost_flag",
+          },
+        },
+        {
+          "title" => "Invalid program type",
+          "detail" => "You need to pick an option",
+          "source" => {
+            "pointer" => "/data/attributes/program_type",
+          },
+        },
+        {
+          "title" => "Invalid qualification",
+          "detail" => "You need to pick an outcome",
+          "source" => {
+            "pointer" => "/data/attributes/qualification",
+          },
+        },
+        {
+          "title" => "Invalid start date",
+          "detail" => "Start date can't be blank",
+          "source" => {
+            "pointer" => "/data/attributes/start_date",
+          },
+        },
+        {
+          "title" => "Invalid study mode",
+          "detail" => "You need to pick an option",
+          "source" => {
+            "pointer" => "/data/attributes/study_mode",
+          },
+        },
+        {
+          "title" => "Invalid age range in years",
+          "detail" => "You need to pick an age range",
+          "source" => {
+            "pointer" => "/data/attributes/age_range_in_years",
+          },
+        },
+        {
+          "title" => "Invalid level",
+          "detail" => "You need to pick a level",
+          "source" => {
+            "pointer" => "/data/attributes/level",
+          },
+        },
+        {
+          "title" => "Invalid sites",
+          "detail" => "You must pick at least one location for this course",
+          "source" => {
+            "pointer" => "/data/attributes/sites",
+          },
+        },
+        {
+          "title" => "Invalid applications open from",
+          "detail" => "You must say when applications open from",
+          "source" => {
+            "pointer" => "/data/attributes/applications_open_from",
+          },
+        },
+      ]
 
       expect(json_response["data"]["errors"]).to match_array(expected_errors)
     end
@@ -410,7 +409,7 @@ describe "/api/v2/build_new_course", type: :request do
         level: :primary,
         age_range_in_years: "3_to_7",
         applications_open_from: provider.recruitment_cycle.application_start_date,
-        } }
+      } }
     end
 
     let(:sites) { [create(:site, provider: provider)] }
@@ -427,7 +426,6 @@ describe "/api/v2/build_new_course", type: :request do
       expected = course_jsonapi
       expected["data"]["attributes"]["name"] = "Primary with mathematics"
       expected["data"]["errors"] = []
-
 
       expect(json_response).to eq expected
     end

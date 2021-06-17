@@ -140,8 +140,8 @@ module MCB
     end
 
     def organisations_table(organisations,
-                        name: "Organisations",
-                        add_columns: [])
+                            name: "Organisations",
+                            add_columns: [])
       return if organisations.nil?
 
       [

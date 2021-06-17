@@ -175,8 +175,8 @@ RSpec.describe Courses::CopyToProviderService do
     describe "the new course" do
       subject { new_course }
 
-      its(:ucas_status) { should eq :new }
-      its(:open_for_applications?) { should be_falsey }
+      its(:ucas_status) { is_expected.to eq :new }
+      its(:open_for_applications?) { is_expected.to be_falsey }
     end
 
     it "copies over the course's sites" do

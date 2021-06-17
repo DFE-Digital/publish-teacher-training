@@ -107,11 +107,11 @@ module NotificationService
             expect(CourseVacancies::UpdatedMailer)
               .to receive(:fully_updated)
                     .with({
-                            course: course,
-                            user: user,
-                            datetime: DateTime.now,
-                            vacancies_filled: true,
-                          })
+                      course: course,
+                      user: user,
+                      datetime: DateTime.now,
+                      vacancies_filled: true,
+                    })
           end
 
           service_call
@@ -131,11 +131,11 @@ module NotificationService
             expect(CourseVacancies::UpdatedMailer)
               .to receive(:fully_updated)
                     .with({
-                            course: course,
-                            user: user,
-                            datetime: DateTime.now,
-                            vacancies_filled: false,
-                          })
+                      course: course,
+                      user: user,
+                      datetime: DateTime.now,
+                      vacancies_filled: false,
+                    })
           end
 
           service_call
@@ -165,15 +165,14 @@ module NotificationService
             expect(CourseVacancies::UpdatedMailer)
               .to receive(:partially_updated)
                     .with({
-                            course: course,
-                            user: user,
-                            datetime: DateTime.now,
-                            vacancies_closed: [first_site_status.site.location_name],
-                            vacancies_opened: [second_site_status.site.location_name],
-                          })
+                      course: course,
+                      user: user,
+                      datetime: DateTime.now,
+                      vacancies_closed: [first_site_status.site.location_name],
+                      vacancies_opened: [second_site_status.site.location_name],
+                    })
                     .and_return(double(deliver_later: true))
           end
-
 
           service_call
         end

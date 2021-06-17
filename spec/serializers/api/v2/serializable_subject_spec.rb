@@ -10,16 +10,15 @@ describe API::V2::SerializableSubject do
 
   subject { JSON.parse(resource.as_jsonapi.to_json) }
 
-  it { should have_type "subjects" }
-  it { should have_attribute(:subject_name).with_value(non_bursary_subject.subject_name) }
-  it { should have_attribute(:subject_code).with_value(non_bursary_subject.subject_code) }
-
+  it { is_expected.to have_type "subjects" }
+  it { is_expected.to have_attribute(:subject_name).with_value(non_bursary_subject.subject_name) }
+  it { is_expected.to have_attribute(:subject_code).with_value(non_bursary_subject.subject_code) }
 
   context "when a non-bursary subject" do
-    it { should have_attribute(:bursary_amount).with_value(nil) }
-    it { should have_attribute(:early_career_payments).with_value(nil) }
-    it { should have_attribute(:scholarship).with_value(nil) }
-    it { should have_attribute(:subject_knowledge_enhancement_course_available).with_value(nil) }
+    it { is_expected.to have_attribute(:bursary_amount).with_value(nil) }
+    it { is_expected.to have_attribute(:early_career_payments).with_value(nil) }
+    it { is_expected.to have_attribute(:scholarship).with_value(nil) }
+    it { is_expected.to have_attribute(:subject_knowledge_enhancement_course_available).with_value(nil) }
   end
 
   # NOTE: There is no longer any bursary subject with subject knowledge
@@ -28,9 +27,9 @@ describe API::V2::SerializableSubject do
     let(:bursary_subject) { find_or_create(:secondary_subject, :mathematics) }
     let(:resource) { API::V2::SerializableSubject.new object: bursary_subject }
 
-    it { should have_attribute(:bursary_amount).with_value(bursary_subject.financial_incentive.bursary_amount) }
-    it { should have_attribute(:early_career_payments).with_value(bursary_subject.financial_incentive.early_career_payments) }
-    it { should have_attribute(:scholarship).with_value(bursary_subject.financial_incentive.scholarship) }
-    it { should have_attribute(:subject_knowledge_enhancement_course_available).with_value(true) }
+    it { is_expected.to have_attribute(:bursary_amount).with_value(bursary_subject.financial_incentive.bursary_amount) }
+    it { is_expected.to have_attribute(:early_career_payments).with_value(bursary_subject.financial_incentive.early_career_payments) }
+    it { is_expected.to have_attribute(:scholarship).with_value(bursary_subject.financial_incentive.scholarship) }
+    it { is_expected.to have_attribute(:subject_knowledge_enhancement_course_available).with_value(true) }
   end
 end

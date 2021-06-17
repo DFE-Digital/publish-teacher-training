@@ -24,7 +24,6 @@
 #  * zeus: 'zeus rspec' (requires the server to be started separately)
 #  * 'just' rspec: 'rspec'
 
-
 group :red_green_refactor, halt_on_fail: true do
   guard :rspec, cmd: 'bundle exec spring rspec', failed_mode: :keep do
     require "guard/rspec/dsl"

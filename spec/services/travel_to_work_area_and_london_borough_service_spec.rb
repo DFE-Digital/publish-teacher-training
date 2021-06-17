@@ -28,19 +28,19 @@ describe TravelToWorkAreaAndLondonBoroughService do
       let(:travel_to_work_areas_successful_response) do
         {
           "163653": {
-            "parent_area": nil,
-            "generation_high": 41,
-            "all_names": {},
-            "id": 163653,
-            "codes": {
-              "gss": "E30000234",
+            parent_area: nil,
+            generation_high: 41,
+            all_names: {},
+            id: 163653,
+            codes: {
+              gss: "E30000234",
             },
-            "name": travel_to_work_area,
-            "country": "E",
-            "type_name": "Travel to Work Areas",
-            "generation_low": 38,
-            "country_name": "England",
-            "type": "TTW",
+            name: travel_to_work_area,
+            country: "E",
+            type_name: "Travel to Work Areas",
+            generation_low: 38,
+            country_name: "England",
+            type: "TTW",
           },
         }.to_json
       end
@@ -48,26 +48,27 @@ describe TravelToWorkAreaAndLondonBoroughService do
       let(:london_boroughs_successful_response) do
         {
           "2504": {
-            "parent_area": nil,
-            "generation_high": 41,
-            "all_names": {},
-            "id": 2504,
-            "codes": {
-              "unit_id": "11164",
-              "ons": "00BK",
-              "gss": "E09000033",
+            parent_area: nil,
+            generation_high: 41,
+            all_names: {},
+            id: 2504,
+            codes: {
+              unit_id: "11164",
+              ons: "00BK",
+              gss: "E09000033",
               "local-authority-eng": "WSM",
               "local-authority-canonical": "WSM",
             },
-            "name": london_borough,
-            "country": "E",
-            "type_name": "London borough",
-            "generation_low": 1,
-            "country_name": "England",
-            "type": "LBO",
+            name: london_borough,
+            country: "E",
+            type_name: "London borough",
+            generation_low: 1,
+            country_name: "England",
+            type: "LBO",
           },
         }.to_json
       end
+
       before do
         stub_request(:get, travel_to_work_areas_query).to_return(body: travel_to_work_areas_successful_response)
         stub_request(:get, london_boroughs_query).to_return(body: london_boroughs_successful_response)
@@ -77,9 +78,9 @@ describe TravelToWorkAreaAndLondonBoroughService do
         let(:travel_to_work_area) { "Cambridge" }
 
         it "updates the travel to work area and london_borough remains nil" do
-          expect { described_class.call(site: site) }.
-            to change { site.reload.travel_to_work_area }.from(nil).to("Cambridge").
-              and(not_change { site.london_borough })
+          expect { described_class.call(site: site) }
+            .to change { site.reload.travel_to_work_area }.from(nil).to("Cambridge")
+              .and(not_change { site.london_borough })
         end
       end
 
@@ -90,9 +91,9 @@ describe TravelToWorkAreaAndLondonBoroughService do
           let(:london_borough) { "Westminster City Council" }
 
           it "updates the london Borough to Westminster" do
-            expect { described_class.call(site: site) }.
-              to change { site.reload.travel_to_work_area }.from(nil).to("London").
-                and change { site.london_borough }.from(nil).to("Westminster")
+            expect { described_class.call(site: site) }
+              .to change { site.reload.travel_to_work_area }.from(nil).to("London")
+                .and change { site.london_borough }.from(nil).to("Westminster")
           end
         end
 
@@ -100,9 +101,9 @@ describe TravelToWorkAreaAndLondonBoroughService do
           let(:london_borough) { "City of London Corporation" }
 
           it "updates the london Borough to City of London" do
-            expect { described_class.call(site: site) }.
-              to change { site.reload.travel_to_work_area }.from(nil).to("London").
-                and change { site.london_borough }.from(nil).to("City of London")
+            expect { described_class.call(site: site) }
+              .to change { site.reload.travel_to_work_area }.from(nil).to("London")
+                .and change { site.london_borough }.from(nil).to("City of London")
           end
         end
 
@@ -110,9 +111,9 @@ describe TravelToWorkAreaAndLondonBoroughService do
           let(:london_borough) { "Greenwich Borough Council" }
 
           it "updates removes 'London Borough' from the string" do
-            expect { described_class.call(site: site) }.
-              to change { site.reload.travel_to_work_area }.from(nil).to("London").
-                and change { site.london_borough }.from(nil).to("Greenwich")
+            expect { described_class.call(site: site) }
+              .to change { site.reload.travel_to_work_area }.from(nil).to("London")
+                .and change { site.london_borough }.from(nil).to("Greenwich")
           end
         end
       end

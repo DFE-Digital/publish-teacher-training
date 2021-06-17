@@ -10,8 +10,8 @@ describe API::V2::SerializableRecruitmentCycle do
 
   subject { JSON.parse(resource.as_jsonapi.to_json) }
 
-  it { should have_type "recruitment_cycles" }
-  it { should have_attribute(:year).with_value(recruitment_cycle.year) }
-  it { should have_attribute(:application_start_date).with_value(recruitment_cycle.application_start_date.to_s) }
-  it { should have_attribute(:application_end_date).with_value(recruitment_cycle.application_end_date.to_s) }
+  it { is_expected.to have_type "recruitment_cycles" }
+  it { is_expected.to have_attribute(:year).with_value(recruitment_cycle.year) }
+  it { is_expected.to have_attribute(:application_start_date).with_value(recruitment_cycle.application_start_date.to_s) }
+  it { is_expected.to have_attribute(:application_end_date).with_value(recruitment_cycle.application_end_date.to_s) }
 end

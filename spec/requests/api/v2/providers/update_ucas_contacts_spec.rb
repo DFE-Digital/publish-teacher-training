@@ -74,41 +74,41 @@ describe "PATCH recruitment_cycles/year/providers/:provider_code/courses/:course
     describe "admin contact" do
       let(:type) { "admin" }
 
-      its(:name) { should eq admin_contact.name }
-      its(:email) { should eq admin_contact.email }
-      its(:telephone) { should eq admin_contact.telephone }
+      its(:name) { is_expected.to eq admin_contact.name }
+      its(:email) { is_expected.to eq admin_contact.email }
+      its(:telephone) { is_expected.to eq admin_contact.telephone }
     end
 
     describe "utt contact" do
       let(:type) { "utt" }
 
-      its(:name) { should eq utt_contact.name }
-      its(:email) { should eq utt_contact.email }
-      its(:telephone) { should eq utt_contact.telephone }
+      its(:name) { is_expected.to eq utt_contact.name }
+      its(:email) { is_expected.to eq utt_contact.email }
+      its(:telephone) { is_expected.to eq utt_contact.telephone }
     end
 
     describe "web link contact" do
       let(:type) { "web_link" }
 
-      its(:name) { should eq web_link_contact.name }
-      its(:email) { should eq web_link_contact.email }
-      its(:telephone) { should eq web_link_contact.telephone }
+      its(:name) { is_expected.to eq web_link_contact.name }
+      its(:email) { is_expected.to eq web_link_contact.email }
+      its(:telephone) { is_expected.to eq web_link_contact.telephone }
     end
 
     describe "fraud contact" do
       let(:type) { "fraud" }
 
-      its(:name) { should eq fraud_contact.name }
-      its(:email) { should eq fraud_contact.email }
-      its(:telephone) { should eq fraud_contact.telephone }
+      its(:name) { is_expected.to eq fraud_contact.name }
+      its(:email) { is_expected.to eq fraud_contact.email }
+      its(:telephone) { is_expected.to eq fraud_contact.telephone }
     end
 
     describe "finance contact" do
       let(:type) { "finance" }
 
-      its(:name) { should eq finance_contact.name }
-      its(:email) { should eq finance_contact.email }
-      its(:telephone) { should eq finance_contact.telephone }
+      its(:name) { is_expected.to eq finance_contact.name }
+      its(:email) { is_expected.to eq finance_contact.email }
+      its(:telephone) { is_expected.to eq finance_contact.telephone }
     end
   end
 end

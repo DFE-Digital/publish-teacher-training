@@ -81,6 +81,7 @@ describe "mcb providers edit" do
 
     context "with the --not-accrediting-provider option" do
       let(:accrediting_provider) { "Y" }
+
       before do
         execute_edit(arguments: [rolled_over_provider.provider_code, "--not-accrediting-provider"])
       end

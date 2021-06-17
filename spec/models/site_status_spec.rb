@@ -10,40 +10,45 @@ RSpec.describe SiteStatus, type: :model do
   end
 
   describe "auditing" do
-    it { should be_audited.associated_with(:course) }
+    it { is_expected.to be_audited.associated_with(:course) }
   end
 
   describe "associations" do
     subject { build(:site_status) }
 
-    it { should belong_to(:site) }
-    it { should belong_to(:course) }
+    it { is_expected.to belong_to(:site) }
+    it { is_expected.to belong_to(:course) }
   end
 
   describe "findable?" do
     describe "if discontinued on UCAS" do
       subject { create(:site_status, :discontinued) }
-      it { should_not be_findable }
+
+      it { is_expected.to_not be_findable }
     end
 
     describe "if suspended on UCAS" do
       subject { create(:site_status, :suspended) }
-      it { should_not be_findable }
+
+      it { is_expected.to_not be_findable }
     end
 
     describe "if new on UCAS" do
       subject { create(:site_status, :new) }
-      it { should_not be_findable }
+
+      it { is_expected.to_not be_findable }
     end
 
     describe "if running but not published on UCAS" do
       subject { create(:site_status, :running, :unpublished) }
-      it { should_not be_findable }
+
+      it { is_expected.to_not be_findable }
     end
 
     describe "if running and published on UCAS" do
       subject { create(:site_status, :running, :published) }
-      it { should be_findable }
+
+      it { is_expected.to be_findable }
     end
   end
 
@@ -51,52 +56,59 @@ RSpec.describe SiteStatus, type: :model do
     subject { SiteStatus.findable }
 
     context "with a course discontinued on UCAS" do
-      it { should_not include(create(:site_status, :discontinued)) }
+      it { is_expected.to_not include(create(:site_status, :discontinued)) }
     end
 
     context "if suspended on UCAS" do
-      it { should_not include(create(:site_status, :suspended)) }
+      it { is_expected.to_not include(create(:site_status, :suspended)) }
     end
 
     context "if new on UCAS" do
-      it { should_not include(create(:site_status, :new)) }
+      it { is_expected.to_not include(create(:site_status, :new)) }
     end
 
     describe "if running but not published on UCAS" do
-      it { should_not include(create(:site_status, :running, :unpublished)) }
+      it { is_expected.to_not include(create(:site_status, :running, :unpublished)) }
     end
 
     describe "if running and published on UCAS" do
-      it { should include(create(:site_status, :running, :published)) }
+      it { is_expected.to include(create(:site_status, :running, :published)) }
     end
   end
 
   describe "has vacancies?" do
     describe "if has part-time vacancies" do
       let(:course) { build(:course, study_mode: :part_time) }
+
       subject { create(:site_status, :findable, :part_time_vacancies, course: course) }
-      it { should have_vacancies }
+
+      it { is_expected.to have_vacancies }
     end
 
     describe "if has full-time vacancies" do
       subject { create(:site_status, :findable, :full_time_vacancies) }
-      it { should have_vacancies }
+
+      it { is_expected.to have_vacancies }
     end
 
     describe "if has both full-time and part-time vacancies" do
       let(:course) { build(:course, study_mode: :full_time_or_part_time) }
+
       subject { create(:site_status, :findable, :both_full_time_and_part_time_vacancies, course: course) }
-      it { should have_vacancies }
+
+      it { is_expected.to have_vacancies }
     end
 
     describe "if has no vacancies" do
       subject { create(:site_status, :with_no_vacancies) }
-      it { should_not have_vacancies }
+
+      it { is_expected.to_not have_vacancies }
     end
 
     describe "if has no findable vacancies" do
       subject { create(:site_status, :full_time_vacancies) }
-      it { should_not have_vacancies }
+
+      it { is_expected.to_not have_vacancies }
     end
   end
 
@@ -126,14 +138,16 @@ RSpec.describe SiteStatus, type: :model do
         spec[:valid_states].each do |state|
           context "vac_status set to #{state}" do
             subject { build(:site_status, vac_status: state, course: course) }
-            it { should be_valid }
+
+            it { is_expected.to be_valid }
           end
         end
 
         spec[:invalid_states].each do |state|
           context "vac_status set to #{state}" do
             subject { build(:site_status, vac_status: state, course: course) }
-            it { should_not be_valid }
+
+            it { is_expected.to_not be_valid }
 
             it "has a validation error about vacancy status not matching study mode" do
               subject.valid?
@@ -147,7 +161,8 @@ RSpec.describe SiteStatus, type: :model do
 
   describe "default_vac_status_given" do
     subject { SiteStatus }
-    it "should return correct default_vac_status" do
+
+    it "returns correct default_vac_status" do
       expect(subject.default_vac_status_given(study_mode: "full_time")).to eq :full_time_vacancies
       expect(subject.default_vac_status_given(study_mode: "part_time")).to eq :part_time_vacancies
       expect(subject.default_vac_status_given(study_mode: "full_time_or_part_time")).to eq :both_full_time_and_part_time_vacancies
@@ -158,15 +173,17 @@ RSpec.describe SiteStatus, type: :model do
   describe "status changes" do
     describe "when suspending a running, published site status" do
       subject { create(:site_status, :running, :published).tap(&:suspend!).reload }
-      it { should be_status_suspended }
-      it { should be_unpublished_on_ucas }
+
+      it { is_expected.to be_status_suspended }
+      it { is_expected.to be_unpublished_on_ucas }
     end
 
     %i[new suspended discontinued].each do |status|
       describe "when starting a #{status}, unpublished site status" do
         subject { create(:site_status, status, :unpublished).tap(&:start!).reload }
-        it { should be_status_running }
-        it { should be_published_on_ucas }
+
+        it { is_expected.to be_status_running }
+        it { is_expected.to be_published_on_ucas }
       end
     end
   end

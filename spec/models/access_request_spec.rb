@@ -2,11 +2,11 @@ require "rails_helper"
 
 describe AccessRequest, type: :model do
   describe "associations" do
-    it { should belong_to(:requester) }
+    it { is_expected.to belong_to(:requester) }
   end
 
   describe "auditing" do
-    it { should be_audited }
+    it { is_expected.to be_audited }
   end
 
   describe "type" do
@@ -45,8 +45,8 @@ describe AccessRequest, type: :model do
 
       subject { AccessRequest.requested }
 
-      it { should include access_request1, access_request2 }
-      it { should_not include access_request3, access_request4, access_request5 }
+      it { is_expected.to include access_request1, access_request2 }
+      it { is_expected.to_not include access_request3, access_request4, access_request5 }
     end
   end
 
@@ -66,10 +66,10 @@ describe AccessRequest, type: :model do
     let(:access_request) {
       build(:access_request,
             organisation: user.organisations.first.name,
-                requester_email: user.email,
-                requester: nil,
-                request_date_utc: nil,
-                status: nil)
+            requester_email: user.email,
+            requester: nil,
+            request_date_utc: nil,
+            status: nil)
     }
 
     before do
@@ -83,9 +83,9 @@ describe AccessRequest, type: :model do
 
     subject { access_request }
 
-    its(:requester)         { should eq user }
-    its(:request_date_utc)  { should be_within(1.second).of Time.now.utc }
-    its(:status)            { should eq "requested" }
+    its(:requester)         { is_expected.to eq user }
+    its(:request_date_utc)  { is_expected.to be_within(1.second).of Time.now.utc }
+    its(:status)            { is_expected.to eq "requested" }
   end
 
   describe "default scope" do
@@ -100,7 +100,7 @@ describe AccessRequest, type: :model do
 
       subject { AccessRequest.all }
 
-      it { should include access_request1, access_request3 }
+      it { is_expected.to include access_request1, access_request3 }
     end
   end
 end

@@ -1,4 +1,3 @@
-# rubocop:disable Metrics/BlockLength
 class CleanUpCourseSubjectDataPostMigration < ActiveRecord::Migration[5.2]
   def change
     say_with_time "cleansing subject data" do
@@ -57,4 +56,3 @@ class CleanUpCourseSubjectDataPostMigration < ActiveRecord::Migration[5.2]
     end
   end
 end
-# rubocop:enable Metrics/BlockLength
