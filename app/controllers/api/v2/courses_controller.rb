@@ -292,8 +292,7 @@ module API
                   :level,
                   :degree_grade,
                   :additional_degree_subject_requirements,
-                  :degree_subject_requirements,
-                )
+                  :degree_subject_requirements)
           .permit(
             :about_course,
             :course_length,
