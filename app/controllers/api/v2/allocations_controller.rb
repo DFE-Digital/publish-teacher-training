@@ -7,11 +7,9 @@ module API
       def index
         authorize Allocation
 
-        scope = Allocation.where(accredited_body_id: accredited_body.id)
-
-        if params[:filter] && params[:filter][:training_provider_code]
-          scope = scope.where(provider_code: params[:filter][:training_provider_code])
-        end
+        scope = Allocation.includes(:recruitment_cycle)
+                          .where(accredited_body_code: accredited_body.provider_code)
+                          .where(allocation_filter_params)
 
         render jsonapi: policy_scope(scope),
                include: params[:include],
@@ -60,10 +58,23 @@ module API
 
     private
 
+      def allocation_filter_params
+        recruitment_cycle_years = filter_params.dig(:recruitment_cycle, :year)
+
+        recruitment_cycle_years = [recruitment_cycle.year] if recruitment_cycle_years.blank?
+
+        {
+          provider_code: filter_params.dig(:training_provider_code),
+          recruitment_cycle: { year: recruitment_cycle_years },
+        }.compact
+      end
+
+      def filter_params
+        @filter_params ||= params.fetch(:filter, {})
+      end
+
       def recruitment_cycle
-        @recruitment_cycle ||= RecruitmentCycle.find_by(
-          year: params[:recruitment_cycle_year],
-        ) || RecruitmentCycle.find_by(year: Allocation::ALLOCATION_CYCLE_YEAR)
+        @recruitment_cycle ||= RecruitmentCycle.find_by(year: Allocation::ALLOCATION_CYCLE_YEAR)
       end
 
       def accredited_body
@@ -90,7 +101,7 @@ module API
           )
       end
 
-      # TODO remove when publish is doing the right thing
+      # TODO: remove when publish is doing the right thing
       def get_request_type(permitted_params)
         return permitted_params[:request_type] if permitted_params[:request_type].present?
 
