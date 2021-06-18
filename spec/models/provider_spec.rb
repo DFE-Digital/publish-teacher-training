@@ -734,35 +734,50 @@ describe Provider, type: :model do
     end
   end
 
-  describe '#visa_sponsorship_publishable?' do
-    it "returns true when year is 2022 and provider has declared sponsorship" do
-      provider = build(
-        :provider,
-        can_sponsor_student_visa: true,
-        can_sponsor_skilled_worker_visa: false,
-        recruitment_cycle: build(:recruitment_cycle, year: 2022),
-      )
-      expect(provider.visa_sponsorship_publishable?).to be(true)
+  describe "#visa_sponsorship_publishable?" do
+    context "when year is 2022 and provider has declared sponsorship" do
+      let(:provider) do
+        build(
+          :provider,
+          can_sponsor_student_visa: true,
+          can_sponsor_skilled_worker_visa: false,
+          recruitment_cycle: build(:recruitment_cycle, year: 2022),
+        )
+      end
+
+      it "returns true" do
+        expect(subject.visa_sponsorship_publishable?).to be(true)
+      end
     end
 
-    it "returns true when year is 2021 and provider as not declared sponsorship" do
-      provider = build(
-        :provider,
-        can_sponsor_student_visa: nil,
-        can_sponsor_skilled_worker_visa: false,
-        recruitment_cycle: build(:recruitment_cycle, year: 2021),
-      )
-      expect(provider.visa_sponsorship_publishable?).to be(true)
+    context "when year is 2021 and provider as not declared sponsorship" do
+      let(:provider) do
+        build(
+          :provider,
+          can_sponsor_student_visa: nil,
+          can_sponsor_skilled_worker_visa: false,
+          recruitment_cycle: build(:recruitment_cycle, year: 2021),
+        )
+      end
+
+      it "returns true" do
+        expect(subject.visa_sponsorship_publishable?).to be(true)
+      end
     end
 
-    it "returns false when year is 2022 and provider as not declared sponsorship" do
-      provider = build(
-        :provider,
-        can_sponsor_student_visa: nil,
-        can_sponsor_skilled_worker_visa: false,
-        recruitment_cycle: build(:recruitment_cycle, year: 2022),
-      )
-      expect(provider.visa_sponsorship_publishable?).to be(false)
+    context "when year is 2022 and provider as not declared sponsorship" do
+      let(:provider) do
+        build(
+          :provider,
+          can_sponsor_student_visa: nil,
+          can_sponsor_skilled_worker_visa: false,
+          recruitment_cycle: build(:recruitment_cycle, year: 2022),
+        )
+      end
+
+      it "returns false" do
+        expect(provider.visa_sponsorship_publishable?).to be(false)
+      end
     end
   end
 end

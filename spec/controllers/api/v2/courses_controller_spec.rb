@@ -3,11 +3,13 @@ require "rails_helper"
 describe API::V2::CoursesController, type: :controller do
   let(:site_status) { build(:site_status, :new) }
   let(:dfe_subject) { find_or_create(:primary_subject, :primary) }
+  let(:provider) { create(:provider) }
   let(:course) {
     create(:course,
            site_statuses: [site_status],
            enrichments: [enrichment],
-           subjects: [dfe_subject])
+           subjects: [dfe_subject],
+           provider: provider)
   }
   let(:email) { "manage_courses@digital.education.gov.uk" }
   let(:sign_in_user_id) { "manage_courses_api" }
@@ -36,17 +38,45 @@ describe API::V2::CoursesController, type: :controller do
       }
     end
 
-    it "returns a validation error when visa sponsorship information is unpublishable" do
-      course.provider.update(can_sponsor_student_visa: nil)
-      course.provider.recruitment_cycle.update(year: '2022')
-      expect(NotificationService::CoursePublished).not_to receive(:call).with(course: course)
-      post :publish, params: {
-        recruitment_cycle_year: Provider::VISA_SPONSORSHIP_REQUIRED_FROM,
-        provider_code: course.provider.provider_code,
-        code: course.course_code,
-      }
-      expect(response).to have_http_status(:unprocessable_entity)
-      expect(response.body).to match(/Provider You must say whether your provider can sponsor visas/)
+    context "in 2022 recruitment cycle" do
+      let(:provider) do
+        create(
+          :provider,
+          can_sponsor_student_visa: nil,
+          recruitment_cycle: create(:recruitment_cycle, year: "2022"),
+        )
+      end
+
+      it "returns a validation error when visa sponsorship information is unpublishable" do
+        expect(NotificationService::CoursePublished).not_to receive(:call).with(course: course)
+        post :publish, params: {
+          recruitment_cycle_year: provider.recruitment_cycle.year,
+          provider_code: course.provider.provider_code,
+          code: course.course_code,
+        }
+        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response.body).to match(/You must say whether you can sponsor visas/)
+      end
+    end
+
+    context "in 2021 recruitment cycle" do
+      let(:provider) do
+        create(
+          :provider,
+          can_sponsor_student_visa: nil,
+          recruitment_cycle: create(:recruitment_cycle, year: "2021"),
+        )
+      end
+
+      it "returns a validation error when visa sponsorship information is unpublishable" do
+        expect(NotificationService::CoursePublished).not_to receive(:call).with(course: course)
+        post :publish, params: {
+          recruitment_cycle_year: provider.recruitment_cycle.year,
+          provider_code: course.provider.provider_code,
+          code: course.course_code,
+        }
+        expect(response.body).not_to match(/You must say whether you can sponsor visas/)
+      end
     end
   end
 

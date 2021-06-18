@@ -652,7 +652,7 @@ private
 
   def validate_provider_visa_sponsorship_publishable
     unless provider.visa_sponsorship_publishable?
-      errors.add(:provider, :visa_sponsorship_not_publishable)
+      errors.add(:base, :visa_sponsorship_not_publishable)
     end
   end
 
