@@ -134,14 +134,14 @@ module MCB
   def self.get_recruitment_year(opts)
     raise RuntimeError, "Rails has not been initialised" unless defined? Rails
 
-    opts[:'recruitment-year'] || RecruitmentCycle.current_recruitment_cycle.year
+    opts[:"recruitment-year"] || RecruitmentCycle.current_recruitment_cycle.year
   end
 
   def self.get_recruitment_cycle(opts)
     raise RuntimeError, "Rails has not been initialised" unless defined? Rails
 
-    if opts.key? :'recruitment-year'
-      RecruitmentCycle.find_by(year: opts[:'recruitment-year'])
+    if opts.key? :"recruitment-year"
+      RecruitmentCycle.find_by(year: opts[:"recruitment-year"])
     else
       RecruitmentCycle.current_recruitment_cycle
     end
@@ -281,7 +281,7 @@ module MCB
       token = opts.fetch(:token) { apiv1_token(opts.slice(:webapp, :rgroup)) }
 
       # Safeguard to ensure we don't go off the deep end.
-      max_pages = opts.fetch(:'max-pages')
+      max_pages = opts.fetch(:"max-pages")
 
       Enumerator.new do |y|
         max_pages.times do |page_count|
@@ -521,12 +521,12 @@ module MCB
 
     def add_url_params_from_opts(opts, url)
       new_url = url.dup
-      if opts.key? :'changed-since'
+      if opts.key? :"changed-since"
         changed_since = DateTime.strptime(
-          CGI.unescape(opts[:'changed-since']),
+          CGI.unescape(opts[:"changed-since"]),
           "%FT%T.%NZ",
         ) rescue nil
-        changed_since ||= DateTime.parse(opts[:'changed-since'])
+        changed_since ||= DateTime.parse(opts[:"changed-since"])
         changed_since_param = CGI.escape(changed_since.strftime("%FT%T.%6NZ"))
         new_url.query = "changed_since=#{changed_since_param}"
       end

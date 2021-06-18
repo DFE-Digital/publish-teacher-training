@@ -8,16 +8,16 @@ run do |opts, args, _cmd|
 
   users = if args.any?
             args.map { |id| MCB.find_user_by_identifier id }
-          elsif opts[:'only-active-non-admins']
+          elsif opts[:"only-active-non-admins"]
             User.active.non_admins
           else
             User.all
           end
 
   headers = %i[id email sign_in_user_id first_name last_name last_login_date_utc]
-  if opts[:'csv-output-filename']
+  if opts[:"csv-output-filename"]
     require "csv"
-    CSV.open(opts[:'csv-output-filename'], "wb") do |csv|
+    CSV.open(opts[:"csv-output-filename"], "wb") do |csv|
       csv << headers
       users.pluck(*headers).each { |user| csv << user }
     end

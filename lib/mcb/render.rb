@@ -164,7 +164,7 @@ module MCB
       return if providers.nil?
 
       columns =
-        providers_table_columns(extended: opts[:'extended-listing']) + add_columns
+        providers_table_columns(extended: opts[:"extended-listing"]) + add_columns
 
       [
         "#{name}:",
