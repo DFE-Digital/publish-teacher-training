@@ -314,26 +314,6 @@ describe MCB::Editor::ProviderEditor, :needs_audit_user do
         end
       end
 
-      context "when there are later recruitment cycles after the one that's been added to" do
-        let!(:next_recruitment_cycle) { create :recruitment_cycle, :next }
-        let!(:one_after_next_recruitment_cycle) { create :recruitment_cycle, year: next_recruitment_cycle.year.to_i + 1 }
-
-        it "clones the provider into all subsequent recruitment cycles" do
-          run_new_provider_wizard(
-            *valid_answers,
-            "y", # confirm creation
-            desired_attributes[:organisation_name],
-            "yes",
-          )
-
-          expect(next_recruitment_cycle.providers.count).to eq(1)
-          expect(next_recruitment_cycle.providers.first.attributes).to include(expected_provider_attributes)
-
-          expect(one_after_next_recruitment_cycle.providers.count).to eq(1)
-          expect(one_after_next_recruitment_cycle.providers.first.attributes).to include(expected_provider_attributes)
-        end
-      end
-
       it "does not create a Provider if creation isn't confirmed" do
         output = run_new_provider_wizard(
           *valid_answers,

@@ -3,9 +3,11 @@ require "rails_helper"
 RSpec.describe Courses::CopyToProviderService do
   let(:accrediting_provider) { create :provider, :accredited_body }
   let(:provider) { create :provider, courses: [course] }
+  let(:published_course_enrichment) { build :course_enrichment, :published }
   let(:maths) { create :secondary_subject, :mathematics }
   let(:course) {
     build :course,
+          enrichments: [published_course_enrichment],
           accrediting_provider: accrediting_provider,
           subjects: [maths],
           level: "secondary"
@@ -60,7 +62,9 @@ RSpec.describe Courses::CopyToProviderService do
   it "doesn't copy enrichments when they do not exist" do
     service.execute(course: course, new_provider: new_provider)
 
-    expect(mocked_enrichments_copy_to_course_service).to_not have_received(:execute)
+    expect(mocked_enrichments_copy_to_course_service).to_not have_received(:execute).with(
+      enrichment: nil,
+    )
   end
 
   it "saves without doing validations" do
