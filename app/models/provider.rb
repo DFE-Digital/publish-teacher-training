@@ -268,7 +268,7 @@ class Provider < ApplicationRecord
   def visa_sponsorship_publishable?
     return true if recruitment_cycle.year.to_i < VISA_SPONSORSHIP_REQUIRED_FROM
 
-    %i[can_sponsor_student_visa can_sponsor_skilled_worker_visa].none? { |attr| send(attr).nil? }
+    %i[can_sponsor_student_visa can_sponsor_skilled_worker_visa].none? { |attr| public_send(attr).nil? }
   end
 
 private
