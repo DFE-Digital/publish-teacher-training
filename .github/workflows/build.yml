@@ -89,6 +89,9 @@ jobs:
       env:
         GIT_BRANCH: ${{env.BRANCH_TAG}}
 
+    - name: Run Ruby Linter
+      run: docker-compose exec -T web /bin/sh -c 'bundle exec rubocop --format clang'
+
     - name: Run tests
       run: |
         docker-compose exec -T web /bin/sh -c 'bundle config --local disable_exec_load true'

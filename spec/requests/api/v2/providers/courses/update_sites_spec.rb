@@ -47,7 +47,7 @@ describe "PATCH /providers/:provider_code/courses/:course_code with sites" do
             "/courses/#{course.course_code}",
           headers: {
             "HTTP_AUTHORIZATION" => credentials,
-            'Content-Type': "application/json",
+            "Content-Type": "application/json",
           },
           params: jsonapi_data.to_json
   end

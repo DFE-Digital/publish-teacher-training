@@ -248,11 +248,9 @@ RSpec.describe "/api/v2/providers/<accredited_body_code>/allocations", type: :re
   end
 
   def when_i_get_the_filtered_by_recruitment_cycle_years_allocations_index_endpoint
-    provider_to_filter = @training_providers.first
     get "/api/v2/providers/#{@accredited_body.provider_code}/allocations?filter[recruitment_cycle][years]=[#{allocation_recruitment_cycle.year}, #{previous_allocation_recruitment_cycle.year}]", headers: { "HTTP_AUTHORIZATION" => @credentials }
   end
 
-  
   def then_a_new_allocation_is_returned_with_zero_number_of_places
     expect(response).to have_http_status(:created)
     parsed_response = JSON.parse(response.body)

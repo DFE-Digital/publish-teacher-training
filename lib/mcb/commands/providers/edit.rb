@@ -1,8 +1,8 @@
 summary "Edit information about provider"
-option nil, :'accrediting-provider',
+option nil, :"accrediting-provider",
        "Update the accrediting provider attribute to accredited_body.",
        default: false
-option nil, :'not-accrediting-provider',
+option nil, :"not-accrediting-provider",
        "Update the accrediting provider attribute to not_an_accredited_body.",
        default: false
 

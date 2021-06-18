@@ -64,7 +64,7 @@ module API
         recruitment_cycle_years = [recruitment_cycle.year] if recruitment_cycle_years.blank?
 
         {
-          provider_code: filter_params.dig(:training_provider_code),
+          provider_code: filter_params[:training_provider_code],
           recruitment_cycle: { year: recruitment_cycle_years },
         }.compact
       end

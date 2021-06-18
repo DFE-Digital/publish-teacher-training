@@ -24,7 +24,7 @@ run do |opts, args, _cmd|
 
   verbose "looking for provider '#{provider_code}' course '#{course_code}'"
 
-  opts = MCB.expose_opts_defaults_for_splat(opts, :url, :'max-pages', :token, :all)
+  opts = MCB.expose_opts_defaults_for_splat(opts, :url, :"max-pages", :token, :all)
 
   (course, last_context) = find_course(provider_code, course_code, opts)
 
@@ -32,7 +32,7 @@ run do |opts, args, _cmd|
     error "Provider '#{provider_code}' course '#{course_code}' not found"
 
     MCB::display_pages_received(page: last_context[:page],
-                                max_pages: opts[:'max-pages'],
+                                max_pages: opts[:"max-pages"],
                                 next_url: last_context[:next_url])
 
     next
