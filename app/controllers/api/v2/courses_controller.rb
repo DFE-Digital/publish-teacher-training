@@ -186,7 +186,7 @@ module API
       end
 
       def update_course
-        return unless course_params.values.any? || funding_type_params.present?
+        return unless course_params.values.any? || funding_type_params.present? || course_params.key?("degree_subject_requirements")
         return unless @course.course_params_assignable(course_params)
 
         @course.assign_attributes(course_params)
