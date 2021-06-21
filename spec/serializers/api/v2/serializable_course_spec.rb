@@ -36,6 +36,12 @@ describe API::V2::SerializableCourse do
   it { is_expected.to have_attribute(:degree_grade).with_value(course.degree_grade) }
   it { is_expected.to have_attribute(:additional_degree_subject_requirements).with_value(course.additional_degree_subject_requirements) }
   it { is_expected.to have_attribute(:degree_subject_requirements).with_value(course.degree_subject_requirements) }
+  it { is_expected.to have_attribute(:accept_pending_gcse).with_value(false) }
+  it { is_expected.to have_attribute(:accept_gcse_equivalency).with_value(false) }
+  it { is_expected.to have_attribute(:accept_english_gcse_equivalency).with_value(false) }
+  it { is_expected.to have_attribute(:accept_maths_gcse_equivalency).with_value(false) }
+  it { is_expected.to have_attribute(:accept_science_gcse_equivalency).with_value(false) }
+  it { is_expected.to have_attribute(:additional_gcse_equivalencies) }
 
   context "with a provider" do
     let(:provider) { course.provider }

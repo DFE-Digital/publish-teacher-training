@@ -26,6 +26,15 @@ FactoryBot.define do
     additional_degree_subject_requirements { true }
     degree_subject_requirements { Faker::Lorem.sentence.to_s }
 
+    trait :with_gcse_equivalency do
+      accept_pending_gcse { [true, false].sample }
+      accept_gcse_equivalency { [true, false].sample }
+      accept_english_gcse_equivalency { [true, false].sample }
+      accept_maths_gcse_equivalency { [true, false].sample }
+      accept_science_gcse_equivalency { [true, false].sample }
+      additional_gcse_equivalencies { Faker::Lorem.sentence.to_s }
+    end
+
     trait :without_validation do
       to_create { |instance| instance.save(validate: false) }
     end
