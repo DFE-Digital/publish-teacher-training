@@ -10,12 +10,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_06_14_130500) do
+ActiveRecord::Schema.define(version: 2021_06_23_150714) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
   enable_extension "btree_gist"
-  enable_extension "citext"
   enable_extension "pg_buffercache"
   enable_extension "pg_stat_statements"
   enable_extension "plpgsql"
@@ -119,11 +118,11 @@ ActiveRecord::Schema.define(version: 2021_06_14_130500) do
     t.integer "degree_grade"
     t.boolean "additional_degree_subject_requirements"
     t.string "degree_subject_requirements"
-    t.boolean "accept_pending_gcse", default: false
-    t.boolean "accept_gcse_equivalency", default: false
-    t.boolean "accept_english_gcse_equivalency", default: false
-    t.boolean "accept_maths_gcse_equivalency", default: false
-    t.boolean "accept_science_gcse_equivalency", default: false
+    t.boolean "accept_pending_gcse"
+    t.boolean "accept_gcse_equivalency"
+    t.boolean "accept_english_gcse_equivalency"
+    t.boolean "accept_maths_gcse_equivalency"
+    t.boolean "accept_science_gcse_equivalency"
     t.string "additional_gcse_equivalencies"
     t.index ["accredited_body_code"], name: "index_course_on_accredited_body_code"
     t.index ["changed_at"], name: "index_course_on_changed_at", unique: true
