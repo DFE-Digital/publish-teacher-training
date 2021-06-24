@@ -119,6 +119,7 @@ en:
               blank: "^You must say when applications open from"
             base:
               duplicate: "This course already exists. You should add further locations for this course to the existing profile in Publish"
+              visa_sponsorship_not_publishable: "You must say whether you can sponsor visas"
         course_enrichment:
           attributes:
             salary_details:
