@@ -765,7 +765,7 @@ describe Provider, type: :model do
       end
     end
 
-    context "when year is 2022 and provider as not declared sponsorship" do
+    context "when year is 2022 and provider has not declared sponsorship" do
       let(:provider) do
         build(
           :provider,
