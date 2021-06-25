@@ -11,7 +11,7 @@ module PageObjects
 
       element :error_summary, ".govuk-error-summary"
 
-      element :submit, 'input.govuk-button[type="submit"]'
+      element :submit, 'button.govuk-button[type="submit"]'
     end
   end
 end
