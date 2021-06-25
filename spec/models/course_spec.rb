@@ -502,89 +502,124 @@ describe Course, type: :model do
           ])
         end
       end
-    end
 
-    context "if subjects are empty" do
-      let(:course) { create(:course) }
+      context "if subjects are empty" do
+        let(:course) { create(:course) }
 
-      it "passes validation" do
-        expect(course.valid?).to be_truthy
-      end
-    end
-
-    context "course has been assigned secondary level" do
-      let(:course) { create(:course, level: "secondary", subjects: [find_or_create(:secondary_subject, :english)]) }
-
-      context "modern foreign languages" do
-        it "validates even with multiple languages" do
-          course.subjects = [modern_languages, find_or_create(:modern_languages_subject, :japanese), find_or_create(:modern_languages_subject, :french)]
+        it "passes validation" do
           expect(course.valid?).to be_truthy
         end
       end
 
-      it "validates if the subject is of that level" do
-        course.subjects = [find_or_create(:secondary_subject, :mathematics)]
-        expect(course.valid?).to be_truthy
+      context "course has been assigned secondary level" do
+        let(:course) { create(:course, level: "secondary", subjects: [find_or_create(:secondary_subject, :english)]) }
+
+        context "modern foreign languages" do
+          it "validates even with multiple languages" do
+            course.subjects = [modern_languages, find_or_create(:modern_languages_subject, :japanese), find_or_create(:modern_languages_subject, :french)]
+            expect(course.valid?).to be_truthy
+          end
+        end
+
+        it "validates if the subject is of that level" do
+          course.subjects = [find_or_create(:secondary_subject, :mathematics)]
+          expect(course.valid?).to be_truthy
+        end
+
+        it "does not validate if the subject is not of that level" do
+          course.subjects = [find_or_create(:primary_subject, :primary_with_mathematics)]
+          expect(course.valid?).to be_falsey
+          expect(course.errors[:subjects]).to eq(["must be secondary"])
+        end
+
+        it "validates if there are only 2 subjects" do
+          course.subjects = [find_or_create(:secondary_subject, :mathematics), find_or_create(:secondary_subject, :english)]
+          expect(course.valid?).to be_truthy
+          expect(course.errors[:subjects]).to eq([])
+        end
+
+        it "does not validate if there are more than 2 subjects" do
+          course.subjects = [find_or_create(:secondary_subject, :mathematics), find_or_create(:secondary_subject, :english), find_or_create(:secondary_subject, :history)]
+          expect(course.valid?).to be_falsey
+          expect(course.errors[:subjects]).to eq(["has too many subjects"])
+        end
       end
 
-      it "does not validate if the subject is not of that level" do
-        course.subjects = [find_or_create(:primary_subject, :primary_with_mathematics)]
-        expect(course.valid?).to be_falsey
-        expect(course.errors[:subjects]).to eq(["must be secondary"])
+      context "course has been assigned primary level" do
+        let(:course) { create(:course, level: :primary, subjects: [find_or_create(:primary_subject, :primary_with_english)]) }
+
+        it "validates if the subject is of that level" do
+          course.subjects = [find_or_create(:primary_subject, :primary_with_mathematics)]
+          expect(course.valid?).to be_truthy
+        end
+
+        it "does not validate if the subject is not of that level" do
+          course.subjects = [find_or_create(:secondary_subject, :mathematics)]
+          expect(course.valid?).to be_falsey
+          expect(course.errors[:subjects]).to eq(["must be primary"])
+        end
+
+        it "does not validate if there is more than one subject" do
+          course.subjects = [find_or_create(:primary_subject, :primary_with_mathematics), find_or_create(:primary_subject, :primary_with_english)]
+          expect(course.valid?).to be_falsey
+          expect(course.errors[:subjects]).to eq(["has too many subjects"])
+        end
       end
 
-      it "validates if there are only 2 subjects" do
-        course.subjects = [find_or_create(:secondary_subject, :mathematics), find_or_create(:secondary_subject, :english)]
-        expect(course.valid?).to be_truthy
-        expect(course.errors[:subjects]).to eq([])
+      context "course has been assigned further education level" do
+        let(:course) { create(:course, :infer_level, qualification: "pgce", subjects: [find_or_create(:further_education_subject)]) }
+
+        it "validates if the subject is of that level" do
+          course.subjects = [find_or_create(:further_education_subject)]
+          expect(course.valid?).to be_truthy
+        end
+
+        it "does not validate if the subject is not of that level" do
+          course.subjects = [find_or_create(:secondary_subject, :biology)]
+          expect(course.valid?).to be_falsey
+          expect(course.errors[:subjects]).to eq(["must be further education"])
+        end
+
+        it "does not validate if there is more than one subject" do
+          course.subjects = [find_or_create(:further_education_subject), find_or_create(:primary_subject)]
+          expect(course.valid?).to be_falsey
+          expect(course.errors[:subjects]).to eq(["has too many subjects"])
+        end
       end
 
-      it "does not validate if there are more than 2 subjects" do
-        course.subjects = [find_or_create(:secondary_subject, :mathematics), find_or_create(:secondary_subject, :english), find_or_create(:secondary_subject, :history)]
-        expect(course.valid?).to be_falsey
-        expect(course.errors[:subjects]).to eq(["has too many subjects"])
-      end
-    end
+      describe "validate_degree_requirements_publishable" do
+        context "when the provider is in the 2021 cycle or before" do
+          it "returns true and does not add an error" do
+            expect(course.validate_degree_requirements_publishable).to eq true
+            expect(course.errors).to be_empty
+          end
+        end
 
-    context "course has been assigned primary level" do
-      let(:course) { create(:course, level: :primary, subjects: [find_or_create(:primary_subject, :primary_with_english)]) }
+        context "when the provider is in the 2022 cycle or later" do
+          let(:next_recruitment_cycle) { create :recruitment_cycle, :next }
+          let(:provider) { create(:provider, recruitment_cycle: next_recruitment_cycle) }
+          let(:course_with_degree_grade) { create(:course, provider: provider) }
+          let(:course_without_degree_grade) { create(:course, provider: provider, degree_grade: nil) }
 
-      it "validates if the subject is of that level" do
-        course.subjects = [find_or_create(:primary_subject, :primary_with_mathematics)]
-        expect(course.valid?).to be_truthy
-      end
+          context "when degree grade is present" do
+            it "returns true and does not add an error" do
+              course.validate_degree_requirements_publishable
 
-      it "does not validate if the subject is not of that level" do
-        course.subjects = [find_or_create(:secondary_subject, :mathematics)]
-        expect(course.valid?).to be_falsey
-        expect(course.errors[:subjects]).to eq(["must be primary"])
-      end
+              expect(course_with_degree_grade.validate_degree_requirements_publishable).to eq true
+              expect(course_without_degree_grade.errors).to be_empty
+            end
+          end
 
-      it "does not validate if there is more than one subject" do
-        course.subjects = [find_or_create(:primary_subject, :primary_with_mathematics), find_or_create(:primary_subject, :primary_with_english)]
-        expect(course.valid?).to be_falsey
-        expect(course.errors[:subjects]).to eq(["has too many subjects"])
-      end
-    end
+          context "when degree grade is nil" do
+            it "returns false and adds an error" do
+              course.validate_degree_requirements_publishable
 
-    context "course has been assigned further education level" do
-      let(:course) { create(:course, :infer_level, qualification: "pgce", subjects: [find_or_create(:further_education_subject)]) }
-
-      it "validates if the subject is of that level" do
-        course.subjects = [find_or_create(:further_education_subject)]
-        expect(course.valid?).to be_truthy
-      end
-
-      it "does not validate if the subject is not of that level" do
-        course.subjects = [find_or_create(:secondary_subject, :biology)]
-        expect(course.valid?).to be_falsey
-        expect(course.errors[:subjects]).to eq(["must be further education"])
-      end
-
-      it "does not validate if there is more than one subject" do
-        course.subjects = [find_or_create(:further_education_subject), find_or_create(:primary_subject)]
-        expect(course.valid?).to be_falsey
-        expect(course.errors[:subjects]).to eq(["has too many subjects"])
+              expect(course_without_degree_grade.validate_degree_requirements_publishable).to eq false
+              expect(course_without_degree_grade.errors.count).to eq 1
+              expect(course_without_degree_grade.errors.first.type).to eq :degree_requirements_not_publishable
+            end
+          end
+        end
       end
     end
   end

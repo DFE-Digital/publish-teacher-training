@@ -55,6 +55,8 @@ class Course < ApplicationRecord
     not_set: nil,
   }.freeze
 
+  DEGREE_REQUIREMENTS_REQUIRED_FROM = 2022
+
   enum maths: ENTRY_REQUIREMENT_OPTIONS, _suffix: :for_maths
   enum english: ENTRY_REQUIREMENT_OPTIONS, _suffix: :for_english
   enum science: ENTRY_REQUIREMENT_OPTIONS, _suffix: :for_science
@@ -259,6 +261,7 @@ class Course < ApplicationRecord
   validate :validate_enrichment_publishable, on: :publish
   validate :validate_site_statuses_publishable, on: :publish
   validate :validate_provider_visa_sponsorship_publishable, on: :publish
+  validate :validate_degree_requirements_publishable, on: :publish
   validate :validate_enrichment
   validate :validate_qualification, on: %i[update new]
   validate :validate_start_date, on: :update, if: -> { provider.present? && start_date.present? }
@@ -566,6 +569,13 @@ class Course < ApplicationRecord
     end
 
     requirements
+  end
+
+  def validate_degree_requirements_publishable
+    return true if recruitment_cycle.year.to_i < DEGREE_REQUIREMENTS_REQUIRED_FROM || degree_grade.present?
+
+    errors.add(:base, :degree_requirements_not_publishable)
+    false
   end
 
 private

@@ -120,6 +120,7 @@ en:
             base:
               duplicate: "This course already exists. You should add further locations for this course to the existing profile in Publish"
               visa_sponsorship_not_publishable: "You must say whether you can sponsor visas"
+              degree_requirements_not_publishable: "Enter degree requirements"
         course_enrichment:
           attributes:
             salary_details:
@@ -143,7 +144,7 @@ en:
               blank: "^Enter a course length"
         provider:
           attributes:
-            provider_name:     
+            provider_name:
               too_long: "Your provider name is too long, it must be fewer than 100 characters"
             email:
               blank: "^Enter email address"
