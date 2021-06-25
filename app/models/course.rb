@@ -276,6 +276,18 @@ class Course < ApplicationRecord
 
   after_validation :remove_unnecessary_enrichments_validation_message
 
+  def rollable_published?
+    content_status == :published
+  end
+
+  def rollable_withdrawn?
+    content_status == :withdrawn
+  end
+
+  def rollable?
+    rollable_published? || rollable_withdrawn?
+  end
+
   def update_notification_attributes
     %w[name age_range_in_years qualification study_mode maths english science]
   end

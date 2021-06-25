@@ -2,8 +2,9 @@ require "rails_helper"
 
 describe Providers::CopyToRecruitmentCycleService do
   describe "#execute" do
-    let(:site)   { build :site }
-    let(:course) { create :course, provider: provider }
+    let(:site) { build :site }
+    let(:published_course_enrichment) { build :course_enrichment, :published }
+    let(:course) { create :course, enrichments: [published_course_enrichment], provider: provider }
     let(:ucas_preferences) { build(:ucas_preferences, type_of_gt12: :coming_or_not) }
     let(:contacts) {
       [

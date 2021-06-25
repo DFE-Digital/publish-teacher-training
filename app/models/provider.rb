@@ -62,6 +62,18 @@ class Provider < ApplicationRecord
   # the accredited_providers that this provider is a training_provider for
   has_many :accrediting_providers, -> { distinct }, through: :courses
 
+  def rollable_courses?
+    courses.any?(&:rollable?)
+  end
+
+  def rollable_accredited_courses?
+    accredited_courses.any?(&:rollable?)
+  end
+
+  def rollable?
+    rollable_courses? || rollable_accredited_courses?
+  end
+
   # the providers that this provider is an accredited_provider for
   def training_providers
     Provider.where(id: current_accredited_courses.pluck(:provider_id))

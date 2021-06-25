@@ -13,24 +13,26 @@ module Providers
       sites_count = 0
       courses_count = 0
 
-      ActiveRecord::Base.transaction do
-        rolled_over_provider = new_recruitment_cycle.providers.find_by(provider_code: provider.provider_code)
-        if rolled_over_provider == nil
-          providers_count = 1
-          rolled_over_provider = provider.dup
-          rolled_over_provider.organisations << provider.organisations
-          rolled_over_provider.ucas_preferences = provider.ucas_preferences.dup
-          rolled_over_provider.contacts << provider.contacts.map(&:dup)
-          rolled_over_provider.recruitment_cycle = new_recruitment_cycle
-          rolled_over_provider.skip_geocoding = true
+      if provider.rollable?
 
-          rolled_over_provider.save!
+        ActiveRecord::Base.transaction do
+          rolled_over_provider = new_recruitment_cycle.providers.find_by(provider_code: provider.provider_code)
+          if rolled_over_provider == nil
+            providers_count = 1
+            rolled_over_provider = provider.dup
+            rolled_over_provider.organisations << provider.organisations
+            rolled_over_provider.ucas_preferences = provider.ucas_preferences.dup
+            rolled_over_provider.contacts << provider.contacts.map(&:dup)
+            rolled_over_provider.recruitment_cycle = new_recruitment_cycle
+            rolled_over_provider.skip_geocoding = true
+            rolled_over_provider.save!
+          end
+
+          # Order is important here. Sites should be copied over before courses
+          # so that courses can link up to the correct sites in the new provider.
+          sites_count = copy_sites_to_new_provider(provider, rolled_over_provider)
+          courses_count = copy_courses_to_new_provider(provider, rolled_over_provider)
         end
-
-        # Order is important here. Sites should be copied over before courses
-        # so that courses can link up to the correct sites in the new provider.
-        sites_count = copy_sites_to_new_provider(provider, rolled_over_provider)
-        courses_count = copy_courses_to_new_provider(provider, rolled_over_provider)
       end
 
       {
