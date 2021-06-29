@@ -8,6 +8,7 @@ on:
 jobs:
   delete-review-app:
     name: Delete Review App ${{ github.event.pull_request.number }}
+    id: wait_for_deployment
     if: github.actor != 'dependabot[bot]'
     runs-on: ubuntu-latest
     steps:
@@ -17,7 +18,11 @@ jobs:
          token: ${{ secrets.GITHUB_TOKEN }}
          checkName: ${{ github.event.pull_request.number }} Deployment
          ref: ${{ github.event.pull_request.head.sha }}
-         timeoutSeconds: 120
+         timeoutSeconds: 1800
+
+      - name: Exit whole workflow if wait was not successful
+        if: steps.wait_for_deployment.outputs.conclusion != 'success'
+        run: exit 1
 
       - name: Checkout
         uses: actions/checkout@v2
@@ -44,7 +49,7 @@ jobs:
           . terraform/workspace_variables/review.sh
           echo "TF_VAR_key_vault_name=$TF_VAR_key_vault_name" >> $GITHUB_ENV
           echo "TF_VAR_key_vault_app_secret_name=$TF_VAR_key_vault_app_secret_name" >> $GITHUB_ENV
-          echo "TF_VAR_key_vault_infra_secret_name=$TF_VAR_key_vault_infra_secret_name" >> $GITHUB_ENV          
+          echo "TF_VAR_key_vault_infra_secret_name=$TF_VAR_key_vault_infra_secret_name" >> $GITHUB_ENV
         env:
           DOCKER_IMAGE: ${{ format('dfedigital/teacher-training-api:paas-{0}', github.sha) }}
           AZURE_STORAGE_CONNECTION_STRING: ${{ secrets.AZURE_STORAGE_CONNECTION_STRING_REVIEW }}
