@@ -20,10 +20,11 @@ updates/refactoring work.
 
 2. Begin a test Rollover by running through the steps in
   [On Rollover launch date](#on-rollover-launch-date).
-  You'll need a new `RecruitmentCycle` for the next cycle by running
-  `rake rollover:new_recruitment_cycle`. You might not know the
-  `application_start_date` and `application_end_date` in time for testing, so
-  just use sensible placeholders.
+   You'll need a new `RecruitmentCycle` for the next cycle, to create this,
+   run `bundle exec rake rollover:create_recruitment_cycle"[YYYY, "YYYY-MM-DD", "YYYY-MM-DD"]"`.
+   This is `year`, `application_start_date` and `application_end_date` respectively.
+   You might not know the `application_start_date` and `application_end_date` in time for 
+   testing, so just use sensible placeholders.
 
 3. Test v2, v3 and public v1 endpoints (v1 is the original UCAS API and soon to
   be deprecated).
@@ -43,13 +44,13 @@ updates/refactoring work.
 1. Create a new `RecruitmentCycle` with the correct `year`,
   `application_start_date` and `application_end_date` by running:
 
-    **`rake "rollover:new_recruitment_cycle[YYYY YYYY-MM-DD YYYY-MM-DD]"`**
+    **`bundle exec rake rollover:create_recruitment_cycle"[YYYY, "YYYY-MM-DD", "YYYY-MM-DD"]"`**
 
     (argument order: `year`, `application_start_date`, `application_end_date`)
 
 2. Rollover providers by running:
 
-    **`rake rollover:providers`**
+    **`bundle exec rake rollover:providers`**
 
 3. Complete the steps on Publish. You'll need to have run the above rake tasks
   before making any setting changes on Publish.
