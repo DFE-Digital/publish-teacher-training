@@ -103,6 +103,7 @@ en:
               blank: "^Complete your course information before publishing"
             sites:
               blank: "^You must pick at least one location for this course"
+              site_urn_not_publishable: "^You must provide a Unique Reference Number (URN) for all course locations"
             age_range_in_years:
               blank: "^You need to pick an age range"
             program_type:
