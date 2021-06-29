@@ -54,7 +54,7 @@ jobs:
         id: GetSecretAction
 
       - name: Upload sqldbdump to storageAccount
-        uses: bacongobbler/azure-blob-storage-upload@v1.1.1
+        uses: bacongobbler/azure-blob-storage-upload@v1
         with:
           source_dir: ./
           container_name: sqldbdump
