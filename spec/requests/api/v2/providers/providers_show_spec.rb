@@ -156,22 +156,6 @@ describe "Providers API v2", type: :request do
       end
     end
 
-    context "with the maximum number of sites" do
-      let(:sites) {
-        [*"A".."Z", "0", "-", *"1".."9"].map { |code|
-          build(:site, code: code)
-        }
-      }
-      let(:provider) { create(:provider, sites: sites, organisations: [organisation]) }
-
-      it "has can_add_more_sites? set to false" do
-        perform_request
-
-        expect(json_response["data"])
-          .to have_attribute(:can_add_more_sites?).with_value(false)
-      end
-    end
-
     describe "JSON generated for a provider" do
       it "has a data section with the correct attributes" do
         perform_request

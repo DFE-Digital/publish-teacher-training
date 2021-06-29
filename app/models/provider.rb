@@ -234,7 +234,7 @@ class Provider < ApplicationRecord
   end
 
   def can_add_more_sites?
-    sites.size < Site::POSSIBLE_CODES.size
+    true
   end
 
   # This reflects the fact that organisations should actually be a has_one.
