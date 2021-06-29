@@ -57,6 +57,10 @@ class Course < ApplicationRecord
 
   DEGREE_REQUIREMENTS_REQUIRED_FROM = 2022
 
+  # Most providers require GCSE grade 4 ("C"),
+  # but some require grade 5 ("strong C")
+  PROVIDERS_REQUIRING_GCSE_GRADE_5 = %w[U80 I30].freeze
+
   enum maths: ENTRY_REQUIREMENT_OPTIONS, _suffix: :for_maths
   enum english: ENTRY_REQUIREMENT_OPTIONS, _suffix: :for_english
   enum science: ENTRY_REQUIREMENT_OPTIONS, _suffix: :for_science
@@ -430,6 +434,14 @@ class Course < ApplicationRecord
 
   def gcse_science_required?
     gcse_subjects_required.include?("science")
+  end
+
+  def gcse_grade_required
+    if PROVIDERS_REQUIRING_GCSE_GRADE_5.include?(provider.provider_code)
+      5
+    else
+      4
+    end
   end
 
   def last_published_at
