@@ -96,6 +96,18 @@ jobs:
           path: backup_sanitised.sql
           retention-days: 7
 
+      - name: Notify slack channel on failure
+        if: failure()
+        uses: rtCamp/action-slack-notify@master
+        env:
+          SLACK_CHANNEL: twd_publish_register_tech
+          SLACK_COLOR: '#ef5343'
+          SLACK_ICON_EMOJI: ':github-logo:'
+          SLACK_USERNAME: Teacher Training API
+          SLACK_TITLE: TTAPI database backup failed
+          SLACK_MESSAGE: ':alert: <!channel> TTAPI database backup failed'
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+
   restore:
    needs: [backup]
    runs-on: ubuntu-latest
@@ -121,3 +133,15 @@ jobs:
         run: cf conduit ${POSTGRES_SERVICE_INSTANCE} -- psql < backup_sanitised.sql
         env:
           POSTGRES_SERVICE_INSTANCE: teacher-training-api-postgres-${{ matrix.environment }}
+
+      - name: Notify slack channel on failure
+        if: failure()
+        uses: rtCamp/action-slack-notify@master
+        env:
+          SLACK_CHANNEL: twd_publish_register_tech
+          SLACK_COLOR: '#ef5343'
+          SLACK_ICON_EMOJI: ':github-logo:'
+          SLACK_USERNAME: Teacher Training API
+          SLACK_TITLE: TTAPI database restore failed
+          SLACK_MESSAGE: ':alert: <!channel> TTAPI database restore to ${{ matrix.environment }} failed'
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
