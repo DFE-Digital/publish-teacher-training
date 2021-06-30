@@ -3,7 +3,9 @@ require "rails_helper"
 describe Site, type: :model do
   include ActiveJob::TestHelper
 
-  subject { create(:site) }
+  let(:provider) { create(:provider) }
+
+  subject { create(:site, provider_id: provider.id) }
 
   describe "auditing" do
     it { is_expected.to be_audited.associated_with(:provider) }
@@ -42,6 +44,29 @@ describe Site, type: :model do
 
   describe "associations" do
     it { is_expected.to belong_to(:provider) }
+  end
+
+  context "when the site provider updates their urn in the 2022 cycle" do
+    let(:provider) do
+      create(
+        :provider,
+        recruitment_cycle: create(:recruitment_cycle, year: "2022"),
+      )
+    end
+
+    let(:site) do
+      create(
+        :site,
+        urn: "",
+        provider_id: provider.id,
+      )
+    end
+
+    it "validates the presence of a URN" do
+      # this means that rollover happens successfully; the record is created but it will be invalid on update, because of no URN
+      expect { site }.to change { Site.count }.by(1)
+      expect(site).to_not be_valid
+    end
   end
 
   describe "#touch_provider" do

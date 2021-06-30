@@ -8,6 +8,7 @@ module Providers
       address4: "County",
       postcode: "M1 1JG",
       region_code: "north_west",
+      ukprn: "12345678",
     }.freeze
 
     def initialize(recruitment_cycle:, provider_name:, provider_code:, provider_type:, is_accredited_body:)
@@ -45,6 +46,7 @@ module Providers
         address4: provider.address4,
         postcode: provider.postcode,
         region_code: provider.region_code,
+        urn: Faker::Number.number(digits: [5, 6].sample),
       )
 
       true
