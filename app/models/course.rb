@@ -590,6 +590,10 @@ class Course < ApplicationRecord
     false
   end
 
+  def required_qualifications
+    RequiredQualificationsSummary.new(self).extract
+  end
+
 private
 
   def add_site!(site:)
