@@ -3,6 +3,7 @@ name: Database Backup and Restore
 on:
   schedule: # 03:00 UTC Mon-Fri
     - cron: '0 3 * * 1-5'
+  workflow_dispatch:
 
 jobs:
   backup:
@@ -54,7 +55,7 @@ jobs:
         id: GetSecretAction
 
       - name: Upload sqldbdump to storageAccount
-        uses: bacongobbler/azure-blob-storage-upload@v1
+        uses: bacongobbler/azure-blob-storage-upload@v1.2.0
         with:
           source_dir: ./
           container_name: sqldbdump
