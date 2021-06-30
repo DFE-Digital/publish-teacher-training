@@ -186,7 +186,7 @@ module API
       end
 
       def update_course
-        return unless course_params.values.any? || funding_type_params.present? || course_params.key?("degree_subject_requirements")
+        return unless course_params.values.any? || funding_type_params.present? || qualification_params.present?
         return unless @course.course_params_assignable(course_params)
 
         @course.assign_attributes(course_params)
@@ -352,6 +352,16 @@ module API
 
       def funding_type_params
         params.fetch(:course, {})[:funding_type]
+      end
+
+      def qualification_params
+        course_params.keys & %w[
+          accept_english_gcse_equivalency
+          accept_maths_gcse_equivalency
+          accept_science_gcse_equivalency
+          degree_subject_requirements
+          additional_gcse_equivalencies
+        ]
       end
 
       def subject_ids
