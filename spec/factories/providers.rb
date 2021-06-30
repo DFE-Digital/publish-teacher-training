@@ -21,6 +21,7 @@ FactoryBot.define do
     website { Faker::Internet.url }
     provider_type { :lead_school }
     urn { Faker::Number.number(digits: [5, 6].sample) }
+    ukprn { Faker::Number.number(digits: 8) }
     accrediting_provider { "N" }
     region_code { "london" }
     organisations { [create(:organisation, :with_user)] }

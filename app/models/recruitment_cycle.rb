@@ -41,4 +41,9 @@ class RecruitmentCycle < ApplicationRecord
     following_year = Date.new(year.to_i, 1, 1) + 1.year
     "#{year}/#{following_year.strftime('%y')}"
   end
+
+  # TODO: remove once the 2022 rollover is complete
+  def after_2021?
+    year.to_i >= 2022
+  end
 end
