@@ -3,6 +3,7 @@ name: Database Backup and Restore
 on:
   schedule: # 03:00 UTC Mon-Fri
     - cron: '0 3 * * 1-5'
+  workflow_dispatch:
 
 jobs:
   backup:
