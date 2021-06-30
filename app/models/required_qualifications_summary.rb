@@ -23,6 +23,11 @@ private
     output << gcse_equivalency_content
     output << "\n"
     output << (course.additional_gcse_equivalencies || "")
+    output << "\n"
+    output << degree_grade_content
+    output << "\n"
+    output << degree_subject_requirements_content
+    output << "\n"
   end
 
   def required_gcse_content
@@ -65,5 +70,23 @@ private
       maths: course.accept_maths_gcse_equivalency?,
       science: course.accept_science_gcse_equivalency?,
     }.select { |_k, v| v }.keys
+  end
+
+  def degree_grade_content
+    {
+      "two_one" => "An undergraduate degree at class 2:1 or above, or equivalent.",
+      "two_two" => "An undergraduate degree at class 2:2 or above, or equivalent.",
+      "third_class" => "An undergraduate degree, or equivalent. This should be an honours degree (Third or above), or equivalent.",
+      "not_required" => "An undergraduate degree, or equivalent.",
+      nil => "",
+    }[course.degree_grade]
+  end
+
+  def degree_subject_requirements_content
+    if course.additional_degree_subject_requirements?
+      course.degree_subject_requirements
+    else
+      ""
+    end
   end
 end
