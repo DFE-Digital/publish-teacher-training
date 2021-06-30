@@ -17,7 +17,7 @@ module API
                  :course_code, :name, :study_mode, :qualification, :description,
                  :content_status, :ucas_status, :funding_type,
                  :level, :is_send?, :english, :maths, :science, :gcse_subjects_required,
-                 :age_range_in_years, :accrediting_provider,
+                 :gcse_grade_required, :age_range_in_years, :accrediting_provider,
                  :accredited_body_code, :level, :degree_grade,
                  :additional_degree_subject_requirements,
                  :degree_subject_requirements, :accept_pending_gcse, :accept_gcse_equivalency,

@@ -1739,6 +1739,19 @@ describe Course, type: :model do
     end
   end
 
+  describe "#gcse_grade_required" do
+    its(:gcse_grade_required) { is_expected.to eq(4) }
+
+    context "when the provider is on the PROVIDERS_REQUIRING_GCSE_GRADE_5 list" do
+      let(:course) do
+        provider = create(:provider, provider_code: Course::PROVIDERS_REQUIRING_GCSE_GRADE_5.sample)
+        create(:course, provider: provider)
+      end
+
+      its(:gcse_grade_required) { is_expected.to eq(5) }
+    end
+  end
+
   context "bursaries and scholarships" do
     let!(:financial_incentive) { create(:financial_incentive, subject: modern_languages, bursary_amount: 255, scholarship: 1415, early_career_payments: 32) }
 

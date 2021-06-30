@@ -30,6 +30,7 @@ describe API::V2::SerializableCourse do
   it { is_expected.to have_attribute :maths }
   it { is_expected.to have_attribute :science }
   it { is_expected.to have_attribute :gcse_subjects_required }
+  it { is_expected.to have_attribute :gcse_grade_required }
   it { is_expected.to have_attribute :provider_code }
   it { is_expected.to have_attribute :age_range_in_years }
   it { is_expected.to have_attribute(:recruitment_cycle_year).with_value(course.recruitment_cycle.year) }
