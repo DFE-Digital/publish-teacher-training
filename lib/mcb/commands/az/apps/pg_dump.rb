@@ -16,10 +16,10 @@ run do |opts, _args, _cmd|
   ENV["PGPASSWORD"] = ENV["DB_PASSWORD"]
   target_file = opts[:target_file]
   target_file ||= "#{opts[:env] || ENV['DB_HOSTNAME']}_" \
-    "#{ENV['DB_DATABASE']}_#{Time.now.utc.strftime('%Y%m%d_%H%M%S')}.sql"
+                  "#{ENV['DB_DATABASE']}_#{Time.now.utc.strftime('%Y%m%d_%H%M%S')}.sql"
   cmd = "pg_dump --encoding utf8 --clean --if-exists " \
-      "-h #{ENV['DB_HOSTNAME']} -U #{ENV['DB_USERNAME']} -d #{ENV['DB_DATABASE']} " \
-      "--file '#{target_file}'"
+        "-h #{ENV['DB_HOSTNAME']} -U #{ENV['DB_USERNAME']} -d #{ENV['DB_DATABASE']} " \
+        "--file '#{target_file}'"
 
   MCB::exec_command(cmd)
 end

@@ -456,7 +456,7 @@ describe "/api/v2/build_new_course", type: :request do
 
   def do_get(params)
     get "/api/v2/build_new_course?year=#{recruitment_cycle.year}" \
-          "&provider_code=#{provider.provider_code}",
+        "&provider_code=#{provider.provider_code}",
         headers: { "HTTP_AUTHORIZATION" => credentials },
         params: params
     response

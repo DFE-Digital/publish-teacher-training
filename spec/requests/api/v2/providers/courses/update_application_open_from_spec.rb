@@ -13,7 +13,7 @@ describe "PATCH /providers/:provider_code/courses/:course_code" do
     jsonapi_data[:data][:attributes] = updated_applications_open_from
 
     patch "/api/v2/recruitment_cycles/#{course.provider.recruitment_cycle.year}/providers/#{course.provider.provider_code}" \
-            "/courses/#{course.course_code}",
+          "/courses/#{course.course_code}",
           headers: { "HTTP_AUTHORIZATION" => credentials },
           params: {
             _jsonapi: jsonapi_data,

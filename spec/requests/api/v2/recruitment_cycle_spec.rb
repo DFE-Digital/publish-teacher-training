@@ -88,8 +88,8 @@ describe "/api/v2/recruitment_cycle", type: :request do
 
     let(:request_path) {
       "/api/v2/recruitment_cycles/#{recruitment_cycle.year}" \
-      "/providers/#{provider.provider_code}" \
-      "/recruitment_cycles"
+        "/providers/#{provider.provider_code}" \
+        "/recruitment_cycles"
     }
 
     describe "the JSON response" do

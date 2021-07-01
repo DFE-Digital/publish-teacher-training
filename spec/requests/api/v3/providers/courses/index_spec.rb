@@ -193,7 +193,7 @@ describe "GET v3/recruitment_cycle/:recruitment_cycle_year/providers/:provider_c
       describe "making a request for the next recruitment cycle" do
         let(:request_path) {
           "/api/v3/recruitment_cycles/#{next_cycle.year}" \
-          "/providers/#{next_provider.provider_code}/courses"
+            "/providers/#{next_provider.provider_code}/courses"
         }
 
         it "only returns data for the next recruitment cycle" do

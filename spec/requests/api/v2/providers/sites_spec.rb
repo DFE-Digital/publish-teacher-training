@@ -174,7 +174,7 @@ describe "Sites API v2", type: :request do
       describe "when specifying the next recruitment cycle" do
         let(:request_path) {
           "/api/v2/recruitment_cycles/#{next_cycle.year}" \
-           "/providers/#{provider.provider_code}/sites"
+            "/providers/#{provider.provider_code}/sites"
         }
 
         subject do

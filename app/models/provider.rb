@@ -189,20 +189,20 @@ class Provider < ApplicationRecord
   # less time rendering because there's less data to comb through.
   def self.include_courses_counts
     joins(
-      %{
+      <<~EOSQL,
         LEFT OUTER JOIN (
           SELECT b.provider_id, COUNT(*) courses_count
           FROM course b
           WHERE b.discarded_at IS NULL
           GROUP BY b.provider_id
         ) a ON a.provider_id = provider.id
-      },
+      EOSQL
     ).select("provider.*, COALESCE(a.courses_count, 0) AS included_courses_count")
   end
 
   def self.include_accredited_courses_counts(provider_code)
     joins(
-      %{
+      <<~EOSQL,
         LEFT OUTER JOIN (
           SELECT b.provider_id, COUNT(*) courses_count
           FROM course b
@@ -210,7 +210,7 @@ class Provider < ApplicationRecord
           AND b.accredited_body_code = #{ActiveRecord::Base.connection.quote(provider_code)}
           GROUP BY b.provider_id
         ) a ON a.provider_id = provider.id
-      },
+      EOSQL
     ).select("provider.*, COALESCE(a.courses_count, 0) AS included_accredited_courses_count")
   end
 

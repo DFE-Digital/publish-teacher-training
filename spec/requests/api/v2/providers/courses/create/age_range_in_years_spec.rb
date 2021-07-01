@@ -15,7 +15,7 @@ RSpec.describe "POST /providers/:provider_code/courses/:course_code" do
     )
 
     post "/api/v2/recruitment_cycles/#{recruitment_cycle.year}/providers/" \
-            "#{course.provider.provider_code}/courses",
+         "#{course.provider.provider_code}/courses",
          headers: { "HTTP_AUTHORIZATION" => credentials },
          params: {
            _jsonapi: { data: jsonapi_data[:data] },

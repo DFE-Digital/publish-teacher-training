@@ -14,7 +14,7 @@ describe "PATCH /providers/:provider_code/courses/:course_code" do
     jsonapi_data[:data][:attributes] = gcse_requirements
 
     patch "/api/v2/providers/#{course.provider.provider_code}" \
-            "/courses/#{course.course_code}",
+          "/courses/#{course.course_code}",
           headers: { "HTTP_AUTHORIZATION" => credentials },
           params: {
             _jsonapi: jsonapi_data,

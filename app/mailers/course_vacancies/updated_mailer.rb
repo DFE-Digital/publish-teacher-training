@@ -38,8 +38,8 @@ module CourseVacancies
 
     def create_course_url(course)
       "#{Settings.find_url}" \
-      "/course/#{course.provider.provider_code}" \
-      "/#{course.course_code}"
+        "/course/#{course.provider.provider_code}" \
+        "/#{course.course_code}"
     end
   end
 end
