@@ -26,6 +26,16 @@ describe ProviderSerializer do
     it { is_expected.to eq provider.ucas_preferences.type_of_gt12_before_type_cast }
   end
 
+  describe "campuses" do
+    before do
+      create_list(:site, 40, code: nil, provider: provider)
+    end
+
+    subject { serialize(provider)["campuses"] }
+
+    its(:count) { is_expected.to eq(37) }
+  end
+
   describe "utt_application_alerts" do
     subject { serialize(provider)["utt_application_alerts"] }
 

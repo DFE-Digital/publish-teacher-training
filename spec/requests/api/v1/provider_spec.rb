@@ -25,6 +25,21 @@ describe "Providers API", type: :request do
 
     let(:get_index) { get "/api/v1/#{current_year}/providers", headers: { "HTTP_AUTHORIZATION" => credentials } }
 
+    context "when provider has more than 37 sites" do
+      let(:provider) { create(:provider) }
+
+      before do
+        Site::POSSIBLE_CODES.each { |code| create(:site, code: code, provider: provider) }
+        create_list(:site, 2, code: nil, provider: provider)
+        get_index
+      end
+
+      it "includes only the first 37 sites" do
+        json = JSON.parse(response.body)
+        expect(json[0]["campuses"].map { |campus| campus["campus_code"] }).to match_array(Site::POSSIBLE_CODES)
+      end
+    end
+
     context "without changed_since parameter" do
       provider = nil
       provider2 = nil

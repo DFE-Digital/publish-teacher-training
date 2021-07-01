@@ -1,8 +1,8 @@
 require "mcb_helper"
 
 describe '"mcb apiv1 providers find"' do
-  let(:site1)     { build(:site) }
-  let(:site2)     { build(:site) }
+  let(:site1)     { build(:site, code: "A") }
+  let(:site2)     { build(:site, code: "Z") }
   let(:contact1)  { build(:contact, :utt_type) }
   let(:contact2)  { build(:contact, :admin_type) }
   let(:provider1) { create(:provider, sites: [site1], contacts: [contact1]) }

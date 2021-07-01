@@ -1,5 +1,7 @@
 class CourseProviderSerializer < ActiveModel::Serializer
-  has_many :sites, key: :campuses
+  has_many :sites, key: :campuses do
+    object.sites.where(code: Site::POSSIBLE_CODES)
+  end
 
   attributes :institution_code, :institution_name, :institution_type, :accrediting_provider,
              :scheme_member
