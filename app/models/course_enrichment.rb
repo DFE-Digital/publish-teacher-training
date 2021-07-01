@@ -70,7 +70,7 @@ class CourseEnrichment < ApplicationRecord
 
   # Requirements and qualifications
 
-  validates :required_qualifications, presence: true, on: :publish
+  validates :required_qualifications, presence: true, on: :publish, if: :required_qualifications_needed?
   validates :required_qualifications, words_count: { maximum: 100 }
 
   validates :personal_qualities, words_count: { maximum: 100 }
@@ -99,5 +99,9 @@ class CourseEnrichment < ApplicationRecord
 
   def withdraw
     update(status: "withdrawn")
+  end
+
+  def required_qualifications_needed?
+    (course&.provider&.recruitment_cycle&.year.to_i) < Course::DEGREE_REQUIREMENTS_REQUIRED_FROM
   end
 end
