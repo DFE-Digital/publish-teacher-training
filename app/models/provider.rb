@@ -229,10 +229,6 @@ class Provider < ApplicationRecord
     update_columns changed_at: timestamp
   end
 
-  def unassigned_site_codes
-    Site::POSSIBLE_CODES - sites.pluck(:code)
-  end
-
   def can_add_more_sites?
     true
   end

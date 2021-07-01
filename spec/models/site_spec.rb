@@ -15,7 +15,12 @@ describe Site, type: :model do
   it { is_expected.to validate_uniqueness_of(:location_name).scoped_to(:provider_id) }
   it { is_expected.to validate_uniqueness_of(:code).case_insensitive.scoped_to(:provider_id) }
   it { is_expected.to validate_presence_of(:code) }
-  it { is_expected.to validate_inclusion_of(:code).in_array(Site::POSSIBLE_CODES).with_message("must be A-Z, 0-9 or -") }
+
+  it "validates that code can only contain A-Z, 0-9 or -" do
+    subject.code = "22,A"
+    subject.valid?
+    expect(subject.errors[:code]).to include("must contain only A-Z, 0-9 or -")
+  end
 
   it "validates that URN cannot be letters" do
     subject.urn = "XXXXXX"
@@ -66,12 +71,6 @@ describe Site, type: :model do
     it "is assigned a valid code by default" do
       expect { subject.valid? }.to change { subject.code.blank? }.from(true).to(false)
       expect(subject.errors[:code]).to be_empty
-    end
-
-    it "is assigned easily-confused codes only when all others have been used up" do
-      (Site::DESIRABLE_CODES - %w[A]).each { |code| create(:site, code: code, provider: provider) }
-      subject.validate
-      expect(subject.code).to eq("A")
     end
   end
 
