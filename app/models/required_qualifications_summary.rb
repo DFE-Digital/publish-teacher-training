@@ -16,18 +16,14 @@ private
 
   def generate_summary_text
     output = ""
-    output << required_gcse_content
-    output << "\n"
-    output << pending_gcse_content
-    output << "\n"
-    output << gcse_equivalency_content
-    output << "\n"
-    output << (course.additional_gcse_equivalencies || "")
-    output << "\n"
-    output << degree_grade_content
-    output << "\n"
+    output << required_gcse_content << "\n"
+    output << pending_gcse_content << "\n"
+    output << gcse_equivalency_content << "\n"
+    output << (course.additional_gcse_equivalencies || "") << "\n"
+    output << degree_grade_content << "\n"
     output << degree_subject_requirements_content
-    output << "\n"
+
+    output.strip
   end
 
   def required_gcse_content

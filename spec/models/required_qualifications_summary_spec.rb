@@ -17,7 +17,7 @@ describe RequiredQualificationsSummary, type: :model do
         course = create(:course, :primary)
         summary = described_class.new(course).extract
 
-        expect(summary).to eq <<~SUMMARY
+        expect(summary).to eq <<~SUMMARY.strip
           Grade 4 (C) or above in English, maths and science, or equivalent qualification.
           Candidates with pending GCSEs will not be considered.
           Equivalency tests will not be accepted.
