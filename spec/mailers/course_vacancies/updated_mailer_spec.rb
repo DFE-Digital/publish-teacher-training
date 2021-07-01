@@ -48,8 +48,8 @@ module CourseVacancies
 
         it "includes the URL for the course in the personalisation" do
           url = "#{Settings.find_url}" \
-        "/course/#{course.provider.provider_code}" \
-        "/#{course.course_code}"
+                "/course/#{course.provider.provider_code}" \
+                "/#{course.course_code}"
           expect(mail.govuk_notify_personalisation[:course_url]).to eq(url)
         end
 
@@ -117,8 +117,8 @@ module CourseVacancies
 
         it "includes the URL for the course in the personalisation" do
           url = "#{Settings.find_url}" \
-        "/course/#{course.provider.provider_code}" \
-        "/#{course.course_code}"
+                "/course/#{course.provider.provider_code}" \
+                "/#{course.course_code}"
           expect(mail.govuk_notify_personalisation[:course_url]).to eq(url)
         end
 

@@ -1040,7 +1040,7 @@ describe "Courses API v2", type: :request do
       describe "making a request for the next recruitment cycle" do
         let(:request_path) {
           "/api/v2/recruitment_cycles/#{next_cycle.year}" \
-          "/providers/#{next_provider.provider_code}/courses"
+            "/providers/#{next_provider.provider_code}/courses"
         }
 
         it "only returns data for the next recruitment cycle" do

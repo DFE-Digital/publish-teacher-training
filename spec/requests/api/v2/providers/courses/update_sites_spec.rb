@@ -44,7 +44,7 @@ describe "PATCH /providers/:provider_code/courses/:course_code with sites" do
 
   def perform_request
     patch "/api/v2/providers/#{course.provider.provider_code}" \
-            "/courses/#{course.course_code}",
+          "/courses/#{course.course_code}",
           headers: {
             "HTTP_AUTHORIZATION" => credentials,
             "Content-Type": "application/json",

@@ -27,8 +27,8 @@ describe "GET v3/recruitment_cycle/:recruitment_cycle_year/providers/:provider_c
   let(:jsonapi_response) { JSON.parse(response.body) }
   let(:route) {
     "/api/v3/recruitment_cycles/#{current_year}" \
-    "/providers/#{provider.provider_code}" \
-    "/courses/#{course.course_code}"
+      "/providers/#{provider.provider_code}" \
+      "/courses/#{course.course_code}"
   }
   let(:course) {
     create :course,
