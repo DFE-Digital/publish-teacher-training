@@ -37,7 +37,7 @@ review:
 	$(eval DEPLOY_ENV=review)
 	$(if $(APP_NAME), , $(error Missing environment variable "APP_NAME", Please specify a name for your review app))
 	$(eval AZ_SUBSCRIPTION=s121-findpostgraduateteachertraining-development)
-	$(eval backend_key=-backend-config=key=$(APP_NAME).terraform.tfstate)
+	$(eval backend_key=-backend-config=key=pr-$(APP_NAME).tfstate)
 	$(eval export TF_VAR_paas_app_environment=review-$(APP_NAME))
 	$(eval export TF_VAR_paas_web_app_host_name=$(APP_NAME))
 	echo https://teacher-training-api-review-$(APP_NAME).london.cloudapps.digital will be created in bat-qa space
@@ -79,22 +79,25 @@ rollover: ## Set DEPLOY_ENV to rollover
 	$(eval paas_env=rollover)
 
 deploy-init:
-	$(eval export TF_DATA_DIR=./terraform/.terraform)
 	$(if $(IMAGE_TAG), , $(error Missing environment variable "IMAGE_TAG"))
 	$(eval export TF_VAR_paas_docker_image=dfedigital/teacher-training-api:paas-$(IMAGE_TAG))
-	$(eval export TF_VAR_paas_app_secrets_file=./terraform/workspace_variables/app_secrets.yml)
+	$(eval export TF_VAR_paas_app_secrets_file=./workspace_variables/app_secrets.yml)
 	az account set -s ${AZ_SUBSCRIPTION} && az account show
-	terraform init -reconfigure -backend-config=terraform/workspace_variables/$(DEPLOY_ENV)_backend.tfvars $(backend_key) terraform
+	cd terraform && \
+		terraform init -reconfigure -backend-config=workspace_variables/$(DEPLOY_ENV)_backend.tfvars $(backend_key)
 	echo "🚀 DEPLOY_ENV is $(DEPLOY_ENV)"
 
 deploy-plan: deploy-init
-	terraform plan -var-file=terraform/workspace_variables/$(DEPLOY_ENV).tfvars terraform
+	cd terraform && . ./workspace_variables/$(DEPLOY_ENV).sh && \
+		terraform plan -var-file=workspace_variables/$(DEPLOY_ENV).tfvars
 
 deploy: deploy-init
-	terraform apply -var-file=terraform/workspace_variables/$(DEPLOY_ENV).tfvars -auto-approve terraform
+	cd terraform && . ./workspace_variables/$(DEPLOY_ENV).sh && \
+		terraform apply -var-file=workspace_variables/$(DEPLOY_ENV).tfvars -auto-approve
 
 destroy: deploy-init
-	terraform destroy -var-file=terraform/workspace_variables/$(DEPLOY_ENV).tfvars terraform
+	cd terraform && . ./workspace_variables/$(DEPLOY_ENV).sh && \
+		terraform destroy -var-file=workspace_variables/$(DEPLOY_ENV).tfvars
 
 install-fetch-config:
 	[ ! -f bin/fetch_config.rb ] \
