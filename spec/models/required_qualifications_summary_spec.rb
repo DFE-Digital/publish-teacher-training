@@ -35,6 +35,15 @@ describe RequiredQualificationsSummary, type: :model do
         expect(summary).not_to include "Grade 4 (C) or above in English and maths, or equivalent qualification"
       end
 
+      it "specifies a GCSE grade requirement defined by the course" do
+        course = create(:course, :primary)
+        allow(course).to receive(:gcse_grade_required).and_return 5
+        summary = described_class.new(course).extract
+
+        expect(summary).to include "Grade 5 (C) or above in English, maths and science, or equivalent qualification"
+        expect(summary).not_to include "Grade 5 (C) or above in English and maths, or equivalent qualification"
+      end
+
       it "does not mention science as a required GCSE if course is secondary" do
         course = create(:course, :secondary)
         summary = described_class.new(course).extract

@@ -29,9 +29,9 @@ private
   def required_gcse_content
     case course.level
     when "primary"
-      "Grade 4 (C) or above in English, maths and science, or equivalent qualification."
+      "Grade #{course.gcse_grade_required} (C) or above in English, maths and science, or equivalent qualification."
     when "secondary"
-      "Grade 4 (C) or above in English and maths, or equivalent qualification."
+      "Grade #{course.gcse_grade_required} (C) or above in English and maths, or equivalent qualification."
     else
       ""
     end
