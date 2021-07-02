@@ -101,6 +101,21 @@ jobs:
         GIT_BRANCH: ${{env.BRANCH_TAG}}
         CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
 
+    - name: Wait for review app deployment
+      id: wait_for_review_app_deployment
+      if: ${{ github.event_name == 'pull_request' && github.actor != 'dependabot[bot]' }}
+      uses: fountainhead/action-wait-for-check@v1.0.0
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        ref: ${{ github.head_ref }}
+        checkName: ${{ github.event.pull_request.number }} Deployment
+        timeoutSeconds:  1800
+        intervalSeconds: 10
+
+    - name: Exit if review app deployment failed
+      if: ${{ steps.wait_for_review_app_deployment.outputs.conclusion != '' && steps.wait_for_review_app_deployment.outputs.conclusion != 'success' }}
+      run: exit 1
+
     - name: Trigger Deployment
       if: ${{ success() && github.ref == 'refs/heads/master' }}
       uses: benc-uk/workflow-dispatch@v1
