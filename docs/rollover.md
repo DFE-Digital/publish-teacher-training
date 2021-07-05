@@ -46,7 +46,9 @@ updates/refactoring work.
 
     **`bundle exec rake rollover:create_recruitment_cycle"[YYYY, "YYYY-MM-DD", "YYYY-MM-DD"]"`**
 
-    (argument order: `year`, `application_start_date`, `application_end_date`)
+    (argument order: `year`, `application_start_date`, `application_end_date`) eg:
+
+    **`bundle exec rake rollover:create_recruitment_cycle[2022, 2022-10-12, 2022-09-30]`**
 
 2. Rollover providers by running:
 

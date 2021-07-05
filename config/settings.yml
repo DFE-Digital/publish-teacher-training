@@ -28,7 +28,7 @@ authentication:
   audience: "teacher-training-api"
   subject: "access"
 
-current_recruitment_cycle_year: 2021
+current_recruitment_cycle_year: 2022
 allocation_cycle_year: 2021
 govuk_notify:
   api_key: please_change_me
