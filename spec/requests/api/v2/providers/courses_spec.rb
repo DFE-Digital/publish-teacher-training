@@ -13,6 +13,7 @@ describe "Courses API v2", type: :request do
   let(:previous_year) { current_year - 1 }
   let(:next_year)     { current_year + 1 }
   let(:subjects) { [course_subject_mathematics] }
+  let(:frozen_time) { current_cycle.application_start_date + 1 }
 
   let(:findable_open_course) do
     create(:course, :resulting_in_pgce_with_qts, :with_apprenticeship,
@@ -98,6 +99,14 @@ describe "Courses API v2", type: :request do
       include_examples "Unauthenticated, unauthorised, or not accepted T&Cs"
 
       describe "JSON generated for courses" do
+        after do
+          Timecop.return
+        end
+
+        before do
+          Timecop.freeze(frozen_time)
+        end
+
         it { is_expected.to have_http_status(:success) }
 
         it "has a data section with the correct attributes" do
@@ -679,6 +688,14 @@ describe "Courses API v2", type: :request do
       let(:request_path) { "/api/v2/providers/#{provider.provider_code}/courses" }
 
       subject { perform_request }
+
+      after do
+        Timecop.return
+      end
+
+      before do
+        Timecop.freeze(frozen_time)
+      end
 
       it { is_expected.to have_http_status(:success) }
 

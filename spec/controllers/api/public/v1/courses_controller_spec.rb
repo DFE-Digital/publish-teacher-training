@@ -73,8 +73,6 @@ RSpec.describe API::Public::V1::CoursesController do
           let(:first_page) { 1 }
           let(:last_page) { 3 }
 
-          url_prefix = "http://test.host/api/public/v1/recruitment_cycles/2021/courses?page="
-
           let(:url_prefix) do
             "http://test.host/api/public/v1/recruitment_cycles/#{recruitment_cycle.year}/courses?page="
           end
