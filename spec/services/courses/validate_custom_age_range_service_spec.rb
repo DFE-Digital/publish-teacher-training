@@ -18,7 +18,7 @@ describe Courses::ValidateCustomAgeRangeService do
   end
 
   context "an invalid age range" do
-    let(:error_message) { "is invalid. You must enter a valid age range." }
+    let(:error_message) { "is invalid. Enter a valid age range." }
 
     context "with an age range of with a gap of less than 4 years" do
       let(:age_range_in_years) { "5_to_8" }

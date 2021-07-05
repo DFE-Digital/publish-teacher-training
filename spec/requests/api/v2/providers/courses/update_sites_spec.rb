@@ -113,7 +113,7 @@ describe "PATCH /providers/:provider_code/courses/:course_code with sites" do
       end
 
       it "returns validation error" do
-        expect(response.body).to include("You must choose at least one location")
+        expect(response.body).to include("Select at least one location")
       end
     end
   end

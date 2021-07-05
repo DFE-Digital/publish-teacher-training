@@ -183,42 +183,42 @@ describe "/api/v2/build_new_course", type: :request do
       expected["data"]["errors"] = [
         {
           "title" => "Invalid maths",
-          "detail" => "Pick an option for Maths",
+          "detail" => "Select an option for maths",
           "source" => {
             "pointer" => "/data/attributes/maths",
           },
         },
         {
           "title" => "Invalid english",
-          "detail" => "Pick an option for English",
+          "detail" => "Select an option for English",
           "source" => {
             "pointer" => "/data/attributes/english",
           },
         },
         {
           "title" => "Invalid sites",
-          "detail" => "You must pick at least one location for this course",
+          "detail" => "Select at least one location for this course",
           "source" => {
             "pointer" => "/data/attributes/sites",
           },
         },
         {
           "title" => "Invalid qualification",
-          "detail" => "You need to pick an outcome",
+          "detail" => "Select an outcome",
           "source" => {
             "pointer" => "/data/attributes/qualification",
           },
         },
         {
           "title" => "Invalid applications open from",
-          "detail" => "You must say when applications open from",
+          "detail" => "Select when applications will open and enter the date if applicable",
           "source" => {
             "pointer" => "/data/attributes/applications_open_from",
           },
         },
         {
           "title" => "Invalid subjects",
-          "detail" => "You must pick at least one subject",
+          "detail" => "Select at least one subject",
           "source" => {
             "pointer" => "/data/attributes/subjects",
           },
@@ -239,7 +239,7 @@ describe "/api/v2/build_new_course", type: :request do
         },
         {
           "title" => "Invalid program type",
-          "detail" => "You need to pick an option",
+          "detail" => "Select a program type",
           "source" => {
             "pointer" => "/data/attributes/program_type",
           },
@@ -253,21 +253,21 @@ describe "/api/v2/build_new_course", type: :request do
         },
         {
           "title" => "Invalid study mode",
-          "detail" => "You need to pick an option",
+          "detail" => "Select a study mode",
           "source" => {
             "pointer" => "/data/attributes/study_mode",
           },
         },
         {
           "title" => "Invalid age range in years",
-          "detail" => "You need to pick an age range",
+          "detail" => "Select an age range",
           "source" => {
             "pointer" => "/data/attributes/age_range_in_years",
           },
         },
         {
           "title" => "Invalid level",
-          "detail" => "You need to pick a level",
+          "detail" => "Select a course level",
           "source" => {
             "pointer" => "/data/attributes/level",
           },
@@ -299,21 +299,21 @@ describe "/api/v2/build_new_course", type: :request do
       expected_errors = [
         {
           "title" => "Invalid maths",
-          "detail" => "Pick an option for Maths",
+          "detail" => "Select an option for maths",
           "source" => {
             "pointer" => "/data/attributes/maths",
           },
         },
         {
           "title" => "Invalid english",
-          "detail" => "Pick an option for English",
+          "detail" => "Select an option for English",
           "source" => {
             "pointer" => "/data/attributes/english",
           },
         },
         {
           "title" => "Invalid subjects",
-          "detail" => "You must pick at least one subject",
+          "detail" => "Select at least one subject",
           "source" => {
             "pointer" => "/data/attributes/subjects",
           },
@@ -334,14 +334,14 @@ describe "/api/v2/build_new_course", type: :request do
         },
         {
           "title" => "Invalid program type",
-          "detail" => "You need to pick an option",
+          "detail" => "Select a program type",
           "source" => {
             "pointer" => "/data/attributes/program_type",
           },
         },
         {
           "title" => "Invalid qualification",
-          "detail" => "You need to pick an outcome",
+          "detail" => "Select an outcome",
           "source" => {
             "pointer" => "/data/attributes/qualification",
           },
@@ -355,35 +355,35 @@ describe "/api/v2/build_new_course", type: :request do
         },
         {
           "title" => "Invalid study mode",
-          "detail" => "You need to pick an option",
+          "detail" => "Select a study mode",
           "source" => {
             "pointer" => "/data/attributes/study_mode",
           },
         },
         {
           "title" => "Invalid age range in years",
-          "detail" => "You need to pick an age range",
+          "detail" => "Select an age range",
           "source" => {
             "pointer" => "/data/attributes/age_range_in_years",
           },
         },
         {
           "title" => "Invalid level",
-          "detail" => "You need to pick a level",
+          "detail" => "Select a course level",
           "source" => {
             "pointer" => "/data/attributes/level",
           },
         },
         {
           "title" => "Invalid sites",
-          "detail" => "You must pick at least one location for this course",
+          "detail" => "Select at least one location for this course",
           "source" => {
             "pointer" => "/data/attributes/sites",
           },
         },
         {
           "title" => "Invalid applications open from",
-          "detail" => "You must say when applications open from",
+          "detail" => "Select when applications will open and enter the date if applicable",
           "source" => {
             "pointer" => "/data/attributes/applications_open_from",
           },

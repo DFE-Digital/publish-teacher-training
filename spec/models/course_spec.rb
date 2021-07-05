@@ -298,7 +298,7 @@ describe Course, type: :model do
     it {
       expect(subject).to validate_presence_of(:level)
         .on(:publish)
-        .with_message("^You need to pick a level")
+        .with_message("^Select a course level")
     }
 
     it "validates scoped to provider_id and only on create and update" do
@@ -318,13 +318,13 @@ describe Course, type: :model do
         it "Requires a level" do
           error = errors[:level]
           expect(error).not_to be_empty
-          expect(error.first).to include("You need to pick a level")
+          expect(error.first).to include("Select a course level")
         end
 
         it "Requires a subject" do
           error = errors[:subjects]
           expect(error).not_to be_empty
-          expect(error.first).to include("You must pick at least one subject")
+          expect(error.first).to include("Select at least one subject")
         end
 
         context "With modern languages as a subject" do
@@ -333,7 +333,7 @@ describe Course, type: :model do
           it "Requires a language to be selected" do
             error = errors[:modern_languages_subjects]
             expect(error).not_to be_empty
-            expect(error.first).to include("You must pick at least one language")
+            expect(error.first).to include("Select at least one language")
           end
 
           it "Does not add an error if a language is selected" do
@@ -347,32 +347,32 @@ describe Course, type: :model do
         it "Requires an age range" do
           error = errors[:age_range_in_years]
           expect(error).not_to be_empty
-          expect(error.first).to include("You need to pick an age range")
+          expect(error.first).to include("Select an age range")
         end
 
         it "Requires an outcome" do
           error = errors[:qualification]
           expect(error).not_to be_empty
-          expect(error.first).to include("You need to pick an outcome")
+          expect(error.first).to include("Select an outcome")
         end
 
         it "Requires a program type to have been specified" do
           error = errors[:program_type]
           expect(error).not_to be_empty
-          expect(error.first).to include("You need to pick an option")
+          expect(error.first).to include("Select a program type")
         end
 
         it "Requires a study mode" do
           error = errors[:study_mode]
           expect(error).not_to be_empty
-          expect(error.first).to include("You need to pick an option")
+          expect(error.first).to include("Select a study mode")
         end
 
         context "Applications open" do
           it "Empty" do
             error = errors[:applications_open_from]
             expect(error).not_to be_empty
-            expect(error.first).to include("You must say when applications open")
+            expect(error.first).to include("Select when applications will open and enter the date if applicable")
           end
 
           it "A date outside of the current recruitment cycle" do
@@ -387,7 +387,7 @@ describe Course, type: :model do
         it "Requires at least one location" do
           error = errors[:sites]
           expect(error).not_to be_empty
-          expect(error.first).to include("You must pick at least one location")
+          expect(error.first).to include("Select at least one location")
         end
       end
 
@@ -400,7 +400,7 @@ describe Course, type: :model do
         it "requires age_range_in_years" do
           error = errors[:age_range_in_years]
           expect(error).not_to be_empty
-          expect(error.first).to include("You need to pick an age range")
+          expect(error.first).to include("Select an age range")
         end
       end
 
@@ -434,26 +434,26 @@ describe Course, type: :model do
         context "age_range_in_years" do
           let(:blank_field) { { age_range_in_years: nil } }
 
-          it { is_expected.to include "You need to pick an age range" }
+          it { is_expected.to include "Select an age range" }
         end
 
         context "for a provider in the 2021 cycle" do
           context "maths" do
             let(:blank_field) { { maths: nil } }
 
-            it { is_expected.to include "Pick an option for Maths" }
+            it { is_expected.to include "Select an option for maths" }
           end
 
           context "english" do
             let(:blank_field) { { english: nil } }
 
-            it { is_expected.to include "Pick an option for English" }
+            it { is_expected.to include "Select an option for English" }
           end
 
           context "science" do
             let(:blank_field) { { science: nil } }
 
-            it { is_expected.to include "Pick an option for Science" }
+            it { is_expected.to include "Select an option for science" }
           end
         end
 
@@ -533,7 +533,7 @@ describe Course, type: :model do
         it "gives an error for the subjects" do
           expect(subject.errors.full_messages).to match_array([
             "There is a problem with this course. Contact support to fix it (Error: S)",
-            "You must pick at least one subject",
+            "Select at least one subject",
           ])
         end
       end

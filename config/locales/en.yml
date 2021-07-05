@@ -8,20 +8,20 @@ en:
   components:
     page_titles:
       sign_in:
-        index: Sign in
-        new: User not found
+        index: "Sign in"
+        new: "User not found"
       support:
         providers:
-          index: Providers
+          index: "Providers"
           courses:
-            index: Courses
+            index: "Courses"
         users:
-          index: Users
-          show: User overview
+          index: "Users"
+          show: "User overview"
         data_exports:
-          index: Data exports
+          index: "Data exports"
     filter:
-      text_search: Name or code
+      text_search: "Name or code"
   course:
     update_email:
       name: "title"
@@ -48,17 +48,17 @@ en:
         not_required: "Not required"
   provider_suggestion:
     errors:
-      bad_request: Unknown provider code or name, please check the query string.
+      bad_request: "Unknown provider code or name, please check the query string."
   support:
     data_exports:
       index:
         users:
-          name: Only users affiliated with a provider
+          name: "Only users affiliated with a provider"
           description: "The list of all users affiliated with a provider from current recruitment cycle with columns: provider_code, provider_name, provider_type, first_name, last_name, email_address"
   activerecord:
     attributes:
       course:
-        name: Title
+        name: "Title"
       course_enrichment:
         fee_uk_eu: "Course fees for UK and EU students"
         fee_international: "Course fees for international students"
@@ -90,37 +90,37 @@ en:
         course:
           attributes:
             level:
-              blank: "^You need to pick a level"
+              blank: "^Select a course level"
             qualification:
-              blank: "^You need to pick an outcome"
+              blank: "^Select an outcome"
             maths:
-              inclusion: "^Pick an option for Maths"
+              inclusion: "^Select an option for maths"
             english:
-              inclusion: "^Pick an option for English"
+              inclusion: "^Select an option for English"
             science:
-              inclusion: "^Pick an option for Science"
+              inclusion: "^Select an option for science"
             enrichments:
               blank: "^Complete your course information before publishing"
             sites:
-              blank: "^You must pick at least one location for this course"
+              blank: "^Select at least one location for this course"
               site_urn_not_publishable: "^Enter a Unique Reference Number (URN) for all course locations"
             age_range_in_years:
-              blank: "^You need to pick an age range"
+              blank: "^Select an age range"
             program_type:
-              blank: "^You need to pick an option"
+              blank: "^Select a program type"
             subjects:
               blank: "^There is a problem with this course. Contact support to fix it (Error: S)"
-              course_creation: "^You must pick at least one subject"
-              duplicate: "^You've already selected this subject - you can only select a subject once"
+              course_creation: "^Select at least one subject"
+              duplicate: "^You have already selected this subject. You can only select a subject once"
             modern_languages_subjects:
-              select_a_language: "^You must pick at least one language"
+              select_a_language: "^Select at least one language"
             study_mode:
-              blank: "^You need to pick an option"
+              blank: "^Select a study mode"
             applications_open_from:
-              blank: "^You must say when applications open from"
+              blank: "^Select when applications will open and enter the date if applicable"
             base:
               duplicate: "This course already exists. You should add further locations for this course to the existing profile in Publish"
-              visa_sponsorship_not_publishable: "You must say whether you can sponsor visas"
+              visa_sponsorship_not_publishable: "Select if you can sponsor visas"
               provider_ukprn_not_publishable: "Enter a UK Provider Reference Number (UKPRN)"
               provider_ukprn_and_urn_not_publishable: "Enter a UK Provider Reference Number (UKPRN) and URN"
               degree_requirements_not_publishable: "Enter degree requirements"
@@ -128,9 +128,9 @@ en:
         course_enrichment:
           attributes:
             salary_details:
-              blank: "^Give details about the salary for this course"
+              blank: "^Enter details about the salary for this course"
             fee_uk_eu:
-              blank: "^Give details about the fee for UK and EU students"
+              blank: "^Enter details about the fee for UK and EU students"
               greater_than_or_equal_to: "must be greater than or equal to £0"
               less_than_or_equal_to: "must be less than or equal to £100,000"
               not_an_integer: "must not include pence, like 1000 or 1500"
@@ -149,7 +149,7 @@ en:
         provider:
           attributes:
             provider_name:
-              too_long: "Your provider name is too long, it must be fewer than 100 characters"
+              too_long: "Enter a provider name that is 100 characters or fewer"
             email:
               blank: "^Enter email address"
             website:
@@ -193,4 +193,4 @@ en:
       title: SERVER_ERROR
       detail: "Something has gone wrong, please try again in a few minutes"
   pagy:
-    overflow: The requested page param was out of range and invalid for this request.
+    overflow: "The requested page param was out of range and invalid for this request."

@@ -57,12 +57,12 @@ RSpec.describe "POST /providers/:provider_code/courses/:course_code" do
 
     it "returns an error" do
       expect(json_data.count).to eq 1
-      expect(response.body).to include "You need to pick an age range"
+      expect(response.body).to include "Select an age range"
     end
   end
 
   context "an invalid age range" do
-    let(:error_message) { "is invalid. You must enter a valid age range." }
+    let(:error_message) { "is invalid. Enter a valid age range." }
 
     context "with an age range of with a gap of less than 4 years" do
       let(:age_range_in_years) { "5_to_8" }
