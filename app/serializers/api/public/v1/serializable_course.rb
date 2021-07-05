@@ -115,6 +115,10 @@ module API
           @object.subjects.pluck(:subject_code).compact
         end
 
+        attribute :required_qualifications do
+          @object.required_qualifications
+        end
+
         enrichment_attribute :about_course
         enrichment_attribute :course_length
         enrichment_attribute :fee_details
@@ -125,7 +129,6 @@ module API
         enrichment_attribute :interview_process
         enrichment_attribute :other_requirements
         enrichment_attribute :personal_qualities
-        enrichment_attribute :required_qualifications
         enrichment_attribute :salary_details
       end
     end
