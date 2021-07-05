@@ -208,35 +208,10 @@ describe Provider, type: :model do
 
   its(:recruitment_cycle) { is_expected.to eq find(:recruitment_cycle) }
 
-  describe "#unassigned_site_codes" do
+  describe "#can_add_more_sites?" do
     subject { create(:provider) }
 
-    before do
-      %w[A B C D 1 2 3 -].each { |code| subject.sites << build(:site, code: code) }
-    end
-
-    let(:expected_unassigned_codes) { ("E".."Z").to_a + %w[0] + ("4".."9").to_a }
-
-    its(:unassigned_site_codes) { is_expected.to eq(expected_unassigned_codes) }
-  end
-
-  describe "#can_add_more_sites?" do
-    context "when provider has less sites than max allowed" do
-      subject { create(:provider) }
-
-      its(:can_add_more_sites?) { is_expected.to be_truthy }
-    end
-
-    context "when provider has the max sites allowed" do
-      let(:all_site_codes) { ("A".."Z").to_a + %w[0 -] + ("1".."9").to_a }
-      let(:sites) do
-        all_site_codes.map { |code| build(:site, code: code) }
-      end
-
-      subject { create(:provider, sites: sites) }
-
-      its(:can_add_more_sites?) { is_expected.to be_falsey }
-    end
+    its(:can_add_more_sites?) { is_expected.to be_truthy }
   end
 
   it "defines an enum for accrediting_provider" do

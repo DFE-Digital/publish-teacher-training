@@ -229,12 +229,8 @@ class Provider < ApplicationRecord
     update_columns changed_at: timestamp
   end
 
-  def unassigned_site_codes
-    Site::POSSIBLE_CODES - sites.pluck(:code)
-  end
-
   def can_add_more_sites?
-    sites.size < Site::POSSIBLE_CODES.size
+    true
   end
 
   # This reflects the fact that organisations should actually be a has_one.

@@ -9,17 +9,7 @@ FactoryBot.define do
     region_code { "london" }
     urn { Faker::Number.number(digits: [5, 6].sample) }
 
-    # When we retrieve a random code (as Site#pick_next_available_code does),
-    # there is the possibility we'll end up with this code duplicated when
-    # creating Sites that aren't persisted (e.g. running build(:site) twice).
-    # Using a sequence significantly reduces the chances of this happening in
-    # the tests, and starting at a random number ensures we don't start to test
-    # site codes in a deterministic way by accident (they should only be
-    # deterministic when set explicitly by the test).
-    sequence(:code, Random.rand(1000)) do |n|
-      max_codes = Site::POSSIBLE_CODES.count
-      Site::POSSIBLE_CODES[n % max_codes]
-    end
+    sequence(:code) { |n| "A#{n}" }
 
     provider
 

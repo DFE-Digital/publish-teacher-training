@@ -22,7 +22,7 @@ class Site < ApplicationRecord
             presence: true
   validates :postcode, postcode: true
   validates :code, uniqueness: { scope: :provider_id, case_sensitive: false },
-                   inclusion: { in: POSSIBLE_CODES, message: "must be A-Z, 0-9 or -" },
+                   format: { with: /\A[A-Z0-9\-]+\z/, message: "must contain only A-Z, 0-9 or -" },
                    presence: true
 
   validates :urn, reference_number_format: { allow_blank: true, minimum: 5, maximum: 6, message: "^URN must be 5 or 6 numbers" }
@@ -75,7 +75,7 @@ class Site < ApplicationRecord
   end
 
   def assign_code
-    self.code ||= pick_next_available_code(available_codes: provider&.unassigned_site_codes)
+    self.code ||= Sites::CodeGenerator.call(provider: provider)
   end
 
   def to_s
@@ -83,12 +83,6 @@ class Site < ApplicationRecord
   end
 
 private
-
-  def pick_next_available_code(available_codes: [])
-    available_desirable_codes = available_codes & DESIRABLE_CODES
-    available_undesirable_codes = available_codes & EASILY_CONFUSED_CODES
-    available_desirable_codes.sample || available_undesirable_codes.sample
-  end
 
   def needs_travel_to_work_area_and_london_borough_updated?
     latitude.present? &&
