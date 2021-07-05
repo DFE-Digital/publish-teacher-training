@@ -298,7 +298,7 @@ describe Course, type: :model do
     it {
       expect(subject).to validate_presence_of(:level)
         .on(:publish)
-        .with_message("^You need to pick a level")
+        .with_message("^Select a level")
     }
 
     it "validates scoped to provider_id and only on create and update" do
@@ -318,7 +318,7 @@ describe Course, type: :model do
         it "Requires a level" do
           error = errors[:level]
           expect(error).not_to be_empty
-          expect(error.first).to include("You need to pick a level")
+          expect(error.first).to include("Select a level")
         end
 
         it "Requires a subject" do
@@ -347,25 +347,25 @@ describe Course, type: :model do
         it "Requires an age range" do
           error = errors[:age_range_in_years]
           expect(error).not_to be_empty
-          expect(error.first).to include("You need to pick an age range")
+          expect(error.first).to include("Select an age range")
         end
 
         it "Requires an outcome" do
           error = errors[:qualification]
           expect(error).not_to be_empty
-          expect(error.first).to include("You need to pick an outcome")
+          expect(error.first).to include("Select an outcome")
         end
 
         it "Requires a program type to have been specified" do
           error = errors[:program_type]
           expect(error).not_to be_empty
-          expect(error.first).to include("You need to pick an option")
+          expect(error.first).to include("Pick an option")
         end
 
         it "Requires a study mode" do
           error = errors[:study_mode]
           expect(error).not_to be_empty
-          expect(error.first).to include("You need to pick an option")
+          expect(error.first).to include("Pick an option")
         end
 
         context "Applications open" do
@@ -400,7 +400,7 @@ describe Course, type: :model do
         it "requires age_range_in_years" do
           error = errors[:age_range_in_years]
           expect(error).not_to be_empty
-          expect(error.first).to include("You need to pick an age range")
+          expect(error.first).to include("Select an age range")
         end
       end
 
@@ -434,7 +434,7 @@ describe Course, type: :model do
         context "age_range_in_years" do
           let(:blank_field) { { age_range_in_years: nil } }
 
-          it { is_expected.to include "You need to pick an age range" }
+          it { is_expected.to include "Select an age range" }
         end
 
         context "maths" do

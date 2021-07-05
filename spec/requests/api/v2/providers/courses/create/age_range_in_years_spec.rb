@@ -57,7 +57,7 @@ RSpec.describe "POST /providers/:provider_code/courses/:course_code" do
 
     it "returns an error" do
       expect(json_data.count).to eq 1
-      expect(response.body).to include "You need to pick an age range"
+      expect(response.body).to include "Select an age range"
     end
   end
 

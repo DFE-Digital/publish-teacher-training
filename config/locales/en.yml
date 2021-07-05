@@ -90,9 +90,9 @@ en:
         course:
           attributes:
             level:
-              blank: "^You need to pick a level"
+              blank: "^Select a level"
             qualification:
-              blank: "^You need to pick an outcome"
+              blank: "^Select an outcome"
             maths:
               inclusion: "^Pick an option for Maths"
             english:
@@ -103,11 +103,11 @@ en:
               blank: "^Complete your course information before publishing"
             sites:
               blank: "^You must pick at least one location for this course"
-              site_urn_not_publishable: "^You must provide a Unique Reference Number (URN) for all course locations"
+              site_urn_not_publishable: "^Enter a Unique Reference Number (URN) for all course locations"
             age_range_in_years:
-              blank: "^You need to pick an age range"
+              blank: "^Select an age range"
             program_type:
-              blank: "^You need to pick an option"
+              blank: "^Pick an option"
             subjects:
               blank: "^There is a problem with this course. Contact support to fix it (Error: S)"
               course_creation: "^You must pick at least one subject"
@@ -115,14 +115,14 @@ en:
             modern_languages_subjects:
               select_a_language: "^You must pick at least one language"
             study_mode:
-              blank: "^You need to pick an option"
+              blank: "^Pick an option"
             applications_open_from:
               blank: "^You must say when applications open from"
             base:
               duplicate: "This course already exists. You should add further locations for this course to the existing profile in Publish"
-              visa_sponsorship_not_publishable: "You must say whether you can sponsor visas"
-              provider_ukprn_not_publishable: "You must provide a UK provider reference number (UKPRN)"
-              provider_ukprn_and_urn_not_publishable: "You must provide a UK provider reference number (UKPRN) and URN"
+              visa_sponsorship_not_publishable: "Select whether you can sponsor visas"
+              provider_ukprn_not_publishable: "Enter a UK provider reference number (UKPRN)"
+              provider_ukprn_and_urn_not_publishable: "Enter a UK provider reference number (UKPRN) and URN"
               degree_requirements_not_publishable: "Enter degree requirements"
               gcse_requirements_not_publishable: "Enter GCSE requirements"
         course_enrichment:

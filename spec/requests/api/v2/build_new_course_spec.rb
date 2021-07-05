@@ -204,7 +204,7 @@ describe "/api/v2/build_new_course", type: :request do
         },
         {
           "title" => "Invalid qualification",
-          "detail" => "You need to pick an outcome",
+          "detail" => "Select an outcome",
           "source" => {
             "pointer" => "/data/attributes/qualification",
           },
@@ -239,7 +239,7 @@ describe "/api/v2/build_new_course", type: :request do
         },
         {
           "title" => "Invalid program type",
-          "detail" => "You need to pick an option",
+          "detail" => "Pick an option",
           "source" => {
             "pointer" => "/data/attributes/program_type",
           },
@@ -253,21 +253,21 @@ describe "/api/v2/build_new_course", type: :request do
         },
         {
           "title" => "Invalid study mode",
-          "detail" => "You need to pick an option",
+          "detail" => "Pick an option",
           "source" => {
             "pointer" => "/data/attributes/study_mode",
           },
         },
         {
           "title" => "Invalid age range in years",
-          "detail" => "You need to pick an age range",
+          "detail" => "Select an age range",
           "source" => {
             "pointer" => "/data/attributes/age_range_in_years",
           },
         },
         {
           "title" => "Invalid level",
-          "detail" => "You need to pick a level",
+          "detail" => "Select a level",
           "source" => {
             "pointer" => "/data/attributes/level",
           },
@@ -334,14 +334,14 @@ describe "/api/v2/build_new_course", type: :request do
         },
         {
           "title" => "Invalid program type",
-          "detail" => "You need to pick an option",
+          "detail" => "Pick an option",
           "source" => {
             "pointer" => "/data/attributes/program_type",
           },
         },
         {
           "title" => "Invalid qualification",
-          "detail" => "You need to pick an outcome",
+          "detail" => "Select an outcome",
           "source" => {
             "pointer" => "/data/attributes/qualification",
           },
@@ -355,21 +355,21 @@ describe "/api/v2/build_new_course", type: :request do
         },
         {
           "title" => "Invalid study mode",
-          "detail" => "You need to pick an option",
+          "detail" => "Pick an option",
           "source" => {
             "pointer" => "/data/attributes/study_mode",
           },
         },
         {
           "title" => "Invalid age range in years",
-          "detail" => "You need to pick an age range",
+          "detail" => "Select an age range",
           "source" => {
             "pointer" => "/data/attributes/age_range_in_years",
           },
         },
         {
           "title" => "Invalid level",
-          "detail" => "You need to pick a level",
+          "detail" => "Select a level",
           "source" => {
             "pointer" => "/data/attributes/level",
           },

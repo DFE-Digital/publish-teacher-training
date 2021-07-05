@@ -70,22 +70,22 @@ describe API::V2::CoursesController, type: :controller do
           end
 
           it "has a validation error about provider not having visa sponsorship information" do
-            expect(validation_errors).to include("You must say whether you can sponsor visas")
+            expect(validation_errors).to include("Select whether you can sponsor visas")
           end
 
           it "has a validation error about provider not having a UKPRN" do
-            expect(validation_errors).to include("You must provide a UK provider reference number (UKPRN)")
+            expect(validation_errors).to include("Enter a UK provider reference number (UKPRN)")
           end
 
           it "has a validation error about locations not having a URN" do
-            expect(validation_errors).to include("You must provide a Unique Reference Number (URN) for all course locations")
+            expect(validation_errors).to include("Enter a Unique Reference Number (URN) for all course locations")
           end
 
           context "provider is a lead school" do
             let(:provider_type) { :lead_school }
 
             it "has a validation error about provider not having a UKPRN and URN" do
-              expect(validation_errors).to include("You must provide a UK provider reference number (UKPRN) and URN")
+              expect(validation_errors).to include("Enter a UK provider reference number (UKPRN) and URN")
             end
           end
         end
