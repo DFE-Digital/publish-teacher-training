@@ -6,6 +6,7 @@ describe API::V2::CoursesController, type: :controller do
   let(:provider) { create(:provider) }
   let(:course) do
     create(:course,
+           :with_gcse_equivalency,
            site_statuses: [site_status],
            enrichments: [enrichment],
            subjects: [dfe_subject],

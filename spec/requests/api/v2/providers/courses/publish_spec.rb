@@ -9,7 +9,6 @@ describe "Publish API v2", type: :request do
 
   describe "POST publish" do
     let(:status) { 200 }
-    let(:course) { findable_open_course }
     let(:publish_path) do
       "/api/v2/recruitment_cycles/#{provider.recruitment_cycle.year}/providers/#{provider.provider_code}" +
         "/courses/#{course.course_code}/publish"
@@ -20,6 +19,7 @@ describe "Publish API v2", type: :request do
     let(:dfe_subject) { find_or_create(:primary_subject, :primary) }
     let(:course) {
       create(:course,
+             :with_gcse_equivalency,
              provider: provider,
              site_statuses: [site_status],
              enrichments: [enrichment],
@@ -54,6 +54,7 @@ describe "Publish API v2", type: :request do
       let(:dfe_subjects) { [find_or_create(:primary_subject, :primary_with_mathematics)] }
       let!(:course) do
         create(:course,
+               :with_gcse_equivalency,
                level: "primary",
                provider: provider,
                site_statuses: [site_status],
