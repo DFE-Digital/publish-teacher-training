@@ -140,8 +140,11 @@ describe CourseEnrichment, type: :model do
 
   describe "required_qualifications attribute" do
     let(:required_qualifications_text) { "this course is great" }
+    let(:recruitment_cycle) { build(:recruitment_cycle, year: "2021") }
+    let(:provider) { build(:provider, recruitment_cycle: recruitment_cycle) }
+    let(:course) { build(:course, provider: provider) }
 
-    subject { build :course_enrichment, required_qualifications: required_qualifications_text }
+    subject { build :course_enrichment, required_qualifications: required_qualifications_text, course: course }
 
     context "with over 100 words" do
       let(:required_qualifications_text) { Faker::Lorem.sentence(word_count: 100 + 1) }
@@ -155,7 +158,15 @@ describe CourseEnrichment, type: :model do
       it { is_expected.to be_valid }
 
       describe "on publish" do
-        it { is_expected.to_not be_valid :publish }
+        context "in recruitment cycle 2021" do
+          it { is_expected.to_not be_valid :publish }
+        end
+
+        context "in recruitment cycle 2022" do
+          let(:recruitment_cycle) { build(:recruitment_cycle, year: "2022") }
+
+          it { is_expected.to be_valid :publish }
+        end
       end
     end
   end
@@ -215,7 +226,6 @@ describe CourseEnrichment, type: :model do
 
     context "fee based course" do
       it { is_expected.to validate_presence_of(:fee_uk_eu).on(:publish) }
-      it { is_expected.to validate_presence_of(:required_qualifications).on(:publish) }
       it { is_expected.to validate_presence_of(:fee_uk_eu).on(:publish) }
       it { is_expected.to validate_numericality_of(:fee_uk_eu).on(:publish) }
       it { is_expected.to validate_numericality_of(:fee_international).on(:publish) }
@@ -250,7 +260,6 @@ describe CourseEnrichment, type: :model do
       let(:course_enrichment) { build(:course_enrichment, :with_salary_based_course) }
 
       it { is_expected.to validate_presence_of(:salary_details).on(:publish) }
-      it { is_expected.to validate_presence_of(:required_qualifications).on(:publish) }
       it { is_expected.to_not validate_presence_of(:fee_uk_eu).on(:publish) }
       it { is_expected.to_not validate_numericality_of(:fee_uk_eu).on(:publish) }
       it { is_expected.to_not validate_numericality_of(:fee_international).on(:publish) }
