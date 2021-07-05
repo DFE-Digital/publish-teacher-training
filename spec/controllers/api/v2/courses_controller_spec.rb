@@ -4,38 +4,34 @@ describe API::V2::CoursesController, type: :controller do
   let(:site_status) { build(:site_status, :new) }
   let(:dfe_subject) { find_or_create(:primary_subject, :primary) }
   let(:provider) { create(:provider) }
-  let(:course) {
+  let(:course) do
     create(:course,
            site_statuses: [site_status],
            enrichments: [enrichment],
            subjects: [dfe_subject],
            provider: provider)
-  }
+  end
   let(:email) { "manage_courses@digital.education.gov.uk" }
   let(:sign_in_user_id) { "manage_courses_api" }
-  let(:existing_user) do
-    create(
-      :user, admin: true,
-             email: email,
-             sign_in_user_id: sign_in_user_id
-    )
-  end
+  let(:existing_user) { create(:user, admin: true, email: email, sign_in_user_id: sign_in_user_id) }
 
   before do
+    allow(NotificationService::CoursePublished).to receive(:call).with(course: course)
     allow(controller).to receive(:authenticate).and_return(true)
     controller.instance_variable_set(:@current_user, existing_user)
+
+    post :publish, params: {
+      recruitment_cycle_year: provider.recruitment_cycle.year,
+      provider_code: course.provider.provider_code,
+      code: course.course_code,
+    }
   end
 
   describe "#publish" do
     let(:enrichment) { build(:course_enrichment, :initial_draft) }
 
     it "sends the course publish notification" do
-      expect(NotificationService::CoursePublished).to receive(:call).with(course: course)
-      post :publish, params: {
-        recruitment_cycle_year: RecruitmentCycle.current_recruitment_cycle.year,
-        provider_code: course.provider.provider_code,
-        code: course.course_code,
-      }
+      expect(NotificationService::CoursePublished).to have_received(:call).with(course: course)
     end
 
     context "in 2022 recruitment cycle" do
@@ -45,18 +41,15 @@ describe API::V2::CoursesController, type: :controller do
         let(:provider) { create(:provider, recruitment_cycle: recruitment_cycle) }
 
         it "sends a notification that the course was published" do
-          expect(NotificationService::CoursePublished).to receive(:call).with(course: course)
-          post :publish, params: {
-            recruitment_cycle_year: provider.recruitment_cycle.year,
-            provider_code: course.provider.provider_code,
-            code: course.course_code,
-          }
+          expect(NotificationService::CoursePublished).to have_received(:call).with(course: course)
         end
       end
 
       context "missing information on visa sponsorship, UKPRN and/or URN" do
         let(:provider_type) { :scitt }
         let(:validation_errors) { JSON(response.body, symbolize_names: true)[:errors].map { |e| e[:detail] } }
+        let(:site) { create(:site, urn: nil) }
+        let(:site_status) { create(:site_status, :running, site: site) }
         let(:provider) do
           create(:provider,
                  provider_type: provider_type,
@@ -66,16 +59,8 @@ describe API::V2::CoursesController, type: :controller do
                  recruitment_cycle: recruitment_cycle)
         end
 
-        before do
-          post :publish, params: {
-            recruitment_cycle_year: provider.recruitment_cycle.year,
-            provider_code: course.provider.provider_code,
-            code: course.course_code,
-          }
-        end
-
         it "doesn't send a notification" do
-          expect(NotificationService::CoursePublished).not_to receive(:call).with(course: course)
+          expect(NotificationService::CoursePublished).not_to have_received(:call).with(course: course)
         end
 
         context "API response" do
@@ -89,6 +74,10 @@ describe API::V2::CoursesController, type: :controller do
 
           it "has a validation error about provider not having a UKPRN" do
             expect(validation_errors).to include("You must provide a UK provider reference number (UKPRN)")
+          end
+
+          it "has a validation error about locations not having a URN" do
+            expect(validation_errors).to include("You must provide a Unique Reference Number (URN) for all course locations")
           end
 
           context "provider is a lead school" do
@@ -106,16 +95,6 @@ describe API::V2::CoursesController, type: :controller do
       context "missing information on visa sponsorship" do
         let(:recruitment_cycle) { find_or_create(:recruitment_cycle, year: "2021") }
         let(:provider) { create(:provider, can_sponsor_student_visa: nil, recruitment_cycle: recruitment_cycle) }
-
-        before do
-          allow(NotificationService::CoursePublished).to receive(:call).with(course: course)
-
-          post :publish, params: {
-            recruitment_cycle_year: recruitment_cycle.year,
-            provider_code: provider.provider_code,
-            code: course.course_code,
-          }
-        end
 
         it "sends a course published notification" do
           expect(NotificationService::CoursePublished).to have_received(:call).with(course: course)
