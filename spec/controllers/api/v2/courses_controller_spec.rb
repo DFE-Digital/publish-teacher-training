@@ -39,43 +39,97 @@ describe API::V2::CoursesController, type: :controller do
     end
 
     context "in 2022 recruitment cycle" do
-      let(:provider) do
-        create(
-          :provider,
-          can_sponsor_student_visa: nil,
-          recruitment_cycle: create(:recruitment_cycle, year: "2022"),
-        )
+      let(:recruitment_cycle) { create(:recruitment_cycle, year: "2022") }
+
+      context "all the necessary course information has been submitted" do
+        let(:provider) { create(:provider, recruitment_cycle: recruitment_cycle) }
+
+        it "sends a notification that the course was published" do
+          expect(NotificationService::CoursePublished).to receive(:call).with(course: course)
+          post :publish, params: {
+            recruitment_cycle_year: provider.recruitment_cycle.year,
+            provider_code: course.provider.provider_code,
+            code: course.course_code,
+          }
+        end
       end
 
-      it "returns a validation error when visa sponsorship information is unpublishable" do
-        expect(NotificationService::CoursePublished).not_to receive(:call).with(course: course)
-        post :publish, params: {
-          recruitment_cycle_year: provider.recruitment_cycle.year,
-          provider_code: course.provider.provider_code,
-          code: course.course_code,
-        }
-        expect(response).to have_http_status(:unprocessable_entity)
-        expect(response.body).to match(/You must say whether you can sponsor visas/)
+      context "missing information on visa sponsorship, UKPRN and/or URN" do
+        let(:provider_type) { :scitt }
+        let(:validation_errors) { JSON(response.body, symbolize_names: true)[:errors].map { |e| e[:detail] } }
+        let(:provider) do
+          create(:provider,
+                 provider_type: provider_type,
+                 can_sponsor_student_visa: nil,
+                 ukprn: nil,
+                 urn: nil,
+                 recruitment_cycle: recruitment_cycle)
+        end
+
+        before do
+          post :publish, params: {
+            recruitment_cycle_year: provider.recruitment_cycle.year,
+            provider_code: course.provider.provider_code,
+            code: course.course_code,
+          }
+        end
+
+        it "doesn't send a notification" do
+          expect(NotificationService::CoursePublished).not_to receive(:call).with(course: course)
+        end
+
+        context "API response" do
+          it "returns a 422 error" do
+            expect(response).to have_http_status(:unprocessable_entity)
+          end
+
+          it "has a validation error about provider not having visa sponsorship information" do
+            expect(validation_errors).to include("You must say whether you can sponsor visas")
+          end
+
+          it "has a validation error about provider not having a UKPRN" do
+            expect(validation_errors).to include("You must provide a UK provider reference number (UKPRN)")
+          end
+
+          context "provider is a lead school" do
+            let(:provider_type) { :lead_school }
+
+            it "has a validation error about provider not having a UKPRN and URN" do
+              expect(validation_errors).to include("You must provide a UK provider reference number (UKPRN) and URN")
+            end
+          end
+        end
       end
     end
 
     context "in 2021 recruitment cycle" do
-      let(:provider) do
-        create(
-          :provider,
-          can_sponsor_student_visa: nil,
-          recruitment_cycle: create(:recruitment_cycle, year: "2021"),
-        )
-      end
+      context "missing information on visa sponsorship" do
+        let(:recruitment_cycle) { find_or_create(:recruitment_cycle, year: "2021") }
+        let(:provider) { create(:provider, can_sponsor_student_visa: nil, recruitment_cycle: recruitment_cycle) }
 
-      it "returns a validation error when visa sponsorship information is unpublishable" do
-        expect(NotificationService::CoursePublished).not_to receive(:call).with(course: course)
-        post :publish, params: {
-          recruitment_cycle_year: provider.recruitment_cycle.year,
-          provider_code: course.provider.provider_code,
-          code: course.course_code,
-        }
-        expect(response.body).not_to match(/You must say whether you can sponsor visas/)
+        before do
+          allow(NotificationService::CoursePublished).to receive(:call).with(course: course)
+
+          post :publish, params: {
+            recruitment_cycle_year: recruitment_cycle.year,
+            provider_code: provider.provider_code,
+            code: course.course_code,
+          }
+        end
+
+        it "sends a course published notification" do
+          expect(NotificationService::CoursePublished).to have_received(:call).with(course: course)
+        end
+
+        context "API response" do
+          it "returns 200" do
+            expect(response).to have_http_status(:success)
+          end
+
+          it "returns no validation error about missing visa information" do
+            expect(response.body).not_to match(/You must say whether you can sponsor visas/)
+          end
+        end
       end
     end
   end

@@ -264,7 +264,8 @@ class Course < ApplicationRecord
   validates :subjects, presence: true, on: :publish
   validate :validate_enrichment_publishable, on: :publish
   validate :validate_site_statuses_publishable, on: :publish
-  validate :validate_provider_visa_sponsorship_publishable, on: :publish
+  validate :validate_provider_visa_sponsorship_publishable, on: :publish, if: -> { recruitment_cycle.after_2021? }
+  validate :validate_provider_urn_ukprn_publishable, on: :publish, if: -> { recruitment_cycle.after_2021? }
   validate :validate_degree_requirements_publishable, on: :publish
   validate :validate_enrichment
   validate :validate_qualification, on: %i[update new]
@@ -685,8 +686,16 @@ private
   end
 
   def validate_provider_visa_sponsorship_publishable
-    unless provider.visa_sponsorship_publishable?
+    if provider.can_sponsor_student_visa.nil? || provider.can_sponsor_skilled_worker_visa.nil?
       errors.add(:base, :visa_sponsorship_not_publishable)
+    end
+  end
+
+  def validate_provider_urn_ukprn_publishable
+    if provider.lead_school? && provider.ukprn.blank? && provider.urn.blank?
+      errors.add(:base, :provider_ukprn_and_urn_not_publishable)
+    elsif provider.ukprn.blank?
+      errors.add(:base, :provider_ukprn_not_publishable)
     end
   end
 

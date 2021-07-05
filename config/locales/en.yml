@@ -120,6 +120,8 @@ en:
             base:
               duplicate: "This course already exists. You should add further locations for this course to the existing profile in Publish"
               visa_sponsorship_not_publishable: "You must say whether you can sponsor visas"
+              provider_ukprn_not_publishable: "You must provide a UK provider reference number (UKPRN)"
+              provider_ukprn_and_urn_not_publishable: "You must provide a UK provider reference number (UKPRN) and URN"
               degree_requirements_not_publishable: "Enter degree requirements"
         course_enrichment:
           attributes:
