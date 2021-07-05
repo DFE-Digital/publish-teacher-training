@@ -603,8 +603,6 @@ describe Course, type: :model do
 
           context "when degree grade is present" do
             it "returns true and does not add an error" do
-              course.validate_degree_requirements_publishable
-
               expect(course_with_degree_grade.validate_degree_requirements_publishable).to eq true
               expect(course_without_degree_grade.errors).to be_empty
             end
@@ -612,11 +610,40 @@ describe Course, type: :model do
 
           context "when degree grade is nil" do
             it "returns false and adds an error" do
-              course.validate_degree_requirements_publishable
-
               expect(course_without_degree_grade.validate_degree_requirements_publishable).to eq false
               expect(course_without_degree_grade.errors.count).to eq 1
               expect(course_without_degree_grade.errors.first.type).to eq :degree_requirements_not_publishable
+            end
+          end
+        end
+      end
+
+      describe "validate_gcse_requirements_publishable" do
+        context "when the provider is in the 2021 cycle or before" do
+          it "returns true and does not add an error" do
+            expect(course.validate_gcse_requirements_publishable).to eq true
+            expect(course.errors).to be_empty
+          end
+        end
+
+        context "when the provider is in the 2022 cycle or later" do
+          let(:next_recruitment_cycle) { create :recruitment_cycle, :next }
+          let(:provider) { create(:provider, recruitment_cycle: next_recruitment_cycle) }
+          let(:publishable_course) { create(:course, provider: provider, accept_pending_gcse: true, accept_gcse_equivalency: false) }
+          let(:unpublishable_course) { create(:course, provider: provider, accept_pending_gcse: nil) }
+
+          context "when accept_pending_gcse and accept_gcse_equivalency are present" do
+            it "returns true and does not add an error" do
+              expect(publishable_course.validate_gcse_requirements_publishable).to eq true
+              expect(publishable_course.errors).to be_empty
+            end
+          end
+
+          context "when accept_pending_gcse or accept_gcse_equivalency is nil" do
+            it "returns false and adds an error" do
+              expect(unpublishable_course.validate_gcse_requirements_publishable).to eq false
+              expect(unpublishable_course.errors.count).to eq 1
+              expect(unpublishable_course.errors.first.type).to eq :gcse_requirements_not_publishable
             end
           end
         end

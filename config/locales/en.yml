@@ -124,6 +124,7 @@ en:
               provider_ukprn_not_publishable: "You must provide a UK provider reference number (UKPRN)"
               provider_ukprn_and_urn_not_publishable: "You must provide a UK provider reference number (UKPRN) and URN"
               degree_requirements_not_publishable: "Enter degree requirements"
+              gcse_requirements_not_publishable: "Enter GCSE requirements"
         course_enrichment:
           attributes:
             salary_details:

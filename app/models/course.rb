@@ -55,7 +55,7 @@ class Course < ApplicationRecord
     not_set: nil,
   }.freeze
 
-  DEGREE_REQUIREMENTS_REQUIRED_FROM = 2022
+  STRUCTURED_REQUIREMENTS_REQUIRED_FROM = 2022
 
   # Most providers require GCSE grade 4 ("C"),
   # but some require grade 5 ("strong C")
@@ -268,6 +268,7 @@ class Course < ApplicationRecord
   validate :validate_provider_urn_ukprn_publishable, on: :publish, if: -> { recruitment_cycle.after_2021? }
   validate :validate_all_sites_publishable, on: :publish, if: -> { recruitment_cycle.after_2021? }
   validate :validate_degree_requirements_publishable, on: :publish
+  validate :validate_gcse_requirements_publishable, on: :publish
   validate :validate_enrichment
   validate :validate_qualification, on: %i[update new]
   validate :validate_start_date, on: :update, if: -> { provider.present? && start_date.present? }
@@ -586,9 +587,16 @@ class Course < ApplicationRecord
   end
 
   def validate_degree_requirements_publishable
-    return true if recruitment_cycle.year.to_i < DEGREE_REQUIREMENTS_REQUIRED_FROM || degree_grade.present?
+    return true if recruitment_cycle.year.to_i < STRUCTURED_REQUIREMENTS_REQUIRED_FROM || degree_grade.present?
 
     errors.add(:base, :degree_requirements_not_publishable)
+    false
+  end
+
+  def validate_gcse_requirements_publishable
+    return true if recruitment_cycle.year.to_i < STRUCTURED_REQUIREMENTS_REQUIRED_FROM || !accept_pending_gcse.nil? || !accept_gcse_equivalency.nil?
+
+    errors.add(:base, :gcse_requirements_not_publishable)
     false
   end
 
