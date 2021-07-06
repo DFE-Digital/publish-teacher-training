@@ -437,22 +437,57 @@ describe Course, type: :model do
           it { is_expected.to include "You need to pick an age range" }
         end
 
-        context "maths" do
-          let(:blank_field) { { maths: nil } }
+        context "for a provider in the 2021 cycle" do
+          context "maths" do
+            let(:blank_field) { { maths: nil } }
 
-          it { is_expected.to include "Pick an option for Maths" }
+            it { is_expected.to include "Pick an option for Maths" }
+          end
+
+          context "english" do
+            let(:blank_field) { { english: nil } }
+
+            it { is_expected.to include "Pick an option for English" }
+          end
+
+          context "science" do
+            let(:blank_field) { { science: nil } }
+
+            it { is_expected.to include "Pick an option for Science" }
+          end
         end
 
-        context "english" do
-          let(:blank_field) { { english: nil } }
+        context "for a provider in the 2022 cycle" do
+          let(:recruitment_cycle) { build(:recruitment_cycle, :next) }
+          let(:provider) { build(:provider, recruitment_cycle: recruitment_cycle) }
+          let(:course) do
+            create(
+              :course,
+              provider: provider,
+              level: "secondary",
+              name: "Biology",
+              course_code: "3X9F",
+              subjects: [find_or_create(:secondary_subject, :biology)],
+            )
+          end
 
-          it { is_expected.to include "Pick an option for English" }
-        end
+          context "maths" do
+            let(:blank_field) { { maths: nil } }
 
-        context "science" do
-          let(:blank_field) { { science: nil } }
+            it { is_expected.to eq nil }
+          end
 
-          it { is_expected.to include "Pick an option for Science" }
+          context "english" do
+            let(:blank_field) { { english: nil } }
+
+            it { is_expected.to eq nil }
+          end
+
+          context "science" do
+            let(:blank_field) { { science: nil } }
+
+            it { is_expected.to eq nil }
+          end
         end
       end
 

@@ -256,9 +256,9 @@ class Course < ApplicationRecord
     ENTRY_REQUIREMENT_OPTIONS.reject { |option| option == :not_set }.keys.map(&:to_s)
   end
 
-  validates :maths,   inclusion: { in: entry_requirement_options_without_nil_choice }, unless: :further_education_course?
-  validates :english, inclusion: { in: entry_requirement_options_without_nil_choice }, unless: :further_education_course?
-  validates :science, inclusion: { in: entry_requirement_options_without_nil_choice }, if: :gcse_science_required?
+  validates :maths,   inclusion: { in: entry_requirement_options_without_nil_choice }, unless: -> { further_education_course? || recruitment_cycle.after_2021? }
+  validates :english, inclusion: { in: entry_requirement_options_without_nil_choice }, unless: -> { further_education_course? || recruitment_cycle.after_2021? }
+  validates :science, inclusion: { in: entry_requirement_options_without_nil_choice }, if: -> { gcse_science_required? && !recruitment_cycle.after_2021? }
   validates :is_send, inclusion: { in: [true, false] }
   validates :sites, presence: true, on: %i[publish new]
   validates :subjects, presence: true, on: :publish
