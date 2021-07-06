@@ -82,6 +82,9 @@ class Course < ApplicationRecord
            inverse_of: :course,
            before_add: :set_subject_position
 
+  delegate :recruitment_cycle, :provider_code, to: :provider, allow_nil: true
+  delegate :after_2021?, to: :recruitment_cycle, allow_nil: true, prefix: :recruitment_cycle
+
   def set_subject_position(course_subject)
     return unless course_subject.subject.secondary_subject?
 
@@ -256,17 +259,24 @@ class Course < ApplicationRecord
     ENTRY_REQUIREMENT_OPTIONS.reject { |option| option == :not_set }.keys.map(&:to_s)
   end
 
-  validates :maths,   inclusion: { in: entry_requirement_options_without_nil_choice }, unless: -> { further_education_course? || recruitment_cycle.after_2021? }
-  validates :english, inclusion: { in: entry_requirement_options_without_nil_choice }, unless: -> { further_education_course? || recruitment_cycle.after_2021? }
-  validates :science, inclusion: { in: entry_requirement_options_without_nil_choice }, if: -> { gcse_science_required? && !recruitment_cycle.after_2021? }
+  validates :maths, inclusion: { in: entry_requirement_options_without_nil_choice }, unless: -> {
+    further_education_course? || recruitment_cycle_after_2021?
+  }
+  validates :english, inclusion: { in: entry_requirement_options_without_nil_choice }, unless: -> {
+    further_education_course? || recruitment_cycle_after_2021?
+  }
+  validates :science, inclusion: { in: entry_requirement_options_without_nil_choice }, if: -> {
+    gcse_science_required? && !recruitment_cycle_after_2021?
+  }
+
   validates :is_send, inclusion: { in: [true, false] }
   validates :sites, presence: true, on: %i[publish new]
   validates :subjects, presence: true, on: :publish
   validate :validate_enrichment_publishable, on: :publish
   validate :validate_site_statuses_publishable, on: :publish
-  validate :validate_provider_visa_sponsorship_publishable, on: :publish, if: -> { recruitment_cycle.after_2021? }
-  validate :validate_provider_urn_ukprn_publishable, on: :publish, if: -> { recruitment_cycle.after_2021? }
-  validate :validate_all_sites_publishable, on: :publish, if: -> { recruitment_cycle.after_2021? }
+  validate :validate_provider_visa_sponsorship_publishable, on: :publish, if: -> { recruitment_cycle_after_2021? }
+  validate :validate_provider_urn_ukprn_publishable, on: :publish, if: -> { recruitment_cycle_after_2021? }
+  validate :validate_all_sites_publishable, on: :publish, if: -> { recruitment_cycle_after_2021? }
   validate :validate_degree_requirements_publishable, on: :publish
   validate :validate_gcse_requirements_publishable, on: :publish
   validate :validate_enrichment
@@ -306,10 +316,6 @@ class Course < ApplicationRecord
     RecruitmentCycle.find_by(year: year)
       .providers.find_by(provider_code: provider_code)
       .courses.find_by(course_code: course_code)
-  end
-
-  def recruitment_cycle
-    provider.recruitment_cycle
   end
 
   def generate_name
@@ -440,7 +446,7 @@ class Course < ApplicationRecord
   end
 
   def gcse_grade_required
-    if PROVIDERS_REQUIRING_GCSE_GRADE_5.include?(provider.provider_code)
+    if PROVIDERS_REQUIRING_GCSE_GRADE_5.include?(provider_code)
       5
     else
       4
@@ -507,7 +513,7 @@ class Course < ApplicationRecord
   end
 
   def to_s
-    "#{name} (#{provider.provider_code}/#{course_code}) [#{recruitment_cycle}]"
+    "#{name} (#{provider_code}/#{course_code}) [#{recruitment_cycle}]"
   end
 
   def next_recruitment_cycle?
@@ -693,7 +699,7 @@ private
   def validate_site_statuses_publishable
     site_statuses.each do |site_status|
       unless site_status.valid?
-        raise RuntimeError.new("Site status invalid on course #{provider.provider_code}/#{course_code}: #{site_status.errors.full_messages.first}")
+        raise RuntimeError.new("Site status invalid on course #{provider_code}/#{course_code}: #{site_status.errors.full_messages.first}")
       end
     end
   end
