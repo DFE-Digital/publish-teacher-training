@@ -87,6 +87,20 @@ describe API::V2::CoursesController, type: :controller do
             it "has a validation error about provider not having a UKPRN and URN" do
               expect(validation_errors).to include("You must provide a UK provider reference number (UKPRN) and URN")
             end
+
+            context "when only URN is nil" do
+              let(:provider) do
+                create(:provider,
+                       provider_type: provider_type,
+                       can_sponsor_student_visa: nil,
+                       urn: nil,
+                       recruitment_cycle: recruitment_cycle)
+              end
+
+              it "has a validation error about provider not having a UKPRN and URN" do
+                expect(validation_errors).to include("You must provide a UK provider reference number (UKPRN) and URN")
+              end
+            end
           end
         end
       end

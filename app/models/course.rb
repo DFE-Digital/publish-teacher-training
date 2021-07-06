@@ -705,7 +705,7 @@ private
   end
 
   def validate_provider_urn_ukprn_publishable
-    if provider.lead_school? && provider.ukprn.blank? && provider.urn.blank?
+    if provider.lead_school? && (provider.ukprn.blank? || provider.urn.blank?)
       errors.add(:base, :provider_ukprn_and_urn_not_publishable)
     elsif provider.ukprn.blank?
       errors.add(:base, :provider_ukprn_not_publishable)
