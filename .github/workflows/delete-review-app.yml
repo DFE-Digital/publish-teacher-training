@@ -13,6 +13,7 @@ jobs:
     steps:
       - name: Wait for Deploy App Workflow for review
         id: wait_for_deployment
+        if: contains(github.event.pull_request.labels.*.name, 'deploy')
         uses: fountainhead/action-wait-for-check@v1.0.0
         with:
          token: ${{ secrets.GITHUB_TOKEN }}
@@ -21,7 +22,7 @@ jobs:
          timeoutSeconds: 1800
 
       - name: Exit whole workflow if wait was not successful
-        if: steps.wait_for_deployment.outputs.conclusion != 'success'
+        if: ${{ steps.wait_for_deployment.outputs.conclusion != '' && steps.wait_for_deployment.outputs.conclusion != 'success' }}
         run: exit 1
 
       - name: Checkout
