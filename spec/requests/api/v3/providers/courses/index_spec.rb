@@ -225,7 +225,7 @@ describe "GET v3/recruitment_cycle/:recruitment_cycle_year/providers/:provider_c
           json_response = JSON.parse response.body
           expect(json_response["data"].count).to eq 1
           expect(json_response["data"].first)
-            .to have_attribute("name").with_value('Mathematics')
+            .to have_attribute("name").with_value("Mathematics")
         end
       end
 
