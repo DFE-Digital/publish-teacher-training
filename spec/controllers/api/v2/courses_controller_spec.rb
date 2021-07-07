@@ -74,18 +74,18 @@ describe API::V2::CoursesController, type: :controller do
           end
 
           it "has a validation error about provider not having a UKPRN" do
-            expect(validation_errors).to include("You must provide a UK provider reference number (UKPRN)")
+            expect(validation_errors).to include("Enter a UK Provider Reference Number (UKPRN)")
           end
 
           it "has a validation error about locations not having a URN" do
-            expect(validation_errors).to include("You must provide a Unique Reference Number (URN) for all course locations")
+            expect(validation_errors).to include("Enter a Unique Reference Number (URN) for all course locations")
           end
 
           context "provider is a lead school" do
             let(:provider_type) { :lead_school }
 
             it "has a validation error about provider not having a UKPRN and URN" do
-              expect(validation_errors).to include("You must provide a UK provider reference number (UKPRN) and URN")
+              expect(validation_errors).to include("Enter a UK Provider Reference Number (UKPRN) and URN")
             end
 
             context "when only URN is nil" do
@@ -98,7 +98,7 @@ describe API::V2::CoursesController, type: :controller do
               end
 
               it "has a validation error about provider not having a UKPRN and URN" do
-                expect(validation_errors).to include("You must provide a UK provider reference number (UKPRN) and URN")
+                expect(validation_errors).to include("Enter a UK Provider Reference Number (UKPRN) and URN")
               end
             end
           end
