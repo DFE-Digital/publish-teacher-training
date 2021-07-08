@@ -101,8 +101,7 @@ describe "PATCH /providers/:provider_code/courses/:course_code" do
 
     it "Returns an error" do
       json_response = JSON.parse(response.body)
-
-      expect(json_response["errors"][0]["detail"]).to eq("You've already selected this subject - you can only select a subject once")
+      expect(json_response["errors"][0]["detail"]).to eq("You have already selected this subject. You can only select a subject once")
     end
   end
 

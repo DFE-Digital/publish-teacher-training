@@ -36,7 +36,7 @@ describe "PATCH /providers/:provider_code/courses/:course_code" do
   end
 
   context "course has different additional_gcse_equivalencies" do
-    let(:updated_additional_gcse_equivalencies) { { additional_gcse_equivalencies: "Must have a Physics A level." } }
+    let(:updated_additional_gcse_equivalencies) { { additional_gcse_equivalencies: "Must have a physics A level." } }
 
     it "returns http success" do
       perform_request(updated_additional_gcse_equivalencies)
@@ -47,7 +47,7 @@ describe "PATCH /providers/:provider_code/courses/:course_code" do
       expect {
         perform_request(updated_additional_gcse_equivalencies)
       }.to change { course.reload.additional_gcse_equivalencies }
-            .from("Must have a cycling proficiency certificate.").to("Must have a Physics A level.")
+            .from("Must have a cycling proficiency certificate.").to("Must have a physics A level.")
     end
   end
 

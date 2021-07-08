@@ -127,11 +127,11 @@ describe "PATCH /providers/:provider_code/courses/:course_code" do
       expect(response).to have_http_status(:unprocessable_entity)
     end
 
-    it "has Maths, English and Science validation errors" do
+    it "has maths, English and science validation errors" do
       expect(json_data.count).to eq 3
-      expect(response.body).to include("Pick an option for Maths")
-      expect(response.body).to include("Pick an option for English")
-      expect(response.body).to include("Pick an option for Science")
+      expect(response.body).to include("Select an option for maths")
+      expect(response.body).to include("Select an option for English")
+      expect(response.body).to include("Select an option for science")
     end
   end
 
@@ -151,11 +151,11 @@ describe "PATCH /providers/:provider_code/courses/:course_code" do
       expect(response).to have_http_status(:unprocessable_entity)
     end
 
-    it "has Maths and English validation errors" do
+    it "has maths and English validation errors" do
       expect(json_data.count).to eq 2
-      expect(response.body).to include("Pick an option for Maths")
-      expect(response.body).to include("Pick an option for English")
-      expect(response.body).not_to include("Pick an option for Science")
+      expect(response.body).to include("Select an option for maths")
+      expect(response.body).to include("Select an option for English")
+      expect(response.body).not_to include("Select an option for science")
     end
 
     it "does not change any attribute" do

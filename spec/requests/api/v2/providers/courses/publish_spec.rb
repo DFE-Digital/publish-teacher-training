@@ -134,11 +134,11 @@ describe "Publish API v2", type: :request do
 
         it "has validation errors" do
           expect(json_data.map { |error| error["detail"] }).to match_array([
-            "You must pick at least one location for this course",
+            "Select at least one location for this course",
             "Enter details about this course",
             "Enter details about school placements",
             "Enter a course length",
-            "Give details about the salary for this course",
+            "Enter details about the salary for this course",
             "Enter details about the qualifications needed",
           ])
         end
@@ -162,7 +162,7 @@ describe "Publish API v2", type: :request do
               "Enter details about this course",
               "Enter details about school placements",
               "Enter a course length",
-              "Give details about the fee for UK and EU students",
+              "Enter details about the fee for UK and EU students",
               "Enter details about the qualifications needed",
             ])
           end
@@ -197,7 +197,7 @@ describe "Publish API v2", type: :request do
               "Enter details about this course",
               "Enter details about school placements",
               "Enter a course length",
-              "Give details about the salary for this course",
+              "Enter details about the salary for this course",
               "Enter details about the qualifications needed",
             ])
           end

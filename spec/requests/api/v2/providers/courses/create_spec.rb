@@ -151,7 +151,7 @@ describe "Course POST #create API V2", type: :request do
         response_body = JSON.parse(response.body)
         expect(response_body["errors"].first).to eq(
           "title" => "Invalid sites",
-          "detail" => "You must pick at least one location for this course",
+          "detail" => "Select at least one location for this course",
           "source" => {},
         )
       end

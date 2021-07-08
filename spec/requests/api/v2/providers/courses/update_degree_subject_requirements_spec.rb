@@ -29,14 +29,14 @@ describe "PATCH /providers/:provider_code/courses/:course_code" do
   let(:course)            {
     create :course,
            provider: provider,
-           degree_subject_requirements: "Must have a Maths A level."
+           degree_subject_requirements: "Must have an A level in maths."
   }
   let(:permitted_params) do
     %i[degree_subject_requirements]
   end
 
   context "course has different degree_subject_requirements" do
-    let(:updated_degree_subject_requirements) { { degree_subject_requirements: "Must have a Physics A level." } }
+    let(:updated_degree_subject_requirements) { { degree_subject_requirements: "Must have a physics A level." } }
 
     it "returns http success" do
       perform_request(updated_degree_subject_requirements)
@@ -47,13 +47,13 @@ describe "PATCH /providers/:provider_code/courses/:course_code" do
       expect {
         perform_request(updated_degree_subject_requirements)
       }.to change { course.reload.degree_subject_requirements }
-            .from("Must have a Maths A level.").to("Must have a Physics A level.")
+            .from("Must have an A level in maths.").to("Must have a physics A level.")
     end
   end
 
   context "course has the same degree_subject_requirements" do
     context "with values passed into the params" do
-      let(:updated_degree_subject_requirements) { { degree_subject_requirements: "Must have a Maths A level." } }
+      let(:updated_degree_subject_requirements) { { degree_subject_requirements: "Must have an A level in maths." } }
 
       it "returns http success" do
         perform_request(updated_degree_subject_requirements)
@@ -64,7 +64,7 @@ describe "PATCH /providers/:provider_code/courses/:course_code" do
         expect {
           perform_request(updated_degree_subject_requirements)
         }.to_not change { course.reload.degree_subject_requirements }
-             .from("Must have a Maths A level.")
+             .from("Must have an A level in maths.")
       end
     end
   end
@@ -81,7 +81,7 @@ describe "PATCH /providers/:provider_code/courses/:course_code" do
       expect {
         perform_request(updated_degree_subject_requirements)
       }.to_not change { course.reload.degree_subject_requirements }
-           .from("Must have a Maths A level.")
+           .from("Must have an A level in maths.")
     end
   end
 
@@ -97,7 +97,7 @@ describe "PATCH /providers/:provider_code/courses/:course_code" do
       expect {
         perform_request(updated_degree_subject_requirements)
       }.to change { course.reload.degree_subject_requirements }
-            .from("Must have a Maths A level.").to(nil)
+            .from("Must have an A level in maths.").to(nil)
     end
   end
 end
