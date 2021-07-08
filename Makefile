@@ -40,7 +40,7 @@ review:
 	$(eval backend_key=-backend-config=key=pr-$(APP_NAME).tfstate)
 	$(eval export TF_VAR_paas_app_environment=review-$(APP_NAME))
 	$(eval export TF_VAR_paas_web_app_host_name=$(APP_NAME))
-	echo https://teacher-training-api-review-$(APP_NAME).london.cloudapps.digital will be created in bat-qa space
+	echo https://teacher-training-api-review-pr-$(APP_NAME).london.cloudapps.digital will be created in bat-qa space
 
 .PHONY: qa
 qa: ## Set DEPLOY_ENV to qa
@@ -78,9 +78,16 @@ rollover: ## Set DEPLOY_ENV to rollover
 	$(eval space=bat-staging)
 	$(eval paas_env=rollover)
 
+.PHONY: ci
+ci:	## Run in automation environment
+	$(eval export DISABLE_PASSCODE=true)
+	$(eval export AUTO_APPROVE=-auto-approve)
+
 deploy-init:
-	$(if $(IMAGE_TAG), , $(error Missing environment variable "IMAGE_TAG"))
-	$(eval export TF_VAR_paas_docker_image=dfedigital/teacher-training-api:paas-$(IMAGE_TAG))
+	$(if $(IMAGE_TAG), , $(eval export IMAGE_TAG=master))
+	$(if $(or $(DISABLE_PASSCODE),$(PASSCODE)), , $(error Missing environment variable "PASSCODE", retrieve from https://login.london.cloud.service.gov.uk/passcode))
+	$(eval export TF_VAR_cf_sso_passcode=$(PASSCODE))
+	$(eval export TF_VAR_paas_docker_image=dfedigital/teacher-training-api:$(IMAGE_TAG))
 	$(eval export TF_VAR_paas_app_secrets_file=./workspace_variables/app_secrets.yml)
 	az account set -s ${AZ_SUBSCRIPTION} && az account show
 	cd terraform && \
@@ -93,11 +100,11 @@ deploy-plan: deploy-init
 
 deploy: deploy-init
 	cd terraform && . ./workspace_variables/$(DEPLOY_ENV).sh && \
-		terraform apply -var-file=workspace_variables/$(DEPLOY_ENV).tfvars -auto-approve
+		terraform apply -var-file=workspace_variables/$(DEPLOY_ENV).tfvars $(AUTO_APPROVE)
 
 destroy: deploy-init
 	cd terraform && . ./workspace_variables/$(DEPLOY_ENV).sh && \
-		terraform destroy -var-file=workspace_variables/$(DEPLOY_ENV).tfvars
+		terraform destroy -var-file=workspace_variables/$(DEPLOY_ENV).tfvars $(AUTO_APPROVE)
 
 install-fetch-config:
 	[ ! -f bin/fetch_config.rb ] \
