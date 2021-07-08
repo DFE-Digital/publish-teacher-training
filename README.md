@@ -11,7 +11,7 @@
 
 ### Native
 
-- Ruby 2.7.2
+- Ruby 2.7.4
 - postgresql-9.6 postgresql-contrib-9.6
 
 ### Docker
@@ -96,7 +96,7 @@ bundle exec guard --no-interactions
 
 GraphViz is required as a dependency of the [rails-erd](https://github.com/voormedia/rails-erd/) gem that is used to generate the entity relationship diagram during migrations.
 
-On OSX: 
+On OSX:
 
 ```bash
 brew install graphviz
@@ -250,7 +250,7 @@ can be useful for people who aren't as familiar with the app, or with certain
 complex operations that just aren't already packaged up in the app.
 
 In order to use the external environment functionality you must set the
-environments in ```config/azure_environments.yml ```like so:  
+environments in ```config/azure_environments.yml ```like so:
 ```
 qa:
   webapp: <webapp>

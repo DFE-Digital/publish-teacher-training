@@ -16,10 +16,10 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Set up Ruby 2.7.2
+      - name: Set up Ruby 2.7.4
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: 2.7.2
+          ruby-version: 2.7.4
 
       - name: install bundler and gems
         run: |
@@ -35,7 +35,7 @@ jobs:
 
       - name: Set Environment variables
         run: |
-          if [ ! -z "${{ github.event.inputs.pr }}" ]; then 
+          if [ ! -z "${{ github.event.inputs.pr }}" ]; then
             PR_NUMBER=${{ github.event.inputs.pr }}
             echo "base_url: https://teacher-training-api-pr-$PR_NUMBER.london.cloudapps.digital" >> config/settings/review.yml
             echo "publish_api_url: https://teacher-training-api-pr-$PR_NUMBER.london.cloudapps.digital" >> config/settings/review.yml
