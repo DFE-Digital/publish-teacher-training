@@ -25,7 +25,7 @@ on:
         required: true
       pr:
         description: PR number for the review app
-        required: false        
+        required: false
       sha:
         description: Commit sha to be deployed
         required: true
@@ -98,7 +98,7 @@ jobs:
           echo "TF_VAR_key_vault_app_secret_name=$TF_VAR_key_vault_app_secret_name" >> $GITHUB_ENV
           echo "TF_VAR_key_vault_infra_secret_name=$TF_VAR_key_vault_infra_secret_name" >> $GITHUB_ENV
         env:
-          DOCKER_IMAGE: ${{ format('dfedigital/teacher-training-api:paas-{0}', github.event.inputs.sha) }}
+          DOCKER_IMAGE: ${{ format('dfedigital/teacher-training-api:{0}', github.event.inputs.sha) }}
           DEPLOY_ENV: ${{ matrix.environment }}
 
       - uses: azure/login@v1
