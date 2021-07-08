@@ -39,11 +39,10 @@ private
           copy_course_to_provider_service: copy_courses_to_provider_service,
           copy_site_to_provider_service: Sites::CopyToProviderService.new,
           logger: Logger.new(STDOUT),
-          force: force,
         )
 
         counts = copy_provider_to_recruitment_cycle.execute(
-          provider: provider, new_recruitment_cycle: new_recruitment_cycle,
+          provider: provider, new_recruitment_cycle: new_recruitment_cycle, force: force,
         )
       end
     end

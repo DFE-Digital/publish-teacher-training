@@ -9,8 +9,7 @@ RSpec.describe Courses::CopyToProviderService do
     build :course,
           enrichments: [published_course_enrichment],
           accrediting_provider: accrediting_provider,
-          subjects: [maths],
-          level: "secondary"
+          subjects: [maths], level: "secondary"
   }
   let(:recruitment_cycle) { find_or_create :recruitment_cycle }
   let(:new_recruitment_cycle) { create :recruitment_cycle, :next }
@@ -185,6 +184,26 @@ RSpec.describe Courses::CopyToProviderService do
 
     it "copies over the course's sites" do
       expect(mocked_sites_copy_to_course_service).to have_received(:execute).with(new_site: new_site, new_course: new_course)
+    end
+  end
+
+  context "when the course is not rollable" do
+    let(:site) { create :site, provider: provider }
+    let!(:new_site) { create :site, provider: new_provider, code: site.code }
+
+    before do
+      allow(course).to receive(:rollable?).and_return(false)
+
+      described_class.new(
+        sites_copy_to_course: mocked_sites_copy_to_course_service,
+        enrichments_copy_to_course: mocked_enrichments_copy_to_course_service,
+      ).execute(course: course, new_provider: new_provider, force: true)
+    end
+
+    it "still copies the course to the provider" do
+      new_course = new_provider.courses.first
+      expect(new_course.course_code).to eq(course.course_code)
+      expect(new_provider.courses.count).to eq(1)
     end
   end
 end
