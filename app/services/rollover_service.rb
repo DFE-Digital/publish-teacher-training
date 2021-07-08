@@ -1,8 +1,9 @@
 class RolloverService
   include ServicePattern
 
-  def initialize(provider_codes:)
+  def initialize(provider_codes:, force: false)
     @provider_codes = provider_codes
+    @force = force
   end
 
   def call
@@ -21,7 +22,7 @@ class RolloverService
 
 private
 
-  attr_reader :provider_codes
+  attr_reader :provider_codes, :force
 
   def rollover(provider, total_counts)
     print "Copying provider #{provider.provider_code}: "
@@ -38,6 +39,7 @@ private
           copy_course_to_provider_service: copy_courses_to_provider_service,
           copy_site_to_provider_service: Sites::CopyToProviderService.new,
           logger: Logger.new(STDOUT),
+          force: force,
         )
 
         counts = copy_provider_to_recruitment_cycle.execute(

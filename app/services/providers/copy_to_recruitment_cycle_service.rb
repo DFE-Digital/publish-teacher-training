@@ -1,11 +1,13 @@
 module Providers
   class CopyToRecruitmentCycleService
     attr :logger
+    attr_reader :force
 
-    def initialize(copy_course_to_provider_service:, copy_site_to_provider_service:, logger: nil)
+    def initialize(copy_course_to_provider_service:, copy_site_to_provider_service:, logger: nil, force: false)
       @copy_course_to_provider_service = copy_course_to_provider_service
       @copy_site_to_provider_service = copy_site_to_provider_service
       @logger = logger || Logger.new("/dev/null")
+      @force = force
     end
 
     def execute(provider:, new_recruitment_cycle:)
@@ -13,8 +15,7 @@ module Providers
       sites_count = 0
       courses_count = 0
 
-      if provider.rollable?
-
+      if provider.rollable? || force
         ActiveRecord::Base.transaction do
           rolled_over_provider = new_recruitment_cycle.providers.find_by(provider_code: provider.provider_code)
           if rolled_over_provider == nil
