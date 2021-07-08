@@ -1,4 +1,4 @@
-variable cf_sso_passcode { default = null }
+variable cf_sso_passcode { default = "" }
 
 variable cf_space {}
 

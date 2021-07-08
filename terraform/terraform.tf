@@ -29,10 +29,11 @@ provider azurerm {
 }
 
 provider cloudfoundry {
-  api_url      = local.cf_api_url
-  user         = local.infra_secrets.CF_USER
-  password     = local.infra_secrets.CF_PASSWORD
-  sso_passcode = var.cf_sso_passcode
+  api_url           = local.cf_api_url
+  user              = var.cf_sso_passcode == "" ? local.infra_secrets.CF_USER : null
+  password          = var.cf_sso_passcode == "" ? local.infra_secrets.CF_PASSWORD : null
+  sso_passcode      = var.cf_sso_passcode != "" ? var.cf_sso_passcode : null
+  store_tokens_path = var.cf_sso_passcode != "" ? ".cftoken" : null
 }
 
 provider statuscake {
