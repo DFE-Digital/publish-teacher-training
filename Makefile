@@ -59,7 +59,7 @@ staging: ## Set DEPLOY_ENV to staging
 .PHONY: sandbox
 sandbox: ## Set DEPLOY_ENV to sandbox
 	$(eval DEPLOY_ENV=sandbox)
-	$(eval AZ_SUBSCRIPTION=s121-findpostgraduateteachertraining-sandbox)
+	$(eval AZ_SUBSCRIPTION=s121-findpostgraduateteachertraining-production)
 	$(eval space=bat-prod)
 	$(eval paas_env=sandbox)
 
