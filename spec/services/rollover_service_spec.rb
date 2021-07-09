@@ -185,10 +185,27 @@ describe RolloverService do
     end
   end
 
-  def perform_rollover
+  context "force: true" do
+    let(:current_cycle_provider) do
+      create :provider
+    end
+
+    before do
+      allow(current_cycle_provider).to receive(:rollable?).and_return(false)
+    end
+
+    context "when the provider is not rollable" do
+      it "still copies the provider" do
+        perform_rollover(force: true)
+        expect(next_cycle_provider).not_to be_nil
+      end
+    end
+  end
+
+  def perform_rollover(force: false)
     stderr = nil
     output = with_stubbed_stdout(stderr: stderr) do
-      RolloverService.call(provider_codes: [current_cycle_provider.provider_code])
+      RolloverService.call(provider_codes: [current_cycle_provider.provider_code], force: force)
     end
     [output, stderr]
   end
