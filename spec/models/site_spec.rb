@@ -62,11 +62,7 @@ describe Site, type: :model do
       )
     end
 
-    it "validates the presence of a URN" do
-      # this means that rollover happens successfully; the record is created but it will be invalid on update, because of no URN
-      expect { site }.to change { Site.count }.by(1)
-      expect(site).to_not be_valid
-    end
+    it { is_expected.to validate_presence_of(:urn).with_message("^URN must be 5 or 6 numbers") }
   end
 
   describe "#touch_provider" do

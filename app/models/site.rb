@@ -26,9 +26,9 @@ class Site < ApplicationRecord
                    presence: true
 
   # TODO: Remove this validation once the 2021 recruitment cycle is over
-  validates :urn, reference_number_format: { allow_blank: false, minimum: 5, maximum: 6, message: "^URN must be 5 or 6 numbers" }
+  validates :urn, reference_number_format: { allow_blank: true, minimum: 5, maximum: 6, message: "^URN must be 5 or 6 numbers" }
 
-  validates :urn, reference_number_format: { allow_blank: false, minimum: 5, maximum: 6, message: "^URN must be 5 or 6 numbers" }, if: -> { provider.recruitment_cycle.after_2021? }
+  validates :urn, reference_number_format: { allow_blank: false, minimum: 5, maximum: 6, message: "^URN must be 5 or 6 numbers" }, if: -> { provider.present? && recruitment_cycle_after_2021? }
 
   acts_as_mappable lat_column_name: :latitude, lng_column_name: :longitude
 
@@ -37,6 +37,9 @@ class Site < ApplicationRecord
   attr_accessor :skip_geocoding
   after_commit :geocode_site, unless: :skip_geocoding
   after_commit :add_travel_to_work_area_and_london_borough, if: :needs_travel_to_work_area_and_london_borough_updated?
+
+  delegate :recruitment_cycle, :provider_code, to: :provider, allow_nil: true
+  delegate :after_2021?, to: :recruitment_cycle, allow_nil: true, prefix: :recruitment_cycle
 
   def geocode_site
     GeocodeJob.perform_later("Site", id) if needs_geolocation?
