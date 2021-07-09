@@ -59,6 +59,7 @@ terraform.tfstate.d/
 lock.json
 *secret*.tfvars
 .terraform/
+terraform/*token
 
 # Ignore master key for decrypting credentials and more.
 /config/master.key

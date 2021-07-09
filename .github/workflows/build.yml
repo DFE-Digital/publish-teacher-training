@@ -21,14 +21,10 @@ jobs:
 
     - name: Get values for current commit
       run: |
-        GIT_SHA_SHORT=$(echo ${{github.sha}} | cut -c 1-7)
         GIT_REF=${{github.ref}}
         GIT_BRANCH=${GIT_REF##*/}
 
-        echo "GIT_SHA_SHORT=$GIT_SHA_SHORT" >> $GITHUB_ENV
-        echo "GIT_BRANCH=$GIT_BRANCH" >> $GITHUB_ENV
-        echo "SHA_TAG=paas-$GIT_SHA_SHORT" >> $GITHUB_ENV
-        echo "BRANCH_TAG=paas-$GIT_BRANCH" >> $GITHUB_ENV
+        echo "BRANCH_TAG=$GIT_BRANCH" >> $GITHUB_ENV
 
     - name: Login to DockerHub
       if: github.actor != 'dependabot[bot]'
@@ -57,7 +53,7 @@ jobs:
       with:
         tags: |
           ${{ env.DOCKER_IMAGE}}:${{ env.BRANCH_TAG }}
-          ${{ env.DOCKER_IMAGE}}:${{ env.SHA_TAG }}
+          ${{ env.DOCKER_IMAGE}}:${{ github.sha }}
         push: ${{ github.actor != 'dependabot[bot]' }}
         load: ${{ github.actor == 'dependabot[bot]' }}
         cache-from: |
@@ -66,7 +62,7 @@ jobs:
           ${{ env.DOCKER_IMAGE}}-middleman:${{ env.BRANCH_TAG }}
         build-args: |
           BUILDKIT_INLINE_CACHE=1
-          COMMIT_SHA=paas-${{ github.sha }}
+          COMMIT_SHA=${{ github.sha }}
 
     - name: Trigger Review App Deployment
       if: ${{ github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'deploy') }}
@@ -75,7 +71,7 @@ jobs:
         workflow: Deploy
         ref: ${{ github.head_ref }}
         token: ${{ secrets.ACTIONS_API_ACCESS_TOKEN  }}
-        inputs: '{"pr": "${{ github.event.pull_request.number }}", "sha": "${{ env.GIT_SHA_SHORT }}"}'
+        inputs: '{"pr": "${{ github.event.pull_request.number }}", "sha": "${{ github.sha }}"}'
 
     - name: Setup tests
       run: |
@@ -123,7 +119,7 @@ jobs:
       with:
         workflow: Deploy
         token: ${{ secrets.ACTIONS_API_ACCESS_TOKEN  }}
-        inputs: '{"qa": "true", "staging": "true", "production": "true", "sandbox": "true", "rollover": "true", "sha": "${{ env.GIT_SHA_SHORT }}"}'
+        inputs: '{"qa": "true", "staging": "true", "production": "true", "sandbox": "true", "rollover": "true", "sha": "${{ github.sha }}"}'
 
     - name: Alert Build Failures
       if: ${{ failure() && github.ref == 'refs/heads/master' }}
