@@ -1,4 +1,4 @@
-FROM ruby:2.7.2-alpine3.12 AS middleman
+FROM ruby:2.7.4-alpine3.12 AS middleman
 
 RUN apk add --update --no-cache npm git build-base
 
@@ -15,7 +15,7 @@ RUN bundle exec middleman build --build-dir=../public
 
 ###
 
-FROM ruby:2.7.2-alpine3.12
+FROM ruby:2.7.4-alpine3.12
 
 ARG COMMIT_SHA
 
@@ -51,7 +51,7 @@ COPY --from=middleman /public/ $APP_HOME/public/
 
 ENV COMMIT_SHA=${COMMIT_SHA}
 
-RUN ls /app/public/ && \ 
+RUN ls /app/public/ && \
     bundle exec rake assets:precompile && \
     rm -rf node_modules tmp
 
