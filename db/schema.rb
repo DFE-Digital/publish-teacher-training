@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_06_23_150714) do
+ActiveRecord::Schema.define(version: 2021_07_12_082658) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
@@ -317,8 +317,6 @@ ActiveRecord::Schema.define(version: 2021_06_23_150714) do
     t.datetime "updated_at", default: -> { "timezone('utc'::text, now())" }, null: false
     t.float "latitude"
     t.float "longitude"
-    t.string "travel_to_work_area"
-    t.string "london_borough"
     t.string "urn"
     t.index ["latitude", "longitude"], name: "index_site_on_latitude_and_longitude"
     t.index ["provider_id", "code"], name: "IX_site_provider_id_code", unique: true
