@@ -2422,4 +2422,34 @@ describe Course, type: :model do
       end
     end
   end
+
+  describe "rollable?" do
+    subject do
+      create(
+        :course,
+        level: "secondary",
+        name: "Classics",
+        course_code: "AAAA",
+        enrichments: [enrichment],
+      ).rollable?
+    end
+
+    context "course is published" do
+      let(:enrichment) { create(:course_enrichment, :published) }
+
+      it { is_expected.to eq(true) }
+    end
+
+    context "course is withdrawn" do
+      let(:enrichment) { create(:course_enrichment, :withdrawn) }
+
+      it { is_expected.to eq(true) }
+    end
+
+    context "course is published with unpublished changes" do
+      let(:enrichment) { create(:course_enrichment, :subsequent_draft) }
+
+      it { is_expected.to eq(true) }
+    end
+  end
 end

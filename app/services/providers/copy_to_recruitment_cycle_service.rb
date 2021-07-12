@@ -1,16 +1,14 @@
 module Providers
   class CopyToRecruitmentCycleService
     attr :logger
-    attr_reader :force
 
-    def initialize(copy_course_to_provider_service:, copy_site_to_provider_service:, logger: nil, force: false)
+    def initialize(copy_course_to_provider_service:, copy_site_to_provider_service:, logger: nil)
       @copy_course_to_provider_service = copy_course_to_provider_service
       @copy_site_to_provider_service = copy_site_to_provider_service
       @logger = logger || Logger.new("/dev/null")
-      @force = force
     end
 
-    def execute(provider:, new_recruitment_cycle:)
+    def execute(provider:, new_recruitment_cycle:, force: false)
       providers_count = 0
       sites_count = 0
       courses_count = 0

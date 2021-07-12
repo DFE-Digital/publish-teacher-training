@@ -157,5 +157,19 @@ describe Providers::CopyToRecruitmentCycleService do
         courses: 1,
       )
     end
+
+    context "provider is not rollable?" do
+      context "force: true" do
+        before do
+          allow(provider).to receive(:rollable?).and_return(false)
+        end
+
+        it "still copies the provider" do
+          expect {
+            service.execute(provider: provider, new_recruitment_cycle: new_recruitment_cycle, force: true)
+          }.to(change { new_recruitment_cycle.providers.count })
+        end
+      end
+    end
   end
 end
