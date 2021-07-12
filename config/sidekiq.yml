@@ -2,6 +2,5 @@
 :queues:
   - default
   - geocoding
-  - add_travel_to_work_area_and_london_borough
   - save_statistic
   - mailers

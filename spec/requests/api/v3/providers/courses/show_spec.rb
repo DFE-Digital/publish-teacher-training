@@ -170,8 +170,6 @@ describe "GET v3/recruitment_cycle/:recruitment_cycle_year/providers/:provider_c
               "region_code" => courses_site_status.site.region_code,
               "latitude" => courses_site_status.site.latitude,
               "longitude" => courses_site_status.site.longitude,
-              "travel_to_work_area" => courses_site_status.site.travel_to_work_area,
-              "london_borough" => courses_site_status.site.london_borough,
               "urn" => courses_site_status.site.urn,
               "recruitment_cycle_year" => current_year.to_s,
             },
