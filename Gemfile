@@ -203,7 +203,7 @@ group :test do
   gem "database_cleaner"
   gem "jsonapi-rspec"
   gem "rspec_junit_formatter"
-  gem "shoulda-matchers", "~> 4.5"
+  gem "shoulda-matchers", "~> 5.0"
   gem "simplecov", "< 0.22", require: false
 
   # Page objects
