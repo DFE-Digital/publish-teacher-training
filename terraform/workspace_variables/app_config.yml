@@ -31,3 +31,8 @@ review:
   <<: *default
   RAILS_ENV: review
   RACK_ENV: review
+
+loadtest:
+  <<: *default
+  RAILS_ENV: loadtest
+  RACK_ENV: loadtest

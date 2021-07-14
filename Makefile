@@ -78,6 +78,13 @@ rollover: ## Set DEPLOY_ENV to rollover
 	$(eval space=bat-staging)
 	$(eval paas_env=rollover)
 
+.PHONY: loadtest
+loadtest: ## Set DEPLOY_ENV to rollover
+	$(eval DEPLOY_ENV=loadtest)
+	$(eval AZ_SUBSCRIPTION=s121-findpostgraduateteachertraining-development)
+	$(eval space=bat-qa)
+	$(eval paas_env=loadtest)
+
 .PHONY: ci
 ci:	## Run in automation environment
 	$(eval export DISABLE_PASSCODE=true)
