@@ -4,6 +4,9 @@ module API
       class SerializableProviderSuggestion < JSONAPI::Serializable::Resource
         type "provider_suggestions"
 
+        attributes :ukprn,
+                   :urn
+
         attribute :code do
           @object.provider_code
         end

@@ -23,6 +23,7 @@ module API
         belongs_to :recruitment_cycle
 
         attributes :code,
+                   :urn,
                    :latitude,
                    :longitude,
                    :postcode,
