@@ -25,7 +25,10 @@ class Site < ApplicationRecord
                    format: { with: /\A[A-Z0-9\-]+\z/, message: "must contain only A-Z, 0-9 or -" },
                    presence: true
 
+  # TODO: Remove this validation once the 2021 recruitment cycle is over
   validates :urn, reference_number_format: { allow_blank: true, minimum: 5, maximum: 6, message: "^URN must be 5 or 6 numbers" }
+
+  validates :urn, reference_number_format: { allow_blank: false, minimum: 5, maximum: 6, message: "^URN must be 5 or 6 numbers" }, if: -> { provider.present? && recruitment_cycle_after_2021? }
 
   acts_as_mappable lat_column_name: :latitude, lng_column_name: :longitude
 
@@ -33,6 +36,9 @@ class Site < ApplicationRecord
 
   attr_accessor :skip_geocoding
   after_commit :geocode_site, unless: :skip_geocoding
+
+  delegate :recruitment_cycle, :provider_code, to: :provider, allow_nil: true
+  delegate :after_2021?, to: :recruitment_cycle, allow_nil: true, prefix: :recruitment_cycle
 
   def geocode_site
     GeocodeJob.perform_later("Site", id) if needs_geolocation?

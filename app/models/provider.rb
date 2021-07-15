@@ -122,9 +122,15 @@ class Provider < ApplicationRecord
 
   validates :telephone, phone: { message: "^Enter a valid telephone number" }, if: :telephone_changed?
 
+  # TODO: Remove this validation once the 2021 recruitment cycle is over
   validates :ukprn, reference_number_format: { allow_blank: true, minimum: 8, maximum: 8, message: "^UKPRN must be 8 numbers" }
 
+  validates :ukprn, reference_number_format: { allow_blank: false, minimum: 8, maximum: 8, message: "^UKPRN must be 8 numbers" }, if: -> { recruitment_cycle.after_2021? }, on: :update
+
+  # TODO: Remove this validation once the 2021 recruitment cycle is over
   validates :urn, reference_number_format: { allow_blank: true, minimum: 5, maximum: 6, message: "^URN must be 5 or 6 numbers" }, if: :lead_school?
+
+  validates :urn, reference_number_format: { allow_blank: false, minimum: 5, maximum: 6, message: "^URN must be 5 or 6 numbers" }, if: -> { lead_school? && recruitment_cycle.after_2021? }, on: :update
 
   validates :train_with_us, presence: true, on: :update, if: :train_with_us_changed?
   validates :train_with_disability, presence: true, on: :update, if: :train_with_disability_changed?

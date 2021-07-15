@@ -53,6 +53,7 @@ def create_standard_provider_and_courses_for_cycle(recruitment_cycle, superuser)
     address3: Faker::Address.city,
     address4: Faker::Address.state,
     postcode: Faker::Address.postcode,
+    urn: Faker::Number.number(digits: [5, 6].sample),
   )
 
   primary_course = Course.create!(

@@ -48,6 +48,22 @@ describe Provider, type: :model do
     end
   end
 
+  context "when the provider updates their ukprn in the 2022 cycle" do
+    let(:provider) do
+      create(
+        :provider,
+        ukprn: "",
+        recruitment_cycle: create(:recruitment_cycle, year: "2022"),
+      )
+    end
+
+    it "validates the presence of a ukprn" do
+      # this means that rollover happens successfully; the record is created but it will be invalid on update, because of no ukprn
+      expect { provider }.to change { Provider.count }.by(1)
+      expect(provider).to_not be_valid
+    end
+  end
+
   describe "organisation" do
     it "returns the only organisation a provider has" do
       expect(subject.organisation).to eq subject.organisations.first
