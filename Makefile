@@ -71,15 +71,8 @@ production: ## Set DEPLOY_ENV to production
 	$(eval space=bat-prod)
 	$(eval paas_env=prod)
 
-.PHONY: rollover
-rollover: ## Set DEPLOY_ENV to rollover
-	$(eval DEPLOY_ENV=rollover)
-	$(eval AZ_SUBSCRIPTION=s121-findpostgraduateteachertraining-test)
-	$(eval space=bat-staging)
-	$(eval paas_env=rollover)
-
 .PHONY: loadtest
-loadtest: ## Set DEPLOY_ENV to rollover
+loadtest: ## Set DEPLOY_ENV to loadtest
 	$(eval DEPLOY_ENV=loadtest)
 	$(eval AZ_SUBSCRIPTION=s121-findpostgraduateteachertraining-development)
 	$(eval space=bat-qa)

@@ -22,19 +22,7 @@ staging:
 qa:
   <<: *default
 
-qa_paas:
-  url: <%= ENV['DATABASE_URL'] %>
-  adapter: postgresql
-  encoding: unicode
-  pool: 5
-
-pentest:
-  <<: *default
-
 research:
-  <<: *default
-
-rollover:
   <<: *default
 
 production:
