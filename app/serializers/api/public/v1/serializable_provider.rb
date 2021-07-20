@@ -6,7 +6,9 @@ module API
 
         belongs_to :recruitment_cycle
 
-        attributes :postcode,
+        attributes :ukprn,
+                   :urn,
+                   :postcode,
                    :provider_type,
                    :region_code,
                    :train_with_disability,

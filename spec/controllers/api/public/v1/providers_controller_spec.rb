@@ -277,7 +277,9 @@ RSpec.describe API::Public::V1::ProvidersController do
 
         context "default fields" do
           let(:fields) do
-            %w[ postcode
+            %w[ ukprn
+                urn
+                postcode
                 provider_type
                 region_code
                 train_with_disability
@@ -383,6 +385,8 @@ RSpec.describe API::Public::V1::ProvidersController do
           "type" => "providers",
           "attributes" => {
             "code" => provider.provider_code,
+            "ukprn" => provider.ukprn,
+            "urn" => provider.urn,
             "name" => provider.provider_name,
             "postcode" => provider.postcode,
             "provider_type" => provider.provider_type,
