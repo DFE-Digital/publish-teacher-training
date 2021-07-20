@@ -156,6 +156,7 @@ describe "Courses API v2", type: :request do
                 "accept_maths_gcse_equivalency" => nil,
                 "accept_science_gcse_equivalency" => nil,
                 "additional_gcse_equivalencies" => nil,
+                "program_type" => provider.courses[0].program_type,
               },
               "relationships" => {
                 "accrediting_provider" => { "meta" => { "included" => false } },
@@ -735,6 +736,7 @@ describe "Courses API v2", type: :request do
               "accept_maths_gcse_equivalency" => nil,
               "accept_science_gcse_equivalency" => nil,
               "additional_gcse_equivalencies" => nil,
+              "program_type" => provider.courses[0].program_type,
             },
             "relationships" => {
               "accrediting_provider" => { "meta" => { "included" => false } },

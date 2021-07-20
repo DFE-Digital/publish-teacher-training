@@ -43,6 +43,7 @@ describe API::V2::SerializableCourse do
   it { is_expected.to have_attribute(:accept_maths_gcse_equivalency).with_value(nil) }
   it { is_expected.to have_attribute(:accept_science_gcse_equivalency).with_value(nil) }
   it { is_expected.to have_attribute(:additional_gcse_equivalencies) }
+  it { is_expected.to have_attribute(:program_type) }
 
   context "with a provider" do
     let(:provider) { course.provider }
