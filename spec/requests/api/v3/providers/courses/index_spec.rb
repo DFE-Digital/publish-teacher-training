@@ -12,7 +12,7 @@ describe "GET v3/recruitment_cycle/:recruitment_cycle_year/providers/:provider_c
 
   let(:applications_open_from) { Time.now.utc }
   let(:findable_open_course) do
-    create(:course, :resulting_in_pgce_with_qts, :with_apprenticeship,
+    create(:course, :resulting_in_pgce_with_qts, :with_apprenticeship, :with_gcse_equivalency,
            level: "primary",
            name: "Mathematics",
            provider: provider,
@@ -113,6 +113,12 @@ describe "GET v3/recruitment_cycle/:recruitment_cycle_year/providers/:provider_c
                 "accredited_body_code" => nil,
                 "uuid" => provider.courses[0].uuid,
                 "program_type" => provider.courses[0].program_type,
+                "accept_pending_gcse" => provider.courses[0].accept_pending_gcse,
+                "accept_gcse_equivalency" => provider.courses[0].accept_gcse_equivalency,
+                "accept_english_gcse_equivalency" => provider.courses[0].accept_english_gcse_equivalency,
+                "accept_maths_gcse_equivalency" => provider.courses[0].accept_maths_gcse_equivalency,
+                "accept_science_gcse_equivalency" => provider.courses[0].accept_science_gcse_equivalency,
+                "additional_gcse_equivalencies" => provider.courses[0].additional_gcse_equivalencies,
               },
               "relationships" => {
                 "accrediting_provider" => { "meta" => { "included" => false } },

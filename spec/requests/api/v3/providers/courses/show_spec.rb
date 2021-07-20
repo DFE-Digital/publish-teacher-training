@@ -32,6 +32,7 @@ describe "GET v3/recruitment_cycle/:recruitment_cycle_year/providers/:provider_c
   }
   let(:course) {
     create :course,
+           :with_gcse_equivalency,
            provider: provider,
            enrichments: enrichments,
            site_statuses: [courses_site_status],
@@ -146,6 +147,12 @@ describe "GET v3/recruitment_cycle/:recruitment_cycle_year/providers/:provider_c
             "accredited_body_code" => nil,
             "uuid" => course.uuid,
             "program_type" => course.program_type,
+            "accept_pending_gcse" => course.accept_pending_gcse,
+            "accept_gcse_equivalency" => course.accept_gcse_equivalency,
+            "accept_english_gcse_equivalency" => course.accept_english_gcse_equivalency,
+            "accept_maths_gcse_equivalency" => course.accept_maths_gcse_equivalency,
+            "accept_science_gcse_equivalency" => course.accept_science_gcse_equivalency,
+            "additional_gcse_equivalencies" => course.additional_gcse_equivalencies,
           },
           "relationships" => {
             "accrediting_provider" => { "meta" => { "included" => false } },

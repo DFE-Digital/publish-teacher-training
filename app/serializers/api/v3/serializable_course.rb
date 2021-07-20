@@ -21,7 +21,10 @@ module API
                  :content_status, :ucas_status, :funding_type,
                  :level, :is_send?, :english, :maths, :science, :gcse_subjects_required,
                  :age_range_in_years, :accrediting_provider,
-                 :accredited_body_code, :level, :changed_at, :uuid, :program_type
+                 :accredited_body_code, :level, :changed_at, :uuid, :program_type,
+                 :accept_pending_gcse, :accept_gcse_equivalency,
+                 :accept_english_gcse_equivalency, :accept_maths_gcse_equivalency,
+                 :accept_science_gcse_equivalency, :additional_gcse_equivalencies
 
       attribute :start_date do
         written_month_year(@object.start_date) if @object.start_date
