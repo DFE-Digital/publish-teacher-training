@@ -153,6 +153,9 @@ describe "GET v3/recruitment_cycle/:recruitment_cycle_year/providers/:provider_c
             "accept_maths_gcse_equivalency" => course.accept_maths_gcse_equivalency,
             "accept_science_gcse_equivalency" => course.accept_science_gcse_equivalency,
             "additional_gcse_equivalencies" => course.additional_gcse_equivalencies,
+            "degree_grade" => course.degree_grade,
+            "additional_degree_subject_requirements" => course.additional_degree_subject_requirements,
+            "degree_subject_requirements" => course.degree_subject_requirements,
           },
           "relationships" => {
             "accrediting_provider" => { "meta" => { "included" => false } },
