@@ -180,7 +180,7 @@ GEM
       ruby2_keywords
     faraday_middleware (1.0.0)
       faraday (~> 1.0)
-    ffi (1.15.0)
+    ffi (1.15.3)
     formatador (0.2.5)
     globalid (0.4.2)
       activesupport (>= 4.2.0)
@@ -267,7 +267,7 @@ GEM
     jwt (2.2.3)
     launchy (2.5.0)
       addressable (~> 2.7)
-    listen (3.5.1)
+    listen (3.6.0)
       rb-fsevent (~> 0.10, >= 0.10.3)
       rb-inotify (~> 0.9, >= 0.9.10)
     logstash-event (1.2.02)
@@ -604,7 +604,7 @@ DEPENDENCIES
   jsonapi-serializable
   jwt
   launchy
-  listen (>= 3.0.5, < 3.6)
+  listen (>= 3.0.5, < 3.7)
   logstash-logger (~> 0.26.1)
   omniauth (~> 1.9)
   omniauth-rails_csrf_protection
