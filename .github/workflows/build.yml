@@ -82,10 +82,13 @@ jobs:
         token: ${{ secrets.ACTIONS_API_ACCESS_TOKEN  }}
         inputs: '{"pr": "${{ github.event.pull_request.number }}", "sha": "${{ env.DOCKER_IMAGE_TAG }}"}'
 
-    - name: Setup tests
+    - name: Pull image if not loaded
+      if: ${{ github.actor != 'dependabot[bot]' }}
       run: |
         docker pull ${DOCKER_IMAGE}:${{ env.DOCKER_IMAGE_TAG }}
 
+    - name: Setup tests
+      run: |
         docker-compose up --no-build -d
         docker-compose exec -T web /bin/sh -c "./wait-for-command.sh -c 'nc -z db 5432' -s 0 -t 20"
         docker-compose exec -T web /bin/sh -c "bundle exec rails db:setup"
