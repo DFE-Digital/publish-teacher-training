@@ -14,14 +14,6 @@ services:
     environment:
     - POSTGRES_PASSWORD=developmentpassword
 
-  middleman:
-    build:
-      context: .
-      target: middleman
-      cache_from:
-        - ${dockerHubUsername:-dfedigital}/teacher-training-api-middleman:master
-    image: ${dockerHubUsername:-dfedigital}/teacher-training-api-middleman:${GIT_BRANCH:-latest}
-
   web:
     build:
       context: .
@@ -34,7 +26,6 @@ services:
       - "3001:3001"
     depends_on:
       - db
-      - middleman
       - redis
     environment:
       - DB_HOSTNAME=db
