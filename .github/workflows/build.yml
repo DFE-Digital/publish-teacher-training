@@ -19,12 +19,21 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v2
 
-    - name: Get values for current commit
+    - name: Get values for current commit (Push)
       run: |
         GIT_REF=${{github.ref}}
         GIT_BRANCH=${GIT_REF##*/}
-
         echo "BRANCH_TAG=$GIT_BRANCH" >> $GITHUB_ENV
+        echo "DOCKER_IMAGE_TAG=$GITHUB_SHA" >> $GITHUB_ENV
+
+    - name: Get values for current commit (Pull request)
+      run: |
+        # This is the actual PR branch
+        GIT_REF=${{ github.head_ref }}
+        GIT_BRANCH=${GIT_REF##*/}
+        echo "BRANCH_TAG=$GIT_BRANCH" >> $GITHUB_ENV
+        # This is the latest commit on the actual PR branch
+        echo "DOCKER_IMAGE_TAG=${{ github.event.pull_request.head.sha }}" >> $GITHUB_ENV
 
     - name: Login to DockerHub
       if: github.actor != 'dependabot[bot]'
@@ -53,7 +62,7 @@ jobs:
       with:
         tags: |
           ${{ env.DOCKER_IMAGE}}:${{ env.BRANCH_TAG }}
-          ${{ env.DOCKER_IMAGE}}:${{ github.sha }}
+          ${{ env.DOCKER_IMAGE}}:${{ env.DOCKER_IMAGE_TAG }}
         push: ${{ github.actor != 'dependabot[bot]' }}
         load: ${{ github.actor == 'dependabot[bot]' }}
         cache-from: |
@@ -62,7 +71,7 @@ jobs:
           ${{ env.DOCKER_IMAGE}}-middleman:${{ env.BRANCH_TAG }}
         build-args: |
           BUILDKIT_INLINE_CACHE=1
-          COMMIT_SHA=${{ github.sha }}
+          COMMIT_SHA=${{ env.DOCKER_IMAGE_TAG }}
 
     - name: Trigger Review App Deployment
       if: ${{ github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'deploy') }}
@@ -71,12 +80,12 @@ jobs:
         workflow: Deploy
         ref: ${{ github.head_ref }}
         token: ${{ secrets.ACTIONS_API_ACCESS_TOKEN  }}
-        inputs: '{"pr": "${{ github.event.pull_request.number }}", "sha": "${{ github.sha }}"}'
+        inputs: '{"pr": "${{ github.event.pull_request.number }}", "sha": "${{ env.DOCKER_IMAGE_TAG }}"}'
 
     - name: Setup tests
       run: |
-        docker pull ${DOCKER_IMAGE}:${BRANCH_TAG}
-        docker pull ${DOCKER_IMAGE}-middleman:${BRANCH_TAG}
+        docker pull ${DOCKER_IMAGE}:${{ env.DOCKER_IMAGE_TAG }}
+        docker pull ${DOCKER_IMAGE}-middleman:${{ env.DOCKER_IMAGE_TAG }}
 
         docker-compose up --no-build -d
         docker-compose exec -T web /bin/sh -c "./wait-for-command.sh -c 'nc -z db 5432' -s 0 -t 20"
@@ -119,7 +128,7 @@ jobs:
       with:
         workflow: Deploy
         token: ${{ secrets.ACTIONS_API_ACCESS_TOKEN  }}
-        inputs: '{"qa": "true", "staging": "true", "production": "true", "sandbox": "true", "sha": "${{ github.sha }}"}'
+        inputs: '{"qa": "true", "staging": "true", "production": "true", "sandbox": "true", "sha": "${{ env.DOCKER_IMAGE_TAG }}"}'
 
     - name: Alert Build Failures
       if: ${{ failure() && github.ref == 'refs/heads/master' }}
