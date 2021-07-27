@@ -66,6 +66,7 @@ jobs:
         push: ${{ github.actor != 'dependabot[bot]' }}
         load: ${{ github.actor == 'dependabot[bot]' }}
         cache-from: |
+          ${{ env.DOCKER_IMAGE}}:master
           ${{ env.DOCKER_IMAGE}}:${{ env.BRANCH_TAG }}
           ${{ env.DOCKER_IMAGE}}-middleman:master
           ${{ env.DOCKER_IMAGE}}-middleman:${{ env.BRANCH_TAG }}
