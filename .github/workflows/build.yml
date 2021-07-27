@@ -85,7 +85,6 @@ jobs:
     - name: Setup tests
       run: |
         docker pull ${DOCKER_IMAGE}:${{ env.DOCKER_IMAGE_TAG }}
-        docker pull ${DOCKER_IMAGE}-middleman:${{ env.DOCKER_IMAGE_TAG }}
 
         docker-compose up --no-build -d
         docker-compose exec -T web /bin/sh -c "./wait-for-command.sh -c 'nc -z db 5432' -s 0 -t 20"
