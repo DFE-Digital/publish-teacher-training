@@ -11,8 +11,14 @@ Rails.application.routes.draw do
   get "/user-not-found", to: "sign_in#new"
   get "/sign-out", to: "sessions#sign_out"
 
-  get "/auth/dfe/callback", to: "sessions#callback"
-  get "/auth/dfe/signout", to: "sessions#destroy"
+  if AuthenticationService.persona?
+    get "/personas", to: "personas#index"
+    post "/auth/developer/callback", to: "sessions#callback"
+    get "/auth/developer/signout", to: "sessions#destroy"
+  else
+    get "/auth/dfe/callback", to: "sessions#callback"
+    get "/auth/dfe/signout", to: "sessions#destroy"
+  end
 
   namespace :support do
     get "/" => redirect("/support/providers")

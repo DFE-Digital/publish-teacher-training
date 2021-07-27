@@ -1,0 +1,15 @@
+<h2 class="govuk-heading-m">Colin</h2>
+
+  <p class="govuk-body"><%= govuk_tag(text: "Admin", colour: "blue") %></p>
+
+  <p class="govuk-body">
+    Colin is a DfE support agent who has administrator access to all organisations.
+  </p>
+</h2>
+
+<%= form_tag("/auth/developer/callback") do %>
+  <%= hidden_field_tag "email", email_address %>
+  <%= hidden_field_tag "first_name", first_name %>
+  <%= hidden_field_tag "last_name", last_name %>
+  <%= submit_tag "Login as Colin", class: "govuk-button govuk-!-margin-bottom-2" %>
+<% end %>

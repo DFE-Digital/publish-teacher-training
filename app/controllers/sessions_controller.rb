@@ -2,7 +2,11 @@ class SessionsController < ApplicationController
   skip_before_action :authenticate
 
   def sign_out
-    redirect_to "/auth/dfe/signout"
+    if AuthenticationService.persona?
+      redirect_to "/auth/developer/signout"
+    else
+      redirect_to "/auth/dfe/signout"
+    end
   end
 
   def callback

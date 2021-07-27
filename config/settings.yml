@@ -54,3 +54,6 @@ skylight:
   enable: false
   authentication: please_change_me
 render_json_errors: false
+
+basic_auth:
+  enabled: false

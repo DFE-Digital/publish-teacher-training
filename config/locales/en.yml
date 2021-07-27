@@ -10,6 +10,7 @@ en:
       sign_in:
         index: "Sign in"
         new: "User not found"
+        personas: Teacher Training API Personas
       support:
         providers:
           index: "Providers"

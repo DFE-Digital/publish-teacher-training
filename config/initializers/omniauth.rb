@@ -1,29 +1,42 @@
 # frozen_string_literal: true
 
-OmniAuth.config.logger = Rails.logger
+require_relative "../../app/services/authentication_service"
 
-dfe_sign_in_issuer_uri = URI.parse(Settings.dfe_signin.issuer)
-dfe_sign_in_redirect_uri = URI.join(Settings.base_url, "/auth/dfe/callback")
+if AuthenticationService.persona?
 
-client_options = {
-  identifier: Settings.dfe_signin.identifier,
+  Rails.application.config.middleware.use OmniAuth::Builder do
+    provider :developer,
+             fields: %i[uid email first_name last_name],
+             uid_field: :uid
+  end
+else
 
-  port: dfe_sign_in_issuer_uri.port,
-  scheme: dfe_sign_in_issuer_uri.scheme,
-  host: dfe_sign_in_issuer_uri.host,
+  OmniAuth.config.logger = Rails.logger
 
-  secret: Settings.dfe_signin.secret,
-  redirect_uri: dfe_sign_in_redirect_uri&.to_s,
-}
+  dfe_sign_in_issuer_uri = URI.parse(Settings.dfe_signin.issuer)
+  dfe_sign_in_redirect_uri = URI.join(Settings.base_url, "/auth/dfe/callback")
 
-options = {
-  name: :dfe,
-  discovery: true,
-  response_type: :code,
-  scope: %i[email profile],
-  path_prefix: "/auth",
-  callback_path: "/auth/dfe/callback",
-  client_options: client_options,
-}
+  client_options = {
+    identifier: Settings.dfe_signin.identifier,
 
-Rails.application.config.middleware.use OmniAuth::Strategies::OpenIDConnect, options
+    port: dfe_sign_in_issuer_uri.port,
+    scheme: dfe_sign_in_issuer_uri.scheme,
+    host: dfe_sign_in_issuer_uri.host,
+
+    secret: Settings.dfe_signin.secret,
+    redirect_uri: dfe_sign_in_redirect_uri&.to_s,
+  }
+
+  options = {
+    name: :dfe,
+    discovery: true,
+    response_type: :code,
+    scope: %i[email profile],
+    path_prefix: "/auth",
+    callback_path: "/auth/dfe/callback",
+    client_options: client_options,
+  }
+
+  Rails.application.config.middleware.use OmniAuth::Strategies::OpenIDConnect, options
+
+end

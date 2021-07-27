@@ -1,0 +1,15 @@
+<% content_for :page_title, I18n.t("components.page_titles.sign_in.personas") %>
+
+<h1 class="govuk-heading-xl">
+  <span class="govuk-caption-xl">
+    Teacher Training API
+  </span>
+  Personas
+</h1>
+
+<hr class="govuk-section-break govuk-section-break--visible govuk-section-break--l">
+
+<%= render Persona::View.new(email_address: "becomingateacher+admin-integration-tests@digital.education.gov.uk",
+                              first_name: "Support agent",
+                              last_name: "Colin")
+%>

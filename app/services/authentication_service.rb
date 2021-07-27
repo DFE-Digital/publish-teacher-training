@@ -5,6 +5,23 @@ class AuthenticationService
     @logger = logger
   end
 
+  class << self
+    DFE_SIGNIN = "dfe_signin".freeze
+    PERSONA = "persona".freeze
+
+    def mode
+      Settings.authentication.mode == PERSONA ? PERSONA : DFE_SIGNIN
+    end
+
+    def dfe_signin?
+      mode == DFE_SIGNIN
+    end
+
+    def persona?
+      mode == PERSONA
+    end
+  end
+
   def execute(encoded_token)
     @encoded_token = encoded_token
     @user = find_user_by_sign_in_user_id || find_user_by_email

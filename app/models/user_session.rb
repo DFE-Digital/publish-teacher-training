@@ -48,7 +48,11 @@ class UserSession
   end
 
   def logout_url
-    dfe_logout_url
+    if AuthenticationService.persona?
+      "/sign-in"
+    else
+      dfe_logout_url
+    end
   end
 
 private

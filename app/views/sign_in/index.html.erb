@@ -5,11 +5,14 @@
 
     <h1 class="govuk-heading-l">Sign in to <%= I18n.t("service_name") %></h1>
 
-    <p class="govuk-body-m"> Use DfE Sign-in to access your account. You need to be a registered administrator to login to these pages.</p>
-
-    <%= govuk_button_to("Sign in using DfE Sign-in", "/auth/dfe", class: "qa-sign_in_button") %>
-
-    <p class="govuk-body-m">If you do not have a DfE Sign-in account but need access to <%= I18n.t("service_name") %>,   email <%= support_email %>.
-    </p>
+    <% if AuthenticationService.dfe_signin? %>
+        <p class="govuk-body-m">Use DfE Sign-in to access your account. You need to be a registered administrator to login to these pages.</p>
+        <%= govuk_button_to("Sign in using DfE Sign-in", "/auth/dfe", class: "qa-sign_in_button") %>
+        <p class="govuk-body-m">If you do not have a DfE Sign-in account but need access to<%= I18n.t("service_name") %>,   email <%= support_email %>.
+        </p>
+    <% else %>
+        <p class="govuk-body-m">Use Personas to access an account.</p>
+        <%= govuk_link_to "Sign in using a Persona", "/personas", button: true %>
+    <% end %>
   </div>
 </div>
