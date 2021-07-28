@@ -71,7 +71,6 @@ jobs:
         run: make review ci destroy
         env:
           ARM_ACCESS_KEY:             ${{ secrets.ARM_ACCESS_KEY_REVIEW }}
-          IMAGE_TAG:                  ${{ github.event.inputs.sha }}
           TF_VAR_azure_credentials:   ${{ secrets.AZURE_CREDENTIALS_REVIEW }}
           APP_NAME:                   ${{ env.PR_NUMBER }}
 

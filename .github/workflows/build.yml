@@ -19,12 +19,21 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v2
 
-    - name: Get values for current commit
+    - name: Get values for current commit (Push)
       run: |
         GIT_REF=${{github.ref}}
         GIT_BRANCH=${GIT_REF##*/}
-
         echo "BRANCH_TAG=$GIT_BRANCH" >> $GITHUB_ENV
+        echo "DOCKER_IMAGE_TAG=$GITHUB_SHA" >> $GITHUB_ENV
+
+    - name: Get values for current commit (Pull request)
+      run: |
+        # This is the actual PR branch
+        GIT_REF=${{ github.head_ref }}
+        GIT_BRANCH=${GIT_REF##*/}
+        echo "BRANCH_TAG=$GIT_BRANCH" >> $GITHUB_ENV
+        # This is the latest commit on the actual PR branch
+        echo "DOCKER_IMAGE_TAG=${{ github.event.pull_request.head.sha }}" >> $GITHUB_ENV
 
     - name: Login to DockerHub
       if: github.actor != 'dependabot[bot]'
@@ -37,7 +46,7 @@ jobs:
       uses: docker/setup-buildx-action@v1
 
     - name: Build Teacher-Training-Api-Middleman
-      uses: docker/build-push-action@v2.1.0
+      uses: docker/build-push-action@v2
       with:
         tags: ${{ env.DOCKER_IMAGE}}-middleman:${{ env.BRANCH_TAG }}
         push: ${{ github.actor != 'dependabot[bot]' }}
@@ -49,20 +58,21 @@ jobs:
         build-args: BUILDKIT_INLINE_CACHE=1
 
     - name: Build Teacher-Training-Api
-      uses: docker/build-push-action@v2.1.0
+      uses: docker/build-push-action@v2
       with:
         tags: |
           ${{ env.DOCKER_IMAGE}}:${{ env.BRANCH_TAG }}
-          ${{ env.DOCKER_IMAGE}}:${{ github.sha }}
+          ${{ env.DOCKER_IMAGE}}:${{ env.DOCKER_IMAGE_TAG }}
         push: ${{ github.actor != 'dependabot[bot]' }}
         load: ${{ github.actor == 'dependabot[bot]' }}
         cache-from: |
+          ${{ env.DOCKER_IMAGE}}:master
           ${{ env.DOCKER_IMAGE}}:${{ env.BRANCH_TAG }}
           ${{ env.DOCKER_IMAGE}}-middleman:master
           ${{ env.DOCKER_IMAGE}}-middleman:${{ env.BRANCH_TAG }}
         build-args: |
           BUILDKIT_INLINE_CACHE=1
-          COMMIT_SHA=${{ github.sha }}
+          COMMIT_SHA=${{ env.DOCKER_IMAGE_TAG }}
 
     - name: Trigger Review App Deployment
       if: ${{ github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'deploy') }}
@@ -71,20 +81,22 @@ jobs:
         workflow: Deploy
         ref: ${{ github.head_ref }}
         token: ${{ secrets.ACTIONS_API_ACCESS_TOKEN  }}
-        inputs: '{"pr": "${{ github.event.pull_request.number }}", "sha": "${{ github.sha }}"}'
+        inputs: '{"pr": "${{ github.event.pull_request.number }}", "sha": "${{ env.DOCKER_IMAGE_TAG }}"}'
+
+    - name: Pull image if not loaded
+      if: ${{ github.actor != 'dependabot[bot]' }}
+      run: |
+        docker pull ${DOCKER_IMAGE}:${{ env.DOCKER_IMAGE_TAG }}
 
     - name: Setup tests
       run: |
-        docker pull ${DOCKER_IMAGE}:${BRANCH_TAG}
-        docker pull ${DOCKER_IMAGE}-middleman:${BRANCH_TAG}
-
         docker-compose up --no-build -d
         docker-compose exec -T web /bin/sh -c "./wait-for-command.sh -c 'nc -z db 5432' -s 0 -t 20"
         docker-compose exec -T web /bin/sh -c "bundle exec rails db:setup"
         docker-compose exec -T web /bin/sh -c "apk --no-cache add curl"
         docker-compose exec -T web /bin/sh -c "bundle exec rake cc:setup"
       env:
-        GIT_BRANCH: ${{env.BRANCH_TAG}}
+        IMAGE_TAG: ${{ env.DOCKER_IMAGE_TAG }}
 
     - name: Run Ruby Linter
       run: docker-compose exec -T web /bin/sh -c 'bundle exec rubocop --format clang'
@@ -95,7 +107,7 @@ jobs:
         docker-compose exec -T web /bin/sh -c 'bundle exec rake parallel:setup'
         docker-compose exec -T web /bin/sh -c 'bundle exec rake "parallel:spec[,, -O .azure_parallel]"'
       env:
-        GIT_BRANCH: ${{env.BRANCH_TAG}}
+        IMAGE_TAG: ${{ env.DOCKER_IMAGE_TAG }}
         CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
 
     - name: Wait for review app deployment
@@ -119,7 +131,7 @@ jobs:
       with:
         workflow: Deploy
         token: ${{ secrets.ACTIONS_API_ACCESS_TOKEN  }}
-        inputs: '{"qa": "true", "staging": "true", "production": "true", "sandbox": "true", "sha": "${{ github.sha }}"}'
+        inputs: '{"qa": "true", "staging": "true", "production": "true", "sandbox": "true", "sha": "${{ env.DOCKER_IMAGE_TAG }}"}'
 
     - name: Alert Build Failures
       if: ${{ failure() && github.ref == 'refs/heads/master' }}
