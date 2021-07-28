@@ -19,6 +19,8 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v2
 
+    - run: echo "test"
+
     - name: Get values for current commit (Push)
       if: github.event_name == 'push'
       run: |
