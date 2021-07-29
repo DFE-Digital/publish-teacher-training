@@ -91,6 +91,18 @@ private
     # Only running and published site statuses
     running_and_published_criteria = site_status[:status].eq(SiteStatus.statuses[:running]).and(site_status[:publish].eq(SiteStatus.publishes[:published]))
 
+    running_and_published_and_vacancy_criteria = if has_vacancies?
+                                                   running_and_published_criteria
+                                                     .and(site_status[:vac_status])
+                                                     .eq_any([
+                                                       SiteStatus.vac_statuses[:full_time_vacancies],
+                                                       SiteStatus.vac_statuses[:part_time_vacancies],
+                                                       SiteStatus.vac_statuses[:both_full_time_and_part_time_vacancies],
+                                                     ])
+                                                 else
+                                                   running_and_published_criteria
+                                                 end
+
     # we only want sites that have been geocoded
     has_been_geocoded_criteria = sites[:latitude].not_eq(nil).and(sites[:longitude].not_eq(nil))
 
@@ -102,7 +114,7 @@ private
 
     # Create virtual table with sites and site statuses
     site_status.join(sites).on(site_status[:site_id].eq(sites[:id]))
-     .where(running_and_published_criteria)
+     .where(running_and_published_and_vacancy_criteria)
      .where(has_been_geocoded_criteria)
      .where(locatable_address_criteria)
   end

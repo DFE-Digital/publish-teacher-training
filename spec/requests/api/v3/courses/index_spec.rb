@@ -372,6 +372,52 @@ describe "GET v3/courses" do
     end
   end
 
+  describe "requesting courses ordered by distance with vacancy filter" do
+    let(:findable_status_with_no_vacancies) { build(:site_status, :findable, :with_no_vacancies, site: build(:site, latitude: 0, longitude: 0)) }
+    let(:findable_status_with_vacancies) { build(:site_status, :findable, :with_any_vacancy,  site: build(:site, latitude: 5, longitude: 5)) }
+    let(:another_findable_status_with_vacancies) { build(:site_status, :findable, :with_any_vacancy, site: build(:site, latitude: 3, longitude: 3)) }
+    let(:course_with_multiple_sites) { create(:course, provider: create(:provider), site_statuses: [findable_status_with_no_vacancies, findable_status_with_vacancies], enrichments: [published_enrichment]) }
+    let(:course_with_single_site) { create(:course, provider: create(:provider), site_statuses: [another_findable_status_with_vacancies], enrichments: [published_enrichment]) }
+    let(:request_path) { "/api/v3/courses?include=site_statuses.site&sort=distance&latitude=0&longitude=0&filter[has_vacancies]=#{has_vacancies?}" }
+
+    context "has_vacancies filter is true " do
+      let(:has_vacancies?) { true }
+
+      before do
+        course_with_single_site
+        course_with_multiple_sites
+      end
+
+      it "the first course returned has the closest site with vacancies" do
+        get request_path
+        json_response = JSON.parse(response.body)
+        course_hashes = json_response["data"]
+
+        expect(course_hashes.count).to eq(2)
+        expect(course_hashes.first["id"]).to eq(course_with_single_site.id.to_s)
+      end
+    end
+
+    context "has_vacancies filter is false" do
+      let(:has_vacancies?) { false }
+
+      before do
+        course_with_single_site
+        course_with_multiple_sites
+      end
+
+      it "the first course returned has the closest site, regardless of vacancy status" do
+        get request_path
+        json_response = JSON.parse(response.body)
+        course_hashes = json_response["data"]
+
+        expect(course_hashes.count).to eq(2)
+
+        expect(course_hashes.first["id"]).to eq(course_with_multiple_sites.id.to_s)
+      end
+    end
+  end
+
   describe "study type filter" do
     let(:request_path) { "/api/v3/courses?filter[study_type]=full_time" }
 
