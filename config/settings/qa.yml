@@ -15,3 +15,10 @@ skylight:
   enable: true
 environment:
   name: "qa"
+
+authentication:
+  # mode: dfe_signin  # default authentication mode
+  mode: persona     # none critical systems, ie localhost
+
+basic_auth:
+  enabled: true
