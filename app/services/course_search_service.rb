@@ -85,38 +85,45 @@ private
   end
 
   def locatable_sites
-    site_status = SiteStatus.arel_table
+    site_statuses = SiteStatus.arel_table
     sites = Site.arel_table
 
+    # Create virtual table with sites and site statuses
+    site_statuses.join(sites).on(site_statuses[:site_id].eq(sites[:id]))
+     .where(site_statuses_criteria(site_statuses))
+     .where(has_been_geocoded_criteria(sites))
+     .where(locatable_address_criteria(sites))
+  end
+
+  def site_statuses_criteria(site_statuses)
     # Only running and published site statuses
-    running_and_published_criteria = site_status[:status].eq(SiteStatus.statuses[:running]).and(site_status[:publish].eq(SiteStatus.publishes[:published]))
+    running_and_published_criteria = site_statuses[:status].eq(SiteStatus.statuses[:running]).and(site_statuses[:publish].eq(SiteStatus.publishes[:published]))
 
-    running_and_published_and_vacancy_criteria = if has_vacancies?
-                                                   running_and_published_criteria
-                                                     .and(site_status[:vac_status])
-                                                     .eq_any([
-                                                       SiteStatus.vac_statuses[:full_time_vacancies],
-                                                       SiteStatus.vac_statuses[:part_time_vacancies],
-                                                       SiteStatus.vac_statuses[:both_full_time_and_part_time_vacancies],
-                                                     ])
-                                                 else
-                                                   running_and_published_criteria
-                                                 end
+    if has_vacancies?
+      # Only site statuses with vacancies
+      running_and_published_criteria
+        .and(site_statuses[:vac_status])
+        .eq_any([
+          SiteStatus.vac_statuses[:full_time_vacancies],
+          SiteStatus.vac_statuses[:part_time_vacancies],
+          SiteStatus.vac_statuses[:both_full_time_and_part_time_vacancies],
+        ])
+    else
+      running_and_published_criteria
+    end
+  end
 
+  def has_been_geocoded_criteria(sites)
     # we only want sites that have been geocoded
-    has_been_geocoded_criteria = sites[:latitude].not_eq(nil).and(sites[:longitude].not_eq(nil))
+    sites[:latitude].not_eq(nil).and(sites[:longitude].not_eq(nil))
+  end
 
+  def locatable_address_criteria(sites)
     # only sites that have a locatable address
     # there are some sites with no address1 or postcode that cannot be
     # accurately geocoded. We don't want to return these as the closest site.
     # This should be removed once the data is fixed
-    locatable_address_criteria = sites[:address1].not_eq("").or(sites[:postcode].not_eq(""))
-
-    # Create virtual table with sites and site statuses
-    site_status.join(sites).on(site_status[:site_id].eq(sites[:id]))
-     .where(running_and_published_and_vacancy_criteria)
-     .where(has_been_geocoded_criteria)
-     .where(locatable_address_criteria)
+    sites[:address1].not_eq("").or(sites[:postcode].not_eq(""))
   end
 
   def course_id_with_lowest_locatable_distance
