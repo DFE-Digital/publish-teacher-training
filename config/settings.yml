@@ -57,3 +57,13 @@ render_json_errors: false
 
 basic_auth:
   enabled: false
+
+google:
+  bigquery:
+    project_id: replaceme
+    dataset: replaceme
+    api_json_key: ""
+    table_name: events
+
+features:
+  send_request_data_to_bigquery: false
