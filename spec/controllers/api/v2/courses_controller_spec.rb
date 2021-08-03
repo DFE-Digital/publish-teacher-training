@@ -77,10 +77,6 @@ describe API::V2::CoursesController, type: :controller do
             expect(validation_errors).to include("Enter a UK Provider Reference Number (UKPRN)")
           end
 
-          it "has a validation error about locations not having a URN" do
-            expect(validation_errors).to include("Enter a Unique Reference Number (URN) for all course locations")
-          end
-
           context "provider is a lead school" do
             let(:provider_type) { :lead_school }
 
