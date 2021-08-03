@@ -276,7 +276,6 @@ class Course < ApplicationRecord
   validate :validate_site_statuses_publishable, on: :publish
   validate :validate_provider_visa_sponsorship_publishable, on: :publish, if: -> { recruitment_cycle_after_2021? }
   validate :validate_provider_urn_ukprn_publishable, on: :publish, if: -> { recruitment_cycle_after_2021? }
-  validate :validate_all_sites_publishable, on: :publish, if: -> { recruitment_cycle_after_2021? }
   validate :validate_degree_requirements_publishable, on: :publish
   validate :validate_gcse_requirements_publishable, on: :publish
   validate :validate_enrichment
@@ -846,12 +845,6 @@ private
     end
     @services.register(:content_status) do
       Courses::ContentStatusService.new
-    end
-  end
-
-  def validate_all_sites_publishable
-    if sites.any? { |s| s.urn.blank? }
-      errors.add(:sites, :site_urn_not_publishable)
     end
   end
 end
