@@ -116,7 +116,7 @@ GEM
     config (3.1.0)
       deep_merge (~> 1.2, >= 1.2.1)
       dry-validation (~> 1.0, >= 1.0.0)
-    connection_pool (2.2.3)
+    connection_pool (2.2.5)
     crack (0.4.5)
       rexml
     crass (1.0.6)
@@ -425,7 +425,7 @@ GEM
     rb-inotify (0.10.1)
       ffi (~> 1.0)
     rb-readline (0.5.5)
-    redis (4.2.5)
+    redis (4.4.0)
     regexp_parser (2.1.1)
     request_store (1.5.0)
       rack (>= 1.4)
@@ -493,7 +493,7 @@ GEM
     sentry-ruby-core (4.6.4)
       concurrent-ruby
       faraday
-    sentry-sidekiq (4.6.3)
+    sentry-sidekiq (4.6.4)
       sentry-ruby-core (~> 4.6.0)
       sidekiq (>= 3.0)
     shellany (0.0.1)
