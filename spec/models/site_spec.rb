@@ -46,25 +46,6 @@ describe Site, type: :model do
     it { is_expected.to belong_to(:provider) }
   end
 
-  context "when the site provider updates their urn in the 2022 cycle" do
-    let(:provider) do
-      create(
-        :provider,
-        recruitment_cycle: create(:recruitment_cycle, year: "2022"),
-      )
-    end
-
-    let(:site) do
-      create(
-        :site,
-        urn: "",
-        provider_id: provider.id,
-      )
-    end
-
-    it { is_expected.to validate_presence_of(:urn).with_message("^URN must be 5 or 6 numbers") }
-  end
-
   describe "#touch_provider" do
     let(:site) { create(:site) }
 
