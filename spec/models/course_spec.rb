@@ -1812,6 +1812,16 @@ describe Course, type: :model do
 
       its(:gcse_grade_required) { is_expected.to eq(5) }
     end
+
+    context "when the accrediting provider is on the PROVIDERS_REQUIRING_GCSE_GRADE_5 list" do
+      let(:course) do
+        provider = create(:provider)
+        accrediting_provider = create(:provider, provider_code: Course::PROVIDERS_REQUIRING_GCSE_GRADE_5.sample)
+        create(:course, provider: provider, accrediting_provider: accrediting_provider)
+      end
+
+      its(:gcse_grade_required) { is_expected.to eq(5) }
+    end
   end
 
   context "bursaries and scholarships" do
