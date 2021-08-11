@@ -1,4 +1,5 @@
 class ApplicationController < ActionController::Base
+  include EmitsRequestEvents
   before_action :authenticate
 
   include Pundit
