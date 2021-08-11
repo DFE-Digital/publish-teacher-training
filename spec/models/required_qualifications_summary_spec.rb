@@ -19,8 +19,8 @@ describe RequiredQualificationsSummary, type: :model do
 
         expect(summary).to eq <<~SUMMARY.strip
           Grade 4 (C) or above in English, maths and science, or equivalent qualification.
-          Candidates with pending GCSEs will not be considered.
-          Equivalency tests will not be accepted.
+          We will not consider candidates with pending GCSEs.
+          We do not accept equivalency tests.
 
           An undergraduate degree at class 2:1 or above, or equivalent.
           Completed at least one programming module.
@@ -64,14 +64,14 @@ describe RequiredQualificationsSummary, type: :model do
         course = create(:course, accept_pending_gcse: true)
         summary = described_class.new(course).extract
 
-        expect(summary).to include "Candidates with pending GCSEs will be considered"
+        expect(summary).to include "We will consider candidates with pending GCSEs"
       end
 
       it "states pending GCSEs will NOT be considered if accept_pending_gcse? is false" do
         course = create(:course, accept_pending_gcse: false)
         summary = described_class.new(course).extract
 
-        expect(summary).to include "Candidates with pending GCSEs will not be considered"
+        expect(summary).to include "We will not consider candidates with pending GCSEs"
       end
 
       context "course.accept_gcse_equivalency? is false" do
@@ -80,7 +80,7 @@ describe RequiredQualificationsSummary, type: :model do
         it "states equivalency tests not accepted" do
           summary = described_class.new(course).extract
 
-          expect(summary).to include "Equivalency tests will not be accepted"
+          expect(summary).to include "We do not accept equivalency tests"
         end
       end
 
@@ -91,14 +91,14 @@ describe RequiredQualificationsSummary, type: :model do
           course.update!(accept_english_gcse_equivalency: true)
           summary = described_class.new(course).extract
 
-          expect(summary).to include "Equivalency tests will be accepted in English"
+          expect(summary).to include "We will accept equivalency tests in English"
         end
 
         it "states two equivalencies accepted if two accepted" do
           course.update!(accept_english_gcse_equivalency: true, accept_maths_gcse_equivalency: true)
           summary = described_class.new(course).extract
 
-          expect(summary).to include "Equivalency tests will be accepted in English and maths"
+          expect(summary).to include "We will accept equivalency tests in English and maths"
         end
 
         it "states three equivalencies accepted if three accepted" do
@@ -109,7 +109,7 @@ describe RequiredQualificationsSummary, type: :model do
           )
           summary = described_class.new(course).extract
 
-          expect(summary).to include "Equivalency tests will be accepted in English, maths and science"
+          expect(summary).to include "We will accept equivalency tests in English, maths and science"
         end
 
         it "shows additional GCSE equivalencies if present" do

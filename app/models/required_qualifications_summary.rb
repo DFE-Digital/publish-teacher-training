@@ -39,24 +39,24 @@ private
 
   def pending_gcse_content
     if course.accept_pending_gcse?
-      "Candidates with pending GCSEs will be considered."
+      "We will consider candidates with pending GCSEs."
     else
-      "Candidates with pending GCSEs will not be considered."
+      "We will not consider candidates with pending GCSEs."
     end
   end
 
   def gcse_equivalency_content
-    return "Equivalency tests will not be accepted." unless course.accept_gcse_equivalency?
+    return "We do not accept equivalency tests." unless course.accept_gcse_equivalency?
 
     case gcse_equivalencies.count
     when 0
       "" # Assume that course.additional_gcse_equivalencies is populated instead
     when 1
-      "Equivalency tests will be accepted in #{gcse_equivalencies[0].capitalize}."
+      "We will accept equivalency tests in #{gcse_equivalencies[0].capitalize}."
     when 2
-      "Equivalency tests will be accepted in #{gcse_equivalencies[0].capitalize} and #{gcse_equivalencies[1]}."
+      "We will accept equivalency tests in #{gcse_equivalencies[0].capitalize} and #{gcse_equivalencies[1]}."
     when 3
-      "Equivalency tests will be accepted in #{gcse_equivalencies[0].capitalize}, #{gcse_equivalencies[1]} and #{gcse_equivalencies[2]}."
+      "We will accept equivalency tests in #{gcse_equivalencies[0].capitalize}, #{gcse_equivalencies[1]} and #{gcse_equivalencies[2]}."
     end
   end
 
