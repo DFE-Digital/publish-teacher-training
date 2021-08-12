@@ -19,6 +19,7 @@ module BigQuery
         request_user_agent: request.user_agent,
         request_query: query_to_kv_pairs(request.query_string),
         request_referer: request.referer,
+        anonymised_user_agent_and_ip: anonymised_user_agent_and_ip(request),
       )
     end
 
@@ -42,6 +43,16 @@ module BigQuery
     def query_to_kv_pairs(query_string)
       vars = Rack::Utils.parse_query(query_string)
       vars.map { |k, v| { "key" => k, "value" => [v].flatten } }
+    end
+
+    def anonymised_user_agent_and_ip(rack_request)
+      if rack_request.remote_ip.present?
+        anonymise(rack_request.user_agent.to_s + rack_request.remote_ip.to_s)
+      end
+    end
+
+    def anonymise(text)
+      Digest::SHA2.hexdigest(text)
     end
   end
 end

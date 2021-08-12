@@ -28,8 +28,10 @@ module BigQuery
             user_agent: "browser-stuff",
             query_string: "test=one&other-test=two",
             referer: "https://www.example.com",
+            remote_ip: "120.0.0.1",
           )
         end
+        let(:sha2_hashed_browser_stuff_plus_ip) { "03c72584280cb752f8bf5e662a55ef1adafb3f628812bb9f08fe32dd1e0f6352" }
 
         before do
           event.with_request_details(request)
@@ -39,6 +41,7 @@ module BigQuery
         it {  is_expected.to include("request_path" => "/path") }
         it {  is_expected.to include("request_method" => "GET") }
         it {  is_expected.to include("request_user_agent" => "browser-stuff") }
+        it {  is_expected.to include("anonymised_user_agent_and_ip" => sha2_hashed_browser_stuff_plus_ip) }
 
         it {
           expect(subject).to include("request_query" => [
