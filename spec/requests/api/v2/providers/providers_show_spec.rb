@@ -43,7 +43,6 @@ describe "Providers API v2", type: :request do
             "provider_name" => provider.provider_name,
             "provider_type" => provider.provider_type,
             "accredited_body?" => true,
-            "can_add_more_sites?" => true,
             "train_with_us" => provider.train_with_us,
             "train_with_disability" => provider.train_with_disability,
             "address1" => provider.address1,

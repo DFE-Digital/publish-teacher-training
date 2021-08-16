@@ -235,10 +235,6 @@ class Provider < ApplicationRecord
     update_columns changed_at: timestamp
   end
 
-  def can_add_more_sites?
-    true
-  end
-
   # This reflects the fact that organisations should actually be a has_one.
   def organisation
     organisations.first

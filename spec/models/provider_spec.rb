@@ -224,12 +224,6 @@ describe Provider, type: :model do
 
   its(:recruitment_cycle) { is_expected.to eq find(:recruitment_cycle) }
 
-  describe "#can_add_more_sites?" do
-    subject { create(:provider) }
-
-    its(:can_add_more_sites?) { is_expected.to be_truthy }
-  end
-
   it "defines an enum for accrediting_provider" do
     expect(subject)
       .to define_enum_for("accrediting_provider")
