@@ -218,6 +218,13 @@ describe "Course POST #create API V2", type: :request do
         created_course = provider.reload.courses.last
         expect(created_course.subjects).to eq([further_education_subject])
       end
+
+      it "Creates a course with maths, English and science set to `not_required`" do
+        created_course = provider.reload.courses.last
+        expect(created_course.english).to eq("not_required")
+        expect(created_course.maths).to eq("not_required")
+        expect(created_course.science).to eq("not_required")
+      end
     end
   end
 end
