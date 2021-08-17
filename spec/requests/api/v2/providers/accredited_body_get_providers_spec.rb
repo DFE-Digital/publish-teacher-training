@@ -54,7 +54,6 @@ describe "AccreditedBody API v2", type: :request do
                 "provider_name" => accredited_provider.provider_name,
                 "provider_type" => accredited_provider.provider_type,
                 "accredited_body?" => false,
-                "can_add_more_sites?" => true,
                 "accredited_bodies" => [],
                 "train_with_us" => accredited_provider.train_with_us,
                 "train_with_disability" => accredited_provider.train_with_disability,
@@ -110,7 +109,6 @@ describe "AccreditedBody API v2", type: :request do
                 "provider_name" => delivering_provider1.provider_name,
                 "provider_type" => accredited_provider.provider_type,
                 "accredited_body?" => delivering_provider1.accredited_body?,
-                "can_add_more_sites?" => delivering_provider1.can_add_more_sites?,
                 "accredited_bodies" => [
                   {
                     "provider_name" => accredited_provider.provider_name,
@@ -172,7 +170,6 @@ describe "AccreditedBody API v2", type: :request do
                 "provider_name" => delivering_provider2.provider_name,
                 "provider_type" => accredited_provider.provider_type,
                 "accredited_body?" => delivering_provider2.accredited_body?,
-                "can_add_more_sites?" => delivering_provider2.can_add_more_sites?,
                 "accredited_bodies" => [
                   {
                     "provider_name" => accredited_provider.provider_name,

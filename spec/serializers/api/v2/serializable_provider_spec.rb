@@ -29,7 +29,6 @@ describe API::V2::SerializableProvider do
   it { is_expected.to have_attribute(:provider_code).with_value(provider.provider_code) }
   it { is_expected.to have_attribute(:provider_name).with_value(provider.provider_name) }
   it { is_expected.to have_attribute(:accredited_body?).with_value(false) }
-  it { is_expected.to have_attribute(:can_add_more_sites?).with_value(true) }
   it { is_expected.to have_attribute(:recruitment_cycle_year).with_value(provider.recruitment_cycle.year) }
   it { is_expected.to have_attribute(:gt12_contact).with_value(provider.ucas_preferences.gt12_response_destination) }
   it { is_expected.to have_attribute(:application_alert_contact).with_value(provider.ucas_preferences.application_alert_email) }
