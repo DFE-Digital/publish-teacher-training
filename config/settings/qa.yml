@@ -22,3 +22,6 @@ authentication:
 
 basic_auth:
   enabled: true
+
+features:
+  send_request_data_to_bigquery: true

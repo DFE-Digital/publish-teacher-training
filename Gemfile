@@ -123,6 +123,9 @@ gem "omniauth", "~> 1.9"
 gem "omniauth_openid_connect", "~> 0.3"
 gem "omniauth-rails_csrf_protection"
 
+# Data integration with BigQuery
+gem "google-cloud-bigquery"
+
 group :development, :test do
   # Prettyprint in console
   gem "awesome_print"
