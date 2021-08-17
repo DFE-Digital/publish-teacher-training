@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_07_12_082658) do
+ActiveRecord::Schema.define(version: 2021_08_16_162416) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
@@ -318,6 +318,8 @@ ActiveRecord::Schema.define(version: 2021_07_12_082658) do
     t.float "latitude"
     t.float "longitude"
     t.string "urn"
+    t.datetime "discarded_at"
+    t.index ["discarded_at"], name: "index_site_on_discarded_at"
     t.index ["latitude", "longitude"], name: "index_site_on_latitude_and_longitude"
     t.index ["provider_id", "code"], name: "IX_site_provider_id_code", unique: true
   end

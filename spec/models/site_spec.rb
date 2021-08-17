@@ -11,6 +11,45 @@ describe Site, type: :model do
     it { is_expected.to be_audited.associated_with(:provider) }
   end
 
+  describe "#discard" do
+    context "before discarding" do
+      its(:discarded?) { is_expected.to be false }
+
+      it "is in kept" do
+        expect(Site.kept).to eq([subject])
+      end
+
+      it "is not in discarded" do
+        expect(Site.discarded).to be_empty
+      end
+    end
+
+    context "after discarding" do
+      before do
+        create(:site, provider: provider)
+        subject.discard
+      end
+
+      its(:discarded?) { is_expected.to be true }
+
+      it "is not in kept" do
+        expect(Site.kept).not_to include(subject)
+      end
+
+      it "is in discarded" do
+        expect(Site.discarded).to eq([subject])
+      end
+    end
+
+    context "incorrect actions" do
+      it "raises error when only one location exists" do
+        expect { subject.discard }.to raise_error(
+          "You cannot delete the last location",
+        )
+      end
+    end
+  end
+
   it { is_expected.to validate_presence_of(:location_name) }
   it { is_expected.to validate_presence_of(:address1) }
   it { is_expected.to validate_presence_of(:postcode) }
