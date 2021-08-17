@@ -42,7 +42,7 @@ class Provider < ApplicationRecord
   has_and_belongs_to_many :organisations, join_table: :organisation_provider
   has_many :users, -> { kept }, through: :organisations, inverse_of: false
 
-  has_many :sites
+  has_many :sites, -> { kept }, inverse_of: :provider
 
   has_many :user_notifications,
            foreign_key: :provider_code,

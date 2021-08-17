@@ -16,4 +16,5 @@ class SitePolicy
 
   alias_method :update?, :show?
   alias_method :create?, :show?
+  alias_method :destroy?, :show?
 end

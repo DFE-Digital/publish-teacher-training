@@ -42,10 +42,9 @@ describe Site, type: :model do
     end
 
     context "incorrect actions" do
-      it "raises error when only one location exists" do
-        expect { subject.discard }.to raise_error(
-          "You cannot delete the last location",
-        )
+      it "does not discard when only one location exists" do
+        expect { subject.discard }.to raise_error(Site::DiscardError,
+                                                  "cannot delete the last location")
       end
     end
   end

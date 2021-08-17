@@ -71,7 +71,7 @@ Rails.application.routes.draw do
           post :send_vacancies_updated_notification, on: :member
           get :new, on: :new
         end
-        resources :sites, only: %i[index update show create]
+        resources :sites, only: %i[index update show create destroy]
         resources :recruitment_cycles, only: %i[index]
         get "training_providers/:training_provider_code", to: "accredited_provider_training_providers#show"
         get :training_providers, to: "accredited_provider_training_providers#index"

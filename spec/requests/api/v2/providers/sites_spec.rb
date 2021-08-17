@@ -558,4 +558,22 @@ describe "Sites API v2", type: :request do
       end
     end
   end
+
+  describe "DELETE destroy" do
+    let(:path) do
+      "/api/v2/providers/#{provider.provider_code}" +
+        "/sites/#{site1.id}"
+    end
+
+    subject do
+      delete path, headers: { "HTTP_AUTHORIZATION" => credentials }
+      response
+    end
+
+    include_examples "Unauthenticated, unauthorised, or not accepted T&Cs"
+
+    describe "when authorized" do
+      it { is_expected.to have_http_status(:no_content) }
+    end
+  end
 end

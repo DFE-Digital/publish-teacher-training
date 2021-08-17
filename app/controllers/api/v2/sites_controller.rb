@@ -39,6 +39,10 @@ module API
         render jsonapi: @site
       end
 
+      def destroy
+        @site.discard
+      end
+
     private
 
       def site_params

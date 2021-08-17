@@ -6,6 +6,8 @@ class Site < ApplicationRecord
   include TouchProvider
   include Discard::Model
 
+  class DiscardError < StandardError; end
+
   POSSIBLE_CODES = (("A".."Z").to_a + ("0".."9").to_a + ["-"]).freeze
   EASILY_CONFUSED_CODES = %w[1 I 0 O -].freeze # these ought to be assigned last
   DESIRABLE_CODES = (POSSIBLE_CODES - EASILY_CONFUSED_CODES).freeze
@@ -13,7 +15,7 @@ class Site < ApplicationRecord
   before_validation :assign_code, unless: :persisted?
 
   before_discard do
-    raise "You cannot delete the last location" if provider.sites.count == 1
+    raise DiscardError, "cannot delete the last location" if provider.sites.count == 1
   end
 
   audited associated_with: :provider

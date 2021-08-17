@@ -11,7 +11,7 @@ describe SitePolicy do
     end
   end
 
-  permissions :show? do
+  permissions :show?, :destroy? do
     let(:organisation) { create(:organisation, users: [user]) }
     let(:site) { create(:site) }
     let!(:provider) {
