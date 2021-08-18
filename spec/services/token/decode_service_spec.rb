@@ -30,8 +30,6 @@ describe Token::DecodeService do
               subject: encode_service_subject)
   end
 
-  let(:now) { Time.zone.now }
-
   subject do
     described_class.call(encoded_token: encoded_token,
                          secret: Settings.authentication.secret,
@@ -42,35 +40,49 @@ describe Token::DecodeService do
   end
 
   describe "#call" do
-    before do
-      allow(Time).to receive(:zone)
-        .and_return(OpenStruct.new(now: now))
-    end
+    # before do
+    #   allow(Time).to receive(:zone)
+    #     .and_return(OpenStruct.new(now: now))
+    # end
 
-    it "token values are equal" do
-      expect(subject).to match(payload)
-    end
-
-    context "mismatch" do
-      shared_examples "mismatch" do |option, exception, value = option|
-        context "#{option} settings" do
-          let("encode_service_#{option}".to_sym) { value.to_s }
-
-          it "raises an exception" do
-            expect { subject }.to raise_exception exception
-          end
+    context "non-expired token" do
+      around do |spec|
+        Timecop.freeze do
+          spec.run
         end
       end
 
-      include_examples "mismatch", :secret, JWT::VerificationError
-      include_examples "mismatch", :algorithm, JWT::IncorrectAlgorithm, "HS512"
-      include_examples "mismatch", :audience, JWT::InvalidAudError
-      include_examples "mismatch", :issuer, JWT::InvalidIssuerError
-      include_examples "mismatch", :subject, JWT::InvalidSubError
+      it "token values are equal" do
+        expect(subject).to match(payload)
+      end
+
+      context "mismatch" do
+        shared_examples "mismatch" do |option, exception, value = option|
+          context "#{option} settings" do
+            let("encode_service_#{option}".to_sym) { value.to_s }
+
+            it "raises an exception" do
+              expect { subject }.to raise_exception exception
+            end
+          end
+        end
+
+        include_examples "mismatch", :secret, JWT::VerificationError
+        include_examples "mismatch", :algorithm, JWT::IncorrectAlgorithm, "HS512"
+        include_examples "mismatch", :audience, JWT::InvalidAudError
+        include_examples "mismatch", :issuer, JWT::InvalidIssuerError
+        include_examples "mismatch", :subject, JWT::InvalidSubError
+      end
     end
 
     context "expired token" do
-      let(:now) { Time.zone.now - (5.minutes + 6.seconds) }
+      around do |spec|
+        encoded_token # encoded with actual Time.now
+
+        Timecop.freeze((5.minutes + 6.seconds).from_now) do
+          spec.run
+        end
+      end
 
       it "raises an exception" do
         expect { subject }.to raise_exception JWT::ExpiredSignature
