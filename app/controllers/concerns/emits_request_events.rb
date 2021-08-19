@@ -11,7 +11,9 @@ module EmitsRequestEvents
       request_event = BigQuery::RequestEvent.new do |event|
         event.with_request_details(request)
         event.with_response_details(response)
-        event.with_user(current_user)
+        if respond_to?(:current_user, true)
+          event.with_user(current_user)
+        end
       end
 
       SendEventToBigQueryJob.perform_later(request_event.as_json)
