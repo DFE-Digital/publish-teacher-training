@@ -12,6 +12,14 @@ class TestController < ::ApplicationController
   def authenticate
     @current_user = User.last
   end
+
+  attr_reader :current_user
+end
+
+class UnauthenticatedTestController < PublicAPIController
+  def test
+    render plain: "Booyah"
+  end
 end
 
 describe EmitsRequestEvents, type: :request do
@@ -20,6 +28,7 @@ describe EmitsRequestEvents, type: :request do
   before do
     Rails.application.routes.draw do
       get "/test", to: "test#test"
+      get "/unauthenticated_test", to: "unauthenticated_test#test"
     end
   end
 
@@ -52,6 +61,22 @@ describe EmitsRequestEvents, type: :request do
           "X-Request-Id" => "iamauuid",
         }
       }.not_to(have_enqueued_job(SendEventToBigQueryJob))
+    end
+  end
+
+  context "controller doesn't have a current_user" do
+    before do
+      stub_feature(true)
+    end
+
+    it "does send to big query" do
+      expect {
+        get "/unauthenticated_test?foo=bar", headers: {
+          "HTTP_USER_AGENT" => "Toaster/1.23",
+          "HTTP_REFERER" => "https://example.com/",
+          "X-Request-Id" => "iamauuid",
+        }
+      }.to(have_enqueued_job(SendEventToBigQueryJob))
     end
   end
 
