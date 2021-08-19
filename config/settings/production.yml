@@ -22,3 +22,6 @@ skylight:
 environment:
   name: "beta"
 render_json_errors: true
+
+features:
+  send_request_data_to_bigquery: true

@@ -20,3 +20,6 @@ bg_jobs:
     queue: save_statistic
 environment:
   name: "staging"
+
+features:
+  send_request_data_to_bigquery: true
