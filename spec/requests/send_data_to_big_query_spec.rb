@@ -16,7 +16,7 @@ class TestController < ::ApplicationController
   attr_reader :current_user
 end
 
-class UnauthenticatedTestController < ::API::Public::V1::ApplicationController
+class UnauthenticatedTestController < PublicAPIController
   def test
     render plain: "Booyah"
   end

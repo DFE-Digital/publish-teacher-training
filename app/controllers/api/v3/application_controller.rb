@@ -1,9 +1,6 @@
 module API
   module V3
-    class ApplicationController < ActionController::API
-      include Pagy::Backend
-      include ErrorHandlers::Pagy
-
+    class ApplicationController < PublicAPIController
       rescue_from ActiveRecord::RecordNotFound, with: :jsonapi_404
 
       before_action :store_request_id
