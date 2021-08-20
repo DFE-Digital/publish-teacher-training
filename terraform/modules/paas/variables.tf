@@ -43,9 +43,6 @@ locals {
   postgres_extensions = {
     enable_extensions = ["pg_stat_statements", "btree_gin", "btree_gist"]
   }
-  review_app_postgres_params = {
-    restore_from_latest_snapshot_of = local.qa_postgres_service_instance
-  }
-  postgres_params = merge(local.postgres_extensions, var.app_environment == "review" ? local.review_app_postgres_params : {})
+  postgres_params = local.postgres_extensions
   web_app_routes  = [cloudfoundry_route.web_app_service_gov_uk_route, cloudfoundry_route.web_app_cloudapps_digital_route]
 }
