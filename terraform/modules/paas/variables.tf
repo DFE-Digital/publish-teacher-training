@@ -41,7 +41,7 @@ locals {
   worker_app_start_command = "bundle exec sidekiq -c 5 -C config/sidekiq.yml"
 
   postgres_extensions = {
-    enable_extensions = ["pg_buffercache", "pg_stat_statements", "btree_gin", "btree_gist"]
+    enable_extensions = ["pg_stat_statements", "btree_gin", "btree_gist"]
   }
   review_app_postgres_params = {
     restore_from_latest_snapshot_of = local.qa_postgres_service_instance
