@@ -378,6 +378,7 @@ class Course < ApplicationRecord
     # itself, so we don't want to alter the semantics of updated_at which
     # represents changes to just the course record.
     update_columns changed_at: timestamp
+    touch_provider
   end
 
   def study_mode_description

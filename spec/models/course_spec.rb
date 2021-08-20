@@ -2462,4 +2462,26 @@ describe Course, type: :model do
       it { is_expected.to eq(true) }
     end
   end
+
+  describe "update_changed_at" do
+    around do |example|
+      Timecop.freeze do
+        example.run
+      end
+    end
+
+    before do
+      course.update_columns(changed_at: 1.day.ago)
+      course.provider.update_columns(changed_at: 1.day.ago)
+      course.update_changed_at
+    end
+
+    it "sets changed_at" do
+      expect(course.changed_at).to eq(Time.zone.now)
+    end
+
+    it "touches the provider" do
+      expect(course.provider.changed_at).to eq(Time.zone.now)
+    end
+  end
 end
