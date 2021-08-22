@@ -17,7 +17,9 @@ module API
                    :latitude,
                    :longitude,
                    :telephone,
-                   :email
+                   :email,
+                   :can_sponsor_skilled_worker_visa,
+                   :can_sponsor_student_visa
 
         attribute :accredited_body do
           @object.accredited_body?

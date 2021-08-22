@@ -297,7 +297,9 @@ RSpec.describe API::Public::V1::ProvidersController do
                 latitude
                 longitude
                 telephone
-                email]
+                email
+                can_sponsor_skilled_worker_visa
+                can_sponsor_student_visa]
           end
 
           before do
@@ -405,6 +407,8 @@ RSpec.describe API::Public::V1::ProvidersController do
             "longitude" => provider.longitude,
             "telephone" => provider.telephone,
             "email" => provider.email,
+            "can_sponsor_student_visa" => provider.can_sponsor_student_visa,
+            "can_sponsor_skilled_worker_visa" => provider.can_sponsor_skilled_worker_visa,
           },
         }
       end
