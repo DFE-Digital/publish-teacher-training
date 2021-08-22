@@ -33,7 +33,15 @@ module API
                    :qualifications,
                    :scholarship_amount,
                    :study_mode,
-                   :uuid
+                   :uuid,
+                   :degree_grade,
+                   :degree_subject_requirements,
+                   :accept_pending_gcse,
+                   :accept_gcse_equivalency,
+                   :accept_english_gcse_equivalency,
+                   :accept_maths_gcse_equivalency,
+                   :accept_science_gcse_equivalency,
+                   :additional_gcse_equivalencies
 
         attribute :about_accredited_body do
           @object.accrediting_provider_description
