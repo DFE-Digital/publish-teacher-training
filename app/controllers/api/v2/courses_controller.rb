@@ -343,6 +343,9 @@ module API
 
       def update_further_education_fields
         @course.funding_type = "fee"
+        @course.english = "not_required"
+        @course.maths = "not_required"
+        @course.science = "not_required"
         @course.subjects << FurtherEducationSubject.instance
       end
 
