@@ -93,6 +93,7 @@ describe "Sites API v2", type: :request do
               "longitude" => site1.longitude,
               "urn" => site1.urn,
               "recruitment_cycle_year" => current_cycle.year,
+              "deletable?" => true,
             },
           },
           {
@@ -111,6 +112,7 @@ describe "Sites API v2", type: :request do
               "longitude" => site2.longitude,
               "urn" => site2.urn,
               "recruitment_cycle_year" => current_cycle.year,
+              "deletable?" => true,
             },
           },
         ])

@@ -5,7 +5,7 @@ describe Site, type: :model do
 
   let(:provider) { create(:provider) }
 
-  subject { create(:site, provider_id: provider.id) }
+  subject(:created_site) { create(:site, provider_id: provider.id) }
 
   describe "auditing" do
     it { is_expected.to be_audited.associated_with(:provider) }
@@ -46,6 +46,13 @@ describe Site, type: :model do
         expect { subject.discard }.to raise_error(Site::DiscardError,
                                                   "cannot delete the last location")
       end
+
+      it "raises error when courses belong to the site" do
+        create(:site, provider: provider)
+        create(:course, sites: [created_site])
+        expect { subject.discard }.to raise_error(Site::DiscardError,
+                                                  "cannot delete location having courses")
+      end
     end
   end
 
@@ -82,6 +89,8 @@ describe Site, type: :model do
 
   describe "associations" do
     it { is_expected.to belong_to(:provider) }
+    it { is_expected.to have_many(:site_statuses) }
+    it { is_expected.to have_many(:courses) }
   end
 
   describe "#touch_provider" do

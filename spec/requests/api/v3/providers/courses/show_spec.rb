@@ -182,6 +182,7 @@ describe "GET v3/recruitment_cycle/:recruitment_cycle_year/providers/:provider_c
               "longitude" => courses_site_status.site.longitude,
               "urn" => courses_site_status.site.urn,
               "recruitment_cycle_year" => current_year.to_s,
+              "deletable?" => false,
             },
           },
         ],

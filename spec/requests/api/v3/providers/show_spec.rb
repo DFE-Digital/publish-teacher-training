@@ -166,6 +166,7 @@ describe "GET v3/recruitment_cycle/:recruitment_cycle_year/providers/:provider_c
               "longitude" => site.longitude,
               "urn" => site.urn,
               "recruitment_cycle_year" => site.recruitment_cycle.year,
+              "deletable?" => false,
             },
           },
         ],

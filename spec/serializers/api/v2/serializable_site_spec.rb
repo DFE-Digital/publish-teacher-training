@@ -19,4 +19,20 @@ describe API::V2::SerializableSite do
   it { is_expected.to have_attribute(:postcode).with_value(site.postcode) }
   it { is_expected.to have_attribute(:region_code).with_value(site.region_code) }
   it { is_expected.to have_attribute(:recruitment_cycle_year).with_value(site.recruitment_cycle.year) }
+
+  describe "#deletable?" do
+    it { is_expected.to have_attribute(:deletable?).with_value(false) }
+
+    context "when the provider has multiple sites" do
+      before { create(:site, provider: site.provider) }
+
+      it { is_expected.to have_attribute(:deletable?).with_value(true) }
+
+      context "when the site has courses" do
+        before { create(:course, sites: [site]) }
+
+        it { is_expected.to have_attribute(:deletable?).with_value(false) }
+      end
+    end
+  end
 end

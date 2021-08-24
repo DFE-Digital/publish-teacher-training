@@ -479,6 +479,7 @@ describe "Courses API v2", type: :request do
                   "longitude" => site1.longitude,
                   "urn" => site1.urn,
                   "recruitment_cycle_year" => current_year.to_s,
+                  "deletable?" => false,
                 },
               },
               {
@@ -497,6 +498,7 @@ describe "Courses API v2", type: :request do
                   "longitude" => site2.longitude,
                   "urn" => site2.urn,
                   "recruitment_cycle_year" => current_year.to_s,
+                  "deletable?" => false,
                 },
               },
             ],

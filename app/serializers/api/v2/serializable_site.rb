@@ -10,6 +10,10 @@ module API
       attribute :recruitment_cycle_year do
         @object.recruitment_cycle.year
       end
+
+      attribute :deletable? do
+        @object.courses.size.zero? && @object.provider.sites.count > 1
+      end
     end
   end
 end

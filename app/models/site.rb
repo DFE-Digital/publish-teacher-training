@@ -15,12 +15,18 @@ class Site < ApplicationRecord
   before_validation :assign_code, unless: :persisted?
 
   before_discard do
+    raise DiscardError, "cannot delete location having courses" if courses.count.positive?
     raise DiscardError, "cannot delete the last location" if provider.sites.count == 1
   end
 
   audited associated_with: :provider
 
   belongs_to :provider
+
+  has_many :site_statuses
+  has_many :courses,
+           -> { kept.distinct.merge(SiteStatus.where(status: %i[new_status running])) },
+           through: :site_statuses
 
   validates :location_name, uniqueness: { scope: :provider_id }
   validates :location_name,
