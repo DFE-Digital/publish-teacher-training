@@ -1192,7 +1192,7 @@ describe Course, type: :model do
       end
 
       context "when the provider can sponsor skilled worker visas" do
-        let(:provider) { create(:provider, can_sponsor_skilled_worker_visa: true, can_sponsor_student_visa: false)}
+        let(:provider) { create(:provider, can_sponsor_skilled_worker_visa: true, can_sponsor_student_visa: false) }
 
         it "returns the course" do
           expect(subject).to eq [course]
@@ -1200,7 +1200,7 @@ describe Course, type: :model do
       end
 
       context "when the provider can sponsor student visas" do
-        let(:provider) { create(:provider, can_sponsor_skilled_worker_visa: false, can_sponsor_student_visa: true)}
+        let(:provider) { create(:provider, can_sponsor_skilled_worker_visa: false, can_sponsor_student_visa: true) }
 
         it "returns the course" do
           expect(subject).to eq [course]
@@ -1208,7 +1208,7 @@ describe Course, type: :model do
       end
 
       context "when the provider cannot sponsor visas" do
-        let(:provider) { create(:provider, can_sponsor_skilled_worker_visa: false, can_sponsor_student_visa: false)}
+        let(:provider) { create(:provider, can_sponsor_skilled_worker_visa: false, can_sponsor_student_visa: false) }
 
         it "does not return the course" do
           expect(subject).to eq []

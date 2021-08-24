@@ -112,3 +112,7 @@ properties:
       - two_two
       - third_class
       - not_required
+provider_can_sponsor_visa:
+    description: "Only return courses where the provider can sponsor either a skilled worker or student visa"
+    type: boolean
+    example: true
