@@ -214,6 +214,75 @@ RSpec.describe API::Public::V1::CoursesController do
 
           expect(meta["count"]).to be(2)
         end
+
+        context "default fields" do
+          let(:fields) do
+            %w[ accredited_body_code
+                age_maximum
+                age_minimum
+                bursary_amount
+                bursary_requirements
+                created_at
+                funding_type
+                gcse_subjects_required
+                level
+                name
+                program_type
+                qualifications
+                scholarship_amount
+                study_mode
+                uuid
+                degree_grade
+                degree_subject_requirements
+                accept_pending_gcse
+                accept_gcse_equivalency
+                accept_english_gcse_equivalency
+                accept_maths_gcse_equivalency
+                accept_science_gcse_equivalency
+                additional_gcse_equivalencies
+                about_accredited_body
+                applications_open_from
+                changed_at
+                code
+                findable
+                has_early_career_payments
+                has_scholarship
+                has_vacancies
+                is_send
+                last_published_at
+                open_for_applications
+                required_qualifications_english
+                required_qualifications_maths
+                required_qualifications_science
+                running
+                start_date
+                state
+                summary
+                subject_codes
+                required_qualifications
+                about_course
+                course_length
+                fee_details
+                fee_international
+                fee_domestic
+                financial_support
+                how_school_placements_work
+                interview_process
+                other_requirements
+                personal_qualities
+                salary_details]
+          end
+
+          before do
+            get :index, params: {
+              recruitment_cycle_year: recruitment_cycle.year,
+            }
+          end
+
+          it "returns the default fields" do
+            expect(json_response["data"].first["attributes"].keys).to match_array(fields)
+          end
+        end
       end
     end
   end

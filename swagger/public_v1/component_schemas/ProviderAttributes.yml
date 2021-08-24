@@ -134,3 +134,11 @@ properties:
     format: url
     description: "A link to the initial teacher training or course pages of your website."
     example: "http://www.teamworkstsa.org/home-page-s-c-i-t-t-teacher-training/"
+  can_sponsor_skilled_worker_visa:
+    type: boolean
+    description: "Can this provider sponsor Skilled Worker visas?"
+    example: "true"
+  can_sponsor_student_visa:
+    type: boolean
+    description: "Can this provider sponsor Student visas?"
+    example: "true"

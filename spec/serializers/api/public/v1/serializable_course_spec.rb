@@ -83,4 +83,13 @@ RSpec.describe API::Public::V1::SerializableCourse do
   it { is_expected.to have_attribute(:study_mode).with_value("full_time") }
   it { is_expected.to have_attribute(:summary).with_value("PGCE with QTS full time teaching apprenticeship") }
   it { is_expected.to have_attribute(:subject_codes).with_value(%w[00]) }
+
+  it { is_expected.to have_attribute(:degree_grade).with_value(course.degree_grade) }
+  it { is_expected.to have_attribute(:degree_subject_requirements).with_value(course.degree_subject_requirements) }
+  it { is_expected.to have_attribute(:accept_pending_gcse).with_value(course.accept_pending_gcse) }
+  it { is_expected.to have_attribute(:accept_gcse_equivalency).with_value(course.accept_gcse_equivalency) }
+  it { is_expected.to have_attribute(:accept_english_gcse_equivalency).with_value(course.accept_english_gcse_equivalency) }
+  it { is_expected.to have_attribute(:accept_maths_gcse_equivalency).with_value(course.accept_maths_gcse_equivalency) }
+  it { is_expected.to have_attribute(:accept_science_gcse_equivalency).with_value(course.accept_science_gcse_equivalency) }
+  it { is_expected.to have_attribute(:additional_gcse_equivalencies).with_value(course.additional_gcse_equivalencies) }
 end

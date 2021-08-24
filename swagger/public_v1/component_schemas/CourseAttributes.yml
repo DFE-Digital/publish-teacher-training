@@ -340,3 +340,48 @@ properties:
     items:
       type: string
       example: "00"
+  degree_grade:
+    type: string
+    nullable: true
+    description: "Minimum degree grade required for this course"
+    example: "two_one"
+    enum:
+      - two_one
+      - two_two
+      - third_class
+      - not_required
+  degree_subject_requirements:
+    type: string
+    nullable: true
+    description: "Degree subject requirements"
+    example: "Completed at least one programming module."
+  accept_pending_gcse:
+    type: boolean
+    nullable: true
+    description: "Does the provider consider candidates with pending GCSEs for this course?"
+    example: "true"
+  accept_gcse_equivalency:
+    type: boolean
+    nullable: true
+    description: "Does the provider consider candidates who need to take an equivalency test in English, maths or science?"
+    example: "true"
+  accept_english_gcse_equivalency:
+    type: boolean
+    nullable: true
+    description: "Does the provider consider candidates who need to take an equivalency test in English?"
+    example: "true"
+  accept_maths_gcse_equivalency:
+    type: boolean
+    nullable: true
+    description: "Does the provider consider candidates who need to take an equivalency test in maths?"
+    example: "true"
+  accept_science_gcse_equivalency:
+    type: boolean
+    nullable: true
+    description: "Does the provider consider candidates who need to take an equivalency test in science?"
+    example: "true"
+  additional_gcse_equivalencies:
+    type: string
+    nullable: true
+    description: "Details about equivalency tests the provider offers or accepts"
+    example: "We offer our own equivalency tests."

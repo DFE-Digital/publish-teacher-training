@@ -32,4 +32,6 @@ describe API::Public::V1::SerializableProvider do
   it { is_expected.to have_attribute(:longitude).with_value(provider.longitude) }
   it { is_expected.to have_attribute(:telephone).with_value(provider.telephone) }
   it { is_expected.to have_attribute(:email).with_value(provider.email) }
+  it { is_expected.to have_attribute(:can_sponsor_skilled_worker_visa).with_value(provider.can_sponsor_skilled_worker_visa) }
+  it { is_expected.to have_attribute(:can_sponsor_student_visa).with_value(provider.can_sponsor_student_visa) }
 end
