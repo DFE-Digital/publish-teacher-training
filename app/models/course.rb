@@ -259,6 +259,11 @@ class Course < ApplicationRecord
     where(degree_grade: degree_grades)
   end
 
+  scope :provider_can_sponsor_visa, -> do
+    joins(:provider)
+    .where("provider.can_sponsor_student_visa = true OR provider.can_sponsor_skilled_worker_visa = true")
+  end
+
   def self.entry_requirement_options_without_nil_choice
     ENTRY_REQUIREMENT_OPTIONS.reject { |option| option == :not_set }.keys.map(&:to_s)
   end

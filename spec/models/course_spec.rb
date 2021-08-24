@@ -1181,6 +1181,40 @@ describe Course, type: :model do
         expect(described_class.findable.with_vacancies.to_a).to eql([course_in_scope])
       end
     end
+
+    describe ".provider_can_sponsor_visa" do
+      subject { described_class.provider_can_sponsor_visa }
+
+      let(:course) { create(:course, provider: provider) }
+
+      before do
+        course
+      end
+
+      context "when the provider can sponsor skilled worker visas" do
+        let(:provider) { create(:provider, can_sponsor_skilled_worker_visa: true, can_sponsor_student_visa: false)}
+
+        it "returns the course" do
+          expect(subject).to eq [course]
+        end
+      end
+
+      context "when the provider can sponsor student visas" do
+        let(:provider) { create(:provider, can_sponsor_skilled_worker_visa: false, can_sponsor_student_visa: true)}
+
+        it "returns the course" do
+          expect(subject).to eq [course]
+        end
+      end
+
+      context "when the provider cannot sponsor visas" do
+        let(:provider) { create(:provider, can_sponsor_skilled_worker_visa: false, can_sponsor_student_visa: false)}
+
+        it "does not return the course" do
+          expect(subject).to eq []
+        end
+      end
+    end
   end
 
   describe "changed_at" do
