@@ -302,6 +302,38 @@ describe "GET v3/courses" do
     end
   end
 
+  describe "degree grade filter" do
+    let(:request_path) { "/api/v3/courses?filter[degree_grade]=two_two" }
+
+    context "with a course that has a 2:2 degree grade minimum requirement" do
+      let(:course_with_two_two_degree) { create(:course, degree_grade: :two_two, site_statuses: [findable_status]) }
+
+      before { course_with_two_two_degree }
+
+      it "is returned" do
+        get request_path
+        json_response = JSON.parse(response.body)
+        course_hashes = json_response["data"]
+
+        expect(course_hashes.count).to eq(1)
+      end
+    end
+
+    context "with a course that does not have a 2:2 degree grade minimum requirement" do
+      let(:course_with_third_class_degree) { create(:course, degree_grade: :third_class, site_statuses: [findable_status]) }
+
+      before { course_with_third_class_degree }
+
+      it "is returned" do
+        get request_path
+        json_response = JSON.parse(response.body)
+        course_hashes = json_response["data"]
+
+        expect(course_hashes.count).to eq(0)
+      end
+    end
+  end
+
   describe "qualifications filter" do
     let(:request_path) { "/api/v3/courses?filter[qualification]=pgce" }
 

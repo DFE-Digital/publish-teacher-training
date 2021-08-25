@@ -27,6 +27,7 @@ class CourseSearchService
     scope = scope.with_send if send_courses_filter?
     scope = scope.within(filter[:radius], origin: origin) if locations_filter?
     scope = scope.with_funding_types(funding_types) if funding_types.any?
+    scope = scope.with_degree_grades(degree_grades) if degree_grades.any?
     scope = scope.changed_since(filter[:updated_since]) if updated_since_filter?
 
     # The 'where' scope will remove duplicates
@@ -204,6 +205,12 @@ private
     return [] if filter[:funding_type].blank?
 
     filter[:funding_type].split(",")
+  end
+
+  def degree_grades
+    return [] if filter[:degree_grade].blank?
+
+    filter[:degree_grade].split(",")
   end
 
   def subject_codes

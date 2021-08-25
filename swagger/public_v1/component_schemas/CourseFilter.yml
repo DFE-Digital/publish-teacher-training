@@ -103,3 +103,12 @@ properties:
     description: "Return courses have been updated since the date (ISO 8601 date format)"
     type: string
     example: "2020-11-13T11:21:55Z"
+  degree_grade:
+    description: "Return courses based on their degree grade. This is a comma delimited string. If multiple degree grade types are provided then any course matching any one of the options provided will be returned, i.e. the OR operator is used."
+    type: string
+    example: "two_two,third_class"
+    enum:
+      - two_one
+      - two_two
+      - third_class
+      - not_required

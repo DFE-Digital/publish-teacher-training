@@ -515,6 +515,17 @@
               "fee"
             ]
           },
+          "degree_grade": {
+            "description": "Return courses based on their degree grade. This is a comma delimited string. If multiple degree grade types are provided then any course matching any one of the options provided will be returned, i.e. the OR operator is used.",
+            "type": "string",
+            "example": "two_two,third_class",
+            "enum": [
+              "two_one",
+              "two_two",
+              "third_class",
+              "not_required"
+            ]
+          },
           "qualification": {
             "description": "Search courses based on the award given on course completion. This is a comma delimited string. If multiple qualifications are given then any course matching any one of the qualifications provided will be returned, i.e. the OR operator is used.",
             "type": "string",

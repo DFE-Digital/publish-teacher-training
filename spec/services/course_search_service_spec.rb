@@ -465,6 +465,67 @@ RSpec.describe CourseSearchService do
       end
     end
 
+    describe "filter[degree_grade]" do
+      context "when two_two" do
+        let(:filter) { { degree_grade: "two_two" } }
+        let(:expected_scope) { double }
+
+        it "adds the with_degree_grades scope" do
+          expect(scope).to receive(:with_degree_grades).with(%w(two_two)).and_return(course_ids_scope)
+          expect(course_ids_scope).to receive(:select).and_return(inner_query_scope)
+          expect(course_with_includes).to receive(:where).and_return(expected_scope)
+          expect(subject).to eq(expected_scope)
+        end
+      end
+
+      context "when third_class" do
+        let(:filter) { { degree_grade: "third_class" } }
+        let(:expected_scope) { double }
+
+        it "adds the with_degree_grades scope" do
+          expect(scope).to receive(:with_degree_grades).with(%w(third_class)).and_return(course_ids_scope)
+          expect(course_ids_scope).to receive(:select).and_return(inner_query_scope)
+          expect(course_with_includes).to receive(:where).and_return(expected_scope)
+          expect(subject).to eq(expected_scope)
+        end
+      end
+
+      context "when not_required" do
+        let(:filter) { { degree_grade: "not_required" } }
+        let(:expected_scope) { double }
+
+        it "adds the with_degree_grades scope" do
+          expect(scope).to receive(:with_degree_grades).with(%w(not_required)).and_return(course_ids_scope)
+          expect(course_ids_scope).to receive(:select).and_return(inner_query_scope)
+          expect(course_with_includes).to receive(:where).and_return(expected_scope)
+          expect(subject).to eq(expected_scope)
+        end
+      end
+
+      context "when all" do
+        let(:filter) { { degree_grade: "two_one,two_two,third_class,not_required" } }
+        let(:expected_scope) { double }
+
+        it "adds the with_degree_grades scope" do
+          expect(scope).to receive(:with_degree_grades).with(%w(two_two third_class not_required)).and_return(course_ids_scope)
+          expect(course_ids_scope).to receive(:select).and_return(inner_query_scope)
+          expect(course_with_includes).to receive(:where).and_return(expected_scope)
+          expect(subject).to eq(expected_scope)
+        end
+      end
+
+      context "when absent" do
+        let(:filter) { {} }
+
+        it "doesn't add the scope" do
+          expect(scope).not_to receive(:with_degree_grades)
+          expect(scope).to receive(:select).and_return(inner_query_scope)
+          expect(course_with_includes).to receive(:where).and_return(expected_scope)
+          expect(subject).to eq(expected_scope)
+        end
+      end
+    end
+
     describe "filter[subjects]" do
       context "a single subject code" do
         let(:filter) { { subjects: "A1" } }

@@ -24,6 +24,7 @@ describe "API" do
                   has_vacancies: true,
                   subjects: "00,01",
                   updated_since: "2020-11-13T11:21:55Z",
+                  degree_grade: "two_two",
                 }
       parameter name: :sort,
                 in: :query,
