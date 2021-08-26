@@ -1,0 +1,6 @@
+shared:
+  provider:
+    - provider_name
+  course:
+    - name
+

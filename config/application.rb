@@ -25,7 +25,6 @@ module ManageCoursesBackend
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 5.2
-
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration can go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded after loading
@@ -58,5 +57,7 @@ module ManageCoursesBackend
     config.view_component.preview_paths = [Rails.root.join("spec/components")]
     config.view_component.preview_route = "/view_components"
     config.view_component.show_previews = !Rails.env.production?
+
+    config.analytics = config_for(:analytics)
   end
 end
