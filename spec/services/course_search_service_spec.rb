@@ -507,7 +507,7 @@ RSpec.describe CourseSearchService do
         let(:expected_scope) { double }
 
         it "adds the with_degree_grades scope" do
-          expect(scope).to receive(:with_degree_grades).with(%w(two_two third_class not_required)).and_return(course_ids_scope)
+          expect(scope).to receive(:with_degree_grades).with(%w(two_one two_two third_class not_required)).and_return(course_ids_scope)
           expect(course_ids_scope).to receive(:select).and_return(inner_query_scope)
           expect(course_with_includes).to receive(:where).and_return(expected_scope)
           expect(subject).to eq(expected_scope)

@@ -1016,6 +1016,15 @@ describe Course, type: :model do
           expect(subject).to contain_exactly(minimum_degree_not_required_course)
         end
       end
+
+      context "third_class degree course and 2:2 degree course" do
+        let(:degree_grades) { %w[two_two third_class] }
+
+        it "returns courses that require a minimum of a two degree or a third class degree" do
+          expect(subject.count).to eq(2)
+          expect(subject).to eq([two_two_course, third_class_course])
+        end
+      end
     end
 
     describe ".with_salary" do
