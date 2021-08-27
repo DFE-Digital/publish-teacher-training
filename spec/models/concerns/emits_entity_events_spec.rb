@@ -56,4 +56,22 @@ RSpec.describe EmitsEntityEvents do
       end
     end
   end
+
+  describe "send_import_event" do
+    let(:provider) { create(:provider) }
+
+    before do
+      provider
+      clear_enqueued_jobs
+    end
+
+    it "sends an event" do
+      provider.send_import_event
+      expect(SendEventToBigQueryJob).to have_been_enqueued
+    end
+
+    it "sets the event type" do
+      expect(provider.send_import_event.as_json["event_type"]).to eq("event_import")
+    end
+  end
 end

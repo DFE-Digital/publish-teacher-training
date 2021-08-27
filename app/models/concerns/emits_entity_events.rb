@@ -6,7 +6,7 @@ module EmitsEntityEvents
 
     after_create do
       data = entity_data(attributes)
-      send_event("create_entity", data) if data.any?
+      send_event(build_event(BigQuery::EntityEvent::CREATE_ENTITY_EVENT_TYPE, data)) if data.any?
     end
 
     after_update do
@@ -17,19 +17,23 @@ module EmitsEntityEvents
       interesting_changes = entity_data(saved_changes.transform_values(&:last))
 
       if interesting_changes.any?
-        send_event("update_entity", entity_data(attributes).merge(interesting_changes))
+        send_event(
+          build_event(BigQuery::EntityEvent::UPDATE_ENTITY_EVENT_TYPE, entity_data(attributes).merge(interesting_changes)),
+        )
       end
     end
   end
 
-  def send_event(type, data)
-    return unless FeatureService.enabled?(:send_request_data_to_bigquery)
-
-    event = BigQuery::EntityEvent.new do |ee|
-      ee.with_type(type)
-      ee.with_entity_table_name(self.class.table_name)
-      ee.with_data(data)
+  def send_import_event
+    build_event(BigQuery::EntityEvent::IMPORT_EVENT_TYPE, entity_data(attributes)).tap do |event|
+      send_event(event)
     end
+  end
+
+private
+
+  def send_event(event)
+    return unless FeatureService.enabled?(:send_request_data_to_bigquery)
 
     SendEventToBigQueryJob.perform_later(event.as_json)
   end
@@ -37,5 +41,13 @@ module EmitsEntityEvents
   def entity_data(changeset)
     exportable_attrs = Rails.configuration.analytics[self.class.table_name.to_sym]
     changeset.slice(*exportable_attrs&.map(&:to_s))
+  end
+
+  def build_event(type, data)
+    BigQuery::EntityEvent.new do |ee|
+      ee.with_type(type)
+      ee.with_entity_table_name(self.class.table_name)
+      ee.with_data(data)
+    end
   end
 end
