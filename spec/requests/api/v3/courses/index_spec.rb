@@ -305,7 +305,7 @@ describe "GET v3/courses" do
   describe "degree grade filter" do
     let(:request_path) { "/api/v3/courses?filter[degree_grade]=two_two,third_class" }
 
-    context "with a course that has a 2:2 degree grade minimum requirement or no requirements" do
+    context "with one course that has a 2:2 degree grade and another that has a third class degree grade" do
       let(:course_with_two_two_degree) { create(:course, degree_grade: :two_two, site_statuses: [findable_status]) }
       let(:course_with_third_class_degree) { create(:course, degree_grade: :third_class, site_statuses: [build(:site_status, :findable)]) }
 
@@ -323,7 +323,7 @@ describe "GET v3/courses" do
       end
     end
 
-    context "with a course that does not have a 2:2 degree grade minimum requirement or no requirements" do
+    context "with a course that has a 'not_required' degree grade" do
       let(:minimum_degree_not_required_course) { create(:course, degree_grade: :not_required, site_statuses: [findable_status]) }
 
       before { minimum_degree_not_required_course }

@@ -996,7 +996,7 @@ describe Course, type: :model do
       context "2:2 courses" do
         let(:degree_grades) { %w[two_two] }
 
-        it "returns courses that require a minimum of a 2:2 degree" do
+        it "returns courses with a 'two_two' degree grade" do
           expect(subject).to contain_exactly(two_two_course)
         end
       end
@@ -1004,15 +1004,15 @@ describe Course, type: :model do
       context "third class degree courses" do
         let(:degree_grades) { %w[third_class] }
 
-        it "returns courses that require a minimum of a third class degree" do
+        it "returns courses with a 'third_class' degree grade" do
           expect(subject).to contain_exactly(third_class_course)
         end
       end
 
-      context "courses without a minimum degree requirement" do
+      context "no requirement degree courses" do
         let(:degree_grades) { %w[not_required] }
 
-        it "returns courses without a minimum degree requirement" do
+        it "returns courses with a 'not_required' degree grade" do
           expect(subject).to contain_exactly(minimum_degree_not_required_course)
         end
       end
