@@ -1,6 +1,7 @@
 ---
 :queues:
   - default
+  - mailers
   - geocoding
   - save_statistic
-  - mailers
+  - low_priority
