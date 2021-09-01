@@ -980,6 +980,44 @@ describe Course, type: :model do
       end
     end
 
+    describe ".with_degree_grades" do
+      let(:two_two_course) { create(:course, degree_grade: :two_two) }
+      let(:third_class_course) { create(:course, degree_grade: :third_class) }
+      let(:minimum_degree_not_required_course) { create(:course, degree_grade: :not_required) }
+
+      subject { described_class.with_degree_grades(degree_grades) }
+
+      before do
+        two_two_course
+        third_class_course
+        minimum_degree_not_required_course
+      end
+
+      context "2:2 courses" do
+        let(:degree_grades) { %w[two_two] }
+
+        it "returns courses with a 'two_two' degree grade" do
+          expect(subject).to contain_exactly(two_two_course)
+        end
+      end
+
+      context "third class degree courses" do
+        let(:degree_grades) { %w[third_class] }
+
+        it "returns courses with a 'third_class' degree grade" do
+          expect(subject).to contain_exactly(third_class_course)
+        end
+      end
+
+      context "no requirement degree courses" do
+        let(:degree_grades) { %w[not_required] }
+
+        it "returns courses with a 'not_required' degree grade" do
+          expect(subject).to contain_exactly(minimum_degree_not_required_course)
+        end
+      end
+    end
+
     describe ".with_salary" do
       let(:course_higher_education_programme) do
         create(:course, program_type: :higher_education_programme)
