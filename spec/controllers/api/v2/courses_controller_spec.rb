@@ -70,7 +70,7 @@ describe API::V2::CoursesController, type: :controller do
           end
 
           it "has a validation error about provider not having visa sponsorship information" do
-            expect(validation_errors).to include("Select if you can sponsor visas")
+            expect(validation_errors).to include("Select if visas can be sponsored")
           end
 
           it "has a validation error about provider not having a UKPRN" do
@@ -117,7 +117,7 @@ describe API::V2::CoursesController, type: :controller do
           end
 
           it "returns no validation error about missing visa information" do
-            expect(response.body).not_to match(/Select if you can sponsor visas/)
+            expect(response.body).not_to match(/Select if visas can be sponsored/)
           end
         end
       end
