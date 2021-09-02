@@ -612,6 +612,42 @@ RSpec.describe CourseSearchService do
         expect(subject).to eq(expected_scope)
       end
     end
+
+    describe "filter[can_sponsor_visa]" do
+      context "when true" do
+        let(:filter) { { can_sponsor_visa: true } }
+        let(:expected_scope) { double }
+
+        it "adds the provider_can_sponsor_visa scope" do
+          expect(scope).to receive(:provider_can_sponsor_visa).and_return(course_ids_scope)
+          expect(course_ids_scope).to receive(:select).and_return(inner_query_scope)
+          expect(course_with_includes).to receive(:where).and_return(expected_scope)
+          expect(subject).to eq(expected_scope)
+        end
+      end
+
+      context "when false" do
+        let(:filter) { { can_sponsor_visa: false } }
+
+        it "adds the provider_can_sponsor_visa scope" do
+          expect(scope).not_to receive(:provider_can_sponsor_visa)
+          expect(scope).to receive(:select).and_return(inner_query_scope)
+          expect(course_with_includes).to receive(:where).and_return(expected_scope)
+          expect(subject).to eq(expected_scope)
+        end
+      end
+
+      context "when absent" do
+        let(:filter) { {} }
+
+        it "doesn't add the provider_can_sponsor_visa scope" do
+          expect(scope).not_to receive(:provider_can_sponsor_visa)
+          expect(scope).to receive(:select).and_return(inner_query_scope)
+          expect(course_with_includes).to receive(:where).and_return(expected_scope)
+          expect(subject).to eq(expected_scope)
+        end
+      end
+    end
   end
 
   describe "expand_university" do
