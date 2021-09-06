@@ -1,6 +1,181 @@
 shared:
-  provider:
-    - provider_name
+  access_request:
+    - id
+    - organisation
+    - request_date_utc
+    - status
+  allocation:
+    - id
+    - provider_id
+    - accredited_body_id
+    - number_of_places
+    - created_at
+    - updated_at
+    - request_type
+    - accredited_body_code
+    - provider_code
+    - recruitment_cycle_id
+    - confirmed_number_of_places
+  contact:
+    - id
+    - provider_id
+    - type
+    - created_at
+    - updated_at
+    - permission_given
   course:
+    - id
+    - course_code
     - name
-
+    - profpost_flag
+    - program_type
+    - qualification
+    - start_date
+    - study_mode
+    - provider_id
+    - modular
+    - english
+    - maths
+    - science
+    - created_at
+    - updated_at
+    - changed_at
+    - accredited_body_code
+    - discarded_at
+    - age_range_in_years
+    - applications_open_from
+    - is_send
+    - level
+    - uuid
+    - degree_grade
+    - additional_degree_subject_requirements
+    - degree_subject_requirements
+    - accept_pending_gcse
+    - accept_gcse_equivalency
+    - accept_english_gcse_equivalency
+    - accept_maths_gcse_equivalency
+    - accept_science_gcse_equivalency
+    - additional_gcse_equivalencies
+  course_site:
+    - id
+    - course_id
+    - publish
+    - site_id
+    - status
+    - vac_status
+  course_subject:
+    - id
+    - course_id
+    - subject_id
+    - created_at
+    - updated_at
+    - position
+  financial_incentive:
+    - id
+    - subject_id
+    - bursary_amount
+    - early_career_payments
+    - scholarship
+    - created_at
+    - updated_at
+    - subject_knowledge_enhancement_course_available
+  interrupt_page_acknowledgement:
+    - id
+    - page
+    - recruitment_cycle_id
+    - user_id
+    - created_at
+    - updated_at
+  organisation:
+    - id
+    - name
+    - org_id
+  organisation_provider:
+    - id
+    - provider_id
+    - organisation_id
+  organisation_user:
+    - id
+    - organisation_id
+    - user_id
+  provider:
+    - id
+    - address4
+    - provider_name
+    - scheme_member
+    - year_code
+    - provider_code
+    - provider_type
+    - postcode
+    - website
+    - address1
+    - address2
+    - address3
+    - region_code
+    - created_at
+    - updated_at
+    - accrediting_provider
+    - changed_at
+    - recruitment_cycle_id
+    - discarded_at
+    - train_with_us
+    - train_with_disability
+    - accrediting_provider_enrichments
+    - latitude
+    - longitude
+    - ukprn
+    - urn
+    - can_sponsor_skilled_worker_visa
+    - can_sponsor_student_visa
+  recruitment_cycle:
+    - id
+    - year
+    - application_start_date
+    - application_end_date
+    - created_at
+    - updated_at
+  site:
+    - id
+    - address2
+    - address3
+    - address4
+    - code
+    - location_name
+    - postcode
+    - address1
+    - provider_id
+    - region_code
+    - created_at
+    - updated_at
+    - latitude
+    - longitude
+    - urn
+  subject:
+    - id
+    - type
+    - subject_code
+    - subject_name
+  subject_area:
+    - typename
+    - name
+    - created_at
+    - updated_at
+  user:
+    - id
+    - first_login_date_utc
+    - last_login_date_utc
+    - welcome_email_date_utc
+    - invite_date_utc
+    - accept_terms_date_utc
+    - state
+    - admin
+    - discarded_at
+    - magic_link_token_sent_at
+  user_notification:
+    - id
+    - user_id
+    - provider_code
+    - course_update
+    - created_at
+    - updated_at
+    - course_publish

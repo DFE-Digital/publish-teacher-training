@@ -22,6 +22,7 @@ Lint/ConstantDefinitionInBlock:
     - "spec/validators/email_validator_spec.rb"
     - "spec/validators/phone_validator_spec.rb"
     - "spec/validators/reference_number_format_validator_spec.rb"
+    - "lib/tasks/big_query.rake"
 
 # Offense count: 3
 # Configuration parameters: IgnoreLiteralBranches, IgnoreConstantBranches.
