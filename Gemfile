@@ -126,6 +126,9 @@ gem "omniauth-rails_csrf_protection"
 # Data integration with BigQuery
 gem "google-cloud-bigquery"
 
+# Faster JSON serialization
+gem "oj"
+
 group :development, :test do
   # Prettyprint in console
   gem "awesome_print"

@@ -346,6 +346,7 @@ GEM
       shellany (~> 0.0)
     notifications-ruby-client (5.1.1)
       jwt (>= 1.5, < 3)
+    oj (3.13.4)
     omniauth (1.9.1)
       hashie (>= 3.4.6)
       rack (>= 1.6.2, < 3)
@@ -673,6 +674,7 @@ DEPENDENCIES
   jwt
   kaminari
   listen (>= 3.0.5, < 3.8)
+  oj
   omniauth (~> 1.9)
   omniauth-rails_csrf_protection
   omniauth_openid_connect (~> 0.3)
