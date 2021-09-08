@@ -49,7 +49,7 @@ describe AuthenticationService do
     end
 
     context "with a valid DfE-SignIn ID but invalid email" do
-      let(:email) { Faker::Internet.email }
+      let(:email) { "bob@gmail.com" }
 
       it { is_expected.to eq user }
 
@@ -71,16 +71,12 @@ describe AuthenticationService do
 
         it { is_expected.to eq user }
 
-        it "does not update the user's email" do
-          expect { subject }.not_to(change { user.reload.email })
+        it "updates the user's email" do
+          expect { subject }.to(change { user.reload.email }.to(email))
         end
 
-        it "generates an exception which is captured by Sentry" do
-          expect(Sentry).to receive(:capture_exception).with(
-            instance_of(AuthenticationService::DuplicateUserError),
-          )
-
-          subject
+        it "updates the existing users email to example email" do
+          expect { subject }.to(change { existing_user.reload.email }.to("bob_gmail.com@example.com"))
         end
       end
     end
