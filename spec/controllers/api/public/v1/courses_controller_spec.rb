@@ -183,23 +183,43 @@ RSpec.describe API::Public::V1::CoursesController do
       end
 
       context "with filtering" do
-        before do
-          provider.courses << build(:course, provider: provider)
+        context "with valid funding type" do
+          before do
+            provider.courses << build(:course, provider: provider)
 
-          allow(CourseSearchService).to receive(:call).and_return(Course.all)
+            allow(CourseSearchService).to receive(:call).and_return(Course.all)
 
-          get :index, params: {
-            recruitment_cycle_year: recruitment_cycle.year,
-            filter: {
-              funding_type: "salary",
-            },
-          }
+            get :index, params: {
+              recruitment_cycle_year: recruitment_cycle.year,
+              filter: {
+                funding_type: "salary",
+              },
+            }
+          end
+
+          it "delegates to the CourseSearchService" do
+            expect(CourseSearchService).to have_received(:call).with(
+              hash_including(filter: ActionController::Parameters.new(funding_type: "salary")),
+            )
+          end
         end
 
-        it "delegates to the CourseSearchService" do
-          expect(CourseSearchService).to have_received(:call).with(
-            hash_including(filter: ActionController::Parameters.new(funding_type: "salary")),
-          )
+        context "when updated_since is invalid" do
+          before do
+            provider.courses << build(:course, provider: provider)
+
+            get :index, params: {
+              recruitment_cycle_year: recruitment_cycle.year,
+              filter: {
+                updated_since: "foobar",
+              },
+            }
+          end
+
+          it "returns a 400 error message" do
+            expect(response).to have_http_status(:bad_request)
+            expect(json_response["message"]).to eq("Invalid changed_since value, the format should be an ISO8601 UTC timestamp, for example: `2019-01-01T12:01:00Z`")
+          end
         end
       end
 
