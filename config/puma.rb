@@ -56,7 +56,7 @@ if env == "development" && Settings.use_ssl
       root_ca.issuer = root_ca.subject # root CA's are "self-signed"
       root_ca.public_key = root_key.public_key
       root_ca.not_before = Time.zone.now
-      root_ca.not_after = root_ca.not_before + 2 * 365 * 24 * 60 * 60 # 2 years validity
+      root_ca.not_after = root_ca.not_before + (2 * 365 * 24 * 60 * 60) # 2 years validity
       root_ca.sign(root_key, OpenSSL::Digest.new("SHA256"))
       root_ca
     end

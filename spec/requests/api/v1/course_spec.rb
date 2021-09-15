@@ -281,7 +281,7 @@ describe "Courses API", type: :request do
         before do
           @courses = Array.new(25) do |i|
             create(:course, course_code: "CRSE#{i + 1}",
-                            changed_at: timestamp + i / 1000.0,
+                            changed_at: timestamp + (i / 1000.0),
                             provider: provider,
                             site_statuses: [create(:site_status, :published)])
           end
