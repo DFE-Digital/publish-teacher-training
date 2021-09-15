@@ -19,9 +19,10 @@ module NotificationBanner
       classes: [],
       role: nil,
       title_id: nil,
-      disable_auto_focus: false
+      disable_auto_focus: false,
+      html_attributes: nil
     )
-      super(classes: classes)
+      super(classes: classes, html_attributes: html_attributes)
       @title_text = title_text
       @text = text
       @type = type

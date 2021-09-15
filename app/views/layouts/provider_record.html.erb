@@ -1,6 +1,6 @@
 <%= extends_layout :application do %>
   <%= content_for(:breadcrumbs) do %>
-    <%= render GovukComponent::BackLink.new(
+    <%= render GovukComponent::BackLinkComponent.new(
       text: 'All provider records',
       href: support_providers_path,
     ) %>
