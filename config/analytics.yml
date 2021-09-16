@@ -86,6 +86,11 @@ shared:
     - user_id
     - created_at
     - updated_at
+  nctl_organisation:
+    - id
+    - name
+    - nctl_id
+    - organisation_id
   organisation:
     - id
     - name
