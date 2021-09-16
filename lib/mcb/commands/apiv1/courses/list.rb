@@ -12,12 +12,12 @@ run do |opts, _args, _cmd|
 
   opts = MCB.expose_opts_defaults_for_splat(opts, :url, :"max-pages", :token, :all)
 
-  table = Terminal::Table.new headings: %w[Code Name Provider\ Code Provider\ Name] do |t|
+  table = Terminal::Table.new headings: ["Code", "Name", "Provider Code", "Provider Name"] do |t|
     MCB.each_v1_course(opts).each do |course, context|
       last_context = context
       provider_info = course["provider"]
                         .slice("institution_code", "institution_name")
-      t << course.slice("course_code", "name").values + provider_info.values
+      t << (course.slice("course_code", "name").values + provider_info.values)
     end
   end
 

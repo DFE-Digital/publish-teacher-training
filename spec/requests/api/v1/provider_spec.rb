@@ -475,7 +475,7 @@ describe "Providers API", type: :request do
         before do
           @providers = Array.new(25) do |i|
             create(:provider, provider_code: "PROV#{i + 1}",
-                              changed_at: timestamp + i / 1000.0,
+                              changed_at: timestamp + (i / 1000.0),
                               sites: [])
           end
         end
