@@ -155,6 +155,10 @@ shared:
     - latitude
     - longitude
     - urn
+  statistic:
+    - json_data
+    - created_at
+    - updated_at
   subject:
     - id
     - type
