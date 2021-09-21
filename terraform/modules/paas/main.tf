@@ -2,7 +2,7 @@ resource cloudfoundry_app web_app {
   name                       = local.web_app_name
   space                      = data.cloudfoundry_space.space.id
   health_check_type          = "http"
-  health_check_http_endpoint = "/ping"
+  health_check_http_endpoint = "/check"
   instances                  = var.web_app_instances
   memory                     = var.web_app_memory
   disk_quota                 = 1500

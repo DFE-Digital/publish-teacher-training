@@ -53,5 +53,6 @@ RUN ls /app/public/ && \
 
 ARG COMMIT_SHA
 ENV COMMIT_SHA=${COMMIT_SHA}
+RUN echo ${COMMIT_SHA} > public/check
 
 CMD bundle exec rails db:migrate:ignore_concurrent_migration_exceptions && bundle exec rails server -b 0.0.0.0
