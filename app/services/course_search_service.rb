@@ -56,11 +56,12 @@ class CourseSearchService
       scope = scope.joins(:provider)
       scope = scope.select("DISTINCT(course.id), course.*, distance, #{Course.sanitize_sql(distance_with_university_area_adjustment)}")
 
-      scope = if expand_university?
-                      scope.order(:boosted_distance)
-                    else
-                      scope.order(:distance)
-                    end
+      scope =
+        if expand_university?
+          scope.order(:boosted_distance)
+        else
+          scope.order(:distance)
+        end
     end
 
     scope
