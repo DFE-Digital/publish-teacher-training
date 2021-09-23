@@ -45,6 +45,10 @@ module BigQuery
           value = value.to_s
         end
 
+        if value.is_a?(Hash)
+          value = value.to_json
+        end
+
         { "key" => key, "value" => Array.wrap(value) }
       end
     end
