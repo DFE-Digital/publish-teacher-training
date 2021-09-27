@@ -10,7 +10,7 @@ resource cloudfoundry_app web_app {
   strategy                   = local.deployment_strategy
   timeout                    = 300
   stopped                    = var.web_app_stopped
-  environment                = var.app_environment_variables
+  environment                = local.app_environment_variables
   docker_credentials         = var.docker_credentials
 
   service_binding {
@@ -18,6 +18,9 @@ resource cloudfoundry_app web_app {
   }
   service_binding {
     service_instance = cloudfoundry_service_instance.redis.id
+  }
+  service_binding {
+    service_instance = cloudfoundry_service_instance.redis_cache.id
   }
   service_binding {
     service_instance = cloudfoundry_user_provided_service.logging.id
@@ -42,7 +45,7 @@ resource cloudfoundry_app worker_app {
   timeout              = 300
   health_check_timeout = 300
   stopped              = var.worker_app_stopped
-  environment          = var.app_environment_variables
+  environment          = local.app_environment_variables
   docker_credentials   = var.docker_credentials
 
   service_binding {
@@ -50,6 +53,9 @@ resource cloudfoundry_app worker_app {
   }
   service_binding {
     service_instance = cloudfoundry_service_instance.redis.id
+  }
+  service_binding {
+    service_instance = cloudfoundry_service_instance.redis_cache.id
   }
   service_binding {
     service_instance = cloudfoundry_user_provided_service.logging.id
@@ -80,9 +86,21 @@ resource cloudfoundry_service_instance postgres {
 }
 
 resource cloudfoundry_service_instance redis {
-  name         = local.redis_service_name
+  name         = local.redis_worker_service_name
   space        = data.cloudfoundry_space.space.id
   service_plan = data.cloudfoundry_service.redis.service_plans[var.redis_service_plan]
+  json_params  = jsonencode({ maxmemory_policy = "noeviction" })
+  timeouts {
+    create = "60m"
+    update = "60m"
+  }
+}
+
+resource cloudfoundry_service_instance redis_cache {
+  name         = local.redis_cache_service_name
+  space        = data.cloudfoundry_space.space.id
+  service_plan = data.cloudfoundry_service.redis.service_plans[var.redis_service_plan]
+  json_params  = jsonencode({ maxmemory_policy = "allkeys-lru" })
   timeouts {
     create = "60m"
     update = "60m"
@@ -93,4 +111,9 @@ resource cloudfoundry_user_provided_service logging {
   name             = local.logging_service_name
   space            = data.cloudfoundry_space.space.id
   syslog_drain_url = var.logstash_url
+}
+
+resource cloudfoundry_service_key redis_cache_key {
+  name             = "${local.redis_cache_service_name}-key"
+  service_instance = cloudfoundry_service_instance.redis_cache.id
 }
