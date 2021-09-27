@@ -3,6 +3,10 @@ module API
     class SerializableCourse < JSONAPI::Serializable::Resource
       include TimeFormat
 
+      def jsonapi_cache_key(options)
+        "V3/#{@object.cache_key_with_version} " + super(options)
+      end
+
       class << self
         def enrichment_attribute(name, enrichment_name = name)
           attribute name do

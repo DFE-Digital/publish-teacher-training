@@ -32,6 +32,7 @@ describe "GET v3/recruitment_cycles/:year/courses" do
 
       json_response = JSON.parse(response.body)
       course_hashes = json_response["data"]
+
       expect(course_hashes.count).to eq(1)
       expect(course_hashes.first["id"]).to eq(current_course.id.to_s)
     end
@@ -45,6 +46,44 @@ describe "GET v3/recruitment_cycles/:year/courses" do
       meta = json_response["meta"]
 
       expect(meta["count"]).to be(1)
+    end
+  end
+
+  describe "caching" do
+    before { current_course }
+
+    let!(:additional_course) do
+      create(
+        :course, site_statuses: [build(:site_status, :findable)], enrichments: [build(:course_enrichment, :published)]
+      )
+    end
+
+    it "caches course hashes" do
+      get request_path
+
+      course_hashes = JSON.parse(response.body)["data"]
+      expect(course_hashes.count).to eq(2)
+      expect(course_hashes.first["id"].to_i).to eq current_course.id
+      expect(course_hashes.second["id"].to_i).to eq additional_course.id
+
+      cached_data = Rails.cache.instance_variable_get(:@data)
+      expect(
+        cached_data.each_value.map do |cache_entry|
+          JSON.parse(cache_entry.value)["id"].to_i
+        end,
+      ).to eq [current_course.id, additional_course.id]
+    end
+
+    it "busts cache entries" do
+      get request_path
+      course_hashes = JSON.parse(response.body)["data"]
+      expect(course_hashes.first.dig("attributes", "name")).to eq current_course.name
+
+      current_course.update!(name: "Astronomy")
+      get request_path
+      course_hashes = JSON.parse(response.body)["data"]
+      expect(course_hashes.first.dig("attributes", "name")).to eq "Astronomy"
+      expect(course_hashes.last.dig("attributes", "name")).to eq additional_course.name
     end
   end
 end
