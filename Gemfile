@@ -34,7 +34,7 @@ gem "kaminari"
 gem "pagy", "~> 3.13"
 
 # JSON:API Ruby Client
-gem "jsonapi-rails"
+gem "jsonapi-rails", github:  'DFE-Digital/jsonapi-rails'
 gem "jsonapi-rb"
 
 # Access jsonb attributes like normal ActiveRecord model attributes
