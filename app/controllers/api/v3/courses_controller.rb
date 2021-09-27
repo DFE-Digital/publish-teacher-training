@@ -12,7 +12,8 @@ module API
                fields: fields_param,
                include: params[:include],
                meta: { count: course_search.count("course.id") },
-               class: CourseSerializersServiceV3.new.execute
+               class: CourseSerializersServiceV3.new.execute,
+               cache: Rails.cache
       end
 
       def show
