@@ -43,8 +43,8 @@ class CourseSearchService
 
     if provider_name.present?
       scope = scope
-                      .accredited_body_order(provider_name)
-                      .ascending_canonical_order
+        .accredited_body_order(provider_name)
+        .ascending_canonical_order
     elsif sort_by_provider_ascending?
       scope = scope.ascending_canonical_order
       scope = scope.select("provider.provider_name", "course.*")
