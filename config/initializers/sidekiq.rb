@@ -1,11 +1,7 @@
 if ENV.key?("VCAP_SERVICES")
-  service_config = JSON.parse(ENV["VCAP_SERVICES"])
-  redis_config = service_config["redis"].first
-  redis_credentials = redis_config["credentials"]
-
   Sidekiq.configure_server do |config|
     config.redis = {
-      url: redis_credentials["uri"],
+      url: ENV.fetch("REDIS_WORKER_URL"),
     }
 
     if Settings.bg_jobs
@@ -15,7 +11,7 @@ if ENV.key?("VCAP_SERVICES")
 
   Sidekiq.configure_client do |config|
     config.redis = {
-      url: redis_credentials["uri"],
+      url: ENV.fetch("REDIS_WORKER_URL"),
     }
   end
 

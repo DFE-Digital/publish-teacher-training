@@ -42,7 +42,11 @@ locals {
   worker_app_start_command = "bundle exec sidekiq -c 5 -C config/sidekiq.yml"
 
   app_environment_variables = merge(var.app_environment_variables,
-  { REDIS_CACHE_URL = cloudfoundry_service_key.redis_cache_key.credentials.uri })
+    {
+      REDIS_CACHE_URL  = cloudfoundry_service_key.redis_cache_key.credentials.uri
+      REDIS_WORKER_URL = cloudfoundry_service_key.redis_worker_key.credentials.uri
+    }
+  )
 
   postgres_extensions = {
     enable_extensions = ["pg_buffercache", "pg_stat_statements", "btree_gin", "btree_gist"]
