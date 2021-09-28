@@ -166,7 +166,6 @@ shared:
     - subject_code
     - subject_name
   subject_area:
-    - id
     - typename
     - name
     - created_at
