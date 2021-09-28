@@ -63,15 +63,14 @@ describe "GET v3/recruitment_cycles/:year/courses" do
 
       course_hashes = JSON.parse(response.body)["data"]
       expect(course_hashes.count).to eq(2)
-      expect(course_hashes.first["id"].to_i).to eq current_course.id
-      expect(course_hashes.second["id"].to_i).to eq additional_course.id
+      expect(course_hashes.map { |h| h["id"].to_i }).to match_array [current_course.id, additional_course.id]
 
       cached_data = Rails.cache.instance_variable_get(:@data)
       expect(
         cached_data.each_value.map do |cache_entry|
           JSON.parse(cache_entry.value)["id"].to_i
         end,
-      ).to eq [current_course.id, additional_course.id]
+      ).to match_array [current_course.id, additional_course.id]
     end
 
     it "busts cache entries" do
@@ -82,8 +81,7 @@ describe "GET v3/recruitment_cycles/:year/courses" do
       current_course.update!(name: "Astronomy")
       get request_path
       course_hashes = JSON.parse(response.body)["data"]
-      expect(course_hashes.first.dig("attributes", "name")).to eq "Astronomy"
-      expect(course_hashes.last.dig("attributes", "name")).to eq additional_course.name
+      expect(course_hashes.map { |h| h.dig("attributes", "name") }).to match_array ["Astronomy", additional_course.name]
     end
   end
 end
