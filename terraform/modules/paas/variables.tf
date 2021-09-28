@@ -33,12 +33,16 @@ locals {
   web_app_name                 = "teacher-training-api-${local.app_name_suffix}"
   worker_app_name              = "teacher-training-api-worker-${local.app_name_suffix}"
   postgres_service_name        = "teacher-training-api-postgres-${local.app_name_suffix}"
-  redis_service_name           = "teacher-training-api-redis-${local.app_name_suffix}"
+  redis_worker_service_name    = "teacher-training-api-worker-redis-${local.app_name_suffix}"
+  redis_cache_service_name     = "teacher-training-api-cache-redis-${local.app_name_suffix}"
   logging_service_name         = "teacher-training-api-logit-${local.app_name_suffix}"
   deployment_strategy          = "blue-green-v2"
   qa_postgres_service_instance = "eef01a89-0659-4eae-8220-8a142fa4502e"
 
   worker_app_start_command = "bundle exec sidekiq -c 5 -C config/sidekiq.yml"
+
+  app_environment_variables = merge(var.app_environment_variables,
+  { REDIS_CACHE_URL = cloudfoundry_service_key.redis_cache_key.credentials.uri })
 
   postgres_extensions = {
     enable_extensions = ["pg_buffercache", "pg_stat_statements", "btree_gin", "btree_gist"]
