@@ -50,7 +50,7 @@ module ManageCoursesBackend
     config.action_mailer.delivery_job = "ActionMailer::MailDeliveryJob"
 
     config.skylight.environments = Settings.skylight.enable ? [Rails.env] : []
-    config.skylight.logger = SemanticLogger[Skylight]
+    config.skylight.logger = SemanticLogger[Skylight] if defined?(SemanticLogger)
     config.skylight.log_level = :fatal
     config.skylight.native_log_level = :fatal
 

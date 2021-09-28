@@ -94,9 +94,6 @@ gem "govuk_notify_rails"
 gem "sidekiq"
 gem "sidekiq-cron"
 
-# Semantic Logger makes logs pretty
-gem "rails_semantic_logger"
-
 # Thread-safe global state
 gem "request_store"
 
@@ -128,6 +125,11 @@ gem "google-cloud-bigquery"
 
 # Faster JSON serialization
 gem "oj"
+
+# Semantic Logger makes production logs consumable by Logit
+group :production do
+  gem "rails_semantic_logger"
+end
 
 group :development, :test do
   # Prettyprint in console
