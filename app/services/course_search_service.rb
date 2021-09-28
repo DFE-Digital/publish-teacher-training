@@ -31,9 +31,6 @@ class CourseSearchService
     scope = scope.changed_since(filter[:updated_since]) if updated_since_filter?
     scope = scope.provider_can_sponsor_visa if can_sponsor_visa_filter?
 
-    # The 'where' scope will remove duplicates
-    # An outer query is required in the event the provider name is present.
-    # This prevents 'PG::InvalidColumnReference: ERROR: for SELECT DISTINCT, ORDER BY expressions must appear in select list'
     scope = scope.includes(
       :enrichments,
       subjects: [:financial_incentive],
@@ -45,12 +42,13 @@ class CourseSearchService
       scope = scope
         .accredited_body_order(provider_name)
         .ascending_canonical_order
+      scope = scope.select("DISTINCT(course.id), course.*, provider.provider_name, CASE WHEN provider.provider_name = #{ActiveRecord::Base.connection.quote(provider_name)} THEN '1' END as by_provider_name")
     elsif sort_by_provider_ascending?
       scope = scope.ascending_canonical_order
-      scope = scope.select("provider.provider_name", "course.*")
+      scope = scope.select("DISTINCT(course.id), course.*, provider.provider_name")
     elsif sort_by_provider_descending?
       scope = scope.descending_canonical_order
-      scope = scope.select("provider.provider_name", "course.*")
+      scope = scope.select("DISTINCT(course.id), course.*, provider.provider_name")
     elsif sort_by_distance?
       scope = scope.joins(courses_with_distance_from_origin)
       scope = scope.joins(:provider)
