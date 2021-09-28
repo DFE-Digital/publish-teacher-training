@@ -41,13 +41,8 @@ module BigQuery
 
     def hash_to_kv_pairs(hash)
       hash.map do |(key, value)|
-        if value.in? [true, false]
-          value = value.to_s
-        end
-
-        if value.is_a?(Hash)
-          value = value.to_json
-        end
+        value = value.to_s if value.in? [true, false]
+        value = value.to_json if value.is_a?(Hash) || value.is_a?(Array)
 
         { "key" => key, "value" => Array.wrap(value) }
       end
