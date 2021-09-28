@@ -2,7 +2,7 @@ module BigQuery
   class EntityEvent
     CREATE_ENTITY_EVENT_TYPE = "create_entity".freeze
     UPDATE_ENTITY_EVENT_TYPE = "update_entity".freeze
-    IMPORT_EVENT_TYPE = "event_import".freeze
+    IMPORT_EVENT_TYPE = "import_entity".freeze
     EVENT_TYPES = [CREATE_ENTITY_EVENT_TYPE, UPDATE_ENTITY_EVENT_TYPE, IMPORT_EVENT_TYPE].freeze
 
     def initialize

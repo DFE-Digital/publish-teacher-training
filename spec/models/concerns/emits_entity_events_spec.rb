@@ -71,7 +71,7 @@ RSpec.describe EmitsEntityEvents do
     end
 
     it "sets the event type" do
-      expect(provider.send_import_event.as_json["event_type"]).to eq("event_import")
+      expect(provider.send_import_event.as_json["event_type"]).to eq("import_entity")
     end
   end
 end
