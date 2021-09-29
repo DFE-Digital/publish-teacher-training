@@ -8,7 +8,7 @@ module BigQuery
     def initialize
       @event_hash = {
         environment: Rails.env,
-        occurred_at: Time.zone.now.iso8601,
+        occurred_at: Time.zone.now.iso8601(6),
       }
       yield self if block_given?
     end
