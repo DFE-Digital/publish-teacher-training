@@ -19,7 +19,8 @@ RSpec.describe CourseSearchService do
       allow(Course).to receive(:includes)
         .with(
           :enrichments,
-          subjects: [:financial_incentive],
+          :financial_incentives,
+          course_subjects: [:subject],
           site_statuses: [:site],
           provider: %i[recruitment_cycle ucas_preferences],
         ).and_return(course_with_includes)
