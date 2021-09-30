@@ -9,6 +9,7 @@ module Courses
       when "fee"
         course.program_type = update_fee_program(course)
       end
+      course.save unless course.errors.any?
     end
 
   private
