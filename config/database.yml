@@ -37,3 +37,6 @@ production:
 
 sandbox:
   <<: *default
+
+loadtest:
+  <<: *default
