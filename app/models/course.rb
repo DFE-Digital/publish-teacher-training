@@ -147,10 +147,6 @@ class Course < ApplicationRecord
     joins(site_statuses: :site).merge(SiteStatus.where(status: :running)).merge(Site.within(range, origin: origin))
   end
 
-  scope :by_distance, ->(origin:) do
-    joins(site_statuses: :site).merge(SiteStatus.where(status: :running)).merge(Site.by_distance(origin: origin))
-  end
-
   scope :by_name_ascending, -> do
     order(name: :asc)
   end
