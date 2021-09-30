@@ -46,6 +46,7 @@ describe Courses::AssignProgramTypeService do
       let(:course) { create(:course, :with_accrediting_provider) }
 
       it "returns :school_direct_training_programme" do
+        course.reload
         expect(course.program_type).to eq("school_direct_training_programme")
       end
     end

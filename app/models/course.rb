@@ -540,6 +540,7 @@ class Course < ApplicationRecord
   def funding_type=(funding_type)
     assign_program_type_service = Courses::AssignProgramTypeService.new
     assign_program_type_service.execute(funding_type, self)
+    save unless errors.any?
   end
 
   def ensure_site_statuses_match_study_mode
