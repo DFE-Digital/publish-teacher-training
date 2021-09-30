@@ -56,11 +56,12 @@ class CourseSearchService
       outer_scope = outer_scope.joins(:provider)
       outer_scope = outer_scope.select("course.*, distance, #{Course.sanitize_sql(distance_with_university_area_adjustment)}")
 
-      outer_scope = if expand_university?
-                      outer_scope.order(:boosted_distance)
-                    else
-                      outer_scope.order(:distance)
-                    end
+      outer_scope =
+        if expand_university?
+          outer_scope.order(:boosted_distance)
+        else
+          outer_scope.order(:distance)
+        end
     end
 
     outer_scope
