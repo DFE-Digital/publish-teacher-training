@@ -2,7 +2,7 @@
 cf_space                   = "bat-qa"
 paas_app_environment       = "loadtest"
 paas_web_app_host_name     = "loadtest"
-paas_web_app_instances     = 8
+paas_web_app_instances     = 10
 paas_web_app_memory        = 1536
 paas_worker_app_instances  = 1
 paas_worker_app_memory     = 1024
