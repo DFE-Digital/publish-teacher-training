@@ -1,20 +1,17 @@
-<%= render GovukComponent::SummaryList.new do |component|
-  component.slot(
-    :row,
-    key: "Name",
-    value: @provider.provider_name,
-    action: govuk_link_to(t(:change), edit_support_provider_path(@provider))
-  ) 
+<%= render GovukComponent::SummaryListComponent.new do |component|
+  component.row do |row|
+    row.key { "Name" }
+    row.value { @provider.provider_name }
+    row.action(text: "Change", href: edit_support_provider_url(@provider))
+  end
 
-  component.slot(
-    :row,
-    key: "Code",
-    value: @provider.provider_code
-  )
+  component.row do |row|
+    row.key { "Code" }
+    row.value { @provider.provider_code }
+  end
 
-  component.slot(
-    :row,
-    key: "Last updated",
-    value: gov_uk_format(@provider.updated_at)
-  )
+  component.row do |row|
+    row.key { "Last updated" }
+    row.value { gov_uk_format(@provider.updated_at) }
+  end
 end %>
