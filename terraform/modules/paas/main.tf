@@ -22,9 +22,10 @@ resource cloudfoundry_app web_app {
   service_binding {
     service_instance = cloudfoundry_service_instance.redis_cache.id
   }
-  service_binding {
-    service_instance = cloudfoundry_user_provided_service.logging.id
-  }
+  # Logging to Logit is disabled in load tests
+  # service_binding {
+  #   service_instance = cloudfoundry_user_provided_service.logging.id
+  # }
   dynamic "routes" {
     for_each = local.web_app_routes
     content {
@@ -57,9 +58,10 @@ resource cloudfoundry_app worker_app {
   service_binding {
     service_instance = cloudfoundry_service_instance.redis_cache.id
   }
-  service_binding {
-    service_instance = cloudfoundry_user_provided_service.logging.id
-  }
+  # Logging to Logit is disabled in load tests
+  # service_binding {
+  #   service_instance = cloudfoundry_user_provided_service.logging.id
+  # }
 }
 
 resource cloudfoundry_route web_app_cloudapps_digital_route {
