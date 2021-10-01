@@ -3,6 +3,7 @@ if ENV.key?("VCAP_SERVICES")
     config.redis = {
       url: ENV.fetch("REDIS_WORKER_URL"),
     }
+    config.logger.level = Logger::WARN
 
     if Settings.bg_jobs
       Sidekiq::Cron::Job.load_from_hash Settings.bg_jobs
