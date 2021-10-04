@@ -14,7 +14,7 @@ describe Course, type: :model do
       let(:enrichment) { build(:course_enrichment, :subsequent_draft, created_at: 1.day.ago) }
       let(:primary_with_mathematics) { find_or_create(:primary_subject, :primary_with_mathematics) }
       let(:course) {
-        create(:course, subjects: [primary_with_mathematics], enrichments: [enrichment], site_statuses: [site_status])
+        create(:course, :with_gcse_equivalency, subjects: [primary_with_mathematics], enrichments: [enrichment], site_statuses: [site_status])
       }
 
       its(:publishable?) { is_expected.to be_truthy }

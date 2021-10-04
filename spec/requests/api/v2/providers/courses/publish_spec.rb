@@ -139,7 +139,7 @@ describe "Publish API v2", type: :request do
             "Enter details about school placements",
             "Enter a course length",
             "Enter details about the salary for this course",
-            "Enter details about the qualifications needed",
+            "Enter GCSE requirements",
           ])
         end
       end
@@ -163,7 +163,7 @@ describe "Publish API v2", type: :request do
               "Enter details about school placements",
               "Enter a course length",
               "Enter details about the fee for UK and EU students",
-              "Enter details about the qualifications needed",
+              "Enter GCSE requirements",
             ])
           end
 
@@ -173,7 +173,7 @@ describe "Publish API v2", type: :request do
               "/data/attributes/how_school_placements_work",
               "/data/attributes/course_length",
               "/data/attributes/fee_uk_eu",
-              "/data/attributes/required_qualifications",
+              nil,
             ])
           end
         end
@@ -198,7 +198,7 @@ describe "Publish API v2", type: :request do
               "Enter details about school placements",
               "Enter a course length",
               "Enter details about the salary for this course",
-              "Enter details about the qualifications needed",
+              "Enter GCSE requirements",
             ])
           end
         end

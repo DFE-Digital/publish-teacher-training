@@ -6,7 +6,7 @@ describe RecruitmentCycle, type: :model do
 
   subject { current_cycle }
 
-  its(:to_s) { is_expected.to eq("2021/22") }
+  its(:to_s) { is_expected.to eq("2022/23") }
 
   it "is valid with valid attributes" do
     expect(subject).to be_valid

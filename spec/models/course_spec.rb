@@ -437,57 +437,22 @@ describe Course, type: :model do
           it { is_expected.to include "Select an age range" }
         end
 
-        context "for a provider in the 2021 cycle" do
-          context "maths" do
-            let(:blank_field) { { maths: nil } }
+        context "maths" do
+          let(:blank_field) { { maths: nil } }
 
-            it { is_expected.to include "Select an option for maths" }
-          end
-
-          context "english" do
-            let(:blank_field) { { english: nil } }
-
-            it { is_expected.to include "Select an option for English" }
-          end
-
-          context "science" do
-            let(:blank_field) { { science: nil } }
-
-            it { is_expected.to include "Select an option for science" }
-          end
+          it { is_expected.to eq nil }
         end
 
-        context "for a provider in the 2022 cycle" do
-          let(:recruitment_cycle) { build(:recruitment_cycle, :next) }
-          let(:provider) { build(:provider, recruitment_cycle: recruitment_cycle) }
-          let(:course) do
-            create(
-              :course,
-              provider: provider,
-              level: "secondary",
-              name: "Biology",
-              course_code: "3X9F",
-              subjects: [find_or_create(:secondary_subject, :biology)],
-            )
-          end
+        context "english" do
+          let(:blank_field) { { english: nil } }
 
-          context "maths" do
-            let(:blank_field) { { maths: nil } }
+          it { is_expected.to eq nil }
+        end
 
-            it { is_expected.to eq nil }
-          end
+        context "science" do
+          let(:blank_field) { { science: nil } }
 
-          context "english" do
-            let(:blank_field) { { english: nil } }
-
-            it { is_expected.to eq nil }
-          end
-
-          context "science" do
-            let(:blank_field) { { science: nil } }
-
-            it { is_expected.to eq nil }
-          end
+          it { is_expected.to eq nil }
         end
       end
 
@@ -531,10 +496,7 @@ describe Course, type: :model do
         end
 
         it "gives an error for the subjects" do
-          expect(subject.errors.full_messages).to match_array([
-            "There is a problem with this course. Contact support to fix it (Error: S)",
-            "Select at least one subject",
-          ])
+          expect(subject.errors.full_messages).to include("Select at least one subject")
         end
       end
 
@@ -623,63 +585,45 @@ describe Course, type: :model do
       end
 
       describe "validate_degree_requirements_publishable" do
-        context "when the provider is in the 2021 cycle or before" do
+        let(:next_recruitment_cycle) { create :recruitment_cycle, :next }
+        let(:provider) { create(:provider, recruitment_cycle: next_recruitment_cycle) }
+        let(:course_with_degree_grade) { create(:course, provider: provider) }
+        let(:course_without_degree_grade) { create(:course, provider: provider, degree_grade: nil) }
+
+        context "when degree grade is present" do
           it "returns true and does not add an error" do
-            expect(course.validate_degree_requirements_publishable).to eq true
-            expect(course.errors).to be_empty
+            expect(course_with_degree_grade.validate_degree_requirements_publishable).to eq true
+            expect(course_without_degree_grade.errors).to be_empty
           end
         end
 
-        context "when the provider is in the 2022 cycle or later" do
-          let(:next_recruitment_cycle) { create :recruitment_cycle, :next }
-          let(:provider) { create(:provider, recruitment_cycle: next_recruitment_cycle) }
-          let(:course_with_degree_grade) { create(:course, provider: provider) }
-          let(:course_without_degree_grade) { create(:course, provider: provider, degree_grade: nil) }
-
-          context "when degree grade is present" do
-            it "returns true and does not add an error" do
-              expect(course_with_degree_grade.validate_degree_requirements_publishable).to eq true
-              expect(course_without_degree_grade.errors).to be_empty
-            end
-          end
-
-          context "when degree grade is nil" do
-            it "returns false and adds an error" do
-              expect(course_without_degree_grade.validate_degree_requirements_publishable).to eq false
-              expect(course_without_degree_grade.errors.count).to eq 1
-              expect(course_without_degree_grade.errors.first.type).to eq :degree_requirements_not_publishable
-            end
+        context "when degree grade is nil" do
+          it "returns false and adds an error" do
+            expect(course_without_degree_grade.validate_degree_requirements_publishable).to eq false
+            expect(course_without_degree_grade.errors.count).to eq 1
+            expect(course_without_degree_grade.errors.first.type).to eq :degree_requirements_not_publishable
           end
         end
       end
 
       describe "validate_gcse_requirements_publishable" do
-        context "when the provider is in the 2021 cycle or before" do
+        let(:next_recruitment_cycle) { create :recruitment_cycle, :next }
+        let(:provider) { create(:provider, recruitment_cycle: next_recruitment_cycle) }
+        let(:publishable_course) { create(:course, provider: provider, accept_pending_gcse: true, accept_gcse_equivalency: false) }
+        let(:unpublishable_course) { create(:course, provider: provider, accept_pending_gcse: nil) }
+
+        context "when accept_pending_gcse and accept_gcse_equivalency are present" do
           it "returns true and does not add an error" do
-            expect(course.validate_gcse_requirements_publishable).to eq true
-            expect(course.errors).to be_empty
+            expect(publishable_course.validate_gcse_requirements_publishable).to eq true
+            expect(publishable_course.errors).to be_empty
           end
         end
 
-        context "when the provider is in the 2022 cycle or later" do
-          let(:next_recruitment_cycle) { create :recruitment_cycle, :next }
-          let(:provider) { create(:provider, recruitment_cycle: next_recruitment_cycle) }
-          let(:publishable_course) { create(:course, provider: provider, accept_pending_gcse: true, accept_gcse_equivalency: false) }
-          let(:unpublishable_course) { create(:course, provider: provider, accept_pending_gcse: nil) }
-
-          context "when accept_pending_gcse and accept_gcse_equivalency are present" do
-            it "returns true and does not add an error" do
-              expect(publishable_course.validate_gcse_requirements_publishable).to eq true
-              expect(publishable_course.errors).to be_empty
-            end
-          end
-
-          context "when accept_pending_gcse or accept_gcse_equivalency is nil" do
-            it "returns false and adds an error" do
-              expect(unpublishable_course.validate_gcse_requirements_publishable).to eq false
-              expect(unpublishable_course.errors.count).to eq 1
-              expect(unpublishable_course.errors.first.type).to eq :gcse_requirements_not_publishable
-            end
+        context "when accept_pending_gcse or accept_gcse_equivalency is nil" do
+          it "returns false and adds an error" do
+            expect(unpublishable_course.validate_gcse_requirements_publishable).to eq false
+            expect(unpublishable_course.errors.count).to eq 1
+            expect(unpublishable_course.errors.first.type).to eq :gcse_requirements_not_publishable
           end
         end
       end
