@@ -586,7 +586,7 @@ class Course < ApplicationRecord
     requirements = [I18n.t("course.values.bursary_requirements.second_degree")]
     mathematics_requirement = I18n.t("course.values.bursary_requirements.maths")
 
-    if subjects.include?(PrimarySubject.find_by(subject_name: "Primary with mathematics"))
+    if subjects.any? { |subject| subject.subject_name == "Primary with mathematics" }
       requirements.push(mathematics_requirement)
     end
 

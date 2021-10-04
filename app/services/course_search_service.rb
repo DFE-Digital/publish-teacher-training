@@ -36,7 +36,8 @@ class CourseSearchService
     # This prevents 'PG::InvalidColumnReference: ERROR: for SELECT DISTINCT, ORDER BY expressions must appear in select list'
     outer_scope = Course.includes(
       :enrichments,
-      subjects: [:financial_incentive],
+      :financial_incentives,
+      course_subjects: [:subject],
       site_statuses: [:site],
       provider: %i[recruitment_cycle ucas_preferences],
     ).where(id: scope.select(:id))
