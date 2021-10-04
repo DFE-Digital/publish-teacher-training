@@ -2,9 +2,9 @@
 cf_space                   = "bat-prod"
 paas_app_environment       = "prod"
 paas_web_app_host_name     = null
-paas_web_app_instances     = 8
-paas_web_app_memory        = 1536
-paas_worker_app_instances  = 2
+paas_web_app_instances     = 10
+paas_web_app_memory        = 2048
+paas_worker_app_instances  = 4
 paas_worker_app_memory     = 512
 paas_postgres_service_plan = "medium-ha-11"
 paas_redis_service_plan    = "micro-ha-5_x"
