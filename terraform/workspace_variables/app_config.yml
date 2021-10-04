@@ -1,6 +1,7 @@
 default: &default
   ASSETS_PRECOMPILE: true
   RAILS_SERVE_STATIC_FILES: true
+  RAILS_MAX_THREADS: 50
 
 qa:
   <<: *default
