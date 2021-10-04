@@ -31,93 +31,70 @@ describe API::V2::CoursesController, type: :controller do
   describe "#publish" do
     let(:enrichment) { build(:course_enrichment, :initial_draft) }
 
+    let(:recruitment_cycle) { find_or_create(:recruitment_cycle, year: RecruitmentCycle.current.year) }
+
     it "sends the course publish notification" do
       expect(NotificationService::CoursePublished).to have_received(:call).with(course: course)
     end
 
-    context "in 2022 recruitment cycle" do
-      let(:recruitment_cycle) { create(:recruitment_cycle, year: "2022") }
+    context "all the necessary course information has been submitted" do
+      let(:provider) { create(:provider, recruitment_cycle: recruitment_cycle) }
 
-      context "all the necessary course information has been submitted" do
-        let(:provider) { create(:provider, recruitment_cycle: recruitment_cycle) }
+      it "sends a notification that the course was published" do
+        expect(NotificationService::CoursePublished).to have_received(:call).with(course: course)
+      end
+    end
 
-        it "sends a notification that the course was published" do
-          expect(NotificationService::CoursePublished).to have_received(:call).with(course: course)
-        end
+    context "missing information on visa sponsorship, UKPRN and/or URN" do
+      let(:provider_type) { :scitt }
+      let(:validation_errors) { JSON(response.body, symbolize_names: true)[:errors].map { |e| e[:detail] } }
+      let(:site) { create(:site, urn: nil) }
+      let(:site_status) { create(:site_status, :running, site: site) }
+      let(:provider) do
+        create(:provider,
+               provider_type: provider_type,
+               can_sponsor_student_visa: nil,
+               ukprn: nil,
+               urn: nil,
+               recruitment_cycle: recruitment_cycle)
       end
 
-      context "missing information on visa sponsorship, UKPRN and/or URN" do
-        let(:provider_type) { :scitt }
-        let(:validation_errors) { JSON(response.body, symbolize_names: true)[:errors].map { |e| e[:detail] } }
-        let(:site) { create(:site, urn: nil) }
-        let(:site_status) { create(:site_status, :running, site: site) }
-        let(:provider) do
-          create(:provider,
-                 provider_type: provider_type,
-                 can_sponsor_student_visa: nil,
-                 ukprn: nil,
-                 urn: nil,
-                 recruitment_cycle: recruitment_cycle)
+      it "doesn't send a notification" do
+        expect(NotificationService::CoursePublished).not_to have_received(:call).with(course: course)
+      end
+
+      context "API response" do
+        it "returns a 422 error" do
+          expect(response).to have_http_status(:unprocessable_entity)
         end
 
-        it "doesn't send a notification" do
-          expect(NotificationService::CoursePublished).not_to have_received(:call).with(course: course)
+        it "has a validation error about provider not having visa sponsorship information" do
+          expect(validation_errors).to include("Select if visas can be sponsored")
         end
 
-        context "API response" do
-          it "returns a 422 error" do
-            expect(response).to have_http_status(:unprocessable_entity)
+        it "has a validation error about provider not having a UKPRN" do
+          expect(validation_errors).to include("Enter a UK Provider Reference Number (UKPRN)")
+        end
+
+        context "provider is a lead school" do
+          let(:provider_type) { :lead_school }
+
+          it "has a validation error about provider not having a UKPRN and URN" do
+            expect(validation_errors).to include("Enter a UK Provider Reference Number (UKPRN) and URN")
           end
 
-          it "has a validation error about provider not having visa sponsorship information" do
-            expect(validation_errors).to include("Select if visas can be sponsored")
-          end
-
-          it "has a validation error about provider not having a UKPRN" do
-            expect(validation_errors).to include("Enter a UK Provider Reference Number (UKPRN)")
-          end
-
-          context "provider is a lead school" do
-            let(:provider_type) { :lead_school }
+          context "when only URN is nil" do
+            let(:provider) do
+              create(:provider,
+                     provider_type: provider_type,
+                     can_sponsor_student_visa: nil,
+                     urn: nil,
+                     recruitment_cycle: recruitment_cycle)
+            end
 
             it "has a validation error about provider not having a UKPRN and URN" do
               expect(validation_errors).to include("Enter a UK Provider Reference Number (UKPRN) and URN")
             end
-
-            context "when only URN is nil" do
-              let(:provider) do
-                create(:provider,
-                       provider_type: provider_type,
-                       can_sponsor_student_visa: nil,
-                       urn: nil,
-                       recruitment_cycle: recruitment_cycle)
-              end
-
-              it "has a validation error about provider not having a UKPRN and URN" do
-                expect(validation_errors).to include("Enter a UK Provider Reference Number (UKPRN) and URN")
-              end
-            end
-          end
-        end
-      end
-    end
-
-    context "in 2021 recruitment cycle" do
-      context "missing information on visa sponsorship" do
-        let(:recruitment_cycle) { find_or_create(:recruitment_cycle, year: "2021") }
-        let(:provider) { create(:provider, can_sponsor_student_visa: nil, recruitment_cycle: recruitment_cycle) }
-
-        it "sends a course published notification" do
-          expect(NotificationService::CoursePublished).to have_received(:call).with(course: course)
-        end
-
-        context "API response" do
-          it "returns 200" do
-            expect(response).to have_http_status(:success)
-          end
-
-          it "returns no validation error about missing visa information" do
-            expect(response.body).not_to match(/Select if visas can be sponsored/)
           end
         end
       end

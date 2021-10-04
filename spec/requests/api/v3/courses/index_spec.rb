@@ -1,7 +1,7 @@
 require "rails_helper"
 
 describe "GET v3/recruitment_cycles/:year/courses" do
-  let(:request_path) { "/api/v3/recruitment_cycles/2020/courses" }
+  let(:request_path) { "/api/v3/recruitment_cycles/#{RecruitmentCycle.current.year}/courses" }
   let(:current_course) do
     create(:course, site_statuses: [build(:site_status, :findable)], enrichments: [build(:course_enrichment, :published)])
   end

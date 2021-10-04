@@ -38,7 +38,7 @@ describe "Publishable API v2", type: :request do
 
     context "unpublished course with draft enrichment" do
       let(:course) do
-        create(:course, :primary, :unpublished, :draft_enrichment)
+        create(:course, :primary, :unpublished, :draft_enrichment, :with_gcse_equivalency)
       end
 
       it "returns ok" do
@@ -62,7 +62,7 @@ describe "Publishable API v2", type: :request do
             "Enter details about school placements",
             "Enter a course length",
             "Enter details about the salary for this course",
-            "Enter details about the qualifications needed",
+            "Enter GCSE requirements",
             "Select at least one location for this course",
           ])
         end
@@ -86,7 +86,7 @@ describe "Publishable API v2", type: :request do
               "Enter details about this course",
               "Enter a course length",
               "Enter details about the fee for UK and EU students",
-              "Enter details about the qualifications needed",
+              "Enter GCSE requirements",
               "Enter details about school placements",
             ])
           end
@@ -97,8 +97,7 @@ describe "Publishable API v2", type: :request do
               /data/attributes/how_school_placements_work
               /data/attributes/course_length
               /data/attributes/fee_uk_eu
-              /data/attributes/required_qualifications
-            ))
+            ) << nil)
           end
         end
       end

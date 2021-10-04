@@ -123,15 +123,8 @@ describe "PATCH /providers/:provider_code/courses/:course_code" do
     let(:json_data) { JSON.parse(response.body)["errors"] }
     let(:gcse_requirements) { { english: "not_set", maths: "not_set", science: "not_set" } }
 
-    it "returns an error" do
-      expect(response).to have_http_status(:unprocessable_entity)
-    end
-
-    it "has maths, English and science validation errors" do
-      expect(json_data.count).to eq 3
-      expect(response.body).to include("Select an option for maths")
-      expect(response.body).to include("Select an option for English")
-      expect(response.body).to include("Select an option for science")
+    it "returns 200 ok" do
+      expect(response).to have_http_status(:ok)
     end
   end
 
@@ -147,21 +140,14 @@ describe "PATCH /providers/:provider_code/courses/:course_code" do
              subjects: [secondary_subject]
     }
 
-    it "returns an error" do
-      expect(response).to have_http_status(:unprocessable_entity)
-    end
-
-    it "has maths and English validation errors" do
-      expect(json_data.count).to eq 2
-      expect(response.body).to include("Select an option for maths")
-      expect(response.body).to include("Select an option for English")
-      expect(response.body).not_to include("Select an option for science")
+    it "returns 200 ok" do
+      expect(response).to have_http_status(:ok)
     end
 
     it "does not change any attribute" do
-      expect(course.reload.maths).to eq("must_have_qualification_at_application_time")
-      expect(course.reload.english).to eq("must_have_qualification_at_application_time")
-      expect(course.reload.science).to eq("must_have_qualification_at_application_time")
+      expect(course.reload.maths).to eq("not_set")
+      expect(course.reload.english).to eq("not_set")
+      expect(course.reload.science).to eq("not_set")
     end
   end
 

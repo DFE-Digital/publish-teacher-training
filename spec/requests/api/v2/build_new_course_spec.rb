@@ -182,20 +182,6 @@ describe "/api/v2/build_new_course", type: :request do
       expected["data"]["attributes"]["name"] = ""
       expected["data"]["errors"] = [
         {
-          "title" => "Invalid maths",
-          "detail" => "Select an option for maths",
-          "source" => {
-            "pointer" => "/data/attributes/maths",
-          },
-        },
-        {
-          "title" => "Invalid english",
-          "detail" => "Select an option for English",
-          "source" => {
-            "pointer" => "/data/attributes/english",
-          },
-        },
-        {
           "title" => "Invalid sites",
           "detail" => "Select at least one location for this course",
           "source" => {
@@ -297,20 +283,6 @@ describe "/api/v2/build_new_course", type: :request do
 
     it "returns a new course with the correct errors" do
       expected_errors = [
-        {
-          "title" => "Invalid maths",
-          "detail" => "Select an option for maths",
-          "source" => {
-            "pointer" => "/data/attributes/maths",
-          },
-        },
-        {
-          "title" => "Invalid english",
-          "detail" => "Select an option for English",
-          "source" => {
-            "pointer" => "/data/attributes/english",
-          },
-        },
         {
           "title" => "Invalid subjects",
           "detail" => "Select at least one subject",
