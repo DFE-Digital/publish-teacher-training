@@ -37,14 +37,6 @@ Rails.application.routes.draw do
   end
 
   namespace :api do
-    namespace :v1 do
-      scope "/(:recruitment_year)", constraints: { recruitment_year: /2022|2023/ } do
-        resources :providers, only: :index
-        resources :subjects, only: :index
-        resources :courses, only: :index
-      end
-    end
-
     namespace :v2 do
       resources :user_notification_preferences, only: %i[show update]
 
