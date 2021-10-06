@@ -50,8 +50,6 @@ describe "GET v3/recruitment_cycles/:year/courses" do
   end
 
   describe "caching" do
-    before { current_course }
-
     let!(:additional_course) do
       create(
         :course, site_statuses: [build(:site_status, :findable)], enrichments: [build(:course_enrichment, :published)]
@@ -76,12 +74,30 @@ describe "GET v3/recruitment_cycles/:year/courses" do
     it "busts cache entries" do
       get request_path
       course_hashes = JSON.parse(response.body)["data"]
-      expect(course_hashes.first.dig("attributes", "name")).to eq current_course.name
+      expect(course_hashes.map { |h| h.dig("attributes", "name") }).to match_array [current_course.name, additional_course.name]
 
       current_course.update!(name: "Astronomy")
       get request_path
       course_hashes = JSON.parse(response.body)["data"]
       expect(course_hashes.map { |h| h.dig("attributes", "name") }).to match_array ["Astronomy", additional_course.name]
+    end
+
+    it "busts cache entries when included providers are updated" do
+      request_path = "/api/v3/recruitment_cycles/#{RecruitmentCycle.current.year}/courses?include=provider"
+      get request_path
+      included_hashes = JSON.parse(response.body)["included"]
+
+      expect(
+        included_hashes.map { |h| h.dig("attributes", "provider_name") },
+      ).to match_array [current_course.provider.provider_name, additional_course.provider.provider_name]
+
+      additional_course.provider.update!(provider_name: "Fubar Ltd.")
+      get request_path
+      included_hashes = JSON.parse(response.body)["included"]
+
+      expect(
+        included_hashes.map { |h| h.dig("attributes", "provider_name") },
+      ).to match_array [current_course.provider.provider_name, "Fubar Ltd."]
     end
   end
 end

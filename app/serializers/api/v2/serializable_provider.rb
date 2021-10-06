@@ -1,6 +1,8 @@
 module API
   module V2
     class SerializableProvider < JSONAPI::Serializable::Resource
+      include JsonapiCacheKeyHelper
+
       type "providers"
 
       attributes :provider_code, :provider_name, :provider_type, :accredited_body?,
