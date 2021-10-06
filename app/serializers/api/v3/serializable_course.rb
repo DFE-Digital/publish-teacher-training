@@ -4,7 +4,9 @@ module API
       include TimeFormat
 
       def jsonapi_cache_key(options)
-        "V3/#{@object.cache_key_with_version} " + super(options)
+        course_cache_key = @object.cache_key_with_version
+        provider_cache_key = @object.provider.cache_key_with_version
+        "V3/#{course_cache_key} #{provider_cache_key}" + super(options)
       end
 
       class << self
