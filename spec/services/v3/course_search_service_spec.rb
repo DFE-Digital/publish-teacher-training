@@ -113,6 +113,29 @@ RSpec.describe V3::CourseSearchService do
           expect(courses.map { |c| c.provider.provider_name }).to eq ["University of Warwick"]
         end
       end
+
+      context "filter by funding" do
+        let(:with_salary) { create(:course, :with_salary) }
+        let(:without_salary) { create(:course) }
+
+        it "returns only courses with a salary if filter value is 'salary'" do
+          filter = { funding: "salary" }
+          courses = described_class.call(filter: filter).all
+          expect(courses).to eq [without_salary]
+        end
+
+        it "returns all courses if filter value is 'all'" do
+          filter = { funding: "all" }
+          courses = described_class.call(filter: filter).all
+          expect(courses).to eq [without_salary]
+        end
+
+        it "returns all courses if filter value is blank" do
+          filter = {}
+          courses = described_class.call(filter: filter).all
+          expect(courses).to eq [with_salary, without_salary]
+        end
+      end
     end
   end
 
@@ -192,31 +215,6 @@ RSpec.describe V3::CourseSearchService do
       end
     end
 
-
-    describe "filter[funding]" do
-      context "when value is salary" do
-        let(:filter) { { funding: "salary" } }
-        let(:expected_scope) { double }
-
-        it "adds the with_salary scope" do
-          expect(scope).to receive(:with_salary).and_return(course_ids_scope)
-          expect(course_ids_scope).to receive(:select).and_return(inner_query_scope)
-          expect(course_with_includes).to receive(:where).and_return(expected_scope)
-          expect(subject).to eq(expected_scope)
-        end
-      end
-
-      context "when value is all" do
-        let(:filter) { { funding: "all" } }
-
-        it "doesn't add the with_salary scope" do
-          expect(scope).not_to receive(:with_salary)
-          expect(scope).to receive(:select).and_return(inner_query_scope)
-          expect(course_with_includes).to receive(:where).and_return(expected_scope)
-          expect(subject).to eq(expected_scope)
-        end
-      end
-    end
 
     describe "filter[qualification]" do
       context "when qualifications passed" do
