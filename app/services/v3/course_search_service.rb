@@ -17,56 +17,71 @@ module V3
     end
 
     def call
-      scope = course_scope
-      scope = scope.with_salary if funding_filter_salary?
-      scope = scope.with_qualifications(qualifications) if qualifications.any?
-      scope = scope.with_vacancies if with_vacancies?
-      scope = scope.findable if findable?
-      scope = scope.with_study_modes(study_types) if study_types.any?
-      scope = scope.with_subjects(subject_codes) if subject_codes.any?
-      scope = scope.with_provider_name(provider_name) if provider_name.present?
-      scope = scope.with_send if send_courses_filter?
-      scope = scope.within(filter[:radius], origin: origin) if locations_filter?
-      scope = scope.with_funding_types(funding_types) if funding_types.any?
-      scope = scope.with_degree_grades(degree_grades) if degree_grades.any?
-      scope = scope.changed_since(filter[:updated_since]) if updated_since_filter?
-      scope = scope.provider_can_sponsor_visa if can_sponsor_visa_filter?
+      filter_scope = CourseFilterAttribute
+      filter_scope = filter_scope.where(provider_name: provider_name) if provider_name.present?
+      filter_scope = filter_scope.where(subject_code: subject_codes) if subject_codes.any?
+      filter_scope = filter_scope.where(is_send: true) if send_courses_filter?
 
-      # The 'where' scope will remove duplicates
-      # An outer query is required in the event the provider name is present.
-      # This prevents 'PG::InvalidColumnReference: ERROR: for SELECT DISTINCT, ORDER BY expressions must appear in select list'
-      outer_scope = Course.includes(
+
+      # scope = course_scope
+      # scope = scope.with_salary if funding_filter_salary?
+      # scope = scope.with_qualifications(qualifications) if qualifications.any?
+      # scope = scope.with_vacancies if with_vacancies?
+      # scope = scope.findable if findable?
+      # scope = scope.with_study_modes(study_types) if study_types.any?
+      # # scope = scope.with_subjects(subject_codes) if subject_codes.any?
+      # # scope = scope.with_provider_name(provider_name) if provider_name.present?
+      # scope = scope.with_send if send_courses_filter?
+      # scope = scope.within(filter[:radius], origin: origin) if locations_filter?
+      # scope = scope.with_funding_types(funding_types) if funding_types.any?
+      # scope = scope.with_degree_grades(degree_grades) if degree_grades.any?
+      # scope = scope.changed_since(filter[:updated_since]) if updated_since_filter?
+      # scope = scope.provider_can_sponsor_visa if can_sponsor_visa_filter?
+
+
+      course_scope.includes(
         :enrichments,
         :financial_incentives,
         course_subjects: [:subject],
         site_statuses: [:site],
         provider: %i[recruitment_cycle ucas_preferences],
-      ).where(id: scope.select(:id))
+      ).where(id: filter_scope.all)
 
-      if provider_name.present?
-        outer_scope = outer_scope
-                        .accredited_body_order(provider_name)
-                        .ascending_canonical_order
-      elsif sort_by_provider_ascending?
-        outer_scope = outer_scope.ascending_canonical_order
-        outer_scope = outer_scope.select("provider.provider_name", "course.*")
-      elsif sort_by_provider_descending?
-        outer_scope = outer_scope.descending_canonical_order
-        outer_scope = outer_scope.select("provider.provider_name", "course.*")
-      elsif sort_by_distance?
-        outer_scope = outer_scope.joins(courses_with_distance_from_origin)
-        outer_scope = outer_scope.joins(:provider)
-        outer_scope = outer_scope.select("course.*, distance, #{Course.sanitize_sql(distance_with_university_area_adjustment)}")
+      # # The 'where' scope will remove duplicates
+      # # An outer query is required in the event the provider name is present.
+      # # This prevents 'PG::InvalidColumnReference: ERROR: for SELECT DISTINCT, ORDER BY expressions must appear in select list'
+      # outer_scope = Course.includes(
+      #   :enrichments,
+      #   :financial_incentives,
+      #   course_subjects: [:subject],
+      #   site_statuses: [:site],
+      #   provider: %i[recruitment_cycle ucas_preferences],
+      # ).where(id: scope.select(:id))
 
-        outer_scope =
-          if expand_university?
-            outer_scope.order(:boosted_distance)
-          else
-            outer_scope.order(:distance)
-          end
-      end
+      # if provider_name.present?
+      #   outer_scope = outer_scope
+      #                   .accredited_body_order(provider_name)
+      #                   .ascending_canonical_order
+      # elsif sort_by_provider_ascending?
+      #   outer_scope = outer_scope.ascending_canonical_order
+      #   outer_scope = outer_scope.select("provider.provider_name", "course.*")
+      # elsif sort_by_provider_descending?
+      #   outer_scope = outer_scope.descending_canonical_order
+      #   outer_scope = outer_scope.select("provider.provider_name", "course.*")
+      # elsif sort_by_distance?
+      #   outer_scope = outer_scope.joins(courses_with_distance_from_origin)
+      #   outer_scope = outer_scope.joins(:provider)
+      #   outer_scope = outer_scope.select("course.*, distance, #{Course.sanitize_sql(distance_with_university_area_adjustment)}")
 
-      outer_scope
+      #   outer_scope =
+      #     if expand_university?
+      #       outer_scope.order(:boosted_distance)
+      #     else
+      #       outer_scope.order(:distance)
+      #     end
+      # end
+
+      # outer_scope
     end
 
     private_class_method :new
