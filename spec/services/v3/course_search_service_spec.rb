@@ -3,6 +3,37 @@ require "rails_helper"
 
 RSpec.describe V3::CourseSearchService do
   describe ".call" do
+    describe "sorting" do
+      before do
+        create(:course, name: "A", provider: create(:provider, provider_name: "A"))
+        create(:course, name: "B", provider: create(:provider, provider_name: "B"))
+        create(:course, name: "C", provider: create(:provider, provider_name: "A"))
+        create(:course, name: "D", provider: create(:provider, provider_name: "B"))
+      end
+
+      context "sort by ascending provider name and course name" do
+        let(:sort) { "name,provider.provider_name" }
+
+        it "orders as specified" do
+          courses = described_class.call(sort: sort).all
+          expect(courses.map { |c| c.provider.provider_name }).to eq %w[A A B B]
+          expect(courses.map(&:name)).to eq %w[A C B D]
+        end
+      end
+
+      context "sort by descending provider name and course name" do
+        let(:sort) { "-provider.provider_name,-name" }
+
+        it "orders as specified" do
+          courses = described_class.call(sort: sort).all
+          expect(courses.map { |c| c.provider.provider_name }).to eq %w[B B A A]
+          expect(courses.map(&:name)).to eq %w[D B C A]
+        end
+      end
+    end
+  end
+
+  describe "old .call" do
     let(:course_with_includes) { class_double(Course) }
     let(:scope) { class_double(Course) }
     let(:select_scope) { class_double(Course) }
@@ -46,30 +77,6 @@ RSpec.describe V3::CourseSearchService do
     end
 
     describe "sort by" do
-      context "ascending provider name and course name" do
-        let(:sort) { "name,provider.provider_name" }
-
-        it "orders in ascending order" do
-          expect(scope).to receive(:select).and_return(inner_query_scope)
-          expect(course_with_includes).to receive(:where).with(id: inner_query_scope).and_return(outer_query_scope)
-          expect(outer_query_scope).to receive(:ascending_canonical_order).and_return(select_scope)
-          expect(select_scope).to receive(:select).and_return(expected_scope)
-          expect(subject).to eq(expected_scope)
-        end
-      end
-
-      context "descending provider name and course name" do
-        let(:sort) { "-provider.provider_name,-name" }
-
-        it "orders in descending order" do
-          expect(scope).to receive(:select).and_return(inner_query_scope)
-          expect(course_with_includes).to receive(:where).and_return(order_scope)
-          expect(order_scope).to receive(:descending_canonical_order).and_return(select_scope)
-          expect(select_scope).to receive(:select).and_return(expected_scope)
-          expect(subject).to eq(expected_scope)
-        end
-      end
-
       context "by distance" do
         let(:sort) { "distance" }
 
