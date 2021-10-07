@@ -1,3 +1,4 @@
+# rubocop:disable RSpec/StubbedMock
 require "rails_helper"
 
 RSpec.describe V3::CourseSearchService do
@@ -758,3 +759,4 @@ RSpec.describe V3::CourseSearchService do
     end
   end
 end
+# rubocop:enable RSpec/StubbedMock
