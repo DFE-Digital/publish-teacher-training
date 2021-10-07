@@ -525,6 +525,9 @@ GEM
       rexml
     ruby-progressbar (1.11.0)
     ruby2_keywords (0.0.5)
+    scenic (1.5.4)
+      activerecord (>= 4.0.0)
+      railties (>= 4.0.0)
     schema_to_scaffold (0.8.0)
       activesupport (>= 3.2.1)
     semantic_logger (4.8.2)
@@ -709,6 +712,7 @@ DEPENDENCIES
   rubocop
   rubocop-rails
   rubocop-rspec
+  scenic
   schema_to_scaffold
   sentry-rails
   sentry-ruby

@@ -129,6 +129,8 @@ gem "google-cloud-bigquery"
 # Faster JSON serialization
 gem "oj"
 
+gem "scenic"
+
 group :development, :test do
   # Prettyprint in console
   gem "awesome_print"
