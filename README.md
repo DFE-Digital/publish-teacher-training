@@ -1,4 +1,3 @@
-
 [![Build Status](https://dfe-ssp.visualstudio.com/Become-A-Teacher/_apis/build/status/Find/teacher-training-api?branchName=master)](https://dfe-ssp.visualstudio.com/Become-A-Teacher/_build/latest?definitionId=46&branchName=master)
 ![Build](https://github.com/DFE-Digital/teacher-training-api/workflows/Build/badge.svg?branch=master&event=push)
 [![Maintainability](https://api.codeclimate.com/v1/badges/b97c086ada58c27c967c/maintainability)](https://codeclimate.com/github/DFE-Digital/teacher-training-api/maintainability)
@@ -57,7 +56,6 @@ docker-compose exec web /bin/sh -c "bundle exec rails db:setup"
 
 Then open http://localhost:3001 to see the app.
 
-
 ### Run The Server in SSL Mode
 
 By default the server does not run in SSL mode. If you want to run the local
@@ -67,7 +65,6 @@ server in SSL mode, you can do so by setting the environment variable
 ```bash
 SETTINGS__USE_SSL=1 rails s
 ```
-
 
 ### Trust the TLS certificate
 
@@ -80,8 +77,8 @@ On macOS:
 sudo security add-trusted-cert -d -r trustRoot -k /Library/Keychains/System.keychain config/localhost/https/localhost.crt
 ```
 
-
 ## Running specs
+
 ```
 bundle exec rspec
 ```
@@ -142,17 +139,6 @@ bundle exec rake
 
 ## Accessing API
 
-### V1
-
-[See API Docs](https://github.com/DFE-Digital/teacher-training-api/blob/master/docs/api.md)
-
-Quick check that it's working in local development with the token "bats"
-configured in `config/environments/development.rb`:
-
-```bash
-curl http://localhost:3001/api/v1/2020/subjects.json -H "Authorization: Bearer bats"
-```
-
 ### V2
 
 #### Authentication
@@ -188,6 +174,7 @@ Where `-S secret` is the secret. In development, the secret should be set to
 Refer to the [the config gem](https://github.com/railsconfig/config#accessing-the-settings-object) to understand the `file based settings` loading order.
 
 To override file based via `Machine based env variables settings`
+
 ```bash
 cat config/settings.yml
 file
@@ -206,7 +193,7 @@ puts Settings.file.based.setting.env1
 machine wins
 ```
 
-Any `Machine based env variables settings` that is not prefixed with `SETTINGS`.* are not considered for general consumption.
+Any `Machine based env variables settings` that is not prefixed with `SETTINGS`.\* are not considered for general consumption.
 
 ### Documentation
 
@@ -250,7 +237,8 @@ can be useful for people who aren't as familiar with the app, or with certain
 complex operations that just aren't already packaged up in the app.
 
 In order to use the external environment functionality you must set the
-environments in ```config/azure_environments.yml ```like so:
+environments in `config/azure_environments.yml `like so:
+
 ```
 qa:
   webapp: <webapp>
@@ -265,6 +253,7 @@ production:
   rgroup: <rgroup>
   subscription: <subscription>
 ```
+
 If you are a member of the Find team you may find a filled out config [here](https://dfedigital.atlassian.net/wiki/spaces/BaT/pages/1182761062/MCB+Configuration?atlOrigin=eyJpIjoiZDg0N2Q2ZTg0NTRiNDQ1MmEwZWQ3M2VhZjMyYjIxNjEiLCJwIjoiYyJ9n).
 
 The script's functionality is accessed using sub-commands with built-in
@@ -282,16 +271,17 @@ be organised in an appropriate sub-folder there.
 
 ### Dependencies
 
-* Requires an installation of the `az` command on the `PATH`. Get it at
+- Requires an installation of the `az` command on the `PATH`. Get it at
   https://docs.microsoft.com/en-us/cli/azure/?view=azure-cli-latest
-* An Azure account with access to the subscription(s) - if you're on a non-DfE
+- An Azure account with access to the subscription(s) - if you're on a non-DfE
   device you need BYOD & 2FA set up.
-* A publish user with your email address with access to the organisation(s) you
+- A publish user with your email address with access to the organisation(s) you
   want to modify.
 
 ### Mandatory requirements
 
 To successfully log into the system, you will need to:
+
 1. Create an account on DfE Sign-in
    1. Get a DfE Sign-in admin to invite you (give them this link:
       https://signin-test-sup-as.azurewebsites.net/users)
@@ -306,16 +296,16 @@ Users not matching
 `%@digital.education.gov.uk` and `%@education.gov.uk`
 will be anonymized for non production environment.
 
-
 ## <a name="releases"></a>Releases
 
 Find (Publish Teacher Training & Teacher Training API) build and release process is split into two separate Azure DevOps pipelines.
+
 - [Build Pipeline](https://dfe-ssp.visualstudio.com/Become-A-Teacher/_build?definitionId=46): This is the main development CI pipeline which will automatically trigger a build from a commit to any branch within the teacher-training-api GitHub code repository.
 - [Release Pipeline](https://dfe-ssp.visualstudio.com/Become-A-Teacher/_release?_a=releases&view=mine&definitionId=36): When commits are made to the master branch, this pipeline will auto deploy the application to the QA infrastructure environment in Azure. Frontend and backend release pipelines are consolidated and are made up of several stages including integration testing. Release in staging and production can be triggered manualy only - see deployment guide for more details.
 
 ## <a name="other_documentation"></a>Other Documentation
 
-* [Deployment guide](./docs/deployment.md)
-* [Services pattern documentation](./app/services/README.md)
-* [Healthcheck and Ping Endpoints](./docs/healthcheck_and_ping_endpoints.md)
-* [Alerting and monitoring](./docs/alerting_and_monitoring.md)
+- [Deployment guide](./docs/deployment.md)
+- [Services pattern documentation](./app/services/README.md)
+- [Healthcheck and Ping Endpoints](./docs/healthcheck_and_ping_endpoints.md)
+- [Alerting and monitoring](./docs/alerting_and_monitoring.md)
