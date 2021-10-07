@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_10_05_153519) do
+ActiveRecord::Schema.define(version: 2021_10_07_140208) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
@@ -131,6 +131,7 @@ ActiveRecord::Schema.define(version: 2021_10_05_153519) do
     t.index ["is_send"], name: "index_course_on_is_send"
     t.index ["program_type"], name: "index_course_on_program_type"
     t.index ["provider_id", "course_code"], name: "IX_course_provider_id_course_code", unique: true
+    t.index ["provider_id"], name: "index_course_on_provider_id"
     t.index ["qualification"], name: "index_course_on_qualification"
     t.index ["study_mode"], name: "index_course_on_study_mode"
     t.index ["uuid"], name: "index_courses_unique_uuid", unique: true
