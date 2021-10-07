@@ -10,12 +10,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_10_07_140208) do
+ActiveRecord::Schema.define(version: 2021_10_07_145402) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
   enable_extension "btree_gist"
-  enable_extension "citext"
   enable_extension "pg_buffercache"
   enable_extension "pg_stat_statements"
   enable_extension "plpgsql"
@@ -244,40 +243,6 @@ ActiveRecord::Schema.define(version: 2021_10_07_140208) do
     t.index ["user_id"], name: "IX_organisation_user_user_id"
   end
 
-  create_table "pets2", id: false, force: :cascade do |t|
-    t.integer "id"
-    t.text "address4"
-    t.text "provider_name"
-    t.text "scheme_member"
-    t.text "contact_name"
-    t.text "year_code"
-    t.text "provider_code"
-    t.text "provider_type"
-    t.text "postcode"
-    t.text "website"
-    t.text "address1"
-    t.text "address2"
-    t.text "address3"
-    t.text "email"
-    t.text "telephone"
-    t.integer "region_code"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.text "accrediting_provider"
-    t.datetime "changed_at"
-    t.integer "recruitment_cycle_id"
-    t.datetime "discarded_at"
-    t.text "train_with_us"
-    t.text "train_with_disability"
-    t.jsonb "accrediting_provider_enrichments"
-    t.float "latitude"
-    t.float "longitude"
-    t.string "ukprn"
-    t.string "urn"
-    t.boolean "can_sponsor_skilled_worker_visa"
-    t.boolean "can_sponsor_student_visa"
-  end
-
   create_table "provider", id: :serial, force: :cascade do |t|
     t.text "address4"
     t.text "provider_name"
@@ -387,40 +352,6 @@ ActiveRecord::Schema.define(version: 2021_10_07_140208) do
     t.index ["typename"], name: "index_subject_area_on_typename", unique: true
   end
 
-  create_table "temp", id: false, force: :cascade do |t|
-    t.integer "id"
-    t.text "address4"
-    t.text "provider_name"
-    t.text "scheme_member"
-    t.text "contact_name"
-    t.text "year_code"
-    t.text "provider_code"
-    t.text "provider_type"
-    t.text "postcode"
-    t.text "website"
-    t.text "address1"
-    t.text "address2"
-    t.text "address3"
-    t.text "email"
-    t.text "telephone"
-    t.integer "region_code"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.text "accrediting_provider"
-    t.datetime "changed_at"
-    t.integer "recruitment_cycle_id"
-    t.datetime "discarded_at"
-    t.text "train_with_us"
-    t.text "train_with_disability"
-    t.jsonb "accrediting_provider_enrichments"
-    t.float "latitude"
-    t.float "longitude"
-    t.string "ukprn"
-    t.string "urn"
-    t.boolean "can_sponsor_skilled_worker_visa"
-    t.boolean "can_sponsor_student_visa"
-  end
-
   create_table "user", id: :serial, force: :cascade do |t|
     t.text "email"
     t.text "first_name", null: false
@@ -474,4 +405,46 @@ ActiveRecord::Schema.define(version: 2021_10_07_140208) do
   add_foreign_key "site", "provider", name: "FK_site_provider_provider_id", on_delete: :cascade
   add_foreign_key "subject", "subject_area", column: "type", primary_key: "typename", name: "fk_subject__subject_area"
   add_foreign_key "user_notification", "\"user\"", column: "user_id"
+
+  create_view "course_filter_attribute", materialized: true, sql_definition: <<-SQL
+      SELECT course.id,
+      course.program_type,
+      course.qualification,
+      course.study_mode,
+      course.is_send,
+      course.degree_grade,
+      provider.provider_name,
+      provider.can_sponsor_student_visa,
+      provider.can_sponsor_skilled_worker_visa,
+      provider.recruitment_cycle_id,
+      subject.subject_code,
+      course_site.vac_status,
+      course_site.publish,
+      course_site.status,
+      site.latitude,
+      site.longitude
+     FROM (((((course
+       JOIN provider ON ((provider.id = course.provider_id)))
+       JOIN course_subject ON ((course_subject.course_id = course.id)))
+       JOIN subject ON ((subject.id = course_subject.subject_id)))
+       JOIN course_site ON ((course_site.course_id = course.id)))
+       JOIN site ON ((site.id = course_site.site_id)));
+  SQL
+  add_index "course_filter_attribute", ["can_sponsor_skilled_worker_visa"], name: "course_filter_attributes_worker_visa_index"
+  add_index "course_filter_attribute", ["can_sponsor_student_visa"], name: "index_course_filter_attribute_on_can_sponsor_student_visa"
+  add_index "course_filter_attribute", ["degree_grade"], name: "index_course_filter_attribute_on_degree_grade"
+  add_index "course_filter_attribute", ["id"], name: "index_course_filter_attribute_on_id"
+  add_index "course_filter_attribute", ["is_send"], name: "index_course_filter_attribute_on_is_send"
+  add_index "course_filter_attribute", ["latitude"], name: "index_course_filter_attribute_on_latitude"
+  add_index "course_filter_attribute", ["longitude"], name: "index_course_filter_attribute_on_longitude"
+  add_index "course_filter_attribute", ["program_type"], name: "index_course_filter_attribute_on_program_type"
+  add_index "course_filter_attribute", ["provider_name"], name: "index_course_filter_attribute_on_provider_name"
+  add_index "course_filter_attribute", ["publish"], name: "index_course_filter_attribute_on_publish"
+  add_index "course_filter_attribute", ["qualification"], name: "index_course_filter_attribute_on_qualification"
+  add_index "course_filter_attribute", ["recruitment_cycle_id"], name: "index_course_filter_attribute_on_recruitment_cycle_id"
+  add_index "course_filter_attribute", ["status"], name: "index_course_filter_attribute_on_status"
+  add_index "course_filter_attribute", ["study_mode"], name: "index_course_filter_attribute_on_study_mode"
+  add_index "course_filter_attribute", ["subject_code"], name: "index_course_filter_attribute_on_subject_code"
+  add_index "course_filter_attribute", ["vac_status"], name: "index_course_filter_attribute_on_vac_status"
+
 end
