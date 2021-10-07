@@ -9,16 +9,13 @@ module Courses
       when "fee"
         course.program_type = update_fee_program(course)
       end
+      course.save
     end
 
   private
 
     def update_salaried_program(course)
-      if !course.self_accredited?
-        course.program_type = :school_direct_salaried_training_programme
-      else
-        course.errors.add(:program_type, "Salary is not valid for a self accredited course")
-      end
+      course.program_type = :school_direct_salaried_training_programme
     end
 
     def update_fee_program(course)
