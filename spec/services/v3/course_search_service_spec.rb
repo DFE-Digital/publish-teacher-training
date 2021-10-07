@@ -130,7 +130,7 @@ RSpec.describe V3::CourseSearchService do
           expect(courses).to eq [without_salary]
         end
 
-        it "returns all courses if filter is blank" do
+        it "returns all courses if filter is absent" do
           filter = {}
           courses = described_class.call(filter: filter).all
           expect(courses).to eq [with_salary, without_salary]
@@ -148,7 +148,7 @@ RSpec.describe V3::CourseSearchService do
           expect(courses).to match_array [pgde, pgce_with_qts]
         end
 
-        it "returns all courses if filter is blank" do
+        it "returns all courses if filter is absent" do
           filter = {}
           courses = described_class.call(filter: filter).all
           expect(courses).to match_array [pgce, pgde, pgce_with_qts]
@@ -172,10 +172,33 @@ RSpec.describe V3::CourseSearchService do
           expect(courses).to match_array [full_time_vacancies, part_time_vacancies, no_vacancies]
         end
 
-        it "returns all courses when filter is blank" do
+        it "returns all courses when filter is absent" do
           filter = {}
           courses = described_class.call(filter: filter).all
           expect(courses).to match_array [full_time_vacancies, part_time_vacancies, no_vacancies]
+        end
+      end
+
+      context "filter by findable" do
+        let!(:findable) { create(:course, site_statuses: [build(:site_status, :findable)]) }
+        let!(:not_findable) { create(:course, site_statuses: [build(:site_status, :unpublished)]) }
+
+        it "returns only findable courses when filter is true" do
+          filter = { has_vacancies: true }
+          courses = described_class.call(filter: filter).all
+          expect(courses).to match_array [findable]
+        end
+
+        it "returns all courses when filter is false" do
+          filter = { has_vacancies: false }
+          courses = described_class.call(filter: filter).all
+          expect(courses).to match_array [findable, not_findable]
+        end
+
+        it "returns all courses when filter is absent" do
+          filter = {}
+          courses = described_class.call(filter: filter).all
+          expect(courses).to match_array [findable, not_findable]
         end
       end
     end
@@ -253,42 +276,6 @@ RSpec.describe V3::CourseSearchService do
 
         it "does not add the within scope" do
           expect(scope).not_to receive(:within)
-        end
-      end
-    end
-
-    describe "filter[findable]" do
-      context "when true" do
-        let(:filter) { { findable: true } }
-        let(:expected_scope) { double }
-
-        it "adds the findable scope" do
-          expect(scope).to receive(:findable).and_return(course_ids_scope)
-          expect(course_ids_scope).to receive(:select).and_return(inner_query_scope)
-          expect(course_with_includes).to receive(:where).and_return(expected_scope)
-          expect(subject).to eq(expected_scope)
-        end
-      end
-
-      context "when false" do
-        let(:filter) { { findable: false } }
-
-        it "doesn't add the findable scope" do
-          expect(scope).not_to receive(:findable)
-          expect(scope).to receive(:select).and_return(inner_query_scope)
-          expect(course_with_includes).to receive(:where).and_return(expected_scope)
-          expect(subject).to eq(expected_scope)
-        end
-      end
-
-      context "when absent" do
-        let(:filter) { {} }
-
-        it "doesn't add the findable scope" do
-          expect(scope).not_to receive(:findable)
-          expect(scope).to receive(:select).and_return(inner_query_scope)
-          expect(course_with_includes).to receive(:where).and_return(expected_scope)
-          expect(subject).to eq(expected_scope)
         end
       end
     end
