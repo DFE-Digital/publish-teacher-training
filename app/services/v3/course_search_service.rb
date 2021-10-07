@@ -20,7 +20,7 @@ module V3
       scope = course_scope
       scope = scope.with_salary if funding_filter_salary?
       scope = scope.with_qualifications(qualifications) if qualifications.any?
-      scope = scope.with_vacancies if has_vacancies?
+      scope = scope.with_vacancies if with_vacancies?
       scope = scope.findable if findable?
       scope = scope.with_study_modes(study_types) if study_types.any?
       scope = scope.with_subjects(subject_codes) if subject_codes.any?
@@ -96,7 +96,7 @@ module V3
       # Create virtual table with sites and site statuses
       site_statuses.join(sites).on(site_statuses[:site_id].eq(sites[:id]))
       .where(site_statuses_criteria(site_statuses))
-      .where(has_been_geocoded_criteria(sites))
+      .where(already_geocoded_criteria(sites))
       .where(locatable_address_criteria(sites))
     end
 
@@ -104,7 +104,7 @@ module V3
       # Only running and published site statuses
       running_and_published_criteria = site_statuses[:status].eq(SiteStatus.statuses[:running]).and(site_statuses[:publish].eq(SiteStatus.publishes[:published]))
 
-      if has_vacancies?
+      if with_vacancies?
         # Only site statuses with vacancies
         running_and_published_criteria
           .and(site_statuses[:vac_status])
@@ -118,7 +118,7 @@ module V3
       end
     end
 
-    def has_been_geocoded_criteria(sites)
+    def already_geocoded_criteria(sites)
       # we only want sites that have been geocoded
       sites[:latitude].not_eq(nil).and(sites[:longitude].not_eq(nil))
     end
@@ -158,9 +158,9 @@ module V3
     end
 
     def locations_filter?
-      filter.has_key?(:latitude) &&
-        filter.has_key?(:longitude) &&
-        filter.has_key?(:radius)
+      filter.key?(:latitude) &&
+        filter.key?(:longitude) &&
+        filter.key?(:radius)
     end
 
     def sort_by_provider_ascending?
@@ -191,7 +191,7 @@ module V3
       filter[:qualification].split(",")
     end
 
-    def has_vacancies?
+    def with_vacancies?
       filter[:has_vacancies].to_s.downcase == "true"
     end
 
