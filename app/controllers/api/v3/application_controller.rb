@@ -44,7 +44,7 @@ module API
 
       def fields_param
         params.fetch(:fields, {})
-          .permit(:subject_areas, :subjects, :courses, :providers)
+          .permit(:subject_areas, :subjects, :courses, :providers, :site_statuses)
           .to_h
           .map { |k, v| [k, v.split(",").map(&:to_sym)] }
       end
