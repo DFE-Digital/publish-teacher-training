@@ -99,6 +99,20 @@ RSpec.describe V3::CourseSearchService do
           expect(courses).to eq [near_course]
         end
       end
+
+      context "filter by provider" do
+        let(:filter) { { "provider.provider_name": "University of Warwick" } }
+
+        before do
+          create(:course, provider: build(:provider, provider_name: "University of Warwick"))
+          create(:course, provider: build(:provider, provider_name: "University of Life"))
+        end
+
+        it "returns only courses belonging to the named provider" do
+          courses = described_class.call(filter: filter).all
+          expect(courses.map { |c| c.provider.provider_name }).to eq ["University of Warwick"]
+        end
+      end
     end
   end
 
@@ -178,23 +192,6 @@ RSpec.describe V3::CourseSearchService do
       end
     end
 
-    describe "filter[provider.provider_name]" do
-      context "when provider name is present" do
-        let(:filter) { { "provider.provider_name": "University of Warwick" } }
-        let(:expected_scope) { double }
-        let(:accredited_body_scope) { double }
-        let(:order_scope) { double }
-
-        it "adds some scope" do
-          expect(scope).to receive(:with_provider_name).and_return(course_ids_scope)
-          expect(course_ids_scope).to receive(:select).with(:id).and_return(inner_query_scope)
-          expect(course_with_includes).to receive(:where).and_return(accredited_body_scope)
-          expect(accredited_body_scope).to receive(:accredited_body_order).and_return(order_scope)
-          expect(order_scope).to receive(:ascending_canonical_order).and_return(expected_scope)
-          expect(subject).to eq(expected_scope)
-        end
-      end
-    end
 
     describe "filter[funding]" do
       context "when value is salary" do
