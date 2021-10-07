@@ -1,6 +1,8 @@
 module API
   module V2
     class SerializableProviderEnrichment < JSONAPI::Serializable::Resource
+      include JsonapiCacheKeyHelper
+
       type "provider_enrichment"
 
       has_one :provider
