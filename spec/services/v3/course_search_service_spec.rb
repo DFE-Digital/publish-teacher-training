@@ -64,6 +64,42 @@ RSpec.describe V3::CourseSearchService do
         end
       end
     end
+
+    describe "filtering" do
+      context "filter by distance" do
+        let(:origin) { { latitude: 0, longitude: 0 } }
+        let(:radius) { 5 } # miles
+        let(:near_to_origin) { { latitude: 0.01, longitude: 0 } } # ~1 mile away
+        let(:far_from_origin) { { latitude: 0.2, longitude: 0 } } # ~12 miles away
+        let(:furthest_from_origin) { { latitude: 0.3, longitude: 0 } } # ~18 miles away
+
+        let(:filter) { { longitude: origin[:longitude], latitude: origin[:latitude], radius: radius } }
+
+        let!(:furthest_course) do
+          create(
+            :course,
+            site_statuses: [build(:site_status, :findable, site: build(:site, **furthest_from_origin))],
+          )
+        end
+        let!(:far_course) do
+          create(
+            :course,
+            site_statuses: [build(:site_status, :findable, site: build(:site, **far_from_origin))],
+          )
+        end
+        let!(:near_course) do
+          create(
+            :course,
+            site_statuses: [build(:site_status, :findable, site: build(:site, **near_to_origin))],
+          )
+        end
+
+        it "returns only courses within the radius" do
+          courses = described_class.call(filter: filter).all
+          expect(courses).to eq [near_course]
+        end
+      end
+    end
   end
 
   describe "old .call" do
@@ -131,20 +167,6 @@ RSpec.describe V3::CourseSearchService do
     end
 
     describe "range" do
-      context "when a range is specified" do
-        let(:longitude) { 0 }
-        let(:latitude) { 1 }
-        let(:radius) { 5 }
-        let(:filter) { { longitude: longitude, latitude: latitude, radius: radius } }
-
-        it "adds the within scope" do
-          expect(scope).to receive(:within).with(radius, origin: [latitude, longitude]).and_return(course_ids_scope)
-          expect(course_ids_scope).to receive(:select).and_return(inner_query_scope)
-          expect(course_with_includes).to receive(:where).and_return(expected_scope)
-          expect(subject).to eq(expected_scope)
-        end
-      end
-
       context "when a range is not specified" do
         let(:longitude) { 0 }
         let(:latitude) { 1 }
