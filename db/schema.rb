@@ -10,11 +10,12 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_10_05_153519) do
+ActiveRecord::Schema.define(version: 2021_10_07_140208) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
   enable_extension "btree_gist"
+  enable_extension "citext"
   enable_extension "pg_buffercache"
   enable_extension "pg_stat_statements"
   enable_extension "plpgsql"
@@ -131,6 +132,7 @@ ActiveRecord::Schema.define(version: 2021_10_05_153519) do
     t.index ["is_send"], name: "index_course_on_is_send"
     t.index ["program_type"], name: "index_course_on_program_type"
     t.index ["provider_id", "course_code"], name: "IX_course_provider_id_course_code", unique: true
+    t.index ["provider_id"], name: "index_course_on_provider_id"
     t.index ["qualification"], name: "index_course_on_qualification"
     t.index ["study_mode"], name: "index_course_on_study_mode"
     t.index ["uuid"], name: "index_courses_unique_uuid", unique: true
@@ -242,6 +244,40 @@ ActiveRecord::Schema.define(version: 2021_10_05_153519) do
     t.index ["user_id"], name: "IX_organisation_user_user_id"
   end
 
+  create_table "pets2", id: false, force: :cascade do |t|
+    t.integer "id"
+    t.text "address4"
+    t.text "provider_name"
+    t.text "scheme_member"
+    t.text "contact_name"
+    t.text "year_code"
+    t.text "provider_code"
+    t.text "provider_type"
+    t.text "postcode"
+    t.text "website"
+    t.text "address1"
+    t.text "address2"
+    t.text "address3"
+    t.text "email"
+    t.text "telephone"
+    t.integer "region_code"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.text "accrediting_provider"
+    t.datetime "changed_at"
+    t.integer "recruitment_cycle_id"
+    t.datetime "discarded_at"
+    t.text "train_with_us"
+    t.text "train_with_disability"
+    t.jsonb "accrediting_provider_enrichments"
+    t.float "latitude"
+    t.float "longitude"
+    t.string "ukprn"
+    t.string "urn"
+    t.boolean "can_sponsor_skilled_worker_visa"
+    t.boolean "can_sponsor_student_visa"
+  end
+
   create_table "provider", id: :serial, force: :cascade do |t|
     t.text "address4"
     t.text "provider_name"
@@ -349,6 +385,40 @@ ActiveRecord::Schema.define(version: 2021_10_05_153519) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["typename"], name: "index_subject_area_on_typename", unique: true
+  end
+
+  create_table "temp", id: false, force: :cascade do |t|
+    t.integer "id"
+    t.text "address4"
+    t.text "provider_name"
+    t.text "scheme_member"
+    t.text "contact_name"
+    t.text "year_code"
+    t.text "provider_code"
+    t.text "provider_type"
+    t.text "postcode"
+    t.text "website"
+    t.text "address1"
+    t.text "address2"
+    t.text "address3"
+    t.text "email"
+    t.text "telephone"
+    t.integer "region_code"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.text "accrediting_provider"
+    t.datetime "changed_at"
+    t.integer "recruitment_cycle_id"
+    t.datetime "discarded_at"
+    t.text "train_with_us"
+    t.text "train_with_disability"
+    t.jsonb "accrediting_provider_enrichments"
+    t.float "latitude"
+    t.float "longitude"
+    t.string "ukprn"
+    t.string "urn"
+    t.boolean "can_sponsor_skilled_worker_visa"
+    t.boolean "can_sponsor_student_visa"
   end
 
   create_table "user", id: :serial, force: :cascade do |t|
