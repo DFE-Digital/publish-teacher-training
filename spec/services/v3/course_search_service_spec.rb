@@ -230,6 +230,42 @@ RSpec.describe V3::CourseSearchService do
           expect(courses).to match_array [full_time, part_time]
         end
       end
+
+      context "filter by funding_type" do
+        let!(:fee) { create(:course, :fee_type_based) }
+        let!(:salary) { create(:course, :with_salary) }
+        let!(:apprenticeship) { create(:course, :with_apprenticeship) }
+
+        it "returns fee courses if funding_type is fee" do
+          filter = { funding_type: "fee" }
+          courses = described_class.call(filter: filter).all
+          expect(courses).to match_array [fee]
+        end
+
+        it "returns salary courses if funding_type is salary" do
+          filter = { funding_type: "salary" }
+          courses = described_class.call(filter: filter).all
+          expect(courses).to match_array [salary]
+        end
+
+        it "returns apprenticeship courses if funding_type is apprenticeship" do
+          filter = { funding_type: "apprenticeship" }
+          courses = described_class.call(filter: filter).all
+          expect(courses).to match_array [apprenticeship]
+        end
+
+        it "returns all courses if all funding types present" do
+          filter = { funding_type: "fee,salary,apprenticeship" }
+          courses = described_class.call(filter: filter).all
+          expect(courses).to match_array [fee, salary, apprenticeship]
+        end
+
+        it "returns all courses if filter is absent" do
+          filter = {}
+          courses = described_class.call(filter: filter).all
+          expect(courses).to match_array [fee, salary, apprenticeship]
+        end
+      end
     end
   end
 
@@ -305,67 +341,6 @@ RSpec.describe V3::CourseSearchService do
 
         it "does not add the within scope" do
           expect(scope).not_to receive(:within)
-        end
-      end
-    end
-
-    describe "filter[funding_type]" do
-      context "when fee" do
-        let(:filter) { { funding_type: "fee" } }
-        let(:expected_scope) { double }
-
-        it "adds the with_funding_types scope" do
-          expect(scope).to receive(:with_funding_types).with(%w(fee)).and_return(course_ids_scope)
-          expect(course_ids_scope).to receive(:select).and_return(inner_query_scope)
-          expect(course_with_includes).to receive(:where).and_return(expected_scope)
-          expect(subject).to eq(expected_scope)
-        end
-      end
-
-      context "when salary" do
-        let(:filter) { { funding_type: "salary" } }
-        let(:expected_scope) { double }
-
-        it "adds the with_funding_types scope" do
-          expect(scope).to receive(:with_funding_types).with(%w(salary)).and_return(course_ids_scope)
-          expect(course_ids_scope).to receive(:select).and_return(inner_query_scope)
-          expect(course_with_includes).to receive(:where).and_return(expected_scope)
-          expect(subject).to eq(expected_scope)
-        end
-      end
-
-      context "when apprenticeship" do
-        let(:filter) { { funding_type: "apprenticeship" } }
-        let(:expected_scope) { double }
-
-        it "adds the with_funding_types scope" do
-          expect(scope).to receive(:with_funding_types).with(%w(apprenticeship)).and_return(course_ids_scope)
-          expect(course_ids_scope).to receive(:select).and_return(inner_query_scope)
-          expect(course_with_includes).to receive(:where).and_return(expected_scope)
-          expect(subject).to eq(expected_scope)
-        end
-      end
-
-      context "when all" do
-        let(:filter) { { funding_type: "fee,salary,apprenticeship" } }
-        let(:expected_scope) { double }
-
-        it "adds the with_funding_types scope" do
-          expect(scope).to receive(:with_funding_types).with(%w(fee salary apprenticeship)).and_return(course_ids_scope)
-          expect(course_ids_scope).to receive(:select).and_return(inner_query_scope)
-          expect(course_with_includes).to receive(:where).and_return(expected_scope)
-          expect(subject).to eq(expected_scope)
-        end
-      end
-
-      context "when absent" do
-        let(:filter) { {} }
-
-        it "doesn't add the scope" do
-          expect(scope).not_to receive(:with_funding_types)
-          expect(scope).to receive(:select).and_return(inner_query_scope)
-          expect(course_with_includes).to receive(:where).and_return(expected_scope)
-          expect(subject).to eq(expected_scope)
         end
       end
     end
