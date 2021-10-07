@@ -5,10 +5,10 @@ RSpec.describe V3::CourseSearchService do
   describe ".call" do
     describe "sorting" do
       before do
-        create(:course, name: "A", provider: create(:provider, provider_name: "A"))
-        create(:course, name: "B", provider: create(:provider, provider_name: "B"))
-        create(:course, name: "C", provider: create(:provider, provider_name: "A"))
-        create(:course, name: "D", provider: create(:provider, provider_name: "B"))
+        create(:course, name: "A", provider: build(:provider, provider_name: "A"))
+        create(:course, name: "B", provider: build(:provider, provider_name: "B"))
+        create(:course, name: "C", provider: build(:provider, provider_name: "A"))
+        create(:course, name: "D", provider: build(:provider, provider_name: "B"))
       end
 
       context "sort by ascending provider name and course name" do
@@ -28,6 +28,39 @@ RSpec.describe V3::CourseSearchService do
           courses = described_class.call(sort: sort).all
           expect(courses.map { |c| c.provider.provider_name }).to eq %w[B B A A]
           expect(courses.map(&:name)).to eq %w[D B C A]
+        end
+      end
+
+      context "distance" do
+        let(:sort) { "distance" }
+        let(:origin) { { latitude: 0, longitude: 0 } }
+        let(:near_to_origin) { { latitude: 1, longitude: 0 } }
+        let(:far_from_origin) { { latitude: 2, longitude: 0 } }
+        let(:furthest_from_origin) { { latitude: 3, longitude: 0 } }
+
+        let!(:furthest_course) do
+          create(
+            :course,
+            site_statuses: [build(:site_status, :findable, site: build(:site, **furthest_from_origin))],
+          )
+        end
+        let!(:far_course) do
+          create(
+            :course,
+            site_statuses: [build(:site_status, :findable, site: build(:site, **far_from_origin))],
+          )
+        end
+        let!(:near_course) do
+          create(
+            :course,
+            site_statuses: [build(:site_status, :findable, site: build(:site, **near_to_origin))],
+          )
+        end
+
+        it "orders distance descending" do
+          courses = described_class.call(sort: sort).all
+
+          expect(courses.map(&:id)).to eq [furthest_course.id, far_course.id, near_course.id]
         end
       end
     end
@@ -77,22 +110,6 @@ RSpec.describe V3::CourseSearchService do
     end
 
     describe "sort by" do
-      context "by distance" do
-        let(:sort) { "distance" }
-
-        xit "orders in descending order by distance" do
-          expect(scope).to receive(:select).and_return(inner_query_scope)
-          expect(course_with_includes).to receive(:where).with(id: inner_query_scope).and_return(outer_query_scope)
-          expect(outer_query_scope).to receive(:joins).and_return(joins_provider_scope)
-          expect(joins_provider_scope).to receive(:joins).with(:provider).and_return(select_scope)
-          select_criteria = "course.*, distance"
-
-          expect(select_scope).to receive(:select).with(select_criteria)
-            .and_return(order_scope)
-          expect(order_scope).to receive(:order).with(:distance).and_return(expected_scope)
-        end
-      end
-
       context "unspecified" do
         it "does not order" do
           expect(scope).not_to receive(:order)
