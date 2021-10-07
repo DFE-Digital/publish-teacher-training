@@ -130,10 +130,28 @@ RSpec.describe V3::CourseSearchService do
           expect(courses).to eq [without_salary]
         end
 
-        it "returns all courses if filter value is blank" do
+        it "returns all courses if filter is blank" do
           filter = {}
           courses = described_class.call(filter: filter).all
           expect(courses).to eq [with_salary, without_salary]
+        end
+      end
+
+      context "filter by qualification" do
+        let!(:pgce) { create(:course, :resulting_in_pgce) }
+        let!(:pgce_with_qts) { create(:course, :resulting_in_pgce_with_qts) }
+        let!(:pgde) { create(:course, :resulting_in_pgde) }
+
+        it "returns only courses matching the specified qualifications" do
+          filter = { qualification: "pgde,pgce_with_qts" }
+          courses = described_class.call(filter: filter).all
+          expect(courses).to match_array [pgde, pgce_with_qts]
+        end
+
+        it "returns all courses if filter is blank" do
+          filter = {}
+          courses = described_class.call(filter: filter).all
+          expect(courses).to match_array [pgce, pgde, pgce_with_qts]
         end
       end
     end
@@ -211,37 +229,6 @@ RSpec.describe V3::CourseSearchService do
 
         it "does not add the within scope" do
           expect(scope).not_to receive(:within)
-        end
-      end
-    end
-
-
-    describe "filter[qualification]" do
-      context "when qualifications passed" do
-        let(:filter) { { qualification: "pgde,pgce_with_qts,pgde_with_qts,qts,pgce" } }
-        let(:expected_scope) { double }
-
-        it "adds the with_qualifications scope" do
-          expect(scope)
-            .to receive(:with_qualifications)
-            .with(%w(pgde pgce_with_qts pgde_with_qts qts pgce))
-            .and_return(course_ids_scope)
-
-          expect(course_ids_scope).to receive(:select).and_return(inner_query_scope)
-          expect(course_with_includes).to receive(:where).and_return(expected_scope)
-
-          expect(subject).to eq(expected_scope)
-        end
-      end
-
-      context "when no qualifications passed" do
-        let(:filter) { {} }
-
-        it "adds the with_qualifications scope" do
-          expect(scope).not_to receive(:with_qualifications)
-          expect(scope).to receive(:select).and_return(inner_query_scope)
-          expect(course_with_includes).to receive(:where).and_return(expected_scope)
-          expect(subject).to eq(expected_scope)
         end
       end
     end
