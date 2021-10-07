@@ -201,6 +201,35 @@ RSpec.describe V3::CourseSearchService do
           expect(courses).to match_array [findable, not_findable]
         end
       end
+
+      context "filter by study_type" do
+        let!(:full_time) { create(:course, study_mode: :full_time) }
+        let!(:part_time) { create(:course, study_mode: :part_time) }
+
+        it "returns full_time courses when study_type is full_time" do
+          filter = { study_type: "full_time" }
+          courses = described_class.call(filter: filter).all
+          expect(courses).to match_array [full_time]
+        end
+
+        it "returns part_time courses when study_type is part_time" do
+          filter = { study_type: "part_time" }
+          courses = described_class.call(filter: filter).all
+          expect(courses).to match_array [part_time]
+        end
+
+        it "returns all courses when both study types are present" do
+          filter = { study_type: "full_time,part_time" }
+          courses = described_class.call(filter: filter).all
+          expect(courses).to match_array [full_time, part_time]
+        end
+
+        it "returns all courses when filter is absent" do
+          filter = {}
+          courses = described_class.call(filter: filter).all
+          expect(courses).to match_array [full_time, part_time]
+        end
+      end
     end
   end
 
@@ -276,55 +305,6 @@ RSpec.describe V3::CourseSearchService do
 
         it "does not add the within scope" do
           expect(scope).not_to receive(:within)
-        end
-      end
-    end
-
-    describe "filter[study_type]" do
-      context "when full_time" do
-        let(:filter) { { study_type: "full_time" } }
-        let(:expected_scope) { double }
-
-        it "adds the with_study_modes scope" do
-          expect(scope).to receive(:with_study_modes).with(%w(full_time)).and_return(course_ids_scope)
-          expect(course_ids_scope).to receive(:select).and_return(inner_query_scope)
-          expect(course_with_includes).to receive(:where).and_return(expected_scope)
-          expect(subject).to eq(expected_scope)
-        end
-      end
-
-      context "when part_time" do
-        let(:filter) { { study_type: "part_time" } }
-        let(:expected_scope) { double }
-
-        it "adds the with_study_modes scope" do
-          expect(scope).to receive(:with_study_modes).with(%w(part_time)).and_return(course_ids_scope)
-          expect(course_ids_scope).to receive(:select).and_return(inner_query_scope)
-          expect(course_with_includes).to receive(:where).and_return(expected_scope)
-          expect(subject).to eq(expected_scope)
-        end
-      end
-
-      context "when both" do
-        let(:filter) { { study_type: "part_time,full_time" } }
-        let(:expected_scope) { double }
-
-        it "adds the with_study_modes scope with an array of both arguments" do
-          expect(scope).to receive(:with_study_modes).with(%w(part_time full_time)).and_return(course_ids_scope)
-          expect(course_ids_scope).to receive(:select).and_return(inner_query_scope)
-          expect(course_with_includes).to receive(:where).and_return(expected_scope)
-          expect(subject).to eq(expected_scope)
-        end
-      end
-
-      context "when absent" do
-        let(:filter) { {} }
-
-        it "doesn't add the scope" do
-          expect(scope).not_to receive(:with_study_modes)
-          expect(scope).to receive(:select).and_return(inner_query_scope)
-          expect(course_with_includes).to receive(:where).and_return(expected_scope)
-          expect(subject).to eq(expected_scope)
         end
       end
     end
