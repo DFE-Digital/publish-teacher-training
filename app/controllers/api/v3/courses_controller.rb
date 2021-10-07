@@ -12,7 +12,7 @@ module API
                fields: fields_param,
                include: params[:include],
                meta: { count: course_search.size },
-               class: CourseSerializersServiceV3.new.execute,
+               class: CourseSerializersServiceV3.new(provider_serializer: API::V3::SerializableProvider).execute,
                cache: Rails.cache
       end
 
@@ -21,7 +21,10 @@ module API
 
         if @course.is_published?
           # https://github.com/jsonapi-rb/jsonapi-rails/issues/113
-          render jsonapi: @course, fields: fields_param, include: params[:include], class: CourseSerializersServiceV3.new.execute
+          render jsonapi: @course,
+                 fields: fields_param,
+                 include: params[:include],
+                 class: CourseSerializersServiceV3.new.execute
         else
           raise ActiveRecord::RecordNotFound
         end
