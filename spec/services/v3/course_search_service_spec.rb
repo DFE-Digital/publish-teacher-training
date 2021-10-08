@@ -4,10 +4,12 @@ RSpec.describe V3::CourseSearchService do
   describe ".call" do
     describe "sorting" do
       before do
-        create(:course, name: "A", provider: build(:provider, provider_name: "A"))
-        create(:course, name: "B", provider: build(:provider, provider_name: "B"))
-        create(:course, name: "C", provider: build(:provider, provider_name: "A"))
-        create(:course, name: "D", provider: build(:provider, provider_name: "B"))
+        provider_a = build(:provider, provider_name: "A")
+        provider_b = build(:provider, provider_name: "B")
+        create(:course, name: "A", provider: provider_a)
+        create(:course, name: "B", provider: provider_b)
+        create(:course, name: "C", provider: provider_a)
+        create(:course, name: "D", provider: provider_b)
       end
 
       context "sort by ascending provider name and course name" do
@@ -111,7 +113,7 @@ RSpec.describe V3::CourseSearchService do
         end
       end
 
-      context "filter by provider" do
+      context "filter by provider name" do
         let(:filter) { { "provider.provider_name": "University of Warwick" } }
 
         before do
