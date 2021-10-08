@@ -1,4 +1,3 @@
-# rubocop:disable RSpec/StubbedMock
 require "rails_helper"
 
 RSpec.describe V3::CourseSearchService do
@@ -66,6 +65,18 @@ RSpec.describe V3::CourseSearchService do
     end
 
     describe "filtering" do
+      context "multiple filters" do
+        it "applies multiple filters" do
+          filter = { study_type: "part_time", funding: "salary" }
+          matching1 = create(:course, :with_salary, study_mode: :part_time)
+          matching2 = create(:course, :with_apprenticeship, study_mode: :part_time)
+          create(:course, :with_apprenticeship, study_mode: :full_time) # non-matching
+
+          courses = described_class.call(filter: filter).all
+          expect(courses).to match_array [matching1, matching2]
+        end
+      end
+
       context "filter by distance" do
         let(:origin) { { latitude: 0, longitude: 0 } }
         let(:radius) { 5 } # miles
@@ -386,22 +397,4 @@ RSpec.describe V3::CourseSearchService do
       end
     end
   end
-
-  xdescribe "old .call" do
-    describe "multiple filters" do
-      let(:filter) { { study_type: "part_time", funding: "salary" } }
-      let(:salary_scope) { double }
-      let(:expected_scope) { double }
-
-      it "combines scopes" do
-        expect(scope).to receive(:with_salary).and_return(salary_scope)
-        expect(salary_scope).to receive(:with_study_modes).with(%w(part_time)).and_return(course_ids_scope)
-        expect(course_ids_scope).to receive(:select).and_return(inner_query_scope)
-        expect(course_with_includes).to receive(:where).and_return(expected_scope)
-        expect(subject).to eq(expected_scope)
-      end
-    end
-
-  end
 end
-# rubocop:enable RSpec/StubbedMock
