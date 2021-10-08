@@ -1,7 +1,7 @@
 module V3
   class CourseSearchService
-    def initialize(filter: {}, sort: nil, course_scope: Course)
-      @filter = filter
+    def initialize(filter: nil, sort: nil, course_scope: Course)
+      @filter = filter || {}
       @sort = Set.new(sort&.split(","))
       @course_scope = course_scope
     end
