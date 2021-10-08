@@ -1,10 +1,13 @@
 module API
   module V3
     class SerializableProvider < JSONAPI::Serializable::Resource
+      include JsonapiCacheKeyHelper
+
       type "providers"
 
       attributes :provider_code, :provider_name, :provider_type,
-                 :latitude, :longitude, :can_sponsor_student_visa,
+                 :longitude, :address1, :address2, :address3, :address4,
+                 :postcode, :latitude, :longitude, :can_sponsor_student_visa,
                  :can_sponsor_skilled_worker_visa
 
       attribute :recruitment_cycle_year do

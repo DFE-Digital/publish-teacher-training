@@ -14,6 +14,11 @@ describe API::V3::SerializableProvider do
   it { is_expected.to have_attribute(:provider_code).with_value(provider.provider_code) }
   it { is_expected.to have_attribute(:provider_name).with_value(provider.provider_name) }
   it { is_expected.to have_attribute(:recruitment_cycle_year).with_value(provider.recruitment_cycle.year) }
+  it { is_expected.to have_attribute(:address1).with_value(provider.address1) }
+  it { is_expected.to have_attribute(:address2).with_value(provider.address2) }
+  it { is_expected.to have_attribute(:address3).with_value(provider.address3) }
+  it { is_expected.to have_attribute(:address4).with_value(provider.address4) }
+  it { is_expected.to have_attribute(:postcode).with_value(provider.postcode) }
   it { is_expected.to have_attribute(:latitude).with_value(provider.latitude) }
   it { is_expected.to have_attribute(:longitude).with_value(provider.longitude) }
   it { is_expected.to have_attribute(:can_sponsor_student_visa).with_value(provider.can_sponsor_student_visa) }
