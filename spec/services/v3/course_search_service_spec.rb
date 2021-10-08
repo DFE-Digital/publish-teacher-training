@@ -126,19 +126,19 @@ RSpec.describe V3::CourseSearchService do
       end
 
       context "filter by funding" do
-        let(:with_salary) { create(:course, :with_salary) }
-        let(:without_salary) { create(:course) }
+        let!(:with_salary) { create(:course, :with_salary) }
+        let!(:without_salary) { create(:course, :with_higher_education) }
 
         it "returns only courses with a salary if filter value is 'salary'" do
           filter = { funding: "salary" }
           courses = described_class.call(filter: filter).all
-          expect(courses).to eq [without_salary]
+          expect(courses).to match_array [with_salary]
         end
 
         it "returns all courses if filter value is 'all'" do
           filter = { funding: "all" }
           courses = described_class.call(filter: filter).all
-          expect(courses).to eq [without_salary]
+          expect(courses).to match_array [with_salary, without_salary]
         end
 
         it "returns all courses if filter is absent" do
