@@ -297,46 +297,39 @@ RSpec.describe V3::CourseSearchService do
           )
         end
       end
+
+      context "filter by subjects" do
+        let!(:primary_course1) { create(:course, :primary, subjects: [create(:primary_subject, :primary)]) }
+        let!(:primary_course2) { create(:course, :primary, subjects: [create(:primary_subject, :primary_with_mathematics)]) }
+        let!(:secondary_course) { create(:course, :secondary, subjects: [create(:secondary_subject, :science)]) }
+
+        it "returns courses matching the subject code" do
+          filter = { subjects: primary_course1.subjects.first.subject_code }
+          expect(described_class.call(filter: filter).all).to match_array [primary_course1]
+        end
+
+        it "returns all courses matching multiple subject codes" do
+          subject_codes = "#{primary_course1.subjects.first.subject_code},#{secondary_course.subjects.first.subject_code}"
+          filter = { subjects: subject_codes }
+          expect(described_class.call(filter: filter).all).to match_array [
+            primary_course1,
+            secondary_course,
+          ]
+        end
+
+        it "returns all courses when filter is absent" do
+          filter = {}
+          expect(described_class.call(filter: filter).all).to match_array [
+            primary_course1,
+            primary_course2,
+            secondary_course,
+          ]
+        end
+      end
     end
   end
 
   xdescribe "old .call" do
-    describe "filter[subjects]" do
-      context "a single subject code" do
-        let(:filter) { { subjects: "A1" } }
-        let(:expected_scope) { double }
-
-        it "adds the subject scope" do
-          expect(scope).to receive(:with_subjects).with(%w(A1)).and_return(course_ids_scope)
-          expect(course_ids_scope).to receive(:select).and_return(inner_query_scope)
-          expect(course_with_includes).to receive(:where).and_return(expected_scope)
-          expect(subject).to eq(expected_scope)
-        end
-      end
-
-      context "multiple subject codes" do
-        let(:filter) { { subjects: "A1,B2" } }
-        let(:expected_scope) { double }
-
-        it "adds the subject scope" do
-          expect(scope).to receive(:with_subjects).with(%w(A1 B2)).and_return(course_ids_scope)
-          expect(course_ids_scope).to receive(:select).and_return(inner_query_scope)
-          expect(course_with_includes).to receive(:where).and_return(expected_scope)
-          expect(subject).to eq(expected_scope)
-        end
-      end
-
-      context "when absent" do
-        let(:filter) { {} }
-
-        it "doesn't add the scope" do
-          expect(scope).not_to receive(:with_subjects)
-          expect(scope).to receive(:select).and_return(inner_query_scope)
-          expect(course_with_includes).to receive(:where).and_return(expected_scope)
-          expect(subject).to eq(expected_scope)
-        end
-      end
-    end
 
     describe "filter[send_courses]" do
       context "when true" do
