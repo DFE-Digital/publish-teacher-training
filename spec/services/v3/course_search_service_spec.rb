@@ -326,46 +326,40 @@ RSpec.describe V3::CourseSearchService do
           ]
         end
       end
+
+      context "filter by send_courses" do
+        let!(:send_course) { create(:course, is_send: true) }
+        let!(:non_send_course1) { create(:course, is_send: false) }
+        let!(:non_send_course2) { create(:course, is_send: false) }
+
+        it "returns SEND courses when filter is true" do
+          filter = { send_courses: true }
+          expect(described_class.call(filter: filter).all).to match_array [send_course]
+        end
+
+        it "returns all courses when filter is false" do
+          filter = { send_courses: false }
+          expect(described_class.call(filter: filter).all).to match_array [
+            send_course,
+            non_send_course1,
+            non_send_course2,
+          ]
+        end
+
+        it "returns all courses when filter is absent" do
+          filter = {}
+          expect(described_class.call(filter: filter).all).to match_array [
+            send_course,
+            non_send_course1,
+            non_send_course2,
+          ]
+        end
+      end
+
     end
   end
 
   xdescribe "old .call" do
-
-    describe "filter[send_courses]" do
-      context "when true" do
-        let(:filter) { { send_courses: true } }
-        let(:expected_scope) { double }
-
-        it "adds the with_send scope" do
-          expect(scope).to receive(:with_send).and_return(course_ids_scope)
-          expect(course_ids_scope).to receive(:select).and_return(inner_query_scope)
-          expect(course_with_includes).to receive(:where).and_return(expected_scope)
-          expect(subject).to eq(expected_scope)
-        end
-      end
-
-      context "when false" do
-        let(:filter) { { send_courses: false } }
-
-        it "adds the with_send scope" do
-          expect(scope).not_to receive(:with_send)
-          expect(scope).to receive(:select).and_return(inner_query_scope)
-          expect(course_with_includes).to receive(:where).and_return(expected_scope)
-          expect(subject).to eq(expected_scope)
-        end
-      end
-
-      context "when absent" do
-        let(:filter) { {} }
-
-        it "doesn't add the with_send scope" do
-          expect(scope).not_to receive(:with_send)
-          expect(scope).to receive(:select).and_return(inner_query_scope)
-          expect(course_with_includes).to receive(:where).and_return(expected_scope)
-          expect(subject).to eq(expected_scope)
-        end
-      end
-    end
 
     describe "multiple filters" do
       let(:filter) { { study_type: "part_time", funding: "salary" } }
