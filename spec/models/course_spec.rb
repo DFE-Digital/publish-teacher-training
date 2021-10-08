@@ -1138,16 +1138,40 @@ describe Course, type: :model do
       context "when the provider can sponsor skilled worker visas" do
         let(:provider) { create(:provider, can_sponsor_skilled_worker_visa: true, can_sponsor_student_visa: false) }
 
-        it "returns the course" do
-          expect(subject).to eq [course]
+        context "and is a salaried course" do
+          let(:course) { create(:course, :salary_type_based, provider: provider) }
+
+          it "returns the course" do
+            expect(subject).to eq [course]
+          end
+        end
+
+        context "and is non-salaried course" do
+          let(:course) { create(:course, :fee_type_based, provider: provider) }
+
+          it "does not return the course" do
+            expect(subject).to eq []
+          end
         end
       end
 
       context "when the provider can sponsor student visas" do
         let(:provider) { create(:provider, can_sponsor_skilled_worker_visa: false, can_sponsor_student_visa: true) }
 
-        it "returns the course" do
-          expect(subject).to eq [course]
+        context "and is non-salaried course" do
+          let(:course) { create(:course, :fee_type_based, provider: provider) }
+
+          it "returns the course" do
+            expect(subject).to eq [course]
+          end
+        end
+
+        context "and is a salaried course" do
+          let(:course) { create(:course, :salary_type_based, provider: provider) }
+
+          it "does not return the course" do
+            expect(subject).to eq []
+          end
         end
       end
 

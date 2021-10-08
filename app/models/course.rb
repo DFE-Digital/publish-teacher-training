@@ -259,7 +259,18 @@ class Course < ApplicationRecord
 
   scope :provider_can_sponsor_visa, -> do
     joins(:provider)
-    .where("provider.can_sponsor_student_visa = true OR provider.can_sponsor_skilled_worker_visa = true")
+    .where(
+      program_type: %w[school_direct_training_programme higher_education_programme scitt_programme],
+      provider: { can_sponsor_student_visa: true },
+    )
+    .or(
+      joins(:provider)
+      .where(
+        program_type: %w[school_direct_salaried_training_programme pg_teaching_apprenticeship],
+        provider: { can_sponsor_skilled_worker_visa: true },
+      ),
+    )
+    .distinct
   end
 
   def self.entry_requirement_options_without_nil_choice
