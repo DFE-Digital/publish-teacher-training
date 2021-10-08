@@ -195,13 +195,13 @@ RSpec.describe V3::CourseSearchService do
         let!(:not_findable) { create(:course, site_statuses: [build(:site_status, :unpublished)]) }
 
         it "returns only findable courses when filter is true" do
-          filter = { has_vacancies: true }
+          filter = { findable: true }
           courses = described_class.call(filter: filter).all
           expect(courses).to match_array [findable]
         end
 
         it "returns all courses when filter is false" do
-          filter = { has_vacancies: false }
+          filter = { findable: false }
           courses = described_class.call(filter: filter).all
           expect(courses).to match_array [findable, not_findable]
         end
