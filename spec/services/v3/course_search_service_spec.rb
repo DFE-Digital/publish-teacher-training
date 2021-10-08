@@ -356,11 +356,38 @@ RSpec.describe V3::CourseSearchService do
         end
       end
 
+      context "filter by can_sponsor_visa" do
+        let!(:sponsered_course1) { create(:course, provider: build(:provider, can_sponsor_student_visa: true, can_sponsor_skilled_worker_visa: false)) }
+        let!(:sponsered_course2) { create(:course, provider: build(:provider, can_sponsor_student_visa: false, can_sponsor_skilled_worker_visa: true)) }
+        let!(:unsponsered_course) { create(:course, provider: build(:provider, can_sponsor_student_visa: false, can_sponsor_skilled_worker_visa: false)) }
+
+        it "returns matching courses when filter is true" do
+          filter = { can_sponsor_visa: true }
+          expect(described_class.call(filter: filter).all).to match_array [sponsered_course1, sponsered_course2]
+        end
+
+        it "returns all courses when filter is false" do
+          filter = { can_sponsor_visa: false }
+          expect(described_class.call(filter: filter).all).to match_array [
+            sponsered_course1,
+            sponsered_course2,
+            unsponsered_course,
+          ]
+        end
+
+        it "returns all courses when filter is absent" do
+          filter = {}
+          expect(described_class.call(filter: filter).all).to match_array [
+            sponsered_course1,
+            sponsered_course2,
+            unsponsered_course,
+          ]
+        end
+      end
     end
   end
 
   xdescribe "old .call" do
-
     describe "multiple filters" do
       let(:filter) { { study_type: "part_time", funding: "salary" } }
       let(:salary_scope) { double }
@@ -375,41 +402,6 @@ RSpec.describe V3::CourseSearchService do
       end
     end
 
-    describe "filter[can_sponsor_visa]" do
-      context "when true" do
-        let(:filter) { { can_sponsor_visa: true } }
-        let(:expected_scope) { double }
-
-        it "adds the provider_can_sponsor_visa scope" do
-          expect(scope).to receive(:provider_can_sponsor_visa).and_return(course_ids_scope)
-          expect(course_ids_scope).to receive(:select).and_return(inner_query_scope)
-          expect(course_with_includes).to receive(:where).and_return(expected_scope)
-          expect(subject).to eq(expected_scope)
-        end
-      end
-
-      context "when false" do
-        let(:filter) { { can_sponsor_visa: false } }
-
-        it "adds the provider_can_sponsor_visa scope" do
-          expect(scope).not_to receive(:provider_can_sponsor_visa)
-          expect(scope).to receive(:select).and_return(inner_query_scope)
-          expect(course_with_includes).to receive(:where).and_return(expected_scope)
-          expect(subject).to eq(expected_scope)
-        end
-      end
-
-      context "when absent" do
-        let(:filter) { {} }
-
-        it "doesn't add the provider_can_sponsor_visa scope" do
-          expect(scope).not_to receive(:provider_can_sponsor_visa)
-          expect(scope).to receive(:select).and_return(inner_query_scope)
-          expect(course_with_includes).to receive(:where).and_return(expected_scope)
-          expect(subject).to eq(expected_scope)
-        end
-      end
-    end
   end
 end
 # rubocop:enable RSpec/StubbedMock
