@@ -51,8 +51,14 @@ module V3
       elsif sort_by_distance?
         outer_scope = outer_scope.joins(courses_with_distance_from_origin)
         outer_scope = outer_scope.joins(:provider)
-        outer_scope = outer_scope.select("course.*, distance")
-        outer_scope.order(:distance)
+        outer_scope = outer_scope.select("course.*, distance, #{Course.sanitize_sql(distance_with_university_area_adjustment)}")
+
+        outer_scope =
+          if expand_university?
+            outer_scope.order(:boosted_distance)
+          else
+            outer_scope.order(:distance)
+          end
       end
 
       outer_scope
@@ -61,6 +67,22 @@ module V3
     private_class_method :new
 
   private
+
+    def expand_university?
+      filter[:expand_university].to_s.downcase == "true"
+    end
+
+    def distance_with_university_area_adjustment
+      university_provider_type = Provider.provider_types[:university]
+      university_location_area_radius = 10
+      <<~EOSQL.gsub(/\s+/m, " ").strip
+        (CASE
+          WHEN provider.provider_type = '#{university_provider_type}'
+            THEN (distance - #{university_location_area_radius})
+          ELSE distance
+        END) as boosted_distance
+      EOSQL
+    end
 
     def locatable_sites
       site_statuses = SiteStatus.arel_table

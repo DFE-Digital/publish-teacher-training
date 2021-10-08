@@ -56,10 +56,10 @@ RSpec.describe V3::CourseSearchService do
           )
         end
 
-        it "orders distance descending" do
+        it "orders distance ascending" do
           courses = described_class.call(sort: sort).all
 
-          expect(courses.map(&:id)).to eq [furthest_course.id, far_course.id, near_course.id]
+          expect(courses).to eq [near_course, far_course, furthest_course]
         end
       end
     end
@@ -393,6 +393,113 @@ RSpec.describe V3::CourseSearchService do
             sponsered_course2,
             unsponsered_course,
           ]
+        end
+      end
+    end
+  end
+
+  describe "expand_university" do
+    context "university course vs non university course" do
+      null_island = { latitude: 0, longitude: 0 }
+
+      over_5_miles_from_null_island = { latitude: 0.1, longitude: 0 }
+
+      subject do
+        described_class.call(filter: filter,
+                             sort: "distance",
+                             course_scope: scope)
+      end
+
+      let(:university_course) do
+        create(:course, provider: university_provider,
+                        site_statuses: [build(:site_status, :findable, site: site)],
+                        enrichments: [build(:course_enrichment, :published)])
+      end
+
+      let(:non_university_course) do
+        create(:course, provider: non_university_provider,
+                        site_statuses: [build(:site_status, :findable, site: site2)],
+                        enrichments: [build(:course_enrichment, :published)])
+      end
+
+      let(:courses) do
+        [university_course, non_university_course]
+      end
+
+      let(:site) do
+        build(:site, **over_5_miles_from_null_island)
+      end
+
+      let(:site2) do
+        build(:site, **null_island)
+      end
+
+      let(:university_provider) do
+        build(:provider, provider_type: :university, sites: [site])
+      end
+
+      let(:non_university_provider) do
+        build(:provider, provider_type: :scitt, sites: [site2])
+      end
+
+      before do
+        courses
+      end
+
+      let(:scope) do
+        Course.all
+      end
+
+      context "when false" do
+        let(:filter) do
+          null_island.merge(expand_university: "false")
+        end
+
+        it "returns correctly" do
+          expect(subject.count(:id)).to eq(2)
+
+          expect(subject.first.boosted_distance).to eq(0)
+          expect(subject.first.distance).to eq(0)
+          expect(subject.first).to eq(non_university_course)
+
+          expect(subject.second.boosted_distance - subject.second.distance).to eq(-10)
+          expect(subject.second).to eq(university_course)
+        end
+      end
+
+      context "when absent" do
+        let(:filter) do
+          null_island
+        end
+
+        it "returns correctly" do
+          expect(subject.count(:id)).to eq(2)
+
+          expect(subject.first.boosted_distance).to eq(0)
+          expect(subject.first.distance).to eq(0)
+          expect(subject.first).to eq(non_university_course)
+
+          expect(subject.second.boosted_distance - subject.second.distance).to eq(-10)
+          expect(subject.second).to eq(university_course)
+        end
+      end
+
+      context "when true" do
+        describe "university course has less 10 miles" do
+          let(:filter) do
+            null_island.merge(expand_university: "true")
+          end
+
+          it "returns correctly" do
+            expect(subject.count(:id)).to eq(2)
+
+            expect(subject.first.boosted_distance - subject.first.distance).to eq(-10)
+            expect(subject.first).to eq(university_course)
+
+            expect(subject.second.boosted_distance).to eq(0)
+            expect(subject.second.distance).to eq(0)
+            expect(subject.second).to eq(non_university_course)
+          end
         end
       end
     end
