@@ -66,6 +66,7 @@ RSpec.describe V3::CourseSearchService do
 
         it "does not contain duplicates when multiple sites per course" do
           near_course.site_statuses << build(:site_status, :findable, site: build(:site, **far_from_origin))
+          near_course.site_statuses << build(:site_status, :findable, site: build(:site, **furthest_from_origin))
           courses = described_class.call(sort: sort).all
 
           expect(courses).to eq [near_course, far_course, furthest_course]
@@ -381,9 +382,7 @@ RSpec.describe V3::CourseSearchService do
         let!(:sponsered_course2) { create(:course, provider: build(:provider, can_sponsor_student_visa: false, can_sponsor_skilled_worker_visa: true)) }
         let!(:unsponsered_course) { create(:course, provider: build(:provider, can_sponsor_student_visa: false, can_sponsor_skilled_worker_visa: false)) }
 
-        # TODO: This spec passes locally but fails in CI. Not clear why from
-        # initial investigation. Mark as pending until it can be revisited.
-        xit "returns matching courses when filter is true" do
+        it "returns matching courses when filter is true" do
           filter = { can_sponsor_visa: true }
           expect(described_class.call(filter: filter).all).to match_array [sponsered_course1, sponsered_course2]
         end
@@ -412,54 +411,42 @@ RSpec.describe V3::CourseSearchService do
   describe "expand_university" do
     context "university course vs non university course" do
       null_island = { latitude: 0, longitude: 0 }
-
       over_5_miles_from_null_island = { latitude: 0.1, longitude: 0 }
 
       subject do
-        described_class.call(filter: filter,
-                             sort: "distance",
-                             course_scope: scope)
+        described_class.call(
+          filter: filter,
+          sort: "distance",
+          course_scope: scope,
+        )
       end
 
       let(:university_course) do
-        create(:course, provider: university_provider,
-                        site_statuses: [build(:site_status, :findable, site: site)],
-                        enrichments: [build(:course_enrichment, :published)])
+        create(
+          :course,
+          provider: university_provider,
+          site_statuses: [build(:site_status, :findable, site: site)],
+          enrichments: [build(:course_enrichment, :published)],
+        )
       end
 
       let(:non_university_course) do
-        create(:course, provider: non_university_provider,
-                        site_statuses: [build(:site_status, :findable, site: site2)],
-                        enrichments: [build(:course_enrichment, :published)])
+        create(
+          :course,
+          provider: non_university_provider,
+          site_statuses: [build(:site_status, :findable, site: site2)],
+          enrichments: [build(:course_enrichment, :published)],
+        )
       end
 
-      let(:courses) do
-        [university_course, non_university_course]
-      end
+      let(:courses) { [university_course, non_university_course] }
+      let(:site) { build(:site, **over_5_miles_from_null_island) }
+      let(:site2) { build(:site, **null_island) }
+      let(:university_provider) { build(:provider, provider_type: :university, sites: [site]) }
+      let(:non_university_provider) { build(:provider, provider_type: :scitt, sites: [site2]) }
+      let(:scope) { Course.all }
 
-      let(:site) do
-        build(:site, **over_5_miles_from_null_island)
-      end
-
-      let(:site2) do
-        build(:site, **null_island)
-      end
-
-      let(:university_provider) do
-        build(:provider, provider_type: :university, sites: [site])
-      end
-
-      let(:non_university_provider) do
-        build(:provider, provider_type: :scitt, sites: [site2])
-      end
-
-      before do
-        courses
-      end
-
-      let(:scope) do
-        Course.all
-      end
+      before { courses }
 
       context "when false" do
         let(:filter) do
