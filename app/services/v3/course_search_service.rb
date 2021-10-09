@@ -27,41 +27,38 @@ module V3
       scope = scope.with_degree_grades(degree_grades) if degree_grades.any?
       scope = scope.provider_can_sponsor_visa if can_sponsor_visa_filter?
 
-      # The 'where' scope will remove duplicates
-      # An outer query is required in the event the provider name is present.
-      # This prevents 'PG::InvalidColumnReference: ERROR: for SELECT DISTINCT, ORDER BY expressions must appear in select list'
-      outer_scope = Course.includes(
+      scope = scope.includes(
         :enrichments,
         :financial_incentives,
         course_subjects: [:subject],
         site_statuses: [:site],
         provider: %i[recruitment_cycle ucas_preferences],
-      ).where(id: scope.select(:id))
+      )
 
       if provider_name.present?
-        outer_scope = outer_scope
-                        .accredited_body_order(provider_name)
-                        .ascending_canonical_order
+        scope = scope
+          .accredited_body_order(provider_name)
+          .ascending_canonical_order
       elsif sort_by_provider_ascending?
-        outer_scope = outer_scope.ascending_canonical_order
-        outer_scope = outer_scope.select("provider.provider_name", "course.*")
+        scope = scope.ascending_canonical_order
+        scope = scope.select("provider.provider_name", "course.*")
       elsif sort_by_provider_descending?
-        outer_scope = outer_scope.descending_canonical_order
-        outer_scope = outer_scope.select("provider.provider_name", "course.*")
+        scope = scope.descending_canonical_order
+        scope = scope.select("provider.provider_name", "course.*")
       elsif sort_by_distance?
-        outer_scope = outer_scope.joins(courses_with_distance_from_origin)
-        outer_scope = outer_scope.joins(:provider)
-        outer_scope = outer_scope.select("course.*, distance, #{Course.sanitize_sql(distance_with_university_area_adjustment)}")
+        scope = scope.joins(courses_with_distance_from_origin)
+        scope = scope.joins(:provider)
+        scope = scope.select("DISTINCT(course.id), course.*, distance, #{Course.sanitize_sql(distance_with_university_area_adjustment)}")
 
-        outer_scope =
+        scope =
           if expand_university?
-            outer_scope.order(:boosted_distance)
+            scope.order(:boosted_distance)
           else
-            outer_scope.order(:distance)
+            scope.order(:distance)
           end
       end
 
-      outer_scope
+      scope
     end
 
     private_class_method :new
