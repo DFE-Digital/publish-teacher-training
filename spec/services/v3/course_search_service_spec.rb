@@ -63,6 +63,13 @@ RSpec.describe V3::CourseSearchService do
 
           expect(courses).to eq [near_course, far_course, furthest_course]
         end
+
+        it "does not contain duplicates when multiple sites per course" do
+          near_course.site_statuses << build(:site_status, :findable, site: build(:site, **far_from_origin))
+          courses = described_class.call(sort: sort).all
+
+          expect(courses).to eq [near_course, far_course, furthest_course]
+        end
       end
     end
 
