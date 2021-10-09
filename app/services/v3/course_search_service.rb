@@ -37,7 +37,7 @@ module V3
 
       if provider_name.present?
         scope = scope
-          .accredited_body_order(provider_name)
+          .joins(:provider).order("by_provider_name")
           .ascending_canonical_order
         scope = scope.select("DISTINCT(course.id), course.*, provider.provider_name, CASE WHEN provider.provider_name = #{ActiveRecord::Base.connection.quote(provider_name)} THEN '1' END as by_provider_name")
       elsif sort_by_provider_ascending?
