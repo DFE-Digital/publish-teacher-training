@@ -167,6 +167,7 @@ class Course < ApplicationRecord
 
   scope :accredited_body_order, ->(provider_name) do
     joins(:provider).merge(Provider.by_provider_name(provider_name))
+    joins(:provider).order('by_provider_name')
   end
 
   scope :changed_since, ->(timestamp) do
