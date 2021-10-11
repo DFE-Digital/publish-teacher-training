@@ -270,7 +270,6 @@ class Course < ApplicationRecord
         provider: { can_sponsor_skilled_worker_visa: true },
       ),
     )
-    .distinct
   end
 
   def self.entry_requirement_options_without_nil_choice

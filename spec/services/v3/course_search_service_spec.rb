@@ -3,32 +3,37 @@ require "rails_helper"
 RSpec.describe V3::CourseSearchService do
   describe ".call" do
     describe "sorting" do
-      before do
-        provider_a = build(:provider, provider_name: "A")
-        provider_b = build(:provider, provider_name: "B")
-        create(:course, name: "A", provider: provider_a)
-        create(:course, name: "B", provider: provider_b)
-        create(:course, name: "C", provider: provider_a)
-        create(:course, name: "D", provider: provider_b)
-      end
+      context "provider_name" do
+        before do
+          provider_a = build(:provider, provider_name: "A")
+          provider_b = build(:provider, provider_name: "B")
+          create(:course, name: "A", provider: provider_a)
+          create(:course, name: "B", provider: provider_b)
+          create(:course, name: "C", provider: provider_a)
+          create(:course, name: "D", provider: provider_b)
+        end
 
-      context "sort by ascending provider name and course name" do
-        let(:sort) { "name,provider.provider_name" }
-
-        it "orders as specified" do
+        it "orders by ascending provider name and course name" do
+          sort = "name,provider.provider_name"
           courses = described_class.call(sort: sort).all
           expect(courses.map { |c| c.provider.provider_name }).to eq %w[A A B B]
           expect(courses.map(&:name)).to eq %w[A C B D]
         end
-      end
 
-      context "sort by descending provider name and course name" do
-        let(:sort) { "-provider.provider_name,-name" }
-
-        it "orders as specified" do
+        it "orders by descending provider name and course name" do
+          sort = "-provider.provider_name,-name"
           courses = described_class.call(sort: sort).all
           expect(courses.map { |c| c.provider.provider_name }).to eq %w[B B A A]
           expect(courses.map(&:name)).to eq %w[D B C A]
+        end
+
+        it "successfully combines filtering and sorting" do
+          sort = "name,provider.provider_name"
+          filter = { "provider.provider_name": "A" }
+
+          courses = described_class.call(sort: sort, filter: filter).all
+          expect(courses.map { |c| c.provider.provider_name }).to eq %w[A A]
+          expect(courses.map(&:name)).to eq %w[A C]
         end
       end
 
@@ -63,6 +68,23 @@ RSpec.describe V3::CourseSearchService do
 
           expect(courses).to eq [near_course, far_course, furthest_course]
         end
+
+        it "does not contain duplicates when multiple sites per course" do
+          near_course.site_statuses << build(:site_status, :findable, site: build(:site, **far_from_origin))
+          near_course.site_statuses << build(:site_status, :findable, site: build(:site, **furthest_from_origin))
+          courses = described_class.call(sort: sort).all
+
+          expect(courses).to eq [near_course, far_course, furthest_course]
+        end
+      end
+
+      it "does not contain duplicates when sort not specified" do
+        # Create a known state that can result in duplicate records:
+        course = create(:course, :primary, subjects: [create(:primary_subject, :primary), create(:primary_subject, :primary_with_mathematics)])
+        subject_codes = Subject.pluck(:subject_code)
+        result = described_class.call(filter: { subjects: subject_codes.join(",") }).all
+
+        expect(result).to eq [course]
       end
     end
 
@@ -146,7 +168,7 @@ RSpec.describe V3::CourseSearchService do
         it "returns all courses if filter is absent" do
           filter = {}
           courses = described_class.call(filter: filter).all
-          expect(courses).to eq [with_salary, without_salary]
+          expect(courses).to match_array [with_salary, without_salary]
         end
       end
 
@@ -370,13 +392,31 @@ RSpec.describe V3::CourseSearchService do
       end
 
       context "filter by can_sponsor_visa" do
-        let!(:sponsered_course1) { create(:course, provider: build(:provider, can_sponsor_student_visa: true, can_sponsor_skilled_worker_visa: false)) }
-        let!(:sponsered_course2) { create(:course, provider: build(:provider, can_sponsor_student_visa: false, can_sponsor_skilled_worker_visa: true)) }
+        let!(:sponsered_course1) do
+          create(
+            :course,
+            program_type: :school_direct_training_programme,
+            provider: build(
+              :provider,
+              can_sponsor_student_visa: true,
+              can_sponsor_skilled_worker_visa: false,
+            ),
+          )
+        end
+        let!(:sponsered_course2) do
+          create(
+            :course,
+            program_type: :pg_teaching_apprenticeship,
+            provider: build(
+              :provider,
+              can_sponsor_student_visa: false,
+              can_sponsor_skilled_worker_visa: true,
+            ),
+          )
+        end
         let!(:unsponsered_course) { create(:course, provider: build(:provider, can_sponsor_student_visa: false, can_sponsor_skilled_worker_visa: false)) }
 
-        # TODO: This spec passes locally but fails in CI. Not clear why from
-        # initial investigation. Mark as pending until it can be revisited.
-        xit "returns matching courses when filter is true" do
+        it "returns matching courses when filter is true" do
           filter = { can_sponsor_visa: true }
           expect(described_class.call(filter: filter).all).to match_array [sponsered_course1, sponsered_course2]
         end
@@ -405,54 +445,42 @@ RSpec.describe V3::CourseSearchService do
   describe "expand_university" do
     context "university course vs non university course" do
       null_island = { latitude: 0, longitude: 0 }
-
       over_5_miles_from_null_island = { latitude: 0.1, longitude: 0 }
 
       subject do
-        described_class.call(filter: filter,
-                             sort: "distance",
-                             course_scope: scope)
+        described_class.call(
+          filter: filter,
+          sort: "distance",
+          course_scope: scope,
+        )
       end
 
       let(:university_course) do
-        create(:course, provider: university_provider,
-                        site_statuses: [build(:site_status, :findable, site: site)],
-                        enrichments: [build(:course_enrichment, :published)])
+        create(
+          :course,
+          provider: university_provider,
+          site_statuses: [build(:site_status, :findable, site: site)],
+          enrichments: [build(:course_enrichment, :published)],
+        )
       end
 
       let(:non_university_course) do
-        create(:course, provider: non_university_provider,
-                        site_statuses: [build(:site_status, :findable, site: site2)],
-                        enrichments: [build(:course_enrichment, :published)])
+        create(
+          :course,
+          provider: non_university_provider,
+          site_statuses: [build(:site_status, :findable, site: site2)],
+          enrichments: [build(:course_enrichment, :published)],
+        )
       end
 
-      let(:courses) do
-        [university_course, non_university_course]
-      end
+      let(:courses) { [university_course, non_university_course] }
+      let(:site) { build(:site, **over_5_miles_from_null_island) }
+      let(:site2) { build(:site, **null_island) }
+      let(:university_provider) { build(:provider, provider_type: :university, sites: [site]) }
+      let(:non_university_provider) { build(:provider, provider_type: :scitt, sites: [site2]) }
+      let(:scope) { Course.all }
 
-      let(:site) do
-        build(:site, **over_5_miles_from_null_island)
-      end
-
-      let(:site2) do
-        build(:site, **null_island)
-      end
-
-      let(:university_provider) do
-        build(:provider, provider_type: :university, sites: [site])
-      end
-
-      let(:non_university_provider) do
-        build(:provider, provider_type: :scitt, sites: [site2])
-      end
-
-      before do
-        courses
-      end
-
-      let(:scope) do
-        Course.all
-      end
+      before { courses }
 
       context "when false" do
         let(:filter) do
