@@ -3,29 +3,25 @@ require "rails_helper"
 RSpec.describe V3::CourseSearchService do
   describe ".call" do
     describe "sorting" do
-      before do
-        provider_a = build(:provider, provider_name: "A")
-        provider_b = build(:provider, provider_name: "B")
-        create(:course, name: "A", provider: provider_a)
-        create(:course, name: "B", provider: provider_b)
-        create(:course, name: "C", provider: provider_a)
-        create(:course, name: "D", provider: provider_b)
-      end
+      context "provider_name" do
+        before do
+          provider_a = build(:provider, provider_name: "A")
+          provider_b = build(:provider, provider_name: "B")
+          create(:course, name: "A", provider: provider_a)
+          create(:course, name: "B", provider: provider_b)
+          create(:course, name: "C", provider: provider_a)
+          create(:course, name: "D", provider: provider_b)
+        end
 
-      context "sort by ascending provider name and course name" do
-        let(:sort) { "name,provider.provider_name" }
-
-        it "orders as specified" do
+        it "orders by ascending provider name and course name" do
+          sort = "name,provider.provider_name"
           courses = described_class.call(sort: sort).all
           expect(courses.map { |c| c.provider.provider_name }).to eq %w[A A B B]
           expect(courses.map(&:name)).to eq %w[A C B D]
         end
-      end
 
-      context "sort by descending provider name and course name" do
-        let(:sort) { "-provider.provider_name,-name" }
-
-        it "orders as specified" do
+        it "orders by descending provider name and course name" do
+          sort = "-provider.provider_name,-name"
           courses = described_class.call(sort: sort).all
           expect(courses.map { |c| c.provider.provider_name }).to eq %w[B B A A]
           expect(courses.map(&:name)).to eq %w[D B C A]
