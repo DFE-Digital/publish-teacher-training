@@ -1,13 +1,9 @@
 module V3
   class CourseSearchService
-    def initialize(
-      filter:,
-      sort: nil,
-      course_scope: Course
-    )
+    def initialize(filter: nil, sort: nil, course_scope: Course)
       @filter = filter || {}
-      @course_scope = course_scope
       @sort = Set.new(sort&.split(","))
+      @course_scope = course_scope
     end
 
     class << self
@@ -29,7 +25,6 @@ module V3
       scope = scope.within(filter[:radius], origin: origin) if locations_filter?
       scope = scope.with_funding_types(funding_types) if funding_types.any?
       scope = scope.with_degree_grades(degree_grades) if degree_grades.any?
-      scope = scope.changed_since(filter[:updated_since]) if updated_since_filter?
       scope = scope.provider_can_sponsor_visa if can_sponsor_visa_filter?
 
       # The 'where' scope will remove duplicates
@@ -231,10 +226,6 @@ module V3
 
     def send_courses_filter?
       filter[:send_courses].to_s.downcase == "true"
-    end
-
-    def updated_since_filter?
-      filter[:updated_since].present?
     end
 
     def can_sponsor_visa_filter?
