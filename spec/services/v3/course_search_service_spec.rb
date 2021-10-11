@@ -392,8 +392,28 @@ RSpec.describe V3::CourseSearchService do
       end
 
       context "filter by can_sponsor_visa" do
-        let!(:sponsered_course1) { create(:course, provider: build(:provider, can_sponsor_student_visa: true, can_sponsor_skilled_worker_visa: false)) }
-        let!(:sponsered_course2) { create(:course, provider: build(:provider, can_sponsor_student_visa: false, can_sponsor_skilled_worker_visa: true)) }
+        let!(:sponsered_course1) do
+          create(
+            :course,
+            program_type: :school_direct_training_programme,
+            provider: build(
+              :provider,
+              can_sponsor_student_visa: true,
+              can_sponsor_skilled_worker_visa: false,
+            ),
+          )
+        end
+        let!(:sponsered_course2) do
+          create(
+            :course,
+            program_type: :pg_teaching_apprenticeship,
+            provider: build(
+              :provider,
+              can_sponsor_student_visa: false,
+              can_sponsor_skilled_worker_visa: true,
+            ),
+          )
+        end
         let!(:unsponsered_course) { create(:course, provider: build(:provider, can_sponsor_student_visa: false, can_sponsor_skilled_worker_visa: false)) }
 
         it "returns matching courses when filter is true" do
