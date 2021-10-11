@@ -168,7 +168,7 @@ RSpec.describe V3::CourseSearchService do
         it "returns all courses if filter is absent" do
           filter = {}
           courses = described_class.call(filter: filter).all
-          expect(courses).to eq [with_salary, without_salary]
+          expect(courses).to match_array [with_salary, without_salary]
         end
       end
 
