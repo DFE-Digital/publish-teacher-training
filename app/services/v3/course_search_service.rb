@@ -57,6 +57,8 @@ module V3
           else
             scope.order(:distance)
           end
+      elsif !scope.to_sql.include?("DISTINCT")
+        scope = scope.select("DISTINCT(course.id), course.*")
       end
 
       scope

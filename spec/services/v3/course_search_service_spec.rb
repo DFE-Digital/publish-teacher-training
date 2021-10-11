@@ -26,6 +26,15 @@ RSpec.describe V3::CourseSearchService do
           expect(courses.map { |c| c.provider.provider_name }).to eq %w[B B A A]
           expect(courses.map(&:name)).to eq %w[D B C A]
         end
+
+        it "successfully combines filtering and sorting" do
+          sort = "name,provider.provider_name"
+          filter = { "provider.provider_name": "A" }
+
+          courses = described_class.call(sort: sort, filter: filter).all
+          expect(courses.map { |c| c.provider.provider_name }).to eq %w[A A]
+          expect(courses.map(&:name)).to eq %w[A C]
+        end
       end
 
       context "distance" do
@@ -67,6 +76,15 @@ RSpec.describe V3::CourseSearchService do
 
           expect(courses).to eq [near_course, far_course, furthest_course]
         end
+      end
+
+      it "does not contain duplicates when sort not specified" do
+        # Create a known state that can result in duplicate records:
+        course = create(:course, :primary, subjects: [create(:primary_subject, :primary), create(:primary_subject, :primary_with_mathematics)])
+        subject_codes = Subject.pluck(:subject_code)
+        result = described_class.call(filter: { subjects: subject_codes.join(",") }).all
+
+        expect(result).to eq [course]
       end
     end
 
