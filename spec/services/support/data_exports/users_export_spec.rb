@@ -24,6 +24,7 @@ RSpec.describe Support::DataExports::UsersExport do
           email_address: user.email,
           first_login_at: user.first_login_date_utc,
           last_login_at: user.last_login_date_utc,
+          sign_in_user_id: user.sign_in_user_id,
         },
       )
     end
@@ -53,6 +54,7 @@ RSpec.describe Support::DataExports::UsersExport do
           email_address: user1.email,
           first_login_at: user1.first_login_date_utc,
           last_login_at: user1.last_login_date_utc,
+          sign_in_user_id: user1.sign_in_user_id,
         },
         {
           user_id: user2.id,
@@ -64,6 +66,7 @@ RSpec.describe Support::DataExports::UsersExport do
           email_address: user2.email,
           first_login_at: user2.first_login_date_utc,
           last_login_at: user2.last_login_date_utc,
+          sign_in_user_id: user2.sign_in_user_id,
         },
       ])
     end
