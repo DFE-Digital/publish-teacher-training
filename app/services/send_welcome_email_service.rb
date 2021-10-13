@@ -10,7 +10,7 @@ class SendWelcomeEmailService
     return if current_user.welcome_email_date_utc
 
     # Getting visibility on the missing personalisation first_name issue
-    raise MissingFirstNameError, "This user does not have a first name." if current_user.first_name.blank?
+    raise MissingFirstNameError, "This user (user.id: #{current_user.id}) does not have a first name." if current_user.first_name.nil? || current_user.first_name.blank?
 
     WelcomeEmailMailer
       .send_welcome_email(first_name: current_user.first_name, email: current_user.email)
