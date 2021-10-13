@@ -95,5 +95,36 @@ describe SendWelcomeEmailService do
         expect(WelcomeEmailMailer).to have_received(:send_welcome_email).with(hash_including(first_name: "Meowington"))
       end
     end
+
+    context "when the user does not have a first name" do
+      let(:current_user_spy) do
+        spy(
+          email: "meowington@cat.net",
+          first_name: nil,
+          first_login_date_utc: Time.local(2018, 1, 1).utc,
+          welcome_email_date_utc: nil,
+        )
+      end
+
+      before do
+        allow(WelcomeEmailMailer).to receive_message_chain(:send_welcome_email, :deliver_later)
+        allow(Sentry).to receive(:capture_exception).with(SendWelcomeEmailService::MissingFirstNameError).and_return(nil)
+      end
+
+      it "does not set their welcome email date to now" do
+        described_class.call(current_user: current_user_spy)
+        expect(current_user_spy).to_not have_received(:update).with(hash_including(welcome_email_date_utc: Time.now.utc))
+      end
+
+      it "does not sends the welcome email" do
+        described_class.call(current_user: current_user_spy)
+        expect(WelcomeEmailMailer).to_not have_received(:send_welcome_email)
+      end
+
+      it "sends the error to Sentry" do
+        expect(Sentry).to receive(:capture_exception).with(SendWelcomeEmailService::MissingFirstNameError)
+        described_class.call(current_user: current_user_spy)
+      end
+    end
   end
 end

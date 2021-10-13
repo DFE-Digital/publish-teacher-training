@@ -18,4 +18,15 @@ describe WelcomeEmailMailer, type: :mailer do
       expect(mail.govuk_notify_personalisation).to eq(first_name: "meow")
     end
   end
+
+  context "inputting a nil first name" do
+    before do
+      allow(Sentry).to receive(:capture_exception).with(WelcomeEmailMailer::MissingFirstNameError).and_return(nil)
+    end
+
+    it "raises, captures and sends an error to sentry" do
+      expect(Sentry).to receive(:capture_exception).with(WelcomeEmailMailer::MissingFirstNameError)
+      described_class.send_welcome_email(first_name: "", email: "cat@meow.cat").deliver_now
+    end
+  end
 end
