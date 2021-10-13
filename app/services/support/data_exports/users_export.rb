@@ -30,6 +30,7 @@ module Support
           email_address: user.email,
           first_login_at: user.first_login_date_utc,
           last_login_at: user.last_login_date_utc,
+          sign_in_user_id: user.sign_in_user_id,
         }
       end
     end
