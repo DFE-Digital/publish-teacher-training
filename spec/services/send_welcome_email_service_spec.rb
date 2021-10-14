@@ -116,7 +116,7 @@ describe SendWelcomeEmailService do
         expect(current_user_spy).to_not have_received(:update).with(hash_including(welcome_email_date_utc: Time.now.utc))
       end
 
-      it "does not sends the welcome email" do
+      it "does not send the welcome email" do
         described_class.call(current_user: current_user_spy)
         expect(WelcomeEmailMailer).to_not have_received(:send_welcome_email)
       end
