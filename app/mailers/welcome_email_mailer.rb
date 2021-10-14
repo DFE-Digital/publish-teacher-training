@@ -3,7 +3,7 @@ class WelcomeEmailMailer < GovukNotifyRails::Mailer
 
   def send_welcome_email(first_name:, email:)
     # Getting visibility on the missing personalisation first_name issue
-    raise MissingFirstNameError, "The firstname '#{first_name}' is not a valid personalisation." if first_name.blank?
+    raise MissingFirstNameError, "You must provide a firstname personalisation." if first_name.blank?
 
     set_template(Settings.govuk_notify.welcome_email_template_id)
 
