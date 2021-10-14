@@ -70,6 +70,8 @@ module Support
     def create_provider_params
       params.require(:provider).permit(:provider_name,
                                        :provider_code,
+                                       :provider_type,
+                                       :urn,
                                        :recruitment_cycle_id,
                                        :email,
                                        :ukprn,
