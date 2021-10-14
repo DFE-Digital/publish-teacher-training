@@ -117,6 +117,8 @@ class Provider < ApplicationRecord
 
   validates :provider_code, uniqueness: { scope: :recruitment_cycle }
 
+  validates :provider_type, presence: true
+
   validates :telephone, phone: { message: "^Enter a valid telephone number" }, if: :telephone_changed?
 
   # TODO: Remove this validation once the 2021 recruitment cycle is over

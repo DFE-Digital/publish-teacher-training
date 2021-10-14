@@ -34,6 +34,7 @@ private
   def when_i_fill_in_a_valid_provider_details
     provider_new_page.provider_name.set("My favourite provider")
     provider_new_page.provider_code.set("A32")
+    provider_new_page.provider_type_scitt.click
     provider_new_page.provider_email.set("test@example.com")
     provider_new_page.provider_telephone.set("01392 000000")
   end
