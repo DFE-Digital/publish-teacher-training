@@ -184,5 +184,22 @@ describe AuthenticationService do
         expect { subject }.not_to(change { user.reload.last_name })
       end
     end
+
+    context "when the duplicated email already exists" do
+      let(:duplicated_user) { create(:user, email: "duplicated@email.com") }
+      let(:duplicated_duplicated_user) { create(:user, email: "duplicated_email.com@example.com") }
+      let(:duplicated_email) { "duplicated_email.com@example.com" }
+      let(:email) { "duplicated@email.com" }
+
+      before do
+        duplicated_user
+        duplicated_duplicated_user
+        subject
+      end
+
+      it "appends the id of the duplicate email onto the end, ensuring its uniqueness" do
+        expect(duplicated_user.reload.email).to eq(duplicated_email + duplicated_duplicated_user.id.to_s)
+      end
+    end
   end
 end
