@@ -15,6 +15,14 @@ module Support
       if @provider.save
         redirect_to support_provider_path(provider), flash: { success: "Provider was successfully created" }
       else
+        @provider.errors.messages.each { |k, v|
+          case k
+          when :"sites.urn", :email, :telephone
+            @provider.errors.messages[k] = v.first.gsub("^", "")
+          else
+            @provider.errors.messages[k] = "#{k.to_s.gsub(/.\.^?/, ' ').humanize} #{v.first}"
+          end
+        }
         render :new
       end
     end
