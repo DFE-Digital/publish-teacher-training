@@ -23,8 +23,6 @@ class Provider < ApplicationRecord
     scitt: "B",
     lead_school: "Y",
     university: "O",
-    unknown: "",
-    invalid_value: "0", # there is only one of these in the data
   }
 
   enum accrediting_provider: {
