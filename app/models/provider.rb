@@ -32,11 +32,6 @@ class Provider < ApplicationRecord
     not_an_accredited_body: "N",
   }
 
-  enum scheme_member: {
-    is_a_UCAS_ITT_member: "Y",
-    not_a_UCAS_ITT_member: "N",
-  }
-
   belongs_to :recruitment_cycle
 
   has_and_belongs_to_many :organisations, join_table: :organisation_provider
@@ -294,7 +289,6 @@ private
   end
 
   def set_defaults
-    self.scheme_member ||= "is_a_UCAS_ITT_member"
     self.year_code ||= recruitment_cycle.year
   end
 

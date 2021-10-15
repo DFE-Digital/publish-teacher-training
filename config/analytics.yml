@@ -107,7 +107,6 @@ shared:
     - id
     - address4
     - provider_name
-    - scheme_member
     - year_code
     - provider_code
     - provider_type

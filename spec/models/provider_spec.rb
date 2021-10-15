@@ -231,13 +231,6 @@ describe Provider, type: :model do
       .with_values("accredited_body" => "Y", "not_an_accredited_body" => "N")
   end
 
-  it "defines an enum for accrediting_provider" do
-    expect(subject)
-      .to define_enum_for("scheme_member")
-      .backed_by_column_of_type(:text)
-      .with_values("is_a_UCAS_ITT_member" => "Y", "not_a_UCAS_ITT_member" => "N")
-  end
-
   describe "courses" do
     let(:course) { create(:course, :primary, :unpublished) }
     let!(:provider) { course.provider }
@@ -319,28 +312,12 @@ describe Provider, type: :model do
     describe "#set_defaults" do
       let(:provider) { build :provider }
 
-      it 'sets scheme_member to "Y"' do
-        expect(provider.scheme_member).to be_nil
-
-        provider.save!
-
-        expect(provider.is_a_UCAS_ITT_member?).to be_truthy
-      end
-
       it "sets the year_code from the recruitment_cycle" do
         expect(provider.year_code).to be_nil
 
         provider.save!
 
         expect(provider.year_code).to eq(provider.recruitment_cycle.year)
-      end
-
-      it "does not override a given value for scheme_member" do
-        provider.scheme_member = "not_a_UCAS_ITT_member"
-
-        provider.save!
-
-        expect(provider.scheme_member).to eq("not_a_UCAS_ITT_member")
       end
 
       it "does not override a given value for year_code" do
