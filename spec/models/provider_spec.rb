@@ -28,39 +28,63 @@ describe Provider, type: :model do
     it { is_expected.to have_many(:user_notifications) }
   end
 
-  describe "urn validations" do
-    context "when provider_type is lead_schools" do
-      let(:invalid_provider) { build(:provider, urn: "1") }
-      let(:valid) { build(:provider, urn: "12345") }
+  describe "validations" do
+    describe "urn validations" do
+      context "when provider_type is lead_schools" do
+        let(:invalid_provider) { build(:provider, urn: "1") }
+        let(:valid) { build(:provider, urn: "12345") }
 
-      it "validates a urn of length 5 - 6" do
-        expect(invalid_provider).to_not be_valid
-        expect(provider).to be_valid
+        it "validates a urn of length 5 - 6" do
+          expect(invalid_provider).to_not be_valid
+          expect(provider).to be_valid
+        end
+      end
+
+      context "when provider_type is lead_schools" do
+        let(:invalid_provider) { build(:provider, urn: "XXXXXX") }
+
+        it "validates that a urn contains digits only" do
+          expect(invalid_provider).to_not be_valid
+        end
       end
     end
 
-    context "when provider_type is lead_schools" do
-      let(:invalid_provider) { build(:provider, urn: "XXXXXX") }
+    context "when the provider updates their ukprn in the 2022 cycle" do
+      let(:provider) do
+        create(
+          :provider,
+          ukprn: "",
+          recruitment_cycle: create(:recruitment_cycle, year: "2022"),
+        )
+      end
 
-      it "validates that a urn contains digits only" do
-        expect(invalid_provider).to_not be_valid
+      it "validates the presence of a ukprn" do
+        # this means that rollover happens successfully; the record is created but it will be invalid on update, because of no ukprn
+        expect { provider }.to change { Provider.count }.by(1)
+        expect(provider).to_not be_valid
       end
     end
-  end
 
-  context "when the provider updates their ukprn in the 2022 cycle" do
-    let(:provider) do
-      create(
-        :provider,
-        ukprn: "",
-        recruitment_cycle: create(:recruitment_cycle, year: "2022"),
-      )
-    end
+    describe "provider code validations" do
+      context "when same recruitment cycle" do
+        let(:provider) { create(:provider) }
+        let(:invalid_provider) { build(:provider, provider_code: provider.provider_code) }
 
-    it "validates the presence of a ukprn" do
-      # this means that rollover happens successfully; the record is created but it will be invalid on update, because of no ukprn
-      expect { provider }.to change { Provider.count }.by(1)
-      expect(provider).to_not be_valid
+        it "raises validation error" do
+          expect(invalid_provider.valid?).to eq false
+          expect(invalid_provider.errors.messages[:provider_code].first).to eq "has already been taken"
+        end
+      end
+
+      context "when different recruitment cycles" do
+        let(:provider) { create(:provider, recruitment_cycle: create(:recruitment_cycle, year: "2022")) }
+        let(:duplicated_provider_code) { build(:provider, provider_code: provider.provider_code, recruitment_cycle: create(:recruitment_cycle, year: "2021")) }
+
+        it "does not raise validation error" do
+          expect(duplicated_provider_code.valid?).to eq true
+          expect(duplicated_provider_code.errors.messages.any?).to eq false
+        end
+      end
     end
   end
 
