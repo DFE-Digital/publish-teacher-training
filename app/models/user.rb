@@ -32,7 +32,7 @@ class User < ApplicationRecord
 
   validates :first_name, presence: true
   validates :last_name, presence: true
-  validates :email, presence: true, format: { with: /\A.*@.*\z/, message: "must contain @" }
+  validates :email, presence: true, format: { with: /\A.*@.*\z/, message: "must contain @" }, uniqueness: true
   validate :email_is_lowercase
 
   validates :email, if: :admin?, format: {
