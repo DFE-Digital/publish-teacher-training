@@ -80,8 +80,9 @@ describe Providers::CopyToRecruitmentCycleService do
     end
 
     context "the provider already exists in the new recruitment cycle" do
+      let(:old_recruitment_cycle) { create :recruitment_cycle, :previous }
       let(:new_provider) {
-        build :provider, provider_code: provider.provider_code
+        create :provider, recruitment_cycle: old_recruitment_cycle, provider_code: provider.provider_code
       }
       let(:new_recruitment_cycle) {
         create :recruitment_cycle, :next,
