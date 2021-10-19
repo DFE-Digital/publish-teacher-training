@@ -75,8 +75,10 @@ describe AuthenticationService do
           expect { subject }.to(change { user.reload.email }.to(email))
         end
 
-        it "updates the existing users email to example email" do
-          expect { subject }.to(change { existing_user.reload.email }.to("bob_gmail.com@example.com"))
+        Timecop.freeze do
+          it "updates the existing users email to example email" do
+            expect { subject }.to(change { existing_user.reload.email }.to("bob#{Time.now.to_i}gmail.com@example.com"))
+          end
         end
       end
     end
@@ -182,23 +184,6 @@ describe AuthenticationService do
 
       it "does not set the last name to nil" do
         expect { subject }.not_to(change { user.reload.last_name })
-      end
-    end
-
-    context "when the duplicated email already exists" do
-      let(:duplicated_user) { create(:user, email: "duplicated@email.com") }
-      let(:duplicated_duplicated_user) { create(:user, email: "duplicated_email.com@example.com") }
-      let(:duplicated_email) { "duplicated_email.com@example.com" }
-      let(:email) { "duplicated@email.com" }
-
-      before do
-        duplicated_user
-        duplicated_duplicated_user
-        subject
-      end
-
-      it "appends the id of the duplicate email onto the end, ensuring its uniqueness" do
-        expect(duplicated_user.reload.email).to eq(duplicated_email + duplicated_duplicated_user.id.to_s)
       end
     end
   end

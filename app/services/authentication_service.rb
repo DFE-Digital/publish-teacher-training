@@ -109,10 +109,7 @@ private
 
     if (duplicate_user = find_user_by_email)
       # Change: bob@gmail.com => bob_gmail.com@example.com
-      new_email = duplicate_user.email.gsub(/\@/, "_") + "@example.com"
-
-      # we now should check if the duplicate email (new email) exists, and if it does, append the id onto it to ensure its unique
-      new_email += User.find_by(email: new_email).id.to_s while User.exists?(email: new_email)
+      new_email = duplicate_user.email.gsub(/\@/, Time.now.to_i.to_s) + "@example.com"
 
       duplicate_user.update!(email: new_email)
     end
