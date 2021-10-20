@@ -15,6 +15,8 @@ module Support
       if @provider.save
         redirect_to support_provider_path(provider), flash: { success: "Provider was successfully created" }
       else
+        # The below code is to fix a mismatch of error messages
+        # for invalid forms in the support console.
         @provider.errors.messages.each { |k, v|
           case k
           when :"sites.urn", :email, :telephone
