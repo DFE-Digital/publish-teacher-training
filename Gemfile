@@ -133,6 +133,9 @@ group :development, :test do
   # Prettyprint in console
   gem "awesome_print"
 
+  # Better colorized logs
+  gem "amazing_print"
+
   # Help eliminate N+1 queries
   gem "bullet"
 
