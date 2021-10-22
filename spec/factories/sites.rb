@@ -8,6 +8,7 @@ FactoryBot.define do
     postcode { Faker::Address.postcode }
     region_code { "london" }
     urn { Faker::Number.number(digits: [5, 6].sample) }
+    uuid { Faker::Internet.uuid }
 
     sequence(:code) { |n| "A#{n}" }
 
