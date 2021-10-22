@@ -27,7 +27,8 @@ module API
                    :latitude,
                    :longitude,
                    :postcode,
-                   :region_code
+                   :region_code,
+                   :uuid
 
         attribute :name do
           @object.location_name
