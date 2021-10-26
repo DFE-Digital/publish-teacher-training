@@ -75,8 +75,10 @@ describe AuthenticationService do
           expect { subject }.to(change { user.reload.email }.to(email))
         end
 
-        it "updates the existing users email to example email" do
-          expect { subject }.to(change { existing_user.reload.email }.to("bob_gmail.com@example.com"))
+        Timecop.freeze do
+          it "updates the existing users email to example email" do
+            expect { subject }.to(change { existing_user.reload.email }.to("bob_#{Time.now.to_i}_gmail.com@example.com"))
+          end
         end
       end
     end
