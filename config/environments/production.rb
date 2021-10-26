@@ -32,9 +32,8 @@ Rails.application.configure do
   # config.force_ssl = true
 
   # Logging
-  config.log_tags = [:request_id] # Prepend all log lines with the following tags.
-  config.log_level = Settings.log_level
   config.rails_semantic_logger.add_file_appender = false
+  config.log_format = :json
 
   config.active_record.logger = nil # Don't log SQL in production
 

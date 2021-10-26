@@ -53,7 +53,5 @@ Rails.application.configure do
   config.active_job.queue_adapter = :async
 
   # Logging
-  config.log_level = Settings.log_level
-
-  config.logger = ActiveSupport::Logger.new(STDOUT)
+  config.log_format = :color
 end
