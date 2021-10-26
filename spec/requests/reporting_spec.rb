@@ -29,15 +29,11 @@ describe "GET /reporting" do
               scitt: 0,
               lead_school: 0,
               university: 0,
-              unknown: 0,
-              invalid_value: 0,
             },
             closed: {
               scitt: 0,
               lead_school: 0,
               university: 0,
-              unknown: 0,
-              invalid_value: 0,
             },
           },
           region_code: {
@@ -84,10 +80,10 @@ describe "GET /reporting" do
         },
         provider_type: {
           open: {
-            scitt: 0, lead_school: 0, university: 0, unknown: 0, invalid_value: 0
+            scitt: 0, lead_school: 0, university: 0
           },
           closed: {
-            scitt: 0, lead_school: 0, university: 0, unknown: 0, invalid_value: 0
+            scitt: 0, lead_school: 0, university: 0
           },
         },
         program_type: {

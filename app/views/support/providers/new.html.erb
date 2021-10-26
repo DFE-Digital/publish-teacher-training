@@ -11,6 +11,16 @@
 
         <%= f.govuk_text_field :provider_name, label: { text: "Name", size: "s" } %>
         <%= f.govuk_text_field :provider_code, label: { text: "Code", size: "s" } %>
+        <%= f.govuk_radio_buttons_fieldset(:provider_type, legend: { text: "What is the provider type?", size: "s" }) do %>
+          <%= f.govuk_radio_button :provider_type, :lead_school, label: { text: "Lead School" }, link_errors: true  do %>
+            <%= f.govuk_text_field :urn,
+                                  width: "one-quarter",
+                                  label: { text: "What is their URN?" },
+                                  autocomplete: :disabled %>
+          <% end %>
+          <%= f.govuk_radio_button :provider_type, :scitt, label: { text: "SCITT" }, link_errors: true %>
+          <%= f.govuk_radio_button :provider_type, :university, label: { text: "University" }, link_errors: true %>
+        <% end %>
         <%= f.govuk_text_field :ukprn, label: { text: "UKPRN", size: "s" } %>
         <%= f.govuk_email_field :email, label: { text: "Email address", size: "s" } %>
         <%= f.govuk_phone_field :telephone, label: { text: "Telephone number", size: "s" } %>

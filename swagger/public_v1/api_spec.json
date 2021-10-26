@@ -1154,9 +1154,7 @@
             "enum": [
               "scitt",
               "lead_school",
-              "university",
-              "unknown",
-              "invalid_value"
+              "university"
             ]
           },
           "region_code": {

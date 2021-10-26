@@ -23,8 +23,6 @@ class Provider < ApplicationRecord
     scitt: "B",
     lead_school: "Y",
     university: "O",
-    unknown: "",
-    invalid_value: "0", # there is only one of these in the data
   }
 
   enum accrediting_provider: {
@@ -116,6 +114,8 @@ class Provider < ApplicationRecord
   validates :provider_name, length: { maximum: 100 }, on: :update
 
   validates :provider_code, uniqueness: { scope: :recruitment_cycle }
+
+  validates :provider_type, presence: true
 
   validates :telephone, phone: { message: "^Enter a valid telephone number" }, if: :telephone_changed?
 

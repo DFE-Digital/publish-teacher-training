@@ -7,6 +7,7 @@ module PageObjects
 
       element :provider_name, "#provider-provider-name-field"
       element :provider_code, "#provider-provider-code-field"
+      element :provider_type_scitt, "#provider-provider-type-scitt-field"
       element :provider_email, "#provider-email-field"
       element :provider_telephone, "#provider-telephone-field"
       element :organisation_name, "#provider-organisations-attributes-0-name-field"

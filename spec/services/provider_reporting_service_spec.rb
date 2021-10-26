@@ -45,10 +45,10 @@ describe ProviderReportingService do
         },
         provider_type: {
           open: {
-            scitt: 1, lead_school: 2, university: 3, unknown: 4, invalid_value: 5
+            scitt: 1, lead_school: 2, university: 3
           },
           closed: {
-            scitt: 0, lead_school: 0, university: 0, unknown: 0, invalid_value: 0
+            scitt: 0, lead_school: 0, university: 0
           },
         },
         region_code: {

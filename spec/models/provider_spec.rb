@@ -86,6 +86,16 @@ describe Provider, type: :model do
         end
       end
     end
+
+    describe "provider_type validations" do
+      let(:invalid_provider) { build(:provider, provider_type: nil) }
+      let(:valid_provider) { build(:provider, provider_type: "lead_school") }
+
+      it "validates provider_type" do
+        expect(invalid_provider).to_not be_valid
+        expect(valid_provider).to be_valid
+      end
+    end
   end
 
   describe "organisation" do
@@ -108,11 +118,7 @@ describe Provider, type: :model do
 
   describe "changed_at" do
     it "is set on create" do
-      provider = Provider.create(
-        recruitment_cycle: find_or_create(:recruitment_cycle),
-        email: "email@test.com",
-        telephone: "0123456789",
-      )
+      provider = create(:provider)
 
       expect(provider.changed_at).to be_present
       expect(provider.changed_at).to eq provider.updated_at

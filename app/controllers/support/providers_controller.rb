@@ -15,6 +15,16 @@ module Support
       if @provider.save
         redirect_to support_provider_path(provider), flash: { success: "Provider was successfully created" }
       else
+        # The below code is to fix a mismatch of error messages
+        # for invalid forms in the support console.
+        @provider.errors.messages.each { |k, v|
+          case k
+          when :"sites.urn", :email, :telephone
+            @provider.errors.messages[k] = v.first.gsub("^", "")
+          else
+            @provider.errors.messages[k] = "#{k.to_s.gsub(/.\.^?/, ' ').humanize} #{v.first}"
+          end
+        }
         render :new
       end
     end
@@ -70,6 +80,8 @@ module Support
     def create_provider_params
       params.require(:provider).permit(:provider_name,
                                        :provider_code,
+                                       :provider_type,
+                                       :urn,
                                        :recruitment_cycle_id,
                                        :email,
                                        :ukprn,
