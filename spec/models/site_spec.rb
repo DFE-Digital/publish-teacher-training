@@ -42,6 +42,10 @@ describe Site, type: :model do
     expect(subject.errors[:urn]).to include("^URN must be 5 or 6 numbers")
   end
 
+  it "has a uuid" do
+    expect(subject.uuid).to be_present
+  end
+
   describe "associations" do
     it { is_expected.to belong_to(:provider) }
   end

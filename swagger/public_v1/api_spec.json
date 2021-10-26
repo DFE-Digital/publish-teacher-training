@@ -916,6 +916,11 @@
             "type": "number",
             "description": "The longitude of the location.",
             "example": -1.3603394
+          },
+          "uuid": {
+            "type": "string",
+            "description": "The unique identifier of the location.",
+            "example": "a74106f6-dd85-45c4-8d56-048e6222734h"
           }
         }
       },
