@@ -10,8 +10,8 @@
 
 ### Native
 
-- Ruby 2.7.4
-- postgresql-9.6 postgresql-contrib-9.6
+- PostgreSQL 11
+- GraphViz
 
 ### Docker
 
@@ -20,16 +20,42 @@
 
 ## Setting up the app in development
 
-
-
-
 ### Native
 
-0. If you haven't already, follow this [tutorial](https://gorails.com/setup) to setup your Rails environment, make sure to install PostgreSQL 9.6 as the database.
-1. Run `asdf install` to install the correct Ruby version. If you don’t have `asdf` on your system, follow the [Installation guide](https://asdf-vm.com/#/core-manage-asdf?id=install) and ensure the [asdf-ruby plugin](https://github.com/asdf-vm/asdf-ruby) is installed.
-2. Run `bundle install` to install the gem dependencies.
-3. Run `bundle exec rails db:setup` to create a development and testing database.
-4. Run `bundle exec rails server` to launch the app on http://localhost:3001.
+#### Install build dependencies
+
+Install [asdf-vm](https://asdf-vm.com/).
+
+Install the plugins and versions specified in `.tool-versions`
+
+```bash
+asdf plugin add ruby
+asdf plugin add nodejs
+asdf plugin add yarn
+asdf install
+```
+
+When the versions are updated in master run `asdf install` again to update your
+installation.
+
+(We don't mandate asdf, you can use other tools if you prefer.)
+
+#### Run the builds
+
+Run the following commands:
+
+```bash
+yarn
+bundle
+bundle exec rake webpacker:compile
+bundle exec rails db:setup
+```
+
+#### Run the server
+
+```bash
+bundle exec rails server
+```
 
 ### Docker
 
@@ -84,16 +110,6 @@ Or through guard (`--no-interactions` allows the use of `pry` inside tests):
 
 ```bash
 bundle exec guard --no-interactions
-```
-
-## Development Dependencies
-
-GraphViz is required as a dependency of the [rails-erd](https://github.com/voormedia/rails-erd/) gem that is used to generate the entity relationship diagram during migrations.
-
-On OSX:
-
-```bash
-brew install graphviz
 ```
 
 ## Architectural Decision Record
