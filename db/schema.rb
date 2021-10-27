@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_10_25_141502) do
+ActiveRecord::Schema.define(version: 2021_10_27_094711) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
@@ -55,6 +55,14 @@ ActiveRecord::Schema.define(version: 2021_10_25_141502) do
     t.index ["provider_id"], name: "index_allocation_on_provider_id"
     t.index ["recruitment_cycle_id", "accredited_body_code", "provider_code"], name: "index_allocation_recruitment_and_codes"
     t.index ["request_type"], name: "index_allocation_on_request_type"
+  end
+
+  create_table "allocation_uplift", force: :cascade do |t|
+    t.bigint "allocation_id", null: false
+    t.integer "uplifts"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["allocation_id"], name: "index_allocation_uplift_on_allocation_id"
   end
 
   create_table "audit", force: :cascade do |t|
@@ -386,6 +394,7 @@ ActiveRecord::Schema.define(version: 2021_10_25_141502) do
   add_foreign_key "access_request", "\"user\"", column: "requester_id", name: "FK_access_request_user_requester_id", on_delete: :nullify
   add_foreign_key "allocation", "provider"
   add_foreign_key "allocation", "provider", column: "accredited_body_id"
+  add_foreign_key "allocation_uplift", "allocation"
   add_foreign_key "contact", "provider", name: "fk_contact_provider"
   add_foreign_key "course", "provider", name: "FK_course_provider_provider_id", on_delete: :cascade
   add_foreign_key "course_enrichment", "\"user\"", column: "created_by_user_id", name: "FK_course_enrichment_user_created_by_user_id"
