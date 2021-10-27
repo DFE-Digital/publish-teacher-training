@@ -58,7 +58,7 @@ ActiveRecord::Schema.define(version: 2021_10_27_094711) do
   end
 
   create_table "allocation_uplift", force: :cascade do |t|
-    t.bigint "allocation_id", null: false
+    t.bigint "allocation_id"
     t.integer "uplifts"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false

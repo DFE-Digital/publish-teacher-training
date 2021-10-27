@@ -1,6 +1,9 @@
 class AllocationUplift < ApplicationRecord
+  belongs_to :allocation
+
   extend Forwardable
 
-  belongs_to :allocation
-  def_delegators :@allocation, :provider, :accredited_body, :recruitment_cycle
+  attr_accessor :allocation
+
+  def_delegators :@allocation, :provider, :recruitment_cycle
 end
