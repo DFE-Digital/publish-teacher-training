@@ -10,8 +10,8 @@
 
 ### Native
 
-- Ruby 2.7.4
-- postgresql-9.6 postgresql-contrib-9.6
+- PostgreSQL 11
+- GraphViz (`brew install graphviz`, or the equivalent with your package manager)
 
 ### Docker
 
@@ -20,19 +20,42 @@
 
 ## Setting up the app in development
 
-### Settings
-
-If you are going to login with a user who hasn't recieved the welcome email - you will need to set the following settings to their correct values in `config/settings/development.local.yml`:
-
-- `govuk_notify.api_key`
-
 ### Native
 
-0. If you haven't already, follow this [tutorial](https://gorails.com/setup) to setup your Rails environment, make sure to install PostgreSQL 9.6 as the database.
-1. Run `asdf install` to install the correct Ruby version. If you don’t have `asdf` on your system, follow the [Installation guide](https://asdf-vm.com/#/core-manage-asdf?id=install) and ensure the [asdf-ruby plugin](https://github.com/asdf-vm/asdf-ruby) is installed.
-2. Run `bundle install` to install the gem dependencies.
-3. Run `bundle exec rails db:setup` to create a development and testing database.
-4. Run `bundle exec rails server` to launch the app on http://localhost:3001.
+#### Install build dependencies
+
+Install [asdf-vm](https://asdf-vm.com/).
+
+Install the plugins and versions specified in `.tool-versions`
+
+```bash
+asdf plugin add ruby
+asdf plugin add nodejs
+asdf plugin add yarn
+asdf install
+```
+
+When the versions are updated in master run `asdf install` again to update your
+installation.
+
+(We don't mandate asdf, you can use other tools if you prefer.)
+
+#### Run the builds
+
+Run the following commands:
+
+```bash
+yarn
+bundle
+bundle exec rake webpacker:compile
+bundle exec rails db:setup
+```
+
+#### Run the server
+
+```bash
+bundle exec rails server
+```
 
 ### Docker
 
@@ -89,24 +112,7 @@ Or through guard (`--no-interactions` allows the use of `pry` inside tests):
 bundle exec guard --no-interactions
 ```
 
-## Development Dependencies
-
-GraphViz is required as a dependency of the [rails-erd](https://github.com/voormedia/rails-erd/) gem that is used to generate the entity relationship diagram during migrations.
-
-On OSX:
-
-```bash
-brew install graphviz
-```
-
-## Architectural Decision Record
-
-See the [docs/adr](docs/adr) directory for a list of the Architectural Decision
-Record (ADR). We use [adr-tools](https://github.com/npryce/adr-tools) to manage
-our ADRs, see the link for how to install (hint: `brew install adr-tools` or use
-ASDF).
-
-## Running specs in parallel
+### Running specs in parallel
 
 When running specs in parallel for the first time you will first need to set up
 your test databases.
@@ -118,6 +124,14 @@ To run the specs in parallel:
 
 To drop the test databases:
 `bundle exec rails parallel:drop`
+
+
+## Architectural Decision Record
+
+See the [docs/adr](docs/adr) directory for a list of the Architectural Decision
+Record (ADR). We use [adr-tools](https://github.com/npryce/adr-tools) to manage
+our ADRs, see the link for how to install (hint: `brew install adr-tools` or use
+ASDF).
 
 ## Linting
 
@@ -227,85 +241,8 @@ To track exceptions through Sentry, configure the `SENTRY_DSN` environment varia
 SENTRY_DSN=https://aaa:bbb@sentry.io/123 rails s
 ```
 
-## mcb Command
-
-This project comes with a script `bin/mcb` which provides certain
-project-specific functionality that is conveniently accessed via the cmdline.
-The goal is to provide access to project data and functionality in a guided
-way that is safer and better sign-posted than using the raw Rails console. This
-can be useful for people who aren't as familiar with the app, or with certain
-complex operations that just aren't already packaged up in the app.
-
-In order to use the external environment functionality you must set the
-environments in `config/azure_environments.yml `like so:
-
-```
-qa:
-  webapp: <webapp>
-  rgroup: <rgroup>
-  subscription: <subscription>
-staging:
-  webapp: <webapp>
-  rgroup: <rgroup>
-  subscription: <subscription>
-production:
-  webapp: <webapp>
-  rgroup: <rgroup>
-  subscription: <subscription>
-```
-
-If you are a member of the Find team you may find a filled out config [here](https://dfedigital.atlassian.net/wiki/spaces/BaT/pages/1182761062/MCB+Configuration?atlOrigin=eyJpIjoiZDg0N2Q2ZTg0NTRiNDQ1MmEwZWQ3M2VhZjMyYjIxNjEiLCJwIjoiYyJ9n).
-
-The script's functionality is accessed using sub-commands with built-in
-documentation. This is the best way to discover it's functionality and the
-commands available, and is accessible with the `--help` option:
-
-```
-bin/mcb --help
-or
-bin/mcb -h
-```
-
-Commands for mcb are defined in `lib/mcb/commands` and any new commands should
-be organised in an appropriate sub-folder there.
-
-### Dependencies
-
-- Requires an installation of the `az` command on the `PATH`. Get it at
-  https://docs.microsoft.com/en-us/cli/azure/?view=azure-cli-latest
-- An Azure account with access to the subscription(s) - if you're on a non-DfE
-  device you need BYOD & 2FA set up.
-- A publish user with your email address with access to the organisation(s) you
-  want to modify.
-
-### Mandatory requirements
-
-To successfully log into the system, you will need to:
-
-1. Create an account on DfE Sign-in
-   1. Get a DfE Sign-in admin to invite you (give them this link:
-      https://signin-test-sup-as.azurewebsites.net/users)
-   2. Sign up from the email sent from DfE Sign-in
-2. Grant access to some providers:
-   1. For local: `bundle exec bin/mcb users grant {email} {provider_code}`
-   2. For `qa` and `production`:
-      1. You will need to log into Azure first: `az login`
-      2. `bundle exec bin/mcb -E {env} users grant {email} {provider_code}`
-
-Users not matching
-`%@digital.education.gov.uk` and `%@education.gov.uk`
-will be anonymized for non production environment.
-
-## <a name="releases"></a>Releases
-
-Find (Publish Teacher Training & Teacher Training API) build and release process is split into two separate Azure DevOps pipelines.
-
-- [Build Pipeline](https://dfe-ssp.visualstudio.com/Become-A-Teacher/_build?definitionId=46): This is the main development CI pipeline which will automatically trigger a build from a commit to any branch within the teacher-training-api GitHub code repository.
-- [Release Pipeline](https://dfe-ssp.visualstudio.com/Become-A-Teacher/_release?_a=releases&view=mine&definitionId=36): When commits are made to the master branch, this pipeline will auto deploy the application to the QA infrastructure environment in Azure. Frontend and backend release pipelines are consolidated and are made up of several stages including integration testing. Release in staging and production can be triggered manualy only - see deployment guide for more details.
-
 ## <a name="other_documentation"></a>Other Documentation
 
-- [Deployment guide](./docs/deployment.md)
 - [Services pattern documentation](./app/services/README.md)
 - [Healthcheck and Ping Endpoints](./docs/healthcheck_and_ping_endpoints.md)
 - [Alerting and monitoring](./docs/alerting_and_monitoring.md)
