@@ -11,7 +11,7 @@
 ### Native
 
 - PostgreSQL 11
-- GraphViz
+- GraphViz (`brew install graphviz`, or the equivalent with your package manager)
 
 ### Docker
 
