@@ -7,6 +7,7 @@ module API
 
       belongs_to :accredited_body
       belongs_to :provider
+      has_one :allocation_uplift
     end
   end
 end
