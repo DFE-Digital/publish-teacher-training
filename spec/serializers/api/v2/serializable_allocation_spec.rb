@@ -33,7 +33,7 @@ describe API::V2::SerializableAllocation do
   end
 
   it "includes the allocation_uplift relationship" do
-    expect(subject.dig(:data, :relationship, :allocation_uplift, :data)).to eq({ type: :allocation_uplift, id: allocation_uplift.id.to_s })
+    expect(subject.dig(:data, :relationships, :allocation_uplift, :data)).to eq({ type: :allocation_uplift, id: allocation_uplift.id.to_s })
   end
 
   it "includes the provider relationship" do

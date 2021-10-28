@@ -15,7 +15,6 @@ ActiveRecord::Schema.define(version: 2021_10_27_094711) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
   enable_extension "btree_gist"
-  enable_extension "citext"
   enable_extension "pg_buffercache"
   enable_extension "pg_stat_statements"
   enable_extension "plpgsql"
@@ -59,7 +58,7 @@ ActiveRecord::Schema.define(version: 2021_10_27_094711) do
   end
 
   create_table "allocation_uplift", force: :cascade do |t|
-    t.bigint "allocation_id"
+    t.bigint "allocation_id", null: false
     t.integer "uplifts"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
