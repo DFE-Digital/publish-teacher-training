@@ -11,7 +11,7 @@ module Support
     end
 
     def find_providers_with_allocations
-      Provider.where(id: Allocation.current_allocations.select(:provider_id))
+      Provider.where(id: Allocation.current_allocations.select(:provider_id)).order(:provider_name)
     end
 
     def filters
