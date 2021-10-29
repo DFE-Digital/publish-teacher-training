@@ -5,7 +5,8 @@ describe API::V2::SerializableAllocation do
   let(:resource) { described_class.new(object: allocation) }
   let(:accredited_body) { allocation.accredited_body }
   let(:provider) { allocation.provider }
-  let(:allocation) { build(:allocation, number_of_places: 10) }
+  let(:allocation_uplift) { allocation.allocation_uplift }
+  let(:allocation) { create(:allocation, :with_allocation_uplift, number_of_places: 10) }
 
   subject do
     jsonapi_renderer.render(
@@ -13,10 +14,12 @@ describe API::V2::SerializableAllocation do
       class: {
         Allocation: API::V2::SerializableAllocation,
         Provider: API::V2::SerializableProvider,
+        AllocationUplift: API::V2::SerializableAllocationUplift,
       },
       include: %i(
         accredited_body
         provider
+        allocation_uplift
       ),
     )
   end
@@ -27,6 +30,10 @@ describe API::V2::SerializableAllocation do
 
   it "includes the accredited_body relationship" do
     expect(subject.dig(:data, :relationships, :accredited_body, :data)).to eq({ type: :providers, id: accredited_body.id.to_s })
+  end
+
+  it "includes the allocation_uplift relationship" do
+    expect(subject.dig(:data, :relationships, :allocation_uplift, :data)).to eq({ type: :allocation_uplift, id: allocation_uplift.id.to_s })
   end
 
   it "includes the provider relationship" do

@@ -7,6 +7,8 @@ RSpec.describe Allocation do
       subject.valid?
     end
 
+    it { is_expected.to have_one(:allocation_uplift) }
+
     describe "auditing" do
       it { is_expected.to be_audited.associated_with(:provider) }
     end

@@ -4,6 +4,7 @@ class Allocation < ApplicationRecord
   belongs_to :provider
   belongs_to :accredited_body, class_name: "Provider"
   belongs_to :recruitment_cycle
+  has_one :allocation_uplift
 
   audited associated_with: :provider
 
