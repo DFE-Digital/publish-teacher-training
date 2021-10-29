@@ -1,0 +1,40 @@
+<table class="govuk-table">
+  <thead class="govuk-table__head">
+    <tr class="govuk-table__row">
+      <th scope="col" class="govuk-table__header govuk-!-width-one-half">Provider name</th>
+      <th scope="col" class="govuk-table__header govuk-!-width-one-half">Provider code</th>
+      <th scope="col" class="govuk-table__header govuk-!-width-one-half">Number of Allocations</th>
+      <th scope="col" class="govuk-table__header govuk-!-width-one-half">Number of Uplifts</th>
+    </tr>
+  </thead>
+
+  <tbody class="govuk-table__body">
+    <% @providers_with_allocations.each do |provider| %>
+      <tr class="govuk-table__row qa-provider_row">
+        <td class="govuk-table__cell">
+          <span class="govuk-!-display-block govuk-!-margin-bottom-1">
+            <%= govuk_link_to provider.provider_name, support_provider_path(provider) %>
+          </span>
+        </td>
+
+        <td class="govuk-table__cell">
+          <span class="govuk-!-display-block govuk-!-margin-bottom-1">
+            <%= provider.provider_code %>
+          </span>
+        </td>
+
+        <td class="govuk-table__cell">
+          <span class="govuk-!-display-block govuk-!-margin-bottom-1">
+            <%= provider.allocations.last.confirmed_number_of_places %>
+          </span>
+        </td>
+
+        <td class="govuk-table__cell">
+          <span class="govuk-!-display-block govuk-!-margin-bottom-1">
+            <%= provider.allocations.last.allocation_uplift&.uplfits.to_i %>
+          </span>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

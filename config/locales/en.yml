@@ -19,6 +19,8 @@ en:
         users:
           index: "Users"
           show: "User overview"
+        allocations:
+          index: "Allocations"
         data_exports:
           index: "Data exports"
     filter:

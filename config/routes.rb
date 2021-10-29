@@ -29,6 +29,8 @@ Rails.application.routes.draw do
     end
     resources :users, only: %i[index show new create]
 
+    resources :allocations, only: %i[index]
+
     resources :data_exports, path: "data-exports", only: [:index] do
       member do
         post :download

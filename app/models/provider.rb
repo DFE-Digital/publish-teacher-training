@@ -51,6 +51,7 @@ class Provider < ApplicationRecord
            foreign_key: :accredited_body_code,
            primary_key: :provider_code,
            inverse_of: :accrediting_provider
+  has_many :allocations
 
   # the accredited_providers that this provider is a training_provider for
   has_many :accrediting_providers, -> { distinct }, through: :courses
