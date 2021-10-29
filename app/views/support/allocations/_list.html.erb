@@ -13,7 +13,7 @@
       <tr class="govuk-table__row qa-provider_row">
         <td class="govuk-table__cell">
           <span class="govuk-!-display-block govuk-!-margin-bottom-1">
-            <%= govuk_link_to provider.provider_name, support_provider_path(provider) %>
+            <%= govuk_link_to provider.provider_name, support_allocation_path(provider.allocations.last.id) %>
           </span>
         </td>
 
@@ -31,7 +31,7 @@
 
         <td class="govuk-table__cell">
           <span class="govuk-!-display-block govuk-!-margin-bottom-1">
-            <%= provider.allocations.last.allocation_uplift&.uplfits.to_i %>
+            <%= provider.allocations.last.allocation_uplift&.uplifts.to_i %>
           </span>
         </td>
       </tr>

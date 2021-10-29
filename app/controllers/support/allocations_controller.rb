@@ -4,6 +4,14 @@ module Support
       @providers_with_allocations = filtered_providers_with_allocations.page(params[:page] || 1)
     end
 
+    def edit
+      @allocation = Allocation.find(params[:id])
+    end
+
+    def show
+      @allocation = Allocation.find(params[:id])
+    end
+
   private
 
     def filtered_providers_with_allocations
