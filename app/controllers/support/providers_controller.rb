@@ -1,5 +1,5 @@
 module Support
-  class ProvidersController < ApplicationController
+  class ProvidersController < SupportInterfaceController
     def index
       @providers = filtered_providers.page(params[:page] || 1)
     end

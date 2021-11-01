@@ -1,0 +1,6 @@
+<li>
+  <h2 class="govuk-heading-m">
+    <%= govuk_link_to provider.provider_name, publish_interface_provider_path(provider.provider_code) %>
+    <span class="govuk-hint"><%= pluralize(provider.included_courses_count, "course") %></span>
+  </h2>
+</li>

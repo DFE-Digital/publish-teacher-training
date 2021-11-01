@@ -1,15 +1,16 @@
-<h2 class="govuk-heading-m">Colin</h2>
+<h2 class="govuk-heading-m"><%= first_name %></h2>
 
-  <p class="govuk-body"><%= govuk_tag(text: "Admin", colour: "blue") %></p>
-
+<% if tags.present? %>
   <p class="govuk-body">
-    Colin is a DfE support agent who has administrator access to all organisations.
+    <% tags.each do |tag| %>
+      <%= govuk_tag(text: tag, colour: "blue") %>
+    <% end %>
   </p>
-</h2>
+<% end %>
 
 <%= form_tag("/auth/developer/callback") do %>
   <%= hidden_field_tag "email", email_address %>
   <%= hidden_field_tag "first_name", first_name %>
   <%= hidden_field_tag "last_name", last_name %>
-  <%= submit_tag "Login as Colin", class: "govuk-button govuk-!-margin-bottom-2" %>
+  <%= submit_tag "Login as #{first_name}", class: "govuk-button govuk-!-margin-bottom-2" %>
 <% end %>

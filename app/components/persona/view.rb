@@ -2,12 +2,13 @@
 
 module Persona
   class View < GovukComponent::Base
-    attr_accessor :email_address, :first_name, :last_name
+    attr_accessor :email_address, :first_name, :last_name, :tags
 
     def initialize(
       email_address:,
       first_name:,
       last_name:,
+      tags: [],
       classes: [],
       html_attributes: nil
     )
@@ -15,6 +16,7 @@ module Persona
       @email_address = email_address
       @first_name = first_name
       @last_name = last_name
+      @tags = tags
     end
   end
 end

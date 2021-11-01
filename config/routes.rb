@@ -7,17 +7,24 @@ Rails.application.routes.draw do
   mount OpenApi::Rswag::Ui::Engine => "/api-docs"
   mount OpenApi::Rswag::Api::Engine => "/api-docs"
 
-  get "/sign-in", to: "sign_in#index"
-  get "/user-not-found", to: "sign_in#new"
-  get "/sign-out", to: "sessions#sign_out"
-
   if AuthenticationService.persona?
+    root to: redirect("/personas")
     get "/personas", to: "personas#index"
     post "/auth/developer/callback", to: "sessions#callback"
     get "/auth/developer/signout", to: "sessions#destroy"
   else
+    root to: redirect("/publish/providers")
     get "/auth/dfe/callback", to: "sessions#callback"
     get "/auth/dfe/signout", to: "sessions#destroy"
+  end
+
+  get "/sign-in", to: "sign_in#index"
+  get "/user-not-found", to: "sign_in#new"
+  get "/sign-out", to: "sessions#sign_out"
+
+  namespace :publish_interface, path: "publish" do
+    resources :providers, path: "organisations", param: :provider_code, only: [:index, :show] do
+    end
   end
 
   namespace :support do

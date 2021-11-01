@@ -9,7 +9,30 @@
 
 <hr class="govuk-section-break govuk-section-break--visible govuk-section-break--l">
 
-<%= render Persona::View.new(email_address: "becomingateacher+admin-integration-tests@digital.education.gov.uk",
-                              first_name: "Support agent",
-                              last_name: "Colin")
-%>
+<%= render Persona::View.new(
+  email_address: "becomingateacher+admin-integration-tests@digital.education.gov.uk",
+  first_name: "Colin",
+  last_name: "Support Agent ",
+  tags: ["Admin"],
+) %>
+
+<p class="govuk-body">
+  Colin is a DfE support agent who has administrator access to all organisations.
+</p>
+
+<%= render Persona::View.new(
+  email_address: "anonimized-user-7839@example.org",
+  first_name: "Mary",
+  last_name: "Business Suport Coordinator",
+  tags: ["Multi-org", "Accredited body", "School Direct"],
+) %>
+
+<p class="govuk-body">
+  Mary is a SCITT Business Support Coordinator who belongs to:
+</p>
+
+<ul class="govuk-list govuk-list--bullet">
+  <li>multiple accredited bodies, <strong>Suffolk and Norfolk Primary SCITT</strong> and <strong>Suffolk and Norfolk Secondary SCITT</strong></li>
+  <li>a school direct <strong>Thorpe St Andrew School and Sixth Form</strong> with courses accredited by <strong>Suffolk and Norfolk Secondary SCITT</strong></li>
+  <li>a school direct <strong>Thorpe St Andrew School and Sixth Form</strong> with courses also accredited by an organisation not associated with Mary</li>
+</ul>

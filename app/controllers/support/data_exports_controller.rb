@@ -1,5 +1,5 @@
 module Support
-  class DataExportsController < ApplicationController
+  class DataExportsController < SupportInterfaceController
     def index
       @data_exports = DataExports::DataExport.all
     end

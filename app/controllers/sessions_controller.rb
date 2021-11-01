@@ -15,7 +15,11 @@ class SessionsController < ApplicationController
     if current_user
       UserSessions::Update.call(user: current_user, user_session: user_session)
 
-      redirect_to support_providers_path
+      if current_user.admin?
+        redirect_to support_providers_path
+      else
+        redirect_to publish_interface_providers_path
+      end
     else
       UserSession.end_session!(session)
 

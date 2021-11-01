@@ -1,5 +1,5 @@
 module Support
-  class UsersController < ApplicationController
+  class UsersController < SupportInterfaceController
     def index
       @users = User.order(:last_name).page(params[:page] || 1)
     end
