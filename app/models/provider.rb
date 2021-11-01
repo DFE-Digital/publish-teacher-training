@@ -272,8 +272,13 @@ class Provider < ApplicationRecord
   end
 
   def rolled_over?
-    # TODO: copy over rollover config from Publish
-    false
+    FeatureService.enabled?("rollover.can_edit_current_and_next_cycles")
+  end
+
+  def website_with_protocol
+    return if website.blank?
+
+    website.start_with?("http") ? website : ("http://" + website)
   end
 
 private

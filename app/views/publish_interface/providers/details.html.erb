@@ -1,0 +1,157 @@
+<% content_for :page_title, title_with_error_prefix("About your organisation", @errors.present?) %>
+<%= content_for :before_content, render_breadcrumbs(:organisation_details) %>
+
+<% if @errors.present? %>
+  <div class="govuk-error-summary" aria-labelledby="error-summary-title" role="alert" tabindex="-1" data-module="govuk-error-summary" data-ga-event-form="error">
+    <h2 class="govuk-error-summary__title" id="error-summary-title">
+      There is a problem
+    </h2>
+    <div class="govuk-error-summary__body">
+      <ul class="govuk-list govuk-error-summary__list">
+        <% @errors.each do |id, messages| %>
+          <% messages.each do |message| %>
+            <li data-error-message="<%= message %>">
+              <a href="<%= provider_enrichment_error_url(
+                provider: @provider,
+                field: id,
+              ) %>"><%= message %></a>
+            </li>
+          <% end %>
+        <% end %>
+      </ul>
+    </div>
+  </div>
+<% end %>
+
+<h1 class="govuk-heading-l">
+  <span class="govuk-caption-l"><%= @recruitment_cycle.title %></span>
+  About your organisation
+</h1>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= govuk_summary_list do |summary_list| %>
+      <% enrichment_summary(
+        summary_list,
+        :provider,
+        "Training with your organisation",
+        @provider.train_with_us,
+        %w[train_with_us],
+        action_path: "#{about_publish_interface_provider_recruitment_cycle_path(@provider.provider_code, @provider.recruitment_cycle.year)}#train-with-us",
+        action_visually_hidden_text: "details about training with your organisation",
+      ) %>
+
+      <%# TODO: descipher what's going on here and make it work %>
+      <%# <% if @provider.accredited_bodies.present? %1> %>
+      <%#   <% @provider.accredited_bodies.each do |provider| %1> %>
+      <%#     <% enrichment_summary( %>
+      <%#       summary_list, %>
+      <%#       :provider, %>
+      <%#       "#{provider.provider_name} (optional)", %>
+      <%#       provider["description"], %>
+      <%#       ["accrediting_provider_#{provider['provider_code']}"], %>
+      <%#       action_path: "#{about_provider_recruitment_cycle_path(@provider.provider_code, @provider.recruitment_cycle.year)}#accrediting-provider-#{provider['provider_code']}", %>
+      <%#       action_visually_hidden_text: "details about #{provider['provider_name']}", %>
+      <%#     ) %1> %>
+      <%#   <% end %1> %>
+      <%# <% end %1> %>
+
+      <% enrichment_summary(
+        summary_list,
+        :provider,
+        "Training with disabilities and other needs",
+        @provider.train_with_disability,
+        %w[train_with_disability],
+        action_path: "#{about_publish_interface_provider_recruitment_cycle_path(@provider.provider_code, @provider.recruitment_cycle.year)}#train-with-disability",
+        action_visually_hidden_text: "details about training with disabilities and other needs",
+      ) %>
+
+      <%# TODO: this block is pending, temporarily commented out as part of the initial spike on migrating Publish to TTAPI %>
+      <%# <% if Providers::VisaSponsorshipService.new(provider).visa_sponsorship_enabled? %1> %>
+      <%#   <% enrichment_summary( %>
+      <%#     summary_list, %>
+      <%#     :provider, %>
+      <%#     "Visa sponsorship", %>
+      <%#     visa_sponsorship_status(@provider), %>
+      <%#     %w[can_sponsor_student_visa can_sponsor_skilled_worker_visa], %>
+      <%#     truncate_value: false, %>
+      <%#     action_path: provider.declared_visa_sponsorship? ? provider_recruitment_cycle_visas_path(@provider.provider_code, @provider.recruitment_cycle.year) : nil, %>
+      <%#     action_visually_hidden_text: "if candidates can get visa sponsorship", %>
+      <%#   ) %1> %>
+      <%# <% end %1> %>
+    <% end %>
+
+    <h2 class="govuk-heading-m">Contact details</h2>
+    <%= govuk_summary_list do |summary_list| %>
+      <% enrichment_summary(
+        summary_list,
+        :provider,
+        "Email address",
+        @provider.email,
+        %w[email],
+        action_path: "#{contact_publish_interface_provider_recruitment_cycle_path(@provider.provider_code, @provider.recruitment_cycle.year)}#email",
+        action_visually_hidden_text: "email address",
+      ) %>
+
+      <% enrichment_summary(
+        summary_list,
+        :provider,
+        "Telephone number",
+        @provider.telephone,
+        %w[telephone],
+        action_path: "#{contact_publish_interface_provider_recruitment_cycle_path(@provider.provider_code, @provider.recruitment_cycle.year)}#telephone",
+        action_visually_hidden_text: "telephone number",
+      ) %>
+
+      <% enrichment_summary(
+        summary_list,
+        :provider,
+        "Website",
+        @provider.website,
+        %w[website],
+        action_path: "#{contact_publish_interface_provider_recruitment_cycle_path(@provider.provider_code, @provider.recruitment_cycle.year)}#website",
+        action_visually_hidden_text: "website",
+      ) %>
+
+      <% enrichment_summary(
+        summary_list,
+        :provider,
+        "UKPRN",
+        @provider.ukprn,
+        %w[ukprn],
+        action_path: "#{contact_publish_interface_provider_recruitment_cycle_path(@provider.provider_code, @provider.recruitment_cycle.year)}#ukprn",
+        action_visually_hidden_text: "UKPRN",
+      ) %>
+
+      <% if @provider.provider_type == "lead_school" %>
+        <% enrichment_summary(
+          summary_list,
+          :provider,
+          "URN",
+          @provider.urn,
+          %w[urn],
+          action_path: "#{contact_publish_interface_provider_recruitment_cycle_path(@provider.provider_code, @provider.recruitment_cycle.year)}#urn",
+          action_visually_hidden_text: "URN",
+        ) %>
+      <% end %>
+
+      <% enrichment_summary(
+        summary_list,
+        :provider,
+        "Contact address",
+        @provider.full_address,
+        %w[address1 address2 address3 address4 postcode],
+        action_path: "#{contact_publish_interface_provider_recruitment_cycle_path(@provider.provider_code, @provider.recruitment_cycle.year)}#address",
+        action_visually_hidden_text: "contact address",
+      ) %>
+    <% end %>
+  </div>
+
+  <aside class="govuk-grid-column-one-third" data-qa="provider__status_panel">
+    <div class="app-status-box">
+      <h2 class="govuk-heading-m">View on a course</h2>
+      <p class="govuk-body">This information will show on all your courses.</p>
+      <p class="govuk-body">View any course to see how it looks to applicants.</p>
+    </div>
+  </aside>
+</div>
