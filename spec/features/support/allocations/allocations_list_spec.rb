@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-feature "View providers" do
+feature "View allocations" do
   let(:user) { create(:user, :admin) }
   let(:provider) { create(:provider) }
   let(:provider2) { create(:provider) }
@@ -15,7 +15,7 @@ feature "View providers" do
     when_i_visit_the_allocations_index_page
   end
 
-  scenario "i can view the providers" do
+  scenario "i can view all providers and their allocations" do
     then_i_see_the_providers_and_their_allocations
   end
 
