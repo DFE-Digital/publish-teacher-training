@@ -1,5 +1,18 @@
 module PublishInterface
   module ViewHelper
+    def govuk_back_link_to(url = :back, body = "Back")
+      render GovukComponent::BackLinkComponent.new(
+        text: body,
+        href: url,
+        classes: "govuk-!-display-none-print",
+        html_attributes: {
+          data: {
+            qa: "page-back",
+          },
+        },
+      )
+    end
+
     def bat_contact_mail_to(name = nil, **kwargs)
       govuk_mail_to bat_contact_email_address, name || bat_contact_email_address_with_wrap, **kwargs
     end

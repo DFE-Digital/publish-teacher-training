@@ -29,6 +29,7 @@ Rails.application.routes.draw do
       resources :recruitment_cycles, param: :year, constraints: { year: /#{Settings.current_cycle}|#{Settings.current_cycle + 1}/ }, path: "", only: :show do
         get "/details", on: :member, to: "providers#details"
         get "/contact", on: :member, to: "providers#contact"
+        put "/contact", on: :member, to: "providers#update"
         get "/about", on: :member, to: "providers#about"
 
         resources :courses, on: :member, param: :code, only: [:index]

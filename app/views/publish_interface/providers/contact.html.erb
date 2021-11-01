@@ -1,0 +1,102 @@
+<% page_title = "Contact details" %>
+<% content_for :page_title, title_with_error_prefix(page_title, @errors.present?) %>
+
+<% content_for :before_content do %>
+  <%= govuk_back_link_to(details_publish_interface_provider_recruitment_cycle_path(@provider.provider_code, @provider.recruitment_cycle.year)) %>
+<% end %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_with(
+      model: @provider,
+      url: contact_publish_interface_provider_recruitment_cycle_path(@provider.provider_code, @provider.recruitment_cycle.year),
+      method: :put,
+      builder: GOVUKDesignSystemFormBuilder::FormBuilder,
+    ) do |f| %>
+
+      <%= f.govuk_error_summary %>
+
+      <h1 class="govuk-heading-l">
+        <span class="govuk-caption-l"><%= @provider.provider_name %></span>
+        <%= page_title %>
+      </h1>
+
+      <%= f.hidden_field :page, value: :contact %>
+
+      <% if current_user["admin"] %>
+        <div class="app-status-box app-status-box--admin">
+          <p class="govuk-body">
+            <%= govuk_tag(text: "Admin feature", colour: "purple") %>
+          </p>
+
+          <%= f.govuk_text_field(:provider_name,
+            label: { size: "m" },
+            data: { qa: "provider_name" }) %>
+        </div>
+      <% end %>
+
+      <%= f.govuk_text_field(:email,
+        form_group: { id: "email" },
+        label: { size: "m" },
+        autocomplete: "email",
+        spellcheck: false,
+        data: { qa: "email" }) %>
+
+      <%= f.govuk_text_field(:telephone,
+        form_group: { id: "telephone" },
+        label: { size: "m" },
+        width: 20,
+        autocomplete: "tel",
+        data: { qa: "telephone" }) %>
+
+      <%= f.govuk_text_field(:website,
+        form_group: { id: "website" },
+        label: { size: "m" },
+        data: { qa: "website" }) %>
+
+      <%= f.govuk_text_field(:ukprn,
+        form_group: { id: "ukprn" },
+        label: { size: "m" },
+        width: 10,
+        data: { qa: "ukprn" }) %>
+
+      <% if @provider.provider_type == "lead_school" %>
+        <%= f.govuk_text_field(:urn,
+          form_group: { id: "urn" },
+          label: { size: "m" },
+          width: 10,
+          data: { qa: "urn" }) %>
+      <% end %>
+
+      <%= f.govuk_fieldset legend: { text: "Contact address", size: "m" }, id: "address" do %>
+        <%= f.govuk_text_field(:address1,
+          label: -> { safe_join([t("helpers.label.provider.address1"), " ", tag.span("line 1 of 2", class: "govuk-visually-hidden")]) },
+          autocomplete: "address-line1",
+          data: { qa: "address1" }) %>
+
+        <%= f.govuk_text_field(:address2,
+          label: { hidden: true },
+          autocomplete: "address-line2",
+          data: { qa: "address2" }) %>
+
+        <%= f.govuk_text_field(:address3,
+          width: "two-thirds",
+          autocomplete: "address-level2",
+          data: { qa: "address3" }) %>
+
+        <%= f.govuk_text_field(:address4,
+          width: "two-thirds",
+          autocomplete: "address-level1",
+          data: { qa: "address4" }) %>
+
+        <%= f.govuk_text_field(:postcode,
+          width: 10,
+          autocomplete: "postal-code",
+          data: { qa: "postcode" }) %>
+      <% end %>
+
+      <%= render GovukComponent::InsetTextComponent.new(text: I18n.t("success.changes_ttl")) %>
+      <%= f.govuk_submit "Save and publish changes" %>
+    <% end %>
+  </div>
+</div>
