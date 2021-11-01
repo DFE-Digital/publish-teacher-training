@@ -24,6 +24,14 @@ Rails.application.routes.draw do
 
   namespace :publish_interface, path: "publish" do
     resources :providers, path: "organisations", param: :provider_code, only: [:index, :show] do
+      get "/users", on: :member, to: "providers/users#index"
+
+      resources :recruitment_cycles, param: :year, constraints: { year: /#{Settings.current_cycle}|#{Settings.current_cycle + 1}/ }, path: "", only: :show do
+        get "/details", on: :member, to: "providers#details"
+
+        resources :courses, on: :member, param: :code, only: [:index]
+        resources :sites, path: "locations", on: :member, except: [:destroy, :show]
+      end
     end
   end
 

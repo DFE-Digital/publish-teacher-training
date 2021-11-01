@@ -271,6 +271,11 @@ class Provider < ApplicationRecord
     courses.each(&:discard)
   end
 
+  def rolled_over?
+    # TODO: copy over rollover config from Publish
+    false
+  end
+
 private
 
   def accrediting_provider_enrichment(provider_code)

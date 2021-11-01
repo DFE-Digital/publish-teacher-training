@@ -16,6 +16,15 @@ module PublishInterface
       @providers = @providers.page(page).per(per_page)
     end
 
+    def show
+      @provider = Provider
+        .where(recruitment_cycle: @recruitment_cycle)
+        .where(provider_code: params[:provider_code])
+        .first
+
+      authorize @provider, :show?
+    end
+
   private
 
     def build_recruitment_cycle

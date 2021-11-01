@@ -28,6 +28,7 @@ authentication:
   audience: "teacher-training-api"
   subject: "access"
 
+current_cycle: 2022 # Temporary - part of the Publish merge, should match current_recruitment_cycle_year
 current_recruitment_cycle_year: 2022
 allocation_cycle_year: 2021
 govuk_notify:

@@ -1,0 +1,32 @@
+<% content_for :page_title, @recruitment_cycle.title %>
+<%= content_for :before_content, render_breadcrumbs(:recruitment_cycle) %>
+
+<h1 class="govuk-heading-l">
+  <%= @recruitment_cycle.title %>
+</h1>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <% if @recruitment_cycle.next? %>
+      <p class="govuk-body-l">
+        Prepare your courses and locations for the next cycle. Your records have been copied from the current cycle.
+      </p>
+    <% else %>
+      <p class="govuk-body-l">
+        Manage courses, locations and vacancies in the current&nbsp;cycle.
+      </p>
+    <% end %>
+
+    <%= render partial: "recruitment_cycles/about_organisation", locals: { provider: @provider, year: params[:year] } %>
+    <%= render partial: "recruitment_cycles/locations_info", locals: { provider: @provider, year: params[:year] } %>
+    <%= render partial: "recruitment_cycles/courses_info", locals: { provider: @provider, year: params[:year] } %>
+    <%= render partial: "recruitment_cycles/courses_accredited_body", locals: { provider: @provider, year: params[:year] } %>
+    <% if @recruitment_cycle.current? %>
+      <%= render partial: "recruitment_cycles/allocations", locals: { provider: @provider, year: params[:year] } %>
+    <% elsif @recruitment_cycle.next? %>
+      <%= render partial: "recruitment_cycles/allocations", locals: { provider: @provider.from_previous_recruitment_cycle, year: params[:year].to_i.pred } %>
+    <% end %>
+  </div>
+
+  <%= render partial: "shared/aside_information_box" %>
+</div>
