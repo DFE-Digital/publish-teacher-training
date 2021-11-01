@@ -42,6 +42,10 @@ module FeatureHelpers
       @allocations_index_page ||= PageObjects::Support::AllocationsIndex.new
     end
 
+    def allocations_show_page
+      @allocations_show_page ||= PageObjects::Support::AllocationsShow.new
+    end
+
     def sign_in_page
       @sign_in_page ||= PageObjects::SignIn.new
     end
