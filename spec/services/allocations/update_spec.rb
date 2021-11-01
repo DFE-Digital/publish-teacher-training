@@ -57,7 +57,7 @@ RSpec.describe Allocations::Update do
         let(:provider) { create(:provider) }
         let(:accredited_body) { create(:provider, :accredited_body) }
         let(:previous_recruitment_cycle) do
-          create(:recruitment_cycle, year: RecruitmentCycle.current.year.to_i - 1)
+          create(:recruitment_cycle, year: Settings.allocation_cycle_year.to_i - 1)
         end
 
         let(:previous_number_of_places) { rand(1..99) }

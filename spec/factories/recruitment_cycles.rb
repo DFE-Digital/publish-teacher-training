@@ -11,5 +11,9 @@ FactoryBot.define do
     trait :next do
       year { (Settings.current_recruitment_cycle_year.to_i + 1).to_s }
     end
+
+    trait :current_allocation do
+      year { Settings.allocation_cycle_year }
+    end
   end
 end

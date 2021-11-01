@@ -38,6 +38,10 @@ module FeatureHelpers
       @user_new_page ||= PageObjects::Support::UserNew.new
     end
 
+    def allocations_index_page
+      @allocations_index_page ||= PageObjects::Support::AllocationsIndex.new
+    end
+
     def sign_in_page
       @sign_in_page ||= PageObjects::SignIn.new
     end
