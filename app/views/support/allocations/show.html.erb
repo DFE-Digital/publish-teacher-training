@@ -1,7 +1,21 @@
+<%= content_for(:breadcrumbs) do %>
+    <%= render GovukComponent::BackLinkComponent.new(
+      text: "All Allocation records",
+      href: support_allocations_path,
+    ) %>
+<% end %>
+
+<h1 class="govuk-heading-l">Allocations for <%= @allocation.provider.provider_name %></h1>
+
 <%= render GovukComponent::SummaryListComponent.new do |component|
   component.row do |row|
     row.key { "Provider Name" }
     row.value { @allocation.provider.provider_name }
+  end
+
+  component.row do |row|
+    row.key { "Accredited Body Name" }
+    row.value { @allocation.accredited_body.provider_name }
   end
 
   component.row do |row|

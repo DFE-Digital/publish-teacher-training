@@ -4,25 +4,24 @@ module Support
       allocation_uplift
     end
 
-    def update
-      if allocation_uplift.update(update_allocation_uplift_params)
-        redirect_to support_allocation_path(allocation_uplift.allocation)
-      else
-        render :edit
-      end
-    end
-
     def new
       @allocation_uplift = AllocationUplift.new(allocation: allocation)
     end
 
     def create
-      @allocation = Allocation.find(create_allocation_uplift_params[:allocation_id].to_i)
-      @allocation_uplift = AllocationUplift.new(allocation: @allocation, uplifts: create_allocation_uplift_params[:uplifts])
+      @allocation_uplift = AllocationUplift.new(create_allocation_uplift_params)
       if @allocation_uplift.save
-        redirect_to support_allocation_path(allocation), flash: { success: "Allocation Uplift was successfully created" }
+        redirect_to support_allocation_path(@allocation_uplift.allocation), flash: { success: "Allocation Uplift was successfully created" }
       else
         render :new
+      end
+    end
+
+    def update
+      if allocation_uplift.update(update_allocation_uplift_params)
+        redirect_to support_allocation_path(allocation_uplift.allocation)
+      else
+        render :edit
       end
     end
 
