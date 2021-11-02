@@ -19,7 +19,7 @@ module Support
 
     def update
       if allocation_uplift.update(update_allocation_uplift_params)
-        redirect_to support_allocation_path(allocation_uplift.allocation)
+        redirect_to support_allocation_path(allocation_uplift.allocation), flash: { success: "Allocation Uplift was successfully updated" }
       else
         render :edit
       end

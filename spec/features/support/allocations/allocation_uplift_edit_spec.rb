@@ -18,6 +18,7 @@ feature "Edit an Allocation Uplift" do
     then_i_can_edit_their_allocation_uplift_amount
     and_i_click_continue
     and_i_get_redirected_to_allocation_show_page
+    with_a_success_message
     and_the_allocation_has_updated
   end
 
@@ -41,6 +42,10 @@ private
 
   def and_i_get_redirected_to_allocation_show_page
     expect(allocations_show_page).to be_displayed(id: allocation.id)
+  end
+
+  def with_a_success_message
+    expect(allocations_show_page).to have_content "Allocation Uplift was successfully updated"
   end
 
   def and_the_allocation_has_updated
