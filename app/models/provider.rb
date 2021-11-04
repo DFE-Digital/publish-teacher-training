@@ -51,6 +51,10 @@ class Provider < ApplicationRecord
            foreign_key: :accredited_body_code,
            primary_key: :provider_code,
            inverse_of: :accrediting_provider
+
+  # We have a has_many relationship rather than has_one as
+  # there are lead_schools that have PE courses ratified by more than
+  # one Accredited Body
   has_many :allocations
 
   # the accredited_providers that this provider is a training_provider for
