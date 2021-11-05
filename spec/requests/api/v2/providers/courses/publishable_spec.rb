@@ -38,7 +38,7 @@ describe "Publishable API v2", type: :request do
 
     context "unpublished course with draft enrichment" do
       let(:course) do
-        create(:course, :primary, :unpublished, :draft_enrichment, :with_gcse_equivalency)
+        create(:course, :primary, :unpublished, :draft_enrichment, :with_gcse_equivalency, :self_accredited)
       end
 
       it "returns ok" do
@@ -64,6 +64,7 @@ describe "Publishable API v2", type: :request do
             "Enter details about the salary for this course",
             "Enter GCSE requirements",
             "Select at least one location for this course",
+            "The Accredited Body  does not exist in this cycle",
           ])
         end
       end
@@ -81,13 +82,14 @@ describe "Publishable API v2", type: :request do
           it { is_expected.to have_http_status(:unprocessable_entity) }
 
           it "has validation error details" do
-            expect(json_data.count).to eq 5
+            expect(json_data.count).to eq 6
             expect(json_data.map { |error| error["detail"] }).to match_array([
               "Enter details about this course",
               "Enter a course length",
               "Enter details about the fee for UK and EU students",
               "Enter GCSE requirements",
               "Enter details about school placements",
+              "The Accredited Body  does not exist in this cycle",
             ])
           end
 
@@ -97,7 +99,7 @@ describe "Publishable API v2", type: :request do
               /data/attributes/how_school_placements_work
               /data/attributes/course_length
               /data/attributes/fee_uk_eu
-            ) << nil)
+            ).push(nil, nil))
           end
         end
       end

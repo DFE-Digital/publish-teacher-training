@@ -4,6 +4,7 @@ describe "Publish API v2", type: :request do
   let(:user)         { create(:user) }
   let(:organisation) { create(:organisation, users: [user]) }
   let(:provider)       { create :provider, organisations: [organisation] }
+  let(:accredited_body) { create :provider, :accredited_body }
   let(:payload) { { email: user.email } }
   let(:credentials) { encode_to_credentials(payload) }
 
@@ -21,6 +22,7 @@ describe "Publish API v2", type: :request do
       create(:course,
              :with_gcse_equivalency,
              provider: provider,
+             accredited_body_code: accredited_body.provider_code,
              site_statuses: [site_status],
              enrichments: [enrichment],
              subjects: [dfe_subject])
@@ -57,6 +59,7 @@ describe "Publish API v2", type: :request do
                :with_gcse_equivalency,
                level: "primary",
                provider: provider,
+               accredited_body_code: accredited_body.provider_code,
                site_statuses: [site_status],
                enrichments: [enrichment],
                subjects: dfe_subjects,
@@ -140,6 +143,7 @@ describe "Publish API v2", type: :request do
             "Enter a course length",
             "Enter details about the salary for this course",
             "Enter GCSE requirements",
+            "The Accredited Body  does not exist in this cycle",
           ])
         end
       end
@@ -164,6 +168,7 @@ describe "Publish API v2", type: :request do
               "Enter a course length",
               "Enter details about the fee for UK and EU students",
               "Enter GCSE requirements",
+              "The Accredited Body  does not exist in this cycle",
             ])
           end
 
@@ -173,6 +178,7 @@ describe "Publish API v2", type: :request do
               "/data/attributes/how_school_placements_work",
               "/data/attributes/course_length",
               "/data/attributes/fee_uk_eu",
+              nil,
               nil,
             ])
           end
@@ -199,6 +205,7 @@ describe "Publish API v2", type: :request do
               "Enter a course length",
               "Enter details about the salary for this course",
               "Enter GCSE requirements",
+              "The Accredited Body  does not exist in this cycle",
             ])
           end
         end

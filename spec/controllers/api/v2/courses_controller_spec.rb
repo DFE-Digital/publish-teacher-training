@@ -4,13 +4,15 @@ describe API::V2::CoursesController, type: :controller do
   let(:site_status) { build(:site_status, :new) }
   let(:dfe_subject) { find_or_create(:primary_subject, :primary) }
   let(:provider) { create(:provider) }
+  let(:accredited_body) { create(:provider, :accredited_body) }
   let(:course) do
     create(:course,
            :with_gcse_equivalency,
            site_statuses: [site_status],
            enrichments: [enrichment],
            subjects: [dfe_subject],
-           provider: provider)
+           provider: provider,
+           accredited_body_code: accredited_body.provider_code)
   end
   let(:email) { "manage_courses@digital.education.gov.uk" }
   let(:sign_in_user_id) { "manage_courses_api" }
