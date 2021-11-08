@@ -16,7 +16,7 @@ class Allocation < ApplicationRecord
 
   enum request_type: { initial: 0, repeat: 1, declined: 2 }
 
-  scope :current_allocations, -> { RecruitmentCycle.find_by(year: Settings.allocation_cycle_year).allocations }
+  scope :current_allocations, -> { where(recruitment_cycle: RecruitmentCycle.find_by(year: Settings.allocation_cycle_year)) }
 
   def previous
     Allocation.find_by(
