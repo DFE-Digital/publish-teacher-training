@@ -15,11 +15,7 @@ module Support
     end
 
     def filtered_providers_with_allocations
-      Support::Providers::Filter.call(providers: find_providers_with_allocations, filters: filters)
-    end
-
-    def find_providers_with_allocations
-      Provider.where(id: Allocation.current_allocations.select(:provider_id)).order(:provider_name)
+      Support::Providers::Filter.call(providers: Provider.with_allocations_for_current_cycle_year, filters: filters)
     end
 
     def filters

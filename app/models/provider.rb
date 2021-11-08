@@ -107,6 +107,8 @@ class Provider < ApplicationRecord
 
   scope :in_current_cycle, -> { where(recruitment_cycle: RecruitmentCycle.current_recruitment_cycle) }
 
+  scope :with_allocations_for_current_cycle_year, -> { joins(:allocations).merge(Allocation.current_allocations).order(:provider_name) }
+
   scope :not_geocoded, -> { where(latitude: nil, longitude: nil).or where(region_code: nil) }
 
   serialize :accrediting_provider_enrichments, AccreditingProviderEnrichment::ArraySerializer
