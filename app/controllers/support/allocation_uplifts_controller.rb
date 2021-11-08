@@ -10,6 +10,7 @@ module Support
 
     def create
       @allocation_uplift = AllocationUplift.new(create_allocation_uplift_params)
+      @allocation_uplift.allocation = allocation
       if @allocation_uplift.save
         redirect_to support_allocation_path(@allocation_uplift.allocation), flash: { success: "Allocation Uplift was successfully created" }
       else
@@ -28,7 +29,7 @@ module Support
   private
 
     def allocation_uplift
-      @allocation_uplift ||= AllocationUplift.find(params[:id])
+      @allocation_uplift ||= allocation.allocation_uplift
     end
 
     def allocation

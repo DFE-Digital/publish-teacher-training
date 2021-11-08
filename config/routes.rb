@@ -29,9 +29,9 @@ Rails.application.routes.draw do
     end
     resources :users, only: %i[index show new create]
 
-    resources :allocations, only: %i[index show]
-
-    resources :allocation_uplifts, only: %i[edit update create new]
+    resources :allocations, only: %i[index show] do
+      resources :uplifts, only: %i[edit update create new], controller: :allocation_uplifts
+    end
 
     resources :data_exports, path: "data-exports", only: [:index] do
       member do

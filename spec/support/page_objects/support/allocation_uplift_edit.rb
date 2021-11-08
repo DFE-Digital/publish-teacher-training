@@ -3,7 +3,7 @@
 module PageObjects
   module Support
     class AllocationUpliftEdit < PageObjects::Base
-      set_url "/support/allocation_uplifts/{uplift_id}/edit?allocation_id={allocation_id}"
+      set_url "/support/allocations/{allocation_id}/uplifts/{uplift_id}/edit"
 
       element :allocation_uplift_amount, "#allocation-uplift-uplifts-field"
       element :submit, ".govuk-button"

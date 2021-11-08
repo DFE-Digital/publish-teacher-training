@@ -16,7 +16,6 @@
       <%= f.govuk_error_summary %>
 
       <%= f.govuk_text_field :uplifts, label: { text: "Allocation Uplift", size: "s" }, width: 20 %>
-      <%= f.hidden_field(:allocation_id, value: @allocation_uplift.allocation.id) %>
       <%= f.govuk_submit %>
     <% end %>
 
