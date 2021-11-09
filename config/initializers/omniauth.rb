@@ -37,6 +37,55 @@ else
     client_options: client_options,
   }
 
+module OmniAuth
+  module Strategies
+    class OpenIDConnect
+      def authorize_uri
+        client.redirect_uri = redirect_uri
+        opts = {
+          response_type: options.response_type,
+          scope: options.scope,
+          state: new_state,
+          nonce: (new_nonce if options.send_nonce),
+          hd: options.hd,
+          prompt: :consent,
+        }
+        client.authorization_uri(opts.reject { |_, v| v.nil? })
+      end
+
+      def callback_phase
+        error = request.params["error_reason"] || request.params["error"]
+        if error == "sessionexpired"
+          redirect("/sign-in")
+        elsif error
+          raise CallbackError.new(request.params["error"], request.params["error_description"] || request.params["error_reason"], request.params["error_uri"])
+        elsif request.params["state"].to_s.empty? || request.params["state"] != stored_state
+          # Monkey patch: Ensure a basic 401 rack response with no body or header isn't served
+          # return Rack::Response.new(['401 Unauthorized'], 401).finish
+          redirect("/auth/failure")
+        elsif !request.params["code"]
+          fail!(:missing_code, OmniAuth::OpenIDConnect::MissingCodeError.new(request.params["error"]))
+        else
+          options.issuer = issuer if options.issuer.blank?
+          discover! if options.discovery
+          client.redirect_uri = redirect_uri
+          client.authorization_code = authorization_code
+          access_token
+          super
+        end
+      rescue CallbackError => e
+        fail!(:invalid_credentials, e)
+      rescue ::Timeout::Error, ::Errno::ETIMEDOUT => e
+        fail!(:timeout, e)
+      rescue ::SocketError => e
+        fail!(:failed_to_connect, e)
+      rescue Rack::OAuth2::Client::Error => e
+        Rails.logger.error "Auth failure, is Settings.dfe_signin.secret correct? #{e}"
+        raise
+      end
+    end
+  end
+end
   Rails.application.config.middleware.use OmniAuth::Strategies::OpenIDConnect, options
 
 end
