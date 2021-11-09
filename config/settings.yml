@@ -3,7 +3,7 @@ environment:
 support_email: becomingateacher@digital.education.gov.uk
 
 # URL of this app for the callback after sigining in
-base_url: https://localhost:3001
+base_url: http://ttapi:3001
 
 dfe_signin:
   # Our service name

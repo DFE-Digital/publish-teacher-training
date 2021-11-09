@@ -358,9 +358,6 @@ GEM
     omniauth (1.9.1)
       hashie (>= 3.4.6)
       rack (>= 1.6.2, < 3)
-    omniauth-rails_csrf_protection (0.1.2)
-      actionpack (>= 4.2)
-      omniauth (>= 1.3.1)
     omniauth_openid_connect (0.3.5)
       addressable (~> 2.5)
       omniauth (~> 1.9)
@@ -686,7 +683,6 @@ DEPENDENCIES
   listen (>= 3.0.5, < 3.8)
   oj
   omniauth (~> 1.9)
-  omniauth-rails_csrf_protection
   omniauth_openid_connect (~> 0.3)
   open_api-rswag-api
   open_api-rswag-specs

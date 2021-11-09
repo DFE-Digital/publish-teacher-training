@@ -23,7 +23,7 @@ Rails.application.routes.draw do
   get "/sign-out", to: "sessions#sign_out"
 
   namespace :publish_interface, path: "publish" do
-    resources :providers, path: "organisations", param: :provider_code, only: [:index, :show] do
+    resources :providers, path: "organisations", param: :code, only: [:index, :show] do
       get "/users", on: :member, to: "providers/users#index"
 
       resources :recruitment_cycles, param: :year, constraints: { year: /#{Settings.current_cycle}|#{Settings.current_cycle + 1}/ }, path: "", only: :show do

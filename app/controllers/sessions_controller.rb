@@ -1,5 +1,4 @@
 class SessionsController < ApplicationController
-  skip_before_action :authenticate
 
   def sign_out
     if AuthenticationService.persona?
@@ -15,11 +14,8 @@ class SessionsController < ApplicationController
     if current_user
       UserSessions::Update.call(user: current_user, user_session: user_session)
 
-      if current_user.admin?
-        redirect_to support_providers_path
-      else
-        redirect_to publish_interface_providers_path
-      end
+      target_path = session.delete('post_dfe_sign_in_path')
+      redirect_to target_path
     else
       UserSession.end_session!(session)
 

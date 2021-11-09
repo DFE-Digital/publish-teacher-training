@@ -15,7 +15,7 @@ module PublishInterface
     end
 
     def organisations_breadcrumb
-      @has_multiple_providers ? { "Organisations" => providers_path } : {}
+      @has_multiple_providers ? { "Organisations" => publish_interface_providers_path } : {}
     end
 
     def provider_breadcrumb

@@ -2,7 +2,6 @@ class ApplicationController < ActionController::Base
   include EmitsRequestEvents
   include Pundit
 
-  before_action :authenticate
   before_action :enforce_basic_auth, if: -> { BasicAuthenticable.required? }
 
   default_form_builder GOVUKDesignSystemFormBuilder::FormBuilder
@@ -26,9 +25,5 @@ private
 
   def authenticated?
     current_user.present?
-  end
-
-  def authenticate
-    redirect_to sign_in_path unless authenticated?
   end
 end

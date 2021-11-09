@@ -1,5 +1,5 @@
 module PublishInterface
-  class ProvidersController < ApplicationController
+  class ProvidersController < PublishInterfaceController
     before_action :build_recruitment_cycle
     before_action :build_provider, except: %i[index show]
 
@@ -47,7 +47,7 @@ module PublishInterface
     def build_provider
       @provider = Provider
         .where(recruitment_cycle: @recruitment_cycle)
-        .where(params[:provider_code])
+        .where(provider_code: params[:provider_code])
         .first
     end
 

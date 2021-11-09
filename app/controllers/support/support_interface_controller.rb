@@ -1,11 +1,11 @@
 module Support
   class SupportInterfaceController < ApplicationController
-    before_action :authenticate_support_user
+    before_action :authenticate
 
   private
 
-    def authenticate_support_user
-      redirect_to sign_in_path if !current_user.admin?
+    def authenticate
+      redirect_to sign_in_path if !current_user&.admin?
     end
   end
 end
