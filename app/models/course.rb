@@ -872,6 +872,8 @@ private
   end
 
   def accredited_body_exists_in_current_cycle
+    return unless accredited_body_code
+
     errors.add(:base, "The Accredited Body #{accredited_body_code} does not exist in this cycle") unless RecruitmentCycle.current.providers.find_by(provider_code: accredited_body_code)
   end
 end
