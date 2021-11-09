@@ -143,7 +143,6 @@ describe "Publish API v2", type: :request do
             "Enter a course length",
             "Enter details about the salary for this course",
             "Enter GCSE requirements",
-            "The Accredited Body  does not exist in this cycle",
           ])
         end
       end
@@ -168,7 +167,6 @@ describe "Publish API v2", type: :request do
               "Enter a course length",
               "Enter details about the fee for UK and EU students",
               "Enter GCSE requirements",
-              "The Accredited Body  does not exist in this cycle",
             ])
           end
 
@@ -178,7 +176,6 @@ describe "Publish API v2", type: :request do
               "/data/attributes/how_school_placements_work",
               "/data/attributes/course_length",
               "/data/attributes/fee_uk_eu",
-              nil,
               nil,
             ])
           end
@@ -205,7 +202,6 @@ describe "Publish API v2", type: :request do
               "Enter a course length",
               "Enter details about the salary for this course",
               "Enter GCSE requirements",
-              "The Accredited Body  does not exist in this cycle",
             ])
           end
         end
@@ -229,6 +225,32 @@ describe "Publish API v2", type: :request do
                                   RuntimeError,
                                   "Site status invalid on course #{provider.provider_code}/#{course.course_code}: Vac status (full_time_vacancies) must be consistent with course study mode part_time",
                                 ))
+        end
+      end
+
+      context "accredited body does not exist in current recruitment cycle" do
+        let(:accredited_body) { create(:provider, :accredited_body, :discarded) }
+        let(:enrichment) { build(:course_enrichment, :initial_draft) }
+        let(:site_status) { build(:site_status, :findable) }
+        let(:dfe_subjects) { [find_or_create(:primary_subject, :primary_with_mathematics)] }
+        let!(:course) do
+          create(:course,
+                 :with_gcse_equivalency,
+                 level: "primary",
+                 provider: provider,
+                 accredited_body_code: accredited_body.provider_code,
+                 site_statuses: [site_status],
+                 enrichments: [enrichment],
+                 subjects: dfe_subjects,
+                 age: 17.days.ago)
+        end
+
+        it { is_expected.to have_http_status(:unprocessable_entity) }
+
+        it "has validation errors" do
+          expect(json_data.map { |error| error["detail"] }).to match_array([
+            "The Accredited Body #{accredited_body.provider_code} does not exist in this cycle",
+          ])
         end
       end
     end
