@@ -3,14 +3,8 @@
 require "rails_helper"
 
 feature "View allocations" do
-  let(:user) { create(:user, :admin) }
-  let(:provider) { create(:provider) }
-  let(:provider2) { create(:provider) }
-  let(:allocation) { create(:allocation, provider: provider, number_of_places: 5) }
-  let(:allocation2) { create(:allocation, provider: provider2, number_of_places: 3) }
-
   before do
-    given_i_am_authenticated(user: user)
+    given_i_am_authenticated(user: create(:user, :admin))
     and_there_are_providers_with_allocations_and_uplifts
     when_i_visit_the_allocations_index_page
   end
@@ -20,8 +14,10 @@ feature "View allocations" do
   end
 
   def and_there_are_providers_with_allocations_and_uplifts
-    allocation
-    allocation2
+    @provider = create(:provider)
+    @provider2 = create(:provider)
+    @allocation = create(:allocation, provider: @provider, number_of_places: 5)
+    @allocation2 = create(:allocation, provider: @provider2, number_of_places: 3)
   end
 
   def when_i_visit_the_allocations_index_page
@@ -30,6 +26,6 @@ feature "View allocations" do
 
   def then_i_see_the_providers_and_their_allocations
     expect(allocations_index_page.providers.size).to eq(2)
-    expect(allocations_index_page).to have_content provider.provider_name
+    expect(allocations_index_page).to have_content @provider.provider_name
   end
 end
