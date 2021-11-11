@@ -38,7 +38,7 @@ describe "Publishable API v2", type: :request do
 
     context "unpublished course with draft enrichment" do
       let(:course) do
-        create(:course, :primary, :unpublished, :draft_enrichment, :with_gcse_equivalency)
+        create(:course, :primary, :unpublished, :draft_enrichment, :with_gcse_equivalency, :self_accredited)
       end
 
       it "returns ok" do

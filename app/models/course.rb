@@ -304,6 +304,7 @@ class Course < ApplicationRecord
   validate :validate_subject_count
   validate :validate_subject_consistency
   validate :validate_custom_age_range, on: %i[create new], if: -> { age_range_in_years.present? }
+  validate :accredited_body_exists_in_current_cycle, on: :publish, unless: -> { self_accredited? }
   validates_with UniqueCourseValidator, on: :new
 
   validates :name, :profpost_flag, :program_type, :qualification, :start_date, :study_mode, presence: true
@@ -868,5 +869,11 @@ private
 
   def self_accredited_cannot_be_salary_funded
     errors.add(:program_type, "Salary is not valid for a self accredited course") if self_accredited? && funding_type == "salary"
+  end
+
+  def accredited_body_exists_in_current_cycle
+    return unless accredited_body_code
+
+    errors.add(:base, "The Accredited Body #{accredited_body_code} does not exist in this cycle") unless RecruitmentCycle.current.providers.find_by(provider_code: accredited_body_code)
   end
 end
