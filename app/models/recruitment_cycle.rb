@@ -15,11 +15,6 @@ class RecruitmentCycle < ApplicationRecord
     end
     alias_method :current, :current_recruitment_cycle
 
-    def current_allocation_recruitment_cycle
-      find_by(year: Settings.allocation_cycle_year)
-    end
-    alias_method :current_allocation, :current_allocation_recruitment_cycle
-
     def next_recruitment_cycle
       current_recruitment_cycle.next
     end
