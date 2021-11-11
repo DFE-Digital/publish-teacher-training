@@ -21,6 +21,7 @@ en:
           show: "User overview"
         allocations:
           index: "Allocations"
+          edit: "Edit Allocation"
         allocation_uplifts:
           edit: "Edit Allocation Uplift"
         data_exports:

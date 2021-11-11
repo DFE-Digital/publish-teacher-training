@@ -1,0 +1,19 @@
+<%= render PageTitle::View.new(title: "support.allocations.edit") %>
+
+<h1 class="govuk-heading-l">Edit Allocation</h1>
+
+<%= render "support/menu" %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds-from-desktop">
+    <%= form_with model: [:support, @allocation], local: true do |f| %>
+        
+    <%= f.govuk_error_summary %>
+
+    <%= f.govuk_text_field :confirmed_number_of_places, label: { text: "What are the confirmed number of places", size: "s" }, width: 20 %>
+    <%= f.govuk_submit %>
+    <% end %>
+
+    <%= govuk_link_to(t("cancel"), support_provider_path) %>
+  </div>
+</div>

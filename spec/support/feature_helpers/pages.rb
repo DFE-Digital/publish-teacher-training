@@ -50,6 +50,10 @@ module FeatureHelpers
       @allocation_uplift_edit_page ||= PageObjects::Support::AllocationUpliftEdit.new
     end
 
+    def allocation_edit_page
+      @allocation_edit_page ||= PageObjects::Support::AllocationEdit.new
+    end
+
     def allocation_uplift_new_page
       @allocation_uplift_new_page ||= PageObjects::Support::AllocationUpliftNew.new
     end

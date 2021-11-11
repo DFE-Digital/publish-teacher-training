@@ -29,7 +29,7 @@ Rails.application.routes.draw do
     end
     resources :users, only: %i[index show new create]
 
-    resources :allocations, only: %i[index show] do
+    resources :allocations, only: %i[index show edit update] do
       resources :uplifts, only: %i[edit update create new], controller: :allocation_uplifts
     end
 

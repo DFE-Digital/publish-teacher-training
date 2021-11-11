@@ -23,7 +23,7 @@
   component.row do |row|
     row.key { "Allocations" }
     row.value { @allocation.confirmed_number_of_places.to_s }
-    row.action(href: nil)
+    row.action(text: "Change", href: edit_support_allocation_path(id: @allocation.id))
   end
 
   component.row do |row|
