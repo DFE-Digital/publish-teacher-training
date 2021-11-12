@@ -38,6 +38,22 @@ module FeatureHelpers
       @user_new_page ||= PageObjects::Support::UserNew.new
     end
 
+    def allocations_index_page
+      @allocations_index_page ||= PageObjects::Support::AllocationsIndex.new
+    end
+
+    def allocations_show_page
+      @allocations_show_page ||= PageObjects::Support::AllocationsShow.new
+    end
+
+    def allocation_uplift_edit_page
+      @allocation_uplift_edit_page ||= PageObjects::Support::AllocationUpliftEdit.new
+    end
+
+    def allocation_uplift_new_page
+      @allocation_uplift_new_page ||= PageObjects::Support::AllocationUpliftNew.new
+    end
+
     def sign_in_page
       @sign_in_page ||= PageObjects::SignIn.new
     end

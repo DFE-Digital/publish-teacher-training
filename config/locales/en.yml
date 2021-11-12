@@ -19,6 +19,10 @@ en:
         users:
           index: "Users"
           show: "User overview"
+        allocations:
+          index: "Allocations"
+        allocation_uplifts:
+          edit: "Edit Allocation Uplift"
         data_exports:
           index: "Data exports"
     filter:

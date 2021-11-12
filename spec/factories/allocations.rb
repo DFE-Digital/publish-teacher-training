@@ -3,7 +3,7 @@ FactoryBot.define do
     association :accredited_body, factory: %i(provider accredited_body)
     association :provider
     number_of_places { 0 }
-    recruitment_cycle { RecruitmentCycle.current }
+    association :recruitment_cycle, :current_allocation, strategy: :find_or_create
 
     provider_code { provider.provider_code }
     accredited_body_code { accredited_body.provider_code }
