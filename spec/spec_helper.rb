@@ -7,9 +7,6 @@ require "audited-rspec"
 require "simplecov"
 
 SimpleCov.minimum_coverage 75
-SimpleCov.start "rails" do
-  add_filter "/mcb/"
-end
 SimpleCov.start do
   add_filter "spec"
 end
