@@ -1,12 +1,7 @@
-# Replace stdout with a StringIO for a given block of code, and return it.
-#
-# Utility function to help run 'mcb' commands in our specs, get the output and
-# then test what was output. See examples in lib/mcb/commands tests. This
-# approach is a slight modification of the 'capture' method that was available
-# in Rails <=4. That implementation used a pipe and a separate thread to read
-# from that pipe and write to a StringIO object. Unfortunately that
-# implementation isn't threads-safe but this one should be.
+# NOTE: This can be removed
+# Retaining as the tests becomes very noise without this.
 
+# Replace stdout with a StringIO for a given block of code, and return it.
 def with_stubbed_stdout(stdin: nil, stderr: nil, &block)
   # if the parameters are wrong for a cli command then the error is written to
   # stderr which is lost when we have it mocked out. This env gives us a way to
