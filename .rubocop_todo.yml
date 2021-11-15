@@ -18,7 +18,6 @@ Lint/AmbiguousBlockAssociation:
 Lint/ConstantDefinitionInBlock:
   Exclude:
     - "lib/tasks/code_climate.rake"
-    - "spec/mcb_helper.rb"
     - "spec/validators/email_validator_spec.rb"
     - "spec/validators/phone_validator_spec.rb"
     - "spec/validators/reference_number_format_validator_spec.rb"
@@ -30,7 +29,6 @@ Lint/DuplicateBranch:
   Exclude:
     - "app/services/courses/validate_custom_age_range_service.rb"
     - "docs/lib/govuk_tech_docs/open_api/extension.rb"
-    - "lib/mcb.rb"
 
 # Offense count: 7
 # Configuration parameters: AllowComments, AllowEmptyLambdas.
@@ -55,7 +53,6 @@ Lint/MissingSuper:
     - "app/components/paginator/view.rb"
     - "app/components/providers/filters/view.rb"
     - "app/components/tab_navigation/view.rb"
-    - "lib/mcb/config.rb"
 
 # Offense count: 1
 Lint/SelfAssignment:
@@ -67,7 +64,6 @@ Naming/AccessorMethodName:
   Exclude:
     - "app/controllers/api/v2/providers_controller.rb"
     - "app/models/course.rb"
-    - "lib/mcb/azure.rb"
 
 # Offense count: 1
 # Configuration parameters: ExpectMatchingDefinition, CheckDefinitionPathHierarchy, Regex, IgnoreExecutableScripts, AllowedAcronyms.
@@ -277,7 +273,6 @@ RSpec/SingleArgumentMessageChain:
 RSpec/StubbedMock:
   Exclude:
     - "spec/controllers/api/public/v1/providers/courses_controller_spec.rb"
-    - "spec/lib/mcb/editor/provider_editor_spec.rb"
     - "spec/requests/api/v3/courses/index_spec.rb"
     - "spec/services/allocation_reporting_service_spec.rb"
     - "spec/services/course_reporting_service_spec.rb"
@@ -332,10 +327,6 @@ Rails/Delegate:
 Rails/EnvironmentVariableAccess:
   Exclude:
     - "app/controllers/heartbeat_controller.rb"
-    - "lib/mcb.rb"
-    - "lib/mcb/azure.rb"
-    - "lib/mcb/commands/az/apps/pg_dump.rb"
-    - "lib/mcb/commands/db.rb"
 
 # Offense count: 2
 # Configuration parameters: Include.
@@ -387,7 +378,6 @@ Style/CaseLikeIf:
   Exclude:
     - "app/services/courses/generate_course_name_service.rb"
     - "docs/lib/govuk_tech_docs/open_api/renderer.rb"
-    - "lib/mcb/editor/provider_editor.rb"
     - "spec/factories/courses.rb"
 
 # Offense count: 17
@@ -396,14 +386,6 @@ Style/ColonMethodCall:
   Exclude:
     - "app/models/course.rb"
     - "config/initializers/geokit_config.rb"
-    - "lib/mcb/azure.rb"
-    - "lib/mcb/cli/course_cli.rb"
-    - "lib/mcb/commands/apiv1/courses/find.rb"
-    - "lib/mcb/commands/apiv1/courses/list.rb"
-    - "lib/mcb/commands/apiv1/providers/find.rb"
-    - "lib/mcb/commands/apiv1/providers/list.rb"
-    - "lib/mcb/commands/az/apps/pg_dump.rb"
-    - "lib/mcb/commands/db.rb"
 
 # Offense count: 10
 # Cop supports --auto-correct.
@@ -433,14 +415,6 @@ Style/EmptyLiteral:
 Style/Encoding:
   Exclude:
     - "app/controllers/api/v2/courses_controller.rb"
-    - "lib/mcb/commands/courses/show.rb"
-
-# Offense count: 2
-# Cop supports --auto-correct.
-Style/ExplicitBlockArgument:
-  Exclude:
-    - "lib/mcb/editor/base.rb"
-    - "spec/lib/mcb/cli/base_cli_spec.rb"
 
 # Offense count: 10
 # Cop supports --auto-correct.
@@ -453,7 +427,6 @@ Style/FormatString:
     - "app/serializers/site_serializer.rb"
     - "app/services/rollover_service.rb"
     - "spec/factories/providers.rb"
-    - "spec/lib/mcb/commands/apiv1/providers/find_spec.rb"
     - "spec/serializers/provider_serializer_spec.rb"
     - "spec/serializers/site_serializer_spec.rb"
 
@@ -464,8 +437,6 @@ Style/GlobalStdStream:
     - "app/services/rollover_service.rb"
     - "config/environments/development.rb"
     - "config/initializers/semantic_logger.rb"
-    - "lib/mcb.rb"
-    - "spec/mcb_helper.rb"
     - "spec/support/with_stubbed_stdout.rb"
 
 # Offense count: 51
@@ -482,7 +453,6 @@ Style/HashAsLastArrayItem:
     - "app/controllers/api/v2/courses_controller.rb"
     - "app/controllers/api/v3/providers_controller.rb"
     - "app/models/course_enrichment.rb"
-    - "lib/mcb/render.rb"
     - "spec/requests/api/v2/build_new_course_spec.rb"
 
 # Offense count: 1
@@ -504,7 +474,6 @@ Style/KeywordParametersOrder:
   Exclude:
     - "app/services/subjects/financial_incentive_creator_service.rb"
     - "app/services/subjects/financial_incentive_set_subject_knowledge_enhancement_course_available_service.rb"
-    - "lib/mcb.rb"
 
 # Offense count: 35
 # Cop supports --auto-correct.
@@ -570,14 +539,6 @@ Style/NilComparison:
   Exclude:
     - "app/models/course.rb"
     - "app/services/providers/copy_to_recruitment_cycle_service.rb"
-    - "lib/mcb/commands/users/revoke.rb"
-
-# Offense count: 1
-# Cop supports --auto-correct.
-# Configuration parameters: IncludeSemanticChanges.
-Style/NonNilCheck:
-  Exclude:
-    - "lib/mcb/editor/grant_access_wizard.rb"
 
 # Offense count: 30
 # Cop supports --auto-correct.
@@ -598,7 +559,6 @@ Style/PreferredHashMethods:
 Style/Proc:
   Exclude:
     - "app/models/site_status.rb"
-    - "lib/mcb.rb"
 
 # Offense count: 5
 # Cop supports --auto-correct.
@@ -610,7 +570,6 @@ Style/RaiseArgs:
     - "app/controllers/concerns/validate_jsonapi_type.rb"
     - "app/controllers/error_controller.rb"
     - "app/models/course.rb"
-    - "lib/mcb/commands/providers/edit.rb"
 
 # Offense count: 2
 # Cop supports --auto-correct.
@@ -626,22 +585,12 @@ Style/RedundantBegin:
   Exclude:
     - "lib/tasks/migrate_swallowing_concurrent_migration_exceptions.rake"
 
-# Offense count: 4
-# Cop supports --auto-correct.
-Style/RedundantCapitalW:
-  Exclude:
-    - "spec/bin/mcb_spec.rb"
-    - "spec/lib/mcb/commands/apiv1/courses/list_spec.rb"
-    - "spec/lib/mcb/commands/apiv1/providers/list_spec.rb"
-
 # Offense count: 6
 # Cop supports --auto-correct.
 Style/RedundantException:
   Exclude:
     - "app/controllers/api/v2/courses_controller.rb"
     - "app/models/course.rb"
-    - "lib/mcb.rb"
-    - "lib/mcb/commands/providers/edit.rb"
 
 # Offense count: 1
 # Cop supports --auto-correct.
@@ -679,7 +628,6 @@ Style/RedundantSelf:
 # Cop supports --auto-correct.
 Style/RescueModifier:
   Exclude:
-    - "lib/mcb.rb"
     - "spec/requests/api/v2/session_spec.rb"
 
 # Offense count: 6
@@ -715,12 +663,6 @@ Style/SingleArgumentDig:
     - "spec/requests/api/v2/providers/providers_show_spec.rb"
     - "spec/requests/api/v2/providers/update_accrediting_providers_spec.rb"
     - "spec/requests/api/v3/courses/index_spec.rb"
-
-# Offense count: 1
-# Cop supports --auto-correct.
-Style/SlicingWithRange:
-  Exclude:
-    - "lib/mcb/commands/courses/edit.rb"
 
 # Offense count: 1
 # Cop supports --auto-correct.
@@ -792,12 +734,6 @@ Style/TrailingCommaInArrayLiteral:
 Style/TrailingCommaInHashLiteral:
   Exclude:
     - "spec/requests/api/v2/interrupt_page_acknowlegements_spec.rb"
-
-# Offense count: 1
-# Cop supports --auto-correct.
-Style/WhileUntilDo:
-  Exclude:
-    - "lib/mcb/cli/base_cli.rb"
 
 # Offense count: 1
 # Cop supports --auto-correct.
