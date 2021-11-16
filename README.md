@@ -173,16 +173,6 @@ or with curl:
 curl http://localhost:3001/api/v2/recruitment_cycles.json -H "Authorization: Bearer <encoded JWT token>"
 ```
 
-Encoding the payload can be done with an MCB command:
-
-```
-$ bin/mcb apiv2 token generate -S sekret --audience audience --issuer issuer --subject subject user@example.com
-eyJhbGciOiJIUzI1NiJ9.eyJkYXRhIjp7ImVtYWlsIjoidXNlckBsb2NhbF0ifSwiYXVkIjoiYXVkaWVuY2UiLCJleHAiOjE2MDU1NTg1OTQsImlhdCI6MTYwNTU1ODI5NCwiaXNzIjoiaXNzdWVyIiwic3ViIjoic3ViamVjdCJ9.81jNfeJGBLpgB64TD60oMc3UOkQtSjnQRRPUwEiQCXo
-```
-
-Where `-S secret` is the secret. In development, the secret should be set to
-`secret` by default on backend and frontend.
-
 ## Settings vs config vs Environment variables
 
 Refer to the [the config gem](https://github.com/railsconfig/config#accessing-the-settings-object) to understand the `file based settings` loading order.

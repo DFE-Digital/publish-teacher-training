@@ -47,8 +47,7 @@ looking at what jobs we have queued up.
 
 This check will fail if there are stale jobs in a queue that doesn't have a
 processor running. You can check which queues have jobs by starting the Rails
-console (you'll have to use `mcb` if you can't connect to the console, for
-example for Azure webapp services) and running:
+console and running:
 
 ```ruby
 stats = Sidekiq::Stats.new

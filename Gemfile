@@ -54,11 +54,6 @@ gem "jwt"
 # Formalise config settings with support for env vars
 gem "config"
 
-# For building interactive cmdline apps (mcb)
-gem "cri"
-gem "highline"
-gem "rainbow"
-
 # Build pretty tables in the terminal
 #   table_print handles ActiveRecord objects and collections really nicely
 gem "table_print"
