@@ -1,9 +1,11 @@
 class RolloverService
   include ServicePattern
 
-  def initialize(provider_codes:, force: false, logger: Rails.logger)
+  def initialize(provider_codes:, force: false, source_recruitment_cycle: RecruitmentCycle.current_recruitment_cycle, target_recruitment_cycle: RecruitmentCycle.next_recruitment_cycle, logger: Rails.logger)
     @provider_codes = provider_codes
     @force = force
+    @source_recruitment_cycle = source_recruitment_cycle
+    @target_recruitment_cycle = target_recruitment_cycle
     @logger = logger
   end
 
@@ -14,13 +16,14 @@ class RolloverService
       providers.each { |provider| rollover(provider, total_counts) }
     end
 
+    logger.info("Rollover from #{source_recruitment_cycle.year} to #{target_recruitment_cycle&.year}")
     logger.info("Rollover nothing") if total_counts.values.sum.zero?
     logger.info("Rollover done in #{'%.3f' % total_bm.real} seconds", total_counts)
   end
 
 private
 
-  attr_reader :provider_codes, :force, :logger
+  attr_reader :provider_codes, :force, :source_recruitment_cycle, :target_recruitment_cycle, :logger
 
   def rollover(provider, total_counts)
     logger.info("Rollover copying provider #{provider.provider_code}: ")
@@ -40,7 +43,7 @@ private
         )
 
         counts = copy_provider_to_recruitment_cycle.execute(
-          provider: provider, new_recruitment_cycle: new_recruitment_cycle, force: force,
+          provider: provider, new_recruitment_cycle: target_recruitment_cycle, force: force,
         )
       end
     end
@@ -53,16 +56,11 @@ private
     total_counts.merge!(counts) { |_, total, count| total + count }
   end
 
-  def new_recruitment_cycle
-    @new_recruitment_cycle ||= RecruitmentCycle.next_recruitment_cycle
-  end
-
   def providers
     @providers ||= if provider_codes.any?
-                     RecruitmentCycle.current_recruitment_cycle
-                                     .providers.where(provider_code: provider_codes.to_a.map(&:upcase))
+                     source_recruitment_cycle.providers.where(provider_code: provider_codes.to_a.map(&:upcase))
                    else
-                     RecruitmentCycle.current_recruitment_cycle.providers
+                     source_recruitment_cycle.providers
                    end
   end
 end

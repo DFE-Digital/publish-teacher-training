@@ -60,7 +60,7 @@ describe RolloverService do
         let(:past_provider) { create(:provider, recruitment_cycle: previous_cycle, provider_code: "AB1") }
         let(:future_provider) { create(:provider, recruitment_cycle: next_recruitment_cycle) }
 
-        it "doesn't pass other providers" do
+        it "doesn't pass past or future providers" do
           expect(copy_provider_to_recruitment_cycle_service).to receive(:execute).with(
             provider: provider, new_recruitment_cycle: next_recruitment_cycle, force: false,
           )
@@ -74,6 +74,26 @@ describe RolloverService do
           )
           described_class.call(provider_codes: ["AB1"], logger: logger_spy)
           expect(logger_spy).to have_received(:info).exactly(5).times
+        end
+
+        context "with source recruitment cycle as the previous recruitment cycle" do
+          context "and target recruitment cycle as next recruitment cycle" do
+            it "pass past providers ony" do
+              expect(copy_provider_to_recruitment_cycle_service).not_to receive(:execute).with(
+                provider: provider, new_recruitment_cycle: next_recruitment_cycle, force: false,
+              )
+
+              expect(copy_provider_to_recruitment_cycle_service).to receive(:execute).with(
+                provider: past_provider, new_recruitment_cycle: next_recruitment_cycle, force: false,
+              )
+
+              expect(copy_provider_to_recruitment_cycle_service).not_to receive(:execute).with(
+                provider: future_provider, new_recruitment_cycle: next_recruitment_cycle, force: false,
+              )
+              described_class.call(provider_codes: ["AB1"], source_recruitment_cycle: previous_cycle, target_recruitment_cycle: next_recruitment_cycle, logger: logger_spy)
+              expect(logger_spy).to have_received(:info).exactly(5).times
+            end
+          end
         end
       end
     end
