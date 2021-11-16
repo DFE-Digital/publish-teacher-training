@@ -5,36 +5,31 @@ module API
                               only: %i[create],
                               class: API::V2::DeserializableAccessRequest
 
-      before_action :build_access_request, only: :approve
+      before_action :authorize_access_request
 
       def approve
-        result = AccessRequestApprovalService.call(@access_request)
+        result = AccessRequestApprovalService.call(access_request(:requested))
 
         render status: :ok, json: { result: result }
       end
 
       def show
-        authorize AccessRequest
-        @access_request = AccessRequest.find(params[:id])
-
-        if @access_request.discarded?
+        if access_request.discarded?
           render jsonapi: nil, status: :not_found
         else
-          render jsonapi: @access_request, include: params[:include]
+          render jsonapi: access_request, include: params[:include]
         end
       end
 
       def index
-        authorize AccessRequest
         @access_requests = AccessRequest.requested.includes(:requester).by_request_date
 
         render jsonapi: @access_requests, include: params[:include]
       end
 
       def create
-        authorize AccessRequest
         @access_request = AccessRequest.new(access_request_params)
-        @access_request.add_additonal_attributes(@access_request.requester_email)
+        @access_request.add_additional_attributes(@access_request.requester_email)
 
         if @access_request.valid?
           render jsonapi: @access_request
@@ -44,15 +39,17 @@ module API
       end
 
       def destroy
-        authorize AccessRequest
-        @access_request = AccessRequest.find(params[:id])
-        @access_request.discard
+        access_request.discard
       end
 
     private
 
-      def build_access_request
-        @access_request = authorize AccessRequest.requested.find(params[:id])
+      def authorize_access_request
+        authorize AccessRequest
+      end
+
+      def access_request(scope = :all)
+        @access_request ||= AccessRequest.public_send(scope).find(params[:id])
       end
 
       def access_request_params
@@ -63,7 +60,7 @@ module API
           :organisation,
           :reason,
           :requester_email,
-        ).with_defaults requester_email: current_user.email
+        ).with_defaults(requester_email: current_user.email)
       end
     end
   end
