@@ -21,6 +21,14 @@ module Support
       end
     end
 
+    def destroy
+      if user.destroy
+        redirect_to support_users_path, flash: { success: "User successfully deleted" }
+      else
+        redirect_to support_users_path, flash: { success: "This user has already been deleted" }
+      end
+    end
+
   private
 
     def user_params

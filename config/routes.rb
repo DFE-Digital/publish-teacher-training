@@ -27,7 +27,7 @@ Rails.application.routes.draw do
       get :users, on: :member
       resources :courses, only: %i[index]
     end
-    resources :users, only: %i[index show new create]
+    resources :users, only: %i[index show new create destroy]
 
     resources :allocations, only: %i[index show] do
       resources :uplifts, only: %i[edit update create new], controller: :allocation_uplifts
