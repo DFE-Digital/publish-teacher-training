@@ -130,7 +130,6 @@ GEM
     crack (0.4.5)
       rexml
     crass (1.0.6)
-    cri (2.15.11)
     database_cleaner (2.0.1)
       database_cleaner-active_record (~> 2.0.0)
     database_cleaner-active_record (2.0.0)
@@ -280,7 +279,6 @@ GEM
       rubocop (< 2.0)
     hashdiff (1.0.1)
     hashie (4.1.0)
-    highline (2.0.3)
     httparty (0.20.0)
       mime-types (~> 3.0)
       multi_xml (>= 0.5.2)
@@ -658,7 +656,6 @@ DEPENDENCIES
   canonical-rails
   capybara (>= 2.15)
   config
-  cri
   custom_error_message!
   database_cleaner
   discard
@@ -675,7 +672,6 @@ DEPENDENCIES
   guard
   guard-rspec
   guard-rubocop
-  highline
   httparty
   jsonapi-rails!
   jsonapi-rb
@@ -704,7 +700,6 @@ DEPENDENCIES
   rails-controller-testing
   rails-erd
   rails_semantic_logger
-  rainbow
   rb-readline
   request_store
   rspec-its
