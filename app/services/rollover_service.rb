@@ -1,9 +1,10 @@
 class RolloverService
   include ServicePattern
 
-  def initialize(provider_codes:, force: false)
+  def initialize(provider_codes:, force: false, logger: Rails.logger)
     @provider_codes = provider_codes
     @force = force
+    @logger = logger
   end
 
   def call
@@ -13,19 +14,16 @@ class RolloverService
       providers.each { |provider| rollover(provider, total_counts) }
     end
 
-    puts "Rollover done: " \
-         "#{total_counts[:providers]} providers, " \
-         "#{total_counts[:sites]} sites, " \
-         "#{total_counts[:courses]} courses " \
-         "in %.3f seconds" % total_bm.real
+    logger.info("Rollover nothing") if total_counts.values.sum.zero?
+    logger.info("Rollover done in #{'%.3f' % total_bm.real} seconds", total_counts)
   end
 
 private
 
-  attr_reader :provider_codes, :force
+  attr_reader :provider_codes, :force, :logger
 
   def rollover(provider, total_counts)
-    print "Copying provider #{provider.provider_code}: "
+    logger.info("Rollover copying provider #{provider.provider_code}: ")
     counts = nil
 
     bm = Benchmark.measure do
@@ -38,7 +36,7 @@ private
         copy_provider_to_recruitment_cycle = Providers::CopyToRecruitmentCycleService.new(
           copy_course_to_provider_service: copy_courses_to_provider_service,
           copy_site_to_provider_service: Sites::CopyToProviderService.new,
-          logger: Logger.new(STDOUT),
+          logger: logger,
         )
 
         counts = copy_provider_to_recruitment_cycle.execute(
@@ -47,10 +45,10 @@ private
       end
     end
 
-    puts "provider #{counts[:providers].zero? ? 'skipped' : 'copied'}, " \
-         "#{counts[:sites]} sites copied, " \
-         "#{counts[:courses]} courses copied " \
-         "in %.3f seconds" % bm.real
+    logger.info("Rollover: provider #{counts[:providers].zero? ? 'skipped' : 'copied'}, " \
+                "#{counts[:sites]} sites copied, " \
+                "#{counts[:courses]} courses copied " \
+                "in %.3f seconds" % bm.real)
 
     total_counts.merge!(counts) { |_, total, count| total + count }
   end

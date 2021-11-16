@@ -1,6 +1,8 @@
 require "rails_helper"
 
 describe RolloverService do
+  let(:logger_spy) { spy }
+
   let!(:next_recruitment_cycle) { find_or_create :recruitment_cycle, :next }
 
   let(:copy_course_to_provider_service) { instance_double(Courses::CopyToProviderService) }
@@ -15,7 +17,7 @@ describe RolloverService do
     allow(Providers::CopyToRecruitmentCycleService).to receive(:new).with(
       copy_course_to_provider_service: copy_course_to_provider_service,
       copy_site_to_provider_service: instance_of(Sites::CopyToProviderService),
-      logger: instance_of(Logger),
+      logger: logger_spy,
     ).and_return(copy_provider_to_recruitment_cycle_service)
   end
 
@@ -41,16 +43,16 @@ describe RolloverService do
         expect(copy_provider_to_recruitment_cycle_service).to receive(:execute).with(
           provider: provider, new_recruitment_cycle: next_recruitment_cycle, force: false,
         )
-
-        no_output { described_class.call(provider_codes: ["AB1"]) }
+        expect(logger_spy).to have_received(:info).exactly(0).times
+        described_class.call(provider_codes: ["AB1"], logger: logger_spy)
       end
 
       it "doesn't pass other providers" do
         expect(copy_provider_to_recruitment_cycle_service).not_to receive(:execute).with(
           provider: provider_to_ignore, new_recruitment_cycle: next_recruitment_cycle, force: false,
         )
-
-        no_output { described_class.call(provider_codes: ["AB1"]) }
+        expect(logger_spy).to have_received(:info).exactly(0).times
+        described_class.call(provider_codes: ["AB1"], logger: logger_spy)
       end
 
       context "when providers exist in other cycles" do
@@ -70,8 +72,8 @@ describe RolloverService do
           expect(copy_provider_to_recruitment_cycle_service).not_to receive(:execute).with(
             provider: future_provider, new_recruitment_cycle: next_recruitment_cycle, force: false,
           )
-
-          no_output { described_class.call(provider_codes: ["AB1"]) }
+          described_class.call(provider_codes: ["AB1"], logger: logger_spy)
+          expect(logger_spy).to have_received(:info).exactly(5).times
         end
       end
     end
@@ -101,7 +103,8 @@ describe RolloverService do
           provider: other_provider, new_recruitment_cycle: next_recruitment_cycle, force: false,
         )
 
-        no_output { described_class.call(provider_codes: []) }
+        described_class.call(provider_codes: [], logger: logger_spy)
+        expect(logger_spy).to have_received(:info).exactly(7).times
       end
 
       context "when providers exist in other cycles" do
@@ -122,7 +125,8 @@ describe RolloverService do
             provider: future_provider, new_recruitment_cycle: next_recruitment_cycle, force: false,
           )
 
-          no_output { described_class.call(provider_codes: []) }
+          described_class.call(provider_codes: [], logger: logger_spy)
+          expect(logger_spy).to have_received(:info).exactly(7).times
         end
       end
 
@@ -131,16 +135,11 @@ describe RolloverService do
           expect(copy_provider_to_recruitment_cycle_service).to receive(:execute).with(
             provider: provider, new_recruitment_cycle: next_recruitment_cycle, force: true,
           )
+          described_class.call(provider_codes: [], logger: logger_spy, force: true)
 
-          no_output { described_class.call(provider_codes: [], force: true) }
+          expect(logger_spy).to have_received(:info).exactly(7).times
         end
       end
-    end
-
-    def no_output(&block)
-      stderr = nil
-      output = with_stubbed_stdout(stderr: stderr, &block)
-      [output, stderr]
     end
   end
 end
