@@ -1,8 +1,10 @@
 <table class="govuk-table">
   <thead class="govuk-table__head">
     <tr class="govuk-table__row">
-      <th scope="col" class="govuk-table__header govuk-!-width-one-half">Provider name</th>
+      <th scope="col" class="govuk-table__header govuk-!-width-one-quarter">Provider name</th>
       <th scope="col" class="govuk-table__header govuk-!-width-one-eighth">Provider code</th>
+      <th scope="col" class="govuk-table__header govuk-!-width-one-quarter">Accredited Body Name</th>
+      <th scope="col" class="govuk-table__header govuk-!-width-one-eighth">Accredited Body Code</th>
       <th scope="col" class="govuk-table__header govuk-!-width-one-eighth">Number of allocations</th>
       <th scope="col" class="govuk-table__header govuk-!-width-one-eighth">Number of Uplifts</th>
     </tr>
@@ -20,6 +22,18 @@
         <td class="govuk-table__cell">
           <span class="govuk-!-display-block govuk-!-margin-bottom-1">
             <%= provider.provider_code %>
+          </span>
+        </td>
+
+        <td class="govuk-table__cell">
+          <span class="govuk-!-display-block govuk-!-margin-bottom-1">
+            <%= provider.allocations.last.accredited_body.provider_name %>
+          </span>
+        </td>
+
+        <td class="govuk-table__cell">
+          <span class="govuk-!-display-block govuk-!-margin-bottom-1">
+            <%= provider.allocations.last.accredited_body.provider_code %>
           </span>
         </td>
 
