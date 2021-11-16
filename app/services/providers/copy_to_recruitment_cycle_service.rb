@@ -30,7 +30,7 @@ module Providers
           # Order is important here. Sites should be copied over before courses
           # so that courses can link up to the correct sites in the new provider.
           sites_count = copy_sites_to_new_provider(provider, rolled_over_provider)
-          courses_count = copy_courses_to_new_provider(provider, rolled_over_provider)
+          courses_count = copy_courses_to_new_provider(provider, rolled_over_provider, force)
         end
       end
 
@@ -43,11 +43,11 @@ module Providers
 
   private
 
-    def copy_courses_to_new_provider(provider, new_provider)
+    def copy_courses_to_new_provider(provider, new_provider, force)
       courses_count = 0
 
       provider.courses.each do |course|
-        new_course = @copy_course_to_provider_service.execute(course: course, new_provider: new_provider)
+        new_course = @copy_course_to_provider_service.execute(course: course, new_provider: new_provider, force: force)
         courses_count += 1 if new_course.present?
       rescue Exception # rubocop: disable Lint/RescueException
         logger.fatal "error trying to copy course #{course.course_code}" if logger

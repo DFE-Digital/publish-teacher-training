@@ -5,7 +5,7 @@ module Courses
       @enrichments_copy_to_course = enrichments_copy_to_course
     end
 
-    def execute(course:, new_provider:, force: false)
+    def execute(course:, new_provider:, force:)
       return nil unless course.rollable? || force
       return nil if course_code_already_exists_on_provider?(course: course, new_provider: new_provider)
 

@@ -32,7 +32,7 @@ RSpec.describe Courses::CopyToProviderService do
   end
 
   it "makes a copy of the course in the new provider" do
-    service.execute(course: course, new_provider: new_provider)
+    service.execute(course: course, new_provider: new_provider, force: false)
 
     expect(new_course).not_to be_nil
     expect(new_course.accredited_body_code).to eq course.accredited_body_code
@@ -47,19 +47,19 @@ RSpec.describe Courses::CopyToProviderService do
   end
 
   it "updates the applications_open_from and start date attributes" do
-    service.execute(course: course, new_provider: new_provider)
+    service.execute(course: course, new_provider: new_provider, force: false)
     expect(new_course.start_date).to eq course.start_date + 1.year
     expect(new_course.applications_open_from).to eq course.applications_open_from + 1.year
   end
 
   it "leaves the existing course alone" do
-    service.execute(course: course, new_provider: new_provider)
+    service.execute(course: course, new_provider: new_provider, force: false)
 
     expect(provider.reload.courses).to eq [course]
   end
 
   it "doesn't copy enrichments when they do not exist" do
-    service.execute(course: course, new_provider: new_provider)
+    service.execute(course: course, new_provider: new_provider, force: false)
 
     expect(mocked_enrichments_copy_to_course_service).to_not have_received(:execute).with(
       enrichment: nil,
@@ -70,7 +70,7 @@ RSpec.describe Courses::CopyToProviderService do
     course_dup = instance_spy(Course, recruitment_cycle: recruitment_cycle)
     allow(course).to receive(:dup).and_return(course_dup)
 
-    service.execute(course: course, new_provider: new_provider)
+    service.execute(course: course, new_provider: new_provider, force: false)
 
     expect(course_dup).to have_received(:save!).with(validate: false)
   end
@@ -84,7 +84,7 @@ RSpec.describe Courses::CopyToProviderService do
     end
 
     it "copies the latest published enrichment" do
-      service.execute(course: course, new_provider: new_provider)
+      service.execute(course: course, new_provider: new_provider, force: false)
 
       expect(mocked_enrichments_copy_to_course_service).to have_received(:execute).with(
         enrichment: published_enrichment, new_course: new_course,
@@ -101,7 +101,7 @@ RSpec.describe Courses::CopyToProviderService do
     end
 
     it "copies the draft enrichment" do
-      service.execute(course: course, new_provider: new_provider)
+      service.execute(course: course, new_provider: new_provider, force: false)
 
       expect(mocked_enrichments_copy_to_course_service).to have_received(:execute).with(
         enrichment: draft_enrichment, new_course: new_course,
@@ -117,17 +117,17 @@ RSpec.describe Courses::CopyToProviderService do
     }
 
     it "returns nil" do
-      expect(service.execute(course: course, new_provider: new_provider)).to be_nil
+      expect(service.execute(course: course, new_provider: new_provider, force: false)).to be_nil
     end
 
     it "does not make a copy of the course" do
-      service.execute(course: course, new_provider: new_provider)
+      service.execute(course: course, new_provider: new_provider, force: false)
 
       expect(mocked_sites_copy_to_course_service).to_not have_received(:execute)
     end
 
     it "does not make a copy of the enrichments" do
-      service.execute(course: course, new_provider: new_provider)
+      service.execute(course: course, new_provider: new_provider, force: false)
 
       expect(mocked_enrichments_copy_to_course_service).to_not have_received(:execute)
     end
@@ -142,17 +142,17 @@ RSpec.describe Courses::CopyToProviderService do
     end
 
     it "returns nil" do
-      expect(service.execute(course: course, new_provider: new_provider)).to be_nil
+      expect(service.execute(course: course, new_provider: new_provider, force: false)).to be_nil
     end
 
     it "does not make a copy of the course" do
-      service.execute(course: course, new_provider: new_provider)
+      service.execute(course: course, new_provider: new_provider, force: false)
 
       expect(mocked_sites_copy_to_course_service).to_not have_received(:execute)
     end
 
     it "does not make a copy of the enrichments" do
-      service.execute(course: course, new_provider: new_provider)
+      service.execute(course: course, new_provider: new_provider, force: false)
 
       expect(mocked_enrichments_copy_to_course_service).to_not have_received(:execute)
     end
@@ -172,7 +172,7 @@ RSpec.describe Courses::CopyToProviderService do
       described_class.new(
         sites_copy_to_course: mocked_sites_copy_to_course_service,
         enrichments_copy_to_course: mocked_enrichments_copy_to_course_service,
-      ).execute(course: course, new_provider: new_provider)
+      ).execute(course: course, new_provider: new_provider, force: false)
     end
 
     describe "the new course" do
@@ -188,6 +188,7 @@ RSpec.describe Courses::CopyToProviderService do
   end
 
   context "when the course is not rollable" do
+    let(:force) { false }
     let(:site) { create :site, provider: provider }
     let!(:new_site) { create :site, provider: new_provider, code: site.code }
 
@@ -197,13 +198,27 @@ RSpec.describe Courses::CopyToProviderService do
       described_class.new(
         sites_copy_to_course: mocked_sites_copy_to_course_service,
         enrichments_copy_to_course: mocked_enrichments_copy_to_course_service,
-      ).execute(course: course, new_provider: new_provider, force: true)
+      ).execute(course: course, new_provider: new_provider, force: force)
     end
 
-    it "still copies the course to the provider" do
-      new_course = new_provider.courses.first
-      expect(new_course.course_code).to eq(course.course_code)
-      expect(new_provider.courses.count).to eq(1)
+    context "when the force is used" do
+      let(:force) { true }
+
+      it "still copies the course to the provider" do
+        new_course = new_provider.courses.first
+        expect(new_course.course_code).to eq(course.course_code)
+        expect(new_provider.courses.count).to eq(1)
+      end
+    end
+
+    context "when the force is false" do
+      let(:force) { false }
+
+      it "does not copies the course to the provider" do
+        new_course = new_provider.courses.first
+        expect(new_course).to be_nil
+        expect(new_provider.courses.count).to eq(0)
+      end
     end
   end
 end

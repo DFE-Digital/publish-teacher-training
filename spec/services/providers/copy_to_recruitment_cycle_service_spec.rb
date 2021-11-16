@@ -103,7 +103,7 @@ describe Providers::CopyToRecruitmentCycleService do
       it "copies over the courses" do
         service.execute(provider: provider, new_recruitment_cycle: new_recruitment_cycle)
 
-        expect(mocked_copy_course_service).to have_received(:execute).with(course: course, new_provider: new_provider)
+        expect(mocked_copy_course_service).to have_received(:execute).with(course: course, new_provider: new_provider, force: false)
       end
     end
 
@@ -143,7 +143,7 @@ describe Providers::CopyToRecruitmentCycleService do
     it "copies over the courses" do
       service.execute(provider: provider, new_recruitment_cycle: new_recruitment_cycle)
 
-      expect(mocked_copy_course_service).to have_received(:execute).with(course: course, new_provider: new_provider)
+      expect(mocked_copy_course_service).to have_received(:execute).with(course: course, new_provider: new_provider, force: false)
     end
 
     it "returns a hash of the counts of copied objects" do
