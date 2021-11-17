@@ -1,7 +1,7 @@
 module Support
   class AllocationsController < ApplicationController
     def index
-      @providers_with_allocations = filtered_providers_with_allocations.page(params[:page] || 1)
+      @allocations = filtered_allocations.page(params[:page] || 1)
     end
 
     def show
@@ -14,8 +14,8 @@ module Support
       @allocation ||= Allocation.find(params[:id])
     end
 
-    def filtered_providers_with_allocations
-      Support::Providers::Filter.call(providers: Provider.with_allocations_for_current_cycle_year, filters: filters)
+    def filtered_allocations
+      Support::Allocations::Filter.call(allocations: Allocation.current_allocations, filters: filters)
     end
 
     def filters

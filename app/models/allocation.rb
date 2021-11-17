@@ -1,6 +1,8 @@
 class Allocation < ApplicationRecord
   ALLOCATION_CYCLE_YEAR = Settings.allocation_cycle_year.to_s.freeze
 
+  include PgSearch::Model
+
   belongs_to :provider
   belongs_to :accredited_body, class_name: "Provider"
   belongs_to :recruitment_cycle
@@ -17,6 +19,8 @@ class Allocation < ApplicationRecord
   enum request_type: { initial: 0, repeat: 1, declined: 2 }
 
   scope :current_allocations, -> { where(recruitment_cycle: RecruitmentCycle.find_by(year: Settings.allocation_cycle_year)) }
+
+  pg_search_scope :search_by_code_or_name, against: %i(provider_code), using: { tsearch: { prefix: true } }
 
   def previous
     Allocation.find_by(
