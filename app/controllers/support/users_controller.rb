@@ -22,7 +22,7 @@ module Support
     end
 
     def destroy
-      if user.destroy
+      if user.discard
         redirect_to support_users_path, flash: { success: "User successfully deleted" }
       else
         redirect_to support_users_path, flash: { success: "This user has already been deleted" }
