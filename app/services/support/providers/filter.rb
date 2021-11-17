@@ -13,7 +13,7 @@ module Support
       def call
         return providers unless filters
 
-        filter_trainees
+        filter_providers
       end
 
     private
@@ -26,7 +26,7 @@ module Support
         providers.search_by_code_or_name(text_search)
       end
 
-      def filter_trainees
+      def filter_providers
         text_search(providers, filters[:text_search])
       end
     end

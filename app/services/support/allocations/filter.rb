@@ -13,7 +13,7 @@ module Support
       def call
         return allocations unless filters
 
-        filter_trainees
+        filter_allocations
       end
 
     private
@@ -26,7 +26,7 @@ module Support
         allocations.search_by_code_or_name(text_search)
       end
 
-      def filter_trainees
+      def filter_allocations
         text_search(allocations, filters[:text_search])
       end
     end
