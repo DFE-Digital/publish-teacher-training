@@ -13,6 +13,7 @@ feature "Deleting a new user" do
     when_i_click_the_delete_button
     then_i_am_taken_to_the_user_index_page
     with_a_success_message
+    and_the_user_is_in_a_discarded_state
   end
 
 private
@@ -35,5 +36,10 @@ private
 
   def with_a_success_message
     expect(users_index_page).to have_content("User successfully deleted")
+  end
+
+  def and_the_user_is_in_a_discarded_state
+    @user_to_delete.reload
+    expect(@user_to_delete.discarded?).to eq true
   end
 end
