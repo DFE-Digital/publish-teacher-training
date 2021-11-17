@@ -7,3 +7,8 @@
 <%= render "support/providers/list", providers: @providers %>
 
 <%= render Paginator::View.new(scope: @providers) %>
+
+<%= govuk_button_to("Delete this user",
+      support_user_path(@user),
+      method: :delete,
+      class: "govuk-button govuk-button--warning") %>
