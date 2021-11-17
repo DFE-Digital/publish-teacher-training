@@ -2,11 +2,11 @@
 
 require "rails_helper"
 
-describe Support::Providers::Filter do
+describe Support::Filter do
   let(:provider) { create(:provider) }
   let(:provider2) { create(:provider) }
 
-  subject { Support::Providers::Filter.call(providers: Provider.all, filters: params) }
+  subject { Support::Filter.call(model_data_scope: Provider.all, filters: params) }
 
   before do
     provider
