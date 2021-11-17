@@ -41,7 +41,7 @@ describe RolloverService do
 
       it "passes the providers in provider_codes to the `CopyToRecruitmentCycle` service" do
         expect(copy_provider_to_recruitment_cycle_service).to receive(:execute).with(
-          provider: provider, new_recruitment_cycle: next_recruitment_cycle, force: false,
+          provider: provider, new_recruitment_cycle: next_recruitment_cycle, force: nil,
         )
         expect(logger_spy).to have_received(:info).exactly(0).times
         described_class.call(provider_codes: ["AB1"], logger: logger_spy)
@@ -49,7 +49,7 @@ describe RolloverService do
 
       it "doesn't pass other providers" do
         expect(copy_provider_to_recruitment_cycle_service).not_to receive(:execute).with(
-          provider: provider_to_ignore, new_recruitment_cycle: next_recruitment_cycle, force: false,
+          provider: provider_to_ignore, new_recruitment_cycle: next_recruitment_cycle, force: nil,
         )
         expect(logger_spy).to have_received(:info).exactly(0).times
         described_class.call(provider_codes: ["AB1"], logger: logger_spy)
@@ -62,15 +62,15 @@ describe RolloverService do
 
         it "doesn't pass past or future providers" do
           expect(copy_provider_to_recruitment_cycle_service).to receive(:execute).with(
-            provider: provider, new_recruitment_cycle: next_recruitment_cycle, force: false,
+            provider: provider, new_recruitment_cycle: next_recruitment_cycle, force: nil,
           )
 
           expect(copy_provider_to_recruitment_cycle_service).not_to receive(:execute).with(
-            provider: past_provider, new_recruitment_cycle: next_recruitment_cycle, force: false,
+            provider: past_provider, new_recruitment_cycle: next_recruitment_cycle, force: nil,
           )
 
           expect(copy_provider_to_recruitment_cycle_service).not_to receive(:execute).with(
-            provider: future_provider, new_recruitment_cycle: next_recruitment_cycle, force: false,
+            provider: future_provider, new_recruitment_cycle: next_recruitment_cycle, force: nil,
           )
           described_class.call(provider_codes: ["AB1"], logger: logger_spy)
           expect(logger_spy).to have_received(:info).exactly(5).times
@@ -80,15 +80,15 @@ describe RolloverService do
           context "and target recruitment cycle as next recruitment cycle" do
             it "pass past providers ony" do
               expect(copy_provider_to_recruitment_cycle_service).not_to receive(:execute).with(
-                provider: provider, new_recruitment_cycle: next_recruitment_cycle, force: false,
+                provider: provider, new_recruitment_cycle: next_recruitment_cycle, force: nil,
               )
 
               expect(copy_provider_to_recruitment_cycle_service).to receive(:execute).with(
-                provider: past_provider, new_recruitment_cycle: next_recruitment_cycle, force: false,
+                provider: past_provider, new_recruitment_cycle: next_recruitment_cycle, force: nil,
               )
 
               expect(copy_provider_to_recruitment_cycle_service).not_to receive(:execute).with(
-                provider: future_provider, new_recruitment_cycle: next_recruitment_cycle, force: false,
+                provider: future_provider, new_recruitment_cycle: next_recruitment_cycle, force: nil,
               )
               described_class.call(provider_codes: ["AB1"], source_recruitment_cycle: previous_cycle, target_recruitment_cycle: next_recruitment_cycle, logger: logger_spy)
               expect(logger_spy).to have_received(:info).exactly(5).times
@@ -117,10 +117,10 @@ describe RolloverService do
 
       it "passes all providers `CopyToRecruitmentCycle` service" do
         expect(copy_provider_to_recruitment_cycle_service).to receive(:execute).with(
-          provider: provider, new_recruitment_cycle: next_recruitment_cycle, force: false,
+          provider: provider, new_recruitment_cycle: next_recruitment_cycle, force: nil,
         )
         expect(copy_provider_to_recruitment_cycle_service).to receive(:execute).with(
-          provider: other_provider, new_recruitment_cycle: next_recruitment_cycle, force: false,
+          provider: other_provider, new_recruitment_cycle: next_recruitment_cycle, force: nil,
         )
 
         described_class.call(provider_codes: [], logger: logger_spy)
@@ -134,15 +134,15 @@ describe RolloverService do
 
         it "doesn't pass other providers" do
           expect(copy_provider_to_recruitment_cycle_service).to receive(:execute).with(
-            provider: provider, new_recruitment_cycle: next_recruitment_cycle, force: false,
+            provider: provider, new_recruitment_cycle: next_recruitment_cycle, force: nil,
           )
 
           expect(copy_provider_to_recruitment_cycle_service).not_to receive(:execute).with(
-            provider: past_provider, new_recruitment_cycle: next_recruitment_cycle, force: false,
+            provider: past_provider, new_recruitment_cycle: next_recruitment_cycle, force: nil,
           )
 
           expect(copy_provider_to_recruitment_cycle_service).not_to receive(:execute).with(
-            provider: future_provider, new_recruitment_cycle: next_recruitment_cycle, force: false,
+            provider: future_provider, new_recruitment_cycle: next_recruitment_cycle, force: nil,
           )
 
           described_class.call(provider_codes: [], logger: logger_spy)
@@ -150,14 +150,16 @@ describe RolloverService do
         end
       end
 
-      context "force: true" do
-        it "passes the argument to the `CopyToRecruitmentCycle` service" do
-          expect(copy_provider_to_recruitment_cycle_service).to receive(:execute).with(
-            provider: provider, new_recruitment_cycle: next_recruitment_cycle, force: true,
-          )
-          described_class.call(provider_codes: [], logger: logger_spy, force: true)
+      [:provider, :provider_and_courses].each do |force_type|
+        context "force: #{force_type}" do
+          it "passes the argument to the `CopyToRecruitmentCycle` service" do
+            expect(copy_provider_to_recruitment_cycle_service).to receive(:execute).with(
+              provider: provider, new_recruitment_cycle: next_recruitment_cycle, force: force_type,
+            )
+            described_class.call(provider_codes: [], logger: logger_spy, force: force_type)
 
-          expect(logger_spy).to have_received(:info).exactly(7).times
+            expect(logger_spy).to have_received(:info).exactly(7).times
+          end
         end
       end
     end

@@ -8,12 +8,12 @@ module Providers
       @logger = logger || Logger.new("/dev/null")
     end
 
-    def execute(provider:, new_recruitment_cycle:, force: false)
+    def execute(provider:, new_recruitment_cycle:, force:)
       providers_count = 0
       sites_count = 0
       courses_count = 0
 
-      if provider.rollable? || force
+      if provider.rollable? || [:provider, :provider_and_courses].include?(force)
         ActiveRecord::Base.transaction do
           rolled_over_provider = new_recruitment_cycle.providers.find_by(provider_code: provider.provider_code)
           if rolled_over_provider == nil
@@ -30,7 +30,7 @@ module Providers
           # Order is important here. Sites should be copied over before courses
           # so that courses can link up to the correct sites in the new provider.
           sites_count = copy_sites_to_new_provider(provider, rolled_over_provider)
-          courses_count = copy_courses_to_new_provider(provider, rolled_over_provider, force)
+          courses_count = copy_courses_to_new_provider(provider, rolled_over_provider, force == :provider_and_courses)
         end
       end
 
