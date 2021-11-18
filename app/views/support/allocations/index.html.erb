@@ -4,6 +4,6 @@
 
 <%= render "support/menu" %>
 
-<%= render PaginatedFilter::View.new(filters: nil, collection: @allocations) do %>
+<%= render PaginatedFilter::View.new(filters: @filters, collection: @allocations) do %>
   <%= render "list", allocations: @allocations %>
 <% end %>
