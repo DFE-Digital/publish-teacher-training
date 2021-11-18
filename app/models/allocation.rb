@@ -20,7 +20,7 @@ class Allocation < ApplicationRecord
 
   scope :current_allocations, -> { where(recruitment_cycle: RecruitmentCycle.find_by(year: Settings.allocation_cycle_year)) }
 
-  pg_search_scope :search_by_code_or_name, associated_against: {
+  pg_search_scope :search, associated_against: {
     provider: %i(provider_code provider_name),
     accredited_body: %i(provider_code provider_name),
   }, using: { tsearch: { prefix: true } }

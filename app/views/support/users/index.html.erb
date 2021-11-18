@@ -9,5 +9,6 @@
   <%= link_to "Download users (CSV)", support_data_exports_path(anchor: "users"), class: "govuk-button govuk-button--secondary" %>
 </div>
 
-<%= render "users", users: @users %>
-<%= render Paginator::View.new(scope: @users ) %>
+<%= render PaginatedFilter::View.new(filters: @filters, collection: @users) do %>
+  <%= render "users", providers: @users %>
+<% end %>

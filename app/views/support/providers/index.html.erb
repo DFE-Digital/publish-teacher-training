@@ -9,6 +9,5 @@
       class: "govuk-button govuk-!-margin-bottom-6") %>
 
 <%= render PaginatedFilter::View.new(filters: @filters, collection: @providers) do %>
-
   <%= render "list", providers: @providers %>
 <% end %>

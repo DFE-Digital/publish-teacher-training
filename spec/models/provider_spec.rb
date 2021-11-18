@@ -690,11 +690,11 @@ describe Provider, type: :model do
     end
   end
 
-  describe "#search_by_code_or_name" do
+  describe "#search" do
     let!(:matching_provider) { create(:provider, provider_code: "ABC", provider_name: "Dave's Searches") }
     let!(:non_matching_provider) { create(:provider) }
 
-    subject { described_class.search_by_code_or_name(search_term) }
+    subject { described_class.search(search_term) }
 
     context "with an exactly matching code" do
       let(:search_term) { "ABC" }

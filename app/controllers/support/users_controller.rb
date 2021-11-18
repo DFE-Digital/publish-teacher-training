@@ -1,7 +1,7 @@
 module Support
   class UsersController < ApplicationController
     def index
-      @users = User.order(:last_name).page(params[:page] || 1)
+      @users = filtered_users.page(params[:page] || 1)
     end
 
     def show
@@ -33,6 +33,18 @@ module Support
 
     def providers
       RecruitmentCycle.current.providers.where(id: user.providers)
+    end
+
+    def filtered_users
+      Support::Filter.call(model_data_scope: User.order(:last_name), filters: filters)
+    end
+
+    def filters
+      @filters ||= ProviderFilter.new(params: filter_params).filters
+    end
+
+    def filter_params
+      params.permit(:text_search, :page, :commit)
     end
   end
 end
