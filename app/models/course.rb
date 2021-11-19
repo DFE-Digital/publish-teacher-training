@@ -536,8 +536,8 @@ class Course < ApplicationRecord
 
   # Ideally this would just use the validation, but:
   # https://github.com/rails/rails/issues/13971
-  def course_params_assignable(course_params)
-    assignable_after_publish(course_params) &&
+  def course_params_assignable(course_params, is_admin)
+    assignable_after_publish(course_params, is_admin) &&
       entry_requirements_assignable(course_params) &&
       qualification_assignable(course_params)
   end
@@ -646,8 +646,9 @@ private
     enrichments.max_by(&:created_at)
   end
 
-  def assignable_after_publish(course_params)
-    relevant_params = course_params.slice(:is_send, :applications_open_from, :application_start_date)
+  def assignable_after_publish(course_params, is_admin)
+    params_keys = [*(:is_send unless is_admin), :applications_open_from, :application_start_date]
+    relevant_params = course_params.slice(*params_keys)
 
     return true if relevant_params.empty? || !is_published?
 

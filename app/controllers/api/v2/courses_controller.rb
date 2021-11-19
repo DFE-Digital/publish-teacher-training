@@ -187,7 +187,7 @@ module API
 
       def update_course
         return unless course_params.values.present? || funding_type_params.present? || qualification_params.present?
-        return unless @course.course_params_assignable(course_params)
+        return unless @course.course_params_assignable(course_params, current_user.admin?)
 
         @course.assign_attributes(course_params)
         @course.save
