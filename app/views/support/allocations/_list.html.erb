@@ -11,41 +11,41 @@
   </thead>
 
   <tbody class="govuk-table__body">
-    <% @providers_with_allocations.each do |provider| %>
+    <% @allocations.each do |allocation| %>
       <tr class="govuk-table__row qa-provider_row">
         <td class="govuk-table__cell">
           <span class="govuk-!-display-block govuk-!-margin-bottom-1">
-            <%= govuk_link_to provider.provider_name, support_allocation_path(provider.allocations.last.id) %>
+            <%= govuk_link_to allocation.provider.provider_name, support_allocation_path(allocation.id) %>
           </span>
         </td>
 
         <td class="govuk-table__cell">
           <span class="govuk-!-display-block govuk-!-margin-bottom-1">
-            <%= provider.provider_code %>
+            <%= allocation.provider.provider_code %>
           </span>
         </td>
 
         <td class="govuk-table__cell">
           <span class="govuk-!-display-block govuk-!-margin-bottom-1">
-            <%= provider.allocations.last.accredited_body.provider_name %>
+            <%= allocation.accredited_body.provider_name %>
           </span>
         </td>
 
         <td class="govuk-table__cell">
           <span class="govuk-!-display-block govuk-!-margin-bottom-1">
-            <%= provider.allocations.last.accredited_body.provider_code %>
+            <%= allocation.accredited_body.provider_code %>
           </span>
         </td>
 
         <td class="govuk-table__cell">
           <span class="govuk-!-display-block govuk-!-margin-bottom-1">
-            <%= provider.allocations.last.confirmed_number_of_places %>
+            <%= allocation.confirmed_number_of_places %>
           </span>
         </td>
 
         <td class="govuk-table__cell">
           <span class="govuk-!-display-block govuk-!-margin-bottom-1">
-            <%= provider.allocations.last.allocation_uplift&.uplifts.to_i %>
+            <%= allocation.allocation_uplift&.uplifts.to_i %>
           </span>
         </td>
       </tr>

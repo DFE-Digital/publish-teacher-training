@@ -145,7 +145,7 @@ class Provider < ApplicationRecord
 
   before_discard { discard_courses }
 
-  pg_search_scope :search_by_code_or_name, against: %i(provider_code provider_name), using: { tsearch: { prefix: true } }
+  pg_search_scope :search, against: %i(provider_code provider_name), using: { tsearch: { prefix: true } }
 
   accepts_nested_attributes_for :sites
   accepts_nested_attributes_for :organisations

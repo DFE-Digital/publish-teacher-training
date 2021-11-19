@@ -1,5 +1,6 @@
 class User < ApplicationRecord
   include Discard::Model
+  include PgSearch::Model
 
   has_many :organisation_users
 
@@ -29,6 +30,8 @@ class User < ApplicationRecord
   scope :course_publish_subscribers, ->(accredited_body_code) do
     joins(:user_notifications).merge(UserNotification.course_publish_notification_requests(accredited_body_code))
   end
+
+  pg_search_scope :search, against: %i(first_name last_name email), using: { tsearch: { prefix: true } }
 
   validates :first_name, presence: true
   validates :last_name, presence: true
