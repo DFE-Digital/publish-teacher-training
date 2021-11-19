@@ -1,5 +1,12 @@
 <%= render PageTitle::View.new(title: "support.users.show") %>
 
+<%= content_for(:breadcrumbs) do %>
+    <%= render GovukComponent::BackLinkComponent.new(
+      text: "All User records",
+      href: support_users_path,
+    ) %>
+<% end %>
+
 <h1 class="govuk-heading-l">
   <%= full_name(@user) %>
 </h1>

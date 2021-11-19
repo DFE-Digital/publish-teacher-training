@@ -27,3 +27,42 @@
     border-bottom: none;
   }
 }
+
+.app-phase-banner__env--development .govuk-tag {
+  background: govuk-colour("dark-grey");
+}
+
+.app-phase-banner__env--qa .govuk-tag {
+  background-color: govuk-colour("orange");
+}
+
+.app-phase-banner__env--staging .govuk-tag {
+  background-color: govuk-colour("red");
+}
+
+.app-phase-banner__env--sandbox .govuk-tag,
+.app-phase-banner__env--review .govuk-tag {
+  background-color: govuk-colour("purple");
+}
+
+.app-header__env--development,
+.app-header__env--development .govuk-header__container {
+  border-color: govuk-colour("dark-grey");
+}
+
+.app-header__env--qa,
+.app-header__env--qa .govuk-header__container {
+  border-color: govuk-colour("orange");
+}
+
+.app-header__env--staging,
+.app-header__env--staging .govuk-header__container {
+  border-color: govuk-colour("red");
+}
+
+.app-header__env--sandbox,
+.app-header__env--review,
+.app-header__env--sandbox .govuk-header__container,
+.app-header__env--review .govuk-header__container {
+  border-color: govuk-colour("purple");
+}
