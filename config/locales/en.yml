@@ -26,7 +26,12 @@ en:
         data_exports:
           index: "Data exports"
     filter:
-      text_search: "Name or code"
+      providers:
+        text_search: "Name or code"
+      allocations:
+        text_search: "Name or code"
+      users:
+        text_search: "Name or email"
   course:
     update_email:
       name: "title"
