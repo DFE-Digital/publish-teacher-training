@@ -2,7 +2,7 @@ namespace :rollover do
   desc "Rollover providers, courses and locations to the next cycle"
   task :providers, [:provider_codes] => :environment do |_task, args|
     provider_codes = args[:provider_codes]
-    RolloverService.call(provider_codes: provider_codes&.split || [])
+    RolloverService.call(provider_codes: provider_codes&.split || [], force: nil)
   end
 
   desc "Create a new recruitment cycle"

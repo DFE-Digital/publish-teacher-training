@@ -1,7 +1,7 @@
 class RolloverService
   include ServicePattern
 
-  def initialize(provider_codes:, force: nil, source_recruitment_cycle: RecruitmentCycle.current_recruitment_cycle, target_recruitment_cycle: RecruitmentCycle.next_recruitment_cycle, logger: Rails.logger)
+  def initialize(provider_codes:, force:, source_recruitment_cycle: RecruitmentCycle.current_recruitment_cycle, target_recruitment_cycle: RecruitmentCycle.next_recruitment_cycle, logger: Rails.logger)
     @provider_codes = provider_codes
     @force = force
     @source_recruitment_cycle = source_recruitment_cycle

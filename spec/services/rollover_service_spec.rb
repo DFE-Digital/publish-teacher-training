@@ -44,7 +44,7 @@ describe RolloverService do
           provider: provider, new_recruitment_cycle: next_recruitment_cycle, force: nil,
         )
         expect(logger_spy).to have_received(:info).exactly(0).times
-        described_class.call(provider_codes: ["AB1"], logger: logger_spy)
+        described_class.call(provider_codes: ["AB1"], logger: logger_spy, force: nil)
       end
 
       it "doesn't pass other providers" do
@@ -52,7 +52,7 @@ describe RolloverService do
           provider: provider_to_ignore, new_recruitment_cycle: next_recruitment_cycle, force: nil,
         )
         expect(logger_spy).to have_received(:info).exactly(0).times
-        described_class.call(provider_codes: ["AB1"], logger: logger_spy)
+        described_class.call(provider_codes: ["AB1"], logger: logger_spy, force: nil)
       end
 
       context "when providers exist in other cycles" do
@@ -72,7 +72,7 @@ describe RolloverService do
           expect(copy_provider_to_recruitment_cycle_service).not_to receive(:execute).with(
             provider: future_provider, new_recruitment_cycle: next_recruitment_cycle, force: nil,
           )
-          described_class.call(provider_codes: ["AB1"], logger: logger_spy)
+          described_class.call(provider_codes: ["AB1"], logger: logger_spy, force: nil)
           expect(logger_spy).to have_received(:info).exactly(5).times
         end
 
@@ -90,7 +90,7 @@ describe RolloverService do
               expect(copy_provider_to_recruitment_cycle_service).not_to receive(:execute).with(
                 provider: future_provider, new_recruitment_cycle: next_recruitment_cycle, force: nil,
               )
-              described_class.call(provider_codes: ["AB1"], source_recruitment_cycle: previous_cycle, target_recruitment_cycle: next_recruitment_cycle, logger: logger_spy)
+              described_class.call(provider_codes: ["AB1"], source_recruitment_cycle: previous_cycle, target_recruitment_cycle: next_recruitment_cycle, logger: logger_spy, force: nil)
               expect(logger_spy).to have_received(:info).exactly(5).times
             end
           end
@@ -123,7 +123,7 @@ describe RolloverService do
           provider: other_provider, new_recruitment_cycle: next_recruitment_cycle, force: nil,
         )
 
-        described_class.call(provider_codes: [], logger: logger_spy)
+        described_class.call(provider_codes: [], logger: logger_spy, force: nil)
         expect(logger_spy).to have_received(:info).exactly(7).times
       end
 
@@ -145,7 +145,7 @@ describe RolloverService do
             provider: future_provider, new_recruitment_cycle: next_recruitment_cycle, force: nil,
           )
 
-          described_class.call(provider_codes: [], logger: logger_spy)
+          described_class.call(provider_codes: [], logger: logger_spy, force: nil)
           expect(logger_spy).to have_received(:info).exactly(7).times
         end
       end
