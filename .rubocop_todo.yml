@@ -53,6 +53,7 @@ Lint/MissingSuper:
     - "app/components/paginator/view.rb"
     - "app/components/providers/filters/view.rb"
     - "app/components/tab_navigation/view.rb"
+    - "app/components/allocation_record_card/view.rb"
 
 # Offense count: 1
 Lint/SelfAssignment:

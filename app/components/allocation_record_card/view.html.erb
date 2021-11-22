@@ -1,0 +1,19 @@
+<div class="allocation-record-card qa-provider_row">
+  <div class="allocation-record-card__row-allocation-title">
+    <h<%= heading_level %> class="govuk-heading-m allocation-record-card__allocation-title-header">
+      <%= govuk_link_to provider_name, support_allocation_path(allocation.id) %>
+    </h<%= heading_level %>>
+  </div>
+  <div class="allocation-record-card__col-allocation-details">
+    <div class="allocation-record-card__col-allocation-provider-information">
+      <%= provider_code %>
+      <%= accredited_body_code %>
+      <%= accredited_body_name %>
+    </div>
+
+    <div class="allocation-record-card__col-allocation-places-uplifts">
+      <%= number_of_places %>
+      <%= number_of_uplifts %>
+    </div>
+  </div>
+</div>
