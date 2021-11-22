@@ -10,14 +10,19 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds-from-desktop">
     <%= form_with model: [:support, @user], local: true do |f| %>
-      
-    <%= f.govuk_error_summary %>
+      <fieldset class="govuk-fieldset">
+        <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+          <h1 class="govuk-fieldset__heading">Add a new user</h1>
+        </legend>
 
-    <%= f.govuk_text_field :first_name, label: { text: "First name", size: "s" }, width: 20 %>
-    <%= f.govuk_text_field :last_name, label: { text: "Last name", size: "s" }, width: 20 %>
-    <%= f.govuk_text_field :email, label: { text: "Email address", size: "s" }, width: 20 %>
+        <%= f.govuk_error_summary %>
 
-    <%= f.govuk_submit %>
+        <%= f.govuk_text_field :first_name, label: { text: "First name", size: "s" }, width: 20 %>
+        <%= f.govuk_text_field :last_name, label: { text: "Last name", size: "s" }, width: 20 %>
+        <%= f.govuk_text_field :email, label: { text: "Email address", size: "s" }, width: 20 %>
+
+        <%= f.govuk_submit %>
+      </fieldset>
     <% end %>
 
     <%= govuk_link_to(t("cancel"), support_users_path) %>
