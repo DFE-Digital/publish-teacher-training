@@ -42,7 +42,7 @@
             <%= submit_tag "Apply filters", class: "govuk-button" %>
 
             <div class="govuk-form-group">
-              <%= label_tag "text_search", "Name or code", class: "govuk-label govuk-label--s" %>
+              <%= label_tag "text_search", filter_label, class: "govuk-label govuk-label--s" %>
               <%= text_field_tag "text_search", (filters[:text_search] if filters), spellcheck: false, class: "govuk-input" %>
             </div>
           </form>

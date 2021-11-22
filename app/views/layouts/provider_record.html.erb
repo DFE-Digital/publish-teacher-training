@@ -1,3 +1,5 @@
+<%= render PageTitle::View.new(title: "support.providers.show") %>
+
 <%= extends_layout :application do %>
   <%= content_for(:breadcrumbs) do %>
     <%= render GovukComponent::BackLinkComponent.new(

@@ -14,19 +14,29 @@ en:
       support:
         providers:
           index: "Providers"
+          new: "Add a provider"
+          show: "View a provider"
           courses:
             index: "Courses"
         users:
           index: "Users"
           show: "User overview"
+          new: "Add a user"
         allocations:
           index: "Allocations"
+          show: "Allocation overview"
         allocation_uplifts:
+          new: "Create an Allocation Uplift"
           edit: "Edit Allocation Uplift"
         data_exports:
           index: "Data exports"
     filter:
-      text_search: "Name or code"
+      providers:
+        text_search: "Name or code"
+      allocations:
+        text_search: "Name or code"
+      users:
+        text_search: "Name or email"
   course:
     update_email:
       name: "title"

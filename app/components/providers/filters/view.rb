@@ -3,11 +3,12 @@
 module Providers
   module Filters
     class View < GovukComponent::Base
-      attr_accessor :filters, :filter_actions
+      attr_accessor :filters, :filter_label, :filter_actions
 
-      def initialize(filters:, filter_actions: nil)
+      def initialize(filters:, filter_label:, filter_actions: nil)
         @filters = filters
         @filter_actions = filter_actions
+        @filter_label = filter_label
       end
 
       def filter_label_for(filter)
