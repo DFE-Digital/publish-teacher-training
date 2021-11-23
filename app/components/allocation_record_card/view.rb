@@ -26,11 +26,11 @@ module AllocationRecordCard
     end
 
     def number_of_places
-      tag.p("Allocated places: #{allocation.confirmed_number_of_places}", class: "govuk-caption-m govuk-!-font-size-16 allocation-record-card__id govuk-!-margin-bottom-0")
+      tag.p("Allocated places: #{allocation.confirmed_number_of_places}", class: "govuk-heading-m govuk-!-font-size-16 allocation-record-card__id govuk-!-margin-bottom-0")
     end
 
     def number_of_uplifts
-      tag.p("Allocation Uplifts: #{allocation.allocation_uplift&.uplifts.to_i}", class: "govuk-caption-m govuk-!-font-size-16 allocation-record-card__id govuk-!-margin-bottom-0")
+      tag.p("Allocation Uplifts: #{allocation.allocation_uplift&.uplifts.to_i}", class: "govuk-heading-m govuk-!-font-size-16 allocation-record-card__id govuk-!-margin-bottom-0")
     end
   end
 end
