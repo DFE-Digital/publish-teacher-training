@@ -8,10 +8,11 @@ module AllocationRecordCard
 
     attr_reader :allocation, :heading_level
 
-    def initialize(heading_level = 3, allocation:)
+    def initialize(heading_level = 3, allocation:, allocation_iteration:)
       super
       @allocation = allocation
       @heading_level = heading_level
+      @iteration = allocation_iteration
     end
 
     def provider_code

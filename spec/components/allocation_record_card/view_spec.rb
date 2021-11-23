@@ -11,7 +11,7 @@ module AllocationRecordCard
     let(:accredited_body) { allocation.accredited_body }
 
     before do
-      render_inline(described_class.new(allocation: allocation))
+      render_inline(described_class.with_collection([allocation]))
     end
 
     it "renders all the correct details" do
