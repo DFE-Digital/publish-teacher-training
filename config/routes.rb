@@ -20,6 +20,10 @@ Rails.application.routes.draw do
     get "/auth/dfe/signout", to: "sessions#destroy"
   end
 
+  scope module: "publish_interface" do
+    root to: "providers#index"
+  end
+
   namespace :support do
     get "/" => redirect("/support/providers")
 

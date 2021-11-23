@@ -64,7 +64,7 @@ describe SessionsController, type: :controller do
 
       it "redirects to the root page" do
         request_callback
-        expect(response).to redirect_to(support_providers_path)
+        expect(response).to redirect_to(root_path)
       end
     end
 

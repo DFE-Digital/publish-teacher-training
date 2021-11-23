@@ -1,5 +1,5 @@
 module Support
-  class AllocationUpliftsController < ApplicationController
+  class AllocationUpliftsController < SupportController
     def edit
       allocation_uplift
     end

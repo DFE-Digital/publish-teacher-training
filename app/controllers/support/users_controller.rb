@@ -1,5 +1,5 @@
 module Support
-  class UsersController < ApplicationController
+  class UsersController < SupportController
     def index
       @users = filtered_users.page(params[:page] || 1)
     end

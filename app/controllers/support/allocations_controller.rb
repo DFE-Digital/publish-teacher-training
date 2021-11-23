@@ -1,5 +1,5 @@
 module Support
-  class AllocationsController < ApplicationController
+  class AllocationsController < SupportController
     def index
       @allocations = filtered_allocations.page(params[:page] || 1)
     end

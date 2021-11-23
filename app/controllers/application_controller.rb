@@ -29,11 +29,6 @@ private
   end
 
   def authenticate
-    if !authenticated?
-      redirect_to sign_in_path
-    elsif !current_user.admin?
-      flash[:error] = "User is not an admin"
-      redirect_to sign_in_path
-    end
+    redirect_to sign_in_path if !authenticated?
   end
 end
