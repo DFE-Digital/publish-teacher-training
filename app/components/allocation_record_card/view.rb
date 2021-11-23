@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module AllocationRecordCard
-  class View < GovukComponent::Base
+  class View < ViewComponent::Base
     with_collection_parameter :allocation
     delegate :provider, :accredited_body, to: :allocation
     delegate :provider_name, to: :provider
@@ -9,6 +9,7 @@ module AllocationRecordCard
     attr_reader :allocation, :heading_level
 
     def initialize(heading_level = 3, allocation:)
+      super
       @allocation = allocation
       @heading_level = heading_level
     end

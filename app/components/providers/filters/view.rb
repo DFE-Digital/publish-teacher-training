@@ -11,10 +11,6 @@ module Providers
         @filter_label = filter_label
       end
 
-      def filter_label_for(filter)
-        I18n.t("components.filter.#{filter}")
-      end
-
       def tags_for_filter(filter, value)
         [{ title: title_html(filter, value), remove_link: remove_select_tag_link(filter) }]
       end
