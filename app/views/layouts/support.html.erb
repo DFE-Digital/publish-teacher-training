@@ -1,0 +1,20 @@
+<%= extends_layout :application do %>
+  <%= content_for(:header) do %>
+    <%= render Header::View.new(
+      service_name: I18n.t("service_name"),
+      items: header_items(@current_user),
+    ) %>
+  <% end %>
+
+  <%= content_for(:navigation_bar) do %>
+    <%= render NavigationBar::View.new(
+      items: [
+        { name: "Providers", url: support_providers_path, current: true },
+      ],
+      current_path: request.path,
+      current_user: @current_user,
+    ) %>
+  <% end %>
+
+  <%= yield %>
+<% end %>

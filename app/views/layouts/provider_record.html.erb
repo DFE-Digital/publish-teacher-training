@@ -1,13 +1,13 @@
 <%= render PageTitle::View.new(title: "support.providers.show") %>
 
-<%= extends_layout :application do %>
+<%= extends_layout :support do %>
   <%= content_for(:breadcrumbs) do %>
     <%= render GovukComponent::BackLinkComponent.new(
       text: 'All provider records',
       href: support_providers_path,
     ) %>
   <% end %>
-  
+
   <h1 class="govuk-heading-l"><%= @provider.provider_name %></h1>
 
   <%= render TabNavigation::View.new(items: [
