@@ -36,9 +36,9 @@ private
 
   def after_sign_in_path
     if current_user.admin?
-      support_path
+      support_providers_path
     else
-      root_path
+      publish_root_path
     end
   end
 end

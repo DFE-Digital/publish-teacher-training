@@ -20,8 +20,8 @@ Rails.application.routes.draw do
     get "/auth/dfe/signout", to: "sessions#destroy"
   end
 
-  scope module: "publish_interface" do
-    root to: "providers#index"
+  namespace :publish_interface, path: :publish, as: :publish do
+    get "/organisations", to: "providers#index", as: :root
   end
 
   namespace :support do

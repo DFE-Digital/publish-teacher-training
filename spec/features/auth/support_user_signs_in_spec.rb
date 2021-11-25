@@ -17,7 +17,7 @@ feature "Authentication" do
   end
 
   def when_i_visit_the_support_interface
-    visit support_path
+    visit support_providers_path
   end
 
   def then_i_am_expected_to_sign_in
