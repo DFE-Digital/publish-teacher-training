@@ -1,0 +1,102 @@
+@import "../base.scss";
+
+.allocation-record-card {
+  border-bottom: 1px solid govuk-colour("mid-grey");
+  margin-bottom: govuk-spacing(3);
+  padding-bottom: govuk-spacing(3);
+
+  .allocation-record-card__row-allocation-title {
+    margin-bottom: govuk-spacing(2);
+    width: 70%;
+
+    @include govuk-media-query($from: $mobile-big-end, $until: desktop) {
+      width: 70%;
+    }
+
+    @include govuk-media-query($from: $govuk-page-width) {
+      width: 70%;
+    }
+  }
+
+  .allocation-record-card__col-allocation-details {
+    @include govuk-media-query($from: tablet) {
+      display: flex;
+      align-items: stretch;
+    }
+    
+    @include govuk-media-query($from: $mobile-small-end) {
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+    }
+  
+    @include govuk-media-query($from: $mobile-big-end, $until: desktop) {
+      width: 100%;
+      padding-right: govuk-spacing(3);
+      display: flex;
+      justify-content: space-between;
+    }
+  
+    @include govuk-media-query($from: $govuk-page-width) {
+      width: 100%;
+      padding-right: govuk-spacing(3);
+      display: flex;
+      justify-content: space-between;
+    }
+  
+    .allocation-record-card__col-allocation-places-uplifts {
+      margin-top: govuk-spacing(2);
+  
+      @include govuk-media-query($from: $mobile-small-end) {
+        width: 25%;
+        margin-top: 0;
+        text-align: right;
+      }
+  
+      @include govuk-media-query($from: $mobile-big-end, $until: desktop) {
+        width: 25%;
+      }
+    }
+  
+  }
+}
+
+.allocation-record-card:first-of-type {
+  border-top: 1px solid govuk-colour("mid-grey");
+  padding-top: govuk-spacing(3);
+}
+
+.allocation-record-card__primary {
+  @include govuk-media-query($from: tablet) {
+    width: 60%;
+  }
+
+  p {
+    margin-bottom: 0;
+  }
+}
+
+.allocation-record-card__secondary {
+  @include govuk-media-query($from: tablet) {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 40%;
+    text-align: right;
+  }
+}
+
+.allocation-record-card__allocation-title-header {
+  margin-bottom: govuk-spacing(1);
+}
+
+.allocation-record-card__id {
+  overflow-wrap: break-word;
+  margin-top: 0;
+}
+
+.filter-row {
+  @include govuk-media-query($until: desktop) {
+    padding-top: govuk-spacing(7);
+  }
+}
