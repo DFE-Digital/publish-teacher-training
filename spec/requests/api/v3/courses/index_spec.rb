@@ -99,6 +99,29 @@ describe "GET v3/recruitment_cycles/:year/courses" do
         included_hashes.map { |h| h.dig("attributes", "provider_name") },
       ).to match_array [current_course.provider.provider_name, "Fubar Ltd."]
     end
+
+    it "busts cache entries when sites are added to a course" do
+      request_path = "/api/v3/recruitment_cycles/#{RecruitmentCycle.current.year}/courses?include=site_statuses.site,provider"
+      get request_path
+
+      included_hashes = JSON.parse(response.body)["included"]
+
+      expect(
+        included_hashes.map { |h| h.dig("attributes", "location_name") }.compact,
+      ).to match_array [current_course.sites.first.location_name, additional_course.sites.first.location_name]
+
+      additional_site = create(:site, location_name: "An additional site")
+
+      create(:site_status, site: additional_site, course_id: additional_course.id)
+
+      get request_path
+
+      included_hashes = JSON.parse(response.body)["included"]
+
+      expect(
+        included_hashes.map { |h| h.dig("attributes", "location_name") }.compact,
+      ).to match_array [current_course.sites.first.location_name, additional_course.sites.first.location_name, additional_site.location_name]
+    end
   end
 end
 

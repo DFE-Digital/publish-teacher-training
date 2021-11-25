@@ -2,7 +2,7 @@ module API
   module V3
     class SerializableCourse < JSONAPI::Serializable::Resource
       include TimeFormat
-      include JsonapiCacheKeyHelper
+      include JsonapiCourseCacheKeyHelper
 
       class << self
         def enrichment_attribute(name, enrichment_name = name)
