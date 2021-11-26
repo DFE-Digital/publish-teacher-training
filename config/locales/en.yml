@@ -18,6 +18,7 @@ en:
           show: "View a provider"
           courses:
             index: "Courses"
+            edit: "Edit course code"
         users:
           index: "Users"
           show: "User overview"
