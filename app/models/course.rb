@@ -18,6 +18,7 @@ class Course < ApplicationRecord
 
   validates :course_code,
             uniqueness: { scope: :provider_id },
+            presence: true,
             on: %i[create update]
 
   validate :self_accredited_cannot_be_salary_funded

@@ -104,6 +104,9 @@ en:
               blank: "is missing"
         course:
           attributes:
+            course_code: 
+              taken: "Course code is already taken"
+              blank: "Course code cannot be blank"
             level:
               blank: "^Select a course level"
             qualification:
