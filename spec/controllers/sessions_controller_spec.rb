@@ -62,9 +62,9 @@ describe SessionsController, type: :controller do
         expect(session["user"]["last_name"]).to eq(user.last_name)
       end
 
-      it "redirects to the root page" do
+      it "redirects to the Publish root page" do
         request_callback
-        expect(response).to redirect_to(support_providers_path)
+        expect(response).to redirect_to(publish_root_path)
       end
     end
 

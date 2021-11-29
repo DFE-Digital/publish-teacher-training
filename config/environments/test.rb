@@ -55,5 +55,5 @@ Rails.application.configure do
   config.active_job.queue_adapter = :test
 
   # Logging
-  config.log_format = :color
+  config.log_level = :error
 end

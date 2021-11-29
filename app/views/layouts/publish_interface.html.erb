@@ -1,0 +1,10 @@
+<%= extends_layout :application do %>
+  <%= content_for(:header) do %>
+    <%= render Header::View.new(
+      service_name: I18n.t("publish_service_name"),
+      items: header_items(@current_user),
+    ) %>
+  <% end %>
+
+  <%= yield %>
+<% end %>

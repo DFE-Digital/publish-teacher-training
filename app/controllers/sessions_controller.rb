@@ -15,7 +15,7 @@ class SessionsController < ApplicationController
     if current_user
       UserSessions::Update.call(user: current_user, user_session: user_session)
 
-      redirect_to support_providers_path
+      redirect_to after_sign_in_path
     else
       UserSession.end_session!(session)
 
@@ -29,6 +29,16 @@ class SessionsController < ApplicationController
       redirect_to user_session.logout_url
     else
       redirect_to support_providers_path
+    end
+  end
+
+private
+
+  def after_sign_in_path
+    if current_user.admin?
+      support_providers_path
+    else
+      publish_root_path
     end
   end
 end

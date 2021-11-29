@@ -1,5 +1,5 @@
 module Support
-  class CoursesController < ApplicationController
+  class CoursesController < SupportController
     def index
       @courses = provider.courses.order(:name).page(params[:page] || 1)
       render layout: "provider_record"
