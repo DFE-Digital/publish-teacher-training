@@ -2,11 +2,9 @@
 
 require "rails_helper"
 
-feature "Edit provider course cide" do
-  let(:user) { create(:user, :admin) }
-
+feature "Edit provider course code" do
   before do
-    given_i_am_authenticated(user: user)
+    given_i_am_authenticated_as_an_admin_user
     and_there_is_a_provider_with_courses
     when_i_visit_the_provider_courses_index_page
     and_click_on_the_first_course_code_edit_link
@@ -37,6 +35,10 @@ feature "Edit provider course cide" do
   end
 
 private
+
+  def given_i_am_authenticated_as_an_admin_user
+    given_i_am_authenticated(user: create(:user, :admin))
+  end
 
   def provider
     @provider ||= create(:provider, courses: [build(:course), build(:course)])
