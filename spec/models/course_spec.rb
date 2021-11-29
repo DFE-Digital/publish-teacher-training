@@ -285,6 +285,7 @@ describe Course, type: :model do
   end
 
   describe "validations" do
+    it { is_expected.to validate_presence_of(:course_code) }
     it { is_expected.to validate_presence_of(:name) }
     it { is_expected.to validate_presence_of(:profpost_flag) }
     it { is_expected.to validate_presence_of(:program_type) }

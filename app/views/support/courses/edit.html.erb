@@ -1,0 +1,16 @@
+<%= render PageTitle::View.new(title: "support.providers.courses.edit") %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds-from-desktop">
+    <%= form_with model: [:support, @provider, @course], local: true do |f| %>
+          
+      <%= f.govuk_error_summary %>
+
+      <%= f.govuk_text_field(:course_code, 
+      label: { text: "Edit course code", tag: "h1", size: "l" }, width: 10) %>
+      <%= f.govuk_submit %>
+    <% end %>
+
+    <%= govuk_link_to(t("cancel"), support_provider_courses_path) %>
+  </div>
+</div>

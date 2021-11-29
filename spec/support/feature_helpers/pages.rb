@@ -23,7 +23,11 @@ module FeatureHelpers
     end
 
     def provider_courses_index_page
-      @provider_courses_index_page ||= PageObjects::Support::ProviderCoursesIndex.new
+      @provider_courses_index_page ||= PageObjects::Support::Provider::CoursesIndex.new
+    end
+
+    def course_edit_page
+      @course_edit_page ||= PageObjects::Support::Provider::CourseEdit.new
     end
 
     def users_show_page

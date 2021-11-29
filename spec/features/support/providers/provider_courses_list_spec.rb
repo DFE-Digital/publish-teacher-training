@@ -13,13 +13,20 @@ feature "View provider courses" do
     then_i_should_see_a_table_of_courses
   end
 
+  def course
+    @course ||= create(:course)
+  end
+
+  def provider
+    @provider ||= course.provider
+  end
+
   def and_there_is_a_provider_with_courses
-    @provider = create(:provider)
-    @provider.courses << create(:course)
+    provider
   end
 
   def when_i_visit_the_provider_show_page
-    provider_show_page.load(id: @provider.id)
+    provider_show_page.load(id: provider.id)
   end
 
   def and_click_on_the_courses_tab
@@ -27,6 +34,10 @@ feature "View provider courses" do
   end
 
   def then_i_should_see_a_table_of_courses
-    expect(provider_courses_index_page.courses.size).to eq(1)
+    expect(provider_courses_index_page.courses_row.size).to eq(1)
+
+    expect(provider_courses_index_page.courses_row.first.name).to have_text(course.name)
+    expect(provider_courses_index_page.courses_row.first.course_code).to have_text(course.course_code)
+    expect(provider_courses_index_page.courses_row.first.edit_link).to have_text("Edit")
   end
 end

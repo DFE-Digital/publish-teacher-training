@@ -11,11 +11,11 @@
   <tbody class="govuk-table__body">
     <% @courses.each do |course| %>
       <tr class="govuk-table__row course-row">
-        <td class="govuk-table__cell">
+        <td class="govuk-table__cell name">
             <span class="govuk-!-display-block govuk-!-margin-bottom-1"><%= course.name %></span>
         </td>
-        <td class="govuk-table__cell">
-          <span class="govuk-!-display-block govuk-!-margin-bottom-1"><%= course.course_code %></span>
+        <td class="govuk-table__cell course_code">
+          <span class="govuk-!-display-block govuk-!-margin-bottom-1"><%= course.course_code %> (<%= govuk_link_to "Edit", edit_support_provider_course_url(@provider,course) %>)</span>
         </td>
       </tr>
     <% end %>
