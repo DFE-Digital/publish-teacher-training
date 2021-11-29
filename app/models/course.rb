@@ -20,8 +20,6 @@ class Course < ApplicationRecord
             uniqueness: { scope: :provider_id },
             on: %i[create update]
 
-  validate :self_accredited_cannot_be_salary_funded
-
   enum program_type: {
     higher_education_programme: "HE",
     school_direct_training_programme: "SD",
@@ -523,7 +521,7 @@ class Course < ApplicationRecord
   end
 
   def self_accredited?
-    provider&.accredited_body?
+    provider.accredited_body?
   end
 
   def to_s
@@ -866,10 +864,6 @@ private
     @services.register(:content_status) do
       Courses::ContentStatusService.new
     end
-  end
-
-  def self_accredited_cannot_be_salary_funded
-    errors.add(:program_type, "Salary is not valid for a self accredited course") if self_accredited? && funding_type == "salary"
   end
 
   def accredited_body_exists_in_current_cycle
