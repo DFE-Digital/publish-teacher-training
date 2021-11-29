@@ -1865,9 +1865,12 @@ describe Course, type: :model do
   end
 
   context "bursaries and scholarships" do
-    let!(:financial_incentive) { create(:financial_incentive, subject: modern_languages, bursary_amount: 255, scholarship: 1415, early_career_payments: 32) }
+    let(:english) { find_or_create(:secondary_subject, :english) }
+    let(:maths) { find_or_create(:secondary_subject, :mathematics) }
+    let(:religious_education) { find_or_create(:secondary_subject, :religious_education) }
+    let!(:financial_incentive) { create(:financial_incentive, subject: english, bursary_amount: 255, scholarship: 1415, early_career_payments: 32) }
 
-    subject { create(:course, :skip_validate, level: "secondary", subjects: [modern_languages]) }
+    subject { create(:course, :skip_validate, level: "secondary", subjects: [english]) }
 
     it { is_expected.to have_bursary }
     it { is_expected.to have_scholarship_and_bursary }
@@ -1875,6 +1878,30 @@ describe Course, type: :model do
 
     it { expect(subject.bursary_amount).to eq("255") }
     it { expect(subject.scholarship_amount).to eq("1415") }
+
+    context "with multiple subjects" do
+      context "when main subject does not have financial incentive" do
+        subject { create(:course, :skip_validate, level: "secondary", subjects: [religious_education, english]) }
+
+        it "reads financial incentives from only the first subject" do
+          expect(subject.bursary_amount).to be_nil
+          expect(subject.has_bursary?).to eq false
+          expect(subject.scholarship_amount).to be_nil
+          expect(subject.has_scholarship?).to eq false
+        end
+      end
+
+      context "when main subject has a financial incentive" do
+        subject { create(:course, :skip_validate, level: "secondary", subjects: [maths, english]) }
+
+        it "reads financial incentives from only the first subject" do
+          expect(subject.bursary_amount).to eq maths.financial_incentive.bursary_amount
+          expect(subject.has_bursary?).to eq true
+          expect(subject.scholarship_amount).to eq maths.financial_incentive.scholarship
+          expect(subject.has_scholarship?).to eq true
+        end
+      end
+    end
   end
 
   context "entry requirements" do
