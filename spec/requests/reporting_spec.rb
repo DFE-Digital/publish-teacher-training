@@ -179,17 +179,27 @@ describe "GET /reporting" do
     }.with_indifferent_access
   end
 
+  let(:recruitment_cycle) {
+    find_or_create(:recruitment_cycle)
+  }
+
   let(:previous_recruitment_cycle) {
     find_or_create(:recruitment_cycle, :previous)
   }
 
-  let(:next_recruitment_cycle) {
-    find_or_create(:recruitment_cycle, :next)
+  let(:allocation_recruitment_cycle) {
+    find_or_create(:recruitment_cycle, :current_allocation)
+  }
+
+  let(:previous_allocation_cycle) {
+    find_or_create(:recruitment_cycle, :previous_allocation_cycle)
   }
 
   it "returns status success" do
+    recruitment_cycle
     previous_recruitment_cycle
-    next_recruitment_cycle
+    allocation_recruitment_cycle
+    previous_allocation_cycle
     get "/reporting"
     expect(response.status).to eq(200)
     expect(JSON.parse(response.body)).to eq(expected)
