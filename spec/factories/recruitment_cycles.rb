@@ -15,5 +15,9 @@ FactoryBot.define do
     trait :current_allocation do
       year { Settings.allocation_cycle_year }
     end
+
+    trait :previous_allocation_cycle do
+      year { (Settings.allocation_cycle_year - 1).to_s }
+    end
   end
 end
