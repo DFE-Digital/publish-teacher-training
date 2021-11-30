@@ -1,15 +1,65 @@
 <% content_for :page_title, I18n.t("components.page_titles.sign_in.personas") %>
 
-<h1 class="govuk-heading-xl">
-  <span class="govuk-caption-xl">
-    Teacher Training API
-  </span>
-  Personas
-</h1>
+<h1 class="govuk-heading-l">Publish test users</h1>
 
 <hr class="govuk-section-break govuk-section-break--visible govuk-section-break--l">
 
-<%= render Persona::View.new(email_address: "becomingateacher+admin-integration-tests@digital.education.gov.uk",
-                              first_name: "Support agent",
-                              last_name: "Colin")
-%>
+<h2 class="govuk-heading-m">Anne</h2>
+<p class="govuk-body"><%= govuk_tag(text: "School Direct", colour: "blue") %></p>
+<p class="govuk-body">
+  Anne is a course administrator who belongs to one school direct.
+</p>
+<%= render Persona::View.new(
+  email_address: "anonimized-user-10599@example.org",
+  first_name: "Course administrator",
+  last_name: "Anne"
+) %>
+
+<hr class="govuk-section-break govuk-section-break--visible govuk-section-break--l">
+
+<h2 class="govuk-heading-m">Susy</h2>
+<p class="govuk-body"><%= govuk_tag(text: "Accredited body", colour: "blue") %></p>
+<p class="govuk-body">
+  Susy is a SCITT service manager who belongs to one accredited body.
+</p>
+<%= render Persona::View.new(
+  email_address:  "anonimized-user-8847@example.org",
+  first_name:  "ITT partnership manager",
+  last_name: "Susy"
+) %>
+
+<hr class="govuk-section-break govuk-section-break--visible govuk-section-break--l">
+
+<h2 class="govuk-heading-m">Mary</h2>
+<p class="govuk-body">
+  <%= govuk_tag(text: "Multi-org", colour: "blue") %>
+  <%= govuk_tag(text: "Accredited body", colour: "blue") %>
+  <%= govuk_tag(text: "School Direct", colour: "blue") %>
+</p>
+<p class="govuk-body">
+  Mary is a SCITT Business Support Coordinator who belongs to:
+</p>
+<ul class="govuk-list govuk-list--bullet">
+  <li>multiple accredited bodies, <strong>Suffolk and Norfolk Primary SCITT</strong> and <strong>Suffolk and Norfolk Secondary SCITT</strong></li>
+  <li>a school direct <strong>Thorpe St Andrew School and Sixth Form</strong> with courses accredited by <strong>Suffolk and Norfolk Secondary SCITT</strong></li>
+  <li>a school direct <strong>Thorpe St Andrew School and Sixth Form</strong> with courses also accredited by an organisation not associated with Mary</li>
+</ul>
+
+<%= render Persona::View.new(
+  email_address: "anonimized-user-7839@example.org",
+  first_name:  "Multi-org administrator",
+  last_name: "Mary"
+) %>
+
+<hr class="govuk-section-break govuk-section-break--visible govuk-section-break--l">
+
+<h2 class="govuk-heading-m">Colin</h2>
+<p class="govuk-body"><%= govuk_tag(text: "Admin", colour: "blue") %></p>
+<p class="govuk-body">
+  Colin is a DfE support agent who has administrator access to all organisations.
+</p>
+<%= render Persona::View.new(
+  email_address: "becomingateacher+admin-integration-tests@digital.education.gov.uk",
+  first_name: "Support agent",
+  last_name: "Colin"
+) %>
