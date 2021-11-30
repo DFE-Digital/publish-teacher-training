@@ -1,7 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "GET /api/v2/recruitment_cycles/:year/providers/\
-  <provider_code>/training_providers/:training_provider_code/courses" do
+RSpec.describe "GET /api/v2/recruitment_cycles/:year/providers/ <provider_code>/training_providers/:training_provider_code/courses" do
   let(:organisation) { create(:organisation) }
   let(:user)         { create(:user, organisations: [organisation]) }
   let(:payload)      { { email: user.email } }
@@ -21,8 +20,7 @@ RSpec.describe "GET /api/v2/recruitment_cycles/:year/providers/\
   let(:request_path) { "/api/v2/recruitment_cycles/#{recruitment_cycle.year}/providers/#{accredited_body.provider_code}/training_providers/#{training_provider.provider_code}/courses" }
 
   context "current recruitment cycle" do
-    it "returns courses provided by the training provider that are\
-    awarded by the awarding body with provider code <provider_code>" do
+    it "returns courses provided by the training provider that are awarded by the awarding body with provider code <provider_code>" do
       perform_request
 
       parsed_response = JSON.parse(response.body)["data"]

@@ -492,7 +492,7 @@ describe "GET v3/courses" do
     let(:course_with_single_site) { create(:course, provider: create(:provider), site_statuses: [another_findable_status_with_vacancies], enrichments: [published_enrichment]) }
     let(:request_path) { "/api/v3/courses?include=site_statuses.site&sort=distance&latitude=0&longitude=0&filter[has_vacancies]=#{has_vacancies?}" }
 
-    context "has_vacancies filter is true " do
+    context "has_vacancies filter is true" do
       let(:has_vacancies?) { true }
 
       before do

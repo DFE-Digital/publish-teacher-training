@@ -16,7 +16,7 @@ describe Subjects::FinancialIncentiveSetSubjectKnowledgeEnhancementCourseAvailab
     allow(financial_incentives_records_spy).to receive(:update_all)
   end
 
-  it "sets the subject knowledge enhancement course available for existing financial incentive " do
+  it "sets the subject knowledge enhancement course available for existing financial incentive" do
     service.execute
     expect(financial_incentive_spy).to have_received(:where)
       .with(subject: { subject_name: ["Primary with mathematics", "Biology", "Computing", "English", "Design and technology", "Geography", "Chemistry", "Mathematics", "Physics", "French", "German", "Spanish", "Italian", "Japanese", "Mandarin", "Russian", "Modern languages (other)", "Religious education"] })
