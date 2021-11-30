@@ -10,13 +10,13 @@ RSpec.describe Course, type: :model do
       let(:funding_type) { "salary" }
 
       context "an externally accredited courses" do
-        let(:subject) { create(:course, :with_accrediting_provider) }
+        subject { create(:course, :with_accrediting_provider) }
 
         its(:program_type) { is_expected.to eq("school_direct_salaried_training_programme") }
       end
 
       context "a self accredited course" do
-        let(:subject) { create(:course, :self_accredited) }
+        subject { create(:course, :self_accredited) }
 
         it "adds an error to the course object" do
           expect(subject.errors.count).to eq 1
@@ -26,7 +26,8 @@ RSpec.describe Course, type: :model do
     end
 
     describe "when funding type is apprenticeship" do
-      let(:subject) { create(:course, :with_scitt) }
+      subject { create(:course, :with_scitt) }
+
       let(:funding_type) { "apprenticeship" }
 
       its(:program_type) { is_expected.to eq("pg_teaching_apprenticeship") }
@@ -36,14 +37,15 @@ RSpec.describe Course, type: :model do
       let(:funding_type) { "fee" }
 
       context "an externally accredited course" do
-        let(:subject) { create(:course, :with_accrediting_provider) }
+        subject { create(:course, :with_accrediting_provider) }
 
         its(:program_type) { is_expected.to eq("school_direct_training_programme") }
       end
 
       context "a SCITTs self accredited courses" do
         let(:provider) { build(:provider, :scitt) }
-        let(:subject) { create(:course, provider: provider) }
+
+        subject { create(:course, provider: provider) }
 
         its(:program_type) {
           is_expected.to eq("scitt_programme")
@@ -52,7 +54,8 @@ RSpec.describe Course, type: :model do
 
       context "a HEIs self accredited courses" do
         let(:provider) { build(:provider, :university) }
-        let(:subject) { create(:course, provider: provider) }
+
+        subject { create(:course, provider: provider) }
 
         its(:program_type) { is_expected.to eq("higher_education_programme") }
       end
