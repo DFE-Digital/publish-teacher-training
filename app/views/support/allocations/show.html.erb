@@ -13,31 +13,31 @@
   component.row do |row|
     row.key { "Provider Name" }
     row.value { @allocation.provider.provider_name }
-    row.action(href: nil)
+    row.action
   end
 
   component.row do |row|
     row.key { "Provider Code" }
     row.value { @allocation.provider.provider_code }
-    row.action(href: nil)
+    row.action
   end
 
   component.row do |row|
     row.key { "Accredited Body Name" }
     row.value { @allocation.accredited_body.provider_name }
-    row.action(href: nil)
+    row.action
   end
 
   component.row do |row|
     row.key { "Accredited Body Code" }
     row.value { @allocation.accredited_body.provider_code }
-    row.action(href: nil)
+    row.action
   end
 
   component.row do |row|
     row.key { "Allocations" }
     row.value { @allocation.confirmed_number_of_places.to_s }
-    row.action(href: nil)
+    row.action
   end
 
   component.row do |row|
