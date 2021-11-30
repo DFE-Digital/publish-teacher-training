@@ -523,7 +523,10 @@ class Course < ApplicationRecord
   end
 
   def financial_incentive
-    subjects.first.financial_incentive
+    # Ignore "modern languages" as financial incentives
+    # differ based on the language selected
+
+    subjects.reject { |subject| subject.subject_name == "Modern Languages" }.first.financial_incentive
   end
 
   def self_accredited?
