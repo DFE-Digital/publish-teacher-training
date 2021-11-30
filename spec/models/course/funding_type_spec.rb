@@ -2,15 +2,6 @@ require "rails_helper"
 
 RSpec.describe Course, type: :model do
   describe "#funding_type" do
-    describe "self accredited salary" do
-      let(:course) { create(:course, :self_accredited) }
-
-      it "adds an error" do
-        course.funding_type = "salary"
-        expect(course.errors.messages[:program_type]).to eq(["Salary is not valid for a self accredited course"])
-      end
-    end
-
     describe "higher education programme" do
       subject { create(:course, :with_higher_education) }
 
