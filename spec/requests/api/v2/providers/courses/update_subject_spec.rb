@@ -34,11 +34,11 @@ describe "PATCH /providers/:provider_code/courses/:course_code" do
 
   context "course has no subjects" do
     let(:course) { create(:course, level: :secondary, provider: provider) }
-    let(:subject) { find_or_create(:secondary_subject, :mathematics) }
+    let(:subject_to_add) { find_or_create(:secondary_subject, :mathematics) }
     let(:updated_subjects) do
       {
         subjects: {
-          data: [{ "type" => "subject", "id" => subject.id.to_s }],
+          data: [{ "type" => "subject", "id" => subject_to_add.id.to_s }],
         },
       }
     end
@@ -48,7 +48,7 @@ describe "PATCH /providers/:provider_code/courses/:course_code" do
     end
 
     it "adds a subject" do
-      expect(course.reload.subjects.first.id).to eq(subject.id)
+      expect(course.reload.subjects.first.id).to eq(subject_to_add.id)
     end
   end
 
