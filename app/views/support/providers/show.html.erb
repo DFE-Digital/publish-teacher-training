@@ -8,10 +8,12 @@
   component.row do |row|
     row.key { "Code" }
     row.value { @provider.provider_code }
+    row.action
   end
 
   component.row do |row|
     row.key { "Last updated" }
     row.value { gov_uk_format(@provider.updated_at) }
+    row.action
   end
 end %>
