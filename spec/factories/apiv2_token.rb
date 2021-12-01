@@ -33,8 +33,18 @@ end
 
 FactoryBot.register_strategy(:build_jwt, JWTStrategy)
 
+jwt = Struct.new(
+  :payload,
+  :secret,
+  :algorithm,
+  :audience,
+  :issuer,
+  :subject,
+  :now,
+)
+
 FactoryBot.define do
-  factory :apiv2, class: OpenStruct do
+  factory :apiv2, class: jwt do
     payload {}
     secret { Settings.authentication.secret }
     algorithm { Settings.authentication.algorithm }

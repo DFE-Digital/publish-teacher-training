@@ -10,14 +10,14 @@ module AllocationRecordCard
 
     def multiple_allocations
       [
-        OpenStruct.new(
+        Allocation.new(
           id: 1,
           confirmed_number_of_places: 3,
           provider: provider,
           accredited_body: accredited_body,
           allocation_uplift: allocation_uplift,
         ),
-        OpenStruct.new(
+        Allocation.new(
           id: 2,
           confirmed_number_of_places: 5,
           provider: provider,
@@ -28,21 +28,21 @@ module AllocationRecordCard
     end
 
     def provider
-      @provider ||= OpenStruct.new(
+      @provider ||= Provider.new(
         provider_code: "HC7",
         provider_name: "Hogwarts School of Witchcraft and Wizardry",
       )
     end
 
     def accredited_body
-      @accredited_body ||= OpenStruct.new(
+      @accredited_body ||= Provider.new(
         provider_code: "SP1",
         provider_name: "South Park Elementary",
       )
     end
 
     def allocation_uplift
-      @allocation_uplift ||= OpenStruct.new(
+      @allocation_uplift ||= AllocationUplift.new(
         uplifts: 4,
       )
     end

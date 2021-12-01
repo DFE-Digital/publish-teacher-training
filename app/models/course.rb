@@ -405,7 +405,8 @@ class Course < ApplicationRecord
   def program_type_description
     if school_direct_salaried_training_programme? then " with salary"
     elsif pg_teaching_apprenticeship? then " teaching apprenticeship"
-    else ""
+    else
+      ""
     end
   end
 

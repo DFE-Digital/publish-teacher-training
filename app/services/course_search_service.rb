@@ -134,7 +134,7 @@ private
     # select course_id and nearest site with shortest distance from origin
     # as courses may have multiple sites
     # this will remove duplicates by aggregating on course_id
-    origin_lat_long = OpenStruct.new(lat: origin[0].to_f, lng: origin[1].to_f)
+    origin_lat_long = Struct.new(:lat, :lng).new(origin[0].to_f, origin[1].to_f)
     lowest_locatable_distance = Arel.sql("MIN#{Site.sanitize_sql(Site.distance_sql(origin_lat_long))} as distance")
     locatable_sites.project(:course_id, lowest_locatable_distance).group(:course_id)
   end
