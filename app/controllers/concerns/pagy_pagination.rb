@@ -16,7 +16,7 @@ private
   attr_accessor :pagy_results
 
   def pagination_links
-    meta = pagy_metadata(pagy_results.first, urls: true)
+    meta = pagy_metadata(pagy_results.first)
 
     {
       first: meta[:first_url],
