@@ -29,11 +29,11 @@ describe "PATCH /providers/:provider_code/courses/:course_code" do
   let(:course)            {
     create :course,
            provider: provider,
-           subjects: [subject],
+           subjects: subjects,
            qualification: qualification
   }
   let(:qualification) { :pgce_with_qts }
-  let(:subject) { find_or_create(:primary_subject, :primary) }
+  let(:subjects) { [find_or_create(:primary_subject, :primary)] }
   let(:permitted_params) do
     %i[updated_qualification]
   end
@@ -90,13 +90,13 @@ describe "PATCH /providers/:provider_code/courses/:course_code" do
       let(:course) {
         create(:course,
                provider: provider,
-               subjects: [subject],
+               subjects: subjects,
                qualification: qualification,
                level: "further_education")
       }
       let(:json_data) { JSON.parse(response.body)["errors"] }
       let(:updated_qualification) { { qualification: "pgce_with_qts" } }
-      let(:subject) { find_or_create(:further_education_subject) }
+      let(:subjects) { [find_or_create(:further_education_subject)] }
       let(:qualification) { :pgce }
 
       it "returns an error" do

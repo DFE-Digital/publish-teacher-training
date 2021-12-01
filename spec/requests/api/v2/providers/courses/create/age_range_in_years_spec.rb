@@ -33,11 +33,11 @@ RSpec.describe "POST /providers/:provider_code/courses/:course_code" do
     build :course,
           provider: provider,
           age_range_in_years: age_range_in_years,
-          subjects: [subject],
+          subjects: subjects,
           sites: [site]
   }
   let(:site) { build(:site) }
-  let(:subject) { find_or_create(:primary_subject) }
+  let(:subjects) { [find_or_create(:primary_subject)] }
 
   let(:age_range_in_years) { "3_to_7" }
   let(:json_data) { JSON.parse(response.body)["errors"] }

@@ -11,7 +11,8 @@ describe Course, type: :model do
       subjects: [find_or_create(:secondary_subject, :biology)],
     )
   end
-  let(:subject) { course }
+  subject { course }
+
   let(:french) { find_or_create(:modern_languages_subject, :french) }
   let!(:financial_incentive) { create(:financial_incentive, subject: modern_languages) }
   let(:modern_languages) { find_or_create(:secondary_subject, :modern_languages) }
@@ -242,7 +243,7 @@ describe Course, type: :model do
         delivered_course
       end
 
-      let(:subject) { described_class.accredited_body_order(provider.provider_name) }
+      subject { described_class.accredited_body_order(provider.provider_name) }
 
       it "returns courses accredited after courses delivered" do
         expect(subject).to eq([delivered_course, accredited_course])
@@ -1237,7 +1238,7 @@ describe Course, type: :model do
       end
 
       context "with a ucas_status of new" do
-        let(:subject) { create(:course, provider: provider, site_statuses: [new_site_status]) }
+        subject { create(:course, provider: provider, site_statuses: [new_site_status]) }
 
         it "does not set the site to running" do
           expect(second_site_status.reload.status).to eq("suspended")
@@ -1405,7 +1406,7 @@ describe Course, type: :model do
     end
 
     describe "#has_vacancies? (when site_statuses not loaded)" do
-      let(:subject) {
+      subject {
         create(:course, site_statuses: site_statuses).reload
       }
 
@@ -1521,7 +1522,7 @@ describe Course, type: :model do
                applications_open_from: applications_open_from)
       end
 
-      let(:subject) {
+      subject {
         course.reload
       }
 
@@ -1590,27 +1591,29 @@ describe Course, type: :model do
 
     describe "ucas_status" do
       context "without any site statuses" do
-        let(:subject) { create(:course) }
+        subject { create(:course) }
 
         its(:ucas_status) { is_expected.to eq :new }
       end
 
       context "with a running site_status" do
-        let(:subject) { create(:course, site_statuses: [findable]) }
+        subject { create(:course, site_statuses: [findable]) }
 
         its(:ucas_status) { is_expected.to eq :running }
       end
 
       context "with a new site_status" do
         let(:new) { build(:site_status, :new) }
-        let(:subject) { create(:course, site_statuses: [new]) }
+
+        subject { create(:course, site_statuses: [new]) }
 
         its(:ucas_status) { is_expected.to eq :new }
       end
 
       context "with a not running site_status" do
         let(:suspended) { build(:site_status, :suspended) }
-        let(:subject) { create(:course, site_statuses: [suspended]) }
+
+        subject { create(:course, site_statuses: [suspended]) }
 
         its(:ucas_status) { is_expected.to eq :not_running }
       end
@@ -1777,31 +1780,31 @@ describe Course, type: :model do
 
   describe "qualifications" do
     context "course with qts qualication" do
-      let(:subject) { create(:course, :resulting_in_qts) }
+      subject { create(:course, :resulting_in_qts) }
 
       its(:qualifications) { is_expected.to eq %i[qts] }
     end
 
     context "course with pgce qts qualication" do
-      let(:subject) { create(:course, :resulting_in_pgce_with_qts) }
+      subject { create(:course, :resulting_in_pgce_with_qts) }
 
       its(:qualifications) { is_expected.to eq %i[qts pgce] }
     end
 
     context "course with pgde qts qualication" do
-      let(:subject) { create(:course, :resulting_in_pgde_with_qts) }
+      subject { create(:course, :resulting_in_pgde_with_qts) }
 
       its(:qualifications) { is_expected.to eq %i[qts pgde] }
     end
 
     context "course with pgce qualication" do
-      let(:subject) { create(:course, :resulting_in_pgce) }
+      subject { create(:course, :resulting_in_pgce) }
 
       its(:qualifications) { is_expected.to eq %i[pgce] }
     end
 
     context "course with pgde qualication" do
-      let(:subject) { create(:course, :resulting_in_pgde) }
+      subject { create(:course, :resulting_in_pgde) }
 
       its(:qualifications) { is_expected.to eq %i[pgde] }
     end
@@ -2111,7 +2114,7 @@ describe Course, type: :model do
 
   describe "#discard" do
     context "new course" do
-      let!(:subject) do
+      let!(:course) do
         course = create(:course)
 
         site = create(:site)
@@ -2119,6 +2122,8 @@ describe Course, type: :model do
 
         course
       end
+
+      subject { course }
 
       context "before discarding" do
         its(:discarded?) { is_expected.to be false }
@@ -2134,7 +2139,7 @@ describe Course, type: :model do
 
       context "after discarding" do
         before do
-          subject.discard
+          course.discard
         end
 
         its(:discarded?) { is_expected.to be true }
@@ -2166,7 +2171,8 @@ describe Course, type: :model do
   describe "#applications_open_from" do
     context "a new course with a given date" do
       let(:applications_open_from) { Time.zone.today }
-      let(:subject) { create(:course, applications_open_from: applications_open_from) }
+
+      subject { create(:course, applications_open_from: applications_open_from) }
 
       its(:applications_open_from) { is_expected.to eq applications_open_from }
     end
@@ -2174,14 +2180,15 @@ describe Course, type: :model do
     context "a new course within a recruitment cycle" do
       let(:recruitment_cycle) { build :recruitment_cycle, :next }
       let(:provider)          { build :provider, recruitment_cycle: recruitment_cycle }
-      let(:subject) { create :course, :applications_open_from_not_set, provider: provider }
+
+      subject { create :course, :applications_open_from_not_set, provider: provider }
 
       its(:applications_open_from) { is_expected.to eq recruitment_cycle.application_start_date }
     end
   end
 
   describe "#is_send=" do
-    let(:subject) { build(:course) }
+    subject { build(:course) }
 
     before do
       subject.is_send = value
