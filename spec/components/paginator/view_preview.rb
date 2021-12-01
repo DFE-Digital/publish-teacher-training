@@ -13,12 +13,18 @@ module Paginator
   private
 
     def scope(current_page: 1, total_count: 29, page_size: 25)
-      OpenStruct.new(
-        relation: Provider.all.page(1),
-        total_count: total_count,
-        limit_value: page_size,
-        current_page: current_page,
-        total_pages: (total_count.to_f / page_size).ceil,
+      Struct.new(
+        :relation,
+        :total_count,
+        :limit_value,
+        :current_page,
+        :total_pages,
+      ).new(
+        Provider.all.page(1),
+        total_count,
+        page_size,
+        current_page,
+        (total_count.to_f / page_size).ceil,
       )
     end
   end

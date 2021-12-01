@@ -40,11 +40,6 @@ describe Token::DecodeService do
   end
 
   describe "#call" do
-    # before do
-    #   allow(Time).to receive(:zone)
-    #     .and_return(OpenStruct.new(now: now))
-    # end
-
     context "non-expired token" do
       around do |spec|
         Timecop.freeze do
