@@ -7,7 +7,7 @@ class User < ApplicationRecord
   has_many :providers, through: :user_permissions
 
   # dependent destroy because https://stackoverflow.com/questions/34073757/removing-relations-is-not-being-audited-by-audited-gem/34078860#34078860
-  has_many :organisations, through: :organisation_users, dependent: :destroy
+  # has_many :organisations, through: :organisation_users, dependent: :destroy
 
   has_many :user_notifications, class_name: "UserNotification"
 

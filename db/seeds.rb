@@ -41,9 +41,7 @@ def create_standard_provider_and_courses_for_cycle(recruitment_cycle, superuser)
     email: Faker::Internet.email,
     telephone: Faker::PhoneNumber.phone_number,
   )
-  organisation = Organisation.create!(name: "ACME SCITT Org")
-  organisation.providers << provider
-  superuser.organisations << organisation
+  superuser.providers << provider
 
   Site.create!(
     provider: provider,
@@ -274,20 +272,19 @@ create_standard_provider_and_courses_for_cycle(next_recruitment_cycle, superuser
     telephone: Faker::PhoneNumber.phone_number,
   )
 
-  organisation = Organisation.create!(name: "ACME#{i}")
-  organisation.providers << provider
-
   user = User.create!(
     email: Faker::Internet.unique.email,
     first_name: Faker::Name.first_name,
     last_name: Faker::Name.last_name,
   )
 
-  user.organisations << organisation
-  superuser.organisations << organisation
+  user.providers << provider
+  superuser.providers << provider
 end
 
 access_requester_user = User.all.reject(&:admin?).sample
+
+Organisation.create!(name: "ACME")
 
 10.times do
   AccessRequest.create!(
