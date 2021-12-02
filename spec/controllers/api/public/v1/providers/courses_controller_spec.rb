@@ -61,7 +61,7 @@ RSpec.describe API::Public::V1::Providers::CoursesController do
         let(:last_page) { 3 }
 
         let(:url_prefix) do
-          "/api/public/v1/recruitment_cycles/#{recruitment_cycle.year}/providers/#{provider.provider_code}/courses?page="
+          "http://test.host/api/public/v1/recruitment_cycles/#{recruitment_cycle.year}/providers/#{provider.provider_code}/courses?page="
         end
 
         context "page 1" do
