@@ -4,9 +4,7 @@ describe User, type: :model do
   subject { create(:user, first_name: "Jane", last_name: "Smith", email: "jsmith@scitt.org") }
 
   describe "associations" do
-    it { is_expected.to have_many(:organisation_users) }
-    it { is_expected.to have_many(:organisations).through(:organisation_users) }
-    it { is_expected.to have_many(:providers).through(:organisations) }
+    it { is_expected.to have_many(:providers).through(:user_permissions) }
     it { is_expected.to have_many(:user_notifications) }
   end
 
@@ -78,72 +76,6 @@ describe User, type: :model do
 
     it "includes active users and excludes inactive users" do
       expect(User.active).to eq([active_user])
-    end
-  end
-
-  describe "#remove_access_to" do
-    let(:organisation) { create(:organisation) }
-    let(:other_organisation) { create(:organisation) }
-    let(:yet_other_organisation) { create(:organisation) }
-
-    describe "one organisation" do
-      before do
-        subject.organisations = [organisation, other_organisation]
-        subject.remove_access_to(organisation)
-      end
-
-      it "removes the right organisation" do
-        expect(subject.reload.organisations).to eq([other_organisation])
-      end
-    end
-
-    describe "#associated_with_accredited_body?" do
-      context "user is associated with accredited body" do
-        let(:organisation) { create(:organisation, providers: [accredited_body]) }
-        let(:current_recruitment_cycle) { find_or_create(:recruitment_cycle) }
-        let(:accredited_body) { create(:provider, :accredited_body, recruitment_cycle: current_recruitment_cycle) }
-
-        subject { create(:user, organisations: [organisation]) }
-
-        it "returns true" do
-          expect(subject.associated_with_accredited_body?).to be true
-        end
-      end
-
-      context "user is not associated with an accredited body" do
-        it "returns false" do
-          expect(subject.associated_with_accredited_body?).to be false
-        end
-      end
-    end
-
-    describe "#notifications_configured?" do
-      context "user has notifications configured" do
-        before do
-          subject.user_notifications << create(:user_notification)
-        end
-
-        it "returns true" do
-          expect(subject.notifications_configured?).to be true
-        end
-      end
-
-      context "user does not have notifications configured" do
-        it "returns false" do
-          expect(subject.notifications_configured?).to be false
-        end
-      end
-    end
-
-    describe "multiple organisations" do
-      before do
-        subject.organisations = [organisation, other_organisation, yet_other_organisation]
-        subject.remove_access_to [organisation, yet_other_organisation]
-      end
-
-      it "removes the right organisation" do
-        expect(subject.reload.organisations).to eq([other_organisation])
-      end
     end
   end
 

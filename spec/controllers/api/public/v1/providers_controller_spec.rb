@@ -17,14 +17,12 @@ RSpec.describe API::Public::V1::ProvidersController do
     end
 
     context "when there are providers" do
-      let(:organisation) { create(:organisation) }
       let(:contact) { build(:contact) }
 
       let(:provider) do
         create(:provider,
                provider_code: "1AT",
                provider_name: "First",
-               organisations: [organisation],
                contacts: [contact])
       end
 
@@ -51,7 +49,6 @@ RSpec.describe API::Public::V1::ProvidersController do
           let(:next_recruitment_cycle) { create :recruitment_cycle, :next }
           let(:next_provider) do
             create :provider,
-                   organisations: [organisation],
                    provider_code: provider.provider_code,
                    recruitment_cycle: next_recruitment_cycle
           end
@@ -72,7 +69,7 @@ RSpec.describe API::Public::V1::ProvidersController do
 
       context "with pagination" do
         before do
-          recruitment_cycle.providers << build_list(:provider, 2, organisations: [organisation], contacts: [contact])
+          recruitment_cycle.providers << build_list(:provider, 2, contacts: [contact])
 
           get :index, params: {
             recruitment_cycle_year: recruitment_cycle.year,
@@ -181,7 +178,6 @@ RSpec.describe API::Public::V1::ProvidersController do
           create(:provider,
                  provider_code: "0AT",
                  provider_name: "Before",
-                 organisations: [organisation],
                  contacts: [contact])
         end
 
@@ -189,7 +185,6 @@ RSpec.describe API::Public::V1::ProvidersController do
           create(:provider,
                  provider_code: "2AT",
                  provider_name: "Second",
-                 organisations: [organisation],
                  contacts: [contact])
         end
 
@@ -320,7 +315,6 @@ RSpec.describe API::Public::V1::ProvidersController do
             create(:provider,
                    provider_code: "2AT",
                    provider_name: "Second",
-                   organisations: [organisation],
                    contacts: [contact])
           end
         end

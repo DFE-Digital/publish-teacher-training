@@ -10,6 +10,8 @@ FactoryBot.define do
       end
     end
 
+    users { [create(:user)] }
+
     address1 { Faker::Address.street_address }
     address2 { Faker::Address.community }
     address3 { Faker::Address.city }
