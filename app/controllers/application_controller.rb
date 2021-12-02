@@ -31,4 +31,8 @@ private
   def authenticate
     redirect_to sign_in_path if !authenticated?
   end
+
+  def not_found
+    render "errors/not_found", status: :not_found
+  end
 end
