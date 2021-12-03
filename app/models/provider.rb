@@ -150,7 +150,7 @@ class Provider < ApplicationRecord
   pg_search_scope :search, against: %i(provider_code provider_name), using: { tsearch: { prefix: true } }
 
   accepts_nested_attributes_for :sites
-  accepts_nested_attributes_for :organisations
+  # accepts_nested_attributes_for :organisations
 
   attr_accessor :skip_geocoding
   after_commit :geocode_provider, unless: :skip_geocoding
@@ -242,9 +242,9 @@ class Provider < ApplicationRecord
   end
 
   # This reflects the fact that organisations should actually be a has_one.
-  def organisation
-    organisations.first
-  end
+  # def organisation
+  #   organisations.first
+  # end
 
   def provider_type=(new_value)
     super
