@@ -26,7 +26,7 @@ FactoryBot.define do
     ukprn { Faker::Number.number(digits: 8) }
     accrediting_provider { "N" }
     region_code { "london" }
-    organisations { [create(:organisation, :with_user)] }
+    # organisations { [create(:organisation, :with_user)] }
     association :recruitment_cycle, strategy: :find_or_create
 
     train_with_us { Faker::Lorem.sentence.to_s }

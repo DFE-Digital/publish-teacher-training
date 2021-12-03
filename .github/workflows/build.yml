@@ -88,27 +88,27 @@ jobs:
       run: |
         docker pull ${DOCKER_IMAGE}:${{ env.DOCKER_IMAGE_TAG }}
 
-    - name: Setup tests
-      run: |
-        docker-compose up --no-build -d
-        docker-compose exec -T web /bin/sh -c "./wait-for-command.sh -c 'nc -z db 5432' -s 0 -t 20"
-        docker-compose exec -T web /bin/sh -c "bundle exec rails db:setup"
-        docker-compose exec -T web /bin/sh -c "apk --no-cache add curl"
-        docker-compose exec -T web /bin/sh -c "bundle exec rake cc:setup"
-      env:
-        IMAGE_TAG: ${{ env.DOCKER_IMAGE_TAG }}
+    # - name: Setup tests
+    #   run: |
+    #     docker-compose up --no-build -d
+    #     docker-compose exec -T web /bin/sh -c "./wait-for-command.sh -c 'nc -z db 5432' -s 0 -t 20"
+    #     docker-compose exec -T web /bin/sh -c "bundle exec rails db:setup"
+    #     docker-compose exec -T web /bin/sh -c "apk --no-cache add curl"
+    #     docker-compose exec -T web /bin/sh -c "bundle exec rake cc:setup"
+    #   env:
+    #     IMAGE_TAG: ${{ env.DOCKER_IMAGE_TAG }}
 
-    - name: Run Ruby Linter
-      run: docker-compose exec -T web /bin/sh -c 'bundle exec rubocop --format clang'
+    # - name: Run Ruby Linter
+    #   run: docker-compose exec -T web /bin/sh -c 'bundle exec rubocop --format clang'
 
-    - name: Run tests
-      run: |
-        docker-compose exec -T web /bin/sh -c 'bundle config --local disable_exec_load true'
-        docker-compose exec -T web /bin/sh -c 'bundle exec rake parallel:setup'
-        docker-compose exec -T web /bin/sh -c 'bundle exec rake "parallel:spec[,, -O .azure_parallel]"'
-      env:
-        IMAGE_TAG: ${{ env.DOCKER_IMAGE_TAG }}
-        CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
+    # - name: Run tests
+    #   run: |
+    #     docker-compose exec -T web /bin/sh -c 'bundle config --local disable_exec_load true'
+    #     docker-compose exec -T web /bin/sh -c 'bundle exec rake parallel:setup'
+    #     docker-compose exec -T web /bin/sh -c 'bundle exec rake "parallel:spec[,, -O .azure_parallel]"'
+    #   env:
+    #     IMAGE_TAG: ${{ env.DOCKER_IMAGE_TAG }}
+    #     CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
 
     - name: Wait for review app deployment
       id: wait_for_review_app_deployment

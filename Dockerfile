@@ -54,4 +54,4 @@ RUN ls /app/public/ && \
 ARG COMMIT_SHA
 ENV COMMIT_SHA=${COMMIT_SHA}
 
-CMD bundle exec rails db:migrate:ignore_concurrent_migration_exceptions && bundle exec rails server -b 0.0.0.0
+CMD bundle exec rails db:migrate:ignore_concurrent_migration_exceptions && bundle exec rake organisation_user_migrate:migrate_organisation_user_to_user_permission && bundle exec rails server -b 0.0.0.0
