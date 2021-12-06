@@ -36,6 +36,22 @@ describe "PATCH /providers/:provider_code/courses/:course_code" do
             _jsonapi: jsonapi_data,
           }
   end
+  let(:provider)          { create :provider, users: [user] }
+  let(:user)              { create :user }
+  let(:payload)           { { email: user.email } }
+  let(:credentials)       { encode_to_credentials(payload) }
+
+  let(:course)            {
+    create :course,
+           provider: provider,
+           subjects: subjects,
+           qualification: qualification
+  }
+  let(:qualification) { :pgce_with_qts }
+  let(:subjects) { [find_or_create(:primary_subject, :primary)] }
+  let(:permitted_params) do
+    %i[updated_qualification]
+  end
 
   before do
     perform_request(updated_qualification)

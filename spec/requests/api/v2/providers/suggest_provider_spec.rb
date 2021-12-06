@@ -2,14 +2,13 @@ require "rails_helper"
 
 describe "GET /suggest" do
   let(:jsonapi_renderer) { JSONAPI::Serializable::Renderer.new }
-  let(:organisation) { create(:organisation) }
   let(:next_recruitment_cycle) { find_or_create(:recruitment_cycle, :next) }
-  let(:user) { create :user, organisations: [organisation] }
+  let(:user) { create :user }
   let(:payload) { { email: user.email } }
   let(:credentials) { encode_to_credentials(payload) }
 
-  let(:provider) { create(:provider, provider_name: "PROVIDER 1", organisations: [organisation]) }
-  let(:provider2)  { create(:provider, provider_name: "PROVIDER 2", organisations: [organisation]) }
+  let(:provider) { create(:provider, provider_name: "PROVIDER 1", users: [user]) }
+  let(:provider2)  { create(:provider, provider_name: "PROVIDER 2", users: [user]) }
 
   context "current recruitment cycle" do
     before do
@@ -63,7 +62,7 @@ describe "GET /suggest" do
   context "next recruitment cycle" do
     it "searches for a provider" do
       next_recruitment_cycle = find_or_create(:recruitment_cycle, :next)
-      provider = create(:provider, organisations: [organisation], recruitment_cycle: next_recruitment_cycle)
+      provider = create(:provider, users: [user], recruitment_cycle: next_recruitment_cycle)
 
       get "/api/v2/providers/suggest?query=#{provider.provider_name}",
           headers: { "HTTP_AUTHORIZATION" => credentials }
@@ -73,7 +72,7 @@ describe "GET /suggest" do
   end
 
   it "limits responses to a maximum of 5 items" do
-    create_list(:provider, 11, provider_name: "provider X", organisations: [organisation], recruitment_cycle: next_recruitment_cycle)
+    create_list(:provider, 11, provider_name: "provider X", users: [user], recruitment_cycle: next_recruitment_cycle)
 
     get "/api/v2/recruitment_cycles/#{next_recruitment_cycle.year}/providers/suggest?query=provider",
         headers: { "HTTP_AUTHORIZATION" => credentials }

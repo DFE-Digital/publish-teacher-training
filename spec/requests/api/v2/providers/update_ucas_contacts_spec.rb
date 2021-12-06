@@ -57,6 +57,33 @@ describe "PATCH recruitment_cycles/year/providers/:provider_code/courses/:course
     provider.reload.contacts.find_by(type: type)
   end
 
+  let(:recruitment_cycle) { find_or_create :recruitment_cycle }
+  let(:provider) do
+    create :provider,
+           users: [user],
+           recruitment_cycle: recruitment_cycle,
+           contacts: [build(:contact)]
+  end
+  let(:user)         { create(:user) }
+  let(:payload)      { { email: user.email } }
+  let(:credentials) { encode_to_credentials(payload) }
+
+  let(:admin_contact) { build(:contact, :admin_type) }
+  let(:utt_contact) { build(:contact, :utt_type) }
+  let(:web_link_contact) { build(:contact, :web_link_type) }
+  let(:fraud_contact) { build(:contact, :fraud_type) }
+  let(:finance_contact)  { build(:contact, :finance_type) }
+
+  let(:updated_contacts) do
+    {
+      admin_contact: slice_contact(admin_contact),
+      utt_contact: slice_contact(utt_contact),
+      web_link_contact: slice_contact(web_link_contact),
+      fraud_contact: slice_contact(fraud_contact),
+      finance_contact: slice_contact(finance_contact),
+    }
+  end
+
   before do
     perform_request(updated_contacts)
   end

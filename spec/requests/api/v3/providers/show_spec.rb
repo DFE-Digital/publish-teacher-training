@@ -5,8 +5,7 @@ describe "GET v3/recruitment_cycle/:recruitment_cycle_year/providers/:provider_c
   let(:request_path) { "/api/v3/recruitment_cycles/#{recruitment_cycle.year}/providers/#{provider.provider_code}" }
   let(:request_params) { {} }
 
-  let(:user) { create(:user, organisations: [organisation]) }
-  let(:organisation) { create(:organisation) }
+  let(:user) { create(:user) }
   let(:payload) { { email: user.email } }
 
   let(:site) { build(:site) }
@@ -23,7 +22,7 @@ describe "GET v3/recruitment_cycle/:recruitment_cycle_year/providers/:provider_c
   let!(:provider) do
     create(:provider,
            sites: [site],
-           organisations: [organisation],
+           users: [user],
            accrediting_provider_enrichments: accrediting_provider_enrichments,
            courses: courses,
            contacts: [contact],
@@ -202,7 +201,7 @@ describe "GET v3/recruitment_cycle/:recruitment_cycle_year/providers/:provider_c
     let(:next_recruitment_cycle) { create :recruitment_cycle, :next }
     let(:next_provider) {
       create :provider,
-             organisations: [organisation],
+             users: [user],
              provider_code: provider.provider_code,
              recruitment_cycle: next_recruitment_cycle
     }

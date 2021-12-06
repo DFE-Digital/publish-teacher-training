@@ -34,6 +34,20 @@ describe "PATCH /providers/:provider_code/courses/:course_code" do
             _jsonapi: jsonapi_data,
           }
   end
+  let(:provider)          { create :provider, users: [user] }
+  let(:user)              { create :user }
+  let(:payload)           { { email: user.email } }
+  let(:credentials)       { encode_to_credentials(payload) }
+
+  let(:course)            {
+    create :course,
+           provider: provider,
+           age_range_in_years: age_range_in_years
+  }
+  let(:age_range_in_years) { "3_to_7" }
+  let(:permitted_params) do
+    %i[age_range_in_years]
+  end
 
   before do
     perform_request(updated_age_range_in_years)

@@ -33,6 +33,19 @@ describe "PATCH /providers/:provider_code/courses/:course_code" do
             _jsonapi: jsonapi_data,
           }
   end
+  let(:provider)          { create :provider, users: [user] }
+  let(:user)              { create :user }
+  let(:payload)           { { email: user.email } }
+  let(:credentials)       { encode_to_credentials(payload) }
+
+  let(:course)            {
+    create :course,
+           provider: provider,
+           additional_gcse_equivalencies: "Must have a cycling proficiency certificate."
+  }
+  let(:permitted_params) do
+    %i[additional_gcse_equivalencies]
+  end
 
   context "course has different additional_gcse_equivalencies" do
     let(:updated_additional_gcse_equivalencies) { { additional_gcse_equivalencies: "Must have a physics A level." } }

@@ -1,12 +1,11 @@
 require "rails_helper"
 
 describe "/api/v2/build_new_course", type: :request do
-  let(:user) { create(:user, organisations: [organisation]) }
+  let(:user) { create(:user) }
   let(:recruitment_cycle) { find_or_create :recruitment_cycle }
-  let(:organisation)      { create :organisation }
   let(:provider) do
     create :provider,
-           organisations: [organisation],
+           users: [user],
            recruitment_cycle: recruitment_cycle,
            provider_type: "Y"
   end
@@ -86,7 +85,7 @@ describe "/api/v2/build_new_course", type: :request do
     let(:site) { build(:site) }
     let(:provider) do
       create :provider,
-             organisations: [organisation],
+             users: [user],
              recruitment_cycle: recruitment_cycle,
              provider_type: "Y",
              sites: [site]
@@ -122,7 +121,7 @@ describe "/api/v2/build_new_course", type: :request do
       let(:pe) { find_or_create(:secondary_subject, :physical_education) }
 
       context "when the current user is an admin" do
-        let(:user) { create(:user, :admin, organisations: [organisation]) }
+        let(:user) { create(:user, :admin) }
 
         it "returns pe as a potential subject" do
           response = do_get params

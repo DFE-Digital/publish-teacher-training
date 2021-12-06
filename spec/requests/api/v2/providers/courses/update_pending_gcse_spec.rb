@@ -33,6 +33,19 @@ describe "PATCH /providers/:provider_code/courses/:course_code" do
             _jsonapi: jsonapi_data,
           }
   end
+  let(:provider)          { create :provider, users: [user] }
+  let(:user)              { create :user }
+  let(:payload)           { { email: user.email } }
+  let(:credentials)       { encode_to_credentials(payload) }
+
+  let(:course)            {
+    create :course,
+           provider: provider,
+           accept_pending_gcse: false
+  }
+  let(:permitted_params) do
+    %i[accept_pending_gcse]
+  end
 
   context "course has an updated_pending_gcse" do
     let(:updated_pending_gcse) { { accept_pending_gcse: true } }

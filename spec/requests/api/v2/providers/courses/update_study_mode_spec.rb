@@ -40,6 +40,27 @@ describe "PATCH /providers/:provider_code/courses/:course_code" do
             _jsonapi: jsonapi_data,
           }
   end
+  let(:provider)          { create :provider, users: [user], sites: [site] }
+  let(:user)              { create :user }
+  let(:payload)           { { email: user.email } }
+  let(:credentials)       { encode_to_credentials(payload) }
+
+  let(:course)            {
+    create :course,
+           provider: provider,
+           study_mode: study_mode,
+           site_statuses: [site_status1, site_status2, site_status3, site_status4]
+  }
+  let(:site_status1) { build(:site_status, :findable, :part_time_vacancies, site: site) }
+  let(:site_status2) { build(:site_status, :findable, :full_time_vacancies, site: site) }
+  let(:site_status3) { build(:site_status, :findable, :both_full_time_and_part_time_vacancies, site: site) }
+  let(:site_status4) { build(:site_status, :findable, :with_no_vacancies, site: site) }
+  let(:site) { build(:site) }
+  let(:study_mode) { :full_time_or_part_time }
+
+  let(:permitted_params) do
+    %i[study_mode]
+  end
 
   before do
     perform_request(updated_study_mode)

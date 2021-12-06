@@ -33,6 +33,19 @@ describe "PATCH /providers/:provider_code/courses/:course_code" do
             _jsonapi: jsonapi_data,
           }
   end
+  let(:provider)          { create :provider, users: [user] }
+  let(:user)              { create :user }
+  let(:payload)           { { email: user.email } }
+  let(:credentials)       { encode_to_credentials(payload) }
+
+  let(:course)            {
+    create :course,
+           provider: provider,
+           degree_subject_requirements: "Must have an A level in maths."
+  }
+  let(:permitted_params) do
+    %i[degree_subject_requirements]
+  end
 
   context "course has different degree_subject_requirements" do
     let(:updated_degree_subject_requirements) { { degree_subject_requirements: "Must have a physics A level." } }

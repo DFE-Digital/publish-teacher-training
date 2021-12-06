@@ -33,6 +33,19 @@ describe "PATCH /providers/:provider_code/courses/:course_code" do
             _jsonapi: jsonapi_data,
           }
   end
+  let(:provider)          { create :provider, users: [user] }
+  let(:user)              { create :user }
+  let(:payload)           { { email: user.email } }
+  let(:credentials)       { encode_to_credentials(payload) }
+
+  let(:course)            {
+    create :course,
+           provider: provider,
+           accept_science_gcse_equivalency: false
+  }
+  let(:permitted_params) do
+    %i[accept_science_gcse_equivalency]
+  end
 
   context "course has an updated_science_gcse_equivalency" do
     let(:updated_science_gcse_equivalency) { { accept_science_gcse_equivalency: true } }

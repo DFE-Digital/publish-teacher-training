@@ -5,7 +5,6 @@ describe AllocationPolicy do
 
   let(:user) { create(:user) }
   let(:admin) { create(:user, :admin) }
-  let(:organisation) { create(:organisation, users: [user]) }
   let(:accredited_body) { create(:provider, :accredited_body) }
   let(:training_provider) { create(:provider) }
   let(:allocation) do
@@ -29,17 +28,13 @@ describe AllocationPolicy do
 
   permissions :create? do
     context "a user that belongs to the allocation accredited body" do
-      before do
-        organisation.providers << accredited_body
-      end
+      before { accredited_body.users << user }
 
       it { is_expected.to permit(user, allocation) }
     end
 
     context "a user that belongs to the provider" do
-      before do
-        organisation.providers << training_provider
-      end
+      before { training_provider.users << user }
 
       it { is_expected.not_to permit(user, allocation) }
     end
@@ -66,7 +61,7 @@ describe AllocationPolicy do
     subject { described_class.new(user, Allocation).resolve }
 
     context "a user that belongs to the allocation accredited body" do
-      before { organisation.providers << accredited_body }
+      before { accredited_body.users << user }
 
       it { is_expected.to contain_exactly(allocation) }
     end

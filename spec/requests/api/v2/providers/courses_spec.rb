@@ -2,7 +2,6 @@ require "rails_helper"
 
 describe "Courses API v2", type: :request do
   let(:user)         { create(:user) }
-  let(:organisation) { create(:organisation, users: [user]) }
   let(:payload)      { { email: user.email } }
   let(:credentials) { encode_to_credentials(payload) }
   let(:course_subject_mathematics) { find_or_create(:primary_subject, :primary_with_mathematics) }
@@ -44,7 +43,7 @@ describe "Courses API v2", type: :request do
     ]
   }
   let(:enrichment)     { build :course_enrichment, :published }
-  let(:provider)       { create :provider, organisations: [organisation] }
+  let(:provider)       { create :provider, users: [user] }
 
   let(:site_status1)   { findable_open_course.site_statuses.first }
   let(:site_status2)   { findable_open_course.site_statuses.last }
@@ -1009,7 +1008,7 @@ describe "Courses API v2", type: :request do
       let(:next_cycle) { create :recruitment_cycle, :next }
       let(:next_provider) {
         create :provider,
-               organisations: [organisation],
+               users: [user],
                provider_code: provider.provider_code,
                recruitment_cycle: next_cycle
       }

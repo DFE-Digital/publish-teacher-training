@@ -33,6 +33,21 @@ describe "PATCH /providers/:provider_code/courses/:course_code" do
             _jsonapi: jsonapi_data,
           }
   end
+  let(:provider)          { build :provider, users: [user] }
+  let(:user)              { create :user }
+  let(:payload)           { { email: user.email } }
+  let(:credentials)       { encode_to_credentials(payload) }
+
+  let(:course)            {
+    create :course,
+           provider: provider,
+           applications_open_from: applications_open_from
+  }
+
+  let(:applications_open_from) { DateTime.new(provider.recruitment_cycle.year.to_i, 1, 15).utc }
+  let(:permitted_params) do
+    %i[updated_applications_open_from]
+  end
 
   before do
     perform_request(updated_applications_open_from)
@@ -83,7 +98,7 @@ describe "PATCH /providers/:provider_code/courses/:course_code" do
   context "for a course in the next cycle" do
     context "with an invalid applications_open_from" do
       let(:course) { create :course, provider: provider, applications_open_from: applications_open_from }
-      let(:provider) { build :provider, organisations: [organisation], recruitment_cycle: recruitment_cycle }
+      let(:provider) { build :provider, users: [user], recruitment_cycle: recruitment_cycle }
       let(:recruitment_cycle) { create(:recruitment_cycle, :next) }
       let(:applications_open_from) { DateTime.new(provider.recruitment_cycle.year.to_i, 1, 15).utc }
       let(:json_data) { JSON.parse(response.body)["errors"] }

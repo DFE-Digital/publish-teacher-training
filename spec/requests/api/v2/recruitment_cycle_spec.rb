@@ -1,9 +1,7 @@
 require "rails_helper"
 
 describe "/api/v2/recruitment_cycle", type: :request do
-  let(:user) { create(:user, organisations: [organisation]) }
-  let(:json_response) { JSON.parse(response.body) }
-  let(:organisation) { create(:organisation) }
+  let(:user) { create(:user) }
   let(:payload) { { email: user.email } }
   let(:credentials) { encode_to_credentials(payload) }
   let(:request_params) { {} }
@@ -76,11 +74,11 @@ describe "/api/v2/recruitment_cycle", type: :request do
   describe "/api/v2/recruitment_cycles/:year/providers/:provider_code/recruitment_cycles" do
     let(:recruitment_cycle)      { find_or_create :recruitment_cycle }
     let(:next_recruitment_cycle) { find_or_create :recruitment_cycle, :next }
-    let(:provider) { create :provider, organisations: [organisation] }
+    let(:provider) { create :provider, users: [user] }
     let(:next_provider) {
       create :provider,
              :next_recruitment_cycle,
-             organisations: [organisation],
+             users: [user],
              provider_code: provider.provider_code
     }
     let(:provider2) { create :provider }

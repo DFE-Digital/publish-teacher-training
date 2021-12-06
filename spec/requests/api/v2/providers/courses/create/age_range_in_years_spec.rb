@@ -39,6 +39,25 @@ RSpec.describe "POST /providers/:provider_code/courses/:course_code" do
          }
   end
 
+  let(:provider)          { create :provider, users: [user], recruitment_cycle: recruitment_cycle, sites: [site] }
+  let(:recruitment_cycle) { find_or_create :recruitment_cycle }
+  let(:user)              { create :user }
+  let(:payload)           { { email: user.email } }
+  let(:credentials)       { encode_to_credentials(payload) }
+
+  let(:course)            {
+    build :course,
+          provider: provider,
+          age_range_in_years: age_range_in_years,
+          subjects: subjects,
+          sites: [site]
+  }
+  let(:site) { build(:site) }
+  let(:subjects) { [find_or_create(:primary_subject)] }
+
+  let(:age_range_in_years) { "3_to_7" }
+  let(:json_data) { JSON.parse(response.body)["errors"] }
+
   context "with a valid age range" do
     it "returns http success" do
       expect(response).to have_http_status(:success)

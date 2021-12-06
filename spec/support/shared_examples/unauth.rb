@@ -8,8 +8,8 @@ shared_examples "Unauthenticated, unauthorised, or not accepted T&Cs" do
   end
 
   context "when user has not accepted terms" do
-    let(:user)         { create(:user, :inactive) }
-    let(:organisation) { create(:organisation, users: [user]) }
+    let(:user) { create(:user, :inactive) }
+    let(:provider) { create(:provider, users: [user]) }
 
     it { is_expected.to have_http_status(:forbidden) }
 
@@ -20,8 +20,8 @@ shared_examples "Unauthenticated, unauthorised, or not accepted T&Cs" do
   end
 
   context "when user has been discarded" do
-    let(:user)         { create(:user) }
-    let(:organisation) { create(:organisation, users: [user]) }
+    let(:user) { create(:user) }
+    let(:provider) { create(:provider, users: [user]) }
 
     before do
       user.discard
