@@ -1913,12 +1913,6 @@ describe Course, type: :model do
 
         subject { create(:course, :skip_validate, level: "secondary", subjects: [modern_languages, french, german, spanish]) }
 
-        before do
-          french_financial_incentive
-          german_financial_incentive
-          spanish_financial_incentive
-        end
-
         it "reads financial incentives from only the first subject, and ignores the 'Modern Languages' subject" do
           expect(subject.bursary_amount).to eq french.financial_incentive.bursary_amount
           expect(subject.has_bursary?).to eq true

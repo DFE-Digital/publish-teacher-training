@@ -499,7 +499,7 @@ class Course < ApplicationRecord
   end
 
   def has_bursary?
-    !bursary_amount.nil?
+    bursary_amount.present?
   end
 
   def has_scholarship_and_bursary?
@@ -507,11 +507,11 @@ class Course < ApplicationRecord
   end
 
   def has_scholarship?
-    !scholarship_amount.nil?
+    scholarship_amount.present?
   end
 
   def has_early_career_payments?
-    !financial_incentive&.early_career_payments.nil?
+    financial_incentive&.early_career_payments.present?
   end
 
   def bursary_amount
