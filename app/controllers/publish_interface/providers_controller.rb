@@ -3,7 +3,9 @@ module PublishInterface
     rescue_from ActiveRecord::RecordNotFound, with: :not_found
     decorates_assigned :provider
     before_action :build_recruitment_cycle
-    before_action :build_provider
+    before_action :build_provider, except: [:index]
+
+    def index; end
 
     def details
       redirect_to_contact_page_with_ukprn_error if @provider.ukprn.blank?
@@ -19,9 +21,7 @@ module PublishInterface
     end
 
     def build_provider
-      @provider = Provider
-        .where(recruitment_cycle: @recruitment_cycle, provider_code: params[:provider_code])
-        .first
+      @provider = Provider.find_by!(recruitment_cycle: @recruitment_cycle, provider_code: params[:provider_code])
     end
 
     def redirect_to_contact_page_with_ukprn_error
