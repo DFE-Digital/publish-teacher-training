@@ -64,6 +64,8 @@ class Provider < ApplicationRecord
   # the accredited_providers that this provider is a training_provider for
   has_many :accrediting_providers, -> { distinct }, through: :courses
 
+  delegate :year, to: :recruitment_cycle, prefix: true
+
   def rollable_courses?
     courses.any?(&:rollable?)
   end
@@ -187,6 +189,10 @@ class Provider < ApplicationRecord
     address.compact.join(", ")
   end
 
+  def full_address_with_breaks
+    [address1, address2, address3, address4, postcode].map { |line| ERB::Util.html_escape(line) }.select(&:present?).join("<br> ").html_safe
+  end
+
   def address_changed?
     saved_change_to_provider_name? ||
       saved_change_to_address1? ||
@@ -292,6 +298,18 @@ class Provider < ApplicationRecord
 
   def discard_courses
     courses.each(&:discard)
+  end
+
+  def declared_visa_sponsorship?
+    !can_sponsor_student_visa.nil? && !can_sponsor_skilled_worker_visa.nil?
+  end
+
+  def can_sponsor_all_visas?
+    can_sponsor_student_visa && can_sponsor_skilled_worker_visa
+  end
+
+  def can_only_sponsor_student_visa?
+    can_sponsor_student_visa && !can_sponsor_skilled_worker_visa
   end
 
 private
