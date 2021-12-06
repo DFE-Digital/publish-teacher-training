@@ -8,6 +8,8 @@ module PublishInterface
     def index; end
 
     def details
+      authorize @provider, :show?
+
       redirect_to_contact_page_with_ukprn_error if @provider.ukprn.blank?
       @errors = flash[:error_summary]
       flash.delete(:error_summary)
