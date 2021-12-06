@@ -1,0 +1,91 @@
+<% page_title = "About your organisation" %>
+<% content_for :page_title, title_with_error_prefix(page_title, @errors.present?) %>
+
+<% content_for :before_content do %>
+  <%= govuk_back_link_to(details_provider_recruitment_cycle_path(@provider.provider_code, @provider.recruitment_cycle_year)) %>
+<% end %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_with(
+      model: provider,
+      url: about_provider_recruitment_cycle_path(@provider.provider_code, @provider.recruitment_cycle_year),
+      method: :put,
+      builder: GOVUKDesignSystemFormBuilder::FormBuilder,
+    ) do |f| %>
+
+      <%= f.govuk_error_summary %>
+
+      <h1 class="govuk-heading-l">
+        <span class="govuk-caption-l"><%= @provider.provider_name %></span>
+        <%= page_title %>
+      </h1>
+
+      <%= f.hidden_field :page, value: :about %>
+
+      <p class="govuk-body">Tell applicants why they should choose to train with you. Say:</p>
+      <ul class="govuk-list govuk-list--bullet">
+        <li>who you are</li>
+        <li>who you work with</li>
+      </ul>
+      <p class="govuk-body">You could mention:</p>
+      <ul class="govuk-list govuk-list--bullet">
+        <li>your key values</li>
+        <li>your specialisms</li>
+        <li>your past achievements (eg student successes, Ofsted ratings)</li>
+      </ul>
+      <p class="govuk-body">Be specific with any claims you make, and support them with evidence. For example:</p>
+      <ul class="govuk-list govuk-list--bullet">
+        <li>don’t say “our students are some of the happiest in the country”</li>
+        <li>do say “the Times Educational Supplement ranked our students as 4th happiest in the country”</li>
+      </ul>
+
+      <%= f.govuk_text_area(:train_with_us,
+        form_group: { id: "train-with-us" },
+        label: { size: "m" },
+        max_words: 250,
+        rows: 15) %>
+
+      <% if provider.accredited_bodies.present? %>
+        <% accredited_body = "accredited body".pluralize(provider.accredited_bodies.count) %>
+
+        <hr class="govuk-section-break govuk-section-break--visible govuk-section-break--l">
+
+        <h2 class="govuk-heading-m">About your <%= accredited_body %></h2>
+
+        <p class="govuk-body">Tell applicants about your <%= accredited_body %> – you could mention their academic specialities and achievements.</p>
+        <p class="govuk-body">Be specific with the claims you make, and support them with evidence.</p>
+
+        <%= f.fields model: :accredited_bodies do |abf| %>
+          <%= abf.hidden_field :provider_name %>
+          <%= abf.hidden_field :provider_code %>
+          <%= abf.govuk_text_area(:description,
+            form_group: { id: "accrediting-provider-#{abf.object.provider_code}" },
+            label: { text: "#{abf.object.provider_name} (optional)", size: "s" },
+            max_words: 100,
+            rows: 10) %>
+        <% end %>
+      <% end %>
+
+      <hr class="govuk-section-break govuk-section-break--visible govuk-section-break--l">
+
+      <h2 class="govuk-heading-m">Training with disabilities and other needs</h2>
+      <p class="govuk-body">Say how you support candidates with disabilities and other needs. This could include candidates with:</p>
+      <ul class="govuk-list govuk-list--bullet">
+        <li>dyslexia</li>
+        <li>physical, hearing and visual impairments</li>
+        <li>mental health conditions</li>
+      </ul>
+      <p class="govuk-body">If accessibility varies between locations, give details. It’s also useful for applicants to know how you’ve accommodated others with specific access needs in the past.</p>
+
+      <%= f.govuk_text_area(:train_with_disability,
+        form_group: { id: "train-with-disability" },
+        label: { size: "s" },
+        max_words: 250,
+        rows: 15) %>
+
+      <%= render GovukComponent::InsetTextComponent.new(text: I18n.t("success.changes_ttl")) %>
+      <%= f.govuk_submit "Save and publish changes" %>
+    <% end %>
+  </div>
+</div>

@@ -14,6 +14,10 @@ module PublishInterface
       flash.delete(:error_summary)
     end
 
+    def about
+      show_deep_linked_errors(%i[train_with_us train_with_disability])
+    end
+
   private
 
     def build_recruitment_cycle
@@ -29,6 +33,12 @@ module PublishInterface
       flash[:error] = { id: "provider-error", message: "Please enter a UKPRN before continuing" }
 
       redirect_to contact_provider_recruitment_cycle_path(@provider.provider_code, @provider.recruitment_cycle_year)
+    end
+
+    def show_deep_linked_errors(attributes)
+      return if params[:display_errors].blank?
+
+      @errors = @provider.errors.messages.select { |key| attributes.include? key }
     end
   end
 end
