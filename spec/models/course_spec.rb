@@ -1869,9 +1869,10 @@ describe Course, type: :model do
   end
 
   context "bursaries and scholarships" do
-    let!(:financial_incentive) { create(:financial_incentive, subject: modern_languages, bursary_amount: 255, scholarship: 1415, early_career_payments: 32) }
+    let(:english) { find_or_create(:secondary_subject, :english) }
+    let!(:financial_incentive) { create(:financial_incentive, subject: english, bursary_amount: 255, scholarship: 1415, early_career_payments: 32) }
 
-    subject { create(:course, :skip_validate, level: "secondary", subjects: [modern_languages]) }
+    subject { create(:course, :skip_validate, level: "secondary", subjects: [english]) }
 
     it { is_expected.to have_bursary }
     it { is_expected.to have_scholarship_and_bursary }
@@ -1879,6 +1880,51 @@ describe Course, type: :model do
 
     it { expect(subject.bursary_amount).to eq("255") }
     it { expect(subject.scholarship_amount).to eq("1415") }
+
+    context "with multiple subjects" do
+      let(:maths) { find_or_create(:secondary_subject, :mathematics) }
+      let(:religious_education) { find_or_create(:secondary_subject, :religious_education) }
+
+      context "when main subject does not have financial incentive" do
+        subject { create(:course, :skip_validate, level: "secondary", subjects: [religious_education, english]) }
+
+        it "reads financial incentives from only the first subject" do
+          expect(subject.bursary_amount).to be_nil
+          expect(subject.has_bursary?).to eq false
+          expect(subject.scholarship_amount).to be_nil
+          expect(subject.has_scholarship?).to eq false
+        end
+      end
+
+      context "when main subject has a financial incentive" do
+        subject { create(:course, :skip_validate, level: "secondary", subjects: [maths, english]) }
+
+        it "reads financial incentives from only the first subject" do
+          expect(subject.bursary_amount).to eq maths.financial_incentive.bursary_amount
+          expect(subject.has_bursary?).to eq true
+          expect(subject.scholarship_amount).to eq maths.financial_incentive.scholarship
+          expect(subject.has_scholarship?).to eq true
+        end
+      end
+
+      context "with modern languages" do
+        let(:french) { create(:modern_languages_subject, :french) }
+        let(:german) { create(:modern_languages_subject, :german) }
+        let(:spanish) { create(:modern_languages_subject, :spanish) }
+        let!(:french_financial_incentive) { create(:financial_incentive, subject: french, bursary_amount: "15000", scholarship: nil) }
+        let!(:german_financial_incentive) { create(:financial_incentive, subject: german, bursary_amount: "14000", scholarship: nil) }
+        let!(:spanish_financial_incentive) { create(:financial_incentive, subject: spanish, bursary_amount: "13000", scholarship: nil) }
+
+        subject { create(:course, :skip_validate, level: "secondary", subjects: [modern_languages, french, german, spanish]) }
+
+        it "reads financial incentives from only the first subject, and ignores the 'Modern Languages' subject" do
+          expect(subject.bursary_amount).to eq french.financial_incentive.bursary_amount
+          expect(subject.has_bursary?).to eq true
+          expect(subject.scholarship_amount).to eq french.financial_incentive.scholarship
+          expect(subject.has_scholarship?).to eq false
+        end
+      end
+    end
   end
 
   context "entry requirements" do

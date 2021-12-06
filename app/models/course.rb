@@ -499,27 +499,34 @@ class Course < ApplicationRecord
   end
 
   def has_bursary?
-    financial_incentives.any?(&:bursary_amount?)
+    bursary_amount.present?
   end
 
   def has_scholarship_and_bursary?
-    financial_incentives.any?(&:scholarship?) && financial_incentives.any?(&:bursary_amount?)
+    has_scholarship? && has_bursary?
   end
 
   def has_scholarship?
-    financial_incentives.any?(&:scholarship?)
+    scholarship_amount.present?
   end
 
   def has_early_career_payments?
-    financial_incentives.any?(&:early_career_payments?)
+    financial_incentive&.early_career_payments.present?
   end
 
   def bursary_amount
-    financial_incentives&.first&.bursary_amount
+    financial_incentive&.bursary_amount
   end
 
   def scholarship_amount
-    financial_incentives&.first&.scholarship
+    financial_incentive&.scholarship
+  end
+
+  def financial_incentive
+    # Ignore "modern languages" as financial incentives
+    # differ based on the language selected
+
+    subjects.reject { |subject| subject.subject_name == "Modern Languages" }.first.financial_incentive
   end
 
   def self_accredited?
