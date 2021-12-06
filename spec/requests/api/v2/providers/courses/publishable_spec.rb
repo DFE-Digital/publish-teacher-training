@@ -3,7 +3,6 @@ require "rails_helper"
 describe "Publishable API v2", type: :request do
   let(:course)        { TestDataCache.get(:course, :primary, :unpublished) }
   let(:provider)      { course.provider }
-  let(:organisation)  { provider.organisations.first }
   let(:user)          { provider.users.first }
   let(:payload)       { { email: user.email } }
   let(:credentials) { encode_to_credentials(payload) }

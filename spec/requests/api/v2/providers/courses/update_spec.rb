@@ -15,9 +15,8 @@ describe "PATCH /providers/:provider_code/courses/:course_code" do
   end
 
   let(:recruitment_cycle) { find_or_create :recruitment_cycle }
-  let(:organisation) { create :organisation }
-  let(:provider) { create(:provider, organisations: [organisation], recruitment_cycle: recruitment_cycle) }
-  let(:user) { create :user, organisations: [organisation] }
+  let(:provider) { create(:provider, users: [user], recruitment_cycle: recruitment_cycle) }
+  let(:user) { create :user }
   let(:payload) { { email: user.email } }
   let(:credentials) { encode_to_credentials(payload) }
 
@@ -630,7 +629,7 @@ describe "PATCH /providers/:provider_code/courses/:course_code" do
     context "with a non-self-accrediting body" do
       let(:provider) do
         create(:provider,
-               organisations: [organisation],
+               users: [user],
                recruitment_cycle: recruitment_cycle)
       end
 
@@ -684,7 +683,7 @@ describe "PATCH /providers/:provider_code/courses/:course_code" do
       let(:provider) do
         create(:provider,
                :accredited_body,
-               organisations: [organisation],
+               users: [user],
                recruitment_cycle: recruitment_cycle)
       end
 

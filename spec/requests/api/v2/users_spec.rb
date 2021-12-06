@@ -53,8 +53,7 @@ describe "/api/v2/users", type: :request do
     end
 
     context "when user is associated with an accredited body" do
-      let(:organisation) { create(:organisation, providers: [accredited_body]) }
-      let(:user) { create(:user, organisations: [organisation]) }
+      let(:user) { create(:user, providers: [accredited_body]) }
       let(:accredited_body) { create(:provider, :accredited_body) }
 
       it "has a data section with the correct attribute" do
