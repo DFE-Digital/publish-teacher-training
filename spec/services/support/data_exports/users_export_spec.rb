@@ -31,15 +31,9 @@ RSpec.describe Support::DataExports::UsersExport do
   end
 
   describe ".data" do
-    let(:provider) { create(:provider, organisations: []) }
-    let(:organisation) { create(:organisation, users: [], providers: [provider]) }
-    let(:user1) { create(:user, organisations: [organisation]) }
-    let(:user2) { create(:user, organisations: [organisation]) }
-
-    before do
-      user1
-      user2
-    end
+    let(:provider) { create(:provider, users: []) }
+    let!(:user1) { create(:user, providers: [provider]) }
+    let!(:user2) { create(:user, providers: [provider]) }
 
     it "returns array of user_data" do
       res = subject.data

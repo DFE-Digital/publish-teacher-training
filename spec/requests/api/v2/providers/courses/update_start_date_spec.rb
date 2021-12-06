@@ -20,9 +20,8 @@ describe "PATCH /providers/:provider_code/courses/:course_code" do
             _jsonapi: jsonapi_data,
           }
   end
-  let(:organisation)      { create :organisation }
-  let(:provider)          { build :provider, organisations: [organisation] }
-  let(:user)              { create :user, organisations: [organisation] }
+  let(:provider)          { build :provider, users: [user] }
+  let(:user)              { create :user }
   let(:payload)           { { email: user.email } }
   let(:credentials)       { encode_to_credentials(payload) }
 

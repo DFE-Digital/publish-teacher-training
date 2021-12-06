@@ -2,14 +2,13 @@ require "rails_helper"
 
 describe "Courses API v2", type: :request do
   let(:user)         { create(:user) }
-  let(:organisation) { create(:organisation, users: [user]) }
   let(:payload)      { { email: user.email } }
   let(:credentials) { encode_to_credentials(payload) }
   let(:current_cycle) { find_or_create :recruitment_cycle }
   let(:subjects) { [course_subject_mathematics] }
 
-  let(:provider1)       { create :provider, organisations: [organisation] }
-  let(:provider2)       { create :provider, organisations: [organisation] }
+  let(:provider1)       { create :provider, users: [user] }
+  let(:provider2)       { create :provider, users: [user] }
   let(:accredited_body) { create :provider, :accredited_body }
 
   let(:course1) { create(:course, provider: provider1) }
@@ -17,7 +16,7 @@ describe "Courses API v2", type: :request do
   let(:course3) { create(:course) }
   let(:course4) { create(:course, provider: provider1, accrediting_provider: accredited_body) }
 
-  let(:provider3) { create :provider, :previous_recruitment_cycle, organisations: [organisation] }
+  let(:provider3) { create :provider, :previous_recruitment_cycle, users: [user] }
   let(:previous_cycle_course) { create(:course, provider: provider3) }
 
   describe "GET index" do

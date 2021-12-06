@@ -2,13 +2,12 @@ require "rails_helper"
 
 describe "GET /providers/:provider_code/courses/new" do
   let(:recruitment_cycle) { find_or_create :recruitment_cycle }
-  let(:organisation)      { create :organisation }
   let(:provider) do
     create :provider,
-           organisations: [organisation],
+           users: [user],
            recruitment_cycle: recruitment_cycle
   end
-  let(:user)    { create :user, organisations: [organisation] }
+  let(:user)    { create(:user) }
   let(:payload) { { email: user.email } }
   let(:credentials) { encode_to_credentials(payload) }
 

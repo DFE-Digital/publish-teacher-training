@@ -8,20 +8,18 @@ describe "PATCH /providers/:provider_code" do
   end
   let(:permitted_params) { %i[accredited_bodies] }
   let(:recruitment_cycle) { find_or_create :recruitment_cycle }
-  let(:organisation) { create :organisation }
-  let(:accrediting_provider) { create :provider, provider_code: "AP1" }
+  let(:accrediting_provider) { create :provider, provider_code: "AP2" }
   let(:course) { create :course, accrediting_provider: accrediting_provider, course_code: "P33P" }
   let(:courses) { [course] }
   let(:accrediting_provider_enrichments) { nil }
   let(:provider) do
     create :provider,
-           provider_code: "A01",
-           organisations: [organisation],
+           users: [user],
            recruitment_cycle: recruitment_cycle,
            accrediting_provider_enrichments: accrediting_provider_enrichments,
            courses: courses
   end
-  let(:user)         { create :user, organisations: [organisation] }
+  let(:user)         { create :user }
   let(:payload)      { { email: user.email } }
   let(:credentials) { encode_to_credentials(payload) }
   let(:new_description) { "new description" }

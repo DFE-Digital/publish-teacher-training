@@ -2,8 +2,7 @@ require "rails_helper"
 
 describe "AccreditedBody API v2", type: :request do
   describe "GET /providers" do
-    let(:user) { create(:user, organisations: [organisation]) }
-    let(:organisation) { create(:organisation) }
+    let(:user) { create(:user) }
     let(:recruitment_cycle) { find_or_create :recruitment_cycle }
     let(:payload) { { email: user.email } }
     let(:credentials) { encode_to_credentials(payload) }
@@ -33,7 +32,7 @@ describe "AccreditedBody API v2", type: :request do
 
     let(:accredited_provider) {
       create(:provider,
-             organisations: [organisation],
+             users: [user],
              recruitment_cycle: recruitment_cycle)
     }
 
@@ -216,7 +215,7 @@ describe "AccreditedBody API v2", type: :request do
 
         let(:accredited_provider_2) {
           create(:provider,
-                 organisations: [create(:organisation)],
+                 users: [create(:user)],
                  recruitment_cycle: recruitment_cycle)
         }
 

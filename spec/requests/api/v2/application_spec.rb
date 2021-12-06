@@ -2,8 +2,7 @@ require "rails_helper"
 
 describe "API v2", type: :request do
   describe "Error 404" do
-    let(:user) { create(:user, organisations: [organisation]) }
-    let(:organisation) { create(:organisation) }
+    let(:user) { create(:user) }
     let(:payload) { { email: user.email } }
     let(:credentials) { encode_to_credentials(payload) }
 
