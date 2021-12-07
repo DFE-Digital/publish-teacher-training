@@ -41,16 +41,16 @@
         action_path: "#{about_publish_provider_recruitment_cycle_path(@provider.provider_code, @provider.recruitment_cycle_year)}#train-with-us",
         action_visually_hidden_text: "details about training with your organisation",
       ) %>
-      <% if provider.accredited_bodies.present? %>
-        <% provider.accredited_bodies.each do |provider| %>
+      <% if @provider.accredited_bodies.present? %>
+        <% @provider.accredited_bodies.each do |accredited_provider| %>
           <% enrichment_summary(
             summary_list,
             :provider,
-            "#{provider[:provider_name]} (optional)",
-            provider["description"],
-            ["accrediting_provider_#{provider['provider_code']}"],
-            action_path: "#{about_publish_provider_recruitment_cycle_path(@provider.provider_code, @provider.recruitment_cycle_year)}#accrediting-provider-#{provider['provider_code']}",
-            action_visually_hidden_text: "details about #{provider['provider_name']}",
+            "#{accredited_provider[:provider_name]} (optional)",
+            accredited_provider["description"],
+            ["accrediting_provider_#{accredited_provider['provider_code']}"],
+            action_path: "#{about_publish_provider_recruitment_cycle_path(@provider.provider_code, @provider.recruitment_cycle_year)}#accrediting-provider-#{accredited_provider['provider_code']}",
+            action_visually_hidden_text: "details about #{accredited_provider['provider_name']}",
           ) %>
         <% end %>
       <% end %>
@@ -65,7 +65,7 @@
         action_visually_hidden_text: "details about training with disabilities and other needs",
       ) %>
 
-      <% if Providers::VisaSponsorshipService.new(provider).visa_sponsorship_enabled? %>
+      <% if Providers::VisaSponsorshipService.new(@provider).visa_sponsorship_enabled? %>
         <% enrichment_summary(
           summary_list,
           :provider,
@@ -73,7 +73,7 @@
           visa_sponsorship_status(@provider),
           %w[can_sponsor_student_visa can_sponsor_skilled_worker_visa],
           truncate_value: false,
-          action_path: provider.declared_visa_sponsorship? ? publish_provider_recruitment_cycle_visas_path(@provider.provider_code, @provider.recruitment_cycle_year) : nil,
+          action_path: @provider.declared_visa_sponsorship? ? publish_provider_recruitment_cycle_visas_path(@provider.provider_code, @provider.recruitment_cycle_year) : nil,
           action_visually_hidden_text: "if candidates can get visa sponsorship",
         ) %>
       <% end %>
