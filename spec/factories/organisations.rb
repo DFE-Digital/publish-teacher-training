@@ -10,5 +10,9 @@ FactoryBot.define do
     trait :with_user do
       users { [create(:user)] }
     end
+
+    trait :with_providers do
+      providers { create_list(:provider, 3) }
+    end
   end
 end
