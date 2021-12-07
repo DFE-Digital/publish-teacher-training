@@ -9,7 +9,13 @@ class User < ApplicationRecord
 
   has_many :user_notifications, class_name: "UserNotification"
 
-  has_many :providers, through: :organisations
+  # WIP
+  alias_attribute :providers, :providers_via_organisations
+  has_many :providers_via_organisations, through: :organisations, source: :providers
+
+  has_many :user_permissions
+  has_many :providers_via_user_permissions, through: :user_permissions, source: :providers
+
 
   has_many :access_requests,
            foreign_key: :requester_id,
