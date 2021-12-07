@@ -17,6 +17,14 @@ module Providers
 
     private
 
+      def providers_list?
+        filter_label == t("components.filter.providers.provider_search")
+      end
+
+      def course_search?(filter)
+        filter == "course_search"
+      end
+
       def title_html(filter, value)
         tag.span("Remove ", class: "govuk-visually-hidden") + value + tag.span(" #{filter.humanize.downcase} filter", class: "govuk-visually-hidden")
       end
