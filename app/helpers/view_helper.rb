@@ -39,7 +39,7 @@ module ViewHelper
   # end
 
   def title_with_error_prefix(title, error)
-   "#{t('page_titles.error_prefix') if error}#{title}"
+    "#{t('page_titles.error_prefix') if error}#{title}"
   end
 
   # def enrichment_error_url(provider_code:, course:, field:, message: nil)

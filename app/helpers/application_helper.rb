@@ -53,6 +53,8 @@ module ApplicationHelper
   #   end
   # end
 
+  # TODO: refactor enrichment_summary method to not use an instance variable
+  # rubocop:disable Rails/HelperInstanceVariable
   def enrichment_summary(summary_list, model, key, value, fields, truncate_value: true, action_path: nil, action_visually_hidden_text: nil)
     action = render_action(action_path, action_visually_hidden_text)
 
@@ -81,6 +83,7 @@ module ApplicationHelper
       end
     end
   end
+# rubocop:enable Rails/HelperInstanceVariable
 
 private
 
