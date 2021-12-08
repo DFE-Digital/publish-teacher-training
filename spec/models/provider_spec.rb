@@ -199,6 +199,52 @@ describe Provider, type: :model do
     end
   end
 
+  describe "provider_and_course_search" do
+    let(:provider) { create(:provider, provider_name: "Really big school", provider_code: "A01", courses: [build(:course, course_code: "2VVZ")]) }
+    let(:provider2) { create(:provider, provider_name: "Slightly smaller school", provider_code: "A02", courses: [build(:course, course_code: "2VVZ")]) }
+
+    subject { Provider.provider_and_course_search(search_params) }
+
+    context "when provider code only is given" do
+      let(:search_params) do
+        {
+          provider_name_or_code: "A01",
+          course_code: nil,
+        }
+      end
+
+      it "returns the correct list of providers" do
+        expect(subject).to eq([provider])
+      end
+    end
+
+    context "when course code only is present" do
+      let(:search_params) do
+        {
+          provider_name_or_code: nil,
+          course_code: "2VVZ",
+        }
+      end
+
+      it "returns the correct list of providers" do
+        expect(subject).to eq([provider, provider2])
+      end
+    end
+
+    context "when provider code and course are present" do
+      let(:search_params) do
+        {
+          provider_name_or_code: "A01",
+          course_code: "2VVZ",
+        }
+      end
+
+      it "returns the correct list of providers" do
+        expect(subject).to eq([provider])
+      end
+    end
+  end
+
   describe "#update_changed_at" do
     let(:provider) { create(:provider, changed_at: 1.hour.ago) }
 

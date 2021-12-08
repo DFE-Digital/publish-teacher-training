@@ -89,6 +89,18 @@ class Provider < ApplicationRecord
     end.order(:changed_at, :id)
   end
 
+  scope :provider_and_course_search, ->(
+    provider_name_or_code: search_params[:provider_name_or_code],
+    course_code: search_params[:course_code]) do
+                                       if course_code.blank?
+                                         search(provider_name_or_code)
+                                       elsif provider_name_or_code.blank?
+                                         joins(:courses).merge(Course.case_insensitve_search(course_code))
+                                       else
+                                         search(provider_name_or_code).joins(:courses).merge(Course.case_insensitve_search(course_code))
+                                       end
+                                     end
+
   scope :by_name_ascending, -> { order(provider_name: :asc) }
   scope :by_name_descending, -> { order(provider_name: :desc) }
 
