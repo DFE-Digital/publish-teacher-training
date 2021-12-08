@@ -29,7 +29,7 @@ describe ProviderPolicy do
   end
 
   permissions :can_show_training_provider? do
-    let(:allowed_user) { provider.users.first }
+    let(:allowed_user) { create(:user, providers: [provider]) }
     let(:not_allowed_user) { create(:user) }
 
     let(:provider) { course.accrediting_provider }

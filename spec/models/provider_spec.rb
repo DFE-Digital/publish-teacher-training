@@ -22,7 +22,7 @@ describe Provider, type: :model do
 
   describe "associations" do
     it { is_expected.to have_many(:sites) }
-    it { is_expected.to have_many(:users).through(:organisations) }
+    it { is_expected.to have_many(:users).through(:user_permissions) }
     it { is_expected.to have_one(:ucas_preferences).class_name("ProviderUCASPreference") }
     it { is_expected.to have_many(:contacts) }
     it { is_expected.to have_many(:user_notifications) }
@@ -105,11 +105,7 @@ describe Provider, type: :model do
   end
 
   describe "users" do
-    let(:discarded_user) { create(:user, :discarded) }
-
-    before do
-      provider.organisation.users << discarded_user
-    end
+    let(:discarded_user) { create(:user, :discarded, providers: [provider]) }
 
     it "returns users who haven't been discarded" do
       expect(subject.users).not_to include(discarded_user)

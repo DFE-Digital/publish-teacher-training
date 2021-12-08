@@ -37,7 +37,7 @@ class Provider < ApplicationRecord
   has_many :users_via_organisation, -> { kept }, through: :organisations, source: :users
 
   has_many :user_permissions
-  has_many :users, through: :user_permissions
+  has_many :users, -> { kept }, through: :user_permissions
 
   has_many :sites
 

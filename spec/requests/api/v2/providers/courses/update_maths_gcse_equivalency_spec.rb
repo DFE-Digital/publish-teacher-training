@@ -2,9 +2,8 @@ require "rails_helper"
 
 describe "PATCH /providers/:provider_code/courses/:course_code" do
   let(:jsonapi_renderer) { JSONAPI::Serializable::Renderer.new }
-  let(:organisation)      { create :organisation }
-  let(:provider)          { create :provider, organisations: [organisation] }
-  let(:user)              { create :user, organisations: [organisation] }
+  let(:provider)          { create :provider, users: [user] }
+  let(:user)              { create :user }
   let(:payload)           { { email: user.email } }
   let(:credentials)       { encode_to_credentials(payload) }
   let(:course)            {
@@ -32,19 +31,6 @@ describe "PATCH /providers/:provider_code/courses/:course_code" do
           params: {
             _jsonapi: jsonapi_data,
           }
-  end
-  let(:provider)          { create :provider, users: [user] }
-  let(:user)              { create :user }
-  let(:payload)           { { email: user.email } }
-  let(:credentials)       { encode_to_credentials(payload) }
-
-  let(:course)            {
-    create :course,
-           provider: provider,
-           accept_english_gcse_equivalency: false
-  }
-  let(:permitted_params) do
-    %i[accept_english_gcse_equivalency]
   end
 
   context "course has an updated_maths_gcse_equivalency" do

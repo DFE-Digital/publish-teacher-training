@@ -2,6 +2,7 @@ require "rails_helper"
 
 describe "/api/v2/recruitment_cycle", type: :request do
   let(:user) { create(:user) }
+  let(:json_response) { JSON.parse(response.body) }
   let(:payload) { { email: user.email } }
   let(:credentials) { encode_to_credentials(payload) }
   let(:request_params) { {} }

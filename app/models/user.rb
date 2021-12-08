@@ -52,9 +52,8 @@ class User < ApplicationRecord
     "#{first_name} #{last_name} <#{email}>"
   end
 
-  # accepts array or single organisation
-  def remove_access_to(organisations_to_remove)
-    self.organisations = organisations - Array(organisations_to_remove)
+  def remove_access_to(providers_to_remove)
+    self.providers = providers - Array(providers_to_remove)
   end
 
   def associated_with_accredited_body?

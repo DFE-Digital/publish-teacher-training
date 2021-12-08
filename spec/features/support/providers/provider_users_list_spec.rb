@@ -14,7 +14,7 @@ feature "View provider users" do
   end
 
   def and_there_is_a_provider
-    @provider = create(:provider)
+    @provider = create(:provider, :with_users)
   end
 
   def when_i_visit_the_provider_show_page
@@ -26,6 +26,6 @@ feature "View provider users" do
   end
 
   def then_i_should_see_a_table_of_users
-    expect(provider_users_index_page.users.size).to eq(1)
+    expect(provider_users_index_page.users.size).to eq(4)
   end
 end

@@ -24,7 +24,6 @@ FactoryBot.define do
     ukprn { Faker::Number.number(digits: 8) }
     accrediting_provider { "N" }
     region_code { "london" }
-    organisations { [create(:organisation, :with_user)] }
     association :recruitment_cycle, strategy: :find_or_create
 
     train_with_us { Faker::Lorem.sentence.to_s }
@@ -49,6 +48,10 @@ FactoryBot.define do
       provider_type { %i[university scitt].sample }
       accrediting_provider { "Y" }
       urn { nil }
+    end
+
+    trait :with_users do
+      users { create_list(:user, 4) }
     end
 
     transient do

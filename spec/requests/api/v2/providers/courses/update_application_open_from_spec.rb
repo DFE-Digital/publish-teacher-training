@@ -2,9 +2,8 @@ require "rails_helper"
 
 describe "PATCH /providers/:provider_code/courses/:course_code" do
   let(:jsonapi_renderer) { JSONAPI::Serializable::Renderer.new }
-  let(:organisation)      { create :organisation }
-  let(:provider)          { build :provider, organisations: [organisation] }
-  let(:user)              { create :user, organisations: [organisation] }
+  let(:provider)          { build :provider, users: [user] }
+  let(:user)              { create :user }
   let(:payload)           { { email: user.email } }
   let(:credentials)       { encode_to_credentials(payload) }
   let(:course)            {
@@ -32,21 +31,6 @@ describe "PATCH /providers/:provider_code/courses/:course_code" do
           params: {
             _jsonapi: jsonapi_data,
           }
-  end
-  let(:provider)          { build :provider, users: [user] }
-  let(:user)              { create :user }
-  let(:payload)           { { email: user.email } }
-  let(:credentials)       { encode_to_credentials(payload) }
-
-  let(:course)            {
-    create :course,
-           provider: provider,
-           applications_open_from: applications_open_from
-  }
-
-  let(:applications_open_from) { DateTime.new(provider.recruitment_cycle.year.to_i, 1, 15).utc }
-  let(:permitted_params) do
-    %i[updated_applications_open_from]
   end
 
   before do

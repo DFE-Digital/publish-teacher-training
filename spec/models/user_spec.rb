@@ -6,7 +6,7 @@ describe User, type: :model do
   describe "associations" do
     it { is_expected.to have_many(:organisation_users) }
     it { is_expected.to have_many(:organisations).through(:organisation_users) }
-    it { is_expected.to have_many(:providers).through(:organisations) }
+    it { is_expected.to have_many(:providers).through(:user_permissions) }
     it { is_expected.to have_many(:user_notifications) }
   end
 
@@ -82,28 +82,27 @@ describe User, type: :model do
   end
 
   describe "#remove_access_to" do
-    let(:organisation) { create(:organisation) }
-    let(:other_organisation) { create(:organisation) }
-    let(:yet_other_organisation) { create(:organisation) }
+    let(:provider) { create(:provider) }
+    let(:other_provider) { create(:provider) }
+    let(:yet_other_provider) { create(:provider) }
 
-    describe "one organisation" do
+    describe "one provider" do
       before do
-        subject.organisations = [organisation, other_organisation]
-        subject.remove_access_to(organisation)
+        subject.providers = [provider, other_provider]
+        subject.remove_access_to(provider)
       end
 
-      it "removes the right organisation" do
-        expect(subject.reload.organisations).to eq([other_organisation])
+      it "removes the right provider" do
+        expect(subject.reload.providers).to eq([other_provider])
       end
     end
 
     describe "#associated_with_accredited_body?" do
       context "user is associated with accredited body" do
-        let(:organisation) { create(:organisation, providers: [accredited_body]) }
         let(:current_recruitment_cycle) { find_or_create(:recruitment_cycle) }
         let(:accredited_body) { create(:provider, :accredited_body, recruitment_cycle: current_recruitment_cycle) }
 
-        subject { create(:user, organisations: [organisation]) }
+        subject { create(:user, providers: [accredited_body]) }
 
         it "returns true" do
           expect(subject.associated_with_accredited_body?).to be true
@@ -135,14 +134,14 @@ describe User, type: :model do
       end
     end
 
-    describe "multiple organisations" do
+    describe "multiple providers" do
       before do
-        subject.organisations = [organisation, other_organisation, yet_other_organisation]
-        subject.remove_access_to [organisation, yet_other_organisation]
+        subject.providers = [provider, other_provider, yet_other_provider]
+        subject.remove_access_to [provider, yet_other_provider]
       end
 
-      it "removes the right organisation" do
-        expect(subject.reload.organisations).to eq([other_organisation])
+      it "removes the right provider" do
+        expect(subject.reload.providers).to eq([other_provider])
       end
     end
   end

@@ -68,9 +68,6 @@ describe UserNotificationPreferences do
   end
 
   describe "#update" do
-    let(:organisation) { create(:organisation) }
-    let(:organisation2) { create(:organisation) }
-
     let(:accredited_body1) { create(:provider, :accredited_body) }
     let(:accredited_body2) { create(:provider, :accredited_body) }
 
@@ -109,9 +106,7 @@ describe UserNotificationPreferences do
 
     context "user has no notifications" do
       before do
-        user
-        organisation.users << user
-        organisation.providers = [accredited_body1, accredited_body2]
+        user.providers << [accredited_body1, accredited_body2]
       end
 
       it "creates user notification preference for each accredited body" do
@@ -126,12 +121,6 @@ describe UserNotificationPreferences do
       end
 
       context "when the user has duplicate provider associations" do
-        before do
-          user
-          organisation2.users << user
-          organisation2.providers = [accredited_body1, accredited_body2]
-        end
-
         it "doesn't create duplicate user notification preferences" do
           described_class.new(user_id: user.id).update(enable_notifications: true)
 
@@ -144,7 +133,7 @@ describe UserNotificationPreferences do
         let(:previous_accredited_body) { create(:provider, :accredited_body, :previous_recruitment_cycle) }
 
         before do
-          organisation.providers << previous_accredited_body
+          user.providers << previous_accredited_body
         end
 
         it "doesn't create a user notification preference for that accredited body" do
@@ -158,8 +147,7 @@ describe UserNotificationPreferences do
       before do
         user
         other_user
-        organisation.users << user
-        organisation.providers = [accredited_body1, accredited_body2]
+        user.providers << [accredited_body1, accredited_body2]
         user_notification1
         user_notification2
         other_users_notification
@@ -219,8 +207,7 @@ describe UserNotificationPreferences do
         before do
           user
           other_user
-          organisation.users << user
-          organisation.providers = [accredited_body1]
+          user.providers = [accredited_body1]
           user_notification1
           user_notification2
         end
@@ -241,8 +228,7 @@ describe UserNotificationPreferences do
         before do
           user
           other_user
-          organisation.users << user
-          organisation.providers = [accredited_body1, accredited_body2, accredited_body3]
+          user.providers << [accredited_body1, accredited_body2, accredited_body3]
           user_notification1
           user_notification2
         end
