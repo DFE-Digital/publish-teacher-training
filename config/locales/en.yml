@@ -96,14 +96,12 @@ en:
         site:
           attributes:
             location_name:
-              blank: "is missing"
+              blank: "^Enter a name"
               taken: "is in use by another location"
             address1:
-              blank: "is missing"
-            address3:
-              blank: "is missing"
+              blank: "^Enter a building and street"
             postcode:
-              blank: "is missing"
+              blank: "^Enter a postcode"
         course:
           attributes:
             course_code: 
