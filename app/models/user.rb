@@ -9,7 +9,6 @@ class User < ApplicationRecord
 
   has_many :user_notifications, class_name: "UserNotification"
 
-  # WIP
   has_many :providers, through: :organisations
 
   has_many :user_permissions
