@@ -1,6 +1,6 @@
 module UserAssociationsService
   class Delete
-    attr_reader :user, :organisations
+    attr_reader :user, :providers
 
     class << self
       def call(**args)
@@ -8,8 +8,8 @@ module UserAssociationsService
       end
     end
 
-    def initialize(user:, organisations:)
-      @organisations = organisations
+    def initialize(user:, providers:)
+      @providers = providers
       @user = user
     end
 
@@ -23,7 +23,7 @@ module UserAssociationsService
   private
 
     def remove_access
-      user.remove_access_to(organisations)
+      user.remove_access_to(providers)
     end
 
     def update_user_notification_preferences

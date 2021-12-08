@@ -54,10 +54,6 @@ describe API::V2::SerializableAccessRequest do
   end
 
   describe "has the correct attributes" do
-    before { Timecop.freeze }
-
-    after  { Timecop.return }
-
     it { is_expected.to have_attribute(:email_address).with_value(access_request.email_address) }
     it { is_expected.to have_attribute(:first_name).with_value(access_request.first_name) }
     it { is_expected.to have_attribute(:last_name).with_value(access_request.last_name) }

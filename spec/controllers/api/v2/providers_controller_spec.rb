@@ -8,7 +8,7 @@ RSpec.describe API::V2::ProvidersController do
 
   describe "#show_any" do
     context "when any provider uses endpoint" do
-      let(:user) { provider.users.first }
+      let(:user) { create(:user, providers: [provider]) }
       let(:provider) { create(:provider) }
       let(:course) { create(:course) }
       let(:other_provider) { course.provider }
@@ -26,7 +26,7 @@ RSpec.describe API::V2::ProvidersController do
 
   describe "#suggest_any" do
     context "when any provider uses endpoint" do
-      let(:user) { provider.users.first }
+      let(:user) { create(:user, providers: [provider]) }
       let!(:provider) { create(:provider) }
       let(:course) { create(:course) }
       let!(:other_provider) { course.provider }
@@ -38,7 +38,7 @@ RSpec.describe API::V2::ProvidersController do
     end
 
     context "with a filter" do
-      let(:user) { provider.users.first }
+      let(:user) { create(:user, providers: [provider]) }
       let!(:provider) { create(:provider) }
       let!(:in_scope_provider) { create(:provider, :accredited_body, provider_name: "in provider") }
       let!(:out_scope_provider) { create(:provider, provider_name: "out provider") }
@@ -57,7 +57,7 @@ RSpec.describe API::V2::ProvidersController do
 
   describe "#update" do
     context "when user is not an admin" do
-      let(:user) { provider.users.first }
+      let(:user) { create(:user, providers: [provider]) }
       let(:provider) { create(:provider, can_sponsor_student_visa: true, can_sponsor_skilled_worker_visa: false) }
       let(:course) { create(:course, provider: provider) }
 

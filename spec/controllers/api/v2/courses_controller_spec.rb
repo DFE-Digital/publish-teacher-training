@@ -177,7 +177,7 @@ describe API::V2::CoursesController, type: :controller do
     let(:enrichment) { build(:course_enrichment, :published) }
 
     context "as non-admin" do
-      let(:existing_user) { course.provider.users.first }
+      let(:existing_user) { create(:user, providers: [course.provider]) }
 
       it "cannot update admin fields" do
         expect {
