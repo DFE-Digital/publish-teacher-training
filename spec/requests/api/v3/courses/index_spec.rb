@@ -19,10 +19,11 @@ describe "GET v3/recruitment_cycles/:year/courses" do
   describe "request_id" do
     it "stores request_id from header" do
       headers = { "X-Request-Id" => "hello" }
-      hash = double
-      expect(RequestStore).to receive(:store).and_return(hash)
-      expect(hash).to receive(:[]=).with(:request_id, "hello")
+      allow(RequestStore).to receive(:store).and_return({})
+
       get request_path, headers: headers
+
+      expect(RequestStore.store).to include(request_id: "hello")
     end
   end
 
