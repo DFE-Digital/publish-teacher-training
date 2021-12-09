@@ -168,7 +168,7 @@ class Course < ApplicationRecord
     joins(:provider).merge(Provider.by_provider_name(provider_name))
   end
 
-  scope :case_insensitve_search, ->(course_code) do
+  scope :case_insensitive_search, ->(course_code) do
     where("lower(course.course_code) = ?", course_code.downcase)
   end
 

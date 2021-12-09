@@ -19,22 +19,23 @@ module Support
 
     attr_reader :model_data_scope, :filters
 
-    def provider_and_course_search(model_data_scope, filters)
-      search_params = { provider_name_or_code: filters[:provider_search], course_code: filters[:course_search] }
-      return model_data_scope if filters.values.none?
+    def search(model_data_scope, filters)
+      return model_data_scope if filters.values.all?(&:blank?)
 
-      model_data_scope.provider_and_course_search(search_params)
+      search_params = { provider_name_or_code: filters[:provider_search], course_code: filters[:course_search] }
+
+      model_data_scope.search(**search_params)
     end
 
     def text_search(model_data_scope, text_search)
       return model_data_scope if text_search.blank?
 
-      model_data_scope.search(text_search)
+      model_data_scope.provider_search(text_search)
     end
 
     def filter_model_data_scope
       if filters.include?(:provider_search)
-        provider_and_course_search(model_data_scope, filters)
+        search(model_data_scope, filters)
       else
         text_search(model_data_scope, filters[:text_search])
       end

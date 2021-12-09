@@ -250,10 +250,10 @@ describe Course, type: :model do
       end
     end
 
-    describe "case_insensitve_search" do
-      let(:course) { create(:course, course_code: "2VVZ") }
+    describe "case_insensitive_search" do
+      let(:course) { create(:course, course_code: "2VvZ") }
 
-      subject { described_class.case_insensitve_search("2vvZ") }
+      subject { described_class.case_insensitive_search("2vVZ") }
 
       it "returns correct course with incorrect" do
         expect(subject).to eq([course])

@@ -199,11 +199,11 @@ describe Provider, type: :model do
     end
   end
 
-  describe "provider_and_course_search" do
+  describe "#search" do
     let(:provider) { create(:provider, provider_name: "Really big school", provider_code: "A01", courses: [build(:course, course_code: "2VVZ")]) }
     let(:provider2) { create(:provider, provider_name: "Slightly smaller school", provider_code: "A02", courses: [build(:course, course_code: "2VVZ")]) }
 
-    subject { Provider.provider_and_course_search(search_params) }
+    subject { described_class.search(search_params) }
 
     context "when provider code only is given" do
       let(:search_params) do
@@ -736,11 +736,11 @@ describe Provider, type: :model do
     end
   end
 
-  describe "#search" do
+  describe "#provider_search" do
     let!(:matching_provider) { create(:provider, provider_code: "ABC", provider_name: "Dave's Searches") }
     let!(:non_matching_provider) { create(:provider) }
 
-    subject { described_class.search(search_term) }
+    subject { described_class.provider_search(search_term) }
 
     context "with an exactly matching code" do
       let(:search_term) { "ABC" }

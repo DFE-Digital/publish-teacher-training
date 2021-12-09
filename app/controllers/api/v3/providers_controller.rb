@@ -10,7 +10,7 @@ module API
 
         build_fields_for_index
         @providers = @recruitment_cycle.providers.includes(:recruitment_cycle)
-        @providers = @providers.search(params[:search]) if params[:search].present?
+        @providers = @providers.provider_search(params[:search]) if params[:search].present?
 
         render jsonapi: @providers.by_name_ascending, class: { Provider: API::V3::SerializableProvider }, fields: @fields
       end

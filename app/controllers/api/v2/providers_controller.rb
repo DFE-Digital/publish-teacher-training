@@ -63,7 +63,7 @@ module API
         return render(status: :bad_request) unless begins_with_alphanumeric(params[:query])
 
         found_providers = policy_scope(@recruitment_cycle.providers)
-          .search(params[:query])
+          .provider_search(params[:query])
           .limit(5)
 
         render(
@@ -80,7 +80,7 @@ module API
         return render(status: :bad_request) unless begins_with_alphanumeric(params[:query])
 
         scope = @recruitment_cycle.providers
-                                  .search(params[:query])
+                                  .provider_search(params[:query])
                                   .limit(5)
 
         scope = scope.accredited_body if only_accredited_body_filter?
