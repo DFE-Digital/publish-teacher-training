@@ -7,7 +7,7 @@ module API
 
           found_providers = recruitment_cycle.providers
                               .with_findable_courses
-                              .search(params[:query])
+                              .provider_search(params[:query])
                               .limit(10)
 
           render(

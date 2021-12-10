@@ -168,6 +168,10 @@ class Course < ApplicationRecord
     joins(:provider).merge(Provider.by_provider_name(provider_name))
   end
 
+  scope :case_insensitive_search, ->(course_code) do
+    where("lower(course.course_code) = ?", course_code.downcase)
+  end
+
   scope :changed_since, ->(timestamp) do
     if timestamp.present?
       changed_at_since(timestamp)

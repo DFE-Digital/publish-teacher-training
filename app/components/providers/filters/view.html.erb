@@ -11,7 +11,7 @@
 
       <!-- Div made focusable to 'catch' focus from filters. see https://github.com/DFE-Digital/apply-for-teacher-training/pull/2640 -->
       <div class="moj-filter__content" tabindex="-1">
-        <% if filters %>
+        <% if filters.present? %>
           <div class="moj-filter__selected">
             <div class="moj-filter__selected-heading">
               <div class="moj-filter__heading-title">
@@ -25,14 +25,22 @@
             </div>
 
             <% filters.each do |filter, value| %>
-              <h3 class="govuk-heading-s govuk-!-margin-bottom-0"><%= filter_label %></h3>
-              <ul class="moj-filter-tags">
-                <% tags_for_filter(filter, value).each do |tag| %>
-                  <li>
-                    <%= govuk_link_to(tag[:title], tag[:remove_link], class: "moj-filter__tag", draggable: "false") %>
-                  </li>
-                <% end %>
-              </ul>
+              <% if value.present? %>
+                <h3 class="govuk-heading-s govuk-!-margin-bottom-0">
+                  <% if course_search?(filter) %>
+                    <%= t("components.filter.providers.course_search") %>
+                  <% else %>
+                    <%= filter_label %>
+                  <% end %>
+                </h3>
+                <ul class="moj-filter-tags">
+                  <% tags_for_filter(filter, value).each do |tag| %>
+                    <li>
+                      <%= govuk_link_to(tag[:title], tag[:remove_link], class: "moj-filter__tag", draggable: "false") %>
+                    </li>
+                  <% end %>
+                </ul>
+              <% end %>
             <% end %>
           </div>
         <% end %>
@@ -41,10 +49,21 @@
           <form method="get">
             <%= submit_tag "Apply filters", class: "govuk-button" %>
 
-            <div class="govuk-form-group">
-              <%= label_tag "text_search", filter_label, class: "govuk-label govuk-label--s" %>
-              <%= text_field_tag "text_search", (filters[:text_search] if filters), spellcheck: false, class: "govuk-input" %>
-            </div>
+            <% if providers_list? %>
+              <div class="govuk-form-group">
+                <%= label_tag "provider_search", filter_label, class: "govuk-label govuk-label--s" %>
+                <%= text_field_tag "provider_search", (filters[:provider_search] if filters), spellcheck: false, class: "govuk-input" %>
+              </div>
+              <div class="govuk-form-group">
+                <%= label_tag "course_search", t("components.filter.providers.course_search"), class: "govuk-label govuk-label--s" %>
+                <%= text_field_tag "course_search", (filters[:course_search] if filters), spellcheck: false, class: "govuk-input" %>
+              </div>
+            <% else %>
+              <div class="govuk-form-group">
+                <%= label_tag "text_search", filter_label, class: "govuk-label govuk-label--s" %>
+                <%= text_field_tag "text_search", (filters[:text_search] if filters), spellcheck: false, class: "govuk-input" %>
+              </div>
+            <% end %>
           </form>
         </div>
       </div>

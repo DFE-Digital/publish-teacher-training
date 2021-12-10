@@ -16,12 +16,14 @@ private
   attr_reader :params
 
   def merged_filters
-    @merged_filters ||= text_search.with_indifferent_access
+    @merged_filters ||= params.include?("text_search") ? text_search : provider_and_course_search
   end
 
   def text_search
-    return {} if params[:text_search].blank?
+    params.slice(:text_search)
+  end
 
-    { "text_search" => params[:text_search] }
+  def provider_and_course_search
+    params.slice(:provider_search, :course_search)
   end
 end

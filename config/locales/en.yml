@@ -34,7 +34,8 @@ en:
           index: "Data exports"
     filter:
       providers:
-        text_search: "Name or code"
+        provider_search: "Provider name or code"
+        course_search: "Course code"
       allocations:
         text_search: "Name or code"
       users:
@@ -106,7 +107,7 @@ en:
               blank: "is missing"
         course:
           attributes:
-            course_code: 
+            course_code:
               taken: "Course code is already taken"
               blank: "Course code cannot be blank"
             level:

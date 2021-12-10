@@ -66,7 +66,7 @@ module Support
     end
 
     def filter_params
-      params.permit(:text_search, :page, :commit)
+      params.permit(:provider_search, :course_search, :page, :commit)
     end
 
     def provider
