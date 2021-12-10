@@ -1,12 +1,12 @@
 FactoryBot.define do
   factory :access_request do
-    requester { build(:user, :with_organisation) }
+    requester { build(:user, :with_provider) }
     status { :requested }
     request_date_utc { Time.now.utc }
     email_address { Faker::Internet.email }
     first_name { Faker::Name.first_name }
     last_name { Faker::Name.last_name }
-    organisation { requester.organisations.first }
+    organisation { requester.providers.first }
     reason { Faker::Lorem.sentence.to_s }
     requester_email { requester.email }
   end

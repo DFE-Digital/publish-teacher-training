@@ -61,11 +61,10 @@ describe AccessRequest, type: :model do
   end
 
   describe "#add_additional_attributes" do
-    let(:user) { create(:user, organisations: [organisation]) }
+    let(:user) { create(:user) }
     let(:organisation) { build(:organisation) }
     let(:access_request) {
       build(:access_request,
-            organisation: user.organisations.first.name,
             requester_email: user.email,
             requester: nil,
             request_date_utc: nil,
