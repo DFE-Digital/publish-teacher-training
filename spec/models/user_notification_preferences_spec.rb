@@ -121,10 +121,6 @@ describe UserNotificationPreferences do
       end
 
       context "when the user has duplicate provider associations" do
-        before do
-          user.providers << [accredited_body1, accredited_body2]
-        end
-
         it "doesn't create duplicate user notification preferences" do
           described_class.new(user_id: user.id).update(enable_notifications: true)
 
