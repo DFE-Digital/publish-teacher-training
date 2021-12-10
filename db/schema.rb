@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_12_07_140550) do
+ActiveRecord::Schema.define(version: 2021_12_10_103437) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
@@ -396,8 +396,9 @@ ActiveRecord::Schema.define(version: 2021_12_07_140550) do
     t.bigint "provider_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["provider_id"], name: "index_user_permission_on_provider_id", unique: true
-    t.index ["user_id"], name: "index_user_permission_on_user_id", unique: true
+    t.index ["provider_id"], name: "index_user_permission_on_provider_id"
+    t.index ["user_id", "provider_id"], name: "index_user_permission_on_user_id_and_provider_id", unique: true
+    t.index ["user_id"], name: "index_user_permission_on_user_id"
   end
 
   add_foreign_key "access_request", "\"user\"", column: "requester_id", name: "FK_access_request_user_requester_id", on_delete: :nullify
