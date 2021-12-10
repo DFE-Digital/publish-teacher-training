@@ -4,10 +4,8 @@ RSpec.describe UserAssociationsService::Delete do
   let(:user) { create :user }
 
   let(:accredited_body1) { create(:provider, :accredited_body, users: [user]) }
-  # let(:organisation1) { create(:organisation, users: [user], providers: [accredited_body1]) }
 
   let(:accredited_body2) { create(:provider, :accredited_body, users: [user]) }
-  # let(:organisation2) { create(:organisation, users: [user], providers: [accredited_body2]) }
 
   let(:user_notification1) do
     create(
