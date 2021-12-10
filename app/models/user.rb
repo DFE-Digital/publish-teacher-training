@@ -2,14 +2,7 @@ class User < ApplicationRecord
   include Discard::Model
   include PgSearch::Model
 
-  has_many :organisation_users
-
-  # dependent destroy because https://stackoverflow.com/questions/34073757/removing-relations-is-not-being-audited-by-audited-gem/34078860#34078860
-  has_many :organisations, through: :organisation_users, dependent: :destroy
-
   has_many :user_notifications, class_name: "UserNotification"
-
-  has_many :providers_via_organisations, through: :organisations, source: :providers
 
   has_many :user_permissions
   has_many :providers, through: :user_permissions
@@ -52,7 +45,7 @@ class User < ApplicationRecord
     "#{first_name} #{last_name} <#{email}>"
   end
 
-  # accepts array or single organisation
+  # accepts array or single provider
   def remove_access_to(providers_to_remove)
     self.providers = self.providers - Array(providers_to_remove)
   end

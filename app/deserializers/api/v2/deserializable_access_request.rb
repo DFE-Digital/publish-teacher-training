@@ -4,7 +4,6 @@ module API
       attributes :first_name,
                  :last_name,
                  :email_address,
-                 :organisation,
                  :reason,
                  :requester_email
     end

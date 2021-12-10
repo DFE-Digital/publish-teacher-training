@@ -7,7 +7,6 @@ module Support
     def new
       @provider = Provider.new
       @provider.sites.build
-      @provider.organisations.build
     end
 
     def create
@@ -92,8 +91,7 @@ module Support
                                                                         address2
                                                                         address3
                                                                         address4
-                                                                        postcode],
-                                                   organisations_attributes: %i[name]).merge(recruitment_cycle: RecruitmentCycle.current_recruitment_cycle)
+                                                                        postcode]).merge(recruitment_cycle: RecruitmentCycle.current_recruitment_cycle)
     end
   end
 end

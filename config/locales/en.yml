@@ -195,8 +195,6 @@ en:
               blank: "^Enter your last name"
             email_address:
               blank: "^Enter your email address"
-            organisation:
-              blank: "^Enter their organisation"
             reason:
               blank: "^Why do they need access?"
   errors:

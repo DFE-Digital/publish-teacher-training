@@ -32,10 +32,6 @@ class Provider < ApplicationRecord
 
   belongs_to :recruitment_cycle
 
-  has_and_belongs_to_many :organisations, join_table: :organisation_provider
-
-  has_many :users_via_organisation, -> { kept }, through: :organisations, source: :users
-
   has_many :user_permissions
   has_many :users, -> { kept }, through: :user_permissions
 
@@ -152,7 +148,6 @@ class Provider < ApplicationRecord
   pg_search_scope :search, against: %i(provider_code provider_name), using: { tsearch: { prefix: true } }
 
   accepts_nested_attributes_for :sites
-  accepts_nested_attributes_for :organisations
 
   attr_accessor :skip_geocoding
   after_commit :geocode_provider, unless: :skip_geocoding
@@ -241,11 +236,6 @@ class Provider < ApplicationRecord
     # itself, so we don't want to alter the semantics of updated_at which
     # represents changes to just the provider record.
     update_columns changed_at: timestamp
-  end
-
-  # This reflects the fact that organisations should actually be a has_one.
-  def organisation
-    organisations.first
   end
 
   def provider_type=(new_value)

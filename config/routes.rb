@@ -61,8 +61,6 @@ Rails.application.routes.draw do
       get "providers/suggest_any", to: "providers#suggest_any"
       get "/recruitment_cycles/:recruitment_cycle_year/providers/suggest", to: "providers#suggest"
 
-      resources :organisations, only: :index
-
       concern :provider_routes do
         resources :courses, param: :code do
           post :publish, on: :member
@@ -91,7 +89,6 @@ Rails.application.routes.draw do
       resources :recruitment_cycles,
                 only: %i[index show],
                 param: :year do
-        resources :organisations, only: :index
         resources :providers,
                   only: %i[index show update],
                   param: :code,

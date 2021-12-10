@@ -4,12 +4,12 @@ Faker::Config.locale = "en-GB"
 module IntegrationSeeds
   class << self
     def call
-      organisation_id = "000"
-      organisation = FactoryBot.find_or_create(
-        :organisation,
+      provider_id = "000"
+      provider = FactoryBot.find_or_create(
+        :provider,
         :with_anonymised_data,
-        name: "Test Organisation",
-        org_id: organisation_id,
+        name: "Test provider",
+        org_id: provider_id,
       )
 
       test_user = create_user(
@@ -18,7 +18,7 @@ module IntegrationSeeds
         last_name: "tests",
         state: "transitioned",
       )
-      add_user_to_organisation test_user, organisation
+      add_user_to_provider test_user, provider
 
       admin_user = create_user(
         email: "becomingateacher+admin-integration-tests@digital.education.gov.uk",
@@ -27,7 +27,7 @@ module IntegrationSeeds
         state: "transitioned",
         admin: true,
       )
-      add_user_to_organisation admin_user, organisation
+      add_user_to_provider admin_user, provider
 
       provider_code = "0AA"
       provider = current_recruitment_cycle.providers.find_by(provider_code: provider_code)
@@ -37,7 +37,6 @@ module IntegrationSeeds
           :with_anonymised_data,
           :accredited_body,
           recruitment_cycle: current_recruitment_cycle,
-          organisations: [organisation],
           provider_code: provider_code,
           provider_name: "Integrated Testing School #{provider_code}",
 
@@ -99,8 +98,8 @@ module IntegrationSeeds
 
   private
 
-    def add_user_to_organisation(user, organisation)
-      organisation.users << user unless user.in? organisation.users
+    def add_user_to_provider(user, provider)
+      provider.users << user unless user.in? provider.users
     end
 
     def current_recruitment_cycle

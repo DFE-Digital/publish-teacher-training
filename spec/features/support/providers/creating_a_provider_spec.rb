@@ -12,7 +12,6 @@ feature "Creating a provider" do
 
   scenario "adds a new provider" do
     when_i_fill_in_a_valid_provider_details
-    and_i_fill_in_a_valid_organisation_details
     and_i_fill_in_a_valid_site_details
     and_i_click_the_submit_button
     then_i_am_redirected_back_to_the_provider_show_page
@@ -37,10 +36,6 @@ private
     provider_new_page.provider_type_scitt.click
     provider_new_page.provider_email.set("test@example.com")
     provider_new_page.provider_telephone.set("01392 000000")
-  end
-
-  def and_i_fill_in_a_valid_organisation_details
-    provider_new_page.organisation_name.set("Organisation 1")
   end
 
   def and_i_fill_in_a_valid_site_details

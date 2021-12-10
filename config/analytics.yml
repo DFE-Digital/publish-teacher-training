@@ -1,7 +1,6 @@
 shared:
   access_request:
     - id
-    - organisation
     - request_date_utc
     - status
   allocation:
@@ -86,23 +85,6 @@ shared:
     - user_id
     - created_at
     - updated_at
-  nctl_organisation:
-    - id
-    - name
-    - nctl_id
-    - organisation_id
-  organisation:
-    - id
-    - name
-    - org_id
-  organisation_provider:
-    - id
-    - provider_id
-    - organisation_id
-  organisation_user:
-    - id
-    - organisation_id
-    - user_id
   provider:
     - id
     - address4

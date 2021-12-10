@@ -10,7 +10,6 @@ module PageObjects
       element :provider_type_scitt, "#provider-provider-type-scitt-field"
       element :provider_email, "#provider-email-field"
       element :provider_telephone, "#provider-telephone-field"
-      element :organisation_name, "#provider-organisations-attributes-0-name-field"
       element :site_name, "#provider-sites-attributes-0-name-field"
       element :site_code, "#provider-sites-attributes-0-code-field"
       element :site_location_name, "#provider-sites-attributes-0-location-name-field"

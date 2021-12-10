@@ -154,7 +154,6 @@ RSpec/IteratedExpectation:
   Exclude:
     - "spec/models/concerns/courses/edit_options/qualifications_concern_spec.rb"
     - "spec/models/course/publish_enrichments_spec.rb"
-    - "spec/requests/api/v2/organisations_spec.rb"
 
 # Offense count: 4
 RSpec/LeakyConstantDeclaration:
@@ -333,7 +332,6 @@ Rails/EnvironmentVariableAccess:
 # Include: app/models/**/*.rb
 Rails/HasAndBelongsToMany:
   Exclude:
-    - "app/models/organisation.rb"
     - "app/models/provider.rb"
 
 # Offense count: 88
