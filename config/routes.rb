@@ -28,6 +28,7 @@ Rails.application.routes.draw do
         get "/about", on: :member, to: "providers#about"
         put "/about", on: :member, to: "providers#update"
         get "/contact", on: :member, to: "providers#contact"
+        put "/contact", on: :member, to: "providers#update"
         get "/details", on: :member, to: "providers#details"
         get "/visas", to: "providers/visas#edit"
       end
