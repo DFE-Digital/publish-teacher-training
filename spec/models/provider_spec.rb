@@ -227,7 +227,7 @@ describe Provider, type: :model do
       end
 
       it "returns the correct list of providers" do
-        expect(subject).to eq([provider, provider2])
+        expect(subject).to match_array([provider, provider2])
       end
     end
 
