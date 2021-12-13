@@ -270,14 +270,6 @@ Rails/WhereExists:
 
 # Offense count: 3
 # Cop supports --auto-correct.
-Style/CaseLikeIf:
-  Exclude:
-    - 'app/services/courses/generate_course_name_service.rb'
-    - 'docs/lib/govuk_tech_docs/open_api/renderer.rb'
-    - 'spec/factories/courses.rb'
-
-# Offense count: 3
-# Cop supports --auto-correct.
 # Configuration parameters: EnforcedStyle.
 # SupportedStyles: format, sprintf, percent
 Style/FormatString:

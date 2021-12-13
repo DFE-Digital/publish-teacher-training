@@ -31,11 +31,12 @@ module Courses
 
       language_names = languages.map { |language| format_language_name(language) }
 
-      if language_names.length == 1
+      case language_names.length
+      when 1
         title + " (#{language_names[0]})"
-      elsif language_names.length == 2
+      when 2
         title + " (#{language_names.join(' and ')})"
-      elsif language_names.length == 3
+      when 3
         title + " (#{language_names.join(', ')})"
       end
     end

@@ -182,7 +182,8 @@ module GovukTechDocs
         properties.merge! get_any_of_hash(schema_data)
         properties_hash = {}
         properties.each do |pkey, property|
-          if property.type == "object"
+          case property.type
+          when "object"
             properties_hash[pkey] = {}
             items = property.items
             if items.present?
@@ -191,7 +192,7 @@ module GovukTechDocs
             if property.properties.present?
               properties_hash[pkey] = schema_properties(property)
             end
-          elsif property.type == "array"
+          when "array"
             properties_hash[pkey] = []
             items = property.items
             if items.present?
