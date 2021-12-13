@@ -381,11 +381,11 @@ describe "Access Request API V2", type: :request do
 
         it "has validation error details" do
           expect(json_data.count).to eq 5
-          expect(json_data[0]["detail"]).to eq("Enter your first name")
-          expect(json_data[1]["detail"]).to eq("Enter your last name")
-          expect(json_data[2]["detail"]).to eq("Enter your email address")
+          expect(json_data[0]["detail"]).to eq("Enter a first name")
+          expect(json_data[1]["detail"]).to eq("Enter a last name")
+          expect(json_data[2]["detail"]).to eq("Enter an email address")
           expect(json_data[3]["detail"]).to eq("Enter their organisation")
-          expect(json_data[4]["detail"]).to eq("Why do they need access?")
+          expect(json_data[4]["detail"]).to eq("Enter why they need access")
         end
 
         it "has validation error pointers" do

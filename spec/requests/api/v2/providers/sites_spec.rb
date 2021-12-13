@@ -371,17 +371,17 @@ describe "Sites API v2", type: :request do
 
             it "checks the location_name is present" do
               expect(response.body).to include("Invalid location_name")
-              expect(response.body).to include("Name is missing")
+              expect(response.body).to include("Enter a name")
             end
 
             it "checks the address1 is present" do
               expect(response.body).to include("Invalid address1")
-              expect(response.body).to include("Building and street is missing")
+              expect(response.body).to include("Enter a building and street")
             end
 
             it "checks the postcode is present" do
               expect(response.body).to include("Invalid postcode")
-              expect(response.body).to include("Postcode is missing")
+              expect(response.body).to include("Enter a postcode")
             end
 
             it "checks the postcode is present" do
