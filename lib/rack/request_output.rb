@@ -5,7 +5,7 @@ module Rack
     end
 
     def call(env)
-      Rails.logger.debug { "API HIT => #{env['rack.url_scheme']}://#{env['HTTP_HOST']}#{env['REQUEST_URI']}" }
+      Rails.logger.info { "API HIT => #{env['rack.url_scheme']}://#{env['HTTP_HOST']}#{env['REQUEST_URI']}" }
 
       @app.call(env)
     end

@@ -23,11 +23,11 @@ class AllocationCopyDataService
     end
 
     if @summary
-      puts "###################################"
-      puts "## Allocation copying task complete"
-      puts "# copied: #{copied}"
-      puts "# skipped: #{skipped}"
-      puts "###################################"
+      Rails.logger.info "###################################"
+      Rails.logger.info "## Allocation copying task complete"
+      Rails.logger.info { "# copied: #{copied}" }
+      Rails.logger.info { "# skipped: #{skipped}" }
+      Rails.logger.info "###################################"
     end
   end
 

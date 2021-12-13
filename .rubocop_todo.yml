@@ -260,19 +260,6 @@ Rails/HasAndBelongsToMany:
     - 'app/models/organisation.rb'
     - 'app/models/provider.rb'
 
-# Offense count: 13
-# Cop supports --auto-correct.
-# Configuration parameters: Include.
-# Include: app/**/*.rb, config/**/*.rb, db/**/*.rb, lib/**/*.rb
-Rails/Output:
-  Exclude:
-    - 'app/services/allocation_copy_data_service.rb'
-    - 'app/services/allocation_importer_service.rb'
-    - 'app/services/recruitment_cycle_creation_service.rb'
-    - 'app/services/rollover_service.rb'
-    - 'db/migrate/20191001124753_unique_course_subject.rb'
-    - 'db/migrate/20191004162845_add_missing_fks.rb'
-
 # Offense count: 1
 # Cop supports --auto-correct.
 # Configuration parameters: EnforcedStyle.
