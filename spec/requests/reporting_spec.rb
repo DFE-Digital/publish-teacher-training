@@ -115,8 +115,16 @@ describe "GET /reporting" do
           closed: { yes: 0, no: 0 },
         },
         subject: {
-          open: Subject.active.each_with_index.map { |sub, _i| x = {}; x[sub.subject_name] = 0; x }.reduce({}, :merge),
-          closed: Subject.active.each_with_index.map { |sub, _i| x = {}; x[sub.subject_name] = 0; x }.reduce({}, :merge),
+          open: Subject.active.each_with_index.map { |sub, _i|
+                  x = {}
+                  x[sub.subject_name] = 0
+                  x
+                } .reduce({}, :merge),
+          closed: Subject.active.each_with_index.map { |sub, _i|
+                    x = {}
+                    x[sub.subject_name] = 0
+                    x
+                  } .reduce({}, :merge),
         },
       },
       publish: {

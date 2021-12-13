@@ -86,26 +86,26 @@ describe PublishReportingService do
       subject { described_class.call(recruitment_cycle_scope: recruitment_cycle_scope) }
 
       it "applies the scopes" do
-        expect(User).to receive_message_chain(:count).and_return(666)
+        expect(User).to receive(:count).and_return(666)
         expect(User).to receive_message_chain(:active, :count).and_return(600)
         expect(User).to receive_message_chain(:active, :last_login_since).and_return(recent_active_users)
 
-        expect(recent_active_users).to receive_message_chain(:count).and_return(60)
+        expect(recent_active_users).to receive(:count).and_return(60)
         expect(recent_active_users).to receive_message_chain(:joins, :merge, :group, :count).and_return(recent_active_user_count_by_provider)
 
         expect(providers_scope).to receive_message_chain(:joins, :merge).with(recent_active_users).and_return(providers_active_user_scope)
         expect(providers_active_user_scope).to receive_message_chain(:distinct, :count) .and_return(providers_with_recent_active_users_distinct_count)
 
-        expect(providers_scope).to receive_message_chain(:count).and_return(providers_count)
+        expect(providers_scope).to receive(:count).and_return(providers_count)
 
-        expect(courses_scope).to receive_message_chain(:changed_at_since).and_return(courses_changed_at_since_scope)
+        expect(courses_scope).to receive(:changed_at_since).and_return(courses_changed_at_since_scope)
         expect(courses_changed_at_since_scope).to receive_message_chain(:findable, :distinct).and_return(courses_findable_scope)
-        expect(courses_findable_scope).to receive_message_chain(:with_vacancies).and_return(open_courses_scope)
+        expect(courses_findable_scope).to receive(:with_vacancies).and_return(open_courses_scope)
         expect(courses_findable_scope).to receive_message_chain(:where, :not).with(id: open_courses_scope).and_return(closed_courses_scope)
-        expect(courses_changed_at_since_scope).to receive_message_chain(:count).and_return(courses_changed_at_since_count)
-        expect(courses_findable_scope).to receive_message_chain(:count).and_return(courses_findable_count)
-        expect(open_courses_scope).to receive_message_chain(:count).and_return(open_courses_count)
-        expect(closed_courses_scope).to receive_message_chain(:count).and_return(closed_courses_count)
+        expect(courses_changed_at_since_scope).to receive(:count).and_return(courses_changed_at_since_count)
+        expect(courses_findable_scope).to receive(:count).and_return(courses_findable_count)
+        expect(open_courses_scope).to receive(:count).and_return(open_courses_count)
+        expect(closed_courses_scope).to receive(:count).and_return(closed_courses_count)
 
         expect(courses_scope).to receive_message_chain(:created_at_since, :count).and_return(courses_created_at_since_count)
 

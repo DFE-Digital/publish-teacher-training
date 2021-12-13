@@ -61,7 +61,7 @@ RSpec.describe Courses::CopyToProviderService do
   it "doesn't copy enrichments when they do not exist" do
     service.execute(course: course, new_provider: new_provider)
 
-    expect(mocked_enrichments_copy_to_course_service).to_not have_received(:execute).with(
+    expect(mocked_enrichments_copy_to_course_service).not_to have_received(:execute).with(
       enrichment: nil,
     )
   end
@@ -123,13 +123,13 @@ RSpec.describe Courses::CopyToProviderService do
     it "does not make a copy of the course" do
       service.execute(course: course, new_provider: new_provider)
 
-      expect(mocked_sites_copy_to_course_service).to_not have_received(:execute)
+      expect(mocked_sites_copy_to_course_service).not_to have_received(:execute)
     end
 
     it "does not make a copy of the enrichments" do
       service.execute(course: course, new_provider: new_provider)
 
-      expect(mocked_enrichments_copy_to_course_service).to_not have_received(:execute)
+      expect(mocked_enrichments_copy_to_course_service).not_to have_received(:execute)
     end
   end
 
@@ -148,13 +148,13 @@ RSpec.describe Courses::CopyToProviderService do
     it "does not make a copy of the course" do
       service.execute(course: course, new_provider: new_provider)
 
-      expect(mocked_sites_copy_to_course_service).to_not have_received(:execute)
+      expect(mocked_sites_copy_to_course_service).not_to have_received(:execute)
     end
 
     it "does not make a copy of the enrichments" do
       service.execute(course: course, new_provider: new_provider)
 
-      expect(mocked_enrichments_copy_to_course_service).to_not have_received(:execute)
+      expect(mocked_enrichments_copy_to_course_service).not_to have_received(:execute)
     end
   end
 

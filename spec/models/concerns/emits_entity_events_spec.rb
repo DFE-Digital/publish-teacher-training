@@ -17,7 +17,7 @@ RSpec.describe EmitsEntityEvents do
 
   describe "create" do
     context "when an entity has configured fields to include" do
-      let(:include_fields) { %w(provider_name provider_code) }
+      let(:include_fields) { %w[provider_name provider_code] }
 
       before do
         create(:provider)
@@ -43,7 +43,7 @@ RSpec.describe EmitsEntityEvents do
     end
 
     context "when an entity has configured fields to include" do
-      let(:include_fields) { %w(provider_name provider_code) }
+      let(:include_fields) { %w[provider_name provider_code] }
 
       it "sends the event" do
         expect(SendEventToBigQueryJob).to have_been_enqueued

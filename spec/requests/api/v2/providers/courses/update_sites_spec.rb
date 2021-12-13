@@ -2,6 +2,27 @@ require "rails_helper"
 
 describe "PATCH /providers/:provider_code/courses/:course_code with sites" do
   let(:organisation) { create :organisation }
+  let(:sites_payload) {
+    [
+      { "type" => "sites", "id" => existing_site.id.to_s },
+      { "type" => "sites", "id" => site_to_add.id.to_s },
+    ]
+  }
+  let(:jsonapi_data) do
+    {
+      "_jsonapi" => {
+        "data" => {
+          "id" => course.id.to_s,
+          "type" => "courses",
+          "relationships" => {
+            "sites" => {
+              "data" => sites_payload,
+            },
+          },
+        },
+      },
+    }
+  end
   let(:provider)     { create :provider, organisations: [organisation] }
   let(:user)         { create :user, organisations: [organisation] }
   let(:payload)      { { email: user.email } }
@@ -17,29 +38,6 @@ describe "PATCH /providers/:provider_code/courses/:course_code with sites" do
 
   before do
     course.sites = [site_status.site, existing_site, unwanted_site]
-  end
-
-  let(:sites_payload) {
-    [
-      { "type" => "sites", "id" => existing_site.id.to_s },
-      { "type" => "sites", "id" => site_to_add.id.to_s },
-    ]
-  }
-
-  let(:jsonapi_data) do
-    {
-      "_jsonapi" => {
-        "data" => {
-          "id" => course.id.to_s,
-          "type" => "courses",
-          "relationships" => {
-            "sites" => {
-              "data" => sites_payload,
-            },
-          },
-        },
-      },
-    }
   end
 
   def perform_request

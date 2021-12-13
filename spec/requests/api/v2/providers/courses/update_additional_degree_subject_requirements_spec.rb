@@ -2,6 +2,19 @@ require "rails_helper"
 
 describe "PATCH /providers/:provider_code/courses/:course_code" do
   let(:jsonapi_renderer) { JSONAPI::Serializable::Renderer.new }
+  let(:organisation)      { create :organisation }
+  let(:provider)          { create :provider, organisations: [organisation] }
+  let(:user)              { create :user, organisations: [organisation] }
+  let(:payload)           { { email: user.email } }
+  let(:credentials)       { encode_to_credentials(payload) }
+  let(:course)            do
+    create :course,
+           provider: provider,
+           additional_degree_subject_requirements: true
+  end
+  let(:permitted_params) do
+    %i[additional_degree_subject_requirements]
+  end
 
   def perform_request(updated_additional_degree_subject_requirements)
     jsonapi_data = jsonapi_renderer.render(
@@ -19,20 +32,6 @@ describe "PATCH /providers/:provider_code/courses/:course_code" do
           params: {
             _jsonapi: jsonapi_data,
           }
-  end
-  let(:organisation)      { create :organisation }
-  let(:provider)          { create :provider, organisations: [organisation] }
-  let(:user)              { create :user, organisations: [organisation] }
-  let(:payload)           { { email: user.email } }
-  let(:credentials)       { encode_to_credentials(payload) }
-
-  let(:course)            do
-    create :course,
-           provider: provider,
-           additional_degree_subject_requirements: true
-  end
-  let(:permitted_params) do
-    %i[additional_degree_subject_requirements]
   end
 
   context "course has an updated_additional_degree_subject_requirements" do
@@ -63,7 +62,7 @@ describe "PATCH /providers/:provider_code/courses/:course_code" do
       it "does not change updated_additional_degree_subject_requirements attribute" do
         expect {
           perform_request(updated_additional_degree_subject_requirements)
-        }.to_not change { course.reload.additional_degree_subject_requirements }
+        }.not_to change { course.reload.additional_degree_subject_requirements }
              .from(true)
       end
     end
@@ -80,7 +79,7 @@ describe "PATCH /providers/:provider_code/courses/:course_code" do
     it "does not change updated_additional_degree_subject_requirements attribute" do
       expect {
         perform_request(updated_additional_degree_subject_requirements)
-      }.to_not change { course.reload.additional_degree_subject_requirements }
+      }.not_to change { course.reload.additional_degree_subject_requirements }
            .from(true)
     end
   end

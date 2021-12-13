@@ -14,7 +14,7 @@ module NotificationBanner
       end
 
       it "doesn't add the success class" do
-        expect(component).to_not have_selector(".govuk-notification-banner--success")
+        expect(component).not_to have_selector(".govuk-notification-banner--success")
       end
 
       it "has a default title of 'Important'" do

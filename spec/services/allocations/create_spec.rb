@@ -4,7 +4,7 @@ RSpec.describe Allocations::Create do
   let(:provider) { create(:provider) }
   let(:accredited_body) { create(:provider, :accredited_body) }
 
-  # Note: the concept of recruitment cycle here is ethereal.
+  # NOTE: the concept of recruitment cycle here is ethereal.
   # it is tied to a recruitment cycle that is associated to
   # Settings.allocation_cycle_year
 

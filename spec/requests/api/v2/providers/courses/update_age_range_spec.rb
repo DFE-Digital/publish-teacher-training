@@ -2,6 +2,20 @@ require "rails_helper"
 
 describe "PATCH /providers/:provider_code/courses/:course_code" do
   let(:jsonapi_renderer) { JSONAPI::Serializable::Renderer.new }
+  let(:organisation)      { create :organisation }
+  let(:provider)          { create :provider, organisations: [organisation] }
+  let(:user)              { create :user, organisations: [organisation] }
+  let(:payload)           { { email: user.email } }
+  let(:credentials)       { encode_to_credentials(payload) }
+  let(:course)            {
+    create :course,
+           provider: provider,
+           age_range_in_years: age_range_in_years
+  }
+  let(:age_range_in_years) { "3_to_7" }
+  let(:permitted_params) do
+    %i[age_range_in_years]
+  end
 
   def perform_request(updated_age_range_in_years)
     jsonapi_data = jsonapi_renderer.render(
@@ -19,21 +33,6 @@ describe "PATCH /providers/:provider_code/courses/:course_code" do
           params: {
             _jsonapi: jsonapi_data,
           }
-  end
-  let(:organisation)      { create :organisation }
-  let(:provider)          { create :provider, organisations: [organisation] }
-  let(:user)              { create :user, organisations: [organisation] }
-  let(:payload)           { { email: user.email } }
-  let(:credentials)       { encode_to_credentials(payload) }
-
-  let(:course)            {
-    create :course,
-           provider: provider,
-           age_range_in_years: age_range_in_years
-  }
-  let(:age_range_in_years) { "3_to_7" }
-  let(:permitted_params) do
-    %i[age_range_in_years]
   end
 
   before do

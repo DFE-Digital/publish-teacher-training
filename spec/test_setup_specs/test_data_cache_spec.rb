@@ -16,7 +16,7 @@ describe "TestDataCache" do
       course = TestDataCache.get(:course, :primary, :unpublished)
 
       expect(course.name).to eq("unpublished course name")
-      expect(FactoryBot).to_not have_received(:create)
+      expect(FactoryBot).not_to have_received(:create)
     end
 
     it "finds trait pre-defined in test setup [:unpublished, :primary]" do

@@ -2,6 +2,9 @@ require "rails_helper"
 
 describe Course, type: :model do
   let(:recruitment_cycle) { course.recruitment_cycle }
+  let(:french) { find_or_create(:modern_languages_subject, :french) }
+  let!(:financial_incentive) { create(:financial_incentive, subject: modern_languages) }
+  let(:modern_languages) { find_or_create(:secondary_subject, :modern_languages) }
   let(:course) do
     create(
       :course,
@@ -11,11 +14,8 @@ describe Course, type: :model do
       subjects: [find_or_create(:secondary_subject, :biology)],
     )
   end
-  subject { course }
 
-  let(:french) { find_or_create(:modern_languages_subject, :french) }
-  let!(:financial_incentive) { create(:financial_incentive, subject: modern_languages) }
-  let(:modern_languages) { find_or_create(:secondary_subject, :modern_languages) }
+  subject { course }
 
   its(:to_s) { is_expected.to eq("Biology (#{course.provider.provider_code}/3X9F) [#{course.recruitment_cycle}]") }
   its(:modular) { is_expected.to eq("") }
@@ -479,7 +479,7 @@ describe Course, type: :model do
         end
 
         it "adds enrichment errors" do
-          expect(subject.errors.full_messages).to_not be_empty
+          expect(subject.errors.full_messages).not_to be_empty
         end
       end
     end
@@ -494,7 +494,7 @@ describe Course, type: :model do
         end
 
         it "adds enrichment errors" do
-          expect(subject.errors.full_messages).to_not be_empty
+          expect(subject.errors.full_messages).not_to be_empty
         end
       end
 
@@ -874,7 +874,7 @@ describe Course, type: :model do
       end
 
       context "full time and part_time" do
-        let(:study_modes) { %w(full_time part_time) }
+        let(:study_modes) { %w[full_time part_time] }
 
         it "returns all" do
           expect(subject).to contain_exactly(course_both, course_part_time, course_full_time)
@@ -1065,7 +1065,7 @@ describe Course, type: :model do
       end
 
       context "multiple qualifications" do
-        let(:qualifications) { %w(pgde pgce qts) }
+        let(:qualifications) { %w[pgde pgce qts] }
 
         it "returns all requested" do
           expect(subject).to contain_exactly(course_pgce, course_pgde, course_qts)
@@ -1325,7 +1325,7 @@ describe Course, type: :model do
         context "with a findable site" do
           let(:site_statuses) { [findable] }
 
-          its(:findable_site_statuses) { is_expected.to_not be_empty }
+          its(:findable_site_statuses) { is_expected.not_to be_empty }
         end
 
         context "with no findable sites" do
@@ -1337,7 +1337,7 @@ describe Course, type: :model do
         context "with at least one findable sites" do
           let(:site_statuses) { [findable, suspended] }
 
-          its(:findable_site_statuses) { is_expected.to_not be_empty }
+          its(:findable_site_statuses) { is_expected.not_to be_empty }
         end
       end
 
@@ -1356,7 +1356,7 @@ describe Course, type: :model do
         context "with a findable site" do
           let(:site_statuses) { [findable] }
 
-          its(:findable_site_statuses) { is_expected.to_not be_empty }
+          its(:findable_site_statuses) { is_expected.not_to be_empty }
         end
 
         context "with no findable sites" do
@@ -1368,7 +1368,7 @@ describe Course, type: :model do
         context "with at least one findable sites" do
           let(:site_statuses) { [findable, suspended] }
 
-          its(:findable_site_statuses) { is_expected.to_not be_empty }
+          its(:findable_site_statuses) { is_expected.not_to be_empty }
         end
       end
     end
@@ -1679,7 +1679,7 @@ describe Course, type: :model do
       subject { Course.changed_since(10.minutes.ago) }
 
       it { is_expected.to include course }
-      it { is_expected.to_not include old_course }
+      it { is_expected.not_to include old_course }
     end
 
     context "with a course that has been changed less than a second after the given timestamp" do
@@ -1697,7 +1697,7 @@ describe Course, type: :model do
 
       subject { Course.changed_since(timestamp) }
 
-      it { is_expected.to_not include course }
+      it { is_expected.not_to include course }
     end
   end
 
@@ -1999,7 +1999,7 @@ describe Course, type: :model do
 
       it "keeps the site status as new when an existing site is added" do
         expect { subject.sites = [existing_site] }
-          .to_not change { existing_site_status.reload.status }.from("new_status")
+          .not_to change { existing_site_status.reload.status }.from("new_status")
       end
 
       it "removes the site status when an existing site is removed" do
@@ -2071,8 +2071,6 @@ describe Course, type: :model do
 
   describe "#enrichments" do
     describe "#find_or_initialize_draft" do
-      let(:course) { create(:course, enrichments: enrichments) }
-
       copyable_enrichment_attributes =
         %w[
           about_course
@@ -2089,6 +2087,7 @@ describe Course, type: :model do
           salary_details
         ].freeze
 
+      let(:course) { create(:course, enrichments: enrichments) }
       let(:actual_enrichment_attributes) do
         subject.attributes.slice(*copyable_enrichment_attributes)
       end
@@ -2116,7 +2115,7 @@ describe Course, type: :model do
           expect(actual_enrichment_attributes).to eq expected_enrichment_attributes
         end
 
-        its(:id) { is_expected.to_not be_nil }
+        its(:id) { is_expected.not_to be_nil }
         its(:last_published_timestamp_utc) { is_expected.to eq initial_draft_enrichment.last_published_timestamp_utc }
         its(:status) { is_expected.to eq "draft" }
       end
@@ -2145,7 +2144,7 @@ describe Course, type: :model do
           expect(actual_enrichment_attributes).to eq expected_enrichment_attributes
         end
 
-        its(:id) { is_expected.to_not be_nil }
+        its(:id) { is_expected.not_to be_nil }
         its(:last_published_timestamp_utc) { is_expected.to be_within(1.second).of subsequent_draft_enrichment.last_published_timestamp_utc }
         its(:status) { is_expected.to eq "draft" }
       end
@@ -2538,8 +2537,6 @@ describe Course, type: :model do
 
     # NOTE: There is currently no finanical incentives for `primary with maths`.
     xcontext "when primary with maths" do
-      subject { Course.new(subjects: [PrimarySubject.find_by(subject_code: "03")]) }
-
       subject do
         create(
           :course,

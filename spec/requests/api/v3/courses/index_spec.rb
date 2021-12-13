@@ -240,14 +240,13 @@ describe "GET v3/courses" do
 
       context "when a course has 2 available sites" do
         let(:another_site) { build(:site, latitude: 0.5, longitude: 0.5) }
+        let(:page_1) { "/api/v3/courses?sort=distance&latitude=0&longitude=0&page[page]=1" }
+        let(:page_2) { "/api/v3/courses?sort=distance&latitude=0&longitude=0&page[page]=2" }
+        let(:page_3) { "/api/v3/courses?sort=distance&latitude=0&longitude=0&page[page]=3" }
 
         before do
           course_b.site_statuses << create(:site_status, :findable, site: another_site)
         end
-
-        let(:page_1) { "/api/v3/courses?sort=distance&latitude=0&longitude=0&page[page]=1" }
-        let(:page_2) { "/api/v3/courses?sort=distance&latitude=0&longitude=0&page[page]=2" }
-        let(:page_3) { "/api/v3/courses?sort=distance&latitude=0&longitude=0&page[page]=3" }
 
         # jsonapi removes duplicates on the same page
         # therefore this test needs to span multiple pages
@@ -843,7 +842,7 @@ describe "GET v3/courses" do
         get request_path
 
         keys = JSON.parse(response.body)["data"][0]["attributes"].keys
-        expect(keys).to eql(%w{course_code changed_at provider_code})
+        expect(keys).to eql(%w[course_code changed_at provider_code])
       end
     end
   end

@@ -45,22 +45,22 @@ class TestDataCache
 
     def course_factories
       {
-        %i[primary unpublished] => -> do
+        %i[primary unpublished] => lambda do
           FactoryBot.create(:course, :primary, :unpublished)
         end,
-        %i[resulting_in_qts] => -> do
+        %i[resulting_in_qts] => lambda do
                                   FactoryBot.create(:course, :resulting_in_qts)
                                 end,
-        %i[resulting_in_pgce_with_qts] => -> do
+        %i[resulting_in_pgce_with_qts] => lambda do
                                             FactoryBot.create(:course, :resulting_in_pgce_with_qts)
                                           end,
-        %i[resulting_in_pgde_with_qts] => -> do
+        %i[resulting_in_pgde_with_qts] => lambda do
                                             FactoryBot.create(:course, :resulting_in_pgde_with_qts)
                                           end,
-        %i[resulting_in_pgce] => -> do
+        %i[resulting_in_pgce] => lambda do
                                    FactoryBot.create(:course, :resulting_in_pgce)
                                  end,
-        %i[resulting_in_pgde] => -> do
+        %i[resulting_in_pgde] => lambda do
                                    FactoryBot.create(:course, :resulting_in_pgde)
                                  end,
       }

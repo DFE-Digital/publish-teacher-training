@@ -2,25 +2,12 @@ require "rails_helper"
 
 describe "PATCH /providers/:provider_code/courses/:course_code" do
   let(:jsonapi_renderer) { JSONAPI::Serializable::Renderer.new }
-  let(:request_path) do
-    "/api/v2/recruitment_cycles/#{recruitment_cycle.year}" +
-      "/providers/#{course.provider.provider_code}" +
-      "/courses/#{course.course_code}"
-  end
-
-  def perform_request(course)
-    jsonapi_data = jsonapi_renderer.render(course, class: { Course: API::V2::SerializableCourse })
-    jsonapi_data.dig(:data, :attributes).merge!(enrichment_attributes).slice!(*permitted_params)
-    patch request_path, headers: { "HTTP_AUTHORIZATION" => credentials }, params: { _jsonapi: jsonapi_data }
-  end
-
   let(:recruitment_cycle) { find_or_create :recruitment_cycle }
   let(:organisation) { create :organisation }
   let(:provider) { create(:provider, organisations: [organisation], recruitment_cycle: recruitment_cycle) }
   let(:user) { create :user, organisations: [organisation] }
   let(:payload) { { email: user.email } }
   let(:credentials) { encode_to_credentials(payload) }
-
   let(:course) { create :course, provider: provider }
   let(:update_enrichment) { build :course_enrichment, **enrichment_attributes }
   let(:enrichment_attributes) do
@@ -39,7 +26,6 @@ describe "PATCH /providers/:provider_code/courses/:course_code" do
       salary_details: "new salary details",
     }
   end
-
   let(:permitted_params) do
     %i[
       about_course
@@ -55,6 +41,17 @@ describe "PATCH /providers/:provider_code/courses/:course_code" do
       required_qualifications
       salary_details
     ]
+  end
+  let(:request_path) do
+    "/api/v2/recruitment_cycles/#{recruitment_cycle.year}" +
+      "/providers/#{course.provider.provider_code}" +
+      "/courses/#{course.course_code}"
+  end
+
+  def perform_request(course)
+    jsonapi_data = jsonapi_renderer.render(course, class: { Course: API::V2::SerializableCourse })
+    jsonapi_data.dig(:data, :attributes).merge!(enrichment_attributes).slice!(*permitted_params)
+    patch request_path, headers: { "HTTP_AUTHORIZATION" => credentials }, params: { _jsonapi: jsonapi_data }
   end
 
   describe "with unpermitted attributes on course object" do
@@ -144,7 +141,7 @@ describe "PATCH /providers/:provider_code/courses/:course_code" do
       it "doesn't create a draft enrichment" do
         expect {
           perform_request(course)
-        }.to_not(change { course.reload.enrichments.count })
+        }.not_to(change { course.reload.enrichments.count })
       end
     end
 
@@ -154,13 +151,13 @@ describe "PATCH /providers/:provider_code/courses/:course_code" do
       it "doesn't create a draft enrichment" do
         expect {
           perform_request(course)
-        }.to_not(change { course.reload.enrichments.count })
+        }.not_to(change { course.reload.enrichments.count })
       end
 
       it "doesn't change content status" do
         expect {
           perform_request(course)
-        }.to_not(change { course.reload.content_status })
+        }.not_to(change { course.reload.content_status })
       end
     end
 
@@ -247,7 +244,7 @@ describe "PATCH /providers/:provider_code/courses/:course_code" do
       it "doesn't create a draft enrichment" do
         expect {
           perform_request(course)
-        }.to_not(change { course.reload.enrichments.count })
+        }.not_to(change { course.reload.enrichments.count })
       end
     end
 
@@ -257,13 +254,13 @@ describe "PATCH /providers/:provider_code/courses/:course_code" do
       it "doesn't create a draft enrichment" do
         expect {
           perform_request(course)
-        }.to_not(change { course.reload.enrichments.count })
+        }.not_to(change { course.reload.enrichments.count })
       end
 
       it "doesn't change content status" do
         expect {
           perform_request(course)
-        }.to_not(change { course.reload.content_status })
+        }.not_to(change { course.reload.content_status })
       end
     end
 
@@ -317,7 +314,7 @@ describe "PATCH /providers/:provider_code/courses/:course_code" do
     it "doesn't change content status" do
       expect {
         perform_request(course)
-      }.to_not(change { course.reload.content_status })
+      }.not_to(change { course.reload.content_status })
     end
 
     context "with invalid data" do
@@ -377,7 +374,7 @@ describe "PATCH /providers/:provider_code/courses/:course_code" do
       it "doesn't change content status" do
         expect {
           perform_request(course)
-        }.to_not(change { course.reload.content_status })
+        }.not_to(change { course.reload.content_status })
       end
     end
   end
@@ -490,7 +487,7 @@ describe "PATCH /providers/:provider_code/courses/:course_code" do
       it "doesn't change content status" do
         expect {
           perform_request(course)
-        }.to_not(change { course.reload.content_status })
+        }.not_to(change { course.reload.content_status })
       end
     end
 
@@ -602,6 +599,14 @@ describe "PATCH /providers/:provider_code/courses/:course_code" do
 
   describe "notifications" do
     let(:mail_spy) { spy }
+    let(:user_notifications) do
+      create(:user_notification, user: user, provider: accredited_body, course_update: true)
+    end
+    let(:update_course) do
+      course.dup.tap do |c|
+        c.age_range_in_years = "7_to_14"
+      end
+    end
     let(:mailer_spy) { spy(course_update_email: mail_spy) }
     let(:findable) { build(:site_status, :findable) }
     let(:new) { build(:site_status, :new) }
@@ -615,16 +620,6 @@ describe "PATCH /providers/:provider_code/courses/:course_code" do
       stub_const("CourseUpdateEmailMailer", mailer_spy)
       user_notifications
       perform_request(update_course)
-    end
-
-    let(:user_notifications) do
-      create(:user_notification, user: user, provider: accredited_body, course_update: true)
-    end
-
-    let(:update_course) do
-      course.dup.tap do |c|
-        c.age_range_in_years = "7_to_14"
-      end
     end
 
     context "with a non-self-accrediting body" do

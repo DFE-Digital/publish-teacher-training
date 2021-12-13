@@ -150,7 +150,7 @@ describe Site, type: :model do
 
           site.save
 
-          expect(GeocodeJob).to_not have_received(:perform_later)
+          expect(GeocodeJob).not_to have_received(:perform_later)
         end
       end
 

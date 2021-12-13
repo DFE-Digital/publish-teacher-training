@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.describe "/api/v2/allocations/<id>", type: :request do
   before do
-    # Note: the concept of recruitment cycle here is ethereal.
+    # NOTE: the concept of recruitment cycle here is ethereal.
     # it is tied to a recruitment cycle that is associated to
     # Settings.allocation_cycle_year
     allocation_recruitment_cycle

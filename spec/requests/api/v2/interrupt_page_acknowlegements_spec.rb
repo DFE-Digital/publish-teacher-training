@@ -53,8 +53,8 @@ describe "Interrupt page acknowledgements API v2", type: :request do
            headers: { "HTTP_AUTHORIZATION" => credentials },
            params: {
              interrupt_page_acknowledgement: {
-               page: "rollover"
-             }
+               page: "rollover",
+             },
            }
       response
     end
@@ -78,7 +78,7 @@ describe "Interrupt page acknowledgements API v2", type: :request do
       end
 
       it "still returns success" do
-        expect { subject }.to_not change {
+        expect { subject }.not_to change {
           user.interrupt_page_acknowledgements.count
         }
         expect(subject.status).to eq 200

@@ -13,7 +13,7 @@ describe ErrorHandlers::Base, type: :controller do
     allow(Settings).to receive(:render_json_errors).and_return(render_json_errors)
 
     routes.draw {
-      get 'error' => 'anonymous#error'
+      get "error" => "anonymous#error"
     }
   end
 
@@ -33,7 +33,7 @@ describe ErrorHandlers::Base, type: :controller do
           "status" => 500,
           "title" => a_string_including("ERROR"),
           "detail" => a_string_including("gone wrong"),
-        ]
+        ],
       )
     end
   end

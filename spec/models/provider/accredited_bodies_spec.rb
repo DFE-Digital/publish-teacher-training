@@ -12,7 +12,7 @@ describe Provider, type: :model do
   end
 
   before do
-    # Note: provider needs to be reloaded due to
+    # NOTE: provider needs to be reloaded due to
     #       provider.accrediting_providers
     #       provider.accredited_bodies
     provider.reload

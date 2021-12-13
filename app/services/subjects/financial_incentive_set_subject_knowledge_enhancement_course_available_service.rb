@@ -1,6 +1,6 @@
 module Subjects
   class FinancialIncentiveSetSubjectKnowledgeEnhancementCourseAvailableService
-    def initialize(financial_incentive: FinancialIncentive, year:)
+    def initialize(year:, financial_incentive: FinancialIncentive)
       @financial_incentive = financial_incentive
       @year = year
     end

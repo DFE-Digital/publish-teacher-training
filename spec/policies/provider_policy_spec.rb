@@ -26,8 +26,8 @@ describe ProviderPolicy do
     let(:provider) { build(:provider) }
     let!(:organisation) { build(:organisation, providers: [provider], users: [user]) }
 
-    it { is_expected.to_not permit(user, provider) }
-    it { is_expected.to_not permit(user_outside_org, provider) }
+    it { is_expected.not_to permit(user, provider) }
+    it { is_expected.not_to permit(user_outside_org, provider) }
     it { is_expected.to permit(admin, provider) }
   end
 
@@ -41,7 +41,7 @@ describe ProviderPolicy do
 
     it { is_expected.to permit(admin, training_provider) }
     it { is_expected.to permit(allowed_user, training_provider) }
-    it { is_expected.to_not permit(not_allowed_user, training_provider) }
+    it { is_expected.not_to permit(not_allowed_user, training_provider) }
   end
 
   describe "#permitted_provider_attributes" do
@@ -53,7 +53,7 @@ describe ProviderPolicy do
       end
 
       it "excludes provider_name" do
-        expect(subject.permitted_provider_attributes).to_not include(:provider_name)
+        expect(subject.permitted_provider_attributes).not_to include(:provider_name)
       end
     end
 

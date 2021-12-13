@@ -42,7 +42,7 @@ JSONAPI::Rails.configure do |config|
   # }
   #
   # # Set a default pagination scheme.
-  config.jsonapi_pagination = ->(collection) do
+  config.jsonapi_pagination = lambda { |collection|
     {}.tap do |links|
       if collection.respond_to?(:next_page) && collection.next_page.present?
         links[:next] = page_url(page: collection.next_page)
@@ -56,7 +56,7 @@ JSONAPI::Rails.configure do |config|
         links[:last] = page_url(page: [collection.total_pages - 1, 1].max)
       end
     end
-  end
+  }
   #
   # # Set a logger.
   # config.logger = Logger.new(STDOUT)

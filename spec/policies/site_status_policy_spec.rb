@@ -16,7 +16,7 @@ describe SiteStatusPolicy do
     context "with a user outside the organisation" do
       let(:user) { build(:user) }
 
-      it { is_expected.to_not permit(user, site_status) }
+      it { is_expected.not_to permit(user, site_status) }
     end
   end
 end

@@ -189,7 +189,7 @@ describe API::V2::CoursesController, type: :controller do
           }
         }.to raise_error(ActionController::UnpermittedParameters)
 
-        expect(course.reload.name).to_not eql("new course name")
+        expect(course.reload.name).not_to eql("new course name")
       end
     end
 

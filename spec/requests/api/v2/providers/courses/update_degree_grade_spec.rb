@@ -2,6 +2,19 @@ require "rails_helper"
 
 describe "PATCH /providers/:provider_code/courses/:course_code" do
   let(:jsonapi_renderer) { JSONAPI::Serializable::Renderer.new }
+  let(:organisation)      { create :organisation }
+  let(:provider)          { create :provider, organisations: [organisation] }
+  let(:user)              { create :user, organisations: [organisation] }
+  let(:payload)           { { email: user.email } }
+  let(:credentials)       { encode_to_credentials(payload) }
+  let(:course)            {
+    create :course,
+           provider: provider,
+           degree_grade: "two_one"
+  }
+  let(:permitted_params) do
+    %i[degree_grade]
+  end
 
   def perform_request(updated_degree_grade)
     jsonapi_data = jsonapi_renderer.render(
@@ -19,20 +32,6 @@ describe "PATCH /providers/:provider_code/courses/:course_code" do
           params: {
             _jsonapi: jsonapi_data,
           }
-  end
-  let(:organisation)      { create :organisation }
-  let(:provider)          { create :provider, organisations: [organisation] }
-  let(:user)              { create :user, organisations: [organisation] }
-  let(:payload)           { { email: user.email } }
-  let(:credentials)       { encode_to_credentials(payload) }
-
-  let(:course)            {
-    create :course,
-           provider: provider,
-           degree_grade: "two_one"
-  }
-  let(:permitted_params) do
-    %i[degree_grade]
   end
 
   context "course has an updated_degree_grade" do
@@ -63,7 +62,7 @@ describe "PATCH /providers/:provider_code/courses/:course_code" do
       it "does not change updated_degree_grade attribute" do
         expect {
           perform_request(updated_degree_grade)
-        }.to_not change { course.reload.degree_grade }
+        }.not_to change { course.reload.degree_grade }
              .from("two_one")
       end
     end
@@ -80,7 +79,7 @@ describe "PATCH /providers/:provider_code/courses/:course_code" do
     it "does not change updated_degree_grade attribute" do
       expect {
         perform_request(updated_degree_grade)
-      }.to_not change { course.reload.degree_grade }
+      }.not_to change { course.reload.degree_grade }
            .from("two_one")
     end
   end

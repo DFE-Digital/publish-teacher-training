@@ -25,7 +25,7 @@ describe SitePolicy do
     context "with a user outside the organisation" do
       let(:other_user) { create(:user) }
 
-      it { is_expected.to_not permit(other_user, site) }
+      it { is_expected.not_to permit(other_user, site) }
     end
   end
 end

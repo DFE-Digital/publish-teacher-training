@@ -4,9 +4,7 @@ class RolloverReportingService
   end
 
   class << self
-    def call
-      new.call
-    end
+    delegate :call, to: :new
   end
 
   def call

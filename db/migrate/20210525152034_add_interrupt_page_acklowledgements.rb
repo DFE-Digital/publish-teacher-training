@@ -7,7 +7,7 @@ class AddInterruptPageAcklowledgements < ActiveRecord::Migration[6.1]
 
       t.timestamps
 
-      t.index [:page, :recruitment_cycle_id, :user_id], unique: true, name: :interrupt_page_all_column_idx
+      t.index %i[page recruitment_cycle_id user_id], unique: true, name: :interrupt_page_all_column_idx
     end
   end
 end

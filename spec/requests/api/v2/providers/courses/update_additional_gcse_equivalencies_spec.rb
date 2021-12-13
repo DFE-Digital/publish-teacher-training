@@ -2,6 +2,19 @@ require "rails_helper"
 
 describe "PATCH /providers/:provider_code/courses/:course_code" do
   let(:jsonapi_renderer) { JSONAPI::Serializable::Renderer.new }
+  let(:organisation)      { create :organisation }
+  let(:provider)          { create :provider, organisations: [organisation] }
+  let(:user)              { create :user, organisations: [organisation] }
+  let(:payload)           { { email: user.email } }
+  let(:credentials)       { encode_to_credentials(payload) }
+  let(:course)            {
+    create :course,
+           provider: provider,
+           additional_gcse_equivalencies: "Must have a cycling proficiency certificate."
+  }
+  let(:permitted_params) do
+    %i[additional_gcse_equivalencies]
+  end
 
   def perform_request(updated_additional_gcse_equivalencies)
     jsonapi_data = jsonapi_renderer.render(
@@ -19,20 +32,6 @@ describe "PATCH /providers/:provider_code/courses/:course_code" do
           params: {
             _jsonapi: jsonapi_data,
           }
-  end
-  let(:organisation)      { create :organisation }
-  let(:provider)          { create :provider, organisations: [organisation] }
-  let(:user)              { create :user, organisations: [organisation] }
-  let(:payload)           { { email: user.email } }
-  let(:credentials)       { encode_to_credentials(payload) }
-
-  let(:course)            {
-    create :course,
-           provider: provider,
-           additional_gcse_equivalencies: "Must have a cycling proficiency certificate."
-  }
-  let(:permitted_params) do
-    %i[additional_gcse_equivalencies]
   end
 
   context "course has different additional_gcse_equivalencies" do
@@ -63,7 +62,7 @@ describe "PATCH /providers/:provider_code/courses/:course_code" do
       it "does not change additional_gcse_equivalencies attribute" do
         expect {
           perform_request(updated_additional_gcse_equivalencies)
-        }.to_not change { course.reload.additional_gcse_equivalencies }
+        }.not_to change { course.reload.additional_gcse_equivalencies }
              .from("Must have a cycling proficiency certificate.")
       end
     end
@@ -80,7 +79,7 @@ describe "PATCH /providers/:provider_code/courses/:course_code" do
     it "does not change additional_gcse_equivalencies attribute" do
       expect {
         perform_request(updated_additional_gcse_equivalencies)
-      }.to_not change { course.reload.additional_gcse_equivalencies }
+      }.not_to change { course.reload.additional_gcse_equivalencies }
            .from("Must have a cycling proficiency certificate.")
     end
   end

@@ -53,7 +53,7 @@ describe AccessRequestApprovalService do
           call_service!
 
           expect(User.where(email: "abc@de.com")).to exist
-          expect(User.where(email: "Abc@de.com")).to_not exist
+          expect(User.where(email: "Abc@de.com")).not_to exist
         end
       end
     end
@@ -123,7 +123,7 @@ describe AccessRequestApprovalService do
           call_service!
           target_user.organisations.reload
 
-          expect(User.where(email: "Abc@de.com")).to_not exist
+          expect(User.where(email: "Abc@de.com")).not_to exist
           expect(target_user.organisations).to(
             match_array(access_request.requester.organisations),
           )

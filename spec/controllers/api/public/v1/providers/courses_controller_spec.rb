@@ -40,19 +40,18 @@ RSpec.describe API::Public::V1::Providers::CoursesController do
       end
 
       let!(:courses) { create_list(:course, 3, provider: provider) }
+      let(:pagination) do
+        {
+          page: page,
+          per_page: 3,
+        }
+      end
 
       before do
         get :index, params: {
           recruitment_cycle_year: recruitment_cycle.year,
           provider_code: provider.provider_code,
           **pagination,
-        }
-      end
-
-      let(:pagination) do
-        {
-          page: page,
-          per_page: 3,
         }
       end
 
@@ -172,7 +171,7 @@ RSpec.describe API::Public::V1::Providers::CoursesController do
         end
 
         it "doesn't include subjects" do
-          expect(JSON.parse(response.body)["data"][0]["relationships"].keys).to_not include("subjects")
+          expect(JSON.parse(response.body)["data"][0]["relationships"].keys).not_to include("subjects")
         end
       end
     end

@@ -1,4 +1,4 @@
-require "rails_helper.rb"
+require "rails_helper"
 
 describe UniqueCourseValidator do
   let(:service) { described_class.new }

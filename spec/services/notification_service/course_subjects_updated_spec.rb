@@ -77,8 +77,8 @@ module NotificationService
         let(:course) { create(:course, accredited_body_code: accredited_body.provider_code, provider: provider) }
 
         it "does not send a notification" do
-          expect(CourseSubjectsUpdatedEmailMailer).to_not receive(:course_subjects_updated_email)
-          expect(course.recruitment_cycle).to_not eql(RecruitmentCycle.current)
+          expect(CourseSubjectsUpdatedEmailMailer).not_to receive(:course_subjects_updated_email)
+          expect(course.recruitment_cycle).not_to eql(RecruitmentCycle.current)
 
           call_service
         end

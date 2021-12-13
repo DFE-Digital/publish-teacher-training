@@ -2,6 +2,19 @@ require "rails_helper"
 
 describe "PATCH /providers/:provider_code/courses/:course_code" do
   let(:jsonapi_renderer) { JSONAPI::Serializable::Renderer.new }
+  let(:organisation)      { create :organisation }
+  let(:provider)          { create :provider, organisations: [organisation] }
+  let(:user)              { create :user, organisations: [organisation] }
+  let(:payload)           { { email: user.email } }
+  let(:credentials)       { encode_to_credentials(payload) }
+  let(:course)            {
+    create :course,
+           provider: provider,
+           degree_subject_requirements: "Must have an A level in maths."
+  }
+  let(:permitted_params) do
+    %i[degree_subject_requirements]
+  end
 
   def perform_request(updated_degree_subject_requirements)
     jsonapi_data = jsonapi_renderer.render(
@@ -19,20 +32,6 @@ describe "PATCH /providers/:provider_code/courses/:course_code" do
           params: {
             _jsonapi: jsonapi_data,
           }
-  end
-  let(:organisation)      { create :organisation }
-  let(:provider)          { create :provider, organisations: [organisation] }
-  let(:user)              { create :user, organisations: [organisation] }
-  let(:payload)           { { email: user.email } }
-  let(:credentials)       { encode_to_credentials(payload) }
-
-  let(:course)            {
-    create :course,
-           provider: provider,
-           degree_subject_requirements: "Must have an A level in maths."
-  }
-  let(:permitted_params) do
-    %i[degree_subject_requirements]
   end
 
   context "course has different degree_subject_requirements" do
@@ -63,7 +62,7 @@ describe "PATCH /providers/:provider_code/courses/:course_code" do
       it "does not change degree_subject_requirements attribute" do
         expect {
           perform_request(updated_degree_subject_requirements)
-        }.to_not change { course.reload.degree_subject_requirements }
+        }.not_to change { course.reload.degree_subject_requirements }
              .from("Must have an A level in maths.")
       end
     end
@@ -80,7 +79,7 @@ describe "PATCH /providers/:provider_code/courses/:course_code" do
     it "does not change degree_subject_requirements attribute" do
       expect {
         perform_request(updated_degree_subject_requirements)
-      }.to_not change { course.reload.degree_subject_requirements }
+      }.not_to change { course.reload.degree_subject_requirements }
            .from("Must have an A level in maths.")
     end
   end

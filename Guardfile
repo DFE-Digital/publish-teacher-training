@@ -15,7 +15,7 @@
 #
 # and, you'll have to watch "config/Guardfile" instead of "Guardfile"
 
-# Note: The cmd option is now required due to the increasing number of ways
+# NOTE: The cmd option is now required due to the increasing number of ways
 #       rspec may be run, below are examples of the most common uses.
 #  * bundler: 'bundle exec rspec'
 #  * bundler binstubs: 'bin/rspec'
@@ -25,7 +25,7 @@
 #  * 'just' rspec: 'rspec'
 
 group :red_green_refactor, halt_on_fail: true do
-  guard :rspec, cmd: 'bundle exec spring rspec', failed_mode: :keep do
+  guard :rspec, cmd: "bundle exec spring rspec", failed_mode: :keep do
     require "guard/rspec/dsl"
     dsl = Guard::RSpec::Dsl.new(self)
 
@@ -42,13 +42,13 @@ group :red_green_refactor, halt_on_fail: true do
     dsl.watch_spec_files_for(ruby.lib_files)
 
     # Rails files
-    rails = dsl.rails(view_extensions: %w(erb))
+    rails = dsl.rails(view_extensions: %w[erb])
     dsl.watch_spec_files_for(rails.app_files)
     dsl.watch_spec_files_for(rails.views)
 
     watch(rails.controllers) do |m|
       [
-        rspec.spec.call("controllers/#{m[1]}_controller")
+        rspec.spec.call("controllers/#{m[1]}_controller"),
       ]
     end
 

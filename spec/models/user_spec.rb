@@ -13,20 +13,20 @@ describe User, type: :model do
   describe "validations" do
     it { is_expected.to validate_presence_of(:email).with_message("must contain @") }
     it { is_expected.to validate_uniqueness_of(:email) }
-    it { is_expected.to_not allow_value("CAPS_IN_EMAIL@ACME.ORG").for(:email) }
-    it { is_expected.to_not allow_value("email_without_at").for(:email) }
-    it { is_expected.to_not allow_value(nil).for(:first_name) }
-    it { is_expected.to_not allow_value(nil).for(:last_name) }
-    it { is_expected.to_not allow_value("").for(:first_name) }
-    it { is_expected.to_not allow_value("").for(:last_name) }
-    it { is_expected.to_not allow_value("  ").for(:first_name) }
-    it { is_expected.to_not allow_value("  ").for(:last_name) }
+    it { is_expected.not_to allow_value("CAPS_IN_EMAIL@ACME.ORG").for(:email) }
+    it { is_expected.not_to allow_value("email_without_at").for(:email) }
+    it { is_expected.not_to allow_value(nil).for(:first_name) }
+    it { is_expected.not_to allow_value(nil).for(:last_name) }
+    it { is_expected.not_to allow_value("").for(:first_name) }
+    it { is_expected.not_to allow_value("").for(:last_name) }
+    it { is_expected.not_to allow_value("  ").for(:first_name) }
+    it { is_expected.not_to allow_value("  ").for(:last_name) }
 
     context "for an admin-user" do
       subject { create(:user, :admin) }
 
-      it { is_expected.to_not allow_value("general.public@example.org").for(:email) }
-      it { is_expected.to_not allow_value("some.provider@devon.gov.uk").for(:email) }
+      it { is_expected.not_to allow_value("general.public@example.org").for(:email) }
+      it { is_expected.not_to allow_value("some.provider@devon.gov.uk").for(:email) }
       it { is_expected.to allow_value("bobs.your.uncle@digital.education.gov.uk").for(:email) }
       it { is_expected.to allow_value("right.malarky@education.gov.uk").for(:email) }
     end

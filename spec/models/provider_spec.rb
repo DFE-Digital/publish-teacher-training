@@ -35,7 +35,7 @@ describe Provider, type: :model do
         let(:valid) { build(:provider, urn: "12345") }
 
         it "validates a urn of length 5 - 6" do
-          expect(invalid_provider).to_not be_valid
+          expect(invalid_provider).not_to be_valid
           expect(provider).to be_valid
         end
       end
@@ -44,7 +44,7 @@ describe Provider, type: :model do
         let(:invalid_provider) { build(:provider, urn: "XXXXXX") }
 
         it "validates that a urn contains digits only" do
-          expect(invalid_provider).to_not be_valid
+          expect(invalid_provider).not_to be_valid
         end
       end
     end
@@ -61,7 +61,7 @@ describe Provider, type: :model do
       it "validates the presence of a ukprn" do
         # this means that rollover happens successfully; the record is created but it will be invalid on update, because of no ukprn
         expect { provider }.to change { Provider.count }.by(1)
-        expect(provider).to_not be_valid
+        expect(provider).not_to be_valid
       end
     end
 
@@ -92,7 +92,7 @@ describe Provider, type: :model do
       let(:valid_provider) { build(:provider, provider_type: "lead_school") }
 
       it "validates provider_type" do
-        expect(invalid_provider).to_not be_valid
+        expect(invalid_provider).not_to be_valid
         expect(valid_provider).to be_valid
       end
     end
@@ -187,7 +187,7 @@ describe Provider, type: :model do
 
       subject { Provider.changed_since(publish_time) }
 
-      it { is_expected.to_not include provider }
+      it { is_expected.not_to include provider }
     end
 
     context "with a provider that has been changed before the given timestamp" do
@@ -195,7 +195,7 @@ describe Provider, type: :model do
 
       subject { Provider.changed_since(10.minutes.ago) }
 
-      it { is_expected.to_not include provider }
+      it { is_expected.not_to include provider }
     end
   end
 
@@ -328,7 +328,7 @@ describe Provider, type: :model do
 
           expect(provider_with_included.courses_count).to eq(1)
           expect(provider_with_included).to have_received(:included_courses_count)
-          expect(provider_with_included.courses).to_not have_received(:size)
+          expect(provider_with_included.courses).not_to have_received(:size)
         end
       end
 
@@ -341,7 +341,7 @@ describe Provider, type: :model do
 
           expect(provider_with_included.accredited_courses_count).to eq(1)
           expect(provider_with_included).to have_received(:included_accredited_courses_count)
-          expect(provider_with_included.courses).to_not have_received(:size)
+          expect(provider_with_included.courses).not_to have_received(:size)
         end
       end
     end
@@ -512,7 +512,7 @@ describe Provider, type: :model do
 
     it { is_expected.to include findable_course }
     it { is_expected.to include discontinued_course }
-    it { is_expected.to_not include discarded_course }
+    it { is_expected.not_to include discarded_course }
 
     describe "#current_accredited_courses" do
       subject { provider.current_accredited_courses }
@@ -529,7 +529,7 @@ describe Provider, type: :model do
                site_statuses: [build(:site_status, :discontinued)]
       end
 
-      it { is_expected.to_not include last_years_course }
+      it { is_expected.not_to include last_years_course }
     end
   end
 
@@ -593,7 +593,7 @@ describe Provider, type: :model do
         end
 
         it "is not returned" do
-          expect(subject).to_not include(non_findable_course.provider,
+          expect(subject).not_to include(non_findable_course.provider,
                                          non_findable_course_with_accrediting_provider.provider,
                                          non_findable_course_with_accrediting_provider.accrediting_provider)
         end
@@ -720,7 +720,7 @@ describe Provider, type: :model do
 
           provider.save
 
-          expect(GeocodeJob).to_not have_received(:perform_later)
+          expect(GeocodeJob).not_to have_received(:perform_later)
         end
       end
 

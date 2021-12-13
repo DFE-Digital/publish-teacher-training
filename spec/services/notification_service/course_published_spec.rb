@@ -66,8 +66,8 @@ module NotificationService
         before { setup_notifications }
 
         it "does not notifications" do
-          expect(CoursePublishEmailMailer).to_not receive(:course_publish_email)
-          expect(course.recruitment_cycle).to_not eql(RecruitmentCycle.current)
+          expect(CoursePublishEmailMailer).not_to receive(:course_publish_email)
+          expect(course.recruitment_cycle).not_to eql(RecruitmentCycle.current)
           described_class.call(course: course)
         end
       end

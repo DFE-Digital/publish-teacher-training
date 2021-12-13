@@ -1,5 +1,3 @@
-# coding: utf-8
-
 module API
   module V2
     class CoursesController < API::V2::ApplicationController
@@ -29,7 +27,7 @@ module API
         json_data = JSONAPI::Serializable::Renderer.new.render(
           @course,
           class: CourseSerializersService.new.execute,
-          include: [:subjects, :sites, :accrediting_provider, :provider, provider: [:sites]],
+          include: [:subjects, :sites, :accrediting_provider, :provider, { provider: [:sites] }],
         )
 
         unless @current_user.admin?
@@ -146,7 +144,7 @@ module API
           @course.withdraw
           NotificationService::CourseWithdrawn.call(course: @course)
         else
-          raise RuntimeError.new("This course has not been published and should be deleted not withdrawn")
+          raise "This course has not been published and should be deleted not withdrawn"
         end
       end
 

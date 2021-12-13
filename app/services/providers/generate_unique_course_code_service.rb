@@ -7,9 +7,7 @@ module Providers
     def execute(existing_codes:)
       code = nil
 
-      while code.nil? || code.in?(existing_codes)
-        code = @generate_course_code_service.execute
-      end
+      code = @generate_course_code_service.execute while code.nil? || code.in?(existing_codes)
 
       code
     end

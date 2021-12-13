@@ -2,6 +2,7 @@ require "rails_helper"
 
 RSpec.describe "GET /api/v2/recruitment_cycles/:year/providers/ <provider_code>/training_providers/:training_provider_code/courses" do
   let(:organisation) { create(:organisation) }
+  let(:request_path) { "/api/v2/recruitment_cycles/#{recruitment_cycle.year}/providers/#{accredited_body.provider_code}/training_providers/#{training_provider.provider_code}/courses" }
   let(:user)         { create(:user, organisations: [organisation]) }
   let(:payload)      { { email: user.email } }
   let(:credentials)  { encode_to_credentials(payload) }
@@ -16,8 +17,6 @@ RSpec.describe "GET /api/v2/recruitment_cycles/:year/providers/ <provider_code>/
   def perform_request
     get request_path, headers: { "HTTP_AUTHORIZATION" => credentials }
   end
-
-  let(:request_path) { "/api/v2/recruitment_cycles/#{recruitment_cycle.year}/providers/#{accredited_body.provider_code}/training_providers/#{training_provider.provider_code}/courses" }
 
   context "current recruitment cycle" do
     it "returns courses provided by the training provider that are awarded by the awarding body with provider code <provider_code>" do
