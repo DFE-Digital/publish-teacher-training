@@ -33,7 +33,11 @@ class Provider < ApplicationRecord
   belongs_to :recruitment_cycle
 
   has_and_belongs_to_many :organisations, join_table: :organisation_provider
-  has_many :users, -> { kept }, through: :organisations, inverse_of: false
+
+  has_many :users, -> { kept }, through: :organisations
+
+  has_many :user_permissions
+  has_many :users_via_user_permission, through: :user_permissions, source: :users
 
   has_many :sites
 
