@@ -82,7 +82,7 @@ describe Support::Filter do
       end
 
       it "filters the provider out" do
-        expect(subject).to eq([provider, provider2])
+        expect(subject).to match_array([provider, provider2])
       end
     end
   end
