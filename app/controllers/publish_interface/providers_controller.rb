@@ -15,7 +15,27 @@ module PublishInterface
     end
 
     def about
-      show_deep_linked_errors(%i[train_with_us train_with_disability])
+      @about_form = PublishInterface::AboutYourOrganisationForm.build_from_provider(@provider)
+    end
+
+    def update
+      authorize @provider, :update?
+
+      @about_form = PublishInterface::AboutYourOrganisationForm.build_from_provider(@provider)
+      @about_form.save(provider_params)
+
+      if @about_form.valid?
+        flash[:success] = I18n.t("success.published")
+        redirect_to(
+          details_publish_provider_recruitment_cycle_path(
+            @provider.provider_code,
+            @provider.recruitment_cycle_year,
+          ),
+        )
+      else
+        @errors = @about_form.errors.messages
+        render provider_params["page"].to_sym
+      end
     end
 
   private
@@ -35,10 +55,10 @@ module PublishInterface
       redirect_to contact_provider_recruitment_cycle_path(@provider.provider_code, @provider.recruitment_cycle_year)
     end
 
-    def show_deep_linked_errors(attributes)
-      return if params[:display_errors].blank?
-
-      @errors = @provider.errors.messages.select { |key| attributes.include? key }
+    def provider_params
+      params
+        .fetch(:publish_interface_about_your_organisation_form, {})
+        .permit(:page, :train_with_us, :train_with_disability, accredited_bodies: [:provider_name, :provider_code, :description])
     end
   end
 end

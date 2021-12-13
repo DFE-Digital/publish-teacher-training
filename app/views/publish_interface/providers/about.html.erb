@@ -2,22 +2,21 @@
 <% content_for :page_title, title_with_error_prefix(page_title, @errors.present?) %>
 
 <% content_for :before_content do %>
-  <%= govuk_back_link_to(details_provider_recruitment_cycle_path(@provider.provider_code, @provider.recruitment_cycle_year)) %>
+  <%= govuk_back_link_to(details_publish_provider_recruitment_cycle_path(@about_form.provider_code, @about_form.recruitment_cycle_year)) %>
 <% end %>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <%= form_with(
-      model: provider,
-      url: about_provider_recruitment_cycle_path(@provider.provider_code, @provider.recruitment_cycle_year),
+      model: @about_form,
+      url: about_publish_provider_recruitment_cycle_path(@about_form.provider_code, @about_form.recruitment_cycle_year),
       method: :put,
-      builder: GOVUKDesignSystemFormBuilder::FormBuilder,
     ) do |f| %>
 
       <%= f.govuk_error_summary %>
 
       <h1 class="govuk-heading-l">
-        <span class="govuk-caption-l"><%= @provider.provider_name %></span>
+        <span class="govuk-caption-l"><%= @about_form.provider_name %></span>
         <%= page_title %>
       </h1>
 
@@ -42,12 +41,12 @@
 
       <%= f.govuk_text_area(:train_with_us,
         form_group: { id: "train-with-us" },
-        label: { size: "m" },
+        label: { text: "Training with you", size: "m" },
         max_words: 250,
         rows: 15) %>
 
-      <% if provider.accredited_bodies.present? %>
-        <% accredited_body = "accredited body".pluralize(provider.accredited_bodies.count) %>
+      <% if @about_form.accredited_bodies.present? %>
+        <% accredited_body = "accredited body".pluralize(@about_form.accredited_bodies.count) %>
 
         <hr class="govuk-section-break govuk-section-break--visible govuk-section-break--l">
 
@@ -56,14 +55,16 @@
         <p class="govuk-body">Tell applicants about your <%= accredited_body %> – you could mention their academic specialities and achievements.</p>
         <p class="govuk-body">Be specific with the claims you make, and support them with evidence.</p>
 
-        <%= f.fields model: :accredited_bodies do |abf| %>
-          <%= abf.hidden_field :provider_name %>
-          <%= abf.hidden_field :provider_code %>
-          <%= abf.govuk_text_area(:description,
-            form_group: { id: "accrediting-provider-#{abf.object.provider_code}" },
-            label: { text: "#{abf.object.provider_name} (optional)", size: "s" },
-            max_words: 100,
-            rows: 10) %>
+        <% @about_form.accredited_bodies.each_with_index do |accredited_body| %>
+          <%= f.fields_for :accredited_bodies, accredited_body, index: nil do |abf| %>
+            <%= abf.hidden_field :provider_name %>
+            <%= abf.hidden_field :provider_code %>
+            <%= abf.govuk_text_area(:description,
+              form_group: { id: "accrediting-provider-#{accredited_body.provider_code}" },
+              label: { text: "#{accredited_body.provider_name} (optional)", size: "s" },
+              max_words: 100,
+              rows: 10) %>
+          <% end %>
         <% end %>
       <% end %>
 
@@ -80,7 +81,7 @@
 
       <%= f.govuk_text_area(:train_with_disability,
         form_group: { id: "train-with-disability" },
-        label: { size: "s" },
+        label: { text: "Training with disabilities and other needs", size: "s" },
         max_words: 250,
         rows: 15) %>
 

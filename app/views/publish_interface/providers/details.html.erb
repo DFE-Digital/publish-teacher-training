@@ -47,10 +47,10 @@
             summary_list,
             :provider,
             "#{accredited_provider[:provider_name]} (optional)",
-            accredited_provider["description"],
-            ["accrediting_provider_#{accredited_provider['provider_code']}"],
-            action_path: "#{about_publish_provider_recruitment_cycle_path(@provider.provider_code, @provider.recruitment_cycle_year)}#accrediting-provider-#{accredited_provider['provider_code']}",
-            action_visually_hidden_text: "details about #{accredited_provider['provider_name']}",
+            accredited_provider[:description],
+            ["accrediting_provider_#{accredited_provider[:provider_code]}"],
+            action_path: "#{about_publish_provider_recruitment_cycle_path(@provider.provider_code, @provider.recruitment_cycle_year)}#accrediting-provider-#{accredited_provider[:provider_code]}",
+            action_visually_hidden_text: "details about #{accredited_provider[:provider_name]}",
           ) %>
         <% end %>
       <% end %>
