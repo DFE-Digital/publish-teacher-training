@@ -22,7 +22,6 @@ describe API::V2::SerializableAccessRequest do
     expect(subject).to have_jsonapi_attributes(:email_address,
                                                :first_name,
                                                :last_name,
-                                               :organisation,
                                                :request_date_utc,
                                                :requester_id,
                                                :status,
@@ -57,7 +56,6 @@ describe API::V2::SerializableAccessRequest do
     it { is_expected.to have_attribute(:email_address).with_value(access_request.email_address) }
     it { is_expected.to have_attribute(:first_name).with_value(access_request.first_name) }
     it { is_expected.to have_attribute(:last_name).with_value(access_request.last_name) }
-    it { is_expected.to have_attribute(:organisation).with_value(access_request.organisation) }
     it { is_expected.to have_attribute(:reason).with_value(access_request.reason) }
     it { is_expected.to have_attribute(:request_date_utc).with_value(access_request.request_date_utc.iso8601) }
     it { is_expected.to have_attribute(:requester_id).with_value(access_request.requester_id) }

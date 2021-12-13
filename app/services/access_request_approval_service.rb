@@ -14,7 +14,9 @@ class AccessRequestApprovalService
       user.invite_date_utc = Time.now.utc
     end
 
-    @access_request.requester.providers.each do |provider|
+    providers_missing_on_target_user = @access_request.requester.providers - target_user.providers
+
+    providers_missing_on_target_user.each do |provider|
       target_user.providers << provider
     end
 

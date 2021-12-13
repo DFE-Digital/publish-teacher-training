@@ -61,23 +61,18 @@ describe AccessRequest, type: :model do
   end
 
   describe "#add_additional_attributes" do
-    let(:user) { create(:user) }
+    let(:user) { create(:user, :with_provider) }
     let(:organisation) { build(:organisation) }
     let(:access_request) {
       build(:access_request,
+            :without_requester,
             requester_email: user.email,
-            requester: nil,
             request_date_utc: nil,
             status: nil)
     }
 
     before do
-      Timecop.freeze
       access_request.add_additional_attributes(access_request.requester_email)
-    end
-
-    after do
-      Timecop.return
     end
 
     subject { access_request }

@@ -72,20 +72,20 @@ describe AccessRequestApprovalService do
 
       context "with existing providers" do
         let(:target_user) do
-          create(:user, :with_organisation, email: access_request.email_address)
+          create(:user, :with_provider, email: access_request.email_address)
         end
-        let!(:access_request)   { create(:access_request) }
-        let!(:old_organisation) { target_user.providers.first }
+        let!(:access_request) { create(:access_request) }
+        let!(:old_provider) { target_user.providers.first }
         let(:requester) { access_request.requester }
 
-        it "keeps the existing organisation and gain access to new ones" do
+        it "keeps the existing provider and gain access to new ones" do
           subject
           target_user.providers.reload
 
           expect(target_user.providers).to(
             include(requester.providers.first),
           )
-          expect(target_user.providers).to include(old_organisation)
+          expect(target_user.providers).to include(old_provider)
         end
       end
 
@@ -99,7 +99,7 @@ describe AccessRequestApprovalService do
           )
         end
 
-        it "does not change the orgnisations of the target user" do
+        it "does not change the providers of the target user" do
           expect { subject }.not_to(change { target_user.providers.reload })
         end
 

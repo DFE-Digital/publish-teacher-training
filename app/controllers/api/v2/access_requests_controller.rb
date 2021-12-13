@@ -57,6 +57,7 @@ module API
           :email_address,
           :first_name,
           :last_name,
+          :organisation,
           :reason,
           :requester_email,
         ).with_defaults(requester_email: current_user.email)

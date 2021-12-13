@@ -3,9 +3,9 @@ require "rails_helper"
 describe "Access Request API V2", type: :request do
   # Specify a fixed admin email to avoid randomisation from the factory, must qualify as #admin?
   let(:admin_user) { create(:user, :admin) }
-  let(:requesting_user) { create(:user, organisations: [organisation]) }
+  let(:requesting_user) { create(:user, providers: [provider]) }
   let(:requested_user) { create(:user) }
-  let(:organisation) { create(:organisation) }
+  let(:provider) { create(:provider) }
   let(:payload) { { email: admin_user.email } }
   let(:credentials) { encode_to_credentials(payload) }
 
@@ -14,7 +14,7 @@ describe "Access Request API V2", type: :request do
            email_address: requested_user.email,
            requester_email: requesting_user.email,
            requester_id: requesting_user.id,
-           organisation: organisation.name)
+           organisation: provider.provider_name)
   }
 
   subject { response }
@@ -77,7 +77,6 @@ describe "Access Request API V2", type: :request do
           :last_name,
           :requester_email,
           :requester_id,
-          :organisation,
           :reason,
           :request_date_utc,
           :status,
@@ -88,7 +87,6 @@ describe "Access Request API V2", type: :request do
           :last_name,
           :requester_email,
           :requester_id,
-          :organisation,
           :reason,
           :request_date_utc,
           :status,
@@ -176,7 +174,7 @@ describe "Access Request API V2", type: :request do
               "notifications_configured" => first_access_request.requester.notifications_configured?,
             },
             "relationships" => {
-              "organisations" => {
+              "providers" => {
                 "meta" => {
                   "included" => false,
                 },
@@ -244,8 +242,8 @@ describe "Access Request API V2", type: :request do
       end
 
       context "when the user requested user already exists" do
-        it "gives a pre existing user access to the right organisations" do
-          expect(requested_user.organisations).to eq requesting_user.organisations
+        it "gives a pre existing user access to the right providers" do
+          expect(requested_user.providers).to eq requesting_user.providers
         end
       end
 
@@ -257,7 +255,7 @@ describe "Access Request API V2", type: :request do
                  email_address: "test@user.com",
                  requester_email: requesting_user.email,
                  requester_id: requesting_user.id,
-                 organisation: organisation.name)
+                 organisation: provider.provider_name)
         }
 
         before do
@@ -268,7 +266,7 @@ describe "Access Request API V2", type: :request do
         it "creates a new account for a new user and gives access to the right orgs" do
           new_user = User.find_by!(email: "test@user.com")
 
-          expect(new_user.organisations).to eq requesting_user.organisations
+          expect(new_user.providers).to eq requesting_user.providers
         end
       end
     end
@@ -381,20 +379,18 @@ describe "Access Request API V2", type: :request do
         it { is_expected.to have_http_status(:unprocessable_entity) }
 
         it "has validation error details" do
-          expect(json_data.count).to eq 5
+          expect(json_data.count).to eq 4
           expect(json_data[0]["detail"]).to eq("Enter your first name")
           expect(json_data[1]["detail"]).to eq("Enter your last name")
           expect(json_data[2]["detail"]).to eq("Enter your email address")
-          expect(json_data[3]["detail"]).to eq("Enter their organisation")
-          expect(json_data[4]["detail"]).to eq("Why do they need access?")
+          expect(json_data[3]["detail"]).to eq("Why do they need access?")
         end
 
         it "has validation error pointers" do
           expect(json_data[0]["source"]["pointer"]).to eq("/data/attributes/first_name")
           expect(json_data[1]["source"]["pointer"]).to eq("/data/attributes/last_name")
           expect(json_data[2]["source"]["pointer"]).to eq("/data/attributes/email_address")
-          expect(json_data[3]["source"]["pointer"]).to eq("/data/attributes/organisation")
-          expect(json_data[4]["source"]["pointer"]).to eq("/data/attributes/reason")
+          expect(json_data[3]["source"]["pointer"]).to eq("/data/attributes/reason")
         end
       end
     end

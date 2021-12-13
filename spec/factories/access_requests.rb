@@ -26,4 +26,9 @@ FactoryBot.define do
   trait :declined do
     status { :declined }
   end
+
+  trait :without_requester do
+    requester { nil }
+    organisation { nil }
+  end
 end

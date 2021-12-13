@@ -299,6 +299,6 @@ access_requester_user = User.all.reject(&:admin?).sample
     request_date_utc: rand(1..20).days.ago,
     status: %i[requested completed].sample,
     reason: "No reason",
-    organisation: Organisation.first.name,
+    organisation: Provider.first.provider_name,
   )
 end
