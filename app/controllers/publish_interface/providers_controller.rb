@@ -18,6 +18,10 @@ module PublishInterface
       @about_form = PublishInterface::AboutYourOrganisationForm.build_from_provider(@provider)
     end
 
+    def contact
+      @about_form = PublishInterface::AboutYourOrganisationForm.build_from_provider(@provider)
+    end
+
     def update
       authorize @provider, :update?
 
@@ -58,7 +62,12 @@ module PublishInterface
     def provider_params
       params
         .fetch(:publish_interface_about_your_organisation_form, {})
-        .permit(:page, :train_with_us, :train_with_disability, accredited_bodies: [:provider_name, :provider_code, :description])
+        .permit(
+          :email, :telephone, :urn, :website, :ukprn, :address1, :address2,
+          :address3, :address4, :postcode, :region_code,
+          :page, :train_with_us, :train_with_disability,
+          accredited_bodies: [:provider_name, :provider_code, :description]
+        )
     end
   end
 end

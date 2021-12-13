@@ -1,16 +1,16 @@
 module ViewHelper
-  # def govuk_back_link_to(url = :back, body = "Back")
-  #   render GovukComponent::BackLinkComponent.new(
-  #     text: body,
-  #     href: url,
-  #     classes: "govuk-!-display-none-print",
-  #     html_attributes: {
-  #       data: {
-  #         qa: "page-back",
-  #       },
-  #     },
-  #   )
-  # end
+  def govuk_back_link_to(url = :back, body = "Back")
+    render GovukComponent::BackLinkComponent.new(
+      text: body,
+      href: url,
+      classes: "govuk-!-display-none-print",
+      html_attributes: {
+        data: {
+          qa: "page-back",
+        },
+      },
+    )
+  end
 
   # def search_ui_url(relative_path)
   #   URI.join(Settings.search_ui.base_url, relative_path).to_s
