@@ -28,7 +28,7 @@ module Support
     end
 
     def update_course_params
-      params.require(:course).permit(:course_code)
+      params.require(:course).permit(:course_code, :name, :start_date)
     end
   end
 end
