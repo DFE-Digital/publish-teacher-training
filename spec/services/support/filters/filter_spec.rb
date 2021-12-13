@@ -43,7 +43,7 @@ describe Support::Filter do
 
       it "returns all results" do
         expect(subject.length).to eq 2
-        expect(subject).to eq([provider, provider2])
+        expect(subject).to match_array([provider, provider2])
       end
     end
   end
