@@ -260,13 +260,6 @@ RSpec/VariableName:
 RSpec/VerifiedDoubles:
   Enabled: false
 
-# Offense count: 1
-# Cop supports --auto-correct.
-# Configuration parameters: NilOrEmpty, NotPresent, UnlessPresent.
-Rails/Blank:
-  Exclude:
-    - 'db/migrate/20191016144506_copy_latest_provider_enrichment_data_to_provider.rb'
-
 # Offense count: 2
 # Configuration parameters: Include.
 # Include: app/models/**/*.rb
