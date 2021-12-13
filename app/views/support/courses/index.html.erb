@@ -3,8 +3,8 @@
 <table class="govuk-table">
   <thead class="govuk-table__head">
     <tr class="govuk-table__row">
-      <th scope="col" class="govuk-table__header govuk-!-width-one-quarter">Course name</th>
-      <th scope="col" class="govuk-table__header govuk-!-width-one-quarter">Course code</th>
+      <th scope="col" class="govuk-table__header">Course name and code</th>
+      <th scope="col" class="govuk-table__header"></th>
     </tr>
   </thead>
 
@@ -12,10 +12,10 @@
     <% @courses.each do |course| %>
       <tr class="govuk-table__row course-row">
         <td class="govuk-table__cell name">
-            <span class="govuk-!-display-block govuk-!-margin-bottom-1"><%= course.name %></span>
+          <span class="govuk-!-display-block govuk-!-margin-bottom-1"><%= course.name %> (<%= course.course_code %>)</span>
         </td>
-        <td class="govuk-table__cell course_code">
-          <span class="govuk-!-display-block govuk-!-margin-bottom-1"><%= course.course_code %> (<%= govuk_link_to "Edit", edit_support_provider_course_url(@provider,course) %>)</span>
+        <td class="govuk-table__cell change">
+          <%= govuk_link_to "Change", edit_support_provider_course_url(@provider,course) %>
         </td>
       </tr>
     <% end %>
