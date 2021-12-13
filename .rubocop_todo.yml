@@ -64,14 +64,6 @@ Naming/AccessorMethodName:
     - 'app/models/course.rb'
 
 # Offense count: 1
-# Configuration parameters: ExpectMatchingDefinition, CheckDefinitionPathHierarchy, CheckDefinitionPathHierarchyRoots, Regex, IgnoreExecutableScripts, AllowedAcronyms.
-# CheckDefinitionPathHierarchyRoots: lib, spec, test, src
-# AllowedAcronyms: CLI, DSL, ACL, API, ASCII, CPU, CSS, DNS, EOF, GUID, HTML, HTTP, HTTPS, ID, IP, JSON, LHS, QPS, RAM, RHS, RPC, SLA, SMTP, SQL, SSH, TCP, TLS, TTL, UDP, UI, UID, UUID, URI, URL, UTF8, VM, XML, XMPP, XSRF, XSS
-Naming/FileName:
-  Exclude:
-    - 'config/initializers/rswag-ui.rb'
-
-# Offense count: 1
 # Configuration parameters: IgnoredPatterns.
 # SupportedStyles: snake_case, camelCase
 Naming/MethodName:
