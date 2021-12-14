@@ -78,8 +78,8 @@ module PublishInterface
     end
 
     def promote_errors
-      @provider.errors.each do |attribute, error|
-        errors.add(attribute, error)
+      @provider.errors.each do |error|
+        errors.add(error.attribute, error.full_message)
       end
     end
 
