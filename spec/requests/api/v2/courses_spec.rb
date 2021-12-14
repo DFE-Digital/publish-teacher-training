@@ -36,8 +36,7 @@ describe "Courses API v2", type: :request do
 
     context "request without filters" do
       let(:request_path) do
-        api_v2_recruitment_cycle_courses_path(current_cycle.year) +
-          "?include=subjects"
+        "#{api_v2_recruitment_cycle_courses_path(current_cycle.year)}?include=subjects"
       end
 
       it "returns user related courses" do

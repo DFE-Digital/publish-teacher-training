@@ -693,7 +693,7 @@ private
       # `full_messages_for` here will remove any `^`s defined in the validator or en.yml.
       # We still need it for later, so re-add it.
       # jsonapi_errors will throw if it's given an array, so we call `.first`.
-      message = "^" + enrichment.errors.full_messages_for(field).first.to_s
+      message = "^#{enrichment.errors.full_messages_for(field).first}"
       errors.add field.to_sym, message
     end
   end

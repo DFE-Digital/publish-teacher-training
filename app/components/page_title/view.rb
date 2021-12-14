@@ -23,10 +23,10 @@ private
   end
 
   def build_title
-    title.match?(I18N_FORMAT) ? I18n.t("components.page_titles." + title) : title
+    title.match?(I18N_FORMAT) ? I18n.t("components.page_titles.#{title}") : title
   end
 
   def build_service_name
-    title.present? ? " - " + I18n.t("service_name") : I18n.t("service_name")
+    title.present? ? " - #{I18n.t('service_name')}" : I18n.t("service_name")
   end
 end

@@ -296,22 +296,3 @@ Style/RedundantFetchBlock:
 # SupportedStyles: use_perl_names, use_english_names
 Style/SpecialGlobalVars:
   EnforcedStyle: use_perl_names
-
-# Offense count: 16
-# Cop supports --auto-correct.
-# Configuration parameters: Mode.
-Style/StringConcatenation:
-  Exclude:
-    - 'app/components/page_title/view.rb'
-    - 'app/components/providers/filters/view.rb'
-    - 'app/models/course.rb'
-    - 'app/services/authentication_service.rb'
-    - 'config/initializers/rswag_api.rb'
-    - 'docs/lib/govuk_tech_docs/open_api/renderer.rb'
-    - 'spec/factories/organisations.rb'
-    - 'spec/factories/providers.rb'
-    - 'spec/factories/sites.rb'
-    - 'spec/requests/api/v2/courses_spec.rb'
-    - 'spec/support/matchers/have_text_table_row.rb'
-    - 'spec/validators/unique_course_validator_spec.rb'
-    - 'spec/validators/words_count_validator_spec.rb'

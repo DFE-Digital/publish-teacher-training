@@ -42,7 +42,7 @@ describe WordsCountValidator do
   end
 
   context "with invalid number of words" do
-    let(:some_words_field) { (%w[word] * maximum).join(" ") + " popped" }
+    let(:some_words_field) { "#{(%w[word] * maximum).join(' ')} popped" }
 
     it { is_expected.to be false }
 
@@ -52,7 +52,7 @@ describe WordsCountValidator do
   end
 
   context "with newlines" do
-    let(:some_words_field) { (%w[word] * maximum).join("\n") + " popped" }
+    let(:some_words_field) { "#{(%w[word] * maximum).join("\n")} popped" }
 
     it { is_expected.to be false }
 
@@ -62,7 +62,7 @@ describe WordsCountValidator do
   end
 
   context "with non-words such as markdown" do
-    let(:some_words_field) { (%w[word] * maximum).join(" ") + " *" }
+    let(:some_words_field) { "#{(%w[word] * maximum).join(' ')} *" }
 
     it { is_expected.to be false }
 
