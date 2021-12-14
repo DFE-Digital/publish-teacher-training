@@ -261,14 +261,6 @@ Style/FormatString:
     - 'app/services/rollover_service.rb'
     - 'spec/factories/providers.rb'
 
-# Offense count: 14
-# Cop supports --auto-correct.
-Style/GlobalStdStream:
-  Exclude:
-    - 'app/services/rollover_service.rb'
-    - 'config/initializers/semantic_logger.rb'
-    - 'spec/support/with_stubbed_stdout.rb'
-
 # Offense count: 1
 # Configuration parameters: MinBranchesCount.
 Style/HashLikeCase:

@@ -26,17 +26,17 @@ def run(stdin: nil, stderr: nil)
 
   # We neeed to save a duplicate of the original STDOUT so that we can
   # re-instate it when we're done fiddling.
-  original_stdout = STDOUT.dup
+  original_stdout = $stdout.dup
 
   # Here's where the magic happens. STDOUT is now redirecting to our tempfile.
-  STDOUT.reopen(output_file)
-  STDOUT.sync
+  $stdout.reopen(output_file)
+  $stdout.sync
 
   if stderr
     stderr_file = Tempfile.new("stderr.")
-    original_stderr = STDERR.dup
-    STDERR.reopen(stderr_file)
-    STDERR.sync
+    original_stderr = $stderr.dup
+    $stderr.reopen(stderr_file)
+    $stderr.sync
   end
 
   # Maybe we should do stdin in a similar way, but for now this works so we'll
@@ -57,10 +57,10 @@ def run(stdin: nil, stderr: nil)
 
   # Restore STDOUT before we read back from the output file, which is why we
   # can't just rely on the ensure block to do it.
-  STDOUT.reopen(original_stdout)
+  $stdout.reopen(original_stdout)
 
   if stderr
-    STDERR.reopen(original_stderr)
+    $stderr.reopen(original_stderr)
 
     stderr_file.sync
     stderr_file.seek(0)
@@ -72,13 +72,13 @@ def run(stdin: nil, stderr: nil)
   output_file.read
 ensure
   # We need to restore STDOUT and remove the output file no matter what.
-  STDOUT.reopen(original_stdout)
-  STDOUT.sync
+  $stdout.reopen(original_stdout)
+  $stdout.sync
   output_file.unlink
 
   if stderr
-    STDERR.reopen(original_stderr)
-    STDERR.sync
+    $stderr.reopen(original_stderr)
+    $stderr.sync
     stderr_file.unlink
   end
 
