@@ -282,11 +282,3 @@ Style/RedundantArgument:
   Exclude:
     - 'lib/tasks/sandbox.rake'
     - 'spec/support/parse_text_table.rb'
-
-# Offense count: 1
-# Cop supports --auto-correct.
-# Configuration parameters: SafeForConstants.
-Style/RedundantFetchBlock:
-  Exclude:
-    - 'config/puma.rb'
-
