@@ -7,6 +7,7 @@ module Support
     def initialize(model_data_scope:, filter_model:)
       @model_data_scope = model_data_scope
       @filter_model = filter_model
+      @pg_search_method = filter_model.pg_search_method
     end
 
     def call
@@ -30,7 +31,7 @@ module Support
     def text_search(model_data_scope, text_search)
       return model_data_scope if text_search.blank?
 
-      model_data_scope.provider_search(text_search)
+      model_data_scope.public_send(pg_search_method(text_search))
     end
 
     def filter_model_data_scope

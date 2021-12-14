@@ -48,7 +48,7 @@ module Support
     end
 
     def filter
-      @filter ||= ProviderFilter.new(params: filter_params)
+      @filter ||= Support::Providers::Filter.new(params: filter_params)
     end
 
     def filters

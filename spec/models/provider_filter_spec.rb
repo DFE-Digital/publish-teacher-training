@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-describe ProviderFilter do
+describe Support::Providers::Filter do
   let(:permitted_params) { ActionController::Parameters.new(params).permit(:text_search) }
   let(:permitted_params2) { ActionController::Parameters.new(provider_and_course_params).permit(:provider_search, :course_search) }
 
