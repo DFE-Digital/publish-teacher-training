@@ -59,7 +59,7 @@ describe "PATCH /providers/:provider_code" do
     ]
   end
   let(:request_path) do
-    "/api/v2/recruitment_cycles/#{recruitment_cycle.year}" +
+    "/api/v2/recruitment_cycles/#{recruitment_cycle.year}" \
       "/providers/#{provider.provider_code}"
   end
 

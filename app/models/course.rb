@@ -776,7 +776,7 @@ private
       end_date = short_date(recruitment_cycle.application_end_date)
       errors.add(
         :applications_open_from,
-        "#{chosen_date} is not valid for the #{provider.recruitment_cycle.year} cycle. " +
+        "#{chosen_date} is not valid for the #{provider.recruitment_cycle.year} cycle. " \
         "A valid date must be between #{start_date} and #{end_date}",
       )
     end

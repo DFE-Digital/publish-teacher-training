@@ -77,7 +77,7 @@ describe "Courses API v2", type: :request do
       context "for multiple codes" do
         let(:request_path) do
           api_v2_recruitment_cycle_courses_path(current_cycle.year) +
-            "?filter[accredited_body_code][]=#{accredited_body.provider_code}" +
+            "?filter[accredited_body_code][]=#{accredited_body.provider_code}" \
             "&filter[accredited_body_code][]=#{accredited_body2.provider_code}"
         end
 

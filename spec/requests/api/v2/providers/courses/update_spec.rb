@@ -43,8 +43,8 @@ describe "PATCH /providers/:provider_code/courses/:course_code" do
     ]
   end
   let(:request_path) do
-    "/api/v2/recruitment_cycles/#{recruitment_cycle.year}" +
-      "/providers/#{course.provider.provider_code}" +
+    "/api/v2/recruitment_cycles/#{recruitment_cycle.year}" \
+      "/providers/#{course.provider.provider_code}" \
       "/courses/#{course.course_code}"
   end
 

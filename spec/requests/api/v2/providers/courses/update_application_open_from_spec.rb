@@ -74,7 +74,7 @@ describe "PATCH /providers/:provider_code/courses/:course_code" do
         chosen_date = updated_applications_open_from[:applications_open_from].strftime("%d/%m/%Y")
         start_date = provider.recruitment_cycle.application_start_date.strftime("%d/%m/%Y")
         end_date = provider.recruitment_cycle.application_end_date.strftime("%d/%m/%Y")
-        expect(response.body).to include("#{chosen_date} is not valid for the #{provider.recruitment_cycle.year} cycle. " +
+        expect(response.body).to include("#{chosen_date} is not valid for the #{provider.recruitment_cycle.year} cycle. " \
                                          "A valid date must be between #{start_date} and #{end_date}")
       end
     end
@@ -96,7 +96,7 @@ describe "PATCH /providers/:provider_code/courses/:course_code" do
         chosen_date = updated_applications_open_from[:applications_open_from].strftime("%d/%m/%Y")
         start_date = provider.recruitment_cycle.application_start_date.strftime("%d/%m/%Y")
         end_date = provider.recruitment_cycle.application_end_date.strftime("%d/%m/%Y")
-        expect(response.body).to include("#{chosen_date} is not valid for the #{provider.recruitment_cycle.year} cycle. " +
+        expect(response.body).to include("#{chosen_date} is not valid for the #{provider.recruitment_cycle.year} cycle. " \
                                          "A valid date must be between #{start_date} and #{end_date}")
       end
     end

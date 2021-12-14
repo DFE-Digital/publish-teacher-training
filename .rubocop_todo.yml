@@ -283,24 +283,6 @@ Style/HashLikeCase:
   Exclude:
     - 'app/models/concerns/with_qualifications.rb'
 
-# Offense count: 17
-# Cop supports --auto-correct.
-Style/LineEndConcatenation:
-  Exclude:
-    - 'app/models/course.rb'
-    - 'spec/requests/api/v2/courses_spec.rb'
-    - 'spec/requests/api/v2/providers/courses/create_spec.rb'
-    - 'spec/requests/api/v2/providers/courses/publish_spec.rb'
-    - 'spec/requests/api/v2/providers/courses/publishable_spec.rb'
-    - 'spec/requests/api/v2/providers/courses/update_application_open_from_spec.rb'
-    - 'spec/requests/api/v2/providers/courses/update_spec.rb'
-    - 'spec/requests/api/v2/providers/courses_spec.rb'
-    - 'spec/requests/api/v2/providers/sites_spec.rb'
-    - 'spec/requests/api/v2/providers/update_accrediting_providers_spec.rb'
-    - 'spec/requests/api/v2/providers/update_provider_ucas_preferences.rb'
-    - 'spec/requests/api/v2/providers/update_spec.rb'
-    - 'spec/requests/api/v2/providers/update_ucas_contacts_spec.rb'
-
 # Offense count: 3
 # Cop supports --auto-correct.
 # Configuration parameters: EnforcedStyle.
