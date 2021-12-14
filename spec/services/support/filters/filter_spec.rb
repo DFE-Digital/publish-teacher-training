@@ -5,8 +5,9 @@ require "rails_helper"
 describe Support::Filter do
   let(:provider) { create(:provider, provider_name: "Really big school", provider_code: "A01", courses: [build(:course, course_code: "2VVZ")]) }
   let(:provider2) { create(:provider, provider_name: "Slightly smaller school", provider_code: "A02", courses: [build(:course, course_code: "2VVZ")]) }
+  let(:filter_model) { double filters: params }
 
-  subject { Support::Filter.call(model_data_scope: Provider.all, filters: params) }
+  subject { Support::Filter.call(model_data_scope: Provider.all, filter_model: filter_model) }
 
   before do
     provider

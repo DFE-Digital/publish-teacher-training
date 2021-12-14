@@ -54,15 +54,19 @@ module Support
   private
 
     def filtered_providers
-      Support::Filter.call(model_data_scope: find_providers, filters: filters)
+      Support::Filter.call(model_data_scope: find_providers, filter_model: filter)
     end
 
     def find_providers
       RecruitmentCycle.current.providers.order(:provider_name).includes(:courses, :users)
     end
 
+    def filter
+      @filter ||= ProviderFilter.new(params: filter_params)
+    end
+
     def filters
-      @filters ||= ProviderFilter.new(params: filter_params).filters
+      @filters ||= filter.filters
     end
 
     def filter_params

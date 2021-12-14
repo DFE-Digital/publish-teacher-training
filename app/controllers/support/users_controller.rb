@@ -44,11 +44,15 @@ module Support
     end
 
     def filtered_users
-      Support::Filter.call(model_data_scope: User.order(:last_name), filters: filters)
+      Support::Filter.call(model_data_scope: User.order(:last_name), filter_model: filter)
+    end
+
+    def filter
+      @filter ||= ProviderFilter.new(params: filter_params)
     end
 
     def filters
-      @filters ||= ProviderFilter.new(params: filter_params).filters
+      @filters ||= filter.filters
     end
 
     def filter_params

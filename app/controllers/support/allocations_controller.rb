@@ -15,11 +15,15 @@ module Support
     end
 
     def filtered_allocations
-      Support::Filter.call(model_data_scope: Allocation.current_allocations, filters: filters)
+      Support::Filter.call(model_data_scope: Allocation.current_allocations, filter_model: filter)
+    end
+
+    def filter
+      @filter ||= ProviderFilter.new(params: filter_params)
     end
 
     def filters
-      @filters ||= ProviderFilter.new(params: filter_params).filters
+      @filters ||= filter.filters
     end
 
     def filter_params

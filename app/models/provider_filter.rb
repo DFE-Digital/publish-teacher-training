@@ -3,6 +3,7 @@
 class ProviderFilter
   def initialize(params:)
     @params = params
+    @pg_search_method = :provider_search
   end
 
   def filters

@@ -4,20 +4,20 @@ module Support
   class Filter
     include ServicePattern
 
-    def initialize(model_data_scope:, filters:)
+    def initialize(model_data_scope:, filter_model:)
       @model_data_scope = model_data_scope
-      @filters = filters
+      @filter_model = filter_model
     end
 
     def call
-      return model_data_scope unless filters
+      return model_data_scope unless filter_model.filters
 
       filter_model_data_scope
     end
 
   private
 
-    attr_reader :model_data_scope, :filters
+    attr_reader :model_data_scope, :filter_model
 
     def search(model_data_scope, filters)
       return model_data_scope if filters.values.all?(&:blank?)
@@ -34,10 +34,10 @@ module Support
     end
 
     def filter_model_data_scope
-      if filters.include?(:provider_search)
-        search(model_data_scope, filters)
+      if filter_model.filters.include?(:provider_search)
+        search(model_data_scope, filter_model.filters)
       else
-        text_search(model_data_scope, filters[:text_search])
+        text_search(model_data_scope, filter_model.filters[:text_search])
       end
     end
   end
