@@ -65,11 +65,9 @@ private
   end
 
   def allocation_exists?(prev_alloc)
-    Allocation.where(
-      provider_code: prev_alloc.provider_code,
-      accredited_body_code: prev_alloc.accredited_body_code,
-      recruitment_cycle_id: allocation_cycle.id,
-    ).exists?
+    Allocation.exists?(provider_code: prev_alloc.provider_code,
+                       accredited_body_code: prev_alloc.accredited_body_code,
+                       recruitment_cycle_id: allocation_cycle.id)
   end
 
   def allocation_cycle

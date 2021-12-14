@@ -260,14 +260,6 @@ Rails/HasAndBelongsToMany:
     - 'app/models/organisation.rb'
     - 'app/models/provider.rb'
 
-# Offense count: 1
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle.
-# SupportedStyles: exists, where
-Rails/WhereExists:
-  Exclude:
-    - 'app/services/allocation_copy_data_service.rb'
-
 # Offense count: 3
 # Cop supports --auto-correct.
 # Configuration parameters: EnforcedStyle.
