@@ -274,11 +274,3 @@ Style/GlobalStdStream:
 Style/HashLikeCase:
   Exclude:
     - 'app/models/concerns/with_qualifications.rb'
-
-# Offense count: 2
-# Cop supports --auto-correct.
-# Configuration parameters: Methods.
-Style/RedundantArgument:
-  Exclude:
-    - 'lib/tasks/sandbox.rake'
-    - 'spec/support/parse_text_table.rb'

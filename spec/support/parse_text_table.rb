@@ -50,7 +50,7 @@ end
 
 def is_a_row_delimeter?(row)
   contains_only_dashes = /^\-+$/
-  row.join("").match?(contains_only_dashes)
+  row.join.match?(contains_only_dashes)
 end
 
 RSpec::Matchers.define :have_cell_containing do |text|
