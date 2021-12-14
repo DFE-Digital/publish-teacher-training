@@ -16,6 +16,13 @@ class AccessRequestApprovalService
 
     orgs_missing_on_target_user = @access_request.requester.organisations - target_user.organisations
     target_user.organisations << orgs_missing_on_target_user
+
+    # In addition, create the user permission relationship
+    missing_providers_on_target_user = orgs_missing_on_target_user.flat_map(&:providers)
+    missing_providers_on_target_user.each do |org_provider|
+      target_user.providers << org_provider
+    end
+
     @access_request.approve
   end
 end
