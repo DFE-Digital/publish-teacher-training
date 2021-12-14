@@ -19,7 +19,7 @@ module Support
     end
 
     def filter
-      @filter ||= Support::Providers::Filter.new(params: filter_params)
+      @filter ||= Support::Allocations::Filter.new(params: filter_params)
     end
 
     def filters

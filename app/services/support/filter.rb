@@ -18,7 +18,7 @@ module Support
 
   private
 
-    attr_reader :model_data_scope, :filter_model
+    attr_reader :model_data_scope, :filter_model, :pg_search_method
 
     def search(model_data_scope, filters)
       return model_data_scope if filters.values.all?(&:blank?)
@@ -31,7 +31,7 @@ module Support
     def text_search(model_data_scope, text_search)
       return model_data_scope if text_search.blank?
 
-      model_data_scope.public_send(pg_search_method(text_search))
+      model_data_scope.public_send(pg_search_method, text_search)
     end
 
     def filter_model_data_scope
