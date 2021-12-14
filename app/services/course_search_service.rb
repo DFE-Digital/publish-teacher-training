@@ -157,9 +157,9 @@ private
   end
 
   def locations_filter?
-    filter.has_key?(:latitude) &&
-      filter.has_key?(:longitude) &&
-      filter.has_key?(:radius)
+    filter.key?(:latitude) &&
+      filter.key?(:longitude) &&
+      filter.key?(:radius)
   end
 
   def sort_by_provider_ascending?

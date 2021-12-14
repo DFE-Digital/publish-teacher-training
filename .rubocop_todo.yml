@@ -275,14 +275,6 @@ Style/HashLikeCase:
   Exclude:
     - 'app/models/concerns/with_qualifications.rb'
 
-# Offense count: 3
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle.
-# SupportedStyles: short, verbose
-Style/PreferredHashMethods:
-  Exclude:
-    - 'app/services/course_search_service.rb'
-
 # Offense count: 2
 # Cop supports --auto-correct.
 # Configuration parameters: Methods.
