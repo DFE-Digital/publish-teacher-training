@@ -24,7 +24,7 @@ gem "bootsnap", ">= 1.1.0", require: false
 # Canonical meta tag
 gem "canonical-rails"
 
-# Decorate logic to keep it of the views and helper methods
+# Decorate logic to keep it out of the views and helper methods
 gem "draper"
 
 # Custom attributes for endpoints
