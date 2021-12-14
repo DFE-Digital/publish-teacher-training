@@ -6,6 +6,8 @@ en:
       sign_out: "Sign out"
   cancel: "Cancel"
   change: "Change"
+  page_titles:
+    error_prefix: "Error: "
   components:
     page_titles:
       sign_in:
