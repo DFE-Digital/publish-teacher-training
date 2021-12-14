@@ -29,7 +29,10 @@ private
   end
 
   def authenticate
-    redirect_to sign_in_path if !authenticated?
+    if !authenticated?
+      session["post_dfe_sign_in_path"] = request.fullpath
+      redirect_to sign_in_path
+    end
   end
 
   def not_found
