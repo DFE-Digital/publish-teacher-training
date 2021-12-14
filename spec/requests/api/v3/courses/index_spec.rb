@@ -565,7 +565,7 @@ describe "GET v3/courses" do
   end
 
   describe "subjects filter" do
-    let(:course_with_A1_subject) do
+    let(:course_with_a1_subject) do
       create(:course,
              enrichments: [published_enrichment],
              site_statuses: [findable_status],
@@ -576,7 +576,7 @@ describe "GET v3/courses" do
       let(:request_path) { "/api/v3/courses?filter[subjects]=A1" }
 
       before do
-        course_with_A1_subject
+        course_with_a1_subject
       end
 
       it "is returned" do
@@ -589,7 +589,7 @@ describe "GET v3/courses" do
 
     context "with courses that match multiple subjects" do
       let(:request_path) { "/api/v3/courses?filter[subjects]=A1,B1" }
-      let(:course_with_B1_subject) do
+      let(:course_with_b1_subject) do
         create(:course,
                enrichments: [published_enrichment],
                site_statuses: [build(:site_status, :findable)],
@@ -597,8 +597,8 @@ describe "GET v3/courses" do
       end
 
       before do
-        course_with_A1_subject
-        course_with_B1_subject
+        course_with_a1_subject
+        course_with_b1_subject
       end
 
       it "is returned" do
@@ -613,7 +613,7 @@ describe "GET v3/courses" do
       let(:request_path) { "/api/v3/courses?filter[subjects]=C1" }
 
       before do
-        course_with_A1_subject
+        course_with_a1_subject
       end
 
       it "is not returned" do
