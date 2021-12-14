@@ -290,16 +290,6 @@ Style/RedundantFetchBlock:
   Exclude:
     - 'config/puma.rb'
 
-# Offense count: 4
-# Cop supports --auto-correct.
-# Configuration parameters: ConvertCodeThatCanStartToReturnNil, AllowedMethods.
-# AllowedMethods: present?, blank?, presence, try, try!
-Style/SafeNavigation:
-  Exclude:
-    - 'app/models/accrediting_provider_enrichment.rb'
-    - 'app/services/providers/copy_to_recruitment_cycle_service.rb'
-    - 'lib/tasks/backfill_urns_and_ukprns.rake'
-
 # Offense count: 54
 # Cop supports --auto-correct.
 Style/SingleArgumentDig:

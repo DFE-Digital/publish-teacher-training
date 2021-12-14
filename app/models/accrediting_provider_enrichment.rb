@@ -33,7 +33,7 @@ class AccreditingProviderEnrichment
       end
 
       def dump(obj)
-        obj.to_json if obj
+        obj&.to_json
       end
     end
   end
