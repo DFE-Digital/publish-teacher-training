@@ -7,7 +7,7 @@ module Support
 
       def initialize(params:)
         @params = params
-        @pg_search_method = :provider_search
+        @pg_search_method = :search
       end
 
       def filters
@@ -21,7 +21,7 @@ module Support
       attr_reader :params
 
       def merged_filters
-        @merged_filters ||= params.include?("text_search") ? text_search : provider_and_course_search
+        @merged_filters ||= provider_and_course_search
       end
 
       def text_search

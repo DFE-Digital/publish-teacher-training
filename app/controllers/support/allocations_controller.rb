@@ -1,5 +1,7 @@
 module Support
   class AllocationsController < SupportController
+    before_action :filters
+
     def index
       @allocations = filtered_allocations.page(params[:page] || 1)
     end

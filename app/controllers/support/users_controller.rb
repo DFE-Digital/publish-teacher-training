@@ -1,5 +1,7 @@
 module Support
   class UsersController < SupportController
+    before_action :filters
+
     def index
       @users = filtered_users.page(params[:page] || 1)
     end
