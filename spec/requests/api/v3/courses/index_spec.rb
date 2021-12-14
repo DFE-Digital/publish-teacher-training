@@ -698,8 +698,8 @@ describe "GET v3/courses" do
         json_response = JSON.parse(response.body)
         course_hashes = json_response["data"]
 
-        expect(course_hashes.first.dig("attributes").dig("name")).to eq(filtered_provider_course.name)
-        expect(course_hashes.second.dig("attributes").dig("name")).to eq(another_provider_course.name)
+        expect(course_hashes.first["attributes"]["name"]).to eq(filtered_provider_course.name)
+        expect(course_hashes.second["attributes"]["name"]).to eq(another_provider_course.name)
       end
     end
   end

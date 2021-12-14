@@ -60,7 +60,7 @@ module API
         end
 
         def sort_field
-          @sort_field ||= Set.new(params.dig(:sort)&.split(","))
+          @sort_field ||= Set.new(params[:sort]&.split(","))
         end
 
         def provider_fields

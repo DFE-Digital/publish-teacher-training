@@ -72,9 +72,9 @@ describe "PATCH /providers/:provider_code" do
       expect(response).to have_http_status(:ok)
       accredited_body = JSON.parse(response.body).dig("data", "attributes", "accredited_bodies").first
 
-      expect(accredited_body.dig("provider_code")).to eq(accrediting_provider.provider_code)
-      expect(accredited_body.dig("provider_name")).to eq(accrediting_provider.provider_name)
-      expect(accredited_body.dig("description")).to eq(new_description)
+      expect(accredited_body["provider_code"]).to eq(accrediting_provider.provider_code)
+      expect(accredited_body["provider_name"]).to eq(accrediting_provider.provider_name)
+      expect(accredited_body["description"]).to eq(new_description)
     end
 
     context "failed validation" do
@@ -128,9 +128,9 @@ describe "PATCH /providers/:provider_code" do
       expect(response).to have_http_status(:ok)
       accredited_body = JSON.parse(response.body).dig("data", "attributes", "accredited_bodies").first
 
-      expect(accredited_body.dig("provider_code")).to eq(accrediting_provider.provider_code)
-      expect(accredited_body.dig("provider_name")).to eq(accrediting_provider.provider_name)
-      expect(accredited_body.dig("description")).to eq(new_description)
+      expect(accredited_body["provider_code"]).to eq(accrediting_provider.provider_code)
+      expect(accredited_body["provider_name"]).to eq(accrediting_provider.provider_name)
+      expect(accredited_body["description"]).to eq(new_description)
     end
 
     context "failed validation" do
@@ -193,9 +193,9 @@ describe "PATCH /providers/:provider_code" do
         expect(response).to have_http_status(:ok)
         accredited_body = JSON.parse(response.body).dig("data", "attributes", "accredited_bodies").first
 
-        expect(accredited_body.dig("provider_code")).to eq(accrediting_provider.provider_code)
-        expect(accredited_body.dig("provider_name")).to eq(accrediting_provider.provider_name)
-        expect(accredited_body.dig("description")).to eq(new_description)
+        expect(accredited_body["provider_code"]).to eq(accrediting_provider.provider_code)
+        expect(accredited_body["provider_name"]).to eq(accrediting_provider.provider_name)
+        expect(accredited_body["description"]).to eq(new_description)
       end
     end
 
@@ -218,9 +218,9 @@ describe "PATCH /providers/:provider_code" do
         expect(response).to have_http_status(:ok)
         accredited_body = JSON.parse(response.body).dig("data", "attributes", "accredited_bodies").first
 
-        expect(accredited_body.dig("provider_code")).to eq(accrediting_provider.provider_code)
-        expect(accredited_body.dig("provider_name")).to eq(accrediting_provider.provider_name)
-        expect(accredited_body.dig("description")).to eq(new_description)
+        expect(accredited_body["provider_code"]).to eq(accrediting_provider.provider_code)
+        expect(accredited_body["provider_name"]).to eq(accrediting_provider.provider_name)
+        expect(accredited_body["description"]).to eq(new_description)
       end
     end
   end

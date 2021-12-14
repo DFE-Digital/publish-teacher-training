@@ -290,16 +290,6 @@ Style/RedundantFetchBlock:
   Exclude:
     - 'config/puma.rb'
 
-# Offense count: 54
-# Cop supports --auto-correct.
-Style/SingleArgumentDig:
-  Exclude:
-    - 'app/controllers/api/public/v1/providers_controller.rb'
-    - 'spec/controllers/api/v2/providers_controller_spec.rb'
-    - 'spec/requests/api/v2/providers/providers_show_spec.rb'
-    - 'spec/requests/api/v2/providers/update_accrediting_providers_spec.rb'
-    - 'spec/requests/api/v3/courses/index_spec.rb'
-
 # Offense count: 2
 # Cop supports --auto-correct.
 # Configuration parameters: RequireEnglish.

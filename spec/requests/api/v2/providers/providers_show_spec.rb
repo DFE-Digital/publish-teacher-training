@@ -120,13 +120,13 @@ describe "Providers API v2", type: :request do
         perform_request
 
         expect(response).to have_http_status(:success)
-        included_user = json_response.dig("included").first
+        included_user = json_response["included"].first
 
-        expect(included_user.dig("id")).to eq(user.id.to_s)
-        expect(included_user.dig("type")).to eq("users")
-        expect(included_user.dig("attributes").dig("first_name")).to eq(user.first_name)
-        expect(included_user.dig("attributes").dig("last_name")).to eq(user.last_name)
-        expect(included_user.dig("attributes").dig("email")).to eq(user.email)
+        expect(included_user["id"]).to eq(user.id.to_s)
+        expect(included_user["type"]).to eq("users")
+        expect(included_user["attributes"]["first_name"]).to eq(user.first_name)
+        expect(included_user["attributes"]["last_name"]).to eq(user.last_name)
+        expect(included_user["attributes"]["email"]).to eq(user.email)
       end
     end
 
@@ -137,21 +137,21 @@ describe "Providers API v2", type: :request do
         perform_request
 
         expect(response).to have_http_status(:success)
-        included_site = json_response.dig("included").first
+        included_site = json_response["included"].first
 
-        expect(included_site.dig("id")).to eq(site.id.to_s)
-        expect(included_site.dig("type")).to eq("sites")
-        expect(included_site.dig("attributes").dig("code")).to eq(site.code)
-        expect(included_site.dig("attributes").dig("location_name")).to eq(site.location_name)
-        expect(included_site.dig("attributes").dig("address1")).to eq(site.address1)
-        expect(included_site.dig("attributes").dig("address2")).to eq(site.address2)
-        expect(included_site.dig("attributes").dig("address3")).to eq(site.address3)
-        expect(included_site.dig("attributes").dig("address4")).to eq(site.address4)
-        expect(included_site.dig("attributes").dig("postcode")).to eq(site.postcode)
-        expect(included_site.dig("attributes").dig("region_code")).to eq(site.region_code)
-        expect(included_site.dig("attributes").dig("latitude")).to eq(site.latitude)
-        expect(included_site.dig("attributes").dig("longitude")).to eq(site.longitude)
-        expect(included_site.dig("attributes").dig("recruitment_cycle_year")).to eq(site.recruitment_cycle.year)
+        expect(included_site["id"]).to eq(site.id.to_s)
+        expect(included_site["type"]).to eq("sites")
+        expect(included_site["attributes"]["code"]).to eq(site.code)
+        expect(included_site["attributes"]["location_name"]).to eq(site.location_name)
+        expect(included_site["attributes"]["address1"]).to eq(site.address1)
+        expect(included_site["attributes"]["address2"]).to eq(site.address2)
+        expect(included_site["attributes"]["address3"]).to eq(site.address3)
+        expect(included_site["attributes"]["address4"]).to eq(site.address4)
+        expect(included_site["attributes"]["postcode"]).to eq(site.postcode)
+        expect(included_site["attributes"]["region_code"]).to eq(site.region_code)
+        expect(included_site["attributes"]["latitude"]).to eq(site.latitude)
+        expect(included_site["attributes"]["longitude"]).to eq(site.longitude)
+        expect(included_site["attributes"]["recruitment_cycle_year"]).to eq(site.recruitment_cycle.year)
       end
     end
 
