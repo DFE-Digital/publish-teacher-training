@@ -19,8 +19,7 @@ RSpec.describe Providers::CreateFakeProviderService do
     expect {
       service.execute
     }.to change { Provider.count }.by(1).and \
-      change { Organisation.count }.by(1).and \
-        change { Site.count }.by(1)
+      change { Site.count }.by(1)
   end
 
   context "a provider with that code already exists" do

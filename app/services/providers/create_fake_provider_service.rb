@@ -34,9 +34,7 @@ module Providers
         accrediting_provider: @is_accredited_body ? "accredited_body" : "not_an_accredited_body",
       }.merge(DEFAULT_PROVIDER_ATTRIBUTES))
 
-      organisation = Organisation.new(name: @provider_name)
-      organisation.providers << provider
-      organisation.save!
+      provider.save!
 
       provider.sites.create!(
         location_name: "Site 1",

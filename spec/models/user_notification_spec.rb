@@ -20,8 +20,7 @@ describe UserNotification, type: :model do
   end
 
   describe "associations" do
-    let(:organisation) { create(:organisation, providers: [provider]) }
-    let(:user) { create(:user, organisations: [organisation]) }
+    let(:user) { create(:user, providers: [provider]) }
     let(:provider) { create(:provider) }
 
     subject { described_class.new(user_id: user.id, provider_code: provider.provider_code) }
@@ -31,8 +30,7 @@ describe UserNotification, type: :model do
   end
 
   describe "scopes" do
-    let(:organisation) { create(:organisation, providers: [provider]) }
-    let(:user) { create(:user, organisations: [organisation]) }
+    let(:user) { create(:user, providers: [provider]) }
     let(:provider) { create(:provider) }
     let(:user_notification_create) do
       create(

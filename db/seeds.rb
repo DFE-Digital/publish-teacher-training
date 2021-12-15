@@ -9,7 +9,6 @@ SubjectArea.destroy_all
 Site.destroy_all
 SiteStatus.destroy_all
 Provider.destroy_all
-Organisation.destroy_all
 User.destroy_all
 AccessRequest.destroy_all
 RecruitmentCycle.destroy_all
@@ -32,7 +31,7 @@ superuser = User.create!(
   admin: true,
 )
 
-def create_standard_provider_and_courses_for_cycle(recruitment_cycle, superuser)
+def create_standard_provider_and_courses_for_cycle(recruitment_cycle, _superuser)
   provider = Provider.create!(
     provider_name: "Acme SCITT",
     provider_code: "A01",
@@ -41,9 +40,6 @@ def create_standard_provider_and_courses_for_cycle(recruitment_cycle, superuser)
     email: Faker::Internet.email,
     telephone: Faker::PhoneNumber.phone_number,
   )
-  organisation = Organisation.create!(name: "ACME SCITT Org")
-  organisation.providers << provider
-  superuser.organisations << organisation
 
   Site.create!(
     provider: provider,
@@ -274,17 +270,14 @@ create_standard_provider_and_courses_for_cycle(next_recruitment_cycle, superuser
     telephone: Faker::PhoneNumber.phone_number,
   )
 
-  organisation = Organisation.create!(name: "ACME#{i}")
-  organisation.providers << provider
-
   user = User.create!(
     email: Faker::Internet.unique.email,
     first_name: Faker::Name.first_name,
     last_name: Faker::Name.last_name,
   )
 
-  user.organisations << organisation
-  superuser.organisations << organisation
+  user.providers << provider
+  superuser.providers << provider
 end
 
 access_requester_user = User.all.reject(&:admin?).sample

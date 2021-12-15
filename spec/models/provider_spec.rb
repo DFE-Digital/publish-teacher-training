@@ -98,12 +98,6 @@ describe Provider, type: :model do
     end
   end
 
-  describe "organisation" do
-    it "returns the only organisation a provider has" do
-      expect(subject.organisation).to eq subject.organisations.first
-    end
-  end
-
   describe "users" do
     let(:discarded_user) { create(:user, :discarded, providers: [provider]) }
 

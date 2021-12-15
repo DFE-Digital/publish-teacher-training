@@ -37,15 +37,6 @@
 
       <fieldset class="govuk-fieldset">
         <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
-          <h2 class="govuk-fieldset__heading">Organisation</h2>
-        </legend>
-        <%= f.fields_for :organisations do |organisation| %>
-          <%= organisation.govuk_text_field :name, label: { text: "Organisation name", size: "s" } %>
-        <% end %>
-      </fieldset>
-
-      <fieldset class="govuk-fieldset">
-        <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
           <h2 class="govuk-fieldset__heading">Site</h2>
         </legend>
         <%= f.fields_for :sites do |site| %>

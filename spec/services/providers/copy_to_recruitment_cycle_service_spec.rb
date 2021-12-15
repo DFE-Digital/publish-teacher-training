@@ -107,12 +107,6 @@ describe Providers::CopyToRecruitmentCycleService do
       end
     end
 
-    it "assigns the new provider to organisation" do
-      service.execute(provider: provider, new_recruitment_cycle: new_recruitment_cycle)
-
-      expect(new_provider.organisation).to eq provider.organisation
-    end
-
     it "copies over the ucas_preferences" do
       service.execute(provider: provider, new_recruitment_cycle: new_recruitment_cycle)
 

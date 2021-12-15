@@ -4,8 +4,7 @@ describe User, type: :model do
   subject { create(:user, first_name: "Jane", last_name: "Smith", email: "jsmith@scitt.org") }
 
   describe "associations" do
-    it { is_expected.to have_many(:organisation_users) }
-    it { is_expected.to have_many(:organisations).through(:organisation_users) }
+    it { is_expected.to have_many(:user_permissions) }
     it { is_expected.to have_many(:providers).through(:user_permissions) }
     it { is_expected.to have_many(:user_notifications) }
   end

@@ -19,7 +19,6 @@ module Providers
           if rolled_over_provider == nil
             providers_count = 1
             rolled_over_provider = provider.dup
-            rolled_over_provider.organisations << provider.organisations
             rolled_over_provider.ucas_preferences = provider.ucas_preferences.dup
             rolled_over_provider.contacts << provider.contacts.map(&:dup)
             rolled_over_provider.recruitment_cycle = new_recruitment_cycle
