@@ -3,6 +3,9 @@ module Support
     def index
       @courses = provider.courses.order(:name).page(params[:page] || 1)
       render layout: "provider_record"
+    rescue ActiveRecord::RecordNotFound
+      flash[:warning] = "Provider not found"
+      redirect_to support_providers_path
     end
 
     def edit
