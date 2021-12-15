@@ -1,7 +1,4 @@
-[![Build Status](https://dfe-ssp.visualstudio.com/Become-A-Teacher/_apis/build/status/Find/teacher-training-api?branchName=master)](https://dfe-ssp.visualstudio.com/Become-A-Teacher/_build/latest?definitionId=46&branchName=master)
 ![Build](https://github.com/DFE-Digital/teacher-training-api/workflows/Build/badge.svg?branch=master&event=push)
-[![Maintainability](https://api.codeclimate.com/v1/badges/b97c086ada58c27c967c/maintainability)](https://codeclimate.com/github/DFE-Digital/teacher-training-api/maintainability)
-[![Test Coverage](https://api.codeclimate.com/v1/badges/b97c086ada58c27c967c/test_coverage)](https://codeclimate.com/github/DFE-Digital/teacher-training-api/test_coverage)
 [![View performance data on Skylight](https://badges.skylight.io/status/NXAwzyZjkp2m.svg?token=JaYZey50Y8gfC00RvzkcrDz5OP-SwiBSTtbhkMw1KIs)](https://www.skylight.io/app/applications/NXAwzyZjkp2m)
 
 # Teacher Training API
