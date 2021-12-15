@@ -17,8 +17,9 @@ module PublishInterface
   private
 
     def build_recruitment_cycle
-      cycle_year = params[:recruitment_cycle_year] || params[:year] || Settings.current_cycle
-      @recruitment_cycle = RecruitmentCycle.find_by(year: cycle_year)
+      cycle_year = params[:recruitment_cycle_year] || params[:year] || Settings.current_recruitment_cycle_year
+
+      @recruitment_cycle = RecruitmentCycle.find_by!(year: cycle_year)
     end
 
     def build_provider

@@ -51,6 +51,6 @@ private
   # end
 
   # def is_current_cycle(cycle_year)
-  #   Settings.current_cycle == cycle_year.to_i
+  #   Settings.current_recruitment_cycle_year == cycle_year.to_i
   # end
 end
