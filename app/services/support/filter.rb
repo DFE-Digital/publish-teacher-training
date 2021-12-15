@@ -30,7 +30,7 @@ module Support
     def text_search(model_data_scope, text_search)
       return model_data_scope if text_search.blank?
 
-      model_data_scope.provider_search(text_search)
+      model_data_scope.search(text_search)
     end
 
     def filter_model_data_scope
