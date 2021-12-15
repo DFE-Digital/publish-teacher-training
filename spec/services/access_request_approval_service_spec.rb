@@ -132,8 +132,11 @@ describe AccessRequestApprovalService do
     end
 
     context "writing data concurrently" do
+      let(:organisation_provider_count) { access_request.requester.organisations.flat_map(&:providers).count }
+
       it "writes to both user_permission and organisation_user" do
-        expect { call_service! }.to change { OrganisationUser.count }.by(1).and change { UserPermission.count }.by(access_request.requester.organisations.flat_map(&:providers).count)
+        expect { call_service! }.to change { OrganisationUser.count }.by(1).and \
+          change { UserPermission.count }.by(organisation_provider_count)
       end
     end
   end
