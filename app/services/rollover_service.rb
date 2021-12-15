@@ -16,8 +16,8 @@ class RolloverService
     Rails.logger.info "Rollover done: " \
                       "#{total_counts[:providers]} providers, " \
                       "#{total_counts[:sites]} sites, " \
-                      "#{total_counts[:courses]} courses " \
-                      "in %.3f seconds" % total_bm.real
+                      "#{total_counts[:courses]} courses " +
+                      format("in %.3f seconds", total_bm.real)
   end
 
 private
@@ -49,8 +49,8 @@ private
 
     Rails.logger.info "provider #{counts[:providers].zero? ? 'skipped' : 'copied'}, " \
                       "#{counts[:sites]} sites copied, " \
-                      "#{counts[:courses]} courses copied " \
-                      "in %.3f seconds" % bm.real
+                      "#{counts[:courses]} courses copied " +
+                      format("in %.3f seconds", bm.real)
 
     total_counts.merge!(counts) { |_, total, count| total + count }
   end

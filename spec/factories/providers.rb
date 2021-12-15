@@ -2,7 +2,7 @@ FactoryBot.define do
   factory :provider do
     provider_name { "ACME SCITT#{rand(1000000)}" }
 
-    sequence(:provider_code) { |n| "A#{'%02d' % n}" }
+    sequence(:provider_code) { |n| format("A%02d", n) }
 
     trait :with_anonymised_data do
       sequence(:provider_code) do |n|

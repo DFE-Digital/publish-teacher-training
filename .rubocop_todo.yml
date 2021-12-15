@@ -252,15 +252,6 @@ Rails/HasAndBelongsToMany:
     - 'app/models/organisation.rb'
     - 'app/models/provider.rb'
 
-# Offense count: 3
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle.
-# SupportedStyles: format, sprintf, percent
-Style/FormatString:
-  Exclude:
-    - 'app/services/rollover_service.rb'
-    - 'spec/factories/providers.rb'
-
 # Offense count: 1
 # Configuration parameters: MinBranchesCount.
 Style/HashLikeCase:
