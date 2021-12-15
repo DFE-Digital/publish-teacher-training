@@ -1,0 +1,6 @@
+.app-summary-list__value--truncate {
+  max-width: 295px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

@@ -37,9 +37,29 @@ class RecruitmentCycle < ApplicationRecord
     RecruitmentCycle.current_recruitment_cycle == self
   end
 
+  def current_and_open?
+    current? && FeatureService.enabled?("rollover.has_current_cycle_started?")
+  end
+
   def to_s
     following_year = Date.new(year.to_i, 1, 1) + 1.year
     "#{year}/#{following_year.strftime('%y')}"
+  end
+
+  def title
+    if current_and_open?
+      "Current cycle (#{year_range})"
+    elsif current?
+      "New cycle (#{year_range})"
+    elsif next?
+      "Next cycle (#{year_range})"
+    else
+      year_range
+    end
+  end
+
+  def year_range
+    "#{year} to #{year.to_i + 1}"
   end
 
   # TODO: remove once the 2022 rollover is complete

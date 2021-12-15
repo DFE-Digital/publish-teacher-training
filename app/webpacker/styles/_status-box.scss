@@ -1,0 +1,36 @@
+.app-status-box {
+  @include govuk-responsive-margin(6, "bottom");
+  background-color: govuk-colour("light-grey");
+  padding: govuk-spacing(4);
+
+  > *:last-child {
+    margin-bottom: 0;
+  }
+
+  .autocomplete__input,
+  .govuk-input,
+  .govuk-select {
+    background: govuk-colour("white");
+  }
+
+  // Add a 2px solid border around tags which match colour of the text
+  .govuk-tag--grey {
+    border: 2px solid govuk-shade(govuk-colour("dark-grey", $legacy: "grey-1"), 30);
+  }
+
+  .govuk-tag--yellow {
+    border: 2px solid govuk-shade(govuk-colour("yellow"), 65);
+  }
+
+  .govuk-tag--red {
+    border: 2px solid govuk-shade(govuk-colour("red"), 30);
+  }
+
+  .govuk-tag--green {
+    border: 2px solid govuk-shade(govuk-colour("green"), 20);
+  }
+}
+
+.app-status-box--admin {
+  border-left: $govuk-border-width solid govuk-colour("purple");
+}

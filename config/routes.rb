@@ -22,6 +22,15 @@ Rails.application.routes.draw do
 
   namespace :publish_interface, path: :publish, as: :publish do
     get "/organisations", to: "providers#index", as: :root
+
+    resources :providers, path: "organisations", param: :code, only: [] do
+      resources :recruitment_cycles, param: :year, constraints: { year: /#{Settings.current_recruitment_cycle_year}|#{Settings.current_recruitment_cycle_year + 1}/ }, path: "", only: [] do
+        get "/about", on: :member, to: "providers#about"
+        get "/contact", on: :member, to: "providers#contact"
+        get "/details", on: :member, to: "providers#details"
+        get "/visas", to: "providers/visas#edit"
+      end
+    end
   end
 
   namespace :support do
