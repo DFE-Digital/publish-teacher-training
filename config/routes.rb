@@ -164,6 +164,6 @@ Rails.application.routes.draw do
     end
   end
 
-  get "error_500", to: "error#error_500"
-  get "error_nodb", to: "error#error_nodb"
+  get "error_500", to: "api_error#error500"
+  get "error_nodb", to: "api_error#error_nodb"
 end
