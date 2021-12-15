@@ -60,6 +60,6 @@ module ManageCoursesBackend
 
     config.analytics = config_for(:analytics)
 
-    config.exceptions_app = self.routes
+    config.exceptions_app = routes
   end
 end
