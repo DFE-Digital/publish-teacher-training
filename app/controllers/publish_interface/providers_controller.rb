@@ -1,6 +1,6 @@
 module PublishInterface
   class ProvidersController < PublishInterfaceController
-    rescue_from ActiveRecord::RecordNotFound, with: :not_found
+    rescue_from ActiveRecord::RecordNotFound, with: :render_not_found
     before_action :build_recruitment_cycle
     before_action :build_provider, except: [:index]
 

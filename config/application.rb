@@ -59,5 +59,7 @@ module ManageCoursesBackend
     config.view_component.show_previews = !Rails.env.production?
 
     config.analytics = config_for(:analytics)
+
+    config.exceptions_app = self.routes
   end
 end
