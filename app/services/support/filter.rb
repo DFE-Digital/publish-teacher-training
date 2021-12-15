@@ -24,7 +24,7 @@ module Support
 
       search_params = { provider_name_or_code: filters[:provider_search], course_code: filters[:course_search] }
 
-      model_data_scope.search(**search_params)
+      model_data_scope.provider_or_course_search(**search_params)
     end
 
     def text_search(model_data_scope, text_search)
