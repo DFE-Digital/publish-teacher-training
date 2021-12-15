@@ -3,7 +3,7 @@ namespace :organisation_user_migrate do
     total_bm = Benchmark.measure do
       UserPermission.insert_all(
         OrganisationUser.includes(:user, organisation: [providers: [:recruitment_cycle]]).all.flat_map { |organisation_user|
-          organisation_user.organisation.providers.where(recruitment_cycle: RecruitmentCycle.current).ids.map do |id|
+          organisation_user.organisation.providers.ids.map do |id|
             {
               user_id: organisation_user.user.id,
               provider_id: id,
