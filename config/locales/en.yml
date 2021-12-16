@@ -1,6 +1,6 @@
 en:
-  service_name: "Teacher Training API Admin"
-  publish_service_name: "Publish teacher training"
+  service_name: "Publish teacher training courses"
+  support_service_name: "Teacher training API Admin"
   header:
     items:
       sign_out: "Sign out"

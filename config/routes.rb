@@ -20,6 +20,12 @@ Rails.application.routes.draw do
     get "/auth/dfe/signout", to: "sessions#destroy"
   end
 
+  scope via: :all do
+    match "/404", to: "errors#not_found"
+    match "/500", to: "errors#internal_server_error"
+    match "/403", to: "errors#forbidden"
+  end
+
   namespace :publish_interface, path: :publish, as: :publish do
     get "/organisations", to: "providers#index", as: :root
 
@@ -164,6 +170,6 @@ Rails.application.routes.draw do
     end
   end
 
-  get "error_500", to: "error#error_500"
-  get "error_nodb", to: "error#error_nodb"
+  get "error_500", to: "api_error#error500"
+  get "error_nodb", to: "api_error#error_nodb"
 end

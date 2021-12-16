@@ -1,0 +1,11 @@
+<% content_for :page_title, "You are not permitted to see this page" %>
+
+<div class="govuk-grid-row" data-qa="errors__forbidden">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-l">You are not permitted to see this page</h1>
+    <p class="govuk-body">This page is restricted to certain users only.</p>
+    <p class="govuk-body">
+      Contact us by email to request access: <%= bat_contact_mail_to subject: "Publish teacher training courses access request" %>
+    </p>
+  </div>
+</div>
