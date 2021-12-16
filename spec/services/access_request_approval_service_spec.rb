@@ -4,44 +4,44 @@ describe AccessRequestApprovalService do
   describe ".call" do
     let!(:access_request) { create(:access_request) }
 
-    subject { described_class.call(access_request) }
+    subject(:call_service!) { described_class.call(access_request) }
 
     context "for a new user" do
       let(:target_user) { User.find_by(email: access_request.email_address) }
 
       it "creates the new user" do
-        expect { subject }.to change { User.count }.by(1)
+        expect { call_service! }.to change { User.count }.by(1)
       end
 
       it "sets the email address" do
-        subject
+        call_service!
         expect(User.where(email: access_request.email_address)).to exist
       end
 
       it "sets the first_name" do
-        subject
+        call_service!
         expect(target_user.first_name).to eq(access_request.first_name)
       end
 
       it "sets the last_name" do
-        subject
+        call_service!
         expect(target_user.last_name).to eq(access_request.last_name)
       end
 
       it "sets the invite date" do
-        subject
+        call_service!
         expect(target_user.invite_date_utc).to be_within(1.second).of Time.now.utc
       end
 
       it "gives the user access to the requestor's orgs" do
-        subject
+        call_service!
         expect(target_user.organisations).to(
           match_array(access_request.requester.organisations),
         )
       end
 
       it "is marked completed" do
-        expect { subject }.to change { access_request.status }
+        expect { call_service! }.to change { access_request.status }
           .from("requested")
           .to("completed")
       end
@@ -50,7 +50,7 @@ describe AccessRequestApprovalService do
         let!(:access_request) { create(:access_request, email_address: "Abc@de.com") }
 
         it "creates the target user with a lowercase email address" do
-          subject
+          call_service!
 
           expect(User.where(email: "abc@de.com")).to exist
           expect(User.where(email: "Abc@de.com")).to_not exist
@@ -62,11 +62,11 @@ describe AccessRequestApprovalService do
       let!(:target_user) { create(:user, email: access_request.email_address) }
 
       it "does not create a new user" do
-        expect { subject }.not_to(change { User.count })
+        expect { call_service! }.not_to(change { User.count })
       end
 
       it "sets the target user's organisations to the requesting user's organisations" do
-        expect { subject }.to change { target_user.reload.organisations }
+        expect { call_service! }.to change { target_user.reload.organisations }
           .to(access_request.requester.organisations)
       end
 
@@ -79,7 +79,7 @@ describe AccessRequestApprovalService do
         let(:requester) { access_request.requester }
 
         it "keeps the existing organisation and gain access to new ones" do
-          subject
+          call_service!
           target_user.organisations.reload
 
           expect(target_user.organisations).to(
@@ -100,11 +100,11 @@ describe AccessRequestApprovalService do
         end
 
         it "does not change the orgnisations of the target user" do
-          expect { subject }.not_to(change { target_user.organisations.reload })
+          expect { call_service! }.not_to(change { target_user.organisations.reload })
         end
 
         it "does not duplicate the records" do
-          subject
+          call_service!
           target_user.organisations.reload
 
           expect(target_user.organisations).to(
@@ -120,7 +120,7 @@ describe AccessRequestApprovalService do
         let!(:access_request) { create(:access_request, email_address: "Ab@c.com") }
 
         it "does not duplicate the user" do
-          subject
+          call_service!
           target_user.organisations.reload
 
           expect(User.where(email: "Abc@de.com")).to_not exist
@@ -128,6 +128,15 @@ describe AccessRequestApprovalService do
             match_array(access_request.requester.organisations),
           )
         end
+      end
+    end
+
+    context "writing data concurrently" do
+      let(:organisation_provider_count) { access_request.requester.organisations.flat_map(&:providers).count }
+
+      it "writes to both user_permission and organisation_user" do
+        expect { call_service! }.to change { OrganisationUser.count }.by(1).and \
+          change { UserPermission.count }.by(organisation_provider_count)
       end
     end
   end
