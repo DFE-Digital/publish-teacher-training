@@ -17,7 +17,6 @@ Lint/AmbiguousBlockAssociation:
 # AllowedMethods: enums
 Lint/ConstantDefinitionInBlock:
   Exclude:
-    - "lib/tasks/code_climate.rake"
     - "spec/validators/email_validator_spec.rb"
     - "spec/validators/phone_validator_spec.rb"
     - "spec/validators/reference_number_format_validator_spec.rb"
