@@ -19,7 +19,7 @@ en:
           show: "View a provider"
           courses:
             index: "Courses"
-            edit: "Edit course code"
+            edit: "Edit course details"
         users:
           index: "Users"
           show: "User overview"
@@ -108,6 +108,10 @@ en:
             course_code:
               taken: "Course code is already taken"
               blank: "Course code cannot be blank"
+            start_date:
+              blank: "Start date cannot have blank values"
+            name:
+              blank: "Course title cannot be blank"
             level:
               blank: "^Select a course level"
             qualification:

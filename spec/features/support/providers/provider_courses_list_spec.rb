@@ -37,7 +37,7 @@ feature "View provider courses" do
     expect(provider_courses_index_page.courses_row.size).to eq(1)
 
     expect(provider_courses_index_page.courses_row.first.name).to have_text(course.name)
-    expect(provider_courses_index_page.courses_row.first.course_code).to have_text(course.course_code)
-    expect(provider_courses_index_page.courses_row.first.edit_link).to have_text("Edit")
+    expect(provider_courses_index_page.courses_row.first.name).to have_text(course.course_code)
+    expect(provider_courses_index_page.courses_row.first.change_link).to have_text("Change")
   end
 end

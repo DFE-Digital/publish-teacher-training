@@ -211,7 +211,7 @@ describe "/api/v2/build_new_course", type: :request do
         },
         {
           "title" => "Invalid title",
-          "detail" => "Title can't be blank",
+          "detail" => "Title Course title cannot be blank",
           "source" => {
             "pointer" => "/data/attributes/name",
           },
@@ -232,7 +232,7 @@ describe "/api/v2/build_new_course", type: :request do
         },
         {
           "title" => "Invalid start date",
-          "detail" => "Start date can't be blank",
+          "detail" => "Start date Start date cannot have blank values",
           "source" => {
             "pointer" => "/data/attributes/start_date",
           },
@@ -292,7 +292,7 @@ describe "/api/v2/build_new_course", type: :request do
         },
         {
           "title" => "Invalid title",
-          "detail" => "Title can't be blank",
+          "detail" => "Title Course title cannot be blank",
           "source" => {
             "pointer" => "/data/attributes/name",
           },
@@ -320,7 +320,7 @@ describe "/api/v2/build_new_course", type: :request do
         },
         {
           "title" => "Invalid start date",
-          "detail" => "Start date can't be blank",
+          "detail" => "Start date Start date cannot have blank values",
           "source" => {
             "pointer" => "/data/attributes/start_date",
           },
