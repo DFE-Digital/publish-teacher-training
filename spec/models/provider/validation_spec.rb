@@ -86,7 +86,7 @@ describe Provider, type: :model do
       context "word count exceed limit" do
         let(:word_count) { 250 + 1 }
 
-        it { is_expected.to_not be_valid }
+        it { is_expected.not_to be_valid }
       end
     end
 
@@ -103,7 +103,7 @@ describe Provider, type: :model do
       context "word count exceed limit" do
         let(:word_count) { 250 + 1 }
 
-        it { is_expected.to_not be_valid }
+        it { is_expected.not_to be_valid }
       end
     end
 
@@ -191,7 +191,7 @@ describe Provider, type: :model do
         context "word count exceed limit" do
           let(:word_count) { 100 + 1 }
 
-          it { is_expected.to_not be_valid }
+          it { is_expected.not_to be_valid }
         end
       end
     end

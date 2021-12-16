@@ -21,7 +21,7 @@ module API
         acknowledgement = InterruptPageAcknowledgement.find_or_initialize_by(
           user_id: params[:user_id],
           recruitment_cycle: recruitment_cycle,
-          page: params.dig(:interrupt_page_acknowledgement, :page)
+          page: params.dig(:interrupt_page_acknowledgement, :page),
         )
         if acknowledgement.save
           render jsonapi: acknowledgement

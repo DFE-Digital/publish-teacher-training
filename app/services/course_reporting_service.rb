@@ -43,8 +43,16 @@ private
     closed = CourseSubject.where(course_id: @closed_courses).group(:subject_id).count
 
     {
-      open: Subject.active.map { |sub| x = {}; x[sub.subject_name] = open[sub.id] || 0; x }.reduce({}, :merge),
-      closed: Subject.active.map { |sub| x = {}; x[sub.subject_name] = closed[sub.id] || 0; x }.reduce({}, :merge),
+      open: Subject.active.map { |sub|
+              x = {}
+              x[sub.subject_name] = open[sub.id] || 0
+              x
+            } .reduce({}, :merge),
+      closed: Subject.active.map { |sub|
+                x = {}
+                x[sub.subject_name] = closed[sub.id] || 0
+                x
+              }              .reduce({}, :merge),
     }
   end
 
@@ -55,13 +63,29 @@ private
     case column
     when :provider_type
       {
-        open: Provider.provider_types.map { |key, value| x = {}; x[key.to_sym] = open[value] || 0; x }.reduce({}, :merge),
-        closed: Provider.provider_types.map { |key, value| x = {}; x[key.to_sym] = closed[value] || 0; x }.reduce({}, :merge),
+        open: Provider.provider_types.map { |key, value|
+                x = {}
+                x[key.to_sym] = open[value] || 0
+                x
+              }              .reduce({}, :merge),
+        closed: Provider.provider_types.map { |key, value|
+                  x = {}
+                  x[key.to_sym] = closed[value] || 0
+                  x
+                } .reduce({}, :merge),
       }
     when :program_type, :study_mode, :qualification
       {
-        open: Course.send(column.to_s.pluralize).map { |key, _value| x = {}; x[key.to_sym] = open[key] || 0; x }.reduce({}, :merge),
-        closed: Course.send(column.to_s.pluralize).map { |key, _value| x = {}; x[key.to_sym] = closed[key] || 0; x }.reduce({}, :merge),
+        open: Course.send(column.to_s.pluralize).map { |key, _value|
+                x = {}
+                x[key.to_sym] = open[key] || 0
+                x
+              } .reduce({}, :merge),
+        closed: Course.send(column.to_s.pluralize).map { |key, _value|
+                  x = {}
+                  x[key.to_sym] = closed[key] || 0
+                  x
+                } .reduce({}, :merge),
       }
     when :is_send
       {

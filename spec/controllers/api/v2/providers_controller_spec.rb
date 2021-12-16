@@ -33,7 +33,7 @@ RSpec.describe API::V2::ProvidersController do
 
       it "returns unassociated providers" do
         get :suggest_any, params: { query: other_provider.provider_code }
-        expect(JSON.parse(response.body).dig("data").map { |p| p["id"] }).to eql([other_provider.id.to_s])
+        expect(JSON.parse(response.body)["data"].map { |p| p["id"] }).to eql([other_provider.id.to_s])
       end
     end
 
@@ -45,12 +45,12 @@ RSpec.describe API::V2::ProvidersController do
 
       it "applies filter to results" do
         get :suggest_any, params: { query: "provider", filter: { only_accredited_body: "true" } }
-        expect(JSON.parse(response.body).dig("data").map { |p| p["id"].to_i }).to eql([in_scope_provider.id])
+        expect(JSON.parse(response.body)["data"].map { |p| p["id"].to_i }).to eql([in_scope_provider.id])
       end
 
       it "applies filter to results" do
         get :suggest_any, params: { query: "provider", filter: { only_accredited_body: "false" } }
-        expect(JSON.parse(response.body).dig("data").map { |p| p["id"].to_i }).to eql([in_scope_provider.id, out_scope_provider.id])
+        expect(JSON.parse(response.body)["data"].map { |p| p["id"].to_i }).to eql([in_scope_provider.id, out_scope_provider.id])
       end
     end
   end

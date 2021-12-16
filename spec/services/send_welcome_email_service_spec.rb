@@ -113,12 +113,12 @@ describe SendWelcomeEmailService do
 
       it "does not set their welcome email date to now" do
         described_class.call(current_user: current_user_spy)
-        expect(current_user_spy).to_not have_received(:update).with(hash_including(welcome_email_date_utc: Time.now.utc))
+        expect(current_user_spy).not_to have_received(:update).with(hash_including(welcome_email_date_utc: Time.now.utc))
       end
 
       it "does not send the welcome email" do
         described_class.call(current_user: current_user_spy)
-        expect(WelcomeEmailMailer).to_not have_received(:send_welcome_email)
+        expect(WelcomeEmailMailer).not_to have_received(:send_welcome_email)
       end
 
       it "sends the error to Sentry" do

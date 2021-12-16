@@ -13,11 +13,11 @@ class RolloverService
       providers.each { |provider| rollover(provider, total_counts) }
     end
 
-    puts "Rollover done: " \
-         "#{total_counts[:providers]} providers, " \
-         "#{total_counts[:sites]} sites, " \
-         "#{total_counts[:courses]} courses " \
-         "in %.3f seconds" % total_bm.real
+    Rails.logger.info "Rollover done: " \
+                      "#{total_counts[:providers]} providers, " \
+                      "#{total_counts[:sites]} sites, " \
+                      "#{total_counts[:courses]} courses " +
+                      format("in %.3f seconds", total_bm.real)
   end
 
 private
@@ -25,7 +25,7 @@ private
   attr_reader :provider_codes, :force
 
   def rollover(provider, total_counts)
-    print "Copying provider #{provider.provider_code}: "
+    Rails.logger.info { "Copying provider #{provider.provider_code}: " }
     counts = nil
 
     bm = Benchmark.measure do
@@ -38,7 +38,7 @@ private
         copy_provider_to_recruitment_cycle = Providers::CopyToRecruitmentCycleService.new(
           copy_course_to_provider_service: copy_courses_to_provider_service,
           copy_site_to_provider_service: Sites::CopyToProviderService.new,
-          logger: Logger.new(STDOUT),
+          logger: Logger.new($stdout),
         )
 
         counts = copy_provider_to_recruitment_cycle.execute(
@@ -47,10 +47,10 @@ private
       end
     end
 
-    puts "provider #{counts[:providers].zero? ? 'skipped' : 'copied'}, " \
-         "#{counts[:sites]} sites copied, " \
-         "#{counts[:courses]} courses copied " \
-         "in %.3f seconds" % bm.real
+    Rails.logger.info "provider #{counts[:providers].zero? ? 'skipped' : 'copied'}, " \
+                      "#{counts[:sites]} sites copied, " \
+                      "#{counts[:courses]} courses copied " +
+                      format("in %.3f seconds", bm.real)
 
     total_counts.merge!(counts) { |_, total, count| total + count }
   end

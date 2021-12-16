@@ -8,17 +8,17 @@ describe Providers::GenerateCourseCodeService do
   end
 
   it "does not include O" do
-    expect(service.send(:valid_letters)).to_not include("O")
+    expect(service.send(:valid_letters)).not_to include("O")
   end
 
   it "does not include I" do
-    expect(service.send(:valid_letters)).to_not include("I")
+    expect(service.send(:valid_letters)).not_to include("I")
   end
 
   it "does not include lower case letters" do
     letters_string = service.send(:valid_letters).join(" ")
 
-    expect(letters_string).to_not match(/[a-z]/)
+    expect(letters_string).not_to match(/[a-z]/)
   end
 
   it "does not include I" do

@@ -63,11 +63,12 @@ FactoryBot.define do
       end
 
       if evaluator.infer_subjects? && course.subjects.empty?
-        if course.level == "primary"
+        case course.level
+        when "primary"
           course.subjects << find_or_create(:primary_subject, :primary)
-        elsif course.level == "secondary"
+        when "secondary"
           course.subjects << find_or_create(:secondary_subject, :science)
-        elsif course.level == "further_education"
+        when "further_education"
           course.subjects << find_or_create(:further_education_subject)
         end
       end

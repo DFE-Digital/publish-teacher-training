@@ -2,6 +2,12 @@ require "rails_helper"
 
 describe "PATCH /providers/:provider_code/courses/:course_code" do
   let(:jsonapi_renderer) { JSONAPI::Serializable::Renderer.new }
+  let(:organisation) { create :organisation }
+  let(:provider) { create :provider, organisations: [organisation], sites: [site] }
+  let(:user) { create :user, organisations: [organisation] }
+  let(:payload) { { email: user.email } }
+  let(:credentials) { encode_to_credentials(payload) }
+  let(:site) { build(:site) }
 
   def perform_request(updated_subjects)
     jsonapi_data = jsonapi_renderer.render(
@@ -20,13 +26,6 @@ describe "PATCH /providers/:provider_code/courses/:course_code" do
             _jsonapi: jsonapi_data,
           }
   end
-  let(:organisation) { create :organisation }
-  let(:provider) { create :provider, organisations: [organisation], sites: [site] }
-  let(:user) { create :user, organisations: [organisation] }
-  let(:payload) { { email: user.email } }
-  let(:credentials) { encode_to_credentials(payload) }
-
-  let(:site) { build(:site) }
 
   before do
     perform_request(updated_subjects)

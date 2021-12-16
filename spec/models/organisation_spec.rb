@@ -15,13 +15,13 @@ describe Organisation, type: :model do
     context "when name is empty string" do
       let(:name) { "  " }
 
-      it { is_expected.to_not be_valid }
+      it { is_expected.not_to be_valid }
     end
 
     context "when name is nil" do
       let(:name) { nil }
 
-      it { is_expected.to_not be_valid }
+      it { is_expected.not_to be_valid }
     end
 
     context "when name is a school" do

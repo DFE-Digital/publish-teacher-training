@@ -34,7 +34,7 @@ module Header
 
       it "renders the links" do
         expect(component.find_all(".app-header__content .govuk-header__link").length).to eq(2)
-        expect(page).to_not have_css(".app-header__content--single-item")
+        expect(page).not_to have_css(".app-header__content--single-item")
       end
     end
   end

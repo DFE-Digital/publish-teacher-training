@@ -1,4 +1,4 @@
-require "rails_helper.rb"
+require "rails_helper"
 
 describe UniqueCourseValidator do
   let(:service) { described_class.new }
@@ -60,7 +60,7 @@ describe UniqueCourseValidator do
 
   context "With an exact duplicate with a different course code" do
     before do
-      new_course.course_code = new_course.course_code + "1"
+      new_course.course_code = "#{new_course.course_code}1"
     end
 
     include_examples "a duplicate course"

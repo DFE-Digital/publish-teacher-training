@@ -77,8 +77,16 @@ describe CourseReportingService do
         closed: { yes: 0, no: 0 },
       },
       subject: {
-        open: Subject.active.each_with_index.map { |sub, i| x = {}; x[sub.subject_name] = (i + 1) * 3; x }.reduce({}, :merge),
-        closed: Subject.active.each_with_index.map { |sub, _i| x = {}; x[sub.subject_name] = 0; x }.reduce({}, :merge),
+        open: Subject.active.each_with_index.map { |sub, i|
+                x = {}
+                x[sub.subject_name] = (i + 1) * 3
+                x
+              } .reduce({}, :merge),
+        closed: Subject.active.each_with_index.map { |sub, _i|
+                  x = {}
+                  x[sub.subject_name] = 0
+                  x
+                } .reduce({}, :merge),
       },
     }
   end
@@ -88,76 +96,80 @@ describe CourseReportingService do
       subject { described_class.call(courses_scope: courses_scope) }
 
       it "applies the scopes" do
-        expect(courses_scope).to receive_message_chain(:distinct).and_return(distinct_courses_scope)
-        expect(distinct_courses_scope).to receive_message_chain(:count).and_return(courses_count)
-        expect(distinct_courses_scope).to receive_message_chain(:count).and_return(courses_count)
-        expect(distinct_courses_scope).to receive_message_chain(:findable).and_return(findable_courses_scope)
+        expect(courses_scope).to receive(:distinct).and_return(distinct_courses_scope)
+        expect(distinct_courses_scope).to receive(:count).and_return(courses_count)
+        expect(distinct_courses_scope).to receive(:count).and_return(courses_count)
+        expect(distinct_courses_scope).to receive(:findable).and_return(findable_courses_scope)
 
-        expect(findable_courses_scope).to receive_message_chain(:with_vacancies).and_return(open_courses_scope)
+        expect(findable_courses_scope).to receive(:with_vacancies).and_return(open_courses_scope)
         expect(findable_courses_scope).to receive_message_chain(:where, :not).and_return(closed_courses_scope)
 
-        expect(findable_courses_scope).to receive_message_chain(:count).and_return(findable_courses_count)
-        expect(findable_courses_scope).to receive_message_chain(:count).and_return(findable_courses_count)
-        expect(open_courses_scope).to receive_message_chain(:count).and_return(open_courses_count)
+        expect(findable_courses_scope).to receive(:count).and_return(findable_courses_count)
+        expect(findable_courses_scope).to receive(:count).and_return(findable_courses_count)
+        expect(open_courses_scope).to receive(:count).and_return(open_courses_count)
 
-        expect(open_courses_scope).to receive_message_chain(:group).with(:provider_type).and_return(open_courses_provider_type_scope)
-        expect(open_courses_provider_type_scope).to receive_message_chain(:count)
+        expect(open_courses_scope).to receive(:group).with(:provider_type).and_return(open_courses_provider_type_scope)
+        expect(open_courses_provider_type_scope).to receive(:count)
           .and_return(
             { "B" => 1, "Y" => 2, "O" => 3, "" => 4, "0" => 5 },
           )
 
-        expect(open_courses_scope).to receive_message_chain(:group).with(:program_type).and_return(open_courses_program_type_scope)
-        expect(open_courses_program_type_scope).to receive_message_chain(:count)
+        expect(open_courses_scope).to receive(:group).with(:program_type).and_return(open_courses_program_type_scope)
+        expect(open_courses_program_type_scope).to receive(:count)
           .and_return(
             { "higher_education_programme" => 1, "school_direct_training_programme" => 2,
               "school_direct_salaried_training_programme" => 3, "scitt_programme" => 4,
               "pg_teaching_apprenticeship" => 5 },
           )
 
-        expect(open_courses_scope).to receive_message_chain(:group).with(:study_mode).and_return(open_courses_study_mode_scope)
-        expect(open_courses_study_mode_scope).to receive_message_chain(:count)
+        expect(open_courses_scope).to receive(:group).with(:study_mode).and_return(open_courses_study_mode_scope)
+        expect(open_courses_study_mode_scope).to receive(:count)
           .and_return(
             { "full_time" => 1, "part_time" => 2, "full_time_or_part_time" => 3 },
           )
 
-        expect(open_courses_scope).to receive_message_chain(:group).with(:qualification).and_return(open_courses_qualification_scope)
-        expect(open_courses_qualification_scope).to receive_message_chain(:count)
+        expect(open_courses_scope).to receive(:group).with(:qualification).and_return(open_courses_qualification_scope)
+        expect(open_courses_qualification_scope).to receive(:count)
           .and_return(
             { "qts" => 1, "pgce_with_qts" => 2, "pgde_with_qts" => 3, "pgce" => 4, "pgde" => 5 },
           )
 
-        expect(open_courses_scope).to receive_message_chain(:group).with(:is_send).and_return(open_courses_is_send_scope)
-        expect(open_courses_is_send_scope).to receive_message_chain(:count)
+        expect(open_courses_scope).to receive(:group).with(:is_send).and_return(open_courses_is_send_scope)
+        expect(open_courses_is_send_scope).to receive(:count)
           .and_return({ true => 1, false => 2 })
 
-        expect(CourseSubject).to receive_message_chain(:where).with(course_id: open_courses_scope).and_return(open_course_subjects)
+        expect(CourseSubject).to receive(:where).with(course_id: open_courses_scope).and_return(open_course_subjects)
 
-        expect(open_course_subjects).to receive_message_chain(:group).with(:subject_id).and_return(open_course_subjects_grouped)
-        expect(open_course_subjects_grouped).to receive_message_chain(:count).and_return(
-          Subject.active.each_with_index.map { |sub, i| x = {}; x[sub.id] = (i + 1) * 3; x }.reduce({}, :merge),
+        expect(open_course_subjects).to receive(:group).with(:subject_id).and_return(open_course_subjects_grouped)
+        expect(open_course_subjects_grouped).to receive(:count).and_return(
+          Subject.active.each_with_index.map { |sub, i|
+            x = {}
+            x[sub.id] = (i + 1) * 3
+            x
+          } .reduce({}, :merge),
         )
 
-        expect(closed_courses_scope).to receive_message_chain(:count).and_return(closed_courses_count)
+        expect(closed_courses_scope).to receive(:count).and_return(closed_courses_count)
 
-        expect(closed_courses_scope).to receive_message_chain(:group).with(:provider_type).and_return(closed_courses_provider_type_scope)
-        expect(closed_courses_provider_type_scope).to receive_message_chain(:count).and_return({})
+        expect(closed_courses_scope).to receive(:group).with(:provider_type).and_return(closed_courses_provider_type_scope)
+        expect(closed_courses_provider_type_scope).to receive(:count).and_return({})
 
-        expect(closed_courses_scope).to receive_message_chain(:group).with(:program_type).and_return(closed_courses_program_type_scope)
-        expect(closed_courses_program_type_scope).to receive_message_chain(:count).and_return({})
+        expect(closed_courses_scope).to receive(:group).with(:program_type).and_return(closed_courses_program_type_scope)
+        expect(closed_courses_program_type_scope).to receive(:count).and_return({})
 
-        expect(closed_courses_scope).to receive_message_chain(:group).with(:study_mode).and_return(closed_courses_study_mode_scope)
-        expect(closed_courses_study_mode_scope).to receive_message_chain(:count).and_return({})
+        expect(closed_courses_scope).to receive(:group).with(:study_mode).and_return(closed_courses_study_mode_scope)
+        expect(closed_courses_study_mode_scope).to receive(:count).and_return({})
 
-        expect(closed_courses_scope).to receive_message_chain(:group).with(:qualification).and_return(closed_courses_qualification_scope)
-        expect(closed_courses_qualification_scope).to receive_message_chain(:count).and_return({})
+        expect(closed_courses_scope).to receive(:group).with(:qualification).and_return(closed_courses_qualification_scope)
+        expect(closed_courses_qualification_scope).to receive(:count).and_return({})
 
-        expect(closed_courses_scope).to receive_message_chain(:group).with(:is_send).and_return(closed_courses_is_send_scope)
-        expect(closed_courses_is_send_scope).to receive_message_chain(:count).and_return({})
+        expect(closed_courses_scope).to receive(:group).with(:is_send).and_return(closed_courses_is_send_scope)
+        expect(closed_courses_is_send_scope).to receive(:count).and_return({})
 
-        expect(CourseSubject).to receive_message_chain(:where).with(course_id: closed_courses_scope).and_return(closed_course_subjects)
-        expect(closed_course_subjects).to receive_message_chain(:group).with(:subject_id).and_return(closed_course_subjects_grouped)
+        expect(CourseSubject).to receive(:where).with(course_id: closed_courses_scope).and_return(closed_course_subjects)
+        expect(closed_course_subjects).to receive(:group).with(:subject_id).and_return(closed_course_subjects_grouped)
 
-        expect(closed_course_subjects_grouped).to receive_message_chain(:count).and_return({})
+        expect(closed_course_subjects_grouped).to receive(:count).and_return({})
 
         expect(subject).to eq(expected)
       end

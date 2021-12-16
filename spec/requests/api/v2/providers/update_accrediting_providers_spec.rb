@@ -2,8 +2,13 @@ require "rails_helper"
 
 describe "PATCH /providers/:provider_code" do
   let(:jsonapi_renderer) { JSONAPI::Serializable::Renderer.new }
+  let(:enrichment_payload) do
+    jsonapi_data = json_payload(provider)
+    jsonapi_data.dig(:data, :attributes, :accredited_bodies, 0)[:description] = new_description
+    jsonapi_data
+  end
   let(:request_path) do
-    "/api/v2/recruitment_cycles/#{recruitment_cycle.year}" +
+    "/api/v2/recruitment_cycles/#{recruitment_cycle.year}" \
       "/providers/#{provider.provider_code}"
   end
   let(:permitted_params) { %i[accredited_bodies] }
@@ -45,15 +50,9 @@ describe "PATCH /providers/:provider_code" do
           }
   end
 
-  let(:enrichment_payload) do
-    jsonapi_data = json_payload(provider)
-    jsonapi_data.dig(:data, :attributes, :accredited_bodies, 0)[:description] = new_description
-    jsonapi_data
-  end
-
   before do
     provider.reload
-    # Note: provider needs to be reloaded due to
+    # NOTE: provider needs to be reloaded due to
     #       provider.accrediting_providers
     #       provider.accredited_bodies
   end
@@ -73,22 +72,23 @@ describe "PATCH /providers/:provider_code" do
       expect(response).to have_http_status(:ok)
       accredited_body = JSON.parse(response.body).dig("data", "attributes", "accredited_bodies").first
 
-      expect(accredited_body.dig("provider_code")).to eq(accrediting_provider.provider_code)
-      expect(accredited_body.dig("provider_name")).to eq(accrediting_provider.provider_name)
-      expect(accredited_body.dig("description")).to eq(new_description)
+      expect(accredited_body["provider_code"]).to eq(accrediting_provider.provider_code)
+      expect(accredited_body["provider_name"]).to eq(accrediting_provider.provider_name)
+      expect(accredited_body["description"]).to eq(new_description)
     end
 
     context "failed validation" do
       let(:new_description) {
         Faker::Lorem.sentence(word_count: 101)
       }
+      let(:json_data) { JSON.parse(subject.body)["errors"] }
+      let(:json_data) { JSON.parse(subject.body)["errors"] }
+
       it "creates a accredited body enrichment" do
         expect {
           patch_request(enrichment_payload)
-        }.to_not(change { provider.reload.accrediting_provider_enrichments.present? })
+        }.not_to(change { provider.reload.accrediting_provider_enrichments.present? })
       end
-
-      let(:json_data) { JSON.parse(subject.body)["errors"] }
 
       subject do
         patch_request(enrichment_payload)
@@ -117,7 +117,7 @@ describe "PATCH /providers/:provider_code" do
     it "updates an existing accredited body enrichment" do
       expect {
         patch_request(enrichment_payload)
-      }.to_not(change { provider.reload.accrediting_provider_enrichments.size })
+      }.not_to(change { provider.reload.accrediting_provider_enrichments.size })
 
       expect(provider.accrediting_provider_enrichments.count).to eq(courses.size)
 
@@ -128,27 +128,28 @@ describe "PATCH /providers/:provider_code" do
       expect(response).to have_http_status(:ok)
       accredited_body = JSON.parse(response.body).dig("data", "attributes", "accredited_bodies").first
 
-      expect(accredited_body.dig("provider_code")).to eq(accrediting_provider.provider_code)
-      expect(accredited_body.dig("provider_name")).to eq(accrediting_provider.provider_name)
-      expect(accredited_body.dig("description")).to eq(new_description)
+      expect(accredited_body["provider_code"]).to eq(accrediting_provider.provider_code)
+      expect(accredited_body["provider_name"]).to eq(accrediting_provider.provider_name)
+      expect(accredited_body["description"]).to eq(new_description)
     end
 
     context "failed validation" do
       let(:new_description) {
         Faker::Lorem.sentence(word_count: 101)
       }
+      let(:json_data) { JSON.parse(subject.body)["errors"] }
+
+      let(:json_data) { JSON.parse(subject.body)["errors"] }
 
       it "did not updates an existing accredited body enrichment" do
         expect {
           patch_request(enrichment_payload)
-        }.to_not(change { provider.reload.accrediting_provider_enrichments.size })
+        }.not_to(change { provider.reload.accrediting_provider_enrichments.size })
 
         accrediting_provider_enrichment = provider.accrediting_provider_enrichments.first
         expect(accrediting_provider_enrichment.Description).to eq(old_description)
         expect(accrediting_provider_enrichment.UcasProviderCode).to eq(accrediting_provider.provider_code)
       end
-
-      let(:json_data) { JSON.parse(subject.body)["errors"] }
 
       subject do
         patch_request(enrichment_payload)
@@ -192,9 +193,9 @@ describe "PATCH /providers/:provider_code" do
         expect(response).to have_http_status(:ok)
         accredited_body = JSON.parse(response.body).dig("data", "attributes", "accredited_bodies").first
 
-        expect(accredited_body.dig("provider_code")).to eq(accrediting_provider.provider_code)
-        expect(accredited_body.dig("provider_name")).to eq(accrediting_provider.provider_name)
-        expect(accredited_body.dig("description")).to eq(new_description)
+        expect(accredited_body["provider_code"]).to eq(accrediting_provider.provider_code)
+        expect(accredited_body["provider_name"]).to eq(accrediting_provider.provider_name)
+        expect(accredited_body["description"]).to eq(new_description)
       end
     end
 
@@ -206,7 +207,7 @@ describe "PATCH /providers/:provider_code" do
       it "updates an existing accredited body enrichment" do
         expect {
           patch_request(enrichment_payload)
-        }.to_not(change { provider.reload.accrediting_provider_enrichments.present? })
+        }.not_to(change { provider.reload.accrediting_provider_enrichments.present? })
 
         expect(provider.accrediting_provider_enrichments.count).to eq(courses.size)
 
@@ -217,9 +218,9 @@ describe "PATCH /providers/:provider_code" do
         expect(response).to have_http_status(:ok)
         accredited_body = JSON.parse(response.body).dig("data", "attributes", "accredited_bodies").first
 
-        expect(accredited_body.dig("provider_code")).to eq(accrediting_provider.provider_code)
-        expect(accredited_body.dig("provider_name")).to eq(accrediting_provider.provider_name)
-        expect(accredited_body.dig("description")).to eq(new_description)
+        expect(accredited_body["provider_code"]).to eq(accrediting_provider.provider_code)
+        expect(accredited_body["provider_name"]).to eq(accrediting_provider.provider_name)
+        expect(accredited_body["description"]).to eq(new_description)
       end
     end
   end

@@ -51,14 +51,14 @@ module UserSessions
         end
 
         it "does not update the user's details" do
-          expect(user.email).to_not eq(user_session.email)
-          expect(user.sign_in_user_id).to_not eq(user_session.sign_in_user_id)
-          expect(user.first_name).to_not eq(user_session.first_name)
-          expect(user.last_name).to_not eq(user_session.last_name)
+          expect(user.email).not_to eq(user_session.email)
+          expect(user.sign_in_user_id).not_to eq(user_session.sign_in_user_id)
+          expect(user.first_name).not_to eq(user_session.first_name)
+          expect(user.last_name).not_to eq(user_session.last_name)
         end
 
         it "is unsuccessful" do
-          expect(service).to_not be_successful
+          expect(service).not_to be_successful
         end
       end
     end

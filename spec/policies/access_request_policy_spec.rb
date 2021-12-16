@@ -9,7 +9,7 @@ describe AccessRequestPolicy do
     context "non-admin user" do
       let(:user) { build(:user) }
 
-      it { is_expected.to_not permit(user) }
+      it { is_expected.not_to permit(user) }
     end
 
     context "admin user" do

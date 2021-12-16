@@ -55,6 +55,11 @@ describe "GET v3/recruitment_cycle/:recruitment_cycle_year/providers" do
     let(:second_alphabetical_provider) do
       create(:provider, provider_name: "Zork", organisations: [organisation])
     end
+    let(:provider_names_in_response) {
+      JSON.parse(subject.body)["data"].map { |provider|
+        provider["attributes"]["provider_name"]
+      }
+    }
     let(:request_path) { "/api/v3/recruitment_cycles/#{recruitment_cycle.year}/providers" }
 
     before do
@@ -64,14 +69,8 @@ describe "GET v3/recruitment_cycle/:recruitment_cycle_year/providers" do
       provider.update(provider_name: "Acme")
     end
 
-    let(:provider_names_in_response) {
-      JSON.parse(subject.body)["data"].map { |provider|
-        provider["attributes"]["provider_name"]
-      }
-    }
-
     it "returns them in alphabetical order" do
-      expect(provider_names_in_response).to eq(%w(Acme Zork))
+      expect(provider_names_in_response).to eq(%w[Acme Zork])
     end
   end
 

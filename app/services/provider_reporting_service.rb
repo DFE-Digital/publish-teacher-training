@@ -42,8 +42,16 @@ private
     closed = @closed_providers.group(column).count
 
     {
-      open: Provider.send(column.to_s.pluralize).map { |key, _value| x = {}; x[key.to_sym] = open[key] || 0; x }.reduce({}, :merge),
-      closed: Provider.send(column.to_s.pluralize).map { |key, _value| x = {}; x[key.to_sym] = closed[key] || 0; x }.reduce({}, :merge),
+      open: Provider.send(column.to_s.pluralize).map { |key, _value|
+              x = {}
+              x[key.to_sym] = open[key] || 0
+              x
+            } .reduce({}, :merge),
+      closed: Provider.send(column.to_s.pluralize).map { |key, _value|
+                x = {}
+                x[key.to_sym] = closed[key] || 0
+                x
+              } .reduce({}, :merge),
     }
   end
 end

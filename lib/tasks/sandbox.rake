@@ -20,7 +20,7 @@ namespace :sandbox do
     current_recruitment_cycle = RecruitmentCycle.current
 
     CSV.foreach(args[:csv_file_path], headers: :first_row, return_headers: false) do |row|
-      names = row[0].split(" ")
+      names = row[0].split
       email = row[1]
       provider_name = row[2]
 

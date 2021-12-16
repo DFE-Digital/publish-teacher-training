@@ -109,7 +109,7 @@ private
 
     if (duplicate_user = find_user_by_email)
       # Change: bob@gmail.com => bob_1634828853_gmail.com@example.com
-      new_email = duplicate_user.email.gsub(/\@/, "_#{Time.now.to_i}_") + "@example.com"
+      new_email = "#{duplicate_user.email.gsub(/\@/, "_#{Time.now.to_i}_")}@example.com"
 
       duplicate_user.update!(email: new_email)
     end

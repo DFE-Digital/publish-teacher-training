@@ -240,14 +240,13 @@ describe "GET v3/courses" do
 
       context "when a course has 2 available sites" do
         let(:another_site) { build(:site, latitude: 0.5, longitude: 0.5) }
+        let(:page_1) { "/api/v3/courses?sort=distance&latitude=0&longitude=0&page[page]=1" }
+        let(:page_2) { "/api/v3/courses?sort=distance&latitude=0&longitude=0&page[page]=2" }
+        let(:page_3) { "/api/v3/courses?sort=distance&latitude=0&longitude=0&page[page]=3" }
 
         before do
           course_b.site_statuses << create(:site_status, :findable, site: another_site)
         end
-
-        let(:page_1) { "/api/v3/courses?sort=distance&latitude=0&longitude=0&page[page]=1" }
-        let(:page_2) { "/api/v3/courses?sort=distance&latitude=0&longitude=0&page[page]=2" }
-        let(:page_3) { "/api/v3/courses?sort=distance&latitude=0&longitude=0&page[page]=3" }
 
         # jsonapi removes duplicates on the same page
         # therefore this test needs to span multiple pages
@@ -566,7 +565,7 @@ describe "GET v3/courses" do
   end
 
   describe "subjects filter" do
-    let(:course_with_A1_subject) do
+    let(:course_with_a1_subject) do
       create(:course,
              enrichments: [published_enrichment],
              site_statuses: [findable_status],
@@ -577,7 +576,7 @@ describe "GET v3/courses" do
       let(:request_path) { "/api/v3/courses?filter[subjects]=A1" }
 
       before do
-        course_with_A1_subject
+        course_with_a1_subject
       end
 
       it "is returned" do
@@ -590,7 +589,7 @@ describe "GET v3/courses" do
 
     context "with courses that match multiple subjects" do
       let(:request_path) { "/api/v3/courses?filter[subjects]=A1,B1" }
-      let(:course_with_B1_subject) do
+      let(:course_with_b1_subject) do
         create(:course,
                enrichments: [published_enrichment],
                site_statuses: [build(:site_status, :findable)],
@@ -598,8 +597,8 @@ describe "GET v3/courses" do
       end
 
       before do
-        course_with_A1_subject
-        course_with_B1_subject
+        course_with_a1_subject
+        course_with_b1_subject
       end
 
       it "is returned" do
@@ -614,7 +613,7 @@ describe "GET v3/courses" do
       let(:request_path) { "/api/v3/courses?filter[subjects]=C1" }
 
       before do
-        course_with_A1_subject
+        course_with_a1_subject
       end
 
       it "is not returned" do
@@ -699,8 +698,8 @@ describe "GET v3/courses" do
         json_response = JSON.parse(response.body)
         course_hashes = json_response["data"]
 
-        expect(course_hashes.first.dig("attributes").dig("name")).to eq(filtered_provider_course.name)
-        expect(course_hashes.second.dig("attributes").dig("name")).to eq(another_provider_course.name)
+        expect(course_hashes.first["attributes"]["name"]).to eq(filtered_provider_course.name)
+        expect(course_hashes.second["attributes"]["name"]).to eq(another_provider_course.name)
       end
     end
   end
@@ -843,7 +842,7 @@ describe "GET v3/courses" do
         get request_path
 
         keys = JSON.parse(response.body)["data"][0]["attributes"].keys
-        expect(keys).to eql(%w{course_code changed_at provider_code})
+        expect(keys).to eql(%w[course_code changed_at provider_code])
       end
     end
   end

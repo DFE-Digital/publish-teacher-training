@@ -48,7 +48,7 @@ RSpec.describe API::Public::V1::SerializableCourse do
   it { is_expected.to have_attribute(:financial_support).with_value(course.latest_published_enrichment.financial_support) }
   it { is_expected.to have_attribute(:findable).with_value(course.findable?) }
   it { is_expected.to have_attribute(:funding_type).with_value("apprenticeship") }
-  it { is_expected.to have_attribute(:gcse_subjects_required).with_value(%w{maths english science}) }
+  it { is_expected.to have_attribute(:gcse_subjects_required).with_value(%w[maths english science]) }
   it { is_expected.to have_attribute(:has_early_career_payments).with_value(false) }
   it { is_expected.to have_attribute(:financial_support).with_value(course.latest_published_enrichment.financial_support) }
   it { is_expected.to have_attribute(:has_scholarship).with_value(course.has_scholarship?) }
@@ -63,7 +63,7 @@ RSpec.describe API::Public::V1::SerializableCourse do
   it { is_expected.to have_attribute(:other_requirements).with_value(course.latest_published_enrichment.other_requirements) }
   it { is_expected.to have_attribute(:personal_qualities).with_value(course.latest_published_enrichment.personal_qualities) }
   it { is_expected.to have_attribute(:program_type).with_value(course.program_type) }
-  it { is_expected.to have_attribute(:qualifications).with_value(%w{qts pgce}) }
+  it { is_expected.to have_attribute(:qualifications).with_value(%w[qts pgce]) }
   it { is_expected.to have_attribute(:required_qualifications).with_value(course.latest_published_enrichment.required_qualifications) }
   it { is_expected.to have_attribute(:required_qualifications_english).with_value("must_have_qualification_at_application_time") }
   it { is_expected.to have_attribute(:required_qualifications_maths).with_value("must_have_qualification_at_application_time") }

@@ -51,8 +51,8 @@ module NotificationService
       before { setup_notifications }
 
       it "does not send notifications" do
-        expect(CourseUpdateEmailMailer).to_not receive(:course_update_email)
-        expect(course.recruitment_cycle).to_not eql(RecruitmentCycle.current)
+        expect(CourseUpdateEmailMailer).not_to receive(:course_update_email)
+        expect(course.recruitment_cycle).not_to eql(RecruitmentCycle.current)
         service_call
       end
     end

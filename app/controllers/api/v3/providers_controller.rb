@@ -4,8 +4,8 @@ module API
       before_action :build_recruitment_cycle
 
       def index
-        if params[:search].present?
-          return render(status: :bad_request) if params[:search].length < 2
+        if params[:search].present? && (params[:search].length < 2)
+          return render(status: :bad_request)
         end
 
         build_fields_for_index
@@ -18,7 +18,7 @@ module API
       def show
         code = params.fetch(:code, params[:provider_code])
         @provider = @recruitment_cycle.providers
-          .includes(:sites, :courses, courses: [:enrichments, :sites, site_statuses: [:site], provider: [:recruitment_cycle], subjects: [:financial_incentive]])
+          .includes(:sites, :courses, courses: [:enrichments, :sites, { site_statuses: [:site], provider: [:recruitment_cycle], subjects: [:financial_incentive] }])
           .find_by!(
             provider_code: code.upcase,
           )

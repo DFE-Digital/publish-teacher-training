@@ -21,7 +21,7 @@ describe "Course POST #create API V2", type: :request do
   end
   let(:jsonapi_renderer) { JSONAPI::Serializable::Renderer.new }
   let(:create_path) do
-    "/api/v2/recruitment_cycles/#{recruitment_cycle.year}" +
+    "/api/v2/recruitment_cycles/#{recruitment_cycle.year}" \
       "/providers/#{course.provider.provider_code}/courses"
   end
 
@@ -96,7 +96,7 @@ describe "Course POST #create API V2", type: :request do
       it "creates a course with a different code" do
         expect { perform_request(course) }.to change { provider.reload.courses.count }.from(1).to(2)
         expect(created_course.course_code).to match(/^[A-Z]\d{3}$/)
-        expect(created_course.course_code).to_not eq(existing_course.course_code)
+        expect(created_course.course_code).not_to eq(existing_course.course_code)
       end
     end
 

@@ -9,9 +9,7 @@ module ValidateJsonapiType
     # So for now, we do this by hand.
     sent_type = params[:_jsonapi][:data][:type]
     unless sent_type == type
-      raise ActionController::BadRequest.new(
-        "data type '#{sent_type}' did not match expected type '#{type}'",
-      )
+      raise ActionController::BadRequest, "data type '#{sent_type}' did not match expected type '#{type}'"
     end
   end
 end

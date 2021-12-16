@@ -90,38 +90,38 @@ describe ProviderReportingService do
       subject { described_class.call(providers_scope: providers_scope) }
 
       it "applies the scopes" do
-        expect(providers_scope).to receive_message_chain(:distinct).and_return(distinct_providers_scope)
-        expect(distinct_providers_scope).to receive_message_chain(:count).and_return(providers_count)
-        expect(distinct_providers_scope).to receive_message_chain(:count).and_return(providers_count)
-        expect(distinct_providers_scope).to receive_message_chain(:where).with(id: Course.findable.select(:provider_id)).and_return(training_providers_scope)
+        expect(providers_scope).to receive(:distinct).and_return(distinct_providers_scope)
+        expect(distinct_providers_scope).to receive(:count).and_return(providers_count)
+        expect(distinct_providers_scope).to receive(:count).and_return(providers_count)
+        expect(distinct_providers_scope).to receive(:where).with(id: Course.findable.select(:provider_id)).and_return(training_providers_scope)
 
-        expect(distinct_providers_scope).to receive_message_chain(:where)
+        expect(distinct_providers_scope).to receive(:where)
           .with(id: Course.findable.with_vacancies.select(:provider_id))
           .and_return(open_providers_scope)
 
         expect(training_providers_scope).to receive_message_chain(:where, :not).and_return(closed_providers_scope)
 
-        expect(training_providers_scope).to receive_message_chain(:count).and_return(training_providers_count)
-        expect(training_providers_scope).to receive_message_chain(:count).and_return(training_providers_count)
-        expect(open_providers_scope).to receive_message_chain(:count).and_return(open_providers_count)
+        expect(training_providers_scope).to receive(:count).and_return(training_providers_count)
+        expect(training_providers_scope).to receive(:count).and_return(training_providers_count)
+        expect(open_providers_scope).to receive(:count).and_return(open_providers_count)
 
-        expect(open_providers_scope).to receive_message_chain(:group)
+        expect(open_providers_scope).to receive(:group)
           .with(:accrediting_provider)
           .and_return(open_providers_accrediting_provider_scope)
 
-        expect(open_providers_accrediting_provider_scope).to receive_message_chain(:count)
+        expect(open_providers_accrediting_provider_scope).to receive(:count)
           .and_return(
             { "accredited_body" => 1, "not_an_accredited_body" => 2 },
           )
 
-        expect(open_providers_scope).to receive_message_chain(:group).with(:provider_type).and_return(open_providers_provider_type_scope)
-        expect(open_providers_provider_type_scope).to receive_message_chain(:count)
+        expect(open_providers_scope).to receive(:group).with(:provider_type).and_return(open_providers_provider_type_scope)
+        expect(open_providers_provider_type_scope).to receive(:count)
           .and_return(
             { "scitt" => 1, "lead_school" => 2, "university" => 3, "unknown" => 4, "invalid_value" => 5 },
           )
 
-        expect(open_providers_scope).to receive_message_chain(:group).with(:region_code).and_return(open_providers_region_code_scope)
-        expect(open_providers_region_code_scope).to receive_message_chain(:count)
+        expect(open_providers_scope).to receive(:group).with(:region_code).and_return(open_providers_region_code_scope)
+        expect(open_providers_region_code_scope).to receive(:count)
           .and_return(
             {
               "no_region" => 0,
@@ -139,16 +139,16 @@ describe ProviderReportingService do
             },
           )
 
-        expect(closed_providers_scope).to receive_message_chain(:count).and_return(closed_providers_count)
+        expect(closed_providers_scope).to receive(:count).and_return(closed_providers_count)
 
-        expect(closed_providers_scope).to receive_message_chain(:group).with(:accrediting_provider).and_return(closed_providers_accrediting_provider_scope)
-        expect(closed_providers_accrediting_provider_scope).to receive_message_chain(:count).and_return({})
+        expect(closed_providers_scope).to receive(:group).with(:accrediting_provider).and_return(closed_providers_accrediting_provider_scope)
+        expect(closed_providers_accrediting_provider_scope).to receive(:count).and_return({})
 
-        expect(closed_providers_scope).to receive_message_chain(:group).with(:provider_type).and_return(closed_providers_provider_type_scope)
-        expect(closed_providers_provider_type_scope).to receive_message_chain(:count).and_return({})
+        expect(closed_providers_scope).to receive(:group).with(:provider_type).and_return(closed_providers_provider_type_scope)
+        expect(closed_providers_provider_type_scope).to receive(:count).and_return({})
 
-        expect(closed_providers_scope).to receive_message_chain(:group).with(:region_code).and_return(closed_providers_region_code_scope)
-        expect(closed_providers_region_code_scope).to receive_message_chain(:count).and_return({})
+        expect(closed_providers_scope).to receive(:group).with(:region_code).and_return(closed_providers_region_code_scope)
+        expect(closed_providers_region_code_scope).to receive(:count).and_return({})
 
         expect(subject).to eq(expected)
       end

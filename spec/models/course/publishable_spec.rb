@@ -33,7 +33,7 @@ describe Course, type: :model do
           course.errors
         end
 
-        it { is_expected.to_not be_empty }
+        it { is_expected.not_to be_empty }
       end
     end
 
@@ -51,7 +51,7 @@ describe Course, type: :model do
           course.errors
         end
 
-        it { is_expected.to_not be_empty }
+        it { is_expected.not_to be_empty }
       end
     end
   end

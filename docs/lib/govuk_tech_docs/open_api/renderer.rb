@@ -69,14 +69,14 @@ module GovukTechDocs
         operations.compact.each_value do |operation|
           responses = operation.responses
           responses.each do |_rkey, response|
-            if response.content["application/json"]
-              schema = response.content["application/json"].schema
-              schema_name = get_schema_name(schema.node_context.source_location.to_s)
-              if !schema_name.nil?
-                schemas.push schema_name
-              end
-              schemas.concat(schemas_from_schema(schema))
+            next unless response.content["application/json"]
+
+            schema = response.content["application/json"].schema
+            schema_name = get_schema_name(schema.node_context.source_location.to_s)
+            if !schema_name.nil?
+              schemas.push schema_name
             end
+            schemas.concat(schemas_from_schema(schema))
           end
         end
         # Render all referenced schemas
@@ -100,7 +100,7 @@ module GovukTechDocs
           properties.push schema.items
         end
         all_of = schema["allOf"]
-        if !all_of.blank?
+        if all_of.present?
           all_of.each do |schema_nested|
             schema_nested.properties.each do |property|
               properties.push property[1]
@@ -172,7 +172,7 @@ module GovukTechDocs
       end
 
       def schema_properties(schema_data)
-        properties = Hash.new
+        properties = {}
         if defined? schema_data.properties
           schema_data.properties.each do |key, property|
             properties[key] = property
@@ -180,25 +180,26 @@ module GovukTechDocs
         end
         properties.merge! get_all_of_hash(schema_data)
         properties.merge! get_any_of_hash(schema_data)
-        properties_hash = Hash.new
+        properties_hash = {}
         properties.each do |pkey, property|
-          if property.type == "object"
-            properties_hash[pkey] = Hash.new
+          case property.type
+          when "object"
+            properties_hash[pkey] = {}
             items = property.items
-            if !items.blank?
+            if items.present?
               properties_hash[pkey] = schema_properties(items)
             end
-            if !property.properties.blank?
+            if property.properties.present?
               properties_hash[pkey] = schema_properties(property)
             end
-          elsif property.type == "array"
-            properties_hash[pkey] = Array.new
+          when "array"
+            properties_hash[pkey] = []
             items = property.items
-            if !items.blank?
+            if items.present?
               properties_hash[pkey].push schema_properties(items)
             end
           else
-            properties_hash[pkey] = !property.example.nil? ? property.example : property.type
+            properties_hash[pkey] = property.example.nil? ? property.type : property.example
           end
         end
 
@@ -206,7 +207,7 @@ module GovukTechDocs
       end
 
       def schema_is_referenced?(schema)
-        schema.node_context.source_location.pointer.segments[0..1] == %w{components schemas}
+        schema.node_context.source_location.pointer.segments[0..1] == %w[components schemas]
       end
 
     private
@@ -220,14 +221,14 @@ module GovukTechDocs
       end
 
       def get_all_of_array(schema)
-        properties = Array.new
+        properties = []
         if schema.is_a?(Array)
           schema = schema[1]
         end
         if schema["allOf"]
           all_of = schema["allOf"]
         end
-        if !all_of.blank?
+        if all_of.present?
           all_of.each do |schema_nested|
             schema_nested.properties.each do |property|
               if property.is_a?(Array)
@@ -241,11 +242,11 @@ module GovukTechDocs
       end
 
       def get_all_of_hash(schema)
-        properties = Hash.new
+        properties = {}
         if schema["allOf"]
           all_of = schema["allOf"]
         end
-        if !all_of.blank?
+        if all_of.present?
           all_of.each do |schema_nested|
             schema_nested.properties.each do |key, property|
               properties[key] = property
@@ -256,7 +257,7 @@ module GovukTechDocs
       end
 
       def get_any_of_hash(schema)
-        properties = Hash.new
+        properties = {}
         any_of = schema["anyOf"]
 
         if any_of.present?
@@ -269,7 +270,7 @@ module GovukTechDocs
       end
 
       def get_renderer(file)
-        template_path = File.join(File.dirname(__FILE__), "templates/" + file)
+        template_path = File.join(File.dirname(__FILE__), "templates/#{file}")
         template = File.open(template_path, "r").read
         ERB.new(template)
       end
@@ -320,7 +321,7 @@ module GovukTechDocs
         properties = []
 
         all_of = schema_data[1]["allOf"]
-        if !all_of.blank?
+        if all_of.present?
           all_of.each do |schema_nested|
             schema_nested.properties.each do |property|
               properties.push property
@@ -329,7 +330,7 @@ module GovukTechDocs
         end
 
         any_of = schema_data[1]["anyOf"]
-        if !any_of.blank?
+        if any_of.present?
           any_of.each do |schema_nested|
             schema_nested.properties.each do |property|
               properties.push property

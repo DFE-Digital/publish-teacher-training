@@ -2,30 +2,6 @@ require "rails_helper"
 
 describe "PATCH /providers/:provider_code" do
   let(:jsonapi_renderer) { JSONAPI::Serializable::Renderer.new }
-  let(:request_path) do
-    "/api/v2/recruitment_cycles/#{recruitment_cycle.year}" +
-      "/providers/#{provider.provider_code}"
-  end
-
-  def perform_request(provider)
-    jsonapi_data = jsonapi_renderer.render(
-      provider,
-      class: {
-        Provider: API::V2::SerializableProvider,
-      },
-    )
-
-    jsonapi_data.dig(:data, :attributes).slice!(*permitted_params)
-    perform_enqueued_jobs do
-      patch request_path,
-            headers: { "HTTP_AUTHORIZATION" => credentials },
-            params: {
-              _jsonapi: jsonapi_data,
-              include: "latest_enrichment",
-            }
-    end
-  end
-
   let(:recruitment_cycle) { find_or_create :recruitment_cycle }
   let(:organisation) { create :organisation }
   let(:site1) { build(:site_status, :findable) }
@@ -42,10 +18,8 @@ describe "PATCH /providers/:provider_code" do
   let(:user)         { create :user, organisations: [organisation] }
   let(:payload)      { { email: user.email } }
   let(:credentials) { encode_to_credentials(payload) }
-
   let(:enrichment) { build(:provider_enrichment) }
   let(:update_provider) { provider.dup.tap { |p| updated_attributes.each { |attribute_name, attribute_value| p[attribute_name] = attribute_value } } }
-
   let(:updated_attributes) do
     {
       email: "cats@cats4lyf.cat",
@@ -83,6 +57,29 @@ describe "PATCH /providers/:provider_code" do
       can_sponsor_student_visa
       can_sponsor_skilled_worker_visa
     ]
+  end
+  let(:request_path) do
+    "/api/v2/recruitment_cycles/#{recruitment_cycle.year}" \
+      "/providers/#{provider.provider_code}"
+  end
+
+  def perform_request(provider)
+    jsonapi_data = jsonapi_renderer.render(
+      provider,
+      class: {
+        Provider: API::V2::SerializableProvider,
+      },
+    )
+
+    jsonapi_data.dig(:data, :attributes).slice!(*permitted_params)
+    perform_enqueued_jobs do
+      patch request_path,
+            headers: { "HTTP_AUTHORIZATION" => credentials },
+            params: {
+              _jsonapi: jsonapi_data,
+              include: "latest_enrichment",
+            }
+    end
   end
 
   describe "with permitted attributes on provider object" do
@@ -130,6 +127,8 @@ describe "PATCH /providers/:provider_code" do
       end
     end
 
+    let!(:next_cycle) { find_or_create(:recruitment_cycle, :next) }
+
     include_examples "does not allow assignment", :id,                   9999
     include_examples "does not allow assignment", :provider_name,        "provider name"
     include_examples "does not allow assignment", :contact_name,         "contact name"
@@ -143,8 +142,6 @@ describe "PATCH /providers/:provider_code" do
     include_examples "does not allow assignment", :ukprn, "1234567"
     include_examples "does not allow assignment", :ukprn, "XXXXXXXX"
     include_examples "does not allow assignment", :urn, "1234"
-
-    let!(:next_cycle) { find_or_create(:recruitment_cycle, :next) }
 
     include_examples "does not allow assignment", :recruitment_cycle_id
 
@@ -161,11 +158,11 @@ describe "PATCH /providers/:provider_code" do
       subject { provider.reload }
 
       context "with a course" do
-        its(:courses) { is_expected.to_not include(course2) }
+        its(:courses) { is_expected.not_to include(course2) }
       end
 
       context "with sites" do
-        its(:sites) { is_expected.to_not include(site) }
+        its(:sites) { is_expected.not_to include(site) }
       end
     end
   end
@@ -192,7 +189,7 @@ describe "PATCH /providers/:provider_code" do
     it "doesn't update provider" do
       expect {
         perform_request update_provider
-      }.to_not(change { provider.reload })
+      }.not_to(change { provider.reload })
     end
   end
 
@@ -202,7 +199,7 @@ describe "PATCH /providers/:provider_code" do
     it "doesn't update provider" do
       expect {
         perform_request update_provider
-      }.to_not(change { provider.reload })
+      }.not_to(change { provider.reload })
     end
   end
 

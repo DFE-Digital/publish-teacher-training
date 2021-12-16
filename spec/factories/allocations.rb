@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :allocation do
-    association :accredited_body, factory: %i(provider accredited_body)
+    association :accredited_body, factory: %i[provider accredited_body]
     association :provider
     number_of_places { 0 }
     association :recruitment_cycle, :current_allocation, strategy: :find_or_create

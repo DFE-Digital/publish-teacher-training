@@ -8,7 +8,7 @@ module Courses
         #
         # https://github.com/DFE-Digital/publish-teacher-training/blob/master/spec/factories/courses.rb
         def potential_subjects
-          self.assignable_master_subjects&.sort_by(&:subject_name)
+          assignable_master_subjects&.sort_by(&:subject_name)
         end
 
         def modern_languages

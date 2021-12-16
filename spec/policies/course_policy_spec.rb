@@ -23,7 +23,7 @@ describe CoursePolicy do
     context "with a user outside the organisation" do
       let(:other_user) { create(:user) }
 
-      it { is_expected.to_not permit(other_user, course) }
+      it { is_expected.not_to permit(other_user, course) }
     end
   end
 
@@ -33,7 +33,7 @@ describe CoursePolicy do
     context "when non admin user" do
       it "returns user attributes" do
         expect(subject.permitted_attributes).to include(:english)
-        expect(subject.permitted_attributes).to_not include(:name)
+        expect(subject.permitted_attributes).not_to include(:name)
       end
     end
 

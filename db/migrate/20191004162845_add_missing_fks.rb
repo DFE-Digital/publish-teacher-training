@@ -2,7 +2,7 @@ class AddMissingFks < ActiveRecord::Migration[6.0]
   def up
     # there is bad data in prod (3 rows), kill it:
     violations = ProviderUCASPreference.find_by_sql("select * from provider_ucas_preference where provider_id not in (select id from provider)")
-    puts "Deleting #{violations.count} orphaned provider_ucas_preference records..."
+    Rails.logger.info { "Deleting #{violations.count} orphaned provider_ucas_preference records..." }
     violations.each(&:destroy)
     add_foreign_key :provider_ucas_preference, :provider, name: "fk_provider_ucas_preference__provider"
 

@@ -2,6 +2,19 @@ require "rails_helper"
 
 describe "PATCH /providers/:provider_code/courses/:course_code" do
   let(:jsonapi_renderer) { JSONAPI::Serializable::Renderer.new }
+  let(:organisation)      { create :organisation }
+  let(:provider)          { create :provider, organisations: [organisation] }
+  let(:user)              { create :user, organisations: [organisation] }
+  let(:payload)           { { email: user.email } }
+  let(:credentials)       { encode_to_credentials(payload) }
+  let(:course)            {
+    create :course,
+           provider: provider,
+           subjects: [find_or_create(:primary_subject, :primary)]
+  }
+  let(:permitted_params) do
+    %i[english maths science]
+  end
 
   def perform_request(gcse_requirements)
     jsonapi_data = jsonapi_renderer.render(
@@ -19,20 +32,6 @@ describe "PATCH /providers/:provider_code/courses/:course_code" do
           params: {
             _jsonapi: jsonapi_data,
           }
-  end
-  let(:organisation)      { create :organisation }
-  let(:provider)          { create :provider, organisations: [organisation] }
-  let(:user)              { create :user, organisations: [organisation] }
-  let(:payload)           { { email: user.email } }
-  let(:credentials)       { encode_to_credentials(payload) }
-
-  let(:course)            {
-    create :course,
-           provider: provider,
-           subjects: [find_or_create(:primary_subject, :primary)]
-  }
-  let(:permitted_params) do
-    %i[english maths science]
   end
 
   before do

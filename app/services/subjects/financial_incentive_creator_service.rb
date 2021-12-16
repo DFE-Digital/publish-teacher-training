@@ -1,6 +1,6 @@
 module Subjects
   class FinancialIncentiveCreatorService
-    def initialize(subject: Subject, financial_incentive: FinancialIncentive, year:)
+    def initialize(year:, subject: Subject, financial_incentive: FinancialIncentive)
       @subject = subject
       @financial_incentive = financial_incentive
       @year = year

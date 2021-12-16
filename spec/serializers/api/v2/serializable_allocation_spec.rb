@@ -16,11 +16,11 @@ describe API::V2::SerializableAllocation do
         Provider: API::V2::SerializableProvider,
         AllocationUplift: API::V2::SerializableAllocationUplift,
       },
-      include: %i(
+      include: %i[
         accredited_body
         provider
         allocation_uplift
-      ),
+      ],
     )
   end
 

@@ -66,7 +66,7 @@ module GovukTechDocs
               @render.schema(text)
             end
           else
-            return text
+            text
           end
         else
           text
@@ -77,7 +77,7 @@ module GovukTechDocs
 
       def uri?(string)
         uri = URI.parse(string)
-        %w(http https).include?(uri.scheme)
+        %w[http https].include?(uri.scheme)
       rescue URI::BadURIError
         false
       rescue URI::InvalidURIError

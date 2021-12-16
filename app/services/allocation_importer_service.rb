@@ -20,7 +20,7 @@ class AllocationImporterService
         raise "Accredited Body Provider with code: #{row['accredited_body_code']} not found"
       end
 
-      puts "Importing training_provider: #{training_provider.provider_code} and accredited_body: #{accredited_body_provider.provider_code}"
+      Rails.logger.info { "Importing training_provider: #{training_provider.provider_code} and accredited_body: #{accredited_body_provider.provider_code}" }
 
       allocation = Allocation.find_or_initialize_by(
         provider: training_provider,

@@ -3,6 +3,11 @@ require "rails_helper"
 describe Course, type: :model do
   describe "#enrichments" do
     let(:first_enrichment) { build(:course_enrichment, :published, created_at: 5.days.ago) }
+    let(:another_course) do
+      create(:course, enrichments: [
+        build(:course_enrichment, :published, created_at: 5.days.ago),
+      ])
+    end
     let(:second_enrichment) { build(:course_enrichment, :published, created_at: 3.days.ago) }
     let(:third_enrichment) { build(:course_enrichment, :subsequent_draft, created_at: 1.day.ago) }
 
@@ -10,12 +15,6 @@ describe Course, type: :model do
     let(:course) { create(:course, enrichments: enrichments) }
 
     subject { course.reload.enrichments }
-
-    let(:another_course) do
-      create(:course, enrichments: [
-        build(:course_enrichment, :published, created_at: 5.days.ago),
-      ])
-    end
 
     its(:size) { is_expected.to eq(3) }
 
@@ -79,13 +78,13 @@ describe Course, type: :model do
                created_at: 1.day.ago,
                updated_at: 20.minutes.ago)]
       }
+      let(:enrichment) { subject.enrichments.first }
+
       subject do
         create(:course,
                changed_at: 10.minutes.ago,
                enrichments: enrichments)
       end
-
-      let(:enrichment) { subject.enrichments.first }
 
       its(:changed_at) { is_expected.to be_within(1.second).of Time.now.utc }
 

@@ -48,7 +48,10 @@ describe "POST /sessions/create_by_magic" do
         perform_request
       } .to(
         have_enqueued_email(WelcomeEmailMailer, :send_welcome_email)
-            .with { user.reload; { first_name: user.first_name, email: user.email } }
+            .with {
+          user.reload
+          { first_name: user.first_name, email: user.email }
+        }
             .on_queue(:mailers),
       )
     end

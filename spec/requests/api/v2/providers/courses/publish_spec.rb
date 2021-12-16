@@ -11,7 +11,7 @@ describe "Publish API v2", type: :request do
   describe "POST publish" do
     let(:status) { 200 }
     let(:publish_path) do
-      "/api/v2/recruitment_cycles/#{provider.recruitment_cycle.year}/providers/#{provider.provider_code}" +
+      "/api/v2/recruitment_cycles/#{provider.recruitment_cycle.year}/providers/#{provider.provider_code}" \
         "/courses/#{course.course_code}/publish"
     end
 

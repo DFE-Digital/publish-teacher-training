@@ -46,7 +46,7 @@ describe AccessRequest, type: :model do
       subject { AccessRequest.requested }
 
       it { is_expected.to include access_request1, access_request2 }
-      it { is_expected.to_not include access_request3, access_request4, access_request5 }
+      it { is_expected.not_to include access_request3, access_request4, access_request5 }
     end
   end
 

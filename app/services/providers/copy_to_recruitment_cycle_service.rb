@@ -16,7 +16,7 @@ module Providers
       if provider.rollable? || force
         ActiveRecord::Base.transaction do
           rolled_over_provider = new_recruitment_cycle.providers.find_by(provider_code: provider.provider_code)
-          if rolled_over_provider == nil
+          if rolled_over_provider.nil?
             providers_count = 1
             rolled_over_provider = provider.dup
             rolled_over_provider.organisations << provider.organisations
@@ -50,7 +50,7 @@ module Providers
         new_course = @copy_course_to_provider_service.execute(course: course, new_provider: new_provider)
         courses_count += 1 if new_course.present?
       rescue Exception # rubocop: disable Lint/RescueException
-        logger.fatal "error trying to copy course #{course.course_code}" if logger
+        logger&.fatal "error trying to copy course #{course.course_code}"
         raise
       end
 

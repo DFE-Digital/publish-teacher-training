@@ -66,6 +66,7 @@ class Course < ApplicationRecord
   enum english: ENTRY_REQUIREMENT_OPTIONS, _suffix: :for_english
   enum science: ENTRY_REQUIREMENT_OPTIONS, _suffix: :for_science
 
+  after_validation :remove_unnecessary_enrichments_validation_message
   before_save :set_applications_open_from
 
   belongs_to :provider
@@ -144,95 +145,95 @@ class Course < ApplicationRecord
   has_one :latest_published_enrichment, -> { published.order("created_at DESC, id DESC").limit(1) },
           class_name: "CourseEnrichment"
 
-  scope :within, ->(range, origin:) do
+  scope :within, lambda { |range, origin:|
     joins(site_statuses: :site).merge(SiteStatus.where(status: :running)).merge(Site.within(range, origin: origin))
-  end
+  }
 
-  scope :by_name_ascending, -> do
+  scope :by_name_ascending, lambda {
     order(name: :asc)
-  end
+  }
 
-  scope :by_name_descending, -> do
+  scope :by_name_descending, lambda {
     order(name: :desc)
-  end
+  }
 
-  scope :ascending_canonical_order, -> do
+  scope :ascending_canonical_order, lambda {
     joins(:provider).merge(Provider.by_name_ascending).order("name asc, course_code asc")
-  end
+  }
 
-  scope :descending_canonical_order, -> do
+  scope :descending_canonical_order, lambda {
     joins(:provider).merge(Provider.by_name_descending).order("name desc, course_code desc")
-  end
+  }
 
-  scope :accredited_body_order, ->(provider_name) do
+  scope :accredited_body_order, lambda { |provider_name|
     joins(:provider).merge(Provider.by_provider_name(provider_name))
-  end
+  }
 
-  scope :case_insensitive_search, ->(course_code) do
+  scope :case_insensitive_search, lambda { |course_code|
     where("lower(course.course_code) = ?", course_code.downcase)
-  end
+  }
 
-  scope :changed_since, ->(timestamp) do
+  scope :changed_since, lambda { |timestamp|
     if timestamp.present?
       changed_at_since(timestamp)
     else
       where.not(changed_at: nil)
     end.order(:changed_at, :id)
-  end
+  }
 
-  scope :changed_at_since, ->(timestamp) do
+  scope :changed_at_since, lambda { |timestamp|
     where("course.changed_at > ?", timestamp)
-  end
+  }
 
-  scope :created_at_since, ->(timestamp) do
+  scope :created_at_since, lambda { |timestamp|
     where("course.created_at > ?", timestamp)
-  end
+  }
 
-  scope :not_new, -> do
+  scope :not_new, lambda {
     includes(site_statuses: %i[site course])
       .where
       .not(SiteStatus.table_name => { status: SiteStatus.statuses[:new_status] })
-  end
+  }
 
-  scope :published, -> do
+  scope :published, lambda {
     where(id: CourseEnrichment.published.select(:course_id))
-  end
+  }
 
   scope :with_recruitment_cycle, ->(year) { joins(provider: :recruitment_cycle).where(recruitment_cycle: { year: year }) }
   scope :findable, -> { joins(:site_statuses).merge(SiteStatus.findable) }
   scope :with_vacancies, -> { joins(:site_statuses).merge(SiteStatus.with_vacancies) }
   scope :with_salary, -> { where(program_type: %i[school_direct_salaried_training_programme pg_teaching_apprenticeship]) }
-  scope :with_study_modes, ->(study_modes) do
+  scope :with_study_modes, lambda { |study_modes|
     where(study_mode: Array(study_modes) << "full_time_or_part_time")
-  end
-  scope :with_subjects, ->(subject_codes) do
+  }
+  scope :with_subjects, lambda { |subject_codes|
     joins(:subjects).merge(Subject.with_subject_codes(subject_codes))
-  end
+  }
 
-  scope :with_qualifications, ->(qualifications) do
+  scope :with_qualifications, lambda { |qualifications|
     where(qualification: qualifications)
-  end
+  }
 
-  scope :with_accredited_bodies, ->(accredited_body_codes) do
+  scope :with_accredited_bodies, lambda { |accredited_body_codes|
     where(accredited_body_code: accredited_body_codes)
-  end
+  }
 
-  scope :with_provider_name, ->(provider_name) do
+  scope :with_provider_name, lambda { |provider_name|
     where(
       provider_id: Provider.where(provider_name: provider_name),
     ).or(
-      self.where(
+      where(
         accredited_body_code: Provider.where(provider_name: provider_name)
                                        .select(:provider_code),
       ),
     )
-  end
+  }
 
-  scope :with_send, -> do
+  scope :with_send, lambda {
     where(is_send: true)
-  end
+  }
 
-  scope :with_funding_types, ->(funding_types) do
+  scope :with_funding_types, lambda { |funding_types|
     program_types = []
 
     if funding_types.include?("salary")
@@ -254,13 +255,13 @@ class Course < ApplicationRecord
     end
 
     where(program_type: program_types)
-  end
+  }
 
-  scope :with_degree_grades, ->(degree_grades) do
+  scope :with_degree_grades, lambda { |degree_grades|
     where(degree_grade: degree_grades)
-  end
+  }
 
-  scope :provider_can_sponsor_visa, -> do
+  scope :provider_can_sponsor_visa, lambda {
     joins(:provider)
     .where(
       program_type: %w[school_direct_training_programme higher_education_programme scitt_programme],
@@ -273,19 +274,19 @@ class Course < ApplicationRecord
         provider: { can_sponsor_skilled_worker_visa: true },
       ),
     )
-  end
+  }
 
   def self.entry_requirement_options_without_nil_choice
     ENTRY_REQUIREMENT_OPTIONS.reject { |option| option == :not_set }.keys.map(&:to_s)
   end
 
-  validates :maths, inclusion: { in: entry_requirement_options_without_nil_choice }, unless: -> {
+  validates :maths, inclusion: { in: entry_requirement_options_without_nil_choice }, unless: lambda {
     further_education_course? || recruitment_cycle_after_2021?
   }
-  validates :english, inclusion: { in: entry_requirement_options_without_nil_choice }, unless: -> {
+  validates :english, inclusion: { in: entry_requirement_options_without_nil_choice }, unless: lambda {
     further_education_course? || recruitment_cycle_after_2021?
   }
-  validates :science, inclusion: { in: entry_requirement_options_without_nil_choice }, if: -> {
+  validates :science, inclusion: { in: entry_requirement_options_without_nil_choice }, if: lambda {
     gcse_science_required? && !recruitment_cycle_after_2021?
   }
 
@@ -313,8 +314,6 @@ class Course < ApplicationRecord
   validates :name, :profpost_flag, :program_type, :qualification, :start_date, :study_mode, presence: true
   validates :age_range_in_years, presence: true, on: %i[new create publish], unless: :further_education_course?
   validates :level, presence: true, on: %i[new create publish]
-
-  after_validation :remove_unnecessary_enrichments_validation_message
 
   def rollable_withdrawn?
     content_status == :withdrawn
@@ -554,7 +553,7 @@ class Course < ApplicationRecord
   end
 
   def is_published?
-    %i{published published_with_unpublished_changes}.include? content_status
+    %i[published published_with_unpublished_changes].include? content_status
   end
 
   def funding_type=(funding_type)
@@ -683,7 +682,7 @@ private
   end
 
   def qualification_assignable(course_params)
-    assignable = course_params[:qualification].nil? || Course::qualifications.include?(course_params[:qualification].to_sym)
+    assignable = course_params[:qualification].nil? || Course.qualifications.include?(course_params[:qualification].to_sym)
     errors.add(:qualification, "is invalid") unless assignable
 
     assignable
@@ -694,7 +693,7 @@ private
       # `full_messages_for` here will remove any `^`s defined in the validator or en.yml.
       # We still need it for later, so re-add it.
       # jsonapi_errors will throw if it's given an array, so we call `.first`.
-      message = "^" + enrichment.errors.full_messages_for(field).first.to_s
+      message = "^#{enrichment.errors.full_messages_for(field).first}"
       errors.add field.to_sym, message
     end
   end
@@ -725,7 +724,7 @@ private
   def validate_site_statuses_publishable
     site_statuses.each do |site_status|
       unless site_status.valid?
-        raise RuntimeError.new("Site status invalid on course #{provider_code}/#{course_code}: #{site_status.errors.full_messages.first}")
+        raise "Site status invalid on course #{provider_code}/#{course_code}: #{site_status.errors.full_messages.first}"
       end
     end
   end
@@ -749,7 +748,7 @@ private
   end
 
   def remove_unnecessary_enrichments_validation_message
-    self.errors.delete :enrichments if self.errors[:enrichments] == ["is invalid"]
+    errors.delete :enrichments if errors[:enrichments] == ["is invalid"]
   end
 
   def validate_qualification
@@ -777,7 +776,7 @@ private
       end_date = short_date(recruitment_cycle.application_end_date)
       errors.add(
         :applications_open_from,
-        "#{chosen_date} is not valid for the #{provider.recruitment_cycle.year} cycle. " +
+        "#{chosen_date} is not valid for the #{provider.recruitment_cycle.year} cycle. " \
         "A valid date must be between #{start_date} and #{end_date}",
       )
     end
@@ -800,8 +799,8 @@ private
   end
 
   def has_the_modern_languages_secondary_subject_type?
-    raise "SecondarySubject not found" if SecondarySubject == nil
-    raise "SecondarySubject.modern_languages not found" if SecondarySubject.modern_languages == nil
+    raise "SecondarySubject not found" if SecondarySubject.nil?
+    raise "SecondarySubject.modern_languages not found" if SecondarySubject.modern_languages.nil?
 
     subjects.any? { |subject| subject&.id == SecondarySubject.modern_languages.id }
   end

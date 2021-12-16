@@ -2,6 +2,7 @@ require "rails_helper"
 
 describe "/api/v2/recruitment_cycle", type: :request do
   let(:user) { create(:user, organisations: [organisation]) }
+  let(:json_response) { JSON.parse(response.body) }
   let(:organisation) { create(:organisation) }
   let(:payload) { { email: user.email } }
   let(:credentials) { encode_to_credentials(payload) }
@@ -12,8 +13,6 @@ describe "/api/v2/recruitment_cycle", type: :request do
         headers: { "HTTP_AUTHORIZATION" => credentials },
         params: request_params
   end
-
-  let(:json_response) { JSON.parse(response.body) }
 
   describe "/api/v2/recruitment_cycles" do
     let(:recruitment_cycle)      { find_or_create :recruitment_cycle }
