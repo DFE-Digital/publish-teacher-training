@@ -2,16 +2,19 @@ module Providers
   class ProviderListComponent < GovukComponent::Base
     include Support::TimeHelper
 
-    def initialize(provider)
+    PROVIDER_TYPE_LOOKUP = {
+      "scitt" => "SCITT",
+      "lead_school" => "Lead school",
+      "university" => "University",
+    }.freeze
+
+    def initialize(provider:)
+      super(classes: classes, html_attributes: html_attributes)
       @provider = provider
     end
 
     def formatted_provider_type
-      case @provider.provider_type
-      when "scitt" then "SCITT"
-      when "lead_school" then "Lead school"
-      when "university" then "University"
-      end
+      PROVIDER_TYPE_LOOKUP[@provider.provider_type]
     end
 
     def formatted_accrediting_provider
