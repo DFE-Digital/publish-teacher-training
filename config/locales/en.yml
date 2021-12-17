@@ -45,6 +45,10 @@ en:
         text_search: "Name or code"
       users:
         text_search: "Name or email"
+        user_type: "Filter by User type"
+        user_types:
+          admin: "Admin User"
+          provider: "Provider User"
   course:
     update_email:
       name: "title"

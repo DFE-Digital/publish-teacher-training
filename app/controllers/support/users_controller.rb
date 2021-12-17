@@ -48,11 +48,11 @@ module Support
     end
 
     def filters
-      @filters ||= ProviderFilter.new(params: filter_params).filters
+      @filters ||= Support::Filters::UserFilter.new(params: filter_params).filters
     end
 
     def filter_params
-      params.permit(:text_search, :page, :commit)
+      params.permit(:text_search, :page, :commit, user_type: [])
     end
   end
 end

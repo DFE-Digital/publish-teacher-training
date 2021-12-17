@@ -62,7 +62,7 @@ module Support
     end
 
     def filters
-      @filters ||= ProviderFilter.new(params: filter_params).filters
+      @filters ||= Support::Filters::ProviderFilter.new(params: filter_params).filters
     end
 
     def filter_params
