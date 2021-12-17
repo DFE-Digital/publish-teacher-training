@@ -31,7 +31,19 @@ module Support
     end
 
     def update_course_params
-      params.require(:course).permit(:course_code, :name, :start_date)
+      params.require(:course).permit(
+        :course_code, :name,
+        :"start_date(3i)", :"start_date(2i)", :"start_date(1i)"
+      ).transform_keys { |key| start_date_field_to_attribute(key) }
+    end
+
+    def start_date_field_to_attribute(key)
+      case key
+      when "start_date(3i)" then "day"
+      when "start_date(2i)" then "month"
+      when "start_date(1i)" then "year"
+      else key
+      end
     end
   end
 end
