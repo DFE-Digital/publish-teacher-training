@@ -396,6 +396,27 @@ describe Course, type: :model do
           end
         end
 
+        context "With start date" do
+          let(:course) { Course.new(provider: provider, start_date: Date.new(2021, 9, 1), day: "222", month: "90", year: "2022") }
+
+          it "Requires a start date in valid format to update" do
+            course.valid?(:update)
+            error = course.errors.messages[:start_date]
+            expect(error).not_to be_empty
+            expect(error.first).to include("Start date format is invalid")
+          end
+
+          it "Permits valid date values" do
+            course.day = "2"
+            course.month = "9"
+            course.year = "2021"
+
+            course.valid?(:edit)
+            error = course.errors.messages[:start_date]
+            expect(error).to be_empty
+          end
+        end
+
         it "Requires at least one location" do
           error = errors[:sites]
           expect(error).not_to be_empty
