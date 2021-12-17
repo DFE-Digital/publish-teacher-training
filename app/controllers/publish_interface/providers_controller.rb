@@ -25,8 +25,8 @@ module PublishInterface
     def update
       authorize @provider, :update?
 
-      @about_form = PublishInterface::AboutYourOrganisationForm.build_from_provider(@provider)
-      @about_form.save(provider_params)
+      @about_form = PublishInterface::AboutYourOrganisationForm.build_from_controller_params(provider_params)
+      @about_form.save
 
       if @about_form.valid?
         flash[:success] = I18n.t("success.published")
@@ -38,7 +38,7 @@ module PublishInterface
         )
       else
         @errors = @about_form.errors.messages
-        render provider_params["page"].to_sym
+        render page_param
       end
     end
 
@@ -62,12 +62,16 @@ module PublishInterface
     def provider_params
       params
         .fetch(:publish_interface_about_your_organisation_form, {})
+        .except(:page)
         .permit(
-          :email, :telephone, :urn, :website, :ukprn, :address1, :address2,
-          :address3, :address4, :postcode, :region_code,
-          :page, :train_with_us, :train_with_disability,
-          accredited_bodies: [:provider_name, :provider_code, :description]
+          *AboutYourOrganisationForm::FIELDS,
+          accredited_bodies: %i[provider_name provider_code description],
         )
+        .merge(provider: @provider)
+    end
+
+    def page_param
+      params.fetch(:publish_interface_about_your_organisation_form).fetch(:page)
     end
   end
 end
