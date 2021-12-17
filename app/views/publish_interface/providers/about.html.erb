@@ -55,7 +55,7 @@
         <p class="govuk-body">Tell applicants about your <%= accredited_body %> – you could mention their academic specialities and achievements.</p>
         <p class="govuk-body">Be specific with the claims you make, and support them with evidence.</p>
 
-        <% @about_form.accredited_bodies.each_with_index do |accredited_body| %>
+        <% @about_form.accredited_bodies.each do |accredited_body| %>
           <%= f.fields_for :accredited_bodies, accredited_body, index: nil do |abf| %>
             <%= abf.hidden_field :provider_name %>
             <%= abf.hidden_field :provider_code %>
