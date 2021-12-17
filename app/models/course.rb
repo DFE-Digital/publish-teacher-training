@@ -16,6 +16,8 @@ class Course < ApplicationRecord
   has_associated_audits
   audited
 
+  attr_accessor :month, :day, :year
+
   validates :course_code,
             uniqueness: { scope: :provider_id },
             presence: true,
@@ -764,6 +766,29 @@ private
   end
 
   def validate_start_date
+    date_args = [day, month, year]
+
+    return self.start_date = "" if date_args.compact.present? && date_args.any?(&:blank?)
+
+    validate_start_date_format(date_args)
+    validate_start_date_cycle
+  end
+
+  def convert_start_date(date_args)
+    return true if date_args.any?(&:nil?)
+
+    begin
+      self.start_date = Date.civil(year.to_i, month.to_i, day.to_i)
+    rescue ArgumentError
+      false
+    end
+  end
+
+  def validate_start_date_format(date_args)
+    errors.add(:start_date, "Start date format is invalid") unless convert_start_date(date_args)
+  end
+
+  def validate_start_date_cycle
     errors.add :start_date, "#{start_date.strftime('%B %Y')} is not in the #{recruitment_cycle.year} cycle" unless start_date_options.include?(written_month_year(start_date))
   end
 
