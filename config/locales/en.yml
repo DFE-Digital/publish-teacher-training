@@ -77,6 +77,10 @@ en:
     attributes:
       course:
         name: "Title"
+      provider:
+        scitt: "SCITT"
+        lead_school: "Lead school"
+        university: "University"
       course_enrichment:
         fee_uk_eu: "Course fees for UK and EU students"
         fee_international: "Course fees for international students"

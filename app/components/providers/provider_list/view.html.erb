@@ -14,13 +14,13 @@
   component.row do |row|
     row.key { "Accredited provider" }
     row.value { formatted_accrediting_provider }
-    row.action(text: "Change", href: edit_support_provider_url(@provider))
+    row.action
   end
 
   component.row do |row|
     row.key { "Provider type" }
     row.value { formatted_provider_type }
-    row.action(text: "Change", href: edit_support_provider_url(@provider))
+    row.action(text: "Change", href: edit_support_provider_url(@provider), visually_hidden_text: 'provider type')
   end
 
   component.row do |row|
