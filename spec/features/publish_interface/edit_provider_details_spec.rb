@@ -10,15 +10,12 @@ feature "About Your Organisation section" do
     then_i_can_edit_info_about_training_with_us
     then_i_can_edit_info_about_our_accredited_bodies
     then_i_can_edit_info_about_disabilities_and_other_needs
-    # TODO: then_i_can_edit_info_about_visa_sponsorship
     then_i_can_edit_contact_details
   end
 
   def given_i_am_a_provider_user
     @current_user = create(:user, :with_provider)
     @provider = @current_user.providers.first
-    # Mark visa fields as false - switch to true when implementing visa section
-    @provider.update!(can_sponsor_student_visa: false, can_sponsor_skilled_worker_visa: false)
     user_exists_in_dfe_sign_in(user: @current_user)
   end
 
