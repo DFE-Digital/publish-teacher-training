@@ -4,7 +4,7 @@
 </div>
 
 <div class="govuk-form-group">
-  <% ["admin", "provider"].each do |user_type, _| %>
+  <% ["admin", "provider"].each do |user_type| %>
     <div class="govuk-checkboxes__item">
       <%= check_box_tag "user_type[]", user_type, checked?(filters, :user_type, user_type), id: "user_type-#{user_type}", class: "govuk-checkboxes__input" %>
       <%= label_tag "user_type-#{user_type}", label_for("user_type", user_type), class: "govuk-label govuk-checkboxes__label" %>
