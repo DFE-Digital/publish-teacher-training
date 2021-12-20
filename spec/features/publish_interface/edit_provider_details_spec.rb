@@ -28,20 +28,28 @@ feature "About Your Organisation section" do
   end
 
   def when_i_visit_the_details_page
-    visit details_publish_provider_recruitment_cycle_path(@provider.provider_code, @provider.recruitment_cycle_year)
-    click_button "Sign in using DfE Sign-in"
+    provider_details_show_page.load(
+      provider_code: @provider.provider_code,
+      recruitment_cycle_year: @provider.recruitment_cycle_year,
+    )
+    sign_in_page.sign_in_button.click
   end
 
   def then_i_can_edit_info_about_training_with_us
-    click_link "Change details about training with your organisation"
-    fill_in "Training with you", with: ""
-    click_button "Save and publish changes"
-    within ".govuk-error-summary__body" do
+    provider_details_show_page.train_with_us_link.click
+    expect(page).to have_current_path provider_details_edit_page.url(
+      provider_code: @provider.provider_code,
+      recruitment_cycle_year: @provider.recruitment_cycle_year,
+    )
+
+    provider_details_edit_page.training_with_you_field.set ""
+    provider_details_edit_page.save_and_publish.click
+    within provider_details_edit_page.error_summary do
       expect(page).to have_content "Enter details about training with you"
     end
 
-    fill_in "Training with you", with: "Updated: Training with you"
-    click_button "Save and publish changes"
+    provider_details_edit_page.training_with_you_field.set "Updated: Training with you"
+    provider_details_edit_page.save_and_publish.click
 
     expect(page).to have_content "Your changes have been published"
     within_summary_row "Training with your organisation" do
@@ -51,8 +59,9 @@ feature "About Your Organisation section" do
 
   def then_i_can_edit_info_about_our_accredited_bodies
     click_link "Change details about #{@accrediting_provider.provider_name}"
-    fill_in @accrediting_provider.provider_name, with: "Updated: accredited body description"
-    click_button "Save and publish changes"
+
+    provider_details_edit_page.accredited_body_description_field.set "Updated: accredited body description"
+    provider_details_edit_page.save_and_publish.click
 
     expect(page).to have_content "Your changes have been published"
     within_summary_row @accrediting_provider.provider_name do
@@ -61,9 +70,10 @@ feature "About Your Organisation section" do
   end
 
   def then_i_can_edit_info_about_disabilities_and_other_needs
-    click_link "Change details about training with disabilities and other needs"
-    fill_in "Training with disabilities and other needs", with: "Updated: training with disabilities"
-    click_button "Save and publish changes"
+    provider_details_show_page.train_with_disability_link.click
+
+    provider_details_edit_page.train_with_disability_field.set "Updated: training with disabilities"
+    provider_details_edit_page.save_and_publish.click
 
     expect(page).to have_content "Your changes have been published"
     within_summary_row "Training with disabilities and other needs" do
@@ -72,12 +82,12 @@ feature "About Your Organisation section" do
   end
 
   def then_i_can_edit_contact_details
-    click_link "Change email address"
+    provider_details_show_page.email_link.click
 
-    fill_in "Email address", with: "updated@email.com"
-    fill_in "Telephone number", with: "11111 111111"
-    fill_in "Building and street", with: "123 Updated Street"
-    click_button "Save and publish changes"
+    provider_contact_details_edit_page.email.set "updated@email.com"
+    provider_contact_details_edit_page.telephone.set "11111 111111"
+    provider_contact_details_edit_page.address1.set "123 Updated Street"
+    provider_details_edit_page.save_and_publish.click
 
     expect(page).to have_content "Your changes have been published"
     within_summary_row "Email address" do
