@@ -606,7 +606,7 @@ GEM
       attr_required (>= 0.0.5)
       httpclient (>= 2.4)
     table_print (1.5.7)
-    tabulo (2.7.2)
+    tabulo (2.7.3)
       tty-screen (= 0.8.1)
       unicode-display_width (= 2.1.0)
     terminal-table (3.0.2)
