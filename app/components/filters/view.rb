@@ -2,27 +2,35 @@
 
 module Filters
   class View < GovukComponent::Base
-    attr_accessor :filters, :filter_label, :filter_actions, :filter_model
+    attr_accessor :filters, :filter_actions, :filter_model
 
-    def initialize(filters:, filter_label:, filter_model:, filter_actions: nil)
+    def initialize(filters:, filter_model:, filter_actions: nil)
       @filters = filters
       @filter_actions = filter_actions
-      @filter_label = filter_label
       @filter_model = filter_model
-    end
-
-    def tags_for_filter(filter, value)
-      [{ title: title_html(filter, value), remove_link: remove_select_tag_link(filter) }]
     end
 
   private
 
+    def tags_for_filter(filter, value)
+      # Sometimes we can have multiple filter values/tags, ie for box-checking filters.
+      # A lean solution to conflicting value vs values of filters is to treat all
+      # as values, hence the flatten.map
+      [value].flatten.map do |v|
+        { title: title_html(filter, v), remove_link: remove_select_tag_link(filter) }
+      end
+    end
+
     def filter_attributes
-      "::Filters::#{filter_model}Attributes::View".constantize.new(filters: filters, filter_label: filter_label)
+      "::Filters::#{filter_model}Attributes::View".constantize.new(filters: filters)
     end
 
     def providers_list?
       filter_label == t("components.filter.providers.provider_search")
+    end
+
+    def filter_label(filter)
+      t("components.filter.#{filter_model.to_s.downcase.pluralize}.#{filter}")
     end
 
     def course_search?(filter)

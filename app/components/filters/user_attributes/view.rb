@@ -1,11 +1,10 @@
 module Filters
   module UserAttributes
     class View < GovukComponent::Base
-      attr_accessor :filters, :filter_label
+      attr_accessor :filters
 
-      def initialize(filters:, filter_label:)
+      def initialize(filters:)
         @filters = filters
-        @filter_label = filter_label
       end
 
     private

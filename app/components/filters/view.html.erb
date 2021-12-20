@@ -25,11 +25,7 @@
             <% filters.each do |filter, value| %>
               <% if value.present? %>
                 <h3 class="govuk-heading-s govuk-!-margin-bottom-0">
-                  <% if course_search?(filter) %>
-                    <%= t("components.filter.providers.course_search") %>
-                  <% else %>
-                    <%= filter_label %>
-                  <% end %>
+                  <%= filter_label(filter) %>
                 </h3>
                 <ul class="moj-filter-tags">
                   <% tags_for_filter(filter, value).each do |tag| %>
