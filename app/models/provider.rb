@@ -310,6 +310,10 @@ class Provider < ApplicationRecord
     can_sponsor_student_visa && !can_sponsor_skilled_worker_visa
   end
 
+  def can_only_sponsor_skilled_worker_visa?
+    !can_sponsor_student_visa && can_sponsor_skilled_worker_visa
+  end
+
 private
 
   scope :course_code_search, ->(course_code) { joins(:courses).merge(Course.case_insensitive_search(course_code)) }

@@ -14,6 +14,34 @@ module PublishInterface
       flash.delete(:error_summary)
     end
 
+    def about
+      @about_form = PublishInterface::AboutYourOrganisationForm.build_from_provider(@provider)
+    end
+
+    def contact
+      @about_form = PublishInterface::AboutYourOrganisationForm.build_from_provider(@provider)
+    end
+
+    def update
+      authorize @provider, :update?
+
+      @about_form = PublishInterface::AboutYourOrganisationForm.build_from_controller_params(provider_params)
+      @about_form.save
+
+      if @about_form.valid?
+        flash[:success] = I18n.t("success.published")
+        redirect_to(
+          details_publish_provider_recruitment_cycle_path(
+            @provider.provider_code,
+            @provider.recruitment_cycle_year,
+          ),
+        )
+      else
+        @errors = @about_form.errors.messages
+        render page_param
+      end
+    end
+
   private
 
     def build_recruitment_cycle
@@ -30,6 +58,21 @@ module PublishInterface
       flash[:error] = { id: "provider-error", message: "Please enter a UKPRN before continuing" }
 
       redirect_to contact_provider_recruitment_cycle_path(@provider.provider_code, @provider.recruitment_cycle_year)
+    end
+
+    def provider_params
+      params
+        .fetch(:publish_interface_about_your_organisation_form, {})
+        .except(:page)
+        .permit(
+          *AboutYourOrganisationForm::FIELDS,
+          accredited_bodies: %i[provider_name provider_code description],
+        )
+        .merge(provider: @provider)
+    end
+
+    def page_param
+      params.fetch(:publish_interface_about_your_organisation_form).fetch(:page)
     end
   end
 end

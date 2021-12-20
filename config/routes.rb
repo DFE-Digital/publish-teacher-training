@@ -32,7 +32,9 @@ Rails.application.routes.draw do
     resources :providers, path: "organisations", param: :code, only: [] do
       resources :recruitment_cycles, param: :year, constraints: { year: /#{Settings.current_recruitment_cycle_year}|#{Settings.current_recruitment_cycle_year + 1}/ }, path: "", only: [] do
         get "/about", on: :member, to: "providers#about"
+        put "/about", on: :member, to: "providers#update"
         get "/contact", on: :member, to: "providers#contact"
+        put "/contact", on: :member, to: "providers#update"
         get "/details", on: :member, to: "providers#details"
         get "/visas", to: "providers/visas#edit"
       end

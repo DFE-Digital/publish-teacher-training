@@ -35,7 +35,11 @@ class SessionsController < ApplicationController
 private
 
   def after_sign_in_path
-    if current_user.admin?
+    saved_path = session.delete("post_dfe_sign_in_path")
+
+    if saved_path
+      saved_path
+    elsif current_user.admin?
       support_providers_path
     else
       publish_root_path

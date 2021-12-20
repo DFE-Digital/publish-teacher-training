@@ -6,6 +6,8 @@ en:
       sign_out: "Sign out"
   cancel: "Cancel"
   change: "Change"
+  page_titles:
+    error_prefix: "Error: "
   components:
     page_titles:
       sign_in:
@@ -216,3 +218,6 @@ en:
       detail: "Something has gone wrong, please try again in a few minutes"
   pagy:
     overflow: "The requested page param was out of range and invalid for this request."
+  success:
+    published: "Your changes have been published."
+    changes_ttl: "Changes will appear on Find postgraduate teacher training within 15 minutes."
