@@ -2,27 +2,24 @@
 
 module Filters
   class View < GovukComponent::Base
-    attr_accessor :filters, :filter_label, :filter_actions
+    attr_accessor :filters, :filter_label, :filter_actions, :filter_model
 
-    def initialize(filters:, filter_label:, filter_actions: nil)
+    def initialize(filters:, filter_label:, filter_model:, filter_actions: nil)
       @filters = filters
       @filter_actions = filter_actions
       @filter_label = filter_label
+      @filter_model = filter_model
     end
 
     def tags_for_filter(filter, value)
       [{ title: title_html(filter, value), remove_link: remove_select_tag_link(filter) }]
     end
 
-    def checked?(filters, filter, value)
-      filters && filters[filter]&.include?(value)
-    end
-
-    def label_for(attribute, value)
-      I18n.t("components.filter.users.#{attribute.pluralize}.#{value}")
-    end
-
   private
+
+    def filter_attributes
+      "::Filters::#{filter_model}Attributes::View".constantize.new(filters: filters, filter_label: filter_label)
+    end
 
     def providers_list?
       filter_label == t("components.filter.providers.provider_search")

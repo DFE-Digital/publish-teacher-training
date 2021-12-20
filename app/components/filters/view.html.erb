@@ -5,8 +5,6 @@
         <div class="moj-filter__header-title">
           <h2 class="govuk-heading-m">Filters</h2>
         </div>
-        <div class="moj-filter__header-action">
-        </div>
       </div>
 
       <!-- Div made focusable to 'catch' focus from filters. see https://github.com/DFE-Digital/apply-for-teacher-training/pull/2640 -->
@@ -48,31 +46,7 @@
         <div class="moj-filter__options">
           <form method="get">
             <%= submit_tag "Apply filters", class: "govuk-button" %>
-
-            <% if providers_list? %>
-              <div class="govuk-form-group">
-                <%= label_tag "provider_search", filter_label, class: "govuk-label govuk-label--s" %>
-                <%= text_field_tag "provider_search", (filters[:provider_search] if filters), spellcheck: false, class: "govuk-input" %>
-              </div>
-              <div class="govuk-form-group">
-                <%= label_tag "course_search", t("components.filter.providers.course_search"), class: "govuk-label govuk-label--s" %>
-                <%= text_field_tag "course_search", (filters[:course_search] if filters), spellcheck: false, class: "govuk-input" %>
-              </div>
-            <% else %>
-              <div class="govuk-form-group">
-                <%= label_tag "text_search", filter_label, class: "govuk-label govuk-label--s" %>
-                <%= text_field_tag "text_search", (filters[:text_search] if filters), spellcheck: false, class: "govuk-input" %>
-              </div>
-
-              <div class="govuk-form-group">
-                <% ["admin", "provider"].each do |user_type, _| %>
-                  <div class="govuk-checkboxes__item">
-                    <%= check_box_tag "user_type[]", user_type, checked?(filters, :user_type, user_type), id: "user_type-#{user_type}", class: "govuk-checkboxes__input" %>
-                    <%= label_tag "user_type-#{user_type}", label_for("user_type", user_type), class: "govuk-label govuk-checkboxes__label" %>
-                  </div>
-                <% end %>
-              </div>
-            <% end %>
+            <%= render filter_attributes %>
           </form>
         </div>
       </div>
