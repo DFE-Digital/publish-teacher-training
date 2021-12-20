@@ -25,10 +25,16 @@ module Support
       records.search(text_search)
     end
 
-    def provider_course_search(records, search)
+    def course_search(records, search)
       return records if search.blank?
 
-      records.provider_course_search(search)
+      records.course_search(search)
+    end
+
+    def provider_search(records, search)
+      return records if search.blank?
+
+      records.provider_search(search)
     end
 
     def user_type(records, user_type_arr)
@@ -48,8 +54,8 @@ module Support
       filtered_records = model_data_scope
 
       filtered_records = text_search(filtered_records, filters[:text_search]) if filtered_records.respond_to?(:search)
-      filtered_records = provider_course_search(filtered_records, filters[:provider_search]) if filtered_records.respond_to?(:provider_course_search)
-      filtered_records = provider_course_search(filtered_records, filters[:course_search]) if filtered_records.respond_to?(:provider_course_search)
+      filtered_records = provider_search(filtered_records, filters[:provider_search]) if filtered_records.respond_to?(:provider_search)
+      filtered_records = course_search(filtered_records, filters[:course_search]) if filtered_records.respond_to?(:course_search)
       filtered_records = user_type(filtered_records, filters[:user_type]) if filtered_records.respond_to?(:admins)
 
       filtered_records

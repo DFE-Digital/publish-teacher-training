@@ -3,16 +3,16 @@
 require "rails_helper"
 
 describe Support::Filters::ProviderFilter do
-  let(:permitted_params) { ActionController::Parameters.new(params).permit(:text_search) }
-  let(:permitted_params2) { ActionController::Parameters.new(provider_and_course_params).permit(:provider_search, :course_search) }
+  let(:permitted_params) { ActionController::Parameters.new(provider_and_course_params).permit(:provider_search, :course_search) }
 
   subject { described_class.new(params: permitted_params) }
 
   describe "#filters" do
     context "with fully valid parameters" do
-      let(:params) do
+      let(:provider_and_course_params) do
         {
-          text_search: "search terms",
+          provider_search: "search terms",
+          course_search: "course search terms",
         }
       end
 
@@ -22,7 +22,7 @@ describe Support::Filters::ProviderFilter do
     end
 
     context "with empty params" do
-      let(:params) { {} }
+      let(:provider_and_course_params) { {} }
 
       it "returns nil" do
         expect(subject.filters).to be_nil
@@ -30,7 +30,7 @@ describe Support::Filters::ProviderFilter do
     end
 
     context "provider and course params from providers controller" do
-      subject { described_class.new(params: permitted_params2) }
+      subject { described_class.new(params: permitted_params) }
 
       context "with fully valid course and provider parameters" do
         let(:provider_and_course_params) do
@@ -41,7 +41,7 @@ describe Support::Filters::ProviderFilter do
         end
 
         it "returns the correct filter hash" do
-          expect(subject.filters).to eq(permitted_params2.to_h)
+          expect(subject.filters).to eq(permitted_params.to_h)
         end
       end
 
@@ -54,7 +54,7 @@ describe Support::Filters::ProviderFilter do
         end
 
         it "returns the correct filter hash" do
-          expect(subject.filters).to eq(permitted_params2.to_h)
+          expect(subject.filters).to eq(permitted_params.to_h)
         end
       end
 
@@ -67,7 +67,7 @@ describe Support::Filters::ProviderFilter do
         end
 
         it "returns the correct filter hash" do
-          expect(subject.filters).to eq(permitted_params2.to_h)
+          expect(subject.filters).to eq(permitted_params.to_h)
         end
       end
 

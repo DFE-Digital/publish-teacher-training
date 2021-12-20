@@ -15,19 +15,19 @@ describe Support::Filter do
       context "filtering with a known provider" do
         let(:params) do
           {
-            text_search: provider.provider_name,
+            provider_search: provider.provider_name,
           }
         end
 
         it "filters the provider out" do
-          expect(subject).to eq([provider])
+          expect(subject).to match_array([provider])
         end
       end
 
       context "filtering with an unknown provider or invalid entry" do
         let(:params) do
           {
-            text_search: "i can haz cheezeburger",
+            provider_search: "i can haz cheezeburger",
           }
         end
 

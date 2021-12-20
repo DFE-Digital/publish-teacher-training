@@ -25,16 +25,8 @@ module Filters
       "::Filters::#{filter_model}Attributes::View".constantize.new(filters: filters)
     end
 
-    def providers_list?
-      filter_label == t("components.filter.providers.provider_search")
-    end
-
     def filter_label(filter)
       t("components.filter.#{filter_model.to_s.downcase.pluralize}.#{filter}")
-    end
-
-    def course_search?(filter)
-      filter == "course_search"
     end
 
     def title_html(filter, value)
