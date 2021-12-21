@@ -1,0 +1,31 @@
+<%= render GovukComponent::SummaryListComponent.new do |component|
+  component.row do |row|
+    row.key { "Name" }
+    row.value { @provider.provider_name }
+    row.action(text: "Change", href: edit_support_provider_url(@provider), visually_hidden_text: 'provider name')
+  end
+
+  component.row do |row|
+    row.key { "Code" }
+    row.value { @provider.provider_code }
+    row.action
+  end
+
+  component.row do |row|
+    row.key { "Accredited provider" }
+    row.value { formatted_accrediting_provider }
+    row.action
+  end
+
+  component.row do |row|
+    row.key { "Provider type" }
+    row.value { formatted_provider_type }
+    row.action(text: "Change", href: edit_support_provider_url(@provider), visually_hidden_text: 'provider type')
+  end
+
+  component.row do |row|
+    row.key { "Last updated" }
+    row.value { gov_uk_format(@provider.updated_at) }
+    row.action
+  end
+end %>

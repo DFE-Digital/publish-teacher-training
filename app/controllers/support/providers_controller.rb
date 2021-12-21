@@ -74,7 +74,7 @@ module Support
     end
 
     def update_provider_params
-      params.require(:provider).permit(:provider_name)
+      params.require(:provider).permit(:provider_name, :provider_type)
     end
 
     def create_provider_params

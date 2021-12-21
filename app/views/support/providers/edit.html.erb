@@ -1,10 +1,20 @@
+<h1 class="govuk-heading-l">Edit provider details</h1>
+
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds-from-desktop">
     <%= form_with model: [:support, @provider], local: true do |f| %>
-        
+
     <%= f.govuk_error_summary %>
 
-    <%= f.govuk_text_field :provider_name, label: { text: "New Provider name", size: "s" }, width: 20 %>
+    <%= f.govuk_text_field :provider_name, label: { text: "Provider name", size: "m" }, width: 20 %>
+
+      <%= f.govuk_radio_buttons_fieldset :provider_type, legend: { text: "Provider type", size: "m" } do %>
+        <%= f.govuk_radio_button :provider_type, :scitt, label: { text: "SCITT", size: "s" }, hint: { text: "Marks as an accredited provider" }, width: 20 %>
+        <%= f.govuk_radio_button :provider_type, :lead_school, label: { text: "Lead school", size: "s" }, hint: { text: "Marks as not an accredited provider" }, width: 20 %>
+        <%= f.govuk_radio_divider %>
+        <%= f.govuk_radio_button :provider_type, :university, label: { text: "University", size: "s" }, hint: { text: "Marks as an accredited provider" }, width: 20 %>
+      <% end %>
+
     <%= f.govuk_submit %>
     <% end %>
 
