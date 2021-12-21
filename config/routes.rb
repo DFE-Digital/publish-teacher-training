@@ -36,7 +36,10 @@ Rails.application.routes.draw do
         get "/contact", on: :member, to: "providers#contact"
         put "/contact", on: :member, to: "providers#update"
         get "/details", on: :member, to: "providers#details"
-        get "/visas", to: "providers/visas#edit"
+
+        scope module: :providers do
+          resource :visas, only: %i[edit update], path: "/visas"
+        end
       end
     end
   end

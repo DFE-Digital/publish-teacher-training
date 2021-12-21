@@ -11,5 +11,9 @@ module FeatureHelpers
     def provider_contact_details_edit_page
       @provider_contact_details_edit_page ||= PageObjects::PublishInterface::ProviderContactDetailsEdit.new
     end
+
+    def visa_sponsorships_page
+      @visa_sponsorships_page ||= PageObjects::PublishInterface::ProviderVisaSponsorships.new
+    end
   end
 end
