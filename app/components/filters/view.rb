@@ -1,13 +1,14 @@
 # frozen_string_literal: true
 
 module Filters
-  class View < GovukComponent::Base
+  class View < ViewComponent::Base
     attr_accessor :filters, :filter_actions, :filter_model
 
     def initialize(filters:, filter_model:, filter_actions: nil)
       @filters = filters
       @filter_actions = filter_actions
       @filter_model = filter_model
+      super
     end
 
   private
@@ -35,8 +36,7 @@ module Filters
 
     def remove_select_tag_link(filter)
       new_filters = filters.reject { |f| f == filter }
-      new_filters.to_query.blank? ? nil : "?" + new_filters.to_query
+      new_filters.to_query.blank? ? nil : "?#{new_filters.to_query}"
     end
   end
 end
-

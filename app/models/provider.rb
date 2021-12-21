@@ -155,12 +155,12 @@ class Provider < ApplicationRecord
   end
 
   pg_search_scope :provider_search,
-                  against: %i(provider_code provider_name),
+                  against: %i[provider_code provider_name],
                   using: { tsearch: { prefix: true } }
 
   pg_search_scope :course_search,
                   associated_against: {
-                    courses: %i(course_code),
+                    courses: %i[course_code],
                   }, using: { tsearch: { prefix: true } }
 
   accepts_nested_attributes_for :sites

@@ -65,4 +65,3 @@ describe Support::Filters::AllocationFilter do
     end
   end
 end
- 

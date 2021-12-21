@@ -12,7 +12,7 @@ describe Support::Filters::UserFilter do
       let(:params) do
         {
           text_search: "search terms",
-          user_type: ["admin", "provider"],
+          user_type: %w[admin provider],
         }
       end
 
@@ -49,7 +49,7 @@ describe Support::Filters::UserFilter do
         let(:params) do
           {
             text_search: "",
-            user_type: ["admin", "provider"],
+            user_type: %w[admin provider],
           }
         end
 
