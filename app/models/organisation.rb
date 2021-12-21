@@ -5,8 +5,6 @@ class Organisation < ApplicationRecord
 
   has_and_belongs_to_many :providers
 
-  has_many :nctl_organisations
-
   validates :name, presence: true
 
   has_associated_audits
