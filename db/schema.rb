@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_12_10_103437) do
+ActiveRecord::Schema.define(version: 2021_12_21_133521) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
@@ -223,13 +223,6 @@ ActiveRecord::Schema.define(version: 2021_12_10_103437) do
     t.index ["user_id"], name: "index_interrupt_page_acknowledgement_on_user_id"
   end
 
-  create_table "nctl_organisation", id: :serial, force: :cascade do |t|
-    t.text "name"
-    t.text "nctl_id", null: false
-    t.integer "organisation_id"
-    t.index ["organisation_id"], name: "IX_nctl_organisation_organisation_id"
-  end
-
   create_table "organisation", id: :serial, force: :cascade do |t|
     t.text "name"
     t.text "org_id"
@@ -415,7 +408,6 @@ ActiveRecord::Schema.define(version: 2021_12_10_103437) do
   add_foreign_key "course_subject", "course", name: "fk_course_subject__course"
   add_foreign_key "course_subject", "subject", name: "fk_course_subject__subject"
   add_foreign_key "financial_incentive", "subject"
-  add_foreign_key "nctl_organisation", "organisation", name: "FK_nctl_organisation_organisation_organisation_id", on_delete: :cascade
   add_foreign_key "organisation_provider", "organisation", name: "FK_organisation_provider_organisation_organisation_id"
   add_foreign_key "organisation_provider", "provider", name: "FK_organisation_provider_provider_provider_id"
   add_foreign_key "organisation_user", "\"user\"", column: "user_id", name: "FK_organisation_user_user_user_id"

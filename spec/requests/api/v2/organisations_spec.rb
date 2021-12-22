@@ -93,10 +93,6 @@ describe "Organisations API v2", type: :request do
           expect(json_response["data"]).to(
             include(have_attribute(:name).with_value(organisation.name)),
           )
-          expect(json_response["data"]).to(
-            include(have_attribute(:nctl_ids)
-                      .with_value(organisation.nctl_organisations.map(&:nctl_id))),
-          )
         end
 
         it "returns the user relationships" do

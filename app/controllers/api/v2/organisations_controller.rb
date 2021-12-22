@@ -6,7 +6,7 @@ module API
         @organisations = Organisation.all
         if params_includes_provider?
           current_recruitment_cycle = RecruitmentCycle.current
-          @organisations = @organisations.includes(:providers, :users, :nctl_organisations)
+          @organisations = @organisations.includes(:providers, :users)
                              .where(provider: { recruitment_cycle_id: current_recruitment_cycle.id })
 
         end
