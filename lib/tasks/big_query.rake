@@ -1,19 +1,17 @@
 require "csv"
 
 namespace :big_query do
-  ON_REDIS_ERROR_WAIT_TIME_IN_SECONDS = 10
-  ON_REDIS_ERROR_RETRY_ATTEMPTS = 5
+  Object.const_set("ON_REDIS_ERROR_WAIT_TIME_IN_SECONDS", 10)
+  Object.const_set("ON_REDIS_ERROR_RETRY_ATTEMPTS", 5)
 
   desc <<~DESC
     Send import events for configured entities
   DESC
 
   task send_import_events: :environment do
-    class CourseSite < ApplicationRecord; end
-
-    class OrganisationProvider < ApplicationRecord; end
-
-    class Session < ApplicationRecord; end
+    Object.const_set("CourseSite", Class.new(ApplicationRecord))
+    Object.const_set("OrganisationProvider", Class.new(ApplicationRecord))
+    Object.const_set("Session", Class.new(ApplicationRecord))
 
     conf = Rails.configuration.analytics
 
