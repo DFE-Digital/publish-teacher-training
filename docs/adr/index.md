@@ -7,3 +7,5 @@
 * [5. Service entry points](0005-service-entry-points.md)
 * [6. Controller structure](0006-controller-structure.md)
 * [7. JavaScript Linting and code style](0007-javascript-linting.md)
+* [8. Skylight for performance monitoring](0008-use-skylight-for-performance-monitoring.md)
+* [9. Form objects](0009-form-objects.md)
