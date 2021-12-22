@@ -1,14 +1,14 @@
 require "rails_helper"
 
+class ReferenceNumberFormatValidatorTest
+  include ActiveModel::Validations
+
+  attr_accessor :reference_number
+
+  validates :reference_number, reference_number_format: { allow_blank: true, maximum: 8, minimum: 8, message: "error" }
+end
+
 describe ReferenceNumberFormatValidator do
-  class ReferenceNumberFormatValidatorTest
-    include ActiveModel::Validations
-
-    attr_accessor :reference_number
-
-    validates :reference_number, reference_number_format: { allow_blank: true, maximum: 8, minimum: 8, message: "error" }
-  end
-
   let(:reference_number) { "12345678" }
 
   let(:model) do
