@@ -6,6 +6,8 @@ ruby "2.7.4"
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem "rails", "6.1.4.4"
 
+gem 'rack-cors'
+
 # Transpile app-like JavaScript. Read more: https://github.com/rails/webpacker
 gem "webpacker", "~> 5.4"
 
