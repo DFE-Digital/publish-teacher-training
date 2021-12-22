@@ -9,11 +9,19 @@ module Support
     end
 
     def edit
-      course
+      @edit_course_form = Support::EditCourseForm.new(course)
     end
 
     def update
-      if course.update(update_course_params)
+      @edit_course_form = Support::EditCourseForm.new(course)
+
+      @edit_course_form.assign_attributes(update_course_params)
+      @edit_course_form.save
+
+      @edit_course_form.valid?
+      @edit_course_form.course_valid?
+
+      if @edit_course_form.errors.none?
         redirect_to support_provider_courses_path(provider)
       else
         render :edit
@@ -31,7 +39,7 @@ module Support
     end
 
     def update_course_params
-      params.require(:course).permit(
+      params.require(:support_edit_course_form).permit(
         :course_code, :name,
         :"start_date(3i)", :"start_date(2i)", :"start_date(1i)"
       ).transform_keys { |key| start_date_field_to_attribute(key) }

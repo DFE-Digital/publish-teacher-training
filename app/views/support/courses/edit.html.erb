@@ -3,7 +3,7 @@
 <h1 class="govuk-heading-l">Edit course details</h1>
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds-from-desktop">
-    <%= form_with model: [:support, @provider, @course], local: true do |f| %>
+    <%= form_with model: @edit_course_form, url: support_provider_course_path, method: :patch do |f| %>
 
       <%= f.govuk_error_summary %>
 
