@@ -8,7 +8,7 @@ module Support
     ].freeze
 
     attr_accessor(*FIELDS)
-    attr_accessor :day, :month, :year
+    attr_accessor :day, :month, :year, :course
     validate :validate_start_date_format
 
     def initialize(course)
@@ -24,18 +24,17 @@ module Support
     end
 
     def save
-      valid?
-      course_valid?
-      return false unless errors.none?
+      return false unless valid?
 
       @course.save
     end
 
-    def course_valid?
+    def valid?
+      super()
       assign_attributes_to_course
-      @course.valid?
-
-      promote_errors
+      course.valid?
+      promote_errors_from_course
+      errors.none?
     end
 
     def start_date
@@ -47,34 +46,22 @@ module Support
     def check_start_date
       date_args = [year, month, day].map(&:to_i)
 
-      begin
-        Date.new(*date_args)
-      rescue ArgumentError
-        Struct.new(:day, :month, :year).new(day, month, year)
-      end
+      Date.valid_date?(*date_args) ? Date.new(*date_args) : Struct.new(:day, :month, :year).new(day, month, year)
     end
 
     def assign_attributes_to_course
-      # not ideal but whilst validation is in 2 places this should prevent overlap
-      # this can be removed when we migrate validation over to just the form
-      if valid_date? || date_args_blank?
-        @course.assign_attributes(
-          course_code: course_code,
-          name: name,
-          start_date: start_date,
-        )
-      else
-        @course.assign_attributes(
-          course_code: course_code,
-          name: name,
-        )
-      end
+      attributes = {
+        course_code: course_code,
+        name: name,
+      }
+
+      attributes[:start_date] = start_date if valid_date? || date_args_blank?
+
+      course.assign_attributes(attributes)
     end
 
-    def promote_errors
-      @course.errors.each do |error|
-        errors.add(error.attribute, error.message)
-      end
+    def promote_errors_from_course
+      errors.merge!(course.errors)
     end
 
     def validate_start_date_format
