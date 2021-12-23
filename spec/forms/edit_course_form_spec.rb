@@ -19,10 +19,9 @@ module Support
       end
 
       context "form is assigned invalid date value" do
-        # 'save' should be true here as 'start_date' is excluded from course update, validation occurs on form itself as opposed to the model.
         it "returns true" do
           subject.assign_attributes(course_code: "T92", name: "Universitry of Oxfords", day: "222", month: "9", year: "2022")
-          expect(subject.save).to eq(true)
+          expect(subject.save).to eq(false)
         end
       end
 

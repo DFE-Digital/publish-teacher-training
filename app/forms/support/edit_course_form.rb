@@ -3,7 +3,12 @@ module Support
     include ActiveModel::Model
     include ActiveModel::Validations
 
-    attr_accessor :course_code, :name, :day, :month, :year
+    FIELDS = %i[
+      course_code name
+    ].freeze
+
+    attr_accessor(*FIELDS)
+    attr_accessor :day, :month, :year
     validate :validate_start_date_format
 
     def initialize(course)
@@ -19,23 +24,15 @@ module Support
     end
 
     def save
-      # not ideal but whilst validation is in 2 places this should prevent overlap
-      # this can be removed when we migrate validation over
-      if valid_date? || date_args_blank?
-        @course.update(
-          course_code: course_code,
-          name: name,
-          start_date: start_date,
-        )
-      else
-        @course.update(
-          course_code: course_code,
-          name: name,
-        )
-      end
+      valid?
+      course_valid?
+      return false unless errors.none?
+
+      @course.save
     end
 
     def course_valid?
+      assign_attributes_to_course
       @course.valid?
 
       promote_errors
@@ -54,6 +51,23 @@ module Support
         Date.new(*date_args)
       rescue ArgumentError
         Struct.new(:day, :month, :year).new(day, month, year)
+      end
+    end
+
+    def assign_attributes_to_course
+      # not ideal but whilst validation is in 2 places this should prevent overlap
+      # this can be removed when we migrate validation over to just the form
+      if valid_date? || date_args_blank?
+        @course.assign_attributes(
+          course_code: course_code,
+          name: name,
+          start_date: start_date,
+        )
+      else
+        @course.assign_attributes(
+          course_code: course_code,
+          name: name,
+        )
       end
     end
 
