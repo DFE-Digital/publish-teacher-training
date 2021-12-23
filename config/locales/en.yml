@@ -22,6 +22,8 @@ en:
           courses:
             index: "Courses"
             edit: "Edit course details"
+          locations:
+            index: "Locations"
         users:
           index: "Users"
           show: "User overview"

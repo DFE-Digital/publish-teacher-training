@@ -50,6 +50,7 @@ Rails.application.routes.draw do
     resources :providers, except: %i[destroy] do
       get :users, on: :member
       resources :courses, only: %i[index edit update]
+      resources :locations, only: :index
     end
     resources :users, only: %i[index show new create destroy]
 
