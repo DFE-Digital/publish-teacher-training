@@ -78,9 +78,9 @@ describe "Interrupt page acknowledgements API v2", type: :request do
       end
 
       it "still returns success" do
-        expect { subject }.not_to change {
+        expect { subject }.not_to(change {
           user.interrupt_page_acknowledgements.count
-        }
+        })
         expect(subject.status).to eq 200
       end
     end
