@@ -1,7 +1,7 @@
 module Support
   class ProvidersController < SupportController
     def index
-      @providers = filtered_providers.page(params[:page] || 1)
+      @providers = filtered_providers
     end
 
     def new
@@ -54,7 +54,7 @@ module Support
   private
 
     def filtered_providers
-      Support::Filter.call(model_data_scope: find_providers, filters: filters)
+      @filtered_providers ||= Support::Filter.call(model_data_scope: find_providers, filter_params: filter_params)
     end
 
     def find_providers
@@ -66,7 +66,7 @@ module Support
     end
 
     def filter_params
-      params.permit(:provider_search, :course_search, :page, :commit)
+      @filter_params ||= params.except(:commit).permit(:provider_search, :course_search, :page)
     end
 
     def provider

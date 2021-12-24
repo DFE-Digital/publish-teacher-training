@@ -1,7 +1,7 @@
 module Support
   class AllocationsController < SupportController
     def index
-      @allocations = filtered_allocations.page(params[:page] || 1)
+      @allocations = filtered_allocations
     end
 
     def show
@@ -15,15 +15,11 @@ module Support
     end
 
     def filtered_allocations
-      Support::Filter.call(model_data_scope: Allocation.current_allocations, filters: filters)
-    end
-
-    def filters
-      @filters ||= Support::Filters::AllocationFilter.new(params: filter_params).filters
+      @filtered_allocations ||= Support::Filter.call(model_data_scope: Allocation.current_allocations, filter_params: filter_params)
     end
 
     def filter_params
-      params.permit(:text_search, :page, :commit)
+      @filter_params ||= params.except(:commit).permit(:text_search, :page)
     end
   end
 end

@@ -3,7 +3,7 @@
 require "rails_helper"
 
 describe Support::Filter do
-  subject { Support::Filter.call(model_data_scope: model_scope, filters: params) }
+  subject { described_class.call(model_data_scope: model_scope, filter_params: params) }
 
   describe "#call" do
     context "with Provider as model_scope" do
