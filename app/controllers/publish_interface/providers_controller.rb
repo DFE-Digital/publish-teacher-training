@@ -18,10 +18,6 @@ module PublishInterface
       @about_form = PublishInterface::AboutYourOrganisationForm.build_from_provider(@provider)
     end
 
-    def contact
-      @about_form = PublishInterface::AboutYourOrganisationForm.build_from_provider(@provider)
-    end
-
     def update
       authorize @provider, :update?
 

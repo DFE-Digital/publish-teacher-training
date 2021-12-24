@@ -21,7 +21,7 @@ feature "Editing visa sponsorships" do
   end
 
   def given_i_am_authenticated_as_a_provider_user
-    given_i_am_authenticated(user: user)
+    given_i_am_authenticated(user: create(:user, :with_provider))
     provider.update!(can_sponsor_student_visa: nil, can_sponsor_skilled_worker_visa: nil)
   end
 
@@ -53,11 +53,7 @@ feature "Editing visa sponsorships" do
     expect(page).to have_content("Select if candidates can get a sponsored Student visa")
   end
 
-  def user
-    @user ||= create(:user, :with_provider)
-  end
-
   def provider
-    user.providers.first
+    @current_user.providers.first
   end
 end

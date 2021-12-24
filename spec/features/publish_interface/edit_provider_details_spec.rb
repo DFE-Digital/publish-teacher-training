@@ -10,7 +10,6 @@ feature "About Your Organisation section" do
     then_i_can_edit_info_about_training_with_us
     then_i_can_edit_info_about_our_accredited_bodies
     then_i_can_edit_info_about_disabilities_and_other_needs
-    then_i_can_edit_contact_details
   end
 
   def given_i_am_a_provider_user
@@ -75,26 +74,6 @@ feature "About Your Organisation section" do
     expect(page).to have_content "Your changes have been published"
     within_summary_row "Training with disabilities and other needs" do
       expect(page).to have_content "Updated: training with disabilities"
-    end
-  end
-
-  def then_i_can_edit_contact_details
-    provider_details_show_page.email_link.click
-
-    provider_contact_details_edit_page.email.set "updated@email.com"
-    provider_contact_details_edit_page.telephone.set "11111 111111"
-    provider_contact_details_edit_page.address1.set "123 Updated Street"
-    provider_details_edit_page.save_and_publish.click
-
-    expect(page).to have_content "Your changes have been published"
-    within_summary_row "Email address" do
-      expect(page).to have_content "updated@email.com"
-    end
-    within_summary_row "Telephone number" do
-      expect(page).to have_content "11111 111111"
-    end
-    within_summary_row "Contact address" do
-      expect(page).to have_content "123 Updated Street"
     end
   end
 end
