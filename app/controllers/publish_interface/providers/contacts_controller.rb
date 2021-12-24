@@ -2,10 +2,14 @@ module PublishInterface
   module Providers
     class ContactsController < PublishInterfaceController
       def edit
+        authorize(provider, :edit?)
+
         @provider_contact_form = ProviderContactForm.new(provider)
       end
 
       def update
+        authorize(provider, :update?)
+
         @provider_contact_form = ProviderContactForm.new(provider, params: provider_contact_params)
 
         if @provider_contact_form.save!

@@ -2,10 +2,14 @@ module PublishInterface
   module Providers
     class VisasController < PublishInterfaceController
       def edit
+        authorize(provider, :edit?)
+
         @provider_visa_form = ProviderVisaForm.new(provider)
       end
 
       def update
+        authorize(provider, :update?)
+
         @provider_visa_form = ProviderVisaForm.new(provider, params: provider_visa_params)
 
         if @provider_visa_form.save!
