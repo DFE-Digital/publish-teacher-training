@@ -14,7 +14,10 @@ module Filters
       end
 
       it "renders all the correct details" do
-        # TODO: Add more expected attributes here
+        expect(component).to have_text("Name or email")
+        expect(component).to have_text("User type")
+        expect(component).to have_text("Admin User")
+        expect(component).to have_text("Provider User")
       end
     end
   end

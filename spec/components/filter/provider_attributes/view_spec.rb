@@ -14,7 +14,8 @@ module Filters
       end
 
       it "renders all the correct details" do
-        # TODO: Add more expected attributes here
+        expect(component).to have_text("Provider name or code")
+        expect(component).to have_text("Course code")
       end
     end
   end

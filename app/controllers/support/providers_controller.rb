@@ -61,10 +61,6 @@ module Support
       RecruitmentCycle.current.providers.order(:provider_name).includes(:courses, :users)
     end
 
-    def filters
-      @filters ||= Support::Filters::ProviderFilter.new(params: filter_params).filters
-    end
-
     def filter_params
       @filter_params ||= params.except(:commit).permit(:provider_search, :course_search, :page)
     end
