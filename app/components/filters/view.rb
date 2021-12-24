@@ -2,11 +2,10 @@
 
 module Filters
   class View < ViewComponent::Base
-    attr_accessor :filters, :filter_actions, :filter_model
+    attr_accessor :filters, :filter_model
 
-    def initialize(filters:, filter_model:, filter_actions: nil)
+    def initialize(filters:, filter_model:)
       @filters = filters
-      @filter_actions = filter_actions
       @filter_model = filter_model
       super
     end
