@@ -16,8 +16,6 @@ class Course < ApplicationRecord
   has_associated_audits
   audited
 
-  attr_accessor :month, :day, :year
-
   validates :course_code,
             uniqueness: { scope: :provider_id },
             presence: true,

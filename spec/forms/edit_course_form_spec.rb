@@ -13,28 +13,28 @@ module Support
     describe "#save" do
       context "form is assigned valid details" do
         it "returns true" do
-          subject.assign_attributes(course_code: "T92", name: "Universitry of Oxfords", day: "2", month: "9", year: "2022")
+          subject.assign_attributes(course_code: "T92", name: "Universitry of Oxfords", start_date_day: "2", start_date_month: "9", start_date_year: "2022")
           expect(subject.save).to eq(true)
         end
       end
 
       context "form is assigned invalid date value" do
         it "returns true" do
-          subject.assign_attributes(course_code: "T92", name: "Universitry of Oxfords", day: "222", month: "9", year: "2022")
+          subject.assign_attributes(course_code: "T92", name: "Universitry of Oxfords", start_date_day: "222", start_date_month: "9", start_date_year: "2022")
           expect(subject.save).to eq(false)
         end
       end
 
       context "form is assigned blank values" do
         it "returns false" do
-          subject.assign_attributes(course_code: "", name: "", day: "", month: "", year: "")
+          subject.assign_attributes(course_code: "", name: "", start_date_day: "", start_date_month: "", start_date_year: "")
           expect(subject.save).to eq(false)
         end
       end
 
-      context "form is assigned invalid date year" do
+      context "form is assigned invalid date start_date_year" do
         it "returns false" do
-          subject.assign_attributes(course_code: "T92", name: "Universitry of Oxfords", day: "2", month: "9", year: "2027")
+          subject.assign_attributes(course_code: "T92", name: "Universitry of Oxfords", start_date_day: "2", start_date_month: "9", start_date_year: "2027")
           expect(subject.save).to eq(false)
         end
       end
@@ -43,7 +43,7 @@ module Support
     describe "#valid?" do
       context "form is assigned date with valid format" do
         it "can return true if valid start date" do
-          subject.assign_attributes(course_code: "T92", name: "Universitry of Oxfords", day: "2", month: "9", year: "2022")
+          subject.assign_attributes(course_code: "T92", name: "Universitry of Oxfords", start_date_day: "2", start_date_month: "9", start_date_year: "2022")
           subject.save
           subject.valid?
 
@@ -55,7 +55,7 @@ module Support
 
       context "form is assigned date with invalid format" do
         it "can return date format error only" do
-          subject.assign_attributes(course_code: "T92", name: "Universitry of Oxfords", day: "111", month: "90", year: "2022")
+          subject.assign_attributes(course_code: "T92", name: "Universitry of Oxfords", start_date_day: "111", start_date_month: "90", start_date_year: "2022")
           subject.save
 
           expect(subject.valid?).to eq(false)
@@ -66,7 +66,7 @@ module Support
 
       context "form is assigned date args with blank values" do
         it "can promote and return errors" do
-          subject.assign_attributes(course_code: "", name: "", day: "", month: "", year: "")
+          subject.assign_attributes(course_code: "", name: "", start_date_day: "", start_date_month: "", start_date_year: "")
           subject.save
           subject.valid?
 
@@ -79,7 +79,7 @@ module Support
 
       context "form is assigned date args with date outside current cycle" do
         it "can promote and return errors" do
-          subject.assign_attributes(course_code: "T92", name: "Universitry of Oxfords", day: "2", month: "9", year: "2027")
+          subject.assign_attributes(course_code: "T92", name: "Universitry of Oxfords", start_date_day: "2", start_date_month: "9", start_date_year: "2027")
           subject.save
           subject.valid?
 
@@ -92,21 +92,21 @@ module Support
     describe "#start_date" do
       context "form is assigned valid date args" do
         it "returns a date object" do
-          subject.assign_attributes(course_code: "T92", name: "Universitry of Oxfords", day: "2", month: "9", year: "2022")
+          subject.assign_attributes(course_code: "T92", name: "Universitry of Oxfords", start_date_day: "2", start_date_month: "9", start_date_year: "2022")
           expect(subject.start_date).to eq(Date.new(2022, 9, 2))
         end
       end
 
-      context "form is assigned invalid date year" do
+      context "form is assigned invalid date start_date_year" do
         it "returns a date object" do
-          subject.assign_attributes(course_code: "T92", name: "Universitry of Oxfords", day: "2", month: "9", year: "2027")
+          subject.assign_attributes(course_code: "T92", name: "Universitry of Oxfords", start_date_day: "2", start_date_month: "9", start_date_year: "2027")
           expect(subject.start_date).to eq(Date.new(2027, 9, 2))
         end
       end
 
       context "form is assigned invalid date args" do
         it "returns struct object" do
-          subject.assign_attributes(course_code: "T92", name: "Universitry of Oxfords", day: "222", month: "90", year: "2022")
+          subject.assign_attributes(course_code: "T92", name: "Universitry of Oxfords", start_date_day: "222", start_date_month: "90", start_date_year: "2022")
           output = subject.start_date
           expect(output).not_to be_instance_of(Date)
           expect(output.day).to eq("222")
@@ -117,7 +117,7 @@ module Support
 
       context "form is assigned blank values" do
         it "returns struct object" do
-          subject.assign_attributes(course_code: "", name: "", day: "", month: "", year: "")
+          subject.assign_attributes(course_code: "", name: "", start_date_day: "", start_date_month: "", start_date_year: "")
           output = subject.start_date
           expect(output).not_to be_instance_of(Date)
           expect(output.day).to eq("")

@@ -8,7 +8,7 @@ module Support
     ].freeze
 
     attr_accessor(*FIELDS)
-    attr_accessor :day, :month, :year, :course
+    attr_accessor :start_date_day, :start_date_month, :start_date_year, :course
     validate :validate_start_date_format
 
     def initialize(course)
@@ -17,9 +17,9 @@ module Support
       super(
         course_code: @course.course_code,
         name: @course.name,
-        day: @course.start_date&.day,
-        month: @course.start_date&.month,
-        year: @course.start_date&.year,
+        start_date_day: @course.start_date&.day,
+        start_date_month: @course.start_date&.month,
+        start_date_year: @course.start_date&.year,
       )
     end
 
@@ -44,9 +44,9 @@ module Support
   private
 
     def check_start_date
-      date_args = [year, month, day].map(&:to_i)
+      date_args = [start_date_year, start_date_month, start_date_day].map(&:to_i)
 
-      Date.valid_date?(*date_args) ? Date.new(*date_args) : Struct.new(:day, :month, :year).new(day, month, year)
+      Date.valid_date?(*date_args) ? Date.new(*date_args) : Struct.new(:day, :month, :year).new(start_date_day, start_date_month, start_date_year)
     end
 
     def assign_attributes_to_course
@@ -75,7 +75,7 @@ module Support
     end
 
     def date_args_blank?
-      [year, month, day].any?(&:blank?)
+      [start_date_year, start_date_month, start_date_day].any?(&:blank?)
     end
   end
 end

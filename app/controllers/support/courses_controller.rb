@@ -42,9 +42,9 @@ module Support
 
     def start_date_field_to_attribute(key)
       case key
-      when "start_date(3i)" then "day"
-      when "start_date(2i)" then "month"
-      when "start_date(1i)" then "year"
+      when "start_date(3i)" then "start_date_day"
+      when "start_date(2i)" then "start_date_month"
+      when "start_date(1i)" then "start_date_year"
       else key
       end
     end
