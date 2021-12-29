@@ -87,7 +87,7 @@
         "Email address",
         @provider.email,
         %w[email],
-        action_path: "#{edit_publish_provider_recruitment_cycle_contact_path(@provider.provider_code, @provider.recruitment_cycle_year)}#email",
+        action_path: "#{contact_publish_provider_recruitment_cycle_path(@provider.provider_code, @provider.recruitment_cycle_year)}#email",
         action_visually_hidden_text: "email address",
       ) %>
 
@@ -97,7 +97,7 @@
         "Telephone number",
         @provider.telephone,
         %w[telephone],
-        action_path: "#{edit_publish_provider_recruitment_cycle_contact_path(@provider.provider_code, @provider.recruitment_cycle_year)}#telephone",
+        action_path: "#{contact_publish_provider_recruitment_cycle_path(@provider.provider_code, @provider.recruitment_cycle_year)}#telephone",
         action_visually_hidden_text: "telephone number",
       ) %>
 
@@ -107,7 +107,7 @@
         "Website",
         @provider.website,
         %w[website],
-        action_path: "#{edit_publish_provider_recruitment_cycle_contact_path(@provider.provider_code, @provider.recruitment_cycle_year)}#website",
+        action_path: "#{contact_publish_provider_recruitment_cycle_path(@provider.provider_code, @provider.recruitment_cycle_year)}#website",
         action_visually_hidden_text: "website",
       ) %>
 
@@ -117,7 +117,7 @@
         "UKPRN",
         @provider.ukprn,
         %w[ukprn],
-        action_path: "#{edit_publish_provider_recruitment_cycle_contact_path(@provider.provider_code, @provider.recruitment_cycle_year)}#ukprn",
+        action_path: "#{contact_publish_provider_recruitment_cycle_path(@provider.provider_code, @provider.recruitment_cycle_year)}#ukprn",
         action_visually_hidden_text: "UKPRN",
       ) %>
 
@@ -128,7 +128,7 @@
           "URN",
           @provider.urn,
           %w[urn],
-          action_path: "#{edit_publish_provider_recruitment_cycle_contact_path(@provider.provider_code, @provider.recruitment_cycle_year)}#urn",
+          action_path: "#{contact_publish_provider_recruitment_cycle_path(@provider.provider_code, @provider.recruitment_cycle_year)}#urn",
           action_visually_hidden_text: "URN",
         ) %>
       <% end %>
@@ -139,7 +139,7 @@
         "Contact address",
         @provider.full_address_with_breaks,
         %w[address1 address2 address3 address4 postcode],
-        action_path: "#{edit_publish_provider_recruitment_cycle_contact_path(@provider.provider_code, @provider.recruitment_cycle_year)}#address",
+        action_path: "#{contact_publish_provider_recruitment_cycle_path(@provider.provider_code, @provider.recruitment_cycle_year)}#address",
         action_visually_hidden_text: "contact address",
       ) %>
     <% end %>

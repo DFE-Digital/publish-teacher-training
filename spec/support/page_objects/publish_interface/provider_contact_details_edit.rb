@@ -1,7 +1,7 @@
 module PageObjects
   module PublishInterface
     class ProviderContactDetailsEdit < PageObjects::Base
-      set_url "/publish/organisations/{provider_code}/{recruitment_cycle_year}/contact/edit"
+      set_url "/publish/organisations/{provider_code}/{recruitment_cycle_year}/contact"
 
       element :error_summary, ".govuk-error-summary"
       element :email, "#publish-interface-provider-contact-form-email-field"
