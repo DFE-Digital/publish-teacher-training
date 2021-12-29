@@ -26,8 +26,6 @@ class CourseEnrichment < ApplicationRecord
     status.in? %w[draft rolled_over]
   end
 
-  validates :course, presence: true
-
   # About this course
 
   validates :about_course, presence: true, on: :publish
