@@ -24,10 +24,10 @@ RSpec.configure do |config|
   # the root example_group in your specs, e.g. describe '...', swagger_doc: 'v2/swagger.json'
   swagger_v1_template = YAML.load_file(Rails.root.join("swagger/public_v1/template.yml"))
   swagger_v1_template["components"]["schemas"] ||= {}
-  additional_component_schemas = Dir[Rails.root.join("swagger/public_v1/component_schemas/*.yml")].map do |path|
+  additional_component_schemas = Dir[Rails.root.join("swagger/public_v1/component_schemas/*.yml")].to_h do |path|
     component_name = File.basename(path, ".yml")
     [component_name, YAML.load_file(path)]
-  end.to_h
+  end
   swagger_v1_template["components"]["schemas"].merge!(additional_component_schemas)
   swagger_v1_template["components"]["schemas"] = swagger_v1_template["components"]["schemas"].sort.to_h
   config.swagger_docs = {
