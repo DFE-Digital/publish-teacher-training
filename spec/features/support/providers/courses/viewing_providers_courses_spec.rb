@@ -17,7 +17,7 @@ private
   end
 
   def provider
-    @provider ||= create(:provider, courses: [build(:course), build(:course)], discarded_at: Time.zone.now)
+    @provider ||= create(:provider, courses: [build(:course)], discarded_at: Time.zone.now)
   end
 
   def and_there_is_a_discarded_provider_with_courses

@@ -26,6 +26,10 @@ module FeatureHelpers
       @provider_courses_index_page ||= PageObjects::Support::Provider::CoursesIndex.new
     end
 
+    def provider_locations_index_page
+      @provider_locations_index_page ||= PageObjects::Support::Provider::LocationsIndex.new
+    end
+
     def course_edit_page
       @course_edit_page ||= PageObjects::Support::Provider::CourseEdit.new
     end
