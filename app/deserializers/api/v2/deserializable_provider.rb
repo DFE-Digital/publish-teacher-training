@@ -38,8 +38,7 @@ module API
       def reverse_mapping
         declared_attributes = DeserializableProvider.attr_blocks.keys
         declared_attributes
-          .map { |key| [key.to_sym, "/data/attributes/#{key}"] }
-          .to_h
+          .to_h { |key| [key.to_sym, "/data/attributes/#{key}"] }
       end
     end
   end

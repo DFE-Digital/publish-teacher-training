@@ -271,7 +271,7 @@ module GovukTechDocs
 
       def get_renderer(file)
         template_path = File.join(File.dirname(__FILE__), "templates/#{file}")
-        template = File.open(template_path, "r").read
+        template = File.read(template_path)
         ERB.new(template)
       end
 
