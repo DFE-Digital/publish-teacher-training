@@ -45,7 +45,7 @@ end
 
 def parse_cells(text_table)
   cell_delimeters = /\||\+/
-  text_table.split(cell_delimeters).reject(&:empty?)
+  text_table.split(cell_delimeters).compact_blank
 end
 
 def is_a_row_delimeter?(row)

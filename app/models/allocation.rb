@@ -10,7 +10,6 @@ class Allocation < ApplicationRecord
 
   audited associated_with: :provider
 
-  validates :provider, :accredited_body, presence: true
   validates :number_of_places, numericality: true
 
   validate :accredited_body_is_an_accredited_body

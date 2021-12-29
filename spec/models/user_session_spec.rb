@@ -13,7 +13,7 @@ describe UserSession do
     end
 
     it "returns nil when the user has signed in and has not been recently active" do
-      session = { "user" => { "last_active_at" => Time.zone.now - 1.day } }
+      session = { "user" => { "last_active_at" => 1.day.ago } }
 
       user = described_class.load_from_session(session)
 

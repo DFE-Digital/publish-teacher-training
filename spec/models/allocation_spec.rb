@@ -14,11 +14,11 @@ RSpec.describe Allocation do
     end
 
     it "requires accredited_body" do
-      expect(subject.errors["accredited_body"]).to include("can't be blank")
+      expect(subject.errors["accredited_body"]).to include("must exist")
     end
 
     it "requires provider" do
-      expect(subject.errors["provider"]).to include("can't be blank")
+      expect(subject.errors["provider"]).to include("must exist")
     end
 
     it "requires the accredited_body to be an accredited_body" do
