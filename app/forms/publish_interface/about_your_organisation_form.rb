@@ -4,8 +4,8 @@ module PublishInterface
     include ActiveModel::Validations
 
     FIELDS = %i[
-      train_with_us train_with_disability email telephone urn website ukprn
-      address1 address2 address3 address4 postcode region_code
+      train_with_us
+      train_with_disability
     ].freeze
 
     attr_accessor :provider

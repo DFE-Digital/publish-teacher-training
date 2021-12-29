@@ -1,18 +1,18 @@
 module PublishInterface
   module Providers
-    class VisasController < PublishInterfaceController
+    class ContactsController < PublishInterfaceController
       def edit
         authorize(provider, :edit?)
 
-        @provider_visa_form = ProviderVisaForm.new(provider)
+        @provider_contact_form = ProviderContactForm.new(provider)
       end
 
       def update
         authorize(provider, :update?)
 
-        @provider_visa_form = ProviderVisaForm.new(provider, params: provider_visa_params)
+        @provider_contact_form = ProviderContactForm.new(provider, params: provider_contact_params)
 
-        if @provider_visa_form.save!
+        if @provider_contact_form.save!
           flash[:success] = I18n.t("success.published")
 
           redirect_to details_publish_provider_recruitment_cycle_path(
@@ -26,12 +26,8 @@ module PublishInterface
 
     private
 
-      def provider_visa_params
-        return { can_sponsor_student_visa: nil } if params[:publish_interface_provider_visa_form].blank?
-
-        params.require(:publish_interface_provider_visa_form).permit(*ProviderVisaForm::FIELDS).transform_values do |value|
-          ActiveModel::Type::Boolean.new.cast(value)
-        end
+      def provider_contact_params
+        params.require(:publish_interface_provider_contact_form).permit(*ProviderContactForm::FIELDS)
       end
 
       def provider
