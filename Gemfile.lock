@@ -465,10 +465,10 @@ GEM
       ruby-graphviz (~> 1.2)
     rails-html-sanitizer (1.4.2)
       loofah (~> 2.3)
-    rails_semantic_logger (4.6.1)
+    rails_semantic_logger (4.9.0)
       rack
-      railties (>= 3.2)
-      semantic_logger (~> 4.8)
+      railties (>= 5.1)
+      semantic_logger (~> 4.9)
     railties (6.1.4.4)
       actionpack (= 6.1.4.4)
       activesupport (= 6.1.4.4)
@@ -540,7 +540,7 @@ GEM
     ruby2_keywords (0.0.5)
     schema_to_scaffold (0.8.0)
       activesupport (>= 3.2.1)
-    semantic_logger (4.8.2)
+    semantic_logger (4.9.0)
       concurrent-ruby (~> 1.0)
     semantic_range (3.0.0)
     sentry-rails (4.8.1)
@@ -648,7 +648,7 @@ GEM
     websocket-extensions (0.1.5)
     xpath (3.2.0)
       nokogiri (~> 1.8)
-    zeitwerk (2.5.1)
+    zeitwerk (2.5.2)
 
 PLATFORMS
   ruby
