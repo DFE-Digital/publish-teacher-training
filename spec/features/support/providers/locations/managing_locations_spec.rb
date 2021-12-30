@@ -57,7 +57,7 @@ feature "Managing a provider's locations" do
   end
 
   def then_i_should_see_a_success_message
-    expect(page).to have_content(I18n.t("support.flash.updated"))
+    expect(page).to have_content(I18n.t("support.flash.updated", resource: "Location"))
   end
 
   def and_the_location_details_are_updated
