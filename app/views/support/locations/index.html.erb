@@ -14,7 +14,9 @@
       <% @sites.each do |site| %>
         <tr class="govuk-table__row location-row">
           <td class="govuk-table__cell name">
-            <span class="govuk-!-display-block govuk-!-margin-bottom-1"><%= site.location_name %></span>
+            <span class="govuk-!-display-block govuk-!-margin-bottom-1">
+              <%= govuk_link_to site.location_name, edit_support_provider_location_path(@provider, site) %>
+            </span>
           </td>
           <td class="govuk-table__cell code">
             <span class="govuk-!-display-block govuk-!-margin-bottom-1">

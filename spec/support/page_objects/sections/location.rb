@@ -8,6 +8,7 @@ module PageObjects
       element :name, ".name"
       element :code, ".code"
       element :urn, ".urn"
+      element :edit_link, ".name a"
     end
   end
 end
