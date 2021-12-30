@@ -2,8 +2,8 @@
 
 require "rails_helper"
 
-feature "Viewing a providers courses" do
-  scenario "i can a provider's locations" do
+feature "Managing a provider's locations" do
+  scenario "i can view a provider's locations" do
     given_i_am_authenticated(user: create(:user, :admin))
     when_i_visit_a_provider_locations_page
     then_i_should_see_a_list_of_locations
@@ -20,7 +20,7 @@ feature "Viewing a providers courses" do
     and_the_location_details_are_updated
   end
 
-  scenario "updating with invalid data" do
+  scenario "i cannot update with invalid data" do
     given_i_am_authenticated(user: create(:user, :admin))
     when_i_visit_a_provider_locations_page
     and_i_click_on_the_edit_link_for_a_location

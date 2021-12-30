@@ -40,7 +40,7 @@ module Support
 
     def update
       if provider.update(update_provider_params)
-        redirect_to support_provider_path(provider)
+        redirect_to support_provider_path(provider), flash: { success: t("support.flash.updated", resource: "Provider") }
       else
         render :edit
       end

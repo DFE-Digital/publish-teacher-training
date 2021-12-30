@@ -15,7 +15,7 @@ module Support
 
     def update
       if site.update(site_params)
-        redirect_to support_provider_locations_path(provider), flash: { success: t("support.flash.updated") }
+        redirect_to support_provider_locations_path(provider), flash: { success: t("support.flash.updated", resource: "Location") }
       else
         render :edit
       end

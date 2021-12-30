@@ -17,7 +17,7 @@ module Support
       @edit_course_form.assign_attributes(update_course_params)
 
       if @edit_course_form.save
-        redirect_to support_provider_courses_path(provider)
+        redirect_to support_provider_courses_path(provider), flash: { success: t("support.flash.updated", resource: "Course") }
       else
         render :edit
       end
