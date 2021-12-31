@@ -80,6 +80,9 @@ en:
           description: "The list of all users affiliated with a provider from current recruitment cycle with columns: provider_code, provider_name, provider_type, first_name, last_name, email_address"
     flash:
       updated: "%{resource} successfully updated"
+      deleted: "%{resource} successfully deleted"
+    actions:
+      delete: "Delete this %{resource}"
     update_record: "Update"
   activerecord:
     attributes:

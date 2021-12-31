@@ -13,7 +13,8 @@ module PageObjects
         element :building_and_street, "#site-address1-field"
         element :postcode, "#site-postcode-field"
 
-        element :update_record, ".govuk-button"
+        element :update_record, 'button.govuk-button[type="submit"]'
+        element :delete_record, 'input.govuk-button[type="submit"]'
 
         def errors
           within(error_summary) do
