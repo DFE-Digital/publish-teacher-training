@@ -469,6 +469,20 @@ describe Provider, type: :model do
     end
   end
 
+  describe "#discard_sites" do
+    let(:site) { build(:site) }
+    let(:provider) { create(:provider, sites: [site]) }
+
+    before do
+      provider.discard_sites
+    end
+
+    it "discards all of the providers sites" do
+      expect(provider.sites.count).to eq(0)
+      expect(site.discarded?).to be_truthy
+    end
+  end
+
   describe "#next_available_course_code" do
     let(:provider) { create(:provider) }
     let(:course1) { create(:course, provider: provider, course_code: "A123") }

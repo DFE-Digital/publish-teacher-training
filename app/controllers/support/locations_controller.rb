@@ -15,16 +15,26 @@ module Support
 
     def update
       if site.update(site_params)
-        redirect_to support_provider_locations_path(provider), flash: { success: t("support.flash.updated", resource: "Location") }
+        redirect_to support_provider_locations_path(provider), flash: { success: t("support.flash.updated", resource: flash_resource) }
       else
         render :edit
       end
+    end
+
+    def destroy
+      site.discard!
+
+      redirect_to support_provider_locations_path(provider), flash: { success: t("support.flash.deleted", resource: flash_resource) }
     end
 
   private
 
     def provider
       @provider ||= RecruitmentCycle.current.providers.find(params[:provider_id])
+    end
+
+    def flash_resource
+      @flash_resource ||= "Location"
     end
 
     def site_params

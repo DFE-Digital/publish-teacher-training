@@ -4,6 +4,7 @@ class Site < ApplicationRecord
   include PostcodeNormalize
   include RegionCode
   include TouchProvider
+  include Discard::Model
 
   POSSIBLE_CODES = (("A".."Z").to_a + ("0".."9").to_a + ["-"]).freeze
   EASILY_CONFUSED_CODES = %w[1 I 0 O -].freeze # these ought to be assigned last
@@ -21,7 +22,7 @@ class Site < ApplicationRecord
             :postcode,
             presence: true
   validates :postcode, postcode: true
-  validates :code, uniqueness: { scope: :provider_id, case_sensitive: false },
+  validates :code, uniqueness: { scope: :provider_id, case_sensitive: false, conditions: -> { where(discarded_at: nil) } },
                    format: { with: /\A[A-Z0-9\-]+\z/, message: "must contain only A-Z, 0-9 or -" },
                    presence: true
 

@@ -50,6 +50,23 @@ describe Site, type: :model do
     it { is_expected.to belong_to(:provider) }
   end
 
+  describe "discarded behaviour for code" do
+    let(:existing_code) { "AB" }
+    let(:site_with_code) { create(:site, code: existing_code, provider_id: provider.id) }
+
+    subject { create(:site, provider_id: provider.id, code: "B") }
+
+    before do
+      site_with_code.discard!
+      subject.code = existing_code
+    end
+
+    it "can be saved with a discarded code" do
+      expect { subject.save! }.not_to raise_error
+      expect(subject.reload.code).to eq(existing_code)
+    end
+  end
+
   describe "#touch_provider" do
     let(:site) { create(:site) }
 

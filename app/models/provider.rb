@@ -39,7 +39,7 @@ class Provider < ApplicationRecord
   has_many :user_permissions
   has_many :users_via_user_permission, through: :user_permissions, source: :users
 
-  has_many :sites
+  has_many :sites, -> { kept }, inverse_of: :provider
 
   has_many :user_notifications,
            foreign_key: :provider_code,
@@ -159,7 +159,10 @@ class Provider < ApplicationRecord
 
   acts_as_mappable lat_column_name: :latitude, lng_column_name: :longitude
 
-  before_discard { discard_courses }
+  before_discard do
+    discard_courses
+    discard_sites
+  end
 
   pg_search_scope :search, against: %i[provider_code provider_name], using: { tsearch: { prefix: true } }
 
@@ -296,6 +299,10 @@ class Provider < ApplicationRecord
 
   def discard_courses
     courses.each(&:discard)
+  end
+
+  def discard_sites
+    sites.each(&:discard)
   end
 
   def declared_visa_sponsorship?

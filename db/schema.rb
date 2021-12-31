@@ -10,11 +10,12 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_12_21_133521) do
+ActiveRecord::Schema.define(version: 2021_12_31_135738) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
   enable_extension "btree_gist"
+  enable_extension "citext"
   enable_extension "pg_buffercache"
   enable_extension "pg_stat_statements"
   enable_extension "plpgsql"
@@ -327,8 +328,11 @@ ActiveRecord::Schema.define(version: 2021_12_21_133521) do
     t.float "longitude"
     t.string "urn"
     t.uuid "uuid", default: -> { "uuid_generate_v4()" }, null: false
+    t.datetime "discarded_at"
+    t.index ["discarded_at"], name: "index_site_on_discarded_at"
     t.index ["latitude", "longitude"], name: "index_site_on_latitude_and_longitude"
-    t.index ["provider_id", "code"], name: "IX_site_provider_id_code", unique: true
+    t.index ["provider_id", "code"], name: "idx_site_code_discarded_at_not_null", where: "(discarded_at IS NOT NULL)"
+    t.index ["provider_id", "code"], name: "idx_site_code_discarded_at_null", where: "(discarded_at IS NULL)"
     t.index ["uuid"], name: "index_sites_unique_uuid", unique: true
   end
 
