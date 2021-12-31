@@ -24,6 +24,7 @@ en:
             edit: "Edit course details"
           locations:
             index: "Locations"
+            edit: "Edit location details"
         users:
           index: "Users"
           show: "User overview"
@@ -77,6 +78,9 @@ en:
         users:
           name: "Only users affiliated with a provider"
           description: "The list of all users affiliated with a provider from current recruitment cycle with columns: provider_code, provider_name, provider_type, first_name, last_name, email_address"
+    flash:
+      updated: "%{resource} successfully updated"
+    update_record: "Update"
   activerecord:
     attributes:
       course:

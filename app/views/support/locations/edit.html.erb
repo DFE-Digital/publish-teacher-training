@@ -1,0 +1,36 @@
+<%= render PageTitle::View.new(title: "support.providers.locations.edit") %>
+
+<h1 class="govuk-heading-l">Edit location details</h1>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds-from-desktop">
+    <%= form_with model: [:support, @site], local: true, url: support_provider_location_path do |f| %>
+
+      <%= f.govuk_error_summary %>
+
+      <%= f.govuk_text_field :location_name, label: { text: "Name", size: "m" } %>
+
+      <%= f.govuk_text_field(:urn, label: { text: "Unique Reference Number (URN)", size: "m" }, width: 10) %>
+
+      <%= f.govuk_text_field(:code, label: { text: "Location code", size: "m" }, width: 10) %>
+
+      <%= f.govuk_fieldset legend: { text: "Address", size: "m" } do %>
+        <%= f.govuk_text_field(:address1, label: { text: "Building and street"}) %>
+
+        <%= f.govuk_text_field(:address2, label: { hidden: true }) %>
+
+        <%= f.govuk_text_field(:address3, label: { text: "Town or city"}, width: "two-thirds") %>
+
+        <%= f.govuk_text_field(:address4, label: { text: "County"}, width: "two-thirds") %>
+
+        <%= f.govuk_text_field(:postcode, width: 10) %>
+      <% end %>
+
+      <%= f.govuk_submit t("support.update_record") %>
+    <% end %>
+
+    <p class="govuk-body">
+      <%= govuk_link_to(t("cancel"), support_provider_locations_path) %>
+    </p> 
+  </div>
+</div>
