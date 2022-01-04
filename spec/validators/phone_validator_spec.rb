@@ -1,14 +1,14 @@
 require "rails_helper"
 
+class PhoneValidatorTest
+  include ActiveRecord::Validations
+
+  attr_accessor :phone_number
+
+  validates :phone_number, phone: true
+end
+
 describe PhoneValidator do
-  class PhoneValidatorTest
-    include ActiveRecord::Validations
-
-    attr_accessor :phone_number
-
-    validates :phone_number, phone: true
-  end
-
   let(:model) do
     PhoneValidatorTest.new
   end
