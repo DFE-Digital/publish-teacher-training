@@ -14,11 +14,6 @@ module Filters
 
     it "renders all the correct details" do
       expect(component).to have_text("Filters")
-      # TODO: Add more expected attributes here
-    end
-
-    it "renders the attributes filter of the filter klass" do
-      # TODO: Check that the nested render happened
     end
   end
 end

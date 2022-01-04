@@ -13,9 +13,6 @@ module Filters
   private
 
     def tags_for_filter(filter, value)
-      # Sometimes we can have multiple filter values/tags, ie for box-checking filters.
-      # A lean solution to conflicting value vs values of filters is to treat all
-      # as values, hence the flatten.map
       [value].flatten.map do |v|
         { title: title_html(filter, v), remove_link: remove_select_tag_link(filter) }
       end
@@ -36,6 +33,10 @@ module Filters
     def remove_select_tag_link(filter)
       new_filters = filters.reject { |f| f == filter }
       new_filters.to_query.blank? ? nil : "?#{new_filters.to_query}"
+    end
+
+    def reload_path
+      send("support_#{filter_model.to_s.downcase.pluralize}_path".to_sym)
     end
   end
 end

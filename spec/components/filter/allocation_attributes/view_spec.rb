@@ -7,10 +7,10 @@ module Filters
     describe View do
       alias_method :component, :page
 
-      let(:filters) { nil }
+      let(:filters) { { text_search: "South Park Elementary" } }
 
       before do
-        render_inline(described_class.new(filters: nil))
+        render_inline(described_class.new(filters: filters))
       end
 
       it "renders all the correct details" do
