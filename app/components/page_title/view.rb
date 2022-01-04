@@ -6,6 +6,7 @@ class PageTitle::View < GovukComponent::Base
   attr_accessor :title
 
   def initialize(title: "", has_errors: false)
+    super(classes: classes, html_attributes: html_attributes)
     @title = title
     @has_errors = has_errors
   end

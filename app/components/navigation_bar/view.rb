@@ -4,6 +4,7 @@ class NavigationBar::View < GovukComponent::Base
   attr_reader :items, :current_path
 
   def initialize(items:, current_path:, current_user: {})
+    super(classes: classes, html_attributes: html_attributes)
     @items = items
     @current_path = current_path
     @current_user = current_user
