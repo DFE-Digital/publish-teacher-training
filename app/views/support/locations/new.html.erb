@@ -1,0 +1,23 @@
+<%= render PageTitle::View.new(title: "support.providers.locations.new") %>
+
+<h1 class="govuk-heading-l">Add a location</h1>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds-from-desktop">
+    <%= render partial: "form", locals: { site: @site, form_url: support_provider_locations_path } %>
+
+    <p class="govuk-body">
+      <%= govuk_link_to(t("cancel"), support_provider_locations_path) %>
+    </p>
+
+    <% if @site.persisted? %>
+      <p class="govuk-body">
+        <%= govuk_button_to t("support.actions.delete", resource: "location"),
+            support_provider_location_path(@provider, @site),
+            method: :delete,
+            class: "govuk-button govuk-button--warning" %>
+      </p>
+    <% end %>
+    
+  </div>
+</div>

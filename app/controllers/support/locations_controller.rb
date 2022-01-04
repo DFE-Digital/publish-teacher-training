@@ -8,6 +8,21 @@ module Support
       redirect_to support_providers_path
     end
 
+    def new
+      provider
+      @site = provider.sites.build
+    end
+
+    def create
+      @site = provider.sites.build(site_params)
+
+      if @site.save
+        redirect_to support_provider_locations_path(provider), flash: { success: t("support.flash.created", resource: flash_resource) }
+      else
+        render :new
+      end
+    end
+
     def edit
       provider
       site
