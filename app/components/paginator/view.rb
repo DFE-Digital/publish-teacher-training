@@ -11,6 +11,7 @@ module Paginator
     KAMINARI_LINKS_LIMIT = 5
 
     def initialize(scope:)
+      super
       @scope = scope
     end
 

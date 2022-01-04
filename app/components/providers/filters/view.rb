@@ -6,6 +6,7 @@ module Providers
       attr_accessor :filters, :filter_label, :filter_actions
 
       def initialize(filters:, filter_label:, filter_actions: nil)
+        super(classes: classes, html_attributes: html_attributes)
         @filters = filters
         @filter_actions = filter_actions
         @filter_label = filter_label

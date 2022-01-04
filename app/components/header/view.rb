@@ -6,6 +6,7 @@ class Header::View < GovukComponent::Base
   include ActiveModel
 
   def initialize(service_name:, items: nil)
+    super(classes: classes, html_attributes: html_attributes)
     @service_name = service_name
     @items = items
   end

@@ -6,18 +6,6 @@
 # Note that changes in the inspected code, or installation of new
 # versions of RuboCop, may require this file to be generated again.
 
-# Offense count: 8
-Lint/MissingSuper:
-  Exclude:
-    - 'app/components/flash_banner/view.rb'
-    - 'app/components/header/view.rb'
-    - 'app/components/navigation_bar/view.rb'
-    - 'app/components/page_title/view.rb'
-    - 'app/components/paginated_filter/view.rb'
-    - 'app/components/paginator/view.rb'
-    - 'app/components/providers/filters/view.rb'
-    - 'app/components/tab_navigation/view.rb'
-
 # Offense count: 1
 Lint/SelfAssignment:
   Exclude:
