@@ -6,18 +6,6 @@
 # Note that changes in the inspected code, or installation of new
 # versions of RuboCop, may require this file to be generated again.
 
-# Offense count: 7
-# Configuration parameters: AllowComments, AllowEmptyLambdas.
-Lint/EmptyBlock:
-  Exclude:
-    - 'spec/components/navigation_bar/view_spec.rb'
-    - 'spec/controllers/api/public/v1/subjects_controller_spec.rb'
-    - 'spec/factories/apiv2_token.rb'
-    - 'spec/factories/financial_incentives.rb'
-    - 'spec/factories/pgde_course.rb'
-    - 'spec/requests/api/v2/providers/courses/update_accrediting_provider_spec.rb'
-    - 'spec/requests/api/v2/providers/sites_spec.rb'
-
 # Offense count: 8
 Lint/MissingSuper:
   Exclude:

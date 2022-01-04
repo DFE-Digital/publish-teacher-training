@@ -45,7 +45,7 @@ jwt = Struct.new(
 
 FactoryBot.define do
   factory :apiv2, class: jwt do
-    payload {}
+    payload { nil }
     secret { Settings.authentication.secret }
     algorithm { Settings.authentication.algorithm }
     audience { Settings.authentication.audience }
