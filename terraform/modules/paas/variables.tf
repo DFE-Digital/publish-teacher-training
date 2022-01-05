@@ -28,6 +28,11 @@ variable app_environment {}
 
 variable app_environment_variables { type = map }
 
+variable "publish_gov_uk_host_names" {
+  default = []
+  type = list
+}
+
 locals {
   app_name_suffix              = var.app_environment != "review" ? var.app_environment : "pr-${var.web_app_host_name}"
   web_app_name                 = "teacher-training-api-${local.app_name_suffix}"
@@ -55,5 +60,10 @@ locals {
     restore_from_latest_snapshot_of = local.qa_postgres_service_instance
   }
   postgres_params = merge(local.postgres_extensions, var.app_environment == "review" ? local.review_app_postgres_params : {})
-  web_app_routes  = [cloudfoundry_route.web_app_service_gov_uk_route, cloudfoundry_route.web_app_cloudapps_digital_route]
+
+  web_app_routes = flatten([
+    cloudfoundry_route.web_app_cloudapps_digital_route,
+    cloudfoundry_route.web_app_service_gov_uk_route,
+    values(cloudfoundry_route.web_app_publish_gov_uk_route)
+  ])
 }
