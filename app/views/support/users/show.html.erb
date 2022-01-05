@@ -11,7 +11,7 @@
   <%= full_name(@user) %>
 </h1>
 
-<%= render "support/providers/list", providers: @providers %>
+<%= render "support/users/user_providers", providers: @providers %>
 
 <%= render Paginator::View.new(scope: @providers) %>
 

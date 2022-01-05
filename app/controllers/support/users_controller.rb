@@ -29,14 +29,6 @@ module Support
       end
     end
 
-    def remove_from_provider
-      if user.remove_access_to(provider)
-        redirect_to support_user_path(user), flash: { success: "#{provider.provider_name} removed from user" }
-      else
-        redirect_to support_user_path(user), flash: { success: "Unable to remove #{provider.provider_name} from user" }
-      end
-    end
-
   private
 
     def user_params
@@ -61,10 +53,6 @@ module Support
 
     def filter_params
       params.permit(:text_search, :page, :commit)
-    end
-
-    def provider
-      @provider ||= Provider.find(params["provider_id"])
     end
   end
 end

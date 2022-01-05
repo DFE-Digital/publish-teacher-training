@@ -6,7 +6,7 @@ feature "Deleting a provider from user" do
   before do
     given_i_am_authenticated(user: create(:user, :admin))
     and_a_user_provider_relationship_exists_to_remove
-    when_i_visit_the_user_show_page(@user.id)
+    when_i_visit_the_user_show_page
   end
 
   scenario "Deleting a user-provider relationship" do
@@ -23,8 +23,8 @@ private
     @user = create(:user, providers: [@provider])
   end
 
-  def when_i_visit_the_user_show_page(user_id)
-    users_show_page.load(id: user_id)
+  def when_i_visit_the_user_show_page
+    users_show_page.load(id: @user.id)
   end
 
   def when_i_click_the_remove_user_from_provider_button
@@ -36,7 +36,7 @@ private
   end
 
   def with_a_success_message
-    expect(users_show_page).to have_content("#{@provider.provider_name} removed from user")
+    expect(users_show_page).to have_content("#{@user.first_name} #{@user.last_name} removed from #{@provider.provider_name}")
   end
 
   def and_the_user_provider_relationship_is_destroyed

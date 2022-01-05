@@ -54,7 +54,8 @@ Rails.application.routes.draw do
       resources :locations, only: %i[index edit update destroy]
     end
     resources :users, only: %i[index show new create destroy]
-    post "/users/:id/remove_provider/:provider_id", to: "users#remove_from_provider", as: "remove_provider_from_user"
+
+    resources :user_permissions, only: %i[destroy]
 
     resources :allocations, only: %i[index show] do
       resources :uplifts, only: %i[edit update create new], controller: :allocation_uplifts
