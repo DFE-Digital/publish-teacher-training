@@ -59,9 +59,13 @@ describe API::V2::SerializableAccessRequest do
     it { is_expected.to have_attribute(:last_name).with_value(access_request.last_name) }
     it { is_expected.to have_attribute(:organisation).with_value(access_request.organisation) }
     it { is_expected.to have_attribute(:reason).with_value(access_request.reason) }
-    it { is_expected.to have_attribute(:request_date_utc).with_value(access_request.request_date_utc.iso8601) }
     it { is_expected.to have_attribute(:requester_id).with_value(access_request.requester_id) }
     it { is_expected.to have_attribute(:status).with_value(access_request.status) }
     it { is_expected.to have_attribute(:requester_email).with_value(access_request.requester_email) }
+
+    it "has a request date within 1s" do
+      request_time = Time.iso8601(access_request.request_date_utc.iso8601)
+      expect(Time.iso8601(subject["attributes"]["request_date_utc"])).to be_between(request_time - 1, request_time + 1)
+    end
   end
 end
