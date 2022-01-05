@@ -6,12 +6,6 @@
 # Note that changes in the inspected code, or installation of new
 # versions of RuboCop, may require this file to be generated again.
 
-# Offense count: 2
-Naming/AccessorMethodName:
-  Exclude:
-    - 'app/controllers/api/v2/providers_controller.rb'
-    - 'app/models/course.rb'
-
 # Offense count: 1
 # Configuration parameters: IgnoredPatterns.
 # SupportedStyles: snake_case, camelCase
