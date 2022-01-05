@@ -1,7 +1,7 @@
 module API
   module V2
     class ProvidersController < API::V2::ApplicationController
-      before_action :get_user, if: -> { params[:user_id].present? }
+      before_action :find_user, if: -> { params[:user_id].present? }
       before_action :build_recruitment_cycle
       before_action :build_provider, except: %i[index suggest suggest_any]
 
@@ -115,7 +115,7 @@ module API
                       )
       end
 
-      def get_user
+      def find_user
         @user = User.find(params[:user_id])
       end
 

@@ -82,12 +82,12 @@ class Course < ApplicationRecord
   has_many :course_subjects,
            -> { order :position },
            inverse_of: :course,
-           before_add: :set_subject_position
+           before_add: :assign_subject_position
 
   delegate :recruitment_cycle, :provider_code, to: :provider, allow_nil: true
   delegate :after_2021?, to: :recruitment_cycle, allow_nil: true, prefix: :recruitment_cycle
 
-  def set_subject_position(course_subject)
+  def assign_subject_position(course_subject)
     return unless course_subject.subject.secondary_subject?
 
     secondary_course_subjects = course_subjects.select { |cs| cs.subject.secondary_subject? }
