@@ -82,7 +82,7 @@ feature "Managing a provider's locations" do
   end
 
   def when_i_edit_the_location_details
-    provider_location_edit_page.location_form.location_name.set "Updated location name"
+    provider_location_edit_page.location_form.location_name.set("Updated location name")
   end
 
   def and_i_submit_for(page_object)

@@ -9,7 +9,6 @@ module Support
     end
 
     def new
-      provider
       @site = provider.sites.build
     end
 
