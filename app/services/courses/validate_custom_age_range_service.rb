@@ -6,9 +6,7 @@ module Courses
       if valid_age_range_regex.match(age_range_in_years)
         from_age = get_ages(age_range_in_years, valid_age_range_regex)["from"]
         to_age = get_ages(age_range_in_years, valid_age_range_regex)["to"]
-        if from_age_invalid?(from_age)
-          course.errors.add(:age_range_in_years, "^Age range must be a school age")
-        elsif to_age_invalid?(to_age)
+        if from_age_invalid?(from_age) || to_age_invalid?(to_age)
           course.errors.add(:age_range_in_years, "^Age range must be a school age")
         elsif to_age - from_age < 4
           course.errors.add(:age_range_in_years, "^Age range must cover at least 4 years")

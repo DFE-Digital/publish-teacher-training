@@ -6,13 +6,6 @@
 # Note that changes in the inspected code, or installation of new
 # versions of RuboCop, may require this file to be generated again.
 
-# Offense count: 2
-# Configuration parameters: IgnoreLiteralBranches, IgnoreConstantBranches.
-Lint/DuplicateBranch:
-  Exclude:
-    - 'app/services/courses/validate_custom_age_range_service.rb'
-    - 'docs/lib/govuk_tech_docs/open_api/extension.rb'
-
 # Offense count: 7
 # Configuration parameters: AllowComments, AllowEmptyLambdas.
 Lint/EmptyBlock:
