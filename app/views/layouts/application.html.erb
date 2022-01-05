@@ -38,10 +38,11 @@
       ) %>
     <% end %>
 
-    <%= yield :navigation_bar %>
 
     <div class="govuk-width-container">
       <div class="govuk-width-container">
+        <%= render PhaseBanner::View.new %>
+        <%= yield :navigation_bar %>
         <%= yield :breadcrumbs %>
         <%= yield :before_content %>
       </div>

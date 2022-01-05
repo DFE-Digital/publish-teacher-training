@@ -14,4 +14,5 @@ bg_jobs:
 skylight:
   enable: true
 environment:
+  label: "Load test"
   name: "loadtest"

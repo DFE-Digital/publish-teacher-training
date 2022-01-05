@@ -14,6 +14,7 @@ bg_jobs:
 skylight:
   enable: true
 environment:
+  label: "QA"
   name: "qa"
 
 authentication:

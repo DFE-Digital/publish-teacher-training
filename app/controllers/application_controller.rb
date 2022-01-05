@@ -23,6 +23,7 @@ private
   def current_user
     @current_user ||= User.find_by(email: user_session&.email)
   end
+  helper_method :current_user
 
   def authenticated?
     current_user.present?

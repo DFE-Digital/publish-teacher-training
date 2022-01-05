@@ -10,4 +10,5 @@ bg_jobs:
     class: "SaveStatisticJob"
     queue: save_statistic
 environment:
-  name: "development"
+  label: "Test"
+  name: "test"

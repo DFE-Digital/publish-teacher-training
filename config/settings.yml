@@ -1,5 +1,6 @@
 environment:
   name: "beta"
+  label: "Beta"
 support_email: becomingateacher@digital.education.gov.uk
 
 # URL of this app for the callback after sigining in
@@ -64,6 +65,9 @@ google:
     dataset: replaceme
     api_json_key: ""
     table_name: events
+
+feedback:
+  link: https://docs.google.com/forms/d/e/1FAIpQLSfZNWa6zx30SkF_1EAwqNPZHOgK8qYcVQ7uDyhi0P6oPm71zg/viewform
 
 features:
   send_request_data_to_bigquery: false
