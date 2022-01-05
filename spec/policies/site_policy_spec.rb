@@ -12,17 +12,16 @@ describe SitePolicy do
   end
 
   permissions :show? do
-    let(:organisation) { create(:organisation, users: [user]) }
     let(:site) { create(:site) }
     let!(:provider) {
       create(:provider,
              sites: [site],
-             organisations: [organisation])
+             users: [user])
     }
 
     it { is_expected.to permit(user, site) }
 
-    context "with a user outside the organisation" do
+    context "with a user outside the provider" do
       let(:other_user) { create(:user) }
 
       it { is_expected.not_to permit(other_user, site) }

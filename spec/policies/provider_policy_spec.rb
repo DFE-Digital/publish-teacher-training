@@ -5,10 +5,8 @@ describe ProviderPolicy do
   let(:admin) { build(:user, :admin) }
 
   describe "scope" do
-    let(:organisation) { create(:organisation, users: [user]) }
-
     it "limits the providers to those the user is assigned to" do
-      provider1 = create(:provider, organisations: [organisation])
+      provider1 = create(:provider, users: [user])
       _provider2 = create(:provider)
 
       expect(Pundit.policy_scope(user, Provider.all)).to eq [provider1]
@@ -23,8 +21,7 @@ describe ProviderPolicy do
 
   permissions :create? do
     let(:user_outside_org) { build(:user) }
-    let(:provider) { build(:provider) }
-    let!(:organisation) { build(:organisation, providers: [provider], users: [user]) }
+    let(:provider) { build(:provider, users: [user]) }
 
     it { is_expected.not_to permit(user, provider) }
     it { is_expected.not_to permit(user_outside_org, provider) }
@@ -32,7 +29,7 @@ describe ProviderPolicy do
   end
 
   permissions :can_show_training_provider? do
-    let(:allowed_user) { provider.users.first }
+    let(:allowed_user) { create(:user, providers: [provider]) }
     let(:not_allowed_user) { create(:user) }
 
     let(:provider) { course.accrediting_provider }

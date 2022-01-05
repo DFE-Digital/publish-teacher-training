@@ -9,10 +9,10 @@ class User < ApplicationRecord
 
   has_many :user_notifications, class_name: "UserNotification"
 
-  has_many :providers, through: :organisations
+  has_many :providers_via_organisations, through: :organisations, source: :providers
 
   has_many :user_permissions
-  has_many :providers_via_user_permissions, through: :user_permissions, source: :provider
+  has_many :providers, through: :user_permissions
 
   has_many :access_requests,
            foreign_key: :requester_id,
@@ -52,9 +52,8 @@ class User < ApplicationRecord
     "#{first_name} #{last_name} <#{email}>"
   end
 
-  # accepts array or single organisation
-  def remove_access_to(organisations_to_remove)
-    self.organisations = organisations - Array(organisations_to_remove)
+  def remove_access_to(providers_to_remove)
+    self.providers = providers - Array(providers_to_remove)
   end
 
   def associated_with_accredited_body?

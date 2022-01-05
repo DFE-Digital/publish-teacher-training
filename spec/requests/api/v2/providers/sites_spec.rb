@@ -2,7 +2,6 @@ require "rails_helper"
 
 describe "Sites API v2", type: :request do
   let(:user) { create(:user) }
-  let(:organisation) { create(:organisation, users: [user]) }
   let(:payload) { { email: user.email } }
   let(:credentials) { encode_to_credentials(payload) }
 
@@ -19,7 +18,7 @@ describe "Sites API v2", type: :request do
 
   let(:provider) {
     build(:provider,
-          organisations: [organisation])
+          users: [user])
   }
 
   subject { response }
@@ -130,7 +129,7 @@ describe "Sites API v2", type: :request do
     context "with two recruitment cycles" do
       let(:next_provider) {
         create :provider,
-               organisations: [organisation],
+               users: [user],
                provider_code: provider.provider_code,
                recruitment_cycle: next_cycle,
                sites: [next_site1, next_site2]

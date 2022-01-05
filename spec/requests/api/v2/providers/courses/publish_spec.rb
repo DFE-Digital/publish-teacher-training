@@ -1,9 +1,8 @@
 require "rails_helper"
 
 describe "Publish API v2", type: :request do
-  let(:user)         { create(:user) }
-  let(:organisation) { create(:organisation, users: [user]) }
-  let(:provider)       { create :provider, organisations: [organisation] }
+  let(:user) { create(:user) }
+  let(:provider) { create :provider, users: [user] }
   let(:accredited_body) { create :provider, :accredited_body }
   let(:payload) { { email: user.email } }
   let(:credentials) { encode_to_credentials(payload) }
@@ -91,7 +90,7 @@ describe "Publish API v2", type: :request do
       end
 
       context "in the next cycle" do
-        let(:provider) { create :provider, :next_recruitment_cycle, organisations: [organisation] }
+        let(:provider) { create :provider, :next_recruitment_cycle, users: [user] }
 
         it "publishes a course" do
           perform_enqueued_jobs do

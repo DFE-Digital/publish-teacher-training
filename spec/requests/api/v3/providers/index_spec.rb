@@ -1,14 +1,12 @@
 require "rails_helper"
 
 describe "GET v3/recruitment_cycle/:recruitment_cycle_year/providers" do
-  let(:organisation) { create(:organisation) }
   let(:recruitment_cycle) { find_or_create :recruitment_cycle }
 
   let!(:provider) {
     create(:provider,
            provider_code: "1AT",
            provider_name: "First provider",
-           organisations: [organisation],
            contacts: [contact])
   }
 
@@ -53,7 +51,7 @@ describe "GET v3/recruitment_cycle/:recruitment_cycle_year/providers" do
 
   context "with unalphabetical ordering in the database" do
     let(:second_alphabetical_provider) do
-      create(:provider, provider_name: "Zork", organisations: [organisation])
+      create(:provider, provider_name: "Zork")
     end
     let(:provider_names_in_response) {
       JSON.parse(subject.body)["data"].map { |provider|
@@ -78,7 +76,6 @@ describe "GET v3/recruitment_cycle/:recruitment_cycle_year/providers" do
     let(:next_recruitment_cycle) { create :recruitment_cycle, :next }
     let(:next_provider) {
       create :provider,
-             organisations: [organisation],
              provider_code: provider.provider_code,
              recruitment_cycle: next_recruitment_cycle
     }
@@ -122,7 +119,6 @@ describe "GET v3/recruitment_cycle/:recruitment_cycle_year/providers" do
       create(:provider,
              provider_code: "2AT",
              provider_name: "Second provider",
-             organisations: [organisation],
              contacts: [contact])
     end
 

@@ -125,6 +125,7 @@ describe "Access Request API V2", type: :request do
 
     context "when authorised" do
       before do
+        first_access_request
         Timecop.freeze
         access_requests_show_route
       end

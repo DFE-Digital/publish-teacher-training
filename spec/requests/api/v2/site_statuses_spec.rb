@@ -1,8 +1,8 @@
 require "rails_helper"
 
 describe "Site Helpers API V2" do
-  let(:user) { create(:user).tap { |u| organisation.users << u } }
-  let(:organisation) { site_status.course.provider.organisations.first }
+  let(:provider) { site_status.course.provider }
+  let(:user) { create(:user).tap { |u| provider.users << u } }
   let(:payload) { { email: user.email } }
   let(:credentials) { encode_to_credentials(payload) }
   let(:site_status) { create :site_status }

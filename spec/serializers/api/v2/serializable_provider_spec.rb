@@ -5,7 +5,6 @@ describe API::V2::SerializableProvider do
   let(:accrediting_provider) { create(:provider, :accredited_body) }
   let(:course) { create(:course, accrediting_provider: accrediting_provider) }
   let(:user) { create(:user) }
-  let(:organisation) { create(:organisation, users: [user]) }
   let(:site) { create(:site) }
   let(:contact) { create(:contact) }
   let(:provider) do
@@ -14,7 +13,7 @@ describe API::V2::SerializableProvider do
            courses: [course],
            contacts: [contact],
            sites: [site],
-           organisations: [organisation]
+           users: [user]
   end
   let(:resource) { described_class.new object: provider }
   let(:jsonapi_renderer) { JSONAPI::Serializable::Renderer.new }

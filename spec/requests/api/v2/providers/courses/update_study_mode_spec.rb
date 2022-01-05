@@ -2,9 +2,8 @@ require "rails_helper"
 
 describe "PATCH /providers/:provider_code/courses/:course_code" do
   let(:jsonapi_renderer) { JSONAPI::Serializable::Renderer.new }
-  let(:organisation)      { create :organisation }
-  let(:provider)          { create :provider, organisations: [organisation], sites: [site] }
-  let(:user)              { create :user, organisations: [organisation] }
+  let(:provider)          { create :provider, users: [user], sites: [site] }
+  let(:user)              { create :user }
   let(:payload)           { { email: user.email } }
   let(:credentials)       { encode_to_credentials(payload) }
   let(:course)            {

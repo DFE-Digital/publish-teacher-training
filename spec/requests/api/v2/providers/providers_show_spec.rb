@@ -4,8 +4,7 @@ describe "Providers API v2", type: :request do
   describe "GET /providers#show" do
     let(:request_path) { "/api/v2/providers/#{provider.provider_code}" }
     let(:request_params) { {} }
-    let(:user) { create(:user, organisations: [organisation]) }
-    let(:organisation) { create(:organisation) }
+    let(:user) { create(:user) }
     let(:payload) { { email: user.email } }
     let(:credentials) { encode_to_credentials(payload) }
 
@@ -24,7 +23,7 @@ describe "Providers API v2", type: :request do
       create(:provider,
              :accredited_body,
              sites: [site],
-             organisations: [organisation],
+             users: [user],
              accrediting_provider_enrichments: accrediting_provider_enrichments,
              courses: courses,
              contacts: [contact],
@@ -179,7 +178,7 @@ describe "Providers API v2", type: :request do
       let(:next_recruitment_cycle) { create :recruitment_cycle, :next }
       let(:next_provider) {
         create :provider,
-               organisations: [organisation],
+               users: [user],
                provider_code: provider.provider_code,
                recruitment_cycle: next_recruitment_cycle
       }

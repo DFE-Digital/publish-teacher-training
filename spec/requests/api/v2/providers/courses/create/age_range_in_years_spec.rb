@@ -2,10 +2,9 @@ require "rails_helper"
 
 RSpec.describe "POST /providers/:provider_code/courses/:course_code" do
   let(:jsonapi_renderer) { JSONAPI::Serializable::Renderer.new }
-  let(:organisation)      { create :organisation }
-  let(:provider)          { create :provider, organisations: [organisation], recruitment_cycle: recruitment_cycle, sites: [site] }
+  let(:provider)          { create :provider, users: [user], recruitment_cycle: recruitment_cycle, sites: [site] }
   let(:recruitment_cycle) { find_or_create :recruitment_cycle }
-  let(:user)              { create :user, organisations: [organisation] }
+  let(:user)              { create :user }
   let(:payload)           { { email: user.email } }
   let(:credentials)       { encode_to_credentials(payload) }
   let(:course)            {

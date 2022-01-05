@@ -5,15 +5,13 @@ RSpec.describe UserAssociationsService::Create do
 
   describe "#call" do
     context "when adding to a single organsation" do
-      let(:accredited_body) { create(:provider, :accredited_body) }
-      let(:organisation) { create(:organisation, users: [user], providers: [accredited_body]) }
+      let(:accredited_body) { create(:provider, :accredited_body, users: [user]) }
 
       let(:new_accredited_body) { create(:provider, :accredited_body) }
-      let(:new_organisation) { create(:organisation, providers: [new_accredited_body]) }
 
       subject do
         described_class.call(
-          organisation: new_organisation,
+          provider: new_accredited_body,
           user: user,
         )
       end
@@ -40,15 +38,14 @@ RSpec.describe UserAssociationsService::Create do
         end
 
         before do
-          organisation
           user_notification
         end
 
-        it "creates organisation_users association" do
+        it "creates user_permissions association" do
           subject
 
-          expect(new_organisation.users).to eq([user])
-          expect(user.organisations).to include(organisation, new_organisation)
+          expect(new_accredited_body.users).to eq([user])
+          expect(user.providers).to include(accredited_body, new_accredited_body)
         end
 
         it "creates user_notifications association with the previous enabled value" do
@@ -60,15 +57,11 @@ RSpec.describe UserAssociationsService::Create do
       end
 
       context "when user has never set notification preferences" do
-        before do
-          organisation
-        end
-
-        it "creates organisation_users association" do
+        it "creates user_permissions association" do
           subject
 
-          expect(new_organisation.users).to eq([user])
-          expect(user.organisations).to include(organisation, new_organisation)
+          expect(new_accredited_body.users).to eq([user])
+          expect(user.providers).to include(accredited_body, new_accredited_body)
         end
 
         it "doesn't create user_notifications association" do
@@ -79,29 +72,16 @@ RSpec.describe UserAssociationsService::Create do
       end
     end
 
-    context "when adding to all organsations" do
+    context "when adding to all providers" do
       subject do
         described_class.call(
           user: user,
-          all_organisations: true,
+          all_providers: true,
         )
       end
 
       let(:accredited_body) { create(:provider, :accredited_body) }
-      let(:organisation1) do
-        create(:organisation,
-               providers: [accredited_body])
-      end
-
-      let(:organisation2) do
-        create(:organisation,
-               providers: [create(:provider, :accredited_body)])
-      end
-
-      before do
-        organisation1
-        organisation2
-      end
+      let!(:provider1) { create(:provider, :accredited_body) }
 
       context "when user have saved notification preferences" do
         let(:user_notification) do
@@ -118,10 +98,10 @@ RSpec.describe UserAssociationsService::Create do
           user_notification
         end
 
-        it "creates organisation_users association" do
+        it "creates user_permissions association" do
           subject
 
-          expect(user.organisations).to match_array(Organisation.all)
+          expect(user.providers).to match_array(Provider.all)
         end
 
         it "creates user_notifications association for all user's accredited bodies" do
@@ -132,10 +112,10 @@ RSpec.describe UserAssociationsService::Create do
       end
 
       context "when user has never set notification preferences" do
-        it "creates organisation_users association" do
+        it "creates user_permissions association" do
           subject
 
-          expect(user.organisations).to match_array(Organisation.all)
+          expect(user.providers).to match_array(Provider.all)
         end
 
         it "doesn't create user_notifications association" do

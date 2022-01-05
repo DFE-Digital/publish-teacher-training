@@ -15,11 +15,11 @@ FactoryBot.define do
     end
 
     trait :with_organisation do
-      organisations { [create(:organisation)] }
+      organisations { [create(:organisation, :with_providers)] }
     end
 
     trait :with_provider do
-      organisations { [create(:organisation, providers: [create(:provider)])] }
+      providers { [create(:provider)] }
     end
 
     trait :inactive do

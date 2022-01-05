@@ -8,8 +8,7 @@ describe "PATCH recruitment_cycles/year/providers/:provider_code/courses/:course
   end
 
   let(:recruitment_cycle) { find_or_create :recruitment_cycle }
-  let(:organisation) { create :organisation }
-  let(:user)         { create :user, organisations: [organisation] }
+  let(:user)         { create :user }
   let(:payload)      { { email: user.email } }
   let(:credentials) { encode_to_credentials(payload) }
 
@@ -33,7 +32,7 @@ describe "PATCH recruitment_cycles/year/providers/:provider_code/courses/:course
   context "for a provider with existing preferences" do
     let(:provider) do
       create :provider,
-             organisations: [organisation],
+             users: [user],
              recruitment_cycle: recruitment_cycle,
              ucas_preferences: ucas_preferences
     end
@@ -47,7 +46,7 @@ describe "PATCH recruitment_cycles/year/providers/:provider_code/courses/:course
   context "for a provider without existing preferences" do
     let(:provider) do
       create :provider,
-             organisations: [organisation],
+             users: [user],
              recruitment_cycle: recruitment_cycle,
              ucas_preferences: nil
     end

@@ -3,14 +3,13 @@ require "rails_helper"
 describe "PATCH recruitment_cycles/year/providers/:provider_code/courses/:course_code" do
   let(:jsonapi_renderer) { JSONAPI::Serializable::Renderer.new }
   let(:recruitment_cycle) { find_or_create :recruitment_cycle }
-  let(:organisation) { create :organisation }
-  let(:provider)     do
+  let(:provider) do
     create :provider,
-           organisations: [organisation],
+           users: [user],
            recruitment_cycle: recruitment_cycle,
            contacts: [build(:contact)]
   end
-  let(:user)         { create :user, organisations: [organisation] }
+  let(:user)         { create(:user) }
   let(:payload)      { { email: user.email } }
   let(:credentials) { encode_to_credentials(payload) }
   let(:admin_contact) { build(:contact, :admin_type) }
@@ -27,6 +26,7 @@ describe "PATCH recruitment_cycles/year/providers/:provider_code/courses/:course
       finance_contact: slice_contact(finance_contact),
     }
   end
+
   let(:request_path) do
     "/api/v2/recruitment_cycles/#{recruitment_cycle.year}" \
       "/providers/#{provider.provider_code}"

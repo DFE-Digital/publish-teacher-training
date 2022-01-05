@@ -1,7 +1,6 @@
 require "rails_helper"
 
 describe "PATCH /providers/:provider_code/courses/:course_code with sites" do
-  let(:organisation) { create :organisation }
   let(:sites_payload) {
     [
       { "type" => "sites", "id" => existing_site.id.to_s },
@@ -23,8 +22,8 @@ describe "PATCH /providers/:provider_code/courses/:course_code with sites" do
       },
     }
   end
-  let(:provider)     { create :provider, organisations: [organisation] }
-  let(:user)         { create :user, organisations: [organisation] }
+  let(:provider)     { create :provider }
+  let(:user)         { create :user, providers: [provider] }
   let(:payload)      { { email: user.email } }
   let(:credentials) { encode_to_credentials(payload) }
 

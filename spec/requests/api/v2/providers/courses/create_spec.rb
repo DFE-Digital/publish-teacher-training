@@ -2,11 +2,10 @@ require "rails_helper"
 
 describe "Course POST #create API V2", type: :request do
   let(:user)         { create(:user) }
-  let(:organisation) { create(:organisation, users: [user]) }
   let(:payload)      { { email: user.email } }
   let(:credentials) { encode_to_credentials(payload) }
 
-  let(:provider) { create(:provider, organisations: [organisation]) }
+  let(:provider) { create(:provider, users: [user]) }
   let(:site_one) { create(:site, provider: provider) }
   let(:site_two) { create(:site, provider: provider) }
   let(:recruitment_cycle) { provider.recruitment_cycle }
@@ -101,7 +100,7 @@ describe "Course POST #create API V2", type: :request do
     end
 
     context "When a provider is not accredited" do
-      let(:provider) { create(:provider, :accredited_body, organisations: [organisation]) }
+      let(:provider) { create(:provider, :accredited_body, users: [user]) }
       let(:course) do
         build(
           :course,
@@ -180,7 +179,7 @@ describe "Course POST #create API V2", type: :request do
     end
 
     context "When the course is a further education course" do
-      let(:provider) { create(:provider, :university, organisations: [organisation]) }
+      let(:provider) { create(:provider, :university, users: [user]) }
       let(:course) do
         build(
           :course,

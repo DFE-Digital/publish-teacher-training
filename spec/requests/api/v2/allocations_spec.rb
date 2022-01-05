@@ -113,7 +113,7 @@ RSpec.describe "/api/v2/allocations/<id>", type: :request do
 
   def given_i_am_an_authenticated_user_from_the_accredited_body
     @user = create(:user)
-    @user.organisations << @accredited_body.organisation
+    @user.providers << @accredited_body
     payload = { email: @user.email }
     @credentials = encode_to_credentials(payload)
   end
@@ -121,7 +121,7 @@ RSpec.describe "/api/v2/allocations/<id>", type: :request do
   def given_i_am_an_authenticated_user_from_another_accredited_body
     @user = create(:user)
     @another_accredited_body = create(:provider, :accredited_body, recruitment_cycle: allocation_recruitment_cycle)
-    @user.organisations << @another_accredited_body.organisation
+    @user.providers << @another_accredited_body
     payload = { email: @user.email }
     @credentials =  encode_to_credentials(payload)
   end

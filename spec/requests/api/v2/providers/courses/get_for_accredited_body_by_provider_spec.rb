@@ -1,14 +1,13 @@
 require "rails_helper"
 
 RSpec.describe "GET /api/v2/recruitment_cycles/:year/providers/ <provider_code>/training_providers/:training_provider_code/courses" do
-  let(:organisation) { create(:organisation) }
   let(:request_path) { "/api/v2/recruitment_cycles/#{recruitment_cycle.year}/providers/#{accredited_body.provider_code}/training_providers/#{training_provider.provider_code}/courses" }
-  let(:user)         { create(:user, organisations: [organisation]) }
+  let(:user)         { create(:user) }
   let(:payload)      { { email: user.email } }
   let(:credentials)  { encode_to_credentials(payload) }
 
   let(:recruitment_cycle) { find_or_create(:recruitment_cycle) }
-  let(:accredited_body) { create(:provider, :accredited_body, organisations: [organisation]) }
+  let(:accredited_body) { create(:provider, :accredited_body, users: [user]) }
   let(:training_provider) { create(:provider) }
 
   let!(:course1) { create(:course, provider: training_provider, accrediting_provider: accredited_body) }
@@ -33,7 +32,7 @@ RSpec.describe "GET /api/v2/recruitment_cycles/:year/providers/ <provider_code>/
     let(:next_training_provider) { create(:provider, :next_recruitment_cycle) }
     let(:next_course) { create(:course, provider: next_training_provider, accrediting_provider: accredited_body) }
     let(:request_path) { "/api/v2/recruitment_cycles/#{next_recruitment_cycle.year}/providers/#{next_accredited_body.provider_code}/training_providers/#{next_training_provider.provider_code}/courses" }
-    let(:next_accredited_body) { create(:provider, :accredited_body, :next_recruitment_cycle, organisations: [organisation]) }
+    let(:next_accredited_body) { create(:provider, :accredited_body, :next_recruitment_cycle, users: [user]) }
 
     before do
       next_course

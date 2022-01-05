@@ -3,19 +3,18 @@ require "rails_helper"
 describe "PATCH /providers/:provider_code" do
   let(:jsonapi_renderer) { JSONAPI::Serializable::Renderer.new }
   let(:recruitment_cycle) { find_or_create :recruitment_cycle }
-  let(:organisation) { create :organisation }
   let(:site1) { build(:site_status, :findable) }
   let(:course1) { build(:course, level: "primary", site_statuses: [site1], subjects: [dfe_subject]) }
   let!(:dfe_subject) { find_or_create(:primary_subject, :primary) }
   let(:provider)     do
     create :provider,
-           organisations: [organisation],
+           users: [user],
            recruitment_cycle: recruitment_cycle,
            courses: [course1],
            can_sponsor_student_visa: false,
            can_sponsor_skilled_worker_visa: false
   end
-  let(:user)         { create :user, organisations: [organisation] }
+  let(:user)         { create :user }
   let(:payload)      { { email: user.email } }
   let(:credentials) { encode_to_credentials(payload) }
   let(:enrichment) { build(:provider_enrichment) }

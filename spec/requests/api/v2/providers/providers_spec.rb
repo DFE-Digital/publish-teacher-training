@@ -2,15 +2,14 @@ require "rails_helper"
 
 describe "Providers API v2", type: :request do
   describe "GET /providers" do
-    let(:user) { create(:user, organisations: [organisation]) }
-    let(:organisation) { create(:organisation) }
+    let(:user) { create(:user) }
     let(:recruitment_cycle) { find_or_create :recruitment_cycle }
     let(:payload) { { email: user.email } }
     let(:credentials) { encode_to_credentials(payload) }
 
     let!(:provider) {
       create(:provider,
-             organisations: [organisation],
+             users: [user],
              contacts: [contact])
     }
     let(:contact) { build(:contact) }
@@ -122,7 +121,7 @@ describe "Providers API v2", type: :request do
 
     context "with unalphabetical ordering in the database" do
       let(:second_alphabetical_provider) do
-        create(:provider, provider_name: "Zork", organisations: [organisation])
+        create(:provider, provider_name: "Zork", users: [user])
       end
       let(:provider_names_in_response) {
         JSON.parse(subject.body)["data"].map { |provider|
@@ -147,7 +146,7 @@ describe "Providers API v2", type: :request do
       let(:next_recruitment_cycle) { create :recruitment_cycle, :next }
       let(:next_provider) {
         create :provider,
-               organisations: [organisation],
+               users: [user],
                provider_code: provider.provider_code,
                recruitment_cycle: next_recruitment_cycle
       }

@@ -2,7 +2,6 @@ require "rails_helper"
 
 describe ContactPolicy do
   let(:user) { create(:user) }
-  let(:organisation) { create(:organisation, users: [user]) }
   let(:provider) { create(:provider) }
   let(:contact) { create(:contact, provider: provider) }
 
@@ -11,7 +10,7 @@ describe ContactPolicy do
   permissions :show?, :update? do
     context "a user that belongs to the provider" do
       before do
-        organisation.providers << provider
+        provider.users << user
       end
 
       it { is_expected.to permit(user, contact) }
