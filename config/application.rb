@@ -49,6 +49,8 @@ module ManageCoursesBackend
 
     config.action_mailer.delivery_job = "ActionMailer::MailDeliveryJob"
 
+    config.session_store :cookie_store, expire_after: 3.days
+
     config.skylight.environments = Settings.skylight.enable ? [Rails.env] : []
     config.skylight.logger = SemanticLogger[Skylight]
     config.skylight.log_level = :fatal
