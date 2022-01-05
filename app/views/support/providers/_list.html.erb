@@ -3,6 +3,7 @@
     <tr class="govuk-table__row">
       <th scope="col" class="govuk-table__header govuk-!-width-one-half">Provider name</th>
       <th scope="col" class="govuk-table__header govuk-!-width-one-half">Provider code</th>
+      <th scope="col" class="govuk-table__header govuk-!-width-one-half">Action</th>
     </tr>
   </thead>
 
@@ -18,6 +19,15 @@
         <td class="govuk-table__cell">
           <span class="govuk-!-display-block govuk-!-margin-bottom-1">
             <%= provider.provider_code %>
+          </span>
+        </td>
+
+        <td class="govuk-table__cell">
+          <span class="govuk-!-display-block govuk-!-margin-bottom-1">
+            <%= govuk_button_to("Remove provider",
+              support_remove_provider_from_user_path(@user, provider.id),
+              id: "remove-provider",
+              class: "govuk-button govuk-button--warning govuk-!-margin-bottom-0") %>
           </span>
         </td>
       </tr>
