@@ -67,8 +67,8 @@ module PublishInterface
       @provider.accrediting_provider_enrichments =
         accredited_bodies.map do |accredited_body|
           {
-            UcasProviderCode: accredited_body.provider_code,
-            Description: accredited_body.description,
+            ucas_provider_code: accredited_body.provider_code,
+            description: accredited_body.description,
           }
         end
       @provider.save

@@ -6,14 +6,6 @@
 # Note that changes in the inspected code, or installation of new
 # versions of RuboCop, may require this file to be generated again.
 
-# Offense count: 1
-# Configuration parameters: IgnoredPatterns.
-# SupportedStyles: snake_case, camelCase
-Naming/MethodName:
-  EnforcedStyle: snake_case
-  Exclude:
-    - 'app/models/accrediting_provider_enrichment.rb'
-
 # Offense count: 16
 # Configuration parameters: NamePrefix, ForbiddenPrefixes, AllowedMethods, MethodDefinitionMacros.
 # NamePrefix: is_, has_, have_

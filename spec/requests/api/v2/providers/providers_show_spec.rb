@@ -12,8 +12,8 @@ describe "Providers API v2", type: :request do
     let(:description) { "An accredited body description" }
     let(:accrediting_provider_enrichments) do
       [{
-        "UcasProviderCode" => accrediting_provider.provider_code,
-        "Description" => description,
+        "ucas_provider_code" => accrediting_provider.provider_code,
+        "description" => description,
       }]
     end
     let(:accrediting_provider) { create :provider }

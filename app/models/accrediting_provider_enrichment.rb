@@ -3,9 +3,9 @@ class AccreditingProviderEnrichment
   include ActiveModel::Model
 
   # Pascal cased as the original is stored like so.
-  attr_accessor :UcasProviderCode, :Description
+  attr_accessor :ucas_provider_code, :description
 
-  validates :Description, words_count: { maximum: 100 }
+  validates :description, words_count: { maximum: 100 }
 
   def initialize(attrs)
     attrs.each do |attr, value|
@@ -14,7 +14,7 @@ class AccreditingProviderEnrichment
   end
 
   def attributes
-    %i[UcasProviderCode Description].inject({}) do |hash, attr|
+    %i[ucas_provider_code description].inject({}) do |hash, attr|
       hash[attr] = send(attr)
       hash
     end

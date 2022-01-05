@@ -31,9 +31,9 @@ describe Provider, type: :model do
       context "with an old accredited body enrichment" do
         let(:accrediting_provider_enrichments) do
           [{
-            "Description" => description,
+            "description" => description,
             # XX4 might have previously been an accrediting provider for this provider, and the data is still in the database
-            "UcasProviderCode" => "XX4",
+            "ucas_provider_code" => "XX4",
           }]
         end
 
@@ -58,8 +58,8 @@ describe Provider, type: :model do
       context "with an accredited body enrichment" do
         let(:accrediting_provider_enrichments) do
           [{
-            "Description" => description,
-            "UcasProviderCode" => accrediting_provider.provider_code,
+            "description" => description,
+            "ucas_provider_code" => accrediting_provider.provider_code,
           }]
         end
 
@@ -77,8 +77,8 @@ describe Provider, type: :model do
       context "with a corrupt accredited body enrichment" do
         let(:accrediting_provider_enrichments) do
           [{
-            "Description" => description,
-            # UcasProviderCode missing. We found data like this in our database so need to handle it.
+            "description" => description,
+            # ucas_provider_code missing. We found data like this in our database so need to handle it.
           }]
         end
 

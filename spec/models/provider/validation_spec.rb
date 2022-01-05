@@ -116,8 +116,8 @@ describe Provider, type: :model do
           10.times do |index|
             result <<
               {
-                "Description" => Faker::Lorem.sentence(word_count: word_count),
-                "UcasProviderCode" => "UPC#{index}",
+                "description" => Faker::Lorem.sentence(word_count: word_count),
+                "ucas_provider_code" => "UPC#{index}",
               }
           end
           result
@@ -163,8 +163,8 @@ describe Provider, type: :model do
         let(:accrediting_provider_enrichments) {
           accrediting_providers.map do |ap|
             {
-              "Description" => Faker::Lorem.sentence(word_count: word_count),
-              "UcasProviderCode" => ap.provider_code.to_s,
+              "description" => Faker::Lorem.sentence(word_count: word_count),
+              "ucas_provider_code" => ap.provider_code.to_s,
             }
           end
         }

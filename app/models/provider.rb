@@ -283,7 +283,7 @@ class Provider < ApplicationRecord
       {
         provider_name: ap.provider_name,
         provider_code: ap.provider_code,
-        description: accrediting_provider_enrichment&.Description || "",
+        description: accrediting_provider_enrichment&.description || "",
       }
     end
   end
@@ -324,13 +324,13 @@ private
 
   def accrediting_provider_enrichment(provider_code)
     accrediting_provider_enrichments&.find do |enrichment|
-      enrichment.UcasProviderCode == provider_code
+      enrichment.ucas_provider_code == provider_code
     end
   end
 
   def add_enrichment_errors
     accrediting_provider_enrichments&.each do |item|
-      accrediting_provider = accrediting_providers.find { |ap| ap.provider_code == item.UcasProviderCode }
+      accrediting_provider = accrediting_providers.find { |ap| ap.provider_code == item.ucas_provider_code }
 
       if accrediting_provider.present? && item.invalid?
         message = "^Reduce the word count for #{accrediting_provider.provider_name}"

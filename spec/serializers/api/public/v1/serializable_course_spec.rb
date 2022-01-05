@@ -15,10 +15,10 @@ RSpec.describe API::Public::V1::SerializableCourse do
 
   context "when there is an accredited body with enrichments" do
     before do
-      course.provider.update(accrediting_provider_enrichments: [{ Description: "foo", UcasProviderCode: course.accrediting_provider.provider_code }])
+      course.provider.update(accrediting_provider_enrichments: [{ description: "foo", ucas_provider_code: course.accrediting_provider.provider_code }])
     end
 
-    it { is_expected.to have_attribute(:about_accredited_body).with_value(course.provider.accrediting_provider_enrichments.first.Description) }
+    it { is_expected.to have_attribute(:about_accredited_body).with_value(course.provider.accrediting_provider_enrichments.first.description) }
   end
 
   it { is_expected.to have_attribute(:about_accredited_body).with_value(nil) }

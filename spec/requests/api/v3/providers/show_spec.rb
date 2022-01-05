@@ -12,8 +12,8 @@ describe "GET v3/recruitment_cycle/:recruitment_cycle_year/providers/:provider_c
   let(:description) { "An accredited body description" }
   let(:accrediting_provider_enrichments) do
     [{
-      "UcasProviderCode" => accrediting_provider.provider_code,
-      "Description" => description,
+      "ucas_provider_code" => accrediting_provider.provider_code,
+      "description" => description,
     }]
   end
   let(:accrediting_provider) { create :provider }

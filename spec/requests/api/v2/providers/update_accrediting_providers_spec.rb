@@ -64,8 +64,8 @@ describe "PATCH /providers/:provider_code" do
       expect(provider.accrediting_provider_enrichments.count).to eq(courses.size)
 
       accrediting_provider_enrichment = provider.accrediting_provider_enrichments.first
-      expect(accrediting_provider_enrichment.Description).to eq(new_description)
-      expect(accrediting_provider_enrichment.UcasProviderCode).to eq(accrediting_provider.provider_code)
+      expect(accrediting_provider_enrichment.description).to eq(new_description)
+      expect(accrediting_provider_enrichment.ucas_provider_code).to eq(accrediting_provider.provider_code)
 
       expect(response).to have_http_status(:ok)
       accredited_body = JSON.parse(response.body).dig("data", "attributes", "accredited_bodies").first
@@ -109,7 +109,7 @@ describe "PATCH /providers/:provider_code" do
   context "provider has only an accredited body enrichment" do
     let(:old_description) { "old stuff" }
     let(:accrediting_provider_enrichments) do
-      [{ "Description" => old_description, "UcasProviderCode" => accrediting_provider.provider_code }]
+      [{ "description" => old_description, "ucas_provider_code" => accrediting_provider.provider_code }]
     end
 
     it "updates an existing accredited body enrichment" do
@@ -120,8 +120,8 @@ describe "PATCH /providers/:provider_code" do
       expect(provider.accrediting_provider_enrichments.count).to eq(courses.size)
 
       accrediting_provider_enrichment = provider.accrediting_provider_enrichments.first
-      expect(accrediting_provider_enrichment.Description).to eq(new_description)
-      expect(accrediting_provider_enrichment.UcasProviderCode).to eq(accrediting_provider.provider_code)
+      expect(accrediting_provider_enrichment.description).to eq(new_description)
+      expect(accrediting_provider_enrichment.ucas_provider_code).to eq(accrediting_provider.provider_code)
 
       expect(response).to have_http_status(:ok)
       accredited_body = JSON.parse(response.body).dig("data", "attributes", "accredited_bodies").first
@@ -145,8 +145,8 @@ describe "PATCH /providers/:provider_code" do
         }.not_to(change { provider.reload.accrediting_provider_enrichments.size })
 
         accrediting_provider_enrichment = provider.accrediting_provider_enrichments.first
-        expect(accrediting_provider_enrichment.Description).to eq(old_description)
-        expect(accrediting_provider_enrichment.UcasProviderCode).to eq(accrediting_provider.provider_code)
+        expect(accrediting_provider_enrichment.description).to eq(old_description)
+        expect(accrediting_provider_enrichment.ucas_provider_code).to eq(accrediting_provider.provider_code)
       end
 
       subject do
@@ -185,8 +185,8 @@ describe "PATCH /providers/:provider_code" do
         expect(provider.accrediting_provider_enrichments.count).to eq(courses.size)
         accrediting_provider_enrichment = provider.accrediting_provider_enrichments.first
 
-        expect(accrediting_provider_enrichment.Description).to eq(new_description)
-        expect(accrediting_provider_enrichment.UcasProviderCode).to eq(accrediting_provider.provider_code)
+        expect(accrediting_provider_enrichment.description).to eq(new_description)
+        expect(accrediting_provider_enrichment.ucas_provider_code).to eq(accrediting_provider.provider_code)
 
         expect(response).to have_http_status(:ok)
         accredited_body = JSON.parse(response.body).dig("data", "attributes", "accredited_bodies").first
@@ -199,7 +199,7 @@ describe "PATCH /providers/:provider_code" do
 
     context "provider has only a single accrediting provider enrichments" do
       let(:accrediting_provider_enrichments) do
-        [{ "Description" => "old stuff", "UcasProviderCode" => accrediting_provider.provider_code }]
+        [{ "description" => "old stuff", "ucas_provider_code" => accrediting_provider.provider_code }]
       end
 
       it "updates an existing accredited body enrichment" do
@@ -210,8 +210,8 @@ describe "PATCH /providers/:provider_code" do
         expect(provider.accrediting_provider_enrichments.count).to eq(courses.size)
 
         accrediting_provider_enrichment = provider.accrediting_provider_enrichments.first
-        expect(accrediting_provider_enrichment.Description).to eq(new_description)
-        expect(accrediting_provider_enrichment.UcasProviderCode).to eq(accrediting_provider.provider_code)
+        expect(accrediting_provider_enrichment.description).to eq(new_description)
+        expect(accrediting_provider_enrichment.ucas_provider_code).to eq(accrediting_provider.provider_code)
 
         expect(response).to have_http_status(:ok)
         accredited_body = JSON.parse(response.body).dig("data", "attributes", "accredited_bodies").first
