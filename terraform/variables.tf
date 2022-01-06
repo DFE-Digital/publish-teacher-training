@@ -36,6 +36,11 @@ variable key_vault_infra_secret_name {}
 
 variable azure_credentials { default = null }
 
+variable "publish_gov_uk_host_names" {
+  default = []
+  type = list
+}
+
 variable statuscake_alerts {
   type    = map
   default = {}

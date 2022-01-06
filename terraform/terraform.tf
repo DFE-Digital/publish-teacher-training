@@ -59,6 +59,7 @@ module paas {
   postgres_service_plan     = var.paas_postgres_service_plan
   redis_service_plan        = var.paas_redis_service_plan
   app_environment_variables = local.paas_app_environment_variables
+  publish_gov_uk_host_names = var.publish_gov_uk_host_names
 }
 
 module statuscake {
