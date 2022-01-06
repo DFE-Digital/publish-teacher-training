@@ -54,17 +54,7 @@ module Support
     def check_date(date_type)
       date_args = date_array(date_type).map(&:to_i)
 
-      if Date.valid_date?(*date_args)
-        Date.new(*date_args)
-      elsif date_args_blank?(date_type)
-        nil
-      else
-        OpenStruct.new(
-          day: send("#{date_type}_day"),
-          month: send("#{date_type}_month"),
-          year: send("#{date_type}_year"),
-        )
-      end
+      Date.new(*date_args) if Date.valid_date?(*date_args)
     end
 
     def date_array(date_type)
