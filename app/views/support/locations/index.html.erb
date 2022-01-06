@@ -1,5 +1,7 @@
 <%= render PageTitle::View.new(title: "support.providers.locations.index") %>
 
+<%= govuk_link_to("Add location", new_support_provider_location_path, class: "govuk-button govuk-!-margin-bottom-3") %>
+
 <table class="govuk-table">
   <thead class="govuk-table__head">
     <tr class="govuk-table__row">

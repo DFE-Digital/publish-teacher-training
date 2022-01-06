@@ -24,6 +24,7 @@ en:
             edit: "Edit course details"
           locations:
             index: "Locations"
+            new: "Add a location"
             edit: "Edit location details"
         users:
           index: "Users"
@@ -79,11 +80,13 @@ en:
           name: "Only users affiliated with a provider"
           description: "The list of all users affiliated with a provider from current recruitment cycle with columns: provider_code, provider_name, provider_type, first_name, last_name, email_address"
     flash:
+      created: "%{resource} successfully created"
       updated: "%{resource} successfully updated"
       deleted: "%{resource} successfully deleted"
     actions:
       delete: "Delete this %{resource}"
     update_record: "Update"
+    create_record: "Create"
   activerecord:
     attributes:
       course:
@@ -235,3 +238,5 @@ en:
     published: "Your changes have been published."
     saved: "Your changes have been saved."
     changes_ttl: "Changes will appear on Find postgraduate teacher training within 15 minutes."
+  links:
+    get_information_schools: "https://www.get-information-schools.service.gov.uk/"

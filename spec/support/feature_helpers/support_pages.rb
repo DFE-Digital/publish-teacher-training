@@ -30,6 +30,10 @@ module FeatureHelpers
       @provider_locations_index_page ||= PageObjects::Support::Provider::LocationsIndex.new
     end
 
+    def provider_location_create_page
+      @provider_location_create_page ||= PageObjects::Support::Provider::LocationCreate.new
+    end
+
     def provider_location_edit_page
       @provider_location_edit_page ||= PageObjects::Support::Provider::LocationEdit.new
     end
