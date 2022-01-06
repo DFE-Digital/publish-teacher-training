@@ -2,12 +2,18 @@
   homepage_url: old_publish_homepage_path,
   classes: "govuk-!-display-none-print app-header app-header--wide-logo #{environment_header_class}",
   navigation_classes: "govuk-header__navigation--end") do |header| %>
-  <% header.product_name(name: "Publish teacher training courses") %>
-  <% if current_user.present? && current_user.associated_with_accredited_body? %>
-    <% header.navigation_item(text: "Notifications", href: old_publish_notifications_path, active: current_page?(old_publish_notifications_path)) %>
-  <% end %>
+
+  <% header.product_name(name: service_name) %>
+
   <% if current_user.present? %>
-    <% header.navigation_item(text: "Sign out", href: sign_out_path) %>
-    <% header.navigation_item(text: "(#{current_user.first_name} #{current_user.last_name})", href: Settings.dfe_signin.profile) %>
+    <% if current_user.admin? %>
+      <% header.navigation_item(text: "Sign out", href: sign_out_path) %>
+    <% else %>
+      <% if current_user.associated_with_accredited_body? %>
+        <% header.navigation_item(text: "Notifications", href: old_publish_notifications_path, active: current_page?(old_publish_notifications_path)) %>
+      <% end %>
+      <% header.navigation_item(text: "Sign out", href: sign_out_path) %>
+      <% header.navigation_item(text: "(#{current_user.first_name} #{current_user.last_name})", href: Settings.dfe_signin.profile) %>
+    <% end %>
   <% end %>
 <% end %>

@@ -1,21 +1,14 @@
 # frozen_string_literal: true
 
 class Header::View < GovukComponent::Base
-  attr_reader :service_name, :current_user, :items
+  attr_reader :service_name, :current_user
 
   include ActiveModel
 
-  def initialize(service_name:, current_user: nil, items: nil)
+  def initialize(service_name:, current_user: nil)
     super(classes: classes, html_attributes: html_attributes)
     @service_name = service_name
     @current_user = current_user
-    @items = items
-  end
-
-  def header_class
-    klass = "govuk-header__content app-header__content"
-    klass += " app-header__content--single-item" if items.length == 1
-    klass
   end
 
   def environment_header_class

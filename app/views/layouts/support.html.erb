@@ -2,7 +2,7 @@
   <%= content_for(:header) do %>
     <%= render Header::View.new(
       service_name: I18n.t("support_service_name"),
-      items: header_items(@current_user),
+      current_user: current_user
     ) %>
   <% end %>
 
