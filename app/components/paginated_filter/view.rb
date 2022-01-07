@@ -5,6 +5,7 @@ module PaginatedFilter
     attr_reader :filter_params, :collection
 
     def initialize(filter_params:, collection:)
+      super
       @filter_params = filter_params
       @collection = collection
     end
