@@ -36,6 +36,7 @@ feature "Edit provider course details" do
       when_i_fill_in_course_code_with existing_course_code
       and_i_fill_in_course_title_with valid_course_name
       and_i_fill_in_course_start_date_with valid_date_day, valid_date_month, invalid_date_year
+      and_i_fill_in_course_application_open_from_with valid_date_day, valid_date_month, invalid_date_year
       and_i_click_the_continue_button
       then_i_see_the_error_summary
       and_it_contains_invalid_value_errors
@@ -43,15 +44,18 @@ feature "Edit provider course details" do
 
     scenario "I cannot use invalid date format" do
       when_i_fill_in_course_start_date_with invalid_date_day, invalid_date_month, valid_date_year
+      and_i_fill_in_course_application_open_from_with invalid_date_day, invalid_date_month, valid_date_year
       and_i_click_the_continue_button
       then_i_see_the_error_summary
       and_it_contains_start_date_format_error
+      and_it_contains_applications_open_from_format_error
     end
 
     scenario "I cannot use a blank course details" do
       when_i_fill_in_course_code_with blank_value
       and_i_fill_in_course_title_with blank_value
       and_i_fill_in_course_start_date_with blank_value, blank_value, blank_value
+      and_i_fill_in_course_application_open_from_with blank_value, blank_value, blank_value
       and_i_click_the_continue_button
       then_i_see_the_error_summary
       and_it_contains_blank_errors
@@ -190,9 +194,14 @@ private
     expect(course_edit_page.error_summary.text).to include("Start date format is invalid")
   end
 
+  def and_it_contains_applications_open_from_format_error
+    expect(course_edit_page.error_summary.text).to include("Applications open from format is invalid")
+  end
+
   def and_it_contains_blank_errors
     expect(course_edit_page.error_summary.text).to include("Course code cannot be blank")
     expect(course_edit_page.error_summary.text).to include("Course title cannot be blank")
     expect(course_edit_page.error_summary.text).to include("Start date cannot have blank values")
+    expect(course_edit_page.error_summary.text).to include("Select when applications will open and enter the date if applicable")
   end
 end
