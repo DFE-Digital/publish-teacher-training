@@ -37,7 +37,7 @@ private
   end
 
   def with_a_success_message
-    expect(provider_users_index_page).to have_content("#{@user.first_name} #{@user.last_name} removed from #{@provider.provider_name}")
+    expect(provider_users_index_page).to have_content("User permission successfully deleted")
   end
 
   def then_i_am_taken_to_the_provider_users_index_page
@@ -46,7 +46,7 @@ private
 
   def and_the_user_provider_relationship_is_destroyed
     @provider.reload
-    expect(@provider.users.length).to eq 0
-    expect(provider_users_index_page.users.length).to eq 0
+    expect(@provider.users).to be_empty
+    expect(provider_users_index_page.users).to be_empty
   end
 end
