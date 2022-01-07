@@ -360,7 +360,6 @@ describe "Sites API v2", type: :request do
             let(:location_name) { "" }
             let(:address1)      { "" }
             let(:postcode)      { "" }
-            let(:region_code)   { "" }
 
             it { is_expected.to have_http_status(:unprocessable_entity) }
 
@@ -386,9 +385,6 @@ describe "Sites API v2", type: :request do
             it "checks the postcode is present" do
               expect(response.body).to include("Invalid postcode")
               expect(response.body).to include("Postcode is not valid (for example, BN1 1AA)")
-            end
-
-            xit "checks the region_code is present" do
             end
           end
 

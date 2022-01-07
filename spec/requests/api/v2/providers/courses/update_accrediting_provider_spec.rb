@@ -57,7 +57,7 @@ describe "PATCH /providers/:provider_code/courses/:course_code" do
   end
 
   context "with no values passed into the params" do
-    let(:accredited_body_code) {}
+    let(:accredited_body_code) { nil }
 
     before do
       @accredited_body_code = course.accredited_body_code

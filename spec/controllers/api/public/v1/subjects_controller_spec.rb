@@ -7,7 +7,7 @@ RSpec.describe API::Public::V1::SubjectsController do
     end
 
     context "when there are no params" do
-      let(:params) {}
+      let(:params) { nil }
 
       it "returns array of data" do
         expect(json_response["data"]).to eql([
