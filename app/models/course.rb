@@ -768,7 +768,7 @@ private
   end
 
   def validate_applications_open_from
-    if applications_open_from.blank?
+    if applications_open_from.blank? || applications_open_from.is_a?(Struct)
       errors.add(:applications_open_from, :blank)
     elsif !valid_date_range.include?(applications_open_from)
       chosen_date = short_date(applications_open_from)

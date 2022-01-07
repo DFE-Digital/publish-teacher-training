@@ -46,9 +46,9 @@ module Support
       when "start_date(3i)" then "start_date_day"
       when "start_date(2i)" then "start_date_month"
       when "start_date(1i)" then "start_date_year"
-      when "applications_open_from(3i)" then "applications_open_from_date_day"
-      when "applications_open_from(2i)" then "applications_open_from_date_month"
-      when "applications_open_from(1i)" then "applications_open_from_date_year"
+      when "applications_open_from(3i)" then "applications_open_from_day"
+      when "applications_open_from(2i)" then "applications_open_from_month"
+      when "applications_open_from(1i)" then "applications_open_from_year"
       else key
       end
     end

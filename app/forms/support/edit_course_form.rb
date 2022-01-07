@@ -8,9 +8,9 @@ module Support
     ].freeze
 
     attr_accessor(*FIELDS)
-    attr_accessor :start_date_day, :start_date_month, :start_date_year, :course, :applications_open_from_date_day, :applications_open_from_date_month, :applications_open_from_date_year
+    attr_accessor :start_date_day, :start_date_month, :start_date_year, :course, :applications_open_from_day, :applications_open_from_month, :applications_open_from_year
     validate :validate_start_date_format
-    validate :validate_applications_open_from_date_format
+    validate :validate_applications_open_from_format
 
     def initialize(course)
       @course = course
@@ -21,9 +21,9 @@ module Support
         start_date_day: @course.start_date&.day,
         start_date_month: @course.start_date&.month,
         start_date_year: @course.start_date&.year,
-        applications_open_from_date_day: @course.applications_open_from&.day,
-        applications_open_from_date_month: @course.applications_open_from&.month,
-        applications_open_from_date_year: @course.applications_open_from&.year,
+        applications_open_from_day: @course.applications_open_from&.day,
+        applications_open_from_month: @course.applications_open_from&.month,
+        applications_open_from_year: @course.applications_open_from&.year,
       )
     end
 
@@ -45,8 +45,8 @@ module Support
       @start_date ||= check_date(:start_date)
     end
 
-    def applications_open_from_date
-      @applications_open_from_date ||= check_date(:applications_open_from_date)
+    def applications_open_from
+      @applications_open_from ||= check_date(:applications_open_from)
     end
 
   private
@@ -54,7 +54,17 @@ module Support
     def check_date(date_type)
       date_args = date_array(date_type).map(&:to_i)
 
-      Date.new(*date_args) if Date.valid_date?(*date_args)
+      return Date.new(*date_args) if Date.valid_date?(*date_args)
+
+      date_struct(date_type)
+    end
+
+    def date_struct(date_type)
+      Struct.new(:day, :month, :year).new(
+        send("#{date_type}_day"),
+        send("#{date_type}_month"),
+        send("#{date_type}_year"),
+      )
     end
 
     def date_array(date_type)
@@ -66,10 +76,8 @@ module Support
         course_code: course_code,
         name: name,
         start_date: start_date,
-        applications_open_from: applications_open_from_date,
+        applications_open_from: applications_open_from,
       }
-
-      attributes[:applications_open_from] = applications_open_from_date if valid_date?(:applications_open_from_date)
 
       course.assign_attributes(attributes)
     end
@@ -82,8 +90,8 @@ module Support
       validate_date(:start_date)
     end
 
-    def validate_applications_open_from_date_format
-      validate_date(:applications_open_from_date)
+    def validate_applications_open_from_format
+      validate_date(:applications_open_from)
     end
 
     def validate_date(date_type)
