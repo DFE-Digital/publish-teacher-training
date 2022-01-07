@@ -8,12 +8,11 @@ on:
 jobs:
   delete-review-app:
     name: Delete Review App ${{ github.event.pull_request.number }}
-    if: github.actor != 'dependabot[bot]'
+    if: contains(github.event.pull_request.labels.*.name, 'deploy')
     runs-on: ubuntu-latest
     steps:
       - name: Wait for Deploy App Workflow for review
         id: wait_for_deployment
-        if: contains(github.event.pull_request.labels.*.name, 'deploy')
         uses: fountainhead/action-wait-for-check@v1.0.0
         with:
          token: ${{ secrets.GITHUB_TOKEN }}
