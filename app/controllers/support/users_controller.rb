@@ -44,15 +44,11 @@ module Support
     end
 
     def filtered_users
-      Support::Filter.call(model_data_scope: User.order(:last_name), filters: filters)
-    end
-
-    def filters
-      @filters ||= ProviderFilter.new(params: filter_params).filters
+      Support::Filter.call(model_data_scope: User.order(:last_name), filter_params: filter_params)
     end
 
     def filter_params
-      params.permit(:text_search, :page, :commit)
+      @filter_params ||= params.except(:commit).permit(:text_search, :page, :commit, user_type: [])
     end
   end
 end

@@ -11,7 +11,7 @@ FactoryBot.define do
 
     trait :admin do
       admin { true }
-      email { "factory.admin@education.gov.uk" }
+      email { "factory.admin.#{Faker::Name.first_name.downcase}@education.gov.uk" }
     end
 
     trait :with_organisation do

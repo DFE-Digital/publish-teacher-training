@@ -8,6 +8,6 @@
       new_support_provider_path,
       class: "govuk-button govuk-!-margin-bottom-6") %>
 
-<%= render PaginatedFilter::View.new(filters: @filters, collection: @providers, filter_label: t("components.filter.providers.provider_search")) do %>
+<%= render PaginatedFilter::View.new(filter_params: @filter_params, collection: @providers) do %>
   <%= render "list", providers: @providers %>
 <% end %>

@@ -95,16 +95,6 @@ class Provider < ApplicationRecord
     end.order(:changed_at, :id)
   }
 
-  scope :provider_or_course_search, lambda { |provider_name_or_code: nil, course_code: nil|
-                                      if course_code.blank?
-                                        search(provider_name_or_code)
-                                      elsif provider_name_or_code.blank?
-                                        course_code_search(course_code)
-                                      else
-                                        search(provider_name_or_code).course_code_search(course_code)
-                                      end
-                                    }
-
   scope :by_name_ascending, -> { order(provider_name: :asc) }
   scope :by_name_descending, -> { order(provider_name: :desc) }
 
@@ -164,7 +154,14 @@ class Provider < ApplicationRecord
     discard_sites
   end
 
-  pg_search_scope :search, against: %i[provider_code provider_name], using: { tsearch: { prefix: true } }
+  pg_search_scope :provider_search,
+                  against: %i[provider_code provider_name],
+                  using: { tsearch: { prefix: true } }
+
+  pg_search_scope :course_search,
+                  associated_against: {
+                    courses: %i[course_code],
+                  }, using: { tsearch: { prefix: true } }
 
   accepts_nested_attributes_for :sites
   accepts_nested_attributes_for :organisations

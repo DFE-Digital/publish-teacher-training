@@ -1,0 +1,14 @@
+<div class="govuk-form-group">
+  <%= label_tag "text_search", t("components.filter.users.text_search"), class: "govuk-label govuk-label--s" %>
+  <%= text_field_tag "text_search", (filters[:text_search] if filters), spellcheck: false, class: "govuk-input" %>
+</div>
+
+<div class="govuk-form-group">
+  <%= label_tag "user_type", t("components.filter.users.user_type"), class: "govuk-label govuk-label--s" %>
+  <% ["admin", "provider"].each do |user_type| %>
+    <div class="govuk-checkboxes__item">
+      <%= check_box_tag "user_type[]", user_type, checked?(filters, :user_type, user_type), id: "user_type-#{user_type}", class: "govuk-checkboxes__input" %>
+      <%= label_tag "user_type-#{user_type}", label_for("user_type", user_type), class: "govuk-label govuk-checkboxes__label" %>
+    </div>
+  <% end %>
+</div>

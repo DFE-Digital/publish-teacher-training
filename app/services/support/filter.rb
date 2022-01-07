@@ -4,41 +4,59 @@ module Support
   class Filter
     include ServicePattern
 
-    def initialize(model_data_scope:, filters:)
+    def initialize(model_data_scope:, filter_params:)
       @model_data_scope = model_data_scope
-      @filters = filters
+      @filter_params = filter_params
     end
 
     def call
-      return model_data_scope unless filters
-
-      filter_model_data_scope
+      filter_records.page(filter_params[:page] || 1)
     end
 
   private
 
-    attr_reader :model_data_scope, :filters
+    attr_reader :model_data_scope, :filter_params
 
-    def search(model_data_scope, filters)
-      return model_data_scope if filters.values.all?(&:blank?)
+    def text_search(records, text_search)
+      return records if text_search.blank?
 
-      search_params = { provider_name_or_code: filters[:provider_search], course_code: filters[:course_search] }
-
-      model_data_scope.provider_or_course_search(**search_params)
+      records.search(text_search)
     end
 
-    def text_search(model_data_scope, text_search)
-      return model_data_scope if text_search.blank?
+    def course_search(records, search)
+      return records if search.blank?
 
-      model_data_scope.search(text_search)
+      records.course_search(search)
     end
 
-    def filter_model_data_scope
-      if filters.include?(:provider_search)
-        search(model_data_scope, filters)
+    def provider_search(records, search)
+      return records if search.blank?
+
+      records.provider_search(search)
+    end
+
+    def user_type(records, user_type_arr)
+      return records if user_type_arr&.all?(&:blank?)
+
+      case user_type_arr
+      when ["admin"]
+        records.admins
+      when ["provider"]
+        records.non_admins
       else
-        text_search(model_data_scope, filters[:text_search])
+        records
       end
+    end
+
+    def filter_records
+      filtered_records = model_data_scope
+
+      filtered_records = text_search(filtered_records, filter_params[:text_search]) if filtered_records.respond_to?(:search)
+      filtered_records = provider_search(filtered_records, filter_params[:provider_search]) if filtered_records.respond_to?(:provider_search)
+      filtered_records = course_search(filtered_records, filter_params[:course_search]) if filtered_records.respond_to?(:course_search)
+      filtered_records = user_type(filtered_records, filter_params[:user_type]) if filtered_records.respond_to?(:admins)
+
+      filtered_records
     end
   end
 end

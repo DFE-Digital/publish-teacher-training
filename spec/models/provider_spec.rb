@@ -195,48 +195,32 @@ describe Provider, type: :model do
     end
   end
 
-  describe "#provider_or_course_search" do
-    let(:provider) { create(:provider, provider_name: "Really big school", provider_code: "A01", courses: [build(:course, course_code: "2VVZ")]) }
-    let(:provider2) { create(:provider, provider_name: "Slightly smaller school", provider_code: "A02", courses: [build(:course, course_code: "2VVZ")]) }
+  describe "#provider_search" do
+    let!(:provider) { create(:provider, provider_name: "Really big school", provider_code: "A01", courses: [build(:course, course_code: "2VVZ")]) }
+    let!(:provider2) { create(:provider, provider_name: "Slightly smaller school", provider_code: "A02", courses: [build(:course, course_code: "2VVZ")]) }
 
-    subject { described_class.provider_or_course_search(search_params) }
+    subject { described_class.provider_search(provider_code) }
 
     context "when provider code only is given" do
-      let(:search_params) do
-        {
-          provider_name_or_code: "A01",
-          course_code: nil,
-        }
-      end
+      let(:provider_code) { "A01" }
 
       it "returns the correct list of providers" do
-        expect(subject).to eq([provider])
+        expect(subject).to match_array([provider])
       end
     end
+  end
+
+  describe "#course_search" do
+    let!(:provider) { create(:provider, provider_name: "Really big school", provider_code: "A01", courses: [build(:course, course_code: "2VVZ")]) }
+    let!(:provider2) { create(:provider, provider_name: "Slightly smaller school", provider_code: "A02", courses: [build(:course, course_code: "2VVZ")]) }
+
+    subject { described_class.course_search(course_code) }
 
     context "when course code only is present" do
-      let(:search_params) do
-        {
-          provider_name_or_code: nil,
-          course_code: "2VVZ",
-        }
-      end
+      let(:course_code) { "2VVZ" }
 
       it "returns the correct list of providers" do
         expect(subject).to match_array([provider, provider2])
-      end
-    end
-
-    context "when provider code and course are present" do
-      let(:search_params) do
-        {
-          provider_name_or_code: "A01",
-          course_code: "2VVZ",
-        }
-      end
-
-      it "returns the correct list of providers" do
-        expect(subject).to eq([provider])
       end
     end
   end
@@ -750,7 +734,7 @@ describe Provider, type: :model do
     let!(:matching_provider) { create(:provider, provider_code: "ABC", provider_name: "Dave's Searches") }
     let!(:non_matching_provider) { create(:provider) }
 
-    subject { described_class.search(search_term) }
+    subject { described_class.provider_search(search_term) }
 
     context "with an exactly matching code" do
       let(:search_term) { "ABC" }
