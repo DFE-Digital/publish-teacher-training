@@ -1,5 +1,8 @@
 class ApplicationController < ActionController::Base
   include EmitsRequestEvents
+  include Authentication
+
+  helper_method :current_user
   before_action :authenticate
 
   include Pundit
@@ -13,26 +16,6 @@ private
   def enforce_basic_auth
     authenticate_or_request_with_http_basic do |username, password|
       BasicAuthenticable.authenticate(username, password)
-    end
-  end
-
-  def user_session
-    @user_session ||= UserSession.load_from_session(session)
-  end
-
-  def current_user
-    @current_user ||= User.find_by(email: user_session&.email)
-  end
-  helper_method :current_user
-
-  def authenticated?
-    current_user.present?
-  end
-
-  def authenticate
-    if !authenticated?
-      session["post_dfe_sign_in_path"] = request.fullpath
-      redirect_to sign_in_path
     end
   end
 
