@@ -1,9 +1,9 @@
 <table class="govuk-table">
   <thead class="govuk-table__head">
     <tr class="govuk-table__row">
-      <th scope="col" class="govuk-table__header govuk-!-width-one-quarter">First name</th>
-      <th scope="col" class="govuk-table__header govuk-!-width-one-quarter">Last name</th>
-      <th scope="col" class="govuk-table__header govuk-!-width-two-quarters">Email</th>
+      <th scope="col" class="govuk-table__header govuk-!-width-one-quarter">Name</th>
+      <th scope="col" class="govuk-table__header govuk-!-width-one-quarter">Email</th>
+      <th scope="col" class="govuk-table__header govuk-!-width-one-half">Providers</th>
     </tr>
   </thead>
 
@@ -11,15 +11,21 @@
     <% @users.each do |user| %>
       <tr class="govuk-table__row user-row">
         <td class="govuk-table__cell">
-            <span class="govuk-!-display-block govuk-!-margin-bottom-1"><%= user.first_name %></span>
-        </td>
-        <td class="govuk-table__cell">
-          <span class="govuk-!-display-block govuk-!-margin-bottom-1"><%= user.last_name %></span>
+          <span class="govuk-!-display-block govuk-!-margin-bottom-1">
+            <%= user.full_name %>
+          </span>
         </td>
         <td class="govuk-table__cell">
           <span class="govuk-!-display-block govuk-!-margin-bottom-1">
-            <%= govuk_link_to user.email, support_user_path(user) %>
+            <%= user.email %>
           </span>
+        </td>
+        <td class="govuk-table__cell">
+          <% user.providers.each do |provider| %>
+            <span class="govuk-!-display-block govuk-!-margin-bottom-1">
+              <%= provider.provider_name %>
+            </span>
+          <% end %>
         </td>
       </tr>
     <% end %>

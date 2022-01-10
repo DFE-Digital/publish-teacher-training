@@ -68,6 +68,10 @@ class User < ApplicationRecord
     user_notifications.count.positive?
   end
 
+  def full_name
+    "#{first_name} #{last_name}"
+  end
+
 private
 
   def email_is_lowercase
