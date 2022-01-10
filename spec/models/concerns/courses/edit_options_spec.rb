@@ -53,6 +53,8 @@ describe Course, type: :model do
     it "sorts the potentinal subject by their name" do
       expect(secondary_course.potential_subjects).to eql(
         [
+          find(:secondary_subject, :ancient_greek),
+          find(:secondary_subject, :ancient_hebrew),
           find(:secondary_subject, :art_and_design),
           find(:secondary_subject, :biology),
           find(:secondary_subject, :business_studies),
@@ -69,6 +71,7 @@ describe Course, type: :model do
           find(:secondary_subject, :geography),
           find(:secondary_subject, :health_and_social_care),
           find(:secondary_subject, :history),
+          find(:secondary_subject, :latin),
           find(:secondary_subject, :mathematics),
           find(:secondary_subject, :modern_languages),
           find(:secondary_subject, :music),

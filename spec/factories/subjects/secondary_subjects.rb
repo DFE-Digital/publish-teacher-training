@@ -2,6 +2,8 @@ FactoryBot.define do
   subjects = {
     # Modern Lanuages has been removed as it would cause validation errors if it
     # isn't paired with a valid modern language subject use a trait if you want to create it
+    "Ancient Greek" => "A1",
+    "Ancient Hebrew" => "A2",
     "Art and design" => "W1",
     "Science" => "F0",
     "Biology" => "C1",
@@ -19,6 +21,7 @@ FactoryBot.define do
     "Geography" => "F8",
     "Health and social care" => "L5",
     "History" => "V1",
+    "Latin" => "A0",
     "Mathematics" => "G1",
     "Music" => "W3",
     "Philosophy" => "P1",
@@ -40,6 +43,16 @@ FactoryBot.define do
     after(:build) do |subject, _level|
       financial_incentive = find_or_create(:financial_incentive, subject: subject)
       subject.update(financial_incentive: financial_incentive)
+    end
+
+    trait :ancient_greek do
+      subject_name { "Ancient Greek" }
+      subject_code { subjects["Ancient Greek"] }
+    end
+
+    trait :ancient_hebrew do
+      subject_name { "Ancient Hebrew" }
+      subject_code { subjects["Ancient Hebrew"] }
     end
 
     trait :art_and_design do
@@ -125,6 +138,11 @@ FactoryBot.define do
     trait :history do
       subject_name { "History" }
       subject_code { subjects["History"] }
+    end
+
+    trait :latin do
+      subject_name { "Latin" }
+      subject_code { subjects["Latin"] }
     end
 
     trait :mathematics do
