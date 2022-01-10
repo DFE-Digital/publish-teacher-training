@@ -23,6 +23,8 @@ Subjects::CreatorService.new.execute
 Subjects::FinancialIncentiveCreatorService.new(year: 2021).execute
 Subjects::FinancialIncentiveSetSubjectKnowledgeEnhancementCourseAvailableService.new(year: 2021).execute
 
+Subjects::FinancialIncentiveCreatorService.new(year: 2022).execute
+
 superuser = User.create!(
   first_name: "Super",
   last_name: "Admin",

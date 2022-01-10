@@ -52,6 +52,11 @@ module Subjects
         # NOTE: no subject_code for 'Modern Languages' because this is just a stub used to trigger
         # selection of actual entries from `modern_languages` list
         { subject_name: "Modern Languages", subject_code: nil },
+
+        # NOTE: These subject_code are contrived.
+        { subject_name: "Latin", subject_code: "A0" },
+        { subject_name: "Ancient Greek", subject_code: "A1" },
+        { subject_name: "Ancient Hebrew", subject_code: "A2" },
       ]
 
       modern_languages = [
