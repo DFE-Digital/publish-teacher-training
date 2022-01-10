@@ -4,3 +4,11 @@
 
 @import "status-box";
 @import "summary-list";
+
+.fixed-table {
+  table-layout: fixed;
+}
+
+.break-email {
+  word-break: break-all;
+}
