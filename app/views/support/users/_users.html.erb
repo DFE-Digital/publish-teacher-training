@@ -21,7 +21,7 @@
           </span>
         </td>
         <td class="govuk-table__cell">
-          <% user.providers.each do |provider| %>
+          <% user.providers.in_current_cycle.each do |provider| %>
             <span class="govuk-!-display-block govuk-!-margin-bottom-1">
               <%= provider.provider_name %>
             </span>
