@@ -1,9 +1,9 @@
 <table class="govuk-table">
   <thead class="govuk-table__head">
     <tr class="govuk-table__row">
-      <th scope="col" class="govuk-table__header govuk-!-width-one-quarter">Name</th>
+      <th scope="col" class="govuk-table__header govuk-!-width-one-half">Name</th>
       <th scope="col" class="govuk-table__header govuk-!-width-one-quarter">Email</th>
-      <th scope="col" class="govuk-table__header govuk-!-width-one-half">Providers</th>
+      <th scope="col" class="govuk-table__header govuk-!-width-one-quarter">Provider count</th>
     </tr>
   </thead>
 
@@ -21,11 +21,9 @@
           </span>
         </td>
         <td class="govuk-table__cell">
-          <% user.providers.in_current_cycle.each do |provider| %>
-            <span class="govuk-!-display-block govuk-!-margin-bottom-1">
-              <%= provider.provider_name %>
-            </span>
-          <% end %>
+          <span class="govuk-!-display-block govuk-!-margin-bottom-1">
+            <%= user.providers.in_current_cycle.count %>
+          </span>
         </td>
       </tr>
     <% end %>
