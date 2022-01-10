@@ -12,6 +12,20 @@ feature "Authentication" do
     and_i_cannot_access_the_support_interface
   end
 
+  context "publish migration" do
+    before do
+      allow_any_instance_of(ActionDispatch::Request).to receive(:referer).and_return(Settings.publish_url)
+      disable_features(:send_request_data_to_bigquery)
+      enable_features(:display_migration_signin)
+    end
+
+    scenario "users are shown the right signin content" do
+      given_i_am_a_provider_user
+      when_i_arrive_from_the_old_publish
+      then_i_am_shown_the_right_content
+    end
+  end
+
   def given_i_am_a_provider_user
     @current_user = create(:user)
     user_exists_in_dfe_sign_in(user: @current_user)
@@ -38,5 +52,14 @@ feature "Authentication" do
     visit support_providers_path
     expect(page).to have_content "User is not an admin"
     expect(page).to have_current_path sign_in_path
+  end
+
+  def when_i_arrive_from_the_old_publish
+    sign_in_page.load
+  end
+
+  def then_i_am_shown_the_right_content
+    expect(sign_in_page).to have_text("Sign in to continue")
+    expect(sign_in_page).to have_button("Sign in")
   end
 end
