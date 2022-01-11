@@ -20,6 +20,7 @@ bg_jobs:
 skylight:
   enable: true
 environment:
+  label: "Beta"
   name: "beta"
 render_json_errors: true
 

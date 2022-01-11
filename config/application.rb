@@ -15,6 +15,7 @@ require "action_view/railtie"
 # require "sprockets/railtie"
 # require "rails/test_unit/railtie"
 require "view_component/engine"
+require "view_component/compile_cache"
 require "govuk/components"
 
 # Require the gems listed in Gemfile, including any gems
@@ -58,6 +59,7 @@ module ManageCoursesBackend
 
     config.view_component.preview_paths = [Rails.root.join("spec/components")]
     config.view_component.preview_route = "/view_components"
+    config.view_component.preview_controller = "ComponentPreviewsController"
     config.view_component.show_previews = !Rails.env.production?
 
     config.analytics = config_for(:analytics)

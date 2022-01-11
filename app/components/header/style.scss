@@ -1,68 +1,40 @@
 @import "../base.scss";
 
-.app-header__logo {
-  width: auto;
-}
+.app-header--wide-logo {
+  @include govuk-media-query($from: desktop) {
+    .govuk-header__logo {
+      width: auto;
+    }
 
-.app-header__content {
-  width: auto;
-  float: right;
-}
-
-// If the header content contains just a single item, don't collapse into a
-// menu drop-down.
-.app-header__content--single-item {
-  .govuk-header__menu-button {
-    display: none;
-  }
-
-  .govuk-header__navigation {
-    display: block;
-    position: absolute;
-    top: 10px;
-    right: 0;
-  }
-
-  .govuk-header__navigation-item {
-    border-bottom: none;
+    .govuk-header__content {
+      width: auto;
+      float: right;
+    }
   }
 }
 
-.app-phase-banner__env--development .govuk-tag {
-  background: govuk-colour("dark-grey");
-}
+.govuk-header__container {
+  .app-header--development & {
+    border-bottom-color: govuk-colour("dark-grey");
+  }
 
-.app-phase-banner__env--qa .govuk-tag {
-  background-color: govuk-colour("orange");
-}
+  .app-header--qa & {
+    border-bottom-color: govuk-colour("orange");
+  }
 
-.app-phase-banner__env--staging .govuk-tag {
-  background-color: govuk-colour("red");
-}
+  .app-header--review & {
+    border-bottom-color: govuk-colour("purple");
+  }
 
-.app-phase-banner__env--sandbox .govuk-tag,
-.app-phase-banner__env--review .govuk-tag {
-  background-color: govuk-colour("purple");
-}
+  .app-header--rollover & {
+    border-bottom-color: govuk-colour("turquoise");
+  }
 
-.app-header__env--development,
-.app-header__env--development .govuk-header__container {
-  border-color: govuk-colour("dark-grey");
-}
+  .app-header--staging & {
+    border-bottom-color: govuk-colour("red");
+  }
 
-.app-header__env--qa,
-.app-header__env--qa .govuk-header__container {
-  border-color: govuk-colour("orange");
-}
-
-.app-header__env--staging,
-.app-header__env--staging .govuk-header__container {
-  border-color: govuk-colour("red");
-}
-
-.app-header__env--sandbox,
-.app-header__env--review,
-.app-header__env--sandbox .govuk-header__container,
-.app-header__env--review .govuk-header__container {
-  border-color: govuk-colour("purple");
+  .app-header--sandbox & {
+    border-bottom-color: govuk-colour("purple");
+  }
 }

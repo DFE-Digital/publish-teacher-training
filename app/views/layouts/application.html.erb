@@ -34,14 +34,14 @@
     <% else %>
       <%= render Header::View.new(
         service_name: I18n.t("service_name"),
-        items: header_items(@current_user),
+        current_user: current_user
       ) %>
     <% end %>
 
-    <%= yield :navigation_bar %>
-
     <div class="govuk-width-container">
       <div class="govuk-width-container">
+        <%= render PhaseBanner::View.new %>
+        <%= yield :navigation_bar %>
         <%= yield :breadcrumbs %>
         <%= yield :before_content %>
       </div>

@@ -19,6 +19,7 @@ bg_jobs:
     class: "SaveStatisticJob"
     queue: save_statistic
 environment:
+  label: "Staging"
   name: "staging"
 
 features:

@@ -6,35 +6,42 @@ module Header
   describe View do
     alias_method :component, :page
 
-    let(:items) { nil }
-
-    before do
-      render_inline(described_class.new(service_name: "Test Service", items: items))
-    end
-
     it "renders Service's name" do
+      render_inline(described_class.new(service_name: "Test Service"))
       expect(component.find(".govuk-header__product-name")).to have_text("Test Service")
     end
 
-    it "does not render links" do
-      expect(component).not_to have_selector(".app-header__content")
+    it "links to Old Publish homepage" do
+      render_inline(described_class.new(service_name: "Test Service"))
+      expect(page.has_link?(nil, href: Settings.publish_url)).to eq true
     end
 
-    context "with one menu item" do
-      let(:items) { [{ name: "Link", url: "www.google.com" }] }
+    it "doesn't contain a sign out link if no current user" do
+      render_inline(described_class.new(service_name: "test"))
+      expect(component).not_to have_text("Sign out")
+    end
 
-      it "renders the link and adds the correct class" do
-        expect(component.find_all(".app-header__content .govuk-header__link").length).to eq(1)
-        expect(page).to have_css(".app-header__content--single-item")
+    context "for an admin user" do
+      it "renders a sign out link" do
+        render_inline(
+          described_class.new(
+            service_name: "test",
+            current_user: build(:user, :admin),
+          ),
+        )
+
+        expect(component).to have_text("Sign out")
       end
     end
 
-    context "with multiple menu items" do
-      let(:items) { [{ name: "Link1", url: "www.google.com" }, { name: "Link2", url: "www.google.com" }] }
+    context "for a non-admin user" do
+      it "links to Old Publish notifications section if associated_with_accredited_body" do
+        user = build(:user)
+        allow(user).to receive(:associated_with_accredited_body?).and_return true
 
-      it "renders the links" do
-        expect(component.find_all(".app-header__content .govuk-header__link").length).to eq(2)
-        expect(page).not_to have_css(".app-header__content--single-item")
+        render_inline(described_class.new(service_name: "Test Service", current_user: user))
+
+        expect(page.has_link?("Notifications", href: "#{Settings.publish_url}/notifications")).to eq true
       end
     end
   end
