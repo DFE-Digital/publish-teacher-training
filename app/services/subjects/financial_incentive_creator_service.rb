@@ -8,6 +8,11 @@ module Subjects
 
     def subject_and_financial_incentives
       subject_and_financial_incentives = {
+        2022 => {
+          ["Latin", "Ancient Greek", "Ancient Hebrew"] => {
+            bursary_amount: "15000",
+          },
+        },
         2021 => {
           %w[Biology] => {
             bursary_amount: "7000",

@@ -290,7 +290,7 @@ describe "Courses API v2", type: :request do
                   ],
                   "modern_languages" => [
                     {
-                      "id" => "34",
+                      "id" => "37",
                       "type" => "subjects",
                       "attributes" => {
                         "subject_name" => "French",
@@ -302,7 +302,7 @@ describe "Courses API v2", type: :request do
                       },
                     },
                     {
-                      "id" => "35",
+                      "id" => "38",
                       "type" => "subjects",
                       "attributes" => {
                         "subject_name" => "English as a second or other language",
@@ -314,7 +314,7 @@ describe "Courses API v2", type: :request do
                       },
                     },
                     {
-                      "id" => "36",
+                      "id" => "39",
                       "type" => "subjects",
                       "attributes" => {
                         "subject_name" => "German",
@@ -326,7 +326,7 @@ describe "Courses API v2", type: :request do
                       },
                     },
                     {
-                      "id" => "37",
+                      "id" => "40",
                       "type" => "subjects",
                       "attributes" => {
                         "subject_name" => "Italian",
@@ -338,7 +338,7 @@ describe "Courses API v2", type: :request do
                       },
                     },
                     {
-                      "id" => "38",
+                      "id" => "41",
                       "type" => "subjects",
                       "attributes" => {
                         "subject_name" => "Japanese",
@@ -350,7 +350,7 @@ describe "Courses API v2", type: :request do
                       },
                     },
                     {
-                      "id" => "39",
+                      "id" => "42",
                       "type" => "subjects",
                       "attributes" => {
                         "subject_name" => "Mandarin",
@@ -362,7 +362,7 @@ describe "Courses API v2", type: :request do
                       },
                     },
                     {
-                      "id" => "40",
+                      "id" => "43",
                       "type" => "subjects",
                       "attributes" => {
                         "subject_name" => "Russian",
@@ -374,7 +374,7 @@ describe "Courses API v2", type: :request do
                       },
                     },
                     {
-                      "id" => "41",
+                      "id" => "44",
                       "type" => "subjects",
                       "attributes" => {
                         "subject_name" => "Spanish",
@@ -386,7 +386,7 @@ describe "Courses API v2", type: :request do
                       },
                     },
                     {
-                      "id" => "42",
+                      "id" => "45",
                       "type" => "subjects",
                       "attributes" => {
                         "subject_name" => "Modern languages (other)",
@@ -538,7 +538,7 @@ describe "Courses API v2", type: :request do
           eq(
             [
               {
-                "id" => "34",
+                "id" => "37",
                 "type" => "subjects",
                 "attributes" => {
                   "subject_name" => "French",
@@ -550,7 +550,7 @@ describe "Courses API v2", type: :request do
                 },
               },
               {
-                "id" => "35",
+                "id" => "38",
                 "type" => "subjects",
                 "attributes" => {
                   "subject_name" => "English as a second or other language",
@@ -562,7 +562,7 @@ describe "Courses API v2", type: :request do
                 },
               },
               {
-                "id" => "36",
+                "id" => "39",
                 "type" => "subjects",
                 "attributes" => {
                   "subject_name" => "German",
@@ -574,7 +574,7 @@ describe "Courses API v2", type: :request do
                 },
               },
               {
-                "id" => "37",
+                "id" => "40",
                 "type" => "subjects",
                 "attributes" => {
                   "subject_name" => "Italian",
@@ -586,7 +586,7 @@ describe "Courses API v2", type: :request do
                 },
               },
               {
-                "id" => "38",
+                "id" => "41",
                 "type" => "subjects",
                 "attributes" => {
                   "subject_name" => "Japanese",
@@ -598,7 +598,7 @@ describe "Courses API v2", type: :request do
                 },
               },
               {
-                "id" => "39",
+                "id" => "42",
                 "type" => "subjects",
                 "attributes" => {
                   "subject_name" => "Mandarin",
@@ -610,7 +610,7 @@ describe "Courses API v2", type: :request do
                 },
               },
               {
-                "id" => "40",
+                "id" => "43",
                 "type" => "subjects",
                 "attributes" => {
                   "subject_name" => "Russian",
@@ -622,7 +622,7 @@ describe "Courses API v2", type: :request do
                 },
               },
               {
-                "id" => "41",
+                "id" => "44",
                 "type" => "subjects",
                 "attributes" => {
                   "subject_name" => "Spanish",
@@ -634,7 +634,7 @@ describe "Courses API v2", type: :request do
                 },
               },
               {
-                "id" => "42",
+                "id" => "45",
                 "type" => "subjects",
                 "attributes" => {
                   "subject_name" => "Modern languages (other)",
@@ -865,7 +865,7 @@ describe "Courses API v2", type: :request do
                 ],
                 "modern_languages" => [
                   {
-                    "id" => "34",
+                    "id" => "37",
                     "type" => "subjects",
                     "attributes" => {
                       "subject_name" => "French",
@@ -877,7 +877,7 @@ describe "Courses API v2", type: :request do
                     },
                   },
                   {
-                    "id" => "35",
+                    "id" => "38",
                     "type" => "subjects",
                     "attributes" => {
                       "subject_name" => "English as a second or other language",
@@ -889,7 +889,7 @@ describe "Courses API v2", type: :request do
                     },
                   },
                   {
-                    "id" => "36",
+                    "id" => "39",
                     "type" => "subjects",
                     "attributes" => {
                       "subject_name" => "German",
@@ -901,7 +901,7 @@ describe "Courses API v2", type: :request do
                     },
                   },
                   {
-                    "id" => "37",
+                    "id" => "40",
                     "type" => "subjects",
                     "attributes" => {
                       "subject_name" => "Italian",
@@ -913,7 +913,7 @@ describe "Courses API v2", type: :request do
                     },
                   },
                   {
-                    "id" => "38",
+                    "id" => "41",
                     "type" => "subjects",
                     "attributes" => {
                       "subject_name" => "Japanese",
@@ -925,7 +925,7 @@ describe "Courses API v2", type: :request do
                     },
                   },
                   {
-                    "id" => "39",
+                    "id" => "42",
                     "type" => "subjects",
                     "attributes" => {
                       "subject_name" => "Mandarin",
@@ -937,7 +937,7 @@ describe "Courses API v2", type: :request do
                     },
                   },
                   {
-                    "id" => "40",
+                    "id" => "43",
                     "type" => "subjects",
                     "attributes" => {
                       "subject_name" => "Russian",
@@ -949,7 +949,7 @@ describe "Courses API v2", type: :request do
                     },
                   },
                   {
-                    "id" => "41",
+                    "id" => "44",
                     "type" => "subjects",
                     "attributes" => {
                       "subject_name" => "Spanish",
@@ -961,7 +961,7 @@ describe "Courses API v2", type: :request do
                     },
                   },
                   {
-                    "id" => "42",
+                    "id" => "45",
                     "type" => "subjects",
                     "attributes" => {
                       "subject_name" => "Modern languages (other)",

@@ -411,6 +411,42 @@ RSpec.describe API::Public::V1::SubjectsController do
             "id" => "34",
             "type" => "subjects",
             "attributes" => {
+              "name" => "Latin",
+              "code" => "A0",
+              "bursary_amount" => nil,
+              "early_career_payments" => nil,
+              "scholarship" => nil,
+              "subject_knowledge_enhancement_course_available" => nil,
+            },
+          },
+          {
+            "id" => "35",
+            "type" => "subjects",
+            "attributes" => {
+              "name" => "Ancient Greek",
+              "code" => "A1",
+              "bursary_amount" => nil,
+              "early_career_payments" => nil,
+              "scholarship" => nil,
+              "subject_knowledge_enhancement_course_available" => nil,
+            },
+          },
+          {
+            "id" => "36",
+            "type" => "subjects",
+            "attributes" => {
+              "name" => "Ancient Hebrew",
+              "code" => "A2",
+              "bursary_amount" => nil,
+              "early_career_payments" => nil,
+              "scholarship" => nil,
+              "subject_knowledge_enhancement_course_available" => nil,
+            },
+          },
+          {
+            "id" => "37",
+            "type" => "subjects",
+            "attributes" => {
               "name" => "French",
               "code" => "15",
               "bursary_amount" => "10000",
@@ -420,7 +456,7 @@ RSpec.describe API::Public::V1::SubjectsController do
             },
           },
           {
-            "id" => "35",
+            "id" => "38",
             "type" => "subjects",
             "attributes" => {
               "name" => "English as a second or other language",
@@ -432,7 +468,7 @@ RSpec.describe API::Public::V1::SubjectsController do
             },
           },
           {
-            "id" => "36",
+            "id" => "39",
             "type" => "subjects",
             "attributes" => {
               "name" => "German",
@@ -444,7 +480,7 @@ RSpec.describe API::Public::V1::SubjectsController do
             },
           },
           {
-            "id" => "37",
+            "id" => "40",
             "type" => "subjects",
             "attributes" => {
               "name" => "Italian",
@@ -456,7 +492,7 @@ RSpec.describe API::Public::V1::SubjectsController do
             },
           },
           {
-            "id" => "38",
+            "id" => "41",
             "type" => "subjects",
             "attributes" => {
               "name" => "Japanese",
@@ -468,7 +504,7 @@ RSpec.describe API::Public::V1::SubjectsController do
             },
           },
           {
-            "id" => "39",
+            "id" => "42",
             "type" => "subjects",
             "attributes" => {
               "name" => "Mandarin",
@@ -480,7 +516,7 @@ RSpec.describe API::Public::V1::SubjectsController do
             },
           },
           {
-            "id" => "40",
+            "id" => "43",
             "type" => "subjects",
             "attributes" => {
               "name" => "Russian",
@@ -492,7 +528,7 @@ RSpec.describe API::Public::V1::SubjectsController do
             },
           },
           {
-            "id" => "41",
+            "id" => "44",
             "type" => "subjects",
             "attributes" => {
               "name" => "Spanish",
@@ -504,7 +540,7 @@ RSpec.describe API::Public::V1::SubjectsController do
             },
           },
           {
-            "id" => "42",
+            "id" => "45",
             "type" => "subjects",
             "attributes" => {
               "name" => "Modern languages (other)",
@@ -516,7 +552,7 @@ RSpec.describe API::Public::V1::SubjectsController do
             },
           },
           {
-            "id" => "43",
+            "id" => "46",
             "type" => "subjects",
             "attributes" => {
               "name" => "Further education",
@@ -543,6 +579,8 @@ RSpec.describe API::Public::V1::SubjectsController do
 
       it "sorts the subject names in ascending order" do
         expect(json_response["data"].map { |subject| subject["attributes"]["name"] }).to eq([
+          "Ancient Greek",
+          "Ancient Hebrew",
           "Art and design",
           "Biology",
           "Business studies",
@@ -565,6 +603,7 @@ RSpec.describe API::Public::V1::SubjectsController do
           "History",
           "Italian",
           "Japanese",
+          "Latin",
           "Mandarin",
           "Mathematics",
           "Modern Languages",

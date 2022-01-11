@@ -410,6 +410,42 @@ describe "GET v3 /subjects" do
         "id" => "34",
         "type" => "subjects",
         "attributes" => {
+          "subject_name" => "Latin",
+          "subject_code" => "A0",
+          "bursary_amount" => nil,
+          "early_career_payments" => nil,
+          "scholarship" => nil,
+          "subject_knowledge_enhancement_course_available" => nil,
+        },
+      },
+      {
+        "id" => "35",
+        "type" => "subjects",
+        "attributes" => {
+          "subject_name" => "Ancient Greek",
+          "subject_code" => "A1",
+          "bursary_amount" => nil,
+          "early_career_payments" => nil,
+          "scholarship" => nil,
+          "subject_knowledge_enhancement_course_available" => nil,
+        },
+      },
+      {
+        "id" => "36",
+        "type" => "subjects",
+        "attributes" => {
+          "subject_name" => "Ancient Hebrew",
+          "subject_code" => "A2",
+          "bursary_amount" => nil,
+          "early_career_payments" => nil,
+          "scholarship" => nil,
+          "subject_knowledge_enhancement_course_available" => nil,
+        },
+      },
+      {
+        "id" => "37",
+        "type" => "subjects",
+        "attributes" => {
           "subject_name" => "French",
           "subject_code" => "15",
           "bursary_amount" => "10000",
@@ -419,7 +455,7 @@ describe "GET v3 /subjects" do
         },
       },
       {
-        "id" => "35",
+        "id" => "38",
         "type" => "subjects",
         "attributes" => {
           "subject_name" => "English as a second or other language",
@@ -431,7 +467,7 @@ describe "GET v3 /subjects" do
         },
       },
       {
-        "id" => "36",
+        "id" => "39",
         "type" => "subjects",
         "attributes" => {
           "subject_name" => "German",
@@ -443,7 +479,7 @@ describe "GET v3 /subjects" do
         },
       },
       {
-        "id" => "37",
+        "id" => "40",
         "type" => "subjects",
         "attributes" => {
           "subject_name" => "Italian",
@@ -455,7 +491,7 @@ describe "GET v3 /subjects" do
         },
       },
       {
-        "id" => "38",
+        "id" => "41",
         "type" => "subjects",
         "attributes" => {
           "subject_name" => "Japanese",
@@ -467,7 +503,7 @@ describe "GET v3 /subjects" do
         },
       },
       {
-        "id" => "39",
+        "id" => "42",
         "type" => "subjects",
         "attributes" => {
           "subject_name" => "Mandarin",
@@ -479,7 +515,7 @@ describe "GET v3 /subjects" do
         },
       },
       {
-        "id" => "40",
+        "id" => "43",
         "type" => "subjects",
         "attributes" => {
           "subject_name" => "Russian",
@@ -491,7 +527,7 @@ describe "GET v3 /subjects" do
         },
       },
       {
-        "id" => "41",
+        "id" => "44",
         "type" => "subjects",
         "attributes" => {
           "subject_name" => "Spanish",
@@ -503,7 +539,7 @@ describe "GET v3 /subjects" do
         },
       },
       {
-        "id" => "42",
+        "id" => "45",
         "type" => "subjects",
         "attributes" => {
           "subject_name" => "Modern languages (other)",
@@ -515,7 +551,7 @@ describe "GET v3 /subjects" do
         },
       },
       {
-        "id" => "43",
+        "id" => "46",
         "type" => "subjects",
         "attributes" => {
           "subject_name" => "Further education",
@@ -772,67 +808,88 @@ describe "GET v3 /subjects" do
           "id" => "34",
           "type" => "subjects",
           "attributes" => {
-            "subject_name" => "French",
+            "subject_name" => "Latin",
           },
         },
         {
           "id" => "35",
           "type" => "subjects",
           "attributes" => {
-            "subject_name" => "English as a second or other language",
+            "subject_name" => "Ancient Greek",
           },
         },
         {
           "id" => "36",
           "type" => "subjects",
           "attributes" => {
-            "subject_name" => "German",
+            "subject_name" => "Ancient Hebrew",
           },
         },
         {
           "id" => "37",
           "type" => "subjects",
           "attributes" => {
-            "subject_name" => "Italian",
+            "subject_name" => "French",
           },
         },
         {
           "id" => "38",
           "type" => "subjects",
           "attributes" => {
-            "subject_name" => "Japanese",
+            "subject_name" => "English as a second or other language",
           },
         },
         {
           "id" => "39",
           "type" => "subjects",
           "attributes" => {
-            "subject_name" => "Mandarin",
+            "subject_name" => "German",
           },
         },
         {
           "id" => "40",
           "type" => "subjects",
           "attributes" => {
-            "subject_name" => "Russian",
+            "subject_name" => "Italian",
           },
         },
         {
           "id" => "41",
           "type" => "subjects",
           "attributes" => {
-            "subject_name" => "Spanish",
+            "subject_name" => "Japanese",
           },
         },
         {
           "id" => "42",
           "type" => "subjects",
           "attributes" => {
-            "subject_name" => "Modern languages (other)",
+            "subject_name" => "Mandarin",
           },
         },
         {
           "id" => "43",
+          "type" => "subjects",
+          "attributes" => {
+            "subject_name" => "Russian",
+          },
+        },
+        {
+          "id" => "44",
+          "type" => "subjects",
+          "attributes" => {
+            "subject_name" => "Spanish",
+          },
+        },
+        {
+          "id" => "45",
+          "type" => "subjects",
+          "attributes" => {
+            "subject_name" => "Modern languages (other)",
+          },
+        },
+        {
+          "id" => "46",
           "type" => "subjects",
           "attributes" => {
             "subject_name" => "Further education",
@@ -849,6 +906,8 @@ describe "GET v3 /subjects" do
 
       it "sorts the subject names in ascending order" do
         expect(json_response["data"].map { |subject| subject["attributes"]["subject_name"] }).to eq([
+          "Ancient Greek",
+          "Ancient Hebrew",
           "Art and design",
           "Biology",
           "Business studies",
@@ -871,6 +930,7 @@ describe "GET v3 /subjects" do
           "History",
           "Italian",
           "Japanese",
+          "Latin",
           "Mandarin",
           "Mathematics",
           "Modern Languages",
