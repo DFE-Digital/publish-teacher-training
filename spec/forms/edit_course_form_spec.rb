@@ -65,7 +65,7 @@ module Support
           expect(subject.valid?).to eq(false)
           expect(subject.errors.messages.count).to eq(2)
           expect(subject.errors.messages[:start_date]).to include("Start date format is invalid")
-          expect(subject.errors.messages[:applications_open_from]).to include("Applications open from format is invalid")
+          expect(subject.errors.messages[:applications_open_from]).to include("Applications open from date format is invalid")
         end
       end
 

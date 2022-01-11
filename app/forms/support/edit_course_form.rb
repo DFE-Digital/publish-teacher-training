@@ -97,7 +97,16 @@ module Support
     def validate_date(date_type)
       return if date_args_blank?(date_type)
 
-      errors.add(date_type, "#{date_type.to_s.humanize.capitalize} format is invalid") unless valid_date?(date_type)
+      errors.add(date_type, "#{attribute(date_type)} format is invalid") unless valid_date?(date_type)
+    end
+
+    def attribute(date_type)
+      case date_type
+      when :applications_open_from
+        "#{date_type.to_s.humanize.capitalize} date"
+      else
+        date_type.to_s.humanize.capitalize
+      end
     end
 
     def valid_date?(date_type)

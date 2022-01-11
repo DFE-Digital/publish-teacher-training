@@ -195,7 +195,7 @@ private
   end
 
   def and_it_contains_applications_open_from_format_error
-    expect(course_edit_page.error_summary.text).to include("Applications open from format is invalid")
+    expect(course_edit_page.error_summary.text).to include("Applications open from date format is invalid")
   end
 
   def and_it_contains_blank_errors
