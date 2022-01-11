@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :access_request do
-    requester { build(:user, :with_organisation) }
+    requester { build(:user, :with_organisation, :with_provider) }
     status { :requested }
     request_date_utc { Time.now.utc }
     email_address { Faker::Internet.email }

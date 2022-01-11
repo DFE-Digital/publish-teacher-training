@@ -244,8 +244,8 @@ describe "Access Request API V2", type: :request do
       end
 
       context "when the user requested user already exists" do
-        it "gives a pre existing user access to the right organisations" do
-          expect(requested_user.organisations).to eq requesting_user.organisations
+        it "gives a pre existing user access to the right providers" do
+          expect(requested_user.providers).to eq requesting_user.providers
         end
       end
 
@@ -265,10 +265,10 @@ describe "Access Request API V2", type: :request do
                headers: { "HTTP_AUTHORIZATION" => credentials }
         end
 
-        it "creates a new account for a new user and gives access to the right orgs" do
+        it "creates a new account for a new user and gives access to the right providers" do
           new_user = User.find_by!(email: "test@user.com")
 
-          expect(new_user.organisations).to eq requesting_user.organisations
+          expect(new_user.providers).to eq requesting_user.providers
         end
       end
     end
