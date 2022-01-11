@@ -20,10 +20,10 @@ next_recruitment_cycle = RecruitmentCycle.create(year: (current_recruitment_year
 
 Subjects::SubjectAreaCreatorService.new.execute
 Subjects::CreatorService.new.execute
-Subjects::FinancialIncentiveCreatorService.new(year: 2021).execute
+[2021, 2022].each do |year|
+  Subjects::FinancialIncentiveCreatorService.new(year: year).execute
+end
 Subjects::FinancialIncentiveSetSubjectKnowledgeEnhancementCourseAvailableService.new(year: 2021).execute
-
-Subjects::FinancialIncentiveCreatorService.new(year: 2022).execute
 
 superuser = User.create!(
   first_name: "Super",
