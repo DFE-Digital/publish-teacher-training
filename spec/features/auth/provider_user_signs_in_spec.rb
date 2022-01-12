@@ -19,7 +19,7 @@ feature "Authentication" do
       enable_features(:display_migration_signin)
     end
 
-    scenario "users are shown the right signin content" do
+    scenario "users are shown the right signin content when arriving from Old Publish" do
       given_i_am_a_provider_user
       when_i_arrive_from_the_old_publish
       then_i_am_shown_the_right_content
