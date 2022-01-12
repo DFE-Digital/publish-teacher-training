@@ -36,15 +36,19 @@ module Support
     def update_course_params
       params.require(:support_edit_course_form).permit(
         *EditCourseForm::FIELDS,
-        :"start_date(3i)", :"start_date(2i)", :"start_date(1i)"
-      ).transform_keys { |key| start_date_field_to_attribute(key) }
+        :"start_date(3i)", :"start_date(2i)", :"start_date(1i)",
+        :"applications_open_from(3i)", :"applications_open_from(2i)", :"applications_open_from(1i)"
+      ).transform_keys { |key| date_field_to_attribute(key) }
     end
 
-    def start_date_field_to_attribute(key)
+    def date_field_to_attribute(key)
       case key
       when "start_date(3i)" then "start_date_day"
       when "start_date(2i)" then "start_date_month"
       when "start_date(1i)" then "start_date_year"
+      when "applications_open_from(3i)" then "applications_open_from_day"
+      when "applications_open_from(2i)" then "applications_open_from_month"
+      when "applications_open_from(1i)" then "applications_open_from_year"
       else key
       end
     end

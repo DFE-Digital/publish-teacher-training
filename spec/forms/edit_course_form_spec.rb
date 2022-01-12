@@ -3,10 +3,10 @@ require "rails_helper"
 module Support
   describe EditCourseForm do
     let(:course) { create(:course, course_code: "T92", name: "Universitry of Oxfords", start_date: Date.new(2022, 9, 1)) }
-    let(:valid_attributes) { { course_code: "T92", name: "Universitry of Oxfords", start_date_day: "2", start_date_month: "9", start_date_year: "2022" } }
-    let(:attributes_with_invalid_date_format) { { course_code: "T92", name: "Universitry of Oxfords", start_date_day: "222", start_date_month: "90", start_date_year: "2022" } }
-    let(:attributes_with_invalid_date_year) { { course_code: "T92", name: "Universitry of Oxfords", start_date_day: "2", start_date_month: "9", start_date_year: "2027" } }
-    let(:blank_attributes) { { course_code: "", name: "", start_date_day: "", start_date_month: "", start_date_year: "" } }
+    let(:valid_attributes) { { course_code: "T92", name: "Universitry of Oxfords", start_date_day: "2", start_date_month: "9", start_date_year: "2022", applications_open_from_day: "5", applications_open_from_month: "7", applications_open_from_year: "2022" } }
+    let(:attributes_with_invalid_date_format) { { course_code: "T92", name: "Universitry of Oxfords", start_date_day: "222", start_date_month: "90", start_date_year: "2022", applications_open_from_day: "500x", applications_open_from_month: "7", applications_open_from_year: "2022" } }
+    let(:attributes_with_invalid_date_year) { { course_code: "T92", name: "Universitry of Oxfords", start_date_day: "2", start_date_month: "9", start_date_year: "2027", applications_open_from_day: "4", applications_open_from_month: "8", applications_open_from_year: "2000" } }
+    let(:blank_attributes) { { course_code: "", name: "", start_date_day: "", start_date_month: "", start_date_year: "", applications_open_from_day: "", applications_open_from_month: "", applications_open_from_year: "" } }
 
     subject { described_class.new(course) }
 
@@ -63,8 +63,9 @@ module Support
           subject.save
 
           expect(subject.valid?).to eq(false)
-          expect(subject.errors.messages.count).to eq(1)
+          expect(subject.errors.messages.count).to eq(2)
           expect(subject.errors.messages[:start_date]).to include("Start date format is invalid")
+          expect(subject.errors.messages[:applications_open_from]).to include("Applications open from date format is invalid")
         end
       end
 
@@ -74,10 +75,11 @@ module Support
           subject.save
           subject.valid?
 
-          expect(subject.errors.messages.count).to eq(3)
+          expect(subject.errors.messages.count).to eq(4)
           expect(subject.errors.messages[:course_code]).to include("Course code cannot be blank")
           expect(subject.errors.messages[:name]).to include("Course title cannot be blank")
           expect(subject.errors.messages[:start_date]).to include("Start date cannot have blank values")
+          expect(subject.errors.messages[:applications_open_from]).to include("^Select when applications will open and enter the date if applicable")
         end
       end
 
@@ -87,8 +89,9 @@ module Support
           subject.save
           subject.valid?
 
-          expect(subject.errors.messages.count).to eq(1)
+          expect(subject.errors.messages.count).to eq(2)
           expect(subject.errors.messages[:start_date]).to include("September 2027 is not in the 2022 cycle")
+          expect(subject.errors.messages[:applications_open_from]).to include("04/08/2000 is not valid for the 2022 cycle. A valid date must be between 01/10/2021 and 30/09/2022")
         end
       end
     end

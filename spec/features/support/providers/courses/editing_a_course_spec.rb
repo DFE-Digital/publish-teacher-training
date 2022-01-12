@@ -21,7 +21,8 @@ feature "Edit provider course details" do
     scenario "I can edit a course details" do
       when_i_fill_in_course_code_with valid_course_code
       and_i_fill_in_course_title_with valid_course_name
-      and_i_fill_in_course_start_date_with valid_start_date_day, valid_start_date_month, valid_start_date_year
+      and_i_fill_in_course_start_date_with valid_date_day, valid_date_month, valid_date_year
+      and_i_fill_in_course_application_open_from_with valid_date_day, valid_date_month, valid_date_year
       and_i_click_the_continue_button
       then_i_am_redirected_back_to_the_provider_courses_index_page
       and_the_course_name_and_code_are_updated
@@ -34,23 +35,27 @@ feature "Edit provider course details" do
     scenario "I cannot use invalid course details" do
       when_i_fill_in_course_code_with existing_course_code
       and_i_fill_in_course_title_with valid_course_name
-      and_i_fill_in_course_start_date_with valid_start_date_day, valid_start_date_month, invalid_start_date_year
+      and_i_fill_in_course_start_date_with valid_date_day, valid_date_month, invalid_date_year
+      and_i_fill_in_course_application_open_from_with valid_date_day, valid_date_month, invalid_date_year
       and_i_click_the_continue_button
       then_i_see_the_error_summary
       and_it_contains_invalid_value_errors
     end
 
     scenario "I cannot use invalid date format" do
-      when_i_fill_in_course_start_date_with invalid_start_date_day, invalid_start_date_month, valid_start_date_year
+      when_i_fill_in_course_start_date_with invalid_date_day, invalid_date_month, valid_date_year
+      and_i_fill_in_course_application_open_from_with invalid_date_day, invalid_date_month, valid_date_year
       and_i_click_the_continue_button
       then_i_see_the_error_summary
       and_it_contains_start_date_format_error
+      and_it_contains_applications_open_from_format_error
     end
 
     scenario "I cannot use a blank course details" do
       when_i_fill_in_course_code_with blank_value
       and_i_fill_in_course_title_with blank_value
       and_i_fill_in_course_start_date_with blank_value, blank_value, blank_value
+      and_i_fill_in_course_application_open_from_with blank_value, blank_value, blank_value
       and_i_click_the_continue_button
       then_i_see_the_error_summary
       and_it_contains_blank_errors
@@ -94,20 +99,20 @@ private
     @course_name ||= "Geography"
   end
 
-  def valid_start_date_day
-    @valid_start_date_day ||= "1"
+  def valid_date_day
+    @valid_date_day ||= "1"
   end
 
-  def invalid_start_date_day
-    @invalid_start_date_day ||= "111"
+  def invalid_date_day
+    @invalid_date_day ||= "111"
   end
 
-  def valid_start_date_month
-    @valid_start_date_month ||= "10"
+  def valid_date_month
+    @valid_date_month ||= "10"
   end
 
-  def invalid_start_date_month
-    @invalid_start_date_month ||= "90"
+  def invalid_date_month
+    @invalid_date_month ||= "90"
   end
 
   def valid_course_code
@@ -122,12 +127,12 @@ private
     @existing_course_code ||= provider.courses.second.course_code
   end
 
-  def valid_start_date_year
-    @valid_start_date_year ||= "2021"
+  def valid_date_year
+    @valid_date_year ||= "2021"
   end
 
-  def invalid_start_date_year
-    @invalid_start_date_year ||= "2026"
+  def invalid_date_year
+    @invalid_date_year ||= "2026"
   end
 
   def blank_value
@@ -148,7 +153,14 @@ private
     course_edit_page.start_date_year.set(year)
   end
 
+  def when_i_fill_in_course_application_open_from_with(day, month, year)
+    course_edit_page.application_open_from_day.set(day)
+    course_edit_page.application_open_from_month.set(month)
+    course_edit_page.application_open_from_year.set(year)
+  end
+
   alias_method :and_i_fill_in_course_start_date_with, :when_i_fill_in_course_start_date_with
+  alias_method :and_i_fill_in_course_application_open_from_with, :when_i_fill_in_course_application_open_from_with
 
   def and_i_click_the_continue_button
     course_edit_page.continue.click
@@ -164,9 +176,9 @@ private
   end
 
   def then_i_see_the_updated_start_date
-    expect(course_edit_page.start_date_day.value).to eq(valid_start_date_day)
-    expect(course_edit_page.start_date_month.value).to eq(valid_start_date_month)
-    expect(course_edit_page.start_date_year.value).to eq(valid_start_date_year)
+    expect(course_edit_page.start_date_day.value).to eq(valid_date_day)
+    expect(course_edit_page.start_date_month.value).to eq(valid_date_month)
+    expect(course_edit_page.start_date_year.value).to eq(valid_date_year)
   end
 
   def then_i_see_the_error_summary
@@ -182,9 +194,14 @@ private
     expect(course_edit_page.error_summary.text).to include("Start date format is invalid")
   end
 
+  def and_it_contains_applications_open_from_format_error
+    expect(course_edit_page.error_summary.text).to include("Applications open from date format is invalid")
+  end
+
   def and_it_contains_blank_errors
     expect(course_edit_page.error_summary.text).to include("Course code cannot be blank")
     expect(course_edit_page.error_summary.text).to include("Course title cannot be blank")
     expect(course_edit_page.error_summary.text).to include("Start date cannot have blank values")
+    expect(course_edit_page.error_summary.text).to include("Select when applications will open and enter the date if applicable")
   end
 end

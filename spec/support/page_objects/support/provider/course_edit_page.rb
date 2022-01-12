@@ -11,6 +11,9 @@ module PageObjects
         element :start_date_day, "#support_edit_course_form_start_date_3i"
         element :start_date_month, "#support_edit_course_form_start_date_2i"
         element :start_date_year, "#support_edit_course_form_start_date_1i"
+        element :application_open_from_day, "#support_edit_course_form_applications_open_from_3i"
+        element :application_open_from_month, "#support_edit_course_form_applications_open_from_2i"
+        element :application_open_from_year, "#support_edit_course_form_applications_open_from_1i"
         element :error_summary, ".govuk-error-summary"
         element :continue, ".govuk-button"
       end
