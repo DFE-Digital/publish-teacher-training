@@ -608,15 +608,11 @@ GEM
       attr_required (>= 0.0.5)
       httpclient (>= 2.4)
     table_print (1.5.7)
-    tabulo (2.7.3)
-      tty-screen (= 0.8.1)
-      unicode-display_width (= 2.1.0)
     terminal-table (3.0.2)
       unicode-display_width (>= 1.1.1, < 3)
     thor (1.2.1)
     timecop (0.9.4)
     trailblazer-option (0.1.2)
-    tty-screen (0.8.1)
     tzinfo (2.0.4)
       concurrent-ruby (~> 1.0)
     uber (0.1.0)
@@ -739,7 +735,6 @@ DEPENDENCIES
   spring-watcher-listen (~> 2.0.0)
   super_diff
   table_print
-  tabulo
   terminal-table
   timecop
   tzinfo-data
