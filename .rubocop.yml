@@ -18,3 +18,6 @@ AllCops:
     - "bin/*"
     - "db/schema.rb"
     - "node_modules/**/*"
+
+RSpec/AnyInstance:
+  Enabled: false
