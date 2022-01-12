@@ -6,15 +6,17 @@
     ) %>
   <% end %>
 
-  <%= content_for(:navigation_bar) do %>
-    <%= render NavigationBar::View.new(
-      items: [
-        { name: "Providers", url: support_providers_path, current: true },
-      ],
-      current_path: request.path,
-      current_user: @current_user,
-    ) %>
-  <% end %>
+<!-- Uncomment this when more items are needed on the navigation bar.
+  <%# <%= content_for(:navigation_bar) do %> %>
+    <%# <%= render NavigationBar::View.new( %>
+      <%# items: [ %>
+        <%# { name: "Providers", url: support_providers_path, current: true }, %>
+      <%# ], %>
+      <%# current_path: request.path, %>
+      <%# current_user: @current_user, %>
+    <%# ) %> %>
+  <%# <% end %> %>
+-->
 
   <%= yield %>
 <% end %>
