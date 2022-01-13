@@ -23,11 +23,14 @@ feature "Edit provider course details" do
       and_i_fill_in_course_title_with valid_course_name
       and_i_fill_in_course_start_date_with valid_date_day, valid_date_month, valid_date_year
       and_i_fill_in_course_application_open_from_with valid_date_day, valid_date_month, valid_date_year
+      and_i_select_the_send_checkbox
       and_i_click_the_continue_button
       then_i_am_redirected_back_to_the_provider_courses_index_page
       and_the_course_name_and_code_are_updated
       when_i_return_to_the_edit_page
       then_i_see_the_updated_start_date
+      then_i_see_the_updated_applications_open_from_date
+      and_i_see_the_updated_send_specialism
     end
   end
 
@@ -175,10 +178,24 @@ private
     expect(provider_courses_index_page).to have_text(course_name)
   end
 
+  def and_i_select_the_send_checkbox
+    course_edit_page.send_specialism_checkbox.check
+  end
+
   def then_i_see_the_updated_start_date
     expect(course_edit_page.start_date_day.value).to eq(valid_date_day)
     expect(course_edit_page.start_date_month.value).to eq(valid_date_month)
     expect(course_edit_page.start_date_year.value).to eq(valid_date_year)
+  end
+
+  def then_i_see_the_updated_applications_open_from_date
+    expect(course_edit_page.application_open_from_day.value).to eq(valid_date_day)
+    expect(course_edit_page.application_open_from_month.value).to eq(valid_date_month)
+    expect(course_edit_page.application_open_from_year.value).to eq(valid_date_year)
+  end
+
+  def and_i_see_the_updated_send_specialism
+    expect(course_edit_page.send_specialism_checkbox.checked?).to eq true
   end
 
   def then_i_see_the_error_summary

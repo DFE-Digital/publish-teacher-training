@@ -25,6 +25,7 @@ FactoryBot.define do
     degree_grade { :two_one }
     additional_degree_subject_requirements { true }
     degree_subject_requirements { "Completed at least one programming module." }
+    is_send { false }
 
     trait :with_gcse_equivalency do
       accept_pending_gcse { [true, false].sample }
