@@ -3,13 +3,12 @@ publish_api_url: https://api.publish-teacher-training-courses.service.gov.uk
 publish_url: https://www.publish-teacher-training-courses.service.gov.uk
 find_url: https://www.find-postgraduate-teacher-training.service.gov.uk
 
-base_url: https://api.publish-teacher-training-courses.service.gov.uk
+base_url: https://www2.publish-teacher-training-courses.service.gov.uk
 
 dfe_signin:
   issuer: https://oidc.signin.education.gov.uk
   secret: please_change_me # Override with SETTINGS__DFE_SIGNIN__SECRET
   profile: https://profile.signin.education.gov.uk
-  base_url: https://api.publish-teacher-training-courses.service.gov.uk
   user_search_url: https://support.signin.education.gov.uk/users
 
 bg_jobs:
