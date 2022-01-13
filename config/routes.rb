@@ -4,6 +4,8 @@ Rails.application.routes.draw do
   get :sha, controller: :heartbeat
   get :reporting, controller: :reporting
 
+  get "/" => redirect("/publish/organisations"), constraints: PublishConstraint.new
+
   mount OpenApi::Rswag::Ui::Engine => "/api-docs"
   mount OpenApi::Rswag::Api::Engine => "/api-docs"
 
