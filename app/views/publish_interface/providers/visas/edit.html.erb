@@ -2,12 +2,7 @@
 <% content_for :page_title, title_with_error_prefix(page_title, @provider_visa_form.errors.present?) %>
 
 <% content_for :before_content do %>
-  <%= govuk_back_link_to(
-      old_publish_link_for(
-        details_publish_provider_recruitment_cycle_path(@provider.provider_code, @provider.recruitment_cycle_year)
-      )
-    )
-  %>
+  <%= govuk_back_link_to(details_publish_provider_recruitment_cycle_path(@provider.provider_code, @provider.recruitment_cycle_year)) %>
 <% end %>
 
 <div class="govuk-grid-row">
@@ -28,8 +23,8 @@
       </h1>
 
       <p class="govuk-body">
-        If you’re unsure if your courses can sponsor visas, check the 
-        <%= govuk_link_to("Register of Student sponsors", "https://www.gov.uk/government/publications/register-of-licensed-sponsors-students") %> 
+        If you’re unsure if your courses can sponsor visas, check the
+        <%= govuk_link_to("Register of Student sponsors", "https://www.gov.uk/government/publications/register-of-licensed-sponsors-students") %>
         and <%= govuk_link_to("Register of Worker and Temporary Worker licensed sponsors", "https://www.gov.uk/government/publications/register-of-licensed-sponsors-workers") %>.
       </p>
 

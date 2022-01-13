@@ -2,12 +2,7 @@
 <% content_for :page_title, title_with_error_prefix(page_title, @errors.present?) %>
 
 <% content_for :before_content do %>
-  <%= govuk_back_link_to(
-      old_publish_link_for(
-        details_publish_provider_recruitment_cycle_path(@about_form.provider_code, @about_form.recruitment_cycle_year)
-      )
-    ) 
-  %>
+  <%= govuk_back_link_to(details_publish_provider_recruitment_cycle_path(@about_form.provider_code, @about_form.recruitment_cycle_year)) %>
 <% end %>
 
 <div class="govuk-grid-row">

@@ -1,6 +1,12 @@
 <% content_for :page_title, title_with_error_prefix("About your organisation", @errors.present?) %>
-<% # TODO: breadcrumbs %>
-<%# <%= content_for :before_content, render_breadcrumbs(:organisation_details) %1> %>
+
+<% content_for :before_content do %>
+  <%= govuk_back_link_to(
+    old_publish_link_for(
+      publish_provider_recruitment_cycle_path(@provider.provider_code, @provider.recruitment_cycle_year)
+    )
+  ) %>
+<% end %>
 
 <% if @errors.present? %>
   <div class="govuk-error-summary" aria-labelledby="error-summary-title" role="alert" tabindex="-1" data-module="govuk-error-summary" data-ga-event-form="error">
