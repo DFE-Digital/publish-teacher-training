@@ -1,4 +1,5 @@
 module PublishInterface
+  class AboutYourOrganisationForm < BaseProviderForm
   class AboutYourOrganisationForm
     include ActiveModel::Model
     include ActiveModel::Validations
@@ -6,77 +7,53 @@ module PublishInterface
     FIELDS = %i[
       train_with_us
       train_with_disability
+      accrediting_provider_enrichments
     ].freeze
 
-    attr_accessor :provider
-    delegate :recruitment_cycle_year, :provider_code, :provider_name, to: :provider
-    attr_accessor :_accredited_bodies_data
     attr_accessor(*FIELDS)
 
-    def self.build_from_provider(provider)
-      fields_to_populate = provider.attributes.symbolize_keys.slice(*FIELDS)
-
-      form = new(fields_to_populate)
-      form.provider = provider
-      form._accredited_bodies_data = provider.accredited_bodies
-      form
-    end
-
-    def self.build_from_controller_params(params)
-      accredited_bodies_params = params.delete(:accredited_bodies)
-      provider = params.delete(:provider)
-
-      form = new(params)
-      form.provider = provider
-      form._accredited_bodies_data = accredited_bodies_params
-      form.provider.assign_attributes(params)
-      form
-    end
-
     def accredited_bodies
-      _accredited_bodies_data.map do |ab|
-        AccreditedBody.new(
-          provider_name: ab[:provider_name],
-          provider_code: ab[:provider_code],
-          description: ab[:description],
-        )
+      @accredited_bodies ||= provider.accredited_bodies.map do |ab|
+        accredited_body(ab)
       end
-    end
-
-    def valid?
-      @provider.valid?
-    end
-
-    def save
-      Provider.transaction do
-        update_provider
-        update_accrediting_enrichment
-      end
-      promote_errors
     end
 
   private
 
-    def update_provider
-      @provider.save
+    def accredited_body(provider_name:, provider_code:, description:)
+      AccreditedBody.new(
+        provider_name: provider_name,
+        provider_code: provider_code,
+        description: params_description(provider_code) || description,
+      )
     end
 
-    def update_accrediting_enrichment
-      return if _accredited_bodies_data.blank?
+    def params_description(provider_code)
+      params[:accredited_bodies].to_h { |i| [i[:provider_code], i[:description]] }[provider_code] if params&.dig(:accredited_bodies).present?
+    end
 
-      @provider.accrediting_provider_enrichments =
-        accredited_bodies.map do |accredited_body|
-          {
-            UcasProviderCode: accredited_body.provider_code,
-            Description: accredited_body.description,
-          }
+    def accrediting_provider_enrichments
+      accredited_bodies.map do |accredited_body|
+        {
+          UcasProviderCode: accredited_body.provider_code,
+          Description: accredited_body.description,
+        }
+      end
+    end
+
+    def compute_fields
+      provider.attributes.symbolize_keys.slice(*FIELDS).merge(new_attributes)
+    end
+
+    def new_attributes
+      params.except(:accredited_bodies).merge(accrediting_provider_enrichments: accrediting_provider_enrichments)
+    end
+
+    def add_enrichment_errors
+      accredited_bodies&.each_with_index do |accredited_body, _index|
+        if accredited_body.invalid?
+          errors.add :accredited_bodies, accredited_body.errors[:description].first
         end
-      @provider.save
-    end
-
-    def promote_errors
-      @provider.errors.each do |error|
-        errors.add(error.attribute, error.full_message)
       end
     end
 
