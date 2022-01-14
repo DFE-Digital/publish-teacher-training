@@ -89,7 +89,7 @@ module Support
     end
 
     def send?
-      JSON(is_send)
+      ActiveModel::Type::Boolean.new.cast(is_send)
     end
 
     def validate_start_date_format
