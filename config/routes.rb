@@ -42,6 +42,8 @@ Rails.application.routes.draw do
 
           get "/contact", on: :member, to: "contacts#edit"
           put "/contact", on: :member, to: "contacts#update"
+          get "/visas", on: :member, to: "visas#edit"
+          put "/visas", on: :member, to: "visas#update"
         end
       end
     end
