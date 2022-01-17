@@ -15,16 +15,15 @@ module PublishInterface
     end
 
     def about
-      @about_form = PublishInterface::AboutYourOrganisationForm.build_from_provider(@provider)
+      @about_form = AboutYourOrganisationForm.new(@provider)
     end
 
     def update
       authorize @provider, :update?
 
-      @about_form = PublishInterface::AboutYourOrganisationForm.build_from_controller_params(provider_params)
-      @about_form.save
+      @about_form = AboutYourOrganisationForm.new(@provider, params: provider_params)
 
-      if @about_form.valid?
+      if @about_form.save!
         flash[:success] = I18n.t("success.published")
         redirect_to(
           details_publish_provider_recruitment_cycle_path(
@@ -34,7 +33,7 @@ module PublishInterface
         )
       else
         @errors = @about_form.errors.messages
-        render page_param
+        render :about
       end
     end
 
@@ -59,16 +58,10 @@ module PublishInterface
     def provider_params
       params
         .fetch(:publish_interface_about_your_organisation_form, {})
-        .except(:page)
         .permit(
           *AboutYourOrganisationForm::FIELDS,
           accredited_bodies: %i[provider_name provider_code description],
         )
-        .merge(provider: @provider)
-    end
-
-    def page_param
-      params.fetch(:publish_interface_about_your_organisation_form).fetch(:page)
     end
   end
 end
