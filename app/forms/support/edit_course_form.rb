@@ -8,7 +8,7 @@ module Support
     ].freeze
 
     attr_accessor(*FIELDS)
-    attr_accessor :start_date_day, :start_date_month, :start_date_year, :course, :applications_open_from_day, :applications_open_from_month, :applications_open_from_year
+    attr_accessor :start_date_day, :start_date_month, :start_date_year, :course, :applications_open_from_day, :applications_open_from_month, :applications_open_from_year, :is_send
     validate :validate_start_date_format
     validate :validate_applications_open_from_format
 
@@ -24,6 +24,7 @@ module Support
         applications_open_from_day: @course.applications_open_from&.day,
         applications_open_from_month: @course.applications_open_from&.month,
         applications_open_from_year: @course.applications_open_from&.year,
+        is_send: @course.is_send,
       )
     end
 
@@ -77,6 +78,7 @@ module Support
         name: name,
         start_date: start_date,
         applications_open_from: applications_open_from,
+        is_send: send?,
       }
 
       course.assign_attributes(attributes)
@@ -84,6 +86,10 @@ module Support
 
     def promote_errors_from_course
       errors.merge!(course.errors)
+    end
+
+    def send?
+      ActiveModel::Type::Boolean.new.cast(is_send)
     end
 
     def validate_start_date_format

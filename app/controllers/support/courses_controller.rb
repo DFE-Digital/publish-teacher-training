@@ -37,7 +37,8 @@ module Support
       params.require(:support_edit_course_form).permit(
         *EditCourseForm::FIELDS,
         :"start_date(3i)", :"start_date(2i)", :"start_date(1i)",
-        :"applications_open_from(3i)", :"applications_open_from(2i)", :"applications_open_from(1i)"
+        :"applications_open_from(3i)", :"applications_open_from(2i)", :"applications_open_from(1i)",
+        :is_send
       ).transform_keys { |key| date_field_to_attribute(key) }
     end
 
