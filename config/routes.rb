@@ -59,6 +59,8 @@ Rails.application.routes.draw do
     end
     resources :users, only: %i[index show new create destroy]
 
+    resources :user_permissions, only: %i[destroy]
+
     resources :allocations, only: %i[index show] do
       resources :uplifts, only: %i[edit update create new], controller: :allocation_uplifts
     end

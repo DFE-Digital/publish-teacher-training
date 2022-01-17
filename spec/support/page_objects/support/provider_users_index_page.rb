@@ -6,6 +6,8 @@ module PageObjects
       set_url "/support/providers/{provider_id}/users"
 
       sections :users, PageObjects::Sections::User, ".user-row"
+
+      element :remove_user_from_provider_button, "#remove-provider"
     end
   end
 end

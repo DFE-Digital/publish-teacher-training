@@ -8,6 +8,7 @@ module PageObjects
       sections :provider_rows, PageObjects::Sections::Provider, ".qa-provider_row"
 
       element :delete_button, ".govuk-button"
+      element :remove_user_from_provider_button, "#remove-provider"
     end
   end
 end
