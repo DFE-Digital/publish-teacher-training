@@ -9,6 +9,8 @@ feature "View users" do
     given_i_am_authenticated(user: user)
     when_i_visit_the_users_index_page
     then_i_should_see_a_table_of_users
+    and_i_click_the_full_name
+    and_it_takes_me_to_the_user_page
   end
 
   def and_there_is_a_provider
@@ -25,5 +27,14 @@ feature "View users" do
 
   def then_i_should_see_a_table_of_users
     expect(users_index_page.users.size).to eq(1)
+    expect(users_index_page.users.first.full_name.text).to eq(user.full_name)
+  end
+
+  def and_i_click_the_full_name
+    users_index_page.users.first.full_name.click
+  end
+
+  def and_it_takes_me_to_the_user_page
+    expect(users_show_page).to be_displayed
   end
 end
