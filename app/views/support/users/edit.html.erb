@@ -1,1 +1,8 @@
+<%= content_for(:breadcrumbs) do %>
+  <%= render GovukComponent::BackLinkComponent.new(
+    text: 'User record',
+    href: support_user_path(@user),
+  ) %>
+<% end %>
+
 This is going to be the User Edit Form

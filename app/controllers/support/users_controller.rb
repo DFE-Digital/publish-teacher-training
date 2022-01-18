@@ -5,7 +5,7 @@ module Support
     end
 
     def show
-      @providers = providers.order(:provider_name).page(params[:page] || 1)
+      user
       render layout: "user_record"
     end
 
@@ -24,7 +24,23 @@ module Support
 
     def edit
       user
+    end
+
+    def providers
+      user
+      @providers = fetch_providers.order(:provider_name).page(params[:page] || 1)
       render layout: "user_record"
+    end
+
+    def update
+      @edit_user_form = Support::EditUserForm.new(user)
+      @edit_user_form.assign_attributes(update_user_params)
+
+      if @edit_user_form.save
+        redirect_to support_provider_users_path(provider), flash: { success: t("support.flash.updated", resource: "User") }
+      else
+        render :edit
+      end
     end
 
     def destroy
@@ -45,7 +61,7 @@ module Support
       @user ||= User.find(params[:id])
     end
 
-    def providers
+    def fetch_providers
       RecruitmentCycle.current.providers.where(id: user.providers)
     end
 

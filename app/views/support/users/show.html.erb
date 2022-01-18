@@ -1,15 +1,34 @@
-<%= render PageTitle::View.new(title: "support.users.show") %>
+<%= render GovukComponent::SummaryListComponent.new do |component|
+  component.row do |row|
+    row.key { "First name" }
+    row.value { @user.first_name }
+    row.action(text: "Change", href: edit_support_user_path(@user), visually_hidden_text: 'first name')
+  end
 
-<%= content_for(:breadcrumbs) do %>
-    <%= render GovukComponent::BackLinkComponent.new(
-      text: "All User records",
-      href: support_users_path,
-    ) %>
-<% end %>
+  component.row do |row|
+    row.key { "Last name" }
+    row.value { @user.last_name }
+    row.action(text: "Change", href: edit_support_user_path(@user), visually_hidden_text: 'last name')
+  end
 
-<%= render "support/users/user_providers", providers: @providers %>
+  component.row do |row|
+    row.key { "Email" }
+    row.value { @user.email }
+    row.action(text: "Change", href: edit_support_user_path(@user), visually_hidden_text: 'email')
+  end
 
-<%= render Paginator::View.new(scope: @providers) %>
+  component.row do |row|
+    row.key { "Admin?" }
+    row.value { @user.admin?.to_s.capitalize }
+    row.action(text: "Change", href: edit_support_user_path(@user), visually_hidden_text: 'admin')
+  end
+
+  component.row do |row|
+    row.key { "Last login date" }
+    row.value { @user.last_login_date_utc.to_s }
+    row.action
+  end
+end %>
 
 <%= govuk_button_to("Delete this user",
       support_user_path(@user),

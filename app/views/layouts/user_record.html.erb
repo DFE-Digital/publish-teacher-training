@@ -11,8 +11,8 @@
   <h1 class="govuk-heading-l"><%= @user.full_name %></h1>
 
   <%= render TabNavigation::View.new(items: [
-    { name: "Providers", url: support_user_path(@user) },
-    { name: "Details", url: edit_support_user_path(@user) },
+    { name: "Details", url: support_user_path(@user) },
+    { name: "Providers", url: providers_support_user_path(@user) },
   ]) %>
 
   <%= yield %>
