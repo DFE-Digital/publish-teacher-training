@@ -1,0 +1,19 @@
+<%= render PageTitle::View.new(title: "support.users.show") %>
+
+<%= extends_layout :support do %>
+  <%= content_for(:breadcrumbs) do %>
+    <%= render GovukComponent::BackLinkComponent.new(
+      text: 'All user records',
+      href: support_users_path,
+    ) %>
+  <% end %>
+
+  <h1 class="govuk-heading-l"><%= @user.full_name %></h1>
+
+  <%= render TabNavigation::View.new(items: [
+    { name: "Providers", url: support_user_path(@user) },
+    { name: "Details", url: edit_support_user_path(@user) },
+  ]) %>
+
+  <%= yield %>
+<% end %>

@@ -6,6 +6,7 @@ module Support
 
     def show
       @providers = providers.order(:provider_name).page(params[:page] || 1)
+      render layout: "user_record"
     end
 
     def new
@@ -19,6 +20,11 @@ module Support
       else
         render :new
       end
+    end
+
+    def edit
+      user
+      render layout: "user_record"
     end
 
     def destroy

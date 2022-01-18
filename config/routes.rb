@@ -57,7 +57,7 @@ Rails.application.routes.draw do
       resources :courses, only: %i[index edit update]
       resources :locations
     end
-    resources :users, only: %i[index show new create destroy]
+    resources :users, only: %i[index show new edit create destroy]
 
     resources :user_permissions, only: %i[destroy]
 

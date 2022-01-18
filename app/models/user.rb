@@ -52,6 +52,10 @@ class User < ApplicationRecord
     "#{first_name} #{last_name} <#{email}>"
   end
 
+  def full_name
+    "#{first_name} #{last_name}"
+  end
+
   def remove_access_to(providers_to_remove)
     self.providers = providers - Array(providers_to_remove)
   end
