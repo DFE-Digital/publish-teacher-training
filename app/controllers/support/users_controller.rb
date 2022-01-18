@@ -33,11 +33,8 @@ module Support
     end
 
     def update
-      @edit_user_form = Support::EditUserForm.new(user)
-      @edit_user_form.assign_attributes(update_user_params)
-
-      if @edit_user_form.save
-        redirect_to support_provider_users_path(provider), flash: { success: t("support.flash.updated", resource: "User") }
+      if user.update(update_user_params)
+        redirect_to support_user_path(user), flash: { success: t("support.flash.updated", resource: "User") }
       else
         render :edit
       end
@@ -55,6 +52,10 @@ module Support
 
     def user_params
       params.require(:user).permit(:first_name, :last_name, :email).merge(state: "new")
+    end
+
+    def update_user_params
+      params.require(:user).permit(:first_name, :last_name, :email, :admin)
     end
 
     def user
