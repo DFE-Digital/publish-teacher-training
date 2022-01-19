@@ -10,6 +10,7 @@ feature "About Your Organisation section" do
     then_i_can_edit_info_about_training_with_us
     then_i_can_edit_info_about_our_accredited_bodies
     then_i_can_edit_info_about_disabilities_and_other_needs
+    and_i_cannot_access_a_provider_i_do_not_have_permissions_for
   end
 
   def given_i_am_a_provider_user
@@ -75,5 +76,15 @@ feature "About Your Organisation section" do
     within_summary_row "Training with disabilities and other needs" do
       expect(page).to have_content "Updated: training with disabilities"
     end
+  end
+
+  def and_i_cannot_access_a_provider_i_do_not_have_permissions_for
+    @another_provider = create(:provider)
+    expect {
+      provider_details_show_page.load(
+        provider_code: @another_provider.provider_code,
+        recruitment_cycle_year: @another_provider.recruitment_cycle_year,
+      )
+    } .to raise_error(Pundit::NotAuthorizedError)
   end
 end
