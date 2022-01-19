@@ -4,3 +4,14 @@
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+
+.govuk-table {
+  &--fixed {
+    @extend .govuk-table;
+    table-layout: fixed;
+  }
+
+  .break {
+    word-break: break-all;
+  }
+}
