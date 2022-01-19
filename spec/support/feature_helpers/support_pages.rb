@@ -46,6 +46,10 @@ module FeatureHelpers
       @users_show_page ||= PageObjects::Support::UserShow.new
     end
 
+    def users_show_providers_page
+      @users_show_providers_page ||= PageObjects::Support::UserShowProviders.new
+    end
+
     def users_index_page
       @users_index_page ||= PageObjects::Support::UsersIndex.new
     end
