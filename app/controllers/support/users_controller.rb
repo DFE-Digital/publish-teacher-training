@@ -26,12 +26,6 @@ module Support
       user
     end
 
-    def providers
-      user
-      @providers = fetch_providers.order(:provider_name).page(params[:page] || 1)
-      render layout: "user_record"
-    end
-
     def update
       if user.update(update_user_params)
         redirect_to support_user_path(user), flash: { success: t("support.flash.updated", resource: "User") }
@@ -60,10 +54,6 @@ module Support
 
     def user
       @user ||= User.find(params[:id])
-    end
-
-    def fetch_providers
-      RecruitmentCycle.current.providers.where(id: user.providers)
     end
 
     def filtered_users

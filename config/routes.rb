@@ -57,8 +57,11 @@ Rails.application.routes.draw do
       resources :courses, only: %i[index edit update]
       resources :locations
     end
+
     resources :users do
-      get :providers, on: :member
+      scope module: :users do
+        get :providers, on: :member, to: "providers#show"
+      end
     end
 
     resources :user_permissions, only: %i[destroy]
