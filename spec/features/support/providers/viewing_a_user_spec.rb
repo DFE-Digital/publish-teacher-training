@@ -31,5 +31,9 @@ feature "Viewing a user" do
 
   def then_i_am_directed_to_the_user_show_page
     expect(users_show_page).to be_displayed
+    expect(users_show_page.first_name.text).to eq user.first_name
+    expect(users_show_page.last_name.text).to eq user.last_name
+    expect(users_show_page.email.text).to eq user.email
+    expect(users_show_page.admin_status.text).to eq "False"
   end
 end
