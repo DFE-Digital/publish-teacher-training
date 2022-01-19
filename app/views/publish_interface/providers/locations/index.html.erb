@@ -1,0 +1,46 @@
+<% page_title = "Locations" %>
+
+<%= render PageTitle::View.new(title: page_title) %>
+
+<% content_for :before_content do %>
+  <%= govuk_back_link_to(
+    old_publish_link_for(
+      publish_provider_recruitment_cycle_path(@provider.provider_code, @provider.recruitment_cycle_year)
+    )
+  ) %>
+<% end %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-l">
+      <span class="govuk-caption-l"><%= @recruitment_cycle.title %></span>
+      <%= page_title %>
+    </h1>
+
+    <p class="govuk-body">A location is a place that a candidate selects when making an application. They do this by choosing from a list on the course page in Find.</p>
+
+    <p class="govuk-body">Use this section to:</p>
+    <ul class="govuk-list govuk-list--bullet">
+      <li>edit location names and addresses</li>
+      <li>add locations</li>
+    </ul>
+
+    <p class="govuk-body">You can assign locations to a course from the ‘Basic details’ tab on the course page.</p>
+
+    <table class="govuk-table app-table--vertical-align-middle">
+      <thead class="govuk-table__head">
+        <tr class="govuk-table__row">
+          <th class="govuk-table__header" scope="col">Name</th>
+          <th class="govuk-table__header" scope="col">Location code</th>
+          <% if urn_required?(@recruitment_cycle.year.to_i) %>
+            <th class="govuk-table__header" scope="col">URN</th>
+          <% end %>
+        </tr>
+      </thead>
+      <tbody class="govuk-table__body">
+        <%= render partial: "location", collection: @locations %>
+      </tbody>
+    </table>
+    <%= govuk_button_link_to "Add a location", new_publish_provider_recruitment_cycle_location_path(@provider.provider_code) %>
+  </div>
+</div>

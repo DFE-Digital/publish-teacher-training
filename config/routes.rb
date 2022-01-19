@@ -38,7 +38,7 @@ Rails.application.routes.draw do
         get "/details", on: :member, to: "providers#details"
 
         scope module: :providers do
-          resource :visas, only: %i[edit update], path: "/visas"
+          resources :locations, except: %i[destroy show]
 
           get "/contact", on: :member, to: "contacts#edit"
           put "/contact", on: :member, to: "contacts#update"

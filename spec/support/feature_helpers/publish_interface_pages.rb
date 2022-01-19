@@ -15,5 +15,9 @@ module FeatureHelpers
     def visa_sponsorships_page
       @visa_sponsorships_page ||= PageObjects::PublishInterface::ProviderVisaSponsorships.new
     end
+
+    def publish_provider_locations_index_page
+      @publish_provider_locations_index_page ||= PageObjects::PublishInterface::ProviderLocationsIndex.new
+    end
   end
 end

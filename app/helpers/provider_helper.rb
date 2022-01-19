@@ -38,7 +38,7 @@ private
       raw("<p class=\"govuk-heading-s app-inset-text__title\">Can you sponsor visas?</p>") +
         govuk_link_to(
           "Select if visas can be sponsored",
-          edit_publish_provider_recruitment_cycle_visas_path(
+          visas_publish_provider_recruitment_cycle_path(
             provider.provider_code,
             provider.recruitment_cycle_year,
           ),
