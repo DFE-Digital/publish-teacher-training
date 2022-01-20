@@ -2,6 +2,8 @@ module PublishInterface
   module Providers
     class LocationsController < PublishInterfaceController
       def index
+        authorize :provider, :index?
+
         @locations = provider.sites.sort_by(&:location_name)
       end
 
