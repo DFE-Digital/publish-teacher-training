@@ -9,7 +9,7 @@
   <div class="govuk-grid-column-two-thirds">
     <%= form_with(
       model: @provider_visa_form,
-      url: publish_provider_recruitment_cycle_visas_path(@provider.provider_code, @provider.recruitment_cycle_year),
+      url: visas_publish_provider_recruitment_cycle_path(@provider.provider_code, @provider.recruitment_cycle_year),
       method: :put,
       local: true,
       builder: GOVUKDesignSystemFormBuilder::FormBuilder,

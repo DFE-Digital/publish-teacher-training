@@ -1,5 +1,6 @@
 class Site < ApplicationRecord
   MAIN_SITE = "main site".freeze
+  URN_2022_REQUIREMENTS_REQUIRED_FROM = 2022
 
   include PostcodeNormalize
   include RegionCode

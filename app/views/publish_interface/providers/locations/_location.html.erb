@@ -1,0 +1,13 @@
+<tr class="govuk-table__row location-row">
+  <th class="govuk-table__header name" scope="row">
+    <%= govuk_link_to location.location_name, edit_publish_provider_recruitment_cycle_location_path(@provider.provider_code, location.recruitment_cycle.year, location.id) %>
+  </th>
+  <td class="govuk-table__cell code">
+    <%= location.code %> <%= location.code == "-" ? "(dash)" : "" %>
+  </td>
+  <% if urn_required?(@recruitment_cycle.year.to_i) %>
+    <td class="govuk-table__cell urn">
+      <%= location.urn.presence || "<strong class='govuk-error-message govuk-\!-display-inline'>(Missing)</strong>".html_safe %>
+    </td>
+  <% end %>
+</tr>
