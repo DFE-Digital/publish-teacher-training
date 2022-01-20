@@ -4,7 +4,9 @@ module PublishInterface
     before_action :build_recruitment_cycle
     before_action :build_provider, except: [:index]
 
-    def index; end
+    def index
+      authorize :provider, :index?
+    end
 
     def details
       authorize @provider, :show?
@@ -15,6 +17,8 @@ module PublishInterface
     end
 
     def about
+      authorize @provider, :show?
+
       @about_form = AboutYourOrganisationForm.new(@provider)
     end
 
