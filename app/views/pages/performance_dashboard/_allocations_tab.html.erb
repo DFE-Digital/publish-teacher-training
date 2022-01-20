@@ -1,0 +1,11 @@
+<h2 class="govuk-heading-m">Allocations</h2>
+
+<h3 class="govuk-heading-s">
+  PE Requests for <%= next_allocation_cycle_period_text %>
+</h3>
+<%= render partial: "pages/performance_dashboard/allocation_content", locals: { recruitment_cycle: "current" } %>
+
+<h3 class="govuk-heading-s">
+  PE Requests for <%= current_allocation_cycle_period_text %>
+</h3>
+<%= render partial: "pages/performance_dashboard/allocation_content", locals: { recruitment_cycle: "previous" } %>

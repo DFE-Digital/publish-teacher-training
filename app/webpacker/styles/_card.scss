@@ -1,0 +1,70 @@
+.app-card {
+  @include govuk-responsive-padding(4);
+  @include govuk-font($size: 19);
+  background-color: govuk-colour("light-grey");
+  display: block;
+  position: relative;
+}
+
+.app-card--blue {
+  background: govuk-colour("blue");
+  color: govuk-colour("white");
+}
+
+.app-card--green {
+  background: govuk-colour("green");
+  color: govuk-colour("white");
+}
+
+.app-card--red {
+  color: govuk-shade(govuk-colour("red"), 30);
+  background: govuk-tint(govuk-colour("red"), 80);
+}
+
+.app-card--white {
+  background-color: govuk-colour("white");
+}
+
+.app-card__link {
+  color: inherit;
+  text-decoration: none;
+
+  > * {
+    position: relative;
+    z-index: 1;
+  }
+
+  &:focus {
+    outline: 0;
+  }
+
+  &::before {
+    bottom: 0;
+    content: "";
+    display: block;
+    left: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+    z-index: 0;
+  }
+
+  &:focus::before {
+    box-shadow: inset 0 0 0 4px govuk-colour("black");
+    outline: $govuk-focus-width solid $govuk-focus-colour;
+  }
+
+  &:hover::before {
+    background-color: rgba(govuk-colour("black"), 0.05);
+  }
+}
+
+.app-card__count {
+  @include govuk-font($size: 80, $weight: bold);
+  display: block;
+}
+
+.app-card__secondary-count {
+  @include govuk-font($size: 36, $weight: bold);
+  display: block;
+}

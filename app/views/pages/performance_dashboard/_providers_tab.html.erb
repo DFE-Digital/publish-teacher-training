@@ -1,0 +1,39 @@
+<h2 class="govuk-heading-m">Providers</h2>
+
+<div class="govuk-grid-row govuk-!-margin-bottom-4">
+  <div class="govuk-grid-column-full">
+    <div class="app-card app-card--blue" data-qa="performance-dashboard-stat">
+      <span class="app-card__count">
+        <%= @performance_data.total_providers %>
+      </span>
+      using Publish
+    </div>
+  </div>
+</div>
+
+<div class="govuk-grid-row govuk-!-margin-bottom-0">
+  <div class="govuk-grid-column-one-third">
+    <div class="app-card app-card--green" data-qa="performance-dashboard-stat">
+      <span class="app-card__secondary-count">
+        <%= @performance_data.providers_published_courses %>
+      </span>
+      with published courses
+    </div>
+  </div>
+  <div class="govuk-grid-column-one-third">
+    <div class="app-card app-card--red" data-qa="performance-dashboard-stat">
+      <span class="app-card__secondary-count">
+        <%= @performance_data.providers_unpublished_courses %>
+      </span>
+      with courses not published
+    </div>
+  </div>
+  <div class="govuk-grid-column-one-third">
+    <div class="app-card" data-qa="performance-dashboard-stat">
+      <span class="app-card__secondary-count">
+        <%= @performance_data.providers_accredited_bodies %>
+      </span>
+      accredited bodies
+    </div>
+  </div>
+</div>
