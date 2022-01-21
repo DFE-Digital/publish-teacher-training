@@ -5,10 +5,11 @@ module PageObjects
     class UserShow < PageObjects::Base
       set_url "/support/users/{id}"
 
-      sections :provider_rows, PageObjects::Sections::Provider, ".qa-provider_row"
-
       element :delete_button, ".govuk-button"
-      element :remove_user_from_provider_button, "#remove-provider"
+      element :first_name, "#first_name"
+      element :last_name, "#last_name"
+      element :email, "#email"
+      element :admin_status, "#admin_status"
     end
   end
 end

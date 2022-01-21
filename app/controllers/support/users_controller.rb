@@ -5,7 +5,8 @@ module Support
     end
 
     def show
-      @providers = providers.order(:provider_name).page(params[:page] || 1)
+      user
+      render layout: "user_record"
     end
 
     def new
@@ -18,6 +19,18 @@ module Support
         redirect_to support_users_path
       else
         render :new
+      end
+    end
+
+    def edit
+      user
+    end
+
+    def update
+      if user.update(update_user_params)
+        redirect_to support_user_path(user), flash: { success: t("support.flash.updated", resource: "User") }
+      else
+        render :edit
       end
     end
 
@@ -35,12 +48,12 @@ module Support
       params.require(:user).permit(:first_name, :last_name, :email).merge(state: "new")
     end
 
-    def user
-      @user ||= User.find(params[:id])
+    def update_user_params
+      params.require(:user).permit(:first_name, :last_name, :email, :admin)
     end
 
-    def providers
-      RecruitmentCycle.current.providers.where(id: user.providers)
+    def user
+      @user ||= User.find(params[:id])
     end
 
     def filtered_users

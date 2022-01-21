@@ -46,12 +46,20 @@ module FeatureHelpers
       @users_show_page ||= PageObjects::Support::UserShow.new
     end
 
+    def users_show_providers_page
+      @users_show_providers_page ||= PageObjects::Support::UserShowProviders.new
+    end
+
     def users_index_page
       @users_index_page ||= PageObjects::Support::UsersIndex.new
     end
 
     def user_new_page
       @user_new_page ||= PageObjects::Support::UserNew.new
+    end
+
+    def user_edit_page
+      @user_edit_page ||= PageObjects::Support::UserEdit.new
     end
 
     def allocations_index_page

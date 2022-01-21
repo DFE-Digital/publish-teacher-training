@@ -13,8 +13,8 @@ feature "Viewing a user" do
     and_i_click_on_the_user
   end
 
-  scenario "i can view providers that belong to a user" do
-    then_i_should_see_a_table_of_providers
+  scenario "i am directed to the user show page" do
+    then_i_am_directed_to_the_user_show_page
   end
 
   def when_i_visit_the_provider_show_page
@@ -29,7 +29,11 @@ feature "Viewing a user" do
     provider_users_index_page.users.first.email.click
   end
 
-  def then_i_should_see_a_table_of_providers
-    expect(users_show_page.provider_rows.size).to eq(1)
+  def then_i_am_directed_to_the_user_show_page
+    expect(users_show_page).to be_displayed
+    expect(users_show_page.first_name.text).to eq user.first_name
+    expect(users_show_page.last_name.text).to eq user.last_name
+    expect(users_show_page.email.text).to eq user.email
+    expect(users_show_page.admin_status.text).to eq "False"
   end
 end

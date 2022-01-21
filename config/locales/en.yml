@@ -30,6 +30,7 @@ en:
           index: "Users"
           show: "User overview"
           new: "Add a user"
+          edit: "Edit a user"
         allocations:
           index: "Allocations"
           show: "Allocation overview"
