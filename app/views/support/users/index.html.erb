@@ -10,5 +10,5 @@
 </div>
 
 <%= render PaginatedFilter::View.new(filter_params: @filter_params, collection: @users) do %>
-  <%= render "users", providers: @users %>
+  <%= render "users", users: @users %>
 <% end %>

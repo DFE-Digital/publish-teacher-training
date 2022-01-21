@@ -13,9 +13,7 @@ module PageObjects
       element :provider_user_checkbox, "#user_type-provider.govuk-checkboxes__input"
       element :remove_filters, "a.govuk-link", text: "Clear"
 
-      def users
-        page.find_all(".user-row")
-      end
+      sections :users, PageObjects::Sections::User, ".user-row"
     end
   end
 end

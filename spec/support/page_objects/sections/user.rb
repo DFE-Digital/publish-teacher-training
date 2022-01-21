@@ -5,7 +5,7 @@ require_relative "base"
 module PageObjects
   module Sections
     class User < PageObjects::Sections::Base
-      element :email, ".govuk-link"
+      element :full_name, ".govuk-link"
     end
   end
 end
