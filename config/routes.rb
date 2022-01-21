@@ -45,6 +45,7 @@ Rails.application.routes.draw do
           get "/visas", on: :member, to: "visas#edit"
           put "/visas", on: :member, to: "visas#update"
           get "/users", on: :member, to: "users#index"
+          get "/request-access", on: :member, to: "access_requests#new"
         end
       end
     end
