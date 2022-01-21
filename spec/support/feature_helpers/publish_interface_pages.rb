@@ -19,5 +19,9 @@ module FeatureHelpers
     def publish_provider_locations_index_page
       @publish_provider_locations_index_page ||= PageObjects::PublishInterface::ProviderLocationsIndex.new
     end
+
+    def provider_users_page
+      @provider_users_page ||= PageObjects::PublishInterface::ProviderUsers.new
+    end
   end
 end
