@@ -1,15 +1,14 @@
-module Providers
-  class UsersController < ApplicationController
-    def index
-      cycle_year = params.fetch(:year, Settings.current_cycle)
-      @recruitment_cycle = RecruitmentCycle.find(cycle_year).first
+module PublishInterface
+  module Providers
+    class UsersController < PublishInterfaceController
+      def index
+        cycle_year = params.fetch(:year, Settings.current_cycle)
+        @recruitment_cycle = RecruitmentCycle.find_by!(year: cycle_year)
 
-      @provider = Provider.includes(:users)
-                    .where(recruitment_cycle_year: @recruitment_cycle.year)
-                    .find(params[:code])
-                    .first
+        @provider = @recruitment_cycle.providers.find_by(provider_code: params[:provider_code])
 
-      @users = @provider.users
+        @users = @provider.users
+      end
     end
   end
 end
