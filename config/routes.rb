@@ -60,7 +60,7 @@ Rails.application.routes.draw do
 
     resources :users do
       scope module: :users do
-        get :providers, on: :member, to: "providers#show"
+        resource :providers, on: :member, only: %i[show]
       end
     end
 
