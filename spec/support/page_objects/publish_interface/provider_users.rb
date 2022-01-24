@@ -3,7 +3,7 @@
 module PageObjects
   module PublishInterface
     class ProviderUsers < PageObjects::Base
-      set_url "/publish/organisations/{provider_code}/{recruitment_cycle_year}/users"
+      set_url "/publish/organisations/{provider_code}/users"
 
       element :request_access, "#govuk-button"
       element :heading, "h1"

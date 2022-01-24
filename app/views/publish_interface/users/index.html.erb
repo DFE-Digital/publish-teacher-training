@@ -1,7 +1,7 @@
 <% page_title = "Users" %>
 
 <% content_for :before_content do %>
-  <%= govuk_back_link_to(details_publish_provider_recruitment_cycle_path(@provider.provider_code, @provider.recruitment_cycle_year)) %>
+  <%= govuk_back_link_to("#{Settings.publish_url}/organisations/#{@provider.provider_code}") %>
 <% end %>
 
 <div class="govuk-grid-row">
@@ -10,7 +10,7 @@
     <p class="govuk-body">
       These users currently have access to this organisation. They can manage all your course and organisation details, including publishing, closing and withdrawing courses.
     </p>
-    <%= govuk_button_link_to "Request access for someone else", request_access_publish_provider_recruitment_cycle_path(code: @provider.provider_code) %>
+    <%= govuk_button_link_to "Request access for someone else", request_access_publish_provider_path(code: @provider.provider_code) %>
     <% @users.each do |user| %>
       <div>
         <h2 class="govuk-heading-m govuk-!-margin-bottom-1">
