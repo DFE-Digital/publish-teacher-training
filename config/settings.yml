@@ -3,6 +3,10 @@ environment:
   label: "Beta"
 support_email: becomingateacher@digital.education.gov.uk
 
+search_ui:
+  # URL of the C# search ui app (search-and-compare-ui)
+  base_url: https://localhost:5000
+
 # URL of this app for the callback after sigining in
 base_url: https://localhost:3001
 
@@ -30,6 +34,7 @@ authentication:
   subject: "access"
 
 current_recruitment_cycle_year: 2022
+next_cycle_open_date: 2022-10-5
 allocation_cycle_year: 2021
 govuk_notify:
   api_key: please_change_me
@@ -76,3 +81,5 @@ features:
     # Normally a short period of time between rollover and the next cycle
     # actually starting when it would be set to false
     has_current_cycle_started?: true
+    # During rollover providers should be able to edit current & next recruitment cycle courses
+    can_edit_current_and_next_cycles: false

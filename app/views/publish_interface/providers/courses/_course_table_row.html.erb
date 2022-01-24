@@ -1,0 +1,40 @@
+<tr class="govuk-table__row">
+  <td class="govuk-table__cell app-table--courses__course-name" data-qa="courses-table__course-name">
+    <% if current_page?(publish_provider_recruitment_cycle_courses_path(@provider.provider_code, course.recruitment_cycle.year)) %>
+      <%= govuk_link_to course.name_and_code,
+        publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle.year, course.course_code),
+        class: "govuk-heading-s govuk-!-margin-bottom-0" %>
+    <% else %>
+      <span class="govuk-heading-s govuk-!-margin-0">
+        <%= course.name_and_code %><br>
+      </span>
+    <% end %>
+    <span class="govuk-body-s"><%= course.description %></span>
+  </td>
+  <td class="govuk-table__cell" data-qa="courses-table__status">
+    <%= course.status_tag %>
+  </td>
+  <td class="govuk-table__cell" data-qa="courses-table__findable">
+    <% if @training_provider.present? %>
+      <%= course.on_find(@training_provider) %>
+    <% else %>
+      <%= course.on_find(@provider) %>
+    <% end %>
+  </td>
+  <td class="govuk-table__cell" data-qa="courses-table__applications">
+    <% if course.is_running? || course.is_withdrawn? %>
+      <%= course.open_or_closed_for_applications %>
+    <% end %>
+  </td>
+  <% if @recruitment_cycle.current_and_open? %>
+    <td class="govuk-table__cell" data-qa="courses-table__vacancies">
+      <% if course.is_running? || course.is_withdrawn? %>
+        <% if current_page?(publish_provider_recruitment_cycle_courses_path(@provider.provider_code, course.recruitment_cycle.year)) %>
+          <%= course.vacancies %>
+        <% else %>
+          <%= course.has_vacancies? ? "Yes" : "No" %>
+        <% end %>
+      <% end %>
+    </td>
+  <% end %>
+</tr>

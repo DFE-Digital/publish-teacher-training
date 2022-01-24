@@ -39,6 +39,10 @@ Rails.application.routes.draw do
 
         scope module: :providers do
           resources :locations, except: %i[destroy show]
+          resources :courses, only: %i[index new create show] do
+            get "/vacancies", on: :member, to: "courses/vacancies#edit"
+            put "/vacancies", on: :member, to: "courses/vacancies#update"
+          end
 
           get "/contact", on: :member, to: "contacts#edit"
           put "/contact", on: :member, to: "contacts#update"

@@ -1,0 +1,53 @@
+<% content_for :page_title, @provider.rolled_over? ? "Courses – #{@recruitment_cycle.title}" : "Courses" %>
+
+<% content_for :before_content do %>
+  <%= govuk_back_link_to(
+    old_publish_link_for(
+      publish_provider_recruitment_cycle_path(@provider.provider_code, @provider.recruitment_cycle_year)
+    )
+  ) %>
+<% end %>
+
+<h1 class="govuk-heading-l">
+  <span class="govuk-caption-l"><%= @recruitment_cycle.title %></span>
+  Courses
+</h1>
+
+<%= render partial: "course_abilities_blurb", locals: { classes: "govuk-!-margin-bottom-6" } %>
+
+<% if @provider.courses.count > 10 %>
+  <%= govuk_button_link_to(
+    "Add a new course",
+    new_publish_provider_recruitment_cycle_course_path(
+      provider_code: @provider.provider_code,
+      recruitment_cycle_year: @provider.recruitment_cycle_year,
+    ),
+    class: "govuk-!-margin-bottom-6",
+  ) %>
+<% end %>
+
+<% if @self_accredited_courses %>
+  <section data-qa="courses__table-section">
+    <%= render partial: "course_table", locals: { courses: @self_accredited_courses } %>
+  </section>
+<% end %>
+
+<% @courses_by_accrediting_provider.each do |accrediting_provider, courses| %>
+  <section data-qa="courses__table-section">
+    <h2 class="govuk-heading-m">
+      <span class="govuk-caption-m">Accredited body</span>
+      <%= accrediting_provider %>
+    </h2>
+
+    <%= render partial: "course_table", locals: { courses: courses } %>
+  </section>
+<% end %>
+
+<%= govuk_button_link_to(
+  "Add a new course",
+  new_publish_provider_recruitment_cycle_course_path(
+    provider_code: @provider.provider_code,
+    recruitment_cycle_year: @provider.recruitment_cycle_year,
+  ),
+  class: "govuk-!-margin-bottom-2",
+) %>

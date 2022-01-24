@@ -556,6 +556,26 @@ class Course < ApplicationRecord
     %i[published published_with_unpublished_changes].include? content_status
   end
 
+  def has_unpublished_changes?
+    content_status == "published_with_unpublished_changes"
+  end
+
+  def is_running?
+    ucas_status == :running
+  end
+
+  def is_withdrawn?
+    content_status == "withdrawn" || not_running?
+  end
+
+  def not_running?
+    ucas_status == :not_running
+  end
+
+  def new_and_not_running?
+    ucas_status == :new
+  end
+
   def funding_type=(funding_type)
     assign_program_type_service = Courses::AssignProgramTypeService.new
     assign_program_type_service.execute(funding_type, self)
