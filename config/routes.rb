@@ -52,6 +52,12 @@ Rails.application.routes.draw do
           get "/visas", on: :member, to: "visas#edit"
           put "/visas", on: :member, to: "visas#update"
         end
+
+        resource :courses, only: %i[create] do
+          resource :level, on: :member, only: %i[new], controller: "courses/level" do
+            get "continue"
+          end
+        end
       end
     end
   end
