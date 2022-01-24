@@ -24,7 +24,7 @@
 
         <td class="govuk-table__cell">
           <span class="govuk-!-display-block govuk-!-margin-bottom-1">
-            <%= govuk_button_to("Remove",
+            <%= govuk_button_to("Remove provider",
               support_user_permission_path(@user.user_permissions.find_by(provider_id: provider.id)),
               id: "remove-provider",
               method: :delete,
