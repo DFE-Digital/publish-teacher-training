@@ -8,7 +8,7 @@ module PublishInterface
       end
 
       def create
-        authorize(provider, :index?)
+        authorize(provider, :index?) # TODO: include proper authorization
 
         @course_levels_form = LevelsForm.new(params: course_level_params)
 

@@ -4,8 +4,6 @@
   <%= "backlink placeholder" %>
 <% end %>
 
-errors placeholder
-
 <h1 class="govuk-heading-l">
   What type of course?
 </h1>
@@ -17,6 +15,7 @@ errors placeholder
                   method: :post,
                   local: true do |form| %>
 
+          <%= form.govuk_error_summary %>
       
           <fieldset class="govuk-fieldset">
             <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">

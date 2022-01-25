@@ -7,7 +7,7 @@ module PublishInterface
 
       attr_accessor(*FIELDS)
 
-      # validates :level, presence: true
+      validates :level, presence: true
 
       def stash_or_save
         false
