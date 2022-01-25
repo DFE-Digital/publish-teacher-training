@@ -1,0 +1,61 @@
+<% content_for :page_title, title_with_error_prefix("What type of course?", @errors && @errors.any?) %>
+
+<% content_for :before_content do %>
+  <%= "backlink placeholder" %>
+<% end %>
+
+errors placeholder
+
+<h1 class="govuk-heading-l">
+  What type of course?
+</h1>
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_with model: @course_levels_form,
+                  url: visas_publish_provider_recruitment_cycle_path(@provider.provider_code, @provider.recruitment_cycle_year),
+                  builder: GOVUKDesignSystemFormBuilder::FormBuilder,
+                  method: :put,
+                  local: true,
+                  method: :get do |form| %>
+
+      
+          <fieldset class="govuk-fieldset">
+            <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+              <h2 class="govuk-fieldset__heading">Level</h2>
+            </legend>
+            <div class="govuk-radios govuk-radios" data-module="govuk-radios">
+              <% %i[primary secondary further_education].each do |level| %>
+                <div class="govuk-radios__item">
+                  <%= form.radio_button(
+                    :level, level,
+                    class: "govuk-radios__input",
+                    data: {
+                      qa: "course__#{level}",
+                    }
+                  ) %>
+                  <%= form.label(
+                    :level,
+                    value: level,
+                    class: "govuk-label govuk-radios__label",
+                  ) %>
+                </div>
+              <% end %>
+            </div>
+
+          </fieldset>
+
+        <h2 class="govuk-heading-m">
+          Special educational needs and disability (SEND)
+        </h2>
+
+        <div class="govuk-form-group">
+          <div class="govuk-checkboxes" data-module="govuk-checkboxes">
+            <div class="govuk-checkboxes__item">
+              <%= form.check_box(:is_send, checked: false, data: { qa: "is_send" }, class: "govuk-checkboxes__input") %>
+              <%= form.label(:is_send, "This course has an additional SEND specialism", class: "govuk-label govuk-checkboxes__label") %>
+            </div>
+          </div>
+        </div>
+    <% end %>
+  </div>
+</div>
