@@ -157,6 +157,7 @@ class CourseDecorator < ApplicationDecorator
   end
 
   def funding_option
+    # rubocop:disable Lint/DuplicateBranch
     if salaried?
       "Salary"
     elsif excluded_from_bursary?
@@ -168,6 +169,7 @@ class CourseDecorator < ApplicationDecorator
     else
       "Student finance if you’re eligible"
     end
+    # rubocop:enable Lint/DuplicateBranch
   end
 
   def current_cycle?
@@ -286,9 +288,9 @@ private
 
   def not_on_find
     if object.new_and_not_running?
-      "No – still in draft"
+      "No - still in draft"
     elsif object.is_withdrawn?
-      "No – withdrawn"
+      "No - withdrawn"
     else
       "No"
     end

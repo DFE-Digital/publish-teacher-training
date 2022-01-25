@@ -21,3 +21,7 @@ AllCops:
 
 RSpec/AnyInstance:
   Enabled: false
+
+# Remove after migration
+Naming/PredicateName:
+  Enabled: false

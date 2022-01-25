@@ -15,26 +15,23 @@ module Courses
 
       def by_accrediting_provider(provider)
         # rubocop:disable Style/MultilineBlockChain
+        # rubocop:disable Style/HashTransformValues
         provider
           .courses
-          .group_by { |course|
+          .group_by do |course|
             # HOTFIX: A courses API response no included hash seems to cause issues with the
             # .accrediting_provider relationship lookup. To be investigated, for now,
             # if this throws, it's self-accredited.
-            begin
-              course.accrediting_provider&.provider_name || provider.provider_name
-            rescue StandardError
-              provider.provider_name
-            end
-          }
+            course.accrediting_provider&.provider_name || provider.provider_name
+          rescue StandardError
+            provider.provider_name
+          end
           .sort_by { |accrediting_provider, _| accrediting_provider.downcase }
-          .map { |provider_name, courses|
-          [provider_name,
-           courses.sort_by { |course| [course.name, course.course_code] }
-                                         .map(&:decorate)]
-        }
-          .to_h
+          .to_h do |provider_name, courses|
+            [provider_name, courses.sort_by { |course| [course.name, course.course_code] }.map(&:decorate)]
+          end
         # rubocop:enable Style/MultilineBlockChain
+        # rubocop:enable Style/HashTransformValues
       end
     end
   end

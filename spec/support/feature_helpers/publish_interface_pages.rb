@@ -19,5 +19,9 @@ module FeatureHelpers
     def publish_provider_locations_index_page
       @publish_provider_locations_index_page ||= PageObjects::PublishInterface::ProviderLocationsIndex.new
     end
+
+    def publish_provider_courses_index_page
+      @publish_provider_courses_index_page ||= PageObjects::PublishInterface::ProviderCoursesIndex.new
+    end
   end
 end
