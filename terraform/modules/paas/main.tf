@@ -14,9 +14,6 @@ resource cloudfoundry_app web_app {
   docker_credentials         = var.docker_credentials
 
   service_binding {
-    service_instance = cloudfoundry_service_instance.postgres.id
-  }
-  service_binding {
     service_instance = cloudfoundry_service_instance.redis.id
   }
   service_binding {
@@ -48,9 +45,6 @@ resource cloudfoundry_app worker_app {
   environment          = local.app_environment_variables
   docker_credentials   = var.docker_credentials
 
-  service_binding {
-    service_instance = cloudfoundry_service_instance.postgres.id
-  }
   service_binding {
     service_instance = cloudfoundry_service_instance.redis.id
   }
@@ -118,6 +112,11 @@ resource cloudfoundry_user_provided_service logging {
   name             = local.logging_service_name
   space            = data.cloudfoundry_space.space.id
   syslog_drain_url = var.logstash_url
+}
+
+resource cloudfoundry_service_key postgres_key {
+  name             = "${local.postgres_service_name}-app-key"
+  service_instance = cloudfoundry_service_instance.postgres.id
 }
 
 resource cloudfoundry_service_key redis_cache_key {

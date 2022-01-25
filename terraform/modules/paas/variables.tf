@@ -48,6 +48,7 @@ locals {
 
   app_environment_variables = merge(var.app_environment_variables,
     {
+      DATABASE_URL     = cloudfoundry_service_key.postgres_key.credentials.uri
       REDIS_CACHE_URL  = cloudfoundry_service_key.redis_cache_key.credentials.uri
       REDIS_WORKER_URL = cloudfoundry_service_key.redis_worker_key.credentials.uri
     }
