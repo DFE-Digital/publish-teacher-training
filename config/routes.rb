@@ -54,9 +54,7 @@ Rails.application.routes.draw do
         end
 
         resource :courses, only: %i[create] do
-          resource :level, on: :member, only: %i[new], controller: "courses/level" do
-            get "continue"
-          end
+          resource :level, on: :member, only: %i[new create], controller: "courses/level"
         end
       end
     end
