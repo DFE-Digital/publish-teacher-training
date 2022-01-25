@@ -1,4 +1,9 @@
 en:
+  helpers:
+    hint:
+      site:
+        urn_html: |-
+          Find URNs on <a class="govuk-link" href="https://www.get-information-schools.service.gov.uk" target="_blank">Get information about schools (opens in new tab)</a>
   service_name: "Publish teacher training courses"
   support_service_name: "Teacher Training API Admin"
   header:

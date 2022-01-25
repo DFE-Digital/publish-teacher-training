@@ -1,0 +1,42 @@
+<%= f.govuk_text_field(:location_name,
+  label: { text: "Name", size: "m" },
+  data: { qa: "location_name" }) %>
+
+<%= f.govuk_text_field(:urn,
+  label: { text: "Unique Reference Number (URN)", size: "m" },
+  hint: {
+    text: t(
+      'helpers.hint.site.urn_html'
+    )
+  },
+  width: 10) %>
+
+<%= f.govuk_fieldset legend: { text: "Address", size: "m" } do %>
+  <%= f.govuk_text_field(:address1,
+    label: -> { safe_join(["Building and street", " ", tag.span("line 1 of 2", class: "govuk-visually-hidden")]) },
+    autocomplete: "address-line1",
+    data: { qa: "address1" }) %>
+
+  <%= f.govuk_text_field(:address2,
+    label: { hidden: true },
+    autocomplete: "address-line2",
+    data: { qa: "address2" }) %>
+
+  <%= f.govuk_text_field(:address3,
+    label: { text: "Town or city" },
+    width: "two-thirds",
+    autocomplete: "address-level2",
+    data: { qa: "address3" }) %>
+
+  <%= f.govuk_text_field(:address4,
+    label: { text: "County" },
+    width: "two-thirds",
+    autocomplete: "address-level1",
+    data: { qa: "address4" }) %>
+
+  <%= f.govuk_text_field(:postcode,
+    label: { text: "Postcode" },
+    width: 10,
+    autocomplete: "postal-code",
+    data: { qa: "postcode" }) %>
+<% end %>
