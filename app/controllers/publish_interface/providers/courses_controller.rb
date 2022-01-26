@@ -11,7 +11,9 @@ module PublishInterface
     private
 
       def provider
-        @provider ||= Provider.find_by!(recruitment_cycle: recruitment_cycle, provider_code: params[:provider_code])
+        @provider ||= Provider
+          .includes(courses: %i[sites site_statuses enrichments provider])
+          .find_by!(recruitment_cycle: recruitment_cycle, provider_code: params[:provider_code])
       end
 
       def recruitment_cycle
