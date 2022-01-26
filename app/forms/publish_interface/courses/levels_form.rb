@@ -13,6 +13,10 @@ module PublishInterface
       def compute_fields
         course.attributes.slice(*FIELDS).merge(params)
       end
+
+      def form_store_key
+        :course_level
+      end
     end
   end
 end

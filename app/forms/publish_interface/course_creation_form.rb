@@ -6,8 +6,15 @@ module PublishInterface
 
     alias_method :course, :model
 
+    attr_accessor :store
+
+    def initialize(*args)
+      super
+      @store = FormStore
+    end
+
     def stash
-      valid? && store.set(id, form_store_key, fields.except(*fields_to_ignore_before_stash))
+      valid? && store.set(form_store_key, fields)
     end
   end
 end
