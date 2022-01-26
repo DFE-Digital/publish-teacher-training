@@ -1,0 +1,36 @@
+<div class="govuk-grid-row govuk-!-margin-bottom-6">
+  <div class="govuk-grid-column-one-quarter">
+    <h2 class="govuk-heading-m">Providers</h2>
+    <div class="app-card" data-qa="performance-dashboard-kpi">
+      <span class="app-card__secondary-count"><%= @performance_data.total_providers %></span>
+      using Publish
+    </div>
+  </div>
+  <div class="govuk-grid-column-one-quarter">
+    <h2 class="govuk-heading-m">Courses</h2>
+    <div class="app-card" data-qa="performance-dashboard-kpi">
+      <span class="app-card__secondary-count">
+        <%= @performance_data.total_courses %>
+      </span>
+      available on Find
+    </div>
+  </div>
+  <div class="govuk-grid-column-one-quarter">
+    <h2 class="govuk-heading-m">Users</h2>
+    <div class="app-card" data-qa="performance-dashboard-kpi">
+      <span class="app-card__secondary-count">
+        <%= @performance_data.total_users %>
+      </span>
+      registered in Publish
+    </div>
+  </div>
+  <div class="govuk-grid-column-one-quarter">
+    <h2 class="govuk-heading-m">Allocations</h2>
+    <div class="app-card" data-qa="performance-dashboard-kpi">
+      <span class="app-card__secondary-count">
+        <%= @performance_data.total_allocations %>
+      </span>
+      requests made
+    </div>
+  </div>
+</div>

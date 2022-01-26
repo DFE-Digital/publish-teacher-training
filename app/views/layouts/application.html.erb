@@ -55,20 +55,6 @@
       </main>
     </div>
 
-    <%= tag.footer(class: "govuk-footer", role: "contentinfo") do %>
-      <div class="govuk-width-container">
-        <div class="govuk-footer__meta">
-          <div class="govuk-footer__meta-item govuk-footer__meta-item--grow">
-            <div class="govuk-footer__meta-custom">
-
-            </div>
-
-          </div>
-          <div class="govuk-footer__meta-item">
-            <%= govuk_link_to raw(%(&copy Crown copyright)), "https://www.nationalarchives.gov.uk/information-management/re-using-public-sector-information/uk-government-licensing-framework/crown-copyright/", class: "govuk-footer__link govuk-footer__copyright-logo" %>
-          </div>
-        </div>
-      </div>
-    <% end %>
+    <%= render partial: "layouts/footer" %>
   </body>
 </html>

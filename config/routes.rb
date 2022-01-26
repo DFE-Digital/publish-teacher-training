@@ -13,6 +13,13 @@ Rails.application.routes.draw do
   get "/user-not-found", to: "sign_in#new"
   get "/sign-out", to: "sessions#sign_out"
 
+  get "/accessibility", to: "pages#accessibility", as: :accessibility
+  get "/cookies", to: "pages#cookies", as: :cookies
+  get "/guidance", to: "pages#guidance", as: :guidance
+  get "/performance-dashboard", to: "pages#performance_dashboard", as: :performance_dashboard
+  get "/privacy-policy", to: "pages#privacy", as: :privacy
+  get "/terms-conditions", to: "pages#terms", as: :terms
+
   if AuthenticationService.persona?
     get "/personas", to: "personas#index"
     post "/auth/developer/callback", to: "sessions#callback"

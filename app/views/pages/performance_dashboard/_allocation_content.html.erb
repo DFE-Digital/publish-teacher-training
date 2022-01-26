@@ -1,0 +1,34 @@
+<div class="govuk-grid-row govuk-!-margin-bottom-<%= recruitment_cycle == "current" ? "6" : "0" %>">
+  <div class="govuk-grid-column-one-quarter">
+    <div class="app-card" data-qa="performance-dashboard-stat">
+      <span class="app-card__secondary-count">
+        <%= @performance_data.allocations_requests(recruitment_cycle) %>
+      </span>
+      requests
+    </div>
+  </div>
+  <div class="govuk-grid-column-one-quarter">
+    <div class="app-card" data-qa="performance-dashboard-stat">
+      <span class="app-card__secondary-count">
+        <%= @performance_data.allocations_number_of_places(recruitment_cycle) %>
+      </span>
+      number of places
+    </div>
+  </div>
+  <div class="govuk-grid-column-one-quarter">
+    <div class="app-card" data-qa="performance-dashboard-stat">
+      <span class="app-card__secondary-count">
+        <%= @performance_data.allocations_accredited_bodies(recruitment_cycle) %>
+      </span>
+      accredited bodies
+    </div>
+  </div>
+  <div class="govuk-grid-column-one-quarter">
+    <div class="app-card" data-qa="performance-dashboard-stat">
+      <span class="app-card__secondary-count">
+        <%= @performance_data.allocations_providers(recruitment_cycle) %>
+      </span>
+      providers
+    </div>
+  </div>
+</div>
