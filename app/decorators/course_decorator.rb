@@ -178,9 +178,9 @@ class CourseDecorator < ApplicationDecorator
     current_cycle? && FeatureService.enabled?("rollover.has_current_cycle_started?")
   end
 
-#   def next_cycle?
-#     course.recruitment_cycle.year.to_i == Settings.current_recruitment_cycle_year + 1
-#   end
+  def next_cycle?
+    course.recruitment_cycle.year.to_i == Settings.current_recruitment_cycle_year + 1
+  end
 
 #   def use_financial_support_placeholder?
 #     course.recruitment_cycle.year.to_i == Settings.financial_support_placeholder_cycle
