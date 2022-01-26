@@ -12,7 +12,7 @@ module PublishInterface
 
         @course_levels_form = LevelsForm.new(params: course_level_params)
 
-        if @course_levels_form.stash_or_save
+        if @course_levels_form.valid? && @course_levels_form.stash
           # TODO: include the wizard to figure out the next step
           redirect_to(relevant_path)
         else

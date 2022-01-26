@@ -1,6 +1,7 @@
 module PublishInterface
   class CourseCreationForm
     include ActiveModel::Model
+    include ActiveModel::AttributeAssignment
     include ActiveModel::Validations::Callbacks
 
     attr_accessor :course, :params
@@ -8,10 +9,6 @@ module PublishInterface
     def initialize(course: nil, params: {})
       @course = course
       @params = params
-    end
-
-    def stash_or_save
-      raise(NotImplementedError)
     end
 
   private
