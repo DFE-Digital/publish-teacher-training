@@ -15,35 +15,17 @@
   <div class="govuk-grid-column-two-thirds">
     <%= form_with model: @course_levels_form,
                   url: publish_provider_recruitment_cycle_courses_level_path,
-                  builder: GOVUKDesignSystemFormBuilder::FormBuilder,
                   method: :post,
-                  local: true do |form| %>
+                  local: true do |f| %>
+          <%= f.govuk_error_summary %>
 
-          <%= form.govuk_error_summary %>
-      
-          <fieldset class="govuk-fieldset">
-            <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
-              <h2 class="govuk-fieldset__heading">Level</h2>
-            </legend>
-            <div class="govuk-radios govuk-radios govuk-!-margin-bottom-5" data-module="govuk-radios">
-              <% %i[primary secondary further_education].each do |level| %>
-                <div class="govuk-radios__item">
-                  <%= form.radio_button(
-                    :level, level,
-                    class: "govuk-radios__input",
-                    data: {
-                      qa: "course__#{level}",
-                    }
-                  ) %>
-                  <%= form.label(
-                    :level,
-                    value: level,
-                    class: "govuk-label govuk-radios__label",
-                  ) %>
-                </div>
-              <% end %>
-            </div>
-          </fieldset>
+          <%= f.govuk_collection_radio_buttons(
+            :course_level,
+            %i[primary secondary further_education],
+            ->(value) { value },
+            ->(label) { label.to_s.humanize },
+            legend: { text: "Level", tag: "h1", size: "m" },
+          ) %>
 
         <h2 class="govuk-heading-m">
           Special educational needs and disability (SEND)
@@ -52,14 +34,14 @@
         <div class="govuk-form-group">
           <div class="govuk-checkboxes" data-module="govuk-checkboxes">
             <div class="govuk-checkboxes__item">
-              <%= form.check_box(:is_send, checked: false, data: { qa: "is_send" }, class: "govuk-checkboxes__input") %>
-              <%= form.label(:is_send, "This course has an additional SEND specialism", class: "govuk-label govuk-checkboxes__label") %>
+              <%= f.check_box(:is_send, checked: false, data: { qa: "is_send" }, class: "govuk-checkboxes__input") %>
+              <%= f.label(:is_send, "This course has an additional SEND specialism", class: "govuk-label govuk-checkboxes__label") %>
             </div>
           </div>
         </div>
 
         <p class="govuk-body">
-          <%= form.submit "Continue",
+          <%= f.submit "Continue",
                         class: "govuk-button govuk-!-margin-top-3",
                         data: { qa: "course__save" } %>
         </p>

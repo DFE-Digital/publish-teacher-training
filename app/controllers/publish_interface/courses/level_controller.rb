@@ -34,7 +34,7 @@ module PublishInterface
 
       def course_level_params
         params.require(:publish_interface_courses_levels_form).permit(
-          :level,
+          :course_level,
           :is_send,
         )
       end
