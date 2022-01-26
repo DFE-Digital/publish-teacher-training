@@ -4,15 +4,15 @@ module PublishInterface
       def new
         authorize(provider, :index?)
 
-        @course_levels_form = LevelsForm.new
+        @course_level_form = LevelsForm.new(Course.new)
       end
 
       def create
         authorize(provider, :index?) # TODO: include proper authorization
 
-        @course_levels_form = LevelsForm.new(params: course_level_params)
+        @course_level_form = LevelsForm.new(Course.new, params: course_level_params)
 
-        if @course_levels_form.valid? && @course_levels_form.stash
+        if @course_level_form.valid? && @course_level_form.stash
           # TODO: include the wizard to figure out the next step
           redirect_to(relevant_path)
         else
