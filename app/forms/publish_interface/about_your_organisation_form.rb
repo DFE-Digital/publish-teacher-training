@@ -33,7 +33,7 @@ module PublishInterface
     end
 
     def changed?(attribute)
-      public_send(attribute) != @provider.public_send(attribute)
+      public_send(attribute) != provider.public_send(attribute)
     end
 
     def accredited_body(provider_name:, provider_code:, description:)
