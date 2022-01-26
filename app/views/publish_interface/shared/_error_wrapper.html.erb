@@ -1,0 +1,5 @@
+<div
+  class="<%= class_names("govuk-form-group", "govuk-form-group--error": @errors&.slice(*error_keys)&.values&.compact&.any?) %>"
+  data-qa="<%= data_qa %>">
+  <%= yield %>
+</div>

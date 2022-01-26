@@ -66,6 +66,52 @@ Rails.application.routes.draw do
           get "/visas", on: :member, to: "visas#edit"
           put "/visas", on: :member, to: "visas#update"
         end
+
+        resource :courses, only: %i[create] do
+          resource :outcome, on: :member, only: %i[new], controller: "courses/outcome" do
+            get "continue"
+          end
+          resource :entry_requirements, on: :member, only: %i[new], controller: "courses/entry_requirements", path: "entry-requirements" do
+            get "continue"
+          end
+          resource :study_mode, on: :member, only: %i[new], controller: "courses/study_mode", path: "full-part-time" do
+            get "continue"
+          end
+          resource :level, on: :member, only: %i[new], controller: "courses/level" do
+            get "continue"
+          end
+          resource :locations, on: :member, only: %i[new], controller: "courses/sites" do
+            get "back"
+            get "continue"
+          end
+          resource :start_date, on: :member, only: %i[new], controller: "courses/start_date", path: "start-date" do
+            get "continue"
+          end
+          resource :applications_open, on: :member, only: %i[new], controller: "courses/applications_open", path: "applications-open" do
+            get "continue"
+          end
+          resource :age_range, on: :member, only: %i[new], controller: "courses/age_range", path: "age-range" do
+            get "continue"
+          end
+          resource :subjects, on: :member, only: %i[new], controller: "courses/subjects", path: "subjects" do
+            get "continue"
+          end
+          resource :modern_languages, on: :member, only: %i[new], controller: "courses/modern_languages", path: "modern-languages" do
+            get "back"
+            get "continue"
+          end
+          resource :apprenticeship, on: :member, only: %i[new], controller: "courses/apprenticeship" do
+            get "continue"
+          end
+          resource :accredited_body, on: :member, only: %i[new], controller: "courses/accredited_body", path: "accredited-body" do
+            get "continue"
+            get "search_new"
+          end
+          resource :fee_or_salary, on: :member, only: %i[new], controller: "courses/fee_or_salary", path: "fee-or-salary" do
+            get "continue"
+          end
+          get "confirmation"
+        end
       end
     end
   end

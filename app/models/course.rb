@@ -541,6 +541,18 @@ class Course < ApplicationRecord
     subjects.reject { |subject| subject.subject_name == "Modern Languages" }.first&.financial_incentive
   end
 
+  def is_further_education?
+    level == "further_education"
+  end
+
+  def is_uni_or_scitt?
+    provider.accredited_body?
+  end
+
+  def is_school_direct?
+    !(is_uni_or_scitt? || is_further_education?)
+  end
+
   def self_accredited?
     provider.accredited_body?
   end
