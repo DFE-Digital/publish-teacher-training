@@ -11,8 +11,7 @@
       model: @location_form,
       url: publish_provider_recruitment_cycle_locations_path(@location_form.provider_code, @location_form.recruitment_cycle_year),
       method: :post,
-      class: "location-form",
-      builder: GOVUKDesignSystemFormBuilder::FormBuilder,
+      class: "location-form"
     ) do |f| %>
 
       <%= f.govuk_error_summary %>
