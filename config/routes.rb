@@ -39,6 +39,9 @@ Rails.application.routes.draw do
     get "/organisations", to: "providers#index", as: :root
 
     resources :providers, path: "organisations", param: :code, only: [] do
+      get "/users", on: :member, to: "users#index"
+      get "/request-access", on: :member, to: "access_requests#new"
+
       resources :recruitment_cycles, param: :year, constraints: { year: /#{Settings.current_recruitment_cycle_year}|#{Settings.current_recruitment_cycle_year + 1}/ }, path: "", only: [:show] do
         get "/about", on: :member, to: "providers#about"
         put "/about", on: :member, to: "providers#update"

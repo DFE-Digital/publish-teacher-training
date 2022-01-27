@@ -1,0 +1,28 @@
+<% page_title = "Users" %>
+
+<% content_for :before_content do %>
+  <%= govuk_back_link_to(
+      old_publish_link_for(
+        publish_provider_recruitment_cycle_path(@provider.provider_code, @provider.recruitment_cycle_year)
+      )
+    ) %>
+<% end %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-l">Users</h1>
+    <p class="govuk-body">
+      These users currently have access to this organisation. They can manage all your course and organisation details, including publishing, closing and withdrawing courses.
+    </p>
+    <%= govuk_button_link_to "Request access for someone else", request_access_publish_provider_path(code: @provider.provider_code) %>
+    <% @users.each do |user| %>
+      <div>
+        <h2 class="govuk-heading-m govuk-!-margin-bottom-1">
+          <%= "#{user.first_name} #{user.last_name}" %>
+        </h2>
+        <p class="govuk-body govuk-!-margin-bottom-0"><%= user.email %></p>
+      </div>
+      <hr class="govuk-section-break govuk-section-break--visible govuk-section-break--m">
+    <% end %>
+  </div>
+</div>
