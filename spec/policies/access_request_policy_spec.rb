@@ -19,7 +19,7 @@ describe AccessRequestPolicy do
     end
   end
 
-  permissions :create? do
+  permissions :create?, :new? do
     context "non-admin user" do
       let(:user) { build(:user) }
 
