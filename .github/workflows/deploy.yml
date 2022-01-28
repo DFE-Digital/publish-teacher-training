@@ -86,15 +86,16 @@ jobs:
             echo "DEPLOY_ENV=review" >> $GITHUB_ENV
             echo "APP_NAME=$PR_NUMBER" >> $GITHUB_ENV
             echo "DEPLOY_URL=https://teacher-training-api-pr-$PR_NUMBER.london.cloudapps.digital" >> $GITHUB_ENV
-            . terraform/workspace_variables/review.sh
+            DEPLOY_ENV=review
           else
-            . terraform/workspace_variables/$DEPLOY_ENV.sh
+            echo "DEPLOY_ENV=$DEPLOY_ENV" >> $GITHUB_ENV
             echo "DEPLOY_URL=https://$DEPLOY_ENV.api.publish-teacher-training-courses.service.gov.uk" >> $GITHUB_ENV
           fi;
 
-          echo "TF_VAR_key_vault_name=$TF_VAR_key_vault_name" >> $GITHUB_ENV
-          echo "TF_VAR_key_vault_app_secret_name=$TF_VAR_key_vault_app_secret_name" >> $GITHUB_ENV
-          echo "TF_VAR_key_vault_infra_secret_name=$TF_VAR_key_vault_infra_secret_name" >> $GITHUB_ENV
+          tf_vars_file=terraform/workspace_variables/${DEPLOY_ENV}.tfvars.json
+          echo "key_vault_name=$(jq -r '.key_vault_name' ${tf_vars_file})" >> $GITHUB_ENV
+          echo "key_vault_app_secret_name=$(jq -r '.key_vault_app_secret_name' ${tf_vars_file})" >> $GITHUB_ENV
+          echo "key_vault_infra_secret_name=$(jq -r '.key_vault_infra_secret_name' ${tf_vars_file})" >> $GITHUB_ENV
         env:
           DEPLOY_ENV: ${{ matrix.environment }}
 
@@ -105,10 +106,10 @@ jobs:
       - name: Validate Azure Key Vault secrets
         uses: DFE-Digital/github-actions/validate-key-vault-secrets@master
         with:
-          KEY_VAULT: ${{ env.TF_VAR_key_vault_name }}
+          KEY_VAULT: ${{ env.key_vault_name }}
           SECRETS: |
-            ${{ env.TF_VAR_key_vault_app_secret_name }}
-            ${{ env.TF_VAR_key_vault_infra_secret_name }}
+            ${{ env.key_vault_app_secret_name }}
+            ${{ env.key_vault_infra_secret_name }}
 
       - name: Terraform init, plan & apply
         run: make ${{env.DEPLOY_ENV}} ci deploy
