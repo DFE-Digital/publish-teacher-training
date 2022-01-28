@@ -16,8 +16,16 @@ module FeatureHelpers
       @visa_sponsorships_page ||= PageObjects::PublishInterface::ProviderVisaSponsorships.new
     end
 
-    def publish_provider_locations_index_page
-      @publish_provider_locations_index_page ||= PageObjects::PublishInterface::ProviderLocationsIndex.new
+    def publish_locations_index_page
+      @publish_locations_index_page ||= PageObjects::PublishInterface::LocationsIndex.new
+    end
+
+    def publish_location_new_page
+      @publish_location_new_page ||= PageObjects::PublishInterface::LocationNew.new
+    end
+
+    def publish_location_edit_page
+      @publish_location_edit_page ||= PageObjects::PublishInterface::LocationEdit.new
     end
 
     def provider_users_page

@@ -1,0 +1,29 @@
+<% page_title = "Add a location" %>
+<% content_for :page_title, title_with_error_prefix(page_title, @location_form.errors.any?) %>
+
+<% content_for :before_content do %>
+  <%= govuk_back_link_to(publish_provider_recruitment_cycle_locations_path(@location_form.provider_code, @location_form.recruitment_cycle_year)) %>
+<% end %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_with(
+      model: @location_form,
+      url: publish_provider_recruitment_cycle_locations_path(@location_form.provider_code, @location_form.recruitment_cycle_year),
+      method: :post,
+      class: "location-form"
+    ) do |f| %>
+
+      <%= f.govuk_error_summary %>
+
+      <h1 class="govuk-heading-l">
+        <%= page_title %>
+      </h1>
+
+      <p class="govuk-body">Once a location is added (and assigned to a course), candidates can choose it as their preferred place of training when completing the UCAS application form.</p>
+      <p class="govuk-body">When you’ve added this location you can assign it to a course from the ‘Basic details’ tab on the course page.</p>
+      <%= render "form", f: f %>
+      <%= f.govuk_submit "Save", data: { qa: "location__publish-changes" } %>
+    <% end %>
+  </div>
+</div>
