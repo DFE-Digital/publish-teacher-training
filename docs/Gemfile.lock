@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/DFE-Digital/tech-docs-gem.git
-  revision: f6a2abaaf66271c94fb3205423732164c5dede2b
+  revision: df8acdc24a020f43cc9e83e5167a0dc3dc260a77
   branch: fix-urls
   specs:
     govuk_tech_docs (2.0.11)
@@ -29,7 +29,7 @@ GEM
       minitest (>= 5.1)
       tzinfo (~> 2.0)
       zeitwerk (~> 2.3)
-    addressable (2.7.0)
+    addressable (2.8.0)
       public_suffix (>= 2.0.2, < 5.0)
     autoprefixer-rails (6.7.7.2)
       execjs
@@ -145,11 +145,11 @@ GEM
       middleman-core (>= 3.2)
       rouge (~> 2.0)
     mini_mime (1.0.2)
-    mini_portile2 (2.5.0)
+    mini_portile2 (2.7.1)
     minitest (5.15.0)
     multi_json (1.15.0)
-    nokogiri (1.11.1)
-      mini_portile2 (~> 2.5.0)
+    nokogiri (1.13.1)
+      mini_portile2 (~> 2.7.0)
       racc (~> 1.4)
     openapi3_parser (0.5.2)
       commonmarker (~> 0.17)
@@ -164,7 +164,7 @@ GEM
       coderay (~> 1.1)
       method_source (~> 1.0)
     public_suffix (4.0.6)
-    racc (1.5.2)
+    racc (1.6.0)
     rack (2.2.3)
     rack-livereload (0.3.17)
       rack
