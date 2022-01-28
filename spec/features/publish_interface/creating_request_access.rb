@@ -57,7 +57,8 @@ private
   end
 
   def then_i_should_see_an_error_message
-    expect(request_access_new_page.error_messages).to eq(["Enter a first name", "Enter a last name", "Enter an email address", "Enter their organisation", "Enter why they need access"])
+    expected_error_messages = ["Enter a first name", "Enter a last name", "Enter an email address", "Enter their organisation", "Enter why they need access"]
+    expect(request_access_new_page.error_messages).to eq(expected_error_messages)
   end
 
   def provider
