@@ -31,5 +31,9 @@ module FeatureHelpers
     def provider_users_page
       @provider_users_page ||= PageObjects::PublishInterface::ProviderUsers.new
     end
+
+    def request_access_new_page
+      @request_access_new_page ||= PageObjects::PublishInterface::RequestAccessNew.new
+    end
   end
 end

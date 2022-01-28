@@ -1,0 +1,39 @@
+<% page_title = "Request access for someone else" %>
+<% content_for :page_title, title_with_error_prefix(page_title, @access_request.errors.any?) %>
+
+<% content_for :before_content do %>
+  <%= govuk_back_link_to(users_publish_provider_path(params[:code])) %>
+<% end %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_with(
+      model: @access_request,
+      url: request_access_publish_provider_path(params[:code]),
+      method: :post
+    ) do |f| %>
+
+      <%= f.govuk_error_summary %>
+
+      <h1 class="govuk-heading-l">
+        <%= page_title %>
+      </h1>
+
+      <p class="govuk-body">You can request a DfE Sign-in account for others who manage your courses.</p>
+
+      <%= f.govuk_fieldset legend: { text: "Request an account for:", size: "m" } do %>
+        <%= f.govuk_text_field :first_name, label: { text: 'First name' }, width: "one-half" %>
+
+        <%= f.govuk_text_field :last_name, label: { text: 'Last name' }, width: "one-half" %>
+
+        <%= f.govuk_email_field :email_address, label: { text: "Email address" } %>
+
+        <%= f.govuk_text_field :organisation %>
+
+        <%= f.govuk_text_area :reason, width: "two-thirds" %>
+      <% end %>
+
+      <%= f.govuk_submit "Request access" %>
+    <% end %>
+  </div>
+</div>
