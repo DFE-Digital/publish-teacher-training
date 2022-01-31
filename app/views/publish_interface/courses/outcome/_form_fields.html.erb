@@ -1,0 +1,15 @@
+<% legend = capture do %>
+    <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+        <h1 class="govuk-fieldset__heading">
+            <%= course_name_and_code %>
+            Pick a course outcome
+        </h1>
+    </legend>
+<% end %>
+
+<%= render "publish_interface/shared/edit_options_radio_buttons",
+           form: form,
+           legend: legend,
+           key: "qualifications",
+           field: :qualification,
+           bold_labels: true %>

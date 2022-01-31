@@ -28,7 +28,7 @@ module Courses
           subjects: potential_subjects,
           modern_languages: modern_languages,
           modern_languages_subject: modern_languages_subject,
-        }
+        }.with_indifferent_access
       end
     end
   end
