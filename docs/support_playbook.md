@@ -9,7 +9,7 @@ To remove an organisation, you can `discard` it:
 RecruitmentCycle.current.providers.find_by(provider_code: "1JJ").discard
 ```
 
-If the org has running courses, you will get a validation error. In this scenario you just need to make sure there aren't any users attached to it.
+If the organisation has running courses, you will get a validation error. In this scenario you just need to make sure there aren't any users attached to it.
 
 ## Republishing a withdrawn course
 
