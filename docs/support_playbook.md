@@ -17,7 +17,7 @@ To republish a course which has been withdrawn:
 
 ```ruby
 # Find the course by code or urn
-course = RecruitmentCycle.current.providers.find_by(urn: "138459").courses.find_by(course_code: "3C2F")
+course = RecruitmentCycle.current.providers.find_by(provider_code: "138459").courses.find_by(course_code: "3C2F")
 
 course.enrichments.max_by(&:created_at).update(status: "published", last_published_timestamp_utc: Time.now.utc)
 
