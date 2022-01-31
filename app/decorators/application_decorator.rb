@@ -1,4 +1,5 @@
 class ApplicationDecorator < Draper::Decorator
+  # TODO: Move this to a view component
   def status_tag
     tag = h.govuk_tag(text: status_text.html_safe, colour: status_colour)
     tag += unpublished_status_hint if object.has_unpublished_changes?

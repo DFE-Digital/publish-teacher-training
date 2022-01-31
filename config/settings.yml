@@ -4,7 +4,6 @@ environment:
 support_email: becomingateacher@digital.education.gov.uk
 
 search_ui:
-  # URL of the C# search ui app (search-and-compare-ui)
   base_url: https://localhost:5000
 
 # URL of this app for the callback after sigining in
