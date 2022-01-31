@@ -1,0 +1,18 @@
+<table class="govuk-table app-table--vertical-align-middle app-table--courses">
+  <thead class="govuk-table__head">
+    <tr class="govuk-table__row">
+      <th class="govuk-table__header">Course</th>
+      <th class="govuk-table__header">Status</th>
+      <th class="govuk-table__header">
+        <% if @recruitment_cycle.current_and_open? %>Is it<% else %>Will it be<% end %> on <abbr class="app-!-text-decoration-underline-dotted" title="Find postgraduate teacher training">Find</abbr>?
+      </th>
+      <th class="govuk-table__header">Applications</th>
+      <% if @recruitment_cycle.current_and_open? %>
+        <th class="govuk-table__header">Vacancies</th>
+      <% end %>
+    </tr>
+  </thead>
+  <tbody class="govuk-table__body">
+    <%= render partial: "course_table_row", collection: courses, as: :course %>
+  </tbody>
+</table>

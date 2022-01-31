@@ -1,0 +1,13 @@
+// Required since govuk-frontend 3.0.0
+.app-table--vertical-align-middle {
+  .govuk-table__header,
+  .govuk-table__cell {
+    vertical-align: middle;
+  }
+}
+
+.app-table--courses {
+  &__course-name {
+    width: 33%;
+  }
+}

@@ -35,5 +35,9 @@ module FeatureHelpers
     def request_access_new_page
       @request_access_new_page ||= PageObjects::PublishInterface::RequestAccessNew.new
     end
+
+    def publish_provider_courses_index_page
+      @publish_provider_courses_index_page ||= PageObjects::PublishInterface::ProviderCoursesIndex.new
+    end
   end
 end

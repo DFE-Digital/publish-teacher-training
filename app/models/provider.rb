@@ -78,6 +78,10 @@ class Provider < ApplicationRecord
     rollable_courses? || rollable_accredited_courses?
   end
 
+  def rolled_over?
+    FeatureService.enabled?("rollover.can_edit_current_and_next_cycles")
+  end
+
   # the providers that this provider is an accredited_provider for
   def training_providers
     Provider.where(id: current_accredited_courses.pluck(:provider_id))
