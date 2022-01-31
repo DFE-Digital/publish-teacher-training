@@ -34,7 +34,6 @@ Change `program_type` to the preferred value on the course record.
 
 Change `provider_type` to the preferred value on the provider record.
 
-
 ## Changing accredited body of courses
 
 To change the accrediting body of a course, you can do the following:
