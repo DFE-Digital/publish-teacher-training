@@ -13,3 +13,6 @@ search_ui:
 authentication:
   secret: secret
   mode: persona
+
+features:
+  display_migration_signin: false
