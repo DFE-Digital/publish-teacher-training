@@ -95,16 +95,13 @@ deploy-init:
 	echo "🚀 DEPLOY_ENV is $(DEPLOY_ENV)"
 
 deploy-plan: deploy-init
-	cd terraform && . ./workspace_variables/$(DEPLOY_ENV).sh && \
-		terraform plan -var-file=workspace_variables/$(DEPLOY_ENV).tfvars
+	cd terraform && terraform plan -var-file=workspace_variables/$(DEPLOY_ENV).tfvars.json
 
 deploy: deploy-init
-	cd terraform && . ./workspace_variables/$(DEPLOY_ENV).sh && \
-		terraform apply -var-file=workspace_variables/$(DEPLOY_ENV).tfvars $(AUTO_APPROVE)
+	cd terraform && terraform apply -var-file=workspace_variables/$(DEPLOY_ENV).tfvars.json $(AUTO_APPROVE)
 
 destroy: deploy-init
-	cd terraform && . ./workspace_variables/$(DEPLOY_ENV).sh && \
-		terraform destroy -var-file=workspace_variables/$(DEPLOY_ENV).tfvars $(AUTO_APPROVE)
+	cd terraform &&	terraform destroy -var-file=workspace_variables/$(DEPLOY_ENV).tfvars.json $(AUTO_APPROVE)
 
 install-fetch-config:
 	[ ! -f bin/fetch_config.rb ] \
@@ -112,12 +109,17 @@ install-fetch-config:
 		&& chmod +x bin/fetch_config.rb \
 		|| true
 
-edit-app-secrets: install-fetch-config
-	. terraform/workspace_variables/$(DEPLOY_ENV).sh && bin/fetch_config.rb -s azure-key-vault-secret:$${TF_VAR_key_vault_name}/$${TF_VAR_key_vault_app_secret_name} \
-		-e -d azure-key-vault-secret:$${TF_VAR_key_vault_name}/$${TF_VAR_key_vault_app_secret_name} -f yaml
+read-keyvault-config:
+	$(eval export key_vault_name=$(shell jq -r '.key_vault_name' terraform/workspace_variables/$(DEPLOY_ENV).tfvars.json))
+	$(eval key_vault_app_secret_name=$(shell jq -r '.key_vault_app_secret_name' terraform/workspace_variables/$(DEPLOY_ENV).tfvars.json))
+	$(eval key_vault_infra_secret_name=$(shell jq -r '.key_vault_infra_secret_name' terraform/workspace_variables/$(DEPLOY_ENV).tfvars.json))
 
-print-app-secrets: install-fetch-config
-	. terraform/workspace_variables/$(DEPLOY_ENV).sh && bin/fetch_config.rb -s azure-key-vault-secret:$${TF_VAR_key_vault_name}/$${TF_VAR_key_vault_app_secret_name} \
+edit-app-secrets: read-keyvault-config install-fetch-config
+	bin/fetch_config.rb -s azure-key-vault-secret:${key_vault_name}/${key_vault_app_secret_name} \
+		-e -d azure-key-vault-secret:${key_vault_name}/${key_vault_app_secret_name} -f yaml
+
+print-app-secrets: read-keyvault-config install-fetch-config
+	bin/fetch_config.rb -s azure-key-vault-secret:${key_vault_name}/${key_vault_app_secret_name} \
 		-f yaml
 
 console:
