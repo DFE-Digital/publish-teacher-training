@@ -48,7 +48,7 @@ module PublishInterface
       def modern_languages_subject
         return @modern_languages_subject if @modern_languages_subject
 
-        hash = @course.meta[:edit_options][:modern_languages_subject]
+        hash = @course.edit_course_options[:modern_languages_subject]
         @modern_languages_subject = Subject.new(hash)
       end
 
@@ -68,7 +68,7 @@ module PublishInterface
       end
 
       def find_subject(subject_id)
-        @course.meta[:edit_options][:subjects].find do |subject|
+        @course.edit_course_options[:subjects].find do |subject|
           subject[:id] == subject_id
         end
       end
@@ -111,7 +111,7 @@ module PublishInterface
       end
 
       def modern_language_selected?
-        @course.meta[:edit_options][:modern_languages].present?
+        @course.edit_course_options[:modern_languages].present?
       end
 
       def strip_non_language_subject_ids(subject_ids)
@@ -121,7 +121,7 @@ module PublishInterface
       end
 
       def available_languages_ids
-        @course.meta[:edit_options][:modern_languages].map do |language|
+        @course.edit_course_options[:modern_languages].map do |language|
           language["id"]
         end
       end

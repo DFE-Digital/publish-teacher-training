@@ -209,9 +209,7 @@ class CourseDecorator < ApplicationDecorator
   #   end
 
   def selectable_subjects
-    # here we need to fish out the type of subject (ie Primary, Secondary, FurtherEducation, ModernLanguages)
-    # there may also be a concern for this subjects concern or edit options
-    "#{level.capitalize}Subject".constantize.all.map { |subject| [subject.attributes["subject_name"], subject["id"]] }
+    edit_course_options["subjects"].map { |subject| [subject.attributes["subject_name"], subject["id"]] }
   end
 
   def selected_subject_ids
