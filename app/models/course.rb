@@ -680,15 +680,15 @@ class Course < ApplicationRecord
   end
   
   def remove_carat_from_error_messages
-    new_errors = self.errors.map do |error|
+    new_errors = errors.map do |error|
       message = error.message.start_with?("^") ? error.message[1..] : error.message
-        [error.attribute, message]      
+      [error.attribute, message]
     end
 
-    self.errors.clear
+    errors.clear
 
-    new_errors.each do |attribute, message| 
-      self.errors.add attribute, message: message
+    new_errors.each do |attribute, message|
+      errors.add attribute, message: message
     end
   end
 

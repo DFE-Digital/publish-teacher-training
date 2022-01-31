@@ -65,7 +65,7 @@ module PublishInterface
     end
 
     def errors
-      @course.valid?(:new)
+      @course.valid?(course_params)
       @course.remove_carat_from_error_messages
 
       @course.errors.messages.select { |key, _message| error_keys.include?(key) }
