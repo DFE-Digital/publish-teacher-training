@@ -20,7 +20,7 @@ class CourseDecorator < ApplicationDecorator
       if current_cycle_and_open?
         h.govuk_link_to("Yes - view online", h.search_ui_course_page_url(provider_code: provider.provider_code, course_code: object.course_code))
       else
-        "Yes – from #{Settings.next_cycle_open_date.to_s(:month)}"
+        "Yes - from #{Settings.next_cycle_open_date.to_s(:month)}"
       end
     else
       not_on_find
@@ -208,16 +208,18 @@ class CourseDecorator < ApplicationDecorator
   #     end
   #   end
 
-  #   def selectable_subjects
-  #     meta["edit_options"]["subjects"].map { |subject| [subject["attributes"]["subject_name"], subject["id"]] }
-  #   end
+  def selectable_subjects
+    # here we need to fish out the type of subject (ie Primary, Secondary, FurtherEducation, ModernLanguages)
+    # there may also be a concern for this subjects concern or edit options
+    "#{level.capitalize}Subject".constantize.all.map { |subject| [subject.attributes["subject_name"], subject["id"]] }
+  end
 
-  #   def selected_subject_ids
-  #     selectable_subject_ids = meta["edit_options"]["subjects"].map { |subject| subject["id"] }
-  #     selected_subject_ids = subjects.map(&:id)
+  def selected_subject_ids
+    selectable_subject_ids = course.subjects.map { |subject| subject["id"] }
+    selected_subject_ids = subjects.map(&:id)
 
-  #     selectable_subject_ids & selected_subject_ids
-  #   end
+    selectable_subject_ids & selected_subject_ids
+  end
 
   #   def subject_present?(subject_to_find)
   #     subjects.map { |subject| subject["id"] }.include?(subject_to_find["id"])
@@ -256,27 +258,27 @@ class CourseDecorator < ApplicationDecorator
     end
   end
 
-  #   def subject_page_title
-  #     case level
-  #     when "primary"
-  #       "Pick a primary subject"
-  #     when "secondary"
-  #       "Pick a secondary subject"
-  #     else
-  #       "Pick a subject"
-  #     end
-  #   end
+  def subject_page_title
+    case level
+    when "primary"
+      "Pick a primary subject"
+    when "secondary"
+      "Pick a secondary subject"
+    else
+      "Pick a subject"
+    end
+  end
 
-  #   def subject_input_label
-  #     case level
-  #     when "primary"
-  #       "Primary subject"
-  #     when "secondary"
-  #       "Secondary subject"
-  #     else
-  #       "Pick a subject"
-  #     end
-  #   end
+  def subject_input_label
+    case level
+    when "primary"
+      "Primary subject"
+    when "secondary"
+      "Secondary subject"
+    else
+      "Pick a subject"
+    end
+  end
 
   #   def accept_gcse_equivalency?
   #     object.accept_gcse_equivalency

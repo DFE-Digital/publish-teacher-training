@@ -20,7 +20,7 @@
           <% if !current_user["admin"] && @course.level == "secondary" %>
             <h2 class="govuk-heading-m"> Adding a Physical education course?</h2>
             <p class="govuk-body">You’ll need to fill in a
-              <%= govuk_link_to "separate Google Form", add_course_url(current_user['info']['email'], @provider), rel: "noopener noreferrer", target: "_blank" %>,
+              <%= govuk_link_to "separate Google Form", add_course_url(current_user.email, @provider), rel: "noopener noreferrer", target: "_blank" %>,
             as PE places are limited.</p>
           <% end %>
         </div>

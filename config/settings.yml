@@ -70,6 +70,27 @@ google:
     api_json_key: ""
     table_name: events
 
+google_forms:
+  current_cycle:
+    new_pe_course_for_accredited_bodies:
+      url: https://docs.google.com/forms/d/e/1FAIpQLSerPrTvuQNNkpMH_yfgJ8_o5ajthtq5XhOP9x-zG8JL4o5n-Q/viewform?usp=pp_url
+      email_entry: entry.957076544
+      provider_code_entry: entry.1735563938
+    new_pe_course_for_unaccredited_bodies:
+      url: https://docs.google.com/forms/d/e/1FAIpQLSeZK6wGdvDy40QFiFcI8_JRgG-kPWUPBjLfY_EffebCkL0goQ/viewform?usp=pp_url
+      email_entry: entry.1033530353
+      provider_code_entry: entry.158771972
+  # NOTE: these forms are only in use / visible during Rollover i.e. when both cycles are visible.
+  next_cycle:
+    new_pe_course_for_accredited_bodies:
+      url: https://docs.google.com/forms/d/e/1FAIpQLSerPrTvuQNNkpMH_yfgJ8_o5ajthtq5XhOP9x-zG8JL4o5n-Q/viewform?usp=pp_url
+      email_entry: entry.957076544
+      provider_code_entry: entry.1735563938
+    new_pe_course_for_unaccredited_bodies:
+      url: https://docs.google.com/forms/d/e/1FAIpQLSeZK6wGdvDy40QFiFcI8_JRgG-kPWUPBjLfY_EffebCkL0goQ/viewform?usp=pp_url
+      email_entry: entry.1033530353
+      provider_code_entry: entry.158771972
+
 feedback:
   link: https://docs.google.com/forms/d/e/1FAIpQLSfZNWa6zx30SkF_1EAwqNPZHOgK8qYcVQ7uDyhi0P6oPm71zg/viewform
 

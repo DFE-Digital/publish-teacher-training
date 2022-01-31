@@ -7,6 +7,7 @@ module PublishInterface
       before_action :build_new_course, :build_provider, only: %i[back new continue]
       before_action :build_previous_course_creation_params, only: %i[new continue]
       before_action :build_meta_course_creation_params, only: %i[new continue]
+      before_action :build_course_from_params, only: %i[new]
       before_action :build_back_link, only: %i[new back continue]
       before_action :build_course, only: %i[edit update]
     end
@@ -60,12 +61,17 @@ module PublishInterface
       )
     end
 
+    def build_course_from_params
+      @course.assign_attributes(course_params)
+    end
+
     def add_custom_age_range_into_params
       params["course"]["age_range_in_years"] = "#{age_from_param}_to_#{age_to_param}"
     end
 
     def errors
-      @course.valid?(course_params)
+      @course.assign_attributes(course_params)
+      @course.valid?
       @course.remove_carat_from_error_messages
 
       @course.errors.messages.select { |key, _message| error_keys.include?(key) }
@@ -210,25 +216,25 @@ module PublishInterface
       when :level
         new_publish_provider_recruitment_cycle_courses_level_path(path_params)
       when :modern_languages
-        new__publish_provider_recruitment_cycle_courses_modern_languages_path(path_params)
+        new_publish_provider_recruitment_cycle_courses_modern_languages_path(path_params)
       when :apprenticeship
-        new__publish_provider_recruitment_cycle_courses_apprenticeship_path(path_params)
+        new_publish_provider_recruitment_cycle_courses_apprenticeship_path(path_params)
       when :location
-        new__publish_provider_recruitment_cycle_courses_locations_path(path_params)
+        new_publish_provider_recruitment_cycle_courses_locations_path(path_params)
       when :entry_requirements
-        new__publish_provider_recruitment_cycle_courses_entry_requirements_path(path_params)
+        new_publish_provider_recruitment_cycle_courses_entry_requirements_path(path_params)
       when :outcome
-        new__publish_provider_recruitment_cycle_courses_outcome_path(path_params)
+        new_publish_provider_recruitment_cycle_courses_outcome_path(path_params)
       when :full_or_part_time
-        new__publish_provider_recruitment_cycle_courses_study_mode_path(path_params)
+        new_publish_provider_recruitment_cycle_courses_study_mode_path(path_params)
       when :applications_open
-        new__publish_provider_recruitment_cycle_courses_applications_open_path(path_params)
+        new_publish_provider_recruitment_cycle_courses_applications_open_path(path_params)
       when :accredited_body
-        new__publish_provider_recruitment_cycle_courses_accredited_body_path(path_params)
+        new_publish_provider_recruitment_cycle_courses_accredited_body_path(path_params)
       when :start_date
-        new__publish_provider_recruitment_cycle_courses_start_date_path(path_params)
+        new_publish_provider_recruitment_cycle_courses_start_date_path(path_params)
       when :age_range
-        new__publish_provider_recruitment_cycle_courses_age_range_path(path_params)
+        new_publish_provider_recruitment_cycle_courses_age_range_path(path_params)
       when :subjects
         new_publish_provider_recruitment_cycle_courses_subjects_path(path_params)
       when :fee_or_salary

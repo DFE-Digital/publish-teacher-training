@@ -1,6 +1,6 @@
 module PublishInterface
   module Courses
-    class SubjectsController < ApplicationController
+    class SubjectsController < PublishInterfaceController
       decorates_assigned :course
       before_action :build_course, only: %i[edit update]
       before_action :build_course_params, only: [:continue]
