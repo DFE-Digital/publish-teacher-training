@@ -8,3 +8,6 @@ find_url: https://qa.find-postgraduate-teacher-training.service.gov.uk
 authentication:
   secret: secret
   mode: persona
+
+features:
+  display_migration_signin: false

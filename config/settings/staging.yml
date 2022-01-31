@@ -23,4 +23,3 @@ environment:
 
 features:
   send_request_data_to_bigquery: true
-  display_migration_signin: true
