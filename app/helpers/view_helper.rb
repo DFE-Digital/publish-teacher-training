@@ -106,22 +106,22 @@ module ViewHelper
   ##
   ## Example usage:
   ##   <input class="<%= cns("govuk-input", "govuk-input--width-10": is_small) %>">
-  # def classnames(*args)
-  #  args.reduce("") do |str, arg|
-  #    classes =
-  #
-  #      if arg.is_a? Hash
-  #        arg.reduce([]) { |cs, (classname, condition)| cs + [condition ? classname : nil] }
-  #      elsif arg.is_a? String
-  #        [arg]
-  #      else
-  #        []
-  #      end
-  #      #    ([str] + classes).reject(&:blank?).join(" ")
-  #  end
-  # end
+  def classnames(*args)
+   args.reduce("") do |str, arg|
+     classes =
+  
+       if arg.is_a? Hash
+         arg.reduce([]) { |cs, (classname, condition)| cs + [condition ? classname : nil] }
+       elsif arg.is_a? String
+         [arg]
+       else
+         []
+       end
+       #    ([str] + classes).reject(&:blank?).join(" ")
+   end
+  end
 
-  # alias_method :cns, :classnames
+  alias_method :cns, :classnames
 
   # private
 

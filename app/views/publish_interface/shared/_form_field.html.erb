@@ -1,0 +1,18 @@
+<% @errors ||= {}
+   label ||= field.to_s.humanize
+   label_bold ||= false
+   options = {
+     class: "govuk-input",
+     aria: { describedby: @errors.key?(field) ? "#{field}-error" : "" },
+     data: { qa: field.to_s },
+   }.merge(defined?(id) ? { id: id } : {}) %>
+
+<%= render "publish_interface/shared/error_wrapper", error_keys: [field], data_qa: "course__#{field}" do %>
+  <%= form.label field, label, {
+      class: cns("govuk-label", "govuk-label--s": label_bold),
+    }.merge(defined?(id) ? { for: id } : {}) %>
+
+  <%= render "publish_interface/shared/error_messages", error_keys: [field] %>
+
+  <%= yield([field, options]) %>
+<% end %>

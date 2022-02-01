@@ -198,15 +198,15 @@ class CourseDecorator < ApplicationDecorator
     end
   end
 
-  #   def applications_open_from_message_for(recruitment_cycle)
-  #     if current_cycle?
-  #       "As soon as the course is on Find (recommended)"
-  #     else
-  #       year = recruitment_cycle.year.to_i
-  #       day_month = Date.parse(recruitment_cycle.application_start_date).strftime("%-d %B")
-  #       "On #{day_month} when applications for the #{year} to #{year + 1} cycle open"
-  #     end
-  #   end
+  def applications_open_from_message_for(recruitment_cycle)
+    if current_cycle?
+      "As soon as the course is on Find (recommended)"
+    else
+      year = recruitment_cycle.year.to_i
+      day_month = Date.parse(recruitment_cycle.application_start_date).strftime("%-d %B")
+      "On #{day_month} when applications for the #{year} to #{year + 1} cycle open"
+    end
+  end
 
   def selectable_subjects
     edit_course_options["subjects"].map { |subject| [subject.attributes["subject_name"], subject["id"]] }
