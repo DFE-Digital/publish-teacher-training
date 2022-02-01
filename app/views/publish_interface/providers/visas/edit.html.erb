@@ -23,14 +23,13 @@
       </h1>
 
       <p class="govuk-body">
-        If you’re unsure if your courses can sponsor visas, check the
-        <%= govuk_link_to("Register of Student sponsors", "https://www.gov.uk/government/publications/register-of-licensed-sponsors-students") %>
-        and <%= govuk_link_to("Register of Worker and Temporary Worker licensed sponsors", "https://www.gov.uk/government/publications/register-of-licensed-sponsors-workers") %>.
+        Non-UK teacher training candidates need the correct visa or immigration status to work or study in England.
       </p>
 
       <p class="govuk-body">
-        Find out how to <%= govuk_link_to("become a visa sponsor", "https://www.gov.uk/guidance/recruit-trainee-teachers-from-overseas-accredited-itt-providers#recruit-by-becoming-a-visa-sponsor") %>.
+        Student visas are sponsored by the teacher training provider that ratifies your course. Skilled Worker visas are sponsored by the employing school, local authority or multi-academy trust.
       </p>
+    <p class="govuk-body"><%= govuk_link_to("Learn more about visa sponsorship", "https://www.gov.uk/guidance/recruit-trainee-teachers-from-overseas-accredited-itt-providers#recruit-by-becoming-a-visa-sponsor") %></p>
 
       <%= f.govuk_radio_buttons_fieldset(:can_sponsor_student_visa,
         legend: { text: "Can candidates get a sponsored Student visa for your fee-paying courses?" }) do %>
