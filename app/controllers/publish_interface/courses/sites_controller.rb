@@ -65,13 +65,10 @@ module PublishInterface
       end
 
       def build_course_params
-        selected_site_ids = params.dig(:course, :site_statuses_attributes)
-          .values
-          .select { |field| field["selected"] == "1" }
-          .map { |field| field["id"] }
+        selected_site_ids = params["sites"]
 
-        params["course"]["sites_ids"] = selected_site_ids
-        params["course"].delete("site_statuses_attributes")
+        params["course"]["sites"] = selected_site_ids
+        params.delete("sites")
       end
 
       def build_provider_with_sites

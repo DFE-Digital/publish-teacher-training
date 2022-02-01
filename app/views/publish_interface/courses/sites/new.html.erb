@@ -20,12 +20,12 @@
         <%= render "publish_interface/shared/error_messages", error_keys: [:sites] %>
         <div class="govuk-form-group govuk-!-margin-top-2">
           <div class="govuk-checkboxes">
-            <%= fields.fields_for :site_statuses, @provider.sites.sort_by(&:location_name) do |sfields| %>
-              <% sfields.object.each do |site| %>
+            <%= fields.fields_for :site_statuses do |sfields| %>
+              <% @provider.sites.sort_by(&:location_name).each do |site| %>
                 <div class="govuk-checkboxes__item">
-                  <%= sfields.check_box "selected", checked: course.has_site?(site), class: "govuk-checkboxes__input" %>
-                  <%= sfields.label "selected", class: "govuk-label govuk-checkboxes__label"  do %>
-                    <strong data-qa="site__name"><%= site.location_name %></strong>
+                  <%= check_box_tag "sites[]", site.id, course.has_site?(site), id: "sites-#{site.id}", class: "govuk-checkboxes__input" %>
+                  <%= label_tag "sites-#{site.id}", class: "govuk-label govuk-checkboxes__label" do %>
+                      <%= site.location_name %>
                   <% end %>
                   <span class="govuk-hint govuk-checkboxes__hint">
                     <%= site.full_address %>

@@ -14,6 +14,7 @@ module PublishInterface
     def back; end
 
     def new
+      # TODO: Create a new? method on the authorize provider
       authorize(@provider, :index?)
     end
 
@@ -131,7 +132,7 @@ module PublishInterface
             :subordinate_subject_id,
             :funding_type,
             :accredited_body_code,
-            sites_ids: [],
+            sites: [],
             subjects_ids: [],
           )
       else

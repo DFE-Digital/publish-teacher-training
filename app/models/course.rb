@@ -497,6 +497,9 @@ class Course < ApplicationRecord
   def sites=(desired_sites)
     existing_sites = sites
 
+    # TODO: check if there is a better way to pass sites through new course form
+    desired_sites.map! { |id| Site.find(id) } if desired_sites.all? { |site| site.is_a? String }
+
     if persisted?
       to_add = desired_sites - existing_sites
       to_add.each { |site| add_site!(site: site) }
