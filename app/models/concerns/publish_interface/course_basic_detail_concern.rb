@@ -4,8 +4,8 @@ module PublishInterface
 
     included do
       decorates_assigned :course
-      before_action :build_new_course, :build_provider, only: %i[back new continue]
-      before_action :build_previous_course_creation_params, only: %i[new continue]
+      before_action :build_new_course, :build_provider, only: %i[back new continue confirmation]
+      before_action :build_previous_course_creation_params, only: %i[new continue confirmation]
       before_action :build_meta_course_creation_params, only: %i[new continue]
       before_action :build_back_link, only: %i[new back continue]
       before_action :build_course, only: %i[edit update]
@@ -236,7 +236,7 @@ module PublishInterface
       when :fee_or_salary
         new_publish_provider_recruitment_cycle_courses_fee_or_salary_path(path_params)
       when :confirmation
-        confirmation_publish_provider_recruitment_cycle_courses_path(path_params)
+        confirmation_publish_provider_recruitment_cycle_courses_confirmation_path(path_params)
       end
     end
   end

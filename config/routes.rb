@@ -110,7 +110,11 @@ Rails.application.routes.draw do
           resource :fee_or_salary, on: :member, only: %i[new], controller: "courses/fee_or_salary", path: "fee-or-salary" do
             get "continue"
           end
-          get "confirmation"
+          resource :confirmation, on: :member, only: %i[confirmation], controller: "courses/confirmation", path: "confirmation" do
+            # original route that is not nested conflicts with the course controller that lives inside the provider namspace.
+            # TODO: work out how to fix this.
+            get "confirmation"
+          end
         end
       end
     end
