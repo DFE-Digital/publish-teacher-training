@@ -17,10 +17,10 @@ module PublishInterface
       def order_edit_options
         qualification_options = @course.edit_course_options[:qualifications]
         @course.edit_course_options[:qualifications] = if @course.level == "further_education"
-                                                          non_qts_qualifications(qualification_options)
-                                                        else
-                                                          qts_qualifications(qualification_options)
-                                                        end
+                                                         non_qts_qualifications(qualification_options)
+                                                       else
+                                                         qts_qualifications(qualification_options)
+                                                       end
       end
 
       def current_step

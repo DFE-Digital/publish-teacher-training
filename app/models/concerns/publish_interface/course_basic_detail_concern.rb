@@ -7,7 +7,6 @@ module PublishInterface
       before_action :build_new_course, :build_provider, only: %i[back new continue]
       before_action :build_previous_course_creation_params, only: %i[new continue]
       before_action :build_meta_course_creation_params, only: %i[new continue]
-      before_action :build_course_from_params, only: %i[new]
       before_action :build_back_link, only: %i[new back continue]
       before_action :build_course, only: %i[edit update]
     end
@@ -59,10 +58,7 @@ module PublishInterface
       @course = Course.new(
         provider: provider,
       )
-    end
-
-    def build_course_from_params
-      @course.assign_attributes(course_params)
+      @course.assign_attributes(course_params.to_unsafe_hash)
     end
 
     def add_custom_age_range_into_params
@@ -70,7 +66,7 @@ module PublishInterface
     end
 
     def errors
-      @course.valid?(course_params)
+      @course.valid?
       @course.remove_carat_from_error_messages
 
       @course.errors.messages.select { |key, _message| error_keys.include?(key) }
@@ -237,7 +233,7 @@ module PublishInterface
       when :subjects
         new_publish_provider_recruitment_cycle_courses_subjects_path(path_params)
       when :fee_or_salary
-        new_provider_recruitment_cycle_courses_fee_or_salary_path(path_params)
+        new_publish_provider_recruitment_cycle_courses_fee_or_salary_path(path_params)
       when :confirmation
         confirmation_provider_recruitment_cycle_courses_path(path_params)
       end
