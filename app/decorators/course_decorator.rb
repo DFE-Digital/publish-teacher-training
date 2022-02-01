@@ -152,9 +152,9 @@ class CourseDecorator < ApplicationDecorator
   #   site_statuses.select(&:new_or_running?).sort_by { |status| status.site.location_name }
   # end
 
-  # def has_site?(site)
-  #   !course.sites.nil? && object.sites.any? { |s| s.id == site.id }
-  # end
+  def has_site?(site)
+    !course.sites.nil? && object.sites.any? { |s| s.id == site.id }
+  end
 
   # def funding_option
   #   if salaried?
