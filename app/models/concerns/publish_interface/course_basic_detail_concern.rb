@@ -133,7 +133,7 @@ module PublishInterface
             :funding_type,
             :accredited_body_code,
             sites: [],
-            subjects_ids: [],
+            subjects: [],
           )
       else
         ActionController::Parameters.new({}).permit(:course)

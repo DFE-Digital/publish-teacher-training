@@ -94,11 +94,11 @@ module PublishInterface
         selected_master = params[:course][:master_subject_id] if params[:course][:master_subject_id].present?
         selected_subordinate = nil
         selected_subordinate = params[:course][:subordinate_subject_id] if params[:course][:subordinate_subject_id].present?
-        previous_subject_selections = params[:course][:subjects_ids]
+        previous_subject_selections = params[:course][:subjects]
 
-        params[:course][:subjects_ids] = []
-        params[:course][:subjects_ids] << selected_master if selected_master
-        params[:course][:subjects_ids] << selected_subordinate if selected_subordinate
+        params[:course][:subjects] = []
+        params[:course][:subjects] << selected_master if selected_master
+        params[:course][:subjects] << selected_subordinate if selected_subordinate
         params[:course].delete(:master_subject_id)
         params[:course].delete(:subordinate_subject_id)
 
@@ -106,7 +106,7 @@ module PublishInterface
 
         if modern_language_selected?
           previous_language_selections = strip_non_language_subject_ids(previous_subject_selections)
-          params[:course][:subjects_ids].concat(previous_language_selections)
+          params[:course][:subjects].concat(previous_language_selections)
         end
       end
 
