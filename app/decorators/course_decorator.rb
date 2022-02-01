@@ -223,13 +223,13 @@ class CourseDecorator < ApplicationDecorator
   #     subjects.map { |subject| subject["id"] }.include?(subject_to_find["id"])
   #   end
 
-  #   def return_start_date
-  #     if FeatureService.enabled?("rollover.can_edit_current_and_next_cycles")
-  #       start_date.presence || "September #{Settings.current_recruitment_cycle_year + 1}"
-  #     else
-  #       start_date.presence || "September #{Settings.current_recruitment_cycle_year}"
-  #     end
-  #   end
+  def return_start_date
+    if FeatureService.enabled?("rollover.can_edit_current_and_next_cycles")
+      start_date.presence || "September #{Settings.current_recruitment_cycle_year + 1}"
+    else
+      start_date.presence || "September #{Settings.current_recruitment_cycle_year}"
+    end
+  end
 
   def placements_heading
     if is_further_education?
