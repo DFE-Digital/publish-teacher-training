@@ -51,5 +51,53 @@ module FeatureHelpers
     def publish_provider_courses_details_page
       @publish_provider_courses_details_page ||= PageObjects::Publish::ProviderCoursesDetails.new
     end
+
+    def new_level_page
+      @new_level_page ||= PageObjects::PublishInterface::Courses::NewLevel.new
+    end
+
+    def new_subjects_page
+      @new_subjects_page ||= PageObjects::PublishInterface::Courses::NewSubjects.new
+    end
+
+    def new_modern_languages_page
+      @new_modern_languages_page ||= PageObjects::PublishInterface::Courses::NewModernLanguages.new
+    end
+
+    def new_age_range_page
+      @new_age_range_page ||= PageObjects::PublishInterface::Courses::NewAgeRange.new
+    end
+
+    def new_outcome_page
+      @new_outcome_page ||= PageObjects::PublishInterface::Courses::NewOutcome.new
+    end
+
+    def new_apprenticeship_page
+      @new_apprenticeship_page ||= PageObjects::PublishInterface::Courses::NewApprenticeship.new
+    end
+
+    def new_study_mode_page
+      @new_study_mode_page ||= PageObjects::PublishInterface::Courses::NewStudyMode.new
+    end
+
+    def new_applications_open_page
+      @new_applications_open_page ||= PageObjects::PublishInterface::Courses::NewApplicationsOpen.new
+    end
+
+    def new_start_date_page
+      @new_start_date_page ||= PageObjects::PublishInterface::Courses::NewStartDate.new
+    end
+
+    def new_entry_requirements_page
+      @new_entry_requirements_page ||= PageObjects::PublishInterface::Courses::NewEntryRequirements.new
+    end
+
+    def new_locations_page
+      @new_locations_page ||= PageObjects::PublishInterface::Courses::NewLocations.new
+    end
+
+    def confirmation_page
+      @confirmation_page ||= PageObjects::PublishInterface::CourseConfirmation.new
+    end
   end
 end
