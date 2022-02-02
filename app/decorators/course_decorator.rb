@@ -139,10 +139,10 @@ class CourseDecorator < ApplicationDecorator
   #     %w[OneYear TwoYears].exclude?(course.course_length) && !course.course_length.nil?
   #   end
 
-    def other_age_range?
-      options = object.edit_course_options["age_range_in_years"]
-      options.exclude?(course.age_range_in_years)
-    end
+  def other_age_range?
+    options = object.edit_course_options["age_range_in_years"]
+    options.exclude?(course.age_range_in_years)
+  end
 
   def alphabetically_sorted_sites
     object.sites.sort_by(&:location_name)

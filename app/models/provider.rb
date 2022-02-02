@@ -7,6 +7,8 @@ class Provider < ApplicationRecord
   include Discard::Model
   include PgSearch::Model
 
+  CHANGES_INTRODUCED_IN_2022_CYCLE = 2022
+
   before_create :set_defaults
 
   has_associated_audits
