@@ -1,0 +1,28 @@
+<% if course.gcse_section_complete? %>
+  <p class="govuk-body">
+    <%= required_gcse_summary_content(course) %>
+  </p>
+
+  <p class="govuk-body">
+    <%= pending_gcse_summary_content(course) %>
+    <%= gcse_equivalency_summary_content(course) %>
+  </p>
+
+  <% if course.additional_gcse_equivalencies %>
+    <%= simple_format(course.additional_gcse_equivalencies, class: "govuk-body") %>
+  <% end %>
+<% else %>
+  <%= govuk_inset_text(classes: inset_text_css_classes) do %>
+    <p class="govuk-heading-s app-inset-text__title">GCSE and equivalency tests</p>
+    <p class="govuk-body">
+      <%= govuk_link_to "Enter GCSE and equivalency test requirements", "#"
+        # gcses_pending_or_equivalency_tests_provider_recruitment_cycle_course_path(
+        #   course.provider.provider_code,
+        #   course.provider.recruitment_cycle_year,
+        #   course.course_code,
+        # ) 
+        %>
+    </p>
+  <% end %>
+<% end %>
+

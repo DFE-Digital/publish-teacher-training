@@ -182,105 +182,113 @@ class CourseDecorator < ApplicationDecorator
     course.recruitment_cycle.year.to_i == Settings.current_recruitment_cycle_year + 1
   end
 
-#   def use_financial_support_placeholder?
-#     course.recruitment_cycle.year.to_i == Settings.financial_support_placeholder_cycle
-#   end
+  #   def use_financial_support_placeholder?
+  #     course.recruitment_cycle.year.to_i == Settings.financial_support_placeholder_cycle
+  #   end
 
-#   def cycle_range
-#     "#{course.recruitment_cycle.year} to #{course.recruitment_cycle.year.to_i + 1}"
-#   end
+  #   def cycle_range
+  #     "#{course.recruitment_cycle.year} to #{course.recruitment_cycle.year.to_i + 1}"
+  #   end
 
-#   def age_range
-#     if object.age_range_in_years.present?
-#       I18n.t("edit_options.age_range_in_years.#{object.age_range_in_years}.label", default: object.age_range_in_years.humanize)
-#     else
-#       "<span class='app-!-colour-muted'>Unknown</span>".html_safe
-#     end
-#   end
+  #   def age_range
+  #     if object.age_range_in_years.present?
+  #       I18n.t("edit_options.age_range_in_years.#{object.age_range_in_years}.label", default: object.age_range_in_years.humanize)
+  #     else
+  #       "<span class='app-!-colour-muted'>Unknown</span>".html_safe
+  #     end
+  #   end
 
-#   def applications_open_from_message_for(recruitment_cycle)
-#     if current_cycle?
-#       "As soon as the course is on Find (recommended)"
-#     else
-#       year = recruitment_cycle.year.to_i
-#       day_month = Date.parse(recruitment_cycle.application_start_date).strftime("%-d %B")
-#       "On #{day_month} when applications for the #{year} to #{year + 1} cycle open"
-#     end
-#   end
+  #   def applications_open_from_message_for(recruitment_cycle)
+  #     if current_cycle?
+  #       "As soon as the course is on Find (recommended)"
+  #     else
+  #       year = recruitment_cycle.year.to_i
+  #       day_month = Date.parse(recruitment_cycle.application_start_date).strftime("%-d %B")
+  #       "On #{day_month} when applications for the #{year} to #{year + 1} cycle open"
+  #     end
+  #   end
 
-#   def selectable_subjects
-#     meta["edit_options"]["subjects"].map { |subject| [subject["attributes"]["subject_name"], subject["id"]] }
-#   end
+  #   def selectable_subjects
+  #     meta["edit_options"]["subjects"].map { |subject| [subject["attributes"]["subject_name"], subject["id"]] }
+  #   end
 
-#   def selected_subject_ids
-#     selectable_subject_ids = meta["edit_options"]["subjects"].map { |subject| subject["id"] }
-#     selected_subject_ids = subjects.map(&:id)
+  #   def selected_subject_ids
+  #     selectable_subject_ids = meta["edit_options"]["subjects"].map { |subject| subject["id"] }
+  #     selected_subject_ids = subjects.map(&:id)
 
-#     selectable_subject_ids & selected_subject_ids
-#   end
+  #     selectable_subject_ids & selected_subject_ids
+  #   end
 
-#   def subject_present?(subject_to_find)
-#     subjects.map { |subject| subject["id"] }.include?(subject_to_find["id"])
-#   end
+  #   def subject_present?(subject_to_find)
+  #     subjects.map { |subject| subject["id"] }.include?(subject_to_find["id"])
+  #   end
 
-#   def return_start_date
-#     if FeatureService.enabled?("rollover.can_edit_current_and_next_cycles")
-#       start_date.presence || "September #{Settings.current_recruitment_cycle_year + 1}"
-#     else
-#       start_date.presence || "September #{Settings.current_recruitment_cycle_year}"
-#     end
-#   end
+  #   def return_start_date
+  #     if FeatureService.enabled?("rollover.can_edit_current_and_next_cycles")
+  #       start_date.presence || "September #{Settings.current_recruitment_cycle_year + 1}"
+  #     else
+  #       start_date.presence || "September #{Settings.current_recruitment_cycle_year}"
+  #     end
+  #   end
 
-#   def placements_heading
-#     if is_further_education?
-#       "How teaching placements work"
-#     else
-#       "How school placements work"
-#     end
-#   end
+  #   def placements_heading
+  #     if is_further_education?
+  #       "How teaching placements work"
+  #     else
+  #       "How school placements work"
+  #     end
+  #   end
 
-#   def listing_basic_details
-#     if is_further_education?
-#       ["outcome",
-#        "full time or part time",
-#        "fee or salary",
-#        "application open date",
-#        "course start date"]
-#     else
-#       ["age range",
-#        "outcome",
-#        "full time or part time",
-#        "application open date",
-#        "course start date",
-#        "GCSE requirements"]
-#     end
-#   end
+  #   def listing_basic_details
+  #     if is_further_education?
+  #       ["outcome",
+  #        "full time or part time",
+  #        "fee or salary",
+  #        "application open date",
+  #        "course start date"]
+  #     else
+  #       ["age range",
+  #        "outcome",
+  #        "full time or part time",
+  #        "application open date",
+  #        "course start date",
+  #        "GCSE requirements"]
+  #     end
+  #   end
 
-#   def subject_page_title
-#     case level
-#     when "primary"
-#       "Pick a primary subject"
-#     when "secondary"
-#       "Pick a secondary subject"
-#     else
-#       "Pick a subject"
-#     end
-#   end
+  #   def subject_page_title
+  #     case level
+  #     when "primary"
+  #       "Pick a primary subject"
+  #     when "secondary"
+  #       "Pick a secondary subject"
+  #     else
+  #       "Pick a subject"
+  #     end
+  #   end
 
-#   def subject_input_label
-#     case level
-#     when "primary"
-#       "Primary subject"
-#     when "secondary"
-#       "Secondary subject"
-#     else
-#       "Pick a subject"
-#     end
-#   end
+  #   def subject_input_label
+  #     case level
+  #     when "primary"
+  #       "Primary subject"
+  #     when "secondary"
+  #       "Secondary subject"
+  #     else
+  #       "Pick a subject"
+  #     end
+  #   end
 
-#   def accept_gcse_equivalency?
-#     object.accept_gcse_equivalency
-#   end
+  #   def accept_gcse_equivalency?
+  #     object.accept_gcse_equivalency
+  #   end
+
+  def degree_section_complete?
+    object.degree_grade.present?
+  end
+
+  def gcse_section_complete?
+    !object.accept_pending_gcse.nil? && !object.accept_gcse_equivalency.nil?
+  end
 
 private
 

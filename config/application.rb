@@ -14,7 +14,7 @@ require "action_view/railtie"
 # require "action_cable/engine"
 # require "sprockets/railtie"
 # require "rails/test_unit/railtie"
-require "view_component/engine"
+
 require "view_component/compile_cache"
 require "govuk/components"
 
