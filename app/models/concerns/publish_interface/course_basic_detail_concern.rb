@@ -199,7 +199,7 @@ module PublishInterface
       when :location
         back_publish_provider_recruitment_cycle_courses_locations_path(path_params)
       when :modern_languages
-        back_provider_recruitment_cycle_courses_modern_languages_path(path_params)
+        back_publish_provider_recruitment_cycle_courses_modern_languages_path(path_params)
       else
         course_creation_path_for(page)
       end

@@ -1,0 +1,59 @@
+<div class="govuk-radios" data-module="govuk-radios">
+  <% @course.edit_course_options["age_range_in_years"].each do |value| %>
+    <div class="govuk-radios__item">
+      <%= form.radio_button :age_range_in_years, value, class: "govuk-radios__input", data: { qa: "course__age_range_in_years_#{value}_radio" } %>
+      <%= form.label :age_range_in_years,
+            t("edit_options.age_range_in_years.#{value}.label"),
+            value: value,
+            class: "govuk-label govuk-radios__label" %>
+    </div>
+  <% end %>
+  <div class="govuk-radios__divider">or</div>
+  <div class="govuk-radios__item">
+    <%= form.radio_button(
+      :age_range_in_years,
+      "other",
+      class: "govuk-radios__input",
+      data: {
+        "aria-controls" => "other-container",
+        qa: "course__age_range_in_years_other_radio",
+      },
+      checked: expand_another_age_range?,
+      aria: {
+        describedby: @errors && @errors[:age_range_in_years_other] ? "course_age_range_in_years-error" : "",
+      },
+    ) %>
+    <%= form.label :age_range_in_years, t("edit_options.age_range_in_years.other.label"), value: "other", class: "govuk-label govuk-radios__label" %>
+  </div>
+  <div class="govuk-radios__conditional <%= "govuk-radios__conditional--hidden" unless course.other_age_range? %>" id="other-container">
+    <p class="govuk-body">Enter an age range in years, for example: 5 to 11. The course must cover 4 or more school years.</p>
+    <%= render "publish_interface/shared/error_messages", error_keys: [:age_range_in_years_from] %>
+    <%= render "publish_interface/shared/error_wrapper", error_keys: [:age_range_in_years_from], data_qa: "course__age_range_in_years_from" do %>
+      <label class="govuk-label" for="course_course_age_range_in_years_other_from">From</label>
+      <%= form.number_field(
+        "course_age_range_in_years_other_from",
+        min: 0,
+        max: 46,
+        value: age_range_from_field_value,
+        class: "govuk-input govuk-input--width-2",
+        data: {
+          qa: "course__age_range_in_years_other_from_input",
+        },
+      ) %>
+    <% end %>
+    <%= render "publish_interface/shared/error_messages", error_keys: [:age_range_in_years_to] %>
+    <%= render "publish_interface/shared/error_wrapper", error_keys: [:age_range_in_years_to], data_qa: "course__age_range_in_years_to" do %>
+      <label class="govuk-label" for="course_course_age_range_in_years_other_to">To</label>
+      <%= form.number_field(
+        "course_age_range_in_years_other_to",
+        min: 4,
+        max: 50,
+        value: age_range_to_field_value,
+        class: "govuk-input govuk-input--width-2",
+        data: {
+          qa: "course__age_range_in_years_other_to_input",
+        },
+      ) %>
+    <% end %>
+  </div>
+</div>
