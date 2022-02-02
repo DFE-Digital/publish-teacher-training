@@ -24,6 +24,13 @@ feature "selecting a level" do
     then_i_am_met_with_the_course_outcome_page
   end
 
+  scenario "with SEND checked" do
+    [given_i_select_further_education_level, given_i_select_secondary_level, given_i_select_primary_level].sample
+    and_i_check_is_send
+    and_i_click_continue
+    then_with_send_is_in_params
+  end
+
   scenario "invalid entries" do
     given_i_select_nothing
     and_i_click_continue
@@ -59,6 +66,10 @@ private
     new_level_page.continue.click
   end
 
+  def and_i_check_is_send
+    new_level_page.send_specialism_checkbox.click
+  end
+
   def provider
     @provider ||= @user.providers.first
   end
@@ -81,6 +92,10 @@ private
   def then_i_am_met_with_errors
     expect(page).to have_content("There is a problem")
     expect(page).to have_content("Select a course level")
+  end
+
+  def then_with_send_is_in_params
+    expect(page.current_url).to match(/is_send%5D=1/)
   end
 
   def primary_level_selected_params
