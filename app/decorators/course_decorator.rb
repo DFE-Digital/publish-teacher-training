@@ -124,16 +124,16 @@ class CourseDecorator < ApplicationDecorator
   #     object.subjects.map(&:subject_name).sort.join("<br>").html_safe
   #   end
 
-  #   def length
-  #     case object.course_length
-  #     when "OneYear"
-  #       "1 year"
-  #     when "TwoYears"
-  #       "Up to 2 years"
-  #     else
-  #       object.course_length
-  #     end
-  #   end
+  def length
+    case object.enrichment_attribute(:course_length)
+    when "OneYear"
+      "1 year"
+    when "TwoYears"
+      "Up to 2 years"
+    else
+      object.enrichment_attribute(:course_length)
+    end
+  end
 
   #   def other_course_length?
   #     %w[OneYear TwoYears].exclude?(course.course_length) && !course.course_length.nil?
@@ -231,13 +231,13 @@ class CourseDecorator < ApplicationDecorator
   #     end
   #   end
 
-  #   def placements_heading
-  #     if is_further_education?
-  #       "How teaching placements work"
-  #     else
-  #       "How school placements work"
-  #     end
-  #   end
+  def placements_heading
+    if is_further_education?
+      "How teaching placements work"
+    else
+      "How school placements work"
+    end
+  end
 
   #   def listing_basic_details
   #     if is_further_education?
@@ -281,6 +281,14 @@ class CourseDecorator < ApplicationDecorator
   #   def accept_gcse_equivalency?
   #     object.accept_gcse_equivalency
   #   end
+
+  def has_fees?
+    object.funding_type == "fee"
+  end
+
+  def is_further_education?
+    object.level == "further_education"
+  end
 
   def degree_section_complete?
     object.degree_grade.present?
