@@ -72,6 +72,10 @@ module FeatureHelpers
       @new_outcome_page ||= PageObjects::PublishInterface::Courses::NewOutcome.new
     end
 
+    def new_fee_or_salary_page
+      @new_fee_or_salary_page ||= PageObjects::PublishInterface::Courses::NewFeeOrSalary.new
+    end
+
     def new_apprenticeship_page
       @new_apprenticeship_page ||= PageObjects::PublishInterface::Courses::NewApprenticeship.new
     end

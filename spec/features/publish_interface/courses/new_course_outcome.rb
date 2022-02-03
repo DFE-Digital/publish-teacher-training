@@ -49,15 +49,6 @@ private
     new_outcome_page.qualification_fields.send(outcome).click
   end
 
-  def when_i_select_another_age_range
-    new_outcome_page.age_range_other.click
-  end
-
-  def and_fill_out_custom_values
-    new_outcome_page.age_range_from_field.set("6")
-    new_outcome_page.age_range_to_field.set("12")
-  end
-
   def and_i_select_nothing; end
 
   def and_i_click_continue
