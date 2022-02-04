@@ -35,7 +35,7 @@ private
   end
 
   def then_i_am_met_with_the_confirmation_page
-    expect(page.current_path).to match("/publish/organisations/#{provider.provider_code}/#{Settings.current_recruitment_cycle_year}/courses/confirmation/confirmation")
+    expect(page).to have_current_path("/publish/organisations/#{provider.provider_code}/#{Settings.current_recruitment_cycle_year}/courses/confirmation/confirmation", ignore_query: true)
     expect(page).to have_content("Check your answers before confirming")
   end
 end

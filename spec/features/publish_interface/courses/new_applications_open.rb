@@ -50,7 +50,7 @@ private
   end
 
   def then_i_am_met_with_the_start_date_page
-    expect(page.current_path).to match("/publish/organisations/#{provider.provider_code}/#{Settings.current_recruitment_cycle_year}/courses/start-date/new")
+    expect(page).to have_current_path("/publish/organisations/#{provider.provider_code}/#{Settings.current_recruitment_cycle_year}/courses/start-date/new", ignore_query: true)
     expect(page).to have_content("When does the course start?")
   end
 
