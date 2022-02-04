@@ -9,7 +9,7 @@ describe CoursePolicy do
     it { is_expected.to permit(user, Course) }
   end
 
-  permissions :show?, :update?, :withdraw? do
+  permissions :show?, :update?, :withdraw?, :details? do
     let(:course) { create(:course) }
     let!(:provider) {
       create(:provider,

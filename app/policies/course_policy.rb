@@ -37,6 +37,7 @@ class CoursePolicy
     user.present?
   end
 
+  alias_method :details?, :show?
   alias_method :update?, :show?
   alias_method :destroy?, :show?
   alias_method :publish?, :update?
