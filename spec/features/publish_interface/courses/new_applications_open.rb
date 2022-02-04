@@ -12,6 +12,12 @@ feature "choosing an application open from date" do
     then_i_am_met_with_the_start_date_page
   end
 
+  # scenario "selecting a custom date" do
+  #   when_i_select_as_soon_as_open_on_find
+  #   and_i_click_continue
+  #   then_i_am_met_with_the_start_date_page
+  # end
+
   scenario "invalid entries" do
     and_i_select_nothing
     and_i_click_continue
