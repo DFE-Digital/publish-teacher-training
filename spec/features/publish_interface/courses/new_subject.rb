@@ -37,14 +37,6 @@ private
     new_subjects_page.load(provider_code: provider.provider_code, recruitment_cycle_year: Settings.current_recruitment_cycle_year, query: send("#{level}_subject_params"))
   end
 
-  def primary_subject_params
-    { "course[is_send]" => ["0"], "course[level]" => "primary" }
-  end
-
-  def secondary_subject_params
-    { "course[is_send]" => ["0"], "course[level]" => "secondary" }
-  end
-
   def when_i_select_a_primary_subject
     new_subjects_page.subjects_fields.select("Primary with English").click
   end

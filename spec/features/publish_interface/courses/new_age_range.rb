@@ -35,11 +35,7 @@ private
   end
 
   def when_i_visit_the_new_age_range_page
-    new_age_range_page.load(provider_code: provider.provider_code, recruitment_cycle_year: Settings.current_recruitment_cycle_year, query: params)
-  end
-
-  def params
-    { "course[is_send]" => ["0"], "course[level]" => "primary", "course[subjects][]" => "2" }
+    new_age_range_page.load(provider_code: provider.provider_code, recruitment_cycle_year: Settings.current_recruitment_cycle_year, query: age_range_params)
   end
 
   def when_i_select_an_age_range

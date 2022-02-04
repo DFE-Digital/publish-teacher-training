@@ -21,11 +21,7 @@ private
   end
 
   def when_i_visit_the_new_start_date_page
-    new_start_date_page.load(provider_code: provider.provider_code, recruitment_cycle_year: Settings.current_recruitment_cycle_year, query: params)
-  end
-
-  def params
-    { "course[qualification]" => "qts", "course[accredited_body_code]" => provider.courses.first.accrediting_provider.provider_code, "course[funding_type]" => ["fee"], "course[level]" => "secondary", "course[is_send]" => ["0"], "course[study_mode]" => "full_time", "course[age_range_in_years]" => ["11_to_16"], "course[subjects][]" => "2", "commit" => ["Continue"], "course[applications_open_from]" => "2021-10-12"}
+    new_start_date_page.load(provider_code: provider.provider_code, recruitment_cycle_year: Settings.current_recruitment_cycle_year, query: start_date_params(provider))
   end
 
   def when_i_select_september; end

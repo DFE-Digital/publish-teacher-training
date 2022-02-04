@@ -31,11 +31,7 @@ private
   end
 
   def when_i_visit_the_new_locations_page
-    new_locations_page.load(provider_code: provider.provider_code, recruitment_cycle_year: Settings.current_recruitment_cycle_year, query: params)
-  end
-
-  def params
-    { "course[age_range_in_years]" => ["3_to_7"], "course[funding_type]" => ["fee"], "course[is_send]" => ["0"], "course[level]" => "primary", "course[qualification]" => "qts", "course[study_mode]" => "full_time", "course[subjects][]" => "2" }
+    new_locations_page.load(provider_code: provider.provider_code, recruitment_cycle_year: Settings.current_recruitment_cycle_year, query: locations_params)
   end
 
   def when_i_select_a_location

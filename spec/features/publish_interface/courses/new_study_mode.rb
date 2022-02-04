@@ -38,11 +38,7 @@ private
   end
 
   def when_i_visit_the_new_study_mode_page
-    new_study_mode_page.load(provider_code: provider.provider_code, recruitment_cycle_year: Settings.current_recruitment_cycle_year, query: params)
-  end
-
-  def params
-    { "course[is_send]" => ["0"], "course[level]" => "primary", "course[subjects][]" => "2", "course[age_range_in_years]" => ["3_to_7"] }
+    new_study_mode_page.load(provider_code: provider.provider_code, recruitment_cycle_year: Settings.current_recruitment_cycle_year, query: study_mode_params)
   end
 
   def when_i_select_a_study_mode(study_mode)

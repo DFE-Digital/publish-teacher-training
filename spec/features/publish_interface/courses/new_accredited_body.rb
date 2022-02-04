@@ -27,11 +27,7 @@ private
   end
 
   def when_i_visit_the_new_accredited_bodies_page
-    new_accredited_body_page.load(provider_code: provider.provider_code, recruitment_cycle_year: Settings.current_recruitment_cycle_year, query: params)
-  end
-
-  def params
-    { "course[qualification]" => "qts", "course[funding_type]" => ["fee"], "course[level]" => "secondary", "course[is_send]" => ["0"], "course[study_mode]" => "full_time", "course[age_range_in_years]" => ["11_to_16"], "course[subjects][]" => "2", "commit" => ["Continue"]}
+    new_accredited_body_page.load(provider_code: provider.provider_code, recruitment_cycle_year: Settings.current_recruitment_cycle_year, query: accredited_body_params)
   end
 
   def when_i_select_an_accredited_body

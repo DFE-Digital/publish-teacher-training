@@ -38,11 +38,7 @@ private
   end
 
   def when_i_visit_the_new_fee_or_salary_page
-    new_fee_or_salary_page.load(provider_code: provider.provider_code, recruitment_cycle_year: Settings.current_recruitment_cycle_year, query: params)
-  end
-
-  def params
-    { "course[is_send]" => ["0"], "course[level]" => "primary", "course[subjects][]" => "2", "course[age_range_in_years]" => ["3_to_7"] }
+    new_fee_or_salary_page.load(provider_code: provider.provider_code, recruitment_cycle_year: Settings.current_recruitment_cycle_year, query: fee_or_salary_params)
   end
 
   def when_i_select_an_fee_or_salary(funding_type)
