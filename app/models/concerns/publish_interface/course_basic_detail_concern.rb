@@ -54,6 +54,7 @@ module PublishInterface
 
     def build_new_course
       add_custom_age_range_into_params if params.dig("course", "age_range_in_years") == "other"
+      transform_sites_params if sites_blank
       provider = RecruitmentCycle.find_by(year: params[:recruitment_cycle_year]).providers.find_by(provider_code: params[:provider_code])
 
       @course = Course.new(
@@ -62,12 +63,22 @@ module PublishInterface
       @course.assign_attributes(course_params.to_unsafe_hash)
     end
 
+    def sites_blank
+      params.dig("course", "sites").blank?
+    end
+
+    def transform_sites_params
+      params["course"]["sites"] = []
+    end
+
     def add_custom_age_range_into_params
       params["course"]["age_range_in_years"] = "#{age_from_param}_to_#{age_to_param}"
     end
 
     def errors
       @course.valid?
+      # Site validation not being called properly
+      @course.errors.add(:sites, I18n.t("activerecord.errors.models.course.attributes.sites.blank")) if sites_blank
       @course.remove_carat_from_error_messages
 
       @course.errors.messages.select { |key, _message| error_keys.include?(key) }

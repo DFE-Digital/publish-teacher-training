@@ -13,11 +13,11 @@ feature "selection locations" do
     then_i_am_met_with_the_accredited_body_page
   end
 
-  # scenario "invalid entries" do
-  #   and_i_select_nothing
-  #   and_i_click_continue
-  #   then_i_am_met_with_errors
-  # end
+  scenario "invalid entries" do
+    and_i_select_nothing
+    and_i_click_continue
+    then_i_am_met_with_errors
+  end
 
 private
 
@@ -60,6 +60,6 @@ private
 
   def then_i_am_met_with_errors
     expect(page).to have_content("There is a problem")
-    expect(page).to have_content("Pick full time, part time or full time and part time")
+    expect(page).to have_content("Select at least one location for this course")
   end
 end

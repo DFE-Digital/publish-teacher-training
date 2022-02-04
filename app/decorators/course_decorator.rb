@@ -156,6 +156,10 @@ class CourseDecorator < ApplicationDecorator
     !course.sites.nil? && object.sites.any? { |s| s.id == site.id }
   end
 
+  def sites
+    alphabetically_sorted_sites.pluck(:id)
+  end
+
   # def funding_option
   #   if salaried?
   #     "Salary"

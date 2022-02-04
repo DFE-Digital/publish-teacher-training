@@ -18,6 +18,7 @@
           </h1>
         </legend>
         <%= render "publish_interface/shared/error_messages", error_keys: [:sites] %>
+
         <div class="govuk-form-group govuk-!-margin-top-2">
           <div class="govuk-checkboxes">
             <%= fields.fields_for :site_statuses do |sfields| %>
