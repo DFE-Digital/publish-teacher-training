@@ -1,0 +1,207 @@
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= govuk_summary_list do |summary_list| %>
+      <% summary_list.row(html_attributes: { data: { qa: "course__level" } }) do |row| %>
+        <% row.key { "Level" } %>
+        <% row.value { course.level.humanize } %>
+        <% row.action %>
+      <% end %>
+
+      <% summary_list.row(html_attributes: { data: { qa: "course__is_send" } }) do |row| %>
+        <% row.key { raw("<abbr class=\"app-!-text-decoration-underline-dotted\" title=\"Special educational needs and disability\">SEND</abbr>") } %>
+        <% row.value { course.is_send?  } %>
+        <% if @course.edit_course_options[:show_is_send] %>
+          <% row.action({
+            href: send_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code),
+            visually_hidden_text: "SEND",
+          }) %>
+        <% else %>
+          <% row.action() %>
+        <% end %>
+      <% end %>
+
+      <% unless course.is_further_education? %>
+        <% summary_list.row(html_attributes: { data: { qa: "course__subjects" } }) do |row| %>
+          <% row.key { "Subject".pluralize(course.subjects.count) } %>
+          <% row.value { course.sorted_subjects } %>
+          <% row.action({
+            # href: subjects_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code),
+            # visually_hidden_text: "subjects",
+          }) %>
+        <% end %>
+      <% end %>
+
+      <% unless course.level == "further_education" %>
+        <% summary_list.row(html_attributes: { data: { qa: "course__age_range" } }) do |row| %>
+          <% row.key { "Age range" } %>
+          <% row.value { course.age_range } %>
+          <% row.action({
+            # href: age_range_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code),
+            # visually_hidden_text: "age range",
+          }) %>
+        <% end %>
+      <% end %>
+
+      <% summary_list.row(html_attributes: { data: { qa: "course__outcome" } }) do |row| %>
+        <% row.key { "Outcome" } %>
+        <% row.value { course.outcome } %>
+        <% row.action({
+          # href: outcome_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code),
+          # visually_hidden_text: "outcome",
+        }) %>
+      <% end %>
+
+      <% if @provider.accredited_body? %>
+        <% summary_list.row(html_attributes: { data: { qa: "course__apprenticeship" } }) do |row| %>
+          <% row.key { "Apprenticeship" } %>
+          <% row.value { course.apprenticeship? } %>
+          <% if course.is_published? %>
+            <% row.action() %>
+          <% else %>
+            <% row.action({
+              # href: apprenticeship_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code),
+              # visually_hidden_text: "if apprenticeship",
+            }) %>
+          <% end %>
+        <% end %>
+      <% else %>
+        <% summary_list.row(html_attributes: { data: { qa: "course__funding" } }) do |row| %>
+          <% row.key { "Fee or salary" } %>
+          <% row.value { course.funding } %>
+          <% if course.is_published? %>
+            <% row.action() %>
+          <% else %>
+            <% row.action({
+              # href: fee_or_salary_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code),
+              # visually_hidden_text: "if fee or salary",
+            }) %>
+          <% end %>
+        <% end %>
+      <% end %>
+
+      <% summary_list.row(html_attributes: { data: { qa: "course__study_mode" } }) do |row| %>
+        <% row.key { "Full or part time" } %>
+        <% row.value { course.study_mode&.humanize } %>
+        <% row.action({
+          # href: full_part_time_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code),
+          # visually_hidden_text: "if full or part time",
+        }) %>
+      <% end %>
+
+      <% summary_list.row(html_attributes: { data: { qa: "course__locations" } }) do |row| %>
+        <% row.key { "Locations" } %>
+        <% row.value do %>
+          <% if course.sites.nil? || course.sites.empty? %>
+            <span class="app-!-colour-muted">None</span>
+          <% elsif course.sites.size == 1 %>
+            <%= course.sites.first.location_name %>
+          <% else %>
+            <ul class="govuk-list">
+              <% course.alphabetically_sorted_sites.each do |site| %>
+                <li><%= site.location_name %></li>
+              <% end %>
+            </ul>
+          <% end %>
+        <% end %>
+        <% row.action({
+          # href: locations_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code),
+          # visually_hidden_text: "locations",
+        }) %>
+      <% end %>
+
+      <% unless @provider.accredited_body? %>
+        <% summary_list.row(html_attributes: { data: { qa: "course__accredited_body" } }) do |row| %>
+          <% row.key { "Accredited body" } %>
+          <% row.value { course.accrediting_provider&.provider_name } %>
+          <% if course.is_published? %>
+            <% row.action() %>
+          <% else %>
+            <% row.action({
+              # href: accredited_body_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code),
+              # visually_hidden_text: "accredited body",
+            }) %>
+          <% end %>
+        <% end %>
+      <% end %>
+
+      <% summary_list.row(html_attributes: { data: { qa: "course__applications_open" } }) do |row| %>
+        <% row.key { "Applications open" } %>
+        <% row.value { l(course.applications_open_from&.to_date) } %>
+        <% if @course.edit_course_options[:show_applications_open] %>
+          <% row.action({
+            # href: applications_open_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code),
+            # visually_hidden_text: "date applications open",
+          }) %>
+        <% else %>
+          <% row.action() %>
+        <% end %>
+      <% end %>
+
+      <% summary_list.row(html_attributes: { data: { qa: "course__start_date" } }) do |row| %>
+        <% row.key { "Course starts" } %>
+        <% row.value { l(course.start_date&.to_date, format: :short) } %>
+        <% if @course.edit_course_options[:show_start_date] %>
+          <% row.action({
+            # href: start_date_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code),
+            # visually_hidden_text: "date course starts",
+          }) %>
+        <% else %>
+          <% row.action() %>
+        <% end %>
+      <% end %>
+
+      <% summary_list.row(html_attributes: { data: { qa: "course__name" } }) do |row| %>
+        <% row.key { "Title" } %>
+        <% row.value { course.name } %>
+        <% row.action() %>
+      <% end %>
+
+      <% summary_list.row(html_attributes: { data: { qa: "course__description" } }) do |row| %>
+        <% row.key { "Description" } %>
+        <% row.value { course.description } %>
+        <% row.action %>
+      <% end %>
+
+      <% summary_list.row(html_attributes: { data: { qa: "course__course_code" } }) do |row| %>
+        <% row.key { "Course code" } %>
+        <% row.value { course.course_code } %>
+        <% row.action %>
+      <% end %>
+
+      <% if course.next_cycle? && course.has_fees? %>
+        <% summary_list.row(html_attributes: { data: { qa: "course__allocations" } }) do |row| %>
+          <% row.key { "Allocations" } %>
+          <% row.value do %>
+            <% if course.has_physical_education_subject? %>
+              <p class="govuk-body">Recruitment to fee-funded PE courses is limited by the number of places allocated to you by DfE.</p>
+              <p class="govuk-body">If you haven’t already, you must <%= govuk_link_to "request allocations", "https://docs.google.com/forms/d/e/1FAIpQLSfMJDoChdgXmGJM1UcEgoiyvlR9ExESF1-vv32lrXF8AK3ShA/viewform?usp=sf_link" %></p>
+            <% else %>
+              Recruitment is not restricted
+            <% end %>
+          <% end %>
+          <% row.action %>
+        <% end %>
+      <% end %>
+    <% end %>
+  </div>
+
+  <% if course.is_running? || course.new_and_not_running? %>
+    <aside class="govuk-grid-column-one-third">
+      <div class="app-status-box">
+        <h3 class="govuk-heading-m">Changing your basic details</h3>
+        <p class="govuk-body">At the moment you can change:</p>
+        <ul class="govuk-list govuk-list--bullet">
+          <li><abbr class="app-!-text-decoration-underline-dotted" title="Special educational needs and disability">SEND</abbr> specialism</li>
+          <% course.listing_basic_details.each do |details| %>
+            <li><%= details %></li>
+          <% end %>
+        </ul>
+
+        <p class="govuk-body">
+          To request other changes to your basic details contact the Becoming a Teacher team:<br>
+          <%= bat_contact_mail_to subject: "Edit #{course.name} (#{@provider.provider_code}/#{course.course_code})", data: { qa: "course__contact_support_link" } %>
+        </p>
+      </div>
+    </aside>
+  <% end %>
+</div>

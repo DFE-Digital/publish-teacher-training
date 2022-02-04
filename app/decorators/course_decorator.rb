@@ -31,13 +31,13 @@ class CourseDecorator < ApplicationDecorator
     object.open_for_applications? ? "Open" : "Closed"
   end
 
-  #   def outcome
-  #     I18n.t("edit_options.qualifications.#{object.qualification}.label")
-  #   end
+  def outcome
+    I18n.t("edit_options.qualifications.#{object.qualification}.label")
+  end
 
-  #   def is_send?
-  #     object.is_send? ? "Yes" : "No"
-  #   end
+  def is_send?
+    object.is_send? ? "Yes" : "No"
+  end
 
   #   def funding
   #     {
@@ -116,13 +116,13 @@ class CourseDecorator < ApplicationDecorator
   #     object.funding_type == "salary" || object.funding_type == "apprenticeship"
   #   end
 
-  #   def apprenticeship?
-  #     object.funding_type == "apprenticeship" ? "Yes" : "No"
-  #   end
+  def apprenticeship?
+    object.funding_type == "apprenticeship" ? "Yes" : "No"
+  end
 
-  #   def sorted_subjects
-  #     object.subjects.map(&:subject_name).sort.join("<br>").html_safe
-  #   end
+  def sorted_subjects
+    object.subjects.map(&:subject_name).sort.join("<br>").html_safe
+  end
 
   def length
     case object.enrichment_attribute(:course_length)
@@ -190,13 +190,13 @@ class CourseDecorator < ApplicationDecorator
   #     "#{course.recruitment_cycle.year} to #{course.recruitment_cycle.year.to_i + 1}"
   #   end
 
-  #   def age_range
-  #     if object.age_range_in_years.present?
-  #       I18n.t("edit_options.age_range_in_years.#{object.age_range_in_years}.label", default: object.age_range_in_years.humanize)
-  #     else
-  #       "<span class='app-!-colour-muted'>Unknown</span>".html_safe
-  #     end
-  #   end
+  def age_range
+    if object.age_range_in_years.present?
+      I18n.t("edit_options.age_range_in_years.#{object.age_range_in_years}.label", default: object.age_range_in_years.humanize)
+    else
+      "<span class='app-!-colour-muted'>Unknown</span>".html_safe
+    end
+  end
 
   #   def applications_open_from_message_for(recruitment_cycle)
   #     if current_cycle?
@@ -239,22 +239,22 @@ class CourseDecorator < ApplicationDecorator
     end
   end
 
-  #   def listing_basic_details
-  #     if is_further_education?
-  #       ["outcome",
-  #        "full time or part time",
-  #        "fee or salary",
-  #        "application open date",
-  #        "course start date"]
-  #     else
-  #       ["age range",
-  #        "outcome",
-  #        "full time or part time",
-  #        "application open date",
-  #        "course start date",
-  #        "GCSE requirements"]
-  #     end
-  #   end
+  def listing_basic_details
+    if is_further_education?
+      ["outcome",
+       "full time or part time",
+       "fee or salary",
+       "application open date",
+       "course start date"]
+    else
+      ["age range",
+       "outcome",
+       "full time or part time",
+       "application open date",
+       "course start date",
+       "GCSE requirements"]
+    end
+  end
 
   #   def subject_page_title
   #     case level
