@@ -265,3 +265,69 @@ en:
     changes_ttl: "Changes will appear on Find postgraduate teacher training within 15 minutes."
   links:
     get_information_schools: "https://www.get-information-schools.service.gov.uk/"
+  edit_options:
+    qualifications:
+      qts:
+        label: "QTS"
+        help: "Qualified teacher status"
+      pgce:
+        label: "PGCE only (without QTS)"
+        help: "Postgraduate certificate in education"
+      pgce_with_qts:
+        label: "PGCE with QTS"
+        help: "Postgraduate certificate in education with qualified teacher status"
+      pgde:
+        label: "PGDE only (without QTS)"
+        help: "Postgraduate diploma in education"
+      pgde_with_qts:
+        label: "PGDE with QTS"
+        help: "Postgraduate diploma in education with qualified teacher status"
+    age_range_in_years:
+      other:
+        label: "Another age range"
+      3_to_7:
+        label: "3 to 7"
+      5_to_11:
+        label: "5 to 11"
+      7_to_11:
+        label: "7 to 11"
+      7_to_14:
+        label: "7 to 14 (middle years)"
+      11_to_16:
+        label: "11 to 16"
+      11_to_18:
+        label: "11 to 18"
+      14_to_19:
+        label: "14 to 19"
+    study_modes:
+      part_time:
+        label: "Part time"
+      full_time:
+        label: "Full time"
+      full_time_or_part_time:
+        label: "Full time or part time"
+    apprenticeship:
+      pg_teaching_apprenticeship:
+        label: "Yes"
+      higher_education_programme:
+        label: "No"
+      scitt_programme:
+        label: "No"
+    fee_or_salary:
+      pg_teaching_apprenticeship:
+        label: "Teaching apprenticeship (with salary)"
+      school_direct_training_programme:
+        label: "Fee paying (no salary)"
+      school_direct_salaried_training_programme:
+        label: "Salaried"
+  number:
+    currency:
+      format:
+        unit: "£"
+        delimiter: ","
+        separator: "."
+        precision: 0
+  date:
+    formats:
+      default: "%-d %B %Y"
+      short: "%B %Y"  
