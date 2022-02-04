@@ -497,9 +497,6 @@ class Course < ApplicationRecord
   def sites=(desired_sites)
     existing_sites = sites
 
-    # TODO: check if there is a better way to pass sites through new course form
-    desired_sites.map! { |id| Site.find(id) } if desired_sites.all? { |site| site.is_a? String }
-
     if persisted?
       to_add = desired_sites - existing_sites
       to_add.each { |site| add_site!(site: site) }
@@ -510,25 +507,6 @@ class Course < ApplicationRecord
       sites.reload
     else
       super(desired_sites)
-    end
-  end
-
-  def subjects=(desired_subjects)
-    existing_subjects = subjects
-
-    # TODO: check if there is a better way to pass subjects through new course form
-    desired_subjects.map! { |id| Subject.find(id) } if desired_subjects.all? { |subject| subject.is_a? String }
-
-    if persisted?
-      to_add = desired_subjects - existing_subjects
-      to_add.each { |subject| add_subject!(subject: subject) }
-
-      to_remove = existing_subjects - desired_subjects
-      to_remove.each { |subject| remove_subject!(subject: subject) }
-
-      subjects.reload
-    else
-      super(desired_subjects)
     end
   end
 

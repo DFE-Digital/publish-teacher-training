@@ -60,7 +60,22 @@ module PublishInterface
       @course = Course.new(
         provider: provider,
       )
-      @course.assign_attributes(course_params.to_unsafe_hash)
+      course_attributes = course_params.to_unsafe_hash
+      course_attributes["subjects"] = subjects_from_ids if params.dig("course", "subjects").present?
+      course_attributes["sites"] = sites_from_ids if params.dig("course", "sites").present?
+      @course.assign_attributes(course_attributes)
+    end
+
+    def subjects_from_ids
+      params.dig("course", "subjects")&.map do |subject_id|
+        Subject.find(subject_id)
+      end
+    end
+
+    def sites_from_ids
+      params.dig("course", "sites")&.map do |site_id|
+        Site.find(site_id)
+      end
     end
 
     def sites_blank
@@ -68,7 +83,7 @@ module PublishInterface
     end
 
     def transform_sites_params
-      params["course"]["sites"] = []
+      params["course"] && params["course"]["sites"] = []
     end
 
     def add_custom_age_range_into_params
