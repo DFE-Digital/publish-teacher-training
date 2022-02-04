@@ -76,9 +76,7 @@ module PublishInterface
     end
 
     def errors
-      @course.valid?
-      # Site validation not being called properly
-      @course.errors.add(:sites, I18n.t("activerecord.errors.models.course.attributes.sites.blank")) if sites_blank
+      @course.valid?(:new)
       @course.remove_carat_from_error_messages
 
       @course.errors.messages.select { |key, _message| error_keys.include?(key) }
