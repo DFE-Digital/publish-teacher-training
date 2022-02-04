@@ -3,7 +3,7 @@ class ProviderDecorator < ApplicationDecorator
 
   def accredited_bodies
     object.accredited_bodies.sort_by { |provider| provider["provider_name"] }.map do |provider|
-      OpenStruct.new(provider)
+      Struct.new(:provider_name, :provider_code, :description, keyword_init: true).new(provider)
     end
   end
 

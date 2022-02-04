@@ -3,7 +3,7 @@
 module FeatureHelpers
   module NewCourseParam
     def accredited_body_params
-      { 
+      {
         "course[qualification]" => "qts",
         "course[funding_type]" => ["fee"],
         "course[level]" => "secondary",

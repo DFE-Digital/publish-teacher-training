@@ -13,7 +13,6 @@ module PublishInterface
 
     private
 
-
       def provider
         @provider ||= Provider
           .includes(courses: %i[sites site_statuses enrichments provider])

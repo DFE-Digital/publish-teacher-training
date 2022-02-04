@@ -3,7 +3,7 @@ module PublishInterface
     class LevelController < PublishInterfaceController
       include CourseBasicDetailConcern
 
-  private
+    private
 
       def error_keys
         [:level]
