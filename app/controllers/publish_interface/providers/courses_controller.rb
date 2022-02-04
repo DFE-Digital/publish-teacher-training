@@ -19,6 +19,12 @@ module PublishInterface
         flash.delete(:error_summary)
       end
 
+      def details
+        fetch_course
+
+        authorize @course
+      end
+
     private
 
       def fetch_course

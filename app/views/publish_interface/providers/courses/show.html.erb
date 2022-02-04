@@ -51,6 +51,19 @@
         <span class="govuk-body-s govuk-!-font-weight-regular pointer-events-none">Content, fees and eligibility</span>
       <% end %>
     </li>
+
+    <li class="govuk-tabs__list-item" role="presentation">
+      <%= govuk_link_to(
+        details_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code),
+        class: "govuk-tabs__tab",
+        role: "tab",
+        tabindex: "1",
+        aria: { selected: false },
+      ) do %>
+        Basic details<br>
+        <span class="govuk-body-s govuk-!-font-weight-regular pointer-events-none">Locations, outcome, subject</span>
+      <% end %>
+    </li>
   </ul>
 
   <section class="govuk-tabs__panel" id="description">
