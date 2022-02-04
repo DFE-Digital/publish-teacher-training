@@ -68,6 +68,10 @@ module FeatureHelpers
       @new_age_range_page ||= PageObjects::PublishInterface::Courses::NewAgeRange.new
     end
 
+    def new_accredited_body_page
+      @new_accredited_body_page ||= PageObjects::PublishInterface::Courses::NewAccreditedBody.new
+    end
+
     def new_outcome_page
       @new_outcome_page ||= PageObjects::PublishInterface::Courses::NewOutcome.new
     end
