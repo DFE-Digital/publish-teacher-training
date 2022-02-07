@@ -25,7 +25,7 @@ module Publish
 
         authorize @course
       end
-      
+
       def create
         build_new_course
 

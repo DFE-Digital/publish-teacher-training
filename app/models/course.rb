@@ -678,7 +678,7 @@ class Course < ApplicationRecord
   def enrichment_attribute(enrichment_name)
     enrichments.most_recent&.first&.public_send(enrichment_name)
   end
-  
+
   def remove_carat_from_error_messages
     new_errors = errors.map do |error|
       message = error.message.start_with?("^") ? error.message[1..] : error.message
