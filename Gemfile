@@ -115,7 +115,7 @@ gem "govuk_design_system_formbuilder"
 
 # DfE Sign-In
 gem "omniauth", "~> 1.9"
-gem "omniauth_openid_connect", "~> 0.3"
+gem "omniauth_openid_connect", "~> 0.4"
 gem "omniauth-rails_csrf_protection"
 
 # Data integration with BigQuery
