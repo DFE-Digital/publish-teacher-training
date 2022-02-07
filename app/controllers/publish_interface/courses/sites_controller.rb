@@ -61,7 +61,7 @@ module PublishInterface
 
       def set_default_site
         params["course"] ||= {}
-        params["course"]["sites_ids"] = [@provider.sites.first.id]
+        params["course"]["sites"] = [@provider.sites.first.id]
       end
 
       def build_course_params
