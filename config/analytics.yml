@@ -70,6 +70,16 @@ shared:
     - created_at
     - updated_at
     - position
+  course_enrichment:
+    - id
+    - course_id
+    - created_at
+    - created_by_user_id
+    - json_data
+    - last_published_timestamp_utc
+    - status
+    - updated_at
+    - updated_by_user_id
   financial_incentive:
     - id
     - subject_id
