@@ -12,6 +12,11 @@ feature "Managing a provider's courses" do
     then_i_should_see_a_list_of_courses
   end
 
+  scenario "i can view a single provider's course" do
+    and_i_click_on_a_course
+    then_i_see_the_course
+  end
+
   def given_i_am_authenticated_as_a_provider_user
     given_i_am_authenticated(
       user: create(
@@ -33,6 +38,14 @@ feature "Managing a provider's courses" do
     expect(publish_provider_courses_index_page.courses.size).to eq(1)
 
     expect(publish_provider_courses_index_page.courses.first.name).to have_text(course.name)
+  end
+
+  def and_i_click_on_a_course
+    publish_provider_courses_index_page.courses.first.link.click
+  end
+
+  def then_i_see_the_course
+    expect(page).to have_current_path("/publish/organisations/#{provider.provider_code}/#{provider.recruitment_cycle_year}/courses/#{course.course_code}")
   end
 
   def provider
