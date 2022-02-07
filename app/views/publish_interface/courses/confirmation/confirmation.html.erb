@@ -74,7 +74,7 @@
             <% row.key { "Apprenticeship" } %>
             <% row.value { course.apprenticeship? } %>
             <% row.action({
-              href: new_provider_recruitment_cycle_courses_apprenticeship_path(course.provider.provider_code, course.recruitment_cycle.year, params.to_unsafe_h.merge(goto_confirmation: true)),
+              href: new_publish_provider_recruitment_cycle_courses_apprenticeship_path(course.provider.provider_code, course.recruitment_cycle.year, params.to_unsafe_h.merge(goto_confirmation: true)),
               visually_hidden_text: "if apprenticeship",
             }) %>
           <% end %>
@@ -101,10 +101,10 @@
         <% summary_list.row(html_attributes: { data: { qa: "course__locations" } }) do |row| %>
           <% row.key { "Locations" } %>
           <% row.value do %>
-            <% if course.sites.nil? || course.sites.empty? %>
+            <% if course.object.sites.nil? || course.object.sites.empty? %>
               <span class="app-!-colour-muted">None</span>
-            <% elsif course.sites.size == 1 %>
-              <%= course.sites.first.location_name %>
+            <% elsif course.object.sites.size == 1 %>
+              <%= course.object.sites.first.location_name %>
             <% else %>
               <ul class="govuk-list">
                 <% course.alphabetically_sorted_sites.each do |site| %>
