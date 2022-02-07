@@ -1,0 +1,35 @@
+<%= render "publish_interface/shared/error_wrapper", error_keys: %i[funding_type program_type], data_qa: "course__funding_type" do %>
+  <fieldset class="govuk-fieldset">
+    <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+      <h1 class="govuk-fieldset__heading">
+        Is this a teaching apprenticeship?
+      </h1>
+    </legend>
+
+    <%= render "publish_interface/shared/error_messages", error_keys: %i[funding_type program_type] %>
+
+    <div class="govuk-radios govuk-!-margin-top-2" data-module="govuk-radios">
+      <div class="govuk-radios__item">
+        <%= form.radio_button :funding_type,
+                "apprenticeship",
+                class: "govuk-radios__input" %>
+        <%= form.label :funding_type,
+                "Yes",
+                value: "apprenticeship",
+                class: "govuk-label govuk-radios__label",
+                data: { qa: "course__funding_type_apprenticeship" } %>
+      </div>
+
+      <div class="govuk-radios__item">
+        <%= form.radio_button :funding_type,
+                "fee",
+                class: "govuk-radios__input" %>
+        <%= form.label :funding_type,
+                "No",
+                value: "fee",
+                class: "govuk-label govuk-radios__label",
+                data: { qa: "course__funding_type_fee" } %>
+      </div>
+    </div>
+  </fieldset>
+<% end %>
