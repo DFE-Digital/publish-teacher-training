@@ -7,7 +7,7 @@ module PublishInterface
 
       def confirmation
         # TODO: fix authorization
-        authorize(provider, :index?)
+        authorize(provider, :edit?)
         recruitment_cycle
       end
 

@@ -12,7 +12,7 @@ module PublishInterface
 
       def continue
         # TODO: include proper authorization
-        authorize(@provider, :index?)
+        authorize(@provider, :edit?)
         code = course_params[:accredited_body_code]
         query = @accredited_body
 

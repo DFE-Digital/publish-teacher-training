@@ -9,7 +9,7 @@ module PublishInterface
 
       def new
         # TODO: Create a :new? authorize method
-        authorize(@provider, :index?)
+        authorize(@provider, :edit?)
         return if has_modern_languages_subject?
 
         redirect_to next_step

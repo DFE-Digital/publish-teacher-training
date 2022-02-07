@@ -15,7 +15,7 @@ module PublishInterface
 
     def new
       # TODO: Create a new? method on the authorize provider
-      authorize(@provider, :index?)
+      authorize(@provider, :edit?)
     end
 
     def edit; end
@@ -40,7 +40,7 @@ module PublishInterface
     end
 
     def continue
-      authorize(@provider, :index?)
+      authorize(@provider, :edit?)
       @errors = errors
 
       if @errors.any?
