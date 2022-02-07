@@ -166,7 +166,7 @@
 
         <% summary_list.row(html_attributes: { data: { qa: "course__name" } }) do |row| %>
           <% row.key { "Title" } %>
-          <% row.value { course.name } %>
+          <% row.value { course.object.generate_name } %>
           <% row.action %>
         <% end %>
 
@@ -219,7 +219,7 @@
         <%= govuk_inset_text do %>
           <h3 class="govuk-heading-m" data-qa="course__name">
             <span class="govuk-heading-s govuk-!-margin-bottom-0"><%= @provider.provider_name %></span>
-            <%= course.name %>
+            <%= course.object.generate_name %>
           </h3>
           <p class="govuk-body" data-qa="course__description">Course: <%= course.description %></p>
         <% end %>

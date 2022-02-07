@@ -42,8 +42,9 @@ module PublishInterface
       end
 
       def back
+        authorize(@provider, :edit?)
         if @provider.sites.count > 1
-          redirect_to new_provider_recruitment_cycle_courses_locations_path(path_params)
+          redirect_to new_publish_provider_recruitment_cycle_courses_locations_path(path_params)
         else
           redirect_to @back_link_path
         end

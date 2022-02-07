@@ -26,10 +26,10 @@
                 <div class="govuk-checkboxes__item">
                   <%= check_box_tag "sites[]", site.id, course.has_site?(site), id: "sites-#{site.id}", class: "govuk-checkboxes__input" %>
                   <%= label_tag "sites-#{site.id}", class: "govuk-label govuk-checkboxes__label" do %>
-                      <%= site.location_name %>
+                      <strong data-qa="site__name"><%= site.location_name %></strong>
                   <% end %>
                   <span class="govuk-hint govuk-checkboxes__hint">
-                    <%= site.full_address %>
+                    <%= site.migrated_full_address %>
                   </span>
                 </div>
               <% end %>
