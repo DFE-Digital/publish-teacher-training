@@ -3,7 +3,7 @@ module PublishInterface
     module Courses
       class VacanciesController < PublishInterfaceController
         def edit
-          authorize(provider, :edit?)
+          authorize(provider)
 
           @course_vacancies_form = CourseVacanciesForm.new(course)
           @site_statuses = @course_vacancies_form.running_site_statuses
