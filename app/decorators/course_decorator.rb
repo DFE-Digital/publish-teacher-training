@@ -144,9 +144,9 @@ class CourseDecorator < ApplicationDecorator
   #     options.exclude?(course.age_range_in_years)
   #   end
 
-  #   def alphabetically_sorted_sites
-  #     object.sites.sort_by(&:location_name)
-  #   end
+  def alphabetically_sorted_sites
+    object.sites.sort_by(&:location_name)
+  end
 
   # def preview_site_statuses
   #   site_statuses.select(&:new_or_running?).sort_by { |status| status.site.location_name }
