@@ -8,6 +8,15 @@ feature "Course show" do
     when_i_visit_the_course_page
   end
 
+  let(:course) {
+    build(:course)
+  }
+
+  scenario "i can view the course basic details" do
+    and_i_click_on_basic_details
+    then_i_see_the_course_basic_details
+  end
+
   describe "with a fee paying course" do
     let(:course) {
       build(:course, enrichments: [course_enrichment], funding_type: "fee")
@@ -26,6 +35,14 @@ feature "Course show" do
     scenario "i can view a salary course" do
       then_i_should_see_the_description_of_the_salary_course
     end
+  end
+
+  def and_i_click_on_basic_details
+    publish_provider_courses_show_page.basic_details_link.click
+  end
+
+  def then_i_see_the_course_basic_details
+    expect(page).to have_current_path("/publish/organisations/#{provider.provider_code}/#{provider.recruitment_cycle_year}/courses/#{course.course_code}/details")
   end
 
   def course_enrichment

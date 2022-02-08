@@ -12,7 +12,7 @@
         <% row.value { course.is_send?  } %>
         <% if @course.edit_course_options[:show_is_send] %>
           <% row.action({
-            href: send_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code),
+            #href: send_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code),
             visually_hidden_text: "SEND",
           }) %>
         <% else %>

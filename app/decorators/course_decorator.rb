@@ -39,13 +39,13 @@ class CourseDecorator < ApplicationDecorator
     object.is_send? ? "Yes" : "No"
   end
 
-  #   def funding
-  #     {
-  #       "salary" => "Salaried",
-  #       "apprenticeship" => "Teaching apprenticeship (with salary)",
-  #       "fee" => "Fee paying (no salary)",
-  #     }[object.funding_type]
-  #   end
+  def funding
+    {
+      "salary" => "Salaried",
+      "apprenticeship" => "Teaching apprenticeship (with salary)",
+      "fee" => "Fee paying (no salary)",
+    }[object.funding_type]
+  end
 
   #   def subject_name
   #     if object.subjects.count == 1
