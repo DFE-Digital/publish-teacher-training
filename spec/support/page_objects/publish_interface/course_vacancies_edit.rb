@@ -1,11 +1,14 @@
 # frozen_string_literal: true
 
+require_relative "../sections/errorlink"
+require_relative "../sections/vacancy"
+
 module PageObjects
   module PublishInterface
     class CourseVacanciesEdit < PageObjects::Base
       set_url "/publish/organisations/{provider_code}/{recruitment_cycle_year}/courses/{course_code}/vacancies"
 
-      element :error_summary, ".govuk-error-summary"
+      sections :errors, Sections::ErrorLink, ".govuk-error-summary__list li>a"
 
       element :confirm_no_vacancies, "#publish-interface-course-vacancies-form-change-vacancies-confirmation-no-vacancies-confirmation-field"
       element :confirm_has_vacancies, "#publish-interface-course-vacancies-form-change-vacancies-confirmation-has-vacancies-confirmation-field"
@@ -16,24 +19,20 @@ module PageObjects
       element :vacancies_radio_no_vacancies, "#publish-interface-course-vacancies-form-has-vacancies-field"
       element :vacancies_radio_has_some_vacancies, "#publish-interface-course-vacancies-form-has-vacancies-true-field"
 
+      sections :vacancies, Sections::Vacancy, ".govuk-checkboxes__item"
+
       element :submit, 'button.govuk-button[type="submit"]'
 
-      def errors
-        within(error_summary) do
-          all(".govuk-error-summary__list li").map(&:text)
-        end
+      def error_messages
+        errors.map(&:text)
       end
 
-      def sites
-        within("#publish-interface-course-vacancies-form-has-vacancies-true-conditional") do
-          all(".govuk-checkboxes__item")
-        end
+      def vacancy_names
+        vacancies.map(&:text)
       end
 
-      def site_checkboxes
-        within("#publish-interface-course-vacancies-form-has-vacancies-true-conditional") do
-          all(".govuk-checkboxes__input")
-        end
+      def vacancy_checked_values
+        vacancies.map(&:checked?)
       end
     end
   end

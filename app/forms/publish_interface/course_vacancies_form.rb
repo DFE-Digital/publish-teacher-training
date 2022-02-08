@@ -39,17 +39,18 @@ module PublishInterface
     def assign_attributes_to_model
       model.assign_attributes(
         fields
-          .except(*fields_to_ignore_before_save, :has_vacancies)
+          .symbolize_keys
+          .except(*fields_to_ignore_before_save)
           .deep_merge(attributes_for_site_statuses),
       )
     end
 
     def fields_to_ignore_before_save
-      %w[change_vacancies_confirmation has_vacancies]
+      FIELDS
     end
 
     def attributes_for_site_statuses
-      { site_statuses_attributes: statuses_attributes }.stringify_keys
+      { site_statuses_attributes: statuses_attributes }
     end
 
     def vacancies_confirmation
@@ -80,7 +81,7 @@ module PublishInterface
 
     def attributes_for_multiple_site_statuses
       params[:site_statuses_attributes].transform_values do |site_status_params|
-        site_status_params.except("full_time", "part_time").merge(vac_status: site_status_vacancy(site_status_params))
+        site_status_params.except(:full_time, :part_time).merge(vac_status: site_status_vacancy(site_status_params))
       end
     end
 

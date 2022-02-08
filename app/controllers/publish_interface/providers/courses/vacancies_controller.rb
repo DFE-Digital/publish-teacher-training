@@ -10,7 +10,7 @@ module PublishInterface
         end
 
         def update
-          authorize(provider, :update?)
+          authorize(provider)
 
           @course_vacancies_form = CourseVacanciesForm.new(course, params: vacancy_params)
 
@@ -35,11 +35,11 @@ module PublishInterface
         end
 
         def provider
-          @provider ||= Provider.find_by!(recruitment_cycle: recruitment_cycle, provider_code: params[:provider_code])
+          @provider ||= recruitment_cycle.providers.find_by(recruitment_cycle: recruitment_cycle, provider_code: params[:provider_code])
         end
 
         def recruitment_cycle
-          cycle_year = params[:recruitment_cycle_year] || params[:year] || Settings.current_recruitment_cycle_year
+          cycle_year = params[:recruitment_cycle_year] || Settings.current_recruitment_cycle_year
 
           @recruitment_cycle ||= RecruitmentCycle.find_by!(year: cycle_year)
         end
@@ -51,8 +51,6 @@ module PublishInterface
             .require(:publish_interface_course_vacancies_form)
             .permit(
               CourseVacanciesForm::FIELDS,
-              :change_vacancies_confirmation,
-              :has_vacancies,
               site_statuses_attributes: %i[id vac_status full_time part_time],
             )
         end

@@ -202,7 +202,7 @@ private
   end
 
   def then_i_should_see_a_an_error_message
-    expect(publish_provider_vacancies_edit_page.errors).to include(vacancies_confirmation_error_message)
+    expect(publish_provider_vacancies_edit_page.error_messages).to include(vacancies_confirmation_error_message)
   end
 
   def then_i_should_see_a_checkbox_to_turn_off_all_vacancies
@@ -222,23 +222,23 @@ private
   def then_i_should_see_a_checkbox_for_each_running_site
     expect(publish_provider_vacancies_edit_page).to have_vacancies_radio_choice
     expect(publish_provider_vacancies_edit_page.vacancies_radio_has_some_vacancies).to be_checked
-    expect(publish_provider_vacancies_edit_page.sites.map(&:text)).to match_array(["Site 1", "Site 2"])
+    expect(publish_provider_vacancies_edit_page.vacancy_names).to match_array(["Site 1", "Site 2"])
   end
 
   def then_i_should_see_the_course_as_having_no_vacancies
     expect(publish_provider_vacancies_edit_page).to have_vacancies_radio_choice
     expect(publish_provider_vacancies_edit_page.vacancies_radio_no_vacancies).to be_checked
     expect(publish_provider_vacancies_edit_page.vacancies_radio_has_some_vacancies).not_to be_checked
-    expect(publish_provider_vacancies_edit_page.site_checkboxes.map(&:checked?)).to all(be_falsey)
+    expect(publish_provider_vacancies_edit_page.vacancy_checked_values).to all(be_falsey)
   end
 
   def then_i_should_see_a_checkbox_for_each_study_mode
     expect(publish_provider_vacancies_edit_page).to have_vacancies_radio_choice
     expect(publish_provider_vacancies_edit_page.vacancies_radio_has_some_vacancies).to be_checked
-    expect(publish_provider_vacancies_edit_page.sites.map(&:text)).to match_array(
+    expect(publish_provider_vacancies_edit_page.vacancy_names).to match_array(
       ["Uni full and part time 1 (Full time)", "Uni full and part time 1 (Part time)"],
     )
-    expect(publish_provider_vacancies_edit_page.site_checkboxes.map(&:checked?)).to all(be_truthy)
+    expect(publish_provider_vacancies_edit_page.vacancy_checked_values).to all(be_truthy)
   end
 
   def then_i_should_see_a_checkbox_for_each_study_mode_per_site
@@ -253,8 +253,8 @@ private
 
     expect(publish_provider_vacancies_edit_page).to have_vacancies_radio_choice
     expect(publish_provider_vacancies_edit_page.vacancies_radio_has_some_vacancies).to be_checked
-    expect(publish_provider_vacancies_edit_page.sites.map(&:text)).to match_array(expected_checkbox_state.keys)
-    expect(publish_provider_vacancies_edit_page.site_checkboxes.map(&:checked?)).to match_array(expected_checkbox_state.values)
+    expect(publish_provider_vacancies_edit_page.vacancy_names).to match_array(expected_checkbox_state.keys)
+    expect(publish_provider_vacancies_edit_page.vacancy_checked_values).to match_array(expected_checkbox_state.values)
   end
 
   def when_i_check_the_checkbox_to_turn_off_all_vacancies
@@ -267,40 +267,40 @@ private
 
   def and_i_uncheck_the_sites
     expect(publish_provider_vacancies_edit_page.vacancies_radio_has_some_vacancies).to be_checked
-    expect(publish_provider_vacancies_edit_page.sites.map(&:text)).to match_array(["Site 1", "Site 2"])
+    expect(publish_provider_vacancies_edit_page.vacancy_names).to match_array(["Site 1", "Site 2"])
 
-    publish_provider_vacancies_edit_page.site_checkboxes.each(&:uncheck)
+    publish_provider_vacancies_edit_page.vacancies.each(&:uncheck)
   end
 
   def and_i_check_all_the_sites
     expect(publish_provider_vacancies_edit_page.vacancies_radio_has_some_vacancies).not_to be_checked
 
     publish_provider_vacancies_edit_page.vacancies_radio_has_some_vacancies.choose
-    publish_provider_vacancies_edit_page.site_checkboxes.each(&:check)
+    publish_provider_vacancies_edit_page.vacancies.each(&:check)
   end
 
   def and_i_uncheck_some_sites
     expect(publish_provider_vacancies_edit_page.vacancies_radio_has_some_vacancies).to be_checked
 
-    publish_provider_vacancies_edit_page.sites.find { |el| el.text == "Site 1" }.uncheck
+    publish_provider_vacancies_edit_page.vacancies.find { |el| el.text == "Site 1" }.uncheck
   end
 
   def and_i_check_some_sites
     expect(publish_provider_vacancies_edit_page.vacancies_radio_has_some_vacancies).not_to be_checked
     publish_provider_vacancies_edit_page.vacancies_radio_has_some_vacancies.choose
 
-    publish_provider_vacancies_edit_page.sites.find { |el| el.text == "Site 1" }.check
+    publish_provider_vacancies_edit_page.vacancies.find { |el| el.text == "Site 1" }.check
   end
 
   def and_i_check_the_part_time_site
     expect(publish_provider_vacancies_edit_page.vacancies_radio_has_some_vacancies).to be_checked
 
-    publish_provider_vacancies_edit_page.sites.find { |el| el.text == "Uni 1 (Part time)" }.check
+    publish_provider_vacancies_edit_page.vacancies.find { |el| el.text == "Uni 1 (Part time)" }.check
   end
 
   def and_i_choose_to_remove_all_vacancies
     expect(publish_provider_vacancies_edit_page.vacancies_radio_has_some_vacancies).to be_checked
-    expect(publish_provider_vacancies_edit_page.sites.map(&:text)).to match_array(["Site 1", "Site 2"])
+    expect(publish_provider_vacancies_edit_page.vacancy_names).to match_array(["Site 1", "Site 2"])
 
     publish_provider_vacancies_edit_page.vacancies_radio_no_vacancies.choose
   end
