@@ -20,9 +20,7 @@ module PublishInterface
     end
 
     def site_statuses_attributes=(attributes)
-      attributes.each do |_i, site_status_params|
-        @site_statuses.push(site_status_params)
-      end
+      @site_statuses = attributes.values
     end
 
   private
