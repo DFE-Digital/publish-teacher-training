@@ -117,7 +117,7 @@ class CourseDecorator < ApplicationDecorator
   #   end
 
   def apprenticeship?
-    object.funding_type == "apprenticeship" ? "Yes" : "No"
+    object.funding_type.to_s == "apprenticeship" ? "Yes" : "No"
   end
 
   def sorted_subjects
@@ -125,13 +125,13 @@ class CourseDecorator < ApplicationDecorator
   end
 
   def length
-    case object.enrichment_attribute(:course_length)
+    case course_length.to_s
     when "OneYear"
       "1 year"
     when "TwoYears"
       "Up to 2 years"
     else
-      object.enrichment_attribute(:course_length)
+      course_length.to_s
     end
   end
 
@@ -296,6 +296,50 @@ class CourseDecorator < ApplicationDecorator
 
   def gcse_section_complete?
     !object.accept_pending_gcse.nil? && !object.accept_gcse_equivalency.nil?
+  end
+
+  def about_course
+    object.enrichment_attribute(:about_course)
+  end
+
+  def interview_process
+    object.enrichment_attribute(:interview_process)
+  end
+
+  def how_school_placements_work
+    object.enrichment_attribute(:how_school_placements_work)
+  end
+
+  def fee_uk_eu
+    object.enrichment_attribute(:fee_uk_eu)
+  end
+
+  def fee_international
+    object.enrichment_attribute(:fee_international)
+  end
+
+  def fee_details
+    object.enrichment_attribute(:fee_details)
+  end
+
+  def financial_support
+    object.enrichment_attribute(:financial_support)
+  end
+
+  def salary_details
+    object.enrichment_attribute(:salary_details)
+  end
+
+  def personal_qualities
+    object.enrichment_attribute(:personal_qualities)
+  end
+
+  def other_requirements
+    object.enrichment_attribute(:other_requirements)
+  end
+
+  def course_length
+    object.enrichment_attribute(:course_length)
   end
 
 private
