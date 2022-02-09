@@ -26,6 +26,19 @@ course.site_statuses.each do |site_status|
 end
 ```
 
+## Unpubblishing a published course
+
+Sometimes providers will accidentally publish a course and would like to unpublish it.
+
+```ruby
+course = RecruitmentCycle.current.providers.find_by(provider_code: "B72").courses.find_by(course_code: "V1X1")
+course.enrichments.max_by(&:created_at).update(status: "draft", last_published_timestamp_utc: nil)
+
+course.site_statuses.each do |site_status|
+  site_status.update(vac_status: :full_time_vacancies, status: :new_status, publish: :unpublished)
+end
+```
+
 ## Changing course to a different type (eg to salaried)
 
 Change `program_type` to the preferred value on the course record.
