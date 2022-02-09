@@ -20,7 +20,7 @@
         <%= page_title %>
       </h1>
 
-      <p class="govuk-body">Tell applicants why they should choose to train with you. Say:</p>
+      <p class="govuk-body">Tell candidates why they should choose to train with you. Say:</p>
       <ul class="govuk-list govuk-list--bullet">
         <li>who you are</li>
         <li>who you work with</li>
@@ -50,7 +50,7 @@
 
         <h2 class="govuk-heading-m">About your <%= accredited_body %></h2>
 
-        <p class="govuk-body">Tell applicants about your <%= accredited_body %> – you could mention their academic specialities and achievements.</p>
+        <p class="govuk-body">Tell candidates about your <%= accredited_body %> – you could mention their academic specialities and achievements.</p>
         <p class="govuk-body">Be specific with the claims you make, and support them with evidence.</p>
 
         <% @about_form.accredited_bodies.each do |accredited_body| %>
@@ -75,7 +75,7 @@
         <li>physical, hearing and visual impairments</li>
         <li>mental health conditions</li>
       </ul>
-      <p class="govuk-body">If accessibility varies between locations, give details. It’s also useful for applicants to know how you’ve accommodated others with specific access needs in the past.</p>
+      <p class="govuk-body">If accessibility varies between locations, give details. It’s also useful for candidates to know how you’ve accommodated others with specific access needs in the past.</p>
 
       <%= f.govuk_text_area(:train_with_disability,
         form_group: { id: "train-with-disability" },
