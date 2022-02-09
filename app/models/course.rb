@@ -395,11 +395,11 @@ class Course < ApplicationRecord
   end
 
   def has_multiple_running_sites_or_study_modes?
-    running_site_statuses.length > 1 || full_time_or_part_time?
+    running_site_statuses.count > 1 || full_time_or_part_time?
   end
 
   def running_site_statuses
-    site_statuses.select(&:running?)
+    site_statuses.where(status: :running)
   end
 
   def update_changed_at(timestamp: Time.now.utc)

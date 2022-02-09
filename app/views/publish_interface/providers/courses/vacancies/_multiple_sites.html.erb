@@ -15,7 +15,7 @@
         <% if @course.full_time_or_part_time? %>
           <%= render partial: "site_status_checkbox", locals: { f: site_status, course: @course, study_mode: :part_time, show_study_mode: true } %>
           <%= render partial: "site_status_checkbox", locals: { f: site_status, course: @course, study_mode: :full_time, show_study_mode: true } %>
-        <% elsif @course.full_time? || @course.part_time? %>
+        <% else %>
           <%= render partial: "site_status_checkbox", locals: { f: site_status, course: @course, study_mode: @course.study_mode } %>
         <% end %>
       <% end %>

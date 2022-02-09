@@ -198,14 +198,6 @@ FactoryBot.define do
       to_create { |instance| instance.save(validate: false) }
     end
 
-    trait :full_time_or_part_time do
-      study_mode { :full_time_or_part_time }
-    end
-
-    trait :part_time do
-      study_mode { "part_time" }
-    end
-
     trait :unpublished do
       transient do
         identifier { "unpublished" }

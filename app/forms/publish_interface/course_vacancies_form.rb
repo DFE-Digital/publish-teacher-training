@@ -35,12 +35,14 @@ module PublishInterface
     end
 
     def assign_attributes_to_model
-      model.assign_attributes(
-        fields
-          .symbolize_keys
-          .except(*fields_to_ignore_before_save)
-          .deep_merge(attributes_for_site_statuses),
-      )
+      model.assign_attributes(model_attributes)
+    end
+
+    def model_attributes
+      fields
+        .symbolize_keys
+        .except(*fields_to_ignore_before_save)
+        .deep_merge(attributes_for_site_statuses)
     end
 
     def fields_to_ignore_before_save
