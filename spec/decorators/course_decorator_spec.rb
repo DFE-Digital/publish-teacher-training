@@ -25,6 +25,8 @@ describe CourseDecorator do
   let(:course) do
     build(
       :course,
+      :fee_type_based,
+      level: "Secondary",
       course_code: "A1",
       name: "Mathematics",
       qualification: "pgce_with_qts",
@@ -35,13 +37,14 @@ describe CourseDecorator do
       accrediting_provider: provider,
       subjects: subjects,
       enrichments: [course_enrichment],
+      funding_type: "fee",
     )
   end
 
-  let(:start_date) { Time.zone.local(2019) }
+  let(:start_date) { Time.zone.local(current_recruitment_cycle.year) }
   let(:site) { build(:site) }
   let(:site_status) do
-    build(:site_status, :both_full_time_and_part_time_vacancies, site: site)
+    build(:site_status, :full_time_vacancies, site: site)
   end
 
   let(:decorated_course) { course.decorate }
@@ -50,9 +53,9 @@ describe CourseDecorator do
     expect(decorated_course.name_and_code).to eq("Mathematics (A1)")
   end
 
-  # it "returns a list of subjects in alphabetical order" do
-  #   expect(decorated_course.sorted_subjects).to eq("English<br>Mathematics")
-  # end
+  it "returns a list of subjects in alphabetical order" do
+    expect(decorated_course.sorted_subjects).to eq("English<br>Mathematics")
+  end
 
   it "returns if applications are open or closed" do
     allow(course).to receive(:open_for_applications?).and_return(true)
@@ -60,21 +63,21 @@ describe CourseDecorator do
     expect(decorated_course.open_or_closed_for_applications).to eq("Open")
   end
 
-  # it "returns if course is an apprenticeship" do
-  #   expect(decorated_course.apprenticeship?).to eq("No")
-  # end
+  it "returns if course is an apprenticeship" do
+    expect(decorated_course.apprenticeship?).to eq("No")
+  end
 
-  # it "returns if course is SEND?" do
-  #   expect(decorated_course.is_send?).to eq("No")
-  # end
+  it "returns if course is SEND?" do
+    expect(decorated_course.is_send?).to eq("No")
+  end
 
   # it "returns the Find URL" do
   #   expect(decorated_course.find_url).to eq("#{Settings.search_ui.base_url}/course/#{provider.provider_code}/#{course.course_code}")
   # end
 
-  # it "returns course length" do
-  #   expect(decorated_course.length).to eq("1 year")
-  # end
+  it "returns course length" do
+    expect(decorated_course.length).to eq("1 year")
+  end
 
   context "recruitment cycles" do
     before do
@@ -617,23 +620,23 @@ describe CourseDecorator do
   #   end
   # end
 
-  # describe "#placements_heading" do
-  #   context "when the subject is not further education" do
-  #     let(:course) { build(:course) }
+  describe "#placements_heading" do
+    context "when the subject is not further education" do
+      let(:course) { build(:course) }
 
-  #     it "returns school placements" do
-  #       expect(decorated_course.placements_heading).to eq("How school placements work")
-  #     end
-  #   end
+      it "returns school placements" do
+        expect(decorated_course.placements_heading).to eq("How school placements work")
+      end
+    end
 
-  #   context "when the subject is further education" do
-  #     let(:course) { build(:course, level: "further_education") }
+    context "when the subject is further education" do
+      let(:course) { build(:course, level: "further_education") }
 
-  #     it "returns teaching placements" do
-  #       expect(decorated_course.placements_heading).to eq("How teaching placements work")
-  #     end
-  #   end
-  # end
+      it "returns teaching placements" do
+        expect(decorated_course.placements_heading).to eq("How teaching placements work")
+      end
+    end
+  end
 
   # describe "#subject_page_title" do
   #   let(:subject_page_title) { course.decorate.subject_page_title }
@@ -663,32 +666,32 @@ describe CourseDecorator do
   #   end
   # end
 
-  # describe "#changing_basic_details" do
-  #   context "basic details when course is further education" do
-  #     let(:course) { build :course, level: "further_education" }
+  describe "#changing_basic_details" do
+    context "basic details when course is further education" do
+      let(:course) { build :course, level: "further_education" }
 
-  #     it "returns the correct details under 'changing your basic details'" do
-  #       expect(decorated_course.listing_basic_details).to eq(["outcome",
-  #                                                             "full time or part time",
-  #                                                             "fee or salary",
-  #                                                             "application open date",
-  #                                                             "course start date"])
-  #     end
-  #   end
+      it "returns the correct details under 'changing your basic details'" do
+        expect(decorated_course.listing_basic_details).to eq(["outcome",
+                                                              "full time or part time",
+                                                              "fee or salary",
+                                                              "application open date",
+                                                              "course start date"])
+      end
+    end
 
-  #   context "basic details when course is primary or secondary" do
-  #     let(:course) { build :course }
+    context "basic details when course is primary or secondary" do
+      let(:course) { build :course }
 
-  #     it "returns the correct details under 'changing your basic details'" do
-  #       expect(decorated_course.listing_basic_details).to eq(["age range",
-  #                                                             "outcome",
-  #                                                             "full time or part time",
-  #                                                             "application open date",
-  #                                                             "course start date",
-  #                                                             "GCSE requirements"])
-  #     end
-  #   end
-  # end
+      it "returns the correct details under 'changing your basic details'" do
+        expect(decorated_course.listing_basic_details).to eq(["age range",
+                                                              "outcome",
+                                                              "full time or part time",
+                                                              "application open date",
+                                                              "course start date",
+                                                              "GCSE requirements"])
+      end
+    end
+  end
 
   # describe "#subject_input_label" do
   #   let(:subject_input_label) { course.decorate.subject_input_label }

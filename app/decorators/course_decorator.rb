@@ -283,11 +283,11 @@ class CourseDecorator < ApplicationDecorator
   #   end
 
   def has_fees?
-    object.funding_type == "fee"
+    object.funding_type.match?(/fee/)
   end
 
   def is_further_education?
-    object.level == "further_education"
+    object.level.match?(/further_education/)
   end
 
   def degree_section_complete?
