@@ -18,7 +18,7 @@
         "aria-controls" => "other-container",
         qa: "course__age_range_in_years_other_radio",
       },
-      checked: expand_another_age_range?,
+      checked: expand_another_age_range?(@errors),
       aria: {
         describedby: @errors && @errors[:age_range_in_years_other] ? "course_age_range_in_years-error" : "",
       },

@@ -107,17 +107,18 @@ module ViewHelper
   ## Example usage:
   ##   <input class="<%= cns("govuk-input", "govuk-input--width-10": is_small) %>">
   def classnames(*args)
-    args.reduce("") do |_str, arg|
+    args.reduce("") do |str, arg|
       classes =
 
-        if arg.is_a? Hash
+        case arg
+        when Hash
           arg.reduce([]) { |cs, (classname, condition)| cs + [condition ? classname : nil] }
-        elsif arg.is_a? String
+        when String
           [arg]
         else
           []
         end
-      #    ([str] + classes).reject(&:blank?).join(" ")
+      ([str] + classes).compact_blank.join(" ")
     end
   end
 
