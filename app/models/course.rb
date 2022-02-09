@@ -104,6 +104,7 @@ class Course < ApplicationRecord
   has_many :subjects, through: :course_subjects
   has_many :financial_incentives, through: :subjects
   has_many :site_statuses
+  accepts_nested_attributes_for :site_statuses
   has_many :sites,
            -> { distinct.merge(SiteStatus.where(status: %i[new_status running])) },
            through: :site_statuses
@@ -391,6 +392,14 @@ class Course < ApplicationRecord
     else
       site_statuses.findable.with_vacancies.any?
     end
+  end
+
+  def has_multiple_running_sites_or_study_modes?
+    running_site_statuses.count > 1 || full_time_or_part_time?
+  end
+
+  def running_site_statuses
+    site_statuses.where(status: :running)
   end
 
   def update_changed_at(timestamp: Time.now.utc)

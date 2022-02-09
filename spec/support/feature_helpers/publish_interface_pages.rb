@@ -39,5 +39,9 @@ module FeatureHelpers
     def publish_provider_courses_index_page
       @publish_provider_courses_index_page ||= PageObjects::PublishInterface::ProviderCoursesIndex.new
     end
+
+    def publish_provider_vacancies_edit_page
+      @publish_provider_vacancies_edit_page ||= PageObjects::PublishInterface::CourseVacanciesEdit.new
+    end
   end
 end
