@@ -28,7 +28,7 @@ module PublishInterface
     private
 
       def fetch_course
-        @course = provider.courses.find_by(params[:code])
+        @course = provider.courses.find_by!(course_code: params[:code])
       end
 
       def provider

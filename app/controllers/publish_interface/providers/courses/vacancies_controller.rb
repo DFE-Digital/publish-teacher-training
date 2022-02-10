@@ -31,7 +31,7 @@ module PublishInterface
       private
 
         def course
-          @course ||= provider.courses.find_by!(course_code: params[:id])
+          @course ||= provider.courses.find_by!(course_code: params[:code])
         end
 
         def provider
