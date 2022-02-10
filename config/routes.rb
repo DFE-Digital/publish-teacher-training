@@ -4,11 +4,11 @@ Rails.application.routes.draw do
   get :sha, controller: :heartbeat
   get :reporting, controller: :reporting
 
-  root to: "publish_interface/providers#index"
-
   constraints(ApiConstraint.new) do
     get "/", to: redirect("/docs/")
   end
+
+  root to: "publish_interface/providers#index"
 
   mount OpenApi::Rswag::Ui::Engine => "/api-docs"
   mount OpenApi::Rswag::Api::Engine => "/api-docs"
