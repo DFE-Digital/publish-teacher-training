@@ -8,10 +8,6 @@ feature "Course show" do
     when_i_visit_the_course_details_page
   end
 
-  let(:course) {
-    build(:course, :with_accrediting_provider, start_date: Date.parse("2022 January"))
-  }
-
   scenario "i can view the course basic details" do
     then_i_see_the_course_basic_details
   end
@@ -21,7 +17,7 @@ feature "Course show" do
       user: create(
         :user,
         providers: [
-          create(:provider, courses: [course]),
+          create(:provider, courses: [build(:course, :with_accrediting_provider, start_date: Date.parse("2022 January"))]),
         ],
       ),
     )
@@ -87,5 +83,9 @@ feature "Course show" do
 
   def provider
     @current_user.providers.first
+  end
+
+  def course
+    provider.courses.first
   end
 end

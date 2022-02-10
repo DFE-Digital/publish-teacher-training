@@ -3,36 +3,25 @@
 require "rails_helper"
 
 feature "Course show" do
-  before do
-    given_i_am_authenticated_as_a_provider_user
-    when_i_visit_the_course_page
-  end
-
-  let(:course) {
-    build(:course)
-  }
-
   scenario "i can view the course basic details" do
+    given_i_am_authenticated_as_a_provider_user(course: build(:course))
+    when_i_visit_the_course_page
     and_i_click_on_basic_details
     then_i_see_the_course_basic_details
   end
 
   describe "with a fee paying course" do
-    let(:course) {
-      build(:course, enrichments: [course_enrichment], funding_type: "fee")
-    }
-
     scenario "i can view a fee course" do
+      given_i_am_authenticated_as_a_provider_user(course: build(:course, enrichments: [course_enrichment], funding_type: "fee"))
+      when_i_visit_the_course_page
       then_i_should_see_the_description_of_the_fee_course
     end
   end
 
   describe "with a salary paying course" do
-    let(:course) {
-      build(:course, enrichments: [course_enrichment], funding_type: "salary")
-    }
-
     scenario "i can view a salary course" do
+      given_i_am_authenticated_as_a_provider_user(course: build(:course, enrichments: [course_enrichment], funding_type: "salary"))
+      when_i_visit_the_course_page
       then_i_should_see_the_description_of_the_salary_course
     end
   end
@@ -49,7 +38,7 @@ feature "Course show" do
     @course_enrichment ||= build(:course_enrichment, :published, course_length: :TwoYears, fee_uk_eu: 9250, fee_international: 14000)
   end
 
-  def given_i_am_authenticated_as_a_provider_user
+  def given_i_am_authenticated_as_a_provider_user(course:)
     given_i_am_authenticated(
       user: create(
         :user,
@@ -146,5 +135,9 @@ feature "Course show" do
 
   def provider
     @current_user.providers.first
+  end
+
+  def course
+    provider.courses.first
   end
 end
