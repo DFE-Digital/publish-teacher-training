@@ -45,7 +45,7 @@ RUN  yarn install --frozen-lockfile && \
 
 ADD . $APP_HOME/
 
-COPY --from=middleman /public/ $APP_HOME/public/
+COPY --from=middleman /public/ $APP_HOME/public/docs/
 
 RUN ls /app/public/ && \
     bundle exec rake assets:precompile && \
