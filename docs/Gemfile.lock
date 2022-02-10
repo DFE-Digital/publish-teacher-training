@@ -1,7 +1,6 @@
 GIT
-  remote: https://github.com/DFE-Digital/tech-docs-gem.git
-  revision: df8acdc24a020f43cc9e83e5167a0dc3dc260a77
-  branch: fix-urls
+  remote: https://github.com/DFE-Digital/tech-docs-gem
+  revision: 81f2deb482dec52ae70f8e942cd98aa2cde02659
   specs:
     govuk_tech_docs (2.0.11)
       activesupport
@@ -170,7 +169,7 @@ GEM
       rack
     rack-test (1.1.0)
       rack (>= 1.0, < 3)
-    rb-fsevent (0.11.0)
+    rb-fsevent (0.11.1)
     rb-inotify (0.10.1)
       ffi (~> 1.0)
     redcarpet (3.3.4)
