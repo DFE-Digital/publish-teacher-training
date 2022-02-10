@@ -62,14 +62,17 @@ module PublishInterface
 
       def set_default_site
         params["course"] ||= {}
-        params["course"]["sites"] = [@provider.sites.first.id]
+        params["course"]["sites_ids"] = [@provider.sites.first.id]
       end
 
       def build_course_params
-        selected_site_ids = params["sites"]
+        selected_site_ids = params.dig(:course, :site_statuses_attributes)
+          .values
+          .select { |field| field["selected"] == "1" }
+          .map { |field| field["id"] }
 
-        params["course"]["sites"] = selected_site_ids
-        params.delete("sites")
+        params["course"]["sites_ids"] = selected_site_ids
+        params["course"].delete("site_statuses_attributes")
       end
 
       def build_provider_with_sites

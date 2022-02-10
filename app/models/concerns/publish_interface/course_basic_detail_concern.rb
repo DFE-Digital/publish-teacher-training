@@ -54,16 +54,18 @@ module PublishInterface
 
     def build_new_course
       add_custom_age_range_into_params if params.dig("course", "age_range_in_years") == "other"
-      transform_sites_params if sites_blank
       provider = RecruitmentCycle.find_by(year: params[:recruitment_cycle_year]).providers.find_by(provider_code: params[:provider_code])
 
       @course = Course.new(
-        provider: provider,
+        provider: provider, **course_attributes,
       )
-      course_attributes = course_params.to_unsafe_hash
+    end
+
+    def course_attributes
+      course_attributes = course_params.to_unsafe_hash.except(:sites_ids)
       course_attributes["subjects"] = subjects_from_ids if params.dig("course", "subjects").present?
-      course_attributes["sites"] = sites_from_ids if params.dig("course", "sites").present?
-      @course.assign_attributes(course_attributes)
+      course_attributes["sites"] = sites_from_ids if params.dig("course", "sites_ids").present?
+      course_attributes
     end
 
     def subjects_from_ids
@@ -73,17 +75,9 @@ module PublishInterface
     end
 
     def sites_from_ids
-      params.dig("course", "sites")&.map do |site_id|
+      params.dig("course", "sites_ids")&.map do |site_id|
         Site.find(site_id)
       end
-    end
-
-    def sites_blank
-      params.dig("course", "sites").blank?
-    end
-
-    def transform_sites_params
-      params["course"] && params["course"]["sites"] = []
     end
 
     def add_custom_age_range_into_params
@@ -156,7 +150,7 @@ module PublishInterface
             :subordinate_subject_id,
             :funding_type,
             :accredited_body_code,
-            sites: [],
+            sites_ids: [],
             subjects: [],
           )
       else

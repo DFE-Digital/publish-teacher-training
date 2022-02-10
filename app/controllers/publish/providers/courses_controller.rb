@@ -27,20 +27,23 @@ module Publish
       end
 
       def create
+        authorize :provider, :index?
         build_new_course
+
+        @course.name = @course.generate_name
+        @course.course_code = provider.next_available_course_code
 
         if @course.save
           flash[:success_with_body] = { title: "Your course has been created", body: "Add the rest of your details and publish the course, so that candidates can find and apply to it." }
           redirect_to(
-            provider_recruitment_cycle_course_path(
+            publish_provider_recruitment_cycle_courses_path(
               @course.provider_code,
-              @course.recruitment_cycle_year,
+              @course.recruitment_cycle.year,
               @course.course_code,
             ),
           )
         else
           @errors = @course.errors.messages
-
           @course_creation_params = course_params
           build_new_course
 

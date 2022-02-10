@@ -21,19 +21,18 @@
 
         <div class="govuk-form-group govuk-!-margin-top-2">
           <div class="govuk-checkboxes">
-            <%= fields.fields_for :site_statuses do |sfields| %>
-              <% @provider.sites.sort_by(&:location_name).each do |site| %>
+            <%= fields.fields_for :site_statuses, @provider.sites.sort_by(&:location_name) do |sfields| %>
+                <% site = sfields.object %>
                 <div class="govuk-checkboxes__item">
-                  <%= check_box_tag "sites[]", site.id, course.has_site?(site), id: "sites-#{site.id}", class: "govuk-checkboxes__input" %>
-                  <%= label_tag "sites-#{site.id}", class: "govuk-label govuk-checkboxes__label" do %>
-                      <strong data-qa="site__name"><%= site.location_name %></strong>
+                  <%= sfields.check_box "selected", checked: course.has_site?(site), class: "govuk-checkboxes__input" %>
+                  <%= sfields.label "selected", class: "govuk-label govuk-checkboxes__label"  do %>
+                    <strong data-qa="site__name"><%= site.location_name %></strong>
                   <% end %>
                   <span class="govuk-hint govuk-checkboxes__hint">
-                    <%= site.migrated_full_address %>
+                    <%= site.full_address %>
                   </span>
                 </div>
               <% end %>
-            <% end %>
           </div>
         </div>
       </fieldset>
