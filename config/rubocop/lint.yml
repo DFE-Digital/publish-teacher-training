@@ -20,8 +20,8 @@ Lint/StructNewOverride:
 # https://github.com/rubocop/rubocop-rails/issues/343
 Lint/UselessMethodDefinition:
   Exclude:
-    - 'app/controllers/publish_interface/courses/applications_open_controller.rb'
-    - 'app/controllers/publish_interface/courses/modern_languages_controller.rb'
-    - 'app/controllers/publish_interface/courses/outcome_controller.rb'
-    - 'app/controllers/publish_interface/courses/sites_controller.rb'
-    - 'app/controllers/publish_interface/courses/subjects_controller.rb'
+    - 'app/controllers/publish/courses/applications_open_controller.rb'
+    - 'app/controllers/publish/courses/modern_languages_controller.rb'
+    - 'app/controllers/publish/courses/outcome_controller.rb'
+    - 'app/controllers/publish/courses/sites_controller.rb'
+    - 'app/controllers/publish/courses/subjects_controller.rb'

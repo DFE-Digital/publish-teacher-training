@@ -1,0 +1,61 @@
+<% content_for :page_title, title_with_error_prefix("Organisation search", course.errors.any?) %>
+
+<%= render "publish/shared/errors" %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-l">
+      Pick an accredited body
+    </h1>
+
+    <p class="govuk-body">You searched for ‘<%= @query %>’.</p>
+
+    <%= form_with model: course,
+                  url: continue_provider_recruitment_cycle_courses_accredited_body_path(
+                    @provider.provider_code,
+                    @provider.recruitment_cycle_year,
+                  ),
+                  method: :get do |form| %>
+
+      <%= render "publish/shared/course_creation_hidden_fields",
+        form: form,
+        course_creation_params: @course_creation_params,
+        except_keys: [:accredited_body_code] %>
+
+      <% if @provider_suggestions.any? %>
+        <p class="govuk-body">We found these providers which matched your search:</p>
+
+        <div class="govuk-radios" data-module="govuk-radios" data-qa="course__accredited_body">
+          <%= render partial: "provider_suggestion", collection: @provider_suggestions, locals: { form: form } %>
+          <div class="govuk-radios__divider">or</div>
+
+          <div class="govuk-radios__item">
+            <%= form.radio_button :accredited_body_code,
+              "other",
+              class: "govuk-radios__input",
+              data: { "aria-controls" => "other-container" } %>
+            <%= form.label :accredited_body_code,
+              "Try another accrediting provider",
+              for: "course_accredited_body_code_other",
+              value: false,
+              class: "govuk-label govuk-radios__label" %>
+          </div>
+
+          <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="other-container">
+            <%= render "provider_search_field", form: form %>
+          </div>
+        </div>
+      <% else %>
+        <p class="govuk-body">We did not find any accredited bodies which matched your search.</p>
+
+        <p class="govuk-body">Try another search:</p>
+
+        <%= form.hidden_field :accredited_body_code, value: :other %>
+        <%= render "provider_search_field", form: form %>
+      <% end %>
+
+      <%= form.submit course.is_running? ? "Save and publish changes" : "Save",
+        class: "govuk-button govuk-!-margin-top-3", data: { qa: "course__save" } %>
+    <% end %>
+  </div>
+</div>

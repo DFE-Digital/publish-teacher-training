@@ -8,7 +8,7 @@ feature "Authentication" do
     when_i_visit_the_root_path
     then_i_am_expected_to_sign_in
     when_i_sign_in
-    then_i_can_access_the_publish_interface
+    then_i_can_access_the_publish
     and_i_cannot_access_the_support_interface
   end
 
@@ -43,7 +43,7 @@ feature "Authentication" do
     click_button "Sign in using DfE Sign-in"
   end
 
-  def then_i_can_access_the_publish_interface
+  def then_i_can_access_the_publish
     expect(page).to have_current_path publish_root_path
     expect(page).to have_content "Publish teacher training"
   end

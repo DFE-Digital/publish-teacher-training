@@ -1,4 +1,0 @@
-<%= render "publish_interface/shared/form_field",
-  form: form, field: :start_date, label: { text: "Course start date", class: "govuk-label govuk-label--s" }  do |field, options| %>
-  <%= form.select field, options_for_select(@course.edit_course_options["start_dates"], course.return_start_date), { include_blank: true }, data: { qa: "start_date" }, class: "govuk-select" %>
-<% end %>

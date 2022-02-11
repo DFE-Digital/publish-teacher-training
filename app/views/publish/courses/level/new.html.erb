@@ -1,0 +1,39 @@
+<% content_for :page_title, title_with_error_prefix("What type of course?", @errors && @errors.any?) %>
+
+<% content_for :before_content do %>
+  <%= govuk_back_link_to(@back_link_path) %>
+<% end %>
+
+<%= render "publish/shared/errors" %>
+
+<h1 class="govuk-heading-l">
+  What type of course?
+</h1>
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_with url: continue_publish_provider_recruitment_cycle_courses_level_path(
+                    @provider.provider_code,
+                    @provider.recruitment_cycle_year,
+                  ),
+                  method: :get do |form| %>
+
+      <%= render "publish/courses/new_fields_holder", form: form, except_keys: [:level] do |fields| %>
+        <%= render "publish/shared/error_wrapper", error_keys: [:level], data_qa: "course__level" do %>
+          <fieldset class="govuk-fieldset">
+            <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+              <h2 class="govuk-fieldset__heading">Level</h2>
+            </legend>
+            <%= render "publish/shared/error_messages", error_keys: [:level] %>
+            <%= render "form_fields", form: fields %>
+          </fieldset>
+        <% end %>
+
+        <h2 class="govuk-heading-m">
+          Special educational needs and disability (SEND)
+        </h2>
+
+        <%= render "publish/courses/send/form_fields", form: fields %>
+      <% end %>
+    <% end %>
+  </div>
+</div>
