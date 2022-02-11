@@ -14,8 +14,7 @@ module Publish
     def back; end
 
     def new
-      # TODO: Create a new? method on the authorize provider
-      authorize(@provider, :edit?)
+      authorize(@provider, :can_create_course?)
     end
 
     def edit; end
@@ -40,7 +39,7 @@ module Publish
     end
 
     def continue
-      authorize(@provider, :edit?)
+      authorize(@provider, :can_create_course?)
       @errors = errors
 
       if @errors.any?

@@ -8,8 +8,7 @@ module Publish
       include CourseBasicDetailConcern
 
       def new
-        # TODO: Create a :new? authorize method
-        authorize(@provider, :edit?)
+        authorize(@provider, :can_create_course?)
         return if has_modern_languages_subject?
 
         redirect_to next_step

@@ -11,8 +11,8 @@ module Publish
       end
 
       def continue
-        # TODO: include proper authorization
-        authorize(@provider, :edit?)
+        authorize(@provider, :can_create_course?)
+
         code = course_params[:accredited_body_code]
         query = @accredited_body
 

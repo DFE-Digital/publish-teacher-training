@@ -6,8 +6,7 @@ module Publish
       decorates_assigned :course
 
       def confirmation
-        # TODO: fix authorization
-        authorize(provider, :edit?)
+        authorize(provider, :can_create_course?)
         recruitment_cycle
       end
 
