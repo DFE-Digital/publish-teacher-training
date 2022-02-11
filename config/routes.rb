@@ -8,7 +8,7 @@ Rails.application.routes.draw do
     get "/", to: redirect("/docs/")
   end
 
-  root to: "publish_interface/providers#index"
+  root to: "publish/providers#index"
 
   mount OpenApi::Rswag::Ui::Engine => "/api-docs"
   mount OpenApi::Rswag::Api::Engine => "/api-docs"
@@ -39,7 +39,7 @@ Rails.application.routes.draw do
     match "/403", to: "errors#forbidden"
   end
 
-  namespace :publish_interface, path: :publish, as: :publish do
+  namespace :publish, as: :publish do
     get "/organisations", to: "providers#index", as: :root
 
     resources :providers, path: "organisations", param: :code, only: [] do

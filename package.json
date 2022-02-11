@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "@ministryofjustice/frontend": "^0.2.1",
-    "@rails/webpacker": "^5.2.1",
+    "@rails/webpacker": "^5.4.3",
     "accessible-autocomplete": "^2.0.3",
     "babel-polyfill": "^6.26.0",
     "core-js": "^3.9.1",
@@ -20,7 +20,7 @@
   },
   "devDependencies": {
     "jest": "^26.5.3",
-    "webpack-dev-server": "^3.11.0"
+    "webpack-dev-server": "3.11.3"
   },
   "jest": {
     "roots": [
