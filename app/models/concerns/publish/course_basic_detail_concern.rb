@@ -253,7 +253,7 @@ module Publish
       when :fee_or_salary
         new_publish_provider_recruitment_cycle_courses_fee_or_salary_path(path_params)
       when :confirmation
-        confirmation_publish_provider_recruitment_cycle_courses_confirmation_path(path_params)
+        confirmation_publish_provider_recruitment_cycle_courses_path(path_params)
       end
     end
   end

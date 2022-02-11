@@ -53,21 +53,6 @@ Rails.application.routes.draw do
         put "/about", on: :member, to: "providers#update"
         get "/details", on: :member, to: "providers#details"
 
-        scope module: :providers do
-          resources :locations, except: %i[destroy show]
-          resources :courses, param: :code, only: %i[index new create show] do
-            get "/details", on: :member, to: "courses#details"
-
-            get "/vacancies", on: :member, to: "courses/vacancies#edit"
-            put "/vacancies", on: :member, to: "courses/vacancies#update"
-          end
-
-          get "/contact", on: :member, to: "contacts#edit"
-          put "/contact", on: :member, to: "contacts#update"
-          get "/visas", on: :member, to: "visas#edit"
-          put "/visas", on: :member, to: "visas#update"
-        end
-
         resource :courses, only: %i[create] do
           resource :outcome, on: :member, only: %i[new], controller: "courses/outcome" do
             get "continue"
@@ -111,11 +96,24 @@ Rails.application.routes.draw do
           resource :fee_or_salary, on: :member, only: %i[new], controller: "courses/fee_or_salary", path: "fee-or-salary" do
             get "continue"
           end
-          resource :confirmation, on: :member, only: %i[confirmation], controller: "courses/confirmation", path: "confirmation" do
-            # original route that is not nested conflicts with the course controller that lives inside the provider namspace.
-            # TODO: work out how to fix this.
-            get "confirmation"
-          end
+
+          get "confirmation"
+        end
+
+        resources :courses, param: :code, only: %i[index new create show] do
+          get "/details", on: :member, to: "courses#details"
+
+          get "/vacancies", on: :member, to: "courses/vacancies#edit"
+          put "/vacancies", on: :member, to: "courses/vacancies#update"
+        end
+
+        scope module: :providers do
+          resources :locations, except: %i[destroy show]
+
+          get "/contact", on: :member, to: "contacts#edit"
+          put "/contact", on: :member, to: "contacts#update"
+          get "/visas", on: :member, to: "visas#edit"
+          put "/visas", on: :member, to: "visas#update"
         end
       end
     end
