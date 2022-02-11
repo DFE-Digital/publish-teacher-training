@@ -85,7 +85,7 @@ class Course < ApplicationRecord
            before_add: :set_subject_position
 
   delegate :recruitment_cycle, :provider_code, to: :provider, allow_nil: true
-  delegate :after_2021?, to: :recruitment_cycle, allow_nil: true, prefix: :recruitment_cycle
+  delegate :after_2021?, :year, to: :recruitment_cycle, allow_nil: true, prefix: :recruitment_cycle
 
   def set_subject_position(course_subject)
     return unless course_subject.subject.secondary_subject?
@@ -661,6 +661,10 @@ class Course < ApplicationRecord
 
   def required_qualifications
     RequiredQualificationsSummary.new(self).extract
+  end
+
+  def enrichment_attribute(enrichment_name)
+    enrichments.most_recent&.first&.public_send(enrichment_name)
   end
 
 private

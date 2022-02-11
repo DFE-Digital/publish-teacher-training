@@ -1,6 +1,8 @@
 module PublishInterface
   module Providers
     class CoursesController < PublishInterfaceController
+      decorates_assigned :course
+
       def index
         authorize :provider, :index?
 
@@ -8,7 +10,26 @@ module PublishInterface
         self_accredited_courses
       end
 
+      def show
+        fetch_course
+
+        authorize @course
+
+        @errors = flash[:error_summary]
+        flash.delete(:error_summary)
+      end
+
+      def details
+        fetch_course
+
+        authorize @course
+      end
+
     private
+
+      def fetch_course
+        @course = provider.courses.find_by!(course_code: params[:code])
+      end
 
       def provider
         @provider ||= Provider

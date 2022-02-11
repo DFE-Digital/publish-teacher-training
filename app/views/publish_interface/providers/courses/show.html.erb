@@ -1,0 +1,79 @@
+<% content_for :page_title, title_with_error_prefix("#{course.name_and_code} - Courses", @errors.present?) %>
+<%= content_for :before_content do %>
+  <%= govuk_back_link_to(
+      publish_provider_recruitment_cycle_path(@provider.provider_code, @provider.recruitment_cycle_year)
+  ) %>
+<% end %>
+
+<% if @errors.present? %>
+  <div class="govuk-error-summary" aria-labelledby="error-summary-title" role="alert" tabindex="-1" data-module="govuk-error-summary" data-ga-event-form="error">
+    <h2 class="govuk-error-summary__title" id="error-summary-title">
+      There is a problem
+    </h2>
+    
+    <div class="govuk-error-summary__body">
+      <ul class="govuk-list govuk-error-summary__list">
+        <% @errors.each do |id, messages| %>
+          <% messages.each do |message| %>
+            <li data-error-message="<%= message %>">
+              <a href="<%= enrichment_error_url(
+                provider_code: @provider.provider_code,
+                course: @course,
+                field: id,
+                message: message,
+              ) %>"><%= message %></a>
+            </li>
+          <% end %>
+        <% end %>
+      </ul>
+    </div>
+  </div>
+<% end %>
+
+<h1 class="govuk-heading-l">
+  <span class="govuk-caption-l"><%= course.description %></span>
+  <%= course.name_and_code %>
+</h1>
+
+<div class="govuk-tabs app-tabs app-tabs--course">
+  <h2 class="govuk-tabs__title">Contents</h2>
+
+  <ul class="govuk-tabs__list" role="tablist">
+    <li class="govuk-tabs__list-item govuk-tabs__list-item--selected" role="presentation">
+      <%= govuk_link_to(
+        "#description",
+        class: "govuk-tabs__tab",
+        role: "tab",
+        tabindex: "-1",
+        aria: { selected: true },
+      ) do %>
+        Description<br>
+        <span class="govuk-body-s govuk-!-font-weight-regular pointer-events-none">Content, fees and eligibility</span>
+      <% end %>
+    </li>
+
+    <li class="govuk-tabs__list-item" role="presentation">
+      <%= govuk_link_to(
+        details_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code),
+        class: "govuk-tabs__tab",
+        role: "tab",
+        tabindex: "1",
+        aria: { selected: false },
+      ) do %>
+        Basic details<br>
+        <span class="govuk-body-s govuk-!-font-weight-regular pointer-events-none">Locations, outcome, subject</span>
+      <% end %>
+    </li>
+  </ul>
+
+  <section class="govuk-tabs__panel" id="description">
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-two-thirds">
+        <%= render partial: "description_content" %>
+      </div>
+      <div class="govuk-grid-column-one-third" data-qa="course__status_panel">
+        <%# render partial: "courses/status_panel" %>
+      </div>
+    </div>
+  </section>
+</div>
