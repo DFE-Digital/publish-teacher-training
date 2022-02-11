@@ -26,7 +26,7 @@ module Publish
     end
 
     def create
-      authorize :provider, :index?
+      authorize :provider, :can_create_course?
       build_new_course
 
       @course.name = @course.generate_name
@@ -38,7 +38,6 @@ module Publish
           publish_provider_recruitment_cycle_courses_path(
             @course.provider_code,
             @course.recruitment_cycle.year,
-            @course.course_code,
           ),
         )
       else
