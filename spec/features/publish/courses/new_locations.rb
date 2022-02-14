@@ -14,7 +14,6 @@ feature "selection locations" do
   end
 
   scenario "invalid entries" do
-    and_i_select_nothing
     and_i_click_continue
     then_i_am_met_with_errors
   end
@@ -38,8 +37,6 @@ private
     new_locations_page.check("sites-#{provider.sites.first.id}")
     new_locations_page.check("sites-#{provider.sites.second.id}")
   end
-
-  def and_i_select_nothing; end
 
   def and_i_click_continue
     new_locations_page.continue.click

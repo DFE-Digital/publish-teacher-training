@@ -13,7 +13,6 @@ feature "selection accredited_bodies" do
   end
 
   scenario "invalid entries" do
-    and_i_select_nothing
     and_i_click_continue
     then_i_am_met_with_errors
   end
@@ -33,8 +32,6 @@ private
   def when_i_select_an_accredited_body
     new_accredited_body_page.find("#course_accredited_body_code_a03").click
   end
-
-  def and_i_select_nothing; end
 
   def and_i_click_continue
     new_accredited_body_page.continue.click

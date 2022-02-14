@@ -20,7 +20,6 @@ feature "choosing an application open from date" do
   end
 
   scenario "invalid entries" do
-    and_i_select_nothing
     and_i_click_continue
     then_i_am_met_with_errors
   end
@@ -50,8 +49,6 @@ private
   def and_i_put_in_a_custom_date
     new_applications_open_page.applications_open_field_day.click
   end
-
-  def and_i_select_nothing; end
 
   def and_i_click_continue
     new_applications_open_page.continue.click

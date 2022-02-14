@@ -25,7 +25,6 @@ feature "selecting a fee or salary" do
   end
 
   scenario "invalid entries" do
-    and_i_select_nothing
     and_i_click_continue
     then_i_am_met_with_errors
   end
@@ -44,8 +43,6 @@ private
   def when_i_select_an_fee_or_salary(funding_type)
     new_fee_or_salary_page.funding_type_fields.send(funding_type).click
   end
-
-  def and_i_select_nothing; end
 
   def and_i_click_continue
     new_fee_or_salary_page.continue.click

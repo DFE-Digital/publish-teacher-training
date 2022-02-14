@@ -25,7 +25,6 @@ feature "selecting full time or part time or full or part time" do
   end
 
   scenario "invalid entries" do
-    and_i_select_nothing
     and_i_click_continue
     then_i_am_met_with_errors
   end
@@ -44,8 +43,6 @@ private
   def when_i_select_a_study_mode(study_mode)
     new_study_mode_page.study_mode_fields.send(study_mode).click
   end
-
-  def and_i_select_nothing; end
 
   def and_i_click_continue
     new_study_mode_page.continue.click

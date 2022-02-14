@@ -21,7 +21,6 @@ feature "selecting a subject" do
 
   scenario "invalid entries" do
     when_i_visit_the_new_course_subject_page(%i[primary secondary].sample)
-    and_i_select_nothing
     and_i_click_continue
     then_i_am_met_with_errors
   end
@@ -44,8 +43,6 @@ private
   def when_i_select_a_secondary_subject
     new_subjects_page.subjects_fields.select("Ancient Greek").click
   end
-
-  def and_i_select_nothing; end
 
   def and_i_click_continue
     new_subjects_page.continue.click

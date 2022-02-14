@@ -25,7 +25,6 @@ feature "selecting a course outcome" do
   end
 
   scenario "invalid entries" do
-    and_i_select_nothing
     and_i_click_continue
     then_i_am_met_with_errors
   end
@@ -44,8 +43,6 @@ private
   def when_i_select_an_outcome(outcome)
     new_outcome_page.qualification_fields.send(outcome).click
   end
-
-  def and_i_select_nothing; end
 
   def and_i_click_continue
     new_outcome_page.continue.click

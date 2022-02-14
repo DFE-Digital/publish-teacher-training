@@ -22,7 +22,7 @@ feature "selecting an age range" do
 
   scenario "invalid entries" do
     when_i_visit_the_new_age_range_page
-    and_i_select_nothing
+
     and_i_click_continue
     then_i_am_met_with_errors
   end
@@ -50,8 +50,6 @@ private
     new_age_range_page.age_range_from_field.set("6")
     new_age_range_page.age_range_to_field.set("12")
   end
-
-  def and_i_select_nothing; end
 
   def and_i_click_continue
     new_age_range_page.continue.click
