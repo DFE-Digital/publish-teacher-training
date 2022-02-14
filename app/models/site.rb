@@ -58,11 +58,7 @@ class Site < ApplicationRecord
 
     return "" if address.all?(&:blank?)
 
-    address.compact.join(", ")
-  end
-
-  def migrated_full_address
-    [address1, address2, address3, address4, postcode].select(&:present?).join(", ")
+    address.select(&:present?).join(", ")
   end
 
   def address_changed?
