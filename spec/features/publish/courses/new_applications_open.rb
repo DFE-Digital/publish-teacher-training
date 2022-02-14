@@ -12,11 +12,12 @@ feature "choosing an application open from date" do
     then_i_am_met_with_the_start_date_page
   end
 
-  # scenario "selecting a custom date" do
-  #   when_i_select_as_soon_as_open_on_find
-  #   and_i_click_continue
-  #   then_i_am_met_with_the_start_date_page
-  # end
+  scenario "selecting a custom date" do
+    when_i_select_on_a_specific_date
+    and_i_put_in_a_custom_date
+    and_i_click_continue
+    then_i_am_met_with_the_start_date_page
+  end
 
   scenario "invalid entries" do
     and_i_select_nothing
@@ -37,6 +38,17 @@ private
 
   def when_i_select_as_soon_as_open_on_find
     new_applications_open_page.applications_open_field.click
+  end
+
+  def when_i_select_on_a_specific_date
+    new_applications_open_page.applications_open_field_day.set("1")
+    new_applications_open_page.applications_open_field_month.set("1")
+    new_applications_open_page.applications_open_field_year.set(Settings.current_recruitment_cycle_year)
+    new_applications_open_page.applications_open_field_other.click
+  end
+
+  def and_i_put_in_a_custom_date
+    new_applications_open_page.applications_open_field_day.click
   end
 
   def and_i_select_nothing; end
