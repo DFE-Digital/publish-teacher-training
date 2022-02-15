@@ -1,0 +1,8 @@
+<div class="govuk-form-group">
+  <div class="govuk-checkboxes" data-module="govuk-checkboxes">
+    <div class="govuk-checkboxes__item">
+      <%= form.check_box(:is_send, checked: @course.is_send?, data: { qa: "is_send" }, class: "govuk-checkboxes__input") %>
+      <%= form.label(:is_send, "This course has an additional SEND specialism", class: "govuk-label govuk-checkboxes__label") %>
+    </div>
+  </div>
+</div>

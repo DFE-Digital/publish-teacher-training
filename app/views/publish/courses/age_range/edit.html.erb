@@ -1,0 +1,43 @@
+<% page_title = "Specify an age range" %>
+<% content_for :page_title, title_with_error_prefix("#{page_title} – #{course.name_and_code}", form_object.errors.any?) %>
+
+<% content_for :before_content do %>
+  <%= govuk_back_link_to(details_provider_recruitment_cycle_course_path(course.provider_code, course.recruitment_cycle_year, course.course_code)) %>
+<% end %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_with(
+      model: form_object,
+      url: age_range_provider_recruitment_cycle_course_path(@course.provider_code, @course.recruitment_cycle_year, @course.course_code),
+      scope: :course,
+      method: :put,
+      builder: GOVUKDesignSystemFormBuilder::FormBuilder,
+    ) do |f| %>
+
+      <%= f.govuk_error_summary %>
+
+      <%= f.govuk_radio_buttons_fieldset(:age_range_in_years, legend: { text: page_title, size: "l" }, caption: { text: course.name_and_code, size: "l" }) do %>
+        <% @course.meta["edit_options"]["age_range_in_years"].each do |value| %>
+          <%= f.govuk_radio_button(:age_range_in_years,
+            value,
+            label: { text: I18n.t("edit_options.age_range_in_years.#{value}.label") },
+            link_errors: true) %>
+        <% end %>
+
+        <%= f.govuk_radio_divider %>
+
+        <%= f.govuk_radio_button :age_range_in_years, "other", label: { text: "Another age range" } do %>
+          <p class="govuk-body">Enter an age range in years, for example: 5 to 11. The course must cover 4 or more school years.</p>
+
+          <%= f.govuk_text_field :course_age_range_in_years_other_from, label: { text: "From" }, class: "govuk-input govuk-input--width-2" %>
+
+          <%= f.govuk_text_field :course_age_range_in_years_other_to, label: { text: "To" }, class: "govuk-input govuk-input--width-2" %>
+        <% end %>
+      <% end %>
+
+      <%= render GovukComponent::InsetTextComponent.new(text: I18n.t("success.changes_ttl")) if course.is_running? %>
+      <%= f.govuk_submit course.is_running? ? "Save and publish changes" : "Save", data: { qa: "course__save" } %>
+    <% end %>
+  </div>
+</div>

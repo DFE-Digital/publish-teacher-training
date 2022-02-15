@@ -541,6 +541,18 @@ class Course < ApplicationRecord
     subjects.reject { |subject| subject.subject_name == "Modern Languages" }.first&.financial_incentive
   end
 
+  def is_further_education?
+    level == "further_education"
+  end
+
+  def is_uni_or_scitt?
+    provider.accredited_body?
+  end
+
+  def is_school_direct?
+    !(is_uni_or_scitt? || is_further_education?)
+  end
+
   def self_accredited?
     provider.accredited_body?
   end
@@ -665,6 +677,19 @@ class Course < ApplicationRecord
 
   def enrichment_attribute(enrichment_name)
     enrichments.most_recent&.first&.public_send(enrichment_name)
+  end
+
+  def remove_carat_from_error_messages
+    new_errors = errors.map do |error|
+      message = error.message.start_with?("^") ? error.message[1..] : error.message
+      [error.attribute, message]
+    end
+
+    errors.clear
+
+    new_errors.each do |attribute, message|
+      errors.add attribute, message: message
+    end
   end
 
 private

@@ -568,31 +568,31 @@ describe CourseDecorator do
   #   end
   # end
 
-  # describe "return_start_date" do
-  #   context "when the course has a start date" do
-  #     it "should return the course's start date" do
-  #       expect(decorated_course.return_start_date).to eq(course.start_date)
-  #     end
-  #   end
+  describe "return_start_date" do
+    context "when the course has a start date" do
+      it "returns the course's start date" do
+        expect(decorated_course.return_start_date).to eq(course.start_date)
+      end
+    end
 
-  #   context "when the course has no start date" do
-  #     let(:start_date) { nil }
+    context "when the course has no start date" do
+      let(:start_date) { nil }
 
-  #     it "should return the September of the current cycle" do
-  #       expect(decorated_course.return_start_date).to eq("September #{Settings.current_cycle}")
-  #     end
-  #   end
+      it "returns the September of the current cycle" do
+        expect(decorated_course.return_start_date).to eq("September #{current_recruitment_cycle.year}")
+      end
+    end
 
-  #   context "during rollover" do
-  #     let(:start_date) { nil }
+    context "during rollover" do
+      let(:start_date) { nil }
 
-  #     before { allow(Settings.features.rollover).to receive(:can_edit_current_and_next_cycles).and_return(true) }
+      before { allow(Settings.features.rollover).to receive(:can_edit_current_and_next_cycles).and_return(true) }
 
-  #     it "should return the September of the next cycle" do
-  #       expect(decorated_course.return_start_date).to eq("September #{Settings.current_cycle + 1}")
-  #     end
-  #   end
-  # end
+      it "returns the September of the next cycle" do
+        expect(decorated_course.return_start_date).to eq("September #{current_recruitment_cycle.year.to_i + 1}")
+      end
+    end
+  end
 
   # describe "#other_course_length?" do
   #   context "when course_length is a pre-defined value" do
@@ -638,33 +638,33 @@ describe CourseDecorator do
     end
   end
 
-  # describe "#subject_page_title" do
-  #   let(:subject_page_title) { course.decorate.subject_page_title }
+  describe "#subject_page_title" do
+    let(:subject_page_title) { course.decorate.subject_page_title }
 
-  #   context "a primary course" do
-  #     let(:course) { build :course, level: "primary" }
+    context "a primary course" do
+      let(:course) { build :course, level: "primary" }
 
-  #     it "returns the correct page title" do
-  #       expect(subject_page_title).to eq("Pick a primary subject")
-  #     end
-  #   end
+      it "returns the correct page title" do
+        expect(subject_page_title).to eq("Pick a primary subject")
+      end
+    end
 
-  #   context "a secondary course" do
-  #     let(:course) { build :course, level: "secondary" }
+    context "a secondary course" do
+      let(:course) { build :course, level: "secondary" }
 
-  #     it "returns the correct page title" do
-  #       expect(subject_page_title).to eq("Pick a secondary subject")
-  #     end
-  #   end
+      it "returns the correct page title" do
+        expect(subject_page_title).to eq("Pick a secondary subject")
+      end
+    end
 
-  #   context "a further education course" do
-  #     let(:course) { build :course, level: "further_education" }
+    context "a further education course" do
+      let(:course) { build :course, level: "further_education" }
 
-  #     it "returns the correct page title" do
-  #       expect(subject_page_title).to eq("Pick a subject")
-  #     end
-  #   end
-  # end
+      it "returns the correct page title" do
+        expect(subject_page_title).to eq("Pick a subject")
+      end
+    end
+  end
 
   describe "#changing_basic_details" do
     context "basic details when course is further education" do
@@ -693,33 +693,33 @@ describe CourseDecorator do
     end
   end
 
-  # describe "#subject_input_label" do
-  #   let(:subject_input_label) { course.decorate.subject_input_label }
+  describe "#subject_input_label" do
+    let(:subject_input_label) { course.decorate.subject_input_label }
 
-  #   context "a primary course" do
-  #     let(:course) { build :course, level: "primary" }
+    context "a primary course" do
+      let(:course) { build :course, level: "primary" }
 
-  #     it "returns the correct input label" do
-  #       expect(subject_input_label).to eq("Primary subject")
-  #     end
-  #   end
+      it "returns the correct input label" do
+        expect(subject_input_label).to eq("Primary subject")
+      end
+    end
 
-  #   context "a secondary course" do
-  #     let(:course) { build :course, level: "secondary" }
+    context "a secondary course" do
+      let(:course) { build :course, level: "secondary" }
 
-  #     it "returns the correct input label" do
-  #       expect(subject_input_label).to eq("Secondary subject")
-  #     end
-  #   end
+      it "returns the correct input label" do
+        expect(subject_input_label).to eq("Secondary subject")
+      end
+    end
 
-  #   context "a further education course" do
-  #     let(:course) { build :course, level: "further_education" }
+    context "a further education course" do
+      let(:course) { build :course, level: "further_education" }
 
-  #     it "returns the correct input label" do
-  #       expect(subject_input_label).to eq("Pick a subject")
-  #     end
-  #   end
-  # end
+      it "returns the correct input label" do
+        expect(subject_input_label).to eq("Pick a subject")
+      end
+    end
+  end
 
   # describe "#cycle_range" do
   #   let(:expected_cycle_range) do

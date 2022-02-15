@@ -58,7 +58,7 @@ class Site < ApplicationRecord
 
     return "" if address.all?(&:blank?)
 
-    address.compact.join(", ")
+    address.select(&:present?).join(", ")
   end
 
   def address_changed?

@@ -20,7 +20,7 @@ class CourseDecorator < ApplicationDecorator
       if current_cycle_and_open?
         h.govuk_link_to("Yes - view online", h.search_ui_course_page_url(provider_code: provider.provider_code, course_code: object.course_code))
       else
-        "Yes – from #{Settings.next_cycle_open_date.to_s(:month)}"
+        "Yes - from #{Settings.next_cycle_open_date.to_s(:month)}"
       end
     else
       not_on_find
@@ -139,10 +139,10 @@ class CourseDecorator < ApplicationDecorator
   #     %w[OneYear TwoYears].exclude?(course.course_length) && !course.course_length.nil?
   #   end
 
-  #   def other_age_range?
-  #     options = object.meta["edit_options"]["age_range_in_years"]
-  #     options.exclude?(course.age_range_in_years)
-  #   end
+  def other_age_range?
+    options = object.edit_course_options["age_range_in_years"]
+    options.exclude?(course.age_range_in_years)
+  end
 
   def alphabetically_sorted_sites
     object.sites.sort_by(&:location_name)
@@ -152,8 +152,12 @@ class CourseDecorator < ApplicationDecorator
   #   site_statuses.select(&:new_or_running?).sort_by { |status| status.site.location_name }
   # end
 
-  # def has_site?(site)
-  #   !course.sites.nil? && object.sites.any? { |s| s.id == site.id }
+  def has_site?(site)
+    !course.sites.nil? && object.sites.any? { |s| s.id == site.id }
+  end
+
+  # def sites
+  #   alphabetically_sorted_sites.pluck(:id)
   # end
 
   # def funding_option
@@ -198,38 +202,38 @@ class CourseDecorator < ApplicationDecorator
     end
   end
 
-  #   def applications_open_from_message_for(recruitment_cycle)
-  #     if current_cycle?
-  #       "As soon as the course is on Find (recommended)"
-  #     else
-  #       year = recruitment_cycle.year.to_i
-  #       day_month = Date.parse(recruitment_cycle.application_start_date).strftime("%-d %B")
-  #       "On #{day_month} when applications for the #{year} to #{year + 1} cycle open"
-  #     end
-  #   end
+  def applications_open_from_message_for(recruitment_cycle)
+    if current_cycle?
+      "As soon as the course is on Find (recommended)"
+    else
+      year = recruitment_cycle.year.to_i
+      day_month = Date.parse(recruitment_cycle.application_start_date).strftime("%-d %B")
+      "On #{day_month} when applications for the #{year} to #{year + 1} cycle open"
+    end
+  end
 
-  #   def selectable_subjects
-  #     meta["edit_options"]["subjects"].map { |subject| [subject["attributes"]["subject_name"], subject["id"]] }
-  #   end
+  def selectable_subjects
+    edit_course_options["subjects"].map { |subject| [subject.attributes["subject_name"], subject["id"]] }
+  end
 
-  #   def selected_subject_ids
-  #     selectable_subject_ids = meta["edit_options"]["subjects"].map { |subject| subject["id"] }
-  #     selected_subject_ids = subjects.map(&:id)
+  def selected_subject_ids
+    selectable_subject_ids = course.subjects.map { |subject| subject["id"] }
+    selected_subject_ids = subjects.map(&:id)
 
-  #     selectable_subject_ids & selected_subject_ids
-  #   end
+    selectable_subject_ids & selected_subject_ids
+  end
 
   #   def subject_present?(subject_to_find)
   #     subjects.map { |subject| subject["id"] }.include?(subject_to_find["id"])
   #   end
 
-  #   def return_start_date
-  #     if FeatureService.enabled?("rollover.can_edit_current_and_next_cycles")
-  #       start_date.presence || "September #{Settings.current_recruitment_cycle_year + 1}"
-  #     else
-  #       start_date.presence || "September #{Settings.current_recruitment_cycle_year}"
-  #     end
-  #   end
+  def return_start_date
+    if FeatureService.enabled?("rollover.can_edit_current_and_next_cycles")
+      start_date.presence || "September #{Settings.current_recruitment_cycle_year + 1}"
+    else
+      start_date.presence || "September #{Settings.current_recruitment_cycle_year}"
+    end
+  end
 
   def placements_heading
     if is_further_education?
@@ -256,27 +260,27 @@ class CourseDecorator < ApplicationDecorator
     end
   end
 
-  #   def subject_page_title
-  #     case level
-  #     when "primary"
-  #       "Pick a primary subject"
-  #     when "secondary"
-  #       "Pick a secondary subject"
-  #     else
-  #       "Pick a subject"
-  #     end
-  #   end
+  def subject_page_title
+    case level
+    when "primary"
+      "Pick a primary subject"
+    when "secondary"
+      "Pick a secondary subject"
+    else
+      "Pick a subject"
+    end
+  end
 
-  #   def subject_input_label
-  #     case level
-  #     when "primary"
-  #       "Primary subject"
-  #     when "secondary"
-  #       "Secondary subject"
-  #     else
-  #       "Pick a subject"
-  #     end
-  #   end
+  def subject_input_label
+    case level
+    when "primary"
+      "Primary subject"
+    when "secondary"
+      "Secondary subject"
+    else
+      "Pick a subject"
+    end
+  end
 
   #   def accept_gcse_equivalency?
   #     object.accept_gcse_equivalency

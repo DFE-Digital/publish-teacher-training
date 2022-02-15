@@ -1,0 +1,24 @@
+<%= render "publish/shared/error_wrapper", error_keys: [:study_mode], data_qa: "course__study_mode" do %>
+  <fieldset class="govuk-fieldset">
+    <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+      <h1 class="govuk-fieldset__heading">
+        Full time or part time?
+      </h1>
+    </legend>
+
+    <%= render "publish/shared/error_messages", error_keys: [:study_modes] %>
+    <div class="govuk-radios govuk-!-margin-top-2" data-module="govuk-radios">
+      <% @course.edit_course_options["study_modes"].each do |value| %>
+        <div class="govuk-radios__item">
+          <%= form.radio_button :study_mode,
+                  value,
+                  class: "govuk-radios__input" %>
+          <%= form.label :study_mode,
+                  t("edit_options.study_modes.#{value}.label"),
+                  value: value,
+                  class: "govuk-label govuk-radios__label" %>
+        </div>
+      <% end %>
+    </div>
+  </fieldset>
+<% end %>

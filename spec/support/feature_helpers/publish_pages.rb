@@ -51,5 +51,61 @@ module FeatureHelpers
     def publish_provider_courses_details_page
       @publish_provider_courses_details_page ||= PageObjects::Publish::ProviderCoursesDetails.new
     end
+
+    def new_level_page
+      @new_level_page ||= PageObjects::Publish::Courses::NewLevel.new
+    end
+
+    def new_subjects_page
+      @new_subjects_page ||= PageObjects::Publish::Courses::NewSubjects.new
+    end
+
+    def new_modern_languages_page
+      @new_modern_languages_page ||= PageObjects::Publish::Courses::NewModernLanguages.new
+    end
+
+    def new_age_range_page
+      @new_age_range_page ||= PageObjects::Publish::Courses::NewAgeRange.new
+    end
+
+    def new_accredited_body_page
+      @new_accredited_body_page ||= PageObjects::Publish::Courses::NewAccreditedBody.new
+    end
+
+    def new_outcome_page
+      @new_outcome_page ||= PageObjects::Publish::Courses::NewOutcome.new
+    end
+
+    def new_fee_or_salary_page
+      @new_fee_or_salary_page ||= PageObjects::Publish::Courses::NewFeeOrSalary.new
+    end
+
+    def new_apprenticeship_page
+      @new_apprenticeship_page ||= PageObjects::Publish::Courses::NewApprenticeship.new
+    end
+
+    def new_study_mode_page
+      @new_study_mode_page ||= PageObjects::Publish::Courses::NewStudyMode.new
+    end
+
+    def new_applications_open_page
+      @new_applications_open_page ||= PageObjects::Publish::Courses::NewApplicationsOpen.new
+    end
+
+    def new_start_date_page
+      @new_start_date_page ||= PageObjects::Publish::Courses::NewStartDate.new
+    end
+
+    def new_entry_requirements_page
+      @new_entry_requirements_page ||= PageObjects::Publish::Courses::NewEntryRequirements.new
+    end
+
+    def new_locations_page
+      @new_locations_page ||= PageObjects::Publish::Courses::NewLocations.new
+    end
+
+    def confirmation_page
+      @confirmation_page ||= PageObjects::Publish::CourseConfirmation.new
+    end
   end
 end
