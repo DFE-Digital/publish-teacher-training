@@ -107,5 +107,9 @@ module FeatureHelpers
     def confirmation_page
       @confirmation_page ||= PageObjects::Publish::CourseConfirmation.new
     end
+
+    def publish_course_information_page
+      @publish_course_information_page ||= PageObjects::Publish::CourseInformationEdit.new
+    end
   end
 end

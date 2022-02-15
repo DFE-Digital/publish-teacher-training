@@ -316,6 +316,16 @@ en:
               blank: "Enter their organisation"
             reason:
               blank: "Enter why they need access"
+        publish/course_information_form:
+          attributes:
+            about_course:
+              blank: "Enter details about this course"
+              too_long: "Reduce the word count for about course"
+            interview_process:
+              too_long: "Reduce the word count for interview process"
+            how_school_placements_work:
+              blank: "Enter details about school placements"
+              too_long: "Reduce the word count for how school placements work"
   errors:
     messages:
       email: "^Enter an email address in the correct format, like name@example.com"

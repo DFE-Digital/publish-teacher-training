@@ -105,6 +105,9 @@ Rails.application.routes.draw do
 
           get "/vacancies", on: :member, to: "courses/vacancies#edit"
           put "/vacancies", on: :member, to: "courses/vacancies#update"
+
+          get "/about", on: :member, to: "courses/course_information#edit"
+          patch "/about", on: :member, to: "courses/course_information#update"
         end
 
         scope module: :providers do
