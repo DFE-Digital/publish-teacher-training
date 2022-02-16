@@ -13,7 +13,7 @@ module Publish
         @course_information_form = CourseInformationForm.new(course.model.latest_published_enrichment, params: course_information_params)
 
         if @course_information_form.save!
-          flash[:success] = I18n.t("success.published")
+          flash[:success] = I18n.t("success.saved")
 
           redirect_to publish_provider_recruitment_cycle_course_path(
             provider.provider_code,

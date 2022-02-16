@@ -55,7 +55,7 @@ feature "Editing course information" do
   end
 
   def then_i_should_see_a_success_message
-    expect(page).to have_content(I18n.t("success.published"))
+    expect(page).to have_content(I18n.t("success.saved"))
   end
 
   def and_the_course_information_is_updated
