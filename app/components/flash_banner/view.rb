@@ -4,7 +4,7 @@ module FlashBanner
   class View < GovukComponent::Base
     attr_reader :flash
 
-    FLASH_TYPES = %i[success warning info].freeze
+    FLASH_TYPES = %w[success warning info].freeze
 
     def initialize(flash:)
       super(classes: classes, html_attributes: html_attributes)

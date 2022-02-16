@@ -7,7 +7,7 @@ module Publish
   private
 
     def provider
-      @provider ||= recruitment_cycle.providers.find_by(recruitment_cycle: recruitment_cycle, provider_code: params[:provider_code])
+      @provider ||= recruitment_cycle.providers.find_by(provider_code: params[:provider_code])
     end
 
     def recruitment_cycle
