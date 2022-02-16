@@ -44,7 +44,7 @@ module Publish
     def redirect_to_contact_page_with_ukprn_error
       flash[:error] = { id: "provider-error", message: "Please enter a UKPRN before continuing" }
 
-      redirect_to contact_provider_recruitment_cycle_path(provider.provider_code, provider.recruitment_cycle_year)
+      redirect_to contact_publish_provider_recruitment_cycle_path(provider.provider_code, provider.recruitment_cycle_year)
     end
 
     def provider_params
