@@ -59,7 +59,7 @@ feature "Editing course information" do
   end
 
   def and_the_course_information_is_updated
-    enrichment = course.reload.latest_published_enrichment
+    enrichment = course.reload.enrichments.find_or_initialize_draft
 
     expect(enrichment.about_course).to eq(@about_course)
     expect(enrichment.interview_process).to eq(@interview_process)

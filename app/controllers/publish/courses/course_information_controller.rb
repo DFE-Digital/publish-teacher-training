@@ -4,13 +4,13 @@ module Publish
       def edit
         authorize(provider)
 
-        @course_information_form = CourseInformationForm.new(course.model.latest_published_enrichment)
+        @course_information_form = CourseInformationForm.new(course_enrichment)
       end
 
       def update
         authorize(provider)
 
-        @course_information_form = CourseInformationForm.new(course.model.latest_published_enrichment, params: course_information_params)
+        @course_information_form = CourseInformationForm.new(course_enrichment, params: course_information_params)
 
         if @course_information_form.save!
           flash[:success] = I18n.t("success.saved")
@@ -37,6 +37,10 @@ module Publish
           .permit(
             CourseInformationForm::FIELDS,
           )
+      end
+
+      def course_enrichment
+        @course_enrichment ||= course.enrichments.find_or_initialize_draft
       end
     end
   end
