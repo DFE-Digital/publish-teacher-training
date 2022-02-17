@@ -61,22 +61,18 @@ module Publish
     end
 
     def course_attributes
-      course_attributes = course_params.to_unsafe_hash.except(:sites_ids)
-      course_attributes["subjects"] = subjects_from_ids if params.dig("course", "subjects").present?
+      course_attributes = course_params.to_unsafe_hash.except(:sites_ids, :subjects_ids)
+      course_attributes["subjects"] = subjects_from_ids if params.dig("course", "subjects_ids").present?
       course_attributes["sites"] = sites_from_ids if params.dig("course", "sites_ids").present?
       course_attributes
     end
 
     def subjects_from_ids
-      params.dig("course", "subjects")&.map do |subject_id|
-        Subject.find(subject_id)
-      end
+      Subject.find(params.dig("course", "subjects_ids"))
     end
 
     def sites_from_ids
-      params.dig("course", "sites_ids")&.map do |site_id|
-        Site.find(site_id)
-      end
+      Site.find(params.dig("course", "sites_ids"))
     end
 
     def add_custom_age_range_into_params
@@ -150,7 +146,7 @@ module Publish
             :funding_type,
             :accredited_body_code,
             sites_ids: [],
-            subjects: [],
+            subjects_ids: [],
           )
       else
         ActionController::Parameters.new({}).permit(:course)
