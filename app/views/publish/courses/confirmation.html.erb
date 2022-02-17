@@ -7,7 +7,6 @@
       model: course,
       url: publish_provider_recruitment_cycle_courses_path(@provider.provider_code, @provider.recruitment_cycle_year),
       method: :post,
-      builder: GOVUKDesignSystemFormBuilder::FormBuilder,
     ) do |f| %>
 
       <%= render "publish/shared/errors" %>

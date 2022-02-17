@@ -18,7 +18,7 @@ feature "Editing course information" do
 
   scenario "updating with invalid data" do
     and_i_submit_with_invalid_data
-    then_i_should_see_a_an_error_message
+    then_i_should_see_an_error_message
   end
 
   def given_i_am_authenticated_as_a_provider_user
@@ -66,7 +66,7 @@ feature "Editing course information" do
     expect(enrichment.how_school_placements_work).to eq(@school_placements)
   end
 
-  def then_i_should_see_a_an_error_message
+  def then_i_should_see_an_error_message
     expect(publish_course_information_page.error_messages).to include(
       I18n.t("activemodel.errors.models.publish/course_information_form.attributes.about_course.blank"),
     )
