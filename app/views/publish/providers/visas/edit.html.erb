@@ -12,7 +12,6 @@
       url: visas_publish_provider_recruitment_cycle_path(@provider.provider_code, @provider.recruitment_cycle_year),
       method: :put,
       local: true,
-      builder: GOVUKDesignSystemFormBuilder::FormBuilder,
     ) do |f| %>
 
       <%= f.govuk_error_summary %>
