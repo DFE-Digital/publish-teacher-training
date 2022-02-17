@@ -4,8 +4,8 @@ module Publish
 
     included do
       decorates_assigned :course
-      before_action :build_new_course, :build_provider, only: %i[back new continue confirmation]
-      before_action :build_previous_course_creation_params, only: %i[new continue confirmation]
+      before_action :build_new_course, :build_provider, only: %i[back new continue]
+      before_action :build_previous_course_creation_params, only: %i[new continue]
       before_action :build_meta_course_creation_params, only: %i[new continue]
       before_action :build_back_link, only: %i[new back continue]
       before_action :build_course, only: %i[edit update]
@@ -113,38 +113,8 @@ module Publish
             :course_age_range_in_years_other_to,
             :goto_confirmation,
             :language_ids,
-          )
-          .permit(
-            :page,
-            :about_course,
-            :course_length,
-            :course_length_other_length,
-            :fee_details,
-            :fee_international,
-            :fee_uk_eu,
-            :financial_support,
-            :how_school_placements_work,
-            :interview_process,
-            :other_requirements,
-            :personal_qualities,
-            :salary_details,
-            :required_qualifications,
-            :qualification, # qualification is actually "outcome"
-            :maths,
-            :english,
-            :science,
-            :funding_type,
-            :level,
-            :is_send,
-            :program_type,
-            :study_mode,
-            :applications_open_from,
-            :start_date,
-            :age_range_in_years,
-            :master_subject_id,
-            :subordinate_subject_id,
-            :funding_type,
-            :accredited_body_code,
+          ).permit(
+            policy(Course.new).permitted_new_course_attributes,
             sites_ids: [],
             subjects_ids: [],
           )

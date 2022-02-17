@@ -53,22 +53,27 @@ class CoursePolicy
     end
   end
 
+  def permitted_new_course_attributes
+    %i[
+      accredited_body_code
+      age_range_in_years
+      applications_open_from
+      funding_type
+      is_send
+      level
+      qualification
+      start_date
+      study_mode
+    ]
+  end
+
 private
 
   def permitted_user_attributes
-    %i[
+    permitted_new_course_attributes + %i[
       english
       maths
       science
-      qualification
-      age_range_in_years
-      start_date
-      applications_open_from
-      study_mode
-      is_send
-      accredited_body_code
-      funding_type
-      level
       degree_grade
       additional_degree_subject_requirements
       degree_subject_requirements
