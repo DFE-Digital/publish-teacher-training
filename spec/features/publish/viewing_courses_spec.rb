@@ -17,6 +17,11 @@ feature "Managing a provider's courses" do
     then_i_see_the_course
   end
 
+  scenario "i can view new course level page" do
+    and_i_click_on_add_course
+    then_i_see_the_new_course_level_page
+  end
+
   def given_i_am_authenticated_as_a_provider_user
     given_i_am_authenticated(
       user: create(
@@ -46,6 +51,14 @@ feature "Managing a provider's courses" do
 
   def then_i_see_the_course
     expect(page).to have_current_path("/publish/organisations/#{provider.provider_code}/#{provider.recruitment_cycle_year}/courses/#{course.course_code}")
+  end
+
+  def and_i_click_on_add_course
+    publish_provider_courses_index_page.add_course.click
+  end
+
+  def then_i_see_the_new_course_level_page
+    expect(page).to have_current_path("/publish/organisations/#{provider.provider_code}/#{provider.recruitment_cycle_year}/courses/level/new")
   end
 
   def provider
