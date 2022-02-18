@@ -46,6 +46,27 @@ describe CoursePolicy do
     end
   end
 
+  describe "#permitted_new_course_attributes" do
+    subject { described_class.new(user, build(:course)).permitted_new_course_attributes }
+
+    context "when non admin user" do
+      it "returns new course attributes" do
+        expected_attributes = %i[
+          accredited_body_code
+          age_range_in_years
+          applications_open_from
+          funding_type
+          is_send
+          level
+          qualification
+          start_date
+          study_mode
+        ]
+        expect(subject).to match_array(expected_attributes)
+      end
+    end
+  end
+
   describe CoursePolicy::Scope do
     let(:accredited_body) { create(:provider, :accredited_body, users: [user]) }
     let(:training_provider) { create(:provider) }
