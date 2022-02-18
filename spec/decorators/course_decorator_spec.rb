@@ -594,31 +594,31 @@ describe CourseDecorator do
     end
   end
 
-  # describe "#other_course_length?" do
-  #   context "when course_length is a pre-defined value" do
-  #     let(:course) { build(:course, course_length: "OneYear") }
+  describe "#other_course_length?" do
+    context "when course_length is a pre-defined value" do
+      let(:course_enrichment) { build(:course_enrichment, course_length: "OneYear") }
 
-  #     it "returns false" do
-  #       expect(decorated_course.other_course_length?).to be_falsey
-  #     end
-  #   end
+      it "returns false" do
+        expect(decorated_course.other_course_length?).to be_falsey
+      end
+    end
 
-  #   context "when course_length is nil" do
-  #     let(:course) { build(:course, course_length: nil) }
+    context "when course_length is nil" do
+      let(:course_enrichment) { build(:course_enrichment, course_length: nil) }
 
-  #     it "returns false so there is no default value" do
-  #       expect(decorated_course.other_course_length?).to be_falsey
-  #     end
-  #   end
+      it "returns false so there is no default value" do
+        expect(decorated_course.other_course_length?).to be_falsey
+      end
+    end
 
-  #   context "when course_length is user set" do
-  #     let(:course) { build(:course, course_length: "3 months") }
+    context "when course_length is user set" do
+      let(:course_enrichment) { build(:course_enrichment, course_length: "3 months") }
 
-  #     it "returns true" do
-  #       expect(decorated_course.other_course_length?).to be_truthy
-  #     end
-  #   end
-  # end
+      it "returns true" do
+        expect(decorated_course.other_course_length?).to be_truthy
+      end
+    end
+  end
 
   describe "#placements_heading" do
     context "when the subject is not further education" do

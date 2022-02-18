@@ -1,0 +1,99 @@
+<% page_title = "Course length and fees" %>
+<% content_for :page_title, title_with_error_prefix("#{page_title} – #{@course.name_and_code}", @course_fee_form.errors.any?) %>
+
+<% content_for :before_content do %>
+  <%= govuk_back_link_to(publish_provider_recruitment_cycle_course_path(@provider.provider_code, @course.recruitment_cycle_year, @course.course_code)) %>
+<% end %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_with(
+      model: @course_fee_form,
+      url: fees_publish_provider_recruitment_cycle_course_path(@provider.provider_code, @course.recruitment_cycle_year, @course.course_code),
+      data: { qa: "enrichment-form", module: "form-check-leave" },
+      method: :patch,
+      local: true,
+    ) do |f| %>
+
+      <%= f.govuk_error_summary %>
+
+      <h1 class="govuk-heading-l">
+        <span class="govuk-caption-l"><%= @course.name_and_code %></span>
+        <%= page_title %>
+      </h1>
+
+      <%= f.govuk_radio_buttons_fieldset(:course_length,
+        legend: { text: "Course length", size: "m" },
+        form_group: {
+          id: @course_fee_form.errors.key?(:course_length) ? "course_length-error" : "course-length",
+        }) do %>
+          <%= f.govuk_radio_button(:course_length, "OneYear",
+            data: { qa: "course_course_length_oneyear" },
+            label: { text: "1 year" },
+            link_errors: true) %>
+
+          <%= f.govuk_radio_button(:course_length, "TwoYears",
+            label: { text: "Up to 2 years" },
+            data: { qa: "course_course_length_twoyears" }) %>
+
+          <%= f.govuk_radio_button(:course_length, "Other",
+            checked: @course_fee_form.other_course_length?,
+            label: { text: "Other" },
+            data: { qa: "course_course_length_other" }) do %>
+
+            <%= f.govuk_text_field(:course_length_other_length,
+              label: { text: "Course length", size: "s" },
+              width: 20,
+              data: { qa: "course_course_length_other_length" }) %>
+          <% end %>
+      <% end %>
+
+
+      <hr class="govuk-section-break govuk-section-break--visible govuk-section-break--l">
+
+      <h3 class="govuk-heading-m">Course fees</h3>
+
+      <%= f.govuk_text_field(:fee_uk_eu,
+        form_group: { id: @course_fee_form.errors.key?(:fee_uk_eu) ? "fee_uk_eu-error" : "fee-uk" },
+        label: { text: "Fee for UK students", size: "s" },
+        prefix_text: "£",
+        width: 5,
+        data: { qa: "course_fee_uk_eu" }) %>
+
+      <%= f.govuk_text_field(:fee_international,
+        form_group: { id: "fee-international" },
+        label: { text: "Fee for international students (optional)", size: "s" },
+        prefix_text: "£",
+        width: 5,
+        data: { qa: "course_fee_international" }) %>
+
+      <h3 class="govuk-heading-m" id="fee-details">Fee details</h3>
+      <p class="govuk-body">If applicable, give further details about the fees for this course.</p>
+      <p class="govuk-body">This could include:</p>
+      <ul class="govuk-list govuk-list--bullet">
+        <li>any top up fees</li>
+        <li>any other costs</li>
+      </ul>
+
+      <%= f.govuk_text_area(:fee_details,
+        label: { text: "Fee details (optional)", size: "s" },
+        rows: 15,
+        max_words: 250,
+        data: { qa: "course_fee_details" }) %>
+
+      <hr class="govuk-section-break govuk-section-break--visible govuk-section-break--l">
+
+      <h3 class="govuk-heading-m" id="financial-support">Financial support you offer</h3>
+      <p class="govuk-body">If applicable, say more about the financial support you offer for this course. For example, any bursaries available.</p>
+      <p class="govuk-body">You do not need to add details of any DfE bursaries and subject scholarships here. These will be published automatically to your course page</p>
+
+      <%= f.govuk_text_area(:financial_support,
+        label: { text: "Financial support you offer (optional)", size: "s" },
+        rows: 15,
+        max_words: 250,
+        data: { qa: "course_financial_support" }) %>
+
+      <%= f.govuk_submit "Save" %>
+    <% end %>
+  </div>
+</div>

@@ -27,7 +27,7 @@ class CourseEnrichment < ApplicationRecord
   end
 
   # About this course
-
+  # TODO POST MIGRATION: Move out of this as it's handled in the form object
   validates :about_course, presence: true, on: :publish
   validates :about_course, words_count: { maximum: 400 }
 
@@ -38,6 +38,7 @@ class CourseEnrichment < ApplicationRecord
 
   # Course length and fees
 
+  # TODO: POST MIGRATION: Move out of this as it's handled in the form object
   validates :course_length, presence: true, on: :publish
 
   validates :fee_uk_eu, presence: true, on: :publish, if: :is_fee_based?
