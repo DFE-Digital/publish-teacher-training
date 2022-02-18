@@ -53,26 +53,8 @@ module Publish
 
     def build_new_course
       add_custom_age_range_into_params if params.dig("course", "age_range_in_years") == "other"
-      provider = RecruitmentCycle.find_by(year: params[:recruitment_cycle_year]).providers.find_by(provider_code: params[:provider_code])
 
-      @course = Course.new(
-        provider: provider, **course_attributes,
-      )
-    end
-
-    def course_attributes
-      course_attributes = course_params.to_unsafe_hash.except(:sites_ids, :subjects_ids)
-      course_attributes["subjects"] = subjects_from_ids if params.dig("course", "subjects_ids").present?
-      course_attributes["sites"] = sites_from_ids if params.dig("course", "sites_ids").present?
-      course_attributes
-    end
-
-    def subjects_from_ids
-      Subject.find(params.dig("course", "subjects_ids"))
-    end
-
-    def sites_from_ids
-      Site.find(params.dig("course", "sites_ids"))
+      @course = CourseCreationService.call(course_params: course_params, provider: provider)
     end
 
     def add_custom_age_range_into_params
@@ -80,9 +62,6 @@ module Publish
     end
 
     def errors
-      @course.valid?(:new)
-      @course.remove_carat_from_error_messages
-
       @course.errors.messages.select { |key, _message| error_keys.include?(key) }
     end
 

@@ -77,7 +77,7 @@ class SiteStatus < ApplicationRecord
     when "full_time_or_part_time"
       :both_full_time_and_part_time_vacancies
     else
-      raise "Unexpected study mode #{study_mode}"
+      :no_vacancies
     end
   end
 
