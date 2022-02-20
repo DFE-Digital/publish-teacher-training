@@ -1,0 +1,15 @@
+<h3 class="govuk-heading-s govuk-!-margin-bottom-0">Applications</h3>
+<p class="govuk-body" data-qa="course__open_for_applications"><%= course.open_or_closed_for_applications %></p>
+
+<h3 class="govuk-heading-s govuk-!-margin-0">Vacancies</h3>
+<p class="govuk-body" data-qa="course__has_vacancies">
+  <%= course.vacancies %>
+</p>
+
+<% if course.last_published_at.present? %>
+  <hr class="govuk-section-break govuk-section-break--visible govuk-section-break--m">
+  <p class="govuk-body" data-qa="course__last_published_date">
+    Last published:<br>
+    <%= l(course.last_published_at&.to_date) %>
+  </p>
+<% end %>
