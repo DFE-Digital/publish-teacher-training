@@ -24,6 +24,7 @@ module PageObjects
       section :other_requirements, Sections::SummaryList, '[data-qa="enrichment__other_requirements"]'
 
       element :basic_details_link, "a.govuk-link.govuk-tabs__tab", text: "Basic details"
+      element :status_sidebar, '[data-qa="course__status_panel"]'
     end
   end
 end

@@ -15,6 +15,7 @@ feature "Course show" do
       given_i_am_authenticated_as_a_provider_user(course: build(:course, enrichments: [course_enrichment], funding_type: "fee"))
       when_i_visit_the_course_page
       then_i_should_see_the_description_of_the_fee_course
+      and_i_should_see_the_status_sidebar
     end
   end
 
@@ -23,7 +24,12 @@ feature "Course show" do
       given_i_am_authenticated_as_a_provider_user(course: build(:course, enrichments: [course_enrichment], funding_type: "salary"))
       when_i_visit_the_course_page
       then_i_should_see_the_description_of_the_salary_course
+      and_i_should_see_the_status_sidebar
     end
+  end
+
+  def and_i_should_see_the_status_sidebar
+    expect(publish_provider_courses_show_page).to have_status_sidebar
   end
 
   def and_i_click_on_basic_details

@@ -10,7 +10,7 @@
     <h2 class="govuk-error-summary__title" id="error-summary-title">
       There is a problem
     </h2>
-    
+
     <div class="govuk-error-summary__body">
       <ul class="govuk-list govuk-error-summary__list">
         <% @errors.each do |id, messages| %>
@@ -72,7 +72,7 @@
         <%= render partial: "description_content" %>
       </div>
       <div class="govuk-grid-column-one-third" data-qa="course__status_panel">
-        <%# render partial: "courses/status_panel" %>
+        <%= render partial: "description_status_panel" %>
       </div>
     </div>
   </section>
