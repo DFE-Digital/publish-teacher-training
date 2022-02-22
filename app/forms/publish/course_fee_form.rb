@@ -13,7 +13,7 @@ module Publish
 
     attr_accessor(*FIELDS)
 
-    delegate :recruitment_cycle_year, :provider_code, :name, to: :course
+    delegate :is_fee_based?, to: :course
 
     validates :course_length, presence: true
     validates :fee_uk_eu, presence: true, if: :is_fee_based?
@@ -40,10 +40,6 @@ module Publish
     end
 
   private
-
-    def is_fee_based?
-      course&.is_fee_based?
-    end
 
     def compute_fields
       course_enrichment
