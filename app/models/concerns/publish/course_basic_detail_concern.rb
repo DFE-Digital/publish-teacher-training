@@ -54,7 +54,7 @@ module Publish
     def build_new_course
       add_custom_age_range_into_params if params.dig("course", "age_range_in_years") == "other"
 
-      @course = CourseCreationService.call(course_params: course_params, provider: provider)
+      @course = ::Courses::CreationService.call(course_params: course_params, provider: provider)
     end
 
     def add_custom_age_range_into_params

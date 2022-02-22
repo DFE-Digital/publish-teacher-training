@@ -33,7 +33,7 @@ module Publish
 
     def create
       authorize(provider, :can_create_course?)
-      @course = CourseCreationService.call(course_params: course_params, provider: provider, next_available_course_code: true)
+      @course = ::Courses::CreationService.call(course_params: course_params, provider: provider, next_available_course_code: true)
 
       if @course.save
         flash[:success_with_body] = { title: "Your course has been created", body: "Add the rest of your details and publish the course, so that candidates can find and apply to it." }
@@ -55,7 +55,7 @@ module Publish
       authorize(provider, :can_create_course?)
 
       @course_creation_params = course_params
-      @course = CourseCreationService.call(course_params: course_params, provider: provider)
+      @course = ::Courses::CreationService.call(course_params: course_params, provider: provider)
     end
 
   private
