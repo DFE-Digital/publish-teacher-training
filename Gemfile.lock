@@ -484,6 +484,7 @@ GEM
     rb-inotify (0.10.1)
       ffi (~> 1.0)
     rb-readline (0.5.5)
+    redcarpet (3.5.1)
     redis (4.6.0)
     regexp_parser (2.2.1)
     representable (3.1.1)
@@ -541,6 +542,7 @@ GEM
       rexml
     ruby-progressbar (1.11.0)
     ruby2_keywords (0.0.5)
+    rubypants (0.7.1)
     schema_to_scaffold (0.8.0)
       activesupport (>= 3.2.1)
     semantic_logger (4.10.0)
@@ -712,6 +714,7 @@ DEPENDENCIES
   rails-erd
   rails_semantic_logger
   rb-readline
+  redcarpet
   request_store
   rspec-its
   rspec-rails
@@ -719,6 +722,7 @@ DEPENDENCIES
   rubocop
   rubocop-rails
   rubocop-rspec
+  rubypants
   schema_to_scaffold
   sentry-rails
   sentry-ruby
