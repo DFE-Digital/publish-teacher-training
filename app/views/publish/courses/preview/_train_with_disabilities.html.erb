@@ -1,0 +1,12 @@
+<div class="govuk-!-margin-bottom-8">
+  <h2 class="govuk-heading-l" id="section-train-with-disabilities">Training with disabilities and other needs</h2>
+  <div data-qa="course__train_with_disabilities">
+    <% if @provider.train_with_disability.present? %>
+      <%= markdown(@provider.train_with_disability) %>
+    <% else %>
+      <%= govuk_inset_text(classes: "app-inset-text--narrow-border app-inset-text--important") do %>
+        <p class="govuk-body">Please add details about <%= govuk_link_to "training with disabilities", about_provider_recruitment_cycle_path(@provider.provider_code, @provider.recruitment_cycle_year) %>.</p>
+      <% end %>
+    <% end %>
+  </div>
+</div>

@@ -1,0 +1,23 @@
+<% if course.degree_section_complete? %>
+  <p class="govuk-body">
+    <%= degree_grade_content(course) %>
+  </p>
+
+  <% if course.level == "secondary" %>
+    <p class="govuk-body">Your degree subject should be in <%= subject_name(course) %> or a similar subject. Otherwise you’ll need to prove your subject knowledge in some other way.</p>
+  <% end %>
+
+  <% if course.degree_subject_requirements.present? %>
+    <p class="govuk-body">
+      <%= markdown(course.degree_subject_requirements) %>
+    </p>
+  <% end %>
+<% else %>
+  <%= govuk_inset_text(classes: "app-inset-text--important") do %>
+    <p class="govuk-body">
+      Please add details <%= govuk_link_to "about degree requirements",
+        nil #degrees_start_provider_recruitment_cycle_course_path(course.provider.provider_code, course.provider.recruitment_cycle_year, course.course_code,) 
+        %>.
+    </p>
+  <% end %>
+<% end %>
