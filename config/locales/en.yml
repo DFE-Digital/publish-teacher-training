@@ -326,6 +326,25 @@ en:
             how_school_placements_work:
               blank: "Enter details about school placements"
               too_long: "Reduce the word count for how school placements work"
+        publish/course_fee_form:
+          attributes:
+            course_length:
+              blank: "Enter a course length"
+            fee_uk_eu:
+              blank: "Enter details about the course fees for UK and EU students"
+              not_a_number: "Course fees for UK and EU students must be a valid number"
+              greater_than_or_equal_to: "Course fees for UK and EU students must be greater than or equal to £0"
+              less_than_or_equal_to: "Course fees for UK and EU students must be less than or equal to £100,000"
+              not_an_integer: "Course fees for UK and EU students must not include pence, like 1000 or 1500"
+            fee_international:
+              not_a_number: "Course fees for international students must be a valid number"
+              greater_than_or_equal_to: "Course fees for international students must be greater than or equal to £0"
+              less_than_or_equal_to: "Course fees for international students must be less than or equal to £100,000"
+              not_an_integer: "Course fees for international students must not include pence, like 1000 or 1500"
+            fee_details:
+              too_long: "Reduce the word count for fee details"
+            financial_support:
+              too_long: "Reduce the word count for financial support"
   errors:
     messages:
       email: "^Enter an email address in the correct format, like name@example.com"

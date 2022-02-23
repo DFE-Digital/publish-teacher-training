@@ -51,7 +51,7 @@
       "Course length",
       course.length,
       %w[course_length],
-      action_path: nil, #"#{fees_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code)}#course-length",
+      action_path: "#{fees_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code)}#course-length",
       action_visually_hidden_text: "course length",
     ) %>
 
@@ -61,7 +61,7 @@
       "Fee for UK students",
       number_to_currency(course.fee_uk_eu),
       %w[fee_uk_eu],
-      action_path: nil, #"#{fees_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code)}#fee-uk",
+      action_path: "#{fees_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code)}#fee-uk",
       action_visually_hidden_text: "fee for UK students",
     ) %>
 
@@ -71,7 +71,7 @@
       "Fee for international students (optional)",
       number_to_currency(course.fee_international),
       %w[fee_international],
-      action_path: nil, #"#{fees_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code)}#fee-international",
+      action_path: "#{fees_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code)}#fee-international",
       action_visually_hidden_text: "fee for international students",
     ) %>
 
@@ -81,7 +81,7 @@
       "Fee details (optional)",
       course.fee_details,
       %w[fee_details],
-      action_path: nil, #"#{fees_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code)}#fee-details",
+      action_path: "#{fees_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code)}#fee-details",
       action_visually_hidden_text: "fee details",
     ) %>
 
@@ -91,7 +91,7 @@
       "Financial support you offer (optional)",
       course.financial_support,
       %w[financial_support],
-      action_path: nil, #"#{fees_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code)}#financial-support",
+      action_path: "#{fees_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code)}#financial-support",
       action_visually_hidden_text: "details of financial support you offer",
     ) %>
   <% else %>
