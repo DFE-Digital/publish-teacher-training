@@ -11,7 +11,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     env:
-      DOCKER_IMAGE: dfedigital/teacher-training-api
+      DOCKER_IMAGE: ghcr.io/dfe-digital/teacher-training-api
 
     steps:
     - name: Checkout
@@ -35,12 +35,13 @@ jobs:
         # This is the latest commit on the actual PR branch
         echo "DOCKER_IMAGE_TAG=${{ github.event.pull_request.head.sha }}" >> $GITHUB_ENV
 
-    - name: Login to DockerHub
+    - name: Login to GitHub Container Registry
       if: github.actor != 'dependabot[bot]'
-      uses: docker/login-action@v1
+      uses: docker/login-action@v1.12.0
       with:
-        username: ${{ secrets.DOCKERHUB_USERNAME }}
-        password: ${{ secrets.DOCKERHUB_PERSONAL_ACCESS_TOKEN }}
+        registry: ghcr.io
+        username: ${{ github.repository_owner }}
+        password: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v1
@@ -53,8 +54,8 @@ jobs:
         load: ${{ github.actor == 'dependabot[bot]' }}
         target: middleman
         cache-from: |
-          ${{ env.DOCKER_IMAGE}}-middleman:master
-          ${{ env.DOCKER_IMAGE}}-middleman:${{ env.BRANCH_TAG }}
+          type=registry,ref=${{ env.DOCKER_IMAGE}}-middleman:master
+          type=registry,ref=${{ env.DOCKER_IMAGE}}-middleman:${{ env.BRANCH_TAG }}
         build-args: BUILDKIT_INLINE_CACHE=1
 
     - name: Build Teacher-Training-Api
@@ -66,10 +67,10 @@ jobs:
         push: ${{ github.actor != 'dependabot[bot]' }}
         load: ${{ github.actor == 'dependabot[bot]' }}
         cache-from: |
-          ${{ env.DOCKER_IMAGE}}:master
-          ${{ env.DOCKER_IMAGE}}:${{ env.BRANCH_TAG }}
-          ${{ env.DOCKER_IMAGE}}-middleman:master
-          ${{ env.DOCKER_IMAGE}}-middleman:${{ env.BRANCH_TAG }}
+          type=registry,ref=${{ env.DOCKER_IMAGE}}:master
+          type=registry,ref=${{ env.DOCKER_IMAGE}}:${{ env.BRANCH_TAG }}
+          type=registry,ref=${{ env.DOCKER_IMAGE}}-middleman:master
+          type=registry,ref=${{ env.DOCKER_IMAGE}}-middleman:${{ env.BRANCH_TAG }}
         build-args: |
           BUILDKIT_INLINE_CACHE=1
           COMMIT_SHA=${{ env.DOCKER_IMAGE_TAG }}

@@ -11,7 +11,6 @@ resource cloudfoundry_app web_app {
   timeout                    = 300
   stopped                    = var.web_app_stopped
   environment                = local.app_environment_variables
-  docker_credentials         = var.docker_credentials
 
   service_binding {
     service_instance = cloudfoundry_service_instance.redis.id
@@ -43,7 +42,6 @@ resource cloudfoundry_app worker_app {
   health_check_timeout = 300
   stopped              = var.worker_app_stopped
   environment          = local.app_environment_variables
-  docker_credentials   = var.docker_credentials
 
   service_binding {
     service_instance = cloudfoundry_service_instance.redis.id
