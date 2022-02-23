@@ -52,9 +52,5 @@ locals {
   app_secrets                    = yamldecode(data.azurerm_key_vault_secret.app_secrets.value)
   infra_secrets                  = yamldecode(data.azurerm_key_vault_secret.infra_secrets.value)
   paas_app_environment_variables = merge(local.app_secrets, local.app_config)
-  docker_credentials = {
-    username = local.infra_secrets.DOCKERHUB_USERNAME
-    password = local.infra_secrets.DOCKERHUB_PASSWORD
-  }
   azure_credentials = try(jsondecode(var.azure_credentials), null)
 }

@@ -87,7 +87,7 @@ deploy-init:
 	$(if $(IMAGE_TAG), , $(eval export IMAGE_TAG=master))
 	$(if $(or $(DISABLE_PASSCODE),$(PASSCODE)), , $(error Missing environment variable "PASSCODE", retrieve from https://login.london.cloud.service.gov.uk/passcode))
 	$(eval export TF_VAR_cf_sso_passcode=$(PASSCODE))
-	$(eval export TF_VAR_paas_docker_image=dfedigital/teacher-training-api:$(IMAGE_TAG))
+	$(eval export TF_VAR_paas_docker_image=ghcr.io/dfe-digital/teacher-training-api:$(IMAGE_TAG))
 	$(eval export TF_VAR_paas_app_secrets_file=./workspace_variables/app_secrets.yml)
 	az account set -s ${AZ_SUBSCRIPTION} && az account show
 	cd terraform && \
