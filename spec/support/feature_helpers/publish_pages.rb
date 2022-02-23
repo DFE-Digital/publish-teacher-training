@@ -115,5 +115,9 @@ module FeatureHelpers
     def publish_course_fee_page
       @publish_course_fee_page ||= PageObjects::Publish::CourseFeeEdit.new
     end
+
+    def publish_course_location_page
+      @publish_course_location_page ||= PageObjects::Publish::CourseLocationEdit.new
+    end
   end
 end

@@ -110,6 +110,8 @@ Rails.application.routes.draw do
           patch "/about", on: :member, to: "courses/course_information#update"
           get "/fees", on: :member, to: "courses/fees#edit"
           patch "/fees", on: :member, to: "courses/fees#update"
+          get "/locations", on: :member, to: "courses/sites#edit"
+          put "/locations", on: :member, to: "courses/sites#update"
         end
 
         scope module: :providers do

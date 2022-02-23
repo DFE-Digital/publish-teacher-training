@@ -1,19 +1,19 @@
-<% content_for :page_title, title_with_error_prefix("Select the locations for this course – #{course.name_and_code}", @errors.present?) %>
+<% content_for :page_title, title_with_error_prefix("Select the locations for this course – #{course.name_and_code}", @course_location_form.errors.present?) %>
 
 <% content_for :before_content do %>
-  <%= govuk_back_link_to(details_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code)) %>
+  <%= govuk_back_link_to(details_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code)) %>
 <% end %>
 
-<% if @errors.present? %>
+<% if @course_location_form.errors.present? %>
   <div class="govuk-error-summary" aria-labelledby="error-summary-title" role="alert" tabindex="-1" data-module="govuk-error-summary" data-ga-event-form="error">
     <h2 class="govuk-error-summary__title" id="error-summary-title">
-      <%= @errors.first %>
+      <%= @course_location_form.errors[:site_ids].first %>
     </h2>
     <div class="govuk-error-summary__body">
       <p class="govuk-body" data-error-message="Removing all locations would prevent people from applying to this course">
         Removing all locations would prevent people from applying to this course.
         If you want to close applications, you can
-        <%= govuk_link_to "edit the vacancies for this course", vacancies_provider_recruitment_cycle_course_path(code: course.course_code) %>.
+        <%= govuk_link_to "edit the vacancies for this course", vacancies_publish_provider_recruitment_cycle_course_path(code: course.course_code) %>.
       </p>
     </div>
   </div>
@@ -26,28 +26,26 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <p class="govuk-body govuk-body govuk-!-margin-bottom-6"><%= govuk_link_to "Manage all your locations", provider_recruitment_cycle_sites_path(@provider.provider_code), data: { qa: "course__manage_provider_locations_link" } %> to add to or edit this list.</p>
+    <p class="govuk-body govuk-body govuk-!-margin-bottom-6"><%= govuk_link_to "Manage all your locations", publish_provider_recruitment_cycle_locations_path(@provider.provider_code), data: { qa: "course__manage_provider_locations_link" } %> to add to or edit this list.</p>
 
-    <%= form_for course, url: locations_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code), method: :put do |form| %>
-      <div class="govuk-form-group">
-        <div class="govuk-checkboxes">
-          <%= form.fields_for :site_statuses, @provider.sites.sort_by(&:location_name) do |sf| %>
-            <% site = sf.object %>
-            <div class="govuk-checkboxes__item">
-              <%= sf.check_box "selected", checked: course.has_site?(site), class: "govuk-checkboxes__input" %>
-              <%= sf.label "selected", class: "govuk-label govuk-checkboxes__label"  do %>
-                <strong><%= site.location_name %></strong>
-              <% end %>
-              <span class="govuk-hint govuk-checkboxes__hint">
-                <%= site.full_address %>
-              </span>
-            </div>
-          <% end %>
-        </div>
-      </div>
+    <%= form_with(
+      model: @course_location_form, 
+      url: locations_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code), 
+      method: :put,
+      local: true
+    ) do |f| %>
 
-      <%= form.submit course.is_running? ? "Save and publish changes" : "Save",
-        class: "govuk-button", data: { qa: "course__save" } %>
+      <%= f.govuk_check_boxes_fieldset :site_ids, legend: nil do %>
+       <% @provider.sites.sort_by(&:location_name).each_with_index do |site, index| %>
+          <%= f.govuk_check_box :site_ids, 
+              site.id, 
+              label: { text: site.location_name, size: "s" },
+              hint: { text: site.full_address },
+              link_errors: index.zero? %>
+       <% end %>
+      <% end %>
+
+      <%= f.govuk_submit course.is_running? ? "Save and publish changes" : "Save" %>
     <% end %>
   </div>
 </div>
