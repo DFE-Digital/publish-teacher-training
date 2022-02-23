@@ -55,9 +55,9 @@ class CourseDecorator < ApplicationDecorator
   #     end
   #   end
 
-  #   def has_scholarship_and_bursary?
-  #     has_bursary? && has_scholarship?
-  #   end
+  def has_scholarship_and_bursary?
+    has_bursary? && has_scholarship?
+  end
 
   #   def bursary_first_line_ending
   #     if bursary_requirements.count > 1
@@ -78,26 +78,26 @@ class CourseDecorator < ApplicationDecorator
   #     requirements
   #   end
 
-  #   def bursary_only?
-  #     has_bursary? && !has_scholarship?
-  #   end
+  def bursary_only?
+    has_bursary? && !has_scholarship?
+  end
 
-  #   def has_bursary?
-  #     object.subjects.present? &&
-  #       object.subjects.any? { |subject| subject.attributes["bursary_amount"].present? }
-  #   end
+  def has_bursary?
+    object.subjects.present? &&
+      object.subjects.any? { |subject| subject.attributes["bursary_amount"].present? }
+  end
 
-  #   def excluded_from_bursary?
-  #     object.subjects.present? &&
-  #       # incorrect bursary eligibility only shows up on courses with 2 subjects
-  #       object.subjects.count == 2 &&
-  #       has_excluded_course_name?
-  #   end
+  def excluded_from_bursary?
+    object.subjects.present? &&
+      # incorrect bursary eligibility only shows up on courses with 2 subjects
+      object.subjects.count == 2 &&
+      has_excluded_course_name?
+  end
 
-  #   def has_scholarship?
-  #     object.subjects.present? &&
-  #       object.subjects.any? { |subject| subject.attributes["scholarship"].present? }
-  #   end
+  def has_scholarship?
+    object.subjects.present? &&
+      object.subjects.any? { |subject| subject.attributes["scholarship"].present? }
+  end
 
   #   def has_early_career_payments?
   #     object.subjects.present? &&
@@ -112,9 +112,9 @@ class CourseDecorator < ApplicationDecorator
   #     find_max("scholarship")
   #   end
 
-  #   def salaried?
-  #     object.funding_type == "salary" || object.funding_type == "apprenticeship"
-  #   end
+  def salaried?
+    object.funding_type == "salary" || object.funding_type == "apprenticeship"
+  end
 
   def apprenticeship?
     object.funding_type.to_s == "apprenticeship" ? "Yes" : "No"
@@ -148,9 +148,9 @@ class CourseDecorator < ApplicationDecorator
     object.sites.sort_by(&:location_name)
   end
 
-  # def preview_site_statuses
-  #   site_statuses.select(&:new_or_running?).sort_by { |status| status.site.location_name }
-  # end
+  def preview_site_statuses
+    site_statuses.new_or_running.sort_by { |status| status.site.location_name }
+  end
 
   def has_site?(site)
     !course.sites.nil? && object.sites.any? { |s| s.id == site.id }
@@ -160,19 +160,19 @@ class CourseDecorator < ApplicationDecorator
   #   alphabetically_sorted_sites.pluck(:id)
   # end
 
-  # def funding_option
-  #   if salaried?
-  #     "Salary"
-  #   elsif excluded_from_bursary?
-  #     "Student finance if you’re eligible"
-  #   elsif has_scholarship_and_bursary?
-  #     "Scholarships or bursaries, as well as student finance, are available if you’re eligible"
-  #   elsif has_bursary?
-  #     "Bursaries and student finance are available if you’re eligible"
-  #   else
-  #     "Student finance if you’re eligible"
-  #   end
-  # end
+  def funding_option
+    if salaried?
+      "Salary"
+    elsif excluded_from_bursary?
+      "Student finance if you’re eligible"
+    elsif has_scholarship_and_bursary?
+      "Scholarships or bursaries, as well as student finance, are available if you’re eligible"
+    elsif has_bursary?
+      "Bursaries and student finance are available if you’re eligible"
+    else
+      "Student finance if you’re eligible"
+    end
+  end
 
   def current_cycle?
     course.recruitment_cycle.year.to_i == Settings.current_recruitment_cycle_year
@@ -186,9 +186,9 @@ class CourseDecorator < ApplicationDecorator
     course.recruitment_cycle.year.to_i == Settings.current_recruitment_cycle_year + 1
   end
 
-  #   def use_financial_support_placeholder?
-  #     course.recruitment_cycle.year.to_i == Settings.financial_support_placeholder_cycle
-  #   end
+  def use_financial_support_placeholder?
+    course.recruitment_cycle.year.to_i == Settings.financial_support_placeholder_cycle
+  end
 
   #   def cycle_range
   #     "#{course.recruitment_cycle.year} to #{course.recruitment_cycle.year.to_i + 1}"
@@ -346,6 +346,10 @@ class CourseDecorator < ApplicationDecorator
     object.enrichment_attribute(:course_length)
   end
 
+  def about_accrediting_body
+    object.accrediting_provider_description
+  end
+
 private
 
   def not_on_find
@@ -374,17 +378,17 @@ private
   #   subject_attributes.compact.max.to_s
   # end
 
-  # def has_excluded_course_name?
-  #   exclusions = [
-  #     /^Drama/,
-  #     /^Media Studies/,
-  #     /^PE/,
-  #     /^Physical/,
-  #   ]
-  #   # We only care about course with a name matching the pattern 'Foo with bar'
-  #   # We don't care about courses matching the pattern 'Foo and bar'
-  #   return false unless /with/.match?(object.name)
+  def has_excluded_course_name?
+    exclusions = [
+      /^Drama/,
+      /^Media Studies/,
+      /^PE/,
+      /^Physical/,
+    ]
+    # We only care about course with a name matching the pattern 'Foo with bar'
+    # We don't care about courses matching the pattern 'Foo and bar'
+    return false unless /with/.match?(object.name)
 
-  #   exclusions.any? { |e| e.match?(object.name) }
-  # end
+    exclusions.any? { |e| e.match?(object.name) }
+  end
 end
