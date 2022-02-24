@@ -41,7 +41,7 @@
 
         <% unless course.is_further_education? %>
           <% summary_list.row(html_attributes: { data: { qa: "course__subjects" } }) do |row| %>
-            <% row.key { "Subject".pluralize(course.subjects.count) } %>
+            <% row.key { "Subject".pluralize(course.subjects.length) } %>
             <% row.value { course.sorted_subjects } %>
             <% row.action({
               href: new_publish_provider_recruitment_cycle_courses_subjects_path(course.provider.provider_code, course.recruitment_cycle.year, params.to_unsafe_h.merge(goto_confirmation: true)),
