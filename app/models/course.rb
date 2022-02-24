@@ -578,7 +578,7 @@ class Course < ApplicationRecord
   end
 
   def has_unpublished_changes?
-    content_status == "published_with_unpublished_changes"
+    content_status == :published_with_unpublished_changes
   end
 
   def is_running?
