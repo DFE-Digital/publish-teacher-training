@@ -27,7 +27,9 @@ module Courses
       update_subjects(course)
       update_sites(course)
       update_further_education_fields(course) if course.level == "further_education"
+
       course.course_code = provider.next_available_course_code if next_available_course_code
+      course.name = course.generate_name
 
       course.valid?(:new)
       course.remove_carat_from_error_messages
@@ -70,8 +72,6 @@ module Courses
         subject_ids.each_with_index do |id, index|
           course.course_subjects.select { |cs| cs.subject_id == id.to_i }.first.position = index
         end
-
-        course.name = course.generate_name
       end
     end
 

@@ -11,7 +11,7 @@ describe Courses::CreationService do
 
   subject do
     described_class.call(
-      course_params: course_params, provider: provider,
+      course_params: valid_course_params, provider: provider,
       next_available_course_code: next_available_course_code
     )
   end
@@ -19,7 +19,7 @@ describe Courses::CreationService do
   context "primary course" do
     let(:primary_subject) { find_or_create(:primary_subject, :primary) }
 
-    let(:course_params) do
+    let(:valid_course_params) do
       {
         "age_range_in_years" => "3_to_7",
         "applications_open_from" => recruitment_cycle.application_start_date,
@@ -36,7 +36,7 @@ describe Courses::CreationService do
     end
 
     it "create the primary course" do
-      course_params.except("is_send", "sites_ids", "subjects_ids", "course_code").each do |key, value|
+      valid_course_params.except("is_send", "sites_ids", "subjects_ids", "course_code").each do |key, value|
         expect(subject.public_send(key)).to eq(value)
       end
 
@@ -44,6 +44,8 @@ describe Courses::CreationService do
       expect(subject.sites.map(&:id)).to eq([site.id])
       expect(subject.subjects.map(&:id)).to eq([primary_subject.id])
       expect(subject.course_code).to eq(nil)
+      expect(subject.name).to eq("Primary (SEND)")
+      expect(subject.errors).to be_empty
     end
 
     context "next_available_course_code is true" do
@@ -52,7 +54,7 @@ describe Courses::CreationService do
       end
 
       it "create the primary course" do
-        course_params.except("is_send", "sites_ids", "subjects_ids", "course_code").each do |key, value|
+        valid_course_params.except("is_send", "sites_ids", "subjects_ids", "course_code").each do |key, value|
           expect(subject.public_send(key)).to eq(value)
         end
 
@@ -61,6 +63,8 @@ describe Courses::CreationService do
         expect(subject.subjects.map(&:id)).to eq([primary_subject.id])
         expect(subject.course_code).not_to eq(nil)
         expect(subject.course_code).not_to eq("D0CK")
+        expect(subject.name).to eq("Primary (SEND)")
+        expect(subject.errors).to be_empty
       end
     end
   end
@@ -68,12 +72,12 @@ describe Courses::CreationService do
   context "secondary course" do
     let(:secondary_subject) { find_or_create(:secondary_subject, :biology) }
 
-    let(:course_params) do
+    let(:valid_course_params) do
       {
         "age_range_in_years" => "12_to_17",
         "applications_open_from" => recruitment_cycle.application_start_date,
         "funding_type" => "salary",
-        "is_send" => "1",
+        "is_send" => "0",
         "level" => "secondary",
         "qualification" => "pgce_with_qts",
         "start_date" => "September #{recruitment_cycle.year}",
@@ -85,14 +89,16 @@ describe Courses::CreationService do
     end
 
     it "create the secondary course" do
-      course_params.except("is_send", "sites_ids", "subjects_ids", "course_code").each do |key, value|
+      valid_course_params.except("is_send", "sites_ids", "subjects_ids", "course_code").each do |key, value|
         expect(subject.send(key)).to eq(value)
       end
 
-      expect(subject.is_send).to eq(true)
+      expect(subject.is_send).to eq(false)
       expect(subject.sites.map(&:id)).to eq([site.id])
       expect(subject.subjects.map(&:id)).to eq([secondary_subject.id])
       expect(subject.course_code).to eq(nil)
+      expect(subject.name).to eq("Biology")
+      expect(subject.errors).to be_empty
     end
 
     context "next_available_course_code is true" do
@@ -101,15 +107,17 @@ describe Courses::CreationService do
       end
 
       it "create the secondary course" do
-        course_params.except("is_send", "sites_ids", "subjects_ids", "course_code").each do |key, value|
+        valid_course_params.except("is_send", "sites_ids", "subjects_ids", "course_code").each do |key, value|
           expect(subject.public_send(key)).to eq(value)
         end
 
-        expect(subject.is_send).to eq(true)
+        expect(subject.is_send).to eq(false)
         expect(subject.sites.map(&:id)).to eq([site.id])
         expect(subject.subjects.map(&:id)).to eq([secondary_subject.id])
         expect(subject.course_code).not_to eq(nil)
         expect(subject.course_code).not_to eq("D0CK")
+        expect(subject.name).to eq("Biology")
+        expect(subject.errors).to be_empty
       end
     end
   end
@@ -117,7 +125,7 @@ describe Courses::CreationService do
   context "further_education course" do
     let(:further_education_subject) { find_or_create(:further_education_subject) }
 
-    let(:course_params) do
+    let(:valid_course_params) do
       {
         "applications_open_from" => recruitment_cycle.application_start_date,
         "is_send" => "1",
@@ -134,6 +142,8 @@ describe Courses::CreationService do
       expect(subject.sites.map(&:id)).to eq([site.id])
       expect(subject.subjects.map(&:id)).to eq([further_education_subject.id])
       expect(subject.course_code).to eq(nil)
+      expect(subject.name).to eq("Further education (SEND)")
+      expect(subject.errors).to be_empty
     end
 
     context "next_available_course_code is true" do
@@ -142,7 +152,7 @@ describe Courses::CreationService do
       end
 
       it "create the further_education course" do
-        course_params.except("is_send", "sites_ids", "course_code").each do |key, value|
+        valid_course_params.except("is_send", "sites_ids", "course_code").each do |key, value|
           expect(subject.send(key)).to eq(value)
         end
 
@@ -151,6 +161,8 @@ describe Courses::CreationService do
         expect(subject.subjects.map(&:id)).to eq([further_education_subject.id])
         expect(subject.course_code).not_to eq(nil)
         expect(subject.course_code).not_to eq("D0CK")
+        expect(subject.name).to eq("Further education (SEND)")
+        expect(subject.errors).to be_empty
       end
     end
   end
