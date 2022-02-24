@@ -4,8 +4,6 @@ module Publish
       before_action :build_course_params, only: :continue
       include CourseBasicDetailConcern
 
-      decorates_assigned :provider
-
       def edit
         build_provider
       end

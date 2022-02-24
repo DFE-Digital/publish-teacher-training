@@ -21,7 +21,9 @@ private
 
   def given_i_am_authenticated_as_a_provider_user
     @user = create(:user, :with_provider)
-    @user.providers.first.courses << create(:course, :with_accrediting_provider)
+    course = create(:course, :with_accrediting_provider)
+    @accredited_body_code = course.accredited_body_code
+    @user.providers.first.courses << course
     given_i_am_authenticated(user: @user)
   end
 
@@ -30,7 +32,7 @@ private
   end
 
   def when_i_select_an_accredited_body
-    new_accredited_body_page.find("#course_accredited_body_code_a03").click
+    new_accredited_body_page.find("#course_accredited_body_code_#{@accredited_body_code.downcase}").click
   end
 
   def and_i_click_continue
