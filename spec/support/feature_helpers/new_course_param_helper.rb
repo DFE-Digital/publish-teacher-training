@@ -10,7 +10,7 @@ module FeatureHelpers
         "course[is_send]" => ["0"],
         "course[study_mode]" => "full_time",
         "course[age_range_in_years]" => ["11_to_16"],
-        "course[subjects][]" => "2",
+        "course[subjects_ids][]" => "2",
         "commit" => ["Continue"],
       }
     end
@@ -19,7 +19,7 @@ module FeatureHelpers
       {
         "course[is_send]" => ["0"],
         "course[level]" => "primary",
-        "course[subjects][]" => "2",
+        "course[subjects_ids][]" => "2",
       }
     end
 
@@ -31,7 +31,7 @@ module FeatureHelpers
         "course[is_send]" => ["0"],
         "course[study_mode]" => "full_time",
         "course[age_range_in_years]" => ["11_to_16"],
-        "course[subjects][]" => "2",
+        "course[subjects_ids][]" => "2",
         "commit" => ["Continue"],
       }
     end
@@ -40,7 +40,7 @@ module FeatureHelpers
       {
         "course[is_send]" => ["0"],
         "course[level]" => "primary",
-        "course[subjects][]" => "2",
+        "course[subjects_ids][]" => "2",
         "course[age_range_in_years]" => ["3_to_7"],
       }
     end
@@ -49,7 +49,7 @@ module FeatureHelpers
       {
         "course[is_send]" => ["0"],
         "course[level]" => "primary",
-        "course[subjects][]" => "2",
+        "course[subjects_ids][]" => "2",
         "course[age_range_in_years]" => ["3_to_7"],
       }
     end
@@ -62,7 +62,7 @@ module FeatureHelpers
         "course[level]" => "primary",
         "course[qualification]" => "qts",
         "course[study_mode]" => "full_time",
-        "course[subjects][]" => "2",
+        "course[subjects_ids][]" => "2",
       }
     end
 
@@ -75,7 +75,7 @@ module FeatureHelpers
         "course[is_send]" => ["0"],
         "course[study_mode]" => "full_time",
         "course[age_range_in_years]" => ["11_to_16"],
-        "course[subjects][]" => "2",
+        "course[subjects_ids][]" => "2",
         "commit" => ["Continue"],
         "course[applications_open_from]" => "2021-10-12",
       }
@@ -85,7 +85,7 @@ module FeatureHelpers
       {
         "course[is_send]" => ["0"],
         "course[level]" => "primary",
-        "course[subjects][]" => "2",
+        "course[subjects_ids][]" => "2",
         "course[age_range_in_years]" => ["3_to_7"],
       }
     end

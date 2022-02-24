@@ -63,10 +63,10 @@ private
   end
 
   def primary_subject_selected_params
-    "?course%5Bis_send%5D=%5B%220%22%5D&course%5Blevel%5D=primary&course%5Bsubjects%5D%5B%5D=2"
+    "?course%5Bis_send%5D=%5B%220%22%5D&course%5Blevel%5D=primary&course%5Bsubjects_ids%5D%5B%5D=2"
   end
 
   def secondary_subject_selected_params
-    "?course%5Bis_send%5D=%5B%220%22%5D&course%5Blevel%5D=secondary&course%5Bsubjects%5D%5B%5D=35"
+    "?course%5Bis_send%5D=%5B%220%22%5D&course%5Blevel%5D=secondary&course%5Bsubjects_ids%5D%5B%5D=35"
   end
 end
