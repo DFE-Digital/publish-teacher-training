@@ -68,7 +68,7 @@ module NotificationBanner
     end
 
     def success_banner?
-      type == :success
+      type&.to_sym == :success
     end
   end
 end

@@ -1,7 +1,7 @@
 <% content_for :page_title, title_with_error_prefix("#{course.name_and_code} - Courses", @errors.present?) %>
 <%= content_for :before_content do %>
   <%= govuk_back_link_to(
-      publish_provider_recruitment_cycle_path(@provider.provider_code, @provider.recruitment_cycle_year)
+      publish_provider_recruitment_cycle_courses_path(@provider.provider_code, @provider.recruitment_cycle_year)
   ) %>
 <% end %>
 

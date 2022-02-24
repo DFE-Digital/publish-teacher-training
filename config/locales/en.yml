@@ -345,6 +345,10 @@ en:
               too_long: "Reduce the word count for fee details"
             financial_support:
               too_long: "Reduce the word count for financial support"
+        publish/course_location_form:
+          attributes:
+            site_ids:
+              no_locations: "Select at least one location"
   errors:
     messages:
       email: "^Enter an email address in the correct format, like name@example.com"

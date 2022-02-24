@@ -1,12 +1,9 @@
 module Publish
   module Courses
     class SitesController < PublishController
-      decorates_assigned :course
-      before_action :build_course_params, only: %i[continue]
-
       include CourseBasicDetailConcern
-      before_action :build_course, only: %i[edit update]
-      before_action :build_provider_with_sites
+
+      before_action :build_course_params, only: %i[continue]
 
       def continue
         super
@@ -20,23 +17,26 @@ module Publish
         end
       end
 
-      def edit; end
+      def edit
+        authorize(provider)
+
+        @course_location_form = CourseLocationForm.new(@course)
+      end
 
       def update
-        @course.provider_code = @provider.provider_code
-        selected_site_ids = params.dig(:course, :site_statuses_attributes)
-          .values
-          .select { |f| f["selected"] == "1" }
-          .map { |f| f["id"] }
+        authorize(provider)
 
-        @course.sites = @provider.sites.select { |site| selected_site_ids.include?(site.id) }
-
-        if @course.save
+        @course_location_form = CourseLocationForm.new(@course, params: location_params)
+        if @course_location_form.save!
           success_message = @course.is_running? ? "Course locations saved and published" : "Course locations saved"
-          redirect_to provider_recruitment_cycle_course_path(params[:provider_code], params[:recruitment_cycle_year], params[:code]), flash: { success: success_message }
-        else
-          @errors = @course.errors.full_messages
+          flash[:success] = success_message
 
+          redirect_to publish_provider_recruitment_cycle_course_path(
+            provider.provider_code,
+            recruitment_cycle.year,
+            course.course_code,
+          )
+        else
           render :edit
         end
       end
@@ -75,21 +75,14 @@ module Publish
         params["course"].delete("site_statuses_attributes")
       end
 
-      def build_provider_with_sites
-        @provider = RecruitmentCycle.find_by(year: params[:recruitment_cycle_year])
-                      .providers
-                      .find_by(provider_code: params[:provider_code])
+      def location_params
+        return { site_ids: nil } if params[:publish_course_location_form][:site_ids].all?(&:empty?)
+
+        params.require(:publish_course_location_form).permit(site_ids: [])
       end
 
       def build_course
-        @provider_code = params[:provider_code]
-        @course = Course
-          .includes(:sites)
-          .includes(provider: [:sites])
-          .where(recruitment_cycle_year: params[:recruitment_cycle_year])
-          .where(provider_code: @provider_code)
-          .find(params[:code])
-          .first
+        @course = provider.courses.find_by!(course_code: params[:code])
       end
     end
   end
