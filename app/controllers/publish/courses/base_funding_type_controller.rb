@@ -1,7 +1,6 @@
 module Publish
   module Courses
     class BaseFundingTypeController < PublishController
-
     private
 
       def course

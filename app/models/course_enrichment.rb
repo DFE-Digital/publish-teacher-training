@@ -63,7 +63,7 @@ class CourseEnrichment < ApplicationRecord
             if: :is_fee_based?
 
   # Course length and salary
-  # TODO: POST MIGRATION: Move out of this as it's handled in the form object   
+  # TODO: POST MIGRATION: Move out of this as it's handled in the form object
   validates :salary_details, presence: true, on: :publish, unless: :is_fee_based?
   validates :salary_details, words_count: { maximum: 250 }, unless: :is_fee_based?
 
