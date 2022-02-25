@@ -223,9 +223,9 @@ class CourseDecorator < ApplicationDecorator
     selectable_subject_ids & selected_subject_ids
   end
 
-  #   def subject_present?(subject_to_find)
-  #     subjects.map { |subject| subject["id"] }.include?(subject_to_find["id"])
-  #   end
+  def subject_present?(subject_to_find)
+    subjects.ids.include?(subject_to_find.id)
+  end
 
   def return_start_date
     if FeatureService.enabled?("rollover.can_edit_current_and_next_cycles")

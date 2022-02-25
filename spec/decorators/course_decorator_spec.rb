@@ -222,15 +222,15 @@ describe CourseDecorator do
   #   end
   # end
 
-  # describe "#subject_present?" do
-  #   it "returns true when the subject id exists" do
-  #     expect(decorated_course.subject_present?(english)).to eq(true)
-  #   end
+  describe "#subject_present?" do
+    it "returns true when the subject id exists" do
+      expect(decorated_course.subject_present?(english)).to eq(true)
+    end
 
-  #   it "returns true when the subject id does not exists" do
-  #     expect(decorated_course.subject_present?(biology)).to eq(false)
-  #   end
-  # end
+    it "returns true when the subject id does not exists" do
+      expect(decorated_course.subject_present?(biology)).to eq(false)
+    end
+  end
 
   # context "financial incentives" do
   #   describe "#salaried?" do
