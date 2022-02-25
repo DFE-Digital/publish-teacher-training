@@ -20,10 +20,9 @@
         <%= page_title %>
       </h1>
 
-      <p class="govuk-body">Once a location is added (and assigned to a course), candidates can choose it as their preferred place of training when completing the UCAS application form.</p>
-      <p class="govuk-body">When you’ve added this location you can assign it to a course from the ‘Basic details’ tab on the course page.</p>
+      <p class="govuk-body">Once a location is added, you can assign it to a course by going to the ‘Basic details’ tab in 'Courses'. Candidates will see a list of locations on the course page on Find.</p>
       <%= render "form", f: f %>
-      <%= f.govuk_submit "Save", data: { qa: "location__publish-changes" } %>
+      <%= f.govuk_submit "Add location", data: { qa: "location__publish-changes" } %>
     <% end %>
   </div>
 </div>
