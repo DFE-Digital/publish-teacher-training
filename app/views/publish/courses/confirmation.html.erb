@@ -116,7 +116,7 @@
                 You can’t change this because you only have 1 location.
               </p>
               <p class="govuk-body">
-                <%= govuk_link_to "Manage your locations", publish_provider_locations_path, target: "_blank", rel: "noopener noreferrer" %>
+                <%= govuk_link_to "Manage your locations", publish_provider_recruitment_cycle_locations_path(course.provider.provider_code, course.recruitment_cycle.year), target: "_blank", rel: "noopener noreferrer" %>
               </p>
             <% end %>
           <% end %>
