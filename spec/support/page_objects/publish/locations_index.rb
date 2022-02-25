@@ -9,7 +9,7 @@ module PageObjects
 
       sections :locations, Sections::Location, ".location-row"
 
-      element :add_location, ".govuk-button", text: "Add a location"
+      element :add_location, ".govuk-button", text: "Add location"
     end
   end
 end
