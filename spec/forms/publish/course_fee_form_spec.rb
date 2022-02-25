@@ -82,15 +82,16 @@ module Publish
     end
 
     describe "#save!" do
-      let(:course) { build(:course) }
-      let(:params) { { course_length: "some new value" } }
+      let(:params) { { course_length: "some new value", fee_uk_eu: 12_000 } }
 
       before do
-        enrichment.course_length = nil
+        enrichment.fee_uk_eu = 9500
+        enrichment.course_length = "OneYear"
       end
 
       it "saves the provider with any new attributes" do
-        expect { subject.save! }.to change(enrichment, :course_length).from(nil).to("some new value")
+        expect { subject.save! }.to change(enrichment, :course_length).from("OneYear").to("some new value")
+        .and change(enrichment, :fee_uk_eu).from(9500).to(12_000)
       end
     end
   end

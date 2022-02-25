@@ -1,0 +1,48 @@
+<% page_title = "Course length and fees" %>
+<% content_for :page_title, title_with_error_prefix("#{page_title} – #{@course.name_and_code}", @course_salary_form.errors.any?) %>
+
+<% content_for :before_content do %>
+  <%= govuk_back_link_to(publish_provider_recruitment_cycle_course_path(@provider.provider_code, @course.recruitment_cycle_year, @course.course_code)) %>
+<% end %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_with(
+      model: @course_salary_form,
+      url: salary_publish_provider_recruitment_cycle_course_path(@provider.provider_code, @course.recruitment_cycle_year, @course.course_code),
+      data: { qa: "enrichment-form", module: "form-check-leave" },
+      method: :patch,
+      local: true,
+    ) do |f| %>
+
+      <%= f.govuk_error_summary %>
+
+      <h1 class="govuk-heading-l">
+        <span class="govuk-caption-l"><%= @course.name_and_code %></span>
+        <%= page_title %>
+      </h1>
+
+      <%= render partial: "publish/courses/course_length_field", locals: { f: f, form_object: @course_salary_form } %>
+
+      <hr class="govuk-section-break govuk-section-break--visible govuk-section-break--l">
+
+      <h3 class="govuk-heading-m">Salary</h3>
+
+      <p class="govuk-body">Give details about the salary for this course.</p>
+      <p class="govuk-body">You should:</p>
+      <ul class="govuk-list govuk-list--bullet">
+        <li>give an indication of the salary – if you don’t have the figure, say how it will be calculated (eg using the unqualified teachers’ pay scales)</li>
+        <li>say whether there are any fees or others costs – if there are no fees for this course, you should also say so</li>
+      </ul>
+
+      <%= f.govuk_text_area(:salary_details,
+        form_group: { id: @course_salary_form.errors.key?(:salary_details) ? "salary_details-error" : "salary" },
+        label: { text: "Salary", size: "s" },
+        rows: 15,
+        max_words: 250,
+        data: { qa: "course_salary_details" }) %>
+
+      <%= f.govuk_submit "Save" %>
+    <% end %>
+  </div>
+</div>
