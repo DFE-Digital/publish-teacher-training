@@ -20,7 +20,7 @@
         <%= page_title %>
       </h1>
 
-      <p class="govuk-body">Once a location is added, you can assign it to a course by going to the ‘Basic details’ tab in 'Courses'. Candidates will see a list of locations on the course page on Find.</p>
+      <p class="govuk-body">Once a location is added, you can assign it to a course by going to the ‘Basic details’ tab in ‘Courses’. Candidates will see a list of locations on the course page on Find.</p>
       <%= render "form", f: f %>
       <%= f.govuk_submit "Add location", data: { qa: "location__publish-changes" } %>
     <% end %>
