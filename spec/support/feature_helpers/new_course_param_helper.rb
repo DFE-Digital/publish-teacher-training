@@ -90,6 +90,10 @@ module FeatureHelpers
       }
     end
 
+    def level_params(level)
+      public_send("#{level}_subject_params")
+    end
+
     def primary_subject_params
       { "course[is_send]" => ["0"], "course[level]" => "primary" }
     end
