@@ -10,12 +10,12 @@
     <%= course.on_find %>
   </p>
 
-  <% if course.is_published? && course.is_running? %>
+  <% if course.has_unpublished_changes? && course.is_running? %>
+    <%= render partial: "publish/courses/status_panel/unpublished" %>
+  <% elsif course.is_published? && course.is_running? %>
     <%= render partial: "publish/courses/status_panel/published" %>
   <% elsif course.is_withdrawn? %>
     <%= render partial: "publish/courses/status_panel/withdrawn" %>
-  <% else %>
-    <%= render partial: "publish/courses/status_panel/unpublished" %>
   <% end %>
 
   <% if course.is_running? %>

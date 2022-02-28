@@ -574,7 +574,7 @@ class Course < ApplicationRecord
   end
 
   def is_published?
-    content_status == :published
+    %i[published published_with_unpublished_changes].include? content_status
   end
 
   def has_unpublished_changes?
