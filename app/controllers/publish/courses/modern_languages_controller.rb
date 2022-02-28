@@ -120,9 +120,7 @@ module Publish
       end
 
       def non_language_subject_ids
-        @course.edit_course_options[:subjects].map do |subject|
-          subject["id"]
-        end
+        @course.edit_course_options[:subjects].map(&:id).map(&:to_s)
       end
 
       def selected_non_language_subject_ids

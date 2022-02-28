@@ -1,0 +1,22 @@
+<% content_for :page_title, title_with_error_prefix("Pick all the languages for this course", @errors && @errors.any?) %>
+
+<% content_for :before_content do %>
+  <%= govuk_back_link_to(@back_link_path) %>
+<% end %>
+
+<%= render "publish/shared/errors" %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_with url: continue_publish_provider_recruitment_cycle_courses_modern_languages_path(
+                    @provider.provider_code,
+                    @provider.recruitment_cycle_year,
+                  ),
+                  method: :get do |form| %>
+
+      <%= render "publish/courses/new_fields_holder", form: form, except_keys: [:modern_languages] do |fields| %>
+        <%= render "form_fields", form: fields %>
+      <% end %>
+    <% end %>
+  </div>
+</div>
