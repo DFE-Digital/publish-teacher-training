@@ -24,7 +24,7 @@ FactoryBot.define do
       subject_code { subjects["French"] }
     end
 
-    trait :english_as_a_second_lanaguge_or_other_language do
+    trait :english_as_a_second_language_or_other_language do
       subject_name { "English as a second or other language" }
       subject_code { subjects["English as a second or other language"] }
     end
