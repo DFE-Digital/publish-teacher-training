@@ -53,11 +53,15 @@ feature "Course show" do
   end
 
   def and_i_should_see_the_unpublished_partial
-    expect(publish_provider_courses_show_page).to have_unpublished_partial
+    publish_provider_courses_show_page.status_sidebar.within do |status_sidebar|
+      expect(status_sidebar).to have_unpublished_partial
+    end
   end
 
   def and_i_should_see_the_published_partial
-    expect(publish_provider_courses_show_page).to have_published_partial
+    publish_provider_courses_show_page.status_sidebar.within do |status_sidebar|
+      expect(status_sidebar).to have_published_partial
+    end
   end
 
   def and_i_click_on_basic_details

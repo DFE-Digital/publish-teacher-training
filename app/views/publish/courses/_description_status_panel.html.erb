@@ -9,7 +9,7 @@
   <p class="govuk-body" data-qa="course__is_findable">
     <%= course.on_find %>
   </p>
-<!-- Do we need a default here? -->
+
   <% if course.has_unpublished_changes? %>
     <%= render partial: "publish/courses/status_panel/unpublished" %>
   <% elsif course.is_published? && course.is_running? %>
