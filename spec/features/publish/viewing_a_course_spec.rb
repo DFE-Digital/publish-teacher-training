@@ -91,7 +91,7 @@ feature "Course show" do
   end
 
   def course_enrichment_initial_draft
-    @course_enrichment ||= build(:course_enrichment, :initial_draft)
+    @course_enrichment_initial_draft ||= build(:course_enrichment, :initial_draft)
   end
 
   def given_i_am_authenticated_as_a_provider_user(course:)
