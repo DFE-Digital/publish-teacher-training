@@ -21,7 +21,7 @@ module Sites
     end
 
     def existing_sequential_codes
-      existing_site_codes - Site::POSSIBLE_CODES
+      (existing_site_codes - Site::POSSIBLE_CODES).compact
     end
 
     def existing_site_codes
