@@ -25,6 +25,8 @@ module PageObjects
 
       element :basic_details_link, "a.govuk-link.govuk-tabs__tab", text: "Basic details"
       element :status_sidebar, '[data-qa="course__status_panel"]'
+      element :unpublished_partial, '[data-qa="unpublished__partial"]'
+      element :published_partial, '[data-qa="published__partial"]'
     end
   end
 end
