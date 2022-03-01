@@ -66,6 +66,22 @@ module FeatureHelpers
       }
     end
 
+    def confirmation_params(provider)
+      {
+        "course[accredited_body_code]" => provider.courses.first.accrediting_provider.provider_code,
+        "course[age_range_in_years]" => "14_to_19",
+        "course[applications_open_from]" => "2021-10-12",
+        "course[funding_type]" => "apprenticeship",
+        "course[is_send]" => "0",
+        "course[level]" => "secondary",
+        "course[qualification]" => "pgde_with_qts",
+        "course[start_date]" => "October 2021",
+        "course[study_mode]" => "full_time_or_part_time",
+        "course[subjects_ids][]" => "30",
+        "course[sites_ids][]" => provider.sites.first.id,
+      }
+    end
+
     def start_date_params(provider)
       {
         "course[qualification]" => "qts",
@@ -75,8 +91,7 @@ module FeatureHelpers
         "course[is_send]" => ["0"],
         "course[study_mode]" => "full_time",
         "course[age_range_in_years]" => ["11_to_16"],
-        "course[subjects_ids][]" => "2",
-        "commit" => ["Continue"],
+        "course[subjects_ids][]" => "30",
         "course[applications_open_from]" => "2021-10-12",
       }
     end
