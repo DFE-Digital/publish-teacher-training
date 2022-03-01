@@ -16,6 +16,8 @@
     <%= render partial: "publish/courses/status_panel/published" %>
   <% elsif course.is_withdrawn? %>
     <%= render partial: "publish/courses/status_panel/withdrawn" %>
+  <% else %>
+    <%= render partial: "publish/courses/status_panel/unpublished" %>
   <% end %>
 
   <% if course.is_running? %>
