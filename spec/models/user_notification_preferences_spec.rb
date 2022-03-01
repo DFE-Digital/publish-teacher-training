@@ -18,7 +18,7 @@ describe UserNotificationPreferences do
     describe "enabled?" do
       context "when there are no user notifications" do
         it "returns false" do
-          expect(subject.enabled?).to eq(false)
+          expect(subject.enabled?).to be(false)
         end
       end
 
@@ -29,7 +29,7 @@ describe UserNotificationPreferences do
           let(:preference) { false }
 
           it "returns false" do
-            expect(subject.enabled?).to eq(false)
+            expect(subject.enabled?).to be(false)
           end
         end
 
@@ -37,7 +37,7 @@ describe UserNotificationPreferences do
           let(:preference) { true }
 
           it "returns true" do
-            expect(subject.enabled?).to eq(true)
+            expect(subject.enabled?).to be(true)
           end
         end
       end
@@ -112,7 +112,7 @@ describe UserNotificationPreferences do
       it "creates user notification preference for each accredited body" do
         user_notification_preferences = described_class.new(user_id: user.id).update(enable_notifications: true)
 
-        expect(user_notification_preferences.enabled?).to eq(true)
+        expect(user_notification_preferences.enabled?).to be(true)
         user_notifications = UserNotification.where(user_id: user.id)
         expect(user_notifications.count).to eq(2)
         expect(user_notifications.map(&:course_publish)).to eq([true, true])
@@ -156,7 +156,7 @@ describe UserNotificationPreferences do
       it "updates their notifications" do
         user_notification_preferences = described_class.new(user_id: user.id).update(enable_notifications: true)
 
-        expect(user_notification_preferences.enabled?).to eq(true)
+        expect(user_notification_preferences.enabled?).to be(true)
         user_notifications = UserNotification.where(user_id: user.id)
         expect(user_notifications.count).to eq(2)
         expect(user_notifications.map(&:course_publish)).to eq([true, true])
@@ -168,10 +168,10 @@ describe UserNotificationPreferences do
       it "resets enabled after update" do
         user_notification_preferences = described_class.new(user_id: user.id)
         pre_enabled = user_notification_preferences.enabled?
-        expect(pre_enabled).to eq(false)
+        expect(pre_enabled).to be(false)
 
         user_notification_preferences.update(enable_notifications: true)
-        expect(user_notification_preferences.enabled?).to eq(true)
+        expect(user_notification_preferences.enabled?).to be(true)
       end
 
       it "doesn't update other users notifications" do

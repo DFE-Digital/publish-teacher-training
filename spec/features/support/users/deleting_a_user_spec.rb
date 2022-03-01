@@ -40,6 +40,6 @@ private
 
   def and_the_user_is_in_a_discarded_state
     @user_to_delete.reload
-    expect(@user_to_delete.discarded?).to eq true
+    expect(@user_to_delete.discarded?).to be true
   end
 end

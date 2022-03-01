@@ -62,7 +62,7 @@ describe "GET v3/recruitment_cycle/:recruitment_cycle_year/providers/:provider_c
     it "returns nil course information" do
       get route
 
-      expect(jsonapi_response["data"]).to eq nil
+      expect(jsonapi_response["data"]).to be_nil
     end
   end
 
@@ -72,7 +72,7 @@ describe "GET v3/recruitment_cycle/:recruitment_cycle_year/providers/:provider_c
     it "returns nil course information" do
       get route
 
-      expect(jsonapi_response["data"]).to eq nil
+      expect(jsonapi_response["data"]).to be_nil
     end
   end
 

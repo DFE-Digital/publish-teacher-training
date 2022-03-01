@@ -65,7 +65,7 @@ describe "heartbeat requests" do
 
         json_response = JSON.parse(response.body)
 
-        expect(json_response["checks"]["sidekiq_processes"]).to eq false
+        expect(json_response["checks"]["sidekiq_processes"]).to be false
       end
     end
 

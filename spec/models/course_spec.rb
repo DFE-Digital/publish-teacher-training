@@ -421,17 +421,17 @@ describe Course, type: :model do
 
         it "Allows a blank options for age range in years" do
           course.age_range_in_years = nil
-          expect(course.valid?).to eq(true)
+          expect(course.valid?).to be(true)
         end
 
         it "Allows a blank option for english" do
           course.english = nil
-          expect(course.valid?).to eq(true)
+          expect(course.valid?).to be(true)
         end
 
         it "Allows a blank option for maths" do
           course.maths = nil
-          expect(course.valid?).to eq(true)
+          expect(course.valid?).to be(true)
         end
       end
 
@@ -452,19 +452,19 @@ describe Course, type: :model do
         context "maths" do
           let(:blank_field) { { maths: nil } }
 
-          it { is_expected.to eq nil }
+          it { is_expected.to be_nil }
         end
 
         context "english" do
           let(:blank_field) { { english: nil } }
 
-          it { is_expected.to eq nil }
+          it { is_expected.to be_nil }
         end
 
         context "science" do
           let(:blank_field) { { science: nil } }
 
-          it { is_expected.to eq nil }
+          it { is_expected.to be_nil }
         end
       end
 
@@ -604,14 +604,14 @@ describe Course, type: :model do
 
         context "when degree grade is present" do
           it "returns true and does not add an error" do
-            expect(course_with_degree_grade.validate_degree_requirements_publishable).to eq true
+            expect(course_with_degree_grade.validate_degree_requirements_publishable).to be true
             expect(course_without_degree_grade.errors).to be_empty
           end
         end
 
         context "when degree grade is nil" do
           it "returns false and adds an error" do
-            expect(course_without_degree_grade.validate_degree_requirements_publishable).to eq false
+            expect(course_without_degree_grade.validate_degree_requirements_publishable).to be false
             expect(course_without_degree_grade.errors.count).to eq 1
             expect(course_without_degree_grade.errors.first.type).to eq :degree_requirements_not_publishable
           end
@@ -626,14 +626,14 @@ describe Course, type: :model do
 
         context "when accept_pending_gcse and accept_gcse_equivalency are present" do
           it "returns true and does not add an error" do
-            expect(publishable_course.validate_gcse_requirements_publishable).to eq true
+            expect(publishable_course.validate_gcse_requirements_publishable).to be true
             expect(publishable_course.errors).to be_empty
           end
         end
 
         context "when accept_pending_gcse or accept_gcse_equivalency is nil" do
           it "returns false and adds an error" do
-            expect(unpublishable_course.validate_gcse_requirements_publishable).to eq false
+            expect(unpublishable_course.validate_gcse_requirements_publishable).to be false
             expect(unpublishable_course.errors.count).to eq 1
             expect(unpublishable_course.errors.first.type).to eq :gcse_requirements_not_publishable
           end
@@ -1900,9 +1900,9 @@ describe Course, type: :model do
 
         it "reads financial incentives from only the first subject" do
           expect(subject.bursary_amount).to be_nil
-          expect(subject.has_bursary?).to eq false
+          expect(subject.has_bursary?).to be false
           expect(subject.scholarship_amount).to be_nil
-          expect(subject.has_scholarship?).to eq false
+          expect(subject.has_scholarship?).to be false
         end
       end
 
@@ -1911,9 +1911,9 @@ describe Course, type: :model do
 
         it "reads financial incentives from only the first subject" do
           expect(subject.bursary_amount).to eq maths.financial_incentive.bursary_amount
-          expect(subject.has_bursary?).to eq true
+          expect(subject.has_bursary?).to be true
           expect(subject.scholarship_amount).to eq maths.financial_incentive.scholarship
-          expect(subject.has_scholarship?).to eq true
+          expect(subject.has_scholarship?).to be true
         end
       end
 
@@ -1930,9 +1930,9 @@ describe Course, type: :model do
 
           it "reads financial incentives from only the first subject, and ignores the 'Modern Languages' subject" do
             expect(subject.bursary_amount).to eq french.financial_incentive.bursary_amount
-            expect(subject.has_bursary?).to eq true
+            expect(subject.has_bursary?).to be true
             expect(subject.scholarship_amount).to eq french.financial_incentive.scholarship
-            expect(subject.has_scholarship?).to eq false
+            expect(subject.has_scholarship?).to be false
           end
         end
 
@@ -2317,24 +2317,24 @@ describe Course, type: :model do
 
     describe "when setting the entry requirement" do
       it "can assign a valid value" do
-        expect(course.course_params_assignable({ maths: "equivalence_test" }, is_admin)).to eq(true)
+        expect(course.course_params_assignable({ maths: "equivalence_test" }, is_admin)).to be(true)
         expect(course.errors.messages).to eq({})
       end
 
       it "cannot be assigned an invalid value" do
-        expect(course.course_params_assignable({ maths: "test" }, is_admin)).to eq(false)
+        expect(course.course_params_assignable({ maths: "test" }, is_admin)).to be(false)
         expect(course.errors.messages).to eq(maths: ["is invalid"])
       end
     end
 
     describe "when setting the qualification" do
       it "can assign a valid qualification" do
-        expect(course.course_params_assignable({ qualification: "pgce_with_qts" }, is_admin)).to eq(true)
+        expect(course.course_params_assignable({ qualification: "pgce_with_qts" }, is_admin)).to be(true)
         expect(course.errors.messages).to eq({})
       end
 
       it "cannot assign invalid qualification" do
-        expect(course.course_params_assignable({ qualification: "invalid" }, is_admin)).to eq(false)
+        expect(course.course_params_assignable({ qualification: "invalid" }, is_admin)).to be(false)
         expect(course.errors.messages).to eq(qualification: ["is invalid"])
       end
     end
@@ -2345,17 +2345,17 @@ describe Course, type: :model do
         let(:course) { create(:course, enrichments: [enrichment]) }
 
         it "can assign to SEND" do
-          expect(course.course_params_assignable({ is_send: true }, is_admin)).to eq(true)
+          expect(course.course_params_assignable({ is_send: true }, is_admin)).to be(true)
           expect(course.errors.messages).to eq({})
         end
 
         it "can assign to applications open from" do
-          expect(course.course_params_assignable({ applications_open_from: "25/08/2019" }, is_admin)).to eq(true)
+          expect(course.course_params_assignable({ applications_open_from: "25/08/2019" }, is_admin)).to be(true)
           expect(course.errors.messages).to eq({})
         end
 
         it "can assign to applications open from" do
-          expect(course.course_params_assignable({ application_start_date: "25/08/2019" }, is_admin)).to eq(true)
+          expect(course.course_params_assignable({ application_start_date: "25/08/2019" }, is_admin)).to be(true)
           expect(course.errors.messages).to eq({})
         end
       end
@@ -2365,17 +2365,17 @@ describe Course, type: :model do
         let(:course) { create(:course, enrichments: [enrichment]) }
 
         it "cannot assign to SEND" do
-          expect(course.course_params_assignable({ is_send: true }, is_admin)).to eq(false)
+          expect(course.course_params_assignable({ is_send: true }, is_admin)).to be(false)
           expect(course.errors.messages).to eq(is_send: ["cannot be changed after publish"])
         end
 
         it "cannot assign to applications open from" do
-          expect(course.course_params_assignable({ applications_open_from: "25/08/2019" }, is_admin)).to eq(false)
+          expect(course.course_params_assignable({ applications_open_from: "25/08/2019" }, is_admin)).to be(false)
           expect(course.errors.messages).to eq(applications_open_from: ["cannot be changed after publish"])
         end
 
         it "cannot assign to applications open from" do
-          expect(course.course_params_assignable({ application_start_date: "25/08/2019" }, is_admin)).to eq(false)
+          expect(course.course_params_assignable({ application_start_date: "25/08/2019" }, is_admin)).to be(false)
           expect(course.errors.messages).to eq(application_start_date: ["cannot be changed after publish"])
         end
 
@@ -2383,7 +2383,7 @@ describe Course, type: :model do
           let(:is_admin) { true }
 
           it "can assign to SEND" do
-            expect(course.course_params_assignable({ is_send: true }, is_admin)).to eq(true)
+            expect(course.course_params_assignable({ is_send: true }, is_admin)).to be(true)
             expect(course.errors.messages).to eq({})
           end
         end
@@ -2397,7 +2397,7 @@ describe Course, type: :model do
       let(:course) { create(:course, enrichments: [enrichment]) }
 
       it "returns false" do
-        expect(course.is_published?).to eq(false)
+        expect(course.is_published?).to be(false)
       end
     end
 
@@ -2406,7 +2406,7 @@ describe Course, type: :model do
       let(:course) { create(:course, enrichments: [enrichment]) }
 
       it "returns true" do
-        expect(course.is_published?).to eq(true)
+        expect(course.is_published?).to be(true)
       end
     end
 
@@ -2416,7 +2416,7 @@ describe Course, type: :model do
 
       it "returns true" do
         expect(course.content_status).to eq(:published_with_unpublished_changes)
-        expect(course.is_published?).to eq(true)
+        expect(course.is_published?).to be(true)
       end
     end
 
@@ -2426,7 +2426,7 @@ describe Course, type: :model do
 
       it "returns false" do
         expect(course.content_status).to eq(:withdrawn)
-        expect(course.is_published?).to eq(false)
+        expect(course.is_published?).to be(false)
       end
     end
   end
@@ -2567,19 +2567,19 @@ describe Course, type: :model do
     context "course is published" do
       let(:enrichment) { create(:course_enrichment, :published) }
 
-      it { is_expected.to eq(true) }
+      it { is_expected.to be(true) }
     end
 
     context "course is withdrawn" do
       let(:enrichment) { create(:course_enrichment, :withdrawn) }
 
-      it { is_expected.to eq(true) }
+      it { is_expected.to be(true) }
     end
 
     context "course is published with unpublished changes" do
       let(:enrichment) { create(:course_enrichment, :subsequent_draft) }
 
-      it { is_expected.to eq(true) }
+      it { is_expected.to be(true) }
     end
   end
 
