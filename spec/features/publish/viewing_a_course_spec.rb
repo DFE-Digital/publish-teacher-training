@@ -48,6 +48,16 @@ feature "Course show" do
     end
   end
 
+  describe "with an inital draft course" do
+    scenario "i can view the unpublished partial" do
+      given_i_am_authenticated_as_a_provider_user(course: build(:course, enrichments: [course_enrichment_initial_draft], funding_type: "salary"))
+      when_i_visit_the_course_page
+      then_i_should_see_the_description_of_the_initial_draft_course
+      and_i_should_see_the_status_sidebar
+      and_i_should_see_the_unpublished_partial
+    end
+  end
+
   def and_i_should_see_the_status_sidebar
     expect(publish_provider_courses_show_page).to have_status_sidebar
   end
@@ -80,6 +90,10 @@ feature "Course show" do
     @course_enrichment_unpublished_changes ||= build(:course_enrichment, :subsequent_draft, course_length: :TwoYears, fee_uk_eu: 9250, fee_international: 14000)
   end
 
+  def course_enrichment_initial_draft
+    @course_enrichment ||= build(:course_enrichment, :initial_draft)
+  end
+
   def given_i_am_authenticated_as_a_provider_user(course:)
     given_i_am_authenticated(
       user: create(
@@ -100,6 +114,12 @@ feature "Course show" do
   def then_i_should_see_the_description_of_the_unpublished_changes_course
     expect(publish_provider_courses_show_page.about_course).to have_content(
       course_enrichment_unpublished_changes.about_course,
+    )
+  end
+
+  def then_i_should_see_the_description_of_the_initial_draft_course
+    expect(publish_provider_courses_show_page.about_course).to have_content(
+      course_enrichment_initial_draft.about_course,
     )
   end
 
