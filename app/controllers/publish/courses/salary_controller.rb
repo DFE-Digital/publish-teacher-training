@@ -1,18 +1,18 @@
 module Publish
   module Courses
-    class FeesController < BaseFundingTypeController
+    class SalaryController < BaseFundingTypeController
       def edit
         authorize(provider)
 
-        @course_fee_form = CourseFeeForm.new(course_enrichment)
+        @course_salary_form = CourseSalaryForm.new(course_enrichment)
       end
 
       def update
         authorize(provider)
 
-        @course_fee_form = CourseFeeForm.new(course_enrichment, params: formatted_params)
+        @course_salary_form = CourseSalaryForm.new(course_enrichment, params: formatted_params)
 
-        if @course_fee_form.save!
+        if @course_salary_form.save!
           flash[:success] = I18n.t("success.saved")
 
           redirect_to publish_provider_recruitment_cycle_course_path(
@@ -28,11 +28,11 @@ module Publish
     private
 
       def funding_type
-        :publish_course_fee_form
+        :publish_course_salary_form
       end
 
       def funding_type_fields
-        CourseFeeForm::FIELDS
+        CourseSalaryForm::FIELDS
       end
     end
   end

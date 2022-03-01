@@ -101,7 +101,7 @@
       "Course length",
       course.length,
       %w[course_length],
-      action_path: nil, #"#{salary_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code)}#course-length",
+      action_path: "#{salary_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code)}#course-length",
       action_visually_hidden_text: "course length",
     ) %>
 
@@ -111,7 +111,7 @@
       "Salary",
       course.salary_details,
       %w[salary_details],
-      action_path: nil, #"#{salary_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code)}#salary",
+      action_path: "#{salary_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code)}#salary",
       action_visually_hidden_text: "salary",
     ) %>
   <% end %>

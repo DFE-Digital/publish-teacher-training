@@ -345,6 +345,13 @@ en:
               too_long: "Reduce the word count for fee details"
             financial_support:
               too_long: "Reduce the word count for financial support"
+        publish/course_salary_form:
+          attributes:
+            course_length:
+              blank: "Enter a course length"
+            salary_details:
+              blank: "Enter details about the salary for this course"
+              too_long: "Reduce the word count for salary details"
         publish/course_location_form:
           attributes:
             site_ids:
