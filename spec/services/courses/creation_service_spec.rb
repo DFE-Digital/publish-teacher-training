@@ -40,10 +40,10 @@ describe Courses::CreationService do
         expect(subject.public_send(key)).to eq(value)
       end
 
-      expect(subject.is_send).to eq(true)
+      expect(subject.is_send).to be(true)
       expect(subject.sites.map(&:id)).to eq([site.id])
       expect(subject.subjects.map(&:id)).to eq([primary_subject.id])
-      expect(subject.course_code).to eq(nil)
+      expect(subject.course_code).to be_nil
       expect(subject.name).to eq("Primary (SEND)")
       expect(subject.errors).to be_empty
     end
@@ -58,10 +58,10 @@ describe Courses::CreationService do
           expect(subject.public_send(key)).to eq(value)
         end
 
-        expect(subject.is_send).to eq(true)
+        expect(subject.is_send).to be(true)
         expect(subject.sites.map(&:id)).to eq([site.id])
         expect(subject.subjects.map(&:id)).to eq([primary_subject.id])
-        expect(subject.course_code).not_to eq(nil)
+        expect(subject.course_code).not_to be_nil
         expect(subject.course_code).not_to eq("D0CK")
         expect(subject.name).to eq("Primary (SEND)")
         expect(subject.errors).to be_empty
@@ -93,10 +93,10 @@ describe Courses::CreationService do
         expect(subject.send(key)).to eq(value)
       end
 
-      expect(subject.is_send).to eq(false)
+      expect(subject.is_send).to be(false)
       expect(subject.sites.map(&:id)).to eq([site.id])
       expect(subject.subjects.map(&:id)).to eq([secondary_subject.id])
-      expect(subject.course_code).to eq(nil)
+      expect(subject.course_code).to be_nil
       expect(subject.name).to eq("Biology")
       expect(subject.errors).to be_empty
     end
@@ -111,10 +111,10 @@ describe Courses::CreationService do
           expect(subject.public_send(key)).to eq(value)
         end
 
-        expect(subject.is_send).to eq(false)
+        expect(subject.is_send).to be(false)
         expect(subject.sites.map(&:id)).to eq([site.id])
         expect(subject.subjects.map(&:id)).to eq([secondary_subject.id])
-        expect(subject.course_code).not_to eq(nil)
+        expect(subject.course_code).not_to be_nil
         expect(subject.course_code).not_to eq("D0CK")
         expect(subject.name).to eq("Biology")
         expect(subject.errors).to be_empty
@@ -138,10 +138,10 @@ describe Courses::CreationService do
     end
 
     it "create the further_education course" do
-      expect(subject.is_send).to eq(true)
+      expect(subject.is_send).to be(true)
       expect(subject.sites.map(&:id)).to eq([site.id])
       expect(subject.subjects.map(&:id)).to eq([further_education_subject.id])
-      expect(subject.course_code).to eq(nil)
+      expect(subject.course_code).to be_nil
       expect(subject.name).to eq("Further education (SEND)")
       expect(subject.errors).to be_empty
     end
@@ -156,10 +156,10 @@ describe Courses::CreationService do
           expect(subject.send(key)).to eq(value)
         end
 
-        expect(subject.is_send).to eq(true)
+        expect(subject.is_send).to be(true)
         expect(subject.sites.map(&:id)).to eq([site.id])
         expect(subject.subjects.map(&:id)).to eq([further_education_subject.id])
-        expect(subject.course_code).not_to eq(nil)
+        expect(subject.course_code).not_to be_nil
         expect(subject.course_code).not_to eq("D0CK")
         expect(subject.name).to eq("Further education (SEND)")
         expect(subject.errors).to be_empty
