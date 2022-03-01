@@ -338,12 +338,12 @@ describe "PATCH /providers/:provider_code/courses/:course_code" do
       it "returns validation errors" do
         perform_request(course)
 
-        expect("Invalid about_course".in?(subject)).to eq(true)
-        expect("Invalid interview_process".in?(subject)).to eq(true)
-        expect("Invalid how_school_placements_work".in?(subject)).to eq(true)
-        expect("Invalid required_qualifications".in?(subject)).to eq(true)
-        expect("Invalid fee_details".in?(subject)).to eq(true)
-        expect("Invalid financial_support".in?(subject)).to eq(true)
+        expect("Invalid about_course".in?(subject)).to be(true)
+        expect("Invalid interview_process".in?(subject)).to be(true)
+        expect("Invalid how_school_placements_work".in?(subject)).to be(true)
+        expect("Invalid required_qualifications".in?(subject)).to be(true)
+        expect("Invalid fee_details".in?(subject)).to be(true)
+        expect("Invalid financial_support".in?(subject)).to be(true)
       end
     end
 
@@ -420,8 +420,8 @@ describe "PATCH /providers/:provider_code/courses/:course_code" do
       it "returns validation errors" do
         perform_request(course)
 
-        expect("Invalid enrichments".in?(subject)).to eq(false)
-        expect("Invalid about_course".in?(subject)).to eq(true)
+        expect("Invalid enrichments".in?(subject)).to be(false)
+        expect("Invalid about_course".in?(subject)).to be(true)
       end
     end
   end
@@ -475,12 +475,12 @@ describe "PATCH /providers/:provider_code/courses/:course_code" do
       it "returns validation errors" do
         perform_request(course)
 
-        expect("Invalid about_course".in?(subject)).to eq(true)
-        expect("Invalid interview_process".in?(subject)).to eq(true)
-        expect("Invalid how_school_placements_work".in?(subject)).to eq(true)
-        expect("Invalid required_qualifications".in?(subject)).to eq(true)
-        expect("Invalid fee_details".in?(subject)).to eq(true)
-        expect("Invalid financial_support".in?(subject)).to eq(true)
+        expect("Invalid about_course".in?(subject)).to be(true)
+        expect("Invalid interview_process".in?(subject)).to be(true)
+        expect("Invalid how_school_placements_work".in?(subject)).to be(true)
+        expect("Invalid required_qualifications".in?(subject)).to be(true)
+        expect("Invalid fee_details".in?(subject)).to be(true)
+        expect("Invalid financial_support".in?(subject)).to be(true)
       end
 
       it "doesn't change content status" do

@@ -195,7 +195,7 @@ private
   end
 
   def and_i_see_the_updated_send_specialism
-    expect(course_edit_page.send_specialism_checkbox.checked?).to eq true
+    expect(course_edit_page.send_specialism_checkbox.checked?).to be true
   end
 
   def then_i_see_the_error_summary

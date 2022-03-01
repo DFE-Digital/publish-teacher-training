@@ -14,7 +14,7 @@ describe API::V2::SerializableUserNotificationPreferences do
   end
 
   it "has a enabled attribute" do
-    expect(subject.as_jsonapi[:attributes][:enabled]).to eq(true)
+    expect(subject.as_jsonapi[:attributes][:enabled]).to be(true)
   end
 
   it "has a updated_at attribute" do

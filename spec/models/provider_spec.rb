@@ -71,7 +71,7 @@ describe Provider, type: :model do
         let(:invalid_provider) { build(:provider, provider_code: provider.provider_code) }
 
         it "raises validation error" do
-          expect(invalid_provider.valid?).to eq false
+          expect(invalid_provider.valid?).to be false
           expect(invalid_provider.errors.messages[:provider_code].first).to eq "has already been taken"
         end
       end
@@ -81,8 +81,8 @@ describe Provider, type: :model do
         let(:duplicated_provider_code) { build(:provider, provider_code: provider.provider_code, recruitment_cycle: create(:recruitment_cycle, year: "2021")) }
 
         it "does not raise validation error" do
-          expect(duplicated_provider_code.valid?).to eq true
-          expect(duplicated_provider_code.errors.messages.any?).to eq false
+          expect(duplicated_provider_code.valid?).to be true
+          expect(duplicated_provider_code.errors.messages.any?).to be false
         end
       end
     end

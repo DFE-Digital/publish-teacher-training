@@ -81,6 +81,6 @@ describe "user notification preferences service" do
   end
 
   def then_i_receive_the_disabled_notification_preferences
-    expect(JSON.parse(response.body).dig("data", "attributes", "enabled")).to eq(false)
+    expect(JSON.parse(response.body).dig("data", "attributes", "enabled")).to be(false)
   end
 end

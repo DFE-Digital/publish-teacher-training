@@ -218,8 +218,8 @@ describe "PATCH /providers/:provider_code" do
     it "returns validation errors" do
       perform_request update_provider
 
-      expect("Invalid train_with_us".in?(subject)).to eq(true)
-      expect("Invalid train_with_disability".in?(subject)).to eq(true)
+      expect("Invalid train_with_us".in?(subject)).to be(true)
+      expect("Invalid train_with_disability".in?(subject)).to be(true)
     end
   end
 
@@ -232,8 +232,8 @@ describe "PATCH /providers/:provider_code" do
 
     it "returns validation errors" do
       perform_request update_provider
-      expect("Invalid enrichments".in?(subject)).to eq(false)
-      expect("Invalid telephone".in?(subject)).to eq(true)
+      expect("Invalid enrichments".in?(subject)).to be(false)
+      expect("Invalid telephone".in?(subject)).to be(true)
     end
   end
 end

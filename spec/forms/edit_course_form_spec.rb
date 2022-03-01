@@ -18,28 +18,28 @@ module Support
       context "form is assigned valid details" do
         it "returns true" do
           subject.assign_attributes(valid_attributes)
-          expect(subject.save).to eq(true)
+          expect(subject.save).to be(true)
         end
       end
 
       context "form is assigned invalid date value" do
         it "returns true" do
           subject.assign_attributes(attributes_with_invalid_date_format)
-          expect(subject.save).to eq(false)
+          expect(subject.save).to be(false)
         end
       end
 
       context "form is assigned blank values" do
         it "returns false" do
           subject.assign_attributes(blank_attributes)
-          expect(subject.save).to eq(false)
+          expect(subject.save).to be(false)
         end
       end
 
       context "form is assigned invalid date start_date_year" do
         it "returns false" do
           subject.assign_attributes(attributes_with_invalid_date_year)
-          expect(subject.save).to eq(false)
+          expect(subject.save).to be(false)
         end
       end
     end
@@ -51,7 +51,7 @@ module Support
           subject.save
           subject.valid?
 
-          expect(subject.valid?).to eq(true)
+          expect(subject.valid?).to be(true)
           expect(subject.errors.messages.count).to eq(0)
           expect(subject.errors.messages[:start_date]).not_to include("Start date format is invalid")
         end
@@ -62,7 +62,7 @@ module Support
           subject.assign_attributes(attributes_with_invalid_date_format)
           subject.save
 
-          expect(subject.valid?).to eq(false)
+          expect(subject.valid?).to be(false)
           expect(subject.errors.messages.count).to eq(2)
           expect(subject.errors.messages[:start_date]).to include("Start date format is invalid")
           expect(subject.errors.messages[:applications_open_from]).to include("Applications open from date format is invalid")

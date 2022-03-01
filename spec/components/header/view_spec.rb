@@ -13,7 +13,7 @@ module Header
 
     it "links to Old Publish homepage" do
       render_inline(described_class.new(service_name: "Test Service"))
-      expect(page.has_link?(nil, href: Settings.publish_url)).to eq true
+      expect(page.has_link?(nil, href: Settings.publish_url)).to be true
     end
 
     it "doesn't contain a sign out link if no current user" do
@@ -41,7 +41,7 @@ module Header
 
         render_inline(described_class.new(service_name: "Test Service", current_user: user))
 
-        expect(page.has_link?("Notifications", href: "#{Settings.publish_url}/notifications")).to eq true
+        expect(page.has_link?("Notifications", href: "#{Settings.publish_url}/notifications")).to be true
       end
     end
   end

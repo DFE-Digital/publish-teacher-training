@@ -48,8 +48,8 @@ describe "/api/v2/users", type: :request do
       expect(data_attributes["first_name"]).to eq(user.first_name)
       expect(data_attributes["last_name"]).to eq(user.last_name)
       expect(data_attributes["state"]).to eq(user.state)
-      expect(data_attributes["associated_with_accredited_body"]).to eq(false)
-      expect(data_attributes["notifications_configured"]).to eq(false)
+      expect(data_attributes["associated_with_accredited_body"]).to be(false)
+      expect(data_attributes["notifications_configured"]).to be(false)
     end
 
     context "when user is associated with an accredited body" do
@@ -60,7 +60,7 @@ describe "/api/v2/users", type: :request do
         json_response = JSON.parse(response.body)
         data_attributes = json_response["data"]["attributes"]
 
-        expect(data_attributes["associated_with_accredited_body"]).to eq(true)
+        expect(data_attributes["associated_with_accredited_body"]).to be(true)
       end
     end
 
@@ -71,7 +71,7 @@ describe "/api/v2/users", type: :request do
         json_response = JSON.parse(response.body)
         data_attributes = json_response["data"]["attributes"]
 
-        expect(data_attributes["notifications_configured"]).to eq(true)
+        expect(data_attributes["notifications_configured"]).to be(true)
       end
     end
   end

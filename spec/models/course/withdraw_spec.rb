@@ -18,11 +18,11 @@ describe Course, type: :model do
       let(:enrichment) { build(:course_enrichment, :published) }
 
       it "is not findable" do
-        expect(course.findable?).to eq(false)
+        expect(course.findable?).to be(false)
       end
 
       it "is not published" do
-        expect(course.is_published?).to eq(false)
+        expect(course.is_published?).to be(false)
       end
 
       it "has updated the courses site statuses to be suspended and have no vacancies" do

@@ -197,7 +197,7 @@ RSpec.describe SiteStatus, type: :model do
       end
 
       it "returns true" do
-        expect(subject.vacancies_filled?).to eq(true)
+        expect(subject.vacancies_filled?).to be(true)
       end
     end
 
@@ -209,7 +209,7 @@ RSpec.describe SiteStatus, type: :model do
       end
 
       it "returns false" do
-        expect(subject.vacancies_filled?).to eq(false)
+        expect(subject.vacancies_filled?).to be(false)
       end
     end
   end

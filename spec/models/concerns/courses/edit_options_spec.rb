@@ -169,7 +169,7 @@ describe Course, type: :model do
 
     context "when unpublished" do
       it "returns the correct options for the recruitment_cycle" do
-        expect(course.show_start_date?).to eq(true)
+        expect(course.show_start_date?).to be(true)
       end
     end
 
@@ -178,7 +178,7 @@ describe Course, type: :model do
       let(:course) { create(:course, enrichments: [enrichment]) }
 
       it "returns no options" do
-        expect(course.show_start_date?).to eq(false)
+        expect(course.show_start_date?).to be(false)
       end
     end
   end
@@ -188,7 +188,7 @@ describe Course, type: :model do
 
     context "when unpublished" do
       it "indicates that the option is a checkbox" do
-        expect(course.show_is_send?).to eq(true)
+        expect(course.show_is_send?).to be(true)
       end
     end
 
@@ -197,7 +197,7 @@ describe Course, type: :model do
       let(:course) { create(:course, enrichments: [enrichment]) }
 
       it "indicates that the option is hidden" do
-        expect(course.show_is_send?).to eq(false)
+        expect(course.show_is_send?).to be(false)
       end
     end
   end
@@ -207,7 +207,7 @@ describe Course, type: :model do
 
     context "when unpublished" do
       it "indicates that the option is a checkbox" do
-        expect(course.show_applications_open?).to eq(true)
+        expect(course.show_applications_open?).to be(true)
       end
     end
 
@@ -216,7 +216,7 @@ describe Course, type: :model do
       let(:course) { create(:course, enrichments: [enrichment]) }
 
       it "indicates that the option is hidden" do
-        expect(course.show_applications_open?).to eq(false)
+        expect(course.show_applications_open?).to be(false)
       end
     end
   end
