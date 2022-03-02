@@ -17,15 +17,13 @@
       <%= page_title %>
     </h1>
 
-    <p class="govuk-body">A location is a place that a candidate selects when making an application. They do this by choosing from a list on the course page in Find.</p>
+<p class="govuk-body">You can assign locations to a course by going to the ‘Basic details’ tab in ‘Courses’.</p>
 
-    <p class="govuk-body">Use this section to:</p>
+    <p class="govuk-body">Once a location has been assigned to a course, candidates will be able to:</p>
     <ul class="govuk-list govuk-list--bullet">
-      <li>edit location names and addresses</li>
-      <li>add locations</li>
+      <li>see a list of assigned locations on the course page on Find</li>
+      <li>select their preferred location when applying for a course</li>
     </ul>
-
-    <p class="govuk-body">You can assign locations to a course from the ‘Basic details’ tab on the course page.</p>
 
     <table class="govuk-table app-table--vertical-align-middle">
       <thead class="govuk-table__head">
@@ -41,6 +39,6 @@
         <%= render partial: "location", collection: @locations %>
       </tbody>
     </table>
-    <%= govuk_button_link_to "Add a location", new_publish_provider_recruitment_cycle_location_path(@provider.provider_code) %>
+    <%= govuk_button_link_to "Add location", new_publish_provider_recruitment_cycle_location_path(@provider.provider_code) %>
   </div>
 </div>
