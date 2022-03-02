@@ -34,8 +34,8 @@ private
   end
 
   def when_i_select_a_location
-    new_locations_page.check("sites-#{provider.sites.first.id}")
-    new_locations_page.check("sites-#{provider.sites.second.id}")
+    new_locations_page.check(provider.sites.first.location_name)
+    new_locations_page.check(provider.sites.second.location_name)
   end
 
   def and_i_click_continue

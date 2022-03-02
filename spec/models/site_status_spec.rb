@@ -166,7 +166,7 @@ RSpec.describe SiteStatus, type: :model do
       expect(subject.default_vac_status_given(study_mode: "full_time")).to eq :full_time_vacancies
       expect(subject.default_vac_status_given(study_mode: "part_time")).to eq :part_time_vacancies
       expect(subject.default_vac_status_given(study_mode: "full_time_or_part_time")).to eq :both_full_time_and_part_time_vacancies
-      expect { subject.default_vac_status_given(study_mode: "foo") }.to raise_error("Unexpected study mode foo")
+      expect(subject.default_vac_status_given(study_mode: "foo")).to eq :no_vacancies
     end
   end
 

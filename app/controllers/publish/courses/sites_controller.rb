@@ -1,9 +1,9 @@
 module Publish
   module Courses
     class SitesController < PublishController
-      include CourseBasicDetailConcern
-
       before_action :build_course_params, only: %i[continue]
+
+      include CourseBasicDetailConcern
 
       def continue
         super

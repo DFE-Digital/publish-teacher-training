@@ -10,7 +10,7 @@ module FeatureHelpers
         "course[is_send]" => ["0"],
         "course[study_mode]" => "full_time",
         "course[age_range_in_years]" => ["11_to_16"],
-        "course[subjects][]" => "2",
+        "course[subjects_ids][]" => "2",
         "commit" => ["Continue"],
       }
     end
@@ -19,7 +19,7 @@ module FeatureHelpers
       {
         "course[is_send]" => ["0"],
         "course[level]" => "primary",
-        "course[subjects][]" => "2",
+        "course[subjects_ids][]" => "2",
       }
     end
 
@@ -31,7 +31,7 @@ module FeatureHelpers
         "course[is_send]" => ["0"],
         "course[study_mode]" => "full_time",
         "course[age_range_in_years]" => ["11_to_16"],
-        "course[subjects][]" => "2",
+        "course[subjects_ids][]" => "2",
         "commit" => ["Continue"],
       }
     end
@@ -40,7 +40,7 @@ module FeatureHelpers
       {
         "course[is_send]" => ["0"],
         "course[level]" => "primary",
-        "course[subjects][]" => "2",
+        "course[subjects_ids][]" => "2",
         "course[age_range_in_years]" => ["3_to_7"],
       }
     end
@@ -49,7 +49,7 @@ module FeatureHelpers
       {
         "course[is_send]" => ["0"],
         "course[level]" => "primary",
-        "course[subjects][]" => "2",
+        "course[subjects_ids][]" => "2",
         "course[age_range_in_years]" => ["3_to_7"],
       }
     end
@@ -62,7 +62,23 @@ module FeatureHelpers
         "course[level]" => "primary",
         "course[qualification]" => "qts",
         "course[study_mode]" => "full_time",
-        "course[subjects][]" => "2",
+        "course[subjects_ids][]" => "2",
+      }
+    end
+
+    def confirmation_params(provider)
+      {
+        "course[accredited_body_code]" => provider.courses.first.accrediting_provider.provider_code,
+        "course[age_range_in_years]" => "14_to_19",
+        "course[applications_open_from]" => "2021-10-12",
+        "course[funding_type]" => "apprenticeship",
+        "course[is_send]" => "0",
+        "course[level]" => "secondary",
+        "course[qualification]" => "pgde_with_qts",
+        "course[start_date]" => "October 2021",
+        "course[study_mode]" => "full_time_or_part_time",
+        "course[subjects_ids][]" => "30",
+        "course[sites_ids][]" => provider.sites.first.id,
       }
     end
 
@@ -75,8 +91,7 @@ module FeatureHelpers
         "course[is_send]" => ["0"],
         "course[study_mode]" => "full_time",
         "course[age_range_in_years]" => ["11_to_16"],
-        "course[subjects][]" => "2",
-        "commit" => ["Continue"],
+        "course[subjects_ids][]" => "30",
         "course[applications_open_from]" => "2021-10-12",
       }
     end
@@ -85,9 +100,13 @@ module FeatureHelpers
       {
         "course[is_send]" => ["0"],
         "course[level]" => "primary",
-        "course[subjects][]" => "2",
+        "course[subjects_ids][]" => "2",
         "course[age_range_in_years]" => ["3_to_7"],
       }
+    end
+
+    def level_params(level)
+      public_send("#{level}_subject_params")
     end
 
     def primary_subject_params

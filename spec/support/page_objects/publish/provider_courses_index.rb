@@ -18,6 +18,8 @@ module PageObjects
         element :vacancies, '[data-qa="courses-table__vacancies"]'
       end
 
+      element :success_summary, ".govuk-notification-banner--success"
+
       element :add_course, ".govuk-button", text: "Add a new course"
     end
   end

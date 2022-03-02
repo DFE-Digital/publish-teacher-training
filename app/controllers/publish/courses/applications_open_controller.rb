@@ -28,7 +28,7 @@ module Publish
             :study_mode,
             :age_range_in_years,
             :sites_ids,
-            :subjects,
+            :subjects_ids,
             :goto_confirmation,
             :accredited_body_code,
           )

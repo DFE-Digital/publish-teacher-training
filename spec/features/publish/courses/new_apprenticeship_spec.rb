@@ -2,7 +2,7 @@ require "rails_helper"
 
 feature "selecting a teaching apprenticeship" do
   before do
-    given_i_am_authenticated_as_an_ab_provider_user
+    given_i_am_authenticated_as_an_accredited_body_provider_user
     when_i_visit_the_apprenticeship_page
   end
 
@@ -25,7 +25,7 @@ feature "selecting a teaching apprenticeship" do
 
 private
 
-  def given_i_am_authenticated_as_an_ab_provider_user
+  def given_i_am_authenticated_as_an_accredited_body_provider_user
     @user = create(:user)
     @user.providers << create(:provider, :accredited_body)
     given_i_am_authenticated(user: @user)

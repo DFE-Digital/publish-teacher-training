@@ -4,8 +4,8 @@ module Publish
 
     included do
       decorates_assigned :course
-      before_action :build_new_course, :build_provider, only: %i[back new continue confirmation]
-      before_action :build_previous_course_creation_params, only: %i[new continue confirmation]
+      before_action :build_new_course, :build_provider, only: %i[back new continue]
+      before_action :build_previous_course_creation_params, only: %i[new continue]
       before_action :build_meta_course_creation_params, only: %i[new continue]
       before_action :build_back_link, only: %i[new back continue]
       before_action :build_course, only: %i[edit update]
@@ -53,30 +53,8 @@ module Publish
 
     def build_new_course
       add_custom_age_range_into_params if params.dig("course", "age_range_in_years") == "other"
-      provider = RecruitmentCycle.find_by(year: params[:recruitment_cycle_year]).providers.find_by(provider_code: params[:provider_code])
 
-      @course = Course.new(
-        provider: provider, **course_attributes,
-      )
-    end
-
-    def course_attributes
-      course_attributes = course_params.to_unsafe_hash.except(:sites_ids)
-      course_attributes["subjects"] = subjects_from_ids if params.dig("course", "subjects").present?
-      course_attributes["sites"] = sites_from_ids if params.dig("course", "sites_ids").present?
-      course_attributes
-    end
-
-    def subjects_from_ids
-      params.dig("course", "subjects")&.map do |subject_id|
-        Subject.find(subject_id)
-      end
-    end
-
-    def sites_from_ids
-      params.dig("course", "sites_ids")&.map do |site_id|
-        Site.find(site_id)
-      end
+      @course = ::Courses::CreationService.call(course_params: course_params, provider: provider)
     end
 
     def add_custom_age_range_into_params
@@ -84,9 +62,6 @@ module Publish
     end
 
     def errors
-      @course.valid?(:new)
-      @course.remove_carat_from_error_messages
-
       @course.errors.messages.select { |key, _message| error_keys.include?(key) }
     end
 
@@ -117,40 +92,10 @@ module Publish
             :course_age_range_in_years_other_to,
             :goto_confirmation,
             :language_ids,
-          )
-          .permit(
-            :page,
-            :about_course,
-            :course_length,
-            :course_length_other_length,
-            :fee_details,
-            :fee_international,
-            :fee_uk_eu,
-            :financial_support,
-            :how_school_placements_work,
-            :interview_process,
-            :other_requirements,
-            :personal_qualities,
-            :salary_details,
-            :required_qualifications,
-            :qualification, # qualification is actually "outcome"
-            :maths,
-            :english,
-            :science,
-            :funding_type,
-            :level,
-            :is_send,
-            :program_type,
-            :study_mode,
-            :applications_open_from,
-            :start_date,
-            :age_range_in_years,
-            :master_subject_id,
-            :subordinate_subject_id,
-            :funding_type,
-            :accredited_body_code,
+          ).permit(
+            policy(Course.new).permitted_new_course_attributes,
             sites_ids: [],
-            subjects: [],
+            subjects_ids: [],
           )
       else
         ActionController::Parameters.new({}).permit(:course)

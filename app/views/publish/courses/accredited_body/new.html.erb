@@ -23,8 +23,8 @@
 
           <%= render "publish/courses/new_fields_holder", form: form, except_keys: [:accredited_body_code] do |fields| %>
             <div class="govuk-radios" data-module="govuk-radios" data-qa="course__accredited_body">
-              <% if provider.accredited_bodies.length > 0 %>
-                <%= render partial: "provider_suggestion", collection: provider.accredited_bodies, locals: { form: fields } %>
+              <% if @provider.accredited_bodies.length > 0 %>
+                <%= render partial: "provider_suggestion", collection: @provider.accredited_bodies, locals: { form: fields } %>
 
                 <div class="govuk-radios__divider">or</div>
 

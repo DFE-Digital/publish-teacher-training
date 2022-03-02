@@ -1,7 +1,6 @@
 module Publish
   class CoursesController < PublishController
     decorates_assigned :course
-    include CourseBasicDetailConcern
 
     def index
       authorize :provider, :index?
@@ -25,12 +24,16 @@ module Publish
       authorize @course
     end
 
-    def create
-      authorize :provider, :can_create_course?
-      build_new_course
+    def new
+      authorize(provider, :can_create_course?)
+      return render_locations_messages unless provider.sites&.any?
 
-      @course.name = @course.generate_name
-      @course.course_code = provider.next_available_course_code
+      redirect_to new_publish_provider_recruitment_cycle_courses_level_path(params[:provider_code], @recruitment_cycle.year)
+    end
+
+    def create
+      authorize(provider, :can_create_course?)
+      @course = ::Courses::CreationService.call(course_params: course_params, provider: provider, next_available_course_code: true)
 
       if @course.save
         flash[:success_with_body] = { title: "Your course has been created", body: "Add the rest of your details and publish the course, so that candidates can find and apply to it." }
@@ -43,7 +46,6 @@ module Publish
       else
         @errors = @course.errors.messages
         @course_creation_params = course_params
-        build_new_course
 
         render :confirmation
       end
@@ -51,19 +53,40 @@ module Publish
 
     def confirmation
       authorize(provider, :can_create_course?)
-      recruitment_cycle
+
+      @course_creation_params = course_params
+      @course = ::Courses::CreationService.call(course_params: course_params, provider: provider)
     end
 
   private
+
+    def course_params
+      if params.key? :course
+        params.require(:course)
+          .permit(
+            policy(Course.new).permitted_new_course_attributes,
+            sites_ids: [],
+            subjects_ids: [],
+          )
+      else
+        ActionController::Parameters.new({}).permit(:course)
+      end
+    end
+
+    def render_locations_messages
+      flash[:error] = { id: "locations-error", message: "You need to create at least one location before creating a course" }
+
+      redirect_to new_publish_provider_recruitment_cycle_location_path(provider.provider_code, provider.recruitment_cycle_year)
+    end
 
     def fetch_course
       @course = provider.courses.find_by!(course_code: params[:code])
     end
 
     def provider
-      @provider ||= Provider
+      @provider ||= recruitment_cycle.providers
         .includes(courses: %i[sites site_statuses enrichments provider])
-        .find_by!(recruitment_cycle: recruitment_cycle, provider_code: params[:provider_code])
+        .find_by!(provider_code: params[:provider_code])
     end
 
     def courses_by_accrediting_provider

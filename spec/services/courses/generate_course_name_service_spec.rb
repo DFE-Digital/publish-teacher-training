@@ -155,7 +155,7 @@ describe Courses::GenerateCourseNameService do
       context "English as a second language -> English" do
         context "With a single language" do
           let(:subjects) do
-            [modern_languages, find_or_create(:modern_languages_subject, :english_as_a_second_lanaguge_or_other_language)]
+            [modern_languages, find_or_create(:modern_languages_subject, :english_as_a_second_language_or_other_language)]
           end
 
           it "Returns the title Modern Languages (English)" do
@@ -167,7 +167,7 @@ describe Courses::GenerateCourseNameService do
           let(:subjects) do
             [
               modern_languages,
-              find_or_create(:modern_languages_subject, :english_as_a_second_lanaguge_or_other_language),
+              find_or_create(:modern_languages_subject, :english_as_a_second_language_or_other_language),
               find_or_create(:modern_languages_subject, :spanish),
             ]
           end
@@ -181,7 +181,7 @@ describe Courses::GenerateCourseNameService do
           let(:subjects) do
             [
               modern_languages,
-              find_or_create(:modern_languages_subject, :english_as_a_second_lanaguge_or_other_language),
+              find_or_create(:modern_languages_subject, :english_as_a_second_language_or_other_language),
               find_or_create(:modern_languages_subject, :french),
               find_or_create(:modern_languages_subject, :spanish),
             ]
