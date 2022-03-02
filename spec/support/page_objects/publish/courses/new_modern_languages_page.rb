@@ -9,6 +9,8 @@ module PageObjects
         element :languages_fields, '[data-qa="course__languages"]'
         element :title, '[data-qa="page-heading"]'
 
+        element :continue, '[data-qa="course__save"]'
+
         def language_checkbox(name)
           languages_fields.find("[data-qa=\"checkbox_language_#{name}\"]")
         end
@@ -16,8 +18,6 @@ module PageObjects
         def has_no_language_checkbox?(name)
           languages_fields.has_css?("[data-qa=\"checkbox_language_#{name}\"]")
         end
-
-        element :continue, '[data-qa="course__save"]'
       end
     end
   end

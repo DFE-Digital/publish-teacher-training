@@ -25,7 +25,11 @@ private
   end
 
   def when_i_visit_the_confirmation_page
-    confirmation_page.load(provider_code: provider.provider_code, recruitment_cycle_year: Settings.current_recruitment_cycle_year, query: confirmation_params(provider))
+    confirmation_page.load(
+      provider_code: provider.provider_code,
+      recruitment_cycle_year: Settings.current_recruitment_cycle_year,
+      query: confirmation_params(provider),
+    )
   end
 
   def and_i_click_continue

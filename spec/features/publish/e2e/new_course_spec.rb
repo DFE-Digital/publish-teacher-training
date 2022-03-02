@@ -128,8 +128,8 @@ private
   def select_age_range(course_creation_params, next_page:)
     course_creation_params[:age_range_in_years] = "5_to_11"
 
-    choose("course_age_range_in_years_5_to_11")
-    click_on "Continue"
+    new_age_range_page.age_range_fields.five_to_eleven.click
+    new_age_range_page.continue.click
 
     expect_page_to_be_displayed_with_query(
       page: next_page,

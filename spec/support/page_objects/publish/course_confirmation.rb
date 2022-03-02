@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require_relative "../sections/errorlink"
+
 module PageObjects
   module Publish
     class CourseConfirmation < PageObjects::Base

@@ -55,7 +55,10 @@ private
   end
 
   def language
-    @language ||= %i[french english_as_a_second_language_or_other_language german italian japanese mandarin russian spanish modern_languages_other].sample
+    @language ||= %i[
+      french english_as_a_second_language_or_other_language german
+      italian japanese mandarin russian spanish modern_languages_other
+    ].sample
   end
 
   def language_subject
