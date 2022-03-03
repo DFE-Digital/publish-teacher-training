@@ -1,0 +1,42 @@
+<div class="app-status-box">
+  <h3 class="govuk-heading-m">Status</h3>
+  <p class="govuk-body" data-qa="course__content-status">
+    <%= course.status_tag %>
+  </p>
+  <h3 class="govuk-heading-s govuk-!-margin-bottom-0">
+    <% if @recruitment_cycle.current_and_open? %>Is it<% else %>Will it be<% end %> on <abbr class="app-!-text-decoration-underline-dotted" title="Find postgraduate teacher training">Find</abbr>?
+  </h3>
+  <p class="govuk-body" data-qa="course__is_findable">
+    <%= course.on_find %>
+  </p>
+
+  <% if course.has_unpublished_changes? %>
+    <%= render partial: "publish/courses/status_panel/unpublished" %>
+  <% elsif course.is_published? && course.is_running? %>
+    <%= render partial: "publish/courses/status_panel/published" %>
+  <% elsif course.is_withdrawn? %>
+    <%= render partial: "publish/courses/status_panel/withdrawn" %>
+  <% else %>
+    <%= render partial: "publish/courses/status_panel/unpublished" %>
+  <% end %>
+
+  <% if course.is_running? %>
+    <hr class="govuk-section-break govuk-section-break--visible govuk-section-break--m">
+    <h3 class="govuk-heading-m">Withdraw</h3>
+    <p class="govuk-body">Remove this course from Find and close applications.</p>
+    <p class="govuk-body">
+      <%= govuk_link_to "Withdraw this course" %>
+
+      <%# govuk_link_to "Withdraw this course", withdraw_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code), class: "app-link--destructive", data: { qa: "course__withdraw-link" } %>
+    </p>
+  <% elsif course.new_and_not_running? %>
+    <hr class="govuk-section-break govuk-section-break--visible govuk-section-break--m">
+    <h3 class="govuk-heading-m govuk-visually-hidden">Delete</h3>
+    <p class="govuk-body">
+      <%= govuk_link_to "Delete this course" %>
+
+      <%# govuk_link_to "Delete this course", delete_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code), class: "app-link--destructive", data: { qa: "course__delete-link" } %>
+    </p>
+  <% end %>
+</div>
+

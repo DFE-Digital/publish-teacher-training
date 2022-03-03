@@ -15,6 +15,7 @@ feature "Course show" do
       given_i_am_authenticated_as_a_provider_user(course: build(:course, enrichments: [course_enrichment], funding_type: "fee"))
       when_i_visit_the_course_page
       then_i_should_see_the_description_of_the_fee_course
+      and_i_should_see_the_status_sidebar
     end
   end
 
@@ -23,6 +24,53 @@ feature "Course show" do
       given_i_am_authenticated_as_a_provider_user(course: build(:course, enrichments: [course_enrichment], funding_type: "salary"))
       when_i_visit_the_course_page
       then_i_should_see_the_description_of_the_salary_course
+      and_i_should_see_the_status_sidebar
+    end
+  end
+
+  describe "with a published and running course" do
+    scenario "i can view the published partial" do
+      given_i_am_authenticated_as_a_provider_user(course: build(:course, enrichments: [course_enrichment], funding_type: "salary", site_statuses: [build(:site_status, :findable)]))
+      when_i_visit_the_course_page
+      then_i_should_see_the_description_of_the_salary_course
+      and_i_should_see_the_status_sidebar
+      and_i_should_see_the_published_partial
+    end
+  end
+
+  describe "with a published with unpublished changes course" do
+    scenario "i can view the unpublished partial" do
+      given_i_am_authenticated_as_a_provider_user(course: build(:course, enrichments: [course_enrichment_unpublished_changes], funding_type: "salary"))
+      when_i_visit_the_course_page
+      then_i_should_see_the_description_of_the_unpublished_changes_course
+      and_i_should_see_the_status_sidebar
+      and_i_should_see_the_unpublished_partial
+    end
+  end
+
+  describe "with an inital draft course" do
+    scenario "i can view the unpublished partial" do
+      given_i_am_authenticated_as_a_provider_user(course: build(:course, enrichments: [course_enrichment_initial_draft], funding_type: "salary"))
+      when_i_visit_the_course_page
+      then_i_should_see_the_description_of_the_initial_draft_course
+      and_i_should_see_the_status_sidebar
+      and_i_should_see_the_unpublished_partial
+    end
+  end
+
+  def and_i_should_see_the_status_sidebar
+    expect(publish_provider_courses_show_page).to have_status_sidebar
+  end
+
+  def and_i_should_see_the_unpublished_partial
+    publish_provider_courses_show_page.status_sidebar.within do |status_sidebar|
+      expect(status_sidebar).to have_unpublished_partial
+    end
+  end
+
+  def and_i_should_see_the_published_partial
+    publish_provider_courses_show_page.status_sidebar.within do |status_sidebar|
+      expect(status_sidebar).to have_published_partial
     end
   end
 
@@ -36,6 +84,14 @@ feature "Course show" do
 
   def course_enrichment
     @course_enrichment ||= build(:course_enrichment, :published, course_length: :TwoYears, fee_uk_eu: 9250, fee_international: 14000)
+  end
+
+  def course_enrichment_unpublished_changes
+    @course_enrichment_unpublished_changes ||= build(:course_enrichment, :subsequent_draft, course_length: :TwoYears, fee_uk_eu: 9250, fee_international: 14000)
+  end
+
+  def course_enrichment_initial_draft
+    @course_enrichment_initial_draft ||= build(:course_enrichment, :initial_draft)
   end
 
   def given_i_am_authenticated_as_a_provider_user(course:)
@@ -52,6 +108,18 @@ feature "Course show" do
   def when_i_visit_the_course_page
     publish_provider_courses_show_page.load(
       provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year, course_code: course.course_code,
+    )
+  end
+
+  def then_i_should_see_the_description_of_the_unpublished_changes_course
+    expect(publish_provider_courses_show_page.about_course).to have_content(
+      course_enrichment_unpublished_changes.about_course,
+    )
+  end
+
+  def then_i_should_see_the_description_of_the_initial_draft_course
+    expect(publish_provider_courses_show_page.about_course).to have_content(
+      course_enrichment_initial_draft.about_course,
     )
   end
 
