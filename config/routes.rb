@@ -108,6 +108,8 @@ Rails.application.routes.draw do
 
           get "/about", on: :member, to: "courses/course_information#edit"
           patch "/about", on: :member, to: "courses/course_information#update"
+          get "/requirements", on: :member, to: "courses/requirements#edit"
+          patch "/requirements", on: :member, to: "courses/requirements#update"
           get "/fees", on: :member, to: "courses/fees#edit"
           patch "/fees", on: :member, to: "courses/fees#update"
           get "/salary", on: :member, to: "courses/salary#edit"

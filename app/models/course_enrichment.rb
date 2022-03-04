@@ -68,7 +68,7 @@ class CourseEnrichment < ApplicationRecord
   validates :salary_details, words_count: { maximum: 250 }, unless: :is_fee_based?
 
   # Requirements and qualifications
-
+  # TODO: POST MIGRATION: Move out of this as it's handled in the form object
   validates :required_qualifications, presence: true, on: :publish, if: :required_qualifications_needed?
   validates :required_qualifications, words_count: { maximum: 100 }
 

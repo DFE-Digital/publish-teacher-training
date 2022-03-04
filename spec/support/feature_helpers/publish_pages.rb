@@ -120,6 +120,10 @@ module FeatureHelpers
       @publish_course_salary_page ||= PageObjects::Publish::CourseSalaryEdit.new
     end
 
+    def publish_course_requirements_page
+      @publish_course_requirements_page ||= PageObjects::Publish::CourseRequirementEdit.new
+    end
+
     def publish_course_location_page
       @publish_course_location_page ||= PageObjects::Publish::CourseLocationEdit.new
     end

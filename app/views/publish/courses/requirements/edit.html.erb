@@ -1,0 +1,58 @@
+<% if @provider.recruitment_cycle_year.to_i >= Provider::CHANGES_INTRODUCED_IN_2022_CYCLE %>
+  <% page_title = "Personal qualities and other requirements" %>
+<% else %>
+  <% page_title = "Requirements and eligibility" %>
+<% end %>
+
+<% content_for :page_title, title_with_error_prefix("#{page_title} – #{@course.name_and_code}", @course_requirement_form.errors.any?) %>
+
+<% content_for :before_content do %>
+  <%= govuk_back_link_to(publish_provider_recruitment_cycle_course_path(@provider.provider_code, @course.recruitment_cycle_year, @course.course_code)) %>
+<% end %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_with(
+      model: @course_requirement_form,
+      url: requirements_publish_provider_recruitment_cycle_course_path(@provider.provider_code, @course.recruitment_cycle_year, @course.course_code),
+      data: { qa: "enrichment-form", module: "form-check-leave" },
+      method: :patch,
+      local: true,
+    ) do |f| %>
+
+      <%= f.govuk_error_summary %>
+
+      <h1 class="govuk-heading-l">
+        <span class="govuk-caption-l"><%= @course.name_and_code %></span>
+        <%= page_title %>
+      </h1>
+
+      <% if @provider.recruitment_cycle_year.to_i < Provider::CHANGES_INTRODUCED_IN_2022_CYCLE %>
+        <%= f.govuk_text_area :required_qualifications,
+          label: { size: "m" },
+          max_words: 100,
+          rows: 10 %>
+
+        <hr class="govuk-section-break govuk-section-break--visible govuk-section-break--l">
+      <% end %>
+
+      <%= f.govuk_text_area :personal_qualities,
+        form_group: { id: "personal-qualities" },
+        label: { text: "Personal qualities (optional)", size: "m" },
+        hint: { text: "Tell applicants about the skills, motivation and experience you’re looking for (for example, experience of working with children, a genuine passion for the subject or a talent for public speaking)." },
+        max_words: 100,
+        rows: 10 %>
+
+      <hr class="govuk-section-break govuk-section-break--visible govuk-section-break--l">
+
+      <%= f.govuk_text_area :other_requirements,
+        form_group: { id: "other-requirements" },
+        label: { text: "Other requirements (optional)", size: "m" },
+        hint: { text: "If applicants need any non-academic qualifications or documents, list them here (such as criminal record checks or relevant work experience)." },
+        max_words: 100,
+        rows: 10 %>
+
+      <%= f.govuk_submit "Save" %>
+    <% end %>
+  </div>
+</div>
