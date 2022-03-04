@@ -149,7 +149,7 @@
     "Personal qualities (optional)",
     course.personal_qualities,
     %w[personal_qualities],
-    action_path: nil, #"#{requirements_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code)}#personal-qualities",
+    action_path: "#{requirements_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code)}#personal-qualities",
     action_visually_hidden_text: "personal qualities",
   ) %>
 
@@ -159,7 +159,7 @@
     "Other requirements (optional)",
     course.other_requirements,
     %w[other_requirements],
-    action_path: nil, #"#{requirements_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code)}#other-requirements",
+    action_path: "#{requirements_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code)}#other-requirements",
     action_visually_hidden_text: "other requirements",
   ) %>
 <% end %>
