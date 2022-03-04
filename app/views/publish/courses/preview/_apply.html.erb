@@ -24,6 +24,7 @@
 
     <table class="govuk-table app-table--vertical-align-middle" data-qa="course__choose_a_training_location">
       <caption class="govuk-visually-hidden">Choose a training location - List of locations, vacancies and codes</caption>
+
       <thead class="govuk-table__head">
         <tr class="govuk-table__row">
           <th class="govuk-table__header" scope="col">Location</th>
@@ -37,11 +38,7 @@
             <td class="govuk-table__cell">
               <strong><%= smart_quotes(site_status.site.location_name) %></strong>
               <br>
-              <%=site_status.vac_status%>
-              <%=site_status.status%>
-              <%=site_status.publish%>
-              asd
-              <%#= smart_quotes(site_status.site.full_address) %>
+              <%= smart_quotes(site_status.site.full_address) %>
             </td>
             <td class="govuk-table__cell">
               <%= site_status.has_vacancies? ? "Yes" : "No" %>
