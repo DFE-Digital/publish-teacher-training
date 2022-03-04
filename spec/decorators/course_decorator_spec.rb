@@ -300,22 +300,22 @@ describe CourseDecorator do
   #     end
   #   end
 
-  #   describe "#subject_name" do
-  #     context "course has more than one subject" do
-  #       it "returns the course name" do
-  #         expect(decorated_course.subject_name).to eq("Mathematics")
-  #       end
-  #     end
+  describe "#subject_name" do
+    context "course has more than one subject" do
+      it "returns the course name" do
+        expect(decorated_course.subject_name).to eq("Mathematics")
+      end
+    end
 
-  #     context "course has one subject" do
-  #       let(:subject) { build :subject, subject_name: "Computer Science" }
-  #       let(:course) { build :course, subjects: [subject] }
+    context "course has one subject" do
+      let(:course_subject) { find_or_create :secondary_subject, :computing }
+      let(:course) { build :course, subjects: [course_subject] }
 
-  #       it "return the subject name" do
-  #         expect(decorated_course.subject_name).to eq("Computer Science")
-  #       end
-  #     end
-  #   end
+      it "return the subject name" do
+        expect(decorated_course.subject_name).to eq("Computing")
+      end
+    end
+  end
 
   #   describe "#bursary_requirements" do
   #     let(:subject) { decorated_course.bursary_requirements }

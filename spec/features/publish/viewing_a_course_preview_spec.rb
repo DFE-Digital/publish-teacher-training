@@ -4,36 +4,33 @@ require "rails_helper"
 
 feature "Course show" do
   scenario "i can view the course basic details" do
-    given_i_am_authenticated_as_a_provider_user
+    given_i_am_authenticated(user: user_with_fee_based_course)
     when_i_visit_the_course_preview_page
     then_i_see_the_course_preview_details
   end
 
-  # context "contact details for London School of Jewish Studies and the course code is X104" do
-  #   let(:provider) do
-  #     build(
-  #       :provider,
-  #       provider_code: "28T",
-  #     )
-  #   end
+  context "contact details for London School of Jewish Studies and the course code is X104" do
+    scenario "renders the custom address requested via zendesk" do
+      given_i_am_authenticated(
+        user: user_with_custom_address_requested_via_zendesk,
+      )
+      when_i_visit_the_course_preview_page
+      then_i_see_custom_address
+    end
+  end
 
-  #   let(:course) do
-  #     build(:course,
-  #           course_code: "X104",
-  #           provider: provider)
-  #   end
+private
 
-  #   it "renders the custom address requested via zendesk" do
-  #     visit preview_provider_recruitment_cycle_course_path(provider.provider_code, current_recruitment_cycle.year, course.course_code)
-
-  #     expect(preview_course_page).to have_content "LSJS"
-  #     expect(preview_course_page).to have_content "44A Albert Road"
-  #     expect(preview_course_page).to have_content "London"
-  #     expect(preview_course_page).to have_content "NW4 2SJ"
-  #   end
-  # end
+  def then_i_see_custom_address
+    expect(publish_course_preview_page).to have_content "LSJS"
+    expect(publish_course_preview_page).to have_content "44A Albert Road"
+    expect(publish_course_preview_page).to have_content "London"
+    expect(publish_course_preview_page).to have_content "NW4 2SJ"
+  end
 
   def then_i_see_the_course_preview_details
+    expect_financial_support
+
     expect(publish_course_preview_page.title).to have_content(
       "#{course.name} (#{course.course_code})",
     )
@@ -55,7 +52,7 @@ feature "Course show" do
     )
 
     expect(publish_course_preview_page.age_range_in_years).to have_content(
-      "3 to 7",
+      "11 to 18",
     )
 
     expect(publish_course_preview_page.funding_option).to have_content(
@@ -178,7 +175,22 @@ feature "Course show" do
     expect(publish_course_preview_page).to have_course_advice
   end
 
-  def given_i_am_authenticated_as_a_provider_user
+  def user_with_custom_address_requested_via_zendesk
+    course = build(:course,
+                   course_code: "X104")
+    provider = build(
+      :provider, provider_code: "28T", courses: [course]
+    )
+
+    create(
+      :user,
+      providers: [
+        provider,
+      ],
+    )
+  end
+
+  def user_with_fee_based_course
     site1 = build(:site, location_name: "Running site with vacancies")
     site2 = build(:site, location_name: "Suspended site with vacancies")
     site3 = build(:site, location_name: "New site with vacancies")
@@ -200,11 +212,14 @@ feature "Course show" do
 
     accrediting_provider = build(:provider)
 
+    course_subject = find_or_create(:secondary_subject, :mathematics)
+
     course = build(
-      :course, :fee_type_based, accrediting_provider: accrediting_provider,
-                                site_statuses: site_statuses, enrichments: [course_enrichment],
-                                degree_grade: "two_one",
-                                degree_subject_requirements: "Maths A level"
+      :course, :secondary, :fee_type_based, accrediting_provider: accrediting_provider,
+                                            site_statuses: site_statuses, enrichments: [course_enrichment],
+                                            degree_grade: "two_one",
+                                            degree_subject_requirements: "Maths A level",
+                                            subjects: [course_subject]
     )
     accrediting_provider_enrichment = {
       "UcasProviderCode" => accrediting_provider.provider_code,
@@ -215,15 +230,11 @@ feature "Course show" do
       :provider, sites: sites, courses: [course], accrediting_provider_enrichments: [accrediting_provider_enrichment]
     )
 
-    user = create(
+    create(
       :user,
       providers: [
         provider,
       ],
-    )
-
-    given_i_am_authenticated(
-      user: user,
     )
   end
 
@@ -253,7 +264,7 @@ feature "Course show" do
     @accrediting_provider ||= course.accrediting_provider
   end
 
-  def expect_finanical_support
+  def expect_financial_support
     # NOTE: There is a period at the beginning of the new/current
     #       recruitment cycle whereby the financial incentives
     #       announcement is still pending.
@@ -270,16 +281,16 @@ feature "Course show" do
   def expect_financial_support_placeholder
     expect(decorated_course.use_financial_support_placeholder?).to be_truthy
 
-    expect(preview_course_page.find(".govuk-inset-text"))
+    expect(publish_course_preview_page.find(".govuk-inset-text"))
       .to have_text("Financial support for 2021 to 2022 will be announced soon. Further information is available on Get Into Teaching.")
-    expect(preview_course_page).to_not have_scholarship_amount
-    expect(preview_course_page).to_not have_bursary_amount
+    expect(publish_course_preview_page).not_to have_scholarship_amount
+    expect(publish_course_preview_page).not_to have_bursary_amount
   end
 
   def expect_financial_incentives
     expect(decorated_course.use_financial_support_placeholder?).to be_falsey
 
-    expect(preview_course_page.scholarship_amount).to have_content("a scholarship of £2,000")
-    expect(preview_course_page.bursary_amount).to have_content("a bursary of £4,000")
+    expect(publish_course_preview_page.scholarship_amount).to have_content("a scholarship of £26,000")
+    expect(publish_course_preview_page.bursary_amount).to have_content("a bursary of £24,000")
   end
 end

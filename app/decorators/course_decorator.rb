@@ -47,25 +47,25 @@ class CourseDecorator < ApplicationDecorator
     }[object.funding_type]
   end
 
-  #   def subject_name
-  #     if object.subjects.count == 1
-  #       object.subjects.first.subject_name
-  #     else
-  #       object.name
-  #     end
-  #   end
-
-  def has_scholarship_and_bursary?
-    has_bursary? && has_scholarship?
+  def subject_name
+    if object.subjects.size == 1
+      object.subjects.first.subject_name
+    else
+      object.name
+    end
   end
 
-  #   def bursary_first_line_ending
-  #     if bursary_requirements.count > 1
-  #       ":"
-  #     else
-  #       "#{bursary_requirements.first}."
-  #     end
-  #   end
+  def has_scholarship_and_bursary?
+    object.has_bursary? && object.has_scholarship?
+  end
+
+  def bursary_first_line_ending
+    if bursary_requirements.count > 1
+      ":"
+    else
+      "#{bursary_requirements.first}."
+    end
+  end
 
   #   def bursary_requirements
   #     requirements = ["a degree of 2:2 or above in any subject"]
@@ -79,12 +79,7 @@ class CourseDecorator < ApplicationDecorator
   #   end
 
   def bursary_only?
-    has_bursary? && !has_scholarship?
-  end
-
-  def has_bursary?
-    object.subjects.present? &&
-      object.subjects.any? { |subject| subject.attributes["bursary_amount"].present? }
+    object.has_bursary? && !object.has_scholarship?
   end
 
   def excluded_from_bursary?
@@ -92,11 +87,6 @@ class CourseDecorator < ApplicationDecorator
       # incorrect bursary eligibility only shows up on courses with 2 subjects
       object.subjects.count == 2 &&
       has_excluded_course_name?
-  end
-
-  def has_scholarship?
-    object.subjects.present? &&
-      object.subjects.any? { |subject| subject.attributes["scholarship"].present? }
   end
 
   #   def has_early_career_payments?
