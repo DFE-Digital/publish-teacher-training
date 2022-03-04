@@ -9,7 +9,6 @@ module PageObjects
 
       sections :errors, Sections::ErrorLink, ".govuk-error-summary__list li>a"
 
-      element :required_qualifications, "#publish-course-requirement-form-required-qualifications-field"
       element :personal_qualities, "#publish-course-requirement-form-personal-qualities-field"
       element :other_requirements, "#publish-course-requirement-form-other-requirements-field"
 

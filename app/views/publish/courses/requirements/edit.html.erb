@@ -1,8 +1,4 @@
-<% if @provider.recruitment_cycle_year.to_i >= Provider::CHANGES_INTRODUCED_IN_2022_CYCLE %>
-  <% page_title = "Personal qualities and other requirements" %>
-<% else %>
-  <% page_title = "Requirements and eligibility" %>
-<% end %>
+<% page_title = "Personal qualities and other requirements" %>
 
 <% content_for :page_title, title_with_error_prefix("#{page_title} – #{@course.name_and_code}", @course_requirement_form.errors.any?) %>
 
@@ -26,15 +22,6 @@
         <span class="govuk-caption-l"><%= @course.name_and_code %></span>
         <%= page_title %>
       </h1>
-
-      <% if @provider.recruitment_cycle_year.to_i < Provider::CHANGES_INTRODUCED_IN_2022_CYCLE %>
-        <%= f.govuk_text_area :required_qualifications,
-          label: { size: "m" },
-          max_words: 100,
-          rows: 10 %>
-
-        <hr class="govuk-section-break govuk-section-break--visible govuk-section-break--l">
-      <% end %>
 
       <%= f.govuk_text_area :personal_qualities,
         form_group: { id: "personal-qualities" },
