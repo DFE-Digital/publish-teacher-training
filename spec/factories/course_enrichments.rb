@@ -2,7 +2,7 @@ FactoryBot.define do
   factory :course_enrichment do
     course
     status { :draft }
-    about_course { Faker::Books::Dune.quote }
+    about_course { Faker::Lorem.sentence }
     course_length do
       # samples taken from real data
       [
@@ -49,10 +49,10 @@ FactoryBot.define do
         "You can find information about tuition fee loans and other financial help on the Gov.uk website - (https://www.gov.uk/student-finance)",
       ].sample
     end
-    how_school_placements_work { Faker::TvShows::GameOfThrones.quote }
-    interview_process { Faker::TvShows::Seinfeld.quote }
-    other_requirements { Faker::TvShows::TheITCrowd.quote }
-    personal_qualities { Faker::Hipster.paragraph }
+    how_school_placements_work { Faker::Lorem.sentence }
+    interview_process { Faker::Lorem.sentence }
+    other_requirements { Faker::Lorem.sentence }
+    personal_qualities { Faker::Lorem.sentence }
     required_qualifications { Faker::Educator.degree }
     # Technically, salary_details should align with whether the course is
     # salaried or not. Maybe worth implementing this somehow at some point.

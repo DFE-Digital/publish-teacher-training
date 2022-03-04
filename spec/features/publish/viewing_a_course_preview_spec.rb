@@ -1,0 +1,285 @@
+# frozen_string_literal: true
+
+require "rails_helper"
+
+feature "Course show" do
+  scenario "i can view the course basic details" do
+    given_i_am_authenticated_as_a_provider_user
+    when_i_visit_the_course_preview_page
+    then_i_see_the_course_preview_details
+  end
+
+  # context "contact details for London School of Jewish Studies and the course code is X104" do
+  #   let(:provider) do
+  #     build(
+  #       :provider,
+  #       provider_code: "28T",
+  #     )
+  #   end
+
+  #   let(:course) do
+  #     build(:course,
+  #           course_code: "X104",
+  #           provider: provider)
+  #   end
+
+  #   it "renders the custom address requested via zendesk" do
+  #     visit preview_provider_recruitment_cycle_course_path(provider.provider_code, current_recruitment_cycle.year, course.course_code)
+
+  #     expect(preview_course_page).to have_content "LSJS"
+  #     expect(preview_course_page).to have_content "44A Albert Road"
+  #     expect(preview_course_page).to have_content "London"
+  #     expect(preview_course_page).to have_content "NW4 2SJ"
+  #   end
+  # end
+
+  def then_i_see_the_course_preview_details
+    expect(publish_course_preview_page.title).to have_content(
+      "#{course.name} (#{course.course_code})",
+    )
+
+    expect(publish_course_preview_page.sub_title).to have_content(
+      provider.provider_name,
+    )
+
+    expect(publish_course_preview_page.accredited_body).to have_content(
+      accrediting_provider.provider_name,
+    )
+
+    expect(publish_course_preview_page.description).to have_content(
+      course.description,
+    )
+
+    expect(publish_course_preview_page.qualifications).to have_content(
+      "PGCE with QTS",
+    )
+
+    expect(publish_course_preview_page.age_range_in_years).to have_content(
+      "3 to 7",
+    )
+
+    expect(publish_course_preview_page.funding_option).to have_content(
+      decorated_course.funding_option,
+    )
+
+    expect(publish_course_preview_page.length).to have_content(
+      decorated_course.length,
+    )
+
+    expect(publish_course_preview_page.applications_open_from).to have_content(
+      course.applications_open_from.strftime("%-d %B %Y"),
+    )
+
+    expect(publish_course_preview_page.start_date).to have_content(
+      "September #{recruitment_cycle.year}",
+    )
+
+    expect(publish_course_preview_page.provider_website).to have_content(
+      provider.website,
+    )
+
+    expect(publish_course_preview_page).not_to have_vacancies
+
+    expect(publish_course_preview_page.about_course).to have_content(
+      decorated_course.about_course,
+    )
+
+    expect(publish_course_preview_page.interview_process).to have_content(
+      decorated_course.interview_process,
+    )
+
+    expect(publish_course_preview_page.school_placements).to have_content(
+      decorated_course.how_school_placements_work,
+    )
+
+    expect(publish_course_preview_page).to have_content(
+      "The course fees for #{recruitment_cycle.year} to #{recruitment_cycle.year.to_i + 1} are as follows",
+    )
+
+    expect(publish_course_preview_page.uk_fees).to have_content(
+      "£9,250",
+    )
+
+    expect(publish_course_preview_page.international_fees).to have_content(
+      "£14,000",
+    )
+
+    expect(publish_course_preview_page.fee_details).to have_content(
+      decorated_course.fee_details,
+    )
+
+    expect(publish_course_preview_page).not_to have_salary_details
+
+    expect(publish_course_preview_page.financial_support_details).to have_content(
+      "Financial support from the training provider",
+    )
+
+    expect(publish_course_preview_page.personal_qualities).to have_content(
+      decorated_course.personal_qualities,
+    )
+
+    expect(publish_course_preview_page.other_requirements).to have_content(
+      decorated_course.other_requirements,
+    )
+
+    expect(publish_course_preview_page.train_with_us).to have_content(
+      provider.train_with_us,
+    )
+
+    expect(publish_course_preview_page.about_accrediting_body).to have_content(
+      decorated_course.about_accrediting_body,
+    )
+
+    expect(publish_course_preview_page.train_with_disability).to have_content(
+      provider.train_with_disability,
+    )
+
+    expect(publish_course_preview_page.contact_email).to have_content(
+      provider.email,
+    )
+
+    expect(publish_course_preview_page.contact_telephone).to have_content(
+      provider.telephone,
+    )
+
+    expect(publish_course_preview_page).to have_content "2:1 or above, or equivalent"
+    expect(publish_course_preview_page).to have_content "Maths A level"
+
+    expect(publish_course_preview_page.contact_website).to have_content(
+      provider.website,
+    )
+
+    expect(publish_course_preview_page.contact_address).to have_content(
+      provider.full_address,
+    )
+
+    expect(publish_course_preview_page).to have_choose_a_training_location_table
+    expect(publish_course_preview_page.choose_a_training_location_table).not_to have_content(
+      "Suspended site with vacancies",
+    )
+
+    [
+      ["New site with no vacancies", "No"],
+      ["New site with vacancies", "No"],
+      ["Running site with no vacancies", "No"],
+      ["Running site with vacancies", "Yes"],
+    ].each.with_index(1) do |site, index|
+      name, has_vacancies_string = site
+
+      expect(publish_course_preview_page.choose_a_training_location_table)
+        .to have_selector("tbody tr:nth-child(#{index}) strong", text: name)
+
+      expect(publish_course_preview_page.choose_a_training_location_table)
+        .to have_selector("tbody tr:nth-child(#{index}) td", text: has_vacancies_string)
+    end
+
+    expect(publish_course_preview_page).to have_locations_map
+
+    expect(publish_course_preview_page).to have_course_advice
+  end
+
+  def given_i_am_authenticated_as_a_provider_user
+    site1 = build(:site, location_name: "Running site with vacancies")
+    site2 = build(:site, location_name: "Suspended site with vacancies")
+    site3 = build(:site, location_name: "New site with vacancies")
+    site4 = build(:site, location_name: "New site with no vacancies")
+    site5 = build(:site, location_name: "Running site with no vacancies")
+
+    site_status1 = build(:site_status, :published, :full_time_vacancies, :running, site: site1)
+    site_status2 = build(:site_status, :published, :full_time_vacancies, :suspended, site: site2)
+    site_status3 = build(:site_status, :published, :full_time_vacancies, :new, site: site3)
+    site_status4 = build(:site_status, :published, :with_no_vacancies, :new, site: site4)
+    site_status5 = build(:site_status, :published, :with_no_vacancies, :running, site: site5)
+
+    sites = [site1, site2, site3, site4, site5]
+    site_statuses = [site_status1, site_status2, site_status3, site_status4, site_status5]
+
+    course_enrichment = build(
+      :course_enrichment, :published, course_length: :TwoYears, fee_uk_eu: 9250, fee_international: 14000
+    )
+
+    accrediting_provider = build(:provider)
+
+    course = build(
+      :course, :fee_type_based, accrediting_provider: accrediting_provider,
+                                site_statuses: site_statuses, enrichments: [course_enrichment],
+                                degree_grade: "two_one",
+                                degree_subject_requirements: "Maths A level"
+    )
+    accrediting_provider_enrichment = {
+      "UcasProviderCode" => accrediting_provider.provider_code,
+      "Description" => Faker::Lorem.sentence,
+    }
+
+    provider = build(
+      :provider, sites: sites, courses: [course], accrediting_provider_enrichments: [accrediting_provider_enrichment]
+    )
+
+    user = create(
+      :user,
+      providers: [
+        provider,
+      ],
+    )
+
+    given_i_am_authenticated(
+      user: user,
+    )
+  end
+
+  def when_i_visit_the_course_preview_page
+    publish_course_preview_page.load(
+      provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year, course_code: course.course_code,
+    )
+  end
+
+  def provider
+    @provider ||= @current_user.providers.first
+  end
+
+  def recruitment_cycle
+    @recruitment_cycle ||= provider.recruitment_cycle
+  end
+
+  def course
+    @course ||= provider.courses.first
+  end
+
+  def decorated_course
+    @decorated_course ||= course.decorate
+  end
+
+  def accrediting_provider
+    @accrediting_provider ||= course.accrediting_provider
+  end
+
+  def expect_finanical_support
+    # NOTE: There is a period at the beginning of the new/current
+    #       recruitment cycle whereby the financial incentives
+    #       announcement is still pending.
+
+    financial_incentives_been_announced = true
+
+    if financial_incentives_been_announced
+      expect_financial_incentives
+    else
+      expect_financial_support_placeholder
+    end
+  end
+
+  def expect_financial_support_placeholder
+    expect(decorated_course.use_financial_support_placeholder?).to be_truthy
+
+    expect(preview_course_page.find(".govuk-inset-text"))
+      .to have_text("Financial support for 2021 to 2022 will be announced soon. Further information is available on Get Into Teaching.")
+    expect(preview_course_page).to_not have_scholarship_amount
+    expect(preview_course_page).to_not have_bursary_amount
+  end
+
+  def expect_financial_incentives
+    expect(decorated_course.use_financial_support_placeholder?).to be_falsey
+
+    expect(preview_course_page.scholarship_amount).to have_content("a scholarship of £2,000")
+    expect(preview_course_page.bursary_amount).to have_content("a bursary of £4,000")
+  end
+end

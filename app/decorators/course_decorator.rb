@@ -149,16 +149,12 @@ class CourseDecorator < ApplicationDecorator
   end
 
   def preview_site_statuses
-    site_statuses.new_or_running.sort_by { |status| status.site.location_name }
+    object.site_statuses.new_or_running.sort_by { |status| status.site.location_name }
   end
 
   def has_site?(site)
     !course.sites.nil? && object.sites.any? { |s| s.id == site.id }
   end
-
-  # def sites
-  #   alphabetically_sorted_sites.pluck(:id)
-  # end
 
   # rubocop:disable Lint/DuplicateBranch: Duplicate branch body detected
   def funding_option
@@ -195,9 +191,9 @@ class CourseDecorator < ApplicationDecorator
     course.recruitment_cycle.year.to_i == Settings.financial_support_placeholder_cycle
   end
 
-  #   def cycle_range
-  #     "#{course.recruitment_cycle.year} to #{course.recruitment_cycle.year.to_i + 1}"
-  #   end
+  def cycle_range
+    "#{course.recruitment_cycle.year} to #{course.recruitment_cycle.year.to_i + 1}"
+  end
 
   def age_range
     if object.age_range_in_years.present?
