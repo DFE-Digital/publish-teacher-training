@@ -16,7 +16,6 @@ module Publish
       end
 
       def update
-        binding.pry
         if form_object.valid?
           flash[:success] = I18n.t("success.saved")
 
