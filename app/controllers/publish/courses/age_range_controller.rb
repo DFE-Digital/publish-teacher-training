@@ -16,7 +16,7 @@ module Publish
       end
 
       def update
-        #binding.pry
+        binding.pry
         if form_object.valid?
           flash[:success] = I18n.t("success.saved")
 
@@ -43,7 +43,7 @@ module Publish
       end
 
       def form_object
-        @form_object ||= AgeRangeForm.new(@course)
+        @form_object ||= AgeRangeForm.new(@course, params: permitted_params)
       end
 
       def permitted_params

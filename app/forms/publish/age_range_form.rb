@@ -26,7 +26,7 @@ module Publish
                                             end
     end
 
-    def initialize(args)
+    def initialize(*args)
       super
 
       if process_custom_range?
