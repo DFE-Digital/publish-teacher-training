@@ -58,7 +58,7 @@ module Publish
   private
 
     def presets
-      course.edit_course_options['age_range_in_years']
+      course.edit_course_options["age_range_in_years"]
     end
 
     def compute_fields

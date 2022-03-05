@@ -38,7 +38,7 @@ module Publish
     private
 
       def age_range_presets
-        @course.edit_course_options['age_range_in_years']
+        @course.edit_course_options["age_range_in_years"]
       end
 
       def form_object
