@@ -39,6 +39,7 @@ class CoursePolicy
 
   alias_method :details?, :show?
   alias_method :update?, :show?
+  alias_method :edit?, :show? # is this the correct permission?
   alias_method :destroy?, :show?
   alias_method :publish?, :update?
   alias_method :publishable?, :update?

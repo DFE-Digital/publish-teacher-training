@@ -3,6 +3,8 @@ module Publish
     class AgeRangeController < PublishController
       include CourseBasicDetailConcern
       decorates_assigned :course
+      before_action :build_recruitment_cycle, only: %i[edit update]
+      before_action :build_provider, only: %i[edit update]
       before_action :build_course, only: %i[edit update]
 
       def edit
@@ -14,6 +16,7 @@ module Publish
       end
 
       def update
+        #binding.pry
         if form_object.valid?
           flash[:success] = I18n.t("success.saved")
 
@@ -21,7 +24,7 @@ module Publish
 
           if @course.update(course_params)
             redirect_to(
-              details_provider_recruitment_cycle_course_path(
+              details_publish_provider_recruitment_cycle_course_path(
                 @course.provider_code,
                 @course.recruitment_cycle_year,
                 @course.course_code,
@@ -36,11 +39,11 @@ module Publish
     private
 
       def age_range_presets
-        @course.meta["edit_options"]["age_range_in_years"]
+        @course.edit_course_options['age_range_in_years']
       end
 
       def form_object
-        @form_object ||= AgeRangeForm.new(permitted_params.merge(presets: age_range_presets))
+        @form_object ||= AgeRangeForm.new(@course)
       end
 
       def permitted_params
@@ -87,12 +90,24 @@ module Publish
         :age_range
       end
 
+      def build_provider
+        return if params[:provider_code].blank?
+
+        @provider = @recruitment_cycle.providers.find_by!(
+          provider_code: params[:provider_code].upcase,
+        )
+      end
+
+      def build_recruitment_cycle
+        @recruitment_cycle = RecruitmentCycle.find_by(
+          year: params[:recruitment_cycle_year],
+        ) || RecruitmentCycle.current_recruitment_cycle
+      end
+
       def build_course
-        @course = Course
-          .where(recruitment_cycle_year: params[:recruitment_cycle_year])
-          .where(provider_code: params[:provider_code])
-          .find(params[:code])
-          .first
+        @course = @provider.courses.find_by!(course_code: params[:code].upcase)
+
+        authorize @course
       end
     end
   end

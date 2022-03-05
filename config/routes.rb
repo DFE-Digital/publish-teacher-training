@@ -103,6 +103,9 @@ Rails.application.routes.draw do
         resources :courses, param: :code, only: %i[index new create show] do
           get "/details", on: :member, to: "courses#details"
 
+          get "/age_range", on: :member, to: "courses/age_range#edit"
+          put "/age_range", on: :member, to: "courses/age_range#update"
+
           get "/vacancies", on: :member, to: "courses/vacancies#edit"
           put "/vacancies", on: :member, to: "courses/vacancies#update"
 
