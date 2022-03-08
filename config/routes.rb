@@ -118,6 +118,14 @@ Rails.application.routes.draw do
           put "/locations", on: :member, to: "courses/sites#update"
 
           get "/preview", on: :member, to: "courses#preview"
+          get "/degrees/start", on: :member, to: "courses/degrees/start#edit"
+          put "/degrees/start", on: :member, to: "courses/degrees/start#update"
+
+          get "/degrees/grade", on: :member, to: "courses/degrees/grade#edit"
+          put "/degrees/grade", on: :member, to: "courses/degrees/grade#update"
+
+          get "/degrees/subject-requirements", on: :member, to: "courses/degrees/subject_requirements#edit"
+          put "/degrees/subject-requirements", on: :member, to: "courses/degrees/subject_requirements#update"
         end
 
         scope module: :providers do

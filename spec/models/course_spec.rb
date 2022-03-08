@@ -2604,4 +2604,40 @@ describe Course, type: :model do
       expect(course.provider.changed_at).to eq(Time.zone.now)
     end
   end
+
+  describe "#degree_section_complete?" do
+    context "when degree_grade is set" do
+      subject { build(:course, degree_grade: "two_one") }
+
+      it "returns true" do
+        expect(subject.degree_section_complete?).to be(true)
+      end
+    end
+
+    context "when degree_grade is nil" do
+      subject { build(:course, degree_grade: nil) }
+
+      it "returns false" do
+        expect(subject.degree_section_complete?).to be(false)
+      end
+    end
+  end
+
+  describe "#is_primary?" do
+    context "when course is primary" do
+      subject { build(:course, level: :primary) }
+
+      it "returns true" do
+        expect(subject.is_primary?).to be(true)
+      end
+    end
+
+    context "when degree_grade is nil" do
+      subject { build(:course, level: :secondary) }
+
+      it "returns false" do
+        expect(subject.is_primary?).to be(false)
+      end
+    end
+  end
 end
