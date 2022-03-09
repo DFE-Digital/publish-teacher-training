@@ -64,6 +64,7 @@ basic_auth:
   enabled: false
 
 google:
+  maps_api_key: replace_me
   bigquery:
     project_id: replaceme
     dataset: replaceme

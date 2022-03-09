@@ -127,5 +127,9 @@ module FeatureHelpers
     def publish_course_location_page
       @publish_course_location_page ||= PageObjects::Publish::CourseLocationEdit.new
     end
+
+    def publish_course_preview_page
+      @publish_course_preview_page ||= PageObjects::Publish::CoursePreview.new
+    end
   end
 end

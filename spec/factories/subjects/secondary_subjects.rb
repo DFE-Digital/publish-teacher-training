@@ -1,6 +1,6 @@
 FactoryBot.define do
   subjects = {
-    # Modern Lanuages has been removed as it would cause validation errors if it
+    # Modern Languages has been removed as it would cause validation errors if it
     # isn't paired with a valid modern language subject use a trait if you want to create it
     "Ancient Greek" => "A1",
     "Ancient Hebrew" => "A2",

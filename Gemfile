@@ -92,6 +92,10 @@ gem "sidekiq-cron"
 # Semantic Logger makes logs pretty
 gem "rails_semantic_logger"
 
+# Render nice markdown
+gem "redcarpet"
+gem "rubypants"
+
 # Thread-safe global state
 gem "request_store"
 

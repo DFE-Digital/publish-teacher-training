@@ -58,6 +58,12 @@ module Publish
       @course = ::Courses::CreationService.call(course_params: course_params, provider: provider)
     end
 
+    def preview
+      fetch_course
+
+      authorize @course
+    end
+
   private
 
     def course_params

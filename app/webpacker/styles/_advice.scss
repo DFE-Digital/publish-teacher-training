@@ -1,0 +1,23 @@
+.app-advice {
+  @include govuk-responsive-margin(4, "bottom");
+  background: govuk-colour("light-grey");
+  border-left: $govuk-border-width solid $git-brand-colour;
+  clear: both;
+  padding: govuk-spacing(4);
+}
+
+.app-advice__caption {
+  @include govuk-font($size: 19);
+  color: govuk-colour("dark-grey");
+  display: block;
+}
+
+.app-advice__title {
+  @include govuk-font($size: 24, $weight: "bold");
+  margin-top: 0;
+  margin-bottom: govuk-spacing(4);
+}
+
+.app-advice__body > *:last-child {
+  margin-bottom: 0;
+}
