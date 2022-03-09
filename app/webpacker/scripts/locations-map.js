@@ -1,7 +1,6 @@
 import createPopupClass from "./map-popup";
 
 const initLocationsMap = () => {
-  console.log("im here")
   const $map = document.getElementById("locations-map");
   const trainingLocations = window.trainingLocations
     .filter(({lat, lng}) => lat !== "" && lng !== "")

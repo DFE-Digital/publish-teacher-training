@@ -176,8 +176,7 @@ private
   end
 
   def user_with_custom_address_requested_via_zendesk
-    course = build(:course,
-                   course_code: "X104")
+    course = build(:course, course_code: "X104")
     provider = build(
       :provider, provider_code: "28T", courses: [course]
     )

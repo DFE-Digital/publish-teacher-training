@@ -148,7 +148,6 @@ class CourseDecorator < ApplicationDecorator
 
   # rubocop:disable Lint/DuplicateBranch: Duplicate branch body detected
   def funding_option
-    # TODO: Fix this typical railsy rubbish
     if salaried?
       "Salary"
     elsif excluded_from_bursary?
