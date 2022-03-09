@@ -70,3 +70,6 @@ terraform/*token
 /yarn-error.log
 yarn-debug.log*
 .yarn-integrity
+
+# Ignore snyk related cache
+.dccache
