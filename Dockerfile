@@ -1,6 +1,10 @@
 FROM ruby:2.7.5-alpine3.15 AS middleman
+# Remove apk add for gmp 6.2.1-r1 when the base image is updated
 
 RUN apk add --update --no-cache npm git build-base
+
+# Remove once base image ruby:2.7.5-alpine3.15 has been updated with latest gmp
+RUN apk add --no-cache gmp=6.2.1-r1
 
 COPY docs/Gemfile docs/Gemfile.lock /
 
@@ -23,6 +27,9 @@ RUN apk add --update --no-cache tzdata && \
 
 RUN apk add --update --no-cache --virtual runtime-dependances \
  postgresql-dev git ncurses shared-mime-info
+
+# Remove once base image ruby:2.7.5-alpine3.15 has been updated with latest gmp
+RUN apk add --no-cache gmp=6.2.1-r1
 
 ENV APP_HOME /app
 
