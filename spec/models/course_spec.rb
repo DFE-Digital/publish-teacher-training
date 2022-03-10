@@ -2632,7 +2632,7 @@ describe Course, type: :model do
       end
     end
 
-    context "when degree_grade is nil" do
+    context "when course is not primary" do
       subject { build(:course, level: :secondary) }
 
       it "returns false" do

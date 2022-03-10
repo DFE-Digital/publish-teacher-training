@@ -32,7 +32,9 @@ module Publish
         end
 
         def grade_params
-          params.dig(:publish_degree_grade_form, :grade)
+          return if params[:publish_degree_grade_form].blank?
+
+          params.require(:publish_degree_grade_form).permit(:grade)[:grade]
         end
       end
     end
