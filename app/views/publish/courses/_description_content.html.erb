@@ -138,7 +138,7 @@
       (render GcseRowContentComponent::View.new(course: course, errors: @errors)),
       %w[accept_pending_gcse accept_gcse_equivalency accept_english_gcse_equivalency accept_maths_gcse_equivalency accept_science_gcse_equivalency additional_gcse_equivalencies],
       truncate_value: false,
-      action_path: nil, #course.gcse_section_complete? ? gcses_pending_or_equivalency_tests_provider_recruitment_cycle_course_path(@provider.provider_code, @provider.recruitment_cycle_year, course.course_code) : nil,
+      action_path: course.gcse_section_complete? ? gcses_pending_or_equivalency_tests_publish_provider_recruitment_cycle_course_path(@provider.provider_code, @provider.recruitment_cycle_year, course.course_code) : nil,
       action_visually_hidden_text: "GCSEs",
     ) %>
   
