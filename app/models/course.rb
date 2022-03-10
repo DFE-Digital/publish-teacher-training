@@ -10,7 +10,7 @@ class Course < ApplicationRecord
   after_initialize :set_defaults
 
   before_discard do
-    raise "You cannot delete the running course #{self}" unless ucas_status == :new
+    raise "You cannot delete the running course #{self}" unless %i[new not_running].include?(ucas_status)
   end
 
   has_associated_audits
