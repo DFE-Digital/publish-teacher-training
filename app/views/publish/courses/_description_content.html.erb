@@ -127,7 +127,7 @@
       (render DegreeRowContentComponent::View.new(course: course, errors: @errors)),
       %w[degree_grade degree_subject_requirements],
       truncate_value: false,
-      action_path: nil, #course.degree_section_complete? ? degrees_start_provider_recruitment_cycle_course_path(@provider.provider_code, @provider.recruitment_cycle_year, course.course_code) : nil,
+      action_path: course.degree_section_complete? ? degrees_start_publish_provider_recruitment_cycle_course_path(@provider.provider_code, @provider.recruitment_cycle_year, course.course_code) : nil,
       action_visually_hidden_text: "degree",
     ) %>
 

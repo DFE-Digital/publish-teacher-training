@@ -131,5 +131,17 @@ module FeatureHelpers
     def publish_course_preview_page
       @publish_course_preview_page ||= PageObjects::Publish::CoursePreview.new
     end
+
+    def publish_degree_start_page
+      @publish_degree_start_page ||= PageObjects::Publish::DegreeStart.new
+    end
+
+    def publish_degree_grade_page
+      @publish_degree_grade_page ||= PageObjects::Publish::DegreeGrade.new
+    end
+
+    def publish_degree_subject_requirement_page
+      @publish_degree_subject_requirement_page ||= PageObjects::Publish::DegreeSubjectRequirement.new
+    end
   end
 end

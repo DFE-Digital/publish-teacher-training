@@ -12,13 +12,13 @@
   <%= govuk_inset_text(classes: inset_text_css_classes) do %>
     <p class="govuk-heading-s app-inset-text__title">Do you require a minimum degree classification?</p>
     <p class="govuk-body">
-      <%= govuk_link_to "Enter degree requirements", "#"
-        # degrees_start_provider_recruitment_cycle_course_path(
-        #   course.provider.provider_code,
-        #   course.recruitment_cycle_year,
-        #   course.course_code,
-        # ) 
-        %>
+      <%= govuk_link_to "Enter degree requirements",
+        degrees_start_publish_provider_recruitment_cycle_course_path(
+          course.provider.provider_code,
+          course.recruitment_cycle_year,
+          course.course_code,
+        ) 
+      %>
     </p>
   <% end %>
 <% end %>

@@ -4,6 +4,8 @@ require "rails_helper"
 
 module DegreeRowContentComponent
   describe View, type: :component do
+    include Rails.application.routes.url_helpers
+
     let(:recruitment_cycle) { build(:recruitment_cycle) }
     let(:provider) { build(:provider, recruitment_cycle: recruitment_cycle) }
     let(:course) do
@@ -19,13 +21,13 @@ module DegreeRowContentComponent
       render_inline(described_class.new(course: course.decorate))
     end
 
-    context "when the degree section is incomplete", skip: true do
+    context "when the degree section is incomplete" do
       let(:degree_grade) { nil }
 
       it "renders a link to the degree section" do
         expect(page).to have_link(
           "Enter degree requirements",
-          href: Rails.application.routes.url_helpers.degrees_start_provider_recruitment_cycle_course_path(
+          href: degrees_start_publish_provider_recruitment_cycle_course_path(
             provider.provider_code,
             provider.recruitment_cycle.year,
             course.course_code,

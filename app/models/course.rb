@@ -545,6 +545,14 @@ class Course < ApplicationRecord
     level == "further_education"
   end
 
+  def degree_section_complete?
+    degree_grade.present?
+  end
+
+  def is_primary?
+    level == "primary"
+  end
+
   def is_uni_or_scitt?
     provider.accredited_body?
   end
