@@ -60,7 +60,7 @@ feature "Editing course study mode" do
 
   def then_i_should_see_an_error_message
     expect(publish_course_study_mode_page.error_messages).to include(
-       I18n.t("activemodel.errors.models.publish/course_study_mode_form.attributes.study_mode.blank"),
+      I18n.t("activemodel.errors.models.publish/course_study_mode_form.attributes.study_mode.blank"),
     )
   end
 
