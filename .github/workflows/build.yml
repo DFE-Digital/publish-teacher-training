@@ -9,6 +9,8 @@ on:
 
 jobs:
   build:
+    outputs:
+      IMAGE_TAG: ${{ env.DOCKER_IMAGE_TAG }}
     runs-on: ubuntu-latest
     env:
       DOCKER_IMAGE: ghcr.io/dfe-digital/teacher-training-api
@@ -75,15 +77,6 @@ jobs:
           BUILDKIT_INLINE_CACHE=1
           COMMIT_SHA=${{ env.DOCKER_IMAGE_TAG }}
 
-    - name: Trigger Review App Deployment
-      if: ${{ github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'deploy') }}
-      uses: benc-uk/workflow-dispatch@v1
-      with:
-        workflow: Deploy
-        ref: ${{ github.head_ref }}
-        token: ${{ secrets.ACTIONS_API_ACCESS_TOKEN  }}
-        inputs: '{"pr": "${{ github.event.pull_request.number }}", "sha": "${{ env.DOCKER_IMAGE_TAG }}"}'
-
     - name: Pull image if not loaded
       if: ${{ github.actor != 'dependabot[bot]' }}
       run: |
@@ -109,29 +102,6 @@ jobs:
       env:
         IMAGE_TAG: ${{ env.DOCKER_IMAGE_TAG }}
 
-    - name: Wait for review app deployment
-      id: wait_for_review_app_deployment
-      if: ${{ github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'deploy') }}
-      uses: fountainhead/action-wait-for-check@v1.0.0
-      with:
-        token: ${{ secrets.GITHUB_TOKEN }}
-        ref: ${{ github.head_ref }}
-        checkName: ${{ github.event.pull_request.number }} Deployment
-        timeoutSeconds:  1800
-        intervalSeconds: 10
-
-    - name: Exit if review app deployment failed
-      if: ${{ steps.wait_for_review_app_deployment.outputs.conclusion != '' && steps.wait_for_review_app_deployment.outputs.conclusion != 'success' }}
-      run: exit 1
-
-    - name: Trigger Deployment
-      if: ${{ success() && github.ref == 'refs/heads/master' }}
-      uses: benc-uk/workflow-dispatch@v1
-      with:
-        workflow: Deploy
-        token: ${{ secrets.ACTIONS_API_ACCESS_TOKEN  }}
-        inputs: '{"qa": "true", "staging": "true", "production": "true", "sandbox": "true", "sha": "${{ env.DOCKER_IMAGE_TAG }}"}'
-
     - name: Alert Build Failures
       if: ${{ failure() && github.ref == 'refs/heads/master' }}
       uses: rtCamp/action-slack-notify@master
@@ -143,3 +113,48 @@ jobs:
         SLACK_TITLE: Build failure
         SLACK_MESSAGE: ':alert: <!channel> Teacher Training API Build failure :sadparrot:'
         SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+
+  deploy-review-app:
+    name: Deployment To Review
+    concurrency: deploy_review_${{ github.event.pull_request.number }}
+    if: ${{ github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'deploy') }}
+    needs: [build]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Deploy App to Review
+        uses: ./.github/actions/deploy/
+        with:
+          actions-api-access-token: ${{ secrets.ACTIONS_API_ACCESS_TOKEN }}
+          arm-access-key: ${{ secrets.ARM_ACCESS_KEY_REVIEW }}
+          azure-credentials: ${{ secrets.AZURE_CREDENTIALS_REVIEW }}
+          environment: review
+          pr-number: ${{ github.event.pull_request.number }}
+          sha: ${{ needs.build.outputs.IMAGE_TAG }}
+          slack-webhook: ${{ secrets.SLACK_WEBHOOK }}
+
+  deploy-all:
+    name: Deployment To All
+    concurrency: deploy_all
+    if: ${{ success() && github.ref == 'refs/heads/master' }}
+    needs: [build]
+    runs-on: ubuntu-latest
+    strategy:
+      matrix: 
+        environment: [qa,staging,production,sandbox]
+      max-parallel: 1
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Deploy App to ${{ matrix.environment }}
+        uses: ./.github/actions/deploy/
+        with:
+          actions-api-access-token: ${{ secrets.ACTIONS_API_ACCESS_TOKEN }}
+          arm-access-key: ${{ secrets[format('ARM_ACCESS_KEY_{0}', matrix.environment)] }}
+          azure-credentials: ${{ secrets[format('AZURE_CREDENTIALS_{0}', matrix.environment)] }}
+          environment: ${{ matrix.environment }}
+          sha: ${{ needs.build.outputs.IMAGE_TAG }}
+          slack-webhook: ${{ secrets.SLACK_WEBHOOK }}
