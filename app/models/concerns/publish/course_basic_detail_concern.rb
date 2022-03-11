@@ -4,7 +4,7 @@ module Publish
 
     included do
       decorates_assigned :course
-      before_action :build_new_course, :build_provider, only: %i[back new continue]
+      before_action :build_new_course, only: %i[back new continue]
       before_action :build_previous_course_creation_params, only: %i[new continue]
       before_action :build_meta_course_creation_params, only: %i[new continue]
       before_action :build_back_link, only: %i[new back continue]
@@ -26,7 +26,7 @@ module Publish
       if @course.update(course_params)
         flash[:success] = I18n.t("success.saved")
         redirect_to(
-          details_provider_recruitment_cycle_course_path(
+          details_publish_provider_recruitment_cycle_course_path(
             @course.provider_code,
             @course.recruitment_cycle_year,
             @course.course_code,
@@ -67,18 +67,6 @@ module Publish
 
     def error_keys
       []
-    end
-
-    def build_provider
-      @provider = RecruitmentCycle.find_by(year: params[:recruitment_cycle_year]).providers.find_by(provider_code: params[:provider_code])
-    end
-
-    def build_course
-      @course = Course
-        .where(recruitment_cycle_year: params[:recruitment_cycle_year])
-        .where(provider_code: params[:provider_code])
-        .find(params[:code])
-        .first
     end
 
     def course_params

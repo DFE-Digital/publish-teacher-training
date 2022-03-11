@@ -118,6 +118,10 @@ Rails.application.routes.draw do
           put "/locations", on: :member, to: "courses/sites#update"
 
           get "/preview", on: :member, to: "courses#preview"
+
+          get "/full-part-time", on: :member, to: "courses/study_mode#edit"
+          put "/full-part-time", on: :member, to: "courses/study_mode#update"
+
           get "/degrees/start", on: :member, to: "courses/degrees/start#edit"
           put "/degrees/start", on: :member, to: "courses/degrees/start#update"
 

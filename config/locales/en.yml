@@ -365,6 +365,10 @@ en:
               too_long: "Reduce the word count for personal qualities"
             other_requirements:
               too_long: "Reduce the word count for other requirements"
+        publish/course_study_mode_form:
+          attributes:
+            study_mode:
+              blank: "Pick full time, part time or full time and part time"
   errors:
     messages:
       email: "^Enter an email address in the correct format, like name@example.com"
