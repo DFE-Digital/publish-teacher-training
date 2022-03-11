@@ -147,5 +147,9 @@ module FeatureHelpers
     def publish_course_study_mode_page
       @publish_course_study_mode_page ||= PageObjects::Publish::CourseStudyModeEdit.new
     end
+
+    def gcse_requirements_page
+      @gcse_requirements_page ||= PageObjects::Publish::Courses::GcseRequirementsPage.new
+    end
   end
 end
