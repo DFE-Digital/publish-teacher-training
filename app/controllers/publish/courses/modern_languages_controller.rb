@@ -52,7 +52,7 @@ module Publish
       def back
         authorize(@provider, :edit?)
         if has_modern_languages_subject?
-          redirect_to new_provider_recruitment_cycle_courses_modern_languages_path(path_params)
+          redirect_to new_publish_provider_recruitment_cycle_courses_modern_languages_path(path_params)
         else
           redirect_to @back_link_path
         end
