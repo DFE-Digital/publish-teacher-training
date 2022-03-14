@@ -41,7 +41,7 @@ module Publish
     validates :age_range_in_years, presence: true
     validates :course_age_range_in_years_other_from, numericality: {
       only_integer: true,
-      allow_blank: true
+      allow_blank: true,
     }, inclusion: { in: 0..46 }
     validates :course_age_range_in_years_other_to, numericality: {
       only_integer: true,
