@@ -27,11 +27,6 @@ module Publish
       end
 
     private
-
-      def build_course
-        @course = provider.courses.find_by!(course_code: params[:code])
-      end
-
       def study_mode_params
         return { study_mode: nil } if params[:publish_course_study_mode_form].blank?
 

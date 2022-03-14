@@ -57,6 +57,10 @@ module Publish
       @course = ::Courses::CreationService.call(course_params: course_params, provider: provider)
     end
 
+    def build_course
+      @course = provider.courses.find_by!(course_code: params[:code])
+    end
+
     def add_custom_age_range_into_params
       params["course"]["age_range_in_years"] = "#{age_from_param}_to_#{age_to_param}"
     end
