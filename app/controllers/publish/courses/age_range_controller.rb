@@ -37,9 +37,10 @@ module Publish
 
     private
 
-      def age_range_presets
-        @course.edit_course_options["age_range_in_years"]
-      end
+      #def age_range_presets
+      #  binding.pry
+      #  @course.edit_course_options["age_range_in_years"]
+      #end
 
       def form_object
         @form_object ||= AgeRangeForm.new(@course, params: permitted_params)

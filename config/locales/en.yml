@@ -1,7 +1,4 @@
 en:
-  age_range:
-    errors:
-      to_invalid_error: "Enter a valid age in To"
   helpers:
     hint:
       site:
@@ -307,6 +304,22 @@ en:
   activemodel:
     errors:
       models:
+        publish/age_range_form:
+          attributes:
+            age_range_in_years:
+              blank: "You need to pick an age range"
+            course_age_range_in_years_other_from:
+              blank: "Enter an age in From"
+              not_a_number: "Enter a valid age in From"
+              not_an_integer: "Enter a valid age in From"
+              inclusion: "From age must be between 0 and 46"
+              invalid: "Enter a valid age in From"
+            course_age_range_in_years_other_to:
+              blank: "Enter an age in To"
+              not_a_number: "Enter a valid age in To"
+              not_an_integer: "Enter a valid age in To"
+              inclusion: "To age must be between 4 and 50"
+              invalid: "Enter a valid age in To"
         publish/access_request_form:
           attributes:
             first_name:

@@ -17,7 +17,7 @@
       <%= f.govuk_error_summary %>
 
       <%= f.govuk_radio_buttons_fieldset(:age_range_in_years, legend: { text: page_title, size: "l" }, caption: { text: course.name_and_code, size: "l" }) do %>
-        <% @course.edit_course_options["age_range_in_years"].each do |value| %>
+        <% @course.age_range_options.each do |value| %>
           <%= f.govuk_radio_button(:age_range_in_years,
             value,
             label: { text: I18n.t("edit_options.age_range_in_years.#{value}.label") },

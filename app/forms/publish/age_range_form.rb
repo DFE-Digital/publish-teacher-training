@@ -2,6 +2,8 @@ module Publish
   class AgeRangeForm < BaseModelForm
     alias_method :course, :model
 
+    include ::Courses::EditOptions::AgeRangeConcern
+
     FIELDS = %i[
       age_range_in_years
       course_age_range_in_years_other_from
@@ -36,21 +38,15 @@ module Publish
       end
     end
 
-    validates :age_range_in_years, presence: { message: I18n.t("age_range.errors.missing_error") }
+    validates :age_range_in_years, presence: true
     validates :course_age_range_in_years_other_from, numericality: {
       only_integer: true,
-      greater_than_or_equal_to: 0,
-      less_than_or_equal_to: 46,
-      allow_blank: true,
-      message: I18n.t("age_range.errors.from_range", min: 0, max: 46),
-    }
+      allow_blank: true
+    }, inclusion: { in: 0..46 }
     validates :course_age_range_in_years_other_to, numericality: {
       only_integer: true,
-      greater_than_or_equal_to: 4,
-      less_than_or_equal_to: 50,
       allow_blank: true,
-      message: I18n.t("age_range.errors.to_range", min: 4, max: 50),
-    }
+    }, inclusion: { in: 4..50 }
     validate :age_range_from_and_to_missing
     validate :age_range_from_and_to_reversed
     validate :age_range_spans_at_least_4_years
@@ -58,7 +54,7 @@ module Publish
   private
 
     def presets
-      course.edit_course_options["age_range_in_years"]
+      course.age_range_options
     end
 
     def compute_fields
@@ -80,24 +76,24 @@ module Publish
     def age_range_from_and_to_missing
       if age_range_in_years == "other"
         if course_age_range_in_years_other_from.blank?
-          errors.add(:course_age_range_in_years_other_from, I18n.t("age_range.errors.from_missing_error"))
+          errors.add(:course_age_range_in_years_other_from, :blank)
         end
 
         if course_age_range_in_years_other_to.blank?
-          errors.add(:course_age_range_in_years_other_to, I18n.t("age_range.errors.to_missing_error"))
+          errors.add(:course_age_range_in_years_other_to, :blank)
         end
       end
     end
 
     def age_range_from_and_to_reversed
       if age_range_in_years == "other" && course_age_range_in_years_other_from.present? && course_age_range_in_years_other_to.present? && (course_age_range_in_years_other_from.to_i > course_age_range_in_years_other_to.to_i)
-        errors.add(:course_age_range_in_years_other_from, I18n.t("age_range.errors.from_invalid_error"))
+        errors.add(:course_age_range_in_years_other_from, :invalid)
       end
     end
 
     def age_range_spans_at_least_4_years
       if age_range_in_years == "other" && ((course_age_range_in_years_other_to.to_i - course_age_range_in_years_other_from.to_i).abs < 4)
-        errors.add(:course_age_range_in_years_other_to, I18n.t("age_range.errors.to_invalid_error"))
+        errors.add(:course_age_range_in_years_other_to, :invalid)
       end
     end
   end
