@@ -17,12 +17,12 @@
 <% else %>
   <%= govuk_inset_text(classes: "app-inset-text--important") do %>
     <p class="govuk-body">
-      Please add details <%= govuk_link_to "about GCSE requirements", "#"
-        # gcses_pending_or_equivalency_tests_provider_recruitment_cycle_course_path(
-        #   course.provider.provider_code,
-        #   course.provider.recruitment_cycle_year,
-        #   course.course_code,
-        # ) 
+      Please add details <%= govuk_link_to "about GCSE requirements",
+        gcses_pending_or_equivalency_tests_publish_provider_recruitment_cycle_course_path(
+          course.provider.provider_code,
+          course.provider.recruitment_cycle_year,
+          course.course_code,
+        ) 
         %>.
     </p>
   <% end %>

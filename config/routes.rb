@@ -130,6 +130,9 @@ Rails.application.routes.draw do
 
           get "/degrees/subject-requirements", on: :member, to: "courses/degrees/subject_requirements#edit"
           put "/degrees/subject-requirements", on: :member, to: "courses/degrees/subject_requirements#update"
+
+          get "/gcses-pending-or-equivalency-tests", on: :member, to: "courses/gcse_requirements#edit"
+          put "/gcses-pending-or-equivalency-tests", on: :member, to: "courses/gcse_requirements#update"
         end
 
         scope module: :providers do
