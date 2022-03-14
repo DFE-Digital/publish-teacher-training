@@ -26,14 +26,10 @@ runs:
     - name: Set Environment variables
       shell: bash
       run: |
-        echo "DEPLOY_ENV=$DEPLOY_ENV" >> $GITHUB_ENV
         if [ -n "${{ inputs.pr-number }}" ]; then
-          PR_NUMBER=${{ inputs.pr-number }}
-          echo "PR_NUMBER=$PR_NUMBER" >> $GITHUB_ENV
-          echo "DEPLOY_ENV=$DEPLOY_ENV-${{ inputs.pr-number }}" >> $GITHUB_ENV
-          echo "APP_NAME=$PR_NUMBER" >> $GITHUB_ENV
-          echo "DEPLOY_URL=https://teacher-training-api-pr-$PR_NUMBER.london.cloudapps.digital" >> $GITHUB_ENV
-          DEPLOY_ENV=review
+          echo "DEPLOY_ENV=${{ inputs.environment }}-${{ inputs.pr-number }}" >> $GITHUB_ENV
+          echo "APP_NAME=${{ inputs.pr-number }}" >> $GITHUB_ENV
+          echo "DEPLOY_URL=https://teacher-training-api-pr-${{ inputs.pr-number }}.london.cloudapps.digital" >> $GITHUB_ENV
           echo "DEPLOY_REF=${{ github.head_ref }}" >> $GITHUB_ENV
         else
           echo "DEPLOY_ENV=${{ inputs.environment }}" >> $GITHUB_ENV
@@ -41,15 +37,13 @@ runs:
           echo "DEPLOY_REF=${{ github.ref }}" >> $GITHUB_ENV
         fi;
 
-        tf_vars_file=terraform/workspace_variables/${DEPLOY_ENV}.tfvars.json
+        tf_vars_file=terraform/workspace_variables/${{ inputs.environment }}.tfvars.json
         echo "key_vault_name=$(jq -r '.key_vault_name' ${tf_vars_file})" >> $GITHUB_ENV
         echo "key_vault_app_secret_name=$(jq -r '.key_vault_app_secret_name' ${tf_vars_file})" >> $GITHUB_ENV
         echo "key_vault_infra_secret_name=$(jq -r '.key_vault_infra_secret_name' ${tf_vars_file})" >> $GITHUB_ENV
-      env:
-        DEPLOY_ENV: ${{ inputs.environment }}
 
     - name: Start ${{ inputs.environment }} Deployment
-      uses: bobheadxi/deployments@v0.4.3
+      uses: bobheadxi/deployments@v1
       id:   deployment
       with:
         step: start
@@ -110,8 +104,8 @@ runs:
       run: exit 1
 
     - name: Update ${{ env.DEPLOY_ENV }} status
-      if:   ${{ always() }}
-      uses: bobheadxi/deployments@v0.4.3
+      if:   always()
+      uses: bobheadxi/deployments@v1
       with:
         step:   finish
         token:  ${{ github.token }}
