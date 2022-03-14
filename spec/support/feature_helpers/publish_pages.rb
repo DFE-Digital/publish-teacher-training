@@ -143,5 +143,9 @@ module FeatureHelpers
     def publish_degree_subject_requirement_page
       @publish_degree_subject_requirement_page ||= PageObjects::Publish::DegreeSubjectRequirement.new
     end
+
+    def publish_course_study_mode_page
+      @publish_course_study_mode_page ||= PageObjects::Publish::CourseStudyModeEdit.new
+    end
   end
 end

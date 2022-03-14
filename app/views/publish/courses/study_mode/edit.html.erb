@@ -1,21 +1,40 @@
-<% content_for :page_title, title_with_error_prefix("Full time or part time? – #{course.name_and_code}", course.errors.any?) %>
+<% content_for :page_title, title_with_error_prefix("Full time or part time? – #{course.name_and_code}", @course_study_mode_form.errors.any?) %>
 
 <% content_for :before_content do %>
-  <%= govuk_back_link_to(details_provider_recruitment_cycle_course_path(course.provider_code, course.recruitment_cycle_year, course.course_code)) %>
+  <%= govuk_back_link_to(details_publish_provider_recruitment_cycle_course_path(
+    course.provider_code, 
+    course.recruitment_cycle_year, 
+    course.course_code)
+  ) %>
 <% end %>
-
-<%= render "publish/shared/errors" %>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <%= form_with model: course,
-                  url: full_part_time_provider_recruitment_cycle_course_path(@course.provider_code, @course.recruitment_cycle_year, @course.course_code),
-                  method: :put do |form| %>
+    <%= form_with(
+      model: @course_study_mode_form,
+      url: full_part_time_publish_provider_recruitment_cycle_course_path(
+        course.provider_code, 
+        course.recruitment_cycle_year, 
+        course.course_code,
+      ),
+      method: :put,
+      local: true
+    ) do |f| %>
 
-      <%= render "form_fields", form: form %>
+      <%= f.govuk_error_summary %>
 
-      <%= form.submit course.is_running? ? "Save and publish changes" : "Save",
-        class: "govuk-button", data: { qa: "course__save" } %>
+      <%= f.govuk_radio_buttons_fieldset(:study_mode, legend: { text: "Full time or part time?", tag: "h1", size: "l" }) do %>
+        <% course.edit_course_options["study_modes"].each_with_index do |study_mode, index| %>
+          <%= f.govuk_radio_button(
+            :study_mode,
+            study_mode,
+            label: { text: t("edit_options.study_modes.#{study_mode}.label") },
+            link_errors: index.zero?,
+          ) %>
+        <% end %>
+      <% end %>
+
+      <%= f.govuk_submit course.is_running? ? "Save and publish changes" : "Save" %>
     <% end %>
   </div>
 </div>
