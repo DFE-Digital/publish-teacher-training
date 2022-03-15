@@ -7,6 +7,12 @@ on:
   pull_request:
     types: [opened, reopened, synchronize, labeled]
 
+permissions:
+  contents: write
+  deployments: write
+  packages: write
+  pull-requests: write
+
 jobs:
   build:
     outputs:
