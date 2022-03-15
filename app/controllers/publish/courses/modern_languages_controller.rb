@@ -98,15 +98,6 @@ module Publish
         end
       end
 
-      def build_course
-        @course = Course
-                    .includes(:subjects, :site_statuses)
-                    .where(recruitment_cycle_year: params[:recruitment_cycle_year])
-                    .where(provider_code: params[:provider_code])
-                    .find(params[:code])
-                    .first
-      end
-
       def has_modern_languages_subject?
         modern_languages_subject_id = @course.edit_course_options[:modern_languages_subject][:id]
         @course.subjects.any? { |subject| subject[:id] == modern_languages_subject_id }

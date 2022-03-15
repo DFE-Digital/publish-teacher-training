@@ -81,15 +81,6 @@ module Publish
         [:subjects]
       end
 
-      def build_course
-        @course = Course
-                    .includes(:subjects, :site_statuses)
-                    .where(recruitment_cycle_year: params[:recruitment_cycle_year])
-                    .where(provider_code: params[:provider_code])
-                    .find(params[:code])
-                    .first
-      end
-
       def build_course_params
         selected_master = params[:course][:master_subject_id] if params[:course][:master_subject_id].present?
         selected_subordinate = nil
