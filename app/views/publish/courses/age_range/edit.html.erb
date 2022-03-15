@@ -20,18 +20,20 @@
         <% @course.age_range_options.each do |value| %>
           <%= f.govuk_radio_button(:age_range_in_years,
             value,
+            data: { qa: "course__age_range_in_years_#{value}_radio" },
             label: { text: I18n.t("edit_options.age_range_in_years.#{value}.label") },
             link_errors: true) %>
         <% end %>
 
         <%= f.govuk_radio_divider %>
 
-        <%= f.govuk_radio_button :age_range_in_years, "other", label: { text: "Another age range" } do %>
+        <%= f.govuk_radio_button :age_range_in_years, "other", label: { text: "Another age range" },
+        data: { qa: "course__age_range_in_years_other_radio" } do %>
           <p class="govuk-body">Enter an age range in years, for example: 5 to 11. The course must cover 4 or more school years.</p>
 
-          <%= f.govuk_text_field :course_age_range_in_years_other_from, label: { text: "From" }, class: "govuk-input govuk-input--width-2" %>
+          <%= f.govuk_text_field :course_age_range_in_years_other_from, label: { text: "From" }, class: "govuk-input govuk-input--width-2", data: { qa: "course__age_range_in_years_other_from_input" } %>
 
-          <%= f.govuk_text_field :course_age_range_in_years_other_to, label: { text: "To" }, class: "govuk-input govuk-input--width-2" %>
+          <%= f.govuk_text_field :course_age_range_in_years_other_to, label: { text: "To" }, class: "govuk-input govuk-input--width-2", data: { qa: "course__age_range_in_years_other_to_input" } %>
         <% end %>
       <% end %>
 

@@ -42,11 +42,15 @@ module Publish
     validates :course_age_range_in_years_other_from, numericality: {
       only_integer: true,
       allow_blank: true,
-    }, inclusion: { in: 0..46 }
+      greater_than_or_equal_to: 0,
+      less_than_or_equal_to: 46,
+    }
     validates :course_age_range_in_years_other_to, numericality: {
       only_integer: true,
       allow_blank: true,
-    }, inclusion: { in: 4..50 }
+      greater_than_or_equal_to: 4,
+      less_than_or_equal_to: 50,
+    }
     validate :age_range_from_and_to_missing
     validate :age_range_from_and_to_reversed
     validate :age_range_spans_at_least_4_years
