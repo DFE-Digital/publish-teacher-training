@@ -11,7 +11,7 @@ feature "selecting an age range" do
     when_i_select_a_preset_age_range
     and_i_click_continue
     then_i_should_see_a_success_message
-    and_the_course_age_range_is_updated('5_to_11')
+    and_the_course_age_range_is_updated("5_to_11")
   end
 
   scenario "selecting a custom age range" do
@@ -19,7 +19,7 @@ feature "selecting an age range" do
     when_i_select_a_custom_age_range
     and_i_click_continue
     then_i_should_see_a_success_message
-    and_the_course_age_range_is_updated('10_to_15')
+    and_the_course_age_range_is_updated("10_to_15")
   end
 
   scenario "selecting an invalid age range" do
@@ -29,7 +29,6 @@ feature "selecting an age range" do
     then_i_should_see_an_error_message
     and_the_course_age_range_is_not_updated
   end
-
 
 private
 
@@ -53,14 +52,14 @@ private
 
   def when_i_select_a_custom_age_range
     publish_course_age_range_page.age_range_other.click
-    publish_course_age_range_page.age_range_from_field.set('10')
-    publish_course_age_range_page.age_range_to_field.set('15')
+    publish_course_age_range_page.age_range_from_field.set("10")
+    publish_course_age_range_page.age_range_to_field.set("15")
   end
 
   def when_i_select_an_invalid_age_range
     publish_course_age_range_page.age_range_other.click
-    publish_course_age_range_page.age_range_from_field.set('10')
-    publish_course_age_range_page.age_range_to_field.set('5')
+    publish_course_age_range_page.age_range_from_field.set("10")
+    publish_course_age_range_page.age_range_to_field.set("5")
   end
 
   def and_i_click_continue
@@ -84,7 +83,7 @@ private
   def and_the_course_age_range_is_not_updated
     @course = course.reload
 
-    expect(@course.age_range_in_years).to eq('3_to_7')
+    expect(@course.age_range_in_years).to eq("3_to_7")
   end
 
   def then_i_should_see_an_error_message
