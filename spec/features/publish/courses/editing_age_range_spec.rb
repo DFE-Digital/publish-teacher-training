@@ -70,10 +70,6 @@ private
     expect(page).to have_content(I18n.t("success.saved"))
   end
 
-  def then_i_should_see_an_error_message
-    expect(page).to have_content(I18n.t("success.saved"))
-  end
-
   def and_the_course_age_range_is_updated(age_range)
     @course = course.reload
 
