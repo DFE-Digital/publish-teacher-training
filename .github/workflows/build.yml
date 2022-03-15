@@ -15,8 +15,10 @@ permissions:
 
 jobs:
   build:
+    name: Build
     outputs:
-      IMAGE_TAG: ${{ env.DOCKER_IMAGE_TAG }}
+      docker_image: ${{ env.DOCKER_IMAGE }}
+      image_tag: ${{ env.DOCKER_IMAGE_TAG }}
     runs-on: ubuntu-latest
     env:
       DOCKER_IMAGE: ghcr.io/dfe-digital/teacher-training-api
@@ -72,8 +74,7 @@ jobs:
         tags: |
           ${{ env.DOCKER_IMAGE}}:${{ env.BRANCH_TAG }}
           ${{ env.DOCKER_IMAGE}}:${{ env.DOCKER_IMAGE_TAG }}
-        push: ${{ github.actor != 'dependabot[bot]' }}
-        load: ${{ github.actor == 'dependabot[bot]' }}
+        push: true
         cache-from: |
           type=registry,ref=${{ env.DOCKER_IMAGE}}:master
           type=registry,ref=${{ env.DOCKER_IMAGE}}:${{ env.BRANCH_TAG }}
@@ -83,10 +84,35 @@ jobs:
           BUILDKIT_INLINE_CACHE=1
           COMMIT_SHA=${{ env.DOCKER_IMAGE_TAG }}
 
-    - name: Pull image if not loaded
-      if: ${{ github.actor != 'dependabot[bot]' }}
+    - name: Alert Build Failures
+      if: ${{ failure() && github.ref == 'refs/heads/master' }}
+      uses: rtCamp/action-slack-notify@master
+      env:
+        SLACK_CHANNEL: twd_publish_tech
+        SLACK_COLOR: '#ef5343'
+        SLACK_ICON_EMOJI: ':github-logo:'
+        SLACK_USERNAME: Teacher Training API
+        SLACK_TITLE: Build failure
+        SLACK_MESSAGE: ':alert: <!channel> Teacher Training API Build failure :sadparrot:'
+        SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+
+  test:
+    name: Test
+    needs: [build]
+    outputs:
+      image_tag: ${{ needs.build.outputs.image_tag }}
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: Set environment variables
       run: |
-        docker pull ${DOCKER_IMAGE}:${{ env.DOCKER_IMAGE_TAG }}
+        echo "IMAGE_TAG=${{ needs.build.outputs.image_tag }}" >> $GITHUB_ENV
+
+    - name: Pull docker images
+      run: docker pull ${{ needs.build.outputs.docker_image }}:$IMAGE_TAG
 
     - name: Setup tests
       run: |
@@ -94,8 +120,6 @@ jobs:
         docker-compose exec -T web /bin/sh -c "./wait-for-command.sh -c 'nc -z db 5432' -s 0 -t 20"
         docker-compose exec -T web /bin/sh -c "bundle exec rails db:setup"
         docker-compose exec -T web /bin/sh -c "apk --no-cache add curl"
-      env:
-        IMAGE_TAG: ${{ env.DOCKER_IMAGE_TAG }}
 
     - name: Run Ruby Linter
       run: docker-compose exec -T web /bin/sh -c 'bundle exec rubocop --format clang'
@@ -108,7 +132,7 @@ jobs:
       env:
         IMAGE_TAG: ${{ env.DOCKER_IMAGE_TAG }}
 
-    - name: Alert Build Failures
+    - name: Alert Test Failures
       if: ${{ failure() && github.ref == 'refs/heads/master' }}
       uses: rtCamp/action-slack-notify@master
       env:
@@ -116,8 +140,8 @@ jobs:
         SLACK_COLOR: '#ef5343'
         SLACK_ICON_EMOJI: ':github-logo:'
         SLACK_USERNAME: Teacher Training API
-        SLACK_TITLE: Build failure
-        SLACK_MESSAGE: ':alert: <!channel> Teacher Training API Build failure :sadparrot:'
+        SLACK_TITLE: Test failure
+        SLACK_MESSAGE: ':alert: <!channel> Teacher Training API Test failure :sadparrot:'
         SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
 
   deploy-review-app:
@@ -138,14 +162,14 @@ jobs:
           azure-credentials: ${{ secrets.AZURE_CREDENTIALS_REVIEW }}
           environment: review
           pr-number: ${{ github.event.pull_request.number }}
-          sha: ${{ needs.build.outputs.IMAGE_TAG }}
+          sha: ${{ needs.build.outputs.image_tag }}
           slack-webhook: ${{ secrets.SLACK_WEBHOOK }}
 
   deploy-all:
     name: Deployment To All
     concurrency: deploy_all
     if: ${{ success() && github.ref == 'refs/heads/master' }}
-    needs: [build]
+    needs: [test]
     runs-on: ubuntu-latest
     strategy:
       matrix: 
@@ -162,5 +186,5 @@ jobs:
           arm-access-key: ${{ secrets[format('ARM_ACCESS_KEY_{0}', matrix.environment)] }}
           azure-credentials: ${{ secrets[format('AZURE_CREDENTIALS_{0}', matrix.environment)] }}
           environment: ${{ matrix.environment }}
-          sha: ${{ needs.build.outputs.IMAGE_TAG }}
+          sha: ${{ needs.test.outputs.image_tag }}
           slack-webhook: ${{ secrets.SLACK_WEBHOOK }}
