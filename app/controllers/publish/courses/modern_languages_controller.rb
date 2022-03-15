@@ -4,7 +4,6 @@ module Publish
       decorates_assigned :course
       before_action :build_course, only: %i[edit update]
       before_action :build_course_params, only: [:continue]
-      before_action :build_provider, only: [:new]
       include CourseBasicDetailConcern
 
       def new
@@ -63,12 +62,6 @@ module Publish
       end
 
     private
-
-      def build_provider
-        @provider = RecruitmentCycle.find_by(year: params[:recruitment_cycle_year])
-                      .providers
-                      .find_by(provider_code: params[:provider_code])
-      end
 
       def error_keys
         [:modern_languages_subjects]
