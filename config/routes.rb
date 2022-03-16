@@ -136,6 +136,12 @@ Rails.application.routes.draw do
 
           get "/gcses-pending-or-equivalency-tests", on: :member, to: "courses/gcse_requirements#edit"
           put "/gcses-pending-or-equivalency-tests", on: :member, to: "courses/gcse_requirements#update"
+
+          get "/subjects", on: :member, to: "courses/subjects#edit"
+          put "/subjects", on: :member, to: "courses/subjects#update"
+
+          get "/modern-languages", on: :member, to: "courses/modern_languages#edit"
+          put "/modern-languages", on: :member, to: "courses/modern_languages#update"
         end
 
         scope module: :providers do

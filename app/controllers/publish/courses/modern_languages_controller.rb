@@ -18,10 +18,12 @@ module Publish
       end
 
       def edit
-        return unless @course.edit_course_options[:modern_languages].nil?
+        authorize(provider)
+
+        return if selected_non_language_subjects_ids.include? modern_languages_subject_id.to_s
 
         redirect_to(
-          details_provider_recruitment_cycle_course_path(
+          details_publish_provider_recruitment_cycle_course_path(
             @course.provider_code,
             @course.recruitment_cycle_year,
             @course.course_code,
@@ -30,13 +32,12 @@ module Publish
       end
 
       def update
-        updated_subject_list = selected_language_subjects
-        updated_subject_list += selected_non_language_subjects
+        authorize(provider)
 
-        if @course.update(subjects: updated_subject_list)
+        if service.save
           flash[:success] = I18n.t("success.saved")
           redirect_to(
-            details_provider_recruitment_cycle_course_path(
+            details_publish_provider_recruitment_cycle_course_path(
               @course.provider_code,
               @course.recruitment_cycle_year,
               @course.course_code,
@@ -63,44 +64,49 @@ module Publish
 
     private
 
+      def updated_subject_list
+        @updated_subject_list ||= selected_language_subjects_ids.concat(selected_non_language_subjects_ids)
+      end
+
+      def service
+        @service ||= ::Courses::AssignSubjectsService.call(course: @course, subject_ids: updated_subject_list)
+      end
+
       def error_keys
         [:modern_languages_subjects]
       end
 
-      def selected_language_subjects
-        language_ids = params.dig(:course, :language_ids)
-        if language_ids.present?
-          found_languages_ids = available_languages_ids & language_ids
-          found_languages_ids.map { |id| Subject.new(id: id) }
-        else
-          []
+      def modern_languages_subject_id
+        @modern_languages_subject_id ||= @course.edit_course_options[:modern_languages_subject].id
+      end
+
+      def selected_subjects(param_key)
+        edit_course_options_key = param_key == :language_ids ? :modern_languages : :subjects
+
+        ids = params.dig(:course, param_key)&.map(&:to_i) || []
+
+        @course.edit_course_options[edit_course_options_key].filter_map do |subject|
+          subject.id.to_s if ids.include?(subject.id)
         end
       end
 
-      def selected_non_language_subjects
-        ids = params.dig(:course, :subjects_ids) || []
-
-        ids.map do |id|
-          Subject.new(id: id)
-        end
+      def selected_language_subjects_ids
+        selected_subjects(:language_ids)
       end
 
-      def available_languages_ids
-        @course.edit_course_options[:modern_languages].map do |language|
-          language["id"]
-        end
+      def selected_non_language_subjects_ids
+        selected_subjects(:subjects_ids)
       end
 
       def has_modern_languages_subject?
-        modern_languages_subject_id = @course.edit_course_options[:modern_languages_subject][:id]
-        @course.subjects.any? { |subject| subject[:id] == modern_languages_subject_id }
+        @course.subjects.any? { |subject| subject.id == modern_languages_subject_id }
       end
 
       def build_course_params
         build_new_course # to get languages edit_options
         params[:course][:subjects_ids] = selected_non_language_subject_ids
         params[:course][:subjects_ids] += params[:course][:language_ids] if params[:course][:language_ids]
-        params[:course].delete :language_ids
+        params[:course].delete(:language_ids)
       end
 
       def non_language_subject_ids
