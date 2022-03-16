@@ -119,6 +119,9 @@ Rails.application.routes.draw do
 
           get "/preview", on: :member, to: "courses#preview"
 
+          get "/outcome", on: :member, to: "courses/outcome#edit"
+          put "/outcome", on: :member, to: "courses/outcome#update"
+
           get "/full-part-time", on: :member, to: "courses/study_mode#edit"
           put "/full-part-time", on: :member, to: "courses/study_mode#update"
 

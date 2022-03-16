@@ -148,6 +148,10 @@ module FeatureHelpers
       @publish_course_study_mode_page ||= PageObjects::Publish::CourseStudyModeEdit.new
     end
 
+    def publish_course_outcome_page
+      @publish_course_outcome_page ||= PageObjects::Publish::Courses::OutcomeEditPage.new
+    end
+
     def gcse_requirements_page
       @gcse_requirements_page ||= PageObjects::Publish::Courses::GcseRequirementsPage.new
     end
