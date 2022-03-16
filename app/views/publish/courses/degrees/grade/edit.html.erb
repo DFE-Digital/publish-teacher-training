@@ -1,0 +1,30 @@
+<% page_title = "What is the minimum degree classification you require?" %>
+<% content_for :page_title, title_with_error_prefix(page_title, @grade_form.errors.present?) %>
+
+<% content_for :before_content do %>
+  <%= govuk_back_link_to(degrees_start_publish_provider_recruitment_cycle_course_path) %>
+<% end %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_with(
+      model: @grade_form, url: degrees_grade_publish_provider_recruitment_cycle_course_path(
+        @course.provider.provider_code,
+        @course.provider.recruitment_cycle_year,
+        @course.course_code,
+      ),
+      method: :put
+    ) do |f| %>
+
+      <%= f.govuk_error_summary %>
+
+      <%= f.govuk_radio_buttons_fieldset :grade, caption: { text: @course.name_and_code, size: "l" }, legend: { text: page_title, size: "l", tag: "h1" } do %>
+        <%= f.govuk_radio_button :grade, "two_one", label: { text: "2:1 or above (or equivalent)" }, data: { qa: "degree_grade__two_one" }, link_errors: true %>
+        <%= f.govuk_radio_button :grade, "two_two", label: { text: "2:2 or above (or equivalent)" }, data: { qa: "degree_grade__two_two" } %>
+        <%= f.govuk_radio_button :grade, "third_class", label: { text: "Third or above (or equivalent)" }, data: { qa: "degree_grade__third_class" } %>
+      <% end %>
+
+      <%= f.govuk_submit "Save", data: { qa: "degree_grade__save" } %>
+    <% end %>
+  </div>
+</div>

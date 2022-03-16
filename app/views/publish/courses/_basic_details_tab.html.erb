@@ -83,8 +83,8 @@
         <% row.key { "Full or part time" } %>
         <% row.value { course.study_mode&.humanize } %>
         <% row.action({
-          # href: full_part_time_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code),
-          # visually_hidden_text: "if full or part time",
+          href: full_part_time_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code),
+          visually_hidden_text: "if full or part time",
         }) %>
       <% end %>
 

@@ -1,10 +1,10 @@
 source "https://rubygems.org"
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby "2.7.4"
+ruby "2.7.5"
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem "rails", "6.1.4.6"
+gem "rails", "6.1.5"
 
 # Transpile app-like JavaScript. Read more: https://github.com/rails/webpacker
 gem "webpacker", "~> 5.4"
@@ -91,6 +91,10 @@ gem "sidekiq-cron"
 
 # Semantic Logger makes logs pretty
 gem "rails_semantic_logger"
+
+# Render nice markdown
+gem "redcarpet"
+gem "rubypants"
 
 # Thread-safe global state
 gem "request_store"

@@ -124,8 +124,36 @@ module FeatureHelpers
       @publish_course_salary_page ||= PageObjects::Publish::CourseSalaryEdit.new
     end
 
+    def publish_course_requirements_page
+      @publish_course_requirements_page ||= PageObjects::Publish::CourseRequirementEdit.new
+    end
+
     def publish_course_location_page
       @publish_course_location_page ||= PageObjects::Publish::CourseLocationEdit.new
+    end
+
+    def publish_course_preview_page
+      @publish_course_preview_page ||= PageObjects::Publish::CoursePreview.new
+    end
+
+    def publish_degree_start_page
+      @publish_degree_start_page ||= PageObjects::Publish::DegreeStart.new
+    end
+
+    def publish_degree_grade_page
+      @publish_degree_grade_page ||= PageObjects::Publish::DegreeGrade.new
+    end
+
+    def publish_degree_subject_requirement_page
+      @publish_degree_subject_requirement_page ||= PageObjects::Publish::DegreeSubjectRequirement.new
+    end
+
+    def publish_course_study_mode_page
+      @publish_course_study_mode_page ||= PageObjects::Publish::CourseStudyModeEdit.new
+    end
+
+    def gcse_requirements_page
+      @gcse_requirements_page ||= PageObjects::Publish::Courses::GcseRequirementsPage.new
     end
   end
 end

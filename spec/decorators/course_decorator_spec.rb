@@ -300,22 +300,22 @@ describe CourseDecorator do
   #     end
   #   end
 
-  #   describe "#subject_name" do
-  #     context "course has more than one subject" do
-  #       it "returns the course name" do
-  #         expect(decorated_course.subject_name).to eq("Mathematics")
-  #       end
-  #     end
+  describe "#subject_name" do
+    context "course has more than one subject" do
+      it "returns the course name" do
+        expect(decorated_course.subject_name).to eq("Mathematics")
+      end
+    end
 
-  #     context "course has one subject" do
-  #       let(:subject) { build :subject, subject_name: "Computer Science" }
-  #       let(:course) { build :course, subjects: [subject] }
+    context "course has one subject" do
+      let(:course_subject) { find_or_create :secondary_subject, :computing }
+      let(:course) { build :course, subjects: [course_subject] }
 
-  #       it "return the subject name" do
-  #         expect(decorated_course.subject_name).to eq("Computer Science")
-  #       end
-  #     end
-  #   end
+      it "return the subject name" do
+        expect(decorated_course.subject_name).to eq("Computing")
+      end
+    end
+  end
 
   #   describe "#bursary_requirements" do
   #     let(:subject) { decorated_course.bursary_requirements }
@@ -721,17 +721,17 @@ describe CourseDecorator do
     end
   end
 
-  # describe "#cycle_range" do
-  #   let(:expected_cycle_range) do
-  #     "#{current_recruitment_cycle.year} to #{current_recruitment_cycle.year.to_i + 1}"
-  #   end
+  describe "#cycle_range" do
+    let(:expected_cycle_range) do
+      "#{current_recruitment_cycle.year} to #{current_recruitment_cycle.year.to_i + 1}"
+    end
 
-  #   subject { course.decorate.cycle_range }
+    subject { course.decorate.cycle_range }
 
-  #   it "should state the correct cycle range" do
-  #     expect(subject).to eq(expected_cycle_range)
-  #   end
-  # end
+    it "states the correct cycle range" do
+      expect(subject).to eq(expected_cycle_range)
+    end
+  end
 
   # describe "#use_financial_support_placeholder?" do
   #   before do

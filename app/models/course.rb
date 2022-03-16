@@ -10,7 +10,7 @@ class Course < ApplicationRecord
   after_initialize :set_defaults
 
   before_discard do
-    raise "You cannot delete the running course #{self}" unless ucas_status == :new
+    raise "You cannot delete the running course #{self}" unless %i[new not_running].include?(ucas_status)
   end
 
   has_associated_audits
@@ -543,6 +543,14 @@ class Course < ApplicationRecord
 
   def is_further_education?
     level == "further_education"
+  end
+
+  def degree_section_complete?
+    degree_grade.present?
+  end
+
+  def is_primary?
+    level == "primary"
   end
 
   def is_uni_or_scitt?

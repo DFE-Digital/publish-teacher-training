@@ -1,0 +1,12 @@
+<div class="govuk-!-margin-bottom-8">
+  <h2 class="govuk-heading-l" id="section-about">About the course</h2>
+  <div data-qa="course__about_course">
+    <% if course.about_course.present? %>
+      <%= markdown(course.about_course) %>
+    <% else %>
+      <%= govuk_inset_text(classes: "app-inset-text--narrow-border app-inset-text--important") do %>
+        <p class="govuk-body">Please add details for this section.</p>
+      <% end %>
+    <% end %>
+  </div>
+</div>

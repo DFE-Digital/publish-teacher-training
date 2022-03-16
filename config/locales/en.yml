@@ -374,6 +374,19 @@ en:
           attributes:
             site_ids:
               no_locations: "Select at least one location"
+        publish/course_requirement_form:
+          attributes:
+            required_qualifications:
+              blank: "Enter details about the qualifications needed"
+              too_long: "Reduce the word count for required qualifications"
+            personal_qualities:
+              too_long: "Reduce the word count for personal qualities"
+            other_requirements:
+              too_long: "Reduce the word count for other requirements"
+        publish/course_study_mode_form:
+          attributes:
+            study_mode:
+              blank: "Pick full time, part time or full time and part time"
   errors:
     messages:
       email: "^Enter an email address in the correct format, like name@example.com"

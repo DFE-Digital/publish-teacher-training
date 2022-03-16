@@ -111,12 +111,31 @@ Rails.application.routes.draw do
 
           get "/about", on: :member, to: "courses/course_information#edit"
           patch "/about", on: :member, to: "courses/course_information#update"
+          get "/requirements", on: :member, to: "courses/requirements#edit"
+          patch "/requirements", on: :member, to: "courses/requirements#update"
           get "/fees", on: :member, to: "courses/fees#edit"
           patch "/fees", on: :member, to: "courses/fees#update"
           get "/salary", on: :member, to: "courses/salary#edit"
           patch "/salary", on: :member, to: "courses/salary#update"
           get "/locations", on: :member, to: "courses/sites#edit"
           put "/locations", on: :member, to: "courses/sites#update"
+
+          get "/preview", on: :member, to: "courses#preview"
+
+          get "/full-part-time", on: :member, to: "courses/study_mode#edit"
+          put "/full-part-time", on: :member, to: "courses/study_mode#update"
+
+          get "/degrees/start", on: :member, to: "courses/degrees/start#edit"
+          put "/degrees/start", on: :member, to: "courses/degrees/start#update"
+
+          get "/degrees/grade", on: :member, to: "courses/degrees/grade#edit"
+          put "/degrees/grade", on: :member, to: "courses/degrees/grade#update"
+
+          get "/degrees/subject-requirements", on: :member, to: "courses/degrees/subject_requirements#edit"
+          put "/degrees/subject-requirements", on: :member, to: "courses/degrees/subject_requirements#update"
+
+          get "/gcses-pending-or-equivalency-tests", on: :member, to: "courses/gcse_requirements#edit"
+          put "/gcses-pending-or-equivalency-tests", on: :member, to: "courses/gcse_requirements#update"
         end
 
         scope module: :providers do

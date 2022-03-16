@@ -1,0 +1,12 @@
+<% case course.outcome %>
+<% when "QTS" %>
+  <%= render partial: "publish/courses/preview/qualification/qts" %>
+<% when "PGCE with QTS" %>
+  <%= render partial: "publish/courses/preview/qualification/pgce_with_qts" %>
+<% when "PGDE with QTS" %>
+  <%= render partial: "publish/courses/preview/qualification/pgde_with_qts" %>
+<% when "PGCE" %>
+  <%= render partial: "publish/courses/preview/qualification/pgce" %>
+<% when "PGDE" %>
+  <%= render partial: "publish/courses/preview/qualification/pgde" %>
+<% end %>
