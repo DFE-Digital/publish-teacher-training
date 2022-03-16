@@ -3,8 +3,8 @@ module Publish
     class AgeRangeController < PublishController
       include CourseBasicDetailConcern
       decorates_assigned :course
-      before_action :build_recruitment_cycle, only: %i[edit update]
-      before_action :build_provider, only: %i[edit update]
+      before_action :recruitment_cycle, only: %i[edit update]
+      before_action :provider, only: %i[edit update]
       before_action :build_course, only: %i[edit update]
 
       def edit
@@ -100,8 +100,7 @@ module Publish
       end
 
       def build_course
-        @course = @provider.courses.find_by!(course_code: params[:code].upcase)
-
+        super
         authorize @course
       end
     end
