@@ -40,28 +40,28 @@ module Publish
 
     validates :age_range_in_years, presence: true
     # Conditional validation to fix form validation
-    with_options if: :age_range_other? do |other|
-      other.validates :course_age_range_in_years_other_from, numericality: {
+    with_options if: :age_range_other? do
+      validates :course_age_range_in_years_other_from, numericality: {
         only_integer: true,
         allow_blank: true,
         greater_than_or_equal_to: 0,
         less_than_or_equal_to: 46,
       }
-      other.validates :course_age_range_in_years_other_to, numericality: {
+      validates :course_age_range_in_years_other_to, numericality: {
         only_integer: true,
         allow_blank: true,
         greater_than_or_equal_to: 4,
         less_than_or_equal_to: 50,
       }
-      other.validate :age_range_from_and_to_missing
-      other.validate :age_range_from_and_to_reversed
-      other.validate :age_range_spans_at_least_4_years
+      validate :age_range_from_and_to_missing
+      validate :age_range_from_and_to_reversed
+      validate :age_range_spans_at_least_4_years
     end
 
   private
 
     def age_range_other?
-      age_range_in_years == 'other'
+      age_range_in_years == "other"
     end
 
     def presets
