@@ -40,7 +40,6 @@ class CoursePolicy
   alias_method :preview?, :show?
   alias_method :details?, :show?
   alias_method :update?, :show?
-  alias_method :edit?, :show?
   alias_method :destroy?, :show?
   alias_method :publish?, :update?
   alias_method :publishable?, :update?

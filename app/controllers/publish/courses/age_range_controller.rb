@@ -3,8 +3,7 @@ module Publish
     class AgeRangeController < PublishController
       include CourseBasicDetailConcern
       decorates_assigned :course
-      before_action :recruitment_cycle, only: %i[edit update]
-      before_action :provider, only: %i[edit update]
+      before_action :build_course, only: %i[edit update]
 
       def edit
         if params[:display_errors] == "true"
@@ -22,7 +21,7 @@ module Publish
 
           if @course.update(course_params)
             redirect_to(
-              details_publish_provider_recruitment_cycle_course_path(
+              details_provider_recruitment_cycle_course_path(
                 @course.provider_code,
                 @course.recruitment_cycle_year,
                 @course.course_code,
@@ -36,8 +35,12 @@ module Publish
 
     private
 
+      def age_range_presets
+        @course.meta["edit_options"]["age_range_in_years"]
+      end
+
       def form_object
-        @form_object ||= AgeRangeForm.new(@course, params: permitted_params)
+        @form_object ||= AgeRangeForm.new(permitted_params.merge(presets: age_range_presets))
       end
 
       def permitted_params
@@ -85,8 +88,11 @@ module Publish
       end
 
       def build_course
-        super
-        authorize @course
+        @course = Course
+          .where(recruitment_cycle_year: params[:recruitment_cycle_year])
+          .where(provider_code: params[:provider_code])
+          .find(params[:code])
+          .first
       end
     end
   end
