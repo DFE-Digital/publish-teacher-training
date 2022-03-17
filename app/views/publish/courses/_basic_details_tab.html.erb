@@ -36,8 +36,8 @@
           <% row.key { "Age range" } %>
           <% row.value { course.age_range } %>
           <% row.action({
-            href: age_range_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code),
-            visually_hidden_text: "age range",
+            # href: age_range_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code),
+            # visually_hidden_text: "age range",
           }) %>
         <% end %>
       <% end %>
