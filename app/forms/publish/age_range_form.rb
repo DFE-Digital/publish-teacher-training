@@ -39,23 +39,30 @@ module Publish
     end
 
     validates :age_range_in_years, presence: true
-    validates :course_age_range_in_years_other_from, numericality: {
-      only_integer: true,
-      allow_blank: true,
-      greater_than_or_equal_to: 0,
-      less_than_or_equal_to: 46,
-    }
-    validates :course_age_range_in_years_other_to, numericality: {
-      only_integer: true,
-      allow_blank: true,
-      greater_than_or_equal_to: 4,
-      less_than_or_equal_to: 50,
-    }
-    validate :age_range_from_and_to_missing
-    validate :age_range_from_and_to_reversed
-    validate :age_range_spans_at_least_4_years
+
+    with_options if: :age_range_other? do |other|
+      other.validates :course_age_range_in_years_other_from, numericality: {
+        only_integer: true,
+        allow_blank: true,
+        greater_than_or_equal_to: 0,
+        less_than_or_equal_to: 46,
+      }
+      other.validates :course_age_range_in_years_other_to, numericality: {
+        only_integer: true,
+        allow_blank: true,
+        greater_than_or_equal_to: 4,
+        less_than_or_equal_to: 50,
+      }
+      other.validate :age_range_from_and_to_missing
+      other.validate :age_range_from_and_to_reversed
+      other.validate :age_range_spans_at_least_4_years
+    end
 
   private
+
+    def age_range_other?
+      age_range_in_years == 'other'
+    end
 
     def presets
       course.age_range_options
