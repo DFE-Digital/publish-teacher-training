@@ -39,7 +39,7 @@ module Publish
     end
 
     validates :age_range_in_years, presence: true
-
+    # Conditional validation to fix form validation
     with_options if: :age_range_other? do |other|
       other.validates :course_age_range_in_years_other_from, numericality: {
         only_integer: true,
