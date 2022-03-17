@@ -16,13 +16,6 @@ feature "Editing course outcome" do
     and_the_course_outcome_is_updated
   end
 
-  scenario "updating with invalid data" do
-    and_there_is_a_course_with_no_outcome
-    when_i_visit_the_course_outcome_page
-    and_i_submit
-    then_i_should_see_an_error_message
-  end
-
   context "a course offering QTS" do
     scenario "shows the correct outcome options to choose from" do
       and_there_is_a_qts_course_i_want_to_edit
@@ -51,13 +44,6 @@ feature "Editing course outcome" do
     given_a_course_exists(:resulting_in_pgde, level: "further_education")
   end
 
-  def and_there_is_a_course_with_no_outcome
-    given_a_course_exists
-    # There is a NOT NULL constraint on the outcome column, so we need to set it
-    # to an out of range enum integer which will force a validation error
-    @course.update_columns(qualification: 99)
-  end
-
   def when_i_visit_the_course_outcome_page
     publish_course_outcome_page.load(
       provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year, course_code: course.course_code,
@@ -78,11 +64,6 @@ feature "Editing course outcome" do
 
   def and_the_course_outcome_is_updated
     expect(course.reload).to be_pgce_with_qts
-  end
-
-  def then_i_should_see_an_error_message
-    expect(publish_course_outcome_page.error_messages).to include("Pick an outcome")
-    expect(publish_course_outcome_page).to have_selector("#qualification-error")
   end
 
   def then_i_am_shown_the_correct_qts_options
