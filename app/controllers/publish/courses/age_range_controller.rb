@@ -3,6 +3,8 @@ module Publish
     class AgeRangeController < PublishController
       include CourseBasicDetailConcern
       decorates_assigned :course
+      before_action :recruitment_cycle, only: %i[edit update]
+      before_action :provider, only: %i[edit update]
 
       def edit
         if params[:display_errors] == "true"
