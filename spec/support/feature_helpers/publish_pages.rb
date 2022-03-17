@@ -60,8 +60,16 @@ module FeatureHelpers
       @new_subjects_page ||= PageObjects::Publish::Courses::NewSubjects.new
     end
 
+    def subjects_edit_page
+      @subjects_edit_page ||= PageObjects::Publish::Courses::SubjectsEdit.new
+    end
+
     def new_modern_languages_page
       @new_modern_languages_page ||= PageObjects::Publish::Courses::NewModernLanguages.new
+    end
+
+    def modern_languages_edit_page
+      @modern_languages_edit_page ||= PageObjects::Publish::Courses::ModernLanguagesEdit.new
     end
 
     def new_age_range_page
