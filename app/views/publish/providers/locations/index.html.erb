@@ -1,6 +1,6 @@
 <% page_title = "Locations" %>
 
-<%= render PageTitle::View.new(title: page_title) %>
+<% content_for :page_title, page_title %>
 
 <% content_for :before_content do %>
   <%= govuk_back_link_to(
