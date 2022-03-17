@@ -22,7 +22,7 @@ feature "selecting an age range" do
     and_the_course_age_range_is_updated("10_to_15")
   end
 
-  scenario "selecting an invalid age range" do
+  scenario "selecting an invalid custom age range" do
     when_i_visit_the_edit_age_range_page
     when_i_select_an_invalid_age_range
     and_i_click_continue
@@ -37,7 +37,7 @@ private
   end
 
   def and_there_is_a_course_i_want_to_edit
-    given_a_course_exists(enrichments: [build(:course_enrichment, :published)])
+    given_a_course_exists
   end
 
   def when_i_visit_the_edit_age_range_page
