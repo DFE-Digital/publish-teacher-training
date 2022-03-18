@@ -17,9 +17,13 @@ module Publish
       authorize(@provider, :can_create_course?)
     end
 
-    def edit; end
+    def edit
+      authorize(provider)
+    end
 
     def update
+      authorize(provider)
+
       @errors = errors
       return render :edit if @errors.present?
 
