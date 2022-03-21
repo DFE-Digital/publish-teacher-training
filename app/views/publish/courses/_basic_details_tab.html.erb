@@ -25,8 +25,8 @@
           <% row.key { "Subject".pluralize(course.subjects.count) } %>
           <% row.value { course.sorted_subjects } %>
           <% row.action({
-            # href: subjects_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code),
-            # visually_hidden_text: "subjects",
+            href: subjects_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code),
+            visually_hidden_text: "subjects",
           }) %>
         <% end %>
       <% end %>

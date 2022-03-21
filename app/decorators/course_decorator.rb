@@ -214,7 +214,9 @@ class CourseDecorator < ApplicationDecorator
   end
 
   def subject_present?(subject_to_find)
-    subjects.ids.include?(subject_to_find.id)
+    subjects.any? do |course_subject|
+      course_subject.id == subject_to_find.id
+    end
   end
 
   def return_start_date

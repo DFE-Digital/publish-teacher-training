@@ -6,10 +6,10 @@ feature "selecting a subject" do
   end
 
   scenario "selecting language" do
-    when_i_visit_the_new_course_modern_languages_page(with_invalid_query: false)
+    when_i_visit_the_new_course_modern_languages_page
     when_i_select_a_language
     and_i_click_continue
-    then_i_am_met_with_the_age_range_page(with_invalid_params: false)
+    then_i_am_met_with_the_age_range_page
   end
 
   scenario "redirect due to lacking modern languages id in query" do

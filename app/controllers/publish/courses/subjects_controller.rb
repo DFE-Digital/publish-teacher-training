@@ -6,26 +6,31 @@ module Publish
       before_action :build_course_params, only: [:continue]
       include CourseBasicDetailConcern
 
-      def edit; end
+      def edit
+        authorize(provider)
+      end
 
       def continue
         super
       end
 
       def update
-        if has_modern_languages_subject?
+        authorize(provider)
+
+        if selected_subject_ids.include?(modern_languages_subject_id.to_s)
           redirect_to(
-            modern_languages_provider_recruitment_cycle_course_path(
+            modern_languages_publish_provider_recruitment_cycle_course_path(
               @course.provider_code,
               @course.recruitment_cycle_year,
               @course.course_code,
               course: { subjects_ids: selected_subject_ids },
             ),
           )
-        elsif @course.update(subjects: selected_subjects)
+
+        elsif assign_subjects_service.save
           flash[:success] = I18n.t("success.saved")
           redirect_to(
-            details_provider_recruitment_cycle_course_path(
+            details_publish_provider_recruitment_cycle_course_path(
               @course.provider_code,
               @course.recruitment_cycle_year,
               @course.course_code,
@@ -39,38 +44,16 @@ module Publish
 
     private
 
-      def has_modern_languages_subject?
-        selected_subjects.any? do |s|
-          s.id.to_s == modern_languages_subject.id.to_s
-        end
+      def assign_subjects_service
+        @assign_subjects_service ||= ::Courses::AssignSubjectsService.call(course: @course, subject_ids: selected_subject_ids)
       end
 
-      def modern_languages_subject
-        return @modern_languages_subject if @modern_languages_subject
-
-        hash = @course.edit_course_options[:modern_languages_subject]
-        @modern_languages_subject = Subject.new(hash)
+      def modern_languages_subject_id
+        @modern_languages_subject_id ||= @course.edit_course_options[:modern_languages_subject].id
       end
 
       def selected_subject_ids
-        params[:course]
-        .slice(:master_subject_id, :subordinate_subject_id)
-        .to_unsafe_h
-        .values
-        .select(&:present?)
-      end
-
-      def selected_subjects
-        selected_subject_ids.map do |subject_id|
-          subject_hash = find_subject(subject_id)
-          Subject.new(subject_hash.to_h)
-        end
-      end
-
-      def find_subject(subject_id)
-        @course.edit_course_options[:subjects].find do |subject|
-          subject[:id] == subject_id
-        end
+        @selected_subject_ids ||= [selected_master, selected_subordinate].compact
       end
 
       def current_step
@@ -81,37 +64,27 @@ module Publish
         [:subjects]
       end
 
-      def build_course
-        @course = Course
-                    .includes(:subjects, :site_statuses)
-                    .where(recruitment_cycle_year: params[:recruitment_cycle_year])
-                    .where(provider_code: params[:provider_code])
-                    .find(params[:code])
-                    .first
+      def selected_master
+        @selected_master ||= params[:course][:master_subject_id] if params[:course][:master_subject_id].present?
+      end
+
+      def selected_subordinate
+        @selected_subordinate ||= params[:course][:subordinate_subject_id] if params[:course][:subordinate_subject_id].present?
       end
 
       def build_course_params
-        selected_master = params[:course][:master_subject_id] if params[:course][:master_subject_id].present?
-        selected_subordinate = nil
-        selected_subordinate = params[:course][:subordinate_subject_id] if params[:course][:subordinate_subject_id].present?
         previous_subject_selections = params[:course][:subjects_ids]
 
-        params[:course][:subjects_ids] = []
-        params[:course][:subjects_ids] << selected_master if selected_master
-        params[:course][:subjects_ids] << selected_subordinate if selected_subordinate
+        params[:course][:subjects_ids] = selected_subject_ids
+
         params[:course].delete(:master_subject_id)
         params[:course].delete(:subordinate_subject_id)
 
         build_new_course # to get languages edit_options
 
-        if modern_language_selected?
-          previous_language_selections = strip_non_language_subject_ids(previous_subject_selections)
-          params[:course][:subjects_ids].concat(previous_language_selections)
-        end
-      end
+        previous_language_selections = selected_subject_ids.include?(modern_languages_subject_id.to_s) ? strip_non_language_subject_ids(previous_subject_selections) : []
 
-      def modern_language_selected?
-        @course.edit_course_options[:modern_languages].present?
+        params[:course][:subjects_ids] = selected_subject_ids.concat(previous_language_selections)
       end
 
       def strip_non_language_subject_ids(subject_ids)
@@ -121,9 +94,7 @@ module Publish
       end
 
       def available_languages_ids
-        @course.edit_course_options[:modern_languages].map do |language|
-          language["id"]
-        end
+        @course.edit_course_options[:modern_languages].map(&:id).map(&:to_s)
       end
     end
   end
