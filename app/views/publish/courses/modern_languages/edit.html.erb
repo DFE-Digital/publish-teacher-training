@@ -1,8 +1,12 @@
 <% content_for :page_title, title_with_error_prefix("Pick all the languages for #{course.name_and_code}", course.errors.any?) %>
 
 <% content_for :before_content do %>
-  <%= govuk_back_link_to(details_publish_provider_recruitment_cycle_course_path(course.provider_code, course.recruitment_cycle_year, course.course_code)) %>
+  <%= govuk_back_link_to(
+    details_publish_provider_recruitment_cycle_course_path(
+      course.provider_code, course.recruitment_cycle_year, course.course_code)) 
+  %>
 <% end %>
+
 
 <%= render 'publish/shared/errors' %>
 

@@ -27,7 +27,7 @@ describe Courses::AssignSubjectsService do
       expect(subject.subjects.map(&:id)).to eq([primary_subject.id])
     end
 
-    it "set the name" do
+    it "sets the name" do
       expect(subject.name).to eq("Primary")
     end
 
@@ -45,7 +45,7 @@ describe Courses::AssignSubjectsService do
       expect(subject.subjects.map(&:id)).to eq([secondary_subject.id])
     end
 
-    it "set the name" do
+    it "sets the name" do
       expect(subject.name).to eq("Biology")
     end
 
@@ -69,7 +69,7 @@ describe Courses::AssignSubjectsService do
         expect(subject.course_subjects.second.subject.id).to eq(secondary_subject.id)
       end
 
-      it "set the name" do
+      it "sets the name" do
         expect(subject.name).to eq("English with Biology")
       end
     end
@@ -84,7 +84,7 @@ describe Courses::AssignSubjectsService do
       expect(subject.subjects.map(&:id)).to eq([further_education_subject.id])
     end
 
-    it "set the name" do
+    it "sets the name" do
       expect(subject.name).to eq("Further education")
     end
 

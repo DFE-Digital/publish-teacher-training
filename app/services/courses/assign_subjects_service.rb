@@ -18,6 +18,8 @@ module Courses
       course
     end
 
+  private
+
     def subjects
       @subjects ||= Subject.find(@subject_ids)
     end

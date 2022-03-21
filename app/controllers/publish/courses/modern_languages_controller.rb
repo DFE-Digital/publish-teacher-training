@@ -34,7 +34,7 @@ module Publish
       def update
         authorize(provider)
 
-        if service.save
+        if assign_subjects_service.save
           flash[:success] = I18n.t("success.saved")
           redirect_to(
             details_publish_provider_recruitment_cycle_course_path(
@@ -68,8 +68,8 @@ module Publish
         @updated_subject_list ||= selected_language_subjects_ids.concat(selected_non_language_subjects_ids)
       end
 
-      def service
-        @service ||= ::Courses::AssignSubjectsService.call(course: @course, subject_ids: updated_subject_list)
+      def assign_subjects_service
+        @assign_subjects_service ||= ::Courses::AssignSubjectsService.call(course: @course, subject_ids: updated_subject_list)
       end
 
       def error_keys
