@@ -27,7 +27,7 @@ module Publish
     def course_code_is_correct
       return if course.course_code == confirm_course_code
 
-      errors.add(:confirm_course_code, "Enter the course code #{course.course_code} to withdraw this course")
+      errors.add(:confirm_course_code, :invalid_code, course_code: course.course_code)
     end
   end
 end
